@@ -39,12 +39,12 @@ int main(int argc, char *argv[])
 
 
     for (i = 0; i < 2000000; i++) {
-	/*
-	   p = (struct link *) malloc (sizeof (struct link));
-	   free (p);
-	 */
-	p = (struct link *)link_new(head);
-	link_destroy(head, p);
+        /*
+           p = (struct link *) malloc (sizeof (struct link));
+           free (p);
+         */
+        p = (struct link *)link_new(head);
+        link_destroy(head, p);
     }
 
     link_cleanup(head);

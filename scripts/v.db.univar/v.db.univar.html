@@ -54,6 +54,16 @@ v.db.select samples
 v.db.univar samples column=heights
 </pre></div>
 
+<h3>JSON output</h3>
+
+This uses the JSON output of the module which is passed using
+a pipe (in Bash or other unix-like shell) to the <em>jq</em> tool
+which selects just the relevant statistic.
+
+<div class="code"><pre>
+v.db.univar precip_30ynormals column=annual format=json | jq .statistics.mean
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>

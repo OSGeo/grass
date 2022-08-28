@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     opt4->answer = "1";
     opt4->description = _("Number of times to repeat the filter");
     opt4->guisection = _("Filter");
-    
+
     opt5 = G_define_option();
     opt5->key = "title";
     opt5->type = TYPE_STRING;
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     flag2->guisection = _("Filter");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /*
        preserve_edges = flag3->answer;
@@ -119,9 +119,8 @@ int main(int argc, char **argv)
 
     sscanf(opt4->answer, "%d", &repeat);
     sscanf(opt6->answer, "%d", &nprocs);
-    if (nprocs < 1)
-    {
-      G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
+    if (nprocs < 1) {
+        G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
     }
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
@@ -146,18 +145,18 @@ int main(int argc, char **argv)
 
     /* make sure filter matrix won't extend outside the raster map */
     for (i = 0; i < nfilters; i++) {
-	if (filter[i].size > ncols || filter[i].size > nrows)
-	    G_fatal_error(_("Raster map too small for the size of the filter"));
+        if (filter[i].size > ncols || filter[i].size > nrows)
+            G_fatal_error(_("Raster map too small for the size of the filter"));
     }
 
 
     /* make a title for result */
     if (opt5->answer)
-	strcpy(title, opt5->answer);
+        strcpy(title, opt5->answer);
     else {
-	if (*temp == 0)
-	    strcpy(temp, "unknown filter");
-	sprintf(title, "%s filtered using %s", in_name, temp);
+        if (*temp == 0)
+            strcpy(temp, "unknown filter");
+        sprintf(title, "%s filtered using %s", in_name, temp);
     }
 
     perform_filter(in_name, out_name, filter, nfilters, repeat);

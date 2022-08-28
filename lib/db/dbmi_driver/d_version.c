@@ -16,11 +16,11 @@
 #include "macros.h"
 
 /*!
-  \brief Get version info
+   \brief Get version info
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_version(void)
 {
     /* no arg(s) */

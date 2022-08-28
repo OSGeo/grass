@@ -11,7 +11,7 @@
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Markus Neteler
-*/
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -47,24 +47,24 @@ const char *Vect_get_column_names(const struct Map_info *Map, int field)
 
     num_dblinks = Vect_get_num_dblinks(Map);
     if (num_dblinks <= 0)
-	return (NULL);
+        return (NULL);
 
     G_debug(3,
-	    "Displaying column names for database connection of layer %d:",
-	    field);
+            "Displaying column names for database connection of layer %d:",
+            field);
     if ((fi = Vect_get_field(Map, field)) == NULL)
-	return (NULL);
+        return (NULL);
     driver = db_start_driver(fi->driver);
     if (driver == NULL)
-	return (NULL);
+        return (NULL);
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK)
-	return (NULL);
+        return (NULL);
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK)
-	return (NULL);
+        return (NULL);
 
     ncols = db_get_table_number_of_columns(table);
     col_names = G_malloc(ncols * sizeof(char *));
@@ -103,24 +103,24 @@ const char *Vect_get_column_types(const struct Map_info *Map, int field)
 
     num_dblinks = Vect_get_num_dblinks(Map);
     if (num_dblinks <= 0)
-	return (NULL);
+        return (NULL);
 
     G_debug(3,
-	    "Displaying column types for database connection of layer %d:",
-	    field);
+            "Displaying column types for database connection of layer %d:",
+            field);
     if ((fi = Vect_get_field(Map, field)) == NULL)
-	return (NULL);
+        return (NULL);
     driver = db_start_driver(fi->driver);
     if (driver == NULL)
-	return (NULL);
+        return (NULL);
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK)
-	return (NULL);
+        return (NULL);
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK)
-	return (NULL);
+        return (NULL);
 
     ncols = db_get_table_number_of_columns(table);
     sqltype_names = G_malloc(ncols * sizeof(char *));
@@ -162,24 +162,24 @@ const char *Vect_get_column_names_types(const struct Map_info *Map, int field)
 
     num_dblinks = Vect_get_num_dblinks(Map);
     if (num_dblinks <= 0)
-	return (NULL);
+        return (NULL);
 
     G_debug(3,
-	    "Displaying column types for database connection of layer %d:",
-	    field);
+            "Displaying column types for database connection of layer %d:",
+            field);
     if ((fi = Vect_get_field(Map, field)) == NULL)
-	return (NULL);
+        return (NULL);
     driver = db_start_driver(fi->driver);
     if (driver == NULL)
-	return (NULL);
+        return (NULL);
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK)
-	return (NULL);
+        return (NULL);
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK)
-	return (NULL);
+        return (NULL);
 
     ncols = db_get_table_number_of_columns(table);
     col_type_names = G_malloc(ncols * sizeof(char *));

@@ -31,10 +31,10 @@ typedef struct
     struct Flag *full, *testunit, *testint;
 } paramType;
 
-paramType param;		/*Parameters */
+paramType param;                /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void);		/*Fill the paramType structure */
+static void set_params(void);   /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -85,83 +85,84 @@ int main(int argc, char *argv[])
     G_add_keyword("test");
     G_add_keyword("gpde");
     module->description =
-	_("Performs unit and integration tests for gpde library");
+        _("Performs unit and integration tests for gpde library");
 
     /* Get parameters from user */
     set_params();
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
 
     /*Run the unit tests */
     if (param.testunit->answer || param.full->answer) {
-	returnstat += unit_test_arrays();
-	returnstat += unit_test_assemble();
-	returnstat += unit_test_gradient();
-	returnstat += unit_test_geom_data();
-	returnstat += unit_test_les_creation();
-	returnstat += unit_test_tools();
+        returnstat += unit_test_arrays();
+        returnstat += unit_test_assemble();
+        returnstat += unit_test_gradient();
+        returnstat += unit_test_geom_data();
+        returnstat += unit_test_les_creation();
+        returnstat += unit_test_tools();
 
     }
 
     /*Run the integration tests */
     if (param.testint->answer || param.full->answer) {
-	returnstat += integration_test_gwflow();
-	returnstat += integration_test_solute_transport();
+        returnstat += integration_test_gwflow();
+        returnstat += integration_test_solute_transport();
     }
 
     /*Run single tests */
     if (!param.full->answer) {
-	/*unit tests */
-	if (!param.testunit->answer) {
-	    i = 0;
-	    if (param.unit->answers)
-		while (param.unit->answers[i]) {
-		    if (strcmp(param.unit->answers[i], "array") == 0)
-			returnstat += unit_test_arrays();
+        /*unit tests */
+        if (!param.testunit->answer) {
+            i = 0;
+            if (param.unit->answers)
+                while (param.unit->answers[i]) {
+                    if (strcmp(param.unit->answers[i], "array") == 0)
+                        returnstat += unit_test_arrays();
 
-		    if (strcmp(param.unit->answers[i], "assemble") == 0)
-			returnstat += unit_test_assemble();
+                    if (strcmp(param.unit->answers[i], "assemble") == 0)
+                        returnstat += unit_test_assemble();
 
-		    if (strcmp(param.unit->answers[i], "gradient") == 0)
-			returnstat += unit_test_gradient();
+                    if (strcmp(param.unit->answers[i], "gradient") == 0)
+                        returnstat += unit_test_gradient();
 
-		    if (strcmp(param.unit->answers[i], "geom") == 0)
-			returnstat += unit_test_geom_data();
+                    if (strcmp(param.unit->answers[i], "geom") == 0)
+                        returnstat += unit_test_geom_data();
 
-		    if (strcmp(param.unit->answers[i], "les") == 0)
-			returnstat += unit_test_les_creation();
+                    if (strcmp(param.unit->answers[i], "les") == 0)
+                        returnstat += unit_test_les_creation();
 
-		    if (strcmp(param.unit->answers[i], "tools") == 0)
-			returnstat += unit_test_tools();
+                    if (strcmp(param.unit->answers[i], "tools") == 0)
+                        returnstat += unit_test_tools();
 
-		    i++;
-		}
-	}
-	/*integration tests */
-	if (!param.testint->answer) {
-	    i = 0;
-	    if (param.integration->answers)
-		while (param.integration->answers[i]) {
-		    if (strcmp(param.integration->answers[i], "gwflow") == 0)
-			returnstat += integration_test_gwflow();
+                    i++;
+                }
+        }
+        /*integration tests */
+        if (!param.testint->answer) {
+            i = 0;
+            if (param.integration->answers)
+                while (param.integration->answers[i]) {
+                    if (strcmp(param.integration->answers[i], "gwflow") == 0)
+                        returnstat += integration_test_gwflow();
 
-		    if (strcmp(param.integration->answers[i], "heatflow") == 0);	/*nothing to do for now */
+                    if (strcmp(param.integration->answers[i], "heatflow") == 0) ;       /*nothing to do for now */
 
-		    if (strcmp(param.integration->answers[i], "transport") == 0)
-		        returnstat += integration_test_solute_transport();
+                    if (strcmp(param.integration->answers[i], "transport") ==
+                        0)
+                        returnstat += integration_test_solute_transport();
 
-		    i++;
-		}
+                    i++;
+                }
 
-	}
+        }
     }
 
-    if(returnstat != 0)
-    	G_warning("Errors detected while testing the gpde lib");
+    if (returnstat != 0)
+        G_warning("Errors detected while testing the gpde lib");
     else
-    	G_message("\n-- gpde lib tests finished successfully --");
+        G_message("\n-- gpde lib tests finished successfully --");
 
     return (returnstat);
 }

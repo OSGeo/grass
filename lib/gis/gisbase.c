@@ -18,7 +18,7 @@
  * programs. This directory will have subdirectories which will
  * contain modules and files required for the running of the
  * system. Some of these directories are:
- 
+
  \verbatim
  bin    commands run by the user
  etc    modules and data files used by GRASS commands

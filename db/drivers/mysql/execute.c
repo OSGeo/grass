@@ -37,18 +37,17 @@ int db__driver_execute_immediate(dbString * sql)
     G_debug(3, "Escaped SQL: %s", str);
 
     if (mysql_query(connection, str) != 0) {
-	db_d_append_error("%s\n%s\n%s",
-			  _("Unable to execute:"),
-			  str,
-			  mysql_error(connection));
-	db_d_report_error();
-	if (str)
-	    G_free(str);
-	return DB_FAILED;
+        db_d_append_error("%s\n%s\n%s",
+                          _("Unable to execute:"),
+                          str, mysql_error(connection));
+        db_d_report_error();
+        if (str)
+            G_free(str);
+        return DB_FAILED;
     }
 
     if (str)
-	G_free(str);
+        G_free(str);
 
     return DB_OK;
 }
@@ -58,11 +57,11 @@ int db__driver_begin_transaction(void)
     G_debug(2, "mysql: START TRANSACTION");
 
     if (mysql_query(connection, "START TRANSACTION") != 0) {
-	db_d_append_error("%s %s",
-			  _("Unable to start transaction:"),
-			  mysql_error(connection));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error("%s %s",
+                          _("Unable to start transaction:"),
+                          mysql_error(connection));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     return DB_OK;
@@ -73,11 +72,11 @@ int db__driver_commit_transaction(void)
     G_debug(2, "mysql: COMMIT");
 
     if (mysql_query(connection, "COMMIT") != 0) {
-	db_d_append_error("%s %s",
-			  _("Unable to commit transaction:"),
-			  mysql_error(connection));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error("%s %s",
+                          _("Unable to commit transaction:"),
+                          mysql_error(connection));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     return DB_OK;
