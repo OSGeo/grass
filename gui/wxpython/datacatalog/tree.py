@@ -296,7 +296,7 @@ class DataCatalogTree(TreeView):
                 ("raster_3d", "grid3"),
             ),
             evt_handler=self,
-            gconsole=parent.parent,
+            giface=self._giface,
         )
         # Get databases from settings
         # add current to settings if it's not included

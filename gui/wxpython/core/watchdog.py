@@ -137,33 +137,16 @@ class MapsetWatchdog:
                                (("raster", "cell"), ...)
     :param object instance evt_handler: event handler object instance of
                                         class
-    :param object instance|parent object instance gconsole: object instance of
-                                                            core.gconsole.GConsole
-                                                            class or parent
-                                                            object instance which
-                                                            hold object instance
-                                                            of core.gconsole.GConsole
-                                                            class
+    :param object instance giface: object instance of giface class
     :param str patterns: map watchdog patterns with default value "*" all
     """
 
-    def __init__(self, elements_dirs, evt_handler, gconsole, patterns="*"):
+    def __init__(self, elements_dirs, evt_handler, giface, patterns="*"):
         self._elements_dirs = elements_dirs
         self._evt_handler = evt_handler
         self._patterns = patterns
-        self._gconsole = gconsole
+        self._giface = giface
         self._observer = None
-
-    def _getGconsole(self):
-        """Lazy loading of object instance of core.gconsole.GConsole class
-
-        :return object instance: object instance of class
-                                 core.gconsole.GConsole
-        """
-        gconsole = "_gconsole"
-        if hasattr(self._gconsole, gconsole):
-            return getattr(self._gconsole, gconsole)
-        return self._gconsole
 
     def ScheduleWatchCurrentMapset(self):
         """Using watchdog library, sets up watching of current mapset folder
@@ -210,7 +193,7 @@ class MapsetWatchdog:
         except OSError:
             # in case inotify on linux exceeds limits
             watchdog_used = False
-            self._getGconsole().WriteWarning(
+            self._giface.WriteWarning(
                 _(
                     "File size limit exceeded. The current mapset"
                     " and maps watchdog are disabled now."

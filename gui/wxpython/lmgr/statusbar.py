@@ -22,6 +22,7 @@ import wx
 import grass.script as gs
 
 from core.gcmd import RunCommand
+from core.watchdog import watchdog_used
 from gui_core.wrap import Button
 
 
@@ -83,15 +84,17 @@ class SbMask:
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
         self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
         self.giface.currentMapsetChanged.connect(self.Refresh)
+        if not watchdog_used:
+            self.giface.grassdbChanged.connect(self.dbChanged)
         self.Refresh()
 
-    def dbChanged(self, map_name, new_map_name):
+    def dbChanged(self, map=None, newname=None):
         """Mapset files changed
 
-        :param str map_path: map that is changed
-        :param str map_dest: new map
+        :param str map: map that is changed
+        :param str newname: new map
         """
-        if map_name == self.mask_layer or new_map_name == self.mask_layer:
+        if map == self.mask_layer or newname == self.mask_layer:
             self.Refresh()
             self.giface.updateMap.emit()
 

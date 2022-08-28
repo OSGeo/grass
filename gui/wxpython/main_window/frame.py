@@ -225,7 +225,7 @@ class GMFrame(wx.Frame):
         self._mapset_watchdog = MapsetWatchdog(
             elements_dirs=(("raster", "cell"),),
             evt_handler=self,
-            gconsole=self._gconsole,
+            giface=self._giface,
         )
         self._mapset_watchdog.ScheduleWatchCurrentMapset()
         self.Bind(
@@ -2373,8 +2373,8 @@ class GMFrame(wx.Frame):
         :param str map_dest: new map path
         """
         self.statusbar.mask.dbChanged(
-            os.path.basename(map_path) if map_path else map_path,
-            os.path.basename(map_dest) if map_dest else map_dest,
+            map=os.path.basename(map_path) if map_path else map_path,
+            newname=os.path.basename(map_dest) if map_dest else map_dest,
         )
 
     def _onMapsetChanged(self, event):
