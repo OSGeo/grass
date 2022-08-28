@@ -104,8 +104,7 @@ int db__driver_create_table(dbTable * table)
     G_debug(3, " SQL: %s", db_get_string(&sql));
 
     if (mysql_query(connection, db_get_string(&sql)) != 0) {
-        db_d_append_error("%s\n%s\%s",
-                          _("Unable to create table:"),
+        db_d_append_error(_("Unable to create table:\n%s\n%s"),
                           db_get_string(&sql), mysql_error(connection));
         db_d_report_error();
         db_free_string(&sql);
