@@ -1,15 +1,15 @@
 /*!
-  \file rowio/put.c
-  
-  \brief RowIO library - Write a row
-  
-  (C) 2001-2009 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
-  
-  \author Original author CERL
-*/
+   \file rowio/put.c
+
+   \brief RowIO library - Write a row
+
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -44,13 +44,13 @@ int Rowio_put(ROWIO * R, const void *buf, int row)
     int i;
 
     if (row < 0)
-	return 0;
+        return 0;
 
     for (i = 0; i < R->nrows; i++)
-	if (row == R->rcb[i].row) {
-	    memcpy(R->rcb[i].buf, buf, R->len);
-	    R->rcb[i].dirty = 1;
-	    return 1;
-	}
+        if (row == R->rcb[i].row) {
+            memcpy(R->rcb[i].buf, buf, R->len);
+            R->rcb[i].dirty = 1;
+            return 1;
+        }
     return ((*R->putrow) (R->fd, buf, row, R->len));
 }

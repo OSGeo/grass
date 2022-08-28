@@ -13,11 +13,11 @@ void trncm(Cpx * a, int n)
     int i, j, e;
 
     for (i = 0, e = n - 1; i < n - 1; ++i, --e, a += n + 1) {
-	for (j = 0, p = a + 1, q = a + n; j < e; ++j) {
-	    s = *p;
-	    *p++ = *q;
-	    *q = s;
-	    q += n;
-	}
+        for (j = 0, p = a + 1, q = a + n; j < e; ++j) {
+            s = *p;
+            *p++ = *q;
+            *q = s;
+            q += n;
+        }
     }
 }

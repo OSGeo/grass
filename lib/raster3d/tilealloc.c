@@ -27,8 +27,8 @@ void *Rast3d_alloc_tiles_type(RASTER3D_Map * map, int nofTiles, int type)
 
     tiles = Rast3d_malloc(map->tileSize * Rast3d_length(type) * nofTiles);
     if (tiles == NULL) {
-	Rast3d_error("Rast3d_alloc_tiles_type: error in Rast3d_malloc");
-	return NULL;
+        Rast3d_error("Rast3d_alloc_tiles_type: error in Rast3d_malloc");
+        return NULL;
     }
 
     return tiles;
@@ -53,8 +53,8 @@ void *Rast3d_alloc_tiles(RASTER3D_Map * map, int nofTiles)
 
     tiles = Rast3d_alloc_tiles_type(map, nofTiles, map->typeIntern);
     if (tiles == NULL) {
-	Rast3d_error("Rast3d_alloc_tiles: error in Rast3d_alloc_tiles_type");
-	return NULL;
+        Rast3d_error("Rast3d_alloc_tiles: error in Rast3d_alloc_tiles_type");
+        return NULL;
     }
 
     return tiles;

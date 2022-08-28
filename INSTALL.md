@@ -43,10 +43,10 @@ GRASS source code is currently distributed in 2 forms:
 ### Officially released source code
 
 The full source code version contains all the GRASS source code
-required for compilation. It is distributed as one file (`*.tar.gz`
-package) and the version is composed of 3 numbers, e.g. 8.2.0, 8.2.1
+required for compilation. It is distributed as one file (*.tar.gz
+package) and the version is composed of 3 numbers, e.g. 3.7.0, 3.7.1
 etc. See
-<https://github.com/OSGeo/grass/releases>
+<https://github.com/OSGeo/grass/releases>.
 
 ### Snapshots of source code (generated from GitHub)
 
@@ -54,7 +54,7 @@ This version of the source code can be acquired either from the GitHub
 repository (<https://github.com/OSGeo/grass/>) or as a auto-generated snapshot
 (`*.tar.gz` package) of the GitHub repository. The snapshot name
 contains the date when the snapshot was created (checked out from
-the GitHub repository), e.g. grass-8.3.git_src_snapshot_2022_04_27.tar.gz
+the GitHub repository), e.g. grass-3.7.git_src_snapshot_2022_04_27.tar.gz
 from <https://grass.osgeo.org/grass-devel/source/snapshot/>
 Further instructions at <https://trac.osgeo.org/grass/wiki/DownloadSource>
 

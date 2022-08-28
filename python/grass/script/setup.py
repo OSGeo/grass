@@ -24,19 +24,20 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass8bin = "grass"
+    executable = "grass"
     if sys.platform.startswith("win"):
         # MS Windows
-        grass8bin = r"C:\OSGeo4W\bin\grass.bat"
+        executable = r"C:\OSGeo4W\bin\grass.bat"
         # uncomment when using standalone WinGRASS installer
-        # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.2.0\grass.bat'
-        # this can be avoided if GRASS executable is added to PATH
+        # executable = r'C:\Program Files (x86)\GRASS GIS <version>\grass.bat'
+        # this can be skipped if GRASS executable is added to PATH
     elif sys.platform == "darwin":
         # Mac OS X
-        grass8bin = "/Applications/GRASS-8.2.app/Contents/Resources/bin/grass"
+        version = "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
+        executable = f"/Applications/GRASS-{version}.app/Contents/Resources/bin/grass"
 
     # query GRASS GIS itself for its Python package path
-    grass_cmd = [grass8bin, "--config", "python_path"]
+    grass_cmd = [executable, "--config", "python_path"]
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 
     # define GRASS-Python environment
@@ -64,7 +65,7 @@ Usage::
     session.finish()
 
 
-(C) 2010-2021 by the GRASS Development Team
+(C) 2010-2022 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.

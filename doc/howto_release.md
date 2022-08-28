@@ -445,3 +445,20 @@ Software pages:
 Via Web / Social media:
 
 - See: <https://grass.osgeo.org/wiki/Contact_Databases>
+
+## Update VERSION file to next version number
+
+After the final release whole is done, modify the VERSION file use
+the dedicated script, e.g., for next micro version, run:
+
+```bash
+./utils/update_version.py micro
+./utils/update_version.py status
+```
+
+Now commit the change to the branch with the commit message generated above:
+
+```bash
+git diff
+git commit include/VERSION -m "version: GRASS GIS 8.2.1"
+```

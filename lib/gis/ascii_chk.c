@@ -39,11 +39,11 @@ void G_ascii_check(char *string)
     ptr2 = string;
 
     while (*ptr1) {
-	if ((*ptr1 >= 040) && (*ptr1 <= 0176))
-	    *ptr2++ = *ptr1;
-	else if (*ptr1 == TAB)
-	    *ptr2++ = SPACE;
-	ptr1++;
+        if ((*ptr1 >= 040) && (*ptr1 <= 0176))
+            *ptr2++ = *ptr1;
+        else if (*ptr1 == TAB)
+            *ptr2++ = SPACE;
+        ptr1++;
     }
     *ptr2 = 0;
 }

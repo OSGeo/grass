@@ -30,7 +30,8 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-enum OutputFormat {
+enum OutputFormat
+{
     PLAIN,
     JSON,
     CSV,
@@ -210,7 +211,8 @@ int main(int argc, char **argv)
                                                _("Column names are always included"));
         fatal_error_option_value_excludes_option(options.format, options.fsep,
                                                  _("Separator is part of the format"));
-        fatal_error_option_value_excludes_option(options.format, options.nullval,
+        fatal_error_option_value_excludes_option(options.format,
+                                                 options.nullval,
                                                  _("Null value is part of the format"));
     }
     if (format != VERTICAL) {
@@ -242,12 +244,12 @@ int main(int argc, char **argv)
         }
         else if (format == PLAIN || format == VERTICAL) {
             if (flags.region->answer)
-               fsep = G_store("=");
+                fsep = G_store("=");
             else
-               fsep = G_store("|");
+                fsep = G_store("|");
         }
         else
-            fsep = NULL;  /* Something like a separator is part of the format. */
+            fsep = NULL;        /* Something like a separator is part of the format. */
     }
     if (options.vsep->answer)
         vsep = G_option_to_separator(options.vsep);
@@ -422,9 +424,9 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\t", "\\t");
                     if (format == JSON && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
-                    if (strchr(str, '\f'))  /* form feed, somewhat unlikely */
+                    if (strchr(str, '\f'))      /* form feed, somewhat unlikely */
                         str = G_str_replace(str, "\f", "\\f");
-                    if (strchr(str, '\b'))  /* backspace, quite unlikely */
+                    if (strchr(str, '\b'))      /* backspace, quite unlikely */
                         str = G_str_replace(str, "\b", "\\b");
                 }
                 /* Common CSV does not escape, but doubles quotes (and we quote all
@@ -508,7 +510,8 @@ int main(int argc, char **argv)
             fprintf(stdout, "%f%s%f%s%f%s%f", min_box->N, fsep, min_box->S,
                     fsep, min_box->W, fsep, min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, "%s%f%s%f", fsep, min_box->T, fsep, min_box->B);
+                fprintf(stdout, "%s%f%s%f", fsep, min_box->T, fsep,
+                        min_box->B);
             }
             fprintf(stdout, "\n");
         }

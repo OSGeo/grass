@@ -59,11 +59,11 @@ FILE *I_fopen_subgroup_ref_old(const char *group, const char *subgroup)
     return fd;
 }
 
-FILE *I_fopen_subgroup_ref_old2(const char *group, const char *subgroup, const char *mapset)
+FILE *I_fopen_subgroup_ref_old2(const char *group, const char *subgroup,
+                                const char *mapset)
 {
     FILE *fd;
 
     fd = I_fopen_subgroup_file_old2(group, subgroup, mapset, "REF");
     return fd;
 }
-

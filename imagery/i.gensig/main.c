@@ -28,8 +28,8 @@
 
 int main(int argc, char *argv[])
 {
-    struct parms parms;		/* command line parms */
-    struct files files;		/* file descriptors, io, buffers */
+    struct parms parms;         /* command line parms */
+    struct files files;         /* file descriptors, io, buffers */
     struct Signature S;
     struct GModule *module;
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     G_add_keyword("MLC");
     G_add_keyword(_("signatures"));
     module->description =
-	_("Generates statistics for i.maxlik from raster map.");
+        _("Generates statistics for i.maxlik from raster map.");
 
     parse(argc, argv, &parms);
     openfiles(&parms, &files, &S);
@@ -57,6 +57,6 @@ int main(int argc, char *argv[])
     I_free_signatures(&S);
 
     G_done_msg(" ");
-    
+
     exit(EXIT_SUCCESS);
 }

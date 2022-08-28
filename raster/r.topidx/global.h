@@ -11,7 +11,7 @@
 #define is_atbv_unprocessed(i,j) (atbv(i,j) == UNPROCESSED)
 
 #ifndef DBL_MAX
-#define DBL_MAX 1.797693E308  /* DBL_MAX approximation */
+#define DBL_MAX 1.797693E308    /* DBL_MAX approximation */
 #endif
 #define	ZERO			0.0000001
 #define	UNPROCESSED		-DBL_MAX
