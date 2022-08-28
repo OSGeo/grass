@@ -44,7 +44,7 @@ init.sh.
 ## Building GRASS
 
 Building GRASS as a Mac OS X application is pretty much the same as for
-a unix build (see the [INSTALL](../INSTALL) document for details). For an
+a unix build (see the [INSTALL.md](../INSTALL.md) document for details). For an
 application, just add this option to configure:
 
 `--enable-macosx-app`
