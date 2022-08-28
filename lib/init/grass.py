@@ -2032,9 +2032,18 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """.format(
             sh_history=sh_history
         )
+        # Ubuntu sudo creates a file .sudo_as_admin_successful and cbash checks
+        # for this file in the home directory from /etc/bash.bashrc and prints a
+        # message if it's not detected. This can be suppressed with either
+        # creating the file ~/.sudo_as_admin_successful (it's always empty) or
+        # by creating a file ~/.hushlogin (also an empty file)
+        # Here we create the file in the Mapset directory if it exists in the
+        # user's home directory.
         sudo_success_file = ".sudo_as_admin_successful"
         if os.path.exists(os.path.join(userhome, sudo_success_file)):
             try:
+                # Open with append so that if the file already exists there
+                # isn't any error.
                 fh = open(os.path.join(home, sudo_success_file), "a")
             finally:
                 fh.close()
