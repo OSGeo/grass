@@ -10,29 +10,29 @@
 char *translate(const char *arg)
 {
     if (arg == NULL)
-	return (char *) arg;
+        return (char *)arg;
 
     if (strlen(arg) == 0)
-        return NULL; /* unset */
-    
+        return NULL;            /* unset */
+
     if (*arg && translate_output) {
-	fputs(arg, stdout);
-	fputs("\n", stdout);
+        fputs(arg, stdout);
+        fputs("\n", stdout);
     }
 
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
     static const char *domain;
 
     if (!domain) {
-	domain = getenv("GRASS_TRANSLATION_DOMAIN");
-	if (domain)
-	    G_putenv("GRASS_TRANSLATION_DOMAIN", "grassmods");
-	else
-	    domain = PACKAGE;
+        domain = getenv("GRASS_TRANSLATION_DOMAIN");
+        if (domain)
+            G_putenv("GRASS_TRANSLATION_DOMAIN", "grassmods");
+        else
+            domain = PACKAGE;
     }
 
     return G_gettext(domain, arg);
 #else
-    return (char *) arg;
+    return (char *)arg;
 #endif
 }

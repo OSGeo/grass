@@ -1,8 +1,8 @@
 #ifndef GLOBAL
-# define GLOBAL extern
-# define INIT(x)
+#define GLOBAL extern
+#define INIT(x)
 #else
-# define INIT(x) = x
+#define INIT(x) = x
 #endif
 
 #include <grass/raster.h>
@@ -18,9 +18,10 @@ struct _layer_
     const char *name;
     const char *mapset;
     struct Categories labels;
-    int nlen;			/* num chars of largest cat when printed */
-    int clen;			/* num chars for cat label when printed */
+    int nlen;                   /* num chars of largest cat when printed */
+    int clen;                   /* num chars for cat label when printed */
 };
+
 #define LAYER struct _layer_
 extern LAYER *layers;
 extern int nlayers;
@@ -31,6 +32,7 @@ struct _gstats_
     double area;
     long count;
 };
+
 #define GSTATS struct _gstats_
 extern GSTATS *Gstats;
 extern int nstats;
@@ -45,6 +47,7 @@ struct _units_
     int eformat;
     char *label[2];
 };
+
 #define UNITS struct _units_
 extern UNITS unit[MAX_UNITS];
 extern int nunits;

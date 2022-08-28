@@ -24,6 +24,8 @@ categories = \
 	t:temporal \
 	v:vector
 
+EXTRA_CLEAN_DIRS := $(wildcard __pycache__)
+
 IDXCATS := $(foreach cat,$(categories),$(lastword $(subst :, ,$(cat))))
 
 IDXSRC = full_index index topics keywords graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)

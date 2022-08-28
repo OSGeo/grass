@@ -19,7 +19,7 @@ int Pcolornum(double, double, double);
 
 /* colortable.c */
 int Pcolortable(unsigned char *, unsigned char *, unsigned char *,
-		unsigned char *, int);
+                unsigned char *, int);
 /* colorvalue.c */
 int Pcolorvalue(int, float *, float *, float *);
 

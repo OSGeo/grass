@@ -22,6 +22,7 @@
 #else
 #include <grass/ccmath_grass.h>
 #endif
+
 /**
  * Documentation and ccmath library version 2.2.1 by Daniel A. Atkinson
  *
@@ -173,6 +174,7 @@
  Linear System Solutions:
 -----------------------------------------------------------------------------
 */
+
 /**
      \brief Solve a general linear system  A*x = b.
 
@@ -181,9 +183,9 @@
      \param  n = dimension of system
      \return 0 -> normal exit; -1 -> singular input
  */
-int G_math_solv(double **a,double *b,int n)
+int G_math_solv(double **a, double *b, int n)
 {
-    return solv(a[0],b, n);
+    return solv(a[0], b, n);
 }
 
 
@@ -195,9 +197,9 @@ int G_math_solv(double **a,double *b,int n)
      \param  n = dimension of system
      \return: 0 -> normal exit; -1 -> input matrix not positive definite
  */
- int G_math_solvps(double **a,double *b,int n)
+int G_math_solvps(double **a, double *b, int n)
 {
-    return solvps(a[0], b,n);
+    return solvps(a[0], b, n);
 }
 
 
@@ -211,7 +213,7 @@ int G_math_solv(double **a,double *b,int n)
      \param  m = dimension parameter ( M is (m+1)x(m+1) )
 
 */
-void G_math_solvtd(double *a,double *b,double *c,double *x,int m)
+void G_math_solvtd(double *a, double *b, double *c, double *x, int m)
 {
     solvtd(a, b, c, x, m);
     return;
@@ -219,14 +221,14 @@ void G_math_solvtd(double *a,double *b,double *c,double *x,int m)
 
 
 /*
-     \brief Solve an upper right triangular linear system T*x = b.
+   \brief Solve an upper right triangular linear system T*x = b.
 
-     \param  a = pointer to array of upper right triangular matrix T
-     \param  b = pointer to array of system vector The computation overloads this with the solution vector x.
-     \param  n = dimension (dim(a)=n*n,dim(b)=n)
-     \return value: f = status flag, with 0 -> normal exit, -1 -> system singular
-*/
-int G_math_solvru(double **a,double *b,int n)
+   \param  a = pointer to array of upper right triangular matrix T
+   \param  b = pointer to array of system vector The computation overloads this with the solution vector x.
+   \param  n = dimension (dim(a)=n*n,dim(b)=n)
+   \return value: f = status flag, with 0 -> normal exit, -1 -> system singular
+ */
+int G_math_solvru(double **a, double *b, int n)
 {
     return solvru(a[0], b, n);
 }
@@ -239,7 +241,7 @@ int G_math_solvru(double **a,double *b,int n)
      \param  n = dimension of the system (i.e. A is n x n )
      \return: 0 -> normal exit, 1 -> singular input matrix
 */
-int G_math_minv(double **a,int n)
+int G_math_minv(double **a, int n)
 {
     return minv(a[0], n);
 }
@@ -253,9 +255,9 @@ int G_math_minv(double **a,int n)
      \param  n = dimension of the system (dim(v)=n*n)
      \return: 0 -> normal exit 1 -> input matrix not positive definite
 */
-int G_math_psinv(double **a,int n)
+int G_math_psinv(double **a, int n)
 {
-    return psinv( a[0], n);
+    return psinv(a[0], n);
 }
 
 
@@ -266,18 +268,19 @@ int G_math_psinv(double **a,int n)
      \param  n = dimension (dim(a)=n*n)
      \return value: status flag, with 0 -> matrix inverted -1 -> matrix singular
 */
-int G_math_ruinv(double **a,int n)
+int G_math_ruinv(double **a, int n)
 {
     return ruinv(a[0], n);
 }
 
 
 /*
------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------
 
-     Symmetric Eigensystem Analysis:
------------------------------------------------------------------------------
-*/
+   Symmetric Eigensystem Analysis:
+   -----------------------------------------------------------------------------
+ */
+
 /**
 
      \brief Compute the eigenvalues of a real symmetric matrix A.
@@ -286,7 +289,7 @@ int G_math_ruinv(double **a,int n)
      \param  ev = pointer to array of the output eigenvalues
      \param  n = dimension parameter (dim(a)= n*n, dim(ev)= n)
 */
-void G_math_eigval(double **a,double *ev,int n)
+void G_math_eigval(double **a, double *ev, int n)
 {
     eigval(a[0], ev, n);
     return;
@@ -307,7 +310,7 @@ void G_math_eigval(double **a,double *ev,int n)
      \param  ev = pointer to the array of the output eigenvalues
      \param  n = dimension parameter (dim(a)= n*n, dim(ev)= n)
 */
-void G_math_eigen(double **a,double *ev,int n)
+void G_math_eigen(double **a, double *ev, int n)
 {
     eigen(a[0], ev, n);
     return;
@@ -315,82 +318,82 @@ void G_math_eigen(double **a,double *ev,int n)
 
 
 /*
-     \brief Compute the maximum (absolute) eigenvalue and corresponding eigenvector of a real symmetric matrix A.
+   \brief Compute the maximum (absolute) eigenvalue and corresponding eigenvector of a real symmetric matrix A.
 
 
-     \param  a = array containing symmetric input matrix A
-     \param  u = array containing the n components of the eigenvector at exit (vector normalized to 1)
-     \param  n = dimension of system
-     \return: ev = eigenvalue of A with maximum absolute value HUGE -> convergence failure
-*/
-double G_math_evmax(double **a,double *u,int n)
+   \param  a = array containing symmetric input matrix A
+   \param  u = array containing the n components of the eigenvector at exit (vector normalized to 1)
+   \param  n = dimension of system
+   \return: ev = eigenvalue of A with maximum absolute value HUGE -> convergence failure
+ */
+double G_math_evmax(double **a, double *u, int n)
 {
     return evmax(a[0], u, n);
 }
 
 
 /* 
-------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
- Singular Value Decomposition:
-------------------------------------------------------------------------------
+   Singular Value Decomposition:
+   ------------------------------------------------------------------------------
 
-     A number of versions of the Singular Value Decomposition (SVD)
-     are implemented in the library. They support the efficient
-     computation of this important factorization for a real m by n
-     matrix A. The general form of the SVD is
+   A number of versions of the Singular Value Decomposition (SVD)
+   are implemented in the library. They support the efficient
+   computation of this important factorization for a real m by n
+   matrix A. The general form of the SVD is
 
-          A = U*S*V~     with S = | D |
-                                  | 0 |
+   A = U*S*V~     with S = | D |
+   | 0 |
 
-     where U is an m by m orthogonal matrix, V is an n by n orthogonal matrix,
-     D is the n by n diagonal matrix of singular value, and S is the singular
-     m by n matrix produced by the transformation.
+   where U is an m by m orthogonal matrix, V is an n by n orthogonal matrix,
+   D is the n by n diagonal matrix of singular value, and S is the singular
+   m by n matrix produced by the transformation.
 
-     The singular values computed by these functions provide important
-     information on the rank of the matrix A, and on several matrix
-     norms of A. The number of non-zero singular values d[i] in D
-     equal to the rank of A. The two norm of A is
+   The singular values computed by these functions provide important
+   information on the rank of the matrix A, and on several matrix
+   norms of A. The number of non-zero singular values d[i] in D
+   equal to the rank of A. The two norm of A is
 
-          ||A|| = max(d[i]) , and the condition number is
+   ||A|| = max(d[i]) , and the condition number is
 
-          k(A) = max(d[i])/min(d[i]) .
+   k(A) = max(d[i])/min(d[i]) .
 
-     The Frobenius norm of the matrix A is
+   The Frobenius norm of the matrix A is
 
-          Fn(A) = Sum(i=0 to n-1) d[i]^2 .
+   Fn(A) = Sum(i=0 to n-1) d[i]^2 .
 
-     Singular values consistent with zero are easily recognized, since
-     the decomposition algorithms have excellent numerical stability.
-     The value of a 'zero' d[i] is no larger than a few times the
-     computational rounding error e.
-     
-     The matrix U1 is formed from the first n orthonormal column vectors
-     of U.  U1[i,j] = U[i,j] for i = 1 to m and j = 1 to n. A singular
-     value decomposition of A can also be expressed in terms of the m by\
-     n matrix U1, with
+   Singular values consistent with zero are easily recognized, since
+   the decomposition algorithms have excellent numerical stability.
+   The value of a 'zero' d[i] is no larger than a few times the
+   computational rounding error e.
 
-                       A = U1*D*V~ .
+   The matrix U1 is formed from the first n orthonormal column vectors
+   of U.  U1[i,j] = U[i,j] for i = 1 to m and j = 1 to n. A singular
+   value decomposition of A can also be expressed in terms of the m by\
+   n matrix U1, with
 
-     SVD functions with three forms of output are provided. The first
-     form computes only the singular values, while the second computes
-     the singular values and the U and V orthogonal transformation
-     matrices. The third form of output computes singular values, the
-     V matrix, and saves space by overloading the input array with
-     the U1 matrix.
+   A = U1*D*V~ .
 
-     Two forms of decomposition algorithm are available for each of the
-     three output types. One is computationally efficient when m ~ n.
-     The second, distinguished by the prefix 'sv2' in the function name,
-     employs a two stage Householder reduction to accelerate computation
-     when m substantially exceeds n. Use of functions of the second form
-     is recommended for m > 2n.
+   SVD functions with three forms of output are provided. The first
+   form computes only the singular values, while the second computes
+   the singular values and the U and V orthogonal transformation
+   matrices. The third form of output computes singular values, the
+   V matrix, and saves space by overloading the input array with
+   the U1 matrix.
 
-     Singular value output from each of the six SVD functions satisfies
+   Two forms of decomposition algorithm are available for each of the
+   three output types. One is computationally efficient when m ~ n.
+   The second, distinguished by the prefix 'sv2' in the function name,
+   employs a two stage Householder reduction to accelerate computation
+   when m substantially exceeds n. Use of functions of the second form
+   is recommended for m > 2n.
 
-          d[i] >= 0 for i = 0 to n-1.
--------------------------------------------------------------------------------
-*/
+   Singular value output from each of the six SVD functions satisfies
+
+   d[i] >= 0 for i = 0 to n-1.
+   -------------------------------------------------------------------------------
+ */
 
 
 /**
@@ -404,7 +407,7 @@ double G_math_evmax(double **a,double *u,int n)
      \return value: status flag with: 0 -> success -1 -> input error m < n
 
 */
-int G_math_svdval(double *d,double **a,int m,int n)
+int G_math_svdval(double *d, double **a, int m, int n)
 {
     return svdval(d, a[0], m, n);
 }
@@ -420,24 +423,24 @@ int G_math_svdval(double *d,double **a,int m,int n)
      \param  n = number of columns in A (m>=n required)
      \return value: status flag with: 0 -> success -1 -> input error m < n
 */
-int G_math_sv2val(double *d,double **a,int m,int n)
+int G_math_sv2val(double *d, double **a, int m, int n)
 {
     return sv2val(d, a[0], m, n);
 }
 
 
 /*
-     \brief Compute the singular value transformation S = U~*A*V.
-     
-     \param  d = pointer to double array of dimension n (output = singular values of A)
-     \param  a = pointer to store of the m by n input matrix A (A is altered by the computation)
-     \param  u = pointer to store for m by m orthogonal matrix U
-     \param  v = pointer to store for n by n orthogonal matrix V
-     \param  m = number of rows in A
-     \param  n = number of columns in A (m>=n required)
-     \return value: status flag with: 0 -> success -1 -> input error m < n
-*/
-int G_math_svduv(double *d,double **a,double **u,int m,double **v,int n)
+   \brief Compute the singular value transformation S = U~*A*V.
+
+   \param  d = pointer to double array of dimension n (output = singular values of A)
+   \param  a = pointer to store of the m by n input matrix A (A is altered by the computation)
+   \param  u = pointer to store for m by m orthogonal matrix U
+   \param  v = pointer to store for n by n orthogonal matrix V
+   \param  m = number of rows in A
+   \param  n = number of columns in A (m>=n required)
+   \return value: status flag with: 0 -> success -1 -> input error m < n
+ */
+int G_math_svduv(double *d, double **a, double **u, int m, double **v, int n)
 {
     return svduv(d, a[0], u[0], m, v[0], n);
 }
@@ -454,7 +457,7 @@ int G_math_svduv(double *d,double **a,double **u,int m,double **v,int n)
      \param  n = number of columns in A (m>=n required)
      \return value: status flag with: 0 -> success -1 -> input error m < n
 */
-int G_math_sv2uv(double *d,double **a,double **u,int m,double **v,int n)
+int G_math_sv2uv(double *d, double **a, double **u, int m, double **v, int n)
 {
     return sv2uv(d, a[0], u[0], m, v[0], n);
 }
@@ -473,7 +476,7 @@ int G_math_sv2uv(double *d,double **a,double **u,int m,double **v,int n)
      \return value: status flag with: 0 -> success -1 -> input error m < n
 
 */
-int G_math_svdu1v(double *d,double **a,int m,double **v,int n)
+int G_math_svdu1v(double *d, double **a, int m, double **v, int n)
 {
     return svdu1v(d, a[0], m, v[0], n);
 }

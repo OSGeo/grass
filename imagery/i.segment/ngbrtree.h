@@ -1,3 +1,4 @@
+
 /*************************************************************
  *                          USAGE                            *
  *************************************************************
@@ -66,7 +67,7 @@
 #include <stddef.h>
 
 /* maximum RB Tree height */
-#define NBTREE_MAX_HEIGHT 64        /* should be more than enough */
+#define NBTREE_MAX_HEIGHT 64    /* should be more than enough */
 
 /* routine to compare data items
  * return -1 if rb_a < rb_b
@@ -75,35 +76,35 @@
  */
 struct ngbr_stats
 {
-    int id;		/* region ID */
-    int row, col;	/* row, col of one cell in this region */
-    int count;		/* number cells in this region */
-    double *mean;	/* mean for each band = sum[b] / count */
+    int id;                     /* region ID */
+    int row, col;               /* row, col of one cell in this region */
+    int count;                  /* number cells in this region */
+    double *mean;               /* mean for each band = sum[b] / count */
 };
 
 
 struct NB_NODE
 {
-    unsigned char red;              /* 0 = black, 1 = red */
-    struct NB_NODE *link[2];        /* link to children: link[0] for smaller, link[1] for larger */
-    struct ngbr_stats data;           /* any kind of data */
+    unsigned char red;          /* 0 = black, 1 = red */
+    struct NB_NODE *link[2];    /* link to children: link[0] for smaller, link[1] for larger */
+    struct ngbr_stats data;     /* any kind of data */
 };
- 
+
 struct NB_TREE
 {
-    struct NB_NODE *root;           /* root node */
-    size_t datasize;                /* item size */
-    size_t count;                   /* number of items in tree. */
-    int nbands;			    /* number of bands */
+    struct NB_NODE *root;       /* root node */
+    size_t datasize;            /* item size */
+    size_t count;               /* number of items in tree. */
+    int nbands;                 /* number of bands */
 };
 
 struct NB_TRAV
 {
-    struct NB_TREE *tree;           /* tree being traversed */
-    struct NB_NODE *curr_node;      /* current node */
-    struct NB_NODE *up[NBTREE_MAX_HEIGHT];  /* stack of parent nodes */
-    int top;                        /* index for stack */
-    int first;                      /* little helper flag */
+    struct NB_TREE *tree;       /* tree being traversed */
+    struct NB_NODE *curr_node;  /* current node */
+    struct NB_NODE *up[NBTREE_MAX_HEIGHT];      /* stack of parent nodes */
+    int top;                    /* index for stack */
+    int first;                  /* little helper flag */
 };
 
 
@@ -119,7 +120,8 @@ int cmp_ngbr(struct ngbr_stats *, struct ngbr_stats *);
 /* tree traversal functions */
 int nbtree_init_trav(struct NB_TRAV *, struct NB_TREE *);
 struct ngbr_stats *nbtree_traverse(struct NB_TRAV *);
-struct ngbr_stats *nbtree_traverse_start(struct NB_TRAV *, struct ngbr_stats *);
+struct ngbr_stats *nbtree_traverse_start(struct NB_TRAV *,
+                                         struct ngbr_stats *);
 
 /* debug tree from given node downwards */
 int nbtree_debug(struct NB_TREE *, struct NB_NODE *);

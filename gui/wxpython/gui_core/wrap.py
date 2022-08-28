@@ -909,6 +909,10 @@ class ListBox(wx.ListBox):
         else:
             wx.ListBox.SetToolTipString(self, tip)
 
+    def DeselectAll(self):
+        for i in range(self.GetCount()):
+            self.Deselect(i)
+
 
 class HyperlinkCtrl(HyperlinkCtrl_):
     """Wrapper around HyperlinkCtrl to have more control

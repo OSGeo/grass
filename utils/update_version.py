@@ -46,16 +46,24 @@ def construct_version(version_info):
     return f"{version_info.major}.{version_info.minor}.{version_info.micro}"
 
 
-def suggest_commit_from_version_file(action):
+def suggest_commit_from_version_file(action, tag):
     """Using information in the version file, suggest a commit message"""
     version_file = read_version_file()
-    suggest_commit(action, construct_version(version_file))
+    suggest_commit(action, construct_version(version_file), tag=tag)
 
 
-def suggest_commit(action, version):
+def suggest_commit(action, version, tag):
     """Suggest a commit message for action and version"""
-    print("message: Use the provided title as a commit message")
-    print(f"title: 'version: {action} {version}'")
+    print("read:")
+    if tag:
+        print("  user_message: Use the provided messages for the commit and the tag.")
+        print("  note: Once all checks pass, you are expected to create a tag.")
+    else:
+        print("  user_message: Use the provided message for the commit")
+    print("use:")
+    print(f"  commit_message: 'version: {action} {version}'")
+    if tag:
+        print(f"  tag_message: 'GRASS GIS {version}'")
 
 
 def release_candidate(args):
@@ -78,7 +86,7 @@ def release_candidate(args):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS")
+    suggest_commit_from_version_file("GRASS GIS", tag=True)
 
 
 def release(_unused):
@@ -98,7 +106,7 @@ def release(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS")
+    suggest_commit_from_version_file("GRASS GIS", tag=True)
 
 
 def update_micro(_unused):
@@ -127,7 +135,7 @@ def update_micro(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("Start")
+    suggest_commit_from_version_file("Start", tag=False)
 
 
 def update_minor(args):
@@ -156,7 +164,7 @@ def update_minor(args):
     write_version_file(
         major=version_file.major, minor=minor, micro=micro, year=this_year()
     )
-    suggest_commit_from_version_file("Start")
+    suggest_commit_from_version_file("Start", tag=False)
 
 
 def update_major(_unused):
@@ -171,7 +179,7 @@ def update_major(_unused):
     minor = 0
     major = int(version_file.major) + 1
     write_version_file(major=major, minor=minor, micro=micro, year=this_year())
-    suggest_commit_from_version_file("Start")
+    suggest_commit_from_version_file("Start", tag=False)
 
 
 def back_to_dev(_unused):
@@ -199,7 +207,7 @@ def back_to_dev(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file(action)
+    suggest_commit_from_version_file(action, tag=False)
 
 
 def status_as_yaml(version_info, today, version, tag):

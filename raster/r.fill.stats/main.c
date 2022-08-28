@@ -83,9 +83,9 @@ typedef struct
 
 
 /* function pointers for operation modes */
-void (*GET_STATS) (unsigned long, unsigned long, double, double, int,
-                   stats_struct *);
-void (*COLLECT_DATA) (double, double, double, double, stats_struct *);
+void (*GET_STATS)(unsigned long, unsigned long, double, double, int,
+                  stats_struct *);
+void (*COLLECT_DATA)(double, double, double, double, stats_struct *);
 
 
 /*
@@ -326,6 +326,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
     unsigned long i, j;
     void *cell;
     double cell_value;
+
     stats->overwrite = 0;
     if (preserve == TRUE) {
         cell = CELL_INPUT_HANDLES[row_index];
@@ -333,8 +334,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
         cell += CELL_IN_SIZE * ((DATA_WIDTH - 1) / 2);
         if (!IS_NULL(cell)) {
             stats->overwrite = 1;
-            *stats->overwrite_value =
-                    (double)Rast_get_d_value(cell, IN_TYPE);
+            *stats->overwrite_value = (double)Rast_get_d_value(cell, IN_TYPE);
             return;
         }
     }
@@ -356,8 +356,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
                 /* only add if within neighborhood */
                 if (WEIGHTS[i][j] != -1.0) {
                     /* get data needed for chosen statistic */
-                    COLLECT_DATA(cell_value, WEIGHTS[i][j], min, max,
-                                 stats);
+                    COLLECT_DATA(cell_value, WEIGHTS[i][j], min, max, stats);
                 }
             }
             /* go to next cell on current row */
@@ -570,8 +569,7 @@ void interpolate_row(unsigned long row_index, unsigned long cols,
             WRITE_DOUBLE_VAL(cell_output, *stats->overwrite_value);
             /* write error/uncertainty output map? */
             if (write_err) {
-                Rast_set_f_value(err_output, 0,
-                                 FCELL_TYPE);
+                Rast_set_f_value(err_output, 0, FCELL_TYPE);
             }
         }
         /* enough reachable cells in input map? */
@@ -856,8 +854,7 @@ int main(int argc, char *argv[])
     parm.preserve = G_define_flag();
     parm.preserve->key = 'k';
     parm.preserve->label = _("Keep (preserve) original cell values");
-    parm.preserve->description =
-        _("By default original values are smoothed");
+    parm.preserve->description = _("By default original values are smoothed");
 
     parm.print_w = G_define_flag();
     parm.print_w->key = 'w';

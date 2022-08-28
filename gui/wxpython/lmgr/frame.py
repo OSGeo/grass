@@ -153,6 +153,9 @@ class GMFrame(wx.Frame):
 
         # create widgets
         self._createMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.statusbar = SbMain(parent=self, giface=self._giface)
         self.notebook = self._createNotebook()
         self._createDataCatalog(self.notebook)
@@ -2233,18 +2236,6 @@ class GMFrame(wx.Frame):
                     self.notebook.SetSelectionByName("output")
                 else:
                     self.notebook.SetSelectionByName("layers")
-
-        try:
-            ckc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
 
         event.Skip()
 
