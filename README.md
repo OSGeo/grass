@@ -32,9 +32,9 @@ Want to become a core developer? See
 
 ## How to compile GRASS
 
-> See INSTALL file.
+> See the INSTALL.md file.
 
-Yes, you should really read [INSTALL](INSTALL). In addition, there are detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
+Yes, you should really read [INSTALL.md](INSTALL.md). In addition, there are detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
 
 ## Docker
 
