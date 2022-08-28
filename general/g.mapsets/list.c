@@ -9,6 +9,8 @@ void list_available_mapsets(const char **mapset_name, int nmapsets,
 {
     int n;
 
+    G_message(_("Available mapsets:"));
+
     for (n = 0; n < nmapsets; n++) {
         fprintf(stdout, "%s", mapset_name[n]);
         if (n < nmapsets - 1) {
@@ -32,6 +34,8 @@ void list_accessible_mapsets(const char *fs)
     int n;
     const char *name;
 
+    G_message(_("Accessible mapsets:"));
+    
     for (n = 0; (name = G_get_mapset_name(n)); n++) {
         /* match each mapset to its numeric equivalent */
         fprintf(stdout, "%s", name);
@@ -64,26 +68,4 @@ void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
     }
     fprintf(stdout, "]}\n");
 
-}
-
-
-void list_avaliable_mapsets_vertical(const char **mapset_name, int nmapsets,
-                                     const char *vsep)
-{
-    int n;
-
-    for (n = 0; n < nmapsets; n++) {
-        fprintf(stdout, "%s", mapset_name[n]);
-        if (n < nmapsets - 1) {
-            if (strcmp(vsep, "space") == 0)
-                fprintf(stdout, " \n");
-            else if (strcmp(vsep, "comma") == 0)
-                fprintf(stdout, ",\n");
-            else if (strcmp(vsep, "tab") == 0)
-                fprintf(stdout, "\t\n");
-            else
-                fprintf(stdout, "%s\n", vsep);
-        }
-    }
-    fprintf(stdout, "\n");
 }

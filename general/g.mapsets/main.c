@@ -37,9 +37,7 @@
 enum OutputFormat
 {
     PLAIN,
-    JSON,
-    CSV,
-    VERTICAL
+    JSON
 };
 
 void fatal_error_option_value_excludes_flag(struct Option *option,
@@ -74,18 +72,17 @@ int main(int argc, char *argv[])
     int no_tokens;
     FILE *fp;
     char path_buf[GPATH_MAX];
-    char *path, *fsep, *vsep;
+    char *path, *fsep;
     int operation, nchoices;
     enum OutputFormat format;
-    bool vsep_needs_newline;
     char **mapset_name;
     int nmapsets;
 
     struct GModule *module;
     struct _opt
     {
-        struct Option *mapset, *op, *format, *fsep, *vsep, *nullval;
-        struct Flag *print, *list, *dialog, *escape;
+        struct Option *mapset, *op, *format, *fsep;
+        struct Flag *print, *list, *dialog;
     } opt;
 
     G_gisinit(argv[0]);
@@ -120,32 +117,16 @@ int main(int argc, char *argv[])
     opt.format->type = TYPE_STRING;
     opt.format->required = YES;
     opt.format->label = _("Output format for printing (-l and -p flags)");
-    opt.format->options = "plain,csv,json,vertical";
+    opt.format->options = "plain,json";
     opt.format->descriptions =
         "plain;Configurable plain text output;"
-        "csv;CSV (Comma Separated Values);"
-        "json;JSON (JavaScript Object Notation);"
-        "vertical;Plain text vertical output (instead of horizontal)";
+        "json;JSON (JavaScript Object Notation);";
     opt.format->answer = "plain";
     opt.format->guisection = _("Format");
 
     opt.fsep = G_define_standard_option(G_OPT_F_SEP);
     opt.fsep->answer = NULL;
     opt.fsep->guisection = _("Format");
-
-    opt.vsep = G_define_standard_option(G_OPT_F_SEP);
-    opt.vsep->key = "vertical_separator";
-    opt.vsep->label = _("Output vertical record separator");
-    opt.vsep->answer = NULL;
-    opt.vsep->guisection = _("Format");
-
-    opt.nullval = G_define_standard_option(G_OPT_M_NULL_VALUE);
-    opt.nullval->guisection = _("Format");
-
-    opt.escape = G_define_flag();
-    opt.escape->key = 'e';
-    opt.escape->description = _("Escape newline and backslash characters");
-    opt.escape->guisection = _("Format");
 
     opt.list = G_define_flag();
     opt.list->key = 'l';
@@ -190,25 +171,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (strcmp(opt.format->answer, "csv") == 0)
-        format = CSV;
-    else if (strcmp(opt.format->answer, "json") == 0)
+    if (strcmp(opt.format->answer, "json") == 0)
         format = JSON;
-    else if (strcmp(opt.format->answer, "vertical") == 0)
-        format = VERTICAL;
     else
         format = PLAIN;
     if (format == JSON) {
-        fatal_error_option_value_excludes_flag(opt.format, opt.escape,
-                                               _("Escaping is based on the format"));
         fatal_error_option_value_excludes_option(opt.format, opt.fsep,
                                                  _("Separator is part of the format"));
-        fatal_error_option_value_excludes_option(opt.format, opt.nullval,
-                                                 _("Null value is part of the format"));
-    }
-    if (format != VERTICAL) {
-        fatal_error_option_value_excludes_option(opt.format, opt.vsep,
-                                                 _("Only vertical output can use vertical separator"));
     }
 
     /* the field separator */
@@ -217,23 +186,12 @@ int main(int argc, char *argv[])
     }
     else {
         /* A different separator is needed to for each format and output. */
-        if (format == CSV) {
-            fsep = G_store(",");
-        }
-        else if (format == PLAIN) {
+        if (format == PLAIN) {
             fsep = G_store("|");
         }
         else
             fsep = NULL;        /* Something like a separator is part of the format. */
     }
-
-    if (opt.vsep->answer)
-        vsep = G_option_to_separator(opt.vsep);
-    else
-        vsep = G_store("\n");
-    vsep_needs_newline = true;
-    if (vsep && !strcmp(vsep, "\n"))
-        vsep_needs_newline = false;
 
     /* list available mapsets */
     if (opt.list->answer) {
@@ -246,10 +204,6 @@ int main(int argc, char *argv[])
         mapset_name = get_available_mapsets(&nmapsets);
         if (format == JSON) {
             list_avaliable_mapsets_json((const char **)mapset_name, nmapsets);
-        }
-        else if (format == VERTICAL) {
-            list_avaliable_mapsets_vertical((const char **)mapset_name,
-                                            nmapsets, vsep);
         }
         else {
             list_available_mapsets((const char **)mapset_name, nmapsets,

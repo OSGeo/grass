@@ -14,47 +14,56 @@
 """Test parsing and structure of CSV and JSON outputs from g.mapsets"""
 
 import json
+import pytest
 import grass.script as gs
 
 
-def check_separators(format, mapsets):
-    SEPARATORS = ["newline", "space", "comma", "tab", "pipe", None]
-
-    for sep in SEPARATORS:
-        text = gs.read_command("g.mapsets", format=format, separator=sep, flags="l")
-        if sep == "newline":
-            assert text == "\n".join(mapsets) + "\n"
-        elif sep == "space":
-            assert text == " ".join(mapsets) + "\n"
-        elif sep == "comma":
-            assert text == ",".join(mapsets) + "\n"
-        elif sep == "tab":
-            assert text == "\t".join(mapsets) + "\n"
-        elif sep == "pipe":
-            assert text == "|".join(mapsets) + "\n"
-        else:
-            # Default vallue
-            assert text == "|".join(mapsets) + "\n"
-
-
-def test_plain_output(simple_dataset):
+@pytest.mark.parametrize(
+    "separator", ["newline", "space", "comma", "tab", "pipe", ",", None]
+)
+def test_plain_output(simple_dataset, separator):
     """Test that the separators are properly applied"""
-    check_separators("plain", simple_dataset.mapsets)
+    mapsets = simple_dataset.mapsets
+    text = gs.read_command("g.mapsets", format="plain", separator=separator, flags="l")
+
+    def _check_parsed_list(text, sep):
+        """Asserts to run on for each separator"""
+        parsed_list = text.splitlines()
+
+        # Make sure new line conditions are handled correctly
+        if sep != "\n":
+            parsed_list = text.split(sep)
+            assert parsed_list[-1] == "test3\n"
+        else:
+            assert parsed_list[-1] == "test3"
+
+        assert len(parsed_list) == 4
+        assert parsed_list[0] == "PERMANENT"
+        assert text == sep.join(mapsets) + "\n"
+
+    if separator == "newline":
+        _check_parsed_list(text, "\n")
+    elif separator == "space":
+        _check_parsed_list(text, " ")
+    elif separator == "comma":
+        _check_parsed_list(text, ",")
+    elif separator == "tab":
+        assert text == "\t".join(mapsets) + "\n"
+    elif separator == "pipe":
+        assert text == "|".join(mapsets) + "\n"
+    elif separator == ",":
+        assert text == ",".join(mapsets) + "\n"
+    else:
+        # Default vallue
+        assert text == "|".join(mapsets) + "\n"
 
 
 def test_json_ouput(simple_dataset):
     """JSON format"""
     text = gs.read_command("g.mapsets", format="json", flags="l")
-    print(f"Text JSON: {text}")
     data = json.loads(text)
     assert list(data.keys()) == ["mapsets"]
     assert isinstance(data["mapsets"], list)
     assert len(data["mapsets"]) == 4
     for mapset in simple_dataset.mapsets:
         assert mapset in data["mapsets"]
-
-
-def test_csv_output(simple_dataset):
-    """CSV format"""
-    text = gs.read_command("g.mapsets", format="csv", flags="l")
-    assert text == ",".join(simple_dataset.mapsets) + "\n"

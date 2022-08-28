@@ -5,11 +5,11 @@ Fixture for grass.jupyter.TimeSeries test
 Fixture for ReprojectionRenderer test with simple GRASS location, raster, vector.
 """
 
+
 from types import SimpleNamespace
 
-import pytest
-
 import grass.script as gs
+import pytest
 
 TEST_MAPSETS = ["PERMANENT", "test1", "test2", "test3"]
 
