@@ -692,7 +692,10 @@ if not re.search("<html>", src_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
     if tmp_data:
         for line in tmp_data.splitlines(True):
-            if not re.search("</body>|</html>", line, re.IGNORECASE):
+            # The cleanup happens on Makefile level too.
+            if not re.search(
+                "</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
+            ):
                 sys.stdout.write(line)
 
 # create TOC

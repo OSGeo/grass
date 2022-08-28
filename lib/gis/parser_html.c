@@ -301,6 +301,7 @@ void G__usage_html(void)
     }
     fprintf(stdout, "</div>\n");
 
+    fprintf(stdout, "</div> <!-- end container -->\n");
     fprintf(stdout, "</body>\n</html>\n");
 }
 
