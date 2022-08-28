@@ -2032,7 +2032,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """.format(
             sh_history=sh_history
         )
-        # Ubuntu sudo creates a file .sudo_as_admin_successful and cbash checks
+        # Ubuntu sudo creates a file .sudo_as_admin_successful and bash checks
         # for this file in the home directory from /etc/bash.bashrc and prints a
         # message if it's not detected. This can be suppressed with either
         # creating the file ~/.sudo_as_admin_successful (it's always empty) or
