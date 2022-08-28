@@ -371,6 +371,16 @@ class TestRasterUnivar(TestCase):
             precision=6,
             sep="=",
         )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            zones="zone_map",
+            flags="ge",
+            nprocs=4,
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
 
 
 class TestAccumulateFails(TestCase):
