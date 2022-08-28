@@ -75,6 +75,7 @@ GLOBAL int skip_cells;
 GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
+
 /* Zenith/nadir comparison modes. */
 GLOBAL enum
 {

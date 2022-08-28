@@ -1,17 +1,12 @@
 """
 @package photo2image.ip2i_mapdisplay
-
 @brief Display to manage ground control points with two toolbars, one
 for various display management functions, one for manipulating GCPs.
-
 Classes:
-- mapdisplay::MapFrame
-
+- mapdisplay::MapPanel
 (C) 2006-2011 by the GRASS Development Team
-
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
-
 @author Markus Metz
 """
 
@@ -27,10 +22,9 @@ from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GMessage
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
-from gui_core.mapdisp import SingleMapFrame
+from gui_core.mapdisp import SingleMapPanel
 from gui_core.wrap import Menu
 from mapwin.buffered import BufferedMapWindow
-from mapwin.base import MapWindowProperties
 
 import mapdisp.statusbar as sb
 import gcp.statusbar as sbgcp
@@ -39,8 +33,8 @@ import gcp.statusbar as sbgcp
 cmdfilename = None
 
 
-class MapFrame(SingleMapFrame):
-    """Main frame for map display window. Drawing takes place in
+class MapPanel(SingleMapPanel):
+    """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
 
@@ -57,7 +51,6 @@ class MapFrame(SingleMapFrame):
     ):
         """Main map display window with toolbars, statusbar and
         DrawWindow
-
         :param giface: GRASS interface instance
         :param title: window title
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
@@ -66,7 +59,7 @@ class MapFrame(SingleMapFrame):
         :param kwargs: wx.Frame attribures
         """
 
-        SingleMapFrame.__init__(
+        SingleMapPanel.__init__(
             self,
             parent=parent,
             giface=giface,
@@ -78,9 +71,7 @@ class MapFrame(SingleMapFrame):
         )
 
         self._giface = giface
-        # properties are shared in other objects, so defining here
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
+
         self.mapWindowProperties.alignExtent = True
 
         #
@@ -105,18 +96,14 @@ class MapFrame(SingleMapFrame):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
-            sb.SbProjection,
             sbgcp.SbGoToGCP,
             sbgcp.SbRMSError,
         ]
 
         # create statusbar and its manager
         self.statusbar = self.CreateStatusbar(statusbarItems)
-        self.statusbarManager.SetMode(8)  # goto GCP
 
         #
         # Init map display (buffered DC & set default cursor)
@@ -173,6 +160,9 @@ class MapFrame(SingleMapFrame):
         # windows
         self.list = self.CreateGCPList()
 
+        # set Go To GCP item as active in statusbar
+        self.mapWindowProperties.sbItem = 5
+
         # self.SrcMapWindow.SetSize((300, 300))
         # self.TgtMapWindow.SetSize((300, 300))
         self.list.SetSize((100, 150))
@@ -220,11 +210,8 @@ class MapFrame(SingleMapFrame):
 
         self.decorationDialog = None  # decoration/overlays
 
-        # doing nice things in statusbar when other things are ready
-        self.statusbarManager.Update()
-
     def _setUpMapWindow(self, mapWindow):
-        # TODO: almost the same implementation as for MapFrameBase (only names differ)
+        # TODO: almost the same implementation as for MapPanelBase (only names differ)
         # enable or disable zoom history tool
         mapWindow.zoomHistoryAvailable.connect(
             lambda: self.GetMapToolbar().Enable("zoomback", enable=True)
@@ -236,7 +223,6 @@ class MapFrame(SingleMapFrame):
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
-
         Currently known toolbars are:
          - 'map'     - basic map toolbar
          - 'gcpdisp' - GCP Manager, Display

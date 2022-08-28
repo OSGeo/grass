@@ -58,25 +58,25 @@ DCELL d_calc(DCELL x)
  */
 int main(int argc, char *argv[])
 {
-    struct Cell_head cellhd;	/* it stores region information,
-				   and header information of rasters */
-    char *name;			/* input raster name */
-    char *result;		/* output raster name */
-    char *mapset;		/* mapset name */
-    void *inrast;		/* input buffer */
-    unsigned char *outrast;	/* output buffer */
+    struct Cell_head cellhd;    /* it stores region information,
+                                   and header information of rasters */
+    char *name;                 /* input raster name */
+    char *result;               /* output raster name */
+    char *mapset;               /* mapset name */
+    void *inrast;               /* input buffer */
+    unsigned char *outrast;     /* output buffer */
     int nrows, ncols;
     int row, col;
-    int infd, outfd;		/* file descriptor */
-    RASTER_MAP_TYPE data_type;	/* type of the map (CELL/DCELL/...) */
-    struct History history;	/* holds meta-data (title, comments,..) */
+    int infd, outfd;            /* file descriptor */
+    RASTER_MAP_TYPE data_type;  /* type of the map (CELL/DCELL/...) */
+    struct History history;     /* holds meta-data (title, comments,..) */
 
-    struct GModule *module;	/* GRASS module for parsing arguments */
+    struct GModule *module;     /* GRASS module for parsing arguments */
 
-    struct Option *input, *output;	/* options */
+    struct Option *input, *output;      /* options */
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
+    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
     /* options and flags parser */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* stores options and flags to variables */
     name = input->answer;
@@ -100,9 +100,9 @@ int main(int argc, char *argv[])
 
     /* returns NULL if the map was not found in any mapset, 
      * mapset name otherwise */
-    mapset = (char *) G_find_raster2(name, "");
+    mapset = (char *)G_find_raster2(name, "");
     if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
+        G_fatal_error(_("Raster map <%s> not found"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
     data_type = Rast_map_type(name, mapset);
@@ -128,39 +128,39 @@ int main(int argc, char *argv[])
 
     /* for each row */
     for (row = 0; row < nrows; row++) {
-	CELL c;
-	FCELL f;
-	DCELL d;
+        CELL c;
+        FCELL f;
+        DCELL d;
 
-	G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
 
-	/* read input map */
-	Rast_get_row(infd, inrast, row, data_type);
+        /* read input map */
+        Rast_get_row(infd, inrast, row, data_type);
 
-	/* process the data */
-	for (col = 0; col < ncols; col++) {
-	    /* use different function for each data type */
-	    switch (data_type) {
-	    case CELL_TYPE:
-		c = ((CELL *) inrast)[col];
-		c = c_calc(c);	/* calculate */
-		((CELL *) outrast)[col] = c;
-		break;
-	    case FCELL_TYPE:
-		f = ((FCELL *) inrast)[col];
-		f = f_calc(f);	/* calculate */
-		((FCELL *) outrast)[col] = f;
-		break;
-	    case DCELL_TYPE:
-		d = ((DCELL *) inrast)[col];
-		d = d_calc(d);	/* calculate */
-		((DCELL *) outrast)[col] = d;
-		break;
-	    }
-	}
+        /* process the data */
+        for (col = 0; col < ncols; col++) {
+            /* use different function for each data type */
+            switch (data_type) {
+            case CELL_TYPE:
+                c = ((CELL *) inrast)[col];
+                c = c_calc(c);  /* calculate */
+                ((CELL *) outrast)[col] = c;
+                break;
+            case FCELL_TYPE:
+                f = ((FCELL *) inrast)[col];
+                f = f_calc(f);  /* calculate */
+                ((FCELL *) outrast)[col] = f;
+                break;
+            case DCELL_TYPE:
+                d = ((DCELL *) inrast)[col];
+                d = d_calc(d);  /* calculate */
+                ((DCELL *) outrast)[col] = d;
+                break;
+            }
+        }
 
-	/* write raster row to output raster map */
-	Rast_put_row(outfd, outrast, data_type);
+        /* write raster row to output raster map */
+        Rast_put_row(outfd, outrast, data_type);
     }
 
     /* memory cleanup */

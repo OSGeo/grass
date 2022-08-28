@@ -25,7 +25,7 @@ int db__driver_close_cursor(dbCursor * dbc)
     /* get my cursor via the dbc token */
     c = (cursor *) db_find_token(db_get_cursor_token(dbc));
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
     /* free_cursor(cursor) */
     free_cursor(c);
@@ -41,8 +41,8 @@ cursor *alloc_cursor()
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-	db_d_append_error(_("Unable allocate cursor."));
-	return NULL;
+        db_d_append_error(_("Unable allocate cursor."));
+        return NULL;
     }
 
     c->res = NULL;
@@ -50,8 +50,8 @@ cursor *alloc_cursor()
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-	db_d_append_error(_("Unable to add dnew token."));
-	return NULL;
+        db_d_append_error(_("Unable to add dnew token."));
+        return NULL;
     }
 
     c->cols = NULL;
@@ -65,7 +65,7 @@ void free_cursor(cursor * c)
     db_drop_token(c->token);
 
     if (c->res) {
-	mysql_free_result(c->res);
+        mysql_free_result(c->res);
     }
 
     G_free(c->cols);

@@ -16,13 +16,13 @@
 #include "macros.h"
 
 /*!
-  \brief Open database connection
+   \brief Open database connection
 
-  \param driver db driver
-  \param handle handle info (database and schema name)
+   \param driver db driver
+   \param handle handle info (database and schema name)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_open_database(dbDriver * driver, dbHandle * handle)
 {
@@ -39,7 +39,7 @@ int db_open_database(dbDriver * driver, dbHandle * handle)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code;        /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;

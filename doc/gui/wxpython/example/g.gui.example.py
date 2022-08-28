@@ -19,7 +19,7 @@
 ############################################################################
 
 # %module
-# % description: Example GUI application which displays raster map and further information
+# % description: Example GUI app which displays raster map and further information
 # % keyword: example
 # % keyword: GUI
 # % keyword: raster
@@ -31,7 +31,6 @@
 
 import os
 import sys
-import wx
 
 
 # i18n is taken care of in the grass library code.
@@ -43,15 +42,21 @@ if __name__ == "__main__":
     if wxbase not in sys.path:
         sys.path.append(wxbase)
 
-from core.globalvar import CheckWxVersion
-from core.giface import StandaloneGrassInterface
-from core.utils import GuiModuleMain
-from core.settings import UserSettings
-from example.frame import ExampleMapFrame
-
 
 def main():
     options, flags = gcore.parser()
+
+    import wx
+
+    from grass.script.setup import set_gui_path
+
+    set_gui_path()
+
+    from core.globalvar import CheckWxVersion, MAP_WINDOW_SIZE
+    from core.giface import StandaloneGrassInterface
+    from core.settings import UserSettings
+    from example.frame import ExampleMapDisplay
+
     if options["input"]:
         map_name = gcore.find_file(name=options["input"], element="cell")["fullname"]
         if not map_name:
@@ -72,10 +77,17 @@ def main():
         wx.InitAllImageHandlers()
 
     # show main frame
-    giface = StandaloneGrassInterface()
-    frame = ExampleMapFrame(parent=None, giface=giface)
+    frame = wx.Frame(
+        parent=None, size=MAP_WINDOW_SIZE, title=_("Example Tool - GRASSGIS")
+    )
+    frame = ExampleMapDisplay(
+        parent=frame,
+        giface=StandaloneGrassInterface(),
+    )
     if options["input"]:
-        giface.WriteLog(_("Loading raster map <{raster}>...").format(raster=map_name))
+        frame.giface.WriteLog(
+            _("Loading raster map <{raster}>...").format(raster=map_name)
+        )
         frame.SetLayer(map_name)
 
     frame.Show()
@@ -83,4 +95,4 @@ def main():
 
 
 if __name__ == "__main__":
-    GuiModuleMain(main)
+    main()

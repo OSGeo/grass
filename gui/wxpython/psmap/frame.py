@@ -258,6 +258,15 @@ class PsMapFrame(wx.Frame):
         self.book.SetSelection(page_index)
         self.currentPage = page_index
 
+    def _getGhostscriptProgramName(self):
+        """Get Ghostscript program name
+
+        :return: Ghostscript program name
+        """
+        import platform
+
+        return "gswin64c" if "64" in platform.architecture()[0] else "gswin32c"
+
     def InstructionFile(self):
         """Creates mapping instructions"""
 
@@ -469,36 +478,36 @@ class PsMapFrame(wx.Frame):
 
                     im_array = np.array(im)
                     im = PILImage.fromarray(np.rot90(im_array, 3))
-
-                # hack for Windows, change method for loading EPS
-                if sys.platform == "win32":
-                    import types
-
-                    im.load = types.MethodType(loadPSForWindows, im)
                 im.save(self.imgName, format="PNG")
-            except (IOError, OSError) as e:
+            except (IOError, OSError):
                 del busy
+                program = self._getGhostscriptProgramName()
                 dlg = HyperlinkDialog(
                     self,
                     title=_("Preview not available"),
                     message=_(
                         "Preview is not available probably because Ghostscript is not installed or not on PATH."
                     ),
-                    hyperlink="http://trac.osgeo.org/grass/wiki/CompileOnWindows#Ghostscript",
-                    hyperlinkLabel=_("Please follow instructions on GRASS Trac Wiki."),
+                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                    hyperlinkLabel=_(
+                        "You can donwload {program} {arch} version here."
+                    ).format(
+                        program=program,
+                        arch="64bit" if "64" in program else "32bit",
+                    ),
                 )
                 dlg.ShowModal()
                 dlg.Destroy()
                 return
 
+            self.book.SetSelection(1)
+            self.currentPage = 1
             rect = self.previewCanvas.ImageRect()
             self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
             self.previewCanvas.DrawImage(rect=rect)
 
             del busy
             self.SetStatusText(_("Preview generated"), 0)
-            self.book.SetSelection(1)
-            self.currentPage = 1
 
         grass.try_remove(event.userData["instrFile"])
         if event.userData["temp"]:
@@ -969,7 +978,7 @@ class PsMapFrame(wx.Frame):
         """creates a wx.Font object from selected postscript font. To be
         used for estimating bounding rectangle of text"""
 
-        fontsize = textDict["fontsize"] * self.canvas.currScale
+        fontsize = round(textDict["fontsize"] * self.canvas.currScale)
         fontface = textDict["font"].split("-")[0]
         try:
             fontstyle = textDict["font"].split("-")[1]
@@ -1459,8 +1468,9 @@ class PsMapBufferedWindow(wx.Window):
             units.convert(value=(rect.GetY() - pRecty), fromUnit=fromU, toUnit=toU)
             * scale
         )
-
-        return Rect2D(X, Y, Width, Height)
+        if canvasToPaper:
+            return Rect2D(X, Y, Width, Height)
+        return Rect2D(int(X), int(Y), int(Width), int(Height))
 
     def SetPage(self):
         """Sets and changes page, redraws paper"""
@@ -1481,7 +1491,7 @@ class PsMapBufferedWindow(wx.Window):
 
         x = cW / 2 - pW / 2
         y = cH / 2 - pH / 2
-        self.DrawPaper(Rect(x, y, pW, pH))
+        self.DrawPaper(Rect(int(x), int(y), int(pW), int(pH)))
 
     def modifyRectangle(self, r):
         """Recalculates rectangle not to have negative size"""
@@ -2347,7 +2357,7 @@ class PsMapBufferedWindow(wx.Window):
             bounds = self.pdcPaper.GetIdBounds(self.pageId)
         else:
             bounds = self.pdcImage.GetIdBounds(self.imageId)
-        zoomP = bounds.Inflate(bounds.width / 20, bounds.height / 20)
+        zoomP = bounds.Inflate(round(bounds.width / 20), round(bounds.height / 20))
         zoomFactor, view = self.ComputeZoom(zoomP)
         self.Zoom(zoomFactor, view)
 
@@ -2400,7 +2410,7 @@ class PsMapBufferedWindow(wx.Window):
             text = "\n".join(self.itemLabels[drawid])
             w, h, lh = dc.GetFullMultiLineTextExtent(text)
             textExtent = (w, h)
-            textRect = Rect(0, 0, *textExtent).CenterIn(bb)
+            textRect = Rect(0, 0, *textExtent).CenterIn(Rect(*bb))
             r = map(int, bb)
             while not Rect(*r).ContainsRect(textRect) and size >= 8:
                 size -= 2
@@ -2408,7 +2418,7 @@ class PsMapBufferedWindow(wx.Window):
                 dc.SetFont(font)
                 pdc.SetFont(font)
                 textExtent = dc.GetTextExtent(text)
-                textRect = Rect(0, 0, *textExtent).CenterIn(bb)
+                textRect = Rect(0, 0, *textExtent).CenterIn(Rect(*bb))
             pdc.SetTextForeground(wx.Colour(100, 100, 100, 200))
             pdc.SetBackgroundMode(wx.TRANSPARENT)
             pdc.DrawLabel(text=text, rect=textRect)
@@ -2417,9 +2427,9 @@ class PsMapBufferedWindow(wx.Window):
             pdc.DrawCircle(x=bb[0] + bb[2] / 2, y=bb[1] + bb[3] / 2, radius=bb[2] / 2)
 
         elif pdctype == "line":
-            pdc.DrawLinePoint(lineCoords[0], lineCoords[1])
+            pdc.DrawLinePoint(*lineCoords[0], *lineCoords[1])
 
-        pdc.SetIdBounds(drawid, bb)
+        pdc.SetIdBounds(drawid, Rect(*bb))
         pdc.EndDrawing()
         self.Refresh()
 
@@ -2471,11 +2481,6 @@ class PsMapBufferedWindow(wx.Window):
     def DrawBitmap(self, pdc, filePath, rotation, bbox):
         """Draw bitmap using PIL"""
         pImg = PILImage.open(filePath)
-        if sys.platform == "win32" and "eps" in os.path.splitext(filePath)[1].lower():
-            import types
-
-            pImg.load = types.MethodType(loadPSForWindows, pImg)
-
         if rotation:
             # get rid of black background
             pImg = pImg.convert("RGBA")
@@ -2565,7 +2570,7 @@ class PsMapBufferedWindow(wx.Window):
 
         self.pdcPaper.SetPen(self.pen["margins"])
         self.pdcPaper.SetBrush(self.brush["margins"])
-        self.pdcPaper.DrawRectangle(x, y, w, h)
+        self.pdcPaper.DrawRectangle(int(x), int(y), int(w), int(h))
 
         self.pdcPaper.SetIdBounds(self.pageId, rect)
         self.pdcPaper.EndDrawing()
@@ -2582,7 +2587,7 @@ class PsMapBufferedWindow(wx.Window):
         iH = iH * self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
-        imageRect = Rect(x, y, iW, iH)
+        imageRect = Rect(int(x), int(y), int(iW), int(iH))
 
         return imageRect
 
@@ -2716,8 +2721,8 @@ class PsMapBufferedWindow(wx.Window):
     def ScaleRect(self, rect, scale):
         """Scale rectangle"""
         return Rect(
-            rect.GetLeft() * scale,
-            rect.GetTop() * scale,
-            rect.GetSize()[0] * scale,
-            rect.GetSize()[1] * scale,
+            int(rect.GetLeft() * scale),
+            int(rect.GetTop() * scale),
+            int(rect.GetSize()[0] * scale),
+            int(rect.GetSize()[1] * scale),
         )

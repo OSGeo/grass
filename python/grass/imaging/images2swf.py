@@ -371,7 +371,7 @@ def floatsToBits(arr):
         i1 = int(i)
         i2 = i - i1
         bits += intToBits(i1, 15)
-        bits += intToBits(i2 * 2 ** 16, 16)
+        bits += intToBits(i2 * 2**16, 16)
     return bits
 
 

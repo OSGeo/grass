@@ -264,7 +264,7 @@ def get_tgis_message_interface():
     """Return the temporal GIS message interface which is of type
     grass.pygrass.message.Messenger()
 
-    Use this message interface to print messages to stdout using the
+    Use this message interface to print messages to stderr using the
     GRASS C-library messaging system.
     """
     global message_interface
@@ -712,13 +712,14 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = _(
-        "Please create a backup of your temporal database to avoid losing data.\n"
-    )
     if tgis_db_version > 2:
-        backup_howto += _("Run t.upgrade command to upgrade your temporal database.\n")
+        backup_howto = _(
+            "Run t.upgrade command to upgrade your temporal database.\n"
+            "Consider creating a backup of your temporal database to avoid "
+            "loosing data in case something goes wrong.\n"
+        )
     else:
-        backup_howto += _(
+        backup_howto = _(
             "You need to export it by "
             "restoring the GRASS GIS version used for creating this DB."
             "Notes: Use t.rast.export and t.vect.export "

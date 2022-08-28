@@ -16752,7 +16752,7 @@ msgid "EPSG code:"
 msgstr "EPSG kods:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "Proj.4 string (required):"
+msgid "PROJ string (required):"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
@@ -16761,7 +16761,7 @@ msgstr "EPSG datne:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
 msgid ""
-"Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string "
+"Load EPSG codes (be patient), enter EPSG code or insert PROJ string "
 "directly."
 msgstr ""
 

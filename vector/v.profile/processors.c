@@ -14,7 +14,7 @@ static size_t alloc_size = 0;
 
 /* Add point to result data set */
 void add_point(const int cat, const double dist,
-               const double z, size_t * rescount, const int open3d)
+               const double z, size_t *rescount, const int open3d)
 {
     Result *tmp;
 
@@ -48,7 +48,7 @@ void add_point(const int cat, const double dist,
 /* Check if point is on profile line (inside buffer) and calculate distance to it */
 void proc_point(struct line_pnts *Points, struct line_pnts *Profil,
                 struct line_pnts *Buffer, const int cat,
-                size_t * rescount, const int open3d)
+                size_t *rescount, const int open3d)
 {
     double dist;
 
@@ -61,7 +61,7 @@ void proc_point(struct line_pnts *Points, struct line_pnts *Profil,
 
 /* Process all line intersection points */
 void proc_line(struct line_pnts *Ipoints, struct line_pnts *Profil,
-               const int cat, size_t * rescount, const int open3d)
+               const int cat, size_t *rescount, const int open3d)
 {
     int i;
     double dist;

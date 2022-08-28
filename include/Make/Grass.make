@@ -100,7 +100,6 @@ MANDIR = $(MANBASEDIR)/man$(MANSECT)
 HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/utils/g.html2man.py
 
 GDAL_LINK = $(USE_GDAL)
-GDAL_DYNAMIC = 1
 
 DEPFILE = depend.mk
 
@@ -235,15 +234,7 @@ DISPLAYDEPS += $(CAIRODRIVERLIB)
 endif
 
 ifneq ($(GDAL_LINK),)
-ifneq ($(GDAL_DYNAMIC),)
-ifneq ($(MINGW),)
-RASTERDEPS += -lkernel32
-else
-RASTERDEPS += $(DLLIB)
-endif
-else
 RASTERDEPS += $(GDALLIBS)
-endif
 endif
 
 ifeq ($(OPENGL_WINDOWS),1)

@@ -29,34 +29,34 @@ int zoom(struct Cell_head *window, const char *name, const char *mapset)
     left = ncols;
     right = -1;
     for (row = 0; row < nrows; row++) {
-	Rast_get_row(fd, rast_ptr = raster, row, map_type);
-	for (col = 0; col < ncols; col++) {
-	    if (!Rast_is_null_value(rast_ptr, map_type))
-		break;
-	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_cell_size(map_type));
-	}
-	if (col == ncols)
-	    continue;
-	if (row < top)
-	    top = row;
-	if (row > bottom)
-	    bottom = row;
-	if (col < left)
-	    left = col;
-	for (mark = col; col < ncols; col++) {
-	    if (!Rast_is_null_value(rast_ptr, map_type))
-		mark = col;
-	    rast_ptr = G_incr_void_ptr(rast_ptr, Rast_cell_size(map_type));
-	}
-	if (mark > right)
-	    right = mark;
+        Rast_get_row(fd, rast_ptr = raster, row, map_type);
+        for (col = 0; col < ncols; col++) {
+            if (!Rast_is_null_value(rast_ptr, map_type))
+                break;
+            rast_ptr = G_incr_void_ptr(rast_ptr, Rast_cell_size(map_type));
+        }
+        if (col == ncols)
+            continue;
+        if (row < top)
+            top = row;
+        if (row > bottom)
+            bottom = row;
+        if (col < left)
+            left = col;
+        for (mark = col; col < ncols; col++) {
+            if (!Rast_is_null_value(rast_ptr, map_type))
+                mark = col;
+            rast_ptr = G_incr_void_ptr(rast_ptr, Rast_cell_size(map_type));
+        }
+        if (mark > right)
+            right = mark;
     }
     Rast_close(fd);
     G_free(raster);
 
     /* no data everywhere? */
     if (bottom < 0)
-	return 0;
+        return 0;
 
     north = window->north - top * window->ns_res;
     south = window->north - (bottom + 1) * window->ns_res;

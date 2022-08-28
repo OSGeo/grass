@@ -26,13 +26,15 @@
 #include "options.h"
 
 int fg_color, bg_color, text_color;
+
 //int do_background = TRUE;
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *n_arrow, *fsize,
-        *width_opt, *rotation_opt, *lbl_opt, *text_color_opt, *font, *path, *charset;
+        *width_opt, *rotation_opt, *lbl_opt, *text_color_opt, *font, *path,
+        *charset;
     struct Flag *no_text, *rotate_text, *rads;
     double east, north;
     double rotation;
@@ -97,8 +99,7 @@ int main(int argc, char **argv)
     lbl_opt->key = "label";
     lbl_opt->required = NO;
     lbl_opt->answer = "N";
-    lbl_opt->description =
-        _("Displayed letter on the top of arrow");
+    lbl_opt->description = _("Displayed letter on the top of arrow");
     lbl_opt->guisection = _("Text");
 
     fg_color_opt = G_define_standard_option(G_OPT_CN);
@@ -130,7 +131,7 @@ int main(int argc, char **argv)
     font->guisection = _("Text");
 
     fsize = G_define_option();
-    fsize->key = "fontsize"; /* size in d.text */
+    fsize->key = "fontsize";    /* size in d.text */
     fsize->type = TYPE_DOUBLE;
     fsize->required = NO;
     fsize->answer = "14";
@@ -155,7 +156,7 @@ int main(int argc, char **argv)
     charset->type = TYPE_STRING;
     charset->required = NO;
     charset->description =
-	_("Text encoding (only applicable to TrueType fonts)");
+        _("Text encoding (only applicable to TrueType fonts)");
     charset->guisection = _("Text");
 
     rotate_text = G_define_flag();
@@ -221,11 +222,11 @@ int main(int argc, char **argv)
     D_open_driver();
 
     if (font->answer)
-	D_font(font->answer);
+        D_font(font->answer);
     else if (path->answer)
-	D_font(path->answer);
+        D_font(path->answer);
     if (charset->answer)
-	D_encoding(charset->answer);
+        D_encoding(charset->answer);
 
     draw_n_arrow(east, north, rotation, lbl_opt->answer, rot_with_text,
                  fontsize, n_arrow->answer, line_width);
