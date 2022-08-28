@@ -497,9 +497,9 @@ int main(int argc, char **argv)
 
         if (point_color2_opt->answer) {
             int rgb_r, rgb_g, rgb_b;
-            int ret =
-                G_str_to_color(point_color2_opt->answer, &rgb_r, &rgb_g,
-                               &rgb_b);
+            int ret = G_str_to_color(point_color2_opt->answer, &rgb_r, &rgb_g,
+                                     &rgb_b);
+
             if (ret == 0)
                 G_fatal_error(_("Color <%s> cannot for option %s be parsed"),
                               point_color2_opt->answer,
@@ -889,7 +889,7 @@ int main(int argc, char **argv)
 
     /* draw the x-axis label */
     if ((strcmp(title[0]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        xlabel =  G_store("");
+        xlabel = G_store("");
     else
         G_asprintf(&xlabel, "X: %s %s", title[0]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;

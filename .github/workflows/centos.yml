@@ -1,14 +1,20 @@
 name: CentOS
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   build:
     name: ${{ matrix.os }} build
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     container: ${{ matrix.os }}
     strategy:
       matrix:

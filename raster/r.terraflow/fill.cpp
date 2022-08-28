@@ -138,7 +138,7 @@ public:
 
 
 char *
-verbosedir(std::string s) {
+verbosedir(const std::string &s) {
   static char buf[BUFSIZ];
   sprintf(buf, "dump/%s", s.c_str());
   return buf;
@@ -160,7 +160,6 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
 
   Rtimer rt, rtTotal;
   AMI_STREAM<elevation_type> *elstr_reclass=NULL;
-  AMI_STREAM<ElevationWindow > *winstr=NULL;
   AMI_STREAM<plateauStats> *statstr=NULL;
   AMI_STREAM<plateauType> *platstr=NULL;
   AMI_STREAM<waterType> *waterstr=NULL;
@@ -194,13 +193,10 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   
   rt_start(rt);
   dirstr = new AMI_STREAM<direction_type>;
-  winstr = new AMI_STREAM<ElevationWindow>();
   statstr = new AMI_STREAM<plateauStats>;
   
   platstr = findPlateaus(elstr, nrows, ncols, nodataType::ELEVATION_NODATA,
-						 winstr, dirstr, statstr);
- 
-  delete winstr; /* not used; not made */
+						 dirstr, statstr);
   rt_stop(rt);
   
   if (stats) {
@@ -331,11 +327,10 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   }
 
   rt_start(rt);
-  winstr = NULL;
   dirstr = new AMI_STREAM<direction_type>();
   statstr = new AMI_STREAM<plateauStats>();
   platstr = findPlateaus(filledstr, nrows, ncols, nodataType::ELEVATION_NODATA,
-			 winstr, dirstr, statstr);
+                         dirstr, statstr);
   rt_stop(rt);
   if (stats) {
       stats->recordTime("findingPlateaus2", rt);
@@ -537,7 +532,7 @@ assignFinalDirections(AMI_STREAM<plateauStats> *statstr,
 class directionElevationMerger {
 public:
   waterGridType operator()(elevation_type el, direction_type dir, 
-			   waterType p) { 
+			   const waterType &p) { 
     /* check that no (boundary) nodata values got in here */
     assert(el != nodataType::ELEVATION_BOUNDARY);
     assert(!is_nodata(el));		/* p should be a valid grid cell */

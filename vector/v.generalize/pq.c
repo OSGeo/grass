@@ -24,11 +24,11 @@ int binary_heap_init(int size, binary_heap * bh)
     bh->items = 0;
     bh->key = (double *)G_malloc(sizeof(double) * (size + 1));
     if (bh->key == NULL)
-	return 0;
+        return 0;
     bh->value = (int *)G_malloc(sizeof(int) * (size + 1));
     if (bh->value == NULL) {
-	G_free(bh->key);
-	return 0;
+        G_free(bh->key);
+        return 0;
     }
     return 1;
 }
@@ -45,9 +45,9 @@ void binary_heap_push(double key, int value, binary_heap * bh)
     int i = ++(bh->items);
 
     while (i != 1 && key > bh->key[i / 2]) {
-	bh->key[i] = bh->key[i / 2];
-	bh->value[i] = bh->value[i / 2];
-	i /= 2;
+        bh->key[i] = bh->key[i / 2];
+        bh->value[i] = bh->value[i / 2];
+        i /= 2;
     }
 
     bh->key[i] = key;
@@ -60,7 +60,7 @@ int binary_heap_extract_max(binary_heap * bh, int *value)
     int n = bh->items;
 
     if (n == 0)
-	return 0;
+        return 0;
     *value = bh->value[1];
 
 
@@ -73,27 +73,27 @@ int binary_heap_extract_max(binary_heap * bh, int *value)
 
 
     while (1) {
-	int greater = i;
-	int left = 2 * i;
-	int right = 2 * i + 1;
+        int greater = i;
+        int left = 2 * i;
+        int right = 2 * i + 1;
 
-	if (left < n && bh->key[left] > bh->key[i])
-	    greater = left;
-	if (right < n && bh->key[right] > bh->key[greater])
-	    greater = right;
+        if (left < n && bh->key[left] > bh->key[i])
+            greater = left;
+        if (right < n && bh->key[right] > bh->key[greater])
+            greater = right;
 
-	if (greater == i)
-	    break;
+        if (greater == i)
+            break;
 
-	td = bh->key[i];
-	bh->key[i] = bh->key[greater];
-	bh->key[greater] = td;
+        td = bh->key[i];
+        bh->key[i] = bh->key[greater];
+        bh->key[greater] = td;
 
-	tv = bh->value[i];
-	bh->value[i] = bh->value[greater];
-	bh->value[greater] = tv;
+        tv = bh->value[i];
+        bh->value[i] = bh->value[greater];
+        bh->value[greater] = tv;
 
-	i = greater;
+        i = greater;
     }
 
     bh->items--;

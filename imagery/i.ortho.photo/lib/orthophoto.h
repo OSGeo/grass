@@ -17,17 +17,17 @@ struct Ortho_Image_Group_Ref
     int nfiles;
     struct Ortho_Image_Group_Ref_Files
     {
-	char name[GNAME_MAX];
-	char mapset[GMAPSET_MAX];
+        char name[GNAME_MAX];
+        char mapset[GMAPSET_MAX];
     } *file;
     struct Ortho_Ref_Color
     {
-	unsigned char *table;	/* color table for min-max values */
-	unsigned char *index;	/* data translation index */
-	unsigned char *buf;	/* data buffer for reading color file */
-	int fd;			/* for image i/o */
-	CELL min, max;		/* min,max CELL values */
-	int n;			/* index into Ref_Files */
+        unsigned char *table;   /* color table for min-max values */
+        unsigned char *index;   /* data translation index */
+        unsigned char *buf;     /* data buffer for reading color file */
+        int fd;                 /* for image i/o */
+        CELL min, max;          /* min,max CELL values */
+        int n;                  /* index into Ref_Files */
     } red, grn, blu;
 };
 
@@ -44,9 +44,9 @@ struct Ortho_Camera_File_Ref
     int num_fid;
     struct Fiducial
     {
-	char fid_id[30];
-	double Xf;
-	double Yf;
+        char fid_id[30];
+        double Xf;
+        double Yf;
     } fiducials[20];
 };
 
@@ -121,31 +121,31 @@ struct Ortho_Image_Group
 
 /* conz_points.c */
 int I_new_con_point(struct Ortho_Control_Points *,
-		    double, double, double, double, double, double, int);
+                    double, double, double, double, double, double, int);
 int I_get_con_points(char *, struct Ortho_Control_Points *);
 int I_put_con_points(char *, struct Ortho_Control_Points *);
 int I_convert_con_points(char *, struct Ortho_Control_Points *,
-			 struct Ortho_Control_Points *, double[3], double[3]);
+                         struct Ortho_Control_Points *, double[3], double[3]);
 /* georef.c */
 int I_compute_ref_equations(struct Ortho_Photo_Points *,
-			    double *, double *, double *, double *);
+                            double *, double *, double *, double *);
 /* orthoref.c */
 int I_compute_ortho_equations(struct Ortho_Control_Points *,
-			      struct Ortho_Camera_File_Ref *,
-			      struct Ortho_Camera_Exp_Init *, double *,
-			      double *, double *, double *, double *,
-			      double *, MATRIX *, MATRIX *);
+                              struct Ortho_Camera_File_Ref *,
+                              struct Ortho_Camera_Exp_Init *, double *,
+                              double *, double *, double *, double *,
+                              double *, MATRIX *, MATRIX *);
 int I_ortho_ref(double, double, double, double *, double *, double *,
-		struct Ortho_Camera_File_Ref *, double, double, double,
-		MATRIX);
+                struct Ortho_Camera_File_Ref *, double, double, double,
+                MATRIX);
 int I_inverse_ortho_ref(double, double, double, double *, double *, double *,
-			struct Ortho_Camera_File_Ref *, double, double,
-			double, MATRIX);
+                        struct Ortho_Camera_File_Ref *, double, double,
+                        double, MATRIX);
 void I_ortho_panorama(void);
 
 /* ref_points.c */
 int I_new_ref_point(struct Ortho_Photo_Points *, double,
-		    double, double, double, int);
+                    double, double, double, int);
 int I_get_ref_points(char *, struct Ortho_Photo_Points *);
 int I_put_ref_points(char *, struct Ortho_Photo_Points *);
 

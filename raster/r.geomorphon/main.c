@@ -44,33 +44,54 @@ int main(int argc, char **argv)
         void *buffer;
     } rasters[] = {             /* rasters stores output buffers */
         {
-        "forms", "Most common geomorphic forms", "Patterns", CELL_TYPE,
-                -1, NULL}, {
-        "ternary", "Code of ternary patterns", "Patterns", CELL_TYPE, -1,
-                NULL}, {
-        "positive", "Code of binary positive patterns", "Patterns",
-                CELL_TYPE, -1, NULL}, {
-        "negative", "Code of binary negative patterns", "Patterns",
-                CELL_TYPE, -1, NULL}, {
-        "intensity",
-                "Rasters containing mean relative elevation of the form",
-                "Geometry", FCELL_TYPE, -1, NULL}, {
-        "exposition",
-                "Rasters containing maximum difference between extend and central cell",
-                "Geometry", FCELL_TYPE, -1, NULL}, {
-        "range",
-                "Rasters containing difference between max and min elevation of the form extend",
-                "Geometry", FCELL_TYPE, -1, NULL}, {
-        "variance", "Rasters containing variance of form boundary",
-                "Geometry", FCELL_TYPE, -1, NULL}, {
-        "elongation", "Rasters containing local elongation", "Geometry",
-                FCELL_TYPE, -1, NULL}, {
-        "azimuth", "Rasters containing local azimuth of the elongation",
-                "Geometry", FCELL_TYPE, -1, NULL}, {
-        "extend", "Rasters containing local extend (area) of the form",
-                "Geometry", FCELL_TYPE, -1, NULL}, {
-        "width", "Rasters containing local width of the form", "Geometry",
-                FCELL_TYPE, -1, NULL}
+         "forms", "Most common geomorphic forms", "Patterns", CELL_TYPE,
+         -1, NULL}, {
+                     "ternary", "Code of ternary patterns", "Patterns",
+                     CELL_TYPE, -1,
+                     NULL}, {
+                             "positive", "Code of binary positive patterns",
+                             "Patterns",
+                             CELL_TYPE, -1, NULL}, {
+                                                    "negative",
+                                                    "Code of binary negative patterns",
+                                                    "Patterns",
+                                                    CELL_TYPE, -1, NULL}, {
+                                                                           "intensity",
+                                                                           "Rasters containing mean relative elevation of the form",
+                                                                           "Geometry",
+                                                                           FCELL_TYPE,
+                                                                           -1,
+                                                                           NULL},
+        {
+         "exposition",
+         "Rasters containing maximum difference between extend and central cell",
+         "Geometry", FCELL_TYPE, -1, NULL}, {
+                                             "range",
+                                             "Rasters containing difference between max and min elevation of the form extend",
+                                             "Geometry", FCELL_TYPE, -1,
+                                             NULL}, {
+                                                     "variance",
+                                                     "Rasters containing variance of form boundary",
+                                                     "Geometry", FCELL_TYPE,
+                                                     -1, NULL}, {
+                                                                 "elongation",
+                                                                 "Rasters containing local elongation",
+                                                                 "Geometry",
+                                                                 FCELL_TYPE,
+                                                                 -1, NULL}, {
+                                                                             "azimuth",
+                                                                             "Rasters containing local azimuth of the elongation",
+                                                                             "Geometry",
+                                                                             FCELL_TYPE,
+                                                                             -1,
+                                                                             NULL},
+        {
+         "extend", "Rasters containing local extend (area) of the form",
+         "Geometry", FCELL_TYPE, -1, NULL}, {
+                                             "width",
+                                             "Rasters containing local width of the form",
+                                             "Geometry",
+                                             FCELL_TYPE, -1, NULL}
     };
 
     struct GModule *module;
@@ -81,16 +102,13 @@ int main(int argc, char **argv)
         *par_skip_radius,
         *par_flat_threshold,
         *par_flat_distance,
-        *par_comparison,
-        *par_coords,
-        *par_profiledata,
-        *par_profileformat;
+        *par_comparison, *par_coords, *par_profiledata, *par_profileformat;
     struct Flag *flag_units, *flag_extended;
 
     struct History history;
 
     int i;
-    int meters = 0, extended = 0; /* flags */
+    int meters = 0, extended = 0;       /* flags */
     int oneoff;
     int row, cur_row, col;
     int nrows;
@@ -178,22 +196,22 @@ int main(int argc, char **argv)
 
         par_profiledata = G_define_standard_option(G_OPT_F_OUTPUT);
         par_profiledata->key = "profiledata";
-        par_profiledata->answer = "-";
         par_profiledata->required = NO;
         par_profiledata->description =
             _("Profile output file name (\"-\" for stdout)");
         par_profiledata->guisection = _("Profile");
         G_option_requires(par_profiledata, par_coords, NULL);
+        G_option_requires(par_coords, par_profiledata, NULL);
 
         par_profileformat = G_define_option();
         par_profileformat->key = "profileformat";
         par_profileformat->type = TYPE_STRING;
         par_profileformat->options = "json,yaml,xml";
-        par_profileformat->answer = "json";
         par_profileformat->required = NO;
         par_profileformat->description = _("Profile output format");
         par_profileformat->guisection = _("Profile");
         G_option_requires(par_profileformat, par_coords, NULL);
+        G_option_requires(par_coords, par_profileformat, NULL);
 
         if (G_parser(argc, argv))
             exit(EXIT_FAILURE);
@@ -201,7 +219,7 @@ int main(int argc, char **argv)
 
     {                           /* calculate parameters */
         int num_outputs = 0;
-        double search_radius, skip_radius, start_radius, step_radius;
+        double search_radius, skip_radius;
         double ns_resolution;
 
         if (!strcmp(par_comparison->answer, "anglev1"))
@@ -438,7 +456,8 @@ int main(int argc, char **argv)
                             skip_distance = 0;
                             flat_distance = 0;
                             pattern_size =
-                                calc_pattern(&patterns[1], row, cur_row, col, 0);
+                                calc_pattern(&patterns[1], row, cur_row, col,
+                                             0);
                             pattern = &patterns[1];
                             small_form =
                                 determine_form(pattern->num_negatives,
