@@ -67,7 +67,7 @@ struct SunGeometryVarDay
 
 struct SunGeometryVarSlope
 {
-    double longit_l;		/* The "longitude" difference between the inclined */
+    double longit_l;            /* The "longitude" difference between the inclined */
     /* and orientated plane and the instantaneous solar position */
     double lum_C31_l;
     double lum_C33_l;

@@ -32,17 +32,17 @@ double G_planimetric_polygon_area(const double *x, const double *y, int n)
 
     area = 0;
     while (--n >= 0) {
-	x1 = x2;
-	y1 = y2;
+        x1 = x2;
+        y1 = y2;
 
-	x2 = *x++;
-	y2 = *y++;
+        x2 = *x++;
+        y2 = *y++;
 
-	area += (y2 + y1) * (x2 - x1);
+        area += (y2 + y1) * (x2 - x1);
     }
 
     if ((area /= 2.0) < 0.0)
-	area = -area;
+        area = -area;
 
     return area;
 }

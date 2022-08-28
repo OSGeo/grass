@@ -22,8 +22,8 @@ int main()
     struct timeval t;
 
     if (gettimeofday(&t, NULL) == -1) {
-	fprintf(stderr, "gettimeofday error");
-	return 1;
+        fprintf(stderr, "gettimeofday error");
+        return 1;
     }
     fprintf(stdout, "%li.%li\n", t.tv_sec, (long)t.tv_usec);
     fflush(stdout);

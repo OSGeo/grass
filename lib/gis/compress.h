@@ -26,9 +26,9 @@ int G_bz2_compress_bound(int);
 int G_zstd_compress_bound(int);
 
 typedef int compress_fn(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz);
+                        int dst_sz);
 typedef int expand_fn(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz);
+                      int dst_sz);
 typedef int bound_fn(int src_sz);
 
 struct compressor_list
@@ -48,8 +48,8 @@ struct compressor_list
  * 4: BZIP2
  * 5: ZSTD
  */
- 
-static int n_compressors = 6; 
+
+static int n_compressors = 6;
 
 struct compressor_list compressor[] = {
     {1, G_no_compress, G_no_expand, G_no_compress_bound, "NONE"},
@@ -68,4 +68,3 @@ struct compressor_list compressor[] = {
 #endif
     {0, NULL, NULL, NULL, NULL}
 };
-
