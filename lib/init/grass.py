@@ -2376,8 +2376,8 @@ def classic_parser(argv, default_gui):
         params.batch_job = parsed_args.exec
     # Cases to execute immediatelly
     if parsed_args.version:
-        message("GRASS GIS %s" % GRASS_VERSION)
-        message("\n" + readfile(gpath("etc", "license")))
+        sys.stdout.write("GRASS GIS %s" % GRASS_VERSION)
+        sys.stdout.write("\n" + readfile(gpath("etc", "license")))
         sys.exit()
     if parsed_args.config is not None:
         # None if not provided, empty list if present without values.
