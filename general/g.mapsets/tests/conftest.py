@@ -12,6 +12,7 @@ import grass.script as gs
 import pytest
 
 TEST_MAPSETS = ["PERMANENT", "test1", "test2", "test3"]
+ACCESSIBLE_MAPSETS = ["test3", "PERMANENT"]
 
 
 @pytest.fixture(scope="module")
@@ -29,4 +30,6 @@ def simple_dataset(tmp_path_factory):
         for mapset in TEST_MAPSETS:
             gs.run_command("g.mapset", location=location, mapset=mapset, flags="c")
 
-        yield SimpleNamespace(mapsets=TEST_MAPSETS)
+        yield SimpleNamespace(
+            mapsets=TEST_MAPSETS, accessible_mapsets=ACCESSIBLE_MAPSETS
+        )

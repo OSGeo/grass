@@ -218,7 +218,13 @@ int main(int argc, char *argv[])
             G_warning(_("Flag -%c ignored"), opt.dialog->key);
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        list_accessible_mapsets(fsep);
+        if (format == JSON) {
+            list_accessible_mapsets_json(fsep);
+        }
+        else {
+            list_accessible_mapsets(fsep);
+        }
+
         exit(EXIT_SUCCESS);
     }
 
