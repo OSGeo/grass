@@ -149,6 +149,8 @@ int main(int argc, char *argv[])
 #if defined(_OPENMP)
     if (param.extended->answer) {
         /* Calculation of extended statistics is not parallelized yet */
+        if (nprocs > 1)
+            G_warning(_("Computing extending statistics is not parallelized yet. Ignoring threads setting."));
         nprocs = 1;
     }
     else {
@@ -404,7 +406,7 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
                 if (param.extended->answer) {
                     /* check allocated memory */
                     /* parallelization is disabled, local variable reflects global state */
-                    if (n[zone] >= stats[zone].n_alloc) {
+                    if (stats[zone].n + n[zone] >= stats[zone].n_alloc) {
                         stats[zone].n_alloc += 1000;
                         size_t msize;
 
@@ -415,7 +417,7 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
                                 (DCELL *) G_realloc((void *)stats[zone].
                                                     dcell_array, msize);
                             stats[zone].nextp =
-                                (void *)&(stats[zone].dcell_array[n[zone]]);
+                                (void *)&(stats[zone].dcell_array[stats[zone].n + n[zone]]);
                             break;
                         case FCELL_TYPE:
                             msize = stats[zone].n_alloc * sizeof(FCELL);
@@ -423,7 +425,7 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
                                 (FCELL *) G_realloc((void *)stats[zone].
                                                     fcell_array, msize);
                             stats[zone].nextp =
-                                (void *)&(stats[zone].fcell_array[n[zone]]);
+                                (void *)&(stats[zone].fcell_array[stats[zone].n + n[zone]]);
                             break;
                         case CELL_TYPE:
                             msize = stats[zone].n_alloc * sizeof(CELL);
@@ -431,7 +433,7 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
                                 (CELL *) G_realloc((void *)stats[zone].
                                                    cell_array, msize);
                             stats[zone].nextp =
-                                (void *)&(stats[zone].cell_array[n[zone]]);
+                                (void *)&(stats[zone].cell_array[stats[zone].n + n[zone]]);
                             break;
                         default:
                             break;
