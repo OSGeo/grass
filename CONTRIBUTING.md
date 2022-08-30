@@ -51,32 +51,32 @@ GRASS GIS developer mailing list.
   of the GitHub interface).
 * Clone your fork (use SSH or HTTPS URL):
 
-```
+```bash
 git clone git@github.com:your_GH_account/grass.git
 ```
 
 * Enter the directory
 
-```
+```bash
 cd grass/
 ```
 
 * Add main GRASS GIS repository as "upstream" (use HTTPS URL):
 
-```
+```bash
 git remote add upstream https://github.com/OSGeo/grass
 ```
 
 * Your remotes now should be "origin" which is your fork and "upstream" which
   is this main GRASS GIS repository. You can confirm that using:
 
-```
+```bash
 git remote -v
 ```
 
 * You should see something like:
 
-```
+```bash
 origin	git@github.com:your_GH_account/grass.git (fetch)
 origin	git@github.com:your_GH_account/grass.git (push)
 upstream	https://github.com/OSGeo/grass.git (fetch)
@@ -89,20 +89,20 @@ It is important that "origin" points to your fork.
 
 * Make sure your are using the _main_ branch to create the new branch:
 
-```
+```bash
 git checkout main
 ```
 
 * Download updates from all branches from the _upstream_ remote:
 
-```
+```bash
 git fetch upstream
 ```
 
 * Update your local _main_ branch to match the _main_ branch
   in the _upstream_ repository:
 
-```
+```bash
 git rebase upstream/main
 ```
 
@@ -111,13 +111,13 @@ git rebase upstream/main
 If `rebase` fails with "error: cannot rebase: You have unstaged changes...",
 then move your uncommitted local changes to "stash" using:
 
-```
+```bash
 git stash
 ```
 
 * Now you can rebase:
 
-```
+```bash
 git rebase upstream/main
 ```
 
@@ -129,7 +129,7 @@ git stash apply
 
 * Remove the stash record (optional):
 
-```
+```bash
 git stash pop
 ```
 
@@ -140,7 +140,7 @@ based on it.
 
 * Create a new feature branch and switch to it:
 
-```
+```bash
 git checkout -b new-feature
 ```
 
@@ -155,14 +155,14 @@ Submitting Guidelines at
 
 * Add files to the commit (changed ones or new ones):
 
-```
+```bash
 git add file1
 git add file2
 ```
 
 * Commit the change (first word is the module name):
 
-```
+```bash
 git commit -m "module: added a new feature"
 ```
 
@@ -170,7 +170,7 @@ git commit -m "module: added a new feature"
 
 * Push your local feature branch to your fork:
 
-```
+```bash
 git push origin new-feature
 ```
 
