@@ -1,4 +1,6 @@
-# GRASS GIS docker matrix
+# GRASS GIS docker
+
+## GRASS GIS docker matrix
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/mundialis/grass-py3-pdal.svg)](https://grass.osgeo.org/download/software/docker-images/)
 
@@ -12,13 +14,13 @@
 | Debian 10.1  | stable-debian   | 8.2 branch | 5.2.0 | 2.4.0 | 1.8.0 | 3.7.3  | 1.16 GB    |
 | Alpine 3.12  | stable-alpine   | 8.2 branch | 7.0.1 | 3.1.4 | 2.1.0 | 3.8.10 |  186 MB    |
 
-Last update: 27 Apr 2022 (source: <https://github.com/OSGeo/grass/actions/workflows/docker.yml and https://hub.docker.com/r/mundialis/grass-py3-pdal/tags>)
+Last update: 27 Apr 2022 (source: <https://github.com/OSGeo/grass/actions/workflows/docker.yml> and <https://hub.docker.com/r/mundialis/grass-py3-pdal/tags>)
 
-# Requirements
+## Requirements
 
 * docker or podman
 
-# Installation
+## Installation
 
 To install a docker image, run (replace `<tag>` with the desired Docker tag from the table above):
 

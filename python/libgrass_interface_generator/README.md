@@ -65,7 +65,7 @@ generated files.
 @@ -61,9 +62,14 @@ class WrapperPrinter:
          self.print_group(self.options.inserted_files, "inserted files", self.insert_file)
          self.strip_prefixes()
- 
+
 -    def __del__(self):
 +        if self.has_unnamed_struct_member and outpath:
 +            self._add_remove_zero_bitfields()
@@ -118,7 +118,7 @@ generated files.
                  self.file.write("    ('%s', %s),\n" % (name, ctype.py_string()))
 @@ -481,3 +497,57 @@ class WrapperPrinter:
          )
- 
+
          inserted_file.close()
 +
 +    def _add_remove_zero_bitfields(self):

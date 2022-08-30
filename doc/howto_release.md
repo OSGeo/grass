@@ -204,7 +204,7 @@ Older release description may or may not be a good inspiration:
 
 If RC, mark it as a pre-release, check:
 
-```
+```text
 [x] This is a pre-release
 ```
 

@@ -177,20 +177,22 @@ Web based client: See <https://grasswiki.osgeo.org/wiki/IRC>
 * channel owner: Alessandro Frigeri <afrigeri unipg.it> ("geoalf")
 * quasi guru level: Markus Neteler ("markusN")
 * further operators:
-   * Jachym ("jachym")
-   * Luca ("doktoreas")
-   * Soeren ("huhabla")
-   * Brad ("bdouglas")
+  * Jachym ("jachym")
+  * Luca ("doktoreas")
+  * Soeren ("huhabla")
+  * Brad ("bdouglas")
 
 ## GRASS Bugtracker
 
 Current bugtracker (Jan 2020 - today):
-  * <https://github.com/OSGeo/grass/issues>
+
+* <https://github.com/OSGeo/grass/issues>
 
 Old bugtracker (Jan 2008 - Jan 2020):
-  * <https://trac.osgeo.org/grass/report>
-  * posted new bugs and comments to grass-dev list
-  * Settings:
+
+* <https://trac.osgeo.org/grass/report>
+* posted new bugs and comments to grass-dev list
+* Settings:
 
 Old tracsvn (OSGeo server) (Dec 2007 * Mai 2019)
 ```text
@@ -208,17 +210,19 @@ Old tracsvn (OSGeo server) (Dec 2007 * Mai 2019)
 ```
 
 Very old bugtracker (Jan 2007 * Dec 2008):
-  * <http://wald.intevation.org/tracker/?group_id=21>
-  * gforce, sponsored by Intevation GmbH, Germany
-  * spamassasin spamfilter locally, bogofilter at grass-dev list
-  * needs 'noreply*wald.intevation.org' to be enabled as alias in Mailman
+
+* <http://wald.intevation.org/tracker/?group_id=21>
+* gforce, sponsored by Intevation GmbH, Germany
+* spamassasin spamfilter locally, bogofilter at grass-dev list
+* needs `noreply*wald.intevation.org` to be enabled as alias in Mailman
 
 Very very old bugtracker (Dec 2000 * Dec 2006):
-  * <https://intevation.de/rt/webrt?q_queue=grass>
-  * webRT, sponsored by Intevation GmbH, Germany
-  * spamassasin spamfilter locally, bogofilter at grass-dev list
-  * reports are directly sent to GRASS Developers mailing list for notification
-  * TODO: migrate to trac
+
+* <https://intevation.de/rt/webrt?q_queue=grass>
+* webRT, sponsored by Intevation GmbH, Germany
+* spamassasin spamfilter locally, bogofilter at grass-dev list
+* reports are directly sent to GRASS Developers mailing list for notification
+* TODO: migrate to trac
 
 
 ## GRASS Addons
@@ -227,9 +231,9 @@ Maintainer: Martin Landa and Markus Neteler
 
 Details:
 
-- Windows-addons: grass-addons/utils/addons/README.txt
-- Addon manual pages cronjob: <https://github.com/OSGeo/grass-addons/tree/master/utils/cronjobs_osgeo_lxd>
-- Rendered manuals: <https://grass.osgeo.org/grass8/manuals/addons/>
+* Windows-addons: grass-addons/utils/addons/README.txt
+* Addon manual pages cronjob: <https://github.com/OSGeo/grass-addons/tree/master/utils/cronjobs_osgeo_lxd>
+* Rendered manuals: <https://grass.osgeo.org/grass8/manuals/addons/>
 
 The redirect to the latest grass7x directory is defined on grass.osgeo.org:
   /etc/apache2/includes/grass.osgeo.org.inc

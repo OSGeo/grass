@@ -49,8 +49,8 @@ git remote -v
 * You should see something like:
 
 ```bash
-origin	git@github.com:your_GH_account/grass.git (fetch)
-origin	git@github.com:your_GH_account/grass.git (push)
+origin  git@github.com:your_GH_account/grass.git (fetch)
+origin  git@github.com:your_GH_account/grass.git (push)
 ```
 
 For the following workflow, it is important that
@@ -140,7 +140,7 @@ request comment.
 
 Note that there are some steps you can do locally to improve your code.
 For Python, run `black .` to apply standardized formatting. You can
-also run linter tools such as Pylint which will suggest different improvements 
+also run linter tools such as Pylint which will suggest different improvements
 to your code.
 
 ### Committing
