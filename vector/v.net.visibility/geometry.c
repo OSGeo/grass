@@ -24,12 +24,12 @@ int before(struct Point *p, struct Point *q, struct Line *e)
     int status;
 
     if (e == NULL)
-	return 1;
+        return 1;
 
     status =
-	Vect_segment_intersection(p->x, p->y, 0, q->x, q->y, 0, e->p1->x,
-				  e->p1->y, 0, e->p2->x, e->p2->y, 0, &x1,
-				  &y1, &z1, &x2, &y2, &z2, 0) == 0;
+        Vect_segment_intersection(p->x, p->y, 0, q->x, q->y, 0, e->p1->x,
+                                  e->p1->y, 0, e->p2->x, e->p2->y, 0, &x1,
+                                  &y1, &z1, &x2, &y2, &z2, 0) == 0;
 
     return status;
 }
@@ -41,15 +41,15 @@ int left_turn(struct Point *p1, struct Point *p2, struct Point *p3)
     double a, b, c, d;
 
     if (p3->y == PORT_DOUBLE_MAX) {
-	return (p1->x < p2->x || (p1->x == p2->x && p1->y < p2->y));
+        return (p1->x < p2->x || (p1->x == p2->x && p1->y < p2->y));
     }
     else {
-	a = p1->x - p2->x;
-	b = p1->y - p2->y;
-	c = p3->x - p2->x;
-	d = p3->y - p2->y;
+        a = p1->x - p2->x;
+        b = p1->y - p2->y;
+        c = p3->x - p2->x;
+        d = p3->y - p2->y;
 
-	return a * d - b * c < 0.0;
+        return a * d - b * c < 0.0;
     }
 }
 
@@ -73,13 +73,13 @@ int point_inside(struct Point *p, double x, double y)
     struct Point *n2 = other2(p);
 
     do {
-	if ((((n1->y <= y) && (y < n2->y)) ||
-	     ((n2->y <= y) && (y < n1->y))) &&
-	    (x < (n2->x - n1->x) * (y - n1->y) / (n2->y - n1->y) + n1->x))
-	    c = !c;
+        if ((((n1->y <= y) && (y < n2->y)) ||
+             ((n2->y <= y) && (y < n1->y))) &&
+            (x < (n2->x - n1->x) * (y - n1->y) / (n2->y - n1->y) + n1->x))
+            c = !c;
 
-	n1 = other2(n1);
-	n2 = other2(n2);
+        n1 = other2(n1);
+        n2 = other2(n2);
 
     } while (n1 != p);
 
@@ -96,21 +96,21 @@ int segment_intersect(struct Line *line, struct Point *p, double *y)
     double t;
 
     if (in_between(p, line)) {
-	if (p2->x != p1->x) {
-	    t = (p->x - p1->x) / (p2->x - p1->x);
+        if (p2->x != p1->x) {
+            t = (p->x - p1->x) / (p2->x - p1->x);
 
-	    *y = p1->y + t * (p2->y - p1->y);
-	}
-	else {
-	    if (p1->y > p->y || p2->y > p->y)
-		return -1;
+            *y = p1->y + t * (p2->y - p1->y);
+        }
+        else {
+            if (p1->y > p->y || p2->y > p->y)
+                return -1;
 
-	    *y = p1->y > p2->y ? p1->y : p2->y;
-	}
+            *y = p1->y > p2->y ? p1->y : p2->y;
+        }
 
-	return 1;
+        return 1;
     }
     else
-	return -1;
+        return -1;
 
 }

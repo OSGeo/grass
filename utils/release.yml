@@ -43,3 +43,4 @@ notes:
     regexp:
       - "[Hh]appy [Nn]ew [Yy]ear"
       - "version: "
+      - "RFC: "

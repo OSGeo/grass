@@ -305,10 +305,10 @@ echo $SERVER2:$SERVER2DIR
 
 # upload along with associated files:
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
+  INSTALL.md REQUIREMENTS.html CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
 
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
+  INSTALL.md REQUIREMENTS.html CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
 
 # Only at full release (i.e., not for RCs)!
 # generate link to "latest" source code
@@ -445,3 +445,20 @@ Software pages:
 Via Web / Social media:
 
 - See: <https://grass.osgeo.org/wiki/Contact_Databases>
+
+## Update VERSION file to next version number
+
+After the final release whole is done, modify the VERSION file use
+the dedicated script, e.g., for next micro version, run:
+
+```bash
+./utils/update_version.py micro
+./utils/update_version.py status
+```
+
+Now commit the change to the branch with the commit message generated above:
+
+```bash
+git diff
+git commit include/VERSION -m "version: GRASS GIS 8.2.1"
+```

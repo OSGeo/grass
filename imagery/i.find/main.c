@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     int n;
 
     if (argc < 5 || argc % 2 == 0)
-	G_fatal_error(_("usage: %s location mapset element file."), argv[0]);
+        G_fatal_error(_("usage: %s location mapset element file."), argv[0]);
 
     G_gisinit(argv[0]);
 
@@ -74,26 +74,26 @@ int main(int argc, char *argv[])
     G_setenv_nogisrc("MAPSET", argv[2]);
 
     for (n = 3; n < argc; n += 2) {
-	FILE *fd;
-	int ok;
+        FILE *fd;
+        int ok;
 
-	/* get this list into a temp file first */
-	fd = fopen(tempfile, "w");
-	if (fd == NULL)
-	    G_fatal_error(_("Unable to open temp file."));
+        /* get this list into a temp file first */
+        fd = fopen(tempfile, "w");
+        if (fd == NULL)
+            G_fatal_error(_("Unable to open temp file."));
 
-	remove(argv[n + 1]);
-	ok = find(fd, argv[n]);
-	fclose(fd);
+        remove(argv[n + 1]);
+        ok = find(fd, argv[n]);
+        fclose(fd);
 
-	/* move the temp file to the real file
-	 * this allows programs to run i.find in the background
-	 * and check for completion by looking for the file
-	 */
-	if (ok)
-	    G_rename_file(tempfile, argv[n + 1]);
+        /* move the temp file to the real file
+         * this allows programs to run i.find in the background
+         * and check for completion by looking for the file
+         */
+        if (ok)
+            G_rename_file(tempfile, argv[n + 1]);
 
-	remove(tempfile);
+        remove(tempfile);
     }
     G_free(tempfile);
 
@@ -112,33 +112,33 @@ static int find(FILE * fd, char *element)
     fwrite(&len2, sizeof(len2), 1L, fd);
 
     for (n = 0; ((mapset = G_get_mapset_name(n)) != NULL); n++) {
-	int len;
-	char dir[1024];
-	struct dirent *dp;
-	DIR *dfd;
+        int len;
+        char dir[1024];
+        struct dirent *dp;
+        DIR *dfd;
 
-	G_file_name(dir, element, "", mapset);
-	if ((dfd = opendir(dir)) == NULL)
-	    continue;
+        G_file_name(dir, element, "", mapset);
+        if ((dfd = opendir(dir)) == NULL)
+            continue;
 
-	len = strlen(mapset);
-	if (len > len2)
-	    len2 = len;
+        len = strlen(mapset);
+        if (len > len2)
+            len2 = len;
 
-	while ((dp = readdir(dfd)) != NULL) {
-	    if (dp->d_name[0] != '.') {
-		fprintf(fd, "%s %s\n", dp->d_name, mapset);
-		len = strlen(dp->d_name);
-		if (len > len1)
-		    len1 = len;
-	    }
-	}
+        while ((dp = readdir(dfd)) != NULL) {
+            if (dp->d_name[0] != '.') {
+                fprintf(fd, "%s %s\n", dp->d_name, mapset);
+                len = strlen(dp->d_name);
+                if (len > len1)
+                    len1 = len;
+            }
+        }
 
-	closedir(dfd);
+        closedir(dfd);
     }
 
     if (len1 == 0 || len2 == 0)
-	return 0;
+        return 0;
 
     fflush(fd);
     G_fseek(fd, 0L, SEEK_SET);

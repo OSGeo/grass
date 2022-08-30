@@ -28,20 +28,11 @@ import pathlib
 import subprocess
 import time
 
-try:
-    # Python 2 import
-    from HTMLParser import HTMLParser
-except ImportError:
-    # Python 3 import
-    from html.parser import HTMLParser
+from html.parser import HTMLParser
 
-from six.moves.urllib import request as urlrequest
-from six.moves.urllib.error import HTTPError, URLError
-
-try:
-    import urlparse
-except ImportError:
-    import urllib.parse as urlparse
+from urllib import request as urlrequest
+from urllib.error import HTTPError, URLError
+import urllib.parse as urlparse
 
 try:
     import grass.script as gs
@@ -55,15 +46,6 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
-
-if sys.version_info[0] == 2:
-    PY2 = True
-else:
-    PY2 = False
-
-
-if not PY2:
-    unicode = str
 
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
@@ -86,21 +68,6 @@ def _get_encoding():
     if not encoding:
         encoding = "UTF-8"
     return encoding
-
-
-def decode(bytes_):
-    """Decode bytes with default locale and return (unicode) string
-
-    No-op if parameter is not bytes (assumed unicode string).
-
-    :param bytes bytes_: the bytes to decode
-    """
-    if isinstance(bytes_, unicode):
-        return bytes_
-    if isinstance(bytes_, bytes):
-        enc = _get_encoding()
-        return bytes_.decode(enc)
-    return unicode(bytes_)
 
 
 def urlopen(url, *args, **kwargs):
@@ -399,7 +366,7 @@ tmp_file = "%s.tmp.html" % pgm
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title>${PGM} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
  <meta name="description" content="${PGM}: ${PGM_DESC}">
@@ -482,13 +449,9 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        f = open(name, "rb")
-        s = f.read()
-        f.close()
-        if PY2:
-            return s
-        else:
-            return decode(s)
+        with open(name) as f:
+            s = f.read()
+        return s
     except IOError:
         return ""
 
@@ -687,7 +650,10 @@ if not re.search("<html>", src_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
     if tmp_data:
         for line in tmp_data.splitlines(True):
-            if not re.search("</body>|</html>", line, re.IGNORECASE):
+            # The cleanup happens on Makefile level too.
+            if not re.search(
+                "</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
+            ):
                 sys.stdout.write(line)
 
 # create TOC

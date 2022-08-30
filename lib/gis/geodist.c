@@ -24,7 +24,8 @@
 #include <grass/gis.h>
 #include "pi.h"
 
-static struct state {
+static struct state
+{
     double boa;
     double f;
     double ff64;
@@ -120,7 +121,7 @@ void G_set_geodesic_distance_lat2(double lat2)
  */
 double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
 {
-    double a, cd, d, e,		/*dl, */
+    double a, cd, d, e,         /*dl, */
       q, sd, sdlmr, t, u, v, x, y;
 
 
@@ -128,13 +129,13 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
 
     /* special case - shapiro */
     if (sdlmr == 0.0 && st->t1r == st->t2r)
-	return 0.0;
+        return 0.0;
 
     q = st->t3 + sdlmr * sdlmr * st->t4;
 
     /* special case - shapiro */
     if (q == 1.0)
-	return M_PI * st->al;
+        return M_PI * st->al;
 
     /* Mod: shapiro
      * cd=1-2q is ill-conditioned if q is small O(10**-23)
@@ -154,15 +155,15 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
        t=dl/sd;
      */
 
-    cd = 1 - 2 * q;		/* ill-conditioned subtraction for small q */
+    cd = 1 - 2 * q;             /* ill-conditioned subtraction for small q */
     /* mod starts here */
-    sd = 2 * sqrt(q - q * q);	/* sd^2 = 1 - cd^2 */
-    if (q != 0.0 && cd == 1.0)	/* test for small q */
-	t = 1.0;
+    sd = 2 * sqrt(q - q * q);   /* sd^2 = 1 - cd^2 */
+    if (q != 0.0 && cd == 1.0)  /* test for small q */
+        t = 1.0;
     else if (sd == 0.0)
-	t = 1.0;
+        t = 1.0;
     else
-	t = acos(cd) / sd;	/* don't know how to fix acos(1-2*q) yet */
+        t = acos(cd) / sd;      /* don't know how to fix acos(1-2*q) yet */
     /* mod ends here */
 
     u = st->t1 / (1 - q);
@@ -173,10 +174,9 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
     y = u - v;
     a = -d * e;
 
-    return st->al * sd * (t
-			  - st->f / 4 * (t * x - y)
-			  + st->ff64 * (x * (a + (t - (a + e) / 2) * x)
-					+ y * (-2 * d + e * y) + d * x * y));
+    return st->al * sd * (t - st->f / 4 * (t * x - y)
+                          + st->ff64 * (x * (a + (t - (a + e) / 2) * x)
+                                        + y * (-2 * d + e * y) + d * x * y));
 }
 
 /*!

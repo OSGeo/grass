@@ -1,15 +1,15 @@
 /*!
-  \file lib/raster/gdal.c
-  
-  \brief Raster Library - Utilization of GDAL library.
-  
-  (C) 2010 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Glynn Clements
-*/
+   \file lib/raster/gdal.c
+
+   \brief Raster Library - Utilization of GDAL library.
+
+   (C) 2010 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Glynn Clements
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -32,10 +32,10 @@
 #endif
 
 /*!
-  \brief Initialization
+   \brief Initialization
 
-  Register all GDAL drivers.
-*/
+   Register all GDAL drivers.
+ */
 void Rast_init_gdal(void)
 {
 #ifdef GDAL_LINK
@@ -50,14 +50,14 @@ void Rast_init_gdal(void)
 }
 
 /*!
-  \brief Get GDAL link settings for given raster map
+   \brief Get GDAL link settings for given raster map
 
-  \param name map name
-  \param mapset name of mapset
+   \param name map name
+   \param mapset name of mapset
 
-  \return pointer to GDAL_link structure
-  \return NULL if link not found
-*/
+   \return pointer to GDAL_link structure
+   \return NULL if link not found
+ */
 struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
 {
 #ifdef GDAL_LINK
@@ -231,14 +231,14 @@ static void read_gdal_options(void)
 }
 
 /*!
-  \brief Create GDAL settings for given raster map
+   \brief Create GDAL settings for given raster map
 
-  \param name map name
-  \param map_type map type (CELL, FCELL, DCELL)
+   \param name map name
+   \param map_type map type (CELL, FCELL, DCELL)
 
-  \return pointer to allocated GDAL_link structure
-  \return NULL on error
-*/
+   \return pointer to allocated GDAL_link structure
+   \return NULL on error
+ */
 struct GDAL_link *Rast_create_gdal_link(const char *name,
                                         RASTER_MAP_TYPE map_type)
 {
@@ -394,10 +394,10 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 }
 
 /*!
-  \brief Close existing GDAL link
-  
-  \param gdal pointer to GDAL_link to be closed
-*/
+   \brief Close existing GDAL link
+
+   \param gdal pointer to GDAL_link to be closed
+ */
 void Rast_close_gdal_link(struct GDAL_link *gdal)
 {
 #ifdef GDAL_LINK
@@ -408,13 +408,13 @@ void Rast_close_gdal_link(struct GDAL_link *gdal)
 }
 
 /*!
-  \brief Close existing GDAL link and write out data
+   \brief Close existing GDAL link and write out data
 
-  \param gdal pointer to GDAL_link to be closed
+   \param gdal pointer to GDAL_link to be closed
 
-  \return 1 on success
-  \return -1 on failure
-*/
+   \return 1 on success
+   \return -1 on failure
+ */
 int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 {
     int stat = 1;
@@ -447,10 +447,10 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 
 #ifdef GDAL_LINK
 /*!
-  \brief Input/output function for GDAL links
+   \brief Input/output function for GDAL links
 
-  See GDAL's RasterIO for details.
-*/
+   See GDAL's RasterIO for details.
+ */
 CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag,
                            int x_off, int y_off, int x_size, int y_size,
                            void *buffer, int buf_x_size, int buf_y_size,
