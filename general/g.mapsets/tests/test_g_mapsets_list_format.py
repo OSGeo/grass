@@ -16,67 +16,36 @@
 import json
 import pytest
 import grass.script as gs
+from grass.script import utils as gutils
+
+SEPARATORS = ["newline", "space", "comma", "tab", "pipe", ","]
 
 
-@pytest.mark.parametrize("flag", ["p", "l", "lp"])
-@pytest.mark.parametrize(
-    "separator", ["newline", "space", "comma", "tab", "pipe", ",", None]
-)
-def test_plain_output(simple_dataset, separator, flag):
-    """Test that the separators are properly applied"""
-    mapsets = simple_dataset.mapsets
+def _check_parsed_list(mapsets, text, sep="|"):
+    """Asserts to run on for each separator"""
+    parsed_list = text.splitlines() if sep == "\n" else text.split(sep)
     mapsets_len = len(mapsets)
-    if flag == "p":
-        mapsets = simple_dataset.accessible_mapsets
-        mapsets_len = len(mapsets)
 
-    text = gs.read_command("g.mapsets", format="plain", separator=separator, flags=flag)
-
-    def _check_parsed_list(text, sep):
-        """Asserts to run on for each separator"""
-        parsed_list = text.splitlines()
-
-        # Make sure new line conditions are handled correctly
-        if sep != "\n":
-            parsed_list = text.split(sep)
-            if flag == "l":
-                assert parsed_list[-1] == "test3\n"
-            if flag == "p":
-                assert parsed_list[-1] == "PERMANENT\n"
-        else:
-            if flag == "l":
-                assert parsed_list[-1] == "test3"
-            if flag == "p":
-                assert parsed_list[-1] == "PERMANENT"
-
-        # Check the beginning of list is correct
-        if flag == "p":
-            assert parsed_list[0] == "test3"
-
-        if flag == "l":
-            assert parsed_list[0] == "PERMANENT"
-
-        assert len(parsed_list) == mapsets_len
-        assert text == sep.join(mapsets) + "\n"
-
-    if separator == "newline":
-        _check_parsed_list(text, "\n")
-    elif separator == "space":
-        _check_parsed_list(text, " ")
-    elif separator == "comma":
-        _check_parsed_list(text, ",")
-    elif separator == "tab":
-        assert text == "\t".join(mapsets) + "\n"
-    elif separator == "pipe":
-        assert text == "|".join(mapsets) + "\n"
-    elif separator == ",":
-        assert text == ",".join(mapsets) + "\n"
-    else:
-        # Default vallue
-        assert text == "|".join(mapsets) + "\n"
+    assert len(parsed_list) == mapsets_len
+    assert text == sep.join(mapsets) + "\n"
 
 
-def test_json_ouput(simple_dataset):
+@pytest.mark.parametrize("separator", SEPARATORS)
+def test_plain_list_output(simple_dataset, separator):
+    """Test that the separators are properly applied with list flag"""
+    mapsets = simple_dataset.mapsets
+    text = gs.read_command("g.mapsets", format="plain", separator=separator, flags="l")
+    _check_parsed_list(mapsets, text, gutils.separator(separator))
+
+
+def test_plain_print_output(simple_dataset, separator):
+    """Test that the separators are properly applied with print flag"""
+    mapsets = simple_dataset.accessible_mapsets
+    text = gs.read_command("g.mapsets", format="plain", separator=separator, flags="p")
+    _check_parsed_list(mapsets, text, gutils.separator(separator))
+
+
+def test_json_list_ouput(simple_dataset):
     """JSON format"""
     text = gs.read_command("g.mapsets", format="json", flags="l")
     data = json.loads(text)
@@ -87,7 +56,7 @@ def test_json_ouput(simple_dataset):
         assert mapset in data["mapsets"]
 
 
-def test_accessible_mapsets_json_ouput(simple_dataset):
+def test_json_print_ouput(simple_dataset):
     """JSON format"""
     text = gs.read_command("g.mapsets", format="json", flags="p")
     data = json.loads(text)
