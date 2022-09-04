@@ -303,13 +303,6 @@ class ToolbarController:
 class AuiToolbarController(ToolbarController):
     """Provides handling for aui.AuiToolBar widget"""
 
-    def __init__(self, classObject, widget, parent, toolSwitcher):
-        """
-        :param classObject: toolbar class name (object, i.e. wx.Toolbar)
-        :param widget: toolbar instance
-        """
-        super().__init__(classObject, widget, parent, toolSwitcher)
-
     def _defineTool(self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL):
         """Define tool"""
         if name:
@@ -476,10 +469,6 @@ class AuiToolbar(aui.AuiToolBar):
     def _getToolbarData(self, data):
         """@copydoc ToolbarController:_getToolbarData()"""
         return self.controller.GetToolbarData(data)
-
-    def _defineTool(self, *args, **kwargs):
-        """@copydoc ToolbarController:_defineTool()"""
-        self.controller.DefineTool(*args, **kwargs)
 
     def _onMenu(self, data):
         """@copydoc ToolbarController:_onMenu()"""
