@@ -293,5 +293,93 @@ class TestRSunMode1(TestCase):
         )
 
 
+class TestRSunIncorrectBeamRadFix(TestCase):
+
+    _R_PREFIX = "test_rsun_incorrect_beam_rad_fix_"
+
+    # Input rasters
+    _ASPECT = "r_aspect"
+    _SLOPE = "r_slope"
+    _ELEVATION = "r_elevation"
+    _HORIZON_BASE = "r_horizon"
+    _EXPECTED = "r_expected"
+
+    # Output rasters
+    _BEAM = "beam_rad"
+    _DIFFS = "diffs_rad"
+
+    @classmethod
+    def setUpClass(cls):
+        """Use temporary region settings"""
+        cls.use_temp_region()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove the temporary region"""
+        cls.del_temp_region()
+
+    def tearDown(self):
+        self.runModule(
+            "g.remove", type="raster", flags="f", pattern=f"{self._R_PREFIX}*"
+        )
+
+    def test_1(self):
+        print("Test Incorrect Beam Rad Fix")
+
+        self.assertModule(
+            "r.in.gdal",
+            "Import aspect",
+            input=f"data/{self._ASPECT}.tif",
+            output=f"{self._R_PREFIX}{self._ASPECT}",
+        )
+        self.assertModule(
+            "r.in.gdal",
+            "Import slope",
+            input=f"data/{self._SLOPE}.tif",
+            output=f"{self._R_PREFIX}{self._SLOPE}",
+        )
+        self.assertModule(
+            "r.in.gdal",
+            "Import elevation",
+            input=f"data/{self._ELEVATION}.tif",
+            output=f"{self._R_PREFIX}{self._ELEVATION}",
+        )
+        self.assertModule(
+            "r.in.gdal",
+            "Import expected result",
+            input=f"data/{self._EXPECTED}.tif",
+            output=f"{self._R_PREFIX}{self._EXPECTED}",
+        )
+        for angle in range(0, 360, 45):
+            horizon = f"{self._HORIZON_BASE}_{angle:03d}"
+            self.assertModule(
+                "r.in.gdal",
+                f"Import {horizon}",
+                input=f"data/{horizon}.tif",
+                output=f"{self._R_PREFIX}{horizon}",
+            )
+
+        # Just work with the region covered by the test rasters
+        self.assertModule(
+            "g.region",
+            raster=f"{self._R_PREFIX}{self._ELEVATION}", zoom=f"{self._R_PREFIX}{self._ELEVATION}")
+
+        # Run r.sun using params matching those used when creating the expected result raster
+        self.assertModule(
+            "r.sun",
+            aspect=f"{self._R_PREFIX}{self._ASPECT}", slope=f"{self._R_PREFIX}{self._SLOPE}",
+            elevation=f"{self._R_PREFIX}{self._ELEVATION}",
+            horizon_basename=f"{self._R_PREFIX}{self._HORIZON_BASE}", horizon_step=45,
+            albedo_value=0.15, step=0.25,
+            day=90, beam_rad=f"{self._R_PREFIX}{self._BEAM}")
+
+        self.assertRasterExists(name=f"{self._R_PREFIX}{self._BEAM}")
+
+        self.assertModule("r.mapcalc", expression=f"{self._R_PREFIX}{self._DIFFS}={self._R_PREFIX}{self._BEAM}-{self._R_PREFIX}{self._EXPECTED}")
+
+        MAX_DIFF = 1E-6
+        self.assertRasterMinMax(map=f"{self._R_PREFIX}{self._DIFFS}", refmin=-MAX_DIFF, refmax=MAX_DIFF)
+
+
 if __name__ == "__main__":
     test()
