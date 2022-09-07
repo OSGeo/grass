@@ -51,7 +51,7 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
 
     /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
     if (count == size)
-	str[--count] = '\0';
+        str[--count] = '\0';
 
     return count;
 }

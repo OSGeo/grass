@@ -38,11 +38,11 @@ int main()
     double dim = 0, delta = 1;
 
     while (ABS(delta) > EP)
-	if (sphere_volume(dim + delta) > sphere_volume(dim))
-	    dim += delta;
-	else
-	    delta /= -2;
+        if (sphere_volume(dim + delta) > sphere_volume(dim))
+            dim += delta;
+        else
+            delta /= -2;
     fprintf(stdout, "max volume = %.10f at dimension %.10f\n",
-	    sphere_volume(dim), dim);
+            sphere_volume(dim), dim);
     return 0;
 }

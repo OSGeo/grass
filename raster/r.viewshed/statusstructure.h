@@ -51,19 +51,19 @@
 
 typedef struct statusnode_
 {
-    dimensionType row, col;	/*position of the cell */
-    
-    /* float elev; */			/*elevation of cell */
-    double dist2vp;		/*distance to the viewpoint */
-    double gradient[3];		/*ENTER, CENTER, EXIT gradients of the Line of Sight */
-    double angle[3];		/*ENTER, CENTER, EXIT angles of the Line of Sight */
-    /* double gradient_offset; */	/*gradient of the Line of Sight with local elevation offset */
+    dimensionType row, col;     /*position of the cell */
+
+    /* float elev; *//*elevation of cell */
+    double dist2vp;             /*distance to the viewpoint */
+    double gradient[3];         /*ENTER, CENTER, EXIT gradients of the Line of Sight */
+    double angle[3];            /*ENTER, CENTER, EXIT angles of the Line of Sight */
+    /* double gradient_offset; *//*gradient of the Line of Sight with local elevation offset */
 } StatusNode;
 
 
 typedef struct statuslist_
 {
-    RBTree *rbt;		/*pointer to the root of the bst */
+    RBTree *rbt;                /*pointer to the root of the bst */
 } StatusList;
 
 
@@ -79,9 +79,9 @@ void calculate_dist_n_gradient(StatusNode * sn, double elev,
                                Viewpoint * vp, GridHeader hd);
 
 /* calculate gradient for ENTERING or EXITING event */
-void calculate_event_gradient(StatusNode * sn, int e_idx, 
-			      double row, double col, double elev,
-		              Viewpoint * vp, GridHeader hd);
+void calculate_event_gradient(StatusNode * sn, int e_idx,
+                              double row, double col, double elev,
+                              Viewpoint * vp, GridHeader hd);
 
 /*create an empty status list. */
 StatusList *create_status_struct();
@@ -100,12 +100,14 @@ void insert_into_status_struct(StatusNode sn, StatusList * sl);
 
 /*find the node with max Gradient. The node must be
    //within the distance (from viewpoint) given */
-double find_max_gradient_in_status_struct(StatusList * sl, double dist, double angle, double gradient);
+double find_max_gradient_in_status_struct(StatusList * sl, double dist,
+                                          double angle, double gradient);
 
 /*find the vertical angle in degrees between the viewpoint and the
    point represented by the StatusNode.  Assumes all values (except
    gradient) in sn have been filled. */
-float get_vertical_angle(Viewpoint vp, StatusNode sn, surface_type elev, int doCurv);
+float get_vertical_angle(Viewpoint vp, StatusNode sn, surface_type elev,
+                         int doCurv);
 
 
 #endif

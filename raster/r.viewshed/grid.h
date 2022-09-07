@@ -64,13 +64,13 @@ static const dimensionType maxDimension = USHRT_MAX - 1;
 
 typedef struct grid_header
 {
-    dimensionType ncols;	/*number of columns in the grid */
-    dimensionType nrows;	/*number of rows in the grid */
-    double xllcorner;		/*xllcorner refers to the western edge of grid */
-    double yllcorner;		/*yllcorner refers to the southern edge of grid */
-    double ew_res;		/*the ew resolution of the grid */
-    double ns_res;		/*the ns resolution of the grid */
-    surface_type nodata_value;		/*the value that represents missing data */
+    dimensionType ncols;        /*number of columns in the grid */
+    dimensionType nrows;        /*number of rows in the grid */
+    double xllcorner;           /*xllcorner refers to the western edge of grid */
+    double yllcorner;           /*yllcorner refers to the southern edge of grid */
+    double ew_res;              /*the ew resolution of the grid */
+    double ns_res;              /*the ns resolution of the grid */
+    surface_type nodata_value;  /*the value that represents missing data */
 
     struct Cell_head window;
 } GridHeader;
@@ -84,8 +84,8 @@ typedef struct grid_
     /*two dimensional array holding all the values in the grid */
     float **grid_data;
 
-    float minvalue;		/*the minimum value in the grid */
-    float maxvalue;		/*the maximum value in the grid */
+    float minvalue;             /*the minimum value in the grid */
+    float maxvalue;             /*the maximum value in the grid */
 } Grid;
 
 

@@ -21,13 +21,13 @@
 
 /*write the vtk structured point header */
 void write_vtk_structured_point_header(FILE * fp, char *vtkFile,
-				       RASTER3D_Region region, int dp,
-				       double scale);
+                                       RASTER3D_Region region, int dp,
+                                       double scale);
 /*write the vtk structured grid header */
 void write_vtk_structured_grid_header(FILE * fp, char *vtkFile,
-				      RASTER3D_Region region);
+                                      RASTER3D_Region region);
 /*write the vtk unstructured grid header */
 void write_vtk_unstructured_grid_header(FILE * fp, char *vtkFile,
-					RASTER3D_Region region);
+                                        RASTER3D_Region region);
 
 #endif

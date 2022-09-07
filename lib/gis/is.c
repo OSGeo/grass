@@ -35,7 +35,7 @@ static int test_path_file(const char *path, const char *file)
     G_free(buf);
 
     if (ret == 0)
-	return 1;
+        return 1;
 
     return 0;
 }
