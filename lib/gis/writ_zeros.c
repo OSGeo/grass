@@ -57,7 +57,7 @@ void G_write_zeros(int fd, size_t n)
 
         if (write(fd, zeros, i) < 0)
             G_fatal_error(_("File writing error in %s() %d:%s"),
-                           __func__, errno, strerror(errno));
+                          __func__, errno, strerror(errno));
         n -= i;
     }
 }
