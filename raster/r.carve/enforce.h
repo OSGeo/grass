@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.carve
@@ -51,7 +52,7 @@ typedef struct
 struct parms
 {
     struct Option *inrast, *invect, *outrast, *outvect, *width_col,
-      *depth_col, *field;
+        *depth_col, *field;
     RASTER_MAP_TYPE raster_type;
     double swidth, sdepth;
     int wrap, noflat;
@@ -72,14 +73,16 @@ struct vect_id_cat_map
 
 struct ptr
 {
-    enum Type {
-                 P_INT,
-                 P_DOUBLE,
-                 P_CHAR,
-                 P_DBSTRING,
-                 P_VECT_ID_CAT_MAP,
+    enum Type
+    {
+        P_INT,
+        P_DOUBLE,
+        P_CHAR,
+        P_DBSTRING,
+        P_VECT_ID_CAT_MAP,
     } type;
-    union {
+    union
+    {
         int *p_int;
         double *p_double;
         char *p_char;
@@ -90,20 +93,20 @@ struct ptr
 
 typedef enum
 {
-   WIDTH,
-   DEPTH,
+    WIDTH,
+    DEPTH,
 } value_type;
 
 /* enforce_ds.c */
 extern void enforce_downstream(int /*infd */ , int /*outfd */ ,
                                struct Map_info * /*Map */ ,
                                struct Map_info * /*outMap */ ,
-                               struct parms * /* parm */,
-                               struct field_info * /* Fi */,
-                               int * /* width_col_posw */,
-                               int * /* depth_col_pos */,
-                               char *[2] /* columns[2] */,
-                               dbDriver * /* driver */);
+                               struct parms * /* parm */ ,
+                               struct field_info * /* Fi */ ,
+                               int * /* width_col_posw */ ,
+                               int * /* depth_col_pos */ ,
+                               char *[2] /* columns[2] */ ,
+                               dbDriver * /* driver */ );
 extern void adjust_swidth(struct Cell_head *win, double *value);
 extern void adjust_sdepth(double *value);
 

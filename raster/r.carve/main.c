@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.carve
@@ -73,7 +74,7 @@ int main(int argc, char **argv)
     dbDriver *driver = NULL;
     dbString dbstr;
     dbColumn *column = NULL;
-    char *columns[2] = {0};
+    char *columns[2] = { 0 };
 
     /* start GIS engine */
     G_gisinit(argv[0]);
@@ -83,7 +84,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("hydrology"));
     module->label = _("Generates stream channels.");
     module->description = _("Takes vector stream data, transforms it "
-                "to raster and subtracts depth from the output DEM.");
+                            "to raster and subtracts depth from the output DEM.");
 
     parm.inrast = G_define_standard_option(G_OPT_R_INPUT);
     parm.inrast->key = "raster";
@@ -91,8 +92,7 @@ int main(int argc, char **argv)
 
     parm.invect = G_define_standard_option(G_OPT_V_INPUT);
     parm.invect->key = "vector";
-    parm.invect->label =
-    _("Name of input vector map containing stream(s)");
+    parm.invect->label = _("Name of input vector map containing stream(s)");
 
     parm.outrast = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     parm.outvect->key = "points";
     parm.outvect->required = NO;
     parm.outvect->description =
-    _("Name for output vector map for adjusted stream points");
+        _("Name for output vector map for adjusted stream points");
 
     parm.field = G_define_standard_option(G_OPT_V_FIELD);
     parm.field->key = "field";
@@ -110,13 +110,13 @@ int main(int argc, char **argv)
     parm.width_col = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.width_col->key = "width_column";
     parm.width_col->description =
-    _("Name of column for 'width' parameter (data type must be numeric)");
+        _("Name of column for 'width' parameter (data type must be numeric)");
     parm.width_col->guisection = _("Optional");
 
     parm.depth_col = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.depth_col->key = "depth_column";
     parm.depth_col->description =
-    _("Name of column for 'depth' parameter (data type must be numeric)");
+        _("Name of column for 'depth' parameter (data type must be numeric)");
     parm.depth_col->guisection = _("Optional");
 
     width = G_define_option();
@@ -144,41 +144,37 @@ int main(int argc, char **argv)
     G_check_input_output_name(parm.inrast->answer, parm.outrast->answer,
                               G_FATAL_EXIT);
     if (parm.outvect->answer)
-        Vect_check_input_output_name(parm.invect->answer, parm.outvect->answer,
-                                     G_FATAL_EXIT);
+        Vect_check_input_output_name(parm.invect->answer,
+                                     parm.outvect->answer, G_FATAL_EXIT);
 
     /* setup lat/lon projection and distance calculations */
     init_projection(&win, &parm.wrap);
 
     /* default width - one cell at center */
-    if (!(width->answer))
-    {
+    if (!(width->answer)) {
         parm.swidth = 0.0;
         adjust_swidth(&win, &parm.swidth);
     }
-    else
-    {
-        if (sscanf(width->answer, "%lf", &parm.swidth) != 1 || parm.swidth < 0.0)
-        {
+    else {
+        if (sscanf(width->answer, "%lf", &parm.swidth) != 1 ||
+            parm.swidth < 0.0) {
             G_warning(_("Invalid width value '%s' - using default."),
                       width->answer);
             adjust_swidth(&win, &parm.swidth);
-       }
+        }
     }
 
-    if (!(depth->answer))
-    {
+    if (!(depth->answer)) {
         adjust_sdepth(&parm.sdepth);
     }
-    else
-   {
-       if (sscanf(depth->answer, "%lf", &parm.sdepth) != 1 || parm.sdepth < 0.0)
-       {
-           G_warning(_("Invalid depth value '%s' - using default."),
-                     depth->answer);
-           adjust_sdepth(&parm.sdepth);
-       }
-   }
+    else {
+        if (sscanf(depth->answer, "%lf", &parm.sdepth) != 1 ||
+            parm.sdepth < 0.0) {
+            G_warning(_("Invalid depth value '%s' - using default."),
+                      depth->answer);
+            adjust_sdepth(&parm.sdepth);
+        }
+    }
 
     parm.noflat = noflat->answer;
 
@@ -188,7 +184,8 @@ int main(int argc, char **argv)
 
     Vect_set_open_level(2);
     if (Vect_open_old(&Map, parm.invect->answer, vmapset) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"), parm.invect->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"),
+                      parm.invect->answer);
 
     if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);
@@ -196,8 +193,7 @@ int main(int argc, char **argv)
     /* Open database driver */
     db_init_string(&dbstr);
 
-    if (parm.field->answer)
-    {
+    if (parm.field->answer) {
         Fi = Vect_get_field2(&Map, parm.field->answer);
         if (!(Fi))
             G_fatal_error(_("Database connection not defined for layer <%s>"),
@@ -212,29 +208,25 @@ int main(int argc, char **argv)
         columns[depth_col_pos] = parm.depth_col->answer;
 
         clen = sizeof(columns) / sizeof(columns[0]);
-        for (i = 0; i < clen; i++)
-        {
-            if (columns[i])
-            {
+        for (i = 0; i < clen; i++) {
+            if (columns[i]) {
                 /* Check if to_column exists and get its SQL type */
                 db_get_column(driver, Fi->table, columns[i], &column);
 
-                if (column)
-                {
-                     db_free_column(column);
-                     column = NULL;
-                     int ctype = db_column_Ctype(driver, Fi->table, columns[i]);
-                     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-                     {
-                         /* Close db connection */
-                         db_close_database_shutdown_driver(driver);
-                         driver = NULL;
-                         G_fatal_error(_("Incompatible column type for <%s> column"),
-                                       columns[i]);
-                     }
+                if (column) {
+                    db_free_column(column);
+                    column = NULL;
+                    int ctype =
+                        db_column_Ctype(driver, Fi->table, columns[i]);
+                    if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
+                        /* Close db connection */
+                        db_close_database_shutdown_driver(driver);
+                        driver = NULL;
+                        G_fatal_error(_("Incompatible column type for <%s> column"),
+                                      columns[i]);
+                    }
                 }
-                else
-                {
+                else {
                     /* Close db connection */
                     db_close_database_shutdown_driver(driver);
                     driver = NULL;
@@ -254,7 +246,7 @@ int main(int argc, char **argv)
 
     /* if specified, open vector for output */
     if (parm.outvect->answer)
-    open_new_vect(&outMap, parm.outvect->answer);
+        open_new_vect(&outMap, parm.outvect->answer);
 
     enforce_downstream(infd, outfd, &Map, &outMap, &parm, Fi,
                        &width_col_pos, &depth_col_pos, columns, driver);
@@ -282,22 +274,22 @@ static int init_projection(struct Cell_head *window, int *wrap_ncols)
     G_get_set_window(window);
 
     if (((window->west == (window->east - 360.0)) ||
-     (window->east == (window->west - 360.0))) &&
-    (G_projection() == PROJECTION_LL)) {
+         (window->east == (window->west - 360.0))) &&
+        (G_projection() == PROJECTION_LL)) {
 #if 0
-    G_get_ellipsoid_parameters(&a, &e2);
-    G_begin_geodesic_distance(a, e2);
+        G_get_ellipsoid_parameters(&a, &e2);
+        G_begin_geodesic_distance(a, e2);
 
-    /* add 1.1, not 1.0, to ensure that we round up */
-    *wrap_ncols =
-        (360.0 - (window->east - window->west)) / window->ew_res + 1.1;
+        /* add 1.1, not 1.0, to ensure that we round up */
+        *wrap_ncols =
+            (360.0 - (window->east - window->west)) / window->ew_res + 1.1;
 #else
-    G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
-              G_program_name());
+        G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
+                      G_program_name());
 #endif
     }
     else {
-    *wrap_ncols = 0;
+        *wrap_ncols = 0;
     }
 
     G_begin_distance_calculations();
