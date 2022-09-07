@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
                 map_type = DCELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread(array_data, sizeof(double), mrows * ncols, fp1)
+                if (fread(array_data, sizeof(double), (size_t)mrows * ncols, fp1)
                     != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
                 map_type = FCELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread(array_data, sizeof(float), mrows * ncols, fp1)
+                if (fread(array_data, sizeof(float), (size_t)mrows * ncols, fp1)
                     != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
                 map_type = CELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread(array_data, sizeof(int), mrows * ncols, fp1)
+                if (fread(array_data, sizeof(int), (size_t)mrows * ncols, fp1)
                     != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
