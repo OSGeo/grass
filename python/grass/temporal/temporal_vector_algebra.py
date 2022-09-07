@@ -45,7 +45,7 @@ from __future__ import print_function
 
 try:
     import ply.yacc as yacc
-except:
+except ImportError:
     pass
 
 import grass.pygrass.modules as pygrass
@@ -362,7 +362,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             other map list and given temporal operator.
 
         :param maplist: List of map objects for which relations has been build
-                                    correctely.
+                                    correctly.
         :param topolist: List of strings of temporal relations.
         :param temporal: The temporal operator specifying the temporal
                                         extent operation (intersection, union, disjoint

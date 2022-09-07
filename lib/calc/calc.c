@@ -13,7 +13,7 @@ int columns;
 
 /****************************************************************************/
 
-static RETSIGTYPE handle_fpe(int n)
+static void handle_fpe(int n)
 {
     floating_point_exception = 1;
     floating_point_exception_occurred = 1;

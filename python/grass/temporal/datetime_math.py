@@ -383,7 +383,7 @@ def modify_datetime(
 def adjust_datetime_to_granularity(mydate, granularity):
     """Modify the datetime object to fit the given granularity
 
-    - Years will start at the first of Januar
+    - Years will start at the first of January
     - Months will start at the first day of the month
     - Days will start at the first Hour of the day
     - Hours will start at the first minute of an hour
@@ -794,7 +794,7 @@ def check_datetime_string(time_string, use_dateutil=True):
 
     if has_dateutil and use_dateutil is True:
         # First check if there is only a single number, which specifies
-        # relative time. dateutil will interprete a single number as a valid
+        # relative time. dateutil will interpret a single number as a valid
         # time string, so we have to catch this case beforehand
         try:
             value = int(time_string)

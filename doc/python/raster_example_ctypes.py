@@ -22,7 +22,7 @@ from grass.lib.gis import *
 from grass.lib.raster import *
 
 # check if GRASS is running or not
-if not os.environ.has_key("GISBASE"):
+if "GISBASE" not in os.environ:
     sys.exit("You must be in GRASS GIS to run this program")
 
 # parse command line arguments, prompt user for a raster map name if one wasn't given

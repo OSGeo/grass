@@ -348,30 +348,30 @@ class Module(object):
     >>> neighbors.inputs.size = 5
     >>> neighbors.inputs.quantile = 0.5
     >>> neighbors.get_bash()
-    'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
+    'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
     >>> new_neighbors1 = copy.deepcopy(neighbors)
     >>> new_neighbors1.inputs.input = "mapD"
     >>> new_neighbors1.inputs.size = 3
     >>> new_neighbors1.inputs.quantile = 0.5
     >>> new_neighbors1.get_bash()
-    'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
     >>> new_neighbors2 = copy.deepcopy(neighbors)
     >>> new_neighbors2(input="mapD", size=3, run_=False)
     Module('r.neighbors')
     >>> new_neighbors2.get_bash()
-    'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.get_bash()
-    'r.neighbors method=average size=3'
+    'r.neighbors size=3 method=average weighting_function=none nprocs=1 memory=300'
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
-    'r.neighbors input=mapA method=average size=3 output=mapB'
+    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
 
     >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
     ...                  overwrite=True, run_=False)
@@ -445,34 +445,30 @@ class Module(object):
     >>> colors.returncode
     0
 
-    Multiple run test
+    Run many times and change parameters for each run
 
-    >>> colors = Module("r.colors", map="test_a",
-    ...                                            color="ryb", run_=False)
+    >>> colors = Module("r.colors", map="test_a", color="ryb", run_=False)
     >>> colors.get_bash()
     'r.colors map=test_a color=ryb offset=0.0 scale=1.0'
     >>> colors.run()
     Module('r.colors')
-    >>> colors(color="gyr")
-    Module('r.colors')
+    >>> colors.update(color="gyr")
     >>> colors.run()
     Module('r.colors')
-    >>> colors(color="ryg")
-    Module('r.colors')
-    >>> colors(stderr_=PIPE)
-    Module('r.colors')
+    >>> colors.update(color="ryg")
+    >>> colors.update(stderr_=PIPE)
     >>> colors.run()
     Module('r.colors')
     >>> print(colors.outputs["stderr"].value.strip())
     Color table for raster map <test_a> set to 'ryg'
-    >>> colors(color="byg")
-    Module('r.colors')
-    >>> colors(stdout_=PIPE)
-    Module('r.colors')
+    >>> colors.update(color="byg")
+    >>> colors.update(stdout_=PIPE)
     >>> colors.run()
     Module('r.colors')
     >>> print(colors.outputs["stderr"].value.strip())
     Color table for raster map <test_a> set to 'byg'
+    >>> colors.get_bash()
+    'r.colors map=test_a color=byg offset=0.0 scale=1.0'
 
     Often in the Module class you can find ``*args`` and ``kwargs`` annotation
     in methods, like in the __call__ method.
@@ -624,6 +620,27 @@ class Module(object):
             self.run()
             return self
 
+        self.update(*args, **kargs)
+
+        #
+        # check if execute
+        #
+        if self.run_:
+            #
+            # check reqire parameters
+            #
+            if self.check_:
+                self.check()
+            return self.run()
+        return self
+
+    def update(self, *args, **kargs):
+        """Update module parameters and selected object attributes.
+
+        Valid parameters are all the module parameters
+        and additional parameters, namely: run_, stdin_, stdout_, stderr_,
+        env_, and finish_.
+        """
         #
         # check for extra kargs, set attribute and remove from dictionary
         #
@@ -632,7 +649,7 @@ class Module(object):
                 self.flags[flg].value = True
             del kargs["flags"]
 
-        # set attributs
+        # set attributes
         for key in ("run_", "env_", "finish_", "stdout_", "stderr_", "check_"):
             if key in kargs:
                 setattr(self, key, kargs.pop(key))
@@ -659,18 +676,6 @@ class Module(object):
                 self.flags[key].value = val
             else:
                 raise ParameterError("%s is not a valid parameter." % key)
-
-        #
-        # check if execute
-        #
-        if self.run_:
-            #
-            # check reqire parameters
-            #
-            if self.check_:
-                self.check()
-            return self.run()
-        return self
 
     def get_bash(self):
         """Return a BASH representation of the Module."""
@@ -1035,8 +1040,6 @@ def run_modules_in_temp_region(module_list, q):
         for proc in module_list:
             proc.run()
             proc.wait()
-    except:
-        raise
     finally:
         q.put(module_list)
         del_temp_region()
@@ -1055,8 +1058,6 @@ def run_modules(module_list, q):
         for proc in module_list:
             proc.run()
             proc.wait()
-    except:
-        raise
     finally:
         q.put(module_list)
 

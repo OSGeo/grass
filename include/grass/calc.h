@@ -8,14 +8,15 @@
 typedef int func_t(int argc, const int *argt, void **args);
 typedef int args_t(int argc, int *argt);
 
-enum {
-    E_ARG_LO	= 1,
-    E_ARG_HI	= 2,
-    E_ARG_TYPE	= 3,
-    E_RES_TYPE	= 4,
-    E_INV_TYPE	= 5,
-    E_ARG_NUM	= 6,
-    E_WTF	= 99
+enum
+{
+    E_ARG_LO = 1,
+    E_ARG_HI = 2,
+    E_ARG_TYPE = 3,
+    E_RES_TYPE = 4,
+    E_INV_TYPE = 5,
+    E_ARG_NUM = 6,
+    E_WTF = 99
 };
 
 typedef struct func_desc

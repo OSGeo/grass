@@ -13,14 +13,24 @@ from __future__ import print_function
 import copy
 from datetime import datetime
 import grass.script.core as core
-from .temporal_granularity import *
-from .datetime_math import *
-from .space_time_datasets import *
+from .abstract_dataset import (
+    AbstractDatasetComparisonKeyStartTime,
+    AbstractDatasetComparisonKeyEndTime,
+)
+from .core import init
+from .datetime_math import increment_datetime_by_string, compute_datetime_delta
+from .space_time_datasets import RasterDataset
+from .spatial_extent import SpatialExtent
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .temporal_granularity import (
+    adjust_datetime_to_granularity,
+    compute_absolute_time_granularity,
+)
 
 import grass.lib.vector as vector
 import grass.lib.rtree as rtree
 import grass.lib.gis as gis
-from ctypes import *
+from ctypes import byref
 
 # Uncomment this to detect the error
 core.set_raise_on_error(True)

@@ -90,8 +90,8 @@ void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
 }
 
 
-int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents, int update,
-                double zscale, struct Cell_head *region)
+int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents,
+                int update, double zscale, struct Cell_head *region)
 {
     unsigned long line;
     int first;

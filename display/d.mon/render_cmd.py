@@ -7,6 +7,7 @@ from grass.script import core as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
 
+
 # read environment variables from file
 def read_env_file(env_file):
     width = height = legfile = None
@@ -14,10 +15,10 @@ def read_env_file(env_file):
     if fd is None:
         grass.fatal("Unable to open file '{0}'".format(env_file))
     lines = fd.readlines()
-    for l in lines:
-        if l.startswith("#"):
+    for line in lines:
+        if line.startswith("#"):
             continue
-        k, v = l.rstrip("\n").split("#", 1)[0].strip().split("=", 1)
+        k, v = line.rstrip("\n").split("#", 1)[0].strip().split("=", 1)
         os.environ[k] = v
         if width is None and k == "GRASS_RENDER_WIDTH":
             width = int(v)
@@ -120,12 +121,13 @@ def read_stdin(cmd):
 
     if (
         cmd[0] == "d.text"
-        and not "text" in cmd[1]
-        and (not "input" in cmd[1] or cmd[1]["input"] == "-")
+        and "text" not in cmd[1]
+        and ("input" not in cmd[1] or cmd[1]["input"] == "-")
     ):
         if sys.stdin.isatty():
             sys.stderr.write(
-                "\nPlease enter text instructions.  Enter EOF (ctrl-d) on last line to quit\n"
+                "\nPlease enter text instructions."
+                " Enter EOF (ctrl-d) on last line to quit.\n"
             )
         opt = "input"
 

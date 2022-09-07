@@ -14,15 +14,15 @@ void cmmul(Cpx * c, Cpx * a, Cpx * b, int n)
 
     trncm(b, n);
     for (i = 0; i < n; ++i, a += n) {
-	for (j = 0, q = b; j < n; ++j) {
-	    for (k = 0, p = a, s.re = s.im = 0.; k < n; ++k) {
-		s.re += p->re * q->re - p->im * q->im;
-		s.im += p->im * q->re + p->re * q->im;
-		++p;
-		++q;
-	    }
-	    *c++ = s;
-	}
+        for (j = 0, q = b; j < n; ++j) {
+            for (k = 0, p = a, s.re = s.im = 0.; k < n; ++k) {
+                s.re += p->re * q->re - p->im * q->im;
+                s.im += p->im * q->re + p->re * q->im;
+                ++p;
+                ++q;
+            }
+            *c++ = s;
+        }
     }
     trncm(b, n);
 }

@@ -46,53 +46,49 @@ except ImportError:
 
 
 class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
-
-    def __init__(self, parent, giface, iclass_mapwin=None,
-                 id=wx.ID_ANY):
+    def __init__(self, parent, giface, iclass_mapwin=None, id=wx.ID_ANY):
 
         # wx.SplitterWindow.__init__(self, parent = parent, id = id,
         #                           style = wx.SP_LIVE_UPDATE)
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
         ManageBusyCursorMixin.__init__(self, window=self)
 
-        self.scatt_mgr = self._createScattMgr(guiparent=parent, giface=giface,
-                                              iclass_mapwin=iclass_mapwin)
+        self.scatt_mgr = self._createScattMgr(
+            guiparent=parent, giface=giface, iclass_mapwin=iclass_mapwin
+        )
 
         # toobars
         self.toolbars = {}
-        self.toolbars['mainToolbar'] = self._createMainToolbar()
-        self.toolbars['editingToolbar'] = EditingToolbar(
-            parent=self, scatt_mgr=self.scatt_mgr)
+        self.toolbars["mainToolbar"] = self._createMainToolbar()
+        self.toolbars["editingToolbar"] = EditingToolbar(
+            parent=self, scatt_mgr=self.scatt_mgr
+        )
 
         self._createCategoryPanel(self)
 
         self.plot_panel = ScatterPlotsPanel(self, self.scatt_mgr)
 
         self.mainsizer = wx.BoxSizer(wx.VERTICAL)
+        self.mainsizer.Add(self.toolbars["mainToolbar"], proportion=0, flag=wx.EXPAND)
         self.mainsizer.Add(
-            self.toolbars['mainToolbar'],
-            proportion=0, flag=wx.EXPAND)
+            self.toolbars["editingToolbar"], proportion=0, flag=wx.EXPAND
+        )
         self.mainsizer.Add(
-            self.toolbars['editingToolbar'],
-            proportion=0, flag=wx.EXPAND)
-        self.mainsizer.Add(self.catsPanel, proportion=0,
-                           flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+            self.catsPanel, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
+        )
         self.mainsizer.Add(self.plot_panel, proportion=1, flag=wx.EXPAND)
 
         self.catsPanel.Hide()
-        self.toolbars['editingToolbar'].Hide()
+        self.toolbars["editingToolbar"].Hide()
 
         self.SetSizer(self.mainsizer)
 
-        self.scatt_mgr.computingStarted.connect(
-            lambda: self.UpdateCur(busy=True))
-        self.scatt_mgr.renderingStarted.connect(
-            lambda: self.UpdateCur(busy=True))
-        self.scatt_mgr.renderingFinished.connect(
-            lambda: self.UpdateCur(busy=False))
+        self.scatt_mgr.computingStarted.connect(lambda: self.UpdateCur(busy=True))
+        self.scatt_mgr.renderingStarted.connect(lambda: self.UpdateCur(busy=True))
+        self.scatt_mgr.renderingFinished.connect(lambda: self.UpdateCur(busy=False))
 
         # self.SetSashGravity(0.5)
-        #self.SplitHorizontally(self.head_panel, self.plot_panel, -50)
+        # self.SplitHorizontally(self.head_panel, self.plot_panel, -50)
         self.Layout()
 
     def CloseWindow(self):
@@ -109,8 +105,7 @@ class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
         return MainToolbar(parent=self, scatt_mgr=self.scatt_mgr)
 
     def _createScattMgr(self, guiparent, giface, iclass_mapwin):
-        return ScattsManager(guiparent=self, giface=giface,
-                             iclass_mapwin=iclass_mapwin)
+        return ScattsManager(guiparent=self, giface=giface, iclass_mapwin=iclass_mapwin)
 
     def NewScatterPlot(self, scatt_id, transpose):
         return self.plot_panel.NewScatterPlot(scatt_id, transpose)
@@ -134,53 +129,47 @@ class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
         self.cats_list = CategoryListCtrl(
             parent=self.catsPanel,
             cats_mgr=self.scatt_mgr.GetCategoriesManager(),
-            sel_cats_in_iscatt=self._selCatInIScatt())
+            sel_cats_in_iscatt=self._selCatInIScatt(),
+        )
 
         self.catsPanel.SetMinSize((-1, 100))
         self.catsPanel.SetInitialSize((-1, 150))
 
-        box_capt = StaticBox(parent=self.catsPanel, id=wx.ID_ANY,
-                             label=' %s ' % _("Classes"),)
+        box_capt = StaticBox(
+            parent=self.catsPanel,
+            id=wx.ID_ANY,
+            label=" %s " % _("Classes"),
+        )
         catsSizer = wx.StaticBoxSizer(box_capt, wx.VERTICAL)
 
-        self.toolbars['categoryToolbar'] = self._createCategoryToolbar(
-            self.catsPanel)
+        self.toolbars["categoryToolbar"] = self._createCategoryToolbar(self.catsPanel)
 
-        catsSizer.Add(
-            self.cats_list,
-            proportion=1,
-            flag=wx.EXPAND | wx.TOP,
-            border=5)
-        if self.toolbars['categoryToolbar']:
-            catsSizer.Add(self.toolbars['categoryToolbar'], proportion=0)
+        catsSizer.Add(self.cats_list, proportion=1, flag=wx.EXPAND | wx.TOP, border=5)
+        if self.toolbars["categoryToolbar"]:
+            catsSizer.Add(self.toolbars["categoryToolbar"], proportion=0)
 
         self.catsPanel.SetSizer(catsSizer)
 
     def _createCategoryToolbar(self, parent):
-        return CategoryToolbar(parent=parent,
-                               scatt_mgr=self.scatt_mgr,
-                               cats_list=self.cats_list)
+        return CategoryToolbar(
+            parent=parent, scatt_mgr=self.scatt_mgr, cats_list=self.cats_list
+        )
 
 
 class IScattDialog(wx.Dialog):
-
     def __init__(
-            self, parent, giface,
-            title=_("Interactive Scatter Plot Tool"),
-            id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE, **kwargs):
-        wx.Dialog.__init__(
-            self,
-            parent,
-            id,
-            style=style,
-            title=title,
-            **kwargs)
+        self,
+        parent,
+        giface,
+        title=_("Interactive Scatter Plot Tool"),
+        id=wx.ID_ANY,
+        style=wx.DEFAULT_FRAME_STYLE,
+        **kwargs,
+    ):
+        wx.Dialog.__init__(self, parent, id, style=style, title=title, **kwargs)
         self.SetIcon(
-            wx.Icon(
-                os.path.join(
-                    globalvar.ICONDIR,
-                    'grass.ico'),
-                wx.BITMAP_TYPE_ICO))
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
+        )
 
         self.iscatt_panel = MapDispIScattPanel(self, giface)
 
@@ -199,25 +188,22 @@ class IScattDialog(wx.Dialog):
 
 
 class MapDispIScattPanel(IClassIScattPanel):
-
-    def __init__(self, parent, giface,
-                 id=wx.ID_ANY, **kwargs):
-        IClassIScattPanel.__init__(self, parent=parent, giface=giface,
-                                   id=id, **kwargs)
+    def __init__(self, parent, giface, id=wx.ID_ANY, **kwargs):
+        IClassIScattPanel.__init__(self, parent=parent, giface=giface, id=id, **kwargs)
 
     def _createScattMgr(self, guiparent, giface, iclass_mapwin):
         return ScattsManager(guiparent=self, giface=giface)
 
     def _createMainToolbar(self):
         return MainToolbar(
-            parent=self, scatt_mgr=self.scatt_mgr, opt_tools=['add_group'])
+            parent=self, scatt_mgr=self.scatt_mgr, opt_tools=["add_group"]
+        )
 
     def _selCatInIScatt(self):
         return True
 
 
 class ScatterPlotsPanel(scrolled.ScrolledPanel):
-
     def __init__(self, parent, scatt_mgr, id=wx.ID_ANY):
 
         scrolled.ScrolledPanel.__init__(self, parent)
@@ -357,21 +343,32 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
     def NewScatterPlot(self, scatt_id, transpose):
         # TODO needs to be resolved (should be in this class)
 
-        scatt = ScatterPlotWidget(parent=self.mainPanel,
-                                  scatt_mgr=self.scatt_mgr,
-                                  scatt_id=scatt_id,
-                                  transpose=transpose)
+        scatt = ScatterPlotWidget(
+            parent=self.mainPanel,
+            scatt_mgr=self.scatt_mgr,
+            scatt_id=scatt_id,
+            transpose=transpose,
+        )
         scatt.plotClosed.connect(self.ScatterPlotClosed)
         self.transpose[scatt_id] = transpose
 
         caption = self._creteCaption(scatt_id)
-        self._mgr.AddPane(scatt,
-                          aui.AuiPaneInfo().Dockable(True).Floatable(True).
-                          Name(self._newScatterPlotName(scatt_id)).MinSize((-1, 300)).
-                          Caption(caption).
-                          Center().Position(1).MaximizeButton(True).
-                          MinimizeButton(True).CaptionVisible(True).
-                          CloseButton(True).Layer(0))
+        self._mgr.AddPane(
+            scatt,
+            aui.AuiPaneInfo()
+            .Dockable(True)
+            .Floatable(True)
+            .Name(self._newScatterPlotName(scatt_id))
+            .MinSize((-1, 300))
+            .Caption(caption)
+            .Center()
+            .Position(1)
+            .MaximizeButton(True)
+            .MinimizeButton(True)
+            .CaptionVisible(True)
+            .CloseButton(True)
+            .Layer(0),
+        )
 
         self._mgr.Update()
 
@@ -390,8 +387,8 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         # TODO too low level
         b1_id, b2_id = idScattToidBands(scatt_id, len(bands))
 
-        x_b = bands[b1_id].split('@')[0]
-        y_b = bands[b2_id].split('@')[0]
+        x_b = bands[b1_id].split("@")[0]
+        y_b = bands[b2_id].split("@")[0]
 
         if transpose:
             tmp = x_b
@@ -404,16 +401,22 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return self.scatt_mgr
 
 
-class CategoryListCtrl(ListCtrl,
-                       listmix.ListCtrlAutoWidthMixin):
-
+class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, cats_mgr, sel_cats_in_iscatt, id=wx.ID_ANY):
 
         ListCtrl.__init__(
-            self, parent, id, style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES |
-            wx.LC_VRULES | wx.LC_SINGLE_SEL | wx.LC_NO_HEADER)
-        self.columns = ((_('Class name'), 'name'), )
-        #(_('Color'), 'color'))
+            self,
+            parent,
+            id,
+            style=wx.LC_REPORT
+            | wx.LC_VIRTUAL
+            | wx.LC_HRULES
+            | wx.LC_VRULES
+            | wx.LC_SINGLE_SEL
+            | wx.LC_NO_HEADER,
+        )
+        self.columns = ((_("Class name"), "name"),)
+        # (_('Color'), 'color'))
 
         self.sel_cats_in_iscatt = sel_cats_in_iscatt
 
@@ -431,7 +434,7 @@ class CategoryListCtrl(ListCtrl,
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnCategoryRightUp)  # wxMSW
         self.Bind(wx.EVT_RIGHT_UP, self.OnCategoryRightUp)  # wxGTK
 
-        #self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnEdit)
+        # self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnEdit)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnSel)
 
         self.cats_mgr.setCategoryAttrs.connect(self.Update)
@@ -445,12 +448,11 @@ class CategoryListCtrl(ListCtrl,
 
     def SetVirtualData(self, row, column, text):
         attr = self.columns[column][1]
-        if attr == 'name':
+        if attr == "name":
             try:
-                text.encode('ascii')
+                text.encode("ascii")
             except UnicodeEncodeError:
-                GMessage(parent=self, message=_(
-                    "Please use only ASCII characters."))
+                GMessage(parent=self, message=_("Please use only ASCII characters."))
                 return
 
         cat_id = self.cats_mgr.GetCategories()[row]
@@ -465,8 +467,8 @@ class CategoryListCtrl(ListCtrl,
         for i, col in enumerate(columns):
             self.InsertColumn(i, col[0])  # wx.LIST_FORMAT_RIGHT
 
-        #self.SetColumnWidth(0, 100)
-        #self.SetColumnWidth(1, 100)
+        # self.SetColumnWidth(0, 100)
+        # self.SetColumnWidth(1, 100)
 
     def AddCategory(self):
 
@@ -541,15 +543,14 @@ class CategoryListCtrl(ListCtrl,
 
         cattr = self.cats_mgr.GetCategoryAttrs(cat_id)
 
-        if cattr['show']:
-            c = cattr['color']
+        if cattr["show"]:
+            c = cattr["color"]
 
-            back_c = wx.Colour(*map(int, c.split(':')))
+            back_c = wx.Colour(*map(int, c.split(":")))
             text_c = wx.Colour(*ContrastColor(back_c))
         else:
             back_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTION)
-            text_c = wx.SystemSettings.GetColour(
-                wx.SYS_COLOUR_INACTIVECAPTIONTEXT)
+            text_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTIONTEXT)
 
         # if it is in scope of the method, gui falls, using self solved it
         self.l = wx.ListItemAttr()
@@ -568,7 +569,7 @@ class CategoryListCtrl(ListCtrl,
 
         cats = self.cats_mgr.GetCategories()
         cat_id = cats[cat_idx]
-        showed = self.cats_mgr.GetCategoryAttrs(cat_id)['show']
+        showed = self.cats_mgr.GetCategoryAttrs(cat_id)["show"]
 
         menu = Menu()
 
@@ -589,11 +590,9 @@ class CategoryListCtrl(ListCtrl,
         item = menu.Append(wx.ID_ANY, text)
         self.Bind(
             wx.EVT_MENU,
-            lambda event: self._setCatAttrs(
-                cat_id=cat_id,
-                attrs={
-                    'show': not showed}),
-            item)
+            lambda event: self._setCatAttrs(cat_id=cat_id, attrs={"show": not showed}),
+            item,
+        )
 
         menu.AppendSeparator()
 
@@ -668,8 +667,8 @@ class CategoryListCtrl(ListCtrl,
         cat_idx = self.rightClickedItemIdx
         cat_id = self.cats_mgr.GetCategories()[cat_idx]
 
-        col = self.cats_mgr.GetCategoryAttrs(cat_id)['color']
-        col = map(int, col.split(':'))
+        col = self.cats_mgr.GetCategoryAttrs(cat_id)["color"]
+        col = map(int, col.split(":"))
 
         col_data = wx.ColourData()
         col_data.SetColour(wx.Colour(*col))
@@ -679,7 +678,7 @@ class CategoryListCtrl(ListCtrl,
 
         if dlg.ShowModal() == wx.ID_OK:
             color = dlg.GetColourData().GetColour().Get()
-            color = ':'.join(map(str, color))
+            color = ":".join(map(str, color))
             self.cats_mgr.SetCategoryAttrs(cat_id, {"color": color})
 
         dlg.Destroy()
@@ -689,20 +688,20 @@ class CategoryListCtrl(ListCtrl,
 
         cat_id = self.cats_mgr.GetCategories()[self.rightClickedItemIdx]
         cat_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
-        value = cat_attrs['opacity'] * 100
-        name = cat_attrs['name']
+        value = cat_attrs["opacity"] * 100
+        name = cat_attrs["name"]
 
-        dlg = SetOpacityDialog(self, opacity=value,
-                               title=_("Change opacity of class <%s>" % name))
+        dlg = SetOpacityDialog(
+            self, opacity=value, title=_("Change opacity of class <%s>" % name)
+        )
 
         dlg.applyOpacity.connect(
-            lambda value: self._setCatAttrs(
-                cat_id=cat_id, attrs={
-                    'opacity': value}))
+            lambda value: self._setCatAttrs(cat_id=cat_id, attrs={"opacity": value})
+        )
         dlg.CentreOnParent()
 
         if dlg.ShowModal() == wx.ID_OK:
-            self._setCatAttrs(cat_id=cat_id, attrs={'opacity': value})
+            self._setCatAttrs(cat_id=cat_id, attrs={"opacity": value})
 
         dlg.Destroy()
 
@@ -710,15 +709,14 @@ class CategoryListCtrl(ListCtrl,
         cat_id = self.cats_mgr.GetCategories()[self.rightClickedItemIdx]
         cat_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)
 
-        dlg = RenameClassDialog(self, old_name=cat_attrs['name'])
+        dlg = RenameClassDialog(self, old_name=cat_attrs["name"])
         dlg.CentreOnParent()
 
         while True:
             if dlg.ShowModal() == wx.ID_OK:
                 name = dlg.GetNewName().strip()
                 if not name:
-                    GMessage(parent=self, message=_(
-                        "Empty name was inserted."))
+                    GMessage(parent=self, message=_("Empty name was inserted."))
                 else:
                     self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
                     break

@@ -1,4 +1,4 @@
-"""!
+"""
 @package example.toolbars
 
 @brief Example toolbars and icons.
@@ -19,7 +19,6 @@ for details.
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from icons.icon import MetaIcon
 
 
 class ExampleMapToolbar(BaseToolbar):
@@ -48,16 +47,51 @@ class ExampleMapToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("displaymap", icons["display"], self.parent.OnDraw),
-                ("rendermap", icons["render"], self.parent.OnRender),
-                ("erase", icons["erase"], self.parent.OnErase),
+                (
+                    ("displaymap", icons["display"].label),
+                    icons["display"],
+                    self.parent.OnDraw,
+                ),
+                (
+                    ("rendermap", icons["render"].label),
+                    icons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("erase", icons["erase"].label),
+                    icons["erase"],
+                    self.parent.OnErase,
+                ),
                 (None,),  # creates separator
-                ("pan", icons["pan"], self.parent.OnPan, wx.ITEM_CHECK),  # toggle tool
-                ("zoomIn", icons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomOut", icons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
+                (
+                    ("pan", icons["pan"].label),
+                    icons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),  # toggle tool
+                (
+                    ("zoomIn", icons["zoomIn"].label),
+                    icons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", icons["zoomOut"].label),
+                    icons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
                 (None,),
-                ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
+                (
+                    ("zoomBack", icons["zoomBack"].label),
+                    icons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomToMap", icons["zoomExtent"].label),
+                    icons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
             )
         )
 
@@ -77,7 +111,11 @@ class ExampleMainToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data"""
         return self._getToolbarData(
-            (("addRaster", BaseIcons["addRast"], self.parent.OnSelectRaster),)
+            (
+                ("addRaster", BaseIcons["addRast"].label),
+                BaseIcons["addRast"],
+                self.parent.OnSelectRaster,
+            ),
         )
 
 
@@ -97,7 +135,13 @@ class ExampleMiscToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("help", icons["help"], self.parent.OnHelp),
-                ("quit", icons["quit"], self.parent.OnCloseWindow),
-            )
+                ("help", icons["help"].label),
+                icons["help"],
+                self.parent.OnHelp,
+            ),
+            (
+                ("quit", icons["quit"].label),
+                icons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )

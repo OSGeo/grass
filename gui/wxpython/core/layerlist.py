@@ -69,8 +69,17 @@ class LayerList(object):
                 layers.append(layer)
         return layers
 
-    def AddNewLayer(self, name, mapType, cmd, active=True, hidden=False,
-                    opacity=1, label=None, pos=0):
+    def AddNewLayer(
+        self,
+        name,
+        mapType,
+        cmd,
+        active=True,
+        hidden=False,
+        opacity=1,
+        label=None,
+        pos=0,
+    ):
         """Creates new layer and adds it to the list (insert to the first position).
 
         :param ltype: layer type (raster, vector, raster_3d, ...)
@@ -96,13 +105,11 @@ class LayerList(object):
         return layer
 
     def AddLayer(self, layer):
-        """Adds a layer to the layer list.
-        """
+        """Adds a layer to the layer list."""
         self._list.insert(0, layer)
 
     def InsertLayer(self, index, layer):
-        """Adds a layer to the layer list.
-        """
+        """Adds a layer to the layer list."""
         self._list.insert(index, layer)
 
     def RemoveLayer(self, layer):
@@ -149,9 +156,9 @@ class LayerList(object):
         return len(self._list)
 
     def __str__(self):
-        text = ''
+        text = ""
         for layer in self._list:
-            text += str(layer.name) + '\n'
+            text += str(layer.name) + "\n"
         return text
 
 
@@ -192,11 +199,13 @@ class Layer(object):
         self._hidden = False
         self._initialized = False
 
-        self._mapTypes = ['raster', 'vector', 'raster_3d', 'rgb']
-        self._internalTypes = {'raster': 'cell',
-                               'vector': 'vector',
-                               'raster_3d': 'grid3',
-                               'rgb': 'rgb'}
+        self._mapTypes = ["raster", "vector", "raster_3d", "rgb"]
+        self._internalTypes = {
+            "raster": "cell",
+            "vector": "vector",
+            "raster_3d": "grid3",
+            "rgb": "rgb",
+        }
 
     def GetName(self):
         return self._name
@@ -209,22 +218,21 @@ class Layer(object):
         Therefore map type has to be set first.
         """
         if not self.hidden:
-            fullName = name.split('@')
-            if len(
-                    fullName) == 1 and self._mapType != 'rgb':  # skip checking rgb maps for now
+            fullName = name.split("@")
+            if (
+                len(fullName) == 1 and self._mapType != "rgb"
+            ):  # skip checking rgb maps for now
                 if self._mapType is None:
                     raise ValueError(
-                        "To set layer name, the type of layer must be specified.")
+                        "To set layer name, the type of layer must be specified."
+                    )
 
                 res = gcore.find_file(
-                    name=fullName,
-                    element=self._internalTypes[
-                        self._mapType])
-                if not res['mapset']:
-                    raise ValueError(
-                        "Map <{name}> not found.".format(
-                            name=name))
-                self._name = name + '@' + res['mapset']
+                    name=fullName, element=self._internalTypes[self._mapType]
+                )
+                if not res["mapset"]:
+                    raise ValueError("Map <{name}> not found.".format(name=name))
+                self._name = name + "@" + res["mapset"]
             else:
                 self._name = name
         self.label = name
@@ -256,9 +264,7 @@ class Layer(object):
         :param mapType: can be 'raster', 'vector', 'raster_3d'
         """
         if mapType not in self._mapTypes:
-            raise ValueError(
-                "Wrong map type used: {mtype}".format(
-                    mtype=mapType))
+            raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
 
         self._mapType = mapType
 
@@ -278,8 +284,8 @@ class Layer(object):
         """
         if not (0 <= opacity <= 1):
             raise ValueError(
-                "Opacity value must be between 0 and 1, not {op}.".format(
-                    op=opacity))
+                "Opacity value must be between 0 and 1, not {op}.".format(op=opacity)
+            )
         self._opacity = opacity
 
     opacity = property(fget=GetOpacity, fset=SetOpacity)
@@ -369,10 +375,16 @@ class LayerListToRendererConverter:
 
     def AddLayer(self, index, layer):
         """Adds layer to renderer (prepends)."""
-        self._renderer.AddLayer(ltype=layer.mapType, command=layer.cmd,
-                                name=layer.name, active=layer.active,
-                                hidden=False, opacity=layer.opacity,
-                                render=True, pos=-1)
+        self._renderer.AddLayer(
+            ltype=layer.mapType,
+            command=layer.cmd,
+            name=layer.name,
+            active=layer.active,
+            hidden=False,
+            opacity=layer.opacity,
+            render=True,
+            pos=-1,
+        )
 
     def RemoveLayer(self, index):
         """Removes layer from renderer."""

@@ -11,7 +11,7 @@ int add_rule(RULE ** tail, CELL lo, CELL hi, CELL new)
     r->new = new;
     r->next = NULL;
     if (*tail)
-	(*tail)->next = r;
+        (*tail)->next = r;
     *tail = r;
 
     return 0;

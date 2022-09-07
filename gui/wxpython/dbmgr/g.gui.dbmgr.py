@@ -37,19 +37,18 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from dbmgr.manager import AttributeManager
 
-    mapName = gscript.find_file(options['map'], element='vector')['fullname']
+    mapName = gscript.find_file(options["map"], element="vector")["fullname"]
     if not mapName:
         gscript.set_raise_on_error(False)
-        gscript.fatal(_("Vector map <%s> not found") % options['map'])
+        gscript.fatal(_("Vector map <%s> not found") % options["map"])
 
     app = wx.App()
-    gscript.message(
-        _("Loading attribute data for vector map <%s>...") %
-        mapName)
+    gscript.message(_("Loading attribute data for vector map <%s>...") % mapName)
     f = AttributeManager(
         parent=None,
         id=wx.ID_ANY,
@@ -60,6 +59,7 @@ def main():
     f.Show()
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

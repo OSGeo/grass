@@ -49,7 +49,7 @@ class TestRasterWhat(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.del_temp_region()
 
     def test_row_output(self):
@@ -384,7 +384,7 @@ class TestRasterWhatNull(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.del_temp_region()
 
     def test_null_value(self):

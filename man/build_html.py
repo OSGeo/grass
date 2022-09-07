@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
-# (C) 2003-2021 Markus Neteler and the GRASS Development Team
+# (C) 2003-2022 Markus Neteler and the GRASS Development Team
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
@@ -36,7 +36,7 @@ header1_tmpl = string.Template(
     r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title>${title} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
 """
@@ -122,16 +122,16 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;General</h3>
        <ul>
-        <li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual</a></li>
+        <li class="box"><a href="grass.html">GRASS GIS startup manual</a></li>
         <li class="box"><a href="general.html">General commands manual</a></li>
        </ul>
         <h3>&nbsp;Addons</h3>
         <ul>
-        <li class="box"><a href="https://grass.osgeo.org/grass7/manuals/addons/">Addons manual pages</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass8/manuals/addons/">Addons manual pages</a></li>
        </ul>
         <h3>&nbsp;Programmer's Manual</h3>
         <ul>
-        <li class="box"><a href="https://grass.osgeo.org/programming7/">Programmer's Manual</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/programming8/">Programmer's Manual</a></li>
        </ul>
       </td>
     </tr>
@@ -191,6 +191,7 @@ overview_tmpl = string.Template(
        <ul>
         <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS GIS Python library documentation</a></li>
         <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/grass.jupyter.html">GRASS GIS in Jupyter Notebooks</a></li>
        </ul>
       </td>
     </tr>

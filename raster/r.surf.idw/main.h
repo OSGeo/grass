@@ -1,22 +1,20 @@
 #include <grass/raster.h>
 
 #define         SHORT           short
-#define         TRUE    1
-#define         FALSE   0
 
 #define MELEMENT        struct Melement
 MELEMENT {
-    short x, y;			/* grid coordinates */
+    short x, y;                 /* grid coordinates */
     int value;
-    MELEMENT *next, *prior;	/* next and prior element in row list */
+    MELEMENT *next, *prior;     /* next and prior element in row list */
 };
 
 #define NEIGHBOR        struct neighbor
 NEIGHBOR {
     double distance;
-    MELEMENT *Mptr,		/* pointer to data in linked lists of input */
-    **searchptr;		/* row search pointer that identified this
-				   neighbor */
+    MELEMENT *Mptr,             /* pointer to data in linked lists of input */
+    **searchptr;                /* row search pointer that identified this
+                                   neighbor */
     NEIGHBOR *next;
 };
 
@@ -26,11 +24,11 @@ NEIGHBOR {
    pointers to MELEMENT are set NULL to indicate end of search in a direction */
 #define EW              struct ew
 EW {
-    MELEMENT *east,		/* next eastward search in this row */
-     *west,			/* next westward search in this row */
-     *start;			/* starting point of east and west search in this row */
-    short ealive, walive;	/* used only for latitude-longitude,
-				   TRUE if search is active in this direction */
+    MELEMENT *east,             /* next eastward search in this row */
+     *west,                     /* next westward search in this row */
+     *start;                    /* starting point of east and west search in this row */
+    short ealive, walive;       /* used only for latitude-longitude,
+                                   TRUE if search is active in this direction */
     EW *next;
 };
 

@@ -16,6 +16,6 @@ int zufallsv(double *svblk)
 
     svblk[0] = (double)klotz0_1.ptr;
     for (i = 0; i < 607; ++i)
-	svblk[i + 1] = klotz0_1.buff[i];
+        svblk[i + 1] = klotz0_1.buff[i];
     return 0;
-}				/* zufallsv */
+}                               /* zufallsv */

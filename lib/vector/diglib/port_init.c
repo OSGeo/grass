@@ -14,7 +14,7 @@
 
    As long as the byte switching is symmetrical, the conversion routines
    will work both directions.
-   
+
    The integer test patterns are quite simple, and their choice was
    arbitrary, but the float and double valued were more critical.
 
@@ -25,12 +25,12 @@
    Second, every byte in the test pattern had to be unique.   And
    finally, the number had to not be sensitive to rounding by the 
    specific hardware implementation.
-   
+
    By experimentation it was found that the number  1.3333  met
    all these criteria for both floats and doubles
 
    See the discourse at the end of this file for more information
-   
+
    The 3.0 dig, and dig_plus files are inherently non-portable.  This 
    can be seen in moving files between a SUN 386i and other SUN machines.
    The recommended way to transport files was always to convert to ASCII
@@ -53,7 +53,7 @@
    long     ==  4 bytes
    double   ==  IEEE standard 64 bit
    float    ==  IEEE standard 32 bit
-   
+
    bytes can be swapped around in any reasonable way, but bits within each
    byte must be maintained in normal high to low ordering:  76543210
    is this a problem?
@@ -66,7 +66,7 @@
    Binary DLG files are NOT supported by this code, and will continue to
    be non-portable between different architectures.
    applies to the files coor/topo/cidx, needs testing
-   
+
    (C) 2001-2009 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
@@ -74,7 +74,7 @@
 
    \author Original author CERL, probably Dave Gerdes
    \author Update to GRASS 5.7 Radim Blazek
-*/
+ */
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -91,7 +91,7 @@
 
 static double u_d = TEST_PATTERN;
 static float u_f = TEST_PATTERN;
-off_t u_o;			/* depends on sizeof(off_t) */
+off_t u_o;                      /* depends on sizeof(off_t) */
 static long u_l = LONG_TEST;
 static int u_i = INT_TEST;
 static short u_s = SHORT_TEST;
@@ -101,7 +101,8 @@ static const unsigned char dbl_cmpr[] =
     { 0x3f, 0xf5, 0x55, 0x32, 0x61, 0x7c, 0x1b, 0xda };
 /* flt_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
 static const unsigned char flt_cmpr[] = { 0x3f, 0xaa, 0xa9, 0x93 };
-static const unsigned char off_t_cmpr[] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+static const unsigned char off_t_cmpr[] =
+    { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
 static const unsigned char lng_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static const unsigned char int_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static const unsigned char shrt_cmpr[] = { 0x01, 0x02 };
@@ -133,76 +134,76 @@ unsigned char shrt_cnvrt[sizeof(short)];
  * return offset or -1 if not found
  */
 static int find_offset(const unsigned char *basis, unsigned char search_value,
-		       int size)
+                       int size)
 {
     int i;
 
     for (i = 0; i < size; i++)
-	if (basis[i] == search_value)
-	    return (i);
+        if (basis[i] == search_value)
+            return (i);
 
     return (-1);
 }
 
 static int find_offsets(const void *pattern, unsigned char *cnvrt,
-			const unsigned char *cmpr, int port_size,
-			int nat_size, const char *typename)
+                        const unsigned char *cmpr, int port_size,
+                        int nat_size, const char *typename)
 {
     int big, ltl;
     int i;
 
     for (i = 0; i < port_size; i++) {
-	int off = find_offset(pattern, cmpr[i], nat_size);
+        int off = find_offset(pattern, cmpr[i], nat_size);
 
-	if (off < 0)
-	    G_fatal_error(_("Unable to find '%x' in %s"), cmpr[i], typename);
+        if (off < 0)
+            G_fatal_error(_("Unable to find '%x' in %s"), cmpr[i], typename);
 
-	cnvrt[i] = off;
+        cnvrt[i] = off;
     }
 
     big = ltl = 1;
 
     for (i = 0; i < port_size; i++) {
-	if (cnvrt[i] != (nat_size - port_size + i))
-	    big = 0;		/* isn't big endian */
-	if (cnvrt[i] != (port_size - 1 - i))
-	    ltl = 0;		/* isn't little endian */
+        if (cnvrt[i] != (nat_size - port_size + i))
+            big = 0;            /* isn't big endian */
+        if (cnvrt[i] != (port_size - 1 - i))
+            ltl = 0;            /* isn't little endian */
     }
 
     if (big)
-	return ENDIAN_BIG;
+        return ENDIAN_BIG;
 
     if (ltl)
-	return ENDIAN_LITTLE;
+        return ENDIAN_LITTLE;
 
     return ENDIAN_OTHER;
 }
 
 /*!
-  \brief Initialize Port_info structures
-*/
+   \brief Initialize Port_info structures
+ */
 void port_init(void)
 {
     static int done;
 
     if (done)
-	return;
+        return;
 
     done = 1;
 
     /* Following code checks only if all assumptions are fulfilled */
     /* Check sizes */
     if (nat_dbl != PORT_DOUBLE)
-	G_fatal_error("sizeof(double) != %d", PORT_DOUBLE);
+        G_fatal_error("sizeof(double) != %d", PORT_DOUBLE);
     if (nat_flt != PORT_FLOAT)
-	G_fatal_error("sizeof(float) != %d", PORT_DOUBLE);
+        G_fatal_error("sizeof(float) != %d", PORT_DOUBLE);
     /* off_t size is variable, depending on the vector size and LFS support */
     if (nat_lng < PORT_LONG)
-	G_fatal_error("sizeof(long) < %d", PORT_LONG);
+        G_fatal_error("sizeof(long) < %d", PORT_LONG);
     if (nat_int < PORT_INT)
-	G_fatal_error("sizeof(int) < %d", PORT_INT);
+        G_fatal_error("sizeof(int) < %d", PORT_INT);
     if (nat_shrt < PORT_SHORT)
-	G_fatal_error("sizeof(short) < %d", PORT_SHORT);
+        G_fatal_error("sizeof(short) < %d", PORT_SHORT);
 
     /* Find for each byte in big endian test pattern (*_cmpr) 
      * offset of corresponding byte in machine native order.
@@ -212,25 +213,26 @@ void port_init(void)
 
     if (nat_off_t == 8)
 #ifdef HAVE_LONG_LONG_INT
-	u_o = (off_t) LONG_LONG_TEST;
+        u_o = (off_t) LONG_LONG_TEST;
 #else
-	G_fatal_error("Internal error: can't construct an off_t literal");
+        G_fatal_error("Internal error: can't construct an off_t literal");
 #endif
     else
-	u_o = (off_t) LONG_TEST;
+        u_o = (off_t) LONG_TEST;
 
     dbl_order =
-	find_offsets(&u_d, dbl_cnvrt, dbl_cmpr, PORT_DOUBLE, nat_dbl,
-		     "double");
+        find_offsets(&u_d, dbl_cnvrt, dbl_cmpr, PORT_DOUBLE, nat_dbl,
+                     "double");
     flt_order =
-	find_offsets(&u_f, flt_cnvrt, flt_cmpr, PORT_FLOAT, nat_flt, "float");
+        find_offsets(&u_f, flt_cnvrt, flt_cmpr, PORT_FLOAT, nat_flt, "float");
     off_t_order =
-	find_offsets(&u_o, off_t_cnvrt, off_t_cmpr, nat_off_t, nat_off_t, "off_t");
+        find_offsets(&u_o, off_t_cnvrt, off_t_cmpr, nat_off_t, nat_off_t,
+                     "off_t");
     lng_order =
-	find_offsets(&u_l, lng_cnvrt, lng_cmpr, PORT_LONG, nat_lng, "long");
+        find_offsets(&u_l, lng_cnvrt, lng_cmpr, PORT_LONG, nat_lng, "long");
     int_order =
-	find_offsets(&u_i, int_cnvrt, int_cmpr, PORT_INT, nat_int, "int");
+        find_offsets(&u_i, int_cnvrt, int_cmpr, PORT_INT, nat_int, "int");
     shrt_order =
-	find_offsets(&u_s, shrt_cnvrt, shrt_cmpr, PORT_SHORT, nat_shrt,
-		     "short");
+        find_offsets(&u_s, shrt_cnvrt, shrt_cmpr, PORT_SHORT, nat_shrt,
+                     "short");
 }

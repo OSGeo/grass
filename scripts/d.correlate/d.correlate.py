@@ -75,8 +75,8 @@ def main():
 
                 ifile = open(tmpfile, "r")
                 first = True
-                for l in ifile:
-                    f = l.rstrip("\r\n").split(" ")
+                for line in ifile:
+                    f = line.rstrip("\r\n").split(" ")
                     x = float(f[0])
                     y = float(f[1])
                     if first:
@@ -100,8 +100,8 @@ def main():
                 ofile = p.stdin
 
                 ifile = open(tmpfile, "r")
-                for l in ifile:
-                    f = l.rstrip("\r\n").split(" ")
+                for line in ifile:
+                    f = line.rstrip("\r\n").split(" ")
                     x = float(f[0])
                     y = float(f[1])
                     ofile.write(

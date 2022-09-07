@@ -157,6 +157,7 @@ class TreeModel(object):
         """Filters model based on parameters in kwargs
         that are passed to node's match function.
         Copies tree and returns a filtered copy."""
+
         def _filter(node):
             if node.children:
                 to_remove = []
@@ -216,12 +217,13 @@ class DictNode(object):
         return self._children
 
     def nprint(self, text, indent=0):
-        text.append(indent * ' ' + self.label)
+        text.append(indent * " " + self.label)
         if self.data:
             for key, value in six.iteritems(self.data):
                 text.append(
-                    "%(indent)s* %(key)s : %(value)s" %
-                    {'indent': (indent + 2) * ' ', 'key': key, 'value': value})
+                    "%(indent)s* %(key)s : %(value)s"
+                    % {"indent": (indent + 2) * " ", "key": key, "value": value}
+                )
 
         if self.children:
             for child in self.children:
@@ -243,7 +245,7 @@ class ModuleNode(DictNode):
 
     def __init__(self, label=None, data=None):
         super(ModuleNode, self).__init__(data=data)
-        self._label = label if label else ''
+        self._label = label if label else ""
         if not data:
             self.data = {}
 
@@ -262,7 +264,7 @@ class ModuleNode(DictNode):
             keys = key
 
         for key in keys:
-            if key not in ('command', 'keywords', 'description'):
+            if key not in ("command", "keywords", "description"):
                 return False
             try:
                 text = self.data[key]
@@ -272,20 +274,21 @@ class ModuleNode(DictNode):
                 continue
             if case_sensitive:
                 # start supported but unused, so testing last
-                if value in text or value == '*':
+                if value in text or value == "*":
                     return True
             else:
                 # this works fully only for English and requires accents
                 # to be exact match (even Python 3 casefold() does not help)
-                if value.lower() in text.lower() or value == '*':
+                if value.lower() in text.lower() or value == "*":
                     return True
         return False
 
 
 def main():
     import doctest
+
     doctest.testmod()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

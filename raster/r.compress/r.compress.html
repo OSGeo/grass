@@ -129,7 +129,7 @@ FCELL and DCELL maps are never and have never been compressed with RLE.
 </dd>
 <dt><strong>ZLIB</strong></dt>
 <dd>ZLIB's deflate is the default compression method for all raster 
-maps, if ZSTD is not available. GRASS GIS 7 uses by default 1 as ZLIB 
+maps, if ZSTD is not available. GRASS GIS 8 uses by default 1 as ZLIB 
 compression level which is the best compromise between speed and 
 compression ratio, also when compared to other available compression 
 methods. Valid levels are in the range [1, 9] and can be set with the 
@@ -154,7 +154,6 @@ lower than BZIP2 (for large data). ZSTD compresses up to 4x faster than
 ZLIB, and usually decompresses 6x faster than ZLIB. ZSTD is the 
 default compression method if available.</dd> 
 </dl>
-
 
 <h2>NOTES</h2>
 
@@ -194,7 +193,6 @@ compression. This applies to all raster map types (CELL, FCELL, DCELL).
 <!-- TODO: check with implementation in lib/gis/gisinit.c line 128 -->
 If the variable does not exist, or the value cannot be parsed as an
 integer, ZLIB's compression level 1 will be used.
-
 
 <h2>EXAMPLES</h2>
 
@@ -284,8 +282,3 @@ Compression algorithms:
 James Westervelt and Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
 <p>
 Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

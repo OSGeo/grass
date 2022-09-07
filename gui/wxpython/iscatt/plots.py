@@ -30,27 +30,29 @@ from gui_core.wrap import Menu, NewId
 
 try:
     import matplotlib
-    matplotlib.use('WXAgg')
+
+    matplotlib.use("WXAgg")
     from matplotlib.figure import Figure
-    from matplotlib.backends.backend_wxagg import \
-        FigureCanvasWxAgg as FigCanvas
+    from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
     from matplotlib.artist import Artist
     from matplotlib.patches import Polygon, Ellipse
     import matplotlib.image as mi
     import matplotlib.colors as mcolors
 except ImportError as e:
-    raise ImportError(_('The Scatterplot Tool needs the "matplotlib" '
-                        '(python-matplotlib) package to be installed. {0}').format(e))
+    raise ImportError(
+        _(
+            'The Scatterplot Tool needs the "matplotlib" '
+            "(python-matplotlib) package to be installed. {0}"
+        ).format(e)
+    )
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
 class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
-
-    def __init__(self, parent, scatt_id, scatt_mgr, transpose,
-                 id=wx.ID_ANY):
+    def __init__(self, parent, scatt_id, scatt_mgr, transpose, id=wx.ID_ANY):
         # TODO should not be transpose and scatt_id but x, y
         wx.Panel.__init__(self, parent, id)
         # bacause of aui (if floatable it can not take cursor from parent)
@@ -87,11 +89,11 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
         self.ciddscroll = None
 
-        self.canvas.mpl_connect('motion_notify_event', self.Motion)
-        self.canvas.mpl_connect('button_press_event', self.OnPress)
-        self.canvas.mpl_connect('button_release_event', self.OnRelease)
-        self.canvas.mpl_connect('draw_event', self.DrawCallback)
-        self.canvas.mpl_connect('figure_leave_event', self.OnCanvasLeave)
+        self.canvas.mpl_connect("motion_notify_event", self.Motion)
+        self.canvas.mpl_connect("button_press_event", self.OnPress)
+        self.canvas.mpl_connect("button_release_event", self.OnRelease)
+        self.canvas.mpl_connect("draw_event", self.DrawCallback)
+        self.canvas.mpl_connect("figure_leave_event", self.OnCanvasLeave)
 
     def DrawCallback(self, event):
         self.polygon_drawer.DrawCallback(event)
@@ -116,7 +118,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
         self.zoom_wheel_coords = None
         self.zoom_rect_coords = None
-        self.zoom_rect = Polygon(list(zip([0], [0])), facecolor='none')
+        self.zoom_rect = Polygon(list(zip([0], [0])), facecolor="none")
         self.zoom_rect.set_visible(False)
         self.axes.add_patch(self.zoom_rect)
 
@@ -127,14 +129,13 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def SetMode(self, mode):
         self._deactivateMode()
-        if mode == 'zoom':
-            self.ciddscroll = self.canvas.mpl_connect(
-                'scroll_event', self.ZoomWheel)
-            self.mode = 'zoom'
-        elif mode == 'zoom_extend':
-            self.mode = 'zoom_extend'
-        elif mode == 'pan':
-            self.mode = 'pan'
+        if mode == "zoom":
+            self.ciddscroll = self.canvas.mpl_connect("scroll_event", self.ZoomWheel)
+            self.mode = "zoom"
+        elif mode == "zoom_extend":
+            self.mode = "zoom_extend"
+        elif mode == "pan":
+            self.mode = "pan"
         elif mode:
             self.polygon_drawer.SetMode(mode)
 
@@ -176,21 +177,21 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.canvas.draw()
 
     def OnPress(self, event):
-        'on button press we will see if the mouse is over us and store some data'
+        "on button press we will see if the mouse is over us and store some data"
         if not event.inaxes:
             return
         if self.mode == "zoom_extend":
             self.ZoomToExtend()
 
         if event.xdata and event.ydata:
-            self.zoom_wheel_coords = {'x': event.xdata, 'y': event.ydata}
-            self.zoom_rect_coords = {'x': event.xdata, 'y': event.ydata}
+            self.zoom_wheel_coords = {"x": event.xdata, "y": event.ydata}
+            self.zoom_rect_coords = {"x": event.xdata, "y": event.ydata}
         else:
             self.zoom_wheel_coords = None
             self.zoom_rect_coords = None
 
     def _stopCategoryEdit(self):
-        'disconnect all the stored connection ids'
+        "disconnect all the stored connection ids"
 
         if self.cidpress:
             self.canvas.mpl_disconnect(self.cidpress)
@@ -206,8 +207,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.main_sizer.Fit(self)
 
     def Plot(self, cats_order, scatts, ellipses, styles):
-        """Redraws the figure
-        """
+        """Redraws the figure"""
 
         callafter_list = []
 
@@ -220,29 +220,29 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
         q = Queue()
         _rendDtMemmapsToFiles(self.rend_dt)
-        p = Process(target=MergeImg, args=(cats_order, scatts, styles,
-                                           self.rend_dt, q))
+        p = Process(target=MergeImg, args=(cats_order, scatts, styles, self.rend_dt, q))
         p.start()
         merged_img, self.full_extend, self.rend_dt = q.get()
         p.join()
 
         _rendDtFilesToMemmaps(self.rend_dt)
-        merged_img = np.memmap(
-            filename=merged_img['dt'],
-            shape=merged_img['sh'])
+        merged_img = np.memmap(filename=merged_img["dt"], shape=merged_img["sh"])
 
-        #merged_img, self.full_extend = MergeImg(cats_order, scatts, styles, None)
+        # merged_img, self.full_extend = MergeImg(cats_order, scatts, styles, None)
         self.axes.clear()
-        self.axes.axis('equal')
+        self.axes.axis("equal")
 
         if self.transpose:
             merged_img = np.transpose(merged_img, (1, 0, 2))
 
-        img = imshow(self.axes, merged_img,
-                     extent=[int(ceil(x)) for x in self.full_extend],
-                     origin='lower',
-                     interpolation='nearest',
-                     aspect="equal")
+        img = imshow(
+            self.axes,
+            merged_img,
+            extent=[int(ceil(x)) for x in self.full_extend],
+            origin="lower",
+            interpolation="nearest",
+            aspect="equal",
+        )
 
         callafter_list.append([self.axes.draw_artist, [img]])
         callafter_list.append([grass.try_remove, [merged_img.filename]])
@@ -257,42 +257,49 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             if not e:
                 continue
 
-            colors = styles[cat_id]['color'].split(":")
+            colors = styles[cat_id]["color"].split(":")
             if self.transpose:
-                e['theta'] = 360 - e['theta'] + 90
-                if e['theta'] >= 360:
-                    e['theta'] = abs(360 - e['theta'])
+                e["theta"] = 360 - e["theta"] + 90
+                if e["theta"] >= 360:
+                    e["theta"] = abs(360 - e["theta"])
 
-                e['pos'] = [e['pos'][1], e['pos'][0]]
+                e["pos"] = [e["pos"][1], e["pos"][0]]
 
-            ellip = Ellipse(xy=e['pos'],
-                            width=e['width'],
-                            height=e['height'],
-                            angle=e['theta'],
-                            edgecolor="w",
-                            linewidth=1.5,
-                            facecolor='None')
+            ellip = Ellipse(
+                xy=e["pos"],
+                width=e["width"],
+                height=e["height"],
+                angle=e["theta"],
+                edgecolor="w",
+                linewidth=1.5,
+                facecolor="None",
+            )
             self.axes.add_artist(ellip)
             callafter_list.append([self.axes.draw_artist, [ellip]])
 
-            color = [int(v) / 255.0 for v in styles[cat_id]['color'].split(":")[:3]]
+            color = [int(v) / 255.0 for v in styles[cat_id]["color"].split(":")[:3]]
 
-            ellip = Ellipse(xy=e['pos'],
-                            width=e['width'],
-                            height=e['height'],
-                            angle=e['theta'],
-                            edgecolor=color,
-                            linewidth=1,
-                            facecolor='None')
+            ellip = Ellipse(
+                xy=e["pos"],
+                width=e["width"],
+                height=e["height"],
+                angle=e["theta"],
+                edgecolor=color,
+                linewidth=1,
+                facecolor="None",
+            )
 
             self.axes.add_artist(ellip)
             callafter_list.append([self.axes.draw_artist, [ellip]])
 
-            center = Line2D([e['pos'][0]], [e['pos'][1]],
-                            marker='x',
-                            markeredgecolor='w',
-                            # markerfacecolor=color,
-                            markersize=2)
+            center = Line2D(
+                [e["pos"][0]],
+                [e["pos"][1]],
+                marker="x",
+                markeredgecolor="w",
+                # markerfacecolor=color,
+                markersize=2,
+            )
             self.axes.add_artist(center)
             callafter_list.append([self.axes.draw_artist, [center]])
 
@@ -324,17 +331,19 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
         xdata = event.xdata
         ydata = event.ydata
-        if event.button == 'up':
+        if event.button == "up":
             scale_factor = 1 / self.base_scale
-        elif event.button == 'down':
+        elif event.button == "down":
             scale_factor = self.base_scale
         else:
             scale_factor = 1
 
-        extend = (xdata - (xdata - cur_xlim[0]) * scale_factor,
-                  xdata + (cur_xlim[1] - xdata) * scale_factor,
-                  ydata - (ydata - cur_ylim[0]) * scale_factor,
-                  ydata + (cur_ylim[1] - ydata) * scale_factor)
+        extend = (
+            xdata - (xdata - cur_xlim[0]) * scale_factor,
+            xdata + (cur_xlim[1] - xdata) * scale_factor,
+            ydata - (ydata - cur_ylim[0]) * scale_factor,
+            ydata + (cur_ylim[1] - ydata) * scale_factor,
+        )
 
         self.axes.axis(extend)
 
@@ -353,8 +362,8 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         cur_ylim = self.axes.get_ylim()
 
         x1, y1 = event.xdata, event.ydata
-        x2 = deepcopy(self.zoom_rect_coords['x'])
-        y2 = deepcopy(self.zoom_rect_coords['y'])
+        x2 = deepcopy(self.zoom_rect_coords["x"])
+        y2 = deepcopy(self.zoom_rect_coords["y"])
 
         if x1 == x2 or y1 == y2:
             return
@@ -381,16 +390,13 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         if event.inaxes is None:
             return
 
-        self.cursorMove.emit(
-            x=event.xdata,
-            y=event.ydata,
-            scatt_id=self.scatt_id)
+        self.cursorMove.emit(x=event.xdata, y=event.ydata, scatt_id=self.scatt_id)
 
     def OnCanvasLeave(self, event):
         self.cursorMove.emit(x=None, y=None, scatt_id=self.scatt_id)
 
     def PanMotion(self, event):
-        'on mouse movement'
+        "on mouse movement"
         if not self.mode == "pan":
             return
         if event.inaxes is None:
@@ -403,17 +409,18 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
         x, y = event.xdata, event.ydata
 
-        mx = (x - self.zoom_wheel_coords['x']) * 0.6
-        my = (y - self.zoom_wheel_coords['y']) * 0.6
+        mx = (x - self.zoom_wheel_coords["x"]) * 0.6
+        my = (y - self.zoom_wheel_coords["y"]) * 0.6
 
         extend = (
             cur_xlim[0] - mx,
             cur_xlim[1] - mx,
             cur_ylim[0] - my,
-            cur_ylim[1] - my)
+            cur_ylim[1] - my,
+        )
 
-        self.zoom_wheel_coords['x'] = x
-        self.zoom_wheel_coords['y'] = y
+        self.zoom_wheel_coords["x"] = x
+        self.zoom_wheel_coords["y"] = y
 
         self.axes.axis(extend)
 
@@ -431,8 +438,8 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
         x1, y1 = event.xdata, event.ydata
         self.zoom_rect.set_visible(True)
-        x2 = self.zoom_rect_coords['x']
-        y2 = self.zoom_rect_coords['y']
+        x2 = self.zoom_rect_coords["x"]
+        y2 = self.zoom_rect_coords["y"]
 
         self.zoom_rect.xy = ((x1, y1), (x1, y2), (x2, y2), (x2, y1), (x1, y1))
 
@@ -453,21 +460,23 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
         scatt = scatts[cat_id]
         # print "color map %d" % cat_id
         # TODO make more general
-        if cat_id != 0 and (styles[cat_id]['opacity'] == 0.0 or
-                            not styles[cat_id]['show']):
+        if cat_id != 0 and (
+            styles[cat_id]["opacity"] == 0.0 or not styles[cat_id]["show"]
+        ):
             if cat_id in rend_dt and not rend_dt[cat_id]:
                 del rend_dt[cat_id]
             continue
         if init:
 
-            b2_i = scatt['bands_info']['b1']
-            b1_i = scatt['bands_info']['b2']
+            b2_i = scatt["bands_info"]["b1"]
+            b1_i = scatt["bands_info"]["b2"]
 
             full_extend = (
-                b1_i['min'] - 0.5,
-                b1_i['max'] + 0.5,
-                b2_i['min'] - 0.5,
-                b2_i['max'] + 0.5)
+                b1_i["min"] - 0.5,
+                b1_i["max"] + 0.5,
+                b2_i["min"] - 0.5,
+                b2_i["max"] + 0.5,
+            )
 
         # if it does not need to be updated and was already rendered
         if not _renderCat(cat_id, rend_dt, scatt, styles):
@@ -475,7 +484,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
             if rend_dt[cat_id] is None:
                 continue
         else:
-            masked_cat = np.ma.masked_less_equal(scatt['np_vals'], 0)
+            masked_cat = np.ma.masked_less_equal(scatt["np_vals"], 0)
             vmax = np.amax(masked_cat)
             # totally empty -> no need to render
             if vmax == 0:
@@ -490,39 +499,28 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
             rend_dt[cat_id] = {}
             if cat_id != 0:
-                rend_dt[cat_id]['color'] = styles[cat_id]['color']
+                rend_dt[cat_id]["color"] = styles[cat_id]["color"]
 
-            rend_dt[cat_id]['dt'] = np.memmap(
-                grass.tempfile(),
-                dtype='uint8',
-                mode='w+',
-                shape=(
-                    sh[0],
-                    sh[1],
-                    4))
+            rend_dt[cat_id]["dt"] = np.memmap(
+                grass.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
+            )
 
-            #colored_cat = np.zeros(dtype='uint8', )
-            ApplyColormap(
-                masked_cat,
-                masked_cat.mask,
-                cmap,
-                rend_dt[cat_id]['dt'])
+            # colored_cat = np.zeros(dtype='uint8', )
+            ApplyColormap(masked_cat, masked_cat.mask, cmap, rend_dt[cat_id]["dt"])
 
-            #colored_cat = np.uint8(cmap(masked_cat) * 255)
+            # colored_cat = np.uint8(cmap(masked_cat) * 255)
             del masked_cat
             del cmap
 
-        #colored_cat[...,3] = np.choose(masked_cat.mask, (255, 0))
+        # colored_cat[...,3] = np.choose(masked_cat.mask, (255, 0))
         if init:
-            merged_img = np.memmap(merge_tmp, dtype='uint8', mode='w+',
-                                   shape=rend_dt[cat_id]['dt'].shape)
-            merged_img[:] = rend_dt[cat_id]['dt']
+            merged_img = np.memmap(
+                merge_tmp, dtype="uint8", mode="w+", shape=rend_dt[cat_id]["dt"].shape
+            )
+            merged_img[:] = rend_dt[cat_id]["dt"]
             init = False
         else:
-            MergeArrays(
-                merged_img,
-                rend_dt[cat_id]['dt'],
-                styles[cat_id]['opacity'])
+            MergeArrays(merged_img, rend_dt[cat_id]["dt"], styles[cat_id]["opacity"])
 
         """
                 #c_img_a = np.memmap(grass.tempfile(), dtype="uint16", mode='w+', shape = shape)
@@ -540,27 +538,28 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
     _rendDtMemmapsToFiles(rend_dt)
 
-    merged_img = {'dt': merged_img.filename, 'sh': merged_img.shape}
+    merged_img = {"dt": merged_img.filename, "sh": merged_img.shape}
     output_queue.put((merged_img, full_extend, rend_dt))
 
-#_rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy versions,
+
+# _rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy versions,
 # where memmap objects are not pickable
 
 
 def _rendDtMemmapsToFiles(rend_dt):
 
     for k, v in six.iteritems(rend_dt):
-        if 'dt' in v:
-            rend_dt[k]['sh'] = v['dt'].shape
-            rend_dt[k]['dt'] = v['dt'].filename
+        if "dt" in v:
+            rend_dt[k]["sh"] = v["dt"].shape
+            rend_dt[k]["dt"] = v["dt"].filename
 
 
 def _rendDtFilesToMemmaps(rend_dt):
 
     for k, v in six.iteritems(rend_dt):
-        if 'dt' in v:
-            rend_dt[k]['dt'] = np.memmap(filename=v['dt'], shape=v['sh'])
-            del rend_dt[k]['sh']
+        if "dt" in v:
+            rend_dt[k]["dt"] = np.memmap(filename=v["dt"], shape=v["sh"])
+            del rend_dt[k]["sh"]
 
 
 def _renderCat(cat_id, rend_dt, scatt, styles):
@@ -570,10 +569,9 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
         return True
     if not rend_dt[cat_id]:
         return False
-    if scatt['render']:
+    if scatt["render"]:
         return True
-    if cat_id != 0 and \
-       rend_dt[cat_id]['color'] != styles[cat_id]['color']:
+    if cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"]:
         return True
 
     return False
@@ -582,13 +580,13 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
 def _getColorMap(cat_id, styles):
     cmap = matplotlib.cm.jet
     if cat_id == 0:
-        cmap.set_bad('w', 1.)
+        cmap.set_bad("w", 1.0)
         cmap._init()
         cmap._lut[len(cmap._lut) - 1, -1] = 0
     else:
-        colors = styles[cat_id]['color'].split(":")
+        colors = styles[cat_id]["color"].split(":")
 
-        cmap.set_bad('w', 1.)
+        cmap.set_bad("w", 1.0)
         cmap._init()
         cmap._lut[len(cmap._lut) - 1, -1] = 0
         cmap._lut[:, 0] = int(colors[0]) / 255.0
@@ -599,13 +597,11 @@ def _getColorMap(cat_id, styles):
 
 
 class ScatterPlotContextMenu:
-
     def __init__(self, plot):
 
         self.plot = plot
         self.canvas = plot.canvas
-        self.cidpress = self.canvas.mpl_connect(
-            'button_press_event', self.ContexMenu)
+        self.cidpress = self.canvas.mpl_connect("button_press_event", self.ContexMenu)
 
     def ContexMenu(self, event):
         if not event.inaxes:
@@ -613,8 +609,13 @@ class ScatterPlotContextMenu:
 
         if event.button == 3:
             menu = Menu()
-            menu_items = [["zoom_to_extend", _("Zoom to scatter plot extend"),
-                           lambda event: self.plot.ZoomToExtend()]]
+            menu_items = [
+                [
+                    "zoom_to_extend",
+                    _("Zoom to scatter plot extend"),
+                    lambda event: self.plot.ZoomToExtend(),
+                ]
+            ]
 
             for item in menu_items:
                 item_id = NewId()
@@ -637,7 +638,8 @@ class PolygonDrawer:
     def __init__(self, ax, pol, empty_pol):
         if pol.figure is None:
             raise RuntimeError(
-                'You must first add the polygon to a figure or canvas before defining the interactor')
+                "You must first add the polygon to a figure or canvas before defining the interactor"
+            )
         self.ax = ax
         self.canvas = pol.figure.canvas
 
@@ -650,12 +652,7 @@ class PolygonDrawer:
 
         style = self._getPolygonStyle()
 
-        self.line = Line2D(
-            x,
-            y,
-            marker='o',
-            markerfacecolor='r',
-            animated=True)
+        self.line = Line2D(x, y, marker="o", markerfacecolor="r", animated=True)
         self.ax.add_line(self.line)
         # self._update_line(pol)
 
@@ -667,35 +664,29 @@ class PolygonDrawer:
         if self.empty_pol:
             self._show(False)
 
-        #self.canvas.mpl_connect('draw_event', self.DrawCallback)
-        self.canvas.mpl_connect('button_press_event', self.OnButtonPressed)
-        self.canvas.mpl_connect(
-            'button_release_event',
-            self.ButtonReleaseCallback)
-        self.canvas.mpl_connect(
-            'motion_notify_event',
-            self.motion_notify_callback)
+        # self.canvas.mpl_connect('draw_event', self.DrawCallback)
+        self.canvas.mpl_connect("button_press_event", self.OnButtonPressed)
+        self.canvas.mpl_connect("button_release_event", self.ButtonReleaseCallback)
+        self.canvas.mpl_connect("motion_notify_event", self.motion_notify_callback)
 
         self.it = 0
 
     def _getPolygonStyle(self):
         style = {}
-        style['sel_pol'] = UserSettings.Get(group='scatt',
-                                            key='selection',
-                                            subkey='sel_pol')
-        style['sel_pol_vertex'] = UserSettings.Get(group='scatt',
-                                                   key='selection',
-                                                   subkey='sel_pol_vertex')
+        style["sel_pol"] = UserSettings.Get(
+            group="scatt", key="selection", subkey="sel_pol"
+        )
+        style["sel_pol_vertex"] = UserSettings.Get(
+            group="scatt", key="selection", subkey="sel_pol_vertex"
+        )
 
-        style['sel_pol'] = [i / 255.0 for i in style['sel_pol']]
-        style['sel_pol_vertex'] = [i / 255.0 for i in style['sel_pol_vertex']]
+        style["sel_pol"] = [i / 255.0 for i in style["sel_pol"]]
+        style["sel_pol_vertex"] = [i / 255.0 for i in style["sel_pol_vertex"]]
 
         return style
 
     def _getSnapTresh(self):
-        return UserSettings.Get(group='scatt',
-                                key='selection',
-                                subkey='snap_tresh')
+        return UserSettings.Get(group="scatt", key="selection", subkey="snap_tresh")
 
     def SetMode(self, mode):
         self.mode = mode
@@ -749,28 +740,28 @@ class PolygonDrawer:
     def DrawCallback(self, event):
 
         style = self._getPolygonStyle()
-        self.pol.set_facecolor(style['sel_pol'])
-        self.line.set_markerfacecolor(style['sel_pol_vertex'])
+        self.pol.set_facecolor(style["sel_pol"])
+        self.line.set_markerfacecolor(style["sel_pol_vertex"])
 
         self.background = self.canvas.copy_from_bbox(self.ax.bbox)
         self.ax.draw_artist(self.pol)
         self.ax.draw_artist(self.line)
 
     def poly_changed(self, pol):
-        'this method is called whenever the polygon object is called'
+        "this method is called whenever the polygon object is called"
         # only copy the artist props to the line (except visibility)
         vis = self.line.get_visible()
         Artist.update_from(self.line, pol)
         self.line.set_visible(vis)  # don't use the pol visibility state
 
     def get_ind_under_point(self, event):
-        'get the index of the vertex under point if within threshold'
+        "get the index of the vertex under point if within threshold"
 
         # display coords
         xy = np.asarray(self.pol.xy)
         xyt = self.pol.get_transform().transform(xy)
         xt, yt = xyt[:, 0], xyt[:, 1]
-        d = np.sqrt((xt - event.x)**2 + (yt - event.y)**2)
+        d = np.sqrt((xt - event.x) ** 2 + (yt - event.y) ** 2)
         indseq = np.nonzero(np.equal(d, np.amin(d)))[0]
         ind = indseq[0]
 
@@ -797,7 +788,7 @@ class PolygonDrawer:
         self.moving_ver_idx = self.get_ind_under_point(event)
 
     def ButtonReleaseCallback(self, event):
-        'whenever a mouse button is released'
+        "whenever a mouse button is released"
         if not self.showverts:
             return
         if event.button != 1:
@@ -850,9 +841,10 @@ class PolygonDrawer:
 
             if d <= self._getSnapTresh():
                 self.pol.xy = np.array(
-                    list(self.pol.xy[:i + 1]) +
-                    [(event.xdata, event.ydata)] +
-                    list(self.pol.xy[i + 1:]))
+                    list(self.pol.xy[: i + 1])
+                    + [(event.xdata, event.ydata)]
+                    + list(self.pol.xy[i + 1 :])
+                )
                 self.line.set_data(list(zip(*self.pol.xy)))
                 break
 
@@ -867,16 +859,17 @@ class PolygonDrawer:
             self.empty_pol = False
         else:
             self.pol.xy = np.array(
-                [(event.xdata, event.ydata)] +
-                list(self.pol.xy[1:]) +
-                [(event.xdata, event.ydata)])
+                [(event.xdata, event.ydata)]
+                + list(self.pol.xy[1:])
+                + [(event.xdata, event.ydata)]
+            )
 
         self.line.set_data(list(zip(*self.pol.xy)))
 
         self.Redraw()
 
     def motion_notify_callback(self, event):
-        'on mouse movement'
+        "on mouse movement"
         if not self.mode == "move_vertex":
             return
         if not self.showverts:
@@ -928,7 +921,7 @@ class ModestImage(mi.AxesImage):
     """
 
     def __init__(self, minx=0.0, miny=0.0, *args, **kwargs):
-        if 'extent' in kwargs and kwargs['extent'] is not None:
+        if "extent" in kwargs and kwargs["extent"] is not None:
             raise NotImplementedError("ModestImage does not support extents")
 
         self._full_res = None
@@ -948,12 +941,12 @@ class ModestImage(mi.AxesImage):
         self._full_res = A
         self._A = A
 
-        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype,
-                                                         np.float):
+        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, np.float):
             raise TypeError("Image data can not convert to float")
 
-        if (self._A.ndim not in (2, 3) or
-                (self._A.ndim == 3 and self._A.shape[-1] not in (3, 4))):
+        if self._A.ndim not in (2, 3) or (
+            self._A.ndim == 3 and self._A.shape[-1] not in (3, 4)
+        ):
             raise TypeError("Invalid dimensions for image data")
 
         self._imcache = None
@@ -981,22 +974,28 @@ class ModestImage(mi.AxesImage):
         x1 = min(self._full_res.shape[1] + self.minx, xlim[1] + 5)
         y0, y1, x0, x1 = map(int, [y0, y1, x0, x1])
 
-        sy = int(max(1, min((y1 - y0) / 5., np.ceil(dy / ext[1]))))
-        sx = int(max(1, min((x1 - x0) / 5., np.ceil(dx / ext[0]))))
+        sy = int(max(1, min((y1 - y0) / 5.0, np.ceil(dy / ext[1]))))
+        sx = int(max(1, min((x1 - x0) / 5.0, np.ceil(dx / ext[0]))))
 
         # have we already calculated what we need?
-        if sx == self._sx and sy == self._sy and \
-                x0 == self._bounds[0] and x1 == self._bounds[1] and \
-                y0 == self._bounds[2] and y1 == self._bounds[3]:
+        if (
+            sx == self._sx
+            and sy == self._sy
+            and x0 == self._bounds[0]
+            and x1 == self._bounds[1]
+            and y0 == self._bounds[2]
+            and y1 == self._bounds[3]
+        ):
             return
 
-        self._A = self._full_res[y0 - self.miny:y1 - self.miny:sy,
-                                 x0 - self.minx:x1 - self.minx:sx]
+        self._A = self._full_res[
+            y0 - self.miny : y1 - self.miny : sy, x0 - self.minx : x1 - self.minx : sx
+        ]
 
         x1 = x0 + self._A.shape[1] * sx
         y1 = y0 + self._A.shape[0] * sy
 
-        self.set_extent([x0 - .5, x1 - .5, y0 - .5, y1 - .5])
+        self.set_extent([x0 - 0.5, x1 - 0.5, y0 - 0.5, y1 - 0.5])
         self._sx = sx
         self._sy = sy
         self._bounds = (x0, x1, y0, y1)
@@ -1007,10 +1006,26 @@ class ModestImage(mi.AxesImage):
         super(ModestImage, self).draw(renderer, *args, **kwargs)
 
 
-def imshow(axes, X, cmap=None, norm=None, aspect=None,
-           interpolation=None, alpha=None, vmin=None, vmax=None,
-           origin=None, extent=None, shape=None, filternorm=1,
-           filterrad=4.0, imlim=None, resample=None, url=None, **kwargs):
+def imshow(
+    axes,
+    X,
+    cmap=None,
+    norm=None,
+    aspect=None,
+    interpolation=None,
+    alpha=None,
+    vmin=None,
+    vmax=None,
+    origin=None,
+    extent=None,
+    shape=None,
+    filternorm=1,
+    filterrad=4.0,
+    imlim=None,
+    resample=None,
+    url=None,
+    **kwargs,
+):
     """Similar to matplotlib's imshow command, but produces a ModestImage
 
     Unlike matplotlib version, must explicitly specify axes
@@ -1020,9 +1035,9 @@ def imshow(axes, X, cmap=None, norm=None, aspect=None,
     if not axes._hold:
         axes.cla()
     if norm is not None:
-        assert(isinstance(norm, mcolors.Normalize))
+        assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
-        aspect = matplotlib.rcParams['image.aspect']
+        aspect = matplotlib.rcParams["image.aspect"]
     axes.set_aspect(aspect)
 
     if extent:
@@ -1044,7 +1059,8 @@ def imshow(axes, X, cmap=None, norm=None, aspect=None,
         filternorm=filternorm,
         filterrad=filterrad,
         resample=resample,
-        **kwargs)
+        **kwargs,
+    )
 
     im.set_data(X)
     im.set_alpha(alpha)

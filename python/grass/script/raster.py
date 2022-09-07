@@ -24,7 +24,17 @@ import sys
 import string
 import time
 
-from .core import *
+from .core import (
+    gisenv,
+    find_file,
+    tempfile,
+    run_command,
+    read_command,
+    write_command,
+    feed_command,
+    warning,
+    fatal,
+)
 from grass.exceptions import CalledModuleError
 from .utils import encode, float_or_dms, parse_key_val, try_remove
 
@@ -114,7 +124,7 @@ def mapcalc(
     """
 
     if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2 ** 32)
+        seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
@@ -167,7 +177,7 @@ def mapcalc_start(
     """
 
     if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2 ** 32)
+        seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)

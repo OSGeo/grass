@@ -1,5 +1,5 @@
 all = [
-    'manager',
-    'mapdisplay',
-    'toolbars',
+    "manager",
+    "mapdisplay",
+    "toolbars",
 ]

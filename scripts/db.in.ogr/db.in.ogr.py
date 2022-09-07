@@ -105,8 +105,8 @@ def main():
         grass.read_command("db.connect", flags="c")
         s = grass.read_command("db.tables", flags="p", quiet=True)
 
-    for l in decode(s).splitlines():
-        if l == output:
+    for line in decode(s).splitlines():
+        if line == output:
             if grass.overwrite():
                 grass.warning(
                     _("Table <%s> already exists and will be " "overwritten") % output

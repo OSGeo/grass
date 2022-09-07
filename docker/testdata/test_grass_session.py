@@ -1,4 +1,6 @@
 # Import GRASS Python bindings
+# https://github.com/zarch/grass-session
+
 from grass_session import Session
 import grass.script as gs
 
@@ -13,7 +15,7 @@ with Session(
         input="/tmp/simple.laz",
         output="count_1",
         method="n",
-        flags="s",
+        flags="g",
         resolution=1,
         overwrite=True,
     )

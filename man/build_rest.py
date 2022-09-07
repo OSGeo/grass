@@ -9,7 +9,7 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2021 by Luca Delucchi and the GRASS Development Team
+# (C) 2003-2022 by Luca Delucchi and the GRASS Development Team
 
 import os
 import string
@@ -131,7 +131,7 @@ General
 .. toctree::
     :maxdepth: 1
 
-        GRASS startup manual page <grass7>
+        GRASS startup manual page <grass8>
         General commands manual <general>
 
 Miscellaneous & Variables
@@ -169,7 +169,7 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2021 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+ 2003-2022 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """
 )
 

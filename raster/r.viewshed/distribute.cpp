@@ -82,7 +82,7 @@ extern "C"
 IOVisibilityGrid *distribute_and_sweep(char *inputfname,
 				       GridHeader * hd,
 				       Viewpoint * vp,
-				       ViewOptions viewOptions)
+				       const ViewOptions &viewOptions)
 {
 
     assert(inputfname && hd && vp);
@@ -180,7 +180,7 @@ unsigned long distribute_sector(AMI_STREAM < AEvent > *eventList,
 				AMI_STREAM < AEvent > *enterBndEvents,
 				double start_angle, double end_angle,
 				IOVisibilityGrid * visgrid, Viewpoint * vp,
-				GridHeader *hd, ViewOptions viewOptions)
+				GridHeader *hd, const ViewOptions &viewOptions)
 {
 
 
@@ -549,7 +549,7 @@ unsigned long solve_in_memory(AMI_STREAM < AEvent > *eventList,
 			      AMI_STREAM < AEvent > *enterBndEvents,
 			      double start_angle, double end_angle,
 			      IOVisibilityGrid * visgrid, GridHeader *hd,
-			      Viewpoint * vp, ViewOptions viewOptions)
+			      Viewpoint * vp, const ViewOptions &viewOptions)
 {
 
     assert(eventList && visgrid && vp);

@@ -227,8 +227,6 @@
       <wxgui-item name="Save"/>
       <wxgui-item name="SaveAs"/>
       <wxgui-item name="Close"/>
-      <separator/>
-      <wxgui-item name="LoadGRCFileTclTkGUI"/>
     </items>
   </toolbox>
   <toolbox name="MapDisplay">
@@ -304,6 +302,13 @@
       <module-item name="r.in.lidar">
         <label>LAS LiDAR points import</label>
       </module-item>
+      <module-item name="r.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.in.wms">
+        <label>WMS/WMTS import</label>
+      </module-item>
       <separator/>
       <module-item name="r.unpack">
         <label>Unpack raster map</label>
@@ -346,6 +351,9 @@
       </module-item>
       <module-item name="v.in.lidar">
         <label>LAS LiDAR points import</label>
+      </module-item>
+      <module-item name="v.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
       <separator/>
       <module-item name="v.unpack">
@@ -1071,6 +1079,10 @@
       <separator/>
       <module-item name="r.fillnulls">
         <label>Fill NULL cells</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.fill.stats">
+        <label>Fill NULL cells using IDW</label>
       </module-item>
     </items>
   </toolbox>
@@ -2015,6 +2027,7 @@
       <wxgui-item name="TplotTool"/>
       <wxgui-item name="TimelineTool"/>
       <wxgui-item name="VDigit"/>
+      <wxgui-item name="RDigit"/>
     </items>
   </toolbox>
 </toolboxes>

@@ -15,7 +15,11 @@ The user can select a subset of the input space time raster dataset for
 processing using a SQL WHERE statement. The number of CPU's to be used
 for parallel processing can be specified with the <em>nprocs</em>
 option to speedup the computation on multi-core system.
-
+<p>
+Semantic labels are needed to relate output raster maps to input raster
+maps. E.g. with <em>method=stddev</em>, the user needs to know the
+spatial extent, the time stamp and the semantic label to determine
+which stddev map corresponds to which input map.
 
 <h2>EXAMPLE</h2>
 
@@ -110,12 +114,6 @@ name|start_time|min|max
 <a href="r.mask.html">r.mask</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

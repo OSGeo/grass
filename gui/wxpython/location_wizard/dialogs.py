@@ -25,25 +25,26 @@ import wx.lib.scrolledpanel as scrolled
 from core import globalvar
 from core.gcmd import RunCommand
 from location_wizard.base import BaseClass
-from gui_core.wrap import Button, StaticText, StaticBox, \
-    TextCtrl
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
 
 
 class RegionDef(BaseClass, wx.Dialog):
-    """Page for setting default region extents and resolution
-    """
+    """Page for setting default region extents and resolution"""
 
-    def __init__(self, parent, id=wx.ID_ANY, size=(800, 600), title=_(
-            "Set default region extent and resolution"), location=None):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        size=(800, 600),
+        title=_("Set default region extent and resolution"),
+        location=None,
+    ):
         wx.Dialog.__init__(self, parent, id, title, size=size)
         panel = wx.Panel(self, id=wx.ID_ANY)
 
         self.SetIcon(
-            wx.Icon(
-                os.path.join(
-                    globalvar.ICONDIR,
-                    'grass.ico'),
-                wx.BITMAP_TYPE_ICO))
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
+        )
 
         self.parent = parent
         self.location = location
@@ -70,29 +71,13 @@ class RegionDef(BaseClass, wx.Dialog):
         #
         # 2D
         self.tnorth = self.MakeTextCtrl(
-            text=str(
-                self.north), size=(
-                150, -1), parent=panel)
-        self.tsouth = self.MakeTextCtrl(
-            str(self.south),
-            size=(150, -1),
-            parent=panel)
-        self.twest = self.MakeTextCtrl(
-            str(self.west),
-            size=(150, -1),
-            parent=panel)
-        self.teast = self.MakeTextCtrl(
-            str(self.east),
-            size=(150, -1),
-            parent=panel)
-        self.tnsres = self.MakeTextCtrl(
-            str(self.nsres),
-            size=(150, -1),
-            parent=panel)
-        self.tewres = self.MakeTextCtrl(
-            str(self.ewres),
-            size=(150, -1),
-            parent=panel)
+            text=str(self.north), size=(150, -1), parent=panel
+        )
+        self.tsouth = self.MakeTextCtrl(str(self.south), size=(150, -1), parent=panel)
+        self.twest = self.MakeTextCtrl(str(self.west), size=(150, -1), parent=panel)
+        self.teast = self.MakeTextCtrl(str(self.east), size=(150, -1), parent=panel)
+        self.tnsres = self.MakeTextCtrl(str(self.nsres), size=(150, -1), parent=panel)
+        self.tewres = self.MakeTextCtrl(str(self.ewres), size=(150, -1), parent=panel)
 
         #
         # labels
@@ -104,61 +89,57 @@ class RegionDef(BaseClass, wx.Dialog):
         #
         # buttons
         #
-        self.bset = self.MakeButton(
-            text=_("&Set region"),
-            id=wx.ID_OK, parent=panel)
+        self.bset = self.MakeButton(text=_("&Set region"), id=wx.ID_OK, parent=panel)
         self.bcancel = Button(panel, id=wx.ID_CANCEL)
         self.bset.SetDefault()
 
         #
         # image
         #
-        self.img = wx.Image(os.path.join(globalvar.IMGDIR, "qgis_world.png"),
-                            wx.BITMAP_TYPE_PNG).ConvertToBitmap()
+        self.img = wx.Image(
+            os.path.join(globalvar.IMGDIR, "qgis_world.png"), wx.BITMAP_TYPE_PNG
+        ).ConvertToBitmap()
 
         #
         # set current working environment to PERMANENT mapset
         # in selected location in order to set default region (WIND)
         #
         envval = {}
-        ret = RunCommand('g.gisenv',
-                         read=True)
+        ret = RunCommand("g.gisenv", read=True)
         if ret:
             for line in ret.splitlines():
-                key, val = line.split('=')
+                key, val = line.split("=")
                 envval[key] = val
-            self.currlocation = envval['LOCATION_NAME'].strip("';")
-            self.currmapset = envval['MAPSET'].strip("';")
-            if self.currlocation != self.location or self.currmapset != 'PERMANENT':
-                RunCommand('g.gisenv',
-                           set='LOCATION_NAME=%s' % self.location)
-                RunCommand('g.gisenv',
-                           set='MAPSET=PERMANENT')
+            self.currlocation = envval["LOCATION_NAME"].strip("';")
+            self.currmapset = envval["MAPSET"].strip("';")
+            if self.currlocation != self.location or self.currmapset != "PERMANENT":
+                RunCommand("g.gisenv", set="LOCATION_NAME=%s" % self.location)
+                RunCommand("g.gisenv", set="MAPSET=PERMANENT")
         else:
             dlg = wx.MessageBox(
                 parent=self,
-                message=_('Invalid location selected.'),
+                message=_("Invalid location selected."),
                 caption=_("Error"),
-                style=wx.ID_OK | wx.ICON_ERROR)
+                style=wx.ID_OK | wx.ICON_ERROR,
+            )
             return
 
         #
         # get current region settings
         #
         region = {}
-        ret = RunCommand('g.region',
-                         read=True,
-                         flags='gp3')
+        ret = RunCommand("g.region", read=True, flags="gp3")
         if ret:
             for line in ret.splitlines():
-                key, val = line.split('=')
+                key, val = line.split("=")
                 region[key] = float(val)
         else:
             dlg = wx.MessageBox(
                 parent=self,
                 message=_("Invalid region"),
                 caption=_("Error"),
-                style=wx.ID_OK | wx.ICON_ERROR)
+                style=wx.ID_OK | wx.ICON_ERROR,
+            )
             dlg.ShowModal()
             dlg.Destroy()
             return
@@ -166,39 +147,41 @@ class RegionDef(BaseClass, wx.Dialog):
         #
         # update values
         # 2D
-        self.north = float(region['n'])
-        self.south = float(region['s'])
-        self.east = float(region['e'])
-        self.west = float(region['w'])
-        self.nsres = float(region['nsres'])
-        self.ewres = float(region['ewres'])
-        self.rows = int(region['rows'])
-        self.cols = int(region['cols'])
-        self.cells = int(region['cells'])
+        self.north = float(region["n"])
+        self.south = float(region["s"])
+        self.east = float(region["e"])
+        self.west = float(region["w"])
+        self.nsres = float(region["nsres"])
+        self.ewres = float(region["ewres"])
+        self.rows = int(region["rows"])
+        self.cols = int(region["cols"])
+        self.cells = int(region["cells"])
         # 3D
-        self.top = float(region['t'])
-        self.bottom = float(region['b'])
+        self.top = float(region["t"])
+        self.bottom = float(region["b"])
         #         self.nsres3 = float(region['nsres3'])
         #         self.ewres3 = float(region['ewres3'])
-        self.tbres = float(region['tbres'])
-        self.depth = int(region['depths'])
-        self.cells3 = int(region['cells3'])
+        self.tbres = float(region["tbres"])
+        self.depth = int(region["depths"])
+        self.cells3 = int(region["cells3"])
 
         #
         # 3D box collapsable
         #
         self.infoCollapseLabelExp = _("Click here to show 3D settings")
         self.infoCollapseLabelCol = _("Click here to hide 3D settings")
-        self.settings3D = wx.CollapsiblePane(parent=panel,
-                                             label=self.infoCollapseLabelExp,
-                                             style=wx.CP_DEFAULT_STYLE |
-                                             wx.CP_NO_TLW_RESIZE | wx.EXPAND)
+        self.settings3D = wx.CollapsiblePane(
+            parent=panel,
+            label=self.infoCollapseLabelExp,
+            style=wx.CP_DEFAULT_STYLE | wx.CP_NO_TLW_RESIZE | wx.EXPAND,
+        )
         self.MakeSettings3DPaneContent(self.settings3D.GetPane())
         self.settings3D.Collapse(False)  # FIXME
         self.Bind(
             wx.EVT_COLLAPSIBLEPANE_CHANGED,
             self.OnSettings3DPaneChanged,
-            self.settings3D)
+            self.settings3D,
+        )
 
         #
         # set current region settings
@@ -246,60 +229,54 @@ class RegionDef(BaseClass, wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=0, hgap=0)
 
         # inputs
-        self.ttop = TextCtrl(parent=pane, id=wx.ID_ANY, value=str(self.top),
-                             size=(150, -1))
+        self.ttop = TextCtrl(
+            parent=pane, id=wx.ID_ANY, value=str(self.top), size=(150, -1)
+        )
         self.tbottom = TextCtrl(
-            parent=pane, id=wx.ID_ANY, value=str(
-                self.bottom), size=(
-                150, -1))
+            parent=pane, id=wx.ID_ANY, value=str(self.bottom), size=(150, -1)
+        )
         self.ttbres = TextCtrl(
-            parent=pane, id=wx.ID_ANY, value=str(
-                self.tbres), size=(
-                150, -1))
+            parent=pane, id=wx.ID_ANY, value=str(self.tbres), size=(150, -1)
+        )
         #         self.tnsres3 = wx.TextCtrl(parent = pane, id = wx.ID_ANY, value = str(self.nsres3),
         #                                    size = (150, -1))
         #         self.tewres3  =  wx.TextCtrl(parent = pane, id = wx.ID_ANY, value = str(self.ewres3),
         #                                    size = (150, -1))
 
         # labels
-        self.ldepth = StaticText(
-            parent=pane,
-            label=_("Depth: %d") %
-            self.depth)
-        self.lcells3 = StaticText(
-            parent=pane,
-            label=_("3D Cells: %d") %
-            self.cells3)
+        self.ldepth = StaticText(parent=pane, label=_("Depth: %d") % self.depth)
+        self.lcells3 = StaticText(parent=pane, label=_("3D Cells: %d") % self.cells3)
 
         # top
-        gridSizer.Add(StaticText(parent=pane, label=_("Top")),
-                      flag=wx.ALIGN_CENTER |
-                      wx.LEFT | wx.RIGHT | wx.TOP, border=5,
-                      pos=(0, 1))
-        gridSizer.Add(self.ttop,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.ALL, border=5, pos=(1, 1))
-        # bottom
-        gridSizer.Add(StaticText(parent=pane, label=_("Bottom")),
-                      flag=wx.ALIGN_CENTER |
-                      wx.LEFT | wx.RIGHT | wx.TOP, border=5,
-                      pos=(0, 2))
-        gridSizer.Add(self.tbottom,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.ALL, border=5, pos=(1, 2))
-        # tbres
         gridSizer.Add(
-            StaticText(
-                parent=pane,
-                label=_("T-B resolution")),
+            StaticText(parent=pane, label=_("Top")),
             flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
             border=5,
-            pos=(
-                0,
-                3))
-        gridSizer.Add(self.ttbres,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.ALL, border=5, pos=(1, 3))
+            pos=(0, 1),
+        )
+        gridSizer.Add(
+            self.ttop, flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, border=5, pos=(1, 1)
+        )
+        # bottom
+        gridSizer.Add(
+            StaticText(parent=pane, label=_("Bottom")),
+            flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
+            border=5,
+            pos=(0, 2),
+        )
+        gridSizer.Add(
+            self.tbottom, flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, border=5, pos=(1, 2)
+        )
+        # tbres
+        gridSizer.Add(
+            StaticText(parent=pane, label=_("T-B resolution")),
+            flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
+            border=5,
+            pos=(0, 3),
+        )
+        gridSizer.Add(
+            self.ttbres, flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, border=5, pos=(1, 3)
+        )
 
         # res
         #         gridSizer.Add(item = wx.StaticText(parent = pane, label = _("3D N-S resolution")),
@@ -318,16 +295,23 @@ class RegionDef(BaseClass, wx.Dialog):
         #                       wx.ALL, border = 5, pos = (3, 3))
 
         # rows/cols/cells
-        gridSizer.Add(self.ldepth,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
-                      wx.ALL, border=5, pos=(2, 1))
+        gridSizer.Add(
+            self.ldepth,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL,
+            border=5,
+            pos=(2, 1),
+        )
 
-        gridSizer.Add(self.lcells3,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
-                      wx.ALL, border=5, pos=(2, 2))
+        gridSizer.Add(
+            self.lcells3,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL,
+            border=5,
+            pos=(2, 2),
+        )
 
-        border.Add(gridSizer, proportion=1,
-                   flag=wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, border=5)
+        border.Add(
+            gridSizer, proportion=1, flag=wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, border=5
+        )
 
         pane.SetSizer(border)
         border.Fit(pane)
@@ -356,98 +340,167 @@ class RegionDef(BaseClass, wx.Dialog):
         buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # north
-        gridSizer.Add(self.MakeLabel(text=_("North"), parent=panel),
-                      flag=wx.ALIGN_BOTTOM | wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.TOP | wx.LEFT | wx.RIGHT, border=5, pos=(0, 2))
-        gridSizer.Add(self.tnorth,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.ALL, border=5, pos=(1, 2))
+        gridSizer.Add(
+            self.MakeLabel(text=_("North"), parent=panel),
+            flag=wx.ALIGN_BOTTOM
+            | wx.ALIGN_CENTER_HORIZONTAL
+            | wx.TOP
+            | wx.LEFT
+            | wx.RIGHT,
+            border=5,
+            pos=(0, 2),
+        )
+        gridSizer.Add(
+            self.tnorth,
+            flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(1, 2),
+        )
         # west
-        gridSizer.Add(self.MakeLabel(text=_("West"), parent=panel),
-                      flag=wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.LEFT | wx.TOP | wx.BOTTOM, border=5, pos=(2, 0))
-        gridSizer.Add(self.twest,
-                      flag=wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.ALL, border=5, pos=(2, 1))
+        gridSizer.Add(
+            self.MakeLabel(text=_("West"), parent=panel),
+            flag=wx.ALIGN_RIGHT
+            | wx.ALIGN_CENTER_VERTICAL
+            | wx.LEFT
+            | wx.TOP
+            | wx.BOTTOM,
+            border=5,
+            pos=(2, 0),
+        )
+        gridSizer.Add(
+            self.twest,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(2, 1),
+        )
 
         gridSizer.Add(
             wx.StaticBitmap(
-                panel, wx.ID_ANY, self.img, (-1, -1),
-                (self.img.GetWidth(),
-                 self.img.GetHeight())),
-            flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
-            pos=(2, 2))
+                panel,
+                wx.ID_ANY,
+                self.img,
+                (-1, -1),
+                (self.img.GetWidth(), self.img.GetHeight()),
+            ),
+            flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(2, 2),
+        )
 
         # east
-        gridSizer.Add(self.teast,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.ALL, border=5, pos=(2, 3))
-        gridSizer.Add(self.MakeLabel(text=_("East"), parent=panel),
-                      flag=wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.RIGHT | wx.TOP | wx.BOTTOM, border=5, pos=(2, 4))
+        gridSizer.Add(
+            self.teast,
+            flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(2, 3),
+        )
+        gridSizer.Add(
+            self.MakeLabel(text=_("East"), parent=panel),
+            flag=wx.ALIGN_LEFT
+            | wx.ALIGN_CENTER_VERTICAL
+            | wx.RIGHT
+            | wx.TOP
+            | wx.BOTTOM,
+            border=5,
+            pos=(2, 4),
+        )
         # south
-        gridSizer.Add(self.tsouth,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.ALL, border=5, pos=(3, 2))
-        gridSizer.Add(self.MakeLabel(text=_("South"), parent=panel),
-                      flag=wx.ALIGN_TOP | wx.ALIGN_CENTER_HORIZONTAL |
-                      wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5, pos=(4, 2))
+        gridSizer.Add(
+            self.tsouth,
+            flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(3, 2),
+        )
+        gridSizer.Add(
+            self.MakeLabel(text=_("South"), parent=panel),
+            flag=wx.ALIGN_TOP
+            | wx.ALIGN_CENTER_HORIZONTAL
+            | wx.LEFT
+            | wx.RIGHT
+            | wx.BOTTOM,
+            border=5,
+            pos=(4, 2),
+        )
         # ns-res
-        gridSizer.Add(self.MakeLabel(text=_("N-S resolution"), parent=panel),
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
-                      wx.TOP | wx.LEFT | wx.RIGHT, border=5, pos=(5, 1))
-        gridSizer.Add(self.tnsres,
-                      flag=wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.ALL, border=5, pos=(6, 1))
+        gridSizer.Add(
+            self.MakeLabel(text=_("N-S resolution"), parent=panel),
+            flag=wx.ALIGN_CENTER_VERTICAL
+            | wx.ALIGN_CENTER
+            | wx.TOP
+            | wx.LEFT
+            | wx.RIGHT,
+            border=5,
+            pos=(5, 1),
+        )
+        gridSizer.Add(
+            self.tnsres,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(6, 1),
+        )
         # ew-res
-        gridSizer.Add(self.MakeLabel(text=_("E-W resolution"), parent=panel),
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
-                      wx.TOP | wx.LEFT | wx.RIGHT, border=5, pos=(5, 3))
-        gridSizer.Add(self.tewres,
-                      flag=wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL |
-                      wx.ALL, border=5, pos=(6, 3))
+        gridSizer.Add(
+            self.MakeLabel(text=_("E-W resolution"), parent=panel),
+            flag=wx.ALIGN_CENTER_VERTICAL
+            | wx.ALIGN_CENTER
+            | wx.TOP
+            | wx.LEFT
+            | wx.RIGHT,
+            border=5,
+            pos=(5, 3),
+        )
+        gridSizer.Add(
+            self.tewres,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(6, 3),
+        )
         # rows/cols/cells
-        gridSizer.Add(self.lrows,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
-                      wx.ALL, border=5, pos=(7, 1))
+        gridSizer.Add(
+            self.lrows,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL,
+            border=5,
+            pos=(7, 1),
+        )
 
-        gridSizer.Add(self.lcells,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
-                      wx.ALL, border=5, pos=(7, 2))
+        gridSizer.Add(
+            self.lcells,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL,
+            border=5,
+            pos=(7, 2),
+        )
 
-        gridSizer.Add(self.lcols,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
-                      wx.ALL, border=5, pos=(7, 3))
+        gridSizer.Add(
+            self.lcols,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL,
+            border=5,
+            pos=(7, 3),
+        )
 
         # 3D
-        settings3DSizer.Add(self.settings3D,
-                            flag=wx.ALL,
-                            border=5)
+        settings3DSizer.Add(self.settings3D, flag=wx.ALL, border=5)
 
         # buttons
-        buttonSizer.Add(self.bcancel, proportion=1,
-                        flag=wx.ALIGN_RIGHT |
-                        wx.ALIGN_CENTER_VERTICAL |
-                        wx.ALL, border=10)
-        buttonSizer.Add(self.bset, proportion=1,
-                        flag=wx.ALIGN_CENTER |
-                        wx.ALIGN_CENTER_VERTICAL |
-                        wx.ALL, border=10)
+        buttonSizer.Add(
+            self.bcancel,
+            proportion=1,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=10,
+        )
+        buttonSizer.Add(
+            self.bset,
+            proportion=1,
+            flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=10,
+        )
 
-        frameSizer.Add(gridSizer, proportion=1,
-                       flag=wx.ALL | wx.ALIGN_CENTER, border=5)
-        frameSizer.Add(settings3DSizer, proportion=0,
-                       flag=wx.ALL | wx.ALIGN_CENTER, border=5)
-        frameSizer.Add(buttonSizer, proportion=0,
-                       flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        frameSizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.ALIGN_CENTER, border=5)
+        frameSizer.Add(
+            settings3DSizer, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=5
+        )
+        frameSizer.Add(
+            buttonSizer, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=5
+        )
 
         self.SetAutoLayout(True)
         panel.SetSizer(frameSizer)
@@ -483,11 +536,13 @@ class RegionDef(BaseClass, wx.Dialog):
             self.__UpdateInfo()
 
         except ValueError as e:
-            if len(event.GetString()) > 0 and event.GetString() != '-':
-                dlg = wx.MessageBox(parent=self,
-                                    message=_("Invalid value: %s") % e,
-                                    caption=_("Error"),
-                                    style=wx.OK | wx.ICON_ERROR)
+            if len(event.GetString()) > 0 and event.GetString() != "-":
+                dlg = wx.MessageBox(
+                    parent=self,
+                    message=_("Invalid value: %s") % e,
+                    caption=_("Error"),
+                    style=wx.OK | wx.ICON_ERROR,
+                )
                 # reset values
                 self.tnorth.SetValue(str(self.north))
                 self.tsouth.SetValue(str(self.south))
@@ -531,17 +586,19 @@ class RegionDef(BaseClass, wx.Dialog):
 
     def OnSetButton(self, event=None):
         """Set default region"""
-        ret = RunCommand('g.region',
-                         flags='sa',
-                         n=self.north,
-                         s=self.south,
-                         e=self.east,
-                         w=self.west,
-                         nsres=self.nsres,
-                         ewres=self.ewres,
-                         t=self.top,
-                         b=self.bottom,
-                         tbres=self.tbres)
+        ret = RunCommand(
+            "g.region",
+            flags="sa",
+            n=self.north,
+            s=self.south,
+            e=self.east,
+            w=self.west,
+            nsres=self.nsres,
+            ewres=self.ewres,
+            t=self.top,
+            b=self.bottom,
+            tbres=self.tbres,
+        )
         if ret == 0:
             self.Destroy()
 
@@ -559,8 +616,9 @@ class TransList(wx.VListBox):
             c = self.GetForegroundColour()
         dc.SetFont(self.GetFont())
         dc.SetTextForeground(c)
-        dc.DrawLabel(self._getItemText(n), rect,
-                     wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
+        dc.DrawLabel(
+            self._getItemText(n), rect, wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL
+        )
 
     def OnMeasureItem(self, n):
         height = 0
@@ -574,17 +632,22 @@ class TransList(wx.VListBox):
     def _getItemText(self, item):
         global transformlist
         transitem = transformlist[item]
-        if transitem.strip() != '':
+        if transitem.strip() != "":
             return transitem
 
 
 class SelectTransformDialog(wx.Dialog):
     """Dialog for selecting datum transformations"""
 
-    def __init__(self, parent, transforms,
-                 title=_("Select datum transformation"),
-                 pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+    def __init__(
+        self,
+        parent,
+        transforms,
+        title=_("Select datum transformation"),
+        pos=wx.DefaultPosition,
+        size=wx.DefaultSize,
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+    ):
 
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
 
@@ -607,14 +670,16 @@ class SelectTransformDialog(wx.Dialog):
         # dialog body
         #
         bodyBox = StaticBox(
-            parent=panel, id=wx.ID_ANY, label=" %s " %
-            _("Select from list of datum transformations"))
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s " % _("Select from list of datum transformations"),
+        )
         bodySizer = wx.StaticBoxSizer(bodyBox)
 
         # add no transform option
-        transforms = '---\n\n0\nDo not apply any datum transformations\n\n' + transforms
+        transforms = "---\n\n0\nDo not apply any datum transformations\n\n" + transforms
 
-        transformlist = transforms.split('---')
+        transformlist = transforms.split("---")
         tlistlen = len(transformlist)
 
         # calculate size for transform list
@@ -636,18 +701,15 @@ class SelectTransformDialog(wx.Dialog):
         # VListBox for displaying and selecting transformations
         #
         self.translist = TransList(
-            panel, id=-1, size=(width, height),
-            style=wx.SUNKEN_BORDER)
+            panel, id=-1, size=(width, height), style=wx.SUNKEN_BORDER
+        )
         self.translist.SetItemCount(tlistlen)
         self.translist.SetSelection(2)
         self.translist.SetFocus()
 
         self.Bind(wx.EVT_LISTBOX, self.ClickTrans, self.translist)
 
-        bodySizer.Add(
-            self.translist,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND)
+        bodySizer.Add(self.translist, proportion=1, flag=wx.ALL | wx.EXPAND)
 
         #
         # buttons
@@ -662,11 +724,9 @@ class SelectTransformDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        sizer.Add(bodySizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(bodySizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(btnsizer, proportion=0,
-                  flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        sizer.Add(btnsizer, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         sizer.Fit(panel)
 
@@ -695,5 +755,7 @@ def testRegionDef():
     dlg.Show()
     wx.lib.inspection.InspectionTool().Show()
     app.MainLoop()
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     testRegionDef()

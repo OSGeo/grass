@@ -20,6 +20,8 @@ This program is free software under the GNU General Public License
 
 from __future__ import print_function
 
+import io
+from contextlib import redirect_stdout
 import sys
 
 import wx
@@ -36,21 +38,29 @@ from core.globalvar import CheckWxVersion
 class PyShellWindow(wx.Panel):
     """Python Shell Window"""
 
-    def __init__(self, parent, giface, id=wx.ID_ANY, simpleEditorHandler=None, **kwargs):
+    def __init__(
+        self, parent, giface, id=wx.ID_ANY, simpleEditorHandler=None, **kwargs
+    ):
         self.parent = parent
         self.giface = giface
 
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
-        self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
-            _("Type %s for more GRASS scripting related information.") % "\"help(gs)\"" + "\n" + \
-            _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
+        self.intro = (
+            _("Welcome to wxGUI Interactive Python Shell %s") % VERSION
+            + "\n\n"
+            + _("Type %s for more GRASS scripting related information.") % '"help(gs)"'
+            + "\n"
+            + _("Type %s to add raster or vector to the layer tree.")
+            % "\"AddLayer('map_name')\""
+            + "\n\n"
+        )
 
         shellargs = dict(
             parent=self,
             id=wx.ID_ANY,
             introText=self.intro,
-            locals={"gs": grass, "AddLayer": self.AddLayer},
+            locals={"gs": grass, "AddLayer": self.AddLayer, "help": self.Help},
         )
         # useStockId (available since wxPython 4.0.2) should be False on macOS
         if sys.platform == "darwin" and CheckWxVersion([4, 0, 2]):
@@ -67,11 +77,9 @@ class PyShellWindow(wx.Panel):
 
         self.simpleEditorHandler = simpleEditorHandler
         if simpleEditorHandler:
-            self.btnSimpleEditor = Button(
-                self, id=wx.ID_ANY, label=_("Simple &editor"))
+            self.btnSimpleEditor = Button(self, id=wx.ID_ANY, label=_("Simple &editor"))
             self.btnSimpleEditor.Bind(wx.EVT_BUTTON, simpleEditorHandler)
-            self.btnSimpleEditor.SetToolTip(
-                _("Open a simple Python code editor"))
+            self.btnSimpleEditor.SetToolTip(_("Open a simple Python code editor"))
 
         self._layout()
 
@@ -81,18 +89,19 @@ class PyShellWindow(wx.Panel):
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(self.shell, proportion=1,
-                  flag=wx.EXPAND)
+        sizer.Add(self.shell, proportion=1, flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         if self.simpleEditorHandler:
-            btnSizer.Add(self.btnSimpleEditor, proportion=0,
-                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+            btnSizer.Add(
+                self.btnSimpleEditor,
+                proportion=0,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+                border=5,
+            )
         btnSizer.AddStretchSpacer()
-        btnSizer.Add(self.btnClear, proportion=0,
-                     flag=wx.EXPAND, border=5)
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
+        sizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         sizer.Fit(self)
         sizer.SetSizeHints(self)
@@ -103,42 +112,51 @@ class PyShellWindow(wx.Panel):
         self.SetAutoLayout(True)
         self.Layout()
 
-    def AddLayer(self, name, ltype='auto'):
+    def AddLayer(self, name, ltype="auto"):
         """Add selected map to the layer tree
 
         :param name: name of raster/vector map to be added
         :param type: map type ('raster', 'vector', 'auto' for autodetection)
         """
         fname = None
-        if ltype == 'raster' or ltype != 'vector':
+        if ltype == "raster" or ltype != "vector":
             # check for raster
-            fname = grass.find_file(name, element='cell')['fullname']
+            fname = grass.find_file(name, element="cell")["fullname"]
             if fname:
-                ltype = 'raster'
-                lcmd = 'd.rast'
+                ltype = "raster"
+                lcmd = "d.rast"
 
-        if not fname and (ltype == 'vector' or ltype != 'raster'):
+        if not fname and (ltype == "vector" or ltype != "raster"):
             # if not found check for vector
-            fname = grass.find_file(name, element='vector')['fullname']
+            fname = grass.find_file(name, element="vector")["fullname"]
             if fname:
-                ltype = 'vector'
-                lcmd = 'd.vect'
+                ltype = "vector"
+                lcmd = "d.vect"
 
         if not fname:
             return _("Raster or vector map <%s> not found") % (name)
 
-        self.giface.GetLayerTree().AddLayer(ltype=ltype,
-                                            lname=fname,
-                                            lchecked=True,
-                                            lcmd=[lcmd, 'map=%s' % fname])
-        if ltype == 'raster':
-            return _('Raster map <%s> added') % fname
+        self.giface.GetLayerTree().AddLayer(
+            ltype=ltype, lname=fname, lchecked=True, lcmd=[lcmd, "map=%s" % fname]
+        )
+        if ltype == "raster":
+            return _("Raster map <%s> added") % fname
 
-        return _('Vector map <%s> added') % fname
+        return _("Vector map <%s> added") % fname
+
+    def Help(self, obj):
+        """Override help() function
+
+        :param obj object/str: generate the help of the given object
+
+        return str: help str of the given object
+        """
+        with redirect_stdout(io.StringIO()) as f:
+            help(obj)
+        return f.getvalue()
 
     def OnClear(self, event):
-        """Delete all text from the shell
-        """
+        """Delete all text from the shell"""
         self.shell.clear()
         self.shell.showIntro(self.intro)
         self.shell.prompt()

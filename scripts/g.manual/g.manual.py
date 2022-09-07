@@ -104,7 +104,7 @@ def start_browser(entry):
 
     try:
         webbrowser.open(url_path)
-    except:
+    except Exception:
         grass.fatal(
             _("Error starting browser '%(browser)s' for HTML file" " '%(path)s'")
             % dict(browser=browser, path=path)

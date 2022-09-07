@@ -32,56 +32,56 @@ from grass.pydispatch.signal import Signal
 
 
 BaseIcons = {
-    'display': MetaIcon(img='show',
-                        label=_('Display map'),
-                        desc=_('Re-render modified map layers only')),
-    'render': MetaIcon(img='layer-redraw',
-                       label=_('Render map'),
-                       desc=_('Force re-rendering all map layers')),
-    'erase': MetaIcon(img='erase',
-                      label=_('Erase display'),
-                      desc=_('Erase display canvas with given background color')),
-    'pointer': MetaIcon(img='pointer',
-                        label=_('Pointer')),
-    'zoomIn': MetaIcon(img='zoom-in',
-                       label=_('Zoom in'),
-                       desc=_('Drag or click mouse to zoom')),
-    'zoomOut': MetaIcon(img='zoom-out',
-                        label=_('Zoom out'),
-                        desc=_('Drag or click mouse to unzoom')),
-    'zoomBack': MetaIcon(img='zoom-last',
-                         label=_('Return to previous zoom')),
-    'zoomMenu': MetaIcon(img='zoom-more',
-                         label=_('Various zoom options'),
-                         desc=_('Zoom to default or saved region, save to named region, ...')),
-    'zoomExtent': MetaIcon(img='zoom-extent',
-                           label=_('Zoom to selected map layer(s)')),
-    'zoomRegion': MetaIcon(img='zoom-region',
-                           label=_('Zoom to computational region extent')),
-    'pan': MetaIcon(img='pan',
-                    label=_('Pan'),
-                    desc=_('Drag with mouse to pan')),
-    'saveFile': MetaIcon(img='map-export',
-                         label=_('Save display to file')),
-    'print': MetaIcon(img='print',
-                      label=_('Print display')),
-    'font': MetaIcon(img='font',
-                     label=_('Select font')),
-    'help': MetaIcon(img='help',
-                     label=_('Show manual')),
-    'quit': MetaIcon(img='quit',
-                     label=_('Quit')),
-    'addRast': MetaIcon(img='layer-raster-add',
-                        label=_('Add raster map layer')),
-    'addVect': MetaIcon(img='layer-vector-add',
-                        label=_('Add vector map layer')),
-    'overlay': MetaIcon(img='overlay-add',
-                        label=_('Add map elements'),
-                        desc=_('Overlay elements like scale and legend onto map')),
-    'histogramD': MetaIcon(img='layer-raster-histogram',
-                           label=_('Create histogram with d.histogram')),
-    'settings': MetaIcon(img='settings',
-                         label=_("Settings")),
+    "display": MetaIcon(
+        img="show", label=_("Display map"), desc=_("Re-render modified map layers only")
+    ),
+    "render": MetaIcon(
+        img="layer-redraw",
+        label=_("Render map"),
+        desc=_("Force re-rendering all map layers"),
+    ),
+    "erase": MetaIcon(
+        img="erase",
+        label=_("Erase display"),
+        desc=_("Erase display canvas with given background color"),
+    ),
+    "pointer": MetaIcon(img="pointer", label=_("Pointer")),
+    "zoomIn": MetaIcon(
+        img="zoom-in", label=_("Zoom in"), desc=_("Drag or click mouse to zoom")
+    ),
+    "zoomOut": MetaIcon(
+        img="zoom-out", label=_("Zoom out"), desc=_("Drag or click mouse to unzoom")
+    ),
+    "zoomBack": MetaIcon(img="zoom-last", label=_("Return to previous zoom")),
+    "zoomMenu": MetaIcon(
+        img="zoom-more",
+        label=_("Various zoom options"),
+        desc=_("Zoom to default or saved region, save to named region, ..."),
+    ),
+    "zoomExtent": MetaIcon(img="zoom-extent", label=_("Zoom to selected map layer(s)")),
+    "zoomRegion": MetaIcon(
+        img="zoom-region", label=_("Zoom to computational region extent")
+    ),
+    "pan": MetaIcon(img="pan", label=_("Pan"), desc=_("Drag with mouse to pan")),
+    "saveFile": MetaIcon(img="map-export", label=_("Save display to file")),
+    "print": MetaIcon(img="print", label=_("Print display")),
+    "font": MetaIcon(img="font", label=_("Select font")),
+    "help": MetaIcon(img="help", label=_("Show manual")),
+    "quit": MetaIcon(img="quit", label=_("Quit")),
+    "addRast": MetaIcon(img="layer-raster-add", label=_("Add raster map layer")),
+    "addVect": MetaIcon(img="layer-vector-add", label=_("Add vector map layer")),
+    "overlay": MetaIcon(
+        img="overlay-add",
+        label=_("Add map elements"),
+        desc=_("Overlay elements like scale and legend onto map"),
+    ),
+    "histogram": MetaIcon(
+        img="layer-raster-histogram", label=_("Create histogram with d.histogram")
+    ),
+    "settings": MetaIcon(img="settings", label=_("Settings")),
+    "mapDispSettings": MetaIcon(
+        img="monitor-settings", label=_("Map Display Settings")
+    ),
 }
 
 
@@ -98,17 +98,22 @@ class BaseToolbar(ToolBar):
                 self.Realize()
 
             def _toolbarData(self):
-                return self._getToolbarData((("help", Icons["help"],
-                                              self.parent.OnHelp),
-                                              ))
-
+                # e.g. ("help", _("Help")) tool short label (triangle/arrow
+                # at the right side of the toolbar)
+                return self._getToolbarData(
+                    (
+                        ("help", Icons["help"].label),
+                        Icons["help"],
+                        self.parent.OnHelp
+                    ),
+                )
     """
 
-    def __init__(self, parent, toolSwitcher=None,
-                 style=wx.NO_BORDER | wx.TB_HORIZONTAL):
+    def __init__(
+        self, parent, toolSwitcher=None, style=wx.NO_BORDER | wx.TB_HORIZONTAL
+    ):
         self.parent = parent
-        wx.ToolBar.__init__(self, parent=self.parent, id=wx.ID_ANY,
-                            style=style)
+        wx.ToolBar.__init__(self, parent=self.parent, id=wx.ID_ANY, style=style)
 
         self._default = None
         self.SetToolBitmapSize(globalvar.toolbarSize)
@@ -117,8 +122,7 @@ class BaseToolbar(ToolBar):
         self.handlers = {}
 
     def InitToolbar(self, toolData):
-        """Initialize toolbar, add tools to the toolbar
-        """
+        """Initialize toolbar, add tools to the toolbar"""
         for tool in toolData:
             self.CreateTool(*tool)
 
@@ -128,8 +132,7 @@ class BaseToolbar(ToolBar):
         """Toolbar data (virtual)"""
         return None
 
-    def CreateTool(self, label, bitmap, kind,
-                   shortHelp, longHelp, handler, pos=-1):
+    def CreateTool(self, label, bitmap, kind, shortHelp, longHelp, handler, pos=-1):
         """Add tool to the toolbar
 
         :param pos: if -1 add tool, if > 0 insert at given pos
@@ -137,18 +140,25 @@ class BaseToolbar(ToolBar):
         """
         bmpDisabled = wx.NullBitmap
         tool = -1
+
+        if isinstance(label, tuple):
+            internal_label, label = label[0], label[1]
+        else:
+            internal_label = label
+
         if label:
-            tool = vars(self)[label] = NewId()
-            Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" %
-                      (tool, label, bitmap))
+            tool = vars(self)[internal_label] = NewId()
+            Debug.msg(
+                3, "CreateTool(): tool=%d, label=%s bitmap=%s" % (tool, label, bitmap)
+            )
             if pos < 0:
-                toolWin = self.AddLabelTool(tool, label, bitmap,
-                                            bmpDisabled, kind,
-                                            shortHelp, longHelp)
+                toolWin = self.AddLabelTool(
+                    tool, label, bitmap, bmpDisabled, kind, shortHelp, longHelp
+                )
             else:
-                toolWin = self.InsertLabelTool(pos, tool, label, bitmap,
-                                               bmpDisabled, kind,
-                                               shortHelp, longHelp)
+                toolWin = self.InsertLabelTool(
+                    pos, tool, label, bitmap, bmpDisabled, kind, shortHelp, longHelp
+                )
             self.handlers[tool] = handler
             self.Bind(wx.EVT_TOOL, handler, toolWin)
             self.Bind(wx.EVT_TOOL, self.OnTool, toolWin)
@@ -163,17 +173,23 @@ class BaseToolbar(ToolBar):
         :param enable: True for enable otherwise disable
         """
         for tool in self._data:
-            if tool[0] == '':  # separator
-                continue
-
-            if enable:
-                self.SetToolLongHelp(vars(self)[tool[0]], tool[4])
+            if isinstance(tool[0], tuple):
+                if tool[0][0] == "":  # separator
+                    continue
+                else:
+                    internal_label = tool[0][0]
             else:
-                self.SetToolLongHelp(vars(self)[tool[0]], "")
+                if tool[0] == "":  # separator
+                    continue
+                else:
+                    internal_label = tool[0]
+            if enable:
+                self.SetToolLongHelp(vars(self)[internal_label], tool[4])
+            else:
+                self.SetToolLongHelp(vars(self)[internal_label], "")
 
     def OnTool(self, event):
-        """Tool selected
-        """
+        """Tool selected"""
         if self.toolSwitcher:
             Debug.msg(3, "BaseToolbar.OnTool(): id = %s" % event.GetId())
             self.toolSwitcher.ToolChanged(event.GetId())
@@ -195,18 +211,21 @@ class BaseToolbar(ToolBar):
         .. todo::
             Determine why combobox causes problems here
         """
-        if platform.system() == 'Windows':
+        if platform.system() == "Windows":
             size = self.GetBestSize()
             self.SetSize((size[0] + width, size[1]))
 
     def Enable(self, tool, enable=True):
         """Enable/Disable defined tool
 
-        :param tool: name
+        :param str/tuple tool: name
         :param enable: True to enable otherwise disable tool
         """
         try:
-            id = getattr(self, tool)
+            if isinstance(tool, tuple):
+                id = getattr(self, tool[0])
+            else:
+                id = getattr(self, tool)
         except AttributeError:
             # TODO: test everything that this is not raised
             # this error was ignored for a long time
@@ -226,21 +245,26 @@ class BaseToolbar(ToolBar):
             self.Enable(item[0], enable)
 
     def _getToolbarData(self, data):
-        """Define tool
-        """
+        """Define tool"""
         retData = list()
         for args in data:
             retData.append(self._defineTool(*args))
         return retData
 
-    def _defineTool(self, name=None, icon=None, handler=None,
-                    item=wx.ITEM_NORMAL, pos=-1):
-        """Define tool
-        """
+    def _defineTool(
+        self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL, pos=-1
+    ):
+        """Define tool"""
         if name:
-            return (name, icon.GetBitmap(),
-                    item, icon.GetLabel(), icon.GetDesc(),
-                    handler, pos)
+            return (
+                name,
+                icon.GetBitmap(),
+                item,
+                icon.GetLabel(),
+                icon.GetDesc(),
+                handler,
+                pos,
+            )
         return ("", "", "", "", "", "")  # separator
 
     def _onMenu(self, data):
@@ -261,14 +285,20 @@ class BaseToolbar(ToolBar):
 
         Button must be custom (not toolbar tool) to set smaller width.
         """
-        arrowPath = os.path.join(IMGDIR, 'small_down_arrow.png')
+        arrowPath = os.path.join(IMGDIR, "small_down_arrow.png")
         if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
             bitmap = wx.Bitmap(name=arrowPath)
         else:
             bitmap = wx.ArtProvider.GetBitmap(
-                id=wx.ART_MISSING_IMAGE, client=wx.ART_TOOLBAR)
-        button = BitmapButton(parent=self, id=wx.ID_ANY, size=(
-            (-1, self.GetToolSize()[1])), bitmap=bitmap, style=wx.NO_BORDER)
+                id=wx.ART_MISSING_IMAGE, client=wx.ART_TOOLBAR
+            )
+        button = BitmapButton(
+            parent=self,
+            id=wx.ID_ANY,
+            size=((-1, self.GetToolSize()[1])),
+            bitmap=bitmap,
+            style=wx.NO_BORDER,
+        )
         button.SetToolTip(tooltip)
 
         return button
@@ -282,7 +312,7 @@ class ToolSwitcher:
         self._toolsGroups = defaultdict(list)
 
         # emitted when tool is changed
-        self.toggleToolChanged = Signal('ToolSwitcher.toggleToolChanged')
+        self.toggleToolChanged = Signal("ToolSwitcher.toggleToolChanged")
 
     def AddToolToGroup(self, group, toolbar, tool):
         """Adds tool from toolbar to group of exclusive tools.
@@ -301,7 +331,7 @@ class ToolSwitcher:
         :param btnId: id of a tool (typically button)
         :param toggleHandler: handler to be called to switch the button
         """
-        self._groups[group]['custom'].append((btnId, toggleHandler))
+        self._groups[group]["custom"].append((btnId, toggleHandler))
         self._toolsGroups[btnId].append(group)
 
     def RemoveCustomToolFromGroup(self, tool):
@@ -312,9 +342,11 @@ class ToolSwitcher:
         if tool not in self._toolsGroups:
             return
         for group in self._toolsGroups[tool]:
-            self._groups[group]['custom'] = \
-                [(bid, hdlr) for (bid, hdlr)
-                 in self._groups[group]['custom'] if bid != tool]
+            self._groups[group]["custom"] = [
+                (bid, hdlr)
+                for (bid, hdlr) in self._groups[group]["custom"]
+                if bid != tool
+            ]
 
     def RemoveToolbarFromGroup(self, group, toolbar):
         """Removes toolbar from group.
@@ -338,7 +370,7 @@ class ToolSwitcher:
         """
         for group in self._toolsGroups[tool]:
             for tb in self._groups[group]:
-                if tb == 'custom':
+                if tb == "custom":
                     for bid, handler in self._groups[group][tb]:
                         if tool == bid:
                             return True
@@ -353,7 +385,7 @@ class ToolSwitcher:
         """
         for group in self._toolsGroups[tool]:
             for tb in self._groups[group]:
-                if tb == 'custom':
+                if tb == "custom":
                     for btnId, handler in self._groups[group][tb]:
                         if btnId != tool:
                             handler(False)

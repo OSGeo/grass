@@ -70,6 +70,14 @@
 # % description: Input is a 1-arcsec tile (default: 3-arcsec)
 # %end
 
+
+import os
+import shutil
+import atexit
+import grass.script as grass
+import zipfile as zfile
+
+
 tmpl1sec = """BYTEORDER M
 LAYOUT BIL
 NROWS 3601
@@ -131,12 +139,6 @@ proj = "".join(
         "]",
     ]
 )
-
-import os
-import shutil
-import atexit
-import grass.script as grass
-import zipfile as zfile
 
 
 def cleanup():

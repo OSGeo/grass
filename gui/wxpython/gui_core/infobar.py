@@ -16,8 +16,10 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
+import sys
 import wx
 import wx.aui
+
 try:
     import wx.lib.agw.infobar as IB
 except ImportError:
@@ -29,14 +31,16 @@ def GetCloseButtonBitmap(win, size, colBg, flags=0):
     of wx.RendererNative in certain wx versions.
     See https://github.com/wxWidgets/Phoenix/issues/1425."""
     renderer = wx.RendererNative.Get()
-    if hasattr(renderer, 'DrawTitleBarBitmap'):
+    if hasattr(renderer, "DrawTitleBarBitmap"):
         bmp = wx.Bitmap(*size)
         dc = wx.MemoryDC()
         dc.SelectObject(bmp)
         dc.SetBackground(wx.Brush(colBg))
         dc.Clear()
 
-        wx.RendererNative.Get().DrawTitleBarBitmap(win, dc, wx.Rect(size), wx.TITLEBAR_BUTTON_CLOSE, flags)
+        wx.RendererNative.Get().DrawTitleBarBitmap(
+            win, dc, wx.Rect(size), wx.TITLEBAR_BUTTON_CLOSE, flags
+        )
         dc.SelectObject(wx.NullBitmap)
     else:
         bmp = wx.ArtProvider.GetBitmap(wx.ART_CLOSE, wx.ART_BUTTON)
@@ -55,13 +59,18 @@ class InfoBar(IB.InfoBar):
 
         self.button_ids = []
 
-        # some system themes have alpha, remove it
-        self._background_color = wx.SystemSettings.GetColour(
-            wx.SYS_COLOUR_HIGHLIGHT
-        ).Get(False)
-        self._foreground_color = wx.SystemSettings.GetColour(
-            wx.SYS_COLOUR_HIGHLIGHTTEXT
-        ).Get(False)
+        # color according to OS
+        if sys.platform == "win32":
+            bgcolor = wx.SYS_COLOUR_INFOBK
+            fgcolor = wx.SYS_COLOUR_INFOTEXT
+        else:
+            bgcolor = wx.SYS_COLOUR_HIGHLIGHT
+            fgcolor = wx.SYS_COLOUR_HIGHLIGHTTEXT
+
+        # set background and foreground color and remove alpha
+        self._background_color = wx.SystemSettings.GetColour(bgcolor).Get(False)
+        self._foreground_color = wx.SystemSettings.GetColour(fgcolor).Get(False)
+
         self.SetBackgroundColour(self._background_color)
         self.SetForegroundColour(self._foreground_color)
         self._text.SetBackgroundColour(self._background_color)
@@ -116,7 +125,7 @@ class InfoBar(IB.InfoBar):
         button.SetBackgroundColour(self._background_color)
         button.SetForegroundColour(self._foreground_color)
 
-        if wx.Platform == '__WXMAC__':
+        if wx.Platform == "__WXMAC__":
             # smaller buttons look better in the(narrow)info bar under OS X
             button.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
@@ -126,7 +135,9 @@ class InfoBar(IB.InfoBar):
             self.subSizerButtons.Add(self._button, wx.SizerFlags().Centre().Border())
             self._button.Show()
         else:
-            self.subSizerButtons.Insert(num_items - 1, button, wx.SizerFlags().Centre().Border())
+            self.subSizerButtons.Insert(
+                num_items - 1, button, wx.SizerFlags().Centre().Border()
+            )
 
         if self.IsShown():
             self.UpdateParent()

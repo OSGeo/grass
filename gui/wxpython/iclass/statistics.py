@@ -32,8 +32,7 @@ from grass.pydispatch.signal import Signal
 
 
 class StatisticsData:
-    """Stores all statistics.
-    """
+    """Stores all statistics."""
 
     def __init__(self):
         self.statisticsDict = {}
@@ -41,8 +40,7 @@ class StatisticsData:
 
         self.statisticsAdded = Signal("StatisticsData.statisticsAdded")
         self.statisticsDeleted = Signal("StatisticsData.statisticsDeleted")
-        self.allStatisticsDeleted = Signal(
-            "StatisticsData.allStatisticsDeleted")
+        self.allStatisticsDeleted = Signal("StatisticsData.allStatisticsDeleted")
 
         self.statisticsSet = Signal("StatisticsData.statisticsSet")
 
@@ -53,8 +51,8 @@ class StatisticsData:
         st = Statistics()
         st.SetBaseStatistics(cat=cat, name=name, color=color)
         st.statisticsSet.connect(
-            lambda stats: self.statisticsSet.emit(
-                cat=cat, stats=stats))
+            lambda stats: self.statisticsSet.emit(cat=cat, stats=stats)
+        )
 
         self.statisticsDict[cat] = st
         self.statisticsList.append(cat)
@@ -118,8 +116,8 @@ class Statistics:
         self.color = color
 
         rasterPath = grass.tempfile(create=False)
-        name = name.replace(' ', '_')
-        self.rasterName = name + '_' + os.path.basename(rasterPath)
+        name = name.replace(" ", "_")
+        self.rasterName = name + "_" + os.path.basename(rasterPath)
 
     def SetFromcStatistics(self, cStatistics):
         """Sets all statistical values.

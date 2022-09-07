@@ -1,25 +1,25 @@
 #ifndef V_EXTERNAL_OUT_LOCAL_PROTO_H
 #define V_EXTERNAL_OUT_LOCAL_PROTO_H
 
-struct _options {
+struct _options
+{
     struct Option *dsn, *format, *opts, *input, *output;
 };
 
-struct _flags {
+struct _flags
+{
     struct Flag *f, *p, *r, *g;
 };
 
 /* args.c */
-void parse_args(int, char **,
-		struct _options *, struct _flags*);
+void parse_args(int, char **, struct _options *, struct _flags *);
 
 /* format.c */
 int check_format(char *);
 int is_ogr(const char *);
 
 /* link.c */
-void make_link(const char *,
-	       const char *, char *, char **);
+void make_link(const char *, const char *, char *, char **);
 
 /* list.c */
 char *format_options(void);

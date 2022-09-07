@@ -165,25 +165,26 @@ sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms"))
 
 
 def GetRegion():
-    """!Parse region from GRASS_REGION env var.
-    """
+    """!Parse region from GRASS_REGION env var."""
     region = os.environ["GRASS_REGION"]
-    conv_reg_vals = {'east': 'e',
-                     'north': 'n',
-                     'west': 'w',
-                     'south': 's',
-                     'rows': 'rows',
-                     'cols': 'cols',
-                     'e-w resol': 'ewres',
-                     'n-s resol': 'nsres'}
+    conv_reg_vals = {
+        "east": "e",
+        "north": "n",
+        "west": "w",
+        "south": "s",
+        "rows": "rows",
+        "cols": "cols",
+        "e-w resol": "ewres",
+        "n-s resol": "nsres",
+    }
 
     keys_to_convert = conv_reg_vals.keys()
 
     conv_region = {}
-    region = region.split(';')
+    region = region.split(";")
 
     for r in region:
-        r = r.split(':')
+        r = r.split(":")
         r[0] = r[0].strip()
 
         if r[0] in keys_to_convert:
@@ -193,21 +194,24 @@ def GetRegion():
 
 
 def main():
-    options['region'] = GetRegion()
+    options["region"] = GetRegion()
 
-    if 'GRASS' in options['driver']:
+    if "GRASS" in options["driver"]:
         grass.debug("Using GRASS driver")
         from wms_drv import WMSDrv
+
         wms = WMSDrv()
-    elif 'GDAL' in options['driver']:
+    elif "GDAL" in options["driver"]:
         grass.debug("Using GDAL WMS driver")
         from wms_gdal_drv import WMSGdalDrv
+
         wms = WMSGdalDrv()
 
     temp_map = wms.GetMap(options, flags)
     shutil.move(temp_map, os.environ["GRASS_RENDER_FILE"])
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
