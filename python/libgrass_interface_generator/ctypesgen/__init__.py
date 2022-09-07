@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: us-ascii -*-
-# vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
-
 """
 Ctypesgencore is the module that contains the main body of ctypesgen - in fact,
 it contains everything but the command-line interface.
@@ -62,15 +58,6 @@ from . import processor
 from . import printer_python
 from . import version
 
-try:
-    from . import printer_json
-except ImportError:
-    pass
-
-__version__ = version.VERSION.partition("-")[-1]
-VERSION = __version__
-
-
 # Modules describing internal format
 from . import descriptions
 from . import ctypedescs
@@ -79,5 +66,13 @@ from . import expressions
 # Helper modules
 from . import messages
 from . import options
+
+try:
+    from . import printer_json
+except ImportError:
+    pass
+
+__version__ = version.VERSION.partition("-")[-1]
+VERSION = __version__
 
 printer = printer_python  # Default the printer to generating Python

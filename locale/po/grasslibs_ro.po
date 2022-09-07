@@ -1244,9 +1244,9 @@ msgid "error in datum table file, line %d"
 msgstr ""
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "Nu s-a gasit '%s'"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
 #, c-format
@@ -6258,14 +6258,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "Nu s-a putut crea tabelul <%s>"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "Nu s-a putut şterge nodul %d din indexul spaţial"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -9302,9 +9300,9 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr "Nu s-a putut citit fișierul categorie al rasterului <%s>"
+msgstr ""
 
 #: ../lib/raster/get_cellhd.c:78
 #, c-format
@@ -10172,5 +10170,5 @@ msgstr "Nume pentru harta vectorială de intrare"
 msgid "Category must be integer"
 msgstr "Categoria trebuie să fie de tip integer"
 
-#~ msgid "which is missing."
-#~ msgstr "care lipseşte"
+msgid "which is missing."
+msgstr "care lipseşte"

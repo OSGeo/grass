@@ -9,6 +9,8 @@ Classes:
  - properties::ChBShowRegion
  - properties::ChBAlignExtent
  - properties::ChBResolution
+ - properties::ChBProjection
+ - properties::RBShowInStatusbar
  - properties::MapDisplayPropertiesDialog
 
 (C) 2021 by the GRASS Development Team
@@ -47,6 +49,9 @@ class PropertyItem:
     def _setValue(self, value):
         self.widget.SetValue(value)
 
+    def GetValue(self):
+        return self.widget.GetValue()
+
     def GetWidget(self):
         """Returns underlying widget.
 
@@ -60,9 +65,9 @@ class PropertyItem:
     def _disconnect(self):
         self.mapWindowPropertyChanged().disconnect(self._setValue)
 
-    def _onToggleCheckBox(self, event):
+    def _onToggle(self, event):
         self._disconnect()
-        self.mapWindowProperty = self.widget.GetValue()
+        self.mapWindowProperty = self.GetValue()
         self._connect()
 
 
@@ -78,7 +83,7 @@ class ChBRender(PropertyItem):
         self.widget.SetValue(self.mapWindowProperty)
         self.widget.SetToolTip(wx.ToolTip(_("Enable/disable auto-rendering")))
 
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -119,7 +124,7 @@ class ChBAlignExtent(PropertyItem):
                 )
             )
         )
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -137,9 +142,9 @@ class ChBAlignExtent(PropertyItem):
 class ChBResolution(PropertyItem):
     """Checkbox to select used display resolution."""
 
-    def __init__(self, parent, giface, mapWindowProperties):
+    def __init__(self, parent, mapframe, mapWindowProperties):
         PropertyItem.__init__(self, mapWindowProperties)
-        self.giface = giface
+        self.mapFrame = mapframe
         self.name = "resolution"
         self.widget = wx.CheckBox(
             parent=parent,
@@ -157,7 +162,7 @@ class ChBResolution(PropertyItem):
                 )
             )
         )
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -171,22 +176,22 @@ class ChBResolution(PropertyItem):
     def mapWindowPropertyChanged(self):
         return self._properties.resolutionChanged
 
-    def _onToggleCheckBox(self, event):
+    def _onToggle(self, event):
         """Update display when toggle display mode"""
-        super()._onToggleCheckBox(event)
+        super()._onToggle(event)
 
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
-            self.giface.updateMap.emit()
+            self.mapFrame.GetWindow().UpdateMap()
 
 
 class ChBShowRegion(PropertyItem):
     """Checkbox to enable and disable showing of computational region."""
 
-    def __init__(self, parent, giface, mapWindowProperties):
+    def __init__(self, parent, mapframe, mapWindowProperties):
         PropertyItem.__init__(self, mapWindowProperties)
-        self.giface = giface
-        self.name = "region"
+        self.mapFrame = mapframe
+        self.name = "showRegion"
         self.widget = wx.CheckBox(
             parent=parent, id=wx.ID_ANY, label=_("Show computational extent")
         )
@@ -203,7 +208,7 @@ class ChBShowRegion(PropertyItem):
                 )
             )
         )
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -217,16 +222,107 @@ class ChBShowRegion(PropertyItem):
     def mapWindowPropertyChanged(self):
         return self._properties.showRegionChanged
 
-    def _onToggleCheckBox(self, event):
+    def _onToggle(self, event):
         """Shows/Hides extent (comp. region) in map canvas.
 
         Shows or hides according to checkbox value.
         """
-        super()._onToggleCheckBox(event)
+        super()._onToggle(event)
 
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
-            self.giface.updateMap.emit(render=False)
+            self.mapFrame.GetWindow().UpdateMap(render=False)
+
+
+class ChBProjection(PropertyItem):
+    """Checkbox to enable user defined projection"""
+
+    def __init__(self, parent, mapWindowProperties):
+        PropertyItem.__init__(self, mapWindowProperties)
+        self.name = "useDefinedProjection"
+        self.defaultLabel = _("Display coordinates in different CRS")
+        self.widget = wx.CheckBox(parent=parent, id=wx.ID_ANY, label=self.defaultLabel)
+        self.widget.SetValue(self.mapWindowProperty)
+        self.widget.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Reproject coordinates displayed "
+                    "in the statusbar. Coordinate reference system can be "
+                    "specified in GUI preferences dialog "
+                    "(tab 'Projection')"
+                )
+            )
+        )
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
+        self._connect()
+
+    @property
+    def mapWindowProperty(self):
+        return self._properties.useDefinedProjection
+
+    @mapWindowProperty.setter
+    def mapWindowProperty(self, value):
+        self._properties.useDefinedProjection = value
+
+    def mapWindowPropertyChanged(self):
+        return self._properties.useDefinedProjectionChanged
+
+    def _onToggle(self, event):
+        super()._onToggle(event)
+        epsg = self._properties.epsg
+        if epsg:
+            label = _("{label} (EPSG: {epsg})").format(
+                label=self.defaultLabel, epsg=epsg
+            )
+            self.widget.SetLabel(label)
+        else:
+            self.widget.SetLabel(self.defaultLabel)
+
+
+class RBShowInStatusbar(PropertyItem):
+    """Radiobox managing widgets in statusbar."""
+
+    def __init__(self, parent, mapWindowProperties, sbmanager):
+        PropertyItem.__init__(self, mapWindowProperties)
+        self.name = "showInStatusbar"
+        self.statusbarManager = sbmanager
+
+        choices = self.statusbarManager.GetItemLabels()
+        self.widget = wx.RadioBox(
+            parent=parent,
+            id=wx.ID_ANY,
+            label="Displayed content",
+            choices=choices,
+            majorDimension=1,
+            style=wx.RA_SPECIFY_COLS,
+        )
+        self._setValue(self.mapWindowProperty)
+        self._disableItems()
+
+        self.widget.Bind(wx.EVT_RADIOBOX, self._onToggle)
+        self._connect()
+
+    def _setValue(self, mode):
+        self.widget.SetSelection(mode)
+
+    def GetValue(self):
+        return self.widget.GetSelection()
+
+    def _disableItems(self):
+        """Disables a radiobox options"""
+        for item in self.statusbarManager.disabledItems.keys():
+            self.widget.EnableItem(n=item, enable=False)
+
+    @property
+    def mapWindowProperty(self):
+        return self._properties.sbItem
+
+    @mapWindowProperty.setter
+    def mapWindowProperty(self, value):
+        self._properties.sbItem = value
+
+    def mapWindowPropertyChanged(self):
+        return self._properties.sbItemChanged
 
 
 class MapDisplayPropertiesDialog(wx.Dialog):
@@ -235,10 +331,11 @@ class MapDisplayPropertiesDialog(wx.Dialog):
     def __init__(
         self,
         parent,
-        giface,
+        mapframe,
         properties,
+        sbmanager,
         title=_("Map Display Settings"),
-        size=(-1, 250),
+        size=(-1, 300),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
@@ -246,13 +343,15 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.parent = parent
         self.title = title
         self.size = size
-        self.giface = giface
+        self.mapframe = mapframe
         self.mapWindowProperties = properties
+        self.statusbarManager = sbmanager
 
         # notebook
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         # create notebook pages
         self._createDisplayPage(parent=self.notebook)
+        self._createStatusBarPage(parent=self.notebook)
 
         self.btnClose = Button(self, wx.ID_CLOSE)
         self.SetEscapeId(wx.ID_CLOSE)
@@ -304,7 +403,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         # Use computation resolution
         self.compResolution = ChBResolution(
-            panel, self.giface, self.mapWindowProperties
+            panel, self.mapframe, self.mapWindowProperties
         )
         sizer.Add(
             self.compResolution.GetWidget(),
@@ -315,7 +414,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         # Show computation extent
         self.showCompExtent = ChBShowRegion(
-            panel, self.giface, self.mapWindowProperties
+            panel, self.mapframe, self.mapWindowProperties
         )
         sizer.Add(
             self.showCompExtent.GetWidget(),
@@ -326,4 +425,34 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         panel.SetSizer(sizer)
 
-        return panel
+    def _createStatusBarPage(self, parent):
+        """Create notebook page for statusbar settings"""
+
+        panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        parent.AddPage(page=panel, text=_("Status bar"))
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        self.shownInStatusbar = RBShowInStatusbar(
+            parent=panel,
+            mapWindowProperties=self.mapWindowProperties,
+            sbmanager=self.statusbarManager,
+        )
+        sizer.Add(
+            self.shownInStatusbar.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=3,
+        )
+
+        # Display coordinates in different CRS
+        self.projection = ChBProjection(panel, self.mapWindowProperties)
+        sizer.Add(
+            self.projection.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=3,
+        )
+
+        panel.SetSizer(sizer)

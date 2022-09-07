@@ -24,19 +24,20 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass8bin = "grass"
+    executable = "grass"
     if sys.platform.startswith("win"):
         # MS Windows
-        grass8bin = r"C:\OSGeo4W\bin\grass.bat"
+        executable = r"C:\OSGeo4W\bin\grass.bat"
         # uncomment when using standalone WinGRASS installer
-        # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.0.0\grass.bat'
-        # this can be avoided if GRASS executable is added to PATH
+        # executable = r'C:\Program Files (x86)\GRASS GIS <version>\grass.bat'
+        # this can be skipped if GRASS executable is added to PATH
     elif sys.platform == "darwin":
         # Mac OS X
-        grass8bin = "/Applications/GRASS-8.0.app/Contents/Resources/bin/grass"
+        version = "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
+        executable = f"/Applications/GRASS-{version}.app/Contents/Resources/bin/grass"
 
     # query GRASS GIS itself for its Python package path
-    grass_cmd = [grass8bin, "--config", "python_path"]
+    grass_cmd = [executable, "--config", "python_path"]
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 
     # define GRASS-Python environment
@@ -44,10 +45,9 @@ Usage::
 
     # import (some) GRASS Python bindings
     import grass.script as gs
-    import grass.script.setup as gsetup
 
     # launch session
-    rcfile = gsetup.init(gisdb, location, mapset)
+    session = gs.setup.init(gisdb, location, mapset)
 
     # example calls
     gs.message("Current GRASS GIS 8 environment:")
@@ -62,10 +62,10 @@ Usage::
         print(vect)
 
     # clean up at the end
-    gsetup.finish()
+    session.finish()
 
 
-(C) 2010-2021 by the GRASS Development Team
+(C) 2010-2022 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -81,6 +81,7 @@ for details.
 # then this could even do locking
 
 from pathlib import Path
+import datetime
 import os
 import shutil
 import subprocess
@@ -271,27 +272,37 @@ def init(path, location=None, mapset=None, grass_path=None):
     ValueError is raised. Exceptions from the underlying function are propagated.
 
     To create a GRASS session a session file (aka gisrc file) is created.
-    Caller is responsible for deleting the file which is normally done
-    with the function :func:`finish`.
+    The session object returned by this function will take care of deleting it
+    as long as the object is used as a context manager or the *finish* method
+    of the object is called explicitly. Using methods of the session object is
+    preferred over calling the function :func:`finish`.
 
     Basic usage::
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
-        gs.setup.init(
+        session = gs.setup.init(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",
         )
         # ... use GRASS modules here
         # end the session
-        gs.setup.finish()
+        session.finish()
+
+    The returned object is a context manager, so the ``with`` statement can be used to
+    ensure that the session is finished (closed) at the end::
+
+        # ... setup sys.path before import
+        import grass.script as gs
+        with gs.setup.init("~/grassdata/nc_spm_08/user1")
+            # ... use GRASS modules here
 
     :param path: path to GRASS database
     :param location: location name
     :param mapset: mapset within given location (default: 'PERMANENT')
     :param grass_path: path to GRASS installation or executable
 
-    :returns: path to ``gisrc`` file (may change in future versions)
+    :returns: reference to a session handle object which is a context manager
     """
     grass_path = get_install_path(grass_path)
     if not grass_path:
@@ -332,31 +343,123 @@ def init(path, location=None, mapset=None, grass_path=None):
     os.environ["GISRC"] = write_gisrc(
         mapset_path.directory, mapset_path.location, mapset_path.mapset
     )
-    return os.environ["GISRC"]
+    return SessionHandle()
+
+
+class SessionHandle:
+    """Object used to manage GRASS sessions.
+
+    Do not create objects of this class directly. Use the *init* function
+    to get a session object.
+
+    Basic usage::
+
+        # ... setup sys.path before import as needed
+
+        import grass.script as gs
+
+        session = gs.setup.init("~/grassdata/nc_spm_08/user1")
+
+        # ... use GRASS modules here
+
+        # end the session
+        session.finish()
+
+    Context manager usage::
+
+        # ... setup sys.path before import as needed
+
+        import grass.script as gs
+
+        with gs.setup.init("~/grassdata/nc_spm_08/user1"):
+            # ... use GRASS modules here
+        # session ends automatically here
+    """
+
+    def __init__(self, active=True):
+        self._active = active
+        self._start_time = datetime.datetime.now(datetime.timezone.utc)
+
+    @property
+    def active(self):
+        """True if session is active (not finished)"""
+        return self._active
+
+    def __enter__(self):
+        """Enter the context manager context.
+
+        Notably, the session is activated using the *init* function.
+
+        :returns: reference to the object (self)
+        """
+        if not self.active:
+            raise ValueError(
+                "Attempt to use inactive (finished) session as a context manager"
+            )
+        return self
+
+    def __exit__(self, type, value, traceback):
+        """Exit the context manager context.
+
+        Finishes the existing session.
+        """
+        self.finish()
+
+    def finish(self):
+        """Finish the session.
+
+        If not used as a context manager, call explicitly to clean and close the mapset
+        and finish the session. No GRASS modules can be called afterwards.
+        """
+        if not self.active:
+            raise ValueError("Attempt to finish an already finished session")
+        self._active = False
+        finish(start_time=self._start_time)
 
 
 # clean-up functions when terminating a GRASS session
 # these fns can only be called within a valid GRASS session
-def clean_default_db():
-    # clean the default db if it is sqlite
-    from grass.script import core as gcore
-    from grass.script import db as gdb
 
-    conn = gdb.db_connection()
-    if conn and conn["driver"] == "sqlite":
-        # check if db exists
-        gisenv = gcore.gisenv()
-        database = conn["database"]
-        database = database.replace("$GISDBASE", gisenv["GISDBASE"])
-        database = database.replace("$LOCATION_NAME", gisenv["LOCATION_NAME"])
-        database = database.replace("$MAPSET", gisenv["MAPSET"])
-        if os.path.exists(database):
-            gcore.message(_("Cleaning up default sqlite database ..."))
-            gcore.start_command("db.execute", sql="VACUUM")
-            # give it some time to start
-            import time
 
-            time.sleep(0.1)
+def clean_default_db(*, modified_after=None):
+    """Clean (vacuum) the default db if it is SQLite
+
+    When *modified_after* is set, database is cleaned only when it was modified
+    since the *modified_after* time.
+    """
+    # Limiting usage of in other function by lazy-imports.
+    # pylint: disable=import-outside-toplevel
+    import grass.script as gs
+
+    conn = gs.db_connection()
+    if not conn or conn["driver"] != "sqlite":
+        return
+    # check if db exists
+    gis_env = gs.gisenv()
+    database = conn["database"]
+    database = database.replace("$GISDBASE", gis_env["GISDBASE"])
+    database = database.replace("$LOCATION_NAME", gis_env["LOCATION_NAME"])
+    database = database.replace("$MAPSET", gis_env["MAPSET"])
+    database = Path(database)
+    if not database.is_file():
+        return
+    file_stat = database.stat()
+    # Small size based on MEMORYMB (MiB) or its default.
+    small_db_size = int(gis_env.get("MEMORYMB", 300)) * (1 << 20)
+    if file_stat.st_size <= small_db_size:
+        return
+    if modified_after:
+        modified_time = datetime.datetime.fromtimestamp(
+            file_stat.st_mtime, tz=datetime.timezone.utc
+        )
+        if modified_after >= modified_time:
+            return
+    # Start the vacuum process, then show the message in parallel while
+    # the vacuum is running. Finally, wait for the vacuum process to finish.
+    # Error handling is the same as errors="ignore".
+    process = gs.start_command("db.execute", sql="VACUUM")
+    gs.verbose(_("Cleaning up default SQLite database..."))
+    process.wait()
 
 
 def call(cmd, **kwargs):
@@ -367,16 +470,17 @@ def call(cmd, **kwargs):
 
 
 def clean_temp():
-    from grass.script import core as gcore
+    """Clean mapset temporary directory"""
+    # Lazy-importing to reduce dependencies (this can be eventually removed).
+    # pylint: disable=import-outside-toplevel
+    import grass.script as gs
 
-    gcore.message(_("Cleaning up temporary files..."))
-    nul = open(os.devnull, "w")
+    gs.verbose(_("Cleaning up temporary files..."))
     gisbase = os.environ["GISBASE"]
-    call([os.path.join(gisbase, "etc", "clean_temp")], stdout=nul)
-    nul.close()
+    call([os.path.join(gisbase, "etc", "clean_temp")], stdout=subprocess.DEVNULL)
 
 
-def finish():
+def finish(*, start_time=None):
     """Terminate the GRASS session and clean up
 
     GRASS commands can no longer be used after this function has been
@@ -389,9 +493,12 @@ def finish():
 
     The function is not completely symmetrical with :func:`init` because it only
     closes the mapset, but doesn't undo the runtime environment setup.
-    """
 
-    clean_default_db()
+    When *start_time* is set, it might be used to determine cleaning procedures.
+    Currently, it is used to do SQLite database vacuum only when database was modified
+    since the session started.
+    """
+    clean_default_db(modified_after=start_time)
     clean_temp()
     # TODO: unlock the mapset?
     # unset the GISRC and delete the file

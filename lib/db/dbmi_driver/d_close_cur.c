@@ -18,11 +18,11 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Close cursor
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \brief Close cursor
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_close_cursor(void)
 {
     dbCursor *cursor;
@@ -33,8 +33,8 @@ int db_d_close_cursor(void)
     DB_RECV_TOKEN(&token);
     cursor = (dbCursor *) db_find_token(token);
     if (cursor == NULL) {
-	db_error("** invalid cursor **");
-	return DB_FAILED;
+        db_error("** invalid cursor **");
+        return DB_FAILED;
     }
 
     /* call the procedure */
@@ -44,12 +44,12 @@ int db_d_close_cursor(void)
     db_drop_token(token);
     db_free_cursor(cursor);
     db__drop_cursor_from_driver_state(cursor);
-    db_free(cursor); /* ?? */
+    db_free(cursor);            /* ?? */
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

@@ -1,10 +1,9 @@
-FROM mundialis/docker-pdal:2.1.0 as pdal
-FROM alpine:3.12 as common
+FROM alpine:3.15 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
-LABEL authors="Pietro Zambelli,Markus Neteler"
-LABEL maintainer="peter.zamb@gmail.com,neteler@osgeo.org"
+LABEL authors="Carmen Tawalika,Pietro Zambelli,Markus Neteler"
+LABEL maintainer="neteler@osgeo.org"
 
 # PACKAGES VERSIONS
 ARG PYTHON_VERSION=3
@@ -26,8 +25,10 @@ ENV PACKAGES="\
       geos \
       gnutls \
       jsoncpp \
+      laszip \
       libbz2 \
       libexecinfo \
+      libgeotiff \
       libjpeg-turbo \
       libpng \
       libunwind \
@@ -39,8 +40,9 @@ ENV PACKAGES="\
       py3-numpy \
       py3-pillow \
       py3-six \
+      pdal \
+      pdal-dev \
       postgresql \
-      proj-datumgrid \
       proj-util \
       sqlite \
       sqlite-libs \
@@ -71,13 +73,6 @@ RUN echo "Install main packages";\
     apk update; \
     apk add --no-cache $PACKAGES
 
-COPY --from=pdal /usr/bin/pdal* /usr/bin/
-COPY --from=pdal /usr/lib/libpdal* /usr/lib/
-COPY --from=pdal /usr/lib/pkgconfig/pdal.pc /usr/lib/pkgconfig/pdal.pc
-COPY --from=pdal /usr/include/pdal /usr/include/pdal
-COPY --from=pdal /usr/local/lib/liblaszip* /usr/local/lib/
-COPY --from=pdal /usr/local/include/laszip /usr/local/include/laszip
-
 
 FROM common as build
 
@@ -99,13 +94,12 @@ ENV GRASS_CONFIG="\
       --with-cairo --with-cairo-ldflags=-lfontconfig \
       --with-fftw \
       --with-postgres --with-postgres-includes=/usr/include/postgresql \
+      --with-openmp \
       --without-freetype \
-      --without-openmp \
       --without-opengl \
       --without-nls \
       --without-mysql \
       --without-odbc \
-      --without-openmp \
       "
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
@@ -137,6 +131,8 @@ ENV GRASS_BUILD_PACKAGES="\
       make \
       openjpeg-dev \
       openblas-dev \
+      pdal \
+      pdal-dev \
       postgresql-dev \
       proj-dev \
       python3-dev \
@@ -169,13 +165,13 @@ RUN echo "  => Configure and compile grass" && \
     ldconfig /etc/ld.so.conf.d
 
 # Reduce the image size - Remove unnecessary grass files
-RUN cp /usr/local/grass81/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass81/demolocation; \
-    rm -rf /usr/local/grass81/fonts; \
-    rm -rf /usr/local/grass81/gui; \
-    rm -rf /usr/local/grass81/share; \
-    mkdir -p /usr/local/grass81/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass81/gui/wxpython/xml/module_items.xml;
+RUN cp /usr/local/grass83/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass83/demolocation; \
+    rm -rf /usr/local/grass83/fonts; \
+    rm -rf /usr/local/grass83/gui; \
+    rm -rf /usr/local/grass83/share; \
+    mkdir -p /usr/local/grass83/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass83/gui/wxpython/xml/module_items.xml;
 
 
 FROM common as grass
@@ -190,7 +186,7 @@ COPY --from=build /usr/local/grass* /usr/local/grass/
 RUN pip3 install --upgrade pip six grass-session --ignore-installed six
 
 RUN ln -sf /usr/local/grass `grass --config path`
-RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+RUN grass --tmp-location XY --exec g.version -rge && \
     pdal --version && \
     python3 --version
 
@@ -203,14 +199,16 @@ RUN apk add make gcc
 COPY docker/testdata/simple.laz /tmp/simple.laz
 COPY docker/testdata/test_grass_session.py /scripts/test_grass_session.py
 ENV GRASSBIN=grass
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
 
+# Test grass-session
 # Not yet ready for GRASS GIS 8:
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
-RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
+RUN /usr/bin/python3 /scripts/test_grass_session.py
+# Test PDAL
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 # Test addon installation
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml
+RUN apk add py3-scikit-learn
+RUN grass --tmp-location XY --exec g.extension extension=r.learn.ml2
 
 
 FROM grass as final
@@ -220,9 +218,11 @@ FROM grass as final
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash"
+ENV PROJ_NETWORK="ON"
+
 
 # show installed version
-RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+RUN grass --tmp-location XY --exec g.version -rge && \
     pdal --version && \
     python3 --version
 

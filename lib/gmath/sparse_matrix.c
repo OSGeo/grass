@@ -33,16 +33,16 @@
  *
  * */
 int G_math_add_spvector(G_math_spvector ** Asp, G_math_spvector * spvector,
-			int row)
+                        int row)
 {
     if (Asp != NULL) {
-	G_debug(5,
-		"Add sparse vector %p to the sparse linear equation system at row %i\n",
-		spvector, row);
-	Asp[row] = spvector;
+        G_debug(5,
+                "Add sparse vector %p to the sparse linear equation system at row %i\n",
+                spvector, row);
+        Asp[row] = spvector;
     }
     else {
-	return -1;
+        return -1;
     }
 
     return 1;
@@ -98,13 +98,13 @@ G_math_spvector *G_math_alloc_spvector(int cols)
 void G_math_free_spvector(G_math_spvector * spvector)
 {
     if (spvector) {
-	if (spvector->values)
-	    G_free(spvector->values);
-	if (spvector->index)
-	    G_free(spvector->index);
-	G_free(spvector);
+        if (spvector->values)
+            G_free(spvector->values);
+        if (spvector->index)
+            G_free(spvector->index);
+        G_free(spvector);
 
-	spvector = NULL;
+        spvector = NULL;
     }
 
     return;
@@ -123,11 +123,11 @@ void G_math_free_spmatrix(G_math_spvector ** Asp, int rows)
     int i;
 
     if (Asp) {
-	for (i = 0; i < rows; i++)
-	    G_math_free_spvector(Asp[i]);
+        for (i = 0; i < rows; i++)
+            G_math_free_spvector(Asp[i]);
 
-	G_free(Asp);
-	Asp = NULL;
+        G_free(Asp);
+        Asp = NULL;
     }
 
     return;
@@ -148,18 +148,18 @@ void G_math_print_spmatrix(G_math_spvector ** Asp, int rows)
     int i, j, k, out;
 
     for (i = 0; i < rows; i++) {
-	for (j = 0; j < rows; j++) {
-	    out = 0;
-	    for (k = 0; k < Asp[i]->cols; k++) {
-		if (Asp[i]->index[k] == j) {
-		    fprintf(stdout, "%4.5f ", Asp[i]->values[k]);
-		    out = 1;
-		}
-	    }
-	    if (!out)
-		fprintf(stdout, "%4.5f ", 0.0);
-	}
-	fprintf(stdout, "\n");
+        for (j = 0; j < rows; j++) {
+            out = 0;
+            for (k = 0; k < Asp[i]->cols; k++) {
+                if (Asp[i]->index[k] == j) {
+                    fprintf(stdout, "%4.5f ", Asp[i]->values[k]);
+                    out = 1;
+                }
+            }
+            if (!out)
+                fprintf(stdout, "%4.5f ", 0.0);
+        }
+        fprintf(stdout, "\n");
     }
 
     return;
@@ -186,9 +186,9 @@ double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
 
 #pragma omp parallel for schedule (static) private(i, j)
     for (i = 0; i < rows; i++) {
-	for (j = 0; j < Asp[i]->cols; j++) {
-	    A[i][Asp[i]->index[j]] = Asp[i]->values[j];
-	}
+        for (j = 0; j < Asp[i]->cols; j++) {
+            A[i][Asp[i]->index[j]] = Asp[i]->values[j];
+        }
     }
     return A;
 }
@@ -205,7 +205,7 @@ double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
  0 1 2 5
 
  will be converted into the band matrix
- 
+
  5 2 1
  5 2 1
  5 2 0
@@ -218,7 +218,8 @@ double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
  * \return (double **) the resulting ymmetric band matrix [rows][bandwidth]
  *
  * */
-double **G_math_Asp_to_sband_matrix(G_math_spvector ** Asp, int rows, int bandwidth)
+double **G_math_Asp_to_sband_matrix(G_math_spvector ** Asp, int rows,
+                                    int bandwidth)
 {
     int i, j;
 
@@ -227,13 +228,14 @@ double **G_math_Asp_to_sband_matrix(G_math_spvector ** Asp, int rows, int bandwi
     A = G_alloc_matrix(rows, bandwidth);
 
     for (i = 0; i < rows; i++) {
-	for (j = 0; j < Asp[i]->cols; j++) {
-	   if(Asp[i]->index[j] == i) {
-	      A[i][0] = Asp[i]->values[j];
-	   } else if (Asp[i]->index[j] > i) {
-	      A[i][Asp[i]->index[j] - i] = Asp[i]->values[j];
-	   }
-	}
+        for (j = 0; j < Asp[i]->cols; j++) {
+            if (Asp[i]->index[j] == i) {
+                A[i][0] = Asp[i]->values[j];
+            }
+            else if (Asp[i]->index[j] > i) {
+                A[i][Asp[i]->index[j] - i] = Asp[i]->values[j];
+            }
+        }
     }
     return A;
 }
@@ -262,25 +264,25 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
 
 #pragma omp parallel for schedule (static) private(i, j, nonull, count)
     for (i = 0; i < rows; i++) {
-	nonull = 0;
-	/*Count the number of non zero entries */
-	for (j = 0; j < rows; j++) {
-	    if (A[i][j] > epsilon)
-		nonull++;
-	}
-	/*Allocate the sparse vector and insert values */
-	G_math_spvector *v = G_math_alloc_spvector(nonull);
+        nonull = 0;
+        /*Count the number of non zero entries */
+        for (j = 0; j < rows; j++) {
+            if (A[i][j] > epsilon)
+                nonull++;
+        }
+        /*Allocate the sparse vector and insert values */
+        G_math_spvector *v = G_math_alloc_spvector(nonull);
 
-	count = 0;
-	for (j = 0; j < rows; j++) {
-	    if (A[i][j] > epsilon) {
-		v->index[count] = j;
-		v->values[count] = A[i][j];
-		count++;
-	    }
-	}
-	/*Add vector to sparse matrix */
-	G_math_add_spvector(Asp, v, i);
+        count = 0;
+        for (j = 0; j < rows; j++) {
+            if (A[i][j] > epsilon) {
+                v->index[count] = j;
+                v->values[count] = A[i][j];
+                count++;
+            }
+        }
+        /*Add vector to sparse matrix */
+        G_math_add_spvector(Asp, v, i);
     }
     return Asp;
 }
@@ -301,7 +303,8 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
  * \return (G_math_spvector **)
  *
  * */
-G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)
+G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows,
+                                             int bandwidth, double epsilon)
 {
     int i, j;
 
@@ -312,33 +315,33 @@ G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows, int bandwidth
     Asp = G_math_alloc_spmatrix(rows);
 
     for (i = 0; i < rows; i++) {
-	nonull = 0;
-	/*Count the number of non zero entries */
-	for (j = 0; j < bandwidth; j++) {
-	    if (A[i][j] > epsilon)
-		nonull++;
-	}
+        nonull = 0;
+        /*Count the number of non zero entries */
+        for (j = 0; j < bandwidth; j++) {
+            if (A[i][j] > epsilon)
+                nonull++;
+        }
 
-	/*Allocate the sparse vector and insert values */
+        /*Allocate the sparse vector and insert values */
 
-	G_math_spvector *v = G_math_alloc_spvector(nonull);
+        G_math_spvector *v = G_math_alloc_spvector(nonull);
 
-	count = 0;
-	if (A[i][0] > epsilon) {
-	    v->index[count] = i;
-	    v->values[count] = A[i][0];
-	    count++;
-	}
+        count = 0;
+        if (A[i][0] > epsilon) {
+            v->index[count] = i;
+            v->values[count] = A[i][0];
+            count++;
+        }
 
-	for (j = 1; j < bandwidth; j++) {
-	    if (A[i][j] > epsilon && i + j < rows) {
-		v->index[count] = i + j;
-		v->values[count] = A[i][j];
-		count++;
-	    }
-	}
-	/*Add vector to sparse matrix */
-	G_math_add_spvector(Asp, v, i);
+        for (j = 1; j < bandwidth; j++) {
+            if (A[i][j] > epsilon && i + j < rows) {
+                v->index[count] = i + j;
+                v->values[count] = A[i][j];
+                count++;
+            }
+        }
+        /*Add vector to sparse matrix */
+        G_math_add_spvector(Asp, v, i);
     }
     return Asp;
 }
@@ -368,11 +371,11 @@ void G_math_Ax_sparse(G_math_spvector ** Asp, double *x, double *y, int rows)
 
 #pragma omp for schedule (static) private(i, j, tmp)
     for (i = 0; i < rows; i++) {
-	tmp = 0;
-	for (j = 0; j < Asp[i]->cols; j++) {
-	    tmp += Asp[i]->values[j] * x[Asp[i]->index[j]];
-	}
-	y[i] = tmp;
+        tmp = 0;
+        for (j = 0; j < Asp[i]->cols; j++) {
+            tmp += Asp[i]->values[j] * x[Asp[i]->index[j]];
+        }
+        y[i] = tmp;
     }
     return;
 }

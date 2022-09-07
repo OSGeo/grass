@@ -413,14 +413,33 @@ class Info(object):
             str_err = "Not able to open the map, C function return %d."
             raise OpenError(str_err % openvect)
 
+        # Load attribute table for selected layer.
         if len(self.dblinks) == 0:
             self.layer = layer
             self.table = None
             self.n_lines = 0
         else:
-            self.layer = self.dblinks.by_layer(layer).layer
-            self.table = self.dblinks.by_layer(layer).table()
+            layer_db_link = self.dblinks.by_layer(layer)
+            if not layer_db_link:
+                raise LookupError(
+                    "There appears to be no database link for layer %d of <%s>."
+                    % (layer, self.name)
+                )
+            if layer_db_link.layer != layer:
+                raise RuntimeError(
+                    "The databse link for layer %d of <%s> references layer %d."
+                    % (layer, self.name, layer_db_link.layer)
+                )
+            self.layer = layer
+            try:
+                self.table = layer_db_link.table()
+            except Exception as error:
+                raise RuntimeError(
+                    "Loading the attribute table for layer %d of <%s> failed."
+                    % (layer, self.name)
+                ) from error
             self.n_lines = self.table.n_rows()
+
         self.writeable = self.mapset == utils.getenv("MAPSET")
         # Initialize the finder
         self.find = {

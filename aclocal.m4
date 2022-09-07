@@ -488,7 +488,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_SUFFIX=".so"
 	    SHLIB_LD="${CC} -shared"
             LDFLAGS="-Wl,--export-dynamic"
-            LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
+            LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
             ;;
         *-pc-cygwin)
@@ -562,7 +562,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_SUFFIX=".so"
 	    LDFLAGS="-Wl,--export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
-	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
+	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
 	    # TODO: add optional pthread support with any combination of: 
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
@@ -576,7 +576,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_LD_LIBS="${LIBS}"
 	    LDFLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
 	    SHLIB_LD_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
-	    LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -L${LIB_RUNTIME_DIR}'
+	    LD_SEARCH_FLAGS='-Wl,-rpath,${INST_DIR}/lib -L${LIB_RUNTIME_DIR}'
 	    # some older NetBSD versions do not handle version numbers with dots.
 	    #STLIB_SUFFIX='${GRASS_TRIM_DOTS}.a'
 	    #SHLIB_SUFFIX='${GRASS_TRIM_DOTS}.so'

@@ -38,7 +38,8 @@ static void adjust_lat(double *);
 static void adjust_lon(double *);
 #endif /* unused */
 
-static struct state {
+static struct state
+{
     double TAN_A, TAN1, TAN2, L;
     int parallel;
 } state;
@@ -58,20 +59,20 @@ static struct state *st = &state;
  */
 
 int G_begin_rhumbline_equation(double lon1, double lat1, double lon2,
-			       double lat2)
+                               double lat2)
 {
     adjust_lat(&lat1);
     adjust_lat(&lat2);
 
     if (lon1 == lon2) {
-	st->parallel = 1;		/* a lie */
-	st->L = lat1;
-	return 0;
+        st->parallel = 1;       /* a lie */
+        st->L = lat1;
+        return 0;
     }
     if (lat1 == lat2) {
-	st->parallel = 1;
-	st->L = lat1;
-	return 1;
+        st->parallel = 1;
+        st->L = lat1;
+        return 1;
     }
     st->parallel = 0;
     lon1 = Radians(lon1);
@@ -100,11 +101,12 @@ int G_begin_rhumbline_equation(double lon1, double lat1, double lon2,
 double G_rhumbline_lat_from_lon(double lon)
 {
     if (st->parallel)
-	return st->L;
+        return st->L;
 
     lon = Radians(lon);
 
-    return Degrees(2 * atan(exp((lon - st->L) / st->TAN_A) * st->TAN1) - M_PI_2);
+    return Degrees(2 * atan(exp((lon - st->L) / st->TAN_A) * st->TAN1) -
+                   M_PI_2);
 }
 
 
@@ -112,9 +114,9 @@ double G_rhumbline_lat_from_lon(double lon)
 static void adjust_lon(double *lon)
 {
     while (*lon > 180.0)
-	*lon -= 360.0;
+        *lon -= 360.0;
     while (*lon < -180.0)
-	*lon += 360.0;
+        *lon += 360.0;
 }
 #endif /* unused */
 
@@ -122,7 +124,7 @@ static void adjust_lon(double *lon)
 static void adjust_lat(double *lat)
 {
     if (*lat > 90.0)
-	*lat = 90.0;
+        *lat = 90.0;
     if (*lat < -90.0)
-	*lat = -90.0;
+        *lat = -90.0;
 }

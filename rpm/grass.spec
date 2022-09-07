@@ -1,8 +1,8 @@
-%global shortver 80
+%global shortver 82
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	8.0.0
+Version:	8.2.0
 Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
@@ -363,8 +363,11 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Sat Jan 15 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
-- New upstream version GRASS GIS 8.0.0RC2
+* Fri Jan 28 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
+- New upstream version GRASS GIS 8.0.0
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.6-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
 * Thu Nov 11 2021 Sandro Mani <manisandro@gmail.com> - 7.8.6-3
 - Rebuild (gdal)

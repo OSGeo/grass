@@ -36,7 +36,7 @@ header1_tmpl = string.Template(
     r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title>${title} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
 """
@@ -191,6 +191,7 @@ overview_tmpl = string.Template(
        <ul>
         <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS GIS Python library documentation</a></li>
         <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/grass.jupyter.html">GRASS GIS in Jupyter Notebooks</a></li>
        </ul>
       </td>
     </tr>

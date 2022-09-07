@@ -11494,9 +11494,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Výběr"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 #, fuzzy
@@ -14358,9 +14357,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "záře"
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -20085,9 +20083,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "databáze"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -24492,9 +24489,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "Vypiš informace o atributech"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -30244,9 +30240,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Nelze otevřít soubor s historií pro vektorovou mapu <%s>"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35583,9 +35579,9 @@ msgid "End > start for point cat [%d]"
 msgstr "Konec > start pro kategorie bodů [%d]"
 
 #: ../vector/v.lrs/v.lrs.create/main.c:734
-#, fuzzy, c-format
+#, c-format
 msgid "Start of 1. MP >= end of 2. MP for points' cats [%d], [%d]"
-msgstr "Počátek 1. MP >= konec 2. MP pro body kategorie %[d],[%d] "
+msgstr ""
 
 #: ../vector/v.lrs/v.lrs.create/main.c:751
 #, c-format
@@ -35700,9 +35696,8 @@ msgid "Neighborhood analysis tool for vector point maps."
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:134
-#, fuzzy
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Hodnota každé buňky v novém rastru bude funkcí hodnot kategorii sousedních buněk a bude uložena jako hodnota ve výstupní rastrové mapě."
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:160
 msgid "Method for aggregate statistics (count if non given)"
@@ -35726,9 +35721,8 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:284
-#, fuzzy
 msgid "All points fall outside of the current computational region"
-msgstr "Počáteční bod je mimo současný region"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:285
 msgid "Input vector and computational region do not overlap"
@@ -36820,9 +36814,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr "Přiložit soubory k existujícímu souboru (musí být aktivována volba přepsání)"
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Postrádám tabulku"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -36830,9 +36824,9 @@ msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
 #: ../vector/v.patch/main.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
-msgstr "Počet sloupců se liší."
+msgstr ""
 
 #: ../vector/v.patch/main.c:289
 #, c-format
@@ -38037,9 +38031,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Počet řádků"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42438,9 +42432,8 @@ msgid "Cleaning up temporary files..."
 msgstr ""
 
 #: ../general/g.mapset/main.c:208
-#, fuzzy
 msgid "Mapset switched."
-msgstr "Mapset: %s"
+msgstr ""
 
 #: ../general/g.mapset/main.c:211
 msgid "Mapset switched. Your shell continues to use the history for the old mapset"
@@ -42870,9 +42863,9 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "Skupina <%s> ještě neexistuje. Vytvářím ji..."
+msgstr ""
 
 #: ../general/g.copy/main.c:74
 #, c-format
@@ -42880,14 +42873,14 @@ msgid "%s=%s,%s: files are the same, no copy required. Skipping."
 msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "Rastrová mapa <%s> již existuje a bude přepsána."
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> je neplatné jméno souboru"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -54531,9 +54524,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Měřítkový faktor pro výškový model"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54623,9 +54615,8 @@ msgstr ""
 " (pravidla %f do %f, data %f do %f)"
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Nelze otevřít prolog <%s>"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -56344,30 +56335,26 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Souřadnice dotazu"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
-#, fuzzy
 msgid "Profile"
-msgstr "profil"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "Název výstupního souboru (pro standardní výstup použijte output=-)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Výstupní formát"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed parsing <%s>"
-msgstr "Exportuji <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:302
 #, c-format
@@ -56375,14 +56362,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "Koncový bod je mimo aktuální region"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "Nelze otevřít výstupní soubor <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -56422,9 +56408,9 @@ msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
 
 #: ../raster/r.geomorphon/pattern.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "Internal error in %s()"
-msgstr "Interní chba funkce %s()"
+msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:92 ../raster/r.proj/bordwalk.c:139
 #, c-format
@@ -57877,9 +57863,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "%s mapa <%s> nebyla nalezena"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57895,14 +57880,12 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr "Nelze otevřít databázipro referenční tabulku"
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "Rastrová mapa <%s> nebyla v aktuálním mapsetu nalezena"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "Požadovaný parametr <%s> nebyl zadán"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
@@ -58741,9 +58724,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Nelze nastavit geo transform"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -60689,17 +60671,17 @@ msgstr "Chyba v pj_do_transform"
 msgid "Error in pj_do_proj6"
 msgstr "Chyba v pj_do_proj6"
 
-#~ msgid "Key columns differ"
-#~ msgstr "Klíčové sloupce jsou různé."
+msgid "Key columns differ"
+msgstr "Klíčové sloupce jsou různé."
 
-#~ msgid "Column types differ"
-#~ msgstr "Typy sloupců se liší."
+msgid "Column types differ"
+msgstr "Typy sloupců se liší."
 
-#~ msgid "Missing table"
-#~ msgstr "Postrádám tabulku"
+msgid "Missing table"
+msgstr "Postrádám tabulku"
 
-#~ msgid "Number of columns differ"
-#~ msgstr "Počet sloupců se liší."
+msgid "Number of columns differ"
+msgstr "Počet sloupců se liší."
 
-#~ msgid "Start of 1. MP >= end of 2. MP for points' cats %[d], [%d]"
-#~ msgstr "Počátek 1. MP >= konec 2. MP pro body kategorie %[d],[%d] "
+msgid "Start of 1. MP >= end of 2. MP for points' cats %[d], [%d]"
+msgstr "Počátek 1. MP >= konec 2. MP pro body kategorie %[d],[%d] "

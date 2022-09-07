@@ -1,16 +1,19 @@
-# -*- coding: us-ascii -*-
-# vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
 """
 Main loop for ctypesgen.
 """
 
-import optparse, sys
+import optparse
+import sys
 
-from . import options as core_options
-from . import parser as core_parser
-from . import printer_python, printer_json, processor
-from . import messages as msgs
-from . import version
+from ctypesgen import (
+    messages as msgs,
+    options as core_options,
+    parser as core_parser,
+    printer_python,
+    printer_json,
+    processor,
+    version,
+)
 
 
 def find_names_in_modules(modules):
@@ -18,7 +21,7 @@ def find_names_in_modules(modules):
     for module in modules:
         try:
             mod = __import__(module)
-        except:
+        except Exception:
             pass
         else:
             names.update(dir(mod))
@@ -131,6 +134,16 @@ def main(givenargs=None):
         default=[],
         help="Add LIBDIR to the run-time library search path.",
     )
+    op.add_option(
+        "",
+        "--no-embed-preamble",
+        action="store_false",
+        dest="embed_preamble",
+        default=True,
+        help="Do not embed preamble and loader in output file. "
+        "Defining --output as a file and --output-language to "
+        "Python is a prerequisite.",
+    )
 
     # Parser options
     op.add_option(
@@ -140,6 +153,17 @@ def main(givenargs=None):
         default="gcc -E",
         help="The command to invoke the c preprocessor, including any "
         "necessary options (default: gcc -E)",
+    )
+    op.add_option(
+        "",
+        "--allow-gnu-c",
+        action="store_true",
+        dest="allow_gnu_c",
+        default=False,
+        help="Specify whether to undefine the '__GNUC__' macro, "
+        "while invoking the C preprocessor.\n"
+        "(default: False. i.e. ctypesgen adds an implicit undefine using '-U __GNUC__'.)\n"
+        "Specify this flag to avoid ctypesgen undefining '__GNUC__' as shown above.",
     )
     op.add_option(
         "-D",

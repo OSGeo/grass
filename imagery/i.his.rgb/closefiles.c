@@ -8,7 +8,7 @@
    to grey scale.  */
 
 int closefiles(char *r_name, char *g_name, char *b_name,
-	       int fd_output[3], CELL * rowbuf[3])
+               int fd_output[3], CELL * rowbuf[3])
 {
     int i;
     struct Colors colors;
@@ -18,8 +18,8 @@ int closefiles(char *r_name, char *g_name, char *b_name,
     const char *mapset;
 
     for (i = 0; i < 3; i++) {
-	Rast_close(fd_output[i]);
-	G_free(rowbuf[i]);
+        Rast_close(fd_output[i]);
+        G_free(rowbuf[i]);
     }
 
     mapset = G_mapset();

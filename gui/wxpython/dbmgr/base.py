@@ -3725,29 +3725,34 @@ class LayerBook(wx.Notebook):
             table=table,
             key=key,
             layer=layer,
+            getErrorMsg=True,
         )
 
-        # insert records into table if required
-        if self.addLayerWidgets["addCat"][0].IsChecked():
-            RunCommand(
-                "v.to.db",
-                parent=self,
-                quiet=True,
-                map=self.mapDBInfo.map,
-                layer=layer,
-                qlayer=layer,
-                option="cat",
-                columns=key,
-                overwrite=True,
-            )
-
-        if ret == 0:
+        if ret[0] == 0 and not ret[1]:
+            # insert records into table if required
+            if self.addLayerWidgets["addCat"][0].IsChecked():
+                RunCommand(
+                    "v.to.db",
+                    parent=self,
+                    quiet=True,
+                    map=self.mapDBInfo.map,
+                    layer=layer,
+                    qlayer=layer,
+                    option="cat",
+                    columns=key,
+                    overwrite=True,
+                )
             # update dialog (only for new layer)
             self.parentDialog.parentDbMgrBase.UpdateDialog(layer=layer)
             # update db info
             self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
             # increase layer number
             layerWin.SetValue(layer + 1)
+        elif ret[1]:
+            GWarning(
+                parent=self,
+                message=ret[1],
+            )
 
         if len(self.mapDBInfo.layers.keys()) == 1:
             # first layer add --- enable previously disabled widgets

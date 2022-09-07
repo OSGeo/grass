@@ -1,28 +1,21 @@
-#!/usr/bin/env python
+import os
+import sys
+import json
 
-import os, sys, time, json
-from ctypesgen.descriptions import *
-from ctypesgen.ctypedescs import *
-from ctypesgen.messages import *
-
-import ctypesgen.libraryloader  # So we can get the path to it
-from . import test  # So we can find the path to local files in the printer package
+from ctypesgen.ctypedescs import CtypesBitfield
+from ctypesgen.messages import status_message
 
 
-def path_to_local_file(name, known_local_module=test):
-    basedir = os.path.dirname(known_local_module.__file__)
-    return os.path.join(basedir, name)
-
-
-# From http://stackoverflow.com/questions/1036409/recursively-convert-python-object-graph-to-dictionary
+# From:
+# http://stackoverflow.com/questions/1036409/recursively-convert-python-object-graph-to-dictionary
 def todict(obj, classkey="Klass"):
     if isinstance(obj, dict):
         for k in obj.keys():
             obj[k] = todict(obj[k], classkey)
         return obj
     elif isinstance(obj, str) or isinstance(obj, bytes):
-        # must handle strings before __iter__ test, since they now have __iter__
-        # in Python3
+        # must handle strings before __iter__ test, since they now have
+        # __iter__ in Python3
         return obj
     elif hasattr(obj, "__iter__"):
         return [todict(v, classkey) for v in obj]

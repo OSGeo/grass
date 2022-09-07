@@ -258,6 +258,15 @@ class PsMapFrame(wx.Frame):
         self.book.SetSelection(page_index)
         self.currentPage = page_index
 
+    def _getGhostscriptProgramName(self):
+        """Get Ghostscript program name
+
+        :return: Ghostscript program name
+        """
+        import platform
+
+        return "gswin64c" if "64" in platform.architecture()[0] else "gswin32c"
+
     def InstructionFile(self):
         """Creates mapping instructions"""
 
@@ -469,36 +478,36 @@ class PsMapFrame(wx.Frame):
 
                     im_array = np.array(im)
                     im = PILImage.fromarray(np.rot90(im_array, 3))
-
-                # hack for Windows, change method for loading EPS
-                if sys.platform == "win32":
-                    import types
-
-                    im.load = types.MethodType(loadPSForWindows, im)
                 im.save(self.imgName, format="PNG")
-            except (IOError, OSError) as e:
+            except (IOError, OSError):
                 del busy
+                program = self._getGhostscriptProgramName()
                 dlg = HyperlinkDialog(
                     self,
                     title=_("Preview not available"),
                     message=_(
                         "Preview is not available probably because Ghostscript is not installed or not on PATH."
                     ),
-                    hyperlink="http://trac.osgeo.org/grass/wiki/CompileOnWindows#Ghostscript",
-                    hyperlinkLabel=_("Please follow instructions on GRASS Trac Wiki."),
+                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                    hyperlinkLabel=_(
+                        "You can donwload {program} {arch} version here."
+                    ).format(
+                        program=program,
+                        arch="64bit" if "64" in program else "32bit",
+                    ),
                 )
                 dlg.ShowModal()
                 dlg.Destroy()
                 return
 
+            self.book.SetSelection(1)
+            self.currentPage = 1
             rect = self.previewCanvas.ImageRect()
             self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
             self.previewCanvas.DrawImage(rect=rect)
 
             del busy
             self.SetStatusText(_("Preview generated"), 0)
-            self.book.SetSelection(1)
-            self.currentPage = 1
 
         grass.try_remove(event.userData["instrFile"])
         if event.userData["temp"]:
@@ -2472,11 +2481,6 @@ class PsMapBufferedWindow(wx.Window):
     def DrawBitmap(self, pdc, filePath, rotation, bbox):
         """Draw bitmap using PIL"""
         pImg = PILImage.open(filePath)
-        if sys.platform == "win32" and "eps" in os.path.splitext(filePath)[1].lower():
-            import types
-
-            pImg.load = types.MethodType(loadPSForWindows, pImg)
-
         if rotation:
             # get rid of black background
             pImg = pImg.convert("RGBA")
