@@ -58,7 +58,7 @@ getAvailableMemory() {
 }
 
 void 
-MEMORY_LOG(std::string str) {
+MEMORY_LOG(const std::string &str) {
   printf("%s", str.c_str());
   fflush(stdout);
 }

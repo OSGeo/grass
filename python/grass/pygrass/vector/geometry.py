@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Jul 18 10:46:25 2012
 
 @author: pietro
-
 """
 import ctypes
 import re
@@ -1348,7 +1346,6 @@ class Node(object):
 
 
 class Boundary(Line):
-    """"""
 
     # geometry type
     gtype = libvect.GV_BOUNDARY
@@ -1761,7 +1758,7 @@ class Area(Geo):
         )
         return (
             Line(c_points=p_bound.contents),
-            self.centroid,
+            self.centroid(),
             [Line(c_points=pp_isle[i].contents) for i in range(n_isles.contents.value)],
         )
 

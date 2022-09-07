@@ -4,7 +4,7 @@
 
 <em>g.extension</em> downloads and installs, removes or updates
 extensions (addons) from the official
-<a href="https://grass.osgeo.org/grass7/manuals/addons/">GRASS GIS Addons repository</a>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS Addons repository</a>
 or from user-specified source code repositories into the local GRASS GIS
 installation.
 <p>
@@ -30,15 +30,14 @@ To bulk-update all locally installed GRASS GIS extensions,
 <em><a href="g.extension.all.html">g.extension.all</a></em> module
 is available.
 
-
 <h3>Where the extensions are installed</h3>
 
 GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
 the user's home directory. 
-On GNU/Linux it is <tt>$HOME/.grass7/addons</tt>,
-on MS-Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
+On GNU/Linux it is <tt>$HOME/.grass8/addons</tt>,
+on MS-Windows it is <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.
 The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
 environmental variable.
 
@@ -55,7 +54,6 @@ rather than the default directory defined as per  <tt>GRASS_ADDON_BASE</tt>
 The place where the extensions are installed can be customized by
 the option <b>prefix</b>. Ensuring that these extensions will be accessible
 in GRASS GIS is in this case in the responsibility of the user.
-
 
 <h3>Source code sources and repositories</h3>
 
@@ -113,7 +111,6 @@ should be the same as the one of the official repository.
 Non-official sources are supported on all operating systems except for
 MS-Windows.
 
-
 <h3>Compilation and installation</h3>
 
 On MS-Windows systems, where compilation tools are typically not readily
@@ -126,7 +123,6 @@ This applies for both C and Python modules
 as well as any other extensions. The reason is that more things such
 as manual page are compiled, not only the source code (which is really
 necessary to compile just in case of C).
-
 
 <h2>EXAMPLES</h2>
 
@@ -229,7 +225,6 @@ one can install it using:
 g.extension r.example url=/local/directory/r.example/
 </pre></div>
 
-
 <h2>KNOWN ISSUES</h2>
 
 Toolboxes in the official repository cannot be downloaded.
@@ -259,7 +254,7 @@ with the version number) must be installed.
 </em>
 
 <p>
-<a href="https://grass.osgeo.org/grass7/manuals/addons/">GRASS GIS 7 Addons Manual pages</a>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS 8 Addons Manual pages</a>
 <br>
 <a href="https://grasswiki.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
 
@@ -268,8 +263,3 @@ with the version number) must be installed.
 Markus Neteler (original shell script)<br>
 Martin Landa, Czech Technical University in Prague, Czech Republic (Python rewrite)<br>
 Vaclav Petras, <a href="http://gis.ncsu.edu/osgeorel/">NCSU OSGeoREL</a> (support for general sources, partial refactoring)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

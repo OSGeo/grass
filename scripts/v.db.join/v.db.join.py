@@ -6,7 +6,7 @@
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Join a table to a map table
-# COPYRIGHT:    (C) 2007-2009 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2021 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -78,6 +78,12 @@ def main():
     except CalledModuleError:
         sys.exit(1)
 
+    # Include mapset into the name, so we avoid multiple messages about
+    # found in more mapsets. The following generates an error message, while the code
+    # above does not. However, the above checks that the map exists, so we don't
+    # check it here.
+    map = grass.find_file(map, element="vector")["fullname"]
+
     maptable = f["table"]
     database = f["database"]
     driver = f["driver"]
@@ -119,6 +125,10 @@ def main():
                 grass.warning(_("Column <%s> not found in table <%s>") % (scol, otable))
 
     all_cols_tt = grass.vector_columns(map, int(layer)).keys()
+    # This is used for testing presence (and potential name conflict) with
+    # the newly added columns, but the test needs to case-insensitive since it
+    # is SQL, so we lowercase the names here and in the test.
+    all_cols_tt = [name.lower() for name in all_cols_tt]
 
     select = "SELECT $colname FROM $otable WHERE $otable.$ocolumn=$table.$column"
     template = string.Template("UPDATE $table SET $colname=(%s);" % select)
@@ -147,7 +157,7 @@ def main():
         colspec = "%s %s" % (colname, coltype)
 
         # add only the new column to the table
-        if colname not in all_cols_tt:
+        if colname.lower() not in all_cols_tt:
             try:
                 grass.run_command(
                     "v.db.addcolumn", map=map, columns=colspec, layer=layer

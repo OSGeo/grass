@@ -43,6 +43,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     try:
@@ -53,9 +54,9 @@ def main():
         # user in a nice way
         gscript.fatal(str(e))
 
-    datasets = options['inputs'].strip().split(',')
+    datasets = options["inputs"].strip().split(",")
     datasets = [data for data in datasets if data]
-    view3d = flags['3']
+    view3d = flags["3"]
 
     app = wx.App()
     frame = TimelineFrame(
@@ -68,5 +69,5 @@ def main():
     app.MainLoop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -38,25 +38,25 @@ int G_check_overwrite(int argc, char **argv)
 
     overwrite = 0;
     if ((overstr = G_getenv_nofatal("OVERWRITE"))) {
-	overwrite = atoi(overstr);
+        overwrite = atoi(overstr);
     }
 
     /* check if inherited GRASS_OVERWRITE is 1 */
     if (!overwrite && (overstr = getenv("GRASS_OVERWRITE"))) {
-	overwrite = atoi(overstr);
+        overwrite = atoi(overstr);
     }
 
     /* check for --o or --overwrite option */
     if (!overwrite) {
-	int i;
+        int i;
 
-	for (i = 0; i < argc; i++) {
-	    if (strcmp(argv[i], "--o") == 0 ||
-		strcmp(argv[i], "--overwrite") == 0) {
-		overwrite = 1;
-		break;
-	    }
-	}
+        for (i = 0; i < argc; i++) {
+            if (strcmp(argv[i], "--o") == 0 ||
+                strcmp(argv[i], "--overwrite") == 0) {
+                overwrite = 1;
+                break;
+            }
+        }
     }
 
     G_setenv_nogisrc("OVERWRITE", "1");

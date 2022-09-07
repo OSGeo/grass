@@ -71,9 +71,9 @@ long long get_viewshed_memory_usage(GridHeader * hd);
 
  */
 MemoryVisibilityGrid *viewshed_in_memory(char *inputfname,
-					 GridHeader * hd,
-					 Viewpoint * vp,
-					 ViewOptions viewOptions);
+                                         GridHeader * hd,
+                                         Viewpoint * vp,
+                                         ViewOptions viewOptions);
 
 
 
@@ -91,13 +91,13 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname,
 
  */
 IOVisibilityGrid *viewshed_external(char *inputfname,
-				    GridHeader * hd,
-				    Viewpoint * vp, ViewOptions viewOptions);
+                                    GridHeader * hd,
+                                    Viewpoint * vp, ViewOptions viewOptions);
 
 
 
 void print_viewshed_timings(Rtimer initEventTime, Rtimer sortEventTime,
-			    Rtimer sweepTime);
+                            Rtimer sweepTime);
 
 
 

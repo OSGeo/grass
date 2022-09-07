@@ -11,9 +11,9 @@ void c_stddev(DCELL * result, DCELL * values, int n, const void *closure)
     c_var(&var, values, n, closure);
 
     if (Rast_is_d_null_value(&var))
-	Rast_set_d_null_value(result, 1);
+        Rast_set_d_null_value(result, 1);
     else
-	*result = sqrt(var);
+        *result = sqrt(var);
 }
 
 void w_stddev(DCELL * result, DCELL(*values)[2], int n, const void *closure)
@@ -23,7 +23,7 @@ void w_stddev(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     w_var(&var, values, n, closure);
 
     if (Rast_is_d_null_value(&var))
-	Rast_set_d_null_value(result, 1);
+        Rast_set_d_null_value(result, 1);
     else
-	*result = sqrt(var);
+        *result = sqrt(var);
 }

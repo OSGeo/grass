@@ -17,6 +17,7 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
+import grass.grassdb.config as cfg
 
 from grass.grassdb.checks import is_location_valid
 
@@ -141,18 +142,25 @@ def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
     return False
 
 
-def ensure_demolocation():
-    """Ensure that demolocation exists
+def ensure_default_data_hierarchy():
+    """Ensure that default gisdbase, location and mapset exist.
+    Creates database directory based on the default path determined
+    according to OS if needed. Creates location if needed.
 
-    Creates both database directory and location if needed.
+    Returns the db, loc, mapset, mapset_path"""
 
-    Returns the db, location name, and preferred mapset of the demolocation.
-    """
-    grassdb = get_possible_database_path()
-    # If nothing found, try to create GRASS directory and copy startup loc
-    if grassdb is None:
-        grassdb = create_database_directory()
-    location = "world_latlong_wgs84"
-    if not is_location_valid(grassdb, location):
-        create_startup_location_in_grassdb(grassdb, location)
-    return (grassdb, location, "PERMANENT")
+    gisdbase = get_possible_database_path()
+    location = cfg.default_location
+    mapset = cfg.permanent_mapset
+
+    # If nothing found, try to create GRASS directory
+    if not gisdbase:
+        gisdbase = create_database_directory()
+
+    if not is_location_valid(gisdbase, location):
+        # If not valid, copy startup loc
+        create_startup_location_in_grassdb(gisdbase, location)
+
+    mapset_path = os.path.join(gisdbase, location, mapset)
+
+    return gisdbase, location, mapset, mapset_path

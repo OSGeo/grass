@@ -23,80 +23,77 @@ int voronoi(struct Site *(*nextsite) (void))
 
     newsite = (*nextsite) ();
     while (1) {
-	if (!PQempty())
-	    newintstar = PQ_min();
+        if (!PQempty())
+            newintstar = PQ_min();
 
-	if (newsite != (struct Site *)NULL && 
-	    (PQempty() || newsite->coord.y < newintstar.y || 
-	    (newsite->coord.y == newintstar.y && 
-	    newsite->coord.x < newintstar.x))) {	/* new site is smallest */
+        if (newsite != (struct Site *)NULL && (PQempty() || newsite->coord.y < newintstar.y || (newsite->coord.y == newintstar.y && newsite->coord.x < newintstar.x))) {        /* new site is smallest */
 
-	    G_percent(counter++, nsites, 2);
+            G_percent(counter++, nsites, 2);
 
-	    lbnd = ELleftbnd(&(newsite->coord));
-	    rbnd = ELright(lbnd);
-	    bot = rightreg(lbnd);
-	    e = bisect(bot, newsite);
-	    bisector = HEcreate(e, le);
-	    ELinsert(lbnd, bisector);
-	    if ((p = intersect(lbnd, bisector)) != (struct Site *)NULL) {
-		PQdelete(lbnd);
-		PQinsert(lbnd, p, dist(p, newsite));
-	    }
-	    lbnd = bisector;
-	    bisector = HEcreate(e, re);
-	    ELinsert(lbnd, bisector);
-	    if ((p = intersect(bisector, rbnd)) != (struct Site *)NULL) {
-		PQinsert(bisector, p, dist(p, newsite));
-	    }
-	    /* get next site, but ensure that it doesn't have the same
-	       coordinates as the previous. If so, step over to the following
-	       site. Andrea Aime 4/7/2001 */
-	    do
-		temp = (*nextsite) ();
-	    while (temp != (struct Site *)NULL &&
-		   temp->coord.x == newsite->coord.x &&
-		   temp->coord.y == newsite->coord.y);
-	    newsite = temp;
-	}
-	else if (!PQempty()) {
-	    /* intersection is smallest */
-	    lbnd = PQextractmin();
-	    llbnd = ELleft(lbnd);
-	    rbnd = ELright(lbnd);
-	    rrbnd = ELright(rbnd);
-	    bot = leftreg(lbnd);
-	    top = rightreg(rbnd);
+            lbnd = ELleftbnd(&(newsite->coord));
+            rbnd = ELright(lbnd);
+            bot = rightreg(lbnd);
+            e = bisect(bot, newsite);
+            bisector = HEcreate(e, le);
+            ELinsert(lbnd, bisector);
+            if ((p = intersect(lbnd, bisector)) != (struct Site *)NULL) {
+                PQdelete(lbnd);
+                PQinsert(lbnd, p, dist(p, newsite));
+            }
+            lbnd = bisector;
+            bisector = HEcreate(e, re);
+            ELinsert(lbnd, bisector);
+            if ((p = intersect(bisector, rbnd)) != (struct Site *)NULL) {
+                PQinsert(bisector, p, dist(p, newsite));
+            }
+            /* get next site, but ensure that it doesn't have the same
+               coordinates as the previous. If so, step over to the following
+               site. Andrea Aime 4/7/2001 */
+            do
+                temp = (*nextsite) ();
+            while (temp != (struct Site *)NULL &&
+                   temp->coord.x == newsite->coord.x &&
+                   temp->coord.y == newsite->coord.y);
+            newsite = temp;
+        }
+        else if (!PQempty()) {
+            /* intersection is smallest */
+            lbnd = PQextractmin();
+            llbnd = ELleft(lbnd);
+            rbnd = ELright(lbnd);
+            rrbnd = ELright(rbnd);
+            bot = leftreg(lbnd);
+            top = rightreg(rbnd);
 
-	    v = lbnd->vertex;
-	    makevertex(v);
-	    endpoint(lbnd->ELedge, lbnd->ELpm, v);
-	    endpoint(rbnd->ELedge, rbnd->ELpm, v);
-	    ELdelete(lbnd);
-	    PQdelete(rbnd);
-	    ELdelete(rbnd);
-	    pm = le;
-	    if (bot->coord.y > top->coord.y) {
-		temp = bot;
-		bot = top;
-		top = temp;
-		pm = re;
-	    }
-	    e = bisect(bot, top);
-	    bisector = HEcreate(e, pm);
-	    ELinsert(llbnd, bisector);
-	    endpoint(e, re - pm, v);
-	    deref(v);
-	    if ((p = intersect(llbnd, bisector)) != (struct Site *)NULL) {
-		PQdelete(llbnd);
-		PQinsert(llbnd, p, dist(p, bot));
-	    }
-	    if ((p = intersect(bisector, rrbnd)) != (struct Site *)NULL) {
-		PQinsert(bisector, p, dist(p, bot));
-	    }
-	}
-	else
-	    break;
+            v = lbnd->vertex;
+            makevertex(v);
+            endpoint(lbnd->ELedge, lbnd->ELpm, v);
+            endpoint(rbnd->ELedge, rbnd->ELpm, v);
+            ELdelete(lbnd);
+            PQdelete(rbnd);
+            ELdelete(rbnd);
+            pm = le;
+            if (bot->coord.y > top->coord.y) {
+                temp = bot;
+                bot = top;
+                top = temp;
+                pm = re;
+            }
+            e = bisect(bot, top);
+            bisector = HEcreate(e, pm);
+            ELinsert(llbnd, bisector);
+            endpoint(e, re - pm, v);
+            deref(v);
+            if ((p = intersect(llbnd, bisector)) != (struct Site *)NULL) {
+                PQdelete(llbnd);
+                PQinsert(llbnd, p, dist(p, bot));
+            }
+            if ((p = intersect(bisector, rrbnd)) != (struct Site *)NULL) {
+                PQinsert(bisector, p, dist(p, bot));
+            }
+        }
+        else
+            break;
     }
 
     G_percent(1, 1, 1);

@@ -20,7 +20,7 @@ except ImportError:
 
     # TODO: this needs a better fix since HTMLParseError is actually
     # used including its attributes, so that actually fails
-    # HTMLParseError is depreciated, parsing is not strict
+    # HTMLParseError is deprecated, parsing is not strict
     HTMLParseError = Exception
 
 try:

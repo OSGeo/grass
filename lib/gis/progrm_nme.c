@@ -49,15 +49,15 @@ const char *G_original_program_name(void)
 }
 
 /*!
-  \brief Set program name
+   \brief Set program name
 
-  Program name set to name (name will be returned by
-  G_program_name*())
+   Program name set to name (name will be returned by
+   G_program_name*())
 
-  Extension like .exe or .py is stripped from program name.
+   Extension like .exe or .py is stripped from program name.
 
-  \param s program name
-*/
+   \param s program name
+ */
 void G_set_program_name(const char *s)
 {
     int i;
@@ -67,10 +67,10 @@ void G_set_program_name(const char *s)
 
     i = strlen(s);
     while (--i >= 0) {
-	if (G_is_dirsep(s[i])) {
-	    s += i + 1;
-	    break;
-	}
+        if (G_is_dirsep(s[i])) {
+            s += i + 1;
+            break;
+        }
     }
 
     /* strip extension from program name */
@@ -80,6 +80,6 @@ void G_set_program_name(const char *s)
     name = G_store(temp);
 
     G_debug(1, "G_set_program_name(): %s", name);
-    
+
     G_free(temp);
 }

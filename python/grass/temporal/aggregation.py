@@ -122,7 +122,7 @@ def aggregate_raster_maps(
                absolute
     :param count: The number to be attached to the basename of the new
                  created raster map
-    :param method: The aggreation method to be used by r.series
+    :param method: The aggregation method to be used by r.series
     :param register_null: If true null maps will be registered in the space
                          time raster dataset, if false not
     :param dbif: The temporal database interface to use

@@ -16,13 +16,13 @@
 #include "macros.h"
 
 /*!
-  \brief Execute SQL statements
+   \brief Execute SQL statements
 
-  \param driver db driver
-  \param SQLstatement SQL statement (alter, update, ...)
+   \param driver db driver
+   \param SQLstatement SQL statement (alter, update, ...)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_execute_immediate(dbDriver * driver, dbString * SQLstatement)
 {
@@ -39,19 +39,19 @@ int db_execute_immediate(dbDriver * driver, dbString * SQLstatement)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code;        /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;
 }
 
 /*!
-  \brief Begin transaction
+   \brief Begin transaction
 
-  \param driver db driver
+   \param driver db driver
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_begin_transaction(dbDriver * driver)
 {
@@ -65,19 +65,19 @@ int db_begin_transaction(dbDriver * driver)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;
+        return ret_code;
 
     /* no results */
     return DB_OK;
 }
 
 /*!
-  \brief Commit transaction
-  
-  \param driver db driver
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \brief Commit transaction
+
+   \param driver db driver
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_commit_transaction(dbDriver * driver)
 {
@@ -91,7 +91,7 @@ int db_commit_transaction(dbDriver * driver)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;
+        return ret_code;
 
     /* no results */
     return DB_OK;

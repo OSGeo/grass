@@ -17,13 +17,13 @@
 #include "macros.h"
 
 /*!
-  \brief Close cursor
-  
-  \param cursor cursor to be close
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \brief Close cursor
+
+   \param cursor cursor to be close
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_close_cursor(dbCursor * cursor)
 {
     int ret_code;
@@ -39,7 +39,7 @@ int db_close_cursor(dbCursor * cursor)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code;        /* ret_code SHOULD == DB_FAILED */
 
     db_free_cursor(cursor);
 

@@ -7,9 +7,10 @@
 #include "method.h"
 
 FILE *run_stats(struct Popen *child,
-		const char *basemap, const char *covermap, const char *mode)
+                const char *basemap, const char *covermap, const char *mode)
 {
-    char input[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1 + GNAME_MAX + 1 + GMAPSET_MAX + 1];
+    char input[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1 + GNAME_MAX + 1 +
+               GMAPSET_MAX + 1];
     const char *argv[5];
     FILE *fp;
 
@@ -24,12 +25,13 @@ FILE *run_stats(struct Popen *child,
     /* maybe use r.stats's output= option instead of reading from stdout here, whatever's easier. */
     fp = G_popen_read(child, argv[0], argv);
     if (!fp)
-	G_fatal_error("error running r.stats");
+        G_fatal_error("error running r.stats");
 
     return fp;
 }
 
-FILE *run_reclass(struct Popen *child, const char *basemap, const char *outputmap)
+FILE *run_reclass(struct Popen *child, const char *basemap,
+                  const char *outputmap)
 {
     char input[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1];
     char output[7 + GNAME_MAX + 1];
@@ -47,8 +49,7 @@ FILE *run_reclass(struct Popen *child, const char *basemap, const char *outputma
 
     fp = G_popen_write(child, argv[0], argv);
     if (!fp)
-	G_fatal_error("error running r.stats");
+        G_fatal_error("error running r.stats");
 
     return fp;
 }
-

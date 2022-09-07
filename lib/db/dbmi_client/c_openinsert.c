@@ -16,13 +16,13 @@
 #include "macros.h"
 
 /*!
-  \brief Open insert cursor
+   \brief Open insert cursor
 
-  \param driver db driver
-  \param cursor cursor to be opened
+   \param driver db driver
+   \param cursor cursor to be opened
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_open_insert_cursor(dbDriver * driver, dbCursor * cursor)
 {
@@ -44,7 +44,7 @@ int db_open_insert_cursor(dbDriver * driver, dbCursor * cursor)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code;        /* ret_code SHOULD == DB_FAILED */
 
     /* get the results */
     DB_RECV_TOKEN(&cursor->token);

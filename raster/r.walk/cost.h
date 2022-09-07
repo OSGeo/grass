@@ -7,6 +7,7 @@
 /*      point structure containing various attributes of       */
 /*      a grid cell.                                           */
 /*                                                             */
+
 /***************************************************************/
 
 #ifndef __COST_H__

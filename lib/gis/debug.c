@@ -29,14 +29,14 @@ void G_init_debug(void)
     const char *lstr;
 
     if (G_is_initialized(&initialized))
-	return;
+        return;
 
     lstr = G_getenv_nofatal("DEBUG");
 
     if (lstr != NULL)
-	grass_debug_level = atoi(lstr);
+        grass_debug_level = atoi(lstr);
     else
-	grass_debug_level = 0;
+        grass_debug_level = 0;
 
     G_initialize_done(&initialized);
 }
@@ -71,31 +71,30 @@ int G_debug(int level, const char *msg, ...)
     G_init_debug();
 
     if (grass_debug_level >= level) {
-	va_start(ap, msg);
+        va_start(ap, msg);
 
-	filen = getenv("GRASS_DEBUG_FILE");
-	if (filen != NULL) {
-	    fd = fopen(filen, "a");
-	    if (!fd) {
-		G_warning(_("Cannot open debug file '%s'"), filen);
-		return 0;
-	    }
-	}
-	else {
-	    fd = stderr;
-	}
+        filen = getenv("GRASS_DEBUG_FILE");
+        if (filen != NULL) {
+            fd = fopen(filen, "a");
+            if (!fd) {
+                G_warning(_("Cannot open debug file '%s'"), filen);
+                return 0;
+            }
+        }
+        else {
+            fd = stderr;
+        }
 
-	fprintf(fd, "D%d/%d: ", level, grass_debug_level);
-	vfprintf(fd, msg, ap);
-	fprintf(fd, "\n");
-	fflush(fd);
+        fprintf(fd, "D%d/%d: ", level, grass_debug_level);
+        vfprintf(fd, msg, ap);
+        fprintf(fd, "\n");
+        fflush(fd);
 
-	if (filen != NULL)
-	    fclose(fd);
+        if (filen != NULL)
+            fclose(fd);
 
-	va_end(ap);
+        va_end(ap);
     }
 
     return 1;
 }
-

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import print_function
 
 from os.path import join, exists
@@ -197,7 +196,7 @@ class Vector(Info):
 
             warnings.warn(
                 "Vector.write(geo_obj, attrs=(...)) is"
-                " depreciated, specify cat explicitly",
+                " deprecated, specify cat explicitly",
                 DeprecationWarning,
             )
             # try to accommodate
@@ -731,9 +730,9 @@ class VectorTopo(Vector):
             self.table.filters.select(",".join(self.table.columns.names()))
             # Execute the query and fetch the result
             cur = self.table.execute()
-            l = cur.fetchall()
+            entries = cur.fetchall()
             # Generate the dictionary
-            for entry in l:
+            for entry in entries:
                 table_dict[entry[cat_index]] = list(entry)
 
             return table_dict
@@ -843,7 +842,7 @@ class VectorTopo(Vector):
 
         if bboxlist is not None and len(bboxlist) > 0:
 
-            l = []
+            wkb_list = []
             line_p = libvect.line_pnts()
             line_c = libvect.line_cats()
             size = ctypes.c_size_t()
@@ -876,10 +875,10 @@ class VectorTopo(Vector):
                 else:
                     pcat = cat.value
 
-                l.append((f_id, pcat, ctypes.string_at(barray, size.value)))
+                wkb_list.append((f_id, pcat, ctypes.string_at(barray, size.value)))
                 libgis.G_free(barray)
 
-            return l
+            return wkb_list
         return None
 
     @must_be_open
@@ -943,7 +942,7 @@ class VectorTopo(Vector):
 
         if bboxlist is not None and len(bboxlist) > 0:
 
-            l = []
+            wkb_list = []
             line_c = libvect.line_cats()
             size = ctypes.c_size_t()
             cat = ctypes.c_int()
@@ -967,10 +966,10 @@ class VectorTopo(Vector):
                     if ok > 0:
                         pcat = cat.value
 
-                l.append((a_id, pcat, ctypes.string_at(barray, size.value)))
+                wkb_list.append((a_id, pcat, ctypes.string_at(barray, size.value)))
                 libgis.G_free(barray)
 
-            return l
+            return wkb_list
         return None
 
 

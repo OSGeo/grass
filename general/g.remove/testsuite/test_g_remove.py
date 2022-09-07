@@ -56,17 +56,17 @@ class GMRemoveTest(TestCase):
             rmapcalc("test_map_%i = 100" % i)
         rmapcalc("test_two = 2")
 
-        module = SimpleModule('g.remove',
-                              type='raster', pattern='test_map_*,*two')
+        module = SimpleModule("g.remove", type="raster", pattern="test_map_*,*two")
         self.assertModule(module)
-        self.assertMultiLineEqual(module.outputs.stdout,
-                                  REMOVE_RASTERS.replace('user1',
-                                                         get_current_mapset()))
+        self.assertMultiLineEqual(
+            module.outputs.stdout, REMOVE_RASTERS.replace("user1", get_current_mapset())
+        )
 
-        module = SimpleModule('g.remove', type='raster',
-                              pattern='test_map_*,*two', flags='f')
+        module = SimpleModule(
+            "g.remove", type="raster", pattern="test_map_*,*two", flags="f"
+        )
         self.assertModule(module)
-        self.assertMultiLineEqual(module.outputs.stdout, '')
+        self.assertMultiLineEqual(module.outputs.stdout, "")
         self.assertMultiLineEqual(module.outputs.stderr, REMOVING_RASTERS_LOG)
 
     def test_remove_procedure_exclude(self):
@@ -75,22 +75,30 @@ class GMRemoveTest(TestCase):
         rmapcalc("test_oranges = 200")
         rmapcalc("test_apples_big = 300")
         rmapcalc("test_apples_small = 300")
-        module = SimpleModule('g.remove', type='raster',
-                              pattern='test_{apples,oranges}*',
-                              exclude="*_small")
+        module = SimpleModule(
+            "g.remove",
+            type="raster",
+            pattern="test_{apples,oranges}*",
+            exclude="*_small",
+        )
         self.assertModule(module)
-        self.assertMultiLineEqual(module.outputs.stdout,
-                                  'raster/test_apples@user1\n'
-                                  'raster/test_apples_big@user1\n'
-                                  'raster/test_oranges@user1\n'.replace(
-                                      'user1', get_current_mapset()))
-        module = SimpleModule('g.remove', type='raster',
-                              pattern='test_{apples,oranges}{_small,_big,*}',
-                              flags='f')
+        self.assertMultiLineEqual(
+            module.outputs.stdout,
+            "raster/test_apples@user1\n"
+            "raster/test_apples_big@user1\n"
+            "raster/test_oranges@user1\n".replace("user1", get_current_mapset()),
+        )
+        module = SimpleModule(
+            "g.remove",
+            type="raster",
+            pattern="test_{apples,oranges}{_small,_big,*}",
+            flags="f",
+        )
         self.assertModule(module)
-        self.assertMultiLineEqual(module.outputs.stdout, '')
-        self.assertRegexpMatches(module.outputs.stderr, "(.*<.+>[^\n]*\n){4}",
-                                 msg="4 maps should be removed")
+        self.assertMultiLineEqual(module.outputs.stdout, "")
+        self.assertRegexpMatches(
+            module.outputs.stderr, "(.*<.+>[^\n]*\n){4}", msg="4 maps should be removed"
+        )
 
 
 class GMRemoveWrongInputTest(TestCase):
@@ -98,13 +106,14 @@ class GMRemoveWrongInputTest(TestCase):
 
     def test_re_flags(self):
         """Test that -r and -e flags are exclusive"""
-        module = SimpleModule('g.remove', flags='re',
-                              type='raster', pattern='xxxyyyzzz')
+        module = SimpleModule(
+            "g.remove", flags="re", type="raster", pattern="xxxyyyzzz"
+        )
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
-        self.assertIn('-r', stderr)
-        self.assertIn('-e', stderr)
+        self.assertIn("-r", stderr)
+        self.assertIn("-e", stderr)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

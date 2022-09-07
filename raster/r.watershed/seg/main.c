@@ -80,33 +80,33 @@ int main(int argc, char *argv[])
     init_vars(argc, argv);
     do_astar();
     if (mfd) {
-	do_cum_mfd();
+        do_cum_mfd();
     }
     else {
-	do_cum();
+        do_cum();
     }
     if (sg_flag || ls_flag) {
-	sg_factor();
+        sg_factor();
     }
 
     if (!seg_flag && !bas_flag && !haf_flag) {
-	G_message(_("SECTION %d: Closing Maps."), tot_parts);
-	close_maps();
+        G_message(_("SECTION %d: Closing Maps."), tot_parts);
+        close_maps();
     }
     else {
-	if (arm_flag) {
-	    fp = fopen(arm_name, "w");
-	}
-	num_open_segs = segs_mb / 0.4;
-	if (num_open_segs > (ncols / SCOL + 1) * (nrows / SROW + 1)) {
-	    num_open_segs = (ncols / SCOL + 1) * (nrows / SROW + 1);
-	}
-	cseg_open(&bas, SROW, SCOL, num_open_segs);
-	cseg_open(&haf, SROW, SCOL, num_open_segs);
-	G_message(_("SECTION %d: Watershed determination."), tot_parts - 1);
-	find_pourpts();
-	G_message(_("SECTION %d: Closing Maps."), tot_parts);
-	close_array_seg();
+        if (arm_flag) {
+            fp = fopen(arm_name, "w");
+        }
+        num_open_segs = segs_mb / 0.4;
+        if (num_open_segs > (ncols / SCOL + 1) * (nrows / SROW + 1)) {
+            num_open_segs = (ncols / SCOL + 1) * (nrows / SROW + 1);
+        }
+        cseg_open(&bas, SROW, SCOL, num_open_segs);
+        cseg_open(&haf, SROW, SCOL, num_open_segs);
+        G_message(_("SECTION %d: Watershed determination."), tot_parts - 1);
+        find_pourpts();
+        G_message(_("SECTION %d: Closing Maps."), tot_parts);
+        close_array_seg();
     }
 
     exit(EXIT_SUCCESS);

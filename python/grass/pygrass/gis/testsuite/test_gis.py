@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Luca Delucchi
+@author:Luca Delucchi
 """
 
 from grass.gunittest.case import TestCase

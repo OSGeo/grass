@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Mon Sep 15 17:09:40 2014
 
@@ -77,10 +76,6 @@ class RasterHistoryTestCate(TestCase):
         self.assertEqual(decode(hist.src1), "No such source 1")
         self.assertEqual(decode(hist.src2), "No such source 2")
         r.close()
-
-        hist1 = History("no_map")
-        hist1.command()
-        self.assertEqual(decode(hist1.line(0)), "test_history.py")
 
 
 if __name__ == "__main__":

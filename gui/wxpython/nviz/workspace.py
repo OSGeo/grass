@@ -26,19 +26,22 @@ except ImportError:
 
 
 class NvizSettings(object):
-
     def __init__(self):
         pass
 
     def SetConstantDefaultProp(self):
         """Set default constant data properties"""
         data = dict()
-        for key, value in six.iteritems(UserSettings.Get(group='nviz',
-                                                         key='constant')):
+        for key, value in six.iteritems(UserSettings.Get(group="nviz", key="constant")):
             data[key] = value
-        color = str(data['color'][0]) + ':' + str(data['color']
-                                                  [1]) + ':' + str(data['color'][2])
-        data['color'] = color
+        color = (
+            str(data["color"][0])
+            + ":"
+            + str(data["color"][1])
+            + ":"
+            + str(data["color"][2])
+        )
+        data["color"] = color
 
         return data
 
@@ -46,279 +49,275 @@ class NvizSettings(object):
         """Set default surface data properties"""
         if not data:
             data = dict()
-        for sec in ('attribute', 'draw', 'mask', 'position'):
+        for sec in ("attribute", "draw", "mask", "position"):
             data[sec] = {}
 
         #
         # attributes
         #
-        for attrb in ('shine', ):
-            data['attribute'][attrb] = {}
-            for key, value in six.iteritems(UserSettings.Get(group='nviz',
-                                                             key='surface',
-                                                             subkey=attrb)):
-                data['attribute'][attrb][key] = value
-            data['attribute'][attrb]['update'] = None
+        for attrb in ("shine",):
+            data["attribute"][attrb] = {}
+            for key, value in six.iteritems(
+                UserSettings.Get(group="nviz", key="surface", subkey=attrb)
+            ):
+                data["attribute"][attrb][key] = value
+            data["attribute"][attrb]["update"] = None
 
         #
         # draw
         #
-        data['draw']['all'] = False  # apply only for current surface
-        for control, value in six.iteritems(UserSettings.Get(group='nviz',
-                                                             key='surface',
-                                                             subkey='draw')):
-            if control[:3] == 'res':
-                if 'resolution' not in data['draw']:
-                    data['draw']['resolution'] = {}
-                if 'update' not in data['draw']['resolution']:
-                    data['draw']['resolution']['update'] = None
-                data['draw']['resolution'][control[4:]] = value
+        data["draw"]["all"] = False  # apply only for current surface
+        for control, value in six.iteritems(
+            UserSettings.Get(group="nviz", key="surface", subkey="draw")
+        ):
+            if control[:3] == "res":
+                if "resolution" not in data["draw"]:
+                    data["draw"]["resolution"] = {}
+                if "update" not in data["draw"]["resolution"]:
+                    data["draw"]["resolution"]["update"] = None
+                data["draw"]["resolution"][control[4:]] = value
                 continue
 
-            if control == 'wire-color':
-                value = str(value[0]) + ':' + str(value[1]
-                                                  ) + ':' + str(value[2])
-            elif control in ('mode', 'style', 'shading'):
-                if 'mode' not in data['draw']:
-                    data['draw']['mode'] = {}
+            if control == "wire-color":
+                value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+            elif control in ("mode", "style", "shading"):
+                if "mode" not in data["draw"]:
+                    data["draw"]["mode"] = {}
                 continue
 
-            data['draw'][control] = {'value': value}
-            data['draw'][control]['update'] = None
+            data["draw"][control] = {"value": value}
+            data["draw"][control]["update"] = None
 
         value, desc = self.GetDrawMode(
-            UserSettings.Get(
-                group='nviz', key='surface', subkey=[
-                    'draw', 'mode']), UserSettings.Get(
-                group='nviz', key='surface', subkey=[
-                    'draw', 'style']), UserSettings.Get(
-                        group='nviz', key='surface', subkey=[
-                            'draw', 'shading']))
+            UserSettings.Get(group="nviz", key="surface", subkey=["draw", "mode"]),
+            UserSettings.Get(group="nviz", key="surface", subkey=["draw", "style"]),
+            UserSettings.Get(group="nviz", key="surface", subkey=["draw", "shading"]),
+        )
 
-        data['draw']['mode'] = {'value': value,
-                                'desc': desc,
-                                'update': None}
+        data["draw"]["mode"] = {"value": value, "desc": desc, "update": None}
         # position
-        for coord in ('x', 'y', 'z'):
-            data['position'][coord] = UserSettings.Get(
-                group='nviz', key='surface', subkey=['position', coord])
-        data['position']['update'] = None
+        for coord in ("x", "y", "z"):
+            data["position"][coord] = UserSettings.Get(
+                group="nviz", key="surface", subkey=["position", coord]
+            )
+        data["position"]["update"] = None
 
         return data
 
     def SetVolumeDefaultProp(self):
         """Set default volume data properties"""
         data = dict()
-        for sec in ('attribute', 'draw', 'position'):
+        for sec in ("attribute", "draw", "position"):
             data[sec] = dict()
-            for sec in ('isosurface', 'slice'):
+            for sec in ("isosurface", "slice"):
                 data[sec] = list()
 
         #
         # draw
         #
-        for control, value in six.iteritems(UserSettings.Get(group='nviz',
-                                                             key='volume',
-                                                             subkey='draw')):
-            if control == 'shading':
+        for control, value in six.iteritems(
+            UserSettings.Get(group="nviz", key="volume", subkey="draw")
+        ):
+            if control == "shading":
                 sel = UserSettings.Get(
-                    group='nviz', key='volume', subkey=[
-                        'draw', 'shading'])
+                    group="nviz", key="volume", subkey=["draw", "shading"]
+                )
                 value, desc = self.GetDrawMode(shade=sel, string=False)
 
-                data['draw']['shading'] = {}
-                data['draw']['shading']['isosurface'] = {
-                    'value': value, 'desc': desc['shading']}
-                data['draw']['shading']['slice'] = {'value': value,
-                                                    'desc': desc['shading']}
-            elif control == 'mode':
+                data["draw"]["shading"] = {}
+                data["draw"]["shading"]["isosurface"] = {
+                    "value": value,
+                    "desc": desc["shading"],
+                }
+                data["draw"]["shading"]["slice"] = {
+                    "value": value,
+                    "desc": desc["shading"],
+                }
+            elif control == "mode":
                 sel = UserSettings.Get(
-                    group='nviz', key='volume', subkey=[
-                        'draw', 'mode'])
+                    group="nviz", key="volume", subkey=["draw", "mode"]
+                )
                 if sel == 0:
-                    desc = 'isosurface'
+                    desc = "isosurface"
                 else:
-                    desc = 'slice'
-                data['draw']['mode'] = {'value': sel,
-                                        'desc': desc, }
-            elif control == 'box':
+                    desc = "slice"
+                data["draw"]["mode"] = {
+                    "value": sel,
+                    "desc": desc,
+                }
+            elif control == "box":
                 box = UserSettings.Get(
-                    group='nviz', key='volume', subkey=[
-                        'draw', 'box'])
-                data['draw']['box'] = {'enabled': box}
+                    group="nviz", key="volume", subkey=["draw", "box"]
+                )
+                data["draw"]["box"] = {"enabled": box}
 
             else:
-                data['draw'][control] = {}
-                data['draw'][control]['isosurface'] = {'value': value}
-                data['draw'][control]['slice'] = {'value': value}
+                data["draw"][control] = {}
+                data["draw"][control]["isosurface"] = {"value": value}
+                data["draw"][control]["slice"] = {"value": value}
 
-            if 'update' not in data['draw'][control]:
-                data['draw'][control]['update'] = None
+            if "update" not in data["draw"][control]:
+                data["draw"][control]["update"] = None
 
         #
         # isosurface attributes
         #
-        for attrb in ('shine', ):
-            data['attribute'][attrb] = {}
-            for key, value in six.iteritems(UserSettings.Get(group='nviz',
-                                                             key='volume',
-                                                             subkey=attrb)):
-                data['attribute'][attrb][key] = value
+        for attrb in ("shine",):
+            data["attribute"][attrb] = {}
+            for key, value in six.iteritems(
+                UserSettings.Get(group="nviz", key="volume", subkey=attrb)
+            ):
+                data["attribute"][attrb][key] = value
 
         return data
 
     def SetIsosurfaceDefaultProp(self):
         """Set default isosurface properties"""
         data = dict()
-        for attr in ('shine', 'topo', 'transp', 'color', 'inout'):
+        for attr in ("shine", "topo", "transp", "color", "inout"):
             data[attr] = {}
-            data[attr]['update'] = None
-            if attr == 'inout':
-                data[attr]['value'] = 0
+            data[attr]["update"] = None
+            if attr == "inout":
+                data[attr]["value"] = 0
                 continue
-            for key, value in six.iteritems(UserSettings.Get(group='nviz',
-                                                             key='volume',
-                                                             subkey=attr)):
+            for key, value in six.iteritems(
+                UserSettings.Get(group="nviz", key="volume", subkey=attr)
+            ):
                 data[attr][key] = value
         return data
 
     def SetSliceDefaultProp(self):
         """Set default slice properties"""
         data = dict()
-        data['position'] = copy.deepcopy(
-            UserSettings.Get(
-                group='nviz',
-                key='volume',
-                subkey='slice_position'))
-        data['position']['update'] = None
+        data["position"] = copy.deepcopy(
+            UserSettings.Get(group="nviz", key="volume", subkey="slice_position")
+        )
+        data["position"]["update"] = None
 
-        data['transp'] = copy.deepcopy(
-            UserSettings.Get(
-                group='nviz',
-                key='volume',
-                subkey='transp'))
+        data["transp"] = copy.deepcopy(
+            UserSettings.Get(group="nviz", key="volume", subkey="transp")
+        )
         return data
 
     def SetVectorDefaultProp(self, longDim, data=None):
         """Set default vector data properties"""
         if not data:
             data = dict()
-        for sec in ('lines', 'points'):
+        for sec in ("lines", "points"):
             data[sec] = {}
 
-        self.SetVectorLinesDefaultProp(data['lines'])
-        self.SetVectorPointsDefaultProp(data['points'], longDim)
+        self.SetVectorLinesDefaultProp(data["lines"])
+        self.SetVectorPointsDefaultProp(data["points"], longDim)
 
         return data
 
     def SetVectorLinesDefaultProp(self, data):
         """Set default vector properties -- lines"""
         # width
-        data['width'] = {'value': UserSettings.Get(group='nviz', key='vector',
-                                                   subkey=['lines', 'width'])}
+        data["width"] = {
+            "value": UserSettings.Get(
+                group="nviz", key="vector", subkey=["lines", "width"]
+            )
+        }
 
         # color
-        value = UserSettings.Get(group='nviz', key='vector',
-                                 subkey=['lines', 'color'])
-        color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
-        data['color'] = {'value': color}
+        value = UserSettings.Get(group="nviz", key="vector", subkey=["lines", "color"])
+        color = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+        data["color"] = {"value": color}
 
         # mode
-        if UserSettings.Get(group='nviz', key='vector',
-                            subkey=['lines', 'flat']):
-            type = 'flat'
+        if UserSettings.Get(group="nviz", key="vector", subkey=["lines", "flat"]):
+            type = "flat"
 
         else:
-            type = 'surface'
+            type = "surface"
 
-        data['mode'] = {}
-        data['mode']['type'] = type
-        data['mode']['update'] = None
+        data["mode"] = {}
+        data["mode"]["type"] = type
+        data["mode"]["update"] = None
 
         # height
-        data['height'] = {
-            'value': UserSettings.Get(
-                group='nviz',
-                key='vector',
-                subkey=[
-                    'lines',
-                    'height'])}
+        data["height"] = {
+            "value": UserSettings.Get(
+                group="nviz", key="vector", subkey=["lines", "height"]
+            )
+        }
         # thematic
-        data['thematic'] = {'rgbcolumn': UserSettings.Get(group='nviz', key='vector',
-                                                          subkey=['lines', 'rgbcolumn']),
-                            'sizecolumn': UserSettings.Get(group='nviz', key='vector',
-                                                           subkey=['lines', 'sizecolumn']),
-                            'layer': 1,
-                            'usecolor': False,
-                            'usewidth': False}
-        if 'object' in data:
-            for attrb in ('color', 'width', 'mode', 'height', 'thematic'):
-                data[attrb]['update'] = None
+        data["thematic"] = {
+            "rgbcolumn": UserSettings.Get(
+                group="nviz", key="vector", subkey=["lines", "rgbcolumn"]
+            ),
+            "sizecolumn": UserSettings.Get(
+                group="nviz", key="vector", subkey=["lines", "sizecolumn"]
+            ),
+            "layer": 1,
+            "usecolor": False,
+            "usewidth": False,
+        }
+        if "object" in data:
+            for attrb in ("color", "width", "mode", "height", "thematic"):
+                data[attrb]["update"] = None
 
     def SetVectorPointsDefaultProp(self, data, longDim):
         """Set default vector properties -- points"""
         size_fraction = 0.005
         # size
-        autosize = UserSettings.Get(group='nviz', key='vector',
-                                    subkey=['points', 'autosize'])
+        autosize = UserSettings.Get(
+            group="nviz", key="vector", subkey=["points", "autosize"]
+        )
         if autosize:
-            data['size'] = {'value': longDim * size_fraction}
+            data["size"] = {"value": longDim * size_fraction}
         else:
-            data['size'] = {'value': UserSettings.Get(group='nviz', key='vector',
-                                                      subkey=['points', 'size'])}
+            data["size"] = {
+                "value": UserSettings.Get(
+                    group="nviz", key="vector", subkey=["points", "size"]
+                )
+            }
 
         # width
-        data['width'] = {'value': UserSettings.Get(group='nviz', key='vector',
-                                                   subkey=['points', 'width'])}
+        data["width"] = {
+            "value": UserSettings.Get(
+                group="nviz", key="vector", subkey=["points", "width"]
+            )
+        }
 
         # marker
-        data['marker'] = {
-            'value': UserSettings.Get(
-                group='nviz',
-                key='vector',
-                subkey=[
-                    'points',
-                    'marker'])}
+        data["marker"] = {
+            "value": UserSettings.Get(
+                group="nviz", key="vector", subkey=["points", "marker"]
+            )
+        }
 
         # color
-        value = UserSettings.Get(group='nviz', key='vector',
-                                 subkey=['points', 'color'])
-        color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
-        data['color'] = {'value': color}
+        value = UserSettings.Get(group="nviz", key="vector", subkey=["points", "color"])
+        color = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
+        data["color"] = {"value": color}
 
         # mode
-        data['mode'] = {'type': 'surface'}
-# 'surface' : '', }
+        data["mode"] = {"type": "surface"}
+        # 'surface' : '', }
 
         # height
-        data['height'] = {
-            'value': UserSettings.Get(
-                group='nviz',
-                key='vector',
-                subkey=[
-                    'points',
-                    'height'])}
+        data["height"] = {
+            "value": UserSettings.Get(
+                group="nviz", key="vector", subkey=["points", "height"]
+            )
+        }
 
-        data['thematic'] = {
-            'rgbcolumn': UserSettings.Get(
-                group='nviz',
-                key='vector',
-                subkey=[
-                    'points',
-                    'rgbcolumn']),
-            'sizecolumn': UserSettings.Get(
-                group='nviz',
-                key='vector',
-                subkey=[
-                    'points',
-                    'sizecolumn']),
-            'layer': 1,
-            'usecolor': False,
-            'usesize': False}
-        if 'object' in data:
-            for attrb in ('size', 'width', 'marker',
-                          'color', 'height', 'thematic'):
-                data[attrb]['update'] = None
+        data["thematic"] = {
+            "rgbcolumn": UserSettings.Get(
+                group="nviz", key="vector", subkey=["points", "rgbcolumn"]
+            ),
+            "sizecolumn": UserSettings.Get(
+                group="nviz", key="vector", subkey=["points", "sizecolumn"]
+            ),
+            "layer": 1,
+            "usecolor": False,
+            "usesize": False,
+        }
+        if "object" in data:
+            for attrb in ("size", "width", "marker", "color", "height", "thematic"):
+                data[attrb]["update"] = None
 
     def GetDrawMode(self, mode=None, style=None, shade=None, string=False):
         """Get surface draw mode (value) from description/selection
@@ -337,21 +336,21 @@ class NvizSettings(object):
 
         if string:
             if mode is not None:
-                if mode == 'coarse':
+                if mode == "coarse":
                     value |= wxnviz.DM_WIRE
-                elif mode == 'fine':
+                elif mode == "fine":
                     value |= wxnviz.DM_POLY
                 else:  # both
                     value |= wxnviz.DM_WIRE_POLY
 
             if style is not None:
-                if style == 'wire':
+                if style == "wire":
                     value |= wxnviz.DM_GRID_WIRE
                 else:  # surface
                     value |= wxnviz.DM_GRID_SURF
 
             if shade is not None:
-                if shade == 'flat':
+                if shade == "flat":
                     value |= wxnviz.DM_FLAT
                 else:  # surface
                     value |= wxnviz.DM_GOURAUD
@@ -362,64 +361,65 @@ class NvizSettings(object):
         if mode is not None:
             if mode == 0:  # coarse
                 value |= wxnviz.DM_WIRE
-                desc['mode'] = 'coarse'
+                desc["mode"] = "coarse"
             elif mode == 1:  # fine
                 value |= wxnviz.DM_POLY
-                desc['mode'] = 'fine'
+                desc["mode"] = "fine"
             else:  # both
                 value |= wxnviz.DM_WIRE_POLY
-                desc['mode'] = 'both'
+                desc["mode"] = "both"
 
         if style is not None:
             if style == 0:  # wire
                 value |= wxnviz.DM_GRID_WIRE
-                desc['style'] = 'wire'
+                desc["style"] = "wire"
             else:  # surface
                 value |= wxnviz.DM_GRID_SURF
-                desc['style'] = 'surface'
+                desc["style"] = "surface"
 
         if shade is not None:
             if shade == 0:
                 value |= wxnviz.DM_FLAT
-                desc['shading'] = 'flat'
+                desc["shading"] = "flat"
             else:  # surface
                 value |= wxnviz.DM_GOURAUD
-                desc['shading'] = 'gouraud'
+                desc["shading"] = "gouraud"
 
         return (value, desc)
 
     def SetDecorDefaultProp(self, type):
-        """Set default arrow properties
-        """
+        """Set default arrow properties"""
         data = {}
 
         # arrow
-        if type == 'arrow':
-            data['arrow'] = copy.deepcopy(UserSettings.Get(group='nviz',
-                                                           key='arrow'))
-            data['arrow']['color'] = "%d:%d:%d" % (
-                UserSettings.Get(group='nviz', key='arrow',
-                                 subkey='color')[:3])
-            data['arrow'].update(
+        if type == "arrow":
+            data["arrow"] = copy.deepcopy(UserSettings.Get(group="nviz", key="arrow"))
+            data["arrow"]["color"] = "%d:%d:%d" % (
+                UserSettings.Get(group="nviz", key="arrow", subkey="color")[:3]
+            )
+            data["arrow"].update(
                 copy.deepcopy(
                     UserSettings.Get(
-                        group='nviz',
-                        key='arrow',
-                        settings_type='internal')))
-            data['arrow']['show'] = False
+                        group="nviz", key="arrow", settings_type="internal"
+                    )
+                )
+            )
+            data["arrow"]["show"] = False
 
         # arrow
-        if type == 'scalebar':
-            data['scalebar'] = copy.deepcopy(UserSettings.Get(group='nviz',
-                                                              key='scalebar'))
-            data['scalebar']['color'] = "%d:%d:%d" % (
-                UserSettings.Get(group='nviz', key='scalebar',
-                                 subkey='color')[:3])
-            data['scalebar'].update(
+        if type == "scalebar":
+            data["scalebar"] = copy.deepcopy(
+                UserSettings.Get(group="nviz", key="scalebar")
+            )
+            data["scalebar"]["color"] = "%d:%d:%d" % (
+                UserSettings.Get(group="nviz", key="scalebar", subkey="color")[:3]
+            )
+            data["scalebar"].update(
                 copy.deepcopy(
                     UserSettings.Get(
-                        group='nviz',
-                        key='scalebar',
-                        settings_type='internal')))
-            data['scalebar']['id'] = 0
+                        group="nviz", key="scalebar", settings_type="internal"
+                    )
+                )
+            )
+            data["scalebar"]["id"] = 0
         return data

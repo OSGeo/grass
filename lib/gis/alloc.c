@@ -32,20 +32,20 @@
 void *G__malloc(const char *file, int line, size_t n)
 {
     void *buf;
-	
+
     if (n <= 0)
-	n = 1;			/* make sure we get a valid request */
-	
+        n = 1;                  /* make sure we get a valid request */
+
     buf = malloc(n);
     if (!buf) {
-	struct Cell_head window;
-	
-	G_get_window(&window);
-	G_important_message(_("Current region rows: %d, cols: %d"), 
-		            window.rows, window.cols);
+        struct Cell_head window;
 
-	G_fatal_error(_("G_malloc: unable to allocate %lu bytes of memory at %s:%d"),
-		      (unsigned long) n, file, line);
+        G_get_window(&window);
+        G_important_message(_("Current region rows: %d, cols: %d"),
+                            window.rows, window.cols);
+
+        G_fatal_error(_("G_malloc: unable to allocate %lu bytes of memory at %s:%d"),
+                      (unsigned long)n, file, line);
     }
 
     return buf;
@@ -74,20 +74,20 @@ void *G__calloc(const char *file, int line, size_t m, size_t n)
     void *buf;
 
     if (m <= 0)
-	m = 1;			/* make sure we get a valid requests */
+        m = 1;                  /* make sure we get a valid requests */
     if (n <= 0)
-	n = 1;
+        n = 1;
 
     buf = calloc(m, n);
     if (!buf) {
-	struct Cell_head window;
-	
-	G_get_window(&window);
-	G_important_message(_("Current region rows: %d, cols: %d"), 
-		            window.rows, window.cols);
+        struct Cell_head window;
 
-	G_fatal_error(_("G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"),
-		      (unsigned long) m, (unsigned long) n, file, line);
+        G_get_window(&window);
+        G_important_message(_("Current region rows: %d, cols: %d"),
+                            window.rows, window.cols);
+
+        G_fatal_error(_("G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"),
+                      (unsigned long)m, (unsigned long)n, file, line);
     }
 
     return buf;
@@ -118,22 +118,22 @@ void *G__calloc(const char *file, int line, size_t m, size_t n)
 void *G__realloc(const char *file, int line, void *buf, size_t n)
 {
     if (n <= 0)
-	n = 1;			/* make sure we get a valid request */
+        n = 1;                  /* make sure we get a valid request */
 
     if (!buf)
-	buf = malloc(n);
+        buf = malloc(n);
     else
-	buf = realloc(buf, n);
+        buf = realloc(buf, n);
 
     if (!buf) {
-	struct Cell_head window;
-	
-	G_get_window(&window);
-	G_important_message(_("Current region rows: %d, cols: %d"), 
-		            window.rows, window.cols);
+        struct Cell_head window;
 
-	G_fatal_error(_("G_realloc: unable to allocate %lu bytes of memory at %s:%d"),
-		      (unsigned long) n, file, line);
+        G_get_window(&window);
+        G_important_message(_("Current region rows: %d, cols: %d"),
+                            window.rows, window.cols);
+
+        G_fatal_error(_("G_realloc: unable to allocate %lu bytes of memory at %s:%d"),
+                      (unsigned long)n, file, line);
     }
 
     return buf;

@@ -40,7 +40,6 @@ v.db.univar precip_30ynormals column=annual
  [...]
 </pre></div>
 
-
 <h3>Univariate statistics on randomly sampled data points</h3>
 
 In this example, random points are sampled from the elevation map
@@ -55,6 +54,16 @@ v.db.select samples
 v.db.univar samples column=heights
 </pre></div>
 
+<h3>JSON output</h3>
+
+This uses the JSON output of the module which is passed using
+a pipe (in Bash or other unix-like shell) to the <em>jq</em> tool
+which selects just the relevant statistic.
+
+<div class="code"><pre>
+v.db.univar precip_30ynormals column=annual format=json | jq .statistics.mean
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -66,11 +75,12 @@ v.db.univar samples column=heights
 <a href="v.random.html">v.random</a>
 </em>
 
-<h2>AUTHOR</h2>
- Michael Barton, Arizona State University
-<p>and authors of <em>r.univar.sh</em> (Markus Neteler et al.)
-
-<!--
 <p>
-<i>Last changed: $Date$</i>
--->
+<em>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Michael Barton, Arizona State University
+<p>and authors of <em>r.univar.sh</em> (Markus Neteler et al.)

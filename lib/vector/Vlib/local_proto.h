@@ -16,11 +16,13 @@
 #define TEMPORARY_MAP          2
 
 /* Internal vector library subroutines which are not part of public
-   API*/
+   API */
 
 /* area.c */
-int Vect__get_area_points(const struct Map_info *, const plus_t *, int, struct line_pnts *);
-int Vect__get_area_points_nat(const struct Map_info *, const plus_t *, int, struct line_pnts *);
+int Vect__get_area_points(const struct Map_info *, const plus_t *, int,
+                          struct line_pnts *);
+int Vect__get_area_points_nat(const struct Map_info *, const plus_t *, int,
+                              struct line_pnts *);
 
 /* close.c */
 void Vect__free_cache(struct Format_info_cache *);
@@ -40,10 +42,13 @@ char *Vect__get_element_path(char *, const struct Map_info *, const char *);
 
 /* write_nat.c */
 int V2__add_line_to_topo_nat(struct Map_info *, off_t, int,
-                             const struct line_pnts *, const struct line_cats *, int,
-                             int (*external_routine) (const struct Map_info *, int));
+                             const struct line_pnts *,
+                             const struct line_cats *, int,
+                             int (*external_routine)(const struct Map_info *,
+                                                     int));
 int V2__delete_line_from_topo_nat(struct Map_info *, int, int,
-                                  const struct line_pnts *, const struct line_cats *);
+                                  const struct line_pnts *,
+                                  const struct line_cats *);
 
 /* write_sfa.c */
 off_t V2__write_area_sfa(struct Map_info *, const struct line_pnts **, int,

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 # generates topics.html and topic_*.html
 # (c) 2012 by the GRASS Development Team, Markus Neteler, Luca Delucchi

@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       v.decimate
@@ -38,10 +39,12 @@ void grid_decimation_destroy(struct GridDecimation *grid_decimation)
     /* TODO: we could also offer mode without dealloc (faster) */
     int row, col;
     size_t point, npoints;
+
     for (row = 0; row < grid_decimation->rows; row++) {
         for (col = 0; col < grid_decimation->cols; col++) {
             /* TODO: make index function */
             size_t index = row * grid_decimation->cols + col;
+
             if ((npoints = grid_decimation->grid_sizes[index])) {
                 /* delete points in list */
                 for (point = 0; point < npoints; point++)
@@ -140,7 +143,8 @@ static size_t grid_decimation_xy_to_index(struct GridDecimation
 
 
 void grid_decimation_try_add_point(struct GridDecimation *grid_decimation,
-                                   int cat, double x, double y, double z, void *point_data)
+                                   int cat, double x, double y, double z,
+                                   void *point_data)
 {
     size_t index = grid_decimation_xy_to_index(grid_decimation, x, y);
     int npoints = grid_decimation->grid_sizes[index];
@@ -160,7 +164,8 @@ void grid_decimation_try_add_point(struct GridDecimation *grid_decimation,
         grid_decimation_create_list_with_point(grid_decimation, index, point,
                                                npoints);
         if (grid_decimation->on_add_point)
-            grid_decimation->on_add_point(point, point_data, grid_decimation->on_context);
+            grid_decimation->on_add_point(point, point_data,
+                                          grid_decimation->on_context);
     }
     else {
         if (grid_decimation->if_add_point

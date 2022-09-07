@@ -3,15 +3,14 @@
  * 01 -> class 1: LST produced, other quality, recommend examination of more detailed QA
  * 10 -> class 2: LST not produced due to cloud effects
  * 11 -> class 3: LST not produced primarily due to reasons other than cloud
- */  
+ */
 #include <grass/raster.h>
 
-CELL mod11A2a (CELL pixel) 
+CELL mod11A2a(CELL pixel)
 {
     CELL qctemp;
+
     qctemp = pixel & 0x03;
-    
+
     return qctemp;
 }
-
-

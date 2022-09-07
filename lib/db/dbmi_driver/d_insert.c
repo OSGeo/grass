@@ -17,11 +17,11 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Insert new record into table
+   \brief Insert new record into table
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_insert(void)
 {
     dbToken token;
@@ -32,9 +32,9 @@ int db_d_insert(void)
     DB_RECV_TOKEN(&token);
     cursor = (dbCursor *) db_find_token(token);
     if (cursor == NULL || !db_test_cursor_type_insert(cursor)) {
-	db_error("** not an insert cursor **");
-	DB_SEND_FAILURE();
-	return DB_FAILED;
+        db_error("** not an insert cursor **");
+        DB_SEND_FAILURE();
+        return DB_FAILED;
     }
     DB_RECV_TABLE_DATA(cursor->table);
 
@@ -43,8 +43,8 @@ int db_d_insert(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

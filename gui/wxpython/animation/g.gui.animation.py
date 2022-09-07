@@ -64,6 +64,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
@@ -71,10 +72,10 @@ def main():
     from animation.frame import AnimationFrame, MAX_COUNT
     from animation.data import AnimLayer
 
-    rast = options['raster']
-    vect = options['vector']
-    strds = options['strds']
-    stvds = options['stvds']
+    rast = options["raster"]
+    vect = options["vector"]
+    strds = options["strds"]
+    stvds = options["stvds"]
 
     numInputs = 0
 
@@ -88,8 +89,10 @@ def main():
         numInputs += 1
 
     if numInputs > 1:
-        gscript.fatal(_("%s=, %s=, %s= and %s= are mutually exclusive.") %
-                       ("raster", "vector", "strds", "stvds"))
+        gscript.fatal(
+            _("%s=, %s=, %s= and %s= are mutually exclusive.")
+            % ("raster", "vector", "strds", "stvds")
+        )
 
     if numInputs > 0:
         # We need to initialize the temporal framework in case
@@ -103,27 +106,27 @@ def main():
     layerList = LayerList()
     if rast:
         layer = AnimLayer()
-        layer.mapType = 'raster'
+        layer.mapType = "raster"
         layer.name = rast
-        layer.cmd = ['d.rast', 'map={name}'.format(name=rast.split(',')[0])]
+        layer.cmd = ["d.rast", "map={name}".format(name=rast.split(",")[0])]
         layerList.AddLayer(layer)
     if vect:
         layer = AnimLayer()
-        layer.mapType = 'vector'
+        layer.mapType = "vector"
         layer.name = vect
-        layer.cmd = ['d.vect', 'map={name}'.format(name=vect.split(',')[0])]
+        layer.cmd = ["d.vect", "map={name}".format(name=vect.split(",")[0])]
         layerList.AddLayer(layer)
     if strds:
         layer = AnimLayer()
-        layer.mapType = 'strds'
+        layer.mapType = "strds"
         layer.name = strds
-        layer.cmd = ['d.rast', 'map=']
+        layer.cmd = ["d.rast", "map="]
         layerList.AddLayer(layer)
     if stvds:
         layer = AnimLayer()
-        layer.mapType = 'stvds'
+        layer.mapType = "stvds"
         layer.name = stvds
-        layer.cmd = ['d.vect', 'map=']
+        layer.cmd = ["d.vect", "map="]
         layerList.AddLayer(layer)
 
     app = wx.App()
@@ -137,9 +140,9 @@ def main():
     frame.Show()
     if len(layerList) >= 1:
         # CallAfter added since it was crashing with wxPython 3 gtk
-        wx.CallAfter(frame.SetAnimations,
-                     [layerList] + [None] * (MAX_COUNT - 1))
+        wx.CallAfter(frame.SetAnimations, [layerList] + [None] * (MAX_COUNT - 1))
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

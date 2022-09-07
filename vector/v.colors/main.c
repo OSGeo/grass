@@ -2,11 +2,12 @@
 /****************************************************************
  *
  * MODULE:       v.colors
- * 
- * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- *               
+ *
+ * AUTHOR(S):    Martin Landa <landa.martin gmail.com>,
+ *               Huidae Cho <grass4u gmail.com>
+ *
  * PURPOSE:      Manage color tables for vector maps
- *               
+ *
  * COPYRIGHT:    (C) 2011-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -41,7 +42,8 @@ int main(int argc, char *argv[])
     } opt;
 
     int layer;
-    int overwrite, remove, is_from_stdin, stat, have_colors, convert, use;
+    int overwrite, remove, is_from_stdin, stat, have_colors, convert, invert,
+        use;
     const char *mapset, *cmapset;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
     char *name;
@@ -188,6 +190,7 @@ int main(int argc, char *argv[])
     attrcolumn = opt.attrcol->answer;
     rgbcolumn = opt.rgbcol->answer;
     convert = flag.c->answer;
+    invert = flag.n->answer;
     use = USE_CAT;
     if (opt.use->answer) {
         switch (opt.use->answer[0]) {
@@ -264,9 +267,8 @@ int main(int argc, char *argv[])
     G_suppress_warnings(TRUE);
     have_colors = Vect_read_colors(name, mapset, NULL);
 
-    if (have_colors > 0 && !overwrite) {
+    if (have_colors > 0 && !overwrite)
         G_fatal_error(_("Color table exists. Exiting."));
-    }
 
     G_suppress_warnings(FALSE);
 
@@ -330,10 +332,14 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Unable to read color table for 3D raster map <%s>"),
                               cmap);
         }
-    }
 
-    if (flag.n->answer)
-        Rast_invert_colors(&colors);
+        if (use == USE_ATTR && attrcolumn) {
+            colors_tmp = colors;
+            scan_attr(&Map, layer, attrcolumn, style, rules,
+                      opt.range->answer ? &range : NULL,
+                      &colors, &colors_tmp, invert);
+        }
+    }
 
     if (flag.e->answer) {
         histogram_eq_colors(&Map, layer, &colors_tmp, &colors);
@@ -349,6 +355,9 @@ int main(int argc, char *argv[])
         Rast_abs_log_colors(&colors_tmp, &colors, 100);
         colors = colors_tmp;
     }
+
+    if (use == USE_CAT && invert)
+        Rast_invert_colors(&colors);
 
     G_important_message(_("Writing color rules..."));
 

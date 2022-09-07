@@ -6,12 +6,12 @@
 
 struct octfunc
 {
-    int (*compare) ();
-    VOID_T **(*divide_data) ();
-    int (*add_data) ();
-    int (*intersect) ();
-    int (*division_check) ();
-    int (*get_points) ();
+    int (*compare)();
+    VOID_T **(*divide_data)();
+    int (*add_data)();
+    int (*intersect)();
+    int (*division_check)();
+    int (*get_points)();
 };
 
 struct octtree

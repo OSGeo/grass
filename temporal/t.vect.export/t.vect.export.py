@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.vect.export
@@ -85,8 +85,8 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
     # Export the space time vector dataset
-    tgis.export_stds(
-        _input, output, compression, directory, where, _format, "stvds")
+    tgis.export_stds(_input, output, compression, directory, where, _format, "stvds")
+
 
 ############################################################################
 if __name__ == "__main__":

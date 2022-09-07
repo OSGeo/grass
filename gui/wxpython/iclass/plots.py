@@ -59,50 +59,41 @@ class PlotPanel(scrolled.ScrolledPanel):
     def _createPlotPanel(self):
 
         self.canvasPanel = wx.Panel(parent=self)
-        self.mainSizer.Add(
-            self.canvasPanel,
-            proportion=1,
-            flag=wx.EXPAND,
-            border=0)
+        self.mainSizer.Add(self.canvasPanel, proportion=1, flag=wx.EXPAND, border=0)
         self.canvasSizer = wx.BoxSizer(wx.VERTICAL)
         self.canvasPanel.SetSizer(self.canvasSizer)
 
     def _createControlPanel(self):
-        self.plotSwitch = wx.Choice(self, id=wx.ID_ANY,
-                                    choices=[_("Histograms"),
-                                             _("Coincident plots"),
-                                             _("Scatter plots")])
+        self.plotSwitch = wx.Choice(
+            self,
+            id=wx.ID_ANY,
+            choices=[_("Histograms"), _("Coincident plots"), _("Scatter plots")],
+        )
         self.mainSizer.Add(
-            self.plotSwitch,
-            proportion=0,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+            self.plotSwitch, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
+        )
         self.plotSwitch.Bind(wx.EVT_CHOICE, self.OnPlotTypeSelected)
 
     def _createScatterPlotPanel(self):
-        """Init interactive scatter plot tool
-        """
+        """Init interactive scatter plot tool"""
         try:
             from iscatt.frame import IClassIScattPanel
+
             self.iscatt_panel = IClassIScattPanel(
-                parent=self, giface=self._giface,
-                iclass_mapwin=self.parent.GetFirstWindow())
+                parent=self,
+                giface=self._giface,
+                iclass_mapwin=self.parent.GetFirstWindow(),
+            )
             self.mainSizer.Add(
-                self.iscatt_panel,
-                proportion=1,
-                flag=wx.EXPAND,
-                border=0)
+                self.iscatt_panel, proportion=1, flag=wx.EXPAND, border=0
+            )
             self.iscatt_panel.Hide()
         except ImportError as e:
             self.scatt_error = _(
                 "Scatter plot functionality is disabled.\n\nReason: "
-                "Unable to import packages needed for scatter plot.\n%s" %
-                e)
-            wx.CallAfter(
-                GError,
-                self.scatt_error,
-                showTraceback=False,
-                parent=self)
+                "Unable to import packages needed for scatter plot.\n%s" % e
+            )
+            wx.CallAfter(GError, self.scatt_error, showTraceback=False, parent=self)
             self.iscatt_panel = None
 
     def OnPlotTypeSelected(self, event):
@@ -148,7 +139,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         for canvas in self.canvasList:
             canvas.enableZoom = enable
 
-        #canvas.zoom = type
+        # canvas.zoom = type
 
     def EnablePan(self, enable=True):
         for canvas in self.canvasList:
@@ -181,11 +172,7 @@ class PlotPanel(scrolled.ScrolledPanel):
             canvas.fontSizeAxis = 8
             self.canvasList.append(canvas)
 
-            self.canvasSizer.Add(
-                canvas,
-                proportion=1,
-                flag=wx.EXPAND,
-                border=0)
+            self.canvasSizer.Add(canvas, proportion=1, flag=wx.EXPAND, border=0)
 
         self.SetVirtualSize(self.GetBestVirtualSize())
         self.Layout()
@@ -218,7 +205,7 @@ class PlotPanel(scrolled.ScrolledPanel):
     def DrawCoincidencePlots(self):
         """Draw coincidence plots"""
         for bandIdx in range(len(self.bandList)):
-            self.canvasList[bandIdx].ySpec = 'none'
+            self.canvasList[bandIdx].ySpec = "none"
             lines = []
             level = 0.5
             lines.append(self.DrawInvisibleLine(level))
@@ -230,8 +217,7 @@ class PlotPanel(scrolled.ScrolledPanel):
                     continue
                 color = stat.color
                 level = i + 1
-                line = self.DrawCoincidenceLine(
-                    level, color, stat.bands[bandIdx])
+                line = self.DrawCoincidenceLine(level, color, stat.bands[bandIdx])
                 lines.append(line)
 
             # invisible
@@ -251,7 +237,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         minim = bandValues.min
         maxim = bandValues.max
         points = [(minim, level), (maxim, level)]
-        color = wx.Colour(*map(int, color.split(':')))
+        color = wx.Colour(*map(int, color.split(":")))
         return plot.PolyLine(points, colour=color, width=4)
 
     def DrawInvisibleLine(self, level):
@@ -267,9 +253,10 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.histogramLines = []
         for bandIdx in range(len(self.bandList)):
             self.canvasList[bandIdx].Clear()
-            self.canvasList[bandIdx].ySpec = 'auto'
+            self.canvasList[bandIdx].ySpec = "auto"
             histgramLine = self.CreateHistogramLine(
-                bandValues=statistics.bands[bandIdx])
+                bandValues=statistics.bands[bandIdx]
+            )
 
             meanLine = self.CreateMean(bandValues=statistics.bands[bandIdx])
 
@@ -277,17 +264,15 @@ class PlotPanel(scrolled.ScrolledPanel):
 
             maxLine = self.CreateMax(bandValues=statistics.bands[bandIdx])
 
-            self.histogramLines.append(
-                [histgramLine, meanLine, minLine, maxLine])
+            self.histogramLines.append([histgramLine, meanLine, minLine, maxLine])
 
-            maxRangeLine = self.CreateMaxRange(
-                bandValues=statistics.bands[bandIdx])
-            minRangeLine = self.CreateMinRange(
-                bandValues=statistics.bands[bandIdx])
+            maxRangeLine = self.CreateMaxRange(bandValues=statistics.bands[bandIdx])
+            minRangeLine = self.CreateMinRange(bandValues=statistics.bands[bandIdx])
 
             plotGraph = plot.PlotGraphics(
                 self.histogramLines[bandIdx] + [minRangeLine, maxRangeLine],
-                title=self.bandList[bandIdx])
+                title=self.bandList[bandIdx],
+            )
             self.canvasList[bandIdx].Draw(plotGraph)
 
     def CreateMinRange(self, bandValues):
@@ -344,12 +329,11 @@ class PlotPanel(scrolled.ScrolledPanel):
         """
         for bandIdx in range(len(self.bandList)):
             self.canvasList[bandIdx].Clear()
-            maxRangeLine = self.CreateMaxRange(
-                bandValues=statistics.bands[bandIdx])
-            minRangeLine = self.CreateMinRange(
-                bandValues=statistics.bands[bandIdx])
+            maxRangeLine = self.CreateMaxRange(bandValues=statistics.bands[bandIdx])
+            minRangeLine = self.CreateMinRange(bandValues=statistics.bands[bandIdx])
 
             plotGraph = plot.PlotGraphics(
                 self.histogramLines[bandIdx] + [minRangeLine, maxRangeLine],
-                title=self.bandList[bandIdx])
+                title=self.bandList[bandIdx],
+            )
             self.canvasList[bandIdx].Draw(plotGraph)

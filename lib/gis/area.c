@@ -13,7 +13,8 @@
 
 #include <grass/gis.h>
 
-static struct state {
+static struct state
+{
     struct Cell_head window;
     double square_meters;
     int projection;
@@ -24,7 +25,7 @@ static struct state {
     int next_row;
     double north_value;
     double north;
-    double (*darea0) (double);
+    double (*darea0)(double);
 } state;
 
 static struct state *st = &state;
@@ -51,25 +52,25 @@ int G_begin_cell_area_calculations(void)
     G_get_set_window(&st->window);
     switch (st->projection = st->window.proj) {
     case PROJECTION_LL:
-	G_get_ellipsoid_parameters(&a, &e2);
-	if (e2) {
-	    G_begin_zone_area_on_ellipsoid(a, e2, st->window.ew_res / 360.0);
-	    st->darea0 = G_darea0_on_ellipsoid;
-	}
-	else {
-	    G_begin_zone_area_on_sphere(a, st->window.ew_res / 360.0);
-	    st->darea0 = G_darea0_on_sphere;
-	}
-	st->next_row = 0;
-	st->north = st->window.north;
-	st->north_value = st->darea0(st->north);
-	return 2;
+        G_get_ellipsoid_parameters(&a, &e2);
+        if (e2) {
+            G_begin_zone_area_on_ellipsoid(a, e2, st->window.ew_res / 360.0);
+            st->darea0 = G_darea0_on_ellipsoid;
+        }
+        else {
+            G_begin_zone_area_on_sphere(a, st->window.ew_res / 360.0);
+            st->darea0 = G_darea0_on_sphere;
+        }
+        st->next_row = 0;
+        st->north = st->window.north;
+        st->north_value = st->darea0(st->north);
+        return 2;
     default:
-	st->square_meters = st->window.ns_res * st->window.ew_res;
-	factor = G_database_units_to_meters_factor();
-	if (factor > 0.0)
-	    st->square_meters *= (factor * factor);
-	return (factor > 0.0);
+        st->square_meters = st->window.ns_res * st->window.ew_res;
+        factor = G_database_units_to_meters_factor();
+        if (factor > 0.0)
+            st->square_meters *= (factor * factor);
+        return (factor > 0.0);
     }
 }
 
@@ -90,11 +91,11 @@ double G_area_of_cell_at_row(int row)
     double cell_area;
 
     if (st->projection != PROJECTION_LL)
-	return st->square_meters;
+        return st->square_meters;
 
     if (row != st->next_row) {
-	st->north = st->window.north - row * st->window.ns_res;
-	st->north_value = st->darea0(st->north);
+        st->north = st->window.north - row * st->window.ns_res;
+        st->north_value = st->darea0(st->north);
     }
 
     st->north -= st->window.ns_res;
@@ -123,14 +124,14 @@ int G_begin_polygon_area_calculations(void)
     double factor;
 
     if ((st->projection = G_projection()) == PROJECTION_LL) {
-	G_get_ellipsoid_parameters(&a, &e2);
-	G_begin_ellipsoid_polygon_area(a, e2);
-	return 2;
+        G_get_ellipsoid_parameters(&a, &e2);
+        G_begin_ellipsoid_polygon_area(a, e2);
+        return 2;
     }
     factor = G_database_units_to_meters_factor();
     if (factor > 0.0) {
-	st->units_to_meters_squared = factor * factor;
-	return 1;
+        st->units_to_meters_squared = factor * factor;
+        return 1;
     }
     st->units_to_meters_squared = 1.0;
     return 0;
@@ -161,9 +162,10 @@ double G_area_of_polygon(const double *x, const double *y, int n)
     double area;
 
     if (st->projection == PROJECTION_LL)
-	area = G_ellipsoid_polygon_area(x, y, n);
+        area = G_ellipsoid_polygon_area(x, y, n);
     else
-	area = G_planimetric_polygon_area(x, y, n) * st->units_to_meters_squared;
+        area =
+            G_planimetric_polygon_area(x, y, n) * st->units_to_meters_squared;
 
     return area;
 }

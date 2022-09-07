@@ -77,7 +77,7 @@ void gsdiff_set_SDref(geosurf * gsref)
 geosurf *gsdiff_get_SDref(void)
 {
     if (Refsurf && Refbuff) {
-	return (Refsurf);
+        return (Refsurf);
     }
 
     return (NULL);
@@ -96,8 +96,8 @@ float gsdiff_do_SD(float val, int offset)
     float ref;
 
     if (Refbuff) {
-	GET_MAPATT(Refbuff, offset, ref);
-	return (ref + (val - ref) * Refscale);
+        GET_MAPATT(Refbuff, offset, ref);
+        return (ref + (val - ref) * Refscale);
     }
 
     return (val);

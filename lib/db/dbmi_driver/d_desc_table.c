@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Describe table
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \brief Describe table
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_describe_table(void)
 {
@@ -39,8 +39,8 @@ int db_d_describe_table(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

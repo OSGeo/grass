@@ -33,7 +33,7 @@ void G_write_zeros(int fd, size_t n)
     int i;
 
     if (n <= 0)
-	return;
+        return;
 
     /* There is a subtle gotcha to be avoided here.
      *
@@ -43,22 +43,22 @@ void G_write_zeros(int fd, size_t n)
 
     /* fill zeros buffer with zeros */
     if (n > sizeof(zeros))
-	i = sizeof(zeros);
+        i = sizeof(zeros);
     else
-	i = n;			/* this is ok here */
+        i = n;                  /* this is ok here */
 
     z = zeros;
     while (i--)
-	*z++ = 0;
+        *z++ = 0;
 
     /* write n zeros to fd */
     while (n > 0) {
-	if (n > sizeof(zeros))
-	    i = sizeof(zeros);
-	else
-	    i = n;		/* this is ok here */
+        if (n > sizeof(zeros))
+            i = sizeof(zeros);
+        else
+            i = n;              /* this is ok here */
 
-	write(fd, zeros, i);
-	n -= i;
+        write(fd, zeros, i);
+        n -= i;
     }
 }

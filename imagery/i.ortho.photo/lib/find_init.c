@@ -9,10 +9,11 @@
 int I_find_initial(char *group)
 {
     char *element;
+
     element = (char *)G_malloc(80 * sizeof(char));
 
     if (group == NULL || *group == 0)
-	return 0;
+        return 0;
     sprintf(element, "group/%s", group);
     return G_find_file(element, "INIT_EXP", G_mapset()) != NULL;
 }

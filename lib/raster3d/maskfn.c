@@ -48,10 +48,10 @@ int Rast3d_mask_d_select(DCELL * x, d_Mask * mask)
     d_Interval *I;
 
     if (mask->list == NULL)
-	return 0;
+        return 0;
     for (I = mask->list; I; I = I->next) {
-	if (Rast3d_mask_match_d_interval(*x, I))
-	    return 1;
+        if (Rast3d_mask_match_d_interval(*x, I))
+            return 1;
     }
     return 0;
 }
@@ -59,10 +59,10 @@ int Rast3d_mask_d_select(DCELL * x, d_Mask * mask)
 DCELL Rast3d_mask_match_d_interval(DCELL x, d_Interval * I)
 {
     if (I->inf < 0)
-	return x <= I->low;
+        return x <= I->low;
 
     if (I->inf > 0)
-	return x >= I->high;
+        return x >= I->high;
 
     return x >= I->low && x <= I->high;
 }
@@ -74,27 +74,27 @@ void parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
 
     /* #-# */
     if (sscanf(vallist, "%lf-%lf", &a, &b) == 2) {
-	G_message(_("Adding rule: %lf - %lf"), a, b);
-	add_d_mask_rule(d_mask, a, b, 0);
+        G_message(_("Adding rule: %lf - %lf"), a, b);
+        add_d_mask_rule(d_mask, a, b, 0);
     }
     /* inf-# */
     else if (sscanf(vallist, "%[^ -\t]-%lf", junk, &a) == 2)
-	add_d_mask_rule(d_mask, a, a, -1);
+        add_d_mask_rule(d_mask, a, a, -1);
 
     /* #-inf */
     else if (sscanf(vallist, "%lf-%[^ \t]", &a, junk) == 2)
-	add_d_mask_rule(d_mask, a, a, 1);
+        add_d_mask_rule(d_mask, a, a, 1);
 
     /* # */
     else if (sscanf(vallist, "%lf", &a) == 1)
-	add_d_mask_rule(d_mask, a, a, 0);
+        add_d_mask_rule(d_mask, a, a, 0);
 
     else {
-	if (where)
-	    G_message("%s: ", where);
-	G_warning(_("%s: illegal value spec"), vallist);
-	G_usage();
-	exit(EXIT_FAILURE);
+        if (where)
+            G_message("%s: ", where);
+        G_warning(_("%s: illegal value spec"), vallist);
+        G_usage();
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -108,24 +108,24 @@ void Rast3d_parse_vallist(char **vallist, d_Mask ** d_mask)
 
     init_d_mask_rules(*d_mask);
     if (vallist == NULL)
-	return;
+        return;
 
     for (; *vallist; vallist++) {
-	if (*vallist[0] == '/') {
-	    fd = fopen(*vallist, "r");
-	    if (fd == NULL) {
-		perror(*vallist);
-		G_usage();
-		exit(EXIT_FAILURE);
-	    }
-	    while (fgets(buf, sizeof buf, fd)) {
-		if (sscanf(buf, "%1s", x) != 1 || *x == '#')
-		    continue;
-		parse_d_mask_rule(buf, *d_mask, *vallist);
-	    }
-	    fclose(fd);
-	}
-	else
-	    parse_d_mask_rule(*vallist, *d_mask, (char *)NULL);
+        if (*vallist[0] == '/') {
+            fd = fopen(*vallist, "r");
+            if (fd == NULL) {
+                perror(*vallist);
+                G_usage();
+                exit(EXIT_FAILURE);
+            }
+            while (fgets(buf, sizeof buf, fd)) {
+                if (sscanf(buf, "%1s", x) != 1 || *x == '#')
+                    continue;
+                parse_d_mask_rule(buf, *d_mask, *vallist);
+            }
+            fclose(fd);
+        }
+        else
+            parse_d_mask_rule(*vallist, *d_mask, (char *)NULL);
     }
 }

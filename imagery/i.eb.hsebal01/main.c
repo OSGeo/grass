@@ -56,8 +56,6 @@ int main(int argc, char *argv[])
     DCELL *outrast;
     int nrows = 0, ncols = 0;
     int row = 0, col = 0;
-    int row_wet = 0, col_wet = 0;
-    int row_dry = 0, col_dry = 0;
     double m_row_wet = 0.0, m_col_wet = 0.0;
     double m_row_dry = 0.0, m_col_dry = 0.0;
     int infd_Rn, infd_g0;

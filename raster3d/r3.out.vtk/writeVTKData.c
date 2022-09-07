@@ -30,8 +30,8 @@
 /*local prototypes */
 static double get_raster_value_as_double(int maptype, void *ptr,
                                          double nullval);
-static double get_g3d_raster_value_as_double(RASTER3D_Map *map, int x, int y,
-					     int z, int type, double nullval);
+static double get_g3d_raster_value_as_double(RASTER3D_Map * map, int x, int y,
+                                             int z, int type, double nullval);
 
 
 /* ************************************************************************* */
@@ -45,21 +45,24 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
     if (MapType == CELL_TYPE) {
         if (Rast_is_null_value(ptr, MapType)) {
             val = nullval;
-        } else {
+        }
+        else {
             val = *(CELL *) ptr;
         }
     }
     if (MapType == FCELL_TYPE) {
         if (Rast_is_null_value(ptr, MapType)) {
             val = nullval;
-        } else {
+        }
+        else {
             val = *(FCELL *) ptr;
         }
     }
     if (MapType == DCELL_TYPE) {
         if (Rast_is_null_value(ptr, MapType)) {
             val = nullval;
-        } else {
+        }
+        else {
             val = *(DCELL *) ptr;
         }
     }
@@ -71,7 +74,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 /* Get the value of the 3d raster map as double *************************** */
 
 /* ************************************************************************* */
-double get_g3d_raster_value_as_double(RASTER3D_Map *map, int x, int y, int z,
+double get_g3d_raster_value_as_double(RASTER3D_Map * map, int x, int y, int z,
                                       int type, double nullval)
 {
     double val = 0;
@@ -83,8 +86,9 @@ double get_g3d_raster_value_as_double(RASTER3D_Map *map, int x, int y, int z,
         if (Rast3d_is_null_value_num(&fvalue, FCELL_TYPE))
             val = nullval;
         else
-            val = (double) fvalue;
-    } else {
+            val = (double)fvalue;
+    }
+    else {
         Rast3d_get_value(map, x, y, z, &dvalue, type);
         if (Rast3d_is_null_value_num(&dvalue, DCELL_TYPE))
             val = nullval;
@@ -99,8 +103,8 @@ double get_g3d_raster_value_as_double(RASTER3D_Map *map, int x, int y, int z,
 /* This function writes the point coordinates ****************************** */
 
 /* ************************************************************************* */
-void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region, int dp,
-                      int type, double scale)
+void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region,
+                      int dp, int type, double scale)
 {
     int x, y, z, percentage = 0;
     int rows, cols, depths;
@@ -132,12 +136,12 @@ void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region, int dp
             Rast_get_row(in->bottom, rast_bottom, y, in->bottomMapType);
 
             for (x = 0, ptr_top = rast_top, ptr_bottom = rast_bottom;
-                x < cols;
-                x++, ptr_top =
-                G_incr_void_ptr(ptr_top, Rast_cell_size(in->topMapType)),
-                ptr_bottom =
-                G_incr_void_ptr(ptr_bottom,
-                                Rast_cell_size(in->bottomMapType))) {
+                 x < cols;
+                 x++, ptr_top =
+                 G_incr_void_ptr(ptr_top, Rast_cell_size(in->topMapType)),
+                 ptr_bottom =
+                 G_incr_void_ptr(ptr_bottom,
+                                 Rast_cell_size(in->bottomMapType))) {
 
                 /*Get the values */
                 topval =
@@ -146,18 +150,18 @@ void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region, int dp
                     get_raster_value_as_double(in->bottomMapType, ptr_bottom,
                                                0.0);
 
-                if (type == 1) { /*Structured Grid */
+                if (type == 1) {        /*Structured Grid */
                     /*Calculate the coordinates */
                     xcoor =
                         region.west + (region.ew_res / 2 +
-                        region.ew_res * (x));
+                                       region.ew_res * (x));
                     /* Here the raster3d north->south coordinate system is used */
                     ycoor =
                         region.north - (region.ns_res / 2 +
-                        region.ns_res * (y));
+                                        region.ns_res * (y));
                     zcoor =
                         (bottomval +
-                        z * (topval - bottomval) / (depths - 1)) * scale;
+                         z * (topval - bottomval) / (depths - 1)) * scale;
 
                     xcoor -= x_extent;
                     ycoor -= y_extent;
@@ -165,7 +169,8 @@ void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region, int dp
                     fprintf(fp, "%.*f ", dp, xcoor);
                     fprintf(fp, "%.*f ", dp, ycoor);
                     fprintf(fp, "%.*f\n", dp, zcoor);
-                } else { /*Unstructured Grid */
+                }
+                else {          /*Unstructured Grid */
                     /*Write for every cell the coordinates for a hexahedron -> 8 points */
                     /*VTK Hexaeder */
                     /* bottom
@@ -179,15 +184,15 @@ void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region, int dp
                      * 4 --- 5
 
                      */
-                    xcoor = region.west + (region.ew_res * (x)); /*0, 3, 4, 7 */
+                    xcoor = region.west + (region.ew_res * (x));        /*0, 3, 4, 7 */
                     /* Here the raster3d north->south coordinate system is used */
-                    ycoor = region.north - (region.ns_res * (y)); /*2, 3, 6, 7 */
-                    zcoor = (bottomval + z * (topval - bottomval) / (depths)) * scale; /*0, 1, 2, 3 */
+                    ycoor = region.north - (region.ns_res * (y));       /*2, 3, 6, 7 */
+                    zcoor = (bottomval + z * (topval - bottomval) / (depths)) * scale;  /*0, 1, 2, 3 */
 
-                    xcoor1 = region.west + (region.ew_res + region.ew_res * (x)); /*1, 2, 5, 6 */
+                    xcoor1 = region.west + (region.ew_res + region.ew_res * (x));       /*1, 2, 5, 6 */
                     /* Here the raster3d north->south coordinate system is used */
-                    ycoor1 = region.north - (region.ns_res + region.ns_res * (y)); /*0, 1, 4, 5 */
-                    zcoor1 = (bottomval + z * (topval - bottomval) / (depths) + (topval - bottomval) / (depths)) * scale; /*4, 5, ,6 ,7 */
+                    ycoor1 = region.north - (region.ns_res + region.ns_res * (y));      /*0, 1, 4, 5 */
+                    zcoor1 = (bottomval + z * (topval - bottomval) / (depths) + (topval - bottomval) / (depths)) * scale;       /*4, 5, ,6 ,7 */
 
                     xcoor -= x_extent;
                     ycoor -= y_extent;
@@ -235,7 +240,7 @@ void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region, int dp
     }
 
     if (type == 1)
-        fprintf(fp, "POINT_DATA %i\n", region.cols * region.rows * region.depths); /*We have pointdata */
+        fprintf(fp, "POINT_DATA %i\n", region.cols * region.rows * region.depths);      /*We have pointdata */
 
     return;
 }
@@ -303,7 +308,7 @@ void write_vtk_unstructured_grid_cells(FILE * fp, RASTER3D_Region region)
         }
     }
 
-    fprintf(fp, "CELL_DATA %i\n", region.cols * region.rows * region.depths); /*We have celldata  */
+    fprintf(fp, "CELL_DATA %i\n", region.cols * region.rows * region.depths);   /*We have celldata  */
 
     return;
 }
@@ -313,8 +318,8 @@ void write_vtk_unstructured_grid_cells(FILE * fp, RASTER3D_Region region)
 /* Write the VTK Cell or point data **************************************** */
 
 /* ************************************************************************* */
-void write_vtk_data(FILE * fp, RASTER3D_Map *map, RASTER3D_Region region,
-		    char *varname, int dp)
+void write_vtk_data(FILE * fp, RASTER3D_Map * map, RASTER3D_Region region,
+                    char *varname, int dp)
 {
     double value;
     double nullvalue;
@@ -360,7 +365,8 @@ void write_vtk_data(FILE * fp, RASTER3D_Map *map, RASTER3D_Region region,
                 }
                 fprintf(fp, "\n");
             }
-        } else {
+        }
+        else {
             for (y = 0; y < rows; y++) {
                 G_percent(percentage, (rows * depths - 1), 10);
                 percentage++;
@@ -382,8 +388,8 @@ void write_vtk_data(FILE * fp, RASTER3D_Map *map, RASTER3D_Region region,
 /* Write the VTK RGB Voxel Data ******************************************** */
 
 /* ************************************************************************* */
-void write_vtk_rgb_data(RASTER3D_Map *map_r, RASTER3D_Map *map_g,
-			RASTER3D_Map *map_b, FILE * fp, const char *varname,
+void write_vtk_rgb_data(RASTER3D_Map * map_r, RASTER3D_Map * map_g,
+                        RASTER3D_Map * map_b, FILE * fp, const char *varname,
                         RASTER3D_Region region, int dp)
 {
     double value = 0;
@@ -428,19 +434,21 @@ void write_vtk_rgb_data(RASTER3D_Map *map_r, RASTER3D_Map *map_g,
                      */
                     if (!param.structgrid->answer)
                         value =
-                        get_g3d_raster_value_as_double(maprgb, x, rows - y - 1, z,
-                                                       typeIntern[k],
-                                                       0.0);
+                            get_g3d_raster_value_as_double(maprgb, x,
+                                                           rows - y - 1, z,
+                                                           typeIntern[k],
+                                                           0.0);
                     else
                         value =
-                        get_g3d_raster_value_as_double(maprgb, x, y, z,
-                                                       typeIntern[k],
-                                                       0.0);
+                            get_g3d_raster_value_as_double(maprgb, x, y, z,
+                                                           typeIntern[k],
+                                                           0.0);
                     /*Test of value range, the data should be 1 byte gray values */
                     if (value > 255 || value < 0) {
                         G_warning(_("Wrong 3D raster map values! Values should in between 0 and 255!"));
                         fprintf(fp, "0 ");
-                    } else {
+                    }
+                    else {
 
                         fprintf(fp, "%.*f ", dp, (value / 255));
                     }
@@ -457,9 +465,10 @@ void write_vtk_rgb_data(RASTER3D_Map *map_r, RASTER3D_Map *map_g,
 /* Write the VTK vector Data *********************************************** */
 
 /* ************************************************************************* */
-void write_vtk_vector_data(RASTER3D_Map *map_x, RASTER3D_Map *map_y,
-			   RASTER3D_Map *map_z, FILE * fp, const char *varname,
-                           RASTER3D_Region region, int dp)
+void write_vtk_vector_data(RASTER3D_Map * map_x, RASTER3D_Map * map_y,
+                           RASTER3D_Map * map_z, FILE * fp,
+                           const char *varname, RASTER3D_Region region,
+                           int dp)
 {
     double value = 0;
     int x, y, z, percentage, k;
@@ -482,7 +491,7 @@ void write_vtk_vector_data(RASTER3D_Map *map_x, RASTER3D_Map *map_y,
     /********************** WRITE VECTOR DATA; CELL OR POINT ****************/
     fprintf(fp, "VECTORS %s float\n", varname);
 
-    for (z = 0; z < depths; z++) { /*From the bottom to the top */
+    for (z = 0; z < depths; z++) {      /*From the bottom to the top */
         for (y = 0; y < rows; y++) {
             G_percent(percentage, (rows * depths - 1), 10);
             percentage++;
@@ -503,14 +512,15 @@ void write_vtk_vector_data(RASTER3D_Map *map_x, RASTER3D_Map *map_y,
                      */
                     if (!param.structgrid->answer)
                         value =
-                        get_g3d_raster_value_as_double(mapvect, x, rows - y - 1, z,
-                                                       typeIntern[k],
-                                                       0.0);
+                            get_g3d_raster_value_as_double(mapvect, x,
+                                                           rows - y - 1, z,
+                                                           typeIntern[k],
+                                                           0.0);
                     else
                         value =
-                        get_g3d_raster_value_as_double(mapvect, x, y, z,
-                                                       typeIntern[k],
-                                                       0.0);
+                            get_g3d_raster_value_as_double(mapvect, x, y, z,
+                                                           typeIntern[k],
+                                                           0.0);
                     fprintf(fp, "%.*f ", dp, value);
                 }
                 fprintf(fp, "\n");

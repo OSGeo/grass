@@ -35,7 +35,7 @@
 extern int data_type;
 extern int data_size;
 extern struct Map_info Map;
-extern int input_fd;		/*    input_fd     input raster map descriptor */
+extern int input_fd;            /*    input_fd     input raster map descriptor */
 extern struct line_cats *Cats;
 extern struct Cell_head cell_head;
 
@@ -46,22 +46,22 @@ extern int row_length, row_count, n_rows;
 extern int total_areas;
 extern int n_alloced_ptrs;
 
-extern int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
-extern int value_flag;		/* use raster values as categories */
+extern int smooth_flag;         /* this is 0 for no smoothing, 1 for smoothing of lines */
+extern int value_flag;          /* use raster values as categories */
 
 extern struct Categories RastCats;
-extern int has_cats;		/* Category labels available */
+extern int has_cats;            /* Category labels available */
 extern struct field_info *Fi;
 extern dbDriver *driver;
 extern dbString sql, label;
 
 struct COOR
 {
-    struct COOR *bptr, *fptr;	/* pointers to neighboring points */
-    int row, col, node;		/* row, column of point; node flag */
-    int val;			/* CELL value */
-    double dval;		/* FCELL/DCELL value */
-    double right, left;		/* areas to right and left of line */
+    struct COOR *bptr, *fptr;   /* pointers to neighboring points */
+    int row, col, node;         /* row, column of point; node flag */
+    int val;                    /* CELL value */
+    double dval;                /* FCELL/DCELL value */
+    double right, left;         /* areas to right and left of line */
 
 };
 
@@ -79,11 +79,11 @@ struct line_hdr
 
 struct area_table
 {
-    int free;			/* this entry is not taken yet */
-    double cat;			/* category number for this area */
-    int row;			/* row and column of point where the */
-    int col;			/*   area is widest */
-    int width;			/*   and width there */
+    int free;                   /* this entry is not taken yet */
+    double cat;                 /* category number for this area */
+    int row;                    /* row and column of point where the */
+    int col;                    /*   area is widest */
+    int width;                  /*   and width there */
 };
 
 /* equiv_table - structure in which to compile equivalences between area */
@@ -91,11 +91,11 @@ struct area_table
 
 struct equiv_table
 {
-    int mapped;			/* is this area number mapped? */
-    int where;			/* if so, where */
-    int count;			/* if not, number mapped here */
+    int mapped;                 /* is this area number mapped? */
+    int where;                  /* if so, where */
+    int count;                  /* if not, number mapped here */
     int length;
-    int *ptr;			/*   and pointer to them */
+    int *ptr;                   /*   and pointer to them */
 };
 
 

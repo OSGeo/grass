@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Find database
+   \brief Find database
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_find_database(void)
 {
@@ -39,16 +39,16 @@ int db_d_find_database(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	db_free_handle(&handle);
-	DB_SEND_FAILURE();
-	return DB_OK;
+        db_free_handle(&handle);
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 
     /* send results */
     DB_SEND_INT(found);
     if (found) {
-	DB_SEND_HANDLE(&handle);
+        DB_SEND_HANDLE(&handle);
     }
     db_free_handle(&handle);
     return DB_OK;

@@ -479,8 +479,6 @@ from .datetime_math import create_numeric_suffix
 if sys.version_info[0] >= 3:
     unicode = str
 
-##############################################################################
-
 
 class TemporalAlgebraLexer(object):
     """Lexical analyzer for the GRASS GIS temporal algebra"""
@@ -706,9 +704,6 @@ class TemporalAlgebraLexer(object):
             print(tok)
 
 
-###############################################################################
-
-
 class GlobalTemporalVar(object):
     """This class handles global temporal variable conditional expressions,
     like start_doy() == 3.
@@ -760,18 +755,12 @@ class GlobalTemporalVar(object):
         return str(self.tfunc) + str(self.compop) + str(self.value)
 
 
-###############################################################################
-
-
 class FatalError(Exception):
     def __init__(self, msg):
         self.value = msg
 
     def __str__(self):
         return self.value
-
-
-###############################################################################
 
 
 class TemporalAlgebraParser(object):
@@ -1186,13 +1175,10 @@ class TemporalAlgebraParser(object):
             # Append map to result map list.
             # if returncode == 1:
             #    resultlist.append(map_new)
-        # Get sorted map objects as values from result dictionoary.
+        # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
         resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
         return resultlist
-
-    ######################### Temporal functions ##############################
 
     def remove_maps(self):
         """Removes empty or intermediate maps of different type."""
@@ -2331,8 +2317,6 @@ class TemporalAlgebraParser(object):
         else:
             return resultlist
 
-    ###########################################################################
-
     def p_statement_assign(self, t):
         # The expression should always return a list of maps
         # This function starts all the work and is the last one that is called from the parser
@@ -2574,7 +2558,7 @@ class TemporalAlgebraParser(object):
         t[0] = t[1]
 
     def p_paren_expr(self, t):
-        """ expr : LPAREN expr RPAREN"""
+        """expr : LPAREN expr RPAREN"""
         t[0] = t[2]
 
     def p_number(self, t):
@@ -3351,8 +3335,6 @@ class TemporalAlgebraParser(object):
         else:
             raise SyntaxError("Unexpected syntax error")
 
-
-###############################################################################
 
 if __name__ == "__main__":
     import doctest

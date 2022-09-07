@@ -17,11 +17,11 @@
 #include "dbstubs.h"
 
 /*!
-  \brief ?
+   \brief ?
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_update(void)
 {
     dbToken token;
@@ -32,14 +32,14 @@ int db_d_update(void)
     DB_RECV_TOKEN(&token);
     cursor = (dbCursor *) db_find_token(token);
     if (cursor == NULL || !db_test_cursor_type_update(cursor)) {
-	db_error("** not an update cursor **");
-	DB_SEND_FAILURE();
-	return DB_FAILED;
+        db_error("** not an update cursor **");
+        DB_SEND_FAILURE();
+        return DB_FAILED;
     }
     if (!db_test_cursor_any_column_flag(cursor)) {
-	db_error("** no columns bound in cursor for update **");
-	DB_SEND_FAILURE();
-	return DB_FAILED;
+        db_error("** no columns bound in cursor for update **");
+        DB_SEND_FAILURE();
+        return DB_FAILED;
     }
     DB_RECV_TABLE_DATA(cursor->table);
 
@@ -48,8 +48,8 @@ int db_d_update(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

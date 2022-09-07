@@ -10,8 +10,8 @@ year = "1995"
 
 from grass.gunittest.case import TestCase
 
-class ValidationExcavation(TestCase):
 
+class ValidationExcavation(TestCase):
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
@@ -20,19 +20,20 @@ class ValidationExcavation(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region
-        """
+        """!Remove the temporary region"""
         cls.del_temp_region()
 
     def setUp(self):
-        """Create input data for steady state groundwater flow computation
-        """
+        """Create input data for steady state groundwater flow computation"""
         self.runModule("r.mapcalc", expression="phead= if(row() == 19, 5, 3)")
-        self.runModule("r.mapcalc", expression="status=if((col() == 1 && row() == 13) ||\
+        self.runModule(
+            "r.mapcalc",
+            expression="status=if((col() == 1 && row() == 13) ||\
                                       (col() == 1 && row() == 14) ||\
                                       (col() == 2 && row() == 13) ||\
                                       (col() == 2 && row() == 14) ||\
-                                      (row() == 19), 2, 1)")
+                                      (row() == 19), 2, 1)",
+        )
 
         self.runModule("r.mapcalc", expression="hydcond=0.001")
         self.runModule("r.mapcalc", expression="recharge=0.000000006")
@@ -42,13 +43,27 @@ class ValidationExcavation(TestCase):
         self.runModule("r.mapcalc", expression="null=0.0")
 
     def test_steady_state(self):
-        #compute a steady state groundwater flow
-        self.assertModule("r.gwflow", flags="f", solver="cholesky", top="top", bottom="bottom", phead="phead",
-            status="status", hc_x="hydcond", hc_y="hydcond", s="poros",
-            recharge="recharge", output="gwresult", dtime=864000000000, type="unconfined", budget="water_budget")
+        # compute a steady state groundwater flow
+        self.assertModule(
+            "r.gwflow",
+            flags="f",
+            solver="cholesky",
+            top="top",
+            bottom="bottom",
+            phead="phead",
+            status="status",
+            hc_x="hydcond",
+            hc_y="hydcond",
+            s="poros",
+            recharge="recharge",
+            output="gwresult",
+            dtime=864000000000,
+            type="unconfined",
+            budget="water_budget",
+        )
 
         # Output of r.univar -g
-        univar_string="""n=760
+        univar_string = """n=760
         null_cells=0
         cells=760
         min=3
@@ -62,7 +77,7 @@ class ValidationExcavation(TestCase):
         sum=3821.63682623547"""
 
         # Output of r.info -gre, only a subset of the output is needed
-        info_string="""north=950
+        info_string = """north=950
         south=0
         east=2000
         west=0
@@ -77,9 +92,13 @@ class ValidationExcavation(TestCase):
         max=5.3976262918968
         map=gwresult"""
 
-        self.assertRasterFitsUnivar(raster="gwresult", reference=univar_string, precision=3)
+        self.assertRasterFitsUnivar(
+            raster="gwresult", reference=univar_string, precision=3
+        )
         self.assertRasterFitsInfo(raster="gwresult", reference=info_string, precision=3)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()

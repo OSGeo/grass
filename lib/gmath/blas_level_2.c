@@ -52,11 +52,11 @@ void G_math_d_Ax(double **A, double *x, double *y, int rows, int cols)
 
 #pragma omp for schedule (static) private(i, j, tmp)
     for (i = 0; i < rows; i++) {
-	tmp = 0;
-	for (j = cols - 1; j >= 0; j--) {
-	    tmp += A[i][j] * x[j];
-	}
-	y[i] = tmp;
+        tmp = 0;
+        for (j = cols - 1; j >= 0; j--) {
+            tmp += A[i][j] * x[j];
+        }
+        y[i] = tmp;
     }
     return;
 }
@@ -86,11 +86,11 @@ void G_math_f_Ax(float **A, float *x, float *y, int rows, int cols)
 
 #pragma omp for schedule (static) private(i, j, tmp)
     for (i = 0; i < rows; i++) {
-	tmp = 0;
-	for (j = cols - 1; j >= 0; j--) {
-	    tmp += A[i][j] * x[j];
-	}
-	y[i] = tmp;
+        tmp = 0;
+        for (j = cols - 1; j >= 0; j--) {
+            tmp += A[i][j] * x[j];
+        }
+        y[i] = tmp;
     }
     return;
 }
@@ -118,9 +118,9 @@ void G_math_d_x_dyad_y(double *x, double *y, double **A, int rows, int cols)
 
 #pragma omp for schedule (static) private(i, j)
     for (i = 0; i < rows; i++) {
-	for (j = cols - 1; j >= 0; j--) {
-	    A[i][j] = x[i] * y[j];
-	}
+        for (j = cols - 1; j >= 0; j--) {
+            A[i][j] = x[i] * y[j];
+        }
     }
     return;
 }
@@ -148,9 +148,9 @@ void G_math_f_x_dyad_y(float *x, float *y, float **A, int rows, int cols)
 
 #pragma omp for schedule (static) private(i, j)
     for (i = 0; i < rows; i++) {
-	for (j = cols - 1; j >= 0; j--) {
-	    A[i][j] = x[i] * y[j];
-	}
+        for (j = cols - 1; j >= 0; j--) {
+            A[i][j] = x[i] * y[j];
+        }
     }
     return;
 }
@@ -177,7 +177,7 @@ void G_math_f_x_dyad_y(float *x, float *y, float **A, int rows, int cols)
  * */
 
 void G_math_d_aAx_by(double **A, double *x, double *y, double a, double b,
-		     double *z, int rows, int cols)
+                     double *z, int rows, int cols)
 {
     int i, j;
 
@@ -186,53 +186,53 @@ void G_math_d_aAx_by(double **A, double *x, double *y, double a, double b,
     /*catch specific cases */
     if (a == b) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += A[i][j] * x[j] + y[j];
-	    }
-	    z[i] = a * tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += A[i][j] * x[j] + y[j];
+            }
+            z[i] = a * tmp;
+        }
     }
     else if (b == -1.0) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += a * A[i][j] * x[j] - y[j];
-	    }
-	    z[i] = tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += a * A[i][j] * x[j] - y[j];
+            }
+            z[i] = tmp;
+        }
     }
     else if (b == 0.0) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += A[i][j] * x[j];
-	    }
-	    z[i] = a * tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += A[i][j] * x[j];
+            }
+            z[i] = a * tmp;
+        }
     }
     else if (a == -1.0) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += b * y[j] - A[i][j] * x[j];
-	    }
-	    z[i] = tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += b * y[j] - A[i][j] * x[j];
+            }
+            z[i] = tmp;
+        }
     }
     else {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += a * A[i][j] * x[j] + b * y[j];
-	    }
-	    z[i] = tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += a * A[i][j] * x[j] + b * y[j];
+            }
+            z[i] = tmp;
+        }
     }
     return;
 }
@@ -259,7 +259,7 @@ void G_math_d_aAx_by(double **A, double *x, double *y, double a, double b,
  * */
 
 void G_math_f_aAx_by(float **A, float *x, float *y, float a, float b,
-		     float *z, int rows, int cols)
+                     float *z, int rows, int cols)
 {
     int i, j;
 
@@ -268,53 +268,53 @@ void G_math_f_aAx_by(float **A, float *x, float *y, float a, float b,
     /*catch specific cases */
     if (a == b) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += A[i][j] * x[j] + y[j];
-	    }
-	    z[i] = a * tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += A[i][j] * x[j] + y[j];
+            }
+            z[i] = a * tmp;
+        }
     }
     else if (b == -1.0) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += a * A[i][j] * x[j] - y[j];
-	    }
-	    z[i] = tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += a * A[i][j] * x[j] - y[j];
+            }
+            z[i] = tmp;
+        }
     }
     else if (b == 0.0) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += A[i][j] * x[j];
-	    }
-	    z[i] = a * tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += A[i][j] * x[j];
+            }
+            z[i] = a * tmp;
+        }
     }
     else if (a == -1.0) {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += b * y[j] - A[i][j] * x[j];
-	    }
-	    z[i] = tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += b * y[j] - A[i][j] * x[j];
+            }
+            z[i] = tmp;
+        }
     }
     else {
 #pragma omp for schedule (static) private(i, j, tmp)
-	for (i = 0; i < rows; i++) {
-	    tmp = 0;
-	    for (j = cols - 1; j >= 0; j--) {
-		tmp += a * A[i][j] * x[j] + b * y[j];
-	    }
-	    z[i] = tmp;
-	}
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = cols - 1; j >= 0; j--) {
+                tmp += a * A[i][j] * x[j] + b * y[j];
+            }
+            z[i] = tmp;
+        }
     }
     return;
 }
@@ -344,12 +344,12 @@ int G_math_d_A_T(double **A, int rows)
 
 #pragma omp for schedule (static) private(i, j, tmp)
     for (i = 0; i < rows; i++)
-	for (j = 0; j < i; j++) {
-	    tmp = A[i][j];
+        for (j = 0; j < i; j++) {
+            tmp = A[i][j];
 
-	    A[i][j] = A[j][i];
-	    A[j][i] = tmp;
-	}
+            A[i][j] = A[j][i];
+            A[j][i] = tmp;
+        }
 
     return 0;
 }
@@ -377,12 +377,12 @@ int G_math_f_A_T(float **A, int rows)
 
 #pragma omp for schedule (static) private(i, j, tmp)
     for (i = 0; i < rows; i++)
-	for (j = 0; j < i; j++) {
-	    tmp = A[i][j];
+        for (j = 0; j < i; j++) {
+            tmp = A[i][j];
 
-	    A[i][j] = A[j][i];
-	    A[j][i] = tmp;
-	}
+            A[i][j] = A[j][i];
+            A[j][i] = tmp;
+        }
 
     return 0;
 }

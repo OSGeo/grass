@@ -23,16 +23,11 @@ class StringToColorTestCase(TestCase):
         g = c_int()
         b = c_int()
         ret = libgis.G_str_to_color(string, byref(r), byref(g), byref(b))
-        colors = ("{string} -> "
-                  "{r.value}, {g.value}, {b.value}".format(**locals()))
-        self.assertEqual(ret, 1,
-                         msg="Not successful return code (%s)" % colors)
-        self.assertEqual(r.value, red,
-                         msg="Wrong number for red (%s)" % colors)
-        self.assertEqual(g.value, green,
-                         msg="Wrong number for green (%s)" % colors)
-        self.assertEqual(b.value, blue,
-                         msg="Wrong number for blue (%s)" % colors)
+        colors = "{string} -> " "{r.value}, {g.value}, {b.value}".format(**locals())
+        self.assertEqual(ret, 1, msg="Not successful return code (%s)" % colors)
+        self.assertEqual(r.value, red, msg="Wrong number for red (%s)" % colors)
+        self.assertEqual(g.value, green, msg="Wrong number for green (%s)" % colors)
+        self.assertEqual(b.value, blue, msg="Wrong number for blue (%s)" % colors)
 
     def test_grass_format(self):
         """Test GRASS GIS color format (RRR:GGG:BBB)"""
@@ -106,5 +101,5 @@ class StringToColorTestCase(TestCase):
         self.convert_color("white", 255, 255, 255)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

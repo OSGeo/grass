@@ -87,7 +87,7 @@ TreeNode *NIL;
 
 
 /*public:--------------------------------- */
-RBTree *create_tree(TreeValue tv)
+RBTree *create_tree(const TreeValue &tv)
 {
     init_nil_node();
     RBTree *rbt = (RBTree *) G_malloc(sizeof(RBTree));
@@ -127,7 +127,7 @@ void destroy_sub_tree(TreeNode * node)
     return;
 }
 
-void insert_into(RBTree * rbt, TreeValue value)
+void insert_into(RBTree * rbt, const TreeValue &value)
 {
     insert_into_tree(&(rbt->root), value);
     return;
@@ -199,7 +199,7 @@ char compare_double(double a, double b)
 
 
 /*create a tree node */
-TreeNode *create_tree_node(TreeValue value)
+TreeNode *create_tree_node(const TreeValue &value)
 {
     TreeNode *ret;
 

@@ -74,7 +74,7 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
             if (ltype == -1) {
                 G_fatal_error(_("Unable to read vector map"));
             }
-            else if ((ltype == -2)) {   /* EOF */
+            else if (ltype == -2) {     /* EOF */
                 break;
             }
         }
@@ -100,7 +100,7 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
         primary_color->g = colors[i].g;
         primary_color->b = colors[i].b;
 
-        if (bcolor !=NULL) {
+        if (bcolor != NULL) {
             secondary_color->r = bcolor->r;
             secondary_color->g = bcolor->g;
             secondary_color->b = bcolor->b;
@@ -145,7 +145,7 @@ int draw_line(int ltype, int line,
               const struct cat_list *Clist, SYMBOL * Symb,
               RGBA_Color * primary_color,
               int *n_points, int *n_lines, int *n_centroids,
-              int *n_boundaries, int *n_faces, RGBA_Color *secondary_color)
+              int *n_boundaries, int *n_faces, RGBA_Color * secondary_color)
 {
     double var_size, rotation;
     int i;

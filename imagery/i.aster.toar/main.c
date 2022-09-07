@@ -57,7 +57,6 @@ int main(int argc, char *argv[])
     struct Option *input1, *input2;
     struct Flag *flag0, *flag1, *flag2;
     struct Flag *flag3, *flag4, *flag5;
-    struct History history;     /*metadata */
 
     /************************************/
     char *name;                 /*input raster name */
@@ -81,13 +80,13 @@ int main(int argc, char *argv[])
     /* For some strange reason infd[0] cannot be used later */
     /* So nfiles is initialized with nfiles = 1 */
     int nfiles = 0;
-    int i = 0, j = 0;
+    int i = 0;
     int radiance = 0;
     void *inrast[MAXFILES];
     DCELL *outrast[MAXFILES];
     RASTER_MAP_TYPE in_data_type[MAXFILES];
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE; /* 0=numbers  1=text */
-    double gain[MAXFILES]; /* , offset[MAXFILES]; */
+    double gain[MAXFILES];      /* , offset[MAXFILES]; */
     double kexo[MAXFILES];
     double doy, sun_elevation;
 

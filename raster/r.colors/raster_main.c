@@ -20,7 +20,7 @@
 
 #include "local_proto.h"
 
-/* This is the main function for r.colors*/
+/* This is the main function for r.colors */
 int main(int argc, char **argv)
 {
     return edit_colors(argc, argv, RASTER_TYPE, "raster", "Raster");

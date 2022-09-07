@@ -18,10 +18,18 @@ for details.
 """
 from __future__ import absolute_import
 import os
+import sys
 
 from .utils import parse_key_val
-from .core import *
-from grass.exceptions import CalledModuleError
+from .core import (
+    run_command,
+    read_command,
+    error,
+    fatal,
+    debug,
+)
+
+from grass.exceptions import CalledModuleError, ScriptError
 
 unicode = str
 
@@ -44,8 +52,8 @@ def vector_db(map, env=None, **kwargs):
     )
     result = {}
 
-    for l in s.splitlines():
-        f = l.split(";")
+    for line in s.splitlines():
+        f = line.split(";")
         if len(f) != 5:
             continue
 
@@ -379,7 +387,7 @@ def vector_what(
 
     if layer:
         if isinstance(layer, (tuple, list)):
-            layer_list = [str(l) for l in layer]
+            layer_list = [str(item) for item in layer]
         else:
             layer_list = [str(layer)]
         if len(layer_list) != len(map_list):

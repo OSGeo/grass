@@ -1,8 +1,14 @@
 name: General linting
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   super-linter:
@@ -26,7 +32,7 @@ jobs:
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSON: true
           VALIDATE_MD: false
-          VALIDATE_PERL: false
+          VALIDATE_PERL: true
           VALIDATE_POWERSHELL: true
           VALIDATE_XML: true
           VALIDATE_YAML: true

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.snap
@@ -61,6 +61,7 @@ def main():
 
     stds.update_command_string(dbif=dbif)
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

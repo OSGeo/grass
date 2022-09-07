@@ -30,17 +30,20 @@ import atexit
 
 import grass.script as gs
 
+
 def cleanup():
     # add some cleanup code
     gs.message(_("Inside cleanup function..."))
 
-def main():
-    flag_f = flags['f']
-    option1 = options['option1']
-    raster = options['raster']
-    vector = options['vector']
 
-    #### add your code here ####
+def main():
+    flag_f = flags["f"]
+    option1 = options["option1"]
+    raster = options["raster"]
+    vector = options["vector"]
+
+    # Add your main code here
+
     exitcode = 0
 
     if flag_f:
@@ -55,9 +58,10 @@ def main():
     gs.message(_("Value of raster option: '%s'" % raster))
     gs.message(_("Value of vector option: '%s'" % vector))
 
-    #### end of your code ####
+    # End of your main code here
 
     sys.exit(exitcode)
+
 
 if __name__ == "__main__":
     options, flags = gs.parser()

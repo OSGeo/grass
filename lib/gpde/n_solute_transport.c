@@ -26,8 +26,8 @@
  *
  * */
 N_data_star *N_callback_solute_transport_3d(void *solutedata,
-					    N_geom_data * geom, int col,
-					    int row, int depth)
+                                            N_geom_data * geom, int col,
+                                            int row, int depth)
 {
     double Df_e = 0, Df_w = 0, Df_n = 0, Df_s = 0, Df_t = 0, Df_b = 0;
     double dx, dy, dz, Az;
@@ -132,10 +132,10 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
 
     /*the diagonal entry of the matrix */
     C = ((Dw - vw) * dy * dz +
-	 (De + ve) * dy * dz +
-	 (Ds - vs) * dx * dz +
-	 (Dn + vn) * dx * dz +
-	 (Db - vb) * Az + (Dt + vt) * Az + Az * dz * R / data->dt - q / nf);
+         (De + ve) * dy * dz +
+         (Ds - vs) * dx * dz +
+         (Dn + vn) * dx * dz +
+         (Db - vb) * Az + (Dt + vt) * Az + Az * dz * R / data->dt - q / nf);
 
     /*the entry in the right side b of Ax = b */
     V = (cs + cg_start * Az * dz * R / data->dt - q / nf * cin);
@@ -153,7 +153,7 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
      * printf("dt %g\n", data->dt);
      */
     G_debug(6, "N_callback_solute_transport_3d: called [%i][%i][%i]", row,
-	    col, depth);
+            col, depth);
 
     /*create the 7 point star entries */
     mat_pos = N_create_7star(C, W, E, N, S, T, B, V);
@@ -182,8 +182,8 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
  *
  * */
 N_data_star *N_callback_solute_transport_2d(void *solutedata,
-					    N_geom_data * geom, int col,
-					    int row)
+                                            N_geom_data * geom, int col,
+                                            int row)
 {
     double Df_e = 0, Df_w = 0, Df_n = 0, Df_s = 0;
     double z_e = 0, z_w = 0, z_n = 0, z_s = 0;
@@ -224,24 +224,24 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
 
     /* calculate the cell height */
     z = N_get_array_2d_d_value(data->top, col,
-			       row) -
-	N_get_array_2d_d_value(data->bottom, col, row);
+                               row) -
+        N_get_array_2d_d_value(data->bottom, col, row);
     z_xw =
-	N_get_array_2d_d_value(data->top, col - 1,
-			       row) -
-	N_get_array_2d_d_value(data->bottom, col - 1, row);
+        N_get_array_2d_d_value(data->top, col - 1,
+                               row) -
+        N_get_array_2d_d_value(data->bottom, col - 1, row);
     z_xe =
-	N_get_array_2d_d_value(data->top, col + 1,
-			       row) -
-	N_get_array_2d_d_value(data->bottom, col + 1, row);
+        N_get_array_2d_d_value(data->top, col + 1,
+                               row) -
+        N_get_array_2d_d_value(data->bottom, col + 1, row);
     z_yn =
-	N_get_array_2d_d_value(data->top, col,
-			       row - 1) -
-	N_get_array_2d_d_value(data->bottom, col, row - 1);
+        N_get_array_2d_d_value(data->top, col,
+                               row - 1) -
+        N_get_array_2d_d_value(data->bottom, col, row - 1);
     z_ys =
-	N_get_array_2d_d_value(data->top, col,
-			       row + 1) -
-	N_get_array_2d_d_value(data->bottom, col, row + 1);
+        N_get_array_2d_d_value(data->top, col,
+                               row + 1) -
+        N_get_array_2d_d_value(data->bottom, col, row + 1);
 
     /*geometrical mean of cell height */
     z_w = N_calc_geom_mean(z_xw, z);
@@ -268,32 +268,32 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
     disp_x = N_get_array_2d_d_value(data->disp_xx, col, row);
     disp_y = N_get_array_2d_d_value(data->disp_yy, col, row);
     if (N_get_array_2d_d_value(data->status, col - 1, row) ==
-	N_CELL_TRANSMISSION) {
-	disp_xw = disp_x;
+        N_CELL_TRANSMISSION) {
+        disp_xw = disp_x;
     }
     else {
-	disp_xw = N_get_array_2d_d_value(data->disp_xx, col - 1, row);
+        disp_xw = N_get_array_2d_d_value(data->disp_xx, col - 1, row);
     }
     if (N_get_array_2d_d_value(data->status, col + 1, row) ==
-	N_CELL_TRANSMISSION) {
-	disp_xe = disp_x;
+        N_CELL_TRANSMISSION) {
+        disp_xe = disp_x;
     }
     else {
-	disp_xe = N_get_array_2d_d_value(data->disp_xx, col + 1, row);
+        disp_xe = N_get_array_2d_d_value(data->disp_xx, col + 1, row);
     }
     if (N_get_array_2d_d_value(data->status, col, row - 1) ==
-	N_CELL_TRANSMISSION) {
-	disp_yn = disp_y;
+        N_CELL_TRANSMISSION) {
+        disp_yn = disp_y;
     }
     else {
-	disp_yn = N_get_array_2d_d_value(data->disp_yy, col, row - 1);
+        disp_yn = N_get_array_2d_d_value(data->disp_yy, col, row - 1);
     }
     if (N_get_array_2d_d_value(data->status, col, row + 1) ==
-	N_CELL_TRANSMISSION) {
-	disp_ys = disp_y;
+        N_CELL_TRANSMISSION) {
+        disp_ys = disp_y;
     }
     else {
-	disp_ys = N_get_array_2d_d_value(data->disp_yy, col, row + 1);
+        disp_ys = N_get_array_2d_d_value(data->disp_yy, col, row + 1);
     }
 
     /* calculate the dispersion at the cell borders using the harmonical mean */
@@ -314,16 +314,16 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
     vn = grad.NC;
 
     if (data->stab == N_UPWIND_FULL) {
-	rw = N_full_upwinding(vw, dx, Dw);
-	re = N_full_upwinding(ve, dx, De);
-	rs = N_full_upwinding(vs, dy, Ds);
-	rn = N_full_upwinding(vn, dy, Dn);
+        rw = N_full_upwinding(vw, dx, Dw);
+        re = N_full_upwinding(ve, dx, De);
+        rs = N_full_upwinding(vs, dy, Ds);
+        rn = N_full_upwinding(vn, dy, Dn);
     }
     else if (data->stab == N_UPWIND_EXP) {
-	rw = N_exp_upwinding(vw, dx, Dw);
-	re = N_exp_upwinding(ve, dx, De);
-	rs = N_exp_upwinding(vs, dy, Ds);
-	rn = N_exp_upwinding(vn, dy, Dn);
+        rw = N_exp_upwinding(vw, dx, Dw);
+        re = N_exp_upwinding(ve, dx, De);
+        rs = N_exp_upwinding(vs, dy, Ds);
+        rn = N_exp_upwinding(vn, dy, Dn);
     }
 
     /*mass balance center cell to western cell */
@@ -353,9 +353,9 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
 
     /*the diagonal entry of the matrix */
     C = (Dw + vw * rw) * dy * z_w +
-	(De + ve * re) * dy * z_e +
-	(Ds + vs * rs) * dx * z_s +
-	(Dn + vn * rn) * dx * z_n + Az * z * R / data->dt - q / nf;
+        (De + ve * re) * dy * z_e +
+        (Ds + vs * rs) * dx * z_s +
+        (Dn + vn * rn) * dx * z_n + Az * z * R / data->dt - q / nf;
 
     /*the entry in the right side b of Ax = b */
     V = (cs + cg_start * Az * z * R / data->dt + q / nf * cin);
@@ -400,14 +400,14 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
  * */
 
 N_solute_transport_data3d *N_alloc_solute_transport_data3d(int cols, int rows,
-							   int depths)
+                                                           int depths)
 {
     N_solute_transport_data3d *data = NULL;
 
     data =
-	(N_solute_transport_data3d *) G_calloc(1,
-					       sizeof
-					       (N_solute_transport_data3d));
+        (N_solute_transport_data3d *) G_calloc(1,
+                                               sizeof
+                                               (N_solute_transport_data3d));
 
     data->c = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     data->c_start = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
@@ -459,9 +459,9 @@ N_solute_transport_data2d *N_alloc_solute_transport_data2d(int cols, int rows)
     N_solute_transport_data2d *data = NULL;
 
     data =
-	(N_solute_transport_data2d *) G_calloc(1,
-					       sizeof
-					       (N_solute_transport_data2d));
+        (N_solute_transport_data2d *) G_calloc(1,
+                                               sizeof
+                                               (N_solute_transport_data2d));
 
     data->c = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
     data->c_start = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
@@ -586,49 +586,49 @@ void N_calc_solute_transport_transmission_2d(N_solute_transport_data2d * data)
     rows = data->grad->rows;
 
     G_debug(2,
-	    "N_calc_solute_transport_transmission_2d: calculating transmission boundary");
+            "N_calc_solute_transport_transmission_2d: calculating transmission boundary");
 
     for (j = 0; j < rows; j++) {
-	for (i = 0; i < cols; i++) {
-	    if (N_get_array_2d_d_value(data->status, i, j) ==
-		N_CELL_TRANSMISSION) {
-		count = 0;
-		/*get the gradient neighbours */
-		N_get_gradient_2d(data->grad, &grad, i, j);
-		c = 0;
-		/*
-		   c = N_get_array_2d_d_value(data->c_start, i, j);
-		   if(c > 0)
-		   count++;
-		 */
+        for (i = 0; i < cols; i++) {
+            if (N_get_array_2d_d_value(data->status, i, j) ==
+                N_CELL_TRANSMISSION) {
+                count = 0;
+                /*get the gradient neighbours */
+                N_get_gradient_2d(data->grad, &grad, i, j);
+                c = 0;
+                /*
+                   c = N_get_array_2d_d_value(data->c_start, i, j);
+                   if(c > 0)
+                   count++;
+                 */
 
-		if (grad.WC > 0 &&
-		    !N_is_array_2d_value_null(data->c, i - 1, j)) {
-		    c += N_get_array_2d_d_value(data->c, i - 1, j);
-		    count++;
-		}
-		if (grad.EC < 0 &&
-		    !N_is_array_2d_value_null(data->c, i + 1, j)) {
-		    c += N_get_array_2d_d_value(data->c, i + 1, j);
-		    count++;
-		}
-		if (grad.NC < 0 &&
-		    !N_is_array_2d_value_null(data->c, i, j - 1)) {
-		    c += N_get_array_2d_d_value(data->c, i, j - 1);
-		    count++;
-		}
-		if (grad.SC > 0 &&
-		    !N_is_array_2d_value_null(data->c, i, j + 1)) {
-		    c += N_get_array_2d_d_value(data->c, i, j + 1);
-		    count++;
-		}
-		if (count != 0)
-		    c = c / (double)count;
-		/*make sure it is not NAN */
-		if (c > 0 || c == 0 || c < 0)
-		    N_put_array_2d_d_value(data->c_start, i, j, c);
-	    }
-	}
+                if (grad.WC > 0 &&
+                    !N_is_array_2d_value_null(data->c, i - 1, j)) {
+                    c += N_get_array_2d_d_value(data->c, i - 1, j);
+                    count++;
+                }
+                if (grad.EC < 0 &&
+                    !N_is_array_2d_value_null(data->c, i + 1, j)) {
+                    c += N_get_array_2d_d_value(data->c, i + 1, j);
+                    count++;
+                }
+                if (grad.NC < 0 &&
+                    !N_is_array_2d_value_null(data->c, i, j - 1)) {
+                    c += N_get_array_2d_d_value(data->c, i, j - 1);
+                    count++;
+                }
+                if (grad.SC > 0 &&
+                    !N_is_array_2d_value_null(data->c, i, j + 1)) {
+                    c += N_get_array_2d_d_value(data->c, i, j + 1);
+                    count++;
+                }
+                if (count != 0)
+                    c = c / (double)count;
+                /*make sure it is not NAN */
+                if (c > 0 || c == 0 || c < 0)
+                    N_put_array_2d_d_value(data->c_start, i, j, c);
+            }
+        }
     }
 
     return;
@@ -660,34 +660,34 @@ void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d * data)
     rows = data->grad->rows;
 
     G_debug(2,
-	    "N_calc_solute_transport_disptensor_2d: calculating the dispersivity tensor");
+            "N_calc_solute_transport_disptensor_2d: calculating the dispersivity tensor");
 
     for (j = 0; j < rows; j++) {
-	for (i = 0; i < cols; i++) {
+        for (i = 0; i < cols; i++) {
 
-	    disp_xx = 0;
-	    disp_yy = 0;
-	    disp_xy = 0;
+            disp_xx = 0;
+            disp_yy = 0;
+            disp_xy = 0;
 
-	    /*get the gradient neighbours */
-	    N_get_gradient_2d(data->grad, &grad, i, j);
-	    vx = (grad.WC + grad.EC) / 2;
-	    vy = (grad.NC + grad.SC) / 2;
-	    vv = sqrt(vx * vx + vy * vy);
+            /*get the gradient neighbours */
+            N_get_gradient_2d(data->grad, &grad, i, j);
+            vx = (grad.WC + grad.EC) / 2;
+            vy = (grad.NC + grad.SC) / 2;
+            vv = sqrt(vx * vx + vy * vy);
 
-	    if (vv != 0) {
-		disp_xx = data->al * vx * vx / vv + data->at * vy * vy / vv;
-		disp_yy = data->at * vx * vx / vv + data->al * vy * vy / vv;
-		disp_xy = (data->al - data->at) * vx * vy / vv;
-	    }
+            if (vv != 0) {
+                disp_xx = data->al * vx * vx / vv + data->at * vy * vy / vv;
+                disp_yy = data->at * vx * vx / vv + data->al * vy * vy / vv;
+                disp_xy = (data->al - data->at) * vx * vy / vv;
+            }
 
-	    G_debug(5,
-		    "N_calc_solute_transport_disptensor_2d: [%i][%i] disp_xx %g disp_yy %g disp_xy %g",
-		    i, j, disp_xx, disp_yy, disp_xy);
-	    N_put_array_2d_d_value(data->disp_xx, i, j, disp_xx);
-	    N_put_array_2d_d_value(data->disp_yy, i, j, disp_yy);
-	    N_put_array_2d_d_value(data->disp_xy, i, j, disp_xy);
-	}
+            G_debug(5,
+                    "N_calc_solute_transport_disptensor_2d: [%i][%i] disp_xx %g disp_yy %g disp_xy %g",
+                    i, j, disp_xx, disp_yy, disp_xy);
+            N_put_array_2d_d_value(data->disp_xx, i, j, disp_xx);
+            N_put_array_2d_d_value(data->disp_yy, i, j, disp_yy);
+            N_put_array_2d_d_value(data->disp_xy, i, j, disp_xy);
+        }
     }
 
     return;
@@ -720,52 +720,52 @@ void N_calc_solute_transport_disptensor_3d(N_solute_transport_data3d * data)
     depths = data->grad->depths;
 
     G_debug(2,
-	    "N_calc_solute_transport_disptensor_3d: calculating the dispersivity tensor");
+            "N_calc_solute_transport_disptensor_3d: calculating the dispersivity tensor");
 
     for (k = 0; k < depths; k++) {
-	for (j = 0; j < rows; j++) {
-	    for (i = 0; i < cols; i++) {
-		disp_xx = 0;
-		disp_yy = 0;
-		disp_zz = 0;
-		disp_xy = 0;
-		disp_xz = 0;
-		disp_yz = 0;
+        for (j = 0; j < rows; j++) {
+            for (i = 0; i < cols; i++) {
+                disp_xx = 0;
+                disp_yy = 0;
+                disp_zz = 0;
+                disp_xy = 0;
+                disp_xz = 0;
+                disp_yz = 0;
 
-		/*get the gradient neighbours */
-		N_get_gradient_3d(data->grad, &grad, i, j, k);
-		vx = (grad.WC + grad.EC) / 2;
-		vy = (grad.NC + grad.SC) / 2;
-		vz = (grad.BC + grad.TC) / 2;
-		vv = sqrt(vx * vx + vy * vy + vz * vz);
+                /*get the gradient neighbours */
+                N_get_gradient_3d(data->grad, &grad, i, j, k);
+                vx = (grad.WC + grad.EC) / 2;
+                vy = (grad.NC + grad.SC) / 2;
+                vz = (grad.BC + grad.TC) / 2;
+                vv = sqrt(vx * vx + vy * vy + vz * vz);
 
-		if (vv != 0) {
-		    disp_xx =
-			data->al * vx * vx / vv + data->at * vy * vy / vv +
-			data->at * vz * vz / vv;
-		    disp_yy =
-			data->at * vx * vx / vv + data->al * vy * vy / vv +
-			data->at * vz * vz / vv;
-		    disp_zz =
-			data->at * vx * vx / vv + data->at * vy * vy / vv +
-			data->al * vz * vz / vv;
-		    disp_xy = (data->al - data->at) * vx * vy / vv;
-		    disp_xz = (data->al - data->at) * vx * vz / vv;
-		    disp_yz = (data->al - data->at) * vy * vz / vv;
-		}
+                if (vv != 0) {
+                    disp_xx =
+                        data->al * vx * vx / vv + data->at * vy * vy / vv +
+                        data->at * vz * vz / vv;
+                    disp_yy =
+                        data->at * vx * vx / vv + data->al * vy * vy / vv +
+                        data->at * vz * vz / vv;
+                    disp_zz =
+                        data->at * vx * vx / vv + data->at * vy * vy / vv +
+                        data->al * vz * vz / vv;
+                    disp_xy = (data->al - data->at) * vx * vy / vv;
+                    disp_xz = (data->al - data->at) * vx * vz / vv;
+                    disp_yz = (data->al - data->at) * vy * vz / vv;
+                }
 
-		G_debug(5,
-			"N_calc_solute_transport_disptensor_3d: [%i][%i][%i] disp_xx %g disp_yy %g disp_zz %g  disp_xy %g disp_xz %g disp_yz %g ",
-			i, j, k, disp_xx, disp_yy, disp_zz, disp_xy, disp_xz,
-			disp_yz);
-		N_put_array_3d_d_value(data->disp_xx, i, j, k, disp_xx);
-		N_put_array_3d_d_value(data->disp_yy, i, j, k, disp_yy);
-		N_put_array_3d_d_value(data->disp_zz, i, j, k, disp_zz);
-		N_put_array_3d_d_value(data->disp_xy, i, j, k, disp_xy);
-		N_put_array_3d_d_value(data->disp_xz, i, j, k, disp_xz);
-		N_put_array_3d_d_value(data->disp_yz, i, j, k, disp_yz);
-	    }
-	}
+                G_debug(5,
+                        "N_calc_solute_transport_disptensor_3d: [%i][%i][%i] disp_xx %g disp_yy %g disp_zz %g  disp_xy %g disp_xz %g disp_yz %g ",
+                        i, j, k, disp_xx, disp_yy, disp_zz, disp_xy, disp_xz,
+                        disp_yz);
+                N_put_array_3d_d_value(data->disp_xx, i, j, k, disp_xx);
+                N_put_array_3d_d_value(data->disp_yy, i, j, k, disp_yy);
+                N_put_array_3d_d_value(data->disp_zz, i, j, k, disp_zz);
+                N_put_array_3d_d_value(data->disp_xy, i, j, k, disp_xy);
+                N_put_array_3d_d_value(data->disp_xz, i, j, k, disp_xz);
+                N_put_array_3d_d_value(data->disp_yz, i, j, k, disp_yz);
+            }
+        }
     }
 
     return;

@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Drop table
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \brief Drop table
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_drop_table(void)
 {
@@ -40,8 +40,8 @@ int db_d_drop_table(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

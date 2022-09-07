@@ -70,8 +70,6 @@ def main():
 
     prog = "v.in.mapgen"
 
-    opts = ""
-
     if not os.path.isfile(infile):
         grass.fatal(_("Input file <%s> not found") % infile)
 

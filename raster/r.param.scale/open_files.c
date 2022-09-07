@@ -28,7 +28,7 @@ void open_files(void)
     /* Open new file and set the output file descriptor. */
 
     if (mparam != FEATURE)
-	fd_out = Rast_open_new(rast_out_name, DCELL_TYPE);
+        fd_out = Rast_open_new(rast_out_name, DCELL_TYPE);
     else
-	fd_out = Rast_open_new(rast_out_name, CELL_TYPE);
+        fd_out = Rast_open_new(rast_out_name, CELL_TYPE);
 }

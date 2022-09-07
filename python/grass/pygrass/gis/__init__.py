@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 from __future__ import (
     nested_scopes,
@@ -444,7 +443,7 @@ class VisibleMapset(object):
         with open(self.spath, "ab+") as f:
             lines = f.readlines()
             if lines:
-                return [decode(l.strip()) for l in lines]
+                return [decode(line.strip()) for line in lines]
         lns = [
             "PERMANENT",
         ]

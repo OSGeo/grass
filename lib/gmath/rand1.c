@@ -38,5 +38,5 @@ void G_math_srand(int seed)
 
 int G_math_srand_auto(void)
 {
-    return (int) G_srand48_auto();
+    return (int)G_srand48_auto();
 }

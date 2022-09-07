@@ -18,8 +18,8 @@ and developers converted all shell scripts from GRASS GIS 6 to Python
 for GRASS GIS 7.
 
 To work with *PyGRASS* you need an up-to-date version of GRASS
-GIS 7. The only action before starting to work with *PyGRASS* is
-to launch GRASS GIS 7 and from the console launch *python* or
+GIS. The only action before starting to work with *PyGRASS* is
+to launch GRASS GIS 8 and from the console launch *python* or
 *ipython* (the second one is the recommended way).
 
 
@@ -49,8 +49,8 @@ References
   <http://dx.doi.org/10.3390/ijgi2010201>`_
 * `Python related articles in the GRASS GIS Wiki
   <https://grasswiki.osgeo.org/wiki/Category:Python>`_
-* `GRASS GIS 7 Programmer's Manual
-  <https://grass.osgeo.org/programming7/>`_
+* `GRASS GIS 8 Programmer's Manual
+  <https://grass.osgeo.org/programming8/>`_
 
 This project has been funded with support from the `Google Summer of
 Code 2012

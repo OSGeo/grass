@@ -19,6 +19,7 @@ are useful both for importing and exporting vector maps between GRASS
 and other software, and for transferring data between machines.
 
 <h2>NOTES</h2>
+
  
 The input is read from the file specified by the <b>input</b> option or
 from standard input.
@@ -97,7 +98,6 @@ head -1 input_file | tr '&lt;the_field_separator_character&gt;' '\n' | cat -n
 # use input=- to read from stdin
 cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_columns&gt; input_file | v.in.ascii in=- &lt;your_options&gt;
 </pre></div>
-
 
 <h2>EXAMPLES</h2>
 
@@ -227,7 +227,6 @@ With <b>in=-</b>, the module is reading from standard input, using the default '
 <br>
 The import works for 2D maps as well (no elev column and no '-z' flag).
 
-
 <h3>Example 6 - point format mode</h3>
 
 Generate a 3D points vector map 'points3d.dat' with attributes as ASCII file:
@@ -249,7 +248,6 @@ cat points3d.dat | v.in.ascii in=- -z z=3 cat=0 out=mypoints3D \
 v.info -c mypoints3D
 v.info mypoints3D
 </pre></div>
-
 
 <h3>Example 7 - point format mode</h3>
 
@@ -310,8 +308,3 @@ Research Laboratory<br>
 James Westervelt, U.S.Army Construction Engineering 
 Research Laboratory<br>
 Radim Blazek, ITC-Irst, Trento, Italy
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

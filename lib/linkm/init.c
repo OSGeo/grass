@@ -43,12 +43,12 @@ struct link_head *link_init(int size)
     struct link_head *Head;
 
     if (NULL == (Head = (struct link_head *)malloc(sizeof(struct link_head))))
-	return NULL;
+        return NULL;
 
     if (NULL ==
-	(Head->ptr_array = (VOID_T **) malloc(sizeof(VOID_T *) * PTR_CNT))) {
-	free(Head);
-	return NULL;
+        (Head->ptr_array = (VOID_T **) malloc(sizeof(VOID_T *) * PTR_CNT))) {
+        free(Head);
+        return NULL;
     }
 
     Head->max_ptr = 0;
@@ -66,13 +66,13 @@ void link_cleanup(struct link_head *Head)
     register int i;
 
     if (Head == NULL)
-	return;
+        return;
 
     if (Head->ptr_array) {
-	for (i = 0; i < Head->max_ptr; i++)
-	    if (Head->ptr_array[i] != NULL)
-		free(Head->ptr_array[i]);
-	free(Head->ptr_array);
-	free(Head);
+        for (i = 0; i < Head->max_ptr; i++)
+            if (Head->ptr_array[i] != NULL)
+                free(Head->ptr_array[i]);
+        free(Head->ptr_array);
+        free(Head);
     }
 }

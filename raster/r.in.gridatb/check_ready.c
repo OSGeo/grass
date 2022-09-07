@@ -10,9 +10,9 @@ int check_ready(void)
     retval = 0;
 
     if (!(fp = fopen(file, "r")))
-	retval = 1;
+        retval = 1;
     else
-	fclose(fp);
+        fclose(fp);
 
     return (retval);
 }

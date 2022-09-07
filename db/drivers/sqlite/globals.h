@@ -7,12 +7,12 @@
 typedef struct _cursor
 {
     sqlite3_stmt *statement;
-    int nrows;			/* number of rows in query result, -1 if unknown */
-    int row;			/* current row */
+    int nrows;                  /* number of rows in query result, -1 if unknown */
+    int row;                    /* current row */
     dbToken token;
-    int type;			/* type of cursor: SELECT, UPDATE, INSERT */
-    int *kcols;			/* indexes of known (type) columns */
-    int nkcols;			/* number of known columns */
+    int type;                   /* type of cursor: SELECT, UPDATE, INSERT */
+    int *kcols;                 /* indexes of known (type) columns */
+    int nkcols;                 /* number of known columns */
 
 } cursor;
 

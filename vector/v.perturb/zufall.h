@@ -9,7 +9,7 @@
 #define min(a,b) ((a) <= (b) ? (a) : (b))
 
 /* clock cycle for machine */
-#define CYCLE 2.9e-9		/* cycle for SX-3: */
+#define CYCLE 2.9e-9            /* cycle for SX-3: */
 /* #define CYCLE 6.0e-9 .* cycle for Y-MP: */
 /* #define CYCLE 3.2e-9 .* cycle for VP2200 */
 

@@ -73,7 +73,6 @@ decimation parameters:
 <tr><td>1/6</td><td>skip=6</td></tr>
 </table>
 
-
 <h2>Location Creation</h2>
 
 <em>v.in.lidar</em> attempts to preserve projection information when importing
@@ -97,6 +96,7 @@ created (with only a PERMANENT mapset), and the vector map will have been
 imported with the indicated <b>output</b> name into the PERMANENT mapset.
 
 <h2>NOTES</h2>
+
 The typical file extensions for the LAS format are .las and .laz (compressed). 
 The compressed LAS (.laz) format can be imported only if libLAS has been compiled 
 with laszip support. It is also recommended to compile libLAS with GDAL, 
@@ -122,6 +122,13 @@ available at
   v.in.lidar -tb input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_pts
 </pre></div>
 
+<h2>REFERENCES</h2>
+
+<a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
+ASPRS LAS format</a><br>
+<a href="http://www.liblas.org/">LAS library</a> <br>
+<a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -132,14 +139,7 @@ available at
 <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
 
-<h2>REFERENCES</h2>
-
-<a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
-ASPRS LAS format</a><br>
-<a href="http://www.liblas.org/">LAS library</a> <br>
-<a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation
-
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Markus Metz
 <br>
@@ -148,8 +148,3 @@ Vaclav Petras,
 (decimation, cats, areas, zrange)
 <br>
 based on <em>v.in.ogr</em> by various authors
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

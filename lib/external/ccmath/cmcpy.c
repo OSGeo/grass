@@ -11,5 +11,5 @@ void cmcpy(Cpx * a, Cpx * b, int n)
     int i;
 
     for (i = 0; i < n; ++i)
-	*a++ = *b++;
+        *a++ = *b++;
 }

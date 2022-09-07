@@ -33,18 +33,18 @@ char *Rast_get_cell_title(const char *name, const char *mapset)
     stat = -1;
     fd = G_fopen_old("cats", name, mapset);
     if (fd) {
-	stat = 1;
-	if (!fgets(title, sizeof title, fd))	/* skip number of cats */
-	    stat = -1;
-	else if (!G_getl(title, sizeof title, fd))	/* read title */
-	    stat = -1;
+        stat = 1;
+        if (!fgets(title, sizeof title, fd))    /* skip number of cats */
+            stat = -1;
+        else if (!G_getl(title, sizeof title, fd))      /* read title */
+            stat = -1;
 
-	fclose(fd);
+        fclose(fd);
     }
 
     if (stat < 0)
-	*title = 0;
+        *title = 0;
     else
-	G_strip(title);
+        G_strip(title);
     return G_store(title);
 }

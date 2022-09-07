@@ -25,22 +25,22 @@ struct cache
     int *refs;
 };
 
-typedef void (*func) (struct cache *, void *, int, double, double,
-		      struct Cell_head *);
+typedef void (*func)(struct cache *, void *, int, double, double,
+                     struct Cell_head *);
 
 struct menu
 {
-    func method;		/* routine to interpolate new value      */
-    char *name;			/* method name                           */
-    char *text;			/* menu display - full description       */
+    func method;                /* routine to interpolate new value      */
+    char *name;                 /* method name                           */
+    char *text;                 /* menu display - full description       */
 };
 
 extern void bordwalk(const struct Cell_head *, struct Cell_head *,
-		     const struct pj_info *, const struct pj_info *,
-		     const struct pj_info *, int);
+                     const struct pj_info *, const struct pj_info *,
+                     const struct pj_info *, int);
 extern void bordwalk_edge(const struct Cell_head *, struct Cell_head *,
-		          const struct pj_info *, const struct pj_info *,
-			  const struct pj_info *, int);
+                          const struct pj_info *, const struct pj_info *,
+                          const struct pj_info *, int);
 extern struct cache *readcell(int, const char *);
 extern block *get_block(struct cache *, int);
 extern void release_cache(struct cache *);
@@ -48,24 +48,24 @@ extern void release_cache(struct cache *);
 /* declare resampling methods */
 /* bilinear.c */
 extern void p_bilinear(struct cache *, void *, int, double, double,
-		       struct Cell_head *);
+                       struct Cell_head *);
 /* cubic.c */
 extern void p_cubic(struct cache *, void *, int, double, double,
-		    struct Cell_head *);
+                    struct Cell_head *);
 /* nearest.c */
 extern void p_nearest(struct cache *, void *, int, double, double,
-		      struct Cell_head *);
+                      struct Cell_head *);
 /* bilinear_f.c */
 extern void p_bilinear_f(struct cache *, void *, int, double, double,
-		       struct Cell_head *);
+                         struct Cell_head *);
 /* cubic_f.c */
 extern void p_cubic_f(struct cache *, void *, int, double, double,
-		    struct Cell_head *);
+                      struct Cell_head *);
 /* lanczos.c */
 extern void p_lanczos(struct cache *, void *, int, double, double,
-		    struct Cell_head *);
+                      struct Cell_head *);
 extern void p_lanczos_f(struct cache *, void *, int, double, double,
-		    struct Cell_head *);
+                        struct Cell_head *);
 
 #if 1
 

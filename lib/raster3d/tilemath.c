@@ -22,8 +22,8 @@
  */
 
 void
-Rast3d_tile_index2tile(RASTER3D_Map * map, int tileIndex, int *xTile, int *yTile,
-		   int *zTile)
+Rast3d_tile_index2tile(RASTER3D_Map * map, int tileIndex, int *xTile,
+                       int *yTile, int *zTile)
 {
     int tileIndex2d;
 
@@ -49,7 +49,8 @@ Rast3d_tile_index2tile(RASTER3D_Map * map, int tileIndex, int *xTile, int *yTile
  *  \return int
  */
 
-int Rast3d_tile2tile_index(RASTER3D_Map * map, int xTile, int yTile, int zTile)
+int Rast3d_tile2tile_index(RASTER3D_Map * map, int xTile, int yTile,
+                           int zTile)
 {
     return map->nxy * zTile + map->nx * yTile + xTile;
 }
@@ -75,8 +76,8 @@ int Rast3d_tile2tile_index(RASTER3D_Map * map, int xTile, int yTile, int zTile)
  */
 
 void
-Rast3d_tile_coord_origin(RASTER3D_Map * map, int xTile, int yTile, int zTile, int *x,
-		    int *y, int *z)
+Rast3d_tile_coord_origin(RASTER3D_Map * map, int xTile, int yTile, int zTile,
+                         int *x, int *y, int *z)
 {
     *x = map->tileX * xTile;
     *y = map->tileY * yTile;
@@ -100,7 +101,8 @@ Rast3d_tile_coord_origin(RASTER3D_Map * map, int xTile, int yTile, int zTile, in
  *  \return void
  */
 
-void Rast3d_tile_index_origin(RASTER3D_Map * map, int tileIndex, int *x, int *y, int *z)
+void Rast3d_tile_index_origin(RASTER3D_Map * map, int tileIndex, int *x,
+                              int *y, int *z)
 {
     int xTile, yTile, zTile;
 
@@ -134,8 +136,8 @@ void Rast3d_tile_index_origin(RASTER3D_Map * map, int tileIndex, int *x, int *y,
 
 void
 Rast3d_coord2tile_coord(RASTER3D_Map * map, int x, int y, int z, int *xTile,
-		    int *yTile, int *zTile, int *xOffs, int *yOffs,
-		    int *zOffs)
+                        int *yTile, int *zTile, int *xOffs, int *yOffs,
+                        int *zOffs)
 {
     *xTile = x / map->tileX;
     *xOffs = x % map->tileX;
@@ -164,13 +166,13 @@ Rast3d_coord2tile_coord(RASTER3D_Map * map, int x, int y, int z, int *xTile,
  */
 
 void
-Rast3d_coord2tile_index(RASTER3D_Map * map, int x, int y, int z, int *tileIndex,
-		    int *offset)
+Rast3d_coord2tile_index(RASTER3D_Map * map, int x, int y, int z,
+                        int *tileIndex, int *offset)
 {
     int xTile, yTile, zTile, xOffs, yOffs, zOffs;
 
     Rast3d_coord2tile_coord(map, x, y, z,
-			&xTile, &yTile, &zTile, &xOffs, &yOffs, &zOffs);
+                            &xTile, &yTile, &zTile, &xOffs, &yOffs, &zOffs);
     *tileIndex = Rast3d_tile2tile_index(map, xTile, yTile, zTile);
     *offset = zOffs * map->tileXY + yOffs * map->tileX + xOffs;
 }
@@ -195,7 +197,7 @@ Rast3d_coord2tile_index(RASTER3D_Map * map, int x, int y, int z, int *tileIndex,
 int Rast3d_coord_in_range(RASTER3D_Map * map, int x, int y, int z)
 {
     return (x >= 0) && (x < map->region.cols) && (y >= 0) &&
-	(y < map->region.rows) && (z >= 0) && (z < map->region.depths);
+        (y < map->region.rows) && (z >= 0) && (z < map->region.depths);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -237,7 +239,7 @@ int Rast3d_tile_index_in_range(RASTER3D_Map * map, int tileIndex)
 int Rast3d_tile_in_range(RASTER3D_Map * map, int x, int y, int z)
 {
     return (x >= 0) && (x < map->nx) && (y >= 0) && (y < map->ny) &&
-	(z >= 0) && (z < map->nz);
+        (z >= 0) && (z < map->nz);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -264,41 +266,42 @@ int Rast3d_tile_in_range(RASTER3D_Map * map, int x, int y, int z)
  */
 
 int
-Rast3d_compute_clipped_tile_dimensions(RASTER3D_Map * map, int tileIndex, int *rows,
-				 int *cols, int *depths, int *xRedundant,
-				 int *yRedundant, int *zRedundant)
+Rast3d_compute_clipped_tile_dimensions(RASTER3D_Map * map, int tileIndex,
+                                       int *rows, int *cols, int *depths,
+                                       int *xRedundant, int *yRedundant,
+                                       int *zRedundant)
 {
     int x, y, z;
 
     Rast3d_tile_index2tile(map, tileIndex, &x, &y, &z);
 
     if ((x != map->clipX) && (y != map->clipY) && (z != map->clipZ)) {
-	return map->tileSize;
+        return map->tileSize;
     }
 
     if (x != map->clipX) {
-	*cols = map->tileX;
-	*xRedundant = 0;
+        *cols = map->tileX;
+        *xRedundant = 0;
     }
     else {
-	*cols = (map->region.cols - 1) % map->tileX + 1;
-	*xRedundant = map->tileX - *cols;
+        *cols = (map->region.cols - 1) % map->tileX + 1;
+        *xRedundant = map->tileX - *cols;
     }
     if (y != map->clipY) {
-	*rows = map->tileY;
-	*yRedundant = 0;
+        *rows = map->tileY;
+        *yRedundant = 0;
     }
     else {
-	*rows = (map->region.rows - 1) % map->tileY + 1;
-	*yRedundant = map->tileY - *rows;
+        *rows = (map->region.rows - 1) % map->tileY + 1;
+        *yRedundant = map->tileY - *rows;
     }
     if (z != map->clipZ) {
-	*depths = map->tileZ;
-	*zRedundant = 0;
+        *depths = map->tileZ;
+        *zRedundant = 0;
     }
     else {
-	*depths = (map->region.depths - 1) % map->tileZ + 1;
-	*zRedundant = map->tileZ - *depths;
+        *depths = (map->region.depths - 1) % map->tileZ + 1;
+        *zRedundant = map->tileZ - *depths;
     }
 
     /* printf ("%d (%d %d %d): (%d %d) (%d %d) (%d %d), %d\n", */
@@ -329,70 +332,72 @@ Rast3d_compute_clipped_tile_dimensions(RASTER3D_Map * map, int tileIndex, int *r
  */
 
 void
-Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type, int *tileX, int *tileY, int *tileZ, int maxSize)
+Rast3d_compute_optimal_tile_dimension(RASTER3D_Region * region, int type,
+                                      int *tileX, int *tileY, int *tileZ,
+                                      int maxSize)
 {
-   unsigned long size = 0;
-   unsigned long x, y, z;
-   unsigned long i = 0;
-   unsigned long tileSize;
-   unsigned long divx = 2;
-   unsigned long divy = 2;
-   unsigned long divz = 2;
+    unsigned long size = 0;
+    unsigned long x, y, z;
+    unsigned long i = 0;
+    unsigned long tileSize;
+    unsigned long divx = 2;
+    unsigned long divy = 2;
+    unsigned long divz = 2;
 
-   if(type == FCELL_TYPE)
-      size = sizeof(FCELL);
+    if (type == FCELL_TYPE)
+        size = sizeof(FCELL);
 
-   if(type == DCELL_TYPE)
-      size = sizeof(DCELL);
-   
-   x = region->cols;
-   y = region->rows;
-   z = region->depths;
+    if (type == DCELL_TYPE)
+        size = sizeof(DCELL);
 
-   while(1) {
-       tileSize = size * x * y * z;
+    x = region->cols;
+    y = region->rows;
+    z = region->depths;
 
-       G_debug(2, "Rast3d_compute_optimal_tile_dimension: tilesize %li x %li y %li z %li\n", tileSize, x, y, z);
+    while (1) {
+        tileSize = size * x * y * z;
 
-       if(tileSize <= maxSize * 1024)
-          break;
+        G_debug(2,
+                "Rast3d_compute_optimal_tile_dimension: tilesize %li x %li y %li z %li\n",
+                tileSize, x, y, z);
 
-       /* Compute weighted tile sizes. Take care that the tile size is computed based on
-          the dimension ratio and reduce the border tile overlapping. 
-          In case one dimension is much larger than the other, reduce 
-          the large dimension by a factor till the maxSize is reached or till the 
-          the other dimensions are only by factor 2 smaller.*/
-       if((y / x) <= 2 && (z / x) <= 2) {
-           if(region->cols % divx != 0)
-               x = region->cols / divx + 1;
-           else
-               x = region->cols / divx;
-           divx += 1;
-       }
-       if((x / y) <= 2 && (z / y) <= 2) {
-           if(region->rows % divy != 0)
-               y = region->rows / divy + 1;
-           else
-               y = region->rows / divy;
-           divy += 1;
-       }
-       if((x / z) <= 2 && (y / z) <= 2) {
-           if(region->depths % divz != 0)
-               z = region->depths / divz + 1;
-           else
-               z = region->depths / divz;
-           divz += 1;
-       }
+        if (tileSize <= maxSize * 1024)
+            break;
 
-       /* Avoid infinite loop */
-       i++;
-       if(i > 10000)
-         break;
-   }
+        /* Compute weighted tile sizes. Take care that the tile size is computed based on
+           the dimension ratio and reduce the border tile overlapping. 
+           In case one dimension is much larger than the other, reduce 
+           the large dimension by a factor till the maxSize is reached or till the 
+           the other dimensions are only by factor 2 smaller. */
+        if ((y / x) <= 2 && (z / x) <= 2) {
+            if (region->cols % divx != 0)
+                x = region->cols / divx + 1;
+            else
+                x = region->cols / divx;
+            divx += 1;
+        }
+        if ((x / y) <= 2 && (z / y) <= 2) {
+            if (region->rows % divy != 0)
+                y = region->rows / divy + 1;
+            else
+                y = region->rows / divy;
+            divy += 1;
+        }
+        if ((x / z) <= 2 && (y / z) <= 2) {
+            if (region->depths % divz != 0)
+                z = region->depths / divz + 1;
+            else
+                z = region->depths / divz;
+            divz += 1;
+        }
 
-   *tileX = (int)x;
-   *tileY = (int)y;
-   *tileZ = (int)z;
+        /* Avoid infinite loop */
+        i++;
+        if (i > 10000)
+            break;
+    }
+
+    *tileX = (int)x;
+    *tileY = (int)y;
+    *tileZ = (int)z;
 }
-
-

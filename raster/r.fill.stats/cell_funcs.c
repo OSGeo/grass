@@ -37,10 +37,10 @@ unsigned char CELL_OUT_SIZE;
 unsigned char CELL_OUT_PTR_SIZE;
 unsigned char CELL_ERR_SIZE;
 
-void (*WRITE_CELL_VAL) (void *, void *);
-void (*WRITE_DOUBLE_VAL) (void *, double);
-int (*IS_NULL) (void *);
-void (*SET_NULL) (void *, unsigned long);
+void (*WRITE_CELL_VAL)(void *, void *);
+void (*WRITE_DOUBLE_VAL)(void *, double);
+int (*IS_NULL)(void *);
+void (*SET_NULL)(void *, unsigned long);
 
 /*
  * Write cell values.

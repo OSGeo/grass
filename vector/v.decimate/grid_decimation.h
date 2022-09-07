@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       v.decimate
@@ -39,10 +40,11 @@ struct GridDecimation
     double maxy;
     double ns_res;
     double ew_res;
-    int (*if_add_point) (struct DecimationPoint * point, void *point_data,
-                         struct DecimationPoint ** point_list, size_t npoints,
+    int (*if_add_point)(struct DecimationPoint * point, void *point_data,
+                        struct DecimationPoint ** point_list, size_t npoints,
+                        void *context);
+    void (*on_add_point)(struct DecimationPoint * point, void *point_data,
                          void *context);
-    void (*on_add_point) (struct DecimationPoint * point, void *point_data, void *context);
     void *if_context;
     void *on_context;
 };
@@ -72,7 +74,8 @@ void grid_decimation_add_point_to_list(struct GridDecimation *grid_decimation,
                                        size_t npoints);
 
 void grid_decimation_try_add_point(struct GridDecimation *grid_decimation,
-                                   int cat, double x, double y, double z, void *point_data);
+                                   int cat, double x, double y, double z,
+                                   void *point_data);
 
 void grid_decimation_destroy(struct GridDecimation *grid_decimation);
 

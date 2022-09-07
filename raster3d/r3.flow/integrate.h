@@ -21,15 +21,17 @@ static const double DC[6] = { 37. / 378 - 2825. / 27648, 0,
 };
 
 double norm(const double x, const double y, const double z);
-int get_velocity(RASTER3D_Region * region, struct Gradient_info *gradient_info,
-		 const double x, const double y, const double z,
-		 double *vel_x, double *vel_y, double *vel_z);
+int get_velocity(RASTER3D_Region * region,
+                 struct Gradient_info *gradient_info, const double x,
+                 const double y, const double z, double *vel_x, double *vel_y,
+                 double *vel_z);
 double get_time_step(const char *unit, const double step,
-		     const double velocity, const double cell_size);
+                     const double velocity, const double cell_size);
 int rk45_integrate_next(RASTER3D_Region * region,
-			struct Gradient_info *gradient_info, const double *point,
-			double *next_point, double *delta_t,
-			double *velocity, const double min_step,
-			const double max_step, const double max_error);
+                        struct Gradient_info *gradient_info,
+                        const double *point, double *next_point,
+                        double *delta_t, double *velocity,
+                        const double min_step, const double max_step,
+                        const double max_error);
 
 #endif // INTEGRATE_H

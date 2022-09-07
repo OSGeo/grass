@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE: t.list
@@ -52,7 +52,7 @@
 # % guisection: Formatting
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
+# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
 # % answer: id
 # %end
 
@@ -64,7 +64,7 @@
 # % guisection: Selection
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
 # % answer: id
 # %end
 
@@ -106,7 +106,7 @@ def main():
     where = options["where"]
     separator = gscript.separator(options["separator"])
     outpath = options["output"]
-    colhead = flags['c']
+    colhead = flags["c"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -116,11 +116,11 @@ def main():
     dbif.connect()
     first = True
 
-    if  gscript.verbosity() > 0 and not outpath:
+    if gscript.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
     if outpath:
-        outfile = open(outpath, 'w')
+        outfile = open(outpath, "w")
 
     for ttype in temporal_type.split(","):
         if ttype == "absolute":
@@ -140,13 +140,21 @@ def main():
                 rows = stds_list[key]
 
                 if rows:
-                    if  gscript.verbosity() > 0 and not outpath:
+                    if gscript.verbosity() > 0 and not outpath:
                         if issubclass(sp.__class__, tgis.AbstractMapDataset):
-                            sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%
-                                                     (sp.get_type(), time, key))
+                            sys.stderr.write(
+                                _(
+                                    "Time stamped %s maps with %s available in mapset <%s>:\n"
+                                )
+                                % (sp.get_type(), time, key)
+                            )
                         else:
-                            sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%
-                                                     (sp.get_new_map_instance(None).get_type(), time, key))
+                            sys.stderr.write(
+                                _(
+                                    "Space time %s datasets with %s available in mapset <%s>:\n"
+                                )
+                                % (sp.get_new_map_instance(None).get_type(), time, key)
+                            )
 
                     # Print the column names if requested
                     if colhead and first:
@@ -180,6 +188,7 @@ def main():
     if outpath:
         outfile.close()
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = gscript.parser()

@@ -21,7 +21,8 @@
  * */
 static int add_id_to_list(int id, const struct RTree_Rect *rect, void *list)
 {
-    struct ilist *l = (struct ilist*)list;
+    struct ilist *l = (struct ilist *)list;
+
     G_ilist_add(l, id);
     return 1;
 }
@@ -41,6 +42,5 @@ int RTreeSearch2(struct RTree *t, struct RTree_Rect *r, struct ilist *list)
 
     G_init_ilist(list);
 
-    return t->search_rect(t, r, add_id_to_list, (void*)list);
+    return t->search_rect(t, r, add_id_to_list, (void *)list);
 }
-

@@ -54,7 +54,8 @@ size_t Rast_cell_size(RASTER_MAP_TYPE data_type)
  */
 void *Rast_allocate_buf(RASTER_MAP_TYPE data_type)
 {
-    return (void *)G_calloc(Rast_window_cols() + 1, Rast_cell_size(data_type));
+    return (void *)G_calloc(Rast_window_cols() + 1,
+                            Rast_cell_size(data_type));
 }
 
 /*!
@@ -135,7 +136,7 @@ char *Rast_allocate_null_buf(void)
 unsigned char *Rast__allocate_null_bits(int cols)
 {
     return (unsigned char *)G_calloc(Rast__null_bitstream_size(cols) + 1,
-				     sizeof(unsigned char));
+                                     sizeof(unsigned char));
 }
 
 /*!
@@ -148,8 +149,8 @@ unsigned char *Rast__allocate_null_bits(int cols)
 int Rast__null_bitstream_size(int cols)
 {
     if (cols <= 0)
-	G_fatal_error(_("Rast__null_bitstream_size: cols (%d) is negative"),
-		      cols);
+        G_fatal_error(_("Rast__null_bitstream_size: cols (%d) is negative"),
+                      cols);
 
     return (cols + 7) / 8;
 }

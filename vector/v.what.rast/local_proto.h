@@ -2,13 +2,13 @@
 
 struct order
 {
-    int cat;			/* point category */
-    int count;			/* nuber of points with category 'cat' */
+    int cat;                    /* point category */
+    int count;                  /* nuber of points with category 'cat' */
     int row;
     int col;
-    double x, y;		/* used with interp flag */
+    double x, y;                /* used with interp flag */
     CELL value;
-    DCELL dvalue;		/* used for FCELL and DCELL */
+    DCELL dvalue;               /* used for FCELL and DCELL */
 };
 
 /* search.c */

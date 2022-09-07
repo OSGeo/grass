@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.rast.mapcalc
@@ -99,8 +99,18 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.dataset_mapcalculator(inputs, output, "raster", expression,
-                               base, method, nprocs, register_null, spatial)
+    tgis.dataset_mapcalculator(
+        inputs,
+        output,
+        "raster",
+        expression,
+        base,
+        method,
+        nprocs,
+        register_null,
+        spatial,
+    )
+
 
 ###############################################################################
 

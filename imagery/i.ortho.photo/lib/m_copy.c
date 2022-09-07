@@ -11,17 +11,17 @@ int m_copy(MATRIX * a, MATRIX * b)
     register double *ap, *bp;
 
     if (b->nrows == 0)
-	return error("=: arg2 not defined\n");
+        return error("=: arg2 not defined\n");
 
     r = b->nrows;
     a->nrows = b->nrows;
     a->ncols = b->ncols;
     while (r--) {
-	c = b->ncols;
-	ap = &(a->x[r][0]);
-	bp = &(b->x[r][0]);
-	while (c--)
-	    *ap++ = *bp++;
+        c = b->ncols;
+        ap = &(a->x[r][0]);
+        bp = &(b->x[r][0]);
+        while (c--)
+            *ap++ = *bp++;
     }
 
     return 1;

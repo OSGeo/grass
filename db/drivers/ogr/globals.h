@@ -20,11 +20,11 @@
 typedef struct
 {
     dbToken token;
-    OGRLayerH hLayer;		/* current OGR layer */
-    OGRFeatureH hFeature;	/* current feature */
-    int type;			/* type of cursor: SELECT, UPDATE, INSERT */
-    int *cols;			/* 1 type is known, 0 type is unknown */
-    int ncols;			/* num columns (without fid column) */
+    OGRLayerH hLayer;           /* current OGR layer */
+    OGRFeatureH hFeature;       /* current feature */
+    int type;                   /* type of cursor: SELECT, UPDATE, INSERT */
+    int *cols;                  /* 1 type is known, 0 type is unknown */
+    int ncols;                  /* num columns (without fid column) */
 } cursor;
 
 /* column info (see execute.c) */
@@ -32,8 +32,8 @@ typedef struct
 {
     char *name;
     char *value;
-    int  index;
-    int  qindex; /* query column */
+    int index;
+    int qindex;                 /* query column */
     OGRFieldType type;
 } column_info;
 

@@ -22,7 +22,8 @@
 
 int db__driver_execute_immediate(dbString * sql)
 {
-    char *s, msg[OD_MSG];
+    char *s;
+    SQLCHAR msg[OD_MSG];
     cursor *c;
     SQLRETURN ret;
     SQLINTEGER err;
@@ -32,17 +33,17 @@ int db__driver_execute_immediate(dbString * sql)
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
-    ret = SQLExecDirect(c->stmt, s, SQL_NTS);
+    ret = SQLExecDirect(c->stmt, (SQLCHAR *) s, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
-		      sizeof(msg), NULL);
-	db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n", s, msg,
-			  (int)err);
-	db_d_report_error();
+        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
+                      sizeof(msg), NULL);
+        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n", s, msg,
+                          (int)err);
+        db_d_report_error();
 
-	return DB_FAILED;
+        return DB_FAILED;
     }
 
     free_cursor(c);

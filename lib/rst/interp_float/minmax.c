@@ -20,33 +20,33 @@ int min1(int arg1, int arg2)
     int res;
 
     if (arg1 <= arg2) {
-	res = arg1;
+        res = arg1;
     }
     else {
-	res = arg2;
+        res = arg2;
     }
     return res;
 }
 
 
 int max1(
-	    /*
-	     * L. Mitas (University of Illinois),
-	     * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
-	     *
-	     * modified by McCauley in August 1995
-	     * modified by Mitasova in August 1995  
-	     *
-	     */
-	    int arg1, int arg2)
+            /*
+             * L. Mitas (University of Illinois),
+             * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+             *
+             * modified by McCauley in August 1995
+             * modified by Mitasova in August 1995  
+             *
+             */
+            int arg1, int arg2)
 {
     int res;
 
     if (arg1 >= arg2) {
-	res = arg1;
+        res = arg1;
     }
     else {
-	res = arg2;
+        res = arg2;
     }
     return res;
 }
@@ -56,10 +56,10 @@ double amax1(double arg1, double arg2)
     double res;
 
     if (arg1 >= arg2) {
-	res = arg1;
+        res = arg1;
     }
     else {
-	res = arg2;
+        res = arg2;
     }
     return res;
 }
@@ -69,10 +69,10 @@ double amin1(double arg1, double arg2)
     double res;
 
     if (arg1 <= arg2) {
-	res = arg1;
+        res = arg1;
     }
     else {
-	res = arg2;
+        res = arg2;
     }
     return res;
 }

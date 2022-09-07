@@ -10,11 +10,6 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 ifneq ($(GDAL_LINK),)
 EXTRA_CFLAGS += -DGDAL_LINK=1
 EXTRA_INC += $(PROJINC) $(GDALCFLAGS)
-
-ifneq ($(GDAL_DYNAMIC),)
-EXTRA_CFLAGS += -DGDAL_DYNAMIC=1
-endif
-
 endif
 
 default: lib

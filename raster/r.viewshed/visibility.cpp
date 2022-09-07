@@ -89,7 +89,7 @@ void copy_viewpoint(Viewpoint * a, Viewpoint b)
 /* MemoryVisibilityGrid functions */
 
 /* create and return a grid of the sizes specified in the header */
-MemoryVisibilityGrid *create_inmem_visibilitygrid(GridHeader hd, Viewpoint vp)
+MemoryVisibilityGrid *create_inmem_visibilitygrid(const GridHeader &hd, Viewpoint vp)
 {
 
     MemoryVisibilityGrid *visgrid;
@@ -284,7 +284,7 @@ void save_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid,
 
 /* ------------------------------------------------------------ */
 /*create grid from given header and viewpoint */
-IOVisibilityGrid *init_io_visibilitygrid(GridHeader hd, Viewpoint vp)
+IOVisibilityGrid *init_io_visibilitygrid(const GridHeader &hd, Viewpoint vp)
 {
     IOVisibilityGrid *visgrid;
 

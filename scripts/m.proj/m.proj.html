@@ -7,7 +7,7 @@ eastings and northings may be passed to the program directly from
 standard input. If the <b>output</b> option is omitted, the results
 are sent directly to standard output. In this way <em>m.proj</em> can
 be used as a simple frontend to
-the <a href="https://proj.org">PROJ</a>
+the <a href="https://proj.org/apps/cs2cs.html">PROJ</a>
 <em>cs2cs</em> utility. The <b>-i</b> or <b>-o</b> flags make the task
 especially easy for the common problem of converting to or from lat/long
 WGS84.
@@ -17,7 +17,9 @@ designed to determine the equivalent coordinate values of an
 individual position or list of
 positions. Use <em><a href="v.proj.html">v.proj</a></em> to reproject
 vector maps or <em><a href="r.proj.html">r.proj</a></em> for raster maps.
-
+<p>
+For an introduction to map projections (with PROJ),see the manual page of
+<a href="r.proj.html">r.proj</a>.
 
 <h2>NOTES</h2>
 
@@ -125,7 +127,6 @@ v.db.select test_pnts cat|dbl_1|dbl_2|dbl_3
 4|778074.58|207402.6|0
 </pre></div>
 
-
 <h3>Custom projection parameter usage</h3>
 
 To transform points from a UTM projection (here specified with detailed
@@ -187,7 +188,6 @@ ellipsoid).
 For more usage examples, see the documentation for the
 <a href="https://proj.org">PROJ</a> <em>cs2cs</em> program.
 
-
 <h2>REFERENCES</h2>
 
 <ul>
@@ -211,14 +211,8 @@ For more usage examples, see the documentation for the
 <a href="v.out.ascii.html">v.out.ascii</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
 Functionality inspired by the <em>m.proj</em> and <em>m.proj2</em> modules for
 GRASS GIS 5.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

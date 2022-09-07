@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""Test v.what.strds
+"""
+Test v.what.strds
 
 (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public

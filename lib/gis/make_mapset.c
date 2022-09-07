@@ -48,28 +48,28 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
 
     /* Get location */
     if (location_name == NULL)
-	location_name = G_location();
+        location_name = G_location();
 
     /* Get GISDBASE */
     if (gisdbase_name == NULL)
-	gisdbase_name = G_gisdbase();
+        gisdbase_name = G_gisdbase();
 
     /* TODO: Should probably check that user specified location and gisdbase are valid */
 
     /* check if mapset name is legal */
     if (G_legal_filename(mapset_name) != 1)
         return -2;
-    
+
     /* Check if location exists */
     sprintf(path, "%s/%s", gisdbase_name, location_name);
-    if (access(path, F_OK ) == -1)
+    if (access(path, F_OK) == -1)
         G_fatal_error(_("Location <%s> doesn't exist"), location_name);
-    
+
     /* Make the mapset */
     sprintf(path, "%s/%s/%s", gisdbase_name, location_name, mapset_name);
     if (G_mkdir(path) != 0) {
         perror("G_make_mapset");
-	return -1;
+        return -1;
     }
     G_create_alt_env();
 
@@ -90,4 +90,3 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
 
     return 0;
 }
-

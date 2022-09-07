@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.register
@@ -127,8 +127,18 @@ def main():
     tgis.init()
     # Register maps
     tgis.register_maps_in_space_time_dataset(
-        type=type, name=name, maps=maps, file=file, start=start, end=end,
-        unit=unit, increment=increment, dbif=None, interval=interval, fs=separator)
+        type=type,
+        name=name,
+        maps=maps,
+        file=file,
+        start=start,
+        end=end,
+        unit=unit,
+        increment=increment,
+        dbif=None,
+        interval=interval,
+        fs=separator,
+    )
 
 
 ###############################################################################

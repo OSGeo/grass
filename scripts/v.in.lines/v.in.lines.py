@@ -51,8 +51,6 @@ def main():
     fs = separator(options["separator"])
     threeD = flags["z"]
 
-    prog = "v.in.lines"
-
     if threeD:
         do3D = "z"
     else:

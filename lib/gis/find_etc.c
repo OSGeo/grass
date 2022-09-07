@@ -12,29 +12,29 @@ static char *G__find_etc(const char *name)
      * reject illegal names
      */
     if (*name == 0 || *name == '.')
-	return NULL;
+        return NULL;
 
     /*
      * search paths
      */
     if (pathlist) {
-	char **dirs = G_tokenize(pathlist, ":");
-	char *result = NULL;
-	int i;
+        char **dirs = G_tokenize(pathlist, ":");
+        char *result = NULL;
+        int i;
 
-	for (i = 0; dirs[i]; i++) {
-	    sprintf(path, "%s/%s", dirs[i], name);
+        for (i = 0; dirs[i]; i++) {
+            sprintf(path, "%s/%s", dirs[i], name);
 
-	    if (access(path, 0) == 0) {
-		result = G_store(path);
-		break;
-	    }
-	}
+            if (access(path, 0) == 0) {
+                result = G_store(path);
+                break;
+            }
+        }
 
-	G_free_tokens(dirs);
+        G_free_tokens(dirs);
 
-	if (result)
-	    return result;
+        if (result)
+            return result;
     }
 
     /*
@@ -42,7 +42,7 @@ static char *G__find_etc(const char *name)
      */
     sprintf(path, "%s/etc/%s", G_gisbase(), name);
     if (access(path, 0) == 0)
-	return G_store(path);
+        return G_store(path);
 
     return NULL;
 }

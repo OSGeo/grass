@@ -45,7 +45,7 @@ int return_to_cat(int return_n, int n_returns)
     if (return_n == 1)
         return LAS_FIRST;
     else if (n_returns > 1 && return_n == n_returns)
-            return LAS_LAST;
+        return LAS_LAST;
     else
         return LAS_MID;
 }

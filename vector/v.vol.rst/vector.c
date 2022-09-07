@@ -46,10 +46,6 @@
 #include "points.h"
 
 int point_save(double xmm, double ymm, double zmm, double err)
-
-
-
-
 /*
    c  saves point deviations
    c
@@ -75,9 +71,9 @@ int point_save(double xmm, double ymm, double zmm, double err)
     G_debug(3, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
-	db_close_database(driver);
-	db_shutdown_driver(driver);
-	G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
+        db_close_database(driver);
+        db_shutdown_driver(driver);
+        G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
     }
     count++;
 

@@ -1,15 +1,15 @@
 /*!
-  \file rowio/get.c
-  
-  \brief RowIO library - Get a row
-  
-  (C) 2001-2009 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
-  
-  \author Original author CERL
-*/
+   \file rowio/get.c
+
+   \brief RowIO library - Get a row
+
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL
+ */
 
 #include <stdio.h>
 #include <grass/rowio.h>
@@ -45,61 +45,61 @@ void *Rowio_get(ROWIO * R, int row)
     int cur;
 
     if (row < 0)
-	return NULL;
+        return NULL;
 
     if (row == R->cur)
-	return R->buf;
+        return R->buf;
 
     for (i = 0; i < R->nrows; i++)
-	if (row == R->rcb[i].row)
-	    return my_select(R, i);
+        if (row == R->rcb[i].row)
+            return my_select(R, i);
 
     age = 0;
     cur = 0;
 
     for (i = 0; i < R->nrows; i++)
-	if (R->rcb[i].row < 0) {	/* free slot ! */
-	    cur = i;
-	    break;
-	}
-	else if (age < R->rcb[i].age) {
-	    cur = i;
-	    age = R->rcb[i].age;
-	}
+        if (R->rcb[i].row < 0) {        /* free slot ! */
+            cur = i;
+            break;
+        }
+        else if (age < R->rcb[i].age) {
+            cur = i;
+            age = R->rcb[i].age;
+        }
 
     pageout(R, cur);
 
     i = (*R->getrow) (R->fd, R->rcb[cur].buf, R->rcb[cur].row = row, R->len);
     R->rcb[cur].dirty = 0;
     if (!i) {
-	R->rcb[cur].row = -1;
-	if (cur == R->cur)
-	    R->cur = -1;
-	return NULL;
+        R->rcb[cur].row = -1;
+        if (cur == R->cur)
+            R->cur = -1;
+        return NULL;
     }
 
     return my_select(R, cur);
 }
 
 /*!
-  \brief Flush data
+   \brief Flush data
 
-  \param R pointer to ROWIO strcuture
-*/
+   \param R pointer to ROWIO strcuture
+ */
 void Rowio_flush(ROWIO * R)
 {
     int i;
 
     for (i = 0; i < R->nrows; i++)
-	pageout(R, i);
+        pageout(R, i);
 }
 
 static void pageout(ROWIO * R, int cur)
 {
     if (R->rcb[cur].row < 0)
-	return;
+        return;
     if (!R->rcb[cur].dirty)
-	return;
+        return;
     (*R->putrow) (R->fd, R->rcb[cur].buf, R->rcb[cur].row, R->len);
     R->rcb[cur].dirty = 0;
 }
@@ -110,7 +110,7 @@ static void *my_select(ROWIO * R, int n)
 
     R->rcb[n].age = 0;
     for (i = 0; i < R->nrows; i++)
-	R->rcb[i].age++;
+        R->rcb[i].age++;
     R->cur = R->rcb[n].row;
     R->buf = R->rcb[n].buf;
     return R->buf;

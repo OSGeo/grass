@@ -27,17 +27,15 @@ from core.settings import UserSettings
 # default icon set
 from .grass_icons import iconSet as g_iconSet
 from .grass_icons import iconPath as g_iconPath
+
 iconSetDefault = g_iconSet
 iconPathDefault = g_iconPath
 
-iconTheme = UserSettings.Get(
-    group='appearance',
-    key='iconTheme',
-    subkey='type')
-if iconTheme != 'grass':
+iconTheme = UserSettings.Get(group="appearance", key="iconTheme", subkey="type")
+if iconTheme != "grass":
     sys.stderr.write(
-        _("Unknown iconset '%s', using default 'grass'...\n") %
-        (iconTheme))
+        _("Unknown iconset '%s', using default 'grass'...\n") % (iconTheme)
+    )
 
 iconSet = iconSetDefault
 iconPath = iconPathDefault
@@ -48,8 +46,7 @@ try:
         raise OSError
 
     for key, img in six.iteritems(iconSet):
-        if key not in iconSet or \
-                iconSet[key] is None:  # add key
+        if key not in iconSet or iconSet[key] is None:  # add key
             iconSet[key] = img
 
         iconSet[key] = os.path.join(iconPath, iconSet[key])
@@ -58,40 +55,37 @@ except Exception as e:
 
 
 class MetaIcon:
-    """Handle icon metadata (image path, tooltip, ...)
-    """
+    """Handle icon metadata (image path, tooltip, ...)"""
 
     def __init__(self, img, label=None, desc=None):
         self.imagepath = iconSet.get(img, wx.ART_MISSING_IMAGE)
         if not self.imagepath:
-            self.type = 'unknown'
+            self.type = "unknown"
         else:
-            if self.imagepath.find('wxART_') > -1:
-                self.type = 'wx'
+            if self.imagepath.find("wxART_") > -1:
+                self.type = "wx"
             else:
-                self.type = 'img'
+                self.type = "img"
 
         self.label = label
 
         if desc:
             self.description = desc
         else:
-            self.description = ''
+            self.description = ""
 
     def __str__(self):
-        return "label=%s, img=%s, type=%s" % (
-            self.label, self.imagepath, self.type)
+        return "label=%s, img=%s, type=%s" % (self.label, self.imagepath, self.type)
 
     def GetBitmap(self, size=None):
         bmp = None
 
-        if self.type == 'wx':
+        if self.type == "wx":
             bmp = wx.ArtProvider.GetBitmap(
-                id=self.imagepath, client=wx.ART_TOOLBAR, size=size)
-        elif self.type == 'img':
-            if os.path.isfile(
-                    self.imagepath) and os.path.getsize(
-                    self.imagepath):
+                id=self.imagepath, client=wx.ART_TOOLBAR, size=size
+            )
+        elif self.type == "img":
+            if os.path.isfile(self.imagepath) and os.path.getsize(self.imagepath):
                 if size and len(size) == 2:
                     image = wx.Image(name=self.imagepath)
                     image.Rescale(size[0], size[1])

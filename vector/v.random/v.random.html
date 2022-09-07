@@ -16,7 +16,7 @@ calculated by rounding random floating point number.
 option <b>seed</b>.
 
 <h3>Restriction to vector areas</h3>
-<p>
+
 If an <b>restrict</b> vector map with areas is specified, the location
 of random points is restricted to the selected areas. By default, the
 requested number of points are distributed across all areas.
@@ -39,6 +39,7 @@ Importantly, attributes will only be transferred if <b>layer</b> > 0
 (e.g., <tt>layer=1</tt>).
   
 <h2>EXAMPLES</h2>
+
 All examples are based on the North Carolina sample dataset.
 
 <h3>Generating random points in 2D</h3>
@@ -171,7 +172,6 @@ r.colors randareas6k color=random
 d.rast randareas6k
 </pre></div>
 
-
 <h3>Random sampling from raster map</h3>
 
 Generate 20 random samples from a raster map:
@@ -231,7 +231,6 @@ d.vect random_samples color=white
 Random points only sampled in forested areas (stratified random sampling)
 </center>
 
-
 <h3>Stratified random sampling: Random sampling from vector map with spatial constraints</h3>
 
 Generating n points for each individual area: in this example two random
@@ -256,7 +255,6 @@ Two random points sampled in each individual water body (stratified
 random sampling)
 </center>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -277,11 +275,5 @@ random sampling)
 <a href="http://mccauley-usa.com/">James Darrell McCauley</a>
 <a href="mailto:darrell@mccauley-usa.com">&lt;darrell@mccauley-usa.com&gt;</a>,
 <br>when he was at: 
-<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural
-Engineering</a>
+<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
 <a href="http://www.purdue.edu/">Purdue University</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

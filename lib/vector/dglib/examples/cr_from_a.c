@@ -81,6 +81,7 @@ int main(int argc, char **argv)
   reread_first_line:
     if (fgets(sz, sizeof(sz), fp) == NULL) {
 	fprintf(stderr, "unexpected EOF\n");
+        fclose(fp);
 	return 1;
     }
 

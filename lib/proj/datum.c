@@ -41,17 +41,17 @@ int GPJ_get_datum_by_name(const char *name, struct gpj_datum *dstruct)
     list = listhead = read_datum_table();
 
     while (list != NULL) {
-	if (G_strcasecmp(name, list->name) == 0) {
-	    dstruct->name = G_store(list->name);
-	    dstruct->longname = G_store(list->longname);
-	    dstruct->ellps = G_store(list->ellps);
-	    dstruct->dx = list->dx;
-	    dstruct->dy = list->dy;
-	    dstruct->dz = list->dz;
-	    free_datum_list(listhead);
-	    return 1;
-	}
-	list = list->next;
+        if (G_strcasecmp(name, list->name) == 0) {
+            dstruct->name = G_store(list->name);
+            dstruct->longname = G_store(list->longname);
+            dstruct->ellps = G_store(list->ellps);
+            dstruct->dx = list->dx;
+            dstruct->dy = list->dy;
+            dstruct->dz = list->dz;
+            free_datum_list(listhead);
+            return 1;
+        }
+        list = list->next;
     }
     free_datum_list(listhead);
     return -1;
@@ -90,8 +90,8 @@ int GPJ_get_default_datum_params_by_name(const char *name, char **params)
     list = GPJ_get_datum_transform_by_name(name);
 
     if (list == NULL) {
-	*params = NULL;
-	return -1;
+        *params = NULL;
+        return -1;
     }
 
     /* Take the first parameter set in the list as the default
@@ -99,10 +99,10 @@ int GPJ_get_default_datum_params_by_name(const char *name, char **params)
     *params = G_store(list->params);
 
     while (list != NULL) {
-	count++;
-	old = list;
-	list = list->next;
-	GPJ_free_datum_transform(old);
+        count++;
+        old = list;
+        list = list->next;
+        GPJ_free_datum_transform(old);
     }
 
     return count;
@@ -171,51 +171,54 @@ int GPJ_get_datum_params(char **name, char **params)
  **/
 
 int GPJ__get_datum_params(const struct Key_Value *projinfo,
-			  char **datumname, char **params)
+                          char **datumname, char **params)
 {
     int returnval = -1;
 
     if (NULL != G_find_key_value("datum", projinfo)) {
-	*datumname = G_store(G_find_key_value("datum", projinfo));
-	G_debug(3, "GPJ__get_datum_params: datumname: <%s>", G_find_key_value("datum", projinfo));
-	returnval = 1;
+        *datumname = G_store(G_find_key_value("datum", projinfo));
+        G_debug(3, "GPJ__get_datum_params: datumname: <%s>",
+                G_find_key_value("datum", projinfo));
+        returnval = 1;
     }
     else
-	*datumname = NULL;
+        *datumname = NULL;
 
     if (G_find_key_value("datumparams", projinfo) != NULL) {
-	*params = G_store(G_find_key_value("datumparams", projinfo));
-	G_debug(3, "GPJ__get_datum_params: datumparams: <%s>", G_find_key_value("datumparams", projinfo));
-	returnval = 2;
+        *params = G_store(G_find_key_value("datumparams", projinfo));
+        G_debug(3, "GPJ__get_datum_params: datumparams: <%s>",
+                G_find_key_value("datumparams", projinfo));
+        returnval = 2;
     }
     else if (G_find_key_value("nadgrids", projinfo) != NULL) {
-	/* 1. beware of '@', do not create something like
-	 *    /usr/share/proj/@null, correct is @null or
-	 *    @/usr/share/proj/null
-	 * 2. do not add path to the grid, there might already be a
-	 *    path, and it is safer to use pj_set_finder with PROJ.4 in
-	 *    datum.c */
+        /* 1. beware of '@', do not create something like
+         *    /usr/share/proj/@null, correct is @null or
+         *    @/usr/share/proj/null
+         * 2. do not add path to the grid, there might already be a
+         *    path, and it is safer to use pj_set_finder with PROJ.4 in
+         *    datum.c */
 
-	G_asprintf(params, "nadgrids=%s", G_find_key_value("nadgrids", projinfo));
+        G_asprintf(params, "nadgrids=%s",
+                   G_find_key_value("nadgrids", projinfo));
 
-	returnval = 2;
+        returnval = 2;
     }
     else if (G_find_key_value("towgs84", projinfo) != NULL) {
-	G_asprintf(params, "towgs84=%s",
-		   G_find_key_value("towgs84", projinfo));
-	returnval = 2;
+        G_asprintf(params, "towgs84=%s",
+                   G_find_key_value("towgs84", projinfo));
+        returnval = 2;
     }
     else if (G_find_key_value("dx", projinfo) != NULL
-	     && G_find_key_value("dy", projinfo) != NULL
-	     && G_find_key_value("dz", projinfo) != NULL) {
-	G_asprintf(params, "towgs84=%s,%s,%s",
-		   G_find_key_value("dx", projinfo),
-		   G_find_key_value("dy", projinfo),
-		   G_find_key_value("dz", projinfo));
-	returnval = 2;
+             && G_find_key_value("dy", projinfo) != NULL
+             && G_find_key_value("dz", projinfo) != NULL) {
+        G_asprintf(params, "towgs84=%s,%s,%s",
+                   G_find_key_value("dx", projinfo),
+                   G_find_key_value("dy", projinfo),
+                   G_find_key_value("dz", projinfo));
+        returnval = 2;
     }
     else
-	*params = NULL;
+        *params = NULL;
 
     return returnval;
 
@@ -234,7 +237,7 @@ int GPJ__get_datum_params(const struct Key_Value *projinfo,
  **/
 
 struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
-								 *inputname)
+                                                                 *inputname)
 {
     FILE *fd;
     char file[GPATH_MAX];
@@ -246,25 +249,25 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 
     GPJ_get_datum_by_name(inputname, &dstruct);
     if (dstruct.dx < 99999 && dstruct.dy < 99999 && dstruct.dz < 99999) {
-	/* Include the old-style dx dy dz parameters from datum.table at the 
-	 * start of the list, unless these have been set to all 99999 to 
-	 * indicate only entries in datumtransform.table should be used */
-	if (current == NULL)
-	    current = outputlist =
-		G_malloc(sizeof(struct gpj_datum_transform_list));
-	else
-	    current = current->next =
-		G_malloc(sizeof(struct gpj_datum_transform_list));
-	G_asprintf(&(current->params), "towgs84=%.3f,%.3f,%.3f", dstruct.dx,
-		   dstruct.dy, dstruct.dz);
-	G_asprintf(&(current->where_used), "whole %s region", inputname);
-	G_asprintf(&(current->comment),
-		   "Default 3-Parameter Transformation (May not be optimum for "
-		   "older datums; use this only if no more appropriate options "
-		   "are available.)");
-	count++;
-	current->count = count;
-	current->next = NULL;
+        /* Include the old-style dx dy dz parameters from datum.table at the 
+         * start of the list, unless these have been set to all 99999 to 
+         * indicate only entries in datumtransform.table should be used */
+        if (current == NULL)
+            current = outputlist =
+                G_malloc(sizeof(struct gpj_datum_transform_list));
+        else
+            current = current->next =
+                G_malloc(sizeof(struct gpj_datum_transform_list));
+        G_asprintf(&(current->params), "towgs84=%.3f,%.3f,%.3f", dstruct.dx,
+                   dstruct.dy, dstruct.dz);
+        G_asprintf(&(current->where_used), "whole %s region", inputname);
+        G_asprintf(&(current->comment),
+                   "Default 3-Parameter Transformation (May not be optimum for "
+                   "older datums; use this only if no more appropriate options "
+                   "are available.)");
+        count++;
+        current->count = count;
+        current->next = NULL;
     }
     GPJ_free_datum(&dstruct);
 
@@ -274,40 +277,40 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 
     fd = fopen(file, "r");
     if (!fd) {
-	G_warning(_("Unable to open datum table file <%s>"), file);
-	return outputlist;
+        G_warning(_("Unable to open datum table file <%s>"), file);
+        return outputlist;
     }
 
     for (line = 1; G_getl2(buf, sizeof(buf), fd); line++) {
-	char name[100], params[1024], where_used[1024], comment[1024];
+        char name[100], params[1024], where_used[1024], comment[1024];
 
-	G_strip(buf);
-	if (*buf == '\0' || *buf == '#')
-	    continue;
+        G_strip(buf);
+        if (*buf == '\0' || *buf == '#')
+            continue;
 
-	if (sscanf(buf, "%99s \"%1023[^\"]\" \"%1023[^\"]\" \"%1023[^\"]\"",
-		   name, params, where_used, comment) != 4) {
-	    G_warning(_("Error in datum table file <%s>, line %d"), file,
-		      line);
-	    continue;
-	}
+        if (sscanf(buf, "%99s \"%1023[^\"]\" \"%1023[^\"]\" \"%1023[^\"]\"",
+                   name, params, where_used, comment) != 4) {
+            G_warning(_("Error in datum table file <%s>, line %d"), file,
+                      line);
+            continue;
+        }
 
-	if (G_strcasecmp(inputname, name) == 0) {
-	    /* If the datum name in this line matches the one we are 
-	     * looking for, add an entry to the linked list */
-	    if (current == NULL)
-		current = outputlist =
-		    G_malloc(sizeof(struct gpj_datum_transform_list));
-	    else
-		current = current->next =
-		    G_malloc(sizeof(struct gpj_datum_transform_list));
-	    current->params = G_store(params);
-	    current->where_used = G_store(where_used);
-	    current->comment = G_store(comment);
-	    count++;
-	    current->count = count;
-	    current->next = NULL;
-	}
+        if (G_strcasecmp(inputname, name) == 0) {
+            /* If the datum name in this line matches the one we are 
+             * looking for, add an entry to the linked list */
+            if (current == NULL)
+                current = outputlist =
+                    G_malloc(sizeof(struct gpj_datum_transform_list));
+            else
+                current = current->next =
+                    G_malloc(sizeof(struct gpj_datum_transform_list));
+            current->params = G_store(params);
+            current->where_used = G_store(where_used);
+            current->comment = G_store(comment);
+            count++;
+            current->count = count;
+            current->next = NULL;
+        }
     }
 
     fclose(fd);
@@ -354,38 +357,38 @@ struct datum_list *read_datum_table(void)
 
     fd = fopen(file, "r");
     if (!fd) {
-	G_warning(_("Unable to open datum table file <%s>"), file);
-	return NULL;
+        G_warning(_("Unable to open datum table file <%s>"), file);
+        return NULL;
     }
 
     for (line = 1; G_getl2(buf, sizeof(buf), fd); line++) {
-	char name[100], descr[1024], ellps[100];
-	double dx, dy, dz;
+        char name[100], descr[1024], ellps[100];
+        double dx, dy, dz;
 
-	G_strip(buf);
-	if (*buf == '\0' || *buf == '#')
-	    continue;
+        G_strip(buf);
+        if (*buf == '\0' || *buf == '#')
+            continue;
 
-	if (sscanf(buf, "%s \"%1023[^\"]\" %s dx=%lf dy=%lf dz=%lf",
-		   name, descr, ellps, &dx, &dy, &dz) != 6) {
-	    G_warning(_("Error in datum table file <%s>, line %d"), file,
-		      line);
-	    continue;
-	}
+        if (sscanf(buf, "%s \"%1023[^\"]\" %s dx=%lf dy=%lf dz=%lf",
+                   name, descr, ellps, &dx, &dy, &dz) != 6) {
+            G_warning(_("Error in datum table file <%s>, line %d"), file,
+                      line);
+            continue;
+        }
 
-	if (current == NULL)
-	    current = outputlist = G_malloc(sizeof(struct datum_list));
-	else
-	    current = current->next = G_malloc(sizeof(struct datum_list));
-	current->name = G_store(name);
-	current->longname = G_store(descr);
-	current->ellps = G_store(ellps);
-	current->dx = dx;
-	current->dy = dy;
-	current->dz = dz;
-	current->next = NULL;
+        if (current == NULL)
+            current = outputlist = G_malloc(sizeof(struct datum_list));
+        else
+            current = current->next = G_malloc(sizeof(struct datum_list));
+        current->name = G_store(name);
+        current->longname = G_store(descr);
+        current->ellps = G_store(ellps);
+        current->dx = dx;
+        current->dy = dy;
+        current->dz = dz;
+        current->next = NULL;
 
-	count++;
+        count++;
     }
 
     fclose(fd);
@@ -418,12 +421,12 @@ void free_datum_list(struct datum_list *dstruct)
     struct datum_list *old;
 
     while (dstruct != NULL) {
-	G_free(dstruct->name);
-	G_free(dstruct->longname);
-	G_free(dstruct->ellps);
-	old = dstruct;
-	dstruct = old->next;
-	G_free(old);
+        G_free(dstruct->name);
+        G_free(dstruct->longname);
+        G_free(dstruct->ellps);
+        old = dstruct;
+        dstruct = old->next;
+        G_free(old);
     }
 
     return;

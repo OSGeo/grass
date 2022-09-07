@@ -16,7 +16,8 @@
 #include "pi.h"
 
 
-static struct state {
+static struct state
+{
     double M;
 } state;
 

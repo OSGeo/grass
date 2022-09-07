@@ -16,12 +16,12 @@
 #include "macros.h"
 
 /*!
-  \brief Get number of selected rows
+   \brief Get number of selected rows
 
-  \param cursor db select cursor
+   \param cursor db select cursor
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_get_num_rows(dbCursor * cursor)
 {
@@ -38,7 +38,7 @@ int db_get_num_rows(dbCursor * cursor)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return -1;
+        return -1;
 
     /* get the results */
     DB_RECV_INT(&nrows);

@@ -43,6 +43,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
@@ -54,11 +55,12 @@ def main():
         giface=StandaloneGrassInterface(),
         title=_("Graphical Modeler - GRASS GIS"),
     )
-    if options['file']:
-        frame.LoadModelFile(options['file'])
+    if options["file"]:
+        frame.LoadModelFile(options["file"])
     frame.Show()
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

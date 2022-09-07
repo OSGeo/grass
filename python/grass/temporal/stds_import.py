@@ -582,9 +582,6 @@ def import_stds(
         )
 
         os.chdir(old_cwd)
-    except:
-        raise
-
     # Make sure the location is switched back correctly
     finally:
         if location:

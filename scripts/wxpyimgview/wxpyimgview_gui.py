@@ -40,16 +40,15 @@ import signal
 import struct
 import sys
 import time
+import numpy
+
+import wx
 
 import grass.script as grass
 from grass.script.setup import set_gui_path
 
 set_gui_path()
-from gui_core.wrap import BitmapFromImage
-
-import numpy
-
-import wx
+from gui_core.wrap import BitmapFromImage  # noqa: E402
 
 
 class Frame(wx.Frame):

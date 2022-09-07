@@ -2,8 +2,8 @@
 
 struct order
 {
-    int cat;			/* point category */
-    int count;			/* nuber of points with category 'cat' */
+    int cat;                    /* point category */
+    int count;                  /* nuber of points with category 'cat' */
     double x;
     double y;
     double z;

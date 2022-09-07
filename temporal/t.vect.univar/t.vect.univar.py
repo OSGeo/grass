@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.vect.univar
@@ -78,8 +78,9 @@ import grass.script as grass
 
 ############################################################################
 
+
 def main():
-    #lazy imports
+    # lazy imports
     import grass.temporal as tgis
 
     # Get the options
@@ -103,7 +104,9 @@ def main():
         output = None
 
     tgis.print_vector_dataset_univar_statistics(
-        input, output, twhere, layer, type, column, where, extended, header, separator)
+        input, output, twhere, layer, type, column, where, extended, header, separator
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

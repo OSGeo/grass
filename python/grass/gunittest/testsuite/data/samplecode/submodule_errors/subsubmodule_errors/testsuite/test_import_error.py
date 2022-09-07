@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # comment to get rid of the wrong import
 # (if it is imported before all tests start and everything would fail)
 # import this_module_or_package_does_not_exists__testing_import_error

@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""@package grass.pygrass.messages
+"""
+@package grass.pygrass.messages
 
 @brief PyGRASS message interface
 

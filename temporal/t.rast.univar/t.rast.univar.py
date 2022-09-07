@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.rast.univar
@@ -88,7 +88,9 @@ def main():
         output = None
 
     tgis.print_gridded_dataset_univar_statistics(
-        "strds", input, output, where, extended, no_header, separator, rast_region)
+        "strds", input, output, where, extended, no_header, separator, rast_region
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

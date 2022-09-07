@@ -35,17 +35,17 @@ double N_full_upwinding(double sprod, double distance, double D)
     double z;
 
     if (D == 0)
-	return 0.5;
+        return 0.5;
 
     /*compute the local peclet number */
     z = sprod * distance / D;
 
     if (z > 0)
-	return 1;
+        return 1;
     if (z == 0)
-	return 0.5;
+        return 0.5;
     if (z < 0)
-	return 0;
+        return 0;
 
     return 0;
 }
@@ -65,13 +65,13 @@ double N_exp_upwinding(double sprod, double distance, double D)
     double z;
 
     if (D == 0)
-	return 0.5;
+        return 0.5;
 
     /*compute the local peclet number */
     z = sprod * distance / D;
 
     if (z != 0)
-	return (1 - (1 / z) * (1 - (z / (exp(z) - 1))));
+        return (1 - (1 / z) * (1 - (z / (exp(z) - 1))));
 
     return 0.5;
 }

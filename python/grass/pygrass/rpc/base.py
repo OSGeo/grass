@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Fast and exit-safe interface to PyGRASS Raster and Vector layer
 using multiprocessing

@@ -1,4 +1,4 @@
-#include <stdlib.h>		
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -37,15 +37,16 @@ double **G_math_matrix_to_sband_matrix(double **A, int rows, int bandwidth)
     double **B = G_alloc_matrix(rows, bandwidth);
     double tmp;
 
-    for(i = 0; i < rows; i++) {
-       for(j = 0; j < bandwidth; j++) {
-          if(i + j < rows) {
-            tmp = A[i][i + j]; 
-            B[i][j] = tmp;
-          } else {
-            B[i][j] = 0.0;
-          }
-       }
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < bandwidth; j++) {
+            if (i + j < rows) {
+                tmp = A[i][i + j];
+                B[i][j] = tmp;
+            }
+            else {
+                B[i][j] = 0.0;
+            }
+        }
     }
 
     return B;
@@ -83,20 +84,20 @@ double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)
     double **B = G_alloc_matrix(rows, rows);
     double tmp;
 
-    for(i = 0; i < rows; i++) {
-       for(j = 0; j < bandwidth; j++) {
-          tmp = A[i][j];
-          if(i + j < rows) {
-            B[i][i + j] = tmp; 
-          } 
-       }
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < bandwidth; j++) {
+            tmp = A[i][j];
+            if (i + j < rows) {
+                B[i][i + j] = tmp;
+            }
+        }
     }
 
-    /*Symmetry*/
-    for(i = 0; i < rows; i++) {
-       for(j = i; j < rows; j++) {
-          B[j][i] = B[i][j]; 
-       }
+    /*Symmetry */
+    for (i = 0; i < rows; i++) {
+        for (j = i; j < rows; j++) {
+            B[j][i] = B[i][j];
+        }
     }
 
     return B;
@@ -120,7 +121,8 @@ double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)
  * \return (void)
  *
  * */
-void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth)
+void G_math_Ax_sband(double **A, double *x, double *y, int rows,
+                     int bandwidth)
 {
     int i, j;
     double tmp;
@@ -128,23 +130,23 @@ void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth)
 
 #pragma omp for schedule (static) private(i, j, tmp)
     for (i = 0; i < rows; i++) {
-	tmp = 0;
-	for (j = 0; j < bandwidth; j++) {
-	   if((i + j) < rows)
-	   	tmp += A[i][j]*x[i + j];
-	}
-	y[i] = tmp;
+        tmp = 0;
+        for (j = 0; j < bandwidth; j++) {
+            if ((i + j) < rows)
+                tmp += A[i][j] * x[i + j];
+        }
+        y[i] = tmp;
     }
 
 #pragma omp single
     {
-    for (i = 0; i < rows; i++) {
-	tmp = 0;
-	for (j = 1; j < bandwidth; j++) {
-	   	if(i + j < rows)
-			y[i + j] += A[i][j]*x[i];
-	}
-    }
+        for (i = 0; i < rows; i++) {
+            tmp = 0;
+            for (j = 1; j < bandwidth; j++) {
+                if (i + j < rows)
+                    y[i + j] += A[i][j] * x[i];
+            }
+        }
     }
     return;
 }

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Jun 26 19:10:58 2015
 
@@ -112,8 +111,6 @@ def parse_options(lines, startswith="Opt"):
 
 
 class OptTable(object):
-    """"""
-
     def __init__(self, list_of_dict):
         self.options = list_of_dict
         self.columns = sorted(set([key for _, d in self.options for key in d.keys()]))

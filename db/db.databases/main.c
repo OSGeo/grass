@@ -39,13 +39,13 @@ int main(int argc, char **argv)
     parse_command_line(argc, argv);
 
     if (parms.location) {
-	db_set_string(&locations, parms.location);
-	nlocs = 1;
+        db_set_string(&locations, parms.location);
+        nlocs = 1;
     }
 
     driver = db_start_driver(parms.driver);
     if (driver == NULL)
-	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
     if (db_list_databases(driver, &locations,
                           nlocs, &handles, &count) != DB_OK) {
@@ -56,12 +56,12 @@ int main(int argc, char **argv)
     db_shutdown_driver(driver);
 
     for (i = 0; i < count; i++) {
-	fprintf(stdout, "%s\n", db_get_handle_dbname(&handles[i]));
+        fprintf(stdout, "%s\n", db_get_handle_dbname(&handles[i]));
     }
 
     if (count < 1)
         G_important_message(_("No databases found"));
-                            
+
     exit(EXIT_SUCCESS);
 }
 
@@ -76,9 +76,9 @@ static void parse_command_line(int argc, char **argv)
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
-    driver->answer = (char *) db_get_default_driver_name();
+    driver->answer = (char *)db_get_default_driver_name();
     driver->guisection = _("Connection");
-    
+
     location = G_define_option();
     location->key = "location";
     location->type = TYPE_STRING;
@@ -96,10 +96,10 @@ static void parse_command_line(int argc, char **argv)
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("SQL"));
     module->description =
-	_("Lists all databases for a given driver and location.");
+        _("Lists all databases for a given driver and location.");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     parms.driver = driver->answer;
     parms.location = location->answer ? location->answer : "";

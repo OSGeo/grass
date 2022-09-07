@@ -11,21 +11,21 @@
 
 static int
 Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
-		    int *zone, double *north, double *south, double *east,
-		    double *west, double *top, double *bottom, int *rows,
-		    int *cols, int *depths, double *ew_res, double *ns_res,
-		    double *tb_res)
+                       int *zone, double *north, double *south, double *east,
+                       double *west, double *top, double *bottom, int *rows,
+                       int *cols, int *depths, double *ew_res, double *ns_res,
+                       double *tb_res)
 {
     int returnVal;
-    int (*windowInt) (), (*windowDouble) ();
+    int (*windowInt)(),(*windowDouble)();
 
     if (doRead) {
-	windowDouble = Rast3d_key_get_double;
-	windowInt = Rast3d_key_get_int;
+        windowDouble = Rast3d_key_get_double;
+        windowInt = Rast3d_key_get_int;
     }
     else {
-	windowDouble = Rast3d_key_set_double;
-	windowInt = Rast3d_key_set_int;
+        windowDouble = Rast3d_key_set_double;
+        windowInt = Rast3d_key_set_int;
     }
 
     returnVal = 1;
@@ -48,7 +48,7 @@ Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
     returnVal &= windowDouble(windowKeys, RASTER3D_REGION_TBRES, tb_res);
 
     if (returnVal)
-	return 1;
+        return 1;
 
     Rast3d_error("Rast3d_readWriteWindow: error writing window");
     return 0;
@@ -63,21 +63,21 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     if (windowName == NULL) {
-	G_file_name(path, "", RASTER3D_WINDOW_ELEMENT, G_mapset());
-	return;
+        G_file_name(path, "", RASTER3D_WINDOW_ELEMENT, G_mapset());
+        return;
     }
 
     while (*windowName == ' ')
-	windowName++;
+        windowName++;
 
     if (strchr(windowName, GRASS_DIRSEP) || strchr(windowName, HOST_DIRSEP)) {
-	sprintf(path, "%s", windowName);
-	return;
+        sprintf(path, "%s", windowName);
+        return;
     }
 
     if (G_name_is_fully_qualified(windowName, xname, xmapset)) {
-	G_file_name(path, RASTER3D_WINDOW_DATABASE, xname, xmapset);
-	return;
+        G_file_name(path, RASTER3D_WINDOW_DATABASE, xname, xmapset);
+        return;
     }
 
     G_file_name(path, RASTER3D_WINDOW_DATABASE, windowName, G_mapset());
@@ -144,48 +144,48 @@ int Rast3d_read_window(RASTER3D_Region * window, const char *windowName)
 
 
     if (windowName == NULL) {
-	G_get_window(&win);
+        G_get_window(&win);
 
-	window->proj = win.proj;
-	window->zone = win.zone;
-	window->north = win.north;
-	window->south = win.south;
-	window->east = win.east;
-	window->west = win.west;
-	window->top = win.top;
-	window->bottom = win.bottom;
-	window->rows = win.rows3;
-	window->cols = win.cols3;
-	window->depths = win.depths;
-	window->ns_res = win.ns_res3;
-	window->ew_res = win.ew_res3;
-	window->tb_res = win.tb_res;
+        window->proj = win.proj;
+        window->zone = win.zone;
+        window->north = win.north;
+        window->south = win.south;
+        window->east = win.east;
+        window->west = win.west;
+        window->top = win.top;
+        window->bottom = win.bottom;
+        window->rows = win.rows3;
+        window->cols = win.cols3;
+        window->depths = win.depths;
+        window->ns_res = win.ns_res3;
+        window->ew_res = win.ew_res3;
+        window->tb_res = win.tb_res;
     }
     else {
-	Rast3d_getFullWindowPath(path, windowName);
+        Rast3d_getFullWindowPath(path, windowName);
 
-	if (access(path, R_OK) != 0) {
-	    G_warning("Rast3d_read_window: unable to find [%s].", path);
-	    return 0;
-	}
+        if (access(path, R_OK) != 0) {
+            G_warning("Rast3d_read_window: unable to find [%s].", path);
+            return 0;
+        }
 
-	windowKeys = G_read_key_value_file(path);
+        windowKeys = G_read_key_value_file(path);
 
-	if (!Rast3d_readWriteWindow(windowKeys, 1,
-				 &(window->proj), &(window->zone),
-				 &(window->north), &(window->south),
-				 &(window->east), &(window->west),
-				 &(window->top), &(window->bottom),
-				 &(window->rows), &(window->cols),
-				 &(window->depths), &(window->ew_res),
-				 &(window->ns_res), &(window->tb_res))) {
-	    Rast3d_error
-		("Rast3d_read_window: error extracting window key(s) of file %s",
-		 path);
-	    return 0;
-	}
+        if (!Rast3d_readWriteWindow(windowKeys, 1,
+                                    &(window->proj), &(window->zone),
+                                    &(window->north), &(window->south),
+                                    &(window->east), &(window->west),
+                                    &(window->top), &(window->bottom),
+                                    &(window->rows), &(window->cols),
+                                    &(window->depths), &(window->ew_res),
+                                    &(window->ns_res), &(window->tb_res))) {
+            Rast3d_error
+                ("Rast3d_read_window: error extracting window key(s) of file %s",
+                 path);
+            return 0;
+        }
 
-	G_free_key_value(windowKeys);
+        G_free_key_value(windowKeys);
     }
 
     return 1;

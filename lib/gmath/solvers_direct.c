@@ -81,25 +81,25 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
     {
 
 #pragma omp for  schedule (static) private(i)
-	for (i = 0; i < rows; i++) {
-	    tmpv[i] = A[i][i];
-	    A[i][i] = 1;
-	}
+        for (i = 0; i < rows; i++) {
+            tmpv[i] = A[i][i];
+            A[i][i] = 1;
+        }
 
 #pragma omp single
-	{
-	    G_math_forward_substitution(A, b, b, rows);
-	}
+        {
+            G_math_forward_substitution(A, b, b, rows);
+        }
 
 #pragma omp for  schedule (static) private(i)
-	for (i = 0; i < rows; i++) {
-	    A[i][i] = tmpv[i];
-	}
+        for (i = 0; i < rows; i++) {
+            A[i][i] = tmpv[i];
+        }
 
 #pragma omp single
-	{
-	    G_math_backward_substitution(A, x, b, rows);
-	}
+        {
+            G_math_backward_substitution(A, x, b, rows);
+        }
     }
 
     G_free(c);
@@ -125,14 +125,14 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
  * \return int -- 1 success
  * */
 int G_math_solver_cholesky(double **A, double *x, double *b, int bandwidth,
-			   int rows)
+                           int rows)
 {
 
     G_message(_("Starting cholesky decomposition solver"));
 
     if (G_math_cholesky_decomposition(A, rows, bandwidth) != 1) {
-	G_warning(_("Unable to solve the linear equation system"));
-	return -2;
+        G_warning(_("Unable to solve the linear equation system"));
+        return -2;
     }
 
     G_math_forward_substitution(A, b, b, rows);
@@ -161,13 +161,13 @@ void G_math_gauss_elimination(double **A, double *b, int rows)
 
     for (k = 0; k < rows - 1; k++) {
 #pragma omp parallel for schedule (static) private(i, j, tmpval) shared(k, A, b, rows)
-	for (i = k + 1; i < rows; i++) {
-	    tmpval = A[i][k] / A[k][k];
-	    b[i] = b[i] - tmpval * b[k];
-	    for (j = k + 1; j < rows; j++) {
-		A[i][j] = A[i][j] - tmpval * A[k][j];
-	    }
-	}
+        for (i = k + 1; i < rows; i++) {
+            tmpval = A[i][k] / A[k][k];
+            b[i] = b[i] - tmpval * b[k];
+            for (j = k + 1; j < rows; j++) {
+                A[i][j] = A[i][j] - tmpval * A[k][j];
+            }
+        }
     }
 
     return;
@@ -193,12 +193,12 @@ void G_math_lu_decomposition(double **A, double *b, int rows)
 
     for (k = 0; k < rows - 1; k++) {
 #pragma omp parallel for schedule (static) private(i, j) shared(k, A, rows)
-	for (i = k + 1; i < rows; i++) {
-	    A[i][k] = A[i][k] / A[k][k];
-	    for (j = k + 1; j < rows; j++) {
-		A[i][j] = A[i][j] - A[i][k] * A[k][j];
-	    }
-	}
+        for (i = k + 1; i < rows; i++) {
+            A[i][k] = A[i][k] / A[k][k];
+            for (j = k + 1; j < rows; j++) {
+                A[i][j] = A[i][j] - A[i][k] * A[k][j];
+            }
+        }
     }
 
     return;
@@ -229,47 +229,47 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwidth)
     int colsize;
 
     if (bandwidth <= 0)
-	bandwidth = rows;
+        bandwidth = rows;
 
     colsize = bandwidth;
 
     for (k = 0; k < rows; k++) {
 #pragma omp parallel for schedule (static) private(i, j, sum_2) shared(A, k) reduction(+:sum_1)
-	for (j = 0; j < k; j++) {
-	    sum_1 += A[k][j] * A[k][j];
-	}
+        for (j = 0; j < k; j++) {
+            sum_1 += A[k][j] * A[k][j];
+        }
 
-	if (0 > (A[k][k] - sum_1)) {
-	    G_warning("Matrix is not positive definite. break.");
-	    return -1;
-	}
-	A[k][k] = sqrt(A[k][k] - sum_1);
-	sum_1 = 0.0;
+        if (0 > (A[k][k] - sum_1)) {
+            G_warning("Matrix is not positive definite. break.");
+            return -1;
+        }
+        A[k][k] = sqrt(A[k][k] - sum_1);
+        sum_1 = 0.0;
 
-	if ((k + bandwidth) > rows) {
-	    colsize = rows;
-	}
-	else {
-	    colsize = k + bandwidth;
-	}
+        if ((k + bandwidth) > rows) {
+            colsize = rows;
+        }
+        else {
+            colsize = k + bandwidth;
+        }
 
 #pragma omp parallel for schedule (static) private(i, j, sum_2) shared(A, k, sum_1, colsize)
 
-	for (i = k + 1; i < colsize; i++) {
-	    sum_2 = 0.0;
-	    for (j = 0; j < k; j++) {
-		sum_2 += A[i][j] * A[k][j];
-	    }
-	    A[i][k] = (A[i][k] - sum_2) / A[k][k];
-	}
+        for (i = k + 1; i < colsize; i++) {
+            sum_2 = 0.0;
+            for (j = 0; j < k; j++) {
+                sum_2 += A[i][j] * A[k][j];
+            }
+            A[i][k] = (A[i][k] - sum_2) / A[k][k];
+        }
 
     }
     /* we need to copy the lower triangle matrix to the upper triangle */
 #pragma omp parallel for schedule (static) private(i, k) shared(A, rows)
     for (k = 0; k < rows; k++) {
-	for (i = k + 1; i < rows; i++) {
-	    A[k][i] = A[i][k];
-	}
+        for (i = k + 1; i < rows; i++) {
+            A[k][i] = A[i][k];
+        }
     }
 
 
@@ -291,10 +291,10 @@ void G_math_backward_substitution(double **A, double *x, double *b, int rows)
     int i, j;
 
     for (i = rows - 1; i >= 0; i--) {
-	for (j = i + 1; j < rows; j++) {
-	    b[i] = b[i] - A[i][j] * x[j];
-	}
-	x[i] = (b[i]) / A[i][i];
+        for (j = i + 1; j < rows; j++) {
+            b[i] = b[i] - A[i][j] * x[j];
+        }
+        x[i] = (b[i]) / A[i][i];
     }
 
     return;
@@ -317,11 +317,11 @@ void G_math_forward_substitution(double **A, double *x, double *b, int rows)
     double tmpval = 0.0;
 
     for (i = 0; i < rows; i++) {
-	tmpval = 0;
-	for (j = 0; j < i; j++) {
-	    tmpval += A[i][j] * x[j];
-	}
-	x[i] = (b[i] - tmpval) / A[i][i];
+        tmpval = 0;
+        for (j = 0; j < i; j++) {
+            tmpval += A[i][j] * x[j];
+        }
+        x[i] = (b[i] - tmpval) / A[i][i];
     }
 
     return;

@@ -70,7 +70,8 @@ d.vect graph
 d.vect areas_7_11_25 color=red type=boundary
 </pre></div>
 
-<h3>Example 2</h3>d.er  
+<h3>Example 2</h3>  
+
 An example on how to use <em><a href="v.buffer.html">v.buffer</a></em>
 along with the module:
 <div class="code"><pre>
@@ -80,8 +81,8 @@ d.vect graph
 d.vect lines col=red
 </pre></div>
 
-
 <h3>Example 3</h3>
+
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343:
 <div class="code"><pre>
@@ -91,7 +92,8 @@ d.vect lines col=red
 </pre></div>
 
 <h3>Example 4</h3>
-<!-- does not quite ork yet? -->
+
+<!-- does not quite work yet? -->
 An example (North Carolina sample data) on how to use the coordinate
 parameter with the vis parameter.
 Here the vector map graph is computed then a new visibility graph is computed
@@ -111,8 +113,8 @@ d.vect new_graph
 d.vect areas_7_11_25 color=red type=boundary
 </pre></div>
 
-
 <h3>Example 5</h3>
+
 An example for connections of points (Spearfish):
 <div class="code"><pre>
 v.net.visibility input=archsites output=graph
@@ -191,6 +193,7 @@ v.net.visibility input=simple output=graph
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>
+
 In some cases when 3 points or nodes are collinear, some wrong edges 
 are added. This happens only really rarly and shouldn't be a big 
 problem. When two points have the exact same x coordinate and are 
@@ -208,11 +211,7 @@ visible, some wrong edges are added.
 <a href="v.to.db.html">v.to.db</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
+
 Maximilian Maldacker<br>
 Mentor: Wolf Bergenheim
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

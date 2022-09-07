@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("random"));
     G_add_keyword(_("autocorrelation"));
     module->description =
-	_("Generates random cell values with spatial dependence.");
+        _("Generates random cell values with spatial dependence.");
 
     Output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -59,30 +59,28 @@ int main(int argc, char *argv[])
     Distance->required = YES;
     Distance->multiple = NO;
     Distance->description =
-	_("Maximum distance of spatial correlation (value >= 0.0)");
+        _("Maximum distance of spatial correlation (value >= 0.0)");
 
     MaxCells = G_define_option();
     MaxCells->key = "ncells";
     MaxCells->type = TYPE_INTEGER;
     MaxCells->required = NO;
     MaxCells->options = "1-";
-    MaxCells->description =
-        _("Maximum number of cells to be created");
+    MaxCells->description = _("Maximum number of cells to be created");
 
     SeedStuff = G_define_option();
     SeedStuff->key = "seed";
     SeedStuff->type = TYPE_INTEGER;
     SeedStuff->required = NO;
-    SeedStuff->description =
-	_("Random seed, default [random]");
+    SeedStuff->description = _("Random seed, default [random]");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     Init();
     Indep();
-    
+
     G_done_msg(" ");
-    
+
     exit(EXIT_SUCCESS);
 }

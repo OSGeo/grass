@@ -10,75 +10,75 @@
  * pointers and the function prototypes are defined in a header file.   
  * The actual functions follow. */
 
-int (*is_null) (void *);
-size_t (*bpe) ();
-void *(*get_max) (void *, void *);
-void *(*get_min) (void *, void *);
-void (*get_row) (int, void *, int);
-void *(*get_buf) ();
-void (*put_row) (int, void *);
-double (*slope) (void *, void *, double);
-void (*set_min) (void *);
-void (*set_max) (void *);
-void (*diff) (void *, void *);
-void (*sum) (void *, void *);
-void (*quot) (void *, void *);
-void (*prod) (void *, void *);
+int (*is_null)(void *);
+size_t (*bpe)();
+void *(*get_max)(void *, void *);
+void *(*get_min)(void *, void *);
+void (*get_row)(int, void *, int);
+void *(*get_buf)();
+void (*put_row)(int, void *);
+double (*slope)(void *, void *, double);
+void (*set_min)(void *);
+void (*set_max)(void *);
+void (*diff)(void *, void *);
+void (*sum)(void *, void *);
+void (*quot)(void *, void *);
+void (*prod)(void *, void *);
 
 void set_func_pointers(int in_type)
 {
     switch (in_type) {
     case CELL_TYPE:
-	is_null = is_null_c;
-	bpe = bpe_c;
-	get_max = get_max_c;
-	get_min = get_min_c;
-	get_row = get_row_c;
-	get_buf = get_buf_c;
-	put_row = put_row_c;
-	slope = slope_c;
-	set_min = set_min_c;
-	set_max = set_max_c;
-	diff = diff_c;
-	sum = sum_c;
-	quot = quot_c;
-	prod = prod_c;
+        is_null = is_null_c;
+        bpe = bpe_c;
+        get_max = get_max_c;
+        get_min = get_min_c;
+        get_row = get_row_c;
+        get_buf = get_buf_c;
+        put_row = put_row_c;
+        slope = slope_c;
+        set_min = set_min_c;
+        set_max = set_max_c;
+        diff = diff_c;
+        sum = sum_c;
+        quot = quot_c;
+        prod = prod_c;
 
-	break;
+        break;
 
     case FCELL_TYPE:
-	is_null = is_null_f;
-	bpe = bpe_f;
-	get_max = get_max_f;
-	get_min = get_min_f;
-	get_row = get_row_f;
-	get_buf = get_buf_f;
-	put_row = put_row_f;
-	slope = slope_f;
-	set_min = set_min_f;
-	set_max = set_max_f;
-	diff = diff_f;
-	sum = sum_f;
-	quot = quot_f;
-	prod = prod_f;
+        is_null = is_null_f;
+        bpe = bpe_f;
+        get_max = get_max_f;
+        get_min = get_min_f;
+        get_row = get_row_f;
+        get_buf = get_buf_f;
+        put_row = put_row_f;
+        slope = slope_f;
+        set_min = set_min_f;
+        set_max = set_max_f;
+        diff = diff_f;
+        sum = sum_f;
+        quot = quot_f;
+        prod = prod_f;
 
-	break;
+        break;
 
     case DCELL_TYPE:
-	is_null = is_null_d;
-	bpe = bpe_d;
-	get_max = get_max_d;
-	get_min = get_min_d;
-	get_row = get_row_d;
-	get_buf = get_buf_d;
-	put_row = put_row_d;
-	slope = slope_d;
-	set_min = set_min_d;
-	set_max = set_max_d;
-	diff = diff_d;
-	sum = sum_d;
-	quot = quot_d;
-	prod = prod_d;
+        is_null = is_null_d;
+        bpe = bpe_d;
+        get_max = get_max_d;
+        get_min = get_min_d;
+        get_row = get_row_d;
+        get_buf = get_buf_d;
+        put_row = put_row_d;
+        slope = slope_d;
+        set_min = set_min_d;
+        set_max = set_max_d;
+        diff = diff_d;
+        sum = sum_d;
+        quot = quot_d;
+        prod = prod_d;
     }
 
     return;
@@ -90,10 +90,12 @@ int is_null_c(void *value)
 {
     return Rast_is_c_null_value((CELL *) value);
 }
+
 int is_null_f(void *value)
 {
     return Rast_is_f_null_value((FCELL *) value);
 }
+
 int is_null_d(void *value)
 {
     return Rast_is_d_null_value((DCELL *) value);
@@ -122,7 +124,7 @@ void *get_min_c(void *v1, void *v2)
 
     rc = v2;
     if (*(CELL *) v1 < *(CELL *) v2)
-	rc = v1;
+        rc = v1;
     return rc;
 }
 
@@ -132,7 +134,7 @@ void *get_min_f(void *v1, void *v2)
 
     rc = v2;
     if (*(FCELL *) v1 < *(FCELL *) v2)
-	rc = v1;
+        rc = v1;
     return rc;
 }
 
@@ -142,7 +144,7 @@ void *get_min_d(void *v1, void *v2)
 
     rc = v2;
     if (*(DCELL *) v1 < *(DCELL *) v2)
-	rc = v1;
+        rc = v1;
     return rc;
 }
 
@@ -153,7 +155,7 @@ void *get_max_c(void *v1, void *v2)
 
     rc = v2;
     if (*(CELL *) v1 > *(CELL *) v2)
-	rc = v1;
+        rc = v1;
     return rc;
 }
 
@@ -163,7 +165,7 @@ void *get_max_f(void *v1, void *v2)
 
     rc = v2;
     if (*(FCELL *) v1 > *(FCELL *) v2)
-	rc = v1;
+        rc = v1;
     return rc;
 }
 
@@ -173,7 +175,7 @@ void *get_max_d(void *v1, void *v2)
 
     rc = v2;
     if (*(DCELL *) v1 > *(DCELL *) v2)
-	rc = v1;
+        rc = v1;
     return rc;
 }
 
@@ -230,10 +232,12 @@ void set_min_c(void *v)
 {
     *(CELL *) v = INT_MIN;
 }
+
 void set_min_f(void *v)
 {
     *(FCELL *) v = FLT_MIN;
 }
+
 void set_min_d(void *v)
 {
     *(DCELL *) v = DBL_MIN;
@@ -244,10 +248,12 @@ void set_max_c(void *v)
 {
     *(CELL *) v = INT_MAX;
 }
+
 void set_max_f(void *v)
 {
     *(FCELL *) v = FLT_MAX;
 }
+
 void set_max_d(void *v)
 {
     *(DCELL *) v = DBL_MAX;
@@ -258,10 +264,12 @@ void diff_c(void *v1, void *v2)
 {
     *(CELL *) v1 -= *(CELL *) v2;
 }
+
 void diff_f(void *v1, void *v2)
 {
     *(FCELL *) v1 -= *(FCELL *) v2;
 }
+
 void diff_d(void *v1, void *v2)
 {
     *(DCELL *) v1 -= *(DCELL *) v2;
@@ -272,10 +280,12 @@ void sum_c(void *v1, void *v2)
 {
     *(CELL *) v1 += *(CELL *) v2;
 }
+
 void sum_f(void *v1, void *v2)
 {
     *(FCELL *) v1 += *(FCELL *) v2;
 }
+
 void sum_d(void *v1, void *v2)
 {
     *(DCELL *) v1 += *(DCELL *) v2;
@@ -286,10 +296,12 @@ void quot_c(void *v1, void *v2)
 {
     *(CELL *) v1 /= *(CELL *) v2;
 }
+
 void quot_f(void *v1, void *v2)
 {
     *(FCELL *) v1 /= *(FCELL *) v2;
 }
+
 void quot_d(void *v1, void *v2)
 {
     *(DCELL *) v1 /= *(DCELL *) v2;
@@ -300,10 +312,12 @@ void prod_c(void *v1, void *v2)
 {
     *(CELL *) v1 *= *(CELL *) v2;
 }
+
 void prod_f(void *v1, void *v2)
 {
     *(FCELL *) v1 *= *(FCELL *) v2;
 }
+
 void prod_d(void *v1, void *v2)
 {
     *(DCELL *) v1 *= *(DCELL *) v2;
@@ -319,7 +333,7 @@ double slope_c(void *line1, void *line2, double cnst)
     rc = -HUGE_VAL;
     pedge = (CELL *) line2;
     if (!Rast_is_c_null_value(pedge)) {
-	rc = (*(CELL *) line1 - *pedge) / cnst;
+        rc = (*(CELL *) line1 - *pedge) / cnst;
     }
     return rc;
 }
@@ -332,7 +346,7 @@ double slope_f(void *line1, void *line2, double cnst)
     rc = -HUGE_VAL;
     pedge = (FCELL *) line2;
     if (!Rast_is_f_null_value(pedge)) {
-	rc = (*(FCELL *) line1 - *pedge) / cnst;
+        rc = (*(FCELL *) line1 - *pedge) / cnst;
     }
     return rc;
 }
@@ -345,7 +359,7 @@ double slope_d(void *line1, void *line2, double cnst)
     rc = -HUGE_VAL;
     pedge = (DCELL *) line2;
     if (!Rast_is_d_null_value(pedge)) {
-	rc = (*(DCELL *) line1 - *pedge) / cnst;
+        rc = (*(DCELL *) line1 - *pedge) / cnst;
     }
     return rc;
 }
@@ -362,9 +376,9 @@ int advance_band3(int fh, struct band3 *bnd)
     bnd->b[1] = bnd->b[2];
     bnd->b[2] = hold;
     if (fh == 0)
-	rc = 0;
+        rc = 0;
     else
-	rc = read(fh, bnd->b[2], bnd->sz);
+        rc = read(fh, bnd->b[2], bnd->sz);
     return rc;
 }
 
@@ -380,10 +394,10 @@ int retreat_band3(int fh, struct band3 *bnd)
     bnd->b[1] = bnd->b[0];
     bnd->b[0] = hold;
     if (fh == 0)
-	rc = 0;
+        rc = 0;
     else {
-	rc = read(fh, bnd->b[0], bnd->sz);
-	lseek(fh, (off_t) - 2 * bnd->sz, SEEK_CUR);
+        rc = read(fh, bnd->b[0], bnd->sz);
+        lseek(fh, (off_t) - 2 * bnd->sz, SEEK_CUR);
     }
     return rc;
 }

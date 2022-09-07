@@ -58,9 +58,9 @@ struct parms
 
 /* enforce_ds.c */
 extern int enforce_downstream(int /*infd */ , int /*outfd */ ,
-			      struct Map_info * /*Map */ ,
-			      struct Map_info * /*outMap */ ,
-			      struct parms * /* parm */ );
+                              struct Map_info * /*Map */ ,
+                              struct Map_info * /*outMap */ ,
+                              struct parms * /* parm */ );
 
 /* lobf.c */
 extern Point2 *pg_getpoints(PointGrp *);

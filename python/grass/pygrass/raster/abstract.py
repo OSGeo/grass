@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Aug 17 16:05:25 2012
 
@@ -163,63 +162,51 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
-    def _get_band_reference(self):
-        """Get band reference identifier.
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
 
-        :return str: band identifier (eg. S2_1) or None
+        :return str: semantic label (eg. S2_1) or None
         """
-        band_ref = None
-        p_filename = ctypes.c_char_p()
-        p_band_ref = ctypes.c_char_p()
-        ret = libraster.Rast_read_band_reference(
-            self.name, self.mapset, ctypes.byref(p_filename), ctypes.byref(p_band_ref)
-        )
-        if ret:
-            band_ref = utils.decode(p_band_ref.value)
-            libgis.G_free(p_filename)
-            libgis.G_free(p_band_ref)
 
-        return band_ref
+        semantic_label = libraster.Rast_read_semantic_label(self.name, self.mapset)
+        if semantic_label:
+            return utils.decode(semantic_label)
+        return None
 
     @must_be_in_current_mapset
-    def _set_band_reference(self, band_reference):
-        """Set/Unset band reference identifier.
+    def _set_semantic_label(self, semantic_label):
+        """Set/Unset semantic label identifier.
 
-        :param str band_reference: band reference to assign or None to remove (unset)
+        :param str semantic_label: semantic label to assign or None to remove (unset)
         """
-        if band_reference:
-            # assign
-            from grass.bandref import BandReferenceReader, BandReferenceReaderError
-
-            reader = BandReferenceReader()
-            # determine filename (assuming that band_reference is unique!)
-            try:
-                filename = reader.find_file(band_reference)
-            except BandReferenceReaderError as e:
-                fatal("{}".format(e))
-                raise
-            if not filename:
-                fatal("Band reference <{}> not found".format(band_reference))
-                raise
-
-            # write band reference
-            libraster.Rast_write_band_reference(self.name, filename, band_reference)
+        if semantic_label:
+            if libraster.Rast_legal_semantic_label(semantic_label) is False:
+                raise ValueError(_("Invalid semantic label"))
+            libraster.Rast_write_semantic_label(self.name, semantic_label)
         else:
-            libraster.Rast_remove_band_reference(self.name)
+            libgis.G_remove_misc("cell_misc", "semantic_label", self.name)
 
-    band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
+    semantic_label = property(_get_semantic_label, _set_semantic_label)
 
     def _get_units(self):
-        return libraster.Rast_read_units(self.name, self.mapset)
+        units = libraster.Rast_read_units(self.name, self.mapset)
+        if units:
+            return utils.decode(units)
+        return None
 
+    @must_be_in_current_mapset
     def _set_units(self, units):
         libraster.Rast_write_units(self.name, units)
 
     units = property(_get_units, _set_units)
 
     def _get_vdatum(self):
-        return libraster.Rast_read_vdatum(self.name, self.mapset)
+        vdatum = libraster.Rast_read_vdatum(self.name, self.mapset)
+        if vdatum:
+            return utils.decode(vdatum)
+        return None
 
+    @must_be_in_current_mapset
     def _set_vdatum(self, vdatum):
         libraster.Rast_write_vdatum(self.name, vdatum)
 

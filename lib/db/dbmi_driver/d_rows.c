@@ -17,10 +17,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Get number of selected rows
+   \brief Get number of selected rows
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_get_num_rows(void)
 {
@@ -37,8 +37,8 @@ int db_d_get_num_rows(void)
 
     /* send the return code */
     if (nrows < 0) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

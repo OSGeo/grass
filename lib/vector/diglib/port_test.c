@@ -83,7 +83,8 @@ static unsigned char dbl_cmpr[] =
     { 0x3f, 0xf5, 0x55, 0x32, 0x61, 0x7c, 0x1b, 0xda };
 /* flt_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
 static unsigned char flt_cmpr[] = { 0x3f, 0xaa, 0xa9, 0x93 };
-static unsigned char off_t_cmpr[] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+static unsigned char off_t_cmpr[] =
+    { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
 static unsigned char lng_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static unsigned char int_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
 static unsigned char shrt_cmpr[] = { 0x01, 0x02 };
@@ -123,29 +124,29 @@ int main(int argc, char **argv)
     /* Following code checks only if all assumptions are fulfilled */
     /* Check sizes */
     if (nat_dbl != PORT_DOUBLE) {
-	fprintf(stderr, "ERROR, sizeof (double) != %d\n", PORT_DOUBLE);
-	err = 1;
+        fprintf(stderr, "ERROR, sizeof (double) != %d\n", PORT_DOUBLE);
+        err = 1;
     }
     if (nat_flt != PORT_FLOAT) {
-	fprintf(stderr, "ERROR, sizeof (float) != %d\n", PORT_FLOAT);
-	err = 1;
+        fprintf(stderr, "ERROR, sizeof (float) != %d\n", PORT_FLOAT);
+        err = 1;
     }
     /* port_off_t is variable */
     if (nat_lng < PORT_LONG) {
-	fprintf(stderr, "ERROR, sizeof (long) < %d\n", PORT_LONG);
-	err = 1;
+        fprintf(stderr, "ERROR, sizeof (long) < %d\n", PORT_LONG);
+        err = 1;
     }
     if (nat_int < PORT_INT) {
-	fprintf(stderr, "ERROR, sizeof (int) < %d\n", PORT_INT);
-	err = 1;
+        fprintf(stderr, "ERROR, sizeof (int) < %d\n", PORT_INT);
+        err = 1;
     }
     if (nat_shrt < PORT_SHORT) {
-	fprintf(stderr, "ERROR, sizeof (short) < %d\n", PORT_SHORT);
-	err = 1;
+        fprintf(stderr, "ERROR, sizeof (short) < %d\n", PORT_SHORT);
+        err = 1;
     }
     if (nat_char != PORT_CHAR) {
-	fprintf(stderr, "ERROR, sizeof (char) != %d\n", PORT_CHAR);
-	err = 1;
+        fprintf(stderr, "ERROR, sizeof (char) != %d\n", PORT_CHAR);
+        err = 1;
     }
 
     /* Find for each byte in big endian test pattern (*_cmpr) 
@@ -156,155 +157,155 @@ int main(int argc, char **argv)
     /* Find double order */
     u.d = TEST_PATTERN;
     for (i = 0; i < PORT_DOUBLE; i++) {
-	tmp = find_offset(u.c, dbl_cmpr[i], PORT_DOUBLE);
-	if (-1 == tmp) {
-	    fprintf(stderr, "ERROR, could not find '%x' in double\n",
-		    dbl_cmpr[i]);
-	    err = 1;
-	}
-	dbl_cnvrt[i] = tmp;
+        tmp = find_offset(u.c, dbl_cmpr[i], PORT_DOUBLE);
+        if (-1 == tmp) {
+            fprintf(stderr, "ERROR, could not find '%x' in double\n",
+                    dbl_cmpr[i]);
+            err = 1;
+        }
+        dbl_cnvrt[i] = tmp;
     }
     tmp = tmp2 = 1;
     for (i = 0; i < PORT_DOUBLE; i++) {
-	if (dbl_cnvrt[i] != i)
-	    tmp = 0;		/* isn't big endian */
-	if (dbl_cnvrt[i] != (PORT_DOUBLE - i - 1))
-	    tmp2 = 0;		/* isn't little endian */
+        if (dbl_cnvrt[i] != i)
+            tmp = 0;            /* isn't big endian */
+        if (dbl_cnvrt[i] != (PORT_DOUBLE - i - 1))
+            tmp2 = 0;           /* isn't little endian */
     }
     if (tmp)
-	dbl_order = ENDIAN_BIG;
+        dbl_order = ENDIAN_BIG;
     else if (tmp2)
-	dbl_order = ENDIAN_LITTLE;
+        dbl_order = ENDIAN_LITTLE;
     else
-	dbl_order = ENDIAN_OTHER;
+        dbl_order = ENDIAN_OTHER;
 
     /* Find float order */
     u.f = TEST_PATTERN;
     for (i = 0; i < PORT_FLOAT; i++) {
-	tmp = find_offset(u.c, flt_cmpr[i], PORT_FLOAT);
-	if (-1 == tmp) {
-	    fprintf(stderr, "ERROR, could not find '%x' in float\n",
-		    flt_cmpr[i]);
-	    err = 1;
-	}
-	flt_cnvrt[i] = tmp;
+        tmp = find_offset(u.c, flt_cmpr[i], PORT_FLOAT);
+        if (-1 == tmp) {
+            fprintf(stderr, "ERROR, could not find '%x' in float\n",
+                    flt_cmpr[i]);
+            err = 1;
+        }
+        flt_cnvrt[i] = tmp;
     }
     tmp = tmp2 = 1;
     for (i = 0; i < PORT_FLOAT; i++) {
-	if (flt_cnvrt[i] != i)
-	    tmp = 0;
-	if (flt_cnvrt[i] != (PORT_FLOAT - i - 1))
-	    tmp2 = 0;
+        if (flt_cnvrt[i] != i)
+            tmp = 0;
+        if (flt_cnvrt[i] != (PORT_FLOAT - i - 1))
+            tmp2 = 0;
     }
     if (tmp)
-	flt_order = ENDIAN_BIG;
+        flt_order = ENDIAN_BIG;
     else if (tmp2)
-	flt_order = ENDIAN_LITTLE;
+        flt_order = ENDIAN_LITTLE;
     else
-	flt_order = ENDIAN_OTHER;
+        flt_order = ENDIAN_OTHER;
 
     /* Find off_t order */
     if (nat_off_t == 8)
-	u.o = OFF_T_TEST;
+        u.o = OFF_T_TEST;
     else
-	u.o = LONG_TEST;
+        u.o = LONG_TEST;
     for (i = 0; i < nat_off_t; i++) {
-	tmp = find_offset(u.c, off_t_cmpr[i], nat_off_t);
-	if (-1 == tmp) {
-	    fprintf(stderr, "ERROR, could not find '%x' in off_t\n",
-		    off_t_cmpr[i]);
-	    err = 1;
-	}
-	off_t_cnvrt[i] = tmp;
+        tmp = find_offset(u.c, off_t_cmpr[i], nat_off_t);
+        if (-1 == tmp) {
+            fprintf(stderr, "ERROR, could not find '%x' in off_t\n",
+                    off_t_cmpr[i]);
+            err = 1;
+        }
+        off_t_cnvrt[i] = tmp;
     }
     tmp = tmp2 = 1;
     for (i = 0; i < nat_off_t; i++) {
-	if (off_t_cnvrt[i] != (i + (nat_off_t - nat_off_t)))
-	    tmp = 0;
-	if (off_t_cnvrt[i] != (nat_off_t - i - 1))
-	    tmp2 = 0;
+        if (off_t_cnvrt[i] != (i + (nat_off_t - nat_off_t)))
+            tmp = 0;
+        if (off_t_cnvrt[i] != (nat_off_t - i - 1))
+            tmp2 = 0;
     }
     if (tmp)
-	off_t_order = ENDIAN_BIG;
+        off_t_order = ENDIAN_BIG;
     else if (tmp2)
-	off_t_order = ENDIAN_LITTLE;
+        off_t_order = ENDIAN_LITTLE;
     else
-	off_t_order = ENDIAN_OTHER;
+        off_t_order = ENDIAN_OTHER;
 
     /* Find long order */
     u.l = LONG_TEST;
     for (i = 0; i < PORT_LONG; i++) {
-	tmp = find_offset(u.c, lng_cmpr[i], nat_lng);
-	if (-1 == tmp) {
-	    fprintf(stderr, "ERROR, could not find '%x' in long\n",
-		    lng_cmpr[i]);
-	    err = 1;
-	}
-	lng_cnvrt[i] = tmp;
+        tmp = find_offset(u.c, lng_cmpr[i], nat_lng);
+        if (-1 == tmp) {
+            fprintf(stderr, "ERROR, could not find '%x' in long\n",
+                    lng_cmpr[i]);
+            err = 1;
+        }
+        lng_cnvrt[i] = tmp;
     }
     tmp = tmp2 = 1;
     for (i = 0; i < PORT_LONG; i++) {
-	if (lng_cnvrt[i] != (i + (nat_lng - PORT_LONG)))
-	    tmp = 0;
-	if (lng_cnvrt[i] != (PORT_LONG - i - 1))
-	    tmp2 = 0;
+        if (lng_cnvrt[i] != (i + (nat_lng - PORT_LONG)))
+            tmp = 0;
+        if (lng_cnvrt[i] != (PORT_LONG - i - 1))
+            tmp2 = 0;
     }
     if (tmp)
-	lng_order = ENDIAN_BIG;
+        lng_order = ENDIAN_BIG;
     else if (tmp2)
-	lng_order = ENDIAN_LITTLE;
+        lng_order = ENDIAN_LITTLE;
     else
-	lng_order = ENDIAN_OTHER;
+        lng_order = ENDIAN_OTHER;
 
     /* Find int order */
     u.i = INT_TEST;
     for (i = 0; i < PORT_INT; i++) {
-	tmp = find_offset(u.c, int_cmpr[i], nat_int);
-	if (-1 == tmp) {
-	    fprintf(stderr, "ERROR, could not find '%x' in int\n",
-		    int_cmpr[i]);
-	    err = 1;
-	}
-	int_cnvrt[i] = tmp;
+        tmp = find_offset(u.c, int_cmpr[i], nat_int);
+        if (-1 == tmp) {
+            fprintf(stderr, "ERROR, could not find '%x' in int\n",
+                    int_cmpr[i]);
+            err = 1;
+        }
+        int_cnvrt[i] = tmp;
     }
     tmp = tmp2 = 1;
     for (i = 0; i < PORT_INT; i++) {
-	if (int_cnvrt[i] != (i + (nat_lng - PORT_LONG)))
-	    tmp = 0;
-	if (int_cnvrt[i] != (PORT_INT - i - 1))
-	    tmp2 = 0;
+        if (int_cnvrt[i] != (i + (nat_lng - PORT_LONG)))
+            tmp = 0;
+        if (int_cnvrt[i] != (PORT_INT - i - 1))
+            tmp2 = 0;
     }
     if (tmp)
-	int_order = ENDIAN_BIG;
+        int_order = ENDIAN_BIG;
     else if (tmp2)
-	int_order = ENDIAN_LITTLE;
+        int_order = ENDIAN_LITTLE;
     else
-	int_order = ENDIAN_OTHER;
+        int_order = ENDIAN_OTHER;
 
     /* Find short order */
     u.s = SHORT_TEST;
     for (i = 0; i < PORT_SHORT; i++) {
-	tmp = find_offset(u.c, shrt_cmpr[i], nat_shrt);
-	if (-1 == tmp) {
-	    fprintf(stderr, "ERROR, could not find '%x' in shrt\n",
-		    shrt_cmpr[i]);
-	    err = 1;
-	}
-	shrt_cnvrt[i] = tmp;
+        tmp = find_offset(u.c, shrt_cmpr[i], nat_shrt);
+        if (-1 == tmp) {
+            fprintf(stderr, "ERROR, could not find '%x' in shrt\n",
+                    shrt_cmpr[i]);
+            err = 1;
+        }
+        shrt_cnvrt[i] = tmp;
     }
     tmp = tmp2 = 1;
     for (i = 0; i < PORT_SHORT; i++) {
-	if (shrt_cnvrt[i] != (i + (nat_shrt - PORT_SHORT)))
-	    tmp = 0;
-	if (shrt_cnvrt[i] != (PORT_SHORT - i - 1))
-	    tmp2 = 0;
+        if (shrt_cnvrt[i] != (i + (nat_shrt - PORT_SHORT)))
+            tmp = 0;
+        if (shrt_cnvrt[i] != (PORT_SHORT - i - 1))
+            tmp2 = 0;
     }
     if (tmp)
-	shrt_order = ENDIAN_BIG;
+        shrt_order = ENDIAN_BIG;
     else if (tmp2)
-	shrt_order = ENDIAN_LITTLE;
+        shrt_order = ENDIAN_LITTLE;
     else
-	shrt_order = ENDIAN_OTHER;
+        shrt_order = ENDIAN_OTHER;
 
     printf("\n/* Native machine byte orders */\n");
     printf("#define DOUBLE_ORDER %d\n", dbl_order);
@@ -331,8 +332,8 @@ find_offset(unsigned char *basis, unsigned char search_value, int size)
     register int i;
 
     for (i = 0; i < size; i++)
-	if (basis[i] == search_value)
-	    return (i);
+        if (basis[i] == search_value)
+            return (i);
 
     return (-1);
 }
@@ -345,54 +346,54 @@ static int dumpflags(void)
     fprintf(stdout, "\n/* Double format: */\nstatic int dbl_cnvrt[] = {");
     i = 0;
     while (i < nat_dbl) {
-	fprintf(stdout, "%d", dbl_cnvrt[i]);
-	if (++i < nat_dbl)
-	    fprintf(stdout, ", ");
+        fprintf(stdout, "%d", dbl_cnvrt[i]);
+        if (++i < nat_dbl)
+            fprintf(stdout, ", ");
     }
     fprintf(stdout, "};\n\n");
 
     fprintf(stdout, "/* Float format : */\nstatic int flt_cnvrt[] = {");
     i = 0;
     while (i < nat_flt) {
-	fprintf(stdout, "%d", flt_cnvrt[i]);
-	if (++i < nat_flt)
-	    fprintf(stdout, ", ");
+        fprintf(stdout, "%d", flt_cnvrt[i]);
+        if (++i < nat_flt)
+            fprintf(stdout, ", ");
     }
     fprintf(stdout, "};\n\n");
 
     fprintf(stdout, "/* off_t format  : */\nstatic int off_t_cnvrt[] = {");
     i = 0;
     while (i < nat_off_t) {
-	fprintf(stdout, "%d", off_t_cnvrt[i]);
-	if (++i < nat_off_t)
-	    fprintf(stdout, ", ");
+        fprintf(stdout, "%d", off_t_cnvrt[i]);
+        if (++i < nat_off_t)
+            fprintf(stdout, ", ");
     }
     fprintf(stdout, "};\n\n");
 
     fprintf(stdout, "/* Long format  : */\nstatic int lng_cnvrt[] = {");
     i = 0;
     while (i < nat_lng) {
-	fprintf(stdout, "%d", lng_cnvrt[i]);
-	if (++i < nat_lng)
-	    fprintf(stdout, ", ");
+        fprintf(stdout, "%d", lng_cnvrt[i]);
+        if (++i < nat_lng)
+            fprintf(stdout, ", ");
     }
     fprintf(stdout, "};\n\n");
 
     fprintf(stdout, "/* Int format  : */\nstatic int int_cnvrt[] = {");
     i = 0;
     while (i < nat_int) {
-	fprintf(stdout, "%d", int_cnvrt[i]);
-	if (++i < nat_int)
-	    fprintf(stdout, ", ");
+        fprintf(stdout, "%d", int_cnvrt[i]);
+        if (++i < nat_int)
+            fprintf(stdout, ", ");
     }
     fprintf(stdout, "};\n\n");
 
     fprintf(stdout, "/* Short format : */\nstatic int shrt_cnvrt[] = {");
     i = 0;
     while (i < nat_shrt) {
-	fprintf(stdout, "%d", shrt_cnvrt[i]);
-	if (++i < nat_shrt)
-	    fprintf(stdout, ", ");
+        fprintf(stdout, "%d", shrt_cnvrt[i]);
+        if (++i < nat_shrt)
+            fprintf(stdout, ", ");
     }
     fprintf(stdout, "};\n\n");
 

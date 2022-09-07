@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Thu Jun 28 17:44:45 2012
 
@@ -52,7 +51,7 @@ class History(object):
 
     def __repr__(self):
         return "History(%s)" % ", ".join(
-            ["%s=%r" % (self.attr, getattr(self, attr)) for attr in self.attrs]
+            ["%s=%r" % (attr, getattr(self, attr)) for attr in self.attrs]
         )
 
     def __del__(self):
@@ -138,7 +137,7 @@ class History(object):
         if date_str:
             try:
                 return datetime.datetime.strptime(date_str, self.date_fmt)
-            except:
+            except ValueError:
                 return date_str
 
     def _set_date(self, datetimeobj):

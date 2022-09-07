@@ -68,16 +68,9 @@
 # %end
 
 import sys
+import multiprocessing as mp
 
 import grass.script as gscript
-
-try:
-    # new for python 2.6, in 2.5 it may be easy_install'd.
-    import multiprocessing as mp
-
-    do_mp = True
-except:
-    do_mp = False
 
 
 def get_percentile(map, percentiles):
@@ -125,8 +118,7 @@ def main():
     preserve = flags["p"]
     reset = flags["r"]
 
-    global do_mp
-
+    do_mp = True
     if flags["s"]:
         do_mp = False
 

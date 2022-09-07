@@ -38,14 +38,14 @@ void vrml_putline(int indent, FILE * vout, char *str)
     int i;
 
     if (indent < 0)
-	ind += indent;		/* pre-decrement */
+        ind += indent;          /* pre-decrement */
 
     for (i = 0; i < ind; i++)
-	fprintf(vout, "\t");
+        fprintf(vout, "\t");
     fprintf(vout, "%s\n", str);
 
     if (indent > 0)
-	ind += indent;		/* post-increment */
+        ind += indent;          /* post-increment */
     if (ind < 0)
-	ind = 0;
+        ind = 0;
 }

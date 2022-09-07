@@ -1,3 +1,4 @@
+
 /***************************************************************
  *
  * MODULE:       v.delaunay
@@ -75,7 +76,7 @@ int main(int argc, char *argv[])
     int Type;
     int complete_map;
     int mode3d;
-    
+
     unsigned int n;
     struct edge *l_cw, *r_ccw;
 
@@ -86,7 +87,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("geometry"));
     G_add_keyword(_("triangulation"));
     module->description = _("Creates a Delaunay triangulation from an input "
-			    "vector map containing points or centroids.");
+                            "vector map containing points or centroids.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
@@ -100,30 +101,30 @@ int main(int argc, char *argv[])
     line_flag = G_define_flag();
     line_flag->key = 'l';
     line_flag->description =
-	_("Output triangulation as a graph (lines), not areas");
+        _("Output triangulation as a graph (lines), not areas");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (line_flag->answer)
-	Type = GV_LINE;
+        Type = GV_LINE;
     else
-	Type = GV_BOUNDARY;
+        Type = GV_BOUNDARY;
 
     complete_map = reg_flag->answer ? 0 : 1;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    
+
     Vect_set_open_level(2);
     if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
     /* check if we have a 3D input points map */
     mode3d = Vect_is_3d(&In);
 
     if (0 > Vect_open_new(&Out, out_opt->answer, mode3d))
-	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
+        G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -133,7 +134,7 @@ int main(int argc, char *argv[])
     Vect_region_box(&Window, &Box);
 
     n = read_sites(mode3d, complete_map, &In, Box,
-		   Vect_get_field_number(&In, field_opt->answer));
+                   Vect_get_field_number(&In, field_opt->answer));
 
     Vect_set_release_support(&In);
     Vect_close(&In);
@@ -144,8 +145,8 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Removing duplicates..."));
     remove_duplicates(&n);
     if (n < 3)
-	G_fatal_error(_("no points to triangulate"));
-	
+        G_fatal_error(_("no points to triangulate"));
+
     /* triangulate */
     G_verbose_message(_("Delaunay triangulation..."));
     divide(0, n - 1, &l_cw, &r_ccw);
@@ -155,35 +156,35 @@ int main(int argc, char *argv[])
     free_memory();
 
     if (Type == GV_BOUNDARY) {
-	Vect_build_partial(&Out, GV_BUILD_AREAS);
-	nareas = Vect_get_num_areas(&Out);
-	G_debug(3, "nareas = %d", nareas);
-	/*  Assign centroid to each area */
-	G_message(_("Calculating area centroids..."));
-	for (area = 1; area <= nareas; area++) {
-	    double x, y, z, angle, slope;
-	    int ret;
+        Vect_build_partial(&Out, GV_BUILD_AREAS);
+        nareas = Vect_get_num_areas(&Out);
+        G_debug(3, "nareas = %d", nareas);
+        /*  Assign centroid to each area */
+        G_message(_("Calculating area centroids..."));
+        for (area = 1; area <= nareas; area++) {
+            double x, y, z, angle, slope;
+            int ret;
 
-	    G_percent(area, nareas, 2);
-	    Vect_reset_line(Points);
-	    Vect_reset_cats(Cats);
-	    ret = Vect_get_point_in_area(&Out, area, &x, &y);
-	    if (ret < 0) {
-		G_warning(_("Unable to calculate area centroid"));
-		continue;
-	    }
-	    ret = Vect_tin_get_z(&Out, x, y, &z, &angle, &slope);
-	    G_debug(3, "area centroid z: %f", z);
-	    if (ret < 0) {
-		G_warning(_("Unable to calculate area centroid z coordinate"));
-		continue;
-	    }
-	    Vect_append_point(Points, x, y, z);
-	    Vect_cat_set(Cats, 1, area);
-	    Vect_write_line(&Out, GV_CENTROID, Points, Cats);
-	}
+            G_percent(area, nareas, 2);
+            Vect_reset_line(Points);
+            Vect_reset_cats(Cats);
+            ret = Vect_get_point_in_area(&Out, area, &x, &y);
+            if (ret < 0) {
+                G_warning(_("Unable to calculate area centroid"));
+                continue;
+            }
+            ret = Vect_tin_get_z(&Out, x, y, &z, &angle, &slope);
+            G_debug(3, "area centroid z: %f", z);
+            if (ret < 0) {
+                G_warning(_("Unable to calculate area centroid z coordinate"));
+                continue;
+            }
+            Vect_append_point(Points, x, y, z);
+            Vect_cat_set(Cats, 1, area);
+            Vect_write_line(&Out, GV_CENTROID, Points, Cats);
+        }
     }
-    Vect_build_partial(&Out, GV_BUILD_NONE); /* build topo from scratch */
+    Vect_build_partial(&Out, GV_BUILD_NONE);    /* build topo from scratch */
     Vect_build(&Out);
     Vect_close(&Out);
 

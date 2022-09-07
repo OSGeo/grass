@@ -258,8 +258,8 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                     if (!
                         (point =
                          (struct triple *)G_malloc(sizeof(struct triple) *
-                                                   data_local[tid]->
-                                                   n_points))) {
+                                                   data_local
+                                                   [tid]->n_points))) {
                         G_warning(_("Out of memory"));
                         some_thread_failed = -1;
                         continue;
@@ -333,9 +333,9 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         if (    /* params */
                                IL_matrix_create_alloc(params,
                                                       data_local[tid]->points,
-                                                      data_local[tid]->
-                                                      n_points, matrix[tid],
-                                                      indx[tid],
+                                                      data_local
+                                                      [tid]->n_points,
+                                                      matrix[tid], indx[tid],
                                                       A[tid]) < 0) {
                             some_thread_failed = -1;
                             continue;
@@ -345,8 +345,8 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         if (    /* params */
                                IL_matrix_create_alloc(params,
                                                       data_local[tid]->points,
-                                                      data_local[tid]->
-                                                      n_points - 1,
+                                                      data_local
+                                                      [tid]->n_points - 1,
                                                       matrix[tid], indx[tid],
                                                       A[tid]) < 0) {
                             some_thread_failed = -1;

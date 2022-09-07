@@ -1,15 +1,15 @@
 /*!
    \file lib/imagery/sigfile.c
-   
+
    \brief Imagery Library - Signature file functions (statistics for i.maxlik).
- 
-   (C) 2001-2008, 2013 by the GRASS Development Team
-   
+
+   (C) 2001-2008, 2013, 2021 by the GRASS Development Team
+
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
-   
+
    \author USA CERL
-*/
+ */
 
 #include <string.h>
 #include <grass/imagery.h>
@@ -17,56 +17,51 @@
 /*!
    \brief Create signature file
 
-   \param group group name
-   \param subgroup subgroup name in given group
+   Returns a pointer to FILE for writing signature file.
+   Use fclose on the pointer to close after use.
+
    \param name signature filename
 
-   \return pointer to FILE*
+   \return pointer to FILE
    \return NULL on error
-*/
-FILE *I_fopen_signature_file_new(const char *group,
-				 const char *subgroup, const char *name)
+ */
+FILE *I_fopen_signature_file_new(const char *name)
 {
-    char element[GPATH_MAX];
-    char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
+    char dir[GNAME_MAX];
     FILE *fd;
 
-    if (!G_name_is_fully_qualified(group, group_name, group_mapset)) {
-	strcpy(group_name, group);
-    }
+    /* create sig directory */
+    I_make_signatures_dir(I_SIGFILE_TYPE_SIG);
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIG);
+    fd = G_fopen_new_misc(dir, "sig", name);
 
-    /* create sigset directory */
-    sprintf(element, "%s/subgroup/%s/sig", group_name, subgroup);
-    G__make_mapset_element_misc("group", element);
-
-    sprintf(element, "subgroup/%s/sig/%s", subgroup, name);
-
-    fd = G_fopen_new_misc("group", element, group_name);
-    
     return fd;
 }
 
 /*!
    \brief Open existing signature file
 
-   \param group group name (may be fully qualified)
-   \param subgroup subgroup name in given group
+   Use fully qualified names for signatures from other mapsets.
+
+   Returns a pointer to FILE with signature. Use fclose on the pointer
+   after use.
+
    \param name signature filename
 
-   \return pointer to FILE*
+   \return pointer to FILE
    \return NULL on error
-*/
-FILE *I_fopen_signature_file_old(const char *group,
-				 const char *subgroup, const char *name)
+ */
+FILE *I_fopen_signature_file_old(const char *name)
 {
-    char element[GPATH_MAX];
-    char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
+    char sig_name[GNAME_MAX], sig_mapset[GMAPSET_MAX];
+    char dir[GNAME_MAX];
     FILE *fd;
 
-    G_unqualified_name(group, NULL, group_name, group_mapset);
-    sprintf(element, "subgroup/%s/sig/%s", subgroup, name);
+    if (G_unqualified_name(name, NULL, sig_name, sig_mapset) == 0)
+        strcpy(sig_mapset, G_mapset());
 
-    fd = G_fopen_old_misc("group", element, group_name, group_mapset);
-    
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIG);
+    fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
+
     return fd;
 }

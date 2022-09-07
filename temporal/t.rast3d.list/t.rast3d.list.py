@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:   t.rast3d.list
@@ -106,8 +106,18 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.list_maps_of_stds("str3ds", input, columns, order, where, separator,
-                           method, header, outpath=output)
+    tgis.list_maps_of_stds(
+        "str3ds",
+        input,
+        columns,
+        order,
+        where,
+        separator,
+        method,
+        header,
+        outpath=output,
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

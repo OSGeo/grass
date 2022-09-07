@@ -11,7 +11,7 @@
 # see gui/wxgui/rlisetup/g.gui.rlisetup.html
 echo "SAMPLINGFRAME 0|0|1|1
 SAMPLEAREA -1|-1|0.015021459227467811|0.011058451816745656
-MOVINGWINDOW" > $HOME/.grass7/r.li/movwindow7
+MOVINGWINDOW" > $HOME/.grass8/r.li/movwindow7
 
 export GRASS_OVERWRITE=1
 g.region raster=landcover.30m -p

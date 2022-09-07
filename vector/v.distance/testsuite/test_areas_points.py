@@ -84,6 +84,7 @@ class TestPointsAndAreas(TestCase):
     Created for #2734 (3D point inside area is classified as outside)
     https://trac.osgeo.org/grass/ticket/2734
     """
+
     # TODO: replace by unified handing of maps
     to_remove = []
     areas = "test_vdistance_areas"
@@ -93,58 +94,102 @@ class TestPointsAndAreas(TestCase):
     @classmethod
     def setUpClass(cls):
         """Create vector maps (areas with attributes)"""
-        cls.runModule('v.in.ascii', input='-', output=cls.areas,
-                      format='standard', stdin=areas)
+        cls.runModule(
+            "v.in.ascii", input="-", output=cls.areas, format="standard", stdin=areas
+        )
         cls.to_remove.append(cls.areas)
-        cls.runModule('v.db.addtable', map=cls.areas,
-                      columns="number INTEGER, label VARCHAR(250)")
+        cls.runModule(
+            "v.db.addtable", map=cls.areas, columns="number INTEGER, label VARCHAR(250)"
+        )
         # TODO: this should be done in more effective way
-        cls.runModule('v.db.update', map=cls.areas, column='label',
-                      value="South-west area", where="cat=1")
-        cls.runModule('v.db.update', map=cls.areas, column='label',
-                      value="North-east area", where="cat=2")
+        cls.runModule(
+            "v.db.update",
+            map=cls.areas,
+            column="label",
+            value="South-west area",
+            where="cat=1",
+        )
+        cls.runModule(
+            "v.db.update",
+            map=cls.areas,
+            column="label",
+            value="North-east area",
+            where="cat=2",
+        )
 
-        cls.runModule('v.in.ascii', input='-', output=cls.points,
-                      format='point', separator='pipe', flags='t',
-                      stdin=points)
+        cls.runModule(
+            "v.in.ascii",
+            input="-",
+            output=cls.points,
+            format="point",
+            separator="pipe",
+            flags="t",
+            stdin=points,
+        )
         cls.to_remove.append(cls.points)
-        cls.runModule('v.db.addtable', map=cls.points,
-                      columns="area_label VARCHAR(250)")
+        cls.runModule(
+            "v.db.addtable", map=cls.points, columns="area_label VARCHAR(250)"
+        )
 
-        cls.runModule('v.in.ascii', input='-', output=cls.points_3d,
-                      format='point', separator='pipe', flags='zt', z=3,
-                      stdin=points_3d)
+        cls.runModule(
+            "v.in.ascii",
+            input="-",
+            output=cls.points_3d,
+            format="point",
+            separator="pipe",
+            flags="zt",
+            z=3,
+            stdin=points_3d,
+        )
         cls.to_remove.append(cls.points_3d)
-        cls.runModule('v.db.addtable', map=cls.points_3d,
-                      columns="area_label VARCHAR(250)")
+        cls.runModule(
+            "v.db.addtable", map=cls.points_3d, columns="area_label VARCHAR(250)"
+        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove vector maps"""
         if cls.to_remove:
-            cls.runModule('g.remove', flags='f', type='vector',
-                          name=','.join(cls.to_remove), verbose=True)
+            cls.runModule(
+                "g.remove",
+                flags="f",
+                type="vector",
+                name=",".join(cls.to_remove),
+                verbose=True,
+            )
 
     def test_area_attrs_to_2d_points(self):
         """Check that values are uploaded to 2D points in areas (dmax=0)"""
         # using call_module because PyGRASS doen't accept form_
-        call_module('v.distance', from_=self.points, to=self.areas,
-                    dmax=0, upload='to_attr',
-                    column='area_label', to_column='label')
+        call_module(
+            "v.distance",
+            from_=self.points,
+            to=self.areas,
+            dmax=0,
+            upload="to_attr",
+            column="area_label",
+            to_column="label",
+        )
         # using call_module because it is easier
-        table = call_module('v.db.select', map=self.points,
-                            separator='pipe', flags='c')
+        table = call_module("v.db.select", map=self.points, separator="pipe", flags="c")
         self.assertMultiLineEqual(table, table_ref)
 
     def test_area_attrs_to_3d_points(self):
         """Check that values are uploaded to 3D points in areas (dmax=0)"""
-        call_module('v.distance', from_=self.points_3d, to=self.areas,
-                    dmax=0, upload='to_attr',
-                    column='area_label', to_column='label')
-        table = call_module('v.db.select', map=self.points_3d,
-                            separator='pipe', flags='c')
+        call_module(
+            "v.distance",
+            from_=self.points_3d,
+            to=self.areas,
+            dmax=0,
+            upload="to_attr",
+            column="area_label",
+            to_column="label",
+        )
+        table = call_module(
+            "v.db.select", map=self.points_3d, separator="pipe", flags="c"
+        )
         self.assertMultiLineEqual(table, table_ref)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()
