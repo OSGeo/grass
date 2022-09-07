@@ -126,44 +126,7 @@ statsRecorder::statsRecorder(char *fname) : ofstream(noclobberFileName(fname)){
   //ofstream that takes an fd; wrote another noclobber() function that
   //closes fd and returns the name;
   rt_start(tm);
-#ifndef __MINGW32__
-  bss = sbrk(0);
-#endif
-  char buf[BUFSIZ];
-  *this << freeMem(buf) << endl;
 }
-
-/* ********************************************************************** */
-
-long 
-statsRecorder::freeMem() {
-#ifdef __MINGW32__
-  return -1;
-#else
-  struct rlimit rlim;
-  if (getrlimit(RLIMIT_DATA, &rlim) == -1) {
-	perror("getrlimit: ");
-	return -1;
-  } 	
-  /* printf("getrlimit returns: %d \n", rlim.rlim_cur); */
-  if (rlim.rlim_cur == RLIM_INFINITY) {
-	/* printf("rlim is infinity\n"); */
-	/* should fix this */
-	return -1; 
-  } 
-  long freeMem = rlim.rlim_cur - ((char*)sbrk(0)-(char*)bss);
-  return freeMem;
-#endif /* __MINGW32__ */
-}
-
-char *
-statsRecorder::freeMem(char *buf) {
-  char buf2[BUFSIZ];
-  sprintf(buf, "Free Memory=%s", formatNumber(buf2, freeMem()));
-  return buf;
-}
-
-
 
 /* ********************************************************************** */
 
@@ -208,25 +171,16 @@ statsRecorder::comment(const int n) {
 
 
 
-#if __FreeBSD__ &&  __i386__
-#define LDFMT "%qd"
-#else
-#if __linux__
-#define LDFMT "%lld"
-#else
-#define LDFMT "%ld"
-#endif
-#endif
 char *
 formatNumber(char *buf, off_t val) {
   if(val > (1<<30)) {
-	sprintf(buf, "%.2fG (" LDFMT ")", (double)val/(1<<30), val);
+	sprintf(buf, "%.2fG (%" PRI_OFF_T ")", (double)val/(1<<30), val);
   } else if(val > (1<<20)) {
-	sprintf(buf, "%.2fM (" LDFMT ")", (double)val/(1<<20), val);
+	sprintf(buf, "%.2fM (%" PRI_OFF_T ")", (double)val/(1<<20), val);
   } else if(val > (1<<10)) {
-	sprintf(buf, "%.2fK (" LDFMT ")", (double)val/(1<<10), val);
+	sprintf(buf, "%.2fK (%" PRI_OFF_T ")", (double)val/(1<<10), val);
   } else {
-	sprintf(buf, LDFMT, val);
+	sprintf(buf, "%" PRI_OFF_T, val);
   }
   return buf;
 }

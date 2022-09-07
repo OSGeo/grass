@@ -17,9 +17,10 @@ import numpy as np
 from multiprocessing import Process, Queue
 
 from ctypes import *
+
 try:
     from grass.lib.imagery import *
-    from grass.lib.gis import Cell_head, G_get_window
+    from grass.lib.gis import G_get_window
 except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed"))
 
@@ -31,11 +32,11 @@ def Rasterize(polygon, rast, region, value):
     rows, cols = rast.shape
 
     # TODO creating of region is on many places
-    region['rows'] = rows
-    region['cols'] = cols
+    region["rows"] = rows
+    region["cols"] = cols
 
-    region['nsres'] = 1.0
-    region['ewres'] = 1.0
+    region["nsres"] = 1.0
+    region["ewres"] = 1.0
 
     q = Queue()
     p = Process(target=_rasterize, args=(polygon, rast, region, value, q))
@@ -71,16 +72,12 @@ def MergeArrays(merged_arr, overlay_arr, alpha):
     merged_p = merged_arr.ctypes.data_as(c_uint8_p)
     overlay_p = overlay_arr.ctypes.data_as(c_uint8_p)
 
-    I_merge_arrays(
-        merged_p,
-        overlay_p,
-        merged_arr.shape[0],
-        merged_arr.shape[1],
-        alpha)
+    I_merge_arrays(merged_p, overlay_p, merged_arr.shape[0], merged_arr.shape[1], alpha)
 
 
-def ComputeScatts(region, scatt_conds, bands, n_bands,
-                  scatts, cats_rasts_conds, cats_rasts):
+def ComputeScatts(
+    region, scatt_conds, bands, n_bands, scatts, cats_rasts_conds, cats_rasts
+):
     _memmapToFileNames(scatts)
     _memmapToFileNames(scatt_conds)
 
@@ -95,14 +92,17 @@ def ComputeScatts(region, scatt_conds, bands, n_bands,
             scatts,
             cats_rasts_conds,
             cats_rasts,
-            q))
+            q,
+        ),
+    )
     p.start()
     ret = q.get()
     p.join()
 
     return ret[0], ret[1]
 
-#_memmapToFileNames and _fileNamesToMemmap are  workaround for older numpy version,
+
+# _memmapToFileNames and _fileNamesToMemmap are  workaround for older numpy version,
 # where memmap objects are not pickable,
 # and therefore cannot be passed to process spawned by multiprocessing module
 
@@ -110,25 +110,19 @@ def ComputeScatts(region, scatt_conds, bands, n_bands,
 def _memmapToFileNames(data):
 
     for k, v in six.iteritems(data):
-        if 'np_vals' in v:
-            data[k]['np_vals'] = v['np_vals'].filename()
+        if "np_vals" in v:
+            data[k]["np_vals"] = v["np_vals"].filename()
 
 
 def _fileNamesToMemmap(data):
     for k, v in six.iteritems(data):
-        if 'np_vals' in v:
-            data[k]['np_vals'] = np.memmap(filename=v['np_vals'])
+        if "np_vals" in v:
+            data[k]["np_vals"] = np.memmap(filename=v["np_vals"])
 
 
 def UpdateCatRast(patch_rast, region, cat_rast):
     q = Queue()
-    p = Process(
-        target=_updateCatRastProcess,
-        args=(
-            patch_rast,
-            region,
-            cat_rast,
-            q))
+    p = Process(target=_updateCatRastProcess, args=(patch_rast, region, cat_rast, q))
     p.start()
     ret = q.get()
     p.join()
@@ -141,28 +135,40 @@ def CreateCatRast(region, cat_rast):
     I_create_cat_rast(pointer(cell_head), cat_rast)
 
 
-def _computeScattsProcess(region, scatt_conds, bands, n_bands, scatts,
-                          cats_rasts_conds, cats_rasts, output_queue):
+def _computeScattsProcess(
+    region,
+    scatt_conds,
+    bands,
+    n_bands,
+    scatts,
+    cats_rasts_conds,
+    cats_rasts,
+    output_queue,
+):
 
     _fileNamesToMemmap(scatts)
     _fileNamesToMemmap(scatt_conds)
 
     sccats_c, cats_rasts_c, refs = _getComputationStruct(
-        scatts, cats_rasts, SC_SCATT_DATA, n_bands)
+        scatts, cats_rasts, SC_SCATT_DATA, n_bands
+    )
     scatt_conds_c, cats_rasts_conds_c, refs2 = _getComputationStruct(
-        scatt_conds, cats_rasts_conds, SC_SCATT_CONDITIONS, n_bands)
+        scatt_conds, cats_rasts_conds, SC_SCATT_CONDITIONS, n_bands
+    )
 
     char_bands = _stringListToCharArr(bands)
 
     cell_head = _regionToCellHead(region)
 
-    ret = I_compute_scatts(pointer(cell_head),
-                           pointer(scatt_conds_c),
-                           pointer(cats_rasts_conds_c),
-                           pointer(char_bands),
-                           n_bands,
-                           pointer(sccats_c),
-                           pointer(cats_rasts_c))
+    ret = I_compute_scatts(
+        pointer(cell_head),
+        pointer(scatt_conds_c),
+        pointer(cats_rasts_conds_c),
+        pointer(char_bands),
+        n_bands,
+        pointer(sccats_c),
+        pointer(cats_rasts_c),
+    )
 
     I_sc_free_cats(pointer(sccats_c))
     I_sc_free_cats(pointer(scatt_conds_c))
@@ -173,8 +179,8 @@ def _computeScattsProcess(region, scatt_conds, bands, n_bands, scatts,
 def _getBandcRange(band_info):
     band_c_range = struct_Range()
 
-    band_c_range.max = band_info['max']
-    band_c_range.min = band_info['min']
+    band_c_range.max = band_info["max"]
+    band_c_range.min = band_info["min"]
 
     return band_c_range
 
@@ -183,10 +189,14 @@ def _regionToCellHead(region):
     cell_head = struct_Cell_head()
     G_get_window(pointer(cell_head))
 
-    convert_dict = {'n': 'north', 'e': 'east',
-                    'w': 'west', 's': 'south',
-                    'nsres': 'ns_res',
-                    'ewres': 'ew_res'}
+    convert_dict = {
+        "n": "north",
+        "e": "east",
+        "w": "west",
+        "s": "south",
+        "nsres": "ns_res",
+        "ewres": "ew_res",
+    }
 
     for k, v in six.iteritems(region):
         if k in ["rows", "cols", "cells", "zone"]:  # zone added in r65224
@@ -230,7 +240,7 @@ def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
         for scatt_id, dt in six.iteritems(scatt_ids):
             # if key is missing condition is always True (full scatter plor is
             # computed)
-            vals = dt['np_vals']
+            vals = dt["np_vals"]
 
             scatt_vals = scdScattData()
 
@@ -243,16 +253,13 @@ def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
             else:
                 return None
             data_p = vals.ctypes.data_as(c_void_p)
-            I_scd_init_scatt_data(
-                pointer(scatt_vals),
-                cats_type, len(vals),
-                data_p)
+            I_scd_init_scatt_data(pointer(scatt_vals), cats_type, len(vals), data_p)
 
             refs.append(scatt_vals)
 
-            I_sc_insert_scatt_data(pointer(sccats),
-                                   pointer(scatt_vals),
-                                   cat_c_id, scatt_id)
+            I_sc_insert_scatt_data(
+                pointer(sccats), pointer(scatt_vals), cat_c_id, scatt_id
+            )
 
     cats_rasts_c = _stringListToCharArr(cats_rasts_core)
 
@@ -262,9 +269,7 @@ def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
 def _updateCatRastProcess(patch_rast, region, cat_rast, output_queue):
     cell_head = _regionToCellHead(region)
 
-    ret = I_insert_patch_to_cat_rast(patch_rast,
-                                     pointer(cell_head),
-                                     cat_rast)
+    ret = I_insert_patch_to_cat_rast(patch_rast, pointer(cell_head), cat_rast)
 
     output_queue.put(ret)
 
@@ -280,9 +285,6 @@ def _rasterize(polygon, rast, region, value, output_queue):
     rast_p = rast.ctypes.data_as(c_uint8_p)
 
     cell_h = _regionToCellHead(region)
-    I_rasterize(pol_p,
-                len(polygon),
-                value,
-                pointer(cell_h), rast_p)
+    I_rasterize(pol_p, len(polygon), value, pointer(cell_h), rast_p)
 
     output_queue.put(rast)

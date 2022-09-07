@@ -18,24 +18,25 @@ class TestVDbRenameColumn(TestCase):
     @classmethod
     def setUpClass(cls):
         """Copy vector."""
-        run_command('g.copy', vector='roadsmajor,myroads')
+        run_command("g.copy", vector="roadsmajor,myroads")
 
     @classmethod
     def tearDownClass(cls):
         """Remove copied vector"""
-        run_command('g.remove', type='vector', name='myroads',
-                    flags='f')
+        run_command("g.remove", type="vector", name="myroads", flags="f")
 
     def test_rename_column(self):
         """Renaming a column"""
-        module = SimpleModule('v.db.renamecolumn', map='myroads',
-                              column=('ROAD_NAME', 'roadname'))
+        module = SimpleModule(
+            "v.db.renamecolumn", map="myroads", column=("ROAD_NAME", "roadname")
+        )
         self.assertModule(module)
 
-        m = SimpleModule('v.info', flags='c', map='myroads')
+        m = SimpleModule("v.info", flags="c", map="myroads")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), 'roadname')
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), 'ROAD_NAME')
+        self.assertRegexpMatches(decode(m.outputs.stdout), "roadname")
+        self.assertNotRegexpMatches(decode(m.outputs.stdout), "ROAD_NAME")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

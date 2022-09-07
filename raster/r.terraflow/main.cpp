@@ -128,14 +128,9 @@ parse_args(int argc, char *argv[]) {
       "SFD (D8) direction (meaningful only for MFD flow). "
       "If no answer is given it defaults to infinity.");
 
-  /* main memory */
+  /* raster cache memory */
   struct Option *mem;
-  mem = G_define_option() ;
-  mem->key         = "memory";
-  mem->type        = TYPE_INTEGER;
-  mem->required    = NO;
-  mem->answer      = (char *) "300";
-  mem->description = _("Maximum memory to be used (in MB)");
+  mem = G_define_standard_option(G_OPT_MEMORYMB);
 
   /* temporary STREAM path */
   struct Option *streamdir;
@@ -143,7 +138,7 @@ parse_args(int argc, char *argv[]) {
   streamdir->key        = "directory";
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
-  //streamdir->answer     = "";
+  /* streamdir->answer     = ""; */
   streamdir->description=
      _("Directory to hold temporary files (they can be large)");
 
@@ -418,13 +413,13 @@ printMaxSortSize(long nodata_count) {
   off_t maxneed = (fillmaxsize > flowmaxsize) ? fillmaxsize: flowmaxsize;
   maxneed =  2*maxneed; /* need 2*N to sort */
 
-  G_debug(1, "total elements=%lld, nodata elements=%ld",
+  G_debug(1, "total elements=%" PRI_OFF_T ", nodata elements=%ld",
           (off_t)nrows * ncols, nodata_count);
   G_debug(1, "largest temporary files: ");
-  G_debug(1, "\t\t FILL: %s [%lld elements, %ldB each]",
+  G_debug(1, "\t\t FILL: %s [%" PRI_OFF_T " elements, %ldB each]",
           formatNumber(buf, fillmaxsize),
           (off_t)nrows * ncols, sizeof(waterWindowType));
-  G_debug(1, "\t\t FLOW: %s [%lld elements, %ldB each]",
+  G_debug(1, "\t\t FLOW: %s [%" PRI_OFF_T " elements, %ldB each]",
           formatNumber(buf, flowmaxsize),
           (off_t)nrows * ncols - nodata_count, sizeof(sweepItem));
   G_debug(1, "Will need at least %s space available in %s",

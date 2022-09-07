@@ -18,23 +18,22 @@ class TestVDbDropColumn(TestCase):
     @classmethod
     def setUpClass(cls):
         """Copy vector."""
-        run_command('g.copy', vector='roadsmajor,myroads')
+        run_command("g.copy", vector="roadsmajor,myroads")
 
     @classmethod
     def tearDownClass(cls):
         """Remove copied vector"""
-        run_command('g.remove', type='vector', name='myroads',
-                    flags='f')
+        run_command("g.remove", type="vector", name="myroads", flags="f")
 
     def test_drop_single_column_check(self):
         """Drop column to the attribute table"""
-        module = SimpleModule('v.db.dropcolumn', map='myroads',
-                              columns='SHAPE_LEN')
+        module = SimpleModule("v.db.dropcolumn", map="myroads", columns="SHAPE_LEN")
         self.assertModule(module)
 
-        m = SimpleModule('v.info', map='myroads', flags='c')
+        m = SimpleModule("v.info", map="myroads", flags="c")
         self.assertModule(m)
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), 'SHAPE_LEN')
+        self.assertNotRegexpMatches(decode(m.outputs.stdout), "SHAPE_LEN")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

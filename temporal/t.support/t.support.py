@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.support
@@ -20,71 +20,72 @@
 #
 #############################################################################
 
-#%module
-#% description: Modifies the metadata of a space time dataset.
-#% keyword: temporal
-#% keyword: metadata
-#% keyword: time
-#%end
+# %module
+# % description: Modifies the metadata of a space time dataset.
+# % keyword: temporal
+# % keyword: metadata
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#%end
+# %option G_OPT_STDS_INPUT
+# %end
 
-#%option
-#% key: semantictype
-#% type: string
-#% description: Semantic type of the space time dataset
-#% required: no
-#% multiple: no
-#% options: min,max,sum,mean
-#% answer: mean
-#%end
+# %option
+# % key: semantictype
+# % type: string
+# % description: Semantic type of the space time dataset
+# % required: no
+# % multiple: no
+# % options: min,max,sum,mean
+# % answer: mean
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# %end
 
-#%option
-#% key: title
-#% type: string
-#% description: Title of the space time dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: title
+# % type: string
+# % description: Title of the space time dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: description
-#% type: string
-#% description: Description of the space time dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: description
+# % type: string
+# % description: Description of the space time dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key:  aggr_type
-#% type: string
-#% description: Aggregation type of the space time raster or 3D raster dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key:  aggr_type
+# % type: string
+# % description: Aggregation type of the space time raster or 3D raster dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%flag
-#% key: m
-#% label: Update the metadata information and spatial extent of registered maps from the GRASS spatial database
-#% description: Check for removed maps and delete them from the temporal database and all effected space time datasets
-#%end
+# %flag
+# % key: m
+# % label: Update the metadata information and spatial extent of registered maps from the GRASS spatial database
+# % description: Check for removed maps and delete them from the temporal database and all effected space time datasets
+# %end
 
-#%flag
-#% key: u
-#% description: Update metadata information, temporal and spatial extent from registered maps based on database entries.
-#%end
+# %flag
+# % key: u
+# % description: Update metadata information, temporal and spatial extent from registered maps based on database entries.
+# %end
 
 
 import grass.script as grass
 
 
 ############################################################################
+
 
 def main():
     # lazy imports
@@ -110,8 +111,8 @@ def main():
 
     update = False
     if aggr_type and type == "stvds":
-        return()
-    
+        return ()
+
     if aggr_type and type != "stvds":
         stds.metadata.set_aggregation_type(aggregation_type=aggr_type)
         update = True
@@ -130,7 +131,7 @@ def main():
         stds.update(dbif=dbif)
 
     if map_update:
-        #Update the registered maps from the grass spatial database
+        # Update the registered maps from the grass spatial database
         statement = ""
         # This dict stores the datasets that must be updated
         dataset_dict = {}
@@ -142,7 +143,7 @@ def main():
         for map in maps:
 
             count += 1
-            if count%10 == 0:
+            if count % 10 == 0:
                 grass.percent(count, len(maps), 1)
 
             map.select(dbif=dbif)
@@ -178,6 +179,7 @@ def main():
     stds.update_command_string(dbif=dbif)
 
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

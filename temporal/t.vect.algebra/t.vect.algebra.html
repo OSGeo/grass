@@ -5,7 +5,7 @@ buffer functions on space time vector datasets (STVDS) by using the
 temporal vector algebra. New STVDS can be created, which are
 expressions of existing STVDS.
 
-<h3>PROGRAM USE</h3>
+<p>
 The module expects an <b>expression</b> as input parameter in the following form:
 <p>
 
@@ -31,10 +31,6 @@ of year, time differences or number of maps per time interval to build
 up conditions. These operations can be assigned to space time datasets 
 or to the results of operations between space time datasets.
 
-<p>
-The type of the input space time datasets must be defined 
-with the input parameter <b>type</b>. Possible options are STRDS, STVDS 
-or STR3DS. The default is set to space time raster datasets (STRDS). 
 <p> As default, topological relationships between space time datasets 
 will be evaluated only temporal. Use the <b>s</b> flag to activate the 
 additionally spatial topology evaluation. <p> The expression option 
@@ -73,7 +69,7 @@ starts            A ----
 started           A ------
                   B ----
 
-finishs           A   ----
+finishes          A   ----
                   B ------
 
 finished          A ------
@@ -454,13 +450,6 @@ D = if(contains, td(buff_t(A, "1 days")) == 3, B, C)
 <a href="t.select.html">t.select</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Thomas Leppelt, Soeren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

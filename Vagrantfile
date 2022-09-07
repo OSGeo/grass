@@ -104,11 +104,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       scripts = [
       "clean.sh",
       ];
-      scripts.each { |script| host.vm.provision :shell, :privileged => false, :path => "tools/vagrant/" << script }
+      scripts.each { |script| host.vm.provision :shell, :privileged => false, :path => "utils/vagrant/" << script }
     end
     scripts = [
       "compile.sh",
     ];
-    scripts.each { |script| host.vm.provision :shell, :privileged => false, :path => "tools/vagrant/" << script }
+    scripts.each { |script| host.vm.provision :shell, :privileged => false, :path => "utils/vagrant/" << script }
   end
 end

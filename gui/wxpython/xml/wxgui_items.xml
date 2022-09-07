@@ -154,11 +154,6 @@
     <description>Close workspace file</description>
     <wx-id>ID_CLOSE</wx-id>
   </wxgui-item>
-  <wxgui-item name="LoadGRCFileTclTkGUI">
-    <label>Load GRC file (Tcl/Tk GUI)</label>
-    <handler>OnWorkspaceLoadGrcFile</handler>
-    <description>Load map layers from GRC file to layer tree</description>
-  </wxgui-item>
   <wxgui-item name="AddRaster">
     <label>Add raster</label>
     <handler>OnAddRaster</handler>
@@ -311,12 +306,6 @@
     <description>Creates new mapset in the current location, changes current mapset.</description>
     <keywords>general,mapset,create</keywords>
   </wxgui-item>
-  <wxgui-item name="VersionAndCopyright">
-    <label>Version and copyright</label>
-    <command>g.version -c</command>
-    <description>Displays version and copyright information.</description>
-    <keywords>general,version</keywords>
-  </wxgui-item>
   <wxgui-item name="DisplayMapProjection">
     <label>Display map projection</label>
     <command>g.proj -p</command>
@@ -346,6 +335,7 @@
   <wxgui-item name="SetUpSamplingAndAnalysisFramework">
     <label>Set up sampling and analysis framework</label>
     <handler>OnRLiSetup</handler>
+    <related-module>g.gui.rlisetup</related-module>
     <description>Configuration editor for r.li.'index'</description>
     <keywords>raster,landscape structure analysis</keywords>
   </wxgui-item>
@@ -398,5 +388,24 @@
     <command>g.gui.photo2image</command>
     <description>Corrects scanning distortions of a scanned aerial photo.</description>
     <keywords>general,gui,imagery,georectification,orthophoto</keywords>
+  </wxgui-item>
+  <wxgui-item name="DataCatalog">
+    <label>Data Catalog</label>
+    <handler>OnDataCatalog</handler>
+    <related-module>g.gui.datacatalog</related-module>
+    <description>Launch Data Catalog.</description>
+    <keywords>general,gui,data,catalog</keywords>
+  </wxgui-item>
+  <wxgui-item name="VDigit">
+    <label>Vector digitizer</label>
+    <command>g.gui.vdigit</command>
+    <description>Interactive editing and digitization of vector maps.</description>
+    <keywords>general,gui,vector,editing,digitizer</keywords>
+  </wxgui-item>
+  <wxgui-item name="RDigit">
+    <label>Raster digitizer</label>
+    <command>g.gui.rdigit</command>
+    <description>Interactive editing and digitization of raster maps.</description>
+    <keywords>general,gui,raster,editing,digitizer</keywords>
   </wxgui-item>
 </wxgui-items>

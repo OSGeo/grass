@@ -498,10 +498,10 @@ public:
   /* flowStructure(const flowValue &e, const flowPriority &p):
 	 prio(p), val(e) {}
   */ 
-  flowStructure(const flowStructure &fl) {
-    prio = fl.prio;
-    val = fl.val;
-  }
+  flowStructure(const flowStructure &fl):
+    prio(fl.prio),
+    val(fl.val)
+  {}
   
   ~flowStructure() {}
   

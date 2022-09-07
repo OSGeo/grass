@@ -3,7 +3,7 @@ struct parms
     char *training_map;
     char *group;
     char *subgroup;
-    char *sigfile;
+    char sigfile[GNAME_MAX + GMAPSET_MAX];
     int maxsubclasses;
 };
 
@@ -21,5 +21,5 @@ int get_training_classes(struct parms *, struct files *, struct SigSet *);
 void read_training_labels(struct parms *, struct files *);
 
 /* openfiles.c */
-int openfiles(struct parms *, struct files *);
+int openfiles(struct parms *, struct files *, struct SigSet *);
 #endif

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.rast.colors
@@ -20,87 +20,87 @@
 #
 #############################################################################
 
-#%module
-#% description: Creates/modifies the color table associated with each raster map of the space time raster dataset.
-#% keyword: temporal
-#% keyword: color table
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Creates/modifies the color table associated with each raster map of the space time raster dataset.
+# % keyword: temporal
+# % keyword: color table
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_M_COLR
-#% key: color
-#% type: string
-#% description: Name of color table (see r.color help)
-#% required: no
-#% multiple: no
-#% guisection: Define
-#%end
+# %option G_OPT_M_COLR
+# % key: color
+# % type: string
+# % description: Name of color table (see r.color help)
+# % required: no
+# % multiple: no
+# % guisection: Define
+# %end
 
-#%option G_OPT_R_INPUT
-#% key: raster
-#% description: Raster map from which to copy color table
-#% required: no
-#% guisection: Define
-#%end
+# %option G_OPT_R_INPUT
+# % key: raster
+# % description: Raster map from which to copy color table
+# % required: no
+# % guisection: Define
+# %end
 
-#%option G_OPT_R3_INPUT
-#% key: raster_3d
-#% description: 3D raster map from which to copy color table
-#% required: no
-#% guisection: Define
-#%end
+# %option G_OPT_R3_INPUT
+# % key: raster_3d
+# % description: 3D raster map from which to copy color table
+# % required: no
+# % guisection: Define
+# %end
 
-#%option G_OPT_F_INPUT
-#% key: rules
-#% description: Path to rules file
-#% required: no
-#% guisection: Define
-#%end
+# %option G_OPT_F_INPUT
+# % key: rules
+# % description: Path to rules file
+# % required: no
+# % guisection: Define
+# %end
 
-#%flag
-#% key: r
-#% description: Remove existing color table
-#% guisection: Remove
-#%end
+# %flag
+# % key: r
+# % description: Remove existing color table
+# % guisection: Remove
+# %end
 
-#%flag
-#% key: w
-#% description: Only write new color table if it does not already exist
-#%end
+# %flag
+# % key: w
+# % description: Only write new color table if it does not already exist
+# %end
 
-#%flag
-#% key: l
-#% description: List available rules then exit
-#% guisection: Print
-#%end
+# %flag
+# % key: l
+# % description: List available rules then exit
+# % guisection: Print
+# %end
 
-#%flag
-#% key: n
-#% description: Invert colors
-#% guisection: Define
-#%end
+# %flag
+# % key: n
+# % description: Invert colors
+# % guisection: Define
+# %end
 
-#%flag
-#% key: g
-#% description: Logarithmic scaling
-#% guisection: Define
-#%end
+# %flag
+# % key: g
+# % description: Logarithmic scaling
+# % guisection: Define
+# %end
 
-#%flag
-#% key: a
-#% description: Logarithmic-absolute scaling
-#% guisection: Define
-#%end
+# %flag
+# % key: a
+# % description: Logarithmic-absolute scaling
+# % guisection: Define
+# %end
 
-#%flag
-#% key: e
-#% description: Histogram equalization
-#% guisection: Define
-#%end
+# %flag
+# % key: e
+# % description: Histogram equalization
+# % guisection: Define
+# %end
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
@@ -127,7 +127,7 @@ def main():
     equi = flags["e"]
 
     if raster == "":
-        raster=None
+        raster = None
 
     if volume == "":
         volume = None
@@ -148,7 +148,7 @@ def main():
     if rows:
         # Create the r.colors input file
         filename = grass.tempfile(True)
-        file = open(filename, 'w')
+        file = open(filename, "w")
 
         for row in rows:
             string = "%s\n" % (row["id"])
@@ -156,28 +156,36 @@ def main():
 
         file.close()
 
-        flags_=""
-        if(remove):
-            flags_+="r"
-        if(write):
-            flags_+="w"
-        if(list):
-            flags_+="l"
-        if(invert):
-            flags_+="n"
-        if(log):
-            flags_+="g"
-        if(abslog):
-            flags_+="a"
-        if(equi):
-            flags_+="e"
+        flags_ = ""
+        if remove:
+            flags_ += "r"
+        if write:
+            flags_ += "w"
+        if list:
+            flags_ += "l"
+        if invert:
+            flags_ += "n"
+        if log:
+            flags_ += "g"
+        if abslog:
+            flags_ += "a"
+        if equi:
+            flags_ += "e"
 
         try:
-            grass.run_command("r.colors", flags=flags_, file=filename,
-                              color=color, raster=raster, volume=volume,
-                              rules=rules, overwrite=grass.overwrite())
+            grass.run_command(
+                "r.colors",
+                flags=flags_,
+                file=filename,
+                color=color,
+                raster=raster,
+                volume=volume,
+                rules=rules,
+                overwrite=grass.overwrite(),
+            )
         except CalledModuleError:
             grass.fatal(_("Error in r.colors call"))
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

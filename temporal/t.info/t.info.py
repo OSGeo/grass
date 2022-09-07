@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.info
@@ -20,39 +20,39 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists information about space time datasets and maps.
-#% keyword: temporal
-#% keyword: metadata
-#% keyword: extent
-#% keyword: time
-#%end
+# %module
+# % description: Lists information about space time datasets and maps.
+# % keyword: temporal
+# % keyword: metadata
+# % keyword: extent
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% description: Name of an existing space time dataset or map
-#%end
+# %option G_OPT_STDS_INPUT
+# % description: Name of an existing space time dataset or map
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#% options: strds, str3ds, stvds, raster, raster_3d, vector
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# % options: strds, str3ds, stvds, raster, raster_3d, vector
+# %end
 
-#%flag
-#% key: g
-#% description: Print in shell script style
-#%end
+# %flag
+# % key: g
+# % description: Print in shell script style
+# %end
 
-#%flag
-#% key: h
-#% description: Print history information in human readable shell style for space time datasets
-#%end
+# %flag
+# % key: h
+# % description: Print history information in human readable shell style for space time datasets
+# %end
 
-#%flag
-#% key: d
-#% description: Print information about the temporal DBMI interface and exit
-#% suppress_required: yes
-#%end
+# %flag
+# % key: d
+# % description: Print information about the temporal DBMI interface and exit
+# % suppress_required: yes
+# %end
 from __future__ import print_function
 
 import grass.script as grass
@@ -66,37 +66,39 @@ def main():
 
     name = options["input"]
     type_ = options["type"]
-    shellstyle = flags['g']
-    system = flags['d']
-    history = flags['h']
+    shellstyle = flags["g"]
+    system = flags["d"]
+    history = flags["h"]
 
     # Make sure the temporal database exists
     tgis.init()
 
-    dbif, connected = tgis.init_dbif(None)
+    dbif, connection_state_changed = tgis.init_dbif(None)
 
     rows = tgis.get_tgis_metadata(dbif)
 
     if system and not shellstyle and not history:
         #      0123456789012345678901234567890
-        print(" +------------------- Temporal DBMI backend information ----------------------+")
+        print(
+            " +------------------- Temporal DBMI backend information ----------------------+"
+        )
         print(" | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__))
-        print(" | Temporal database string:... " + str(
-            tgis.get_tgis_database_string()))
-        print(" | SQL template path:.......... " + str(
-            tgis.get_sql_template_path()))
+        print(" | Temporal database string:... " + str(tgis.get_tgis_database_string()))
+        print(" | SQL template path:.......... " + str(tgis.get_sql_template_path()))
         if rows:
             for row in rows:
-                print(" | %s .......... %s"%(row[0], row[1]))
-        print(" +----------------------------------------------------------------------------+")
+                print(" | %s .......... %s" % (row[0], row[1]))
+        print(
+            " +----------------------------------------------------------------------------+"
+        )
         return
     elif system and not history:
-        print("dbmi_python_interface=\'" + str(dbif.get_dbmi().__name__) + "\'")
-        print("dbmi_string=\'" + str(tgis.get_tgis_database_string()) + "\'")
-        print("sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'")
+        print("dbmi_python_interface='" + str(dbif.get_dbmi().__name__) + "'")
+        print("dbmi_string='" + str(tgis.get_tgis_database_string()) + "'")
+        print("sql_template_path='" + str(tgis.get_sql_template_path()) + "'")
         if rows:
             for row in rows:
-                print("%s=\'%s\'"%(row[0], row[1]))
+                print("%s='%s'" % (row[0], row[1]))
         return
 
     if not system and not name:
@@ -110,7 +112,11 @@ def main():
     dataset = tgis.dataset_factory(type_, id_)
 
     if not dataset.is_in_db(dbif):
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id_))
+        grass.fatal(
+            _("Dataset <{n}> of type <{t}> not found in temporal database").format(
+                n=id_, t=type_
+            )
+        )
 
     dataset.select(dbif)
 
@@ -122,6 +128,7 @@ def main():
         dataset.print_shell_info()
     else:
         dataset.print_info()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

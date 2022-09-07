@@ -15,15 +15,15 @@ void cmmult(Cpx * cm, Cpx * a, Cpx * b, int n, int m, int l)
 
     q0 = (Cpx *) calloc(m, sizeof(Cpx));
     for (i = 0; i < l; ++i, ++cm) {
-	for (k = 0, p = b + i; k < m; p += l)
-	    q0[k++] = *p;
-	for (j = 0, p = a, q = cm; j < n; ++j, q += l) {
-	    for (k = 0, z.re = z.im = 0.; k < m; ++k, ++p) {
-		z.re += p->re * q0[k].re - p->im * q0[k].im;
-		z.im += p->im * q0[k].re + p->re * q0[k].im;
-	    }
-	    *q = z;
-	}
+        for (k = 0, p = b + i; k < m; p += l)
+            q0[k++] = *p;
+        for (j = 0, p = a, q = cm; j < n; ++j, q += l) {
+            for (k = 0, z.re = z.im = 0.; k < m; ++k, ++p) {
+                z.re += p->re * q0[k].re - p->im * q0[k].im;
+                z.im += p->im * q0[k].re + p->re * q0[k].im;
+            }
+            *q = z;
+        }
     }
     free(q0);
 }

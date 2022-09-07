@@ -19,7 +19,8 @@
  *  \return void
  */
 
-void Rast3d_get_value(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
+void Rast3d_get_value(RASTER3D_Map * map, int x, int y, int z, void *value,
+                      int type)
 {
     /* get the resampled value */
     map->resampleFun(map, x, y, z, value, type);
@@ -91,23 +92,24 @@ double Rast3d_get_double(RASTER3D_Map * map, int x, int y, int z)
  */
 
 void
-Rast3d_get_window_value(RASTER3D_Map * map, double north, double east, double top,
-		   void *value, int type)
+Rast3d_get_window_value(RASTER3D_Map * map, double north, double east,
+                        double top, void *value, int type)
 {
     int col, row, depth;
 
-    Rast3d_location2coord(&(map->window), north, east, top, &col, &row, &depth);
+    Rast3d_location2coord(&(map->window), north, east, top, &col, &row,
+                          &depth);
 
     /* if (row, col, depth) outside window return NULL value */
     if ((row < 0) || (row >= map->window.rows) ||
-	(col < 0) || (col >= map->window.cols) ||
-	(depth < 0) || (depth >= map->window.depths)) {
-	Rast3d_set_null_value(value, 1, type);
-	return;
+        (col < 0) || (col >= map->window.cols) ||
+        (depth < 0) || (depth >= map->window.depths)) {
+        Rast3d_set_null_value(value, 1, type);
+        return;
     }
 
     /* Get the value from the map in map-region resolution */
-	map->resampleFun(map, col, row, depth, value, type);
+    map->resampleFun(map, col, row, depth, value, type);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -128,23 +130,24 @@ Rast3d_get_window_value(RASTER3D_Map * map, double north, double east, double to
  */
 
 void
-Rast3d_get_region_value(RASTER3D_Map * map, double north, double east, double top,
-		   void *value, int type)
+Rast3d_get_region_value(RASTER3D_Map * map, double north, double east,
+                        double top, void *value, int type)
 {
     int row, col, depth;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
+    Rast3d_location2coord(&(map->region), north, east, top, &col, &row,
+                          &depth);
 
     /* if (row, col, depth) outside region return NULL value */
     if ((row < 0) || (row >= map->region.rows) ||
-	(col < 0) || (col >= map->region.cols) ||
-	(depth < 0) || (depth >= map->region.depths)) {
-	Rast3d_set_null_value(value, 1, type);
-	return;
+        (col < 0) || (col >= map->region.cols) ||
+        (depth < 0) || (depth >= map->region.depths)) {
+        Rast3d_set_null_value(value, 1, type);
+        return;
     }
 
     /* Get the value from the map in map-region resolution */
-	Rast3d_get_value_region(map, col, row, depth, value, type);
+    Rast3d_get_value_region(map, col, row, depth, value, type);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -169,22 +172,23 @@ float Rast3d_get_float_region(RASTER3D_Map * map, int x, int y, int z)
     float value;
 
     if (map->typeIntern == DCELL_TYPE)
-	return (float)Rast3d_get_double_region(map, x, y, z);
+        return (float)Rast3d_get_double_region(map, x, y, z);
 
     /* In case of region coordinates out of bounds, return the Null value */
-    if(x < 0 || y < 0 || z < 0 || x >= map->region.cols ||
-       y >= map->region.rows || z >= map->region.depths) {
-         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
-         return value;
-    }   
+    if (x < 0 || y < 0 || z < 0 || x >= map->region.cols ||
+        y >= map->region.rows || z >= map->region.depths) {
+        Rast3d_set_null_value(&value, 1, FCELL_TYPE);
+        return value;
+    }
 
     Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
     tile = (float *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-	Rast3d_fatal_error("Rast3d_get_float_region: error in Rast3d_get_tile_ptr." 
-                           "Region coordinates x %i y %i z %i  tile index %i offset %i",
-                           x, y, z, tileIndex, offs);
+        Rast3d_fatal_error
+            ("Rast3d_get_float_region: error in Rast3d_get_tile_ptr."
+             "Region coordinates x %i y %i z %i  tile index %i offset %i", x,
+             y, z, tileIndex, offs);
 
     return tile[offs];
 }
@@ -211,22 +215,23 @@ double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
     double value;
 
     if (map->typeIntern == FCELL_TYPE)
-	return (double)Rast3d_get_float_region(map, x, y, z);
+        return (double)Rast3d_get_float_region(map, x, y, z);
 
     /* In case of region coordinates out of bounds, return the Null value */
-    if(x < 0 || y < 0 || z < 0 || x >= map->region.cols ||
-       y >= map->region.rows || z >= map->region.depths) {
-         Rast3d_set_null_value(&value, 1, DCELL_TYPE);
-         return value;
-    } 
+    if (x < 0 || y < 0 || z < 0 || x >= map->region.cols ||
+        y >= map->region.rows || z >= map->region.depths) {
+        Rast3d_set_null_value(&value, 1, DCELL_TYPE);
+        return value;
+    }
 
     Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
     tile = (double *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-	Rast3d_fatal_error("Rast3d_get_double_region: error in Rast3d_get_tile_ptr." 
-                           "Region coordinates x %i y %i z %i  tile index %i offset %i",
-                           x, y, z, tileIndex, offs);
+        Rast3d_fatal_error
+            ("Rast3d_get_double_region: error in Rast3d_get_tile_ptr."
+             "Region coordinates x %i y %i z %i  tile index %i offset %i", x,
+             y, z, tileIndex, offs);
 
     return tile[offs];
 }
@@ -253,11 +258,12 @@ double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
  */
 
 void
-Rast3d_get_value_region(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
+Rast3d_get_value_region(RASTER3D_Map * map, int x, int y, int z, void *value,
+                        int type)
 {
     if (type == FCELL_TYPE) {
-	*((float *)value) = Rast3d_get_float_region(map, x, y, z);
-	return;
+        *((float *)value) = Rast3d_get_float_region(map, x, y, z);
+        return;
     }
 
     *((double *)value) = Rast3d_get_double_region(map, x, y, z);

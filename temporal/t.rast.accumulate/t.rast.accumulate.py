@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.rast.accumulate
@@ -20,144 +20,145 @@
 #
 #############################################################################
 
-#%module
-#% description: Computes cyclic accumulations of a space time raster dataset.
-#% keyword: temporal
-#% keyword: accumulation
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Computes cyclic accumulations of a space time raster dataset.
+# % keyword: temporal
+# % keyword: accumulation
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STRDS_OUTPUT
-#%end
+# %option G_OPT_STRDS_OUTPUT
+# %end
 
 
-#%option G_OPT_STRDS_INPUT
-#% key: lower
-#% description: Input space time raster dataset that defines the lower threshold, values lower than this threshold are excluded from accumulation
-#% required: no
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: lower
+# % description: Input space time raster dataset that defines the lower threshold, values lower than this threshold are excluded from accumulation
+# % required: no
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#% key: upper
-#% description: Input space time raster dataset that defines the upper threshold, values higher than this threshold are excluded from accumulation
-#% required: no
-#%end
+# %option G_OPT_STRDS_INPUT
+# % key: upper
+# % description: Input space time raster dataset that defines the upper threshold, values higher than this threshold are excluded from accumulation
+# % required: no
+# %end
 
-#%option
-#% key: start
-#% type: string
-#% description: The temporal starting point to begin the accumulation, eg '2001-01-01'
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: start
+# % type: string
+# % description: The temporal starting point to begin the accumulation, eg '2001-01-01'
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: stop
-#% type: string
-#% description: The temporal date to stop the accumulation, eg '2009-01-01'
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: stop
+# % type: string
+# % description: The temporal date to stop the accumulation, eg '2009-01-01'
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: cycle
-#% type: string
-#% description: The temporal cycle to restart the accumulation, eg '12 months'
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: cycle
+# % type: string
+# % description: The temporal cycle to restart the accumulation, eg '12 months'
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: offset
-#% type: string
-#% description: The temporal offset to the beginning of the next cycle, eg '6 months'
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: offset
+# % type: string
+# % description: The temporal offset to the beginning of the next cycle, eg '6 months'
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: granularity
-#% type: string
-#% description: The granularity for accumulation '1 day'
-#% answer: 1 day
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: granularity
+# % type: string
+# % description: The granularity for accumulation '1 day'
+# % answer: 1 day
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add to the basename. Set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add to the basename. Set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: limits
-#% type: double
-#% key_desc: lower,upper
-#% description: Use these limits in case lower and/or upper input space time raster datasets are not defined or contain NULL values
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: limits
+# % type: double
+# % key_desc: lower,upper
+# % description: Use these limits in case lower and/or upper input space time raster datasets are not defined or contain NULL values
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: scale
-#% type: double
-#% description: Scale factor for input space time raster dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: scale
+# % type: double
+# % description: Scale factor for input space time raster dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: shift
-#% type: double
-#% description: Shift factor for input space time raster dataset
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: shift
+# % type: double
+# % description: Shift factor for input space time raster dataset
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% label: This method will be applied to compute the accumulative values from the input maps in a single granule
-#% description: Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of input maps); Biologically Effective Degree Days; Huglin Heliothermal index
-#% options: mean,gdd,bedd,huglin
-#% answer: mean
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: method
+# % type: string
+# % label: This method will be applied to compute the accumulative values from the input maps in a single granule
+# % description: Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of input maps); Biologically Effective Degree Days; Huglin Heliothermal index
+# % options: mean,gdd,bedd,huglin
+# % answer: mean
+# % required: no
+# % multiple: no
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty maps in the output space time raster dataset, otherwise they will be deleted
-#%end
+# %flag
+# % key: n
+# % description: Register empty maps in the output space time raster dataset, otherwise they will be deleted
+# %end
 
-#%flag
-#% key: r
-#% description: Reverse time direction in cyclic accumulation
-#%end
+# %flag
+# % key: r
+# % description: Reverse time direction in cyclic accumulation
+# %end
 from __future__ import print_function
 
 import grass.script as grass
 from copy import copy
 
 ############################################################################
+
 
 def main():
     # lazy imports
@@ -215,31 +216,43 @@ def main():
     if output_strds.is_in_db(dbif):
         if not grass.overwrite():
             dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> is already in the "
-                          "database, use overwrite flag to overwrite") % out_id)
+            grass.fatal(
+                _(
+                    "Space time raster dataset <%s> is already in the "
+                    "database, use overwrite flag to overwrite"
+                )
+                % out_id
+            )
 
-    if tgis.check_granularity_string(granularity,
-                                     input_strds.get_temporal_type()) is False:
-            dbif.close()
-            grass.fatal(_("Invalid granularity"))
+    if (
+        tgis.check_granularity_string(granularity, input_strds.get_temporal_type())
+        is False
+    ):
+        dbif.close()
+        grass.fatal(_("Invalid granularity"))
 
-    if tgis.check_granularity_string(cycle,
-                                     input_strds.get_temporal_type()) is False:
-            dbif.close()
-            grass.fatal(_("Invalid cycle"))
+    if tgis.check_granularity_string(cycle, input_strds.get_temporal_type()) is False:
+        dbif.close()
+        grass.fatal(_("Invalid cycle"))
 
     if offset:
-        if tgis.check_granularity_string(offset,
-                                         input_strds.get_temporal_type()) is False:
-                dbif.close()
-                grass.fatal(_("Invalid offset"))
+        if (
+            tgis.check_granularity_string(offset, input_strds.get_temporal_type())
+            is False
+        ):
+            dbif.close()
+            grass.fatal(_("Invalid offset"))
 
     # The lower threshold space time raster dataset
     if lower:
         if not range:
             dbif.close()
-            grass.fatal(_("You need to set the range to compute the occurrence"
-                          " space time raster dataset"))
+            grass.fatal(
+                _(
+                    "You need to set the range to compute the occurrence"
+                    " space time raster dataset"
+                )
+            )
 
         if lower.find("@") >= 0:
             lower_id = lower
@@ -249,7 +262,9 @@ def main():
         lower_strds = tgis.SpaceTimeRasterDataset(lower_id)
         if not lower_strds.is_in_db():
             dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> not found") % (lower_strds.get_id()))
+            grass.fatal(
+                _("Space time raster dataset <%s> not found") % (lower_strds.get_id())
+            )
 
         if lower_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
@@ -261,7 +276,9 @@ def main():
     if upper:
         if not lower:
             dbif.close()
-            grass.fatal(_("The upper option works only in conjunction with the lower option"))
+            grass.fatal(
+                _("The upper option works only in conjunction with the lower option")
+            )
 
         if upper.find("@") >= 0:
             upper = upper
@@ -271,7 +288,9 @@ def main():
         upper_strds = tgis.SpaceTimeRasterDataset(upper_id)
         if not upper_strds.is_in_db():
             dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> not found") % (upper_strds.get_id()))
+            grass.fatal(
+                _("Space time raster dataset <%s> not found") % (upper_strds.get_id())
+            )
 
         if upper_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
@@ -305,19 +324,16 @@ def main():
     count = 1
     output_maps = []
 
-
     while input_strds_end > start and stop > start:
 
         # Make sure that the cyclic computation will stop at the correct time
         if stop and end > stop:
             end = stop
 
-        where = "start_time >= \'%s\' AND start_time < \'%s\'"%(str(start),
-                                                                str(end))
-        input_maps = input_strds.get_registered_maps_as_objects(where=where,
-                                                                dbif=dbif)
+        where = "start_time >= '%s' AND start_time < '%s'" % (str(start), str(end))
+        input_maps = input_strds.get_registered_maps_as_objects(where=where, dbif=dbif)
 
-        grass.message(_("Processing cycle %s - %s"%(str(start), str(end))))
+        grass.message(_("Processing cycle %s - %s" % (str(start), str(end))))
 
         if len(input_maps) == 0:
             continue
@@ -328,17 +344,16 @@ def main():
         gran_list_up = []
         gran_start = start
         while gran_start < end:
-            map = input_strds.get_new_map_instance("%i@%i"%(count, count))
+            map = input_strds.get_new_map_instance("%i@%i" % (count, count))
             if input_strds.is_time_absolute():
-                gran_end = tgis.increment_datetime_by_string(gran_start,
-                                                             granularity)
+                gran_end = tgis.increment_datetime_by_string(gran_start, granularity)
                 map.set_absolute_time(gran_start, gran_end)
-                gran_start = tgis.increment_datetime_by_string(gran_start,
-                                                               granularity)
+                gran_start = tgis.increment_datetime_by_string(gran_start, granularity)
             else:
                 gran_end = gran_start + granularity
-                map.set_relative_time(gran_start, gran_end,
-                                      input_strds.get_relative_time_unit())
+                map.set_relative_time(
+                    gran_start, gran_end, input_strds.get_relative_time_unit()
+                )
                 gran_start = gran_start + granularity
             gran_list.append(copy(map))
             gran_list_low.append(copy(map))
@@ -388,11 +403,14 @@ def main():
                 continue
 
             # New output map
-            if input_strds.get_temporal_type() == 'absolute' and time_suffix == 'gran':
-                suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
-                                                          input_strds.get_granularity())
+            if input_strds.get_temporal_type() == "absolute" and time_suffix == "gran":
+                suffix = tgis.create_suffix_from_datetime(
+                    map.temporal_extent.get_start_time(), input_strds.get_granularity()
+                )
                 output_map_name = "{ba}_{su}".format(ba=base, su=suffix)
-            elif input_strds.get_temporal_type() == 'absolute' and time_suffix == 'time':
+            elif (
+                input_strds.get_temporal_type() == "absolute" and time_suffix == "time"
+            ):
                 suffix = tgis.create_time_suffix(map)
                 output_map_name = "{ba}_{su}".format(ba=base, su=suffix)
             else:
@@ -408,17 +426,22 @@ def main():
                     output_map.delete(dbif)
                     output_map = input_strds.get_new_map_instance(output_map_id)
                 else:
-                    grass.fatal(_("Map <%s> is already registered in the temporal"
-                                 " database, use overwrite flag to overwrite.") %
-                                (output_map.get_map_id()))
+                    grass.fatal(
+                        _(
+                            "Map <%s> is already registered in the temporal"
+                            " database, use overwrite flag to overwrite."
+                        )
+                        % (output_map.get_map_id())
+                    )
 
             map_start, map_end = map.get_temporal_extent_as_tuple()
 
             if map.is_time_absolute():
                 output_map.set_absolute_time(map_start, map_end)
             else:
-                output_map.set_relative_time(map_start, map_end,
-                                             map.get_relative_time_unit())
+                output_map.set_relative_time(
+                    map_start, map_end, map.get_relative_time_unit()
+                )
 
             limits_vals = limits.split(",")
             limits_lower = float(limits_vals[0])
@@ -445,8 +468,12 @@ def main():
                 input_map_names.append(input_map.get_id())
 
             # Set up the module
-            accmod = Module("r.series.accumulate", input=input_map_names,
-                            output=output_map_name, run_=False)
+            accmod = Module(
+                "r.series.accumulate",
+                input=input_map_names,
+                output=output_map_name,
+                run_=False,
+            )
 
             if old_map_name:
                 accmod.inputs["basemap"].value = old_map_name
@@ -469,7 +496,7 @@ def main():
             print(accmod)
             accmod.run()
 
-            if accmod.popen.returncode != 0:
+            if accmod.returncode != 0:
                 dbif.close()
                 grass.fatal(_("Error running r.series.accumulate"))
 
@@ -497,8 +524,7 @@ def main():
             output_strds = input_strds.get_new_instance(out_id)
 
     temporal_type, semantic_type, title, description = input_strds.get_initial_values()
-    output_strds.set_initial_values(temporal_type, semantic_type, title,
-                                    description)
+    output_strds.set_initial_values(temporal_type, semantic_type, title, description)
     output_strds.insert(dbif)
 
     empty_maps = []
@@ -506,15 +532,17 @@ def main():
     count = 0
     for output_map in output_maps:
         count += 1
-        if count%10 == 0:
+        if count % 10 == 0:
             grass.percent(count, len(output_maps), 1)
         # Read the raster map data
         output_map.load()
         # In case of a empty map continue, do not register empty maps
 
         if not register_null:
-            if output_map.metadata.get_min() is None and \
-                output_map.metadata.get_max() is None:
+            if (
+                output_map.metadata.get_min() is None
+                and output_map.metadata.get_max() is None
+            ):
                 empty_maps.append(output_map)
                 continue
 
@@ -531,7 +559,10 @@ def main():
     # Remove empty maps
     if len(empty_maps) > 0:
         for map in empty_maps:
-            grass.run_command("g.remove", flags='f', type="raster", name=map.get_name(), quiet=True)
+            grass.run_command(
+                "g.remove", flags="f", type="raster", name=map.get_name(), quiet=True
+            )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

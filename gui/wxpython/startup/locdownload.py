@@ -20,25 +20,18 @@ from __future__ import print_function
 
 import os
 import sys
-import tempfile
 import shutil
+import textwrap
 import time
-
-try:
-    from urllib2 import HTTPError, URLError
-    from urllib import urlopen, urlretrieve
-except ImportError:
-    # there is also HTTPException, perhaps change to list
-    from urllib.error import HTTPError, URLError
-    from urllib.request import urlopen, urlretrieve
 
 import wx
 from wx.lib.newevent import NewEvent
 
-from grass.script import debug
-from grass.script.utils import try_rmdir
-
+from grass.script.utils import try_rmdir, legalize_vector_name
+from grass.utils.download import download_and_extract, name_from_url, DownloadError
+from grass.grassdb.checks import is_location_valid
 from grass.script.setup import set_gui_path
+
 set_gui_path()
 
 from core.debug import Debug
@@ -70,7 +63,7 @@ LOCATIONS = [
     },
     {
         "label": "Slovakia 3D precipitation voxel data set",
-        "url": "https://grass.osgeo.org/uploads/grass/sampledata/slovakia3d_grass7.tar.gz",
+        "url": "https://grass.osgeo.org/sampledata/slovakia3d_grass7.tar.gz",
     },
     {
         "label": "Fire simulation sample data",
@@ -80,12 +73,16 @@ LOCATIONS = [
         "label": "GISMentors location, Czech Republic",
         "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
     },
+    {
+        "label": "Natural Earth Dataset in WGS84",
+        "url": "https://zenodo.org/record/3968936/files/natural-earth-dataset.tar.gz",
+        "size": "207 MB",
+        "epsg": "4326",
+        "license": "ODC Public Domain Dedication and License 1.0",
+        "maintainer": "Brendan Harmon (brendan.harmon@gmail.com)",
+    },
 ]
 
-
-class DownloadError(Exception):
-    """Error happened during download or when processing the file"""
-    pass
 
 class RedirectText(object):
     def __init__(self, window):
@@ -93,7 +90,11 @@ class RedirectText(object):
 
     def write(self, string):
         try:
-            wx.CallAfter(self.out.SetLabel, string)
+            if self.out:
+                string = self._wrap_string(string)
+                heigth = self._get_heigth(string)
+                wx.CallAfter(self.out.SetLabel, string)
+                self._resize(heigth)
         except:
             # window closed -> PyDeadObjectError
             pass
@@ -101,124 +102,69 @@ class RedirectText(object):
     def flush(self):
         pass
 
-# copy from g.extension, potentially move to library
-def move_extracted_files(extract_dir, target_dir, files):
-    """Fix state of extracted file by moving them to different diretcory
+    def _wrap_string(self, string, width=40):
+        """Wrap string
 
-    When extracting, it is not clear what will be the root directory
-    or if there will be one at all. So this function moves the files to
-    a different directory in the way that if there was one directory extracted,
-    the contained files are moved.
-    """
-    debug("move_extracted_files({0})".format(locals()))
-    if len(files) == 1:
-        shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
-    else:
-        if not os.path.exists(target_dir):
-            os.mkdir(target_dir)
-        for file_name in files:
-            actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
-                # copy_tree() from distutils failed to create
-                # directories before copying files time to time
-                # (when copying to recently deleted directory)
-                shutil.copytree(actual_file,
-                                os.path.join(target_dir, file_name))
-            else:
-                shutil.copy(actual_file, os.path.join(target_dir, file_name))
+        :param str string: input string
+        :param int width: maximum length allowed of the wrapped lines
 
+        :return str: newline-separated string
+        """
+        wrapper = textwrap.TextWrapper(width=width)
+        return wrapper.fill(text=string)
 
-# copy from g.extension, potentially move to library
-def extract_zip(name, directory, tmpdir):
-    """Extract a ZIP file into a directory"""
-    debug("extract_zip(name={name}, directory={directory},"
-          " tmpdir={tmpdir})".format(name=name, directory=directory,
-                                     tmpdir=tmpdir), 3)
-    try:
-        import zipfile
-        zip_file = zipfile.ZipFile(name, mode='r')
-        file_list = zip_file.namelist()
-        # we suppose we can write to parent of the given dir
-        # (supposing a tmp dir)
-        extract_dir = os.path.join(tmpdir, 'extract_dir')
-        os.mkdir(extract_dir)
-        for subfile in file_list:
-            # this should be safe in Python 2.7.4
-            zip_file.extract(subfile, extract_dir)
-        files = os.listdir(extract_dir)
-        move_extracted_files(extract_dir=extract_dir,
-                             target_dir=directory, files=files)
-    except zipfile.BadZipfile as error:
-        raise DownloadError(_("ZIP file is unreadable: {0}").format(error))
+    def _get_heigth(self, string):
+        """Get widget new heigth
 
+        :param str string: input string
 
-# copy from g.extension, potentially move to library
-def extract_tar(name, directory, tmpdir):
-    """Extract a TAR or a similar file into a directory"""
-    debug("extract_tar(name={name}, directory={directory},"
-          " tmpdir={tmpdir})".format(name=name, directory=directory,
-                                     tmpdir=tmpdir), 3)
-    try:
-        import tarfile  # we don't need it anywhere else
-        tar = tarfile.open(name)
-        extract_dir = os.path.join(tmpdir, 'extract_dir')
-        os.mkdir(extract_dir)
-        tar.extractall(path=extract_dir)
-        files = os.listdir(extract_dir)
-        move_extracted_files(extract_dir=extract_dir,
-                             target_dir=directory, files=files)
-    except tarfile.TarError as error:
-        raise DownloadError(_("Archive file is unreadable: {0}").format(error))
+        :return int: widget heigth
+        """
+        n_lines = string.count("\n")
+        attr = self.out.GetClassDefaultAttributes()
+        font_size = attr.font.GetPointSize()
+        heigth = int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
+        return heigth
 
-extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip', 'targz']
+    def _resize(self, heigth=-1):
+        """Resize widget heigth
+
+        :param int heigth: widget heigth
+        """
+        wx.CallAfter(self.out.GetParent().SetMinSize, (-1, -1))
+        wx.CallAfter(self.out.SetMinSize, (-1, heigth))
+        wx.CallAfter(
+            self.out.GetParent().parent.sizer.Fit,
+            self.out.GetParent().parent,
+        )
+
 
 # based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
 def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
         start_time = time.time()
-        sys.stdout.write("Download in progress, wait until it is finished\n0%")
+        sys.stdout.write(
+            _("Download in progress, wait until it is finished 0%"),
+        )
         return
-    if count % 100 != 0: # be less verbose
+    if count % 100 != 0:  # be less verbose
         return
     duration = time.time() - start_time
     progress_size = int(count * block_size)
     speed = int(progress_size / (1024 * duration))
     percent = int(count * block_size * 100 / total_size)
-    sys.stdout.write("Download in progress, wait until it is finished\n{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
-        percent, progress_size / (1024 * 1024), speed, duration
-    ))
-
-# based on g.extension, potentially move to library
-def download_and_extract(source):
-    """Download a file (archive) from URL and uncompress it"""
-    tmpdir = tempfile.mkdtemp()
-    Debug.msg(1, 'Tmpdir: {}'.format(tmpdir))
-    directory = os.path.join(tmpdir, 'location')
-    if source.endswith('.zip'):
-        archive_name = os.path.join(tmpdir, 'location.zip')
-        filename, headers = urlretrieve(source, archive_name, reporthook)
-        if headers.get('content-type', '') != 'application/zip':
-            raise DownloadError(
-                _("Download of <{url}> failed"
-                  " or file <{name}> is not a ZIP file").format(
-                      url=source, name=filename))
-        extract_zip(name=archive_name, directory=directory, tmpdir=tmpdir)
-    elif (source.endswith(".tar.gz") or
-          source.rsplit('.', 1)[1] in extract_tar.supported_formats):
-        if source.endswith(".tar.gz"):
-            ext = "tar.gz"
-        else:
-            ext = source.rsplit('.', 1)[1]
-        archive_name = os.path.join(tmpdir, 'location.' + ext)
-        urlretrieve(source, archive_name, reporthook)
-        # TODO: error handling for urlretrieve
-        extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
-    else:
-        # probably programmer error
-        raise DownloadError(_("Unknown format '{0}'.").format(source))
-    assert os.path.isdir(directory)
-    return directory
+    sys.stdout.write(
+        _(
+            "Download in progress, wait until it is finished "
+            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
+                percent,
+                progress_size / (1024 * 1024),
+                speed,
+                duration,
+            ),
+        ),
+    )
 
 
 def download_location(url, name, database):
@@ -229,7 +175,7 @@ def download_location(url, name, database):
     try:
         # TODO: the unpacking could go right to the path (but less
         # robust) or replace copytree here with move
-        directory = download_and_extract(source=url)
+        directory = download_and_extract(source=url, reporthook=reporthook)
         destination = os.path.join(database, name)
         if not is_location_valid(directory):
             return _("Downloaded location is not valid")
@@ -240,24 +186,9 @@ def download_location(url, name, database):
     return None
 
 
-# based on grass.py (to be moved to future "grass.init")
-def is_location_valid(location):
-    """Return True if GRASS Location is valid
-
-    :param location: path of a Location
-    """
-    # DEFAULT_WIND file should not be required until you do something
-    # that actually uses them. The check is just a heuristic; a directory
-    # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
-    # location, while a directory lacking it probably isn't.
-    # TODO: perhaps we can relax this and require only permanent
-    return os.access(os.path.join(location,
-                                  "PERMANENT", "DEFAULT_WIND"), os.F_OK)
-
-
 def location_name_from_url(url):
     """Create location name from URL"""
-    return url.rsplit('/', 1)[1].split('.', 1)[0].replace("-", "_").replace(" ", "_")
+    return legalize_vector_name(name_from_url(url))
 
 
 DownloadDoneEvent, EVT_DOWNLOAD_DONE = NewEvent()
@@ -277,6 +208,7 @@ class LocationDownloadPanel(wx.Panel):
     of one panel (perhaps sharing the common background download and
     message logic).
     """
+
     def __init__(self, parent, database, locations=LOCATIONS):
         """
 
@@ -285,26 +217,25 @@ class LocationDownloadPanel(wx.Panel):
         """
         wx.Panel.__init__(self, parent=parent)
 
+        self.parent = parent
         self._last_downloaded_location_name = None
         self._download_in_progress = False
         self.database = database
         self.locations = locations
+        self._abort_btn_label = _("Abort")
+        self._abort_btn_tooltip = _("Abort download location")
 
         self.label = StaticText(
-            parent=self,
-            label=_("Select sample location to download:"))
+            parent=self, label=_("Select sample location to download:")
+        )
 
         choices = []
         for item in self.locations:
-            choices.append(item['label'])
+            choices.append(item["label"])
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
-
-        self.download_button = Button(parent=self, id=wx.ID_ANY,
-                                      label=_("Do&wnload"))
-        self.download_button.SetToolTip(_("Download selected location"))
-        self.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
+        self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
         # TODO: add button for a link to an associated website?
         # TODO: add thumbnail for each location?
 
@@ -334,45 +265,67 @@ class LocationDownloadPanel(wx.Panel):
         vertical = wx.BoxSizer(wx.VERTICAL)
         self.sizer = vertical
 
-        vertical.Add(self.label, proportion=0,
-                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
-        vertical.Add(self.choice, proportion=0,
-                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
-
-        button_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        button_sizer.AddStretchSpacer()
-        button_sizer.Add(self.download_button, proportion=0)
-
-        vertical.Add(button_sizer, proportion=0,
-                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
+        vertical.Add(
+            self.label,
+            proportion=0,
+            flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT,
+            border=10,
+        )
+        vertical.Add(
+            self.choice,
+            proportion=0,
+            flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT,
+            border=10,
+        )
         vertical.AddStretchSpacer()
-        vertical.Add(self.message, proportion=0,
-                     flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=10)
+        vertical.Add(
+            self.message,
+            proportion=0,
+            flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
+            border=10,
+        )
 
         self.SetSizer(vertical)
         vertical.Fit(self)
         self.Layout()
         self.SetMinSize(self.GetBestSize())
 
+    def _change_download_btn_label(
+        self, label=_("Do&wnload"), tooltip=_("Download selected location")
+    ):
+        """Change download button label/tooltip"""
+        if self.parent.download_button:
+            self.parent.download_button.SetLabel(label)
+            self.parent.download_button.SetToolTip(tooltip)
+
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
-        Debug.msg(1, "OnDownload")
-        if self._download_in_progress:
-            self._warning(_("Download in progress, wait until it is finished"))
-        index = self.choice.GetSelection()
-        self.DownloadItem(self.locations[index])
-        self.download_button.Enable(False)
+        button_label = self.parent.download_button.GetLabel()
+        if button_label in (_("Download"), _("Do&wnload")):
+            self._change_download_btn_label(
+                label=self._abort_btn_label,
+                tooltip=self._abort_btn_tooltip,
+            )
+            Debug.msg(1, "OnDownload")
+            if self._download_in_progress:
+                self._warning(_("Download in progress, wait until it is finished"))
+            index = self.choice.GetSelection()
+            self.DownloadItem(self.locations[index])
+        else:
+            self.parent.OnCancel()
 
     def DownloadItem(self, item):
         """Download the selected item"""
         Debug.msg(1, "DownloadItem: %s" % item)
         # similar code as in CheckItem
-        url = item['url']
+        url = item["url"]
         dirname = location_name_from_url(url)
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
-            self._error(_("Location named <%s> already exists,"
-                          " download canceled") % dirname)
+            self._error(
+                _("Location named <%s> already exists," " download canceled") % dirname
+            )
+            self._change_download_btn_label()
             return
 
         def download_complete_callback(event):
@@ -382,15 +335,35 @@ class LocationDownloadPanel(wx.Panel):
                 self._error(_("Download failed: %s") % errors)
             else:
                 self._last_downloaded_location_name = dirname
-                self._warning(_("Download completed. The downloaded sample data is listed "
-                                "in the location/mapset tabs upon closing of this window")
+                self._warning(
+                    _(
+                        "Download completed. The downloaded sample data is listed "
+                        "in the location/mapset tabs upon closing of this window"
+                    )
                 )
+            self._change_download_btn_label()
+
+        def terminate_download_callback(event):
+            # Clean up after urllib urlretrieve which is used internally
+            # in grass.utils.
+            from urllib import request  # pylint: disable=import-outside-toplevel
+
+            self._download_in_progress = False
+            request.urlcleanup()
+            sys.stdout.write("Download aborted")
+            self.thread = gThread()
+            self._change_download_btn_label()
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
-        self.thread.Run(callable=download_location,
-                        url=url, name=dirname, database=self.database,
-                        ondone=download_complete_callback)
+        self.thread.Run(
+            callable=download_location,
+            url=url,
+            name=dirname,
+            database=self.database,
+            ondone=download_complete_callback,
+            onterminate=terminate_download_callback,
+        )
 
     def OnChangeChoice(self, event):
         """React to user changing the selection"""
@@ -400,12 +373,14 @@ class LocationDownloadPanel(wx.Panel):
     def CheckItem(self, item):
         """Check what user selected and report potential issues"""
         # similar code as in DownloadItem
-        url = item['url']
+        url = item["url"]
         dirname = location_name_from_url(url)
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
-            self._warning(_("Location named <%s> already exists,"
-                            " rename it first") % dirname)
+            self._warning(
+                _("Location named <%s> already exists," " rename it first") % dirname
+            )
+            self.parent.download_button.SetLabel(label=_("Download"))
             return
         else:
             self._clearMessage()
@@ -425,7 +400,7 @@ class LocationDownloadPanel(wx.Panel):
             _clearMessage() when you know that there is everything
             correct.
         """
-        self.message.SetLabel(text)
+        sys.stdout.write(text)
         self.sizer.Layout()
 
     def _error(self, text):
@@ -439,7 +414,7 @@ class LocationDownloadPanel(wx.Panel):
             _clearMessage() when you know that there is everything
             correct.
         """
-        self.message.SetLabel(_("Error: {text}").format(text=text))
+        sys.stdout.write(_("Error: {text}").format(text=text))
         self.sizer.Layout()
 
     def _clearMessage(self):
@@ -455,29 +430,46 @@ class LocationDownloadDialog(wx.Dialog):
 
     Contains the panel and Cancel button.
     """
-    def __init__(self, parent, database,
-                 title=_("GRASS GIS Location Download")):
+
+    def __init__(self, parent, database, title=_("Location Download")):
         """
         :param database: database to download the location to
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
+        cancel_button = Button(self, id=wx.ID_CANCEL)
+        self.download_button = Button(parent=self, id=wx.ID_ANY, label=_("Do&wnload"))
+        self.download_button.SetToolTip(_("Download selected location"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
-        close_button = Button(self, id=wx.ID_CLOSE)
-        # TODO: terminate download process
-        close_button.Bind(wx.EVT_BUTTON, self.OnClose)
+        cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.Bind(wx.EVT_CLOSE, self.OnCancel)
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
 
         button_sizer = wx.StdDialogButtonSizer()
-        button_sizer.Add(close_button)
+        button_sizer.Add(
+            cancel_button,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
+        button_sizer.Add(
+            self.download_button,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
         button_sizer.Realize()
 
-        sizer.Add(button_sizer, proportion=0,
-                  flag=wx.ALIGN_RIGHT | wx.BOTTOM, border=10)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.sizer.Add(
+            button_sizer,
+            proportion=0,
+            flag=wx.ALIGN_RIGHT | wx.TOP | wx.BOTTOM,
+            border=10,
+        )
+        self.SetSizer(self.sizer)
+        self.sizer.Fit(self)
 
         self.Layout()
 
@@ -485,23 +477,28 @@ class LocationDownloadDialog(wx.Dialog):
         """Get the name of the last location downloaded by the user"""
         return self.panel.GetLocation()
 
-    def OnClose(self, event):
+    def OnCancel(self, event=None):
         if self.panel._download_in_progress:
             # running thread
-            dlg = wx.MessageDialog(parent=self,
-                                   message=_("Do you want to cancel location download?"),
-                                   caption=_("Abort download"),
-                                   style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE
+            dlg = wx.MessageDialog(
+                parent=self,
+                message=_("Do you want to cancel location download?"),
+                caption=_("Abort download"),
+                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
 
             ret = dlg.ShowModal()
             dlg.Destroy()
 
-            # TODO: terminate download process on wx.ID_YES
             if ret == wx.ID_NO:
                 return
+            else:
+                self.panel.thread.Terminate()
+                self.panel._change_download_btn_label()
 
-        self.Close()
+        if event:
+            self.EndModal(wx.ID_CANCEL)
+
 
 def main():
     """Tests the download dialog"""
@@ -511,14 +508,14 @@ def main():
 
     app = wx.App()
 
-    if len(sys.argv) == 2 or sys.argv[2] == 'dialog':
+    if len(sys.argv) == 2 or sys.argv[2] == "dialog":
         window = LocationDownloadDialog(parent=None, database=database)
         window.ShowModal()
         location = window.GetLocation()
         if location:
             print(location)
         window.Destroy()
-    elif sys.argv[2] == 'panel':
+    elif sys.argv[2] == "panel":
         window = wx.Dialog(parent=None)
         panel = LocationDownloadPanel(parent=window, database=database)
         window.ShowModal()
@@ -532,5 +529,5 @@ def main():
     app.MainLoop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

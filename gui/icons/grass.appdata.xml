@@ -33,26 +33,22 @@
   </description>
   <screenshots>
     <screenshot type="default">
-      <image>http://grass.osgeo.org/uploads/images/Gallery/gui/wxgui_histogram.png</image>
+      <image>https://grass.osgeo.org//images/gallery/gui/wxgui_histogram.png</image>
       <caption/>
     </screenshot>
     <screenshot>
-      <image>http://grass.osgeo.org/uploads/images/Gallery/platforms/grass7_RaspberryPI.png</image>
+      <image>https://grass.osgeo.org/images/gallery/lidar/jockeyposter1.jpg</image>
       <caption/>
     </screenshot>
     <screenshot>
-      <image>http://grass.osgeo.org/uploads/images/Gallery/LiDAR/jockeyposter1.jpg</image>
-      <caption/>
-    </screenshot>
-    <screenshot>
-      <image>http://grass.osgeo.org/uploads/images/Gallery/gui/grass7_wxNviz_volume_slices_1.png</image>
+      <image>https://grass.osgeo.org//images/gallery/gui/grass7_wxNviz_volume_slices_1.png</image>
       <caption/>
     </screenshot>
   </screenshots>
   <url type="homepage">https://grass.osgeo.org/</url>
-  <url type="translate">https://grass.osgeo.org/development/translations/</url>
-  <url type="donation">https://grass.osgeo.org/donations/</url>
-  <url type="bugtracker">https://grass.osgeo.org/development/bug-tracking/</url>
+  <url type="translate">https://grasswiki.osgeo.org/wiki/GRASS_messages_translation</url>
+  <url type="donation">https://grass.osgeo.org/contribute/donations/</url>
+  <url type="bugtracker">https://grass.osgeo.org/contribute/</url>
   <url type="help">https://grass.osgeo.org/documentation/</url>
   <update_contact>grass-web@lists.osgeo.org</update_contact>
   <developer_name>GRASS Development Team</developer_name>

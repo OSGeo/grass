@@ -227,8 +227,6 @@
       <wxgui-item name="Save"/>
       <wxgui-item name="SaveAs"/>
       <wxgui-item name="Close"/>
-      <separator/>
-      <wxgui-item name="LoadGRCFileTclTkGUI"/>
     </items>
   </toolbox>
   <toolbox name="MapDisplay">
@@ -304,6 +302,13 @@
       <module-item name="r.in.lidar">
         <label>LAS LiDAR points import</label>
       </module-item>
+      <module-item name="r.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.in.wms">
+        <label>WMS/WMTS import</label>
+      </module-item>
       <separator/>
       <module-item name="r.unpack">
         <label>Unpack raster map</label>
@@ -346,6 +351,9 @@
       </module-item>
       <module-item name="v.in.lidar">
         <label>LAS LiDAR points import</label>
+      </module-item>
+      <module-item name="v.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
       <separator/>
       <module-item name="v.unpack">
@@ -609,8 +617,6 @@
       <separator/>
       <wxgui-item name="CreateNewLocation"/>
       <wxgui-item name="CreateNewMapset"/>
-      <separator/>
-      <wxgui-item name="VersionAndCopyright"/>
     </items>
   </toolbox>
   <toolbox name="MapProjections">
@@ -761,8 +767,8 @@
         <label>Raster series aggregation</label>
       </module-item>
       <module-item name="r.series.accumulate">
-        <label>Raster series accumulation</label> 
-      </module-item> 
+        <label>Raster series accumulation</label>
+      </module-item>
       <separator/>
       <module-item name="r.stats.zonal">
         <label>Statistical overlay</label>
@@ -1067,12 +1073,16 @@
         <label>Regularized spline tension</label>
       </module-item>
       <separator/>
-      <module-item name="r.series.interp"> 
-        <label>Raster series interpolation</label> 
-      </module-item> 
+      <module-item name="r.series.interp">
+        <label>Raster series interpolation</label>
+      </module-item>
       <separator/>
       <module-item name="r.fillnulls">
         <label>Fill NULL cells</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.fill.stats">
+        <label>Fill NULL cells using IDW</label>
       </module-item>
     </items>
   </toolbox>
@@ -2006,13 +2016,18 @@
         <label>Attribute table manager</label>
       </module-item>
       <wxgui-item name="CartographicComposer"/>
+      <wxgui-item name="CorrectsScanningDistortions"/>
+      <wxgui-item name="DataCatalog"/>
       <wxgui-item name="Georectify"/>
       <wxgui-item name="GraphicalModeler"/>
       <wxgui-item name="InteractiveInputForSupervisedClassification"/>
+      <wxgui-item name="ManagingGCPsfor3DCorrection"/>
       <wxgui-item name="MapSwipe"/>
+      <wxgui-item name="SetUpSamplingAndAnalysisFramework"/>
       <wxgui-item name="TplotTool"/>
       <wxgui-item name="TimelineTool"/>
+      <wxgui-item name="VDigit"/>
+      <wxgui-item name="RDigit"/>
     </items>
   </toolbox>
 </toolboxes>
-

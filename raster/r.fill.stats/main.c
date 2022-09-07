@@ -28,7 +28,7 @@
    if (default) cells size specification is used, then the neighborhood
    shape is a less exact rectangle; in that case the neighborhood dimensions
    will also be different for x and y if the cell dimensions are different
-   - lat/lon data is allowed, but distance measure for -m(ap units) is straight line! 
+   - lat/lon data is allowed, but distance measure for -m(ap units) is straight line!
    - cell weights are now normalized to be in range [0;1]
    - center cell weight for "wmean" is now "1.0"
 
@@ -83,9 +83,9 @@ typedef struct
 
 
 /* function pointers for operation modes */
-void (*GET_STATS) (unsigned long, unsigned long, double, double, int,
-                   stats_struct *);
-void (*COLLECT_DATA) (double, double, double, double, stats_struct *);
+void (*GET_STATS)(unsigned long, unsigned long, double, double, int,
+                  stats_struct *);
+void (*COLLECT_DATA)(double, double, double, double, stats_struct *);
 
 
 /*
@@ -148,7 +148,6 @@ void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
     int weight_matrix_line_length = 80;
-    int weight_matrix_weight_length = 7;
     char weight_matrix_line_buf[weight_matrix_line_length + 1];
     char weight_matrix_weight_buf[weight_matrix_line_length + 1];
 
@@ -159,12 +158,6 @@ void print_weights_matrix(long int rows, long int cols)
             if (WEIGHTS[i][j] != -1.0) {
                 snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
                          "%06.2f ", WEIGHTS[i][j]);
-                if (strlen(weight_matrix_weight_buf) >
-                    (weight_matrix_weight_length)) {
-                    snprintf(weight_matrix_weight_buf,
-                             weight_matrix_line_length, "[????] ",
-                             WEIGHTS[i][j]);
-                }
             }
             else {
                 snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
@@ -333,6 +326,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
     unsigned long i, j;
     void *cell;
     double cell_value;
+
     stats->overwrite = 0;
     if (preserve == TRUE) {
         cell = CELL_INPUT_HANDLES[row_index];
@@ -340,8 +334,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
         cell += CELL_IN_SIZE * ((DATA_WIDTH - 1) / 2);
         if (!IS_NULL(cell)) {
             stats->overwrite = 1;
-            *stats->overwrite_value =
-                    (double)Rast_get_d_value(cell, IN_TYPE);
+            *stats->overwrite_value = (double)Rast_get_d_value(cell, IN_TYPE);
             return;
         }
     }
@@ -363,8 +356,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col,
                 /* only add if within neighborhood */
                 if (WEIGHTS[i][j] != -1.0) {
                     /* get data needed for chosen statistic */
-                    COLLECT_DATA(cell_value, WEIGHTS[i][j], min, max,
-                                 stats);
+                    COLLECT_DATA(cell_value, WEIGHTS[i][j], min, max, stats);
                 }
             }
             /* go to next cell on current row */
@@ -577,8 +569,7 @@ void interpolate_row(unsigned long row_index, unsigned long cols,
             WRITE_DOUBLE_VAL(cell_output, *stats->overwrite_value);
             /* write error/uncertainty output map? */
             if (write_err) {
-                Rast_set_f_value(err_output, 0,
-                                 FCELL_TYPE);
+                Rast_set_f_value(err_output, 0, FCELL_TYPE);
             }
         }
         /* enough reachable cells in input map? */
@@ -608,10 +599,10 @@ void interpolate_row(unsigned long row_index, unsigned long cols,
 
 /*
  * Pre-computes the matrix of spatial weights.
- * for operation mode "wmean" (spatially weighted mean), "constant" is passed as "0"
- * and distance-dependent weigths are calculated. For all other modes, "constant" is
+ * For operation mode "wmean" (spatially weighted mean), "constant" is passed as "0"
+ * and distance-dependent weights are calculated. For all other modes, "constant" is
  * passed as "1" and all cells within the circular neighborhood will be set to "1.0".
- * In both casses, all cells outside the neighborhood will be set to "-1.0".
+ * In both cases, all cells outside the neighborhood will be set to "-1.0".
  */
 void build_weights_matrix(double radius, double power, double res_x,
                           double res_y, int constant, int use_map_units)
@@ -743,7 +734,7 @@ int main(int argc, char *argv[])
     /* program settings */
     char *input;
     char *output;
-    char *mapset;
+    const char *mapset;
     double radius = 1.0;
     unsigned long min_cells = 12;
     double power = 2.0;
@@ -863,8 +854,7 @@ int main(int argc, char *argv[])
     parm.preserve = G_define_flag();
     parm.preserve->key = 'k';
     parm.preserve->label = _("Keep (preserve) original cell values");
-    parm.preserve->description =
-        _("By default original values are smoothed");
+    parm.preserve->description = _("By default original values are smoothed");
 
     parm.print_w = G_define_flag();
     parm.print_w->key = 'w';

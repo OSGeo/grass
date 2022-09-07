@@ -1,14 +1,14 @@
-# This package depends on automagic byte compilation
-# https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_2
-%global _python_bytecompile_extra 1
-
-%global shortver 79
+%global shortver 82
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	7.9.0
+Version:	8.2.0
 Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
+
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%bcond_without flexiblas
+%endif
 
 %if 0%{?rhel} >= 7
 %define __python %{__python3}
@@ -23,12 +23,16 @@ Summary:	GRASS GIS - Geographic Resources Analysis Support System
 License:	GPLv2+
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
-Source2:	%{name}-config.h
 
-Patch1:		grass-7.8.0-buildroot.diff
+# fix pkgconfig file
+Patch0:		grass-pkgconfig.patch
 
 BuildRequires:	bison
-BuildRequires:	blas-devel
+%if %{with flexiblas}
+BuildRequires:	flexiblas-devel
+%else
+BuildRequires:	blas-devel, lapack-devel
+%endif
 BuildRequires:	cairo-devel
 BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
@@ -40,7 +44,7 @@ BuildRequires:	freetype-devel
 BuildRequires:	gdal-devel
 BuildRequires:	geos-devel
 BuildRequires:	gettext
-BuildRequires:	lapack-devel
+BuildRequires:	laszip-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	libappstream-glib
 %endif
@@ -70,15 +74,6 @@ BuildRequires:	postgresql-devel
 BuildRequires:	libpq-devel
 %endif
 BuildRequires:	proj-devel
-%if (0%{?rhel} > 7 || 0%{?fedora} >= 30)
-BuildRequires:	proj-datumgrid
-%else
-BuildRequires:	proj-epsg
-BuildRequires:	proj-nad
-%endif
-%if 0%{?fedora} >= 30
-BuildRequires:	proj-datumgrid-world
-%endif
 %if (0%{?rhel} <= 6 && !0%{?fedora})
 # argparse is included in python2.7+ but not python2.6
 BuildRequires:	python-argparse
@@ -96,6 +91,9 @@ BuildRequires:	python3-pillow
 # EPEL6
 BuildRequires:	python-imaging
 %endif
+BuildRequires:	PDAL
+BuildRequires:	PDAL-libs
+BuildRequires:	PDAL-devel
 BuildRequires:	readline-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	subversion
@@ -103,18 +101,15 @@ BuildRequires:	unixODBC-devel
 BuildRequires:	zlib-devel
 BuildRequires:	bzip2-devel
 BuildRequires:	libzstd-devel
+BuildRequires: make
 
 Requires:	bzip2-libs
 Requires:	libzstd
 Requires:	geos
-%if (0%{?rhel} > 7 || 0%{?fedora} >= 30)
+# fedora >= 34: Nothing
+%if (0%{?rhel} > 7 || 0%{?fedora} < 34)
 Requires:	proj-datumgrid
-%else
-Requires:	proj-epsg
-Requires:	proj-nad
-%endif
-%if 0%{?fedora} >= 30
-Requires:  proj-datumgrid-world
+Requires:	proj-datumgrid-world
 %endif
 Requires:	python3
 %if 0%{?rhel} == 7
@@ -138,8 +133,10 @@ Requires:	python3-dateutil
 %if 0%{?rhel} && 0%{?rhel} < 7
 Requires: wxPython
 %else
-Requires: python3-wxpython4
+Requires:	python3-wxpython4
 %endif
+Requires:	PDAL
+Requires:	PDAL-libs
 
 %if "%{_lib}" == "lib"
 %global cpuarch 32
@@ -179,11 +176,14 @@ GRASS GIS development headers
 
 %prep
 %setup -q
-
-%patch1 -p1
+%patch0 -p1 -b.libdir
 
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
+
+%if %{with flexiblas}
+sed -i -e 's/-lblas/-lflexiblas/g' -e 's/-llapack/-lflexiblas/g' configure
+%endif
 
 # Fixup shebangs
 find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
@@ -198,7 +198,7 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-png \
 	--with-postgres \
 %if 0%{?rhel} > 7
-    --with-mysql=no \
+	--with-mysql=no \
 %else
 	--with-mysql \
 %endif
@@ -207,11 +207,16 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-fftw \
 	--with-blas \
 	--with-lapack \
+%if %{with flexiblas}
+	--with-blas-includes=%{_includedir}/flexiblas \
+	--with-lapack-includes=%{_includedir}/flexiblas \
+%endif
 	--with-cairo \
 %if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-freetype \
 %endif
 	--with-nls \
+	--with-pdal \
 	--with-readline \
 	--with-regex \
 	--with-openmp \
@@ -240,30 +245,16 @@ make %{?_smp_mflags}
 # this is not FHS compliant: hide grass-%%{version} in %%{libdir}
 %install
 %make_install \
-	DESTDIR=%{buildroot}%{_libdir} \
-	prefix=%{buildroot}%{_libdir} \
-	UNIX_BIN=%{buildroot}%{_bindir} \
+	DESTDIR=%{buildroot} \
+	prefix=%{_libdir} \
+	UNIX_BIN=%{_bindir} \
 	GISBASE_RUNTIME=%{_libdir}/%{name}%{shortver}
 
 # libraries and headers are in GISBASE = %%{_libdir}/%%{name}
 # keep them in GISBASE
 
-# fix paths:
-# Change GISBASE in startup script
-for I in %{buildroot}%{_bindir}/%{name}%{shortver} \
-	%{buildroot}%{_libdir}/%{name}%{shortver}/include/Make/Platform.make \
-	%{buildroot}%{_libdir}/%{name}%{shortver}/include/Make/Grass.make \
-	%{buildroot}%{_libdir}/%{name}%{shortver}/demolocation/.grassrc%{shortver} \
-	%{buildroot}%{_libdir}/%{name}%{shortver}/etc/fontcap; do
-	sed -i \
-		-e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
-		-e 's|%{buildroot}%{_libdir}/%{name}%{shortver}|%{_libdir}/%{name}%{shortver}|g' \
-		-e 's|%{buildroot}%{_bindir}|%{_bindir}|g' \
-		$I
-done
-
 # fix paths in grass.pc
-sed -i -e 's|%{_prefix}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
+sed -i -e 's|%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
 	%{name}.pc
 
 mkdir -p %{buildroot}%{_libdir}/pkgconfig
@@ -272,7 +263,18 @@ install -p -m 644 %{name}.pc %{buildroot}%{_libdir}/pkgconfig
 # Create multilib header
 mv %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h \
    %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config-%{cpuarch}.h
-install -p -m 644 %{SOURCE2} %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h
+echo '#include <bits/wordsize.h>
+
+#if __WORDSIZE == 32
+#include "grass/config-32.h"
+#else
+#if __WORDSIZE == 64
+#include "grass/config-64.h"
+#else
+#error "Unknown word size"
+#endif
+#endif' > %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h
+chmod 644 %{buildroot}%{_libdir}/%{name}%{shortver}/include/%{name}/config.h
 
 # Make man pages available on the system, convert to utf8 and avoid name conflict
 mkdir -p %{buildroot}%{_mandir}/man1
@@ -280,9 +282,6 @@ for man in $(ls %{buildroot}%{_libdir}/%{name}%{shortver}/docs/man/man1/*.1)
 do
 	iconv -f iso8859-1 -t utf8 $man > %{buildroot}%{_mandir}/man1/$(basename $man)"%{name}"
 done
-
-# create symlink to unversioned name
-ln -s %{_bindir}/%{name}%{shortver} %{buildroot}%{_bindir}/%{name}
 
 # symlink docs from GISBASE to standard system location
 mkdir -p %{buildroot}%{_docdir}
@@ -298,7 +297,7 @@ appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.osge
 #rm -rf %%{buildroot}%%{_prefix}/%%{name}-%%{version}
 
 # Finally move entire tree to shortver subdir
-#mv %{buildroot}%{_libdir}/%{name}-%{version} %{buildroot}%{_libdir}/%{name}%{shortver}
+#mv %%{buildroot}%%{_libdir}/%%{name}-%%{version} %%{buildroot}%%{_libdir}/%%{name}%%{shortver}
 
 # rpm macro for version checking (not from buildroot!)
 mkdir -p ${RPM_BUILD_ROOT}%{macrosdir}
@@ -364,6 +363,89 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Fri Jan 28 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
+- New upstream version GRASS GIS 8.0.0
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.6-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Thu Nov 11 2021 Sandro Mani <manisandro@gmail.com> - 7.8.6-3
+- Rebuild (gdal)
+
+* Sun Nov 07 2021 Björn Esser <besser82@fedoraproject.org> - 7.8.6-2
+- Add patch to fix installation path in pkgconfig file
+
+* Tue Nov 02 2021 Markus Neteler <neteler@mundialis.de> - 7.8.6-1
+- New upstream version GRASS GIS 7.8.6
+
+* Thu Oct 21 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-11
+- Rebuild (geos)
+
+* Tue Aug 10 2021 Orion Poplawski <orion@nwra.com> - 7.8.5-10
+- Rebuild for netcdf 4.8.0
+
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.5-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Mon Jun 21 2021 Markus Neteler <neteler@mundialis.de> - 7.8.5-8
+- fix ctypes for Python 3.10 (RHBZ #1973621)
+
+* Fri May 07 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-7
+- Rebuild (gdal)
+
+* Wed Mar 24 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-6
+- Bump
+
+* Sun Mar 07 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-5
+- Rebuild (proj)
+
+* Sat Feb 13 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-4
+- Rebuild (geos)
+
+* Mon Feb 08 2021 Pavel Raiskup <praiskup@redhat.com> - 7.8.5-3
+- rebuild for libpq ABI fix rhbz#1908268
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Tue Dec 22 2020 Markus Neteler <neteler@mundialis.de> - 7.8.5-1
+- New upstream version GRASS GIS 7.8.5
+
+* Tue Nov 24 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-6
+- Clean up proj-datumgrid requires < f34+
+
+* Fri Nov 20 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-5
+- Drop proj-datumgrid requires on f34+
+
+* Fri Nov  6 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-4
+- Rebuild (proj, gdal)
+
+* Wed Nov  4 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-3
+- Rebuild (PDAL)
+
+* Sat Oct 17 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-2
+- reinstate %%{name}-config.h (RHBZ #1889035) as being needed for QGIS
+
+* Mon Oct 05 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-1
+- New upstream version GRASS GIS 7.8.4
+- disabled %%{name}-config.h
+
+* Thu Aug 27 2020 Iñaki Úcar <iucar@fedoraproject.org> - 7.8.3-10
+- https://fedoraproject.org/wiki/Changes/FlexiBLAS_as_BLAS/LAPACK_manager
+
+* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.3-9
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.3-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Fri Jun 26 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-7
+- added PDAL support
+
+* Sun Jun 21 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-6
+- disable automagic byte compilation (BZ#1847153)
+
 * Tue May 26 2020 Markus Neteler <neteler@mundialis.de> - 7.8.3-5
 - fixed wxPython for F33 (BZ#1836761)
 

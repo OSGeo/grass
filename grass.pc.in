@@ -1,6 +1,6 @@
 # Package Information for pkg-config
 #
-# See also: grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ --config
+# See also: grass --config
 
 prefix=@prefix@/grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@
 exec_prefix=@prefix@/grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@

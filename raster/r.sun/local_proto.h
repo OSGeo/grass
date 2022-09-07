@@ -2,16 +2,15 @@
 
 
 void where_is_point(double *length, struct SunGeometryVarDay *sunVarGeom,
-		    struct GridGeometry *gridGeom);
+                    struct GridGeometry *gridGeom);
 void where_is_point_parallel(double *length, double *sunVarGeom_zp,
                              double *gridGeom_xx0,
                              double *gridGeom_yy0,
                              double *gridGeom_xg0,
                              double *gridGeom_yg0,
-                             double *gridGeom_stepx,
-                             double *gridGeom_stepy);
+                             double *gridGeom_stepx, double *gridGeom_stepy);
 int searching(double *length, struct SunGeometryVarDay *sunVarGeom,
-	      struct GridGeometry *gridGeom);
+              struct GridGeometry *gridGeom);
 int searching_parallel(double *length,
                        double *sunVarGeom_z_orig,
                        double *sunVarGeom_zmax,
@@ -25,8 +24,7 @@ int searching_parallel(double *length,
                        double *gridGeom_yg0,
                        double *gridGeom_stepx,
                        double *gridGeom_stepy,
-                       double *gridGeom_deltx,
-                       double *gridGeom_delty);
+                       double *gridGeom_deltx, double *gridGeom_delty);
 
 
 int useCivilTime();
@@ -44,14 +42,14 @@ void setHorizonInterval(double val);
 void setAngularLossDenominator();
 
 
-void cube(int, int);
+/* void cube(int, int); */
 
 double com_sol_const(int no_of_day);
 
 
 double brad(double, double *bh, struct SunGeometryVarDay *sunVarGeom,
-	    struct SunGeometryVarSlope *sunSlopeGeom,
-	    struct SolarRadVar *sunRadVar);
+            struct SunGeometryVarSlope *sunSlopeGeom,
+            struct SolarRadVar *sunRadVar);
 double brad_parallel(double sh, double *bh,
                      double *sunVarGeom_z_orig,
                      double *sunVarGeom_solarAltitude,
@@ -59,13 +57,12 @@ double brad_parallel(double sh, double *bh,
                      double *sunSlopeGeom_slope,
                      double *sunSlopeGeom_aspect,
                      double *sunRadVar_cbh,
-                     double *sunRadVar_linke,
-                     double *sunRadVar_G_norm_extra);
+                     double *sunRadVar_linke, double *sunRadVar_G_norm_extra);
 
 double drad(double, double bh, double *rr,
-	    struct SunGeometryVarDay *sunVarGeom,
-	    struct SunGeometryVarSlope *sunSlopeGeom,
-	    struct SolarRadVar *sunRadVar);
+            struct SunGeometryVarDay *sunVarGeom,
+            struct SunGeometryVarSlope *sunSlopeGeom,
+            struct SolarRadVar *sunRadVar);
 double drad_parallel(double sh, double bh, double *rr,
                      int *sunVarGeom_isShadow,
                      double *sunVarGeom_solarAltitude,
@@ -75,23 +72,22 @@ double drad_parallel(double sh, double bh, double *rr,
                      double *sunSlopeGeom_slope,
                      double *sunRadVar_cdh,
                      double *sunRadVar_linke,
-                     double *sunRadVar_G_norm_extra,
-                     double *sunRadVar_alb);
+                     double *sunRadVar_G_norm_extra, double *sunRadVar_alb);
 
 double brad_angle_loss(double, double *bh,
-		       struct SunGeometryVarDay *sunVarGeom,
-		       struct SunGeometryVarSlope *sunSlopeGeom,
-		       struct SolarRadVar *sunRadVar);
+                       struct SunGeometryVarDay *sunVarGeom,
+                       struct SunGeometryVarSlope *sunSlopeGeom,
+                       struct SolarRadVar *sunRadVar);
 double drad_angle_loss(double, double bh, double *rr,
-		       struct SunGeometryVarDay *sunVarGeom,
-		       struct SunGeometryVarSlope *sunSlopeGeom,
-		       struct SolarRadVar *sunRadVar);
+                       struct SunGeometryVarDay *sunVarGeom,
+                       struct SunGeometryVarSlope *sunSlopeGeom,
+                       struct SolarRadVar *sunRadVar);
 
 
 void com_par(struct SunGeometryConstDay *sungeom,
-	     struct SunGeometryVarDay *sunVarGeom,
-	     struct GridGeometry *gridGeom,
-	     double latitude, double longitude);
+             struct SunGeometryVarDay *sunVarGeom,
+             struct GridGeometry *gridGeom,
+             double latitude, double longitude);
 void com_par_parallel(double *sunGeom_lum_C11,
                       double *sunGeom_lum_C13,
                       double *sunGeom_lum_C22,
@@ -107,11 +103,10 @@ void com_par_parallel(double *sunGeom_lum_C11,
                       double *sunVarGeom_sunAzimuthAngle,
                       double *sunVarGeom_stepsinangle,
                       double *sunVarGeom_stepcosangle,
-                      double *gridGeom_stepxy,
-                      double latitude);
+                      double *gridGeom_stepxy, double latitude);
 
 void com_par_const(double longitTime, struct SunGeometryConstDay *sungeom,
-		   struct GridGeometry *gridGeom);
+                   struct GridGeometry *gridGeom);
 void com_par_const_parallel(double longitTime,
                             double *sunGeom_lum_C11,
                             double *sunGeom_lum_C13,
@@ -123,16 +118,15 @@ void com_par_const_parallel(double longitTime,
                             double *sunGeom_timeAngle,
                             double *sunGeom_sindecl,
                             double *sunGeom_cosdecl,
-                            double *gridGeom_sinlat,
-                            double *gridGeom_coslat);
+                            double *gridGeom_sinlat, double *gridGeom_coslat);
 
 double lumcline2(struct SunGeometryConstDay *sungeom,
-		 struct SunGeometryVarDay *sunVarGeom,
-		 struct SunGeometryVarSlope *sunSlopeGeom,
-		 struct GridGeometry *gridGeom,
-		 unsigned char *horizonpointer);
+                 struct SunGeometryVarDay *sunVarGeom,
+                 struct SunGeometryVarSlope *sunSlopeGeom,
+                 struct GridGeometry *gridGeom,
+                 unsigned char *horizonpointer);
 double lumcline2_parallel(double *sunGeom_timeAngle,
-                          int    *sunVarGeom_isShadow,
+                          int *sunVarGeom_isShadow,
                           double *sunVarGeom_solarAltitude,
                           double *sunVarGeom_sunAzimuthAngle,
                           double *sunVarGeom_z_orig,
@@ -155,12 +149,12 @@ double lumcline2_parallel(double *sunGeom_timeAngle,
                           unsigned char *horizonpointer);
 
 
-typedef double (*BeamRadFunc) (double sh, double *bh,
-			       struct SunGeometryVarDay * sunVarGeom,
-			       struct SunGeometryVarSlope * sunSlopeGeom,
-			       struct SolarRadVar * sunRadVar);
+typedef double (*BeamRadFunc)(double sh, double *bh,
+                              struct SunGeometryVarDay * sunVarGeom,
+                              struct SunGeometryVarSlope * sunSlopeGeom,
+                              struct SolarRadVar * sunRadVar);
 
-typedef double (*DiffRadFunc) (double sh, double bh, double *rr,
-			       struct SunGeometryVarDay * sunVarGeom,
-			       struct SunGeometryVarSlope * sunSlopeGeom,
-			       struct SolarRadVar * sunRadVar);
+typedef double (*DiffRadFunc)(double sh, double bh, double *rr,
+                              struct SunGeometryVarDay * sunVarGeom,
+                              struct SunGeometryVarSlope * sunSlopeGeom,
+                              struct SolarRadVar * sunRadVar);

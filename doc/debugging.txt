@@ -1,7 +1,7 @@
 GRASS GIS Debugging:
 
 See also
-http://grasswiki.osgeo.org/wiki/GRASS_Debugging
+https://grasswiki.osgeo.org/wiki/GRASS_Debugging
 
 ----------------------------------------------------
 At user level:
@@ -27,7 +27,7 @@ Further hints:
 ----------------------------------------------------
 
 To make gcc less tolerant in accepting errors and code flaws, compile
-with (see also ../INSTALL):
+with (see also the INSTALL.md file):
 
 export CFLAGS='-g -ansi -Wall -D_BSD_SOURCE=1 -D_SVID_SOURCE=1 -D_POSIX_SOURCE=1 -D_POSIX_C_SOURCE=199506L'
 
@@ -75,7 +75,7 @@ C Code debugging Software:
         Python debugger. )
 
     See mini tutorial here:
-    http://grass.osgeo.org/wiki/GRASS_Debugging
+    https://grasswiki.osgeo.org/wiki/GRASS_Debugging
 
 2b) Graphical front-end for command-line debugger: kdbg
       Use the menus

@@ -24,16 +24,18 @@ from core import globalvar
 from gui_core.gselect import Select
 from core.settings import UserSettings
 from grass.script import core as grass
-from gui_core.wrap import Button, StaticText, StaticBox, \
-    TextCtrl
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
 
 
 class VectorCleaningFrame(wx.Frame):
-
     def __init__(
-            self, parent, id=wx.ID_ANY,
-        title=_('Set up vector cleaning tools'),
-            style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
+        self,
+        parent,
+        id=wx.ID_ANY,
+        title=_("Set up vector cleaning tools"),
+        style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
+        **kwargs,
+    ):
         """
         Dialog for interactively defining vector cleaning tools
         """
@@ -46,113 +48,114 @@ class VectorCleaningFrame(wx.Frame):
             self.log = None
 
         # grass command
-        self.cmd = 'v.clean'
+        self.cmd = "v.clean"
 
         # statusbar
         self.CreateStatusBar()
 
         # icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(
-                    globalvar.ICONDIR,
-                    'grass.ico'),
-                wx.BITMAP_TYPE_ICO))
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
+        )
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         # input map to clean
-        self.inmap = ''
+        self.inmap = ""
 
         # cleaned output map
-        self.outmap = ''
+        self.outmap = ""
 
-        self.ftype = ''
+        self.ftype = ""
 
         # cleaning tools
         self.toolslines = {}
 
         self.tool_desc_list = [
-            _('break lines/boundaries'),
-            _('remove duplicates'),
-            _('remove dangles'),
-            _('change boundary dangles to lines'),
-            _('remove bridges'),
-            _('change bridges to lines'),
-            _('snap lines/boundaries'),
-            _('remove duplicate area centroids'),
-            _('break polygons'),
-            _('prune lines/boundaries'),
-            _('remove small areas'),
-            _('remove lines/boundaries of zero length'),
-            _('remove small angles at nodes')
+            _("break lines/boundaries"),
+            _("remove duplicates"),
+            _("remove dangles"),
+            _("change boundary dangles to lines"),
+            _("remove bridges"),
+            _("change bridges to lines"),
+            _("snap lines/boundaries"),
+            _("remove duplicate area centroids"),
+            _("break polygons"),
+            _("prune lines/boundaries"),
+            _("remove small areas"),
+            _("remove lines/boundaries of zero length"),
+            _("remove small angles at nodes"),
         ]
 
         self.tool_list = [
-            'break',
-            'rmdupl',
-            'rmdangle',
-            'chdangle',
-            'rmbridge',
-            'chbridge',
-            'snap',
-            'rmdac',
-            'bpol',
-            'prune',
-            'rmarea',
-            'rmline',
-            'rmsa'
+            "break",
+            "rmdupl",
+            "rmdangle",
+            "chdangle",
+            "rmbridge",
+            "chbridge",
+            "snap",
+            "rmdac",
+            "bpol",
+            "prune",
+            "rmarea",
+            "rmline",
+            "rmsa",
         ]
 
-        self.ftype = [
-            'point',
-            'line',
-            'boundary',
-            'centroid',
-            'area',
-            'face']
+        self.ftype = ["point", "line", "boundary", "centroid", "area", "face"]
 
         self.n_ftypes = len(self.ftype)
 
-        self.tools_string = ''
-        self.thresh_string = ''
-        self.ftype_string = ''
+        self.tools_string = ""
+        self.thresh_string = ""
+        self.ftype_string = ""
 
         self.SetStatusText(_("Set up vector cleaning tools"))
-        self.elem = 'vector'
-        self.ctlabel = _('Choose cleaning tools and set thresholds')
+        self.elem = "vector"
+        self.ctlabel = _("Choose cleaning tools and set thresholds")
 
         # top controls
-        self.inmaplabel = StaticText(parent=self.panel, id=wx.ID_ANY,
-                                     label=_('Select input vector map:'))
-        self.selectionInput = Select(parent=self.panel, id=wx.ID_ANY,
-                                     size=globalvar.DIALOG_GSELECT_SIZE,
-                                     type='vector')
+        self.inmaplabel = StaticText(
+            parent=self.panel, id=wx.ID_ANY, label=_("Select input vector map:")
+        )
+        self.selectionInput = Select(
+            parent=self.panel,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            type="vector",
+        )
         self.ftype_check = {}
-        ftypeBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
-                             label=_(' Feature type: '))
+        ftypeBox = StaticBox(
+            parent=self.panel, id=wx.ID_ANY, label=_(" Feature type: ")
+        )
         self.ftypeSizer = wx.StaticBoxSizer(ftypeBox, wx.HORIZONTAL)
 
-        self.outmaplabel = StaticText(parent=self.panel, id=wx.ID_ANY,
-                                      label=_('Select output vector map:'))
-        self.selectionOutput = Select(parent=self.panel, id=wx.ID_ANY,
-                                      size=globalvar.DIALOG_GSELECT_SIZE,
-                                      mapsets=[grass.gisenv()['MAPSET'], ],
-                                      fullyQualified=False,
-                                      type='vector')
+        self.outmaplabel = StaticText(
+            parent=self.panel, id=wx.ID_ANY, label=_("Select output vector map:")
+        )
+        self.selectionOutput = Select(
+            parent=self.panel,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            mapsets=[
+                grass.gisenv()["MAPSET"],
+            ],
+            fullyQualified=False,
+            type="vector",
+        )
 
         self.overwrite = wx.CheckBox(
-            parent=self.panel, id=wx.ID_ANY,
-            label=_('Allow output files to overwrite existing files'))
+            parent=self.panel,
+            id=wx.ID_ANY,
+            label=_("Allow output files to overwrite existing files"),
+        )
         self.overwrite.SetValue(
-            UserSettings.Get(
-                group='cmd',
-                key='overwrite',
-                subkey='enabled'))
+            UserSettings.Get(group="cmd", key="overwrite", subkey="enabled")
+        )
 
         # cleaning tools
-        self.ct_label = StaticText(parent=self.panel, id=wx.ID_ANY,
-                                   label=self.ctlabel)
+        self.ct_label = StaticText(parent=self.panel, id=wx.ID_ANY, label=self.ctlabel)
 
         self.ct_panel = self._toolsPanel()
 
@@ -168,14 +171,12 @@ class VectorCleaningFrame(wx.Frame):
 
         # Buttons
         self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_run = Button(
-            parent=self.panel,
-            id=wx.ID_ANY,
-            label=_("&Run"))
+        self.btn_run = Button(parent=self.panel, id=wx.ID_ANY, label=_("&Run"))
         self.btn_run.SetDefault()
         self.btn_clipboard = Button(parent=self.panel, id=wx.ID_COPY)
         self.btn_clipboard.SetToolTip(
-            _("Copy the current command string to the clipboard (Ctrl+C)"))
+            _("Copy the current command string to the clipboard (Ctrl+C)")
+        )
         self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
 
         # bindings
@@ -206,88 +207,83 @@ class VectorCleaningFrame(wx.Frame):
 
         inSizer.Add(
             self.inmaplabel,
-            pos=(
-                0,
-                0),
+            pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
-            border=1)
+            border=1,
+        )
         inSizer.Add(
             self.selectionInput,
-            pos=(
-                1,
-                0),
+            pos=(1, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
-            border=1)
+            border=1,
+        )
 
         self.ftype_check = [
-            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_('point')),
-            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_('line')),
-            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_('boundary')),
-            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_('centroid')),
-            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_('area')),
-            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_('face'))
+            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_("point")),
+            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_("line")),
+            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_("boundary")),
+            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_("centroid")),
+            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_("area")),
+            wx.CheckBox(parent=self.panel, id=wx.ID_ANY, label=_("face")),
         ]
 
         typeoptSizer = wx.BoxSizer(wx.HORIZONTAL)
         for num in range(0, self.n_ftypes):
             type_box = self.ftype_check[num]
-            if self.ftype[num] in ('point', 'line', 'area'):
+            if self.ftype[num] in ("point", "line", "area"):
                 type_box.SetValue(True)
             typeoptSizer.Add(type_box, flag=wx.ALIGN_LEFT, border=1)
 
-        self.ftypeSizer.Add(typeoptSizer,
-                            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=2)
+        self.ftypeSizer.Add(
+            typeoptSizer, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=2
+        )
 
         outSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         outSizer.Add(
             self.outmaplabel,
-            pos=(
-                0,
-                0),
+            pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
-            border=1)
+            border=1,
+        )
         outSizer.Add(
             self.selectionOutput,
-            pos=(
-                1,
-                0),
+            pos=(1, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
-            border=1)
+            border=1,
+        )
         replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
-        replaceSizer.Add(self.overwrite, proportion=1,
-                         flag=wx.ALL | wx.EXPAND, border=1)
+        replaceSizer.Add(
+            self.overwrite, proportion=1, flag=wx.ALL | wx.EXPAND, border=1
+        )
 
-        outSizer.Add(replaceSizer, pos=(2, 0),
-                     flag=wx.ALL | wx.EXPAND, border=1)
+        outSizer.Add(replaceSizer, pos=(2, 0), flag=wx.ALL | wx.EXPAND, border=1)
 
         #
         # tools selection
         #
         bodySizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        bodySizer.Add(self.ct_label, pos=(0, 0), span=(1, 2),
-                      flag=wx.ALL, border=5)
+        bodySizer.Add(self.ct_label, pos=(0, 0), span=(1, 2), flag=wx.ALL, border=5)
 
         bodySizer.Add(self.ct_panel, pos=(1, 0), span=(1, 2))
 
         manageBoxSizer = wx.GridBagSizer(hgap=10, vgap=1)
         # start with row 1 for nicer layout
+        manageBoxSizer.Add(self.btn_add, pos=(1, 0), border=2, flag=wx.ALL | wx.EXPAND)
         manageBoxSizer.Add(
-            self.btn_add, pos=(1, 0),
-            border=2, flag=wx.ALL | wx.EXPAND)
+            self.btn_remove, pos=(2, 0), border=2, flag=wx.ALL | wx.EXPAND
+        )
         manageBoxSizer.Add(
-            self.btn_remove, pos=(2, 0),
-            border=2, flag=wx.ALL | wx.EXPAND)
+            self.btn_moveup, pos=(3, 0), border=2, flag=wx.ALL | wx.EXPAND
+        )
         manageBoxSizer.Add(
-            self.btn_moveup, pos=(3, 0),
-            border=2, flag=wx.ALL | wx.EXPAND)
-        manageBoxSizer.Add(
-            self.btn_movedown, pos=(4, 0),
-            border=2, flag=wx.ALL | wx.EXPAND)
+            self.btn_movedown, pos=(4, 0), border=2, flag=wx.ALL | wx.EXPAND
+        )
 
-        bodySizer.Add(manageBoxSizer, pos=(1, 2),
-                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+        bodySizer.Add(
+            manageBoxSizer, pos=(1, 2), flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
+        )
 
         bodySizer.AddGrowableCol(2)
 
@@ -295,40 +291,37 @@ class VectorCleaningFrame(wx.Frame):
         # standard buttons
         #
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(self.btn_close,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
-        btnSizer.Add(self.btn_run,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
-        btnSizer.Add(self.btn_clipboard,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
-        btnSizer.Add(self.btn_help,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(self.btn_close, flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(self.btn_run, flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(self.btn_clipboard, flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(self.btn_help, flag=wx.LEFT | wx.RIGHT, border=5)
 
         #
         # put it all together
         #
-        sizer.Add(inSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(inSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(self.ftypeSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(self.ftypeSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(outSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(outSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                style=wx.LI_HORIZONTAL), proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            wx.StaticLine(parent=self, id=wx.ID_ANY, style=wx.LI_HORIZONTAL),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
-        sizer.Add(bodySizer, proportion=1,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(bodySizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                style=wx.LI_HORIZONTAL), proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            wx.StaticLine(parent=self, id=wx.ID_ANY, style=wx.LI_HORIZONTAL),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        sizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(sizer)
@@ -337,9 +330,9 @@ class VectorCleaningFrame(wx.Frame):
         self.Layout()
 
     def _toolsPanel(self):
-        ct_panel = scrolled.ScrolledPanel(parent=self.panel, id=wx.ID_ANY,
-                                          size=(500, 240),
-                                          style=wx.SUNKEN_BORDER)
+        ct_panel = scrolled.ScrolledPanel(
+            parent=self.panel, id=wx.ID_ANY, size=(500, 240), style=wx.SUNKEN_BORDER
+        )
 
         self.ct_sizer = wx.GridBagSizer(vgap=2, hgap=4)
 
@@ -356,36 +349,39 @@ class VectorCleaningFrame(wx.Frame):
         snum = len(self.toolslines.keys())
         num = snum + 1
         # tool
-        tool_cbox = wx.ComboBox(parent=self.ct_panel, id=1000 + num,
-                                size=(300, -1), choices=self.tool_desc_list,
-                                style=wx.CB_DROPDOWN |
-                                wx.CB_READONLY | wx.TE_PROCESS_ENTER)
+        tool_cbox = wx.ComboBox(
+            parent=self.ct_panel,
+            id=1000 + num,
+            size=(300, -1),
+            choices=self.tool_desc_list,
+            style=wx.CB_DROPDOWN | wx.CB_READONLY | wx.TE_PROCESS_ENTER,
+        )
         self.Bind(wx.EVT_COMBOBOX, self.OnSetTool, tool_cbox)
         # threshold
         txt_ctrl = TextCtrl(
-            parent=self.ct_panel, id=2000 + num, value='0.00', size=(100, -1),
-            style=wx.TE_NOHIDESEL)
+            parent=self.ct_panel,
+            id=2000 + num,
+            value="0.00",
+            size=(100, -1),
+            style=wx.TE_NOHIDESEL,
+        )
         self.Bind(wx.EVT_TEXT, self.OnThreshValue, txt_ctrl)
 
         # select with tool number
-        select = wx.CheckBox(
-            parent=self.ct_panel,
-            id=num,
-            label=str(num) + '.')
+        select = wx.CheckBox(parent=self.ct_panel, id=num, label=str(num) + ".")
         select.SetValue(False)
         self.Bind(wx.EVT_CHECKBOX, self.OnSelect, select)
 
         # start with row 1 and col 1 for nicer layout
-        self.ct_sizer.Add(select, pos=(num, 1),
-                          flag=wx.ALIGN_CENTER | wx.RIGHT)
-        self.ct_sizer.Add(tool_cbox, pos=(num, 2),
-                          flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
-        self.ct_sizer.Add(txt_ctrl, pos=(num, 3),
-                          flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
+        self.ct_sizer.Add(select, pos=(num, 1), flag=wx.ALIGN_CENTER | wx.RIGHT)
+        self.ct_sizer.Add(
+            tool_cbox, pos=(num, 2), flag=wx.ALIGN_CENTER | wx.RIGHT, border=5
+        )
+        self.ct_sizer.Add(
+            txt_ctrl, pos=(num, 3), flag=wx.ALIGN_CENTER | wx.RIGHT, border=5
+        )
 
-        self.toolslines[num] = {'tool_desc': '',
-                                'tool': '',
-                                'thresh': '0.00'}
+        self.toolslines[num] = {"tool_desc": "", "tool": "", "thresh": "0.00"}
 
         self.ct_panel.Layout()
         self.ct_panel.SetupScrolling()
@@ -395,12 +391,10 @@ class VectorCleaningFrame(wx.Frame):
         id = self.selected
 
         if id > 0:
-            self.FindWindowById(id + 1000).SetValue('')
-            self.toolslines[id]['tool_desc'] = ''
-            self.toolslines[id]['tool'] = ''
-            self.SetStatusText(
-                _("%s. cleaning tool removed, will be ignored") %
-                id)
+            self.FindWindowById(id + 1000).SetValue("")
+            self.toolslines[id]["tool_desc"] = ""
+            self.toolslines[id]["tool"] = ""
+            self.SetStatusText(_("%s. cleaning tool removed, will be ignored") % id)
         else:
             self.SetStatusText(_("Please select a cleaning tool to remove"))
 
@@ -414,16 +408,13 @@ class VectorCleaningFrame(wx.Frame):
             up_toolline = self.toolslines[id_up]
 
             self.FindWindowById(id_up).SetValue(True)
-            self.FindWindowById(
-                id_up +
-                1000).SetValue(
-                this_toolline['tool_desc'])
-            self.FindWindowById(id_up + 2000).SetValue(this_toolline['thresh'])
+            self.FindWindowById(id_up + 1000).SetValue(this_toolline["tool_desc"])
+            self.FindWindowById(id_up + 2000).SetValue(this_toolline["thresh"])
             self.toolslines[id_up] = this_toolline
 
             self.FindWindowById(id).SetValue(False)
-            self.FindWindowById(id + 1000).SetValue(up_toolline['tool_desc'])
-            self.FindWindowById(id + 2000).SetValue(up_toolline['thresh'])
+            self.FindWindowById(id + 1000).SetValue(up_toolline["tool_desc"])
+            self.FindWindowById(id + 2000).SetValue(up_toolline["thresh"])
             self.toolslines[id] = up_toolline
             self.selected = id_up
             self.SetStatusText(_("%s. cleaning tool moved up") % id)
@@ -443,19 +434,13 @@ class VectorCleaningFrame(wx.Frame):
             down_toolline = self.toolslines[id_down]
 
             self.FindWindowById(id_down).SetValue(True)
-            self.FindWindowById(
-                id_down +
-                1000).SetValue(
-                this_toolline['tool_desc'])
-            self.FindWindowById(
-                id_down +
-                2000).SetValue(
-                this_toolline['thresh'])
+            self.FindWindowById(id_down + 1000).SetValue(this_toolline["tool_desc"])
+            self.FindWindowById(id_down + 2000).SetValue(this_toolline["thresh"])
             self.toolslines[id_down] = this_toolline
 
             self.FindWindowById(id).SetValue(False)
-            self.FindWindowById(id + 1000).SetValue(down_toolline['tool_desc'])
-            self.FindWindowById(id + 2000).SetValue(down_toolline['thresh'])
+            self.FindWindowById(id + 1000).SetValue(down_toolline["tool_desc"])
+            self.FindWindowById(id + 2000).SetValue(down_toolline["thresh"])
             self.toolslines[id] = down_toolline
             self.selected = id_down
             self.SetStatusText(_("%s. cleaning tool moved down") % id)
@@ -470,26 +455,27 @@ class VectorCleaningFrame(wx.Frame):
         tool_no = id - 1000
         num = self.FindWindowById(id).GetCurrentSelection()
 
-        self.toolslines[tool_no]['tool_desc'] = self.tool_desc_list[num]
-        self.toolslines[tool_no]['tool'] = self.tool_list[num]
+        self.toolslines[tool_no]["tool_desc"] = self.tool_desc_list[num]
+        self.toolslines[tool_no]["tool"] = self.tool_list[num]
 
         self.SetStatusText(
-            str(tool_no) +
-            '. ' +
-            _("cleaning tool: '%s'") %
-            (self.tool_list[num]))
+            str(tool_no) + ". " + _("cleaning tool: '%s'") % (self.tool_list[num])
+        )
 
     def OnThreshValue(self, event):
         """Threshold value was entered"""
         id = event.GetId()
         num = id - 2000
-        self.toolslines[num]['thresh'] = self.FindWindowById(id).GetValue()
+        self.toolslines[num]["thresh"] = self.FindWindowById(id).GetValue()
 
         self.SetStatusText(
-            _("Threshold for %(num)s. tool '%(tool)s': %(thresh)s") % {
-                'num': num,
-                'tool': self.toolslines[num]['tool'],
-                'thresh': self.toolslines[num]['thresh']})
+            _("Threshold for %(num)s. tool '%(tool)s': %(thresh)s")
+            % {
+                "num": num,
+                "tool": self.toolslines[num]["tool"],
+                "thresh": self.toolslines[num]["thresh"],
+            }
+        )
 
     def OnSelect(self, event):
         """Tool was selected"""
@@ -506,39 +492,44 @@ class VectorCleaningFrame(wx.Frame):
 
     def OnDone(self, event):
         """Command done"""
-        self.SetStatusText('')
+        self.SetStatusText("")
 
     def OnCleaningRun(self, event):
-        """Builds options and runs v.clean
-        """
+        """Builds options and runs v.clean"""
         self.GetCmdStrings()
 
         err = list()
-        for p, name in ((self.inmap, _('Name of input vector map')),
-                        (self.outmap, _('Name for output vector map')),
-                        (self.tools_string, _('Tools')),
-                        (self.thresh_string, _('Threshold'))):
+        for p, name in (
+            (self.inmap, _("Name of input vector map")),
+            (self.outmap, _("Name for output vector map")),
+            (self.tools_string, _("Tools")),
+            (self.thresh_string, _("Threshold")),
+        ):
             if not p:
                 err.append(_("'%s' not defined") % name)
         if err:
-            GError(_("Some parameters not defined. Operation "
-                     "canceled.\n\n%s") % '\n'.join(err),
-                   parent=self)
+            GError(
+                _("Some parameters not defined. Operation " "canceled.\n\n%s")
+                % "\n".join(err),
+                parent=self,
+            )
             return
 
         self.SetStatusText(_("Executing selected cleaning operations..."))
         snum = len(self.toolslines.keys())
 
         if self.log:
-            cmd = [self.cmd,
-                   'input=%s' % self.inmap,
-                   'output=%s' % self.outmap,
-                   'tool=%s' % self.tools_string,
-                   'thres=%s' % self.thresh_string]
+            cmd = [
+                self.cmd,
+                "input=%s" % self.inmap,
+                "output=%s" % self.outmap,
+                "tool=%s" % self.tools_string,
+                "thres=%s" % self.thresh_string,
+            ]
             if self.ftype_string:
-                cmd.append('type=%s' % self.ftype_string)
+                cmd.append("type=%s" % self.ftype_string)
             if self.overwrite.IsChecked():
-                cmd.append('--overwrite')
+                cmd.append("--overwrite")
 
             self.log.RunCmd(cmd, onDone=self.OnDone)
             self.parent.Raise()
@@ -548,75 +539,78 @@ class VectorCleaningFrame(wx.Frame):
             else:
                 overwrite = False
 
-            RunCommand(self.cmd,
-                       input=self.inmap,
-                       output=self.outmap,
-                       type=self.ftype_string,
-                       tool=self.tools_string,
-                       thresh=self.thresh_string,
-                       overwrite=overwrite)
+            RunCommand(
+                self.cmd,
+                input=self.inmap,
+                output=self.outmap,
+                type=self.ftype_string,
+                tool=self.tools_string,
+                thresh=self.thresh_string,
+                overwrite=overwrite,
+            )
 
     def OnClose(self, event):
         self.Destroy()
 
     def OnHelp(self, event):
         """Show GRASS manual page"""
-        RunCommand('g.manual',
-                   quiet=True,
-                   parent=self,
-                   entry=self.cmd)
+        RunCommand("g.manual", quiet=True, parent=self, entry=self.cmd)
 
     def OnCopy(self, event):
         """Copy the command"""
         cmddata = wx.TextDataObject()
         # get tool and thresh strings
         self.GetCmdStrings()
-        cmdstring = '%s' % (self.cmd)
+        cmdstring = "%s" % (self.cmd)
         # list -> string
-        cmdstring += ' input=%s output=%s type=%s tool=%s thres=%s' % (
-            self.inmap, self.outmap, self.ftype_string, self.tools_string, self.thresh_string)
+        cmdstring += " input=%s output=%s type=%s tool=%s thres=%s" % (
+            self.inmap,
+            self.outmap,
+            self.ftype_string,
+            self.tools_string,
+            self.thresh_string,
+        )
         if self.overwrite.IsChecked():
-            cmdstring += ' --overwrite'
+            cmdstring += " --overwrite"
 
         cmddata.SetText(cmdstring)
         if wx.TheClipboard.Open():
             wx.TheClipboard.SetData(cmddata)
             wx.TheClipboard.Close()
-            self.SetStatusText(
-                _("Vector cleaning command copied to clipboard"))
+            self.SetStatusText(_("Vector cleaning command copied to clipboard"))
 
     def GetCmdStrings(self):
-        self.tools_string = ''
-        self.thresh_string = ''
-        self.ftype_string = ''
+        self.tools_string = ""
+        self.thresh_string = ""
+        self.ftype_string = ""
         # feature types
         first = 1
         for num in range(0, self.n_ftypes - 1):
             if self.ftype_check[num].IsChecked():
                 if first:
-                    self.ftype_string = '%s' % self.ftype[num]
+                    self.ftype_string = "%s" % self.ftype[num]
                     first = 0
                 else:
-                    self.ftype_string += ',%s' % self.ftype[num]
+                    self.ftype_string += ",%s" % self.ftype[num]
 
         # cleaning tools
         first = 1
         snum = len(self.toolslines.keys())
         for num in range(1, snum + 1):
-            if self.toolslines[num]['tool']:
+            if self.toolslines[num]["tool"]:
                 if first:
-                    self.tools_string = '%s' % self.toolslines[num]['tool']
-                    self.thresh_string = '%s' % self.toolslines[num]['thresh']
+                    self.tools_string = "%s" % self.toolslines[num]["tool"]
+                    self.thresh_string = "%s" % self.toolslines[num]["thresh"]
                     first = 0
                 else:
-                    self.tools_string += ',%s' % self.toolslines[num]['tool']
-                    self.thresh_string += ',%s' % self.toolslines[
-                        num]['thresh']
+                    self.tools_string += ",%s" % self.toolslines[num]["tool"]
+                    self.thresh_string += ",%s" % self.toolslines[num]["thresh"]
 
         self.inmap = self.selectionInput.GetValue()
         self.outmap = self.selectionOutput.GetValue()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app = wx.App()
     frame = VectorCleaningFrame(parent=None)
     frame.Show()

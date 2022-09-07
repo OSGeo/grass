@@ -15,6 +15,40 @@ APPDIR = $(ARCH_DISTDIR)/${MACOSX_APP_NAME}/Contents
 MAKE_DIR_CMD = mkdir -p -m 755
 GRASS_VERSION_BUILD = `/bin/date "+%y%m%d"`
 
+BUNDLE_VERSION := ${GRASS_VERSION_NUMBER}
+# add git commit hash to bundle version if it is a development release
+ifneq (,$(findstring dev,$(GRASS_VERSION_RELEASE)))
+BUNDLE_VERSION := ${GRASS_VERSION_NUMBER} (${GRASS_VERSION_GIT})
+endif
+
+# Figure out version for MACOSX_DEPLOYMENT_TARGET, with following order:
+# - if MACOSX_SDK is set then it will be used
+# - the result of `xcrun --show-sdk-path`
+# - check if Command Line Tools' SDKs is present, and use the default version
+# - use the MacOS version of building machine
+SDK_CMD = ""
+ifeq ($(strip $(MACOSX_SDK)),)
+SDK_CMD = xcrun --show-sdk-path
+else
+SDK_CMD = echo "${MACOSX_SDK}" | cut -d \  -f 2
+endif
+SDK := $(shell $(SDK_CMD))
+
+ifeq ($(SDK),)
+ifneq ($(wildcard /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/.*),)
+SDK = /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+endif
+endif
+
+ifneq ($(SDK),)
+DEPLOYMENT_TARGET_CMD = plutil -extract DefaultProperties.MACOSX_DEPLOYMENT_TARGET \
+	xml1 -o - $(SDK)/SDKSettings.plist | awk -F '[<>]' '/string/{print $$3}'
+else
+DEPLOYMENT_TARGET_CMD = sw_vers -productVersion | cut -d . -f 1,2
+endif
+
+DEPLOYMENT_TARGET := $(shell $(DEPLOYMENT_TARGET_CMD))
+
 # ugly hack - assume gdal prefix starts with -L flag
 ifndef GDAL_BIN
 GDAL_BIN = `echo "${GDALLIBS}" | sed -e "s,-L,," -e "s,/lib.*$$,/bin:,"`
@@ -51,8 +85,9 @@ $(OBJDIR)/Info.plist: Info.plist.in
 	$(MAKE_DIR_CMD) $(OBJDIR)
 	sed -e "s,@GRASS_VERSION_MAJOR@,$(GRASS_VERSION_MAJOR),g" \
 		-e "s,@GRASS_VERSION_MINOR@,$(GRASS_VERSION_MINOR),g" \
-		-e "s,@GRASS_VERSION_RELEASE@,$(GRASS_VERSION_RELEASE),g" \
-		-e "s,@GRASS_VERSION_BUILD@,$(GRASS_VERSION_BUILD),g" \
+		-e "s,@GRASS_VERSION_DATE@,$(GRASS_VERSION_DATE),g" \
+		-e "s,@BUNDLE_VERSION@,$(BUNDLE_VERSION),g" \
+		-e "s,@DEPLOYMENT_TARGET@,$(DEPLOYMENT_TARGET),g" \
 		$< > $@
 
 $(OBJDIR)/GRASS.scpt: GRASS.applescript

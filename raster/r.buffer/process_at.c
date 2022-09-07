@@ -35,17 +35,17 @@ int process_at(int from_row, int to_row, int start_col, int first_zone)
     from_ptr = map + MAPINDEX(from_row, col);
     to_ptr = map + MAPINDEX(to_row, col);
     while (col <= maxcol && *from_ptr == 1) {
-	if ((cur_zone = *to_ptr))
-	    cur_zone -= ZONE_INCR;
-	else
-	    cur_zone = ndist;
+        if ((cur_zone = *to_ptr))
+            cur_zone -= ZONE_INCR;
+        else
+            cur_zone = ndist;
 
-	if (first_zone < cur_zone)
-	    *to_ptr = first_zone + ZONE_INCR;
+        if (first_zone < cur_zone)
+            *to_ptr = first_zone + ZONE_INCR;
 
-	to_ptr++;
-	col++;
-	from_ptr++;
+        to_ptr++;
+        col++;
+        from_ptr++;
     }
 
     return col - 1;

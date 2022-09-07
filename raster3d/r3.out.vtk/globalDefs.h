@@ -18,17 +18,19 @@
 #ifndef __R3_OUT_VTK_GLOBALDEFS_H__
 #define __R3_OUT_VTK_GLOBALDEFS_H__
 
+#include <grass/raster3d.h>
+
 
 typedef struct
 {
     /*RASTER3D maps */
-    void *map;
-    void *map_r;
-    void *map_g;
-    void *map_b;
-    void *map_x;
-    void *map_y;
-    void *map_z;
+    RASTER3D_Map *map;
+    RASTER3D_Map *map_r;
+    RASTER3D_Map *map_g;
+    RASTER3D_Map *map_b;
+    RASTER3D_Map *map_x;
+    RASTER3D_Map *map_y;
+    RASTER3D_Map *map_z;
     /*raster maps */
     int top;
     int bottom;

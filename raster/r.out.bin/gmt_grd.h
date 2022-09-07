@@ -37,25 +37,25 @@
 
 struct GRD_HEADER
 {
-    int nx;			/* Number of columns */
-    int ny;			/* Number of rows */
-    int node_offset;		/* 0 for node grids, 1 for pixel grids */
-    double x_min;		/* Minimum x coordinate */
-    double x_max;		/* Maximum x coordinate */
-    double y_min;		/* Minimum y coordinate */
-    double y_max;		/* Maximum y coordinate */
-    double z_min;		/* Minimum z value */
-    double z_max;		/* Maximum z value */
-    double x_inc;		/* x increment */
-    double y_inc;		/* y increment */
-    double z_scale_factor;	/* grd values must be multiplied by this */
-    double z_add_offset;	/* After scaling, add this */
-    char x_units[GRD_UNIT_LEN];	/* units in x-direction */
-    char y_units[GRD_UNIT_LEN];	/* units in y-direction */
-    char z_units[GRD_UNIT_LEN];	/* grid value units */
-    char title[GRD_TITLE_LEN];	/* name of data set */
-    char command[GRD_COMMAND_LEN];	/* name of generating command */
-    char remark[GRD_REMARK_LEN];	/* comments re this data set */
+    int nx;                     /* Number of columns */
+    int ny;                     /* Number of rows */
+    int node_offset;            /* 0 for node grids, 1 for pixel grids */
+    double x_min;               /* Minimum x coordinate */
+    double x_max;               /* Maximum x coordinate */
+    double y_min;               /* Minimum y coordinate */
+    double y_max;               /* Maximum y coordinate */
+    double z_min;               /* Minimum z value */
+    double z_max;               /* Maximum z value */
+    double x_inc;               /* x increment */
+    double y_inc;               /* y increment */
+    double z_scale_factor;      /* grd values must be multiplied by this */
+    double z_add_offset;        /* After scaling, add this */
+    char x_units[GRD_UNIT_LEN]; /* units in x-direction */
+    char y_units[GRD_UNIT_LEN]; /* units in y-direction */
+    char z_units[GRD_UNIT_LEN]; /* grid value units */
+    char title[GRD_TITLE_LEN];  /* name of data set */
+    char command[GRD_COMMAND_LEN];      /* name of generating command */
+    char remark[GRD_REMARK_LEN];        /* comments re this data set */
 };
 
 /*-----------------------------------------------------------------------------------------

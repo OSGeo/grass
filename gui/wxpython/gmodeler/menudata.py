@@ -21,10 +21,8 @@ from core.menutree import MenuTreeModelBuilder
 
 
 class ModelerMenuData(MenuTreeModelBuilder):
-
     def __init__(self, filename=None):
         if not filename:
-            filename = os.path.join(
-                globalvar.WXGUIDIR, 'xml', 'menudata_modeler.xml')
+            filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_modeler.xml")
 
         MenuTreeModelBuilder.__init__(self, filename)

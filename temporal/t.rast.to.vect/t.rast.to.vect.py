@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.rast.to.vect
@@ -21,100 +21,100 @@
 #
 #############################################################################
 
-#%module
-#% description: Converts a space time raster dataset into a space time vector dataset
-#% keyword: temporal
-#% keyword: conversion
-#% keyword: raster
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Converts a space time raster dataset into a space time vector dataset
+# % keyword: temporal
+# % keyword: conversion
+# % keyword: raster
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STVDS_OUTPUT
-#%end
+# %option G_OPT_STVDS_OUTPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: type
-#% type: string
-#% description: Output feature type
-#% required: yes
-#% multiple: no
-#% options: point,line,area
-#%end
+# %option
+# % key: type
+# % type: string
+# % description: Output feature type
+# % required: yes
+# % multiple: no
+# % options: point,line,area
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: column
-#% type: string
-#% description: Name of attribute column to store value
-#% required: no
-#% multiple: no
-#% answer: value
-#%end
+# %option
+# % key: column
+# % type: string
+# % description: Name of attribute column to store value
+# % required: no
+# % multiple: no
+# % answer: value
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.to.vect processes to run in parallel, more than 1 process works only in conjunction with flag -t
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.to.vect processes to run in parallel, more than 1 process works only in conjunction with flag -t
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty vector maps
-#%end
+# %flag
+# % key: n
+# % description: Register empty vector maps
+# %end
 
-#%flag
-#% key: t
-#% description: Do not create attribute tables
-#%end
+# %flag
+# % key: t
+# % description: Do not create attribute tables
+# %end
 
-#%flag
-#% key: s
-#% description: Smooth corners of area features
-#%end
+# %flag
+# % key: s
+# % description: Smooth corners of area features
+# %end
 
-#%flag
-#% key: z
-#% label: Write raster values as z coordinate
-#% description: Table is not created. Currently supported only for points.
-#%end
+# %flag
+# % key: z
+# % label: Write raster values as z coordinate
+# % description: Table is not created. Currently supported only for points.
+# %end
 
-#%flag
-#% key: b
-#% label: Do not build vector topology
-#% description: Name must be SQL compliant
-#%end
+# %flag
+# % key: b
+# % label: Do not build vector topology
+# % description: Name must be SQL compliant
+# %end
 
-#%flag
-#% key: v
-#% description: Use raster values as categories instead of unique sequence (CELL only)
-#%end
+# %flag
+# % key: v
+# % description: Use raster values as categories instead of unique sequence (CELL only)
+# %end
 
 import sys
 import copy
@@ -122,6 +122,7 @@ import grass.script as gscript
 
 
 ############################################################################
+
 
 def main(options, flags):
     # lazy imports
@@ -144,7 +145,7 @@ def main(options, flags):
     v_flag = flags["v"]
     b_flag = flags["b"]
     z_flag = flags["z"]
-    
+
     # Make sure the temporal database exists
     tgis.init()
     # We need a database interface
@@ -162,9 +163,8 @@ def main(options, flags):
         return
 
     # Check the new stvds
-    new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif,
-                                 overwrite=overwrite)
-                                               
+    new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif, overwrite=overwrite)
+
     # Setup the flags
     flags = ""
     if t_flag is True:
@@ -177,22 +177,32 @@ def main(options, flags):
         flags += "b"
     if z_flag is True:
         flags += "z"
-    
+
     # Configure the r.to.vect module
-    to_vector_module = pymod.Module("r.to.vect", input="dummy",
-                                   output="dummy", run_=False,
-                                   finish_=False, flags=flags,
-                                   type=method, overwrite=overwrite,
-                                   quiet=True)
+    to_vector_module = pymod.Module(
+        "r.to.vect",
+        input="dummy",
+        output="dummy",
+        run_=False,
+        finish_=False,
+        flags=flags,
+        type=method,
+        overwrite=overwrite,
+        quiet=True,
+    )
 
     # The module queue for parallel execution, except if attribute tables should
     # be created. Then force single process use
     if t_flag is False:
         if nprocs > 1:
             nprocs = 1
-            gscript.warning(_("The number of parellel r.to.vect processes was "\
-                               "reduced to 1 because of the table attribute "\
-                               "creation"))
+            gscript.warning(
+                _(
+                    "The number of parellel r.to.vect processes was "
+                    "reduced to 1 because of the table attribute "
+                    "creation"
+                )
+            )
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
 
     count = 0
@@ -202,18 +212,24 @@ def main(options, flags):
     # run r.to.vect all selected maps
     for map in maps:
         count += 1
-        if sp.get_temporal_type() == 'absolute' and time_suffix == 'gran':
-            suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
-                                                      sp.get_granularity())
+        if sp.get_temporal_type() == "absolute" and time_suffix == "gran":
+            suffix = tgis.create_suffix_from_datetime(
+                map.temporal_extent.get_start_time(), sp.get_granularity()
+            )
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
-        elif sp.get_temporal_type() == 'absolute' and time_suffix == 'time':
+        elif sp.get_temporal_type() == "absolute" and time_suffix == "time":
             suffix = tgis.create_time_suffix(map)
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
         else:
             map_name = tgis.create_numeric_suffix(base, count, time_suffix)
-        new_map = tgis.open_new_map_dataset(map_name, None, type="vector",
-                                            temporal_extent=map.get_temporal_extent(),
-                                            overwrite=overwrite, dbif=dbif)
+        new_map = tgis.open_new_map_dataset(
+            map_name,
+            None,
+            type="vector",
+            temporal_extent=map.get_temporal_extent(),
+            overwrite=overwrite,
+            dbif=dbif,
+        )
         new_maps.append(new_map)
 
         mod = copy.deepcopy(to_vector_module)
@@ -221,7 +237,7 @@ def main(options, flags):
         sys.stderr.write(mod.get_bash() + "\n")
         process_queue.put(mod)
 
-        if count%10 == 0:
+        if count % 10 == 0:
             gscript.percent(count, num_maps, 1)
 
     # Wait for unfinished processes
@@ -229,8 +245,9 @@ def main(options, flags):
 
     # Open the new space time vector dataset
     ttype, stype, title, descr = sp.get_initial_values()
-    new_sp = tgis.open_new_stds(output, "stvds", ttype, title,
-                                descr, stype, dbif, overwrite)
+    new_sp = tgis.open_new_stds(
+        output, "stvds", ttype, title, descr, stype, dbif, overwrite
+    )
     # collect empty maps to remove them
     num_maps = len(new_maps)
     empty_maps = []
@@ -240,7 +257,7 @@ def main(options, flags):
     for map in new_maps:
         count += 1
 
-        if count%10 == 0:
+        if count % 10 == 0:
             gscript.percent(count, num_maps, 1)
 
         # Do not register empty maps
@@ -269,10 +286,12 @@ def main(options, flags):
             else:
                 names += ",%s" % (map.get_name())
 
-        gscript.run_command("g.remove", flags='f', type='vector', name=names, 
-                            quiet=True)
+        gscript.run_command(
+            "g.remove", flags="f", type="vector", name=names, quiet=True
+        )
 
     dbif.close()
+
 
 ############################################################################
 

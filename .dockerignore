@@ -1,9 +1,15 @@
 docker
 !docker/testdata
-!docker/alpine/alpine-py38-ctypes.patch
-!docker/alpine/alpine-py38-gisinit.patch
-.git
 .gitignore
 .github
 .travis
 .travis.yml
+
+# The following git files are needed by GRASS GIS to extract the revision
+# during compilation. If you are not using one of the Dockerimages from this
+# repository, delete the .git folder in your Dockerfile after compilation.
+.git
+!.git/HEAD
+!.git/refs/heads
+!.git/objects
+.git/objects/*

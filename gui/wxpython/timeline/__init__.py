@@ -1,4 +1,4 @@
 all = [
-    'g.gui.timeline',
-    'frame',
+    "g.gui.timeline",
+    "frame",
 ]
