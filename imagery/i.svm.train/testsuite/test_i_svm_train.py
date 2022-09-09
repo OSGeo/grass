@@ -11,9 +11,9 @@ Licence:   This program is free software under the GNU General Public
 import os
 import unittest
 import ctypes
+import shutil
 
 from grass.script import core as grass
-from grass.script import shutil_which
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -36,7 +36,7 @@ class IOValidationTest(TestCase):
     """Test input validation and output generation with i.svm.train"""
 
     @classmethod
-    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def setUpClass(cls):
         cls.tmp_rasts = []
         cls.tmp_groups = []
@@ -77,6 +77,25 @@ class IOValidationTest(TestCase):
         cls.runModule(
             "r.support", _map=cls.rast4, semantic_label="GRASS_RND3", quiet=True
         )
+        cls.rast5 = grass.tempname(10)
+        cls.runModule(
+            "r.mapcalc", expression=f"{cls.rast5}=rand(-1.0,1)", seed=1, quiet=True
+        )
+        cls.tmp_rasts.append(cls.rast5)
+        cls.runModule(
+            "r.support", _map=cls.rast5, semantic_label="GRASS_RND4", quiet=True
+        )
+        cls.rast6 = grass.tempname(10)
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.rast6}=if(row() == 1 && col() == 1, 10, if(row() == 2 && col() == 2, -10, rand(-10.0,10)))",
+            seed=1,
+            quiet=True,
+        )
+        cls.tmp_rasts.append(cls.rast6)
+        cls.runModule(
+            "r.support", _map=cls.rast6, semantic_label="GRASS_RND5", quiet=True
+        )
         # An empty imagery group
         cls.group1 = grass.tempname(10)
         cls.runModule("i.group", group=cls.group1, _input=(cls.rast1,), quiet=True)
@@ -90,6 +109,12 @@ class IOValidationTest(TestCase):
             "i.group", group=cls.group3, _input=(cls.rast2, cls.rast3), quiet=True
         )
         cls.tmp_groups.append(cls.group3)
+        # Range test group
+        cls.group4 = grass.tempname(10)
+        cls.runModule(
+            "i.group", group=cls.group4, _input=(cls.rast5, cls.rast6), quiet=True
+        )
+        cls.tmp_groups.append(cls.group4)
 
     @classmethod
     def tearDownClass(cls):
@@ -102,7 +127,7 @@ class IOValidationTest(TestCase):
         for sig in cls.tmp_sigs:
             I_signatures_remove(I_SIGFILE_TYPE_LIBSVM, sig)
 
-    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_empty_group(self):
         """Empty imagery group handling"""
         sigfile = grass.tempname(10)
@@ -117,7 +142,7 @@ class IOValidationTest(TestCase):
         self.assertTrue(isvm.outputs.stderr)
         self.assertIn(self.group1, isvm.outputs.stderr)
 
-    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_wrong_sigfile_mapset(self):
         """Attempt to use FQ signature file name with not current mapset"""
         sigfile = grass.tempname(10)
@@ -133,7 +158,7 @@ class IOValidationTest(TestCase):
         self.assertTrue(isvm.outputs.stderr)
         self.assertIn(mapset, isvm.outputs.stderr)
 
-    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_wrong_svm_param(self):
         """Attempt to use invalid SVM parametres"""
         sigfile = grass.tempname(10)
@@ -149,7 +174,7 @@ class IOValidationTest(TestCase):
         self.assertTrue(isvm.outputs.stderr)
         self.assertIn("eps", isvm.outputs.stderr)
 
-    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_creation_of_misc_files(self):
         """Validate creation of category, history and colour files"""
         sigfile = grass.tempname(10)
@@ -182,7 +207,7 @@ class IOValidationTest(TestCase):
         misc_file = utils.decode(cpath.value)
         self.assertTrue(os.path.isfile(misc_file))
 
-    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_dont_fail_if_misc_files_missing(self):
         """Colour file is missing but it should not cause a failure"""
         sigfile = grass.tempname(10)
@@ -214,6 +239,46 @@ class IOValidationTest(TestCase):
         G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
         self.assertTrue(os.path.isfile(misc_file))
+
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
+    def test_rescaling(self):
+        """Raster values should be rescaled"""
+        sigfile = grass.tempname(10)
+        csigdir = ctypes.create_string_buffer(GNAME_MAX)
+        I_get_signatures_dir(csigdir, I_SIGFILE_TYPE_LIBSVM)
+        sigdir = utils.decode(csigdir.value)
+        isvm = SimpleModule(
+            "i.svm.train",
+            group=self.group4,
+            _input=self.rast4,
+            signaturefile=sigfile,
+            quiet=True,
+        )
+        self.assertModule(isvm)
+        self.tmp_sigs.append(sigfile)
+        cpath = ctypes.create_string_buffer(GPATH_MAX)
+        G_file_name_misc(cpath, sigdir, "version", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "sig", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "cats", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "colr", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertFalse(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "rescale", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        with open(misc_file) as rf:
+            lines = rf.readlines()
+            val = float(lines[1].strip())
+            self.assertTrue(val - 20 < 0.001)
 
 
 if __name__ == "__main__":
