@@ -466,6 +466,8 @@ class GdalImportDialog(ImportDialog):
             return
 
         dsn = self.dsnInput.GetDsn()
+        if not dsn:
+            return
         ext = self.dsnInput.GetFormatExt()
 
         for layer, output, listId in data:
@@ -473,6 +475,9 @@ class GdalImportDialog(ImportDialog):
 
             if self.dsnInput.GetType() == "dir":
                 idsn = os.path.join(dsn, layer)
+            elif self.dsnInput.GetType() == "db":
+                if "PG:" in dsn:
+                    idsn = f"{dsn} table={layer}"
             else:
                 idsn = dsn
 
