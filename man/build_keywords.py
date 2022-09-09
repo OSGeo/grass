@@ -62,6 +62,10 @@ def get_module_man_html_file_path(module):
     """
     if addons_path and module in ",".join(addons_man_files):
         module_path = os.path.join(addons_path, module)
+        module_path = module_path.replace(
+            os.path.commonpath([path, module_path]),
+            ".",
+        )
     else:
         module_path = os.path.join(path, module)
     return module_path
