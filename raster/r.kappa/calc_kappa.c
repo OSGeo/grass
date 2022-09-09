@@ -74,7 +74,7 @@ void calc_kappa(void)
     /* print out the comission and omission accuracy, and conditional kappa */
     fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");
     for (i = 0; i < ncat; i++)
-        if ((kpp[i] == -999) && (i != 0))
+        if (kpp[i] == -999)
             fprintf(fd, "%ld\tNA\t\tNA\t\tNA\n", rlst[i]);
         else
             fprintf(fd, "%ld\t%f\t%f\t%f\n",
