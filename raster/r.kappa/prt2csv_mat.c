@@ -97,7 +97,7 @@ void prn2csv_error_mat(int out_cols, int hdr)
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)
-                fprintf(fd, "%d\t", cats[j]);
+                fprintf(fd, "%ld\t", cats[j]);
             else
                 fprintf(fd, "%s\t", cl);
         }
@@ -113,7 +113,7 @@ void prn2csv_error_mat(int out_cols, int hdr)
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)
-                fprintf(fd, "%d\t", cats[rndx]);
+                fprintf(fd, "%ld\t", cats[rndx]);
             else
                 fprintf(fd, "%s\t", cl);
             /* entries */
