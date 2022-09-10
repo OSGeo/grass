@@ -67,7 +67,7 @@ def get_module_man_html_file_path(module):
             ".",
         )
     else:
-        module_path = os.path.join(path, module)
+        module_path = f"./{module}"
     return module_path
 
 
