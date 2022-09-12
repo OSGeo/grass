@@ -34,38 +34,38 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct _options options;
-    struct _flags   flags;
+    struct _flags flags;
 
     struct Map_info Map;
-    
+
     FILE *fd;
-    
+
     int ilayer, use_ogr;
     char buf[GPATH_MAX], *dsn, *layer;
     const char *output;
     struct Cell_head cellhd;
     ds_t Ogr_ds;
-    
+
     G_gisinit(argv[0]);
-    
+
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
-    G_add_keyword(_("external")); 
+    G_add_keyword(_("external"));
     G_add_keyword("OGR");
     G_add_keyword("PostGIS");
     G_add_keyword(_("level1"));
 
-    module->description = _("Creates a new pseudo-vector map as a link to an OGR-supported layer "
-                            "or a PostGIS feature table.");
-    parse_args(argc, argv,
-               &options, &flags);
+    module->description =
+        _("Creates a new pseudo-vector map as a link to an OGR-supported layer "
+         "or a PostGIS feature table.");
+    parse_args(argc, argv, &options, &flags);
 
     use_ogr = TRUE;
     G_debug(1, "GRASS_VECTOR_OGR defined? %s",
             getenv("GRASS_VECTOR_OGR") ? "yes" : "no");
     if (options.dsn->answer &&
-       G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
+        G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
         /* -> PostgreSQL */
 #if defined HAVE_OGR && defined HAVE_POSTGRES
         if (getenv("GRASS_VECTOR_OGR"))
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 #endif /* HAVE_POSTRES */
 #endif /* HAVE_OGR && HAVE_POSTGRES */
     }
-    
+
 #ifdef HAVE_OGR
     /* GDAL drivers must be registered since check_projection()
      * depends on it (even use_ogr is false)*/
@@ -103,13 +103,14 @@ int main(int argc, char *argv[])
     dsn = NULL;
     if (options.dsn->answer)
         dsn = get_datasource_name(options.dsn->answer, use_ogr);
-    
+
     if (flags.list->answer || flags.tlist->answer) {
         /* list layers */
         if (!dsn)
-            G_fatal_error(_("Required parameter <%s> not set"), options.dsn->key);
-        list_layers(stdout, dsn, NULL,
-                    flags.tlist->answer ? TRUE : FALSE, use_ogr);
+            G_fatal_error(_("Required parameter <%s> not set"),
+                          options.dsn->key);
+        list_layers(stdout, dsn, NULL, flags.tlist->answer ? TRUE : FALSE,
+                    use_ogr);
         exit(EXIT_SUCCESS);
     }
 
@@ -117,11 +118,11 @@ int main(int argc, char *argv[])
     layer = NULL;
     if (options.layer->answer)
         layer = G_store(options.layer->answer);
-    ilayer = list_layers(NULL, dsn, &layer,
-                         FALSE, use_ogr);
+    ilayer = list_layers(NULL, dsn, &layer, FALSE, use_ogr);
     if (ilayer == -1) {
         if (options.layer->answer)
-            G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
+            G_fatal_error(_("Layer <%s> not available"),
+                          options.layer->answer);
         else
             G_fatal_error(_("No layer defined"));
     }
@@ -142,13 +143,14 @@ int main(int argc, char *argv[])
     Ogr_ds = NULL;
     if (strlen(options.dsn->answer) > 0) {
 #if GDAL_VERSION_NUM >= 2020000
-	Ogr_ds = GDALOpenEx(options.dsn->answer, GDAL_OF_VECTOR, NULL, NULL, NULL);
+        Ogr_ds =
+            GDALOpenEx(options.dsn->answer, GDAL_OF_VECTOR, NULL, NULL, NULL);
 #else
-	Ogr_ds = OGROpen(dsn, FALSE, NULL);
+        Ogr_ds = OGROpen(dsn, FALSE, NULL);
 #endif
     }
     if (Ogr_ds == NULL)
-	G_fatal_error(_("Unable to open data source <%s>"), dsn);
+        G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
     G_get_window(&cellhd);
 
@@ -173,16 +175,16 @@ int main(int argc, char *argv[])
     check_projection(&cellhd, Ogr_ds, ilayer, NULL, NULL, 0,
                      flags.override->answer, flags.proj->answer);
     ds_close(Ogr_ds);
-    
+
     /* create new vector map */
     putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");
-    if (Vect_open_new(&Map, output, WITHOUT_Z) < 0) /* dimension is set later from data source */
-	G_fatal_error(_("Unable to create vector map <%s>"), output);
+    if (Vect_open_new(&Map, output, WITHOUT_Z) < 0)     /* dimension is set later from data source */
+        G_fatal_error(_("Unable to create vector map <%s>"), output);
     Vect_set_error_handler_io(NULL, &Map);
-    
+
     Vect_hist_command(&Map);
     Vect_close(&Map);
-    
+
     /* Vect_open_new created 'head', 'coor', 'hist'
        -> delete 'coor' and create 'frmt' */
     sprintf(buf, "%s/%s/%s/%s/coor", G_location_path(), G_mapset(),
@@ -196,19 +198,20 @@ int main(int argc, char *argv[])
     sprintf(buf, "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL)
-        G_fatal_error(_("Unable to create file '%s/%s'"), buf, GV_FRMT_ELEMENT);
-    
+        G_fatal_error(_("Unable to create file '%s/%s'"), buf,
+                      GV_FRMT_ELEMENT);
+
     if (!use_ogr) {
         char *table_name, *schema_name;
-        
+
         get_table_name(layer, &table_name, &schema_name);
-        
+
         fprintf(fd, "format: postgis\n");
         fprintf(fd, "conninfo: %s\n", dsn);
         if (schema_name)
             fprintf(fd, "schema: %s\n", schema_name);
         fprintf(fd, "table: %s\n", table_name);
-          
+
         G_free(table_name);
         G_free(schema_name);
     }
@@ -219,18 +222,18 @@ int main(int argc, char *argv[])
     }
     if (options.where->answer)
         fprintf(fd, "where: %s\n", options.where->answer);
-    
+
     fclose(fd);
-    
+
     if (!flags.topo->answer) {
         Vect_set_open_level(1);
         if (Vect_open_old(&Map, output, G_mapset()) < 0)
-	    G_fatal_error(_("Unable to open vector map <%s>"), output);
+            G_fatal_error(_("Unable to open vector map <%s>"), output);
         Vect_build(&Map);
         Vect_close(&Map);
     }
-    
+
     G_done_msg(_("Link to vector map <%s> created."), output);
-    
+
     exit(EXIT_SUCCESS);
 }

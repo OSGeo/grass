@@ -29,12 +29,12 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 
     list = db_alloc_string_array(db.ntables);
     if (list == NULL && db.ntables > 0)
-	return DB_FAILED;
+        return DB_FAILED;
 
     for (i = 0; i < db.ntables; i++) {
-	if (db_set_string(&list[i], (char *)db.tables[i].name) != DB_OK) {
-	    return DB_FAILED;
-	}
+        if (db_set_string(&list[i], (char *)db.tables[i].name) != DB_OK) {
+            return DB_FAILED;
+        }
     }
 
 

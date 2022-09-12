@@ -39,17 +39,17 @@ int sqpAllocCol(SQLPSTMT * st, int n)
     int i;
 
     if (n > st->aCol) {
-	n += 15;
-	st->Col = (SQLPVALUE *) realloc(st->Col, n * sizeof(SQLPVALUE));
-	st->ColType = (int *)realloc(st->ColType, n * sizeof(int));
-	st->ColWidth = (int *)realloc(st->ColWidth, n * sizeof(int));
-	st->ColDecim = (int *)realloc(st->ColDecim, n * sizeof(int));
+        n += 15;
+        st->Col = (SQLPVALUE *) realloc(st->Col, n * sizeof(SQLPVALUE));
+        st->ColType = (int *)realloc(st->ColType, n * sizeof(int));
+        st->ColWidth = (int *)realloc(st->ColWidth, n * sizeof(int));
+        st->ColDecim = (int *)realloc(st->ColDecim, n * sizeof(int));
 
-	for (i = st->nCol; i < n; i++) {
-	    st->Col[i].s = NULL;
-	}
+        for (i = st->nCol; i < n; i++) {
+            st->Col[i].s = NULL;
+        }
 
-	st->aCol = n;
+        st->aCol = n;
     }
     return (1);
 }
@@ -60,14 +60,14 @@ int sqpAllocVal(SQLPSTMT * st, int n)
     int i;
 
     if (n > st->aVal) {
-	n += 15;
-	st->Val = (SQLPVALUE *) realloc(st->Val, n * sizeof(SQLPVALUE));
+        n += 15;
+        st->Val = (SQLPVALUE *) realloc(st->Val, n * sizeof(SQLPVALUE));
 
-	for (i = st->nVal; i < n; i++) {
-	    st->Val[i].s = NULL;
-	}
+        for (i = st->nVal; i < n; i++) {
+            st->Val[i].s = NULL;
+        }
 
-	st->aVal = n;
+        st->aVal = n;
     }
     return (1);
 }
@@ -79,7 +79,7 @@ int sqpFreeStmt(SQLPSTMT * st)
 
     /* columns */
     for (i = 0; i < st->aCol; i++)
-	free(st->Col[i].s);
+        free(st->Col[i].s);
 
     free(st->Col);
     free(st->ColType);
@@ -90,7 +90,7 @@ int sqpFreeStmt(SQLPSTMT * st)
 
     /* values */
     for (i = 0; i < st->aVal; i++)
-	free(st->Val[i].s);
+        free(st->Val[i].s);
 
     free(st->Val);
     st->aVal = 0;
@@ -100,7 +100,7 @@ int sqpFreeStmt(SQLPSTMT * st)
 
     /* Nodes (where) */
     if (st->upperNodeptr)
-	sqpFreeNode(st->upperNodeptr);
+        sqpFreeNode(st->upperNodeptr);
 
     free(st);
     return (1);

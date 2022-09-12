@@ -11,18 +11,16 @@
  * 1110 -> class 8: L1B data faulty
  * 1111 -> class 9: not processed due to deep ocean or cloud
  * Class 10-15: Combination of bits unused
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09CMGc(CELL pixel, int bandno) 
+CELL mod09CMGc(CELL pixel, int bandno)
 {
     CELL qctemp;
 
-    pixel >>= 2 + (4 * (bandno - 1));	/* bitshift [] to [0-3] etc. */
-    qctemp = pixel & 0x0F;    
-    
+    pixel >>= 2 + (4 * (bandno - 1));   /* bitshift [] to [0-3] etc. */
+    qctemp = pixel & 0x0F;
+
     return qctemp;
 }
-
-

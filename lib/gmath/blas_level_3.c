@@ -48,7 +48,7 @@
  *
  * */
 void G_math_d_aA_B(double **A, double **B, double a, double **C, int rows,
-		   int cols)
+                   int cols)
 {
     int i, j;
 
@@ -56,31 +56,31 @@ void G_math_d_aA_B(double **A, double **B, double a, double **C, int rows,
     /*If B is null, scale the matrix A with th scalar a */
     if (B == NULL) {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = a * A[i][j];
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = a * A[i][j];
 
-	return;
+        return;
     }
 
     /*select special cases */
     if (a == 1.0) {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = A[i][j] + B[i][j];
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = A[i][j] + B[i][j];
     }
     else if (a == -1.0) {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = B[i][j] - A[i][j];
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = B[i][j] - A[i][j];
     }
     else {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = a * A[i][j] + B[i][j];
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = a * A[i][j] + B[i][j];
     }
 
     return;
@@ -111,37 +111,37 @@ void G_math_d_aA_B(double **A, double **B, double a, double **C, int rows,
  *
  * */
 void G_math_f_aA_B(float **A, float **B, float a, float **C, int rows,
-		   int cols)
+                   int cols)
 {
     int i, j;
 
     /*If B is null, scale the matrix A with th scalar a */
     if (B == NULL) {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = a * A[i][j];
-	return;
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = a * A[i][j];
+        return;
     }
 
     /*select special cases */
     if (a == 1.0) {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = A[i][j] + B[i][j];
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = A[i][j] + B[i][j];
     }
     else if (a == -1.0) {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = B[i][j] - A[i][j];
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = B[i][j] - A[i][j];
     }
     else {
 #pragma omp for schedule (static) private(i, j)
-	for (i = rows - 1; i >= 0; i--)
-	    for (j = cols - 1; j >= 0; j--)
-		C[i][j] = a * A[i][j] + B[i][j];
+        for (i = rows - 1; i >= 0; i--)
+            for (j = cols - 1; j >= 0; j--)
+                C[i][j] = a * A[i][j] + B[i][j];
     }
 
     return;
@@ -172,18 +172,18 @@ void G_math_f_aA_B(float **A, float **B, float a, float **C, int rows,
  *
  * */
 void G_math_d_AB(double **A, double **B, double **C, int rows_A,
-		 int cols_A, int cols_B)
+                 int cols_A, int cols_B)
 {
     int i, j, k;
 
 #pragma omp for schedule (static) private(i, j, k)
     for (i = 0; i < rows_A; i++) {
-	for (j = 0; j < cols_B; j++) {
-	    C[i][j] = 0.0;
-	    for (k = cols_A - 1; k >= 0; k--) {
-		C[i][j] += A[i][k] * B[k][j];
-	    }
-	}
+        for (j = 0; j < cols_B; j++) {
+            C[i][j] = 0.0;
+            for (k = cols_A - 1; k >= 0; k--) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
     }
 
     return;
@@ -213,18 +213,18 @@ void G_math_d_AB(double **A, double **B, double **C, int rows_A,
  *
  * */
 void G_math_f_AB(float **A, float **B, float **C, int rows_A,
-		 int cols_A, int cols_B)
+                 int cols_A, int cols_B)
 {
     int i, j, k;
 
 #pragma omp for schedule (static) private(i, j, k)
     for (i = 0; i < rows_A; i++) {
-	for (j = 0; j < cols_B; j++) {
-	    C[i][j] = 0.0;
-	    for (k = cols_A - 1; k >= 0; k--) {
-		C[i][j] += A[i][k] * B[k][j];
-	    }
-	}
+        for (j = 0; j < cols_B; j++) {
+            C[i][j] = 0.0;
+            for (k = cols_A - 1; k >= 0; k--) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
     }
 
     return;

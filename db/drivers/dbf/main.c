@@ -38,11 +38,11 @@ int main(int argc, char *argv[])
     name = argv[0] + strlen(argv[0]);
 
     while (name > argv[0]) {
-	if (name[0] == '/') {
-	    name++;
-	    break;
-	}
-	name--;
+        if (name[0] == '/') {
+            name++;
+            break;
+        }
+        name--;
     }
 
     exit(db_driver(argc, argv));
