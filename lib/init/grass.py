@@ -65,7 +65,11 @@ _DEBUG = None
 # for wxpath
 _WXPYTHON_BASE = None
 
-ENCODING = locale.getdefaultlocale()[1]
+try:
+    # Python >= 3.11
+    ENCODING = locale.getencoding()
+except AttributeError:
+    ENCODING = locale.getdefaultlocale()[1]
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -1414,7 +1418,11 @@ def set_language(grass_config_dir):
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        language, encoding = locale.getdefaultlocale()
+        try:
+            # Python >= 3.11
+            language, encoding = locale.getlocale()
+        except AttributeError:
+            language, encoding = locale.getdefaultlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"
