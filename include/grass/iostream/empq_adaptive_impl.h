@@ -185,7 +185,7 @@ EMPQueueAdaptive<T,Key>::~EMPQueueAdaptive() {
 template<class T, class Key> 
 long 
 EMPQueueAdaptive<T,Key>::maxlen() const {
-  long m=-1;
+  long m = -1;
   switch(regim) {
   case INMEM:
 	assert(im);

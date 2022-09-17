@@ -542,7 +542,7 @@ int main(int argc, char *argv[])
 		    Rast_set_d_null_value(&outrast[col], 1);
 		}else{
 			outrast[col] = d_h1;
-			d_L =-1004*d_roh1*pow(ustar,3)*d_t0dem[row][col]/(d_h1*9.81*0.41);
+			d_L = -1004*d_roh1*pow(ustar,3)*d_t0dem[row][col]/(d_h1*9.81*0.41);
 			d_x = pow((1 - 16 * (5 / d_L)), 0.25);
 			d_psim =2 * log((1 + d_x) / 2) + log((1 + pow(d_x, 2)) / 2) -
 		    		2 * atan(d_x) + 0.5 * M_PI;
@@ -552,7 +552,7 @@ int main(int argc, char *argv[])
 		    	* log((5 / (d_z0m[row][col] * 0.1)) - d_psih);
 			if (row == rowDry && col == colDry) {	/*collect dry pix info */
 		    		d_h1 = (1004 * d_roh1) * (a * d_t0dem[row][col] + b) / d_rah_dry;
-				d_L =-1004*d_roh1*pow(ustar,3)*d_t0dem[row][col]/(d_h1*9.81*0.41);
+				d_L = -1004*d_roh1*pow(ustar,3)*d_t0dem[row][col]/(d_h1*9.81*0.41);
 				d_x = pow((1 - 16 * (5 / d_L)), 0.25);
 				d_psim =2 * log((1 + d_x) / 2) + log((1 + pow(d_x, 2)) / 2) -
 		    			2 * atan(d_x) + 0.5 * M_PI;

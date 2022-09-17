@@ -30,7 +30,7 @@ typedef int dimension_type; /* represent dimension of the grid */
 static const dimension_type dimension_type_max=INT_MAX;
 
 typedef short direction_type;  /* represent the direction of a cell */
-static const direction_type DIRECTION_UNDEF=-1;
+static const direction_type DIRECTION_UNDEF = -1;
 
 /* one of these options must be defined at compile time */
 /* #define ELEV_SHORT */
@@ -72,7 +72,7 @@ typedef int cclabel_type;
 #define CCLABEL_FMT "%3d"
 /* the following are not arbitrary. LABEL_UNDEF should be the
  * most-negative value */
-static const cclabel_type LABEL_UNDEF=-1;
+static const cclabel_type LABEL_UNDEF = -1;
 static const cclabel_type LABEL_BOUNDARY=0;
 static const cclabel_type LABEL_NODATA=1;
 static const cclabel_type LABEL_START=1; /* the next label will be used */

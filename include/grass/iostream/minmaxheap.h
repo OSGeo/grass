@@ -195,8 +195,8 @@ private:
 
 template <class T> 
 long BasicMinMaxHeap<T>::log2(long n) const {
-  long i=-1;
-  // let log2(0)==-1
+  long i = -1;
+  // let log2(0) == -1
   while(n) {
 	n = n >> 1;
 	i++;

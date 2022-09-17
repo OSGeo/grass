@@ -120,7 +120,7 @@ scan3line(FUN &funobj,
       ae = prev->read_item(&tmp);
       if (!done) {
 	assert(ae == AMI_ERROR_NO_ERROR);
-	a[2]=*tmp;
+	a[2]= *tmp;
       } else {
 	a[2] = nodata;
 	assert(ae == AMI_ERROR_END_OF_STREAM);
