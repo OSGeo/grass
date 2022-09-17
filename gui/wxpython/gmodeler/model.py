@@ -2796,7 +2796,7 @@ if __name__ == "__main__":
             if "input" in param["name"]:
                 io_data = "inputs"
                 object_type = "ComplexInput"
-                format_spec = self._getSupportedFormats(param['prompt'])
+                format_spec = self._getSupportedFormats(param["prompt"])
             else:
                 io_data = "inputs"
                 object_type = "LiteralInput"
@@ -2829,7 +2829,7 @@ if __name__ == "__main__":
             ):
                 io_data = "outputs"
                 object_type = "ComplexOutput"
-                format_spec = self._getSupportedFormats(param['prompt'])
+                format_spec = self._getSupportedFormats(param["prompt"])
 
                 self._write_input_output_object(
                     io_data, object_type, param["name"], item, desc, format_spec, ""
