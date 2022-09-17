@@ -27,7 +27,11 @@ if sys.version_info.major >= 3:
 
 
 def _get_encoding():
-    encoding = locale.getdefaultlocale()[1]
+    try:
+        # Python >= 3.11
+        encoding = locale.getencoding()
+    except AttributeError:
+        encoding = locale.getdefaultlocale()[1]
     if not encoding:
         encoding = "UTF-8"
     return encoding

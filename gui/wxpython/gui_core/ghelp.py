@@ -239,7 +239,11 @@ class AboutWindow(wx.Frame):
         if not self.langUsed:
             import locale
 
-            loc = locale.getdefaultlocale()
+            try:
+                # Python >= 3.11
+                loc = locale.getlocale()
+            except AttributeError:
+                loc = locale.getdefaultlocale()
             if loc == (None, None):
                 self.langUsed = _("unknown")
             else:
