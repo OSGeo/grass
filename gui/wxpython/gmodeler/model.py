@@ -2688,9 +2688,6 @@ import atexit
 import tempfile
 from grass.script import run_command
 from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
-from pywps.inout.formats import FORMATS
-
-sup_formats = [Format(form.mime_type) for form in FORMATS]
 
 
 class Model(Process):
@@ -2799,7 +2796,7 @@ if __name__ == "__main__":
             if "input" in param["name"]:
                 io_data = "inputs"
                 object_type = "ComplexInput"
-                format_spec = "supported_formats=sup_formats"
+                format_spec = self._getSupportedFormats(param['prompt'])
             else:
                 io_data = "inputs"
                 object_type = "LiteralInput"
@@ -2832,7 +2829,7 @@ if __name__ == "__main__":
             ):
                 io_data = "outputs"
                 object_type = "ComplexOutput"
-                format_spec = "supported_formats=sup_formats"
+                format_spec = self._getSupportedFormats(param['prompt'])
 
                 self._write_input_output_object(
                     io_data, object_type, param["name"], item, desc, format_spec, ""
@@ -3042,6 +3039,22 @@ if __name__ == "__main__":
             value = ""
 
         return value
+
+    @staticmethod
+    def _getSupportedFormats(prompt):
+        """Get supported formats of an item.
+
+        :param prompt: param['prompt'] of an item
+        :return:
+        """
+        if prompt == "vector":
+            sup_formats = 'Format("application/gml+xml")'
+        elif prompt == "raster":
+            sup_formats = 'Format("image/tif")'
+        else:
+            sup_formats = "FORMAT UNKNOWN - WRITE YOUR OWN"
+
+        return "supported_formats=[{}]".format(sup_formats)
 
 
 class WritePythonFile(WriteScriptFile):
