@@ -2883,6 +2883,7 @@ if __name__ == "__main__":
         for param in item.GetParams()["params"]:
             value = param["value"]
             age = param["age"]
+            overwrite = self.model.GetProperties().get("overwrite", "False")
 
             # output if: outputing a new non-intermediate layer and
             # either not empty or parameterized
@@ -2921,7 +2922,8 @@ if __name__ == "__main__":
 {indent2}output=os.path.join(
 {indent3}tempfile.gettempdir(),
 {indent4}{out} + "{format_ext}"),
-{indent5}format={format})
+{indent5}format={format},
+{indent6}overwrite={overwrite})
 """.format(
                         run_command=strcmd,
                         cmd=command,
@@ -2934,6 +2936,8 @@ if __name__ == "__main__":
                         format_ext=extension,
                         indent5=" " * (self.indent + 12),
                         format=format,
+                        indent6=" " * (self.indent + 12),
+                        overwrite=overwrite,
                     )
                 )
 
