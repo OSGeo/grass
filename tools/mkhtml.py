@@ -90,7 +90,18 @@ if grass_version != "unknown":
     )
 
 
-def decode(bytes_, encoding='UTF-8'):
+def _get_encoding():
+    try:
+        # Python >= 3.11
+        encoding = locale.getencoding()
+    except AttributeError:
+        encoding = locale.getdefaultlocale()[1]
+    if not encoding:
+        encoding = "UTF-8"
+    return encoding
+
+
+def decode(bytes_):
     """Decode bytes with default locale and return (unicode) string
 
     No-op if parameter is not bytes (assumed unicode string).
