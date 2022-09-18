@@ -2059,7 +2059,7 @@ class CmdPanel(wx.Panel):
                                 listData, False))
                         p['wxId'] = [self.win1.GetId()]
 
-                        def OnCheckItem(index, flag):
+                        def OnCheckItem(index=None, flag=None, event=None):
                             layers = list()
                             geometry = None
                             for layer, match, listId in self.win1.GetLayers():
@@ -2073,7 +2073,13 @@ class CmdPanel(wx.Panel):
                             # TODO: v.import has no geometry option
                             self.OnUpdateValues()  # TODO: replace by signal
 
-                        self.win1.OnCheckItem = OnCheckItem
+                        from core.globalvar import CheckWxVersion
+
+                        if CheckWxVersion([4, 1, 0]):
+                            self.win1.Bind(wx.EVT_LIST_ITEM_CHECKED, OnCheckItem)
+                            self.win1.Bind(wx.EVT_LIST_ITEM_UNCHECKED, OnCheckItem)
+                        else:
+                            self.win1.OnCheckItem = OnCheckItem
 
                 elif prompt == 'sql_query':
                     win = gselect.SqlWhereSelect(
