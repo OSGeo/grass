@@ -440,7 +440,7 @@ class VisibleMapset(object):
 
     def read(self):
         """Return the mapsets in the search path"""
-        with open(self.spath, "ab+") as f:
+        with open(self.spath, "rb") as f:
             lines = f.readlines()
             if lines:
                 return [decode(line.strip()) for line in lines]
