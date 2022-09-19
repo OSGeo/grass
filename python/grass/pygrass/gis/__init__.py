@@ -440,15 +440,14 @@ class VisibleMapset(object):
 
     def read(self):
         """Return the mapsets in the search path"""
-        with open(self.spath, "rb") as f:
-            lines = f.readlines()
-            if lines:
-                return [decode(line.strip()) for line in lines]
-        lns = [
-            "PERMANENT",
-        ]
-        self._write(lns)
-        return lns
+        try:
+            with open(self.spath, "rb") as f:
+                lines = f.readlines()
+                if lines:
+                    return [decode(line.strip()) for line in lines]
+                return [self.mapset]
+        except FileNotFoundError:
+            return [self.mapset, "PERMANENT"]
 
     def _write(self, mapsets):
         """Write to SEARCH_PATH file the changes in the search path
