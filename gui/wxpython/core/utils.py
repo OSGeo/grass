@@ -679,7 +679,7 @@ def _parseFormats(output, writableOnly=False):
 
         if name in ('Memory', 'Virtual Raster', 'In Memory Raster'):
             continue
-        if name in ('PostgreSQL', 'SQLite',
+        if name in ('PostgreSQL', 'SQLite', 'SQLite / Spatialite',
                     'ODBC', 'ESRI Personal GeoDatabase',
                     'Rasterlite',
                     'PostGIS WKT Raster driver',
