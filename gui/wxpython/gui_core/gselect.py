@@ -2139,7 +2139,7 @@ class GdalSelect(wx.Panel):
     def SetDatabase(self, db):
         """Update database panel."""
         sizer = self.dbPanel.GetSizer()
-        showBrowse = db in ("SQLite", "Rasterlite")
+        showBrowse = db in ("SQLite", "SQLite / Spatialite", "Rasterlite")
         showDirbrowse = db in ("FileGDB")
         showChoice = db in (
             "PostgreSQL",
