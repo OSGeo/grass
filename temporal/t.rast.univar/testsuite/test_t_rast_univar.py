@@ -105,6 +105,8 @@ class TestRasterUnivar(TestCase):
         """Remove the temporary region"""
         cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.runModule("t.remove", flags="df", type="strds", inputs="B")
+        cls.runModule("g.remove", flags="f", type="raster", name="zones")
+
         cls.del_temp_region()
 
     def test_1(self):
