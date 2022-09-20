@@ -29,7 +29,15 @@ import grass.script as gscript
 
 
 def print_gridded_dataset_univar_statistics(
-    type, input, output, where, extended, no_header=False, fs="|", rast_region=False
+    type,
+    input,
+    output,
+    where,
+    extended,
+    no_header=False,
+    fs="|",
+    rast_region=False,
+    zones=None,
 ):
     """Print univariate statistics for a space time raster or raster3d dataset
 
@@ -43,6 +51,7 @@ def print_gridded_dataset_univar_statistics(
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
            Only available for strds.
+    :param zones: raster map with zones to calculate statistics for
     """
 
     # We need a database interface
@@ -67,8 +76,10 @@ def print_gridded_dataset_univar_statistics(
 
     if no_header is False:
         string = ""
-        string += "id" + fs + "start" + fs + "end" + fs + "mean" + fs
-        string += "min" + fs + "max" + fs
+        string += "id" + fs + "start" + fs + "end" + fs
+        if zones:
+            string += "zone" + fs
+        string += "mean" + fs + "min" + fs + "max" + fs
         string += "mean_of_abs" + fs + "stddev" + fs + "variance" + fs
         string += "coeff_var" + fs + "sum" + fs + "null_cells" + fs + "cells"
         string += fs + "non_null_cells"
@@ -95,11 +106,15 @@ def print_gridded_dataset_univar_statistics(
             flag += "r"
 
         if type == "strds":
-            stats = gscript.parse_command("r.univar", map=id, flags=flag)
+            univar_stats = gscript.read_command(
+                "r.univar", map=id, flags=flag, zones=zones
+            ).rstrip()
         elif type == "str3ds":
-            stats = gscript.parse_command("r3.univar", map=id, flags=flag)
+            univar_stats = gscript.read_command(
+                "r3.univar", map=id, flags=flag, zones=zones
+            ).rstrip()
 
-        if not stats:
+        if not univar_stats:
             if type == "strds":
                 gscript.warning(
                     _("Unable to get statistics for raster map " "<%s>") % id
@@ -109,19 +124,34 @@ def print_gridded_dataset_univar_statistics(
                     _("Unable to get statistics for 3d raster map" " <%s>") % id
                 )
             continue
+        eol = ""
 
-        string += str(id) + fs + str(start) + fs + str(end)
-        string += fs + str(stats["mean"]) + fs + str(stats["min"])
-        string += fs + str(stats["max"]) + fs + str(stats["mean_of_abs"])
-        string += fs + str(stats["stddev"]) + fs + str(stats["variance"])
-        string += fs + str(stats["coeff_var"]) + fs + str(stats["sum"])
-        string += fs + str(stats["null_cells"]) + fs + str(stats["cells"])
-        string += fs + str(int(stats["cells"]) - int(stats["null_cells"]))
-        if extended is True:
-            string += fs + str(stats["first_quartile"]) + fs + str(stats["median"])
-            string += (
-                fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
-            )
+        for idx, stats_kv in enumerate(univar_stats.split(";")):
+            stats = gscript.utils.parse_key_val(stats_kv)
+            string += str(id) + fs + str(start) + fs + str(end)
+            if zones:
+                if idx == 0:
+                    zone = str(stats["zone"])
+                    string = ""
+                    continue
+                string += fs + str(zone)
+                if "zone" in stats:
+                    zone = str(stats["zone"])
+                    eol = "\n"
+                else:
+                    eol = ""
+            string += fs + str(stats["mean"]) + fs + str(stats["min"])
+            string += fs + str(stats["max"]) + fs + str(stats["mean_of_abs"])
+            string += fs + str(stats["stddev"]) + fs + str(stats["variance"])
+            string += fs + str(stats["coeff_var"]) + fs + str(stats["sum"])
+            string += fs + str(stats["null_cells"]) + fs + str(stats["n"])
+            string += fs + str(int(stats["n"]))
+            if extended is True:
+                string += fs + str(stats["first_quartile"]) + fs + str(stats["median"])
+                string += (
+                    fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
+                )
+            string += eol
 
         if output is None:
             print(string)
