@@ -348,7 +348,7 @@ class AuiToolbarController(ToolbarController):
 
 
 class BaseToolbar(ToolBar):
-    """Abstract toolbar class.
+    """Abstract basic toolbar class.
 
     Following code shows how to create new basic toolbar:
 
@@ -427,7 +427,7 @@ class BaseToolbar(ToolBar):
 
 
 class AuiToolbar(aui.AuiToolBar):
-    """Abstract toolbar class.
+    """Abstract AUI toolbar class.
 
     Toolbar for integration with the AUI layout system."""
 
