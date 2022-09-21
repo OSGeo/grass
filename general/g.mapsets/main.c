@@ -292,7 +292,6 @@ int main(int argc, char *argv[])
      */
 
     no_tokens = G_number_of_tokens(tokens);
-
     for (n = 0; n < no_tokens; n++) {
         skip = 0;
         for (i = n; i < no_tokens; i++) {
@@ -326,9 +325,12 @@ void append_mapset(char **path, const char *mapset)
     int len = (*path == NULL ? 0 : strlen(*path));
 
     *path = (char *)G_realloc(*path, len + strlen(mapset) + 2);
-    if (!len)
+    if (!len) {
         *path[0] = '\0';
-    strcat(*path, mapset);
-    strcat(*path, " ");
+        strcat(*path, mapset);
+    } else {
+        strcat(*path, " ");
+        strcat(*path, mapset);
+    }
     return;
 }
