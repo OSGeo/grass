@@ -109,7 +109,7 @@ class ToolbarController:
         for tool in toolData:
             self.CreateTool(*tool)
 
-        self.widget._data = toolData
+        self.widget.setToolData(toolData)
 
     def CreateTool(self, label, bitmap, kind, shortHelp, longHelp, handler, pos=-1):
         """Add tool to the toolbar
@@ -166,7 +166,7 @@ class ToolbarController:
 
         :param enable: True for enable otherwise disable
         """
-        for tool in self.widget._data:
+        for tool in self.widget.getToolData():
             if isinstance(tool[0], tuple):
                 if tool[0][0] == "":  # separator
                     continue
@@ -301,7 +301,7 @@ class ToolbarController:
 
 
 class AuiToolbarController(ToolbarController):
-    """Provides handling for aui.AuiToolBar widget"""
+    """Provides handling for wx.lib.agw.aui.auibar.AuiToolBar widget"""
 
     def _defineTool(self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL):
         """Define tool"""
@@ -387,6 +387,12 @@ class BaseToolbar(ToolBar):
             toolSwitcher=toolSwitcher,
         )
 
+    def getToolData(self):
+        return self._data
+
+    def setToolData(self, data):
+        self._data = data
+
     def _toolbarData(self):
         """Toolbar data (virtual)"""
         return None
@@ -461,6 +467,12 @@ class AuiToolbar(aui.AuiToolBar):
             parent=self.parent,
             toolSwitcher=toolSwitcher,
         )
+
+    def getToolData(self):
+        return self._data
+
+    def setToolData(self, data):
+        self._data = data
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
