@@ -91,7 +91,7 @@ BaseIcons = {
 
 
 class ToolbarController:
-    """Provides handling for wx.Toolbar widget"""
+    """Controller specialized for wx.ToolBar subclass."""
 
     def __init__(self, classObject, widget, parent, toolSwitcher):
         """
@@ -161,7 +161,7 @@ class ToolbarController:
 
         return tool
 
-    def EnableLongHelp(self, enable=True):
+    def EnableLongHelp(self, enable):
         """Enable/disable long help
 
         :param enable: True for enable otherwise disable
@@ -211,7 +211,7 @@ class ToolbarController:
             size = self.classObject.GetBestSize(self.widget)
             self.classObject.SetSize(self.widget, (size[0] + width, size[1]))
 
-    def Enable(self, tool, enable=True):
+    def Enable(self, tool, enable):
         """Enable/Disable defined tool
 
         :param str/tuple tool: name
@@ -230,7 +230,7 @@ class ToolbarController:
 
         self.classObject.EnableTool(self.widget, id, enable)
 
-    def EnableAll(self, enable=True):
+    def EnableAll(self, enable):
         """Enable/Disable all tools
 
         :param enable: True to enable otherwise disable tool
@@ -240,7 +240,7 @@ class ToolbarController:
                 continue
             self.Enable(item[0], enable)
 
-    def GetToolbarData(self, data):
+    def _getToolbarData(self, data):
         """Define tool"""
         retData = list()
         for args in data:
@@ -263,7 +263,7 @@ class ToolbarController:
             )
         return ("", "", "", "", "", "")  # separator
 
-    def OnMenu(self, data):
+    def _onMenu(self, data):
         """Toolbar pop-up menu"""
         menu = Menu()
 
@@ -276,7 +276,7 @@ class ToolbarController:
         self.classObject.PopupMenu(self.widget, menu)
         menu.Destroy()
 
-    def CreateSelectionButton(self, tooltip=_("Select graphics tool")):
+    def CreateSelectionButton(self, tooltip):
         """Add button to toolbar for selection of graphics drawing mode.
 
         Button must be custom (not toolbar tool) to set smaller width.
@@ -301,10 +301,11 @@ class ToolbarController:
 
 
 class AuiToolbarController(ToolbarController):
-    """Provides handling for wx.lib.agw.aui.auibar.AuiToolBar widget"""
+    """Controller specialized for wx.lib.agw.aui.auibar.AuiToolBar subclass"""
 
     def _defineTool(self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL):
-        """Define tool"""
+        """Define tool.
+        Position is not needed since wx.lib.agw.aui.auibar.AuiToolBar does not have InsertTool method."""
         if name:
             return (
                 name,
@@ -397,53 +398,32 @@ class BaseToolbar(ToolBar):
         """Toolbar data (virtual)"""
         return None
 
-    def _getToolbarData(self, data):
-        """@copydoc ToolbarController:_getToolbarData()"""
-        return self.controller.GetToolbarData(data)
-
-    def _onMenu(self, data):
-        """@copydoc ToolbarController:_onMenu()"""
-        self.controller.OnMenu(data)
-
-    def InitToolbar(self, toolData):
-        """@copydoc ToolbarController:InitToolbar()"""
-        self.controller.InitToolbar(toolData)
-
     def CreateTool(self, *args, **kwargs):
-        """@copydoc ToolbarController:CreateTool()"""
-        return self.controller.CreateTool(*args, **kwargs)
-
-    def EnableLongHelp(self, enable=True):
-        """@copydoc ToolbarController:EnableLongHelp()"""
-        self.controller.EnableLongHelp(enable)
-
-    def OnTool(self, event):
-        """@copydoc ToolbarController:OnTool()"""
-        self.controller.OnTool(event)
-
-    def SelectTool(self, id):
-        """@copydoc ToolbarController:SelectTool()"""
-        self.controller.SelectTool(id)
+        """@copydoc ToolbarController::CreateTool()"""
+        self.controller.CreateTool(*args, **kwargs)
 
     def SelectDefault(self):
-        """@copydoc ToolbarController:SelectDefault()"""
+        """@copydoc ToolbarController::SelectDefault()"""
         self.controller.SelectDefault(self._default)
 
-    def FixSize(self, width):
-        """@copydoc ToolbarController:FixSize()"""
-        self.controller.FixSize(width)
+    def EnableLongHelp(self, enable=True):
+        """@copydoc ToolbarController::EnableLongHelp()"""
+        self.controller.EnableLongHelp(enable)
 
     def Enable(self, tool, enable=True):
-        """@copydoc ToolbarController:Enable()"""
+        """@copydoc ToolbarController::Enable()"""
         self.controller.Enable(tool, enable)
 
     def EnableAll(self, enable=True):
-        """@copydoc ToolbarController:EnableAll()"""
+        """@copydoc ToolbarController::EnableAll()"""
         self.controller.EnableAll(enable)
 
     def CreateSelectionButton(self, tooltip=_("Select graphics tool")):
-        """@copydoc ToolbarController:CreateSelectionButton()"""
+        """@copydoc ToolbarController::CreateSelectionButton()"""
         return self.controller.CreateSelectionButton(tooltip)
+
+    def __getattr__(self, name):
+        return getattr(self.controller, name)
 
 
 class AuiToolbar(aui.AuiToolBar):
@@ -478,53 +458,28 @@ class AuiToolbar(aui.AuiToolBar):
         """Toolbar data (virtual)"""
         return None
 
-    def _getToolbarData(self, data):
-        """@copydoc ToolbarController:_getToolbarData()"""
-        return self.controller.GetToolbarData(data)
-
-    def _onMenu(self, data):
-        """@copydoc ToolbarController:_onMenu()"""
-        self.controller.OnMenu(data)
-
-    def InitToolbar(self, toolData):
-        """@copydoc ToolbarController:InitToolbar()"""
-        self.controller.InitToolbar(toolData)
-
-    def CreateTool(self, *args, **kwargs):
-        """@copydoc ToolbarController:CreateTool()"""
-        return self.controller.CreateTool(*args, **kwargs)
-
-    def EnableLongHelp(self, enable=True):
-        """@copydoc ToolbarController:EnableLongHelp()"""
-        self.controller.EnableLongHelp(enable)
-
-    def OnTool(self, event):
-        """@copydoc ToolbarController:OnTool()"""
-        self.controller.OnTool(event)
-
-    def SelectTool(self, id):
-        """@copydoc ToolbarController:SelectTool()"""
-        self.controller.SelectTool(id)
-
     def SelectDefault(self):
-        """@copydoc ToolbarController:SelectDefault()"""
+        """@copydoc ToolbarController::SelectDefault()"""
         self.controller.SelectDefault(self._default)
 
-    def FixSize(self, width):
-        """@copydoc ToolbarController:FixSize()"""
-        self.controller.FixSize(width)
+    def EnableLongHelp(self, enable=True):
+        """@copydoc ToolbarController::EnableLongHelp()"""
+        self.controller.EnableLongHelp(enable)
 
     def Enable(self, tool, enable=True):
-        """@copydoc ToolbarController:Enable()"""
+        """@copydoc ToolbarController::Enable()"""
         self.controller.Enable(tool, enable)
 
     def EnableAll(self, enable=True):
-        """@copydoc ToolbarController:EnableAll()"""
+        """@copydoc ToolbarController::EnableAll()"""
         self.controller.EnableAll(enable)
 
     def CreateSelectionButton(self, tooltip=_("Select graphics tool")):
-        """@copydoc ToolbarController:CreateSelectionButton()"""
+        """@copydoc ToolbarController::CreateSelectionButton()"""
         return self.controller.CreateSelectionButton(tooltip)
+
+    def __getattr__(self, name):
+        return getattr(self.controller, name)
 
 
 class ToolSwitcher:
