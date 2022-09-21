@@ -304,8 +304,8 @@ class AuiToolbarController(ToolbarController):
     """Controller specialized for wx.lib.agw.aui.auibar.AuiToolBar subclass"""
 
     def _defineTool(self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL):
-        """Define tool.
-        Position is not needed since wx.lib.agw.aui.auibar.AuiToolBar does not have InsertTool method."""
+        """Define tool. Position is not needed since wx.lib.agw.aui.auibar.AuiToolBar
+        does not have InsertTool method."""
         if name:
             return (
                 name,
