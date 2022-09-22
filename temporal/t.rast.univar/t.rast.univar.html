@@ -7,10 +7,15 @@ dataset.
 By default it returns the name of the map, the start and end date of
 dataset and the following values: mean, minimum and maximum vale,
 mean_of_abs, standard deviation, variance, coeff_var, number of null
-cells, total number of cell.
+cells, total number of cells.
 <p>
 Using the <em>e</em> flag it can calculate also extended statistics:
 first quartile, median value, third quartile and percentile 90.
+<p>
+If a <em>zones</em> raster map is provided, statistics are computed for
+each zone (category) in that input raster map. The <em>zones</em> option
+does not support Spatio-Temporal-Raster-Datasets (STRDS) but only a single,
+static raster map.
 
 <h2>EXAMPLE</h2>
 
@@ -32,6 +37,7 @@ id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|c
 <em>
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
+<a href="r.univar.html">t.create</a>,
 </em>
 
 <h2>AUTHOR</h2>
