@@ -456,7 +456,10 @@ class VisibleMapset(object):
         """
         with open(self.spath, "w") as f:
             ms = self.location.mapsets()
-            f.write("\n".join([m for m in mapsets if m in ms]))
+            for m in mapsets:
+                if m in ms:
+                    f.write(m)
+                    f.write("\n")
 
     def add(self, mapset):
         """Add a mapset to the search path
@@ -466,7 +469,7 @@ class VisibleMapset(object):
         """
         if mapset not in self.read() and mapset in self.location:
             with open(self.spath, "a+") as f:
-                f.write("\n%s" % mapset)
+                f.write("%s\n" % mapset)
         else:
             raise TypeError("Mapset not found")
 
