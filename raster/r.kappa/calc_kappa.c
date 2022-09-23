@@ -8,6 +8,7 @@
 void calc_kappa(void)
 {
     int i, j;
+    int a_i, b_i;
     int s, l;
     int nl;
     size_t ns;
@@ -37,10 +38,10 @@ void calc_kappa(void)
     total = count_sum(&s, l);
 
     /* calculate the parameters of the kappa-calculation */
-    pi = (double *)G_calloc(ns, sizeof(double));
-    pj = (double *)G_calloc(ns, sizeof(double));
-    pii = (double *)G_calloc(ns, sizeof(double));
-    kpp = (double *)G_calloc(ns, sizeof(double));
+    pi = (double *)G_calloc(ncat, sizeof(double));
+    pj = (double *)G_calloc(ncat, sizeof(double));
+    pii = (double *)G_calloc(ncat, sizeof(double));
+    kpp = (double *)G_calloc(ncat, sizeof(double));
 
     for (i = 0; i < ncat; i++) {
         for (j = 0; j < ns; j++) {
@@ -65,31 +66,46 @@ void calc_kappa(void)
         pC += pi[i] * pj[i];
     }
 
-    for (i = 0; i < ncat; i++)
-        if ((pi[i] == 0) || (pj[i] == 0))
+    for (i = 0; i < ncat; i++) {
+        if (pi[i] == 0)
             kpp[i] = -999;
         else
             kpp[i] = (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
+    }
 
     /* print out the comission and omission accuracy, and conditional kappa */
     fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");
-    for (i = 0; i < ncat; i++)
-        if (kpp[i] == -999)
-            fprintf(fd, "%ld\tNA\t\tNA\t\tNA\n", rlst[i]);
+    for (i = 0; i < ncat; i++) {
+        fprintf(fd, "%ld\t", rlst[i]);
+        if (pi[i] == 0)
+            fprintf(fd, "NA\t\t");
         else
-            fprintf(fd, "%ld\t%f\t%f\t%f\n",
-                    rlst[i], 100 * (1 - pii[i] / pi[i]),
-                    100 * (1 - pii[i] / pj[i]), kpp[i]);
+            fprintf(fd, "%f\t", 100 * (1 - pii[i] / pi[i]));
+        if (pj[i] == 0)
+            fprintf(fd, "NA\t\t");
+        else
+            fprintf(fd, "%f\t", 100 * (1 - pii[i] / pj[i]));
+        if (kpp[i] == -999)
+            fprintf(fd, "NA\n");
+        else
+            fprintf(fd, "%f\n", kpp[i]);
+    }
     fprintf(fd, "\n");
 
     for (i = 0; i < ncat; i++) {
         inter1 += pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.);
     }
+
     for (j = 0; j < ns; j++) {
-        if (Gstats[j].cats[0] != Gstats[j].cats[1])
-            inter2 += Gstats[j].count *
-                pow((pi[Gstats[j].cats[0] - 1] + pj[Gstats[j].cats[1] - 1]),
-                    2.) / total;
+        if (Gstats[j].cats[0] != Gstats[j].cats[1]) {
+            for (i = 0; i < ncat; i++) {
+                if (Gstats[j].cats[0] == rlst[i])
+                    a_i = i;
+                if (Gstats[j].cats[1] == rlst[i])
+                    b_i = i;
+            }
+            inter2 += Gstats[j].count * pow((pi[a_i] + pj[b_i]), 2.) / total;
+        }
     }
     kp = (p0 - pC) / (1 - pC);
     vkp = (inter1 + pow((1 - p0), 2.) * inter2 -
