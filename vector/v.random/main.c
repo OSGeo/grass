@@ -691,6 +691,7 @@ int main(int argc, char *argv[])
                     cats_array[i].cat = cat;
                     cats_array[i].val = cat_area;
 
+                    Vect_reset_cats(Cats);
                 }
 
                 sprintf(buf, "insert into %s (%s", Fi->table, Fi->key);
