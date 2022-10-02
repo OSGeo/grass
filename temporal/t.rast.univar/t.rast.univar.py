@@ -96,11 +96,14 @@ def main():
 
     # Check if zones map exists and is of type CELL
     if zones:
-        with RasterRow(zones) as zones_map:
-            if not zones_map.exist():
-                grass.fatal(_("Zoning raster {} not found".format(zones)))
-            if zones_map.mtype != "CELL":
-                grass.fatal(_("Zoning raster must be of type CELL"))
+        zones_map = RasterRow(zones)
+        if not zones_map.exist():
+			zones_map.close()
+            grass.fatal(_("Zoning raster {} not found".format(zones)))
+        if zones_map.mtype != "CELL":
+			zones_map.close()
+            grass.fatal(_("Zoning raster must be of type CELL"))
+        zones_map.close()
 
     tgis.print_gridded_dataset_univar_statistics(
         "strds",
