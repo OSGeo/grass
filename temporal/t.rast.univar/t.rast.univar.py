@@ -95,7 +95,7 @@ def main():
 
     # Check if zones map exists and is of type CELL
     if zones:
-        if grass.raster.raster_info["datatype"] != "CELL":
+        if grass.raster.raster_info()["datatype"] != "CELL":
             grass.fatal(_("Zoning raster must be of type CELL"))
 
     tgis.print_gridded_dataset_univar_statistics(
