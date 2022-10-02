@@ -64,6 +64,7 @@
 # % guisection: Formatting
 # %end
 
+from grass.pygrass.raster import RasterRow
 import grass.script as grass
 
 
@@ -90,6 +91,14 @@ def main():
         output = None
     if output == "-":
         output = None
+
+    # Check if zones map exists and is of type CELL
+    if zones:
+        with RasterRow(zones) as zones_map:
+            if not zones_map.exist():
+                grass.fatal(_("Zoning raster {} not found".format(zones)))
+            if zones_map.mtype != "CELL":
+                grass.fatal(_("Zoning raster must be of type CELL"))
 
     tgis.print_gridded_dataset_univar_statistics(
         "str3ds", input, output, where, extended, no_header, separator, zones=zones
