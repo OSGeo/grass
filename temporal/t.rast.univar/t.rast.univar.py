@@ -97,7 +97,7 @@ def main():
     # Check if zones map exists and is of type CELL
     if zones:
         with RasterRow(zones) as zones_map:
-            if not zones_map.exists():
+            if not zones_map.exist():
                 grass.fatal(_("Zoning raster {} not found".format(zones)))
             if zones_map.mtype != "CELL":
                 grass.fatal(_("Zoning raster must be of type CELL"))
