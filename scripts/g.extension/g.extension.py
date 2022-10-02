@@ -164,7 +164,13 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as etree
-from distutils.dir_util import copy_tree
+
+if sys.version_info.major == 3 and sys.version_info.minor < 8:
+    from distutils.dir_util import copy_tree
+else:
+    from functools import partial
+
+    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
 from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError
