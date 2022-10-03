@@ -264,9 +264,13 @@ tmp_file = "%s.tmp.html" % pgm
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>GRASS GIS Manual: ${PGM}</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <title>GRASS GIS Manual: ${PGM}</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta name="Author" content="GRASS Development Team">
+ <meta name="description" content="${PGM}: ${PGM_DESC}">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white">
 <div id="container">

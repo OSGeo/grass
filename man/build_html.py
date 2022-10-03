@@ -18,14 +18,15 @@ exclude_mods = [
     "r.watershed.ram",
     "r.watershed.seg",
     "v.topo.check",
-    "helptext.html"]
+    "helptext.html",
+]
 
 # these modules don't use G_parser()
 
 desc_override = {
     "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
     "r.li.daemon": "Support module for r.li landscape index calculations."
-    }
+}
 
 ############################################################################
 
@@ -36,14 +37,18 @@ r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
  <title>${title}</title>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
  <meta name="Author" content="GRASS Development Team">
-""")
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+"""
+)
 
 macosx_tmpl = string.Template(\
 r"""
  <meta name="AppleTitle" content="GRASS GIS ${grass_version} Help">
  <meta name="AppleIcon" content="GRASS-${grass_mmver}/grass_icon.png">
  <meta name="robots" content="anchors">
-""")
+"""
+)
 
 header2_tmpl = string.Template(\
 r""" <link rel="stylesheet" href="grassdocs.css" type="text/css">
@@ -314,7 +319,7 @@ r"""
 
 headertopics_tmpl = \
 r"""
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body style="width: 99%">
 <div id="container">
@@ -328,7 +333,7 @@ r"""
 
 headerkeywords_tmpl = \
 r"""
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body style="width: 99%">
 <div id="container">
