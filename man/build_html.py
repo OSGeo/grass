@@ -39,6 +39,8 @@ header1_tmpl = string.Template(
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
  <title>${title} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 """
 )
 
