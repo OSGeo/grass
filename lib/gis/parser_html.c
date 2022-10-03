@@ -3,7 +3,7 @@
 
    \brief GIS Library - Argument parsing functions (HTML output)
 
-   (C) 2001-2009, 2011-2020 by the GRASS Development Team
+   (C) 2001-2022 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -45,6 +45,12 @@ void G__usage_html(void)
     fprintf(stdout, "<html>\n<head>\n");
     fprintf(stdout,
             " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
+    fprintf(stdout,
+            " <meta name=\"Author\" content=\"GRASS Development Team\">\n");
+    fprintf(stdout,
+            " <meta http-equiv=\"content-language\" content=\"en-us\">\n");
+    fprintf(stdout,
+            " <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
     fprintf(stdout, " <title>%s - GRASS GIS manual</title>\n", st->pgm_name);
     fprintf(stdout, " <meta name=\"description\" content=\"%s", st->pgm_name);
     if (st->module_info.description)

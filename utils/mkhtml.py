@@ -375,6 +375,8 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
  <meta name="Author" content="GRASS Development Team">
  <meta name="description" content="${PGM}: ${PGM_DESC}">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white">
 <div id="container">
