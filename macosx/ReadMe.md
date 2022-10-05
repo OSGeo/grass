@@ -235,7 +235,6 @@ in the correct version at x.x.x.x for the wxpython you have installed):
 
 ```
 --with-python
---with-wxwidgets=/usr/local/lib/wxPython-unicode-x.x.x.x/bin/wx-config
 ```
 
 Note: as of wxpython 2.8.8.0 you can use an external wxpython with the
