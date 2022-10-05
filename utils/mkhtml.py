@@ -152,18 +152,22 @@ def download_git_commit(url, response_format, *args, **kwargs):
         )
 
 
-def get_default_git_log(src_dir):
+def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """Get default Git commit and commit date, when getting commit from
     local Git, local JSON file and remote GitHub REST API server wasn't
     successfull.
 
     :param str src_dir: addon source dir
+    :param str datetime_format: output commit datetime format
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return dict: dict which store last commit and commnit date
     """
     return {
         "commit": "unknown",
-        "date": time.ctime(os.path.getmtime(src_dir)),
+        "date": datetime.fromtimestamp(os.path.getmtime(src_dir)).strftime(
+            datetime_format
+        ),
     }
 
 
@@ -266,7 +270,7 @@ def format_git_commit_date_from_rest_api(
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
-                                e.g. Sun Jan 16 23:09:35 2022
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
@@ -283,7 +287,7 @@ def format_git_commit_date_from_local_git(
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
-                                e.g. Sun Jan 16 23:09:35 2022
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
