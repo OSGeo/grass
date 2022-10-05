@@ -200,7 +200,7 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 
     /************************************************/
 
-    fprintf(ascii, "POINTS %i float\n", info->maxnumpoints);
+    fprintf(ascii, "POINTS %i double\n", info->maxnumpoints);
 
     /*For every available vector type */
     for (k = 0; k < typenum; k++) {
