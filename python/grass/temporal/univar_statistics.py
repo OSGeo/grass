@@ -54,6 +54,11 @@ def print_gridded_dataset_univar_statistics(
     :param zones: raster map with zones to calculate statistics for
     """
 
+    stats_module = {
+        "strds": "r.univar",
+        "str3ds": "r3.univar",
+    }[type]
+
     # We need a database interface
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
@@ -63,9 +68,14 @@ def print_gridded_dataset_univar_statistics(
     if output is not None:
         out_file = open(output, "w")
 
-    rows = sp.get_registered_maps("id,start_time,end_time", where, "start_time", dbif)
+    strds_cols = (
+        "id,start_time,end_time,semantic_label"
+        if type == "strds"
+        else "id,start_time,end_time"
+    )
+    rows = sp.get_registered_maps(strds_cols, where, "start_time", dbif)
 
-    if not rows:
+    if not rows and rows != [""]:
         dbif.close()
         err = "Space time %(sp)s dataset <%(i)s> is empty"
         if where:
@@ -75,44 +85,58 @@ def print_gridded_dataset_univar_statistics(
         )
 
     if no_header is False:
-        string = ""
-        string += "id" + fs + "start" + fs + "end" + fs
+        cols = (
+            ["id", "semantic_label", "start", "end"]
+            if type == "strds"
+            else ["id", "start", "end"]
+        )
         if zones:
-            string += "zone" + fs
-        string += "mean" + fs + "min" + fs + "max" + fs
-        string += "mean_of_abs" + fs + "stddev" + fs + "variance" + fs
-        string += "coeff_var" + fs + "sum" + fs + "null_cells" + fs + "cells"
-        string += fs + "non_null_cells"
+            cols.append("zone")
+        cols.extend(
+            [
+                "mean",
+                "min",
+                "max",
+                "mean_of_abs",
+                "stddev",
+                "variance",
+                "coeff_var",
+                "sum",
+                "null_cells",
+                "cells",
+                "non_null_cells",
+            ]
+        )
         if extended is True:
-            string += fs + "first_quartile" + fs + "median" + fs
-            string += "third_quartile" + fs + "percentile_90"
+            cols.extend(["first_quartile", "median", "third_quartile", "percentile_90"])
+        string = fs.join(cols)
 
         if output is None:
             print(string)
         else:
             out_file.write(string + "\n")
 
+    flag = "g"
+
+    if extended is True:
+        flag += "e"
+    if type == "strds" and rast_region is True:
+        flag += "r"
+
     for row in rows:
         string = ""
         id = row["id"]
         start = row["start_time"]
         end = row["end_time"]
+        semantic_label = (
+            ""
+            if type != "strds" or not row["semantic_label"]
+            else row["semantic_label"]
+        )
 
-        flag = "g"
-
-        if extended is True:
-            flag += "e"
-        if type == "strds" and rast_region is True:
-            flag += "r"
-
-        if type == "strds":
-            univar_stats = gscript.read_command(
-                "r.univar", map=id, flags=flag, zones=zones
-            ).rstrip()
-        elif type == "str3ds":
-            univar_stats = gscript.read_command(
-                "r3.univar", map=id, flags=flag, zones=zones
-            ).rstrip()
+        univar_stats = gscript.read_command(
+            stats_module, map=id, flags=flag, zones=zones
+        ).rstrip()
 
         if not univar_stats:
             if type == "strds":
@@ -128,29 +152,31 @@ def print_gridded_dataset_univar_statistics(
 
         for idx, stats_kv in enumerate(univar_stats.split(";")):
             stats = gscript.utils.parse_key_val(stats_kv)
-            string += str(id) + fs + str(start) + fs + str(end)
+            string += (
+                f"{id}{fs}{semantic_label}{fs}{start}{fs}{end}"
+                if type == "strds"
+                else f"{id}{fs}{start}{fs}{end}"
+            )
             if zones:
                 if idx == 0:
                     zone = str(stats["zone"])
                     string = ""
                     continue
-                string += fs + str(zone)
+                string += f"{fs}{zone}"
                 if "zone" in stats:
                     zone = str(stats["zone"])
                     eol = "\n"
                 else:
                     eol = ""
-            string += fs + str(stats["mean"]) + fs + str(stats["min"])
-            string += fs + str(stats["max"]) + fs + str(stats["mean_of_abs"])
-            string += fs + str(stats["stddev"]) + fs + str(stats["variance"])
-            string += fs + str(stats["coeff_var"]) + fs + str(stats["sum"])
-            string += fs + str(stats["null_cells"]) + fs + str(stats["n"])
-            string += fs + str(int(stats["n"]))
+            string += f'{fs}{stats["mean"]}{fs}{stats["min"]}'
+            string += f'{fs}{stats["max"]}{fs}{stats["mean_of_abs"]}'
+            string += f'{fs}{stats["stddev"]}{fs}{stats["variance"]}'
+            string += f'{fs}{stats["coeff_var"]}{fs}{stats["sum"]}'
+            string += f'{fs}{stats["null_cells"]}{fs}{stats["n"]}'
+            string += f'{fs}{stats["n"]}'
             if extended is True:
-                string += fs + str(stats["first_quartile"]) + fs + str(stats["median"])
-                string += (
-                    fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
-                )
+                string += f'{fs}{stats["first_quartile"]}{fs}{stats["median"]}'
+                string += f'{fs}{stats["third_quartile"]}{fs}{stats["percentile_90"]}'
             string += eol
 
         if output is None:
