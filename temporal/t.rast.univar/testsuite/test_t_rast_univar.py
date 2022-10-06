@@ -8,7 +8,6 @@ for details.
 @author Soeren Gebbert
 """
 
-import grass.script as gscript
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
