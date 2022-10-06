@@ -172,7 +172,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
     def test_7(self):
         """Test use of zones"""
 
-        t_rast_univar = SimpleModule(
+        t_rast_univar_zones = SimpleModule(
             "t.rast3d.univar",
             input="A",
             where="start_time >= '2001-01-01'",
@@ -181,9 +181,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
             verbose=True,
         )
         self.runModule("g.region", res=1)
-        self.assertModule(t_rast_univar)
-
-        print(t_rast_univar.outputs.stdout.split("\n"))
+        self.assertModule(t_rast_univar_zones)
 
         univar_text = """id|start|end|zone|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
 a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|1|100|100|100|100|0|0|0|3000000|0|30000|30000
@@ -201,7 +199,7 @@ a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|14
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"), t_rast_univar_zones.outputs.stdout.split("\n")
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
