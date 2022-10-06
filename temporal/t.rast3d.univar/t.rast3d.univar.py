@@ -100,6 +100,7 @@ def main():
         "str3ds", input, output, where, extended, no_header, separator, False, zones
     )
 
+
 if __name__ == "__main__":
     options, flags = gs.parser()
     main()
