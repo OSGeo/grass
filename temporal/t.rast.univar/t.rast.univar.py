@@ -66,7 +66,7 @@
 # % guisection: Formatting
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 ############################################################################
 
@@ -83,7 +83,7 @@ def main():
     extended = flags["e"]
     no_header = flags["u"]
     rast_region = bool(flags["r"])
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()
@@ -95,8 +95,8 @@ def main():
 
     # Check if zones map exists and is of type CELL
     if zones:
-        if grass.raster.raster_info(zones)["datatype"] != "CELL":
-            grass.fatal(_("Zoning raster must be of type CELL"))
+        if gs.raster.raster_info(zones)["datatype"] != "CELL":
+            gs.fatal(_("Zoning raster must be of type CELL"))
 
     tgis.print_gridded_dataset_univar_statistics(
         "strds",
@@ -112,5 +112,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()
