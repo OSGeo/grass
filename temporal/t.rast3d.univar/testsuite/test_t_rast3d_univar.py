@@ -57,7 +57,7 @@ class TestRasterUnivar(TestCase):
         cls.runModule("g.remove", flags="f", type="raster_3d", name="zones")
         cls.del_temp_region()
 
-    def test_1(self):
+    def test_with_all_maps(self):
 
         t_rast3d_univar = SimpleModule(
             "t.rast3d.univar",
@@ -82,7 +82,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_2(self):
+    def test_with_subset_of_maps(self):
 
         t_rast3d_univar = SimpleModule(
             "t.rast3d.univar",
@@ -106,7 +106,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_3(self):
+    def test_subset_with_output(self):
 
         self.assertModule(
             "t.rast3d.univar",
@@ -130,7 +130,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_4(self):
+    def test_subset_with_output_no_header(self):
 
         self.assertModule(
             "t.rast3d.univar",
@@ -154,7 +154,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_5_error_handling_empty_strds(self):
+    def test_error_handling_empty_strds(self):
         # Empty str3ds
         self.assertModuleFail(
             "t.rast3d.univar",
@@ -165,11 +165,11 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
             verbose=True,
         )
 
-    def test_6_error_handling_no_input(self):
+    def test_error_handling_no_input(self):
         # No input
         self.assertModuleFail("t.rast3d.univar", output="out.txt")
 
-    def test_7(self):
+    def test_with_zones(self):
         """Test use of zones"""
 
         t_rast_univar_zones = SimpleModule(
