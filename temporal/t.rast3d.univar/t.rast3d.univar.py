@@ -75,6 +75,7 @@ def main():
     import grass.temporal as tgis
 
     # Get the options
+    options, flags = gs.parser()
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
@@ -92,15 +93,18 @@ def main():
         output = None
 
     # Check if zones map exists and is of type CELL
-    if zones:
-        if gs.raster.raster_info(zones)["datatype"] != "CELL":
-            gs.fatal(_("Zoning raster must be of type CELL"))
-
     tgis.print_gridded_dataset_univar_statistics(
-        "str3ds", input, output, where, extended, no_header, separator, False, zones
+        "str3ds",
+        input,
+        output,
+        where,
+        extended,
+        no_header=no_header,
+        fs=separator,
+        rast_region=False,
+        zones=zones,
     )
 
 
 if __name__ == "__main__":
-    options, flags = gs.parser()
     main()
