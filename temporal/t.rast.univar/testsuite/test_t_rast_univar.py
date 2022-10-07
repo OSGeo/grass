@@ -108,7 +108,7 @@ class TestRasterUnivar(TestCase):
 
         cls.del_temp_region()
 
-    def test_1(self):
+    def test_with_all_maps(self):
 
         t_rast_univar = SimpleModule(
             "t.rast.univar",
@@ -134,7 +134,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_2(self):
+    def test_with_subset_of_maps(self):
 
         t_rast_univar = SimpleModule(
             "t.rast.univar",
@@ -159,7 +159,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_3(self):
+    def test_coarser_resolution(self):
 
         t_rast_univar = SimpleModule(
             "t.rast.univar",
@@ -184,7 +184,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_4(self):
+    def test_subset_with_output(self):
 
         self.runModule("g.region", res=10)
         self.assertModule(
@@ -212,7 +212,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 print(type(res_line))
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_5(self):
+    def test_subset_with_output_coarse_resolution(self):
 
         self.runModule("g.region", res=10)
         self.assertModule(
@@ -237,7 +237,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_6_error_handling_empty_strds(self):
+    def test_error_handling_empty_strds(self):
         # Empty strds
         self.assertModuleFail(
             "t.rast.univar",
@@ -248,11 +248,11 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
             verbose=True,
         )
 
-    def test_7_error_handling_no_input(self):
+    def test_error_handling_no_input(self):
         # No input
         self.assertModuleFail("t.rast.univar", output="out.txt")
 
-    def test_8(self):
+    def test_with_zones(self):
         """Test use of zones"""
 
         t_rast_univar = SimpleModule(
@@ -291,7 +291,7 @@ a_4@PERMANENT||2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|2
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_B1(self):
+    def test_with_semantic_label(self):
         """Test semantic labels"""
         t_rast_univar = SimpleModule(
             "t.rast.univar",
