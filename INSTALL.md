@@ -65,7 +65,7 @@ For Solaris, see hints below.
 
 The command,
 
-```
+```bash
 ./configure --help
 ```
 
@@ -77,13 +77,13 @@ distributions, FreeBSD, AIX, etc) are available at:
 
 First step of the compilation (-g for debugging, or -O2 for optimization):
 
-```
+```bash
 CFLAGS="-g -Wall" ./configure
 ```
 
 Explanation of make targets:
 
-```
+```text
 make install       - installs the binary
 
 make bindist       - make a binary package with install script
@@ -104,7 +104,7 @@ make pdfdocs       - generate programmer's documentation as PDF files
 
 Next step is the compilation itself:
 
-```
+```bash
 make
 ```
 
@@ -115,13 +115,13 @@ install program (AC_PROG_INSTALL ignores versions which are known to
 have problems), you need to ensure that $srcdir is an absolute path,
 by using e.g.:
 
-```
+```bash
 `pwd`/configure ...
 ```
 
 or:
 
-```
+```bash
 ./configure --srcdir=`pwd` ...
 ```
 
@@ -132,7 +132,7 @@ Note when using a compiler different from "gcc":
 By setting environment variables, the compiler
 names can be defined (C and C++):
 
-```
+```bash
 CC=cc CPP=cpp ./configure ...
 ```
 
@@ -141,7 +141,7 @@ CC=cc CPP=cpp ./configure ...
 To successfully compile GRASS on 64bit platforms, the required
 FFTW2 library has to be compiled with -fPIC flag:
 
-```
+```bash
 #this applies to FFTW3, not to GRASS GIS:
 cd fftw-3.3.4/
 CFLAGS="-fPIC" ./configure
@@ -152,7 +152,7 @@ make install
 To fully enable 64bit library usage for GRASS on 64bit platforms,
 the following additional parameters are recommended/required:
 
-```
+```bash
 ./configure \
    --enable-64bit \
    --with-libs=/usr/lib64 \
@@ -165,25 +165,25 @@ See also CODE OPTIMIZATION below.
 
 After compilation, the resulting code is stored in the directory
 
-```
+```bash
 ./dist.$ARCH
 ```
 
 and the scripts (grass, ...) in
 
-```
+```bash
 ./bin.$ARCH
 ```
 
 To run GRASS, simply start
 
-```
+```bash
 ./bin.$ARCH/grass
 ```
 
 or run
 
-```
+```bash
 make install
 grass
 ```
@@ -212,7 +212,7 @@ GitHub, you have to perform a few steps. In general:
 
 In detail:
 
-```
+```bash
 cd /where/your/grass-source-code/lives/
 git fetch --all
 git merge upstream/main
@@ -229,7 +229,7 @@ To compile (self-made) GRASS modules or to compile modified modules
 at least the GRASS libraries have to be compiled locally. This is
 done by launching:
 
-```
+```bash
 make libs
 ```
 
@@ -237,19 +237,19 @@ Then change into the module's directory and launch the "make"
 command. The installation can be either done with "make install" from
 the main source code directory or locally with
 
-```
+```bash
 "INST_NOW=y make"
 ```
 
 You may want to define an alias for this:
 
-```
+```bash
 alias gmake='INST_NOW=y make'
 ```
 
 Then simply compile/install the current module with
 
-```
+```bash
 gmake
 ```
 
@@ -262,13 +262,13 @@ path(s) in the Makefile to absolute path(s).
 If you would like to set compiler optimisations, for a possibly faster
 binary, type (don't enter a ";" anywhere):
 
-```
+```bash
 CFLAGS=-O ./configure
 ```
 
 or,
 
-```
+```bash
 setenv CFLAGS -O
 ./configure
 ```
@@ -278,7 +278,7 @@ supports this (note: O is the letter, not zero). Using the "gcc" compiler,
 you can also specify processor specific flags (examples, please suggest
 better settings to us):
 
-```
+```bash
 CFLAGS="-mcpu=athlon -O2" # AMD Athlon processor with code optimisations
 CFLAGS="-mcpu=pentium" # Intel Pentium processor
 CFLAGS="-mcpu=pentium4" # Intel Pentium4 processor
@@ -292,7 +292,7 @@ by the local machine at GCC runtime including -mtune.
 
 To find out optional CFLAGS for your platform, enter:
 
-```
+```bash
 gcc -dumpspecs
 ```
 
@@ -301,7 +301,7 @@ See also: <https://gcc.gnu.org/>
 A real fast GRASS version (and small binaries) will be created with
 LDFLAGS set to "stripping" (but this disables debugging):
 
-```
+```bash
 CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
 ```
 
@@ -317,7 +317,7 @@ the source code.
 
 The `-g` and `-Wall` compiler flags are often useful for assisting debugging:
 
-```
+```bash
 CFLAGS="-g -Wall" ./configure
 ```
 
@@ -329,7 +329,7 @@ See also the file ./doc/debugging.txt and the Wiki page
 GRASS GIS includes improved support for reading and writing large files
 (> 2GB) if it is possible in your operating system. If you compile with
 
-```
+```bash
 configure [...] --enable-largefile
 ```
 

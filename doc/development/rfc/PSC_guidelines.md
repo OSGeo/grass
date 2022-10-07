@@ -39,9 +39,9 @@ project.
 The quality control mechanisms, which are the responsibility of the PSC,
 currently include:
 
- * Maintaining submitter guidelines and making all developers aware of them.
- * Granting write access to the source code repository for new developers.
- * Enforcing the submitter guidelines, with the ultimate sanction against non-compliance being removal of write access to the source code repository.
+* Maintaining submitter guidelines and making all developers aware of them.
+* Granting write access to the source code repository for new developers.
+* Enforcing the submitter guidelines, with the ultimate sanction against non-compliance being removal of write access to the source code repository.
 
 In general, once write access has been granted, developers are allowed to
 make changes to the codebase as they see fit. For controversial or
@@ -76,11 +76,11 @@ The PSC will share responsibility and make decisions over issues related
 to the management of the overall direction of the GRASS project and
 external visibility, etc. These include, but are not limited to:
 
- * Release Cycles
- * Project infrastructure
- * Website Maintenance
- * Promotion and Public Relations
- * Other issues as they become relevant
+* Release Cycles
+* Project infrastructure
+* Website Maintenance
+* Promotion and Public Relations
+* Other issues as they become relevant
 
 It is the responsibility of the PSC to ensure that issues critical to the
 future of the GRASS project are adequately attended to. This may involve
@@ -105,8 +105,8 @@ break down of decision-making, or in case of disputes over voting.
 The following issue(s) *must* have a vote called before a
 decision is reached:
 
- * Granting source code repository write access for new developers
- * Selection of a committee Chair
+* Granting source code repository write access for new developers
+* Selection of a committee Chair
 
 ## Composition of the Committee
 

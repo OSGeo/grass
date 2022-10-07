@@ -23,7 +23,22 @@ The advantage of having clearly stated policy on language standard requirements/
 
 It should be emphasized that existing GRASS GIS C and C++ code compiles also with C17 and C++17. There is therefore no need to modernize it the way it was done to C in the 2000’s. Nevertheless, conforming to newer standards may provide better cross platform support and possibly safer code.
 
-Regarding C, there are three standards that may be considered: C99, C11 and C17. C99 never really reached full support on key platforms, this is  particularly the case for Windows ([Visual Studio 2013](https://devblogs.microsoft.com/cppblog/c99-library-support-in-visual-studio-2013/)). Partly in consequence of this lack of support for some C99 features, the C11 standard was made less strict: making some C99 mandatory features optional. Thus, from autumn 2020 even [MSVC complies to C11](https://devblogs.microsoft.com/cppblog/c11-and-c17-standard-support-arriving-in-msvc/) core feature support. Starting with [GCC 4.9](https://gcc.gnu.org/wiki/C11Status) it had “substantially complete” support for C11, Clang from [version 3.1](https://releases.llvm.org/3.1/docs/ClangReleaseNotes.html). [C17](https://en.wikipedia.org/wiki/C17_(C_standard_revision)), on the other hand, doesn’t add new features compared to C11. Its difference is more interesting from compiler point of view, whereas code “good for C11” is good for C17.
+Regarding C, there are three standards that may be considered: C99, C11 and
+C17. C99 never really reached full support on key platforms, this is
+particularly the case for Windows
+([Visual Studio 2013](https://devblogs.microsoft.com/cppblog/c99-library-support-in-visual-studio-2013/)).
+Partly in consequence of this lack of support for some C99 features, the C11
+standard was made less strict: making some C99 mandatory features optional.
+Thus, from autumn 2020 even
+[MSVC complies to C11](https://devblogs.microsoft.com/cppblog/c11-and-c17-standard-support-arriving-in-msvc/)
+core feature support. Starting with
+[GCC 4.9](https://gcc.gnu.org/wiki/C11Status) it had “substantially
+complete” support for C11, Clang from
+[version 3.1](https://releases.llvm.org/3.1/docs/ClangReleaseNotes.html).
+[C17](https://en.wikipedia.org/wiki/C17_(C_standard_revision)), on the other
+hand, doesn’t add new features compared to C11. Its difference is more
+interesting from compiler point of view, whereas code “good for C11” is
+good for C17.
 
 Regarding C++, there are the C++98, C++03, C++11, C++14 and C++17 standards to consider. The platform and compiler support for all of these are significantly better. However, C++11 is at this date in general considered the standard and until compelling reasons argue otherwise, the C++11 standard should be policy of the GRASS GIS project.
 

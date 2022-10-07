@@ -31,7 +31,7 @@ jobs:
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSON: true
-          VALIDATE_MD: false
+          VALIDATE_MD: true
           VALIDATE_PERL: true
           VALIDATE_POWERSHELL: true
           VALIDATE_XML: true
