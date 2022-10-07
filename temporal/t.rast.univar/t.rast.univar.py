@@ -76,6 +76,7 @@ def main():
     import grass.temporal as tgis
 
     # Get the options
+    options, flags = gs.parser()
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
@@ -104,13 +105,12 @@ def main():
         output,
         where,
         extended,
-        no_header,
-        separator,
-        rast_region,
-        zones,
+        no_header=no_header,
+        fs=separator,
+        rast_region=rast_region,
+        zones=zones,
     )
 
 
 if __name__ == "__main__":
-    options, flags = gs.parser()
     main()
