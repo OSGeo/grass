@@ -252,6 +252,13 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[0:2])
                 w, h = map(int, dim.split(",")[2:4])
+                client_disp = wx.ClientDisplayRect()
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
             except:
