@@ -131,7 +131,6 @@ LDFLAGS="-lcurses" \
 ./configure \
 --with-nls \
 --with-readline \
---with-wxwidgets \
 --with-freetype-includes=$freetype_include \
 --with-bzlib \
 --with-postgres \
@@ -189,7 +188,6 @@ PKG_CONFIG=$mxe_bin-pkg-config \
 --host=$arch \
 --with-nls \
 --with-readline \
---with-wxwidgets \
 --with-freetype-includes=$mxe_shared/include/freetype2 \
 --with-bzlib \
 --with-postgres \
