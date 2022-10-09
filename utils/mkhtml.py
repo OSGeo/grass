@@ -26,7 +26,6 @@ import locale
 import json
 import pathlib
 import subprocess
-import time
 
 from html.parser import HTMLParser
 
