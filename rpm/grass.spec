@@ -221,7 +221,6 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-regex \
 	--with-openmp \
 	--with-gdal=%{_bindir}/gdal-config \
-	--with-wxwidgets=%{_bindir}/wx-config \
 	--with-geos=%{_bindir}/geos-config \
 %if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-netcdf=%{_bindir}/nc-config \

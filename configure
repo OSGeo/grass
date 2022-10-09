@@ -888,7 +888,6 @@ with_zstd
 with_gdal
 with_liblas
 with_pdal
-with_wxwidgets
 with_netcdf
 with_geos
 with_includes
@@ -1619,10 +1618,6 @@ Optional Packages:
   --with-pdal=path/pdal-config
                           enable PDAL support (pdal-config with path,
                           e.g. '--with-pdal=/usr/local/bin/pdal-config',
-                          default: no)
-  --with-wxwidgets=path/wx-config
-                          enable wxWidgets support (wx-config with path,
-                          e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
                           default: no)
   --with-netcdf=path/nc-config
                           enable NetCDF support (nc-config with path,
@@ -4454,15 +4449,6 @@ if test "${with_pdal+set}" = set; then :
   withval=$with_pdal;
 else
   with_pdal="no"
-fi
-
-
-
-# Check whether --with-wxwidgets was given.
-if test "${with_wxwidgets+set}" = set; then :
-  withval=$with_wxwidgets;
-else
-  with_wxwidgets="no"
 fi
 
 

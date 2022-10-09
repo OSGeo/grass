@@ -45,7 +45,6 @@ export ARCH=x86_64-w64-mingw32
     --with-fftw \
     --with-nls \
     --with-readline \
-    --with-wxwidgets \
     --with-blas \
     --with-lapack-includes=/mingw64/include/lapack \
     --with-freetype \
