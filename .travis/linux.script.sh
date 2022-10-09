@@ -27,7 +27,6 @@ export CC="ccache $CC"
             --with-freetype-includes=/usr/include/freetype2/ \
             --with-postgres-includes=/usr/include/postgresql/ \
             --with-proj-share=/usr/share/proj \
-            --with-wxwidgets=/usr/bin/wx-config \
             --with-python \
             --with-cairo
 
