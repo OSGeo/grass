@@ -310,12 +310,6 @@ AC_ARG_WITH(pdal,
                           e.g. '--with-pdal=/usr/local/bin/pdal-config',
                           default: no)],, with_pdal="no")
 
-AC_ARG_WITH(wxwidgets,
-[  --with-wxwidgets[=path/wx-config]
-                          enable wxWidgets support (wx-config with path,
-                          e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
-                          default: no)],, with_wxwidgets="no")
-
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
                           enable NetCDF support (nc-config with path,
