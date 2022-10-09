@@ -1714,16 +1714,26 @@ class MapDisplay(FrameMixin, MapPanel):
             )
         )
         # use default frame window layout
+        client_disp = wx.ClientDisplayRect()
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             idx = 4 + idx * 4
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 parent.SetPosition((x, y))
                 parent.SetSize((w, h))
             except Exception:
                 pass
+        else:
+            # Set client display x, y offset (OS panel)
+            parent.SetPosition((client_disp[0], client_disp[1]))
 
         # bindings
         parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
