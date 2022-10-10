@@ -72,11 +72,13 @@ import grass.script as gs
 
 
 def main():
+    # Get the options and flags
+    options, flags = gs.parser()
+
     # lazy imports
     import grass.temporal as tgis
 
-    # Get the options
-    options, flags = gs.parser()
+    # Define variabels
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
