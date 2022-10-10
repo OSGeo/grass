@@ -78,7 +78,7 @@ def main():
     # lazy imports
     import grass.temporal as tgis
 
-    # Define variabels
+    # Define variables
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
