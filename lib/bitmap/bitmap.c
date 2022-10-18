@@ -394,7 +394,7 @@ struct BM *BM_file_read(FILE * fp)
         /* first get number of links */
         if (fread(&i, sizeof(i), sizeof(char), fp) != sizeof(char)) {
             free(map->data);
-            free(data);
+            free(map);
             return NULL;
         }
         cnt = i;
@@ -415,14 +415,14 @@ struct BM *BM_file_read(FILE * fp)
 
             if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char)) {
                 free(map->data);
-                free(data);
+                free(map);
                 return NULL;
             }
             p->count = n;
 
             if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char)) {
                 free(map->data);
-                free(data);
+                free(map);
                 return NULL;
             }
             p->val = n;
