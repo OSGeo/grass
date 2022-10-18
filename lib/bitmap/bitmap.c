@@ -70,8 +70,10 @@ struct BM *BM_create(int x, int y)
     map->bytes = (x + 7) / 8;
 
     if (NULL ==
-        (map->data = (unsigned char *)calloc(map->bytes * y, sizeof(char))))
+        (map->data = (unsigned char *)calloc(map->bytes * y, sizeof(char)))) {
+        free(map);
         return (NULL);
+    }
 
     map->rows = y;
     map->cols = x;
@@ -324,38 +326,54 @@ struct BM *BM_file_read(FILE * fp)
 
     if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char))
         return NULL;
-    if (c != BM_MAGIC)
+    if (c != BM_MAGIC) {
+        free(map);
         return NULL;
+    }
 
-    if (fread(buf, BM_TEXT_LEN, sizeof(char), fp) != sizeof(char))
+    if (fread(buf, BM_TEXT_LEN, sizeof(char), fp) != sizeof(char)) {
+        free(map);
         return NULL;
+    }
 
-    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char))
+    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char)) {
+        free(map);
         return NULL;
+    }
     map->sparse = c;
 
 
     if (fread(&(map->rows), sizeof(map->rows), sizeof(char), fp) !=
-        sizeof(char))
+        sizeof(char)) {
+        free(map);
         return NULL;
+    }
 
     if (fread(&(map->cols), sizeof(map->cols), sizeof(char), fp) !=
-        sizeof(char))
+        sizeof(char)) {
+        free(map);
         return NULL;
+    }
 
     map->bytes = (map->cols + 7) / 8;
 
     if (map->sparse == BM_SPARSE)
         goto readsparse;
 
-    if (NULL == (map->data = (unsigned char *)malloc(map->bytes * map->rows)))
+    if (NULL == (map->data = (unsigned char *)malloc(map->bytes * map->rows))) {
+        free(map);
         return (NULL);
+    }
 
 
     for (i = 0; i < map->rows; i++)
         if (map->bytes !=
-            fread(&(map->data[i * map->bytes]), sizeof(char), map->bytes, fp))
+            fread(&(map->data[i * map->bytes]), sizeof(char), map->bytes,
+                  fp)) {
+            free(map->data);
+            free(map);
             return NULL;
+        }
 
 
     return map;
@@ -367,13 +385,18 @@ struct BM *BM_file_read(FILE * fp)
 
 
     if (NULL == (map->data = (unsigned char *)
-                 malloc(sizeof(struct BMlink *) * map->rows)))
+                 malloc(sizeof(struct BMlink *) * map->rows))) {
+        free(map);
         return (NULL);
+    }
 
     for (y = 0; y < map->rows; y++) {
         /* first get number of links */
-        if (fread(&i, sizeof(i), sizeof(char), fp) != sizeof(char))
+        if (fread(&i, sizeof(i), sizeof(char), fp) != sizeof(char)) {
+            free(map->data);
+            free(data);
             return NULL;
+        }
         cnt = i;
 
 
@@ -390,12 +413,18 @@ struct BM *BM_file_read(FILE * fp)
                 p = p2;
             }
 
-            if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char))
+            if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char)) {
+                free(map->data);
+                free(data);
                 return NULL;
+            }
             p->count = n;
 
-            if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char))
+            if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char)) {
+                free(map->data);
+                free(data);
                 return NULL;
+            }
             p->val = n;
             p->next = NULL;
         }
