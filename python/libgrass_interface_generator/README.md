@@ -2,8 +2,9 @@
 
 ## Notes on ctypesgen
 
-Currently installed version: **v1.1.1**
-<https://github.com/ctypesgen/ctypesgen/releases/tag/1.1.1> (XX OCTOBER 2022)
+Currently installed version:
+[**v1.1.1**](https://github.com/ctypesgen/ctypesgen/releases/tag/1.1.1)
+(19 October 2022)
 
 
 ### How to update ctypesgen version
