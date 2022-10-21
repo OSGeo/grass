@@ -15,7 +15,8 @@ These numbers are assigned to releases. Development versions, pre-release,
 and builds are marked by additional labels as suffixes.
 
 Once a version number is assigned to a release, the associated source code cannot change,
-or in other words, version number is assigned to a particular state of the source code.
+or in other words, version number is assigned to a particular state of the source code. This is called a code freeze and unlike feature freeze,
+code freeze does not allow any changes of the code.
 
 All major and minor version numbers are used for releases,
 i.e., there is no distinction between even and odd numbers.
