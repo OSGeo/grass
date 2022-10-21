@@ -173,3 +173,8 @@ GDAL and PROJ follow the Semantic versioning. QGIS does as well, but in combinat
 Ubuntu and Black lock their version numbering with release schedule.
 Black, after transitioning from beta, releases a major release yearly in January
 using last two digits of year as major version and month as minor release.
+
+## Historical Documents
+
+* Glynn Clements (2007). GRASS-dev GRASS 6.3.0 release preparation. Aug. 12 18:12:32 EDT 2007. <https://lists.osgeo.org/pipermail/grass-dev/2007-August/032705.html>
+* Neteler, Markus (2001). Towards a stable open source GIS: Status and future directions in GRASS development. Second Italian GRASS Users Meeting, University of Trento, Feb. 1-2 2001. <https://www.academia.edu/download/5140572/10.1.1.16.8991.pdf>
