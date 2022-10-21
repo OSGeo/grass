@@ -1,86 +1,157 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
-LABEL authors="Vaclav Petras,Markus Neteler"
-LABEL maintainer="wenzeslaus@gmail.com,neteler@osgeo.org"
+LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
+LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
-# system environment
 ENV DEBIAN_FRONTEND noninteractive
 
-# data directory - not using the base images volume because then the permissions cannot be adapted
-ENV DATA_DIR /data
+# define versions to be used
+# https://github.com/PDAL/PDAL/releases
+ARG PDAL_VERSION=2.4.3
+# https://github.com/hobuinc/laz-perf/releases
+ARG LAZ_PERF_VERSION=3.2.0
 
-# GRASS GIS compile dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends --no-install-suggests \
-        build-essential \
-        libblas-dev \
-        libbz2-dev \
-        libcairo2-dev \
-        libfftw3-dev \
-        libfreetype6-dev \
-        libgdal-dev \
-        libgeos-dev \
-        libglu1-mesa-dev \
-        libgsl0-dev \
-        libjpeg-dev \
-        liblapack-dev \
-        libncurses5-dev \
-        libnetcdf-dev \
-        libopenjp2-7 \
-        libopenjp2-7-dev \
-        libpdal-dev pdal \
-        libpdal-plugin-python \
-        libpng-dev \
-        libpq-dev \
-        libproj-dev \
-        libreadline-dev \
-        libsqlite3-dev \
-        libtiff-dev \
-        libxmu-dev \
-        libzstd-dev \
-        bison \
-        flex \
-        g++ \
-        gettext \
-        gdal-bin \
-        language-pack-en-base \
-        libfftw3-bin \
-        make \
-        ncurses-bin \
-        netcdf-bin \
-        proj-bin \
-        proj-data \
-        python3 \
-        python3-dateutil \
-        python3-dev \
-        python3-numpy \
-        python3-pil \
-        python3-pip \
-        python3-ply \
-        python3-six \
-        python3-wxgtk4.0 \
-        python3-gdal \
-        python3-matplotlib \
-        sqlite3 \
-        subversion \
-        unixodbc-dev \
-        zlib1g-dev \
-    && apt-get autoremove \
-    && apt-get clean && \
-    mkdir -p $DATA_DIR
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /tmp
+
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends --no-install-suggests \
+    build-essential \
+    bison \
+    bzip2 \
+    cmake \
+    curl \
+    flex \
+    g++ \
+    gcc \
+    gdal-bin \
+    git \
+    language-pack-en-base \
+    libbz2-dev \
+    libcairo2 \
+    libcairo2-dev \
+    libcurl4-gnutls-dev \
+    libfftw3-bin \
+    libfftw3-dev \
+    libfreetype6-dev \
+    libgdal-dev \
+    libgeos-dev \
+    libgsl0-dev \
+    libjpeg-dev \
+    libjsoncpp-dev \
+    libnetcdf-dev \
+    libncurses5-dev \
+    libopenblas-base \
+    libopenblas-dev \
+    libopenjp2-7 \
+    libopenjp2-7-dev \
+    libpnglite-dev \
+    libpq-dev \
+    libproj-dev \
+    libpython3-all-dev \
+    libsqlite3-dev \
+    libtiff-dev \
+    libzstd-dev \
+    locales \
+    make \
+    mesa-common-dev \
+    moreutils \
+    ncurses-bin \
+    netcdf-bin \
+    proj-bin \
+    proj-data \
+    python3 \
+    python3-dateutil \
+    python3-dev \
+    python3-magic \
+    python3-numpy \
+    python3-pil \
+    python3-pip \
+    python3-ply \
+    python3-setuptools \
+    python3-venv \
+    software-properties-common \
+    sqlite3 \
+    subversion \
+    unzip \
+    vim \
+    wget \
+    zip \
+    zlib1g-dev
 
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
-RUN mkdir /code
-RUN mkdir /code/grass
+## install laz-perf (missing from https://packages.ubuntu.com/)
+RUN apt-get install cmake
+WORKDIR /src
+RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
+    tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
+    cd laz-perf-${LAZ_PERF_VERSION} && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install
 
-# add repository files to the image
-COPY . /code/grass
+## fetch vertical datums for PDAL and store into PROJ dir
+WORKDIR /src
+RUN mkdir vdatum && \
+    cd vdatum && \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    cd .. && \
+    rm -rf vdatum
 
-WORKDIR /code/grass
+## install pdal
+ENV NUMTHREADS=4
+WORKDIR /src
+RUN wget -q \
+ https://github.com/PDAL/PDAL/releases/download/${PDAL_VERSION}/PDAL-${PDAL_VERSION}-src.tar.gz && \
+    tar xfz PDAL-${PDAL_VERSION}-src.tar.gz && \
+    cd /src/PDAL-${PDAL_VERSION}-src && \
+    mkdir build && \
+    cd build && \
+    cmake .. \
+      -G "Unix Makefiles" \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_C_COMPILER=gcc \
+      -DCMAKE_CXX_COMPILER=g++ \
+      -DCMAKE_MAKE_PROGRAM=make \
+      -DBUILD_PLUGIN_PYTHON=ON \
+      -DBUILD_PLUGIN_CPD=OFF \
+      -DBUILD_PLUGIN_GREYHOUND=ON \
+      -DBUILD_PLUGIN_HEXBIN=ON \
+      -DHEXER_INCLUDE_DIR=/usr/include/ \
+      -DBUILD_PLUGIN_NITF=OFF \
+      -DBUILD_PLUGIN_ICEBRIDGE=ON \
+      -DBUILD_PLUGIN_PGPOINTCLOUD=ON \
+      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
+      -DBUILD_PLUGIN_SQLITE=ON \
+      -DWITH_LASZIP=ON \
+      -DWITH_LAZPERF=ON \
+      -DWITH_TESTS=ON && \
+    make -j $NUMTHREADS && \
+    make install
 
+# copy grass gis source
+WORKDIR /src
+COPY . /src/grass_build/
+WORKDIR /src/grass_build
+
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
+
+# Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
 ENV MYCFLAGS "-O2 -std=gnu99 -m64"
 ENV MYLDFLAGS "-s"
@@ -90,51 +161,82 @@ ENV LDFLAGS "$MYLDFLAGS"
 ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
-# Configure, compile and install GRASS GIS
-ENV NUMTHREADS=2
-RUN ./configure \
-    --enable-largefile \
-    --with-cxx \
-    --with-nls \
-    --with-readline \
-    --with-sqlite \
-    --with-bzlib \
-    --with-zstd \
-    --with-cairo --with-cairo-ldflags=-lfontconfig \
-    --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-    --with-fftw \
-    --with-netcdf \
-    --with-pdal \
-    --with-proj --with-proj-share=/usr/share/proj \
-    --with-geos=/usr/bin/geos-config \
-    --with-postgres --with-postgres-includes="/usr/include/postgresql" \
-    --with-opengl-libs=/usr/include/GL \
-    && make -j $NUMTHREADS && make install && ldconfig
+# Configure compile and install GRASS GIS
+ENV GRASS_PYTHON=/usr/bin/python3
+ENV NUMTHREADS=4
+RUN make distclean || echo "nothing to clean"
+RUN /src/grass_build/configure \
+  --with-cxx \
+  --enable-largefile \
+  --with-proj-share=/usr/share/proj \
+  --with-gdal=/usr/bin/gdal-config \
+  --with-geos \
+  --with-sqlite \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
+  --with-fftw \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-netcdf \
+  --with-zstd \
+  --with-bzlib \
+  --with-pdal \
+  --without-mysql \
+  --without-odbc \
+  --without-openmp \
+  --without-opengl \
+    && make -j $NUMTHREADS \
+    && make install && ldconfig
 
-# enable simple grass command regardless of version number
-RUN if [ ! -e /usr/local/bin/grass ] ; then ln -s /usr/local/bin/grass* /usr/local/bin/grass ; fi
+# Unset environmental variables to avoid later compilation issues
+ENV INTEL ""
+ENV MYCFLAGS ""
+ENV MYLDFLAGS ""
+ENV MYCXXFLAGS ""
+ENV LD_LIBRARY_PATH ""
+ENV LDFLAGS ""
+ENV CFLAGS ""
+ENV CXXFLAGS ""
+
+# set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions
+ENV SHELL /bin/bash
+ENV LC_ALL "en_US.UTF-8"
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
+
+# Create generic GRASS GIS lib name regardless of version number
+RUN ln -sf /usr/local/grass83 /usr/local/grass
+
+# show GRASS GIS, PROJ, GDAL etc versions
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
 
 # Reduce the image size
 RUN apt-get autoremove -y
 RUN apt-get clean -y
+RUN rm -r /src/grass_build/.git
 
-# set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions in docker
-ENV SHELL /bin/bash
+WORKDIR /scripts
 
-# Fix permissions
-RUN chmod -R a+rwx $DATA_DIR
+# install external GRASS GIS session Python API
+RUN pip3 install grass-session
 
-# create a user
-RUN useradd -m -U grass
+# install GRASS GIS extensions
+RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
 
-# declare data volume late so permissions apply
-VOLUME $DATA_DIR
-WORKDIR $DATA_DIR
+# add GRASS GIS envs for python usage
+ENV GISBASE "/usr/local/grass/"
+ENV GRASSBIN "/usr/local/bin/grass"
+ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
 
-# Further reduce the docker image size 
-RUN rm -rf /code/grass
+WORKDIR /tmp
+COPY docker/testdata/simple.laz .
+WORKDIR /scripts
+COPY docker/testdata/test_grass_session.py .
+## just scan the LAZ file
+# Not yet ready for GRASS GIS 8:
+#RUN /usr/bin/python3 /scripts/test_grass_session.py
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
 
-# switch the user
-USER grass
-
-CMD ["/usr/local/bin/grass", "--version"]
+WORKDIR /grassdb
+VOLUME /grassdb
