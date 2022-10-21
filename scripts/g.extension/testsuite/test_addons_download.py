@@ -15,9 +15,12 @@ COPYRIGHT: (C) 2020 Stefan Blumentrath, Vaclav Petras,
            for details.
 """
 
-import os
+import shutil
+
+from pathlib import Path
 from importlib.machinery import SourceFileLoader
-from distutils.spawn import find_executable
+
+import grass.script as gscript
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -27,27 +30,27 @@ from grass.gunittest.utils import silent_rmtree
 class TestModuleDownloadFromDifferentSources(TestCase):
 
     # MS Windows install function requires absolute paths
-    install_prefix = os.path.abspath("gextension_test_install_path")
+    install_prefix = Path("gextension_test_install_path").absolute()
 
     files = [
-        os.path.join(install_prefix, "scripts", "r.example.plus"),
-        os.path.join(install_prefix, "docs", "html", "r.example.plus.html"),
+        install_prefix.joinpath("scripts", "r.example.plus"),
+        install_prefix.joinpath("docs", "html", "r.example.plus.html"),
     ]
 
     def setUp(self):
         """Make sure we are not dealing with some old files"""
-        if os.path.exists(self.install_prefix):
-            files = os.listdir(self.install_prefix)
+        if self.install_prefix.exists():
+            files = list(path.name for path in self.install_prefix.iterdir())
             if files:
                 RuntimeError(
                     "Install prefix path '{}' contains files {}".format(
-                        self.install_prefix, files
+                        str(self.install_prefix), files
                     )
                 )
 
     def tearDown(self):
         """Remove created files"""
-        silent_rmtree(self.install_prefix)
+        silent_rmtree(str(self.install_prefix))
 
     def test_github_install(self):
         """Test installing extension from github"""
@@ -56,7 +59,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             "g.extension",
             extension="r.example.plus",
             url="https://github.com/wenzeslaus/r.example.plus",
-            prefix=self.install_prefix,
+            prefix=str(self.install_prefix),
         )
 
         # Modules with non-standard branch would be good for testing...
@@ -64,7 +67,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             "g.extension",
             extension="r.example.plus",
             url="https://github.com/wenzeslaus/r.example.plus",
-            prefix=self.install_prefix,
+            prefix=str(self.install_prefix),
         )
 
         for file in self.files:
@@ -76,7 +79,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             "g.extension",
             extension="r.example.plus",
             url="https://gitlab.com/vpetras/r.example.plus",
-            prefix=self.install_prefix,
+            prefix=str(self.install_prefix),
         )
 
         for file in self.files:
@@ -84,79 +87,82 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
     def test_bitbucket_install(self):
         """Test installing extension from bitbucket"""
-        d_rast_files = [
-            os.path.join(self.install_prefix, "scripts", "r.sim.stats"),
-            os.path.join(self.install_prefix, "docs", "html", "r.sim.stats.html"),
+        files = [
+            self.install_prefix.joinpath("scripts", "r.sim.stats"),
+            self.install_prefix.joinpath("docs", "html", "r.sim.stats.html"),
         ]
         self.assertModule(
             "g.extension",
             extension="r.sim.stats",
             url="https://bitbucket.org/lrntct/r.sim.stats",
-            prefix=self.install_prefix,
+            prefix=str(self.install_prefix),
         )
 
-        for file in d_rast_files:
+        for file in files:
             self.assertFileExists(file)
 
     def test_github_install_official(self):
         """Test installing C-extension from official addons repository"""
-        r_gdd_files = [
-            os.path.join(self.install_prefix, "bin", "r.gdd"),
-            os.path.join(self.install_prefix, "docs", "html", "r.gdd.html"),
+        files = [
+            self.install_prefix.joinpath("bin", "r.gdd"),
+            self.install_prefix.joinpath("docs", "html", "r.gdd.html"),
         ]
-        self.assertModule("g.extension", extension="r.clip", prefix=self.install_prefix)
+        self.assertModule(
+            "g.extension", extension="r.gdd", prefix=str(self.install_prefix)
+        )
 
-        for file in r_gdd_files:
+        for file in files:
             self.assertFileExists(file)
 
     def test_github_install_official_multimodule(self):
         """Test installing multi-module extension from official addons repository"""
-        i_sentinel_files = [
-            os.path.join(
-                self.install_prefix, "scripts", "i.sentinel.parallel.download"
+        files = [
+            self.install_prefix.joinpath("scripts", "i.sentinel.parallel.download"),
+            self.install_prefix.joinpath(
+                "docs", "html", "i.sentinel.parallel.download.html"
             ),
-            os.path.join(
-                self.install_prefix, "docs", "html", "i.sentinel.parallel.download.html"
-            ),
-            os.path.join(self.install_prefix, "scripts", "i.sentinel.import"),
-            os.path.join(self.install_prefix, "docs", "html", "i.sentinel.import.html"),
+            self.install_prefix.joinpath("scripts", "i.sentinel.import"),
+            self.install_prefix.joinpath("docs", "html", "i.sentinel.import.html"),
         ]
         self.assertModule(
-            "g.extension", extension="i.sentinel", prefix=self.install_prefix
+            "g.extension", extension="i.sentinel", prefix=str(self.install_prefix)
         )
 
-        for file in i_sentinel_files:
+        for file in files:
             self.assertFileExists(file)
-            if not file.endswith("html"):
+            if not str(file).endswith("html"):
                 print(file)
-                self.assertModule(file, **{"help": True})
+                self.assertModule(file, help=True)
 
     def test_windows_install(self):
-        """Test function for installing extension on MS Windows"""
+        """Test function for installing extension on MS Windows
 
-        if not os.path.exists(self.install_prefix):
-            os.mkdir(self.install_prefix)
+        The purpose of this function is to enable tests for
+        downloads of addons on MS Windows, even when developing
+        on other platforms. It loads g.extension as a module and
+        finally executes the install_extension_win() function."""
 
-        v_in_gbif_files = [
-            os.path.join(self.install_prefix, "v.in.gbif", "bin", "v.in.gbif.bat"),
-            os.path.join(self.install_prefix, "v.in.gbif", "scripts", "v.in.gbif.py"),
-            os.path.join(
-                self.install_prefix, "v.in.gbif", "docs", "html", "v.in.gbif.html"
-            ),
+        if not self.install_prefix.exists():
+            self.install_prefix.mkdir(parents=False)
+
+        files = [
+            self.install_prefix.joinpath("v.in.gbif", "bin", "v.in.gbif.bat"),
+            self.install_prefix.joinpath("v.in.gbif", "scripts", "v.in.gbif.py"),
+            self.install_prefix.joinpath("v.in.gbif", "docs", "html", "v.in.gbif.html"),
         ]
-        g_extension_path = find_executable("g.extension")
+        g_extension_path = shutil.which("g.extension")
         g_extension = SourceFileLoader("g.extension", g_extension_path).load_module()
         g_extension.options = {
             "extension": "v.in.gbif",
             "operation": "add",
-            "prefix": self.install_prefix,
+            "prefix": str(self.install_prefix),
         }
         g_extension.build_platform = "x86_64"
-        g_extension.version = "785"
-        g_extension.TMPDIR = self.install_prefix
+        g_extension.version = gscript.version()["version"].replace(".", "")
+        g_extension.TMPDIR = str(self.install_prefix)
         g_extension.install_extension_win("v.in.gbif")
 
-        for file in v_in_gbif_files:
+        for file in files:
             self.assertFileExists(file)
 
 
