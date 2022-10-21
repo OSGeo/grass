@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -6,8 +6,10 @@ LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.
 ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used
-ARG PDAL_VERSION=2.2.0
-ARG LAZ_PERF_VERSION=1.5.0
+# https://github.com/PDAL/PDAL/releases
+ARG PDAL_VERSION=2.4.3
+# https://github.com/hobuinc/laz-perf/releases
+ARG LAZ_PERF_VERSION=3.2.0
 
 SHELL ["/bin/bash", "-c"]
 
@@ -81,7 +83,7 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
-## install laz-perf
+## install laz-perf (missing from https://packages.ubuntu.com/)
 RUN apt-get install cmake
 WORKDIR /src
 RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
