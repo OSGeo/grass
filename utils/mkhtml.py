@@ -532,10 +532,13 @@ def write_toc(data, hamburger_menu_toc=False):
 
     fd = sys.stdout
     if hamburger_menu_toc:
-        fd.write('<script>\n')
-        fd.write('// Create hamburger menu TOC HTML elements by the JavaScript\n')
+        fd.write("<script>\n")
+        fd.write("// Create hamburger menu TOC HTML elements by the JavaScript\n")
         fd.write("let temp = document.createElement('template');\n")
-        fd.write("""const toc = '<ul class="toc-mobile-screen" id="toc-mobile-screen">' + \n""")
+        fd.write(
+            """const toc = '<ul class="toc-mobile-screen"""
+            """id="toc-mobile-screen">' + \n"""
+        )
     else:
         fd.write('<div class="toc">\n')
         fd.write('<h4 class="toc">Table of contents</h4>\n')
@@ -580,7 +583,7 @@ def write_toc(data, hamburger_menu_toc=False):
 
     if hamburger_menu_toc:
         fd.write(
-"""'</li>' +
+            """'</li>' +
 '<a class="close" href="#">' +
 '<img src="./hamburger_menu_close.svg" alt="close">' +
 '</a>' +
