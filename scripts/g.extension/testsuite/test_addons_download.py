@@ -131,39 +131,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in files:
             self.assertFileExists(file)
             if not str(file).endswith("html"):
-                print(file)
-                self.assertModule(file, help=True)
-
-    def test_windows_install(self):
-        """Test function for installing extension on MS Windows
-
-        The purpose of this function is to enable tests for
-        downloads of addons on MS Windows, even when developing
-        on other platforms. It loads g.extension as a module and
-        finally executes the install_extension_win() function."""
-
-        if not self.install_prefix.exists():
-            self.install_prefix.mkdir(parents=False)
-
-        files = [
-            self.install_prefix.joinpath("v.in.gbif", "bin", "v.in.gbif.bat"),
-            self.install_prefix.joinpath("v.in.gbif", "scripts", "v.in.gbif.py"),
-            self.install_prefix.joinpath("v.in.gbif", "docs", "html", "v.in.gbif.html"),
-        ]
-        g_extension_path = shutil.which("g.extension")
-        g_extension = SourceFileLoader("g.extension", g_extension_path).load_module()
-        g_extension.options = {
-            "extension": "v.in.gbif",
-            "operation": "add",
-            "prefix": str(self.install_prefix),
-        }
-        g_extension.build_platform = "x86_64"
-        g_extension.version = gscript.version()["version"].replace(".", "")
-        g_extension.TMPDIR = str(self.install_prefix)
-        g_extension.install_extension_win("v.in.gbif")
-
-        for file in files:
-            self.assertFileExists(file)
+                self.assertModule(str(file), help=True)
 
 
 if __name__ == "__main__":
