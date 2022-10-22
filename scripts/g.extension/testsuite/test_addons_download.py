@@ -52,7 +52,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         """Remove created files"""
         silent_rmtree(str(self.install_prefix))
 
-    @unittest.skipIf(ms_windows)
+    @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_github_install(self):
         """Test installing extension from github"""
 
@@ -74,7 +74,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
-    @unittest.skipIf(ms_windows)
+    @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_gitlab_install(self):
         """Test installing extension from gitlab"""
         self.assertModule(
@@ -87,7 +87,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
-    @unittest.skipIf(ms_windows)
+    @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_bitbucket_install(self):
         """Test installing extension from bitbucket"""
         files = [
