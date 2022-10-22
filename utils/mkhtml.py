@@ -536,7 +536,7 @@ def write_toc(data, hamburger_menu_toc=False):
         fd.write("// Create hamburger menu TOC HTML elements by the JavaScript\n")
         fd.write("let temp = document.createElement('template');\n")
         fd.write(
-            """const toc = '<ul class="toc-mobile-screen"""
+            """const toc = '<ul class="toc-mobile-screen" """
             """id="toc-mobile-screen">' + \n"""
         )
     else:
