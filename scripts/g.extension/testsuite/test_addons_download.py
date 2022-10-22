@@ -15,16 +15,16 @@ COPYRIGHT: (C) 2020 Stefan Blumentrath, Vaclav Petras,
            for details.
 """
 
-import shutil
+import sys
+import unittest
 
 from pathlib import Path
-from importlib.machinery import SourceFileLoader
-
-import grass.script as gscript
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
+
+ms_windows = sys.platform == "win32"
 
 
 class TestModuleDownloadFromDifferentSources(TestCase):
@@ -52,6 +52,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         """Remove created files"""
         silent_rmtree(str(self.install_prefix))
 
+    @unittest.skipIf(ms_windows)
     def test_github_install(self):
         """Test installing extension from github"""
 
@@ -73,6 +74,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @unittest.skipIf(ms_windows)
     def test_gitlab_install(self):
         """Test installing extension from gitlab"""
         self.assertModule(
@@ -85,6 +87,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @unittest.skipIf(ms_windows)
     def test_bitbucket_install(self):
         """Test installing extension from bitbucket"""
         files = [
