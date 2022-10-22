@@ -2187,6 +2187,8 @@ def check_dirs():
     create_dir(os.path.join(options["prefix"], "docs", "html"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
+    check_style_file("hamburger_menu.svg")
+    check_style_file("hamburger_menu_close.svg")
     check_style_file("grassdocs.css")
     create_dir(os.path.join(options["prefix"], "etc"))
     create_dir(os.path.join(options["prefix"], "docs", "man", "man1"))
