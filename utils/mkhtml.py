@@ -573,7 +573,10 @@ def write_toc(data, hamburger_menu_toc=False):
 
         text = text.replace("\xa0", " ")
         if hamburger_menu_toc:
-            fd.write(f"""'<li><a href="#{escape_href(text)}">{text}</a>' + \n""")
+            fd.write(
+                f"""'<li><a class="toc-item" href="#{escape_href(text)}">"""
+                f"{text}</a>' + \n"
+            )
         else:
             fd.write(
                 '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
