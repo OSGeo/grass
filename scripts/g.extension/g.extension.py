@@ -2152,9 +2152,6 @@ def check_style_file(name):
     dist_file = os.path.join(os.getenv("GISBASE"), "docs", "html", name)
     addons_file = os.path.join(options["prefix"], "docs", "html", name)
 
-    if os.path.isfile(addons_file):
-        return
-
     try:
         shutil.copyfile(dist_file, addons_file)
     except OSError as error:
