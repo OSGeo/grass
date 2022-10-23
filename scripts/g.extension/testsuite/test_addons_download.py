@@ -133,7 +133,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if not str(file).endswith("html"):
+            if not file.suffix == "html":
                 self.assertModule(str(file), help=True)
 
 
