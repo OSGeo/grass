@@ -414,7 +414,6 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <div id="container">
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
 """
 
 header_nopgm = """<h2>${PGM}</h2>
@@ -553,42 +552,90 @@ def escape_href(label):
     return label.replace(" ", "-").lower()
 
 
-def write_toc(data):
+def write_toc(data, hamburger_menu_toc=False):
+    """Write Table of Contents
+
+    :param tuple data: parsed data from MyHTMLParser class instance
+    :param bool hamburger_menu_toc: write hamburger menu TOC for the
+                                    mobile, tablet screen
+    """
+
     if not data:
         return
 
     fd = sys.stdout
-    fd.write('<div class="toc">\n')
-    fd.write('<h4 class="toc">Table of contents</h4>\n')
-    fd.write('<ul class="toc">\n')
+    if hamburger_menu_toc:
+        fd.write("<script>\n")
+        fd.write("// Create hamburger menu TOC HTML elements by the JavaScript\n")
+        fd.write("let temp = document.createElement('template');\n")
+        fd.write(
+            """const toc = '<ul class="toc-mobile-screen" """
+            """id="toc-mobile-screen">' + \n"""
+        )
+    else:
+        fd.write('<div class="toc">\n')
+        fd.write('<h4 class="toc">Table of contents</h4>\n')
+        fd.write('<ul class="toc">\n')
     first = True
     has_h2 = False
     in_h3 = False
     indent = 4
     for tag, href, text in data:
         if tag == "h3" and not in_h3 and has_h2:
-            fd.write('\n%s<ul class="toc">\n' % (" " * indent))
+            if hamburger_menu_toc:
+                fd.write("'<ul>' + \n")
+            else:
+                fd.write('\n%s<ul class="toc">\n' % (" " * indent))
             indent += 4
             in_h3 = True
         elif not first:
-            fd.write("</li>\n")
+            if hamburger_menu_toc:
+                fd.write("'</li>' + \n")
+            else:
+                fd.write("</li>\n")
 
         if tag == "h2":
             has_h2 = True
             if in_h3:
                 indent -= 4
-                fd.write("%s</ul></li>\n" % (" " * indent))
+                if hamburger_menu_toc:
+                    fd.write("'</ul></li>' + \n")
+                else:
+                    fd.write("%s</ul></li>\n" % (" " * indent))
                 in_h3 = False
 
         text = text.replace("\xa0", " ")
-        fd.write(
-            '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
-            % (" " * indent, escape_href(text), text)
-        )
+        if hamburger_menu_toc:
+            fd.write(
+                f"""'<li><a class="toc-item" href="#{escape_href(text)}">"""
+                f"{text}</a>' + \n"
+            )
+        else:
+            fd.write(
+                '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
+                % (" " * indent, escape_href(text), text)
+            )
         first = False
 
-    fd.write("</li>\n</ul>\n")
-    fd.write("</div>\n")
+    if hamburger_menu_toc:
+        fd.write(
+            """'</li>' +
+'<a class="close" href="#">' +
+'<img src="./hamburger_menu_close.svg" alt="close">' +
+'</a>' +
+'</ul>' +
+'<a class="hamburger" href="#toc-mobile-screen">' +
+'<img src="./hamburger_menu.svg" alt="menu">' +
+'</a>';
+temp.innerHTML = toc;
+const grassLogoLink = document.getElementsByTagName("img")[0];
+grassLogoLink.after(temp.content);
+</script>
+"""
+        )
+    else:
+        fd.write("</li>\n</ul>\n")
+        fd.write("</div>\n")
 
 
 def update_toc(data):
@@ -690,13 +737,20 @@ if not re.search("<html>", src_data, re.IGNORECASE):
             )
     if not re.search("<html>", tmp_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
+
     if tmp_data:
+        header_logo_img_el = '<img src="grass_logo.png" alt="GRASS logo">'
         for line in tmp_data.splitlines(True):
             # The cleanup happens on Makefile level too.
             if not re.search(
                 "</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
             ):
-                sys.stdout.write(line)
+                if header_logo_img_el in line:
+                    sys.stdout.write(line)
+                    # create hamburger menu TOC
+                    write_toc(create_toc(src_data), hamburger_menu_toc=True)
+                else:
+                    sys.stdout.write(line)
 
 # create TOC
 write_toc(create_toc(src_data))
