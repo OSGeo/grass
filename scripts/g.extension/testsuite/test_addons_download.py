@@ -7,7 +7,7 @@ AUTHOR(S): Stefan Blumentrath <stefan dot blumentrath at nina dot no)
 
 PURPOSE:   Test for g.extension individual modules/extensions download
 
-COPYRIGHT: (C) 2020 Stefan Blumentrath, Vaclav Petras,
+COPYRIGHT: (C) 2022 Stefan Blumentrath, Vaclav Petras,
            and by the GRASS Development Team
 
            This program is free software under the GNU General Public
@@ -33,8 +33,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     install_prefix = Path("gextension_test_install_path").absolute()
 
     files = [
-        install_prefix.joinpath("scripts", "r.example.plus"),
-        install_prefix.joinpath("docs", "html", "r.example.plus.html"),
+        install_prefix / "scripts" / "r.example.plus",
+        install_prefix / "docs" / "html" / "r.example.plus.html",
     ]
 
     def setUp(self):
@@ -43,9 +43,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             files = list(path.name for path in self.install_prefix.iterdir())
             if files:
                 RuntimeError(
-                    "Install prefix path '{}' contains files {}".format(
-                        str(self.install_prefix), files
-                    )
+                    f"Install prefix path '{self.install_prefix}' \
+                    contains files {','.join(files)}"
                 )
 
     def tearDown(self):
@@ -55,13 +54,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_github_install(self):
         """Test installing extension from github"""
-
-        self.assertModule(
-            "g.extension",
-            extension="r.example.plus",
-            url="https://github.com/wenzeslaus/r.example.plus",
-            prefix=str(self.install_prefix),
-        )
 
         # Modules with non-standard branch would be good for testing...
         self.assertModule(
@@ -91,8 +83,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     def test_bitbucket_install(self):
         """Test installing extension from bitbucket"""
         files = [
-            self.install_prefix.joinpath("scripts", "r.sim.stats"),
-            self.install_prefix.joinpath("docs", "html", "r.sim.stats.html"),
+            self.install_prefix / "scripts" / "r.sim.stats",
+            self.install_prefix / "docs" / "html" / "r.sim.stats.html",
         ]
         self.assertModule(
             "g.extension",
@@ -107,8 +99,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     def test_github_install_official(self):
         """Test installing C-extension from official addons repository"""
         files = [
-            self.install_prefix.joinpath("bin", "r.gdd"),
-            self.install_prefix.joinpath("docs", "html", "r.gdd.html"),
+            self.install_prefix / "bin" / "r.gdd",
+            self.install_prefix / "docs" / "html" / "r.gdd.html",
         ]
         self.assertModule(
             "g.extension", extension="r.gdd", prefix=str(self.install_prefix)
@@ -120,12 +112,10 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     def test_github_install_official_multimodule(self):
         """Test installing multi-module extension from official addons repository"""
         files = [
-            self.install_prefix.joinpath("scripts", "i.sentinel.parallel.download"),
-            self.install_prefix.joinpath(
-                "docs", "html", "i.sentinel.parallel.download.html"
-            ),
-            self.install_prefix.joinpath("scripts", "i.sentinel.import"),
-            self.install_prefix.joinpath("docs", "html", "i.sentinel.import.html"),
+            self.install_prefix / "scripts" / "i.sentinel.parallel.download",
+            self.install_prefix / "docs" / "html" / "i.sentinel.parallel.download.html",
+            self.install_prefix / "scripts" / "i.sentinel.import",
+            self.install_prefix / "docs" / "html" / "i.sentinel.import.html",
         ]
         self.assertModule(
             "g.extension", extension="i.sentinel", prefix=str(self.install_prefix)
@@ -133,7 +123,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if not file.suffix == "html":
+            if not file.suffix == ".html":
                 self.assertModule(str(file), help=True)
 
 
