@@ -2,13 +2,10 @@
 TEST:      test_addons_download.py
 
 AUTHOR(S): Stefan Blumentrath <stefan dot blumentrath at nina dot no)
-           based on test_addons_modules.py by
-           Vaclav Petras <wenzeslaus gmail com>
 
 PURPOSE:   Test for g.extension individual modules/extensions download
 
-COPYRIGHT: (C) 2022 Stefan Blumentrath, Vaclav Petras,
-           and by the GRASS Development Team
+COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
 
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
@@ -28,6 +25,10 @@ ms_windows = sys.platform == "win32"
 
 
 class TestModuleDownloadFromDifferentSources(TestCase):
+    """Tests if addons are downloaded and installed successfully
+    by checking that respective files are present in the prefix directory
+    Based on test_addons_modules.py bym Vaclav Petras <wenzeslaus gmail com>
+    """
 
     # MS Windows install function requires absolute paths
     install_prefix = Path("gextension_test_install_path").absolute()
