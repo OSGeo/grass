@@ -31,6 +31,12 @@
 # %option G_OPT_STRDS_INPUT
 # %end
 
+# %option G_OPT_R_INPUT
+# % key: zones
+# % description: Raster map used for zoning, must be of type CELL
+# % required: no
+# %end
+
 # %option G_OPT_F_OUTPUT
 # % required: no
 # %end
@@ -60,24 +66,27 @@
 # % guisection: Formatting
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
 
 def main():
+    # Get the options and flags
+    options, flags = gs.parser()
+
     # lazy imports
     import grass.temporal as tgis
 
-    # Get the options
+    # Define variables
     input = options["input"]
+    zones = options["zones"]
     output = options["output"]
     where = options["where"]
     extended = flags["e"]
     no_header = flags["u"]
     rast_region = bool(flags["r"])
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()
@@ -87,11 +96,23 @@ def main():
     if output == "-":
         output = None
 
+    # Check if zones map exists and is of type CELL
+    if zones:
+        if gs.raster.raster_info(zones)["datatype"] != "CELL":
+            gs.fatal(_("Zoning raster must be of type CELL"))
+
     tgis.print_gridded_dataset_univar_statistics(
-        "strds", input, output, where, extended, no_header, separator, rast_region
+        "strds",
+        input,
+        output,
+        where,
+        extended,
+        no_header=no_header,
+        fs=separator,
+        rast_region=rast_region,
+        zones=zones,
     )
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
     main()
