@@ -27,6 +27,7 @@ ms_windows = sys.platform == "win32"
 class TestModuleDownloadFromDifferentSources(TestCase):
     """Tests if addons are downloaded and installed successfully
     by checking that respective files are present in the prefix directory
+    and that the addon starts (help is printed)
     Based on test_addons_modules.py bym Vaclav Petras <wenzeslaus gmail com>
     """
 
@@ -66,6 +67,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in self.files:
             self.assertFileExists(file)
+            if file.suffix != ".html":
+                self.assertModule(str(file), help=True)
 
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_gitlab_install(self):
@@ -79,6 +82,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in self.files:
             self.assertFileExists(file)
+            if file.suffix != ".html":
+                self.assertModule(str(file), help=True)
 
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_bitbucket_install(self):
@@ -96,6 +101,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
+            if file.suffix != ".html":
+                self.assertModule(str(file), help=True)
 
     def test_github_install_official(self):
         """Test installing C-extension from official addons repository"""
@@ -103,28 +110,50 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             self.install_prefix / "bin" / "r.gdd",
             self.install_prefix / "docs" / "html" / "r.gdd.html",
         ]
+        if ms_windows:
+            files.append(self.install_prefix / "bin" / "r.gdd.exe")
+        else:
+            files.append(self.install_prefix / "bin" / "r.gdd")
+
         self.assertModule(
             "g.extension", extension="r.gdd", prefix=str(self.install_prefix)
         )
 
         for file in files:
             self.assertFileExists(file)
+            if file.suffix != ".html":
+                self.assertModule(str(file), help=True)
 
     def test_github_install_official_multimodule(self):
         """Test installing multi-module extension from official addons repository"""
         files = [
-            self.install_prefix / "scripts" / "i.sentinel.parallel.download",
             self.install_prefix / "docs" / "html" / "i.sentinel.parallel.download.html",
-            self.install_prefix / "scripts" / "i.sentinel.import",
             self.install_prefix / "docs" / "html" / "i.sentinel.import.html",
         ]
+        if ms_windows:
+            files.extend(
+                [
+                    self.install_prefix / "scripts" / "i.sentinel.parallel.download.py",
+                    self.install_prefix / "scripts" / "i.sentinel.import.py",
+                    self.install_prefix / "bin" / "i.sentinel.parallel.download.bat",
+                    self.install_prefix / "bin" / "i.sentinel.import.bat",
+                ]
+            )
+        else:
+            files.extend(
+                [
+                    self.install_prefix / "scripts" / "i.sentinel.parallel.download",
+                    self.install_prefix / "scripts" / "i.sentinel.import",
+                ]
+            )
+
         self.assertModule(
             "g.extension", extension="i.sentinel", prefix=str(self.install_prefix)
         )
 
         for file in files:
             self.assertFileExists(file)
-            if not file.suffix == ".html":
+            if file.suffix != ".html" and file.suffix != ".py":
                 self.assertModule(str(file), help=True)
 
 
