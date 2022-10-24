@@ -668,6 +668,7 @@ def _parseFormats(output, writableOnly=False):
             continue
         if name in (
             "PostgreSQL",
+            "PostgreSQL/PostGIS",
             "SQLite",
             "SQLite / Spatialite",
             "ODBC",

@@ -613,13 +613,19 @@ class OgrImportDialog(ImportDialog):
             return
 
         dsn = self.dsnInput.GetDsn()
+        if not dsn:
+            return
         ext = self.dsnInput.GetFormatExt()
 
         # determine data driver for PostGIS links
         self.popOGR = False
         if (
             self.dsnInput.GetType() == "db"
-            and self.dsnInput.GetFormat() == "PostgreSQL"
+            and self.dsnInput.GetFormat()
+            in (
+                "PostgreSQL",
+                "PostgreSQL/PostGIS",
+            )
             and "GRASS_VECTOR_OGR" not in os.environ
         ):
             self.popOGR = True
