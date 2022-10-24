@@ -33,6 +33,13 @@
 # %option G_OPT_STR3DS_INPUT
 # %end
 
+# %option G_OPT_R_INPUT
+# % key: zones
+# % label: Raster map withh zones to compute statistics for
+# % description: Raster map withh zones to compute statistics for (needs to be CELL)
+# % required: no
+# %end
+
 # %option G_OPT_F_OUTPUT
 # % required: no
 # %end
@@ -57,23 +64,27 @@
 # % guisection: Formatting
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 
 ############################################################################
 
 
 def main():
+    # Get the options
+    options, flags = gs.parser()
+
     # lazy imports
     import grass.temporal as tgis
 
-    # Get the options
+    # Define variables
     input = options["input"]
+    zones = options["zones"]
     output = options["output"]
     where = options["where"]
     extended = flags["e"]
     no_header = flags["s"]
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()
@@ -83,11 +94,19 @@ def main():
     if output == "-":
         output = None
 
+    # Check if zones map exists and is of type CELL
     tgis.print_gridded_dataset_univar_statistics(
-        "str3ds", input, output, where, extended, no_header, separator
+        "str3ds",
+        input,
+        output,
+        where,
+        extended,
+        no_header=no_header,
+        fs=separator,
+        rast_region=False,
+        zones=zones,
     )
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
     main()
