@@ -705,9 +705,6 @@ class GridModule(object):
     def patch(self):
         """Patch the final results."""
         bboxes = split_region_tiles(width=self.width, height=self.height)
-        loc = Location()
-        mset = loc[self.mset.name]
-        mset.visible.extend(loc.mapsets())
         noutputs = 0
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
