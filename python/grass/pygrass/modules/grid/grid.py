@@ -91,10 +91,9 @@ def copy_mapset(mapset, path):
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
     ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
     >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
-    [...'SEARCH_PATH',...'WIND']
+    [...'WIND'...]
     >>> import shutil
     >>> shutil.rmtree(path)
-
     """
     per_old = os.path.join(mapset.gisdbase, mapset.location, "PERMANENT")
     per_new = os.path.join(path, "PERMANENT")
@@ -651,9 +650,6 @@ class GridModule(object):
     def patch(self):
         """Patch the final results."""
         bboxes = split_region_tiles(width=self.width, height=self.height)
-        loc = Location()
-        mset = loc[self.mset.name]
-        mset.visible.extend(loc.mapsets())
         noutputs = 0
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
