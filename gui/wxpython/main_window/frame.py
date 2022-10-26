@@ -1825,14 +1825,6 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
-    def OnVectorCleaning(self, event, cmd=""):
-        """Init interactive vector cleaning"""
-        from modules.vclean import VectorCleaningFrame
-
-        win = VectorCleaningFrame(parent=self)
-        win.CentreOnScreen()
-        win.Show()
-
     def OnRasterOutputFormat(self, event):
         """Set raster output format handler"""
         self.OnMenuCmd(cmd=["r.external.out"])
