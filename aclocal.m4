@@ -448,6 +448,9 @@ AC_DEFUN([SC_ENABLE_SHARED], [
 #                       code, among other things).
 #       SHLIB_LD -      Base command to use for combining object files
 #                       into a shared library.
+#       SHLIB_LDX -     Base command to use for combining object files
+#                       into a shared C++ library.  Make sure "IS_CXX = yes"
+#                       is set in the library's Makefile.
 #       SHLIB_LD_FLAGS -Flags to pass when building a shared library. This
 #                       differes from the SHLIB_CFLAGS as it is not used
 #                       when building object files or executables.
@@ -473,6 +476,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     SHLIB_LD_FLAGS=""
     SHLIB_SUFFIX=""
     SHLIB_LD=""
+    SHLIB_LDX=""
     STLIB_LD='${AR} cr'
     STLIB_SUFFIX='.a'
     GRASS_TRIM_DOTS='`echo ${LIB_VER} | tr -d .`'
@@ -487,6 +491,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$[@])"
 	    SHLIB_SUFFIX=".so"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             LDFLAGS="-Wl,--export-dynamic"
             LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
@@ -500,6 +505,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
         *-pc-mingw32 | *-w64-mingw32 | *-pc-msys)
             SHLIB_SUFFIX=".dll"
             SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             LDFLAGS="-Wl,--export-dynamic,--enable-runtime-pseudo-reloc"
             LD_LIBRARY_PATH_VAR="PATH"
             ;;
@@ -507,6 +513,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             SHLIB_CFLAGS="-fno-common"
             SHLIB_SUFFIX=".dylib"
             SHLIB_LD="${CC} -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name @rpath/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
+            SHLIB_LDX="${CXX} -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name @rpath/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
             LDFLAGS="-Wl,-rpath,${INSTDIR}/lib,-rpath,\${GISBASE}/lib"
             LD_LIBRARY_PATH_VAR="LD_RUN_PATH"
             ;;
@@ -558,6 +565,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_CFLAGS="-fPIC"
 	    #SHLIB_LD="ld -Bshareable -x"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$[@])"
 	    SHLIB_SUFFIX=".so"
 	    LDFLAGS="-Wl,--export-dynamic"
@@ -573,6 +581,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # NetBSD has ELF.
 	    SHLIB_CFLAGS="-fPIC"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
 	    SHLIB_LD_LIBS="${LIBS}"
 	    LDFLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
 	    SHLIB_LD_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
@@ -620,6 +629,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     AC_SUBST(LD_LIBRARY_PATH_VAR)
 
     AC_SUBST(SHLIB_LD)
+    AC_SUBST(SHLIB_LDX)
     AC_SUBST(SHLIB_LD_FLAGS)
     AC_SUBST(SHLIB_CFLAGS)
     AC_SUBST(SHLIB_SUFFIX)

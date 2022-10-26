@@ -773,6 +773,7 @@ STLIB_LD
 SHLIB_SUFFIX
 SHLIB_CFLAGS
 SHLIB_LD_FLAGS
+SHLIB_LDX
 SHLIB_LD
 LD_LIBRARY_PATH_VAR
 LD_SEARCH_FLAGS
@@ -4012,6 +4013,7 @@ ac_save_ldflags="$LDFLAGS"
     SHLIB_LD_FLAGS=""
     SHLIB_SUFFIX=""
     SHLIB_LD=""
+    SHLIB_LDX=""
     STLIB_LD='${AR} cr'
     STLIB_SUFFIX='.a'
     GRASS_TRIM_DOTS='`echo ${LIB_VER} | tr -d .`'
@@ -4026,6 +4028,7 @@ ac_save_ldflags="$LDFLAGS"
             SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$@)"
 	    SHLIB_SUFFIX=".so"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             LDFLAGS="-Wl,--export-dynamic"
             LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
             LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
@@ -4039,6 +4042,7 @@ ac_save_ldflags="$LDFLAGS"
         *-pc-mingw32 | *-w64-mingw32 | *-pc-msys)
             SHLIB_SUFFIX=".dll"
             SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             LDFLAGS="-Wl,--export-dynamic,--enable-runtime-pseudo-reloc"
             LD_LIBRARY_PATH_VAR="PATH"
             ;;
@@ -4046,6 +4050,7 @@ ac_save_ldflags="$LDFLAGS"
             SHLIB_CFLAGS="-fno-common"
             SHLIB_SUFFIX=".dylib"
             SHLIB_LD="${CC} -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name @rpath/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
+            SHLIB_LDX="${CXX} -dynamiclib -compatibility_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -current_version \${GRASS_VERSION_MAJOR}.\${GRASS_VERSION_MINOR} -install_name @rpath/lib\${LIB_NAME}\${SHLIB_SUFFIX}"
             LDFLAGS="-Wl,-rpath,${INSTDIR}/lib,-rpath,\${GISBASE}/lib"
             LD_LIBRARY_PATH_VAR="LD_RUN_PATH"
             ;;
@@ -4105,6 +4110,7 @@ $as_echo "#define _POSIX_PTHREAD_SEMANTICS 1" >>confdefs.h
 	    SHLIB_CFLAGS="-fPIC"
 	    #SHLIB_LD="ld -Bshareable -x"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
             SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$@)"
 	    SHLIB_SUFFIX=".so"
 	    LDFLAGS="-Wl,--export-dynamic"
@@ -4120,6 +4126,7 @@ $as_echo "#define _POSIX_PTHREAD_SEMANTICS 1" >>confdefs.h
 	    # NetBSD has ELF.
 	    SHLIB_CFLAGS="-fPIC"
 	    SHLIB_LD="${CC} -shared"
+            SHLIB_LDX="${CXX} -shared"
 	    SHLIB_LD_LIBS="${LIBS}"
 	    LDFLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
 	    SHLIB_LD_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR} -export-dynamic'
@@ -4161,6 +4168,7 @@ $as_echo "#define _POSIX_PTHREAD_SEMANTICS 1" >>confdefs.h
             as_fn_error $? "***Unknown platform: $host***" "$LINENO" 5
             ;;
     esac
+
 
 
 
