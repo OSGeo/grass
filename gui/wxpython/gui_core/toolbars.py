@@ -20,6 +20,7 @@ import platform
 import os
 
 import wx
+import wx.lib.agw.aui as aui
 
 from core import globalvar
 from core.debug import Debug
@@ -29,11 +30,6 @@ from core.globalvar import IMGDIR
 from gui_core.wrap import ToolBar, Menu, BitmapButton, NewId
 
 from grass.pydispatch.signal import Signal
-
-try:
-    from agw import aui
-except ImportError:
-    import wx.lib.agw.aui as aui
 
 
 BaseIcons = {
@@ -103,13 +99,14 @@ class ToolbarController:
         self.parent = parent
         self.toolSwitcher = toolSwitcher
         self.handlers = {}
+        self.data = None
 
     def InitToolbar(self, toolData):
         """Initialize toolbar, add tools to the toolbar"""
         for tool in toolData:
             self.CreateTool(*tool)
 
-        self.widget.setToolData(toolData)
+        self.data = toolData
 
     def CreateTool(self, label, bitmap, kind, shortHelp, longHelp, handler, pos=-1):
         """Add tool to the toolbar
@@ -131,7 +128,7 @@ class ToolbarController:
                 3, "CreateTool(): tool=%d, label=%s bitmap=%s" % (tool, label, bitmap)
             )
             if pos < 0:
-                toolWin = self.classObject.AddLabelTool(
+                toolWin = self.classObject.AddTool(
                     self.widget,
                     tool,
                     label,
@@ -142,7 +139,7 @@ class ToolbarController:
                     longHelp,
                 )
             else:
-                toolWin = self.classObject.InsertLabelTool(
+                toolWin = self.classObject.InsertTool(
                     self.widget,
                     pos,
                     tool,
@@ -166,7 +163,7 @@ class ToolbarController:
 
         :param enable: True for enable otherwise disable
         """
-        for tool in self.widget.getToolData():
+        for tool in self.data:
             if isinstance(tool[0], tuple):
                 if tool[0][0] == "":  # separator
                     continue
@@ -197,9 +194,9 @@ class ToolbarController:
 
         self.handlers[id](event=None)
 
-    def SelectDefault(self, default):
+    def SelectDefault(self):
         """Select default tool"""
-        self.SelectTool(default)
+        self.SelectTool(self.widget._default)
 
     def FixSize(self, width):
         """Fix toolbar width on Windows
@@ -211,7 +208,7 @@ class ToolbarController:
             size = self.classObject.GetBestSize(self.widget)
             self.classObject.SetSize(self.widget, (size[0] + width, size[1]))
 
-    def Enable(self, tool, enable):
+    def Enable(self, tool, enable=True):
         """Enable/Disable defined tool
 
         :param str/tuple tool: name
@@ -230,7 +227,7 @@ class ToolbarController:
 
         self.classObject.EnableTool(self.widget, id, enable)
 
-    def EnableAll(self, enable):
+    def EnableAll(self, enable=True):
         """Enable/Disable all tools
 
         :param enable: True to enable otherwise disable tool
@@ -318,33 +315,8 @@ class AuiToolbarController(ToolbarController):
         return ("", "", "", "", "", "")  # separator
 
     def CreateTool(self, label, bitmap, kind, shortHelp, longHelp, handler):
-        """Add tool to the toolbar
-
-        :return: id of tool
-        """
-        bmpDisabled = wx.NullBitmap
-        tool = -1
-
-        if isinstance(label, tuple):
-            internal_label, label = label[0], label[1]
-        else:
-            internal_label = label
-
-        if label:
-            tool = vars(self.widget)[internal_label] = NewId()
-            Debug.msg(
-                3, "CreateTool(): tool=%d, label=%s bitmap=%s" % (tool, label, bitmap)
-            )
-            toolWin = self.classObject.AddTool(
-                self.widget, tool, label, bitmap, bmpDisabled, kind, shortHelp, longHelp
-            )
-            self.handlers[tool] = handler
-            self.widget.Bind(wx.EVT_TOOL, handler, toolWin)
-            self.widget.Bind(wx.EVT_TOOL, self.OnTool, toolWin)
-        else:  # separator
-            self.classObject.AddSeparator(self.widget)
-
-        return tool
+        """Add tool to the toolbar"""
+        return super().CreateTool(label, bitmap, kind, shortHelp, longHelp, handler)
 
 
 class BaseToolbar(ToolBar):
@@ -388,39 +360,17 @@ class BaseToolbar(ToolBar):
             toolSwitcher=toolSwitcher,
         )
 
-    def getToolData(self):
-        return self._data
-
-    def setToolData(self, data):
-        self._data = data
-
     def _toolbarData(self):
         """Toolbar data (virtual)"""
         return None
-
-    def CreateTool(self, *args, **kwargs):
-        """@copydoc ToolbarController::CreateTool()"""
-        self.controller.CreateTool(*args, **kwargs)
-
-    def SelectDefault(self):
-        """@copydoc ToolbarController::SelectDefault()"""
-        self.controller.SelectDefault(self._default)
-
-    def EnableLongHelp(self, enable=True):
-        """@copydoc ToolbarController::EnableLongHelp()"""
-        self.controller.EnableLongHelp(enable)
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""
         self.controller.Enable(tool, enable)
 
-    def EnableAll(self, enable=True):
-        """@copydoc ToolbarController::EnableAll()"""
-        self.controller.EnableAll(enable)
-
-    def CreateSelectionButton(self, tooltip=_("Select graphics tool")):
-        """@copydoc ToolbarController::CreateSelectionButton()"""
-        return self.controller.CreateSelectionButton(tooltip)
+    def CreateTool(self, *args, **kwargs):
+        """@copydoc ToolbarController::CreateTool()"""
+        self.controller.CreateTool(*args, **kwargs)
 
     def __getattr__(self, name):
         return getattr(self.controller, name)
@@ -432,10 +382,16 @@ class AuiToolbar(aui.AuiToolBar):
     Toolbar for integration with the AUI layout system."""
 
     def __init__(
-        self, parent, toolSwitcher=None, style=wx.NO_BORDER | wx.TB_HORIZONTAL
+        self,
+        parent,
+        toolSwitcher=None,
+        style=wx.NO_BORDER | wx.TB_HORIZONTAL,
+        agwStyle=aui.AUI_TB_PLAIN_BACKGROUND,
     ):
         self.parent = parent
-        super().__init__(parent=self.parent, id=wx.ID_ANY, style=style)
+        super().__init__(
+            parent=self.parent, id=wx.ID_ANY, style=style, agwStyle=agwStyle
+        )
 
         self._default = None
         self.SetToolBitmapSize(globalvar.toolbarSize)
@@ -448,35 +404,17 @@ class AuiToolbar(aui.AuiToolBar):
             toolSwitcher=toolSwitcher,
         )
 
-    def getToolData(self):
-        return self._data
-
-    def setToolData(self, data):
-        self._data = data
-
     def _toolbarData(self):
         """Toolbar data (virtual)"""
         return None
-
-    def SelectDefault(self):
-        """@copydoc ToolbarController::SelectDefault()"""
-        self.controller.SelectDefault(self._default)
-
-    def EnableLongHelp(self, enable=True):
-        """@copydoc ToolbarController::EnableLongHelp()"""
-        self.controller.EnableLongHelp(enable)
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""
         self.controller.Enable(tool, enable)
 
-    def EnableAll(self, enable=True):
-        """@copydoc ToolbarController::EnableAll()"""
-        self.controller.EnableAll(enable)
-
-    def CreateSelectionButton(self, tooltip=_("Select graphics tool")):
-        """@copydoc ToolbarController::CreateSelectionButton()"""
-        return self.controller.CreateSelectionButton(tooltip)
+    def CreateTool(self, *args, **kwargs):
+        """@copydoc ToolbarController::CreateTool()"""
+        self.controller.CreateTool(*args, **kwargs)
 
     def __getattr__(self, name):
         return getattr(self.controller, name)

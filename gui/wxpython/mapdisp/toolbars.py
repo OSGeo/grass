@@ -280,12 +280,12 @@ class MapToolbar(BaseToolbar):
             icons = BaseIcons
         else:
             icons = NvizIcons
-        for i, data in enumerate(self._data):
+        for i, data in enumerate(self.controller.data):
             for tool in ("zoomIn", "zoomOut"):
                 if data[0] == tool:
                     tmp = list(data)
                     tmp[4] = icons[tool].GetDesc()
-                    self._data[i] = tuple(tmp)
+                    self.controller.data[i] = tuple(tmp)
 
     def OnSelectTool(self, event):
         """Select / enable tool available in tools list"""
