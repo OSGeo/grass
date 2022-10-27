@@ -766,6 +766,10 @@ class ListBox(wx.ListBox):
         for i in range(self.GetCount()):
             self.Deselect(i)
 
+    def SelectAll(self):
+        for i in range(self.GetCount()):
+            self.Select(i)
+
 
 class HyperlinkCtrl(HyperlinkCtrl_):
     """Wrapper around HyperlinkCtrl to have more control
