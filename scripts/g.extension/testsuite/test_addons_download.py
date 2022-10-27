@@ -21,7 +21,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
 
-ms_windows = sys.platform == "win32"
+ms_windows = sys.platform == "win32" or sys.platform == "cygwin"
 
 
 class TestModuleDownloadFromDifferentSources(TestCase):
@@ -107,7 +107,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     def test_github_install_official(self):
         """Test installing C-extension from official addons repository"""
         files = [
-            self.install_prefix / "bin" / "r.gdd",
             self.install_prefix / "docs" / "html" / "r.gdd.html",
         ]
         if ms_windows:
