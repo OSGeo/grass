@@ -4,6 +4,7 @@
 # Add a select all flag to v.edit
 # https://trac.osgeo.org/grass/ticket/2309
 
+ # Windows linebreaks are removed from the output
 set -e
 set -x
 
@@ -15,7 +16,7 @@ v.edit -r map=vedit_test tool=catadd layer=2 cats=10
 
 expected="10
 10"
-out=$(v.category option=print layer=2 input=vedit_test)
+out=$(v.category option=print layer=2 input=vedit_test| tr -d '\r')
 
 if [[ ${out} != "${expected}" ]]; then
     echo "FAIL: Expected '${expected}' not equals to output '${out}'"
@@ -25,7 +26,7 @@ fi
 # test also the original categories
 expected="1
 2"
-out=$(v.category option=print layer=1 input=vedit_test)
+out=$(v.category option=print layer=1 input=vedit_test| tr -d '\r')
 
 if [[ ${out} != "${expected}" ]]; then
     echo "FAIL: Expected '${expected}' not equals to output '${out}'"
