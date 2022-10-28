@@ -794,6 +794,7 @@ def do_doctest_gettext_workaround():
 
         __builtin__._ = new_translator
 
+
 def doc_test():
     """Tests the module using doctest
 
