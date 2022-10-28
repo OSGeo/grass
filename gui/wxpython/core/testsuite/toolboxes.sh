@@ -3,5 +3,5 @@
 # run make in gui/wxpython before the test
 # run test using sh -e
 
-python $GISBASE/gui/wxpython/core/toolboxes.py doctest
-python $GISBASE/gui/wxpython/core/toolboxes.py test
+python3 $GISBASE/gui/wxpython/core/toolboxes.py doctest
+python3 $GISBASE/gui/wxpython/core/toolboxes.py test
