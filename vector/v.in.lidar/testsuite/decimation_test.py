@@ -63,7 +63,10 @@ class TestCountBasedDecimation(TestCase):
     def test_identical(self):
         """Test to see if the standard outputs are created"""
         self.assertModule(
-            "v.in.lidar", input=self.las_file, output=self.imported_points, flags=self.flags
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags=self.flags,
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
