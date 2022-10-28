@@ -37,13 +37,14 @@ def version():
         out, err = p.communicate()
         if p.returncode:
             raise RuntimeError("no version defined?")
-        return out.strip().decode()
+        git_tag = out.strip().decode()
+        return f"{DEFAULT_PREFIX}-{git_tag}"
     except Exception:
         # failover is to try VERSION_FILE instead
         try:
-            return read_file_version()
+            return f"{DEFAULT_PREFIX}-{read_file_version()}"
         except Exception:
-            return DEFAULT_PREFIX + "-0.0.0"
+            return f"{DEFAULT_PREFIX}-0.0.0"
 
 
 def version_number():
@@ -72,11 +73,11 @@ if __name__ == "__main__":
     import argparse
 
     p = argparse.ArgumentParser()
-    p.add_argument("--save", action="store_true", help="Store version to " + VERSION_FILE)
+    p.add_argument("--save", action="store_true", help=f"Store version to {VERSION_FILE}")
     p.add_argument(
         "--read-file-version",
         action="store_true",
-        help="Read the version stored in " + VERSION_FILE,
+        help=f"Read the version stored in {VERSION_FILE}",
     )
     args = p.parse_args()
 
