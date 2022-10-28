@@ -83,7 +83,9 @@ class TestParserJson(TestCase):
             }
         ]
 
-        stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
+        stdout, stderr = subprocess.Popen(
+            args, stdout=subprocess.PIPE, shell=sys.platform == "win32"
+        ).communicate()
         print(stdout)
         json_code = json.loads(decode(stdout))
         self.assertEqual(json_code["module"], "v.out.ascii")
