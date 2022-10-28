@@ -1,9 +1,10 @@
-# librass interface generator
+# libgrass interface generator
 
 ## Notes on ctypesgen
 
 Currently installed version:
-<https://github.com/ctypesgen/ctypesgen/commit/fd495e5edb2f69e5407774f8937a1d62cd33fe55> (17 February 2022)
+[**v1.1.1**](https://github.com/ctypesgen/ctypesgen/releases/tag/1.1.1)
+(19 October 2022)
 
 
 ### How to update ctypesgen version
