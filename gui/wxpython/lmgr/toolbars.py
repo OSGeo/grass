@@ -24,15 +24,15 @@ This program is free software under the GNU General Public License
 """
 
 from core.gcmd import RunCommand
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseToolbar, AuiToolbar, BaseIcons
 from icons.icon import MetaIcon
 
 
-class LMWorkspaceToolbar(BaseToolbar):
+class LMWorkspaceToolbar(AuiToolbar):
     """Layer Manager `workspace` toolbar"""
 
     def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
 
@@ -185,11 +185,11 @@ class DisplayPanelToolbar(BaseToolbar):
         )
 
 
-class LMToolsToolbar(BaseToolbar):
+class LMToolsToolbar(AuiToolbar):
     """Layer Manager `tools` toolbar"""
 
     def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
 
@@ -259,11 +259,11 @@ class LMToolsToolbar(BaseToolbar):
         )
 
 
-class LMMiscToolbar(BaseToolbar):
+class LMMiscToolbar(AuiToolbar):
     """Layer Manager `misc` toolbar"""
 
     def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
 
@@ -293,13 +293,13 @@ class LMMiscToolbar(BaseToolbar):
         )
 
 
-class LMNvizToolbar(BaseToolbar):
+class LMNvizToolbar(AuiToolbar):
     """Nviz toolbar"""
 
     def __init__(self, parent):
         self.lmgr = parent
 
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         # only one dialog can be open
         self.settingsDialog = None

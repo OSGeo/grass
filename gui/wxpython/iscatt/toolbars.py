@@ -133,7 +133,7 @@ class MainToolbar(BaseToolbar):
     def SetPloltsMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
-            for i_tool_data in self._data:
+            for i_tool_data in self.controller.data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                     continue
@@ -159,7 +159,7 @@ class MainToolbar(BaseToolbar):
         self.UnsetMode()
 
     def UnsetMode(self):
-        for i_tool_data in self._data:
+        for i_tool_data in self.controller.data:
             i_tool_name = i_tool_data[0]
             if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                 continue
@@ -281,7 +281,7 @@ class EditingToolbar(BaseToolbar):
     def SetMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
-            for i_tool_data in self._data:
+            for i_tool_data in self.controller.data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name:
                     continue
@@ -300,7 +300,7 @@ class EditingToolbar(BaseToolbar):
             self.UnsetMode()
 
     def UnsetMode(self):
-        for i_tool_data in self._data:
+        for i_tool_data in self.controller.data:
             i_tool_name = i_tool_data[0]
             if not i_tool_name:
                 continue
