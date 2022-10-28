@@ -9,6 +9,7 @@ for details.
 :authors: Vaclav Petras, Soeren Gebbert
 """
 
+import os
 import subprocess
 from grass.script.core import start_command
 from grass.script.utils import encode, decode
@@ -138,4 +139,11 @@ def call_module(
     returncode = process.poll()
     if returncode:
         raise CalledModuleError(module, kwargs, returncode, errors)
-    return decode(output) if output else None
+    output = decode(output) if output else None
+    # Make sure that universal newlines are returned
+    output = (
+        output.replace(os.linesep, "\n")
+        if os.linesep != "\n" and type(output) == str
+        else output
+    )
+    return output
