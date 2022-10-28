@@ -82,7 +82,11 @@ class RasterCategoryTestCase(TestCase):
         cats = Category(self.name)
         cats.read()
         cats.write_rules(tmpfile)
-        self.assertFilesEqualMd5(tmpfile, "data/geology_cats")
+        with open(tmpfile, "r") as act:
+            actual = act.read()
+        with open("data/geology_cats", "r") as ref:
+            reference = ref.read()
+        self.assertLooksLike(actual, reference)
 
 
 if __name__ == "__main__":
