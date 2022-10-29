@@ -152,8 +152,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html" and file.suffix != ".py":
-                self.assertModule(str(file), help=True)
 
 
 if __name__ == "__main__":

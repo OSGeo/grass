@@ -12,11 +12,16 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
            for details.
 """
 
+import os
+import sys
+import unittest
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-import os
+
+ms_windows = sys.platform == "win32" or sys.platform == "cygwin"
 
 FULL_TOOLBOXES_OUTPUT = """\
 Hydrology (HY)
@@ -36,6 +41,7 @@ mcda (MC)
 """
 
 
+@unittest.skipIf(ms_windows, "currently not supported on MS Windows")
 class TestToolboxesMetadata(TestCase):
 
     url = "file://" + os.path.abspath("data")
