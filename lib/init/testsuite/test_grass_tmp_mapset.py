@@ -18,7 +18,7 @@ import unittest
 import os
 import shutil
 import subprocess
-
+import sys
 
 # Note that unlike rest of GRASS GIS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
@@ -46,7 +46,8 @@ class TestTmpMapset(unittest.TestCase):
     def test_command_runs(self):
         """Check that correct parameters are accepted"""
         return_code = subprocess.call(
-            [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-g"]
+            [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-g"],
+            shell=sys.platform == "win32",
         )
         self.assertEqual(
             return_code,
@@ -67,7 +68,8 @@ class TestTmpMapset(unittest.TestCase):
                 "--exec",
                 "g.proj",
                 "-g",
-            ]
+            ],
+            shell=sys.platform == "win32",
         )
         self.assertNotEqual(
             return_code,
@@ -81,7 +83,8 @@ class TestTmpMapset(unittest.TestCase):
     def test_mapset_metadata_correct(self):
         """Check that metadata is readable and have expected value (XY CRS)"""
         output = subprocess.check_output(
-            [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-g"]
+            [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-g"],
+            shell=sys.platform == "win32",
         )
         self.assertEqual(
             output.strip(),
