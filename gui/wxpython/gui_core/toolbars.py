@@ -386,7 +386,7 @@ class AuiToolbar(aui.AuiToolBar):
         parent,
         toolSwitcher=None,
         style=wx.NO_BORDER | wx.TB_HORIZONTAL,
-        agwStyle=aui.AUI_TB_PLAIN_BACKGROUND,
+        agwStyle=aui.AUI_TB_PLAIN_BACKGROUND | aui.AUI_TB_GRIPPER,
     ):
         self.parent = parent
         super().__init__(
