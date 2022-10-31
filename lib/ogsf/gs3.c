@@ -1162,7 +1162,7 @@ int Gs_update_attrange(geosurf * gs, int desc)
             p = (char *)tb->cb;
             SET_MINMAX(p, nm, size, min, max);
         }
-        else if (tb->fb) { // 'min' and 'max' are used uninitialized whenever 'if' condition is false
+        else if (tb->fb) {
             float *p;
 
             size = (size_t)gs->rows * gs->cols;

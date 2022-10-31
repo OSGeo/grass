@@ -162,8 +162,8 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
     }
 
     for (i = 0; i < ncols; i++, col++) {
-        int sqlType;
-        int size, precision, scale;
+        int sqlType = DB_SQL_TYPE_UNKNOWN;
+        int size = 0, precision = 0, scale;
 
         hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, i);
         ogrType = OGR_Fld_GetType(hFieldDefn);

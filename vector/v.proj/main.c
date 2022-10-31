@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 #ifdef HAVE_PROJ_H
     struct Option *pipeline;    /* name of custom PROJ pipeline */
 #endif
-    struct Key_Value *in_proj_keys, *in_unit_keys;
+    struct Key_Value *in_proj_keys = NULL, *in_unit_keys = NULL;
     struct Key_Value *out_proj_keys, *out_unit_keys;
     struct line_pnts *Points, *Points2;
     struct line_cats *Cats;
