@@ -36,7 +36,8 @@ class TestTmpMapset(unittest.TestCase):
 
     def setUp(self):
         """Creates a location used in the tests"""
-        subprocess.check_call([self.executable, "-c", "XY", self.location, "-e"],
+        subprocess.check_call(
+            [self.executable, "-c", "XY", self.location, "-e"],
             shell=sys.platform == "win32",
         )
         self.subdirs = os.listdir(self.location)
