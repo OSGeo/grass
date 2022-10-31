@@ -1,4 +1,4 @@
-from tempfile import NamedTemporaryFile
+import grass.script as gscript
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -184,7 +184,7 @@ class TestNeighbors(TestCase):
 
     def create_filter(self, options):
         """Create a temporary filter file with the given name and options."""
-        f = NamedTemporaryFile()
+        f = gscript.tempfile(create=False)
         f.write(options)
         f.flush()
         return f
