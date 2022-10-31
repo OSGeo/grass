@@ -120,7 +120,9 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix != ".html" and not ms_windows:
+                # Prebuild C-modules for MS Windows are unlikely to run
+                # on fresh compiled GRASS GIS
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official_multimodule(self):
