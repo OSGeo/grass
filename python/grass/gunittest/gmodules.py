@@ -143,7 +143,7 @@ def call_module(
     # Make sure that universal newlines are returned
     output = (
         output.replace(os.linesep, "\n")
-        if os.linesep != "\n" and type(output) == str
+        if os.linesep != "\n" and type(output) is str
         else output
     )
     return output
