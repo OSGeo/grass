@@ -791,6 +791,8 @@ def do_doctest_gettext_workaround():
 
     if sys.version_info[0] == 2:
         import __builtin__
+    elif locals().get("__builtin__", globals().get("__builtin__")) is None:
+        import builtins as __builtin__
 
     __builtin__._ = new_translator
 
