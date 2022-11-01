@@ -792,7 +792,7 @@ def do_doctest_gettext_workaround():
     if sys.version_info[0] == 2:
         import __builtin__
 
-        __builtin__._ = new_translator
+    __builtin__._ = new_translator
 
 
 def doc_test():
