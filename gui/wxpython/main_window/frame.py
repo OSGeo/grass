@@ -189,7 +189,6 @@ class GMFrame(wx.Frame):
             except Exception:
                 pass
             self.Layout()
-            self.Fit()
         else:
             self.Layout()
             self.Fit()
