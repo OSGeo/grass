@@ -185,7 +185,7 @@ class TestNeighbors(TestCase):
     def create_filter(self, options):
         """Create a temporary filter file with the given name and options."""
         grass_tempfile = gs.tempfile(create=False)
-        with open(grass_tempfile, "w") as f:
+        with open(grass_tempfile, "wb") as f:
             f.write(options)
         return grass_tempfile
 
