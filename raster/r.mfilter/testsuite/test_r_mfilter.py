@@ -172,9 +172,9 @@ class TestNeighbors(TestCase):
                    TYPE    S
 
                    MATRIX 3
-                   1 1 1 
-                   1 1 1 
-                   1 1 1 
+                   1 1 1
+                   1 1 1
+                   1 1 1
                    DIVISOR 9
                    TYPE    P""",
     }
@@ -214,13 +214,13 @@ class TestNeighbors(TestCase):
             "r.mfilter",
             input="elevation",
             output=output,
-            filter=filter.name,
+            filter=filter,
         )
         self.assertModule(
             "r.mfilter",
             input="elevation",
             output=output_threaded,
-            filter=filter.name,
+            filter=filter,
             nprocs=4,
         )
         filter.close()
@@ -247,13 +247,13 @@ class TestNeighbors(TestCase):
             "r.mfilter",
             input="elevation",
             output=output,
-            filter=filter.name,
+            filter=filter,
         )
         self.assertModule(
             "r.mfilter",
             input="elevation",
             output=output_threaded,
-            filter=filter.name,
+            filter=filter,
             nprocs=4,
         )
         filter.close()
@@ -280,13 +280,13 @@ class TestNeighbors(TestCase):
             "r.mfilter",
             input="lakes",
             output=output,
-            filter=filter.name,
+            filter=filter,
         )
         self.assertModule(
             "r.mfilter",
             input="lakes",
             output=output_z,
-            filter=filter.name,
+            filter=filter,
             flags="z",
         )
         filter.close()
@@ -315,27 +315,27 @@ class TestNeighbors(TestCase):
             "r.mfilter",
             input="lakes",
             output=output,
-            filter=filter.name,
+            filter=filter,
         )
         self.assertModule(
             "r.mfilter",
             input="lakes",
             output=output_threaded,
-            filter=filter.name,
+            filter=filter,
             nprocs=4,
         )
         self.assertModule(
             "r.mfilter",
             input="lakes",
             output=output_z,
-            filter=filter.name,
+            filter=filter,
             flags="z",
         )
         self.assertModule(
             "r.mfilter",
             input="lakes",
             output=output_z_threaded,
-            filter=filter.name,
+            filter=filter,
             flags="z",
             nprocs=4,
         )
@@ -373,13 +373,13 @@ class TestNeighbors(TestCase):
             "r.mfilter",
             input="elevation",
             output=output,
-            filter=filter.name,
+            filter=filter,
         )
         self.assertModule(
             "r.mfilter",
             input="elevation",
             output=output_threaded,
-            filter=filter.name,
+            filter=filter,
             nprocs=4,
         )
         filter.close()
@@ -406,14 +406,14 @@ class TestNeighbors(TestCase):
             "r.mfilter",
             input="elevation",
             output=output,
-            filter=filter.name,
+            filter=filter,
             repeat=3,
         )
         self.assertModule(
             "r.mfilter",
             input="elevation",
             output=output_threaded,
-            filter=filter.name,
+            filter=filter,
             repeat=3,
             nprocs=4,
         )
