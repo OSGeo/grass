@@ -44,7 +44,7 @@ class TestMapsetPath(TestCase):
 
     def test_mapset_from_str(self):
         """Check with path from str and database directory as Path"""
-        path = "does/not/exist"
+        path = "does\\not\\exist" if ms_windows else "does/not/exist"
         location_name = "test_location_A"
         mapset_name = "test_mapset_1"
         full_path = Path(path) / location_name / mapset_name
@@ -66,7 +66,7 @@ class TestSplitMapsetPath(TestCase):
 
     def test_split_path(self):
         """Check that pathlib.Path is correctly split"""
-        ref_db = "does/not/exist"
+        ref_db = "does\\not\\exist" if ms_windows else "does/not/exist"
         ref_location = "test_location_A"
         ref_mapset = "test_mapset_1"
         path = Path(ref_db) / ref_location / ref_mapset
@@ -77,7 +77,7 @@ class TestSplitMapsetPath(TestCase):
 
     def test_split_str(self):
         """Check that path as str is correctly split"""
-        ref_db = "does/not/exist"
+        ref_db = "does\\not\\exist" if ms_windows else "does/not/exist"
         ref_location = "test_location_A"
         ref_mapset = "test_mapset_1"
         path = Path(ref_db) / ref_location / ref_mapset
@@ -93,7 +93,7 @@ class TestSplitMapsetPath(TestCase):
         ref_mapset = "test_mapset_1"
         path = Path(ref_db) / ref_location / ref_mapset
         new_db, new_location, new_mapset = split_mapset_path(
-            str(path) + "\\" if ms_windows else "/"
+            str(path) + "\\" if ms_windows else str(path) + "/"
         )
         self.assertEqual(new_db, ref_db)
         self.assertEqual(new_location, ref_location)
@@ -135,7 +135,7 @@ class TestResolveMapsetPath(TestCase):
 
     def test_mapset_from_parts(self):
         """Check that a non-existing path is correctly constructed."""
-        path = "does/not/exist"
+        path = "does\\not\\exist" if ms_windows else "does/not/exist"
         location_name = "test_location_A"
         mapset_name = "test_mapset_1"
         mapset_path = resolve_mapset_path(
