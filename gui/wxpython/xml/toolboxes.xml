@@ -757,6 +757,9 @@
   <toolbox name="OverlayRasters">
     <label>Overlay rasters</label>
     <items>
+      <module-item name="r.buildvrt">
+        <label>Build a VRT (Virtual Raster)</label>
+      </module-item>
       <module-item name="r.cross">
         <label>Cross product</label>
       </module-item>
