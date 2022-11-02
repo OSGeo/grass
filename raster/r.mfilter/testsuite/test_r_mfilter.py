@@ -223,7 +223,6 @@ class TestNeighbors(TestCase):
             filter=filter,
             nprocs=4,
         )
-        filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
             reference=self.test_results[test_case],
@@ -256,7 +255,6 @@ class TestNeighbors(TestCase):
             filter=filter,
             nprocs=4,
         )
-        filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
             reference=self.test_results[test_case],
@@ -289,7 +287,6 @@ class TestNeighbors(TestCase):
             filter=filter,
             flags="z",
         )
-        filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
             reference=self.test_results[test_case][False],
@@ -339,7 +336,6 @@ class TestNeighbors(TestCase):
             flags="z",
             nprocs=4,
         )
-        filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
             reference=self.test_results[test_case][False],
@@ -382,7 +378,6 @@ class TestNeighbors(TestCase):
             filter=filter,
             nprocs=4,
         )
-        filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
             reference=self.test_results[test_case],
@@ -417,7 +412,6 @@ class TestNeighbors(TestCase):
             repeat=3,
             nprocs=4,
         )
-        filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
             reference=self.test_results[test_case],
