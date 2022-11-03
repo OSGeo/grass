@@ -206,6 +206,43 @@ a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|14
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
+    def test_with_zones_parallel(self):
+        """Test use of zones"""
+
+        t_rast_univar_zones = SimpleModule(
+            "t.rast3d.univar",
+            input="A",
+            where="start_time >= '2001-01-01'",
+            zones="zones",
+            nprocs=2,
+            overwrite=True,
+            verbose=True,
+        )
+        self.runModule("g.region", res=1)
+        self.assertModule(t_rast_univar_zones)
+
+        univar_text = """id|start|end|zone|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|1|100|100|100|100|0|0|0|3000000|0|30000|30000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|2|100|100|100|100|0|0|0|8400000|0|84000|84000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|3|100|100|100|100|0|0|0|36600000|0|366000|366000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|1|200|200|200|200|0|0|0|6000000|0|30000|30000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|2|200|200|200|200|0|0|0|16800000|0|84000|84000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|3|200|200|200|200|0|0|0|73200000|0|366000|366000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|1|300|300|300|300|0|0|0|9000000|0|30000|30000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|2|300|300|300|300|0|0|0|25200000|0|84000|84000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|3|300|300|300|300|0|0|0|109800000|0|366000|366000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|1|400|400|400|400|0|0|0|12000000|0|30000|30000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|2|400|400|400|400|0|0|0|33600000|0|84000|84000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|146400000|0|366000|366000
+"""
+
+        for ref, res in zip(
+            univar_text.split("\n"), t_rast_univar_zones.outputs.stdout.split("\n")
+        ):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
 
 if __name__ == "__main__":
     from grass.gunittest.main import test
