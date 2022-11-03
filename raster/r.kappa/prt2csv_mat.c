@@ -97,8 +97,9 @@ void prn2csv_error_mat(int out_cols, int hdr)
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)
-                cl = "NULL";
-            fprintf(fd, "%s\t", cl);
+                fprintf(fd, "%ld\t", cats[j]);
+            else
+                fprintf(fd, "%s\t", cl);
         }
         /*for (cndx = first_col; cndx < last_col; cndx++) */
         /*    fprintf(fd, "%ld\t", rlst[cndx]); */
@@ -112,8 +113,9 @@ void prn2csv_error_mat(int out_cols, int hdr)
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)
-                cl = "NULL";
-            fprintf(fd, "%s\t", cl);
+                fprintf(fd, "%ld\t", cats[rndx]);
+            else
+                fprintf(fd, "%s\t", cl);
             /* entries */
             for (cndx = first_col; cndx < last_col; cndx++) {
                 thisone = (ncat * rndx) + cndx;
