@@ -157,7 +157,7 @@ class CalculationCorrectness1Test(TestCase):
             flags="w",
             quiet=True,
         )
-        rows = out.split("\n")
+        rows = out.splitlines()
 
         # Matrix part
         self.assertEqual(rows[10], " M     1\t4\t0\t0\t0\t0\t0\t4")
@@ -170,7 +170,7 @@ class CalculationCorrectness1Test(TestCase):
 
         # Per class coefficients
         for c in range(len(self.per_class["producer"])):
-            vals = rows[20 + c].split(sep=None)
+            vals = rows[20 + c].split()
             # The test on the next line is valid only for this data
             self.assertEqual(vals[0], str(c + 1))
             self.assertTrue(self.match(vals[1], self.per_class["user"][c]))
@@ -178,11 +178,11 @@ class CalculationCorrectness1Test(TestCase):
             self.assertTrue(self.match(vals[3], self.per_class["cond.kappa"][c]))
 
         # Kappa value
-        vals = rows[28].split(sep=None)
+        vals = rows[28].split()
         self.assertTrue(self.match(vals[0], 0.52091))
 
         # Overall characteristics
-        vals = rows[31].split(sep=None)
+        vals = rows[31].split()
         self.assertEqual(vals[0], "11")
         self.assertEqual(vals[1], "18")
         self.assertTrue(self.match(vals[2], 61.111))
@@ -263,7 +263,7 @@ class CalculationCorrectness2Test(TestCase):
             flags="w",
             quiet=True,
         )
-        rows = out.split("\n")
+        rows = out.splitlines()
 
         # Matrix part
         self.assertEqual(rows[10], " M     0\t0\t0\t0\t0\t0\t0\t0")
@@ -276,17 +276,17 @@ class CalculationCorrectness2Test(TestCase):
 
         # Per class coefficients
         for c in range(len(self.per_class["producer"])):
-            vals = rows[20 + c].split(sep=None)
+            vals = rows[20 + c].split()
             self.assertTrue(self.match(vals[1], self.per_class["user"][c]))
             self.assertTrue(self.match(vals[2], self.per_class["producer"][c]))
             self.assertTrue(self.match(vals[3], self.per_class["cond.kappa"][c]))
 
         # Kappa value
-        vals = rows[28].split(sep=None)
+        vals = rows[28].split()
         self.assertTrue(self.match(vals[0], 0.0))
 
         # Overall characteristics
-        vals = rows[31].split(sep=None)
+        vals = rows[31].split()
         self.assertEqual(vals[0], "0")
         self.assertEqual(vals[1], "25")
         self.assertTrue(self.match(vals[2], 0.0))
