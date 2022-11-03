@@ -186,7 +186,8 @@ class GMFrame(wx.Frame):
             except Exception:
                 pass
             self.Layout()
-            self.Fit()
+            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
+                self.Fit()
         else:
             self.Layout()
             self.Fit()
