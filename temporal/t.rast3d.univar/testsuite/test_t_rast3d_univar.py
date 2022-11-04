@@ -244,6 +244,7 @@ a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|14
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
+
 if __name__ == "__main__":
     from grass.gunittest.main import test
 
