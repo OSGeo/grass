@@ -9,7 +9,7 @@
 
 int compute_means(struct files *files, struct Signature *S)
 {
-    int n, n_nulls;
+    int n;
     int b;
     int nrows, ncols, row, col;
     CELL *class;
@@ -33,7 +33,7 @@ int compute_means(struct files *files, struct Signature *S)
                            files->band_cell[b], row);
             for (col = 0; col < ncols; col++) {
                 if (Rast_is_d_null_value(&cell[col])) {
-                    n_nulls++; // 'n_nulls' is uninitialized when used here
+                    // n_nulls++; // 'n_nulls' is uninitialized when used here, this line will be removed
                     continue;
                 }
                 n = class[col];

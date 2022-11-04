@@ -444,7 +444,8 @@ int test_large_file_sparse_random(int depths, int rows, int cols,
             for (x = 0; x < region.cols; x++) {
                 /* Check the counter as cell value */
                 Rast3d_get_value(map, x, y, z, &value, DCELL_TYPE);
-                if (fabs(value - random_value_vector[i]) > EPSILON) {
+				random_value = random_value_vector[i];
+                if (fabs(value - random_value) > EPSILON) {
                     G_message
                         ("At: z %i y %i x %i -- value %.14lf != %.14lf\n", z,
                          y, x, value, random_value); // 'random_value' is uninitialized when used here

@@ -151,7 +151,7 @@ int do_accum(double d8cut)
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
     int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
-    GW_LARGE_INT workedon, killer;
+    GW_LARGE_INT killer;
     char *flag_nbr;
     POINT astarpoint;
     WAT_ALT wa;
@@ -331,7 +331,7 @@ int do_accum(double d8cut)
                     }
                     else if (ct_dir == np_side) {
                         /* check for consistency with A * path */
-                        workedon++;  // 'workedon' is uninitialized when used here
+                        // workedon++;  // 'workedon' is uninitialized when used here, not used, this line will be removed
                     }
                 }
             }
