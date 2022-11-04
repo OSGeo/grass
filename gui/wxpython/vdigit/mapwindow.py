@@ -217,7 +217,7 @@ class VDigitWindow(BufferedMapWindow):
         if not shift:
             tool = tools.get(kc)
             if tool:
-                event = self.toolbar.OnTool(tool["event"])
+                event = self.toolbar.controller.OnTool(tool["event"])
                 tool["tool"](event)
 
     def _updateMap(self):
