@@ -621,6 +621,11 @@ class MapPanel(SingleMapPanel):
                 .BestSize((self.toolbars["map"].GetBestSize())),
             )
 
+        # nviz
+        elif name == "nviz":
+            self.toolbars["map"].combo.SetValue(_("3D View"))
+            self.AddNviz()
+
         # vector digitizer
         elif name == "vdigit":
             self.toolbars["map"].combo.SetValue(_("Vector digitizer"))
