@@ -281,7 +281,7 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
         /* do not go through closed nodes */
         if (have_node_costs && prev[vertex]) {
             memcpy(&ncost,
-                   dglNodeGet_Attr(graph, dglEdgeGet_Tail(graph, edge)), // 'edge' is uninitialized when used here
+                   dglNodeGet_Attr(graph, dglEdgeGet_Tail(graph, edge)),
                    sizeof(ncost));
             if (ncost < 0)
                 continue;

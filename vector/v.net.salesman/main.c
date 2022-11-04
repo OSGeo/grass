@@ -500,8 +500,8 @@ int main(int argc, char **argv)
 
             /* tmpcost must always be > 0 */
 
-            G_debug(2, "? %d - %d cost = %f x %f", cities[cycle[j]], cities[cycle[j+1]], // 'node1' and 'node2' is uninitialized when used here
-				tmpcost, cost);
+            G_debug(2, "? %d - %d cost = %f x %f", cities[cycle[j]],
+                    cities[cycle[j + 1]], tmpcost, cost);
             /* always true for j = 0 */
             if (tmpcost < cost) {
                 city1 = j;

@@ -32,10 +32,8 @@ int compute_means(struct files *files, struct Signature *S)
             Rast_get_d_row(files->band_fd[b], cell =
                            files->band_cell[b], row);
             for (col = 0; col < ncols; col++) {
-                if (Rast_is_d_null_value(&cell[col])) {
-                    // n_nulls++; // 'n_nulls' is uninitialized when used here, this line will be removed
+                if (Rast_is_d_null_value(&cell[col]))
                     continue;
-                }
                 n = class[col];
                 if (n < 0)
                     continue;

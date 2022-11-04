@@ -542,7 +542,7 @@ int Vect_write_ascii(FILE * ascii,
         if (columns) {
             for (i = 0; columns[i]; i++) {
                 if (db_select_value
-                    (driver, Fi->table, Fi->key, 0, columns[i], &value) < 0)  // 'cat' is uninitialized here
+                    (driver, Fi->table, Fi->key, 0, columns[i], &value) < 0)
                     G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
                                   Fi->table, Fi->key, columns[i]);
                 if (columns[i])

@@ -49,7 +49,7 @@ double Cdhc_enormp(double x)
     }
     else {
         x2 = x * x;
-        // x4 *= 1.;               /* huh, what? See original FORTRAN */ // 'x4' is uninitialized when used here
+        // x4 *= 1.;               /* huh, what? See original FORTRAN */
         x4 = 0.5;
         yy1 = (((xt[0] * x4 + xt[1]) * x4 + xt[2]) * x4 + xt[3]) * x4 + xt[4];
         yy2 = (((xu[0] * x4 + xu[1]) * x4 + xu[2]) * x4 + xu[3]) * x4 + 1.;
