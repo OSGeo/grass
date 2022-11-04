@@ -20,7 +20,6 @@ for details.
 """
 from __future__ import print_function
 from multiprocessing import Pool
-from copy import deepcopy
 from subprocess import PIPE
 
 from .core import SQLDatabaseInterfaceConnection, get_current_mapset
