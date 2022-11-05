@@ -1063,7 +1063,7 @@ int main(int argc, char *argv[])
                     G_warning(_("Datatype of column <%s> is not supported. "
                     "Omitting that column."), OGR_Fld_GetNameRef(Ogr_field));
                     ncols_out = ncols_out - 1;
-                    continue; /* skip defined key (FID column) */
+                    continue;
 				}
 		i_out++;
 
