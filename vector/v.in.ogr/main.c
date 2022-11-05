@@ -1053,12 +1053,19 @@ int main(int argc, char *argv[])
                 if (key_idx[layer] > -1 && key_idx[layer] == i)
                     continue; /* skip defined key (FID column) */
 
-		i_out++;
-                
 		Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		Ogr_ftype = OGR_Fld_GetType(Ogr_field);
 
 		G_debug(3, "Ogr_ftype: %i", Ogr_ftype);	/* look up below */
+
+                /* skip columns with unsupported data type */
+                if (Ogr_ftype == OFTBinary) {
+                    G_warning(_("Datatype of column <%s> is not supported. "
+                    "Omitting that column."), OGR_Fld_GetNameRef(Ogr_field));
+                    ncols_out = ncols_out - 1;
+                    continue; /* skip defined key (FID column) */
+				}
+		i_out++;
 
 		if (i < ncnames - 1) {
 		    Ogr_fieldname = G_store(param.cnames->answers[i + 1]);
