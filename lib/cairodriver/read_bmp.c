@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -94,7 +95,14 @@ void cairo_read_bmp(void)
     if (!read_bmp_header(header))
         G_fatal_error(_("Cairo: Invalid BMP header for <%s>"), ca.file_name);
 
-    fread(ca.grid, ca.stride, ca.height, input);
+    if (fread(ca.grid, ca.stride, ca.height, input) != ca.height) {
+            if (feof(input))
+                G_fatal_error(_("Cairo: error reading BMP file <%s>: "
+                                "unexpected end of file"), ca.file_name);
+            else if (ferror(input))
+                G_fatal_error(_("Cairo: error reading BMP file <%s>: %s"),
+                              ca.file_name, strerror(errno));
+    }
 
     fclose(input);
 }
