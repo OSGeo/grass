@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <math.h>
+#include <errno.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -227,7 +228,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
             if (fpoint > 0) {   /* Found */
                 /* read point */
                 lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2), SEEK_SET);
-                read(xpntfd, &XPnt, sizeof(XPNT2));
+                if (read(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
+                    G_fatal_error(_("File reading error in %s() %d:%s"),
+                                  __func__, errno, strerror(errno));
                 if (XPnt.cross == 1)
                     continue;   /* already marked */
 
@@ -238,7 +241,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                     /* write point */
                     lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2),
                           SEEK_SET);
-                    write(xpntfd, &XPnt, sizeof(XPNT2));
+                    if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
+                        G_fatal_error(_("File writing error in %s() %d:%s"),
+                                      __func__, errno, strerror(errno));
                 }
                 else {
                     G_debug(3, "a1 = %f xa1 = %f a2 = %f xa2 = %f", a1,
@@ -252,7 +257,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                         /* write point */
                         lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2),
                               SEEK_SET);
-                        write(xpntfd, &XPnt, sizeof(XPNT2));
+                        if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
+                            G_fatal_error(_("File writing error in %s() %d:%s"),
+                                          __func__, errno, strerror(errno));
                     }
                 }
             }
@@ -274,7 +281,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                 /* write point */
                 lseek(xpntfd, (off_t) (npoints - 1) * sizeof(XPNT2),
                       SEEK_SET);
-                write(xpntfd, &XPnt, sizeof(XPNT2));
+                if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
+                    G_fatal_error(_("File writing error in %s() %d:%s"),
+                                  __func__, errno, strerror(errno));
 
                 npoints++;
             }
@@ -332,7 +341,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
 
             /* read point */
             lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2), SEEK_SET);
-            read(xpntfd, &XPnt, sizeof(XPNT2));
+            if (read(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
+                G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 
             /* break or write last segment of broken line */
             if ((j == (Points->n_points - 1) && broken) || XPnt.cross) {
@@ -367,7 +378,9 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                         /* write point */
                         lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2),
                               SEEK_SET);
-                        write(xpntfd, &XPnt, sizeof(XPNT2));
+                        if (write(xpntfd, &XPnt, sizeof(XPNT2)) < 0)
+                            G_fatal_error(_("File writing error in %s() %d:%s"),
+                                          __func__, errno, strerror(errno));
                     }
                 }
 
