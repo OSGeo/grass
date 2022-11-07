@@ -1058,14 +1058,14 @@ int main(int argc, char *argv[])
 
 		G_debug(3, "Ogr_ftype: %i", Ogr_ftype);	/* look up below */
 
-                /* skip columns with unsupported data type */
-                if (Ogr_ftype == OFTBinary) {
-                    G_warning(_("Datatype of column <%s> is not supported. "
-                    "Omitting that column."), OGR_Fld_GetNameRef(Ogr_field));
-                    ncols_out = ncols_out - 1;
-                    continue;
-				}
-		i_out++;
+            /* skip columns with unsupported data type */
+            if (Ogr_ftype == OFTBinary) {
+                G_warning(_("Column <%s> is omitted, binary data type is not supported."),
+                          OGR_Fld_GetNameRef(Ogr_field));
+                ncols_out = ncols_out - 1;
+                continue;
+            }
+            i_out++;
 
 		if (i < ncnames - 1) {
 		    Ogr_fieldname = G_store(param.cnames->answers[i + 1]);
