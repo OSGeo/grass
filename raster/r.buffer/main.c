@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
         to_meters = KILOMETERS_TO_METERS;
     else if (strcmp(units, "miles") == 0)
         to_meters = MILES_TO_METERS;
-    else if (strcmp(units, "nautmiles") == 0) // 'to_meters' is used uninitialized whenever 'if'
+    else if (strcmp(units, "nautmiles") == 0)
         to_meters = NAUT_MILES_TO_METERS;
 
     /* parse distances */

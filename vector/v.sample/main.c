@@ -205,7 +205,7 @@ int main(int argc, char **argv)
     nlines = Vect_get_num_lines(&In);
 
     for (line = 1; line <= nlines; line++) {
-        int type, cat = 0, ret, cval;
+        int type, cat = -1, ret, cval;
         double dval;
 
         G_debug(3, "line = %d", line);
@@ -215,7 +215,7 @@ int main(int argc, char **argv)
         type = Vect_read_line(&In, Points, Cats, line);
         if (!(type & GV_POINT))
             continue;
-        if (field != -1 && !Vect_cat_get(Cats, field, &cat)) // 'cat' is used uninitialized whenever '&&' condition is false
+        if (field != -1 && !Vect_cat_get(Cats, field, &cat))
             continue;
 
         G_debug(4, "cat = %d", cat);

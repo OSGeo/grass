@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
         order = 1;
     else if (G_strcasecmp(parm.order->answer, "native") == 0)
         order = G_is_little_endian()? 1 : 0;
-    else if (G_strcasecmp(parm.order->answer, "swap") == 0) // 'order' is used uninitialized whenever 'if' condition is false
+    else if (G_strcasecmp(parm.order->answer, "swap") == 0)
         order = G_is_little_endian()? 0 : 1;
 
     swap_flag = order == (G_is_little_endian()? 0 : 1);

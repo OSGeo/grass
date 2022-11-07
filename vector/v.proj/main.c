@@ -360,7 +360,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Unable to initialize coordinate transformation"));
 
     }
-    else if (stat < 0) { // 'in_proj_keys' and 'in_unit_keys' are used uninitialized whenever 'if' condition is false
+    else if (stat < 0) {
         /* allow 0 (i.e. denied permission) */
         /* need to be able to read from others */
         if (stat == 0)

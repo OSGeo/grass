@@ -284,7 +284,7 @@ int main(int argc, char **argv)
         G_fatal_error(_("'layer' must be > 0"));
     if ((fi = Vect_get_field(&Map, Clist->field)) == NULL)
         G_fatal_error(_("Database connection not defined"));
-    if (fi != NULL) { // 'driver' is used uninitialized whenever 'if' condition is false
+    if (fi != NULL) {
         driver = db_start_driver(fi->driver);
         if (driver == NULL)
             G_fatal_error(_("Unable to start driver <%s>"), fi->driver);

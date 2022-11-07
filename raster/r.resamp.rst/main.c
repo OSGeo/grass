@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
         if ((winhd.ew_res != smhd.ew_res) || (winhd.ns_res != smhd.ns_res))
             G_fatal_error(_("Map <%s> is the wrong resolution"), smooth);
 
-        if (Rast_read_fp_range(smooth, "", &range) >= 0) // 'cellmin' is used uninitialized whenever 'if' condition is false
+        if (Rast_read_fp_range(smooth, "", &range) >= 0)
             Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
 
         fcellmin = (float)cellmin;

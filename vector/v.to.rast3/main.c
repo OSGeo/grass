@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
             ret = db_CatValArray_get_value_int(&cvarr, cat, &ivalue);
             value = ivalue;
         }
-        else if (ctype == DB_C_TYPE_DOUBLE) { // 'ret' is used uninitialized whenever 'if' condition is false
+        else if (ctype == DB_C_TYPE_DOUBLE) {
             ret = db_CatValArray_get_value_double(&cvarr, cat, &value);
         }
 

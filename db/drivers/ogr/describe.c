@@ -208,7 +208,7 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
             precision = 0;
             break;
 
-        default: // 'size', 'precision' and 'sqlType' are used uninitialized whenever switch default is taken
+        default:
             G_warning(_("Unknown type"));
             break;
         }

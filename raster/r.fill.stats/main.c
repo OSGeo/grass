@@ -1091,7 +1091,7 @@ int main(int argc, char *argv[])
     else if (OUT_TYPE == FCELL_TYPE) {
         data_type_string_out = "single";
     }
-    else if (OUT_TYPE == DCELL_TYPE) { // 'data_type_string_out' is used uninitialized whenever 'if' condition is false
+    else if (OUT_TYPE == DCELL_TYPE) {
         data_type_string_out = "double";
     }
 
