@@ -691,6 +691,9 @@
       <module-item name="r.tileset">
         <label>Tiling</label>
       </module-item>
+      <module-item name="r.buildvrt">
+        <label>Build a VRT (Virtual Raster)</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="ManageRasterColors">
