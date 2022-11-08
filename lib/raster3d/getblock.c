@@ -12,7 +12,7 @@ void
 Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
                          int ny, int nz, void *block, int type)
 {
-    void *tile;
+    void *tile = NULL;
     int tileX0, tileY0, tileZ0, tileOffsX0, tileOffsY0, tileOffsZ0;
     int tileX1, tileY1, tileZ1, tileOffsX1, tileOffsY1, tileOffsZ1;
     int tx, ty, tz, dx, dy, dz, x, y, z, rows, cols, depths;

@@ -142,7 +142,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
  */
 int build_topo(struct Map_info *Map, int build)
 {
-    int line, type, s, n_nodes;
+    int line, type, s, n_nodes = 0;
     int area, nareas, isle, nisles;
     int face[2];
     char stmt[DB_SQL_MAX];

@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
     nlines = Vect_get_num_lines(&Map);
     for (line = 1; line <= nlines; line++) {
-        int type, cat, depth, row, col, ret;
+        int type, cat, depth, row, col, ret = DB_FAILED;
         double value;
 
         G_percent(line, nlines, 2);

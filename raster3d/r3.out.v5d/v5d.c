@@ -2027,7 +2027,7 @@ v5dstruct *v5dOpenFile(const char *filename, v5dstruct * v)
 int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
                           float *ga, float *gb, void *compdata)
 {
-    int n, k;
+    int n, k = 0;
     off_t pos;
 
     if (time < 0 || time >= v->NumTimes) {
@@ -2096,7 +2096,7 @@ int v5dReadGrid(v5dstruct * v, int time, int var, float data[])
 {
     float ga[MAXLEVELS], gb[MAXLEVELS];
     void *compdata;
-    int bytes;
+    int bytes = 0;
 
     if (time < 0 || time >= v->NumTimes) {
         printf("Error in v5dReadGrid: bad timestep argument (%d)\n", time);
@@ -2491,7 +2491,7 @@ int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[])
 {
     float ga[MAXLEVELS], gb[MAXLEVELS];
     void *compdata;
-    int n, bytes;
+    int n, bytes = 0;
     float min, max;
 
     if (v->Mode != 'w') {

@@ -154,7 +154,7 @@ void I_sc_free_cats(struct scCats *cats)
  */
 int I_sc_add_cat(struct scCats *cats)
 {
-    int i_scatt, i_cat_id, cat_id;
+    int i_scatt, i_cat_id, cat_id = 0;
     int n_a_cats = cats->n_a_cats;
 
     if (cats->n_a_cats >= cats->n_cats)

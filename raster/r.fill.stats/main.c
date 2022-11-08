@@ -1073,8 +1073,8 @@ int main(int argc, char *argv[])
             }
         }
     }
-    char *data_type_string_in;
-    char *data_type_string_out;
+    char *data_type_string_in = NULL;
+    char *data_type_string_out = NULL;
 
     if (IN_TYPE == CELL_TYPE) {
         data_type_string_in = "integer";

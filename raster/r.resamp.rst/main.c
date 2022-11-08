@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 {
     int m1;
     struct FPRange range;
-    DCELL cellmin, cellmax;
+    DCELL cellmin = 0.0, cellmax;
     FCELL *cellrow, fcellmin;
 
     struct GModule *module;

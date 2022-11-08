@@ -109,7 +109,7 @@ void options_to_lattr(LATTR *lattr, const char *layer,
 
 int option_to_color(struct color_rgb *color, const char *color_val)
 {
-    int has_color, ret;
+    int has_color = 0, ret;
     int r, g, b;
     
     ret = G_str_to_color(color_val, &r, &g, &b);

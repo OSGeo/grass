@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
     int is_integer;
     int is_signed;
     int bytes;
-    int order;
+    int order = 0;
     int byte_swap;
     RASTER_MAP_TYPE map_type;
     off_t file_size;

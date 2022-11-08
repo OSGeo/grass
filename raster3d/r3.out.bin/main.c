@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
     char *outfile;
     double null_val;
     int do_stdout;
-    int order;
+    int order = 0;
     int swap_flag;
     int bytes;
     int as_integer = 0;
