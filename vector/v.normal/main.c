@@ -153,7 +153,7 @@ int main(int argc, char **argv)
     nsites = 0;
     for (line = 1; line <= nlines; line++) {
         int type, cat, ret, cval;
-        double dval;
+        double dval = 0.0;
 
         G_debug(3, "line = %d", line);
 
