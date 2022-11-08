@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
         struct Option *snap, *type, *outloc, *cnames, *encoding, *key, *geom;
     } param;
     struct _flag {
-	struct Flag *list, *no_clean, *force2d, *notab,
+	struct Flag *list, *no_clean, *force2d, *notab, *drop,
 	    *region, *over, *extend, *formats, *tolower, *no_import,
             *proj;
     } flag;
@@ -379,6 +379,12 @@ int main(int argc, char *argv[])
 
     flag.notab = G_define_standard_flag(G_FLG_V_TABLE);
     flag.notab->guisection = _("Attributes");
+
+    flag.drop = G_define_flag();
+    flag.drop->guisection = _("Attributes");
+    flag.drop->key = 'd';
+    flag.drop->description =
+        _("Drop columns with unsupported data type from import");
 
     flag.over = G_define_flag();
     flag.over->key = 'o';
@@ -1053,19 +1059,12 @@ int main(int argc, char *argv[])
                 if (key_idx[layer] > -1 && key_idx[layer] == i)
                     continue; /* skip defined key (FID column) */
 
+        i_out++;
+
 		Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		Ogr_ftype = OGR_Fld_GetType(Ogr_field);
 
 		G_debug(3, "Ogr_ftype: %i", Ogr_ftype);	/* look up below */
-
-            /* skip columns with unsupported data type */
-            if (Ogr_ftype == OFTBinary) {
-                G_warning(_("Column <%s> is omitted, binary data type is not supported."),
-                          OGR_Fld_GetNameRef(Ogr_field));
-                ncols_out = ncols_out - 1;
-                continue;
-            }
-            i_out++;
 
 		if (i < ncnames - 1) {
 		    Ogr_fieldname = G_store(param.cnames->answers[i + 1]);
@@ -1182,13 +1181,23 @@ int main(int argc, char *argv[])
 			      Ogr_fieldname, OFTIntegerListlength);
 		}
 		else {
-		    G_warning(_("Column type (Ogr_ftype: %d) not supported (Ogr_fieldname: %s)"),
-			      Ogr_ftype, Ogr_fieldname);
-		    buf[0] = 0;
-		    col_info[i_out].type = G_store(buf);
-		}
-		G_free(Ogr_fieldname);
-	    }
+                /* handle columns of unsupported data type */
+                G_warning(_("Column type (Ogr_ftype: %d) not supported (Ogr_fieldname: %s)\n"),
+                          Ogr_ftype, Ogr_fieldname);
+                if (flag.drop->answer) {
+                    col_info[i_out] = col_info[i_out + 1];
+                    i_out--;
+                    ncols_out--;
+                    G_warning(_("Column <%s> will be omitted from import"),
+                              Ogr_fieldname);
+                }
+                else {
+                    buf[0] = 0;
+                    col_info[i_out].type = G_store(buf);
+                }
+            }
+            G_free(Ogr_fieldname);
+        }
 
 	    /* fix duplicate column names */
 	    done = 0;
