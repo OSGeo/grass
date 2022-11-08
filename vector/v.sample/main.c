@@ -205,7 +205,7 @@ int main(int argc, char **argv)
     nlines = Vect_get_num_lines(&In);
 
     for (line = 1; line <= nlines; line++) {
-        int type, cat, ret, cval;
+        int type, cat = -1, ret, cval;
         double dval;
 
         G_debug(3, "line = %d", line);

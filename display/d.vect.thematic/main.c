@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     int *cats, ncat, nrec, ctype;
     struct Map_info Map;
     struct field_info *fi;
-    dbDriver *driver;
+    dbDriver *driver = NULL;
     dbHandle handle;
     dbCatValArray cvarr;
     struct Cell_head window;

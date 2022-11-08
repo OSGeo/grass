@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     struct Distance *pd;
     const char *input, *output, *mapset;
     char **zone_list;
-    double to_meters;
+    double to_meters = 1.0;
     const char *units;
     int offset;
     int count;
