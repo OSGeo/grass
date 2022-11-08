@@ -1188,8 +1188,6 @@ int main(int argc, char *argv[])
                     col_info[i_out] = col_info[i_out + 1];
                     i_out--;
                     ncols_out--;
-                    G_warning(_("Column <%s> will be omitted from import"),
-                              Ogr_fieldname);
                 }
                 else {
                     buf[0] = 0;
