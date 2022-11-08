@@ -1176,17 +1176,13 @@ int main(int argc, char *argv[])
 		}
 		else {
                 /* handle columns of unsupported data type */
-                G_warning(_("Column type (Ogr_ftype: %d) not supported (Ogr_fieldname: %s)\n"),
-                          Ogr_ftype, Ogr_fieldname);
-                if (flag.drop->answer) {
-                    col_info[i_out] = col_info[i_out + 1];
-                    i_out--;
-                    ncols_out--;
-                }
-                else {
-                    buf[0] = 0;
-                    col_info[i_out].type = G_store(buf);
-                }
+                G_warning(_("Column <%s> is of unsupported data type (Ogr_ftype: %d)\n"
+                           "It is omitted from import\n"), Ogr_fieldname,
+                          Ogr_ftype);
+                buf[0] = 0;
+                col_info[i_out].type = G_store(buf);
+                i_out--;
+                ncols_out--;
             }
             G_free(Ogr_fieldname);
         }
@@ -1395,10 +1391,6 @@ int main(int argc, char *argv[])
 			    db_set_string(&strval, (char *)Ogr_fstring);
 			    db_double_quote_string(&strval);
 			    G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'", db_get_string(&strval));
-			}
-			else {
-			    /* column type not supported */
-			    G_rasprintf(&sqlbuf, &sqlbufsize, "%c", '\0');
 			}
 		    }
 		    else {
