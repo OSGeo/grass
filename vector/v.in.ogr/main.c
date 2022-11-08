@@ -380,12 +380,6 @@ int main(int argc, char *argv[])
     flag.notab = G_define_standard_flag(G_FLG_V_TABLE);
     flag.notab->guisection = _("Attributes");
 
-    flag.drop = G_define_flag();
-    flag.drop->guisection = _("Attributes");
-    flag.drop->key = 'd';
-    flag.drop->description =
-        _("Drop columns with unsupported data type from import");
-
     flag.over = G_define_flag();
     flag.over->key = 'o';
     flag.over->label =
