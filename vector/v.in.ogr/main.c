@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
         struct Option *snap, *type, *outloc, *cnames, *encoding, *key, *geom;
     } param;
     struct _flag {
-	struct Flag *list, *no_clean, *force2d, *notab, *drop,
+	struct Flag *list, *no_clean, *force2d, *notab,
 	    *region, *over, *extend, *formats, *tolower, *no_import,
             *proj;
     } flag;
@@ -1053,7 +1053,7 @@ int main(int argc, char *argv[])
                 if (key_idx[layer] > -1 && key_idx[layer] == i)
                     continue; /* skip defined key (FID column) */
 
-        i_out++;
+                i_out++;
 
 		Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		Ogr_ftype = OGR_Fld_GetType(Ogr_field);
@@ -1176,11 +1176,9 @@ int main(int argc, char *argv[])
 		}
 		else {
                 /* handle columns of unsupported data type */
-                G_warning(_("Column <%s> is of unsupported data type (Ogr_ftype: %d)\n"
-                           "It is omitted from import\n"), Ogr_fieldname,
-                          Ogr_ftype);
-                buf[0] = 0;
-                col_info[i_out].type = G_store(buf);
+                G_warning(_("Column <%s> is of unsupported \"%s\" data type, "
+                            "it is omitted from import."),
+                          Ogr_fieldname, OGR_GetFieldTypeName(Ogr_ftype));
                 i_out--;
                 ncols_out--;
             }
