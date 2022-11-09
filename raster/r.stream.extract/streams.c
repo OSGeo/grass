@@ -70,7 +70,7 @@ static int continue_stream(CELL stream_id, int r_max, int c_max,
         /* debug */
         if (n_stream_nodes != *stream_no)
             G_warning(_("Stream_no %d and n_stream_nodes %" PRI_OFF_T
-                       " out of sync"), *stream_no, n_stream_nodes);
+                        " out of sync"), *stream_no, n_stream_nodes);
 
         stream_node[*stream_no].n_alloc += 2;
         new_size = stream_node[*stream_no].n_alloc * sizeof(int);
@@ -151,7 +151,7 @@ int do_accum(double d8cut)
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
     int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
-    GW_LARGE_INT workedon, killer;
+    GW_LARGE_INT killer;
     char *flag_nbr;
     POINT astarpoint;
     WAT_ALT wa;
@@ -331,7 +331,6 @@ int do_accum(double d8cut)
                     }
                     else if (ct_dir == np_side) {
                         /* check for consistency with A * path */
-                        workedon++;
                     }
                 }
             }
@@ -660,7 +659,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
             /* debug */
             if (n_stream_nodes != stream_no)
                 G_warning(_("Stream_no %d and n_stream_nodes %" PRI_OFF_T
-                           " out of sync"), stream_no, n_stream_nodes);
+                            " out of sync"), stream_no, n_stream_nodes);
         }
 
         /*********************/

@@ -81,7 +81,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
     double xmax, xmin, ymax, ymin;
     int totsegm;                /* total number of segments */
     int total_points = 0;
-    struct triple triple;       /* contains garbage */
+    struct triple triple = { 0.0, 0.0, 0.0, 0.0 };      /* contains garbage */
 
 
     xmin = params->x_orig;
