@@ -79,7 +79,7 @@ Vect_net_ttb_build_graph(struct Map_info *Map,
     struct bound_box box;
     struct boxlist *List;
 
-    dglInt32_t dgl_cost = cost;
+    dglInt32_t dgl_cost;
 
     /*TODO attributes of turntable should be stored in one place */
     const char *tcols[] = { "cat", "ln_from", "ln_to", "cost", "isec", NULL

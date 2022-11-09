@@ -273,7 +273,7 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
     prev[from] = NULL;
     while (begin != end) {
         dglInt32_t vertex = queue[begin++];
-        dglInt32_t *edge, *node;
+        dglInt32_t *edge = NULL, *node;
 
         if (vertex == to)
             break;

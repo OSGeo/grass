@@ -49,7 +49,7 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                                    double dnorm, int threads)
 {
     int some_thread_failed = 0;
-    int tid;
+    int tid = 0;
     int i = 0;
     int j = 0;
     int i_cnt;

@@ -237,9 +237,10 @@ int main(int argc, char *argv[])
                     if (nosplit)
                         Vect_reset_line(Points3);
 
+                    double x = 0.0, y = 0.0, z = 0.0;
+
                     for (i = 0; i < n; i++) {
                         int ret;
-                        double x, y, z;
 
                         if (i == n - 1) {
                             to = l;     /* to be sure that it goes to end */

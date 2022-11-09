@@ -294,7 +294,7 @@ int main(int argc, char **argv)
     /* For each line select all existeng reference segments, sort them along the line
      *  and fcreate stationing. */
 
-    G_debug(2, "find_line(): lfield = %d lcat = %d", lfield, lcat);
+    G_debug(2, "find_line(): lfield = %d", lfield);
 
     arseg = 1000;
     rseg = (RSEGMENT *) G_malloc(arseg * sizeof(RSEGMENT));
