@@ -988,7 +988,7 @@ static void wps_print_mimetype_vector_gml311(void)
 }
 
 /* ************************************************************************** */
-#if 0                           /* unused */
+
 static void wps_print_mimetype_vector_gml212(void)
 {
     fprintf(stdout, "\t\t\t\t\t\t<Format>\n");
@@ -999,6 +999,7 @@ static void wps_print_mimetype_vector_gml212(void)
     fprintf(stdout, "\t\t\t\t\t\t</Format>\n");
 }
 
+#if 0                           /* unused */
 /* *** GRASS vector format exported via v.out.ascii ************************** */
 
 static void wps_print_mimetype_vector_grass_ascii(void)
