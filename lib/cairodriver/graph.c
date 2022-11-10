@@ -339,8 +339,7 @@ static void init_cairo(void)
                                                                     CAIRO_FORMAT_ARGB32,
                                                                     ca.width,
                                                                     ca.height,
-                                                                    ca.
-                                                                    stride);
+                                                                    ca.stride);
         break;
 #if CAIRO_HAS_PDF_SURFACE
     case FTYPE_PDF:
@@ -368,8 +367,7 @@ static void init_cairo(void)
 #endif
 #if CAIRO_HAS_XLIB_XRENDER_SURFACE
     case FTYPE_X11:
-        surface =
-            (cairo_surface_t *)
+        surface = (cairo_surface_t *)
             cairo_xlib_surface_create_with_xrender_format(ca.dpy, ca.win,
                                                           ca.screen,
                                                           ca.format, ca.width,

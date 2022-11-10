@@ -320,8 +320,8 @@ int main(int argc, char **argv)
         G_debug(4, "cat = %d  %s = %d", cvarr.value[i].cat,
                 column_opt->answer,
                 (cvarr.ctype ==
-                 DB_C_TYPE_INT ? cvarr.value[i].val.i : (int)cvarr.
-                 value[i].val.d));
+                 DB_C_TYPE_INT ? cvarr.value[i].val.i : (int)cvarr.value[i].
+                 val.d));
     }
 
     /*Get the sorted data */

@@ -553,7 +553,7 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
     return best_n_id;
 }
 
-#if 0 /* unused */
+#if 0                           /* unused */
 static int check_reg_size(struct globals *globals, int minsize, int row,
                           int col)
 {
@@ -630,7 +630,7 @@ static int check_reg_size(struct globals *globals, int minsize, int row,
 
     return reg_size;
 }
-#endif /* if 0 unused */
+#endif /* unused */
 
 static int update_rid(struct globals *globals, int row, int col, int new_id)
 {

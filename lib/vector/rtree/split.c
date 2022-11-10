@@ -172,6 +172,7 @@ void RTreeInitPVars(struct RTree_PartitionVars *p, int maxrects, int minfill,
 }
 
 #ifdef DEBUG
+
 /*----------------------------------------------------------------------
 | Print out data for a partition from PartitionVars struct.
 | Unused, for debugging only
