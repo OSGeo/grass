@@ -1176,8 +1176,7 @@ int main(int argc, char *argv[])
 		}
 		else {
                 /* handle columns of unsupported data type */
-                G_warning(_("Column <%s> is of unsupported \"%s\" data type, "
-                            "it is omitted from import."),
+                G_warning(_("Column <%s> of unsupported data type \"%s\" is omitted from import"),
                           Ogr_fieldname, OGR_GetFieldTypeName(Ogr_ftype));
                 i_out--;
                 ncols_out--;
