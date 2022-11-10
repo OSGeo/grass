@@ -6,10 +6,10 @@ Retrieved from the Internet Archive for
 [http://sunsite.univie.ac.at/statlib/general/cdh](https://web.archive.org/web/20001006232323/http://sunsite.univie.ac.at/statlib/general/cdh) -- 2000-10-06
 
 
-```
+```txt
           TESTS OF COMPOSITE DISTRIBUTIONAL HYPOTHESES FOR
           THE ANALYSIS OF BIOLOGICAL & ENVIRONMENTAL DATA
-        
+
 This library contains FORTRAN subroutines for testing the hypothesis
 of normality or the hypothesis of exponentiality.  Lognormality can be
 tested by carrying out the tests of normality on the log transformed
@@ -60,7 +60,7 @@ including one or more call statements,such as:
 ** indicates the test is for normality vs. lognormality
 E.P.C. --- Equal Probability Classes
 
-   These subroutines can be freely distributed and can be freely used for 
+   These subroutines can be freely distributed and can be freely used for
    non-commercial purposes.
 ```
 ```fortran
@@ -103,7 +103,7 @@ C  TEST17 Kolmogorov-Smirnov D-Statistic Modified to Test Exponentiality
 C  TEST18 Kuiper V-Statistic Modified to Test Exponentiality
 C  TEST19 Watson U^2-Statistic Modified to Test Exponentiality
 C  TEST20 Anderson-Darling Statistic Modified to Test Exponentiality
-C  TEST21 Chi-Square Test of Exponentiality (with Equal Probability Classes) 
+C  TEST21 Chi-Square Test of Exponentiality (with Equal Probability Classes)
 C  TEST22 Modified Maximum Likelihood Ratio Test for Normality vs. Lognormality
 C  TEST23 Coefficient of Variation Test
 C  TEST24 Kotz Separate-Families Test for Lognormality vs. Normality
@@ -121,10 +121,10 @@ C    Anderson ,T.W. and D.A. Darling.1954.A Test of Goodness of Fit.
 C    JASA 49:765-69.
 C    D'Agostino,R.B. and E.S. Pearson.1973.Tests for Departure from Normality.
 C    Biometrika 60(3):613-22.
-C    D'Agostino,R.B. and B. Rosman.1974.The Power of Geary's Test of 
+C    D'Agostino,R.B. and B. Rosman.1974.The Power of Geary's Test of
 C    Normality.Biometrika 61(1):181-84.
 C    Durbin,J.1961.Some Methods of Constructing Exact Tests.
-C    Biometrika 48(1&2):41-55. 
+C    Biometrika 48(1&2):41-55.
 C    Durbin,J.1973.Distribution Theory Based on the Sample Distribution
 C    Function.SIAM.Philadelphia.
 C    Geary,R.C.1947.Testing for Normality.Biometrika 36:68-97.
@@ -133,28 +133,28 @@ C    Communications in Statistics 1(2):113-32.
 C    Lehmann,E.L.1986.Testing Statistical Hypotheses.John Wiley & Sons.
 C    New York.
 C    Linnet,K.1988.Testing Normality of Transformed Data.
-C    Applied Statistics 32(2):180-186. 
+C    Applied Statistics 32(2):180-186.
 C    SAS [Statistical Analysis System] User's Guide:Basics.Version 5.1985.
 C    SAS User's Guide:Statistics.Version 6.Volumes 1 and 2.1993.
-C    Shapiro,S.S. and R.S.Francia.1972.An Approximate Analysis of Variance 
+C    Shapiro,S.S. and R.S.Francia.1972.An Approximate Analysis of Variance
 C    Test for Normality.JASA 67(337):215-216.
 C    Shapiro,S.S.,M.B.Wilk and H.J.Chen.1968.A Comparative Study of Various
 C    Tests for Normality.JASA 63:1343-72.
-C    Weiss,M.S. 1978.Modification of the Kolmogorov-Smirnov Statistic for Use 
+C    Weiss,M.S. 1978.Modification of the Kolmogorov-Smirnov Statistic for Use
 C    with Correlated Data.JASA 73(364):872-75.
 C
 C
 C****************************************************************************
 C
 C    Note if the sample size N >= 150 then increase the DIMENSION statement
-C    for the TESTS of interest in each subroutine.  
+C    for the TESTS of interest in each subroutine.
 C    The subroutines can be run as a group or individually e.g., as a group:
-C    suppose TESTS 4,12 and 21 are required and the input vector consists of 
+C    suppose TESTS 4,12 and 21 are required and the input vector consists of
 C    20 observations; then in the MAIN program write:
 C
 C                    CALL TEST4(X,Y,20)
 C                    CALL TEST12(X,Y,20)
-C                    CALL TEST21(X,Y,20) 
+C                    CALL TEST21(X,Y,20)
 C
 C****************************************************************************
 C
@@ -169,7 +169,7 @@ C
 C    These subroutines can be freely used for non-commercial purposes and can
 C    be freely distributed.
 C
-C                                        Copyright   1994, Paul Johnson 
+C                                        Copyright   1994, Paul Johnson
 C
 C****************************************************************************
 C
