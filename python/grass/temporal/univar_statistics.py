@@ -31,10 +31,10 @@ from grass.pygrass.modules import Module
 ###############################################################################
 
 
-def compute_univar_stats(row, stats_module, fs, rast_region=False):
+def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=False):
     """Compute univariate statistics for a map of a space time raster or raster3d dataset
 
-    :param row: Must be "strds" or "str3ds"
+    :param registered_map_info: dict or db row with tgis info for a registered map
     :param stats_module: Pre-configured PyGRASS Module to compute univariate statistics with
     :param fs: Field separator
     :param rast_region: If set True ignore the current region settings
@@ -42,13 +42,13 @@ def compute_univar_stats(row, stats_module, fs, rast_region=False):
            Only available for strds.
     """
     string = ""
-    id = row["id"]
-    start = row["start_time"]
-    end = row["end_time"]
+    id = registered_map_info["id"]
+    start = registered_map_info["start_time"]
+    end = registered_map_info["end_time"]
     semantic_label = (
         ""
-        if stats_module.name == "r3.univar" or not row["semantic_label"]
-        else row["semantic_label"]
+        if stats_module.name == "r3.univar" or not registered_map_info["semantic_label"]
+        else registered_map_info["semantic_label"]
     )
 
     stats_module.inputs.map = id
@@ -115,7 +115,7 @@ def print_gridded_dataset_univar_statistics(
 ):
     """Print univariate statistics for a space time raster or raster3d dataset
 
-    :param type: Must be "strds" or "str3ds"
+    :param type: Type of Space-Time-Dataset, must be either strds or str3ds
     :param input: The name of the space time dataset
     :param output: Name of the optional output file, if None stdout is used
     :param where: A temporal database where statement
@@ -215,8 +215,6 @@ def print_gridded_dataset_univar_statistics(
             strings = pool.starmap(
                 compute_univar_stats, [(dict(row), univar_module, fs) for row in rows]
             )
-            pool.close()
-            pool.join()
 
     if output is None:
         print("\n".join(filter(None, strings)))
