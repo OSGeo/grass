@@ -406,28 +406,6 @@ def cmd_exe(args):
     os.remove(gisrc_dst)
 
 
-class CleanManager:
-    """Clean temporary files
-
-    :param bool clean: True if you want clean temporary files
-    :param function clean_func: clean function
-    """
-
-    def __init__(self, clean, clean_func):
-        self._clean = clean
-        self._clean_func = clean_func
-
-    def __enter__(self):
-        pass
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        if exc_type:
-            self._clean_func()
-            return
-        if self._clean:
-            self._clean_func()
-
-
 class GridModule(object):
     # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiprocessing mode.
@@ -667,72 +645,61 @@ class GridModule(object):
                       created by GridModule
         :type clean: bool
         """
-        with CleanManager(clean=clean, clean_func=self.clean):
-            self.module.flags.overwrite = True
-            self.define_mapset_inputs()
-            if self.debug:
-                for wrk in self.get_works():
-                    cmd_exe(wrk)
+        self.module.flags.overwrite = True
+        self.define_mapset_inputs()
+        if self.debug:
+            for wrk in self.get_works():
+                cmd_exe(wrk)
+        else:
+            pool = mltp.Pool(processes=self.processes)
+            result = pool.map_async(cmd_exe, self.get_works())
+            result.wait()
+            pool.close()
+            pool.join()
+            if not result.successful():
+                raise RuntimeError(_("Execution of subprocesses was not successful"))
+
+        if patch:
+            if self.move:
+                os.environ["GISRC"] = self.gisrc_dst
+                self.n_mset.current()
+                self.patch()
+                os.environ["GISRC"] = self.gisrc_src
+                self.mset.current()
+                # copy the outputs from dst => src
+                routputs = [
+                    self.out_prefix + o for o in select(self.module.outputs, "raster")
+                ]
+                copy_rasters(routputs, self.gisrc_dst, self.gisrc_src)
             else:
-                pool = mltp.Pool(processes=self.processes)
-                result = pool.map_async(cmd_exe, self.get_works())
-                result.wait()
-                pool.close()
-                pool.join()
-                if not result.successful():
-                    raise RuntimeError(
-                        _("Execution of subprocesses was not successful")
-                    )
+                self.patch()
 
-            if patch:
-                if self.move:
-                    os.environ["GISRC"] = self.gisrc_dst
-                    self.n_mset.current()
-                    self.patch()
-                    os.environ["GISRC"] = self.gisrc_src
-                    self.mset.current()
-                    # copy the outputs from dst => src
-                    routputs = [
-                        self.out_prefix + o
-                        for o in select(self.module.outputs, "raster")
-                    ]
-                    copy_rasters(routputs, self.gisrc_dst, self.gisrc_src)
-                else:
-                    self.patch()
+        if self.log:
+            # record in the temp directory
+            from grass.lib.gis import G_tempfile
 
-            if self.log:
-                # record in the temp directory
-                from grass.lib.gis import G_tempfile
+            tmp, dummy = os.path.split(G_tempfile())
+            tmpdir = os.path.join(tmp, self.module.name)
+            for k in self.module.outputs:
+                par = self.module.outputs[k]
+                if par.typedesc == "raster" and par.value:
+                    dirpath = os.path.join(tmpdir, par.name)
+                    if not os.path.isdir(dirpath):
+                        os.makedirs(dirpath)
+                    fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
+                    fil.close()
 
-                tmp, dummy = os.path.split(G_tempfile())
-                tmpdir = os.path.join(tmp, self.module.name)
-                for k in self.module.outputs:
-                    par = self.module.outputs[k]
-                    if par.typedesc == "raster" and par.value:
-                        dirpath = os.path.join(tmpdir, par.name)
-                        if not os.path.isdir(dirpath):
-                            os.makedirs(dirpath)
-                        fil = open(
-                            os.path.join(
-                                dirpath,
-                                self.out_prefix + par.value,
-                            ),
-                            "w+",
-                        )
-                        fil.close()
-
-    def clean(self):
-        """Cleanup temporary data"""
-        self.clean_location()
-        self.rm_tiles()
-        if self.n_mset:
-            gisdbase, location = os.path.split(self.move)
-            self.clean_location(Location(location, gisdbase))
-            # rm temporary gis_rc
-            os.remove(self.gisrc_dst)
-            self.gisrc_dst = None
-            sht.rmtree(os.path.join(self.move, "PERMANENT"))
-            sht.rmtree(os.path.join(self.move, self.mset.name))
+        if clean:
+            self.clean_location()
+            self.rm_tiles()
+            if self.n_mset:
+                gisdbase, location = os.path.split(self.move)
+                self.clean_location(Location(location, gisdbase))
+                # rm temporary gis_rc
+                os.remove(self.gisrc_dst)
+                self.gisrc_dst = None
+                sht.rmtree(os.path.join(self.move, "PERMANENT"))
+                sht.rmtree(os.path.join(self.move, self.mset.name))
 
     def patch(self):
         """Patch the final results."""
