@@ -646,25 +646,32 @@ class GridModule(object):
                       created by GridModule
         :type clean: bool
         """
-        self.module.flags.overwrite = True
-        self.define_mapset_inputs()
-
         with contextlib.ExitStack() as stack:
             if clean:
                 stack.callback(self._clean)
-            if self.debug:
-                for wrk in self.get_works():
-                    cmd_exe(wrk)
-            else:
-                pool = mltp.Pool(processes=self.processes)
-                result = pool.map_async(cmd_exe, self.get_works())
-                result.wait()
-                pool.close()
-                pool.join()
-                if not result.successful():
-                    raise RuntimeError(
-                        _("Execution of subprocesses was not successful")
-                    )
+            self._actual_run(patch=patch)
+
+    def _actual_run(self, patch):
+        """Run the GRASS command
+
+        :param patch: set False if you does not want to patch the results
+        """
+        self.module.flags.overwrite = True
+        self.define_mapset_inputs()
+
+        if self.debug:
+            for wrk in self.get_works():
+                cmd_exe(wrk)
+        else:
+            pool = mltp.Pool(processes=self.processes)
+            result = pool.map_async(cmd_exe, self.get_works())
+            result.wait()
+            pool.close()
+            pool.join()
+            if not result.successful():
+                raise RuntimeError(
+                    _("Execution of subprocesses was not successful"),
+                )
 
         if patch:
             if self.move:
