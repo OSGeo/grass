@@ -415,6 +415,10 @@ int main(int argc, char *argv[])
         G_warning(_("Parallel computation disabled when deviation output is required"));
         threads = 1;
     }
+    if (parm.cvdev->answer && threads > 1) {
+        G_warning(_("Parallel computation disabled when cross validation output is required"));
+        threads = 1;
+    }
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else
@@ -423,9 +427,10 @@ int main(int argc, char *argv[])
 #endif
 
     if (devi) {
-	if (Vect_legal_filename(devi) == -1)
-	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
-			  devi);
+        create_devi = true;
+        if (Vect_legal_filename(devi) == -1)
+            G_fatal_error(_("Output vector map name <%s> is not valid map name"),
+                          devi);
     }
     if (cvdev) {
 	if (Vect_legal_filename(cvdev) == -1)
@@ -627,14 +632,12 @@ int main(int argc, char *argv[])
 			  ff->database, ff->driver);
         db_set_error_handler_driver(driver2);
 
-	if (db_execute_immediate(driver2, &sql2) != DB_OK) {
-	    G_fatal_error(_("Unable to create table '%s'"),
-			  db_get_string(&sql2));
-	}
-	db_begin_transaction(driver2);
-	count = 1;
-	create_devi = true;
-
+        if (db_execute_immediate(driver2, &sql2) != DB_OK) {
+            G_fatal_error(_("Unable to create table '%s'"),
+                          db_get_string(&sql2));
+        }
+        db_begin_transaction(driver2);
+        count = 1;
     }
 
     ertot = 0.;
