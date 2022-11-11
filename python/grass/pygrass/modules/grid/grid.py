@@ -7,6 +7,7 @@ from __future__ import (
     print_function,
     unicode_literals,
 )
+import contextlib
 import os
 import sys
 import multiprocessing as mltp
@@ -647,17 +648,23 @@ class GridModule(object):
         """
         self.module.flags.overwrite = True
         self.define_mapset_inputs()
-        if self.debug:
-            for wrk in self.get_works():
-                cmd_exe(wrk)
-        else:
-            pool = mltp.Pool(processes=self.processes)
-            result = pool.map_async(cmd_exe, self.get_works())
-            result.wait()
-            pool.close()
-            pool.join()
-            if not result.successful():
-                raise RuntimeError(_("Execution of subprocesses was not successful"))
+
+        with contextlib.ExitStack() as stack:
+            if clean:
+                stack.callback(self._clean)
+            if self.debug:
+                for wrk in self.get_works():
+                    cmd_exe(wrk)
+            else:
+                pool = mltp.Pool(processes=self.processes)
+                result = pool.map_async(cmd_exe, self.get_works())
+                result.wait()
+                pool.close()
+                pool.join()
+                if not result.successful():
+                    raise RuntimeError(
+                        _("Execution of subprocesses was not successful")
+                    )
 
         if patch:
             if self.move:
@@ -689,17 +696,18 @@ class GridModule(object):
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
-        if clean:
-            self.clean_location()
-            self.rm_tiles()
-            if self.n_mset:
-                gisdbase, location = os.path.split(self.move)
-                self.clean_location(Location(location, gisdbase))
-                # rm temporary gis_rc
-                os.remove(self.gisrc_dst)
-                self.gisrc_dst = None
-                sht.rmtree(os.path.join(self.move, "PERMANENT"))
-                sht.rmtree(os.path.join(self.move, self.mset.name))
+    def _clean(self):
+        """Cleanup temporary data"""
+        self.clean_location()
+        self.rm_tiles()
+        if self.n_mset:
+            gisdbase, location = os.path.split(self.move)
+            self.clean_location(Location(location, gisdbase))
+            # rm temporary gis_rc
+            os.remove(self.gisrc_dst)
+            self.gisrc_dst = None
+            sht.rmtree(os.path.join(self.move, "PERMANENT"))
+            sht.rmtree(os.path.join(self.move, self.mset.name))
 
     def patch(self):
         """Patch the final results."""
