@@ -183,7 +183,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value *proj_info,
     const char *ellpskv, *unit, *unfact;
     char *ellps, *ellpslong, *datum, *params, *towgs84, *datumlongname,
         *start, *end;
-    const char *sysname, *osrunit, *osrunfact;
+    const char *sysname, *osrunit;
     double a, es, rf;
     int haveparams = 0;
 
@@ -302,7 +302,6 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value *proj_info,
             start = G_store(wkt);
 
         osrunit = OSRGetAttrValue(hSRS, "UNIT", 0);
-        osrunfact = OSRGetAttrValue(hSRS, "UNIT", 1);
 
         if ((unfact == NULL) || (G_strcasecmp(osrunit, "unknown") != 0))
             end = G_store("");

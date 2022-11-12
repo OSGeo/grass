@@ -428,7 +428,7 @@ int db_table_to_sql(dbTable * table, dbString * sql)
     int col, ncols;
     dbColumn *column;
     const char *colname;
-    int sqltype, ctype;
+    int sqltype;
     char buf[500];
 
     db_set_string(sql, "create table ");
@@ -442,7 +442,6 @@ int db_table_to_sql(dbTable * table, dbString * sql)
         colname = db_get_column_name(column);
         sqltype = db_get_column_sqltype(column);
 
-        ctype = db_sqltype_to_Ctype(sqltype);
         G_debug(3, "%s (%s)", colname, db_sqltype_name(sqltype));
 
         if (col > 0)

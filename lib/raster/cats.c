@@ -812,7 +812,6 @@ int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
     long len;
     DCELL dtmp1, dtmp2;
     int i;
-    char *descr;
 
     /* DEBUG fprintf(stderr,"Rast_set_d_cat(rast1 = %p,rast2 = %p,label = '%s',pcats = %p)\n",
        rast1,rast2,label,pcats); */
@@ -830,7 +829,7 @@ int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
        the label for this range has been sen, and if it has, overwrite it */
 
     for (i = 0; i < pcats->ncats; i++) {
-        descr = Rast_get_ith_d_cat(pcats, i, &dtmp1, &dtmp2);
+        Rast_get_ith_d_cat(pcats, i, &dtmp1, &dtmp2);
         if ((dtmp1 == *rast1 && dtmp2 == *rast2)
             || (dtmp1 == *rast2 && dtmp2 == *rast1)) {
             if (pcats->labels[i] != NULL)

@@ -71,7 +71,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type,
 {
     struct line_pnts *APoints, *BPoints;
     struct line_cats *ACats, *BCats;
-    int i, c, atype, btype, aline, bline;
+    int i, c, atype, aline, bline;
     int nlines, nacats_orig, npoints;
     int na1, na2, nb1, nb2, nodelines, nline;
     struct bound_box ABox;
@@ -162,7 +162,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type,
                     continue;
             }
 
-            btype = Vect_read_line(Map, BPoints, BCats, bline);
+            Vect_read_line(Map, BPoints, BCats, bline);
             Vect_line_prune(BPoints);
 
             /* check for duplicate */

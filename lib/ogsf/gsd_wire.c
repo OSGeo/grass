@@ -441,7 +441,7 @@ int gsd_wire_surf_const(geosurf * surf, float k)
  */
 int gsd_wire_surf_func(geosurf * gs, int (*user_func)())
 {
-    return(1);
+    return (1);
 }
 
 /*!
@@ -571,7 +571,7 @@ int gsd_wire_arrows(geosurf * surf)
  */
 int gsd_coarse_surf_map(geosurf * surf)
 {
-    int check_mask, check_color, check_transp;
+    int /* check_mask, */ check_color, check_transp;
     int check_material, check_emis, check_shin;
     typbuff *buff, *cobuff, *trbuff, *embuff, *shbuff;
     int xmod, ymod;
@@ -586,7 +586,9 @@ int gsd_coarse_surf_map(geosurf * surf)
     gsurf_att *ematt, *shatt, *tratt, *coloratt;
 
 
-    int datarow1, datacol1, datarow2, datacol2, datarow3, datacol3;
+    int datacol1, datacol2, datacol3;
+
+    /* int datarow1, datarow2, datarow3; */
 
     float kem, ksh, pkem, pksh;
     unsigned int ktrans;
@@ -613,7 +615,7 @@ int gsd_coarse_surf_map(geosurf * surf)
     cobuff = gs_get_att_typbuff(surf, ATT_COLOR, 0);
 
     gs_update_curmask(surf);
-    check_mask = surf->curmask ? 1 : 0;
+    /* check_mask = surf->curmask ? 1 : 0; */
 
     /*
        checks ATT_TOPO & ATT_COLOR no_zero flags, make a mask from each,
@@ -712,10 +714,11 @@ int gsd_coarse_surf_map(geosurf * surf)
     /* will also need to set check_transp, check_shine, etc & fix material */
     for (row = start_val; row <= ycnt - start_val; row += step_val) {
 
-        datarow1 = row * ymod;
-        datarow2 = (row - (step_val / 2)) * ymod;
-        datarow3 = (row + (step_val / 2)) * ymod;
-
+        /*
+           datarow1 = row * ymod;
+           datarow2 = (row - (step_val / 2)) * ymod;
+           datarow3 = (row + (step_val / 2)) * ymod;
+         */
 
         y1 = ymax - row * yres;
         y2 = ymax - (row - (step_val / 2)) * yres;

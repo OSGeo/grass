@@ -11,7 +11,6 @@ int dfwrite_header(file_info * headp)
     cmndln_info *linep;
     FILE *fp;
     long Where_dataoff;
-    long Where_lookoff;
 
     linep = &(headp->linefax);
     fp = headp->dspfoutfp;
@@ -53,7 +52,6 @@ int dfwrite_header(file_info * headp)
     /* the first time this number is set to 0 */
     /*this information will be overwritten after dspf is done */
     /* G_ftell keeps track of where this information is to be placed */
-    Where_lookoff = G_ftell(fp);
     headp->Lookoff = 0;
     if (1 != fwrite(&headp->Lookoff, sizeof(long), 1, fp))
         return (-1);

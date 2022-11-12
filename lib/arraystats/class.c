@@ -271,13 +271,13 @@ double AS_class_discont(double *data, int count, int nbreaks,
                         double *classbreaks)
 {
     int *num, nbclass;
-    double *no, *zz, *nz, *xn, *co;
+    double *no, *zz, /* *nz, */ *xn, *co;
     double *x;                  /* Vector standardized observations */
     int i, j, k;
     double min = 0, max = 0, rangemax = 0;
     int n = 0;
     double rangemin = 0, xlim = 0;
-    double dmax = 0.0, d2 = 0.0, dd = 0.0, p = 0.0;
+    double dmax = 0.0 /*, d2 = 0.0, dd = 0.0, p = 0.0 */ ;
     int nf = 0, nmax = 0;
     double *abc;
     int nd = 0;
@@ -296,7 +296,7 @@ double AS_class_discont(double *data, int count, int nbreaks,
     num = G_malloc((nbclass + 1) * sizeof(int));
     no = G_malloc((nbclass + 1) * sizeof(double));
     zz = G_malloc((nbclass + 1) * sizeof(double));
-    nz = G_malloc(3 * sizeof(double));
+    /* nz = G_malloc(3 * sizeof(double)); */
     xn = G_malloc((n + 1) * sizeof(double));
     co = G_malloc((nbclass + 1) * sizeof(double));
 
@@ -336,7 +336,7 @@ double AS_class_discont(double *data, int count, int nbreaks,
     for (i = 1; i <= nbclass; i++) {
         nmax = 0;
         dmax = 0.0;
-        d2 = 0.0;
+        /* d2 = 0.0; */
         nf = 0;                 /*End number */
 
         /*           Loop through classes */
@@ -353,7 +353,7 @@ double AS_class_discont(double *data, int count, int nbreaks,
                     d = fabs((-1.0 * abc[1] * x[k]) + xn[k] - abc[0]) / den;
                 else
                     d = fabs(x[k] - abc[2]);
-                d2 += pow(d, 2);
+                /* d2 += pow(d, 2); */
                 if (x[k] - x[nd] < xlim)
                     continue;
                 if (x[nf] - x[k] < xlim)
@@ -371,9 +371,9 @@ double AS_class_discont(double *data, int count, int nbreaks,
                     co[j] = (xn[nf]) / (x[nf]); /* A VERIFIER! */
             }
         }
-        if (i == 1)
-            dd = d2;
-        p = d2 / dd;
+        /* if (i == 1)
+           dd = d2;
+           p = d2 / dd; */
         for (j = 1; j <= i; j++) {
             no[j] = num[j];
             zz[j] = x[num[j]] * rangemax + min;
@@ -451,10 +451,9 @@ int AS_class_frequencies(double *data, int count, int nbreaks,
                          double *classbreaks, int *frequencies)
 {
     int i, j;
-    double min, max;
 
-    min = data[0];
-    max = data[count - 1];
+    /* min = data[0];
+       max = data[count - 1]; */
     /* count cases in all classes, except for last class */
     i = 0;
     for (j = 0; j < nbreaks; j++) {
