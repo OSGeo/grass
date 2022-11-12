@@ -139,7 +139,7 @@ changequote([,])
 GRASS_VERSION_GIT="exported"
 # get git short hash + date of last change in GRASS headers
 # (and anything else in include)
-GRASS_HEADERS_GIT_HASH=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
+GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
 if test "$GIT" != "no" ; then
@@ -149,7 +149,7 @@ if test "$GIT" != "no" ; then
    fi
    GRASS_HEADERS_GIT_HASH=`$GIT log -1 --pretty=format:"%h" -- "${SRCDIR}/include" 2>/dev/null`
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
-      GRASS_HEADERS_GIT_HASH=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
+      GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
    GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
