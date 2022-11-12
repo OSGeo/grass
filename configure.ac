@@ -35,6 +35,24 @@ AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/grass/config.h)
 AC_CANONICAL_HOST
 AC_PROG_CC
+
+# Enable C++ option
+
+LOC_ARG_WITH(cxx, C++)
+
+LOC_CHECK_USE(cxx,C++,USE_CXX)
+
+if test -n "$USE_CXX"; then
+	AC_PROG_CXX
+else
+	CXX=
+	CXXFLAGS=
+	AC_SUBST(CXX)
+	AC_SUBST(CXXFLAGS)
+fi
+
+# Done checking C++
+
 LOC_EXEEXT
 AC_SUBST(MINGW32)
 
@@ -259,7 +277,6 @@ AC_ARG_ENABLE(w11,
 
 # With options
 
-LOC_ARG_WITH(cxx, C++)
 #LOC_ARG_WITH(g77, GNU Fortran 77, no)
 
 AC_ARG_WITH(macosx-archs,
@@ -1778,21 +1795,6 @@ fi
 
 AC_SUBST(INTLLIB)
 AC_SUBST(HAVE_NLS)
-
-# Enable C++ option
- 
-LOC_CHECK_USE(cxx,C++,USE_CXX)
-
-if test -n "$USE_CXX"; then
-	AC_PROG_CXX
-else
-	CXX=
-	CXXFLAGS=
-	AC_SUBST(CXX)
-	AC_SUBST(CXXFLAGS)
-fi
-
-# Done checking C++
 
 # Enable openDWG option
 
