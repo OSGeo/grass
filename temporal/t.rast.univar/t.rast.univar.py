@@ -26,6 +26,7 @@
 # % keyword: statistics
 # % keyword: raster
 # % keyword: time
+# % keyword: parallel
 # %end
 
 # %option G_OPT_STRDS_INPUT
@@ -34,6 +35,10 @@
 # %option G_OPT_R_INPUT
 # % key: zones
 # % description: Raster map used for zoning, must be of type CELL
+# % required: no
+# %end
+
+# %option G_OPT_M_NPROCS
 # % required: no
 # %end
 
@@ -82,6 +87,7 @@ def main():
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
+    nprocs = int(options["nprocs"])
     where = options["where"]
     extended = flags["e"]
     no_header = flags["u"]
@@ -111,6 +117,7 @@ def main():
         fs=separator,
         rast_region=rast_region,
         zones=zones,
+        nprocs=nprocs,
     )
 
 
