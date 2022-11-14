@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
     int nfiles;
     int infd[MAXFILES];
     int outfd;
-    char **names;
     char **ptr;
     int i = 0;
     int modis = 0, aster = 0, avhrr = 0;
@@ -78,9 +77,10 @@ int main(int argc, char *argv[])
     int bottom1a, bottom1b;
     int bottom2a, bottom2b;
     int bottom3a, bottom3b;
-    int i_bottom1a, i_bottom1b;
-    int i_bottom2a, i_bottom2b;
-    int i_bottom3a, i_bottom3b;
+    int i_bottom1a /*, i_bottom1b */ ;
+    int /* i_bottom2a, */ i_bottom2b;
+
+    /* int i_bottom3a, i_bottom3b; */
 
     /************************************/
     int histogram[100];
@@ -153,7 +153,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    names = input->answers;
     ptr = input->answers;
 
     result = output->answer;
@@ -293,11 +292,11 @@ int main(int argc, char *argv[])
         bottom3a = 100000;
         bottom3b = 100000;
         i_bottom1a = 100;
-        i_bottom1b = 100;
-        i_bottom2a = 100;
+        /* i_bottom1b = 100; */
+        /* i_bottom2a = 100; */
         i_bottom2b = 100;
-        i_bottom3a = 100;
-        i_bottom3b = 100;
+        /* i_bottom3a = 100; */
+        /* i_bottom3b = 100; */
         /* Water histogram lower bound */
         for (i = 0; i < i_peak1; i++) {
             if (histogram[i] <= bottom1a) {
@@ -309,14 +308,14 @@ int main(int argc, char *argv[])
         for (i = i_peak2; i > i_peak1; i--) {
             if (histogram[i] <= bottom1b) {
                 bottom1b = histogram[i];
-                i_bottom1b = i;
+                /* i_bottom1b = i; */
             }
         }
         /* Land histogram lower bound */
         for (i = i_peak1; i < i_peak2; i++) {
             if (histogram[i] <= bottom2a) {
                 bottom2a = histogram[i];
-                i_bottom2a = i;
+                /* i_bottom2a = i; */
             }
         }
         /* Land histogram higher bound */
@@ -330,14 +329,14 @@ int main(int argc, char *argv[])
         for (i = i_peak2; i < i_peak3; i++) {
             if (histogram[i] < bottom3a) {
                 bottom3a = histogram[i];
-                i_bottom3a = i;
+                /* i_bottom3a = i; */
             }
         }
         /* Cloud/Snow histogram higher bound */
         for (i = 100; i > i_peak3; i--) {
             if (histogram[i] < bottom3b) {
                 bottom3b = histogram[i];
-                i_bottom3b = i;
+                /* i_bottom3b = i; */
             }
         }
         if (flag5->answer) {

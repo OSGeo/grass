@@ -217,7 +217,7 @@ int load_table(int t)
 
 int save_table(int t)
 {
-    int i, j, ncols, nrows, ret, field, rec;
+    int i, j, ncols, nrows, field, rec;
     char name[2000], fname[20], element[100];
     DBFHandle dbf;
     ROW *rows;
@@ -286,17 +286,16 @@ int save_table(int t)
             else {
                 switch (db.tables[t].cols[j].type) {
                 case DBF_INT:
-                    ret = DBFWriteIntegerAttribute(dbf, rec, field, val->i);
+                    DBFWriteIntegerAttribute(dbf, rec, field, val->i);
                     break;
                 case DBF_CHAR:
                     if (val->c != NULL)
-                        ret =
-                            DBFWriteStringAttribute(dbf, rec, field, val->c);
+                        DBFWriteStringAttribute(dbf, rec, field, val->c);
                     else
-                        ret = DBFWriteStringAttribute(dbf, rec, field, "");
+                        DBFWriteStringAttribute(dbf, rec, field, "");
                     break;
                 case DBF_DOUBLE:
-                    ret = DBFWriteDoubleAttribute(dbf, rec, field, val->d);
+                    DBFWriteDoubleAttribute(dbf, rec, field, val->d);
                     break;
                 }
             }

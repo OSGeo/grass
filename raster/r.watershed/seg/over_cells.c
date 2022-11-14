@@ -6,13 +6,13 @@ overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num,
                          CELL * hih_ele)
 {
     int r, rr, c, cc;
-    CELL new_ele, new_max_ele;
+    CELL new_ele /*, new_max_ele */ ;
     char aspect;
     ASP_FLAG af;
 
     cseg_put(&bas, &basin_num, row, col);
     cseg_put(&haf, &haf_num, row, col);
-    new_max_ele = BIGNEG;
+    /* new_max_ele = BIGNEG; */
     for (r = row - 1, rr = 0; r <= row + 1; r++, rr++) {
         for (c = col - 1, cc = 0; c <= col + 1; c++, cc++) {
             if (r >= 0 && c >= 0 && r < nrows && c < ncols) {

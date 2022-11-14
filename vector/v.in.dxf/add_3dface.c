@@ -8,7 +8,8 @@ void add_3dface(struct dxf_file *dxf, struct Map_info *Map)
     char handle[DXF_BUF_SIZE];  /* entity handle, 16 hexadecimal digits */
     char layer[DXF_BUF_SIZE];   /* layer name */
     int layer_flag = 0;         /* indicates if a layer name has been found */
-    int dface_flag = 0;         /* indicates if a edge is invisible */
+
+    /* int dface_flag = 0; *//* indicates if a edge is invisible */
     int xflag = 0;              /* indicates if a x value has been found */
     int yflag = 0;              /* indicates if a y value has been found */
     int zflag = 0;              /* indicates if a z value has been found */
@@ -93,7 +94,7 @@ void add_3dface(struct dxf_file *dxf, struct Map_info *Map)
             zflag = 1;
             break;
         case 70:               /* 3dface flag */
-            dface_flag = atoi(dxf_buf);
+            /* dface_flag = atoi(dxf_buf); */
             /* TODO: what does 'invisible' mean here? */
 
             /*******************************************************************

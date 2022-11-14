@@ -10,8 +10,9 @@ void add_text(struct dxf_file *dxf, struct Map_info *Map)
     int layer_flag = 0;         /* indicates if a layer name has been found */
     int xflag = 0;              /* indicates if a x value has been found */
     int yflag = 0;              /* indicates if a y value has been found */
-    double height = 1.0;        /* read in from dxf file */
-    double angle = 0.0;         /* read in from dxf file */
+
+    /* double height = 1.0; *//* read in from dxf file */
+    /* double angle = 0.0; *//* read in from dxf file */
     char label[DXF_BUF_SIZE];   /* read in from dxf file */
     int label_len = 0;
 
@@ -62,10 +63,10 @@ void add_text(struct dxf_file *dxf, struct Map_info *Map)
             zpnts[0] = atof(dxf_buf);
             break;
         case 40:               /* text height */
-            height = atof(dxf_buf);
+            /* height = atof(dxf_buf); */
             break;
         case 50:               /* text angle */
-            angle = atof(dxf_buf);
+            /* angle = atof(dxf_buf); */
             break;
 
         case 7:                /* text style name */

@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 {
     FILE *ascii;
     struct Option *input, *output, *type_opt, *dp_opt, *layer_opt, *scale;
-    struct Flag *coorcorr, *numatts, *labels;
+    struct Flag *coorcorr, *numatts /* , *labels */ ;
     int itype, *types = NULL, typenum = 0, dp, i;
     struct Map_info Map;
     struct bound_box box;
@@ -87,8 +87,8 @@ int main(int argc, char *argv[])
     numatts->description =
         _("Export numeric attribute table fields as VTK scalar variables");
 
-    labels = NULL;              /* to avoid compiler warning about "unused variable" */
     /* not yet supported
+       labels = NULL;
        labels = G_define_flag();
        labels->key = 'l';
        labels->description = _("Export text attribute table fields as VTK labels");

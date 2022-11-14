@@ -101,20 +101,21 @@ static int solvemat(struct MATRIX *m, double a[], double B[])
 
 int main(int argc, char *argv[])
 {
-    unsigned int r, c, rows, cols, n_valid;     /*  totals  */
+    unsigned int r, c, rows, cols;      /*  totals  */
     int *mapx_fd, mapy_fd, mapres_fd, mapest_fd;
     int i, j, k, n_predictors;
     double *sumX, sumY, *sumsqX, sumsqY, *sumXY;
     double *meanX, meanY, *varX, varY, *sdX, sdY;
     double yest, yres;          /* estimated y, residual */
-    double sumYest, *SSerr_without;
-    double SE;
-    double meanYest, meanYres, varYest, varYres, sdYest, sdYres;
+    double /* sumYest, */ *SSerr_without;
+
+    /* double SE; */
+    /* double meanYest, meanYres, varYest, varYres, sdYest, sdYres; */
     double SStot, SSerr, SSreg;
     double SAE;
     double **a;
     struct MATRIX *m, *m_all;
-    double **B, Rsq, Rsqadj, F, t, AIC, AICc, BIC;
+    double **B, Rsq, Rsqadj, F, /* t, */ AIC, AICc, BIC;
     unsigned int count = 0;
     DCELL **mapx_buf, *mapy_buf, *mapx_val, mapy_val, *mapres_buf,
         *mapest_buf;
@@ -246,12 +247,11 @@ int main(int argc, char *argv[])
         SSerr_without[i] = 0.0;
     }
     sumY = sumsqY = meanY = varY = sdY = 0.0;
-    sumYest = meanYest = varYest = sdYest = 0.0;
-    meanYres = varYres = sdYres = 0.0;
+    /* sumYest = meanYest = varYest = sdYest = 0.0; */
+    /* meanYres = varYres = sdYres = 0.0; */
 
     /* read input maps */
     G_message(_("First pass..."));
-    n_valid = 0;
     mapx_val[0] = 1.0;
     for (r = 0; r < rows; r++) {
         G_percent(r, rows, 2);
@@ -468,7 +468,7 @@ int main(int argc, char *argv[])
     /* constant aka estimate for intercept in R */
     fprintf(stdout, "b%d=%f\n", i, B[0][i]);
     /* t score for R squared of the full model, unused */
-    t = sqrt(Rsq) * sqrt((count - 2) / (1 - Rsq));
+    /* t = sqrt(Rsq) * sqrt((count - 2) / (1 - Rsq)); */
     /*
        fprintf(stdout, "t%d=%f\n", i, t);
      */
@@ -484,7 +484,7 @@ int main(int argc, char *argv[])
     fprintf(stdout, "BIC=%f\n", BIC);
 
     /* error variance of the model, identical to R */
-    SE = SSerr / (count - n_predictors - 1);
+    /* SE = SSerr / (count - n_predictors - 1); */
     /*
        fprintf(stdout, "SE=%f\n", SE);
        fprintf(stdout, "SSerr=%f\n", SSerr);
@@ -495,11 +495,11 @@ int main(int argc, char *argv[])
         fprintf(stdout, "\npredictor%d=%s\n", i + 1, input_mapx->answers[i]);
         fprintf(stdout, "b%d=%f\n", i + 1, B[0][i + 1]);
         if (n_predictors > 1) {
-            double Rsqi, SEi, sumsqX_corr;
+            /* double Rsqi, SEi, sumsqX_corr; */
 
             /* corrected sum of squares for predictor [i] */
-            sumsqX_corr =
-                sumsqX[i] - sumX[i] * sumX[i] / (count - n_predictors - 1);
+            /* sumsqX_corr =
+               sumsqX[i] - sumX[i] * sumX[i] / (count - n_predictors - 1); */
 
             /* standard error SE for predictor [i] */
 
@@ -510,7 +510,7 @@ int main(int argc, char *argv[])
              * resvar = rss / rdf = SE global
              * rss = sum of squares of the residuals
              * rdf = residual degrees of freedom = count - n_predictors - 1 */
-            SEi = sqrt(SE / (Rsq * sumsqX_corr));
+            /* SEi = sqrt(SE / (Rsq * sumsqX_corr)); */
             /*
                fprintf(stdout, "SE%d=%f\n", i + 1, SEi);
              */
@@ -525,11 +525,11 @@ int main(int argc, char *argv[])
             /* the additional amount of variance explained
              * when including predictor [i] :
              * Rsq - Rsqi */
-            Rsqi = (SSerr_without[i] - SSerr) / SStot;
-            fprintf(stdout, "Rsq%d=%f\n", i + 1, Rsqi);
+            /* Rsqi = (SSerr_without[i] - SSerr) / SStot;
+               fprintf(stdout, "Rsq%d=%f\n", i + 1, Rsqi); */
 
             /* t score for Student's t distribution, unused */
-            t = (B[0][i + 1]) / SEi;
+            /* t = (B[0][i + 1]) / SEi; */
             /*
                fprintf(stdout, "t%d=%f\n", i + 1, t);
              */

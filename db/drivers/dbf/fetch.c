@@ -26,7 +26,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     dbColumn *column;
     dbValue *value;
     int col, ncols;
-    int htype, sqltype, ctype;
+    int sqltype, ctype;
     int dbfrow, dbfcol;
 
     /* get cursor token */
@@ -75,7 +75,6 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
         sqltype = db_get_column_sqltype(column);
         ctype = db_sqltype_to_Ctype(sqltype);
-        htype = db_get_column_host_type(column);
 
         if (db.tables[c->table].rows[dbfrow].values[dbfcol].is_null) {
             db_set_value_null(value);

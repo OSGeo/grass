@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     FILE *outf;
     char *outfilename;
 
-    CELL *cell;
+    /* CELL *cell; */
     char *name;
     int fd;
     int nrows, ncols;
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
     if (NULL == (outf = fopen(outfilename, "wb")))
         G_fatal_error(_("Unable to open output file <%s>"), outfilename);
 
-    cell = Rast_allocate_c_buf();
+    /* cell = Rast_allocate_c_buf(); */
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
