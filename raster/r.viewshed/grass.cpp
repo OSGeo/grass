@@ -219,6 +219,8 @@ init_event_list_in_memory(AEvent * eventList, char *rastName,
     G_SURFACE_T **inrast;
     int nrows = Rast_window_rows();
     int ncols = Rast_window_cols();
+    assert(nrows <= maxDimension);
+    assert(ncols <= maxDimension);    
 
     inrast = (G_SURFACE_T **)G_malloc(3 * sizeof(G_SURFACE_T *));
     assert(inrast);
@@ -247,7 +249,7 @@ init_event_list_in_memory(AEvent * eventList, char *rastName,
     Rast_get_row(infd, inrast[2], 0, data_type);
 
     e.angle = -1;
-    for (i = 0; i < nrows; i++) {
+    for (i = 0; i < (dimensionType)nrows; i++) {
 	/*read in the raster row */
 	
 	G_SURFACE_T *tmprast = inrast[0];
@@ -263,7 +265,7 @@ init_event_list_in_memory(AEvent * eventList, char *rastName,
 	G_percent(i, nrows, 2);
 
 	/*fill event list with events from this row */
-	for (j = 0; j < Rast_window_cols(); j++) {
+	for (j = 0; j < (dimensionType)ncols; j++) {
 	    e.row = i;
 	    e.col = j;
 
@@ -443,6 +445,8 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
     G_SURFACE_T **inrast;
     int nrows = Rast_window_rows();
     int ncols = Rast_window_cols();
+    assert(nrows <= maxDimension);
+    assert(ncols <= maxDimension);
 
     inrast = (G_SURFACE_T **)G_malloc(3 * sizeof(G_SURFACE_T *));
     assert(inrast);
@@ -468,7 +472,7 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
     e.angle = -1;
 
     /*start scanning through the grid */
-    for (i = 0; i < nrows; i++) {
+    for (i = 0; i < (dimensionType)nrows; i++) {
 	
 	G_percent(i, nrows, 2);
 
@@ -485,7 +489,7 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
 	    Rast_set_null_value(inrast[2], ncols, data_type);
 
 	/*fill event list with events from this row */
-	for (j = 0; j < ncols; j++) {
+	for (j = 0; j < (dimensionType)ncols; j++) {
 
 	    e.row = i;
 	    e.col = j;
@@ -641,11 +645,16 @@ save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
     outrast = Rast_allocate_buf(type);
     assert(outrast);
 
+    int nrows = Rast_window_rows();
+    int ncols = Rast_window_cols();
+    assert(nrows <= maxDimension);
+    assert(ncols <= maxDimension);
+
     dimensionType i, j;
 
-    for (i = 0; i < Rast_window_rows(); i++) {
-        G_percent(i, Rast_window_rows(), 5);
-	for (j = 0; j < Rast_window_cols(); j++) {
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        G_percent(i, nrows, 5);
+	for (j = 0; j < (dimensionType)ncols; j++) {
 	    if (is_invisible_nodata(grid->grid_data[i][j])) {
 		writeNodataValue(outrast, j, type);
 	    }
@@ -722,14 +731,19 @@ save_vis_elev_to_GRASS(Grid * visgrid, char *elevfname, char *visfname,
     visrast = Rast_allocate_buf(elev_data_type);
     assert(visrast);
 
+    int nrows = Rast_window_rows();
+    int ncols = Rast_window_cols();
+    assert(nrows <= maxDimension);
+    assert(ncols <= maxDimension);
+
     dimensionType i, j;
     double elev = 0, viewshed_value;
 
-    for (i = 0; i < Rast_window_rows(); i++) {
+    for (i = 0; i < (dimensionType)nrows; i++) {
 	/* get the row from elevation */
 	Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
-	for (j = 0; j < Rast_window_cols(); j++) {
+	for (j = 0; j < (dimensionType)ncols; j++) {
 
 	    /* read the current elevation value */
 	    int isNull = 0;
@@ -864,10 +878,15 @@ save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
 	counter++;
     }
 
+    int nrows = Rast_window_rows();
+    int ncols = Rast_window_cols();
+    assert(nrows <= maxDimension);
+    assert(ncols <= maxDimension);
+
     dimensionType i, j;
 
-    for (i = 0; i < Rast_window_rows(); i++) {
-	for (j = 0; j < Rast_window_cols(); j++) {
+    for (i = 0; i < (dimensionType)nrows; i++) {
+	for (j = 0; j < (dimensionType)ncols; j++) {
 
 	    if (curResult->row == i && curResult->col == j) {
 		/*cell is recodred in the visibility stream: it must be
@@ -971,12 +990,17 @@ save_io_vis_and_elev_to_GRASS(IOVisibilityGrid * visgrid, char *elevfname,
 
     dimensionType i, j;
     double elev = 0;
+    int nrows = Rast_window_rows();
+    int ncols = Rast_window_cols();
+    assert(nrows <= maxDimension);
+    assert(ncols <= maxDimension);
+    
 
-    for (i = 0; i < Rast_window_rows(); i++) {
+    for (i = 0; i < (dimensionType)nrows; i++) {
 
 	Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
-	for (j = 0; j < Rast_window_cols(); j++) {
+	for (j = 0; j < (dimensionType)ncols; j++) {
 
 	    /* read the current elevation value */
 
