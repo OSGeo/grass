@@ -1,6 +1,6 @@
 """Test MapsetSession with location fixture with module scope
 
-Location fixture with module scope with module scope needs to be the only session in
+Location fixture with module scope needs to be the only session in
 a module because the sessions are global and would thus overlap with each other
 resulting in the second session ending with failure to access GISRC variable.
 """

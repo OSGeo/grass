@@ -13,14 +13,14 @@ for details.
 import os
 import shutil
 import getpass
-
+import tempfile
 
 from grass.grassdb.checks import (
     mapset_exists,
     is_mapset_valid,
     get_mapset_invalid_reason,
 )
-from grass.grassdb.manage import delete_mapset, resolve_mapset_path
+from grass.grassdb.manage import delete_mapset, resolve_mapset_path, MapsetPath
 
 
 def require_create_ensure_mapset(
@@ -61,17 +61,37 @@ def require_create_ensure_mapset(
         raise ValueError(f"Mapset {path.mapset} is not valid: {reason}")
 
 
-def create_mapset(database, location, mapset):
-    """Creates a mapset in a specified location"""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
-    # create an empty directory
-    os.mkdir(mapset_path)
+def create_temporary_mapset(path, location=None) -> MapsetPath:
+    import pathlib
+
+    path = pathlib.Path(path)
+    if location:
+        path /= location
+    tmp_dir = tempfile.mkdtemp(dir=path)
+    new_path = resolve_mapset_path(tmp_dir)
+    _directory_to_mapset(new_path)
+    return new_path
+
+
+def _directory_to_mapset(path: MapsetPath):
+    """Turn an existing directory into a mapset"""
     # copy DEFAULT_WIND file and its permissions from PERMANENT
     # to WIND in the new mapset
-    region_path1 = os.path.join(location_path, "PERMANENT", "DEFAULT_WIND")
-    region_path2 = os.path.join(location_path, mapset, "WIND")
+    region_path1 = path.path.parent / "PERMANENT" / "DEFAULT_WIND"
+    region_path2 = path.path / "WIND"
     shutil.copy(region_path1, region_path2)
+
+
+def create_mapset(database, location, mapset):
+    """Creates a mapset in a specified location"""
+    path = resolve_mapset_path(
+        database,
+        location,
+        mapset,
+    )
+    # create an empty directory
+    os.mkdir(path)
+    _directory_to_mapset(path)
     # set permissions to u+rw,go+r (disabled; why?)
     # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
 
