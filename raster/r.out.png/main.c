@@ -170,9 +170,9 @@ int main(int argc, char *argv[])
 
     png_compr = atoi(compr->answer);
 
-#if 0                           /* unused */
 #ifdef MAYBE_LATER
     /* ... if at all */
+    int ret;
     ret = G_str_to_color(bgcolor->answer, &def_red, &def_grn, &def_blu);
     if (ret == 0)
         G_fatal_error(_("[%s]: No such color"), bgcolor->answer);
@@ -181,9 +181,8 @@ int main(int argc, char *argv[])
             do_alpha = TRUE;
     }
 #else
-    ret = G_str_to_color(DEFAULT_BG_COLOR, &def_red, &def_grn, &def_blu);
+    G_str_to_color(DEFAULT_BG_COLOR, &def_red, &def_grn, &def_blu);
 #endif
-#endif /* unused */
 
     /*G_get_set_window (&win); *//* 10/99 MN: check for current region */
     G_get_window(&win);
