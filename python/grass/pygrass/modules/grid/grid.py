@@ -669,9 +669,7 @@ class GridModule(object):
             pool.close()
             pool.join()
             if not result.successful():
-                raise RuntimeError(
-                    _("Execution of subprocesses was not successful"),
-                )
+                raise RuntimeError(_("Execution of subprocesses was not successful"))
 
         if patch:
             if self.move:

@@ -127,13 +127,8 @@ def test_overlaps(tmp_path, overlap):
         assert info["min"] > 0
 
 
-@pytest.mark.parametrize(
-    "clean, surface",
-    [
-        (True, False),
-        ("surface", "non_exist_surface"),
-    ],
-)
+@pytest.mark.parametrize("clean", [True, False])
+@pytest.mark.parametrize("surface", ["surface", "non_exist_surface"])
 def test_cleans(tmp_path, clean, surface):
     """Check that temporary mapsets are cleaned when appropriate"""
     location = "test"
