@@ -75,9 +75,10 @@ static int set_constraint_to_deferrable(struct Format_info_pg *, const char *,
                                         const char *, const char *,
                                         const char *, const char *);
 static dbDriver *open_db(struct Format_info_pg *);
-#endif
 
 static struct line_pnts *Points;
+
+#endif
 
 /*!
    \brief Writes feature on level 1 (PostGIS interface)
