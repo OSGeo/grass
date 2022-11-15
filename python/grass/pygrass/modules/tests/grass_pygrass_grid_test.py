@@ -128,15 +128,16 @@ def test_overlaps(tmp_path, overlap):
 
 
 @pytest.mark.parametrize("clean", [True, False])
-def test_cleans(tmp_path, clean):
+@pytest.mark.parametrize("surface", ["surface", "non_exist_surface"])
+def test_cleans(tmp_path, clean, surface):
     """Check that temporary mapsets are cleaned when appropriate"""
     location = "test"
     mapset_prefix = "abc"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / location):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
-        surface = "surface"
-        gs.run_command("r.surf.fractal", output=surface)
+        if surface == "surface":
+            gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
             # modules/shortcuts calls get_commands which requires GISBASE.
