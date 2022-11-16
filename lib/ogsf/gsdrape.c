@@ -883,10 +883,9 @@ int get_vert_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 {
     int fcol, lcol, incr, hits, num, offset, drow1, drow2;
     float xl, yb, xr, yt, z1, z2, alpha;
-    float xres, yres, xi, yi;
+    float yres, xi, yi;
     int bgncol, endcol, cols, rows;
 
-    xres = VXRES(gs);
     yres = VYRES(gs);
     cols = VCOLS(gs);
     rows = VROWS(gs);
@@ -979,11 +978,10 @@ int get_horz_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 {
     int frow, lrow, incr, hits, num, offset, dcol1, dcol2;
     float xl, yb, xr, yt, z1, z2, alpha;
-    float xres, yres, xi, yi;
+    float xres, xi, yi;
     int bgnrow, endrow, rows, cols;
 
     xres = VXRES(gs);
-    yres = VYRES(gs);
     cols = VCOLS(gs);
     rows = VROWS(gs);
 
@@ -1212,7 +1210,7 @@ int segs_intersect(float x1, float y1, float x2, float y2, float x3, float y3,
 {
     float a1, a2, b1, b2, c1, c2;       /* Coefficients of line eqns. */
     float r1, r2, r3, r4;       /* 'Sign' values */
-    float denom, offset, num;   /* Intermediate values */
+    float denom, /* offset, */ num;     /* Intermediate values */
 
     /* Compute a1, b1, c1, where line joining points 1 and 2
      * is "a1 x  +  b1 y  +  c1  =  0".
@@ -1260,7 +1258,7 @@ int segs_intersect(float x1, float y1, float x2, float y2, float x3, float y3,
         return (COLLINEAR);
     }
 
-    offset = denom < 0 ? -denom / 2 : denom / 2;
+    /* offset = denom < 0 ? -denom / 2 : denom / 2; */
 
     /* The denom/2 is to get rounding instead of truncating.  It
      * is added or subtracted to the numerator, depending upon the

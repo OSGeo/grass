@@ -115,7 +115,10 @@ static void fini_xlib(void)
 static void init_file(void)
 {
     int is_vector = 0;
+
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     int is_xlib = 0;
+#endif
     int do_read = 0;
     int do_map = 0;
     char *p;
@@ -168,9 +171,11 @@ static void init_file(void)
     case FTYPE_SVG:
         is_vector = 1;
         break;
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     case FTYPE_X11:
         is_xlib = 1;
         break;
+#endif
     }
 
     p = getenv("GRASS_RENDER_FILE_MAPPED");
@@ -341,8 +346,7 @@ static void init_cairo(void)
                                                                     CAIRO_FORMAT_ARGB32,
                                                                     ca.width,
                                                                     ca.height,
-                                                                    ca.
-                                                                    stride);
+                                                                    ca.stride);
         break;
 #if CAIRO_HAS_PDF_SURFACE
     case FTYPE_PDF:
@@ -370,8 +374,7 @@ static void init_cairo(void)
 #endif
 #if CAIRO_HAS_XLIB_XRENDER_SURFACE
     case FTYPE_X11:
-        surface =
-            (cairo_surface_t *)
+        surface = (cairo_surface_t *)
             cairo_xlib_surface_create_with_xrender_format(ca.dpy, ca.win,
                                                           ca.screen,
                                                           ca.format, ca.width,

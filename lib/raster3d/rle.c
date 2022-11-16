@@ -177,13 +177,12 @@ int Rast3d_rle_count_only(char *src, int nofElts, int eltLength)
 
 void Rast3d_rle_encode(char *src, char *dst, int nofElts, int eltLength)
 {
-    int length, nofEqual;
+    int nofEqual;
     char *head, *tail, *headStop, *headStop2;
 
     if (nofElts <= 0)
         Rast3d_fatal_error("trying to encode 0-length list");
 
-    length = 0;
     nofEqual = 1;
     head = src + eltLength;
     tail = src;
@@ -201,7 +200,6 @@ void Rast3d_rle_encode(char *src, char *dst, int nofElts, int eltLength)
                 /*      printf ("equal %d char %d\n", nofEqual, *tail); */
                 while (tail != head)
                     *dst++ = *tail++;
-                length += G_rle_codeLength(nofEqual) + eltLength;
                 nofEqual = 1;
                 tail = headStop2 - eltLength;
                 break;
@@ -223,9 +221,7 @@ void Rast3d_rle_encode(char *src, char *dst, int nofElts, int eltLength)
     head = tail + eltLength;
     while (tail != head)
         *dst++ = *tail++;
-    length += G_rle_codeLength(nofEqual) + eltLength;
     dst = rle_length2code(-1, dst);
-    length += G_rle_codeLength(-1);
     rle_code2length(dst - 2, &nofEqual);
 }
 
