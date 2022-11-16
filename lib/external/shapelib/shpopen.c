@@ -473,8 +473,9 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
             SwapWord(4, panSHX + i * 2 + 1);
     }
 
-    if ((int)psSHP->sHooks.
-        FWrite(panSHX, sizeof(int32) * 2, psSHP->nRecords, psSHP->fpSHX)
+    if ((int)psSHP->
+        sHooks.FWrite(panSHX, sizeof(int32) * 2, psSHP->nRecords,
+                      psSHP->fpSHX)
         != psSHP->nRecords) {
         psSHP->sHooks.Error("Failure writing .shx contents");
     }
@@ -890,7 +891,6 @@ SHPRestoreSHX(const char *pszLayer, const char *pszAccess, SAHooks * psHooks)
     size_t nMessageLen;
     char *pszMessage;
 
-    unsigned int nCurrentRecordOffset = 0;
     unsigned int nCurrentSHPOffset = 100;
     size_t nRealSHXContentSize = 100;
 
@@ -1023,7 +1023,6 @@ SHPRestoreSHX(const char *pszLayer, const char *pszAccess, SAHooks * psHooks)
             if (!bBigEndian)
                 SwapWord(4, &nRecordLength);
             nRecordOffset += nRecordLength + 4;
-            nCurrentRecordOffset += 8;
             nCurrentSHPOffset += 8 + nRecordLength * 2;
 
             psHooks->FSeek(fpSHP, nCurrentSHPOffset, 0);
@@ -1850,15 +1849,13 @@ SHPWriteObject(SHPHandle psSHP, int nShapeId, SHPObject * psObject)
     /*      Write out record.                                               */
     /* -------------------------------------------------------------------- */
     if (psSHP->sHooks.FSeek(psSHP->fpSHP, nRecordOffset, 0) != 0) {
-        psSHP->sHooks.
-            Error
+        psSHP->sHooks.Error
             ("Error in psSHP->sHooks.FSeek() while writing object to .shp file.");
         free(pabyRec);
         return -1;
     }
     if (psSHP->sHooks.FWrite(pabyRec, nRecordSize, 1, psSHP->fpSHP) < 1) {
-        psSHP->sHooks.
-            Error
+        psSHP->sHooks.Error
             ("Error in psSHP->sHooks.Fwrite() while writing object to .shp file.");
         free(pabyRec);
         return -1;

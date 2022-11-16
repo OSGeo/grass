@@ -274,10 +274,9 @@ int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
     dglInt32_t opaqueset[16] =
         { 360000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     dglNodeTraverser_s nt;
-    dglInt32_t nnodes, edge_cnt;
+    dglInt32_t edge_cnt;
     dglInt32_t *cur_node;
 
-    nnodes = dglGet_NodeCount(in);
     dglInitialize(out, (dglByte_t) 1, (dglInt32_t) 0, (dglInt32_t) 0,
                   opaqueset);
     dglNode_T_Initialize(&nt, in);

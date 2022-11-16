@@ -55,7 +55,7 @@ int GS_write_tif(const char *name)
     TIFF *out;
     unsigned int y, x;
     unsigned int xsize, ysize;
-    int mapsize, linebytes;
+    int linebytes;
     unsigned char *buf, *tmpptr;
     unsigned char *pixbuf;
 
@@ -78,7 +78,6 @@ int GS_write_tif(const char *name)
     TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, 24 > 8 ? 3 : 1);
     TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 24 > 1 ? 8 : 1);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
-    mapsize = 1 << 24;
 
     TIFFSetField(out, TIFFTAG_PHOTOMETRIC, 24 > 8 ?
                  PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK);

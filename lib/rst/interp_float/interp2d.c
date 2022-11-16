@@ -90,10 +90,10 @@ int IL_grid_calc_2d(struct interp_params *params, struct quaddata *data,        
     int cond1, cond2;
     double r;
     double stepix, stepiy, xx, xg, yg, xx2;
-    double rfsta2, /* cons, cons1, */ wm, dx, dy, dxx, dyy, dxy, h, bmgd1,
+    double /* rfsta2, cons, cons1, */ wm, dx, dy, dxx, dyy, dxy, h, bmgd1,
         bmgd2;
     double r2, gd1, gd2;        /* for interpder() */
-    int n1, k, l, m;
+    int /* n1, */ k, l, m;
     int ngstc, nszc, ngstr, nszr;
     double zz;
     int bmask = 1;
@@ -145,7 +145,7 @@ int IL_grid_calc_2d(struct interp_params *params, struct quaddata *data,        
             return -1;
         }
     }
-    n1 = n_points + 1;
+    /* n1 = n_points + 1; */
     /*
      * C C         INTERPOLATION   *  MOST INNER LOOPS ! C
      */
@@ -188,13 +188,13 @@ int IL_grid_calc_2d(struct interp_params *params, struct quaddata *data,        
                         w2[m] = yyr * yyr;
                         r2 = scale * xx2 + w2[m];
                         r = r2;
-                        rfsta2 = scale * xx2 + w2[m];
+                        /* rfsta2 = scale * xx2 + w2[m]; */
                     }
                     else {
                         xx2 = xx * xx;
                         r2 = xx2 + w2[m];
                         r = r2;
-                        rfsta2 = xx2 + w2[m];
+                        /* rfsta2 = xx2 + w2[m]; */
                     }
 
                     h = h + b[m] * params->interp(r, params->fi);

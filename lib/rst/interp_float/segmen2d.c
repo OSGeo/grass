@@ -58,7 +58,7 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info, 
                           double dnorm)
 {
     double xmn, xmx, ymn, ymx, distx, disty, distxp, distyp, temp1, temp2;
-    int i, npt, nptprev, MAXENC;
+    int i, npt, MAXENC;
     struct quaddata *data;
     static int cursegm = 0;
     static double *b = NULL;
@@ -72,7 +72,7 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info, 
     struct triple *point;
     struct triple skip_point;
     int m_skip, skip_index, j, k, segtest;
-    double xx, yy, zz;
+    double xx, yy /*, zz */ ;
 
     /* find the size of the smallest segment once */
     if (first_time) {
@@ -139,7 +139,6 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info, 
                 /* decrease window */
             {
                 MAXENC = 1;
-                nptprev = npt;
                 temp1 = distxp;
                 distxp = distx;
                 distx = distxp - fabs(distx - temp1) * 0.5;
@@ -149,7 +148,6 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info, 
                 /* decrease by 50% of a previous change in window */
             }
             else {
-                nptprev = npt;
                 temp1 = distyp;
                 distyp = disty;
                 temp2 = distxp;
@@ -261,7 +259,7 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info, 
                     params->x_orig;
                 yy = point[skip_index].y * dnorm + data->y_orig +
                     params->y_orig;
-                zz = point[skip_index].z;
+                /* zz = point[skip_index].z; */
                 if (xx >= data->x_orig + params->x_orig &&
                     xx <= data->xmax + params->x_orig &&
                     yy >= data->y_orig + params->y_orig &&

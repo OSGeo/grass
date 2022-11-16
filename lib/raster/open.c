@@ -158,7 +158,6 @@ int Rast__open_old(const char *name, const char *mapset)
     const char *r_mapset;
     struct Cell_head cellhd;
     int CELL_nbytes = 0;        /* bytes per cell in CELL map */
-    int INTERN_SIZE;
     int reclass_flag;
     int MAP_NBYTES;
     RASTER_MAP_TYPE MAP_TYPE;
@@ -256,17 +255,14 @@ int Rast__open_old(const char *name, const char *mapset)
     /* record number of bytes per cell */
     if (MAP_TYPE == FCELL_TYPE) {
         cell_dir = "fcell";
-        INTERN_SIZE = sizeof(FCELL);
         MAP_NBYTES = XDR_FLOAT_NBYTES;
     }
     else if (MAP_TYPE == DCELL_TYPE) {
         cell_dir = "fcell";
-        INTERN_SIZE = sizeof(DCELL);
         MAP_NBYTES = XDR_DOUBLE_NBYTES;
     }
     else {                      /* integer */
         cell_dir = "cell";
-        INTERN_SIZE = sizeof(CELL);
         MAP_NBYTES = CELL_nbytes;
     }
 

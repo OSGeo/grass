@@ -311,7 +311,8 @@ static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[], doubl
     )
 {
     int i, j, n, o, numactive = 0;
-    double dist = 0.0, dx, dy, regularization;
+
+    /* double dist = 0.0, dx, dy, regularization; */
 
     /* INITIALIZE THE MATRIX AND THE TWO COLUMN VECTORS */
 
@@ -362,17 +363,17 @@ static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[], doubl
                     if (i != j)
                         M(j + 3, i + 3) = M(i + 3, j + 3);
 
-                    dx = cp->e1[n] - cp->e1[o];
-                    dy = cp->n1[n] - cp->n1[o];
-                    dist += sqrt(dx * dx + dy * dy);
+                    /* dx = cp->e1[n] - cp->e1[o];
+                       dy = cp->n1[n] - cp->n1[o];
+                       dist += sqrt(dx * dx + dy * dy); */
                 }
             }
         }
     }
 
     /* regularization */
-    dist /= (numactive * numactive);
-    regularization = 0.01 * dist * dist;
+    /* dist /= (numactive * numactive);
+       regularization = 0.01 * dist * dist; */
 
     /* set diagonal to regularization, but not the first 3x3 (global affine) */
 

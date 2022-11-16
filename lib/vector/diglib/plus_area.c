@@ -456,7 +456,7 @@ int dig_del_area(struct Plus_head *plus, int area)
  * \param[in] current_line current line id, negative if request for end node
  * \param[in] side side GV_RIGHT or GV_LEFT
  * \param[in] type line type (GV_LINE, GV_BOUNDARY or both)
- * \param[in] angle
+ * \param[out] angle
  *
  * \return line number of next angle to follow a line (negative if connected by end node)
  *               (number of current line may be returned if dangle - this is used in build)
@@ -665,7 +665,7 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
     if (angle1 == angle2) {
         G_debug(3,
                 "  The line to the left has the same angle: node = %d, line = %d",
-                node, next);
+                node, prev);
         return 0;
     }
 

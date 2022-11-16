@@ -60,7 +60,7 @@ int IL_vector_input_data_2d(struct interp_params *params,       /*!< interpolati
 {
     double dmax2;               /* max distance between points squared */
     double c1, c2, c3, c4;
-    int i, line, k = 0;
+    int i, k = 0;
     double ns_res, ew_res;
     int npoint, OUTRANGE;
     int totsegm;
@@ -140,7 +140,6 @@ int IL_vector_input_data_2d(struct interp_params *params,       /*!< interpolati
     /* Lines without nodes */
     G_message(_("Reading features from vector map ..."));
     sm = 0;
-    line = 1;
     while ((ltype = Vect_read_next_line(Map, Points, Cats)) != -2) {
 
         if (!(ltype & (GV_POINT | GV_LINE | GV_BOUNDARY)))
@@ -149,7 +148,6 @@ int IL_vector_input_data_2d(struct interp_params *params,       /*!< interpolati
         if (field > 0) {        /* use cat or attribute */
             Vect_cat_get(Cats, field, &cat);
 
-            /*    line++; */
             if (zcol == NULL) { /* use categories */
                 z = (double)cat;
             }

@@ -54,14 +54,13 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
     int i, j, k, l, m, m1, i1;  /* loop coounters */
     int cursegm = 0;
     int new_comp = 0;
-    int n_rows, n_cols, inp_r, inp_c;
+    int n_rows, n_cols /*, inp_r, inp_c */ ;
     double x_or, y_or, xm, ym;
     static int first = 1, new_first = 1;
     double **matrix = NULL, **new_matrix = NULL, *b = NULL;
     int *indx = NULL, *new_indx = NULL;
     static struct fcell_triple *in_points = NULL;       /* input points */
-    int inp_check_rows, inp_check_cols, /* total input rows/cols */
-      out_check_rows, out_check_cols;   /* total output rows/cols */
+    int out_check_rows, out_check_cols; /* total output rows/cols */
     int first_row, last_row;    /* first and last input row of segment */
     int first_col, last_col;    /* first and last input col of segment */
     int num, prev;
@@ -125,8 +124,6 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
     overlap1 = min1(overlap1, inp_seg_r - 1);
     out_check_rows = 0;
     out_check_cols = 0;
-    inp_check_rows = 0;
-    inp_check_cols = 0;
 
     if (div == 1) {
         p_size = inp_seg_c * inp_seg_r;
@@ -236,8 +233,6 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
     overlap1 = min1(overlap1, inp_seg_r - 1);
     out_check_rows = 0;
     out_check_cols = 0;
-    inp_check_rows = 0;
-    inp_check_cols = 0;
 
     totsegm = div * div;
 
@@ -247,9 +242,8 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
             n_rows = out_seg_r;
         else
             n_rows = out_seg_r + 1;
-        inp_r = inp_seg_r;
+        /* inp_r = inp_seg_r; */
         out_check_cols = 0;
-        inp_check_cols = 0;
         ngstr = out_check_rows + 1;     /* first output row of the segment */
         nszr = ngstr + n_rows - 1;      /* last output row of the segment */
         y_or = (ngstr - 1) * ns_res;    /* y origin of the segment */
@@ -282,7 +276,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                 n_cols = out_seg_c;
             else
                 n_cols = out_seg_c + 1;
-            inp_c = inp_seg_c;
+            /* inp_c = inp_seg_c; */
 
             ngstc = out_check_cols + 1; /* first output col of the segment */
             nszc = ngstc + n_cols - 1;  /* last output col of the segment */
@@ -349,7 +343,6 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
             else
                 data->n_points = params->KMAX2;
             out_check_cols += n_cols;
-            inp_check_cols += inp_c;
             cursegm = (i - 1) * div + j - 1;
 
             /* show before to catch 0% */
@@ -466,8 +459,6 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
              * cursegm++;
              */
         }
-
-        inp_check_rows += inp_r;
         out_check_rows += n_rows;
     }
 

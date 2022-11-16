@@ -173,7 +173,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 void N_write_array_2d_to_rast(N_array_2d * array, char *name)
 {
     int map;                    /*The rastermap */
-    int x, y, cols, rows, count, type;
+    int x, y, cols, rows, type;
     CELL *rast = NULL;
     FCELL *frast = NULL;
     DCELL *drast = NULL;
@@ -201,7 +201,6 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
 
     G_message(_("Write 2d array to raster map <%s>"), name);
 
-    count = 0;
     for (y = 0; y < rows; y++) {
         G_percent(y, rows - 1, 10);
         for (x = 0; x < cols; x++) {
@@ -388,7 +387,7 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 {
     void *map = NULL;           /*The 3D Rastermap */
     int changemask = 0;
-    int x, y, z, cols, rows, depths, count, type;
+    int x, y, z, cols, rows, depths, type;
     double d1 = 0.0, f1 = 0.0;
     N_array_3d *data = array;
     RASTER3D_Region region;
@@ -438,7 +437,6 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
         }
     }
 
-    count = 0;
     for (z = 0; z < depths; z++) {      /*From the bottom to the top */
         G_percent(z, depths - 1, 10);
         for (y = 0; y < rows; y++) {

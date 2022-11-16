@@ -118,14 +118,14 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
 
             double xmn, xmx, ymn, ymx, distx, disty, distxp, distyp, temp1,
                 temp2;
-            int npt, nptprev, MAXENC;
+            int npt, MAXENC;
             double ew_res, ns_res;
             int MINPTS;
             double pr;
             struct triple *point;
             struct triple skip_point;
             int m_skip, skip_index, k, segtest;
-            double xx, yy, zz;
+            double xx, yy /*, zz */ ;
 
 
             //struct quaddata *data_local;
@@ -195,7 +195,6 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         /* decrease window */
                     {
                         MAXENC = 1;
-                        nptprev = npt;
                         temp1 = distxp;
                         distxp = distx;
                         distx = distxp - fabs(distx - temp1) * 0.5;
@@ -205,7 +204,6 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         /* decrease by 50% of a previous change in window */
                     }
                     else {
-                        nptprev = npt;
                         temp1 = distyp;
                         distyp = disty;
                         temp2 = distxp;
@@ -310,7 +308,7 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                             data_local[tid]->x_orig + params->x_orig;
                         yy = point[skip_index].y * dnorm +
                             data_local[tid]->y_orig + params->y_orig;
-                        zz = point[skip_index].z;
+                        /* zz = point[skip_index].z; */
                         if (xx >= data_local[tid]->x_orig + params->x_orig &&
                             xx <= data_local[tid]->xmax + params->x_orig &&
                             yy >= data_local[tid]->y_orig + params->y_orig &&

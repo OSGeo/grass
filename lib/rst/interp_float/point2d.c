@@ -62,10 +62,11 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
     double west = data->x_orig;
     double north = data->ymax;
     double south = data->y_orig;
-    double rfsta2, errmax, h, xx, yy, r2, hz, zz, err, xmm, ymm, r;
+    double /* rfsta2, errmax, */ h, xx, yy, r2, hz, zz, err, xmm, ymm, r;
     double skip_err;
-    int n1, mm, m, cat;
-    double fstar2;
+    int /* n1, */ mm, m, cat;
+
+    /* double fstar2; */
     int inside;
 
     /*  Site *site; */
@@ -75,9 +76,9 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
     /*  if ((site = G_site_new_struct (-1, 2, 0, 1)) == NULL)
        G_fatal_error ("Memory error for site struct"); */
 
-    fstar2 = params->fi * params->fi / 4.;
-    errmax = .0;
-    n1 = n_points + 1;
+    /* fstar2 = params->fi * params->fi / 4.; */
+    /* errmax = .0; */
+    /* n1 = n_points + 1; */
     for (mm = 1; mm <= n_points; mm++) {
         h = b[0];
         for (m = 1; m <= n_points; m++) {
@@ -85,7 +86,7 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
             yy = points[mm - 1].y - points[m - 1].y;
             r2 = yy * yy + xx * xx;
             if (r2 != 0.) {
-                rfsta2 = fstar2 * r2;
+                /* rfsta2 = fstar2 * r2; */
                 r = r2;
                 h = h + b[m] * params->interp(r, params->fi);
             }
@@ -148,7 +149,7 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
             yy = points[m - 1].y - skip_point.y;
             r2 = yy * yy + xx * xx;
             if (r2 != 0.) {
-                rfsta2 = fstar2 * r2;
+                /* rfsta2 = fstar2 * r2; */
                 r = r2;
                 h = h + b[m] * params->interp(r, params->fi);
             }

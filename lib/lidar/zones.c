@@ -569,7 +569,7 @@ P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
                 char *tab_name)
 {
 
-    int more, line_num, type, count = 0;
+    int more, type, count = 0;
     double coordX, coordY, coordZ;
 
     struct line_pnts *point;
@@ -604,7 +604,6 @@ P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
             value = db_get_column_value(column);
         else
             continue;
-        line_num = db_get_value_int(value);
 
         column = db_get_table_column(table, 1);
         type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
