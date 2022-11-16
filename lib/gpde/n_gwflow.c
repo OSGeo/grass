@@ -269,7 +269,7 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
     double hc_xw, hc_yn, hc_zt;
     double hc_xe, hc_ys, hc_zb;
     double hc_start;
-    double Ss, r, nf, q;
+    double Ss, r, /* nf, */ q;
     double C, W, E, N, S, T, B, V;
     N_data_star *mat_pos;
     N_gwflow_data3d *data;
@@ -310,7 +310,7 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
     /*storativity */
     Ss = N_get_array_3d_d_value(data->s, col, row, depth);
     /*porosity */
-    nf = N_get_array_3d_d_value(data->nf, col, row, depth);
+    /* nf = N_get_array_3d_d_value(data->nf, col, row, depth); */
 
     /*mass balance center cell to western cell */
     W = -1 * Ax * hc_w / dx;

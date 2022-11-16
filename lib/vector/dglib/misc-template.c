@@ -362,7 +362,9 @@ int DGL_FLATTEN_FUNC(dglGraph_s * pgraph)
     register dglInt32_t *pnode;
     register dglInt32_t *pnodescan;
     dglInt32_t *pOutEdgeset;
+#if !defined(_DGL_V1)
     dglInt32_t *pInEdgeset;
+#endif
     int cOutEdgeset;
     int cInEdgeset;
 
@@ -421,7 +423,9 @@ int DGL_FLATTEN_FUNC(dglGraph_s * pgraph)
 	) {
 	pnode = DGL_T_NODEITEM_NodePTR(ptreenode);
 	pOutEdgeset = DGL_T_NODEITEM_OutEdgesetPTR(ptreenode);
+#if !defined(_DGL_V1)
 	pInEdgeset = DGL_T_NODEITEM_InEdgesetPTR(ptreenode);
+#endif
 
 	if (!(DGL_NODE_STATUS(pnode) & DGL_NS_ALONE)) {
 	    cOutEdgeset = (pOutEdgeset) ?

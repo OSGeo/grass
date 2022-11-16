@@ -154,7 +154,8 @@ void G__wps_print_process_description(void)
     const char *value = NULL;
     int i;
     const char *encoding;
-    int new_prompt = 0;
+
+    /* int new_prompt = 0; */
     int store = 1;
     int status = 1;
     const char *identifier = NULL;
@@ -172,7 +173,7 @@ void G__wps_print_process_description(void)
     int is_tuple;               /* Checks the key_descr for comma separated values */
     int num_tuples;             /* Counts the "," in key_descr */
 
-    new_prompt = G__uses_new_gisprompt();
+    /* new_prompt = G__uses_new_gisprompt(); */
 
     /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
 

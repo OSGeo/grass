@@ -51,18 +51,19 @@ float Nbottom[] = { 0.0, 0.0, -1.0 };
 void gsd_display_fringe(geosurf * surf, unsigned long clr, float elev,
                         int where[4])
 {
-    float bot, xres, yres;      /* world size of view cell */
+    float bot /*, xres, yres */ ;       /* world size of view cell */
     int ycnt, xcnt;             /* number of view cells across */
-    float xmax, ymax;
 
-    xres = surf->x_mod * surf->xres;
-    yres = surf->y_mod * surf->yres;
+    /* float xmax, ymax; */
+
+    /* xres = surf->x_mod * surf->xres; */
+    /* yres = surf->y_mod * surf->yres; */
 
     xcnt = VCOLS(surf);
     ycnt = VROWS(surf);
 
-    xmax = surf->xmax;
-    ymax = surf->ymax;
+    /* xmax = surf->xmax; */
+    /* ymax = surf->ymax; */
 
     /* 
        bot = surf->zmin - ((surf->zrange/4.) * surf->z_exag);

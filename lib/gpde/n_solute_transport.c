@@ -35,7 +35,7 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
     double diff_xw, diff_yn;
     double diff_xe, diff_ys;
     double diff_zt, diff_zb;
-    double cin = 0, cg, cg_start;
+    double cin = 0, /* cg, */ cg_start;
     double R, nf, cs, q;
     double C, W, E, N, S, T, B, V;
     double vw = 0, ve = 0, vn = 0, vs = 0, vt = 0, vb = 0;
@@ -59,7 +59,7 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
 
     /*read the data from the arrays */
     cg_start = N_get_array_3d_d_value(data->c_start, col, row, depth);
-    cg = N_get_array_3d_d_value(data->c, col, row, depth);
+    /* cg = N_get_array_3d_d_value(data->c, col, row, depth); */
 
     /*get the surrounding diffusion tensor entries */
     diff_x = N_get_array_3d_d_value(data->diff_x, col, row, depth);
@@ -197,7 +197,7 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
     double diff_xe, diff_ys;
     double disp_xe, disp_ys;
     double z_xe, z_ys;
-    double cin = 0, cg, cg_start;
+    double cin = 0, /* cg, */ cg_start;
     double R, nf, cs, q;
     double C, W, E, N, S, V, NE, NW, SW, SE;
     double vw = 0, ve = 0, vn = 0, vs = 0;
@@ -220,7 +220,7 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
 
     /*read the data from the arrays */
     cg_start = N_get_array_2d_d_value(data->c_start, col, row);
-    cg = N_get_array_2d_d_value(data->c, col, row);
+    /* cg = N_get_array_2d_d_value(data->c, col, row); */
 
     /* calculate the cell height */
     z = N_get_array_2d_d_value(data->top, col,

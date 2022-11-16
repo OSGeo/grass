@@ -1092,7 +1092,7 @@ int gsd_surf_const(geosurf * surf, float k)
 int gsd_surf_func(geosurf * gs, int (*user_func)())
 {
 
-    return(1);
+    return (1);
 }
 
 /*!
@@ -1809,15 +1809,20 @@ int gsd_wall(float *bgn, float *end, float *norm)
  */
 int gsd_norm_arrows(geosurf * surf)
 {
-    typbuff *buff, *cobuff;
-    int check_mask, check_color;
+    typbuff *buff;
+    int check_mask;
     int xmod, ymod, row, col, cnt, xcnt, ycnt;
     long offset, y1off, y2off;
-    float x1, x2, y1, y2, tx, ty, tz, sz;
+    float /* x1, */ x2, y1, y2, tx, ty, tz, sz;
     float n[3], pt[4], xres, yres, ymax, zexag;
-    int col_src, curcolor;
-    gsurf_att *coloratt;
 
+#ifdef DO_ARROW_SOLID
+    int col_src;
+    typbuff *cobuff;
+    gsurf_att *coloratt;
+    int curcolor;
+    int check_color = 1;
+#endif
     int zeros, dr1, dr2, dr3, dr4;
     int datarow1, datacol1, datarow2, datacol2;
 
@@ -1839,7 +1844,7 @@ int gsd_norm_arrows(geosurf * surf)
     gs_update_curmask(surf);
     check_mask = surf->curmask ? 1 : 0;
 
-    check_color = 1;
+#ifdef DO_ARROW_SOLID
     coloratt = &(surf->att[ATT_COLOR]);
     col_src = surf->att[ATT_COLOR].att_src;
 
@@ -1850,12 +1855,13 @@ int gsd_norm_arrows(geosurf * surf)
         else {
             curcolor = surf->wire_color;
         }
-
         check_color = 0;
     }
 
-    buff = gs_get_att_typbuff(surf, ATT_TOPO, 0);
     cobuff = gs_get_att_typbuff(surf, ATT_COLOR, 0);
+#endif
+
+    buff = gs_get_att_typbuff(surf, ATT_TOPO, 0);
 
     xmod = surf->x_mod;
     ymod = surf->y_mod;
@@ -1919,11 +1925,11 @@ int gsd_norm_arrows(geosurf * surf)
             GET_MAPATT(buff, offset, pt[Z]);
             pt[Z] *= zexag;
 
+#ifdef DO_ARROW_SOLID
             if (check_color) {
                 curcolor = gs_mapcolor(cobuff, coloratt, offset);
             }
 
-#ifdef DO_ARROW_SOLID
             gsd_3darrow(pt, curcolor, xres * 2, xres / 2, n, sz);
 #else
             if (DEBUG_ARROW) {
@@ -1940,11 +1946,11 @@ int gsd_norm_arrows(geosurf * surf)
             GET_MAPATT(buff, offset, pt[Z]);
             pt[Z] *= zexag;
 
+#ifdef DO_ARROW_SOLID
             if (check_color) {
                 curcolor = gs_mapcolor(cobuff, coloratt, offset);
             }
 
-#ifdef DO_ARROW_SOLID
             gsd_3darrow(pt, curcolor, xres * 2, xres / 2, n, sz);
 #else
             if (DEBUG_ARROW) {
@@ -1959,7 +1965,7 @@ int gsd_norm_arrows(geosurf * surf)
             datacol1 = col * xmod;
             datacol2 = (col + 1) * xmod;
 
-            x1 = col * xres;
+            /* x1 = col * xres; */
             x2 = (col + 1) * xres;
 
             zeros = 0;
@@ -2001,11 +2007,11 @@ int gsd_norm_arrows(geosurf * surf)
                 GET_MAPATT(buff, offset, pt[Z]);
                 pt[Z] *= zexag;
 
+#ifdef DO_ARROW_SOLID
                 if (check_color) {
                     curcolor = gs_mapcolor(cobuff, coloratt, offset);
                 }
 
-#ifdef DO_ARROW_SOLID
                 gsd_3darrow(pt, curcolor, xres * 2, xres / 2, n, sz);
 #else
                 if (DEBUG_ARROW) {
@@ -2024,11 +2030,11 @@ int gsd_norm_arrows(geosurf * surf)
                 GET_MAPATT(buff, offset, pt[Z]);
                 pt[Z] *= zexag;
 
+#ifdef DO_ARROW_SOLID
                 if (check_color) {
                     curcolor = gs_mapcolor(cobuff, coloratt, offset);
                 }
 
-#ifdef DO_ARROW_SOLID
                 gsd_3darrow(pt, curcolor, xres * 2, xres / 2, n, sz);
 #else
                 if (DEBUG_ARROW) {
@@ -2061,11 +2067,11 @@ int gsd_norm_arrows(geosurf * surf)
  */
 int gsd_surf_map(geosurf * surf)
 {
-    int check_mask, check_color, check_transp;
+    int /* check_mask, */ check_color, check_transp;
     int check_material, check_emis, check_shin;
     typbuff *buff, *cobuff, *trbuff, *embuff, *shbuff;
     int xmod, ymod;
-    int row, col, cnt, xcnt, ycnt;
+    int row, col, xcnt, ycnt;
     long y1off, y2off, y3off;
     long offset2[10];
     float pt2[10][2];
@@ -2082,7 +2088,9 @@ int gsd_surf_map(geosurf * surf)
     GLint window[4];
     int cnt1 = 0, cnt2 = 0;
 
-    int datarow1, datacol1, datarow2, datacol2, datarow3, datacol3;
+    int datacol1, datacol2, datacol3;
+
+    /* int datarow1, datarow2, datarow3; */
 
     float kem, ksh, pkem, pksh;
     unsigned int ktrans;
@@ -2106,7 +2114,7 @@ int gsd_surf_map(geosurf * surf)
     cobuff = gs_get_att_typbuff(surf, ATT_COLOR, 0);
 
     gs_update_curmask(surf);
-    check_mask = surf->curmask ? 1 : 0;
+    /* check_mask = surf->curmask ? 1 : 0; */
 
     /*
        checks ATT_TOPO & ATT_COLOR no_zero flags, make a mask from each,
@@ -2210,7 +2218,6 @@ int gsd_surf_map(geosurf * surf)
 
     /* would also be good to check if colormap == surfmap, to increase speed */
     /* will also need to set check_transp, check_shine, etc & fix material */
-    cnt = 0;
 
     for (row = start_val; row < ycnt; row += step_val) {
         if (GS_check_cancel()) {
@@ -2233,10 +2240,11 @@ int gsd_surf_map(geosurf * surf)
            row /= 2;
            }
          */
-        datarow1 = row * ymod;
-        datarow2 = (row - (step_val / 2)) * ymod;
-        datarow3 = (row + (step_val / 2)) * ymod;
-
+        /*
+           datarow1 = row * ymod;
+           datarow2 = (row - (step_val / 2)) * ymod;
+           datarow3 = (row + (step_val / 2)) * ymod;
+         */
 
         y1 = ymax - row * yres;
         y2 = ymax - (row - (step_val / 2)) * yres;
