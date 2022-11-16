@@ -159,7 +159,7 @@ void update_reclass_maps(const char *name, const char *mapset)
         fprintf(fp, "reclass\n");
         fprintf(fp, "name: %s\n", name);
         fprintf(fp, "mapset: %s\n", mapset);
-        if (fwrite(str, l, 1, fp) < 1 & l > 0)
+        if ((fwrite(str, l, 1, fp) < 1) & (l > 0))
             G_fatal_error(_("Failed to write full reclass maps file"));
         G_free(str);
         fclose(fp);
