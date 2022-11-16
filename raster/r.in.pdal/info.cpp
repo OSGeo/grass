@@ -114,9 +114,9 @@ void print_lasinfo(struct StringList *infiles)
         std::cout << "Point format: " << (int)h.pointFormat() << "\n";
         std::cout << "Point offset: " << h.pointOffset() << "\n";
         std::cout << "Point count: " << h.pointCount() << "\n";
-        for (size_t i = 0; i < pdal::LasHeader::RETURN_COUNT; ++i)
-            std::cout << "Point count by return[" << i
-                      << "]: " << h.pointCountByReturn(i) << "\n";
+//        for (size_t i = 0; i < pdal::LasHeader::RETURN_COUNT; ++i)
+//            std::cout << "Point count by return[" << i
+//                      << "]: " << h.pointCountByReturn(i) << "\n";
         std::cout << "Scales X/Y/Z: " << h.scaleX() << "/" << h.scaleY() << "/"
                   << h.scaleZ() << "\n";
         std::cout << "Offsets X/Y/Z: " << h.offsetX() << "/" << h.offsetY()
