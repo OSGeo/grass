@@ -54,7 +54,6 @@ void collect_ori(int start_fd, int start_is_time)
     extern CELL *cell;
     extern CELL *map_base, *map_x_out, *map_y_out, *map_visit;
     extern float *map_out;
-    extern char buf[];
     extern float neg, zero;
     extern int BARRIER;
     extern int nrows, ncols;
