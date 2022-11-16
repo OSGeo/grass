@@ -64,8 +64,11 @@ static char *build_insert_stmt(const struct Format_info_pg *, const char *,
 static int insert_topo_element(struct Map_info *, int, int, const char *);
 static int type_to_topogeom(const struct Format_info_pg *);
 static int update_next_edge(struct Map_info *, int, int);
+
+#if 0                           /* unused */
 static int delete_face(const struct Map_info *, int);
 static int update_topo_edge(struct Map_info *, int);
+#endif
 static int update_topo_face(struct Map_info *, int);
 static int add_line_to_topo_pg(struct Map_info *, off_t, int,
                                const struct line_pnts *);
@@ -2586,6 +2589,7 @@ int Vect__insert_face_pg(struct Map_info *Map, int area)
     return area;
 }
 
+#if 0                           /* unused */
 /*!
    \brief Delete existing face (currently unused)
 
@@ -2745,6 +2749,7 @@ int update_topo_edge(struct Map_info *Map, int line)
 
     return 0;
 }
+#endif
 
 /*!
    \brief Update lines (left and right faces)

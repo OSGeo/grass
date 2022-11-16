@@ -49,9 +49,9 @@ static void init_cairo(void);
 static int ends_with(const char *string, const char *suffix);
 static void map_file(void);
 
+#if CAIRO_HAS_XLIB_XRENDER_SURFACE
 static void init_xlib(void)
 {
-#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     char *p;
     unsigned long xid;
     XVisualInfo templ;
@@ -101,16 +101,14 @@ static void init_xlib(void)
     if (!ca.win)
         ca.win = XCreatePixmap(ca.dpy, RootWindow(ca.dpy, scrn),
                                ca.width, ca.height, ca.depth);
-#endif
 }
 
 static void fini_xlib(void)
 {
-#if CAIRO_HAS_XLIB_XRENDER_SURFACE
     XSetCloseDownMode(ca.dpy, RetainTemporary);
     XCloseDisplay(ca.dpy);
-#endif
 }
+#endif
 
 static void init_file(void)
 {

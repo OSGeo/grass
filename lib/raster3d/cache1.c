@@ -87,7 +87,7 @@ void Rast3d_cache_dispose(RASTER3D_cache * c)
 
 void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
                        int (*eltRemoveFun)(), void *eltRemoveFunData,
-                       int(*eltLoadFun)(), void *eltLoadFunData)
+                       int (*eltLoadFun)(), void *eltLoadFunData)
 {
     RASTER3D_cache *tmp;
     int i;
@@ -229,6 +229,7 @@ static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
 
 /*---------------------------------------------------------------------------*/
 
+#if 0                           /* unused */
 static int cache_queue_get_top(RASTER3D_cache * c)
 {
     int top;
@@ -239,6 +240,7 @@ static int cache_queue_get_top(RASTER3D_cache * c)
 
     return top;
 }
+#endif
 
 /*---------------------------------------------------------------------------*/
 

@@ -83,7 +83,7 @@ static inline unsigned int heap_parent(unsigned int index) {
 
 
 // return minimum of two integers
-static unsigned int mymin(unsigned int a, unsigned int b) {
+static inline unsigned int mymin(unsigned int a, unsigned int b) {
   return (a<=b)? a:b;
 }
 

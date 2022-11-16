@@ -12,8 +12,6 @@ int dareatheme(struct Map_info *, struct cat_list *, dbCatValArray *,
                const struct color_rgb *, int, struct Cell_head *, int);
 
 int dcmp(const void *, const void *);
-static int cmp(const void *, const void *);
-static char *icon_files(void);
 
 /* display.c */
 int draw_line(int ltype, int line,
