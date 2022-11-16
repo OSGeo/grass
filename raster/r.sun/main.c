@@ -1690,15 +1690,15 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     int someRadiation;
     int numRows;
     int arrayOffset;
-    double lum, q1;
+    double lum = 0.0, q1 = 0.0;
     double dayRad;
-    double latid_l, cos_u, cos_v, sin_u, sin_v;
-    double sin_phi_l, tan_lam_l;
+    double latid_l = 0.0, cos_u = 0.0, cos_v = 0.0, sin_u = 0.0, sin_v = 0.0;
+    double sin_phi_l = 0.0, tan_lam_l = 0.0;
     double zmax = 0;
     double longitTime = 0.;
     double locTimeOffset;
     double latitude, longitude;
-    double coslat;
+    double coslat = 0.0;
 
 
     struct SunGeometryConstDay sunGeom;

@@ -268,6 +268,10 @@ void main_loop(void)
             }
             nwalka = 0;
             nstack = 0;
+            decr = 0.0;
+            velx = 0.0;
+            vely = 0.0;
+            eff = 0.0;
 
 #pragma omp parallel firstprivate(l,lw,k,decr,d1,hhc,velx,vely,eff,gaux,gauy)   //nwalka
             {
