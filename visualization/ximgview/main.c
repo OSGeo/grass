@@ -111,7 +111,7 @@ static void draw(void)
             unsigned char b = *p++;
             unsigned char g = *p++;
             unsigned char r = *p++;
-            unsigned char a = *p++;
+            /* unsigned char a = */ (void)*p++;
             unsigned long c = find_color(r, g, b);
 
             XPutPixel(ximg, col, row, c);

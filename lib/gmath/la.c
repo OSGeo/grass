@@ -215,7 +215,6 @@ mat_struct *G_matrix_scalar_mul(double scalar, mat_struct * matrix,
                                 mat_struct * out)
 {
     int m, n, i, j;
-    int index = 0;
 
     if (matrix == NULL) {
         G_warning(_("Input matrix is uninitialized"));
@@ -968,7 +967,7 @@ vec_struct *G_matvect_product(mat_struct * A, vec_struct * b,
 
     for (i = 0; i < m; i++) {
         sum = 0.0;
-        int width = A->rows;
+        /* int width = A->rows; */
 
         for (j = 0; j < n; j++) {
 
@@ -1602,7 +1601,7 @@ mat_struct *G_matrix_resize(mat_struct * in, int rows, int cols)
     mat_struct *matrix;
 
     matrix = G_matrix_init(rows, cols, rows);
-    int i, j, p, index = 0;
+    int i, j, p /*, index = 0 */ ;
 
     for (i = 0; i < rows; i++)
         for (j = 0; j < cols; j++)
