@@ -1389,6 +1389,10 @@ int main(int argc, char *argv[])
 			    db_double_quote_string(&strval);
 			    G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'", db_get_string(&strval));
 			}
+                else {
+                    /* column type not supported (thus skiped) and not empty */
+                    G_rasprintf(&sqlbuf, &sqlbufsize, "%c", '\0');
+                }
 		    }
 		    else {
 			/* G_warning (_("Column value not set" )); */
