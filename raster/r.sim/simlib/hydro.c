@@ -122,13 +122,15 @@ void main_loop(void)
 {
 
     int i, ii, l, k;
-    int icoub, nmult;
+    int icoub /*, nmult */ ;
     int iw, iblock, lw;
     int itime, iter1;
-    int nfiterh, nfiterw;
-    int mgen, mgen2, mgen3;
+
+    /* int nfiterh, nfiterw; */
+    int mgen /* , mgen2, mgen3 */ ;
     int nblock;
-    int icfl;
+
+    /* int icfl; */
     int mitfac;
 
     /*  int mitfac, p; */
@@ -137,12 +139,12 @@ void main_loop(void)
     double factor, conn, gaux, gauy;
     double d1, addac, decr;
     double barea, sarea, walkwe;
-    double gen, gen2, wei2, wei3, wei, weifac;
+    double gen, gen2, /* wei2, wei3, */ wei /* , weifac */ ;
     float eff;
 
     nblock = 1;
     icoub = 0;
-    icfl = 0;
+    /* icfl = 0; */
     nstack = 0;
 
     if (maxwa > (MAXW - mx * my)) {
@@ -185,13 +187,13 @@ void main_loop(void)
                         (double)maxwab *si[k][l] / (si0 *
                                                     (double)(mx2o * my2o));
                     gen2 = gen2 * (barea / sarea);
-                    mgen2 = (int)gen2;
-                    wei2 = gen2 / (double)(mgen2 + 1);
-                    mgen3 =
-                        (int)((double)mgen2 * wei2 / ((double)mgen * wei));
-                    nmult = mgen3 + 1;
-                    wei3 = gen2 / (double)((mgen + 1) * (mgen2 + 1));
-                    weifac = wei3 / wei;
+                    /* mgen2 = (int)gen2;
+                       wei2 = gen2 / (double)(mgen2 + 1);
+                       mgen3 =
+                       (int)((double)mgen2 * wei2 / ((double)mgen * wei)); */
+                    /* nmult = mgen3 + 1;
+                       wei3 = gen2 / (double)((mgen + 1) * (mgen2 + 1)); */
+                    /* weifac = wei3 / wei; */
                     /*              } else {
                        nmult = 1;
                        weifac = 1.;
@@ -248,8 +250,8 @@ void main_loop(void)
             iter1 = i / iterout;
             iter1 *= iterout;
             if (iter1 == i) {
-                nfiterw = i / iterout + 10;
-                nfiterh = i / iterout + 40;
+                /* nfiterw = i / iterout + 10;
+                   nfiterh = i / iterout + 40; */
                 G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d",
                         iblock, i, miter, nwalk, nwalka);
             }

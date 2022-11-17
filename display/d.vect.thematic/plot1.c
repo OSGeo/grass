@@ -46,9 +46,10 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 {
     int i, ltype, nlines = 0, line, cat = -1;
     double *x, *y;
-    struct line_pnts *Points, *PPoints;
+    struct line_pnts *Points /* , *PPoints */ ;
     struct line_cats *Cats;
-    double msize;
+
+    /* double msize; */
     int x0, y0;
 
     struct field_info *fi = NULL;
@@ -91,10 +92,10 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
         fill_color->a = RGBA_COLOR_NONE;
 
 
-    msize = size * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0));     /* do it better */
+    /* msize = size * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0)); *//* do it better */
 
     Points = Vect_new_line_struct();
-    PPoints = Vect_new_line_struct();
+    /* PPoints = Vect_new_line_struct(); */
     Cats = Vect_new_cats_struct();
 
     open_db = table_colors_flag || width_column;

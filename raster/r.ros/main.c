@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
     float R0,                   /*base ROS (w/out wind/slope) */
       Rdir, sin_fac, cos_fac, Ffactor_all[4][14],       /*in all fuel subclasses by sigma/WO */
       Ffactor_in_dead[3][14],   /*in dead fuel subclasses by sigma/WO */
-      Ffactor_dead[14],         /*dead fuel weight by sigma/WO */
-      Ffactor_live[14],         /*live fuel weight by sigma/WO */
+      /* Ffactor_dead[14], */   /*dead fuel weight by sigma/WO */
+      /* Ffactor_live[14], */   /*live fuel weight by sigma/WO */
       Gfactor_in_dead[3][14],   /*in dead fuel by the 6 classes */
       G1, G2, G3, G4, G5, wo_dead[14],  /*dead fuel total load */
       wn_dead,                  /*net dead fuel total load */
@@ -577,9 +577,9 @@ int main(int argc, char *argv[])
                 Gfactor_in_dead[class][model] = 0.0;
         }
 
-        Ffactor_dead[model] =
-            class_sum / (class_sum + WO[3][model] * SIGMA[3][model]);
-        Ffactor_live[model] = 1 - Ffactor_dead[model];
+        /* Ffactor_dead[model] =
+            class_sum / (class_sum + WO[3][model] * SIGMA[3][model]); */
+        /* Ffactor_live[model] = 1 - Ffactor_dead[model]; */
     }
 
     /*if considering spotting, read elevation map into an array */

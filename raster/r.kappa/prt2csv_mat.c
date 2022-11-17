@@ -21,7 +21,6 @@ void prn2csv_error_mat(int out_cols, int hdr)
     int thisone;
     long t_row, t_col;
     long t_rowcount;
-    const char *mapone;
     FILE *fd;
 
     long *cats;
@@ -106,7 +105,6 @@ void prn2csv_error_mat(int out_cols, int hdr)
         fprintf(fd, "RowSum");
         fprintf(fd, "\n");
         /* body of the matrix */
-        mapone = "MAP2";
         for (rndx = 0; rndx < ncat; rndx++) {
             cats = rlst;
             cl = Rast_get_c_cat((CELL *) & (cats[rndx]), &(layers[1].labels));

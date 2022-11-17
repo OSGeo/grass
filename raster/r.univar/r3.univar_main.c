@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
     double dmin, dmax;
-    int zone, n_zones, use_zone = 0;
+    int zone, n_zones /* , use_zone = 0 */ ;
     const char *mapset, *name;
 
     struct GModule *module;
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
         G_debug(1, "min: %d, max: %d", zone_info.min, zone_info.max);
         zone_info.n_zones = zone_info.max - zone_info.min + 1;
 
-        use_zone = 1;
+        /* use_zone = 1; */
     }
 
     /* Open 3D input raster with default region */

@@ -260,7 +260,6 @@ int print_report(int unit1, int unit2)
 int construct_val_str(int nl, CELL * pval, char *str)
 {
     char str1[50], str2[50];
-    char *descr;
     DCELL dLow, dHigh;
 
     if (Rast_is_c_null_value(pval))
@@ -270,8 +269,7 @@ int construct_val_str(int nl, CELL * pval, char *str)
     else {                      /* find out which floating point range to print */
 
         if (cat_ranges)
-            descr = Rast_get_ith_d_cat(&layers[nl].labels, *pval,
-                                       &dLow, &dHigh);
+            Rast_get_ith_d_cat(&layers[nl].labels, *pval, &dLow, &dHigh);
         else {
             dLow = (DMAX[nl] - DMIN[nl]) / nsteps *
                 (double)(*pval - 1) + DMIN[nl];

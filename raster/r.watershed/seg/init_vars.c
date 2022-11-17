@@ -16,7 +16,6 @@ int init_vars(int argc, char *argv[])
     double memory_divisor, heap_mem, seg_factor, disk_space;
 
     /* int page_block, num_cseg; */
-    int max_bytes;
     CELL *buf, alt_value, *alt_value_buf, block_value;
     char asp_value;
     DCELL wat_value;
@@ -46,7 +45,6 @@ int init_vars(int argc, char *argv[])
     d_one = 1.0;
     ril_value = -1.0;
     /* dep_slope = 0.0; */
-    max_bytes = 0;
     sides = 8;
     mfd = 1;
     c_fac = 5;

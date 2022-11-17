@@ -19,7 +19,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
     struct cat_list *cat_list = NULL;
     int fd;                     /* for raster map */
     int nareas, nlines;         /* number of converted features */
-    int nareas_all, nplines_all;        /* number of all areas, points/lines */
+    int /* nareas_all, */ nplines_all;  /* number of all areas, points/lines */
     int stat;
     int format;
     int pass, npasses;
@@ -154,7 +154,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
     npasses = begin_rasterization(cache_mb, format, dense);
     pass = 0;
 
-    nareas_all = Vect_get_num_areas(&Map);
+    /* nareas_all = Vect_get_num_areas(&Map); */
 
     do {
         pass++;

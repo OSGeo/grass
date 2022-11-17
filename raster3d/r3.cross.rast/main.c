@@ -120,7 +120,7 @@ void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd,
                           int outfd)
 {
     int col, row;
-    int rows, cols, depths, typeIntern;
+    int rows, cols, /* depths, */ typeIntern;
     FCELL *fcell = NULL;
     DCELL *dcell = NULL;
     void *elevrast;
@@ -136,7 +136,7 @@ void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd,
 
     rows = region.rows;
     cols = region.cols;
-    depths = region.depths;
+    /* depths = region.depths; */
 
     /*Typ of the RASTER3D Tile */
     typeIntern = Rast3d_tile_type_map(map);

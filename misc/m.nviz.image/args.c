@@ -960,7 +960,7 @@ void check_parameters(const struct GParams *params)
 
     int nvpoints, nvpoints_pos, nvpoints_layer;
 
-    int nvolumes, nisosurf, nslices;
+    int /* nvolumes, */ nisosurf, nslices;
 
     /* topography */
     nelev_map = opt_get_num_answers(params->elev_map);
@@ -1133,7 +1133,7 @@ void check_parameters(const struct GParams *params)
     /*
      * volumes
      */
-    nvolumes = opt_get_num_answers(params->volume);
+    /* nvolumes = opt_get_num_answers(params->volume); */
     nisosurf = opt_get_num_answers(params->isosurf_level);
     nslices = opt_get_num_answers(params->slice);
 

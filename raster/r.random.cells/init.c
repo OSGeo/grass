@@ -17,7 +17,8 @@ void Init()
     struct Cell_head Region;
     int Count;
     int FD, row, col;
-    double MinRes;
+
+    /* double MinRes; */
 
     G_debug(2, "Init()");
 
@@ -26,10 +27,10 @@ void Init()
     G_get_set_window(&Region);
     EW = Region.ew_res;
     NS = Region.ns_res;
-    if (EW < NS)
-        MinRes = EW;
-    else
-        MinRes = NS;
+    /* if (EW < NS)
+       MinRes = EW;
+       else
+       MinRes = NS; */
     CellBuffer = Rast_allocate_c_buf();
 
     /* Out = FlagCreate( Rs, Cs); */

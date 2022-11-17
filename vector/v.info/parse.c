@@ -9,8 +9,6 @@ void parse_args(int argc, char **argv,
                 char **input, char **field,
                 int *history, int *columns, int *shell)
 {
-    int i;
-
     struct Option *input_opt, *field_opt;
     struct Flag *hist_flag, *col_flag, *shell_flag, *region_flag, *topo_flag;
 
@@ -52,7 +50,6 @@ void parse_args(int argc, char **argv,
     *field = G_store(field_opt->answer);
     *history = hist_flag->answer ? TRUE : FALSE;
     *columns = col_flag->answer ? TRUE : FALSE;
-    i = 0;
     *shell = SHELL_NO;
     if (shell_flag->answer)
         *shell |= SHELL_BASIC;

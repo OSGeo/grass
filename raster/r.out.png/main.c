@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *rast, *png_file, *compr;     /* , *bgcolor; */
     struct Flag *alpha, *wld_flag;
-    char *rastermap;
+
+    /* char *rastermap; */
     char *basename = NULL, *outfile = NULL;
     unsigned char *set, *ored, *ogrn, *oblu;
     int def_red, def_grn, def_blu;
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
     void *voidc;
     int rtype, row, col, do_stdout = 0;
     size_t rsize;
-    int png_compr, ret, do_alpha;
+    int png_compr, /* ret, */ do_alpha;
     struct Cell_head win;
     FILEDESC cellfile = 0;
     FILE *fp;
@@ -97,13 +98,13 @@ int main(int argc, char *argv[])
      * about "variable XXX might be clobbered by `longjmp' or `vfork'"
      * (stack corruption observed on Solaris 2.6 with gcc 2.8.1, even
      * in the absence of any other error condition) */
-    static xelval maxmaxval;
+    /* static xelval maxmaxval; */
 
     static int depth;
     static int filter;
 
     /* these guys are initialized to quiet compiler warnings: */
-    maxmaxval = 255;
+    /* maxmaxval = 255; */
     depth = 0;
 
     G_gisinit(argv[0]);
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
 
-    rastermap = rast->answer;
+    /* rastermap = rast->answer; */
 
     do_alpha = alpha->answer ? TRUE : FALSE;
 
@@ -171,6 +172,7 @@ int main(int argc, char *argv[])
 
 #ifdef MAYBE_LATER
     /* ... if at all */
+    int ret;
     ret = G_str_to_color(bgcolor->answer, &def_red, &def_grn, &def_blu);
     if (ret == 0)
         G_fatal_error(_("[%s]: No such color"), bgcolor->answer);
@@ -179,7 +181,7 @@ int main(int argc, char *argv[])
             do_alpha = TRUE;
     }
 #else
-    ret = G_str_to_color(DEFAULT_BG_COLOR, &def_red, &def_grn, &def_blu);
+    G_str_to_color(DEFAULT_BG_COLOR, &def_red, &def_grn, &def_blu);
 #endif
 
     /*G_get_set_window (&win); *//* 10/99 MN: check for current region */

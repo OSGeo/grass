@@ -40,11 +40,11 @@ static double dimension = 2.;
 double L(double smooth)
 {
     int ii;
-    double resL, n, term;
+    double resL, n /*, term */ ;
 
     n = npoints;
     resL = 0.;
-    term = 1. / pow((2. * M_PI), dimension / 2.);
+    /* term = 1. / pow((2. * M_PI), dimension / 2.); */
 
     for (ii = 0; ii < ndists; ii++) {
         /*    resL+= gaussianFunction(dists[ii]/smooth,2.,dimension) - 2. * gaussianKernel(dists[ii]/smooth,term); */
@@ -826,9 +826,9 @@ void compute_net_distance(double x, double y, struct Map_info *In,
     G_debug(3, "  %d points in box", PointsList->n_values);
 
     for (i = 0; i < PointsList->n_values; i++) {
-        int line, ret;
+        int /* line, */ ret;
 
-        line = PointsList->id[i];
+        /* line = PointsList->id[i]; */
 
         G_debug(3, "  SP: %f %f -> %f %f", x, y, PointsList->box[i].E,
                 PointsList->box[i].N);

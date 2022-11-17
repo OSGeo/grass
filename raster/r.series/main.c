@@ -126,13 +126,13 @@ int main(int argc, char *argv[])
     } flag;
     int i, t;
     int nprocs;
-    bool threaded;
     int num_inputs;
     struct input **inputs = NULL;
     int bufrows;
 
 #if defined(_OPENMP)
     omp_lock_t fd_lock;
+    bool threaded;
 #endif
 
     int num_outputs;
@@ -224,13 +224,13 @@ int main(int argc, char *argv[])
     }
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
+    threaded = nprocs > 1;
 #else
     if (nprocs != 1)
         G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
                     "threads setting."));
     nprocs = 1;
 #endif
-    threaded = nprocs > 1;
 
     lo = -1.0 / 0.0;            /* -inf */
     hi = 1.0 / 0.0;             /* inf */

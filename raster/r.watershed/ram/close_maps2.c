@@ -8,23 +8,24 @@ int close_array_seg(void)
     int incr, max, red, green, blue, rd, gr, bl, flag;
     int c, r, map_fd;
     CELL *cellrow, value;
-    CELL *theseg;
-    RAMSEG thesegseg;
+
+    /* CELL *theseg;
+       RAMSEG thesegseg; */
 
     cellrow = Rast_allocate_c_buf();
     if (seg_flag || bas_flag || haf_flag) {
-        if (seg_flag) {
-            theseg = bas;
-            thesegseg = bas_seg;
-        }
-        else if (bas_flag) {
-            theseg = bas;
-            thesegseg = bas_seg;
-        }
-        else {
-            theseg = haf;
-            thesegseg = haf_seg;
-        }
+        /* if (seg_flag) {
+           theseg = bas;
+           thesegseg = bas_seg;
+           }
+           else if (bas_flag) {
+           theseg = bas;
+           thesegseg = bas_seg;
+           }
+           else {
+           theseg = haf;
+           thesegseg = haf_seg;
+           } */
         max = n_basins;
         G_debug(1, "%d basins created", max);
         Rast_init_colors(&colors);

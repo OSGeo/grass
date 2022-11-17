@@ -53,7 +53,9 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
     int i, ncols, kcols;
     int pgtype, gpgtype;
     char *fname;
-    int sqltype, fsize, precision, scale;
+    int sqltype, fsize;
+
+    /* TODO: int precision, scale; */
     dbColumn *column;
 
     G_debug(3, "describe_table()");
@@ -149,10 +151,10 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
         db_set_column_host_type(column, gpgtype);
         db_set_column_sqltype(column, sqltype);
 
-        /* TODO */
-        precision = 0;
-        scale = 0;
-        /*
+        /* TODO:
+           precision = 0;
+           scale = 0;
+
            db_set_column_precision (column, precision);
            db_set_column_scale (column, scale);
          */

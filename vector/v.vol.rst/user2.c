@@ -94,12 +94,12 @@ int interp_call(struct octtree *root, struct octtree *tree)
 {
     /*    double          xmn,xmx,ymn,ymx,zmn,zmx; */
     double distx, disty, distz, distxp, distyp, distzp, temp1, temp2, temp3;
-    int i, npt, nptprev, MAXENC, k, j;
+    int i, npt, /* nptprev, */ MAXENC, k, j;
     static struct quadruple *points = NULL;
     struct point_3d skip_point;
     struct point_3d *point = NULL;
     int skip_index, segtest;
-    double xx, yy, zz, ww;
+    double xx, yy, zz /*, ww */ ;
 
     if (tree == NULL)
         return -1;
@@ -156,7 +156,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
             i++;
             if (npt > KMAX2) {
                 MAXENC = 1;
-                nptprev = npt;
+                /* nptprev = npt; m */
                 temp1 = distxp;
                 distxp = distx;
                 distx = distxp - fabs(distx - temp1) * 0.5;
@@ -170,7 +170,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
                    ymx+disty,zmn-distz,zmx+distz,points, KMAX2); */
             }
             else {
-                nptprev = npt;
+                /* nptprev = npt; */
                 temp1 = distyp;
                 distyp = disty;
                 temp2 = distxp;
@@ -248,7 +248,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
                 xx = point[skip_index].x;
                 yy = point[skip_index].y;
                 zz = point[skip_index].z;
-                ww = point[skip_index].w;
+                /* ww = point[skip_index].w; */
                 if (xx >= xmn && xx <= xmx && yy >= ymn && yy <= ymx &&
                     zz >= zmn && zz <= zmx) {
                     segtest = 1;

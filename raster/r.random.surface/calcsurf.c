@@ -9,7 +9,7 @@ void CalcSurface(void)
 {
     int Count, OutRows, OutCols;
     int Row, Row2, Col, Col2, RanRows, RanCols;
-    int owC, oeC, onR, osR, wC, eC, nR, sR;
+    int /* owC, */ oeC, onR, /* osR, */ wC, eC, nR, sR;
     double **Randoms;
 
     G_debug(2, "CalcSurface()");
@@ -18,7 +18,7 @@ void CalcSurface(void)
     OutCols = BigF.ColPlus;
     RanRows = (2 * OutRows + Rs);
     RanCols = (2 * OutCols + Cs);
-    owC = osR = 0;
+    /* owC = osR = 0; */
     wC = OutCols;
     sR = OutRows;
     oeC = RanCols - 1;

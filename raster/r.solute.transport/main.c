@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     N_array_2d *hc_y = NULL;
     N_array_2d *phead = NULL;
 
-    double time_step, cfl, length, time_loops, time_sum;
+    double time_step, cfl, length, time_loops /* , time_sum */ ;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -377,7 +377,7 @@ int main(int argc, char *argv[])
     /*Set the number of inner loops and the time step */
     if (data->dt > time_step && param.cfl->answer) {
         /*safe the user time step */
-        time_sum = data->dt;
+        /* time_sum = data->dt; */
         time_loops = data->dt / time_step;
         time_loops = floor(time_loops) + 1;
         data->dt = data->dt / time_loops;

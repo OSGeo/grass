@@ -182,7 +182,9 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
     for (i = 0; i < ncols; i++) {
         const char *fname;
         dbColumn *column;
-        int litetype, sqltype, fsize, precision, scale;
+        int litetype, sqltype, fsize;
+
+        /* TODO: int precision, scale; */
 
         fname = sqlite3_column_name(statement, i);
 
@@ -241,10 +243,10 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
         db_set_column_host_type(column, litetype);
         db_set_column_sqltype(column, sqltype);
 
-        /* TODO */
-        precision = 0;
-        scale = 0;
-        /*
+        /* TODO
+           precision = 0;
+           scale = 0;
+
            db_set_column_precision (column, precision);
            db_set_column_scale (column, scale);
          */

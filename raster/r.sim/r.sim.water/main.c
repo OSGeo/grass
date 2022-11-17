@@ -98,7 +98,8 @@ int main(int argc, char *argv[])
 {
     int threads;
     int ret_val;
-    double x_orig, y_orig;
+
+    /* double x_orig, y_orig; */
     struct GModule *module;
     struct Cell_head cellhd;
     struct WaterParams wp;
@@ -361,8 +362,8 @@ int main(int argc, char *argv[])
     wp.step = (wp.stepx + wp.stepy) / 2.;
     wp.mx = cellhd.cols;
     wp.my = cellhd.rows;
-    x_orig = cellhd.west * wp.conv;
-    y_orig = cellhd.south * wp.conv;    /* do we need this? */
+    /* x_orig = cellhd.west * wp.conv;
+       y_orig = cellhd.south * wp.conv; *//* do we need this? */
     wp.xmin = 0.;
     wp.ymin = 0.;
     wp.xp0 = wp.xmin + wp.stepx / 2.;

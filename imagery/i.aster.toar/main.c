@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     /*File Descriptors */
     int infd[MAXFILES];
     int outfd[MAXFILES];
-    char **names, **ptr;
+    char **ptr;
 
     /* For some strange reason infd[0] cannot be used later */
     /* So nfiles is initialized with nfiles = 1 */
@@ -153,7 +153,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    names = input->answers;
     ptr = input->answers;
     doy = atof(input1->answer);
     sun_elevation = atof(input2->answer);

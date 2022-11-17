@@ -77,7 +77,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     struct field_info *Fi;
     dbDriver *Driver;
     dbCatValArray cvarr, sarray;
-    int nrec, nrec1, ctype, sctype;
+    int nrec, /* nrec1, */ ctype, sctype;
     struct line_pnts *Points;
     struct line_cats *Cats;
 
@@ -113,9 +113,9 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 
     if (scol != NULL) {
 
-        nrec1 =
-            db_select_CatValArray(Driver, Fi->table, Fi->key, scol, wheresql,
-                                  &sarray);
+        /* nrec1 =
+           db_select_CatValArray(Driver, Fi->table, Fi->key, scol, wheresql,
+           &sarray); */
         sctype = cvarr.ctype;
 
         if (sctype == -1)

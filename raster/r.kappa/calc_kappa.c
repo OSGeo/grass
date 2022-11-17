@@ -10,7 +10,6 @@ void calc_kappa(void)
     int i, j;
     int a_i, b_i;
     int s, l;
-    int nl;
     size_t ns;
     double *pi, *pj, *pii, p0, pC;
     double kp, vkp, *kpp;
@@ -21,7 +20,6 @@ void calc_kappa(void)
     /* initialize */
     s = 0;
     l = -1;
-    nl = nlayers;
     ns = nstats;
     obs = 0;
     inter1 = inter2 = 0;

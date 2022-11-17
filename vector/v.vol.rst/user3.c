@@ -242,7 +242,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
         etarcell, rcell, wwcell, zzcell;
     double x_crs, x_crsd, x_crsdd, x_crsdr2;
     int n1, k1, k2, k, i1, l, l1, n4, n5, m, i;
-    int NGST, LSIZE, ngstc, nszc, ngstr, nszr, ngstl, nszl;
+    int /* NGST, */ LSIZE, ngstc, nszc, ngstr, nszr, ngstl, nszl;
     int POINT();
     int ind, ind1;
     static int first_time_z = 1;
@@ -394,7 +394,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
            C         INTERPOLATION   *  MOST INNER LOOPS !
            C
          */
-        NGST = 1;
+        /* NGST = 1; */
         LSIZE = 0;
 
         ngstc = (int)(x_or / ew_res + 0.5) + 1;
@@ -687,7 +687,7 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
  */
 {
     double errmax, h, xx, yy, r2, hz, zz, ww, err, xmm, ymm,
-        zmm, wmm, r, etar;
+        zmm, /* wmm, */ r, etar;
     int n1, mm, m, mmax, inside;
 
     errmax = .0;
@@ -743,7 +743,7 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
                 ((struct octdata *)(root->data))->y_orig;
             zmm = (points[mmax - 1].z * dnorm) +
                 ((struct octdata *)(root->data))->z_orig;
-            wmm = points[mmax - 1].w + wmin;
+            /* wmm = points[mmax - 1].w + wmin; */
             /*      printf (" max. error = %f at point i = %d \n", errmax, mmax);
                printf (" x(i) = %f  y(i) = %f \n", xmm, ymm);
                printf (" z(i) = %f  w(i) = %f \n", zmm, wmm); */

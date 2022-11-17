@@ -42,7 +42,8 @@ void select_linksB(struct costHa *pres_cell, int least, float comp_dens)
     extern struct cell_ptrHa *front_cell, *rear_cell;
     float angle;                /*that of a link cell to spread cell */
     float dir_angle;            /*that of the maximum ROS */
-    float cos_dir_angle, sin_dir_angle;
+
+    /* float cos_dir_angle, sin_dir_angle; */
     float polar_len;            /*polar distance of the ellipse */
     float distance;
     int n = 0, s = 0, e = 0, w = 0;     /*parameters defining a rectangule */
@@ -65,8 +66,8 @@ void select_linksB(struct costHa *pres_cell, int least, float comp_dens)
     dir = DATA(map_dir, pres_cell->row, pres_cell->col);
 
     dir_angle = dir % 360 * PI / 180;
-    sin_dir_angle = sin(dir_angle);
-    cos_dir_angle = cos(dir_angle);
+    /* sin_dir_angle = sin(dir_angle);
+       cos_dir_angle = cos(dir_angle); */
 
     /* identifies a rectangular just enclosing the ellipse,
      * thus avoiding redundant work in selection */

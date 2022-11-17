@@ -16,15 +16,16 @@ int plot_grid(double grid_size, double east, double north, int do_text,
     double x, y, y0;
     double e1, e2;
     struct Cell_head window;
-    double row_dist, colm_dist;
+
+    /* double row_dist, colm_dist; */
     char text[128];
     double tx, ty, bt, bb, bl, br, w, h;
 
     G_get_set_window(&window);
 
     /* pull right and bottom edges back one pixel; display lib bug? */
-    row_dist = D_d_to_u_row(0.) - D_d_to_u_row(1.);
-    colm_dist = D_d_to_u_col(1.) - D_d_to_u_col(0.);
+    /* row_dist = D_d_to_u_row(0.) - D_d_to_u_row(1.);
+       colm_dist = D_d_to_u_col(1.) - D_d_to_u_col(0.); */
     /*    window.south += row_dist;
        window.east -= colm_dist;
      */

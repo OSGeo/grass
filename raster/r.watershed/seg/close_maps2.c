@@ -9,16 +9,17 @@ int close_array_seg(void)
     int incr, max, red, green, blue, rd, gr, bl, flag;
     int c, r, map_fd;
     CELL *cellrow;
-    CSEG *theseg;
+
+    /* CSEG *theseg; */
     ASP_FLAG af;
 
     if (seg_flag || bas_flag || haf_flag) {
-        if (seg_flag)
-            theseg = &bas;
-        else if (bas_flag)
-            theseg = &bas;
-        else
-            theseg = &haf;
+        /* if (seg_flag)
+           theseg = &bas;
+           else if (bas_flag)
+           theseg = &bas;
+           else
+           theseg = &haf; */
         max = -9;
         /*
            for (r = 0; r < nrows; r++) {
