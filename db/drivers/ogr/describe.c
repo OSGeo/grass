@@ -163,7 +163,7 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 
     for (i = 0; i < ncols; i++, col++) {
         int sqlType = DB_SQL_TYPE_UNKNOWN;
-        int size = 0, precision = 0, scale;
+        int size = 0, precision = 0 /* , scale */ ;
 
         hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, i);
         ogrType = OGR_Fld_GetType(hFieldDefn);
@@ -225,9 +225,8 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
         db_set_column_length(column, size);
         db_set_column_precision(column, precision);
 
-        /* TODO */
-        scale = 0;
-        /*
+        /* TODO 
+           scale = 0;
            db_set_column_scale (column, scale);
          */
 

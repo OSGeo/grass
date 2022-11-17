@@ -202,13 +202,14 @@ int region_growing(struct globals *globals)
     struct reg_stats Ri_rs, Rk_rs, Rk_bestn_rs;
     double *dp;
     struct NB_TREE *tmpnbtree;
-    CELL cellmax;
+
+    /* CELL cellmax; */
     struct Cell_head cellhd;
 
     G_verbose_message("Running region growing algorithm");
 
-    cellmax = ((CELL) 1 << (sizeof(CELL) * 8 - 2)) - 1;
-    cellmax += ((CELL) 1 << (sizeof(CELL) * 8 - 2));
+    /* cellmax = ((CELL) 1 << (sizeof(CELL) * 8 - 2)) - 1;
+       cellmax += ((CELL) 1 << (sizeof(CELL) * 8 - 2)); */
 
     init_free_ids();
 

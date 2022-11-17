@@ -65,7 +65,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
                               MATRIX * MO, MATRIX * MT)
 {
     MATRIX delta, epsilon, B, BT, C, E, N, CC, NN, UVW, XYZ, M, WT1;
-    double x, y, z, X, Y, Z, Xp, Yp, CFL;
+    double x, y, /* z, */ X, Y, Z, Xp, Yp, CFL;
     double lam, mu, nu, U, V, W;
     double xbar, ybar;
     double m11, m12, m13, m21, m22, m23, m31, m32, m33;
@@ -390,7 +390,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 
             x = cpz->e1[i];
             y = cpz->n1[i];
-            z = cpz->z1[i];
+            /* z = cpz->z1[i]; */
             X = cpz->e2[i];
             Y = cpz->n2[i];
             Z = cpz->z2[i];
@@ -625,7 +625,7 @@ int I_ortho_ref(double e1, double n1, double z1,
 {
     MATRIX UVW, XYZ;
     double U, V, W;
-    double Xp, Yp, CFL;
+    double /* Xp, Yp, */ CFL;
     double dx, dy, dd;
 
     /*  Initialize and zero the matrices */
@@ -640,8 +640,8 @@ int I_ortho_ref(double e1, double n1, double z1,
 
     /************************ Start the work ******************************/
     /* Set Xp, Yp, and CFL from cam_info */
-    Xp = cam_info->Xp;
-    Yp = cam_info->Yp;
+    /* Xp = cam_info->Xp; */
+    /* Yp = cam_info->Yp; */
     CFL = cam_info->CFL;
 
     /* adjust for earth curvature */

@@ -147,14 +147,14 @@ int draw_line(int ltype, int line,
               int *n_points, int *n_lines, int *n_centroids,
               int *n_boundaries, int *n_faces, RGBA_Color * secondary_color)
 {
-    double var_size, rotation;
+    /* double var_size, rotation; */
     int i;
     double x0, y0;
     double *x, *y;
     int found, cat;
 
-    rotation = 0.0;
-    var_size = size;
+    /* rotation = 0.0;
+       var_size = size; */
     cat = -1;
 
     if (!ltype)

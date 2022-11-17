@@ -55,7 +55,7 @@ static int compare_cats(struct line_cats *ACats, struct line_cats *BCats)
 static int merge_line(struct Map_info *Map, int line,
                       struct line_pnts *MPoints, struct line_cats *MCats)
 {
-    int nlines, i, first, last, next_line, curr_line;
+    int i, first, last, next_line, curr_line;
     int merged = 0, newl = 0;
     int next_node, direction, node_n_lines, type, ltype, lines_type;
     static struct ilist *List = NULL;
@@ -63,8 +63,6 @@ static int merge_line(struct Map_info *Map, int line,
     static struct line_cats *Cats = NULL;
 
     type = GV_LINE;
-
-    nlines = Vect_get_num_lines(Map);
 
     if (!Points)
         Points = Vect_new_line_struct();

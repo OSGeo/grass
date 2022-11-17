@@ -105,12 +105,15 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     char VarName[MAXVARS][10];  /* names of variables */
     int TimeStamp[MAXTIMES];    /* real times for each time step */
     int DateStamp[MAXTIMES];    /* real dates for each time step */
+
+#if 0                           /* unused */
     float NorthLat;             /* latitude of north bound of box */
     float LatInc;               /* spacing between rows in degrees */
     float WestLon;              /* longitude of west bound of box */
     float LonInc;               /* spacing between columns in degs */
     float BottomHgt;            /* height of bottom of box in km */
     float HgtInc;               /* spacing between grid levels in km */
+#endif
     int Projection;
     float ProjArgs[100];
     int Vertical;
@@ -181,6 +184,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     }
 
 
+#if 0                           /* unused */
     /* put here some g3d functions */
     /* required ? */
     LatInc = 1.0;
@@ -189,6 +193,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     NorthLat = 50.0;
     WestLon = 90.0;
     BottomHgt = 0.0;
+#endif
 
 /****************/
 

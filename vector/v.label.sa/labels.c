@@ -993,7 +993,6 @@ static double label_pointover(label_t * label, label_candidate_t * candidate)
     double pointover;
     struct ilist *il;
     struct line_pnts *trbb;
-    int n;
 
     il = Vect_new_list();
 
@@ -1001,7 +1000,7 @@ static double label_pointover(label_t * label, label_candidate_t * candidate)
        candidate->rotation);
      */
     trbb = box_trans_rot(&label->bb, &candidate->point, candidate->rotation);
-    n = Vect_select_lines_by_polygon(&Map, trbb, 0, NULL, GV_POINT, il);
+    Vect_select_lines_by_polygon(&Map, trbb, 0, NULL, GV_POINT, il);
 
     pointover = (double)il->n_values;
     Vect_destroy_list(il);

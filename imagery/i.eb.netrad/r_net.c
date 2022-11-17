@@ -15,7 +15,7 @@ double r_net(double bbalb, double ndvi, double tempk, double dtair,
     /* sunzangle = sun zenith angle at sat. overpass */
     /* tair = air temperature (approximative, or met.station) */
     double Kin = 0.0, Lin = 0.0, Lout = 0.0, Lcorr = 0.0, result = 0.0;
-    double ds = 0.0, e_atm = 0.0, delta = 0.0;
+    double ds = 0.0, e_atm = 0.0 /* , delta = 0.0 */ ;
 
     /* double tsw_for_e_atm = 0.7; *//* Special tsw, consider it a coefficient */
 
@@ -27,7 +27,7 @@ double r_net(double bbalb, double ndvi, double tempk, double dtair,
 
     /*      ds = 1.0 + 0.01672 * sin(2*PI*(doy-93.5)/365); */
     ds = 1.0 / pow((1 + 0.033 * cos(2 * PI * doy / 365)), 2);
-    delta = 0.4093 * sin((2 * PI * doy / 365) - 1.39);
+    /* delta = 0.4093 * sin((2 * PI * doy / 365) - 1.39); */
 
     /* Kin is the shortwave incoming radiation */
     Kin = 1358.0 * (cos(sunzangle * PI / 180) * tsw / (ds * ds));
