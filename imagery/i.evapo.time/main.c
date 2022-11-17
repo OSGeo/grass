@@ -45,11 +45,8 @@ int main(int argc, char *argv[])
 
     /****************************************/
     /* Pointers for file names              */
-    char **names;
     char **ptr;
-    char **names1;
     char **ptr1;
-    char **names2;
     char **ptr2;
 
     /****************************************/
@@ -57,7 +54,6 @@ int main(int argc, char *argv[])
     int bfr, aft;
 
     /****************************************/
-    int ok;
     int i = 0, j = 0;
     double etodoy;              /*minimum ETo DOY */
     double startperiod, endperiod;      /*first and last days (DOYs) of the period studied */
@@ -128,12 +124,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    ok = 1;
-    names = input->answers;
     ptr = input->answers;
-    names1 = input1->answers;
     ptr1 = input1->answers;
-    names2 = input2->answers;
     ptr2 = input2->answers;
     etodoy = atof(input3->answer);
     startperiod = atof(input4->answer);
@@ -141,14 +133,12 @@ int main(int argc, char *argv[])
     result = output->answer;
 
     /****************************************/
-    if (endperiod < startperiod) {
+    if (endperiod < startperiod)
         G_fatal_error(_("The DOY for end_period can not be smaller than start_period"));
-        ok = 0;
-    }
-    if (etodoy > startperiod) {
+
+    if (etodoy > startperiod)
         G_fatal_error(_("The DOY for start_period can not be smaller than eto_doy_min"));
-        ok = 0;
-    }
+
     for (; *ptr != NULL; ptr++) {
         if (nfiles > MAXFILES)
             G_fatal_error(_("Too many ETa files. Only %d allowed."),

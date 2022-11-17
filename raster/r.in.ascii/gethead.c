@@ -31,8 +31,8 @@ int getgrdhead(FILE * fd, struct Cell_head *cellhd)
 
     /* read and check the flag on the first line */
     if (fgets(grd_flag, sizeof(grd_flag), fd) == NULL) {
-    	G_warning(_("failed to read the input file"));
-    	return 0;
+        G_warning(_("failed to read the input file"));
+        return 0;
     }
     if (strncmp(gs_ascii_flag, grd_flag, strlen(gs_ascii_flag))) {
         G_warning(_("input file is not a Surfer ascii grid file"));
@@ -90,7 +90,7 @@ int gethead(FILE * fd,
     int n, s, e, w, r, c;
     char label[100], value[100];
     char buf[1024];
-    int ret, len;
+    int ret;
 
     /* rsb fix */
     fpos_t p;
@@ -109,8 +109,6 @@ int gethead(FILE * fd,
 
         if (!G_getl2(buf, sizeof(buf), fd))
             break;
-
-        len = strlen(buf);
 
         *label = *value = '\0';
         if (NULL == strstr(buf, ":"))
@@ -247,7 +245,7 @@ static int extract(int count,
                    char *label, char *value,
                    void *data, int proj, int (*scanner)())
 {
-    if(count) {
+    if (count) {
         G_warning(_("Duplicate \"%s\" field in header"), label);
         return 0;
     }

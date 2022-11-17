@@ -43,7 +43,7 @@ int DGL_ADD_EDGE_FUNC(dglGraph_s * pgraph,
 #if defined(_DGL_V2)
     dglInt32_t *pinEdgeset;
     dglTreeEdge_s *pEdgeItem;
-    dglTreeEdge_s findEdge;
+    /* dglTreeEdge_s findEdge; */
 #endif
 
     if (pgraph->Flags & DGL_GS_FLAT) {
@@ -204,7 +204,7 @@ int DGL_ADD_EDGE_FUNC(dglGraph_s * pgraph,
     /*
      * Set the edge-tree
      */
-    findEdge.nKey = nEdge;
+    /* findEdge.nKey = nEdge; */
 
     if ((pEdgeItem = dglTreeEdgeAdd(pgraph->pEdgeTree, nEdge)) == NULL) {
 	pgraph->iErrno = DGL_ERR_MemoryExhausted;

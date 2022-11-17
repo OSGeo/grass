@@ -66,7 +66,8 @@ int pie(struct stat_list *dist_stats,   /* list of distribution statistics */
     double y_box[6];
     double height, width;
     double xscale;              /* scaling factors */
-    double yscale;
+
+    /* double yscale; */
     char xlabel[1024];
     char txt[1024];
     char tic_name[80];
@@ -90,7 +91,7 @@ int pie(struct stat_list *dist_stats,   /* list of distribution statistics */
         dist_stats->mincat--;
     }
     xscale = ((double)(x_line[2] - x_line[1]) / ((double)num_cats));
-    yscale = ((double)(y_line[0] - y_line[1])) / dist_stats->maxstat;
+    /* yscale = ((double)(y_line[0] - y_line[1])) / dist_stats->maxstat; */
     yoffset = (long)(y_line[0]);
     if (num_cats >= x_line[2] - x_line[1])
         xoffset = (double)x_line[1];

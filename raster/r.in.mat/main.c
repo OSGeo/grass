@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
     int i, row, col;            /* counters */
 
-    int machine_endianness, file_endianness, endian_mismatch;   /* 0=little, 1=big */
+    int machine_endianness, file_endianness /*, endian_mismatch */ ;    /* 0=little, 1=big */
     int data_format;            /* 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
     int data_type;              /* 0=numbers  1=text */
     int format_block;           /* combo of endianness, 0, data_format, and type */
@@ -133,10 +133,10 @@ int main(int argc, char *argv[])
     G_fseek(fp1, 0, SEEK_SET);  /* frewind() */
 
     file_endianness = format_block / 1000;      /* 0=little, 1=big */
-    if (file_endianness != machine_endianness)
-        endian_mismatch = 1;
-    else
-        endian_mismatch = 0;
+    /* if (file_endianness != machine_endianness)
+       endian_mismatch = 1;
+       else
+       endian_mismatch = 0; */
 
     G_debug(1, "File is %s endian.\n", file_endianness ? "big" : "little");
 
@@ -308,7 +308,8 @@ int main(int argc, char *argv[])
                 map_type = DCELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread(array_data, sizeof(double), (size_t)mrows * ncols, fp1)
+                if (fread
+                    (array_data, sizeof(double), (size_t)mrows * ncols, fp1)
                     != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
@@ -317,7 +318,8 @@ int main(int argc, char *argv[])
                 map_type = FCELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread(array_data, sizeof(float), (size_t)mrows * ncols, fp1)
+                if (fread
+                    (array_data, sizeof(float), (size_t)mrows * ncols, fp1)
                     != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
