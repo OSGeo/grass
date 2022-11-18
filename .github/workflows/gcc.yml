@@ -50,5 +50,5 @@ jobs:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
           CFLAGS: "-std=${{ matrix.c }} -fPIC -Wall -Wno-maybe-uninitialized"
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC -Wall -Wno-class-memaccess"
+          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC -Wall"
         run: .github/workflows/build_ubuntu-20.04.sh $HOME/install -Werror
