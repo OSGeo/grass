@@ -1390,7 +1390,7 @@ int main(int argc, char *argv[])
 			    G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'", db_get_string(&strval));
 			}
                 else {
-                    /* column type not supported (thus skiped) and not empty */
+                    /* column type not supported (thus skipped) and not empty */
                     G_rasprintf(&sqlbuf, &sqlbufsize, "%c", '\0');
                 }
 		    }
