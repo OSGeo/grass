@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout repository contents
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 31
 
@@ -33,7 +33,7 @@ jobs:
           exclude: mswindows .*\.bat .*/testsuite/data/.*
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
