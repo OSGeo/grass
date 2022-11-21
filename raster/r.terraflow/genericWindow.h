@@ -77,6 +77,8 @@ public:
     }
   }
 
+  genericWindow<T> &operator=(const genericWindow<T> &) = default;
+
   /***************************************************************/
   genericWindow(const genericWindow<T> &win) {
     for (int i=0;i<9;i++) {
