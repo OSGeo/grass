@@ -37,9 +37,9 @@ public:
   keyvalue(T vk, T vv) : key(vk), value(vv) {};
 
   keyvalue(const keyvalue &) = default;
-  keyvalue &operator=(const keyvalue &) = default;
+  keyvalue& operator=(const keyvalue &) = default;
   keyvalue(keyvalue &&) = default;
-  keyvalue &operator=(keyvalue &&) = default;
+  keyvalue& operator=(keyvalue &&) = default;
   ~keyvalue() = default;
 
   T getPriority() const { return key; };

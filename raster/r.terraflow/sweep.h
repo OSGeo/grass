@@ -178,16 +178,14 @@ public:
   dimension_type i,j;
   
 public:
-  flowPriority(elevation_type a = 0, toporank_type b = 0,
-               dimension_type c = 0, dimension_type d = 0)
-      : h(a), toporank(b), i(c), j(d)
-  {
-  }
+  flowPriority(elevation_type a=0, toporank_type b=0,
+               dimension_type c=0, dimension_type d=0):
+  h(a), toporank(b), i(c), j(d) {}
 
   flowPriority(const flowPriority &) = default;
-  flowPriority &operator=(const flowPriority &) = default;
+  flowPriority& operator=(const flowPriority &) = default;
   flowPriority(flowPriority &&) = default;
-  flowPriority &operator=(flowPriority &&) = default;
+  flowPriority& operator=(flowPriority &&) = default;
   ~flowPriority() = default;
   
   elevation_type field1() const {
@@ -441,9 +439,9 @@ public:
   flowValue(flowaccumulation_type x=0): value(x) {}
 
   flowValue(const flowValue &) = default;
-  flowValue &operator=(const flowValue &) = default;
+  flowValue& operator=(const flowValue &) = default;
   flowValue(flowValue &&) = default;
-  flowValue &operator=(flowValue &&) = default;
+  flowValue& operator=(flowValue &&) = default;
   ~flowValue() = default;
 
   flowaccumulation_type get() const {
@@ -495,17 +493,15 @@ private:
 
 public:
   
-  flowStructure(const flowPriority &p = 0, const flowValue &e = 0)
-      : prio(p), val(e)
-  {
-  }
-
+  flowStructure(const flowPriority &p = 0, const flowValue &e = 0):
+    prio(p), val(e) {}
+    
   flowStructure(const flowStructure &) = default;
-  flowStructure &operator=(const flowStructure &) = default;
+  flowStructure& operator=(const flowStructure &) = default;
   flowStructure(flowStructure &&) = default;
-  flowStructure &operator=(flowStructure &&) = default;
+  flowStructure& operator=(flowStructure &&) = default;
   ~flowStructure() = default;
-
+  
   flowPriority getPriority() const {
     return prio;
   }
