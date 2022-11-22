@@ -36,17 +36,16 @@ public:
   keyvalue() : key(-1), value(-1) {};
   keyvalue(T vk, T vv) : key(vk), value(vv) {};
 
-  keyvalue(const keyvalue &) = default;
-  keyvalue& operator=(const keyvalue &) = default;
-  keyvalue(keyvalue &&) = default;
-  keyvalue& operator=(keyvalue &&) = default;
-  ~keyvalue() = default;
-
   T getPriority() const { return key; };
   T getValue() const { return value; };
   T src() const { return key; };
   T dst() const { return value; };
 
+  keyvalue operator =(const keyvalue &that) {
+    key = that.key;
+    value = that.value;
+    return *this;
+  };
   int operator != (const keyvalue &e2) const {
     return (key != e2.key) || (value != e2.value);
   }

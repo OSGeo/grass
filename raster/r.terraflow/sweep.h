@@ -178,15 +178,14 @@ public:
   dimension_type i,j;
   
 public:
-  flowPriority(elevation_type a=0, toporank_type b=0,
-               dimension_type c=0, dimension_type d=0):
-  h(a), toporank(b), i(c), j(d) {}
-
-  flowPriority(const flowPriority &) = default;
-  flowPriority& operator=(const flowPriority &) = default;
-  flowPriority(flowPriority &&) = default;
-  flowPriority& operator=(flowPriority &&) = default;
-  ~flowPriority() = default;
+  flowPriority(elevation_type a=0, toporank_type b=0, 
+	       dimension_type c=0, dimension_type d=0): 
+    h(a), toporank(b), i(c), j(d) {}
+  
+  flowPriority(const flowPriority &p):
+    h(p.h), toporank(p.toporank), i(p.i), j(p.j) {}
+  
+  ~flowPriority() {}
   
   elevation_type field1() const {
     return h;
@@ -437,13 +436,9 @@ public:
 
 public:
   flowValue(flowaccumulation_type x=0): value(x) {}
-
-  flowValue(const flowValue &) = default;
-  flowValue& operator=(const flowValue &) = default;
-  flowValue(flowValue &&) = default;
-  flowValue& operator=(flowValue &&) = default;
-  ~flowValue() = default;
-
+  
+  ~flowValue() {}
+  
   flowaccumulation_type get() const {
     return value;
   }
@@ -458,6 +453,10 @@ public:
     flowValue elt(elt1.value + elt2.value);
     return elt;
   }
+  flowValue operator =(const flowValue &elt) {
+    value = elt.value;
+    return *this;
+  } 
   flowValue operator != (const flowValue &elt) {
     return value != elt.value;
   }
@@ -496,11 +495,15 @@ public:
   flowStructure(const flowPriority &p = 0, const flowValue &e = 0):
     prio(p), val(e) {}
     
-  flowStructure(const flowStructure &) = default;
-  flowStructure& operator=(const flowStructure &) = default;
-  flowStructure(flowStructure &&) = default;
-  flowStructure& operator=(flowStructure &&) = default;
-  ~flowStructure() = default;
+  /* flowStructure(const flowValue &e, const flowPriority &p):
+	 prio(p), val(e) {}
+  */ 
+  flowStructure(const flowStructure &fl):
+    prio(fl.prio),
+    val(fl.val)
+  {}
+  
+  ~flowStructure() {}
   
   flowPriority getPriority() const {
     return prio;
