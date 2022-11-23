@@ -804,6 +804,9 @@
       <module-item name="r.cost">
         <label>Cost surface</label>
       </module-item>
+      <module-item name="r.path">
+        <label>Trace a path</label>
+      </module-item>
       <module-item name="r.walk">
         <label>Cumulative movement costs</label>
       </module-item>
