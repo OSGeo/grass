@@ -75,7 +75,9 @@ struct map
 static struct map *maps;
 static int num_maps;
 static int max_maps;
+#ifdef HAVE_PTHREAD_H
 static int masking;
+#endif
 
 static int min_row = INT_MAX;
 static int max_row = -INT_MAX;
