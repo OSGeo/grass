@@ -45,7 +45,7 @@ void calc_metrics(void)
 
     /* allocate matrix and fill in with cats' value */
     metrics = (METRICS *) G_malloc(sizeof(METRICS));
-    metrics->matrix = (long *)G_malloc(ncat * ncat * sizeof(long));
+    metrics->matrix = (long *)G_malloc((size_t)ncat * ncat * sizeof(long));
     for (i = 0; i < ncat * ncat; i++)
         metrics->matrix[i] = 0;
     for (i = 0; i < nstats; i++) {
