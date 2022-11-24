@@ -230,8 +230,8 @@ class CalculationCorrectness2Test(TestCase):
     def tearDownClass(cls):
         """Remove temporary data"""
         cls.del_temp_region()
-        # cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
-        # cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
 
     def match(self, pat, ref):
         if pat == "NA" or ref == "NA":

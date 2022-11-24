@@ -45,6 +45,8 @@ int nlayers;
 GSTATS *Gstats;
 size_t nstats;
 
+METRICS *metrics;
+
 /* function prototypes */
 static void layer(const char *s);
 
@@ -59,7 +61,7 @@ int main(int argc, char **argv)
 
     struct
     {
-        struct Flag *m, *w, *h;
+        struct Flag *m, *w, *h, *j;
     } flags;
 
     G_gisinit(argv[0]);
@@ -113,6 +115,11 @@ int main(int argc, char **argv)
     flags.m->description = _("Print Matrix only");
     flags.m->guisection = _("Output settings");
 
+    flags.j = G_define_flag();
+    flags.j->key = 'j';
+    flags.j->description = _("Print measures in JSON");
+    flags.j->guisection = _("Output settings");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -132,7 +139,7 @@ int main(int argc, char **argv)
 
     if (flags.m->answer) {
         /* prepare the data for calculation */
-        prn2csv_error_mat(2048, flags.h->answer);
+        prn2csv_error_mat(flags.h->answer);
     }
     else {
         /* print header of the output */
@@ -143,7 +150,7 @@ int main(int argc, char **argv)
         prn_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
 
         /* generate the error matrix, kappa and variance */
-        calc_kappa();
+        prt_kappa();
     }
     return EXIT_SUCCESS;
 }

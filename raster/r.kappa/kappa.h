@@ -15,6 +15,22 @@ struct _layer_
     struct Categories labels;
 };
 
+struct _metrics_
+{
+    int ncat;
+    long obs;
+    long correct;
+    long *matrix;
+    long *rowsum;
+    long *colsum;
+    double total_acc;
+    double *prod_acc;
+    double *user_acc;
+    double kappa;
+    double kappa_var;
+    double *cond_kappa;
+};
+
 extern struct Cell_head window;
 
 extern const char *maps[2];
@@ -32,3 +48,6 @@ extern int nlayers;
 #define GSTATS struct _gstats_
 extern GSTATS *Gstats;
 extern size_t nstats;
+
+#define METRICS struct _metrics_
+extern METRICS *metrics;

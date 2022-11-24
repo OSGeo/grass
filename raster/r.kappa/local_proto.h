@@ -1,5 +1,5 @@
-/* calc_kappa.c */
-void calc_kappa(void);
+/* prt_kappa.c */
+void prt_kappa(void);
 
 /* mask.c */
 char *maskinfo(void);
@@ -14,10 +14,10 @@ void prt_label(void);
 void prn_error_mat(int out_cols, int hdr);
 
 /* prt2csv_mat.c */
-void prn2csv_error_mat(int out_cols, int hdr);
+void prn2csv_error_mat(int hdr);
 
 /* stats.c */
 int stats(void);
 
-/* sum.c */
-long count_sum(int *ns, int n1);
+/* calc_metrics.c */
+void calc_metrics(void);
