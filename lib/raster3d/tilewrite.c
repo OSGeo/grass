@@ -374,7 +374,7 @@ Rast3d_flush_tiles_in_cube(RASTER3D_Map * map, int xMin, int yMin, int zMin,
          */
          /*AV*/
         /* BEGIN OF MY CODE */
-        Rast3d_get_coords_map(map, &regionMaxY, &regionMaxX, &regionMaxZ);
+    Rast3d_get_coords_map(map, &regionMaxY, &regionMaxX, &regionMaxZ);
     /* END OF MY CODE */
 
     if ((xMin < 0) && (xMax < 0))
