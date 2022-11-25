@@ -238,7 +238,7 @@ static int get_title(FILE * fd, struct SigSet *S)
     char title[1024];
 
     *title = 0;
-    if (fscanf(fd, "%1024[^\n]", title) != 1)
+    if (fscanf(fd, "%1023[^\n]", title) != 1)
         return -1;
     G_strip(title);
     I_SetSigTitle(S, title);
@@ -293,7 +293,7 @@ static int get_classtitle(FILE * fd, struct ClassSig *C)
     char title[1024];
 
     *title = 0;
-    if (fscanf(fd, "%1024[^\n]", title) != 1)
+    if (fscanf(fd, "%1023[^\n]", title) != 1)
         return -1;
     G_strip(title);
     I_SetClassTitle(C, title);
