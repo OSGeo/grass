@@ -62,6 +62,29 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
+class MapFrame(wx.Frame):
+    """Class which creates the frame widget which is used when undocking
+    map panel from AuiNotebook"""
+
+    def __init__(self, parent, mapdisplay, title):
+        wx.Frame.__init__(self, parent=parent, title=title)
+        self.mapdisplay = mapdisplay
+        self.SetSize(mapdisplay.GetSize())
+        self.sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.SetSizerAndFit(self.sizer)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+    def closeFrameNoEvent(self):
+        self.Unbind(wx.EVT_CLOSE)
+        self.Close()
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+    def OnClose(self, event):
+        self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        self.Destroy()
+        event.Veto()
+
+
 class MapPanel(SingleMapPanel):
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
@@ -112,6 +135,9 @@ class MapPanel(SingleMapPanel):
         self.tree = tree
         # checks for saving workspace
         self.canCloseDisplayCallback = None
+        # distinquishes whether map panel is docked or undocked (Single-Window)
+        # default behaviour is docked
+        self._docked = True
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
@@ -659,6 +685,18 @@ class MapPanel(SingleMapPanel):
         for layer in qlayer:
             self.GetMap().DeleteLayer(layer)
 
+    def SetDockingCallback(self, function):
+        """Sets docking bound method to dock or undock"""
+        self.dck_callback = function
+
+    def OnDockUndock(self, event):
+        """Dock or undock map display panel to independent MapFrame"""
+        self.dck_callback(self)
+        self._docked = not self._docked
+
+    def GetDockingState(self):
+        return self._docked
+
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         self.RemoveQueryLayer()
@@ -968,13 +1006,13 @@ class MapPanel(SingleMapPanel):
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseDisplayCallback:
-            pgnum_dict = self.canCloseDisplayCallback(
+            pgnum_dict, is_docked = self.canCloseDisplayCallback(
                 askIfSaveWorkspace=askIfSaveWorkspace
             )
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                    self.closingDisplay.emit(pgnum_dict=pgnum_dict, is_docked=is_docked)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()

@@ -144,6 +144,10 @@ class MapToolbar(BaseToolbar):
         self.comboid = self.AddControl(self.combo)
         self.parent.Bind(wx.EVT_COMBOBOX, self.OnSelectTool, self.comboid)
 
+        self.docking_btn = wx.Button(self, label="(un)dock")
+        self.docking_btn_id = self.AddControl(self.docking_btn)
+        self.parent.Bind(wx.EVT_BUTTON, self.parent.OnDockUndock)
+
         # realize the toolbar
         self.Realize()
 

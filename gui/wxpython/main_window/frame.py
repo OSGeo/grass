@@ -74,7 +74,7 @@ from lmgr.giface import (
     LayerManagerGrassInterface,
     LayerManagerGrassInterfaceForMapDisplay,
 )
-from mapdisp.frame import MapPanel
+from mapdisp.frame import MapPanel, MapFrame
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
@@ -438,7 +438,7 @@ class GMFrame(wx.Frame):
             )
             # add map display panel to notebook and make it current
             self.mapnotebook.AddPage(mapdisplay, name)
-            self.mapnotebook.SetSelection(self.currentPageNum)
+            self.mapnotebook.SetSelection(self.mapnotebook.GetPageCount() - 1)
 
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
@@ -486,25 +486,30 @@ class GMFrame(wx.Frame):
             """Callback to check if user wants to close display. Map
             Display index can be different from index in Display tab.
 
-            :return dict/None pgnum_dict/None: dict "layers" key represent
+            :return two values: dict/None pgnum_dict/None: dict "layers" key represent
                                                map display notebook layers
                                                tree page index and
                                                "mapnotebook" key represent
                                                map display notebook page
-                                               index (single window mode)
+                                               index (single window mode),
+                                is_docked/None: boolean representing whether
+                                               map display is docked or undocked
             """
             pgnum_dict = {}
             pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
             pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
+            is_docked = mapdisplay.GetDockingState()
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
-                return pgnum_dict
-            return None
+                return pgnum_dict, is_docked
+            return None, None
 
+        # set callbacks
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.SetDockingCallback(self.UndockMapDisplay)
 
         # bind various events
         mapdisplay.onFocus.connect(
@@ -538,6 +543,27 @@ class GMFrame(wx.Frame):
                 group="display", key="showCompExtent", subkey="enabled"
             ),
         )
+
+    def UndockMapDisplay(self, panel):
+        """Undock active map display to independent MapFrame object"""
+        idx = self.mapnotebook.GetPageIndex(panel)
+        text = self.mapnotebook.GetPageText(idx)
+        self.mapnotebook.RemovePage(idx)
+        fr = MapFrame(parent=self, mapdisplay=panel, title=text)
+        panel.Reparent(fr)
+        panel.SetDockingCallback(self.DockMapDisplay)
+        fr.sizer.Add(panel, proportion=1, flag=wx.EXPAND)
+        fr.Show()
+        panel.Show()
+
+    def DockMapDisplay(self, panel):
+        """Dock independent MapFrame object back to Aui.Notebook"""
+        fr = panel.GetParent()
+        panel.Reparent(self.mapnotebook)
+        panel.SetDockingCallback(self.UndockMapDisplay)
+        self.mapnotebook.AddPage(page=panel, caption=fr.GetTitle())
+        self.mapnotebook.SetSelection(self.mapnotebook.GetPageCount() - 1)
+        fr.closeFrameNoEvent()
 
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
@@ -950,7 +976,7 @@ class GMFrame(wx.Frame):
     def OnCBPageClosing(self, event):
         """Page of notebook is being closed
         from Layer Manager (x button next to arrows)
-        Also close associated map display.
+        Also close associated map display (whether docked or undocked)
         """
         # save changes in the workspace
         name = self.notebookLayers.GetPageText(event.GetSelection())
@@ -961,21 +987,28 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+        if self.GetMapDisplay().GetDockingState() is True:
+            self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+        else:
+            self.GetMapDisplay().GetParent().Destroy()
         maptree.Close(True)
 
         self.currentPage = None
 
         event.Skip()
 
-    def _closePageNoEvent(self, pgnum_dict):
-        """Close page and destroy map display without generating notebook
-        page closing event.
+    def _closePageNoEvent(self, pgnum_dict, is_docked):
+        """If map display is docked, close page and destroy map display without generating
+        layer notebook page closing event. If map display is undocked, close only
+        layer notebook page, not map notebook page.
 
         :param dict pgnum_dict: dict "layers" key represent map display
                                 notebook layers tree page index and
                                 "mapnotebook" key represent map display
                                 notebook page index (single window mode)
+              boolean is_docked: "True" means that map display is docked in map
+                               display notebook, "False" means that map display
+                               is undocked to independent frame
         """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
         self.notebookLayers.DeletePage(pgnum_dict["layers"])
@@ -983,7 +1016,8 @@ class GMFrame(wx.Frame):
             FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
             self.OnCBPageClosing,
         )
-        self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
+        if is_docked is True:
+            self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
