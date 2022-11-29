@@ -63,8 +63,7 @@ from grass.pydispatch.signal import Signal
 
 
 class MapFrame(wx.Frame):
-    """Class which creates the frame widget which is used when undocking
-    map panel from AuiNotebook"""
+    """Frame for independent map display window."""
 
     def __init__(self, parent, mapdisplay, title):
         wx.Frame.__init__(self, parent=parent, title=title)
@@ -75,11 +74,13 @@ class MapFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def closeFrameNoEvent(self):
+        """Close frame without generating OnClose event."""
         self.Unbind(wx.EVT_CLOSE)
         self.Close()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, event):
+        """Close frame and associated layer notebook page."""
         self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
         self.Destroy()
         event.Veto()
@@ -135,8 +136,7 @@ class MapPanel(SingleMapPanel):
         self.tree = tree
         # checks for saving workspace
         self.canCloseDisplayCallback = None
-        # distinquishes whether map panel is docked or undocked (Single-Window)
-        # default behaviour is docked
+        # distinguishes whether map panel is docked or undocked (Single-Window)
         self._docked = True
 
         # Emitted when switching map notebook tabs (Single-Window)

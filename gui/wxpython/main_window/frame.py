@@ -304,7 +304,7 @@ class GMFrame(wx.Frame):
         self.mapnotebook.SetArtProvider(SimpleTabArt())
 
         def FocusLastPage():
-            """Focuses the rightmost Map Display page in Map Display notebook"""
+            """Focus the rightmost Map Display page in Map Display notebook"""
             self.mapnotebook.SetSelection(self.mapnotebook.GetPageCount() - 1)
 
         self.mapnotebook.FocusLastPage = FocusLastPage
@@ -984,7 +984,7 @@ class GMFrame(wx.Frame):
     def OnCBPageClosing(self, event):
         """Page of notebook is being closed
         from Layer Manager (x button next to arrows)
-        Also close associated map display (whether docked or undocked)
+        Also close associated map display (whether docked or undocked).
         """
         # save changes in the workspace
         name = self.notebookLayers.GetPageText(event.GetSelection())
