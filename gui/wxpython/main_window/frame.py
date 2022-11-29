@@ -555,6 +555,7 @@ class GMFrame(wx.Frame):
         fr.sizer.Add(panel, proportion=1, flag=wx.EXPAND)
         fr.Show()
         panel.Show()
+        panel.onFocus.emit()
 
     def DockMapDisplay(self, panel):
         """Dock independent MapFrame object back to Aui.Notebook"""
