@@ -304,7 +304,7 @@ class GMFrame(wx.Frame):
         self.mapnotebook.SetArtProvider(SimpleTabArt())
 
         def FocusLastPage():
-            """Focused the last (rightmost) Map Display page in Map Display notebook"""
+            """Focuses the rightmost Map Display page in Map Display notebook"""
             self.mapnotebook.SetSelection(self.mapnotebook.GetPageCount() - 1)
 
         self.mapnotebook.FocusLastPage = FocusLastPage
