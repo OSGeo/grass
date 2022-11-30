@@ -695,6 +695,9 @@ class MapPanel(SingleMapPanel):
         self.dck_callback(self)
         self.docked = not self.docked
 
+    def GetDockingState(self):
+        return self.docked
+
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         self.RemoveQueryLayer()
