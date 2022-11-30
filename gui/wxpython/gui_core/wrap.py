@@ -615,7 +615,7 @@ class Menu(wx.Menu):
 
     def AppendMenu(self, id, text, submenu, help=""):
         if wxPythonPhoenix:
-            wx.Menu.Append(self, id=id, item=text, subMenu=submenu, helpString=help)
+            wx.Menu.AppendSubMenu(self, submenu=submenu, text=text, help=help)
         else:
             wx.Menu.AppendMenu(self, id=id, text=text, submenu=submenu, help=help)
 
