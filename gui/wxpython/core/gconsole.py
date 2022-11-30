@@ -359,7 +359,7 @@ class GConsole(wx.EvtHandler):
     """Backend for command execution, esp. interactive command execution"""
 
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
-        """
+        r"""
         :param guiparent: parent window for created GUI objects
         :param lmgr: layer manager window (TODO: replace by giface)
         :param ignoredCmdPattern: regular expression specifying commads

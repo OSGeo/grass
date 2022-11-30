@@ -657,7 +657,7 @@ def _parseFormats(output, writableOnly=False):
 
     patt = None
     if writableOnly:
-        patt = re.compile("\(rw\+?\)$", re.IGNORECASE)
+        patt = re.compile(r"\(rw\+?\)$", re.IGNORECASE)
 
     for line in output.splitlines():
         key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
