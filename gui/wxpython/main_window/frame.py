@@ -440,6 +440,7 @@ class GMFrame(wx.Frame):
                 tree=layertree,
                 lmgr=self,
                 Map=layertree.Map,
+                docked=True,
                 title=name,
                 size=globalvar.MAP_WINDOW_SIZE,
             )
@@ -498,21 +499,18 @@ class GMFrame(wx.Frame):
                                                tree page index and
                                                "mapnotebook" key represent
                                                map display notebook page
-                                               index (single window mode),
-                                is_docked/None: boolean representing whether
-                                               map display is docked or undocked
+                                               index (single window mode)
             """
             pgnum_dict = {}
             pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
             pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
-            is_docked = mapdisplay.GetDockingState()
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
-                return pgnum_dict, is_docked
-            return None, None
+                return pgnum_dict
+            return None
 
         # set callbacks
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay

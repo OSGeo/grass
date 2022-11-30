@@ -102,6 +102,7 @@ class MapPanel(SingleMapPanel):
         lmgr=None,
         Map=None,
         auimgr=None,
+        docked=None,
         name="MapWindow",
         **kwargs,
     ):
@@ -137,7 +138,7 @@ class MapPanel(SingleMapPanel):
         # checks for saving workspace
         self.canCloseDisplayCallback = None
         # distinguishes whether map panel is docked or undocked (Single-Window)
-        self._docked = True
+        self.docked = docked
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
@@ -692,10 +693,7 @@ class MapPanel(SingleMapPanel):
     def OnDockUndock(self, event):
         """Dock or undock map display panel to independent MapFrame"""
         self.dck_callback(self)
-        self._docked = not self._docked
-
-    def GetDockingState(self):
-        return self._docked
+        self.docked = not self.docked
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
@@ -1006,13 +1004,18 @@ class MapPanel(SingleMapPanel):
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseDisplayCallback:
-            pgnum_dict, is_docked = self.canCloseDisplayCallback(
+            pgnum_dict = self.canCloseDisplayCallback(
                 askIfSaveWorkspace=askIfSaveWorkspace
             )
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    self.closingDisplay.emit(pgnum_dict=pgnum_dict, is_docked=is_docked)
+                    if self.docked is None:
+                        self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                    else:
+                        self.closingDisplay.emit(
+                            pgnum_dict=pgnum_dict, is_docked=self.docked
+                        )
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
