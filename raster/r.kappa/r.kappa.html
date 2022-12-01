@@ -33,6 +33,11 @@ axis, i.e., the reference map layer,  are included in each
 panel.  There is a total at the bottom of each column
 representing the sum of all the rows in that column.
 
+<p>
+It is possible to obtain all data in a machine readable format
+by enabling JSON output flag. JSON keys directly match variable
+names in the C code for convenience.
+
 <h2>NOTES</h2>
 
 It is recommended to reclassify categories of classified
@@ -42,8 +47,11 @@ layer. Because <em>r.kappa</em> calculates and then reports
 information for each and every category.
 
 <p>
-<em>NA</em>'s in output file mean non-applicable in case
-<em>MASK</em> exists.
+<em>NA</em>'s in output mean it was not possible to calculate the value
+(e.g. calculation would involve division by zero).
+In JSON output <em>NA</em>'s are represented with value -999.
+If there is no overlap between both maps, a warning is printed and
+output values are set to 0 or -999 respectively.
 
 <p>
 The <b>Estimated kappa value</b> in <em>r.kappa</em> is the value
@@ -93,6 +101,7 @@ r.kappa -w classification=lsat7_2002_classes reference=training
 <a href="r.stats.html">r.stats</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Tao Wen, University of Illinois at Urbana-Champaign, Illinois
+Tao Wen, University of Illinois at Urbana-Champaign, Illinois<br>
+Maris Nartiss, University of Latvia (JSON output)

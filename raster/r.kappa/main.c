@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 
     flags.j = G_define_flag();
     flags.j->key = 'j';
-    flags.j->description = _("Print measures in JSON");
+    flags.j->description = _("Print in JSON");
     flags.j->guisection = _("Output settings");
 
     if (G_parser(argc, argv))
