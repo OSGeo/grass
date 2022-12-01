@@ -7,15 +7,12 @@
 
 void prn_error_mat(int out_cols, int hdr)
 {
-    int k;
-    long x;
-
     int num_panels, at_panel;
     int cndx, rndx;
     int first_col = 0, last_col = 0;
     int addflag = 0;
     int thisone;
-    long t_row, t_col;
+    long t_row;
     long t_rowcount, grand_count;
     const char *mapone;
     FILE *fd;
@@ -40,7 +37,6 @@ void prn_error_mat(int out_cols, int hdr)
         num_panels = ncat / out_cols;
         if (ncat % out_cols)
             num_panels++;
-        t_rowcount = 0;
         fprintf(fd,
                 "\nError Matrix (MAP1: reference, MAP2: classification)\n");
 
