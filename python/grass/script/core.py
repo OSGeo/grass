@@ -27,7 +27,7 @@ import shutil
 import codecs
 import string
 import random
-import pipes
+import shlex
 from tempfile import NamedTemporaryFile
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
@@ -948,7 +948,7 @@ def parser():
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]
-    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    cmdline += [shlex.quote(a) for a in sys.argv[1:]]
     os.environ["CMDLINE"] = " ".join(cmdline)
 
     argv = sys.argv[:]
