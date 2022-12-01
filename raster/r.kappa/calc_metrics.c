@@ -43,7 +43,7 @@ void calc_metrics(void)
     rlst = (long *)G_realloc(rlst, ncat * sizeof(long));
     G_free(clst);
 
-    /* allocate matrix and fill in with cats' value */
+    /* fill matrix with observed counts */
     metrics = (METRICS *) G_malloc(sizeof(METRICS));
     metrics->matrix = (long *)G_malloc((size_t)ncat * ncat * sizeof(long));
     for (i = 0; i < ncat * ncat; i++)
@@ -121,11 +121,11 @@ void calc_metrics(void)
         if (pi[i] == 0)
             metrics->user_acc[i] = -999;
         else
-            metrics->user_acc[i] = 100 * (1 - pii[i] / pi[i]);
+            metrics->user_acc[i] = 100 * (pii[i] / pi[i]);
         if (pj[i] == 0)
             metrics->prod_acc[i] = -999;
         else
-            metrics->prod_acc[i] = 100 * (1 - pii[i] / pj[i]);
+            metrics->prod_acc[i] = 100 * (pii[i] / pj[i]);
         /* theta 1 */
         p0 += pii[i];
         /* theta 2 */

@@ -32,8 +32,6 @@ void prn2csv_error_mat(int hdr)
         return;
     }
     else {
-        calc_metrics();
-
         /* format and print out the error matrix in panels */
         first_col = 0;
         last_col = ncat;

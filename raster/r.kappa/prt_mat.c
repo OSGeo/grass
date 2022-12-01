@@ -35,8 +35,6 @@ void prn_error_mat(int out_cols, int hdr)
         return;
     }
     else {
-        calc_metrics();
-
         /* format and print out the error matrix in panels */
         out_cols = (out_cols == 132) ? 9 : 5;
         num_panels = ncat / out_cols;

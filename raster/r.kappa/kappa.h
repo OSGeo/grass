@@ -17,7 +17,6 @@ struct _layer_
 
 struct _metrics_
 {
-    int ncat;
     long obs;
     long correct;
     long *matrix;

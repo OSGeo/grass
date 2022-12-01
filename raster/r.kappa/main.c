@@ -123,6 +123,10 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    if (flags.j->answer &&
+        (flags.m->answer || flags.h->answer || flags.w->answer))
+        G_warning(_("When JSON output flag is set, all other formatting flags are ignored"));
+
     G_get_window(&window);
 
     maps[0] = parms.ref->answer;
@@ -136,9 +140,13 @@ int main(int argc, char **argv)
 
     /* run r.stats to obtain statistics of map layers */
     stats();
+    /* calculate metrics from stats */
+    calc_metrics();
 
-    if (flags.m->answer) {
-        /* prepare the data for calculation */
+    if (flags.j->answer) {
+        prn_json();
+    }
+    else if (flags.m->answer) {
         prn2csv_error_mat(flags.h->answer);
     }
     else {

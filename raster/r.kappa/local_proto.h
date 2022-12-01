@@ -16,6 +16,9 @@ void prn_error_mat(int out_cols, int hdr);
 /* prt2csv_mat.c */
 void prn2csv_error_mat(int hdr);
 
+/* prt_json.c */
+void prn_json(void);
+
 /* stats.c */
 int stats(void);
 

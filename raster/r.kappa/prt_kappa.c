@@ -25,11 +25,11 @@ void prt_kappa(void)
         if (metrics->user_acc[i] == -999)
             fprintf(fd, "NA\t\t");
         else
-            fprintf(fd, "%f\t", metrics->user_acc[i]);
+            fprintf(fd, "%f\t", 100 - metrics->user_acc[i]);
         if (metrics->prod_acc[i] == -999)
             fprintf(fd, "NA\t\t");
         else
-            fprintf(fd, "%f\t", metrics->prod_acc[i]);
+            fprintf(fd, "%f\t", 100 - metrics->prod_acc[i]);
         if (metrics->cond_kappa[i] == -999)
             fprintf(fd, "NA\n");
         else
