@@ -307,113 +307,183 @@ class JSONOutputTest(TestCase):
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
 
         cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.refs = []
+        cls.clas = []
+        cls.outp = []
         # Normal case
-        cls.ref_1 = tempname(10)
+        cls.refs.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_1.ascii"),
-            output=cls.ref_1,
+            output=cls.refs[0],
             quiet=True,
         )
-        cls.class_1 = tempname(10)
+        cls.clas.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_1.ascii"),
-            output=cls.class_1,
+            output=cls.clas[0],
             quiet=True,
         )
 
-        cls.ref_json1 = {
-            "map1": cls.ref_1,
-            "map2": cls.class_1,
-            "observations": 18,
-            "correct": 11,
-            "total_acc": 61.111111,
-            "kappa": 0.52091,
-            "kappa_var": 0.016871,
-            "cats": [1, 2, 3, 4, 5, 6],
-            "matrix": [
-                [4, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 1, 4, 0, 0, 0],
-                [3, 0, 0, 0, 0, 1],
-                [0, 0, 0, 0, 1, 0],
-                [0, 2, 0, 0, 0, 2],
-            ],
-            "prod_acc": [57.1429, 0.0, 100.0, -999, 100.0, 66.66666],
-            "user_acc": [100.0, -999, 80.0, 0.0, 100.0, 50.0],
-            "cond_kappa": [1.0, -999, 0.742857, 0.0, 1.0, 0.400],
-        }
-        # Degenerate case with all values missing
-        cls.ref_2 = tempname(10)
+        cls.outp.append(
+            {
+                "map1": cls.refs[0],
+                "map2": cls.clas[0],
+                "observations": 18,
+                "correct": 11,
+                "total_acc": 61.111111,
+                "kappa": 0.52091,
+                "kappa_var": 0.016871,
+                "cats": [1, 2, 3, 4, 5, 6],
+                "matrix": [
+                    [4, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 1, 4, 0, 0, 0],
+                    [3, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 1, 0],
+                    [0, 2, 0, 0, 0, 2],
+                ],
+                "prod_acc": [57.1429, 0.0, 100.0, -999, 100.0, 66.66666],
+                "user_acc": [100.0, -999, 80.0, 0.0, 100.0, 50.0],
+                "cond_kappa": [1.0, -999, 0.742857, 0.0, 1.0, 0.400],
+            }
+        )
+
+        # Bad case with no correct matches
+        cls.refs.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_2.ascii"),
-            output=cls.ref_2,
+            output=cls.refs[1],
             quiet=True,
         )
-        cls.class_2 = tempname(10)
+        cls.clas.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_2.ascii"),
-            output=cls.class_2,
+            output=cls.clas[1],
             quiet=True,
         )
-        cls.ref_json2 = {
-            "map1": cls.ref_2,
-            "map2": cls.class_2,
-            "observations": 25,
-            "correct": 0,
-            "total_acc": 0.0,
-            "kappa": 0.0,
-            "kappa_var": 0.0,
-            "cats": [0, 1, 2, 3, 4, 9],
-            "matrix": [
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [8, 8, 4, 1, 4, 0],
-            ],
-            "prod_acc": [0.0, 0.0, 0.0, 0.0, 0.0, -999],
-            "user_acc": [-999, -999, -999, -999, -999, 0.0],
-            "cond_kappa": [-999, -999, -999, -999, -999, 0.0],
-        }
+        cls.outp.append(
+            {
+                "map1": cls.refs[1],
+                "map2": cls.clas[1],
+                "observations": 25,
+                "correct": 0,
+                "total_acc": 0.0,
+                "kappa": 0.0,
+                "kappa_var": 0.0,
+                "cats": [0, 1, 2, 3, 4, 9],
+                "matrix": [
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [8, 8, 4, 1, 4, 0],
+                ],
+                "prod_acc": [0.0, 0.0, 0.0, 0.0, 0.0, -999],
+                "user_acc": [-999, -999, -999, -999, -999, 0.0],
+                "cond_kappa": [-999, -999, -999, -999, -999, 0.0],
+            }
+        )
+
+        # Degenerate case #1
+        cls.refs.append(tempname(10))
+        cls.clas.append(tempname(10))
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.refs[2]}=null()",
+            quiet=True,
+        )
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.clas[2]}=null()",
+            quiet=True,
+        )
+        cls.outp.append(
+            {
+                "map1": cls.refs[2],
+                "map2": cls.clas[2],
+                "observations": 0,
+                "correct": 0,
+                "total_acc": 0.0,
+                "kappa": -999.0,
+                "kappa_var": -999.0,
+                "cats": [],
+                "matrix": [[]],
+                "prod_acc": [],
+                "user_acc": [],
+                "cond_kappa": [],
+            }
+        )
+
+        # Degenerate case #2
+        cls.refs.append(tempname(10))
+        cls.clas.append(tempname(10))
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.refs[3]}=1",
+            quiet=True,
+        )
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.clas[3]}=null()",
+            quiet=True,
+        )
+        cls.outp.append(
+            {
+                "map1": cls.refs[3],
+                "map2": cls.clas[3],
+                "observations": 0,
+                "correct": 0,
+                "total_acc": 0.0,
+                "kappa": -999.0,
+                "kappa_var": -999.0,
+                "cats": [],
+                "matrix": [[]],
+                "prod_acc": [],
+                "user_acc": [],
+                "cond_kappa": [],
+            }
+        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove temporary data"""
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_2)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.class_2)
+        for ref in cls.refs:
+            cls.runModule("g.remove", flags="f", type="raster", name=ref)
+        for clas in cls.clas:
+            cls.runModule("g.remove", flags="f", type="raster", name=clas)
 
     def test_stdout(self):
-        out = read_command(
-            "r.kappa",
-            reference=self.ref_2,
-            classification=self.class_2,
-            flags="j",
-            quiet=True,
-        )
-        json_out = json.loads(decode(out))
-        self.assertTrue(keyvalue_equals(self.ref_json2, json_out, precision=4))
+        for i in range(len(self.refs)):
+            out = read_command(
+                "r.kappa",
+                reference=self.refs[i],
+                classification=self.clas[i],
+                flags="j",
+                quiet=True,
+            )
+            json_out = json.loads(decode(out))
+            self.assertTrue(keyvalue_equals(self.outp[i], json_out, precision=4))
 
     def test_file(self):
-        f = NamedTemporaryFile()
-        self.runModule(
-            "r.kappa",
-            reference=self.ref_2,
-            classification=self.class_2,
-            output=f.name,
-            flags="j",
-            quiet=True,
-            overwrite=True,
-        )
-        json_out = json.loads(f.read())
-        self.assertTrue(keyvalue_equals(self.ref_json2, json_out, precision=4))
+        for i in range(len(self.refs)):
+            f = NamedTemporaryFile()
+            self.runModule(
+                "r.kappa",
+                reference=self.refs[i],
+                classification=self.clas[i],
+                output=f.name,
+                flags="j",
+                quiet=True,
+                overwrite=True,
+            )
+            json_out = json.loads(f.read())
+            self.assertTrue(keyvalue_equals(self.outp[i], json_out, precision=4))
 
 
 if __name__ == "__main__":

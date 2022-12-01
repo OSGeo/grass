@@ -19,6 +19,17 @@ void calc_metrics(void)
     double inter1 = 0, inter2 = 0;
     int a_i, b_i;
 
+    metrics = (METRICS *) G_malloc(sizeof(METRICS));
+    if (nstats == 0) {
+        G_warning(_("Both maps have nothing in common. Check the computational region."));
+        metrics->obs = 0;
+        metrics->correct = 0;
+        metrics->total_acc = 0;
+        metrics->kappa = -999;
+        metrics->kappa_var = -999;
+        return;
+    }
+
     /* get the cat lists */
     rlst = (long *)G_calloc(nstats * 2, sizeof(long));
     clst = (long *)G_calloc(nstats, sizeof(long));
@@ -44,7 +55,6 @@ void calc_metrics(void)
     G_free(clst);
 
     /* fill matrix with observed counts */
-    metrics = (METRICS *) G_malloc(sizeof(METRICS));
     metrics->matrix = (long *)G_malloc((size_t)ncat * ncat * sizeof(long));
     for (i = 0; i < ncat * ncat; i++)
         metrics->matrix[i] = 0;
