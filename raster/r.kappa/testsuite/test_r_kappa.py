@@ -38,14 +38,12 @@ class MatrixCorrectnessTest(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_1.ascii"),
             output=cls.ref_1,
-            quiet=True,
         )
         cls.class_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_1.ascii"),
             output=cls.class_1,
-            quiet=True,
         )
 
     @classmethod
@@ -96,14 +94,12 @@ class CalculationCorrectness1Test(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_1.ascii"),
             output=cls.ref_1,
-            quiet=True,
         )
         cls.class_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_1.ascii"),
             output=cls.class_1,
-            quiet=True,
         )
         cls.per_class = {
             "producer": [
@@ -209,14 +205,12 @@ class CalculationCorrectness2Test(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_2.ascii"),
             output=cls.ref_1,
-            quiet=True,
         )
         cls.class_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_2.ascii"),
             output=cls.class_1,
-            quiet=True,
         )
         cls.per_class = {
             "producer": [
@@ -316,14 +310,12 @@ class JSONOutputTest(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_1.ascii"),
             output=cls.references[0],
-            quiet=True,
         )
         cls.classifications.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_1.ascii"),
             output=cls.classifications[0],
-            quiet=True,
         )
 
         cls.expected_outputs.append(
@@ -356,14 +348,12 @@ class JSONOutputTest(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_2.ascii"),
             output=cls.references[1],
-            quiet=True,
         )
         cls.classifications.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_2.ascii"),
             output=cls.classifications[1],
-            quiet=True,
         )
         cls.expected_outputs.append(
             {
@@ -395,12 +385,10 @@ class JSONOutputTest(TestCase):
         cls.runModule(
             "r.mapcalc",
             expression=f"{cls.references[2]}=null()",
-            quiet=True,
         )
         cls.runModule(
             "r.mapcalc",
             expression=f"{cls.classifications[2]}=null()",
-            quiet=True,
         )
         cls.expected_outputs.append(
             {
@@ -425,12 +413,10 @@ class JSONOutputTest(TestCase):
         cls.runModule(
             "r.mapcalc",
             expression=f"{cls.references[3]}=1",
-            quiet=True,
         )
         cls.runModule(
             "r.mapcalc",
             expression=f"{cls.classifications[3]}=null()",
-            quiet=True,
         )
         cls.expected_outputs.append(
             {
@@ -481,7 +467,6 @@ class JSONOutputTest(TestCase):
                 classification=self.classifications[i],
                 output=f.name,
                 format="json",
-                quiet=True,
                 overwrite=True,
             )
             json_out = json.loads(f.read())
