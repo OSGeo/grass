@@ -4,7 +4,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-void prn2csv_error_mat(int hdr)
+void print2csv_error_mat(int hdr)
 {
     int j;
 

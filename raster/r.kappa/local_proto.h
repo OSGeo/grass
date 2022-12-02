@@ -1,23 +1,23 @@
-/* prt_kappa.c */
-void prt_kappa(void);
+/* print_kappa.c */
+void print_kappa(void);
 
 /* mask.c */
 char *maskinfo(void);
 
-/* prt_hdr.c */
-void prn_header(void);
+/* print_hdr.c */
+void print_header(void);
 
-/* prt_label.c */
-void prt_label(void);
+/* print_label.c */
+void print_label(void);
 
-/* prt_mat.c */
-void prn_error_mat(int out_cols, int hdr);
+/* print_mat.c */
+void print_error_mat(int out_cols, int hdr);
 
-/* prt2csv_mat.c */
-void prn2csv_error_mat(int hdr);
+/* print2csv_mat.c */
+void print2csv_error_mat(int hdr);
 
-/* prt_json.c */
-void prn_json(void);
+/* print_json.c */
+void print_json(void);
 
 /* stats.c */
 int stats(void);

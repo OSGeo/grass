@@ -4,7 +4,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-void prn_json()
+void print_json()
 {
     bool first;
     FILE *fd;

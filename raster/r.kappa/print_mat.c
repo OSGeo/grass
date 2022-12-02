@@ -4,7 +4,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-void prn_error_mat(int out_cols, int hdr)
+void print_error_mat(int out_cols, int hdr)
 {
     int num_panels, at_panel;
     int cndx, rndx;

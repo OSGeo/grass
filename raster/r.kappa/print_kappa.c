@@ -4,7 +4,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-void prt_kappa(void)
+void print_kappa(void)
 {
     int i;
     FILE *fd;
@@ -51,5 +51,5 @@ void prt_kappa(void)
         fclose(fd);
 
     /* print labels for categories of maps */
-    prt_label();
+    print_label();
 }

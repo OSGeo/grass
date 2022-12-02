@@ -3,7 +3,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-void prt_label(void)
+void print_label(void)
 {
     int i, j;
     long *cats;

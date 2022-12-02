@@ -4,7 +4,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-void prn_header(void)
+void print_header(void)
 {
     int i, len;
     char buf[1024], *titles, *label;

@@ -152,21 +152,21 @@ int main(int argc, char **argv)
     calc_metrics();
 
     if (strcmp(parms.format->answer, "json") == 0) {
-        prn_json();
+        print_json();
     }
     else if (flags.m->answer) {
-        prn2csv_error_mat(flags.h->answer);
+        print2csv_error_mat(flags.h->answer);
     }
     else {
         /* print header of the output */
         if (!flags.h->answer)
-            prn_header();
+            print_header();
 
         /* prepare the data for calculation */
-        prn_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
+        print_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
 
         /* generate the error matrix, kappa and variance */
-        prt_kappa();
+        print_kappa();
     }
     return EXIT_SUCCESS;
 }
