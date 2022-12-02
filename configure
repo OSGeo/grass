@@ -10222,11 +10222,12 @@ ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$PNGLIB $LDFLAGS"
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for png_read_image in -lpng" >&5
-$as_echo_n "checking for png_read_image in -lpng... " >&6; }
+as_ac_Lib=`$as_echo "ac_cv_lib_png$PNGVER''_png_read_image" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for png_read_image in -lpng$PNGVER" >&5
+$as_echo_n "checking for png_read_image in -lpng$PNGVER... " >&6; }
 
 ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpng $ZLIB $MATHLIB $LIBS"
+LIBS="-lpng$PNGVER $ZLIB $MATHLIB $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -10246,17 +10247,18 @@ return png_read_image ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_png_png_read_image=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_png_png_read_image=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png_png_read_image" >&5
-$as_echo "$ac_cv_lib_png_png_read_image" >&6; }
-if test "x$ac_cv_lib_png_png_read_image" = xyes; then :
-  PNGLIB="$PNGLIB -lpng $ZLIB $MATHLIB"
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+  PNGLIB="$PNGLIB -lpng$PNGVER $ZLIB $MATHLIB"
 else
 
 LDFLAGS=${ac_save_ldflags}
