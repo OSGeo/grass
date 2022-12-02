@@ -16,9 +16,10 @@ counts and percentage of overall correctly classified
 pixels are tabulated.
 
 <p>
-The report will be write to an output file which is in
+The report will be written to an output file which is in
 plain text format and named by user at prompt of running
-the program.
+the program. To obtain machine readable version, specify a
+<em>json</em> output format.
 
 <p>
 The body of the report is arranged in panels.  The
@@ -33,10 +34,6 @@ axis, i.e., the reference map layer,  are included in each
 panel.  There is a total at the bottom of each column
 representing the sum of all the rows in that column.
 
-<p>
-It is possible to obtain all data in a machine readable format
-by enabling JSON output flag. JSON keys directly match variable
-names in the C code for convenience.
 
 <h2>NOTES</h2>
 
@@ -49,9 +46,9 @@ information for each and every category.
 <p>
 <em>NA</em>'s in output mean it was not possible to calculate the value
 (e.g. calculation would involve division by zero).
-In JSON output <em>NA</em>'s are represented with value -999.
+In JSON output <em>NA</em>'s are represented with value -999.0.
 If there is no overlap between both maps, a warning is printed and
-output values are set to 0 or -999 respectively.
+output values are set to 0 or -999.0 respectively.
 
 <p>
 The <b>Estimated kappa value</b> in <em>r.kappa</em> is the value

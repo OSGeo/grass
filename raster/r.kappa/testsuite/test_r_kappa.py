@@ -344,9 +344,9 @@ class JSONOutputTest(TestCase):
                     [0, 0, 0, 0, 1, 0],
                     [0, 2, 0, 0, 0, 2],
                 ],
-                "prod_acc": [57.1429, 0.0, 100.0, -999, 100.0, 66.66666],
-                "user_acc": [100.0, -999, 80.0, 0.0, 100.0, 50.0],
-                "cond_kappa": [1.0, -999, 0.742857, 0.0, 1.0, 0.400],
+                "prod_acc": [57.1429, 0.0, 100.0, -999.0, 100.0, 66.66666],
+                "user_acc": [100.0, -999.0, 80.0, 0.0, 100.0, 50.0],
+                "cond_kappa": [1.0, -999.0, 0.742857, 0.0, 1.0, 0.400],
             }
         )
 
@@ -383,9 +383,9 @@ class JSONOutputTest(TestCase):
                     [0, 0, 0, 0, 0, 0],
                     [8, 8, 4, 1, 4, 0],
                 ],
-                "prod_acc": [0.0, 0.0, 0.0, 0.0, 0.0, -999],
-                "user_acc": [-999, -999, -999, -999, -999, 0.0],
-                "cond_kappa": [-999, -999, -999, -999, -999, 0.0],
+                "prod_acc": [0.0, 0.0, 0.0, 0.0, 0.0, -999.0],
+                "user_acc": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
+                "cond_kappa": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
             }
         )
 
@@ -464,7 +464,7 @@ class JSONOutputTest(TestCase):
                 "r.kappa",
                 reference=self.refs[i],
                 classification=self.clas[i],
-                flags="j",
+                format="json",
                 quiet=True,
             )
             json_out = json.loads(decode(out))
@@ -478,7 +478,7 @@ class JSONOutputTest(TestCase):
                 reference=self.refs[i],
                 classification=self.clas[i],
                 output=f.name,
-                flags="j",
+                format="json",
                 quiet=True,
                 overwrite=True,
             )

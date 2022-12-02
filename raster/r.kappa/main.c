@@ -56,12 +56,12 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-        struct Option *map, *ref, *output, *titles;
+        struct Option *map, *ref, *output, *titles, *format;
     } parms;
 
     struct
     {
-        struct Flag *m, *w, *h, *j;
+        struct Flag *m, *w, *h;
     } flags;
 
     G_gisinit(argv[0]);
@@ -99,6 +99,17 @@ int main(int argc, char **argv)
     parms.titles->answer = "ACCURACY ASSESSMENT";
     parms.titles->guisection = _("Output settings");
 
+    parms.format = G_define_option();
+    parms.format->key = "format";
+    parms.format->type = TYPE_STRING;
+    parms.format->required = YES;
+    parms.format->label = _("Output format");
+    parms.format->options = "plain,json";
+    parms.format->descriptions =
+        "plain;Plain text output;" "json;JSON (JavaScript Object Notation);";
+    parms.format->answer = "plain";
+    parms.format->guisection = _("Output settings");
+
     flags.w = G_define_flag();
     flags.w->key = 'w';
     flags.w->label = _("Wide report");
@@ -115,17 +126,12 @@ int main(int argc, char **argv)
     flags.m->description = _("Print Matrix only");
     flags.m->guisection = _("Output settings");
 
-    flags.j = G_define_flag();
-    flags.j->key = 'j';
-    flags.j->description = _("Print in JSON");
-    flags.j->guisection = _("Output settings");
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (flags.j->answer &&
+    if (strcmp(parms.format->answer, "json") == 0 &&
         (flags.m->answer || flags.h->answer || flags.w->answer))
-        G_warning(_("When JSON output flag is set, all other formatting flags are ignored"));
+        G_warning(_("When JSON output format is requested, all formatting flags are ignored"));
 
     G_get_window(&window);
 
@@ -143,7 +149,7 @@ int main(int argc, char **argv)
     /* calculate metrics from stats */
     calc_metrics();
 
-    if (flags.j->answer) {
+    if (strcmp(parms.format->answer, "json") == 0) {
         prn_json();
     }
     else if (flags.m->answer) {
