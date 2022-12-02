@@ -3,7 +3,6 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
 void prt_label(void)
 {
     int i, j;
@@ -22,7 +21,7 @@ void prt_label(void)
         fprintf(fd, "MAP%-d Category Description\n", i + 1);
         for (j = 0; j < ncat; j++) {
             cats = rlst;
-            cl = Rast_get_c_cat((CELL *) & (cats[j]), &(layers[i].labels));
+            cl = Rast_get_c_cat((CELL *)&(cats[j]), &(layers[i].labels));
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)

@@ -4,15 +4,15 @@
  * MODULE:       r.kappa
  * AUTHOR(S):    Tao Wen, UIUC (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Maris Nartiss <maris.gis gmail.com>
  * PURPOSE:      tabulates the error matrix of classification result by
- *               crossing classified map layer with respect to reference map 
+ *               crossing classified map layer with respect to reference map
  *               layer
  * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
@@ -106,8 +106,8 @@ int main(int argc, char **argv)
     parms.format->required = YES;
     parms.format->label = _("Output format");
     parms.format->options = "plain,json";
-    parms.format->descriptions =
-        "plain;Plain text output;" "json;JSON (JavaScript Object Notation);";
+    parms.format->descriptions = "plain;Plain text output;"
+                                 "json;JSON (JavaScript Object Notation);";
     parms.format->answer = "plain";
     parms.format->guisection = _("Output settings");
 
@@ -132,7 +132,8 @@ int main(int argc, char **argv)
 
     if (strcmp(parms.format->answer, "json") == 0 &&
         (flags.m->answer || flags.h->answer || flags.w->answer))
-        G_warning(_("When JSON output format is requested, all formatting flags are ignored"));
+        G_warning(_("When JSON output format is requested, all formatting "
+                    "flags are ignored"));
 
     G_get_window(&window);
 
@@ -170,7 +171,6 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-
 static void layer(const char *s)
 {
     char name[GNAME_MAX];
@@ -182,7 +182,7 @@ static void layer(const char *s)
         G_fatal_error(_("Raster map <%s> not found"), s);
 
     n = nlayers++;
-    layers = (LAYER *) G_realloc(layers, 2 * sizeof(LAYER));
+    layers = (LAYER *)G_realloc(layers, 2 * sizeof(LAYER));
     layers[n].name = G_store(name);
     layers[n].mapset = mapset;
     Rast_read_cats(name, mapset, &layers[n].labels);

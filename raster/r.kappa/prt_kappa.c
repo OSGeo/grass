@@ -4,7 +4,6 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
 void prt_kappa(void)
 {
     int i;
@@ -13,8 +12,9 @@ void prt_kappa(void)
     if (output == NULL)
         fd = stdout;
     else if ((fd = fopen(output, "a")) == NULL)
-        G_fatal_error(_("Cannot open file <%s> to write kappa and relevant parameters"),
-                      output);
+        G_fatal_error(
+            _("Cannot open file <%s> to write kappa and relevant parameters"),
+            output);
 
     /* print out the comission and omission accuracy, and conditional kappa */
     fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");

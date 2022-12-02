@@ -4,7 +4,6 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
 void prn2csv_error_mat(int hdr)
 {
     int j;
@@ -27,8 +26,9 @@ void prn2csv_error_mat(int hdr)
         fd = stdout;
 
     if (fd == NULL)
-        G_fatal_error(_("Cannot open file <%s> to write cats and counts (error matrix)"),
-                      output);
+        G_fatal_error(
+            _("Cannot open file <%s> to write cats and counts (error matrix)"),
+            output);
     else {
         /* format and print out the error matrix in panels */
         first_col = 0;
@@ -40,7 +40,7 @@ void prn2csv_error_mat(int hdr)
         /* print labels MAP1 */
         for (j = 0; j < ncat; j++) {
             cats = rlst;
-            cl = Rast_get_c_cat((CELL *) & (cats[j]), &(layers[0].labels));
+            cl = Rast_get_c_cat((CELL *)&(cats[j]), &(layers[0].labels));
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)
@@ -55,7 +55,7 @@ void prn2csv_error_mat(int hdr)
         /* body of the matrix */
         for (rndx = 0; rndx < ncat; rndx++) {
             cats = rlst;
-            cl = Rast_get_c_cat((CELL *) & (cats[rndx]), &(layers[1].labels));
+            cl = Rast_get_c_cat((CELL *)&(cats[rndx]), &(layers[1].labels));
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)

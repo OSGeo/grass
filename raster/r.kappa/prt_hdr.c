@@ -4,7 +4,6 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
 void prn_header(void)
 {
     int i, len;
@@ -35,8 +34,8 @@ void prn_header(void)
             G_strip(titles);
         if (titles == NULL || *titles == 0)
             titles = "(untitled)";
-        sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label,
-                i + 1, titles, layers[i].name, layers[i].mapset);
+        sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label, i + 1,
+                titles, layers[i].name, layers[i].mapset);
         fprintf(fd, "%s\n", buf);
     }
 

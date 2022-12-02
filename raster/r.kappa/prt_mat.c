@@ -4,7 +4,6 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
 void prn_error_mat(int out_cols, int hdr)
 {
     int num_panels, at_panel;
@@ -27,16 +26,16 @@ void prn_error_mat(int out_cols, int hdr)
         fd = stdout;
 
     if (fd == NULL)
-        G_fatal_error(_("Cannot open file <%s> to write cats and counts (error matrix)"),
-                      output);
+        G_fatal_error(
+            _("Cannot open file <%s> to write cats and counts (error matrix)"),
+            output);
     else {
         /* format and print out the error matrix in panels */
         out_cols = (out_cols == 132) ? 9 : 5;
         num_panels = ncat / out_cols;
         if (ncat % out_cols)
             num_panels++;
-        fprintf(fd,
-                "\nError Matrix (MAP1: reference, MAP2: classification)\n");
+        fprintf(fd, "\nError Matrix (MAP1: reference, MAP2: classification)\n");
 
         for (at_panel = 0; at_panel < num_panels; at_panel++) {
             first_col = at_panel * out_cols;
@@ -44,7 +43,8 @@ void prn_error_mat(int out_cols, int hdr)
             if (last_col >= ncat) {
                 last_col = ncat;
             }
-            /* determine whether room available for row total at the end of last panel */
+            /* determine whether room available for row total at the end of last
+             * panel */
             addflag = 0;
             if (at_panel == (num_panels - 1) &&
                 (last_col - first_col) < (out_cols - 1)) {

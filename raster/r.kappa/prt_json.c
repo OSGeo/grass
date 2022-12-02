@@ -4,7 +4,6 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
 void prn_json()
 {
     bool first;
@@ -16,16 +15,14 @@ void prn_json()
         fd = stdout;
 
     if (fd == NULL)
-        G_fatal_error(_("Cannot open file <%s> to write JSON output"),
-                      output);
+        G_fatal_error(_("Cannot open file <%s> to write JSON output"), output);
 
     fprintf(fd, "{\n");
     fprintf(fd, "    \"reference\": \"%s\",\n", maps[0]);
     fprintf(fd, "    \"classification\": \"%s\",\n", maps[1]);
     fprintf(fd, "    \"observations\": %ld,\n", metrics->observations);
     fprintf(fd, "    \"correct\": %ld,\n", metrics->correct);
-    fprintf(fd, "    \"overall_accuracy\": %.5f,\n",
-            metrics->overall_accuracy);
+    fprintf(fd, "    \"overall_accuracy\": %.5f,\n", metrics->overall_accuracy);
     fprintf(fd, "    \"kappa\": %.5f,\n", metrics->kappa);
     fprintf(fd, "    \"kappa_variance\": %.5f,\n", metrics->kappa_variance);
     fprintf(fd, "    \"cats\": [");

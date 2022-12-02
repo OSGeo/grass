@@ -7,7 +7,6 @@
 static int longcomp(const void *aa, const void *bb);
 static int collapse(long *l, int n);
 
-
 void calc_metrics(void)
 {
     int i, j, k;
@@ -20,9 +19,10 @@ void calc_metrics(void)
     double inter1 = 0.0, inter2 = 0.0;
     int a_i = 0, b_i = 0;
 
-    metrics = (METRICS *) G_malloc(sizeof(METRICS));
+    metrics = (METRICS *)G_malloc(sizeof(METRICS));
     if (nstats == 0) {
-        G_warning(_("Both maps have nothing in common. Check the computational region."));
+        G_warning(_("Both maps have nothing in common. Check the computational "
+                    "region."));
         metrics->observations = 0;
         metrics->correct = 0;
         metrics->overall_accuracy = 0.0;
@@ -47,7 +47,8 @@ void calc_metrics(void)
     ncat1 = collapse(rlst, nstats);
     ncat2 = collapse(clst, nstats);
 
-    /* copy clst to the end of rlst, remove repeated cats, and free unused memory */
+    /* copy clst to the end of rlst, remove repeated cats, and free unused
+     * memory */
     for (i = 0; i < ncat2; i++)
         rlst[ncat1 + i] = clst[i];
     qsort(rlst, ncat1 + ncat2, sizeof(long), longcomp);
@@ -125,8 +126,7 @@ void calc_metrics(void)
         metrics->correct += pii[i];
     }
 
-    metrics->overall_accuracy =
-        100. * metrics->correct / metrics->observations;
+    metrics->overall_accuracy = 100. * metrics->correct / metrics->observations;
 
     /* turn observations into probabilities */
     for (i = 0; i < ncat; i++) {
@@ -170,21 +170,18 @@ void calc_metrics(void)
                 if (Gstats[l].cats[1] == rlst[i])
                     b_i = i;
             }
-            inter2 +=
-                Gstats[l].count * pow((pi[a_i] + pj[b_i]),
-                                      2.) / metrics->observations;
+            inter2 += Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) /
+                      metrics->observations;
         }
     }
     metrics->kappa_variance = (inter1 + pow((1 - p0), 2.) * inter2 -
-                               pow((p0 * pC - 2 * pC + p0),
-                                   2.)) / pow((1 - pC),
-                                              4.) / metrics->observations;
+                               pow((p0 * pC - 2 * pC + p0), 2.)) /
+                              pow((1 - pC), 4.) / metrics->observations;
 
     G_free(pi);
     G_free(pj);
     G_free(pii);
 };
-
 
 /* remove repeated values */
 static int collapse(long *l, int n)
@@ -205,7 +202,6 @@ static int collapse(long *l, int n)
 
     return m;
 }
-
 
 static int longcomp(const void *aa, const void *bb)
 {
