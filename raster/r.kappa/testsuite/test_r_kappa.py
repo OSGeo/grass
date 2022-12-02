@@ -307,29 +307,29 @@ class JSONOutputTest(TestCase):
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
 
         cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
-        cls.refs = []
-        cls.clas = []
-        cls.outp = []
+        cls.references = []
+        cls.classifications = []
+        cls.expected_outputs = []
         # Normal case
-        cls.refs.append(tempname(10))
+        cls.references.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_1.ascii"),
-            output=cls.refs[0],
+            output=cls.references[0],
             quiet=True,
         )
-        cls.clas.append(tempname(10))
+        cls.classifications.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_1.ascii"),
-            output=cls.clas[0],
+            output=cls.classifications[0],
             quiet=True,
         )
 
-        cls.outp.append(
+        cls.expected_outputs.append(
             {
-                "map1": cls.refs[0],
-                "map2": cls.clas[0],
+                "map1": cls.references[0],
+                "map2": cls.classifications[0],
                 "observations": 18,
                 "correct": 11,
                 "total_acc": 61.111111,
@@ -351,24 +351,24 @@ class JSONOutputTest(TestCase):
         )
 
         # Bad case with no correct matches
-        cls.refs.append(tempname(10))
+        cls.references.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_2.ascii"),
-            output=cls.refs[1],
+            output=cls.references[1],
             quiet=True,
         )
-        cls.clas.append(tempname(10))
+        cls.classifications.append(tempname(10))
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_2.ascii"),
-            output=cls.clas[1],
+            output=cls.classifications[1],
             quiet=True,
         )
-        cls.outp.append(
+        cls.expected_outputs.append(
             {
-                "map1": cls.refs[1],
-                "map2": cls.clas[1],
+                "map1": cls.references[1],
+                "map2": cls.classifications[1],
                 "observations": 25,
                 "correct": 0,
                 "total_acc": 0.0,
@@ -390,22 +390,22 @@ class JSONOutputTest(TestCase):
         )
 
         # Degenerate case #1
-        cls.refs.append(tempname(10))
-        cls.clas.append(tempname(10))
+        cls.references.append(tempname(10))
+        cls.classifications.append(tempname(10))
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.refs[2]}=null()",
+            expression=f"{cls.references[2]}=null()",
             quiet=True,
         )
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.clas[2]}=null()",
+            expression=f"{cls.classifications[2]}=null()",
             quiet=True,
         )
-        cls.outp.append(
+        cls.expected_outputs.append(
             {
-                "map1": cls.refs[2],
-                "map2": cls.clas[2],
+                "map1": cls.references[2],
+                "map2": cls.classifications[2],
                 "observations": 0,
                 "correct": 0,
                 "total_acc": 0.0,
@@ -420,22 +420,22 @@ class JSONOutputTest(TestCase):
         )
 
         # Degenerate case #2
-        cls.refs.append(tempname(10))
-        cls.clas.append(tempname(10))
+        cls.references.append(tempname(10))
+        cls.classifications.append(tempname(10))
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.refs[3]}=1",
+            expression=f"{cls.references[3]}=1",
             quiet=True,
         )
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.clas[3]}=null()",
+            expression=f"{cls.classifications[3]}=null()",
             quiet=True,
         )
-        cls.outp.append(
+        cls.expected_outputs.append(
             {
-                "map1": cls.refs[3],
-                "map2": cls.clas[3],
+                "map1": cls.references[3],
+                "map2": cls.classifications[3],
                 "observations": 0,
                 "correct": 0,
                 "total_acc": 0.0,
@@ -453,37 +453,41 @@ class JSONOutputTest(TestCase):
     def tearDownClass(cls):
         """Remove temporary data"""
         cls.del_temp_region()
-        for ref in cls.refs:
-            cls.runModule("g.remove", flags="f", type="raster", name=ref)
-        for clas in cls.clas:
-            cls.runModule("g.remove", flags="f", type="raster", name=clas)
+        for reference in cls.references:
+            cls.runModule("g.remove", flags="f", type="raster", name=reference)
+        for classification in cls.classifications:
+            cls.runModule("g.remove", flags="f", type="raster", name=classification)
 
     def test_stdout(self):
-        for i in range(len(self.refs)):
+        for i in range(len(self.references)):
             out = read_command(
                 "r.kappa",
-                reference=self.refs[i],
-                classification=self.clas[i],
+                reference=self.references[i],
+                classification=self.classifications[i],
                 format="json",
                 quiet=True,
             )
             json_out = json.loads(decode(out))
-            self.assertTrue(keyvalue_equals(self.outp[i], json_out, precision=4))
+            self.assertTrue(
+                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+            )
 
     def test_file(self):
-        for i in range(len(self.refs)):
+        for i in range(len(self.references)):
             f = NamedTemporaryFile()
             self.runModule(
                 "r.kappa",
-                reference=self.refs[i],
-                classification=self.clas[i],
+                reference=self.references[i],
+                classification=self.classifications[i],
                 output=f.name,
                 format="json",
                 quiet=True,
                 overwrite=True,
             )
             json_out = json.loads(f.read())
-            self.assertTrue(keyvalue_equals(self.outp[i], json_out, precision=4))
+            self.assertTrue(
+                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+            )
 
 
 if __name__ == "__main__":
