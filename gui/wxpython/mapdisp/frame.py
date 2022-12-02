@@ -84,7 +84,6 @@ class MapFrame(wx.Frame):
         self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
 
 
-
 class MapPanel(SingleMapPanel):
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
