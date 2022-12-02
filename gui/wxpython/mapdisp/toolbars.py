@@ -254,8 +254,8 @@ class MapToolbar(BaseToolbar):
                     ("mapDispDocking", BaseIcons["mapDispDocking"].label),
                     BaseIcons["mapDispDocking"],
                     self.parent.OnDockUndock,
-                    wx.ITEM_CHECK
-                )
+                    wx.ITEM_CHECK,
+                ),
             )
         )
 
