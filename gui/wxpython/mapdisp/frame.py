@@ -82,8 +82,7 @@ class MapFrame(wx.Frame):
     def OnClose(self, event):
         """Close frame and associated layer notebook page."""
         self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
-        self.Destroy()
-        event.Veto()
+
 
 
 class MapPanel(SingleMapPanel):
@@ -1019,6 +1018,8 @@ class MapPanel(SingleMapPanel):
                         self.closingDisplay.emit(
                             pgnum_dict=pgnum_dict, is_docked=self.docked
                         )
+                        if self.docked is False:
+                            self.GetParent().Destroy()
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()

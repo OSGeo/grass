@@ -494,7 +494,7 @@ class GMFrame(wx.Frame):
             """Callback to check if user wants to close display. Map
             Display index can be different from index in Display tab.
 
-             :return dict/None pgnum_dict/None: dict "layers" key represent
+            :return dict/None pgnum_dict/None: dict "layers" key represent
                                                map display notebook layers
                                                tree page index and
                                                "mapnotebook" key represent
