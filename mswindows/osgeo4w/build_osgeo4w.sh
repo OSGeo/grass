@@ -103,12 +103,12 @@ dist_esc="$src_esc\\\\$dist"
 
 set PATH=%PATH%;C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin
 
-if not exist %GISBASE%\etc\fontcap (
+if not exist %GISBASE%\\etc\\fontcap (
 	pushd .
 	%~d0
-	cd %GISBASE%\lib
+	cd %GISBASE%\\lib
 	set GISRC=dummy
-	%GISBASE%\bin\g.mkfontcap.exe
+	%GISBASE%\\bin\\g.mkfontcap.exe
 	popd
 )
 EOT
@@ -146,12 +146,12 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
 
 set PATH=%OSGEO4W_ROOT%\\bin${msys_path};%PATH%;$bash_exe_path
 
-if not exist %GISBASE%\etc\fontcap (
+if not exist %GISBASE%\\etc\\fontcap (
 	pushd .
 	%~d0
-	cd %GISBASE%\lib
+	cd %GISBASE%\\lib
 	set GISRC=dummy
-	%GISBASE%\bin\g.mkfontcap.exe
+	%GISBASE%\\bin\\g.mkfontcap.exe
 	popd
 )
 EOT
