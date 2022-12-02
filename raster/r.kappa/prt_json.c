@@ -15,11 +15,9 @@ void prn_json()
     else
         fd = stdout;
 
-    if (fd == NULL) {
+    if (fd == NULL)
         G_fatal_error(_("Cannot open file <%s> to write JSON output"),
                       output);
-        return;
-    }
 
     fprintf(fd, "{\n");
     fprintf(fd, "    \"map1\": \"%s\",\n", maps[0]);

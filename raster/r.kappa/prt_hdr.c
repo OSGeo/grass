@@ -14,10 +14,8 @@ void prn_header(void)
 
     if (output == NULL)
         fd = stdout;
-    else if ((fd = fopen(output, "w")) == NULL) {
+    else if ((fd = fopen(output, "w")) == NULL)
         G_fatal_error(_("Cannot open file <%s> to write header"), output);
-        return;
-    }
 
     /* print header */
     fprintf(fd, "\t\t\t%s\n", title);

@@ -26,11 +26,9 @@ void prn_error_mat(int out_cols, int hdr)
     else
         fd = stdout;
 
-    if (fd == NULL) {
+    if (fd == NULL)
         G_fatal_error(_("Cannot open file <%s> to write cats and counts (error matrix)"),
                       output);
-        return;
-    }
     else {
         /* format and print out the error matrix in panels */
         out_cols = (out_cols == 132) ? 9 : 5;

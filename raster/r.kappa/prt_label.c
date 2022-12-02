@@ -13,10 +13,8 @@ void prt_label(void)
 
     if (output == NULL)
         fd = stdout;
-    else if ((fd = fopen(output, "a")) == NULL) {
+    else if ((fd = fopen(output, "a")) == NULL)
         G_fatal_error(_("Can't open file <%s> to write label"), output);
-        return;
-    }
 
     /* print labels */
     for (i = 0; i < nlayers; i++) {

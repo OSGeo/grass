@@ -26,11 +26,9 @@ void prn2csv_error_mat(int hdr)
     else
         fd = stdout;
 
-    if (fd == NULL) {
+    if (fd == NULL)
         G_fatal_error(_("Cannot open file <%s> to write cats and counts (error matrix)"),
                       output);
-        return;
-    }
     else {
         /* format and print out the error matrix in panels */
         first_col = 0;
