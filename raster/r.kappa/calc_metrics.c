@@ -11,20 +11,21 @@ static int collapse(long *l, int n);
 void calc_metrics(void)
 {
     int i, j, k;
+    size_t l;
     long *clst;
     int ncat1, ncat2;
     int cndx;
     double *pi, *pj, *pii;
-    double p0 = 0, pC = 0;
-    double inter1 = 0, inter2 = 0;
-    int a_i, b_i;
+    double p0 = 0.0, pC = 0.0;
+    double inter1 = 0.0, inter2 = 0.0;
+    int a_i = 0, b_i = 0;
 
     metrics = (METRICS *) G_malloc(sizeof(METRICS));
     if (nstats == 0) {
         G_warning(_("Both maps have nothing in common. Check the computational region."));
         metrics->obs = 0;
         metrics->correct = 0;
-        metrics->total_acc = 0;
+        metrics->total_acc = 0.0;
         metrics->kappa = na_value;
         metrics->kappa_var = na_value;
         return;
@@ -33,9 +34,9 @@ void calc_metrics(void)
     /* get the cat lists */
     rlst = (long *)G_calloc(nstats * 2, sizeof(long));
     clst = (long *)G_calloc(nstats, sizeof(long));
-    for (i = 0; i < nstats; i++) {
-        rlst[i] = Gstats[i].cats[0];
-        clst[i] = Gstats[i].cats[1];
+    for (l = 0; l < nstats; l++) {
+        rlst[l] = Gstats[l].cats[0];
+        clst[l] = Gstats[l].cats[1];
     }
 
     /* sort the cat lists */
@@ -58,15 +59,15 @@ void calc_metrics(void)
     metrics->matrix = (long *)G_malloc((size_t)ncat * ncat * sizeof(long));
     for (i = 0; i < ncat * ncat; i++)
         metrics->matrix[i] = 0;
-    for (i = 0; i < nstats; i++) {
+    for (l = 0; l < nstats; l++) {
         for (j = 0; j < ncat; j++)
-            if (rlst[j] == Gstats[i].cats[0])
+            if (rlst[j] == Gstats[l].cats[0])
                 break;
         for (k = 0; k < ncat; k++)
-            if (rlst[k] == Gstats[i].cats[1])
+            if (rlst[k] == Gstats[l].cats[1])
                 break;
         /* matrix: reference in columns, classification in rows */
-        metrics->matrix[j * ncat + k] = Gstats[i].count;
+        metrics->matrix[j * ncat + k] = Gstats[l].count;
     }
 
     /* Calculate marginals */
@@ -89,7 +90,7 @@ void calc_metrics(void)
         metrics->rowsum[cndx] = t_row;
     }
     if (metrics->obs == 0) {
-        metrics->total_acc = 0;
+        metrics->total_acc = 0.0;
         metrics->kappa = na_value;
         metrics->kappa_var = na_value;
         return;
@@ -104,18 +105,18 @@ void calc_metrics(void)
     metrics->prod_acc = (double *)G_calloc(ncat, sizeof(double));
 
     for (i = 0; i < ncat; i++) {
-        for (j = 0; j < nstats; j++) {
-            if (Gstats[j].cats[0] == rlst[i]) {
-                pi[i] += Gstats[j].count;
+        for (l = 0; l < nstats; l++) {
+            if (Gstats[l].cats[0] == rlst[i]) {
+                pi[i] += Gstats[l].count;
             }
 
-            if (Gstats[j].cats[1] == rlst[i]) {
-                pj[i] += Gstats[j].count;
+            if (Gstats[l].cats[1] == rlst[i]) {
+                pj[i] += Gstats[l].count;
             }
 
-            if ((Gstats[j].cats[0] == Gstats[j].cats[1]) &&
-                (Gstats[j].cats[0] == rlst[i])) {
-                pii[i] += Gstats[j].count;
+            if ((Gstats[l].cats[0] == Gstats[l].cats[1]) &&
+                (Gstats[l].cats[0] == rlst[i])) {
+                pii[i] += Gstats[l].count;
             }
         }
         metrics->correct += pii[i];
@@ -157,16 +158,16 @@ void calc_metrics(void)
     }
 
     /* kappa variance */
-    for (j = 0; j < nstats; j++) {
-        if (Gstats[j].cats[0] != Gstats[j].cats[1]) {
+    for (l = 0; l < nstats; l++) {
+        if (Gstats[l].cats[0] != Gstats[l].cats[1]) {
             for (i = 0; i < ncat; i++) {
-                if (Gstats[j].cats[0] == rlst[i])
+                if (Gstats[l].cats[0] == rlst[i])
                     a_i = i;
-                if (Gstats[j].cats[1] == rlst[i])
+                if (Gstats[l].cats[1] == rlst[i])
                     b_i = i;
             }
             inter2 +=
-                Gstats[j].count * pow((pi[a_i] + pj[b_i]), 2.) / metrics->obs;
+                Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) / metrics->obs;
         }
     }
     metrics->kappa_var = (inter1 + pow((1 - p0), 2.) * inter2 -
