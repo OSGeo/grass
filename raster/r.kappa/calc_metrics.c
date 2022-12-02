@@ -25,8 +25,8 @@ void calc_metrics(void)
         metrics->obs = 0;
         metrics->correct = 0;
         metrics->total_acc = 0;
-        metrics->kappa = -999;
-        metrics->kappa_var = -999;
+        metrics->kappa = na_value;
+        metrics->kappa_var = na_value;
         return;
     }
 
@@ -90,8 +90,8 @@ void calc_metrics(void)
     }
     if (metrics->obs == 0) {
         metrics->total_acc = 0;
-        metrics->kappa = -999;
-        metrics->kappa_var = -999;
+        metrics->kappa = na_value;
+        metrics->kappa_var = na_value;
         return;
     }
 
@@ -129,11 +129,11 @@ void calc_metrics(void)
         pj[i] = pj[i] / metrics->obs;
         pii[i] = pii[i] / metrics->obs;
         if (pi[i] == 0)
-            metrics->user_acc[i] = -999;
+            metrics->user_acc[i] = na_value;
         else
             metrics->user_acc[i] = 100 * (pii[i] / pi[i]);
         if (pj[i] == 0)
-            metrics->prod_acc[i] = -999;
+            metrics->prod_acc[i] = na_value;
         else
             metrics->prod_acc[i] = 100 * (pii[i] / pj[i]);
         /* theta 1 */
@@ -144,12 +144,12 @@ void calc_metrics(void)
     if (pC != 1)
         metrics->kappa = (p0 - pC) / (1 - pC);
     else
-        metrics->kappa = -999;
+        metrics->kappa = na_value;
 
     /* conditional kappa */
     for (i = 0; i < ncat; i++) {
         if (pi[i] == 0 || (pi[i] == 1 && pj[i] == 1))
-            metrics->cond_kappa[i] = -999;
+            metrics->cond_kappa[i] = na_value;
         else
             metrics->cond_kappa[i] =
                 (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);

@@ -20,26 +20,26 @@ void prt_kappa(void)
     fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");
     for (i = 0; i < ncat; i++) {
         fprintf(fd, "%ld\t", rlst[i]);
-        if (metrics->user_acc[i] == -999)
+        if (metrics->user_acc[i] == na_value)
             fprintf(fd, "NA\t\t");
         else
             fprintf(fd, "%f\t", 100 - metrics->user_acc[i]);
-        if (metrics->prod_acc[i] == -999)
+        if (metrics->prod_acc[i] == na_value)
             fprintf(fd, "NA\t\t");
         else
             fprintf(fd, "%f\t", 100 - metrics->prod_acc[i]);
-        if (metrics->cond_kappa[i] == -999)
+        if (metrics->cond_kappa[i] == na_value)
             fprintf(fd, "NA\n");
         else
             fprintf(fd, "%f\n", metrics->cond_kappa[i]);
     }
     fprintf(fd, "\n");
     fprintf(fd, "Kappa\t\tKappa Variance\n");
-    if (metrics->kappa == -999)
+    if (metrics->kappa == na_value)
         fprintf(fd, "NA");
     else
         fprintf(fd, "%f", metrics->kappa);
-    if (metrics->kappa_var == -999)
+    if (metrics->kappa_var == na_value)
         fprintf(fd, "\tNA\n");
     else
         fprintf(fd, "\t%f\n", metrics->kappa_var);

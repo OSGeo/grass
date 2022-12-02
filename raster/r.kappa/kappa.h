@@ -50,3 +50,5 @@ extern size_t nstats;
 
 #define METRICS struct _metrics_
 extern METRICS *metrics;
+
+static const double na_value = -999.0;
