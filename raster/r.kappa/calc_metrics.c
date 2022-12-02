@@ -23,11 +23,11 @@ void calc_metrics(void)
     metrics = (METRICS *) G_malloc(sizeof(METRICS));
     if (nstats == 0) {
         G_warning(_("Both maps have nothing in common. Check the computational region."));
-        metrics->obs = 0;
+        metrics->observations = 0;
         metrics->correct = 0;
-        metrics->total_acc = 0.0;
+        metrics->overall_accuracy = 0.0;
         metrics->kappa = na_value;
-        metrics->kappa_var = na_value;
+        metrics->kappa_variance = na_value;
         return;
     }
 
@@ -71,10 +71,10 @@ void calc_metrics(void)
     }
 
     /* Calculate marginals */
-    metrics->obs = 0;
+    metrics->observations = 0;
     metrics->correct = 0;
-    metrics->colsum = (long *)G_malloc(ncat * sizeof(long));
-    metrics->rowsum = (long *)G_malloc(ncat * sizeof(long));
+    metrics->col_sum = (long *)G_malloc(ncat * sizeof(long));
+    metrics->row_sum = (long *)G_malloc(ncat * sizeof(long));
     for (cndx = 0; cndx < ncat; cndx++) {
         long t_col = 0;
         long t_row = 0;
@@ -85,24 +85,27 @@ void calc_metrics(void)
             x += ncat;
             t_row += metrics->matrix[cndx * ncat + k];
         }
-        metrics->obs += t_row;
-        metrics->colsum[cndx] = t_col;
-        metrics->rowsum[cndx] = t_row;
+        metrics->observations += t_row;
+        metrics->col_sum[cndx] = t_col;
+        metrics->row_sum[cndx] = t_row;
     }
-    if (metrics->obs == 0) {
-        metrics->total_acc = 0.0;
+    if (metrics->observations == 0) {
+        metrics->overall_accuracy = 0.0;
         metrics->kappa = na_value;
-        metrics->kappa_var = na_value;
+        metrics->kappa_variance = na_value;
         return;
     }
 
     /* Calculate kappa values */
+    /* Row sum */
     pi = (double *)G_calloc(ncat, sizeof(double));
+    /* Col sum */
     pj = (double *)G_calloc(ncat, sizeof(double));
+    /* Correct */
     pii = (double *)G_calloc(ncat, sizeof(double));
-    metrics->cond_kappa = (double *)G_calloc(ncat, sizeof(double));
-    metrics->user_acc = (double *)G_calloc(ncat, sizeof(double));
-    metrics->prod_acc = (double *)G_calloc(ncat, sizeof(double));
+    metrics->conditional_kappa = (double *)G_calloc(ncat, sizeof(double));
+    metrics->users_accuracy = (double *)G_calloc(ncat, sizeof(double));
+    metrics->producers_accuracy = (double *)G_calloc(ncat, sizeof(double));
 
     for (i = 0; i < ncat; i++) {
         for (l = 0; l < nstats; l++) {
@@ -122,21 +125,22 @@ void calc_metrics(void)
         metrics->correct += pii[i];
     }
 
-    metrics->total_acc = 100. * metrics->correct / metrics->obs;
+    metrics->overall_accuracy =
+        100. * metrics->correct / metrics->observations;
 
     /* turn observations into probabilities */
     for (i = 0; i < ncat; i++) {
-        pi[i] = pi[i] / metrics->obs;
-        pj[i] = pj[i] / metrics->obs;
-        pii[i] = pii[i] / metrics->obs;
+        pi[i] = pi[i] / metrics->observations;
+        pj[i] = pj[i] / metrics->observations;
+        pii[i] = pii[i] / metrics->observations;
         if (pi[i] == 0)
-            metrics->user_acc[i] = na_value;
+            metrics->users_accuracy[i] = na_value;
         else
-            metrics->user_acc[i] = 100 * (pii[i] / pi[i]);
+            metrics->users_accuracy[i] = 100 * (pii[i] / pi[i]);
         if (pj[i] == 0)
-            metrics->prod_acc[i] = na_value;
+            metrics->producers_accuracy[i] = na_value;
         else
-            metrics->prod_acc[i] = 100 * (pii[i] / pj[i]);
+            metrics->producers_accuracy[i] = 100 * (pii[i] / pj[i]);
         /* theta 1 */
         p0 += pii[i];
         /* theta 2 */
@@ -147,12 +151,12 @@ void calc_metrics(void)
     else
         metrics->kappa = na_value;
 
-    /* conditional kappa */
+    /* conditional user's kappa */
     for (i = 0; i < ncat; i++) {
         if (pi[i] == 0 || (pi[i] == 1 && pj[i] == 1))
-            metrics->cond_kappa[i] = na_value;
+            metrics->conditional_kappa[i] = na_value;
         else
-            metrics->cond_kappa[i] =
+            metrics->conditional_kappa[i] =
                 (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
         inter1 += pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.);
     }
@@ -167,13 +171,14 @@ void calc_metrics(void)
                     b_i = i;
             }
             inter2 +=
-                Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) / metrics->obs;
+                Gstats[l].count * pow((pi[a_i] + pj[b_i]),
+                                      2.) / metrics->observations;
         }
     }
-    metrics->kappa_var = (inter1 + pow((1 - p0), 2.) * inter2 -
-                          pow((p0 * pC - 2 * pC + p0), 2.)) / pow((1 - pC),
-                                                                  4.) /
-        metrics->obs;
+    metrics->kappa_variance = (inter1 + pow((1 - p0), 2.) * inter2 -
+                               pow((p0 * pC - 2 * pC + p0),
+                                   2.)) / pow((1 - pC),
+                                              4.) / metrics->observations;
 
     G_free(pi);
     G_free(pj);

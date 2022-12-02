@@ -75,18 +75,18 @@ void prn_error_mat(int out_cols, int hdr)
                 }
                 /* row marginal summation */
                 if (addflag) {
-                    fprintf(fd, "%ld", metrics->rowsum[rndx]);
+                    fprintf(fd, "%ld", metrics->row_sum[rndx]);
                 }
                 fprintf(fd, "\n");
             }
             /* column marginal summation */
             fprintf(fd, "Col Sum\t\t");
             for (cndx = first_col; cndx < last_col; cndx++) {
-                fprintf(fd, "%ld\t", metrics->colsum[cndx]);
+                fprintf(fd, "%ld\t", metrics->col_sum[cndx]);
             }
             /* grand total */
             if (addflag)
-                fprintf(fd, "%ld", metrics->obs);
+                fprintf(fd, "%ld", metrics->observations);
             fprintf(fd, "\n\n");
         }
 

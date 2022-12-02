@@ -20,13 +20,14 @@ void prn_json()
                       output);
 
     fprintf(fd, "{\n");
-    fprintf(fd, "    \"map1\": \"%s\",\n", maps[0]);
-    fprintf(fd, "    \"map2\": \"%s\",\n", maps[1]);
-    fprintf(fd, "    \"observations\": %ld,\n", metrics->obs);
+    fprintf(fd, "    \"reference\": \"%s\",\n", maps[0]);
+    fprintf(fd, "    \"classification\": \"%s\",\n", maps[1]);
+    fprintf(fd, "    \"observations\": %ld,\n", metrics->observations);
     fprintf(fd, "    \"correct\": %ld,\n", metrics->correct);
-    fprintf(fd, "    \"total_acc\": %.5f,\n", metrics->total_acc);
+    fprintf(fd, "    \"overall_accuracy\": %.5f,\n",
+            metrics->overall_accuracy);
     fprintf(fd, "    \"kappa\": %.5f,\n", metrics->kappa);
-    fprintf(fd, "    \"kappa_var\": %.5f,\n", metrics->kappa_var);
+    fprintf(fd, "    \"kappa_variance\": %.5f,\n", metrics->kappa_variance);
     fprintf(fd, "    \"cats\": [");
     first = 1;
     for (int i = 0; i < ncat; i++) {
@@ -55,34 +56,54 @@ void prn_json()
         }
     }
     fprintf(fd, "]\n    ],\n");
-    fprintf(fd, "    \"prod_acc\": [");
+    fprintf(fd, "    \"row_sum\": [");
     first = 1;
     for (int i = 0; i < ncat; i++) {
         if (first)
             first = 0;
         else
             fprintf(fd, ", ");
-        fprintf(fd, "%.5f", metrics->prod_acc[i]);
+        fprintf(fd, "%ld", metrics->row_sum[i]);
     }
     fprintf(fd, "],\n");
-    fprintf(fd, "    \"user_acc\": [");
+    fprintf(fd, "    \"col_sum\": [");
     first = 1;
     for (int i = 0; i < ncat; i++) {
         if (first)
             first = 0;
         else
             fprintf(fd, ", ");
-        fprintf(fd, "%.5f", metrics->user_acc[i]);
+        fprintf(fd, "%ld", metrics->col_sum[i]);
     }
     fprintf(fd, "],\n");
-    fprintf(fd, "    \"cond_kappa\": [");
+    fprintf(fd, "    \"producers_accuracy\": [");
     first = 1;
     for (int i = 0; i < ncat; i++) {
         if (first)
             first = 0;
         else
             fprintf(fd, ", ");
-        fprintf(fd, "%.5f", metrics->cond_kappa[i]);
+        fprintf(fd, "%.5f", metrics->producers_accuracy[i]);
+    }
+    fprintf(fd, "],\n");
+    fprintf(fd, "    \"users_accuracy\": [");
+    first = 1;
+    for (int i = 0; i < ncat; i++) {
+        if (first)
+            first = 0;
+        else
+            fprintf(fd, ", ");
+        fprintf(fd, "%.5f", metrics->users_accuracy[i]);
+    }
+    fprintf(fd, "],\n");
+    fprintf(fd, "    \"conditional_kappa\": [");
+    first = 1;
+    for (int i = 0; i < ncat; i++) {
+        if (first)
+            first = 0;
+        else
+            fprintf(fd, ", ");
+        fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
     }
     fprintf(fd, "]\n");
 

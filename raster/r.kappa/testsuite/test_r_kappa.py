@@ -320,13 +320,13 @@ class JSONOutputTest(TestCase):
 
         cls.expected_outputs.append(
             {
-                "map1": cls.references[0],
-                "map2": cls.classifications[0],
+                "reference": cls.references[0],
+                "classification": cls.classifications[0],
                 "observations": 18,
                 "correct": 11,
-                "total_acc": 61.111111,
+                "overall_accuracy": 61.111111,
                 "kappa": 0.52091,
-                "kappa_var": 0.016871,
+                "kappa_variance": 0.016871,
                 "cats": [1, 2, 3, 4, 5, 6],
                 "matrix": [
                     [4, 0, 0, 0, 0, 0],
@@ -336,9 +336,11 @@ class JSONOutputTest(TestCase):
                     [0, 0, 0, 0, 1, 0],
                     [0, 2, 0, 0, 0, 2],
                 ],
-                "prod_acc": [57.1429, 0.0, 100.0, -999.0, 100.0, 66.66666],
-                "user_acc": [100.0, -999.0, 80.0, 0.0, 100.0, 50.0],
-                "cond_kappa": [1.0, -999.0, 0.742857, 0.0, 1.0, 0.400],
+                "row_sum": [4, 0, 5, 4, 1, 4],
+                "col_sum": [7, 3, 4, 0, 1, 3],
+                "producers_accuracy": [57.1429, 0.0, 100.0, -999.0, 100.0, 66.66666],
+                "users_accuracy": [100.0, -999.0, 80.0, 0.0, 100.0, 50.0],
+                "conditional_kappa": [1.0, -999.0, 0.742857, 0.0, 1.0, 0.400],
             }
         )
 
@@ -357,13 +359,13 @@ class JSONOutputTest(TestCase):
         )
         cls.expected_outputs.append(
             {
-                "map1": cls.references[1],
-                "map2": cls.classifications[1],
+                "reference": cls.references[1],
+                "classification": cls.classifications[1],
                 "observations": 25,
                 "correct": 0,
-                "total_acc": 0.0,
+                "overall_accuracy": 0.0,
                 "kappa": 0.0,
-                "kappa_var": 0.0,
+                "kappa_variance": 0.0,
                 "cats": [0, 1, 2, 3, 4, 9],
                 "matrix": [
                     [0, 0, 0, 0, 0, 0],
@@ -373,9 +375,11 @@ class JSONOutputTest(TestCase):
                     [0, 0, 0, 0, 0, 0],
                     [8, 8, 4, 1, 4, 0],
                 ],
-                "prod_acc": [0.0, 0.0, 0.0, 0.0, 0.0, -999.0],
-                "user_acc": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
-                "cond_kappa": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
+                "row_sum": [0, 0, 0, 0, 0, 25],
+                "col_sum": [8, 8, 4, 1, 4, 0],
+                "producers_accuracy": [0.0, 0.0, 0.0, 0.0, 0.0, -999.0],
+                "users_accuracy": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
+                "conditional_kappa": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
             }
         )
 
@@ -392,18 +396,20 @@ class JSONOutputTest(TestCase):
         )
         cls.expected_outputs.append(
             {
-                "map1": cls.references[2],
-                "map2": cls.classifications[2],
+                "reference": cls.references[2],
+                "classification": cls.classifications[2],
                 "observations": 0,
                 "correct": 0,
-                "total_acc": 0.0,
+                "overall_accuracy": 0.0,
                 "kappa": -999.0,
-                "kappa_var": -999.0,
+                "kappa_variance": -999.0,
                 "cats": [],
                 "matrix": [[]],
-                "prod_acc": [],
-                "user_acc": [],
-                "cond_kappa": [],
+                "row_sum": [],
+                "col_sum": [],
+                "producers_accuracy": [],
+                "users_accuracy": [],
+                "conditional_kappa": [],
             }
         )
 
@@ -420,18 +426,20 @@ class JSONOutputTest(TestCase):
         )
         cls.expected_outputs.append(
             {
-                "map1": cls.references[3],
-                "map2": cls.classifications[3],
+                "reference": cls.references[3],
+                "classification": cls.classifications[3],
                 "observations": 0,
                 "correct": 0,
-                "total_acc": 0.0,
+                "overall_accuracy": 0.0,
                 "kappa": -999.0,
-                "kappa_var": -999.0,
+                "kappa_variance": -999.0,
                 "cats": [],
                 "matrix": [[]],
-                "prod_acc": [],
-                "user_acc": [],
-                "cond_kappa": [],
+                "row_sum": [],
+                "col_sum": [],
+                "producers_accuracy": [],
+                "users_accuracy": [],
+                "conditional_kappa": [],
             }
         )
 

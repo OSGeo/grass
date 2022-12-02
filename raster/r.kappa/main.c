@@ -10,10 +10,11 @@
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Jachym Cepicky <jachym les-ejk.cz>, 
  *               Jan-Oliver Wagner <jan intevation.de>
+ *               Maris Nartiss <maris.gis gmail.com>
  * PURPOSE:      tabulates the error matrix of classification result by
  *               crossing classified map layer with respect to reference map 
  *               layer
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS

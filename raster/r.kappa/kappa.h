@@ -17,17 +17,17 @@ struct _layer_
 
 struct _metrics_
 {
-    long obs;
+    long observations;
     long correct;
     long *matrix;
-    long *rowsum;
-    long *colsum;
-    double total_acc;
-    double *prod_acc;
-    double *user_acc;
+    long *row_sum;
+    long *col_sum;
+    double overall_accuracy;
+    double *producers_accuracy;
+    double *users_accuracy;
     double kappa;
-    double kappa_var;
-    double *cond_kappa;
+    double kappa_variance;
+    double *conditional_kappa;
 };
 
 extern struct Cell_head window;

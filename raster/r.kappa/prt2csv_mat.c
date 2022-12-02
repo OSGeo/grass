@@ -68,16 +68,16 @@ void prn2csv_error_mat(int hdr)
                 fprintf(fd, "%ld\t", metrics->matrix[thisone]);
             }
             /* row marginal summation */
-            fprintf(fd, "%ld", metrics->rowsum[rndx]);
+            fprintf(fd, "%ld", metrics->row_sum[rndx]);
             fprintf(fd, "\n");
         }
         /* column marginal summation */
         fprintf(fd, "ColSum\t");
         for (cndx = first_col; cndx < last_col; cndx++) {
-            fprintf(fd, "%ld\t", metrics->colsum[cndx]);
+            fprintf(fd, "%ld\t", metrics->col_sum[cndx]);
         }
         /* grand total */
-        fprintf(fd, "%ld", metrics->obs);
+        fprintf(fd, "%ld", metrics->observations);
         fprintf(fd, "\n\n");
         if (output != NULL)
             fclose(fd);
