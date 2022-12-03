@@ -288,7 +288,6 @@ AC_ARG_WITH(macosx-sdk,
 [  --with-macosx-sdk[=path/sdk]
                           compile with a system SDK on MacOSX. (default: no)],, with_macosx_sdk="no")
 LOC_ARG_WITH(tiff, TIFF)
-LOC_ARG_WITH(png, PNG)
 LOC_ARG_WITH(postgres, PostgreSQL, no)
 LOC_ARG_WITH(mysql, MySQL, no)
 LOC_ARG_WITH(sqlite, SQLite)
@@ -308,6 +307,11 @@ LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
+
+AC_ARG_WITH(libpng,
+[  --with-libpng[=path/libpng-config]
+                          enable PNG support (libpng-config with path,
+                          e.g. '--with-libpng=/usr/local/bin/libpng-config')])
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -360,9 +364,6 @@ LOC_ARG_WITH_LIB(readline, Readline)
 
 LOC_ARG_WITH_INC(tiff, TIFF)
 LOC_ARG_WITH_LIB(tiff, TIFF)
-
-LOC_ARG_WITH_INC(png, PNG)
-LOC_ARG_WITH_LIB(png, PNG)
 
 LOC_ARG_WITH_INC(postgres, PostgreSQL)
 LOC_ARG_WITH_LIB(postgres, PostgreSQL)
@@ -873,6 +874,55 @@ AC_SUBST(HISTORYLIB)
 
 # Done checking Readline
 
+# PNG option
+
+AC_MSG_CHECKING(whether to use PNG)
+
+PNGLIB=
+PNGINC=
+USE_PNG=
+
+if test "`basename xx/$with_libpng`" = "libpng-config" ; then
+  LIBPNG_CONFIG="$with_libpng"
+fi
+
+if test "$with_libpng" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_PATH_PROG(LIBPNG_CONFIG, libpng-config, no)
+
+  if test "$LIBPNG_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find libpng-config])
+  fi
+
+  if test "$LIBPNG_CONFIG" != "" ; then
+    PNGLIB=`"$LIBPNG_CONFIG" --libs`
+    PNGINC=`"$LIBPNG_CONFIG" --cflags`
+    USE_PNG=1
+  fi
+
+  PNG=
+  ac_save_libs="$LIBS"
+  ac_save_cflags="$CFLAGS"
+  LIBS="$LIBS $PNGLIB"
+  CFLAGS="$CFLAGS $PNGINC"
+
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[png_read_image();]])],[],[
+  AC_TRY_LINK([],[png_read_image();],PNGLIB="$PNGLIB",[
+  AC_MSG_ERROR([*** Unable to locate libpng library.])
+  ])
+  ])
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+
+  AC_DEFINE(HAVE_PNG, 1, [define if PNG exists])
+fi
+
+AC_SUBST(PNGLIB)
+AC_SUBST(PNGINC)
+AC_SUBST(USE_PNG)
+
 # GDAL option
 
 AC_MSG_CHECKING(whether to use GDAL)
@@ -1164,35 +1214,6 @@ AC_SUBST(TIFF_LIBRARY_DIRS)
 AC_SUBST(TIFFLIB)
 
 # Done checking TIFF
-
-# Enable PNG option
-
-LOC_CHECK_USE(png,PNG,USE_PNG)
-
-PNGINC=
-PNGLIB=
-
-if test -n "$USE_PNG"; then
-
-# With PNG includes directory
-
-LOC_CHECK_INC_PATH(png,PNG,PNGINC)
-
-LOC_CHECK_INCLUDES(png.h,PNG,$PNGINC)
-
-# With PNG library directory
-
-LOC_CHECK_LIB_PATH(png,PNG,PNGLIB)
-
-LOC_CHECK_LIBS(png$PNGVER,png_read_image,PNG,$PNGLIB,PNGLIB,,$ZLIB $MATHLIB,)
-
-fi # $USE_PNG
-
-AC_SUBST(PNGINC)
-AC_SUBST(PNGLIB)
-AC_SUBST(USE_PNG)
-
-# Done checking PNG
 
 # Enable PostgreSQL option
 
