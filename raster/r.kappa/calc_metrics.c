@@ -6,6 +6,7 @@
 
 static int longcomp(const void *aa, const void *bb);
 static int collapse(long *l, int n);
+static void update_sum(double *sum, double *c, double value);
 
 void calc_metrics(void)
 {
@@ -15,8 +16,8 @@ void calc_metrics(void)
     int ncat1, ncat2;
     int cndx;
     double *pi, *pj, *pii;
-    double p0 = 0.0, pC = 0.0;
-    double inter1 = 0.0, inter2 = 0.0;
+    double p0 = 0.0, pC = 0.0, p0c = 0.0, pCc = 0.0;
+    double inter1 = 0.0, inter2 = 0.0, inter1c = 0.0, inter2c = 0.0;
     int a_i = 0, b_i = 0;
 
     metrics = (METRICS *)G_malloc(sizeof(METRICS));
@@ -142,10 +143,12 @@ void calc_metrics(void)
         else
             metrics->producers_accuracy[i] = 100 * (pii[i] / pj[i]);
         /* theta 1 */
-        p0 += pii[i];
+        update_sum(&p0, &p0c, pii[i]);
         /* theta 2 */
-        pC += pi[i] * pj[i];
+        update_sum(&pC, &pCc, pi[i] * pj[i]);
     }
+    p0 = p0 + p0c;
+    pC = pC + pCc;
     if (pC != 1)
         metrics->kappa = (p0 - pC) / (1 - pC);
     else
@@ -158,7 +161,8 @@ void calc_metrics(void)
         else
             metrics->conditional_kappa[i] =
                 (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
-        inter1 += pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.);
+        update_sum(&inter1, &inter1c,
+                   pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.));
     }
 
     /* kappa variance */
@@ -170,10 +174,13 @@ void calc_metrics(void)
                 if (Gstats[l].cats[1] == rlst[i])
                     b_i = i;
             }
-            inter2 += Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) /
-                      metrics->observations;
+            update_sum(&inter2, &inter2c,
+                       Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) /
+                           metrics->observations);
         }
     }
+    inter1 = inter1 + inter1c;
+    inter2 = inter2 + inter2c;
     metrics->kappa_variance = (inter1 + pow((1 - p0), 2.) * inter2 -
                                pow((p0 * pC - 2 * pC + p0), 2.)) /
                               pow((1 - pC), 4.) / metrics->observations;
@@ -212,4 +219,21 @@ static int longcomp(const void *aa, const void *bb)
         return -1;
 
     return (*a > *b);
+}
+
+/* Implements improved Kahan–Babuska algorithm by Neumaier, A. 1974 */
+void update_sum(double *sum, double *c, double value)
+{
+    double tmp;
+
+    tmp = *sum + value;
+
+    if (fabs(*sum) >= fabs(value))
+        *c = *c + (*sum - tmp) + value;
+    else
+        *c = *c + (value - tmp) + *sum;
+
+    *sum = tmp;
+
+    return;
 }
