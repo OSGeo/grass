@@ -13,6 +13,7 @@
  */
 
 #include <string.h>
+#include <math.h>
 
 #include <grass/glocale.h>
 
@@ -100,7 +101,7 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents, int update,
     first = TRUE;
 
     /* init to nan in case no points are found */
-    min_x = max_x = min_y = max_y = min_z = max_z = 0.0 / 0.0;
+    min_x = max_x = min_y = max_y = min_z = max_z = NAN;
 
     G_verbose_message(_("Scanning data ..."));
 
