@@ -908,8 +908,8 @@ else
   LIBS="$LIBS $PNGLIB"
   CFLAGS="$CFLAGS $PNGINC"
 
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[png_read_image();]])],[],[
-  AC_TRY_LINK([],[png_read_image();],PNGLIB="$PNGLIB",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[],[
+  AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
   AC_MSG_ERROR([*** Unable to locate libpng library.])
   ])
   ])

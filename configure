@@ -9003,11 +9003,11 @@ fi
 
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
+#include <png.h>
 int
 main ()
 {
-png_read_image();
+png_read_image(NULL, NULL);
   ;
   return 0;
 }
@@ -9018,11 +9018,11 @@ else
 
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
+#include <png.h>
 int
 main ()
 {
-png_read_image();
+png_read_image(NULL, NULL);
   ;
   return 0;
 }
