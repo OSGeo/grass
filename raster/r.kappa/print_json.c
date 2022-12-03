@@ -102,7 +102,8 @@ void print_json()
             fprintf(fd, ", ");
         fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
     }
-    fprintf(fd, "]\n");
+    fprintf(fd, "],\n");
+    fprintf(fd, "    \"mcc\": %.5f\n", metrics->mcc);
 
     fprintf(fd, "}\n");
     if (output != NULL)

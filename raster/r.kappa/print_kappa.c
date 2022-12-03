@@ -34,15 +34,19 @@ void print_kappa(void)
             fprintf(fd, "%f\n", metrics->conditional_kappa[i]);
     }
     fprintf(fd, "\n");
-    fprintf(fd, "Kappa\t\tKappa Variance\n");
+    fprintf(fd, "Kappa\t\tKappa Variance\tMCC\n");
     if (metrics->kappa == na_value)
         fprintf(fd, "NA");
     else
         fprintf(fd, "%f", metrics->kappa);
     if (metrics->kappa_variance == na_value)
+        fprintf(fd, "\tNA");
+    else
+        fprintf(fd, "\t%f", metrics->kappa_variance);
+    if (metrics->mcc == na_value)
         fprintf(fd, "\tNA\n");
     else
-        fprintf(fd, "\t%f\n", metrics->kappa_variance);
+        fprintf(fd, "\t%f\n", metrics->mcc);
 
     fprintf(fd, "\nObs Correct\tTotal Obs\t%% Observed Correct\n");
     fprintf(fd, "%ld\t\t%ld\t\t%f\n", metrics->correct, metrics->observations,

@@ -28,6 +28,7 @@ struct _metrics_
     double kappa;
     double kappa_variance;
     double *conditional_kappa;
+    double mcc;
 };
 
 extern struct Cell_head window;

@@ -181,6 +181,7 @@ class CalculationCorrectness1Test(TestCase):
         # Kappa value
         vals = rows[28].split()
         self.assertTrue(self.match(vals[0], 0.52091))
+        self.assertTrue(self.match(vals[2], 0.55930))
 
         # Overall characteristics
         vals = rows[31].split()
@@ -283,6 +284,7 @@ class CalculationCorrectness2Test(TestCase):
         # Kappa value
         vals = rows[28].split()
         self.assertTrue(self.match(vals[0], 0.0))
+        self.assertTrue(self.match(vals[2], "NA"))
 
         # Overall characteristics
         vals = rows[31].split()
@@ -341,6 +343,7 @@ class JSONOutputTest(TestCase):
                 "producers_accuracy": [57.1429, 0.0, 100.0, -999.0, 100.0, 66.66666],
                 "users_accuracy": [100.0, -999.0, 80.0, 0.0, 100.0, 50.0],
                 "conditional_kappa": [1.0, -999.0, 0.742857, 0.0, 1.0, 0.400],
+                "mcc": 0.55930,
             }
         )
 
@@ -380,6 +383,7 @@ class JSONOutputTest(TestCase):
                 "producers_accuracy": [0.0, 0.0, 0.0, 0.0, 0.0, -999.0],
                 "users_accuracy": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
                 "conditional_kappa": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
+                "mcc": -999.0,
             }
         )
 
@@ -410,6 +414,7 @@ class JSONOutputTest(TestCase):
                 "producers_accuracy": [],
                 "users_accuracy": [],
                 "conditional_kappa": [],
+                "mcc": -999.0,
             }
         )
 
@@ -440,6 +445,7 @@ class JSONOutputTest(TestCase):
                 "producers_accuracy": [],
                 "users_accuracy": [],
                 "conditional_kappa": [],
+                "mcc": -999.0,
             }
         )
 

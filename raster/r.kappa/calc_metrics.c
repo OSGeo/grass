@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "kappa.h"
@@ -19,6 +20,9 @@ void calc_metrics(void)
     double p0 = 0.0, pC = 0.0, p0c = 0.0, pCc = 0.0;
     double inter1 = 0.0, inter2 = 0.0, inter1c = 0.0, inter2c = 0.0;
     int a_i = 0, b_i = 0;
+    double spktk = 0.0, spktkc = 0.0;
+    double spk2 = 0.0, spk2c = 0.0, stk2 = 0.0, stk2c = 0.0;
+    double unrooted;
 
     metrics = (METRICS *)G_malloc(sizeof(METRICS));
     if (nstats == 0) {
@@ -29,6 +33,7 @@ void calc_metrics(void)
         metrics->overall_accuracy = 0.0;
         metrics->kappa = na_value;
         metrics->kappa_variance = na_value;
+        metrics->mcc = na_value;
         return;
     }
 
@@ -184,10 +189,27 @@ void calc_metrics(void)
     metrics->kappa_variance = (inter1 + pow((1 - p0), 2.) * inter2 -
                                pow((p0 * pC - 2 * pC + p0), 2.)) /
                               pow((1 - pC), 4.) / metrics->observations;
-
     G_free(pi);
     G_free(pj);
     G_free(pii);
+
+    /* MCC */
+    for (i = 0; i < ncat; i++) {
+        update_sum(&spktk, &spktkc, metrics->row_sum[i] * metrics->col_sum[i]);
+        update_sum(&spk2, &spk2c, metrics->row_sum[i] * metrics->row_sum[i]);
+        update_sum(&stk2, &stk2c, metrics->col_sum[i] * metrics->col_sum[i]);
+    }
+    spktk = spktk + spktkc;
+    spk2 = spk2 + spk2c;
+    stk2 = stk2 + stk2c;
+    unrooted = (metrics->observations * metrics->observations - spk2) *
+               (metrics->observations * metrics->observations - stk2);
+    if (unrooted <= 0.0) {
+        metrics->mcc = na_value;
+        return;
+    }
+    metrics->mcc =
+        (metrics->correct * metrics->observations - spktk) / sqrt(unrooted);
 };
 
 /* remove repeated values */
