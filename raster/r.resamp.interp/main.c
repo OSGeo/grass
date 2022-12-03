@@ -6,8 +6,9 @@
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
  *               Dylan Beaudette, Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Metz (lanczos)
+ *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:      
- * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -86,6 +87,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("bilinear"));
     G_add_keyword(_("bicubic"));
     G_add_keyword(_("lanczos"));
+    G_add_keyword(_("parallel"));
     module->description =
         _("Resamples raster map to a finer grid using interpolation.");
 
