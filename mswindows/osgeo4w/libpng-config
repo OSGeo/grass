@@ -47,6 +47,7 @@ Known values for OPTION are:
   --ldflags       print linker flags (ldopts, L_opts, R_opts, and libs)
   --static        revise subsequent outputs for static linking
   --help          print this help and exit
+  --dll-version   print DLL version information
   --version       print version information
 EOF
 
@@ -66,6 +67,11 @@ while test $# -gt 0; do
 
     --version)
         echo ${version}
+        exit 0
+        ;;
+
+    --dll-version)
+        echo ${dll_version}
         exit 0
         ;;
 
