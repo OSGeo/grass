@@ -154,29 +154,21 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnOutputSave.SetToolTip(_("Save output window content to the file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
-        self.btnCmdProtocol = ToggleButton(
-            parent=self.panelOutput,
-            id=wx.ID_ANY,
-            label=_("&Log file"),
-            size=self.btnCmdClear.GetSize(),
+        self.btnCmdExportHistory = Button(parent=self.panelOutput, id=wx.ID_ANY)
+        self.btnCmdExportHistory.SetLabel(_("&Export history"))
+        self.btnCmdExportHistory.SetToolTip(
+            _("Export history of executed commands to a file")
         )
-        self.btnCmdProtocol.SetToolTip(
-            _(
-                "Toggle to save list of executed commands into "
-                "a file; content saved when switching off."
-            )
-        )
-        self.cmdFileProtocol = None
 
         if not self._gcstyle & GC_PROMPT:
             self.btnCmdClear.Hide()
-            self.btnCmdProtocol.Hide()
+            self.btnCmdExportHistory.Hide()
 
         self.btnCmdClear.Bind(wx.EVT_BUTTON, self.cmdPrompt.OnCmdErase)
         self.btnOutputClear.Bind(wx.EVT_BUTTON, self.OnOutputClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
-        self.btnCmdProtocol.Bind(wx.EVT_TOGGLEBUTTON, self.OnCmdProtocol)
+        self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
 
         self._layout()
 
@@ -234,7 +226,7 @@ class GConsoleWindow(wx.SplitterWindow):
         )
 
         cmdBtnSizer.Add(
-            self.btnCmdProtocol,
+            self.btnCmdExportHistory,
             proportion=1,
             flag=wx.ALIGN_CENTER
             | wx.ALIGN_CENTER_VERTICAL
@@ -473,54 +465,37 @@ class GConsoleWindow(wx.SplitterWindow):
         self.progressbar.SetValue(event.value)
         event.Skip()
 
-    def CmdProtocolSave(self):
-        """Save list of manually entered commands into a text log file"""
-        if self.cmdFileProtocol is None:
-            return  # it should not happen
-
-        try:
-            with open(self.cmdFileProtocol, "a") as output:
-                cmds = self.cmdPrompt.GetCommands()
-                output.write("\n".join(cmds))
-                if len(cmds) > 0:
-                    output.write("\n")
-        except IOError as e:
-            GError(
-                _("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
-                    filePath=self.cmdFileProtocol, error=e
-                )
-            )
-
-        self.showNotification.emit(
-            message=_("Command log saved to '{}'".format(self.cmdFileProtocol))
+    def OnCmdExportHistory(self, event):
+        """Export history of executed commands into a file"""
+        dlg = wx.FileDialog(
+            self,
+            message=_("Save file as..."),
+            defaultFile="grass_cmd_log.txt",
+            wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*")
+            % {"txt": _("Text files"), "files": _("Files")},
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
-        self.cmdFileProtocol = None
 
-    def OnCmdProtocol(self, event=None):
-        """Save commands into file"""
-        if not event.IsChecked():
-            # stop capturing commands, save list of commands to the
-            # protocol file
-            self.CmdProtocolSave()
-        else:
-            # start capturing commands
-            self.cmdPrompt.ClearCommands()
-            # ask for the file
-            dlg = wx.FileDialog(
-                self,
-                message=_("Save file as..."),
-                defaultFile="grass_cmd_log.txt",
-                wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*")
-                % {"txt": _("Text files"), "files": _("Files")},
-                style=wx.FD_SAVE,
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            try:
+                with open(path, "w") as output:
+                    cmds = self.cmdPrompt.GetCommands()
+                    output.write("\n".join(cmds))
+                    if len(cmds) > 0:
+                        output.write("\n")
+            except IOError as e:
+                GError(
+                    _("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
+                        filePath=path, error=e
+                    )
+                )
+
+            self.showNotification.emit(
+                message=_("Command history saved to '{}'".format(path))
             )
-            if dlg.ShowModal() == wx.ID_OK:
-                self.cmdFileProtocol = dlg.GetPath()
-            else:
-                wx.CallAfter(self.btnCmdProtocol.SetValue, False)
 
-            dlg.Destroy()
-
+        dlg.Destroy()
         event.Skip()
 
     def OnCmdRun(self, event):
