@@ -79,9 +79,6 @@ except ImportError:
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
-    from grass.lib.gis import G_gisinit
-
-    G_gisinit("")
     if os.getenv("GISBASE") is None:
         # intentionally not translatable
         sys.exit(
