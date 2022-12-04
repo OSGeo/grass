@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #include <libsvm/svm.h>
 
@@ -395,15 +396,20 @@ int main(int argc, char *argv[])
         G_verbose_message("Copying category information");
         G_file_name_misc(in_path, sigfile_dir, "cats", name_sigfile,
                          mapset_sigfile);
-        G_file_name(out_path, "cats", name_values, G_mapset());
-        G_copy_file(in_path, out_path); /* It's still OK if it fails to copy */
+        /* Avoid warnings if file does not exist */
+        if (access(in_path, 0) == 0) {
+            G_file_name(out_path, "cats", name_values, G_mapset());
+            G_copy_file(in_path, out_path);
+        }
 
         /* Copy color file from the original training map */
         G_verbose_message("Copying color information");
         G_file_name_misc(in_path, sigfile_dir, "colr", name_sigfile,
                          mapset_sigfile);
-        G_file_name(out_path, "colr", name_values, G_mapset());
-        G_copy_file(in_path, out_path);
+        if (access(in_path, 0) == 0) {
+            G_file_name(out_path, "colr", name_values, G_mapset());
+            G_copy_file(in_path, out_path);
+        }
     }
     Rast_put_cell_title(name_values,
                         /* GTC: A map title */
