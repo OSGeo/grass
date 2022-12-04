@@ -43,7 +43,7 @@ from core.gconsole import (
 )
 from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
-from gui_core.wrap import Button, ClearButton, ToggleButton, StaticText, StaticBox
+from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
 from core.settings import UserSettings
 
 
