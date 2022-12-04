@@ -70,6 +70,7 @@ static void write_point(struct WriteContext *context, int cat, double x,
         G_fatal_error
             ("Unable to create a point in vector map (probably out of memory)");
     struct line_cats *cats_to_write = context->cats;
+
     /* only when writing cats use the ones from parameter, otherwise
      * use the default (which is assumed to be empty) */
     if (context->write_cats && cats)
@@ -79,10 +80,11 @@ static void write_point(struct WriteContext *context, int cat, double x,
 }
 
 
-static void on_add_point(struct DecimationPoint *point, void *point_data, void *context)
+static void on_add_point(struct DecimationPoint *point, void *point_data,
+                         void *context)
 {
-    write_point((struct WriteContext *)context, point->cat, point->x, point->y,
-                point->z, (struct line_cats *)point_data);
+    write_point((struct WriteContext *)context, point->cat, point->x,
+                point->y, point->z, (struct line_cats *)point_data);
 }
 
 /* TODO: these have overlap with vector lib, really needed? */
@@ -355,6 +357,7 @@ int main(int argc, char **argv)
                         " to do nothing and no other options has been set."));
 
     struct Cell_head comp_region;
+
     Rast_get_window(&comp_region);
     if (use_zrange) {
         comp_region.bottom = zrange_min;
@@ -412,6 +415,7 @@ int main(int argc, char **argv)
             break;              /* end of the map */
 
         double x, y, z;
+
         Vect_line_get_point(line, 0, &x, &y, &z);
 
         /* selections/filters */
@@ -436,28 +440,28 @@ int main(int argc, char **argv)
          * - some points miss category (not handled)
          * Here we assume that only one cat has meaning for grid decimation.
          * If no layer available, cat contains junk and shouldn't be used.
-	 * 
-	 * TODO done
+         * 
+         * TODO done
          */
-	cat = -1;
+        cat = -1;
         if (layer > 0) {
-	    if (allowed_cats) {
-		int i;
+            if (allowed_cats) {
+                int i;
 
-		for (i = 0; i < cats->n_cats; i++) {
-		    if (cats->field[i] == layer &&
-			Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
-			cat = cats->cat[i];
-			break;
-		    }
-		}
-		return 0;
-	    }
-	    else
-		Vect_cat_get(cats, layer, &cat);
-	    if (cat < 0)
-		continue;
-	}
+                for (i = 0; i < cats->n_cats; i++) {
+                    if (cats->field[i] == layer &&
+                        Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
+                        cat = cats->cat[i];
+                        break;
+                    }
+                }
+                return 0;
+            }
+            else
+                Vect_cat_get(cats, layer, &cat);
+            if (cat < 0)
+                continue;
+        }
 
         /* using callback when using grid, direct call otherwise */
         if (do_grid_decimation)
@@ -481,9 +485,9 @@ int main(int argc, char **argv)
     Vect_close(&vinput);
     if (!notopo_flag->answer) {
         Vect_build(&voutput);
-	if (write_context.write_cats == TRUE && !notab_flag->answer) {
-	    copy_tabs(&vinput, &voutput);
-	}
+        if (write_context.write_cats == TRUE && !notab_flag->answer) {
+            copy_tabs(&vinput, &voutput);
+        }
     }
     Vect_close(&voutput);
 

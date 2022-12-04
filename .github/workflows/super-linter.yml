@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Lint code base
         uses: docker://github/super-linter:v2.2.2
         env:
@@ -31,7 +31,7 @@ jobs:
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSON: true
-          VALIDATE_MD: false
+          VALIDATE_MD: true
           VALIDATE_PERL: true
           VALIDATE_POWERSHELL: true
           VALIDATE_XML: true

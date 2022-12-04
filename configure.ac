@@ -35,6 +35,24 @@ AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/grass/config.h)
 AC_CANONICAL_HOST
 AC_PROG_CC
+
+# Enable C++ option
+
+LOC_ARG_WITH(cxx, C++)
+
+LOC_CHECK_USE(cxx,C++,USE_CXX)
+
+if test -n "$USE_CXX"; then
+	AC_PROG_CXX
+else
+	CXX=
+	CXXFLAGS=
+	AC_SUBST(CXX)
+	AC_SUBST(CXXFLAGS)
+fi
+
+# Done checking C++
+
 LOC_EXEEXT
 AC_SUBST(MINGW32)
 
@@ -139,7 +157,7 @@ changequote([,])
 GRASS_VERSION_GIT="exported"
 # get git short hash + date of last change in GRASS headers
 # (and anything else in include)
-GRASS_HEADERS_GIT_HASH=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
+GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
 if test "$GIT" != "no" ; then
@@ -149,7 +167,7 @@ if test "$GIT" != "no" ; then
    fi
    GRASS_HEADERS_GIT_HASH=`$GIT log -1 --pretty=format:"%h" -- "${SRCDIR}/include" 2>/dev/null`
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
-      GRASS_HEADERS_GIT_HASH=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
+      GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
    GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
@@ -259,7 +277,6 @@ AC_ARG_ENABLE(w11,
 
 # With options
 
-LOC_ARG_WITH(cxx, C++)
 #LOC_ARG_WITH(g77, GNU Fortran 77, no)
 
 AC_ARG_WITH(macosx-archs,
@@ -308,12 +325,6 @@ AC_ARG_WITH(pdal,
                           enable PDAL support (pdal-config with path,
                           e.g. '--with-pdal=/usr/local/bin/pdal-config',
                           default: no)],, with_pdal="no")
-
-AC_ARG_WITH(wxwidgets,
-[  --with-wxwidgets[=path/wx-config]
-                          enable wxWidgets support (wx-config with path,
-                          e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
-                          default: no)],, with_wxwidgets="no")
 
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
@@ -1784,21 +1795,6 @@ fi
 
 AC_SUBST(INTLLIB)
 AC_SUBST(HAVE_NLS)
-
-# Enable C++ option
- 
-LOC_CHECK_USE(cxx,C++,USE_CXX)
-
-if test -n "$USE_CXX"; then
-	AC_PROG_CXX
-else
-	CXX=
-	CXXFLAGS=
-	AC_SUBST(CXX)
-	AC_SUBST(CXXFLAGS)
-fi
-
-# Done checking C++
 
 # Enable openDWG option
 

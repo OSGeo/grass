@@ -27,15 +27,11 @@ import shutil
 import codecs
 import string
 import random
-import pipes
+import shlex
 from tempfile import NamedTemporaryFile
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
-
-# PY2/PY3 compat
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 # subprocess wrapper that uses shell on Windows
@@ -54,7 +50,7 @@ class Popen(subprocess.Popen):
             and not kwargs.get("shell", False)
             and kwargs.get("executable") is None
         ):
-            cmd = shutil_which(args[0])
+            cmd = shutil.which(args[0])
             if cmd is None:
                 raise OSError(_("Cannot find the executable {0}").format(args[0]))
             args = [cmd] + args[1:]
@@ -97,16 +93,16 @@ _popen_args = [
 
 
 def _make_val(val):
-    """Convert value to unicode"""
-    if isinstance(val, (bytes, str, unicode)):
+    """Convert value to a unicode string"""
+    if isinstance(val, (bytes, str)):
         return decode(val)
     if isinstance(val, (int, float)):
-        return unicode(val)
+        return str(val)
     try:
         return ",".join(map(_make_val, iter(val)))
     except TypeError:
         pass
-    return unicode(val)
+    return str(val)
 
 
 def _make_unicode(val, enc):
@@ -166,87 +162,6 @@ def get_commands():
     return set(cmd), scripts
 
 
-# TODO: Please replace this function with shutil.which() before 8.0 comes out
-# replacement for which function from shutil (not available in all versions)
-# from http://hg.python.org/cpython/file/6860263c05b3/Lib/shutil.py#l1068
-# added because of Python scripts running Python scripts on MS Windows
-# see also ticket #2008 which is unrelated but same function was proposed
-def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
-    """Given a command, mode, and a PATH string, return the path which
-    conforms to the given mode on the PATH, or None if there is no such
-    file.
-
-    `mode` defaults to os.F_OK | os.X_OK. `path` defaults to the result
-    of os.environ.get("PATH"), or can be overridden with a custom search
-    path.
-
-    :param cmd: the command
-    :param mode:
-    :param path:
-
-    """
-    # Check that a given file can be accessed with the correct mode.
-    # Additionally check that `file` is not a directory, as on Windows
-    # directories pass the os.access check.
-    def _access_check(fn, mode):
-        return os.path.exists(fn) and os.access(fn, mode) and not os.path.isdir(fn)
-
-    # If we're given a path with a directory part, look it up directly rather
-    # than referring to PATH directories. This includes checking relative to the
-    # current directory, e.g. ./script
-    if os.path.dirname(cmd):
-        if _access_check(cmd, mode):
-            return cmd
-        return None
-
-    if path is None:
-        path = os.environ.get("PATH", os.defpath)
-    if not path:
-        return None
-    path = path.split(os.pathsep)
-
-    if sys.platform == "win32":
-        # The current directory takes precedence on Windows.
-        if os.curdir not in path:
-            path.insert(0, os.curdir)
-
-        # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(
-            map(lambda x: x.lower(), os.environ.get("PATHEXT", "").split(os.pathsep))
-        )
-        if ".py" not in pathext:
-            # we assume that PATHEXT contains always '.py'
-            pathext.insert(0, ".py")
-        # See if the given file matches any of the expected path extensions.
-        # This will allow us to short circuit when given "python3.exe".
-        # If it does match, only test that one, otherwise we have to try
-        # others.
-        if any(cmd.lower().endswith(ext) for ext in pathext):
-            files = [cmd]
-        else:
-            files = [cmd + ext for ext in pathext]
-    else:
-        # On other platforms you don't have things like PATHEXT to tell you
-        # what file suffixes are executable, so just pass on cmd as-is.
-        files = [cmd]
-
-    seen = set()
-    for dir in path:
-        normdir = os.path.normcase(dir)
-        if normdir not in seen:
-            seen.add(normdir)
-            for thefile in files:
-                name = os.path.join(dir, thefile)
-                if _access_check(name, mode):
-                    return name
-    return None
-
-
-if sys.version_info.major >= 3:
-    # Use shutil.which in Python 3, not the custom implementation.
-    shutil_which = shutil.which  # noqa: F811
-
-
 # Added because of scripts calling scripts on MS Windows.
 # Module name (here cmd) differs from the file name (does not have extension).
 # Additionally, we don't run scripts using system executable mechanism,
@@ -288,7 +203,7 @@ def get_real_command(cmd):
         if ".py" not in pathext:
             # we assume that PATHEXT contains always '.py'
             os.environ["PATHEXT"] = ".py;" + os.environ["PATHEXT"]
-        full_path = shutil_which(cmd + ".py")
+        full_path = shutil.which(cmd + ".py")
         if full_path:
             return full_path
 
@@ -948,7 +863,7 @@ def parser():
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]
-    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    cmdline += [shlex.quote(a) for a in sys.argv[1:]]
     os.environ["CMDLINE"] = " ".join(cmdline)
 
     argv = sys.argv[:]

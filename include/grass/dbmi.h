@@ -1,13 +1,13 @@
 /*!
-  \file include/dbmi.h
+   \file include/dbmi.h
 
-  \brief Main header of \ref dbmilib
+   \brief Main header of \ref dbmilib
 
-  (C) 1999-2009, 2011 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-*/
+   (C) 1999-2009, 2011 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+ */
 
 #ifndef GRASS_DBMI_H
 #define GRASS_DBMI_H
@@ -89,7 +89,7 @@
 #define DB_SQL_TYPE_TIME            10
 #define DB_SQL_TYPE_TIMESTAMP       11
 #define DB_SQL_TYPE_INTERVAL        12
-#define DB_SQL_TYPE_TEXT            13	/* length not defined */
+#define DB_SQL_TYPE_TEXT            13  /* length not defined */
 
 #define DB_SQL_TYPE_SERIAL          21
 
@@ -139,7 +139,7 @@
 #define DB_UNDEFINED	2
 
 /* static buffer for SQL statements */
-#define DB_SQL_MAX      8192
+#define DB_SQL_MAX      65536
 
 typedef void *dbAddress;
 typedef int dbToken;
@@ -152,31 +152,31 @@ typedef struct _db_string
 
 typedef struct _dbmscap
 {
-    char driverName[256];	/* symbolic name for the dbms system */
-    char startup[256];		/* command to run the driver */
-    char comment[256];		/* comment field             */
-    struct _dbmscap *next;	/* linked list               */
+    char driverName[256];       /* symbolic name for the dbms system */
+    char startup[256];          /* command to run the driver */
+    char comment[256];          /* comment field             */
+    struct _dbmscap *next;      /* linked list               */
 } dbDbmscap;
 
 typedef struct _db_dirent
 {
-    dbString name;		/* file/dir name             */
-    int isdir;			/* bool: name is a directory */
-    int perm;			/* permissions               */
+    dbString name;              /* file/dir name             */
+    int isdir;                  /* bool: name is a directory */
+    int perm;                   /* permissions               */
 } dbDirent;
 
 typedef struct _db_driver
 {
-    dbDbmscap dbmscap;		/* dbmscap entry for this driver */
-    FILE *send, *recv;		/* i/o to-from driver            */
-    int pid;			/* process id of the driver      */
+    dbDbmscap dbmscap;          /* dbmscap entry for this driver */
+    FILE *send, *recv;          /* i/o to-from driver            */
+    int pid;                    /* process id of the driver      */
 } dbDriver;
 
 typedef struct _db_handle
 {
-    dbString dbName;		/* database name               */
+    dbString dbName;            /* database name               */
     /* dbString dbPath; *//* directory containing dbName */
-    dbString dbSchema;		/* database schema */
+    dbString dbSchema;          /* database schema */
 } dbHandle;
 
 typedef struct _db_date_time
@@ -258,25 +258,25 @@ typedef struct _db_driver_state
 /* category value (integer) */
 typedef struct
 {
-    int cat;			/* category */
-    int val;			/* value */
+    int cat;                    /* category */
+    int val;                    /* value */
 } dbCatValI;
 
 /* category value */
 typedef struct
 {
-    int cat;			/* category */
+    int cat;                    /* category */
     int isNull;
     union
     {
-	int i;
-	double d;
-	/* s and t were added 22.8.2005, both are pointers,
-	 * they so should not take more than 8 bytes.
-	 * It would be better to add dbString, not pointer,
-	 * But it could be > 8 bytes on some systems */
-	dbString *s;
-	dbDateTime *t;
+        int i;
+        double d;
+        /* s and t were added 22.8.2005, both are pointers,
+         * they so should not take more than 8 bytes.
+         * It would be better to add dbString, not pointer,
+         * But it could be > 8 bytes on some systems */
+        dbString *s;
+        dbDateTime *t;
     } val;
 } dbCatVal;
 
@@ -285,7 +285,7 @@ typedef struct
 {
     int n_values;
     int alloc;
-    int ctype;			/* C type of values stored in array DB_C_TYPE_* */
+    int ctype;                  /* C type of values stored in array DB_C_TYPE_* */
     dbCatVal *value;
 } dbCatValArray;
 
@@ -299,20 +299,20 @@ typedef struct _db_connection
     char *port;
     char *user;
     char *password;
-    char *keycol;		/* name of default key column */
-    char *group;		/* default group to which select privilege is granted */
+    char *keycol;               /* name of default key column */
+    char *group;                /* default group to which select privilege is granted */
 } dbConnection;
 
 /* reclass rule */
 typedef struct
 {
-    int count;			/* number of defined rules */
-    int alloc;			/* size of allocated array */
-    char *table;		/* table name */
-    char *key;			/* key column name */
-    int *cat;			/* array of new category numbers */
-    char **where;		/* array of SQL WHERE conditions */
-    char **label;		/* array of new category labels */
+    int count;                  /* number of defined rules */
+    int alloc;                  /* size of allocated array */
+    char *table;                /* table name */
+    char *key;                  /* key column name */
+    int *cat;                   /* array of new category numbers */
+    char **where;               /* array of SQL WHERE conditions */
+    char **label;               /* array of new category labels */
 } dbRclsRule;
 
 #include <grass/defs/dbmi.h>

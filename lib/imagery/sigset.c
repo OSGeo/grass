@@ -187,7 +187,8 @@ static int get_semantic_labels(FILE * fd, struct SigSet *S)
     /* Read semantic labels and count them to set nbands */
     n = 0;
     pos = 0;
-    S->semantic_labels = (char **)G_realloc(S->semantic_labels, (n + 1) * sizeof(char **));
+    S->semantic_labels =
+        (char **)G_realloc(S->semantic_labels, (n + 1) * sizeof(char **));
     while ((c = (char)fgetc(fd)) != EOF) {
         if (c == '\n') {
             if (prev != ' ') {
@@ -237,7 +238,7 @@ static int get_title(FILE * fd, struct SigSet *S)
     char title[1024];
 
     *title = 0;
-    if (fscanf(fd, "%1024[^\n]", title) != 1)
+    if (fscanf(fd, "%1023[^\n]", title) != 1)
         return -1;
     G_strip(title);
     I_SetSigTitle(S, title);
@@ -292,7 +293,7 @@ static int get_classtitle(FILE * fd, struct ClassSig *C)
     char title[1024];
 
     *title = 0;
-    if (fscanf(fd, "%1024[^\n]", title) != 1)
+    if (fscanf(fd, "%1023[^\n]", title) != 1)
         return -1;
     G_strip(title);
     I_SetClassTitle(C, title);
@@ -482,13 +483,15 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
     /* Safety measure. Untranslated as this should not happen in production! */
     if (S->nbands < 1 || R->nfiles < 1)
         G_fatal_error("Programming error. Invalid length structs passed to "
-                      "I_sort_signatures_by_semantic_label(%d, %d);", S->nbands,
-                      R->nfiles);
+                      "I_sort_signatures_by_semantic_label(%d, %d);",
+                      S->nbands, R->nfiles);
 
     /* Obtain group semantic labels */
     group_semantic_labels = (char **)G_malloc(R->nfiles * sizeof(char *));
     for (unsigned int j = R->nfiles; j--;) {
-        group_semantic_labels[j] = Rast_get_semantic_label_or_name(R->file[j].name, R->file[j].mapset);
+        group_semantic_labels[j] =
+            Rast_get_semantic_label_or_name(R->file[j].name,
+                                            R->file[j].mapset);
     }
 
     /* If lengths are not equal, there will be a mismatch */
@@ -603,7 +606,8 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
         }
 
         /* Replace values in struct with ordered ones */
-        memcpy(S->semantic_labels, new_semantic_labels, S->nbands * sizeof(char **));
+        memcpy(S->semantic_labels, new_semantic_labels,
+               S->nbands * sizeof(char **));
         for (unsigned int c = S->nclasses; c--;) {
             for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
                 memcpy(S->ClassSig[c].SubSig[s].means, new_means[c][s],

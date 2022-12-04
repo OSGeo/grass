@@ -41,23 +41,23 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < 2000000; i++) {
 #ifdef LINKM
-	p = (struct link *)link_new(head);
+        p = (struct link *)link_new(head);
 #else
-	p = (struct link *)malloc(sizeof(struct link));
+        p = (struct link *)malloc(sizeof(struct link));
 #endif
-	tmp->next = p;
-	tmp = p;
-	tmp->next = NULL;
+        tmp->next = p;
+        tmp = p;
+        tmp->next = NULL;
     }
 
     for (p = List.next; p != NULL;) {
-	tmp = p->next;
+        tmp = p->next;
 #ifdef LINKM
-	link_dispose(head, p);
+        link_dispose(head, p);
 #else
-	free(p);
+        free(p);
 #endif
-	p = tmp;
+        p = tmp;
     }
 
 

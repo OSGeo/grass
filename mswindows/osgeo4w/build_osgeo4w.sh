@@ -45,11 +45,10 @@ export ARCH=x86_64-w64-mingw32
     --with-fftw \
     --with-nls \
     --with-readline \
-    --with-wxwidgets \
     --with-blas \
     --with-lapack-includes=/mingw64/include/lapack \
     --with-freetype \
-    --with-freetype-includes=/mingw64/include/freetype2 \
+    --with-freetype-includes=${OSGEO4W_ROOT_MSYS}/include/freetype2 \
     --with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \
     --with-proj-includes=${OSGEO4W_ROOT_MSYS}/include \
     --with-proj-libs=${OSGEO4W_ROOT_MSYS}/lib \
@@ -66,8 +65,9 @@ export ARCH=x86_64-w64-mingw32
     --with-zstd \
     --with-odbc \
     --with-cairo \
-    --with-cairo-includes=${SRC}/include \
-    --with-cairo-ldflags="-L${SRC}/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
+    --with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include \
+    --with-cairo-libs=$OSGEO4W_ROOT_MSYS/lib \
+    --with-cairo-ldflags="-L${SRC}/mswindows/osgeo4w/lib -lcairo" \
     --with-opengl=windows \
     --with-bzlib \
     --with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \

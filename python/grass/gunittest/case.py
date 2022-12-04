@@ -11,6 +11,7 @@ for details.
 from __future__ import print_function
 
 import os
+import shutil
 import subprocess
 import sys
 import hashlib
@@ -19,7 +20,7 @@ import unittest
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import shutil_which, text_to_string, encode, decode
+from grass.script import text_to_string, encode, decode
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (
@@ -1238,9 +1239,8 @@ class TestCase(unittest.TestCase):
         """
         import difflib
 
-        # 'U' taken from difflib documentation
-        fromlines = open(actual, "U").readlines()
-        tolines = open(reference, "U").readlines()
+        fromlines = open(actual).readlines()
+        tolines = open(reference).readlines()
         context_lines = 3  # number of context lines
         # TODO: filenames are set to "actual" and "reference", isn't it too general?
         # it is even more useful if map names or file names are some generated
@@ -1396,7 +1396,7 @@ class TestCase(unittest.TestCase):
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
-        if not shutil_which(module.name):
+        if not shutil.which(module.name):
             stdmsg = "Cannot find the module '{0}'".format(module.name)
             self.fail(self._formatMessage(msg, stdmsg))
         try:

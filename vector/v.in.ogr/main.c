@@ -1053,8 +1053,8 @@ int main(int argc, char *argv[])
                 if (key_idx[layer] > -1 && key_idx[layer] == i)
                     continue; /* skip defined key (FID column) */
 
-		i_out++;
-                
+                i_out++;
+
 		Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		Ogr_ftype = OGR_Fld_GetType(Ogr_field);
 
@@ -1175,13 +1175,14 @@ int main(int argc, char *argv[])
 			      Ogr_fieldname, OFTIntegerListlength);
 		}
 		else {
-		    G_warning(_("Column type (Ogr_ftype: %d) not supported (Ogr_fieldname: %s)"),
-			      Ogr_ftype, Ogr_fieldname);
-		    buf[0] = 0;
-		    col_info[i_out].type = G_store(buf);
-		}
-		G_free(Ogr_fieldname);
-	    }
+                /* handle columns of unsupported data type */
+                G_warning(_("Column <%s> of unsupported data type \"%s\" is omitted from import"),
+                          Ogr_fieldname, OGR_GetFieldTypeName(Ogr_ftype));
+                i_out--;
+                ncols_out--;
+            }
+            G_free(Ogr_fieldname);
+        }
 
 	    /* fix duplicate column names */
 	    done = 0;
@@ -1388,10 +1389,10 @@ int main(int argc, char *argv[])
 			    db_double_quote_string(&strval);
 			    G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'", db_get_string(&strval));
 			}
-			else {
-			    /* column type not supported */
-			    G_rasprintf(&sqlbuf, &sqlbufsize, "%c", '\0');
-			}
+                else {
+                    /* column type not supported (thus skipped) and not empty */
+                    G_rasprintf(&sqlbuf, &sqlbufsize, "%c", '\0');
+                }
 		    }
 		    else {
 			/* G_warning (_("Column value not set" )); */

@@ -16,7 +16,7 @@ void get_minHa(struct costHa *heap, struct costHa *pres_cell, long heap_len)
 {
     /* struct costHa  *fixHa(); */
     if (heap_len == 0)
-	return;
+        return;
     pres_cell->min_cost = heap[1].min_cost;
     pres_cell->angle = heap[1].angle;
     pres_cell->row = heap[1].row;

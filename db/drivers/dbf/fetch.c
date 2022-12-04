@@ -26,7 +26,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     dbColumn *column;
     dbValue *value;
     int col, ncols;
-    int htype, sqltype, ctype;
+    int sqltype, ctype;
     int dbfrow, dbfcol;
 
     /* get cursor token */
@@ -34,31 +34,31 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	db_error("cursor not found");
-	return DB_FAILED;
+        db_error("cursor not found");
+        return DB_FAILED;
     }
 
     /* fetch on position */
     switch (position) {
     case DB_NEXT:
-	c->cur++;
-	break;
+        c->cur++;
+        break;
     case DB_CURRENT:
-	break;
+        break;
     case DB_PREVIOUS:
-	c->cur--;
-	break;
+        c->cur--;
+        break;
     case DB_FIRST:
-	c->cur = 0;
-	break;
+        c->cur = 0;
+        break;
     case DB_LAST:
-	c->cur = c->nrows - 1;
-	break;
+        c->cur = c->nrows - 1;
+        break;
     };
 
     if ((c->cur >= c->nrows) || (c->cur < 0)) {
-	*more = 0;
-	return DB_OK;
+        *more = 0;
+        return DB_OK;
     }
     *more = 1;
 
@@ -68,34 +68,33 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     ncols = db_get_table_number_of_columns(table);
     dbfrow = c->set[c->cur];
     for (col = 1; col <= ncols; col++) {
-	dbfcol = c->cols[col - 1];
-	column = db_get_table_column(table, col - 1);
-	value = db_get_column_value(column);
-	db_free_string(&value->s);
+        dbfcol = c->cols[col - 1];
+        column = db_get_table_column(table, col - 1);
+        value = db_get_column_value(column);
+        db_free_string(&value->s);
 
-	sqltype = db_get_column_sqltype(column);
-	ctype = db_sqltype_to_Ctype(sqltype);
-	htype = db_get_column_host_type(column);
+        sqltype = db_get_column_sqltype(column);
+        ctype = db_sqltype_to_Ctype(sqltype);
 
-	if (db.tables[c->table].rows[dbfrow].values[dbfcol].is_null) {
-	    db_set_value_null(value);
-	}
-	else {
-	    db_set_value_not_null(value);
-	    switch (ctype) {
-	    case DB_C_TYPE_STRING:
-		db_set_string(&(value->s),
-			      db.tables[c->table].rows[dbfrow].values[dbfcol].
-			      c);
-		break;
-	    case DB_C_TYPE_INT:
-		value->i = db.tables[c->table].rows[dbfrow].values[dbfcol].i;
-		break;
-	    case DB_C_TYPE_DOUBLE:
-		value->d = db.tables[c->table].rows[dbfrow].values[dbfcol].d;
-		break;
-	    }
-	}
+        if (db.tables[c->table].rows[dbfrow].values[dbfcol].is_null) {
+            db_set_value_null(value);
+        }
+        else {
+            db_set_value_not_null(value);
+            switch (ctype) {
+            case DB_C_TYPE_STRING:
+                db_set_string(&(value->s),
+                              db.tables[c->table].rows[dbfrow].
+                              values[dbfcol].c);
+                break;
+            case DB_C_TYPE_INT:
+                value->i = db.tables[c->table].rows[dbfrow].values[dbfcol].i;
+                break;
+            case DB_C_TYPE_DOUBLE:
+                value->d = db.tables[c->table].rows[dbfrow].values[dbfcol].d;
+                break;
+            }
+        }
     }
     return DB_OK;
 }
@@ -110,8 +109,8 @@ int db__driver_get_num_rows(dbCursor * cn)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	db_error("cursor not found");
-	return DB_FAILED;
+        db_error("cursor not found");
+        return DB_FAILED;
     }
 
     return (c->nrows);

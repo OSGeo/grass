@@ -863,3 +863,9 @@ class FrameMixin:
 
     def SetPosition(self, pt):
         self.GetParent().SetPosition(pt)
+
+    def GetSize(self):
+        return self.GetParent().GetSize()
+
+    def SetSize(self, *args):
+        self.GetParent().SetSize(*args)

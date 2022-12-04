@@ -240,7 +240,8 @@ double histogram(const char *map_name, int x0, int y0, int width,
                     else
                         D_box_abs(x0 + y0_adjust + ((i - 2) * dy),
                                   y0 - 1,
-                                  x0 - 1 + y0_adjust + ((i - 1) * dy), y0 - 1 - dx);
+                                  x0 - 1 + y0_adjust + ((i - 1) * dy),
+                                  y0 - 1 - dx);
                 }
                 else {          /* vertical */
 
@@ -249,11 +250,13 @@ double histogram(const char *map_name, int x0, int y0, int width,
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
                                   y0 + height + y0_adjust + ((i - 2) * dy),
                                   x0 - 1 - dx,
-                                  y0 + height + y0_adjust + 1 + ((i - 1) * dy));
+                                  y0 + height + y0_adjust + 1 +
+                                  ((i - 1) * dy));
                     else
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
                                   y0 + y0_adjust + ((i - 2) * dy),
-                                  x0 - 1 - dx, y0 + y0_adjust - 1 + ((i - 1) * dy));
+                                  x0 - 1 - dx,
+                                  y0 + y0_adjust - 1 + ((i - 1) * dy));
                 }
             }
         }

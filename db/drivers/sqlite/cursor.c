@@ -26,7 +26,7 @@ int db__driver_close_cursor(dbCursor * dbc)
     /* get my cursor via the dbc token */
     c = (cursor *) db_find_token(db_get_cursor_token(dbc));
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
     sqlite3_finalize(c->statement);
 
@@ -44,8 +44,8 @@ cursor *alloc_cursor()
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-	db_d_append_error(_("Unable to allocate cursor."));
-	return NULL;
+        db_d_append_error(_("Unable to allocate cursor."));
+        return NULL;
     }
 
     c->statement = NULL;
@@ -53,8 +53,8 @@ cursor *alloc_cursor()
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-	db_d_append_error(_("Unable to add new token."));
-	return NULL;
+        db_d_append_error(_("Unable to add new token."));
+        return NULL;
     }
 
     c->kcols = NULL;
