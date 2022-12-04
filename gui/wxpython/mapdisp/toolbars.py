@@ -250,7 +250,7 @@ class MapToolbar(BaseToolbar):
                 self.parent.OnMapDisplayProperties,
             ),
         )
-        if self.parent.GetDockingState() is not None:
+        if self.parent.IsDockable():
             data = data + (
                 (
                     ("mapDispDocking", BaseIcons["mapDispDocking"].label),

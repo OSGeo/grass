@@ -440,7 +440,7 @@ class GMFrame(wx.Frame):
                 tree=layertree,
                 lmgr=self,
                 Map=layertree.Map,
-                docked=True,
+                dockable=True,
                 title=name,
                 size=globalvar.MAP_WINDOW_SIZE,
             )
@@ -993,7 +993,7 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        if self.GetMapDisplay().GetDockingState() is True:
+        if self.GetMapDisplay().IsDocked():
             self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
         else:
             self.GetMapDisplay().GetParent().Destroy()
@@ -1022,7 +1022,7 @@ class GMFrame(wx.Frame):
             FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
             self.OnCBPageClosing,
         )
-        if is_docked is True:
+        if is_docked:
             self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
 
     def _focusPage(self, notification):

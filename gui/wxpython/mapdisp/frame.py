@@ -100,7 +100,7 @@ class MapPanel(SingleMapPanel):
         lmgr=None,
         Map=None,
         auimgr=None,
-        docked=None,
+        dockable=False,
         name="MapWindow",
         **kwargs,
     ):
@@ -135,8 +135,13 @@ class MapPanel(SingleMapPanel):
         self.tree = tree
         # checks for saving workspace
         self.canCloseDisplayCallback = None
-        # distinguishes whether map panel is docked or undocked (Single-Window)
-        self.docked = docked
+
+        # distinquishes whether map panel is dockable (Single-Window)
+        self.dockable = dockable
+
+        if self.dockable:
+            # distinguishes whether map panel is docked or not
+            self.docked = True
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
@@ -686,15 +691,18 @@ class MapPanel(SingleMapPanel):
 
     def SetDockingCallback(self, function):
         """Sets docking bound method to dock or undock"""
-        self.dck_callback = function
+        self.docking_callback = function
 
     def OnDockUndock(self, event):
         """Dock or undock map display panel to independent MapFrame"""
-        self.dck_callback(self)
+        self.docking_callback(self)
         self.docked = not self.docked
 
-    def GetDockingState(self):
+    def IsDocked(self):
         return self.docked
+
+    def IsDockable(self):
+        return self.dockable
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
@@ -1011,14 +1019,14 @@ class MapPanel(SingleMapPanel):
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    if self.docked is None:
-                        self.closingDisplay.emit(pgnum_dict=pgnum_dict)
-                    else:
+                    if self.dockable:
                         self.closingDisplay.emit(
                             pgnum_dict=pgnum_dict, is_docked=self.docked
                         )
-                        if self.docked is False:
+                        if not self.docked:
                             self.GetParent().Destroy()
+                    else:
+                        self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
