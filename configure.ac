@@ -897,7 +897,7 @@ else
   fi
 
   if test "$LIBPNG_CONFIG" != "" ; then
-    PNGLIB=`"$LIBPNG_CONFIG" --libs`
+    PNGLIB=`"$LIBPNG_CONFIG" --ldflags`
     PNGINC=`"$LIBPNG_CONFIG" --cflags`
     USE_PNG=1
   fi
