@@ -115,7 +115,7 @@ include(build_gui_in_subdir)
 include(check_target)
 
 add_subdirectory(thirdparty)
-set(MKHTML_PY ${CMAKE_BINARY_DIR}/tools/mkhtml.py)
+set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
 
 set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
 file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
@@ -165,8 +165,9 @@ execute_process(
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/demolocation/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/config/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/driver/db/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/tools/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/utils/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/lib/
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/python/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/lister/
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/python/grass/lib
   COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/wxpython/xml/
@@ -176,7 +177,7 @@ execute_process(
   )
 
 add_subdirectory(lib)
-add_subdirectory(tools)
+add_subdirectory(utils)
 set(modules_list)
 
 

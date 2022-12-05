@@ -21,7 +21,7 @@ set(gislib_SRCS
   color_str.c               compress.c                line_dist.c               nl_to_spaces.c            progrm_nme.c              timestamp.c               zero.c
   commas.c                  geodesic.c                list.c                    nme_in_mps.c              proj1.c                   token.c                   zone.c
   geodist.c                 ll_format.c               open.c                    proj2.c                   trim_dec.c                parser_json.c             cmprzstd.c
-  compress.c band_reference.c
+  compress.c
   )
 
 if(MINGW)
