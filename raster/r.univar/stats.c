@@ -30,8 +30,8 @@ univar_stat *create_univar_stat_struct(int map_type, int n_perc)
     for (i = 0; i < n_zones; i++) {
         stats[i].sum = 0.0;
         stats[i].sumsq = 0.0;
-        stats[i].min = NAN;
-        stats[i].max = NAN;
+        stats[i].min = 0.0 / 0.0;       /* set to nan as default */
+        stats[i].max = 0.0 / 0.0;       /* set to nan as default */
         stats[i].n_perc = n_perc;
         if (n_perc > 0)
             stats[i].perc = (double *)G_malloc(n_perc * sizeof(double));
@@ -131,7 +131,7 @@ int print_stats(univar_stat *stats)
         var_coef = (stdev / mean) * 100.; /* perhaps stdev/fabs(mean) ? */
 
         if (stats[z].n == 0)
-            stats[z].sum = stats[z].sum_abs = NAN;
+            stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
         sprintf(sum_str, "%.15g", stats[z].sum);
         G_trim_decimal(sum_str);
 
@@ -190,9 +190,9 @@ int print_stats(univar_stat *stats)
             quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
 
             if (stats[z].n == 0) {
-                quartile_25 = median = quartile_75 = NAN;
+                quartile_25 = median = quartile_75 = 0.0 / 0.0;
                 for (i = 0; i < stats[z].n_perc; i++)
-                    quartile_perc[i] = NAN;
+                    quartile_perc[i] = 0.0 / 0.0;
             }
             else {
                 for (i = 0; i < stats[z].n_perc; i++) {
@@ -402,7 +402,7 @@ int print_stats_table(univar_stat *stats)
         var_coef = (stdev / mean) * 100.; /* perhaps stdev/fabs(mean) ? */
 
         if (stats[z].n == 0)
-            stats[z].sum = stats[z].sum_abs = NAN;
+            stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
 
         if (zone_info.n_zones) {
             int z_cat = z + zone_info.min;
@@ -450,9 +450,9 @@ int print_stats_table(univar_stat *stats)
             quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
 
             if (stats[z].n == 0) {
-                quartile_25 = median = quartile_75 = NAN;
+                quartile_25 = median = quartile_75 = 0.0 / 0.0;
                 for (i = 0; i < stats[z].n_perc; i++)
-                    quartile_perc[i] = NAN;
+                    quartile_perc[i] = 0.0 / 0.0;
             }
             else {
                 for (i = 0; i < stats[z].n_perc; i++) {
