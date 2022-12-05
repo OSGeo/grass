@@ -29,6 +29,9 @@ set -u
 
 export INSTALL_PREFIX=$1
 
+# libpng-config --ldflags does not include this flag.
+export LDFLAGS=-L/usr/lib
+
 ./configure \
     --prefix="$INSTALL_PREFIX/" \
     --enable-largefile \
