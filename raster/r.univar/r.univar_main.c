@@ -316,6 +316,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
     const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd[0]);
     const size_t value_sz = Rast_cell_size(map_type);
     int t;
+    int z;
     unsigned int row;
     void **raster_row;
     CELL **zoneraster_row = NULL;
@@ -336,8 +337,8 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 #if defined(_OPENMP)
     omp_lock_t *minmax = G_malloc(n_alloc * sizeof(omp_lock_t));
 
-    for (int i = 0; i < n_alloc; i++) {
-        omp_init_lock(&(minmax[i]));
+    for (z = 0; z < n_alloc; z++) {
+        omp_init_lock(&minmax[z]);
     }
 #endif
 
@@ -552,7 +553,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
             stats[z].sum_abs += sum_abs[z];
 
 #if defined(_OPENMP)
-            omp_set_lock(&(minmax[z]));
+            omp_set_lock(&minmax[z]);
 #endif
             if (stats[z].max < max[z] ||
                 (stats[z].max != stats[z].max && max[z] != DBL_MIN)) {
@@ -563,11 +564,43 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 stats[z].min = min[z];
             }
 #if defined(_OPENMP)
-            omp_unset_lock(&(minmax[z]));
+            omp_unset_lock(&minmax[z]);
 #endif
         }
 
+        /* Free per-thread variables */
+        for (z = 0; z < n_alloc; z++) {
+            if (buckets[z].nextp) {
+                G_free(buckets[z].nextp);
+            }
+            if (buckets[z].cells) {
+                G_free(buckets[z].cells);
+            }
+            if (buckets[z].fcells) {
+                G_free(buckets[z].fcells);
+            }
+            if (buckets[z].dcells) {
+                G_free(buckets[z].fcells);
+            }
+        }
+        G_free(buckets);
+
+        G_free(n);
+        G_free(sum);
+        G_free(sumsq);
+        G_free(sum_abs);
+        G_free(size);
+        G_free(min);
+        G_free(max);
     } /* end parallel region */
+
+#if defined(_OPENMP)
+    for (z = 0; z < n_alloc; z++) {
+        omp_destroy_lock(&minmax[z]);
+    }
+
+    G_free(minmax);
+#endif
 
     for (t = 0; t < nprocs; t++) {
         G_free(raster_row[t]);
