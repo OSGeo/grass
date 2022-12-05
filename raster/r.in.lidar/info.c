@@ -12,7 +12,6 @@
  */
 
 #include <string.h>
-#include <math.h> /* For INIFINITY  */
 
 #include <grass/glocale.h>
 
@@ -104,7 +103,7 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents,
     first = TRUE;
 
     /* init to nan in case no points are found */
-    min_x = max_x = min_y = max_y = min_z = max_z = INFINITY;
+    min_x = max_x = min_y = max_y = min_z = max_z = 0.0 / 0.0;
 
     G_verbose_message(_("Scanning data ..."));
 

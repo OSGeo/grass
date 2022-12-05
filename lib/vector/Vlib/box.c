@@ -253,7 +253,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line,
 
     Line = Plus->Line[line];
     if (Line == NULL) {         /* dead */
-        Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = INFINITY;
+        Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
         return 0;
     }
 
@@ -319,7 +319,7 @@ int Vect_get_area_box(const struct Map_info *Map, int area,
     Area = Plus->Area[area];
 
     if (Area == NULL) {         /* dead */
-        Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = INFINITY;
+        Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
         return 0;
     }
 
@@ -366,7 +366,7 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle,
     Isle = Plus->Isle[isle];
 
     if (Isle == NULL) {         /* dead */
-        Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = INFINITY;
+        Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
         return 0;
     }
 
