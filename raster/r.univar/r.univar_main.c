@@ -483,60 +483,62 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                        point to the buffer. Case 2: other transfers, reallocate
                        exactly if there is any non-empty bucket.
                      */
-                    bucket *t_bucket = &buckets[z];
-                    univar_stat *g_buffer = &stats[z];
+                    bucket *t_bkt = &buckets[z];
+                    univar_stat *g_bfr = &stats[z];
                     size_t old_size;
                     size_t add_size;
 
                     switch (map_type) {
                     case DCELL_TYPE:
-                        if (NULL == g_buffer->dcell_array) {
-                            g_buffer->dcell_array = t_bucket->dcells;
+                        if (NULL == g_bfr->dcell_array) {
+                            g_bfr->dcell_array = t_bkt->dcells;
+                            t_bkt->dcells = NULL;
                         }
-                        else if (t_bucket->n != 0) {
-                            old_size = g_buffer->n * sizeof(DCELL);
-                            add_size = t_bucket->n * sizeof(DCELL);
+                        else if (t_bkt->n != 0) {
+                            old_size = g_bfr->n * sizeof(DCELL);
+                            add_size = t_bkt->n * sizeof(DCELL);
 
-                            g_buffer->dcell_array = (DCELL *)G_realloc(
-                                (void *)g_buffer->dcell_array,
-                                old_size + add_size);
-                            memcpy(&g_buffer->dcell_array[g_buffer->n],
-                                   t_bucket->dcells, add_size);
+                            g_bfr->dcell_array =
+                                (DCELL *)G_realloc((void *)g_bfr->dcell_array,
+                                                   old_size + add_size);
+                            memcpy(&g_bfr->dcell_array[g_bfr->n], t_bkt->dcells,
+                                   add_size);
                         }
                         break;
                     case FCELL_TYPE:
-                        if (NULL == g_buffer->fcell_array) {
-                            g_buffer->fcell_array = t_bucket->fcells;
+                        if (NULL == g_bfr->fcell_array) {
+                            g_bfr->fcell_array = t_bkt->fcells;
+                            t_bkt->fcells = NULL;
                         }
-                        else if (t_bucket->n != 0) {
-                            old_size = g_buffer->n * sizeof(FCELL);
-                            add_size = t_bucket->n * sizeof(FCELL);
+                        else if (t_bkt->n != 0) {
+                            old_size = g_bfr->n * sizeof(FCELL);
+                            add_size = t_bkt->n * sizeof(FCELL);
 
-                            g_buffer->fcell_array = (FCELL *)G_realloc(
-                                (void *)g_buffer->fcell_array,
-                                old_size + add_size);
-                            memcpy(&g_buffer->fcell_array[g_buffer->n],
-                                   t_bucket->fcells, add_size);
+                            g_bfr->fcell_array =
+                                (FCELL *)G_realloc((void *)g_bfr->fcell_array,
+                                                   old_size + add_size);
+                            memcpy(&g_bfr->fcell_array[g_bfr->n], t_bkt->fcells,
+                                   add_size);
                         }
                         break;
                     case CELL_TYPE:
-                        if (NULL == g_buffer->cell_array) {
-                            g_buffer->cell_array = t_bucket->cells;
+                        if (NULL == g_bfr->cell_array) {
+                            g_bfr->cell_array = t_bkt->cells;
+                            t_bkt->cells = NULL;
                         }
-                        else if (t_bucket->n != 0) {
-                            old_size = g_buffer->n * sizeof(CELL);
-                            add_size = t_bucket->n * sizeof(CELL);
+                        else if (t_bkt->n != 0) {
+                            old_size = g_bfr->n * sizeof(CELL);
+                            add_size = t_bkt->n * sizeof(CELL);
 
-                            g_buffer->cell_array =
-                                (CELL *)G_realloc((void *)g_buffer->cell_array,
-                                                  old_size + add_size);
-                            memcpy(&g_buffer->cell_array[g_buffer->n],
-                                   t_bucket->cells, add_size);
+                            g_bfr->cell_array = (CELL *)G_realloc(
+                                (void *)g_bfr->cell_array, old_size + add_size);
+                            memcpy(&g_bfr->cell_array[g_bfr->n], t_bkt->cells,
+                                   add_size);
                         }
                         break;
                     }
 
-                    g_buffer->n += t_bucket->n;
+                    g_bfr->n += t_bkt->n;
                 }
             }
             else {
@@ -570,18 +572,12 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 
         /* Free per-thread variables */
         for (z = 0; z < n_alloc; z++) {
-            if (buckets[z].nextp) {
-                G_free(buckets[z].nextp);
-            }
-            if (buckets[z].cells) {
+            if (buckets[z].cells)
                 G_free(buckets[z].cells);
-            }
-            if (buckets[z].fcells) {
+            if (buckets[z].fcells)
                 G_free(buckets[z].fcells);
-            }
-            if (buckets[z].dcells) {
-                G_free(buckets[z].fcells);
-            }
+            if (buckets[z].dcells)
+                G_free(buckets[z].dcells);
         }
         G_free(buckets);
 
