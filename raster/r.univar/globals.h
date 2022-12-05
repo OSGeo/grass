@@ -43,6 +43,16 @@ typedef struct {
     int first;
 } univar_stat;
 
+/* buffer for each thread to support parallelization */
+typedef struct {
+    size_t n;
+    size_t n_alloc;
+    void *nextp;
+    DCELL *dcells;
+    FCELL *fcells;
+    CELL *cells;
+} bucket;
+
 typedef struct {
     CELL min, max, n_zones;
     struct Categories cats;

@@ -345,7 +345,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 
 #pragma omp parallel if (nprocs > 1)
     {
-        int i;
+        int z;
         int t_id = 0;
 
 #if defined(_OPENMP)
@@ -361,9 +361,17 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
         double *min = G_malloc(n_alloc * sizeof(double));
         double *max = G_malloc(n_alloc * sizeof(double));
 
-        for (i = 0; i < n_alloc; i++) {
-            max[i] = DBL_MIN;
-            min[i] = DBL_MAX;
+        bucket *buckets = G_malloc(n_alloc * sizeof(bucket));
+
+        for (z = 0; z < n_alloc; z++) {
+            max[z] = DBL_MIN;
+            min[z] = DBL_MAX;
+            buckets[z].n = 0;
+            buckets[z].n_alloc = 0;
+            buckets[z].nextp = NULL;
+            buckets[z].cells = NULL;
+            buckets[z].fcells = NULL;
+            buckets[z].dcells = NULL;
         }
 
 #pragma omp for schedule(static)
@@ -406,46 +414,37 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 }
 
                 if (param.extended->answer) {
+                    bucket *t_bkt = &buckets[zone];
+
                     /* check allocated memory */
-                    /* parallelization is disabled, local variable reflects
-                     * global state */
-                    if (stats[zone].n + n[zone] >= stats[zone].n_alloc) {
-                        stats[zone].n_alloc += 1000;
+                    if (t_bkt->n >= t_bkt->n_alloc) {
+                        t_bkt->n_alloc += 1000;
                         size_t msize;
 
                         switch (map_type) {
                         case DCELL_TYPE:
-                            msize = stats[zone].n_alloc * sizeof(DCELL);
-                            stats[zone].dcell_array = (DCELL *)G_realloc(
-                                (void *)stats[zone].dcell_array, msize);
-                            stats[zone].nextp = (void *)&(
-                                stats[zone]
-                                    .dcell_array[stats[zone].n + n[zone]]);
+                            msize = t_bkt->n_alloc * sizeof(DCELL);
+                            t_bkt->dcells = (DCELL *)G_realloc(
+                                (void *)t_bkt->dcells, msize);
+                            t_bkt->nextp = (void *)&(t_bkt->dcells[t_bkt->n]);
                             break;
                         case FCELL_TYPE:
-                            msize = stats[zone].n_alloc * sizeof(FCELL);
-                            stats[zone].fcell_array = (FCELL *)G_realloc(
-                                (void *)stats[zone].fcell_array, msize);
-                            stats[zone].nextp = (void *)&(
-                                stats[zone]
-                                    .fcell_array[stats[zone].n + n[zone]]);
+                            msize = t_bkt->n_alloc * sizeof(FCELL);
+                            t_bkt->fcells = (FCELL *)G_realloc(
+                                (void *)t_bkt->fcells, msize);
+                            t_bkt->nextp = (void *)&(t_bkt->fcells[t_bkt->n]);
                             break;
                         case CELL_TYPE:
-                            msize = stats[zone].n_alloc * sizeof(CELL);
-                            stats[zone].cell_array = (CELL *)G_realloc(
-                                (void *)stats[zone].cell_array, msize);
-                            stats[zone].nextp = (void *)&(
-                                stats[zone]
-                                    .cell_array[stats[zone].n + n[zone]]);
-                            break;
-                        default:
+                            msize = t_bkt->n_alloc * sizeof(CELL);
+                            t_bkt->cells =
+                                (CELL *)G_realloc((void *)t_bkt->cells, msize);
+                            t_bkt->nextp = (void *)&(t_bkt->cells[t_bkt->n]);
                             break;
                         }
                     }
                     /* put the value into stats->XXXcell_array */
-                    memcpy(stats[zone].nextp, ptr, value_sz);
-                    stats[zone].nextp =
-                        G_incr_void_ptr(stats[zone].nextp, value_sz);
+                    memcpy(t_bkt->nextp, ptr, value_sz);
+                    t_bkt->nextp = G_incr_void_ptr(t_bkt->nextp, value_sz);
                 }
 
                 val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
@@ -464,8 +463,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
                     zptr++;
-                n[zone]++;
-
+                buckets[zone].n++;
             } /* end column loop */
             if (!(param.shell_style->answer)) {
 #pragma omp atomic update
@@ -474,31 +472,98 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
             }
         } /* end row loop */
 
-        for (i = 0; i < n_alloc; i++) {
+        for (z = 0; z < n_alloc; z++) {
+            if (param.extended->answer) {
+#pragma omp critical
+                {
+                    /*
+                       Transfers for each thread from local bucket to global
+                       buffer. Case 1: first transfer, skip reallocation and
+                       point to the buffer. Case 2: other transfers, reallocate
+                       exactly if there is any non-empty bucket.
+                     */
+                    bucket *t_bucket = &buckets[z];
+                    univar_stat *g_buffer = &stats[z];
+                    size_t old_size;
+                    size_t add_size;
+
+                    switch (map_type) {
+                    case DCELL_TYPE:
+                        if (NULL == g_buffer->dcell_array) {
+                            g_buffer->dcell_array = t_bucket->dcells;
+                        }
+                        else if (t_bucket->n != 0) {
+                            old_size = g_buffer->n * sizeof(DCELL);
+                            add_size = t_bucket->n * sizeof(DCELL);
+
+                            g_buffer->dcell_array = (DCELL *)G_realloc(
+                                (void *)g_buffer->dcell_array,
+                                old_size + add_size);
+                            memcpy(&g_buffer->dcell_array[g_buffer->n],
+                                   t_bucket->dcells, add_size);
+                        }
+                        break;
+                    case FCELL_TYPE:
+                        if (NULL == g_buffer->fcell_array) {
+                            g_buffer->fcell_array = t_bucket->fcells;
+                        }
+                        else if (t_bucket->n != 0) {
+                            old_size = g_buffer->n * sizeof(FCELL);
+                            add_size = t_bucket->n * sizeof(FCELL);
+
+                            g_buffer->fcell_array = (FCELL *)G_realloc(
+                                (void *)g_buffer->fcell_array,
+                                old_size + add_size);
+                            memcpy(&g_buffer->fcell_array[g_buffer->n],
+                                   t_bucket->fcells, add_size);
+                        }
+                        break;
+                    case CELL_TYPE:
+                        if (NULL == g_buffer->cell_array) {
+                            g_buffer->cell_array = t_bucket->cells;
+                        }
+                        else if (t_bucket->n != 0) {
+                            old_size = g_buffer->n * sizeof(CELL);
+                            add_size = t_bucket->n * sizeof(CELL);
+
+                            g_buffer->cell_array =
+                                (CELL *)G_realloc((void *)g_buffer->cell_array,
+                                                  old_size + add_size);
+                            memcpy(&g_buffer->cell_array[g_buffer->n],
+                                   t_bucket->cells, add_size);
+                        }
+                        break;
+                    }
+
+                    g_buffer->n += t_bucket->n;
+                }
+            }
+            else {
 #pragma omp atomic update
-            stats[i].n += n[i];
+                stats[z].n += buckets[z].n;
+            }
 #pragma omp atomic update
-            stats[i].size += size[i];
+            stats[z].size += size[z];
 #pragma omp atomic update
-            stats[i].sum += sum[i];
+            stats[z].sum += sum[z];
 #pragma omp atomic update
-            stats[i].sumsq += sumsq[i];
+            stats[z].sumsq += sumsq[z];
 #pragma omp atomic update
-            stats[i].sum_abs += sum_abs[i];
+            stats[z].sum_abs += sum_abs[z];
 
 #if defined(_OPENMP)
-            omp_set_lock(&(minmax[i]));
+            omp_set_lock(&(minmax[z]));
 #endif
-            if (stats[i].max < max[i] ||
-                (stats[i].max != stats[i].max && max[i] != DBL_MIN)) {
-                stats[i].max = max[i];
+            if (stats[z].max < max[z] ||
+                (stats[z].max != stats[z].max && max[z] != DBL_MIN)) {
+                stats[z].max = max[z];
             }
-            if (stats[i].min > min[i] ||
-                (stats[i].min != stats[i].min && min[i] != DBL_MAX)) {
-                stats[i].min = min[i];
+            if (stats[z].min > min[z] ||
+                (stats[z].min != stats[z].min && min[z] != DBL_MAX)) {
+                stats[z].min = min[z];
             }
 #if defined(_OPENMP)
-            omp_unset_lock(&(minmax[i]));
+            omp_unset_lock(&(minmax[z]));
 #endif
         }
 
