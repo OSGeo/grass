@@ -1,6 +1,6 @@
 # AUTHOR(S): Rashad Kanavath <rashad km gmail>
-# PURPOSE: 	 Grass root that adds options to activate/deactivate 3rd party libraries
-# COPYRIGHT: (C) 2020 by the GRASS Development Team
+# PURPOSE: 	 GRASS GIS root that adds options to activate/deactivate 3rd party libraries
+# COPYRIGHT: (C) 2020-2022 by the GRASS Development Team
 #   	    	 This program is free software under the GPL (>=v2)
 #   	    	 Read the file COPYING that comes with GRASS for details.
 
@@ -50,7 +50,7 @@ option(WITH_NLS "enable nls support" ${default_option_enabled})
 option(WITH_BZLIB "enable bzlib support" ON)
 option(WITH_BLAS "enable blas support" ON)
 option(WITH_LAPACK "enable lapack support" ON)
-option(WITH_LIBLAS "enable libLAS support" ON)
+option(WITH_LIBLAS "enable libLAS support" OFF)
 option(WITH_OPENDWG "enable v.in.dwg" OFF)
 
 option(WITH_PYTHON "Build python bindings" ON)
