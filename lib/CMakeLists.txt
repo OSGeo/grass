@@ -141,10 +141,10 @@ build_library_in_subdir(arraystats DEPENDS grass_gis)
 
 if(WITH_OPENGL)
 	build_library_in_subdir(ogsf
-	DEPENDS grass_raster grass_raster3d OPENGL TIFF)
+	DEPENDS grass_raster grass_raster3d grass_vector grass_bitmap OPENGL TIFF)
 
 	build_library_in_subdir(nviz
-	DEPENDS grass_display grass_raster grass_vector grass_bitmap OPENGL TIFF)
+	DEPENDS grass_display grass_raster grass_vector grass_bitmap grass_ogsf OPENGL TIFF)
 endif()
 
 add_subdirectory(temporal)
