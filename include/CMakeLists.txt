@@ -260,7 +260,7 @@ endforeach()
 
 add_custom_target(copy_header DEPENDS ${include_depends} LIB_PYTHON)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/grass/version.h.in
   "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
 
 message(STATUS "Creating ${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")

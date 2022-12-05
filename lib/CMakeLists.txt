@@ -149,10 +149,6 @@ endif()
 
 add_subdirectory(temporal)
 
-if(WITH_PYTHON)
-  add_subdirectory(python)
-endif()
-
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_raster grass_vector grass_raster3d )
