@@ -20,11 +20,14 @@ endforeach()
 foreach(ICON ${GRASS_ICONS})
   get_filename_component(FILE_NAME ${ICON} NAME)
   add_custom_command(OUTPUT ${GISBASE}/gui/icons/grass/${FILE_NAME}
- 	COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/gui/icons/grass/
-    COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/docs/html/icons/)
+ 	COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/gui/icons/grass/)
   list(APPEND output_icons ${GISBASE}/gui/icons/grass/${FILE_NAME})
+
+  add_custom_command(OUTPUT ${GISBASE}/docs/html/icons/${FILE_NAME}
+    COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/docs/html/icons/)
   list(APPEND output_icons ${GISBASE}/docs/html/icons/${FILE_NAME})
 endforeach()
+
 
 foreach(ICON ${FLAGS_ICONS})
   get_filename_component(FILE_NAME ${ICON} NAME)

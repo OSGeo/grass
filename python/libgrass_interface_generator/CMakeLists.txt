@@ -74,6 +74,7 @@ foreach(module ${MODULES})
 	-DHDRS=${${module}_HDRS}
 	-DLIBS=${${module}_LIBS}
 	-DOUT_FILE=${output_file}
+	-DGRASS_VERSION_NUMBER=${GRASS_VERSION_NUMBER}
 	-P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
 	COMMENT "Generating ${output_file}"
 	VERBATIM)
