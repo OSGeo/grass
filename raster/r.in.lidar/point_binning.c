@@ -434,7 +434,7 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
             Rast_set_null_value(ptr, 1, rtype);
         else { /* one or more points in cell */
 
-            head_id = Rast_get_c_value((CELL*)index_array + n_offset, CELL_TYPE);
+            head_id = Rast_get_c_value(index_array + n_offset, CELL_TYPE);
             node_id = head_id;
 
             n = 0;
@@ -493,7 +493,7 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
                                CELL_TYPE)) /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {
-            head_id = Rast_get_c_value((CELL*)index_array + n_offset, CELL_TYPE);
+            head_id = Rast_get_c_value(index_array + n_offset, CELL_TYPE);
             node_id = head_id;
             n = 0;
 
@@ -548,7 +548,7 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
                                CELL_TYPE)) /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {
-            head_id = Rast_get_c_value((CELL*)index_array + n_offset, CELL_TYPE);
+            head_id = Rast_get_c_value(index_array + n_offset, CELL_TYPE);
             node_id = head_id;
 
             n = 0;        /* count */
@@ -605,7 +605,7 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                                CELL_TYPE)) /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {
-            head_id = Rast_get_c_value((CELL*)index_array + n_offset, CELL_TYPE);
+            head_id = Rast_get_c_value(index_array + n_offset, CELL_TYPE);
 
             node_id = head_id;
             n = 0;
@@ -697,9 +697,9 @@ void write_values(struct PointBinning *point_binning,
         for (col = 0; col < cols; col++) {
             size_t offset = ((size_t)row * cols + col) * Rast_cell_size(rtype);
             double min =
-                Rast_get_d_value((DCELL*)point_binning->min_array + offset, rtype);
+                Rast_get_d_value(point_binning->min_array + offset, rtype);
             double max =
-                Rast_get_d_value((DCELL*)point_binning->max_array + offset, rtype);
+                Rast_get_d_value(point_binning->max_array + offset, rtype);
             Rast_set_d_value(ptr, max - min, rtype);
             ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
         }
@@ -714,7 +714,7 @@ void write_values(struct PointBinning *point_binning,
             int n =
                 Rast_get_c_value(point_binning->n_array + n_offset, CELL_TYPE);
             double sum =
-                Rast_get_d_value((DCELL*)point_binning->sum_array + offset, rtype);
+                Rast_get_d_value(point_binning->sum_array + offset, rtype);
 
             if (n == 0)
                 Rast_set_null_value(ptr, 1, rtype);
@@ -765,12 +765,12 @@ void write_values(struct PointBinning *point_binning,
                 continue;
 
             double sum_x =
-                Rast_get_d_value((DCELL*)point_binning->x_array + offset, rtype);
+                Rast_get_d_value(point_binning->x_array + offset, rtype);
             double sum_y =
-                Rast_get_d_value((DCELL*)point_binning->y_array + offset, rtype);
+                Rast_get_d_value(point_binning->y_array + offset, rtype);
             /* TODO: we do this also in mean writing */
             double sum_z =
-                Rast_get_d_value((DCELL*)point_binning->sum_array + offset, rtype);
+                Rast_get_d_value(point_binning->sum_array + offset, rtype);
 
             /* We are not writing any categories. They are not needed
              * and potentially it is too much trouble to do it and it is
