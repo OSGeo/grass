@@ -22,6 +22,7 @@ import os
 import difflib
 import codecs
 import sys
+import shutil
 
 import wx
 import wx.stc
@@ -138,6 +139,17 @@ class GPrompt(object):
 
         self.OnCmdErase(None)
         self.ShowStatusText("")
+
+    def CopyHistory(self, targetFile):
+        """Copy history file"""
+        env = grass.gisenv()
+        historyFile = os.path.join(
+            env["GISDBASE"],
+            env["LOCATION_NAME"],
+            env["MAPSET"],
+            ".wxgui_history",
+        )
+        shutil.copyfile(historyFile, targetFile)
 
     def GetCommands(self):
         """Get list of launched commands"""
