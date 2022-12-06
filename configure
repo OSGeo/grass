@@ -9044,7 +9044,7 @@ rm -f core conftest.err conftest.$ac_objext \
   CFLAGS=${ac_save_cflags}
 
 
-$as_echo "#define HAVE_PNG 1" >>confdefs.h
+$as_echo "#define HAVE_PNG_H 1" >>confdefs.h
 
 fi
 

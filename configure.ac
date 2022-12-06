@@ -916,7 +916,7 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_PNG, 1, [define if PNG exists])
+  AC_DEFINE(HAVE_PNG_H, 1, [define if PNG exists])
 fi
 
 AC_SUBST(PNGLIB)
