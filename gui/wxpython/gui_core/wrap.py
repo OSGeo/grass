@@ -203,7 +203,7 @@ class SpinCtrl(wx.SpinCtrl):
             wx.SpinCtrl.SetToolTipString(self, tip)
 
     def SetRange(self, minVal, maxVal):
-        wx.SpinCtrl.SetRange(int(minVal), int(maxVal))
+        wx.SpinCtrl.SetRange(self, int(minVal), int(maxVal))
 
     def SetValue(self, value):
         wx.SpinCtrl.SetValue(self, int(value))
