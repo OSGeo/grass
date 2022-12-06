@@ -141,7 +141,7 @@ class GPrompt(object):
         self.ShowStatusText("")
 
     def CopyHistory(self, targetFile):
-        """Copy history file"""
+        """Copy history file to the target location"""
         env = grass.gisenv()
         historyFile = os.path.join(
             env["GISDBASE"],

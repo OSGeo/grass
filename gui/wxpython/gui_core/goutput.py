@@ -466,7 +466,7 @@ class GConsoleWindow(wx.SplitterWindow):
         event.Skip()
 
     def OnCmdExportHistory(self, event):
-        """Export history of executed commands into a file"""
+        """Export the history of executed commands stored in a .wxgui_history file to a selected file."""
         dlg = wx.FileDialog(
             self,
             message=_("Save file as..."),
