@@ -33,6 +33,7 @@ export CXXFLAGS="-std=gnu++11"
     --with-cairo --with-cairo-ldflags=-lfontconfig \
     --with-freetype --with-freetype-includes=/usr/include/freetype2 \
     --with-proj --with-proj-share=/usr/share/proj \
+    --with-libpng=/usr/bin/libpng-config \
     --with-gdal=/usr/bin/gdal-config \
     --without-zstd \
     --without-tiff \
