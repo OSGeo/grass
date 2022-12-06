@@ -1,0 +1,91 @@
+# inspired by "build GDAL library and to run test with CMake"
+# from https://github.com/OSGeo/gdal/blob/master/.github/workflows/cmake_builds.yml
+
+name: Build and test with CMake
+
+on:
+    push:
+        paths-ignore:
+            - 'doc/**'
+        branches-ignore:
+            - 'backport**'
+    pull_request:
+        paths-ignore:
+            - 'doc/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CMAKE_UNITY_BUILD: OFF
+
+permissions:
+  contents: read  #  to fetch code (actions/checkout)
+
+jobs:
+
+  build-linux-ubuntu-focal:
+    runs-on: ubuntu-20.04
+    env:
+      CMAKE_OPTIONS: -DPython_LOOKUP_VERSION=3.8 -DUSE_CCACHE=ON
+      cache-name: cmake-ubuntu-focal
+    steps:
+    - name: Checkout GRASS
+      uses: actions/checkout@v3
+    - name: Setup cache
+      uses: actions/cache@v3
+      id: cache
+      with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.base_ref }}${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-${{ github.base_ref }}
+            ${{ runner.os }}-${{ env.cache-name }}
+    - name: Install CMake 3.9.1
+      run: |
+        cd ${GITHUB_WORKSPACE}
+        wget https://github.com/Kitware/CMake/releases/download/v3.9.1/cmake-3.9.1-Linux-x86_64.tar.gz
+        tar xzf cmake-3.9.1-Linux-x86_64.tar.gz
+        echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-3.9.1-Linux-x86_64/bin" >> $GITHUB_ENV
+        echo "$GITHUB_WORKSPACE/cmake-3.9.1-Linux-x86_64/bin" >> $GITHUB_PATH
+    - run: |
+        cmake --version
+    - name: Install dependency
+      run: |
+        sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+        sudo apt-get update
+        sudo apt-get install -y -q apt-get install build-essential \
+         flex make bison gcc libgcc1 g++ ccache \
+         python3 python3-dev \
+         python3-opengl python3-wxgtk4.0 \
+         python3-dateutil libgsl-dev python3-numpy \
+         wx3.0-headers wx-common libwxgtk3.0-gtk3-dev \
+         libwxbase3.0-dev libbz2-dev zlib1g-dev gettext \
+         libtiff5-dev libpnglite-dev libcairo2 libcairo2-dev \
+         sqlite3 libsqlite3-dev \
+         libpq-dev libreadline6-dev libfreetype6-dev \
+         libfftw3-3 libfftw3-dev \
+         libboost-thread-dev libboost-program-options-dev libpdal-dev\
+         subversion libzstd-dev checkinstall \
+         libglu1-mesa-dev libxmu-dev \
+         ghostscript wget -y make ccache g++ 
+        sudo apt-get update -y
+    - name: Configure ccache
+      run: |
+          echo CCACHE_BASEDIR=$PWD >> ${GITHUB_ENV}
+          echo CCACHE_DIR=$PWD/.ccache >> ${GITHUB_ENV}
+          echo CCACHE_MAXSIZE=250M >> ${GITHUB_ENV}
+          ccache -z
+      working-directory: ${{ github.workspace }}
+    - name: Configure
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/build
+        cd $GITHUB_WORKSPACE/build
+        cmake  ${CMAKE_OPTIONS} ..
+    - name: Build
+      run: |
+        make -j$(nproc)
+    - name: ccache statistics
+      run: ccache -s
+
