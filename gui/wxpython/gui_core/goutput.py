@@ -483,9 +483,9 @@ class GConsoleWindow(wx.SplitterWindow):
                 self.cmdPrompt.CopyHistory(path)
             except IOError as e:
                 GError(
-                    _("Unable to copy .wxgui_history file to '{filePath}'.\n\nDetails: {error}").format(
-                        filePath=path, error=e
-                    )
+                    _(
+                        "Unable to copy .wxgui_history file to '{filePath}'.\n\nDetails: {error}"
+                    ).format(filePath=path, error=e)
                 )
 
             self.showNotification.emit(
