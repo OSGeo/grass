@@ -471,8 +471,9 @@ class GConsoleWindow(wx.SplitterWindow):
             self,
             message=_("Save file as..."),
             defaultFile="grass_cmd_log.txt",
-            wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*")
-            % {"txt": _("Text files"), "files": _("Files")},
+            wildcard=_("{txt} (*.txt)|*.txt|{files} (*)|*").format(
+                txt=_("Text files"), files=_("Files")
+            ),
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
 
