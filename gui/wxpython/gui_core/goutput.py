@@ -466,7 +466,8 @@ class GConsoleWindow(wx.SplitterWindow):
         event.Skip()
 
     def OnCmdExportHistory(self, event):
-        """Export the history of executed commands stored in a .wxgui_history file to a selected file."""
+        """Export the history of executed commands stored
+        in a .wxgui_history file to a selected file."""
         dlg = wx.FileDialog(
             self,
             message=_("Save file as..."),
@@ -484,8 +485,8 @@ class GConsoleWindow(wx.SplitterWindow):
             except IOError as e:
                 GError(
                     _(
-                        "Unable to copy .wxgui_history file to '{filePath}'.\n\nDetails: {error}"
-                    ).format(filePath=path, error=e)
+                        "Unable to copy .wxgui_history file to {}'.\n\nDetails: {}"
+                    ).format(path, e)
                 )
 
             self.showNotification.emit(
