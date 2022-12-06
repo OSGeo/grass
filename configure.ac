@@ -1,19 +1,19 @@
 #############################################################################
 #
-# MODULE:   	Grass Compilation
+# MODULE:	Grass Compilation
 # AUTHOR(S):	Original author unknown - probably CERL
-#   	    	Eric G. Miller - egm2 jps.net
-#   	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
-#   	    	Markus Neteler - Germany/Italy - neteler itc.it
-#   	    	Nicklas Larsson (update to autoconfig 2.69)
-# PURPOSE:  	This configure runs all the tests to determine what components
-#   	    	are installed on the current system. It also defines certain
-#   	    	configuration variables for compilation and installation.
+#		Eric G. Miller - egm2 jps.net
+#		Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
+#		Markus Neteler - Germany/Italy - neteler itc.it
+#		Nicklas Larsson (update to autoconfig 2.69)
+# PURPOSE:	This configure runs all the tests to determine what components
+#		are installed on the current system. It also defines certain
+#		configuration variables for compilation and installation.
 # COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
 #
-#               This program is free software under the GNU General
-#   	    	Public License (>=v2). Read the file COPYING that
-#   	    	comes with GRASS for details.
+#		This program is free software under the GNU General
+#		Public License (>=v2). Read the file COPYING that
+#		comes with GRASS for details.
 #
 # MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
@@ -490,7 +490,7 @@ fi
 AC_PROG_RANLIB
 AC_CHECK_PROGS(AR, ar)
 AC_CHECK_PROGS(ENV, env)
-AC_PATH_PROG(PERL, perl, no)  
+AC_PATH_PROG(PERL, perl, no)
 AC_HEADER_STDC
 #AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
 AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h f2c.h g2c.h)
@@ -1164,13 +1164,13 @@ else
   if test "$GEOS_CONFIG" = "no" ; then
     AC_MSG_ERROR([*** couldn't find geos-config])
   fi
-  
+
   if test "$GEOS_CONFIG" != "" ; then
     GEOS_LIBS=`"$GEOS_CONFIG" --clibs`
     GEOS_CFLAGS=`"$GEOS_CONFIG" --cflags`
     USE_GEOS=1
   fi
-  
+
   LOC_CHECK_INCLUDES(geos_c.h,GEOS,$GEOS_CFLAGS)
 ### geos 3.3.6 installs geos_c.lib, see http://osgeo-org.1560.n6.nabble.com/osgeo4w-329-update-geos-to-3-3-6-td5024605.html
 #  if test "$MINGW32" = yes ; then
@@ -1489,7 +1489,7 @@ LOC_CHECK_INC_PATH(odbc,ODBC,ODBCINC)
 
 AC_CHECK_HEADER([windows.h],
     AC_DEFINE(HAVE_WINDOWS_H, 1, [Define to 1 if you have the <windows.h> header file.]))
- 
+
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$ODBCINC $CPPFLAGS"
 AC_CHECK_HEADER([sql.h],
@@ -1588,7 +1588,7 @@ save_LDFLAGS="$LDFLAGS"
 LDFLAGS="$BLASLIB $LDFLAGS"
 AC_CHECK_LIB(atlas, ATL_xerbla,
 		[AC_CHECK_LIB(f77blas, sgemm_,
-		[AC_CHECK_LIB(cblas, cblas_dgemm, 
+		[AC_CHECK_LIB(cblas, cblas_dgemm,
 			[blas_ok=yes; BLASLIB="-lcblas -lf77blas -latlas"],
 			[],[-lf77blas -latlas])],
 		[],[-latlas])]
@@ -1936,7 +1936,7 @@ fi
 
 # try to build a test program with "$CC $OMPCLFAGS" to confirm it works
 #...how?
-#echo "int main() {return 0;}" > test.c 
+#echo "int main() {return 0;}" > test.c
 #$CC $OMPCLFAGS test.c -o test
 
 fi # $USE_OPENMP
