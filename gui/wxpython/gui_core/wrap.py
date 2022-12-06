@@ -202,6 +202,12 @@ class SpinCtrl(wx.SpinCtrl):
         else:
             wx.SpinCtrl.SetToolTipString(self, tip)
 
+    def SetRange(self, minVal, maxVal):
+        wx.SpinCtrl.SetRange(int(minVal), int(maxVal))
+
+    def SetValue(self, value):
+        wx.SpinCtrl.SetValue(self, int(value))
+
 
 class FloatSpin(fs.FloatSpin):
     """Wrapper around fs.FloatSpin to have more control
@@ -470,6 +476,7 @@ if CheckWxVersion([4, 1, 0]):
         def __init__(self):
             self.EnableCheckBoxes(True)
             self.AssignImageList(wx.ImageList(16, 16), wx.IMAGE_LIST_SMALL)
+
 
 else:
     import wx.lib.mixins.listctrl as listmix
