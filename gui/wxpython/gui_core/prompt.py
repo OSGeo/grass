@@ -34,7 +34,7 @@ from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core import utils
-from core.gcmd import EncodeString, DecodeString
+from core.gcmd import EncodeString, DecodeString, GError
 
 
 class GPrompt(object):
@@ -149,7 +149,14 @@ class GPrompt(object):
             env["MAPSET"],
             ".wxgui_history",
         )
-        shutil.copyfile(historyFile, targetFile)
+        try:
+            shutil.copyfile(historyFile, targetFile)
+        except Exception as e:
+            GError(
+                _("Unable to copy .wxgui_history file to {}'.\n\nDetails: {}").format(
+                    historyFile, e
+                )
+            )
 
     def GetCommands(self):
         """Get list of launched commands"""

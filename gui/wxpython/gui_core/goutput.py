@@ -480,15 +480,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            try:
-                self.cmdPrompt.CopyHistory(path)
-            except IOError as e:
-                GError(
-                    _(
-                        "Unable to copy .wxgui_history file to {}'.\n\nDetails: {}"
-                    ).format(path, e)
-                )
-
+            self.cmdPrompt.CopyHistory(path)
             self.showNotification.emit(
                 message=_("Command history saved to '{}'".format(path))
             )
