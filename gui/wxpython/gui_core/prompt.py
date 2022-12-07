@@ -151,7 +151,7 @@ class GPrompt(object):
         )
         try:
             shutil.copyfile(historyFile, targetFile)
-        except Exception as e:
+        except (IOError, OSError) as e:
             GError(
                 _("Unable to copy .wxgui_history file to {}'.\n\nDetails: {}").format(
                     historyFile, e
