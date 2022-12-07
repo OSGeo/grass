@@ -137,11 +137,10 @@ class MapPanel(SingleMapPanel):
         self.canCloseDisplayCallback = None
 
         # distinquishes whether map panel is dockable (Single-Window)
-        self.dockable = dockable
+        self._dockable = dockable
 
-        if self.dockable:
-            # distinguishes whether map panel is docked or not
-            self.docked = True
+        # distinguishes whether map panel is docked or not
+        self._docked = True
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
@@ -696,13 +695,13 @@ class MapPanel(SingleMapPanel):
     def OnDockUndock(self, event):
         """Dock or undock map display panel to independent MapFrame"""
         self.docking_callback(self)
-        self.docked = not self.docked
+        self._docked = not self._docked
 
     def IsDocked(self):
-        return self.docked
+        return self._docked
 
     def IsDockable(self):
-        return self.dockable
+        return self._dockable
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
@@ -1019,11 +1018,11 @@ class MapPanel(SingleMapPanel):
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    if self.dockable:
+                    if self._dockable:
                         self.closingDisplay.emit(
-                            pgnum_dict=pgnum_dict, is_docked=self.docked
+                            pgnum_dict=pgnum_dict, is_docked=self._docked
                         )
-                        if not self.docked:
+                        if not self._docked:
                             self.GetParent().Destroy()
                     else:
                         self.closingDisplay.emit(pgnum_dict=pgnum_dict)
