@@ -977,6 +977,11 @@ class GMFrame(wx.Frame):
         except Exception:
             pass
 
+        try:
+            wx.CallLater(500, self.GetMapDisplay().GetParent().Raise)
+        except Exception:
+            pass
+
         event.Skip()
 
     def OnCBPageClosing(self, event):
