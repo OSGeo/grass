@@ -1001,7 +1001,7 @@ class GMFrame(wx.Frame):
         if self.GetMapDisplay().IsDocked():
             self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
         else:
-            self.GetMapDisplay().GetParent().Destroy()
+            self.GetMapDisplay().Destroy()
         maptree.Close(True)
 
         self.currentPage = None
