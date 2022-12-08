@@ -1,7 +1,6 @@
 #ifndef CDHCDEFS_H
 #define CDHCDEFS_H
 
-double Cdhc_enormp(double);
 double Cdhc_normp(double);
 double Cdhc_xinormal(double);
 double *Cdhc_dmax(double *, int);

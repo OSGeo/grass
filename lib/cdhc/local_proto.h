@@ -17,7 +17,6 @@ void wext(double[], int, double, double[], int, double,
           double *, double *, int *);
 
 double Cdhc_alnorm(double, int);
-double Cdhc_enormp(double);
 double Cdhc_normp(double);
 double Cdhc_xinormal(double);
 
