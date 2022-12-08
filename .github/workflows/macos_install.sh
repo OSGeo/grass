@@ -66,10 +66,11 @@ CONFIGURE_FLAGS="\
   --with-readline-libs=${CONDA_PREFIX}/lib
 "
 
-CFLAGS="-O2 -pipe -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall" \
-CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${CONDA_ARCH} -Wall" \
+export CFLAGS="-O2 -pipe -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall"
+export CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${CONDA_ARCH} -Wall"
+
 ./configure $CONFIGURE_FLAGS
 
-make -j$(sysctl -n hw.ncpu)
+make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror" CXXFLAGS="$CXXFLAGS -Werror"
 
 make install
