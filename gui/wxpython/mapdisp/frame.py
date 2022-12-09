@@ -62,28 +62,6 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapFrame(wx.Frame):
-    """Frame for independent map display window."""
-
-    def __init__(self, parent, mapdisplay, title):
-        wx.Frame.__init__(self, parent=parent, title=title)
-        self.mapdisplay = mapdisplay
-        self.SetSize(mapdisplay.GetSize())
-        self.sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.SetSizerAndFit(self.sizer)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-
-    def closeFrameNoEvent(self):
-        """Close frame without generating OnClose event."""
-        self.Unbind(wx.EVT_CLOSE)
-        self.Close()
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-
-    def OnClose(self, event):
-        """Close frame and associated layer notebook page."""
-        self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
-
-
 class MapPanel(SingleMapPanel):
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
@@ -1018,11 +996,11 @@ class MapPanel(SingleMapPanel):
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    if self._dockable:
+                    if self.IsDockable():
                         self.closingDisplay.emit(
-                            pgnum_dict=pgnum_dict, is_docked=self._docked
+                            pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
                         )
-                        if not self._docked:
+                        if not self.IsDocked():
                             self.GetParent().Destroy()
                     else:
                         self.closingDisplay.emit(pgnum_dict=pgnum_dict)

@@ -50,6 +50,7 @@ from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_she
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+from main_window.notebook import MapNotebook
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
@@ -74,7 +75,7 @@ from lmgr.giface import (
     LayerManagerGrassInterface,
     LayerManagerGrassInterfaceForMapDisplay,
 )
-from mapdisp.frame import MapPanel, MapFrame
+from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
@@ -290,34 +291,7 @@ class GMFrame(wx.Frame):
     def _createMapNotebook(self):
         """Create Map Display notebook"""
         # create the notebook off-window to avoid flicker
-        client_size = self.GetClientSize()
-        notebook_style = (
-            aui.AUI_NB_DEFAULT_STYLE | aui.AUI_NB_TAB_EXTERNAL_MOVE | wx.NO_BORDER
-        )
-        self.mapnotebook = aui.AuiNotebook(
-            self,
-            -1,
-            wx.Point(client_size.x, client_size.y),
-            wx.Size(430, 200),
-            agwStyle=notebook_style,
-        )
-        self.mapnotebook.SetArtProvider(SimpleTabArt())
-
-        def FocusLastPage():
-            """Focus the rightmost Map Display page in Map Display notebook"""
-            self.mapnotebook.SetSelection(self.mapnotebook.GetPageCount() - 1)
-
-        self.mapnotebook.FocusLastPage = FocusLastPage
-
-        # bindings
-        self.mapnotebook.Bind(
-            aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
-            lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit(),
-        )
-        self.mapnotebook.Bind(
-            aui.EVT_AUINOTEBOOK_PAGE_CLOSE,
-            self.OnMapNotebookClose,
-        )
+        self.mapnotebook = MapNotebook(parent=self)
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -445,8 +419,7 @@ class GMFrame(wx.Frame):
                 size=globalvar.MAP_WINDOW_SIZE,
             )
             # add map display panel to notebook and make it current
-            self.mapnotebook.AddPage(mapdisplay, name)
-            self.mapnotebook.FocusLastPage()
+            self.mapnotebook.AddPage(self.displayIndex, page=mapdisplay, caption=name)
 
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
@@ -514,7 +487,7 @@ class GMFrame(wx.Frame):
 
         # set callbacks
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
-        mapdisplay.SetDockingCallback(self.UndockMapDisplay)
+        mapdisplay.SetDockingCallback(self.mapnotebook.UndockMapDisplay)
 
         # bind various events
         mapdisplay.onFocus.connect(
@@ -548,28 +521,6 @@ class GMFrame(wx.Frame):
                 group="display", key="showCompExtent", subkey="enabled"
             ),
         )
-
-    def UndockMapDisplay(self, panel):
-        """Undock active map display to independent MapFrame object"""
-        idx = self.mapnotebook.GetPageIndex(panel)
-        text = self.mapnotebook.GetPageText(idx)
-        self.mapnotebook.RemovePage(idx)
-        fr = MapFrame(parent=self, mapdisplay=panel, title=text)
-        panel.Reparent(fr)
-        panel.SetDockingCallback(self.DockMapDisplay)
-        fr.sizer.Add(panel, proportion=1, flag=wx.EXPAND)
-        fr.Show()
-        panel.Show()
-        panel.onFocus.emit()
-
-    def DockMapDisplay(self, panel):
-        """Dock independent MapFrame object back to Aui.Notebook"""
-        fr = panel.GetParent()
-        panel.Reparent(self.mapnotebook)
-        panel.SetDockingCallback(self.UndockMapDisplay)
-        self.mapnotebook.AddPage(page=panel, caption=fr.GetTitle())
-        self.mapnotebook.FocusLastPage()
-        fr.closeFrameNoEvent()
 
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
@@ -973,15 +924,11 @@ class GMFrame(wx.Frame):
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
         try:
+            print("OnCBPageChanged")
+            print(self.GetMapDisplayIndex())
             self.mapnotebook.SetSelection(self.GetMapDisplayIndex())
         except Exception:
             pass
-
-        try:
-            wx.CallLater(500, self.GetMapDisplay().GetParent().Raise)
-        except Exception:
-            pass
-
         event.Skip()
 
     def OnCBPageClosing(self, event):
@@ -998,10 +945,9 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        if self.GetMapDisplay().IsDocked():
-            self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
-        else:
-            self.GetMapDisplay().Destroy()
+        print("OnCBPageClosing")
+        print(self.GetMapDisplayIndex())
+        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
         maptree.Close(True)
 
         self.currentPage = None
@@ -1027,8 +973,9 @@ class GMFrame(wx.Frame):
             FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
             self.OnCBPageClosing,
         )
-        if is_docked:
-            self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
+        print("_closePageNoEvent")
+        print(self.GetMapDisplayIndex())
+        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
@@ -1192,11 +1139,6 @@ class GMFrame(wx.Frame):
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
         return self.GetMapDisplay(onlyCurrent=False)
-
-    def GetMapDisplayIndex(self):
-        """Get the index of the currently active map display tab.
-        Can be different than index of related layertree."""
-        return self.mapnotebook.GetPageIndex(self.GetMapDisplay())
 
     def GetLogWindow(self):
         """Gets console for command output and messages"""
@@ -2403,8 +2345,7 @@ class GMFrame(wx.Frame):
         )
         return dlg
 
-    def OnMapNotebookClose(self, event):
-        """Page of map notebook is being closed"""
-        display = self.GetMapDisplay(onlyCurrent=True)
-        display.OnCloseWindow(event=None, askIfSaveWorkspace=True)
-        event.Veto()
+    def GetMapDisplayIndex(self):
+        """Get the index of the currently active map display tab.
+        Can be different than index of related layertree."""
+        return self.mapnotebook.GetDisplayIndex(self.GetMapDisplay())
