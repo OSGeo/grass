@@ -88,6 +88,7 @@ Note that the first `grassgis` is the name of the image while the second
 `grass` is the name of the executable.
 
 ```bash
+xhost local:$(id -u)
 docker run -it --privileged --user=$(id -u):$(id -g) --rm \
     --volume="$(pwd)/:/data" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env HOME=/data/ --env DISPLAY=$DISPLAY --device="/dev/dri/card0:/dev/dri/card0" \
