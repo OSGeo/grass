@@ -51,7 +51,7 @@ jobs:
         echo "$GITHUB_WORKSPACE/cmake-3.9.1-Linux-x86_64/bin" >> $GITHUB_PATH
     - run: |
         cmake --version
-    - name: Install dependency
+    - name: Install dependencies
       run: |
         sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
         sudo apt-get update
@@ -83,6 +83,9 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/build
         cd $GITHUB_WORKSPACE/build
         cmake ${CMAKE_OPTIONS} ..
+        ls $GITHUB_WORKSPACE/build
+        sudo apt-get install -y -q mlocate ; sudo updatedb
+        locate include/Make/Platform.make
     - name: Build
       run: |
         cd $GITHUB_WORKSPACE/build
