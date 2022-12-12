@@ -123,8 +123,9 @@ class MapNotebook(aui.AuiNotebook):
             pass
 
         if not page.IsDocked():
-            page.GetParent().SetTitle(name)
-            wx.CallLater(500, page.GetParent().Raise)
+            frame = page.GetParent()
+            frame.SetTitle(name)
+            wx.CallLater(500, frame.Raise)
 
     def OnClose(self, event):
         """Page of map notebook is being closed"""
