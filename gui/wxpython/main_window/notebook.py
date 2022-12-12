@@ -91,12 +91,13 @@ class MapNotebook(aui.AuiNotebook):
         fr.closeFrameNoEvent()
 
     def AddPage(self, *args, **kwargs):
-        """Add page to notebook and make it current"""
+        """Overrides Aui.Notebook AddPage method. Adds page to notebook and make it current"""
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
 
     def SetSelectionToPage(self, page):
-        """Set selection either to a MapNotebook page or to an undocked independent frame"""
+        """Overrides Aui.Notebook SetSelectionToPage method.
+        Decides whether to set selection to a MapNotebook page or an undocked independent frame"""
         try:
             super().SetSelection(self.GetPageIndex(page))
         except Exception:
@@ -106,7 +107,8 @@ class MapNotebook(aui.AuiNotebook):
             wx.CallLater(500, page.GetParent().Raise)
 
     def DeletePage(self, page):
-        """Destroy either a MapNotebook page or an undocked independent frame"""
+        """Overrides Aui.Notebook DeletePage method.
+        Decides whether to destroy a MapNotebook page or an undocked independent frame"""
         try:
             super().DeletePage(self.GetPageIndex(page))
         except Exception:
@@ -116,7 +118,8 @@ class MapNotebook(aui.AuiNotebook):
             page.Destroy()
 
     def SetPageText(self, page, name):
-        """Set title to MapNotebook/independent page and focus on it"""
+        """Overrides Aui.Notebook SetPageText method.
+        Decides whether sets title to MapNotebook page or an undocked independent frame"""
         try:
             super().SetPageText(page_idx=self.GetPageIndex(page), text=name)
         except Exception:
