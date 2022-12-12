@@ -292,6 +292,10 @@ class GMFrame(wx.Frame):
         """Create Map Display notebook"""
         # create the notebook off-window to avoid flicker
         self.mapnotebook = MapNotebook(parent=self)
+        # self.mapnotebook.Bind(
+        #     aui.EVT_AUINOTEBOOK_PAGE_CLOSE,
+        #     self.OnMapNotebookClose,
+        # )
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -419,7 +423,7 @@ class GMFrame(wx.Frame):
                 size=globalvar.MAP_WINDOW_SIZE,
             )
             # add map display panel to notebook and make it current
-            self.mapnotebook.AddPage(self.displayIndex, page=mapdisplay, caption=name)
+            self.mapnotebook.AddPage(mapdisplay, name)
 
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
@@ -924,9 +928,7 @@ class GMFrame(wx.Frame):
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
         try:
-            print("OnCBPageChanged")
-            print(self.GetMapDisplayIndex())
-            self.mapnotebook.SetSelection(self.GetMapDisplayIndex())
+            self.mapnotebook.SetSelectionToPage(self.GetMapDisplay())
         except Exception:
             pass
         event.Skip()
@@ -945,9 +947,7 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        print("OnCBPageClosing")
-        print(self.GetMapDisplayIndex())
-        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+        self.mapnotebook.DeletePage(self.GetMapDisplay())
         maptree.Close(True)
 
         self.currentPage = None
@@ -973,9 +973,9 @@ class GMFrame(wx.Frame):
             FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
             self.OnCBPageClosing,
         )
-        print("_closePageNoEvent")
-        print(self.GetMapDisplayIndex())
-        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+        if is_docked:
+            map_page = self.mapnotebook.GetPage(pgnum_dict["mapnotebook"])
+            self.mapnotebook.DeletePage(map_page)
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
@@ -1641,7 +1641,7 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
-            self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
+            self.mapnotebook.SetPageText(self.GetMapDisplay(), name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):
@@ -2345,7 +2345,8 @@ class GMFrame(wx.Frame):
         )
         return dlg
 
-    def GetMapDisplayIndex(self):
-        """Get the index of the currently active map display tab.
-        Can be different than index of related layertree."""
-        return self.mapnotebook.GetDisplayIndex(self.GetMapDisplay())
+    # def OnMapNotebookClose(self, event):
+    #     """Page of map notebook is being closed"""
+    #     display = self.GetMapDisplay(onlyCurrent=True)
+    #     display.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+    #     event.Veto()

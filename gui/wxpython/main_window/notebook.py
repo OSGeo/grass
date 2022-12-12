@@ -55,23 +55,12 @@ class MapNotebook(aui.AuiNotebook):
         agwStyle=aui.AUI_NB_DEFAULT_STYLE | aui.AUI_NB_TAB_EXTERNAL_MOVE | wx.NO_BORDER,
     ):
         self.parent = parent
-        super().__init__(
-            parent=self.parent, id=wx.ID_ANY, agwStyle=agwStyle
-        )
-        client_size =  self.parent.GetClientSize()
-        print(client_size)
+        super().__init__(parent=self.parent, id=wx.ID_ANY, agwStyle=agwStyle)
+        client_size = self.parent.GetClientSize()
         self.SetPosition(wx.Point(client_size.x, client_size.y))
         self.SetSize(430, 200)
 
         self.SetArtProvider(SimpleTabArt())
-
-        # the list of docked map displays
-        self.dock_dict = {}
-        print(self.dock_dict)
-
-        # the list of all map displays and their display indexes
-        self.map_dict = {}
-        print(self.map_dict)
 
         # bindings
         self.Bind(
@@ -80,27 +69,12 @@ class MapNotebook(aui.AuiNotebook):
         )
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnClose)
 
-    def _extendDockDict(self, index, frame):
-        """Note map display indexes and their frames"""
-        print("_extendDockDict")
-        print(self.dock_dict)
-        self.dock_dict[index] = frame
-        print(self.dock_dict)
-
-    def _removeFromDockDict(self, frame):
-        """Note map display indexes and their frames"""
-        print("_removeFromDockDict")
-        print(self.dock_dict)
-        self.dock_dict = {key:val for key, val in self.dock_dict.items() if val != frame}
-        print(self.dock_dict)
-
     def UndockMapDisplay(self, page):
         """Undock active map display to independent MapFrame object"""
         idx = self.GetPageIndex(page)
         text = self.GetPageText(idx)
         self.RemovePage(idx)
         fr = MapPageFrame(parent=self.parent, mapdisplay=page, title=text)
-        self._extendDockDict(page.GetId(), fr)
         page.Reparent(fr)
         page.SetDockingCallback(self.DockMapDisplay)
         fr.sizer.Add(page, proportion=1, flag=wx.EXPAND)
@@ -112,51 +86,45 @@ class MapNotebook(aui.AuiNotebook):
         """Dock independent MapFrame object back to Aui.Notebook"""
         fr = page.GetParent()
         page.Reparent(self)
-        self._removeFromDockDict(fr)
         page.SetDockingCallback(self.UndockMapDisplay)
-        super().AddPage(page=page, caption=fr.GetTitle())
+        self.AddPage(page, fr.GetTitle())
         fr.closeFrameNoEvent()
 
-    def AddPage(self, display_index,**kwargs):
+    def AddPage(self, *args, **kwargs):
         """Add page to notebook and make it current"""
-        super().AddPage(**kwargs)
+        super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
-        mapdisplay = kwargs["page"]
-        self.map_dict[mapdisplay] = display_index
-        print("AddPage")
 
-    def SetSelection(self, index):
-        """Select either a MapNotebook page or an undocked independent frame"""
+    def SetSelectionToPage(self, page):
+        """Set selection either to a MapNotebook page or to an undocked independent frame"""
         try:
-            print("SetSelection")
-            if index in self.dock_dict:
-                print("SetSelection - undocked")
-                self.dock_dict[index].Raise()
-            else:
-                print("SetSelection - normally docked")
-                super().SetSelection(index)
+            super().SetSelection(self.GetPageIndex(page))
         except Exception:
             pass
 
-    def DeletePage(self, index):
+        if not page.IsDocked():
+            wx.CallLater(500, page.GetParent().Raise)
+
+    def DeletePage(self, page):
         """Destroy either a MapNotebook page or an undocked independent frame"""
         try:
-            print("DeletePage")
-            if index in self.dock_dict:
-                print("DeletePage - undocked")
-                self.dock_dict[index].Destroy()
-                self._removeFromDockDict(self.dock_dict[index])
-            else:
-                print("DeletePage - normally docked")
-                super().DeletePage(index)
+            super().DeletePage(self.GetPageIndex(page))
         except Exception:
             pass
 
-    def GetDisplayIndex(self, page):
-        print("GetDisplayIndex")
-        print(self.map_dict)
-        if page in self.map_dict:
-            return self.map_dict[page]
+        if not page.IsDocked():
+            page.Destroy()
+
+    def SetPageText(self, page, name):
+        """Set title to MapNotebook/independent page and focus on it"""
+        try:
+            super().SetPageText(page_idx=self.GetPageIndex(page), text=name)
+        except Exception:
+            pass
+
+        if not page.IsDocked():
+            page.GetParent().SetTitle(name)
+            wx.CallLater(500, page.GetParent().Raise)
 
     def OnClose(self, event):
         """Page of map notebook is being closed"""
