@@ -45,7 +45,7 @@ class MapPageFrame(wx.Frame):
 
 
 class MapNotebook(aui.AuiNotebook):
-    """Map notebook class. Overloades some AuiNotebook classes.
+    """Map notebook class. Overrides some AuiNotebook classes.
     Takes into consideration the dock/undock functionality.
     """
 
