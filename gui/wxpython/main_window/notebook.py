@@ -91,13 +91,15 @@ class MapNotebook(aui.AuiNotebook):
         fr.closeFrameNoEvent()
 
     def AddPage(self, *args, **kwargs):
-        """Overrides Aui.Notebook AddPage method. Adds page to notebook and make it current"""
+        """Overrides Aui.Notebook AddPage method.
+        Adds page to notebook and make it current"""
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
 
     def SetSelectionToPage(self, page):
         """Overrides Aui.Notebook SetSelectionToPage method.
-        Decides whether to set selection to a MapNotebook page or an undocked independent frame"""
+        Decides whether to set selection to a MapNotebook page
+        or an undocked independent frame"""
         try:
             super().SetSelection(self.GetPageIndex(page))
         except Exception:
@@ -108,7 +110,8 @@ class MapNotebook(aui.AuiNotebook):
 
     def DeletePage(self, page):
         """Overrides Aui.Notebook DeletePage method.
-        Decides whether to destroy a MapNotebook page or an undocked independent frame"""
+        Decides whether to destroy a MapNotebook page
+        or an undocked independent frame"""
         try:
             super().DeletePage(self.GetPageIndex(page))
         except Exception:
@@ -117,17 +120,18 @@ class MapNotebook(aui.AuiNotebook):
         if not page.IsDocked():
             page.Destroy()
 
-    def SetPageText(self, page, name):
+    def SetPageText(self, page, text):
         """Overrides Aui.Notebook SetPageText method.
-        Decides whether sets title to MapNotebook page or an undocked independent frame"""
+        Decides whether sets title to MapNotebook page
+        or an undocked independent frame"""
         try:
-            super().SetPageText(page_idx=self.GetPageIndex(page), text=name)
+            super().SetPageText(page_idx=self.GetPageIndex(page), text=text)
         except Exception:
             pass
 
         if not page.IsDocked():
             frame = page.GetParent()
-            frame.SetTitle(name)
+            frame.SetTitle(text)
             wx.CallLater(500, frame.Raise)
 
     def OnClose(self, event):

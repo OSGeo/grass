@@ -1637,7 +1637,7 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
-            self.mapnotebook.SetPageText(self.GetMapDisplay(), name)
+            self.mapnotebook.SetPageText(page=self.GetMapDisplay(), text=name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):
