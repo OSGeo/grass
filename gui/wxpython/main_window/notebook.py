@@ -1,7 +1,7 @@
 """
 @package frame.notebook
 
-@brief Classes for main window statusbar management
+@brief Custom AuiNotebook class and class for undocked AuiNotebook frame
 
 Classes:
  - notebook::MapPageFrame
