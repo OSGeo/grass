@@ -321,9 +321,8 @@ int input_data(void)
         cchez = create_float_matrix(rows, cols, manin_val);
     }
     else {
-        G_fatal_error(_("Raster map <%s> not found, and manin_val undefined, "
-                        "choose one to be allowed to process"),
-                      manin);
+        G_fatal_error(_("Manning's n raster map not found and manin_val "
+                        "undefined, choose one to be allowed to process"));
     }
 
     /* Rain: read rain map or use a single value for all cells */

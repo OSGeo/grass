@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 
     outfilename = parm.tga->answer;
     if (outfilename == NULL)
-        G_fatal_error(_("Invalid output filename <%s>"), outfilename);
+        G_fatal_error(_("Invalid output filename"));
 
     if (NULL == (outf = fopen(outfilename, "wb")))
         G_fatal_error(_("Unable to open output file <%s>"), outfilename);
