@@ -7,13 +7,11 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 static void die(void)
 {
     unlink(stats_file);
     G_fatal_error(_("Problem reading r.stats output"));
 }
-
 
 int stats(void)
 {
@@ -45,8 +43,7 @@ int stats(void)
 
     argv[argc++] = "separator=:";
 
-    sprintf(buf, "input=%s,%s",
-            G_fully_qualified_name(mname, mmapset),
+    sprintf(buf, "input=%s,%s", G_fully_qualified_name(mname, mmapset),
             G_fully_qualified_name(rname, rmapset));
     argv[argc++] = buf;
 
@@ -72,7 +69,7 @@ int stats(void)
         tokens = G_tokenize(buf, ":");
         i = 0;
         ns = nstats++;
-        Gstats = (GSTATS *) G_realloc(Gstats, nstats * sizeof(GSTATS));
+        Gstats = (GSTATS *)G_realloc(Gstats, nstats * sizeof(GSTATS));
         Gstats[ns].cats = (long *)G_calloc(nlayers, sizeof(long));
         for (nl = 0; nl < nlayers; nl++) {
             if (sscanf(tokens[i++], "%ld", &Gstats[ns].cats[nl]) != 1)
