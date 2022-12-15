@@ -338,9 +338,9 @@ class JSONOutputTest(TestCase):
                 ],
                 "row_sum": [4, 0, 5, 4, 1, 4],
                 "col_sum": [7, 3, 4, 0, 1, 3],
-                "producers_accuracy": [57.1429, 0.0, 100.0, -999.0, 100.0, 66.66666],
-                "users_accuracy": [100.0, -999.0, 80.0, 0.0, 100.0, 50.0],
-                "conditional_kappa": [1.0, -999.0, 0.742857, 0.0, 1.0, 0.400],
+                "producers_accuracy": [57.1429, 0.0, 100.0, None, 100.0, 66.66666],
+                "users_accuracy": [100.0, None, 80.0, 0.0, 100.0, 50.0],
+                "conditional_kappa": [1.0, None, 0.742857, 0.0, 1.0, 0.400],
             }
         )
 
@@ -377,9 +377,9 @@ class JSONOutputTest(TestCase):
                 ],
                 "row_sum": [0, 0, 0, 0, 0, 25],
                 "col_sum": [8, 8, 4, 1, 4, 0],
-                "producers_accuracy": [0.0, 0.0, 0.0, 0.0, 0.0, -999.0],
-                "users_accuracy": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
-                "conditional_kappa": [-999.0, -999.0, -999.0, -999.0, -999.0, 0.0],
+                "producers_accuracy": [0.0, 0.0, 0.0, 0.0, 0.0, None],
+                "users_accuracy": [None, None, None, None, None, 0.0],
+                "conditional_kappa": [None, None, None, None, None, 0.0],
             }
         )
 
@@ -401,8 +401,8 @@ class JSONOutputTest(TestCase):
                 "observations": 0,
                 "correct": 0,
                 "overall_accuracy": 0.0,
-                "kappa": -999.0,
-                "kappa_variance": -999.0,
+                "kappa": None,
+                "kappa_variance": None,
                 "cats": [],
                 "matrix": [[]],
                 "row_sum": [],
@@ -431,8 +431,8 @@ class JSONOutputTest(TestCase):
                 "observations": 0,
                 "correct": 0,
                 "overall_accuracy": 0.0,
-                "kappa": -999.0,
-                "kappa_variance": -999.0,
+                "kappa": None,
+                "kappa_variance": None,
                 "cats": [],
                 "matrix": [[]],
                 "row_sum": [],
