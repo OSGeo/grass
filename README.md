@@ -85,6 +85,6 @@ this issue, clean all the compiled files from the source code:
 make distclean
 ```
 
-## Packages
+## Available GNU/Linux and Unix-like OS packages
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/grass.svg?exclude_unsupported=1&exclude_sources=modules,site&minversion=8.2.0)](https://repology.org/project/grass/versions)
