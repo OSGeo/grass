@@ -85,7 +85,7 @@ class Frame(wx.Frame):
         data = data[::, ::, 2::-1]
         fn = getattr(data, "tobytes", getattr(data, "tostring"))
         image = wx.Image(app.i_width, app.i_height, fn())
-        dc.DrawBitmap(BitmapFromImage(image), x0, y0, False)
+        dc.DrawBitmap(BitmapFromImage(image), int(x0), int(y0), False)
 
     def redraw(self, ev):
         if self.app.fraction > 0.001:
