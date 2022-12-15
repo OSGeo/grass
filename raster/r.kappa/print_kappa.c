@@ -47,7 +47,6 @@ void print_kappa(void)
         fprintf(fd, "\tNA\n");
     else
         fprintf(fd, "\t%f\n", metrics->mcc);
-
     fprintf(fd, "\nObs Correct\tTotal Obs\t%% Observed Correct\n");
     fprintf(fd, "%ld\t\t%ld\t\t%f\n", metrics->correct, metrics->observations,
             metrics->overall_accuracy);

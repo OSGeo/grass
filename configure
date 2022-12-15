@@ -681,9 +681,6 @@ PQLIB
 PQLIBPATH
 PQINCPATH
 USE_POSTGRES
-USE_PNG
-PNGLIB
-PNGINC
 TIFFLIB
 TIFF_LIBRARY_DIRS
 TIFF_INCLUDE_DIRS
@@ -710,6 +707,10 @@ USE_GDAL
 GDAL_CFLAGS
 GDAL_LIBS
 GDAL_CONFIG
+USE_PNG
+PNGINC
+PNGLIB
+LIBPNG_CONFIG
 HISTORYLIB
 READLINELIB
 READLINELIBPATH
@@ -866,7 +867,6 @@ enable_w11
 with_macosx_archs
 with_macosx_sdk
 with_tiff
-with_png
 with_postgres
 with_mysql
 with_sqlite
@@ -886,6 +886,7 @@ with_openmp
 with_opencl
 with_bzlib
 with_zstd
+with_libpng
 with_gdal
 with_liblas
 with_pdal
@@ -903,8 +904,6 @@ with_readline_includes
 with_readline_libs
 with_tiff_includes
 with_tiff_libs
-with_png_includes
-with_png_libs
 with_postgres_includes
 with_postgres_libs
 with_mysql_includes
@@ -1589,7 +1588,6 @@ Optional Packages:
   --with-macosx-sdk=path/sdk
                           compile with a system SDK on MacOSX. (default: no)
   --with-tiff             support TIFF functionality (default: yes)
-  --with-png              support PNG functionality (default: yes)
   --with-postgres         support PostgreSQL functionality (default: no)
   --with-mysql            support MySQL functionality (default: no)
   --with-sqlite           support SQLite functionality (default: yes)
@@ -1609,6 +1607,9 @@ Optional Packages:
   --with-opencl           support OpenCL functionality (default: no)
   --with-bzlib            support BZIP2 functionality (default: no)
   --with-zstd             support Zstandard functionality (default: yes)
+  --with-libpng=path/libpng-config
+                          enable PNG support (libpng-config with path,
+                          e.g. '--with-libpng=/usr/local/bin/libpng-config')
   --with-gdal=path/gdal-config
                           enable GDAL/OGR support (gdal-config with path,
                           e.g. '--with-gdal=/usr/local/bin/gdal-config')
@@ -1646,9 +1647,6 @@ Optional Packages:
   --with-tiff-includes=DIRS
                           TIFF include files are in DIRS
   --with-tiff-libs=DIRS   TIFF library files are in DIRS
-  --with-png-includes=DIRS
-                          PNG include files are in DIRS
-  --with-png-libs=DIRS    PNG library files are in DIRS
   --with-postgres-includes=DIRS
                           PostgreSQL include files are in DIRS
   --with-postgres-libs=DIRS
@@ -4508,16 +4506,6 @@ fi
 
 
 
-# Check whether --with-png was given.
-if test "${with_png+set}" = set; then :
-  withval=$with_png;
-else
-  with_png=yes
-fi
-
-
-
-
 # Check whether --with-postgres was given.
 if test "${with_postgres+set}" = set; then :
   withval=$with_postgres;
@@ -4708,6 +4696,13 @@ fi
 
 
 
+# Check whether --with-libpng was given.
+if test "${with_libpng+set}" = set; then :
+  withval=$with_libpng;
+fi
+
+
+
 # Check whether --with-gdal was given.
 if test "${with_gdal+set}" = set; then :
   withval=$with_gdal;
@@ -4847,23 +4842,6 @@ fi
 # Check whether --with-tiff-libs was given.
 if test "${with_tiff_libs+set}" = set; then :
   withval=$with_tiff_libs;
-fi
-
-
-
-
-
-# Check whether --with-png-includes was given.
-if test "${with_png_includes+set}" = set; then :
-  withval=$with_png_includes;
-fi
-
-
-
-
-# Check whether --with-png-libs was given.
-if test "${with_png_libs+set}" = set; then :
-  withval=$with_png_libs;
 fi
 
 
@@ -8949,6 +8927,131 @@ fi # $USE_READLINE
 
 # Done checking Readline
 
+# PNG option
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use PNG" >&5
+$as_echo_n "checking whether to use PNG... " >&6; }
+
+PNGLIB=
+PNGINC=
+USE_PNG=
+
+if test "`basename xx/$with_libpng`" = "libpng-config" ; then
+  LIBPNG_CONFIG="$with_libpng"
+fi
+
+if test "$with_libpng" = "no" ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  # Extract the first word of "libpng-config", so it can be a program name with args.
+set dummy libpng-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+
+case $LIBPNG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_LIBPNG_CONFIG="$LIBPNG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_LIBPNG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_LIBPNG_CONFIG" && ac_cv_path_LIBPNG_CONFIG="no"
+  ;;
+esac
+LIBPNG_CONFIG=$ac_cv_path_LIBPNG_CONFIG
+if test -n "$LIBPNG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LIBPNG_CONFIG" >&5
+$as_echo "$LIBPNG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+
+  if test "$LIBPNG_CONFIG" = "no" ; then
+    as_fn_error $? "*** couldn't find libpng-config" "$LINENO" 5
+  fi
+
+  if test "$LIBPNG_CONFIG" != "" ; then
+    PNGLIB=`"$LIBPNG_CONFIG" --static --ldflags`
+    PNGINC=`"$LIBPNG_CONFIG" --cflags`
+    USE_PNG=1
+  fi
+
+  PNG=
+  ac_save_libs="$LIBS"
+  ac_save_cflags="$CFLAGS"
+  LIBS="$LIBS $PNGLIB"
+  CFLAGS="$CFLAGS $PNGINC"
+
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <png.h>
+int
+main ()
+{
+png_read_image(NULL, NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+else
+
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <png.h>
+int
+main ()
+{
+png_read_image(NULL, NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  PNGLIB="$PNGLIB"
+else
+
+  as_fn_error $? "*** Unable to locate libpng library." "$LINENO" 5
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+
+
+$as_echo "#define HAVE_PNG_H 1" >>confdefs.h
+
+fi
+
+
+
+
+
 # GDAL option
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use GDAL" >&5
@@ -10126,158 +10229,6 @@ fi # $USE_TIFF
 
 
 # Done checking TIFF
-
-# Enable PNG option
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use PNG" >&5
-$as_echo_n "checking whether to use PNG... " >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: \"$with_png\"" >&5
-$as_echo "\"$with_png\"" >&6; }
-case "$with_png" in
-	"no")	USE_PNG=	;;
-	"yes")	USE_PNG="1"	;;
-	*)	as_fn_error $? "*** You must answer yes or no." "$LINENO" 5	;;
-esac
-
-
-
-PNGINC=
-PNGLIB=
-
-if test -n "$USE_PNG"; then
-
-# With PNG includes directory
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of PNG includes" >&5
-$as_echo_n "checking for location of PNG includes... " >&6; }
-case "$with_png_includes" in
-y | ye | yes | n | no)
-	as_fn_error $? "*** You must supply a directory to --with-png-includes." "$LINENO" 5
-	;;
-esac
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_png_includes" >&5
-$as_echo "$with_png_includes" >&6; }
-
-if test -n "$with_png_includes" ; then
-    for dir in $with_png_includes; do
-        if test -d "$dir"; then
-            PNGINC="$PNGINC -I$dir"
-        else
-            as_fn_error $? "*** PNG includes directory $dir does not exist." "$LINENO" 5
-        fi
-    done
-fi
-
-
-
-ac_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$PNGINC $CPPFLAGS"
-for ac_header in png.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "png.h" "ac_cv_header_png_h" "$ac_includes_default"
-if test "x$ac_cv_header_png_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_PNG_H 1
-_ACEOF
-
-else
-
-    as_fn_error $? "*** Unable to locate PNG includes." "$LINENO" 5
-
-fi
-
-done
-
-CPPFLAGS=$ac_save_cppflags
-
-
-# With PNG library directory
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of PNG library" >&5
-$as_echo_n "checking for location of PNG library... " >&6; }
-case "$with_png_libs" in
-y | ye | yes | n | no)
-	as_fn_error $? "*** You must supply a directory to --with-png-libs." "$LINENO" 5
-	;;
-esac
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_png_libs" >&5
-$as_echo "$with_png_libs" >&6; }
-
-if test -n "$with_png_libs"; then
-    for dir in $with_png_libs; do
-        if test -d "$dir"; then
-            PNGLIB="$PNGLIB -L$dir"
-        else
-            as_fn_error $? "*** PNG library directory $dir does not exist." "$LINENO" 5
-        fi
-    done
-fi
-
-
-
-ac_save_ldflags="$LDFLAGS"
-LDFLAGS="$PNGLIB $LDFLAGS"
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for png_read_image in -lpng" >&5
-$as_echo_n "checking for png_read_image in -lpng... " >&6; }
-
-ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpng $ZLIB $MATHLIB $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char png_read_image ();
-int
-main ()
-{
-return png_read_image ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_png_png_read_image=yes
-else
-  ac_cv_lib_png_png_read_image=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png_png_read_image" >&5
-$as_echo "$ac_cv_lib_png_png_read_image" >&6; }
-if test "x$ac_cv_lib_png_png_read_image" = xyes; then :
-  PNGLIB="$PNGLIB -lpng $ZLIB $MATHLIB"
-else
-
-LDFLAGS=${ac_save_ldflags}
-
-    as_fn_error $? "*** Unable to locate PNG library." "$LINENO" 5
-
-
-fi
-
-
-
-LDFLAGS=${ac_save_ldflags}
-
-
-fi # $USE_PNG
-
-
-
-
-
-# Done checking PNG
 
 # Enable PostgreSQL option
 

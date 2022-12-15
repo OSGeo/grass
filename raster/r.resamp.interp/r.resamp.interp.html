@@ -36,6 +36,20 @@ degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.
 
+<h3>PERFORMANCE</h3>
+<p>By specifying the number of parallel processes with <b>nprocs</b> option,
+<em>r.resamp.interp</em> can run significantly faster, see benchmarks below.
+
+<div align="center" style="margin: 10px">
+     <img src="r_resamp_interp_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <br>
+     <i>Figure: Benchmark shows execution time for different
+     number of cells. See benchmark scripts in source code.</i>
+     </div>
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
+
 <h2>EXAMPLE</h2>
 
 Resample elevation raster map to a higher resolution (from 500m to 250m;

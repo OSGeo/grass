@@ -23,8 +23,14 @@ void print_json()
     fprintf(fd, "    \"observations\": %ld,\n", metrics->observations);
     fprintf(fd, "    \"correct\": %ld,\n", metrics->correct);
     fprintf(fd, "    \"overall_accuracy\": %.5f,\n", metrics->overall_accuracy);
-    fprintf(fd, "    \"kappa\": %.5f,\n", metrics->kappa);
-    fprintf(fd, "    \"kappa_variance\": %.5f,\n", metrics->kappa_variance);
+    if (metrics->kappa == na_value)
+        fprintf(fd, "    \"kappa\": null,\n");
+    else
+        fprintf(fd, "    \"kappa\": %.5f,\n", metrics->kappa);
+    if (metrics->kappa_variance == na_value)
+        fprintf(fd, "    \"kappa_variance\": null,\n");
+    else
+        fprintf(fd, "    \"kappa_variance\": %.5f,\n", metrics->kappa_variance);
     fprintf(fd, "    \"cats\": [");
     first = 1;
     for (int i = 0; i < ncat; i++) {
@@ -80,7 +86,10 @@ void print_json()
             first = 0;
         else
             fprintf(fd, ", ");
-        fprintf(fd, "%.5f", metrics->producers_accuracy[i]);
+        if (metrics->producers_accuracy[i] == na_value)
+            fprintf(fd, "null");
+        else
+            fprintf(fd, "%.5f", metrics->producers_accuracy[i]);
     }
     fprintf(fd, "],\n");
     fprintf(fd, "    \"users_accuracy\": [");
@@ -90,7 +99,10 @@ void print_json()
             first = 0;
         else
             fprintf(fd, ", ");
-        fprintf(fd, "%.5f", metrics->users_accuracy[i]);
+        if (metrics->users_accuracy[i] == na_value)
+            fprintf(fd, "null");
+        else
+            fprintf(fd, "%.5f", metrics->users_accuracy[i]);
     }
     fprintf(fd, "],\n");
     fprintf(fd, "    \"conditional_kappa\": [");
@@ -100,10 +112,16 @@ void print_json()
             first = 0;
         else
             fprintf(fd, ", ");
-        fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
+        if (metrics->conditional_kappa[i] == na_value)
+            fprintf(fd, "null");
+        else
+            fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
     }
     fprintf(fd, "],\n");
-    fprintf(fd, "    \"mcc\": %.5f\n", metrics->mcc);
+    if (metrics->mcc == na_value)
+        fprintf(fd, "    \"mcc\": null\n");
+    else
+        fprintf(fd, "    \"mcc\": %.5f\n", metrics->mcc);
 
     fprintf(fd, "}\n");
     if (output != NULL)
