@@ -1,19 +1,18 @@
-
 /****************************************************************
- * 
+ *
  *  MODULE:       v.net.steiner
- *  
+ *
  *  AUTHOR(S):    Radim Blazek
- *                
+ *
  *  PURPOSE:      Find Steiner tree for network
- *                
+ *
  *  COPYRIGHT:    (C) 2001 by the GRASS Development Team
- * 
- *                This program is free software under the 
- *                GNU General Public License (>=v2). 
+ *
+ *                This program is free software under the
+ *                GNU General Public License (>=v2).
  *                Read the file COPYING that comes with GRASS
  *                for details.
- * 
+ *
  **************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -24,26 +23,28 @@
 #include <grass/glocale.h>
 
 /* costs between 2 terminals */
-typedef struct
-{
+typedef struct {
     int term1, term2;
     double cost;
 } COST;
 
-int nterms;                     /* number of terminals */
-int nnodes;                     /* number of nodes */
-int *terms;                     /* array of 1. terminals; 2. accepted steiner points; 3. tested steiner point */
-COST *term_costs;               /* costs between terminals */
-COST *sp_costs;                 /* costs between StP and terminals */
-int *comps;                     /* numbers of component, the terminal was assigned to */
+int nterms; /* number of terminals */
+int nnodes; /* number of nodes */
+int *terms; /* array of 1. terminals; 2. accepted steiner points; 3. tested
+               steiner point */
+COST *term_costs; /* costs between terminals */
+COST *sp_costs;   /* costs between StP and terminals */
+int *comps;       /* numbers of component, the terminal was assigned to */
 
-/* pointer to array of pointers to costs to other nodes, matrix: from-to, from < to:
- *  1-2 1-3 1-4 ... 1-nnodes
- *  2-3 2-4 ... 2-nnodes
- *  3-4 ... 3-nnodes
- *  ...
- *  (nnodes - 1)-nnodes
- *  !!! init costs for from or to node, before this cost is read by init_node_costs();
+/* pointer to array of pointers to costs to other nodes,
+ * matrix: from-to, from < to:
+ *   1-2 1-3 1-4 ... 1-nnodes
+ *   2-3 2-4 ... 2-nnodes
+ *   3-4 ... 3-nnodes
+ *   ...
+ *   (nnodes - 1)-nnodes
+ *   !!! init costs for from or to node, before this cost is read by
+ *   init_node_costs();
  */
 double **nodes_costs;
 
@@ -62,8 +63,8 @@ int init_node_costs(struct Map_info *Map, int from)
             continue;
         ret = Vect_net_shortest_path(Map, from, to, NULL, &cost);
         if (ret == -1) {
-            G_debug(1, "Destination node %d is unreachable from node %d\n",
-                    to, from);
+            G_debug(1, "Destination node %d is unreachable from node %d\n", to,
+                    from);
             cost = -2;
         }
 
@@ -114,26 +115,28 @@ int get_node_costs(int from, int to, double *cost)
 
 /* Calculate costs for MST on given set of terminals.
  *  If AList / NList is not NULL, list of arcs / nodes in MST is created
- *  Note: qsort() from more (say >30) terminals, takes long time (most of mst()).
- *        To improve the speed, there are used two sorted queues of costs:
+ *  Note: qsort() from more (say >30) terminals, takes long time (most of
+ * mst()). To improve the speed, there are used two sorted queues of costs:
  *          1. for all combinations of in trms
  *          2. from 'sp' to all other terminals
  *        Because 1. is sorted only if new sp as added to list of terminals,
  *        and 2. is much shorter than 1., a lot of time is saved.
  */
-int mst(struct Map_info *Map, int *trms, int ntrms,     /* array of terminal, number of terminals */
-        double *cst, double max_cst,    /* cost, maximum cost */
-        struct ilist *AList, struct ilist *NList,       /* list of arcs/nodes in ST */
-        int sp,                 /* Steiner point (node) to be tested with terminals, (0 = ignore) */
-        int rebuild)
-{                               /* rebuild the sorted list of costs for terminals */
+int mst(
+    struct Map_info *Map, int *trms,
+    int ntrms,                   /* array of terminal, number of terminals */
+    double *cst, double max_cst, /* cost, maximum cost */
+    struct ilist *AList, struct ilist *NList, /* list of arcs/nodes in ST */
+    int sp, /* Steiner point (node) to be tested with terminals, (0 = ignore) */
+    int rebuild)
+{ /* rebuild the sorted list of costs for terminals */
     int i, j, node1, node2, com1, com2, t1, t2, line;
     static int k;
-    int tcpos, scpos;           /* current position in the term_costs / sp_costs */
+    int tcpos, scpos; /* current position in the term_costs / sp_costs */
     double tcst;
     struct ilist *List;
     int nsteps, quse;
-    int nall;                   /* number of terminals + sp ( if used ) */
+    int nall; /* number of terminals + sp ( if used ) */
 
     if (AList != NULL) {
         Vect_reset_list(AList);
@@ -153,7 +156,8 @@ int mst(struct Map_info *Map, int *trms, int ntrms,     /* array of terminal, nu
             }
         }
 
-        qsort((void *)term_costs, k, sizeof(COST), cmp);        /* this takes most of a time in mst() */
+        qsort((void *)term_costs, k, sizeof(COST),
+              cmp); /* this takes most of a time in mst() */
         for (i = 0; i < k; i++) {
             G_debug(3, "  %d - %d cost = %f\n", term_costs[i].term1,
                     term_costs[i].term2, term_costs[i].cost);
@@ -163,7 +167,7 @@ int mst(struct Map_info *Map, int *trms, int ntrms,     /* array of terminal, nu
     /* Create sorted array for all combinations of sp -> terms */
     if (sp > 0) {
         for (i = 0; i < ntrms; i++) {
-            sp_costs[i].term1 = -1;     /* not needed */
+            sp_costs[i].term1 = -1; /* not needed */
             sp_costs[i].term2 = i;
             get_node_costs(sp, trms[i], &tcst);
             sp_costs[i].cost = tcst;
@@ -180,7 +184,7 @@ int mst(struct Map_info *Map, int *trms, int ntrms,     /* array of terminal, nu
     /* MST has number_of_terminals-1 arcs */
     if (sp > 0) {
         nall = ntrms + 1;
-        nsteps = ntrms;         /* i.e. + one StP */
+        nsteps = ntrms; /* i.e. + one StP */
     }
     else {
         nall = ntrms;
@@ -203,31 +207,33 @@ int mst(struct Map_info *Map, int *trms, int ntrms,     /* array of terminal, nu
             t2 = term_costs[j].term2;
             com1 = comps[t1];
             com2 = comps[t2];
-            if (com1 != com2 || com1 == 0) {    /* will not create cycle -> candidate */
+            if (com1 != com2 ||
+                com1 == 0) { /* will not create cycle -> candidate */
                 tcpos = j;
                 break;
             }
         }
-        if (j == k) {           /* arc without cycle not found */
+        if (j == k) { /* arc without cycle not found */
             tcpos = -1;
         }
 
         /* StP costs */
         if (sp > 0) {
             for (j = scpos; j < ntrms; j++) {
-                t1 = ntrms;     /* StP is on first fre position */
+                t1 = ntrms; /* StP is on first fre position */
                 t2 = sp_costs[j].term2;
                 com1 = comps[t1];
                 com2 = comps[t2];
                 G_debug(3, "scpos: j = %d comps(%d) = %d coms(%d) = %d\n", j,
                         t1, com1, t2, com2);
-                if (com1 != com2 || com1 == 0) {        /* will not create cycle -> candidate */
+                if (com1 != com2 ||
+                    com1 == 0) { /* will not create cycle -> candidate */
                     scpos = j;
                     G_debug(3, " ok -> scpos = %d\n", scpos);
                     break;
                 }
             }
-            if (j == ntrms) {   /* arc without cycle not found */
+            if (j == ntrms) { /* arc without cycle not found */
                 scpos = -1;
             }
         }
@@ -239,22 +245,23 @@ int mst(struct Map_info *Map, int *trms, int ntrms,     /* array of terminal, nu
             G_debug(3, "tcost = %f, scost = %f\n", term_costs[tcpos].cost,
                     sp_costs[scpos].cost);
 
-        /* Now we have positions set on lowest costs in each queue or -1 if no more/not used */
+        /* Now we have positions set on lowest costs in each queue or -1 if no
+         * more/not used */
         if (tcpos >= 0 && scpos >= 0) {
             if (term_costs[tcpos].cost < sp_costs[scpos].cost)
-                quse = 1;       /* use terms queue */
+                quse = 1; /* use terms queue */
             else
-                quse = 2;       /* use sp queue */
+                quse = 2; /* use sp queue */
         }
         else if (tcpos >= 0) {
-            quse = 1;           /* use terms queue */
+            quse = 1; /* use terms queue */
         }
         else {
-            quse = 2;           /* use sp queue */
+            quse = 2; /* use sp queue */
         }
 
-
-        /* Now we know from which queue take next arc -> add arc to components */
+        /* Now we know from which queue take next arc -> add arc to components
+         */
         if (quse == 1) {
             t1 = term_costs[tcpos].term1;
             t2 = term_costs[tcpos].term2;
@@ -329,11 +336,11 @@ int main(int argc, char **argv)
     struct Flag *geo_f;
     struct GModule *module;
     struct Map_info Map, Out;
-    int *testnode;              /* array all nodes: 1 - should be tested as Steiner, 
-                                 * 0 - no need to test (unreachable or terminal) */
-    struct ilist *TList;        /* list of terminal nodes */
-    struct ilist *StArcs;       /* list of arcs on Steiner tree */
-    struct ilist *StNodes;      /* list of nodes on Steiner tree */
+    int *testnode;         /* array all nodes: 1 - should be tested as Steiner,
+                            * 0 - no need to test (unreachable or terminal) */
+    struct ilist *TList;   /* list of terminal nodes */
+    struct ilist *StArcs;  /* list of arcs on Steiner tree */
+    struct ilist *StNodes; /* list of nodes on Steiner tree */
     struct boxlist *pointlist;
     double cost, tmpcost;
     struct cat_list *Clist;
@@ -391,8 +398,7 @@ int main(int argc, char **argv)
     nsp_opt->required = NO;
     nsp_opt->multiple = NO;
     nsp_opt->answer = "-1";
-    nsp_opt->description =
-        _("Number of Steiner points (-1 for all possible)");
+    nsp_opt->description = _("Number of Steiner points (-1 for all possible)");
 
     geo_f = G_define_flag();
     geo_f->key = 'g';
@@ -445,12 +451,10 @@ int main(int argc, char **argv)
         Vect_read_line(&Map, Points, Cats, i);
         if (!(Vect_cat_get(Cats, tfield, &cat)))
             continue;
-        node =
-            Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0,
-                           0);
+        node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0,
+                              0);
         if (!node) {
-            G_warning(_("Point is not connected to the network (cat=%d)"),
-                      cat);
+            G_warning(_("Point is not connected to the network (cat=%d)"), cat);
             continue;
         }
         if (Vect_cat_in_cat_list(cat, Clist)) {
@@ -488,20 +492,21 @@ int main(int argc, char **argv)
     for (i = 0; i < nnodes; i++) {
         nodes_costs[i] = (double *)G_malloc((nnodes - i) * sizeof(double));
         for (j = 0; j < nnodes - i; j++)
-            nodes_costs[i][j] = -1;     /* init, i.e. cost was not calculated yet */
+            nodes_costs[i][j] = -1; /* init, i.e. cost was not calculated yet */
     }
 
     /* alloc memory from each to each other (not directed) terminal */
-    i = nterms + nterms - 2;    /*  max number of terms + Steiner points */
+    i = nterms + nterms - 2; /*  max number of terms + Steiner points */
     comps = (int *)G_malloc(i * sizeof(int));
-    i = i * (i - 1) / 2;        /* number of combinations */
-    term_costs = (COST *) G_malloc(i * sizeof(COST));
+    i = i * (i - 1) / 2; /* number of combinations */
+    term_costs = (COST *)G_malloc(i * sizeof(COST));
 
     /* alloc memory for costs from Stp to each other terminal */
-    i = nterms + nterms - 2 - 1;        /*  max number of terms + Steiner points - 1 */
-    sp_costs = (COST *) G_malloc(i * sizeof(COST));
+    i = nterms + nterms - 2 - 1; /*  max number of terms + Steiner points - 1 */
+    sp_costs = (COST *)G_malloc(i * sizeof(COST));
 
-    terms = (int *)G_malloc((nterms + nterms - 2) * sizeof(int));       /* i.e. +(nterms - 2)  St Points */
+    terms = (int *)G_malloc((nterms + nterms - 2) *
+                            sizeof(int)); /* i.e. +(nterms - 2)  St Points */
     /* Create initial parts from list of terminals */
     G_debug(1, "List of terminal nodes (%d):\n", nterms);
     for (i = 0; i < nterms; i++) {
@@ -511,8 +516,8 @@ int main(int argc, char **argv)
     }
 
     /* Build graph */
-    Vect_net_build_graph(&Map, type, afield, 0, afcol->answer, NULL, NULL,
-                         geo, 0);
+    Vect_net_build_graph(&Map, type, afield, 0, afcol->answer, NULL, NULL, geo,
+                         0);
 
     /* Init costs for all terminals */
     for (i = 0; i < nterms; i++)
@@ -524,7 +529,8 @@ int main(int argc, char **argv)
         if (ret == 0) {
             /* GTC Terminal refers to an Steiner tree endpoint */
             G_fatal_error(_("Terminal at node [%d] cannot be connected "
-                            "to terminal at node [%d]"), terms[0], terms[i]);
+                            "to terminal at node [%d]"),
+                          terms[0], terms[i]);
         }
     }
 
@@ -542,13 +548,16 @@ int main(int argc, char **argv)
     }
 
     G_message(_("[%d] (not reachable) nodes removed from list "
-                "of Steiner point candidates"), j);
+                "of Steiner point candidates"),
+              j);
 
     /* calc costs for terminals MST */
-    ret = mst(&Map, terms, nterms, &cost, PORT_DOUBLE_MAX, NULL, NULL, 0, 1);   /* no StP, rebuild */
+    ret = mst(&Map, terms, nterms, &cost, PORT_DOUBLE_MAX, NULL, NULL, 0,
+              1); /* no StP, rebuild */
     G_message(_("MST costs = %f"), cost);
 
-    /* Go through all nodes and try to use as steiner points -> find that which saves most costs */
+    /* Go through all nodes and try to use as steiner points -> find that which
+     * saves most costs */
     nspused = 0;
     for (j = 0; j < nsp; j++) {
         sp = 0;
@@ -561,44 +570,44 @@ int main(int argc, char **argv)
                 continue;
             }
             ret =
-                mst(&Map, terms, nterms + j, &tmpcost, cost, NULL, NULL, i,
-                    0);
+                mst(&Map, terms, nterms + j, &tmpcost, cost, NULL, NULL, i, 0);
             G_debug(2, "cost = %f x %f\n", tmpcost, cost);
-            if (tmpcost < cost) {       /* sp candidate */
-                G_debug(3,
-                        "  steiner candidate node = %d mst = %f (x last = %f)\n",
-                        i, tmpcost, cost);
+            if (tmpcost < cost) { /* sp candidate */
+                G_debug(
+                    3, "  steiner candidate node = %d mst = %f (x last = %f)\n",
+                    i, tmpcost, cost);
                 sp = i;
                 cost = tmpcost;
             }
         }
         if (sp > 0) {
             G_message(_("Steiner point at node [%d] was added "
-                        "to terminals (MST costs = %f)"), sp, cost);
+                        "to terminals (MST costs = %f)"),
+                      sp, cost);
             terms[nterms + j] = sp;
             init_node_costs(&Map, sp);
             testnode[sp] = 0;
             nspused++;
             /* rebuild for nex cycle */
-            ret =
-                mst(&Map, terms, nterms + nspused, &tmpcost, PORT_DOUBLE_MAX,
-                    NULL, NULL, 0, 1);
+            ret = mst(&Map, terms, nterms + nspused, &tmpcost, PORT_DOUBLE_MAX,
+                      NULL, NULL, 0, 1);
         }
-        else {                  /* no steiner found */
+        else { /* no steiner found */
             G_message(_("No Steiner point found -> leaving cycle"));
             break;
         }
     }
 
     G_message(_("Number of added Steiner points: %d "
-                "(theoretic max is %d).\n"), nspused, nterms - 2);
+                "(theoretic max is %d).\n"),
+              nspused, nterms - 2);
 
     /* Build lists of arcs and nodes for final version */
-    ret =
-        mst(&Map, terms, nterms + nspused, &cost, PORT_DOUBLE_MAX, StArcs,
-            StNodes, 0, 0);
+    ret = mst(&Map, terms, nterms + nspused, &cost, PORT_DOUBLE_MAX, StArcs,
+              StNodes, 0, 0);
 
-    /* Calculate true costs, which may be lower than MST if steiner points were not used */
+    /* Calculate true costs, which may be lower than MST if steiner points were
+     * not used */
 
     if (nsp < nterms - 2) {
         G_message(_("Spanning tree costs on complete graph = %f\n"
@@ -661,7 +670,8 @@ int main(int argc, char **argv)
 
     G_message(n_("A Steiner tree with %d arc has been built",
                  "A Steiner tree with %d arcs has been built",
-                 StArcs->n_values), StArcs->n_values);
+                 StArcs->n_values),
+              StArcs->n_values);
 
     /* Free, ... */
     Vect_destroy_list(StArcs);
@@ -674,8 +684,8 @@ int main(int argc, char **argv)
 
 int cmp(const void *pa, const void *pb)
 {
-    COST *p1 = (COST *) pa;
-    COST *p2 = (COST *) pb;
+    COST *p1 = (COST *)pa;
+    COST *p2 = (COST *)pb;
 
     if (p1->cost < p2->cost)
         return -1;

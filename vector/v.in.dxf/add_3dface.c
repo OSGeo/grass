@@ -5,14 +5,14 @@
 void add_3dface(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
-    char handle[DXF_BUF_SIZE];  /* entity handle, 16 hexadecimal digits */
-    char layer[DXF_BUF_SIZE];   /* layer name */
-    int layer_flag = 0;         /* indicates if a layer name has been found */
+    char handle[DXF_BUF_SIZE]; /* entity handle, 16 hexadecimal digits */
+    char layer[DXF_BUF_SIZE];  /* layer name */
+    int layer_flag = 0;        /* indicates if a layer name has been found */
 
-    /* int dface_flag = 0; *//* indicates if a edge is invisible */
-    int xflag = 0;              /* indicates if a x value has been found */
-    int yflag = 0;              /* indicates if a y value has been found */
-    int zflag = 0;              /* indicates if a z value has been found */
+    /* int dface_flag = 0; */ /* indicates if a edge is invisible */
+    int xflag = 0;            /* indicates if a x value has been found */
+    int yflag = 0;            /* indicates if a y value has been found */
+    int zflag = 0;            /* indicates if a z value has been found */
     int arr_size = 0;
 
     handle[0] = 0;
@@ -24,10 +24,10 @@ void add_3dface(struct dxf_file *dxf, struct Map_info *Map)
             return;
 
         switch (code) {
-        case 5:                /* entity handle */
+        case 5: /* entity handle */
             strcpy(handle, dxf_buf);
             break;
-        case 8:                /* layer name */
+        case 8: /* layer name */
             if (!layer_flag && *dxf_buf) {
                 if (flag_list) {
                     if (!is_layer_in_list(dxf_buf))
@@ -45,65 +45,65 @@ void add_3dface(struct dxf_file *dxf, struct Map_info *Map)
                 layer_flag = 1;
             }
             break;
-        case 10:               /* first corner x coordinate */
+        case 10: /* first corner x coordinate */
             xpnts[arr_size] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 11:               /* second corner x coordinate */
+        case 11: /* second corner x coordinate */
             xpnts[arr_size] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 12:               /* third corner x coordinate */
+        case 12: /* third corner x coordinate */
             xpnts[arr_size] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 13:               /* fourth corner x coordinate */
+        case 13: /* fourth corner x coordinate */
             xpnts[arr_size] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 20:               /* first corner y coordinate */
+        case 20: /* first corner y coordinate */
             ypnts[arr_size] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 21:               /* second corner y coordinate */
+        case 21: /* second corner y coordinate */
             ypnts[arr_size] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 22:               /* third corner y coordinate */
+        case 22: /* third corner y coordinate */
             ypnts[arr_size] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 23:               /* fourth corner y coordinate */
+        case 23: /* fourth corner y coordinate */
             ypnts[arr_size] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 30:               /* first corner z coordinate */
+        case 30: /* first corner z coordinate */
             zpnts[arr_size] = atof(dxf_buf);
             zflag = 1;
             break;
-        case 31:               /* second corner z coordinate */
+        case 31: /* second corner z coordinate */
             zpnts[arr_size] = atof(dxf_buf);
             zflag = 1;
             break;
-        case 32:               /* third corner z coordinate */
+        case 32: /* third corner z coordinate */
             zpnts[arr_size] = atof(dxf_buf);
             zflag = 1;
             break;
-        case 33:               /* fourth corner z coordinate */
+        case 33: /* fourth corner z coordinate */
             zpnts[arr_size] = atof(dxf_buf);
             zflag = 1;
             break;
-        case 70:               /* 3dface flag */
+        case 70: /* 3dface flag */
             /* dface_flag = atoi(dxf_buf); */
             /* TODO: what does 'invisible' mean here? */
 
             /*******************************************************************
-	     Invisible edge flags (optional; default = 0):
-	     1 = First edge is invisible
-	     2 = Second edge is invisible
-	     4 = Third edge is invisible
-	     8 = Fourth edge is invisible
-	     ******************************************************************/
+             Invisible edge flags (optional; default = 0):
+             1 = First edge is invisible
+             2 = Second edge is invisible
+             4 = Third edge is invisible
+             8 = Fourth edge is invisible
+             ******************************************************************/
             break;
         }
 

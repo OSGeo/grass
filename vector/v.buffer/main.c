@@ -1,15 +1,14 @@
-
 /****************************************************************
  *
  * MODULE:       v.buffer
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Upgraded by Rosen Matev (Google Summer of Code 2008)
  *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *               rewrite and GEOS added by Markus Metz
- *               
+ *
  * PURPOSE:      Vector buffer
- *               
+ *
  * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -43,7 +42,7 @@ int adjust_tolerance(double *tolerance)
     return 0;
 }
 
-int db_CatValArray_get_value_di(dbCatValArray * cvarr, int cat, double *value)
+int db_CatValArray_get_value_di(dbCatValArray *cvarr, int cat, double *value)
 {
     int t;
     int ctype = cvarr->ctype;
@@ -100,17 +99,17 @@ int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
             if (arr_bc[List->value[i]].inner[j] < 1)
                 continue;
 
-            Vect_read_line(Buf, Points, NULL,
-                           arr_bc[List->value[i]].inner[j]);
+            Vect_read_line(Buf, Points, NULL, arr_bc[List->value[i]].inner[j]);
             ret = Vect_point_in_poly(x, y, Points);
-            if (ret != 0) {     /* inside inner contour */
+            if (ret != 0) { /* inside inner contour */
                 flag = 0;
                 break;
             }
         }
 
         if (flag) {
-            /* (x,y) is inside outer contour and outside inner contours of arr_bc[i] */
+            /* (x,y) is inside outer contour and outside inner contours of
+             * arr_bc[i] */
             return 1;
         }
     }
@@ -157,17 +156,17 @@ int buffer_cats(struct buf_contours *arr_bc, struct spatial_index *si,
             if (arr_bc[List->value[i]].inner[j] < 1)
                 continue;
 
-            Vect_read_line(Buf, Points, NULL,
-                           arr_bc[List->value[i]].inner[j]);
+            Vect_read_line(Buf, Points, NULL, arr_bc[List->value[i]].inner[j]);
             ret = Vect_point_in_poly(x, y, Points);
-            if (ret != 0) {     /* inside inner contour */
+            if (ret != 0) { /* inside inner contour */
                 flag = 0;
                 break;
             }
         }
 
         if (flag) {
-            /* (x,y) is inside outer contour and outside inner contours of arr_bc[i] */
+            /* (x,y) is inside outer contour and outside inner contours of
+             * arr_bc[i] */
             inside = 1;
             for (j = 0; j < BCats->n_cats; j++)
                 Vect_cat_set(Cats, BCats->field[j], BCats->cat[j]);
@@ -176,7 +175,6 @@ int buffer_cats(struct buf_contours *arr_bc, struct spatial_index *si,
 
     return inside;
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -187,8 +185,8 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *out_opt, *type_opt, *dista_opt, *distb_opt,
         *angle_opt;
     struct Flag *straight_flag, *nocaps_flag, *cats_flag;
-    struct Option *tol_opt, *bufcol_opt, *scale_opt, *field_opt,
-        *where_opt, *cats_opt;
+    struct Option *tol_opt, *bufcol_opt, *scale_opt, *field_opt, *where_opt,
+        *cats_opt;
 
     struct cat_list *cat_list = NULL;
     int verbose, use_geos;
@@ -249,16 +247,14 @@ int main(int argc, char *argv[])
     dista_opt->key = "distance";
     dista_opt->type = TYPE_DOUBLE;
     dista_opt->required = NO;
-    dista_opt->description =
-        _("Buffer distance along major axis in map units");
+    dista_opt->description = _("Buffer distance along major axis in map units");
     dista_opt->guisection = _("Distance");
 
     distb_opt = G_define_option();
     distb_opt->key = "minordistance";
     distb_opt->type = TYPE_DOUBLE;
     distb_opt->required = NO;
-    distb_opt->description =
-        _("Buffer distance along minor axis in map units");
+    distb_opt->description = _("Buffer distance along minor axis in map units");
     distb_opt->guisection = _("Distance");
 
     angle_opt = G_define_option();
@@ -286,7 +282,8 @@ int main(int argc, char *argv[])
     tol_opt->type = TYPE_DOUBLE;
     tol_opt->required = NO;
     tol_opt->description =
-        _("Maximum distance between theoretical arc and polygon segments as multiple of buffer (default 0.01)");
+        _("Maximum distance between theoretical arc and polygon segments as "
+          "multiple of buffer (default 0.01)");
     tol_opt->guisection = _("Distance");
 
     straight_flag = G_define_flag();
@@ -319,17 +316,17 @@ int main(int argc, char *argv[])
 
     /* TODO: no geodesic support yet in GEOS */
     if (G_projection() == PROJECTION_LL)
-        G_important_message(_("Note: In latitude-longitude coordinate system specify distances in degree unit"));
+        G_important_message(_("Note: In latitude-longitude coordinate system "
+                              "specify distances in degree unit"));
 
     if ((dista_opt->answer && bufcol_opt->answer) ||
         (!(dista_opt->answer || bufcol_opt->answer)))
         G_fatal_error(_("Select a buffer distance/minordistance/angle "
                         "or column, but not both."));
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
-    Vect_set_open_level(2);     /* topology required */
+    Vect_set_open_level(2); /* topology required */
 
     if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
@@ -342,7 +339,8 @@ int main(int argc, char *argv[])
         field = -1;
 
     if ((cats_opt->answer || where_opt->answer) && field == -1) {
-        G_warning(_("Invalid layer number (%d). Parameter '%s' or '%s' specified, assuming layer '1'."),
+        G_warning(_("Invalid layer number (%d). Parameter '%s' or '%s' "
+                    "specified, assuming layer '1'."),
                   field, cats_opt->key, where_opt->key);
         field = 1;
     }
@@ -384,8 +382,7 @@ int main(int argc, char *argv[])
             dalpha = 0;
 
         unit_tolerance = fabs(tolerance * MIN(da, db));
-        G_verbose_message(_("The tolerance in map units = %g"),
-                          unit_tolerance);
+        G_verbose_message(_("The tolerance in map units = %g"), unit_tolerance);
 
         if (use_geos) {
             if (distb_opt->answer)
@@ -413,7 +410,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to create temporary vector map"));
 
     G_set_verbose(0);
-    Vect_build_partial(&Buf, GV_BUILD_BASE);    /* switch to level 2 */
+    Vect_build_partial(&Buf, GV_BUILD_BASE); /* switch to level 2 */
     G_set_verbose(verbose);
 
     /* check and load attribute column data */
@@ -431,12 +428,12 @@ int main(int argc, char *argv[])
                           Fi->database, Fi->driver);
         db_set_error_handler_driver(Driver);
 
-        /* Note do not check if the column exists in the table because it may be expression */
+        /* Note do not check if the column exists in the table because it may be
+         * expression */
 
         /* TODO: only select values we need instead of all in column */
-        nrec =
-            db_select_CatValArray(Driver, Fi->table, Fi->key,
-                                  bufcol_opt->answer, NULL, &cvarr);
+        nrec = db_select_CatValArray(Driver, Fi->table, Fi->key,
+                                     bufcol_opt->answer, NULL, &cvarr);
         if (nrec < 0)
             G_fatal_error(_("Unable to select data from table <%s>"),
                           Fi->table);
@@ -465,7 +462,6 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-
     /* Create buffers' boundaries */
     nlines = nareas = 0;
     if ((type & GV_POINTS) || (type & GV_LINES))
@@ -474,8 +470,9 @@ int main(int argc, char *argv[])
         nareas = Vect_get_num_areas(&In);
 
     if (nlines + nareas == 0) {
-        G_warning(_("No features available for buffering. "
-                    "Check type option and features available in the input vector."));
+        G_warning(
+            _("No features available for buffering. "
+              "Check type option and features available in the input vector."));
         exit(EXIT_SUCCESS);
     }
 
@@ -491,13 +488,14 @@ int main(int argc, char *argv[])
 
     /* check required version for -s/-c flag */
 #ifndef GEOS_3_3
-    G_warning(_("Flags -%c/%c ignored by this version, GEOS >= 3.3 is required"),
-              's', 'c');
+    G_warning(
+        _("Flags -%c/%c ignored by this version, GEOS >= 3.3 is required"), 's',
+        'c');
 #endif
 #endif
     if (!use_geos && (da < 0. || db < 0.)) {
         G_warning(_("Negative distances for internal buffers are not supported "
-                   "and converted to positive values."));
+                    "and converted to positive values."));
         da = fabs(da);
         db = fabs(db);
     }
@@ -544,13 +542,14 @@ int main(int argc, char *argv[])
 
                 ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
                 if (ret != DB_OK) {
-                    G_warning(_("No record for category %d in table <%s>"),
-                              cat, Fi->table);
+                    G_warning(_("No record for category %d in table <%s>"), cat,
+                              Fi->table);
                     continue;
                 }
 
                 if (size_val < 0.0) {
-                    G_warning(_("Attribute is of invalid size (%.3f) for category %d"),
+                    G_warning(_("Attribute is of invalid size (%.3f) for "
+                                "category %d"),
                               size_val, cat);
                     continue;
                 }
@@ -564,29 +563,25 @@ int main(int argc, char *argv[])
                 unit_tolerance = fabs(tolerance * MIN(da, db));
 
                 G_debug(2, "    dynamic buffer size = %.2f", da);
-                G_debug(2, _("The tolerance in map units: %g"),
-                        unit_tolerance);
+                G_debug(2, _("The tolerance in map units: %g"), unit_tolerance);
             }
 
 #ifdef HAVE_GEOS
             if (use_geos)
-                geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
-                            &si, CCats, &arr_bc, &buffers_count,
-                            &arr_bc_alloc, straight_flag->answer,
-                            nocaps_flag->answer);
+                geos_buffer(&In, &Out, &Buf, area, GV_AREA, da, &si, CCats,
+                            &arr_bc, &buffers_count, &arr_bc_alloc,
+                            straight_flag->answer, nocaps_flag->answer);
 #endif
             if (!use_geos) {
                 Vect_area_buffer2(&In, area, da, db, dalpha,
                                   !(straight_flag->answer),
                                   !(nocaps_flag->answer), unit_tolerance,
-                                  &(arr_bc_pts.oPoints),
-                                  &(arr_bc_pts.iPoints),
+                                  &(arr_bc_pts.oPoints), &(arr_bc_pts.iPoints),
                                   &(arr_bc_pts.inner_count));
 
                 Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-                line_id =
-                    Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints,
-                                    CCats);
+                line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints,
+                                          CCats);
                 Vect_destroy_line_struct(arr_bc_pts.oPoints);
                 /* add buffer to spatial index */
                 Vect_get_line_box(&Buf, line_id, &bbox);
@@ -600,16 +595,15 @@ int main(int argc, char *argv[])
                     for (i = 0; i < arr_bc_pts.inner_count; i++) {
                         Vect_write_line(&Out, GV_BOUNDARY,
                                         arr_bc_pts.iPoints[i], BCats);
-                        line_id =
-                            Vect_write_line(&Buf, GV_BOUNDARY,
-                                            arr_bc_pts.iPoints[i], BCats);
+                        line_id = Vect_write_line(&Buf, GV_BOUNDARY,
+                                                  arr_bc_pts.iPoints[i], BCats);
                         Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
                         arr_bc[buffers_count].inner[i] = line_id;
                     }
                     G_free(arr_bc_pts.iPoints);
                 }
                 buffers_count++;
-            }                   /* native buffer end */
+            } /* native buffer end */
         }
     }
 
@@ -661,13 +655,14 @@ int main(int argc, char *argv[])
                 Vect_cat_get(Cats, field, &cat);
                 ret = db_CatValArray_get_value_di(&cvarr, cat, &size_val);
                 if (ret != DB_OK) {
-                    G_warning(_("No record for category %d in table <%s>"),
-                              cat, Fi->table);
+                    G_warning(_("No record for category %d in table <%s>"), cat,
+                              Fi->table);
                     continue;
                 }
 
                 if (size_val < 0.0) {
-                    G_warning(_("Attribute is of invalid size (%.3f) for category %d"),
+                    G_warning(_("Attribute is of invalid size (%.3f) for "
+                                "category %d"),
                               size_val, cat);
                     continue;
                 }
@@ -677,7 +672,8 @@ int main(int argc, char *argv[])
 
                 da = size_val * scale;
                 if (da < 0) {
-                    G_warning(_("Negative distances are only supported for areas"));
+                    G_warning(
+                        _("Negative distances are only supported for areas"));
                     da = fabs(da);
                 }
                 db = da;
@@ -685,8 +681,7 @@ int main(int argc, char *argv[])
                 unit_tolerance = tolerance * MIN(da, db);
 
                 G_debug(2, "    dynamic buffer size = %.2f", da);
-                G_debug(2, _("The tolerance in map units: %g"),
-                        unit_tolerance);
+                G_debug(2, _("The tolerance in map units: %g"), unit_tolerance);
             }
 
             if (da <= 0) {
@@ -707,10 +702,9 @@ int main(int argc, char *argv[])
                                       Points->y[0] - da, 0);
                     Vect_append_point(arr_bc_pts.oPoints, Points->x[0] - da,
                                       Points->y[0] + da, 0);
-                    Vect_append_point(arr_bc_pts.oPoints,
-                                      arr_bc_pts.oPoints->x[0],
-                                      arr_bc_pts.oPoints->y[0],
-                                      arr_bc_pts.oPoints->z[0]);
+                    Vect_append_point(
+                        arr_bc_pts.oPoints, arr_bc_pts.oPoints->x[0],
+                        arr_bc_pts.oPoints->y[0], arr_bc_pts.oPoints->z[0]);
                 }
                 else {
                     Vect_point_buffer2(Points->x[0], Points->y[0], da, db,
@@ -719,9 +713,8 @@ int main(int argc, char *argv[])
                 }
 
                 Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
-                line_id =
-                    Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints,
-                                    CCats);
+                line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints,
+                                          CCats);
                 Vect_destroy_line_struct(arr_bc_pts.oPoints);
                 /* add buffer to spatial index */
                 Vect_get_line_box(&Buf, line_id, &bbox);
@@ -730,37 +723,32 @@ int main(int argc, char *argv[])
                 arr_bc[buffers_count].inner_count = 0;
                 arr_bc[buffers_count].inner = NULL;
                 buffers_count++;
-
             }
             else {
 #ifdef HAVE_GEOS
                 if (use_geos)
-                    geos_buffer(&In, &Out, &Buf, line, type, da,
-                                &si, CCats, &arr_bc, &buffers_count,
-                                &arr_bc_alloc, straight_flag->answer,
-                                nocaps_flag->answer);
+                    geos_buffer(&In, &Out, &Buf, line, type, da, &si, CCats,
+                                &arr_bc, &buffers_count, &arr_bc_alloc,
+                                straight_flag->answer, nocaps_flag->answer);
 #endif
                 if (!use_geos) {
-                    Vect_line_buffer2(Points, da, db, dalpha,
-                                      !(straight_flag->answer),
-                                      !(nocaps_flag->answer), unit_tolerance,
-                                      &(arr_bc_pts.oPoints),
-                                      &(arr_bc_pts.iPoints),
-                                      &(arr_bc_pts.inner_count));
+                    Vect_line_buffer2(
+                        Points, da, db, dalpha, !(straight_flag->answer),
+                        !(nocaps_flag->answer), unit_tolerance,
+                        &(arr_bc_pts.oPoints), &(arr_bc_pts.iPoints),
+                        &(arr_bc_pts.inner_count));
 
                     Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints,
                                     BCats);
-                    line_id =
-                        Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints,
-                                        CCats);
+                    line_id = Vect_write_line(&Buf, GV_BOUNDARY,
+                                              arr_bc_pts.oPoints, CCats);
                     Vect_destroy_line_struct(arr_bc_pts.oPoints);
                     /* add buffer to spatial index */
                     Vect_get_line_box(&Buf, line_id, &bbox);
                     Vect_spatial_index_add_item(&si, buffers_count, &bbox);
                     arr_bc[buffers_count].outer = line_id;
 
-                    arr_bc[buffers_count].inner_count =
-                        arr_bc_pts.inner_count;
+                    arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
                     if (arr_bc_pts.inner_count > 0) {
                         arr_bc[buffers_count].inner =
                             G_malloc(arr_bc_pts.inner_count * sizeof(int));
@@ -776,7 +764,7 @@ int main(int argc, char *argv[])
                         G_free(arr_bc_pts.iPoints);
                     }
                     buffers_count++;
-                }               /* native buffer end */
+                } /* native buffer end */
             }
         }
     }
@@ -791,17 +779,18 @@ int main(int argc, char *argv[])
     G_message(_("Building parts of topology..."));
     Vect_build_partial(&Out, GV_BUILD_BASE);
 
-    /* Warning: snapping must be done, otherwise colinear boundaries are not broken and 
-     * topology cannot be built (the same angle). But snapping distance must be very, very 
-     * small, otherwise counterclockwise boundaries can appear in areas outside the buffer.
-     * I have done some tests on real data (projected) and threshold 1e-8 was not enough,
-     * Snapping threshold 1e-7 seems to work. Don't increase until we find example 
-     * where it is not sufficient. RB */
+    /* Warning: snapping must be done, otherwise colinear boundaries are not
+     * broken and topology cannot be built (the same angle). But snapping
+     * distance must be very, very small, otherwise counterclockwise boundaries
+     * can appear in areas outside the buffer. I have done some tests on real
+     * data (projected) and threshold 1e-8 was not enough, Snapping threshold
+     * 1e-7 seems to work. Don't increase until we find example where it is not
+     * sufficient. RB */
 
-    /* TODO: look at snapping threshold better, calculate some theoretical value to avoid
-     * the same angles of lines at nodes, don't forget about LongLat data, probably
-     * calculate different threshold for each map, depending on map's bounding box 
-     * and/or distance and tolerance */
+    /* TODO: look at snapping threshold better, calculate some theoretical value
+     * to avoid the same angles of lines at nodes, don't forget about LongLat
+     * data, probably calculate different threshold for each map, depending on
+     * map's bounding box and/or distance and tolerance */
     G_message(_("Snapping boundaries..."));
     Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
 
@@ -822,7 +811,8 @@ int main(int argc, char *argv[])
 
     } while (Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL) > 0);
 
-    /* Dangles and bridges don't seem to be necessary if snapping is small enough. */
+    /* Dangles and bridges don't seem to be necessary if snapping is small
+     * enough. */
     /* Still needed for larger buffer distances ? */
 
     Vect_build_partial(&Out, GV_BUILD_AREAS);
@@ -884,19 +874,19 @@ int main(int argc, char *argv[])
             Vect_get_line_areas(&Out, line, &side[0], &side[1]);
 
             for (j = 0; j < 2; j++) {
-                if (side[j] == 0) {     /* area/isle not build */
+                if (side[j] == 0) { /* area/isle not build */
                     areas[j] = 0;
                 }
                 else if (side[j] > 0) { /* area */
                     areas[j] = side[j];
                 }
-                else {          /* < 0 -> island */
+                else { /* < 0 -> island */
                     areas[j] = Vect_get_isle_area(&Out, abs(side[j]));
                 }
             }
 
-            G_debug(3, " areas = %d , %d -> Areas = %d, %d", areas[0],
-                    areas[1], Areas[areas[0]], Areas[areas[1]]);
+            G_debug(3, " areas = %d , %d -> Areas = %d, %d", areas[0], areas[1],
+                    Areas[areas[0]], Areas[areas[1]]);
             if (Areas[areas[0]] && Areas[areas[1]])
                 Lines[line] = 1;
         }

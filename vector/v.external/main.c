@@ -1,13 +1,12 @@
-
 /****************************************************************
  *
  * MODULE:       v.external
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Updated to GRASS 7 by Martin Landa <landa.martin gmail.com>
- *               
+ *
  * PURPOSE:      Create a new vector as a link to OGR layer
- *               
+ *
  * COPYRIGHT:    (C) 2003-2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -58,7 +57,7 @@ int main(int argc, char *argv[])
 
     module->description =
         _("Creates a new pseudo-vector map as a link to an OGR-supported layer "
-         "or a PostGIS feature table.");
+          "or a PostGIS feature table.");
     parse_args(argc, argv, &options, &flags);
 
     use_ogr = TRUE;
@@ -79,7 +78,7 @@ int main(int argc, char *argv[])
                         "but GRASS is compiled with OGR support. "
                         "Using GRASS-PostGIS data driver instead."));
         use_ogr = FALSE;
-#else /* -> force using OGR */
+#else  /* -> force using OGR */
         G_warning(_("GRASS is not compiled with PostgreSQL support. "
                     "Using OGR-PostgreSQL driver instead of native "
                     "GRASS-PostGIS data driver."));
@@ -121,8 +120,7 @@ int main(int argc, char *argv[])
     ilayer = list_layers(NULL, dsn, &layer, FALSE, use_ogr);
     if (ilayer == -1) {
         if (options.layer->answer)
-            G_fatal_error(_("Layer <%s> not available"),
-                          options.layer->answer);
+            G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
         else
             G_fatal_error(_("No layer defined"));
     }
@@ -135,7 +133,8 @@ int main(int argc, char *argv[])
         output = options.output->answer;
 
     if (G_find_vector2(output, G_mapset()) && !G_check_overwrite(argc, argv)) {
-        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the "
+                        "--overwrite flag"),
                       options.output->key, output);
     }
 
@@ -178,7 +177,8 @@ int main(int argc, char *argv[])
 
     /* create new vector map */
     putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");
-    if (Vect_open_new(&Map, output, WITHOUT_Z) < 0)     /* dimension is set later from data source */
+    if (Vect_open_new(&Map, output, WITHOUT_Z) <
+        0) /* dimension is set later from data source */
         G_fatal_error(_("Unable to create vector map <%s>"), output);
     Vect_set_error_handler_io(NULL, &Map);
 
@@ -198,8 +198,7 @@ int main(int argc, char *argv[])
     sprintf(buf, "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL)
-        G_fatal_error(_("Unable to create file '%s/%s'"), buf,
-                      GV_FRMT_ELEMENT);
+        G_fatal_error(_("Unable to create file '%s/%s'"), buf, GV_FRMT_ELEMENT);
 
     if (!use_ogr) {
         char *table_name, *schema_name;

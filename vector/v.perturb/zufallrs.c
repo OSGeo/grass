@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<math.h>
-#include"zufall.h"
+#include <stdio.h>
+#include <math.h>
+#include "zufall.h"
 
 /*
  * restores common block klotz0, containing seeds and pointer to position
@@ -18,4 +18,4 @@ int zufallrs(double *svblk)
         klotz0_1.buff[i] = svblk[i + 1];
 
     return 0;
-}                               /* zufallrs */
+} /* zufallrs */

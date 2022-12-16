@@ -45,8 +45,8 @@ double sangle(struct line_pnts *Points, int segment)
     if (Points->n_points < 2 || segment < 1)
         return -9;
     if (segment >= Points->n_points)
-        G_fatal_error(_("Invalid segment number %d for %d points"),
-                      segment, Points->n_points);
+        G_fatal_error(_("Invalid segment number %d for %d points"), segment,
+                      Points->n_points);
 
     dx = Points->x[segment] - Points->x[segment - 1];
     dy = Points->y[segment] - Points->y[segment - 1];
@@ -59,11 +59,9 @@ double sangle(struct line_pnts *Points, int segment)
  * return 2 point to line
  * return 1 line to line
  */
-int line2line(struct line_pnts *FPoints, int ftype,
-              struct line_pnts *TPoints, int ttype,
-              double *fx, double *fy, double *fz,
-              double *falong, double *fangle,
-              double *tx, double *ty, double *tz,
+int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
+              int ttype, double *fx, double *fy, double *fz, double *falong,
+              double *fangle, double *tx, double *ty, double *tz,
               double *talong, double *tangle, double *dist, int with_z)
 {
     int i, fseg, tseg, tmp_seg;
@@ -94,8 +92,8 @@ int line2line(struct line_pnts *FPoints, int ftype,
 
     /* point -> point */
     if ((ftype & GV_POINTS) && (ttype & GV_POINTS)) {
-        line_distance(TPoints, FPoints->x[0], FPoints->y[0],
-                      FPoints->z[0], with_z, tx, ty, tz, dist, NULL, talong);
+        line_distance(TPoints, FPoints->x[0], FPoints->y[0], FPoints->z[0],
+                      with_z, tx, ty, tz, dist, NULL, talong);
     }
 
     /* point -> line and line -> line */
@@ -105,10 +103,9 @@ int line2line(struct line_pnts *FPoints, int ftype,
         /* calculate the min distance between each point in fline with tline */
         for (i = 0; i < FPoints->n_points; i++) {
 
-            tmp_seg = line_distance(TPoints, FPoints->x[i],
-                                    FPoints->y[i], FPoints->z[i],
-                                    with_z, &tmp_x, &tmp_y, &tmp_z,
-                                    &tmp_dist, NULL, &tmp_along);
+            tmp_seg = line_distance(TPoints, FPoints->x[i], FPoints->y[i],
+                                    FPoints->z[i], with_z, &tmp_x, &tmp_y,
+                                    &tmp_z, &tmp_dist, NULL, &tmp_along);
             if (*dist > tmp_dist) {
                 *dist = tmp_dist;
                 *fx = FPoints->x[i];
@@ -151,10 +148,9 @@ int line2line(struct line_pnts *FPoints, int ftype,
         /* calculate the min distance between each point in tline with fline */
         for (i = 0; i < TPoints->n_points; i++) {
 
-            tmp_seg = line_distance(FPoints, TPoints->x[i],
-                                    TPoints->y[i], TPoints->z[i],
-                                    with_z, &tmp_x, &tmp_y, &tmp_z,
-                                    &tmp_dist, NULL, &tmp_along);
+            tmp_seg = line_distance(FPoints, TPoints->x[i], TPoints->y[i],
+                                    TPoints->z[i], with_z, &tmp_x, &tmp_y,
+                                    &tmp_z, &tmp_dist, NULL, &tmp_along);
             if (*dist > tmp_dist) {
                 *dist = tmp_dist;
                 *fx = tmp_x;
@@ -197,8 +193,7 @@ int line2line(struct line_pnts *FPoints, int ftype,
 
             if (Vect_box_overlap(&fbox, &tbox)) {
                 Vect_reset_line(iPoints);
-                Vect_line_get_intersections(FPoints, TPoints, iPoints,
-                                            with_z);
+                Vect_line_get_intersections(FPoints, TPoints, iPoints, with_z);
                 if (iPoints->n_points) {
                     *dist = 0;
                     *fx = *tx = iPoints->x[0];
@@ -206,14 +201,12 @@ int line2line(struct line_pnts *FPoints, int ftype,
                     *fz = *tz = iPoints->z[0];
 
                     /* falong, talong */
-                    fseg = line_distance(FPoints, iPoints->x[0],
-                                         iPoints->y[0], iPoints->z[0],
-                                         with_z, NULL, NULL, NULL,
-                                         NULL, NULL, falong);
-                    tseg = line_distance(TPoints, iPoints->x[0],
-                                         iPoints->y[0], iPoints->z[0],
-                                         with_z, NULL, NULL, NULL,
-                                         NULL, NULL, talong);
+                    fseg = line_distance(FPoints, iPoints->x[0], iPoints->y[0],
+                                         iPoints->z[0], with_z, NULL, NULL,
+                                         NULL, NULL, NULL, falong);
+                    tseg = line_distance(TPoints, iPoints->x[0], iPoints->y[0],
+                                         iPoints->z[0], with_z, NULL, NULL,
+                                         NULL, NULL, NULL, talong);
                     /* fangle, tangle */
                     *fangle = sangle(FPoints, fseg);
                     *tangle = sangle(TPoints, tseg);
@@ -226,16 +219,14 @@ int line2line(struct line_pnts *FPoints, int ftype,
 }
 
 /* shortest distance between line and area
- * return 1 inside area 
- * return 2 inside isle of area 
+ * return 1 inside area
+ * return 2 inside isle of area
  * return 3 outside area */
-int line2area(const struct Map_info *To,
-              struct line_pnts *Points, int type,
-              int area, const struct bound_box *abox,
-              double *fx, double *fy, double *fz,
-              double *falong, double *fangle,
-              double *tx, double *ty, double *tz,
-              double *talong, double *tangle, double *dist, int with_z)
+int line2area(const struct Map_info *To, struct line_pnts *Points, int type,
+              int area, const struct bound_box *abox, double *fx, double *fy,
+              double *fz, double *falong, double *fangle, double *tx,
+              double *ty, double *tz, double *talong, double *tangle,
+              double *dist, int with_z)
 {
     int i, j;
     double tmp_dist;
@@ -288,8 +279,8 @@ int line2area(const struct Map_info *To,
 
     for (i = 0; i < Points->n_points; i++) {
         if (with_z)
-            in_box = Vect_point_in_box(Points->x[i], Points->y[i],
-                                       Points->z[i], abox);
+            in_box = Vect_point_in_box(Points->x[i], Points->y[i], Points->z[i],
+                                       abox);
         else
             in_box = Vect_point_in_box_2d(Points->x[i], Points->y[i], abox);
         if (in_box) {
@@ -309,9 +300,9 @@ int line2area(const struct Map_info *To,
 
             /* exactly on boundary */
             if (poly == 2) {
-                line2line(Points, type, aPoints, GV_BOUNDARY,
-                          fx, fy, fz, falong, fangle,
-                          tx, ty, tz, talong, tangle, dist, with_z);
+                line2line(Points, type, aPoints, GV_BOUNDARY, fx, fy, fz,
+                          falong, fangle, tx, ty, tz, talong, tangle, dist,
+                          with_z);
 
                 *talong = 0;
                 *tangle = -9;
@@ -331,9 +322,8 @@ int line2area(const struct Map_info *To,
                                                       Points->y[i], &ibox[j]);
                     if (in_box) {
 
-                        poly =
-                            Vect_point_in_poly(Points->x[i], Points->y[i],
-                                               iPoints[j]);
+                        poly = Vect_point_in_poly(Points->x[i], Points->y[i],
+                                                  iPoints[j]);
 
                         /* inside or exactly on boundary */
                         if (poly > 0) {
@@ -342,7 +332,7 @@ int line2area(const struct Map_info *To,
                             double tmp_tx, tmp_ty, tmp_tz, tmp_tangle,
                                 tmp_talong;
 
-                            /* pass all points of the line, 
+                            /* pass all points of the line,
                              * this will catch an intersection */
                             line2line(Points, type, iPoints[j], GV_BOUNDARY,
                                       &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong,
@@ -366,9 +356,8 @@ int line2area(const struct Map_info *To,
                                 *tangle = tmp_tangle;
                             }
 
-                            if (poly == 1)      /* excludes isle boundary */
+                            if (poly == 1) /* excludes isle boundary */
                                 inside_isle = 1;
-
                         }
                     }
                     if (*dist == 0)
@@ -406,7 +395,7 @@ int line2area(const struct Map_info *To,
                     }
                     /* else continue with next point */
                 }
-            }                   /* end inside outer ring */
+            } /* end inside outer ring */
         }
         else {
             /* point not in box of outer ring */
@@ -425,22 +414,21 @@ int line2area(const struct Map_info *To,
              * that should have been detected above */
             G_fatal_error(_("At least one point is really inside the area!"));
         }
-        /* else all points are inside one of the area isles 
+        /* else all points are inside one of the area isles
          * and we already have the minimum distance */
         return 2;
     }
 
-    /* if at least one point was found to be inside the outer ring, 
+    /* if at least one point was found to be inside the outer ring,
      * but no point really inside the area,
      * and at least one point outside,
-     * then there must be an intersection of the line with both 
+     * then there must be an intersection of the line with both
      * the outer ring and one of the isle boundaries */
 
     /* if all line points are outside of the area,
      * intersection is still possible */
 
-    line2line(Points, type, aPoints, GV_BOUNDARY,
-              fx, fy, fz, falong, fangle,
+    line2line(Points, type, aPoints, GV_BOUNDARY, fx, fy, fz, falong, fangle,
               tx, ty, tz, talong, tangle, dist, with_z);
 
     *talong = 0;

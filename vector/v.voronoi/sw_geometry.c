@@ -18,7 +18,6 @@ int geominit(void)
     return 0;
 }
 
-
 struct Edge *bisect(struct Site *s1, struct Site *s2)
 {
     double dx, dy, adx, ady;
@@ -128,8 +127,7 @@ struct Site *intersect(struct Halfedge *el1, struct Halfedge *el2)
         e = e2;
     }
     right_of_site = xint >= e->reg[1]->coord.x;
-    if ((right_of_site && el->ELpm == le) ||
-        (!right_of_site && el->ELpm == re))
+    if ((right_of_site && el->ELpm == le) || (!right_of_site && el->ELpm == re))
         return ((struct Site *)NULL);
 
     v = (struct Site *)getfree(&sfl);
@@ -173,12 +171,12 @@ int right_of(struct Halfedge *el, struct Point *p)
         if (!fast) {
             dxs = topsite->coord.x - (e->reg[0])->coord.x;
             above = e->b * (dxp * dxp - dyp * dyp) <
-                dxs * dyp * (1.0 + 2.0 * dxp / dxs + e->b * e->b);
+                    dxs * dyp * (1.0 + 2.0 * dxp / dxs + e->b * e->b);
             if (e->b < 0.0)
                 above = !above;
         }
     }
-    else {                      /*e->b==1.0 */
+    else { /*e->b==1.0 */
         yl = e->c - e->a * p->x;
         t1 = p->y - yl;
         t2 = p->x - topsite->coord.x;
@@ -187,7 +185,6 @@ int right_of(struct Halfedge *el, struct Point *p)
     }
     return (el->ELpm == le ? above : !above);
 }
-
 
 int endpoint(struct Edge *e, int lr, struct Site *s)
 {
@@ -218,7 +215,6 @@ int makevertex(struct Site *v)
     nvertices++;
     return 0;
 }
-
 
 int deref(struct Site *v)
 {

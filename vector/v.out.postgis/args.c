@@ -38,8 +38,8 @@ void define_options(struct params *params, struct flags *flags)
     params->olink = G_define_standard_option(G_OPT_V_OUTPUT);
     params->olink->key = "output_link";
     params->olink->required = NO;
-    params->olink->label =
-        _("Name for output vector map defined as a link to the PostGIS feature table");
+    params->olink->label = _("Name for output vector map defined as a link to "
+                             "the PostGIS feature table");
     params->olink->description =
         _("If not specified, the vector link is not created. "
           "The link can be also manually created by 'v.external' module.");
@@ -48,10 +48,13 @@ void define_options(struct params *params, struct flags *flags)
     params->opts = G_define_option();
     params->opts->key = "options";
     params->opts->label = _("Creation options");
-    params->opts->description = _("Examples:\n"
-                                  "\t\t'FID=cat': define feature id column 'cat'\n"
-                                  "\t\t'GEOMETRY_NAME=wkb_geometry': define geometry column 'wkb_geometry'\n"
-                                  "\t\t'SPATIAL_INDEX=NO': do not create spatial index on geometry column");
+    params->opts->description =
+        _("Examples:\n"
+          "\t\t'FID=cat': define feature id column 'cat'\n"
+          "\t\t'GEOMETRY_NAME=wkb_geometry': define geometry column "
+          "'wkb_geometry'\n"
+          "\t\t'SPATIAL_INDEX=NO': do not create spatial index on geometry "
+          "column");
     params->opts->required = NO;
     params->opts->multiple = YES;
     params->opts->type = TYPE_STRING;
@@ -75,5 +78,4 @@ void define_options(struct params *params, struct flags *flags)
     flags->force2d->description =
         _("Useful if input is 3D but all z coordinates are identical");
     flags->force2d->guisection = _("Creation");
-
 }

@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               3D vector point input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -44,7 +43,6 @@
 #include "userglobs.h"
 #include "user.h"
 
-
 /*
    x,y,z - input data
    npoint - number of input data
@@ -59,7 +57,7 @@
 
 /*
    INPUT now reads site files using the new, multi-attribute format
-   (mca 2/12/96)    
+   (mca 2/12/96)
  */
 
 int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
@@ -98,14 +96,14 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Fi->database, Fi->driver);
 
-    nrec =
-        db_select_CatValArray(Driver, Fi->table, Fi->key, column, wheresql,
-                              &cvarr);
+    nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, column, wheresql,
+                                 &cvarr);
     ctype = cvarr.ctype;
     G_debug(3, "nrec = %d", nrec);
 
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-        G_fatal_error(_("Column type of wcolumn is not supported (must be integer or double)"));
+        G_fatal_error(_("Column type of wcolumn is not supported (must be "
+                        "integer or double)"));
 
     if (nrec < 0)
         G_fatal_error(_("Unable to select data from table"));
@@ -121,10 +119,11 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         if (sctype == -1)
             G_fatal_error(_("Cannot read column type of smooth column"));
         if (sctype == DB_C_TYPE_DATETIME)
-            G_fatal_error
-                (_("Column type of smooth column (datetime) is not supported"));
+            G_fatal_error(
+                _("Column type of smooth column (datetime) is not supported"));
         if (sctype != DB_C_TYPE_INT && sctype != DB_C_TYPE_DOUBLE)
-            G_fatal_error(_("Column type of smooth column is not supported (must be integer or double)"));
+            G_fatal_error(_("Column type of smooth column is not supported "
+                            "(must be integer or double)"));
     }
 
     Points = Vect_new_line_struct();
@@ -139,7 +138,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
             G_fatal_error(_("Unable to read vector map"));
 
         if (type == -2)
-            break;              /* EOF */
+            break; /* EOF */
 
         if (!(type & GV_POINTS))
             continue;
@@ -158,14 +157,16 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
             ret = db_CatValArray_get_value_int(&cvarr, cat, &ival);
             w = ival;
         }
-        else {                  /* DB_C_TYPE_DOUBLE */
+        else { /* DB_C_TYPE_DOUBLE */
             ret = db_CatValArray_get_value_double(&cvarr, cat, &w);
         }
 
         if (ret != DB_OK) {
             if (wheresql != NULL)
-                /* G_message(_("Database record for cat %d not used due to SQL statement")); */
-                /* do nothing in this case to not confuse user. Or implement second cat list */
+                /* G_message(_("Database record for cat %d not used due to SQL
+                 * statement")); */
+                /* do nothing in this case to not confuse user. Or implement
+                 * second cat list */
                 ;
             else
                 G_warning(_("No record for category %d in table <%s>"), cat,
@@ -179,11 +180,10 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
                 ret = db_CatValArray_get_value_int(&sarray, cat, &intval);
                 sm = intval;
             }
-            else {              /* DB_C_TYPE_DOUBLE */
+            else { /* DB_C_TYPE_DOUBLE */
                 ret = db_CatValArray_get_value_double(&sarray, cat, &sm);
             }
         }
-
 
         G_debug(3, "%f %f %f %f", x, y, z, w);
 
@@ -192,17 +192,16 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         z = z * zmult;
         c1 = x - ((struct octdata *)(root->data))->x_orig;
         c2 = ((struct octdata *)(root->data))->x_orig +
-            ((struct octdata *)(root->data))->n_cols * ew_res - x;
+             ((struct octdata *)(root->data))->n_cols * ew_res - x;
         c3 = y - ((struct octdata *)(root->data))->y_orig;
         c4 = ((struct octdata *)(root->data))->y_orig +
-            ((struct octdata *)(root->data))->n_rows * ns_res - y;
+             ((struct octdata *)(root->data))->n_rows * ns_res - y;
         c5 = z - ((struct octdata *)(root->data))->z_orig;
         c6 = ((struct octdata *)(root->data))->z_orig +
-            ((struct octdata *)(root->data))->n_levs * tb_res - z;
+             ((struct octdata *)(root->data))->n_levs * tb_res - z;
 
-        if (!
-            ((c1 >= 0) && (c2 >= 0) && (c3 >= 0) && (c4 >= 0) && (c5 >= 0) &&
-             (c6 >= 0))) {
+        if (!((c1 >= 0) && (c2 >= 0) && (c3 >= 0) && (c4 >= 0) && (c5 >= 0) &&
+              (c6 >= 0))) {
             if (!OUTRANGE) {
                 G_warning(_("Some points outside of region -- will ignore..."));
             }
@@ -245,23 +244,22 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
             zmax = amax1(zmax, z);
             wmax = amax1(wmax, w);
         }
-    }                           /* while */
+    } /* while */
 
     db_CatValArray_free(&cvarr);
 
     c1 = xmin - ((struct octdata *)(root->data))->x_orig;
     c2 = ((struct octdata *)(root->data))->x_orig +
-        ((struct octdata *)(root->data))->n_cols * ew_res - xmax;
+         ((struct octdata *)(root->data))->n_cols * ew_res - xmax;
     c3 = ymin - ((struct octdata *)(root->data))->y_orig;
     c4 = ((struct octdata *)(root->data))->y_orig +
-        ((struct octdata *)(root->data))->n_rows * ns_res - ymax;
+         ((struct octdata *)(root->data))->n_rows * ns_res - ymax;
     c5 = zmin - ((struct octdata *)(root->data))->z_orig;
     c6 = ((struct octdata *)(root->data))->z_orig +
-        ((struct octdata *)(root->data))->n_levs * tb_res - zmax;
+         ((struct octdata *)(root->data))->n_levs * tb_res - zmax;
 
-    if ((c1 > 5 * ew_res) || (c2 > 5 * ew_res) ||
-        (c3 > 5 * ns_res) || (c4 > 5 * ns_res) ||
-        (c5 > 5 * tb_res) || (c6 > 5 * tb_res)) {
+    if ((c1 > 5 * ew_res) || (c2 > 5 * ew_res) || (c3 > 5 * ns_res) ||
+        (c4 > 5 * ns_res) || (c5 > 5 * tb_res) || (c6 > 5 * tb_res)) {
         static int once = 0;
 
         if (!once) {
@@ -281,7 +279,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 
     ((struct octdata *)(root->data))->x_orig = 0;
     ((struct octdata *)(root->data))->y_orig = 0;
-    ((struct octdata *)(root->data))->z_orig = 0;       /* was commented out */
+    ((struct octdata *)(root->data))->z_orig = 0; /* was commented out */
 
     if (outz != NULL)
         ddisk += disk;
@@ -296,29 +294,30 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     if (mcurv != NULL)
         ddisk += disk;
 
-    G_message
-        ("Processing all selected output files will require %d bytes of disk space for temp files",
-         ddisk);
+    G_message("Processing all selected output files will require %d bytes of "
+              "disk space for temp files",
+              ddisk);
 
     /*
-       fprintf(stderr,"xmin=%lf,xmax=%lf,ymin=%lf,ymax=%lf,zmin=%lf,zmax=%lf,wmin=%lf,wmax=%lf\n",xmin,xmax,ymin,ymax,zmin,zmax,wmin,wmax);
+       fprintf(stderr,"xmin=%lf,xmax=%lf,ymin=%lf,ymax=%lf,zmin=%lf,zmax=%lf,
+       wmin=%lf,wmax=%lf\n",xmin,xmax,ymin,ymax,zmin,zmax,wmin,wmax);
      */
 
     fprintf(stderr, "\n");
     if (OUTRANGE > 0)
-        G_warning
-            (_("There are points outside specified 2D/3D region--ignored %d points (total points: %d)"),
-             OUTRANGE, k);
+        G_warning(_("There are points outside specified 2D/3D region--ignored "
+                    "%d points (total points: %d)"),
+                  OUTRANGE, k);
     if (NPOINT > 0)
-        G_warning
-            (_("Points are more dense than specified 'DMIN'--ignored %d points (remain %d)"),
-             NPOINT, k - NPOINT);
+        G_warning(_("Points are more dense than specified 'DMIN'--ignored %d "
+                    "points (remain %d)"),
+                  NPOINT, k - NPOINT);
     NPOINT = k - NPOINT - NPT - OUTRANGE;
     if (NPOINT < KMIN) {
         if (NPOINT != 0) {
-            G_warning
-                (_("%d points given for interpolation (after thinning) is less than given NPMIN=%d"),
-                 NPOINT, KMIN);
+            G_warning(_("%d points given for interpolation (after thinning) is "
+                        "less than given NPMIN=%d"),
+                      NPOINT, KMIN);
             KMIN = NPOINT;
         }
         else {
@@ -328,17 +327,19 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     }
     if (NPOINT > KMAXPOINTS && KMIN <= KMAX) {
         fprintf(stderr,
-                "ERROR: segmentation parameters set to invalid values: npmin = %d, segmax = %d \n",
+                "ERROR: segmentation parameters set to invalid values: npmin = "
+                "%d, segmax = %d \n",
                 KMIN, KMAX);
-        fprintf(stderr,
-                "for smooth connection of segments, npmin > segmax (see manual) \n");
+        fprintf(stderr, "for smooth connection of segments, npmin > segmax "
+                        "(see manual) \n");
         return -1;
     }
 
     if (NPOINT < KMAXPOINTS && KMAX != KMAXPOINTS)
-        G_warning
-            (_("There is less than %d points for interpolation, no segmentation is necessary, to run the program faster, set segmax=%d (see manual)"),
-             KMAXPOINTS, KMAXPOINTS);
+        G_warning(_("There is less than %d points for interpolation, no "
+                    "segmentation is necessary, to run the program faster, set "
+                    "segmax=%d (see manual)"),
+                  KMAXPOINTS, KMAXPOINTS);
 
     deltx = xmax - xmin;
     delty = ymax - ymin;
@@ -352,14 +353,14 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
        if (fd4 != NULL)
        fprintf (fd4, "deltx,delty %f %f \n", deltx, delty);
      */
-    nsizc = current_region.cols;        /* ((int)(deltx/ew_res))+1;  */
-    nsizr = current_region.rows;        /* ((int)(delty/ns_res))+1;   */
+    nsizc = current_region.cols; /* ((int)(deltx/ew_res))+1;  */
+    nsizr = current_region.rows; /* ((int)(delty/ns_res))+1;   */
     NPT = k;
     x0utm = 0.;
     y0utm = 0.;
     z0utm = 0.;
 
-  /** create a bitmap mask from given raster map **/
+    /** create a bitmap mask from given raster map **/
     if (maskmap != NULL) {
         mapsetm = G_find_raster2(maskmap, "");
         if (!mapsetm) {
@@ -405,9 +406,8 @@ int OUTGR()
 
         for (i = 0; i < nsizr; i++) {
             /* seek to the right row */
-            G_fseek
-                (Tmp_fd_cell,
-                 ((off_t) (nsizr - 1 - i) * nsizc * sizeof(FCELL)), 0);
+            G_fseek(Tmp_fd_cell,
+                    ((off_t)(nsizr - 1 - i) * nsizc * sizeof(FCELL)), 0);
             read_val = fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
             if (read_val != nsizc) {
                 clean();
@@ -417,7 +417,7 @@ int OUTGR()
         }
     }
 
-  /*** Initialize output g3d region ***/
+    /*** Initialize output g3d region ***/
     current_region.bottom = z_orig_in;
     current_region.top = nsizl * tb_res_in + z_orig_in;
 
@@ -426,12 +426,11 @@ int OUTGR()
         G_fatal_error(_("Out of memory"));
     }
 
-  /*** Write elevation results ***/
+    /*** Write elevation results ***/
     if (outz != NULL) {
 
-        cf1 =
-            Rast3d_open_new_opt_tile_size(outz, RASTER3D_USE_CACHE_DEFAULT,
-                                          &current_region, FCELL_TYPE, 32);
+        cf1 = Rast3d_open_new_opt_tile_size(outz, RASTER3D_USE_CACHE_DEFAULT,
+                                            &current_region, FCELL_TYPE, 32);
         if (cf1 == NULL) {
             clean();
             G_fatal_error(_("Unable to open %s for writing"), outz);
@@ -441,8 +440,7 @@ int OUTGR()
         G_fseek(Tmp_fd_z, 0L, 0);
 
         /* Read data in from temp file */
-        read_val =
-            fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_z);
+        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_z);
         if (read_val < 0) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
@@ -451,7 +449,7 @@ int OUTGR()
         cnt = 0;
         for (iarc = 0; iarc < nsizl; iarc++) {
 
-            for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
+            for (y = nsizr - 1; y >= 0; y--) { /* changed by AV */
                 for (x = 0; x < nsizc; x++) {
                     if (maskmap != NULL)
                         bmask = BM_get(bitmask, x, nsizr - y - 1);
@@ -462,12 +460,12 @@ int OUTGR()
                         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                     if (Rast3d_put_float(cf1, x, y, iarc, value) == 0) {
                         clean();
-                        G_fatal_error(_("Error writing cell (%d,%d,%d) with value %f"),
-                                      x, y, iarc, value);
+                        G_fatal_error(
+                            _("Error writing cell (%d,%d,%d) with value %f"), x,
+                            y, iarc, value);
                     }
 
                     cnt++;
-
                 }
             }
         }
@@ -481,12 +479,11 @@ int OUTGR()
             G_message(_("3D raster map <%s> created"), outz);
     }
 
-  /*** Write out the gradient results ***/
+    /*** Write out the gradient results ***/
     if (gradient != NULL) {
 
         cf2 =
-            Rast3d_open_new_opt_tile_size(gradient,
-                                          RASTER3D_USE_CACHE_DEFAULT,
+            Rast3d_open_new_opt_tile_size(gradient, RASTER3D_USE_CACHE_DEFAULT,
                                           &current_region, FCELL_TYPE, 32);
         if (cf2 == NULL) {
             clean();
@@ -497,8 +494,7 @@ int OUTGR()
         G_fseek(Tmp_fd_dx, 0L, 0);
 
         /* Read data in from temp file */
-        read_val =
-            fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dx);
+        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dx);
         if (read_val < 0) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
@@ -507,7 +503,7 @@ int OUTGR()
         cnt = 0;
         for (iarc = 0; iarc < nsizl; iarc++) {
 
-            for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
+            for (y = nsizr - 1; y >= 0; y--) { /* changed by AV */
                 for (x = 0; x < nsizc; x++) {
                     if (maskmap != NULL)
                         bmask = BM_get(bitmask, x, nsizr - y - 1);
@@ -518,12 +514,12 @@ int OUTGR()
                         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                     if (Rast3d_put_float(cf2, x, y, iarc, value) == 0) {
                         clean();
-                        G_fatal_error(_("Error writing cell (%d,%d,%d) with value %f"),
-                                      x, y, iarc, value);
+                        G_fatal_error(
+                            _("Error writing cell (%d,%d,%d) with value %f"), x,
+                            y, iarc, value);
                     }
 
                     cnt++;
-
                 }
             }
         }
@@ -537,12 +533,11 @@ int OUTGR()
             G_message(_("3D raster map <%s> created"), gradient);
     }
 
-  /*** Write out aspect1 results ***/
+    /*** Write out aspect1 results ***/
     if (aspect1 != NULL) {
 
-        cf3 =
-            Rast3d_open_new_opt_tile_size(aspect1, RASTER3D_USE_CACHE_DEFAULT,
-                                          &current_region, FCELL_TYPE, 32);
+        cf3 = Rast3d_open_new_opt_tile_size(aspect1, RASTER3D_USE_CACHE_DEFAULT,
+                                            &current_region, FCELL_TYPE, 32);
         if (cf3 == NULL) {
             clean();
             G_fatal_error(_("Unable to open %s for writing"), aspect1);
@@ -552,8 +547,7 @@ int OUTGR()
         G_fseek(Tmp_fd_dy, 0L, 0);
 
         /* Read data in from temp file */
-        read_val =
-            fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dy);
+        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dy);
         if (read_val < 0) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
@@ -562,7 +556,7 @@ int OUTGR()
         cnt = 0;
         for (iarc = 0; iarc < nsizl; iarc++) {
 
-            for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
+            for (y = nsizr - 1; y >= 0; y--) { /* changed by AV */
                 for (x = 0; x < nsizc; x++) {
                     if (maskmap != NULL)
                         bmask = BM_get(bitmask, x, nsizr - y - 1);
@@ -573,12 +567,12 @@ int OUTGR()
                         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                     if (Rast3d_put_float(cf3, x, y, iarc, value) == 0) {
                         clean();
-                        G_fatal_error(_("Error writing cell (%d,%d,%d) with value %f"),
-                                      x, y, iarc, value);
+                        G_fatal_error(
+                            _("Error writing cell (%d,%d,%d) with value %f"), x,
+                            y, iarc, value);
                     }
 
                     cnt++;
-
                 }
             }
         }
@@ -592,12 +586,11 @@ int OUTGR()
             G_message(_("3D raster map <%s> created"), aspect1);
     }
 
-  /*** Write out aspect2 results ***/
+    /*** Write out aspect2 results ***/
     if (aspect2 != NULL) {
 
-        cf4 =
-            Rast3d_open_new_opt_tile_size(aspect2, RASTER3D_USE_CACHE_DEFAULT,
-                                          &current_region, FCELL_TYPE, 32);
+        cf4 = Rast3d_open_new_opt_tile_size(aspect2, RASTER3D_USE_CACHE_DEFAULT,
+                                            &current_region, FCELL_TYPE, 32);
         if (cf4 == NULL) {
             clean();
             G_fatal_error(_("Unable to open %s for writing"), aspect2);
@@ -607,8 +600,7 @@ int OUTGR()
         G_fseek(Tmp_fd_dz, 0L, 0);
 
         /* Read data in from temp file */
-        read_val =
-            fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dz);
+        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dz);
         if (read_val < 0) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
@@ -617,7 +609,7 @@ int OUTGR()
         cnt = 0;
         for (iarc = 0; iarc < nsizl; iarc++) {
 
-            for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
+            for (y = nsizr - 1; y >= 0; y--) { /* changed by AV */
                 for (x = 0; x < nsizc; x++) {
                     if (maskmap != NULL)
                         bmask = BM_get(bitmask, x, nsizr - y - 1);
@@ -628,12 +620,12 @@ int OUTGR()
                         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                     if (Rast3d_put_float(cf4, x, y, iarc, value) == 0) {
                         clean();
-                        G_fatal_error(_("Error writing cell (%d,%d,%d) with value %f"),
-                                      x, y, iarc, value);
+                        G_fatal_error(
+                            _("Error writing cell (%d,%d,%d) with value %f"), x,
+                            y, iarc, value);
                     }
 
                     cnt++;
-
                 }
             }
         }
@@ -647,12 +639,11 @@ int OUTGR()
             G_message(_("3D raster map <%s> created"), aspect2);
     }
 
-  /*** Write out ncurv results ***/
+    /*** Write out ncurv results ***/
     if (ncurv != NULL) {
 
-        cf5 =
-            Rast3d_open_new_opt_tile_size(ncurv, RASTER3D_USE_CACHE_DEFAULT,
-                                          &current_region, FCELL_TYPE, 32);
+        cf5 = Rast3d_open_new_opt_tile_size(ncurv, RASTER3D_USE_CACHE_DEFAULT,
+                                            &current_region, FCELL_TYPE, 32);
         if (cf5 == NULL) {
             clean();
             G_fatal_error(_("Unable to open %s for writing"), ncurv);
@@ -662,8 +653,7 @@ int OUTGR()
         G_fseek(Tmp_fd_xx, 0L, 0);
 
         /* Read data in from temp file */
-        read_val =
-            fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xx);
+        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xx);
         if (read_val < 0) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
@@ -672,7 +662,7 @@ int OUTGR()
         cnt = 0;
         for (iarc = 0; iarc < nsizl; iarc++) {
 
-            for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
+            for (y = nsizr - 1; y >= 0; y--) { /* changed by AV */
                 for (x = 0; x < nsizc; x++) {
                     if (maskmap != NULL)
                         bmask = BM_get(bitmask, x, nsizr - y - 1);
@@ -683,12 +673,12 @@ int OUTGR()
                         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                     if (Rast3d_put_float(cf5, x, y, iarc, value) == 0) {
                         clean();
-                        G_fatal_error(_("Error writing cell (%d,%d,%d) with value %f"),
-                                      x, y, iarc, value);
+                        G_fatal_error(
+                            _("Error writing cell (%d,%d,%d) with value %f"), x,
+                            y, iarc, value);
                     }
 
                     cnt++;
-
                 }
             }
         }
@@ -702,12 +692,11 @@ int OUTGR()
             G_message(_("3D raster map <%s> created"), ncurv);
     }
 
-  /*** Write out gcurv results ***/
+    /*** Write out gcurv results ***/
     if (gcurv != NULL) {
 
-        cf6 =
-            Rast3d_open_new_opt_tile_size(gcurv, RASTER3D_USE_CACHE_DEFAULT,
-                                          &current_region, FCELL_TYPE, 32);
+        cf6 = Rast3d_open_new_opt_tile_size(gcurv, RASTER3D_USE_CACHE_DEFAULT,
+                                            &current_region, FCELL_TYPE, 32);
         if (cf6 == NULL) {
             clean();
             G_fatal_error(_("Unable to open %s for writing"), gcurv);
@@ -717,8 +706,7 @@ int OUTGR()
         G_fseek(Tmp_fd_yy, 0L, 0);
 
         /* Read data in from temp file */
-        read_val =
-            fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_yy);
+        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_yy);
         if (read_val < 0) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
@@ -727,7 +715,7 @@ int OUTGR()
         cnt = 0;
         for (iarc = 0; iarc < nsizl; iarc++) {
 
-            for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
+            for (y = nsizr - 1; y >= 0; y--) { /* changed by AV */
                 for (x = 0; x < nsizc; x++) {
                     if (maskmap != NULL)
                         bmask = BM_get(bitmask, x, nsizr - y - 1);
@@ -738,12 +726,12 @@ int OUTGR()
                         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                     if (Rast3d_put_float(cf6, x, y, iarc, value) == 0) {
                         clean();
-                        G_fatal_error(_("Error writing cell (%d,%d,%d) with value %f"),
-                                      x, y, iarc, value);
+                        G_fatal_error(
+                            _("Error writing cell (%d,%d,%d) with value %f"), x,
+                            y, iarc, value);
                     }
 
                     cnt++;
-
                 }
             }
         }
@@ -757,12 +745,11 @@ int OUTGR()
             G_message(_("3D raster map <%s> created"), gcurv);
     }
 
-  /*** Write mcurv results ***/
+    /*** Write mcurv results ***/
     if (mcurv != NULL) {
 
-        cf7 =
-            Rast3d_open_new_opt_tile_size(mcurv, RASTER3D_USE_CACHE_DEFAULT,
-                                          &current_region, FCELL_TYPE, 32);
+        cf7 = Rast3d_open_new_opt_tile_size(mcurv, RASTER3D_USE_CACHE_DEFAULT,
+                                            &current_region, FCELL_TYPE, 32);
         if (cf7 == NULL) {
             clean();
             G_fatal_error(_("Unable to open %s for writing"), mcurv);
@@ -772,8 +759,7 @@ int OUTGR()
         G_fseek(Tmp_fd_xy, 0L, 0);
 
         /* Read data in from temp file */
-        read_val =
-            fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xy);
+        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xy);
         if (read_val < 0) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
@@ -782,7 +768,7 @@ int OUTGR()
         cnt = 0;
         for (iarc = 0; iarc < nsizl; iarc++) {
 
-            for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
+            for (y = nsizr - 1; y >= 0; y--) { /* changed by AV */
                 for (x = 0; x < nsizc; x++) {
                     if (maskmap != NULL)
                         bmask = BM_get(bitmask, x, nsizr - y - 1);
@@ -793,12 +779,12 @@ int OUTGR()
                         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                     if (Rast3d_put_float(cf7, x, y, iarc, value) == 0) {
                         clean();
-                        G_fatal_error(_("Error writing cell (%d,%d,%d) with value %f"),
-                                      x, y, iarc, value);
+                        G_fatal_error(
+                            _("Error writing cell (%d,%d,%d) with value %f"), x,
+                            y, iarc, value);
                     }
 
                     cnt++;
-
                 }
             }
         }

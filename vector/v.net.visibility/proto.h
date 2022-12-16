@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -30,6 +29,5 @@ void process_boundary(struct line_pnts *sites, struct Point **points,
                       int cat);
 void add_points(char **coor, struct Point **points, int *num_points);
 int count_new(char **coor);
-
 
 #endif

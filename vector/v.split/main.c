@@ -1,14 +1,13 @@
-
 /***************************************************************
  *
  * MODULE:       v.split
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               update for GRASS 7 by Markus Metz
  *
  * PURPOSE:      Split lines to segments
- *               
+ *
  * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -25,18 +24,17 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#define FROM_KILOMETERS  1000.0
-#define FROM_FEET        0.3048
-#define FROM_SFEET       1200.0 / 3937.0
-#define FROM_MILES       1609.344
-#define FROM_NAUTMILES   1852.0
-
+#define FROM_KILOMETERS 1000.0
+#define FROM_FEET       0.3048
+#define FROM_SFEET      1200.0 / 3937.0
+#define FROM_MILES      1609.344
+#define FROM_NAUTMILES  1852.0
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *in_opt, *layer_opt, *out_opt, *length_opt,
-        *units_opt, *vertices_opt;
+    struct Option *in_opt, *layer_opt, *out_opt, *length_opt, *units_opt,
+        *vertices_opt;
     struct Flag *nosplit_flag, *fixedlength_flag;
 
     struct Map_info In, Out;
@@ -101,8 +99,6 @@ int main(int argc, char *argv[])
         _("Force segments to be exactly of given length, except for last one");
     fixedlength_flag->description = _("Applies only to 'length' option");
 
-
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -119,7 +115,7 @@ int main(int argc, char *argv[])
 
         /* convert length to meters */
         if (strcmp(units_opt->answer, "meters") == 0)
-            /* do nothing */ ;
+            /* do nothing */;
         else if (strcmp(units_opt->answer, "kilometers") == 0)
             length *= FROM_KILOMETERS;
         else if (strcmp(units_opt->answer, "feet") == 0)
@@ -243,7 +239,7 @@ int main(int argc, char *argv[])
                         int ret;
 
                         if (i == n - 1) {
-                            to = l;     /* to be sure that it goes to end */
+                            to = l; /* to be sure that it goes to end */
                         }
                         else {
                             to = from + step;
@@ -251,7 +247,8 @@ int main(int argc, char *argv[])
 
                         ret = Vect_line_segment(Points, from, to, Points2);
                         if (ret == 0) {
-                            G_warning(_("Unable to make line segment: %f - %f (line length = %f)"),
+                            G_warning(_("Unable to make line segment: %f - %f "
+                                        "(line length = %f)"),
                                       from, to, l);
                             continue;
                         }
@@ -291,7 +288,7 @@ int main(int argc, char *argv[])
                 }
             }
             else {
-                int start = 0;  /* number of coordinates written */
+                int start = 0; /* number of coordinates written */
 
                 while (start < Points->n_points - 1) {
                     int i, v = 0;

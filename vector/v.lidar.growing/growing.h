@@ -7,29 +7,29 @@
 
 /*--------------------------------------------------------------------------*/
 /* Definitions for Convex-Hull algorithm */
-#define NR_END 1
-#define FREE_ARG char*
+#define NR_END   1
+#define FREE_ARG char *
 
-#define CMPM(c,A,B) \
-v = (*(double**)A)[c] - (*(double**)B)[c];\
-if (v>0) return 1;\
-if (v<0) return -1;
+#define CMPM(c, A, B)                            \
+    v = (*(double **)A)[c] - (*(double **)B)[c]; \
+    if (v > 0)                                   \
+        return 1;                                \
+    if (v < 0)                                   \
+        return -1;
 
 /*--------------------------------------------------------------------------*/
 /*STRUCTS DECLARATION */
-struct element_grow
-{
-    double interp;              /* Interpolated value */
-    int fi;                     /* Interpolated value counter */
-    int bordo;                  /* Border point */
-    int dueImp;                 /* Double impulse point */
-    double orig;                /* Original value */
-    int fo;                     /* Original value counter */
-    double clas;                /* Classification */
-    int fc;                     /* Classification counter */
-    int obj;                    /* Object counter */
+struct element_grow {
+    double interp; /* Interpolated value */
+    int fi;        /* Interpolated value counter */
+    int bordo;     /* Border point */
+    int dueImp;    /* Double impulse point */
+    double orig;   /* Original value */
+    int fo;        /* Original value counter */
+    double clas;   /* Classification */
+    int fc;        /* Classification counter */
+    int obj;       /* Object counter */
 };
-
 
 /*--------------------------------------------------------------------------*/
 /*FUNCTIONS DECLARATION */

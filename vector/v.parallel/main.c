@@ -1,14 +1,13 @@
-
 /***************************************************************
  *
  * MODULE:       v.parallel
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Upgraded by Rosen Matev (Google Summer of Code 2008)
  *               OGR support by Martin Landa <landa.martin gmail.com>
- *               
+ *
  * PURPOSE:      Create parallel lines
- *               
+ *
  * COPYRIGHT:    (C) 2008-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -58,7 +57,6 @@ int main(int argc, char *argv[])
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
-
     dista_opt = G_define_option();
     dista_opt->key = "distance";
     dista_opt->type = TYPE_DOUBLE;
@@ -81,7 +79,9 @@ int main(int argc, char *argv[])
     angle_opt->required = NO;
     angle_opt->answer = "0";
     angle_opt->multiple = NO;
-    angle_opt->description = _("Angle of major axis in degrees");       /* CW or CCW? does this even work?? */
+    angle_opt->description =
+        _("Angle of major axis in degrees"); /* CW or CCW? does
+                                              this even work?? */
 
     side_opt = G_define_option();
     side_opt->key = "side";
@@ -92,11 +92,9 @@ int main(int argc, char *argv[])
     side_opt->options = "left,right,both";
     side_opt->description = _("Side");
     desc = NULL;
-    G_asprintf(&desc,
-               "left;%s;right;%s;both;%s",
-               _("Parallel line is on the left"),
-               _("Parallel line is on the right"),
-               _("Parallel lines on both sides"));
+    G_asprintf(
+        &desc, "left;%s;right;%s;both;%s", _("Parallel line is on the left"),
+        _("Parallel line is on the right"), _("Parallel lines on both sides"));
     side_opt->descriptions = desc;
 
     tol_opt = G_define_option();
@@ -176,25 +174,21 @@ int main(int argc, char *argv[])
             if (!(buf_flag->answer)) {
                 if (side != 0) {
                     Vect_line_parallel2(Points, da, db, dalpha, side,
-                                        round_flag->answer, tolerance,
-                                        Points2);
+                                        round_flag->answer, tolerance, Points2);
                     Vect_write_line(&Out, ltype, Points2, Cats);
                 }
                 else {
                     Vect_line_parallel2(Points, da, db, dalpha, 1,
-                                        round_flag->answer, tolerance,
-                                        Points2);
+                                        round_flag->answer, tolerance, Points2);
                     Vect_write_line(&Out, ltype, Points2, Cats);
                     Vect_line_parallel2(Points, da, db, dalpha, -1,
-                                        round_flag->answer, tolerance,
-                                        Points2);
+                                        round_flag->answer, tolerance, Points2);
                     Vect_write_line(&Out, ltype, Points2, Cats);
                 }
             }
             else {
-                Vect_line_buffer2(Points, da, db, dalpha, round_flag->answer,
-                                  1, tolerance, &oPoints, &iPoints,
-                                  &inner_count);
+                Vect_line_buffer2(Points, da, db, dalpha, round_flag->answer, 1,
+                                  tolerance, &oPoints, &iPoints, &inner_count);
                 Vect_write_line(&Out, ltype, oPoints, Cats);
                 for (j = 0; j < inner_count; j++) {
                     Vect_write_line(&Out, ltype, iPoints[j], Cats);
