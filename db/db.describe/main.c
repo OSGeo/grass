@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       db.describe
@@ -22,17 +21,13 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
-struct
-{
+struct {
     char *driver, *database, *table;
     int printcolnames;
 } parms;
 
-
 /* function prototypes */
 static void parse_command_line(int, char **);
-
 
 int main(int argc, char **argv)
 {
@@ -92,7 +87,6 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {

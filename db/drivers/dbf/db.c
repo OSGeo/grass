@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
@@ -26,7 +25,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_database(dbHandle * handle)
+int db__driver_open_database(dbHandle *handle)
 {
     const char *name;
     int len;
@@ -55,14 +54,14 @@ int db__driver_open_database(dbHandle * handle)
 
     strcpy(db.name, name);
 
-    /* open database dir and read table ( *.dbf files ) names 
+    /* open database dir and read table ( *.dbf files ) names
      * to structure */
 
     /* parse variables in db.name if present */
     if (db.name[0] == '$') {
         tokens = G_tokenize(db.name, "/");
         no_tokens = G_number_of_tokens(tokens);
-        db.name[0] = '\0';      /* re-init */
+        db.name[0] = '\0'; /* re-init */
 
         for (n = 0; n < no_tokens; n++) {
             G_chop(tokens[n]);
@@ -90,9 +89,8 @@ int db__driver_open_database(dbHandle * handle)
             int status;
 
             status = G_mkdir(db.name);
-            if (status != 0) {  /* mkdir failed */
-                db_d_append_error(_("Unable to create DBF database: %s"),
-                                  name);
+            if (status != 0) { /* mkdir failed */
+                db_d_append_error(_("Unable to create DBF database: %s"), name);
                 db_d_report_error();
                 return DB_FAILED;
             }
@@ -100,14 +98,14 @@ int db__driver_open_database(dbHandle * handle)
                 /* now that the dbf/ dir is created, try again */
                 dir = opendir(db.name);
                 if (dir == NULL) {
-                    db_d_append_error(_("Cannot open DBF database directory: %s"),
-                                      name);
+                    db_d_append_error(
+                        _("Cannot open DBF database directory: %s"), name);
                     db_d_report_error();
                     return DB_FAILED;
                 }
             }
         }
-        else {                  /* some other problem */
+        else { /* some other problem */
             db_d_append_error(_("Unable to open DBF database: %s"), name);
             db_d_report_error();
             return DB_FAILED;

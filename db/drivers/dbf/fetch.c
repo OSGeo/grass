@@ -1,24 +1,23 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 #include <grass/dbmi.h>
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_fetch(dbCursor * cn, int position, int *more)
+int db__driver_fetch(dbCursor *cn, int position, int *more)
 {
     cursor *c;
     dbToken token;
@@ -33,7 +32,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_error("cursor not found");
         return DB_FAILED;
     }
@@ -62,7 +61,6 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     }
     *more = 1;
 
-
     /* get the data out of the descriptor into the table */
     table = db_get_cursor_table(cn);
     ncols = db_get_table_number_of_columns(table);
@@ -83,9 +81,9 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             db_set_value_not_null(value);
             switch (ctype) {
             case DB_C_TYPE_STRING:
-                db_set_string(&(value->s),
-                              db.tables[c->table].rows[dbfrow].
-                              values[dbfcol].c);
+                db_set_string(
+                    &(value->s),
+                    db.tables[c->table].rows[dbfrow].values[dbfcol].c);
                 break;
             case DB_C_TYPE_INT:
                 value->i = db.tables[c->table].rows[dbfrow].values[dbfcol].i;
@@ -99,7 +97,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     return DB_OK;
 }
 
-int db__driver_get_num_rows(dbCursor * cn)
+int db__driver_get_num_rows(dbCursor *cn)
 {
     cursor *c;
     dbToken token;
@@ -108,11 +106,10 @@ int db__driver_get_num_rows(dbCursor * cn)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_error("cursor not found");
         return DB_FAILED;
     }
 
     return (c->nrows);
-
 }

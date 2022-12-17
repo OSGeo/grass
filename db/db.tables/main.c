@@ -1,9 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       db.tables
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>, Stephan Holl
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Stephan Holl
  * PURPOSE:      lists all tables for a given database
  * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
  *
@@ -18,8 +19,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-struct
-{
+struct {
     char *driver, *database;
     int s;
 } parms;
