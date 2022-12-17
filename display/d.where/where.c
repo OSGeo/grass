@@ -7,7 +7,7 @@
 
 extern struct pj_info iproj, oproj, tproj;
 
-int where_am_i(char **coords, FILE * fp, int have_spheroid, int decimal,
+int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal,
                int dcoord)
 {
     char buf1[50], buf2[50];
@@ -49,18 +49,18 @@ int where_am_i(char **coords, FILE * fp, int have_spheroid, int decimal,
 
         if (dcoord) {
             fprintf(stdout, " %.1f %.1f",
-                    100 * (east - D_get_u_west()) / (D_get_u_east() -
-                                                     D_get_u_west()),
-                    100 * (north - D_get_u_south()) / (D_get_u_north() -
-                                                       D_get_u_south()));
+                    100 * (east - D_get_u_west()) /
+                        (D_get_u_east() - D_get_u_west()),
+                    100 * (north - D_get_u_south()) /
+                        (D_get_u_north() - D_get_u_south()));
         }
 
         if (have_spheroid) {
             double lat = north;
             double lon = east;
 
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &lon, &lat, NULL) < 0)
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &lon, &lat,
+                              NULL) < 0)
                 G_fatal_error(_("Error in GPJ_transform()"));
 
             if (decimal) {

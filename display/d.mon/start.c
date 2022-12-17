@@ -50,11 +50,12 @@ char *start(const char *name, const char *output, int width, int height,
                 D_erase("white");
             }
             else
-                G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+                G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use "
+                                "the --overwrite flag"),
                               "output", output_name);
         }
-        D_close_driver();       /* must be called after check because this
-                                 * function produces default map file */
+        D_close_driver(); /* must be called after check because this
+                           * function produces default map file */
         putenv("GRASS_RENDER_IMMEDIATE=");
     }
     else {
@@ -65,7 +66,8 @@ char *start(const char *name, const char *output, int width, int height,
         dir_name = G_store(output_name);
         if (access(dirname(dir_name), W_OK) != 0)
             G_fatal_error(_("Unable to start monitor, don't have "
-                            "write permission for <%s>"), output_name);
+                            "write permission for <%s>"),
+                          output_name);
         G_free(dir_name);
 
         /* check if file exists */
@@ -79,8 +81,7 @@ char *start(const char *name, const char *output, int width, int height,
         }
     }
 
-
-    if (!strchr(output_name, HOST_DIRSEP)) {    /* relative path */
+    if (!strchr(output_name, HOST_DIRSEP)) { /* relative path */
         char *ptr;
 
         if (!getcwd(output_path, GPATH_MAX))
@@ -94,7 +95,7 @@ char *start(const char *name, const char *output, int width, int height,
         G_message(_("Output file: %s"), output_path);
     }
     else {
-        strcpy(output_path, output_name);       /* already full path */
+        strcpy(output_path, output_name); /* already full path */
     }
 
     return output_path;
@@ -122,18 +123,17 @@ char *start_wx(const char *name, const char *element, int width, int height,
         str_x_only = "0";
 
     G_file_name(mon_path, element, NULL, G_mapset());
-    G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
-               name, mon_path, str_width, str_height, str_x_only,
-               SF_BACKGROUND, NULL);
+    G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname, name, mon_path,
+               str_width, str_height, str_x_only, SF_BACKGROUND, NULL);
 
     G_file_name(mapfile, element, "map.ppm", G_mapset());
 
     return mapfile;
 }
 
-int start_mon(const char *name, const char *output, int select,
-              int width, int height, const char *bgcolor,
-              int truecolor, int x_only, int update)
+int start_mon(const char *name, const char *output, int select, int width,
+              int height, const char *bgcolor, int truecolor, int x_only,
+              int update)
 {
     char *mon_path;
     char *out_file, *env_file, *cmd_file, *leg_file;
@@ -184,7 +184,8 @@ int start_mon(const char *name, const char *output, int select,
         G_fatal_error(_("Unable to create file <%s>"), env_file);
 
     if (G_strncasecmp(name, "wx", 2) == 0) {
-        sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n");       /* TODO: read settings from wxGUI */
+        sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings
+                                                             from wxGUI */
         if (write(fd, buf, strlen(buf)) != strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
         sprintf(buf, "GRASS_RENDER_FILE_READ=FALSE\n");
@@ -214,7 +215,6 @@ int start_mon(const char *name, const char *output, int select,
     sprintf(buf, "GRASS_LEGEND_FILE=%s\n", leg_file);
     if (write(fd, buf, strlen(buf)) != strlen(buf))
         G_fatal_error(_("Failed to write to file <%s>"), env_file);
-
 
     if (bgcolor) {
         if (strcmp(bgcolor, "none") == 0)
