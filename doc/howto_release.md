@@ -86,10 +86,10 @@ git status
 git show
 ```
 
-Push the tag to the upstream repo:
+Push the tag to the upstream repo, release branch:
 
 ```bash
-git push upstream
+git push upstream releasebranch_8_2
 ```
 
 ## Create variables
@@ -137,7 +137,8 @@ Create an annotated tag (a lightweight tag is okay too, but there is more metada
 stored for annotated tags including a date; message is suggested by the version script):
 
 ```bash
-git tag $TAG -a -m "GRASS GIS 8.2.0RC1"
+echo $VERSION
+git tag $TAG -a -m "GRASS GIS $VERSION"
 ```
 
 List all tags (annotated will be at the top of both lists):
@@ -150,6 +151,7 @@ git tag -n --sort=-taggerdate
 Now push the tag upstream - this will trigger the automated workflows linked to tags:
 
 ```bash
+# TODO: how to enforce the right release branch?
 git push upstream $TAG
 ```
 
@@ -167,7 +169,8 @@ release candidate because it contains contributor handles and can identify
 new contributors, so use with the _api_ backend, e.g.:
 
 ```bash
-python ./generate_release_notes.py api releasebranch_8_2 8.0.0 $VERSION
+# example: 8.0.0 --> 8.2.0 (major)
+python ./utils/generate_release_notes.py api releasebranch_8_2 8.0.0 $VERSION
 ```
 
 For micro releases, GitHub API does not give good results because it uses PRs
@@ -175,14 +178,16 @@ while the backports are usually direct commits without PRs.
 The _git log_ command operates on commits, so use use the _log_ backend:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_2 8.2.0 $VERSION
+# example: 8.2.0 --> 8.2.1 (minor)
+python ./utils/generate_release_notes.py log releasebranch_8_2 8.2.0 $VERSION
 ```
 
 In between RCs and between last RC and final release, the _log_ backend is useful
 for showing updates since the last RC:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_2 8.2.0RC1 $VERSION
+# example 8.2.0RC1 --> 8.2.0 (from RC1 to final)
+python ./utils/generate_release_notes.py log releasebranch_8_2 8.2.0RC1 $VERSION
 ```
 
 For the final release, the changes accumulated since the first RC need to be
@@ -204,15 +209,15 @@ Older release description may or may not be a good inspiration:
 
 If RC, mark it as a pre-release, check:
 
-```
-[x] This is a pre-release
+```text
+[x] Set as pre-release
 ```
 
 Save the modified draft, but do not publish the release yet.
 
 ## Reset include/VERSION file to git development version
 
-Use a dedicated script to edit the VERSION file.
+Use the dedicated `update_version.py` script to edit the VERSION file.
 
 After an RC, switch to development version:
 
@@ -233,9 +238,9 @@ Use `--help` for details about the options.
 Commit with the suggested commit message and push, e.g.:
 
 ```bash
-git show
+git diff
 git commit include/VERSION -m "version: Back to 8.2.0dev"
-git push upstream
+git push upstream releasebranch_8_2
 ```
 
 ## Upload to OSGeo servers
@@ -296,7 +301,7 @@ Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=osgeo8-grass
+SERVER1=osgeo7-grass
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
