@@ -2,19 +2,18 @@
 #include <grass/gis.h>
 #include "vizual.h"
 
-
-int viz_calc_tvals(cmndln_info * linefax, char **a_levels, char *a_min,
+int viz_calc_tvals(cmndln_info *linefax, char **a_levels, char *a_min,
                    char *a_max, char *a_step, char *a_tnum, int quiet)
 {
-    double interval;            /*increment tvalue for intervals */
-    float datarange;            /*diff btwn min and max data tvalues */
-    float tval;                 /*the threshold value being computed */
+    double interval; /*increment tvalue for intervals */
+    float datarange; /*diff btwn min and max data tvalues */
+    float tval;      /*the threshold value being computed */
     float min, max;
     int ithresh;
     int do_interval = 0;
-    int i;                      /*looping variable */
+    int i; /*looping variable */
 
-    /* 
+    /*
      ** Note that the maximum number of thresholds
      ** that are computed is 127.  This is to set a cap on the size of the
      ** display file that is created */
@@ -49,7 +48,7 @@ int viz_calc_tvals(cmndln_info * linefax, char **a_levels, char *a_min,
         sscanf(a_step, "%lf", &interval);
         do_interval = 1;
     }
-    else if (a_tnum) {          /* should already be default even if not specified */
+    else if (a_tnum) { /* should already be default even if not specified */
         sscanf(a_tnum, "%d", &ithresh);
         if (ithresh < 2) {
             ithresh = 2;
@@ -58,7 +57,7 @@ int viz_calc_tvals(cmndln_info * linefax, char **a_levels, char *a_min,
         interval = datarange / (ithresh - 1);
         do_interval = 1;
     }
-    else {                      /* should never get here */
+    else { /* should never get here */
         G_usage();
         exit(0);
     }
@@ -80,7 +79,6 @@ int viz_calc_tvals(cmndln_info * linefax, char **a_levels, char *a_min,
         for (i = 0; i < linefax->nthres; i++)
             fprintf(stderr, "%f ", linefax->tvalue[i]);
         G_message("No. of thresholds: %i", linefax->nthres + 1);
-
     }
 
     return (0);

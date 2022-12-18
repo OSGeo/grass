@@ -1,20 +1,20 @@
-
 /****************************************************************************
  *
- * MODULE:       r3.to.rast 
- *   	    	
- * AUTHOR(S):    Original author 
+ * MODULE:       r3.to.rast
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert@gmx.de
- * 		08 01 2005 Berlin
- * PURPOSE:      Converts 3D raster maps to 2D raster maps  
+ *                 08 01 2005 Berlin
+ * PURPOSE:      Converts 3D raster maps to 2D raster maps
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,24 +24,26 @@
 #include <grass/glocale.h>
 
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct
-{
+typedef struct {
     struct Option *input, *output;
     struct Option *type;
     struct Option *coeff_a;
     struct Option *coeff_b;
     struct Flag *mask;
-    struct Flag *res;           /*If set, use the same resolution as the input map */
+    struct Flag *res; /*If set, use the same resolution as the input map */
 } paramType;
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-void fatal_error(void *map, int *fd, int depths, char *errorMsg);       /*Simple Error message */
-void set_params();              /*Fill the paramType structure */
-void g3d_to_raster(void *map, RASTER3D_Region region, int *fd, int output_type, int use_coeffs, double coeff_a, double coeff_b);        /*Write the raster */
-int open_output_map(const char *name, int res_type);    /*opens the outputmap */
-void close_output_map(int fd);  /*close the map */
+void fatal_error(void *map, int *fd, int depths,
+                 char *errorMsg); /*Simple Error message */
+void set_params();                /*Fill the paramType structure */
+void g3d_to_raster(void *map, RASTER3D_Region region, int *fd, int output_type,
+                   int use_coeffs, double coeff_a,
+                   double coeff_b);                  /*Write the raster */
+int open_output_map(const char *name, int res_type); /*opens the outputmap */
+void close_output_map(int fd);                       /*close the map */
 
 /* get the output type */
 static int raster_type_option_string_enum(const char *type)
@@ -55,7 +57,6 @@ static int raster_type_option_string_enum(const char *type)
     else
         return FCELL_TYPE;
 }
-
 
 /* ************************************************************************* */
 /* Error handling ********************************************************** */
@@ -81,7 +82,6 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     Rast3d_fatal_error("%s", errorMsg);
     exit(EXIT_FAILURE);
-
 }
 
 /* ************************************************************************* */
@@ -113,16 +113,14 @@ void set_params()
     param.coeff_a->type = TYPE_DOUBLE;
     param.coeff_a->required = NO;
     param.coeff_a->label = _("Value to multiply the raster values with");
-    param.coeff_a->description =
-        _("Coefficient a in the equation y = ax + b");
+    param.coeff_a->description = _("Coefficient a in the equation y = ax + b");
 
     param.coeff_b = G_define_option();
     param.coeff_b->key = "add";
     param.coeff_b->type = TYPE_DOUBLE;
     param.coeff_b->required = NO;
     param.coeff_b->label = _("Value to add to the raster values");
-    param.coeff_b->description =
-        _("Coefficient b in the equation y = ax + b");
+    param.coeff_b->description = _("Coefficient b in the equation y = ax + b");
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
@@ -131,9 +129,9 @@ void set_params()
 
     param.res = G_define_flag();
     param.res->key = 'r';
-    param.res->description =
-        _("Use the same resolution as the input 3D raster map for the 2D output "
-         "maps, independent of the current region settings");
+    param.res->description = _(
+        "Use the same resolution as the input 3D raster map for the 2D output "
+        "maps, independent of the current region settings");
 }
 
 /* ************************************************************************* */
@@ -142,29 +140,28 @@ void set_params()
 /* ************************************************************************* */
 /* coefficients are used only when needed, otherwise the original values
  * is preserved as well as possible */
-void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
-                   int output_type, int use_coeffs, double coeff_a,
-                   double coeff_b)
+void g3d_to_raster(void *map, RASTER3D_Region region, int *fd, int output_type,
+                   int use_coeffs, double coeff_a, double coeff_b)
 {
     FCELL f1 = 0;
     DCELL d1 = 0;
     int x, y, z;
     int rows, cols, depths, typeIntern, pos = 0;
-    void *cell = NULL;          /* point to row buffer */
-    void *ptr = NULL;           /* pointer to single cell */
+    void *cell = NULL; /* point to row buffer */
+    void *ptr = NULL;  /* pointer to single cell */
     size_t cell_size = 0;
 
     rows = region.rows;
     cols = region.cols;
     depths = region.depths;
 
-
     G_debug(2, "g3d_to_raster: Writing %i raster maps with %i rows %i cols.",
             depths, rows, cols);
 
     typeIntern = Rast3d_tile_type_map(map);
 
-    /* we test it here undefined just to be sure and then we use else for CELL */
+    /* we test it here undefined just to be sure and then we use else for CELL
+     */
     if (output_type == CELL_TYPE)
         cell = Rast_allocate_c_buf();
     else if (output_type == FCELL_TYPE)
@@ -177,11 +174,11 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
 
     pos = 0;
     /*Every Rastermap */
-    for (z = 0; z < depths; z++) {      /*From the bottom to the top */
+    for (z = 0; z < depths; z++) { /*From the bottom to the top */
         G_debug(2, "Writing raster map %d of %d", z + 1, depths);
         G_percent(z, depths - 1, 2);
         for (y = 0; y < rows; y++) {
-            ptr = cell;         /* reset at the beginning of a row */
+            ptr = cell; /* reset at the beginning of a row */
             for (x = 0; x < cols; x++) {
                 if (typeIntern == FCELL_TYPE) {
                     Rast3d_get_value(map, x, y, z, &f1, typeIntern);
@@ -214,7 +211,6 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
     }
     G_percent(1, 1, 1);
     G_free(cell);
-
 }
 
 /* ************************************************************************* */
@@ -236,7 +232,7 @@ void close_output_map(int fd)
 }
 
 /* ************************************************************************* */
-/* Main function, open the RASTER3D map and create the raster maps ************** */
+/* Main function, open the RASTER3D map and create the raster maps ********* */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
@@ -245,12 +241,12 @@ int main(int argc, char *argv[])
     struct Cell_head region2d;
     struct GModule *module;
     struct History history;
-    void *map = NULL;           /*The 3D Rastermap */
+    void *map = NULL; /*The 3D Rastermap */
     int i = 0, changemask = 0;
     int *fd = NULL, output_type, cols, rows;
     char *RasterFileName;
     int overwrite = 0;
-    int use_coeffs = 0;         /* bool */
+    int use_coeffs = 0; /* bool */
     double coeff_a = 1;
     double coeff_b = 0;
 
@@ -292,15 +288,13 @@ int main(int argc, char *argv[])
     if (param.res->answer) {
 
         /*Open the map with current region */
-        map = Rast3d_open_cell_old(param.input->answer,
-                                   G_find_raster3d(param.input->answer, ""),
-                                   RASTER3D_DEFAULT_WINDOW,
-                                   RASTER3D_TILE_SAME_AS_FILE,
-                                   RASTER3D_USE_CACHE_DEFAULT);
+        map = Rast3d_open_cell_old(
+            param.input->answer, G_find_raster3d(param.input->answer, ""),
+            RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE,
+            RASTER3D_USE_CACHE_DEFAULT);
         if (map == NULL)
             Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                                param.input->answer);
-
 
         /*Get the region of the map */
         Rast3d_get_region_struct_map(map, &region);
@@ -310,17 +304,15 @@ int main(int argc, char *argv[])
         Rast3d_extract2d_region(&region, &region2d);
         /*Make the new 2d region the default */
         Rast_set_window(&region2d);
-
     }
     else {
         /* Figure out the region from the map */
         Rast3d_get_window(&region);
 
         /*Open the 3d raster map */
-        map = Rast3d_open_cell_old(param.input->answer,
-                                   G_find_raster3d(param.input->answer, ""),
-                                   &region, RASTER3D_TILE_SAME_AS_FILE,
-                                   RASTER3D_USE_CACHE_DEFAULT);
+        map = Rast3d_open_cell_old(
+            param.input->answer, G_find_raster3d(param.input->answer, ""),
+            &region, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
         if (map == NULL)
             Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
@@ -334,7 +326,8 @@ int main(int argc, char *argv[])
     /*If not equal, set the 3D window correct */
     if (rows != region.rows || cols != region.cols) {
         G_message(_("The 2D and 3D region settings are different. "
-                    "Using the 2D window settings to adjust the 2D part of the 3D region."));
+                    "Using the 2D window settings to adjust the 2D part of the "
+                    "3D region."));
         G_get_set_window(&region2d);
         region.ns_res = region2d.ns_res;
         region.ew_res = region2d.ew_res;
@@ -374,11 +367,11 @@ int main(int argc, char *argv[])
         overwrite = G_check_overwrite(argc, argv);
 
         if (G_find_raster2(RasterFileName, "") && !overwrite)
-            G_fatal_error(_("Raster map %d Filename: %s already exists. Use the flag --o to overwrite."),
+            G_fatal_error(_("Raster map %d Filename: %s already exists. Use "
+                            "the flag --o to overwrite."),
                           i + 1, RasterFileName);
 
         fd[i] = open_output_map(RasterFileName, output_type);
-
     }
 
     /*if requested set the Mask on */
@@ -394,7 +387,6 @@ int main(int argc, char *argv[])
 
     /*Create the Rastermaps */
     g3d_to_raster(map, region, fd, output_type, use_coeffs, coeff_a, coeff_b);
-
 
     /*Loop over all output maps! close */
     for (i = 0; i < region.depths; i++) {
@@ -414,10 +406,8 @@ int main(int argc, char *argv[])
                                    region.bottom + (i * region.tb_res),
                                    region.bottom + (i + 1 * region.tb_res));
 
-        Rast_append_format_history(&history,
-                                   "Input map full z-range: %f to %f",
-                                   inputmap_bounds.bottom,
-                                   inputmap_bounds.top);
+        Rast_append_format_history(&history, "Input map full z-range: %f to %f",
+                                   inputmap_bounds.bottom, inputmap_bounds.top);
         Rast_append_format_history(&history, "Input map z-resolution: %f",
                                    inputmap_bounds.tb_res);
 
@@ -425,8 +415,7 @@ int main(int argc, char *argv[])
             Rast_append_format_history(&history,
                                        "GIS region full z-range: %f to %f",
                                        region.bottom, region.top);
-            Rast_append_format_history(&history,
-                                       "GIS region z-resolution: %f",
+            Rast_append_format_history(&history, "GIS region z-resolution: %f",
                                        region.tb_res);
         }
 
@@ -440,7 +429,6 @@ int main(int argc, char *argv[])
             if (Rast3d_mask_is_on(map) && changemask)
                 Rast3d_mask_off(map);
     }
-
 
     /*Cleaning */
     if (RasterFileName)
