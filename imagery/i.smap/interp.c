@@ -8,8 +8,8 @@
 #define EM_PRECISION 1e-4
 #define ML_PRECISION 1e-6
 
-static void seq_MAP_routine(unsigned char ***, struct Region *,
-                            LIKELIHOOD ****, int, double *, float **);
+static void seq_MAP_routine(unsigned char ***, struct Region *, LIKELIHOOD ****,
+                            int, double *, float **);
 static double alpha_dec_max(double ***);
 static void print_N(double ***);
 static void print_alpha(double *);
@@ -20,14 +20,13 @@ void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int, float **);
 static int up_char(int, int, struct Region *, unsigned char **,
                    unsigned char **);
 
-
-void seq_MAP(unsigned char ***sf_pym,   /* pyramid of segmentations */
-             struct Region *region,     /* specifies image subregion */
-             LIKELIHOOD **** ll_pym,    /* pyramid of class statistics */
-             int M,             /* number of classes */
+void seq_MAP(unsigned char ***sf_pym, /* pyramid of segmentations */
+             struct Region *region,   /* specifies image subregion */
+             LIKELIHOOD ****ll_pym,   /* pyramid of class statistics */
+             int M,                   /* number of classes */
              double *alpha_dec, /* decimation parameters returned by seq_MAP */
              float **goodness   /* goodness of fit */
-    )
+)
 {
     int repeat;
 
@@ -42,24 +41,25 @@ void seq_MAP(unsigned char ***sf_pym,   /* pyramid of segmentations */
     }
 }
 
-static void seq_MAP_routine(unsigned char ***sf_pym,    /* pyramid of segmentations */
-                            struct Region *region,      /* specifies image subregion */
-                            LIKELIHOOD **** ll_pym,     /* pyramid of class statistics */
-                            int M,      /* number of classes */
-                            double *alpha_dec,  /* decimation parameters returned by seq_MAP */
-                            float **goodness    /* goodness of fit */
-    )
+static void seq_MAP_routine(
+    unsigned char ***sf_pym, /* pyramid of segmentations */
+    struct Region *region,   /* specifies image subregion */
+    LIKELIHOOD ****ll_pym,   /* pyramid of class statistics */
+    int M,                   /* number of classes */
+    double *alpha_dec,       /* decimation parameters returned by seq_MAP */
+    float **goodness         /* goodness of fit */
+)
 {
-    int j, k;                   /* loop index */
-    int wd, ht;                 /* width and height at each resolution */
-    int *period;                /* sampling period at each resolution */
-    int D;                      /* number of resolutions -1 */
-    double ***N;                /* transition probability statistics; N[2][3][2] */
-    double alpha[3];            /* transition probability parameters */
-    double tmp[3];              /* temporary transition probability parameters */
-    double diff1;               /* change in parameter estimates */
-    double diff2;               /* change in log likelihood */
-    struct Region *regionary;   /* array of region stuctures */
+    int j, k;        /* loop index */
+    int wd, ht;      /* width and height at each resolution */
+    int *period;     /* sampling period at each resolution */
+    int D;           /* number of resolutions -1 */
+    double ***N;     /* transition probability statistics; N[2][3][2] */
+    double alpha[3]; /* transition probability parameters */
+    double tmp[3];   /* temporary transition probability parameters */
+    double diff1;    /* change in parameter estimates */
+    double diff2;    /* change in log likelihood */
+    struct Region *regionary; /* array of region stuctures */
 
     /* determine number of resolutions */
     D = levels_reg(region);
@@ -145,8 +145,8 @@ static void seq_MAP_routine(unsigned char ***sf_pym,    /* pyramid of segmentati
 static double alpha_dec_max(double ***N)
 {
     int i, j, k;
-    double N_marg[2];           /* Marginal transition rate */
-    double N_sum;               /* total number of transitions counted */
+    double N_marg[2]; /* Marginal transition rate */
+    double N_sum;     /* total number of transitions counted */
 
     for (k = 0; k < 2; k++) {
         N_marg[k] = 0;
@@ -165,8 +165,8 @@ static double alpha_dec_max(double ***N)
 }
 
 static void print_N(
-                       /* prints out class transition statistics */
-                       double ***N)
+    /* prints out class transition statistics */
+    double ***N)
 {
     int n0, n1, n2;
 
@@ -179,45 +179,42 @@ static void print_N(
     }
 }
 
-
 static void print_alpha(
-                           /* prints out transition parameters. */
-                           double *alpha)
+    /* prints out transition parameters. */
+    double *alpha)
 {
-    G_debug(2, "Transition probabilities: %f %f %f; %f",
-            alpha[0], alpha[1], alpha[2],
-            1.0 - alpha[0] - 2 * alpha[1] - alpha[2]);
+    G_debug(2, "Transition probabilities: %f %f %f; %f", alpha[0], alpha[1],
+            alpha[2], 1.0 - alpha[0] - 2 * alpha[1] - alpha[2]);
 }
 
-
 static void interp(
-                      /* Estimates finer resolution segmentation from coarser resolution
-                         segmentation and texture statistics. */
-                      unsigned char **sf1,      /* finer resolution segmentation */
-                      struct Region *region,    /* image region */
-                      unsigned char **sf2,      /* coarser resolution segmentation */
-                      LIKELIHOOD *** ll,        /* Log likelihood ll[i][j][class] */
-                      int M,    /* number of classes */
-                      double *alpha,    /* transition probability parameters; alpha[3] */
-                      int period,       /* sampling period of interpolation */
-                      double ***N,      /* transition probability statistics; N[2][3][2] */
-                      int statflag,     /* compute transition statistics if == 1 */
-                      float **goodness  /* cost of best class */
-    )
+    /* Estimates finer resolution segmentation from coarser resolution
+       segmentation and texture statistics. */
+    unsigned char **sf1,   /* finer resolution segmentation */
+    struct Region *region, /* image region */
+    unsigned char **sf2,   /* coarser resolution segmentation */
+    LIKELIHOOD ***ll,      /* Log likelihood ll[i][j][class] */
+    int M,                 /* number of classes */
+    double *alpha,         /* transition probability parameters; alpha[3] */
+    int period,            /* sampling period of interpolation */
+    double ***N,           /* transition probability statistics; N[2][3][2] */
+    int statflag,          /* compute transition statistics if == 1 */
+    float **goodness       /* cost of best class */
+)
 {
-    int i, j;                   /* pixel index */
-    int m;                      /* class index */
-    int bflag;                  /* boundary flag */
-    int nn0, nn1, nn2;          /* transition counts */
-    int *n0, *n1, *n2;          /* transition counts for each possible pixel class */
-    unsigned char *nbr[8];      /* pointers to neighbors at courser resolution */
-    double cost, mincost;       /* cost of class selection; minimum cost */
-    int best = 0;               /* class of minimum cost selection */
+    int i, j;              /* pixel index */
+    int m;                 /* class index */
+    int bflag;             /* boundary flag */
+    int nn0, nn1, nn2;     /* transition counts */
+    int *n0, *n1, *n2;     /* transition counts for each possible pixel class */
+    unsigned char *nbr[8]; /* pointers to neighbors at courser resolution */
+    double cost, mincost;  /* cost of class selection; minimum cost */
+    int best = 0;          /* class of minimum cost selection */
     double Constant, tmp;
-    double *pdf;                /* propability density function of class selections */
-    double Z;                   /* normalizing costant for pdf */
-    double alpha0, alpha1, alpha2;      /* transition probabilities */
-    double log_tbl[2][3][2];    /* log of transition probability */
+    double *pdf; /* propability density function of class selections */
+    double Z;    /* normalizing costant for pdf */
+    double alpha0, alpha1, alpha2; /* transition probabilities */
+    double log_tbl[2][3][2];       /* log of transition probability */
 
     /* allocate memory for pdf */
     pdf = (double *)G_malloc(M * sizeof(double));
@@ -290,12 +287,12 @@ static void interp(
 }
 
 void MLE(                       /* computes maximum likelihood classification */
-            unsigned char **sf, /* segmentation classes */
-            LIKELIHOOD *** ll,  /* texture statistics */
-            struct Region *region,      /* image region */
-            int M,              /* number of classes */
-            float **goodness    /* goodness of fit */
-    )
+         unsigned char **sf,    /* segmentation classes */
+         LIKELIHOOD ***ll,      /* texture statistics */
+         struct Region *region, /* image region */
+         int M,                 /* number of classes */
+         float **goodness       /* goodness of fit */
+)
 {
     int i, j, m, best;
     double max;
@@ -316,20 +313,19 @@ void MLE(                       /* computes maximum likelihood classification */
         }
 }
 
-
 static int up_char(
-                      /* Computes list of pointers to nieghbors at next coarser resolution. *
-                       * Returns flag when on boundary.                                     */
-                      int i, int j,     /* fine resolution pixel location */
-                      struct Region *region,    /* fine resolution image region */
-                      unsigned char **img,      /* course resolution image */
-                      unsigned char **pt        /* list of pointers */
-    )
+    /* Computes list of pointers to nieghbors at next coarser resolution. *
+     * Returns flag when on boundary.                                     */
+    int i, int j,          /* fine resolution pixel location */
+    struct Region *region, /* fine resolution image region */
+    unsigned char **img,   /* course resolution image */
+    unsigned char **pt     /* list of pointers */
+)
 {
     static int xmax, ymax;
-    static int bflag;           /* =1 when on boundary */
-    static int i2, j2;          /* base indices at coarser level */
-    static int di, dj;          /* displacements at coarser level */
+    static int bflag;  /* =1 when on boundary */
+    static int i2, j2; /* base indices at coarser level */
+    static int di, dj; /* displacements at coarser level */
 
     /* create new xmax and ymax */
     xmax = region->xmax;

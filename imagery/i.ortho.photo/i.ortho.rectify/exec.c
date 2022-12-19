@@ -64,9 +64,8 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 
         name = group->group_ref.file[n].name;
         mapset = group->group_ref.file[n].mapset;
-        result =
-            G_malloc(strlen(group->group_ref.file[n].name) +
-                     strlen(extension) + 1);
+        result = G_malloc(strlen(group->group_ref.file[n].name) +
+                          strlen(extension) + 1);
         strcpy(result, group->group_ref.file[n].name);
         strcat(result, extension);
 
@@ -90,8 +89,8 @@ int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
 
         G_debug(2, "Starting the rectification...");
 
-        if (rectify
-            (group, name, mapset, ebuffer, aver_z, result, interp_method)) {
+        if (rectify(group, name, mapset, ebuffer, aver_z, result,
+                    interp_method)) {
             G_debug(2, "Done. Writing results...");
             select_target_env();
             if (cats_ok) {

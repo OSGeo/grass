@@ -7,7 +7,7 @@
 #include "bouman.h"
 #include "region.h"
 
-int read_block(DCELL *** img,   /* img[band][row[col] */
+int read_block(DCELL ***img, /* img[band][row[col] */
                struct Region *region, struct files *files)
 {
     int band, row, col;

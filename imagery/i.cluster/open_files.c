@@ -4,7 +4,6 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-
 int open_files(void)
 {
     char *name, *mapset, **err, *semantic_label;
@@ -25,9 +24,8 @@ int open_files(void)
             G_warning(_("Raster map <%s> do not exists in subgroup <%s>"),
                       G_fully_qualified_name(name, mapset), subgroup);
         }
-        semantic_label =
-            Rast_get_semantic_label_or_name(ref.file[n].name,
-                                            ref.file[n].mapset);
+        semantic_label = Rast_get_semantic_label_or_name(ref.file[n].name,
+                                                         ref.file[n].mapset);
         semantic_labels[n] = G_store(semantic_label);
     }
     if (missing)
@@ -42,7 +40,7 @@ int open_files(void)
         G_fatal_error(_("Subgroup must have at least 2 raster maps"));
     }
 
-    cell = (DCELL **) G_malloc(ref.nfiles * sizeof(DCELL *));
+    cell = (DCELL **)G_malloc(ref.nfiles * sizeof(DCELL *));
     cellfd = (int *)G_malloc(ref.nfiles * sizeof(int));
     for (n = 0; n < ref.nfiles; n++) {
         cell[n] = Rast_allocate_d_buf();
@@ -69,12 +67,11 @@ int open_files(void)
 
         err = I_sort_signatures_by_semantic_label(&in_sig, &ref);
         if (err)
-            G_fatal_error(_("Signature - group member semantic label mismatch.\n"
-                           "Extra signatures for bands: %s\n"
-                           "Imagery group bands without signatures: %s"),
-                          err[0] ? err[0] : _("none"),
-                          err[1] ? err[1] : _("none")
-                );
+            G_fatal_error(
+                _("Signature - group member semantic label mismatch.\n"
+                  "Extra signatures for bands: %s\n"
+                  "Imagery group bands without signatures: %s"),
+                err[0] ? err[0] : _("none"), err[1] ? err[1] : _("none"));
 
         maxclass = in_sig.nsigs;
     }

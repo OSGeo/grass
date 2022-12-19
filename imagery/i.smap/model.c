@@ -8,7 +8,6 @@
 
 #define PI M_PI
 
-
 void extract_init(struct SigSet *S)
 {
     int m;
@@ -25,7 +24,6 @@ void extract_init(struct SigSet *S)
     lambda = G_alloc_vector(nbands);
     tmp_mat = G_alloc_matrix(nbands, nbands);
 
-
     /* invert matrix and compute constant for each subclass */
 
     /* for each class */
@@ -40,20 +38,21 @@ void extract_init(struct SigSet *S)
             for (b1 = 0; b1 < nbands; b1++)
                 for (b2 = 0; b2 < nbands; b2++) {
                     if (SubS->R[b1][b2] != SubS->R[b2][b1])
-                        G_warning(_("Nonsymetric covariance for class %d subclass %d"),
+                        G_warning(_("Nonsymetric covariance for class %d "
+                                    "subclass %d"),
                                   m + 1, i + 1);
 
                     SubS->Rinv[b1][b2] = SubS->R[b1][b2];
                     tmp_mat[b1][b2] = SubS->R[b1][b2];
-
                 }
 
             /* Test for positive definite matrix */
             G_math_eigen(tmp_mat, lambda, nbands);
             for (b1 = 0; b1 < nbands; b1++) {
                 if (lambda[b1] <= 0.0)
-                    G_warning(_("Nonpositive eigenvalues for class %d subclass %d"),
-                              m + 1, i + 1);
+                    G_warning(
+                        _("Nonpositive eigenvalues for class %d subclass %d"),
+                        m + 1, i + 1);
             }
 
             /* Precomputes the cnst */
@@ -70,21 +69,20 @@ void extract_init(struct SigSet *S)
     G_free_matrix(tmp_mat);
 }
 
-
-void extract(DCELL *** img,     /* multispectral image, img[band][i][j] */
-             struct Region *region,     /* region to extract */
-             LIKELIHOOD *** ll, /* log likelihood, ll[i][j][class] */
-             struct SigSet *S   /* class signatures */
-    )
+void extract(DCELL ***img,          /* multispectral image, img[band][i][j] */
+             struct Region *region, /* region to extract */
+             LIKELIHOOD ***ll,      /* log likelihood, ll[i][j][class] */
+             struct SigSet *S       /* class signatures */
+)
 {
-    int i, j;                   /* column and row indexes */
-    int m;                      /* class index */
-    int k;                      /* subclass index */
-    int b1, b2;                 /* spectral index */
-    int no_data;                /* no data flag */
-    int max_nsubclasses;        /* maximum number of subclasses */
-    int nbands;                 /* number of spectral bands */
-    double *subll;              /* log likelihood of subclasses */
+    int i, j;            /* column and row indexes */
+    int m;               /* class index */
+    int k;               /* subclass index */
+    int b1, b2;          /* spectral index */
+    int no_data;         /* no data flag */
+    int max_nsubclasses; /* maximum number of subclasses */
+    int nbands;          /* number of spectral bands */
+    double *subll;       /* log likelihood of subclasses */
     double *diff;
     double maxlike = 0.0L;
     double subsum;
@@ -130,8 +128,7 @@ void extract(DCELL *** img,     /* multispectral image, img[band][i][j] */
                         for (b1 = 0; b1 < nbands; b1++) {
                             diff[b1] = img[b1][i][j] - SubS->means[b1];
                             subll[k] -=
-                                0.5 * diff[b1] * diff[b1] *
-                                SubS->Rinv[b1][b1];
+                                0.5 * diff[b1] * diff[b1] * SubS->Rinv[b1][b1];
                         }
                         for (b1 = 0; b1 < nbands; b1++)
                             for (b2 = b1 + 1; b2 < nbands; b2++)
@@ -156,8 +153,7 @@ void extract(DCELL *** img,     /* multispectral image, img[band][i][j] */
                         /* Sum weighted subclass likelihoods */
                         subsum = 0;
                         for (k = 0; k < C->nsubclasses; k++)
-                            subsum +=
-                                exp(subll[k] - maxlike) * C->SubSig[k].pi;
+                            subsum += exp(subll[k] - maxlike) * C->SubSig[k].pi;
 
                         ll[i][j][m] = log(subsum) + maxlike;
                     }

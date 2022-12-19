@@ -2,17 +2,16 @@
 #include "bouman.h"
 #include "region.h"
 
-
 static void decimate(LIKELIHOOD ***, struct Region *, int, LIKELIHOOD ***,
                      double);
 static void up_ll(LIKELIHOOD *, int, double, LIKELIHOOD *);
 
-
-void make_pyramid(LIKELIHOOD **** ll_pym,       /* log likelihood pyramid, ll_pym[scale][i][j][class] */
-                  struct Region *region,        /* specifies image subregion */
-                  int M,        /* number of classes */
-                  double *alpha /* decimation parameters */
-    )
+void make_pyramid(LIKELIHOOD ****ll_pym, /* log likelihood pyramid,
+                                            ll_pym[scale][i][j][class] */
+                  struct Region *region, /* specifies image subregion */
+                  int M,                 /* number of classes */
+                  double *alpha          /* decimation parameters */
+)
 {
     int D;
     int wd, ht;
@@ -37,19 +36,21 @@ void make_pyramid(LIKELIHOOD **** ll_pym,       /* log likelihood pyramid, ll_py
 }
 
 static void decimate(
-                        /* decimate statistics ll1 to form ll2 */
-                        LIKELIHOOD *** ll1,     /* log likelihood ll1[i][j][class], at fine resolution */
-                        struct Region *region1, /* specifies image subregion */
-                        int M,  /* number of classes */
-                        LIKELIHOOD *** ll2,     /* loglikelihood ll1[i][j][class], at coarse resolution */
-                        double alpha    /* transition parameter */
-    )
+    /* decimate statistics ll1 to form ll2 */
+    LIKELIHOOD ***ll1,      /* log likelihood ll1[i][j][class],
+                             at fine resolution */
+    struct Region *region1, /* specifies image subregion */
+    int M,                  /* number of classes */
+    LIKELIHOOD ***ll2,      /* loglikelihood ll1[i][j][class], at
+                             coarse resolution */
+    double alpha            /* transition parameter */
+)
 {
-    struct Region *region2, reg_spc;    /* coarse resolution region */
-    int wflag, hflag;           /* flags indicate odd number of pixels */
+    struct Region *region2, reg_spc; /* coarse resolution region */
+    int wflag, hflag;                /* flags indicate odd number of pixels */
     int i, j, m;
-    LIKELIHOOD *node;           /* coarse resolution point */
-    LIKELIHOOD *pt1, *pt2, *pt3, *pt4;  /* fine resolution neighbors */
+    LIKELIHOOD *node;                  /* coarse resolution point */
+    LIKELIHOOD *pt1, *pt2, *pt3, *pt4; /* fine resolution neighbors */
 
     region2 = &reg_spc;
 
@@ -112,10 +113,11 @@ static void decimate(
     }
 }
 
-
-static void up_ll(LIKELIHOOD * pt1,     /* array of log likelihood values, pt1[class] */
-                  int M, double alpha, LIKELIHOOD * pt2 /* array of log likelihood values, pt2[class] */
-    )
+static void
+up_ll(LIKELIHOOD *pt1, /* array of log likelihood values, pt1[class] */
+      int M, double alpha,
+      LIKELIHOOD *pt2 /* array of log likelihood values, pt2[class] */
+)
 {
     static int m;
     static double sum, max, cprob[256];
@@ -165,7 +167,6 @@ char ***get_pyramid(int w0, int h0, size_t size)
     return (pym);
 }
 
-
 void free_pyramid(char *pym, int wd, int ht)
 {
     unsigned char ***pt;
@@ -199,7 +200,6 @@ char ****get_cubic_pyramid(int w0, int h0, int M, size_t size)
 
     return (pym);
 }
-
 
 void free_cubic_pyramid(char *pym, int wd, int ht, int M)
 {

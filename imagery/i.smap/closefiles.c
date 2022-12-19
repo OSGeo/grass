@@ -6,7 +6,6 @@
 #include "bouman.h"
 #include "local_proto.h"
 
-
 int closefiles(struct parms *parms, struct files *files)
 {
     int n;
@@ -18,13 +17,13 @@ int closefiles(struct parms *parms, struct files *files)
 
     Rast_close(files->output_fd);
     Rast_write_cats(parms->output_map, &files->output_labels);
-    make_history(parms->output_map,
-                 parms->group, parms->subgroup, parms->sigfile);
+    make_history(parms->output_map, parms->group, parms->subgroup,
+                 parms->sigfile);
 
     if (files->goodness_fd >= 0) {
         Rast_close(files->goodness_fd);
-        make_history(parms->goodness_map,
-                     parms->group, parms->subgroup, parms->sigfile);
+        make_history(parms->goodness_map, parms->group, parms->subgroup,
+                     parms->sigfile);
     }
 
     return 0;
