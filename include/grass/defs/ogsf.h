@@ -284,8 +284,7 @@ int GVL_slice_del(int, int);
 int GVL_slice_num_slices(int);
 int GVL_slice_get_pos(int, int, float *, float *, float *, float *, float *,
                       float *, int *);
-int GVL_slice_set_pos(int, int, float, float, float, float, float, float,
-                      int);
+int GVL_slice_set_pos(int, int, float, float, float, float, float, float, int);
 
 /* Gp3.c */
 int Gp_set_color(const char *, geopoint *);
@@ -294,13 +293,13 @@ int Gp_load_sites_thematic(geosite *, struct Colors *);
 
 /* Gs3.c */
 double Gs_distance(double *, double *);
-int Gs_loadmap_as_float(struct Cell_head *, const char *, float *,
-                        struct BM *, int *);
+int Gs_loadmap_as_float(struct Cell_head *, const char *, float *, struct BM *,
+                        int *);
 int Gs_loadmap_as_int(struct Cell_head *, const char *, int *, struct BM *,
                       int *);
 int Gs_numtype(const char *, int *);
-int Gs_loadmap_as_short(struct Cell_head *, const char *, short *,
-                        struct BM *, int *);
+int Gs_loadmap_as_short(struct Cell_head *, const char *, short *, struct BM *,
+                        int *);
 int Gs_loadmap_as_char(struct Cell_head *, const char *, unsigned char *,
                        struct BM *, int *);
 int Gs_loadmap_as_bitmap(struct Cell_head *, const char *, struct BM *);
@@ -323,8 +322,7 @@ void sub_Vectmem(int);
 Keylist *gk_copy_key(Keylist *);
 unsigned long gk_get_mask_sofar(float, Keylist *);
 int gk_viable_keys_for_mask(unsigned long, Keylist *, Keylist **);
-void gk_follow_frames(Viewnode *, int, Keylist *, int, int, int,
-                      unsigned long);
+void gk_follow_frames(Viewnode *, int, Keylist *, int, int, int, unsigned long);
 void gk_free_key(Keylist *);
 Viewnode *gk_make_framesfromkeys(Keylist *, int, int, int, float);
 double get_key_neighbors(int, double, double, int, Keylist **, Keylist **,
@@ -423,8 +421,7 @@ int calc_norm(geosurf *, int, int, unsigned int);
 /* gs_query.c */
 int gs_los_intersect1(int, float (*)[3], float *);
 int gs_los_intersect(int, float **, float *);
-int RayCvxPolyhedronInt(Point3, Point3, double, Point4 *, int, double *,
-                        int *);
+int RayCvxPolyhedronInt(Point3, Point3, double, Point4 *, int, double *, int *);
 void gs_get_databounds_planes(Point4 *);
 int gs_setlos_enterdata(Point3 *);
 
@@ -654,8 +651,8 @@ int gvl_getall_vols(geovol **);
 int gvl_num_vols(void);
 geovol *gvl_get_last_vol(void);
 geovol *gvl_get_new_vol(void);
-int gvl_init_vol(geovol *, double, double, double, int, int, int,
-                 double, double, double);
+int gvl_init_vol(geovol *, double, double, double, int, int, int, double,
+                 double, double);
 void gvl_delete_vol(int);
 int gvl_free_vol(geovol *);
 void gvl_free_volmem(geovol *);
@@ -682,7 +679,7 @@ int gvl_slice_freemem(geovol_slice *);
 
 /* trans.c */
 void P_scale(float, float, float);
-void P_transform(int, float (*)[4], float(*)[4]);
+void P_transform(int, float (*)[4], float (*)[4]);
 int P_pushmatrix(void);
 int P_popmatrix(void);
 void P_rot(float, char);
