@@ -1,8 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       r.relief
- * AUTHOR(S):	CERL
+ * AUTHOR(S):    CERL
  *               parameters standardized: Markus Neteler, 2008
  *               updates: Michael Barton, 2004
  *               updates: Gordon Keith, 2003
@@ -11,12 +10,12 @@
  *               updates: Markus Neteler, 2001, 1999
  *               Converted to Python by Glynn Clements
  *               Converted to C by Markus Metz
- * PURPOSE:	Creates shaded relief map from raster elevation map (DEM)
- * COPYRIGHT:	(C) 1999 - 2008, 2010, 2012 by the GRASS Development Team
+ * PURPOSE:      Creates shaded relief map from raster elevation map (DEM)
+ * COPYRIGHT:    (C) 1999 - 2008, 2010, 2012 by the GRASS Development Team
  *
- *		This program is free software under the GNU General Public
- *		License (>=v2). Read the file COPYING that comes with GRASS
- *		for details.
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -25,11 +24,12 @@
  *
  *   May 2005 - fixed wrong units parameter (Markus Neteler)
  *
- *   September 2004 - Added z exaggeration control (Michael Barton) 
- *   April 2004 - updated for GRASS 5.7 by Michael Barton 
+ *   September 2004 - Added z exaggeration control (Michael Barton)
+ *   April 2004 - updated for GRASS 5.7 by Michael Barton
  *
- *   9/2004 Adds scale factor input (as per documentation); units set scale only if specified for lat/long regions
- *    Also, adds option of controlling z-exaggeration.
+ *   9/2004 Adds scale factor input (as per documentation); units set scale only
+ * if specified for lat/long regions Also, adds option of controlling
+ * z-exaggeration.
  *
  *   6/2003 fixes for Lat/Long Gordon Keith <gordon.keith@csiro.au>
  *   If n is a number then the ewres and nsres are mulitplied by that scale
@@ -50,7 +50,6 @@
  *       updated number to FP in r.mapcalc statement Markus Neteler
  */
 
-
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -65,7 +64,7 @@ int main(int argc, char *argv[])
     DCELL *elev_cell[3], *temp;
     DCELL *out_rast, *out_ptr = NULL;
     DCELL *c1, *c2, *c3, *c4, *c5, *c6, *c7, *c8, *c9;
-    int Wrap;                   /* global wraparound */
+    int Wrap; /* global wraparound */
     struct Cell_head window;
     struct History hist;
     struct Colors colors;
@@ -84,8 +83,8 @@ int main(int argc, char *argv[])
 
     double degrees_to_radians, radians_to_degrees;
     double H, V;
-    double dx;                  /* partial derivative in ew direction */
-    double dy;                  /* partial derivative in ns direction */
+    double dx; /* partial derivative in ew direction */
+    double dy; /* partial derivative in ns direction */
     double key;
     double slp_in_rad, aspect, cang;
 
@@ -93,10 +92,9 @@ int main(int argc, char *argv[])
     DCELL min, max;
 
     struct GModule *module;
-    struct
-    {
-        struct Option *elevation, *relief, *altitude, *azimuth, *zmult,
-            *scale, *units;
+    struct {
+        struct Option *elevation, *relief, *altitude, *azimuth, *zmult, *scale,
+            *units;
     } parm;
     char *desc;
 
@@ -108,8 +106,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("relief"));
     G_add_keyword(_("terrain"));
     G_add_keyword(_("hillshade"));
-    module->label =
-        _("Creates shaded relief map from an elevation map (DEM).");
+    module->label = _("Creates shaded relief map from an elevation map (DEM).");
 
     parm.elevation = G_define_standard_option(G_OPT_R_INPUT);
     parm.elevation->description =
@@ -162,9 +159,9 @@ int main(int argc, char *argv[])
     desc = NULL;
     G_asprintf(&desc,
                "intl;%s;"
-               "survey;%s", _("international feet"), _("survey feet"));
+               "survey;%s",
+               _("international feet"), _("survey feet"));
     parm.units->descriptions = desc;
-
 
     degrees_to_radians = M_PI / 180.0;
     radians_to_degrees = 180. / M_PI;
@@ -193,13 +190,13 @@ int main(int argc, char *argv[])
     azimuth = (azimuth - 90.) * degrees_to_radians;
 
     if (sscanf(parm.zmult->answer, "%lf", &zmult) != 1 || zmult == 0.0) {
-        G_fatal_error(_("%s=%s - must not be zero"),
-                      parm.zmult->key, parm.zmult->answer);
+        G_fatal_error(_("%s=%s - must not be zero"), parm.zmult->key,
+                      parm.zmult->answer);
     }
 
     if (sscanf(parm.scale->answer, "%lf", &scale) != 1 || scale <= 0.0) {
-        G_fatal_error(_("%s=%s - must be a positive number"),
-                      parm.scale->key, parm.scale->answer);
+        G_fatal_error(_("%s=%s - must be a positive number"), parm.scale->key,
+                      parm.scale->answer);
     }
 
     G_get_set_window(&window);
@@ -213,7 +210,6 @@ int main(int argc, char *argv[])
         if (strcmp(units, "intl") == 0) {
             /* 1 international foot = 0.3048 meters */
             scale = 1. / 0.3048;
-
         }
         else if (strcmp(units, "survey") == 0) {
             /* 1 survey foot = 1200 / 3937 meters */
@@ -223,18 +219,17 @@ int main(int argc, char *argv[])
 
     Wrap = 0;
     if (G_projection() == PROJECTION_LL) {
-        if ((window.west == (window.east - 360.))
-            || (window.east == (window.west - 360.))) {
+        if ((window.west == (window.east - 360.)) ||
+            (window.east == (window.west - 360.))) {
             Wrap = 1;
             ncols += 2;
         }
     }
 
-    /* H = window.ew_res * 4 * 2/ zmult; *//* horizontal (east-west) run 
-       times 4 for weighted difference */
-    /* V = window.ns_res * 4 * 2/ zmult; *//* vertical (north-south) run 
-       times 4 for weighted difference */
-
+    /* H = window.ew_res * 4 * 2/ zmult; */ /* horizontal (east-west) run
+        times 4 for weighted difference */
+    /* V = window.ns_res * 4 * 2/ zmult; */ /* vertical (north-south) run
+        times 4 for weighted difference */
 
     G_begin_distance_calculations();
     north = Rast_row_to_northing(0.5, &window);
@@ -244,12 +239,12 @@ int main(int argc, char *argv[])
     west = Rast_col_to_easting(0.5, &window);
     V = G_distance(east, north, east, south) * 4 * scale / zmult;
     H = G_distance(east, ns_med, west, ns_med) * 4 * scale / zmult;
-    /*    ____________________________
+    /* ____________________________
        |c1      |c2      |c3      |
        |        |        |        |
-       |        |  north |        |        
+       |        |  north |        |
        |        |        |        |
-       |________|________|________|          
+       |________|________|________|
        |c4      |c5      |c6      |
        |        |        |        |
        |  east  | ns_med |  west  |
@@ -264,11 +259,11 @@ int main(int argc, char *argv[])
 
     /* open the elevation file for reading */
     in_fd = Rast_open_old(elev_name, "");
-    elev_cell[0] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));
+    elev_cell[0] = (DCELL *)G_calloc(ncols + 1, sizeof(DCELL));
     Rast_set_d_null_value(elev_cell[0], ncols);
-    elev_cell[1] = (DCELL *) G_calloc(ncols, sizeof(DCELL));
+    elev_cell[1] = (DCELL *)G_calloc(ncols, sizeof(DCELL));
     Rast_set_d_null_value(elev_cell[1], ncols);
-    elev_cell[2] = (DCELL *) G_calloc(ncols, sizeof(DCELL));
+    elev_cell[2] = (DCELL *)G_calloc(ncols, sizeof(DCELL));
     Rast_set_d_null_value(elev_cell[2], ncols);
 
     out_fd = Rast_open_new(sr_name, out_type);
@@ -305,12 +300,12 @@ int main(int argc, char *argv[])
             west = Rast_col_to_easting(0.5, &window);
             V = G_distance(east, north, east, south) * 4 * scale / zmult;
             H = G_distance(east, ns_med, west, ns_med) * 4 * scale / zmult;
-            /*        ____________________________
+            /* ____________________________
                |c1      |c2      |c3      |
                |        |        |        |
-               |        |  north |        |        
+               |        |  north |        |
                |        |        |        |
-               |________|________|________|          
+               |________|________|________|
                |c4      |c5      |c6      |
                |        |        |        |
                |  east  | ns_med |  west  |
@@ -358,8 +353,8 @@ int main(int argc, char *argv[])
         for (col = ncols - 2; col-- > 0;
              c1++, c2++, c3++, c4++, c5++, c6++, c7++, c8++, c9++) {
             /*  DEBUG:
-               fprintf(stdout, "\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n",
-               *c1, *c2, *c3, *c4, *c5, *c6, *c7, *c8, *c9);
+               fprintf(stdout, "\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n%.0f %.0f
+               %.0f\n", *c1, *c2, *c3, *c4, *c5, *c6, *c7, *c8, *c9);
              */
 
             if (Rast_is_d_null_value(c1) || Rast_is_d_null_value(c2) ||
@@ -372,7 +367,7 @@ int main(int argc, char *argv[])
                 out_ptr = G_incr_void_ptr(out_ptr, out_size);
 
                 continue;
-            }                   /* no data */
+            } /* no data */
 
             /* shaded relief */
             /* slope */
@@ -405,17 +400,17 @@ int main(int argc, char *argv[])
 
             /* shaded relief */
             cang = sin(altitude) * sin(slp_in_rad) +
-                cos(altitude) * cos(slp_in_rad) * cos(azimuth - aspect);
+                   cos(altitude) * cos(slp_in_rad) * cos(azimuth - aspect);
 
-            Rast_set_d_value(out_ptr, (DCELL) 255 * cang, out_type);
+            Rast_set_d_value(out_ptr, (DCELL)255 * cang, out_type);
 
             out_ptr = G_incr_void_ptr(out_ptr, out_size);
 
-        }                       /* column for loop */
+        } /* column for loop */
 
         Rast_put_row(out_fd, out_rast, out_type);
 
-    }                           /* row loop */
+    } /* row loop */
 
     G_percent(row, nrows, 2);
 

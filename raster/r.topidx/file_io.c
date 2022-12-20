@@ -19,13 +19,13 @@ void read_cells(void)
     Rast_get_cellhd(input, "", &inhead);
 
     if (data_type == CELL_TYPE)
-        ccell = (CELL *) G_malloc(sizeof(CELL) * window.cols);
+        ccell = (CELL *)G_malloc(sizeof(CELL) * window.cols);
     else if (data_type == FCELL_TYPE)
-        fcell = (FCELL *) G_malloc(sizeof(FCELL) * window.cols);
+        fcell = (FCELL *)G_malloc(sizeof(FCELL) * window.cols);
 
-    cell = (DCELL **) G_malloc(sizeof(DCELL *) * window.rows);
-    atb = (DCELL **) G_malloc(sizeof(DCELL *) * window.rows);
-    a = (DCELL **) G_malloc(sizeof(DCELL *) * window.rows);
+    cell = (DCELL **)G_malloc(sizeof(DCELL *) * window.rows);
+    atb = (DCELL **)G_malloc(sizeof(DCELL *) * window.rows);
+    a = (DCELL **)G_malloc(sizeof(DCELL *) * window.rows);
 
     if (window.ew_res < inhead.ew_res || window.ns_res < inhead.ns_res) {
         G_format_resolution(window.ew_res, buf_wrew, G_projection());
@@ -44,9 +44,9 @@ void read_cells(void)
     for (i = 0; i < window.rows; i++) {
         G_percent(i, window.rows, 2);
 
-        cell[i] = (DCELL *) G_malloc(sizeof(DCELL) * window.cols);
-        atb[i] = (DCELL *) G_malloc(sizeof(DCELL) * window.cols);
-        a[i] = (DCELL *) G_malloc(sizeof(DCELL) * window.cols);
+        cell[i] = (DCELL *)G_malloc(sizeof(DCELL) * window.cols);
+        atb[i] = (DCELL *)G_malloc(sizeof(DCELL) * window.cols);
+        a[i] = (DCELL *)G_malloc(sizeof(DCELL) * window.cols);
 
         if (data_type == CELL_TYPE) {
             Rast_get_c_row(fd, ccell, i);
@@ -54,7 +54,7 @@ void read_cells(void)
                 if (Rast_is_c_null_value(&ccell[j]))
                     Rast_set_d_null_value(&cell[i][j], 1);
                 else
-                    cell[i][j] = (DCELL) ccell[j];
+                    cell[i][j] = (DCELL)ccell[j];
             }
         }
         else if (data_type == FCELL_TYPE) {
@@ -63,7 +63,7 @@ void read_cells(void)
                 if (Rast_is_f_null_value(&fcell[j]))
                     Rast_set_d_null_value(&cell[i][j], 1);
                 else
-                    cell[i][j] = (DCELL) fcell[j];
+                    cell[i][j] = (DCELL)fcell[j];
             }
         }
         else

@@ -1,4 +1,3 @@
-
 /**************************************************
  *
  *               fixHa.c (for spread)
@@ -7,6 +6,7 @@
  *  by the min_cost of a cell.
  *
  **************************************************/
+
 #include <stdlib.h>
 #include "costHa.h"
 #include "local_proto.h"

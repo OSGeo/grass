@@ -1,6 +1,6 @@
 /*
  * r.in.pdal Functions printing out various information on input LAS files
- *  
+ *
  *   Copyright 2021 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss
  *
@@ -19,15 +19,14 @@
 #include <pdal/io/LasReader.hpp>
 #include <pdal/io/LasHeader.hpp>
 
-extern "C"
-{
+extern "C" {
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "string_list.h"
 }
 
-void get_extent(struct StringList *, double *, double *,
-                double *, double *, double *, double *);
+void get_extent(struct StringList *, double *, double *, double *, double *,
+                double *, double *);
 void print_extent(struct StringList *);
 void print_lasinfo(struct StringList *);
 

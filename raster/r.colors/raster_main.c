@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.colors
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               David Johnson
  *               Support for 3D rasters by Soeren Gebbert
- *  
+ *
  * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
  *

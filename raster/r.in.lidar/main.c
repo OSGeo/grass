@@ -1,13 +1,12 @@
-
- /****************************************************************************
+/****************************************************************************
  *
  * MODULE:       r.in.Lidar
- *               
+ *
  * AUTHOR(S):    Markus Metz
  *               Vaclav Petras (base raster addition and refactoring)
  *               Based on r.in.xyz by Hamish Bowman, Volker Wichmann
  *
- * PURPOSE:      Imports LAS LiDAR point clouds to a raster map using 
+ * PURPOSE:      Imports LAS LiDAR point clouds to a raster map using
  *               aggregate statistics.
  *
  * COPYRIGHT:    (C) 2011-2015 Markus Metz and the The GRASS Development Team
@@ -36,7 +35,6 @@
 #include "point_binning.h"
 #include "filters.h"
 
-
 int main(int argc, char *argv[])
 {
     int out_fd, base_raster;
@@ -55,8 +53,8 @@ int main(int argc, char *argv[])
     void *raster_row;
     struct Cell_head region;
     struct Cell_head input_region;
-    int rows, last_rows, row0, cols;    /* scan box size */
-    int row;                    /* counters */
+    int rows, last_rows, row0, cols; /* scan box size */
+    int row;                         /* counters */
 
     int pass, npasses;
     unsigned long line, line_total;
@@ -80,8 +78,8 @@ int main(int argc, char *argv[])
     bin_index_nodes.nodes = 0;
 
     struct GModule *module;
-    struct Option *input_opt, *output_opt, *percent_opt, *type_opt,
-        *filter_opt, *class_opt;
+    struct Option *input_opt, *output_opt, *percent_opt, *type_opt, *filter_opt,
+        *class_opt;
     struct Option *method_opt, *base_raster_opt;
     struct Option *zrange_opt, *zscale_opt;
     struct Option *irange_opt, *iscale_opt;
@@ -116,8 +114,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("conversion"));
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("binning"));
-    module->description =
-        _("Creates a raster map from LAS LiDAR points using univariate statistics.");
+    module->description = _("Creates a raster map from LAS LiDAR points using "
+                            "univariate statistics.");
 
     input_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
     input_opt->required = NO;
@@ -143,8 +141,8 @@ int main(int argc, char *argv[])
     method_opt->type = TYPE_STRING;
     method_opt->required = NO;
     method_opt->description = _("Statistic to use for raster values");
-    method_opt->options =
-        "n,min,max,range,sum,mean,stddev,variance,coeff_var,median,percentile,skewness,trimmean";
+    method_opt->options = "n,min,max,range,sum,mean,stddev,variance,coeff_var,"
+                          "median,percentile,skewness,trimmean";
     method_opt->answer = "mean";
     method_opt->guisection = _("Statistic");
     G_asprintf((char **)&(method_opt->descriptions),
@@ -182,8 +180,7 @@ int main(int argc, char *argv[])
     base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
     base_raster_opt->key = "base_raster";
     base_raster_opt->required = NO;
-    base_raster_opt->label =
-        _("Subtract raster values from the Z coordinates");
+    base_raster_opt->label = _("Subtract raster values from the Z coordinates");
     base_raster_opt->description =
         _("The scale for Z is applied beforehand, the range filter for"
           " Z afterwards");
@@ -212,8 +209,7 @@ int main(int argc, char *argv[])
     irange_opt->type = TYPE_DOUBLE;
     irange_opt->required = NO;
     irange_opt->key_desc = "min,max";
-    irange_opt->description =
-        _("Filter range for intensity values (min,max)");
+    irange_opt->description = _("Filter range for intensity values (min,max)");
     irange_opt->guisection = _("Selection");
 
     iscale_opt = G_define_option();
@@ -249,8 +245,8 @@ int main(int argc, char *argv[])
     trim_opt->options = "0-50";
     trim_opt->label =
         _("Discard given percentage of the smallest and largest values");
-    trim_opt->description =
-        _("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
+    trim_opt->description = _("Discard <trim> percent of the smallest and "
+                              "<trim> percent of the largest observations");
     trim_opt->guisection = _("Statistic");
 
     res_opt = G_define_option();
@@ -305,8 +301,8 @@ int main(int argc, char *argv[])
     over_flag->key = 'o';
     over_flag->label =
         _("Override projection check (use current location's projection)");
-    over_flag->description =
-        _("Assume that the dataset has same projection as the current location");
+    over_flag->description = _(
+        "Assume that the dataset has same projection as the current location");
 
     scan_flag = G_define_flag();
     scan_flag->key = 's';
@@ -379,8 +375,7 @@ int main(int argc, char *argv[])
 
     if (file_list_opt->answer) {
         if (access(file_list_opt->answer, F_OK) != 0)
-            G_fatal_error(_("File <%s> does not exist"),
-                          file_list_opt->answer);
+            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
         string_list_from_file(&infiles, file_list_opt->answer);
     }
     else {
@@ -391,7 +386,8 @@ int main(int argc, char *argv[])
     outmap = output_opt->answer;
 
     if (shell_style->answer && !scan_flag->answer) {
-        scan_flag->answer = 1;  /* pointer not int, so set = shell_style->answer ? */
+        scan_flag->answer =
+            1; /* pointer not int, so set = shell_style->answer ? */
     }
 
     /* check zrange and extent relation */
@@ -402,7 +398,8 @@ int main(int argc, char *argv[])
 
     Rast_get_window(&region);
     /* G_get_window seems to be unreliable if the location has been changed */
-    G_get_set_window(&loc_wind);        /* TODO: v.in.lidar uses G_get_default_window() */
+    G_get_set_window(
+        &loc_wind); /* TODO: v.in.lidar uses G_get_default_window() */
 
     estimated_lines = 0;
     int i;
@@ -473,8 +470,7 @@ int main(int argc, char *argv[])
         else if (strcmp(filter_opt->answer, "mid") == 0)
             return_filter = LAS_MID;
         else
-            G_fatal_error(_("Unknown filter option <%s>"),
-                          filter_opt->answer);
+            G_fatal_error(_("Unknown filter option <%s>"), filter_opt->answer);
     }
     struct ReturnFilter return_filter_struct;
 
@@ -571,7 +567,6 @@ int main(int argc, char *argv[])
             npasses++;
         else
             last_rows = rows;
-
     }
     cols = region.cols;
 
@@ -590,23 +585,22 @@ int main(int argc, char *argv[])
      * flag was defined (alternatively clip the regions) */
     if (base_rast_res_flag->answer)
         use_base_raster_res = 1;
-    if (base_raster_opt->answer && (res_opt->answer || use_base_raster_res
-                                    || extents_flag->answer))
+    if (base_raster_opt->answer &&
+        (res_opt->answer || use_base_raster_res || extents_flag->answer))
         use_segment = 1;
     if (base_raster_opt->answer && !use_segment) {
         /* TODO: do we need to test existence first? mapset? */
         base_raster = Rast_open_old(base_raster_opt->answer, "");
         base_raster_data_type = Rast_get_map_type(base_raster);
-        base_array =
-            G_calloc((size_t)rows * (cols + 1),
-                     Rast_cell_size(base_raster_data_type));
+        base_array = G_calloc((size_t)rows * (cols + 1),
+                              Rast_cell_size(base_raster_data_type));
     }
     if (base_raster_opt->answer && use_segment) {
         if (use_base_raster_res) {
             /* read raster actual extent and resolution */
             Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
             /* TODO: make it only as small as the output is or points are */
-            Rast_set_input_window(&input_region);       /* we have split window */
+            Rast_set_input_window(&input_region); /* we have split window */
         }
         else {
             Rast_get_input_window(&input_region);
@@ -617,9 +611,10 @@ int main(int argc, char *argv[])
 
     if (!scan_flag->answer) {
         if (!check_rows_cols_fit_to_size_t(rows, cols))
-            G_fatal_error(_("Unable to process the whole map at once. "
-                            "Please set the '%s' option to some value lower than 100."),
-                          percent_opt->key);
+            G_fatal_error(
+                _("Unable to process the whole map at once. "
+                  "Please set the '%s' option to some value lower than 100."),
+                percent_opt->key);
         point_binning_memory_test(&point_binning, rows, cols, rtype);
     }
 
@@ -650,9 +645,9 @@ int main(int argc, char *argv[])
             for (row = 0; row < rows; row++) {
                 Rast_get_row(base_raster,
                              base_array +
-                             ((size_t)row * cols *
-                              Rast_cell_size(base_raster_data_type)), row,
-                             base_raster_data_type);
+                                 ((size_t)row * cols *
+                                  Rast_cell_size(base_raster_data_type)),
+                             row, base_raster_data_type);
             }
         }
 
@@ -677,7 +672,7 @@ int main(int argc, char *argv[])
                 line++;
                 counter++;
 
-                if (counter == 100000) {        /* speed */
+                if (counter == 100000) { /* speed */
                     if (line < estimated_lines)
                         G_percent(line, estimated_lines, 3);
                     counter = 0;
@@ -704,8 +699,8 @@ int main(int argc, char *argv[])
                 int return_n = LASPoint_GetReturnNumber(LAS_point);
                 int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
 
-                if (return_filter_is_out
-                    (&return_filter_struct, return_n, n_returns)) {
+                if (return_filter_is_out(&return_filter_struct, return_n,
+                                         n_returns)) {
                     n_filtered++;
                     continue;
                 }
@@ -731,9 +726,9 @@ int main(int argc, char *argv[])
                 if (base_array) {
                     double base_z;
 
-                    if (row_array_get_value_row_col
-                        (base_array, arr_row, arr_col, cols,
-                         base_raster_data_type, &base_z))
+                    if (row_array_get_value_row_col(
+                            base_array, arr_row, arr_col, cols,
+                            base_raster_data_type, &base_z))
                         z -= base_z;
                     else
                         continue;
@@ -741,9 +736,9 @@ int main(int argc, char *argv[])
                 else if (use_segment) {
                     double base_z;
 
-                    if (rast_segment_get_value_xy
-                        (&base_segment, &input_region, base_raster_data_type,
-                         x, y, &base_z))
+                    if (rast_segment_get_value_xy(&base_segment, &input_region,
+                                                  base_raster_data_type, x, y,
+                                                  &base_z))
                         z -= base_z;
                     else
                         continue;
@@ -771,14 +766,14 @@ int main(int argc, char *argv[])
                 count++;
                 /*          G_debug(5, "x: %f, y: %f, z: %f", x, y, z); */
 
-                update_value(&point_binning, &bin_index_nodes, cols,
-                             arr_row, arr_col, rtype, x, y, z);
-            }                   /* while !EOF of one input file */
+                update_value(&point_binning, &bin_index_nodes, cols, arr_row,
+                             arr_col, rtype, x, y, z);
+            } /* while !EOF of one input file */
             /* close input LAS file */
             LASReader_Destroy(LAS_reader);
-        }                       /* end of loop for all input files files */
+        } /* end of loop for all input files files */
 
-        G_percent(1, 1, 1);     /* flush */
+        G_percent(1, 1, 1); /* flush */
         G_debug(2, "pass %d finished, %lu coordinates in box", pass, count);
         count_total += count;
         line_total += line;
@@ -798,13 +793,13 @@ int main(int argc, char *argv[])
 
         /* free memory */
         point_binning_free(&point_binning, &bin_index_nodes);
-    }                           /* passes loop */
+    } /* passes loop */
     if (base_array)
         Rast_close(base_raster);
     if (use_segment)
         Segment_close(&base_segment);
 
-    G_percent(1, 1, 1);         /* flush */
+    G_percent(1, 1, 1); /* flush */
     G_free(raster_row);
 
     G_message(_("%lu points found in input file(s)"), line_total);
@@ -831,15 +826,19 @@ int main(int argc, char *argv[])
                   n_invalid);
     if (n_invalid && !only_valid)
         G_message(_("%lu input points were invalid, use -%c flag to filter"
-                    " them out"), n_invalid, only_valid_flag->key);
+                    " them out"),
+                  n_invalid, only_valid_flag->key);
     if (infiles.num_items > 1) {
-        sprintf(buff, _("Raster map <%s> created."
-                        " %lu points from %d files found in region."),
+        sprintf(buff,
+                _("Raster map <%s> created."
+                  " %lu points from %d files found in region."),
                 outmap, count_total, infiles.num_items);
     }
     else {
-        sprintf(buff, _("Raster map <%s> created."
-                        " %lu points found in region."), outmap, count_total);
+        sprintf(buff,
+                _("Raster map <%s> created."
+                  " %lu points found in region."),
+                outmap, count_total);
     }
 
     G_done_msg("%s", buff);
@@ -848,5 +847,4 @@ int main(int argc, char *argv[])
     string_list_free(&infiles);
 
     exit(EXIT_SUCCESS);
-
 }

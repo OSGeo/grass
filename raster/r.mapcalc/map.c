@@ -1,4 +1,3 @@
-
 #include <grass/config.h>
 
 #include <stdlib.h>
@@ -38,22 +37,19 @@ void setup_region(void)
 
 /****************************************************************************/
 
-struct sub_cache
-{
+struct sub_cache {
     int row;
     char *valid;
     void **buf;
 };
 
-struct row_cache
-{
+struct row_cache {
     int fd;
     int nrows;
     struct sub_cache *sub[3];
 };
 
-struct map
-{
+struct map {
     const char *name;
     const char *mapset;
     int have_cats;
@@ -185,8 +181,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     vtmp = G_alloca(cache->nrows);
     memcpy(vtmp, sub->valid, cache->nrows);
 
-    i = (i < 0)
-        ? 0 : cache->nrows - 1;
+    i = (i < 0) ? 0 : cache->nrows - 1;
     newrow = row - i;
 
     for (j = 0; j < cache->nrows; j++) {
@@ -208,8 +203,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     return sub->buf[i];
 }
 
-static void cache_get(struct row_cache *cache, void *buf, int row,
-                      int res_type)
+static void cache_get(struct row_cache *cache, void *buf, int row, int res_type)
 {
     void *p = cache_get_raw(cache, row, res_type);
 
@@ -245,7 +239,7 @@ static void init_cats(struct map *m)
     m->have_cats = 1;
 }
 
-static void translate_from_colors(struct map *m, DCELL * rast, CELL * cell,
+static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
                                   int ncols, int mod)
 {
     unsigned char *red = G_alloca(columns);
@@ -269,19 +263,17 @@ static void translate_from_colors(struct map *m, DCELL * rast, CELL * cell,
         for (i = 0; i < ncols; i++)
             cell[i] = blu[i];
         break;
-    case '#':                  /* grey (backwards compatible) */
+    case '#': /* grey (backwards compatible) */
         /* old weightings: R=0.177, G=0.813, B=0.011 */
         for (i = 0; i < ncols; i++)
-            cell[i] =
-                (181 * red[i] + 833 * grn[i] + 11 * blu[i] + 512) / 1024;
+            cell[i] = (181 * red[i] + 833 * grn[i] + 11 * blu[i] + 512) / 1024;
         break;
-    case 'y':                  /* grey (NTSC) */
+    case 'y': /* grey (NTSC) */
         /* NTSC weightings: R=0.299, G=0.587, B=0.114 */
         for (i = 0; i < ncols; i++)
-            cell[i] =
-                (306 * red[i] + 601 * grn[i] + 117 * blu[i] + 512) / 1024;
+            cell[i] = (306 * red[i] + 601 * grn[i] + 117 * blu[i] + 512) / 1024;
         break;
-    case 'i':                  /* grey (equal weight) */
+    case 'i': /* grey (equal weight) */
         for (i = 0; i < ncols; i++)
             cell[i] = (red[i] + grn[i] + blu[i]) / 3;
         break;
@@ -319,9 +311,9 @@ static void translate_from_colors(struct map *m, DCELL * rast, CELL * cell,
  */
 
 #define SHIFT 6
-#define NCATS (1<<SHIFT)
+#define NCATS (1 << SHIFT)
 
-static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
+static void translate_from_cats(struct map *m, CELL *cell, DCELL *xcell,
                                 int ncols)
 {
     struct Categories *pcats;
@@ -364,8 +356,8 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
             for (i = 0; i < NCATS; i++) {
                 CELL cat = i + key;
 
-                if ((label = Rast_get_c_cat(&cat, pcats)) == NULL
-                    || sscanf(label, "%lf", values) != 1)
+                if ((label = Rast_get_c_cat(&cat, pcats)) == NULL ||
+                    sscanf(label, "%lf", values) != 1)
                     SET_NULL_D(values);
                 values++;
             }
@@ -561,7 +553,6 @@ int open_map(const char *name, int mod, int row, int col)
         return i;
     }
 
-
     if (num_maps >= max_maps) {
         max_maps += 10;
         maps = G_realloc(maps, max_maps * sizeof(struct map));
@@ -659,7 +650,7 @@ void close_maps(void)
 #endif
 }
 
-void list_maps(FILE * fp, const char *sep)
+void list_maps(FILE *fp, const char *sep)
 {
     int i;
 
@@ -734,7 +725,7 @@ void copy_history(const char *dst, int idx)
     Rast_write_history((char *)dst, &hist);
 }
 
-void create_history(const char *dst, expression * e)
+void create_history(const char *dst, expression *e)
 {
     int RECORD_LEN = 80;
     int WIDTH = RECORD_LEN - 12;
@@ -754,7 +745,8 @@ void create_history(const char *dst, expression * e)
             break;
 
         if (len > WIDTH) {
-            for (n = WIDTH; n > 0 && p[n] != ' '; n--) ;
+            for (n = WIDTH; n > 0 && p[n] != ' '; n--)
+                ;
 
             if (n <= 0)
                 n = WIDTH;
@@ -786,17 +778,17 @@ void create_history(const char *dst, expression * e)
 
 /****************************************************************************/
 
-void prepare_region_from_maps_union(expression ** map_list, int num_maps)
+void prepare_region_from_maps_union(expression **map_list, int num_maps)
 {
     prepare_region_from_maps(map_list, 1, num_maps);
 }
 
-void prepare_region_from_maps_intersect(expression ** map_list, int num_maps)
+void prepare_region_from_maps_intersect(expression **map_list, int num_maps)
 {
     prepare_region_from_maps(map_list, 2, num_maps);
 }
 
-void prepare_region_from_maps(expression ** map_list, int type, int num_maps)
+void prepare_region_from_maps(expression **map_list, int type, int num_maps)
 {
     /* \brief Setup the computational region from all raster maps
      *
@@ -821,8 +813,7 @@ void prepare_region_from_maps(expression ** map_list, int type, int num_maps)
         if (!mapset)
             G_fatal_error(_("Raster map <%s> not found"), rast_name);
 
-        G_debug(1, "Setting region from raster map: %s@%s", rast_name,
-                mapset);
+        G_debug(1, "Setting region from raster map: %s@%s", rast_name, mapset);
 
         Rast_get_cellhd(rast_name, mapset, &temp_window);
 
@@ -833,44 +824,52 @@ void prepare_region_from_maps(expression ** map_list, int type, int num_maps)
         else {
             if (type == 1) {
                 /* Union: find the largest extent */
-                window.north = (window.north > temp_window.north) ?
-                    window.north : temp_window.north;
-                window.south = (window.south < temp_window.south) ?
-                    window.south : temp_window.south;
-                window.east = (window.east > temp_window.east) ?
-                    window.east : temp_window.east;
-                window.west = (window.west < temp_window.west) ?
-                    window.west : temp_window.west;
+                window.north = (window.north > temp_window.north)
+                                   ? window.north
+                                   : temp_window.north;
+                window.south = (window.south < temp_window.south)
+                                   ? window.south
+                                   : temp_window.south;
+                window.east = (window.east > temp_window.east)
+                                  ? window.east
+                                  : temp_window.east;
+                window.west = (window.west < temp_window.west)
+                                  ? window.west
+                                  : temp_window.west;
             }
             else {
                 /* Intersect: Find the smallest extent */
-                window.north = (window.north < temp_window.north) ?
-                    window.north : temp_window.north;
-                window.south = (window.south > temp_window.south) ?
-                    window.south : temp_window.south;
-                window.east = (window.east < temp_window.east) ?
-                    window.east : temp_window.east;
-                window.west = (window.west > temp_window.west) ?
-                    window.west : temp_window.west;
+                window.north = (window.north < temp_window.north)
+                                   ? window.north
+                                   : temp_window.north;
+                window.south = (window.south > temp_window.south)
+                                   ? window.south
+                                   : temp_window.south;
+                window.east = (window.east < temp_window.east)
+                                  ? window.east
+                                  : temp_window.east;
+                window.west = (window.west > temp_window.west)
+                                  ? window.west
+                                  : temp_window.west;
             }
             /* Find the smallest resolution */
-            window.ns_res = (window.ns_res < temp_window.ns_res) ?
-                window.ns_res : temp_window.ns_res;
-            window.ew_res = (window.ew_res < temp_window.ew_res) ?
-                window.ew_res : temp_window.ew_res;
+            window.ns_res = (window.ns_res < temp_window.ns_res)
+                                ? window.ns_res
+                                : temp_window.ns_res;
+            window.ew_res = (window.ew_res < temp_window.ew_res)
+                                ? window.ew_res
+                                : temp_window.ew_res;
         }
     }
 
     /* Set the region only if a map was found in the expression */
     if (first == 1) {
         G_adjust_Cell_head3(&window, 0, 0, 0);
-        G_debug(1,
-                "Region was set to n %g s %g e %g w %g ns_res %g ew_res %g",
+        G_debug(1, "Region was set to n %g s %g e %g w %g ns_res %g ew_res %g",
                 window.north, window.south, window.east, window.west,
                 window.ns_res, window.ew_res);
         G_put_window(&window);
     }
-
 }
 
 /****************************************************************************/

@@ -6,15 +6,15 @@
 
 /***                               spec_syn()                              ***/
 
-/***          Creates a fractal surface using spectral synthesis.	   ***/
+/***          Creates a fractal surface using spectral synthesis.          ***/
 
-/***        Algorithm adapted from Peitgen and Sauper (1988), p.108.	   ***/
+/***        Algorithm adapted from Peitgen and Sauper (1988), p.108.       ***/
 
 /***                    Jo Wood, V1.0, 19th October, 1994                  ***/
 
-/***	   Modified to allow multiple realisations of same surface,	   ***/
+/***           Modified to allow multiple realisations of same surface,    ***/
 
-/***   			Jo Wood, V1.1 15th October, 1995.		   ***/
+/***                           Jo Wood, V1.1 15th October, 1995.           ***/
 
 /***                                                                       ***/
 
@@ -27,24 +27,23 @@
 #include "frac.h"
 #include <grass/gmath.h>
 
-
-int specsyn(double *data[2],    /* Array holding complex data to transform. */
-            int nn              /* Size of array in one dimension.          */
-    )
+int specsyn(double *data[2], /* Array holding complex data to transform. */
+            int nn           /* Size of array in one dimension.          */
+)
 {
     /* ---------------------------------------------------------------- */
     /* ---                      Initialise                          --- */
     /* ---------------------------------------------------------------- */
 
-    int row, col,               /* Counts through half the data array.  */
-      row0, col0,               /* 'other half' of the array.           */
-      coeff;                    /* No. of Fourier coeffficents to calc. */
+    int row, col,   /* Counts through half the data array.  */
+        row0, col0, /* 'other half' of the array.           */
+        coeff;      /* No. of Fourier coeffficents to calc. */
 
-    double phase, rad,          /* polar coordinates of Fourier coeff.  */
-     *temp[2];
+    double phase, rad, /* polar coordinates of Fourier coeff.  */
+        *temp[2];
 
     /* You can set GRASS_RANDOM_SEED for repeatability */
-    G_math_srand_auto();        /* Reset random number generator.       */
+    G_math_srand_auto(); /* Reset random number generator.       */
 
     temp[0] = (double *)G_malloc(nn * nn * sizeof(double));
     temp[1] = (double *)G_malloc(nn * nn * sizeof(double));
@@ -52,7 +51,6 @@ int specsyn(double *data[2],    /* Array holding complex data to transform. */
     /* ---------------------------------------------------------------- */
     /* ---                   Create fractal surface                 --- */
     /* ---------------------------------------------------------------- */
-
 
     /* Calculate all the preliminary random coefficients. */
     /* ================================================== */
@@ -67,9 +65,8 @@ int specsyn(double *data[2],    /* Array holding complex data to transform. */
             phase = TWOPI * G_math_rand();
 
             if ((row != 0) || (col != 0))
-                rad =
-                    pow(row * row + col * col,
-                        -(H + 1) / 2.0) * G_math_rand_gauss(1.);
+                rad = pow(row * row + col * col, -(H + 1) / 2.0) *
+                      G_math_rand_gauss(1.);
             else
                 rad = 0.0;
 
@@ -101,9 +98,8 @@ int specsyn(double *data[2],    /* Array holding complex data to transform. */
     for (row = 1; row < nn / 2; row++)
         for (col = 1; col < nn / 2; col++) {
             phase = TWOPI * G_math_rand();
-            rad =
-                pow(row * row + col * col,
-                    -(H + 1) / 2.0) * G_math_rand_gauss(1.);
+            rad = pow(row * row + col * col, -(H + 1) / 2.0) *
+                  G_math_rand_gauss(1.);
 
             *(data[0] + row * nn + nn - col) = rad * cos(phase);
             *(data[1] + row * nn + nn - col) = rad * sin(phase);
@@ -151,8 +147,8 @@ int specsyn(double *data[2],    /* Array holding complex data to transform. */
                     *(data[1] + (nn - row) * nn + col);
             }
 
-        fft(1, temp, nn * nn, nn, nn);  /* Perform inverse FFT and */
-        write_rast(temp, nn, coeff + 1);        /* write out raster.       */
+        fft(1, temp, nn * nn, nn, nn);   /* Perform inverse FFT and */
+        write_rast(temp, nn, coeff + 1); /* write out raster.       */
     }
 
     /* Free memory. */

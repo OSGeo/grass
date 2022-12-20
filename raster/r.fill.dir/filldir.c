@@ -11,7 +11,7 @@
 #include "tinf.h"
 
 /* get the slope between two cells and return a slope direction */
-void check(CELL newdir, CELL * dir, void *center, void *edge, double cnst,
+void check(CELL newdir, CELL *dir, void *center, void *edge, double cnst,
            double *oldslope)
 {
     double newslope;
@@ -33,7 +33,6 @@ void check(CELL newdir, CELL * dir, void *center, void *edge, double cnst,
     }
 
     return;
-
 }
 
 /* process one row, filling single-cell pits */
@@ -72,13 +71,12 @@ int fill_row(int nl, int ns, struct band3 *bnd)
             rc = 1;
             memcpy(center, min, bpe());
         }
-
     }
     return rc;
 }
 
 /* determine the flow direction at each cell on one row */
-void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir)
+void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL *dir)
 {
     int j, inc;
     size_t offset;
@@ -151,10 +149,10 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
     advance_band3(fe, bnd);
     advance_band3(fe, bnd);
     for (i = 1; i < nl - 1; i += 1) {
-        lseek(fe, (off_t) (i + 1) * bnd->sz, SEEK_SET);
+        lseek(fe, (off_t)(i + 1) * bnd->sz, SEEK_SET);
         advance_band3(fe, bnd);
         if (fill_row(nl, bnd->ns, bnd)) {
-            lseek(fe, (off_t) i * bnd->sz, SEEK_SET);
+            lseek(fe, (off_t)i * bnd->sz, SEEK_SET);
             if (write(fe, bnd->b[1], bnd->sz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                               errno, strerror(errno));

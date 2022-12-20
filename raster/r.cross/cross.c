@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cross
@@ -92,7 +91,7 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
 
             /* search for this value in the tree */
             if (btree_find(&btree, cat, &ptr))
-                result_cell[col] = *(CELL *) ptr;
+                result_cell[col] = *(CELL *)ptr;
             else {
                 btree_update(&btree, cat, keysize, &result, sizeof(CELL));
                 store_reclass(result, primary, cat);

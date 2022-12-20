@@ -7,11 +7,10 @@
 #include <grass/glocale.h>
 #include "method.h"
 
-#define MEM  1024
+#define MEM 1024
 
 /* function prototypes */
 static int s_dev(double *, int, double *);
-
 
 int o_sdev(const char *basemap, const char *covermap, const char *outputmap,
            int usecats, struct Categories *cats)
@@ -22,7 +21,6 @@ int o_sdev(const char *basemap, const char *covermap, const char *outputmap,
     long basecat, covercat, catb, catc;
     double value, sdev, x;
     double *tab;
-
 
     mem = MEM * sizeof(double);
     tab = (double *)G_malloc(mem);
@@ -49,7 +47,7 @@ int o_sdev(const char *basemap, const char *covermap, const char *outputmap,
         }
 
         if (usecats)
-            sscanf(Rast_get_c_cat((CELL *) & covercat, cats), "%lf", &x);
+            sscanf(Rast_get_c_cat((CELL *)&covercat, cats), "%lf", &x);
         else
             x = covercat;
 
@@ -61,7 +59,6 @@ int o_sdev(const char *basemap, const char *covermap, const char *outputmap,
             }
             tab[count++] = x;
         }
-
     }
     if (first) {
         catb = catc = 0;
@@ -77,13 +74,12 @@ int o_sdev(const char *basemap, const char *covermap, const char *outputmap,
     return 0;
 }
 
-
 /***********************************************************************
-*
-*  Given an array of data[1...n], this routine returns its standard
-*  deviation sdev.
-*
-************************************************************************/
+ *
+ *  Given an array of data[1...n], this routine returns its standard
+ *  deviation sdev.
+ *
+ ************************************************************************/
 
 static int s_dev(double *data, int n, double *sdev)
 {
@@ -100,7 +96,7 @@ static int s_dev(double *data, int n, double *sdev)
     ep = 0.0;
     s = 0.0;
 
-    for (i = 0; i < n; i++)     /* First pass to get the mean     */
+    for (i = 0; i < n; i++) /* First pass to get the mean     */
         s += data[i];
     ave = s / n;
 
@@ -113,7 +109,6 @@ static int s_dev(double *data, int n, double *sdev)
     var = (var - ep * ep / n) / (n - 1);
 
     *sdev = sqrt(var);
-
 
     return (0);
 }
