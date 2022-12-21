@@ -74,8 +74,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     /* open data source handle */
     Ogr_ds = OGROpen(ogr_info->dsn, FALSE, NULL);
     if (Ogr_ds == NULL)
-        G_fatal_error(_("Unable to open OGR data source '%s'"),
-                      ogr_info->dsn);
+        G_fatal_error(_("Unable to open OGR data source '%s'"), ogr_info->dsn);
     ogr_info->ds = Ogr_ds;
 
     /* get layer number */
@@ -123,7 +122,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
         break;
     }
 
-    ogr_info->cache.fid = -1;   /* FID >= 0 */
+    ogr_info->cache.fid = -1; /* FID >= 0 */
 
     return 0;
 #else
@@ -156,7 +155,7 @@ int V2_open_old_ogr(struct Map_info *Map)
         G_zero(&(Map->fInfo.ogr.offset), sizeof(struct Format_info_offset));
     }
 
-    Map->fInfo.ogr.next_line = 1;       /* reset feature cache */
+    Map->fInfo.ogr.next_line = 1; /* reset feature cache */
 
     return 0;
 #else
@@ -176,7 +175,7 @@ int V2_open_old_ogr(struct Map_info *Map)
    \param with_z WITH_Z for 3D vector data otherwise WITHOUT_Z
 
    \return 0 success
-   \return -1 error 
+   \return -1 error
  */
 int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 {
@@ -216,8 +215,9 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
         if (strcmp(OGR_FD_GetName(Ogr_featuredefn), name) == 0) {
             if (G_get_overwrite()) {
-                G_warning(_("OGR layer <%s> already exists and will be overwritten"),
-                          ogr_info->layer_name);
+                G_warning(
+                    _("OGR layer <%s> already exists and will be overwritten"),
+                    ogr_info->layer_name);
 
                 if (OGR_DS_DeleteLayer(Ogr_ds, i) != OGRERR_NONE) {
                     G_warning(_("Unable to delete OGR layer <%s>"),
@@ -226,8 +226,9 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
                 }
             }
             else {
-                G_fatal_error(_("OGR layer <%s> already exists in datasource '%s'"),
-                              ogr_info->layer_name, ogr_info->dsn);
+                G_fatal_error(
+                    _("OGR layer <%s> already exists in datasource '%s'"),
+                    ogr_info->layer_name, ogr_info->dsn);
             }
             ogr_info->layer = NULL;
             break;
@@ -253,15 +254,15 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 {
     char elem[GPATH_MAX];
-    char buf[5];                /* used for format version */
+    char buf[5]; /* used for format version */
     long length;
     int Version_Major, Version_Minor, Back_Major, Back_Minor, byte_order;
 
     struct gvfile fp;
     struct Port_info port;
 
-    G_debug(1, "Vect_open_fidx(): name = %s mapset = %s format = %d",
-            Map->name, Map->mapset, Map->format);
+    G_debug(1, "Vect_open_fidx(): name = %s mapset = %s format = %d", Map->name,
+            Map->mapset, Map->format);
 
     sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
     dig_file_init(&fp);
@@ -284,13 +285,15 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     /* check version numbers */
     if (Version_Major > 5 || Version_Minor > 0) {
         if (Back_Major > 5 || Back_Minor > 0) {
-            G_fatal_error(_("Feature index format version %d.%d is not supported by this release."
-                           " Try to rebuild topology or upgrade GRASS."),
+            G_fatal_error(_("Feature index format version %d.%d is not "
+                            "supported by this release."
+                            " Try to rebuild topology or upgrade GRASS."),
                           Version_Major, Version_Minor);
             return -1;
         }
-        G_warning(_("Your GRASS version does not fully support feature index format %d.%d of the vector."
-                   " Consider to rebuild topology or upgrade GRASS."),
+        G_warning(_("Your GRASS version does not fully support feature index "
+                    "format %d.%d of the vector."
+                    " Consider to rebuild topology or upgrade GRASS."),
                   Version_Major, Version_Minor);
     }
 

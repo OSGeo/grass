@@ -1,20 +1,19 @@
-
 /****************************************************************************
-* MODULE:       R-Tree library 
-*              
-* AUTHOR(S):    Antonin Guttman - original code
-*               Daniel Green (green@superliminal.com) - major clean-up
-*                               and implementation of bounding spheres
-*               Markus Metz - file-based and memory-based R*-tree
-*               
-* PURPOSE:      Multidimensional index
-*
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*****************************************************************************/
+ * MODULE:       R-Tree library
+ *
+ * AUTHOR(S):    Antonin Guttman - original code
+ *               Daniel Green (green@superliminal.com) - major clean-up
+ *                               and implementation of bounding spheres
+ *               Markus Metz - file-based and memory-based R*-tree
+ *
+ * PURPOSE:      Multidimensional index
+ *
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <assert.h>
@@ -31,8 +30,8 @@ int RTreeValidChildM(union RTree_Child *child)
  * overlap the argument rectangle.
  * Return the number of qualifying data rects.
  */
-int RTreeSearchM(struct RTree *t, struct RTree_Rect *r,
-                 SearchHitCallback * shcb, void *cbarg)
+int RTreeSearchM(struct RTree *t, struct RTree_Rect *r, SearchHitCallback *shcb,
+                 void *cbarg)
 {
     struct RTree_Node *n;
     int hitCount = 0, notfound;
@@ -50,7 +49,7 @@ int RTreeSearchM(struct RTree *t, struct RTree_Rect *r,
 
     while (top >= 0) {
         n = s[top].sn;
-        if (s[top].sn->level > 0) {     /* this is an internal node in the tree */
+        if (s[top].sn->level > 0) { /* this is an internal node in the tree */
             notfound = 1;
             for (i = s[top].branch_id; i < t->nodecard; i++) {
                 if (s[top].sn->branch[i].child.ptr &&
@@ -69,7 +68,7 @@ int RTreeSearchM(struct RTree *t, struct RTree_Rect *r,
                 top--;
             }
         }
-        else {                  /* this is a leaf node */
+        else { /* this is a leaf node */
             for (i = 0; i < t->leafcard; i++) {
                 if (s[top].sn->branch[i].child.id &&
                     RTreeOverlap(r, &(s[top].sn->branch[i].rect), t)) {
@@ -95,7 +94,7 @@ int RTreeSearchM(struct RTree *t, struct RTree_Rect *r,
  * Non-recursively descends tree.
  * Returns 0 if node was not split and nothing was removed.
  * Returns 1 if root node was split. Old node updated to become one of two.
- * Returns 2 if branches need to be reinserted.  
+ * Returns 2 if branches need to be reinserted.
  * The level argument specifies the number of steps up from the leaf
  * level to insert; e.g. a data rectangle goes in at level = 0.
  */
@@ -142,7 +141,7 @@ static int RTreeInsertRect2M(struct RTree_Rect *r, union RTree_Child child,
     while (top) {
         down = top--;
         i = s[top].branch_id;
-        if (result == 0) {      /* branch was added */
+        if (result == 0) { /* branch was added */
             RTreeExpandRect(&(s[top].sn->branch[i].rect), r, t);
         }
         else if (result == 2) { /* branches were removed */
@@ -152,7 +151,8 @@ static int RTreeInsertRect2M(struct RTree_Rect *r, union RTree_Child child,
         else if (result == 1) { /* node was split */
             /* get node cover of previous node */
             RTreeNodeCover(s[down].sn, &(s[top].sn->branch[i].rect), t);
-            /* add new branch for new node previously added by RTreeAddBranch() */
+            /* add new branch for new node previously added by RTreeAddBranch()
+             */
             b->child.ptr = n2;
             RTreeNodeCover(b->child.ptr, &(b->rect), t);
 
@@ -160,8 +160,7 @@ static int RTreeInsertRect2M(struct RTree_Rect *r, union RTree_Child child,
             cover = NULL;
             if (top)
                 cover = &(s[top - 1].sn->branch[s[top - 1].branch_id].rect);
-            result =
-                RTreeAddBranch(b, s[top].sn, &n2, ee, cover, overflow, t);
+            result = RTreeAddBranch(b, s[top].sn, &n2, ee, cover, overflow, t);
 
             /* update node count */
             if (result == 1) {
@@ -175,7 +174,7 @@ static int RTreeInsertRect2M(struct RTree_Rect *r, union RTree_Child child,
     return result;
 }
 
-/* 
+/*
  * Insert a data rectangle into an index structure.
  * RTreeInsertRect provides for splitting the root;
  * returns 1 if root was split, 0 if it was not.
@@ -196,10 +195,10 @@ int RTreeInsertRectM(struct RTree_Rect *r, union RTree_Child child, int level,
     /* R*-tree forced reinsertion: for each level only once */
     memset(overflow, t->overflow, MAXLEVEL);
 
-    result = RTreeInsertRect2M(r, child, level, &newnode, t,
-                               &reInsertList, overflow);
+    result = RTreeInsertRect2M(r, child, level, &newnode, t, &reInsertList,
+                               overflow);
 
-    if (result == 1) {          /* root split */
+    if (result == 1) { /* root split */
         /* grow a new root, & tree taller */
         t->rootlevel++;
         newroot = RTreeAllocNode(t, t->rootlevel);
@@ -219,7 +218,7 @@ int RTreeInsertRectM(struct RTree_Rect *r, union RTree_Child child, int level,
         return result;
     }
 
-    if (result == 2) {          /* branches were removed */
+    if (result == 2) { /* branches were removed */
         while (reInsertList) {
             /* get next branch in list */
             RTreeCopyBranch(b, &(reInsertList->b), t);
@@ -228,11 +227,10 @@ int RTreeInsertRectM(struct RTree_Rect *r, union RTree_Child child, int level,
             reInsertList = reInsertList->next;
             RTreeFreeListBranch(e);
             /* reinsert branches */
-            result =
-                RTreeInsertRect2M(&(b->rect), b->child, level, &newnode, t,
-                                  &reInsertList, overflow);
+            result = RTreeInsertRect2M(&(b->rect), b->child, level, &newnode, t,
+                                       &reInsertList, overflow);
 
-            if (result == 1) {  /* root split */
+            if (result == 1) { /* root split */
                 /* grow a new root, & tree taller */
                 t->rootlevel++;
                 newroot = RTreeAllocNode(t, t->rootlevel);
@@ -261,9 +259,8 @@ int RTreeInsertRectM(struct RTree_Rect *r, union RTree_Child child, int level,
  * merges branches on the way back up.
  * Returns 1 if record not found, 0 if success.
  */
-static int
-RTreeDeleteRect2M(struct RTree_Rect *r, union RTree_Child child,
-                  struct RTree *t, struct RTree_ListNode **ee)
+static int RTreeDeleteRect2M(struct RTree_Rect *r, union RTree_Child child,
+                             struct RTree *t, struct RTree_ListNode **ee)
 {
     int i, notfound = 1;
     struct RTree_Node *n;
@@ -299,19 +296,21 @@ RTreeDeleteRect2M(struct RTree_Rect *r, union RTree_Child child,
                 s[top].branch_id = t->nodecard;
                 top--;
             }
-            else                /* found a way down but not yet the item */
+            else /* found a way down but not yet the item */
                 notfound = 1;
         }
         else {
             for (i = 0; i < t->leafcard; i++) {
-                if (s[top].sn->branch[i].child.id && s[top].sn->branch[i].child.id == child.id) {       /* found item */
+                if (s[top].sn->branch[i].child.id &&
+                    s[top].sn->branch[i].child.id ==
+                        child.id) { /* found item */
                     RTreeDisconnectBranch(s[top].sn, i, t);
                     t->n_leafs--;
                     notfound = 0;
                     break;
                 }
             }
-            if (notfound)       /* continue searching */
+            if (notfound) /* continue searching */
                 top--;
         }
     }
@@ -344,7 +343,7 @@ RTreeDeleteRect2M(struct RTree_Rect *r, union RTree_Child child,
 
 /*
  * should be called by RTreeDeleteRect() only
- * 
+ *
  * Delete a data rectangle from an index structure.
  * Pass in a pointer to a Rect, the tid of the record, ptr RTree.
  * Returns 1 if record not found, 0 if success.
@@ -373,7 +372,7 @@ int RTreeDeleteRectM(struct RTree_Rect *r, union RTree_Child child,
                     }
                 }
             }
-            else {              /* reinsert leaf branches */
+            else { /* reinsert leaf branches */
                 for (i = 0; i < t->leafcard; i++) {
                     if (n->branch[i].child.id) {
                         RTreeInsertRectM(&(n->branch[i].rect),

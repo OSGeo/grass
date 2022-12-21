@@ -1,7 +1,8 @@
 /*!
    \file lib/vector/Vlib/write_sfa.c
 
-   \brief Vector library - write vector feature - simple feature access (level 2)
+   \brief Vector library - write vector feature - simple feature access (level
+   2)
 
    Higher level functions for reading/writing/manipulating vectors.
 
@@ -37,12 +38,13 @@ static void V2__add_line_to_topo_sfa(struct Map_info *, int,
 #endif
 
 /*!
-   \brief Writes feature on level 2 (OGR/PostGIS interface, pseudo-topological level)
+   \brief Writes feature on level 2 (OGR/PostGIS interface, pseudo-topological
+   level)
 
    \param Map pointer to Map_info structure
-   \param type feature type (see V1_write_line_ogr() for list of supported types)
-   \param points pointer to line_pnts structure (feature geometry) 
-   \param cats pointer to line_cats structure (feature categories)
+   \param type feature type (see V1_write_line_ogr() for list of supported
+   types) \param points pointer to line_pnts structure (feature geometry) \param
+   cats pointer to line_cats structure (feature categories)
 
    \return feature index in offset array (related to pseudo-topology)
    \return -1 on error
@@ -61,8 +63,8 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
     line = 0;
     plus = &(Map->plus);
 
-    G_debug(3, "V2_write_line_sfa(): type = %d (format = %d)",
-            type, Map->format);
+    G_debug(3, "V2_write_line_sfa(): type = %d (format = %d)", type,
+            Map->format);
 
     if (Map->format == GV_FORMAT_POSTGIS) {
         offset_info = &(Map->fInfo.pg.offset);
@@ -76,7 +78,7 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
         return -1;
 
     if (!(plus->update_cidx)) {
-        plus->cidx_up_to_date = FALSE;  /* category index will be outdated */
+        plus->cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     /* Update topology */
@@ -119,7 +121,6 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
         }
         V2__add_line_to_topo_sfa(Map, line, points, cats);
     }
-
 
     G_debug(3, "updated lines : %d , updated nodes : %d",
             plus->uplist.n_uplines, plus->uplist.n_upnodes);
@@ -211,7 +212,7 @@ int V2_delete_line_sfa(struct Map_info *Map, off_t line)
     }
 
     if (!(plus->update_cidx)) {
-        plus->cidx_up_to_date = FALSE;  /* category index will be outdated */
+        plus->cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     if (plus->built >= GV_BUILD_BASE) {
@@ -289,9 +290,8 @@ int V2_delete_line_sfa(struct Map_info *Map, off_t line)
    \return feature offset
    \return -1 on error
  */
-off_t V2__write_area_sfa(struct Map_info *Map,
-                         const struct line_pnts **points, int nparts,
-                         const struct line_cats *cats)
+off_t V2__write_area_sfa(struct Map_info *Map, const struct line_pnts **points,
+                         int nparts, const struct line_cats *cats)
 {
     if (Map->format == GV_FORMAT_OGR) {
 #ifdef HAVE_OGR
@@ -355,7 +355,7 @@ void V2__add_line_to_topo_sfa(struct Map_info *Map, int line,
         for (s = 0; s < 2; s++) {
             side = (s == 0 ? GV_LEFT : GV_RIGHT);
             area = Vect_build_line_area(Map, line, side);
-            if (area > 0) {     /* area */
+            if (area > 0) { /* area */
                 Vect_get_area_box(Map, area, &box);
                 if (first) {
                     Vect_box_copy(&abox, &box);
@@ -386,8 +386,7 @@ void V2__add_line_to_topo_sfa(struct Map_info *Map, int line,
 
     /* Add category index */
     for (i = 0; i < cats->n_cats; i++) {
-        dig_cidx_add_cat_sorted(plus, cats->field[i], cats->cat[i], line,
-                                type);
+        dig_cidx_add_cat_sorted(plus, cats->field[i], cats->cat[i], line, type);
     }
 
     return;

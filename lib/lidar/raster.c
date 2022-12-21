@@ -5,13 +5,12 @@
 #include <grass/lidar.h>
 
 /*------------------------------------------------------------------------------------------------*/
-void
-P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
-                struct bound_box General, struct bound_box Overlap,
-                double **obs, double *param, int *line_num, double pe,
-                double pn, double overlap, int nsplx, int nsply,
-                int num_points, int bilin, struct line_cats *categories,
-                dbDriver * driver, double mean, char *tab_name)
+void P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
+                     struct bound_box General, struct bound_box Overlap,
+                     double **obs, double *param, int *line_num, double pe,
+                     double pn, double overlap, int nsplx, int nsply,
+                     int num_points, int bilin, struct line_cats *categories,
+                     dbDriver *driver, double mean, char *tab_name)
 {
     int i;
     char buf[1024];
@@ -26,24 +25,25 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
     for (i = 0; i < num_points; i++) {
 
-        if (Vect_point_in_box(obs[i][0], obs[i][1], mean, &General)) {  /*Here mean is just for asking if obs point is in box */
+        if (Vect_point_in_box(obs[i][0], obs[i][1], mean,
+                              &General)) { /*Here mean is just for asking if obs
+                                              point is in box */
 
             if (bilin)
-                interpolation =
-                    dataInterpolateBilin(obs[i][0], obs[i][1], pe, pn, nsplx,
-                                         nsply, Elaboration->west,
-                                         Elaboration->south, param);
+                interpolation = dataInterpolateBilin(
+                    obs[i][0], obs[i][1], pe, pn, nsplx, nsply,
+                    Elaboration->west, Elaboration->south, param);
             else
-                interpolation =
-                    dataInterpolateBicubic(obs[i][0], obs[i][1], pe, pn,
-                                           nsplx, nsply, Elaboration->west,
-                                           Elaboration->south, param);
+                interpolation = dataInterpolateBicubic(
+                    obs[i][0], obs[i][1], pe, pn, nsplx, nsply,
+                    Elaboration->west, Elaboration->south, param);
 
             interpolation += mean;
-            Vect_copy_xyz_to_pnts(point, &obs[i][0], &obs[i][1],
-                                  &interpolation, 1);
+            Vect_copy_xyz_to_pnts(point, &obs[i][0], &obs[i][1], &interpolation,
+                                  1);
 
-            if (Vect_point_in_box(obs[i][0], obs[i][1], interpolation, &Overlap)) {     /*(5) */
+            if (Vect_point_in_box(obs[i][0], obs[i][1], interpolation,
+                                  &Overlap)) { /*(5) */
                 Vect_write_line(Out, GV_POINT, point, categories);
             }
             else {
@@ -54,12 +54,12 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
                 sprintf(buf, " VALUES (");
                 db_append_string(&sql, buf);
-                sprintf(buf, "%d, %f, %f, ", line_num[i], obs[i][0],
-                        obs[i][1]);
+                sprintf(buf, "%d, %f, %f, ", line_num[i], obs[i][0], obs[i][1]);
                 db_append_string(&sql, buf);
 
                 if ((*point->x > Overlap.E) && (*point->x < General.E)) {
-                    if ((*point->y > Overlap.N) && (*point->y < General.N)) {   /*(3) */
+                    if ((*point->y > Overlap.N) &&
+                        (*point->y < General.N)) { /*(3) */
                         csi = (General.E - *point->x) / overlap;
                         eta = (General.N - *point->y) / overlap;
                         weight = csi * eta;
@@ -74,7 +74,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                             G_fatal_error(_("Unable to access table <%s>"),
                                           tab_name);
                     }
-                    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {      /*(1) */
+                    else if ((*point->y < Overlap.S) &&
+                             (*point->y > General.S)) { /*(1) */
                         csi = (General.E - *point->x) / overlap;
                         eta = (*point->y - General.S) / overlap;
                         weight = csi * eta;
@@ -89,7 +90,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                             G_fatal_error(_("Unable to access table <%s>"),
                                           tab_name);
                     }
-                    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {    /*(1) */
+                    else if ((*point->y <= Overlap.N) &&
+                             (*point->y >= Overlap.S)) { /*(1) */
                         weight = (General.E - *point->x) / overlap;
                         *point->z = weight * interpolation;
 
@@ -104,7 +106,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                     }
                 }
                 else if ((*point->x < Overlap.W) && (*point->x > General.W)) {
-                    if ((*point->y > Overlap.N) && (*point->y < General.N)) {   /*(4) */
+                    if ((*point->y > Overlap.N) &&
+                        (*point->y < General.N)) { /*(4) */
                         csi = (*point->x - General.W) / overlap;
                         eta = (General.N - *point->y) / overlap;
                         weight = eta * csi;
@@ -119,7 +122,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                             G_fatal_error(_("Unable to access table <%s>"),
                                           tab_name);
                     }
-                    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {      /*(2) */
+                    else if ((*point->y < Overlap.S) &&
+                             (*point->y > General.S)) { /*(2) */
                         csi = (*point->x - General.W) / overlap;
                         eta = (*point->y - General.S) / overlap;
                         weight = csi * eta;
@@ -134,7 +138,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                             G_fatal_error(_("Unable to access table <%s>"),
                                           tab_name);
                     }
-                    else if ((*point->y >= Overlap.S) && (*point->y <= Overlap.N)) {    /*(2) */
+                    else if ((*point->y >= Overlap.S) &&
+                             (*point->y <= Overlap.N)) { /*(2) */
                         weight = (*point->x - General.W) / overlap;
                         *point->z = weight * interpolation;
 
@@ -149,7 +154,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                     }
                 }
                 else if ((*point->x >= Overlap.W) && (*point->x <= Overlap.E)) {
-                    if ((*point->y > Overlap.N) && (*point->y < General.N)) {   /*(3) */
+                    if ((*point->y > Overlap.N) &&
+                        (*point->y < General.N)) { /*(3) */
                         weight = (General.N - *point->y) / overlap;
                         *point->z = weight * interpolation;
 
@@ -162,7 +168,8 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
                             G_fatal_error(_("Unable to access table <%s>"),
                                           tab_name);
                     }
-                    else if ((*point->y < Overlap.S) && (*point->y > General.S)) {      /*(1) */
+                    else if ((*point->y < Overlap.S) &&
+                             (*point->y > General.S)) { /*(1) */
                         weight = (*point->y - General.S) / overlap;
                         *point->z = (1 - weight) * interpolation;
 
@@ -184,14 +191,12 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
     return;
 }
 
-
 /*------------------------------------------------------------------------------------------------*/
-int P_Regular_Points(struct Cell_head *Elaboration,
-                     struct Cell_head *Original, struct bound_box General,
-                     struct bound_box Overlap, SEGMENT * out_seg,
-                     double *param, double passoN, double passoE,
-                     double overlap, double mean, int nsplx, int nsply,
-                     int nrows, int ncols, int bilin)
+int P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
+                     struct bound_box General, struct bound_box Overlap,
+                     SEGMENT *out_seg, double *param, double passoN,
+                     double passoE, double overlap, double mean, int nsplx,
+                     int nsply, int nrows, int ncols, int bilin)
 {
 
     int col, row, startcol, endcol, startrow, endrow;
@@ -227,75 +232,78 @@ int P_Regular_Points(struct Cell_head *Elaboration,
             X = Rast_col_to_easting((double)(col) + 0.5, Original);
             Y = Rast_row_to_northing((double)(row) + 0.5, Original);
 
-            if (Vect_point_in_box(X, Y, mean, &General)) {      /* Here, mean is just for asking if obs point is in box */
+            if (Vect_point_in_box(X, Y, mean,
+                                  &General)) { /* Here, mean is just for asking
+                                                  if obs point is in box */
 
                 if (bilin)
-                    interpolation =
-                        dataInterpolateBilin(X, Y, passoE, passoN, nsplx,
-                                             nsply, Elaboration->west,
-                                             Elaboration->south, param);
+                    interpolation = dataInterpolateBilin(
+                        X, Y, passoE, passoN, nsplx, nsply, Elaboration->west,
+                        Elaboration->south, param);
                 else
-                    interpolation =
-                        dataInterpolateBicubic(X, Y, passoE, passoN, nsplx,
-                                               nsply, Elaboration->west,
-                                               Elaboration->south, param);
+                    interpolation = dataInterpolateBicubic(
+                        X, Y, passoE, passoN, nsplx, nsply, Elaboration->west,
+                        Elaboration->south, param);
 
                 interpolation += mean;
 
-                if (Vect_point_in_box(X, Y, interpolation, &Overlap)) { /* (5) */
+                if (Vect_point_in_box(X, Y, interpolation,
+                                      &Overlap)) { /* (5) */
                     dval = interpolation;
                 }
                 else {
                     Segment_get(out_seg, &dval, row, col);
                     if ((X > Overlap.E) && (X < General.E)) {
-                        if ((Y > Overlap.N) && (Y < General.N)) {       /* (3) */
+                        if ((Y > Overlap.N) && (Y < General.N)) { /* (3) */
                             csi = (General.E - X) / overlap;
                             eta = (General.N - Y) / overlap;
                             weight = csi * eta;
                             interpolation *= weight;
                             dval += interpolation;
                         }
-                        else if ((Y < Overlap.S) && (Y > General.S)) {  /* (1) */
+                        else if ((Y < Overlap.S) && (Y > General.S)) { /* (1) */
                             csi = (General.E - X) / overlap;
                             eta = (Y - General.S) / overlap;
                             weight = csi * eta;
                             interpolation *= weight;
                             dval = interpolation;
                         }
-                        else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {        /* (1) */
+                        else if ((Y >= Overlap.S) &&
+                                 (Y <= Overlap.N)) { /* (1) */
                             weight = (General.E - X) / overlap;
                             interpolation *= weight;
                             dval = interpolation;
                         }
                     }
                     else if ((X < Overlap.W) && (X > General.W)) {
-                        if ((Y > Overlap.N) && (Y < General.N)) {       /* (4) */
+                        if ((Y > Overlap.N) && (Y < General.N)) { /* (4) */
                             csi = (X - General.W) / overlap;
                             eta = (General.N - Y) / overlap;
                             weight = eta * csi;
                             interpolation *= weight;
                             dval += interpolation;
                         }
-                        else if ((Y < Overlap.S) && (Y > General.S)) {  /* (2) */
+                        else if ((Y < Overlap.S) && (Y > General.S)) { /* (2) */
                             csi = (X - General.W) / overlap;
                             eta = (Y - General.S) / overlap;
                             weight = csi * eta;
                             interpolation *= weight;
                             dval += interpolation;
                         }
-                        else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {        /* (2) */
+                        else if ((Y >= Overlap.S) &&
+                                 (Y <= Overlap.N)) { /* (2) */
                             weight = (X - General.W) / overlap;
                             interpolation *= weight;
                             dval += interpolation;
                         }
                     }
                     else if ((X >= Overlap.W) && (X <= Overlap.E)) {
-                        if ((Y > Overlap.N) && (Y < General.N)) {       /* (3) */
+                        if ((Y > Overlap.N) && (Y < General.N)) { /* (3) */
                             weight = (General.N - Y) / overlap;
                             interpolation *= weight;
                             dval += interpolation;
                         }
-                        else if ((Y < Overlap.S) && (Y > General.S)) {  /* (1) */
+                        else if ((Y < Overlap.S) && (Y > General.S)) { /* (1) */
                             weight = (Y - General.S) / overlap;
                             interpolation *= weight;
                             dval = interpolation;
@@ -304,7 +312,7 @@ int P_Regular_Points(struct Cell_head *Elaboration,
                 }
                 Segment_put(out_seg, &dval, row, col);
             }
-        }                       /* END COL */
-    }                           /* END ROW */
+        } /* END COL */
+    }     /* END ROW */
     return 1;
 }

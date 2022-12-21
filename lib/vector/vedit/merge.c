@@ -113,24 +113,24 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
                Vect_append_point (Points2, Points1 -> x[i] - thresh,
                Points1 -> y[i] - thresh, Points1 -> z[i]);
              */
-            Vect_append_point(Points2, Points1->x[i],
-                              Points1->y[i], Points1->z[i]);
+            Vect_append_point(Points2, Points1->x[i], Points1->y[i],
+                              Points1->z[i]);
 
-            /* 
+            /*
              * merge lines only if two lines found in the region
              * i.e. the current line and an adjacent line
              */
             /* NOTE
-             * - this merges two lines also if more than two lines are 
-             *   found in the region, but only two of these lines are 
+             * - this merges two lines also if more than two lines are
+             *   found in the region, but only two of these lines are
              *   in the List
-             * - this not only merges lines connected by end points 
-             *   but also any adjacent line with a mid point identical 
-             *   to one of the end points of the current line 
+             * - this not only merges lines connected by end points
+             *   but also any adjacent line with a mid point identical
+             *   to one of the end points of the current line
              */
             if (0 < Vect_find_line_list(Map, Points1->x[i], Points1->y[i],
-                                        Points1->z[i], GV_LINES, 0, 0,
-                                        NULL, List_in_box)) {
+                                        Points1->z[i], GV_LINES, 0, 0, NULL,
+                                        List_in_box)) {
                 do_merge = 1;
                 line2 = -1;
                 for (j = 0; do_merge && j < List_in_box->n_values; j++) {
@@ -165,7 +165,8 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 
                 Vect_read_line(Map, Points2, Cats2, line2);
 
-                merge_lines(Points1, Cats1, Points2, Cats2, -1.0, &Points);     /* do not use threshold value */
+                merge_lines(Points1, Cats1, Points2, Cats2, -1.0,
+                            &Points); /* do not use threshold value */
 
                 G_debug(3, "Vedit_merge_lines(): lines=%d,%d", line1, line2);
 
@@ -178,7 +179,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
                         nlines_merged++;
                 }
             }
-        }                       /* for each node */
+        } /* for each node */
 
         if (Points->n_points > 0) {
             line = Vect_rewrite_line(Map, line1, type1, Points, Cats1);
@@ -192,7 +193,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
             /* update number of lines */
             G_ilist_add(List, line);
         }
-    }                           /* for each line */
+    } /* for each line */
 
     /* destroy structures */
     Vect_destroy_line_struct(Points1);
@@ -216,11 +217,11 @@ static int merge_lines(struct line_pnts *Points1, struct line_cats *Cats1,
     double mindist;
 
     /* find mininal distance and its index */
-    mindist = Vedit_get_min_distance(Points1, Points2, 0,       /* TODO 3D */
+    mindist = Vedit_get_min_distance(Points1, Points2, 0, /* TODO 3D */
                                      &mindistidx);
 
-    G_debug(3, "   merge line ? index: %d, mindist: %g, thresh: %g",
-            mindistidx, mindist, thresh);
+    G_debug(3, "   merge line ? index: %d, mindist: %g, thresh: %g", mindistidx,
+            mindist, thresh);
 
     if (thresh > 0 && mindist > thresh) {
         return 0;

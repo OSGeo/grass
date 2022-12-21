@@ -22,7 +22,7 @@
    \return 0 success
    \return -1 error writing
  */
-int G_fwrite_key_value(FILE * fd, const struct Key_Value *kv)
+int G_fwrite_key_value(FILE *fd, const struct Key_Value *kv)
 {
     int n;
     int err;
@@ -46,7 +46,7 @@ int G_fwrite_key_value(FILE * fd, const struct Key_Value *kv)
    \return pointer to allocated Key_Value structure
    \return NULL on error
  */
-struct Key_Value *G_fread_key_value(FILE * fd)
+struct Key_Value *G_fread_key_value(FILE *fd)
 {
     struct Key_Value *kv;
     char *key, *value;

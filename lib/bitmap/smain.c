@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <grass/bitmap.h>
 
-
 static int dump_map(struct BM *map);
-
 
 int main(int argc, char *argv[])
 {
@@ -47,7 +45,7 @@ int main(int argc, char *argv[])
         for (x = 0; x < SIZE; x++) {
             BM_set(map, x, y, !BM_get(map, x, y));
 #ifdef FOO
-             /*DEBUG*/ if (y == 0)
+            /*DEBUG*/ if (y == 0)
                 /*DEBUG*/ BM_dump_map_row_sparse(map, y);
 #endif
         }
@@ -75,13 +73,12 @@ int main(int argc, char *argv[])
     }
 
     BM_destroy(map2);
-  nowrite:
+nowrite:
 
     BM_destroy(map);
 
     return 0;
 }
-
 
 static int dump_map(struct BM *map)
 {
@@ -90,7 +87,6 @@ static int dump_map(struct BM *map)
     for (y = 0; y < map->rows; y++) {
         for (x = 0; x < map->cols; x++) {
             fprintf(stdout, "%c", BM_get(map, x, y) ? '#' : '.');
-
         }
         fprintf(stdout, "\n");
     }

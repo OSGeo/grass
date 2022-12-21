@@ -5,7 +5,7 @@
  *
  * (C) 2001-2009 GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
@@ -88,8 +88,8 @@ int Rast_read_fp_range(const char *name, const char *mapset,
             if (range.first_time)
                 return 2;
 
-            Rast_update_fp_range((DCELL) range.min, drange);
-            Rast_update_fp_range((DCELL) range.max, drange);
+            Rast_update_fp_range((DCELL)range.min, drange);
+            Rast_update_fp_range((DCELL)range.max, drange);
             return 1;
         }
         return -1;
@@ -182,19 +182,19 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
             if (Rast_read_fp_range(name, mapset, &drange) >= 0) {
                 Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
                 if (Rast_quant_is_truncate(&quant)) {
-                    x[0] = (CELL) dmin;
-                    x[1] = (CELL) dmax;
+                    x[0] = (CELL)dmin;
+                    x[1] = (CELL)dmax;
                 }
-                else {          /* round */
+                else { /* round */
 
                     if (dmin > 0)
-                        x[0] = (CELL) (dmin + .5);
+                        x[0] = (CELL)(dmin + .5);
                     else
-                        x[0] = (CELL) (dmin - .5);
+                        x[0] = (CELL)(dmin - .5);
                     if (dmax > 0)
-                        x[1] = (CELL) (dmax + .5);
+                        x[1] = (CELL)(dmax + .5);
                     else
-                        x[1] = (CELL) (dmax - .5);
+                        x[1] = (CELL)(dmax - .5);
                 }
             }
             else
@@ -240,7 +240,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
             /* if count==4, the range file is old (4.1) and 0's in it
                have to be ignored */
             if (count < 4 || x[n])
-                Rast_update_range((CELL) x[n], range);
+                Rast_update_range((CELL)x[n], range);
         }
         fclose(fd);
     }
@@ -377,13 +377,15 @@ void Rast_write_range(const char *name, const struct Range *range)
     Rast_write_rstats(name, &(range->rstats));
 
     if (Rast_map_type(name, G_mapset()) != CELL_TYPE) {
-        G_remove_misc("cell_misc", "range", name);      /* remove the old file with this name */
+        G_remove_misc("cell_misc", "range",
+                      name); /* remove the old file with this name */
         G_fatal_error(_("Unable to write range file for <%s>"), name);
     }
 
     fp = G_fopen_new_misc("cell_misc", "range", name);
     if (!fp) {
-        G_remove_misc("cell_misc", "range", name);      /* remove the old file with this name */
+        G_remove_misc("cell_misc", "range",
+                      name); /* remove the old file with this name */
         G_fatal_error(_("Unable to write range file for <%s>"), name);
     }
 
@@ -570,7 +572,7 @@ void Rast_update_fp_range(DCELL val, struct FPRange *range)
  * \param n number of values
  * \param range pointer to Range structure which holds range info
  */
-void Rast_row_update_range(const CELL * cell, int n, struct Range *range)
+void Rast_row_update_range(const CELL *cell, int n, struct Range *range)
 {
     Rast__row_update_range(cell, n, range, 0);
 }
@@ -585,8 +587,8 @@ void Rast_row_update_range(const CELL * cell, int n, struct Range *range)
  * \param range pointer to Range structure which holds range info
  * \param ignore_zeros ignore zeros
  */
-void Rast__row_update_range(const CELL * cell, int n,
-                            struct Range *range, int ignore_zeros)
+void Rast__row_update_range(const CELL *cell, int n, struct Range *range,
+                            int ignore_zeros)
 {
     CELL cat;
 
@@ -600,7 +602,7 @@ void Rast__row_update_range(const CELL * cell, int n,
             range->max = cat;
 
             range->rstats.sum = cat;
-            range->rstats.sumsq = (DCELL) cat *cat;
+            range->rstats.sumsq = (DCELL)cat * cat;
 
             range->rstats.count = 1;
 
@@ -612,7 +614,7 @@ void Rast__row_update_range(const CELL * cell, int n,
             range->max = cat;
 
         range->rstats.sum += cat;
-        range->rstats.sumsq += (DCELL) cat *cat;
+        range->rstats.sumsq += (DCELL)cat * cat;
 
         range->rstats.count += 1;
     }
@@ -630,8 +632,7 @@ void Rast__row_update_range(const CELL * cell, int n,
  * \param range pointer to Range structure which holds range info
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_row_update_fp_range(const void *rast, int n,
-                              struct FPRange *range,
+void Rast_row_update_fp_range(const void *rast, int n, struct FPRange *range,
                               RASTER_MAP_TYPE data_type)
 {
     size_t size = Rast_cell_size(data_type);
@@ -640,13 +641,13 @@ void Rast_row_update_fp_range(const void *rast, int n,
     while (n-- > 0) {
         switch (data_type) {
         case CELL_TYPE:
-            val = (DCELL) * ((CELL *) rast);
+            val = (DCELL) * ((CELL *)rast);
             break;
         case FCELL_TYPE:
-            val = (DCELL) * ((FCELL *) rast);
+            val = (DCELL) * ((FCELL *)rast);
             break;
         case DCELL_TYPE:
-            val = *((DCELL *) rast);
+            val = *((DCELL *)rast);
             break;
         }
 
@@ -714,7 +715,7 @@ void Rast_init_range(struct Range *range)
  * \param[out] min minimum value
  * \param[out] max maximum value
  */
-void Rast_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
+void Rast_get_range_min_max(const struct Range *range, CELL *min, CELL *max)
 {
     if (range->first_time) {
         Rast_set_c_null_value(min, 1);
@@ -764,8 +765,8 @@ void Rast_init_fp_range(struct FPRange *range)
  * \param[out] min minimum value
  * \param[out] max maximum value
  */
-void Rast_get_fp_range_min_max(const struct FPRange *range,
-                               DCELL * min, DCELL * max)
+void Rast_get_fp_range_min_max(const struct FPRange *range, DCELL *min,
+                               DCELL *max)
 {
     if (range->first_time) {
         Rast_set_d_null_value(min, 1);

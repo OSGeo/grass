@@ -12,7 +12,8 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
-   \author Update to GRASS 7 (OGR support) by Martin Landa <landa.martin gmail.com>
+   \author Update to GRASS 7 (OGR support) by Martin Landa <landa.martin
+   gmail.com>
  */
 
 #include <stdlib.h>
@@ -67,7 +68,7 @@ int Vect_write_header(const struct Map_info *Map)
     return 0;
 }
 
-/*! 
+/*!
    \brief Writes head information to text file (GV_HEAD_ELEMENT)
 
    \param Map pointer to Map_info structure
@@ -106,7 +107,8 @@ int Vect__write_head(const struct Map_info *Map)
 }
 
 /*!
-   \brief Reads head information from text file (GV_HEAD_ELEMENT) - for internal use only
+   \brief Reads head information from text file (GV_HEAD_ELEMENT) - for internal
+   use only
 
    \param Map pointer to Map_info structure
 
@@ -138,7 +140,7 @@ int Vect__read_head(struct Map_info *Map)
             continue;
         }
 
-        ptr++;                  /* Search for the start of text */
+        ptr++; /* Search for the start of text */
         while (*ptr == ' ')
             ptr++;
 
@@ -220,8 +222,8 @@ const char *Vect_get_full_name(const struct Map_info *Map)
 {
     char *ptr;
 
-    if (Map->format == GV_FORMAT_OGR_DIRECT &&
-        Map->fInfo.ogr.dsn && Map->fInfo.ogr.layer_name) {
+    if (Map->format == GV_FORMAT_OGR_DIRECT && Map->fInfo.ogr.dsn &&
+        Map->fInfo.ogr.layer_name) {
         ptr = (char *)G_malloc(strlen(Map->fInfo.ogr.layer_name) +
                                strlen(Map->fInfo.ogr.dsn) + 2);
         sprintf(ptr, "%s@%s", Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
@@ -348,7 +350,7 @@ const char *Vect_get_person(const struct Map_info *Map)
    \param Map pointer to Map_info structure
    \param str map name to be set
 
-   \return 0 
+   \return 0
  */
 int Vect_set_map_name(struct Map_info *Map, const char *str)
 {
@@ -546,8 +548,10 @@ const char *Vect_get_proj_name(const struct Map_info *Map)
            strictly more correct, but less nice, string: "Other projection" ? */
         return G_database_projection_name();
     default:
-        G_debug(1, "Vect_get_proj_name(): "
-                "Vect_get_proj() returned an invalid result (%d)", n);
+        G_debug(1,
+                "Vect_get_proj_name(): "
+                "Vect_get_proj() returned an invalid result (%d)",
+                n);
         break;
     }
 

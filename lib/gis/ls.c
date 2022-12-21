@@ -1,11 +1,10 @@
-
 /**
    \file lib/gis/ls.c
 
    \brief Functions to list the files in a directory.
 
    \author Paul Kelly
-   
+
    (C) 2007, 2008 by the GRASS Development Team
 
    This program is free software under the GNU General Public
@@ -32,10 +31,9 @@
 #include <sys/ioctl.h>
 #endif
 
-typedef int ls_filter_func(const char * /*filename */ , void * /*closure */ );
+typedef int ls_filter_func(const char * /*filename */, void * /*closure */);
 
-static struct state
-{
+static struct state {
     ls_filter_func *ls_filter;
     void *ls_closure;
     ls_filter_func *ls_ex_filter;
@@ -59,19 +57,19 @@ static int cmp_names(const void *aa, const void *bb)
  * unwanted file names.  Call this function before G_ls2.
  *
  * \param func      Filter callback function to compare a file name and closure
- * 		    pattern (if NULL, no filter will be used).
- * 		    func(filename, closure) should return 1 on success, 0 on
- * 		    failure.
+ *                     pattern (if NULL, no filter will be used).
+ *                     func(filename, closure) should return 1 on success, 0 on
+ *                     failure.
  * \param closure   Data used to determine if a file name matches the rule.
  **/
 
-void G_set_ls_filter(ls_filter_func * func, void *closure)
+void G_set_ls_filter(ls_filter_func *func, void *closure)
 {
     st->ls_filter = func;
     st->ls_closure = closure;
 }
 
-void G_set_ls_exclude_filter(ls_filter_func * func, void *closure)
+void G_set_ls_exclude_filter(ls_filter_func *func, void *closure)
 {
     st->ls_ex_filter = func;
     st->ls_ex_closure = closure;
@@ -79,17 +77,17 @@ void G_set_ls_exclude_filter(ls_filter_func * func, void *closure)
 
 /**
  * \brief Stores a sorted directory listing in an array
- * 
+ *
  * The filenames in the specified directory are stored in an array of
  * strings, then sorted alphabetically. Each filename has space allocated
  * using G_store(), which can be freed using G_free() if necessary. The
  * same goes for the array itself.
- * 
- * 
+ *
+ *
  * \param dir       Directory to list
  * \param num_files Pointer to an integer in which the total number of
  *                  files listed will be stored
- * 
+ *
  * \return          Pointer to array of strings containing the listing
  **/
 
@@ -104,15 +102,14 @@ char **G_ls2(const char *dir, int *num_files)
         G_fatal_error(_("Unable to open directory %s"), dir);
 
     while ((dp = readdir(dfd)) != NULL) {
-        if (dp->d_name[0] == '.')       /* Don't list hidden files */
+        if (dp->d_name[0] == '.') /* Don't list hidden files */
             continue;
-        if (st->ls_filter && !(*st->ls_filter) (dp->d_name, st->ls_closure))
+        if (st->ls_filter && !(*st->ls_filter)(dp->d_name, st->ls_closure))
             continue;
         if (st->ls_ex_filter &&
-            (*st->ls_ex_filter) (dp->d_name, st->ls_ex_closure))
+            (*st->ls_ex_filter)(dp->d_name, st->ls_ex_closure))
             continue;
-        dir_listing =
-            (char **)G_realloc(dir_listing, (1 + n) * sizeof(char *));
+        dir_listing = (char **)G_realloc(dir_listing, (1 + n) * sizeof(char *));
         dir_listing[n] = G_store(dp->d_name);
         n++;
     }
@@ -127,17 +124,17 @@ char **G_ls2(const char *dir, int *num_files)
 
 /**
  * \brief Prints a directory listing to a stream, in prettified column format
- * 
+ *
  * A replacement for system("ls -C"). Lists the contents of the directory
- * specified to the given stream, e.g. stderr. Tries to determine an 
+ * specified to the given stream, e.g. stderr. Tries to determine an
  * appropriate column width to keep the number of lines used to a minimum
  * and look pretty on the screen.
- * 
+ *
  * \param dir    Directory to list
  * \param stream Stream to print listing to
  **/
 
-void G_ls(const char *dir, FILE * stream)
+void G_ls(const char *dir, FILE *stream)
 {
     int i, n;
     char **dir_listing = G_ls2(dir, &n);
@@ -152,28 +149,28 @@ void G_ls(const char *dir, FILE * stream)
 
 /**
  * \brief Prints a listing of items to a stream, in prettified column format
- * 
+ *
  * Lists the contents of the array passed to the given stream, e.g. stderr.
  * Prints the number of items specified by "perline" to each line, unless
- * perline is given as 0 in which case the function tries to determine an 
+ * perline is given as 0 in which case the function tries to determine an
  * appropriate column width to keep the number of lines used to a minimum
  * and look pretty on the screen.
- * 
+ *
  * \param list      Array of strings containing items to be printed
  * \param num_items Number of items in the array
  * \param perline   Number of items to print per line, 0 for autodetect
  * \param stream    Stream to print listing to
  **/
 
-void G_ls_format(char **list, int num_items, int perline, FILE * stream)
+void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 {
     int i;
 
     int field_width, column_height;
-    int screen_width = 80;      /* Default width of 80 columns */
+    int screen_width = 80; /* Default width of 80 columns */
 
     if (num_items < 1)
-        return;                 /* Nothing to print */
+        return; /* Nothing to print */
 
 #ifdef TIOCGWINSZ
     /* Determine screen_width if possible */
@@ -206,8 +203,7 @@ void G_ls_format(char **list, int num_items, int perline, FILE * stream)
     column_height = (num_items / perline) + ((num_items % perline) > 0);
 
     {
-        const int max
-            = num_items + column_height - (num_items % column_height);
+        const int max = num_items + column_height - (num_items % column_height);
         char **next;
 
         for (i = 1, next = list; i <= num_items; i++) {

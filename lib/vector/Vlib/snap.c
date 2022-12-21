@@ -24,21 +24,20 @@
 #include <grass/kdtree.h>
 
 /* translate segment to box and back */
-#define X1W 0x01                /* x1 is West, x2 East */
-#define Y1S 0x02                /* y1 is South, y2 North */
-#define Z1B 0x04                /* z1 is Bottom, z2 Top */
+#define X1W 0x01 /* x1 is West, x2 East */
+#define Y1S 0x02 /* y1 is South, y2 North */
+#define Z1B 0x04 /* z1 is Bottom, z2 Top */
 
 /* Vertex */
-typedef struct
-{
+typedef struct {
     double x, y, z;
-    int anchor;                 /* 0 - anchor, do not snap this point, that means snap others to this */
+    int anchor; /* 0 - anchor, do not snap this point, that means snap others to
+                   this */
     /* >0  - index of anchor to which snap this point */
     /* -1  - init value */
 } XPNT;
 
-typedef struct
-{
+typedef struct {
     int anchor;
     double along;
 } NEW;
@@ -46,8 +45,8 @@ typedef struct
 /* for qsort */
 static int sort_new(const void *pa, const void *pb)
 {
-    NEW *p1 = (NEW *) pa;
-    NEW *p2 = (NEW *) pb;
+    NEW *p1 = (NEW *)pa;
+    NEW *p2 = (NEW *)pb;
 
     return (p1->along < p2->along ? -1 : (p1->along > p2->along));
 
@@ -60,16 +59,15 @@ static int sort_new(const void *pa, const void *pb)
      */
 }
 
-typedef struct
-{
+typedef struct {
     double x, y, z, along;
 } NEW2;
 
 /* for qsort */
 static int sort_new2(const void *pa, const void *pb)
 {
-    NEW2 *p1 = (NEW2 *) pa;
-    NEW2 *p2 = (NEW2 *) pb;
+    NEW2 *p1 = (NEW2 *)pa;
+    NEW2 *p2 = (NEW2 *)pb;
 
     return (p1->along < p2->along ? -1 : (p1->along > p2->along));
 }
@@ -81,14 +79,16 @@ static int find_item(int id, const struct RTree_Rect *rect, void *list)
     return 0;
 }
 
-/* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
+/* This function is called by RTreeSearch() to add selected node/line/area/isle
+ * to the list */
 static int add_item(int id, const struct RTree_Rect *rect, void *list)
 {
     G_ilist_add((struct ilist *)list, id);
     return 1;
 }
 
-/* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
+/* This function is called by RTreeSearch() to add selected node/line/area/isle
+ * to the list */
 static int find_item_box(int id, const struct RTree_Rect *rect, void *list)
 {
     struct bound_box box;
@@ -105,7 +105,8 @@ static int find_item_box(int id, const struct RTree_Rect *rect, void *list)
     return 0;
 }
 
-/* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
+/* This function is called by RTreeSearch() to add selected node/line/area/isle
+ * to the list */
 static int add_item_box(int id, const struct RTree_Rect *rect, void *list)
 {
     struct bound_box box;
@@ -122,13 +123,11 @@ static int add_item_box(int id, const struct RTree_Rect *rect, void *list)
     return 1;
 }
 
-static void
-Vect_snap_lines_list_rtree(struct Map_info *, const struct ilist *,
-                           double, struct Map_info *);
+static void Vect_snap_lines_list_rtree(struct Map_info *, const struct ilist *,
+                                       double, struct Map_info *);
 
-static void
-Vect_snap_lines_list_kdtree(struct Map_info *, const struct ilist *,
-                            double, struct Map_info *);
+static void Vect_snap_lines_list_kdtree(struct Map_info *, const struct ilist *,
+                                        double, struct Map_info *);
 
 /*!
    \brief Snap selected lines to existing vertex in threshold.
@@ -136,20 +135,21 @@ Vect_snap_lines_list_kdtree(struct Map_info *, const struct ilist *,
    Snap selected lines to existing vertices of other selected lines.
    3D snapping is not supported.
 
-   Lines showing how vertices were snapped may be optionally written to error map. 
-   Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
+   Lines showing how vertices were snapped may be optionally written to error
+   map. Input map must be opened on level 2 for update at least on
+   GV_BUILD_BASE.
 
-   As mentioned above, lines are not necessarily snapped to nearest vertex! For example:
-   <pre>
-   |                    
+   As mentioned above, lines are not necessarily snapped to nearest vertex! For
+   example: <pre>
+   |
    | 1         line 3 is snapped to line 1,
    |           then line 2 is not snapped to common node at lines 1 and 3,
    because it is already outside of threshold
-   ----------- 3   
+   ----------- 3
 
    |
    | 2
-   |    
+   |
    </pre>
 
    The algorithm selects anchor vertices and snaps non-anchor vertices
@@ -166,9 +166,8 @@ Vect_snap_lines_list_kdtree(struct Map_info *, const struct ilist *,
 
    \return void
  */
-void
-Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
-                     double thresh, struct Map_info *Err)
+void Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
+                          double thresh, struct Map_info *Err)
 {
     if (getenv("GRASS_VECTOR_LOWMEM"))
         Vect_snap_lines_list_rtree(Map, List_lines, thresh, Err);
@@ -176,32 +175,33 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
         Vect_snap_lines_list_kdtree(Map, List_lines, thresh, Err);
 }
 
-static void
-Vect_snap_lines_list_kdtree(struct Map_info *Map,
-                            const struct ilist *List_lines, double thresh,
-                            struct Map_info *Err)
+static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
+                                        const struct ilist *List_lines,
+                                        double thresh, struct Map_info *Err)
 {
     struct line_pnts *Points, *NPoints;
     struct line_cats *Cats;
     int line, ltype, line_idx;
     double thresh2;
 
-    int point;                  /* index in points array */
-    int nanchors, ntosnap;      /* number of anchors and number of points to be snapped */
-    int nsnapped, ncreated;     /* number of snapped verices, number of new vertices (on segments) */
-    int apoints, npoints, nvertices;    /* number of allocated points, registered points, vertices */
-    XPNT *XPnts;                /* Array of points */
-    NEW *New = NULL;            /* Array of new points */
-    int anew = 0, nnew;         /* allocated new points , number of new points */
+    int point; /* index in points array */
+    int nanchors,
+        ntosnap; /* number of anchors and number of points to be snapped */
+    int nsnapped, ncreated; /* number of snapped verices, number of new vertices
+                               (on segments) */
+    int apoints, npoints,
+        nvertices; /* number of allocated points, registered points, vertices */
+    XPNT *XPnts;   /* Array of points */
+    NEW *New = NULL;    /* Array of new points */
+    int anew = 0, nnew; /* allocated new points , number of new points */
     struct ilist *List;
-    int *Index = NULL;          /* indexes of anchors for vertices */
-    int aindex = 0;             /* allocated Index */
+    int *Index = NULL; /* indexes of anchors for vertices */
+    int aindex = 0;    /* allocated Index */
 
     struct kdtree *KDTree;
     double c[2];
     double *kdd;
     int *kduid, kd_found;
-
 
     if (List_lines->n_values < 1)
         return;
@@ -215,9 +215,10 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
     thresh2 = thresh * thresh;
 
-    /* Go through all lines in vector, and add each point to structure of points */
+    /* Go through all lines in vector, and add each point to structure of points
+     */
     apoints = 0;
-    point = 1;                  /* index starts from 1 ! */
+    point = 1; /* index starts from 1 ! */
     nvertices = 0;
     XPnts = NULL;
 
@@ -249,8 +250,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
                 if ((point - 1) == apoints) {
                     apoints += 10000;
                     XPnts =
-                        (XPNT *) G_realloc(XPnts,
-                                           (apoints + 1) * sizeof(XPNT));
+                        (XPNT *)G_realloc(XPnts, (apoints + 1) * sizeof(XPNT));
                 }
                 XPnts[point].x = Points->x[v];
                 XPnts[point].y = Points->y[v];
@@ -259,12 +259,12 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
             }
         }
     }
-    G_percent(line_idx, List_lines->n_values, 2);       /* finish it */
+    G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     npoints = point - 1;
 
-    /* Go through all registered points and if not yet marked mark it as anchor and assign this anchor
-     * to all not yet marked points in threshold */
+    /* Go through all registered points and if not yet marked mark it as anchor
+     * and assign this anchor to all not yet marked points in threshold */
 
     G_important_message(_("Snap vertices Pass 2: assign anchor vertices"));
 
@@ -279,7 +279,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
         if (XPnts[point].anchor >= 0)
             continue;
 
-        XPnts[point].anchor = 0;        /* make it anchor */
+        XPnts[point].anchor = 0; /* make it anchor */
         nanchors++;
 
         /* Find points in threshold */
@@ -302,7 +302,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
             dy = XPnts[pointb].y - XPnts[point].y;
             dist2 = dx * dx + dy * dy;
 
-            if (dist2 > thresh2)        /* outside threshold */
+            if (dist2 > thresh2) /* outside threshold */
                 continue;
 
             /* doesn't have an anchor yet */
@@ -310,7 +310,8 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
                 XPnts[pointb].anchor = point;
                 ntosnap++;
             }
-            else if (XPnts[pointb].anchor > 0) {        /* check distance to previously assigned anchor */
+            else if (XPnts[pointb].anchor >
+                     0) { /* check distance to previously assigned anchor */
                 double dist2_a;
 
                 dx = XPnts[XPnts[pointb].anchor].x - XPnts[pointb].x;
@@ -329,9 +330,10 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
         }
     }
 
-    /* Go through all lines and: 
+    /* Go through all lines and:
      *   1) for all vertices: if not anchor snap it to its anchor
-     *   2) for all segments: snap it to all anchors in threshold (except anchors of vertices of course) */
+     *   2) for all segments: snap it to all anchors in threshold (except
+     * anchors of vertices of course) */
 
     nsnapped = ncreated = 0;
 
@@ -374,15 +376,15 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
             anchor = XPnts[spoint].anchor;
 
-            if (anchor > 0) {   /* to be snapped */
+            if (anchor > 0) { /* to be snapped */
                 Points->x[v] = XPnts[anchor].x;
                 Points->y[v] = XPnts[anchor].y;
                 nsnapped++;
                 changed = 1;
-                Index[v] = anchor;      /* point on new location */
+                Index[v] = anchor; /* point on new location */
             }
             else {
-                Index[v] = spoint;      /* old point */
+                Index[v] = spoint; /* old point */
             }
         }
 
@@ -429,9 +431,9 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
             Vect_reset_list(List);
             G_debug(3, "  search anchors for segment %g,%g to %g,%g", x1, y1,
                     x2, y2);
-            /* distance search: circle around midpoint encompassing 
+            /* distance search: circle around midpoint encompassing
              *                  endpoints
-             * box search: box encompassing endpoints, 
+             * box search: box encompassing endpoints,
              *             smaller than corresponding circle */
             rc[0] = xmin - thresh * 2;
             rc[1] = ymin - thresh * 2;
@@ -453,16 +455,14 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
                         XPnts[spoint].anchor);
 
                 if (spoint == Index[v] || spoint == Index[v + 1])
-                    continue;   /* end point */
+                    continue; /* end point */
                 if (XPnts[spoint].anchor > 0)
-                    continue;   /* point is not anchor */
+                    continue; /* point is not anchor */
 
                 /* Check the distance */
-                dist2 =
-                    dig_distance2_point_to_line(XPnts[spoint].x,
-                                                XPnts[spoint].y, 0, x1, y1, 0,
-                                                x2, y2, 0, 0, NULL, NULL,
-                                                NULL, &along, &status);
+                dist2 = dig_distance2_point_to_line(
+                    XPnts[spoint].x, XPnts[spoint].y, 0, x1, y1, 0, x2, y2, 0,
+                    0, NULL, NULL, NULL, &along, &status);
 
                 G_debug(4, "      distance = %lf", sqrt(dist2));
 
@@ -471,7 +471,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
                     if (nnew == anew) {
                         anew += 100;
-                        New = (NEW *) G_realloc(New, anew * sizeof(NEW));
+                        New = (NEW *)G_realloc(New, anew * sizeof(NEW));
                     }
                     New[nnew].anchor = spoint;
                     New[nnew].along = along;
@@ -489,9 +489,10 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
                 for (i = 0; i < nnew; i++) {
                     anchor = New[i].anchor;
-                    /* Vect_line_insert_point ( Points, ++v, XPnts[anchor].x, XPnts[anchor].y, 0); */
-                    Vect_append_point(NPoints, XPnts[anchor].x,
-                                      XPnts[anchor].y, 0);
+                    /* Vect_line_insert_point ( Points, ++v, XPnts[anchor].x,
+                     * XPnts[anchor].y, 0); */
+                    Vect_append_point(NPoints, XPnts[anchor].x, XPnts[anchor].y,
+                                      0);
                     ncreated++;
                 }
                 changed = 1;
@@ -502,8 +503,8 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
         v = Points->n_points - 1;
         Vect_append_point(NPoints, Points->x[v], Points->y[v], Points->z[v]);
 
-        if (changed) {          /* rewrite the line */
-            Vect_line_prune(NPoints);   /* remove duplicates */
+        if (changed) {                /* rewrite the line */
+            Vect_line_prune(NPoints); /* remove duplicates */
             if (NPoints->n_points > 1 || !(ltype & GV_LINES)) {
                 Vect_rewrite_line(Map, line, ltype, NPoints, Cats);
             }
@@ -514,8 +515,8 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
                 Vect_write_line(Err, ltype, Points, Cats);
             }
         }
-    }                           /* for each line */
-    G_percent(line_idx, List_lines->n_values, 2);       /* finish it */
+    }                                             /* for each line */
+    G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(NPoints);
@@ -529,26 +530,28 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map,
     G_verbose_message(_("New vertices: %d"), ncreated);
 }
 
-static void
-Vect_snap_lines_list_rtree(struct Map_info *Map,
-                           const struct ilist *List_lines, double thresh,
-                           struct Map_info *Err)
+static void Vect_snap_lines_list_rtree(struct Map_info *Map,
+                                       const struct ilist *List_lines,
+                                       double thresh, struct Map_info *Err)
 {
     struct line_pnts *Points, *NPoints;
     struct line_cats *Cats;
     int line, ltype, line_idx;
     double thresh2;
 
-    int point;                  /* index in points array */
-    int nanchors, ntosnap;      /* number of anchors and number of points to be snapped */
-    int nsnapped, ncreated;     /* number of snapped verices, number of new vertices (on segments) */
-    int apoints, npoints, nvertices;    /* number of allocated points, registered points, vertices */
-    XPNT *XPnts;                /* Array of points */
-    NEW *New = NULL;            /* Array of new points */
-    int anew = 0, nnew;         /* allocated new points , number of new points */
+    int point; /* index in points array */
+    int nanchors,
+        ntosnap; /* number of anchors and number of points to be snapped */
+    int nsnapped, ncreated; /* number of snapped verices, number of new vertices
+                               (on segments) */
+    int apoints, npoints,
+        nvertices; /* number of allocated points, registered points, vertices */
+    XPNT *XPnts;   /* Array of points */
+    NEW *New = NULL;    /* Array of new points */
+    int anew = 0, nnew; /* allocated new points , number of new points */
     struct ilist *List;
-    int *Index = NULL;          /* indexes of anchors for vertices */
-    int aindex = 0;             /* allocated Index */
+    int *Index = NULL; /* indexes of anchors for vertices */
+    int aindex = 0;    /* allocated Index */
 
     struct RTree *RTree;
     int rtreefd = -1;
@@ -577,9 +580,10 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
 
     thresh2 = thresh * thresh;
 
-    /* Go through all lines in vector, and add each point to structure of points */
+    /* Go through all lines in vector, and add each point to structure of points
+     */
     apoints = 0;
-    point = 1;                  /* index starts from 1 ! */
+    point = 1; /* index starts from 1 ! */
     nvertices = 0;
     XPnts = NULL;
 
@@ -614,14 +618,13 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
             RTreeSearch(RTree, &rect, find_item, List);
             G_debug(3, "List : nvalues =  %d", List->n_values);
 
-            if (List->n_values == 0) {  /* Not found */
+            if (List->n_values == 0) { /* Not found */
                 /* Add to tree and to structure */
                 RTreeInsertRect(&rect, point, RTree);
                 if ((point - 1) == apoints) {
                     apoints += 10000;
                     XPnts =
-                        (XPNT *) G_realloc(XPnts,
-                                           (apoints + 1) * sizeof(XPNT));
+                        (XPNT *)G_realloc(XPnts, (apoints + 1) * sizeof(XPNT));
                 }
                 XPnts[point].x = Points->x[v];
                 XPnts[point].y = Points->y[v];
@@ -630,12 +633,12 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
             }
         }
     }
-    G_percent(line_idx, List_lines->n_values, 2);       /* finish it */
+    G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     npoints = point - 1;
 
-    /* Go through all registered points and if not yet marked mark it as anchor and assign this anchor
-     * to all not yet marked points in threshold */
+    /* Go through all registered points and if not yet marked mark it as anchor
+     * and assign this anchor to all not yet marked points in threshold */
 
     G_important_message(_("Snap vertices Pass 2: assign anchor vertices"));
 
@@ -650,7 +653,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
         if (XPnts[point].anchor >= 0)
             continue;
 
-        XPnts[point].anchor = 0;        /* make it anchor */
+        XPnts[point].anchor = 0; /* make it anchor */
         nanchors++;
 
         /* Find points in threshold */
@@ -677,7 +680,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
             dy = XPnts[pointb].y - XPnts[point].y;
             dist2 = dx * dx + dy * dy;
 
-            if (dist2 > thresh2)        /* outside threshold */
+            if (dist2 > thresh2) /* outside threshold */
                 continue;
 
             /* doesn't have an anchor yet */
@@ -685,7 +688,8 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
                 XPnts[pointb].anchor = point;
                 ntosnap++;
             }
-            else if (XPnts[pointb].anchor > 0) {        /* check distance to previously assigned anchor */
+            else if (XPnts[pointb].anchor >
+                     0) { /* check distance to previously assigned anchor */
                 double dist2_a;
 
                 dx = XPnts[XPnts[pointb].anchor].x - XPnts[pointb].x;
@@ -700,9 +704,10 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
         }
     }
 
-    /* Go through all lines and: 
+    /* Go through all lines and:
      *   1) for all vertices: if not anchor snap it to its anchor
-     *   2) for all segments: snap it to all anchors in threshold (except anchors of vertices of course) */
+     *   2) for all segments: snap it to all anchors in threshold (except
+     * anchors of vertices of course) */
 
     nsnapped = ncreated = 0;
 
@@ -745,15 +750,15 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
             spoint = List->value[0];
             anchor = XPnts[spoint].anchor;
 
-            if (anchor > 0) {   /* to be snapped */
+            if (anchor > 0) { /* to be snapped */
                 Points->x[v] = XPnts[anchor].x;
                 Points->y[v] = XPnts[anchor].y;
                 nsnapped++;
                 changed = 1;
-                Index[v] = anchor;      /* point on new location */
+                Index[v] = anchor; /* point on new location */
             }
             else {
-                Index[v] = spoint;      /* old point */
+                Index[v] = spoint; /* old point */
             }
         }
 
@@ -818,16 +823,14 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
                         XPnts[spoint].anchor);
 
                 if (spoint == Index[v] || spoint == Index[v + 1])
-                    continue;   /* end point */
+                    continue; /* end point */
                 if (XPnts[spoint].anchor > 0)
-                    continue;   /* point is not anchor */
+                    continue; /* point is not anchor */
 
                 /* Check the distance */
-                dist2 =
-                    dig_distance2_point_to_line(XPnts[spoint].x,
-                                                XPnts[spoint].y, 0, x1, y1, 0,
-                                                x2, y2, 0, 0, NULL, NULL,
-                                                NULL, &along, &status);
+                dist2 = dig_distance2_point_to_line(
+                    XPnts[spoint].x, XPnts[spoint].y, 0, x1, y1, 0, x2, y2, 0,
+                    0, NULL, NULL, NULL, &along, &status);
 
                 G_debug(4, "      distance = %lf", sqrt(dist2));
 
@@ -836,7 +839,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
 
                     if (nnew == anew) {
                         anew += 100;
-                        New = (NEW *) G_realloc(New, anew * sizeof(NEW));
+                        New = (NEW *)G_realloc(New, anew * sizeof(NEW));
                     }
                     New[nnew].anchor = spoint;
                     New[nnew].along = along;
@@ -851,9 +854,10 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
 
                 for (i = 0; i < nnew; i++) {
                     anchor = New[i].anchor;
-                    /* Vect_line_insert_point ( Points, ++v, XPnts[anchor].x, XPnts[anchor].y, 0); */
-                    Vect_append_point(NPoints, XPnts[anchor].x,
-                                      XPnts[anchor].y, 0);
+                    /* Vect_line_insert_point ( Points, ++v, XPnts[anchor].x,
+                     * XPnts[anchor].y, 0); */
+                    Vect_append_point(NPoints, XPnts[anchor].x, XPnts[anchor].y,
+                                      0);
                     ncreated++;
                 }
                 changed = 1;
@@ -864,8 +868,8 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
         v = Points->n_points - 1;
         Vect_append_point(NPoints, Points->x[v], Points->y[v], Points->z[v]);
 
-        if (changed) {          /* rewrite the line */
-            Vect_line_prune(NPoints);   /* remove duplicates */
+        if (changed) {                /* rewrite the line */
+            Vect_line_prune(NPoints); /* remove duplicates */
             if (NPoints->n_points > 1 || !(ltype & GV_LINES)) {
                 Vect_rewrite_line(Map, line, ltype, NPoints, Cats);
             }
@@ -876,8 +880,8 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
                 Vect_write_line(Err, ltype, Points, Cats);
             }
         }
-    }                           /* for each line */
-    G_percent(line_idx, List_lines->n_values, 2);       /* finish it */
+    }                                             /* for each line */
+    G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(NPoints);
@@ -893,7 +897,6 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
     G_verbose_message(_("New vertices: %d"), ncreated);
 }
 
-
 /*!
    \brief Snap lines in vector map to existing vertex in threshold.
 
@@ -906,9 +909,8 @@ Vect_snap_lines_list_rtree(struct Map_info *Map,
 
    \return void
  */
-void
-Vect_snap_lines(struct Map_info *Map, int type, double thresh,
-                struct Map_info *Err)
+void Vect_snap_lines(struct Map_info *Map, int type, double thresh,
+                     struct Map_info *Err)
 {
     int line, nlines, ltype;
     struct ilist *List;
@@ -942,10 +944,10 @@ Vect_snap_lines(struct Map_info *Map, int type, double thresh,
 /*!
    \brief Snap a line to reference lines in Map with threshold.
 
-   3D snapping is supported. The line to snap and the reference lines 
+   3D snapping is supported. The line to snap and the reference lines
    can but do not need to be in different vector maps.
 
-   Vect_snap_line() uses less memory, but is slower than 
+   Vect_snap_line() uses less memory, but is slower than
    Vect_snap_lines_list()
 
    For details on snapping, see Vect_snap_lines_list()
@@ -960,10 +962,9 @@ Vect_snap_lines(struct Map_info *Map, int type, double thresh,
 
    \return 1 if line was changed, otherwise 0
  */
-int
-Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
-               struct line_pnts *Points, double thresh, int with_z,
-               int *nsnapped, int *ncreated)
+int Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
+                   struct line_pnts *Points, double thresh, int with_z,
+                   int *nsnapped, int *ncreated)
 {
     struct line_pnts *LPoints, *NPoints;
     struct line_cats *Cats;
@@ -971,17 +972,17 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
     int changed;
     double thresh2;
 
-    int point;                  /* index in points array */
-    int segment;                /* index in segments array */
-    int asegments;              /* number of allocated segments */
-    int nvertices;              /* number of vertices */
-    char *XSegs = NULL;         /* Array of segments */
-    NEW2 *New = NULL;           /* Array of new points */
-    int anew = 0, nnew;         /* allocated new points , number of new points */
+    int point;          /* index in points array */
+    int segment;        /* index in segments array */
+    int asegments;      /* number of allocated segments */
+    int nvertices;      /* number of vertices */
+    char *XSegs = NULL; /* Array of segments */
+    NEW2 *New = NULL;   /* Array of new points */
+    int anew = 0, nnew; /* allocated new points , number of new points */
     struct boxlist *List;
 
-    struct RTree *pnt_tree,     /* spatial index for reference points */
-     *seg_tree;                 /* spatial index for reference segments */
+    struct RTree *pnt_tree, /* spatial index for reference points */
+        *seg_tree;          /* spatial index for reference segments */
     struct RTree_Rect rect;
 
     rect.boundary = G_malloc(6 * sizeof(RectReal));
@@ -1019,11 +1020,11 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 
     thresh2 = thresh * thresh;
 
-    point = segment = 1;        /* index starts from 1 ! */
+    point = segment = 1; /* index starts from 1 ! */
     nvertices = 0;
     asegments = 0;
 
-    /* Add all vertices and all segments of all reference lines 
+    /* Add all vertices and all segments of all reference lines
      * to spatial indices */
     nlines = reflist->n_values;
     for (i = 0; i < nlines; i++) {
@@ -1056,7 +1057,7 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
             RTreeSearch(pnt_tree, &rect, find_item_box, (void *)List);
             G_debug(3, "List : nvalues =  %d", List->n_values);
 
-            if (List->n_values == 0) {  /* Not found */
+            if (List->n_values == 0) { /* Not found */
 
                 /* Add to points tree */
                 RTreeInsertRect(&rect, point, pnt_tree);
@@ -1103,9 +1104,8 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 
                 if ((segment - 1) == asegments) {
                     asegments += 1000;
-                    XSegs =
-                        (char *)G_realloc(XSegs,
-                                          (asegments + 1) * sizeof(char));
+                    XSegs = (char *)G_realloc(XSegs,
+                                              (asegments + 1) * sizeof(char));
                 }
                 XSegs[segment] = sides;
                 segment++;
@@ -1226,13 +1226,9 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
             }
 
             /* Check the distance */
-            tmpdist2 =
-                dig_distance2_point_to_line(Points->x[v],
-                                            Points->y[v],
-                                            Points->z[v],
-                                            x1, y1, z1, x2, y2, z2,
-                                            with_z, &tmpx, &tmpy, &tmpz,
-                                            NULL, &status);
+            tmpdist2 = dig_distance2_point_to_line(
+                Points->x[v], Points->y[v], Points->z[v], x1, y1, z1, x2, y2,
+                z2, with_z, &tmpx, &tmpy, &tmpz, NULL, &status);
 
             if (tmpdist2 < dist2 && status == 0) {
                 dist2 = tmpdist2;
@@ -1328,27 +1324,24 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
             if (Points->x[v] == List->box[i].E &&
                 Points->y[v] == List->box[i].N &&
                 Points->z[v] == List->box[i].T)
-                continue;       /* start point */
+                continue; /* start point */
 
             if (Points->x[v + 1] == List->box[i].E &&
                 Points->y[v + 1] == List->box[i].N &&
                 Points->z[v + 1] == List->box[i].T)
-                continue;       /* end point */
+                continue; /* end point */
 
             /* Check the distance */
-            dist2 =
-                dig_distance2_point_to_line(List->box[i].E,
-                                            List->box[i].N,
-                                            List->box[i].T, x1, y1, z1,
-                                            x2, y2, z2, with_z, NULL, NULL,
-                                            NULL, &along, &status);
+            dist2 = dig_distance2_point_to_line(
+                List->box[i].E, List->box[i].N, List->box[i].T, x1, y1, z1, x2,
+                y2, z2, with_z, NULL, NULL, NULL, &along, &status);
 
             if (dist2 <= thresh2 && status == 0) {
                 G_debug(4, "      anchor in thresh, along = %lf", along);
 
                 if (nnew == anew) {
                     anew += 100;
-                    New = (NEW2 *) G_realloc(New, anew * sizeof(NEW2));
+                    New = (NEW2 *)G_realloc(New, anew * sizeof(NEW2));
                 }
                 New[nnew].x = List->box[i].E;
                 New[nnew].y = List->box[i].N;
@@ -1378,7 +1371,7 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
     Vect_append_point(NPoints, Points->x[v], Points->y[v], Points->z[v]);
 
     if (Points->n_points != NPoints->n_points) {
-        Vect_line_prune(NPoints);       /* remove duplicates */
+        Vect_line_prune(NPoints); /* remove duplicates */
         Vect_reset_line(Points);
         Vect_append_points(Points, NPoints, GV_FORWARD);
     }

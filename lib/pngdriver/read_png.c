@@ -28,7 +28,7 @@ static void read_data(png_structp png_ptr, png_bytep data, png_size_t length)
     if (png_ptr == NULL)
         return;
 
-    fp = (FILE *) png_get_io_ptr(png_ptr);
+    fp = (FILE *)png_get_io_ptr(png_ptr);
 
     if (fp == NULL)
         return;
@@ -54,8 +54,7 @@ void read_png(void)
     png_uint_32 i_width, i_height;
     int depth, color_type;
 
-    png_ptr =
-        png_create_read_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
+    png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
     if (!png_ptr)
         G_fatal_error(_("Unable to allocate PNG structure"));
 
@@ -74,15 +73,16 @@ void read_png(void)
 
     png_read_info(png_ptr, info_ptr);
 
-    png_get_IHDR(png_ptr, info_ptr, &i_width, &i_height,
-                 &depth, &color_type, NULL, NULL, NULL);
+    png_get_IHDR(png_ptr, info_ptr, &i_width, &i_height, &depth, &color_type,
+                 NULL, NULL, NULL);
 
     if (depth != 8)
         G_fatal_error(_("Input PNG file is not 8-bit"));
 
     if (i_width != (unsigned long)png.width ||
         i_height != (unsigned long)png.height)
-        G_fatal_error(_("Input PNG file has incorrect dimensions: expected: %dx%d got: %lux%lu"),
+        G_fatal_error(_("Input PNG file has incorrect dimensions: expected: "
+                        "%dx%d got: %lux%lu"),
                       png.width, png.height, (unsigned long)i_width,
                       (unsigned long)i_height);
 
@@ -143,7 +143,7 @@ void read_png(void)
             }
         else
             for (x = 0; x < png.width; x++, p++, q++)
-                *p = (png_byte) * q;
+                *p = (png_byte)*q;
     }
 
     G_free(line);

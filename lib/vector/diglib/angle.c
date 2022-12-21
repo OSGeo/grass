@@ -1,8 +1,8 @@
 /*
  ****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,12 +11,12 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 /*
- *    functions - calc_begin_angle(), and calc_end_angle()  
+ *    functions - calc_begin_angle(), and calc_end_angle()
  *    used to calculate the angle of a line to a node.
  *    returns -  (float)angle (-PI ... +PI)
  *    returns -  (float)(-9)  if only 1 point or more points but identical
@@ -72,12 +72,13 @@ float dig_calc_begin_angle(const struct line_pnts *points, double thresh)
 
     if (short_line) {
         /* for 4.1 change this to take 1st point after node  -dpg 12/92 */
-        /* return ((float) d_atan2 (yarray[n_points - 1] - last_y, xarray[n_points - 1] - last_x)); */
+        /* return ((float) d_atan2 (yarray[n_points - 1] - last_y,
+         * xarray[n_points - 1] - last_x)); */
         return ((float)d_atan2(yarray[1] - last_y, xarray[1] - last_x));
     }
 
     return ((float)d_atan2(*yptr - last_y, *xptr - last_x));
-}                               /*  calc_begin_angle()  */
+} /*  calc_begin_angle()  */
 
 float dig_calc_end_angle(const struct line_pnts *points, double thresh)
 {
@@ -124,9 +125,8 @@ float dig_calc_end_angle(const struct line_pnts *points, double thresh)
     if (short_line) {
         /* updated for 4.1 to take next point away from node  -dpg */
         /* return ((float) d_atan2 (yarray[0] - last_y, xarray[0] - last_x)); */
-        return ((float)
-                d_atan2(yarray[n_points - 2] - last_y,
-                        xarray[n_points - 2] - last_x));
+        return ((float)d_atan2(yarray[n_points - 2] - last_y,
+                               xarray[n_points - 2] - last_x));
     }
 
     return ((float)d_atan2(*yptr - last_y, *xptr - last_x));
@@ -155,7 +155,7 @@ int dig_is_line_degenerate(const struct line_pnts *points, double thresh)
     yptr = yarray + 1;
 
     short_line = 1;
-    for (i = 1; i < n_points; i++) {    /* Search for next different coord */
+    for (i = 1; i < n_points; i++) { /* Search for next different coord */
         if ((thresh < fabs(*xptr - last_x)) ||
             (thresh < fabs(*yptr - last_y))) {
             short_line = 0;
@@ -169,7 +169,6 @@ int dig_is_line_degenerate(const struct line_pnts *points, double thresh)
         return (1);
 
     return (0);
-
 }
 
 /* Check if line is degenerate (one point or more identical points)

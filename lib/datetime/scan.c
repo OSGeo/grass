@@ -8,7 +8,6 @@
 #include <string.h>
 #include <grass/datetime.h>
 
-
 static int scan_absolute(DateTime *, const char *);
 static int more(const char **);
 static int minus_sign(const char **);
@@ -26,21 +25,20 @@ static void skip_space(const char **);
 static int get_int(const char **, int *, int *);
 static int get_double(const char **, double *, int *, int *);
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Convert the ascii string
  * into a DateTime. This determines the mode/from/to based on the string, inits
  * 'dt' and then sets values in 'dt' based on the [???]
- * Returns 0 if 'string' is legal, -1 if not. 
+ * Returns 0 if 'string' is legal, -1 if not.
  *
  *  \param dt
  *  \param buf
  *  \return int
  */
 
-int datetime_scan(DateTime * dt, const char *buf)
+int datetime_scan(DateTime *dt, const char *buf)
 {
     if (is_relative(buf)) {
         if (scan_relative(dt, buf))
@@ -52,12 +50,10 @@ int datetime_scan(DateTime * dt, const char *buf)
     return datetime_error(-2, "Invalid absolute datetime format");
 }
 
-static const char *month_names[] = {
-    "jan", "feb", "mar", "apr", "may", "jun",
-    "jul", "aug", "sep", "oct", "nov", "dec"
-};
+static const char *month_names[] = {"jan", "feb", "mar", "apr", "may", "jun",
+                                    "jul", "aug", "sep", "oct", "nov", "dec"};
 
-static int scan_absolute(DateTime * dt, const char *buf)
+static int scan_absolute(DateTime *dt, const char *buf)
 {
     char word[1024];
     int n;
@@ -74,12 +70,12 @@ static int scan_absolute(DateTime * dt, const char *buf)
     if (!more(&p))
         return 0;
 
-    if (!get_int(&p, &n, &ndigits)) {   /* no day, so must be month, like Jan */
+    if (!get_int(&p, &n, &ndigits)) { /* no day, so must be month, like Jan */
         if (!get_word(&p, word))
             return 0;
         if (!which_month(word, &month))
             return 0;
-        if (!get_int(&p, &year, &ndigits))      /* year following the month */
+        if (!get_int(&p, &year, &ndigits)) /* year following the month */
             return 0;
         to = DATETIME_MONTH;
         if (is_bc(&p))
@@ -88,12 +84,12 @@ static int scan_absolute(DateTime * dt, const char *buf)
     }
 
     bc = is_bc(&p);
-    if (bc || !get_word(&p, word)) {    /* just a year */
+    if (bc || !get_word(&p, word)) { /* just a year */
         year = n;
         to = DATETIME_YEAR;
         goto set;
     }
-    to = DATETIME_DAY;          /* must be at least: day Mon year [bc] */
+    to = DATETIME_DAY; /* must be at least: day Mon year [bc] */
     day = n;
     if (!which_month(word, &month))
         return 0;
@@ -123,15 +119,15 @@ static int scan_absolute(DateTime * dt, const char *buf)
         return 0;
     to = DATETIME_SECOND;
 
-  timezone:
+timezone:
     if (!get_word(&p, word))
         goto set;
     if (!scan_tz(word, &tz))
         return 0;
     have_tz = 1;
 
-  set:
-    if (more(&p))               /* make sure there isn't anything else */
+set:
+    if (more(&p)) /* make sure there isn't anything else */
         return 0;
     if (datetime_set_type(dt, DATETIME_ABSOLUTE, DATETIME_YEAR, to, fracsec))
         return 0;
@@ -171,8 +167,7 @@ static int scan_absolute(DateTime * dt, const char *buf)
     return 1;
 }
 
-
-static int scan_relative(DateTime * dt, const char *buf)
+static int scan_relative(DateTime *dt, const char *buf)
 {
     const char *p;
     double x;
@@ -205,7 +200,8 @@ static int scan_relative(DateTime * dt, const char *buf)
             month = (int)x;
             break;
         case DATETIME_DAY:
-            day = (int)x;;
+            day = (int)x;
+            ;
             break;
         case DATETIME_HOUR:
             hour = (int)x;
@@ -218,10 +214,9 @@ static int scan_relative(DateTime * dt, const char *buf)
             fracsec = ndecimal;
             break;
         }
-
     }
 
-    if (more(&p))               /* make sure there isn't anything else */
+    if (more(&p)) /* make sure there isn't anything else */
         return 0;
     if (datetime_set_type(dt, DATETIME_RELATIVE, from, to, fracsec))
         return 0;
@@ -292,9 +287,10 @@ static int get_int(const char **s, int *n, int *ndigits)
     return (*ndigits > 0);
 }
 
-static int get_double(const char **s, double *x, int *ndigits,  /* number of digits before decimal */
+static int get_double(const char **s, double *x,
+                      int *ndigits, /* number of digits before decimal */
                       int *ndecimal)
-{                               /* number of decimal places */
+{ /* number of decimal places */
     char buf[1024];
     char *b;
     const char *p;
@@ -320,7 +316,6 @@ static int get_double(const char **s, double *x, int *ndigits,  /* number of dig
     *s = p;
     return 1;
 }
-
 
 /* if pos is non-zero, *(p-1) must be legal */
 /*
@@ -411,8 +406,8 @@ static int scan_tz(const char *word, int *tz)
     if (!is_digit(word[4]))
         return 0;
 
-    *tz = (word[1] - '0') * 600 + (word[2] - '0') * 60 +
-        (word[3] - '0') * 10 + (word[4] - '0');
+    *tz = (word[1] - '0') * 600 + (word[2] - '0') * 60 + (word[3] - '0') * 10 +
+          (word[4] - '0');
     if (neg)
         *tz = -(*tz);
     return 1;
@@ -422,8 +417,8 @@ static int scan_tz(const char *word, int *tz)
    0 not a recognized term
    1 valid term, but perhaps illegal value
  */
-static int relative_term(const char **s,
-                         double *x, int *ndigits, int *ndecimal, int *pos)
+static int relative_term(const char **s, double *x, int *ndigits, int *ndecimal,
+                         int *pos)
 {
     char word[1024];
     const char *p;

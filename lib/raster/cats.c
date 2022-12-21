@@ -5,7 +5,7 @@
  *
  * Code in this file works with category files.  There are two formats:
  * Pre 3.0 direct category encoding form:
- * 
+ *
  *    2 categories
  *    Map Title
  *    Elevation: 1000.00 to 1005.00 feet
@@ -13,7 +13,7 @@
  *    Elevation: 1010.00 to 1015.00 feet
  *
  * 3.0 format
- * 
+ *
  *    # 2 categories
  *    Map Title
  *    Elevation: $1.2 to $2.2 feet       ## Format Statement
@@ -36,7 +36,7 @@
  *
  *   $1.2 will print $1 with 2 decimal places.
  *
- * Also, the form $?xxx$yyy$ translates into yyy if the category is 1, xxx 
+ * Also, the form $?xxx$yyy$ translates into yyy if the category is 1, xxx
  * otherwise. The $yyy$ is optional. Thus
  *
  *   $1 meter$?s
@@ -81,8 +81,8 @@ static int cmp(const void *, const void *);
 
 static void write_cats(const char *element, const char *name,
                        struct Categories *cats);
-static CELL read_cats(const char *element, const char *name,
-                      const char *mapset, struct Categories *pcats, int full);
+static CELL read_cats(const char *element, const char *name, const char *mapset,
+                      struct Categories *pcats, int full);
 
 static struct Categories save_cats;
 
@@ -97,12 +97,12 @@ static struct Categories save_cats;
  * \param name raster map name
  * \param mapset mapset name
  * \param[out] pcats pointer to Cats structure
- * 
+ *
  * \return -1 on error
  * \return 0 on success
  */
-int Rast_read_cats(const char *name,
-                   const char *mapset, struct Categories *pcats)
+int Rast_read_cats(const char *name, const char *mapset,
+                   struct Categories *pcats)
 {
     switch (read_cats("cats", name, mapset, pcats, 1)) {
     case -2:
@@ -133,21 +133,21 @@ int Rast_read_cats(const char *name,
  * \param name vector map name
  * \param mapset mapset name
  * \param[out] pcats pointer to Cats structure
- * 
+ *
  * \return -1 on error
  * \return 0 on success
  */
-int Rast_read_vector_cats(const char *name,
-                          const char *mapset, struct Categories *pcats)
+int Rast_read_vector_cats(const char *name, const char *mapset,
+                          struct Categories *pcats)
 {
     switch (read_cats("dig_cats", name, mapset, pcats, 1)) {
     case -2:
-        G_warning(_("Category support for vector map <%s@%s> missing"),
-                  name, mapset);
+        G_warning(_("Category support for vector map <%s@%s> missing"), name,
+                  mapset);
         break;
     case -1:
-        G_warning(_("Category support for vector map <%s@%s> invalid"),
-                  name, mapset);
+        G_warning(_("Category support for vector map <%s@%s> invalid"), name,
+                  mapset);
         break;
     default:
         return 0;
@@ -182,9 +182,8 @@ CELL Rast_get_max_c_cat(const char *name, const char *mapset)
     return max;
 }
 
-static CELL read_cats(const char *element,
-                      const char *name,
-                      const char *mapset, struct Categories *pcats, int full)
+static CELL read_cats(const char *element, const char *name, const char *mapset,
+                      struct Categories *pcats, int full)
 {
     FILE *fd;
     char buff[1024];
@@ -192,7 +191,6 @@ static CELL read_cats(const char *element,
     DCELL val1, val2;
     int old = 0, fp_map;
     long num = -1;
-
 
     if (strncmp(element, "dig", 3) == 0)
         fp_map = 0;
@@ -214,8 +212,8 @@ static CELL read_cats(const char *element,
     if (!full) {
         fclose(fd);
         if (num < 0)
-            return 0;           /* coorect */
-        return (CELL) num;
+            return 0; /* coorect */
+        return (CELL)num;
     }
 
     /* Read the title for the file */
@@ -258,12 +256,11 @@ static CELL read_cats(const char *element,
                 continue;
             *label = 0;
             /* for fp maps try to read a range of data */
-            if (fp_map
-                && sscanf(buff, "%lf:%lf:%[^\n]", &val1, &val2, label) == 3)
+            if (fp_map &&
+                sscanf(buff, "%lf:%lf:%[^\n]", &val1, &val2, label) == 3)
                 Rast_set_cat(&val1, &val2, label, pcats, DCELL_TYPE);
-            else if (!fp_map
-                     && sscanf(buff, "%d:%d:%[^\n]", &cat1, &cat2,
-                               label) == 3)
+            else if (!fp_map &&
+                     sscanf(buff, "%d:%d:%[^\n]", &cat1, &cat2, label) == 3)
                 Rast_set_cat(&cat1, &cat2, label, pcats, CELL_TYPE);
             else if (sscanf(buff, "%d:%[^\n]", &cat1, label) >= 1)
                 Rast_set_cat(&cat1, &cat1, label, pcats, CELL_TYPE);
@@ -276,7 +273,7 @@ static CELL read_cats(const char *element,
 
     fclose(fd);
     return 0;
-  error:
+error:
     fclose(fd);
     return -1;
 }
@@ -321,7 +318,7 @@ char *Rast_get_cats_title(const struct Categories *pcats)
  * \return pointer to category label
  * \return "" if category is not found
  */
-char *Rast_get_c_cat(CELL * rast, struct Categories *pcats)
+char *Rast_get_c_cat(CELL *rast, struct Categories *pcats)
 {
     return Rast_get_cat(rast, pcats, CELL_TYPE);
 }
@@ -345,7 +342,7 @@ char *Rast_get_c_cat(CELL * rast, struct Categories *pcats)
  * \return pointer to category label
  * \return "" if category is not found
  */
-char *Rast_get_f_cat(FCELL * rast, struct Categories *pcats)
+char *Rast_get_f_cat(FCELL *rast, struct Categories *pcats)
 {
     return Rast_get_cat(rast, pcats, FCELL_TYPE);
 }
@@ -369,7 +366,7 @@ char *Rast_get_f_cat(FCELL * rast, struct Categories *pcats)
  * \return pointer to category label
  * \return "" if category is not found
  */
-char *Rast_get_d_cat(DCELL * rast, struct Categories *pcats)
+char *Rast_get_d_cat(DCELL *rast, struct Categories *pcats)
 {
     return Rast_get_cat(rast, pcats, DCELL_TYPE);
 }
@@ -394,8 +391,8 @@ char *Rast_get_d_cat(DCELL * rast, struct Categories *pcats)
  * \return pointer to category label
  * \return "" if category is not found
  */
-char *Rast_get_cat(void *rast,
-                   struct Categories *pcats, RASTER_MAP_TYPE data_type)
+char *Rast_get_cat(void *rast, struct Categories *pcats,
+                   RASTER_MAP_TYPE data_type)
 {
     static char label[1024];
     char *f, *l, *v;
@@ -426,8 +423,8 @@ char *Rast_get_cat(void *rast,
     if ((f = pcats->fmt) == NULL)
         return label;
 
-    a[0] = (float)val *pcats->m1 + pcats->a1;
-    a[1] = (float)val *pcats->m2 + pcats->a2;
+    a[0] = (float)val * pcats->m1 + pcats->a1;
+    a[1] = (float)val * pcats->m2 + pcats->a2;
 
     l = label;
     while (*f) {
@@ -479,7 +476,7 @@ void Rast_unmark_cats(struct Categories *pcats)
 
 /*!
  * \brief Looks up the category label for each raster value (CELL).
- * 
+ *
  * Looks up the category label for each raster value in the
  * <i>rast_row</i> and updates the marks for labels found.
  *
@@ -492,15 +489,14 @@ void Rast_unmark_cats(struct Categories *pcats)
  * \param pcats pointer to Categories structure
  *
  */
-void Rast_mark_c_cats(const CELL * rast_row,
-                      int ncols, struct Categories *pcats)
+void Rast_mark_c_cats(const CELL *rast_row, int ncols, struct Categories *pcats)
 {
     Rast_mark_cats(rast_row, ncols, pcats, CELL_TYPE);
 }
 
 /*!
  * \brief Looks up the category label for each raster value (FCELL).
- * 
+ *
  * Looks up the category label for each raster value in the
  * <i>rast_row</i> and updates the marks for labels found.
  *
@@ -513,15 +509,15 @@ void Rast_mark_c_cats(const CELL * rast_row,
  * \param pcats pointer to Categories structure
  *
  */
-void Rast_mark_f_cats(const FCELL * rast_row,
-                      int ncols, struct Categories *pcats)
+void Rast_mark_f_cats(const FCELL *rast_row, int ncols,
+                      struct Categories *pcats)
 {
     Rast_mark_cats(rast_row, ncols, pcats, FCELL_TYPE);
 }
 
 /*!
  * \brief Looks up the category label for each raster value (DCELL).
- * 
+ *
  * Looks up the category label for each raster value in the
  * <i>rast_row</i> and updates the marks for labels found.
  *
@@ -534,15 +530,15 @@ void Rast_mark_f_cats(const FCELL * rast_row,
  * \param pcats pointer to Categories structure
  *
  */
-void Rast_mark_d_cats(const DCELL * rast_row,
-                      int ncols, struct Categories *pcats)
+void Rast_mark_d_cats(const DCELL *rast_row, int ncols,
+                      struct Categories *pcats)
 {
     Rast_mark_cats(rast_row, ncols, pcats, DCELL_TYPE);
 }
 
 /*!
  * \brief Looks up the category label for each raster value (DCELL).
- * 
+ *
  * Looks up the category label for each raster value in the
  * <i>rast_row</i> and updates the marks for labels found.
  *
@@ -558,8 +554,7 @@ void Rast_mark_d_cats(const DCELL * rast_row,
  * \return -1 on error
  * \return 1 on success
  */
-int Rast_mark_cats(const void *rast_row,
-                   int ncols, struct Categories *pcats,
+int Rast_mark_cats(const void *rast_row, int ncols, struct Categories *pcats,
                    RASTER_MAP_TYPE data_type)
 {
     size_t size = Rast_cell_size(data_type);
@@ -601,8 +596,8 @@ void Rast_rewind_cats(struct Categories *pcats)
    \return NULL if not found
    \return description if found
  */
-char *Rast_get_next_marked_d_cat(struct Categories *pcats,
-                                 DCELL * rast1, DCELL * rast2, long *count)
+char *Rast_get_next_marked_d_cat(struct Categories *pcats, DCELL *rast1,
+                                 DCELL *rast2, long *count)
 {
     char *descr = NULL;
     int found, i;
@@ -641,8 +636,8 @@ char *Rast_get_next_marked_d_cat(struct Categories *pcats,
    \return NULL if not found
    \return description if found
  */
-char *Rast_get_next_marked_c_cat(struct Categories *pcats,
-                                 CELL * rast1, CELL * rast2, long *count)
+char *Rast_get_next_marked_c_cat(struct Categories *pcats, CELL *rast1,
+                                 CELL *rast2, long *count)
 {
     return Rast_get_next_marked_cat(pcats, rast1, rast2, count, CELL_TYPE);
 }
@@ -657,8 +652,8 @@ char *Rast_get_next_marked_c_cat(struct Categories *pcats,
    \return NULL if not found
    \return description if found
  */
-char *Rast_get_next_marked_f_cat(struct Categories *pcats,
-                                 FCELL * rast1, FCELL * rast2, long *count)
+char *Rast_get_next_marked_f_cat(struct Categories *pcats, FCELL *rast1,
+                                 FCELL *rast2, long *count)
 {
     return Rast_get_next_marked_cat(pcats, rast1, rast2, count, FCELL_TYPE);
 }
@@ -674,9 +669,9 @@ char *Rast_get_next_marked_f_cat(struct Categories *pcats,
    \return NULL if not found
    \return description if found
  */
-char *Rast_get_next_marked_cat(struct Categories *pcats,
-                               void *rast1, void *rast2,
-                               long *count, RASTER_MAP_TYPE data_type)
+char *Rast_get_next_marked_cat(struct Categories *pcats, void *rast1,
+                               void *rast2, long *count,
+                               RASTER_MAP_TYPE data_type)
 {
     DCELL val1, val2;
     char *lab;
@@ -768,8 +763,8 @@ static void get_cond(char **f, char *value, DCELL val)
  * \return 0 if null value detected
  * \return 1 on success
  */
-int Rast_set_c_cat(const CELL * rast1, const CELL * rast2,
-                   const char *label, struct Categories *pcats)
+int Rast_set_c_cat(const CELL *rast1, const CELL *rast2, const char *label,
+                   struct Categories *pcats)
 {
     return Rast_set_cat(rast1, rast2, label, pcats, CELL_TYPE);
 }
@@ -786,8 +781,8 @@ int Rast_set_c_cat(const CELL * rast1, const CELL * rast2,
  *
  * \return
  */
-int Rast_set_f_cat(const FCELL * rast1, const FCELL * rast2,
-                   const char *label, struct Categories *pcats)
+int Rast_set_f_cat(const FCELL *rast1, const FCELL *rast2, const char *label,
+                   struct Categories *pcats)
 {
     return Rast_set_cat(rast1, rast2, label, pcats, FCELL_TYPE);
 }
@@ -806,20 +801,21 @@ int Rast_set_f_cat(const FCELL * rast1, const FCELL * rast2,
  * \return 0 if null value detected
  * \return 1 on success
  */
-int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
-                   const char *label, struct Categories *pcats)
+int Rast_set_d_cat(const DCELL *rast1, const DCELL *rast2, const char *label,
+                   struct Categories *pcats)
 {
     long len;
     DCELL dtmp1, dtmp2;
     int i;
 
-    /* DEBUG fprintf(stderr,"Rast_set_d_cat(rast1 = %p,rast2 = %p,label = '%s',pcats = %p)\n",
-       rast1,rast2,label,pcats); */
+    /* DEBUG fprintf(stderr,"Rast_set_d_cat(rast1 = %p,rast2 = %p,label =
+       '%s',pcats = %p)\n", rast1,rast2,label,pcats); */
     if (Rast_is_d_null_value(rast1))
         return 0;
     if (Rast_is_d_null_value(rast2))
         return 0;
-    /* DEBUG fprintf (stderr, "Rast_set_d_cat(): adding quant rule: %f %f %d %d\n", *rast1, *rast2, pcats->ncats, pcats->ncats); */
+    /* DEBUG fprintf (stderr, "Rast_set_d_cat(): adding quant rule: %f %f %d
+     * %d\n", *rast1, *rast2, pcats->ncats, pcats->ncats); */
     /* the set_cat() functions are used in many places to reset the labels
        for the range (or cat) with existing label. In this case we don't
        want to store both rules with identical range even though the result
@@ -830,8 +826,8 @@ int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
 
     for (i = 0; i < pcats->ncats; i++) {
         Rast_get_ith_d_cat(pcats, i, &dtmp1, &dtmp2);
-        if ((dtmp1 == *rast1 && dtmp2 == *rast2)
-            || (dtmp1 == *rast2 && dtmp2 == *rast1)) {
+        if ((dtmp1 == *rast1 && dtmp2 == *rast2) ||
+            (dtmp1 == *rast2 && dtmp2 == *rast1)) {
             if (pcats->labels[i] != NULL)
                 G_free(pcats->labels[i]);
             pcats->labels[i] = G_store(label);
@@ -841,32 +837,38 @@ int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
         }
     }
     /* when rule for this range does not exist */
-    /* DEBUG fprintf (stderr, "Rast_set_d_cat(): New rule: adding %d %p\n", i, pcats->labels); */
-    Rast_quant_add_rule(&pcats->q, *rast1, *rast2, pcats->ncats,
-                        pcats->ncats);
+    /* DEBUG fprintf (stderr, "Rast_set_d_cat(): New rule: adding %d %p\n", i,
+     * pcats->labels); */
+    Rast_quant_add_rule(&pcats->q, *rast1, *rast2, pcats->ncats, pcats->ncats);
     pcats->ncats++;
     if (pcats->nalloc < pcats->ncats) {
-        /* DEBUG fprintf (stderr, "Rast_set_d_cat(): need more space nalloc = %d ncats = %d\n", pcats->nalloc,pcats->ncats); */
+        /* DEBUG fprintf (stderr, "Rast_set_d_cat(): need more space nalloc = %d
+         * ncats = %d\n", pcats->nalloc,pcats->ncats); */
         len = (pcats->nalloc + 256) * sizeof(char *);
-        /* DEBUG fprintf (stderr, "Rast_set_d_cat(): allocating %d labels(%d)\n", pcats->nalloc + 256,(int)len); */
-        if (len != (int)len) {  /* make sure len doesn't overflow int */
+        /* DEBUG fprintf (stderr, "Rast_set_d_cat(): allocating %d
+         * labels(%d)\n", pcats->nalloc + 256,(int)len); */
+        if (len != (int)len) { /* make sure len doesn't overflow int */
             pcats->ncats--;
             return -1;
         }
-        /* DEBUG fprintf(stderr,"Rast_set_d_cat(): pcats->nalloc = %d, pcats->labels = (%p), len = %d\n",pcats->nalloc,pcats->labels,(int)len); */
+        /* DEBUG fprintf(stderr,"Rast_set_d_cat(): pcats->nalloc = %d,
+         * pcats->labels = (%p), len =
+         * %d\n",pcats->nalloc,pcats->labels,(int)len); */
         if (pcats->nalloc) {
-            /* DEBUG fprintf(stderr,"Rast_set_d_cat(): Realloc-ing pcats->labels (%p)\n",pcats->labels); */
-            pcats->labels =
-                (char **)G_realloc((char *)pcats->labels, (int)len);
+            /* DEBUG fprintf(stderr,"Rast_set_d_cat(): Realloc-ing pcats->labels
+             * (%p)\n",pcats->labels); */
+            pcats->labels = (char **)G_realloc((char *)pcats->labels, (int)len);
         }
         else {
-            /* DEBUG fprintf(stderr,"Rast_set_d_cat(): alloc-ing new labels pointer array\n"); */
+            /* DEBUG fprintf(stderr,"Rast_set_d_cat(): alloc-ing new labels
+             * pointer array\n"); */
             pcats->labels = (char **)G_malloc((int)len);
         }
         /* fflush(stderr); */
-        /* DEBUG fprintf (stderr, "Rast_set_d_cats(): allocating %d marks(%d)\n", pcats->nalloc + 256,(int)len); */
+        /* DEBUG fprintf (stderr, "Rast_set_d_cats(): allocating %d
+         * marks(%d)\n", pcats->nalloc + 256,(int)len); */
         len = (pcats->nalloc + 256) * sizeof(int);
-        if (len != (int)len) {  /* make sure len doesn't overflow int */
+        if (len != (int)len) { /* make sure len doesn't overflow int */
             pcats->ncats--;
             return -1;
         }
@@ -881,19 +883,19 @@ int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
     G_newlines_to_spaces(pcats->labels[pcats->ncats - 1]);
     G_strip(pcats->labels[pcats->ncats - 1]);
     /* DEBUG
-       fprintf (stderr, "%d %s\n", pcats->ncats - 1, pcats->labels[pcats->ncats - 1]);
+       fprintf (stderr, "%d %s\n", pcats->ncats - 1, pcats->labels[pcats->ncats
+       - 1]);
      */
     /* updates cats.num = max cat values. This is really just used in old
        raster programs, and I am doing it for backwards cmpatibility (Olga) */
-    if ((CELL) * rast1 > pcats->num)
-        pcats->num = (CELL) * rast1;
-    if ((CELL) * rast2 > pcats->num)
-        pcats->num = (CELL) * rast2;
+    if ((CELL)*rast1 > pcats->num)
+        pcats->num = (CELL)*rast1;
+    if ((CELL)*rast2 > pcats->num)
+        pcats->num = (CELL)*rast2;
     /* DEBUG fprintf(stderr,"Rast_set_d_cat(): done\n"); */
     /* DEBUG fflush(stderr); */
     return 1;
 }
-
 
 /*!
  * \brief Set a raster category label
@@ -911,8 +913,7 @@ int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
  * \return 1 on success
  */
 
-int Rast_set_cat(const void *rast1, const void *rast2,
-                 const char *label,
+int Rast_set_cat(const void *rast1, const void *rast2, const char *label,
                  struct Categories *pcats, RASTER_MAP_TYPE data_type)
 {
     DCELL val1, val2;
@@ -968,8 +969,7 @@ static void write_cats(const char *element, const char *name,
 
     fd = G_fopen_new(element, name);
     if (!fd)
-        G_fatal_error(_("Unable to open %s file for map <%s>"), element,
-                      name);
+        G_fatal_error(_("Unable to open %s file for map <%s>"), element, name);
 
     /* write # cats - note # indicate 3.0 or later */
     fprintf(fd, "# %ld categories\n", (long)cats->num);
@@ -979,8 +979,8 @@ static void write_cats(const char *element, const char *name,
 
     /* write format and coefficients */
     fprintf(fd, "%s\n", cats->fmt != NULL ? cats->fmt : "");
-    fprintf(fd, "%.2f %.2f %.2f %.2f\n",
-            cats->m1, cats->a1, cats->m2, cats->a2);
+    fprintf(fd, "%.2f %.2f %.2f %.2f\n", cats->m1, cats->a1, cats->m2,
+            cats->a2);
 
     /* if the map is integer or if this is a vector map, sort labels */
     if (strncmp(element, "dig", 3) == 0)
@@ -993,8 +993,7 @@ static void write_cats(const char *element, const char *name,
     /* write the cat numbers:label */
     for (i = 0; i < Rast_quant_nof_rules(&cats->q); i++) {
         descr = Rast_get_ith_d_cat(cats, i, &val1, &val2);
-        if ((cats->fmt && cats->fmt[0])
-            || (descr && descr[0])) {
+        if ((cats->fmt && cats->fmt[0]) || (descr && descr[0])) {
             if (val1 == val2) {
                 sprintf(str1, "%.10f", val1);
                 G_trim_decimal(str1);
@@ -1027,8 +1026,8 @@ static void write_cats(const char *element, const char *name,
  * \return "" on error
  * \return pointer to category description
  */
-char *Rast_get_ith_d_cat(const struct Categories *pcats,
-                         int i, DCELL * rast1, DCELL * rast2)
+char *Rast_get_ith_d_cat(const struct Categories *pcats, int i, DCELL *rast1,
+                         DCELL *rast2)
 {
     int index;
 
@@ -1055,8 +1054,8 @@ char *Rast_get_ith_d_cat(const struct Categories *pcats,
  * \return "" on error
  * \return pointer to category description
  */
-char *Rast_get_ith_f_cat(const struct Categories *pcats,
-                         int i, void *rast1, void *rast2)
+char *Rast_get_ith_f_cat(const struct Categories *pcats, int i, void *rast1,
+                         void *rast2)
 {
     RASTER_MAP_TYPE data_type = FCELL_TYPE;
     char *tmp;
@@ -1082,8 +1081,8 @@ char *Rast_get_ith_f_cat(const struct Categories *pcats,
  * \return "" on error
  * \return pointer to category description
  */
-char *Rast_get_ith_c_cat(const struct Categories *pcats,
-                         int i, void *rast1, void *rast2)
+char *Rast_get_ith_c_cat(const struct Categories *pcats, int i, void *rast1,
+                         void *rast2)
 {
     RASTER_MAP_TYPE data_type = CELL_TYPE;
     char *tmp;
@@ -1317,10 +1316,10 @@ static int cmp(const void *aa, const void *bb)
     DCELL min_rast1, min_rast2, max_rast1, max_rast2;
     CELL index;
 
-    Rast_quant_get_ith_rule(&(save_cats.q), *a,
-                            &min_rast1, &max_rast1, &index, &index);
-    Rast_quant_get_ith_rule(&(save_cats.q), *b,
-                            &min_rast2, &max_rast2, &index, &index);
+    Rast_quant_get_ith_rule(&(save_cats.q), *a, &min_rast1, &max_rast1, &index,
+                            &index);
+    Rast_quant_get_ith_rule(&(save_cats.q), *b, &min_rast2, &max_rast2, &index,
+                            &index);
     if (min_rast1 < min_rast2)
         return -1;
     if (min_rast1 > min_rast2)

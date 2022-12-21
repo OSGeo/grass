@@ -1,4 +1,3 @@
-
 /**********************************************************************
  *
  *  Rast3d_read_history (name, mapset, hist)
@@ -35,13 +34,13 @@
 #include <grass/raster.h>
 
 /*simple error message */
-void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
+void SimpleErrorMessage(FILE *fd, const char *name, const char *mapset)
 {
     if (fd != NULL)
         fclose(fd);
 
-    G_warning(_("can't get history information for [%s] in mapset [%s]"),
-              name, mapset);
+    G_warning(_("can't get history information for [%s] in mapset [%s]"), name,
+              mapset);
     return;
 }
 
@@ -79,7 +78,6 @@ int Rast3d_read_history(const char *name, const char *mapset,
     SimpleErrorMessage(fp, name, mapset);
     return -1;
 }
-
 
 /*!
  * \brief write raster3d History file
