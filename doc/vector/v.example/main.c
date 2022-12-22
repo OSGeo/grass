@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.example
@@ -31,7 +30,7 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     int i, type, cat, ncols, nrows, col, more, open3d;
     char *mapset, sql[200];
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *old, *new;
     dbDriver *driver;
     dbHandle handle;
@@ -61,11 +60,13 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    /* Create and initialize struct's where to store points/lines and categories */
+    /* Create and initialize struct's where to store
+       points/lines and categories
+     */
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    /* Check 1) output is legal vector name; 2) if can find input map; 
+    /* Check 1) output is legal vector name; 2) if can find input map;
        3) if input was found in current mapset, check if input != output.
        lib/vector/Vlib/legal_vname.c
      */
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
     if ((mapset = (char *)G_find_vector2(old->answer, "")) == NULL)
         G_fatal_error(_("Vector map <%s> not found"), old->answer);
 
-    /* Predetermine level at which a map will be opened for reading 
+    /* Predetermine level at which a map will be opened for reading
        lib/vector/Vlib/open.c
      */
     if (Vect_set_open_level(2))
@@ -109,13 +110,13 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Database connection not defined for layer %d"), 1);
     }
 
-    /* Output information useful for debuging 
+    /* Output information useful for debuging
        include/vect/dig_structs.h
      */
     G_debug(1,
-            "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>;\n",
-            Fi->number, Fi->name, Fi->driver, Fi->database, Fi->table,
-            Fi->key);
+            "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; "
+            "Table:<%s>; Key:<%s>;\n",
+            Fi->number, Fi->name, Fi->driver, Fi->database, Fi->table, Fi->key);
 
     /* Prepeare strings for use in db_* calls */
     db_init_string(&dbsql);
@@ -170,8 +171,8 @@ int main(int argc, char *argv[])
             G_debug(1, "SQL: \"%s\"", sql);
             db_set_string(&dbsql, sql);
             /* Now execute query */
-            if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL)
-                != DB_OK)
+            if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL) !=
+                DB_OK)
                 G_warning(_("Unable to get attribute data for cat %d"), cat);
             else {
                 /* Result count */
@@ -181,7 +182,8 @@ int main(int argc, char *argv[])
                 /* Let's output every columns name and value */
                 while (1) {
                     if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-                        G_warning(_("Error while retrieving database record for cat %d"),
+                        G_warning(_("Error while retrieving database record "
+                                    "for cat %d"),
                                   cat);
                         break;
                     }
@@ -206,13 +208,14 @@ int main(int argc, char *argv[])
     Fin = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
     driver = db_start_driver_open_database(Fin->driver, Fin->database);
     G_debug(1,
-            "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>;\n",
+            "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; "
+            "Table:<%s>; Key:<%s>;\n",
             Fin->number, Fin->name, Fin->driver, Fin->database, Fin->table,
             Fin->key);
 
     /* Let's copy attribute table data */
-    if (db_copy_table(Fi->driver, Fi->database, Fi->table,
-                      Fin->driver, Vect_subst_var(Fin->database, &Out),
+    if (db_copy_table(Fi->driver, Fi->database, Fi->table, Fin->driver,
+                      Vect_subst_var(Fin->database, &Out),
                       Fin->table) == DB_FAILED)
         G_warning(_("Unable to copy attribute table to vector map <%s>"),
                   new->answer);
