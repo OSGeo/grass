@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.cluster
@@ -25,18 +24,16 @@
 #include <grass/glocale.h>
 #include <grass/kdtree.h>
 
-#define CL_DBSCAN	1
-#define CL_DBSCAN2	2
-#define CL_DENSE	3
-#define CL_OPTICS	4
-#define CL_OPTICS2	5
+#define CL_DBSCAN        1
+#define CL_DBSCAN2       2
+#define CL_DENSE         3
+#define CL_OPTICS        4
+#define CL_OPTICS2       5
 
-#define GET_PARENT(p, c) ((p) = (int) (((c) - 2) / 3 + 1))
-#define GET_CHILD(c, p) ((c) = (int) (((p) * 3) - 1))
+#define GET_PARENT(p, c) ((p) = (int)(((c)-2) / 3 + 1))
+#define GET_CHILD(c, p)  ((c) = (int)(((p)*3) - 1))
 
-
-struct cl_pnt
-{
+struct cl_pnt {
     int uid;
     int prevpnt;
     double cd;
@@ -126,7 +123,6 @@ int main(int argc, char *argv[])
     flag_topo = G_define_standard_flag(G_FLG_V_TOPO);
 
     flag_attr = G_define_standard_flag(G_FLG_V_TABLE);
-
 
     /* options and flags parser */
     if (G_parser(argc, argv))
@@ -236,8 +232,8 @@ int main(int argc, char *argv[])
 
     noutliers = nclusters = 0;
     if (clmethod == CL_DBSCAN) {
-        /* DBSCAN 
-         * the neighbors of each point 
+        /* DBSCAN
+         * the neighbors of each point
          * with at least minpnts neighbors within distance (epsilon)
          * are added to a cluster */
 
@@ -392,8 +388,7 @@ int main(int argc, char *argv[])
         G_percent(npoints, npoints, 4);
 
         if (nclusters == 0) {
-            G_message(_("No clusters found, adjust option %s"),
-                      dist_opt->key);
+            G_message(_("No clusters found, adjust option %s"), dist_opt->key);
             Vect_close(&In);
             Vect_close(&Out);
             Vect_delete(output->answer);
@@ -604,8 +599,7 @@ int main(int argc, char *argv[])
         G_percent(npoints, npoints, 4);
 
         if (nclusters == 0) {
-            G_message(_("No clusters found, adjust option %s"),
-                      dist_opt->key);
+            G_message(_("No clusters found, adjust option %s"), dist_opt->key);
             Vect_close(&In);
             Vect_close(&Out);
             Vect_delete(output->answer);
@@ -665,8 +659,8 @@ int main(int argc, char *argv[])
     }
     else if (clmethod == CL_OPTICS) {
         /* OPTICS
-         * each pair of points is either directly connected or 
-         * connected by a chain of other points 
+         * each pair of points is either directly connected or
+         * connected by a chain of other points
          * for each unprocessed point p
          * mark as processed, append to output list
          * core distance of p: distance to the k-th neighbor
@@ -675,12 +669,10 @@ int main(int argc, char *argv[])
          * -> needs epsilon, otherwise always coredist(p)
          * for each unprocessed neighbor q
          * if q has not been reached yet, put q in min heap
-         * if q's reachability can be reduced, put q with new reachability in min heap
-         * proceed with point with smallest reachability
-         * clusters:
-         * plot x = position in output list, y = reachability
-         * clusters = valleys of reachability in plot
-         * hierarchical clusters: valleys in valleys
+         * if q's reachability can be reduced, put q with new reachability in
+         * min heap proceed with point with smallest reachability clusters: plot
+         * x = position in output list, y = reachability clusters = valleys of
+         * reachability in plot hierarchical clusters: valleys in valleys
          */
 
         double *kd;
@@ -751,14 +743,14 @@ int main(int argc, char *argv[])
 
             clp[i].cd = kd[minpnts - 1];
             /* no reachability for the seed point !!! */
-            clp[i].reach = clp[i].cd;   /* ok ? */
+            clp[i].reach = clp[i].cd; /* ok ? */
             olist[nout++] = i;
 
             /* initialize heap */
             newrd = clp[i].cd;
             for (j = 0; j < kdfound; j++) {
                 if (clp[clidx[ki[j]]].cd < 0) {
-                    /* deviation from OPTICS, 
+                    /* deviation from OPTICS,
                      * creates nicer connectivity graph */
                     newrd = kd[j];
                     if (clp[clidx[ki[j]]].reach < 0 ||
@@ -791,7 +783,7 @@ int main(int argc, char *argv[])
                     if (heapsize >= npoints)
                         G_fatal_error("Heap is too large");
                     if (clp[clidx[ki[j]]].cd < 0) {
-                        /* deviation from OPTICS, 
+                        /* deviation from OPTICS,
                          * creates nicer connectivity graph */
                         newrd = kd[j];
                         if (clp[clidx[ki[j]]].reach < 0 ||
@@ -851,10 +843,10 @@ int main(int argc, char *argv[])
          *   get p's core distance
          *   get p's neighbors
          *   for each neighbor q
-         *     new reachability of q: dist(p, q) 
+         *     new reachability of q: dist(p, q)
          *     if q has been processed
          *       new reachability of q: max(coredist(q), dist(p, q))
-         *     set or reduce q's reachability 
+         *     set or reduce q's reachability
          *     connect q to p if q's reachability can be updated
          */
 
@@ -912,7 +904,8 @@ int main(int argc, char *argv[])
                     /* no link - back link */
                     if (nextpnt[uid] == ki[j]) {
                         if (coredist[ki[j]] == -1) {
-                            G_fatal_error(_("Neighbor point's core dist is -1"));
+                            G_fatal_error(
+                                _("Neighbor point's core dist is -1"));
                         }
                         if (coredist[ki[j]] < coredist[uid]) {
                             nextpnt[ki[j]] = -1;
@@ -1018,19 +1011,17 @@ int main(int argc, char *argv[])
         G_percent(nlines, nlines, 4);
     }
     else if (clmethod == CL_DENSE) {
-        /* MATRUSKA 
+        /* MATRUSKA
          * clusters in clusters in clusters ...
-         * calculate core density = distance to (minpnts - 1) for each point 
+         * calculate core density = distance to (minpnts - 1) for each point
          * sort points ascending by core density
          * for each point in sorted list
-         *   if point does not have a cluster id 
-         *     start new cluster, cluster reachability is core density of this point
-         *     connect all points within cluster reachability 
-         *     add all connected points to list
-         *     while list is not empty
-         *       remove last point from list
-         *       connect all points within cluster reachability 
-         *       add all connected points to list
+         *   if point does not have a cluster id
+         *     start new cluster, cluster reachability is core density of this
+         * point connect all points within cluster reachability add all
+         * connected points to list while list is not empty remove last point
+         * from list connect all points within cluster reachability add all
+         * connected points to list
          *       */
         int *clidx;
         double *kd;
@@ -1087,7 +1078,6 @@ int main(int argc, char *argv[])
             clp[j].cd = cd;
             clidx[clp[j].uid] = j;
             kdcount++;
-
         }
         G_percent(npoints, npoints, 4);
 
@@ -1147,8 +1137,8 @@ int main(int argc, char *argv[])
                     if (kd[j] <= cd && cid[ki[j]] == 0) {
                         cid[ki[j]] = cat;
                         if (clidx[ki[j]] < 0)
-                            G_fatal_error
-                                ("expand cluster ngbrs: clidx[ki[j]] < 0");
+                            G_fatal_error(
+                                "expand cluster ngbrs: clidx[ki[j]] < 0");
                         G_ilist_add(CList, clidx[ki[j]]);
                     }
                 }
@@ -1282,7 +1272,8 @@ int drop_pt(void)
     if (parent < heapsize) {
         heapidx[parent] = heapidx[heapsize];
 
-        /* sift up last swapped point, only necessary if hole moved to heap end */
+        /* sift up last swapped point, only necessary if hole moved to heap end
+         */
         sift_up(parent);
     }
 

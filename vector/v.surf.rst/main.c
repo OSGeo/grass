@@ -1,11 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       v.surf.rst
  * AUTHOR(S):    H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
  *               University of Illinois
  *               I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
- *               Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+ *               Michael Shapiro, U.S. Army Construction Engineering Research
+ *               Laboratory
  *               modified by McCauley in August 1995
  *               modified by Mitasova in August 1995
  *               modified by Mitasova in November 1999 (dmax, timestamp update)
@@ -45,9 +45,9 @@
 
 #include "surf.h"
 
-#define SCIK1 1                 /*100000 */
-#define SCIK2 1                 /*100000 */
-#define SCIK3 1                 /*100000 */
+#define SCIK1 1 /*100000 */
+#define SCIK2 1 /*100000 */
+#define SCIK3 1 /*100000 */
 
 static double /* pargr */ ns_res, ew_res;
 static double dmin, dmax, ertre;
@@ -61,8 +61,8 @@ static struct tree_info *info;
 static void create_temp_files(void);
 static void clean(void);
 
-static double *az = NULL, *adx = NULL, *ady = NULL, *adxx = NULL, *adyy =
-    NULL, *adxy = NULL;
+static double *az = NULL, *adx = NULL, *ady = NULL, *adxx = NULL, *adyy = NULL,
+              *adxy = NULL;
 static double /* error */ ertot, ertre, zminac, zmaxac, zmult;
 struct multtree *root;
 
@@ -129,18 +129,15 @@ int main(int argc, char *argv[])
     int threads;
 
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *field, *zcol, *wheresql, *scol, *elev, *slope,
             *aspect, *pcurv, *tcurv, *mcurv, *treefile, *overfile, *maskmap,
             *dmin, *dmax, *zmult, *fi, *rsm, *segmax, *npmin, *cvdev, *devi,
             *theta, *scalex, *threads;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *deriv, *cprght, *cv;
     } flag;
-
 
     G_gisinit(argv[0]);
 
@@ -186,11 +183,12 @@ int main(int argc, char *argv[])
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->key = "zcolumn";
     parm.zcol->required = NO;
-    parm.zcol->label =
-        _("Name of the attribute column with values to be used for approximation");
+    parm.zcol->label = _("Name of the attribute column with values to be used "
+                         "for approximation");
     parm.zcol->description =
-        _("If not given and input is 2D vector map then category values are used. "
-         "If input is 3D vector map then z-coordinates are used.");
+        _("If not given and input is 2D vector map then category values are "
+          "used. "
+          "If input is 3D vector map then z-coordinates are used.");
     parm.zcol->guisection = _("Parameters");
 
     parm.wheresql = G_define_standard_option(G_OPT_DB_WHERE);
@@ -199,8 +197,7 @@ int main(int argc, char *argv[])
     parm.elev = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.elev->key = "elevation";
     parm.elev->required = NO;
-    parm.elev->description =
-        _("Name for output surface elevation raster map");
+    parm.elev->description = _("Name for output surface elevation raster map");
     parm.elev->guisection = _("Outputs");
 
     parm.slope = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -218,8 +215,7 @@ int main(int argc, char *argv[])
     parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.pcurv->key = "pcurvature";
     parm.pcurv->required = NO;
-    parm.pcurv->description =
-        _("Name for output profile curvature raster map");
+    parm.pcurv->description = _("Name for output profile curvature raster map");
     parm.pcurv->guisection = _("Outputs");
 
     parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -322,16 +318,16 @@ int main(int argc, char *argv[])
     parm.dmin->key = "dmin";
     parm.dmin->type = TYPE_DOUBLE;
     parm.dmin->required = NO;
-    parm.dmin->description =
-        _("Minimum distance between points (to remove almost identical points)");
+    parm.dmin->description = _(
+        "Minimum distance between points (to remove almost identical points)");
     parm.dmin->guisection = _("Parameters");
 
     parm.dmax = G_define_option();
     parm.dmax->key = "dmax";
     parm.dmax->type = TYPE_DOUBLE;
     parm.dmax->required = NO;
-    parm.dmax->description =
-        _("Maximum distance between points on isoline (to insert additional points)");
+    parm.dmax->description = _("Maximum distance between points on isoline (to "
+                               "insert additional points)");
     parm.dmax->guisection = _("Parameters");
 
     parm.zmult = G_define_option();
@@ -411,45 +407,51 @@ int main(int argc, char *argv[])
 
     sscanf(parm.threads->answer, "%d", &threads);
     if (threads < 1) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads will be set on <%d>"),
+        G_warning(_("<%d> is not valid number of threads. Number of threads "
+                    "will be set on <%d>"),
                   threads, abs(threads));
         threads = abs(threads);
     }
     if (parm.devi->answer && threads > 1) {
-        G_warning(_("Parallel computation disabled when deviation output is required"));
+        G_warning(_(
+            "Parallel computation disabled when deviation output is required"));
         threads = 1;
     }
     if (parm.cvdev->answer && threads > 1) {
-        G_warning(_("Parallel computation disabled when cross validation output is required"));
+        G_warning(_("Parallel computation disabled when cross validation "
+                    "output is required"));
         threads = 1;
     }
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else
     if (threads > 1)
-        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel computation is disabled."));
+        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
+                    "computation is disabled."));
 #endif
 
     if (devi) {
         create_devi = true;
         if (Vect_legal_filename(devi) == -1)
-            G_fatal_error(_("Output vector map name <%s> is not valid map name"),
-                          devi);
+            G_fatal_error(
+                _("Output vector map name <%s> is not valid map name"), devi);
     }
     if (cvdev) {
         if (Vect_legal_filename(cvdev) == -1)
-            G_fatal_error(_("Output vector map name <%s> is not valid map name"),
-                          cvdev);
+            G_fatal_error(
+                _("Output vector map name <%s> is not valid map name"), cvdev);
     }
     if (treefile) {
         if (Vect_legal_filename(treefile) == -1)
-            G_fatal_error(_("Output vector map name <%s> is not valid map name"),
-                          treefile);
+            G_fatal_error(
+                _("Output vector map name <%s> is not valid map name"),
+                treefile);
     }
     if (overfile) {
         if (Vect_legal_filename(overfile) == -1)
-            G_fatal_error(_("Output vector map name <%s> is not valid map name"),
-                          overfile);
+            G_fatal_error(
+                _("Output vector map name <%s> is not valid map name"),
+                overfile);
     }
     /*    if (treefile)
        Vect_check_input_output_name(input, treefile, G_FATAL_EXIT);
@@ -457,10 +459,9 @@ int main(int argc, char *argv[])
        if (overfile)
        Vect_check_input_output_name(input, overfile, G_FATAL_EXIT);
      */
-    if ((elev == NULL) && (pcurv == NULL) && (tcurv == NULL)
-        && (mcurv == NULL)
-        && (slope == NULL) && (aspect == NULL) && (devi == NULL)
-        && (cvdev == NULL))
+    if ((elev == NULL) && (pcurv == NULL) && (tcurv == NULL) &&
+        (mcurv == NULL) && (slope == NULL) && (aspect == NULL) &&
+        (devi == NULL) && (cvdev == NULL))
         G_warning(_("You are not outputting any raster or vector maps"));
 
     cond2 = ((pcurv != NULL) || (tcurv != NULL) || (mcurv != NULL));
@@ -470,10 +471,12 @@ int main(int argc, char *argv[])
     cv = flag.cv->answer;
 
     if ((cv && cvdev == NULL) || (!(cv) && cvdev != NULL))
-        G_fatal_error(_("Both cross-validation options (-c flag and cvdev vector output) must be specified"));
+        G_fatal_error(_("Both cross-validation options (-c flag and cvdev "
+                        "vector output) must be specified"));
 
     if ((elev != NULL || cond1 || cond2 || devi != NULL) && cv)
-        G_fatal_error(_("The cross-validation cannot be computed simultaneously with output raster or devi file"));
+        G_fatal_error(_("The cross-validation cannot be computed "
+                        "simultaneously with output raster or devi file"));
 
     ertre = 0.1;
     sscanf(parm.dmax->answer, "%lf", &dmax);
@@ -491,7 +494,8 @@ int main(int argc, char *argv[])
     if (parm.scalex->answer) {
         sscanf(parm.scalex->answer, "%lf", &scalex);
         if (!parm.theta->answer)
-            G_fatal_error(_("Using anisotropy - both theta and scalex have to be specified"));
+            G_fatal_error(_("Using anisotropy - both theta and scalex have to "
+                            "be specified"));
     }
 
     if (parm.rsm->answer) {
@@ -499,21 +503,22 @@ int main(int argc, char *argv[])
         if (rsm < 0.0)
             G_fatal_error("Smoothing must be a positive value");
         if (scol != NULL)
-            G_warning(_("Both smatt and smooth options specified - using constant"));
+            G_warning(
+                _("Both smatt and smooth options specified - using constant"));
     }
     else {
         sscanf(SMOOTH, "%lf", &rsm);
         if (scol != NULL)
-            rsm = -1;           /* used in InterpLib to indicate variable smoothing */
+            rsm = -1; /* used in InterpLib to indicate variable smoothing */
     }
-
 
     if (npmin > MAXPOINTS - 50) {
-        G_warning(_("The computation will last too long - lower npmin is suggested"));
-        KMAX2 = 2 * npmin;      /* was: KMAX2 = npmin + 50; */
+        G_warning(
+            _("The computation will last too long - lower npmin is suggested"));
+        KMAX2 = 2 * npmin; /* was: KMAX2 = npmin + 50; */
     }
     else
-        KMAX2 = 2 * npmin;      /* was: KMAX2 = MAXPOINTS; fixed by JH in 12/01 */
+        KMAX2 = 2 * npmin; /* was: KMAX2 = MAXPOINTS; fixed by JH in 12/01 */
 
     /* handling of KMAX2 in GRASS4 v.surf.rst
        if (npmin > MAXPOINTS - 50)
@@ -553,14 +558,12 @@ int main(int argc, char *argv[])
             }
         }
     }
-    if ((data =
-         quad_data_new(x_orig, y_orig, xm, ym, n_rows, n_cols, 0,
-                       KMAX)) == NULL)
+    if ((data = quad_data_new(x_orig, y_orig, xm, ym, n_rows, n_cols, 0,
+                              KMAX)) == NULL)
         G_fatal_error(_("Unable to create %s"), "quaddata");
-    if ((functions =
-         MT_functions_new(quad_compare, quad_divide_data, quad_add_data,
-                          quad_intersect, quad_division_check,
-                          quad_get_points)) == NULL)
+    if ((functions = MT_functions_new(
+             quad_compare, quad_divide_data, quad_add_data, quad_intersect,
+             quad_division_check, quad_get_points)) == NULL)
         G_fatal_error(_("Unable to create %s"), "quadfunc");
 
     if ((tree = MT_tree_new(data, NULL, NULL, 0)) == NULL)
@@ -574,7 +577,8 @@ int main(int argc, char *argv[])
     if (open_check < 1)
         G_fatal_error(_("Unable to open vector map <%s>"), input);
     /*    if (open_check < 2)
-       G_fatal_error(_("You first need to run v.build on vector map <%s>"), input);
+       G_fatal_error(_("You first need to run v.build on vector map <%s>"),
+       input);
      */
 
     /* get value used for approximation */
@@ -585,15 +589,19 @@ int main(int argc, char *argv[])
 
     if (Vect_is_3d(&Map)) {
         if (!with_z)
-            G_verbose_message(_("Input is 3D: using attribute values instead of z-coordinates for approximation"));
+            G_verbose_message(_("Input is 3D: using attribute values instead "
+                                "of z-coordinates for approximation"));
         else
-            G_verbose_message(_("Input is 3D: using z-coordinates for approximation"));
+            G_verbose_message(
+                _("Input is 3D: using z-coordinates for approximation"));
     }
-    else {                      /* 2D */
+    else { /* 2D */
         if (parm.zcol->answer)
-            G_verbose_message(_("Input is 2D: using attribute values for approximation"));
+            G_verbose_message(
+                _("Input is 2D: using attribute values for approximation"));
         else
-            G_verbose_message(_("Input is 2D: using category values for approximation"));
+            G_verbose_message(
+                _("Input is 2D: using category values for approximation"));
     }
 
     /* we can't read the input file's timestamp as they don't exist in   */
@@ -649,22 +657,19 @@ int main(int argc, char *argv[])
     create_temp_files();
 
     IL_init_params_2d(&params, NULL, 1, 1, zmult, KMIN, KMAX, maskmap, n_rows,
-                      n_cols, az, adx, ady, adxx, adyy, adxy, fi, KMAX2,
-                      SCIK1, SCIK2, SCIK3, rsm, elev, slope, aspect, pcurv,
-                      tcurv, mcurv, dmin, x_orig, y_orig, deriv, theta,
-                      scalex, Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy, Tmp_fd_xx,
-                      Tmp_fd_yy, Tmp_fd_xy, create_devi, NULL, cv,
-                      parm.wheresql->answer);
+                      n_cols, az, adx, ady, adxx, adyy, adxy, fi, KMAX2, SCIK1,
+                      SCIK2, SCIK3, rsm, elev, slope, aspect, pcurv, tcurv,
+                      mcurv, dmin, x_orig, y_orig, deriv, theta, scalex,
+                      Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy,
+                      Tmp_fd_xy, create_devi, NULL, cv, parm.wheresql->answer);
 
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
-                    IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst,
-                    IL_crstg, IL_write_temp_2d);
+                    IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
+                    IL_write_temp_2d);
 
-    totsegm =
-        IL_vector_input_data_2d(&params, &Map, with_z ? 0 : field,
-                                zcol, scol,
-                                info, &xmin, &xmax,
-                                &ymin, &ymax, &zmin, &zmax, &NPOINT, &dmax);
+    totsegm = IL_vector_input_data_2d(&params, &Map, with_z ? 0 : field, zcol,
+                                      scol, info, &xmin, &xmax, &ymin, &ymax,
+                                      &zmin, &zmax, &NPOINT, &dmax);
     if (totsegm <= 0) {
         clean();
         G_fatal_error(_("Input failed"));
@@ -745,20 +750,19 @@ int main(int argc, char *argv[])
     ertot = 0.;
 #if defined(_OPENMP)
     G_message(_("Processing segments in parallel..."));
-    if (IL_interp_segments_2d_parallel(&params, info, info->root, bitmask,
-                                       zmin, zmax, &zminac, &zmaxac, &gmin,
-                                       &gmax, &c1min, &c1max, &c2min, &c2max,
-                                       &ertot, totsegm, n_cols, dnorm,
-                                       threads) < 0) {
+    if (IL_interp_segments_2d_parallel(&params, info, info->root, bitmask, zmin,
+                                       zmax, &zminac, &zmaxac, &gmin, &gmax,
+                                       &c1min, &c1max, &c2min, &c2max, &ertot,
+                                       totsegm, n_cols, dnorm, threads) < 0) {
         clean();
         G_fatal_error(_("Interp_segmets failed"));
     }
 #else
     G_message(_("Processing segments..."));
-    if (IL_interp_segments_2d(&params, info, info->root, bitmask,
-                              zmin, zmax, &zminac, &zmaxac, &gmin, &gmax,
-                              &c1min, &c1max, &c2min, &c2max, &ertot, totsegm,
-                              n_cols, dnorm) < 0) {
+    if (IL_interp_segments_2d(&params, info, info->root, bitmask, zmin, zmax,
+                              &zminac, &zmaxac, &gmin, &gmax, &c1min, &c1max,
+                              &c2min, &c2max, &ertot, totsegm, n_cols,
+                              dnorm) < 0) {
         clean();
         G_fatal_error(_("Interp_segmets failed"));
     }
@@ -778,7 +782,8 @@ int main(int argc, char *argv[])
                       dtens, 1, NPOINT);
     if (ii < 0) {
         clean();
-        G_fatal_error(_("Unable to write raster maps - try to increase resolution"));
+        G_fatal_error(
+            _("Unable to write raster maps - try to increase resolution"));
     }
 
     G_free(zero_array_cell);
@@ -837,10 +842,8 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
-
-int print_tree(struct multtree *tree,
-               double x_orig, double y_orig, struct Map_info *Map)
+int print_tree(struct multtree *tree, double x_orig, double y_orig,
+               struct Map_info *Map)
 {
     double xarray[5], yarray[5], zarray[5];
     struct line_pnts *Points;
@@ -907,7 +910,7 @@ static FILE *create_temp_file(const char *name, char **tmpname)
 
 static void create_temp_files(void)
 {
-    zero_array_cell = (FCELL *) G_calloc(n_cols, sizeof(FCELL));
+    zero_array_cell = (FCELL *)G_calloc(n_cols, sizeof(FCELL));
 
     Tmp_fd_z = create_temp_file(elev, &Tmp_file_z);
     Tmp_fd_dx = create_temp_file(slope, &Tmp_file_dx);

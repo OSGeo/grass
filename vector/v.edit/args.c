@@ -65,8 +65,7 @@ int parser(int argc, char *argv[], struct GParams *params,
                _("Move vertex of selected vector lines"),
                _("Remove vertex from selected vector lines"),
                _("Add new vertex to selected vector lines"),
-               _("Merge selected vector lines"),
-               _("Break/split vector lines"),
+               _("Merge selected vector lines"), _("Break/split vector lines"),
                _("Select lines and print their ID's"),
                _("Set new categories to selected vector features "
                  "for defined layer"),
@@ -75,16 +74,16 @@ int parser(int argc, char *argv[], struct GParams *params,
                _("Copy selected features"),
                _("Snap vector features in given threshold"),
                _("Flip direction of selected vector lines"),
-               _("Connect two lines"),
-               _("Extend lines"),
-               _("Extend start nodes"),
-               _("Extend end nodes"),
+               _("Connect two lines"), _("Extend lines"),
+               _("Extend start nodes"), _("Extend end nodes"),
                _("Z bulk-labeling (automated assignment of z coordinate to "
                  "vector lines)"),
                _("Change feature type (point<->centroid, line<->boundary)"),
-               _("Delete selected areas from vector map (based on selected centroids)"));
+               _("Delete selected areas from vector map (based on selected "
+                 "centroids)"));
     params->tool->descriptions = desc_tool;
-    params->tool->options = "create,add,delete,copy,move,flip,catadd,catdel,"
+    params->tool->options =
+        "create,add,delete,copy,move,flip,catadd,catdel,"
         "merge,break,snap,connect,extend,extendstart,extendend,chtype,"
         "vertexadd,vertexdel,vertexmove,areadel,zbulk,select";
 
@@ -179,14 +178,15 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->snap->type = TYPE_STRING;
     params->snap->options = "no,node,vertex";
     params->snap->description =
-        _("Snap added or modified features in the given threshold to the nearest existing feature");
+        _("Snap added or modified features in the given threshold to the "
+          "nearest existing feature");
     desc_snap = NULL;
     G_asprintf(&desc_snap,
                "no;%s;"
                "node;%s;"
                "vertex;%s",
-               _("Not apply snapping"),
-               _("Snap only to node"), _("Allow snapping also to vertex"));
+               _("Not apply snapping"), _("Snap only to node"),
+               _("Allow snapping also to vertex"));
     params->snap->descriptions = desc_snap;
     params->snap->answer = "no";
 
@@ -232,7 +232,8 @@ int parser(int argc, char *argv[], struct GParams *params,
     if (params->poly->answers != NULL) {
         int i = 0;
 
-        while (params->poly->answers[i++]) ;
+        while (params->poly->answers[i++])
+            ;
 
         if (i < 6)
             G_fatal_error(_("Polygon must have at least 3 coordinate pairs"));
@@ -313,45 +314,45 @@ int parser(int argc, char *argv[], struct GParams *params,
     }
 
     if ((*action_mode != MODE_CREATE && *action_mode != MODE_ADD &&
-         *action_mode != MODE_ZBULK) && (params->cat->answers == NULL) &&
-        (params->coord->answers == NULL) && (params->poly->answers == NULL) &&
-        (params->id->answers == NULL) && (params->bbox->answers == NULL) &&
-        (params->where->answer == NULL) && (params->query->answer == NULL)) {
+         *action_mode != MODE_ZBULK) &&
+        (params->cat->answers == NULL) && (params->coord->answers == NULL) &&
+        (params->poly->answers == NULL) && (params->id->answers == NULL) &&
+        (params->bbox->answers == NULL) && (params->where->answer == NULL) &&
+        (params->query->answer == NULL)) {
         G_fatal_error(_("At least one option from %s must be specified"),
                       "cats, ids, coords, bbox, polygon, where, query");
     }
 
     if (*action_mode == MODE_MOVE || *action_mode == MODE_VERTEX_MOVE) {
         if (params->move->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"),
-                          params->tool->answer, params->move->key);
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->move->key);
         }
     }
 
-    if (*action_mode == MODE_VERTEX_ADD ||
-        *action_mode == MODE_VERTEX_DELETE ||
+    if (*action_mode == MODE_VERTEX_ADD || *action_mode == MODE_VERTEX_DELETE ||
         *action_mode == MODE_VERTEX_MOVE) {
         if (params->coord->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"),
-                          params->tool->answer, params->coord->key);
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->coord->key);
         }
     }
 
     if (*action_mode == MODE_CATADD || *action_mode == MODE_CATDEL) {
         if (params->cat->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"),
-                          params->tool->answer, params->cat->key);
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->cat->key);
         }
     }
 
     if (*action_mode == MODE_ZBULK) {
         if (params->bbox->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"),
-                          params->tool->answer, params->bbox->key);
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->bbox->key);
         }
         if (params->zbulk->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"),
-                          params->tool->answer, params->zbulk->key);
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->zbulk->key);
         }
     }
 

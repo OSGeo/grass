@@ -10,10 +10,9 @@
  * return 1 if no SRS available
  * return 2 if SRS available but unreadable */
 int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
-                   struct Key_Value **proj_info,
-                   struct Key_Value **proj_units,
-                   char **proj_srid, char **proj_wkt,
-                   char *geom_col, int verbose)
+                   struct Key_Value **proj_info, struct Key_Value **proj_units,
+                   char **proj_srid, char **proj_wkt, char *geom_col,
+                   int verbose)
 {
     OGRSpatialReferenceH hSRS;
 
@@ -33,8 +32,9 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
         igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, geom_col);
         if (igeom < 0)
-            G_fatal_error(_("Geometry column <%s> not found in input layer <%s>"),
-                          geom_col, OGR_L_GetName(Ogr_layer));
+            G_fatal_error(
+                _("Geometry column <%s> not found in input layer <%s>"),
+                geom_col, OGR_L_GetName(Ogr_layer));
         Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
         hSRS = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
     }
@@ -42,7 +42,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
         hSRS = OGR_L_GetSpatialRef(Ogr_layer);
     }
 #else
-    hSRS = OGR_L_GetSpatialRef(Ogr_layer);      /* should not be freed later */
+    hSRS = OGR_L_GetSpatialRef(Ogr_layer); /* should not be freed later */
 #endif
 
     /* verbose is used only when comparing input SRS to GRASS projection,
@@ -69,16 +69,18 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
      * xy CRS */
     if (hSRS == NULL) {
         if (verbose) {
-            G_important_message(_("No projection information available for layer <%s>"),
-                                OGR_L_GetName(Ogr_layer));
+            G_important_message(
+                _("No projection information available for layer <%s>"),
+                OGR_L_GetName(Ogr_layer));
         }
 
         return 1;
     }
 
     if (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS)) {
-        G_important_message(_("Projection for layer <%s> does not contain a valid SRS"),
-                            OGR_L_GetName(Ogr_layer));
+        G_important_message(
+            _("Projection for layer <%s> does not contain a valid SRS"),
+            OGR_L_GetName(Ogr_layer));
 
         if (verbose) {
             char *wkt = NULL;
@@ -113,7 +115,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 
         if (OSRIsProjected(hSRS))
             authkey = "PROJCS";
-        else                    /* is geographic */
+        else /* is geographic */
             authkey = "GEOGCS";
 
         authname = OSRGetAuthorityName(hSRS, authkey);
@@ -169,14 +171,13 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                             "format; cannot create new location."));
         }
         else {
-            if (0 != G_make_location_crs(outloc, cellhd, proj_info,
-                                         proj_units, srid, wkt)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
-                              outloc);
+            if (0 != G_make_location_crs(outloc, cellhd, proj_info, proj_units,
+                                         srid, wkt)) {
+                G_fatal_error(_("Unable to create new location <%s>"), outloc);
             }
             G_message(_("Location <%s> created"), outloc);
 
-            G_unset_window();   /* new location, projection, and window */
+            G_unset_window(); /* new location, projection, and window */
             G_get_window(cellhd);
         }
 
@@ -212,10 +213,12 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             }
         }
 
-        /* -------------------------------------------------------------------- */
-        /*      Does the projection of the current location match the           */
-        /*      dataset?                                                        */
-        /* -------------------------------------------------------------------- */
+        /* --------------------------------------------------------------------
+         */
+        /*      Does the projection of the current location match the */
+        /*      dataset? */
+        /* --------------------------------------------------------------------
+         */
         G_get_default_window(&loc_wind);
         /* fetch LOCATION PROJ info */
         if (loc_wind.proj != PROJECTION_XY) {
@@ -228,15 +231,13 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             cellhd->zone = loc_wind.zone;
             G_message(_("Over-riding projection check"));
         }
-        else if (loc_wind.proj != cellhd->proj
-                 || (err =
-                     G_compare_projections(loc_proj_info, loc_proj_units,
-                                           proj_info, proj_units)) != 1) {
+        else if (loc_wind.proj != cellhd->proj ||
+                 (err = G_compare_projections(loc_proj_info, loc_proj_units,
+                                              proj_info, proj_units)) != 1) {
             int i_value;
 
-            strcpy(error_msg,
-                   _("Projection of dataset does not"
-                     " appear to match current location.\n\n"));
+            strcpy(error_msg, _("Projection of dataset does not"
+                                " appear to match current location.\n\n"));
 
             /* TODO: output this info sorted by key: */
             if (loc_wind.proj != cellhd->proj || err != -2) {
@@ -285,8 +286,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                                 cellhd->proj);
                     else if (cellhd->proj == PROJECTION_LL)
                         sprintf(error_msg + strlen(error_msg),
-                                "Dataset proj = %d (lat/long)\n",
-                                cellhd->proj);
+                                "Dataset proj = %d (lat/long)\n", cellhd->proj);
                     else if (cellhd->proj == PROJECTION_UTM)
                         sprintf(error_msg + strlen(error_msg),
                                 "Dataset proj = %d (UTM), zone = %d\n",
@@ -359,13 +359,13 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                 }
             }
             if (!check_only) {
-                strcat(error_msg,
-                       _("\nIn case of no significant differences in the projection definitions,"
-                        " use the -o flag to ignore them and use"
-                        " current location definition.\n"));
-                strcat(error_msg,
-                       _("Consider generating a new location from the input dataset using "
-                        "the 'location' parameter.\n"));
+                strcat(error_msg, _("\nIn case of no significant differences "
+                                    "in the projection definitions,"
+                                    " use the -o flag to ignore them and use"
+                                    " current location definition.\n"));
+                strcat(error_msg, _("Consider generating a new location from "
+                                    "the input dataset using "
+                                    "the 'location' parameter.\n"));
             }
 
             if (check_only)

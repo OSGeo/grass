@@ -12,7 +12,7 @@
 #include <grass/vector.h>
 #include "quaddefs.h"
 
-#define RANDOM(lo,hi) (G_drand48() * (hi-lo) + lo)
+#define RANDOM(lo, hi) (G_drand48() * (hi - lo) + lo)
 
 /*
  * returns Z struct filled with centers of n non-overlapping circles of
@@ -25,7 +25,7 @@ COOR *find_quadrats(int n, double r, struct Cell_head window)
     double east, north, e_max, e_min, n_max, n_min;
     COOR *quads = NULL;
 
-    quads = (COOR *) G_malloc(n * sizeof(COOR));
+    quads = (COOR *)G_malloc(n * sizeof(COOR));
     if (quads == NULL)
         G_fatal_error("cannot allocate memory for quadrats");
 
@@ -56,11 +56,11 @@ COOR *find_quadrats(int n, double r, struct Cell_head window)
                 }
             }
             if (k == n * n)
-                G_warning
-                    ("Having difficulties fitting that many circles with that radius");
+                G_warning("Having difficulties fitting that many circles with "
+                          "that radius");
             if (k == 2 * n * n)
-                G_fatal_error
-                    ("Maximum number of iterations exceeded\nTry smaller radius or smaller number of quads");
+                G_fatal_error("Maximum number of iterations exceeded\nTry "
+                              "smaller radius or smaller number of quads");
         }
         G_percent(i, n, 1);
         quads[i].x = east;

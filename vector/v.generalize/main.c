@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -26,19 +25,19 @@
 #include "misc.h"
 #include "operators.h"
 
-#define DOUGLAS 0
-#define LANG 1
-#define VERTEX_REDUCTION 2
-#define REUMANN 3
-#define BOYLE 4
+#define DOUGLAS            0
+#define LANG               1
+#define VERTEX_REDUCTION   2
+#define REUMANN            3
+#define BOYLE              4
 #define DISTANCE_WEIGHTING 5
-#define CHAIKEN 6
-#define HERMITE 7
-#define SNAKES 8
-#define DOUGLAS_REDUCTION 9
-#define SLIDING_AVERAGING 10
-#define NETWORK 100
-#define DISPLACEMENT 101
+#define CHAIKEN            6
+#define HERMITE            7
+#define SNAKES             8
+#define DOUGLAS_REDUCTION  9
+#define SLIDING_AVERAGING  10
+#define NETWORK            100
+#define DISPLACEMENT       101
 
 int main(int argc, char *argv[])
 {
@@ -46,17 +45,17 @@ int main(int argc, char *argv[])
     struct line_pnts *Points;
     struct line_cats *Cats, *ACats;
     int i, type, iter;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out, *error_out, *thresh_opt, *method_opt,
         *look_ahead_opt;
     struct Option *iterations_opt, *cat_opt, *alpha_opt, *beta_opt, *type_opt;
     struct Option *field_opt, *where_opt, *reduction_opt, *slide_opt;
-    struct Option *angle_thresh_opt, *degree_thresh_opt,
-        *closeness_thresh_opt;
+    struct Option *angle_thresh_opt, *degree_thresh_opt, *closeness_thresh_opt;
     struct Option *betweeness_thresh_opt;
     struct Flag *notab_flag, *loop_support_flag;
     int with_z;
-    int total_input, total_output;      /* Number of points in the input/output map respectively */
+    int total_input, total_output; /* Number of points in the input/output map
+                                      respectively */
     double thresh, alpha, beta, reduction, slide, angle_thresh;
     double degree_thresh, closeness_thresh, betweeness_thresh;
     int method;
@@ -69,7 +68,8 @@ int main(int argc, char *argv[])
     char *s, *descriptions;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -99,44 +99,43 @@ int main(int argc, char *argv[])
     error_out->key = "error";
     error_out->required = NO;
     error_out->label = _("Error map with failed generalizations");
-    error_out->description =
-        _("Lines and boundaries causing errors (collapsed to a point or topology errors)");
+    error_out->description = _("Lines and boundaries causing errors (collapsed "
+                               "to a point or topology errors)");
 
     method_opt = G_define_option();
     method_opt->key = "method";
     method_opt->type = TYPE_STRING;
     method_opt->required = YES;
     method_opt->multiple = NO;
-    method_opt->options =
-        "douglas,douglas_reduction,lang,reduction,reumann,boyle,sliding_averaging,distance_weighting,chaiken,hermite,snakes,network,displacement";
+    method_opt->options = "douglas,douglas_reduction,lang,reduction,reumann,"
+                          "boyle,sliding_averaging,distance_weighting,chaiken,"
+                          "hermite,snakes,network,displacement";
     descriptions = NULL;
-    G_asprintf(&descriptions,
-               "douglas;%s;"
-               "douglas_reduction;%s;"
-               "lang;%s;"
-               "reduction;%s;"
-               "reumann;%s;"
-               "boyle;%s;"
-               "sliding_averaging;%s;"
-               "distance_weighting;%s;"
-               "chaiken;%s;"
-               "hermite;%s;"
-               "snakes;%s;"
-               "network;%s;"
-               "displacement;%s;",
-               _("Douglas-Peucker Algorithm"),
-               _("Douglas-Peucker Algorithm with reduction parameter"),
-               _("Lang Simplification Algorithm"),
-               _("Vertex Reduction Algorithm eliminates points close to each other"),
-               _("Reumann-Witkam Algorithm"),
-               _("Boyle's Forward-Looking Algorithm"),
-               _("McMaster's Sliding Averaging Algorithm"),
-               _("McMaster's Distance-Weighting Algorithm"),
-               _("Chaiken's Algorithm"),
-               _("Interpolation by Cubic Hermite Splines"),
-               _("Snakes method for line smoothing"),
-               _("Network generalization"),
-               _("Displacement of lines close to each other"));
+    G_asprintf(
+        &descriptions,
+        "douglas;%s;"
+        "douglas_reduction;%s;"
+        "lang;%s;"
+        "reduction;%s;"
+        "reumann;%s;"
+        "boyle;%s;"
+        "sliding_averaging;%s;"
+        "distance_weighting;%s;"
+        "chaiken;%s;"
+        "hermite;%s;"
+        "snakes;%s;"
+        "network;%s;"
+        "displacement;%s;",
+        _("Douglas-Peucker Algorithm"),
+        _("Douglas-Peucker Algorithm with reduction parameter"),
+        _("Lang Simplification Algorithm"),
+        _("Vertex Reduction Algorithm eliminates points close to each other"),
+        _("Reumann-Witkam Algorithm"), _("Boyle's Forward-Looking Algorithm"),
+        _("McMaster's Sliding Averaging Algorithm"),
+        _("McMaster's Distance-Weighting Algorithm"), _("Chaiken's Algorithm"),
+        _("Interpolation by Cubic Hermite Splines"),
+        _("Snakes method for line smoothing"), _("Network generalization"),
+        _("Displacement of lines close to each other"));
     method_opt->descriptions = G_store(descriptions);
 
     method_opt->description = _("Generalization algorithm");
@@ -161,8 +160,8 @@ int main(int argc, char *argv[])
     reduction_opt->required = NO;
     reduction_opt->answer = "50";
     reduction_opt->options = "0-100";
-    reduction_opt->description =
-        _("Percentage of the points in the output of 'douglas_reduction' algorithm");
+    reduction_opt->description = _("Percentage of the points in the output of "
+                                   "'douglas_reduction' algorithm");
 
     slide_opt = G_define_option();
     slide_opt->key = "slide";
@@ -299,7 +298,6 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-
     /* simplification or smoothing? */
     switch (method) {
     case DOUGLAS:
@@ -314,13 +312,11 @@ int main(int argc, char *argv[])
         break;
     }
 
-
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     ACats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -347,7 +343,6 @@ int main(int argc, char *argv[])
         }
     }
 
-
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -357,8 +352,7 @@ int main(int argc, char *argv[])
     layer = Vect_get_field_number(&In, field_opt->answer);
     /* parse filter options */
     if (layer > 0)
-        cat_list = Vect_cats_set_constraint(&In, layer,
-                                            where_opt->answer,
+        cat_list = Vect_cats_set_constraint(&In, layer, where_opt->answer,
                                             cat_opt->answer);
     else if (where_opt->answer || cat_opt->answer) {
         G_warning(_("No layer selected, '%s' and '%s' options are ignored"),
@@ -366,7 +360,8 @@ int main(int argc, char *argv[])
     }
 
     if (method == DISPLACEMENT) {
-        /* modifies only lines, all other features including boundaries are preserved */
+        /* modifies only lines, all other features including boundaries are
+         * preserved */
         /* options where, cats, and layer are respected */
         G_message(_("Displacement..."));
         snakes_displacement(&In, &Out, thresh, alpha, beta, 1.0, 10.0,
@@ -383,7 +378,7 @@ int main(int argc, char *argv[])
                                  closeness_thresh, betweeness_thresh);
     }
 
-    /* copy tables here because method == NETWORK is complete and 
+    /* copy tables here because method == NETWORK is complete and
      * tables for Out may be needed for parse_filter_options() below */
     if (!notab_flag->answer) {
         if (method == NETWORK)
@@ -398,9 +393,10 @@ int main(int argc, char *argv[])
 
     /* smoothing/simplification */
     if (method < NETWORK) {
-        /* modifies only lines of selected type, all other features are preserved */
+        /* modifies only lines of selected type, all other features are
+         * preserved */
         int not_modified_boundaries = 0, n_oversimplified = 0;
-        struct line_pnts *APoints;      /* original Points */
+        struct line_pnts *APoints; /* original Points */
 
         set_topo_debug();
 
@@ -409,8 +405,7 @@ int main(int argc, char *argv[])
 
         G_message("-----------------------------------------------------");
         G_message(_("Generalization (%s)..."), method_opt->answer);
-        G_message(_("Using threshold: %g %s"), thresh,
-                  G_database_unit_name(1));
+        G_message(_("Using threshold: %g %s"), thresh, G_database_unit_name(1));
         G_percent_reset();
 
         APoints = Vect_new_line_struct();
@@ -448,15 +443,13 @@ int main(int argc, char *argv[])
                         if (left > 0) {
                             Vect_get_area_cats(&Out, left, ACats);
                             do_line =
-                                Vect_cats_in_constraint(ACats, layer,
-                                                        cat_list);
+                                Vect_cats_in_constraint(ACats, layer, cat_list);
                         }
 
                         if (!do_line && right > 0) {
                             Vect_get_area_cats(&Out, right, ACats);
                             do_line =
-                                Vect_cats_in_constraint(ACats, layer,
-                                                        cat_list);
+                                Vect_cats_in_constraint(ACats, layer, cat_list);
                         }
                     }
                     if (!do_line)
@@ -516,15 +509,14 @@ int main(int argc, char *argv[])
                                       with_z);
                     break;
                 case DISTANCE_WEIGHTING:
-                    distance_weighting(Points, slide, look_ahead,
-                                       loop_support, with_z);
+                    distance_weighting(Points, slide, look_ahead, loop_support,
+                                       with_z);
                     break;
                 case CHAIKEN:
                     chaiken(Points, thresh, loop_support, with_z);
                     break;
                 case HERMITE:
-                    hermite(Points, thresh, angle_thresh, loop_support,
-                            with_z);
+                    hermite(Points, thresh, angle_thresh, loop_support, with_z);
                     break;
                 case SNAKES:
                     snakes(Points, alpha, beta, loop_support, with_z);
@@ -541,11 +533,11 @@ int main(int argc, char *argv[])
                                   method_opt->answer);
 
                 if (APoints->x[APoints->n_points - 1] !=
-                    Points->x[Points->n_points - 1] ||
+                        Points->x[Points->n_points - 1] ||
                     APoints->y[APoints->n_points - 1] !=
-                    Points->y[Points->n_points - 1] ||
+                        Points->y[Points->n_points - 1] ||
                     APoints->z[APoints->n_points - 1] !=
-                    Points->z[Points->n_points - 1])
+                        Points->z[Points->n_points - 1])
                     G_fatal_error(_("Method '%s' did not preserve last point"),
                                   method_opt->answer);
             }
@@ -587,10 +579,12 @@ int main(int argc, char *argv[])
             total_output += after;
         }
         if (not_modified_boundaries > 0)
-            G_warning(_("%d boundaries were not modified because modification would damage topology"),
+            G_warning(_("%d boundaries were not modified because modification "
+                        "would damage topology"),
                       not_modified_boundaries);
         if (n_oversimplified > 0)
-            G_warning(_("%d lines/boundaries were not modified due to over-simplification"),
+            G_warning(_("%d lines/boundaries were not modified due to "
+                        "over-simplification"),
                       n_oversimplified);
         G_message("-----------------------------------------------------");
 
@@ -611,7 +605,8 @@ int main(int argc, char *argv[])
 
     G_message("-----------------------------------------------------");
     if (total_input != 0 && total_input != total_output)
-        G_done_msg(_("Number of vertices for selected features %s from %d to %d (%d%% remaining)"),
+        G_done_msg(_("Number of vertices for selected features %s from %d to "
+                     "%d (%d%% remaining)"),
                    simplification ? _("reduced") : _("changed"), total_input,
                    total_output, (total_output * 100) / total_input);
     else

@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.extrude
@@ -35,13 +34,11 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output, *zshift, *height, *elevation, *hcolumn,
             *type, *field, *cats, *where, *interp, *scale, *null;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *trace;
     } flag;
 
@@ -70,10 +67,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("geometry"));
     G_add_keyword(_("sampling"));
     G_add_keyword(_("3D"));
-    module->label =
-        _("Extrudes flat vector features to 3D vector features with defined height.");
-    module->description =
-        _("Optionally the height can be derived from sampling of elevation raster map.");
+    module->label = _("Extrudes flat vector features to 3D vector features "
+                      "with defined height.");
+    module->description = _("Optionally the height can be derived from "
+                            "sampling of elevation raster map.");
 
     flag.trace = G_define_flag();
     flag.trace->key = 't';
@@ -187,7 +184,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_set_open_level(2);     /* topology required for input */
+    Vect_set_open_level(2); /* topology required for input */
 
     /* opening input vector map */
     if (Vect_open_old2(&In, opt.input->answer, "", opt.field->answer) < 0)
@@ -204,9 +201,10 @@ int main(int argc, char *argv[])
 
     if ((opt.hcolumn->answer || opt.cats->answer || opt.where->answer) &&
         field == -1) {
-        G_warning(_("Invalid layer number (%d). "
-                   "Parameter '%s', '%s' or '%s' specified, assuming layer '1'."),
-                  field, opt.hcolumn->key, opt.cats->key, opt.where->key);
+        G_warning(
+            _("Invalid layer number (%d). "
+              "Parameter '%s', '%s' or '%s' specified, assuming layer '1'."),
+            field, opt.hcolumn->key, opt.cats->key, opt.where->key);
         field = 1;
     }
 
@@ -215,7 +213,6 @@ int main(int argc, char *argv[])
     if (field > 0)
         cat_list = Vect_cats_set_constraint(&In, field, opt.where->answer,
                                             opt.cats->answer);
-
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -229,16 +226,15 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Database connection not defined for layer %d"),
                           field);
 
-        if ((driver =
-             db_start_driver_open_database(Fi->driver, Fi->database)) == NULL)
+        if ((driver = db_start_driver_open_database(Fi->driver,
+                                                    Fi->database)) == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
         db_set_error_handler_driver(driver);
 
         if (db_get_column(driver, Fi->table, opt.hcolumn->answer, &column) !=
             DB_OK)
-            G_fatal_error(_("Column <%s> does not exist"),
-                          opt.hcolumn->answer);
+            G_fatal_error(_("Column <%s> does not exist"), opt.hcolumn->answer);
         else
             db_free_column(column);
 
@@ -290,28 +286,28 @@ int main(int argc, char *argv[])
             if (opt.hcolumn->answer) {
                 cat = Vect_get_area_cat(&In, area, field);
                 if (cat == -1) {
-                    G_warning(_("No category defined for area %d. Using default fixed height %f."),
+                    G_warning(_("No category defined for area %d. Using "
+                                "default fixed height %f."),
                               area, objheight_default);
                     objheight = objheight_default;
                 }
-                if (get_height(Fi, opt.hcolumn->answer,
-                               driver, cat, &objheight) != 0) {
-                    G_warning(_("Unable to fetch height from DB for area %d. Using default fixed height %f."),
+                if (get_height(Fi, opt.hcolumn->answer, driver, cat,
+                               &objheight) != 0) {
+                    G_warning(_("Unable to fetch height from DB for area %d. "
+                                "Using default fixed height %f."),
                               area, objheight_default);
                     objheight = objheight_default;
                 }
-            }                   /* if opt.hcolumn->answer */
+            } /* if opt.hcolumn->answer */
 
             Vect_get_area_points(&In, area, Points);
 
             G_debug(3, "area: %d height: %f", area, objheight);
 
-            extrude(&In, &Out, Cats, Points,
-                    fdrast, trace, interp_method, scale,
-                    opt.null->answer ? TRUE : FALSE, null_val,
-                    objheight, voffset, &window, GV_AREA, centroid);
-        }                       /* foreach area */
-
+            extrude(&In, &Out, Cats, Points, fdrast, trace, interp_method,
+                    scale, opt.null->answer ? TRUE : FALSE, null_val, objheight,
+                    voffset, &window, GV_AREA, centroid);
+        } /* foreach area */
     }
 
     if (only_type > 0) {
@@ -342,24 +338,25 @@ int main(int argc, char *argv[])
             if (opt.hcolumn->answer) {
                 cat = Vect_get_line_cat(&In, line, field);
                 if (cat == -1) {
-                    G_warning(_("No category defined for feature %d. Using default fixed height %f."),
+                    G_warning(_("No category defined for feature %d. Using "
+                                "default fixed height %f."),
                               line, objheight_default);
                     objheight = objheight_default;
                 }
-                if (get_height(Fi, opt.hcolumn->answer,
-                               driver, cat, &objheight) != 0) {
-                    G_warning(_("Unable to fetch height from DB for line %d. Using default fixed height %f."),
+                if (get_height(Fi, opt.hcolumn->answer, driver, cat,
+                               &objheight) != 0) {
+                    G_warning(_("Unable to fetch height from DB for line %d. "
+                                "Using default fixed height %f."),
                               line, objheight_default);
                     objheight = objheight_default;
                 }
-            }                   /* if opt.hcolumn->answer */
+            } /* if opt.hcolumn->answer */
 
-            extrude(&In, &Out, Cats, Points,
-                    fdrast, trace, interp_method, scale,
-                    opt.null->answer ? TRUE : FALSE, null_val,
-                    objheight, voffset, &window, type, -1);
-        }                       /* for each line */
-    }                           /* else if area */
+            extrude(&In, &Out, Cats, Points, fdrast, trace, interp_method,
+                    scale, opt.null->answer ? TRUE : FALSE, null_val, objheight,
+                    voffset, &window, type, -1);
+        } /* for each line */
+    }     /* else if area */
 
     if (driver) {
         db_close_database(driver);
@@ -370,8 +367,8 @@ int main(int argc, char *argv[])
     if (field < 0)
         Vect_copy_tables(&In, &Out, 0);
     else
-        Vect_copy_table_by_cat_list(&In, &Out, field, field, NULL,
-                                    GV_1TABLE, cat_list);
+        Vect_copy_table_by_cat_list(&In, &Out, field, field, NULL, GV_1TABLE,
+                                    cat_list);
 
     Vect_build(&Out);
 

@@ -3,11 +3,9 @@
 #include <grass/vector.h>
 #include "local.h"
 
-
 struct Cell_head region, page;
 
-static union
-{
+static union {
     CELL **cell;
     DCELL **dcell;
 } raster;
@@ -32,7 +30,6 @@ static int cont(int, int);
 static int move(int, int);
 static int (*dot)(int, int);
 
-
 int begin_rasterization(int cache_mb, int f, int do_dense)
 {
     int i;
@@ -50,8 +47,8 @@ int begin_rasterization(int cache_mb, int f, int do_dense)
     G_get_set_window(&region);
     G_get_set_window(&page);
 
-    row_mb = (double)region.cols * (sizeof(char) + Rast_cell_size(f)) /
-        (1 << 20);
+    row_mb =
+        (double)region.cols * (sizeof(char) + Rast_cell_size(f)) / (1 << 20);
 
     max_rows = cache_mb / row_mb;
     if (max_rows < 1)
@@ -64,13 +61,13 @@ int begin_rasterization(int cache_mb, int f, int do_dense)
 
     G_debug(1, "%d of %d rows are cached", max_rows, region.rows);
 
-    size = (size_t)max_rows *region.cols;
+    size = (size_t)max_rows * region.cols;
 
     switch (format) {
     case CELL_TYPE:
         raster.cell =
-            (CELL **) G_calloc(max_rows * sizeof(char), sizeof(CELL *));
-        raster.cell[0] = (CELL *) G_calloc(size * sizeof(char), sizeof(CELL));
+            (CELL **)G_calloc(max_rows * sizeof(char), sizeof(CELL *));
+        raster.cell[0] = (CELL *)G_calloc(size * sizeof(char), sizeof(CELL));
         for (i = 1; i < max_rows; i++)
             raster.cell[i] = raster.cell[i - 1] + region.cols;
         dot = cell_dot;
@@ -78,9 +75,8 @@ int begin_rasterization(int cache_mb, int f, int do_dense)
 
     case DCELL_TYPE:
         raster.dcell =
-            (DCELL **) G_calloc(max_rows * sizeof(char), sizeof(DCELL *));
-        raster.dcell[0] =
-            (DCELL *) G_calloc(size * sizeof(char), sizeof(DCELL));
+            (DCELL **)G_calloc(max_rows * sizeof(char), sizeof(DCELL *));
+        raster.dcell[0] = (DCELL *)G_calloc(size * sizeof(char), sizeof(DCELL));
         for (i = 1; i < max_rows; i++)
             raster.dcell[i] = raster.dcell[i - 1] + region.cols;
         dot = dcell_dot;
@@ -97,7 +93,6 @@ int begin_rasterization(int cache_mb, int f, int do_dense)
 
     return pages;
 }
-
 
 static int configure_plot(void)
 {
@@ -141,12 +136,10 @@ static int configure_plot(void)
     if (dense)
         setup_plot(0, page.rows, 0, page.cols, dot);
     else
-        G_setup_plot(-0.5, page.rows - 0.5, -0.5, page.cols - 0.5, move,
-                     cont);
+        G_setup_plot(-0.5, page.rows - 0.5, -0.5, page.cols - 0.5, move, cont);
 
     return 0;
 }
-
 
 int output_raster(int fd)
 {

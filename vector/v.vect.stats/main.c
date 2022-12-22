@@ -1,16 +1,15 @@
-
 /***************************************************************
  *
  * MODULE:       v.vect.stats
- * 
+ *
  * AUTHOR(S):    Markus Metz
- *               
- * PURPOSE:      Counts points per area and calculates aggregate statistics. 
- *               
+ *
+ * PURPOSE:      Counts points per area and calculates aggregate statistics.
+ *
  * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -26,12 +25,11 @@
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 
-struct menu
-{
-    stat_func *method;          /* routine to compute new value */
-    int is_int;                 /* whether the result is an integer (unused) */
-    char *name;                 /* method name */
-    char *text;                 /* menu display - full description */
+struct menu {
+    stat_func *method; /* routine to compute new value */
+    int is_int;        /* whether the result is an integer (unused) */
+    char *name;        /* method name */
+    char *text;        /* menu display - full description */
 };
 
 /* modify this table to add new methods */
@@ -48,14 +46,12 @@ static struct menu menu[] = {
     {c_stddev, 0, "stddev", "standard deviation"},
     {c_var, 0, "variance", "statistical variance"},
     {c_divr, 1, "diversity", "number of different values"},
-    {NULL, 0, NULL, NULL}
-};
+    {NULL, 0, NULL, NULL}};
 
 /* Structure to store info for each area category */
-typedef struct
-{
-    int area_cat;               /* area category */
-    int count;                  /* number of points in areas with area_cat */
+typedef struct {
+    int area_cat; /* area category */
+    int count;    /* number of points in areas with area_cat */
     double *values;
     int *cats;
     int nvalues, nalloc;
@@ -65,8 +61,8 @@ typedef struct
 /* compare function for qsort and bsearch */
 static int cmp_area(const void *pa, const void *pb)
 {
-    AREA_CAT *p1 = (AREA_CAT *) pa;
-    AREA_CAT *p2 = (AREA_CAT *) pb;
+    AREA_CAT *p1 = (AREA_CAT *)pa;
+    AREA_CAT *p2 = (AREA_CAT *)pb;
 
     if (p1->area_cat < p2->area_cat)
         return -1;
@@ -81,20 +77,20 @@ int main(int argc, char *argv[])
     int method, use_catno;
     const char *mapset;
     struct GModule *module;
-    struct Option *point_opt,   /* point vector */
-     *area_opt,                 /* area vector */
-     *point_type_opt,           /* point type */
-     *point_field_opt,          /* point layer */
-     *point_cats_opt,           /* point cats */
-     *point_where_opt,          /* point where */
-     *area_field_opt,           /* area layer */
-     *area_cats_opt,            /* area cats */
-     *area_where_opt,           /* area where */
-     *method_opt,               /* stats method */
-     *point_column_opt,         /* point column for stats */
-     *count_column_opt,         /* area column for point count */
-     *stats_column_opt,         /* area column for stats result */
-     *fs_opt;                   /* field separator for printed output */
+    struct Option *point_opt, /* point vector */
+        *area_opt,            /* area vector */
+        *point_type_opt,      /* point type */
+        *point_field_opt,     /* point layer */
+        *point_cats_opt,      /* point cats */
+        *point_where_opt,     /* point where */
+        *area_field_opt,      /* area layer */
+        *area_cats_opt,       /* area cats */
+        *area_where_opt,      /* area where */
+        *method_opt,          /* stats method */
+        *point_column_opt,    /* point column for stats */
+        *count_column_opt,    /* area column for point count */
+        *stats_column_opt,    /* area column for stats result */
+        *fs_opt;              /* field separator for printed output */
     struct Flag *print_flag;
     char *fs;
     struct Map_info PIn, AIn;
@@ -116,8 +112,7 @@ int main(int argc, char *argv[])
     struct bound_box box;
     dbCatValArray cvarr;
     dbColumn *column;
-    struct pvalcat
-    {
+    struct pvalcat {
         double dval;
         int catno;
     } *pvalcats;
@@ -168,8 +163,9 @@ int main(int argc, char *argv[])
 
     point_where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     point_where_opt->key = "points_where";
-    point_where_opt->label =
-        _("WHERE conditions of SQL statement without 'where' keyword for points map");;
+    point_where_opt->label = _("WHERE conditions of SQL statement without "
+                               "'where' keyword for points map");
+    ;
     point_where_opt->guisection = _("Selection");
 
     area_field_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -184,8 +180,8 @@ int main(int argc, char *argv[])
 
     area_where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     area_where_opt->key = "areas_where";
-    area_where_opt->label =
-        _("WHERE conditions of SQL statement without 'where' keyword for area map");;
+    area_where_opt->label = _("WHERE conditions of SQL statement without "
+                              "'where' keyword for area map");
     area_where_opt->guisection = _("Selection");
 
     method_opt = G_define_option();
@@ -217,14 +213,16 @@ int main(int argc, char *argv[])
     count_column_opt->type = TYPE_STRING;
     count_column_opt->label = _("Column name to upload points count");
     count_column_opt->description =
-        _("Column to hold points count, must be of type integer, will be created if not existing");
+        _("Column to hold points count, must be of type integer, will be "
+          "created if not existing");
     count_column_opt->guisection = _("Statistics");
 
     stats_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     stats_column_opt->key = "stats_column";
     stats_column_opt->label = _("Column name to upload statistics");
     stats_column_opt->description =
-        _("Column to hold statistics, must be of type double, will be created if not existing");
+        _("Column to hold statistics, must be of type double, will be created "
+          "if not existing");
     stats_column_opt->guisection = _("Statistics");
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
@@ -244,8 +242,8 @@ int main(int argc, char *argv[])
     G_asprintf((char **)&(point_field_opt->guidependency), "%s,%s",
                point_where_opt->key, point_column_opt->key);
     G_asprintf((char **)&(area_opt->guidependency), "%s,%s,%s,%s",
-               area_field_opt->key, area_where_opt->key,
-               count_column_opt->key, stats_column_opt->key);
+               area_field_opt->key, area_where_opt->key, count_column_opt->key,
+               stats_column_opt->key);
     G_asprintf((char **)&(area_field_opt->guidependency), "%s,%s,%s",
                area_where_opt->key, count_column_opt->key,
                stats_column_opt->key);
@@ -289,7 +287,8 @@ int main(int argc, char *argv[])
     if ((mapset = G_find_vector2(area_opt->answer, "")) == NULL)
         G_fatal_error(_("Vector map <%s> not found"), area_opt->answer);
     if (!print_flag->answer && strcmp(mapset, G_mapset()) != 0)
-        G_fatal_error(_("Vector map <%s> is not in the current mapset <%s> and cannot be updated"),
+        G_fatal_error(_("Vector map <%s> is not in the current mapset <%s> and "
+                        "cannot be updated"),
                       area_opt->answer, G_mapset());
 
     Vect_set_open_level(2);
@@ -299,16 +298,14 @@ int main(int argc, char *argv[])
     point_field = atoi(point_field_opt->answer);
     pcat_list = NULL;
     if (point_field > 0)
-        pcat_list = Vect_cats_set_constraint(&PIn, point_field,
-                                             point_where_opt->answer,
-                                             point_cats_opt->answer);
+        pcat_list = Vect_cats_set_constraint(
+            &PIn, point_field, point_where_opt->answer, point_cats_opt->answer);
 
     area_field = atoi(area_field_opt->answer);
     acat_list = NULL;
     if (area_field > 0)
-        acat_list = Vect_cats_set_constraint(&AIn, area_field,
-                                             area_where_opt->answer,
-                                             area_cats_opt->answer);
+        acat_list = Vect_cats_set_constraint(
+            &AIn, area_field, area_where_opt->answer, area_cats_opt->answer);
 
     method = -1;
     use_catno = 0;
@@ -318,9 +315,8 @@ int main(int argc, char *argv[])
             if ((strcmp(p, method_opt->answer) == 0))
                 break;
         if (!p) {
-            G_warning(_("<%s=%s> unknown %s"),
-                      method_opt->key, method_opt->answer,
-                      method_opt->answer);
+            G_warning(_("<%s=%s> unknown %s"), method_opt->key,
+                      method_opt->answer, method_opt->answer);
             G_usage();
             exit(EXIT_FAILURE);
         }
@@ -362,8 +358,8 @@ int main(int argc, char *argv[])
         db_get_column(Adriver, AFi->table, count_column_opt->answer, &column);
         if (column) {
             /* check count column type */
-            if (db_column_Ctype(Adriver, AFi->table, count_column_opt->answer)
-                != DB_C_TYPE_INT)
+            if (db_column_Ctype(Adriver, AFi->table,
+                                count_column_opt->answer) != DB_C_TYPE_INT)
                 G_fatal_error(_("count_column must be of type integer"));
 
             db_free_column(column);
@@ -373,8 +369,8 @@ int main(int argc, char *argv[])
             /* create count column */
             /* db_add_column() exists but is not implemented,
              * see lib/db/stubs/add_col.c */
-            sprintf(buf, "alter table %s add column %s integer",
-                    AFi->table, count_column_opt->answer);
+            sprintf(buf, "alter table %s add column %s integer", AFi->table,
+                    count_column_opt->answer);
             db_set_string(&stmt, buf);
             if (db_execute_immediate(Adriver, &stmt) != DB_OK)
                 G_fatal_error(_("Unable to add column <%s>"),
@@ -383,7 +379,8 @@ int main(int argc, char *argv[])
 
         if (method_opt->answer) {
             if (!stats_column_opt->answer)
-                G_fatal_error(_("stats_column is required to upload point stats"));
+                G_fatal_error(
+                    _("stats_column is required to upload point stats"));
 
             /* check if stats column exists */
             G_debug(1, "check if stats column exists");
@@ -391,10 +388,11 @@ int main(int argc, char *argv[])
                           &column);
             if (column) {
                 /* check stats column type */
-                if (db_column_Ctype
-                    (Adriver, AFi->table,
-                     stats_column_opt->answer) != DB_C_TYPE_DOUBLE)
-                    G_fatal_error(_("stats_column must be of type double precision"));
+                if (db_column_Ctype(Adriver, AFi->table,
+                                    stats_column_opt->answer) !=
+                    DB_C_TYPE_DOUBLE)
+                    G_fatal_error(
+                        _("stats_column must be of type double precision"));
 
                 db_free_column(column);
                 column = NULL;
@@ -403,8 +401,8 @@ int main(int argc, char *argv[])
                 /* create stats column */
                 /* db_add_column() exists but is not implemented,
                  * see lib/db/stubs/add_col.c */
-                sprintf(buf, "alter table %s add column %s double",
-                        AFi->table, stats_column_opt->answer);
+                sprintf(buf, "alter table %s add column %s double", AFi->table,
+                        stats_column_opt->answer);
                 db_set_string(&stmt, buf);
                 if (db_execute_immediate(Adriver, &stmt) != DB_OK)
                     G_fatal_error(_("Unable to add column <%s>"),
@@ -423,19 +421,18 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Database connection not defined for layer %d"),
                           point_field);
 
-
         /* Open points map driver and database */
-        if (Adriver && strcmp(AFi->driver, PFi->driver) == 0
-            && strcmp(AFi->database, PFi->database) == 0) {
+        if (Adriver && strcmp(AFi->driver, PFi->driver) == 0 &&
+            strcmp(AFi->database, PFi->database) == 0) {
             G_debug(3, "Use the same driver");
             Pdriver = Adriver;
         }
         else {
-            Pdriver =
-                db_start_driver_open_database(PFi->driver, PFi->database);
+            Pdriver = db_start_driver_open_database(PFi->driver, PFi->database);
             if (Pdriver == NULL)
-                G_fatal_error(_("Unable to open database <%s> with driver <%s>"),
-                              PFi->database, PFi->driver);
+                G_fatal_error(
+                    _("Unable to open database <%s> with driver <%s>"),
+                    PFi->database, PFi->driver);
         }
 
         /* check if point column exists */
@@ -450,12 +447,12 @@ int main(int argc, char *argv[])
         }
 
         /* Check column type */
-        ctype =
-            db_column_Ctype(Pdriver, PFi->table, point_column_opt->answer);
+        ctype = db_column_Ctype(Pdriver, PFi->table, point_column_opt->answer);
 
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-            G_fatal_error(_("points_column <%s> of points vector <%s> must be numeric"),
-                          point_column_opt->answer, PFi->table);
+            G_fatal_error(
+                _("points_column <%s> of points vector <%s> must be numeric"),
+                point_column_opt->answer, PFi->table);
 
         db_CatValArray_init(&cvarr);
         nrec = db_select_CatValArray(Pdriver, PFi->table, PFi->key,
@@ -471,12 +468,13 @@ int main(int argc, char *argv[])
     PCats = Vect_new_cats_struct();
     List = Vect_new_boxlist(0);
 
-    /* Allocate space ( may be more than needed (duplicate cats and elements without cats) ) */
+    /* Allocate space ( may be more than needed (duplicate cats and elements
+     * without cats) ) */
     if ((nareas = Vect_get_num_areas(&AIn)) <= 0)
         G_fatal_error("No areas in area input vector");
 
     nacatsalloc = nareas;
-    Area_cat = (AREA_CAT *) G_calloc(nacatsalloc, sizeof(AREA_CAT));
+    Area_cat = (AREA_CAT *)G_calloc(nacatsalloc, sizeof(AREA_CAT));
 
     /* Read all cats from 'area' */
     nacats = 0;
@@ -487,8 +485,8 @@ int main(int argc, char *argv[])
         if (ACats->n_cats <= 0)
             continue;
 
-        if (area_field > 0
-            && !Vect_cats_in_constraint(ACats, area_field, acat_list))
+        if (area_field > 0 &&
+            !Vect_cats_in_constraint(ACats, area_field, acat_list))
             continue;
 
         for (i = 0; i < ACats->n_cats; i++) {
@@ -507,13 +505,10 @@ int main(int argc, char *argv[])
                 nacats++;
                 if (nacats >= nacatsalloc) {
                     nacatsalloc += 100;
-                    Area_cat =
-                        (AREA_CAT *) G_realloc(Area_cat,
-                                               nacatsalloc *
-                                               sizeof(AREA_CAT));
+                    Area_cat = (AREA_CAT *)G_realloc(
+                        Area_cat, nacatsalloc * sizeof(AREA_CAT));
                 }
             }
-
         }
     }
 
@@ -558,8 +553,8 @@ int main(int argc, char *argv[])
         if (ACats->n_cats <= 0)
             continue;
 
-        if (area_field > 0
-            && !Vect_cats_in_constraint(ACats, area_field, acat_list))
+        if (area_field > 0 &&
+            !Vect_cats_in_constraint(ACats, area_field, acat_list))
             continue;
 
         /* select points by box */
@@ -580,13 +575,13 @@ int main(int argc, char *argv[])
             if (!(ptype & point_type))
                 continue;
 
-            if (point_field > 0
-                && !Vect_cats_in_constraint(PCats, point_field, pcat_list))
+            if (point_field > 0 &&
+                !Vect_cats_in_constraint(PCats, point_field, pcat_list))
                 continue;
 
             /* point in area */
-            if (Vect_point_in_area
-                (Points->x[0], Points->y[0], &AIn, area, &box)) {
+            if (Vect_point_in_area(Points->x[0], Points->y[0], &AIn, area,
+                                   &box)) {
                 AREA_CAT *area_info, search_ai;
 
                 int tmp_cat;
@@ -597,21 +592,20 @@ int main(int argc, char *argv[])
                     tmp_cat = -1;
                     for (j = 0; j < PCats->n_cats; j++) {
                         if (PCats->field[j] == point_field) {
-                            if (pcat_list &&
-                                !Vect_cat_in_cat_list(PCats->cat[j],
-                                                      pcat_list)) {
+                            if (pcat_list && !Vect_cat_in_cat_list(
+                                                 PCats->cat[j], pcat_list)) {
                                 continue;
                             }
 
                             if (tmp_cat >= 0)
-                                G_debug(3,
-                                        "More cats found in point layer (point=%d)",
-                                        pline);
+                                G_debug(
+                                    3,
+                                    "More cats found in point layer (point=%d)",
+                                    pline);
                             tmp_cat = PCats->cat[j];
 
                             /* find cat in array */
-                            db_CatValArray_get_value(&cvarr, tmp_cat,
-                                                     &catval);
+                            db_CatValArray_get_value(&cvarr, tmp_cat, &catval);
 
                             if (catval) {
                                 pvalcats[npvalcats].catno = tmp_cat;
@@ -628,13 +622,9 @@ int main(int argc, char *argv[])
                                 }
                                 if (npvalcats >= npvalcatsalloc) {
                                     npvalcatsalloc += 10;
-                                    pvalcats =
-                                        (struct pvalcat *)G_realloc(pvalcats,
-                                                                    npvalcatsalloc
-                                                                    *
-                                                                    sizeof
-                                                                    (struct
-                                                                     pvalcat));
+                                    pvalcats = (struct pvalcat *)G_realloc(
+                                        pvalcats, npvalcatsalloc *
+                                                      sizeof(struct pvalcat));
                                 }
                             }
                         }
@@ -650,7 +640,6 @@ int main(int argc, char *argv[])
                             continue;
                         }
 
-
                         if (search_ai.area_cat >= 0)
                             G_debug(3,
                                     "More cats found in area layer (area=%d)",
@@ -658,10 +647,9 @@ int main(int argc, char *argv[])
                         search_ai.area_cat = ACats->cat[j];
 
                         /* find cat in array */
-                        area_info =
-                            (AREA_CAT *) bsearch((void *)&search_ai, Area_cat,
-                                                 nacats, sizeof(AREA_CAT),
-                                                 cmp_area);
+                        area_info = (AREA_CAT *)bsearch(
+                            (void *)&search_ai, Area_cat, nacats,
+                            sizeof(AREA_CAT), cmp_area);
                         if (area_info->area_cat != search_ai.area_cat)
                             G_fatal_error(_("could not find area category %d"),
                                           search_ai.area_cat);
@@ -677,24 +665,20 @@ int main(int argc, char *argv[])
                                 area_info->nalloc) {
                                 if (area_info->nalloc == 0) {
                                     area_info->nalloc = npvalcats + 10;
-                                    area_info->values =
-                                        (double *)G_calloc(area_info->nalloc,
-                                                           sizeof(double));
-                                    area_info->cats =
-                                        (int *)G_calloc(area_info->nalloc,
-                                                        sizeof(int));
+                                    area_info->values = (double *)G_calloc(
+                                        area_info->nalloc, sizeof(double));
+                                    area_info->cats = (int *)G_calloc(
+                                        area_info->nalloc, sizeof(int));
                                 }
                                 else
                                     area_info->nalloc +=
                                         area_info->nvalues + npvalcats + 10;
-                                area_info->values =
-                                    (double *)G_realloc(area_info->values,
-                                                        area_info->nalloc *
-                                                        sizeof(double));
-                                area_info->cats =
-                                    (int *)G_realloc(area_info->cats,
-                                                     area_info->nalloc *
-                                                     sizeof(int));
+                                area_info->values = (double *)G_realloc(
+                                    area_info->values,
+                                    area_info->nalloc * sizeof(double));
+                                area_info->cats = (int *)G_realloc(
+                                    area_info->cats,
+                                    area_info->nalloc * sizeof(int));
                             }
                             for (k = 0; k < npvalcats; k++) {
                                 area_info->cats[area_info->nvalues] =
@@ -708,8 +692,8 @@ int main(int argc, char *argv[])
                 }
                 count++;
             }
-        }                       /* next point in box */
-    }                           /* next area */
+        } /* next point in box */
+    }     /* next area */
 
     G_debug(1, "count = %d", count);
 
@@ -720,7 +704,7 @@ int main(int argc, char *argv[])
     Vect_close(&PIn);
 
     /* Update table or print to stdout */
-    if (print_flag->answer) {   /* print header */
+    if (print_flag->answer) { /* print header */
         fprintf(stdout, "area_cat%scount", fs);
         if (method_opt->answer)
             fprintf(stdout, "%s%s", fs, menu[method].name);
@@ -741,8 +725,7 @@ int main(int argc, char *argv[])
 
         if (Area_cat[i].count > 0 && method_opt->answer) {
             /* get stats */
-            statsvalue(&result, Area_cat[i].values, Area_cat[i].nvalues,
-                       NULL);
+            statsvalue(&result, Area_cat[i].values, Area_cat[i].nvalues, NULL);
 
             if (use_catno)
                 result = Area_cat[i].cats[(int)result];
@@ -779,7 +762,6 @@ int main(int argc, char *argv[])
             else {
                 update_err++;
             }
-
         }
     }
     if (Adriver)

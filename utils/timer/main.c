@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       $ETC/current_time_s_ms
  * AUTHOR(S):    Markus Neteler
- * PURPOSE:      timer for benchmarking. Prints current time in seconds.milliseconds
+ * PURPOSE:      timer for benchmarking. Prints current time in
+ *               seconds.milliseconds
  *
  * COPYRIGHT:    (C) 2003 by the GRASS Development Team
  *
