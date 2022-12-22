@@ -1248,7 +1248,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         .. todo::
             vector/volume
         """
-        self.lmgr.notebook.SetSelectionByName("nviz")
+        if not UserSettings.Get(
+            group="general",
+            key="singleWindow",
+            subkey="enabled",
+        ):
+            self.lmgr.notebook.SetSelectionByName("nviz")
         ltype = self.GetLayerInfo(self.layer_selected, key="type")
         if ltype == "raster":
             self.lmgr.nviz.SetPage("surface")
