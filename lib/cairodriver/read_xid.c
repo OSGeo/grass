@@ -21,6 +21,6 @@ void cairo_read_xid(void)
 
     fclose(fp);
 
-    ca.win = (Drawable) xid;
+    ca.win = (Drawable)xid;
 #endif
 }

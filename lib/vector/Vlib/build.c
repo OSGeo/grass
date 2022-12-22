@@ -39,24 +39,26 @@ static int format()
 }
 #endif
 
-static int (*Build_array[])() = {
-    Vect_build_nat
+static int (*Build_array[])() = {Vect_build_nat
 #ifdef HAVE_OGR
-        , Vect_build_ogr, Vect_build_ogr
+                                 ,
+                                 Vect_build_ogr, Vect_build_ogr
 #else
-        , format, format
+                                 ,
+                                 format, format
 #endif
 #ifdef HAVE_POSTGRES
-        , Vect_build_pg
+                                 ,
+                                 Vect_build_pg
 #else
-        , format
+                                 ,
+                                 format
 #endif
 };
 
 /* for qsort */
 
-typedef struct
-{
+typedef struct {
     int i;
     double size;
     struct bound_box box;
@@ -104,7 +106,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     if (n_lines < 1) {
         G_debug(3, "  unable to build area with line %d", iline);
         return 0;
-    }                           /* area was not built */
+    } /* area was not built */
 
     /* get line points which forms a boundary of an area */
     Vect__get_area_points(Map, lines, n_lines, APoints);
@@ -124,28 +126,28 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 
     G_debug(3, "  area/isle size = %f", area_size);
 
-    if (area_size > 0) {        /* CW: area */
+    if (area_size > 0) { /* CW: area */
         /* add area structure to plus */
         area = dig_add_area(plus, n_lines, lines, &box);
-        if (area == -1) {       /* error */
+        if (area == -1) { /* error */
             G_fatal_error(_("Unable to add area (map closed, topo saved)"));
         }
         G_debug(3, "  -> area %d", area);
         return area;
     }
-    else if (area_size < 0) {   /* CCW: island */
+    else if (area_size < 0) { /* CCW: island */
         isle = dig_add_isle(plus, n_lines, lines, &box);
-        if (isle == -1) {       /* error */
+        if (isle == -1) { /* error */
             G_fatal_error(_("Unable to add isle (map closed, topo saved)"));
         }
         G_debug(3, "  -> isle %d", isle);
         return -isle;
     }
     else {
-        /* TODO: What to do with such areas? Should be areas/isles of size 0 stored,
-         *        so that may be found and cleaned by some utility
-         *  Note: it would be useful for vertical closed polygons, but such would be added twice
-         *        as area */
+        /* TODO: What to do with such areas? Should be areas/isles of size 0
+         * stored, so that may be found and cleaned by some utility Note: it
+         * would be useful for vertical closed polygons, but such would be added
+         * twice as area */
         G_warning(_("Area of size = 0.0 ignored"));
     }
     return 0;
@@ -154,8 +156,8 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 /* qsort areas by size */
 static int sort_by_size(const void *a, const void *b)
 {
-    BOX_SIZE *as = (BOX_SIZE *) a;
-    BOX_SIZE *bs = (BOX_SIZE *) b;
+    BOX_SIZE *as = (BOX_SIZE *)a;
+    BOX_SIZE *bs = (BOX_SIZE *)b;
 
     if (as->size < bs->size)
         return -1;
@@ -190,9 +192,9 @@ int Vect_isle_find_area(struct Map_info *Map, int isle,
 
     /* see also Vect_find_area() */
 
-    /* Note: We should check all isle points (at least) because if topology is not clean
-     * and two areas overlap, isle which is not completely within area may be attached,
-     * but it would take long time */
+    /* Note: We should check all isle points (at least) because if topology is
+     * not clean and two areas overlap, isle which is not completely within area
+     * may be attached, but it would take long time */
 
     G_debug(3, "Vect_isle_find_area () island = %d", isle);
     plus = &(Map->plus);
@@ -276,17 +278,19 @@ int Vect_isle_find_area(struct Map_info *Map, int isle,
 
         Area = plus->Area[area];
 
-        /* Before other tests, simply exclude those areas inside isolated isles formed by one boundary */
+        /* Before other tests, simply exclude those areas inside isolated isles
+         * formed by one boundary */
         if (abs(Isle->lines[0]) == abs(Area->lines[0])) {
             G_debug(3, "  area inside isolated isle");
             continue;
         }
 
         /* Check box */
-        /* Note: If build is run on large files of areas imported from nontopo format (shapefile)
-         * attaching of isles takes very long time because each area is also isle and select by
-         * box all overlapping areas selects all areas with box overlapping first node. 
-         * Then reading coordinates for all those areas would take a long time -> check first 
+        /* Note: If build is run on large files of areas imported from nontopo
+         * format (shapefile) attaching of isles takes very long time because
+         * each area is also isle and select by box all overlapping areas
+         * selects all areas with box overlapping first node. Then reading
+         * coordinates for all those areas would take a long time -> check first
          * if isle's box is completely within area box */
 
         abox = &size_list[i].box;
@@ -297,15 +301,15 @@ int Vect_isle_find_area(struct Map_info *Map, int isle,
             continue;
         }
 
-        poly =
-            Vect_point_in_area_outer_ring(Node->x, Node->y, Map, area, abox);
+        poly = Vect_point_in_area_outer_ring(Node->x, Node->y, Map, area, abox);
         G_debug(3, "  poly = %d", poly);
 
-        if (poly == 1) {        /* point in area, but node is not part of area inside isle (would be poly == 2) */
+        if (poly == 1) { /* point in area, but node is not part of area inside
+                            isle (would be poly == 2) */
 
 #if 1
             /* new version */
-            /* the bounding box of the smaller area is 
+            /* the bounding box of the smaller area is
              * 1) inside the bounding box of a larger area and thus
              * 2) smaller than the bounding box of a larger area */
 
@@ -314,32 +318,33 @@ int Vect_isle_find_area(struct Map_info *Map, int isle,
 #else
             /* old version */
 
-            /* In rare case island is inside more areas in that case we have to calculate area
-             * of outer ring and take the smaller */
-            if (sel_area == 0) {        /* first */
+            /* In rare case island is inside more areas in that case we have to
+             * calculate area of outer ring and take the smaller */
+            if (sel_area == 0) { /* first */
                 sel_area = area;
             }
-            else {              /* is not first */
+            else { /* is not first */
                 G_debug(1, "slow version of Vect_isle_find_area()");
-                if (cur_size < 0) {     /* second area */
+                if (cur_size < 0) { /* second area */
                     /* This is slow, but should not be called often */
                     Vect_get_area_points(Map, sel_area, APoints);
                     /* G_begin_polygon_area_calculations();
                        cur_size =
                        G_area_of_polygon(APoints->x, APoints->y,
                        APoints->n_points); */
-                    /* this is faster, but there may be latlon problems: the poles */
+                    /* this is faster, but there may be latlon problems: the
+                     * poles */
                     dig_find_area_poly(APoints, &cur_size);
                     G_debug(3, "  first area size = %f (n points = %d)",
                             cur_size, APoints->n_points);
-
                 }
 
                 Vect_get_area_points(Map, area, APoints);
                 /* size =
                    G_area_of_polygon(APoints->x, APoints->y,
                    APoints->n_points); */
-                /* this is faster, but there may be latlon problems: the poles */
+                /* this is faster, but there may be latlon problems: the poles
+                 */
                 dig_find_area_poly(APoints, &size);
                 G_debug(3, "  area size = %f (n points = %d)", size,
                         APoints->n_points);
@@ -395,8 +400,10 @@ int Vect_attach_isle(struct Map_info *Map, int isle,
     if (area > 0) {
         Isle = plus->Isle[isle];
         if (Isle->area > 0) {
-            G_debug(3, "Attempt to attach isle %d to more areas "
-                    "(=>topology is not clean)", isle);
+            G_debug(3,
+                    "Attempt to attach isle %d to more areas "
+                    "(=>topology is not clean)",
+                    isle);
         }
         else {
             Isle->area = area;
@@ -440,12 +447,12 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
 
         if (area > 0) {
             /* if the area box is not fully inside the box, detach
-             * this might detach more than needed, 
+             * this might detach more than needed,
              * but all that need to be reattached and
              * is faster than reattaching all */
             Vect_get_area_box(Map, area, &abox);
-            if (box->W < abox.W && box->E > abox.E &&
-                box->S < abox.S && box->N > abox.N) {
+            if (box->W < abox.W && box->E > abox.E && box->S < abox.S &&
+                box->N > abox.N) {
                 G_debug(3, "Outer area is fully inside search box");
             }
             else {
@@ -472,10 +479,10 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
    <pre>
    +-----------+     +-----------+
    |   1       |     |   1       |
-   | +---+---+ |     | +---+---+ |     
-   | | 2 | 3 | |     | | 2 |     |   
-   | | x |   | |  -> | | x |     |  
-   | |   |   | |     | |   |     | 
+   | +---+---+ |     | +---+---+ |
+   | | 2 | 3 | |     | | 2 |     |
+   | | x |   | |  -> | | x |     |
+   | |   |   | |     | |   |     |
    | +---+---+ |     | +---+---+ |
    |           |     |           |
    +-----------+     +-----------+
@@ -526,12 +533,12 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box *box)
 
         if (area > 0) {
             /* if the area box is not fully inside the box, detach
-             * this might detach more than needed, 
+             * this might detach more than needed,
              * but all that need to be reattached and
              * is faster than reattaching all */
             Vect_get_area_box(Map, area, &abox);
-            if (box->W < abox.W && box->E > abox.E &&
-                box->S < abox.S && box->N > abox.N) {
+            if (box->W < abox.W && box->E > abox.E && box->S < abox.S &&
+                box->N > abox.N) {
                 G_debug(3, "Centroid's area is fully inside search box");
             }
             else {
@@ -550,14 +557,14 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box *box)
         G_debug(3, "\tcentroid %d is in area %d", centr, area);
         if (area > 0) {
             Area = plus->Area[area];
-            if (Area->centroid == 0) {  /* first centroid */
+            if (Area->centroid == 0) { /* first centroid */
                 G_debug(3, "\tfirst centroid -> attach to area");
                 Area->centroid = centr;
                 topo->area = area;
             }
             else if (Area->centroid != centr) { /* duplicate centroid */
-                /* Note: it cannot happen that Area->centroid == centr, because the centroid
-                 * was not registered or a duplicate */
+                /* Note: it cannot happen that Area->centroid == centr, because
+                 * the centroid was not registered or a duplicate */
                 G_debug(3, "\tduplicate centroid -> do not attach to area");
                 topo->area = -area;
             }
@@ -671,8 +678,8 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
                 (struct P_topo_b *)Map->plus.Line[line]->topo;
 
             if (topo->left == 0 || topo->right == 0) {
-                G_debug(3, "line = %d left = %d right = %d", line,
-                        topo->left, topo->right);
+                G_debug(3, "line = %d left = %d right = %d", line, topo->left,
+                        topo->right);
                 nerrors++;
             }
         }
@@ -690,7 +697,7 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
                 continue;
             line = Vect_get_area_centroid(Map, area);
             if (line != 0)
-                continue;       /* has centroid */
+                continue; /* has centroid */
 
             Vect_get_area_boundaries(Map, area, List);
             for (i = 0; i < List->n_values; i++) {
@@ -823,7 +830,8 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
    be:
    - GV_BUILD_NONE - nothing is build
    - GV_BUILD_BASE - basic topology, nodes, lines, spatial index;
-   - GV_BUILD_AREAS - build areas and islands, but islands are not attached to areas;
+   - GV_BUILD_AREAS - build areas and islands, but islands are not attached to
+   areas;
    - GV_BUILD_ATTACH_ISLES - attach islands to areas;
    - GV_BUILD_CENTROIDS - assign centroids to areas, build category index;
    - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
@@ -841,7 +849,7 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
 
    - Vect_build()
    - Vect_build_partial(,GV_BUILD_BASE,)
-   - Vect_build_partial(,GV_BUILD_AREAS,) 
+   - Vect_build_partial(,GV_BUILD_AREAS,)
 
    \param Map vector map
    \param build highest level of build
@@ -858,8 +866,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     /* If topology is already build (map on > level 2), set level to 1
      * so that lines will be read by V1_read_ (all lines) */
-    Map->level = LEVEL_1;       /* may be not needed, because V1_read is used
-                                   directly by Vect_build_ */
+    Map->level = LEVEL_1; /* may be not needed, because V1_read is used
+                             directly by Vect_build_ */
 
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
         !(Map->format == GV_FORMAT_POSTGIS && Map->fInfo.pg.toposchema_name))
@@ -868,8 +876,9 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     if (!Map->plus.Spidx_built) {
         if (Vect_open_sidx(Map, 2) < 0)
-            G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
-                          Vect_get_full_name(Map));
+            G_fatal_error(
+                _("Unable to open spatial index file for vector map <%s>"),
+                Vect_get_full_name(Map));
     }
 
     plus = &(Map->plus);
@@ -882,11 +891,11 @@ int Vect_build_partial(struct Map_info *Map, int build)
     plus->spidx_with_z = Map->head.with_z;
 
     if (build == GV_BUILD_ALL && plus->built < GV_BUILD_ALL) {
-        dig_cidx_free(plus);    /* free old (if any) category index */
+        dig_cidx_free(plus); /* free old (if any) category index */
         dig_cidx_init(plus);
     }
 
-    ret = ((*Build_array[Map->format]) (Map, build));
+    ret = ((*Build_array[Map->format])(Map, build));
     if (ret == 0) {
         return 0;
     }
@@ -899,7 +908,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
     plus->mode = GV_MODE_WRITE;
 
     if (build == GV_BUILD_ALL) {
-        plus->cidx_up_to_date = TRUE;   /* category index was build */
+        plus->cidx_up_to_date = TRUE; /* category index was build */
         dig_cidx_sort(plus);
     }
 
@@ -924,7 +933,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
         struct P_line *Line;
         struct Plus_head *Plus;
 
-        /* Count errors (it does not take much time comparing to build process) */
+        /* Count errors (it does not take much time comparing to build process)
+         */
         Plus = &(Map->plus);
         nlines = Vect_get_num_lines(Map);
         err_boundaries = err_centr_out = err_centr_dupl = 0;
@@ -975,16 +985,13 @@ int Vect_build_partial(struct Map_info *Map, int build)
                       plus->n_clines, plus->n_areas);
 
         if (err_boundaries)
-            G_warning(_("Number of incorrect boundaries: %d"),
-                      err_boundaries);
+            G_warning(_("Number of incorrect boundaries: %d"), err_boundaries);
 
         if (err_centr_out)
-            G_warning(_("Number of centroids outside area: %d"),
-                      err_centr_out);
+            G_warning(_("Number of centroids outside area: %d"), err_centr_out);
 
         if (err_centr_dupl)
             G_warning(_("Number of duplicate centroids: %d"), err_centr_dupl);
-
     }
     else if (build > GV_BUILD_NONE) {
         G_verbose_message(_("Number of areas: -"));
@@ -1043,7 +1050,7 @@ int Vect_save_topo(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_topo_dump(const struct Map_info *Map, FILE * out)
+int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 {
     int i, j, line, isle;
     float angle_deg;
@@ -1078,8 +1085,8 @@ int Vect_topo_dump(const struct Map_info *Map, FILE * out)
 
     /* box */
     Vect_box_copy(&box, &(plus->box));
-    fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", box.N, box.S,
-            box.E, box.W, box.T, box.B);
+    fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", box.N, box.S, box.E,
+            box.W, box.T, box.B);
 
     fprintf(out, SEP);
 
@@ -1113,46 +1120,45 @@ int Vect_topo_dump(const struct Map_info *Map, FILE * out)
         }
         Line = plus->Line[i];
         if (Line->type == GV_POINT) {
-            fprintf(out, "line = %d, type = %d, offset = %lu\n",
-                    i, Line->type, (unsigned long)Line->offset);
+            fprintf(out, "line = %d, type = %d, offset = %lu\n", i, Line->type,
+                    (unsigned long)Line->offset);
         }
         else if (Line->type == GV_CENTROID) {
             struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
 
-            fprintf(out, "line = %d, type = %d, offset = %lu, area = %d\n",
-                    i, Line->type, (unsigned long)Line->offset, topo->area);
+            fprintf(out, "line = %d, type = %d, offset = %lu, area = %d\n", i,
+                    Line->type, (unsigned long)Line->offset, topo->area);
         }
         else if (Line->type == GV_LINE) {
             struct P_topo_l *topo = (struct P_topo_l *)Line->topo;
 
-            fprintf(out,
-                    "line = %d, type = %d, offset = %lu, n1 = %d, n2 = %d\n",
-                    i, Line->type, (unsigned long)Line->offset, topo->N1,
-                    topo->N2);
+            fprintf(
+                out, "line = %d, type = %d, offset = %lu, n1 = %d, n2 = %d\n",
+                i, Line->type, (unsigned long)Line->offset, topo->N1, topo->N2);
         }
         else if (Line->type == GV_BOUNDARY) {
             struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
 
             fprintf(out,
                     "line = %d, type = %d, offset = %lu, n1 = %d, n2 = %d, "
-                    "left = %d, right = %d\n", i, Line->type,
-                    (unsigned long)Line->offset, topo->N1, topo->N2,
-                    topo->left, topo->right);
+                    "left = %d, right = %d\n",
+                    i, Line->type, (unsigned long)Line->offset, topo->N1,
+                    topo->N2, topo->left, topo->right);
         }
         else if (Line->type == GV_FACE) {
             struct P_topo_f *topo = (struct P_topo_f *)Line->topo;
 
             fprintf(out,
                     "line = %d, type = %d, offset = %lu, e1 = %d, e2 = %d, "
-                    "e3 = %d, left = %d, right = %d\n", i, Line->type,
-                    (unsigned long)Line->offset, topo->E[0], topo->E[1],
-                    topo->E[2], topo->left, topo->right);
+                    "e3 = %d, left = %d, right = %d\n",
+                    i, Line->type, (unsigned long)Line->offset, topo->E[0],
+                    topo->E[1], topo->E[2], topo->left, topo->right);
         }
         else if (Line->type == GV_KERNEL) {
             struct P_topo_k *topo = (struct P_topo_k *)Line->topo;
 
-            fprintf(out, "line = %d, type = %d, offset = %lu, volume = %d",
-                    i, Line->type, (unsigned long)Line->offset, topo->volume);
+            fprintf(out, "line = %d, type = %d, offset = %lu, volume = %d", i,
+                    Line->type, (unsigned long)Line->offset, topo->volume);
         }
     }
 
@@ -1166,8 +1172,8 @@ int Vect_topo_dump(const struct Map_info *Map, FILE * out)
         }
         Area = plus->Area[i];
 
-        fprintf(out, "area = %d, n_lines = %d, n_isles = %d centroid = %d\n",
-                i, Area->n_lines, Area->n_isles, Area->centroid);
+        fprintf(out, "area = %d, n_lines = %d, n_isles = %d centroid = %d\n", i,
+                Area->n_lines, Area->n_isles, Area->centroid);
 
         for (j = 0; j < Area->n_lines; j++) {
             line = Area->lines[j];
@@ -1237,8 +1243,7 @@ int Vect_build_sidx(struct Map_info *Map)
 int Vect_build_sidx_from_topo(const struct Map_info *Map)
 {
 
-    G_debug(3, "Vect_build_sidx_from_topo(): name=%s",
-            Vect_get_full_name(Map));
+    G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
 
     G_warning(_("%s is no longer supported"), "Vect_build_sidx_from_topo()");
 
@@ -1275,8 +1280,9 @@ int Vect_save_sidx(struct Map_info *Map)
         dig_file_init(&(plus->spidx_fp));
         plus->spidx_fp.file = fopen(file_path, "w+");
         if (plus->spidx_fp.file == NULL) {
-            G_warning(_("Unable to create spatial index file for vector map <%s>"),
-                      Vect_get_name(Map));
+            G_warning(
+                _("Unable to create spatial index file for vector map <%s>"),
+                Vect_get_name(Map));
             return 0;
         }
 
@@ -1306,7 +1312,7 @@ int Vect_save_sidx(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_sidx_dump(const struct Map_info *Map, FILE * out)
+int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
 {
     if (!(Map->plus.Spidx_built)) {
         Vect_build_sidx_from_topo(Map);

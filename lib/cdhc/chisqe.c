@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 double *Cdhc_chi_square_exp(double *x, int n)
 {
     static double y[2];

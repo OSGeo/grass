@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
 double *Cdhc_kotz_families(double *x, int n)
 {
     static double y[2];

@@ -1,20 +1,19 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass numerical math interface
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> googlemail <dot> com
-*               
-* PURPOSE:      linear equation system solvers
-* 		part of the gmath library
-*               
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass numerical math interface
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> googlemail <dot> com
+ *
+ * PURPOSE:      linear equation system solvers
+ *                 part of the gmath library
+ *
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <math.h>
 #include <unistd.h>
@@ -24,7 +23,7 @@
 #include <grass/gmath.h>
 #include <grass/glocale.h>
 
-#define TINY 1.0e-20
+#define TINY       1.0e-20
 #define COMP_PIVOT 100
 
 /*!
@@ -32,7 +31,7 @@
  *
  * This solver does not support sparse matrices
  * The matrix A will be overwritten.
- * The result is written to the vector x 
+ * The result is written to the vector x
  *
  * \param A double **
  * \param x double *
@@ -80,7 +79,7 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
 #pragma omp parallel
     {
 
-#pragma omp for  schedule (static) private(i)
+#pragma omp for schedule(static) private(i)
         for (i = 0; i < rows; i++) {
             tmpv[i] = A[i][i];
             A[i][i] = 1;
@@ -91,7 +90,7 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
             G_math_forward_substitution(A, b, b, rows);
         }
 
-#pragma omp for  schedule (static) private(i)
+#pragma omp for schedule(static) private(i)
         for (i = 0; i < rows; i++) {
             A[i][i] = tmpv[i];
         }
@@ -105,7 +104,6 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
     G_free(c);
     G_free(tmpv);
 
-
     return 1;
 }
 
@@ -115,14 +113,13 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
  *
  * This solver does not support sparse matrices
  * The matrix A will be overwritten.
- * The result is written to the vector x 
+ * The result is written to the vector x
  *
  * \param A double **
  * \param x double *
  * \param b double *
- * \param bandwidth int -- the bandwidth of the band matrix, if unsure set to rows
- * \param rows int
- * \return int -- 1 success
+ * \param bandwidth int -- the bandwidth of the band matrix, if unsure set to
+ * rows \param rows int \return int -- 1 success
  * */
 int G_math_solver_cholesky(double **A, double *x, double *b, int bandwidth,
                            int rows)
@@ -148,7 +145,7 @@ int G_math_solver_cholesky(double **A, double *x, double *b, int bandwidth,
  * no pivoting is supported.
  * The matrix will be overwritten with the decomposite form
  * \param A double **
- * \param b double * 
+ * \param b double *
  * \param rows int
  * \return void
  *
@@ -160,7 +157,8 @@ void G_math_gauss_elimination(double **A, double *b, int rows)
     double tmpval = 0.0;
 
     for (k = 0; k < rows - 1; k++) {
-#pragma omp parallel for schedule (static) private(i, j, tmpval) shared(k, A, b, rows)
+#pragma omp parallel for schedule(static) private(i, j, tmpval) \
+    shared(k, A, b, rows)
         for (i = k + 1; i < rows; i++) {
             tmpval = A[i][k] / A[k][k];
             b[i] = b[i] - tmpval * b[k];
@@ -181,9 +179,8 @@ void G_math_gauss_elimination(double **A, double *b, int rows)
  * The matrix will be overwritten with the decomposite form
  *
  * \param A double **
- * \param b double * -- this vector is needed if its part of the linear equation system, otherwise set it to NULL
- * \param rows int
- * \return void
+ * \param b double * -- this vector is needed if its part of the linear equation
+ * system, otherwise set it to NULL \param rows int \return void
  *
  * */
 void G_math_lu_decomposition(double **A, double *b, int rows)
@@ -192,7 +189,7 @@ void G_math_lu_decomposition(double **A, double *b, int rows)
     int i, j, k;
 
     for (k = 0; k < rows - 1; k++) {
-#pragma omp parallel for schedule (static) private(i, j) shared(k, A, rows)
+#pragma omp parallel for schedule(static) private(i, j) shared(k, A, rows)
         for (i = k + 1; i < rows; i++) {
             A[i][k] = A[i][k] / A[k][k];
             for (j = k + 1; j < rows; j++) {
@@ -208,8 +205,8 @@ void G_math_lu_decomposition(double **A, double *b, int rows)
  * \brief cholesky decomposition for symmetric, positiv definite matrices
  *        with bandwidth optimization
  *
- * The provided matrix will be overwritten with the lower and 
- * upper triangle matrix A = LL^T 
+ * The provided matrix will be overwritten with the lower and
+ * upper triangle matrix A = LL^T
  *
  * \param A double **
  * \param rows int
@@ -253,7 +250,8 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwidth)
             colsize = k + bandwidth;
         }
 
-#pragma omp parallel for schedule (static) private(i, j, sum_2) shared(A, k, sum_1, colsize)
+#pragma omp parallel for schedule(static) private(i, j, sum_2) \
+    shared(A, k, sum_1, colsize)
 
         for (i = k + 1; i < colsize; i++) {
             sum_2 = 0.0;
@@ -262,16 +260,14 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwidth)
             }
             A[i][k] = (A[i][k] - sum_2) / A[k][k];
         }
-
     }
     /* we need to copy the lower triangle matrix to the upper triangle */
-#pragma omp parallel for schedule (static) private(i, k) shared(A, rows)
+#pragma omp parallel for schedule(static) private(i, k) shared(A, rows)
     for (k = 0; k < rows; k++) {
         for (i = k + 1; i < rows; i++) {
             A[k][i] = A[i][k];
         }
     }
-
 
     return 1;
 }

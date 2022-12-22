@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_cramer_von_mises_exp(double *x, int n)
 {
     static double y[2];
@@ -25,20 +24,20 @@ double *Cdhc_cramer_von_mises_exp(double *x, int n)
 
     for (i = 0; i < n; ++i) {
 
-    /*-
-    a = (2 * i + 1) * log (fx);
-    b = (2 * i + 1) * (xcopy[n-i-1] * (-1.0 / mean));
-    sum3 += a + b;
-    */
+        /*-
+        a = (2 * i + 1) * log (fx);
+        b = (2 * i + 1) * (xcopy[n-i-1] * (-1.0 / mean));
+        sum3 += a + b;
+        */
         fx = 1 - exp(xcopy[i] * (-1.0 / mean));
         fn2 = (double)(2.0 * i + 1) / (2 * n);
         sum4 += (fx - fn2) * (fx - fn2);
     }
 
-  /*-
-  cvm = 1.0 / (n * 12) + sum4;
-  cvmod = cvm * (0.16 / n + 1.0);
-  */
+    /*-
+    cvm = 1.0 / (n * 12) + sum4;
+    cvmod = cvm * (0.16 / n + 1.0);
+    */
     y[0] = (1.0 / (n * 12) + sum4) * (0.16 / n + 1.0);
 
 #ifdef NOISY

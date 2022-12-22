@@ -33,7 +33,7 @@ int I_new_signature(struct Signature *S)
     int i;
 
     i = S->nsigs++;
-    S->sig = (SIG *) G_realloc(S->sig, S->nsigs * sizeof(SIG));
+    S->sig = (SIG *)G_realloc(S->sig, S->nsigs * sizeof(SIG));
 
     S->sig[i].mean = (double *)G_calloc(S->nbands, sizeof(double));
     S->sig[i].var = (double **)G_calloc(S->nbands, sizeof(double *));
@@ -85,7 +85,7 @@ int I_free_signatures(struct Signature *S)
 /*!
  * \brief Internal function for I_read_signatures
  */
-int I_read_one_signature(FILE * fd, struct Signature *S)
+int I_read_one_signature(FILE *fd, struct Signature *S)
 {
     int n;
     int i;
@@ -118,12 +118,11 @@ int I_read_one_signature(FILE * fd, struct Signature *S)
         for (n = 0; n <= i; n++) {
             if (fscanf(fd, "%lf", &s->var[i][n]) != 1)
                 return -1;
-            s->var[n][i] = s->var[i][n];        /* added 28 aug 91 */
+            s->var[n][i] = s->var[i][n]; /* added 28 aug 91 */
         }
     }
-    if (fscanf(fd, "%f%f%f", &s->r, &s->g, &s->b) == 3 &&
-        s->r >= 0.0 && s->r <= 1.0 &&
-        s->g >= 0.0 && s->g <= 1.0 && s->b >= 0.0 && s->b <= 1.0)
+    if (fscanf(fd, "%f%f%f", &s->r, &s->g, &s->b) == 3 && s->r >= 0.0 &&
+        s->r <= 1.0 && s->g >= 0.0 && s->g <= 1.0 && s->b >= 0.0 && s->b <= 1.0)
         s->have_color = 1;
 
     s->status = 1;
@@ -145,7 +144,7 @@ int I_read_one_signature(FILE * fd, struct Signature *S)
  *
  * \return 1 on success, -1 on failure
  */
-int I_read_signatures(FILE * fd, struct Signature *S)
+int I_read_signatures(FILE *fd, struct Signature *S)
 {
     int ver, n, pos;
     char c, prev;
@@ -191,9 +190,8 @@ int I_read_signatures(FILE * fd, struct Signature *S)
             S->semantic_labels[n] = G_store(semantic_label);
             n++;
             /* [n] is 0 based thus: (n + 1) */
-            S->semantic_labels =
-                (char **)G_realloc(S->semantic_labels,
-                                   (n + 1) * sizeof(char **));
+            S->semantic_labels = (char **)G_realloc(S->semantic_labels,
+                                                    (n + 1) * sizeof(char **));
             pos = 0;
             prev = c;
             continue;
@@ -201,7 +199,8 @@ int I_read_signatures(FILE * fd, struct Signature *S)
         /* Semantic labels are limited to GNAME_MAX - 1 + \0 in length;
          * n is 0-based */
         if (pos == (GNAME_MAX - 2)) {
-            G_warning(_("Invalid signature file: semantic label length limit exceeded"));
+            G_warning(_("Invalid signature file: semantic label length limit "
+                        "exceeded"));
             return -1;
         }
         semantic_label[pos] = c;
@@ -216,11 +215,13 @@ int I_read_signatures(FILE * fd, struct Signature *S)
 
     /* Read marker of original class value presence */
     if (ver >= 2 && fscanf(fd, "%d", &S->have_oclass) != 1) {
-        G_warning(_("Invalid signature file: Original class value presence not readable"));
+        G_warning(_("Invalid signature file: Original class value presence not "
+                    "readable"));
         return -1;
     }
 
-    while ((n = I_read_one_signature(fd, S)) == 1) ;
+    while ((n = I_read_one_signature(fd, S)) == 1)
+        ;
 
     if (n < 0)
         return -1;
@@ -241,7 +242,7 @@ int I_read_signatures(FILE * fd, struct Signature *S)
  *
  * \return always 1
  */
-int I_write_signatures(FILE * fd, struct Signature *S)
+int I_write_signatures(FILE *fd, struct Signature *S)
 {
     int k;
     int n;
@@ -310,7 +311,8 @@ int I_write_signatures(FILE * fd, struct Signature *S)
  * detected (== all are present in the other list), a NULL value will be
  * returned in the particular list of mismatches (not an empty string).
  * For example:
- * \code if (ret && ret[1]) printf("List of imagery group bands without signatures: %s\n, ret[1]); \endcode
+ * \code if (ret && ret[1]) printf("List of imagery group bands without
+ * signatures: %s\n, ret[1]); \endcode
  *
  * \param *Signature existing signatures to check & sort
  * \param *Ref group reference
@@ -336,8 +338,7 @@ char **I_sort_signatures_by_semantic_label(struct Signature *S,
     group_semantic_labels = (char **)G_malloc(R->nfiles * sizeof(char *));
     for (unsigned int j = R->nfiles; j--;) {
         group_semantic_labels[j] =
-            Rast_get_semantic_label_or_name(R->file[j].name,
-                                            R->file[j].mapset);
+            Rast_get_semantic_label_or_name(R->file[j].name, R->file[j].mapset);
     }
 
     /* If lengths are not equal, there will be a mismatch */

@@ -19,7 +19,7 @@ static void format_double(double, char *, int);
 /*!
  * \brief Northing to ASCII.
  *
- * Converts the double representation of the <i>north</i> coordinate to 
+ * Converts the double representation of the <i>north</i> coordinate to
  * its ASCII representation (into <i>buf</i>).
  *
  * \param north northing
@@ -59,7 +59,7 @@ void G_format_easting(double east, char *buf, int projection)
 /*!
  * \brief Resolution to ASCII.
  *
- * Converts the double representation of the <i>resolution</i> to its 
+ * Converts the double representation of the <i>resolution</i> to its
  * ASCII representation (into <i>buf</i>).
  *
  * \param resolution resolution value

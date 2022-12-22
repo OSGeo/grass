@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/view.c
  *
@@ -20,7 +19,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
 #define REQ_KEYS 8
 
 static int compare_wind(const struct Cell_head *, const struct Cell_head *);
@@ -33,7 +31,6 @@ static const int vers_major = 4;
 static const int vers_minor = 1;
 
 static int Suppress_warn = 0;
-
 
 /**
  * \brief Turns 3D View warnings on and off.
@@ -49,7 +46,6 @@ void G_3dview_warning(int b)
 {
     Suppress_warn = b ? 0 : 1;
 }
-
 
 /**
  * \brief Sets default for <b>v</b> based on <b>w</b>.
@@ -87,7 +83,7 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
     v->lightpos[0] = w->west;
     v->lightpos[1] = w->north;
     v->lightpos[2] = (w->east - w->west) / 2.0;
-    v->lightpos[3] = 1.0;       /* local source */
+    v->lightpos[3] = 1.0; /* local source */
 
     v->vwin.north = w->north;
     v->vwin.south = w->south;
@@ -103,22 +99,20 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
     v->vwin.rows = w->rows;
 
     return (1);
-
 }
-
 
 /**
  * \brief Saves info to a 3d.view file.
  *
- * The address of a window (struct Cell_head *) may be passed, or if 
- * NULL is passed, the Cell_head structure inside the G_3dview struct 
- * will be used.  e.g., if you called <i>G_get_3dview_defaults</i> with 
- * the Cell_head you want saved, the G_3dview returned already contains 
- * the new Cell_head. But if you're using all the keywords, so didn't 
+ * The address of a window (struct Cell_head *) may be passed, or if
+ * NULL is passed, the Cell_head structure inside the G_3dview struct
+ * will be used.  e.g., if you called <i>G_get_3dview_defaults</i> with
+ * the Cell_head you want saved, the G_3dview returned already contains
+ * the new Cell_head. But if you're using all the keywords, so didn't
  * need defaults, pass this routine the address of a Cell_head.<br>
  *
- * User should call <i>G_get_3dview_defaults</i> before filling a 
- * G_3dview struct to be written if not using all of the optional 
+ * User should call <i>G_get_3dview_defaults</i> before filling a
+ * G_3dview struct to be written if not using all of the optional
  * keywords.<br>
  *
  * These keywords are constant in all 3d.view files:<br>
@@ -212,7 +206,7 @@ int G_put_3dview(const char *fname, const char *mapset,
     fprintf(fp, "DISPLAY_TYPE: %d\n", View->display_type);
     fprintf(fp, "DOZERO: %d\n", View->dozero);
 
-    fprintf(fp, "COLORGRID: %d\n", View->colorgrid);    /* 1 = use color */
+    fprintf(fp, "COLORGRID: %d\n", View->colorgrid); /* 1 = use color */
     fprintf(fp, "SHADING: %d\n", View->shading);
     fprintf(fp, "FRINGE: %d\n", View->fringe);
     fprintf(fp, "BG_COL: %s\n", View->bg_col);
@@ -220,8 +214,8 @@ int G_put_3dview(const char *fname, const char *mapset,
     fprintf(fp, "OTHER_COL: %s\n", View->other_col);
     fprintf(fp, "SURFACEONLY: %d\n", View->surfonly);
     fprintf(fp, "LIGHTS_ON: %d\n", View->lightson);
-    fprintf(fp, "LIGHTPOS: %f %f %f %f\n", View->lightpos[0],
-            View->lightpos[1], View->lightpos[2], View->lightpos[3]);
+    fprintf(fp, "LIGHTPOS: %f %f %f %f\n", View->lightpos[0], View->lightpos[1],
+            View->lightpos[2], View->lightpos[3]);
     fprintf(fp, "LIGHTCOL: %f %f %f\n", View->lightcol[0], View->lightcol[1],
             View->lightcol[2]);
     fprintf(fp, "LIGHTAMBIENT: %f\n", View->ambient);
@@ -232,11 +226,10 @@ int G_put_3dview(const char *fname, const char *mapset,
     return (1);
 }
 
-
 /**
  * \brief Gets a 3D View.
  *
- * If reading an old format, the window boundaries are not checked 
+ * If reading an old format, the window boundaries are not checked
  * against the current window since boundaries weren't saved.
  *
  * \param[in] fname
@@ -254,7 +247,7 @@ int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
     FILE *fp;
     char buffer[80], keystring[24], boo[8], nbuf[128], ebuf[128];
     int lap, v_maj, v_min, wind_keys = 0, reqkeys = 0;
-    int current = 0;            /* current version flag */
+    int current = 0; /* current version flag */
 
     mapset = G_find_file2("3d.view", fname, mapset);
     if (mapset != NULL) {
@@ -267,7 +260,7 @@ int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
         G_get_3dview_defaults(View, &curwin);
 
         if (NULL != fgets(buffer, 80, fp)) {
-            if (buffer[0] != '#') {     /* old d.3d format */
+            if (buffer[0] != '#') { /* old d.3d format */
                 rewind(fp);
                 if (0 <= read_old_format(View, fp))
                     return (0);
@@ -277,7 +270,7 @@ int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
             else {
                 sscanf(buffer, "#%d.%d\n", &v_maj, &v_min);
                 if (v_maj == vers_major && v_min == vers_minor)
-                    current = 1;        /* same version */
+                    current = 1; /* same version */
             }
         }
 
@@ -446,18 +439,18 @@ int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
 
         fclose(fp);
 
-        if (reqkeys != REQ_KEYS)        /* required keys not found */
+        if (reqkeys != REQ_KEYS) /* required keys not found */
             return (-1);
 
         /* fill rest of View->vwin */
         if (wind_keys == 6) {
-            View->vwin.ew_res = (View->vwin.east - View->vwin.west) /
-                View->vwin.cols;
-            View->vwin.ns_res = (View->vwin.north - View->vwin.south) /
-                View->vwin.rows;
+            View->vwin.ew_res =
+                (View->vwin.east - View->vwin.west) / View->vwin.cols;
+            View->vwin.ns_res =
+                (View->vwin.north - View->vwin.south) / View->vwin.rows;
         }
         else
-            return (0);         /* older format */
+            return (0); /* older format */
 
         if (!Suppress_warn) {
             if (95 > (lap = compare_wind(&(View->vwin), &curwin))) {
@@ -485,7 +478,6 @@ int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
 
     return (1);
 }
-
 
 /* returns the percentage of savedwin that overlaps curwin */
 
@@ -519,12 +511,11 @@ static int compare_wind(const struct Cell_head *savedwin,
     edge_sort(n_ings);
 
     area_lap = (e_ings[2] - e_ings[1]) * (n_ings[2] - n_ings[1]);
-    area_saved = (savedwin->east - savedwin->west) *
-        (savedwin->north - savedwin->south);
+    area_saved =
+        (savedwin->east - savedwin->west) * (savedwin->north - savedwin->south);
 
     return ((int)(area_lap * 100.0 / area_saved));
 }
-
 
 static int get_bool(const char *str)
 {
@@ -536,17 +527,19 @@ static int get_bool(const char *str)
     return (atoi(str) ? 1 : 0);
 }
 
-
-static void pr_winerr(int vis,  /* % of saved window overlapping current window */
-                      const char *viewname)
+static void
+pr_winerr(int vis, /* % of saved window overlapping current window */
+          const char *viewname)
 {
     switch (vis) {
     case 0:
-        G_warning(_(" Window saved in \"%s\" is completely outside of current GRASS window."),
+        G_warning(_(" Window saved in \"%s\" is completely outside of current "
+                    "GRASS window."),
                   viewname);
         break;
     default:
-        G_warning(_(" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."),
+        G_warning(_(" Only %d%% of window saved in \"%s\" overlaps with "
+                    "current GRASS window."),
                   vis, viewname);
         break;
     }
@@ -562,7 +555,7 @@ static void edge_sort(float sides[4])
 
     for (i = 0; i < 4; ++i) {
         for (j = i + 1; j < 4; ++j) {
-            if (sides[j] < sides[i]) {  /* then swap */
+            if (sides[j] < sides[i]) { /* then swap */
                 temp = sides[i];
                 sides[i] = sides[j];
                 sides[j] = temp;
@@ -571,8 +564,7 @@ static void edge_sort(float sides[4])
     }
 }
 
-
-static int read_old_format(struct G_3dview *v, FILE * fp)
+static int read_old_format(struct G_3dview *v, FILE *fp)
 {
     char buffer[80];
     int req_keys = 0;
@@ -597,13 +589,13 @@ static int read_old_format(struct G_3dview *v, FILE * fp)
     sscanf(fgets(buffer, 80, fp), "%d", &(v->mesh_freq));
     if (1 == sscanf(fgets(buffer, 80, fp), "%f", &(v->fov)))
         ++req_keys;
-    if (1 == sscanf(fgets(buffer, 80, fp), "%lf", &td)) {       /* resolution */
+    if (1 == sscanf(fgets(buffer, 80, fp), "%lf", &td)) { /* resolution */
         v->vwin.rows = (v->vwin.north - v->vwin.south) / td;
         v->vwin.cols = (v->vwin.east - v->vwin.west) / td;
         v->vwin.ew_res = v->vwin.ns_res = td;
     }
 
-    sscanf(fgets(buffer, 80, fp), "%s", boo);   /* linesonly */
+    sscanf(fgets(buffer, 80, fp), "%s", boo); /* linesonly */
     v->display_type = get_bool(boo) ? 1 : 3;
     sscanf(fgets(buffer, 80, fp), "%s", boo);
     v->dozero = get_bool(boo);
@@ -616,11 +608,10 @@ static int read_old_format(struct G_3dview *v, FILE * fp)
     sscanf(fgets(buffer, 80, fp), "%s", boo);
     v->doavg = get_bool(boo);
 
-    if (v->exag) {              /* old 3d.view files saved height with no exag */
+    if (v->exag) { /* old 3d.view files saved height with no exag */
         v->from_to[0][2] /= v->exag;
         v->from_to[1][2] /= v->exag;
     }
-
 
     fclose(fp);
     if (req_keys == REQ_KEYS)

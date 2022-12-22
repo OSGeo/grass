@@ -22,7 +22,7 @@
 #include "pg_local_proto.h"
 #endif
 
-/*! 
+/*!
    \brief Rewind vector map (PostGIS layer) to cause reads to start
    at beginning (level 1)
 

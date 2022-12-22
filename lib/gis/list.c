@@ -42,14 +42,13 @@ static int list_element(FILE *, const char *, const char *, const char *,
 
    \param element    database element (eg, "cell", "cellhd", etc.)
    \param desc       description for element (if NULL, element is used)
-   \param mapset     mapset to be listed "" to list all mapsets in mapset search list 
+   \param mapset     mapset to be listed "" to list all mapsets in mapset search
+   list
    "." will list current mapset
    \param lister     if given will call this routine to get a list title.
-   NULL if no titles desired. 
+   NULL if no titles desired.
  */
-void G_list_element(const char *element,
-                    const char *desc,
-                    const char *mapset,
+void G_list_element(const char *element, const char *desc, const char *mapset,
                     int (*lister)(const char *, const char *, const char *))
 {
     struct Popen pager;
@@ -80,11 +79,10 @@ void G_list_element(const char *element,
 
     if (count == 0) {
         if (mapset == 0 || *mapset == 0)
-            fprintf(more, _("no %s files available in current mapset\n"),
-                    desc);
+            fprintf(more, _("no %s files available in current mapset\n"), desc);
         else
-            fprintf(more, _("no %s files available in mapset <%s>\n"),
-                    desc, mapset);
+            fprintf(more, _("no %s files available in mapset <%s>\n"), desc,
+                    mapset);
 
         fprintf(more, "----------------------------------------------\n");
     }
@@ -94,10 +92,9 @@ void G_list_element(const char *element,
     G_close_pager(&pager);
 }
 
-static int list_element(FILE * out, const char *element, const char *desc,
-                        const char *mapset, int (*lister)(const char *,
-                                                          const char *,
-                                                          const char *))
+static int list_element(FILE *out, const char *element, const char *desc,
+                        const char *mapset,
+                        int (*lister)(const char *, const char *, const char *))
 {
     char path[GPATH_MAX];
     int count = 0;
@@ -109,7 +106,6 @@ static int list_element(FILE * out, const char *element, const char *desc,
      */
     if (strcmp(mapset, ".") == 0)
         mapset = G_mapset();
-
 
     /*
      * get the full name of the GIS directory within the mapset
@@ -168,10 +164,9 @@ static int list_element(FILE * out, const char *element, const char *desc,
    \brief List specified type of elements. Application must release
    the allocated memory.
 
-   \param element element type (G_ELEMENT_RASTER, G_ELEMENT_VECTOR, G_ELEMENT_REGION )
-   \param gisbase path to GISBASE
-   \param location location name
-   \param mapset mapset name
+   \param element element type (G_ELEMENT_RASTER, G_ELEMENT_VECTOR,
+   G_ELEMENT_REGION ) \param gisbase path to GISBASE \param location location
+   name \param mapset mapset name
 
    \return zero terminated array of element names
  */
@@ -206,15 +201,15 @@ char **G_list(int element, const char *gisbase, const char *location,
         G_fatal_error(_("G_list: Unknown element type"));
     }
 
-    buf = (char *)G_malloc(strlen(gisbase) + strlen(location)
-                           + strlen(mapset) + strlen(el) + 4);
+    buf = (char *)G_malloc(strlen(gisbase) + strlen(location) + strlen(mapset) +
+                           strlen(el) + 4);
 
     sprintf(buf, "%s/%s/%s/%s", gisbase, location, mapset, el);
 
     dirp = opendir(buf);
     G_free(buf);
 
-    if (dirp == NULL) {         /* this can happen if element does not exist */
+    if (dirp == NULL) { /* this can happen if element does not exist */
         list = (char **)G_calloc(1, sizeof(char *));
         return list;
     }

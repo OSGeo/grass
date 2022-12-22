@@ -1,10 +1,9 @@
-
 /*****************************************************************************
  *
  * MODULE:       Grass PDE Numerical Library
  * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
+ *                 soerengebbert <at> gmx <dot> de
+ *
  * PURPOSE:      Unit tests for les solving
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -59,8 +58,7 @@ G_math_les *create_normal_symmetric_les(int rows)
             else
                 les->A[i][j] =
                     (double)(1.0 /
-                             ((((double)i + 1.0) + ((double)j + 1.0) +
-                               100.0)));
+                             ((((double)i + 1.0) + ((double)j + 1.0) + 100.0)));
 
             val += les->A[i][j];
         }
@@ -70,7 +68,6 @@ G_math_les *create_normal_symmetric_les(int rows)
 
     return les;
 }
-
 
 /* *************************************************************** */
 /* create a symmetric band matrix with values ** Hilbert matrix ** */
@@ -88,9 +85,8 @@ G_math_les *create_symmetric_band_les(int rows)
         for (j = 0; j < size; j++) {
             if (i + j < size) {
                 les->A[i][j] =
-                    (double)(1.0 /
-                             ((((double)i + 1.0) + ((double)(i + j) + 1.0) +
-                               100.0)));
+                    (double)(1.0 / ((((double)i + 1.0) +
+                                     ((double)(i + j) + 1.0) + 100.0)));
             }
             else if (j != i) {
                 les->A[i][j] = 0.0;
@@ -101,13 +97,11 @@ G_math_les *create_symmetric_band_les(int rows)
             }
 
             if (j == i)
-                val +=
-                    (double)(1.0 / (((double)i + 1.0) + ((double)j + 1.0)));
+                val += (double)(1.0 / (((double)i + 1.0) + ((double)j + 1.0)));
             else
                 val +=
                     (double)(1.0 /
-                             ((((double)i + 1.0) + ((double)j + 1.0) +
-                               100.0)));
+                             ((((double)i + 1.0) + ((double)j + 1.0) + 100.0)));
         }
         les->b[i] = val;
         les->x[i] = 0.5;
@@ -135,9 +129,8 @@ G_math_les *create_normal_symmetric_pivot_les(int rows)
                              (((double)ii * ii * ii * ii * ii + 1.0) * 1.1 +
                               ((double)jj * jj * jj * jj * jj + 1.0) * 1.1));
             else
-                les->A[i][j] = (double)(1.0 / ((((double)ii * ii * ii + 1.0)
-                                                + ((double)jj * jj * jj +
-                                                   1.0))));
+                les->A[i][j] = (double)(1.0 / ((((double)ii * ii * ii + 1.0) +
+                                                ((double)jj * jj * jj + 1.0))));
 
             val += les->A[i][j];
         }
@@ -163,12 +156,12 @@ G_math_f_les *create_normal_symmetric_f_les(int rows)
         val = 0.0;
         for (j = 0; j < size; j++) {
             if (j == i)
-                les->A[i][j] = (float)(1.0
-                                       / (((float)i + 1.0) +
-                                          ((float)j + 1.0)));
+                les->A[i][j] =
+                    (float)(1.0 / (((float)i + 1.0) + ((float)j + 1.0)));
             else
-                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0)
-                                               + ((float)j + 1.0) + 100.0)));
+                les->A[i][j] =
+                    (float)(1.0 /
+                            ((((float)i + 1.0) + ((float)j + 1.0) + 100.0)));
 
             val += les->A[i][j];
         }
@@ -197,20 +190,20 @@ G_math_les *create_sparse_unsymmetric_les(int rows)
 
         for (j = 0; j < rows; j++) {
             if (j == i) {
-                spvector->values[j] = (double)(1.0 / ((((double)i + 1.0)
-                                                       + ((double)j))));
+                spvector->values[j] =
+                    (double)(1.0 / ((((double)i + 1.0) + ((double)j))));
                 spvector->index[j] = j;
             }
             if (j < i) {
-                spvector->values[j] = (double)(1.0 / ((((double)i + 1.0)
-                                                       + ((double)j + 1.0) +
-                                                       100)));
+                spvector->values[j] =
+                    (double)(1.0 /
+                             ((((double)i + 1.0) + ((double)j + 1.0) + 100)));
                 spvector->index[j] = j;
             }
             if (j > i) {
-                spvector->values[j] = (double)(1.0 / ((((double)i + 1.0)
-                                                       + ((double)j + 1.0) +
-                                                       120)));
+                spvector->values[j] =
+                    (double)(1.0 /
+                             ((((double)i + 1.0) + ((double)j + 1.0) + 120)));
                 spvector->index[j] = j;
             }
 
@@ -240,16 +233,16 @@ G_math_les *create_normal_unsymmetric_les(int rows)
         val = 0.0;
         for (j = 0; j < size; j++) {
             if (j == i)
-                les->A[i][j]
-                    = (double)(1.0 / ((((double)i + 1.0) + ((double)j))));
+                les->A[i][j] =
+                    (double)(1.0 / ((((double)i + 1.0) + ((double)j))));
             if (j < i)
-                les->A[i][j] = (double)(1.0 / ((((double)i + 1.0) + ((double)j
-                                                                     + 1.0) +
-                                                100)));
+                les->A[i][j] =
+                    (double)(1.0 /
+                             ((((double)i + 1.0) + ((double)j + 1.0) + 100)));
             if (j > i)
-                les->A[i][j] = (double)(1.0 / ((((double)i + 1.0) + ((double)j
-                                                                     + 1.0) +
-                                                120)));
+                les->A[i][j] =
+                    (double)(1.0 /
+                             ((((double)i + 1.0) + ((double)j + 1.0) + 120)));
 
             val += les->A[i][j];
         }
@@ -272,23 +265,27 @@ G_math_les *create_normal_unsymmetric_nquad_les_A(int rows, int cols)
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
             if (j == i)
-                les->A[i][j] =
-                    (float)(1.0 / ((((float)i + 1.0) + ((float)j))));
+                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0) + ((float)j))));
             if (j < i && j < cols && i < rows)
-                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0)
-                                               + ((float)j + 1.0) + 100)));
+                les->A[i][j] =
+                    (float)(1.0 /
+                            ((((float)i + 1.0) + ((float)j + 1.0) + 100)));
             if (j > i && j < cols && i < rows)
-                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0)
-                                               + ((float)j + 1.0) + 120)));
+                les->A[i][j] =
+                    (float)(1.0 /
+                            ((((float)i + 1.0) + ((float)j + 1.0) + 120)));
         }
     }
 
     return les;
 }
 
-/* ***************************************************************************** */
-/* create a non quadratic unsymmetric float matrix with values ** Hilbert matrix */
-/* ***************************************************************************** */
+/* *****************************************************************************
+ */
+/* create a non quadratic unsymmetric float matrix with values ** Hilbert matrix
+ */
+/* *****************************************************************************
+ */
 G_math_f_les *create_normal_unsymmetric_f_nquad_les_A(int rows, int cols)
 {
     G_math_f_les *les;
@@ -298,14 +295,15 @@ G_math_f_les *create_normal_unsymmetric_f_nquad_les_A(int rows, int cols)
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
             if (j == i)
-                les->A[i][j] =
-                    (float)(1.0 / ((((float)i + 1.0) + ((float)j))));
+                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0) + ((float)j))));
             if (j < i && j < cols && i < rows)
-                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0)
-                                               + ((float)j + 1.0) + 100)));
+                les->A[i][j] =
+                    (float)(1.0 /
+                            ((((float)i + 1.0) + ((float)j + 1.0) + 100)));
             if (j > i && j < cols && i < rows)
-                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0)
-                                               + ((float)j + 1.0) + 120)));
+                les->A[i][j] =
+                    (float)(1.0 /
+                            ((((float)i + 1.0) + ((float)j + 1.0) + 120)));
         }
     }
 
@@ -327,14 +325,15 @@ G_math_f_les *create_normal_unsymmetric_f_les(int rows)
         val = 0.0;
         for (j = 0; j < size; j++) {
             if (j == i)
-                les->A[i][j] =
-                    (float)(1.0 / ((((float)i + 1.0) + ((float)j))));
+                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0) + ((float)j))));
             if (j < i)
-                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0)
-                                               + ((float)j + 1.0) + 100)));
+                les->A[i][j] =
+                    (float)(1.0 /
+                            ((((float)i + 1.0) + ((float)j + 1.0) + 100)));
             if (j > i)
-                les->A[i][j] = (float)(1.0 / ((((float)i + 1.0)
-                                               + ((float)j + 1.0) + 120)));
+                les->A[i][j] =
+                    (float)(1.0 /
+                            ((((float)i + 1.0) + ((float)j + 1.0) + 120)));
 
             val += les->A[i][j];
         }
@@ -363,14 +362,14 @@ G_math_les *create_sparse_symmetric_les(int rows)
 
         for (j = 0; j < rows; j++) {
             if (j == i) {
-                spvector->values[j] = (double)(1.0 / ((((double)i + 1.0)
-                                                       + ((double)j + 1.0))));
+                spvector->values[j] =
+                    (double)(1.0 / ((((double)i + 1.0) + ((double)j + 1.0))));
                 spvector->index[j] = j;
             }
             else {
-                spvector->values[j] = (double)(1.0 / (((((double)i + 1.0)
-                                                        + ((double)j + 1.0)) +
-                                                       100)));
+                spvector->values[j] =
+                    (double)(1.0 /
+                             (((((double)i + 1.0) + ((double)j + 1.0)) + 100)));
                 spvector->index[j] = j;
             }
 
@@ -393,7 +392,6 @@ void fill_d_vector_range_1(double *x, double a, int rows)
     for (i = 0; i < rows; i++) {
         x[i] = a * (double)i;
     }
-
 }
 
 /* *************************************************************** */
@@ -405,7 +403,6 @@ void fill_d_vector_range_2(double *x, double a, int rows)
         x[i] = a * (double)count;
         count++;
     }
-
 }
 
 /* *************************************************************** */
@@ -425,7 +422,7 @@ void fill_f_vector_range_1(float *x, float a, int rows)
 
     for (i = 0; i < rows; i++) {
         x[i] = a * (float)i;
-        //printf("%f ", x[i]);
+        // printf("%f ", x[i]);
     }
 }
 
@@ -436,10 +433,9 @@ void fill_f_vector_range_2(float *x, float a, int rows)
 
     for (i = rows - 1; i >= 0; i--) {
         x[i] = a * (float)count;
-        //printf("%f ", x[i]);
+        // printf("%f ", x[i]);
         count++;
     }
-
 }
 
 /* *************************************************************** */
@@ -449,7 +445,7 @@ void fill_f_vector_scalar(float *x, float a, int rows)
 
     for (i = 0; i < rows; i++) {
         x[i] = a;
-        //printf("%f ", x[i]);
+        // printf("%f ", x[i]);
     }
 }
 
@@ -472,7 +468,6 @@ void fill_i_vector_range_2(int *x, int a, int rows)
         x[i] = a * count;
         count++;
     }
-
 }
 
 /* *************************************************************** */

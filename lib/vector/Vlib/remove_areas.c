@@ -17,11 +17,11 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-int Vect_remove_small_areas_nat(struct Map_info *, double,
-                                struct Map_info *, double *);
+int Vect_remove_small_areas_nat(struct Map_info *, double, struct Map_info *,
+                                double *);
 
-int Vect_remove_small_areas_ext(struct Map_info *, double,
-                                struct Map_info *, double *);
+int Vect_remove_small_areas_ext(struct Map_info *, double, struct Map_info *,
+                                double *);
 
 /*!
    \brief Remove small areas from the map map.
@@ -32,14 +32,14 @@ int Vect_remove_small_areas_ext(struct Map_info *, double,
    \param[in,out] Map vector map
    \param thresh maximum area size for removed areas
    \param[out] Err vector map where removed lines and centroids are written
-   \param removed_area  pointer to where total size of removed area is stored or NULL
+   \param removed_area  pointer to where total size of removed area is stored or
+   NULL
 
-   \return number of removed areas 
+   \return number of removed areas
  */
 
-int
-Vect_remove_small_areas(struct Map_info *Map, double thresh,
-                        struct Map_info *Err, double *removed_area)
+int Vect_remove_small_areas(struct Map_info *Map, double thresh,
+                            struct Map_info *Err, double *removed_area)
 {
 
     if (Map->format == GV_FORMAT_NATIVE)
@@ -48,9 +48,8 @@ Vect_remove_small_areas(struct Map_info *Map, double thresh,
         return Vect_remove_small_areas_ext(Map, thresh, Err, removed_area);
 }
 
-int
-Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
-                            struct Map_info *Err, double *removed_area)
+int Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
+                                struct Map_info *Err, double *removed_area)
 {
     int area, nareas;
     int nremoved = 0;
@@ -103,7 +102,7 @@ Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
 
             line = List->value[i];
 
-            if (!Vect_line_alive(Map, abs(line)))       /* Should not happen */
+            if (!Vect_line_alive(Map, abs(line))) /* Should not happen */
                 G_fatal_error(_("Area is composed of dead boundary"));
 
             Vect_get_line_areas(Map, abs(line), &left, &right);
@@ -112,14 +111,15 @@ Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
             else
                 neighbour = right;
 
-            G_debug(4, "  line = %d left = %d right = %d neighbour = %d",
-                    line, left, right, neighbour);
+            G_debug(4, "  line = %d left = %d right = %d neighbour = %d", line,
+                    left, right, neighbour);
 
             Vect_list_append(AList, neighbour); /* this checks for duplicity */
         }
         G_debug(3, "num neighbours = %d", AList->n_values);
 
-        /* Go through the list of neighbours and find that with the longest boundary */
+        /* Go through the list of neighbours and find that with the longest
+         * boundary */
         dissolve_neighbour = 0;
         length = -1.0;
         for (i = 0; i < AList->n_values; i++) {
@@ -196,11 +196,9 @@ Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
     return (nremoved);
 }
 
-
 /* much faster version */
-int
-Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
-                            struct Map_info *Err, double *removed_area)
+int Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
+                                struct Map_info *Err, double *removed_area)
 {
     int area, nareas;
     int nremoved = 0;
@@ -263,7 +261,7 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 
             line = List->value[i];
 
-            if (!Vect_line_alive(Map, abs(line)))       /* Should not happen */
+            if (!Vect_line_alive(Map, abs(line))) /* Should not happen */
                 G_fatal_error(_("Area is composed of dead boundary"));
 
             Vect_get_line_areas(Map, abs(line), &left, &right);
@@ -272,8 +270,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
             else
                 neighbour = right;
 
-            G_debug(4, "  line = %d left = %d right = %d neighbour = %d",
-                    line, left, right, neighbour);
+            G_debug(4, "  line = %d left = %d right = %d neighbour = %d", line,
+                    left, right, neighbour);
 
             ncentroid = 0;
             if (neighbour > 0) {
@@ -294,7 +292,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
         if (AList->n_values == 1)
             same_atype = 0;
 
-        /* Go through the list of neighbours and find the one with the longest boundary */
+        /* Go through the list of neighbours and find the one with the longest
+         * boundary */
         dissolve_neighbour = 0;
         length = -1.0;
         for (i = 0; i < AList->n_values; i++) {
@@ -404,13 +403,11 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
             /* get neighbour centroid */
             centroid = Vect_get_area_centroid(Map, dissolve_neighbour);
             /* get neighbour isles */
-            if ((nnisles =
-                 Vect_get_area_num_isles(Map, dissolve_neighbour)) > 0) {
+            if ((nnisles = Vect_get_area_num_isles(Map, dissolve_neighbour)) >
+                0) {
                 for (i = 0; i < nnisles; i++) {
-                    Vect_list_append(IList,
-                                     Vect_get_area_isle(Map,
-                                                        dissolve_neighbour,
-                                                        i));
+                    Vect_list_append(
+                        IList, Vect_get_area_isle(Map, dissolve_neighbour, i));
                 }
             }
 
@@ -440,13 +437,12 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                 topo = Map->plus.Line[abs(line)]->topo;
 
                 if (topo->left == 0 || topo->right == 0) {
-                    new_isle =
-                        Vect_build_line_area(Map, abs(line),
-                                             (line > 0 ? GV_RIGHT : GV_LEFT));
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
                     if (new_isle > 0) {
                         if (outer_area > 0)
-                            G_fatal_error
-                                ("dissolve_neighbour > 0, new area has already been created");
+                            G_fatal_error("dissolve_neighbour > 0, new area "
+                                          "has already been created");
                         outer_area = new_isle;
                         /* reattach centroid */
                         Map->plus.Area[outer_area]->centroid = centroid;
@@ -463,12 +459,14 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                     }
                     else {
                         /* neither area nor isle, should not happen */
-                        G_fatal_error(_("dissolve_neighbour > 0, failed to build new area"));
+                        G_fatal_error(_("dissolve_neighbour > 0, failed to "
+                                        "build new area"));
                     }
                 }
                 /* check */
                 if (topo->left == 0 || topo->right == 0)
-                    G_fatal_error(_("Dissolve with neighbour area: corrupt topology"));
+                    G_fatal_error(
+                        _("Dissolve with neighbour area: corrupt topology"));
             }
             /* build new area from neighbour's boundaries */
             for (i = 0; i < NList->n_values; i++) {
@@ -483,13 +481,12 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                 if (topo->left == 0 || topo->right == 0) {
                     int new_isle;
 
-                    new_isle =
-                        Vect_build_line_area(Map, abs(line),
-                                             (line > 0 ? GV_RIGHT : GV_LEFT));
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
                     if (new_isle > 0) {
                         if (outer_area > 0)
-                            G_fatal_error
-                                ("dissolve_neighbour > 0, new area has already been created");
+                            G_fatal_error("dissolve_neighbour > 0, new area "
+                                          "has already been created");
                         outer_area = new_isle;
                         /* reattach centroid */
                         Map->plus.Area[outer_area]->centroid = centroid;
@@ -510,7 +507,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                     }
                 }
                 if (topo->left == 0 || topo->right == 0)
-                    G_fatal_error(_("Dissolve with neighbour area: corrupt topology"));
+                    G_fatal_error(
+                        _("Dissolve with neighbour area: corrupt topology"));
             }
         }
         /* dissolve with outer isle */
@@ -547,9 +545,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                 if (topo->left == 0 || topo->right == 0) {
                     int new_isle;
 
-                    new_isle =
-                        Vect_build_line_area(Map, abs(line),
-                                             (line > 0 ? GV_RIGHT : GV_LEFT));
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
                     if (new_isle < 0) {
                         Vect_list_append(IList, -new_isle);
                     }
@@ -560,7 +557,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                 }
                 /* check */
                 if (topo->left == 0 || topo->right == 0)
-                    G_fatal_error(_("Dissolve with outer isle: corrupt topology"));
+                    G_fatal_error(
+                        _("Dissolve with outer isle: corrupt topology"));
             }
 
             /* build new isle(s) from old isle's boundaries */
@@ -576,9 +574,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                 if (topo->left == 0 || topo->right == 0) {
                     int new_isle;
 
-                    new_isle =
-                        Vect_build_line_area(Map, abs(line),
-                                             (line > 0 ? GV_RIGHT : GV_LEFT));
+                    new_isle = Vect_build_line_area(
+                        Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
                     if (new_isle < 0) {
                         Vect_list_append(IList, -new_isle);
                     }
@@ -589,7 +586,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
                 }
                 /* check */
                 if (topo->left == 0 || topo->right == 0)
-                    G_fatal_error(_("Dissolve with outer isle: corrupt topology"));
+                    G_fatal_error(
+                        _("Dissolve with outer isle: corrupt topology"));
             }
         }
 

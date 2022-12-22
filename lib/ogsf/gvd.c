@@ -1,7 +1,8 @@
 /*!
    \file lib/ogsf/gvd.c
 
-   \brief OGSF library - loading and manipulating vector sets (lower level functions)
+   \brief OGSF library - loading and manipulating vector sets (lower level
+   functions)
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -31,12 +32,12 @@
    \param gs surface
    \param bgn begin point
    \param end end point
-   \param region region settings 
+   \param region region settings
 
    \return 1 segment inside region
    \return 0 segment outside region
  */
-int gs_clip_segment(geosurf * gs, float *bgn, float *end, float *region)
+int gs_clip_segment(geosurf *gs, float *bgn, float *end, float *region)
 {
     float top, bottom, left, right;
 
@@ -54,9 +55,8 @@ int gs_clip_segment(geosurf * gs, float *bgn, float *end, float *region)
     }
 
     /* for now, ignore any segments with an end outside */
-    return (bgn[X] >= left && bgn[X] <= right &&
-            end[X] >= left && end[X] <= right &&
-            bgn[Y] >= bottom && bgn[Y] <= top &&
+    return (bgn[X] >= left && bgn[X] <= right && end[X] >= left &&
+            end[X] <= right && bgn[Y] >= bottom && bgn[Y] <= top &&
             end[Y] >= bottom && end[Y] <= top);
 }
 
@@ -76,7 +76,7 @@ int gs_clip_segment(geosurf * gs, float *bgn, float *end, float *region)
 
    \return
  */
-int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
+int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 {
     int i, j, k;
     float bgn[3], end[3], tx, ty, tz, konst;
@@ -220,7 +220,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
             /* 3D line */
             else {
                 G_debug(5, "gvd_vect(): 3D vector line");
-                points = (Point3 *) malloc(sizeof(Point3));
+                points = (Point3 *)malloc(sizeof(Point3));
 
                 gsd_bgnline();
                 for (k = 0; k < gln->npts; k++) {
@@ -244,7 +244,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 
                 /* We want at least 3 points */
                 if (gln->npts >= 3) {
-                    points = (Point3 *) malloc(2 * sizeof(Point3));
+                    points = (Point3 *)malloc(2 * sizeof(Point3));
                     glEnable(GL_NORMALIZE);
 
                     glEnable(GL_COLOR_MATERIAL);
@@ -296,7 +296,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
    \param end end line point
    \param color color value
  */
-void gvd_draw_lineonsurf(geosurf * gs, float *bgn, float *end, int color)
+void gvd_draw_lineonsurf(geosurf *gs, float *bgn, float *end, int color)
 {
     Point3 *points;
     int npts, i, j;

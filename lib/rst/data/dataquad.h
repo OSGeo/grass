@@ -21,32 +21,28 @@
  * Read the file COPYING that comes with GRASS for details.
  */
 
-
 #ifndef DATAQUAD_H
 
 #define DATAQUAD_H
 
-#define NW   1
-#define NE   2
-#define SW   3
-#define SE   4
-
+#define NW 1
+#define NE 2
+#define SW 3
+#define SE 4
 
 /*!
  * Point structure to keep coordinates
  *
  * It also contains smoothing for the given point.
  */
-struct triple
-{
+struct triple {
     double x;
     double y;
     double z;
-    double sm;                  /*!< variable smoothing */
+    double sm; /*!< variable smoothing */
 };
 
-struct quaddata
-{
+struct quaddata {
     double x_orig;
     double y_orig;
     double xmax;

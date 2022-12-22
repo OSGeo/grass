@@ -7,8 +7,8 @@
 
    (C) 2001-2015 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -45,12 +45,11 @@
    \returns 1 if point is in box
    \returns 0 if point is not in box
  */
-int Vect_point_in_box(double x, double y, double z,
-                      const struct bound_box *Box)
+int Vect_point_in_box(double x, double y, double z, const struct bound_box *Box)
 {
 
-    return (x >= Box->W && x <= Box->E &&
-            y >= Box->S && y <= Box->N && z >= Box->B && z <= Box->T);
+    return (x >= Box->W && x <= Box->E && y >= Box->S && y <= Box->N &&
+            z >= Box->B && z <= Box->T);
 }
 
 /*!
@@ -83,8 +82,8 @@ int Vect_point_in_box_2d(double x, double y, const struct bound_box *Box)
 int Vect_box_overlap(const struct bound_box *A, const struct bound_box *B)
 {
 
-    if (A->E < B->W || A->W > B->E ||
-        A->N < B->S || A->S > B->N || A->T < B->B || A->B > B->T) {
+    if (A->E < B->W || A->W > B->E || A->N < B->S || A->S > B->N ||
+        A->T < B->B || A->B > B->T) {
         return 0;
     }
 
@@ -139,22 +138,19 @@ int Vect_box_extend(struct bound_box *A, const struct bound_box *B)
     return 1;
 }
 
-
 /*!
- * \brief Clip coordinates to box, if necessary, lines extending outside of a box.
+ * \brief Clip coordinates to box, if necessary, lines extending outside of a
+ * box.
  *
- * A line represented by the coordinates <em>x, y</em> and <em>c_x, c_y</em> is clipped to
- * the window defined by <em>s</em> (south), <em>n</em> (north), <em>w</em>
- * (west), and <em>e</em> (east). Note that the following constraints must be
- * true:
- * w <e
- * s <n
- * The <em>x</em> and <em>c_x</em> are values to be compared to <em>w</em> and
- * <em>e.</em> The <em>y</em> and <em>c_y</em> are values to be compared to
- * <em>s</em> and <em>n.</em>
- * The <em>x</em> and <em>c_x</em> values returned lie between <em>w</em> and 
- * <em>e.</em> The <em>y</em> and <em>c_y</em> values returned lie between 
- * <em>s</em> and <em>n.</em>
+ * A line represented by the coordinates <em>x, y</em> and <em>c_x, c_y</em> is
+ * clipped to the window defined by <em>s</em> (south), <em>n</em> (north),
+ * <em>w</em> (west), and <em>e</em> (east). Note that the following constraints
+ * must be true: w <e s <n The <em>x</em> and <em>c_x</em> are values to be
+ * compared to <em>w</em> and <em>e.</em> The <em>y</em> and <em>c_y</em> are
+ * values to be compared to <em>s</em> and <em>n.</em> The <em>x</em> and
+ * <em>c_x</em> values returned lie between <em>w</em> and <em>e.</em> The
+ * <em>y</em> and <em>c_y</em> values returned lie between <em>s</em> and
+ * <em>n.</em>
  *
  *  \param x, y coordinates (w, e)
  *  \param c_x,c_y coordinates (s, n)
@@ -222,7 +218,6 @@ int Vect_box_clip(double *x, double *y, double *c_x, double *c_y,
     return (mod);
 }
 
-
 /*!
    \brief Get bounding box of given feature
 
@@ -252,7 +247,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line,
     }
 
     Line = Plus->Line[line];
-    if (Line == NULL) {         /* dead */
+    if (Line == NULL) { /* dead */
         Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
         return 0;
     }
@@ -289,7 +284,6 @@ int Vect_get_line_box(const struct Map_info *Map, int line,
     return 1;
 }
 
-
 /*!
    \brief Get bounding box of area
 
@@ -318,7 +312,7 @@ int Vect_get_area_box(const struct Map_info *Map, int area,
 
     Area = Plus->Area[area];
 
-    if (Area == NULL) {         /* dead */
+    if (Area == NULL) { /* dead */
         Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
         return 0;
     }
@@ -365,7 +359,7 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle,
 
     Isle = Plus->Isle[isle];
 
-    if (Isle == NULL) {         /* dead */
+    if (Isle == NULL) { /* dead */
         Box->N = Box->S = Box->E = Box->W = Box->T = Box->B = 0. / 0.;
         return 0;
     }
@@ -457,7 +451,6 @@ int Vect_get_map_box1(struct Map_info *Map, struct bound_box *Box)
 
     return 1;
 }
-
 
 /*!
    \brief Copy region window to bounding box

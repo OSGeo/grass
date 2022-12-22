@@ -55,11 +55,11 @@ int Vect_build_ogr(struct Map_info *Map, int build)
     plus = &(Map->plus);
     ogr_info = &(Map->fInfo.ogr);
 
-    G_debug(1, "Vect_build_ogr(): dsn='%s' layer='%s', build=%d",
-            ogr_info->dsn, ogr_info->layer_name, build);
+    G_debug(1, "Vect_build_ogr(): dsn='%s' layer='%s', build=%d", ogr_info->dsn,
+            ogr_info->layer_name, build);
 
     if (build == plus->built)
-        return 1;               /* do nothing */
+        return 1; /* do nothing */
 
     /* TODO move this init to better place (Vect_open_ ?), because in
        theory build may be reused on level2 */
@@ -122,8 +122,8 @@ int Vect_save_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     struct gvfile fp;
     struct Port_info port;
 
-    if (strcmp(Map->mapset, G_mapset()) != 0 ||
-        Map->support_updated == FALSE || Map->plus.built != GV_BUILD_ALL)
+    if (strcmp(Map->mapset, G_mapset()) != 0 || Map->support_updated == FALSE ||
+        Map->plus.built != GV_BUILD_ALL)
         return 1;
 
     length = 9;

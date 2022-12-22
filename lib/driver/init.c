@@ -59,7 +59,7 @@ void LIB_init(const struct driver *drv)
     screen_height = (p && atoi(p)) ? atoi(p) : DEF_HEIGHT;
 
     if (COM_Graph_set() < 0)
-	exit(1);
+        exit(1);
 
     COM_Set_window(0, screen_height, 0, screen_width);
 }

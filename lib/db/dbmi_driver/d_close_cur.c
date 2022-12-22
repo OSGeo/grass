@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_close_cur.c
- * 
+ *
  * \brief DBMI Library (driver) - close cursor
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -31,7 +31,7 @@ int db_d_close_cursor(void)
 
     /* get the arg(s) */
     DB_RECV_TOKEN(&token);
-    cursor = (dbCursor *) db_find_token(token);
+    cursor = (dbCursor *)db_find_token(token);
     if (cursor == NULL) {
         db_error("** invalid cursor **");
         return DB_FAILED;
@@ -44,7 +44,7 @@ int db_d_close_cursor(void)
     db_drop_token(token);
     db_free_cursor(cursor);
     db__drop_cursor_from_driver_state(cursor);
-    db_free(cursor);            /* ?? */
+    db_free(cursor); /* ?? */
 
     /* send the return code */
     if (stat != DB_OK) {

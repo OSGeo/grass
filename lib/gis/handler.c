@@ -18,8 +18,7 @@
 /*!
    \brief Error handler (see G_add_error_handler() for usage)
  */
-struct handler
-{
+struct handler {
     /*!
        \brief Pointer to the handler routine
      */
@@ -108,6 +107,6 @@ void G__call_error_handlers(void)
         struct handler *h = &handlers[i];
 
         if (h->func)
-            (*h->func) (h->closure);
+            (*h->func)(h->closure);
     }
 }

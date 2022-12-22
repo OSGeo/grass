@@ -50,8 +50,7 @@
  * \return -2 failed to create projection file (currently not used)
  * \return -3 illegal name
  */
-int G_make_location(const char *location_name,
-                    struct Cell_head *wind,
+int G_make_location(const char *location_name, struct Cell_head *wind,
                     const struct Key_Value *proj_info,
                     const struct Key_Value *proj_units)
 {
@@ -124,8 +123,7 @@ int G_make_location(const char *location_name,
  * \return -2 failed to create projection file (currently not used)
  * \return -3 illegal name
  */
-int G_make_location_epsg(const char *location_name,
-                         struct Cell_head *wind,
+int G_make_location_epsg(const char *location_name, struct Cell_head *wind,
                          const struct Key_Value *proj_info,
                          const struct Key_Value *proj_units,
                          const struct Key_Value *proj_epsg)
@@ -184,8 +182,7 @@ int G_make_location_epsg(const char *location_name,
  * \return -2 failed to create projection file (currently not used)
  * \return -3 illegal name
  */
-int G_make_location_crs(const char *location_name,
-                        struct Cell_head *wind,
+int G_make_location_crs(const char *location_name, struct Cell_head *wind,
                         const struct Key_Value *proj_info,
                         const struct Key_Value *proj_units,
                         const char *proj_srid, const char *proj_wkt)
@@ -369,17 +366,17 @@ int G_compare_projections(const struct Key_Value *proj_info1,
     /* -------------------------------------------------------------------- */
     /*      Zone check specially for UTM                                    */
     /* -------------------------------------------------------------------- */
-    if (!strcmp(proj1, "utm") && !strcmp(proj2, "utm")
-        && atof(G_find_key_value("zone", proj_info1))
-        != atof(G_find_key_value("zone", proj_info2)))
+    if (!strcmp(proj1, "utm") && !strcmp(proj2, "utm") &&
+        atof(G_find_key_value("zone", proj_info1)) !=
+            atof(G_find_key_value("zone", proj_info2)))
         return -5;
 
     /* -------------------------------------------------------------------- */
     /*      Hemisphere check specially for UTM                              */
     /* -------------------------------------------------------------------- */
-    if (!strcmp(proj1, "utm") && !strcmp(proj2, "utm")
-        && !!G_find_key_value("south", proj_info1)
-        != !!G_find_key_value("south", proj_info2))
+    if (!strcmp(proj1, "utm") && !strcmp(proj2, "utm") &&
+        !!G_find_key_value("south", proj_info1) !=
+            !!G_find_key_value("south", proj_info2))
         return -6;
 
     /* -------------------------------------------------------------------- */
@@ -432,9 +429,11 @@ int G_compare_projections(const struct Key_Value *proj_info1,
         if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
             return -9;
 
-        /* -------------------------------------------------------------------- */
-        /*      Do they have the same center latitude?                          */
-        /* -------------------------------------------------------------------- */
+        /* --------------------------------------------------------------------
+         */
+        /*      Do they have the same center latitude? */
+        /* --------------------------------------------------------------------
+         */
 
         l_1 = G_find_key_value("lat_0", proj_info1);
         l_2 = G_find_key_value("lat_0", proj_info2);
@@ -445,9 +444,11 @@ int G_compare_projections(const struct Key_Value *proj_info1,
         if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
             return -10;
 
-        /* -------------------------------------------------------------------- */
-        /*      Do they have the same standard parallels?                       */
-        /* -------------------------------------------------------------------- */
+        /* --------------------------------------------------------------------
+         */
+        /*      Do they have the same standard parallels? */
+        /* --------------------------------------------------------------------
+         */
 
         l_1 = G_find_key_value("lat_1", proj_info1);
         l_2 = G_find_key_value("lat_1", proj_info2);
@@ -545,7 +546,6 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
 
     return err;
 }
-
 
 /*!
    \brief Write srid (spatial reference id) to file

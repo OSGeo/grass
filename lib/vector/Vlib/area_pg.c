@@ -19,8 +19,7 @@
 #include "pg_local_proto.h"
 
 static PGresult *build_stmt(const struct Plus_head *,
-                            const struct Format_info_pg *, const plus_t *,
-                            int);
+                            const struct Format_info_pg *, const plus_t *, int);
 
 /*!
    \brief Get area boundary points (PostGIS Topology)
@@ -35,7 +34,7 @@ static PGresult *build_stmt(const struct Plus_head *,
    \return number of points
    \return -1 on error
  */
-int Vect__get_area_points_pg(const struct Map_info *Map, const plus_t * lines,
+int Vect__get_area_points_pg(const struct Map_info *Map, const plus_t *lines,
                              int n_lines, struct line_pnts *APoints)
 {
     int i, direction;
@@ -53,12 +52,14 @@ int Vect__get_area_points_pg(const struct Map_info *Map, const plus_t * lines,
         return -1;
 
     for (i = 0; i < n_lines; i++) {
-        Vect__cache_feature_pg(PQgetvalue(res, i, 0), FALSE, FALSE, &(pg_info->cache), NULL);   /* do caching in readable way */
+        Vect__cache_feature_pg(PQgetvalue(res, i, 0), FALSE, FALSE,
+                               &(pg_info->cache),
+                               NULL); /* do caching in readable way */
         direction = lines[i] > 0 ? GV_FORWARD : GV_BACKWARD;
         Vect_append_points(APoints, pg_info->cache.lines[0], direction);
-        APoints->n_points--;    /* skip last point, avoids duplicates */
+        APoints->n_points--; /* skip last point, avoids duplicates */
     }
-    APoints->n_points++;        /* close polygon */
+    APoints->n_points++; /* close polygon */
 
     PQclear(res);
 
@@ -66,8 +67,8 @@ int Vect__get_area_points_pg(const struct Map_info *Map, const plus_t * lines,
 }
 
 PGresult *build_stmt(const struct Plus_head *plus,
-                     const struct Format_info_pg *pg_info,
-                     const plus_t * lines, int n_lines)
+                     const struct Format_info_pg *pg_info, const plus_t *lines,
+                     int n_lines)
 {
     int i, line;
     size_t stmt_id_size;
@@ -95,16 +96,17 @@ PGresult *build_stmt(const struct Plus_head *plus,
         strcat(stmt_id, buf_id);
     }
     /* Not really working - why?
-       G_asprintf(&stmt, "SELECT geom FROM \"%s\".edge_data WHERE edge_id IN (%s) "
-       "ORDER BY POSITION(edge_id::text in '%s')", pg_info->toposchema_name,
-       stmt_id, stmt_id);
+       G_asprintf(&stmt, "SELECT geom FROM \"%s\".edge_data WHERE edge_id IN
+       (%s) " "ORDER BY POSITION(edge_id::text in '%s')",
+       pg_info->toposchema_name, stmt_id, stmt_id);
      */
-    G_asprintf(&stmt, "SELECT geom FROM \"%s\".edge_data AS t "
+    G_asprintf(&stmt,
+               "SELECT geom FROM \"%s\".edge_data AS t "
                "JOIN (SELECT id, row_number() over() AS id_sorter FROM "
                "(SELECT UNNEST(ARRAY[%s]) AS id) AS y) x ON "
                "t.edge_id in (%s) AND x.id = t.edge_id "
-               "ORDER BY x.id_sorter", pg_info->toposchema_name, stmt_id,
-               stmt_id);
+               "ORDER BY x.id_sorter",
+               pg_info->toposchema_name, stmt_id, stmt_id);
     G_free(stmt_id);
 
     G_debug(2, "SQL: %s", stmt);

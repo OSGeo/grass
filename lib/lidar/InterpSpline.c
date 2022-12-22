@@ -1,4 +1,3 @@
-
 /***********************************************************************
  *
  * MODULE:       lidarlib
@@ -107,27 +106,26 @@ double phi(double csi_x, double csi_y)
 
 void normalDefBicubic(double **N, double *TN, double *Q, double **obsVect,
                       double deltaX, double deltaY, int xNum, int yNum,
-                      double xMin, double yMin, int obsNum, int parNum,
-                      int BW)
+                      double xMin, double yMin, int obsNum, int parNum, int BW)
 {
 
-    int i, k, h, m, n, n0;      /* counters             */
-    double alpha[4][4];         /* coefficients */
+    int i, k, h, m, n, n0; /* counters             */
+    double alpha[4][4];    /* coefficients */
 
-    int i_x;                    /* x = (xMin + (i_x * deltaX) + csi_x) */
+    int i_x; /* x = (xMin + (i_x * deltaX) + csi_x) */
     double csi_x;
 
-    int i_y;                    /* y = (yMin + (i_y * deltaY) + csi_y) */
+    int i_y; /* y = (yMin + (i_y * deltaY) + csi_y) */
     double csi_y;
 
-        /*--------------------------------------*/
+    /*--------------------------------------*/
     for (k = 0; k < parNum; k++) {
         for (h = 0; h < BW; h++)
-            N[k][h] = 0.;       /* Normal matrix inizialization */
-        TN[k] = 0.;             /* Normal vector inizialization */
+            N[k][h] = 0.; /* Normal matrix inizialization */
+        TN[k] = 0.;       /* Normal vector inizialization */
     }
 
-        /*--------------------------------------*/
+    /*--------------------------------------*/
 
     for (i = 0; i < obsNum; i++) {
 
@@ -174,20 +172,10 @@ void normalDefBicubic(double **N, double *TN, double *Q, double **obsVect,
                             for (n = n0; n <= 2; n++) {
                                 if (((i_x + m) >= 0) && ((i_x + m) < xNum) &&
                                     ((i_y + n) >= 0) && ((i_y + n) < yNum)) {
-                                    N[order(i_x + k, i_y + h, yNum)][order
-                                                                     (i_x + m,
-                                                                      i_y + n,
-                                                                      yNum) -
-                                                                     order(i_x
-                                                                           +
-                                                                           k,
-                                                                           i_y
-                                                                           +
-                                                                           h,
-                                                                           yNum)]
-                                        +=
-                                        alpha[k + 1][h +
-                                                     1] * (1 / Q[i]) *
+                                    N[order(i_x + k, i_y + h, yNum)]
+                                     [order(i_x + m, i_y + n, yNum) -
+                                      order(i_x + k, i_y + h, yNum)] +=
+                                        alpha[k + 1][h + 1] * (1 / Q[i]) *
                                         alpha[m + 1][n + 1];
                                     /* 1/Q[i] only refers to the variances */
                                 }
@@ -205,26 +193,28 @@ void normalDefBicubic(double **N, double *TN, double *Q, double **obsVect,
 }
 
 /*----------------------------------------------------------------------------*/
-/* Normal system correction - Introduzione della correzione dovuta alle 
+/* Normal system correction - Introduzione della correzione dovuta alle
    pseudosservazioni (Tykonov) - LAPALCIANO - */
 
-void nCorrectLapl(double **N, double lambda, int xNum, int yNum,
-                  double deltaX, double deltaY)
+void nCorrectLapl(double **N, double lambda, int xNum, int yNum, double deltaX,
+                  double deltaY)
 {
 
-    int i_x, i_y;               /* counters     */
-    int k, h, m, n, n0;         /* counters     */
+    int i_x, i_y;       /* counters     */
+    int k, h, m, n, n0; /* counters     */
 
-    double alpha[5][5];         /* coefficients */
+    double alpha[5][5]; /* coefficients */
 
     double lambdaX, lambdaY;
 
-        /*--------------------------------------*/
+    /*--------------------------------------*/
     lambdaX = lambda * (deltaY / deltaX);
     lambdaY = lambda * (deltaX / deltaY);
 
     alpha[0][0] = 0;
-    alpha[0][1] = lambdaX * (1 / 36.);  /* There is lambda because Q^(-1) contains 1/(1/lambda) */
+    alpha[0][1] =
+        lambdaX *
+        (1 / 36.); /* There is lambda because Q^(-1) contains 1/(1/lambda) */
     alpha[0][2] = lambdaX * (1 / 9.);
     alpha[0][3] = lambdaX * (1 / 36.);
     alpha[0][4] = 0;
@@ -277,23 +267,11 @@ void nCorrectLapl(double **N, double lambda, int xNum, int yNum,
 
                                     if ((alpha[k + 2][h + 2] != 0) &&
                                         (alpha[m + 2][n + 2] != 0)) {
-                                        N[order(i_x + k, i_y + h, yNum)][order
-                                                                         (i_x
-                                                                          + m,
-                                                                          i_y
-                                                                          + n,
-                                                                          yNum)
-                                                                         -
-                                                                         order
-                                                                         (i_x
-                                                                          + k,
-                                                                          i_y
-                                                                          + h,
-                                                                          yNum)]
-                                            +=
-                                            alpha[k + 2][h + 2] * alpha[m +
-                                                                        2][n +
-                                                                           2];
+                                        N[order(i_x + k, i_y + h, yNum)]
+                                         [order(i_x + m, i_y + n, yNum) -
+                                          order(i_x + k, i_y + h, yNum)] +=
+                                            alpha[k + 2][h + 2] *
+                                            alpha[m + 2][n + 2];
                                     }
                                 }
                             }
@@ -315,23 +293,23 @@ void normalDefBilin(double **N, double *TN, double *Q, double **obsVect,
                     double xMin, double yMin, int obsNum, int parNum, int BW)
 {
 
-    int i, k, h, m, n, n0;      /* counters     */
-    double alpha[2][2];         /* coefficients */
+    int i, k, h, m, n, n0; /* counters     */
+    double alpha[2][2];    /* coefficients */
 
-    int i_x;                    /* x = (xMin + (i_x * deltaX) + csi_x) */
+    int i_x; /* x = (xMin + (i_x * deltaX) + csi_x) */
     double csi_x;
 
-    int i_y;                    /* y = (yMin + (i_y * deltaY) + csi_y) */
+    int i_y; /* y = (yMin + (i_y * deltaY) + csi_y) */
     double csi_y;
 
-        /*--------------------------------------*/
+    /*--------------------------------------*/
     for (k = 0; k < parNum; k++) {
         for (h = 0; h < BW; h++)
-            N[k][h] = 0.;       /* Normal matrix inizialization */
-        TN[k] = 0.;             /* Normal vector inizialization */
+            N[k][h] = 0.; /* Normal matrix inizialization */
+        TN[k] = 0.;       /* Normal vector inizialization */
     }
 
-        /*--------------------------------------*/
+    /*--------------------------------------*/
 
     for (i = 0; i < obsNum; i++) {
 
@@ -363,20 +341,10 @@ void normalDefBilin(double **N, double *TN, double *Q, double **obsVect,
                             for (n = n0; n <= 1; n++) {
                                 if (((i_x + m) >= 0) && ((i_x + m) < xNum) &&
                                     ((i_y + n) >= 0) && ((i_y + n) < yNum)) {
-                                    N[order(i_x + k, i_y + h, yNum)][order
-                                                                     (i_x + m,
-                                                                      i_y + n,
-                                                                      yNum) -
-                                                                     order(i_x
-                                                                           +
-                                                                           k,
-                                                                           i_y
-                                                                           +
-                                                                           h,
-                                                                           yNum)]
-                                        +=
-                                        alpha[k][h] * (1 / Q[i]) *
-                                        alpha[m][n];
+                                    N[order(i_x + k, i_y + h, yNum)]
+                                     [order(i_x + m, i_y + n, yNum) -
+                                      order(i_x + k, i_y + h, yNum)] +=
+                                        alpha[k][h] * (1 / Q[i]) * alpha[m][n];
                                     /* 1/Q[i] only refers to the variances */
                                 }
                             }
@@ -392,13 +360,12 @@ void normalDefBilin(double **N, double *TN, double *Q, double **obsVect,
     return;
 }
 
-
 /*----------------------------------------------------------------------------*/
-/* Normal system correction - Introduzione della correzione dovuta alle 
+/* Normal system correction - Introduzione della correzione dovuta alle
    pseudosservazioni (Tykonov) - GRADIENTE - */
 #ifdef notdef
-void nCorrectGrad(double **N, double lambda, int xNum, int yNum,
-                  double deltaX, double deltaY)
+void nCorrectGrad(double **N, double lambda, int xNum, int yNum, double deltaX,
+                  double deltaY)
 {
 
     int i;
@@ -429,8 +396,8 @@ void nCorrectGrad(double **N, double lambda, int xNum, int yNum,
 #endif
 
 /*1-DELTA discretization */
-void nCorrectGrad(double **N, double lambda, int xNum, int yNum,
-                  double deltaX, double deltaY)
+void nCorrectGrad(double **N, double lambda, int xNum, int yNum, double deltaX,
+                  double deltaY)
 {
 
     int i;
@@ -464,18 +431,18 @@ void nCorrectGrad(double **N, double lambda, int xNum, int yNum,
 /*----------------------------------------------------------------------------*/
 /* Observations estimation */
 
-void obsEstimateBicubic(double **obsV, double *obsE, double *parV,
-                        double deltX, double deltY, int xNm, int yNm,
-                        double xMi, double yMi, int obsN)
+void obsEstimateBicubic(double **obsV, double *obsE, double *parV, double deltX,
+                        double deltY, int xNm, int yNm, double xMi, double yMi,
+                        int obsN)
 {
 
-    int i, k, h;                /* counters     */
-    double alpha[4][4];         /* coefficients */
+    int i, k, h;        /* counters     */
+    double alpha[4][4]; /* coefficients */
 
-    int i_x;                    /* x = (xMin + (i_x * deltaX) + csi_x) */
+    int i_x; /* x = (xMin + (i_x * deltaX) + csi_x) */
     double csi_x;
 
-    int i_y;                    /* y = (yMin + (i_y * deltaY) + csi_y) */
+    int i_y; /* y = (yMin + (i_y * deltaY) + csi_y) */
     double csi_y;
 
     for (i = 0; i < obsN; i++) {
@@ -514,10 +481,8 @@ void obsEstimateBicubic(double **obsV, double *obsE, double *parV,
                 for (h = -1; h <= 2; h++) {
                     if (((i_x + k) >= 0) && ((i_x + k) < xNm) &&
                         ((i_y + h) >= 0) && ((i_y + h) < yNm))
-                        obsE[i] +=
-                            parV[order(i_x + k, i_y + h, yNm)] * alpha[k +
-                                                                       1][h +
-                                                                          1];
+                        obsE[i] += parV[order(i_x + k, i_y + h, yNm)] *
+                                   alpha[k + 1][h + 1];
                 }
             }
         }
@@ -526,23 +491,21 @@ void obsEstimateBicubic(double **obsV, double *obsE, double *parV,
     return;
 }
 
-
 /*--------------------------------------------------------------------------------------*/
 /* Data interpolation in a generic point */
 
-double dataInterpolateBicubic(double x, double y, double deltaX,
-                              double deltaY, int xNum, int yNum, double xMin,
-                              double yMin, double *parVect)
+double dataInterpolateBicubic(double x, double y, double deltaX, double deltaY,
+                              int xNum, int yNum, double xMin, double yMin,
+                              double *parVect)
 {
 
-    double z;                   /* abscissa, ordinate and associated value */
+    double z; /* abscissa, ordinate and associated value */
 
-    int k, h;                   /* counters             */
-    double alpha[4][4];         /* coefficients */
+    int k, h;           /* counters             */
+    double alpha[4][4]; /* coefficients */
 
-    int i_x, i_y;               /* x = (xMin + (i_x * deltaX) + csi_x) */
-    double csi_x, csi_y;        /* y = (yMin + (i_y * deltaY) + csi_y) */
-
+    int i_x, i_y;        /* x = (xMin + (i_x * deltaX) + csi_x) */
+    double csi_x, csi_y; /* y = (yMin + (i_y * deltaY) + csi_y) */
 
     z = 0;
 
@@ -576,18 +539,16 @@ double dataInterpolateBicubic(double x, double y, double deltaX,
 
         for (k = -1; k <= 2; k++) {
             for (h = -1; h <= 2; h++) {
-                if (((i_x + k) >= 0) && ((i_x + k) < xNum) && ((i_y + h) >= 0)
-                    && ((i_y + h) < yNum))
-                    z += parVect[order(i_x + k, i_y + h, yNum)] * alpha[k +
-                                                                        1][h +
-                                                                           1];
+                if (((i_x + k) >= 0) && ((i_x + k) < xNum) &&
+                    ((i_y + h) >= 0) && ((i_y + h) < yNum))
+                    z += parVect[order(i_x + k, i_y + h, yNum)] *
+                         alpha[k + 1][h + 1];
             }
         }
     }
 
     return z;
 }
-
 
 /*----------------------------------------------------------------------------*/
 /* Observations estimation */
@@ -597,13 +558,13 @@ void obsEstimateBilin(double **obsV, double *obsE, double *parV, double deltX,
                       int obsN)
 {
 
-    int i, k, h;                /* counters     */
-    double alpha[2][2];         /* coefficients */
+    int i, k, h;        /* counters     */
+    double alpha[2][2]; /* coefficients */
 
-    int i_x;                    /* x = (xMin + (i_x * deltaX) + csi_x) */
+    int i_x; /* x = (xMin + (i_x * deltaX) + csi_x) */
     double csi_x;
 
-    int i_y;                    /* y = (yMin + (i_y * deltaY) + csi_y) */
+    int i_y; /* y = (yMin + (i_y * deltaY) + csi_y) */
     double csi_y;
 
     for (i = 0; i < obsN; i++) {
@@ -637,7 +598,6 @@ void obsEstimateBilin(double **obsV, double *obsE, double *parV, double deltX,
     return;
 }
 
-
 /*--------------------------------------------------------------------------------------*/
 /* Data interpolation in a generic point */
 
@@ -646,13 +606,13 @@ double dataInterpolateBilin(double x, double y, double deltaX, double deltaY,
                             double *parVect)
 {
 
-    double z;                   /* abscissa, ordinate and associated value */
+    double z; /* abscissa, ordinate and associated value */
 
-    int k, h;                   /* counters             */
-    double alpha[2][2];         /* coefficients */
+    int k, h;           /* counters             */
+    double alpha[2][2]; /* coefficients */
 
-    int i_x, i_y;               /* x = (xMin + (i_x * deltaX) + csi_x) */
-    double csi_x, csi_y;        /* y = (yMin + (i_y * deltaY) + csi_y) */
+    int i_x, i_y;        /* x = (xMin + (i_x * deltaX) + csi_x) */
+    double csi_x, csi_y; /* y = (yMin + (i_y * deltaY) + csi_y) */
 
     z = 0;
 
@@ -672,8 +632,8 @@ double dataInterpolateBilin(double x, double y, double deltaX, double deltaY,
 
         for (k = 0; k <= 1; k++) {
             for (h = 0; h <= 1; h++) {
-                if (((i_x + k) >= 0) && ((i_x + k) < xNum) && ((i_y + h) >= 0)
-                    && ((i_y + h) < yNum))
+                if (((i_x + k) >= 0) && ((i_x + k) < xNum) &&
+                    ((i_y + h) >= 0) && ((i_y + h) < yNum))
                     z += parVect[order(i_x + k, i_y + h, yNum)] * alpha[k][h];
             }
         }

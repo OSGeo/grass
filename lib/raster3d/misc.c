@@ -19,9 +19,8 @@ int Rast3d_g3d_type2cell_type(int g3dType)
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_copy_float2Double(const float *src, int offsSrc, double *dst,
-                         int offsDst, int nElts)
+void Rast3d_copy_float2Double(const float *src, int offsSrc, double *dst,
+                              int offsDst, int nElts)
 {
     int i;
 
@@ -34,9 +33,8 @@ Rast3d_copy_float2Double(const float *src, int offsSrc, double *dst,
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_copy_double2Float(const double *src, int offsSrc, float *dst,
-                         int offsDst, int nElts)
+void Rast3d_copy_double2Float(const double *src, int offsSrc, float *dst,
+                              int offsDst, int nElts)
 {
     int i;
 
@@ -49,9 +47,8 @@ Rast3d_copy_double2Float(const double *src, int offsSrc, float *dst,
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_copy_values(const void *src, int offsSrc, int typeSrc, void *dst,
-                   int offsDst, int typeDst, int nElts)
+void Rast3d_copy_values(const void *src, int offsSrc, int typeSrc, void *dst,
+                        int offsDst, int typeDst, int nElts)
 {
     int eltLength;
 

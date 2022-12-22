@@ -13,7 +13,8 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
-   \author Update to GRASS 7 (OGR/PostGIS support) by Martin Landa <landa.martin gmail.com>
+   \author Update to GRASS 7 (OGR/PostGIS support) by Martin Landa <landa.martin
+   gmail.com>
  */
 
 #include <string.h>
@@ -59,7 +60,8 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
 
    Returns:
    - layer name for OGR format (GV_FORMAT_OGR and GV_FORMAT_OGR_DIRECT)
-   - table name for PostGIS format (GV_FORMAT_POSTGIS) including schema (\<schema\>.\<table\>)
+   - table name for PostGIS format (GV_FORMAT_POSTGIS) including schema
+   (\<schema\>.\<table\>)
 
    Note: allocated string should be freed by G_free()
 
@@ -173,7 +175,8 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
         PGresult *res;
 
         pg_info = &(Map->fInfo.pg);
-        sprintf(stmt, "SELECT type,coord_dimension FROM geometry_columns "
+        sprintf(stmt,
+                "SELECT type,coord_dimension FROM geometry_columns "
                 "WHERE f_table_schema = '%s' AND f_table_name = '%s'",
                 pg_info->schema_name, pg_info->table_name);
         G_debug(2, "SQL: %s", stmt);
@@ -241,9 +244,8 @@ const struct Format_info *Vect_get_finfo(const struct Map_info *Map)
    \return GV_TOPO_PSEUDO for pseudo-topology
    \return GV_TOPO_POSTGIS for PostGIS Topology
  */
-int Vect_get_finfo_topology_info(const struct Map_info *Map,
-                                 char **toposchema, char **topogeom,
-                                 int *topo_geo_only)
+int Vect_get_finfo_topology_info(const struct Map_info *Map, char **toposchema,
+                                 char **topogeom, int *topo_geo_only)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR

@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_execute.c
- * 
+ *
  * \brief DBMI Library (driver) - execute SQL statements
  *
  * (C) 1999-2008 by the GRASS Development Team

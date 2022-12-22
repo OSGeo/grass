@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_openinsert.c
- * 
+ *
  * \brief DBMI Library (driver) - open insert cursor
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -33,10 +33,10 @@ int db_d_open_insert_cursor(void)
     DB_RECV_TABLE_DEFINITION(&table);
 
     /* create a cursor */
-    cursor = (dbCursor *) db_malloc(sizeof(dbCursor));
+    cursor = (dbCursor *)db_malloc(sizeof(dbCursor));
     if (cursor == NULL)
         return db_get_error_code();
-    token = db_new_token((dbAddress) cursor);
+    token = db_new_token((dbAddress)cursor);
     if (token < 0)
         return db_get_error_code();
     db_init_cursor(cursor);

@@ -1,20 +1,19 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass numerical math interface
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> googlemail <dot> com
-*               
-* PURPOSE:      linear equation system solvers
-* 		part of the gmath library
-*               
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass numerical math interface
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> googlemail <dot> com
+ *
+ * PURPOSE:      linear equation system solvers
+ *                 part of the gmath library
+ *
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <math.h>
 #include <unistd.h>
@@ -25,29 +24,31 @@
 #include <grass/glocale.h>
 
 static G_math_spvector **create_diag_precond_matrix(double **A,
-                                                    G_math_spvector ** Asp,
+                                                    G_math_spvector **Asp,
                                                     int rows, int prec);
-static int solver_pcg(double **A, G_math_spvector ** Asp, double *x,
-                      double *b, int rows, int maxit, double err, int prec,
-                      int has_band, int bandwidth);
-static int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
+static int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
+                      int rows, int maxit, double err, int prec, int has_band,
+                      int bandwidth);
+static int solver_cg(double **A, G_math_spvector **Asp, double *x, double *b,
                      int rows, int maxit, double err, int has_band,
                      int bandwidth);
-static int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x,
+static int solver_bicgstab(double **A, G_math_spvector **Asp, double *x,
                            double *b, int rows, int maxit, double err);
 
-
 /*!
- * \brief The iterative preconditioned conjugate gradients solver for symmetric positive definite matrices
+ * \brief The iterative preconditioned conjugate gradients solver for symmetric
+ * positive definite matrices
  *
- * This iterative solver works with symmetric positive definite  regular quadratic matrices.
+ * This iterative solver works with symmetric positive definite  regular
+ * quadratic matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param A (double **) -- the matrix
  * \param x (double *) -- the value vector
@@ -56,8 +57,9 @@ static int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x,
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
  * \param prec (int) -- the preconditioner which should be used 1,2 or 3
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
 int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
                       double err, int prec)
@@ -67,18 +69,21 @@ int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
 }
 
 /*!
- * \brief The iterative preconditioned conjugate gradients solver for symmetric positive definite band matrices
+ * \brief The iterative preconditioned conjugate gradients solver for symmetric
+ * positive definite band matrices
  *
- * WARNING: The preconditioning of symmetric band matrices is not implemented yet
+ * WARNING: The preconditioning of symmetric band matrices is not implemented
+ * yet
  *
  * This iterative solver works with symmetric positive definite band matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param A (double **) -- the positive definite band matrix
  * \param x (double *) -- the value vector
@@ -88,8 +93,9 @@ int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
  * \param prec (int) -- the preconditioner which should be used 1,2 or 3
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
 int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows,
                             int bandwidth, int maxit, double err, int prec)
@@ -98,18 +104,19 @@ int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows,
     return solver_pcg(A, NULL, x, b, rows, maxit, err, prec, 1, bandwidth);
 }
 
-
 /*!
- * \brief The iterative preconditioned conjugate gradients solver for sparse symmetric positive definite matrices
+ * \brief The iterative preconditioned conjugate gradients solver for sparse
+ * symmetric positive definite matrices
  *
  * This iterative solver works with symmetric positive definite sparse matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param Asp (G_math_spvector **) -- the sparse matrix
  * \param x (double *) -- the value vector
@@ -118,17 +125,18 @@ int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows,
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
  * \param prec (int) -- the preconditioner which should be used 1,2 or 3
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
-int G_math_solver_sparse_pcg(G_math_spvector ** Asp, double *x, double *b,
+int G_math_solver_sparse_pcg(G_math_spvector **Asp, double *x, double *b,
                              int rows, int maxit, double err, int prec)
 {
 
     return solver_pcg(NULL, Asp, x, b, rows, maxit, err, prec, 0, 0);
 }
 
-int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
+int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
                int rows, int maxit, double err, int prec, int has_band,
                int bandwidth)
 {
@@ -161,7 +169,7 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
     M = create_diag_precond_matrix(A, Asp, rows, prec);
 
     /*
-     * residual calculation 
+     * residual calculation
      */
 #pragma omp parallel
     {
@@ -177,7 +185,7 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
         G_math_Ax_sparse(M, r, p, rows);
 
         /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s)
+#pragma omp for schedule(static) private(i) reduction(+ : s)
         for (i = 0; i < rows; i++) {
             s += p[i] * r[i];
         }
@@ -199,10 +207,8 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
             else
                 G_math_d_Ax(A, p, v, rows, rows);
 
-
-
-            /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s)
+                /* scalar product */
+#pragma omp for schedule(static) private(i) reduction(+ : s)
             for (i = 0; i < rows; i++) {
                 s += v[i] * p[i];
             }
@@ -234,9 +240,8 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
             /*performe the preconditioning */
             G_math_Ax_sparse(M, r, z, rows);
 
-
             /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s)
+#pragma omp for schedule(static) private(i) reduction(+ : s)
             for (i = 0; i < rows; i++) {
                 s += z[i] * r[i];
             }
@@ -270,7 +275,6 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
             break;
         }
 
-
         if (a0 < err) {
             finished = 1;
             break;
@@ -286,18 +290,20 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
     return finished;
 }
 
-
 /*!
- * \brief The iterative conjugate gradients solver for symmetric positive definite matrices
+ * \brief The iterative conjugate gradients solver for symmetric positive
+ * definite matrices
  *
- * This iterative solver works with symmetric positive definite  regular quadratic matrices.
+ * This iterative solver works with symmetric positive definite  regular
+ * quadratic matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param A (double **) -- the matrix
  * \param x (double *) -- the value vector
@@ -305,8 +311,9 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
 int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
                      double err)
@@ -315,16 +322,18 @@ int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
 }
 
 /*!
- * \brief The iterative conjugate gradients solver for symmetric positive definite band matrices
+ * \brief The iterative conjugate gradients solver for symmetric positive
+ * definite band matrices
  *
  * This iterative solver works with symmetric positive definite band matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param A (double **) -- the symmetric positive definite band matrix
  * \param x (double *) -- the value vector
@@ -333,8 +342,9 @@ int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
  * \param bandwidth (int) -- the bandwidth of matrix A
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
 int G_math_solver_cg_sband(double **A, double *x, double *b, int rows,
                            int bandwidth, int maxit, double err)
@@ -342,18 +352,19 @@ int G_math_solver_cg_sband(double **A, double *x, double *b, int rows,
     return solver_cg(A, NULL, x, b, rows, maxit, err, 1, bandwidth);
 }
 
-
 /*!
- * \brief The iterative conjugate gradients solver for sparse symmetric positive definite matrices
+ * \brief The iterative conjugate gradients solver for sparse symmetric positive
+ * definite matrices
  *
  * This iterative solver works with symmetric positive definite sparse matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param Asp (G_math_spvector **) -- the sparse matrix
  * \param x (double *) -- the value vector
@@ -361,18 +372,18 @@ int G_math_solver_cg_sband(double **A, double *x, double *b, int rows,
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
-int G_math_solver_sparse_cg(G_math_spvector ** Asp, double *x, double *b,
+int G_math_solver_sparse_cg(G_math_spvector **Asp, double *x, double *b,
                             int rows, int maxit, double err)
 {
     return solver_cg(NULL, Asp, x, b, rows, maxit, err, 0, 0);
 }
 
-
-int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
-              int rows, int maxit, double err, int has_band, int bandwidth)
+int solver_cg(double **A, G_math_spvector **Asp, double *x, double *b, int rows,
+              int maxit, double err, int has_band, int bandwidth)
 {
     double *r;
 
@@ -396,7 +407,7 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
 
     error_break = 0;
     /*
-     * residual calculation 
+     * residual calculation
      */
 #pragma omp parallel
     {
@@ -411,7 +422,7 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
         G_math_d_copy(r, p, rows);
 
         /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s)
+#pragma omp for schedule(static) private(i) reduction(+ : s)
         for (i = 0; i < rows; i++) {
             s += r[i] * r[i];
         }
@@ -433,8 +444,8 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
             else
                 G_math_d_Ax(A, p, v, rows, rows);
 
-            /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s)
+                /* scalar product */
+#pragma omp for schedule(static) private(i) reduction(+ : s)
             for (i = 0; i < rows; i++) {
                 s += v[i] * p[i];
             }
@@ -464,7 +475,7 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
             }
 
             /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s)
+#pragma omp for schedule(static) private(i) reduction(+ : s)
             for (i = 0; i < rows; i++) {
                 s += r[i] * r[i];
             }
@@ -511,19 +522,19 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
     return finished;
 }
 
-
-
 /*!
- * \brief The iterative biconjugate gradients solver with stabilization for unsymmetric non-definite matrices
+ * \brief The iterative biconjugate gradients solver with stabilization for
+ * unsymmetric non-definite matrices
  *
  * This iterative solver works with regular quadratic matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param A (double **) -- the matrix
  * \param x (double *) -- the value vector
@@ -531,8 +542,9 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
 int G_math_solver_bicgstab(double **A, double *x, double *b, int rows,
                            int maxit, double err)
@@ -541,16 +553,18 @@ int G_math_solver_bicgstab(double **A, double *x, double *b, int rows,
 }
 
 /*!
- * \brief The iterative biconjugate gradients solver with stabilization for unsymmetric non-definite matrices
+ * \brief The iterative biconjugate gradients solver with stabilization for
+ * unsymmetric non-definite matrices
  *
  * This iterative solver works with sparse matrices.
  *
  * This solver solves the linear equation system:
  *  A x = b
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param Asp (G_math_spvector **) -- the sparse matrix
  * \param x (double *) -- the value vector
@@ -558,17 +572,17 @@ int G_math_solver_bicgstab(double **A, double *x, double *b, int rows,
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
- * 
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix
+ * singular, -1 - could not solve the les
+ *
  * */
-int G_math_solver_sparse_bicgstab(G_math_spvector ** Asp, double *x,
-                                  double *b, int rows, int maxit, double err)
+int G_math_solver_sparse_bicgstab(G_math_spvector **Asp, double *x, double *b,
+                                  int rows, int maxit, double err)
 {
     return solver_bicgstab(NULL, Asp, x, b, rows, maxit, err);
 }
 
-
-int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
+int solver_bicgstab(double **A, G_math_spvector **Asp, double *x, double *b,
                     int rows, int maxit, double err)
 {
     double *r;
@@ -628,8 +642,8 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
             else
                 G_math_d_Ax(A, p, v, rows, rows);
 
-            /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s1, s2, s3)
+                /* scalar product */
+#pragma omp for schedule(static) private(i) reduction(+ : s1, s2, s3)
             for (i = 0; i < rows; i++) {
                 s1 += r[i] * r[i];
                 s2 += r[i] * r0[i];
@@ -659,8 +673,8 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
             else
                 G_math_d_Ax(A, s, t, rows, rows);
 
-            /* scalar product */
-#pragma omp for schedule (static) private(i) reduction(+:s1, s2)
+                /* scalar product */
+#pragma omp for schedule(static) private(i) reduction(+ : s1, s2)
             for (i = 0; i < rows; i++) {
                 s1 += t[i] * s[i];
                 s2 += t[i] * t[i];
@@ -676,7 +690,7 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
             G_math_d_ax_by(x, r, x, 1.0, 1.0, rows);
             G_math_d_ax_by(s, t, r, 1.0, -1.0 * omega, rows);
 
-#pragma omp for schedule (static) private(i) reduction(+:s1)
+#pragma omp for schedule(static) private(i) reduction(+ : s1)
             for (i = 0; i < rows; i++) {
                 s1 += r[i] * r0[i];
             }
@@ -690,7 +704,6 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
             G_math_d_ax_by(p, v, p, 1.0, -1.0 * omega, rows);
             G_math_d_ax_by(p, r, p, beta, 1.0, rows);
         }
-
 
         if (Asp != NULL)
             G_message(_("Sparse BiCGStab -- iteration %i error  %g\n"), m,
@@ -719,19 +732,18 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
     return finished;
 }
 
-
 /*!
  * \brief Compute a diagonal preconditioning matrix for krylov space solver
  *
- * \param A (double **) -- the matrix for which the precondition should be computed (if the sparse matrix is used, set it to NULL)
- * \param Asp (G_math_spvector **) -- the matrix for which the precondition should be computed 
- * \param rows (int)
- * \param prec (int) -- which preconditioner should be used 1, 2 or 3
+ * \param A (double **) -- the matrix for which the precondition should be
+ * computed (if the sparse matrix is used, set it to NULL) \param Asp
+ * (G_math_spvector **) -- the matrix for which the precondition should be
+ * computed \param rows (int) \param prec (int) -- which preconditioner should
+ * be used 1, 2 or 3
  *
  * */
-G_math_spvector **create_diag_precond_matrix(double **A,
-                                             G_math_spvector ** Asp, int rows,
-                                             int prec)
+G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
+                                             int rows, int prec)
 {
     G_math_spvector **Msp;
 
@@ -742,7 +754,8 @@ G_math_spvector **create_diag_precond_matrix(double **A,
     Msp = G_math_alloc_spmatrix(rows);
 
     if (A != NULL) {
-#pragma omp parallel for schedule (static) private(i, j, sum) shared(A, Msp, rows, cols, prec)
+#pragma omp parallel for schedule(static) private(i, j, sum) \
+    shared(A, Msp, rows, cols, prec)
         for (i = 0; i < rows; i++) {
             G_math_spvector *spvect = G_math_alloc_spvector(1);
 
@@ -765,15 +778,15 @@ G_math_spvector **create_diag_precond_matrix(double **A,
                 break;
             }
 
-
             spvect->index[0] = i;
-            spvect->cols = 1;;
+            spvect->cols = 1;
+            ;
             G_math_add_spvector(Msp, spvect, i);
-
         }
     }
     else {
-#pragma omp parallel for schedule (static) private(i, j, sum) shared(Asp, Msp, rows, cols, prec)
+#pragma omp parallel for schedule(static) private(i, j, sum) \
+    shared(Asp, Msp, rows, cols, prec)
         for (i = 0; i < rows; i++) {
             G_math_spvector *spvect = G_math_alloc_spvector(1);
 
@@ -799,7 +812,8 @@ G_math_spvector **create_diag_precond_matrix(double **A,
             }
 
             spvect->index[0] = i;
-            spvect->cols = 1;;
+            spvect->cols = 1;
+            ;
             G_math_add_spvector(Msp, spvect, i);
         }
     }

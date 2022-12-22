@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include <grass/gmath.h>
 
-
 /*!
  * \fn float G_math_rand (int seed)
  *

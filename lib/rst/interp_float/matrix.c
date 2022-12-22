@@ -18,7 +18,7 @@
  *
  * \author modified by McCauley in August 1995
  * \author modified by Mitasova in August 1995, Nov. 1996
- * 
+ *
  * \copyright
  * (C) 1993-1996 by Lubos Mitas and the GRASS Development Team
  *
@@ -27,7 +27,6 @@
  * Read the file COPYING that comes with GRASS for details.
  */
 
-
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
@@ -35,18 +34,17 @@
 #include <grass/interpf.h>
 #include <grass/gmath.h>
 
-
-int IL_matrix_create(struct interp_params *params, struct triple *points,       /* points for interpolation */
-                     int n_points,      /* number of points */
-                     double **matrix,   /* matrix */
+int IL_matrix_create(struct interp_params *params,
+                     struct triple *points, /* points for interpolation */
+                     int n_points,          /* number of points */
+                     double **matrix,       /* matrix */
                      int *indx)
 {
     static double *A = NULL;
 
     if (!A) {
-        if (!
-            (A =
-             G_alloc_vector((params->KMAX2 + 2) * (params->KMAX2 + 2) + 1))) {
+        if (!(A = G_alloc_vector((params->KMAX2 + 2) * (params->KMAX2 + 2) +
+                                 1))) {
             fprintf(stderr, "Cannot allocate memory for A\n");
             return -1;
         }
@@ -68,12 +66,12 @@ int IL_matrix_create(struct interp_params *params, struct triple *points,       
  *
  * \return -1 on failure, 1 on success
  */
-int IL_matrix_create_alloc(struct interp_params *params, struct triple *points, /* points for interpolation */
-                           int n_points,        /* number of points */
-                           double **matrix,     /* matrix */
-                           int *indx,
-                           double *A
-                           /* temporary matrix unique for all threads */ )
+int IL_matrix_create_alloc(struct interp_params *params,
+                           struct triple *points, /* points for interpolation */
+                           int n_points,          /* number of points */
+                           double **matrix,       /* matrix */
+                           int *indx, double *A
+                           /* temporary matrix unique for all threads */)
 {
     double xx, yy;
     double rfsta2, r;
@@ -81,17 +79,17 @@ int IL_matrix_create_alloc(struct interp_params *params, struct triple *points, 
     int n1, k1, k2, k, i1, l, m, i, j;
     double fstar2 = params->fi * params->fi / 4.;
     double RO, amaxa;
-    double rsin = 0, rcos = 0, teta, scale = 0; /*anisotropy parameters - added by JH 2002 */
+    double rsin = 0, rcos = 0, teta,
+           scale = 0; /*anisotropy parameters - added by JH 2002 */
     double xxr, yyr;
 
     if (params->theta) {
-        teta = params->theta * (M_PI / 180);    /* deg to rad */
+        teta = params->theta * (M_PI / 180); /* deg to rad */
         rsin = sin(teta);
         rcos = cos(teta);
     }
     if (params->scalex)
         scale = params->scalex;
-
 
     n1 = n_points + 1;
 
@@ -113,12 +111,12 @@ int IL_matrix_create_alloc(struct interp_params *params, struct triple *points, 
         k1 = k * n1 + 1;
         k2 = k + 1;
         i1 = k1 + k;
-        if (params->rsm < 0.) { /*indicates variable smoothing */
-            A[i1] = -points[k - 1].sm;  /* added by Mitasova nov. 96 */
+        if (params->rsm < 0.) {        /*indicates variable smoothing */
+            A[i1] = -points[k - 1].sm; /* added by Mitasova nov. 96 */
             /* G_debug(5, "sm[%d]=%f, a=%f", k, points[k-1].sm, A[i1]); */
         }
         else {
-            A[i1] = RO;         /* constant smoothing */
+            A[i1] = RO; /* constant smoothing */
         }
         /* if (i1 == 100) fprintf (stderr,i "A[%d] = %f\n", i1, A[i1]); */
 

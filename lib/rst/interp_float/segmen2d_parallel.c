@@ -16,7 +16,6 @@
  *
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -30,23 +29,24 @@
 
 static int cut_tree(struct multtree *, struct multtree **, int *);
 
-
 /*!
  * See documentation for IL_interp_segments_2d.
  * This is a parallel processing implementation.
  */
-int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_info *info,        /*!< info for the quad tree */
-                                   struct multtree *tree,       /*!< current leaf of the quad tree */
-                                   struct BM *bitmask,  /*!< bitmask */
-                                   double zmin, double zmax,    /*!< min and max input z-values */
-                                   double *zminac, double *zmaxac,      /*!< min and max interp. z-values */
-                                   double *gmin, double *gmax,  /*!< min and max inperp. slope val. */
-                                   double *c1min, double *c1max,        /*!< min and max interp. curv. val. */
-                                   double *c2min, double *c2max,        /*!< min and max interp. curv. val. */
-                                   double *ertot,       /*!< total interplating func. error */
-                                   int totsegm, /*!< total number of segments */
-                                   off_t offset1,       /*!< offset for temp file writing */
-                                   double dnorm, int threads)
+int IL_interp_segments_2d_parallel(
+    struct interp_params *params,
+    struct tree_info *info,         /*!< info for the quad tree */
+    struct multtree *tree,          /*!< current leaf of the quad tree */
+    struct BM *bitmask,             /*!< bitmask */
+    double zmin, double zmax,       /*!< min and max input z-values */
+    double *zminac, double *zmaxac, /*!< min and max interp. z-values */
+    double *gmin, double *gmax,     /*!< min and max inperp. slope val. */
+    double *c1min, double *c1max,   /*!< min and max interp. curv. val. */
+    double *c2min, double *c2max,   /*!< min and max interp. curv. val. */
+    double *ertot,                  /*!< total interplating func. error */
+    int totsegm,                    /*!< total number of segments */
+    off_t offset1,                  /*!< offset for temp file writing */
+    double dnorm, int threads)
 {
     int some_thread_failed = 0;
     int tid = 0;
@@ -72,9 +72,8 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
     A = (double **)G_malloc(sizeof(double *) * threads);
 
     for (i_cnt = 0; i_cnt < threads; i_cnt++) {
-        if (!
-            (matrix[i_cnt] =
-             G_alloc_matrix(params->KMAX2 + 1, params->KMAX2 + 1))) {
+        if (!(matrix[i_cnt] =
+                  G_alloc_matrix(params->KMAX2 + 1, params->KMAX2 + 1))) {
             G_fatal_error(_("Out of memory"));
             return -1;
         }
@@ -95,9 +94,8 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
     }
 
     for (i_cnt = 0; i_cnt < threads; i_cnt++) {
-        if (!
-            (A[i_cnt] =
-             G_alloc_vector((params->KMAX2 + 2) * (params->KMAX2 + 2) + 1))) {
+        if (!(A[i_cnt] = G_alloc_vector(
+                  (params->KMAX2 + 2) * (params->KMAX2 + 2) + 1))) {
             G_fatal_error(_("Out of memory"));
             return -1;
         }
@@ -107,7 +105,11 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
     cut_tree(tree, all_leafs, &i);
 
     G_message(_("Starting parallel work"));
-#pragma omp parallel firstprivate(tid, i, j, zmin, zmax, tree, totsegm, offset1, dnorm, smseg, ertot, params, info, all_leafs, bitmask, b, indx, matrix, data_local, A) shared(cursegm, threads, some_thread_failed, zminac, zmaxac, gmin, gmax, c1min, c1max, c2min, c2max)  default(none)
+#pragma omp parallel firstprivate(                                           \
+    tid, i, j, zmin, zmax, tree, totsegm, offset1, dnorm, smseg, ertot,      \
+    params, info, all_leafs, bitmask, b, indx, matrix, data_local, A)        \
+    shared(cursegm, threads, some_thread_failed, zminac, zmaxac, gmin, gmax, \
+           c1min, c1max, c2min, c2max) default(none)
     {
 #pragma omp for schedule(dynamic)
         for (i_cnt = 0; i_cnt < totsegm; i_cnt++) {
@@ -125,17 +127,16 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
             struct triple *point;
             struct triple skip_point;
             int m_skip, skip_index, k, segtest;
-            double xx, yy /*, zz */ ;
+            double xx, yy /*, zz */;
 
-
-            //struct quaddata *data_local;
+            // struct quaddata *data_local;
 
             ns_res = (((struct quaddata *)(tree->data))->ymax -
                       ((struct quaddata *)(tree->data))->y_orig) /
-                params->nsizr;
-            ew_res =
-                (((struct quaddata *)(tree->data))->xmax -
-                 ((struct quaddata *)(tree->data))->x_orig) / params->nsizc;
+                     params->nsizr;
+            ew_res = (((struct quaddata *)(tree->data))->xmax -
+                      ((struct quaddata *)(tree->data))->x_orig) /
+                     params->nsizc;
 
             if (all_leafs[i_cnt] == NULL) {
                 some_thread_failed = -1;
@@ -149,12 +150,12 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                 continue;
             }
             else {
-                distx =
-                    (((struct quaddata *)(all_leafs[i_cnt]->data))->n_cols *
-                     ew_res) * 0.1;
-                disty =
-                    (((struct quaddata *)(all_leafs[i_cnt]->data))->n_rows *
-                     ns_res) * 0.1;
+                distx = (((struct quaddata *)(all_leafs[i_cnt]->data))->n_cols *
+                         ew_res) *
+                        0.1;
+                disty = (((struct quaddata *)(all_leafs[i_cnt]->data))->n_rows *
+                         ns_res) *
+                        0.1;
                 distxp = 0;
                 distyp = 0;
                 xmn = ((struct quaddata *)(all_leafs[i_cnt]->data))->x_orig;
@@ -163,36 +164,38 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                 ymx = ((struct quaddata *)(all_leafs[i_cnt]->data))->ymax;
                 i = 0;
                 MAXENC = 0;
-                /* data is a window with zero points; some fields don't make sense in this case
-                   so they are zero (like resolution,dimensions */
+                /* data is a window with zero points; some fields don't make
+                   sense in this case so they are zero (like
+                   resolution,dimensions */
                 /* CHANGE */
                 /* Calcutaing kmin for surrent segment (depends on the size) */
 
                 /*****if (smseg <= 0.00001) MINPTS=params->kmin; else {} ***/
                 pr = pow(2., (xmx - xmn) / smseg - 1.);
-                MINPTS =
-                    params->kmin * (pr /
-                                    (1 + params->kmin * pr / params->KMAX2));
-                /* fprintf(stderr,"MINPTS=%d, KMIN=%d, KMAX=%d, pr=%lf, smseg=%lf, DX=%lf \n", MINPTS,params->kmin,params->KMAX2,pr,smseg,xmx-xmn); */
+                MINPTS = params->kmin *
+                         (pr / (1 + params->kmin * pr / params->KMAX2));
+                /* fprintf(stderr,"MINPTS=%d, KMIN=%d, KMAX=%d, pr=%lf,
+                 * smseg=%lf, DX=%lf \n",
+                 * MINPTS,params->kmin,params->KMAX2,pr,smseg,xmx-xmn); */
 
-                data_local[tid] =
-                    (struct quaddata *)quad_data_new(xmn - distx, ymn - disty,
-                                                     xmx + distx, ymx + disty,
-                                                     0, 0, 0, params->KMAX2);
-                npt =
-                    MT_region_data(info, tree, data_local[tid], params->KMAX2,
-                                   4);
+                data_local[tid] = (struct quaddata *)quad_data_new(
+                    xmn - distx, ymn - disty, xmx + distx, ymx + disty, 0, 0, 0,
+                    params->KMAX2);
+                npt = MT_region_data(info, tree, data_local[tid], params->KMAX2,
+                                     4);
 
                 while ((npt < MINPTS) || (npt > params->KMAX2)) {
                     if (i >= 70) {
-                        G_warning(_("Taking too long to find points for interpolation - "
-                                   "please change the region to area where your points are. "
-                                   "Continuing calculations..."));
+                        G_warning(_("Taking too long to find points for "
+                                    "interpolation - "
+                                    "please change the region to area where "
+                                    "your points are. "
+                                    "Continuing calculations..."));
                         break;
                     }
                     i++;
                     if (npt > params->KMAX2)
-                        /* decrease window */
+                    /* decrease window */
                     {
                         MAXENC = 1;
                         temp1 = distxp;
@@ -218,14 +221,13 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         }
                         /* decrease by 50% of extra distance */
                     }
-                    data_local[tid]->x_orig = xmn - distx;      /* update window */
+                    data_local[tid]->x_orig = xmn - distx; /* update window */
                     data_local[tid]->y_orig = ymn - disty;
                     data_local[tid]->xmax = xmx + distx;
                     data_local[tid]->ymax = ymx + disty;
                     data_local[tid]->n_points = 0;
-                    npt =
-                        MT_region_data(info, tree, data_local[tid],
-                                       params->KMAX2, 4);
+                    npt = MT_region_data(info, tree, data_local[tid],
+                                         params->KMAX2, 4);
                 }
 
                 if (totsegm != 0 && tid == 0) {
@@ -253,38 +255,40 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
 
                 /* allocate memory for CV points only if cv is performed */
                 if (params->cv) {
-                    if (!
-                        (point =
-                         (struct triple *)G_malloc(sizeof(struct triple) *
-                                                   data_local
-                                                   [tid]->n_points))) {
+                    if (!(point = (struct triple *)G_malloc(
+                              sizeof(struct triple) *
+                              data_local[tid]->n_points))) {
                         G_warning(_("Out of memory"));
                         some_thread_failed = -1;
                         continue;
                     }
                 }
 
-                /*normalize the data so that the side of average segment is about 1m */
+                /*normalize the data so that the side of average segment is
+                 * about 1m */
                 /* put data_points into point only if CV is performed */
 
                 for (i = 0; i < data_local[tid]->n_points; i++) {
                     data_local[tid]->points[i].x =
                         (data_local[tid]->points[i].x -
-                         data_local[tid]->x_orig) / dnorm;
+                         data_local[tid]->x_orig) /
+                        dnorm;
                     data_local[tid]->points[i].y =
                         (data_local[tid]->points[i].y -
-                         data_local[tid]->y_orig) / dnorm;
+                         data_local[tid]->y_orig) /
+                        dnorm;
                     if (params->cv) {
-                        point[i].x = data_local[tid]->points[i].x;      /*cv stuff */
-                        point[i].y = data_local[tid]->points[i].y;      /*cv stuff */
-                        point[i].z = data_local[tid]->points[i].z;      /*cv stuff */
+                        point[i].x = data_local[tid]->points[i].x; /*cv stuff */
+                        point[i].y = data_local[tid]->points[i].y; /*cv stuff */
+                        point[i].z = data_local[tid]->points[i].z; /*cv stuff */
                     }
 
-                    /* commented out by Helena january 1997 as this is not necessary
-                       although it may be useful to put normalization of z back? 
-                       data->points[i].z = data->points[i].z / dnorm;
+                    /* commented out by Helena january 1997 as this is not
+                       necessary although it may be useful to put normalization
+                       of z back? data->points[i].z = data->points[i].z / dnorm;
                        this made smoothing self-adjusting  based on dnorm
-                       if (params->rsm < 0.) data->points[i].sm = data->points[i].sm / dnorm;
+                       if (params->rsm < 0.) data->points[i].sm =
+                       data->points[i].sm / dnorm;
                      */
                 }
 
@@ -305,9 +309,9 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         segtest = 0;
                         j = 0;
                         xx = point[skip_index].x * dnorm +
-                            data_local[tid]->x_orig + params->x_orig;
+                             data_local[tid]->x_orig + params->x_orig;
                         yy = point[skip_index].y * dnorm +
-                            data_local[tid]->y_orig + params->y_orig;
+                             data_local[tid]->y_orig + params->y_orig;
                         /* zz = point[skip_index].z; */
                         if (xx >= data_local[tid]->x_orig + params->x_orig &&
                             xx <= data_local[tid]->xmax + params->x_orig &&
@@ -325,28 +329,24 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                                     j++;
                                 }
                             }
-                        }       /* segment area test */
+                        } /* segment area test */
                     }
                     if (!params->cv) {
-                        if (    /* params */
-                               IL_matrix_create_alloc(params,
-                                                      data_local[tid]->points,
-                                                      data_local
-                                                      [tid]->n_points,
-                                                      matrix[tid], indx[tid],
-                                                      A[tid]) < 0) {
+                        if (/* params */
+                            IL_matrix_create_alloc(
+                                params, data_local[tid]->points,
+                                data_local[tid]->n_points, matrix[tid],
+                                indx[tid], A[tid]) < 0) {
                             some_thread_failed = -1;
                             continue;
                         }
                     }
                     else if (segtest == 1) {
-                        if (    /* params */
-                               IL_matrix_create_alloc(params,
-                                                      data_local[tid]->points,
-                                                      data_local
-                                                      [tid]->n_points - 1,
-                                                      matrix[tid], indx[tid],
-                                                      A[tid]) < 0) {
+                        if (/* params */
+                            IL_matrix_create_alloc(
+                                params, data_local[tid]->points,
+                                data_local[tid]->n_points - 1, matrix[tid],
+                                indx[tid], A[tid]) < 0) {
                             some_thread_failed = -1;
                             continue;
                         }
@@ -372,8 +372,7 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         params->check_points(params, data_local[tid], b[tid],
                                              ertot, zmin, dnorm, skip_point);
                     }
-                }               /*end of cv loop */
-
+                } /*end of cv loop */
 
                 if (!params->cv) {
                     if ((params->Tmp_fd_z != NULL) ||
@@ -384,11 +383,11 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                         (params->Tmp_fd_xy != NULL)) {
 #pragma omp critical
                         {
-                            if (params->grid_calc
-                                (params, data_local[tid], bitmask, zmin, zmax,
-                                 zminac, zmaxac, gmin, gmax, c1min, c1max,
-                                 c2min, c2max, ertot, b[tid], offset1,
-                                 dnorm) < 0) {
+                            if (params->grid_calc(params, data_local[tid],
+                                                  bitmask, zmin, zmax, zminac,
+                                                  zmaxac, gmin, gmax, c1min,
+                                                  c1max, c2min, c2max, ertot,
+                                                  b[tid], offset1, dnorm) < 0) {
                                 some_thread_failed = -1;
                             }
                         }
@@ -405,7 +404,7 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                 if (totsegm != 0 && tid == 0) {
                     G_percent(cursegm, totsegm, 1);
                 }
-                /* 
+                /*
                    G_free_matrix(matrix);
                    G_free_ivector(indx);
                    G_free_vector(b);
@@ -414,7 +413,7 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                 G_free(data_local[tid]);
             }
         }
-    }                           /* All threads join master thread and terminate */
+    } /* All threads join master thread and terminate */
 
     for (i_cnt = 0; i_cnt < threads; i_cnt++) {
         G_free(matrix[i_cnt]);
@@ -435,11 +434,10 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
     return 1;
 }
 
-
 /* cut given tree into separate leafs */
-int cut_tree(struct multtree *tree,     /* tree we want to cut */
-             struct multtree **cut_leafs,       /* array of leafs */
-             int *where_to_add /* index of leaf which will be next */ )
+int cut_tree(struct multtree *tree,       /* tree we want to cut */
+             struct multtree **cut_leafs, /* array of leafs */
+             int *where_to_add /* index of leaf which will be next */)
 {
     if (tree == NULL)
         return -1;

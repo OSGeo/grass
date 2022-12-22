@@ -1,22 +1,20 @@
-
 #include <stdio.h>
 #include "path.h"
 
 #define DEF_MINBBOX  2
 #define DEF_MINDIST  2
-#define DEF_MAXPTS  99
+#define DEF_MAXPTS   99
 
-#define FILE_NAME  "htmlmap"
+#define FILE_NAME    "htmlmap"
 
 #define INITIAL_TEXT 1000
 
-#define APACHE 0		/* write output in apache/ncsa server image map format */
-#define NCSA   0		/* write output in apache/ncsa server image map format */
-#define CLIENT 1		/* write output in netscape client side image map format */
-#define RAW    2		/* write output in raw format */
+#define APACHE       0 /* write output in apache/ncsa server image map format */
+#define NCSA         0 /* write output in apache/ncsa server image map format */
+#define CLIENT       1 /* write output in netscape client side image map format */
+#define RAW          2 /* write output in raw format */
 
-struct MapPoly
-{
+struct MapPoly {
     char *url;
     int num_pts;
     int *x_pts;
@@ -24,8 +22,7 @@ struct MapPoly
     struct MapPoly *next_poly;
 };
 
-struct html_state
-{
+struct html_state {
     char *last_text;
     int last_text_len;
     int type;

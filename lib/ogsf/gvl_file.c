@@ -1,14 +1,15 @@
 /*!
    \file lib/ogsf/gvl_file.c
 
-   \brief OGSF library - loading and manipulating volumes (lower level functions)
+   \brief OGSF library - loading and manipulating volumes (lower level
+   functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -24,23 +25,22 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
-#define LUCKY                 33
+#define LUCKY        33
 
-#define MODE_DIRECT            0
-#define MODE_SLICE             1
-#define MODE_FULL              2
-#define MODE_PRELOAD           3
+#define MODE_DIRECT  0
+#define MODE_SLICE   1
+#define MODE_FULL    2
+#define MODE_PRELOAD 3
 
-#define MODE_DEFAULT		   0
+#define MODE_DEFAULT 0
 
-#define STATUS_READY           0
-#define STATUS_BUSY            1
+#define STATUS_READY 0
+#define STATUS_BUSY  1
 
 /*!
    \brief structure for slice mode reading from volume file
  */
-typedef struct
-{
+typedef struct {
     int num, skip;
     int crnt, base;
 
@@ -48,7 +48,7 @@ typedef struct
 } slice_data;
 
 static geovol_file *Data[MAX_VOL_FILES];
-static geovol_file Df[MAX_VOL_FILES];   /* trying to avoid allocation */
+static geovol_file Df[MAX_VOL_FILES]; /* trying to avoid allocation */
 
 static int Numfiles = 0;
 
@@ -185,9 +185,9 @@ char *gvl_file_get_name(int id)
 
    \param vf pointer to geovol_file struct
 
-   \return file type 
+   \return file type
  */
-int gvl_file_get_file_type(geovol_file * vf)
+int gvl_file_get_file_type(geovol_file *vf)
 {
     return (vf->file_type);
 }
@@ -199,7 +199,7 @@ int gvl_file_get_file_type(geovol_file * vf)
 
    \return data type
  */
-int gvl_file_get_data_type(geovol_file * vf)
+int gvl_file_get_data_type(geovol_file *vf)
 {
     return (vf->data_type);
 }
@@ -211,7 +211,7 @@ int gvl_file_get_data_type(geovol_file * vf)
    \param[out] min min value
    \param[out] max max value
  */
-void gvl_file_get_min_max(geovol_file * vf, double *min, double *max)
+void gvl_file_get_min_max(geovol_file *vf, double *min, double *max)
 {
     *min = vf->min;
     *max = vf->max;
@@ -229,7 +229,7 @@ void gvl_file_get_min_max(geovol_file * vf, double *min, double *max)
    \return pointer to file
    \return NULL on failure
  */
-void *open_volfile(const char *name, IFLAG file_type, IFLAG * data_type,
+void *open_volfile(const char *name, IFLAG file_type, IFLAG *data_type,
                    double *min, double *max)
 {
     if (file_type == VOL_FTYPE_RASTER3D) {
@@ -339,7 +339,7 @@ int gvl_file_newh(const char *name, IFLAG file_type)
 
    \return 1
  */
-int free_volfile_buffs(geovol_file * vf)
+int free_volfile_buffs(geovol_file *vf)
 {
     if (vf->mode == MODE_SLICE) {
         G_free(vf->buff);
@@ -357,7 +357,7 @@ int free_volfile_buffs(geovol_file * vf)
 /*!
    \brief Free geovol_file structure for given handle
 
-   \param id 
+   \param id
 
    \return
  */
@@ -414,8 +414,7 @@ int gvl_file_free_datah(int id)
 
    \returns pointer to data
  */
-void *open_g3d_file(const char *filename, IFLAG * type, double *min,
-                    double *max)
+void *open_g3d_file(const char *filename, IFLAG *type, double *min, double *max)
 {
     const char *mapset;
     int itype;
@@ -429,10 +428,9 @@ void *open_g3d_file(const char *filename, IFLAG * type, double *min,
     }
 
     /* open g3d file */
-    map =
-        Rast3d_open_cell_old(filename, mapset, RASTER3D_DEFAULT_WINDOW,
-                             RASTER3D_TILE_SAME_AS_FILE,
-                             RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(filename, mapset, RASTER3D_DEFAULT_WINDOW,
+                               RASTER3D_TILE_SAME_AS_FILE,
+                               RASTER3D_USE_CACHE_DEFAULT);
     if (!map) {
         G_warning(_("Unable to open 3D raster map <%s>"), filename);
         return (NULL);
@@ -467,9 +465,9 @@ void *open_g3d_file(const char *filename, IFLAG * type, double *min,
 int close_g3d_file(void *map)
 {
     /* close opened g3d file */
-    if (Rast3d_close((RASTER3D_Map *) map) != 1) {
+    if (Rast3d_close((RASTER3D_Map *)map) != 1) {
         G_warning(_("Unable to close 3D raster map <%s>"),
-                  ((RASTER3D_Map *) map)->fileName);
+                  ((RASTER3D_Map *)map)->fileName);
         return (-1);
     }
 
@@ -686,7 +684,7 @@ int get_buff_value(IFLAG type, void *data, int offset, void *value)
    \return -1 on failure
    \return 1 on success
  */
-int get_direct_value(geovol_file * vf, int x, int y, int z, void *value)
+int get_direct_value(geovol_file *vf, int x, int y, int z, void *value)
 {
     switch (vf->file_type) {
         /* RASTER3D file type */
@@ -715,21 +713,20 @@ int get_direct_value(geovol_file * vf, int x, int y, int z, void *value)
    \return -1 on failure
    \return 1 on success
  */
-int alloc_vol_buff(geovol_file * vf)
+int alloc_vol_buff(geovol_file *vf)
 {
     switch (vf->data_type) {
         /* float data type */
     case (VOL_DTYPE_FLOAT):
-        if ((vf->buff =
-             (float *)G_malloc(sizeof(float) * Cols * Rows * Depths)) == NULL)
+        if ((vf->buff = (float *)G_malloc(sizeof(float) * Cols * Rows *
+                                          Depths)) == NULL)
             return (-1);
         break;
 
         /* double data type */
     case (VOL_DTYPE_DOUBLE):
-        if ((vf->buff =
-             (double *)G_malloc(sizeof(double) * Cols * Rows * Depths)) ==
-            NULL)
+        if ((vf->buff = (double *)G_malloc(sizeof(double) * Cols * Rows *
+                                           Depths)) == NULL)
             return (-1);
         break;
 
@@ -748,7 +745,7 @@ int alloc_vol_buff(geovol_file * vf)
 
    \return 1
  */
-int free_vol_buff(geovol_file * vf)
+int free_vol_buff(geovol_file *vf)
 {
     G_free(vf->buff);
 
@@ -763,7 +760,7 @@ int free_vol_buff(geovol_file * vf)
    \return -1 on failure
    \return 1 on success
  */
-int read_vol(geovol_file * vf)
+int read_vol(geovol_file *vf)
 {
     switch (vf->file_type) {
         /* RASTER3D file format */
@@ -788,7 +785,7 @@ int read_vol(geovol_file * vf)
 
    \return 1
  */
-int get_vol_value(geovol_file * vf, int x, int y, int z, void *value)
+int get_vol_value(geovol_file *vf, int x, int y, int z, void *value)
 {
     get_buff_value(vf->data_type, vf->buff, z * Rows * Cols + y * Cols + x,
                    value);
@@ -809,17 +806,17 @@ int get_vol_value(geovol_file * vf, int x, int y, int z, void *value)
    \return -1 on failure
    \return 1 on success
  */
-int alloc_slice_buff(geovol_file * vf)
+int alloc_slice_buff(geovol_file *vf)
 {
     int i;
-    slice_data *sd = (slice_data *) vf->buff;
+    slice_data *sd = (slice_data *)vf->buff;
 
     switch (vf->data_type) {
         /* float data type */
     case (VOL_DTYPE_FLOAT):
         for (i = 0; i < sd->num; i++) {
             if ((sd->slice[i] =
-                 (float *)G_malloc(sizeof(float) * Cols * Rows)) == NULL)
+                     (float *)G_malloc(sizeof(float) * Cols * Rows)) == NULL)
                 return (-1);
         }
         break;
@@ -828,7 +825,7 @@ int alloc_slice_buff(geovol_file * vf)
     case (VOL_DTYPE_DOUBLE):
         for (i = 0; i < sd->num; i++) {
             if ((sd->slice[i] =
-                 (double *)G_malloc(sizeof(double) * Cols * Rows)) == NULL)
+                     (double *)G_malloc(sizeof(double) * Cols * Rows)) == NULL)
                 return (-1);
         }
         break;
@@ -848,10 +845,10 @@ int alloc_slice_buff(geovol_file * vf)
 
    \return 1
  */
-int free_slice_buff(geovol_file * vf)
+int free_slice_buff(geovol_file *vf)
 {
     int i;
-    slice_data *sd = (slice_data *) vf->buff;
+    slice_data *sd = (slice_data *)vf->buff;
 
     for (i = 0; i < sd->num; i++) {
         G_free(sd->slice[i]);
@@ -870,10 +867,10 @@ int free_slice_buff(geovol_file * vf)
    \return -1 on failure
    \return 1 on success
  */
-int read_slice(geovol_file * vf, int s, int l)
+int read_slice(geovol_file *vf, int s, int l)
 {
     /* get slice structure */
-    slice_data *sd = (slice_data *) vf->buff;
+    slice_data *sd = (slice_data *)vf->buff;
 
     switch (vf->file_type) {
         /* RASTER3D file format */
@@ -894,12 +891,12 @@ int read_slice(geovol_file * vf, int s, int l)
 
    \param vf pointer to geovol_file struct
  */
-void shift_slices(geovol_file * vf)
+void shift_slices(geovol_file *vf)
 {
     void *tmp;
     int i;
 
-    slice_data *sd = (slice_data *) vf->buff;
+    slice_data *sd = (slice_data *)vf->buff;
 
     /* change pointers to slices */
     tmp = sd->slice[0];
@@ -925,9 +922,9 @@ void shift_slices(geovol_file * vf)
    \return -1 on failure
    \return 1 on success
  */
-int get_slice_value(geovol_file * vf, int x, int y, int z, void *value)
+int get_slice_value(geovol_file *vf, int x, int y, int z, void *value)
 {
-    slice_data *sd = (slice_data *) vf->buff;
+    slice_data *sd = (slice_data *)vf->buff;
 
     /* value is in loaded slices */
     if ((z >= sd->crnt - (sd->base - 1)) &&
@@ -965,7 +962,7 @@ int get_slice_value(geovol_file * vf, int x, int y, int z, void *value)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_file_start_read(geovol_file * vf)
+int gvl_file_start_read(geovol_file *vf)
 {
     int i;
     slice_data *sd;
@@ -992,7 +989,7 @@ int gvl_file_start_read(geovol_file * vf)
             return (-1);
 
         /* read volume */
-        sd = (slice_data *) vf->buff;
+        sd = (slice_data *)vf->buff;
         /* set current slice to 0 */
         sd->crnt = 0;
 
@@ -1016,7 +1013,7 @@ int gvl_file_start_read(geovol_file * vf)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_file_end_read(geovol_file * vf)
+int gvl_file_end_read(geovol_file *vf)
 {
     /* check status */
     if (vf->status == STATUS_READY)
@@ -1048,7 +1045,7 @@ int gvl_file_end_read(geovol_file * vf)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_file_get_value(geovol_file * vf, int x, int y, int z, void *value)
+int gvl_file_get_value(geovol_file *vf, int x, int y, int z, void *value)
 {
     /*  check status */
     if (vf->status != STATUS_BUSY) {
@@ -1085,7 +1082,7 @@ int gvl_file_get_value(geovol_file * vf, int x, int y, int z, void *value)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_file_is_null_value(geovol_file * vf, void *value)
+int gvl_file_is_null_value(geovol_file *vf, void *value)
 {
     switch (vf->file_type) {
         /* RASTER3D file format */
@@ -1114,7 +1111,7 @@ int gvl_file_is_null_value(geovol_file * vf, void *value)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_file_set_mode(geovol_file * vf, IFLAG mode)
+int gvl_file_set_mode(geovol_file *vf, IFLAG mode)
 {
     slice_data *sd;
 
@@ -1131,10 +1128,10 @@ int gvl_file_set_mode(geovol_file * vf, IFLAG mode)
         G_free(vf->buff);
 
     if (mode == MODE_SLICE) {
-        if ((vf->buff = (slice_data *) G_malloc(sizeof(slice_data))) == NULL)
+        if ((vf->buff = (slice_data *)G_malloc(sizeof(slice_data))) == NULL)
             return (-1);
 
-        sd = (slice_data *) vf->buff;
+        sd = (slice_data *)vf->buff;
         sd->num = 1;
         sd->crnt = 0;
         sd->base = 1;
@@ -1164,7 +1161,7 @@ int gvl_file_set_mode(geovol_file * vf, IFLAG mode)
    \return -1 on failure
    \return 1 on success
  */
-int gvl_file_set_slices_param(geovol_file * vf, int n, int b)
+int gvl_file_set_slices_param(geovol_file *vf, int n, int b)
 {
     slice_data *sd;
 
@@ -1174,7 +1171,7 @@ int gvl_file_set_slices_param(geovol_file * vf, int n, int b)
     if (!(vf->mode == MODE_SLICE))
         return (-1);
 
-    sd = (slice_data *) vf->buff;
+    sd = (slice_data *)vf->buff;
     sd->num = n;
     sd->base = b;
 

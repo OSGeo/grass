@@ -1,4 +1,3 @@
-
 #include <math.h>
 #include <string.h>
 
@@ -9,8 +8,7 @@
 #include "path.h"
 #include "clip.h"
 
-struct vector
-{
+struct vector {
     double x, y;
 };
 
@@ -28,8 +26,8 @@ static struct rectangle clip;
 
 static int window_set;
 
-#define min(x,y) ((x) < (y) ? (x) : (y))
-#define max(x,y) ((x) > (y) ? (x) : (y))
+#define min(x, y) ((x) < (y) ? (x) : (y))
+#define max(x, y) ((x) > (y) ? (x) : (y))
 
 /******************************************************************************/
 
@@ -62,22 +60,23 @@ static int euclidify(struct path *p, int no_pole)
     x0 = x1 = p->vertices[0].x;
 
     for (i = 1; i < p->count; i++) {
-	if (fabs(p->vertices[i].y) < 89.9)
-	    p->vertices[i].x = p->vertices[i-1].x + coerce(p->vertices[i].x - p->vertices[i-1].x);
+        if (fabs(p->vertices[i].y) < 89.9)
+            p->vertices[i].x = p->vertices[i - 1].x +
+                               coerce(p->vertices[i].x - p->vertices[i - 1].x);
 
-	x0 = min(x0, p->vertices[i].x);
-	x1 = max(x1, p->vertices[i].x);
+        x0 = min(x0, p->vertices[i].x);
+        x1 = max(x1, p->vertices[i].x);
     }
 
-    if (no_pole && fabs(p->vertices[p->count-1].x - p->vertices[0].x) > 180)
-	return 0;
+    if (no_pole && fabs(p->vertices[p->count - 1].x - p->vertices[0].x) > 180)
+        return 0;
 
     lo = -shift_count(ux1 - x0);
     hi = shift_count(x1 - ux0);
     count = hi - lo + 1;
 
     for (i = 0; i < p->count; i++)
-	p->vertices[i].x -= lo * 360;
+        p->vertices[i].x -= lo * 360;
 
     return count;
 }
@@ -91,10 +90,10 @@ static void ll_wrap_path(struct path *dst, const struct path *src, int no_pole)
     count = euclidify(dst, no_pole);
 
     for (i = 0; i < count; i++) {
-	for (j = 0; j < src->count; j++) {
-	    struct vertex *v = &dst->vertices[j];
-	    path_append(dst, v->x - i * 360, v->y, v->mode);
-	}
+        for (j = 0; j < src->count; j++) {
+            struct vertex *v = &dst->vertices[j];
+            path_append(dst, v->x - i * 360, v->y, v->mode);
+        }
     }
 }
 
@@ -105,9 +104,9 @@ static void conv_path(struct path *dst, const struct path *src)
     path_copy(dst, src);
 
     for (i = 0; i < dst->count; i++) {
-	struct vertex *v = &dst->vertices[i];
-	v->x = D_u_to_d_col(v->x);
-	v->y = D_u_to_d_row(v->y);
+        struct vertex *v = &dst->vertices[i];
+        v->x = D_u_to_d_col(v->x);
+        v->y = D_u_to_d_row(v->y);
     }
 }
 
@@ -120,16 +119,16 @@ static void reduce_path(struct path *dst, const struct path *src, double eps)
     path_append(dst, v->x, v->y, v->mode);
 
     for (i = 1; i < src->count - 1; i++) {
-	struct vertex *v0 = &dst->vertices[dst->count-1];
-	struct vertex *v1 = &src->vertices[i];
-	struct vertex *v2 = &src->vertices[i+1];
+        struct vertex *v0 = &dst->vertices[dst->count - 1];
+        struct vertex *v1 = &src->vertices[i];
+        struct vertex *v2 = &src->vertices[i + 1];
 
-	if (fabs(v1->x - v0->x) < eps && fabs(v1->y - v0->y) < eps &&
-	    fabs(v1->x - v2->x) < eps && fabs(v1->y - v2->y) < eps &&
-	    v0->mode != P_MOVE && v1->mode != P_MOVE && (!v2->mode) != P_MOVE)
-	    continue;
+        if (fabs(v1->x - v0->x) < eps && fabs(v1->y - v0->y) < eps &&
+            fabs(v1->x - v2->x) < eps && fabs(v1->y - v2->y) < eps &&
+            v0->mode != P_MOVE && v1->mode != P_MOVE && (!v2->mode) != P_MOVE)
+            continue;
 
-	path_append(dst, v1->x, v1->y, v1->mode);
+        path_append(dst, v1->x, v1->y, v1->mode);
     }
     v = &src->vertices[src->count - 1];
     path_append(dst, v->x, v->y, v->mode);
@@ -191,7 +190,8 @@ void D_line_width(double d)
     COM_Line_width(d > 0 ? d : 0);
 }
 
-void D_get_text_box(const char *text, double *t, double *b, double *l, double *r)
+void D_get_text_box(const char *text, double *t, double *b, double *l,
+                    double *r)
 {
     double T, B, L, R;
 
@@ -203,18 +203,22 @@ void D_get_text_box(const char *text, double *t, double *b, double *l, double *r
     *r = D_d_to_u_col(R);
 
     if (*t < *b) {
-	double tmp = *t; *t = *b; *b = tmp;
+        double tmp = *t;
+        *t = *b;
+        *b = tmp;
     }
 
     if (*r < *l) {
-	double tmp = *r; *r = *l; *l = tmp;
+        double tmp = *r;
+        *r = *l;
+        *l = tmp;
     }
 }
 
 /******************************************************************************/
 
 /* D_pos_abs(easting, northing):  move to an absolute position
-	on the display using map coordinates */
+        on the display using map coordinates */
 void D_pos_abs(double x, double y)
 {
     cur.x = x;
@@ -240,51 +244,50 @@ static void do_path(int no_pole)
     int i;
 
     if (!window_set)
-	D_clip_to_map();
+        D_clip_to_map();
 
     if (D_is_lat_lon()) {
-	ll_wrap_path(&ll_path, p, no_pole);
-	p = &ll_path;
+        ll_wrap_path(&ll_path, p, no_pole);
+        p = &ll_path;
     }
 
     switch (clip_mode) {
     case M_NONE:
-	break;
+        break;
     case M_CULL:
-	D__set_clip_planes(&planes, &clip);
-	D__cull_path(&clip_path, p, &planes);
-	p = &clip_path;
-	break;
+        D__set_clip_planes(&planes, &clip);
+        D__cull_path(&clip_path, p, &planes);
+        p = &clip_path;
+        break;
     case M_CLIP:
-	D__set_clip_planes(&planes, &clip);
-	D__clip_path(&clip_path, p, &planes);
-	p = &clip_path;
-	break;
+        D__set_clip_planes(&planes, &clip);
+        D__clip_path(&clip_path, p, &planes);
+        p = &clip_path;
+        break;
     }
 
     conv_path(&raw_path, p);
     p = &raw_path;
 
     if (epsilon > 0) {
-	reduce_path(&eps_path, p, epsilon);
-	p = &eps_path;
+        reduce_path(&eps_path, p, epsilon);
+        p = &eps_path;
     }
 
     COM_Begin();
     for (i = 0; i < p->count; i++) {
-	struct vertex *v = &p->vertices[i];
-	switch (v->mode)
-	{
-	case P_MOVE:
-	    COM_Move(v->x, v->y);
-	    break;
-	case P_CONT:
-	    COM_Cont(v->x, v->y);
-	    break;
-	case P_CLOSE:
-	    COM_Close();
-	    break;
-	}
+        struct vertex *v = &p->vertices[i];
+        switch (v->mode) {
+        case P_MOVE:
+            COM_Move(v->x, v->y);
+            break;
+        case P_CONT:
+            COM_Cont(v->x, v->y);
+            break;
+        case P_CLOSE:
+            COM_Close();
+            break;
+        }
     }
 }
 
@@ -298,7 +301,7 @@ void D_end(void)
 }
 
 /* D_move_abs(x,y):  move to an absolute position on the display using
-	display pixel coordinates */
+        display pixel coordinates */
 void D_move_abs(double x, double y)
 {
     path_move(&path, x, y);
@@ -338,27 +341,27 @@ void D_dots(void)
     int i;
 
     if (!window_set)
-	D_clip_to_map();
+        D_clip_to_map();
 
     for (i = 0; i < p->count; i++) {
-	struct vertex *v = &p->vertices[i];
-	double x = v->x;
-	double y = v->y;
+        struct vertex *v = &p->vertices[i];
+        double x = v->x;
+        double y = v->y;
 
-	if (D_is_lat_lon())
-	    x = coerce(x);
+        if (D_is_lat_lon())
+            x = coerce(x);
 
-	if (clip_mode != M_NONE) {
-	    if (x < clip.left || x > clip.rite)
-		continue;
-	    if (y < clip.bot || y > clip.top)
-		continue;
-	}
+        if (clip_mode != M_NONE) {
+            if (x < clip.left || x > clip.rite)
+                continue;
+            if (y < clip.bot || y > clip.top)
+                continue;
+        }
 
-	x = D_u_to_d_col(x);
-	y = D_u_to_d_row(y);
+        x = D_u_to_d_col(x);
+        y = D_u_to_d_row(y);
 
-	COM_Point(x, y);
+        COM_Point(x, y);
     }
 }
 
@@ -369,12 +372,12 @@ static void poly_abs(const double *x, const double *y, int n)
     int i;
 
     if (n < 2)
-	return;
+        return;
 
     D_begin();
     D_move_abs(x[0], y[0]);
     for (i = 1; i < n; i++)
-	D_cont_abs(x[i], y[i]);
+        D_cont_abs(x[i], y[i]);
 }
 
 void D_polyline_abs(const double *x, const double *y, int n)
@@ -428,12 +431,12 @@ static void poly_rel(const double *x, const double *y, int n)
     int i;
 
     if (n < 2)
-	return;
+        return;
 
     D_begin();
     D_move_rel(x[0], y[0]);
     for (i = 1; i < n; i++)
-	D_cont_rel(x[i], y[i]);
+        D_cont_rel(x[i], y[i]);
 }
 
 void D_move_rel(double x, double y)
@@ -488,4 +491,3 @@ void D_box_rel(double x2, double y2)
 }
 
 /******************************************************************************/
-

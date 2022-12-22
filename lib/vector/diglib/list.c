@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,10 +10,11 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <grass/vector.h>
 

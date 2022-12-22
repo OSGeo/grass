@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Allocate new node structure 
+   \brief Allocate new node structure
 
    \return pointer to allocated P_node struct
    \return NULL on error
@@ -81,7 +81,7 @@ int dig_node_alloc_line(struct P_node *node, int add)
     p = G_realloc(node->lines, num * sizeof(plus_t));
     if (p == NULL)
         return -1;
-    node->lines = (plus_t *) p;
+    node->lines = (plus_t *)p;
 
     p = G_realloc(node->angles, num * sizeof(float));
     if (p == NULL)
@@ -258,7 +258,7 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
 }
 
 /*!
-   \brief Allocate new area structure 
+   \brief Allocate new area structure
 
    \return pointer to allocated P_area struct
    \return NULL on error
@@ -293,7 +293,7 @@ void dig_free_area(struct P_area *Area)
 }
 
 /*!
-   \brief Allocate new isle structure 
+   \brief Allocate new isle structure
 
    \return pointer to allocated P_isle struct
    \return NULL on error
@@ -325,13 +325,13 @@ void dig_free_isle(struct P_isle *Isle)
 }
 
 /*!
-   \brief allocate room for 'num' X and Y  arrays in struct line_pnts 
+   \brief allocate room for 'num' X and Y  arrays in struct line_pnts
 
    \param points pointer to line_pnts struct
    \param num number of points
 
    \return 0 on success
-   \return returns -1 on out of memory 
+   \return returns -1 on out of memory
  */
 int dig_alloc_points(struct line_pnts *points, int num)
 {
@@ -340,27 +340,24 @@ int dig_alloc_points(struct line_pnts *points, int num)
 
     alloced = points->alloc_points;
     /* alloc_space will just return if no space is needed */
-    if (!(p =
-          dig__alloc_space(num, &alloced, 50, (char *)points->x,
-                           sizeof(double)))) {
+    if (!(p = dig__alloc_space(num, &alloced, 50, (char *)points->x,
+                               sizeof(double)))) {
         return (dig_out_of_memory());
     }
     points->x = (double *)p;
 
     alloced = points->alloc_points;
     /* alloc_space will just return if no space is needed */
-    if (!(p =
-          dig__alloc_space(num, &alloced, 50, (char *)points->y,
-                           sizeof(double)))) {
+    if (!(p = dig__alloc_space(num, &alloced, 50, (char *)points->y,
+                               sizeof(double)))) {
         return (dig_out_of_memory());
     }
     points->y = (double *)p;
 
     alloced = points->alloc_points;
     /* alloc_space will just return if no space is needed */
-    if (!(p =
-          dig__alloc_space(num, &alloced, 50, (char *)points->z,
-                           sizeof(double)))) {
+    if (!(p = dig__alloc_space(num, &alloced, 50, (char *)points->z,
+                               sizeof(double)))) {
         return (dig_out_of_memory());
     }
     points->z = (double *)p;
@@ -371,14 +368,14 @@ int dig_alloc_points(struct line_pnts *points, int num)
 }
 
 /*!
-   \brief Allocate room for 'num' fields and category arrays 
-   in struct line_cats 
+   \brief Allocate room for 'num' fields and category arrays
+   in struct line_cats
 
    \param cats pointer to line_cats struct
    \param num number of cats
 
    \return 0 on success
-   \return returns -1 on out of memory 
+   \return returns -1 on out of memory
  */
 int dig_alloc_cats(struct line_cats *cats, int num)
 {
@@ -387,17 +384,15 @@ int dig_alloc_cats(struct line_cats *cats, int num)
 
     /* alloc_space will just return if no space is needed */
     alloced = cats->alloc_cats;
-    if (!(p =
-          dig__alloc_space(num, &alloced, 1, (int *)cats->field,
-                           sizeof(int)))) {
+    if (!(p = dig__alloc_space(num, &alloced, 1, (int *)cats->field,
+                               sizeof(int)))) {
         return dig_out_of_memory();
     }
     cats->field = (int *)p;
 
     alloced = cats->alloc_cats;
-    if (!(p =
-          dig__alloc_space(num, &alloced, 1, (int *)cats->cat,
-                           sizeof(int)))) {
+    if (!(p = dig__alloc_space(num, &alloced, 1, (int *)cats->cat,
+                               sizeof(int)))) {
         return dig_out_of_memory();
     }
     cats->cat = (int *)p;
@@ -426,7 +421,7 @@ int dig_area_alloc_line(struct P_area *area, int add)
     p = G_realloc(area->lines, num * sizeof(plus_t));
     if (p == NULL)
         return -1;
-    area->lines = (plus_t *) p;
+    area->lines = (plus_t *)p;
 
     area->alloc_lines = num;
 
@@ -453,7 +448,7 @@ int dig_area_alloc_isle(struct P_area *area, int add)
     p = G_realloc(area->isles, num * sizeof(plus_t));
     if (p == NULL)
         return -1;
-    area->isles = (plus_t *) p;
+    area->isles = (plus_t *)p;
 
     area->alloc_isles = num;
     return (0);
@@ -479,7 +474,7 @@ int dig_isle_alloc_line(struct P_isle *isle, int add)
     p = G_realloc(isle->lines, num * sizeof(plus_t));
     if (p == NULL)
         return -1;
-    isle->lines = (plus_t *) p;
+    isle->lines = (plus_t *)p;
 
     isle->alloc_lines = num;
 

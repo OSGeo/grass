@@ -23,7 +23,7 @@
 
    First, true IEEE numbers had to be chosen to avoid getting an FPE.
    Second, every byte in the test pattern had to be unique.   And
-   finally, the number had to not be sensitive to rounding by the 
+   finally, the number had to not be sensitive to rounding by the
    specific hardware implementation.
 
    By experimentation it was found that the number  1.3333  met
@@ -31,10 +31,10 @@
 
    See the discourse at the end of this file for more information
 
-   The 3.0 dig, and dig_plus files are inherently non-portable.  This 
+   The 3.0 dig, and dig_plus files are inherently non-portable.  This
    can be seen in moving files between a SUN 386i and other SUN machines.
    The recommended way to transport files was always to convert to ASCII
-   (b.a.vect) and copy the ASCII files:  dig_ascii and dig_att to the 
+   (b.a.vect) and copy the ASCII files:  dig_ascii and dig_att to the
    destination machine.
 
    The problem lies in the way that different architectures internally
@@ -44,7 +44,7 @@
 
    The CERL port of GRASS to the Compaq 386 already has code to deal
    with this incompatibility.  This code converts all files that are written
-   out to conform to the 680x0 standard.  These binary files can then be 
+   out to conform to the 680x0 standard.  These binary files can then be
    shared between machines without conversion.
    This code is designed to work with the majority of computers in use
    today that fit the following requirements:
@@ -85,27 +85,27 @@
 #ifdef HAVE_LONG_LONG_INT
 #define LONG_LONG_TEST 0x0102030405060708LL
 #endif
-#define LONG_TEST 0x01020304
-#define INT_TEST 0x01020304
+#define LONG_TEST  0x01020304
+#define INT_TEST   0x01020304
 #define SHORT_TEST 0x0102
 
 static double u_d = TEST_PATTERN;
 static float u_f = TEST_PATTERN;
-off_t u_o;                      /* depends on sizeof(off_t) */
+off_t u_o; /* depends on sizeof(off_t) */
 static long u_l = LONG_TEST;
 static int u_i = INT_TEST;
 static short u_s = SHORT_TEST;
 
 /* dbl_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
-static const unsigned char dbl_cmpr[] =
-    { 0x3f, 0xf5, 0x55, 0x32, 0x61, 0x7c, 0x1b, 0xda };
+static const unsigned char dbl_cmpr[] = {0x3f, 0xf5, 0x55, 0x32,
+                                         0x61, 0x7c, 0x1b, 0xda};
 /* flt_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
-static const unsigned char flt_cmpr[] = { 0x3f, 0xaa, 0xa9, 0x93 };
-static const unsigned char off_t_cmpr[] =
-    { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
-static const unsigned char lng_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
-static const unsigned char int_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
-static const unsigned char shrt_cmpr[] = { 0x01, 0x02 };
+static const unsigned char flt_cmpr[] = {0x3f, 0xaa, 0xa9, 0x93};
+static const unsigned char off_t_cmpr[] = {0x01, 0x02, 0x03, 0x04,
+                                           0x05, 0x06, 0x07, 0x08};
+static const unsigned char lng_cmpr[] = {0x01, 0x02, 0x03, 0x04};
+static const unsigned char int_cmpr[] = {0x01, 0x02, 0x03, 0x04};
+static const unsigned char shrt_cmpr[] = {0x01, 0x02};
 
 /* Find native sizes */
 int nat_dbl = sizeof(double);
@@ -130,7 +130,7 @@ unsigned char int_cnvrt[sizeof(int)];
 unsigned char shrt_cnvrt[sizeof(short)];
 
 /*
- * match search_value against each char in basis. 
+ * match search_value against each char in basis.
  * return offset or -1 if not found
  */
 static int find_offset(const unsigned char *basis, unsigned char search_value,
@@ -146,8 +146,8 @@ static int find_offset(const unsigned char *basis, unsigned char search_value,
 }
 
 static int find_offsets(const void *pattern, unsigned char *cnvrt,
-                        const unsigned char *cmpr, int port_size,
-                        int nat_size, const char *typename)
+                        const unsigned char *cmpr, int port_size, int nat_size,
+                        const char *typename)
 {
     int big, ltl;
     int i;
@@ -165,9 +165,9 @@ static int find_offsets(const void *pattern, unsigned char *cnvrt,
 
     for (i = 0; i < port_size; i++) {
         if (cnvrt[i] != (nat_size - port_size + i))
-            big = 0;            /* isn't big endian */
+            big = 0; /* isn't big endian */
         if (cnvrt[i] != (port_size - 1 - i))
-            ltl = 0;            /* isn't little endian */
+            ltl = 0; /* isn't little endian */
     }
 
     if (big)
@@ -205,7 +205,7 @@ void port_init(void)
     if (nat_shrt < PORT_SHORT)
         G_fatal_error("sizeof(short) < %d", PORT_SHORT);
 
-    /* Find for each byte in big endian test pattern (*_cmpr) 
+    /* Find for each byte in big endian test pattern (*_cmpr)
      * offset of corresponding byte in machine native order.
      * Look if native byte order is little or big or some other (pdp)
      * endian.
@@ -213,26 +213,23 @@ void port_init(void)
 
     if (nat_off_t == 8)
 #ifdef HAVE_LONG_LONG_INT
-        u_o = (off_t) LONG_LONG_TEST;
+        u_o = (off_t)LONG_LONG_TEST;
 #else
         G_fatal_error("Internal error: can't construct an off_t literal");
 #endif
     else
-        u_o = (off_t) LONG_TEST;
+        u_o = (off_t)LONG_TEST;
 
     dbl_order =
-        find_offsets(&u_d, dbl_cnvrt, dbl_cmpr, PORT_DOUBLE, nat_dbl,
-                     "double");
+        find_offsets(&u_d, dbl_cnvrt, dbl_cmpr, PORT_DOUBLE, nat_dbl, "double");
     flt_order =
         find_offsets(&u_f, flt_cnvrt, flt_cmpr, PORT_FLOAT, nat_flt, "float");
-    off_t_order =
-        find_offsets(&u_o, off_t_cnvrt, off_t_cmpr, nat_off_t, nat_off_t,
-                     "off_t");
+    off_t_order = find_offsets(&u_o, off_t_cnvrt, off_t_cmpr, nat_off_t,
+                               nat_off_t, "off_t");
     lng_order =
         find_offsets(&u_l, lng_cnvrt, lng_cmpr, PORT_LONG, nat_lng, "long");
     int_order =
         find_offsets(&u_i, int_cnvrt, int_cmpr, PORT_INT, nat_int, "int");
-    shrt_order =
-        find_offsets(&u_s, shrt_cnvrt, shrt_cmpr, PORT_SHORT, nat_shrt,
-                     "short");
+    shrt_order = find_offsets(&u_s, shrt_cnvrt, shrt_cmpr, PORT_SHORT, nat_shrt,
+                              "short");
 }

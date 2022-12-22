@@ -1,19 +1,18 @@
-
 /**************************************************************
-* Rast_histogram_eq (histo, map, min, max)
-*
-*   struct Histogram *histo;    histogram as returned by Rast_read_histogram()
-*   unsigned char **map;        equalized category mapping
-*   CELL *min, *max;            min,max category for map
-*
-* perform histogram equalization
-* inputs are histo, output is map,min,max
-****************************************************************/
+ * Rast_histogram_eq (histo, map, min, max)
+ *
+ *   struct Histogram *histo;    histogram as returned by Rast_read_histogram()
+ *   unsigned char **map;        equalized category mapping
+ *   CELL *min, *max;            min,max category for map
+ *
+ * perform histogram equalization
+ * inputs are histo, output is map,min,max
+ ****************************************************************/
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void Rast_histogram_eq(const struct Histogram *histo,
-                       unsigned char **map, CELL * min, CELL * max)
+void Rast_histogram_eq(const struct Histogram *histo, unsigned char **map,
+                       CELL *min, CELL *max)
 {
     int i;
     int x;

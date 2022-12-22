@@ -1,24 +1,25 @@
 /*!
    \file lib/ogsf/gsdrape.c
 
-   \brief OGSF library - functions to intersect line segments with edges of surface polygons
+   \brief OGSF library - functions to intersect line segments with edges of
+   surface polygons
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    For efficiency, intersections are found without respect to which
    specific triangle edge is intersected, but on a broader sense with
    the horizontal, vertical, and diagonal seams in the grid, then
-   the intersections are ordered.  If quadstrips are used for drawing 
+   the intersections are ordered.  If quadstrips are used for drawing
    rather than tmesh, triangulation is not consistent; for diagonal
    intersections, the proper diagonal to intersect would need to be
    determined according to the algorithm used by qstrip (look at nearby
-   normals). It may be faster to go ahead and find the intersections 
-   with the other diagonals using the same methods, then at sorting 
-   time determine which diagonal array to look at for each quad.  
+   normals). It may be faster to go ahead and find the intersections
+   with the other diagonals using the same methods, then at sorting
+   time determine which diagonal array to look at for each quad.
    It would also require a mechanism for throwing out unused intersections
    with the diagonals during the ordering phase.
    Do intersections in 2D, fill line structure with 3D pts (maybe calling
-   routine will cache for redrawing).  Get Z value by using linear interp 
+   routine will cache for redrawing).  Get Z value by using linear interp
    between corners.
 
    - check for easy cases:
@@ -38,8 +39,8 @@
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -56,16 +57,15 @@
 #include "rowcol.h"
 #include "math.h"
 
-#define	DONT_INTERSECT    0
-#define	DO_INTERSECT      1
-#define COLLINEAR         2
+#define DONT_INTERSECT   0
+#define DO_INTERSECT     1
+#define COLLINEAR        2
 
-#define LERP(a,l,h)      ((l)+(((h)-(l))*(a)))
-#define EQUAL(a,b)       (fabs((a)-(b))<EPSILON)
-#define ISNODE(p,res)    (fmod((double)p,(double)res)<EPSILON)
+#define LERP(a, l, h)    ((l) + (((h) - (l)) * (a)))
+#define EQUAL(a, b)      (fabs((a) - (b)) < EPSILON)
+#define ISNODE(p, res)   (fmod((double)p, (double)res) < EPSILON)
 
-#define SAME_SIGNS( a, b ) \
-    ((a >= 0 && b >= 0) || (a < 0 && b < 0))
+#define SAME_SIGNS(a, b) ((a >= 0 && b >= 0) || (a < 0 && b < 0))
 
 static int drape_line_init(int, int);
 static Point3 *_gsdrape_get_segments(geosurf *, float *, float *, int *);
@@ -80,9 +80,8 @@ static float EPSILON = 0.000001;
 /*vertical, horizontal, & diagonal intersections */
 static Point3 *Vi, *Hi, *Di;
 
-static typbuff *Ebuf;           /* elevation buffer */
+static typbuff *Ebuf; /* elevation buffer */
 static int Flat;
-
 
 /*!
    \brief Initizalize
@@ -96,24 +95,24 @@ static int Flat;
 static int drape_line_init(int rows, int cols)
 {
     /* use G_calloc() [-> G_fatal_error] instead of calloc ? */
-    if (NULL == (I3d = (Point3 *) calloc(2 * (rows + cols), sizeof(Point3)))) {
+    if (NULL == (I3d = (Point3 *)calloc(2 * (rows + cols), sizeof(Point3)))) {
         return (-1);
     }
 
-    if (NULL == (Vi = (Point3 *) calloc(cols, sizeof(Point3)))) {
+    if (NULL == (Vi = (Point3 *)calloc(cols, sizeof(Point3)))) {
         G_free(I3d);
 
         return (-1);
     }
 
-    if (NULL == (Hi = (Point3 *) calloc(rows, sizeof(Point3)))) {
+    if (NULL == (Hi = (Point3 *)calloc(rows, sizeof(Point3)))) {
         G_free(I3d);
         G_free(Vi);
 
         return (-1);
     }
 
-    if (NULL == (Di = (Point3 *) calloc(rows + cols, sizeof(Point3)))) {
+    if (NULL == (Di = (Point3 *)calloc(rows + cols, sizeof(Point3)))) {
         G_free(I3d);
         G_free(Vi);
         G_free(Hi);
@@ -134,7 +133,7 @@ static int drape_line_init(int rows, int cols)
 
    \return pointer to Point3 struct
  */
-static Point3 *_gsdrape_get_segments(geosurf * gs, float *bgn, float *end,
+static Point3 *_gsdrape_get_segments(geosurf *gs, float *bgn, float *end,
                                      int *num)
 {
     float f[3], l[3];
@@ -164,8 +163,8 @@ static Point3 *_gsdrape_get_segments(geosurf * gs, float *bgn, float *end,
     *num = order_intersects(gs, f, l, vi, hi, di);
     /* fills in return values, eliminates dupes (corners) */
 
-    G_debug(5, "_gsdrape_get_segments vi=%d, hi=%d, di=%d, num=%d",
-            vi, hi, di, *num);
+    G_debug(5, "_gsdrape_get_segments vi=%d, hi=%d, di=%d, num=%d", vi, hi, di,
+            *num);
 
     return (I3d);
 }
@@ -196,7 +195,7 @@ static float dist_squared_2d(float *p1, float *p2)
    \return -1 on failure
    \return 1 on success
  */
-int gsdrape_set_surface(geosurf * gs)
+int gsdrape_set_surface(geosurf *gs)
 {
     static int first = 1;
 
@@ -221,16 +220,16 @@ int gsdrape_set_surface(geosurf * gs)
 
    Clipping performed:
    - bgn and end are replaced so that both points are within viewregion
-   - if seg intersects  
+   - if seg intersects
 
    \param gs surface (geosurf)
    \param bgn begin point
    \param end end point
 
-   \return 0 if segment doesn't intersect the viewregion, or intersects only at corner
-   \return otherwise returns 1
+   \return 0 if segment doesn't intersect the viewregion, or intersects only at
+   corner \return otherwise returns 1
  */
-int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
+int seg_intersect_vregion(geosurf *gs, float *bgn, float *end)
 {
     float *replace, xl, yb, xr, yt, xi, yi;
     int inside = 0;
@@ -255,20 +254,20 @@ int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
     }
     else if (inside) {
         /* one in & one out - replace gets first intersection */
-        if (segs_intersect
-            (bgn[X], bgn[Y], end[X], end[Y], xl, yb, xl, yt, &xi, &yi)) {
+        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yb, xl, yt, &xi,
+                           &yi)) {
             /* left */
         }
-        else if (segs_intersect
-                 (bgn[X], bgn[Y], end[X], end[Y], xr, yb, xr, yt, &xi, &yi)) {
+        else if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xr, yb, xr, yt,
+                                &xi, &yi)) {
             /* right */
         }
-        else if (segs_intersect
-                 (bgn[X], bgn[Y], end[X], end[Y], xl, yb, xr, yb, &xi, &yi)) {
+        else if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yb, xr, yb,
+                                &xi, &yi)) {
             /* bottom */
         }
-        else if (segs_intersect
-                 (bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yt, &xi, &yi)) {
+        else if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yt,
+                                &xi, &yi)) {
             /* top */
         }
 
@@ -280,16 +279,16 @@ int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
         float pt1[2], pt2[2];
 
         replace = pt1;
-        if (segs_intersect
-            (bgn[X], bgn[Y], end[X], end[Y], xl, yb, xl, yt, &xi, &yi)) {
+        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yb, xl, yt, &xi,
+                           &yi)) {
             replace[X] = xi;
             replace[Y] = yi;
             replace = pt2;
             inside++;
         }
 
-        if (segs_intersect
-            (bgn[X], bgn[Y], end[X], end[Y], xr, yb, xr, yt, &xi, &yi)) {
+        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xr, yb, xr, yt, &xi,
+                           &yi)) {
             replace[X] = xi;
             replace[Y] = yi;
             replace = pt2;
@@ -297,8 +296,8 @@ int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
         }
 
         if (inside < 2) {
-            if (segs_intersect
-                (bgn[X], bgn[Y], end[X], end[Y], xl, yb, xr, yb, &xi, &yi)) {
+            if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yb, xr, yb,
+                               &xi, &yi)) {
                 replace[X] = xi;
                 replace[Y] = yi;
                 replace = pt2;
@@ -307,8 +306,8 @@ int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
         }
 
         if (inside < 2) {
-            if (segs_intersect
-                (bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yt, &xi, &yi)) {
+            if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yt,
+                               &xi, &yi)) {
                 replace[X] = xi;
                 replace[Y] = yi;
                 inside++;
@@ -316,7 +315,7 @@ int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
         }
 
         if (inside < 2) {
-            return (0);         /* no intersect or only 1 point on corner */
+            return (0); /* no intersect or only 1 point on corner */
         }
 
         /* compare dist of intersects to bgn - closest replaces bgn */
@@ -347,7 +346,7 @@ int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
 
    \return pointer to Point3 struct
  */
-Point3 *gsdrape_get_segments(geosurf * gs, float *bgn, float *end, int *num)
+Point3 *gsdrape_get_segments(geosurf *gs, float *bgn, float *end, int *num)
 {
     gsdrape_set_surface(gs);
 
@@ -387,7 +386,6 @@ Point3 *gsdrape_get_segments(geosurf * gs, float *bgn, float *end, int *num)
     return (_gsdrape_get_segments(gs, bgn, end, num));
 }
 
-
 /*!
    \brief Get all segments
 
@@ -398,8 +396,7 @@ Point3 *gsdrape_get_segments(geosurf * gs, float *bgn, float *end, int *num)
 
    \return pointer to Point3 struct
  */
-Point3 *gsdrape_get_allsegments(geosurf * gs, float *bgn, float *end,
-                                int *num)
+Point3 *gsdrape_get_allsegments(geosurf *gs, float *bgn, float *end, int *num)
 {
     gsdrape_set_surface(gs);
 
@@ -438,8 +435,7 @@ Point3 *gsdrape_get_allsegments(geosurf * gs, float *bgn, float *end,
    \param f first
    \param l last
  */
-void interp_first_last(geosurf * gs, float *bgn, float *end, Point3 f,
-                       Point3 l)
+void interp_first_last(geosurf *gs, float *bgn, float *end, Point3 f, Point3 l)
 {
     f[X] = bgn[X];
     f[Y] = bgn[Y];
@@ -464,7 +460,7 @@ void interp_first_last(geosurf * gs, float *bgn, float *end, Point3 f,
    \param gs surface (geosurf)
    \param pt
  */
-int _viewcell_tri_interp(geosurf * gs, Point3 pt)
+int _viewcell_tri_interp(geosurf *gs, Point3 pt)
 {
     typbuff *buf;
 
@@ -480,32 +476,31 @@ int _viewcell_tri_interp(geosurf * gs, Point3 pt)
    <pre>
    --------------
    |           /|
-   |          / |          
-   |         /  |         
-   |        /   |        
-   |       /    |       
-   |      /     |      
-   |     /      |     
-   |    /       |    
-   |   /        |   
-   |  /         |  
-   | /          | 
+   |          / |
+   |         /  |
+   |        /   |
+   |       /    |
+   |      /     |
+   |     /      |
+   |    /       |
+   |   /        |
+   |  /         |
+   | /          |
    |/           |
    --------------
    </pre>
 
    UNLESS the top right or bottom left point is masked, in which case a
    single triangle with the opposite diagonal is drawn.  This case is
-   not yet handled here & should only occur on edges. 
+   not yet handled here & should only occur on edges.
    pt has X & Y coordinates in it, we interpolate Z here
 
-   This could probably be much shorter, but not much faster.   
+   This could probably be much shorter, but not much faster.
 
    \return 1 if point is in view region
    \return otherwise 0 (if masked)
  */
-int viewcell_tri_interp(geosurf * gs, typbuff * buf, Point3 pt,
-                        int check_mask)
+int viewcell_tri_interp(geosurf *gs, typbuff *buf, Point3 pt, int check_mask)
 {
     Point3 p1, p2, p3;
     int offset, drow, dcol, vrow, vcol;
@@ -552,14 +547,14 @@ int viewcell_tri_interp(geosurf * gs, typbuff * buf, Point3 pt,
             drow = VROW2DROW(gs, vrow);
             dcol = VCOL2DCOL(gs, vcol + 1);
             offset = DRC2OFF(gs, drow, dcol);
-            GET_MAPATT(buf, offset, p1[Z]);     /* top right */
+            GET_MAPATT(buf, offset, p1[Z]); /* top right */
 
             p2[X] = VCOL2X(gs, vcol);
             p2[Y] = VROW2Y(gs, vrow + 1);
             drow = VROW2DROW(gs, vrow + 1);
             dcol = VCOL2DCOL(gs, vcol);
             offset = DRC2OFF(gs, drow, dcol);
-            GET_MAPATT(buf, offset, p2[Z]);     /* bottom left */
+            GET_MAPATT(buf, offset, p2[Z]); /* bottom left */
 
             if ((pt[X] - p2[X]) / VXRES(gs) > (pt[Y] - p2[Y]) / VYRES(gs)) {
                 /* lower triangle */
@@ -690,10 +685,10 @@ int viewcell_tri_interp(geosurf * gs, typbuff * buf, Point3 pt,
 
    \param gs surface (geosurf)
 
-   \return 1 
-   \return 0 
+   \return 1
+   \return 0
  */
-int in_vregion(geosurf * gs, float *pt)
+int in_vregion(geosurf *gs, float *pt)
 {
     if (pt[X] >= 0.0 && pt[Y] <= gs->yrange) {
         if (pt[X] <= VCOL2X(gs, VCOLS(gs))) {
@@ -711,8 +706,8 @@ int in_vregion(geosurf * gs, float *pt)
    edges have been found, they are in three lists.  (intersections
    with vertical, horizontal, and diagonal triangle edges)
 
-   Each list is ordered in space from first to last segment points, 
-   but now the lists need to be woven together.  This routine 
+   Each list is ordered in space from first to last segment points,
+   but now the lists need to be woven together.  This routine
    starts with the first point of the segment and then checks the
    next point in each list to find the closest, eliminating duplicates
    along the way and storing the result in I3d.
@@ -726,7 +721,7 @@ int in_vregion(geosurf * gs, float *pt)
 
    \return
  */
-int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
+int order_intersects(geosurf *gs, Point3 first, Point3 last, int vi, int hi,
                      int di)
 {
     int num, i, found, cv, ch, cd, cnum;
@@ -746,7 +741,7 @@ int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
     }
 
     /* TODO: big could still be less than first dist */
-    big = gs->yrange * gs->yrange + gs->xrange * gs->xrange;    /*BIG distance */
+    big = gs->yrange * gs->yrange + gs->xrange * gs->xrange; /*BIG distance */
     dv = dh = dd = big;
 
     for (i = 0; i < num; i = cv + ch + cd) {
@@ -838,10 +833,10 @@ int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
 
         if (i == cv + ch + cd) {
             G_debug(5, "order_intersects(): stuck on %d", cnum);
-            G_debug(5, "order_intersects(): cv = %d, ch = %d, cd = %d", cv,
-                    ch, cd);
-            G_debug(5, "order_intersects(): dv = %f, dh = %f, dd = %f", dv,
-                    dh, dd);
+            G_debug(5, "order_intersects(): cv = %d, ch = %d, cd = %d", cv, ch,
+                    cd);
+            G_debug(5, "order_intersects(): dv = %f, dh = %f, dd = %f", dv, dh,
+                    dd);
 
             break;
         }
@@ -879,7 +874,7 @@ int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
 
    \return
  */
-int get_vert_intersects(geosurf * gs, float *bgn, float *end, float *dir)
+int get_vert_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 {
     int fcol, lcol, incr, hits, num, offset, drow1, drow2;
     float xl, yb, xr, yt, z1, z2, alpha;
@@ -923,8 +918,8 @@ int get_vert_intersects(geosurf * gs, float *bgn, float *end, float *dir)
     for (hits = 0; hits < num; hits++) {
         xl = xr = VCOL2X(gs, fcol);
 
-        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yb,
-                           &xi, &yi)) {
+        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yb, &xi,
+                           &yi)) {
             Vi[hits][X] = xi;
             Vi[hits][Y] = yi;
 
@@ -937,11 +932,10 @@ int get_vert_intersects(geosurf * gs, float *bgn, float *end, float *dir)
                 drow2 = (1 + Y2VROW(gs, Vi[hits][Y])) * gs->y_mod;
 
                 if (drow2 >= gs->rows) {
-                    drow2 = gs->rows - 1;       /*bottom edge */
+                    drow2 = gs->rows - 1; /*bottom edge */
                 }
 
-                alpha =
-                    ((gs->yrange - drow1 * gs->yres) - Vi[hits][Y]) / yres;
+                alpha = ((gs->yrange - drow1 * gs->yres) - Vi[hits][Y]) / yres;
 
                 offset = DRC2OFF(gs, drow1, fcol * gs->x_mod);
                 GET_MAPATT(Ebuf, offset, z1);
@@ -970,11 +964,11 @@ int get_vert_intersects(geosurf * gs, float *bgn, float *end, float *dir)
    \param gs surface (geosurf)
    \param bgn begin point
    \param end end point
-   \param dir 
+   \param dir
 
    \return number of intersects
  */
-int get_horz_intersects(geosurf * gs, float *bgn, float *end, float *dir)
+int get_horz_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 {
     int frow, lrow, incr, hits, num, offset, dcol1, dcol2;
     float xl, yb, xr, yt, z1, z2, alpha;
@@ -1017,8 +1011,8 @@ int get_horz_intersects(geosurf * gs, float *bgn, float *end, float *dir)
     for (hits = 0; hits < num; hits++) {
         yb = yt = VROW2Y(gs, frow);
 
-        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yb,
-                           &xi, &yi)) {
+        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yt, xr, yb, &xi,
+                           &yi)) {
             Hi[hits][X] = xi;
             Hi[hits][Y] = yi;
 
@@ -1031,7 +1025,7 @@ int get_horz_intersects(geosurf * gs, float *bgn, float *end, float *dir)
                 dcol2 = (1 + X2VCOL(gs, Hi[hits][X])) * gs->x_mod;
 
                 if (dcol2 >= gs->cols) {
-                    dcol2 = gs->cols - 1;       /* right edge */
+                    dcol2 = gs->cols - 1; /* right edge */
                 }
 
                 alpha = (Hi[hits][X] - (dcol1 * gs->xres)) / xres;
@@ -1069,7 +1063,7 @@ int get_horz_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 
    \return number of intersects
  */
-int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
+int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 {
     int fdig, ldig, incr, hits, num, offset;
     int vrow, vcol, drow1, drow2, dcol1, dcol2;
@@ -1082,7 +1076,7 @@ int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
     yres = VYRES(gs);
     cols = VCOLS(gs);
     rows = VROWS(gs);
-    diags = rows + cols;        /* -1 ? */
+    diags = rows + cols; /* -1 ? */
 
     /* determine upper/lower triangle for last */
     vrow = Y2VROW(gs, end[Y]);
@@ -1127,8 +1121,8 @@ int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
         yt = gs->yrange - (yres * (fdig < cols ? 0 : fdig - cols)) + EPSILON;
         xr = VCOL2X(gs, (fdig < cols ? fdig : cols)) + EPSILON;
 
-        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yb, xr, yt,
-                           &xi, &yi)) {
+        if (segs_intersect(bgn[X], bgn[Y], end[X], end[Y], xl, yb, xr, yt, &xi,
+                           &yi)) {
             Di[hits][X] = xi;
             Di[hits][Y] = yi;
 
@@ -1144,7 +1138,7 @@ int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
             drow2 = (1 + Y2VROW(gs, Di[hits][Y])) * gs->y_mod;
 
             if (drow2 >= gs->rows) {
-                drow2 = gs->rows - 1;   /* bottom edge */
+                drow2 = gs->rows - 1; /* bottom edge */
             }
 
             /* find data cols */
@@ -1156,7 +1150,7 @@ int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
                 dcol2 = (1 + X2VCOL(gs, Di[hits][X])) * gs->x_mod;
 
                 if (dcol2 >= gs->cols) {
-                    dcol2 = gs->cols - 1;       /* right edge */
+                    dcol2 = gs->cols - 1; /* right edge */
                 }
 
                 dx = DCOL2X(gs, dcol2) - Di[hits][X];
@@ -1208,9 +1202,9 @@ int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 int segs_intersect(float x1, float y1, float x2, float y2, float x3, float y3,
                    float x4, float y4, float *x, float *y)
 {
-    float a1, a2, b1, b2, c1, c2;       /* Coefficients of line eqns. */
-    float r1, r2, r3, r4;       /* 'Sign' values */
-    float denom, /* offset, */ num;     /* Intermediate values */
+    float a1, a2, b1, b2, c1, c2;   /* Coefficients of line eqns. */
+    float r1, r2, r3, r4;           /* 'Sign' values */
+    float denom, /* offset, */ num; /* Intermediate values */
 
     /* Compute a1, b1, c1, where line joining points 1 and 2
      * is "a1 x  +  b1 y  +  c1  =  0".
@@ -1250,7 +1244,7 @@ int segs_intersect(float x1, float y1, float x2, float y2, float x3, float y3,
         return (DONT_INTERSECT);
     }
 
-    /* Line segments intersect: compute intersection point. 
+    /* Line segments intersect: compute intersection point.
      */
     denom = a1 * b2 - a2 * b1;
 
@@ -1312,7 +1306,7 @@ int XY_intersect_plane(float *intersect, float *plane)
     float x, y;
 
     if (!plane[Z]) {
-        return (0);             /* doesn't intersect */
+        return (0); /* doesn't intersect */
     }
 
     x = intersect[X];
@@ -1323,7 +1317,7 @@ int XY_intersect_plane(float *intersect, float *plane)
 }
 
 /*!
-   \brief Define plane 
+   \brief Define plane
 
    \param p1,p2,p3 three point on plane
    \param[out] plane plane definition
@@ -1352,11 +1346,10 @@ int P3toPlane(Point3 p1, Point3 p2, Point3 p3, float *plane)
     return (1);
 }
 
-
 /*!
    \brief Get cross product
 
-   \param a,b,c 
+   \param a,b,c
 
    \return cross product c = a cross b
  */

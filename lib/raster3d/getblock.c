@@ -8,9 +8,8 @@
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
-                         int ny, int nz, void *block, int type)
+void Rast3d_get_block_nocache(RASTER3D_Map *map, int x0, int y0, int z0, int nx,
+                              int ny, int nz, void *block, int type)
 {
     void *tile = NULL;
     int tileX0, tileY0, tileZ0, tileOffsX0, tileOffsY0, tileOffsZ0;
@@ -21,14 +20,14 @@ Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
     if (!map->useCache)
         tile = Rast3d_alloc_tiles_type(map, 1, type);
     if (tile == NULL)
-        Rast3d_fatal_error
-            ("Rast3d_get_block_nocache: error in Rast3d_alloc_tiles");
+        Rast3d_fatal_error(
+            "Rast3d_get_block_nocache: error in Rast3d_alloc_tiles");
 
     Rast3d_coord2tile_coord(map, x0, y0, z0, &tileX0, &tileY0, &tileZ0,
                             &tileOffsX0, &tileOffsY0, &tileOffsZ0);
-    Rast3d_coord2tile_coord(map, x0 + nx - 1, y0 + ny - 1, z0 + nz - 1,
-                            &tileX1, &tileY1, &tileZ1,
-                            &tileOffsX1, &tileOffsY1, &tileOffsZ1);
+    Rast3d_coord2tile_coord(map, x0 + nx - 1, y0 + ny - 1, z0 + nz - 1, &tileX1,
+                            &tileY1, &tileZ1, &tileOffsX1, &tileOffsY1,
+                            &tileOffsZ1);
 
     for (tz = tileZ0; tz <= tileZ1; tz++) {
         dz = (tz - tileZ0) * map->tileZ - tileOffsZ0;
@@ -43,14 +42,14 @@ Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
                     if (map->useCache) {
                         tile = Rast3d_get_tile_ptr(map, tileIndex);
                         if (tile == NULL)
-                            Rast3d_fatal_error
-                                ("Rast3d_get_block_nocache: error in Rast3d_get_tile_ptr");
+                            Rast3d_fatal_error("Rast3d_get_block_nocache: "
+                                               "error in Rast3d_get_tile_ptr");
                     }
                     else {
-                        if (!Rast3d_read_tile
-                            (map, tileIndex, tile, map->typeIntern))
-                            Rast3d_fatal_error
-                                ("Rast3d_get_block_nocache: error in Rast3d_read_tile");
+                        if (!Rast3d_read_tile(map, tileIndex, tile,
+                                              map->typeIntern))
+                            Rast3d_fatal_error("Rast3d_get_block_nocache: "
+                                               "error in Rast3d_read_tile");
                     }
 
                 else
@@ -64,12 +63,11 @@ Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
 
                 for (z = (tz == tileZ0 ? tileOffsZ0 : 0); z <= depths; z++)
                     for (y = (ty == tileY0 ? tileOffsY0 : 0); y <= rows; y++) {
-                        Rast3d_copy_values(tile,
-                                           z * map->tileXY + y * map->tileX +
-                                           x, map->typeIntern, block,
-                                           (z + dz) * nx * ny + (y +
-                                                                 dy) * nx +
-                                           (x + dx), type, cols - x + 1);
+                        Rast3d_copy_values(
+                            tile, z * map->tileXY + y * map->tileX + x,
+                            map->typeIntern, block,
+                            (z + dz) * nx * ny + (y + dy) * nx + (x + dx), type,
+                            cols - x + 1);
                     }
             }
         }
@@ -81,11 +79,10 @@ Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Copies the cells contained in the block (cube) with vertices 
+ * Copies the cells contained in the block (cube) with vertices
  * <em>(x0, y0, z0)</em> and <em>(x0 + nx - 1, y0 + ny - 1, z0 + nz - 1)</em>
  * into <em>block</em>. The cell-values in <em>block</em> are of <em>type</em>.
  * The source code can be found in <em>getblock.c</em>.
@@ -102,9 +99,8 @@ Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
  *  \return void
  */
 
-void
-Rast3d_get_block(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
-                 int nz, void *block, int type)
+void Rast3d_get_block(RASTER3D_Map *map, int x0, int y0, int z0, int nx, int ny,
+                      int nz, void *block, int type)
 {
     int x, y, z, nNull, x1, y1, z1, length;
 

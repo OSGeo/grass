@@ -36,7 +36,7 @@
 
    To free allocated memory call Vect_destroy_map_struct().
 
-   \return pointer to Map_info 
+   \return pointer to Map_info
  */
 struct Map_info *Vect_new_map_struct(void)
 {
@@ -60,8 +60,9 @@ struct Map_info *Vect_new_map_struct(void)
  */
 void Vect_destroy_map_struct(struct Map_info *p)
 {
-    /* We should free all allocated member structures, but they may be already 
-       freed by other functions (e.g. Vect_close()) without resetting member pointers to zero */
+    /* We should free all allocated member structures, but they may be already
+       freed by other functions (e.g. Vect_close()) without resetting member
+       pointers to zero */
 
     G_free((char *)p);
 }
@@ -127,11 +128,9 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     struct Map_info In, Out;
     char old_path[GPATH_MAX], new_path[GPATH_MAX], buf[GPATH_MAX];
 
-    const char *files[] = { GV_FRMT_ELEMENT, GV_COOR_ELEMENT,
-        GV_HEAD_ELEMENT, GV_HIST_ELEMENT,
-        GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT,
-        NULL
-    };
+    const char *files[] = {
+        GV_FRMT_ELEMENT, GV_COOR_ELEMENT, GV_HEAD_ELEMENT, GV_HIST_ELEMENT,
+        GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT, NULL};
     const char *inmapset;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
@@ -173,11 +172,11 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
         sprintf(buf, "%s/%s", out, files[i]);
         G_file_name(new_path, GV_DIRECTORY, buf, G_mapset());
 
-        if (access(old_path, F_OK) == 0) {      /* file exists? */
+        if (access(old_path, F_OK) == 0) { /* file exists? */
             G_debug(2, "copy %s to %s", old_path, new_path);
             if (copy_file(old_path, new_path)) {
-                G_warning(_("Unable to copy vector map <%s> to <%s>"),
-                          old_path, new_path);
+                G_warning(_("Unable to copy vector map <%s> to <%s>"), old_path,
+                          new_path);
             }
         }
         i++;
@@ -191,7 +190,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     if (Vect_open_old_head(&In, in, mapset) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), in);
 
-    if (In.format != GV_FORMAT_NATIVE) {        /* Done */
+    if (In.format != GV_FORMAT_NATIVE) { /* Done */
         Vect_close(&In);
         return 0;
     }
@@ -218,7 +217,8 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 /*!
    \brief Rename existing vector map (in the current mapset).
 
-   Attribute tables are created in the same database where input tables were stored.
+   Attribute tables are created in the same database where input tables were
+   stored.
 
    The origial format (native/OGR) is used.
 
@@ -273,7 +273,7 @@ int Vect_rename(const char *in, const char *out)
     if (Vect_open_update_head(&Map, out, G_mapset()) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), out);
 
-    if (Map.format != GV_FORMAT_NATIVE) {       /* Done */
+    if (Map.format != GV_FORMAT_NATIVE) { /* Done */
         Vect_close(&Map);
         return 0;
     }
@@ -304,14 +304,14 @@ int Vect_rename(const char *in, const char *out)
         }
 
         Fout = Vect_default_field_info(&Map, Fin->number, Fin->name, type);
-        G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'",
-                Fin->driver, Fin->database, Fin->table, Fout->driver,
-                Fout->database, Fout->table);
+        G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'", Fin->driver,
+                Fin->database, Fin->table, Fout->driver, Fout->database,
+                Fout->table);
 
         /* TODO: db_rename_table instead of db_copy_table */
-        ret = db_copy_table(Fin->driver, Fin->database, Fin->table,
-                            Fout->driver, Vect_subst_var(Fout->database,
-                                                         &Map), Fout->table);
+        ret =
+            db_copy_table(Fin->driver, Fin->database, Fin->table, Fout->driver,
+                          Vect_subst_var(Fout->database, &Map), Fout->table);
 
         if (ret == DB_FAILED) {
             G_warning(_("Unable to copy table <%s>"), Fin->table);
@@ -333,10 +333,8 @@ int Vect_rename(const char *in, const char *out)
             return -1;
         }
 
-        driver =
-            db_start_driver_open_database(Fout->driver,
-                                          Vect_subst_var(Fout->database,
-                                                         &Map));
+        driver = db_start_driver_open_database(
+            Fout->driver, Vect_subst_var(Fout->database, &Map));
         if (driver == NULL) {
             G_warning(_("Unable to open database <%s> by driver <%s>"),
                       Fout->database, Fout->driver);
@@ -361,7 +359,7 @@ int Vect_rename(const char *in, const char *out)
 
    Vector map must be located in current mapset.
 
-   \param map name of vector map to be delete 
+   \param map name of vector map to be delete
 
    \return -1 error
    \return 0 success
@@ -374,7 +372,7 @@ int Vect_delete(const char *map)
 /*!
    \brief Delete vector map (internal use only)
 
-   \param map name of vector map to be delete 
+   \param map name of vector map to be delete
    \param is_tmp TRUE for temporary maps
 
    \return -1 error
@@ -408,14 +406,13 @@ int Vect__delete(const char *map, int is_tmp)
         return -1;
     }
 
-    Vect_set_open_level(1);     /* Topo not needed */
+    Vect_set_open_level(1); /* Topo not needed */
     ret = Vect__open_old(&Map, map, mapset, NULL, FALSE, TRUE, is_tmp);
     if (ret < 1) {
         if (is_tmp)
-            return 0;           /* temporary vector map doesn't exist */
+            return 0; /* temporary vector map doesn't exist */
         else {
-            G_warning(_("Unable to open header file for vector map <%s>"),
-                      map);
+            G_warning(_("Unable to open header file for vector map <%s>"), map);
             return -1;
         }
     }
@@ -435,7 +432,7 @@ int Vect__delete(const char *map, int is_tmp)
                 if (Fi == NULL) {
                     G_warning(_("Database connection not defined for layer %d"),
                               Map.dblnk->field[i].number);
-                    /* 
+                    /*
                        Vect_close(&Map);
                        return -1;
                      */
@@ -446,9 +443,10 @@ int Vect__delete(const char *map, int is_tmp)
 
                 ret = db_table_exists(Fi->driver, Fi->database, Fi->table);
                 if (ret == -1) {
-                    G_warning(_("Unable to find table <%s> linked to vector map <%s>"),
+                    G_warning(_("Unable to find table <%s> linked to vector "
+                                "map <%s>"),
                               Fi->table, map);
-                    /* 
+                    /*
                        Vect_close(&Map);
                        return -1;
                      */
@@ -456,11 +454,9 @@ int Vect__delete(const char *map, int is_tmp)
                 }
 
                 if (ret == 1) {
-                    ret =
-                        db_delete_table(Fi->driver, Fi->database, Fi->table);
+                    ret = db_delete_table(Fi->driver, Fi->database, Fi->table);
                     if (ret == DB_FAILED) {
-                        G_warning(_("Unable to delete table <%s>"),
-                                  Fi->table);
+                        G_warning(_("Unable to delete table <%s>"), Fi->table);
                         /*
                            Vect_close(&Map);
                            return -1;
@@ -469,7 +465,8 @@ int Vect__delete(const char *map, int is_tmp)
                     }
                 }
                 else {
-                    G_warning(_("Table <%s> linked to vector map <%s> does not exist"),
+                    G_warning(_("Table <%s> linked to vector map <%s> does not "
+                                "exist"),
                               Fi->table, map);
                 }
             }
@@ -488,8 +485,7 @@ int Vect__delete(const char *map, int is_tmp)
 
     while ((ent = readdir(dir))) {
         G_debug(3, "file = '%s'", ent->d_name);
-        if ((strcmp(ent->d_name, ".") == 0) ||
-            (strcmp(ent->d_name, "..") == 0))
+        if ((strcmp(ent->d_name, ".") == 0) || (strcmp(ent->d_name, "..") == 0))
             continue;
 
         ret = snprintf(path_buf, GPATH_MAX, "%s/%s", path, ent->d_name);
@@ -514,7 +510,7 @@ int Vect__delete(const char *map, int is_tmp)
         tmp = path;
     }
     else {
-        /* NFS can create .nfsxxxxxxxx files for those deleted 
+        /* NFS can create .nfsxxxxxxxx files for those deleted
          *  -> we have to move the directory to ./tmp before it is deleted */
         tmp = G_tempfile();
 
@@ -522,8 +518,7 @@ int Vect__delete(const char *map, int is_tmp)
 
         ret = rename(path, tmp);
         if (ret == -1) {
-            G_warning(_("Unable to rename directory '%s' to '%s'"), path,
-                      tmp);
+            G_warning(_("Unable to rename directory '%s' to '%s'"), path, tmp);
             return -1;
         }
     }
@@ -532,8 +527,8 @@ int Vect__delete(const char *map, int is_tmp)
     /* Warning: remove() fails on Windows */
     ret = rmdir(tmp);
     if (ret == -1) {
-        G_warning(_("Unable to remove directory '%s': %s"),
-                  tmp, strerror(errno));
+        G_warning(_("Unable to remove directory '%s': %s"), tmp,
+                  strerror(errno));
         return -1;
     }
 

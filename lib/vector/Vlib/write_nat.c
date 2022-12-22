@@ -59,7 +59,7 @@ off_t V1_write_line_nat(struct Map_info *Map, int type,
    \param points feature geometry
    \param cats feature categories
 
-   \return new feature id 
+   \return new feature id
    \return 0 topology is not requested to be built (build level < GV_BUILD_BASE)
    \return -1 on error
  */
@@ -72,7 +72,7 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
     G_debug(3, "V2_write_line_nat(): type=%d", type);
 
     if (!(Map->plus.update_cidx)) {
-        Map->plus.cidx_up_to_date = FALSE;      /* category index will be outdated */
+        Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
     }
     /* write feature to 'coor' file */
     offset = V1_write_line_nat(Map, type, points, cats);
@@ -80,8 +80,7 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
         return -1;
 
     /* update topology (build level >= GV_BUILD_BASE) */
-    return V2__add_line_to_topo_nat(Map, offset, type, points, cats, -1,
-                                    NULL);
+    return V2__add_line_to_topo_nat(Map, offset, type, points, cats, -1, NULL);
 }
 
 /*!
@@ -120,13 +119,13 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
 
     old_type = V1_read_line_nat(Map, old_points, old_cats, offset);
     if (old_type == -1)
-        return (-1);            /* error */
+        return (-1); /* error */
 
-    if (old_type != -2          /* EOF -> write new line */
-        && points->n_points == old_points->n_points
-        && cats->n_cats == old_cats->n_cats
-        && (((type & GV_POINTS) && (old_type & GV_POINTS))
-            || ((type & GV_LINES) && (old_type & GV_LINES)))) {
+    if (old_type != -2 /* EOF -> write new line */
+        && points->n_points == old_points->n_points &&
+        cats->n_cats == old_cats->n_cats &&
+        (((type & GV_POINTS) && (old_type & GV_POINTS)) ||
+         ((type & GV_LINES) && (old_type & GV_LINES)))) {
 
         /* equal -> overwrite the old */
         return V1__write_line_nat(Map, offset, type, points, cats);
@@ -141,7 +140,8 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
 }
 
 /*!
-   \brief Rewrites feature to 'coor' file at topological level (internal use only)
+   \brief Rewrites feature to 'coor' file at topological level (internal use
+   only)
 
    Note: requires topology level >= GV_BUILD_BASE.
 
@@ -163,9 +163,9 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, off_t line, int type,
 {
     /* TODO: this is just quick shortcut because we have already V2_delete_nat()
      *        and V2_write_nat() this function first deletes old line
-     *        and then writes new one. It is not very effective if number of points
-     *        and cats was not changed or topology is not changed (nodes not moved,
-     *        angles not changed etc.) */
+     *        and then writes new one. It is not very effective if number of
+     * points and cats was not changed or topology is not changed (nodes not
+     * moved, angles not changed etc.) */
 
     int old_type;
     off_t offset, old_offset;
@@ -190,7 +190,7 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, off_t line, int type,
     }
 
     if (!(plus->update_cidx)) {
-        plus->cidx_up_to_date = FALSE;  /* category index will be outdated */
+        plus->cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     old_offset = plus->Line[line]->offset;
@@ -207,11 +207,11 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, off_t line, int type,
         return -1;
 
     /* rewrite feature in coor file */
-    if (old_type != -2          /* EOF -> write new line */
-        && points->n_points == old_points->n_points
-        && cats->n_cats == old_cats->n_cats
-        && (((type & GV_POINTS) && (old_type & GV_POINTS))
-            || ((type & GV_LINES) && (old_type & GV_LINES)))) {
+    if (old_type != -2 /* EOF -> write new line */
+        && points->n_points == old_points->n_points &&
+        cats->n_cats == old_cats->n_cats &&
+        (((type & GV_POINTS) && (old_type & GV_POINTS)) ||
+         ((type & GV_LINES) && (old_type & GV_LINES)))) {
 
         /* equal -> overwrite the old */
         offset = old_offset;
@@ -312,7 +312,7 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
     }
 
     if (!(plus->update_cidx)) {
-        plus->cidx_up_to_date = FALSE;  /* category index will be outdated */
+        plus->cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     /* read the line */
@@ -353,7 +353,8 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset, off_t line)
 
     G_debug(3,
             "V1_restore_line_nat(): offset = %" PRI_OFF_T
-            ", line (not used) = %" PRI_OFF_T, offset, line);
+            ", line (not used) = %" PRI_OFF_T,
+            offset, line);
 
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -403,17 +404,19 @@ int V2_restore_line_nat(struct Map_info *Map, off_t offset, off_t line)
 
     plus = &(Map->plus);
 
-    G_debug(3,
-            "V2_restore_line_nat(): offset = %" PRI_OFF_T ", line = %"
-            PRI_OFF_T, offset, line);
+    G_debug(
+        3, "V2_restore_line_nat(): offset = %" PRI_OFF_T ", line = %" PRI_OFF_T,
+        offset, line);
 
     if (line < 1 || line > plus->n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%" PRI_OFF_T
-                   ")"), line);
+        G_warning(
+            _("Attempt to access feature with invalid id (%" PRI_OFF_T ")"),
+            line);
         return -1;
     }
 
-    Line = Map->plus.Line[line];        /* we expect Line to be NULL, so offset is needed */
+    Line = Map->plus
+               .Line[line]; /* we expect Line to be NULL, so offset is needed */
     if (Line != NULL) {
         G_warning(_("Attempt to access alive feature %d"), (int)line);
         return -1;
@@ -438,7 +441,9 @@ int V2_restore_line_nat(struct Map_info *Map, off_t offset, off_t line)
 
     /* update topology */
     return V2__add_line_to_topo_nat(Map, offset, type, Points, Cats, line,
-                                    NULL) > 0 ? 0 : -1;
+                                    NULL) > 0
+               ? 0
+               : -1;
 }
 
 /*** static or internal subroutines below ****/
@@ -474,7 +479,8 @@ off_t V1__write_line_nat(struct Map_info *Map, off_t offset, int type,
      * else overwrite whatever exists at offset */
 
     if (offset < Map->head.head_size) {
-        if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)      /* set to end of file */
+        if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) ==
+            -1) /* set to end of file */
             return -1;
 
         offset = dig_ftell(&(Map->dig_fp));
@@ -491,7 +497,7 @@ off_t V1__write_line_nat(struct Map_info *Map, off_t offset, int type,
      *                1 bit: 1 - categories, 0 - no category
      *              2-3 bit: store type
      *              4-5 bit: reserved for store type expansion
-     *              6-7 bit: not used  
+     *              6-7 bit: not used
      */
 
     rhead = (char)dig_type_to_store(type);
@@ -499,30 +505,29 @@ off_t V1__write_line_nat(struct Map_info *Map, off_t offset, int type,
     if (cats->n_cats > 0) {
         rhead |= 0x02;
     }
-    rhead |= 0x01;              /* written/rewritten is always alive */
+    rhead |= 0x01; /* written/rewritten is always alive */
 
     if (0 >= dig__fwrite_port_C(&rhead, 1, dig_fp)) {
         return -1;
     }
 
     if (cats->n_cats > 0) {
-        if (Map->head.coor_version.minor == 1) {        /* coor format 5.1 */
+        if (Map->head.coor_version.minor == 1) { /* coor format 5.1 */
             if (0 >= dig__fwrite_port_I(&(cats->n_cats), 1, dig_fp))
                 return -1;
         }
-        else {                  /* coor format 5.0 */
+        else { /* coor format 5.0 */
             nc = (char)cats->n_cats;
             if (0 >= dig__fwrite_port_C(&nc, 1, dig_fp))
                 return -1;
         }
 
         if (cats->n_cats > 0) {
-            if (Map->head.coor_version.minor == 1) {    /* coor format 5.1 */
-                if (0 >=
-                    dig__fwrite_port_I(cats->field, cats->n_cats, dig_fp))
+            if (Map->head.coor_version.minor == 1) { /* coor format 5.1 */
+                if (0 >= dig__fwrite_port_I(cats->field, cats->n_cats, dig_fp))
                     return -1;
             }
-            else {              /* coor format 5.0 */
+            else { /* coor format 5.0 */
                 for (i = 0; i < cats->n_cats; i++) {
                     field = (short)cats->field[i];
                     if (0 >= dig__fwrite_port_S(&field, 1, dig_fp))
@@ -559,7 +564,7 @@ off_t V1__write_line_nat(struct Map_info *Map, off_t offset, int type,
     return offset;
 }
 
-/*! 
+/*!
    \brief Deletes area (i.e. centroid) categories from category
    index (internal use only)
 
@@ -581,7 +586,7 @@ void V2__delete_area_cats_from_cidx_nat(struct Map_info *Map, int area)
         G_fatal_error(_("%s: Area %d does not exist"),
                       "delete_area_cats_from_cidx()", area);
 
-    if (Area->centroid == 0)    /* no centroid found */
+    if (Area->centroid == 0) /* no centroid found */
         return;
 
     if (!Cats)
@@ -595,7 +600,7 @@ void V2__delete_area_cats_from_cidx_nat(struct Map_info *Map, int area)
     }
 }
 
-/*! 
+/*!
    \brief Adds area (i.e. centroid) categories from category index
    (internal use only)
 
@@ -617,7 +622,7 @@ void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
         G_fatal_error(_("%s: Area %d does not exist"),
                       "add_area_cats_to_cidx():", area);
 
-    if (Area->centroid == 0)    /* no centroid found */
+    if (Area->centroid == 0) /* no centroid found */
         return;
 
     if (!Cats)
@@ -643,7 +648,8 @@ void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
    \param Map pointer to Map_info struct
    \param line feature id to be removed
    \param Points feature geometry (pointer to line_pnts struct)
-   \param external_routine external subroutine to execute (used by PostGIS Topology)
+   \param external_routine external subroutine to execute (used by PostGIS
+   Topology)
 
    \return 0 on success
    \return -1 on failure
@@ -687,42 +693,47 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
 
         struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
 
-        /* store adjacent boundaries at nodes (will be used to rebuild area/isle) */
-        /* adjacent are stored: > 0 - we want right side; < 0 - we want left side */
+        /* store adjacent boundaries at nodes (will be used to rebuild
+         * area/isle) */
+        /* adjacent are stored: > 0 - we want right side; < 0 - we want left
+         * side */
         n_adjacent = 0;
 
         next_line =
             dig_angle_next_line(plus, line, GV_RIGHT, GV_BOUNDARY, NULL);
         if (next_line != 0 && abs(next_line) != line) {
-            /* N1, to the right -> we want the right side for > 0  and left for < 0 */
+            /* N1, to the right -> we want the right side for > 0  and left for
+             * < 0 */
             adjacent[n_adjacent] = next_line;
             n_adjacent++;
         }
-        next_line =
-            dig_angle_next_line(plus, line, GV_LEFT, GV_BOUNDARY, NULL);
+        next_line = dig_angle_next_line(plus, line, GV_LEFT, GV_BOUNDARY, NULL);
         if (next_line != 0 && abs(next_line) != line) {
-            /* N1, to the left -> we want the left side for > 0  and right for < 0 */
+            /* N1, to the left -> we want the left side for > 0  and right for <
+             * 0 */
             adjacent[n_adjacent] = -next_line;
             n_adjacent++;
         }
         next_line =
             dig_angle_next_line(plus, -line, GV_RIGHT, GV_BOUNDARY, NULL);
         if (next_line != 0 && abs(next_line) != line) {
-            /* N2, to the right -> we want the right side for > 0  and left for < 0 */
+            /* N2, to the right -> we want the right side for > 0  and left for
+             * < 0 */
             adjacent[n_adjacent] = next_line;
             n_adjacent++;
         }
         next_line =
             dig_angle_next_line(plus, -line, GV_LEFT, GV_BOUNDARY, NULL);
         if (next_line != 0 && abs(next_line) != line) {
-            /* N2, to the left -> we want the left side for > 0  and right for < 0 */
+            /* N2, to the left -> we want the left side for > 0  and right for <
+             * 0 */
             adjacent[n_adjacent] = -next_line;
             n_adjacent++;
         }
 
         /* delete area(s) and islands this line forms */
         first = 1;
-        if (topo->left > 0) {   /* delete area */
+        if (topo->left > 0) { /* delete area */
             Vect_get_area_box(Map, topo->left, &box);
             if (first) {
                 Vect_box_copy(&abox, &box);
@@ -736,10 +747,10 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
             }
             dig_del_area(plus, topo->left);
         }
-        else if (topo->left < 0) {      /* delete isle */
+        else if (topo->left < 0) { /* delete isle */
             dig_del_isle(plus, -topo->left);
         }
-        if (topo->right > 0) {  /* delete area */
+        if (topo->right > 0) { /* delete area */
             Vect_get_area_box(Map, topo->right, &box);
             if (first) {
                 Vect_box_copy(&abox, &box);
@@ -753,7 +764,7 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
             }
             dig_del_area(plus, topo->right);
         }
-        else if (topo->right < 0) {     /* delete isle */
+        else if (topo->right < 0) { /* delete isle */
             dig_del_isle(plus, -topo->right);
         }
     }
@@ -779,8 +790,7 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
     }
 
     /* delete the line from topo */
-    if (0 !=
-        dig_del_line(plus, line, points->x[0], points->y[0], points->z[0]))
+    if (0 != dig_del_line(plus, line, points->x[0], points->y[0], points->z[0]))
         return -1;
 
     /* rebuild areas/isles and attach centroids and isles */
@@ -796,7 +806,7 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
                     side);
 
             area = Vect_build_line_area(Map, abs(adjacent[i]), side);
-            if (area > 0) {     /* area */
+            if (area > 0) { /* area */
                 Vect_get_area_box(Map, area, &box);
                 if (first) {
                     Vect_box_copy(&abox, &box);
@@ -820,8 +830,9 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
             }
         }
         /* reattach all centroids/isles in deleted areas + new area.
-         *  because isles are selected by box it covers also possible new isle created above */
-        if (!first) {           /* i.e. old area/isle was deleted or new one created */
+         *  because isles are selected by box it covers also possible new isle
+         * created above */
+        if (!first) { /* i.e. old area/isle was deleted or new one created */
             /* reattach isles */
             if (plus->built >= GV_BUILD_ATTACH_ISLES)
                 Vect_attach_isles(Map, &abox);
@@ -851,22 +862,25 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
 
    Also updates category index if requested.
 
-   Update areas. Areas are modified if: 
+   Update areas. Areas are modified if:
 
    1) first or/and last point are existing nodes ->
-   - drop areas/islands whose boundaries are neighbour to this boundary at these nodes
-   - try build areas and islands for this boundary and neighbour boundaries going through these nodes
+   - drop areas/islands whose boundaries are neighbour to this boundary at these
+   nodes
+   - try build areas and islands for this boundary and neighbour boundaries
+   going through these nodes
 
-   Question: may be by adding line created new area/isle which doesn't go through nodes of this line
+   Question: may be by adding line created new area/isle which doesn't go
+   through nodes of this line
 
    <pre>
-   old         new line 
-   +----+----+                    +----+----+                 +----+----+ 
+   old         new line
+   +----+----+                    +----+----+                 +----+----+
    | A1 | A2 |  +      /      ->  | A1 |   /|   or +   \   -> | A1 | A2 | \
    |    |    |                    |    |    |                 |    |    |
    +----+----+                    +----+----+                 +----+----+
-   I1   I1                        I1   I1                      
-   </pre>        
+   I1   I1                        I1   I1
+   </pre>
 
    - re-attach all centroids/isles inside new area(s)
    - attach new isle to area outside
@@ -884,11 +898,12 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
    \param points pointer to line_pnts structure (feature's geometry)
    \param cats pointer to line_cats structure (feature's categories)
    \param restore_line feature id to be restored (>0) or added (<=0)
-   \param external_routine pointer to external routine (used by PostGIS Topology)
+   \param external_routine pointer to external routine (used by PostGIS
+   Topology)
 
    \return feature id to be added
-   \return 0 nothing to do (build level must be >= GV_BUILD_BASE) 
-   \return -1 on error 
+   \return 0 nothing to do (build level must be >= GV_BUILD_BASE)
+   \return -1 on error
  */
 int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
                              const struct line_pnts *points,
@@ -910,16 +925,16 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
 
     G_debug(3,
             "V2__add_line_to_topo_nat(): offset = %" PRI_OFF_T
-            " (build level = %d)", offset, plus->built);
+            " (build level = %d)",
+            offset, plus->built);
 
-    if (plus->built < GV_BUILD_BASE)    /* nothing to build */
+    if (plus->built < GV_BUILD_BASE) /* nothing to build */
         return 0;
 
     /* add line to topology */
     dig_line_box(points, &box);
     if (restore_line > 0)
-        line =
-            dig_restore_line(plus, restore_line, type, points, &box, offset);
+        line = dig_restore_line(plus, restore_line, type, points, &box, offset);
     else
         line = dig_add_line(plus, type, points, &box, offset);
     G_debug(3, "  line added to topo with id = %d", line);
@@ -938,10 +953,9 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
 
         /* delete neighbour areas/isles */
         first = TRUE;
-        for (s = 0; s < 2; s++) {       /* for each node */
+        for (s = 0; s < 2; s++) { /* for each node */
             node = (s == 0 ? topo->N1 : topo->N2);
-            G_debug(3,
-                    "  delete neighbour areas/isles: %s node = %d",
+            G_debug(3, "  delete neighbour areas/isles: %s node = %d",
                     (s == 0 ? "first" : "second"), node);
             Node = plus->Node[node];
             n = 0;
@@ -958,25 +972,26 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
                    the right, because if area/isle exists it is the
                    same to the left */
                 if (!s)
-                    next_line =
-                        dig_angle_next_line(plus, line, GV_RIGHT,
-                                            GV_BOUNDARY, NULL);
+                    next_line = dig_angle_next_line(plus, line, GV_RIGHT,
+                                                    GV_BOUNDARY, NULL);
                 else
-                    next_line =
-                        dig_angle_next_line(plus, -line, GV_RIGHT,
-                                            GV_BOUNDARY, NULL);
+                    next_line = dig_angle_next_line(plus, -line, GV_RIGHT,
+                                                    GV_BOUNDARY, NULL);
 
-                if (next_line != 0) {   /* there is a boundary to the right */
+                if (next_line != 0) { /* there is a boundary to the right */
                     NLine = plus->Line[abs(next_line)];
                     topo = (struct P_topo_b *)NLine->topo;
-                    if (next_line > 0)  /* the boundary is connected by 1. node */
-                        /* we are interested just in this side (close to our line) */
+                    if (next_line >
+                        0) /* the boundary is connected by 1. node */
+                        /* we are interested just in this side (close to our
+                         * line) */
                         area = topo->right;
-                    else if (next_line < 0)     /* the boundary is connected by 2. node */
+                    else if (next_line <
+                             0) /* the boundary is connected by 2. node */
                         area = topo->left;
 
                     G_debug(3, "  next_line = %d area = %d", next_line, area);
-                    if (area > 0) {     /* is area */
+                    if (area > 0) { /* is area */
                         Vect_get_area_box(Map, area, &box);
                         if (first) {
                             Vect_box_copy(&abox, &box);
@@ -989,12 +1004,14 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
                             V2__delete_area_cats_from_cidx_nat(Map, area);
                         }
                         dig_del_area(plus, area);
-                        if (external_routine)   /* call external subroutine if defined */
+                        if (external_routine) /* call external subroutine if
+                                                 defined */
                             external_routine(Map, area);
                     }
-                    else if (area < 0) {        /* is isle */
+                    else if (area < 0) { /* is isle */
                         dig_del_isle(plus, -area);
-                        if (external_routine)   /* call external subroutine if defined */
+                        if (external_routine) /* call external subroutine if
+                                                 defined */
                             external_routine(Map, area);
                     }
                 }
@@ -1009,7 +1026,7 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
             side = (s == 0 ? GV_LEFT : GV_RIGHT);
             area = Vect_build_line_area(Map, line, side);
 
-            if (area > 0) {     /* area */
+            if (area > 0) { /* area */
                 Vect_get_area_box(Map, area, &box);
                 if (first) {
                     Vect_box_copy(&abox, &box);
@@ -1033,7 +1050,7 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
         /* Reattach all centroids/isles in deleted areas + new area.
          * Because isles are selected by box it covers also possible
          * new isle created above */
-        if (!first) {           /* i.e. old area/isle was deleted or new one created */
+        if (!first) { /* i.e. old area/isle was deleted or new one created */
             /* Reattach isles */
             if (plus->built >= GV_BUILD_ATTACH_ISLES)
                 Vect_attach_isles(Map, &abox);
@@ -1063,7 +1080,7 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
                 Area = plus->Area[sel_area];
                 Line = plus->Line[line];
                 topo = (struct P_topo_c *)Line->topo;
-                if (Area->centroid == 0) {      /* first centroid */
+                if (Area->centroid == 0) { /* first centroid */
                     G_debug(3, "  first centroid -> attach to area");
                     Area->centroid = line;
                     topo->area = sel_area;
@@ -1071,9 +1088,8 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
                         V2__add_area_cats_to_cidx_nat(Map, sel_area);
                     }
                 }
-                else {          /* duplicate centroid */
-                    G_debug(3,
-                            "  duplicate centroid -> do not attach to area");
+                else { /* duplicate centroid */
+                    G_debug(3, "  duplicate centroid -> do not attach to area");
                     topo->area = -sel_area;
                 }
             }

@@ -1,13 +1,12 @@
-
 /*-
  * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Summer 1993
  * University of Illinois
- * US Army Construction Engineering Research Lab  
+ * US Army Construction Engineering Research Lab
  * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+ * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
  *
  * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
+ * modified by Mitasova in August 1995
  *
  * bug fixes by Jaro Hofierka in February 1999:
  *  line: 175,348 (*dnorm)
@@ -15,7 +14,7 @@
  *         457,461 (})
  *
  * modified by Mitasova November 1999 (option for dnorm ind. tension)
- *  
+ *
  */
 
 #include <stdio.h>
@@ -27,61 +26,55 @@
 #include <grass/interpf.h>
 #include <grass/gmath.h>
 
-static int input_data(struct interp_params *,
-                      int, int, struct fcell_triple *, int, int, int, int,
-                      double, double, double);
+static int input_data(struct interp_params *, int, int, struct fcell_triple *,
+                      int, int, int, int, double, double, double);
 static int write_zeros(struct interp_params *, struct quaddata *, off_t);
 
-int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitmask,    /* bitmask */
-                                   double zmin, double zmax,    /* min and max input z-values */
-                                   double *zminac, double *zmaxac,      /* min and max interp. z-values */
-                                   double *gmin, double *gmax,  /* min and max inperp. slope val. */
-                                   double *c1min, double *c1max, double *c2min, double *c2max,  /* min and max interp. curv. val. */
-                                   double *ertot,       /* total interplating func. error */
-                                   off_t offset1,       /* offset for temp file writing */
-                                   double *dnorm,
-                                   int overlap,
-                                   int inp_rows,
-                                   int inp_cols,
-                                   int fdsmooth,
-                                   int fdinp,
-                                   double ns_res,
-                                   double ew_res,
-                                   double inp_ns_res,
-                                   double inp_ew_res, int dtens)
+int IL_resample_interp_segments_2d(
+    struct interp_params *params, struct BM *bitmask, /* bitmask */
+    double zmin, double zmax,       /* min and max input z-values */
+    double *zminac, double *zmaxac, /* min and max interp. z-values */
+    double *gmin, double *gmax,     /* min and max inperp. slope val. */
+    double *c1min, double *c1max, double *c2min,
+    double *c2max, /* min and max interp. curv. val. */
+    double *ertot, /* total interplating func. error */
+    off_t offset1, /* offset for temp file writing */
+    double *dnorm, int overlap, int inp_rows, int inp_cols, int fdsmooth,
+    int fdinp, double ns_res, double ew_res, double inp_ns_res,
+    double inp_ew_res, int dtens)
 {
 
-    int i, j, k, l, m, m1, i1;  /* loop coounters */
+    int i, j, k, l, m, m1, i1; /* loop coounters */
     int cursegm = 0;
     int new_comp = 0;
-    int n_rows, n_cols /*, inp_r, inp_c */ ;
+    int n_rows, n_cols /*, inp_r, inp_c */;
     double x_or, y_or, xm, ym;
     static int first = 1, new_first = 1;
     double **matrix = NULL, **new_matrix = NULL, *b = NULL;
     int *indx = NULL, *new_indx = NULL;
-    static struct fcell_triple *in_points = NULL;       /* input points */
-    int out_check_rows, out_check_cols; /* total output rows/cols */
-    int first_row, last_row;    /* first and last input row of segment */
-    int first_col, last_col;    /* first and last input col of segment */
+    static struct fcell_triple *in_points = NULL; /* input points */
+    int out_check_rows, out_check_cols;           /* total output rows/cols */
+    int first_row, last_row; /* first and last input row of segment */
+    int first_col, last_col; /* first and last input col of segment */
     int num, prev;
-    int div;                    /* number of divides */
-    int rem_out_row, rem_out_col;       /* output rows/cols remainders */
-    int inp_seg_r, inp_seg_c,   /* # of input rows/cols in segment */
-      out_seg_r, out_seg_c;     /* # of output rows/cols in segment */
-    int ngstc, nszc             /* first and last output col of the
-                                 * segment */
-     , ngstr, nszr;             /* first and last output row of the
-                                 * segment */
-    int index;                  /* index for input data */
+    int div;                      /* number of divides */
+    int rem_out_row, rem_out_col; /* output rows/cols remainders */
+    int inp_seg_r, inp_seg_c,     /* # of input rows/cols in segment */
+        out_seg_r, out_seg_c;     /* # of output rows/cols in segment */
+    int ngstc, nszc               /* first and last output col of the
+                                   * segment */
+        ,
+        ngstr, nszr; /* first and last output row of the
+                      * segment */
+    int index;       /* index for input data */
     int c, r;
     int overlap1;
     int p_size;
     struct quaddata *data;
     double xmax, xmin, ymax, ymin;
-    int totsegm;                /* total number of segments */
+    int totsegm; /* total number of segments */
     int total_points = 0;
-    struct triple triple = { 0.0, 0.0, 0.0, 0.0 };      /* contains garbage */
-
+    struct triple triple = {0.0, 0.0, 0.0, 0.0}; /* contains garbage */
 
     xmin = params->x_orig;
     ymin = params->y_orig;
@@ -89,9 +82,9 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
     ymax = ymin + ns_res * params->nsizr;
     prev = inp_rows * inp_cols;
     if (prev <= params->kmax)
-        div = 1;                /* no segmentation */
+        div = 1; /* no segmentation */
 
-    else {                      /* find the number of divides */
+    else { /* find the number of divides */
         for (i = 2;; i++) {
             c = inp_cols / i;
             r = inp_rows / i;
@@ -114,10 +107,10 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
             prev = num;
         }
     }
-    out_seg_r = params->nsizr / div;    /* output rows per segment */
-    out_seg_c = params->nsizc / div;    /* output cols per segment */
-    inp_seg_r = inp_rows / div; /* input rows per segment */
-    inp_seg_c = inp_cols / div; /* input rows per segment */
+    out_seg_r = params->nsizr / div; /* output rows per segment */
+    out_seg_c = params->nsizc / div; /* output cols per segment */
+    inp_seg_r = inp_rows / div;      /* input rows per segment */
+    inp_seg_c = inp_cols / div;      /* input rows per segment */
     rem_out_col = params->nsizc % div;
     rem_out_row = params->nsizr % div;
     overlap1 = min1(overlap, inp_seg_c - 1);
@@ -132,18 +125,15 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
         p_size = (overlap1 * 2 + inp_seg_c) * (overlap1 * 2 + inp_seg_r);
     }
     if (!in_points) {
-        if (!
-            (in_points =
-             (struct fcell_triple *)G_malloc(sizeof(struct fcell_triple) *
-                                             p_size * div))) {
+        if (!(in_points = (struct fcell_triple *)G_malloc(
+                  sizeof(struct fcell_triple) * p_size * div))) {
             fprintf(stderr, "Cannot allocate memory for in_points\n");
             return -1;
         }
     }
 
     *dnorm =
-        sqrt(((xmax - xmin) * (ymax -
-                               ymin) * p_size) / (inp_rows * inp_cols));
+        sqrt(((xmax - xmin) * (ymax - ymin) * p_size) / (inp_rows * inp_cols));
 
     if (dtens) {
         params->fi = params->fi * (*dnorm) / 1000.;
@@ -151,7 +141,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                 params->fi);
     }
 
-    if (div == 1) {             /* no segmentation */
+    if (div == 1) { /* no segmentation */
         totsegm = 1;
         cursegm = 1;
 
@@ -163,15 +153,15 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
         xm = params->nsizc * ew_res;
         ym = params->nsizr * ns_res;
 
-        data = (struct quaddata *)quad_data_new(x_or, y_or, xm, ym,
-                                                params->nsizr, params->nsizc,
-                                                0, params->KMAX2);
+        data = (struct quaddata *)quad_data_new(
+            x_or, y_or, xm, ym, params->nsizr, params->nsizc, 0, params->KMAX2);
         m1 = 0;
         for (k = 1; k <= p_size; k++) {
             if (!Rast_is_f_null_value(&(in_points[k - 1].z))) {
                 data->points[m1].x = in_points[k - 1].x / (*dnorm);
                 data->points[m1].y = in_points[k - 1].y / (*dnorm);
-                /*        data->points[m1].z = (double) (in_points[k - 1].z) / (*dnorm); */
+                /*        data->points[m1].z = (double) (in_points[k - 1].z) /
+                 * (*dnorm); */
                 data->points[m1].z = (double)(in_points[k - 1].z);
                 data->points[m1].sm = in_points[k - 1].smooth;
                 m1++;
@@ -202,10 +192,9 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 
         params->check_points(params, data, b, ertot, zmin, *dnorm, triple);
 
-        if (params->grid_calc(params, data, bitmask,
-                              zmin, zmax, zminac, zmaxac, gmin, gmax,
-                              c1min, c1max, c2min, c2max, ertot, b, offset1,
-                              *dnorm) < 0) {
+        if (params->grid_calc(params, data, bitmask, zmin, zmax, zminac, zmaxac,
+                              gmin, gmax, c1min, c1max, c2min, c2max, ertot, b,
+                              offset1, *dnorm) < 0) {
             fprintf(stderr, "interpolation failed\n");
             return -1;
         }
@@ -223,10 +212,10 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
         }
     }
 
-    out_seg_r = params->nsizr / div;    /* output rows per segment */
-    out_seg_c = params->nsizc / div;    /* output cols per segment */
-    inp_seg_r = inp_rows / div; /* input rows per segment */
-    inp_seg_c = inp_cols / div; /* input rows per segment */
+    out_seg_r = params->nsizr / div; /* output rows per segment */
+    out_seg_c = params->nsizc / div; /* output cols per segment */
+    inp_seg_r = inp_rows / div;      /* input rows per segment */
+    inp_seg_c = inp_cols / div;      /* input rows per segment */
     rem_out_col = params->nsizc % div;
     rem_out_row = params->nsizr % div;
     overlap1 = min1(overlap, inp_seg_c - 1);
@@ -237,31 +226,31 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
     totsegm = div * div;
 
     /* set up a segment */
-    for (i = 1; i <= div; i++) {        /* input and output rows */
+    for (i = 1; i <= div; i++) { /* input and output rows */
         if (i <= div - rem_out_row)
             n_rows = out_seg_r;
         else
             n_rows = out_seg_r + 1;
         /* inp_r = inp_seg_r; */
         out_check_cols = 0;
-        ngstr = out_check_rows + 1;     /* first output row of the segment */
-        nszr = ngstr + n_rows - 1;      /* last output row of the segment */
-        y_or = (ngstr - 1) * ns_res;    /* y origin of the segment */
+        ngstr = out_check_rows + 1;  /* first output row of the segment */
+        nszr = ngstr + n_rows - 1;   /* last output row of the segment */
+        y_or = (ngstr - 1) * ns_res; /* y origin of the segment */
         /*
          * Calculating input starting and ending rows and columns of this
          * segment
          */
         first_row = (int)(y_or / inp_ns_res) + 1;
         if (first_row > overlap1) {
-            first_row -= overlap1;      /* middle */
+            first_row -= overlap1; /* middle */
             last_row = first_row + inp_seg_r + overlap1 * 2 - 1;
             if (last_row > inp_rows) {
-                first_row -= (last_row - inp_rows);     /* bottom */
+                first_row -= (last_row - inp_rows); /* bottom */
                 last_row = inp_rows;
             }
         }
         else {
-            first_row = 1;      /* top */
+            first_row = 1; /* top */
             last_row = first_row + inp_seg_r + overlap1 * 2 - 1;
         }
         if ((last_row > inp_rows) || (first_row < 1)) {
@@ -271,20 +260,20 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
         input_data(params, first_row, last_row, in_points, fdsmooth, fdinp,
                    inp_rows, inp_cols, zmin, inp_ns_res, inp_ew_res);
 
-        for (j = 1; j <= div; j++) {    /* input and output cols */
+        for (j = 1; j <= div; j++) { /* input and output cols */
             if (j <= div - rem_out_col)
                 n_cols = out_seg_c;
             else
                 n_cols = out_seg_c + 1;
             /* inp_c = inp_seg_c; */
 
-            ngstc = out_check_cols + 1; /* first output col of the segment */
-            nszc = ngstc + n_cols - 1;  /* last output col of the segment */
-            x_or = (ngstc - 1) * ew_res;        /* x origin of the segment */
+            ngstc = out_check_cols + 1;  /* first output col of the segment */
+            nszc = ngstc + n_cols - 1;   /* last output col of the segment */
+            x_or = (ngstc - 1) * ew_res; /* x origin of the segment */
 
             first_col = (int)(x_or / inp_ew_res) + 1;
             if (first_col > overlap1) {
-                first_col -= overlap1;  /* middle */
+                first_col -= overlap1; /* middle */
                 last_col = first_col + inp_seg_c + overlap1 * 2 - 1;
                 if (last_col > inp_cols) {
                     first_col -= (last_col - inp_cols); /* right */
@@ -292,7 +281,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                 }
             }
             else {
-                first_col = 1;  /* left */
+                first_col = 1; /* left */
                 last_col = first_col + inp_seg_c + overlap1 * 2 - 1;
             }
             if ((last_col > inp_cols) || (first_col < 1)) {
@@ -304,17 +293,17 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 
             xm = nszc * ew_res;
             ym = nszr * ns_res;
-            data = (struct quaddata *)quad_data_new(x_or, y_or, xm, ym,
-                                                    nszr - ngstr + 1,
-                                                    nszc - ngstc + 1, 0,
-                                                    params->KMAX2);
+            data = (struct quaddata *)quad_data_new(
+                x_or, y_or, xm, ym, nszr - ngstr + 1, nszc - ngstc + 1, 0,
+                params->KMAX2);
             new_comp = 0;
 
             for (k = 0; k <= last_row - first_row; k++) {
                 for (l = first_col - 1; l < last_col; l++) {
                     index = k * inp_cols + l;
                     if (!Rast_is_f_null_value(&(in_points[index].z))) {
-                        /* if the point is inside the segment (not overlapping) */
+                        /* if the point is inside the segment (not overlapping)
+                         */
                         if ((in_points[index].x - x_or >= 0) &&
                             (in_points[index].y - y_or >= 0) &&
                             ((nszc - 1) * ew_res - in_points[index].x >= 0) &&
@@ -324,7 +313,8 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                             (in_points[index].x - x_or) / (*dnorm);
                         data->points[m].y =
                             (in_points[index].y - y_or) / (*dnorm);
-                        /*            data->points[m].z = (double) (in_points[index].z) / (*dnorm); */
+                        /*            data->points[m].z = (double)
+                         * (in_points[index].z) / (*dnorm); */
                         data->points[m].z = (double)(in_points[index].z);
                         data->points[m].sm = in_points[index].smooth;
                         m++;
@@ -351,8 +341,8 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
             }
             if (m == 0) {
                 /*
-                 * fprintf(stderr,"Warning: segment with zero points encountered,
-                 * insrease overlap\n");
+                 * fprintf(stderr,"Warning: segment with zero points
+                 * encountered, insrease overlap\n");
                  */
                 write_zeros(params, data, offset1);
             }
@@ -372,18 +362,16 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                                     "Cannot allocate memory for new_indx\n");
                             return -1;
                         }
-                        if (!
-                            (new_matrix =
-                             G_alloc_matrix(params->KMAX2 + 1,
-                                            params->KMAX2 + 1))) {
+                        if (!(new_matrix = G_alloc_matrix(params->KMAX2 + 1,
+                                                          params->KMAX2 + 1))) {
                             fprintf(stderr,
                                     "Cannot allocate memory for new_matrix\n");
                             return -1;
                         }
-                    }           /*new_first */
-                    if (params->matrix_create
-                        (params, data->points, data->n_points, new_matrix,
-                         new_indx) < 0)
+                    } /*new_first */
+                    if (params->matrix_create(params, data->points,
+                                              data->n_points, new_matrix,
+                                              new_indx) < 0)
                         return -1;
 
                     for (i1 = 0; i1 < m; i1++) {
@@ -392,18 +380,18 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                     b[0] = 0.;
                     G_lubksb(new_matrix, data->n_points + 1, new_indx, b);
 
-                    params->check_points(params, data, b, ertot, zmin,
-                                         *dnorm, triple);
+                    params->check_points(params, data, b, ertot, zmin, *dnorm,
+                                         triple);
 
-                    if (params->grid_calc(params, data, bitmask,
-                                          zmin, zmax, zminac, zmaxac, gmin,
-                                          gmax, c1min, c1max, c2min, c2max,
-                                          ertot, b, offset1, *dnorm) < 0) {
+                    if (params->grid_calc(params, data, bitmask, zmin, zmax,
+                                          zminac, zmaxac, gmin, gmax, c1min,
+                                          c1max, c2min, c2max, ertot, b,
+                                          offset1, *dnorm) < 0) {
 
                         fprintf(stderr, "interpolate() failed\n");
                         return -1;
                     }
-                }               /*new_comp */
+                } /*new_comp */
                 else {
                     if (first) {
                         first = 0;
@@ -419,18 +407,15 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                                     "Cannot allocate memory for indx\n");
                             return -1;
                         }
-                        if (!
-                            (matrix =
-                             G_alloc_matrix(params->KMAX2 + 1,
-                                            params->KMAX2 + 1))) {
+                        if (!(matrix = G_alloc_matrix(params->KMAX2 + 1,
+                                                      params->KMAX2 + 1))) {
                             fprintf(stderr,
                                     "Cannot allocate memory for matrix\n");
                             return -1;
                         }
-                    }           /* first */
-                    if (params->matrix_create
-                        (params, data->points, data->n_points, matrix,
-                         indx) < 0)
+                    } /* first */
+                    if (params->matrix_create(params, data->points,
+                                              data->n_points, matrix, indx) < 0)
                         return -1;
                     /*        } here it was bug */
                     for (i1 = 0; i1 < m; i1++)
@@ -438,13 +423,13 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
                     b[0] = 0.;
                     G_lubksb(matrix, data->n_points + 1, indx, b);
 
-                    params->check_points(params, data, b, ertot, zmin,
-                                         *dnorm, triple);
+                    params->check_points(params, data, b, ertot, zmin, *dnorm,
+                                         triple);
 
-                    if (params->grid_calc(params, data, bitmask,
-                                          zmin, zmax, zminac, zmaxac, gmin,
-                                          gmax, c1min, c1max, c2min, c2max,
-                                          ertot, b, offset1, *dnorm) < 0) {
+                    if (params->grid_calc(params, data, bitmask, zmin, zmax,
+                                          zminac, zmaxac, gmin, gmax, c1min,
+                                          c1max, c2min, c2max, ertot, b,
+                                          offset1, *dnorm) < 0) {
 
                         fprintf(stderr, "interpolate() failed\n");
                         return -1;
@@ -464,7 +449,8 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 
     /* run one last time after the loop is done to catch 100% */
     if (totsegm != 0)
-        G_percent(1, 1, 1);     /* cursegm doesn't get to totsegm so we force 100% */
+        G_percent(1, 1,
+                  1); /* cursegm doesn't get to totsegm so we force 100% */
 
     /*
      * if (b) G_free_vector(b); if (indx) G_free_ivector(indx); if (matrix)
@@ -476,18 +462,15 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
 
 /* input of data for interpolation and smoothing parameters */
 
-static int input_data(struct interp_params *params,
-                      int first_row, int last_row,
-                      struct fcell_triple *points,
-                      int fdsmooth, int fdinp,
-                      int inp_rows, int inp_cols,
-                      double zmin, double inp_ns_res, double inp_ew_res)
+static int input_data(struct interp_params *params, int first_row, int last_row,
+                      struct fcell_triple *points, int fdsmooth, int fdinp,
+                      int inp_rows, int inp_cols, double zmin,
+                      double inp_ns_res, double inp_ew_res)
 {
-    double x, y, sm;            /* input data and smoothing */
-    int m1, m2;                 /* loop counters */
-    static FCELL *cellinp = NULL;       /* cell buffer for input data */
-    static FCELL *cellsmooth = NULL;    /* cell buffer for smoothing */
-
+    double x, y, sm;                 /* input data and smoothing */
+    int m1, m2;                      /* loop counters */
+    static FCELL *cellinp = NULL;    /* cell buffer for input data */
+    static FCELL *cellsmooth = NULL; /* cell buffer for smoothing */
 
     if (!cellinp)
         cellinp = Rast_allocate_f_buf();
@@ -528,9 +511,10 @@ static int input_data(struct interp_params *params,
     return 1;
 }
 
-static int write_zeros(struct interp_params *params, struct quaddata *data,     /* given segment */
-                       off_t offset1    /* offset for temp file writing */
-    )
+static int write_zeros(struct interp_params *params,
+                       struct quaddata *data, /* given segment */
+                       off_t offset1          /* offset for temp file writing */
+)
 {
 
     /*
@@ -548,9 +532,11 @@ static int write_zeros(struct interp_params *params, struct quaddata *data,     
     double ns_res, ew_res;
 
     ns_res = (((struct quaddata *)(data))->ymax -
-              ((struct quaddata *)(data))->y_orig) / data->n_rows;
+              ((struct quaddata *)(data))->y_orig) /
+             data->n_rows;
     ew_res = (((struct quaddata *)(data))->xmax -
-              ((struct quaddata *)(data))->x_orig) / data->n_cols;
+              ((struct quaddata *)(data))->x_orig) /
+             data->n_cols;
 
     cond2 = ((params->adxx != NULL) || (params->adyy != NULL) ||
              (params->adxy != NULL));
@@ -562,7 +548,7 @@ static int write_zeros(struct interp_params *params, struct quaddata *data,     
     nszr = ngstr + n_rows - 1;
 
     for (k = ngstr; k <= nszr; k++) {
-        offset = offset1 * (k - 1);     /* rows offset */
+        offset = offset1 * (k - 1); /* rows offset */
         for (l = ngstc; l <= nszc; l++) {
             /*
              * params->az[l] = 0.;

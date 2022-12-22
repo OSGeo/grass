@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/driver_state.c
- * 
+ *
  * \brief DBMI Library (driver) - drivers state
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include "dbstubs.h"
-
 
 static dbDriverState state;
 
@@ -76,7 +75,7 @@ void db__mark_database_closed(void)
 
    \param cursor db cursor to be added
  */
-void db__add_cursor_to_driver_state(dbCursor * cursor)
+void db__add_cursor_to_driver_state(dbCursor *cursor)
 {
     dbCursor **list;
     int i;
@@ -90,8 +89,7 @@ void db__add_cursor_to_driver_state(dbCursor * cursor)
     /* if not found, extend list */
     if (i >= state.ncursors) {
         list =
-            (dbCursor **) db_realloc((void *)list,
-                                     (i + 1) * sizeof(dbCursor *));
+            (dbCursor **)db_realloc((void *)list, (i + 1) * sizeof(dbCursor *));
         if (list == NULL)
             return;
         state.cursor_list = list;
@@ -107,7 +105,7 @@ void db__add_cursor_to_driver_state(dbCursor * cursor)
 
    \param cursor db cursor to be dropped
  */
-void db__drop_cursor_from_driver_state(dbCursor * cursor)
+void db__drop_cursor_from_driver_state(dbCursor *cursor)
 {
     int i;
 

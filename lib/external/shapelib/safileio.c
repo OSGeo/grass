@@ -1,4 +1,3 @@
-
 /******************************************************************************
  * $Id: safileio.c,v 1.4 2008-01-16 20:05:14 bram Exp $
  *
@@ -14,7 +13,7 @@
  * option is discussed in more detail in shapelib.html.
  *
  * --
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -36,10 +35,11 @@
  *
  * $Log: safileio.c,v $
  * Revision 1.4  2008-01-16 20:05:14  bram
- * Add file hooks that accept UTF-8 encoded filenames on some platforms.  Use SASetupUtf8Hooks
- *  tosetup the hooks and check SHPAPI_UTF8_HOOKS for its availability.  Currently, this
- *  is only available on the Windows platform that decodes the UTF-8 filenames to wide
- *  character strings and feeds them to _wfopen and _wremove.
+ * Add file hooks that accept UTF-8 encoded filenames on some platforms.  Use
+ *SASetupUtf8Hooks tosetup the hooks and check SHPAPI_UTF8_HOOKS for its
+ *availability.  Currently, this is only available on the Windows platform that
+ *decodes the UTF-8 filenames to wide character strings and feeds them to
+ *_wfopen and _wremove.
  *
  * Revision 1.3  2007/12/18 18:28:11  bram
  * - create hook for client specific atof (bugzilla ticket 1615)
@@ -47,8 +47,8 @@
  *
  * Revision 1.2  2007/12/15 20:25:30  bram
  * dbfopen.c now reads the Code Page information from the DBF file, and exports
- * this information as a string through the DBFGetCodePage function.  This is 
- * either the number from the LDID header field ("LDID/<number>") or as the 
+ * this information as a string through the DBFGetCodePage function.  This is
+ * either the number from the LDID header field ("LDID/<number>") or as the
  * content of an accompanying .CPG file.  When creating a DBF file, the code can
  * be set using DBFCreateEx.
  *
@@ -77,12 +77,12 @@ SHP_CVSID("$Id: safileio.c,v 1.4 2008-01-16 20:05:14 bram Exp $")
 #endif
 
 /************************************************************************/
-    /*                              SADFOpen()                              */
+/*                              SADFOpen()                              */
 
 /************************************************************************/
-     SAFile SADFOpen(const char *pszFilename, const char *pszAccess)
+SAFile SADFOpen(const char *pszFilename, const char *pszAccess)
 {
-    return (SAFile) fopen(pszFilename, pszAccess);
+    return (SAFile)fopen(pszFilename, pszAccess);
 }
 
 /************************************************************************/
@@ -92,7 +92,7 @@ SHP_CVSID("$Id: safileio.c,v 1.4 2008-01-16 20:05:14 bram Exp $")
 
 SAOffset SADFRead(void *p, SAOffset size, SAOffset nmemb, SAFile file)
 {
-    return (SAOffset) fread(p, (size_t)size, (size_t)nmemb, (FILE *) file);
+    return (SAOffset)fread(p, (size_t)size, (size_t)nmemb, (FILE *)file);
 }
 
 /************************************************************************/
@@ -102,7 +102,7 @@ SAOffset SADFRead(void *p, SAOffset size, SAOffset nmemb, SAFile file)
 
 SAOffset SADFWrite(void *p, SAOffset size, SAOffset nmemb, SAFile file)
 {
-    return (SAOffset) fwrite(p, (size_t)size, (size_t)nmemb, (FILE *) file);
+    return (SAOffset)fwrite(p, (size_t)size, (size_t)nmemb, (FILE *)file);
 }
 
 /************************************************************************/
@@ -112,7 +112,7 @@ SAOffset SADFWrite(void *p, SAOffset size, SAOffset nmemb, SAFile file)
 
 SAOffset SADFSeek(SAFile file, SAOffset offset, int whence)
 {
-    return (SAOffset) fseek((FILE *) file, (long)offset, whence);
+    return (SAOffset)fseek((FILE *)file, (long)offset, whence);
 }
 
 /************************************************************************/
@@ -122,7 +122,7 @@ SAOffset SADFSeek(SAFile file, SAOffset offset, int whence)
 
 SAOffset SADFTell(SAFile file)
 {
-    return (SAOffset) ftell((FILE *) file);
+    return (SAOffset)ftell((FILE *)file);
 }
 
 /************************************************************************/
@@ -132,7 +132,7 @@ SAOffset SADFTell(SAFile file)
 
 int SADFFlush(SAFile file)
 {
-    return fflush((FILE *) file);
+    return fflush((FILE *)file);
 }
 
 /************************************************************************/
@@ -142,7 +142,7 @@ int SADFFlush(SAFile file)
 
 int SADFClose(SAFile file)
 {
-    return fclose((FILE *) file);
+    return fclose((FILE *)file);
 }
 
 /************************************************************************/
@@ -170,7 +170,7 @@ void SADError(const char *message)
 
 /************************************************************************/
 
-void SASetupDefaultHooks(SAHooks * psHooks)
+void SASetupDefaultHooks(SAHooks *psHooks)
 {
     psHooks->FOpen = SADFOpen;
     psHooks->FRead = SADFRead;
@@ -184,9 +184,6 @@ void SASetupDefaultHooks(SAHooks * psHooks)
     psHooks->Error = SADError;
     psHooks->Atof = atof;
 }
-
-
-
 
 #ifdef SHPAPI_WINDOWS
 
@@ -209,8 +206,8 @@ const wchar_t *Utf8ToWideChar(const char *pszFilename)
     if (pwszFileName == NULL) {
         return NULL;
     }
-    if (MultiByteToWideChar
-        (CP_UTF8, 0, pszFilename, nMulti, pwszFileName, nWide) == 0) {
+    if (MultiByteToWideChar(CP_UTF8, 0, pszFilename, nMulti, pwszFileName,
+                            nWide) == 0) {
         free(pwszFileName);
         return NULL;
     }
@@ -230,7 +227,7 @@ SAFile SAUtf8WFOpen(const char *pszFilename, const char *pszAccess)
     pwszFileName = Utf8ToWideChar(pszFilename);
     pwszAccess = Utf8ToWideChar(pszAccess);
     if (pwszFileName != NULL && pwszFileName != NULL) {
-        file = (SAFile) _wfopen(pwszFileName, pwszAccess);
+        file = (SAFile)_wfopen(pwszFileName, pwszAccess);
     }
     free((wchar_t *)pwszFileName);
     free((wchar_t *)pwszAccess);
@@ -263,7 +260,7 @@ int SAUtf8WRemove(const char *pszFilename)
 
 /************************************************************************/
 
-void SASetupUtf8Hooks(SAHooks * psHooks)
+void SASetupUtf8Hooks(SAHooks *psHooks)
 {
 #ifdef SHPAPI_WINDOWS
     psHooks->FOpen = SAUtf8WFOpen;

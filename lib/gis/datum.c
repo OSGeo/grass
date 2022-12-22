@@ -5,7 +5,7 @@
  * AUTHOR(S):    Andreas Lange - andreas.lange@rhein-main.de
  *               Paul Kelly - paul-grass@stjohnspoint.co.uk
  * PURPOSE:      provide functions for reading datum parameters from the
- *               location database.     
+ *               location database.
  * COPYRIGHT:    (C) 2000, 2003 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -24,16 +24,14 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static struct table
-{
-    struct datum
-    {
-        char *name;             /* Short Name / acronym of map datum */
-        char *descr;            /* Long Name for map datum */
-        char *ellps;            /* acronym for ellipsoid used with this datum */
-        double dx;              /* delta x */
-        double dy;              /* delta y */
-        double dz;              /* delta z */
+static struct table {
+    struct datum {
+        char *name;  /* Short Name / acronym of map datum */
+        char *descr; /* Long Name for map datum */
+        char *ellps; /* acronym for ellipsoid used with this datum */
+        double dx;   /* delta x */
+        double dy;   /* delta y */
+        double dz;   /* delta z */
     } *datums;
     int size;
     int count;
@@ -97,12 +95,12 @@ const char *G_datum_ellipsoid(int n)
  *                       the datum parameters (if present) will
  *                       be placed.
  *
- *  Extract the datum transformation-related parameters from a 
+ *  Extract the datum transformation-related parameters from a
  *  set of general PROJ_INFO parameters.
- *  This function can be used to test if a location set-up 
+ *  This function can be used to test if a location set-up
  *  supports datum transformation.
- *  
- *  returns: -1 error or no datum information found, 
+ *
+ *  returns: -1 error or no datum information found,
  *           1 only datum name found, 2 params found
  ************************************************************/
 
@@ -121,26 +119,23 @@ int G_get_datumparams_from_projinfo(const struct Key_Value *projinfo,
         returnval = 2;
     }
     else if (G_find_key_value("nadgrids", projinfo) != NULL) {
-        sprintf(params, "nadgrids=%s",
-                G_find_key_value("nadgrids", projinfo));
+        sprintf(params, "nadgrids=%s", G_find_key_value("nadgrids", projinfo));
         returnval = 2;
     }
     else if (G_find_key_value("towgs84", projinfo) != NULL) {
         sprintf(params, "towgs84=%s", G_find_key_value("towgs84", projinfo));
         returnval = 2;
     }
-    else if (G_find_key_value("dx", projinfo) != NULL
-             && G_find_key_value("dy", projinfo) != NULL
-             && G_find_key_value("dz", projinfo) != NULL) {
-        sprintf(params, "towgs84=%s,%s,%s",
-                G_find_key_value("dx", projinfo),
+    else if (G_find_key_value("dx", projinfo) != NULL &&
+             G_find_key_value("dy", projinfo) != NULL &&
+             G_find_key_value("dz", projinfo) != NULL) {
+        sprintf(params, "towgs84=%s,%s,%s", G_find_key_value("dx", projinfo),
                 G_find_key_value("dy", projinfo),
                 G_find_key_value("dz", projinfo));
         returnval = 2;
     }
 
     return returnval;
-
 }
 
 void G_read_datum_table(void)
@@ -178,8 +173,8 @@ void G_read_datum_table(void)
 
         t = &table.datums[table.count];
 
-        if (sscanf(buf, "%s \"%99[^\"]\" %s dx=%lf dy=%lf dz=%lf",
-                   name, descr, ellps, &t->dx, &t->dy, &t->dz) != 6) {
+        if (sscanf(buf, "%s \"%99[^\"]\" %s dx=%lf dy=%lf dz=%lf", name, descr,
+                   ellps, &t->dx, &t->dy, &t->dz) != 6) {
             G_warning(_("error in datum table file, line %d"), line);
             continue;
         }
@@ -191,8 +186,7 @@ void G_read_datum_table(void)
         table.count++;
     }
 
-    qsort(table.datums, table.count, sizeof(struct datum),
-          compare_table_names);
+    qsort(table.datums, table.count, sizeof(struct datum), compare_table_names);
 
     G_initialize_done(&table.initialized);
 }

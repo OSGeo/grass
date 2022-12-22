@@ -1,35 +1,33 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass raster3d Library
-* AUTHOR(S):    Soeren Gebbert, Braunschweig (GER) Jun 2011
-* 		        soerengebbert <at> googlemail <dot> com
-*               
-* PURPOSE:	Unit and Integration tests
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass raster3d Library
+ * AUTHOR(S):    Soeren Gebbert, Braunschweig (GER) Jun 2011
+ *                         soerengebbert <at> googlemail <dot> com
+ *
+ * PURPOSE:      Unit and Integration tests
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
 #include "test_raster3d_lib.h"
 
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct
-{
+typedef struct {
     struct Option *unit, *integration, *depths, *rows, *cols, *tile_size;
     struct Flag *full, *testunit, *testint, *rle, *compression;
 } paramType;
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void);   /*Fill the paramType structure */
+static void set_params(void); /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -65,8 +63,8 @@ void set_params(void)
     param.cols->type = TYPE_INTEGER;
     param.cols->required = NO;
     param.cols->answer = "10800";
-    param.cols->description =
-        "The number of columns to be used for the large file put/get value test";
+    param.cols->description = "The number of columns to be used for the large "
+                              "file put/get value test";
 
     param.tile_size = G_define_option();
     param.tile_size->key = "tile_size";
@@ -74,7 +72,9 @@ void set_params(void)
     param.tile_size->required = NO;
     param.tile_size->answer = "32";
     param.tile_size->description =
-        "The tile size in kilo bytes to be used for the large file put/get value test. Set the tile size to 2048 and the number of row*cols*depths > 130000 to reproduce the tile rle error.";
+        "The tile size in kilo bytes to be used for the large file put/get "
+        "value test. Set the tile size to 2048 and the number of "
+        "row*cols*depths > 130000 to reproduce the tile rle error.";
 
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("unit test"));
-    module->description
-        = "Performs unit and integration tests for the raster3d library";
+    module->description =
+        "Performs unit and integration tests for the raster3d library";
 
     /* Get parameters from user */
     set_params();
@@ -147,9 +147,8 @@ int main(int argc, char *argv[])
                 if (strcmp(param.unit->answers[i], "putget") == 0)
                     returnstat += unit_test_put_get_value();
                 if (strcmp(param.unit->answers[i], "large") == 0)
-                    returnstat +=
-                        unit_test_put_get_value_large_file(depths, rows, cols,
-                                                           tile_size);
+                    returnstat += unit_test_put_get_value_large_file(
+                        depths, rows, cols, tile_size);
 
                 i++;
             }

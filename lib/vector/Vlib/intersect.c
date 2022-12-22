@@ -39,10 +39,10 @@
    ----------  a
    ----------  b
    </pre>
-   Intersection points: 
+   Intersection points:
    <pre>
    return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
-   0        -              -                  -              -  
+   0        -              -                  -              -
    1        a,b            -                  a              b
    2        a              b                  a              b
    3        a              a                  a              a
@@ -88,9 +88,9 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg);
 int line_check_intersection(struct line_pnts *APoints,
                             struct line_pnts *BPoints, int with_z);
 
-#define D  ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
-#define D1 ((bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2))
-#define D2 ((ax2-ax1)*(by1-ay1) - (ay2-ay1)*(bx1-ax1))
+#define D  ((ax2 - ax1) * (by1 - by2) - (ay2 - ay1) * (bx1 - bx2))
+#define D1 ((bx1 - ax1) * (by1 - by2) - (by1 - ay1) * (bx1 - bx2))
+#define D2 ((ax2 - ax1) * (by1 - ay1) - (ay2 - ay1) * (bx1 - ax1))
 
 /*!
  * \brief Check for intersect of 2 line segments.
@@ -138,7 +138,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     *y2 = 0;
     *z2 = 0;
 
-    /*  'Sort' each segment by x, y 
+    /*  'Sort' each segment by x, y
      *   MUST happen before D, D1, D2 are calculated */
     switched = 0;
     if (bx2 < bx1)
@@ -262,8 +262,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
         *y1 = ay2;
     }
 
-    /* TODO: dtol was originally set to 1.0e-10, which was usually working but not always. 
-     *       Can it be a problem to set the tolerance to 0.0 ? */
+    /* TODO: dtol was originally set to 1.0e-10, which was usually working but
+     * not always. Can it be a problem to set the tolerance to 0.0 ? */
     dtol = 0.0;
     if (fabs(d) > dtol) {
 
@@ -271,9 +271,10 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
         if (d > 0) {
             if (d1 < 0 || d1 > d || d2 < 0 || d2 > d) {
                 if (end_points) {
-                    G_debug(2,
-                            "  -> fp error, but intersection at end points %f, %f",
-                            *x1, *y1);
+                    G_debug(
+                        2,
+                        "  -> fp error, but intersection at end points %f, %f",
+                        *x1, *y1);
 
                     return 1;
                 }
@@ -287,9 +288,10 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
         else {
             if (d1 < d || d1 > 0 || d2 < d || d2 > 0) {
                 if (end_points) {
-                    G_debug(2,
-                            "  -> fp error, but intersection at end points %f, %f",
-                            *x1, *y1);
+                    G_debug(
+                        2,
+                        "  -> fp error, but intersection at end points %f, %f",
+                        *x1, *y1);
 
                     return 1;
                 }
@@ -314,11 +316,11 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     /* segments are parallel or collinear */
     G_debug(3, " -> parallel/collinear");
 
-    if (d1 || d2) {             /* lines are parallel */
+    if (d1 || d2) { /* lines are parallel */
         G_debug(2, "  -> parallel");
         if (end_points)
-            G_debug(2,
-                    "Segments are apparently parallel, but connected at end points -> collinear");
+            G_debug(2, "Segments are apparently parallel, but connected at end "
+                       "points -> collinear");
         else
             return 0;
     }
@@ -342,7 +344,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
             *y1 = ay1;
             *z1 = 0;
 
-            return 1;           /* endpoints only */
+            return 1; /* endpoints only */
         }
         if (ay2 == by1) {
             G_debug(2, "    -> connected by end points");
@@ -350,7 +352,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
             *y1 = ay2;
             *z1 = 0;
 
-            return 1;           /* endpoints only */
+            return 1; /* endpoints only */
         }
 
         /* general overlap */
@@ -382,7 +384,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
         /* general overlap, 2 intersection points */
         G_debug(2, "    -> partial overlap");
-        if (by1 > ay1 && by1 < ay2) {   /* b1 in a */
+        if (by1 > ay1 && by1 < ay2) { /* b1 in a */
             G_debug(2, "    -> b1 in a");
             *x1 = bx1;
             *y1 = by1;
@@ -393,7 +395,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
             return 2;
         }
-        if (by2 > ay1 && by2 < ay2) {   /* b2 in a */
+        if (by2 > ay1 && by2 < ay2) { /* b2 in a */
             G_debug(2, "    -> b2 in a");
             *x1 = ax1;
             *y1 = ay1;
@@ -406,7 +408,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
         }
 
         /* should not be reached */
-        G_warning(_("Vect_segment_intersection() ERROR (collinear vertical segments)"));
+        G_warning(_(
+            "Vect_segment_intersection() ERROR (collinear vertical segments)"));
         G_warning("a");
         G_warning("%.15g %.15g", ax1, ay1);
         G_warning("%.15g %.15g", ax2, ay2);
@@ -476,7 +479,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
     /* general overlap, 2 intersection points (lines are not vertical) */
     G_debug(2, "    -> partial overlap");
-    if (bx1 > ax1 && bx1 < ax2) {       /* b1 is in a */
+    if (bx1 > ax1 && bx1 < ax2) { /* b1 is in a */
         G_debug(2, "    -> b1 in a");
         *x1 = bx1;
         *y1 = by1;
@@ -487,7 +490,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
         return 2;
     }
-    if (bx2 > ax1 && bx2 < ax2) {       /* b2 is in a */
+    if (bx2 > ax1 && bx2 < ax2) { /* b2 is in a */
         G_debug(2, "    -> b2 in a");
         *x1 = ax1;
         *y1 = ay1;
@@ -500,7 +503,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     }
 
     /* should not be reached */
-    G_warning(_("Vect_segment_intersection() ERROR (collinear non vertical segments)"));
+    G_warning(_(
+        "Vect_segment_intersection() ERROR (collinear non vertical segments)"));
     G_warning("a");
     G_warning("%.15g %.15g", ax1, ay1);
     G_warning("%.15g %.15g", ax2, ay2);
@@ -511,16 +515,15 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     return 0;
 }
 
-typedef struct
-{                               /* in arrays 0 - A line , 1 - B line */
-    int segment[2];             /* segment number, start from 0 for first */
+typedef struct {    /* in arrays 0 - A line , 1 - B line */
+    int segment[2]; /* segment number, start from 0 for first */
     double distance[2];
     double x, y, z;
 } CROSS;
 
 /* Current line in arrays is for some functions like cmp() set by: */
 static int current;
-static int second;              /* line which is not current */
+static int second; /* line which is not current */
 
 static int a_cross = 0;
 static int n_cross;
@@ -533,17 +536,16 @@ static void add_cross(int asegment, double adistance, int bsegment,
     if (n_cross == a_cross) {
         /* Must be space + 1, used later for last line point, do it better */
         cross =
-            (CROSS *) G_realloc((void *)cross,
-                                (a_cross + 101) * sizeof(CROSS));
+            (CROSS *)G_realloc((void *)cross, (a_cross + 101) * sizeof(CROSS));
         use_cross =
-            (int *)G_realloc((void *)use_cross,
-                             (a_cross + 101) * sizeof(int));
+            (int *)G_realloc((void *)use_cross, (a_cross + 101) * sizeof(int));
         a_cross += 100;
     }
 
-    G_debug(5,
-            "  add new cross: aseg/dist = %d/%f bseg/dist = %d/%f, x = %f y = %f",
-            asegment, adistance, bsegment, bdistance, x, y);
+    G_debug(
+        5,
+        "  add new cross: aseg/dist = %d/%f bseg/dist = %d/%f, x = %f y = %f",
+        asegment, adistance, bsegment, bdistance, x, y);
     cross[n_cross].segment[0] = asegment;
     cross[n_cross].distance[0] = adistance;
     cross[n_cross].segment[1] = bsegment;
@@ -555,8 +557,8 @@ static void add_cross(int asegment, double adistance, int bsegment,
 
 static int cmp_cross(const void *pa, const void *pb)
 {
-    CROSS *p1 = (CROSS *) pa;
-    CROSS *p2 = (CROSS *) pb;
+    CROSS *p1 = (CROSS *)pa;
+    CROSS *p2 = (CROSS *)pb;
 
     if (p1->segment[current] < p2->segment[current])
         return -1;
@@ -594,7 +596,8 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
 }
 #endif
 
-/* shared by Vect_line_intersection, Vect_line_check_intersection, cross_seg, find_cross */
+/* shared by Vect_line_intersection, Vect_line_check_intersection, cross_seg,
+ * find_cross */
 static struct line_pnts *APnts, *BPnts;
 
 /* break segments (called by rtree search) */
@@ -608,31 +611,29 @@ static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
     j = id - 1;
     /* Note: -1 to make up for the +1 when data was inserted */
 
-    ret = Vect_segment_intersection(APnts->x[i], APnts->y[i], APnts->z[i],
-                                    APnts->x[i + 1], APnts->y[i + 1],
-                                    APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
-                                    BPnts->z[j], BPnts->x[j + 1],
-                                    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
-                                    &y1, &z1, &x2, &y2, &z2, 0);
+    ret = Vect_segment_intersection(
+        APnts->x[i], APnts->y[i], APnts->z[i], APnts->x[i + 1], APnts->y[i + 1],
+        APnts->z[i + 1], BPnts->x[j], BPnts->y[j], BPnts->z[j], BPnts->x[j + 1],
+        BPnts->y[j + 1], BPnts->z[j + 1], &x1, &y1, &z1, &x2, &y2, &z2, 0);
 
     /* add ALL (including end points and duplicates), clean later */
     if (ret > 0) {
         G_debug(2, "  -> %d x %d: intersection type = %d", i, j, ret);
-        if (ret == 1) {         /* one intersection on segment A */
+        if (ret == 1) { /* one intersection on segment A */
             G_debug(3, "    in %f, %f ", x1, y1);
             add_cross(i, 0.0, j, 0.0, x1, y1);
         }
         else if (ret == 2 || ret == 3 || ret == 4 || ret == 5) {
             /*  partial overlap; a broken in one, b broken in one
              *  or a contains b; a is broken in 2 points (but 1 may be end)
-             *  or b contains a; b is broken in 2 points (but 1 may be end) 
+             *  or b contains a; b is broken in 2 points (but 1 may be end)
              *  or identical */
             G_debug(3, "    in %f, %f; %f, %f", x1, y1, x2, y2);
             add_cross(i, 0.0, j, 0.0, x1, y1);
             add_cross(i, 0.0, j, 0.0, x2, y2);
         }
     }
-    return 1;                   /* keep going */
+    return 1; /* keep going */
 }
 
 /*!
@@ -645,25 +646,22 @@ static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
  * Superseded by the faster Vect_line_intersection2()
  * Kept as reference implementation
  *
- * \param APoints first input line 
- * \param BPoints second input line 
+ * \param APoints first input line
+ * \param BPoints second input line
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
  * \param[out] nalines number of new lines (ALines)
  * \param[out] nblines number of new lines (BLines)
  * \param with_z 3D, not supported!
  *
- * \return 0 no intersection 
+ * \return 0 no intersection
  * \return 1 intersection found
  */
-int
-Vect_line_intersection(struct line_pnts *APoints,
-                       struct line_pnts *BPoints,
-                       struct bound_box *ABox,
-                       struct bound_box *BBox,
-                       struct line_pnts ***ALines,
-                       struct line_pnts ***BLines,
-                       int *nalines, int *nblines, int with_z)
+int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
+                           struct bound_box *ABox, struct bound_box *BBox,
+                           struct line_pnts ***ALines,
+                           struct line_pnts ***BLines, int *nalines,
+                           int *nblines, int with_z)
 {
     int i, j, k, l, last_seg, seg, last;
     int n_alive_cross;
@@ -671,7 +669,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     double x, y, rethresh;
     struct line_pnts **XLines, *Points;
     struct RTree *MyRTree;
-    struct line_pnts *Points1, *Points2;        /* first, second points */
+    struct line_pnts *Points1, *Points2; /* first, second points */
     int seg1, seg2, vert1, vert2;
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -692,69 +690,71 @@ Vect_line_intersection(struct line_pnts *APoints,
     }
 
     n_cross = 0;
-    rethresh = 0.000001;        /* TODO */
+    rethresh = 0.000001; /* TODO */
     APnts = APoints;
     BPnts = BPoints;
 
     /* RE (representation error).
-     *  RE thresh above is nonsense of course, the RE threshold should be based on
-     *  number of significant digits for double (IEEE-754) which is 15 or 16 and exponent. 
-     *  The number above is in fact not required threshold, and will not work
-     *  for example: equator length is 40.075,695 km (8 digits), units are m (+3) 
-     *  and we want precision in mm (+ 3) = 14 -> minimum rethresh may be around 0.001
-     *  ?Maybe all nonsense? 
-     *  Use rounding error of the unit in the least place ? 
-     *  max of fabs(x), fabs(y)
-     *  rethresh = pow(2, log2(max) - 53) */
+     *  RE thresh above is nonsense of course, the RE threshold should be based
+     * on number of significant digits for double (IEEE-754) which is 15 or 16
+     * and exponent. The number above is in fact not required threshold, and
+     * will not work for example: equator length is 40.075,695 km (8 digits),
+     * units are m (+3) and we want precision in mm (+ 3) = 14 -> minimum
+     * rethresh may be around 0.001 ?Maybe all nonsense? Use rounding error of
+     * the unit in the least place ? max of fabs(x), fabs(y) rethresh = pow(2,
+     * log2(max) - 53) */
 
-    /* Warning: This function is also used to intersect the line by itself i.e. APoints and
-     * BPoints are identical. I am not sure if it is clever, but it seems to work, but
-     * we have to keep this in mind and handle some special cases (maybe) */
+    /* Warning: This function is also used to intersect the line by itself i.e.
+     * APoints and BPoints are identical. I am not sure if it is clever, but it
+     * seems to work, but we have to keep this in mind and handle some special
+     * cases (maybe) */
 
     /* TODO: 3D, RE threshold, GV_POINTS (line x point) */
 
     /* Take each segment from A and intersect by each segment from B.
-     *  
-     *  All intersections are found first and saved to array, then sorted by a distance along the line,
-     *  and then the line is split to pieces.
      *
-     *  Note: If segments are collinear, check if previous/next segments are also collinear, 
-     *  in that case do not break:
-     *  +----------+  
+     *  All intersections are found first and saved to array, then sorted by a
+     * distance along the line, and then the line is split to pieces.
+     *
+     *  Note: If segments are collinear, check if previous/next segments are
+     * also collinear, in that case do not break:
+     *  +----------+
      *  +----+-----+  etc.
-     *  doesn't need to be broken 
+     *  doesn't need to be broken
      *
-     *  Note: If 2 adjacent segments of line B have common vertex exactly (or within thresh) on line A,
-     *  intersection points for these B segments may differ due to RE:
+     *  Note: If 2 adjacent segments of line B have common vertex exactly (or
+     * within thresh) on line A, intersection points for these B segments may
+     * differ due to RE:
      *  ------------ a       ----+--+----            ----+--+----
      *      /\         =>       /    \     or maybe       \/
-     *  b0 /  \ b1             /      \      even:        /\     
+     *  b0 /  \ b1             /      \      even:        /\
      *
-     *  -> solution: snap all breaks to nearest vertices first within RE threshold
-     *  
+     *  -> solution: snap all breaks to nearest vertices first within RE
+     * threshold
+     *
      *  Question: Snap all breaks to each other within RE threshold?
      *
-     *  Note: If a break is snapped to end point or two breaks are snapped to the same vertex
-     *        resulting new line is degenerated => before line is added to array, it must be checked
-     *        if line is not degenerated
+     *  Note: If a break is snapped to end point or two breaks are snapped to
+     * the same vertex resulting new line is degenerated => before line is added
+     * to array, it must be checked if line is not degenerated
      *
-     *  Note: to snap to vertices is important for cases where line A is broken by B and C line
-     *  at the same point:
-     *   \  /  b   no snap     \    /
+     *  Note: to snap to vertices is important for cases where line A is broken
+     * by B and C line at the same point: \  /  b   no snap     \    /
      *    \/       could    ----+--+----
-     *  ------ a   result   
+     *  ------ a   result
      *    /\       in ?:         /\
      *   /  \  c                /  \
-     * 
-     *  Note: once we snap breaks to vertices, we have to do that for both lines A and B in the same way
-     *  and because we cannot be sure that A childrens will not change a bit by break(s) 
-     *  we have to break both A and B  at once i.e. in one Vect_line_intersection () call.
+     *
+     *  Note: once we snap breaks to vertices, we have to do that for both lines
+     * A and B in the same way and because we cannot be sure that A childrens
+     * will not change a bit by break(s) we have to break both A and B  at once
+     * i.e. in one Vect_line_intersection () call.
      */
 
-    /* Spatial index: lines may be very long (thousands of segments) and check each segment 
-     *  with each from second line takes a long time (n*m). Because of that, spatial index
-     *  is build first for the second line and segments from the first line are broken by segments
-     *  in bound box */
+    /* Spatial index: lines may be very long (thousands of segments) and check
+     * each segment with each from second line takes a long time (n*m). Because
+     * of that, spatial index is build first for the second line and segments
+     * from the first line are broken by segments in bound box */
 
     if (!Vect_box_overlap(ABox, BBox)) {
         *nalines = 0;
@@ -822,7 +822,9 @@ Vect_line_intersection(struct line_pnts *APoints,
         box.T = rect.boundary[5] + rethresh;
 
         if (Vect_box_overlap(&abbox, &box)) {
-            RTreeInsertRect(&rect, i + 1, MyRTree);     /* B line segment numbers in rtree start from 1 */
+            RTreeInsertRect(
+                &rect, i + 1,
+                MyRTree); /* B line segment numbers in rtree start from 1 */
         }
     }
 
@@ -861,7 +863,8 @@ Vect_line_intersection(struct line_pnts *APoints,
         box.T = rect.boundary[5] + rethresh;
 
         if (Vect_box_overlap(&abbox, &box)) {
-            j = RTreeSearch(MyRTree, &rect, cross_seg, &i);     /* A segment number from 0 */
+            j = RTreeSearch(MyRTree, &rect, cross_seg,
+                            &i); /* A segment number from 0 */
         }
     }
 
@@ -890,9 +893,8 @@ Vect_line_intersection(struct line_pnts *APoints,
         cross[i].distance[0] = curdist;
 
         /* 2. of A seg */
-        dist =
-            dist2(cross[i].x, cross[i].y, APoints->x[seg + 1],
-                  APoints->y[seg + 1]);
+        dist = dist2(cross[i].x, cross[i].y, APoints->x[seg + 1],
+                     APoints->y[seg + 1]);
         if (dist < curdist) {
             curdist = dist;
             x = APoints->x[seg + 1];
@@ -901,8 +903,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 
         /* 1. of B seg */
         seg = cross[i].segment[1];
-        dist =
-            dist2(cross[i].x, cross[i].y, BPoints->x[seg], BPoints->y[seg]);
+        dist = dist2(cross[i].x, cross[i].y, BPoints->x[seg], BPoints->y[seg]);
         cross[i].distance[1] = dist;
 
         if (dist < curdist) {
@@ -911,9 +912,8 @@ Vect_line_intersection(struct line_pnts *APoints,
             y = BPoints->y[seg];
         }
         /* 2. of B seg */
-        dist =
-            dist2(cross[i].x, cross[i].y, BPoints->x[seg + 1],
-                  BPoints->y[seg + 1]);
+        dist = dist2(cross[i].x, cross[i].y, BPoints->x[seg + 1],
+                     BPoints->y[seg + 1]);
         if (dist < curdist) {
             curdist = dist;
             x = BPoints->x[seg + 1];
@@ -926,12 +926,10 @@ Vect_line_intersection(struct line_pnts *APoints,
             /* Update distances along segments */
             seg = cross[i].segment[0];
             cross[i].distance[0] =
-                dist2(APoints->x[seg], APoints->y[seg], cross[i].x,
-                      cross[i].y);
+                dist2(APoints->x[seg], APoints->y[seg], cross[i].x, cross[i].y);
             seg = cross[i].segment[1];
             cross[i].distance[1] =
-                dist2(BPoints->x[seg], BPoints->y[seg], cross[i].x,
-                      cross[i].y);
+                dist2(BPoints->x[seg], BPoints->y[seg], cross[i].x, cross[i].y);
         }
     }
 
@@ -961,20 +959,19 @@ Vect_line_intersection(struct line_pnts *APoints,
         }
 
         /* Sort points along lines */
-        qsort((void *)cross, sizeof(char) * n_cross, sizeof(CROSS),
-              cmp_cross);
+        qsort((void *)cross, sizeof(char) * n_cross, sizeof(CROSS), cmp_cross);
 
         /* Print all (raw) breaks */
         /* avoid loop when not debugging */
         if (debug_level > 2) {
             for (i = 0; i < n_cross; i++) {
-                G_debug(3,
-                        "  cross = %d seg1/dist1 = %d/%f seg2/dist2 = %d/%f x = %f y = %f",
-                        i, cross[i].segment[current],
-                        sqrt(cross[i].distance[current]),
-                        cross[i].segment[second],
-                        sqrt(cross[i].distance[second]), cross[i].x,
-                        cross[i].y);
+                G_debug(
+                    3,
+                    "  cross = %d seg1/dist1 = %d/%f seg2/dist2 = %d/%f x = %f "
+                    "y = %f",
+                    i, cross[i].segment[current],
+                    sqrt(cross[i].distance[current]), cross[i].segment[second],
+                    sqrt(cross[i].distance[second]), cross[i].x, cross[i].y);
             }
         }
 
@@ -990,21 +987,22 @@ Vect_line_intersection(struct line_pnts *APoints,
                     (cross[i].segment[current] == j - 1 &&
                      cross[i].x == Points1->x[j] &&
                      cross[i].y == Points1->y[j])) {
-                    use_cross[i] = 0;   /* first/last */
+                    use_cross[i] = 0; /* first/last */
                     G_debug(3, "cross %d deleted (first/last point)", i);
                 }
             }
         }
 
         /* Remove breaks with collinear previous and next segments on 1 and 2 */
-        /* Note: breaks with collinear previous and nex must be remove duplicates,
-         *        otherwise some cross may be lost. Example (+ is vertex):
+        /* Note: breaks with collinear previous and nex must be remove
+         * duplicates, otherwise some cross may be lost. Example (+ is vertex):
          *             B          first cross intersections: A/B  segment:
-         *             |               0/0, 0/1, 1/0, 1/1 - collinear previous and next
-         *     AB -----+----+--- A     0/4, 0/5, 1/4, 1/5 - OK        
-         *              \___|                   
-         *                B                    
-         *  This should not inluence that break is always on first segment, see below (I hope)
+         *             |               0/0, 0/1, 1/0, 1/1 - collinear previous
+         * and next AB -----+----+--- A     0/4, 0/5, 1/4, 1/5 - OK
+         *              \___|
+         *                B
+         *  This should not inluence that break is always on first segment, see
+         * below (I hope)
          */
         /* TODO: this doesn't find identical with breaks on revious/next */
         for (i = 0; i < n_cross; i++) {
@@ -1030,8 +1028,9 @@ Vect_line_intersection(struct line_pnts *APoints,
             }
 
             /* Is it vertex on 2, which? */
-            /* For 1. line it is easy, because breaks on vertex are always at end vertex
-             *  for 2. line we need to find which vertex is on break if any (vert2 starts from 0) */
+            /* For 1. line it is easy, because breaks on vertex are always at
+             * end vertex for 2. line we need to find which vertex is on break
+             * if any (vert2 starts from 0) */
             if (cross[i].x == Points2->x[seg2] &&
                 cross[i].y == Points2->y[seg2]) {
                 vert2 = seg2;
@@ -1044,8 +1043,8 @@ Vect_line_intersection(struct line_pnts *APoints,
                 G_debug(3, "  -> is not vertex on 2. line");
                 continue;
             }
-            G_debug(3, "    seg1/vert1 = %d/%d  seg2/ver2 = %d/%d", seg1,
-                    vert1, seg2, vert2);
+            G_debug(3, "    seg1/vert1 = %d/%d  seg2/ver2 = %d/%d", seg1, vert1,
+                    seg2, vert2);
 
             /* Check if the second vertex is not first/last */
             if (vert2 == 0 || vert2 == Points2->n_points - 1) {
@@ -1061,9 +1060,7 @@ Vect_line_intersection(struct line_pnts *APoints,
                   (Points1->x[vert1 - 1] == Points2->x[vert2 + 1] &&
                    Points1->y[vert1 - 1] == Points2->y[vert2 + 1] &&
                    Points1->x[vert1 + 1] == Points2->x[vert2 - 1] &&
-                   Points1->y[vert1 + 1] == Points2->y[vert2 - 1])
-                )
-                ) {
+                   Points1->y[vert1 + 1] == Points2->y[vert2 - 1]))) {
                 G_debug(3, "  -> previous/next are not identical");
                 continue;
             }
@@ -1074,25 +1071,27 @@ Vect_line_intersection(struct line_pnts *APoints,
         }
 
         /* Remove duplicates, i.e. merge all identical breaks to one.
-         *  We must be careful because two points with identical coordinates may be distant if measured along
-         *  the line:
-         *       |         Segments b0 and b1 overlap, b0 runs up, b1 down.
-         *       |         Two inersections may be merged for a, because they are identical,
-         *  -----+---- a   but cannot be merged for b, because both b0 and b1 must be broken. 
-         *       |         I.e. Breaks on b have identical coordinates, but there are not identical
-         *       b0 | b1      if measured along line b.
-         *                 
-         *      -> Breaks may be merged as identical if lay on the same segment, or on vertex connecting
-         *      2 adjacent segments the points lay on
-         *      
-         *  Note: if duplicate is on a vertex, the break is removed from next segment =>
-         *        break on vertex is always on first segment of this vertex (used below) 
+         *  We must be careful because two points with identical coordinates may
+         * be distant if measured along the line: |         Segments b0 and b1
+         * overlap, b0 runs up, b1 down. |         Two inersections may be
+         * merged for a, because they are identical,
+         *  -----+---- a   but cannot be merged for b, because both b0 and b1
+         * must be broken. |         I.e. Breaks on b have identical
+         * coordinates, but there are not identical b0 | b1      if measured
+         * along line b.
+         *
+         *      -> Breaks may be merged as identical if lay on the same segment,
+         * or on vertex connecting 2 adjacent segments the points lay on
+         *
+         *  Note: if duplicate is on a vertex, the break is removed from next
+         * segment => break on vertex is always on first segment of this vertex
+         * (used below)
          */
         last = -1;
         for (i = 0; i < n_cross; i++) {
             if (use_cross[i] == 0)
                 continue;
-            if (last == -1) {   /* set first alive */
+            if (last == -1) { /* set first alive */
                 last = i;
                 continue;
             }
@@ -1101,14 +1100,13 @@ Vect_line_intersection(struct line_pnts *APoints,
             G_debug(3, "  duplicate ?: cross = %d seg = %d dist = %f", i,
                     cross[i].segment[current], cross[i].distance[current]);
             if ((cross[i].segment[current] == cross[last].segment[current] &&
-                 cross[i].distance[current] == cross[last].distance[current])
-                || (cross[i].segment[current] ==
-                    cross[last].segment[current] + 1 &&
-                    cross[i].distance[current] == 0 &&
-                    cross[i].x == cross[last].x &&
-                    cross[i].y == cross[last].y)) {
+                 cross[i].distance[current] == cross[last].distance[current]) ||
+                (cross[i].segment[current] ==
+                     cross[last].segment[current] + 1 &&
+                 cross[i].distance[current] == 0 &&
+                 cross[i].x == cross[last].x && cross[i].y == cross[last].y)) {
                 G_debug(3, "  cross %d identical to last -> removed", i);
-                use_cross[i] = 0;       /* identical */
+                use_cross[i] = 0; /* identical */
             }
             else {
                 last = i;
@@ -1139,9 +1137,9 @@ Vect_line_intersection(struct line_pnts *APoints,
             last_x = Points->x[0];
             last_y = Points->y[0];
             last_z = Points->z[0];
-            /* Go through all cross (+last line point) and create for each new line 
-             *  starting at last_* and ending at cross (last point) */
-            for (i = 0; i <= n_cross; i++) {    /* i.e. n_cross + 1 new lines */
+            /* Go through all cross (+last line point) and create for each new
+             * line starting at last_* and ending at cross (last point) */
+            for (i = 0; i <= n_cross; i++) { /* i.e. n_cross + 1 new lines */
                 seg = cross[i].segment[current];
                 G_debug(2, "%d seg = %d dist = %f", i, seg,
                         cross[i].distance[current]);
@@ -1188,17 +1186,14 @@ Vect_line_intersection(struct line_pnts *APoints,
                     last_z = Points->z[last_seg + 1];
                 }
                 else {
-                    dist = dist2(Points->x[last_seg],
-                                 Points->x[last_seg + 1],
-                                 Points->y[last_seg],
-                                 Points->y[last_seg + 1]);
+                    dist = dist2(Points->x[last_seg], Points->x[last_seg + 1],
+                                 Points->y[last_seg], Points->y[last_seg + 1]);
                     last_z =
                         (Points->z[last_seg] *
-                         sqrt(cross[i].distance[current]) +
-                         Points->z[last_seg + 1] * (sqrt(dist) -
-                                                    sqrt(cross[i].
-                                                         distance[current])))
-                        / sqrt(dist);
+                             sqrt(cross[i].distance[current]) +
+                         Points->z[last_seg + 1] *
+                             (sqrt(dist) - sqrt(cross[i].distance[current]))) /
+                        sqrt(dist);
                 }
 
                 /* add current cross or end point */
@@ -1233,8 +1228,8 @@ Vect_line_intersection(struct line_pnts *APoints,
 
 static struct line_pnts *APnts, *BPnts, *IPnts;
 
-static int cross_found;         /* set by find_cross() */
-static int report_all;          /* should all crossings be reported or just first one */
+static int cross_found; /* set by find_cross() */
+static int report_all;  /* should all crossings be reported or just first one */
 
 /* break segments (called by rtree search) */
 static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
@@ -1247,12 +1242,10 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
     j = id - 1;
     /* Note: -1 to make up for the +1 when data was inserted */
 
-    ret = Vect_segment_intersection(APnts->x[i], APnts->y[i], APnts->z[i],
-                                    APnts->x[i + 1], APnts->y[i + 1],
-                                    APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
-                                    BPnts->z[j], BPnts->x[j + 1],
-                                    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
-                                    &y1, &z1, &x2, &y2, &z2, 0);
+    ret = Vect_segment_intersection(
+        APnts->x[i], APnts->y[i], APnts->z[i], APnts->x[i + 1], APnts->y[i + 1],
+        APnts->z[i + 1], BPnts->x[j], BPnts->y[j], BPnts->z[j], BPnts->x[j + 1],
+        BPnts->y[j + 1], BPnts->z[j + 1], &x1, &y1, &z1, &x2, &y2, &z2, 0);
 
     switch (ret) {
     case 0:
@@ -1277,12 +1270,11 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
         if (!report_all)
             return 0;
     }
-    return 1;                   /* keep going */
+    return 1; /* keep going */
 }
 
-int
-line_check_intersection(struct line_pnts *APoints,
-                        struct line_pnts *BPoints, int with_z)
+int line_check_intersection(struct line_pnts *APoints,
+                            struct line_pnts *BPoints, int with_z)
 {
     int i;
     double dist, rethresh;
@@ -1295,11 +1287,12 @@ line_check_intersection(struct line_pnts *APoints,
         rect_init = 6;
     }
 
-    rethresh = 0.000001;        /* TODO */
+    rethresh = 0.000001; /* TODO */
     APnts = APoints;
     BPnts = BPoints;
 
-    /* TODO: 3D, RE (representation error) threshold, GV_POINTS (line x point) */
+    /* TODO: 3D, RE (representation error) threshold, GV_POINTS (line x point)
+     */
 
     if (!IPnts)
         IPnts = Vect_new_line_struct();
@@ -1309,19 +1302,21 @@ line_check_intersection(struct line_pnts *APoints,
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
         if (APoints->x[0] == BPoints->x[0] && APoints->y[0] == BPoints->y[0]) {
             if (!with_z) {
-                if (report_all && 0 >
-                    Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
-                                          &APoints->y[0], NULL, 1))
-                    G_warning(_("Error while adding point to array. Out of memory"));
+                if (report_all &&
+                    0 > Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
+                                              &APoints->y[0], NULL, 1))
+                    G_warning(
+                        _("Error while adding point to array. Out of memory"));
                 return 1;
             }
             else {
                 if (APoints->z[0] == BPoints->z[0]) {
-                    if (report_all && 0 >
-                        Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
-                                              &APoints->y[0], &APoints->z[0],
-                                              1))
-                        G_warning(_("Error while adding point to array. Out of memory"));
+                    if (report_all &&
+                        0 > Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
+                                                  &APoints->y[0],
+                                                  &APoints->z[0], 1))
+                        G_warning(_("Error while adding point to array. Out of "
+                                    "memory"));
                     return 1;
                 }
                 else
@@ -1334,15 +1329,15 @@ line_check_intersection(struct line_pnts *APoints,
     }
 
     if (APoints->n_points == 1) {
-        Vect_line_distance(BPoints, APoints->x[0], APoints->y[0],
-                           APoints->z[0], with_z, NULL, NULL, NULL, &dist,
-                           NULL, NULL);
+        Vect_line_distance(BPoints, APoints->x[0], APoints->y[0], APoints->z[0],
+                           with_z, NULL, NULL, NULL, &dist, NULL, NULL);
 
         if (dist <= rethresh) {
-            if (report_all && 0 >
-                Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
-                                      &APoints->z[0], 1))
-                G_warning(_("Error while adding point to array. Out of memory"));
+            if (report_all &&
+                0 > Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
+                                          &APoints->z[0], 1))
+                G_warning(
+                    _("Error while adding point to array. Out of memory"));
             return 1;
         }
         else {
@@ -1351,15 +1346,15 @@ line_check_intersection(struct line_pnts *APoints,
     }
 
     if (BPoints->n_points == 1) {
-        Vect_line_distance(APoints, BPoints->x[0], BPoints->y[0],
-                           BPoints->z[0], with_z, NULL, NULL, NULL, &dist,
-                           NULL, NULL);
+        Vect_line_distance(APoints, BPoints->x[0], BPoints->y[0], BPoints->z[0],
+                           with_z, NULL, NULL, NULL, &dist, NULL, NULL);
 
         if (dist <= rethresh) {
-            if (report_all && 0 >
-                Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
-                                      &BPoints->z[0], 1))
-                G_warning(_("Error while adding point to array. Out of memory"));
+            if (report_all &&
+                0 > Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
+                                          &BPoints->z[0], 1))
+                G_warning(
+                    _("Error while adding point to array. Out of memory"));
             return 1;
         }
         else
@@ -1368,10 +1363,10 @@ line_check_intersection(struct line_pnts *APoints,
 
     /* Take each segment from A and find if intersects any segment from B. */
 
-    /* Spatial index: lines may be very long (thousands of segments) and check each segment 
-     *  with each from second line takes a long time (n*m). Because of that, spatial index
-     *  is build first for the second line and segments from the first line are broken by segments
-     *  in bound box */
+    /* Spatial index: lines may be very long (thousands of segments) and check
+     * each segment with each from second line takes a long time (n*m). Because
+     * of that, spatial index is build first for the second line and segments
+     * from the first line are broken by segments in bound box */
 
     /* Create rtree for B line */
     MyRTree = RTreeCreateTree(-1, 0, 2);
@@ -1404,7 +1399,9 @@ line_check_intersection(struct line_pnts *APoints,
             rect.boundary[5] = BPoints->z[i];
         }
 
-        RTreeInsertRect(&rect, i + 1, MyRTree); /* B line segment numbers in rtree start from 1 */
+        RTreeInsertRect(
+            &rect, i + 1,
+            MyRTree); /* B line segment numbers in rtree start from 1 */
     }
 
     /* Find intersection */
@@ -1437,7 +1434,8 @@ line_check_intersection(struct line_pnts *APoints,
             rect.boundary[5] = APoints->z[i];
         }
 
-        RTreeSearch(MyRTree, &rect, find_cross, &i);    /* A segment number from 0 */
+        RTreeSearch(MyRTree, &rect, find_cross,
+                    &i); /* A segment number from 0 */
 
         if (!report_all && cross_found) {
             break;
@@ -1458,16 +1456,15 @@ line_check_intersection(struct line_pnts *APoints,
  * Superseded by the faster Vect_line_check_intersection2()
  * Kept as reference implementation
  *
- * \param APoints first input line 
- * \param BPoints second input line 
+ * \param APoints first input line
+ * \param BPoints second input line
  * \param with_z 3D, not supported (only if one or both are points)!
  *
- * \return 0 no intersection 
+ * \return 0 no intersection
  * \return 1 intersection found
  */
-int
-Vect_line_check_intersection(struct line_pnts *APoints,
-                             struct line_pnts *BPoints, int with_z)
+int Vect_line_check_intersection(struct line_pnts *APoints,
+                                 struct line_pnts *BPoints, int with_z)
 {
     report_all = 0;
     return line_check_intersection(APoints, BPoints, with_z);
@@ -1475,24 +1472,23 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 
 /*!
  * \brief Get 2 lines intersection points.
- * 
+ *
  * A wrapper around Vect_line_check_intersection() function.
  *
  * Superseded by the faster Vect_line_get_intersections2()
  * Kept as reference implementation
  *
- * \param APoints first input line 
- * \param BPoints second input line 
+ * \param APoints first input line
+ * \param BPoints second input line
  * \param[out] IPoints output with intersection points
  * \param with_z 3D, not supported (only if one or both are points)!
  *
- * \return 0 no intersection 
+ * \return 0 no intersection
  * \return 1 intersection found
  */
-int
-Vect_line_get_intersections(struct line_pnts *APoints,
-                            struct line_pnts *BPoints,
-                            struct line_pnts *IPoints, int with_z)
+int Vect_line_get_intersections(struct line_pnts *APoints,
+                                struct line_pnts *BPoints,
+                                struct line_pnts *IPoints, int with_z)
 {
     int ret;
 

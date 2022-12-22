@@ -32,14 +32,15 @@ static int compute_window_row(int fd, int row, int *cellRow)
 
     /* check for row in window */
     if (row < 0 || row >= R__.rd_window.rows) {
-        G_fatal_error(_("Reading raster map <%s@%s> request for row %d is outside region"),
+        G_fatal_error(_("Reading raster map <%s@%s> request for row %d is "
+                        "outside region"),
                       fcb->name, fcb->mapset, row);
     }
 
     /* convert window row to cell file row */
     f = row * fcb->C1 + fcb->C2;
     r = (int)f;
-    if (f < r)                  /* adjust for rounding up of negatives */
+    if (f < r) /* adjust for rounding up of negatives */
         r--;
 
     if (r < 0 || r >= fcb->cellhd.rows)
@@ -92,15 +93,17 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     int ret;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
-        G_fatal_error(_("Error seeking fp raster data file for row %d of <%s>: %s"),
-                      row, fcb->name, strerror(errno));
+        G_fatal_error(
+            _("Error seeking fp raster data file for row %d of <%s>: %s"), row,
+            fcb->name, strerror(errno));
 
     *nbytes = fcb->nbytes;
 
-    ret = G_read_compressed(fcb->data_fd, readamount, data_buf,
-                            bufsize, fcb->cellhd.compressed);
+    ret = G_read_compressed(fcb->data_fd, readamount, data_buf, bufsize,
+                            fcb->cellhd.compressed);
     if (ret <= 0)
-        G_fatal_error(_("Error uncompressing fp raster data for row %d of <%s>: error code %d"),
+        G_fatal_error(_("Error uncompressing fp raster data for row %d of "
+                        "<%s>: error code %d"),
                       row, fcb->name, ret);
 }
 
@@ -135,8 +138,9 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     int n;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
-        G_fatal_error(_("Error seeking raster data file for row %d of <%s>: %s"),
-                      row, fcb->name, strerror(errno));
+        G_fatal_error(
+            _("Error seeking raster data file for row %d of <%s>: %s"), row,
+            fcb->name, strerror(errno));
 
     cmp = G_malloc(readamount);
 
@@ -166,8 +170,9 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
         else {
             if (G_expand(cmp, readamount, data_buf, bufsize,
                          fcb->cellhd.compressed) != bufsize)
-                G_fatal_error(_("Error uncompressing raster data for row %d of <%s>"),
-                              row, fcb->name);
+                G_fatal_error(
+                    _("Error uncompressing raster data for row %d of <%s>"),
+                    row, fcb->name);
         }
     }
     else
@@ -184,13 +189,13 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
 
     *nbytes = fcb->nbytes;
 
-    if (lseek(fcb->data_fd, (off_t) row * bufsize, SEEK_SET) == -1)
-        G_fatal_error(_("Error reading raster data for row %d of <%s>"),
-                      row, fcb->name);
+    if (lseek(fcb->data_fd, (off_t)row * bufsize, SEEK_SET) == -1)
+        G_fatal_error(_("Error reading raster data for row %d of <%s>"), row,
+                      fcb->name);
 
     if (read(fcb->data_fd, data_buf, bufsize) != bufsize)
-        G_fatal_error(_("Error reading raster data for row %d of <%s>"),
-                      row, fcb->name);
+        G_fatal_error(_("Error reading raster data for row %d of <%s>"), row,
+                      fcb->name);
 }
 
 #ifdef HAVE_GDAL
@@ -207,12 +212,11 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
         row = fcb->cellhd.rows - 1 - row;
 
     buf = fcb->gdal->hflip ? G_malloc(fcb->cellhd.cols * fcb->cur_nbytes)
-        : data_buf;
+                           : data_buf;
 
     err =
-        Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, 0, row,
-                            fcb->cellhd.cols, 1, buf, fcb->cellhd.cols, 1,
-                            fcb->gdal->type, 0, 0);
+        Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, 0, row, fcb->cellhd.cols,
+                            1, buf, fcb->cellhd.cols, 1, fcb->gdal->type, 0, 0);
 
     if (fcb->gdal->hflip) {
         int i;
@@ -225,8 +229,9 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
     }
 
     if (err != CE_None)
-        G_fatal_error(_("Error reading raster data via GDAL for row %d of <%s>"),
-                      row, fcb->name);
+        G_fatal_error(
+            _("Error reading raster data via GDAL for row %d of <%s>"), row,
+            fcb->name);
 }
 #endif
 
@@ -251,8 +256,8 @@ static void read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 
 /* copy cell file data to user buffer translated by window column mapping */
 static void cell_values_int(int fd, const unsigned char *data,
-                            const COLUMN_MAPPING * cmap, int nbytes,
-                            void *cell, int n)
+                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
+                            int n)
 {
     CELL *c = cell;
     COLUMN_MAPPING cmapold = 0;
@@ -296,7 +301,7 @@ static void cell_values_int(int fd, const unsigned char *data,
 }
 
 static void cell_values_float(int fd, const unsigned char *data,
-                              const COLUMN_MAPPING * cmap, int nbytes,
+                              const COLUMN_MAPPING *cmap, int nbytes,
                               void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -315,7 +320,7 @@ static void cell_values_float(int fd, const unsigned char *data,
 }
 
 static void cell_values_double(int fd, const unsigned char *data,
-                               const COLUMN_MAPPING * cmap, int nbytes,
+                               const COLUMN_MAPPING *cmap, int nbytes,
                                void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -335,8 +340,8 @@ static void cell_values_double(int fd, const unsigned char *data,
 
 #ifdef HAVE_GDAL
 static void gdal_values_int(int fd, const unsigned char *data,
-                            const COLUMN_MAPPING * cmap, int nbytes,
-                            CELL * cell, int n)
+                            const COLUMN_MAPPING *cmap, int nbytes, CELL *cell,
+                            int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     const unsigned char *d;
@@ -358,19 +363,19 @@ static void gdal_values_int(int fd, const unsigned char *data,
 
         switch (fcb->gdal->type) {
         case GDT_Byte:
-            cell[i] = *(GByte *) d;
+            cell[i] = *(GByte *)d;
             break;
         case GDT_Int16:
-            cell[i] = *(GInt16 *) d;
+            cell[i] = *(GInt16 *)d;
             break;
         case GDT_UInt16:
-            cell[i] = *(GUInt16 *) d;
+            cell[i] = *(GUInt16 *)d;
             break;
         case GDT_Int32:
-            cell[i] = *(GInt32 *) d;
+            cell[i] = *(GInt32 *)d;
             break;
         case GDT_UInt32:
-            cell[i] = *(GUInt32 *) d;
+            cell[i] = *(GUInt32 *)d;
             break;
         default:
             /* shouldn't happen */
@@ -383,8 +388,8 @@ static void gdal_values_int(int fd, const unsigned char *data,
 }
 
 static void gdal_values_float(int fd, const float *data,
-                              const COLUMN_MAPPING * cmap, int nbytes,
-                              FCELL * cell, int n)
+                              const COLUMN_MAPPING *cmap, int nbytes,
+                              FCELL *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
     int i;
@@ -407,8 +412,8 @@ static void gdal_values_float(int fd, const float *data,
 }
 
 static void gdal_values_double(int fd, const double *data,
-                               const COLUMN_MAPPING * cmap, int nbytes,
-                               DCELL * cell, int n)
+                               const COLUMN_MAPPING *cmap, int nbytes,
+                               DCELL *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
     int i;
@@ -432,36 +437,34 @@ static void gdal_values_double(int fd, const double *data,
 #endif
 
 /* transfer_to_cell_XY takes bytes from fcb->data, converts these bytes with
-   the appropriate procedure (e.g. XDR or byte reordering) into type X 
-   values which are put into array work_buf.  
-   finally the values in work_buf are converted into 
+   the appropriate procedure (e.g. XDR or byte reordering) into type X
+   values which are put into array work_buf.
+   finally the values in work_buf are converted into
    type Y and put into 'cell'.
-   if type X == type Y the intermediate step of storing the values in 
+   if type X == type Y the intermediate step of storing the values in
    work_buf might be omitted. check the appropriate function for XY to
-   determine the procedure of conversion. 
+   determine the procedure of conversion.
  */
 static void transfer_to_cell_XX(int fd, void *cell)
 {
-    static void (*cell_values_type[3])() = {
-        cell_values_int, cell_values_float, cell_values_double
-    };
+    static void (*cell_values_type[3])() = {cell_values_int, cell_values_float,
+                                            cell_values_double};
 #ifdef HAVE_GDAL
-    static void (*gdal_values_type[3])() = {
-        gdal_values_int, gdal_values_float, gdal_values_double
-    };
+    static void (*gdal_values_type[3])() = {gdal_values_int, gdal_values_float,
+                                            gdal_values_double};
 #endif
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
 #ifdef HAVE_GDAL
     if (fcb->gdal)
-        (gdal_values_type[fcb->map_type]) (fd, fcb->data, fcb->col_map,
-                                           fcb->cur_nbytes, cell,
-                                           R__.rd_window.cols);
+        (gdal_values_type[fcb->map_type])(fd, fcb->data, fcb->col_map,
+                                          fcb->cur_nbytes, cell,
+                                          R__.rd_window.cols);
     else
 #endif
-        (cell_values_type[fcb->map_type]) (fd, fcb->data, fcb->col_map,
-                                           fcb->cur_nbytes, cell,
-                                           R__.rd_window.cols);
+        (cell_values_type[fcb->map_type])(fd, fcb->data, fcb->col_map,
+                                          fcb->cur_nbytes, cell,
+                                          R__.rd_window.cols);
 }
 
 static void transfer_to_cell_fi(int fd, void *cell)
@@ -473,8 +476,10 @@ static void transfer_to_cell_fi(int fd, void *cell)
     transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < R__.rd_window.cols; i++)
-        ((CELL *) cell)[i] = (fcb->col_map[i] == 0)
-            ? 0 : Rast_quant_get_cell_value(&fcb->quant, work_buf[i]);
+        ((CELL *)cell)[i] =
+            (fcb->col_map[i] == 0)
+                ? 0
+                : Rast_quant_get_cell_value(&fcb->quant, work_buf[i]);
 
     G_free(work_buf);
 }
@@ -488,8 +493,10 @@ static void transfer_to_cell_di(int fd, void *cell)
     transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < R__.rd_window.cols; i++)
-        ((CELL *) cell)[i] = (fcb->col_map[i] == 0)
-            ? 0 : Rast_quant_get_cell_value(&fcb->quant, work_buf[i]);
+        ((CELL *)cell)[i] =
+            (fcb->col_map[i] == 0)
+                ? 0
+                : Rast_quant_get_cell_value(&fcb->quant, work_buf[i]);
 
     G_free(work_buf);
 }
@@ -502,7 +509,7 @@ static void transfer_to_cell_if(int fd, void *cell)
     transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < R__.rd_window.cols; i++)
-        ((FCELL *) cell)[i] = work_buf[i];
+        ((FCELL *)cell)[i] = work_buf[i];
 
     G_free(work_buf);
 }
@@ -515,7 +522,7 @@ static void transfer_to_cell_df(int fd, void *cell)
     transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < R__.rd_window.cols; i++)
-        ((FCELL *) cell)[i] = work_buf[i];
+        ((FCELL *)cell)[i] = work_buf[i];
 
     G_free(work_buf);
 }
@@ -528,7 +535,7 @@ static void transfer_to_cell_id(int fd, void *cell)
     transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < R__.rd_window.cols; i++)
-        ((DCELL *) cell)[i] = work_buf[i];
+        ((DCELL *)cell)[i] = work_buf[i];
 
     G_free(work_buf);
 }
@@ -541,27 +548,22 @@ static void transfer_to_cell_fd(int fd, void *cell)
     transfer_to_cell_XX(fd, work_buf);
 
     for (i = 0; i < R__.rd_window.cols; i++)
-        ((DCELL *) cell)[i] = work_buf[i];
+        ((DCELL *)cell)[i] = work_buf[i];
 
     G_free(work_buf);
 }
 
 /*
  *   works for all map types and doesn't consider
- *   null row corresponding to the requested row 
+ *   null row corresponding to the requested row
  */
 static int get_map_row_nomask(int fd, void *rast, int row,
                               RASTER_MAP_TYPE data_type)
 {
     static void (*transfer_to_cell_FtypeOtype[3][3])() = {
-        {
-         transfer_to_cell_XX, transfer_to_cell_if, transfer_to_cell_id}, {
-                                                                          transfer_to_cell_fi,
-                                                                          transfer_to_cell_XX,
-                                                                          transfer_to_cell_fd},
-        {
-         transfer_to_cell_di, transfer_to_cell_df, transfer_to_cell_XX}
-    };
+        {transfer_to_cell_XX, transfer_to_cell_if, transfer_to_cell_id},
+        {transfer_to_cell_fi, transfer_to_cell_XX, transfer_to_cell_fd},
+        {transfer_to_cell_di, transfer_to_cell_df, transfer_to_cell_XX}};
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int r;
     int row_status;
@@ -585,22 +587,21 @@ static int get_map_row_nomask(int fd, void *rast, int row,
         read_data(fd, fcb->cur_row, fcb->data, &fcb->cur_nbytes);
     }
 
-    (transfer_to_cell_FtypeOtype[fcb->map_type][data_type]) (fd, rast);
+    (transfer_to_cell_FtypeOtype[fcb->map_type][data_type])(fd, rast);
 
     return 1;
 }
 
 static void get_map_row_no_reclass(int fd, void *rast, int row,
-                                   RASTER_MAP_TYPE data_type,
-                                   int null_is_zero, int with_mask)
+                                   RASTER_MAP_TYPE data_type, int null_is_zero,
+                                   int with_mask)
 {
     get_map_row_nomask(fd, rast, row, data_type);
     embed_nulls(fd, rast, row, data_type, null_is_zero, with_mask);
 }
 
-static void get_map_row(int fd, void *rast, int row,
-                        RASTER_MAP_TYPE data_type, int null_is_zero,
-                        int with_mask)
+static void get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
+                        int null_is_zero, int with_mask)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int size = Rast_cell_size(data_type);
@@ -669,8 +670,7 @@ static void get_map_row(int fd, void *rast, int row,
  *
  * \return void
  */
-void Rast_get_row_nomask(int fd, void *buf, int row,
-                         RASTER_MAP_TYPE data_type)
+void Rast_get_row_nomask(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
     get_map_row(fd, buf, row, data_type, 0, 0);
 }
@@ -686,7 +686,7 @@ void Rast_get_row_nomask(int fd, void *buf, int row,
  *
  * \return void
  */
-void Rast_get_c_row_nomask(int fd, CELL * buf, int row)
+void Rast_get_c_row_nomask(int fd, CELL *buf, int row)
 {
     Rast_get_row_nomask(fd, buf, row, CELL_TYPE);
 }
@@ -702,7 +702,7 @@ void Rast_get_c_row_nomask(int fd, CELL * buf, int row)
  *
  * \return void
  */
-void Rast_get_f_row_nomask(int fd, FCELL * buf, int row)
+void Rast_get_f_row_nomask(int fd, FCELL *buf, int row)
 {
     Rast_get_row_nomask(fd, buf, row, FCELL_TYPE);
 }
@@ -718,7 +718,7 @@ void Rast_get_f_row_nomask(int fd, FCELL * buf, int row)
  *
  * \return void
  */
-void Rast_get_d_row_nomask(int fd, DCELL * buf, int row)
+void Rast_get_d_row_nomask(int fd, DCELL *buf, int row)
 {
     Rast_get_row_nomask(fd, buf, row, DCELL_TYPE);
 }
@@ -731,28 +731,27 @@ void Rast_get_d_row_nomask(int fd, DCELL * buf, int row)
  *  - FCELL_TYPE, calls Rast_get_f_row()
  *  - DCELL_TYPE, calls Rast_get_d_row()
  *
- *   Reads appropriate information into the buffer <em>buf</em> associated 
+ *   Reads appropriate information into the buffer <em>buf</em> associated
  *   with the requested row <em>row</em>. <em>buf</em> is associated with the
  *   current window.
  *
- *   Note, that the type of the data in <em>buf</em> (say X) is independent of 
+ *   Note, that the type of the data in <em>buf</em> (say X) is independent of
  *   the type of the data in the file described by <em>fd</em> (say Y).
  *
  *    - Step 1:  Read appropriate raw map data into a intermediate buffer.
  *    - Step 2:  Convert the data into a CPU readable format, and subsequently
- *            resample the data. the data is stored in a second intermediate 
+ *            resample the data. the data is stored in a second intermediate
  *            buffer (the type of the data in this buffer is Y).
  *    - Step 3:  Convert this type Y data into type X data and store it in
- *            buffer "buf". Conversion is performed in functions 
+ *            buffer "buf". Conversion is performed in functions
  *            "transfer_to_cell_XY". (For details of the conversion between
  *            two particular types check the functions).
- *    - Step 4:  read or simmulate null value row and zero out cells corresponding 
- *            to null value cells. The masked out cells are set to null when the
- *            mask exists. (the MASK is taken care of by null values
- *            (if the null file doesn't exist for this map, then the null row
- *            is simulated by assuming that all zero are nulls *** in case
- *            of Rast_get_row() and assuming that all data is valid 
- *            in case of G_get_f/d_raster_row(). In case of deprecated function
+ *    - Step 4:  read or simmulate null value row and zero out cells
+ * corresponding to null value cells. The masked out cells are set to null when
+ * the mask exists. (the MASK is taken care of by null values (if the null file
+ * doesn't exist for this map, then the null row is simulated by assuming that
+ * all zero are nulls *** in case of Rast_get_row() and assuming that all data
+ * is valid in case of G_get_f/d_raster_row(). In case of deprecated function
  *            Rast_get_c_row() all nulls are converted to zeros (so there are
  *            no embedded nulls at all). Also all masked out cells become zeros.
  *
@@ -773,7 +772,7 @@ void Rast_get_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  *
  * Reads a row of raster data and leaves the NULL values intact. (As
  * opposed to the deprecated function Rast_get_c_row() which
- * converts NULL values to zero.) 
+ * converts NULL values to zero.)
  *
  * <b>NOTE.</b> When the raster map is old and null file doesn't
  * exist, it is assumed that all 0-cells are no-data. When map is
@@ -787,7 +786,7 @@ void Rast_get_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
  *
  * \return void
  */
-void Rast_get_c_row(int fd, CELL * buf, int row)
+void Rast_get_c_row(int fd, CELL *buf, int row)
 {
     Rast_get_row(fd, buf, row, CELL_TYPE);
 }
@@ -807,7 +806,7 @@ void Rast_get_c_row(int fd, CELL * buf, int row)
  *
  * \return void
  */
-void Rast_get_f_row(int fd, FCELL * buf, int row)
+void Rast_get_f_row(int fd, FCELL *buf, int row)
 {
     Rast_get_row(fd, buf, row, FCELL_TYPE);
 }
@@ -824,13 +823,13 @@ void Rast_get_f_row(int fd, FCELL * buf, int row)
  *
  * \return void
  */
-void Rast_get_d_row(int fd, DCELL * buf, int row)
+void Rast_get_d_row(int fd, DCELL *buf, int row)
 {
     Rast_get_row(fd, buf, row, DCELL_TYPE);
 }
 
-static int read_null_bits_compressed(int null_fd, unsigned char *flags,
-                                     int row, size_t size, int fd)
+static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
+                                     size_t size, int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     off_t t1 = fcb->null_row_ptr[row];
@@ -839,13 +838,15 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
     unsigned char *compressed_buf;
 
     if (lseek(null_fd, t1, SEEK_SET) < 0)
-        G_fatal_error(_("Error seeking compressed null data for row %d of <%s>"),
-                      row, fcb->name);
+        G_fatal_error(
+            _("Error seeking compressed null data for row %d of <%s>"), row,
+            fcb->name);
 
     if (readamount == size) {
         if (read(null_fd, flags, size) != size) {
-            G_fatal_error(_("Error reading compressed null data for row %d of <%s>"),
-                          row, fcb->name);
+            G_fatal_error(
+                _("Error reading compressed null data for row %d of <%s>"), row,
+                fcb->name);
         }
         return 1;
     }
@@ -854,8 +855,9 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
 
     if (read(null_fd, compressed_buf, readamount) != readamount) {
         G_free(compressed_buf);
-        G_fatal_error(_("Error reading compressed null data for row %d of <%s>"),
-                      row, fcb->name);
+        G_fatal_error(
+            _("Error reading compressed null data for row %d of <%s>"), row,
+            fcb->name);
     }
 
     /* null bits file compressed with LZ4, see lib/gis/compress.h */
@@ -891,7 +893,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
     if (fcb->null_row_ptr)
         return read_null_bits_compressed(null_fd, flags, R, size, fd);
 
-    offset = (off_t) size *R;
+    offset = (off_t)size * R;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0)
         G_fatal_error(_("Error seeking null row %d for <%s>"), R, fcb->name);
@@ -902,7 +904,8 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
     return 1;
 }
 
-#define check_null_bit(flags, bit_num) ((flags)[(bit_num)>>3] & ((unsigned char)0x80>>((bit_num)&7)) ? 1 : 0)
+#define check_null_bit(flags, bit_num) \
+    ((flags)[(bit_num) >> 3] & ((unsigned char)0x80 >> ((bit_num)&7)) ? 1 : 0)
 
 static void get_null_value_row_nomask(int fd, char *flags, int row)
 {
@@ -910,7 +913,8 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
     int j;
 
     if (row > R__.rd_window.rows || row < 0) {
-        G_warning(_("Reading raster map <%s@%s> request for row %d is outside region"),
+        G_warning(_("Reading raster map <%s@%s> request for row %d is outside "
+                    "region"),
                   fcb->name, fcb->mapset, row);
         for (j = 0; j < R__.rd_window.cols; j++)
             flags[j] = 1;
@@ -936,14 +940,14 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 
                 G_free(mask_buf);
             }
-            else {              /* fp map */
+            else { /* fp map */
                 /* if can't read null row, assume  that all data is valid */
                 G_zero(flags, sizeof(char) * R__.rd_window.cols);
                 /* the flags row is ready now */
             }
 
             return;
-        }                       /*if no null file */
+        } /*if no null file */
         else
             fcb->null_cur_row = row;
     }
@@ -975,8 +979,8 @@ static void get_null_value_row_gdal(int fd, char *flags, int row)
 
     for (i = 0; i < R__.rd_window.cols; i++)
         /* note: using == won't work if the null value is NaN */
-        flags[i] = !fcb->col_map[i] ||
-            tmp_buf[i] == fcb->gdal->null_val || tmp_buf[i] != tmp_buf[i];
+        flags[i] = !fcb->col_map[i] || tmp_buf[i] == fcb->gdal->null_val ||
+                   tmp_buf[i] != tmp_buf[i];
 
     G_free(tmp_buf);
 }
@@ -1039,8 +1043,8 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 
     /* this is because without null file the nulls can be only due to 0's
        in data row or mask */
-    if (null_is_zero && !fcb->null_file_exists
-        && (R__.auto_mask <= 0 || !with_mask))
+    if (null_is_zero && !fcb->null_file_exists &&
+        (R__.auto_mask <= 0 || !with_mask))
         return;
 
     null_buf = G_malloc(R__.rd_window.cols);
@@ -1064,7 +1068,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 /*!
    \brief Read or simulate null value row
 
-   Read or simulate null value row and set the cells corresponding 
+   Read or simulate null value row and set the cells corresponding
    to null value to 1. The masked out cells are set to null when the
    mask exists. (the MASK is taken care of by null values
    (if the null file doesn't exist for this map, then the null row

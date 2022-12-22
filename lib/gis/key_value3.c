@@ -34,8 +34,7 @@ void G_write_key_value_file(const char *file, const struct Key_Value *kv)
                       strerror(errno));
 
     if (G_fwrite_key_value(fp, kv) != 0)
-        G_fatal_error(_("Error writing file <%s>: %s"), file,
-                      strerror(errno));
+        G_fatal_error(_("Error writing file <%s>: %s"), file, strerror(errno));
 
     if (fclose(fp) != 0)
         G_fatal_error(_("Error closing output file <%s>: %s"), file,
@@ -65,8 +64,7 @@ struct Key_Value *G_read_key_value_file(const char *file)
 
     kv = G_fread_key_value(fp);
     if (!kv)
-        G_fatal_error(_("Error reading file <%s>: %s"), file,
-                      strerror(errno));
+        G_fatal_error(_("Error reading file <%s>: %s"), file, strerror(errno));
 
     if (fclose(fp) != 0)
         G_fatal_error(_("Error closing input file <%s>: %s"), file,

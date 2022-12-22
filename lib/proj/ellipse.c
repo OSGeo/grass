@@ -1,7 +1,8 @@
 /*!
    \file lib/proj/ellipse.c
 
-   \brief GProj library - Functions for reading datum parameters from the location database
+   \brief GProj library - Functions for reading datum parameters from the
+   location database
 
    \author Paul Kelly <paul-grass stjohnspoint.co.uk>
 
@@ -16,7 +17,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>               /* for sqrt() */
+#include <math.h> /* for sqrt() */
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/gprojects.h>
@@ -33,7 +34,7 @@ static int get_a_e2_rf(const char *, const char *, double *, double *,
  *
  * Dies with diagnostic if there is an error.
  *
- * \param[out] a semi-major axis 
+ * \param[out] a semi-major axis
  * \param[out] e2 first eccentricity squared
  * \param[out] rf reciprocal of the ellipsoid flattening term
  *
@@ -63,15 +64,15 @@ int GPJ_get_ellipsoid_params(double *a, double *e2, double *rf)
  * Dies with diagnostic if there is an error.
  *
  * \param proj_keys proj definition
- * \param[out] a semi-major axis 
+ * \param[out] a semi-major axis
  * \param[out] e2 first eccentricity squared
  * \param[out] rf reciprocal of the ellipsoid flattening term
  *
  * \return 1 on success
  * \return 0 default values used.
  */
-int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
-                              double *a, double *e2, double *rf)
+int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys, double *a,
+                              double *e2, double *rf)
 {
     struct gpj_ellps estruct;
     struct gpj_datum dstruct;
@@ -86,7 +87,6 @@ int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
 
         ellps = G_store(dstruct.ellps);
         GPJ_free_datum(&dstruct);
-
     }
     else
         /* else use ellipsoid defined in PROJ_INFO */
@@ -105,7 +105,7 @@ int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
         return 1;
     }
     else {
-        if (ellps)              /* *ellps = '\0' */
+        if (ellps) /* *ellps = '\0' */
             G_free(ellps);
 
         str3 = G_find_key_value("a", proj_keys);
@@ -145,7 +145,6 @@ int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
     }
     return 1;
 }
-
 
 /*!
  * \brief Looks up ellipsoid in ellipsoid table and returns the a, e2
@@ -240,8 +239,8 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     fd = fopen(file, "r");
 
     if (!fd) {
-        (fatal ? G_fatal_error :
-         G_warning) (_("Unable to open ellipsoid table file <%s>"), file);
+        (fatal ? G_fatal_error : G_warning)(
+            _("Unable to open ellipsoid table file <%s>"), file);
         return NULL;
     }
 
@@ -252,8 +251,8 @@ struct ellps_list *read_ellipsoid_table(int fatal)
         if (*buf == 0 || *buf == '#')
             continue;
 
-        if (sscanf(buf, "%s  \"%1023[^\"]\" %s %s", name, descr, buf1, buf2)
-            != 4) {
+        if (sscanf(buf, "%s  \"%1023[^\"]\" %s %s", name, descr, buf1, buf2) !=
+            4) {
             err++;
             sprintf(buf, " %d", line);
             if (*badlines)
@@ -262,9 +261,8 @@ struct ellps_list *read_ellipsoid_table(int fatal)
             continue;
         }
 
-
-        if (get_a_e2_rf(buf1, buf2, &a, &e2, &rf)
-            || get_a_e2_rf(buf2, buf1, &a, &e2, &rf)) {
+        if (get_a_e2_rf(buf1, buf2, &a, &e2, &rf) ||
+            get_a_e2_rf(buf2, buf1, &a, &e2, &rf)) {
             if (current == NULL)
                 current = outputlist = G_malloc(sizeof(struct ellps_list));
             else
@@ -292,7 +290,10 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     if (!err)
         return outputlist;
 
-    (fatal ? G_fatal_error : G_warning) (n_(("Line%s of ellipsoid table file <%s> is invalid"), ("Lines%s of ellipsoid table file <%s> are invalid"), err), badlines, file);
+    (fatal ? G_fatal_error : G_warning)(
+        n_(("Line%s of ellipsoid table file <%s> is invalid"),
+           ("Lines%s of ellipsoid table file <%s> are invalid"), err),
+        badlines, file);
 
     return outputlist;
 }

@@ -3,11 +3,10 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 /*-
  * driver program for AS 181: Royston's extension of the Shapiro-Wilk
  * W statistic to n=2000
- * needs as181.c as177.c as241.c Cdhc_dcmp.c as66.c 
+ * needs as181.c as177.c as241.c Cdhc_dcmp.c as66.c
  */
 
 double *Cdhc_royston(double *x, int n)

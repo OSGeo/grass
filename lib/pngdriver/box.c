@@ -9,7 +9,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Per Henrik Johansen (original contributor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include <math.h>

@@ -1,10 +1,9 @@
-
 /*****************************************************************************
  *
  * MODULE:       Grass PDE Numerical Library
  * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
+ *                 soerengebbert <at> gmx <dot> de
+ *
  * PURPOSE:      Unit tests for les solving
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -91,7 +90,6 @@ int test_basics_1d(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
@@ -130,7 +128,6 @@ int test_basics_2d(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
@@ -147,8 +144,8 @@ int test_basics_3d(void)
 
         struct RTree_Rect *rect1 = RTreeAllocRect(tree);
 
-        RTreeSetRect3D(rect1, tree, (i - 2), (i + 2), (i - 2), (i + 2),
-                       (i - 2), (i + 2));
+        RTreeSetRect3D(rect1, tree, (i - 2), (i + 2), (i - 2), (i + 2), (i - 2),
+                       (i + 2));
         RTreeInsertRect(rect1, i + 1, tree);
 
         struct RTree_Rect *rect2 = RTreeAllocRect(tree);
@@ -170,7 +167,6 @@ int test_basics_3d(void)
     return sum;
 }
 
-
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
@@ -187,8 +183,8 @@ int test_basics_4d(void)
 
         struct RTree_Rect *rect1 = RTreeAllocRect(tree);
 
-        RTreeSetRect4D(rect1, tree, (i - 2), (i + 2), (i - 2), (i + 2),
-                       (i - 2), (i + 2), (i - 2), (i + 2));
+        RTreeSetRect4D(rect1, tree, (i - 2), (i + 2), (i - 2), (i + 2), (i - 2),
+                       (i + 2), (i - 2), (i + 2));
         RTreeInsertRect(rect1, i + 1, tree);
 
         struct RTree_Rect *rect2 = RTreeAllocRect(tree);

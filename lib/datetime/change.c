@@ -8,20 +8,19 @@
 
 static void make_incr();
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Changes the from/to of the type for dt. 
+ * Changes the from/to of the type for dt.
  * The 'from/to' must be legal
  * values for the mode of dt; (if they are not legal, then the original values
- * are preserved, dt is not changed).  
- * Returns:  
- * 0 OK  
- * -1 invalid 'dt'  
+ * are preserved, dt is not changed).
+ * Returns:
+ * 0 OK
+ * -1 invalid 'dt'
  * -2 invalid 'from/to' <br>
  <ul>
- <li> round =   
+ <li> round =
  * negative implies floor() [decrease magnitude]
  * 0 implies normal rounding, [incr/decr magnitude]
  * positive implies ceil() [increase magnitude]
@@ -52,7 +51,7 @@ static void make_incr();
  *  \return int
  */
 
-int datetime_change_from_to(DateTime * dt, int from, int to, int round)
+int datetime_change_from_to(DateTime *dt, int from, int to, int round)
 {
     DateTime dummy, incr;
     int pos;
@@ -70,7 +69,7 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
 
     /* copy dt->from to local variable, then change it
        in the structure so that increment works correctly for RELATIVE.
-       Otherwise, since increment "reduces" answers, performing carries, 
+       Otherwise, since increment "reduces" answers, performing carries,
        we would carry to invalid units */
 
     dtfrom = dt->from;
@@ -79,7 +78,7 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
     dt->from = from;
 
     /* convert the "lost" lower elements to equiv value for the new 'from'
-     * NOTE: this only affects DATETIME_RELATIVE 
+     * NOTE: this only affects DATETIME_RELATIVE
      *       since absolute will have from==dt->from==YEAR
      */
     for (pos = dtfrom; pos < from; pos++) {
@@ -153,9 +152,9 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
         }
 
         if (round == 0) {
-             /*NEW*/ if (datetime_is_absolute(dt))
+            /*NEW*/ if (datetime_is_absolute(dt))
                 /*NEW*/ ndays = datetime_days_in_year(dt->year, dt->positive);
-             /*NEW*/
+            /*NEW*/
             else
                 /*NEW*/ ndays = 0;
 
@@ -164,13 +163,13 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
 
                 incr.year = dt->year;
                 incr.month = dt->month;
-                 /*NEW*/ incr.day = dt->day + ndays / 2;
+                /*NEW*/ incr.day = dt->day + ndays / 2;
                 incr.hour = dt->hour;
                 incr.minute = dt->minute;
                 incr.second = dt->second;
 
                 datetime_increment(dt, &incr);
-                 /*NEW*/ if (ndays > 0 && pos == DATETIME_DAY)
+                /*NEW*/ if (ndays > 0 && pos == DATETIME_DAY)
                     /*NEW*/ break;
             }
         }
@@ -231,7 +230,7 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
     return 0;
 }
 
-static void make_incr(DateTime * incr, int from, int to, DateTime * dt)
+static void make_incr(DateTime *incr, int from, int to, DateTime *dt)
 {
     datetime_set_type(incr, DATETIME_RELATIVE, from, to, 0);
     if (datetime_is_relative(dt) && datetime_is_negative(dt))

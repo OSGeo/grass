@@ -1,4 +1,3 @@
-
 /*!
    \file lib/gis/token.c
 
@@ -63,7 +62,7 @@ char **G_tokenize(const char *buf, const char *delim)
    char *str = "a,'b,c',d";
 
    char **tokens1, **tokens2;
-   int ntok1, ntok2; 
+   int ntok1, ntok2;
 
    tokens1 = G_tokenize(str, ",");
    ntok1 = G_number_of_tokens(tokens1);
@@ -92,20 +91,12 @@ char **tokenize(const char *buf, const char *delim, const char *inchar)
     char **tokens;
     const char *p;
     char *q;
-    enum
-    {
+    enum {
         S_START,
         S_IN_QUOTE,
         S_AFTER_QUOTE,
     };
-    enum
-    {
-        A_NO_OP,
-        A_ADD_CHAR,
-        A_NEW_FIELD,
-        A_END_RECORD,
-        A_ERROR
-    };
+    enum { A_NO_OP, A_ADD_CHAR, A_NEW_FIELD, A_END_RECORD, A_ERROR };
     int state;
     int quo = inchar ? *inchar : -1;
 
@@ -190,7 +181,8 @@ int G_number_of_tokens(char **tokens)
     int n;
 
     n = 0;
-    for (n = 0; tokens[n] != NULL; n++) ;
+    for (n = 0; tokens[n] != NULL; n++)
+        ;
 
     return n;
 }
@@ -198,7 +190,7 @@ int G_number_of_tokens(char **tokens)
 /*!
    \brief Free memory allocated to tokens.
 
-   <b>Note:</b> <i>G_free_tokens()</i> must be called when finished with 
+   <b>Note:</b> <i>G_free_tokens()</i> must be called when finished with
    tokens to release memory.
 
    \param[out] tokens

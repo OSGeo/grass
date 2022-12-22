@@ -18,7 +18,7 @@
    \brief Move selected primitives
 
    \param Map pointer to Map_info
-   \param BgMap, nbgmaps list of background vector maps used for snapping   
+   \param BgMap, nbgmaps list of background vector maps used for snapping
    \param List list of primitives to be moved
    \param move_x,move_y,move_z direction (move_z used only if map is 3D)
    \param snap enable snapping (see globals.h)
@@ -26,9 +26,9 @@
    \return number of modified primitives
    \return -1 on error
  */
-int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap,
-                     int nbgmaps, struct ilist *List, double move_x,
-                     double move_y, double move_z, int snap, double thresh)
+int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
+                     struct ilist *List, double move_x, double move_y,
+                     double move_z, int snap, double thresh)
 {
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -70,14 +70,14 @@ int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap,
                     int bgi;
 
                     for (bgi = 0; bgi < nbgmaps; bgi++) {
-                        if (Vedit_snap_point
-                            (BgMap[bgi], -1, &x[j], &y[j], &z[j], thresh,
-                             (snap == SNAPVERTEX) ? 1 : 0))
-                            break;      /* snapped, don't continue */
+                        if (Vedit_snap_point(BgMap[bgi], -1, &x[j], &y[j],
+                                             &z[j], thresh,
+                                             (snap == SNAPVERTEX) ? 1 : 0))
+                            break; /* snapped, don't continue */
                     }
                 }
             }
-        }                       /* for each point at line */
+        } /* for each point at line */
 
         newline = Vect_rewrite_line(Map, line, type, Points, Cats);
 

@@ -31,7 +31,7 @@ static int add_id_to_list(int id, const struct RTree_Rect *rect, void *list)
  * Search in an index tree for all data retangles that
  * overlap the argument rectangle.
  *
- * \param t: The RTree 
+ * \param t: The RTree
  * \param r: The argument rectangle
  * \param list: The list to store the ids of overlapping rectangles
  * \return the number of qualifying data rects.

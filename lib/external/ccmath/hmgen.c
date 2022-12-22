@@ -5,9 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-void hmgen(Cpx * h, double *ev, Cpx * u, int n)
+
+void hmgen(Cpx *h, double *ev, Cpx *u, int n)
 {
     Cpx *v, *p;
 
@@ -15,7 +17,7 @@ void hmgen(Cpx * h, double *ev, Cpx * u, int n)
 
     double e;
 
-    v = (Cpx *) calloc(n * n, sizeof(Cpx));
+    v = (Cpx *)calloc(n * n, sizeof(Cpx));
     cmcpy(v, u, n * n);
     hconj(v, n);
     for (i = 0, p = v; i < n; ++i) {

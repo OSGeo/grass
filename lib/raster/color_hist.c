@@ -5,7 +5,7 @@
  *
  * (C) 2007-2009 Glynn Clements and the GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Glynn Clements <glynn@gclements.plus.com>
@@ -99,8 +99,7 @@ void Rast_make_histogram_eq_colors(struct Colors *colors,
    \param max maximum value
  */
 void Rast_make_histogram_log_colors(struct Colors *colors,
-                                    struct Cell_stats *statf, int min,
-                                    int max)
+                                    struct Cell_stats *statf, int min, int max)
 {
     long count, total;
     double lmin, lmax;

@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/table.c
- * 
+ *
  * \brief DBMI Library (client) - table management
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -50,8 +50,8 @@ int db_table_exists(const char *drvname, const char *dbname,
     }
 
     /* The table tabname can be either fully qualified in form table.schema,
-     * or it can be only table name. If the name is fully qualified, compare whole name,
-     * if it is not, compare only table names */
+     * or it can be only table name. If the name is fully qualified, compare
+     * whole name, if it is not, compare only table names */
 
     /* user tables */
     if (db_list_tables(driver, &names, &count, 0) != DB_OK)
@@ -71,7 +71,7 @@ int db_table_exists(const char *drvname, const char *dbname,
     }
     db_free_string_array(names, count);
 
-    if (!found) {               /* system tables */
+    if (!found) { /* system tables */
         if (db_list_tables(driver, &names, &count, 1) != DB_OK)
             return (-1);
 
@@ -102,14 +102,13 @@ int db_table_exists(const char *drvname, const char *dbname,
    \return number of records
    \return -1
  */
-int db_get_table_number_of_rows(dbDriver * driver, dbString * sql)
+int db_get_table_number_of_rows(dbDriver *driver, dbString *sql)
 {
     int nrows;
     dbCursor cursor;
 
     if (db_open_select_cursor(driver, sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
-        G_warning(_("Unable to open select cursor: '%s'"),
-                  db_get_string(sql));
+        G_warning(_("Unable to open select cursor: '%s'"), db_get_string(sql));
         db_close_database_shutdown_driver(driver);
         return -1;
     }

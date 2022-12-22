@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       gis library 
- *              
+ * MODULE:       gis library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,10 +10,11 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/temporal.h>
@@ -25,7 +25,7 @@
  * \param list The pointer to an integer list
  *
  * */
-void tgis_free_map_list(tgisMapList * list)
+void tgis_free_map_list(tgisMapList *list)
 {
     if (list->values) {
         int i;
@@ -44,7 +44,7 @@ void tgis_free_map_list(tgisMapList * list)
 
 /**
  * \brief Return a new integer list.
- * 
+ *
  * G_fatal_error() will be invoked by the
  * allocation function.
  *
@@ -60,13 +60,13 @@ tgisMapList *tgis_new_map_list()
     return list;
 }
 
-/** 
+/**
  * \brief Init a tgisMapList and free allocated memory
- * 
+ *
  * \param list The pointer to a tgisMapList
  *
  * */
-void tgis_init_map_list(tgisMapList * list)
+void tgis_init_map_list(tgisMapList *list)
 {
     if (list->values) {
         int i;
@@ -86,27 +86,27 @@ void tgis_init_map_list(tgisMapList * list)
     list->alloc_values = 0;
 }
 
-/** 
+/**
  * \brief Add a map to tgisMapList
  *
  * This function adds a tgisMap to the list but does not check for duplicates.
  * In case reallocation fails, G_fatal_error() will be invoked by the
  * allocation function.
- * 
+ *
  * The content of the map will not be copied, the pointer
  *to the map will be stored.
  *
  * \param list The tgisMapList pointer
- * \param map A pointer to a tgisMap struct that should be added 
+ * \param map A pointer to a tgisMap struct that should be added
  *
  * */
-void tgis_map_list_add(tgisMapList * list, tgisMap * map)
+void tgis_map_list_add(tgisMapList *list, tgisMap *map)
 {
     if (list->n_values == list->alloc_values) {
         size_t size = (list->n_values + 1000) * sizeof(tgisMap *);
         void *p = G_realloc((void *)list->values, size);
 
-        list->values = (tgisMap **) p;
+        list->values = (tgisMap **)p;
         list->alloc_values = list->n_values + 1000;
     }
 
@@ -114,7 +114,7 @@ void tgis_map_list_add(tgisMapList * list, tgisMap * map)
     list->n_values++;
 }
 
-/** 
+/**
  * \brief Insert map information into tgisMapList
  *
  * This function allocates a tgisMap, fills it with the provided information
@@ -130,7 +130,7 @@ void tgis_map_list_add(tgisMapList * list, tgisMap * map)
  * \param ts A pointer to the timestamp of the map
  *
  * */
-void tgis_map_list_insert(tgisMapList * list, char *name, char *mapset,
+void tgis_map_list_insert(tgisMapList *list, char *name, char *mapset,
                           struct TimeStamp *ts)
 {
     tgisMap *map = G_calloc(1, sizeof(tgisMap));

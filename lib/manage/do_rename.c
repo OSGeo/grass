@@ -56,8 +56,8 @@ int M_do_rename(int n, const char *old, const char *new)
                 renamed = 1;
             }
             else {
-                G_warning(_("Unable to rename vector map <%s> to <%s>"),
-                          old, new);
+                G_warning(_("Unable to rename vector map <%s> to <%s>"), old,
+                          new);
                 result = 1;
             }
         }
@@ -95,7 +95,8 @@ int M_do_rename(int n, const char *old, const char *new)
 
             if (snprintf(colr2, 6 + GMAPSET_MAX, "colr2/%s", G_mapset()) >=
                 6 + GMAPSET_MAX)
-                G_warning(_("String for secondary color table has been truncated"));
+                G_warning(
+                    _("String for secondary color table has been truncated"));
             G_remove(colr2, new);
             switch (G_rename(colr2, old, new)) {
             case -1:

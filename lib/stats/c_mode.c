@@ -2,7 +2,7 @@
 #include <grass/raster.h>
 #include <grass/stats.h>
 
-void c_mode(DCELL * result, DCELL * values, int n, const void *closure)
+void c_mode(DCELL *result, DCELL *values, int n, const void *closure)
 {
     DCELL mode;
     int max;
@@ -35,7 +35,7 @@ void c_mode(DCELL * result, DCELL * values, int n, const void *closure)
         *result = mode;
 }
 
-void w_mode(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_mode(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 {
     DCELL mode;
     DCELL max;

@@ -30,18 +30,16 @@
 #endif
 
 /* TODO: merge these two */
-struct spidxstack
-{
-    off_t pos[MAXCARD];         /* file position of child node, object ID on level 0 */
-    struct RTree_Node sn;       /* stack node */
-    int branch_id;              /* branch no to follow down */
+struct spidxstack {
+    off_t pos[MAXCARD]; /* file position of child node, object ID on level 0 */
+    struct RTree_Node sn; /* stack node */
+    int branch_id;        /* branch no to follow down */
 };
 
-struct spidxpstack
-{
-    off_t pos[MAXCARD];         /* file position of child node, object ID on level 0 */
-    struct RTree_Node *sn;      /* stack node pointer */
-    int branch_id;              /* branch no to follow down */
+struct spidxpstack {
+    off_t pos[MAXCARD]; /* file position of child node, object ID on level 0 */
+    struct RTree_Node *sn; /* stack node pointer */
+    int branch_id;         /* branch no to follow down */
 };
 
 /*!
@@ -56,7 +54,7 @@ struct spidxpstack
 int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
 {
     unsigned char buf[6];
-    long length = 81;           /* header length in bytes */
+    long length = 81; /* header length in bytes */
     struct RTree *t;
     size_t size;
 
@@ -65,7 +63,7 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
 
     /* use ptr->off_t_size = 4 if possible */
     if (sizeof(off_t) > 4) {
-        size = 145;             /* max header size, see below */
+        size = 145; /* max header size, see below */
         size += ptr->Node_spidx->n_nodes * ptr->Node_spidx->nodesize;
         size += ptr->Line_spidx->n_nodes * ptr->Line_spidx->nodesize;
         size += ptr->Area_spidx->n_nodes * ptr->Area_spidx->nodesize;
@@ -96,7 +94,8 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
         else if (ptr->off_t_size == 8)
             length = 117;
         else
-            G_fatal_error(_("Topology file must be written before spatial index file"));
+            G_fatal_error(
+                _("Topology file must be written before spatial index file"));
     }
     else if (ptr->spidx_port.off_t_size == 8) {
         if (ptr->off_t_size == 4)
@@ -104,7 +103,8 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
         else if (ptr->off_t_size == 8)
             length = 145;
         else
-            G_fatal_error(_("Topology file must be written before spatial index file"));
+            G_fatal_error(
+                _("Topology file must be written before spatial index file"));
     }
 
     /* bytes 7 - 10 : header size */
@@ -155,9 +155,8 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 46 - 49 (LFS 53) : root node offset */
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Node_spidx_offset), 1, fp,
-                           ptr->spidx_port.off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Node_spidx_offset), 1, fp,
+                                ptr->spidx_port.off_t_size))
         return (-1);
 
     /* Line spatial index */
@@ -172,9 +171,8 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 62 - 65 (LFS 66 - 73) : root node offset */
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Line_spidx_offset), 1, fp,
-                           ptr->spidx_port.off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Line_spidx_offset), 1, fp,
+                                ptr->spidx_port.off_t_size))
         return (-1);
 
     /* Area spatial index */
@@ -189,9 +187,8 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 78 - 81 (LFS 86 - 93) : root node offset */
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Area_spidx_offset), 1, fp,
-                           ptr->spidx_port.off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Area_spidx_offset), 1, fp,
+                                ptr->spidx_port.off_t_size))
         return (-1);
 
     /* Isle spatial index */
@@ -206,33 +203,29 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 94 - 97 (LFS 106 - 113) : root node offset */
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Isle_spidx_offset), 1, fp,
-                           ptr->spidx_port.off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Isle_spidx_offset), 1, fp,
+                                ptr->spidx_port.off_t_size))
         return (-1);
 
     /* 3D future : */
     /* Face spatial index */
     /* bytes 98 - 101 (LFS 114 - 121) : root node offset */
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Face_spidx_offset), 1, fp,
-                           ptr->spidx_port.off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Face_spidx_offset), 1, fp,
+                                ptr->spidx_port.off_t_size))
         return (-1);
     /* ptr->Face_spidx->rootpos = ptr->Face_spidx_offset; */
 
     /* Volume spatial index */
     /* bytes 102 - 105 (LFS 122 - 129) : root node offset */
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Volume_spidx_offset), 1, fp,
-                           ptr->spidx_port.off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Volume_spidx_offset), 1, fp,
+                                ptr->spidx_port.off_t_size))
         return (-1);
     /* ptr->Volume_spidx->rootpos = ptr->Volume_spidx_offset; */
 
     /* Hole spatial index */
     /* bytes 106 - 109 (LFS 130 - 137) : root node offset */
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Hole_spidx_offset), 1, fp,
-                           ptr->spidx_port.off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Hole_spidx_offset), 1, fp,
+                                ptr->spidx_port.off_t_size))
         return (-1);
     /* ptr->Hole_spidx->rootpos = ptr->Hole_spidx_offset; */
 
@@ -282,28 +275,32 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     byte_order = buf[4];
     ptr->spidx_port.off_t_size = buf[5];
 
-    G_debug(2,
-            "Spidx header: file version %d.%d , supported from GRASS version %d.%d",
-            ptr->version.spidx.major, ptr->version.spidx.minor,
-            ptr->version.spidx.back_major, ptr->version.spidx.back_minor);
+    G_debug(
+        2,
+        "Spidx header: file version %d.%d , supported from GRASS version %d.%d",
+        ptr->version.spidx.major, ptr->version.spidx.minor,
+        ptr->version.spidx.back_major, ptr->version.spidx.back_minor);
 
     G_debug(2, "  byte order %d", byte_order);
 
     /* check version numbers */
     if (ptr->version.spidx.major > GV_SIDX_VER_MAJOR ||
         ptr->version.spidx.minor > GV_SIDX_VER_MINOR) {
-        /* The file was created by GRASS library with higher version than this one */
+        /* The file was created by GRASS library with higher version than this
+         * one */
 
         if (ptr->version.spidx.back_major > GV_SIDX_VER_MAJOR ||
             ptr->version.spidx.back_minor > GV_SIDX_VER_MINOR) {
-            /* This version of GRASS lib is lower than the oldest which can read this format */
+            /* This version of GRASS lib is lower than the oldest which can read
+             * this format */
             G_debug(1, "Spatial index format version %d.%d",
                     ptr->version.spidx.major, ptr->version.spidx.minor);
-            G_fatal_error
-                (_("This version of GRASS (%d.%d) is too old to read this spatial index format."
-                  " Try to rebuild topology or upgrade GRASS to at least version %d."),
-                 GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR,
-                 GRASS_VERSION_MAJOR + 1);
+            G_fatal_error(_("This version of GRASS (%d.%d) is too old to read "
+                            "this spatial index format."
+                            " Try to rebuild topology or upgrade GRASS to at "
+                            "least version %d."),
+                          GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR,
+                          GRASS_VERSION_MAJOR + 1);
             return (-1);
         }
 
@@ -315,7 +312,8 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (ptr->version.spidx.major < GV_SIDX_VER_MAJOR ||
         (ptr->version.spidx.major == GV_SIDX_VER_MAJOR &&
          ptr->version.spidx.minor < GV_SIDX_VER_MINOR)) {
-        /* The file was created by GRASS library with lower version than this one */
+        /* The file was created by GRASS library with lower version than this
+         * one */
         G_fatal_error(_("Spatial index format version %d.%d is not "
                         "supported by this release."
                         " Please rebuild topology."),
@@ -415,9 +413,8 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 46 - 49 (LFS 53) : root node offset */
-    if (0 >=
-        dig__fread_port_O(&(ptr->Node_spidx_offset), 1, fp,
-                          ptr->spidx_port.off_t_size))
+    if (0 >= dig__fread_port_O(&(ptr->Node_spidx_offset), 1, fp,
+                               ptr->spidx_port.off_t_size))
         return (-1);
     t->rootpos = ptr->Node_spidx_offset;
 
@@ -433,9 +430,8 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 62 - 65 (LFS 66 - 73) : root node offset */
-    if (0 >=
-        dig__fread_port_O(&(ptr->Line_spidx_offset), 1, fp,
-                          ptr->spidx_port.off_t_size))
+    if (0 >= dig__fread_port_O(&(ptr->Line_spidx_offset), 1, fp,
+                               ptr->spidx_port.off_t_size))
         return (-1);
     ptr->Line_spidx->rootpos = ptr->Line_spidx_offset;
 
@@ -451,9 +447,8 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 78 - 81 (LFS 86 - 93) : root node offset */
-    if (0 >=
-        dig__fread_port_O(&(ptr->Area_spidx_offset), 1, fp,
-                          ptr->spidx_port.off_t_size))
+    if (0 >= dig__fread_port_O(&(ptr->Area_spidx_offset), 1, fp,
+                               ptr->spidx_port.off_t_size))
         return (-1);
     ptr->Area_spidx->rootpos = ptr->Area_spidx_offset;
 
@@ -469,34 +464,30 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fread_port_I(&(t->rootlevel), 1, fp))
         return (-1);
     /* bytes 94 - 97 (LFS 106 - 113) : root node offset */
-    if (0 >=
-        dig__fread_port_O(&(ptr->Isle_spidx_offset), 1, fp,
-                          ptr->spidx_port.off_t_size))
+    if (0 >= dig__fread_port_O(&(ptr->Isle_spidx_offset), 1, fp,
+                               ptr->spidx_port.off_t_size))
         return (-1);
     ptr->Isle_spidx->rootpos = ptr->Isle_spidx_offset;
 
     /* 3D future : */
     /* Face spatial index */
     /* bytes 98 - 101 (LFS 114 - 121) : root node offset */
-    if (0 >=
-        dig__fread_port_O(&(ptr->Face_spidx_offset), 1, fp,
-                          ptr->spidx_port.off_t_size))
+    if (0 >= dig__fread_port_O(&(ptr->Face_spidx_offset), 1, fp,
+                               ptr->spidx_port.off_t_size))
         return (-1);
     /* ptr->Face_spidx->rootpos = ptr->Face_spidx_offset; */
 
     /* Volume spatial index */
     /* bytes 102 - 105 (LFS 122 - 129) : root node offset */
-    if (0 >=
-        dig__fread_port_O(&(ptr->Volume_spidx_offset), 1, fp,
-                          ptr->spidx_port.off_t_size))
+    if (0 >= dig__fread_port_O(&(ptr->Volume_spidx_offset), 1, fp,
+                               ptr->spidx_port.off_t_size))
         return (-1);
     /* ptr->Volume_spidx->rootpos = ptr->Volume_spidx_offset; */
 
     /* Hole spatial index */
     /* bytes 106 - 109 (LFS 130 - 137) : root node offset */
-    if (0 >=
-        dig__fread_port_O(&(ptr->Hole_spidx_offset), 1, fp,
-                          ptr->spidx_port.off_t_size))
+    if (0 >= dig__fread_port_O(&(ptr->Hole_spidx_offset), 1, fp,
+                               ptr->spidx_port.off_t_size))
         return (-1);
     /* ptr->Hole_spidx->rootpos = ptr->Hole_spidx_offset; */
 
@@ -524,7 +515,7 @@ static int rtree_dump_node(FILE *, struct RTree_Node *n, int);
 
    \return 0
  */
-static int rtree_dump_branch(FILE * fp, struct RTree_Branch *b, int with_z,
+static int rtree_dump_branch(FILE *fp, struct RTree_Branch *b, int with_z,
                              int level)
 {
     const struct RTree_Rect *r;
@@ -552,7 +543,7 @@ static int rtree_dump_branch(FILE * fp, struct RTree_Branch *b, int with_z,
 
    \return 0
  */
-int rtree_dump_node(FILE * fp, struct RTree_Node *n, int with_z)
+int rtree_dump_node(FILE *fp, struct RTree_Node *n, int with_z)
 {
     int i;
 
@@ -593,8 +584,8 @@ static int rtree_dump_node_file(FILE *, off_t, int, struct RTree *);
 
    \return 0
  */
-static int rtree_dump_branch_file(FILE * fp, struct RTree_Branch *b,
-                                  int with_z, int level, struct RTree *t)
+static int rtree_dump_branch_file(FILE *fp, struct RTree_Branch *b, int with_z,
+                                  int level, struct RTree *t)
 {
     const struct RTree_Rect *r;
 
@@ -622,7 +613,7 @@ static int rtree_dump_branch_file(FILE * fp, struct RTree_Branch *b,
 
    \return 0
  */
-int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
+int rtree_dump_node_file(FILE *fp, off_t pos, int with_z, struct RTree *t)
 {
     int i;
     static struct RTree_Node *n = NULL;
@@ -665,21 +656,20 @@ int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
  * do a postorder depth-first non-recursive traversal of the rtree
  * a leaf node is transferred first
  * the root node is transferred last
- * 
+ *
  * this applies to all four scenarios
  * - from intermediate file to sidx file
  * - from sidx file to intermediate file
  * - from memory to sidx file
  * - from sidx file to memory
- * 
- * I could not think of one function that's good for all four scenarios, 
+ *
+ * I could not think of one function that's good for all four scenarios,
  * but that doesn't mean there is none...
- * 
+ *
  * maybe something like V2_read_line_array and Write_line_array
- * in Vlib/read.c and Vlib/write.c, at least for transferring from sidx 
+ * in Vlib/read.c and Vlib/write.c, at least for transferring from sidx
  * and transferrring to sidx?
  */
-
 
 /*!
    \brief Write RTree body from memory to sidx file
@@ -705,12 +695,10 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
     int top = 0;
 
     /* should be foolproof */
-    sidx_nodesize =
-        (int)(2 * PORT_INT +
-              t->nodecard * (off_t_size + NUMSIDES * PORT_DOUBLE));
-    sidx_leafsize =
-        (int)(2 * PORT_INT +
-              t->leafcard * (off_t_size + NUMSIDES * PORT_DOUBLE));
+    sidx_nodesize = (int)(2 * PORT_INT +
+                          t->nodecard * (off_t_size + NUMSIDES * PORT_DOUBLE));
+    sidx_leafsize = (int)(2 * PORT_INT +
+                          t->leafcard * (off_t_size + NUMSIDES * PORT_DOUBLE));
 
     /* stack size of t->rootlevel + 1 would be enough because of
      * depth-first post-order traversal:
@@ -720,7 +708,7 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
     s[top].branch_id = i = 0;
     s[top].sn = t->root;
 
-    /* depth-first postorder traversal 
+    /* depth-first postorder traversal
      * all children of a node are visitied and written out first
      * when a child is written out, its position in file is stored in pos[] for
      * the parent node and written out with the parent node */
@@ -763,11 +751,11 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
             dig__fwrite_port_I(&(s[top].sn->level), 1, fp);
             maxcard = s[top].sn->level ? t->nodecard : t->leafcard;
             for (j = 0; j < maxcard; j++) {
-                dig__fwrite_port_D(s[top].sn->branch[j].rect.boundary,
-                                   NUMSIDES, fp);
+                dig__fwrite_port_D(s[top].sn->branch[j].rect.boundary, NUMSIDES,
+                                   fp);
                 /* leaf node: vector object IDs are stored in child.id */
                 if (s[top].sn->level == 0)
-                    s[top].pos[j] = (off_t) s[top].sn->branch[j].child.id;
+                    s[top].pos[j] = (off_t)s[top].sn->branch[j].child.id;
                 dig__fwrite_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
             }
 
@@ -789,7 +777,6 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
 
     return nextfreepos;
 }
-
 
 /*!
    \brief Write RTree body from temporary file to sidx file
@@ -829,12 +816,10 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
     RTreeFlushBuffer(t);
 
     /* should be foolproof */
-    sidx_nodesize =
-        (int)(2 * PORT_INT +
-              t->nodecard * (off_t_size + NUMSIDES * PORT_DOUBLE));
-    sidx_leafsize =
-        (int)(2 * PORT_INT +
-              t->leafcard * (off_t_size + NUMSIDES * PORT_DOUBLE));
+    sidx_nodesize = (int)(2 * PORT_INT +
+                          t->nodecard * (off_t_size + NUMSIDES * PORT_DOUBLE));
+    sidx_leafsize = (int)(2 * PORT_INT +
+                          t->leafcard * (off_t_size + NUMSIDES * PORT_DOUBLE));
 
     /* stack size of t->rootlevel + 1 would be enough because of
      * depth-first post-order traversal:
@@ -844,7 +829,7 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
     s[top].branch_id = i = 0;
     RTreeReadNode(&s[top].sn, t->rootpos, t);
 
-    /* depth-first postorder traversal 
+    /* depth-first postorder traversal
      * all children of a node are visitied and written out first
      * when a child is written out, its position in file is stored in pos[] for
      * the parent node and written out with the parent node */
@@ -885,11 +870,11 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
             dig__fwrite_port_I(&(s[top].sn.level), 1, fp);
             maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
             for (j = 0; j < maxcard; j++) {
-                dig__fwrite_port_D(s[top].sn.branch[j].rect.boundary,
-                                   NUMSIDES, fp);
+                dig__fwrite_port_D(s[top].sn.branch[j].rect.boundary, NUMSIDES,
+                                   fp);
                 /* leaf node: vector object IDs are stored in child.id */
                 if (s[top].sn.level == 0)
-                    s[top].pos[j] = (off_t) s[top].sn.branch[j].child.id;
+                    s[top].pos[j] = (off_t)s[top].sn.branch[j].child.id;
                 dig__fwrite_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
             }
 
@@ -1000,8 +985,7 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
                     for (j = 0; j < maxcard; j++) {
                         dig__fread_port_D(s[top].sn.branch[j].rect.boundary,
                                           NUMSIDES, fp);
-                        dig__fread_port_O(&(s[top].pos[j]), 1, fp,
-                                          off_t_size);
+                        dig__fread_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
                         /* leaf node
                          * vector object IDs are stored in file as
                          * off_t but always fit into an int, see dig_structs.h
@@ -1125,8 +1109,7 @@ static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
                     for (j = 0; j < maxcard; j++) {
                         dig__fread_port_D(s[top].sn.branch[j].rect.boundary,
                                           NUMSIDES, fp);
-                        dig__fread_port_O(&(s[top].pos[j]), 1, fp,
-                                          off_t_size);
+                        dig__fread_port_O(&(s[top].pos[j]), 1, fp, off_t_size);
                         /* leaf node
                          * vector object IDs are stored in file as
                          * off_t but always fit into an int, see dig_structs.h
@@ -1163,8 +1146,7 @@ static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
              * children of internal nodes do not have an ID, instead
              * they point to the next nodes down the tree */
             if (top >= 0) {
-                s[top].sn.branch[s[top].branch_id - 1].child.pos =
-                    newnode_pos;
+                s[top].sn.branch[s[top].branch_id - 1].child.pos = newnode_pos;
             }
         }
     }
@@ -1199,24 +1181,20 @@ int dig_Wr_spidx(struct gvfile *fp, struct Plus_head *Plus)
     dig_Wr_spidx_head(fp, Plus);
 
     /* Nodes */
-    Plus->Node_spidx_offset =
-        rtree_write_to_sidx(fp, dig_ftell(fp), Plus->Node_spidx,
-                            Plus->spidx_port.off_t_size);
+    Plus->Node_spidx_offset = rtree_write_to_sidx(
+        fp, dig_ftell(fp), Plus->Node_spidx, Plus->spidx_port.off_t_size);
 
     /* Lines */
-    Plus->Line_spidx_offset =
-        rtree_write_to_sidx(fp, dig_ftell(fp), Plus->Line_spidx,
-                            Plus->spidx_port.off_t_size);
+    Plus->Line_spidx_offset = rtree_write_to_sidx(
+        fp, dig_ftell(fp), Plus->Line_spidx, Plus->spidx_port.off_t_size);
 
     /* Areas */
-    Plus->Area_spidx_offset =
-        rtree_write_to_sidx(fp, dig_ftell(fp), Plus->Area_spidx,
-                            Plus->spidx_port.off_t_size);
+    Plus->Area_spidx_offset = rtree_write_to_sidx(
+        fp, dig_ftell(fp), Plus->Area_spidx, Plus->spidx_port.off_t_size);
 
     /* Isles */
-    Plus->Isle_spidx_offset =
-        rtree_write_to_sidx(fp, dig_ftell(fp), Plus->Isle_spidx,
-                            Plus->spidx_port.off_t_size);
+    Plus->Isle_spidx_offset = rtree_write_to_sidx(
+        fp, dig_ftell(fp), Plus->Isle_spidx, Plus->spidx_port.off_t_size);
 
     /* 3D future : */
     /* Faces */
@@ -1224,7 +1202,7 @@ int dig_Wr_spidx(struct gvfile *fp, struct Plus_head *Plus)
     /* Holes */
 
     dig_rewind(fp);
-    dig_Wr_spidx_head(fp, Plus);        /* rewrite with offsets */
+    dig_Wr_spidx_head(fp, Plus); /* rewrite with offsets */
 
     dig_fflush(fp);
     return 0;
@@ -1252,20 +1230,20 @@ int dig_Rd_spidx(struct gvfile *fp, struct Plus_head *Plus)
     dig_set_cur_port(&(Plus->spidx_port));
 
     /* Nodes */
-    rtree_load_from_sidx(fp, Plus->Node_spidx_offset,
-                         Plus->Node_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Node_spidx_offset, Plus->Node_spidx,
+                         Plus->spidx_port.off_t_size);
 
     /* Lines */
-    rtree_load_from_sidx(fp, Plus->Line_spidx_offset,
-                         Plus->Line_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Line_spidx_offset, Plus->Line_spidx,
+                         Plus->spidx_port.off_t_size);
 
     /* Areas */
-    rtree_load_from_sidx(fp, Plus->Area_spidx_offset,
-                         Plus->Area_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Area_spidx_offset, Plus->Area_spidx,
+                         Plus->spidx_port.off_t_size);
 
     /* Isles */
-    rtree_load_from_sidx(fp, Plus->Isle_spidx_offset,
-                         Plus->Isle_spidx, Plus->spidx_port.off_t_size);
+    rtree_load_from_sidx(fp, Plus->Isle_spidx_offset, Plus->Isle_spidx,
+                         Plus->spidx_port.off_t_size);
 
     /* 3D future : */
     /* Faces */
@@ -1283,7 +1261,7 @@ int dig_Rd_spidx(struct gvfile *fp, struct Plus_head *Plus)
 
    \return 0
  */
-int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
+int dig_dump_spidx(FILE *fp, const struct Plus_head *Plus)
 {
     fprintf(fp, "Nodes\n");
     if (Plus->Node_spidx->fd < 0)
@@ -1325,9 +1303,8 @@ int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
 }
 
 /* read node from file */
-static void rtree_read_node(struct NodeBuffer *nb,
-                            off_t nodepos, struct RTree *t,
-                            struct Plus_head *Plus)
+static void rtree_read_node(struct NodeBuffer *nb, off_t nodepos,
+                            struct RTree *t, struct Plus_head *Plus)
 {
     int i, maxcard;
     off_t pos;
@@ -1374,9 +1351,8 @@ static struct RTree_Node *rtree_get_node(off_t nodepos, int level,
     }
     assert(t->nb[level][which].n.level == level);
 
-
     /* make it mru */
-    if (i) {                    /* t->used[level][0] != which */
+    if (i) { /* t->used[level][0] != which */
 #if 0
         t->used[level][i] = t->used[level][0];
         t->used[level][0] = which;
@@ -1392,7 +1368,6 @@ static struct RTree_Node *rtree_get_node(off_t nodepos, int level,
     return &(t->nb[level][which].n);
 }
 
-
 /*!
    \brief Search spatial index file
    Can't use regular RTreeSearch() here because sidx must be read
@@ -1406,8 +1381,8 @@ static struct RTree_Node *rtree_get_node(off_t nodepos, int level,
 
    \return number of qualifying rectangles
  */
-int rtree_search(struct RTree *t, struct RTree_Rect *r,
-                 SearchHitCallback shcb, void *cbarg, struct Plus_head *Plus)
+int rtree_search(struct RTree *t, struct RTree_Rect *r, SearchHitCallback shcb,
+                 void *cbarg, struct Plus_head *Plus)
 {
     int hitCount = 0, found;
 
@@ -1452,7 +1427,7 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r,
 
     while (top >= 0) {
         level = s[top].sn->level;
-        if (level > 0) {        /* this is an internal node in the tree */
+        if (level > 0) { /* this is an internal node in the tree */
             found = 1;
             for (i = s[top].branch_id; i < t->nodecard; i++) {
                 lastpos = s[top].sn->branch[i].child.pos;
@@ -1494,7 +1469,7 @@ int rtree_search(struct RTree *t, struct RTree_Rect *r,
                 top--;
             }
         }
-        else {                  /* this is a leaf node */
+        else { /* this is a leaf node */
             for (i = 0; i < t->leafcard; i++) {
                 if (s[top].sn->branch[i].child.id &&
                     RTreeOverlap(r, &(s[top].sn->branch[i].rect), t)) {

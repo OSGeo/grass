@@ -3,12 +3,12 @@
 
    \brief OGSF library - manipulating views (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -54,10 +54,10 @@ int gsd_get_los(float (*vect)[3], short sx, short sy)
 
     /* OGLXXX XXX I think this is backwards gluProject(XXX); */
     /* WAS: mapw(Vobj, sx, sy, &fx, &fy, &fz, &tx, &ty, &tz); */
-    gluUnProject((GLdouble) sx, (GLdouble) sy, 0.0, modelMatrix,
-                 projMatrix, viewport, &fx, &fy, &fz);
-    gluUnProject((GLdouble) sx, (GLdouble) sy, 1.0, modelMatrix,
-                 projMatrix, viewport, &tx, &ty, &tz);
+    gluUnProject((GLdouble)sx, (GLdouble)sy, 0.0, modelMatrix, projMatrix,
+                 viewport, &fx, &fy, &fz);
+    gluUnProject((GLdouble)sx, (GLdouble)sy, 1.0, modelMatrix, projMatrix,
+                 viewport, &tx, &ty, &tz);
     vect[FROM][X] = fx;
     vect[FROM][Y] = fy;
     vect[FROM][Z] = fz;
@@ -143,7 +143,7 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
    \param gv view (geoview)
    \param dp display (geodisplay)
  */
-void gsd_set_view(geoview * gv, geodisplay * gd)
+void gsd_set_view(geoview *gv, geodisplay *gd)
 {
     double up[3];
     float pos[3];
@@ -213,7 +213,7 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
 
    \param gv view (geoview)
  */
-void gsd_check_focus(geoview * gv)
+void gsd_check_focus(geoview *gv)
 {
     float zmax, zmin;
 
@@ -237,14 +237,13 @@ void gsd_check_focus(geoview * gv)
    \param gv view (geoview)
    \param up up vector
  */
-void gsd_get_zup(geoview * gv, double *up)
+void gsd_get_zup(geoview *gv, double *up)
 {
     float alpha;
     float zup[3], fup[3];
 
     /* neg alpha OK since sin(-x) = -sin(x) */
-    alpha =
-        (2.0 * atan(1.0)) - acos(gv->from_to[FROM][Z] - gv->from_to[TO][Z]);
+    alpha = (2.0 * atan(1.0)) - acos(gv->from_to[FROM][Z] - gv->from_to[TO][Z]);
 
     zup[X] = gv->from_to[TO][X];
     zup[Y] = gv->from_to[TO][Y];
@@ -272,7 +271,7 @@ void gsd_get_zup(geoview * gv, double *up)
 
    \return ?
  */
-int gsd_zup_twist(geoview * gv)
+int gsd_zup_twist(geoview *gv)
 {
     float fr_to[2][4];
     float look_theta, pi;
@@ -323,10 +322,10 @@ int gsd_zup_twist(geoview * gv)
     yupmag = GS_distance(fr_to[FROM], yup);
 
     look_theta = (1800.0 / pi) *
-        acos(((zup[X] - fr_to[FROM][X]) * (yup[X] - fr_to[FROM][X])
-              + (zup[Y] - fr_to[FROM][Y]) * (yup[Y] - fr_to[FROM][Y])
-              + (zup[Z] - fr_to[FROM][Z]) * (yup[Z] - fr_to[FROM][Z])) /
-             (zupmag * yupmag));
+                 acos(((zup[X] - fr_to[FROM][X]) * (yup[X] - fr_to[FROM][X]) +
+                       (zup[Y] - fr_to[FROM][Y]) * (yup[Y] - fr_to[FROM][Y]) +
+                       (zup[Z] - fr_to[FROM][Z]) * (yup[Z] - fr_to[FROM][Z])) /
+                      (zupmag * yupmag));
 
     if (fr_to[TO][X] - fr_to[FROM][X] < 0.0) {
         look_theta = -look_theta;
@@ -412,12 +411,12 @@ void gsd_model2real(Point3 point)
    \param gs surface (geosurf)
    \param point 3d point (Point3)
  */
-void gsd_model2surf(geosurf * gs, Point3 point)
+void gsd_model2surf(geosurf *gs, Point3 point)
 {
     float min, max, sx, sy, sz;
 
     /* so far, only one geographic "region" allowed, so origin of
-       surface is same as origin of model space, but will need to provide 
+       surface is same as origin of model space, but will need to provide
        translations here to make up the difference, so not using gs yet */
 
     if (gs) {
@@ -454,7 +453,6 @@ void gsd_surf2model(Point3 point)
     point[X] = (sx ? point[X] * sx : 0.0);
     point[Y] = (sy ? point[Y] * sy : 0.0);
 
-
     return;
 }
 
@@ -464,7 +462,7 @@ void gsd_surf2model(Point3 point)
    \param gs surface (geosurf)
    \param[in,out] point 3d point (Point3)
  */
-void gsd_surf2real(geosurf * gs, Point3 point)
+void gsd_surf2real(geosurf *gs, Point3 point)
 {
     if (gs) {
         point[X] += gs->ox;
@@ -480,7 +478,7 @@ void gsd_surf2real(geosurf * gs, Point3 point)
    \param gs surface (geosurf)
    \param[in,out] point 3d point (Point3)
  */
-void gsd_real2surf(geosurf * gs, Point3 point)
+void gsd_real2surf(geosurf *gs, Point3 point)
 {
     if (gs) {
         point[X] -= gs->ox;

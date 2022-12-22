@@ -36,7 +36,7 @@
    \return 0 point outside of region
    \return 1 point inside region
  */
-int gs_point_in_region(geosurf * gs, float *pt, float *region)
+int gs_point_in_region(geosurf *gs, float *pt, float *region)
 {
     float top, bottom, left, right;
 
@@ -53,8 +53,7 @@ int gs_point_in_region(geosurf * gs, float *pt, float *region)
         right = region[3];
     }
 
-    return (pt[X] >= left && pt[X] <= right &&
-            pt[Y] >= bottom && pt[Y] <= top);
+    return (pt[X] >= left && pt[X] <= right && pt[Y] >= bottom && pt[Y] <= top);
 }
 
 /*!
@@ -68,14 +67,14 @@ int gs_point_in_region(geosurf * gs, float *pt, float *region)
    \param style object displaying style (highlighted or not)
    \param pt 3d point (Point3)
  */
-void gpd_obj(geosurf * gs, gvstyle * style, Point3 pt)
+void gpd_obj(geosurf *gs, gvstyle *style, Point3 pt)
 {
     float sz, lpt[3];
     float siz[3];
 
     gsd_color_func(style->color);
     sz = GS_global_exag();
-    GS_v3eq(lpt, pt);           /* CHANGING Z OF POINT PASSED, so use copy */
+    GS_v3eq(lpt, pt); /* CHANGING Z OF POINT PASSED, so use copy */
 
     switch (style->symbol) {
     case ST_HISTOGRAM:
@@ -87,7 +86,7 @@ void gpd_obj(geosurf * gs, gvstyle * style, Point3 pt)
             gsd_scale(1.0, 1.0, 1. / sz);
         }
 
-        siz[0] = style->size;   /*TODO: Fix historgam drawing */
+        siz[0] = style->size; /*TODO: Fix historgam drawing */
         siz[1] = style->size;
         siz[2] = style->size;
 
@@ -204,7 +203,7 @@ void gpd_obj(geosurf * gs, gvstyle * style, Point3 pt)
 
    Handling mask checking here
 
-   \todo prevent scaling by 0 
+   \todo prevent scaling by 0
 
    \param gp site (geosite)
    \param gs surface (geosurf)
@@ -213,7 +212,7 @@ void gpd_obj(geosurf * gs, gvstyle * style, Point3 pt)
    \return 0 on failure
    \return 1 on success
  */
-int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
+int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast)
 {
     float site[3], konst;
     int src, check;
@@ -272,16 +271,16 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
                 /* returns 0 if outside or masked */
                 site[Z] += gp->z_trans;
 
-                if (gsd_checkpoint(site, window,
-                                   viewport, modelMatrix, projMatrix))
+                if (gsd_checkpoint(site, window, viewport, modelMatrix,
+                                   projMatrix))
                     continue;
             }
         }
         else if (src == CONST_ATT) {
             if (gs_point_in_region(gs, site, NULL)) {
                 site[Z] = konst + gp->z_trans;
-                if (gsd_checkpoint(site, window,
-                                   viewport, modelMatrix, projMatrix))
+                if (gsd_checkpoint(site, window, viewport, modelMatrix,
+                                   projMatrix))
                     continue;
             }
         }
@@ -300,7 +299,7 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
     return 1;
 }
 
-/*!                                                            
+/*!
    \brief Draw 3D point set
 
    \param gp site (geosite)
@@ -310,7 +309,7 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
    \return 0 on success
    \return 1 on failure
  */
-int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
+int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast)
 {
     float site[3], tz;
     int check;
@@ -356,7 +355,7 @@ int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
         if (gsd_checkpoint(site, window, viewport, modelMatrix, projMatrix))
             continue;
         else
-            /* clip points outside default region? */
+        /* clip points outside default region? */
         {
             if (gpt->highlighted > 0)
                 gpd_obj(NULL, gp->hstyle, site);

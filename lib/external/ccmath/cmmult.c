@@ -5,15 +5,17 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-void cmmult(Cpx * cm, Cpx * a, Cpx * b, int n, int m, int l)
+
+void cmmult(Cpx *cm, Cpx *a, Cpx *b, int n, int m, int l)
 {
     Cpx z, *q0, *p, *q;
 
     int i, j, k;
 
-    q0 = (Cpx *) calloc(m, sizeof(Cpx));
+    q0 = (Cpx *)calloc(m, sizeof(Cpx));
     for (i = 0; i < l; ++i, ++cm) {
         for (k = 0, p = b + i; k < m; p += l)
             q0[k++] = *p;

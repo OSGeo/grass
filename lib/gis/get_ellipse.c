@@ -9,7 +9,7 @@
 
    New 05/2000 by al: for datum shift the f parameter is needed too.
    This all is not a clean design, but it keeps backward-
-   compatibility. 
+   compatibility.
    Looks up ellipsoid in ellipsoid table and returns the
    a, e2 and f parameters for the ellipsoid
 
@@ -25,16 +25,14 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>               /* for sqrt() */
+#include <math.h> /* for sqrt() */
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
 static const char PERMANENT[] = "PERMANENT";
 
-static struct table
-{
-    struct ellipse
-    {
+static struct table {
+    struct ellipse {
         char *name;
         char *descr;
         double a;
@@ -47,8 +45,7 @@ static struct table
 } table;
 
 /* static int get_a_e2 (char *, char *, double *,double *); */
-static int get_a_e2_f(const char *, const char *, double *, double *,
-                      double *);
+static int get_a_e2_f(const char *, const char *, double *, double *, double *);
 static int compare_ellipse_names(const void *, const void *);
 static int get_ellipsoid_parameters(struct Key_Value *, double *, double *);
 
@@ -170,7 +167,6 @@ int G_get_spheroid_by_name(const char *name, double *a, double *e2, double *f)
     return 0;
 }
 
-
 /*!
  * \brief Get description for nth ellipsoid
  *
@@ -263,8 +259,8 @@ int G_read_ellipsoid_table(int fatal)
     fd = fopen(file, "r");
 
     if (fd == NULL) {
-        (fatal ? G_fatal_error :
-         G_warning) (_("Unable to open ellipsoid table file <%s>"), file);
+        (fatal ? G_fatal_error : G_warning)(
+            _("Unable to open ellipsoid table file <%s>"), file);
         G_initialize_done(&table.initialized);
         return 0;
     }
@@ -292,8 +288,7 @@ int G_read_ellipsoid_table(int fatal)
         if (table.count >= table.size) {
             table.size += 60;
             table.ellipses =
-                G_realloc(table.ellipses,
-                          table.size * sizeof(struct ellipse));
+                G_realloc(table.ellipses, table.size * sizeof(struct ellipse));
         }
 
         e = &table.ellipses[table.count];
@@ -324,7 +319,10 @@ int G_read_ellipsoid_table(int fatal)
         return 1;
     }
 
-    (fatal ? G_fatal_error : G_warning) (n_(("Line%s of ellipsoid table file <%s> is invalid"), ("Lines%s of ellipsoid table file <%s> are invalid"), err), badlines, file);
+    (fatal ? G_fatal_error : G_warning)(
+        n_(("Line%s of ellipsoid table file <%s> is invalid"),
+           ("Lines%s of ellipsoid table file <%s> are invalid"), err),
+        badlines, file);
 
     G_initialize_done(&table.initialized);
 

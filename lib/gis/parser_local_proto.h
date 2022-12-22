@@ -6,15 +6,13 @@
 
 #define KEYLENGTH 64
 
-struct Item
-{
+struct Item {
     struct Option *option;
     struct Flag *flag;
     struct Item *next_item;
 };
 
-struct state
-{
+struct state {
     int no_interactive;
     int n_opts;
     int n_flags;
@@ -26,13 +24,14 @@ struct state
     int suppress_required;
     int suppress_overwrite;
 
-    struct GModule module_info; /* general information on the corresponding module */
+    struct GModule
+        module_info; /* general information on the corresponding module */
 
     const char *pgm_name;
     const char *pgm_path;
 
-    struct Flag first_flag;     /* First flag in a linked list      */
-    struct Flag *current_flag;  /* Pointer for traversing list      */
+    struct Flag first_flag;    /* First flag in a linked list      */
+    struct Flag *current_flag; /* Pointer for traversing list      */
 
     struct Option first_option;
     struct Option *current_option;

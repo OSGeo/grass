@@ -104,7 +104,7 @@ char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
    \brief Read a Well Known Binary (WKB) representation of
    a given feature id.
 
-   This function reads a specific feature and converts it into a 
+   This function reads a specific feature and converts it into a
    WKB representation. line_pnts and line_cats structures can be provided
    to store the result of the read operation. That is meaningful in case
    the category values of the feature are needed.
@@ -127,8 +127,8 @@ char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
  */
 unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
                                      struct line_pnts *line_p,
-                                     struct line_cats *line_c,
-                                     int line, size_t *size, int *error)
+                                     struct line_cats *line_c, int line,
+                                     size_t *size, int *error)
 {
     static int init = 0;
 
@@ -202,8 +202,8 @@ unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
    \return pointer to char array
    \return NULL on error
  */
-unsigned char *Vect_line_to_wkb(const struct line_pnts *points,
-                                int type, int with_z, size_t *size)
+unsigned char *Vect_line_to_wkb(const struct line_pnts *points, int type,
+                                int with_z, size_t *size)
 {
     static int init = 0;
 

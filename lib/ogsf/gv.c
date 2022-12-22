@@ -1,7 +1,8 @@
 /*!
    \file lib/ogsf/gv.c
 
-   \brief OGSF library - loading and manipulating vector sets (lower level functions)
+   \brief OGSF library - loading and manipulating vector sets (lower level
+   functions)
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -78,7 +79,8 @@ int gv_num_vects(void)
     geovect *gv;
     int i;
 
-    for (i = 0, gv = Vect_top; gv; gv = gv->next, i++) ;
+    for (i = 0, gv = Vect_top; gv; gv = gv->next, i++)
+        ;
 
     G_debug(5, "gv_num_vects(): num=%d", i);
 
@@ -99,7 +101,8 @@ geovect *gv_get_last_vect(void)
         return NULL;
     }
 
-    for (lv = Vect_top; lv->next; lv = lv->next) ;
+    for (lv = Vect_top; lv->next; lv = lv->next)
+        ;
 
     G_debug(5, "gv_get_last_vect(): id=%d", lv->gvect_id);
 
@@ -116,7 +119,7 @@ geovect *gv_get_new_vect(void)
 {
     geovect *nv, *lv;
 
-    nv = (geovect *) G_malloc(sizeof(geovect));
+    nv = (geovect *)G_malloc(sizeof(geovect));
     if (!nv) {
         /* G_fatal_error */
         return NULL;
@@ -132,11 +135,11 @@ geovect *gv_get_new_vect(void)
         nv->gvect_id = FIRST_VECT_ID;
     }
 
-    nv->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+    nv->style = (gvstyle *)G_malloc(sizeof(gvstyle));
     if (NULL == nv->style)
         return NULL;
     G_zero(nv->style, sizeof(gvstyle));
-    nv->hstyle = (gvstyle *) G_malloc(sizeof(gvstyle));
+    nv->hstyle = (gvstyle *)G_malloc(sizeof(gvstyle));
     if (NULL == nv->hstyle)
         return NULL;
     G_zero(nv->hstyle, sizeof(gvstyle));
@@ -181,7 +184,7 @@ void gv_update_drapesurfs(void)
    \return -1 on error
    \return 0 on success
  */
-int gv_set_defaults(geovect * gv)
+int gv_set_defaults(geovect *gv)
 {
     int i;
 
@@ -220,7 +223,7 @@ int gv_set_defaults(geovect * gv)
    \return -1 on failure
    \return 0 on succcess
  */
-int gv_init_vect(geovect * gv)
+int gv_init_vect(geovect *gv)
 {
     if (!gv) {
         return -1;
@@ -259,7 +262,7 @@ void gv_delete_vect(int id)
    \return -1 on failure
    \return 1 on success
  */
-int gv_free_vect(geovect * fv)
+int gv_free_vect(geovect *fv)
 {
     geovect *gv;
     int found = 0;
@@ -307,7 +310,7 @@ int gv_free_vect(geovect * fv)
 
    \param fv pointer to geovect struct
  */
-void gv_free_vectmem(geovect * fv)
+void gv_free_vectmem(geovect *fv)
 {
     geoline *gln, *tmpln;
 
@@ -358,7 +361,7 @@ void gv_free_vectmem(geovect * fv)
    \param hsurfs array of surfaces (id)
    \param nsurfs number of surfaces
  */
-void gv_set_drapesurfs(geovect * gv, int *hsurfs, int nsurfs)
+void gv_set_drapesurfs(geovect *gv, int *hsurfs, int nsurfs)
 {
     int i;
 

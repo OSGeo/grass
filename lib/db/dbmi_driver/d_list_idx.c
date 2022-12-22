@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_list_idx.c
- * 
+ *
  * \brief DBMI Library (driver) - list indexes
  *
  * (C) 1999-2008 by the GRASS Development Team

@@ -1,6 +1,6 @@
 /*!
  * \file lib/gis/strings.c
- * 
+ *
  * \brief GIS Library - Find raster map
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -48,7 +48,7 @@
  *
  * \param[in,out] name map name
  * \param mapset mapset name or ""
- * 
+ *
  * \return mapset where raster map was found
  * \return NULL if not found
  */
@@ -69,7 +69,7 @@ const char *G_find_raster(char *name, const char *mapset)
  *
  * \param name map name
  * \param mapset mapset name or ""
- * 
+ *
  * \return mapset where raster map was found
  * \return NULL if not found
  */

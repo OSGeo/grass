@@ -47,32 +47,33 @@ int main(int argc, char **argv)
     char *pszGraphOut;
     char *pszNode;
 
-    GNO_BEGIN			/* short   long                default     variable        help */
-	GNO_OPTION("g", "graph", NULL, &pszGraph, "Input Graph file")
-	GNO_OPTION("o", "graphout", NULL, &pszGraphOut, "Output Graph file")
-	GNO_OPTION("n", "node", NULL, &pszNode, "Node Id to cancel")
-	GNO_END if (GNO_PARSE(argc, argv) < 0) {
-	return 1;
+    GNO_BEGIN /* short   long                default     variable        help */
+        GNO_OPTION("g", "graph", NULL, &pszGraph, "Input Graph file")
+        GNO_OPTION("o", "graphout", NULL, &pszGraphOut, "Output Graph file")
+        GNO_OPTION("n", "node", NULL, &pszNode, "Node Id to cancel")
+    GNO_END
+    if (GNO_PARSE(argc, argv) < 0) {
+        return 1;
     }
     /*
      * options parsed
      */
 
     if (pszNode == NULL) {
-	GNO_HELP("delnode usage");
-	return 1;
+        GNO_HELP("delnode usage");
+        return 1;
     }
     nNode = atol(pszNode);
 
     printf("Graph read:\n");
     if ((fd = open(pszGraph, O_RDONLY)) < 0) {
-	perror("open");
-	return 1;
+        perror("open");
+        return 1;
     }
     nret = dglRead(&graph, fd);
     if (nret < 0) {
-	fprintf(stderr, "dglRead error: %s\n", dglStrerror(&graph));
-	return 1;
+        fprintf(stderr, "dglRead error: %s\n", dglStrerror(&graph));
+        return 1;
     }
     close(fd);
     printf("Done.\n");
@@ -80,15 +81,15 @@ int main(int argc, char **argv)
     printf("Graph unflatten:\n");
     nret = dglUnflatten(&graph);
     if (nret < 0) {
-	fprintf(stderr, "dglUnflatten error: %s\n", dglStrerror(&graph));
-	return 1;
+        fprintf(stderr, "dglUnflatten error: %s\n", dglStrerror(&graph));
+        return 1;
     }
     printf("Done.\n");
 
     nret = dglDelNode(&graph, nNode);
     if (nret < 0) {
-	fprintf(stderr, "dglDelNode error: %s\n", dglStrerror(&graph));
-	return 1;
+        fprintf(stderr, "dglDelNode error: %s\n", dglStrerror(&graph));
+        return 1;
     }
 
     printf("Graph flatten:\n");
@@ -96,18 +97,18 @@ int main(int argc, char **argv)
     printf("Done.\n");
 
     if (pszGraphOut) {
-	printf("Graph write: %s\n", pszGraphOut);
-	if ((fd = open(pszGraphOut, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0) {
-	    perror("open");
-	    return 1;
-	}
-	nret = dglWrite(&graph, fd);
-	if (nret < 0) {
-	    fprintf(stderr, "dglWrite error: %s\n", dglStrerror(&graph));
-	    return 1;
-	}
-	close(fd);
-	printf("Done.\n");
+        printf("Graph write: %s\n", pszGraphOut);
+        if ((fd = open(pszGraphOut, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0) {
+            perror("open");
+            return 1;
+        }
+        nret = dglWrite(&graph, fd);
+        if (nret < 0) {
+            fprintf(stderr, "dglWrite error: %s\n", dglStrerror(&graph));
+            return 1;
+        }
+        close(fd);
+        printf("Done.\n");
     }
 
     dglRelease(&graph);

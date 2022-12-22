@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/is.c
  *
@@ -19,9 +18,7 @@
 #include <unistd.h>
 #include <grass/gis.h>
 
-
 static int test_path_file(const char *, const char *);
-
 
 static int test_path_file(const char *path, const char *file)
 {
@@ -40,7 +37,6 @@ static int test_path_file(const char *path, const char *file)
     return 0;
 }
 
-
 /**
 
  * \brief Test if specified directory is GISBASE.
@@ -55,7 +51,6 @@ int G_is_gisbase(const char *path)
     return test_path_file(path, "etc/element_list");
 }
 
-
 /**
  * \brief Test if specified directory is location.
  *
@@ -68,7 +63,6 @@ int G_is_location(const char *path)
 {
     return test_path_file(path, "PERMANENT/DEFAULT_WIND");
 }
-
 
 /**
  * \brief Test if specified directory is mapset.

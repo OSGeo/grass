@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_delete.c
- * 
+ *
  * \brief DBMI Library (driver) - delete record
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -30,7 +30,7 @@ int db_d_delete(void)
 
     /* get the arg(s) */
     DB_RECV_TOKEN(&token);
-    cursor = (dbCursor *) db_find_token(token);
+    cursor = (dbCursor *)db_find_token(token);
     if (cursor == NULL || !db_test_cursor_type_update(cursor)) {
         db_error("** not an update cursor **");
         DB_SEND_FAILURE();

@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_dagostino_d(double *x, int n)
 {
     int i;

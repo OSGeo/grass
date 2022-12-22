@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/select.c
- * 
+ *
  * \brief DBMI Library (client) - select records from table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -32,8 +32,8 @@ static int cmp(const void *pa, const void *pb)
 
 static int cmpcat(const void *pa, const void *pb)
 {
-    dbCatVal *p1 = (dbCatVal *) pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p1 = (dbCatVal *)pa;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (p1->cat < p2->cat)
         return -1;
@@ -45,7 +45,7 @@ static int cmpcat(const void *pa, const void *pb)
 static int cmpcatkey(const void *pa, const void *pb)
 {
     int *p1 = (int *)pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (*p1 < p2->cat)
         return -1;
@@ -56,8 +56,8 @@ static int cmpcatkey(const void *pa, const void *pb)
 
 static int cmpvalueint(const void *pa, const void *pb)
 {
-    dbCatVal *p1 = (dbCatVal *) pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p1 = (dbCatVal *)pa;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (p1->val.i < p2->val.i)
         return -1;
@@ -69,8 +69,8 @@ static int cmpvalueint(const void *pa, const void *pb)
 
 static int cmpvaluedouble(const void *pa, const void *pb)
 {
-    dbCatVal *p1 = (dbCatVal *) pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p1 = (dbCatVal *)pa;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (p1->val.d < p2->val.d)
         return -1;
@@ -100,7 +100,7 @@ static int cmpvaluestring(const void *pa, const void *pb)
    \return number of selected values
    \return -1 on error
  */
-int db_select_int(dbDriver * driver, const char *tab, const char *col,
+int db_select_int(dbDriver *driver, const char *tab, const char *col,
                   const char *where, int **pval)
 {
     int type, more, alloc, count;
@@ -139,7 +139,7 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
         return (-1);
 
     table = db_get_cursor_table(&cursor);
-    column = db_get_table_column(table, 0);     /* first column */
+    column = db_get_table_column(table, 0); /* first column */
     if (column == NULL) {
         return -1;
     }
@@ -201,8 +201,8 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
    \return number of selected values
    \return -1 on error
  */
-int db_select_value(dbDriver * driver, const char *tab, const char *key,
-                    int id, const char *col, dbValue * val)
+int db_select_value(dbDriver *driver, const char *tab, const char *key, int id,
+                    const char *col, dbValue *val)
 {
     int more, count;
     char *buf = NULL;
@@ -232,7 +232,7 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
         return (-1);
 
     table = db_get_cursor_table(&cursor);
-    column = db_get_table_column(table, 0);     /* first column */
+    column = db_get_table_column(table, 0); /* first column */
     value = db_get_column_value(column);
 
     /* fetch the data */
@@ -254,7 +254,8 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
 }
 
 /*!
-   \brief Select pairs key/value to array, values are sorted by key (must be integer)
+   \brief Select pairs key/value to array, values are sorted by key (must be
+   integer)
 
    \param driver DB driver
    \param tab table name
@@ -265,9 +266,9 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
    \return number of selected values
    \return -1 on error
  */
-int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
+int db_select_CatValArray(dbDriver *driver, const char *tab, const char *key,
                           const char *col, const char *where,
-                          dbCatValArray * cvarr)
+                          dbCatValArray *cvarr)
 {
     int i, type, more, nrows, ncols;
     char *buf = NULL;
@@ -343,7 +344,8 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 
         /*
            if ( type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE ) {
-           G_fatal_error ( "Column type not supported by db_select_to_array()" );
+           G_fatal_error ( "Column type not supported by db_select_to_array()"
+           );
            }
          */
     }
@@ -379,7 +381,7 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
             break;
 
         case (DB_C_TYPE_STRING):
-            cvarr->value[i].val.s = (dbString *) malloc(sizeof(dbString));
+            cvarr->value[i].val.s = (dbString *)malloc(sizeof(dbString));
             db_init_string(cvarr->value[i].val.s);
 
             if (!(value->isNull))
@@ -388,12 +390,10 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
             break;
 
         case (DB_C_TYPE_DATETIME):
-            cvarr->value[i].val.t =
-                (dbDateTime *) calloc(1, sizeof(dbDateTime));
+            cvarr->value[i].val.t = (dbDateTime *)calloc(1, sizeof(dbDateTime));
 
             if (!(value->isNull))
-                memcpy(cvarr->value[i].val.t, &(value->t),
-                       sizeof(dbDateTime));
+                memcpy(cvarr->value[i].val.t, &(value->t), sizeof(dbDateTime));
             break;
 
         default:
@@ -414,7 +414,7 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
    \brief Sort key/value array by key
    \param[in,out] arr dbCatValArray (key/value array)
  */
-void db_CatValArray_sort(dbCatValArray * arr)
+void db_CatValArray_sort(dbCatValArray *arr)
 {
     qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal), cmpcat);
 }
@@ -427,12 +427,11 @@ void db_CatValArray_sort(dbCatValArray * arr)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_CatValArray_sort_by_value(dbCatValArray * arr)
+int db_CatValArray_sort_by_value(dbCatValArray *arr)
 {
     switch (arr->ctype) {
     case (DB_C_TYPE_INT):
-        qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
-              cmpvalueint);
+        qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal), cmpvalueint);
         break;
     case (DB_C_TYPE_DOUBLE):
         qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal),
@@ -463,13 +462,12 @@ int db_CatValArray_sort_by_value(dbCatValArray * arr)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_CatValArray_get_value(dbCatValArray * arr, int key, dbCatVal ** cv)
+int db_CatValArray_get_value(dbCatValArray *arr, int key, dbCatVal **cv)
 {
     dbCatVal *catval;
 
-    catval =
-        bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
-                cmpcat);
+    catval = bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
+                     cmpcat);
     if (catval == NULL) {
         return DB_FAILED;
     }
@@ -489,13 +487,12 @@ int db_CatValArray_get_value(dbCatValArray * arr, int key, dbCatVal ** cv)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_CatValArray_get_value_int(dbCatValArray * arr, int key, int *val)
+int db_CatValArray_get_value_int(dbCatValArray *arr, int key, int *val)
 {
     dbCatVal *catval;
 
-    catval =
-        bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
-                cmpcat);
+    catval = bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
+                     cmpcat);
     if (catval == NULL) {
         return DB_FAILED;
     }
@@ -515,15 +512,14 @@ int db_CatValArray_get_value_int(dbCatValArray * arr, int key, int *val)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_CatValArray_get_value_double(dbCatValArray * arr, int key, double *val)
+int db_CatValArray_get_value_double(dbCatValArray *arr, int key, double *val)
 {
     dbCatVal *catval;
 
     G_debug(3, "db_CatValArray_get_value_double(), key = %d", key);
 
-    catval =
-        bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
-                cmpcatkey);
+    catval = bsearch((void *)&key, arr->value, arr->n_values, sizeof(dbCatVal),
+                     cmpcatkey);
     if (catval == NULL) {
         return DB_FAILED;
     }

@@ -1,7 +1,6 @@
 #include <grass/gis.h>
 #include <grass/gmath.h>
 
-
 /*!
  * \fn long G_math_max_pow2 (const long n)
  *
@@ -28,7 +27,6 @@ long G_math_max_pow2(const long n)
 
     return (p2);
 }
-
 
 /*!
  * \fn long G_math_min_pow2 (const long n)

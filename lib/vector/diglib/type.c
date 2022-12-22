@@ -1,4 +1,3 @@
-
 /**
  * \file diglib/type.c
  *

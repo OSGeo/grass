@@ -48,7 +48,7 @@
    \return column sqltype
    \return -1 on error
  */
-int db_column_sqltype(dbDriver * driver, const char *tab, const char *col)
+int db_column_sqltype(dbDriver *driver, const char *tab, const char *col)
 {
     dbTable *table;
     dbString table_name;
@@ -96,7 +96,7 @@ int db_column_sqltype(dbDriver * driver, const char *tab, const char *col)
    \return column Ctype
    \return -1 on error
  */
-int db_column_Ctype(dbDriver * driver, const char *tab, const char *col)
+int db_column_Ctype(dbDriver *driver, const char *tab, const char *col)
 {
     int type;
 
@@ -121,8 +121,8 @@ int db_column_Ctype(dbDriver * driver, const char *tab, const char *col)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_get_column(dbDriver * Driver, const char *tname, const char *cname,
-                  dbColumn ** Column)
+int db_get_column(dbDriver *Driver, const char *tname, const char *cname,
+                  dbColumn **Column)
 {
     int i, ncols, ret;
     dbTable *Table;

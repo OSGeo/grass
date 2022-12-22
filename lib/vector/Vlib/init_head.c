@@ -69,7 +69,7 @@ void Vect__init_head(struct Map_info *Map)
 /*!
    \brief Copy header data from one to another map
 
-   \param from target vector map 
+   \param from target vector map
    \param[out] to destination vector map
 
    \return 0

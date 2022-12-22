@@ -1,4 +1,3 @@
-
 #include "psdriver.h"
 
 void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)

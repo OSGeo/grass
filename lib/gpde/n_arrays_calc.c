@@ -1,26 +1,25 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:     	Higher level array management functions 
-* 		part of the gpde library
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Higher level array management functions
+ *               part of the gpde library
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
 #include <math.h>
 
 #include <grass/N_pde.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-
 
 /* ******************** 2D ARRAY FUNCTIONS *********************** */
 
@@ -32,17 +31,16 @@
  * The array types can be mixed, the values are automatically casted
  * and the null values are set accordingly.
  * <br><br>
- * If you copy a cell array into a dcell array, the values are casted to dcell and 
- * the null values are converted from cell-null to dcell-null
- * <br><br>
- * This function can be called in a parallel region defined with OpenMP.
- * The copy loop is parallelize with a openmp for pragma.
+ * If you copy a cell array into a dcell array, the values are casted to dcell
+ * and the null values are converted from cell-null to dcell-null <br><br> This
+ * function can be called in a parallel region defined with OpenMP. The copy
+ * loop is parallelize with a openmp for pragma.
  *
  * \param source N_array_2d *
  * \param target N_array_2d *
  * \return void
  * */
-void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
+void N_copy_array_2d(N_array_2d *source, N_array_2d *target)
 {
     int i;
     int null = 0;
@@ -50,15 +48,12 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
 #pragma omp single
     {
         if (source->cols_intern != target->cols_intern)
-            G_fatal_error
-                ("N_copy_array_2d: the arrays are not of equal size");
+            G_fatal_error("N_copy_array_2d: the arrays are not of equal size");
 
         if (source->rows_intern != target->rows_intern)
-            G_fatal_error
-                ("N_copy_array_2d: the arrays are not of equal size");
+            G_fatal_error("N_copy_array_2d: the arrays are not of equal size");
 
-        G_debug(3,
-                "N_copy_array_2d: copy source array to target array size %i",
+        G_debug(3, "N_copy_array_2d: copy source array to target array size %i",
                 source->cols_intern * source->rows_intern);
     }
 
@@ -74,19 +69,16 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
             }
             if (target->type == FCELL_TYPE) {
                 if (null)
-                    Rast_set_f_null_value((void *)&(target->fcell_array[i]),
-                                          1);
+                    Rast_set_f_null_value((void *)&(target->fcell_array[i]), 1);
                 else
-                    target->fcell_array[i] = (FCELL) source->cell_array[i];
+                    target->fcell_array[i] = (FCELL)source->cell_array[i];
             }
             if (target->type == DCELL_TYPE) {
                 if (null)
-                    Rast_set_d_null_value((void *)&(target->dcell_array[i]),
-                                          1);
+                    Rast_set_d_null_value((void *)&(target->dcell_array[i]), 1);
                 else
-                    target->dcell_array[i] = (DCELL) source->cell_array[i];
+                    target->dcell_array[i] = (DCELL)source->cell_array[i];
             }
-
         }
         if (source->type == FCELL_TYPE) {
             if (Rast_is_f_null_value((void *)&source->fcell_array[i]))
@@ -94,20 +86,18 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
 
             if (target->type == CELL_TYPE) {
                 if (null)
-                    Rast_set_c_null_value((void *)&(target->cell_array[i]),
-                                          1);
+                    Rast_set_c_null_value((void *)&(target->cell_array[i]), 1);
                 else
-                    target->cell_array[i] = (CELL) source->fcell_array[i];
+                    target->cell_array[i] = (CELL)source->fcell_array[i];
             }
             if (target->type == FCELL_TYPE) {
                 target->fcell_array[i] = source->fcell_array[i];
             }
             if (target->type == DCELL_TYPE) {
                 if (null)
-                    Rast_set_d_null_value((void *)&(target->dcell_array[i]),
-                                          1);
+                    Rast_set_d_null_value((void *)&(target->dcell_array[i]), 1);
                 else
-                    target->dcell_array[i] = (DCELL) source->fcell_array[i];
+                    target->dcell_array[i] = (DCELL)source->fcell_array[i];
             }
         }
         if (source->type == DCELL_TYPE) {
@@ -116,17 +106,15 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
 
             if (target->type == CELL_TYPE) {
                 if (null)
-                    Rast_set_c_null_value((void *)&(target->cell_array[i]),
-                                          1);
+                    Rast_set_c_null_value((void *)&(target->cell_array[i]), 1);
                 else
-                    target->cell_array[i] = (CELL) source->dcell_array[i];
+                    target->cell_array[i] = (CELL)source->dcell_array[i];
             }
             if (target->type == FCELL_TYPE) {
                 if (null)
-                    Rast_set_f_null_value((void *)&(target->fcell_array[i]),
-                                          1);
+                    Rast_set_f_null_value((void *)&(target->fcell_array[i]), 1);
                 else
-                    target->fcell_array[i] = (FCELL) source->dcell_array[i];
+                    target->fcell_array[i] = (FCELL)source->dcell_array[i];
             }
             if (target->type == DCELL_TYPE) {
                 target->dcell_array[i] = source->dcell_array[i];
@@ -151,7 +139,7 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
  * \param type the type of the norm -> N_MAXIMUM_NORM, N_EUKLID_NORM
  * \return double the calculated norm
  * */
-double N_norm_array_2d(N_array_2d * a, N_array_2d * b, int type)
+double N_norm_array_2d(N_array_2d *a, N_array_2d *b, int type)
 {
     int i = 0;
     double norm = 0.0, tmp = 0.0;
@@ -209,9 +197,9 @@ double N_norm_array_2d(N_array_2d * a, N_array_2d * b, int type)
 }
 
 /*!
- * \brief Calculate basic statistics of the N_array_2d struct 
+ * \brief Calculate basic statistics of the N_array_2d struct
  *
- * Calculates the minimum, maximum, sum and the number of 
+ * Calculates the minimum, maximum, sum and the number of
  * non null values. The array offset can be included in the calculation.
  *
  * \param a N_array_2d * - input array
@@ -219,11 +207,11 @@ double N_norm_array_2d(N_array_2d * a, N_array_2d * b, int type)
  * \param max double* - variable to store the computed maximum
  * \param sum double* - variable to store the computed sum
  * \param nonull int* - variable to store the number of non null values
- * \param withoffset - if 1 include offset values in statistic calculation, 0 otherwise 
- * \return void
+ * \param withoffset - if 1 include offset values in statistic calculation, 0
+ * otherwise \return void
  * */
-void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
-                           double *sum, int *nonull, int withoffset)
+void N_calc_array_2d_stats(N_array_2d *a, double *min, double *max, double *sum,
+                           int *nonull, int withoffset)
 {
     int i, j;
     double val;
@@ -233,10 +221,8 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
 
     if (withoffset == 1) {
 
-        *min =
-            (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
-        *max =
-            (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
+        *min = (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
+        *max = (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
 
         for (j = 0 - a->offset; j < a->rows + a->offset; j++) {
             for (i = 0 - a->offset; i < a->cols + a->offset; i++) {
@@ -257,7 +243,6 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
         *min = (double)N_get_array_2d_d_value(a, 0, 0);
         *max = (double)N_get_array_2d_d_value(a, 0, 0);
 
-
         for (j = 0; j < a->rows; j++) {
             for (i = 0; i < a->cols; i++) {
                 if (!N_is_array_2d_value_null(a, i, j)) {
@@ -274,22 +259,22 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
     }
 
     G_debug(3,
-            "N_calc_array_2d_stats: compute array stats, min %g, max %g, sum %g, nonull %i",
+            "N_calc_array_2d_stats: compute array stats, min %g, max %g, sum "
+            "%g, nonull %i",
             *min, *max, *sum, *nonull);
     return;
 }
 
-
 /*!
- * \brief Perform calculations with two input arrays, 
+ * \brief Perform calculations with two input arrays,
  * the result is written to a third array.
  *
  * All arrays must have equal sizes and offsets.
  * The complete data array inclusively offsets is used for calucaltions.
- * Only non-null values are computed. If one array value is null, 
+ * Only non-null values are computed. If one array value is null,
  * the result array value will be null too.
  * <br><br>
- * If a division with zero is detected, the resulting arrays 
+ * If a division with zero is detected, the resulting arrays
  * value will set to null and not to NaN.
  * <br><br>
  * The result array is optional, if the result arrays points to NULL,
@@ -311,12 +296,12 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
  * \param type  - the type of calculation
  * \return N_array_2d * - the pointer to the result array
  * */
-N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b,
-                            N_array_2d * result, int type)
+N_array_2d *N_math_array_2d(N_array_2d *a, N_array_2d *b, N_array_2d *result,
+                            int type)
 {
     N_array_2d *c;
     int i, j, setnull = 0;
-    double va = 0.0, vb = 0.0, vc = 0.0;        /*variables used for calculation */
+    double va = 0.0, vb = 0.0, vc = 0.0; /*variables used for calculation */
 
     /*Set the pointer */
     c = result;
@@ -325,48 +310,42 @@ N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b,
     {
         /*Check the array sizes */
         if (a->cols_intern != b->cols_intern)
-            G_fatal_error
-                ("N_math_array_2d: the arrays are not of equal size");
+            G_fatal_error("N_math_array_2d: the arrays are not of equal size");
         if (a->rows_intern != b->rows_intern)
-            G_fatal_error
-                ("N_math_array_2d: the arrays are not of equal size");
+            G_fatal_error("N_math_array_2d: the arrays are not of equal size");
         if (a->offset != b->offset)
-            G_fatal_error
-                ("N_math_array_2d: the arrays have different offsets");
+            G_fatal_error("N_math_array_2d: the arrays have different offsets");
 
         G_debug(3, "N_math_array_2d: mathematical calculations, size: %i",
                 a->cols_intern * a->rows_intern);
 
-        /*if the result array is null, allocate a new one, use the 
+        /*if the result array is null, allocate a new one, use the
          * largest data type of the input arrays*/
         if (c == NULL) {
             if (a->type == DCELL_TYPE || b->type == DCELL_TYPE) {
                 c = N_alloc_array_2d(a->cols, a->rows, a->offset, DCELL_TYPE);
-                G_debug(3,
-                        "N_math_array_2d: array of type DCELL_TYPE created");
+                G_debug(3, "N_math_array_2d: array of type DCELL_TYPE created");
             }
             else if (a->type == FCELL_TYPE || b->type == FCELL_TYPE) {
                 c = N_alloc_array_2d(a->cols, a->rows, a->offset, FCELL_TYPE);
-                G_debug(3,
-                        "N_math_array_2d: array of type FCELL_TYPE created");
+                G_debug(3, "N_math_array_2d: array of type FCELL_TYPE created");
             }
             else {
                 c = N_alloc_array_2d(a->cols, a->rows, a->offset, CELL_TYPE);
-                G_debug(3,
-                        "N_math_array_2d: array of type CELL_TYPE created");
+                G_debug(3, "N_math_array_2d: array of type CELL_TYPE created");
             }
         }
         else {
             /*Check the array sizes */
             if (a->cols_intern != c->cols_intern)
-                G_fatal_error
-                    ("N_math_array_2d: the arrays are not of equal size");
+                G_fatal_error(
+                    "N_math_array_2d: the arrays are not of equal size");
             if (a->rows_intern != c->rows_intern)
-                G_fatal_error
-                    ("N_math_array_2d: the arrays are not of equal size");
+                G_fatal_error(
+                    "N_math_array_2d: the arrays are not of equal size");
             if (a->offset != c->offset)
-                G_fatal_error
-                    ("N_math_array_2d: the arrays have different offsets");
+                G_fatal_error(
+                    "N_math_array_2d: the arrays have different offsets");
         }
     }
 
@@ -403,21 +382,20 @@ N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b,
                     if (setnull)
                         N_put_array_2d_value_null(c, i, j);
                     else
-                        N_put_array_2d_c_value(c, i, j, (CELL) vc);
+                        N_put_array_2d_c_value(c, i, j, (CELL)vc);
                 }
                 if (c->type == FCELL_TYPE) {
                     if (setnull)
                         N_put_array_2d_value_null(c, i, j);
                     else
-                        N_put_array_2d_f_value(c, i, j, (FCELL) vc);
+                        N_put_array_2d_f_value(c, i, j, (FCELL)vc);
                 }
                 if (c->type == DCELL_TYPE) {
                     if (setnull)
                         N_put_array_2d_value_null(c, i, j);
                     else
-                        N_put_array_2d_d_value(c, i, j, (DCELL) vc);
+                        N_put_array_2d_d_value(c, i, j, (DCELL)vc);
                 }
-
             }
             else {
                 N_put_array_2d_value_null(c, i, j);
@@ -437,7 +415,7 @@ N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b,
  * \param a N_array_2d *
  * \return int - number of replaced values
  * */
-int N_convert_array_2d_null_to_zero(N_array_2d * a)
+int N_convert_array_2d_null_to_zero(N_array_2d *a)
 {
     int i = 0, count = 0;
 
@@ -460,7 +438,6 @@ int N_convert_array_2d_null_to_zero(N_array_2d * a)
             }
         }
 
-
     if (a->type == DCELL_TYPE)
         for (i = 0; i < a->cols_intern * a->rows_intern; i++) {
             if (Rast_is_d_null_value((void *)&(a->dcell_array[i]))) {
@@ -469,18 +446,20 @@ int N_convert_array_2d_null_to_zero(N_array_2d * a)
             }
         }
 
-
     if (a->type == CELL_TYPE)
         G_debug(2,
-                "N_convert_array_2d_null_to_zero: %i values of type CELL_TYPE are converted",
+                "N_convert_array_2d_null_to_zero: %i values of type CELL_TYPE "
+                "are converted",
                 count);
     if (a->type == FCELL_TYPE)
         G_debug(2,
-                "N_convert_array_2d_null_to_zero: %i valuess of type FCELL_TYPE are converted",
+                "N_convert_array_2d_null_to_zero: %i valuess of type "
+                "FCELL_TYPE are converted",
                 count);
     if (a->type == DCELL_TYPE)
         G_debug(2,
-                "N_convert_array_2d_null_to_zero: %i valuess of type DCELL_TYPE are converted",
+                "N_convert_array_2d_null_to_zero: %i valuess of type "
+                "DCELL_TYPE are converted",
                 count);
 
     return count;
@@ -496,14 +475,14 @@ int N_convert_array_2d_null_to_zero(N_array_2d * a)
  * The array data types can be mixed, the values are automatically casted
  * and the null values are set accordingly.
  *
- * If you copy a float array to a double array, the values are casted to DCELL and 
- * the null values are converted from FCELL-null to DCELL-null
+ * If you copy a float array to a double array, the values are casted to DCELL
+ * and the null values are converted from FCELL-null to DCELL-null
  *
  * \param source N_array_3d *
  * \param target N_array_3d *
  * \return void
  * */
-void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
+void N_copy_array_3d(N_array_3d *source, N_array_3d *target)
 {
     int i;
     int null;
@@ -517,19 +496,16 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
     if (source->depths_intern != target->depths_intern)
         G_fatal_error("N_copy_array_3d: the arrays are not of equal size");
 
-
     G_debug(3, "N_copy_array_3d: copy source array to target array size %i",
-            source->cols_intern * source->rows_intern *
-            source->depths_intern);
+            source->cols_intern * source->rows_intern * source->depths_intern);
 
     for (i = 0;
-         i <
-         source->cols_intern * source->rows_intern * source->depths_intern;
+         i < source->cols_intern * source->rows_intern * source->depths_intern;
          i++) {
         null = 0;
         if (source->type == FCELL_TYPE) {
-            if (Rast3d_is_null_value_num
-                ((void *)&(source->fcell_array[i]), FCELL_TYPE))
+            if (Rast3d_is_null_value_num((void *)&(source->fcell_array[i]),
+                                         FCELL_TYPE))
                 null = 1;
 
             if (target->type == FCELL_TYPE) {
@@ -537,22 +513,21 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
             }
             if (target->type == DCELL_TYPE) {
                 if (null)
-                    Rast3d_set_null_value((void *)&(target->dcell_array[i]),
-                                          1, DCELL_TYPE);
+                    Rast3d_set_null_value((void *)&(target->dcell_array[i]), 1,
+                                          DCELL_TYPE);
                 else
                     target->dcell_array[i] = (double)source->fcell_array[i];
             }
-
         }
         if (source->type == DCELL_TYPE) {
-            if (Rast3d_is_null_value_num
-                ((void *)&(source->dcell_array[i]), DCELL_TYPE))
+            if (Rast3d_is_null_value_num((void *)&(source->dcell_array[i]),
+                                         DCELL_TYPE))
                 null = 1;
 
             if (target->type == FCELL_TYPE) {
                 if (null)
-                    Rast3d_set_null_value((void *)&(target->fcell_array[i]),
-                                          1, FCELL_TYPE);
+                    Rast3d_set_null_value((void *)&(target->fcell_array[i]), 1,
+                                          FCELL_TYPE);
                 else
                     target->fcell_array[i] = (float)source->dcell_array[i];
             }
@@ -564,7 +539,6 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
 
     return;
 }
-
 
 /*!
  * \brief Calculate the norm of the two input arrays
@@ -579,7 +553,7 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
  * \param type the type of the norm -> N_MAXIMUM_NORM, N_EUKLID_NORM
  * \return double the calculated norm
  * */
-double N_norm_array_3d(N_array_3d * a, N_array_3d * b, int type)
+double N_norm_array_3d(N_array_3d *a, N_array_3d *b, int type)
 {
     int i = 0;
     double norm = 0.0, tmp = 0.0;
@@ -602,23 +576,23 @@ double N_norm_array_3d(N_array_3d * a, N_array_3d * b, int type)
         v2 = 0.0;
 
         if (a->type == FCELL_TYPE) {
-            if (!Rast3d_is_null_value_num
-                ((void *)&(a->fcell_array[i]), FCELL_TYPE))
+            if (!Rast3d_is_null_value_num((void *)&(a->fcell_array[i]),
+                                          FCELL_TYPE))
                 v1 = (double)a->fcell_array[i];
         }
         if (a->type == DCELL_TYPE) {
-            if (!Rast3d_is_null_value_num
-                ((void *)&(a->dcell_array[i]), DCELL_TYPE))
+            if (!Rast3d_is_null_value_num((void *)&(a->dcell_array[i]),
+                                          DCELL_TYPE))
                 v1 = (double)a->dcell_array[i];
         }
         if (b->type == FCELL_TYPE) {
-            if (!Rast3d_is_null_value_num
-                ((void *)&(b->fcell_array[i]), FCELL_TYPE))
+            if (!Rast3d_is_null_value_num((void *)&(b->fcell_array[i]),
+                                          FCELL_TYPE))
                 v2 = (double)b->fcell_array[i];
         }
         if (b->type == DCELL_TYPE) {
-            if (!Rast3d_is_null_value_num
-                ((void *)&(b->dcell_array[i]), DCELL_TYPE))
+            if (!Rast3d_is_null_value_num((void *)&(b->dcell_array[i]),
+                                          DCELL_TYPE))
                 v2 = (double)b->dcell_array[i];
         }
 
@@ -638,19 +612,20 @@ double N_norm_array_3d(N_array_3d * a, N_array_3d * b, int type)
 /*!
  * \brief Calculate basic statistics of the N_array_3d struct
  *
- * Calculates the minimum, maximum, sum and the number of 
- * non null values. The array offset can be included in the statistical calculation.
+ * Calculates the minimum, maximum, sum and the number of
+ * non null values. The array offset can be included in the statistical
+ * calculation.
  *
  * \param a N_array_3d * - input array
  * \param min double* - variable to store the computed minimum
  * \param max double* - variable to store the computed maximum
  * \param sum double* - variable to store the computed sum
  * \param nonull int* - variable to store the number of non null values
- * \param withoffset - if 1 include offset values in statistic calculation, 0 otherwise 
- * \return void
+ * \param withoffset - if 1 include offset values in statistic calculation, 0
+ * otherwise \return void
  * */
-void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
-                           double *sum, int *nonull, int withoffset)
+void N_calc_array_3d_stats(N_array_3d *a, double *min, double *max, double *sum,
+                           int *nonull, int withoffset)
 {
     int i, j, k;
     double val;
@@ -660,12 +635,10 @@ void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
 
     if (withoffset == 1) {
 
-        *min =
-            (double)N_get_array_3d_d_value(a, 0 - a->offset, 0 - a->offset,
-                                           0 - a->offset);
-        *max =
-            (double)N_get_array_3d_d_value(a, 0 - a->offset, 0 - a->offset,
-                                           0 - a->offset);
+        *min = (double)N_get_array_3d_d_value(a, 0 - a->offset, 0 - a->offset,
+                                              0 - a->offset);
+        *max = (double)N_get_array_3d_d_value(a, 0 - a->offset, 0 - a->offset,
+                                              0 - a->offset);
 
         for (k = 0 - a->offset; k < a->depths + a->offset; k++) {
             for (j = 0 - a->offset; j < a->rows + a->offset; j++) {
@@ -706,23 +679,24 @@ void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
     }
 
     G_debug(3,
-            "N_calc_array_3d_stats: compute array stats, min %g, max %g, sum %g, nonull %i",
+            "N_calc_array_3d_stats: compute array stats, min %g, max %g, sum "
+            "%g, nonull %i",
             *min, *max, *sum, *nonull);
 
     return;
 }
 
 /*!
- * \brief Perform calculations with two input arrays, 
+ * \brief Perform calculations with two input arrays,
  * the result is written to a third array.
  *
  * All arrays must have equal sizes and offsets.
  * The complete data array inclusively offsets is used for calucaltions.
- * Only non-null values are used. If one array value is null, 
+ * Only non-null values are used. If one array value is null,
  * the result array value will be null too.
  * <br><br>
  *
- * If a division with zero is detected, the resulting arrays 
+ * If a division with zero is detected, the resulting arrays
  * value will set to null and not to NaN.
  * <br><br>
  *
@@ -746,12 +720,12 @@ void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
  * \param type  - the type of calculation
  * \return N_array_3d * - the pointer to the result array
  * */
-N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b,
-                            N_array_3d * result, int type)
+N_array_3d *N_math_array_3d(N_array_3d *a, N_array_3d *b, N_array_3d *result,
+                            int type)
 {
     N_array_3d *c;
     int i, j, k, setnull = 0;
-    double va = 0.0, vb = 0.0, vc = 0.0;        /*variables used for calculation */
+    double va = 0.0, vb = 0.0, vc = 0.0; /*variables used for calculation */
 
     /*Set the pointer */
     c = result;
@@ -769,7 +743,7 @@ N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b,
     G_debug(3, "N_math_array_3d: mathematical calculations, size: %i",
             a->cols_intern * a->rows_intern * a->depths_intern);
 
-    /*if the result array is null, allocate a new one, use the 
+    /*if the result array is null, allocate a new one, use the
      * largest data type of the input arrays*/
     if (c == NULL) {
         if (a->type == DCELL_TYPE || b->type == DCELL_TYPE) {
@@ -786,17 +760,13 @@ N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b,
     else {
         /*Check the array sizes */
         if (a->cols_intern != c->cols_intern)
-            G_fatal_error
-                ("N_math_array_3d: the arrays are not of equal size");
+            G_fatal_error("N_math_array_3d: the arrays are not of equal size");
         if (a->rows_intern != c->rows_intern)
-            G_fatal_error
-                ("N_math_array_3d: the arrays are not of equal size");
+            G_fatal_error("N_math_array_3d: the arrays are not of equal size");
         if (a->depths_intern != c->depths_intern)
-            G_fatal_error
-                ("N_math_array_3d: the arrays are not of equal size");
+            G_fatal_error("N_math_array_3d: the arrays are not of equal size");
         if (a->offset != c->offset)
-            G_fatal_error
-                ("N_math_array_3d: the arrays have different offsets");
+            G_fatal_error("N_math_array_3d: the arrays have different offsets");
     }
 
     for (k = 0 - a->offset; k < a->depths + a->offset; k++) {
@@ -859,7 +829,7 @@ N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b,
  * \param a N_array_3d *
  * \return int - number of replaced null values
  * */
-int N_convert_array_3d_null_to_zero(N_array_3d * a)
+int N_convert_array_3d_null_to_zero(N_array_3d *a)
 {
     int i = 0, count = 0;
 
@@ -869,8 +839,8 @@ int N_convert_array_3d_null_to_zero(N_array_3d * a)
     if (a->type == FCELL_TYPE)
         for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern;
              i++) {
-            if (Rast3d_is_null_value_num
-                ((void *)&(a->fcell_array[i]), FCELL_TYPE)) {
+            if (Rast3d_is_null_value_num((void *)&(a->fcell_array[i]),
+                                         FCELL_TYPE)) {
                 a->fcell_array[i] = 0.0;
                 count++;
             }
@@ -879,22 +849,23 @@ int N_convert_array_3d_null_to_zero(N_array_3d * a)
     if (a->type == DCELL_TYPE)
         for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern;
              i++) {
-            if (Rast3d_is_null_value_num
-                ((void *)&(a->dcell_array[i]), DCELL_TYPE)) {
+            if (Rast3d_is_null_value_num((void *)&(a->dcell_array[i]),
+                                         DCELL_TYPE)) {
                 a->dcell_array[i] = 0.0;
                 count++;
             }
         }
 
-
     if (a->type == FCELL_TYPE)
         G_debug(3,
-                "N_convert_array_3d_null_to_zero: %i values of type FCELL_TYPE are converted",
+                "N_convert_array_3d_null_to_zero: %i values of type FCELL_TYPE "
+                "are converted",
                 count);
 
     if (a->type == DCELL_TYPE)
         G_debug(3,
-                "N_convert_array_3d_null_to_zero: %i values of type DCELL_TYPE are converted",
+                "N_convert_array_3d_null_to_zero: %i values of type DCELL_TYPE "
+                "are converted",
                 count);
 
     return count;

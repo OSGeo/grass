@@ -5,9 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-int csolv(Cpx * a, Cpx * b, int n)
+
+int csolv(Cpx *a, Cpx *b, int n)
 {
     int i, j, k, lc;
 
@@ -17,7 +19,7 @@ int csolv(Cpx * a, Cpx * b, int n)
 
     double s, t, tq = 0., zr = 1.e-15;
 
-    q0 = (Cpx *) calloc(n, sizeof(Cpx));
+    q0 = (Cpx *)calloc(n, sizeof(Cpx));
     pa = a;
     pd = a;
     for (j = 0; j < n; ++j, ++pa, pd += n + 1) {

@@ -9,7 +9,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include <math.h>
@@ -91,10 +91,12 @@ void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
     dst_w = dst_r - dst_l;
     dst_h = dst_b - dst_t;
 
-    G_debug(1,
-            "Cairo_begin_raster(): masked=%d, src_lrtb=%d %d %d %d -> w/h=%d %d, "
-            "dst_lrtb=%d %d %d %d -> w/h=%d %d", masked, src_l, src_r, src_t,
-            src_b, src_w, src_h, dst_l, dst_r, dst_t, dst_b, dst_w, dst_h);
+    G_debug(
+        1,
+        "Cairo_begin_raster(): masked=%d, src_lrtb=%d %d %d %d -> w/h=%d %d, "
+        "dst_lrtb=%d %d %d %d -> w/h=%d %d",
+        masked, src_l, src_r, src_t, src_b, src_w, src_h, dst_l, dst_r, dst_t,
+        dst_b, dst_w, dst_h);
 
     /* create source surface */
     src_surf =
@@ -125,9 +127,9 @@ void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
 
    \return next row
  */
-int Cairo_raster(int n, int row,
-                 const unsigned char *red, const unsigned char *grn,
-                 const unsigned char *blu, const unsigned char *nul)
+int Cairo_raster(int n, int row, const unsigned char *red,
+                 const unsigned char *grn, const unsigned char *blu,
+                 const unsigned char *nul)
 {
     int d_y0 = scale_fwd_y(row + 0);
     int d_y1 = scale_fwd_y(row + 1);

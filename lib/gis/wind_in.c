@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/wind_in.c
  *
@@ -32,11 +31,9 @@ int G_point_in_region(double easting, double northing)
     return G_point_in_window(easting, northing, &window);
 }
 
-
-
 /*!
  * \brief Returns TRUE if coordinate is within the given map region.
- * 
+ *
  * Use instead of G_point_in_region() when used in a loop (it's more
  * efficient to only fetch the window once) or for checking if a point
  * is in another region (e.g. contained with a raster map's bounds).

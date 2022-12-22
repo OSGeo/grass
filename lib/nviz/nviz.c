@@ -9,7 +9,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
+           2008/2010)
  */
 
 #include <grass/colors.h>
@@ -22,7 +23,7 @@
 
    \param data nviz data
  */
-void Nviz_init_data(nv_data * data)
+void Nviz_init_data(nv_data *data)
 {
     unsigned int i;
 
@@ -64,7 +65,7 @@ void Nviz_init_data(nv_data * data)
 
    \param data nviz data
  */
-void Nviz_destroy_data(nv_data * data)
+void Nviz_destroy_data(nv_data *data)
 {
     int i;
 
@@ -95,7 +96,7 @@ void Nviz_destroy_data(nv_data * data)
    \param data nviz data
    \param color color value
  */
-void Nviz_set_bgcolor(nv_data * data, int color)
+void Nviz_set_bgcolor(nv_data *data, int color)
 {
     data->bgcolor = color;
 
@@ -109,7 +110,7 @@ void Nviz_set_bgcolor(nv_data * data, int color)
 
    \return color color value
  */
-int Nviz_get_bgcolor(nv_data * data)
+int Nviz_get_bgcolor(nv_data *data)
 {
     return data->bgcolor;
 }
@@ -132,7 +133,7 @@ int Nviz_color_from_str(const char *color_str)
     }
 
     return (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
-        ((int)((blu) << 16) & BLU_MASK);
+           ((int)((blu) << 16) & BLU_MASK);
 }
 
 /*! Add new fringe
@@ -146,10 +147,8 @@ int Nviz_color_from_str(const char *color_str)
    \return pointer to allocated fringe_data structure
    \return NULL on error
  */
-struct fringe_data *Nviz_new_fringe(nv_data * data,
-                                    int id, unsigned long color,
-                                    double elev, int nw, int ne, int sw,
-                                    int se)
+struct fringe_data *Nviz_new_fringe(nv_data *data, int id, unsigned long color,
+                                    double elev, int nw, int ne, int sw, int se)
 {
     int num;
     int *surf;
@@ -164,7 +163,6 @@ struct fringe_data *Nviz_new_fringe(nv_data * data,
         G_free(surf);
     }
 
-
     f = (struct fringe_data *)G_malloc(sizeof(struct fringe_data));
     f->id = id;
     f->color = color;
@@ -174,10 +172,8 @@ struct fringe_data *Nviz_new_fringe(nv_data * data,
     f->where[2] = sw;
     f->where[3] = se;
 
-    data->fringe =
-        (struct fringe_data **)G_realloc(data->fringe,
-                                         data->num_fringes +
-                                         1 * sizeof(struct fringe_data *));
+    data->fringe = (struct fringe_data **)G_realloc(
+        data->fringe, data->num_fringes + 1 * sizeof(struct fringe_data *));
     data->fringe[data->num_fringes++] = f;
 
     return f;
@@ -194,10 +190,8 @@ struct fringe_data *Nviz_new_fringe(nv_data * data,
    \return pointer to allocated fringe_data structure
    \return NULL on error
  */
-struct fringe_data *Nviz_set_fringe(nv_data * data,
-                                    int id, unsigned long color,
-                                    double elev, int nw, int ne, int sw,
-                                    int se)
+struct fringe_data *Nviz_set_fringe(nv_data *data, int id, unsigned long color,
+                                    double elev, int nw, int ne, int sw, int se)
 {
     int i, num;
     int *surf;
@@ -235,7 +229,7 @@ struct fringe_data *Nviz_set_fringe(nv_data * data,
 
    \param data nviz data
  */
-void Nviz_draw_fringe(nv_data * data)
+void Nviz_draw_fringe(nv_data *data)
 {
     int i;
 
@@ -254,8 +248,8 @@ void Nviz_draw_fringe(nv_data * data)
    \param size arrow length
    \param color arrow/text color
  */
-int Nviz_set_arrow(nv_data * data,
-                   int sx, int sy, float size, unsigned int color)
+int Nviz_set_arrow(nv_data *data, int sx, int sy, float size,
+                   unsigned int color)
 {
     int id, pt[2];
     int *surf_list, num_surfs;
@@ -294,17 +288,16 @@ int Nviz_set_arrow(nv_data * data,
     return 0;
 }
 
-
 /*!
    \brief Draws the North Arrow
 
    \param data nviz data
  */
-int Nviz_draw_arrow(nv_data * data)
+int Nviz_draw_arrow(nv_data *data)
 {
 
     struct arrow_data *arw = data->arrow;
-    GLuint FontBase = 0;        /* don't know how to get fontbase */
+    GLuint FontBase = 0; /* don't know how to get fontbase */
 
     data->draw_arrow = 1;
     gsd_north_arrow(arw->where, arw->size, FontBase, arw->color, arw->color);
@@ -317,7 +310,7 @@ int Nviz_draw_arrow(nv_data * data)
 
    \param data nviz data
  */
-void Nviz_delete_arrow(nv_data * data)
+void Nviz_delete_arrow(nv_data *data)
 {
     data->draw_arrow = 0;
 
@@ -336,12 +329,11 @@ void Nviz_delete_arrow(nv_data * data)
    \return NULL on error
  */
 
-struct scalebar_data *Nviz_new_scalebar(nv_data * data,
-                                        int bar_id, float *coords, float size,
+struct scalebar_data *Nviz_new_scalebar(nv_data *data, int bar_id,
+                                        float *coords, float size,
                                         unsigned int color)
 {
     struct scalebar_data *s;
-
 
     s = (struct scalebar_data *)G_malloc(sizeof(struct scalebar_data));
     s->id = bar_id;
@@ -351,16 +343,12 @@ struct scalebar_data *Nviz_new_scalebar(nv_data * data,
     s->where[1] = coords[1];
     s->where[2] = coords[2];
 
-    data->scalebar = (struct scalebar_data **)G_realloc(data->scalebar,
-                                                        (data->num_scalebars +
-                                                         1) *
-                                                        sizeof(struct
-                                                               scalebar_data
-                                                               *));
+    data->scalebar = (struct scalebar_data **)G_realloc(
+        data->scalebar,
+        (data->num_scalebars + 1) * sizeof(struct scalebar_data *));
     data->scalebar[data->num_scalebars++] = s;
 
     return s;
-
 }
 
 /*!
@@ -375,9 +363,8 @@ struct scalebar_data *Nviz_new_scalebar(nv_data * data,
    \return pointer to allocated scalebar_data structure
    \return NULL when there's no surface
  */
-struct scalebar_data *Nviz_set_scalebar(nv_data * data, int bar_id,
-                                        int sx, int sy, float size,
-                                        unsigned int color)
+struct scalebar_data *Nviz_set_scalebar(nv_data *data, int bar_id, int sx,
+                                        int sy, float size, unsigned int color)
 {
     int i, id, pt[2];
     int *surf_list, num_surfs;
@@ -392,7 +379,7 @@ struct scalebar_data *Nviz_set_scalebar(nv_data * data, int bar_id,
         pt[0] = sx;
         pt[1] = sy;
 
-        GS_set_Narrow(pt, id, coords);  /* the same like arrow */
+        GS_set_Narrow(pt, id, coords); /* the same like arrow */
 
         for (i = 0; i < data->num_scalebars; i++) {
             if (data->scalebar[i]) {
@@ -421,11 +408,11 @@ struct scalebar_data *Nviz_set_scalebar(nv_data * data, int bar_id,
 
    \param data nviz data
  */
-void Nviz_draw_scalebar(nv_data * data)
+void Nviz_draw_scalebar(nv_data *data)
 {
     int i;
 
-    GLuint FontBase = 0;        /* don't know how to get fontbase */
+    GLuint FontBase = 0; /* don't know how to get fontbase */
 
     for (i = 0; i < data->num_scalebars; i++) {
         if (data->scalebar[i]) {
@@ -444,7 +431,7 @@ void Nviz_draw_scalebar(nv_data * data)
 
    \param data nviz data
  */
-void Nviz_delete_scalebar(nv_data * data, int bar_id)
+void Nviz_delete_scalebar(nv_data *data, int bar_id)
 {
     if (bar_id < data->num_scalebars && data->scalebar[bar_id] != NULL) {
         G_free(data->scalebar[bar_id]);

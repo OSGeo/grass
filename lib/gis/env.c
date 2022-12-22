@@ -15,27 +15,24 @@
 #include <signal.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <unistd.h>             /* for sleep() */
+#include <unistd.h> /* for sleep() */
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-struct bind
-{
+struct bind {
     int loc;
     char *name;
     char *value;
 };
 
-struct env
-{
+struct env {
     struct bind *binds;
     int count;
     int size;
 };
 
-static struct state
-{
+static struct state {
     struct env env;
     struct env env2;
     char *gisrc;
@@ -59,7 +56,7 @@ static FILE *open_env(const char *, int);
 
    Modes:
    - G_GISRC_MODE_FILE
-   - G_GISRC_MODE_MEMORY 
+   - G_GISRC_MODE_MEMORY
 
    \param mode mode to find/store variables (G_GISRC_MODE_FILE by default)
  */
@@ -91,11 +88,11 @@ void G_init_env(void)
 
 /*!
  * \brief Force to read the mapset environment file VAR
- * 
+ *
  * The mapset specific VAR file of the mapset set with G_setenv()
- * will be read into memory, ignoring if it was readed before. 
+ * will be read into memory, ignoring if it was readed before.
  * Existing values will be overwritten, new values appended.
- * 
+ *
  * \return
  */
 void G__read_mapset_env(void)
@@ -105,11 +102,11 @@ void G__read_mapset_env(void)
 
 /*!
  * \brief Force to read the GISRC environment file
- * 
- * The GISRC file 
- * will be read into memory, ignoring if it was readed before. 
+ *
+ * The GISRC file
+ * will be read into memory, ignoring if it was readed before.
  * Existing values will be overwritten, new values appended.
- * 
+ *
  * \return
  */
 void G__read_gisrc_env(void)
@@ -134,9 +131,9 @@ void G__read_gisrc_path()
     }
 }
 
-static void parse_env(FILE * fd, int loc)
+static void parse_env(FILE *fd, int loc)
 {
-    /* Account for long lines up to GPATH_MAX. 
+    /* Account for long lines up to GPATH_MAX.
        E.g. "GISDBASE: GPATH_MAX\n\0" */
     char buf[GPATH_MAX + 16];
     char *name;
@@ -163,7 +160,7 @@ static int read_env(int loc)
     FILE *fd;
 
     if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
-        return 0;               /* don't use file for GISRC */
+        return 0; /* don't use file for GISRC */
 
     if (G_is_initialized(&st->init[loc]))
         return 1;
@@ -180,7 +177,7 @@ static int read_env(int loc)
 /*!
  * \brief Force the reading or the GISRC or MAPSET/VAR files
  * and overwrite/append the specified variables
- * 
+ *
  */
 static void force_read_env(int loc)
 {
@@ -191,7 +188,6 @@ static void force_read_env(int loc)
         fclose(fd);
     }
 }
-
 
 static int set_env(const char *name, const char *value, int loc)
 {
@@ -222,7 +218,7 @@ static int set_env(const char *name, const char *value, int loc)
     for (n = 0; n < st->env.count; n++) {
         struct bind *b = &st->env.binds[n];
 
-        if (!b->name)           /* mark empty slot found */
+        if (!b->name) /* mark empty slot found */
             empty = n;
         else if (strcmp(b->name, name) == 0 && b->loc == loc) {
             b->value = tv;
@@ -301,7 +297,7 @@ static void write_env(int loc)
 #endif
 
     if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
-        return;                 /* don't use file for GISRC */
+        return; /* don't use file for GISRC */
 
     /*
      * THIS CODE NEEDS TO BE PROTECTED FROM INTERRUPTS
@@ -315,8 +311,8 @@ static void write_env(int loc)
         for (n = 0; n < st->env.count; n++) {
             struct bind *b = &st->env.binds[n];
 
-            if (b->name && b->value && b->loc == loc
-                && (sscanf(b->value, "%1s", dummy) == 1))
+            if (b->name && b->value && b->loc == loc &&
+                (sscanf(b->value, "%1s", dummy) == 1))
                 fprintf(fd, "%s: %s\n", b->name, b->value);
         }
         fclose(fd);
@@ -480,7 +476,8 @@ void G_setenv_nogisrc(const char *name, const char *value)
 }
 
 /*!
-   \brief Set environment name to value from specific place (doesn't update .gisrc)
+   \brief Set environment name to value from specific place (doesn't update
+   .gisrc)
 
    \param name variable name
    \param value variable value

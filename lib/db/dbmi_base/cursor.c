@@ -20,7 +20,7 @@
 
    \param cursor pointer to dbCursor to be initialized
  */
-void db_init_cursor(dbCursor * cursor)
+void db_init_cursor(dbCursor *cursor)
 {
     G_zero(cursor, sizeof(dbCursor));
     cursor->token = -1;
@@ -35,7 +35,7 @@ void db_init_cursor(dbCursor * cursor)
    \return DB_OK on success
    \return error code on error
  */
-int db_alloc_cursor_table(dbCursor * cursor, int ncols)
+int db_alloc_cursor_table(dbCursor *cursor, int ncols)
 {
     cursor->table = db_alloc_table(ncols);
     if (cursor->table == NULL)
@@ -48,7 +48,7 @@ int db_alloc_cursor_table(dbCursor * cursor, int ncols)
 
    \param cursor pointer to dbCursor
  */
-void db_free_cursor(dbCursor * cursor)
+void db_free_cursor(dbCursor *cursor)
 {
     if (cursor->table)
         db_free_table(cursor->table);
@@ -64,7 +64,7 @@ void db_free_cursor(dbCursor * cursor)
 
    \return pointer to dbTable
  */
-dbTable *db_get_cursor_table(dbCursor * cursor)
+dbTable *db_get_cursor_table(dbCursor *cursor)
 {
     return cursor->table;
 }
@@ -75,7 +75,7 @@ dbTable *db_get_cursor_table(dbCursor * cursor)
    \param cursor pointer to dbCursor
    \param table  pointer to dbTable
  */
-void db_set_cursor_table(dbCursor * cursor, dbTable * table)
+void db_set_cursor_table(dbCursor *cursor, dbTable *table)
 {
     cursor->table = table;
 }
@@ -87,7 +87,7 @@ void db_set_cursor_table(dbCursor * cursor, dbTable * table)
 
    \return pointer to dbToken
  */
-dbToken db_get_cursor_token(dbCursor * cursor)
+dbToken db_get_cursor_token(dbCursor *cursor)
 {
     return cursor->token;
 }
@@ -98,7 +98,7 @@ dbToken db_get_cursor_token(dbCursor * cursor)
    \param cursor pointer to dbCursor
    \param token  pointer to dbToken
  */
-void db_set_cursor_token(dbCursor * cursor, dbToken token)
+void db_set_cursor_token(dbCursor *cursor, dbToken token)
 {
     cursor->token = token;
 }
@@ -108,7 +108,7 @@ void db_set_cursor_token(dbCursor * cursor, dbToken token)
 
    \param cursor pointer to dbCursor
  */
-void db_set_cursor_type_readonly(dbCursor * cursor)
+void db_set_cursor_type_readonly(dbCursor *cursor)
 {
     cursor->type = DB_READONLY;
 }
@@ -118,7 +118,7 @@ void db_set_cursor_type_readonly(dbCursor * cursor)
 
    \param cursor pointer to dbCursor
  */
-void db_set_cursor_type_update(dbCursor * cursor)
+void db_set_cursor_type_update(dbCursor *cursor)
 {
     cursor->type = DB_UPDATE;
 }
@@ -128,7 +128,7 @@ void db_set_cursor_type_update(dbCursor * cursor)
 
    \param cursor pointer to dbCursor
  */
-void db_set_cursor_type_insert(dbCursor * cursor)
+void db_set_cursor_type_insert(dbCursor *cursor)
 {
     cursor->type = DB_INSERT;
 }
@@ -141,10 +141,10 @@ void db_set_cursor_type_insert(dbCursor * cursor)
    \return 1 for known cursor type
    \return 0 for unknown cursor type
  */
-int db_test_cursor_type_fetch(dbCursor * cursor)
+int db_test_cursor_type_fetch(dbCursor *cursor)
 {
-    return (cursor->type == DB_READONLY ||
-            cursor->type == DB_UPDATE || cursor->type == DB_INSERT);
+    return (cursor->type == DB_READONLY || cursor->type == DB_UPDATE ||
+            cursor->type == DB_INSERT);
 }
 
 /*!
@@ -155,7 +155,7 @@ int db_test_cursor_type_fetch(dbCursor * cursor)
    \return 1 if cursor type is 'update'
    \return 0 otherwise
  */
-int db_test_cursor_type_update(dbCursor * cursor)
+int db_test_cursor_type_update(dbCursor *cursor)
 {
     return (cursor->type == DB_UPDATE);
 }
@@ -168,7 +168,7 @@ int db_test_cursor_type_update(dbCursor * cursor)
    \return 1 if cursor type is 'insert'
    \return 0 otherwise
  */
-int db_test_cursor_type_insert(dbCursor * cursor)
+int db_test_cursor_type_insert(dbCursor *cursor)
 {
     return (cursor->type == DB_INSERT);
 }
@@ -183,7 +183,7 @@ int db_test_cursor_type_insert(dbCursor * cursor)
    \param cursor pointer to dbCursor
    \param mode cursor mode
  */
-void db_set_cursor_mode(dbCursor * cursor, int mode)
+void db_set_cursor_mode(dbCursor *cursor, int mode)
 {
     cursor->mode = mode;
 }
@@ -193,7 +193,7 @@ void db_set_cursor_mode(dbCursor * cursor, int mode)
 
    \param cursor pointer to dbCursor
  */
-void db_set_cursor_mode_scroll(dbCursor * cursor)
+void db_set_cursor_mode_scroll(dbCursor *cursor)
 {
     cursor->mode |= DB_SCROLL;
 }
@@ -203,7 +203,7 @@ void db_set_cursor_mode_scroll(dbCursor * cursor)
 
    \param cursor pointer to dbCursor
  */
-void db_unset_cursor_mode_scroll(dbCursor * cursor)
+void db_unset_cursor_mode_scroll(dbCursor *cursor)
 {
     cursor->mode &= ~DB_SCROLL;
 }
@@ -213,7 +213,7 @@ void db_unset_cursor_mode_scroll(dbCursor * cursor)
 
    \param cursor pointer to dbCursor
  */
-void db_unset_cursor_mode(dbCursor * cursor)
+void db_unset_cursor_mode(dbCursor *cursor)
 {
     cursor->mode = 0;
 }
@@ -223,7 +223,7 @@ void db_unset_cursor_mode(dbCursor * cursor)
 
    \param cursor pointer to dbCursor
  */
-void db_set_cursor_mode_insensitive(dbCursor * cursor)
+void db_set_cursor_mode_insensitive(dbCursor *cursor)
 {
     cursor->mode |= DB_INSENSITIVE;
 }
@@ -233,7 +233,7 @@ void db_set_cursor_mode_insensitive(dbCursor * cursor)
 
    \param cursor pointer to dbCursor
  */
-void db_unset_cursor_mode_insensitive(dbCursor * cursor)
+void db_unset_cursor_mode_insensitive(dbCursor *cursor)
 {
     cursor->mode &= ~DB_INSENSITIVE;
 }
@@ -246,7 +246,7 @@ void db_unset_cursor_mode_insensitive(dbCursor * cursor)
    \return 1 if true
    \return 0 if false
  */
-int db_test_cursor_mode_scroll(dbCursor * cursor)
+int db_test_cursor_mode_scroll(dbCursor *cursor)
 {
     return (cursor->mode & DB_SCROLL);
 }
@@ -259,7 +259,7 @@ int db_test_cursor_mode_scroll(dbCursor * cursor)
    \return 1 if true
    \return 0 if false
  */
-int db_test_cursor_mode_insensitive(dbCursor * cursor)
+int db_test_cursor_mode_insensitive(dbCursor *cursor)
 {
     return (cursor->mode & DB_INSENSITIVE);
 }
@@ -272,7 +272,7 @@ int db_test_cursor_mode_insensitive(dbCursor * cursor)
    \return DB_OK on success
    \return error code on failure
  */
-int db_alloc_cursor_column_flags(dbCursor * cursor)
+int db_alloc_cursor_column_flags(dbCursor *cursor)
 {
     int ncols;
     int col;
@@ -291,7 +291,7 @@ int db_alloc_cursor_column_flags(dbCursor * cursor)
 
    \param cursor pointer to dbCursor
  */
-void db_free_cursor_column_flags(dbCursor * cursor)
+void db_free_cursor_column_flags(dbCursor *cursor)
 {
     if (cursor->column_flags)
         db_free(cursor->column_flags);
@@ -304,7 +304,7 @@ void db_free_cursor_column_flags(dbCursor * cursor)
    \param cursor pointer to dbCursor
    \param col    column index (starting with '0')
  */
-void db_set_cursor_column_for_update(dbCursor * cursor, int col)
+void db_set_cursor_column_for_update(dbCursor *cursor, int col)
 {
     db_set_cursor_column_flag(cursor, col);
 }
@@ -315,7 +315,7 @@ void db_set_cursor_column_for_update(dbCursor * cursor, int col)
    \param cursor pointer to dbCursor
    \param col    column index (starting with '0')
  */
-void db_unset_cursor_column_for_update(dbCursor * cursor, int col)
+void db_unset_cursor_column_for_update(dbCursor *cursor, int col)
 {
     db_unset_cursor_column_flag(cursor, col);
 }
@@ -329,7 +329,7 @@ void db_unset_cursor_column_for_update(dbCursor * cursor, int col)
    \return 1 if true
    \return 0 if false
  */
-int db_test_cursor_column_for_update(dbCursor * cursor, int col)
+int db_test_cursor_column_for_update(dbCursor *cursor, int col)
 {
     return db_test_cursor_column_flag(cursor, col);
 }
@@ -342,7 +342,7 @@ int db_test_cursor_column_for_update(dbCursor * cursor, int col)
    \return 1 if true
    \return 0 if false
  */
-int db_test_cursor_any_column_for_update(dbCursor * cursor)
+int db_test_cursor_any_column_for_update(dbCursor *cursor)
 {
     return db_test_cursor_any_column_flag(cursor);
 }
@@ -353,7 +353,7 @@ int db_test_cursor_any_column_for_update(dbCursor * cursor)
    \param cursor pointer to dbCursor
    \param col    column index (starting with '0')
  */
-void db_set_cursor_column_flag(dbCursor * cursor, int col)
+void db_set_cursor_column_flag(dbCursor *cursor, int col)
 {
     if (cursor->column_flags)
         cursor->column_flags[col] = 1;
@@ -365,7 +365,7 @@ void db_set_cursor_column_flag(dbCursor * cursor, int col)
    \param cursor pointer to dbCursor
    \param col    column index (starting with '0')
  */
-void db_unset_cursor_column_flag(dbCursor * cursor, int col)
+void db_unset_cursor_column_flag(dbCursor *cursor, int col)
 {
     if (cursor->column_flags)
         cursor->column_flags[col] = 0;
@@ -380,7 +380,7 @@ void db_unset_cursor_column_flag(dbCursor * cursor, int col)
    \return 1 if flag is defined
    \return 0 otherwise
  */
-int db_test_cursor_column_flag(dbCursor * cursor, int col)
+int db_test_cursor_column_flag(dbCursor *cursor, int col)
 {
     return cursor->column_flags && cursor->column_flags[col] ? 1 : 0;
 }
@@ -390,7 +390,7 @@ int db_test_cursor_column_flag(dbCursor * cursor, int col)
 
    \param cursor pointer to dbCursor
  */
-int db_get_cursor_number_of_columns(dbCursor * cursor)
+int db_get_cursor_number_of_columns(dbCursor *cursor)
 {
     dbTable *table;
 
@@ -410,7 +410,7 @@ int db_get_cursor_number_of_columns(dbCursor * cursor)
    \return 1 if true
    \return 0 if false
  */
-int db_test_cursor_any_column_flag(dbCursor * cursor)
+int db_test_cursor_any_column_flag(dbCursor *cursor)
 {
     int ncols, col;
 

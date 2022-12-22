@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/quant_rw.c
- * 
+ *
  * \brief Raster Library - Quantization rules (read/write).
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -78,8 +78,8 @@ void Rast_round_fp_map(const char *name, const char *mapset)
  * \param cmin minimum value
  * \param cmax maximum value
  */
-void Rast_quantize_fp_map(const char *name, const char *mapset,
-                          CELL min, CELL max)
+void Rast_quantize_fp_map(const char *name, const char *mapset, CELL min,
+                          CELL max)
 {
     DCELL d_min, d_max;
     struct FPRange fp_range;
@@ -168,20 +168,20 @@ void Rast_write_quant(const char *name, const char *mapset,
 }
 
 /*!
- * \brief 
+ * \brief
  *
  * Reads quantization rules for <i>name</i> in <i>mapset</i> and
  * stores them in the quantization structure. If the map is in another
  * mapset, first checks for quant2 table for this map in current
- * mapset. 
+ * mapset.
  *  \param name
  *  \param mapset
  *  \param q
  *
  * \return -2 if raster map is of type integer
  * \return -1 if (!G_name_is_fully_qualified())
- * \return 0 if quantization file does not exist, or the file is empty or has wrong format
- * \return 1 if non-empty quantization file exists
+ * \return 0 if quantization file does not exist, or the file is empty or has
+ * wrong format \return 1 if non-empty quantization file exists
  *
  */
 int Rast_read_quant(const char *name, const char *mapset, struct Quant *quant)

@@ -1,4 +1,3 @@
-
 /**
  * \file lib/segment/seek.c
  *
@@ -20,10 +19,9 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
-
 /**
  * \brief Internal use only
- * 
+ *
  * Seek into a segment.
  *
  * \param[in,out] SEG segment
@@ -34,32 +32,30 @@
  */
 
 #define SEG_SEEK_FAST(SEG, n, index) \
-    ((((off_t) (n)) << (SEG)->sizebits) + (index) + (SEG)->offset)
+    ((((off_t)(n)) << (SEG)->sizebits) + (index) + (SEG)->offset)
 
 #define SEG_SEEK_SLOW(SEG, n, index) \
-    ((off_t) (n) * (SEG)->size + (index) + (SEG)->offset)
+    ((off_t)(n) * (SEG)->size + (index) + (SEG)->offset)
 
-int seg_seek_fast(const SEGMENT * SEG, int n, int index)
+int seg_seek_fast(const SEGMENT *SEG, int n, int index)
 {
-    if (lseek((SEG)->fd, SEG_SEEK_FAST(SEG, n, index), 
-        SEEK_SET) == (off_t) -1) {
-	G_fatal_error("Segment seek: %s", strerror(errno));
+    if (lseek((SEG)->fd, SEG_SEEK_FAST(SEG, n, index), SEEK_SET) == (off_t)-1) {
+        G_fatal_error("Segment seek: %s", strerror(errno));
     }
 
     return 0;
 }
 
-int seg_seek_slow(const SEGMENT * SEG, int n, int index)
+int seg_seek_slow(const SEGMENT *SEG, int n, int index)
 {
-    if (lseek((SEG)->fd, SEG_SEEK_SLOW(SEG, n, index), 
-        SEEK_SET) == (off_t) -1) {
-	G_fatal_error("Segment seek: %s", strerror(errno));
+    if (lseek((SEG)->fd, SEG_SEEK_SLOW(SEG, n, index), SEEK_SET) == (off_t)-1) {
+        G_fatal_error("Segment seek: %s", strerror(errno));
     }
 
     return 0;
 }
 
-int seg_seek(const SEGMENT * SEG, int n, int index)
+int seg_seek(const SEGMENT *SEG, int n, int index)
 {
     return SEG->seek(SEG, n, index);
 }

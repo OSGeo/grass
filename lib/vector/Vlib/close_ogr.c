@@ -37,8 +37,7 @@ int V1_close_ogr(struct Map_info *Map)
 #ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
 
-    G_debug(3, "V1_close_ogr() name = %s mapset = %s", Map->name,
-            Map->mapset);
+    G_debug(3, "V1_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
 
     if (!VECT_OPEN(Map))
         return -1;
@@ -93,8 +92,7 @@ int V2_close_ogr(struct Map_info *Map)
 #ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
 
-    G_debug(3, "V2_close_ogr() name = %s mapset = %s", Map->name,
-            Map->mapset);
+    G_debug(3, "V2_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
 
     if (!VECT_OPEN(Map))
         return -1;

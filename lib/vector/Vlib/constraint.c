@@ -34,19 +34,19 @@
    \brief Set constraint region
 
    Vect_read_next_line() will read only features inside of given
-   region or features with overlapping bounding box. 
+   region or features with overlapping bounding box.
 
    \note Constraint is ignored for random access - Vect_read_line().
 
    \param Map pointer to Map_info struct
-   \param n,s,e,w,t,b bbox definition (north, south, east, west, top, and bottom coordinates)
+   \param n,s,e,w,t,b bbox definition (north, south, east, west, top, and bottom
+   coordinates)
 
    \return 0 on success
    \return -1 on error (invalid region)
  */
-int Vect_set_constraint_region(struct Map_info *Map,
-                               double n, double s, double e, double w,
-                               double t, double b)
+int Vect_set_constraint_region(struct Map_info *Map, double n, double s,
+                               double e, double w, double t, double b)
 {
     if (n <= s)
         return -1;
@@ -66,7 +66,7 @@ int Vect_set_constraint_region(struct Map_info *Map,
 }
 
 /*!
-   \brief Get constraint box 
+   \brief Get constraint box
 
    Constraint box can be defined by Vect_set_constraint_region().
 

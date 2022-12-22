@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/basename.c
  *
@@ -20,11 +19,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-
 /*!
  * \brief Truncates filename to the base part (before the last '.')
  * if it matches the extension, otherwise leaves it unchanged.
- * 
+ *
  * Checks if a filename matches a certain file extension
  * (case insensitive) and if so, truncates the string to the
  * base file name (cf. basename Unix command)
@@ -46,13 +44,11 @@ char *G_basename(char *filename, const char *desired_ext)
     return filename;
 }
 
-
-
 /*!
  * \brief Get number of decimals from a string
  *
  * \param str String to analyse
- * 
+ *
  * \return number of decimals
  */
 size_t G_get_num_decimals(const char *str)
@@ -77,8 +73,8 @@ size_t G_get_num_decimals(const char *str)
  *
  * \return a formatted string
  */
-char *G_double_to_basename_format(double number,
-                                  size_t ndigits, size_t ndecimals)
+char *G_double_to_basename_format(double number, size_t ndigits,
+                                  size_t ndecimals)
 {
     double integer, decimal;
 
@@ -104,7 +100,6 @@ char *G_double_to_basename_format(double number,
     return result;
 }
 
-
 /*!
  * \brief Return the environmental basename variable or the default
  * value
@@ -120,13 +115,12 @@ char *G_get_basename_separator()
     return (envsep != NULL && strlen(envsep) > 0) ? envsep : GBASENAME_SEP;
 }
 
-
 /*!
  * \brief join an array of strings using the basename separator
- * 
+ *
  * \param strings is an array of strings
  * \param len is the length of the array
- * 
+ *
  * \return a joined string
  */
 char *G_join_basename_strings(const char **strings, size_t len)
@@ -155,7 +149,6 @@ char *G_join_basename_strings(const char **strings, size_t len)
     return result;
 }
 
-
 /*!
  * \brief Generate the format string
  *
@@ -163,11 +156,11 @@ char *G_join_basename_strings(const char **strings, size_t len)
  * \param digits Number of digits number
  * \param decimals Number of decimal number
  * \param filler String used to fill, default is 0
- * 
+ *
  * \return Format string
  */
-char *G_generate_basename(const char *basename, double number,
-                          size_t ndigits, size_t ndecimals)
+char *G_generate_basename(const char *basename, double number, size_t ndigits,
+                          size_t ndecimals)
 {
     char *separator, *numberstr, *result;
 
@@ -175,8 +168,7 @@ char *G_generate_basename(const char *basename, double number,
     numberstr = G_double_to_basename_format(number, ndigits, ndecimals);
 
     result =
-        G_malloc(strlen(basename) + strlen(separator) + strlen(numberstr) +
-                 1);
+        G_malloc(strlen(basename) + strlen(separator) + strlen(numberstr) + 1);
 
     if (result)
         sprintf(result, "%s%s%s", basename, separator, numberstr);

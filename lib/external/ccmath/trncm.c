@@ -5,8 +5,10 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include "ccmath.h"
-void trncm(Cpx * a, int n)
+
+void trncm(Cpx *a, int n)
 {
     Cpx s, *p, *q;
 

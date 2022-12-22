@@ -1,32 +1,31 @@
-
 /*****************************************************************************
-*
-* MODULE:       SQL statement parser library 
-*   	    	
-* AUTHOR(S):    lex.l and yac.y were originally taken from unixODBC and
-*               probably written by Peter Harvey <pharvey@codebydesigns.com>,
-*               original modifications & added code by 
-*                     Radim Blazek <radim.blazek gmail.com>
-*               Glynn Clements <glynn gclements.plus.com>,
-*               Markus Neteler <neteler itc.it>,
-*               Martin Landa <landa.martin gmail.com>,
-*               Moritz Lennert <mlennert club.worldonline.be>,
-*               Hamish Bowman <hamish_b yahoo.com>,
-*               Daniel Calvelo Aros <dca.gis gmail.com>,
-*               Paul Kelly <paul-grass stjohnspoint.co.uk>,
-*               Alex Shevlakov <sixote yahoo.com>
-*
-* PURPOSE:      Parse input string containing SQL statement to 
-*               SQLPSTMT structure.
-*               SQL parser may be used by simple database drivers. 
-*
-* COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       SQL statement parser library
+ *
+ * AUTHOR(S):    lex.l and yac.y were originally taken from unixODBC and
+ *               probably written by Peter Harvey <pharvey@codebydesigns.com>,
+ *               original modifications & added code by
+ *                     Radim Blazek <radim.blazek gmail.com>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Martin Landa <landa.martin gmail.com>,
+ *               Moritz Lennert <mlennert club.worldonline.be>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Daniel Calvelo Aros <dca.gis gmail.com>,
+ *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
+ *               Alex Shevlakov <sixote yahoo.com>
+ *
+ * PURPOSE:      Parse input string containing SQL statement to
+ *               SQLPSTMT structure.
+ *               SQL parser may be used by simple database drivers.
+ *
+ * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -38,7 +37,7 @@
 SQLPSTMT *sqlpStmt;
 
 /* save string to value */
-int sqpSaveStr(SQLPVALUE * val, char *c)
+int sqpSaveStr(SQLPVALUE *val, char *c)
 {
     int len = 0;
 
@@ -50,7 +49,7 @@ int sqpSaveStr(SQLPVALUE * val, char *c)
     return (1);
 }
 
-void sqpInitValue(SQLPVALUE * val)
+void sqpInitValue(SQLPVALUE *val)
 {
     val->type = SQLP_NULL;
     val->s = NULL;
@@ -58,7 +57,7 @@ void sqpInitValue(SQLPVALUE * val)
     val->d = 0.0;
 }
 
-void sqpCopyValue(SQLPVALUE * from, SQLPVALUE * to)
+void sqpCopyValue(SQLPVALUE *from, SQLPVALUE *to)
 {
     to->type = from->type;
 
@@ -72,7 +71,7 @@ void sqpCopyValue(SQLPVALUE * from, SQLPVALUE * to)
     to->d = from->d;
 }
 
-int sqpInitParser(SQLPSTMT * st)
+int sqpInitParser(SQLPSTMT *st)
 {
     sqlpStmt = st;
     sqlpStmt->cur = sqlpStmt->stmt;
@@ -138,8 +137,8 @@ void sqpValue(char *strval, int intval, double dblval, int type)
 
     sqpAllocVal(sqlpStmt, i + 1);
     sqlpStmt->Val[i].s = NULL;
-    sqlpStmt->Val[i].i = 0;     /* not necessay I think */
-    sqlpStmt->Val[i].d = 0.0;   /* not necessay I think */
+    sqlpStmt->Val[i].i = 0;   /* not necessay I think */
+    sqlpStmt->Val[i].d = 0.0; /* not necessay I think */
 
     sqlpStmt->Val[i].type = type;
     switch (type) {
@@ -160,7 +159,7 @@ void sqpValue(char *strval, int intval, double dblval, int type)
 }
 
 void sqpAssignment(char *col, char *strval, int intval, double dblval,
-                   SQLPNODE * expval, int type)
+                   SQLPNODE *expval, int type)
 {
     int i;
 
@@ -171,8 +170,8 @@ void sqpAssignment(char *col, char *strval, int intval, double dblval,
 
     sqpAllocVal(sqlpStmt, i + 1);
     sqlpStmt->Val[i].s = NULL;
-    sqlpStmt->Val[i].i = 0;     /* not necessay I think */
-    sqlpStmt->Val[i].d = 0.0;   /* not necessay I think */
+    sqlpStmt->Val[i].i = 0;   /* not necessay I think */
+    sqlpStmt->Val[i].d = 0.0; /* not necessay I think */
 
     sqlpStmt->Val[i].type = type;
     switch (type) {
@@ -210,11 +209,11 @@ SQLPNODE *sqpNewNode(void)
 {
     SQLPNODE *np;
 
-    np = (SQLPNODE *) calloc(1, sizeof(SQLPNODE));
+    np = (SQLPNODE *)calloc(1, sizeof(SQLPNODE));
     return np;
 }
 
-SQLPNODE *sqpNewExpressionNode(int oper, SQLPNODE * left, SQLPNODE * right)
+SQLPNODE *sqpNewExpressionNode(int oper, SQLPNODE *left, SQLPNODE *right)
 {
     SQLPNODE *np;
 
@@ -257,7 +256,7 @@ SQLPNODE *sqpNewValueNode(char *strval, int intval, double dblval, int type)
     return np;
 }
 
-void sqpFreeNode(SQLPNODE * np)
+void sqpFreeNode(SQLPNODE *np)
 {
     if (!np)
         return;

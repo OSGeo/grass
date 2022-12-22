@@ -41,7 +41,7 @@ static const uint32 b0 = 0xB;
 
 static int seeded;
 
-#define LO(x) ((x) & 0xFFFFU)
+#define LO(x) ((x)&0xFFFFU)
 #define HI(x) ((x) >> 16)
 
 /*!
@@ -54,9 +54,9 @@ void G_srand48(long seedval)
 {
     uint32 x = (uint32) * (unsigned long *)&seedval;
 
-    x2 = (uint16) HI(x);
-    x1 = (uint16) LO(x);
-    x0 = (uint16) 0x330E;
+    x2 = (uint16)HI(x);
+    x1 = (uint16)LO(x);
+    x0 = (uint16)0x330E;
     seeded = 1;
 }
 
@@ -120,11 +120,11 @@ static void G__next(void)
     if (!seeded)
         G_fatal_error(_("Pseudo-random number generator not seeded"));
 
-    x0 = (uint16) LO(y0);
+    x0 = (uint16)LO(y0);
     y1 += HI(y0);
-    x1 = (uint16) LO(y1);
+    x1 = (uint16)LO(y1);
     y2 += HI(y1);
-    x2 = (uint16) LO(y2);
+    x2 = (uint16)LO(y2);
 }
 
 /*!
@@ -138,7 +138,7 @@ long G_lrand48(void)
     uint32 r;
 
     G__next();
-    r = ((uint32) x2 << 15) | ((uint32) x1 >> 1);
+    r = ((uint32)x2 << 15) | ((uint32)x1 >> 1);
     return (long)r;
 }
 
@@ -153,8 +153,8 @@ long G_mrand48(void)
     uint32 r;
 
     G__next();
-    r = ((uint32) x2 << 16) | ((uint32) x1);
-    return (long)(int32) r;
+    r = ((uint32)x2 << 16) | ((uint32)x1);
+    return (long)(int32)r;
 }
 
 /*!
@@ -173,7 +173,7 @@ double G_drand48(void)
     r += x1;
     r *= 0x10000;
     r += x0;
-    r /= 281474976710656.0;     /* 2^48 */
+    r /= 281474976710656.0; /* 2^48 */
     return r;
 }
 

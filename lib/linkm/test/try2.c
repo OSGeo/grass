@@ -5,7 +5,6 @@
  **
  */
 
-
 /*
  **  read from stdin and each line into a linked list of chars
  **  then print it back out.   if there is any argument specified
@@ -15,8 +14,7 @@
 #include <stdio.h>
 #include <grass/linkm.h>
 
-struct link
-{
+struct link {
     char let;
     struct link *next;
 };
@@ -32,14 +30,11 @@ int main(int argc, char *argv[])
     if (argc == 2)
         rev = 1;
 
-
     List.next = NULL;
     List.let = ' ';
 
-
     link_set_chunk_size(1);
-    head = (VOID_T *) link_init(sizeof(struct link));
-
+    head = (VOID_T *)link_init(sizeof(struct link));
 
     while (NULL != gets(buf)) {
         for (i = 0; buf[i] != '\0'; i++) {

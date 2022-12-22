@@ -20,11 +20,15 @@
 
 #include "e_intersect.h"
 
-#define SWAP(a,b) {double t = a; a = b; b = t;}
-#define D ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
-#define DA ((bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2))
-#define DB ((ax2-ax1)*(by1-ay1) - (ay2-ay1)*(bx1-ax1))
-
+#define SWAP(a, b)    \
+    {                 \
+        double t = a; \
+        a = b;        \
+        b = t;        \
+    }
+#define D  ((ax2 - ax1) * (by1 - by2) - (ay2 - ay1) * (bx1 - bx2))
+#define DA ((bx1 - ax1) * (by1 - by2) - (by1 - ay1) * (bx1 - bx2))
+#define DB ((ax2 - ax1) * (by1 - ay1) - (ay2 - ay1) * (bx1 - ax1))
 
 #ifdef ASDASDASFDSAFFDAS
 mpf_t p11, p12, p21, p22, t1, t2;
@@ -190,7 +194,7 @@ int segment_intersection_2d_e(double ax1, double ay1, double ax2, double ay2,
                 return 0;
             }
         }
-        else {                  /* if sgn_d < 0 */
+        else { /* if sgn_d < 0 */
             if ((sgn_da > 0) || (mpf_cmp(dda, dd) < 0)) {
                 G_debug(3, "        no intersection");
                 return 0;
@@ -204,8 +208,11 @@ int segment_intersection_2d_e(double ax1, double ay1, double ax2, double ay2,
             }
         }
 
-        /*G_debug(3, "        ra=%.17g rb=%.17g", mpf_get_d(dda)/mpf_get_d(dd), mpf_get_d(ddb)/mpf_get_d(dd)); */
-        /*G_debug(3, "        sgn_d=%d sgn_da=%d sgn_db=%d cmp(dda,dd)=%d cmp(ddb,dd)=%d", sgn_d, sgn_da, sgn_db, mpf_cmp(dda, dd), mpf_cmp(ddb, dd)); */
+        /*G_debug(3, "        ra=%.17g rb=%.17g", mpf_get_d(dda)/mpf_get_d(dd),
+         * mpf_get_d(ddb)/mpf_get_d(dd)); */
+        /*G_debug(3, "        sgn_d=%d sgn_da=%d sgn_db=%d cmp(dda,dd)=%d
+         * cmp(ddb,dd)=%d", sgn_d, sgn_da, sgn_db, mpf_cmp(dda, dd),
+         * mpf_cmp(ddb, dd)); */
 
         mpf_set_d(delta, ax2 - ax1);
         mpf_mul(t1, dda, delta);
@@ -305,7 +312,7 @@ int segment_intersection_2d_e(double ax1, double ay1, double ax2, double ay2,
 
     /* general overlap, 2 intersection points */
     G_debug(3, "        partial overlap");
-    if ((bx1 > ax1) && (bx1 < ax2)) {   /* b1 is in a */
+    if ((bx1 > ax1) && (bx1 < ax2)) { /* b1 is in a */
         if (!vertical) {
             *x1 = bx1;
             *y1 = by1;
@@ -320,7 +327,7 @@ int segment_intersection_2d_e(double ax1, double ay1, double ax2, double ay2,
         }
         return 2;
     }
-    if ((bx2 > ax1) && (bx2 < ax2)) {   /* b2 is in a */
+    if ((bx2 > ax1) && (bx2 < ax2)) { /* b2 is in a */
         if (!vertical) {
             *x1 = bx2;
             *y1 = by2;
@@ -351,10 +358,9 @@ int segment_intersection_2d_e(double ax1, double ay1, double ax2, double ay2,
 /* OLD */
 /* tollerance aware version */
 /* TODO: fix all ==s left */
-int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
-                                double ay2, double bx1, double by1,
-                                double bx2, double by2, double *x1,
-                                double *y1, double *x2, double *y2,
+int segment_intersection_2d_tol(double ax1, double ay1, double ax2, double ay2,
+                                double bx1, double by1, double bx2, double by2,
+                                double *x1, double *y1, double *x2, double *y2,
                                 double tol)
 {
     double tola, tolb;
@@ -369,7 +375,6 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
     G_debug(4, "    ax2  = %.18f, ay2  = %.18f", ax2, ay2);
     G_debug(4, "    bx1  = %.18f, by1  = %.18f", bx1, by1);
     G_debug(4, "    bx2  = %.18f, by2  = %.18f", bx2, by2);
-
 
     /* Check identical lines */
     if ((FEQUAL(ax1, bx1, tol) && FEQUAL(ay1, by1, tol) &&
@@ -395,7 +400,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
                 switched = 1;
             else if (by1 == ay1) {
                 if (by2 < ay2)
-                    switched = 1;       /* by2 != ay2 (would be identical */
+                    switched = 1; /* by2 != ay2 (would be identical */
             }
         }
     }
@@ -452,7 +457,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
     /* segments are parallel or collinear */
     G_debug(3, " -> parallel/collinear");
 
-    if ((!FZERO(d1, tol)) || (!FZERO(d2, tol))) {       /* lines are parallel */
+    if ((!FZERO(d1, tol)) || (!FZERO(d2, tol))) { /* lines are parallel */
         G_debug(2, "  -> parallel");
         return 0;
     }
@@ -464,7 +469,6 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
 
        t = (ax1-bx1)*bdx + (ay1-by1)*bdy; */
 
-
     /* Collinear vertical */
     /* original code assumed lines were not both vertical
      *  so there is a special case if they are */
@@ -475,12 +479,12 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
             t = ay1;
             ay1 = ay2;
             ay2 = t;
-        }                       /* to be sure that ay1 < ay2 */
+        } /* to be sure that ay1 < ay2 */
         if (by1 > by2) {
             t = by1;
             by1 = by2;
             by2 = t;
-        }                       /* to be sure that by1 < by2 */
+        } /* to be sure that by1 < by2 */
         if (ay1 > by2 || ay2 < by1) {
             G_debug(2, "   -> no intersection");
             return 0;
@@ -491,13 +495,13 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
             *x1 = ax1;
             *y1 = ay1;
             G_debug(2, "   -> connected by end points");
-            return 1;           /* endpoints only */
+            return 1; /* endpoints only */
         }
         if (FEQUAL(ay2, by1, tol)) {
             *x1 = ax2;
             *y1 = ay2;
             G_debug(2, "  -> connected by end points");
-            return 1;           /* endpoints only */
+            return 1; /* endpoints only */
         }
 
         /* general overlap */
@@ -529,7 +533,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
 
         /* general overlap, 2 intersection points */
         G_debug(2, "    -> partial overlap");
-        if (by1 > ay1 && by1 < ay2) {   /* b1 in a */
+        if (by1 > ay1 && by1 < ay2) { /* b1 in a */
             if (!switched) {
                 *x1 = bx1;
                 *y1 = by1;
@@ -545,7 +549,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
             return 2;
         }
 
-        if (by2 > ay1 && by2 < ay2) {   /* b2 in a */
+        if (by2 > ay1 && by2 < ay2) { /* b2 in a */
             if (!switched) {
                 *x1 = bx2;
                 *y1 = by2;
@@ -562,7 +566,8 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
         }
 
         /* should not be reached */
-        G_warning(("Vect_segment_intersection() ERROR (collinear vertical segments)"));
+        G_warning((
+            "Vect_segment_intersection() ERROR (collinear vertical segments)"));
         G_warning("%.15g %.15g", ax1, ay1);
         G_warning("%.15g %.15g", ax2, ay2);
         G_warning("x");
@@ -604,7 +609,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
         t = ay1;
         ay1 = ay2;
         ay2 = t;
-    }                           /* to be sure that ax1 < ax2 */
+    } /* to be sure that ax1 < ax2 */
     if (bx1 > bx2) {
         t = bx1;
         bx1 = bx2;
@@ -612,7 +617,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
         t = by1;
         by1 = by2;
         by2 = t;
-    }                           /* to be sure that bx1 < bx2 */
+    } /* to be sure that bx1 < bx2 */
 
     /* a contains b */
     if (ax1 <= bx1 && ax2 >= bx2) {
@@ -641,7 +646,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
 
     /* general overlap, 2 intersection points (lines are not vertical) */
     G_debug(2, "    -> partial overlap");
-    if (bx1 > ax1 && bx1 < ax2) {       /* b1 is in a */
+    if (bx1 > ax1 && bx1 < ax2) { /* b1 is in a */
         if (!switched) {
             *x1 = bx1;
             *y1 = by1;
@@ -656,7 +661,7 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
         }
         return 2;
     }
-    if (bx2 > ax1 && bx2 < ax2) {       /* b2 is in a */
+    if (bx2 > ax1 && bx2 < ax2) { /* b2 is in a */
         if (!switched) {
             *x1 = bx2;
             *y1 = by2;
@@ -673,7 +678,8 @@ int segment_intersection_2d_tol(double ax1, double ay1, double ax2,
     }
 
     /* should not be reached */
-    G_warning(("segment_intersection_2d() ERROR (collinear non vertical segments)"));
+    G_warning(
+        ("segment_intersection_2d() ERROR (collinear non vertical segments)"));
     G_warning("%.15g %.15g", ax1, ay1);
     G_warning("%.15g %.15g", ax2, ay2);
     G_warning("x");
@@ -790,7 +796,7 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
                 return 0;
             }
         }
-        else {                  /* if d < 0 */
+        else { /* if d < 0 */
             if ((da > 0) || (da < d)) {
                 G_debug(DLEVEL, "        no intersection");
                 return 0;
@@ -803,8 +809,11 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
             }
         }
 
-        /*G_debug(DLEVEL, "        ra=%.17g rb=%.17g", mpf_get_d(dda)/mpf_get_d(dd), mpf_get_d(ddb)/mpf_get_d(dd)); */
-        /*G_debug(DLEVEL, "        sgn_d=%d sgn_da=%d sgn_db=%d cmp(dda,dd)=%d cmp(ddb,dd)=%d", sgn_d, sgn_da, sgn_db, mpf_cmp(dda, dd), mpf_cmp(ddb, dd)); */
+        /*G_debug(DLEVEL, "        ra=%.17g rb=%.17g",
+         * mpf_get_d(dda)/mpf_get_d(dd), mpf_get_d(ddb)/mpf_get_d(dd)); */
+        /*G_debug(DLEVEL, "        sgn_d=%d sgn_da=%d sgn_db=%d cmp(dda,dd)=%d
+         * cmp(ddb,dd)=%d", sgn_d, sgn_da, sgn_db, mpf_cmp(dda, dd),
+         * mpf_cmp(ddb, dd)); */
 
         *x1 = ax1 + (ax2 - ax1) * da / d;
         *y1 = ay1 + (ay2 - ay1) * da / d;
@@ -872,7 +881,7 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
 
     /* general overlap, 2 intersection points */
     G_debug(DLEVEL, "        partial overlap");
-    if ((bx1 > ax1) && (bx1 < ax2)) {   /* b1 is in a */
+    if ((bx1 > ax1) && (bx1 < ax2)) { /* b1 is in a */
         if (!vertical) {
             *x1 = bx1;
             *y1 = by1;
@@ -887,7 +896,7 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
         }
         return 2;
     }
-    if ((bx2 > ax1) && (bx2 < ax2)) {   /* b2 is in a */
+    if ((bx2 > ax1) && (bx2 < ax2)) { /* b2 is in a */
         if (!vertical) {
             *x1 = bx2;
             *y1 = by2;
@@ -914,7 +923,7 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
     return 0;
 }
 
-#define N 52                    /* double's mantisa size in bits */
+#define N 52 /* double's mantisa size in bits */
 /* a and b are different in at most <bits> significant digits */
 int almost_equal(double a, double b, int bits)
 {
@@ -937,10 +946,9 @@ int almost_equal(double a, double b, int bits)
 }
 
 #ifdef ASDASDFASFEAS
-int segment_intersection_2d_test(double ax1, double ay1, double ax2,
-                                 double ay2, double bx1, double by1,
-                                 double bx2, double by2, double *x1,
-                                 double *y1, double *x2, double *y2)
+int segment_intersection_2d_test(double ax1, double ay1, double ax2, double ay2,
+                                 double bx1, double by1, double bx2, double by2,
+                                 double *x1, double *y1, double *x2, double *y2)
 {
     double t;
 
@@ -1048,7 +1056,7 @@ int segment_intersection_2d_test(double ax1, double ay1, double ax2,
                 return 0;
             }
         }
-        else {                  /* if sgn_d < 0 */
+        else { /* if sgn_d < 0 */
             if ((sgn_da > 0) || (mpf_cmp(dda, dd) < 0)) {
                 G_debug(DLEVEL, "        no intersection");
                 return 0;

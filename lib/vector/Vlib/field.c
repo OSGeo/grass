@@ -30,8 +30,8 @@
 #include "local_proto.h"
 
 #ifdef HAVE_GDAL
-#include <gdal_version.h>       /* needed for FID detection */
-#endif /* HAVE_GDAL */
+#include <gdal_version.h> /* needed for FID detection */
+#endif                    /* HAVE_GDAL */
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
@@ -67,8 +67,9 @@ static int name2sql(char *name)
 
     /* sql-compliant name must start with letter */
     if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z'))) {
-        G_warning(_("Name <%s> is not SQL compliant. Must start with a letter."),
-                  name);
+        G_warning(
+            _("Name <%s> is not SQL compliant. Must start with a letter."),
+            name);
         return 0;
     }
 
@@ -160,7 +161,7 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
 
     ret = -1;
     for (i = 0; i < links->n_fields; i++) {
-        if (field < 0 || links->field[i].number == field) {     /* field found */
+        if (field < 0 || links->field[i].number == field) { /* field found */
             for (j = i; j < links->n_fields - 1; j++) {
                 links->field[j].number = links->field[j + 1].number;
                 links->field[j].name = links->field[j + 1].name;
@@ -192,7 +193,8 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
 
    \param In pointer to Map_info structure (input)
    \param Out pointer to Map_info structure (output)
-   \param first_only TRUE to copy only first link otherwise all DB links are copied
+   \param first_only TRUE to copy only first link otherwise all DB links are
+   copied
  */
 void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
                            int first_only)
@@ -261,7 +263,6 @@ int Vect_check_dblink(const struct dblinks *p, int field, const char *name)
     return 0;
 }
 
-
 /*!
    \brief Add new DB connection to dblinks structure
 
@@ -296,9 +297,8 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
 
     if (p->n_fields == p->alloc_fields) {
         p->alloc_fields += 10;
-        p->field = (struct field_info *)G_realloc((void *)p->field,
-                                                  p->alloc_fields *
-                                                  sizeof(struct field_info));
+        p->field = (struct field_info *)G_realloc(
+            (void *)p->field, p->alloc_fields * sizeof(struct field_info));
     }
 
     p->field[p->n_fields].number = number;
@@ -346,13 +346,12 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
    \param Map pointer to Map_info structure
    \param field layer number
    \param field_name layer name
-   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE 
+   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE
 
    \return pointer to allocated field_info structure
  */
-struct field_info *Vect_default_field_info(struct Map_info *Map,
-                                           int field, const char *field_name,
-                                           int type)
+struct field_info *Vect_default_field_info(struct Map_info *Map, int field,
+                                           const char *field_name, int type)
 {
     struct field_info *fi;
     char buf[GNAME_MAX];
@@ -434,7 +433,7 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
     if (!fi->name)
         fi->name = G_store(buf);
 
-    fi->key = G_store(GV_KEY_COLUMN);   /* Should be: id/fid/gfid/... ? */
+    fi->key = G_store(GV_KEY_COLUMN); /* Should be: id/fid/gfid/... ? */
 #ifdef TEMPORARY_MAP_DB
     if (Map->temporary) {
         Vect__get_element_path(buf, Map, NULL);
@@ -582,7 +581,7 @@ struct field_info *Vect_get_field2(const struct Map_info *Map,
     }
     else if (ifield == -1) {
         if (Vect_get_num_dblinks(Map) > 0)
-            return Vect_get_dblink(Map, 0);     /* return first */
+            return Vect_get_dblink(Map, 0); /* return first */
         else
             return NULL;
     }
@@ -639,7 +638,7 @@ static int read_dblinks_nat(struct Map_info *Map)
     /* Read dblink for native format */
     Vect__get_path(path, Map);
     fd = G_fopen_old(path, GV_DBLN_ELEMENT, Map->mapset);
-    if (fd == NULL) {           /* This may be correct, no tables defined */
+    if (fd == NULL) { /* This may be correct, no tables defined */
         G_debug(1, "Cannot open vector database definition file");
         return -1;
     }
@@ -696,7 +695,7 @@ static int read_dblinks_nat(struct Map_info *Map)
 
         /* get field and field name */
         fldname = strchr(fldstr, '/');
-        if (fldname != NULL) {  /* field has name */
+        if (fldname != NULL) { /* field has name */
             fldname[0] = 0;
             fldname++;
         }
@@ -705,7 +704,8 @@ static int read_dblinks_nat(struct Map_info *Map)
         Vect_add_dblink(dbl, fld, fldname, tab, col, db, drv);
 
         G_debug(1,
-                "field = %d name = %s, table = %s, key = %s, database = %s, driver = %s",
+                "field = %d name = %s, table = %s, key = %s, database = %s, "
+                "driver = %s",
                 fld, fldname, tab, col, db, drv);
 
         rule++;
@@ -727,7 +727,8 @@ static int read_dblinks_ogr(struct Map_info *Map)
 #ifndef HAVE_OGR
     G_warning(_("GRASS is not compiled with OGR support"));
 #else
-#if GDAL_VERSION_NUM > 1320 && HAVE_OGR /* seems to be fixed after 1320 release */
+#if GDAL_VERSION_NUM > 1320 && \
+    HAVE_OGR /* seems to be fixed after 1320 release */
     int nLayers;
     char *ogr_fid_col;
 
@@ -747,15 +748,15 @@ static int read_dblinks_ogr(struct Map_info *Map)
     }
     if (Map->fInfo.ogr.layer == NULL) {
         /* get layer number */
-        nLayers = OGR_DS_GetLayerCount(Map->fInfo.ogr.ds);      /* Layers = Maps in OGR DB */
+        nLayers = OGR_DS_GetLayerCount(
+            Map->fInfo.ogr.ds); /* Layers = Maps in OGR DB */
 
         G_debug(3, "%d layers (maps) found in data source", nLayers);
 
         G_debug(3, "Trying to open OGR layer: %s", Map->fInfo.ogr.layer_name);
         if (Map->fInfo.ogr.layer_name) {
-            Map->fInfo.ogr.layer =
-                OGR_DS_GetLayerByName(Map->fInfo.ogr.ds,
-                                      Map->fInfo.ogr.layer_name);
+            Map->fInfo.ogr.layer = OGR_DS_GetLayerByName(
+                Map->fInfo.ogr.ds, Map->fInfo.ogr.layer_name);
             if (Map->fInfo.ogr.layer == NULL) {
                 OGR_DS_Destroy(Map->fInfo.ogr.ds);
                 Map->fInfo.ogr.ds = NULL;
@@ -770,8 +771,8 @@ static int read_dblinks_ogr(struct Map_info *Map)
     ogr_fid_col = G_store(OGR_L_GetFIDColumn(Map->fInfo.ogr.layer));
     G_debug(3, "Using FID column <%s> in OGR DB", ogr_fid_col);
     Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
-                    Map->fInfo.ogr.layer_name, ogr_fid_col,
-                    Map->fInfo.ogr.dsn, "ogr");
+                    Map->fInfo.ogr.layer_name, ogr_fid_col, Map->fInfo.ogr.dsn,
+                    "ogr");
 #else
     dbDriver *driver;
     dbCursor cursor;
@@ -790,10 +791,10 @@ static int read_dblinks_ogr(struct Map_info *Map)
         return -1;
     }
 
-    /* this is a bit stupid, but above FID auto-detection doesn't work yet...: */
+    /* this is a bit stupid, but above FID auto-detection doesn't work yet...:
+     */
     db_auto_print_errors(0);
-    sprintf(buf, "select FID from %s where FID > 0",
-            Map->fInfo.ogr.layer_name);
+    sprintf(buf, "select FID from %s where FID > 0", Map->fInfo.ogr.layer_name);
     db_set_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
@@ -811,19 +812,20 @@ static int read_dblinks_ogr(struct Map_info *Map)
                     Map->fInfo.ogr.layer_name);
             db_set_string(&sql, buf);
 
-            if (db_open_select_cursor
-                (driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
+            if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
+                DB_OK) {
                 /* Neither FID nor ogc_fid available, so we try gid */
                 G_debug(3, "Failed. Now searching for gid column in OGR DB");
                 sprintf(buf, "select gid from %s where gid > 0",
                         Map->fInfo.ogr.layer_name);
                 db_set_string(&sql, buf);
 
-                if (db_open_select_cursor
-                    (driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
+                if (db_open_select_cursor(driver, &sql, &cursor,
+                                          DB_SEQUENTIAL) != DB_OK) {
                     /* neither FID nor ogc_fid nor ogr_fid nor gid available */
-                    G_warning(_("All FID tests failed. Neither 'FID' nor 'ogc_fid' "
-                               "nor 'ogr_fid' nor 'gid' available in OGR DB table"));
+                    G_warning(
+                        _("All FID tests failed. Neither 'FID' nor 'ogc_fid' "
+                          "nor 'ogr_fid' nor 'gid' available in OGR DB table"));
                     db_close_database_shutdown_driver(driver);
                     return 0;
                 }
@@ -893,7 +895,8 @@ static int read_dblinks_pg(struct Map_info *Map)
 
     if (!pg_info->fid_column) {
         G_warning(_("Feature table <%s> has no primary key defined. "
-                    "Unable to define DB links."), pg_info->table_name);
+                    "Unable to define DB links."),
+                  pg_info->table_name);
         return -1;
     }
     G_debug(3, "Using FID column <%s>", pg_info->fid_column);
@@ -904,8 +907,8 @@ static int read_dblinks_pg(struct Map_info *Map)
     else
         name = pg_info->table_name;
 
-    Vect_add_dblink(dbl, 1, name, name,
-                    pg_info->fid_column, pg_info->db_name, "pg");
+    Vect_add_dblink(dbl, 1, name, name, pg_info->fid_column, pg_info->db_name,
+                    "pg");
     if (name != pg_info->table_name)
         G_free(name);
     return 1;
@@ -975,9 +978,10 @@ int Vect_write_dblinks(struct Map_info *Map)
 
     Vect__get_path(path, Map);
     fd = G_fopen_new(path, GV_DBLN_ELEMENT);
-    if (fd == NULL) {           /* This may be correct, no tables defined */
-        G_warning(_("Unable to create database definition file for vector map <%s>"),
-                  Vect_get_name(Map));
+    if (fd == NULL) { /* This may be correct, no tables defined */
+        G_warning(
+            _("Unable to create database definition file for vector map <%s>"),
+            Vect_get_name(Map));
         return -1;
     }
 
@@ -1072,7 +1076,8 @@ void Vect_set_db_updated(struct Map_info *Map)
 {
     if (strcmp(Map->mapset, G_mapset()) != 0 &&
         G_strcasecmp(Map->mapset, "ogr") != 0) {
-        G_fatal_error(_("Bug: attempt to update map which is not in current mapset"));
+        G_fatal_error(
+            _("Bug: attempt to update map which is not in current mapset"));
     }
 
     Vect_write_dblinks(Map);

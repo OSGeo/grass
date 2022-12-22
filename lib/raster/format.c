@@ -35,8 +35,8 @@
    0 0 0 74        offset of end of data
    \endverbatim
 
-   See Rast__write_row_ptrs() below for the code which writes this data. 
-   However, note that the row offsets are initially zero; 
+   See Rast__write_row_ptrs() below for the code which writes this data.
+   However, note that the row offsets are initially zero;
    they get overwritten later (if you are writing compressed data,
    you don't know how much space it will require until you've compressed
    it).
@@ -52,7 +52,7 @@
  *   Rast__check_format(int fd)
  *
  *   Check to see if map with file descriptor "fd" is in compressed
- *   format.   If it is, the offset table at the beginning of the 
+ *   format.   If it is, the offset table at the beginning of the
  *   file (which gives seek addresses into the file where code for
  *   each row is found) is read into the File Control Buffer (FCB).
  *   The compressed flag in the FCB is appropriately set.
@@ -76,8 +76,8 @@ int Rast__check_format(int fd)
      */
 
     if (fcb->cellhd.compressed < 0) {
-        if (read(fcb->data_fd, compress, 3) != 3
-            || compress[0] != 251 || compress[1] != 255 || compress[2] != 251)
+        if (read(fcb->data_fd, compress, 3) != 3 || compress[0] != 251 ||
+            compress[1] != 255 || compress[2] != 251)
             fcb->cellhd.compressed = 0;
     }
 
@@ -91,7 +91,7 @@ int Rast__check_format(int fd)
     return Rast__read_row_ptrs(fd);
 }
 
-static int read_row_ptrs(int nrows, int old, off_t * row_ptr, int fd)
+static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
 {
     unsigned char nbytes;
     unsigned char *buf, *b;
@@ -133,8 +133,7 @@ static int read_row_ptrs(int nrows, int old, off_t * row_ptr, int fd)
         for (n = 0; n < (int)nbytes; n++) {
             unsigned char c = *b++;
 
-            if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) &&
-                c != 0)
+            if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) && c != 0)
                 goto badread;
 
             v <<= 8;
@@ -148,7 +147,7 @@ static int read_row_ptrs(int nrows, int old, off_t * row_ptr, int fd)
 
     return 1;
 
-  badread:
+badread:
     return -1;
 }
 
@@ -181,7 +180,7 @@ int Rast__read_null_row_ptrs(int fd, int null_fd)
     return 1;
 }
 
-static int write_row_ptrs(int nrows, off_t * row_ptr, int fd)
+static int write_row_ptrs(int nrows, off_t *row_ptr, int fd)
 {
     int nbytes = sizeof(off_t);
     unsigned char *buf, *b;

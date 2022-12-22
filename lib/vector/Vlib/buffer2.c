@@ -7,8 +7,8 @@
 
    (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -24,11 +24,11 @@
 
 #include "dgraph.h"
 
-#define LENGTH(DX, DY) (sqrt((DX*DX)+(DY*DY)))
-#define PI M_PI
-#define RIGHT_SIDE 1
-#define LEFT_SIDE -1
-#define LOOPED_LINE 1
+#define LENGTH(DX, DY)  (sqrt((DX * DX) + (DY * DY)))
+#define PI              M_PI
+#define RIGHT_SIDE      1
+#define LEFT_SIDE       -1
+#define LOOPED_LINE     1
 #define NON_LOOPED_LINE 0
 
 /* norm_vector() calculates normalized vector form two points */
@@ -63,8 +63,8 @@ static void rotate_vector(double x, double y, double cosa, double sina,
 }
 
 /*
- * (x,y) should be normalized vector for common transforms; This func transforms (x,y) to a vector corresponding to da, db, dalpha params
- * dalpha is in radians
+ * (x,y) should be normalized vector for common transforms; This func transforms
+ * (x,y) to a vector corresponding to da, db, dalpha params dalpha is in radians
  */
 static void elliptic_transform(double x, double y, double da, double db,
                                double dalpha, double *nx, double *ny)
@@ -92,9 +92,8 @@ static void elliptic_transform(double x, double y, double da, double db,
 
 /*
  * vect(x,y) must be normalized
- * gives the tangent point of the tangent to ellpise(da,db,dalpha) parallel to vect(x,y)
- * dalpha is in radians
- * ellipse center is in (0,0)
+ * gives the tangent point of the tangent to ellpise(da,db,dalpha) parallel to
+ * vect(x,y) dalpha is in radians ellipse center is in (0,0)
  */
 static void elliptic_tangent(double x, double y, double da, double db,
                              double dalpha, double *px, double *py)
@@ -117,9 +116,9 @@ static void elliptic_tangent(double x, double y, double da, double db,
     return;
 }
 
-
 /*
- * !!! This is not line in GRASS' sense. See http://en.wikipedia.org/wiki/Line_%28mathematics%29
+ * !!! This is not line in GRASS' sense. See
+ * http://en.wikipedia.org/wiki/Line_%28mathematics%29
  */
 static void line_coefficients(double x1, double y1, double x2, double y2,
                               double *a, double *b, double *c)
@@ -132,8 +131,8 @@ static void line_coefficients(double x1, double y1, double x2, double y2,
 }
 
 /*
- * Finds intersection of two straight lines. Returns 0 if the lines are parallel, 1 if they cross,
- * 2 if they are the same line.
+ * Finds intersection of two straight lines. Returns 0 if the lines are
+ * parallel, 1 if they cross, 2 if they are the same line.
  * !!!!!!!!!!!!!!!! FIX THIS TOLLERANCE CONSTANTS BAD (and UGLY) CODE !!!!!!!!!
  */
 static int line_intersection(double a1, double b1, double c1, double a2,
@@ -166,8 +165,8 @@ static double angular_tolerance(double tol, double da, double db)
 }
 
 /*
- * This function generates parallel line (with loops, but not like the old ones).
- * It is not to be used directly for creating buffers.
+ * This function generates parallel line (with loops, but not like the old
+ * ones). It is not to be used directly for creating buffers.
  * + added elliptical buffers/par.lines support
  *
  * dalpha - direction of elliptical buffer major axis in degrees
@@ -175,7 +174,8 @@ static double angular_tolerance(double tol, double da, double db)
  * db: distance along minor (perp.) axis
  * side: side >= 0 - right side, side < 0 - left side
  * when (da == db) we have plain distances (old case)
- * round - 1 for round corners, 0 for sharp corners. (tol is used only if round == 1)
+ * round - 1 for round corners, 0 for sharp corners. (tol is used only if round
+ * == 1)
  */
 static void parallel_line(struct line_pnts *Points, double da, double db,
                           double dalpha, int side, int round, int caps,
@@ -214,8 +214,8 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
         return;
     }
 
-    side = (side >= 0) ? (1) : (-1);    /* normalize variable */
-    dalpha *= PI / 180;         /* convert dalpha from degrees to radians */
+    side = (side >= 0) ? (1) : (-1); /* normalize variable */
+    dalpha *= PI / 180; /* convert dalpha from degrees to radians */
     angular_tol = angular_tolerance(tol, da, db);
 
     for (i = 0; i < np - 1; i++) {
@@ -225,7 +225,6 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
         c0 = c1;
         wx = vx;
         wy = vy;
-
 
         norm_vector(x[i], y[i], x[i + 1], y[i + 1], &tx, &ty);
         if ((tx == 0) && (ty == 0))
@@ -267,22 +266,24 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
                 ty = 0;
             }
             Vect_append_point(nPoints, x[i] + wx + tx, y[i] + wy + ty, 0);
-            Vect_append_point(nPoints, nx + tx, ny + ty, 0);    /* nx == x[i] + vx, ny == y[i] + vy */
+            Vect_append_point(nPoints, nx + tx, ny + ty,
+                              0); /* nx == x[i] + vx, ny == y[i] + vy */
         }
         else if ((!round) || inner_corner) {
             res = line_intersection(a0, b0, c0, a1, b1, c1, &rx, &ry);
             /*                if (res == 0) {
-               G_debug(4, "a0=%.18f, b0=%.18f, c0=%.18f, a1=%.18f, b1=%.18f, c1=%.18f", a0, b0, c0, a1, b1, c1);
-               G_fatal_error("Two consecutive line segments are parallel, but not on one straight line! This should never happen.");
-               return;
+               G_debug(4, "a0=%.18f, b0=%.18f, c0=%.18f, a1=%.18f, b1=%.18f,
+               c1=%.18f", a0, b0, c0, a1, b1, c1); G_fatal_error("Two
+               consecutive line segments are parallel, but not on one straight
+               line! This should never happen."); return;
                }  */
             if (res == 1) {
                 if (!round)
                     Vect_append_point(nPoints, rx, ry, 0);
                 else {
-                    /*                    d = dig_distance2_point_to_line(rx, ry, 0, x[i-1], y[i-1], 0, x[i], y[i], 0,
-                       0, NULL, NULL, NULL, NULL, NULL);
-                       if ( */
+                    /*                    d = dig_distance2_point_to_line(rx,
+                       ry, 0, x[i-1], y[i-1], 0, x[i], y[i], 0, 0, NULL, NULL,
+                       NULL, NULL, NULL); if ( */
                     Vect_append_point(nPoints, rx, ry, 0);
                 }
             }
@@ -319,8 +320,7 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
     }
 
     if (looped) {
-        Vect_append_point(nPoints, nPoints->x[0], nPoints->y[0],
-                          nPoints->z[0]);
+        Vect_append_point(nPoints, nPoints->x[0], nPoints->y[0], nPoints->z[0]);
     }
 
     Vect_line_prune(nPoints);
@@ -364,8 +364,8 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
         return;
     }
 
-    side = (side >= 0) ? (1) : (-1);    /* normalize variable */
-    dalpha *= PI / 180;         /* convert dalpha from degrees to radians */
+    side = (side >= 0) ? (1) : (-1); /* normalize variable */
+    dalpha *= PI / 180; /* convert dalpha from degrees to radians */
     angular_tol = angular_tolerance(tol, da, db);
 
     i = np - 2;
@@ -403,7 +403,6 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
         if (!round)
             line_coefficients(nx, ny, mx, my, &a1, &b1, &c1);
 
-
         delta_phi = angle1 - angle0;
         if (delta_phi > PI)
             delta_phi -= 2 * PI;
@@ -413,7 +412,6 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
         turns360 = (fabs(fabs(delta_phi) - PI) < 1e-15);
         inner_corner = (side * delta_phi <= 0) && (!turns360);
 
-
         /* if <line turns 360> and (<caps> and <not round>) */
         if (turns360 && caps && (!round)) {
             norm_vector(0, 0, vx, vy, &tx, &ty);
@@ -421,7 +419,8 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
             Vect_append_point(nPoints, x[i] + wx + tx, y[i] + wy + ty, 0);
             G_debug(4, " append point (c) x=%.16f y=%.16f", x[i] + wx + tx,
                     y[i] + wy + ty);
-            Vect_append_point(nPoints, nx + tx, ny + ty, 0);    /* nx == x[i] + vx, ny == y[i] + vy */
+            Vect_append_point(nPoints, nx + tx, ny + ty,
+                              0); /* nx == x[i] + vx, ny == y[i] + vy */
             G_debug(4, " append point (c) x=%.16f y=%.16f", nx + tx, ny + ty);
         }
 
@@ -435,8 +434,9 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
                 /* no need to append point in this case */
             }
             else
-                G_fatal_error(_("Unexpected result of line_intersection() res = %d"),
-                              res);
+                G_fatal_error(
+                    _("Unexpected result of line_intersection() res = %d"),
+                    res);
         }
 
         if (round && (!inner_corner) && (!turns360 || caps)) {
@@ -480,30 +480,31 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
 }
 
 /*
- * side: side >= 0 - extracts contour on right side of edge, side < 0 - extracts contour on left side of edge
- * if the extracted contour is the outer contour, it is returned in ccw order
- * else if it is inner contour, it is returned in cw order
+ * side: side >= 0 - extracts contour on right side of edge, side < 0 - extracts
+ * contour on left side of edge if the extracted contour is the outer contour,
+ * it is returned in ccw order else if it is inner contour, it is returned in cw
+ * order
  */
 static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
                             int side, int winding, int stop_at_line_end,
                             struct line_pnts *nPoints)
 {
     int j;
-    int v;                      /* current vertex number */
+    int v; /* current vertex number */
     int v0;
-    int eside;                  /* side of the current edge */
-    double eangle;              /* current edge angle with Ox (according to the current direction) */
-    struct pg_vertex *vert;     /* current vertex */
-    struct pg_vertex *vert0;    /* last vertex */
-    struct pg_edge *edge;       /* current edge; must be edge of vert */
+    int eside;     /* side of the current edge */
+    double eangle; /* current edge angle with Ox (according to the current
+                      direction) */
+    struct pg_vertex *vert;  /* current vertex */
+    struct pg_vertex *vert0; /* last vertex */
+    struct pg_edge *edge;    /* current edge; must be edge of vert */
 
-    /*    int cs; *//* on which side are we turning along the contour */
+    /*    int cs; */ /* on which side are we turning along the contour */
     /* we will always turn right and don't need that one */
     double opt_angle, tangle;
     int opt_j, opt_side, opt_flag;
 
-    G_debug(3,
-            "extract_contour(): v1=%d, v2=%d, side=%d, stop_at_line_end=%d",
+    G_debug(3, "extract_contour(): v1=%d, v2=%d, side=%d, stop_at_line_end=%d",
             first->v1, first->v2, side, stop_at_line_end);
 
     Vect_reset_line(nPoints);
@@ -525,8 +526,8 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
 
     while (1) {
         Vect_append_point(nPoints, vert0->x, vert0->y, 0);
-        G_debug(4, "ec: v0=%d, v=%d, eside=%d, edge->v1=%d, edge->v2=%d", v0,
-                v, eside, edge->v1, edge->v2);
+        G_debug(4, "ec: v0=%d, v=%d, eside=%d, edge->v1=%d, edge->v2=%d", v0, v,
+                eside, edge->v1, edge->v2);
         G_debug(4, "ec: append point x=%.18f y=%.18f", vert0->x, vert0->y);
 
         /* mark current edge as visited on the appropriate side */
@@ -559,9 +560,9 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
             }
         }
 
-        /* 
-           G_debug(4, "ec: opt: side=%d opt_flag=%d opt_angle=%.18f opt_j=%d opt_step=%d",
-           side, opt_flag, opt_angle, opt_j, opt_step);
+        /*
+           G_debug(4, "ec: opt: side=%d opt_flag=%d opt_angle=%.18f opt_j=%d
+           opt_step=%d", side, opt_flag, opt_angle, opt_j, opt_step);
          */
 
         /* if line end is reached (no other edges at curr vertex) */
@@ -571,8 +572,9 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
                 break;
             }
             else {
-                opt_j = 0;      /* the only edge of vert is vert->edges[0] */
-                opt_side = -eside;      /* go to the other side of the current edge */
+                opt_j = 0; /* the only edge of vert is vert->edges[0] */
+                opt_side =
+                    -eside; /* go to the other side of the current edge */
                 G_debug(3, "    end has been reached, turning around");
             }
         }
@@ -582,23 +584,23 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
             break;
         if (opt_side == 1) {
             if (vert->edges[opt_j]->visited_right) {
-                G_warning(_("Next edge was visited (right) but it is not the first one !!! breaking loop"));
+                G_warning(_("Next edge was visited (right) but it is not the "
+                            "first one !!! breaking loop"));
                 G_debug(4,
                         "ec: v0=%d, v=%d, eside=%d, edge->v1=%d, edge->v2=%d",
-                        v, (edge->v1 == v) ? (edge->v2) : (edge->v1),
-                        opt_side, vert->edges[opt_j]->v1,
-                        vert->edges[opt_j]->v2);
+                        v, (edge->v1 == v) ? (edge->v2) : (edge->v1), opt_side,
+                        vert->edges[opt_j]->v1, vert->edges[opt_j]->v2);
                 break;
             }
         }
         else {
             if (vert->edges[opt_j]->visited_left) {
-                G_warning(_("Next edge was visited (left) but it is not the first one !!! breaking loop"));
+                G_warning(_("Next edge was visited (left) but it is not the "
+                            "first one !!! breaking loop"));
                 G_debug(4,
                         "ec: v0=%d, v=%d, eside=%d, edge->v1=%d, edge->v2=%d",
-                        v, (edge->v1 == v) ? (edge->v2) : (edge->v1),
-                        opt_side, vert->edges[opt_j]->v1,
-                        vert->edges[opt_j]->v2);
+                        v, (edge->v1 == v) ? (edge->v2) : (edge->v1), opt_side,
+                        vert->edges[opt_j]->v1, vert->edges[opt_j]->v2);
                 break;
             }
         }
@@ -622,10 +624,10 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
  * This function extracts the outer contour of a (self crossing) line.
  * It can generate left/right contour if none of the line ends are in a loop.
  * If one or both of them is in a loop, then there's only one contour
- * 
- * side: side > 0 - right contour, side < 0 - left contour, side = 0 - outer contour
- *       if side != 0 and there's only one contour, the function returns it
- * 
+ *
+ * side: side > 0 - right contour, side < 0 - left contour, side = 0 - outer
+ * contour if side != 0 and there's only one contour, the function returns it
+ *
  * TODO: Implement side != 0 feature;
  */
 static void extract_outer_contour(struct planar_graph *pg, int side,
@@ -674,8 +676,9 @@ static void extract_outer_contour(struct planar_graph *pg, int side,
 
 /*
  * Extracts contours which are not visited.
- * IMPORTANT: the outer contour must be visited (you should call extract_outer_contour() to do that),
- *            so that extract_inner_contour() doesn't return it
+ * IMPORTANT: the outer contour must be visited (you should call
+ * extract_outer_contour() to do that), so that extract_inner_contour() doesn't
+ * return it
  *
  * returns: 0 when there are no more inner contours; otherwise, 1
  */
@@ -726,7 +729,7 @@ static int point_in_buf(struct line_pnts *Points, double px, double py,
 
     G_debug(3, "point_in_buf()");
 
-    dalpha *= PI / 180;         /* convert dalpha from degrees to radians */
+    dalpha *= PI / 180; /* convert dalpha from degrees to radians */
 
     np = Points->n_points;
     da2 = da * da;
@@ -745,7 +748,8 @@ static int point_in_buf(struct line_pnts *Points, double px, double py,
             delta = mx * cy - my * cx;
             delta_k = (px - vx) * cy - (py - vy) * cx;
             k = delta_k / delta;
-            /*            G_debug(4, "k = %g, k1 = %g", k, (mx * (px - vx) + my * (py - vy)) / (mx * mx + my * my)); */
+            /*            G_debug(4, "k = %g, k1 = %g", k, (mx * (px - vx) + my
+             * * (py - vy)) / (mx * mx + my * my)); */
             if (k <= 0) {
                 nx = vx;
                 ny = vy;
@@ -763,19 +767,20 @@ static int point_in_buf(struct line_pnts *Points, double px, double py,
             elliptic_transform(px - nx, py - ny, 1 / da, 1 / db, dalpha, &tx,
                                &ty);
 
-            d = dig_distance2_point_to_line(nx + tx, ny + ty, 0, vx, vy, 0,
-                                            wx, wy, 0, 0, NULL, NULL, NULL,
-                                            NULL, NULL);
+            d = dig_distance2_point_to_line(nx + tx, ny + ty, 0, vx, vy, 0, wx,
+                                            wy, 0, 0, NULL, NULL, NULL, NULL,
+                                            NULL);
 
-            /*            G_debug(4, "sqrt(d)*da = %g, len' = %g, olen = %g", sqrt(d)*da, da*LENGTH(tx,ty), LENGTH((px-nx),(py-ny))); */
+            /*            G_debug(4, "sqrt(d)*da = %g, len' = %g, olen = %g",
+             * sqrt(d)*da, da*LENGTH(tx,ty), LENGTH((px-nx),(py-ny))); */
             if (d <= 1) {
                 /* G_debug(1, "d=%g", d); */
                 return 1;
             }
         }
         else {
-            d = dig_distance2_point_to_line(px, py, 0, vx, vy, 0, wx, wy, 0,
-                                            0, NULL, NULL, NULL, NULL, NULL);
+            d = dig_distance2_point_to_line(px, py, 0, vx, vy, 0, wx, wy, 0, 0,
+                                            NULL, NULL, NULL, NULL, NULL);
             /*            G_debug(4, "sqrt(d)     = %g", sqrt(d)); */
             if (d <= da2) {
                 return 1;
@@ -868,10 +873,10 @@ static void buffer_lines(struct line_pnts *area_outer,
     G_debug(3, "    processing outer contour");
     *oPoints = Vect_new_line_struct();
     if (auto_side)
-        side =
-            get_polygon_orientation(area_outer->x, area_outer->y,
-                                    area_outer->n_points -
-                                    1) ? LEFT_SIDE : RIGHT_SIDE;
+        side = get_polygon_orientation(area_outer->x, area_outer->y,
+                                       area_outer->n_points - 1)
+                   ? LEFT_SIDE
+                   : RIGHT_SIDE;
     convolution_line(area_outer, da, db, dalpha, side, round, caps, tol,
                      sPoints);
     pg2 = pg_create(sPoints);
@@ -895,8 +900,7 @@ static void buffer_lines(struct line_pnts *area_outer,
             }
 
             if (check_poly &&
-                !Vect_point_in_poly(cPoints->x[0], cPoints->y[0],
-                                    area_outer)) {
+                !Vect_point_in_poly(cPoints->x[0], cPoints->y[0], area_outer)) {
                 if (Vect_get_point_in_poly(cPoints, &px, &py) == 0) {
                     if (!point_in_buf(area_outer, px, py, da, db, dalpha)) {
                         add_line_to_array(cPoints, &arrPoints, &count,
@@ -917,12 +921,12 @@ static void buffer_lines(struct line_pnts *area_outer,
     G_debug(3, "    processing inner contours");
     for (i = 0; i < isles_count; i++) {
         if (auto_side)
-            side =
-                get_polygon_orientation(area_isles[i]->x, area_isles[i]->y,
-                                        area_isles[i]->n_points -
-                                        1) ? RIGHT_SIDE : LEFT_SIDE;
-        convolution_line(area_isles[i], da, db, dalpha, side, round, caps,
-                         tol, sPoints);
+            side = get_polygon_orientation(area_isles[i]->x, area_isles[i]->y,
+                                           area_isles[i]->n_points - 1)
+                       ? RIGHT_SIDE
+                       : LEFT_SIDE;
+        convolution_line(area_isles[i], da, db, dalpha, side, round, caps, tol,
+                         sPoints);
         pg2 = pg_create(sPoints);
         extract_outer_contour(pg2, 0, cPoints);
         res = extract_inner_contour(pg2, &winding, cPoints);
@@ -946,11 +950,12 @@ static void buffer_lines(struct line_pnts *area_outer,
                 /* we need to check if the area is in the buffer.
                    I've simplfied convolution_line(), so that it runs faster,
                    however that leads to occasional problems */
-                if (check_poly && Vect_point_in_poly
-                    (cPoints->x[0], cPoints->y[0], area_isles[i])) {
+                if (check_poly &&
+                    Vect_point_in_poly(cPoints->x[0], cPoints->y[0],
+                                       area_isles[i])) {
                     if (Vect_get_point_in_poly(cPoints, &px, &py) == 0) {
-                        if (!point_in_buf
-                            (area_isles[i], px, py, da, db, dalpha)) {
+                        if (!point_in_buf(area_isles[i], px, py, da, db,
+                                          dalpha)) {
                             add_line_to_array(cPoints, &arrPoints, &count,
                                               &allocated, more);
                             cPoints = Vect_new_line_struct();
@@ -978,7 +983,6 @@ static void buffer_lines(struct line_pnts *area_outer,
     return;
 }
 
-
 /*!
    \brief Creates buffer around line.
 
@@ -1004,8 +1008,8 @@ static void buffer_lines(struct line_pnts *area_outer,
  */
 void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
                        double dalpha, int round, int caps, double tol,
-                       struct line_pnts **oPoints,
-                       struct line_pnts ***iPoints, int *inner_count)
+                       struct line_pnts **oPoints, struct line_pnts ***iPoints,
+                       int *inner_count)
 {
     struct planar_graph *pg;
     struct line_pnts *tPoints, *outer;
@@ -1020,8 +1024,8 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
     Vect_line_prune((struct line_pnts *)Points);
 
     if (Points->n_points == 1)
-        return Vect_point_buffer2(Points->x[0], Points->y[0], da, db,
-                                  dalpha, round, tol, oPoints);
+        return Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
+                                  round, tol, oPoints);
 
     /* initializations */
     tPoints = Vect_new_line_struct();
@@ -1110,8 +1114,8 @@ void Vect_area_buffer2(const struct Map_info *Map, int area, double da,
         tPoints = Vect_new_line_struct();
     }
 
-    buffer_lines(outer, isles, isles_count, 0, da, db, dalpha, round, caps,
-                 tol, oPoints, iPoints, inner_count);
+    buffer_lines(outer, isles, isles_count, 0, da, db, dalpha, round, caps, tol,
+                 oPoints, iPoints, inner_count);
 
     Vect_destroy_line_struct(tPoints);
     Vect_destroy_line_struct(outer);
@@ -1144,7 +1148,7 @@ void Vect_point_buffer2(double px, double py, double da, double db,
 
     *oPoints = Vect_new_line_struct();
 
-    dalpha *= PI / 180;         /* convert dalpha from degrees to radians */
+    dalpha *= PI / 180; /* convert dalpha from degrees to radians */
 
     if (round || (!round)) {
         angular_tol = angular_tolerance(tol, da, db);
@@ -1154,14 +1158,12 @@ void Vect_point_buffer2(double px, double py, double da, double db,
 
         phi1 = 0;
         for (j = 0; j < nsegments; j++) {
-            elliptic_transform(cos(phi1), sin(phi1), da, db, dalpha, &tx,
-                               &ty);
+            elliptic_transform(cos(phi1), sin(phi1), da, db, dalpha, &tx, &ty);
             Vect_append_point(*oPoints, px + tx, py + ty, 0);
             phi1 += angular_step;
         }
     }
     else {
-
     }
 
     /* close the output line */
@@ -1170,7 +1172,6 @@ void Vect_point_buffer2(double px, double py, double da, double db,
 
     return;
 }
-
 
 /*
    \brief Create parallel line
@@ -1189,7 +1190,8 @@ void Vect_line_parallel2(struct line_pnts *InPoints, double da, double db,
                          double dalpha, int side, int round, double tol,
                          struct line_pnts *OutPoints)
 {
-    G_debug(2, "Vect_line_parallel(): npoints = %d, da = %f, "
+    G_debug(2,
+            "Vect_line_parallel(): npoints = %d, da = %f, "
             "db = %f, dalpha = %f, side = %d, round_corners = %d, tol = %f",
             InPoints->n_points, da, db, dalpha, side, round, tol);
 

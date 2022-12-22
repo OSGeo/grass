@@ -16,9 +16,9 @@
 /*!
  * \brief Shortest way between two eastings.
  *
- * For lat-lon projection (<tt>PROJECTION_LL</tt>), <i>east1</i>, 
- * <i>east2</i> are changed so that they are no more than 180 degrees 
- * apart. Their true locations are not changed. For all other 
+ * For lat-lon projection (<tt>PROJECTION_LL</tt>), <i>east1</i>,
+ * <i>east2</i> are changed so that they are no more than 180 degrees
+ * apart. Their true locations are not changed. For all other
  * projections, this function does nothing.
  *
  * \param[in,out] east1 east (x) coordinate of first point

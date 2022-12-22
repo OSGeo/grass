@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void c_maxx(DCELL * result, DCELL * values, int n, const void *closure)
+void c_maxx(DCELL *result, DCELL *values, int n, const void *closure)
 {
     DCELL max, maxx;
     int i;

@@ -35,7 +35,7 @@
 
    \return feature type
    \return -2 no more features
-   \return -1 on failure 
+   \return -1 on failure
  */
 int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
                      struct line_cats *line_c, int line)
@@ -88,13 +88,13 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
                                       list.box[found].N, 0.0);
                 }
                 else {
-                    G_warning(_("Unable to construct centroid for area %d. Skipped."),
-                              topo->area);
+                    G_warning(
+                        _("Unable to construct centroid for area %d. Skipped."),
+                        topo->area);
                 }
             }
             else {
-                G_warning(_("Centroid %d: invalid area %d"), line,
-                          topo->area);
+                G_warning(_("Centroid %d: invalid area %d"), line, topo->area);
             }
         }
 
@@ -116,8 +116,8 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
         type = V1_read_line_ogr(Map, line_p, line_c, Line->offset);
 
     if (type != Line->type) {
-        G_warning(_("Unexpected feature type (%d) - should be (%d)"),
-                  type, Line->type);
+        G_warning(_("Unexpected feature type (%d) - should be (%d)"), type,
+                  Line->type);
         return -1;
     }
 

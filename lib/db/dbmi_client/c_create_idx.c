@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_create_idx.c
- * 
+ *
  * \brief DBMI Library (client) - create index
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -25,7 +25,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_create_index(dbDriver * driver, dbIndex * index)
+int db_create_index(dbDriver *driver, dbIndex *index)
 {
     int ret_code;
 
@@ -40,7 +40,7 @@ int db_create_index(dbDriver * driver, dbIndex * index)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-        return ret_code;        /* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get results */
     DB_RECV_STRING(&index->indexName);
@@ -58,7 +58,7 @@ int db_create_index(dbDriver * driver, dbIndex * index)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_create_index2(dbDriver * driver, const char *table_name,
+int db_create_index2(dbDriver *driver, const char *table_name,
                      const char *column_name)
 {
     int ret;

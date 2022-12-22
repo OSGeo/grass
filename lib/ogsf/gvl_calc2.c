@@ -1,17 +1,18 @@
 /*!
    \file lib/ogsf/gvl_calc2.c
 
-   \brief OGSF library - loading and manipulating volumes, MarchingCubes 33 Algorithm (lower level functions)
+   \brief OGSF library - loading and manipulating volumes, MarchingCubes 33
+   Algorithm (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    Based on implementation of MarchingCubes 33 Algorithm by
    Thomas Lewiner, thomas.lewiner@polytechnique.org, Math Dept, PUC-Rio
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -115,8 +116,8 @@ int mc33_test_interior(char s, float *v)
     case 4:
     case 10:
         a = (v[4] - v[0]) * (v[6] - v[2]) - (v[7] - v[3]) * (v[5] - v[1]);
-        b = v[2] * (v[4] - v[0]) + v[0] * (v[6] - v[2])
-            - v[1] * (v[7] - v[3]) - v[3] * (v[5] - v[1]);
+        b = v[2] * (v[4] - v[0]) + v[0] * (v[6] - v[2]) - v[1] * (v[7] - v[3]) -
+            v[3] * (v[5] - v[1]);
         t = -b / (2 * a);
 
         if (t < 0 || t > 1)
@@ -143,9 +144,8 @@ int mc33_test_interior(char s, float *v)
             edge = cell_table[OFFSET_T12_2_S1 + m_config].polys[14];
             break;
         case 13:
-            edge =
-                cell_table[OFFSET_T13_5_1 + m_subconfig +
-                           m_config * 4].polys[2];
+            edge = cell_table[OFFSET_T13_5_1 + m_subconfig + m_config * 4]
+                       .polys[2];
             break;
         }
 
@@ -322,27 +322,27 @@ int mc33_process_cube(int c_ndx, float *v)
 
     case 3:
         if (mc33_test_face(test[OFFSET_TEST3 + m_config][0], v))
-            return OFFSET_T3_2 + m_config;      /* 3.2 */
+            return OFFSET_T3_2 + m_config; /* 3.2 */
         else
-            return OFFSET_T3_1 + m_config;      /* 3.1 */
+            return OFFSET_T3_1 + m_config; /* 3.1 */
 
     case 4:
         if (mc33_test_interior(test[OFFSET_TEST4 + m_config][0], v))
-            return OFFSET_T4_1 + m_config;      /* 4.1 */
+            return OFFSET_T4_1 + m_config; /* 4.1 */
         else
-            return OFFSET_T4_2 + m_config;      /* 4.2 */
+            return OFFSET_T4_2 + m_config; /* 4.2 */
 
     case 5:
         return OFFSET_T5 + m_config;
 
     case 6:
         if (mc33_test_face(test[OFFSET_TEST6 + m_config][0], v))
-            return OFFSET_T6_2 + m_config;      /* 6.2 */
+            return OFFSET_T6_2 + m_config; /* 6.2 */
         else {
             if (mc33_test_interior(test[OFFSET_TEST6 + m_config][1], v))
-                return OFFSET_T6_1_1 + m_config;        /* 6.1.1 */
+                return OFFSET_T6_1_1 + m_config; /* 6.1.1 */
             else
-                return OFFSET_T6_1_2 + m_config;        /* 6.1.2 */
+                return OFFSET_T6_1_2 + m_config; /* 6.1.2 */
         }
 
     case 7:
@@ -356,23 +356,23 @@ int mc33_process_cube(int c_ndx, float *v)
         switch (subconfig7[m_subconfig]) {
         case 0:
             if (mc33_test_interior(test[OFFSET_TEST7 + m_config][3], v))
-                return OFFSET_T7_4_2 + m_config;        /* 7.4.2 */
+                return OFFSET_T7_4_2 + m_config; /* 7.4.2 */
             else
-                return OFFSET_T7_4_1 + m_config;        /* 7.4.1 */
+                return OFFSET_T7_4_1 + m_config; /* 7.4.1 */
         case 1:
-            return OFFSET_T7_3_S1 + m_config;   /* 7.3 */
+            return OFFSET_T7_3_S1 + m_config; /* 7.3 */
         case 2:
-            return OFFSET_T7_3_S2 + m_config;   /* 7.3 */
+            return OFFSET_T7_3_S2 + m_config; /* 7.3 */
         case 3:
-            return OFFSET_T7_3_S3 + m_config;   /* 7.3 */
+            return OFFSET_T7_3_S3 + m_config; /* 7.3 */
         case 4:
-            return OFFSET_T7_2_S1 + m_config;   /* 7.2 */
+            return OFFSET_T7_2_S1 + m_config; /* 7.2 */
         case 5:
-            return OFFSET_T7_2_S2 + m_config;   /* 7.2 */
+            return OFFSET_T7_2_S2 + m_config; /* 7.2 */
         case 6:
-            return OFFSET_T7_2_S3 + m_config;   /* 7.2 */
+            return OFFSET_T7_2_S3 + m_config; /* 7.2 */
         case 7:
-            return OFFSET_T7_1 + m_config;      /* 7.1 */
+            return OFFSET_T7_1 + m_config; /* 7.1 */
         };
 
     case 8:
@@ -384,20 +384,20 @@ int mc33_process_cube(int c_ndx, float *v)
     case 10:
         if (mc33_test_face(test[OFFSET_TEST10 + m_config][0], v)) {
             if (mc33_test_face(test[OFFSET_TEST10 + m_config][1], v))
-                return OFFSET_T10_1_1_S2 + m_config;    /* 10.1.1 */
+                return OFFSET_T10_1_1_S2 + m_config; /* 10.1.1 */
             else {
-                return OFFSET_T10_2_S1 + m_config;      /* 10.2 */
+                return OFFSET_T10_2_S1 + m_config; /* 10.2 */
             }
         }
         else {
             if (mc33_test_face(test[OFFSET_TEST10 + m_config][1], v)) {
-                return OFFSET_T10_2_S2 + m_config;      /* 10.2 */
+                return OFFSET_T10_2_S2 + m_config; /* 10.2 */
             }
             else {
                 if (mc33_test_interior(test[OFFSET_TEST10 + m_config][2], v))
-                    return OFFSET_T10_1_1_S1 + m_config;        /* 10.1.1 */
+                    return OFFSET_T10_1_1_S1 + m_config; /* 10.1.1 */
                 else
-                    return OFFSET_T10_1_2 + m_config;   /* 10.1.2 */
+                    return OFFSET_T10_1_2 + m_config; /* 10.1.2 */
             }
         }
 
@@ -407,20 +407,20 @@ int mc33_process_cube(int c_ndx, float *v)
     case 12:
         if (mc33_test_face(test[OFFSET_TEST12 + m_config][0], v)) {
             if (mc33_test_face(test[OFFSET_TEST12 + m_config][1], v))
-                return OFFSET_T12_1_1_S2 + m_config;    /* 12.1.1 */
+                return OFFSET_T12_1_1_S2 + m_config; /* 12.1.1 */
             else {
-                return OFFSET_T12_2_S1 + m_config;      /* 12.2 */
+                return OFFSET_T12_2_S1 + m_config; /* 12.2 */
             }
         }
         else {
             if (mc33_test_face(test[OFFSET_TEST12 + m_config][1], v)) {
-                return OFFSET_T12_2_S2 + m_config;      /* 12.2 */
+                return OFFSET_T12_2_S2 + m_config; /* 12.2 */
             }
             else {
                 if (mc33_test_interior(test[OFFSET_TEST12 + m_config][2], v))
-                    return OFFSET_T12_1_1_S1 + m_config;        /* 12.1.1 */
+                    return OFFSET_T12_1_1_S1 + m_config; /* 12.1.1 */
                 else
-                    return OFFSET_T12_1_2 + m_config;   /* 12.1.2 */
+                    return OFFSET_T12_1_2 + m_config; /* 12.1.2 */
             }
         }
 
@@ -439,120 +439,120 @@ int mc33_process_cube(int c_ndx, float *v)
             m_subconfig += 32;
 
         switch (subconfig13[m_subconfig]) {
-        case 0:                /* 13.1 */
+        case 0: /* 13.1 */
             return OFFSET_T13_1_S1 + m_config;
 
-        case 1:                /* 13.2 */
+        case 1: /* 13.2 */
             return OFFSET_T13_2_S1 + 0 + m_config * 6;
-        case 2:                /* 13.2 */
+        case 2: /* 13.2 */
             return OFFSET_T13_2_S1 + 1 + m_config * 6;
-        case 3:                /* 13.2 */
+        case 3: /* 13.2 */
             return OFFSET_T13_2_S1 + 2 + m_config * 6;
-        case 4:                /* 13.2 */
+        case 4: /* 13.2 */
             return OFFSET_T13_2_S1 + 3 + m_config * 6;
-        case 5:                /* 13.2 */
+        case 5: /* 13.2 */
             return OFFSET_T13_2_S1 + 4 + m_config * 6;
-        case 6:                /* 13.2 */
+        case 6: /* 13.2 */
             return OFFSET_T13_2_S1 + 5 + m_config * 6;
 
-        case 7:                /* 13.3 */
+        case 7: /* 13.3 */
             return OFFSET_T13_3_S1 + 0 + m_config * 12;
-        case 8:                /* 13.3 */
+        case 8: /* 13.3 */
             return OFFSET_T13_3_S1 + 1 + m_config * 12;
-        case 9:                /* 13.3 */
+        case 9: /* 13.3 */
             return OFFSET_T13_3_S1 + 2 + m_config * 12;
-        case 10:               /* 13.3 */
+        case 10: /* 13.3 */
             return OFFSET_T13_3_S1 + 3 + m_config * 12;
-        case 11:               /* 13.3 */
+        case 11: /* 13.3 */
             return OFFSET_T13_3_S1 + 4 + m_config * 12;
-        case 12:               /* 13.3 */
+        case 12: /* 13.3 */
             return OFFSET_T13_3_S1 + 5 + m_config * 12;
-        case 13:               /* 13.3 */
+        case 13: /* 13.3 */
             return OFFSET_T13_3_S1 + 6 + m_config * 12;
-        case 14:               /* 13.3 */
+        case 14: /* 13.3 */
             return OFFSET_T13_3_S1 + 7 + m_config * 12;
-        case 15:               /* 13.3 */
+        case 15: /* 13.3 */
             return OFFSET_T13_3_S1 + 8 + m_config * 12;
-        case 16:               /* 13.3 */
+        case 16: /* 13.3 */
             return OFFSET_T13_3_S1 + 9 + m_config * 12;
-        case 17:               /* 13.3 */
+        case 17: /* 13.3 */
             return OFFSET_T13_3_S1 + 10 + m_config * 12;
-        case 18:               /* 13.3 */
+        case 18: /* 13.3 */
             return OFFSET_T13_3_S1 + 11 + m_config * 12;
 
-        case 19:               /* 13.4 */
+        case 19: /* 13.4 */
             return OFFSET_T13_4 + 0 + m_config * 4;
-        case 20:               /* 13.4 */
+        case 20: /* 13.4 */
             return OFFSET_T13_4 + 1 + m_config * 4;
-        case 21:               /* 13.4 */
+        case 21: /* 13.4 */
             return OFFSET_T13_4 + 2 + m_config * 4;
-        case 22:               /* 13.4 */
+        case 22: /* 13.4 */
             return OFFSET_T13_4 + 3 + m_config * 4;
 
-        case 23:               /* 13.5 */
+        case 23: /* 13.5 */
             m_subconfig = 0;
             if (mc33_test_interior(test[OFFSET_TEST13 + m_config][6], v))
                 return OFFSET_T13_5_1 + 0 + m_config * 4;
             else
                 return OFFSET_T13_5_2 + 0 + m_config * 4;
-        case 24:               /* 13.5 */
+        case 24: /* 13.5 */
             m_subconfig = 1;
             if (mc33_test_interior(test[OFFSET_TEST13 + m_config][6], v))
                 return OFFSET_T13_5_1 + 1 + m_config * 4;
             else
                 return OFFSET_T13_5_2 + 1 + m_config * 4;
-        case 25:               /* 13.5 */
+        case 25: /* 13.5 */
             m_subconfig = 2;
             if (mc33_test_interior(test[OFFSET_TEST13 + m_config][6], v))
                 return OFFSET_T13_5_1 + 2 + m_config * 4;
             else
                 return OFFSET_T13_5_2 + 2 + m_config * 4;
-        case 26:               /* 13.5 */
+        case 26: /* 13.5 */
             m_subconfig = 3;
             if (mc33_test_interior(test[OFFSET_TEST13 + m_config][6], v))
                 return OFFSET_T13_5_1 + 3 + m_config * 4;
             else
                 return OFFSET_T13_5_2 + 3 + m_config * 4;
 
-        case 27:               /* 13.3 */
+        case 27: /* 13.3 */
             return OFFSET_T13_3_S2 + 0 + m_config * 12;
-        case 28:               /* 13.3 */
+        case 28: /* 13.3 */
             return OFFSET_T13_3_S2 + 1 + m_config * 12;
-        case 29:               /* 13.3 */
+        case 29: /* 13.3 */
             return OFFSET_T13_3_S2 + 2 + m_config * 12;
-        case 30:               /* 13.3 */
+        case 30: /* 13.3 */
             return OFFSET_T13_3_S2 + 3 + m_config * 12;
-        case 31:               /* 13.3 */
+        case 31: /* 13.3 */
             return OFFSET_T13_3_S2 + 4 + m_config * 12;
-        case 32:               /* 13.3 */
+        case 32: /* 13.3 */
             return OFFSET_T13_3_S2 + 5 + m_config * 12;
-        case 33:               /* 13.3 */
+        case 33: /* 13.3 */
             return OFFSET_T13_3_S2 + 6 + m_config * 12;
-        case 34:               /* 13.3 */
+        case 34: /* 13.3 */
             return OFFSET_T13_3_S2 + 7 + m_config * 12;
-        case 35:               /* 13.3 */
+        case 35: /* 13.3 */
             return OFFSET_T13_3_S2 + 8 + m_config * 12;
-        case 36:               /* 13.3 */
+        case 36: /* 13.3 */
             return OFFSET_T13_3_S2 + 9 + m_config * 12;
-        case 37:               /* 13.3 */
+        case 37: /* 13.3 */
             return OFFSET_T13_3_S2 + 10 + m_config * 12;
-        case 38:               /* 13.3 */
+        case 38: /* 13.3 */
             return OFFSET_T13_3_S2 + 11 + m_config * 12;
 
-        case 39:               /* 13.2 */
+        case 39: /* 13.2 */
             return OFFSET_T13_2_S2 + 0 + m_config * 6;
-        case 40:               /* 13.2 */
+        case 40: /* 13.2 */
             return OFFSET_T13_2_S2 + 1 + m_config * 6;
-        case 41:               /* 13.2 */
+        case 41: /* 13.2 */
             return OFFSET_T13_2_S2 + 2 + m_config * 6;
-        case 42:               /* 13.2 */
+        case 42: /* 13.2 */
             return OFFSET_T13_2_S2 + 3 + m_config * 6;
-        case 43:               /* 13.2 */
+        case 43: /* 13.2 */
             return OFFSET_T13_2_S2 + 4 + m_config * 6;
-        case 44:               /* 13.2 */
+        case 44: /* 13.2 */
             return OFFSET_T13_2_S2 + 5 + m_config * 6;
 
-        case 45:               /* 13.1 */
+        case 45: /* 13.1 */
             return OFFSET_T13_1_S2 + m_config;
 
         default:

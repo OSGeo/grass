@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,10 +10,11 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <sys/types.h>
 #include <string.h>
 #include <grass/vector.h>
@@ -56,13 +56,13 @@ int dig__write_head(struct Map_info *Map)
     if (Map->head.head_size >= GV_COOR_HEAD_SIZE + 4) {
         if (Map->head.size > PORT_LONG_MAX) {
             /* can only happen when sizeof(off_t) == 8 */
-            if (0 >=
-                dig__fwrite_port_O(&(Map->head.size), 1, &(Map->dig_fp),
-                                   sizeof(off_t)))
+            if (0 >= dig__fwrite_port_O(&(Map->head.size), 1, &(Map->dig_fp),
+                                        sizeof(off_t)))
                 return (0);
         }
         else {
-            /* write twice to fill the space and set offset (account for sizeof(off_t) == 4) */
+            /* write twice to fill the space and set offset (account for
+             * sizeof(off_t) == 4) */
             if (0 >=
                 dig__fwrite_port_O(&(Map->head.size), 1, &(Map->dig_fp), 4))
                 return (0);
@@ -83,7 +83,6 @@ int dig__write_head(struct Map_info *Map)
     return 1;
 }
 
-
 int dig__read_head(struct Map_info *Map)
 {
     unsigned char buf[10];
@@ -101,33 +100,36 @@ int dig__read_head(struct Map_info *Map)
     Map->head.coor_version.back_minor = buf[3];
     Map->head.port.byte_order = buf[4];
 
-    G_debug(2,
-            "Coor header: file version %d.%d , supported from GRASS version %d.%d",
-            Map->head.coor_version.major, Map->head.coor_version.minor,
-            Map->head.coor_version.back_major,
-            Map->head.coor_version.back_minor);
+    G_debug(
+        2,
+        "Coor header: file version %d.%d , supported from GRASS version %d.%d",
+        Map->head.coor_version.major, Map->head.coor_version.minor,
+        Map->head.coor_version.back_major, Map->head.coor_version.back_minor);
 
     G_debug(2, "  byte order %d", Map->head.port.byte_order);
 
     /* check version numbers */
     if (Map->head.coor_version.major > GV_COOR_VER_MAJOR ||
         Map->head.coor_version.minor > GV_COOR_VER_MINOR) {
-        /* The file was created by GRASS library with higher version than this one */
+        /* The file was created by GRASS library with higher version than this
+         * one */
 
         if (Map->head.coor_version.back_major > GV_COOR_VER_MAJOR ||
             Map->head.coor_version.back_minor > GV_COOR_VER_MINOR) {
-            /* This version of GRASS lib is lower than the oldest which can read this format */
-            G_fatal_error
-                ("Vector 'coor' format version %d.%d is not supported by this version of GRASS. "
-                 "Update your GRASS.", Map->head.coor_version.major,
-                 Map->head.coor_version.minor);
+            /* This version of GRASS lib is lower than the oldest which can read
+             * this format */
+            G_fatal_error("Vector 'coor' format version %d.%d is not supported "
+                          "by this version of GRASS. "
+                          "Update your GRASS.",
+                          Map->head.coor_version.major,
+                          Map->head.coor_version.minor);
             return (-1);
         }
 
-        G_warning
-            ("Your GRASS version does not fully support vector format %d.%d."
-             " Consider to upgrade GRASS.", Map->head.coor_version.major,
-             Map->head.coor_version.minor);
+        G_warning(
+            "Your GRASS version does not fully support vector format %d.%d."
+            " Consider to upgrade GRASS.",
+            Map->head.coor_version.major, Map->head.coor_version.minor);
     }
 
     dig_init_portable(&port, Map->head.port.byte_order);
@@ -148,9 +150,8 @@ int dig__read_head(struct Map_info *Map)
     if (Map->head.size > PORT_LONG_MAX &&
         Map->head.head_size >= GV_COOR_HEAD_SIZE + 4) {
         /* bytes 11 - 18 : size of coordinate file */
-        if (0 >=
-            dig__fread_port_O(&(Map->head.size), 1, &(Map->dig_fp),
-                              sizeof(off_t)))
+        if (0 >= dig__fread_port_O(&(Map->head.size), 1, &(Map->dig_fp),
+                                   sizeof(off_t)))
             return (0);
     }
     else {
@@ -160,7 +161,8 @@ int dig__read_head(struct Map_info *Map)
     }
     G_debug(2, "  coor size %" PRI_OFF_T, Map->head.size);
 
-    /* Go to end of header, file may be written by new version of GRASS with longer header */
+    /* Go to end of header, file may be written by new version of GRASS with
+     * longer header */
 
     dig_fseek(&(Map->dig_fp), Map->head.head_size, SEEK_SET);
 

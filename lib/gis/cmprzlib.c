@@ -6,7 +6,7 @@
  * FILENAME:    cmprzlib.c
  * AUTHOR(S):   Eric G. Miller <egm2@jps.net>
  *              Markus Metz
- * PURPOSE:     To provide an interface to libz for compressing and 
+ * PURPOSE:     To provide an interface to libz for compressing and
  *              decompressing data using DEFLATE.  It's primary use is in
  *              the storage and reading of GRASS floating point rasters.
  *              It replaces the patented LZW compression interface.
@@ -16,7 +16,7 @@
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -74,11 +74,10 @@
 
 #include "G.h"
 
-
 int G_zlib_compress_bound(int src_sz)
 {
     /* from zlib.h:
-     * "when using compress or compress2, 
+     * "when using compress or compress2,
      * destLen must be at least the value returned by
      * compressBound(sourceLen)"
      * no explanation for the "must be"
@@ -86,9 +85,8 @@ int G_zlib_compress_bound(int src_sz)
     return compressBound(src_sz);
 }
 
-int
-G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
-                int dst_sz)
+int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                    int dst_sz)
 {
     uLong err, nbytes, buf_sz;
     unsigned char *buf;
@@ -119,22 +117,23 @@ G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     buf = dst;
     buf_sz = G_zlib_compress_bound(src_sz);
     if (buf_sz > dst_sz) {
-        G_warning
-            ("G_zlib_compress(): programmer error, destination is too small");
-        if (NULL == (buf = (unsigned char *)
-                     G_calloc(buf_sz, sizeof(unsigned char))))
+        G_warning(
+            "G_zlib_compress(): programmer error, destination is too small");
+        if (NULL ==
+            (buf = (unsigned char *)G_calloc(buf_sz, sizeof(unsigned char))))
             return -1;
     }
     else
         buf_sz = dst_sz;
 
     /* Valid zlib compression levels -1 - 9 */
-    /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6 
-     * as used here, 1 gives the best compromise between speed and compression */
+    /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6
+     * as used here, 1 gives the best compromise between speed and compression
+     */
 
     /* Do single pass compression */
     nbytes = buf_sz;
-    err = compress2((Bytef *) buf, &nbytes,     /* destination */
+    err = compress2((Bytef *)buf, &nbytes,      /* destination */
                     (const Bytef *)src, src_sz, /* source */
                     G__.compression_level);     /* level */
 
@@ -162,11 +161,10 @@ G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     }
 
     return nbytes;
-}                               /* G_zlib_compress() */
+} /* G_zlib_compress() */
 
-
-int
-G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
+                  int dst_sz)
 {
     int err;
     uLong ss, nbytes;
@@ -194,8 +192,8 @@ G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 
     /* Do single pass decompression */
     nbytes = dst_sz;
-    err = uncompress((Bytef *) dst, &nbytes,    /* destination */
-                     (const Bytef *)src, ss);   /* source */
+    err = uncompress((Bytef *)dst, &nbytes,   /* destination */
+                     (const Bytef *)src, ss); /* source */
 
     /* If not Z_OK return error -1 */
     if (err != Z_OK) {
@@ -215,10 +213,8 @@ G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     }
 
     return nbytes;
-}                               /* G_zlib_expand() */
-
+} /* G_zlib_expand() */
 
 #endif /* HAVE_ZLIB_H */
-
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

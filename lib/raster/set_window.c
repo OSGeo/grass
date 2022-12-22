@@ -37,7 +37,7 @@ void Rast__init_window(void)
 
 /*!
  * \brief Establishes 'window' as the current working window.
- * 
+ *
  * \param window window to become operative window
  */
 void Rast_set_window(struct Cell_head *window)
@@ -70,7 +70,7 @@ void Rast_unset_window(void)
 
 /*!
  * \brief Establishes 'window' as the current working window for output.
- * 
+ *
  * \param window window to become operative window
  */
 void Rast_set_output_window(struct Cell_head *window)
@@ -89,7 +89,7 @@ void Rast_set_output_window(struct Cell_head *window)
 
 /*!
  * \brief Establishes 'window' as the current working window for input.
- * 
+ *
  * Any opened cell files has its file-to-window mapping reworked.
  *
  * \param window window to become operative window
@@ -130,8 +130,9 @@ static void update_window_mappings(void)
                 fcb->cellhd.proj == R__.rd_window.proj)
                 continue;
             if (i != maskfd)
-                G_fatal_error(_("Rast_set_read_window(): projection/zone differs from that of "
-                               "currently open raster maps"));
+                G_fatal_error(_("Rast_set_read_window(): projection/zone "
+                                "differs from that of "
+                                "currently open raster maps"));
         }
     }
 
@@ -140,13 +141,13 @@ static void update_window_mappings(void)
         Rast_close(maskfd);
         /* G_free (R__.mask_buf); */
         R__.mask_fd = -1;
-        R__.auto_mask = -1;     /* turn off masking */
+        R__.auto_mask = -1; /* turn off masking */
     }
 
     /* now for each possible open cell file, recreate the window mapping */
     /*
-     * also the memory for reading and writing must be reallocated for all opened
-     * cell files
+     * also the memory for reading and writing must be reallocated for all
+     * opened cell files
      */
     for (i = 0; i < R__.fileinfo_count; i++) {
         struct fileinfo *fcb = &R__.fileinfo[i];
@@ -157,7 +158,8 @@ static void update_window_mappings(void)
             continue;
 
         if (fcb->open_mode == OPEN_OLD)
-            G_fatal_error(_("Input window changed while maps are open for read. Map name <%s>"),
+            G_fatal_error(_("Input window changed while maps are open for "
+                            "read. Map name <%s>"),
                           fcb->name);
     }
 
@@ -174,7 +176,8 @@ static void check_write_window(void)
 
         if (fcb->open_mode == OPEN_NEW_UNCOMPRESSED ||
             fcb->open_mode == OPEN_NEW_COMPRESSED)
-            G_fatal_error(_("Output window changed while maps are open for write. Map name <%s>"),
+            G_fatal_error(_("Output window changed while maps are open for "
+                            "write. Map name <%s>"),
                           fcb->name);
     }
 }

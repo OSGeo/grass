@@ -1,19 +1,18 @@
-
 /****************************************************************************
  *
  * MODULE:       test.dbmi_base.lib
  *
  * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert <at> googlemail <dot> com
- * 		 2010 Braunschweig, Germany
+ *                  2010 Braunschweig, Germany
  *
  * PURPOSE:      Unit and integration tests for the dbmi_base library
  *
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
  *
  *****************************************************************************/
 
@@ -61,15 +60,12 @@ int test_table(void)
     db_init_table(t1);
 
     /*Append three columns of the different type */
-    db_append_table_column(t1,
-                           create_column("first", "first column",
-                                         DB_SQL_TYPE_DOUBLE_PRECISION));
-    db_append_table_column(t1,
-                           create_column("second", "second column",
-                                         DB_SQL_TYPE_REAL));
-    db_append_table_column(t1,
-                           create_column("third", "third column",
-                                         DB_SQL_TYPE_DECIMAL));
+    db_append_table_column(t1, create_column("first", "first column",
+                                             DB_SQL_TYPE_DOUBLE_PRECISION));
+    db_append_table_column(
+        t1, create_column("second", "second column", DB_SQL_TYPE_REAL));
+    db_append_table_column(
+        t1, create_column("third", "third column", DB_SQL_TYPE_DECIMAL));
 
     if (t1->numColumns != 3) {
         G_warning("Error appending columns");
@@ -114,21 +110,18 @@ int test_table(void)
         sum++;
     }
     /*We check only the column names */
-    if (strcmp
-        (t1->columns[0].columnName.string,
-         t2->columns[0].columnName.string) != 0) {
+    if (strcmp(t1->columns[0].columnName.string,
+               t2->columns[0].columnName.string) != 0) {
         G_warning("Error copying first column");
         sum++;
     }
-    if (strcmp
-        (t1->columns[1].columnName.string,
-         t2->columns[1].columnName.string) != 0) {
+    if (strcmp(t1->columns[1].columnName.string,
+               t2->columns[1].columnName.string) != 0) {
         G_warning("Error copying second column");
         sum++;
     }
-    if (strcmp
-        (t1->columns[2].columnName.string,
-         t2->columns[2].columnName.string) != 0) {
+    if (strcmp(t1->columns[2].columnName.string,
+               t2->columns[2].columnName.string) != 0) {
         G_warning("Error copying third column");
         sum++;
     }
@@ -137,12 +130,12 @@ int test_table(void)
     db_set_table_column(t2, 0,
                         create_column("new_first", "new first column",
                                       DB_SQL_TYPE_DOUBLE_PRECISION));
-    db_set_table_column(t2, 1,
-                        create_column("new_second", "new second column",
-                                      DB_SQL_TYPE_REAL));
-    db_set_table_column(t2, 2,
-                        create_column("new_third", "new third column",
-                                      DB_SQL_TYPE_INTEGER));
+    db_set_table_column(
+        t2, 1,
+        create_column("new_second", "new second column", DB_SQL_TYPE_REAL));
+    db_set_table_column(
+        t2, 2,
+        create_column("new_third", "new third column", DB_SQL_TYPE_INTEGER));
 
     G_message("##### Second table new columns:\n");
     db_print_table_definition(stdout, t2);
@@ -150,7 +143,6 @@ int test_table(void)
     dbColumn *c1 = db_get_table_column_by_name(t2, "new_first");
     dbColumn *c2 = db_get_table_column_by_name(t2, "new_second");
     dbColumn *c3 = db_get_table_column_by_name(t2, "new_third");
-
 
     /*We check the column names */
     if (strcmp(c1->columnName.string, "new_first") != 0) {
@@ -172,10 +164,9 @@ int test_table(void)
 /* *************************************************************** */
 /* Simple table creation ***************************************** */
 /* *************************************************************** */
-dbColumn *create_column(const char *name, const char *desctiption,
-                        int sqltype)
+dbColumn *create_column(const char *name, const char *desctiption, int sqltype)
 {
-    dbColumn *column = (dbColumn *) db_calloc(sizeof(dbColumn), 1);
+    dbColumn *column = (dbColumn *)db_calloc(sizeof(dbColumn), 1);
 
     db_init_column(column);
 

@@ -1,4 +1,3 @@
-
 /*-Algorithm AS 177
  * Expected Normal Order Statistics (Exact and Approximate),
  * by J.P. Royston, 1982.
@@ -6,23 +5,21 @@
  *
  * Translation to C by James Darrell McCauley, mccauley@ecn.purdue.edu.
  *
- * The functions Cdhc_nscor1() and Cdhc_nscor2() calculate the expected values of
- * normal order statistics in exact or approximate form, respectively.
+ * The functions Cdhc_nscor1() and Cdhc_nscor2() calculate the expected values
+ * of normal order statistics in exact or approximate form, respectively.
  *
  */
 
 #define NSTEP 721
-#define H 0.025
+#define H     0.025
 
 #include <math.h>
 #include <stdio.h>
 #include "local_proto.h"
 
-
 /* Local function prototypes */
 static double Cdhc_alnfac(int j);
 static double Cdhc_correc(int i, int n);
-
 
 /* exact calculation of normal scores */
 void Cdhc_nscor1(double s[], int n, int n2, double work[], int *ifault)
@@ -52,15 +49,14 @@ void Cdhc_nscor1(double s[], int n, int n2, double work[], int *ifault)
         c = c1 - d;
         for (scor = 0.0, j = 0; j < NSTEP; ++j)
             scor += work[0 * NSTEP + j] *
-                exp(work[1 * NSTEP + j] + work[2 * NSTEP + j] * i
-                    + work[3 * NSTEP + j] * ani + c);
+                    exp(work[1 * NSTEP + j] + work[2 * NSTEP + j] * i +
+                        work[3 * NSTEP + j] * ani + c);
         s[i] = scor * H;
         d += log((double)(i + 1.0) / ani);
     }
 
     return;
 }
-
 
 void init(double work[])
 {
@@ -81,15 +77,14 @@ void init(double work[])
     return;
 }
 
-
 /*-Algorithm AS 177.2 Appl. Statist. (1982) Vol.31, No.2
  * Natural logarithm of factorial for non-negative argument
  */
 static double Cdhc_alnfac(int j)
 {
-    static double r[7] = { 0.0, 0.0, 0.69314718056, 1.79175946923,
-        3.17805383035, 4.78749174278, 6.57925121101
-    };
+    static double r[7] = {0.0,           0.0,           0.69314718056,
+                          1.79175946923, 3.17805383035, 4.78749174278,
+                          6.57925121101};
     double w, z;
 
     if (j == 1)
@@ -101,20 +96,19 @@ static double Cdhc_alnfac(int j)
     z = 1.0 / (w * w);
 
     return (w - 0.5) * log(w) - w + 0.918938522305 +
-        (((4.0 - 3.0 * z) * z - 14.0) * z + 420.0) / (5040.0 * w);
+           (((4.0 - 3.0 * z) * z - 14.0) * z + 420.0) / (5040.0 * w);
 }
-
 
 /*-Algorithm AS 177.3 Appl. Statist. (1982) Vol.31, No.2
  * Approximation for Rankits
  */
 void Cdhc_nscor2(double s[], int n, int n2, int *ifault)
 {
-    static double eps[4] = { 0.419885, 0.450536, 0.456936, 0.468488 };
-    static double dl1[4] = { 0.112063, 0.121770, 0.239299, 0.215159 };
-    static double dl2[4] = { 0.080122, 0.111348, -0.211867, -0.115049 };
-    static double gam[4] = { 0.474798, 0.469051, 0.208597, 0.259784 };
-    static double lam[4] = { 0.282765, 0.304856, 0.407708, 0.414093 };
+    static double eps[4] = {0.419885, 0.450536, 0.456936, 0.468488};
+    static double dl1[4] = {0.112063, 0.121770, 0.239299, 0.215159};
+    static double dl2[4] = {0.080122, 0.111348, -0.211867, -0.115049};
+    static double gam[4] = {0.474798, 0.469051, 0.208597, 0.259784};
+    static double lam[4] = {0.282765, 0.304856, 0.407708, 0.414093};
     static double bb = -0.283833, d = -0.106136, b1 = 0.5641896;
     double e1, e2, l1;
     int i, k;
@@ -149,8 +143,7 @@ void Cdhc_nscor2(double s[], int n, int n2, int *ifault)
             l1 = lam[3] + bb / (1.0 + i + d);
             e1 = (1.0 + i - eps[3]) / (n + gam[3]);
             e2 = pow(e1, l1);
-            s[i] =
-                e1 + e2 * (dl1[3] + e2 * dl2[3]) / n - Cdhc_correc(1 + i, n);
+            s[i] = e1 + e2 * (dl1[3] + e2 * dl2[3]) / n - Cdhc_correc(1 + i, n);
         }
     }
 
@@ -161,20 +154,17 @@ void Cdhc_nscor2(double s[], int n, int n2, int *ifault)
     return;
 }
 
-
 /*-Algorithm AS 177.4 Appl. Statist. (1982) Vol.31, No.2
  * Calculates Cdhc_correction for tail area of noraml distribution
  * corresponding to ith largest rankit in sample size n.
  */
 static double Cdhc_correc(int i, int n)
 {
-    static double c1[7] = { 9.5, 28.7, 1.9, 0.0, -7.0, -6.2, -1.6 };
-    static double c2[7] = { -6.195e3, -9.569e3, -6.728e3, -17.614e3,
-        -8.278e3, -3.570e3, 1.075e3
-    };
-    static double c3[7] = { 9.338e4, 1.7516e5, 4.1040e5, 2.157e6,
-        2.376e6, 2.065e6, 2.065e6
-    };
+    static double c1[7] = {9.5, 28.7, 1.9, 0.0, -7.0, -6.2, -1.6};
+    static double c2[7] = {-6.195e3, -9.569e3, -6.728e3, -17.614e3,
+                           -8.278e3, -3.570e3, 1.075e3};
+    static double c3[7] = {9.338e4, 1.7516e5, 4.1040e5, 2.157e6,
+                           2.376e6, 2.065e6,  2.065e6};
     static double mic = 1.0e-6, c14 = 1.9e-5;
     double an;
 

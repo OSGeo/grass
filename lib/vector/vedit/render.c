@@ -15,8 +15,7 @@
 
 #include <grass/vedit.h>
 
-static struct _region
-{
+static struct _region {
     double center_easting;
     double center_northing;
     double map_west;
@@ -26,8 +25,7 @@ static struct _region
     double map_res;
 } region;
 
-static struct _state
-{
+static struct _state {
     int nitems_alloc;
 
     int type;
@@ -36,8 +34,7 @@ static struct _state
 
 static struct robject *draw_line(struct Map_info *, int, int);
 static struct robject *draw_line_vertices();
-static void draw_line_nodes(struct Map_info *, int, int,
-                            struct robject_list *);
+static void draw_line_nodes(struct Map_info *, int, int, struct robject_list *);
 static int draw_line_dir(struct robject_list *, int);
 static void list_append(struct robject_list *, struct robject *);
 static struct robject *robj_alloc(int, int);
@@ -54,7 +51,8 @@ static void draw_area(struct Map_info *, int, struct robject_list *);
    \param Map pointer to Map_info structure
    \param box bounding box of region to be rendered
    \param draw_flag types of objects to be rendered (see vedit.h)
-   \param center_easing, center_northing, map_width, map_height, map_res values used for conversion en->xy
+   \param center_easing, center_northing, map_width, map_height, map_res values
+   used for conversion en->xy
 
    \return pointer to robject_list structure
  */
@@ -84,9 +82,8 @@ struct robject_list *Vedit_render_map(struct Map_info *Map,
 
     list_obj = (struct robject_list *)G_malloc(sizeof(struct robject_list));
     list_obj->nitems = 0;
-    list_obj->item =
-        (struct robject **)G_malloc(state.nitems_alloc *
-                                    sizeof(struct robject *));
+    list_obj->item = (struct robject **)G_malloc(state.nitems_alloc *
+                                                 sizeof(struct robject *));
 
     /* area */
     if (draw_flag & DRAW_AREA) {
@@ -98,7 +95,7 @@ struct robject_list *Vedit_render_map(struct Map_info *Map,
     }
 
     /* draw lines inside of current display region */
-    nfeat = Vect_select_lines_by_box(Map, box, GV_POINTS | GV_LINES,    /* fixme */
+    nfeat = Vect_select_lines_by_box(Map, box, GV_POINTS | GV_LINES, /* fixme */
                                      list);
     G_debug(1, "Vedit_render_map(): region: w=%f, e=%f, s=%f, n=%f nlines=%d",
             box->W, box->E, box->S, box->N, nfeat);
@@ -130,10 +127,8 @@ struct robject_list *Vedit_render_map(struct Map_info *Map,
         }
     }
 
-    list_obj->item =
-        (struct robject **)G_realloc(list_obj->item,
-                                     list_obj->nitems *
-                                     sizeof(struct robject *));
+    list_obj->item = (struct robject **)G_realloc(
+        list_obj->item, list_obj->nitems * sizeof(struct robject *));
 
     G_debug(1, "Vedit_render_map(): -> nitems = %d", list_obj->nitems);
 
@@ -192,7 +187,7 @@ struct robject *draw_line(struct Map_info *Map, int line, int draw_flag)
         else if (state.type == GV_CENTROID) {
             int cret = Vect_get_centroid_area(Map, line);
 
-            if (cret > 0) {     /* -> area */
+            if (cret > 0) { /* -> area */
                 obj->type = TYPE_CENTROIDIN;
                 draw = draw_flag & DRAW_CENTROIDIN;
             }
@@ -206,8 +201,8 @@ struct robject *draw_line(struct Map_info *Map, int line, int draw_flag)
             }
         }
     }
-    G_debug(3, "  draw_line(): type=%d rtype=%d npoints=%d draw=%d",
-            state.type, obj->type, state.Points->n_points, draw);
+    G_debug(3, "  draw_line(): type=%d rtype=%d npoints=%d draw=%d", state.type,
+            obj->type, state.Points->n_points, draw);
 
     if (!draw)
         return NULL;
@@ -290,16 +285,14 @@ void list_append(struct robject_list *list, struct robject *obj)
 {
     if (list->nitems >= state.nitems_alloc) {
         state.nitems_alloc += 1000;
-        list->item =
-            (struct robject **)G_realloc(list->item,
-                                         state.nitems_alloc *
-                                         sizeof(struct robject *));
+        list->item = (struct robject **)G_realloc(
+            list->item, state.nitems_alloc * sizeof(struct robject *));
     }
     list->item[list->nitems++] = obj;
 }
 
 /*!
-   \brief Allocate robject 
+   \brief Allocate robject
  */
 struct robject *robj_alloc(int type, int npoints)
 {
@@ -322,7 +315,8 @@ struct robject *draw_line_vertices()
     int x, y;
     struct robject *robj;
 
-    robj = robj_alloc(TYPE_VERTEX, state.Points->n_points - 2); /* ignore nodes */
+    robj =
+        robj_alloc(TYPE_VERTEX, state.Points->n_points - 2); /* ignore nodes */
 
     for (i = 1; i < state.Points->n_points - 1; i++) {
         en_to_xy(state.Points->x[i], state.Points->y[i], &x, &y);
@@ -339,15 +333,15 @@ struct robject *draw_line_vertices()
 int draw_line_dir(struct robject_list *list, int line)
 {
     int narrows;
-    int size;                   /* arrow length in pixels */
-    int limit;                  /* segment length limit for drawing symbol (in pixels) */
+    int size;  /* arrow length in pixels */
+    int limit; /* segment length limit for drawing symbol (in pixels) */
     double dist, angle, pos;
     double e, n;
     int x0, y0, x1, y1;
 
     narrows = 0;
     size = 5;
-    limit = 5;                  /* 5px for line segment */
+    limit = 5; /* 5px for line segment */
 
     dist = Vect_line_length(state.Points);
     G_debug(5, "  draw_line_dir() line=%d", line);
@@ -356,16 +350,16 @@ int draw_line_dir(struct robject_list *list, int line)
         while (1) {
             pos = (narrows + 1) * 8 * limit * region.map_res;
 
-            if (Vect_point_on_line(state.Points, pos,
-                                   &e, &n, NULL, NULL, NULL) < 1) {
+            if (Vect_point_on_line(state.Points, pos, &e, &n, NULL, NULL,
+                                   NULL) < 1) {
                 break;
             }
 
             en_to_xy(e, n, &x0, &y0);
 
-            if (Vect_point_on_line
-                (state.Points, pos - 3 * size * region.map_res, &e, &n, NULL,
-                 &angle, NULL) < 1) {
+            if (Vect_point_on_line(state.Points,
+                                   pos - 3 * size * region.map_res, &e, &n,
+                                   NULL, &angle, NULL) < 1) {
                 break;
             }
 
@@ -373,7 +367,7 @@ int draw_line_dir(struct robject_list *list, int line)
 
             draw_arrow(x0, y0, x1, y1, angle, size, line, list);
 
-            if (narrows > 1e2)  /* low resolution, break */
+            if (narrows > 1e2) /* low resolution, break */
                 break;
 
             narrows++;
@@ -382,14 +376,14 @@ int draw_line_dir(struct robject_list *list, int line)
         /* draw at least one arrow in the middle of line */
         if (narrows < 1) {
             dist /= 2.;
-            if (Vect_point_on_line(state.Points, dist,
-                                   &e, &n, NULL, NULL, NULL) > 0) {
+            if (Vect_point_on_line(state.Points, dist, &e, &n, NULL, NULL,
+                                   NULL) > 0) {
 
                 en_to_xy(e, n, &x0, &y0);
 
-                if (Vect_point_on_line
-                    (state.Points, dist - 3 * size * region.map_res, &e, &n,
-                     NULL, &angle, NULL) > 0) {
+                if (Vect_point_on_line(state.Points,
+                                       dist - 3 * size * region.map_res, &e, &n,
+                                       NULL, &angle, NULL) > 0) {
 
                     en_to_xy(e, n, &x1, &y1);
 

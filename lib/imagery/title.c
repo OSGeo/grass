@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <grass/imagery.h>
 
-
 int I_get_group_title(const char *group, char *title, int n)
 {
     FILE *fd;
@@ -17,7 +16,6 @@ int I_get_group_title(const char *group, char *title, int n)
 
     return (fd != NULL);
 }
-
 
 int I_put_group_title(const char *group, const char *title)
 {

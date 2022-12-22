@@ -1,12 +1,11 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
- * PURPOSE:      Test portable r/w functions 
+ * PURPOSE:      Test portable r/w functions
  *
  * COPYRIGHT:    (C) 2001-2010 by the GRASS Development Team
  *
@@ -15,6 +14,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -37,18 +37,16 @@ int main()
     struct gvfile fp;
     int port_off_t;
 
-    double db, td[] = { -(PORT_DOUBLE_MAX), -(D_TEST), -(PORT_DOUBLE_MIN),
-        0, PORT_DOUBLE_MIN, D_TEST, PORT_DOUBLE_MAX
-    };
-    float fb, tf[] = { -(PORT_FLOAT_MAX), -(D_TEST), -(PORT_FLOAT_MIN),
-        0, PORT_FLOAT_MIN, D_TEST, PORT_FLOAT_MAX
-    };
-    long lb, tl[] = { PORT_LONG_MIN, -(L_TEST), 0, L_TEST, PORT_LONG_MAX };
-    int ib, ti[] = { PORT_INT_MIN, -(L_TEST), 0, L_TEST, PORT_INT_MAX };
-    short sb, ts[] = { PORT_SHORT_MIN, -(S_TEST), 0, S_TEST, PORT_SHORT_MAX };
-    char cb, tc[] = { PORT_CHAR_MIN, -(C_TEST), 0, C_TEST, PORT_CHAR_MAX };
+    double db, td[] = {-(PORT_DOUBLE_MAX), -(D_TEST), -(PORT_DOUBLE_MIN), 0,
+                       PORT_DOUBLE_MIN,    D_TEST,    PORT_DOUBLE_MAX};
+    float fb, tf[] = {-(PORT_FLOAT_MAX), -(D_TEST), -(PORT_FLOAT_MIN), 0,
+                      PORT_FLOAT_MIN,    D_TEST,    PORT_FLOAT_MAX};
+    long lb, tl[] = {PORT_LONG_MIN, -(L_TEST), 0, L_TEST, PORT_LONG_MAX};
+    int ib, ti[] = {PORT_INT_MIN, -(L_TEST), 0, L_TEST, PORT_INT_MAX};
+    short sb, ts[] = {PORT_SHORT_MIN, -(S_TEST), 0, S_TEST, PORT_SHORT_MAX};
+    char cb, tc[] = {PORT_CHAR_MIN, -(C_TEST), 0, C_TEST, PORT_CHAR_MAX};
 
-    off_t ob, to[] = { PORT_LONG_MIN, -(L_TEST), 0, L_TEST, PORT_LONG_MAX };
+    off_t ob, to[] = {PORT_LONG_MIN, -(L_TEST), 0, L_TEST, PORT_LONG_MAX};
 
     err = EXIT_SUCCESS;
 
@@ -72,9 +70,10 @@ int main()
             dig__fread_port_D(&db, 1, &fp);
             dig_fflush(&fp);
             if (db != td[j]) {
-                G_warning(_("Error in read/write portable double, byte_order = %d"
-                           " Written: %.16e3E Read: %.16e3E"), byte_order,
-                          td[j], db);
+                G_warning(
+                    _("Error in read/write portable double, byte_order = %d"
+                      " Written: %.16e3E Read: %.16e3E"),
+                    byte_order, td[j], db);
                 err = EXIT_FAILURE;
             }
         }
@@ -86,9 +85,10 @@ int main()
             dig__fread_port_F(&fb, 1, &fp);
             dig_fflush(&fp);
             if (fb != tf[j]) {
-                G_warning(_("Error in read/write portable float, byte_order = %d"
-                           " Written: %.8e3E Read: %.8e3E"), byte_order,
-                          tf[j], fb);
+                G_warning(
+                    _("Error in read/write portable float, byte_order = %d"
+                      " Written: %.8e3E Read: %.8e3E"),
+                    byte_order, tf[j], fb);
                 err = EXIT_FAILURE;
             }
         }
@@ -101,9 +101,10 @@ int main()
             dig__fread_port_O(&ob, 1, &fp, port_off_t);
             dig_fflush(&fp);
             if (ob != to[j]) {
-                G_warning(_("Error in read/write portable off_t, byte_order = %d"
-                           " Written: %lu Read: %lu"), byte_order,
-                          (long unsigned)to[j], (long unsigned)ob);
+                G_warning(
+                    _("Error in read/write portable off_t, byte_order = %d"
+                      " Written: %lu Read: %lu"),
+                    byte_order, (long unsigned)to[j], (long unsigned)ob);
                 err = EXIT_FAILURE;
             }
         }
@@ -117,8 +118,8 @@ int main()
             dig_fflush(&fp);
             if (lb != tl[j]) {
                 G_warning(_("Error in read/write portable long, byte_order = %d"
-                           " Written: %lu Read: %lu"), byte_order,
-                          (long unsigned)tl[j], (long unsigned)lb);
+                            " Written: %lu Read: %lu"),
+                          byte_order, (long unsigned)tl[j], (long unsigned)lb);
                 err = EXIT_FAILURE;
             }
         }
@@ -132,7 +133,8 @@ int main()
             dig_fflush(&fp);
             if (ib != ti[j]) {
                 G_warning(_("Error in read/write portable int, byte_order = %d"
-                           " Written: %d Read: %d"), byte_order, ti[j], ib);
+                            " Written: %d Read: %d"),
+                          byte_order, ti[j], ib);
 
                 err = EXIT_FAILURE;
             }
@@ -146,8 +148,10 @@ int main()
             dig__fread_port_S(&sb, 1, &fp);
             dig_fflush(&fp);
             if (sb != ts[j]) {
-                G_warning(_("Error in read/write portable short, byte_order = %d"
-                           " Written: %d Read: %d"), byte_order, ts[j], sb);
+                G_warning(
+                    _("Error in read/write portable short, byte_order = %d"
+                      " Written: %d Read: %d"),
+                    byte_order, ts[j], sb);
 
                 err = EXIT_FAILURE;
             }
@@ -161,11 +165,10 @@ int main()
             dig_fflush(&fp);
             if (cb != tc[j]) {
                 G_warning(_("Error in read/write portable char, byte_order = %d"
-                           " Written: %d Read: %d"), byte_order, tc[j], cb);
+                            " Written: %d Read: %d"),
+                          byte_order, tc[j], cb);
                 err = EXIT_FAILURE;
             }
-
-
         }
         byte_order = ENDIAN_BIG;
     }

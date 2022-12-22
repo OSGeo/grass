@@ -1,6 +1,6 @@
 #include <grass/btree.h>
 
-int btree_next(BTREE * B, void **key, void **data)
+int btree_next(BTREE *B, void **key, void **data)
 {
     int q;
 
@@ -15,12 +15,12 @@ int btree_next(BTREE * B, void **key, void **data)
     else
         B->cur = B->node[B->cur].right;
 
-    if (B->cur == 0)            /* no more */
+    if (B->cur == 0) /* no more */
         return 0;
 
-    if (B->cur < 0)             /* thread. stop here */
+    if (B->cur < 0) /* thread. stop here */
         B->cur = -(B->cur);
-    else                        /* go all the way left */
+    else /* go all the way left */
         while ((q = B->node[B->cur].left))
             B->cur = q;
 

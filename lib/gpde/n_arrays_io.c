@@ -1,26 +1,25 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:     	IO array management functions 
-* 		part of the gpde library
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      IO array management functions
+ *               part of the gpde library
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
 #include <math.h>
 
 #include <grass/N_pde.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-
 
 /* ******************** 2D ARRAY FUNCTIONS *********************** */
 
@@ -28,13 +27,11 @@
  * \brief Read a raster map into a N_array_2d structure
  *
  * The raster map will be opened in the current region settings.
- * If no N_array_2d structure is provided (NULL pointer), a new structure will be
- * allocated with the same data type as the raster map and the size of the current region. 
- * The array offset will be set to 0.
- * <br><br>
- * If a N_array_2d structure is provided, the values from the raster map are 
- * casted to the N_array_2d type. The array must have the same size 
- * as the current region. 
+ * If no N_array_2d structure is provided (NULL pointer), a new structure will
+ * be allocated with the same data type as the raster map and the size of the
+ * current region. The array offset will be set to 0. <br><br> If a N_array_2d
+ * structure is provided, the values from the raster map are casted to the
+ * N_array_2d type. The array must have the same size as the current region.
  * <br><br>
  * The new created or the provided array are returned.
  * If the reading of the raster map fails, G_fatal_error() will
@@ -44,9 +41,9 @@
  * \param array * N_array_2d - an existing array or NULL
  * \return N_array_2d * - the existing or new allocated array
  * */
-N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
+N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d *array)
 {
-    int map;                    /*The rastermap */
+    int map; /*The rastermap */
     int x, y, cols, rows, type;
     void *rast;
     void *ptr;
@@ -65,7 +62,8 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 
     type = Rast_get_map_type(map);
 
-    /*if the array is NULL create a new one with the data type of the raster map */
+    /*if the array is NULL create a new one with the data type of the raster map
+     */
     /*the offset is 0 by default */
     if (data == NULL) {
         if (type == DCELL_TYPE) {
@@ -81,11 +79,11 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
     else {
         /*Check the array sizes */
         if (data->cols != cols)
-            G_fatal_error
-                ("N_read_rast_to_array_2d: the data array size is different from the current region settings");
+            G_fatal_error("N_read_rast_to_array_2d: the data array size is "
+                          "different from the current region settings");
         if (data->rows != rows)
-            G_fatal_error
-                ("N_read_rast_to_array_2d: the data array size is different from the current region settings");
+            G_fatal_error("N_read_rast_to_array_2d: the data array size is "
+                          "different from the current region settings");
     }
 
     rast = Rast_allocate_buf(type);
@@ -106,13 +104,13 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
                 else {
                     if (data->type == CELL_TYPE)
                         N_put_array_2d_c_value(data, x, y,
-                                               (CELL) * (CELL *) ptr);
+                                               (CELL) * (CELL *)ptr);
                     if (data->type == FCELL_TYPE)
                         N_put_array_2d_f_value(data, x, y,
-                                               (FCELL) * (CELL *) ptr);
+                                               (FCELL) * (CELL *)ptr);
                     if (data->type == DCELL_TYPE)
                         N_put_array_2d_d_value(data, x, y,
-                                               (DCELL) * (CELL *) ptr);
+                                               (DCELL) * (CELL *)ptr);
                 }
             }
             if (type == FCELL_TYPE) {
@@ -122,13 +120,13 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
                 else {
                     if (data->type == CELL_TYPE)
                         N_put_array_2d_c_value(data, x, y,
-                                               (CELL) * (FCELL *) ptr);
+                                               (CELL) * (FCELL *)ptr);
                     if (data->type == FCELL_TYPE)
                         N_put_array_2d_f_value(data, x, y,
-                                               (FCELL) * (FCELL *) ptr);
+                                               (FCELL) * (FCELL *)ptr);
                     if (data->type == DCELL_TYPE)
                         N_put_array_2d_d_value(data, x, y,
-                                               (DCELL) * (FCELL *) ptr);
+                                               (DCELL) * (FCELL *)ptr);
                 }
             }
             if (type == DCELL_TYPE) {
@@ -138,13 +136,13 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
                 else {
                     if (data->type == CELL_TYPE)
                         N_put_array_2d_c_value(data, x, y,
-                                               (CELL) * (DCELL *) ptr);
+                                               (CELL) * (DCELL *)ptr);
                     if (data->type == FCELL_TYPE)
                         N_put_array_2d_f_value(data, x, y,
-                                               (FCELL) * (DCELL *) ptr);
+                                               (FCELL) * (DCELL *)ptr);
                     if (data->type == DCELL_TYPE)
                         N_put_array_2d_d_value(data, x, y,
-                                               (DCELL) * (DCELL *) ptr);
+                                               (DCELL) * (DCELL *)ptr);
                 }
             }
         }
@@ -165,14 +163,14 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
  If the writing of the raster map fails, G_fatal_error() will
  * be invoked.
 
- * \param array N_array_2d * 
+ * \param array N_array_2d *
  * \param name char * - the name of the raster map
  * \return void
  *
  * */
-void N_write_array_2d_to_rast(N_array_2d * array, char *name)
+void N_write_array_2d_to_rast(N_array_2d *array, char *name)
 {
-    int map;                    /*The rastermap */
+    int map; /*The rastermap */
     int x, y, cols, rows, type;
     CELL *rast = NULL;
     FCELL *frast = NULL;
@@ -223,21 +221,19 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
     Rast_close(map);
 }
 
-
 /* ******************** 3D ARRAY FUNCTIONS *********************** */
 
 /*!
  * \brief Read a volume map into a N_array_3d structure
  *
  * The volume map is opened in the current region settings.
- * If no N_array_3d structure is provided (NULL pointer), a new structure will be
- * allocated with the same data type as the volume map and the size of the current region. 
- * The array offset will be set to 0.
- * <br><br>
+ * If no N_array_3d structure is provided (NULL pointer), a new structure will
+ * be allocated with the same data type as the volume map and the size of the
+ * current region. The array offset will be set to 0. <br><br>
  *
- * If a N_array_3d structure is provided, the values from the volume map are 
- * casted to the N_array_3d type. The array must have the same size 
- * as the current region. 
+ * If a N_array_3d structure is provided, the values from the volume map are
+ * casted to the N_array_3d type. The array must have the same size
+ * as the current region.
  * <br><br>
  *
  * The new created or the provided array is returned.
@@ -246,19 +242,18 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
  *
  * \param name * char - the name of an existing volume map
  * \param array * N_array_3d - an existing array or NULL
- * \param mask int - 0 = false, 1 = ture : if a mask is presenent, use it with the input volume map
- * \return N_array_3d * - the existing or new allocated array
+ * \param mask int - 0 = false, 1 = ture : if a mask is presenent, use it with
+ * the input volume map \return N_array_3d * - the existing or new allocated
+ * array
  * */
-N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
-                                      int mask)
+N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d *array, int mask)
 {
-    void *map = NULL;           /*The 3D Rastermap */
+    void *map = NULL; /*The 3D Rastermap */
     int changemask = 0;
     int x, y, z, cols, rows, depths, type;
     double d1 = 0, f1 = 0;
     N_array_3d *data = array;
     RASTER3D_Region region;
-
 
     /*get the current region */
     Rast3d_get_window(&region);
@@ -267,23 +262,21 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
     rows = region.rows;
     depths = region.depths;
 
-
     if (NULL == G_find_raster3d(name, ""))
         Rast3d_fatal_error(_("3D raster map <%s> not found"), name);
 
     /*Open all maps with default region */
-    map =
-        Rast3d_open_cell_old(name, G_find_raster3d(name, ""),
-                             RASTER3D_DEFAULT_WINDOW,
-                             RASTER3D_TILE_SAME_AS_FILE,
-                             RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(
+        name, G_find_raster3d(name, ""), RASTER3D_DEFAULT_WINDOW,
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
     type = Rast3d_tile_type_map(map);
 
-    /*if the array is NULL create a new one with the data type of the volume map */
+    /*if the array is NULL create a new one with the data type of the volume map
+     */
     /*the offset is 0 by default */
     if (data == NULL) {
         if (type == FCELL_TYPE) {
@@ -296,16 +289,15 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
     else {
         /*Check the array sizes */
         if (data->cols != cols)
-            G_fatal_error
-                ("N_read_rast_to_array_3d: the data array size is different from the current region settings");
+            G_fatal_error("N_read_rast_to_array_3d: the data array size is "
+                          "different from the current region settings");
         if (data->rows != rows)
-            G_fatal_error
-                ("N_read_rast_to_array_3d: the data array size is different from the current region settings");
+            G_fatal_error("N_read_rast_to_array_3d: the data array size is "
+                          "different from the current region settings");
         if (data->depths != depths)
-            G_fatal_error
-                ("N_read_rast_to_array_3d: the data array size is different from the current region settings");
+            G_fatal_error("N_read_rast_to_array_3d: the data array size is "
+                          "different from the current region settings");
     }
-
 
     G_message(_("Read g3d map <%s> into the memory"), name);
 
@@ -320,7 +312,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
         }
     }
 
-    for (z = 0; z < depths; z++) {      /*From the bottom to the top */
+    for (z = 0; z < depths; z++) { /*From the bottom to the top */
         G_percent(z, depths - 1, 10);
         for (y = 0; y < rows; y++) {
             for (x = 0; x < cols; x++) {
@@ -347,7 +339,6 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
                         if (data->type == DCELL_TYPE)
                             N_put_array_3d_d_value(data, x, y, z, d1);
                     }
-
                 }
             }
         }
@@ -377,15 +368,15 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
  * be invoked.
  *
  *
- * \param array N_array_3d * 
+ * \param array N_array_3d *
  * \param name char * - the name of the volume map
  * \param mask int - 1 = use a 3d mask, 0 do not use a 3d mask
  * \return void
  *
  * */
-void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
+void N_write_array_3d_to_rast3d(N_array_3d *array, char *name, int mask)
 {
-    void *map = NULL;           /*The 3D Rastermap */
+    void *map = NULL; /*The 3D Rastermap */
     int changemask = 0;
     int x, y, z, cols, rows, depths, type;
     double d1 = 0.0, f1 = 0.0;
@@ -402,24 +393,22 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 
     /*Check the array sizes */
     if (data->cols != cols)
-        G_fatal_error
-            ("N_write_array_3d_to_rast3d: the data array size is different from the current region settings");
+        G_fatal_error("N_write_array_3d_to_rast3d: the data array size is "
+                      "different from the current region settings");
     if (data->rows != rows)
-        G_fatal_error
-            ("N_write_array_3d_to_rast3d: the data array size is different from the current region settings");
+        G_fatal_error("N_write_array_3d_to_rast3d: the data array size is "
+                      "different from the current region settings");
     if (data->depths != depths)
-        G_fatal_error
-            ("N_write_array_3d_to_rast3d: the data array size is different from the current region settings");
+        G_fatal_error("N_write_array_3d_to_rast3d: the data array size is "
+                      "different from the current region settings");
 
     /*Open the new map */
     if (type == DCELL_TYPE)
-        map =
-            Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY,
-                                          &region, DCELL_TYPE, 32);
+        map = Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY,
+                                            &region, DCELL_TYPE, 32);
     else if (type == FCELL_TYPE)
-        map =
-            Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY,
-                                          &region, FCELL_TYPE, 32);
+        map = Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY,
+                                            &region, FCELL_TYPE, 32);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Error opening g3d map <%s>"), name);
@@ -437,7 +426,7 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
         }
     }
 
-    for (z = 0; z < depths; z++) {      /*From the bottom to the top */
+    for (z = 0; z < depths; z++) { /*From the bottom to the top */
         G_percent(z, depths - 1, 10);
         for (y = 0; y < rows; y++) {
             for (x = 0; x < cols; x++) {
@@ -462,8 +451,7 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 
     /* Flush all tile */
     if (!Rast3d_flush_all_tiles(map))
-        Rast3d_fatal_error
-            ("Error flushing tiles with Rast3d_flush_all_tiles");
+        Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
     /* Close files and exit */
     if (!Rast3d_close(map))
         Rast3d_fatal_error(map, NULL, 0, _("Error closing g3d file"));

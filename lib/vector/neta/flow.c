@@ -44,7 +44,7 @@ dglInt32_t sign(dglInt32_t x)
    \return number of flows
    \return -1 on failure
  */
-int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
+int NetA_flow(dglGraph_s *graph, struct ilist *source_list,
               struct ilist *sink_list, int *flow)
 {
     int nnodes, nlines, i;
@@ -57,9 +57,10 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
     dglInt32_t ncost;
 
     nnodes = dglGet_NodeCount(graph);
-    nlines = dglGet_EdgeCount(graph) / 2;       /*each line corresponds to two edges. One in each direction */
-    queue = (dglInt32_t *) G_calloc(nnodes + 3, sizeof(dglInt32_t));
-    prev = (dglInt32_t **) G_calloc(nnodes + 3, sizeof(dglInt32_t *));
+    nlines = dglGet_EdgeCount(graph) /
+             2; /*each line corresponds to two edges. One in each direction */
+    queue = (dglInt32_t *)G_calloc(nnodes + 3, sizeof(dglInt32_t));
+    prev = (dglInt32_t **)G_calloc(nnodes + 3, sizeof(dglInt32_t *));
     is_source = (char *)G_calloc(nnodes + 3, sizeof(char));
     is_sink = (char *)G_calloc(nnodes + 3, sizeof(char));
     if (!queue || !prev || !is_source || !is_sink) {
@@ -123,21 +124,18 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
             dglEdgeset_T_Release(&et);
         }
         if (found == -1)
-            break;              /*no augmenting path */
+            break; /*no augmenting path */
         /*find minimum residual capacity along the augmenting path */
         node = found;
         edge_id = dglEdgeGet_Id(graph, prev[node]);
-        min_residue =
-            dglEdgeGet_Cost(graph,
-                            prev[node]) - sign(edge_id) * flow[labs(edge_id)];
+        min_residue = dglEdgeGet_Cost(graph, prev[node]) -
+                      sign(edge_id) * flow[labs(edge_id)];
         while (!is_source[node]) {
             dglInt32_t residue;
 
             edge_id = dglEdgeGet_Id(graph, prev[node]);
-            residue =
-                dglEdgeGet_Cost(graph,
-                                prev[node]) -
-                sign(edge_id) * flow[labs(edge_id)];
+            residue = dglEdgeGet_Cost(graph, prev[node]) -
+                      sign(edge_id) * flow[labs(edge_id)];
             if (residue < min_residue)
                 min_residue = residue;
             node = dglNodeGet_Id(graph, dglEdgeGet_Head(graph, prev[node]));
@@ -176,7 +174,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
    \return number of edges
    \return -1 on failure
  */
-int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
+int NetA_min_cut(dglGraph_s *graph, struct ilist *source_list,
                  struct ilist *sink_list, int *flow, struct ilist *cut)
 {
     int nnodes, i;
@@ -186,7 +184,7 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
     int begin, end, total_flow;
 
     nnodes = dglGet_NodeCount(graph);
-    queue = (dglInt32_t *) G_calloc(nnodes + 3, sizeof(dglInt32_t));
+    queue = (dglInt32_t *)G_calloc(nnodes + 3, sizeof(dglInt32_t));
     visited = (char *)G_calloc(nnodes + 3, sizeof(char));
     if (!queue || !visited) {
         G_fatal_error(_("Out of memory"));
@@ -208,14 +206,12 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
         dglInt32_t vertex = queue[begin++];
         dglInt32_t *edge, *node = dglGetNode(graph, vertex);
 
-        dglEdgeset_T_Initialize(&et, graph,
-                                dglNodeGet_OutEdgeset(graph, node));
+        dglEdgeset_T_Initialize(&et, graph, dglNodeGet_OutEdgeset(graph, node));
         for (edge = dglEdgeset_T_First(&et); edge;
              edge = dglEdgeset_T_Next(&et)) {
             dglInt32_t cap = dglEdgeGet_Cost(graph, edge);
             dglInt32_t id = dglEdgeGet_Id(graph, edge);
-            dglInt32_t to =
-                dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
+            dglInt32_t to = dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
             if (!visited[to] && cap > sign(id) * flow[labs(id)]) {
                 visited[to] = 1;
                 queue[end++] = to;
@@ -223,7 +219,8 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
         }
         dglEdgeset_T_Release(&et);
     }
-    /*saturated edges from reachable vertices to non-reachable ones form a minimum cost */
+    /*saturated edges from reachable vertices to non-reachable ones form a
+     * minimum cost */
     Vect_reset_list(cut);
     for (i = 1; i <= nnodes; i++) {
         if (!visited[i])
@@ -269,16 +266,15 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
    \return number of undirected edges in the graph
    \return -1 on failure
  */
-int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
+int NetA_split_vertices(dglGraph_s *in, dglGraph_s *out, int *node_costs)
 {
-    dglInt32_t opaqueset[16] =
-        { 360000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    dglInt32_t opaqueset[16] = {360000, 0, 0, 0, 0, 0, 0, 0,
+                                0,      0, 0, 0, 0, 0, 0, 0};
     dglNodeTraverser_s nt;
     dglInt32_t edge_cnt;
     dglInt32_t *cur_node;
 
-    dglInitialize(out, (dglByte_t) 1, (dglInt32_t) 0, (dglInt32_t) 0,
-                  opaqueset);
+    dglInitialize(out, (dglByte_t)1, (dglInt32_t)0, (dglInt32_t)0, opaqueset);
     dglNode_T_Initialize(&nt, in);
     edge_cnt = 0;
     dglInt32_t max_node_cost = 0;
@@ -298,7 +294,7 @@ int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
         if (cost > max_node_cost)
             max_node_cost = cost;
         dglAddEdge(out, 2 * v - 1, 2 * v, cost, edge_cnt);
-        dglAddEdge(out, 2 * v, 2 * v - 1, (dglInt32_t) 0, -edge_cnt);
+        dglAddEdge(out, 2 * v, 2 * v - 1, (dglInt32_t)0, -edge_cnt);
     }
     dglNode_T_Release(&nt);
     dglNode_T_Initialize(&nt, in);
@@ -323,7 +319,7 @@ int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
             to = dglNodeGet_Id(in, dglEdgeGet_Tail(in, edge));
             edge_cnt++;
             dglAddEdge(out, 2 * v, 2 * to - 1, max_node_cost + 1, edge_cnt);
-            dglAddEdge(out, 2 * to - 1, 2 * v, (dglInt32_t) 0, -edge_cnt);
+            dglAddEdge(out, 2 * to - 1, 2 * v, (dglInt32_t)0, -edge_cnt);
         }
         dglEdgeset_T_Release(&et);
     }

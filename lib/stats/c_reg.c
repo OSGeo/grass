@@ -3,8 +3,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-enum
-{
+enum {
     REGRESSION_SLOPE = 0,
     REGRESSION_OFFSET = 1,
     REGRESSION_COEFF_DET = 2,
@@ -12,7 +11,7 @@ enum
     REGRESSION_P = 4
 };
 
-static void regression(DCELL * result, DCELL * values, int n, int which)
+static void regression(DCELL *result, DCELL *values, int n, int which)
 {
     DCELL xsum, ysum;
     DCELL xbar, ybar;
@@ -50,7 +49,7 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
     denom = 0.0;
     for (i = 0; i < n; i++)
         if (!Rast_is_d_null_value(&values[i]))
-            denom += (DCELL) i *i;
+            denom += (DCELL)i * i;
 
     denom -= count * xbar * xbar;
 
@@ -86,27 +85,27 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
         Rast_set_d_null_value(result, 1);
 }
 
-void c_reg_m(DCELL * result, DCELL * values, int n, const void *closure)
+void c_reg_m(DCELL *result, DCELL *values, int n, const void *closure)
 {
     regression(result, values, n, REGRESSION_SLOPE);
 }
 
-void c_reg_c(DCELL * result, DCELL * values, int n, const void *closure)
+void c_reg_c(DCELL *result, DCELL *values, int n, const void *closure)
 {
     regression(result, values, n, REGRESSION_OFFSET);
 }
 
-void c_reg_r2(DCELL * result, DCELL * values, int n, const void *closure)
+void c_reg_r2(DCELL *result, DCELL *values, int n, const void *closure)
 {
     regression(result, values, n, REGRESSION_COEFF_DET);
 }
 
-void c_reg_t(DCELL * result, DCELL * values, int n, const void *closure)
+void c_reg_t(DCELL *result, DCELL *values, int n, const void *closure)
 {
     regression(result, values, n, REGRESSION_T);
 }
 
-static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
+static void regression_w(DCELL *result, DCELL (*values)[2], int n, int which)
 {
     DCELL xsum, ysum;
     DCELL xbar, ybar;
@@ -144,7 +143,7 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
     denom = 0.0;
     for (i = 0; i < n; i++)
         if (!Rast_is_d_null_value(&values[i][0]))
-            denom += (DCELL) i *i * values[i][1];
+            denom += (DCELL)i * i * values[i][1];
 
     denom -= count * xbar * xbar;
 
@@ -180,22 +179,22 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
         Rast_set_d_null_value(result, 1);
 }
 
-void w_reg_m(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_reg_m(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 {
     regression_w(result, values, n, REGRESSION_SLOPE);
 }
 
-void w_reg_c(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_reg_c(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 {
     regression_w(result, values, n, REGRESSION_OFFSET);
 }
 
-void w_reg_r2(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_reg_r2(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 {
     regression_w(result, values, n, REGRESSION_COEFF_DET);
 }
 
-void w_reg_t(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_reg_t(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 {
     regression_w(result, values, n, REGRESSION_T);
 }

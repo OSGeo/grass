@@ -7,13 +7,12 @@
 #include <grass/raster.h>
 #include "raster3d_intern.h"
 
-
 /*---------------------------------------------------------------------------*/
 
-static int
-Rast3d_tile2xdrTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
-                    int depths, int xRedundant, int yRedundant,
-                    int zRedundant, int nofNum, int type)
+static int Rast3d_tile2xdrTile(RASTER3D_Map *map, const void *tile, int rows,
+                               int cols, int depths, int xRedundant,
+                               int yRedundant, int zRedundant, int nofNum,
+                               int type)
 {
     int y, z;
 
@@ -21,7 +20,6 @@ Rast3d_tile2xdrTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
         Rast3d_error("Rast3d_tile2xdrTile: error in Rast3d_init_copy_to_xdr");
         return 0;
     }
-
 
     if (nofNum == map->tileSize) {
         if (!Rast3d_copy_to_xdr(tile, map->tileSize)) {
@@ -35,18 +33,15 @@ Rast3d_tile2xdrTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
         for (z = 0; z < depths; z++) {
             for (y = 0; y < rows; y++) {
                 if (!Rast3d_copy_to_xdr(tile, cols)) {
-                    Rast3d_error
-                        ("Rast3d_tile2xdrTile: error in Rast3d_copy_to_xdr");
+                    Rast3d_error(
+                        "Rast3d_tile2xdrTile: error in Rast3d_copy_to_xdr");
                     return 0;
                 }
-                tile =
-                    G_incr_void_ptr(tile, map->tileX * Rast3d_length(type));
+                tile = G_incr_void_ptr(tile, map->tileX * Rast3d_length(type));
             }
             if (yRedundant)
-                tile =
-                    G_incr_void_ptr(tile,
-                                    map->tileX * yRedundant *
-                                    Rast3d_length(type));
+                tile = G_incr_void_ptr(tile, map->tileX * yRedundant *
+                                                 Rast3d_length(type));
         }
         return 1;
     }
@@ -54,8 +49,8 @@ Rast3d_tile2xdrTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
     if (yRedundant) {
         for (z = 0; z < depths; z++) {
             if (!Rast3d_copy_to_xdr(tile, map->tileX * rows)) {
-                Rast3d_error
-                    ("Rast3d_tile2xdrTile: error in Rast3d_copy_to_xdr");
+                Rast3d_error(
+                    "Rast3d_tile2xdrTile: error in Rast3d_copy_to_xdr");
                 return 0;
             }
             tile = G_incr_void_ptr(tile, map->tileXY * Rast3d_length(type));
@@ -72,7 +67,7 @@ Rast3d_tile2xdrTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
 
 /*---------------------------------------------------------------------------*/
 
-static int Rast3d_writeTileUncompressed(RASTER3D_Map * map, int nofNum)
+static int Rast3d_writeTileUncompressed(RASTER3D_Map *map, int nofNum)
 {
     if (write(map->data_fd, xdr, map->numLengthExtern * nofNum) !=
         map->numLengthExtern * nofNum) {
@@ -85,13 +80,13 @@ static int Rast3d_writeTileUncompressed(RASTER3D_Map * map, int nofNum)
 
 /*---------------------------------------------------------------------------*/
 
-static int Rast3d_writeTileCompressed(RASTER3D_Map * map, int nofNum)
+static int Rast3d_writeTileCompressed(RASTER3D_Map *map, int nofNum)
 {
-    if (!Rast3d_fpcompress_write_xdr_nums
-        (map->data_fd, xdr, nofNum, map->precision, tmpCompress,
-         map->type == FCELL_TYPE)) {
-        Rast3d_error
-            ("Rast3d_writeTileCompressed: error in Rast3d_fpcompress_write_xdr_nums");
+    if (!Rast3d_fpcompress_write_xdr_nums(map->data_fd, xdr, nofNum,
+                                          map->precision, tmpCompress,
+                                          map->type == FCELL_TYPE)) {
+        Rast3d_error("Rast3d_writeTileCompressed: error in "
+                     "Rast3d_fpcompress_write_xdr_nums");
         return 0;
     }
 
@@ -102,23 +97,22 @@ static int Rast3d_writeTileCompressed(RASTER3D_Map * map, int nofNum)
 
 /*---------------------------------------------------------------------------*/
 
-                       /* EXPORTED FUNCTIONS */
+/* EXPORTED FUNCTIONS */
 
 /*---------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------*/
-
 
 /*!
- * \brief 
+ * \brief
  *
- * 
- * Writes tile with index <em>tileIndex</em> to the file corresponding to <em>map</em>. 
- * It is assumed that the cells in <em>tile</em> are of <em>type</em> which
- * must be one of FCELL_TYPE and DCELL_TYPE.  The actual type used to write the
- * tile depends on the type specified at the time when <em>map</em> is initialized.
- * A tile can only be written once. Subsequent attempts to write the same tile
- * are ignored.
+ *
+ * Writes tile with index <em>tileIndex</em> to the file corresponding to
+ * <em>map</em>. It is assumed that the cells in <em>tile</em> are of
+ * <em>type</em> which must be one of FCELL_TYPE and DCELL_TYPE.  The actual
+ * type used to write the tile depends on the type specified at the time when
+ * <em>map</em> is initialized. A tile can only be written once. Subsequent
+ * attempts to write the same tile are ignored.
  *
  *  \param map
  *  \param tileIndex
@@ -129,7 +123,7 @@ static int Rast3d_writeTileCompressed(RASTER3D_Map * map, int nofNum)
  *          0 ... otherwise.
  */
 
-int Rast3d_write_tile(RASTER3D_Map * map, int tileIndex, const void *tile,
+int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
                       int type)
 {
     int rows, cols, depths, xRedundant, yRedundant, zRedundant, nofNum;
@@ -149,51 +143,48 @@ int Rast3d_write_tile(RASTER3D_Map * map, int tileIndex, const void *tile,
         return 0;
     }
 
-    nofNum = Rast3d_compute_clipped_tile_dimensions(map, tileIndex,
-                                                    &rows, &cols, &depths,
-                                                    &xRedundant, &yRedundant,
-                                                    &zRedundant);
+    nofNum = Rast3d_compute_clipped_tile_dimensions(map, tileIndex, &rows,
+                                                    &cols, &depths, &xRedundant,
+                                                    &yRedundant, &zRedundant);
 
-    Rast3d_range_update_from_tile(map, tile, rows, cols, depths,
-                                  xRedundant, yRedundant, zRedundant, nofNum,
-                                  type);
+    Rast3d_range_update_from_tile(map, tile, rows, cols, depths, xRedundant,
+                                  yRedundant, zRedundant, nofNum, type);
 
-    if (!Rast3d_tile2xdrTile(map, tile, rows, cols, depths,
-                             xRedundant, yRedundant, zRedundant, nofNum,
-                             type)) {
+    if (!Rast3d_tile2xdrTile(map, tile, rows, cols, depths, xRedundant,
+                             yRedundant, zRedundant, nofNum, type)) {
         Rast3d_error("Rast3d_write_tile: error in Rast3d_tile2xdrTile");
         return 0;
     }
 
     if (map->compression == RASTER3D_NO_COMPRESSION) {
         if (!Rast3d_writeTileUncompressed(map, nofNum)) {
-            Rast3d_error
-                ("Rast3d_write_tile: error in Rast3d_writeTileUncompressed");
+            Rast3d_error(
+                "Rast3d_write_tile: error in Rast3d_writeTileUncompressed");
             return 0;
         }
     }
     else {
         if (!Rast3d_writeTileCompressed(map, nofNum)) {
-            Rast3d_error
-                ("Rast3d_write_tile: error in Rast3d_writeTileCompressed");
+            Rast3d_error(
+                "Rast3d_write_tile: error in Rast3d_writeTileCompressed");
             return 0;
         }
     }
 
     /* compute the length */
-    map->tileLength[tileIndex] = lseek(map->data_fd, (long)0, SEEK_END) -
-        map->index[tileIndex];
+    map->tileLength[tileIndex] =
+        lseek(map->data_fd, (long)0, SEEK_END) - map->index[tileIndex];
 
     return 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
- *  Is equivalent to <tt>Rast3d_write_tile (map, tileIndex, tile, FCELL_TYPE).</tt>
+ *  Is equivalent to <tt>Rast3d_write_tile (map, tileIndex, tile,
+ * FCELL_TYPE).</tt>
  *
  *  \param map
  *  \param tileIndex
@@ -201,8 +192,7 @@ int Rast3d_write_tile(RASTER3D_Map * map, int tileIndex, const void *tile,
  *  \return int
  */
 
-int Rast3d_write_tile_float(RASTER3D_Map * map, int tileIndex,
-                            const void *tile)
+int Rast3d_write_tile_float(RASTER3D_Map *map, int tileIndex, const void *tile)
 {
     int status;
 
@@ -215,11 +205,11 @@ int Rast3d_write_tile_float(RASTER3D_Map * map, int tileIndex,
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Is equivalent to <tt>Rast3d_write_tile (map, tileIndex, tile, DCELL_TYPE).</tt>
+ * Is equivalent to <tt>Rast3d_write_tile (map, tileIndex, tile,
+ * DCELL_TYPE).</tt>
  *
  *  \param map
  *  \param tileIndex
@@ -227,8 +217,7 @@ int Rast3d_write_tile_float(RASTER3D_Map * map, int tileIndex,
  *  \return int
  */
 
-int Rast3d_write_tile_double(RASTER3D_Map * map, int tileIndex,
-                             const void *tile)
+int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
 {
     int status;
 
@@ -241,21 +230,19 @@ int Rast3d_write_tile_double(RASTER3D_Map * map, int tileIndex,
 
 /*---------------------------------------------------------------------------*/
 
-                      /* CACHE-MODE-ONLY FUNCTIONS */
+/* CACHE-MODE-ONLY FUNCTIONS */
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Writes the tile with
- * <em>tileIndex</em> to the file corresponding to <em>map</em> and removes the tile
- * from the cache (in non-cache mode the buffer provided by the map-structure is
- * written).
- * If this tile has already been written before the write request is ignored.
- * If the tile was never referred to before the invokation of Rast3d_flush_tile, a
- * tile filled with NULL-values is written.
+ * <em>tileIndex</em> to the file corresponding to <em>map</em> and removes the
+ * tile from the cache (in non-cache mode the buffer provided by the
+ * map-structure is written). If this tile has already been written before the
+ * write request is ignored. If the tile was never referred to before the
+ * invokation of Rast3d_flush_tile, a tile filled with NULL-values is written.
  *
  *  \param map
  *  \param tileIndex
@@ -263,7 +250,7 @@ int Rast3d_write_tile_double(RASTER3D_Map * map, int tileIndex,
  *          0 ... otherwise.
  */
 
-int Rast3d_flush_tile(RASTER3D_Map * map, int tileIndex)
+int Rast3d_flush_tile(RASTER3D_Map *map, int tileIndex)
 {
     const void *tile;
 
@@ -289,7 +276,7 @@ int Rast3d_flush_tile(RASTER3D_Map * map, int tileIndex)
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
  *  Writes the tiles with tile-coordinates
  * contained in the axis-parallel cube with vertices <em>(xMin, yMin, zMin)</em>
@@ -308,23 +295,22 @@ int Rast3d_flush_tile(RASTER3D_Map * map, int tileIndex)
  *          0 ... otherwise.
  */
 
-int
-Rast3d_flush_tile_cube(RASTER3D_Map * map, int xMin, int yMin, int zMin,
-                       int xMax, int yMax, int zMax)
+int Rast3d_flush_tile_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
+                           int xMax, int yMax, int zMax)
 {
     int x, y, z;
 
     if (!map->useCache)
-        Rast3d_fatal_error
-            ("Rast3d_flush_tile_cube: function invalid in non-cache mode");
+        Rast3d_fatal_error(
+            "Rast3d_flush_tile_cube: function invalid in non-cache mode");
 
     for (x = xMin; x <= xMax; x++)
         for (y = yMin; y <= yMax; y++)
             for (z = zMin; z <= zMax; z++)
-                if (!Rast3d_flush_tile
-                    (map, Rast3d_tile2tile_index(map, x, y, z))) {
-                    Rast3d_error
-                        ("Rast3d_flush_tile_cube: error in Rast3d_flush_tile");
+                if (!Rast3d_flush_tile(map,
+                                       Rast3d_tile2tile_index(map, x, y, z))) {
+                    Rast3d_error(
+                        "Rast3d_flush_tile_cube: error in Rast3d_flush_tile");
                     return 0;
                 }
 
@@ -333,9 +319,8 @@ Rast3d_flush_tile_cube(RASTER3D_Map * map, int xMin, int yMin, int zMin,
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Writes those tiles for which
  * <em>every</em> cell has coordinate contained in the axis-parallel cube
@@ -356,57 +341,55 @@ Rast3d_flush_tile_cube(RASTER3D_Map * map, int xMin, int yMin, int zMin,
  *          0 ... otherwise.
  */
 
-int
-Rast3d_flush_tiles_in_cube(RASTER3D_Map * map, int xMin, int yMin, int zMin,
-                           int xMax, int yMax, int zMax)
+int Rast3d_flush_tiles_in_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
+                               int xMax, int yMax, int zMax)
 {
     int xTileMin, yTileMin, zTileMin, xTileMax, yTileMax, zTileMax;
     int xOffs, yOffs, zOffs;
     int regionMaxX, regionMaxY, regionMaxZ;
 
     if (!map->useCache)
-        Rast3d_fatal_error
-            ("Rast3d_flush_tiles_in_cube: function invalid in non-cache mode");
-     /*AV*/
-        /*BEGIN OF ORIGINAL CODE */
-        /*
-         *  Rast3d_get_coords_map (map, &regionMaxX, &regionMaxY, &regionMaxZ);
-         */
-         /*AV*/
-        /* BEGIN OF MY CODE */
+        Rast3d_fatal_error(
+            "Rast3d_flush_tiles_in_cube: function invalid in non-cache mode");
+    /*AV*/
+    /*BEGIN OF ORIGINAL CODE */
+    /*
+     *  Rast3d_get_coords_map (map, &regionMaxX, &regionMaxY, &regionMaxZ);
+     */
+    /*AV*/
+    /* BEGIN OF MY CODE */
     Rast3d_get_coords_map(map, &regionMaxY, &regionMaxX, &regionMaxZ);
     /* END OF MY CODE */
 
     if ((xMin < 0) && (xMax < 0))
-        Rast3d_fatal_error
-            ("Rast3d_flush_tiles_in_cube: coordinate out of Range");
+        Rast3d_fatal_error(
+            "Rast3d_flush_tiles_in_cube: coordinate out of Range");
     if ((xMin >= regionMaxX) && (xMax >= regionMaxX))
-        Rast3d_fatal_error
-            ("Rast3d_flush_tiles_in_cube: coordinate out of Range");
+        Rast3d_fatal_error(
+            "Rast3d_flush_tiles_in_cube: coordinate out of Range");
 
     xMin = MIN(MAX(0, xMin), regionMaxX - 1);
 
     if ((yMin < 0) && (yMax < 0))
-        Rast3d_fatal_error
-            ("Rast3d_flush_tiles_in_cube: coordinate out of Range");
+        Rast3d_fatal_error(
+            "Rast3d_flush_tiles_in_cube: coordinate out of Range");
     if ((yMin >= regionMaxY) && (yMax >= regionMaxY))
-        Rast3d_fatal_error
-            ("Rast3d_flush_tiles_in_cube: coordinate out of Range");
+        Rast3d_fatal_error(
+            "Rast3d_flush_tiles_in_cube: coordinate out of Range");
 
     yMin = MIN(MAX(0, yMin), regionMaxY - 1);
 
     if ((zMin < 0) && (zMax < 0))
-        Rast3d_fatal_error
-            ("Rast3d_flush_tiles_in_cube: coordinate out of Range");
+        Rast3d_fatal_error(
+            "Rast3d_flush_tiles_in_cube: coordinate out of Range");
     if ((zMin >= regionMaxZ) && (zMax >= regionMaxZ))
-        Rast3d_fatal_error
-            ("Rast3d_flush_tiles_in_cube: coordinate out of Range");
+        Rast3d_fatal_error(
+            "Rast3d_flush_tiles_in_cube: coordinate out of Range");
 
     zMin = MIN(MAX(0, zMin), regionMaxZ - 1);
 
-    Rast3d_coord2tile_coord(map, xMin, yMin, zMin,
-                            &xTileMin, &yTileMin, &zTileMin,
-                            &xOffs, &yOffs, &zOffs);
+    Rast3d_coord2tile_coord(map, xMin, yMin, zMin, &xTileMin, &yTileMin,
+                            &zTileMin, &xOffs, &yOffs, &zOffs);
 
     if (xOffs != 0)
         xTileMin++;
@@ -415,18 +398,17 @@ Rast3d_flush_tiles_in_cube(RASTER3D_Map * map, int xMin, int yMin, int zMin,
     if (zOffs != 0)
         zTileMin++;
 
-    Rast3d_coord2tile_coord(map, xMax + 1, yMax + 1, zMax + 1,
-                            &xTileMax, &yTileMax, &zTileMax,
-                            &xOffs, &yOffs, &zOffs);
+    Rast3d_coord2tile_coord(map, xMax + 1, yMax + 1, zMax + 1, &xTileMax,
+                            &yTileMax, &zTileMax, &xOffs, &yOffs, &zOffs);
 
     xTileMax--;
     yTileMax--;
     zTileMax--;
 
-    if (!Rast3d_flush_tile_cube(map, xTileMin, yTileMin, zTileMin,
-                                xTileMax, yTileMax, zTileMax)) {
-        Rast3d_error
-            ("Rast3d_flush_tiles_in_cube: error in Rast3d_flush_tile_cube");
+    if (!Rast3d_flush_tile_cube(map, xTileMin, yTileMin, zTileMin, xTileMax,
+                                yTileMax, zTileMax)) {
+        Rast3d_error(
+            "Rast3d_flush_tiles_in_cube: error in Rast3d_flush_tile_cube");
         return 0;
     }
 

@@ -1,4 +1,3 @@
-
 /**************************************************************
  * Rast_put_cell_title (name, title)
  *   char *name        name of map file
@@ -26,7 +25,8 @@ int Rast_put_cell_title(const char *name, const char *title)
     in = G_fopen_old("cats", name, mapset);
     if (!in) {
         G_warning(_("category information for [%s] in [%s]"
-                    " missing or invalid"), name, mapset);
+                    " missing or invalid"),
+                  name, mapset);
         return -1;
     }
 
@@ -50,8 +50,8 @@ int Rast_put_cell_title(const char *name, const char *title)
 
     /* must be #cats line, title line, and label for cat 0 */
     if (line < 3) {
-        G_warning(_("category information for [%s] in [%s] invalid"),
-                  name, mapset);
+        G_warning(_("category information for [%s] in [%s] invalid"), name,
+                  mapset);
         return -1;
     }
 
@@ -64,8 +64,8 @@ int Rast_put_cell_title(const char *name, const char *title)
     out = G_fopen_new("cats", name);
     if (!out) {
         fclose(in);
-        G_warning(_("can't write category information for [%s] in [%s]"),
-                  name, mapset);
+        G_warning(_("can't write category information for [%s] in [%s]"), name,
+                  mapset);
         return -1;
     }
 

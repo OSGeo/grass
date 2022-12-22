@@ -19,7 +19,7 @@
    \param R pointer to ROWIO structure
    \param row row number
  */
-void Rowio_forget(ROWIO * R, int row)
+void Rowio_forget(ROWIO *R, int row)
 {
     int i;
 

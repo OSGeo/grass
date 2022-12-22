@@ -17,7 +17,6 @@
 #include <unistd.h>
 #include <grass/gis.h>
 
-
 /*!
    \brief Rename a file or a directory in the filesystem.
 
@@ -56,7 +55,7 @@ int G_rename_file(const char *oldname, const char *newname)
    The file or directory <i>oldname</i> under the database <i>element</i>
    directory in the current mapset is renamed to <i>newname</i>.
 
-   \bug This routine does not check to see if the <i>newname</i> 
+   \bug This routine does not check to see if the <i>newname</i>
    name is a valid database file name.
 
    \param element element name
@@ -75,11 +74,11 @@ int G_rename(const char *element, const char *oldname, const char *newname)
 
     /* name in mapset legal only if mapset is current mapset */
     mapset = G_mapset();
-    if (G_name_is_fully_qualified(oldname, xname, xmapset)
-        && strcmp(mapset, xmapset))
+    if (G_name_is_fully_qualified(oldname, xname, xmapset) &&
+        strcmp(mapset, xmapset))
         return -1;
-    if (G_name_is_fully_qualified(newname, xname, xmapset)
-        && strcmp(mapset, xmapset))
+    if (G_name_is_fully_qualified(newname, xname, xmapset) &&
+        strcmp(mapset, xmapset))
         return -1;
 
     /* if file does not exist return 0 */

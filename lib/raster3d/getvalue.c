@@ -4,11 +4,11 @@
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
  * Returns in <em>*value</em> the resampled cell-value of the cell with
- * window-coordinate <em>(x, y, z)</em>.  The value returned is of <em>type</em>.
- * This function invokes a fatal error if an error occurs.
+ * window-coordinate <em>(x, y, z)</em>.  The value returned is of
+ * <em>type</em>. This function invokes a fatal error if an error occurs.
  *
  *  \param map
  *  \param x
@@ -19,7 +19,7 @@
  *  \return void
  */
 
-void Rast3d_get_value(RASTER3D_Map * map, int x, int y, int z, void *value,
+void Rast3d_get_value(RASTER3D_Map *map, int x, int y, int z, void *value,
                       int type)
 {
     /* get the resampled value */
@@ -29,7 +29,7 @@ void Rast3d_get_value(RASTER3D_Map * map, int x, int y, int z, void *value,
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
  * Is equivalent to
  * <tt>Rast3d_get_value (map, x, y, z, &value, FCELL_TYPE);</tt> return value.
@@ -41,7 +41,7 @@ void Rast3d_get_value(RASTER3D_Map * map, int x, int y, int z, void *value,
  *  \return float
  */
 
-float Rast3d_get_float(RASTER3D_Map * map, int x, int y, int z)
+float Rast3d_get_float(RASTER3D_Map *map, int x, int y, int z)
 {
     float value;
 
@@ -52,10 +52,11 @@ float Rast3d_get_float(RASTER3D_Map * map, int x, int y, int z)
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
  * Is equivalent
- * to <tt>Rast3d_get_value (map, x, y, z, &value, DCELL_TYPE);</tt> return value.
+ * to <tt>Rast3d_get_value (map, x, y, z, &value, DCELL_TYPE);</tt> return
+ * value.
  *
  *  \param map
  *  \param x
@@ -64,7 +65,7 @@ float Rast3d_get_float(RASTER3D_Map * map, int x, int y, int z)
  *  \return double
  */
 
-double Rast3d_get_double(RASTER3D_Map * map, int x, int y, int z)
+double Rast3d_get_double(RASTER3D_Map *map, int x, int y, int z)
 {
     double value;
 
@@ -75,12 +76,12 @@ double Rast3d_get_double(RASTER3D_Map * map, int x, int y, int z)
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
- * Returns in <em>value</em> the value of the <em>map</em> which corresponds to 
+ * Returns in <em>value</em> the value of the <em>map</em> which corresponds to
  * window coordinates <em>(north, east, top)</em>.  The
- * value is resampled using the resampling function specified for <em>map</em>. The
- * <em>value</em> is of <em>type</em>.
+ * value is resampled using the resampling function specified for <em>map</em>.
+ * The <em>value</em> is of <em>type</em>.
  *
  *  \param map
  *  \param north
@@ -91,19 +92,17 @@ double Rast3d_get_double(RASTER3D_Map * map, int x, int y, int z)
  *  \return void
  */
 
-void
-Rast3d_get_window_value(RASTER3D_Map * map, double north, double east,
-                        double top, void *value, int type)
+void Rast3d_get_window_value(RASTER3D_Map *map, double north, double east,
+                             double top, void *value, int type)
 {
     int col, row, depth;
 
-    Rast3d_location2coord(&(map->window), north, east, top, &col, &row,
-                          &depth);
+    Rast3d_location2coord(&(map->window), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside window return NULL value */
-    if ((row < 0) || (row >= map->window.rows) ||
-        (col < 0) || (col >= map->window.cols) ||
-        (depth < 0) || (depth >= map->window.depths)) {
+    if ((row < 0) || (row >= map->window.rows) || (col < 0) ||
+        (col >= map->window.cols) || (depth < 0) ||
+        (depth >= map->window.depths)) {
         Rast3d_set_null_value(value, 1, type);
         return;
     }
@@ -115,9 +114,9 @@ Rast3d_get_window_value(RASTER3D_Map * map, double north, double east,
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
- * Returns in <em>value</em> the value of the <em>map</em> which corresponds to 
+ * Returns in <em>value</em> the value of the <em>map</em> which corresponds to
  * region coordinates <em>(north, east, top)</em>.
  *
  *  \param map
@@ -129,19 +128,17 @@ Rast3d_get_window_value(RASTER3D_Map * map, double north, double east,
  *  \return void
  */
 
-void
-Rast3d_get_region_value(RASTER3D_Map * map, double north, double east,
-                        double top, void *value, int type)
+void Rast3d_get_region_value(RASTER3D_Map *map, double north, double east,
+                             double top, void *value, int type)
 {
     int row, col, depth;
 
-    Rast3d_location2coord(&(map->region), north, east, top, &col, &row,
-                          &depth);
+    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside region return NULL value */
-    if ((row < 0) || (row >= map->region.rows) ||
-        (col < 0) || (col >= map->region.cols) ||
-        (depth < 0) || (depth >= map->region.depths)) {
+    if ((row < 0) || (row >= map->region.rows) || (col < 0) ||
+        (col >= map->region.cols) || (depth < 0) ||
+        (depth >= map->region.depths)) {
         Rast3d_set_null_value(value, 1, type);
         return;
     }
@@ -153,10 +150,10 @@ Rast3d_get_region_value(RASTER3D_Map * map, double north, double east,
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
- * Is equivalent to <tt>Rast3d_get_value_region (map, x, y, z, &value, FCELL_TYPE);</tt>
- * return value.
+ * Is equivalent to <tt>Rast3d_get_value_region (map, x, y, z, &value,
+ * FCELL_TYPE);</tt> return value.
  *
  *  \param map
  *  \param x
@@ -165,7 +162,7 @@ Rast3d_get_region_value(RASTER3D_Map * map, double north, double east,
  *  \return float
  */
 
-float Rast3d_get_float_region(RASTER3D_Map * map, int x, int y, int z)
+float Rast3d_get_float_region(RASTER3D_Map *map, int x, int y, int z)
 {
     int tileIndex, offs;
     float *tile;
@@ -185,10 +182,10 @@ float Rast3d_get_float_region(RASTER3D_Map * map, int x, int y, int z)
     tile = (float *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-        Rast3d_fatal_error
-            ("Rast3d_get_float_region: error in Rast3d_get_tile_ptr."
-             "Region coordinates x %i y %i z %i  tile index %i offset %i", x,
-             y, z, tileIndex, offs);
+        Rast3d_fatal_error(
+            "Rast3d_get_float_region: error in Rast3d_get_tile_ptr."
+            "Region coordinates x %i y %i z %i  tile index %i offset %i",
+            x, y, z, tileIndex, offs);
 
     return tile[offs];
 }
@@ -196,7 +193,7 @@ float Rast3d_get_float_region(RASTER3D_Map * map, int x, int y, int z)
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
  * Is equivalent to <tt>Rast3d_get_value_region (map, x, y, z, &value,
  * DCELL_TYPE);</tt> return value.
@@ -208,7 +205,7 @@ float Rast3d_get_float_region(RASTER3D_Map * map, int x, int y, int z)
  *  \return double
  */
 
-double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
+double Rast3d_get_double_region(RASTER3D_Map *map, int x, int y, int z)
 {
     int tileIndex, offs;
     double *tile;
@@ -228,10 +225,10 @@ double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
     tile = (double *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-        Rast3d_fatal_error
-            ("Rast3d_get_double_region: error in Rast3d_get_tile_ptr."
-             "Region coordinates x %i y %i z %i  tile index %i offset %i", x,
-             y, z, tileIndex, offs);
+        Rast3d_fatal_error(
+            "Rast3d_get_double_region: error in Rast3d_get_tile_ptr."
+            "Region coordinates x %i y %i z %i  tile index %i offset %i",
+            x, y, z, tileIndex, offs);
 
     return tile[offs];
 }
@@ -239,14 +236,14 @@ double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
 /*---------------------------------------------------------------------------*/
 
 /*!
- * \brief 
+ * \brief
  *
  * Returns in <em>*value</em> the cell-value of the cell with
- * region-coordinate <em>(x, y, z)</em>.  The value returned is of <em>type</em>.
- * Here <em>region</em> means the coordinate in the cube of data in the file, i.e.
- * ignoring geographic coordinates.
- * In case the region coordinates are out of bounds, the Null value will be returned.
- * This function invokes a fatal error if an error occurs.
+ * region-coordinate <em>(x, y, z)</em>.  The value returned is of
+ * <em>type</em>. Here <em>region</em> means the coordinate in the cube of data
+ * in the file, i.e. ignoring geographic coordinates. In case the region
+ * coordinates are out of bounds, the Null value will be returned. This function
+ * invokes a fatal error if an error occurs.
  *
  *  \param map
  *  \param x
@@ -257,9 +254,8 @@ double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
  *  \return void
  */
 
-void
-Rast3d_get_value_region(RASTER3D_Map * map, int x, int y, int z, void *value,
-                        int type)
+void Rast3d_get_value_region(RASTER3D_Map *map, int x, int y, int z,
+                             void *value, int type)
 {
     if (type == FCELL_TYPE) {
         *((float *)value) = Rast3d_get_float_region(map, x, y, z);

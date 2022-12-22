@@ -23,7 +23,7 @@
 
    \param Map vector map
 
-   \return open level 
+   \return open level
    \return -1 on error
  */
 int Vect_level(const struct Map_info *Map)

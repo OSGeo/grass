@@ -76,8 +76,7 @@ int Rast_raster_cmp(const void *v1, const void *v2, RASTER_MAP_TYPE data_type)
  * \param n number of values to copy
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_raster_cpy(void *v1, const void *v2, int n,
-                     RASTER_MAP_TYPE data_type)
+void Rast_raster_cpy(void *v1, const void *v2, int n, RASTER_MAP_TYPE data_type)
 {
     memcpy(v1, v2, n * Rast_cell_size(data_type));
 }
@@ -104,13 +103,13 @@ void Rast_set_c_value(void *rast, CELL cval, RASTER_MAP_TYPE data_type)
     }
     switch (data_type) {
     case CELL_TYPE:
-        *((CELL *) rast) = cval;
+        *((CELL *)rast) = cval;
         break;
     case FCELL_TYPE:
-        *((FCELL *) rast) = (FCELL) cval;
+        *((FCELL *)rast) = (FCELL)cval;
         break;
     case DCELL_TYPE:
-        *((DCELL *) rast) = (DCELL) cval;
+        *((DCELL *)rast) = (DCELL)cval;
         break;
     }
 }
@@ -137,17 +136,16 @@ void Rast_set_f_value(void *rast, FCELL fval, RASTER_MAP_TYPE data_type)
     }
     switch (data_type) {
     case CELL_TYPE:
-        *((CELL *) rast) = (CELL) fval;
+        *((CELL *)rast) = (CELL)fval;
         break;
     case FCELL_TYPE:
-        *((FCELL *) rast) = fval;
+        *((FCELL *)rast) = fval;
         break;
     case DCELL_TYPE:
-        *((DCELL *) rast) = (DCELL) fval;
+        *((DCELL *)rast) = (DCELL)fval;
         break;
     }
 }
-
 
 /*!
  * \brief  Places a DCELL raster value
@@ -171,13 +169,13 @@ void Rast_set_d_value(void *rast, DCELL dval, RASTER_MAP_TYPE data_type)
     }
     switch (data_type) {
     case CELL_TYPE:
-        *((CELL *) rast) = (CELL) dval;
+        *((CELL *)rast) = (CELL)dval;
         break;
     case FCELL_TYPE:
-        *((FCELL *) rast) = (FCELL) dval;
+        *((FCELL *)rast) = (FCELL)dval;
         break;
     case DCELL_TYPE:
-        *((DCELL *) rast) = dval;
+        *((DCELL *)rast) = dval;
         break;
     }
 }
@@ -252,7 +250,6 @@ FCELL Rast_get_f_value(const void *rast, RASTER_MAP_TYPE data_type)
 
     return 0;
 }
-
 
 /*!
  * \brief Retrieves the value of given type from pointer p (DCELL)

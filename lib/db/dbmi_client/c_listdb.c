@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_listdb.c
- * 
+ *
  * \brief DBMI Library (client) - list databases
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -27,8 +27,8 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_list_databases(dbDriver * driver, dbString * path, int npaths,
-                      dbHandle ** handles, int *count)
+int db_list_databases(dbDriver *driver, dbString *path, int npaths,
+                      dbHandle **handles, int *count)
 {
     int ret_code;
     int i;
@@ -45,7 +45,7 @@ int db_list_databases(dbDriver * driver, dbString * path, int npaths,
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-        return ret_code;        /* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* results */
     DB_RECV_INT(count);

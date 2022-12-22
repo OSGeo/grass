@@ -1,7 +1,7 @@
 /*!
  * \file lib/raster/color_look.c
- * 
- * \brief Raster Library - Lookup array of colors 
+ *
+ * \brief Raster Library - Lookup array of colors
  *
  * (C) 1999-2009 by the GRASS Development Team
  *
@@ -42,12 +42,12 @@
  * \param n number of values
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_lookup_c_colors(const CELL * cell,
-                          unsigned char *red, unsigned char *grn,
-                          unsigned char *blu, unsigned char *set, int n,
-                          struct Colors *colors)
+void Rast_lookup_c_colors(const CELL *cell, unsigned char *red,
+                          unsigned char *grn, unsigned char *blu,
+                          unsigned char *set, int n, struct Colors *colors)
 {
-    Rast__organize_colors(colors);      /* make sure the lookup tables are in place */
+    Rast__organize_colors(
+        colors); /* make sure the lookup tables are in place */
 
     G_zero((char *)set, n * sizeof(unsigned char));
 
@@ -76,23 +76,22 @@ void Rast_lookup_c_colors(const CELL * cell,
  * \param colors pointer to Colors structure which holds color info
  * \param map_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_lookup_colors(const void *raster,
-                        unsigned char *red, unsigned char *grn,
-                        unsigned char *blu, unsigned char *set, int n,
-                        struct Colors *colors, RASTER_MAP_TYPE map_type)
+void Rast_lookup_colors(const void *raster, unsigned char *red,
+                        unsigned char *grn, unsigned char *blu,
+                        unsigned char *set, int n, struct Colors *colors,
+                        RASTER_MAP_TYPE map_type)
 {
-    Rast__organize_colors(colors);      /* make sure the lookup tables are in place */
+    Rast__organize_colors(
+        colors); /* make sure the lookup tables are in place */
     /* in case of float color rules, fp_lookup table is created */
 
     G_zero((char *)set, n * sizeof(unsigned char));
 
     /* first lookup the fixed colors */
-    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 0, 0,
-                        map_type);
+    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 0, 0, map_type);
 
     /* now lookup unset colors using the modular rules */
-    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 1, 0,
-                        map_type);
+    Rast__lookup_colors(raster, red, grn, blu, set, n, colors, 1, 0, map_type);
 }
 
 /*!
@@ -110,11 +109,12 @@ void Rast_lookup_colors(const void *raster,
  * \param n number of values
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_lookup_f_colors(const FCELL * fcell, unsigned char *red,
+void Rast_lookup_f_colors(const FCELL *fcell, unsigned char *red,
                           unsigned char *grn, unsigned char *blu,
                           unsigned char *set, int n, struct Colors *colors)
 {
-    Rast__organize_colors(colors);      /* make sure the lookup tables are in place */
+    Rast__organize_colors(
+        colors); /* make sure the lookup tables are in place */
     /* in case of float color rules, fp_lookup table is created */
 
     G_zero((char *)set, n * sizeof(unsigned char));
@@ -143,11 +143,12 @@ void Rast_lookup_f_colors(const FCELL * fcell, unsigned char *red,
  * \param n number of values
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_lookup_d_colors(const DCELL * dcell, unsigned char *red,
+void Rast_lookup_d_colors(const DCELL *dcell, unsigned char *red,
                           unsigned char *grn, unsigned char *blu,
                           unsigned char *set, int n, struct Colors *colors)
 {
-    Rast__organize_colors(colors);      /* make sure the lookup tables are in place */
+    Rast__organize_colors(
+        colors); /* make sure the lookup tables are in place */
     /* in case of float color rules, fp_lookup table is created */
 
     G_zero((char *)set, n * sizeof(unsigned char));
@@ -160,7 +161,6 @@ void Rast_lookup_d_colors(const DCELL * dcell, unsigned char *red,
     Rast__lookup_colors((void *)dcell, red, grn, blu, set, n, colors, 1, 0,
                         DCELL_TYPE);
 }
-
 
 static int less_or_equal(double x, double y)
 {
@@ -222,8 +222,8 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
     /* we want min, max for cp, not min, max overall */
     dmin = cp->min;
     dmax = cp->max;
-    min = (CELL) dmin;
-    max = (CELL) dmax;
+    min = (CELL)dmin;
+    max = (CELL)dmax;
 
     cell_type = (data_type == CELL_TYPE);
 
@@ -246,9 +246,8 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
 
     ptr = raster;
 
-    for (; n-- > 0;
-         ptr = G_incr_void_ptr(ptr, size),
-         red++, grn++, blu++, *set++ = found) {
+    for (; n-- > 0; ptr = G_incr_void_ptr(ptr, size), red++, grn++, blu++,
+                    *set++ = found) {
         /* if the cell is the same as last one, use the prev color values */
         if (ptr != raster && Rast_raster_cmp(ptr, last_ptr, data_type) == 0) {
             *red = *(red - 1);
@@ -301,7 +300,7 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
                 val = dmin;
         }
 
-        cat = (CELL) val;
+        cat = (CELL)val;
 
         found = 0;
 
@@ -318,7 +317,8 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
                     *blu = cp->lookup.blu[cat];
                     found = 1;
                     /*DEBUG
-                       fprintf (stderr, "lookup %d %.2lf %d %d %d\n\n", cat, val, *red, *grn, *blu);
+                       fprintf (stderr, "lookup %d %.2lf %d %d %d\n\n", cat,
+                       val, *red, *grn, *blu);
                      */
                 }
             }
@@ -333,22 +333,23 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
             min_ind = 0;
             max_ind = cp->fp_lookup.nalloc - 2;
             while (1) {
-                /* when the rule for the interval is NULL, we exclude the end points.
-                   when it exists, we include the end-points */
+                /* when the rule for the interval is NULL, we exclude the end
+                   points. when it exists, we include the end-points */
                 if (cp->fp_lookup.rules[try])
                     lower = less;
                 else
                     lower = less_or_equal;
                 /* DEBUG
-                   fprintf (stderr, "%d %d %d %lf %lf %lf\n", min_ind, try, max_ind,
-                   cp->fp_lookup.vals[try-1],
-                   val,
+                   fprintf (stderr, "%d %d %d %lf %lf %lf\n", min_ind, try,
+                   max_ind, cp->fp_lookup.vals[try-1], val,
                    cp->fp_lookup.vals[try]);
                  */
 
-                if (lower(cp->fp_lookup.vals[try + 1], val)) {  /* recurse to the second half */
+                if (lower(cp->fp_lookup.vals[try + 1],
+                          val)) { /* recurse to the second half */
                     min_ind = try + 1;
-                    /* must be still < nalloc-1, since number is within the range */
+                    /* must be still < nalloc-1, since number is within the
+                     * range */
                     try = (max_ind + min_ind) / 2;
                     if (min_ind > max_ind) {
                         rule = NULL;
@@ -356,7 +357,8 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
                     }
                     continue;
                 }
-                if (lower(val, cp->fp_lookup.vals[try])) {      /* recurse to the second half */
+                if (lower(val, cp->fp_lookup.vals[try])) { /* recurse to the
+                                                              second half */
                     max_ind = try - 1;
                     /* must be still >= 0, since number is within the range */
                     try = (max_ind + min_ind) / 2;
@@ -374,7 +376,7 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
             /* find the [low:high] rule that applies */
             for (rule = cp->rules; rule; rule = rule->next) {
                 /* DEBUG
-                   fprintf (stderr, "%.2lf %.2lf %.2lf\n", 
+                   fprintf (stderr, "%.2lf %.2lf %.2lf\n",
                    val, rule->low.value, rule->high.value);
                  */
                 if (rule->low.value <= val && val <= rule->high.value)
@@ -399,8 +401,11 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
         }
         /* DEBUG
            if (rule)
-           fprintf (stderr, "%.2lf %d %d %d   %.2lf %d %d %d \n", rule->low.value , (int)rule->low.red, (int)rule->low.grn, (int)rule->low.blu, rule->high.value, (int)rule->high.red, (int)rule->high.grn, (int)rule->high.blu);
-           fprintf (stderr, "rule found %d %.2lf %d %d %d\n\n", cat, val, *red, *grn, *blu);
+           fprintf (stderr, "%.2lf %d %d %d   %.2lf %d %d %d \n",
+           rule->low.value , (int)rule->low.red, (int)rule->low.grn,
+           (int)rule->low.blu, rule->high.value, (int)rule->high.red,
+           (int)rule->high.grn, (int)rule->high.blu); fprintf (stderr, "rule
+           found %d %.2lf %d %d %d\n\n", cat, val, *red, *grn, *blu);
          */
     }
 }
@@ -423,18 +428,15 @@ void Rast__interpolate_color_rule(DCELL val, unsigned char *red,
     if ((delta = rule->high.value - rule->low.value)) {
         val -= rule->low.value;
 
-        *red =
-            (int)(val * (double)((int)rule->high.red - (int)rule->low.red) /
-                  delta)
-            + (int)rule->low.red;
-        *grn =
-            (int)(val * (double)((int)rule->high.grn - (int)rule->low.grn) /
-                  delta)
-            + (int)rule->low.grn;
-        *blu =
-            (int)(val * (double)((int)rule->high.blu - (int)rule->low.blu) /
-                  delta)
-            + (int)rule->low.blu;
+        *red = (int)(val * (double)((int)rule->high.red - (int)rule->low.red) /
+                     delta) +
+               (int)rule->low.red;
+        *grn = (int)(val * (double)((int)rule->high.grn - (int)rule->low.grn) /
+                     delta) +
+               (int)rule->low.grn;
+        *blu = (int)(val * (double)((int)rule->high.blu - (int)rule->low.blu) /
+                     delta) +
+               (int)rule->low.blu;
     }
     else {
         *red = rule->low.red;

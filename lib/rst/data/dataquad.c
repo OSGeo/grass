@@ -21,11 +21,9 @@
  * Read the file COPYING that comes with GRASS for details.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/dataquad.h>
-
 
 /*!
  * Initialize point structure with given arguments
@@ -51,10 +49,9 @@ struct triple *quad_point_new(double x, double y, double z, double sm)
     return point;
 }
 
-
 /*!
  * Initialize quaddata structure with given arguments
- * 
+ *
  * This is a constructor of the quaddata structure and it allocates memory.
  * It also creates (and allocates memory for) the given number of points
  * (given by *kmax*). The point attributes are set to zero.
@@ -77,8 +74,7 @@ struct quaddata *quad_data_new(double x_or, double y_or, double xmax,
     data->n_rows = rows;
     data->n_cols = cols;
     data->n_points = n_points;
-    data->points =
-        (struct triple *)malloc(sizeof(struct triple) * (kmax + 1));
+    data->points = (struct triple *)malloc(sizeof(struct triple) * (kmax + 1));
     if (!data->points) {
         free(data);
         return NULL;
@@ -92,7 +88,6 @@ struct quaddata *quad_data_new(double x_or, double y_or, double xmax,
 
     return data;
 }
-
 
 /*!
  * Return the quadrant the point should be inserted in
@@ -138,7 +133,6 @@ int quad_compare(struct triple *point, struct quaddata *data)
         return 0;
 }
 
-
 /*!
  * Add point to a given *data*.
  */
@@ -173,10 +167,9 @@ int quad_add_data(struct triple *point, struct quaddata *data, double dmin)
     return cond;
 }
 
-
 /*!
  * Check intersection of two quaddata structures
- * 
+ *
  * Checks if region defined by *data* intersects the region defined
  * by *data_inter*.
  */
@@ -189,32 +182,26 @@ int quad_intersect(struct quaddata *data_inter, struct quaddata *data)
     ymin = data_inter->y_orig;
     ymax = data_inter->ymax;
 
-    if (((data->x_orig >= xmin) && (data->x_orig <= xmax)
-         && (((data->y_orig >= ymin) && (data->y_orig <= ymax))
-             || ((ymin >= data->y_orig) && (ymin <= data->ymax))
-         )
-        )
-        || ((xmin >= data->x_orig) && (xmin <= data->xmax)
-            && (((ymin >= data->y_orig) && (ymin <= data->ymax))
-                || ((data->y_orig >= ymin) && (data->y_orig <= ymax))
-            )
-        )
-        ) {
+    if (((data->x_orig >= xmin) && (data->x_orig <= xmax) &&
+         (((data->y_orig >= ymin) && (data->y_orig <= ymax)) ||
+          ((ymin >= data->y_orig) && (ymin <= data->ymax)))) ||
+        ((xmin >= data->x_orig) && (xmin <= data->xmax) &&
+         (((ymin >= data->y_orig) && (ymin <= data->ymax)) ||
+          ((data->y_orig >= ymin) && (data->y_orig <= ymax))))) {
         return 1;
     }
     else
         return 0;
 }
 
-
 /*!
  * Check if *data* needs to be divided
- * 
+ *
  * Checks if *data* needs to be divided. If `data->points` is empty,
  * returns -1; if its not empty but there aren't enough points
  * in *data* for division returns 0. Otherwise (if its not empty and
  * there are too many points) returns 1.
- * 
+ *
  * \returns 1 if division is needed
  * \returns 0 if division is not needed
  * \returns -1 if there are no points
@@ -229,7 +216,6 @@ int quad_division_check(struct quaddata *data, int kmax)
         return 1;
 }
 
-
 /*!
  * Divide *data* into four new ones
  *
@@ -237,13 +223,12 @@ int quad_division_check(struct quaddata *data, int kmax)
  * them by calling data function `quad_compare()` to determine
  * were to insert. Returns array of 4 new datas (allocates memory).
  */
-struct quaddata **quad_divide_data(struct quaddata *data, int kmax,
-                                   double dmin)
+struct quaddata **quad_divide_data(struct quaddata *data, int kmax, double dmin)
 {
     struct quaddata **datas;
-    int cols1, cols2, rows1, rows2, i;  /*j1, j2, jmin = 0; */
-    double dx, dy;              /* x2, y2, dist, mindist; */
-    double xr, xm, xl, yr, ym, yl;      /* left, right, middle coord */
+    int cols1, cols2, rows1, rows2, i; /*j1, j2, jmin = 0; */
+    double dx, dy;                     /* x2, y2, dist, mindist; */
+    double xr, xm, xl, yr, ym, yl;     /* left, right, middle coord */
     double ew_res, ns_res;
 
     ew_res = (data->xmax - data->x_orig) / data->n_cols;
@@ -291,39 +276,33 @@ struct quaddata **quad_divide_data(struct quaddata *data, int kmax,
     datas[NW] = quad_data_new(xl, ym, xm, yr, rows2, cols1, 0, kmax);
     for (i = 0; i < data->n_points; i++) {
         switch (quad_compare(data->points + i, data)) {
-        case SW:
-            {
-                quad_add_data(data->points + i, datas[SW], dmin);
-                break;
-            }
-        case SE:
-            {
-                quad_add_data(data->points + i, datas[SE], dmin);
-                break;
-            }
-        case NW:
-            {
-                quad_add_data(data->points + i, datas[NW], dmin);
-                break;
-            }
-        case NE:
-            {
-                quad_add_data(data->points + i, datas[NE], dmin);
-                break;
-            }
+        case SW: {
+            quad_add_data(data->points + i, datas[SW], dmin);
+            break;
+        }
+        case SE: {
+            quad_add_data(data->points + i, datas[SE], dmin);
+            break;
+        }
+        case NW: {
+            quad_add_data(data->points + i, datas[NW], dmin);
+            break;
+        }
+        case NE: {
+            quad_add_data(data->points + i, datas[NE], dmin);
+            break;
+        }
         }
     }
     data->points = NULL;
     return datas;
 }
 
-
 /*!
  * Gets such points from *data* that lie within region determined by
  * *data_inter*. Called by tree function `region_data()`.
  */
-int
-quad_get_points(struct quaddata *data_inter, struct quaddata *data, int MAX)
+int quad_get_points(struct quaddata *data_inter, struct quaddata *data, int MAX)
 {
     int i, ind;
     int n = 0;
@@ -339,15 +318,14 @@ quad_get_points(struct quaddata *data_inter, struct quaddata *data, int MAX)
         point = data->points + i;
         if (l >= MAX)
             return MAX + 1;
-        if ((point->x > xmin) && (point->x < xmax)
-            && (point->y > ymin) && (point->y < ymax)) {
+        if ((point->x > xmin) && (point->x < xmax) && (point->y > ymin) &&
+            (point->y < ymax)) {
             ind = data_inter->n_points++;
             data_inter->points[ind].x = point->x;
             data_inter->points[ind].y = point->y;
             data_inter->points[ind].z = point->z;
             data_inter->points[ind].sm = point->sm;
             l = l + 1;
-
         }
     }
     n = l;

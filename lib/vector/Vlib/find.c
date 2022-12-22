@@ -14,6 +14,7 @@
  * Higgins.
  * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
+
 #include <stdlib.h>
 #include <math.h>
 #include <grass/vector.h>
@@ -22,11 +23,9 @@
 #define HUGE_VAL 9999999999999.0
 #endif
 
-
 /* for qsort */
 
-typedef struct
-{
+typedef struct {
     int i;
     double size;
     struct bound_box box;
@@ -34,8 +33,8 @@ typedef struct
 
 static int sort_by_size(const void *a, const void *b)
 {
-    BOX_SIZE *as = (BOX_SIZE *) a;
-    BOX_SIZE *bs = (BOX_SIZE *) b;
+    BOX_SIZE *as = (BOX_SIZE *)a;
+    BOX_SIZE *bs = (BOX_SIZE *)b;
 
     if (as->size < bs->size)
         return -1;
@@ -43,21 +42,19 @@ static int sort_by_size(const void *a, const void *b)
     return (as->size > bs->size);
 }
 
-
 /*!
  * \brief Find the nearest node.
  *
  * \param Map vector map
- * \param ux,uy,uz point coordinates 
+ * \param ux,uy,uz point coordinates
  * \param maxdist max distance from the line
  * \param with_z 3D (WITH_Z, WITHOUT_Z)
  *
  * \return number of nearest node
  * \return 0 if not found
  */
-int
-Vect_find_node(struct Map_info *Map,
-               double ux, double uy, double uz, double maxdist, int with_z)
+int Vect_find_node(struct Map_info *Map, double ux, double uy, double uz,
+                   double maxdist, int with_z)
 {
     int i, nnodes, node;
     struct bound_box box;
@@ -120,16 +117,14 @@ Vect_find_node(struct Map_info *Map,
  * \param maxdist max distance from the line
  * \param with_z 3D (WITH_Z, WITHOUT_Z)
  * \param exclude if > 0 number of line which should be excluded from selection.
- * May be useful if we need line nearest to other one. 
+ * May be useful if we need line nearest to other one.
  *
  * \return number of nearest line
  * \return 0 if not found
  *
  */
-int
-Vect_find_line(struct Map_info *map,
-               double ux, double uy, double uz,
-               int type, double maxdist, int with_z, int exclude)
+int Vect_find_line(struct Map_info *map, double ux, double uy, double uz,
+                   int type, double maxdist, int with_z, int exclude)
 {
     int line;
     struct ilist *exclude_list;
@@ -138,8 +133,8 @@ Vect_find_line(struct Map_info *map,
 
     Vect_list_append(exclude_list, exclude);
 
-    line = Vect_find_line_list(map, ux, uy, uz,
-                               type, maxdist, with_z, exclude_list, NULL);
+    line = Vect_find_line_list(map, ux, uy, uz, type, maxdist, with_z,
+                               exclude_list, NULL);
 
     Vect_destroy_list(exclude_list);
 
@@ -161,11 +156,9 @@ Vect_find_line(struct Map_info *map,
  * \return number of nearest line
  * \return 0 if not found
  */
-int
-Vect_find_line_list(struct Map_info *map,
-                    double ux, double uy, double uz,
-                    int type, double maxdist, int with_z,
-                    const struct ilist *exclude, struct ilist *found)
+int Vect_find_line_list(struct Map_info *map, double ux, double uy, double uz,
+                        int type, double maxdist, int with_z,
+                        const struct ilist *exclude, struct ilist *found)
 {
     int choice;
     double new_dist;
@@ -177,8 +170,8 @@ Vect_find_line_list(struct Map_info *map,
     struct bound_box box;
     struct boxlist *List;
 
-    G_debug(3, "Vect_find_line_list() for %f %f %f type = %d maxdist = %f",
-            ux, uy, uz, type, maxdist);
+    G_debug(3, "Vect_find_line_list() for %f %f %f type = %d maxdist = %f", ux,
+            uy, uz, type, maxdist);
 
     if (first_time) {
         Points = Vect_new_line_struct();
@@ -217,9 +210,9 @@ Vect_find_line_list(struct Map_info *map,
 
         /* No more needed */
         /*
-           Line = Plus->Line[line];       
+           Line = Plus->Line[line];
            if ( Line == NULL ) continue;
-           if ( !(type & Line->type) ) continue; 
+           if ( !(type & Line->type) ) continue;
          */
 
         Vect_read_line(map, Points, NULL, line);
@@ -326,8 +319,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     for (i = 0; i < List->n_values; i++) {
         area = size_list[i].i;
         /* outer ring */
-        ret =
-            Vect_point_in_area_outer_ring(x, y, Map, area, &size_list[i].box);
+        ret = Vect_point_in_area_outer_ring(x, y, Map, area, &size_list[i].box);
 
         G_debug(3, "    area = %d Vect_point_in_area_outer_ring() = %d", area,
                 ret);
@@ -345,8 +337,8 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 
                 if (ret >= 1) {
                     /* point is not in area
-                     * point is also not in any inner area, those have 
-                     * been tested before (sorted list) 
+                     * point is also not in any inner area, those have
+                     * been tested before (sorted list)
                      * -> area inside island could not be built */
                     return 0;
                 }
@@ -360,7 +352,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 
 /*!
  * \brief Find the nearest island
- * 
+ *
  * \param Map vector map
  * \param x,y points coordinates
  *
@@ -401,14 +393,13 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
         island = List->id[i];
         ret = Vect_point_in_island(x, y, Map, island, &List->box[i]);
 
-        if (ret >= 1) {         /* inside */
-            if (current > 0) {  /* not first */
-                if (current_size == -1) {       /* second */
+        if (ret >= 1) {                   /* inside */
+            if (current > 0) {            /* not first */
+                if (current_size == -1) { /* second */
                     G_begin_polygon_area_calculations();
                     Vect_get_isle_points(Map, current, Points);
-                    current_size =
-                        G_area_of_polygon(Points->x, Points->y,
-                                          Points->n_points);
+                    current_size = G_area_of_polygon(Points->x, Points->y,
+                                                     Points->n_points);
                 }
 
                 Vect_get_isle_points(Map, island, Points);
@@ -420,7 +411,7 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
                     current_size = size;
                 }
             }
-            else {              /* first */
+            else { /* first */
                 current = island;
             }
         }

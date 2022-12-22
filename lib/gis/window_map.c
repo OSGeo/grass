@@ -18,7 +18,7 @@
 /*!
    \brief Adjust east longitude.
 
-   This routine returns an equivalent <i>east</i> that is at least as 
+   This routine returns an equivalent <i>east</i> that is at least as
    large as the <i>west</i> coordinate.
 
    <b>Note:</b> This routine should be used only with
@@ -44,9 +44,9 @@ double G_adjust_east_longitude(double east, double west)
    \brief Returns east not smaller than west.
 
    If the region projection is <tt>PROJECTION_LL</tt>, then this
-   routine returns an equivalent <i>east</i> that is not smaller than 
-   the coordinate for the western edge of the region and, if possible, 
-   smaller than the coordinate for the eastern edge of the region. 
+   routine returns an equivalent <i>east</i> that is not smaller than
+   the coordinate for the western edge of the region and, if possible,
+   smaller than the coordinate for the eastern edge of the region.
    Otherwise no adjustment is made and the original <i>east</i> is
    returned.
 

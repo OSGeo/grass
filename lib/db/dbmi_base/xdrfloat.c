@@ -19,7 +19,7 @@
 
    \param d
 
-   \return 
+   \return
  */
 int db__send_float(float d)
 {

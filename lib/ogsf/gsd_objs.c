@@ -3,12 +3,12 @@
 
    \brief OGSF library - objects management (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -31,14 +31,8 @@ static void init_stuff(void);
 /*!
    \brief vertices for octahedron
  */
-float Octo[6][3] = {
-    {1.0, 0.0, 0.0},
-    {0.0, 1.0, 0.0},
-    {0.0, 0.0, 1.0},
-    {-1.0, 0.0, 0.0},
-    {0.0, -1.0, 0.0},
-    {0.0, 0.0, -1.0}
-};
+float Octo[6][3] = {{1.0, 0.0, 0.0},  {0.0, 1.0, 0.0},  {0.0, 0.0, 1.0},
+                    {-1.0, 0.0, 0.0}, {0.0, -1.0, 0.0}, {0.0, 0.0, -1.0}};
 
 #define ONORM .57445626
 
@@ -46,14 +40,9 @@ float Octo[6][3] = {
    \brief normals for flat-shaded octahedron
  */
 float OctoN[8][3] = {
-    {ONORM, ONORM, ONORM},
-    {-ONORM, ONORM, ONORM},
-    {ONORM, -ONORM, ONORM},
-    {-ONORM, -ONORM, ONORM},
-    {ONORM, ONORM, -ONORM},
-    {-ONORM, ONORM, -ONORM},
-    {ONORM, -ONORM, -ONORM},
-    {-ONORM, -ONORM, -ONORM},
+    {ONORM, ONORM, ONORM},   {-ONORM, ONORM, ONORM},   {ONORM, -ONORM, ONORM},
+    {-ONORM, -ONORM, ONORM}, {ONORM, ONORM, -ONORM},   {-ONORM, ONORM, -ONORM},
+    {ONORM, -ONORM, -ONORM}, {-ONORM, -ONORM, -ONORM},
 };
 
 /*!
@@ -68,28 +57,17 @@ float OctoN[8][3] = {
    };
  */
 
-float CubeNormals[3][3] = {
-    {0, -ONORM, 0},
-    {0, 0, ONORM},
-    {ONORM, 0, 0}
-};
+float CubeNormals[3][3] = {{0, -ONORM, 0}, {0, 0, ONORM}, {ONORM, 0, 0}};
 
 float CubeVertices[8][3] = {
-    {-1.0, -1.0, -1.0},
-    {1.0, -1.0, -1.0},
-    {1.0, 1.0, -1.0},
-    {-1.0, 1.0, -1.0},
-    {-1.0, -1.0, 1.0},
-    {1.0, -1.0, 1.0},
-    {1.0, 1.0, 1.0},
-    {-1.0, 1.0, 1.0}
-};
+    {-1.0, -1.0, -1.0}, {1.0, -1.0, -1.0}, {1.0, 1.0, -1.0}, {-1.0, 1.0, -1.0},
+    {-1.0, -1.0, 1.0},  {1.0, -1.0, 1.0},  {1.0, 1.0, 1.0},  {-1.0, 1.0, 1.0}};
 
-float origin[3] = { 0.0, 0.0, 0.0 };
+float origin[3] = {0.0, 0.0, 0.0};
 
-#define UP_NORM Octo[2]
+#define UP_NORM   Octo[2]
 #define DOWN_NORM Octo[5]
-#define ORIGIN origin
+#define ORIGIN    origin
 
 /*!
    \brief vertices & normals for octagon in xy plane
@@ -186,7 +164,7 @@ void gsd_plus(float *center, int colr, float siz)
    \param v1 first point
    \param v2 second point
  */
-void gsd_line_onsurf(geosurf * gs, float *v1, float *v2)
+void gsd_line_onsurf(geosurf *gs, float *v1, float *v2)
 {
     int i, np;
     Point3 *pts;
@@ -232,7 +210,7 @@ void gsd_line_onsurf(geosurf * gs, float *v1, float *v2)
 
    \param number of vertices
  */
-int gsd_nline_onsurf(geosurf * gs, float *v1, float *v2, float *pt, int n)
+int gsd_nline_onsurf(geosurf *gs, float *v1, float *v2, float *pt, int n)
 {
     int i, np, pdraw;
     Point3 *pts;
@@ -275,7 +253,7 @@ int gsd_nline_onsurf(geosurf * gs, float *v1, float *v2, float *pt, int n)
    \param colr color value
    \param siz size value
  */
-void gsd_x(geosurf * gs, float *center, int colr, float siz)
+void gsd_x(geosurf *gs, float *center, int colr, float siz)
 {
     float v1[3], v2[3];
 
@@ -336,7 +314,7 @@ void gsd_diamond(float *center, unsigned long colr, float siz)
     gsd_translate(center[X], center[Y], center[Z]);
     gsd_scale(siz, siz, siz);
     preshade = gsd_getshademodel();
-    gsd_shademodel(0);          /* want flat shading */
+    gsd_shademodel(0); /* want flat shading */
 
     gsd_bgnpolygon();
     gsd_litvert_func(OctoN[0], colr, Octo[0]);
@@ -437,8 +415,7 @@ void gsd_cube(float *center, unsigned long colr, float siz)
     gsd_translate(center[X], center[Y], center[Z]);
     gsd_scale(siz, siz, siz);
     preshade = gsd_getshademodel();
-    gsd_shademodel(0);          /* want flat shading */
-
+    gsd_shademodel(0); /* want flat shading */
 
     /* N wall: */
     gsd_bgnpolygon();
@@ -514,7 +491,7 @@ void gsd_draw_box(float *center, unsigned long colr, float siz)
     gsd_scale(siz, siz, siz);
     gsd_color_func(colr);
 
-    gsd_bgnline();              /* N wall */
+    gsd_bgnline(); /* N wall */
     gsd_vert_func(CubeVertices[2]);
     gsd_vert_func(CubeVertices[3]);
     gsd_vert_func(CubeVertices[7]);
@@ -522,7 +499,7 @@ void gsd_draw_box(float *center, unsigned long colr, float siz)
     gsd_vert_func(CubeVertices[2]);
     gsd_endline();
 
-    gsd_bgnline();              /* S wall */
+    gsd_bgnline(); /* S wall */
     gsd_vert_func(CubeVertices[1]);
     gsd_vert_func(CubeVertices[5]);
     gsd_vert_func(CubeVertices[4]);
@@ -564,7 +541,7 @@ void gsd_draw_box(float *center, unsigned long colr, float siz)
  */
 void gsd_drawsphere(float *center, unsigned long colr, float siz)
 {
-    siz *= .5;                  /* siz is diameter, gsd_sphere uses radius */
+    siz *= .5; /* siz is diameter, gsd_sphere uses radius */
     gsd_color_func(colr);
     gsd_sphere(center, siz);
 
@@ -605,7 +582,7 @@ void gsd_draw_asterisk(float *center, unsigned long colr, float siz)
 {
     float angle;
 
-    angle = 45.;                /* degrees */
+    angle = 45.; /* degrees */
 
     gsd_pushmatrix();
     gsd_translate(center[X], center[Y], center[Z]);
@@ -810,7 +787,6 @@ void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
     return;
 }
 
-
 /*!
    \brief Draw North Arrow takes OpenGL coords and size
 
@@ -830,7 +806,7 @@ int gsd_north_arrow(float *pos2, float len, GLuint fontbase,
     const char *txt;
     float v[4][3];
     float base[3][3];
-    float Ntop[] = { 0.0, 0.0, 1.0 };
+    float Ntop[] = {0.0, 0.0, 1.0};
 
     base[0][Z] = base[1][Z] = base[2][Z] = pos2[Z];
     v[0][Z] = v[1][Z] = v[2][Z] = v[3][Z] = pos2[Z];
@@ -898,7 +874,6 @@ int gsd_north_arrow(float *pos2, float len, GLuint fontbase,
     gsd_flush();
 
     return (1);
-
 }
 
 /*!
@@ -908,7 +883,7 @@ int gsd_north_arrow(float *pos2, float len, GLuint fontbase,
 
    If onsurf in non-null, z component of dir is dropped and
    line-on-suf is used, resulting in length of arrow being proportional
-   to slope 
+   to slope
 
    \param center center point
    \param colr color value
@@ -921,7 +896,7 @@ int gsd_north_arrow(float *pos2, float len, GLuint fontbase,
    \return 0 on surface
  */
 int gsd_arrow(float *center, unsigned long colr, float siz, float *dir,
-              float sz, geosurf * onsurf)
+              float sz, geosurf *onsurf)
 {
     float slope, aspect;
     float tmp[3];
@@ -943,7 +918,7 @@ int gsd_arrow(float *center, unsigned long colr, float siz, float *dir,
         base[Y] = center[Y];
 
         /* project dir to surface, after zexag */
-        len = GS_P2distance(ORIGIN, dir);       /* in case dir isn't normalized */
+        len = GS_P2distance(ORIGIN, dir); /* in case dir isn't normalized */
         tip[X] = center[X] + dir[X] * len * siz;
         tip[Y] = center[Y] + dir[Y] * len * siz;
 
@@ -993,7 +968,7 @@ int gsd_arrow(float *center, unsigned long colr, float siz, float *dir,
    \return 0
  */
 int gsd_arrow_onsurf(float *base, float *tip, unsigned long colr, int wid,
-                     geosurf * gs)
+                     geosurf *gs)
 {
     static int first = 1;
 
@@ -1096,16 +1071,16 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
     if (debugint > 100) {
         G_debug(3, "gsd_3darrow()");
         G_debug(3, "  pt: %f,%f,%f dir: %f,%f,%f slope: %f aspect: %f",
-                center[X], center[Y], center[Z], dir[X], dir[Y], dir[Z],
-                slope, aspect);
+                center[X], center[Y], center[Z], dir[X], dir[Y], dir[Z], slope,
+                aspect);
         debugint = 1;
     }
     debugint++;
 
     preshade = gsd_getshademodel();
 
-    /* 
-       gsd_shademodel(0);  
+    /*
+       gsd_shademodel(0);
        want flat shading? */
     gsd_pushmatrix();
     gsd_translate(center[X], center[Y], center[Z]);
@@ -1123,13 +1098,13 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
         gsd_backface(1);
 
         gsd_pushmatrix();
-        gsd_scale(.10, .10, .75);       /* narrow cyl */
+        gsd_scale(.10, .10, .75); /* narrow cyl */
         primitive_cylinder(colr, 0);
         gsd_popmatrix();
 
         gsd_pushmatrix();
         gsd_translate(0.0, 0.0, .60);
-        gsd_scale(0.3, 0.3, 0.4);       /* cone */
+        gsd_scale(0.3, 0.3, 0.4); /* cone */
         primitive_cone(colr);
         gsd_popmatrix();
 
@@ -1158,17 +1133,16 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
 
    \return 1
  */
-int gsd_scalebar(float *pos2, float len, GLuint fontbase,
-                 unsigned long bar_clr, unsigned long text_clr)
+int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
+                 unsigned long text_clr)
 {
     char txt[100];
     float base[4][3];
-    float Ntop[] = { 0.0, 0.0, 1.0 };
-
+    float Ntop[] = {0.0, 0.0, 1.0};
 
     base[0][Z] = base[1][Z] = base[2][Z] = base[3][Z] = pos2[Z];
 
-    /* simple 1:8 rectangle *//* bump to X/20. for a 1:10 narrower bar? */
+    /* simple 1:8 rectangle */ /* bump to X/20. for a 1:10 narrower bar? */
     base[0][X] = base[1][X] = pos2[X] - len / 2.;
     base[2][X] = base[3][X] = pos2[X] + len / 2.;
 
@@ -1179,7 +1153,7 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase,
     GS_set_draw(GSD_FRONT);
 
     gsd_pushmatrix();
-    gsd_do_scale(1);            /* get map scale factor */
+    gsd_do_scale(1); /* get map scale factor */
 
     glNormal3fv(Ntop);
 
@@ -1222,10 +1196,9 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase,
     base[0][X] -= gsd_get_txtwidth(txt, 18) - 20.;
     base[0][Y] -= gsd_get_txtheight(18) - 20.;
 
-
     glRasterPos3fv(base[0]);
     glListBase(fontbase);
-    glCallLists(strlen(txt), GL_BYTE, (GLubyte *) txt);
+    glCallLists(strlen(txt), GL_BYTE, (GLubyte *)txt);
     GS_done_draw();
 
     gsd_popmatrix();
@@ -1250,7 +1223,7 @@ int gsd_scalebar_v2(float *pos, float len, GLuint fontbase,
                     unsigned long bar_clr, unsigned long text_clr)
 {
     float base[6][3];
-    float Ntop[] = { 0.0, 0.0, 1.0 };
+    float Ntop[] = {0.0, 0.0, 1.0};
 
     base[0][Z] = base[1][Z] = base[2][Z] = pos[Z];
     base[3][Z] = base[4][Z] = base[5][Z] = pos[Z];
@@ -1266,13 +1239,13 @@ int gsd_scalebar_v2(float *pos, float len, GLuint fontbase,
     GS_set_draw(GSD_FRONT);
 
     gsd_pushmatrix();
-    gsd_do_scale(1);            /* get map scale factor */
+    gsd_do_scale(1); /* get map scale factor */
 
     glNormal3fv(Ntop);
 
     gsd_color_func(bar_clr);
 
-    gsd_linewidth(3);           /* could be optional */
+    gsd_linewidth(3); /* could be optional */
 
     /* ------- */
     gsd_bgnline();
@@ -1409,7 +1382,8 @@ void primitive_cylinder(unsigned long col, int caps)
     return;
 }
 
-/*** ACS_MODIFY_BEGIN - sites_attribute management ********************************/
+/*** ACS_MODIFY_BEGIN - sites_attribute management
+ * ********************************/
 /*
    Draws boxes that are used for histograms by gpd_obj function in gpd.c
    for site_attribute management
@@ -1418,16 +1392,12 @@ void primitive_cylinder(unsigned long col, int caps)
 /*!
    \brief Vertices for box
  */
-float Box[8][3] =
-    { {1.0, 1.0, -1.0}, {-1.0, 1.0, -1.0}, {-1.0, 1.0, 1.0}, {1.0, 1.0, 1.0},
-{1.0, -1.0, -1.0}, {-1.0, -1.0, -1.0}, {-1.0, -1.0, 1.0}, {1.0, -1.0, 1.0}
-};
+float Box[8][3] = {{1.0, 1.0, -1.0},  {-1.0, 1.0, -1.0}, {-1.0, 1.0, 1.0},
+                   {1.0, 1.0, 1.0},   {1.0, -1.0, -1.0}, {-1.0, -1.0, -1.0},
+                   {-1.0, -1.0, 1.0}, {1.0, -1.0, 1.0}};
 
-float BoxN[6][3] =
-    { {0, 0, -ONORM}, {0, 0, ONORM}, {0, ONORM, 0}, {0, -ONORM, 0}, {ONORM, 0,
-                                                                     0},
-{-ONORM, 0, 0}
-};
+float BoxN[6][3] = {{0, 0, -ONORM}, {0, 0, ONORM}, {0, ONORM, 0},
+                    {0, -ONORM, 0}, {ONORM, 0, 0}, {-ONORM, 0, 0}};
 
 /*!
    \brief Draw box
@@ -1446,7 +1416,7 @@ void gsd_box(float *center, int colr, float *siz)
     gsd_translate(center[X], center[Y], center[Z] + siz[2]);
     gsd_scale(siz[0], siz[1], siz[2]);
     preshade = gsd_getshademodel();
-    gsd_shademodel(0);          /* want flat shading */
+    gsd_shademodel(0); /* want flat shading */
 
     /* Top */
     gsd_bgnpolygon();
@@ -1501,4 +1471,5 @@ void gsd_box(float *center, int colr, float *siz)
     return;
 }
 
-/*** ACS_MODIFY_END - sites_attribute management ********************************/
+/*** ACS_MODIFY_END - sites_attribute management
+ * ********************************/

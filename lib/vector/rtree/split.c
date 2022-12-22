@@ -1,21 +1,20 @@
-
 /***********************************************************************
-* MODULE:       R-Tree library 
-*              
-* AUTHOR(S):    Antonin Guttman - original code
-*               Daniel Green (green@superliminal.com) - major clean-up
-*                               and implementation of bounding spheres
-*               Markus Metz - file-based and memory-based R*-tree
-*               
-* PURPOSE:      Multidimensional index
-*
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
-*
-*               This program is free software under the GNU General 
-* 		Public License (>=v2). Read the file COPYING that comes 
-* 		with GRASS for details.
-* 
-***********************************************************************/
+ * MODULE:       R-Tree library
+ *
+ * AUTHOR(S):    Antonin Guttman - original code
+ *               Daniel Green (green@superliminal.com) - major clean-up
+ *                               and implementation of bounding spheres
+ *               Markus Metz - file-based and memory-based R*-tree
+ *
+ * PURPOSE:      Multidimensional index
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General
+ *                 Public License (>=v2). Read the file COPYING that comes
+ *                 with GRASS for details.
+ *
+ ***********************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,14 +27,14 @@
 #include "split.h"
 
 #ifndef DBL_MAX
-#define DBL_MAX 1.797693E308    /* DBL_MAX approximation */
+#define DBL_MAX 1.797693E308 /* DBL_MAX approximation */
 #endif
 
 /*----------------------------------------------------------------------
 | Load branch buffer with branches from full node plus the extra branch.
 ----------------------------------------------------------------------*/
 static void RTreeGetBranches(struct RTree_Node *n, struct RTree_Branch *b,
-                             RectReal * CoverSplitArea, struct RTree *t)
+                             RectReal *CoverSplitArea, struct RTree *t)
 {
     int i, maxkids = 0;
 
@@ -43,7 +42,8 @@ static void RTreeGetBranches(struct RTree_Node *n, struct RTree_Branch *b,
         maxkids = t->nodecard;
         /* load the branch buffer */
         for (i = 0; i < maxkids; i++) {
-            assert(t->valid_child(&(n->branch[i].child)));      /* n should have every entry full */
+            assert(t->valid_child(
+                &(n->branch[i].child))); /* n should have every entry full */
             RTreeCopyBranch(&(t->BranchBuf[i]), &(n->branch[i]), t);
         }
     }
@@ -51,7 +51,7 @@ static void RTreeGetBranches(struct RTree_Node *n, struct RTree_Branch *b,
         maxkids = t->leafcard;
         /* load the branch buffer */
         for (i = 0; i < maxkids; i++) {
-            assert(n->branch[i].child.id);      /* n should have every entry full */
+            assert(n->branch[i].child.id); /* n should have every entry full */
             RTreeCopyBranch(&(t->BranchBuf[i]), &(n->branch[i]), t);
         }
     }
@@ -59,7 +59,7 @@ static void RTreeGetBranches(struct RTree_Node *n, struct RTree_Branch *b,
     RTreeCopyBranch(&(t->BranchBuf[maxkids]), b, t);
     t->BranchCount = maxkids + 1;
 
-    if (METHOD == 0) {          /* quadratic split */
+    if (METHOD == 0) { /* quadratic split */
         /* calculate rect containing all in the set */
         RTreeCopyRect(&(t->orect), &(t->BranchBuf[0].rect), t);
         for (i = 1; i < maxkids + 1; i++) {
@@ -161,7 +161,7 @@ void RTreeInitPVars(struct RTree_PartitionVars *p, int maxrects, int minfill,
     if (METHOD == 0) {
         RTreeNullRect(&(p->cover[0]), t);
         RTreeNullRect(&(p->cover[1]), t);
-        p->area[0] = p->area[1] = (RectReal) 0;
+        p->area[0] = p->area[1] = (RectReal)0;
     }
     p->total = maxrects;
     p->minfill = minfill;
@@ -219,12 +219,12 @@ static void RTreePrintPVars(struct RTree_PartitionVars *p, struct RTree *t,
 | split
 |
 | As the seeds for the two groups, pick the two rects that would waste
-| the most area if covered by a single rectangle, i.e. evidently the 
-| worst pair to have in the same group. Of the remaining, one at a time 
-| is chosen to be put in one of the two groups. The one chosen is the 
+| the most area if covered by a single rectangle, i.e. evidently the
+| worst pair to have in the same group. Of the remaining, one at a time
+| is chosen to be put in one of the two groups. The one chosen is the
 | one with the greatest difference in area expansion depending on which
 | group - the rect most strongly attracted to one group and repelled
-| from the other. If one group gets too full (more would force other 
+| from the other. If one group gets too full (more would force other
 | group to violate min fill requirement) then other group gets the rest.
 | These last are the ones that can go in either group most easily.
 ----------------------------------------------------------------------*/
@@ -242,10 +242,10 @@ static void RTreeMethodZero(struct RTree_PartitionVars *p, int minfill,
     rect_0 = &(t->rect_0);
     rect_1 = &(t->rect_1);
 
-    while (p->count[0] + p->count[1] < p->total
-           && p->count[0] < p->total - p->minfill
-           && p->count[1] < p->total - p->minfill) {
-        biggestDiff = (RectReal) - 1.;
+    while (p->count[0] + p->count[1] < p->total &&
+           p->count[0] < p->total - p->minfill &&
+           p->count[1] < p->total - p->minfill) {
+        biggestDiff = (RectReal)-1.;
         for (i = 0; i < p->total; i++) {
             if (!p->taken[i]) {
                 RectReal growth0, growth1, diff;
@@ -317,8 +317,8 @@ static void RTreeSwapBranches(struct RTree_Branch *a, struct RTree_Branch *b,
 | return 0 if a == b
 | return -1 if a < b
 ----------------------------------------------------------------------*/
-static int RTreeCompareBranches(struct RTree_Branch *a,
-                                struct RTree_Branch *b, int side)
+static int RTreeCompareBranches(struct RTree_Branch *a, struct RTree_Branch *b,
+                                int side)
 {
     if (a->rect.boundary[side] < b->rect.boundary[side])
         return -1;
@@ -335,9 +335,8 @@ static int RTreeBranchBufIsSorted(int first, int last, int side,
     int i;
 
     for (i = first; i < last; i++) {
-        if (RTreeCompareBranches
-            (&(t->BranchBuf[i]), &(t->BranchBuf[i + 1]), side)
-            == 1)
+        if (RTreeCompareBranches(&(t->BranchBuf[i]), &(t->BranchBuf[i + 1]),
+                                 side) == 1)
             return 0;
     }
 
@@ -353,11 +352,10 @@ static int RTreePartitionBranchBuf(int first, int last, int side,
     int pivot, mid = ((first + last) >> 1);
     int larger, smaller;
 
-    if (last - first == 1) {    /* only two items in list */
-        if (RTreeCompareBranches
-            (&(t->BranchBuf[first]), &(t->BranchBuf[last]), side) == 1) {
-            RTreeSwapBranches(&(t->BranchBuf[first]), &(t->BranchBuf[last]),
-                              t);
+    if (last - first == 1) { /* only two items in list */
+        if (RTreeCompareBranches(&(t->BranchBuf[first]), &(t->BranchBuf[last]),
+                                 side) == 1) {
+            RTreeSwapBranches(&(t->BranchBuf[first]), &(t->BranchBuf[last]), t);
         }
         return last;
     }
@@ -365,20 +363,18 @@ static int RTreePartitionBranchBuf(int first, int last, int side,
     /* larger of two */
     larger = pivot = mid;
     smaller = first;
-    if (RTreeCompareBranches
-        (&(t->BranchBuf[first]), &(t->BranchBuf[mid]), side)
-        == 1) {
+    if (RTreeCompareBranches(&(t->BranchBuf[first]), &(t->BranchBuf[mid]),
+                             side) == 1) {
         larger = pivot = first;
         smaller = mid;
     }
 
-    if (RTreeCompareBranches
-        (&(t->BranchBuf[larger]), &(t->BranchBuf[last]), side)
-        == 1) {
+    if (RTreeCompareBranches(&(t->BranchBuf[larger]), &(t->BranchBuf[last]),
+                             side) == 1) {
         /* larger is largest, get the larger of smaller and last */
         pivot = last;
-        if (RTreeCompareBranches
-            (&(t->BranchBuf[smaller]), &(t->BranchBuf[last]), side) == 1) {
+        if (RTreeCompareBranches(&(t->BranchBuf[smaller]),
+                                 &(t->BranchBuf[last]), side) == 1) {
             pivot = smaller;
         }
     }
@@ -390,8 +386,8 @@ static int RTreePartitionBranchBuf(int first, int last, int side,
     pivot = first;
 
     while (first < last) {
-        if (RTreeCompareBranches
-            (&(t->BranchBuf[first]), &(t->BranchBuf[last]), side) != 1) {
+        if (RTreeCompareBranches(&(t->BranchBuf[first]), &(t->BranchBuf[last]),
+                                 side) != 1) {
             if (pivot != first) {
                 RTreeSwapBranches(&(t->BranchBuf[pivot]),
                                   &(t->BranchBuf[first]), t);
@@ -446,9 +442,9 @@ static void RTreeQuicksortBranchBuf(int side, struct RTree *t)
 /*----------------------------------------------------------------------
 | Method #1 for choosing a partition: this is the R*-tree method
 |
-| Pick the axis with the smallest margin increase (keep rectangles 
+| Pick the axis with the smallest margin increase (keep rectangles
 | square).
-| Along the chosen split axis, choose the distribution with the minimum 
+| Along the chosen split axis, choose the distribution with the minimum
 | overlap-value. Resolve ties by choosing the distribution with the
 | minimum area-value.
 | If one group gets too full (more would force other group to violate min
@@ -515,7 +511,8 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
             r2 = &(t->BranchBuf[maxkids - minfill1].rect);
             RTreeExpandRect(upperrect, r2, t);
 
-            /* check distributions for this axis, adhere the minimum node fill */
+            /* check distributions for this axis, adhere the minimum node fill
+             */
             for (j = minfill1; j < t->BranchCount - minfill; j++) {
 
                 r1 = &(t->BranchBuf[j].rect);
@@ -527,7 +524,8 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
                     RTreeExpandRect(rect_1, r2, t);
                 }
 
-                /* the margin is the sum of the lengths of the edges of a rectangle */
+                /* the margin is the sum of the lengths of the edges of a
+                 * rectangle */
                 margin =
                     RTreeRectMargin(rect_0, t) + RTreeRectMargin(rect_1, t);
 
@@ -545,9 +543,9 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
                 for (k = 0; k < t->ndims; k++) {
                     /* no overlap */
                     if (rect_0->boundary[k] >
-                        rect_1->boundary[k + t->ndims_alloc] ||
+                            rect_1->boundary[k + t->ndims_alloc] ||
                         rect_0->boundary[k + t->ndims_alloc] <
-                        rect_1->boundary[k]) {
+                            rect_1->boundary[k]) {
                         overlap = 0;
                         break;
                     }
@@ -585,14 +583,14 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
                         best_side[i] = s;
                     }
                 }
-            }                   /* end of distribution check */
-        } while (s--);          /* end of side check */
-    }                           /* end of axis check */
+            }          /* end of distribution check */
+        } while (s--); /* end of side check */
+    }                  /* end of axis check */
 
     /* Use best distribution to classify branches */
     if (best_axis != axis || best_side[best_axis] != side)
-        RTreeQuicksortBranchBuf(best_axis +
-                                best_side[best_axis] * t->ndims_alloc, t);
+        RTreeQuicksortBranchBuf(
+            best_axis + best_side[best_axis] * t->ndims_alloc, t);
 
     best_cut[best_axis]++;
 
@@ -626,7 +624,7 @@ void RTreeSplitNode(struct RTree_Node *n, struct RTree_Branch *b,
     /* find partition */
     p = &(t->p);
 
-    if (METHOD == 1)            /* R* split */
+    if (METHOD == 1) /* R* split */
         RTreeMethodOne(&(t->p), MINFILL(level, t), MAXKIDS(level, t), t);
     else
         RTreeMethodZero(&(t->p), MINFILL(level, t), CoverSplitArea, t);

@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,10 +10,11 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 /*  @(#)prune.c 3.0  2/19/98  */
 /* by Michel Wurtz for GRASS 4.2.1 - <mw@engees.u-strasbg.fr>
  * This is a complete rewriting of the previous dig_prune subroutine.
@@ -25,7 +25,7 @@
  *
  * The algorithm used is very different, and based on the suppression
  * of intermediate points, when they are closer than thresh from a
- * moving straight line.  
+ * moving straight line.
  *
  * The distance between a point M                ->   ->
  * and a AD segment is given                  || AM ^ AD ||
@@ -37,10 +37,10 @@
  * When comparing   || AM ^ AD ||   and    t = thresh * || AD ||
  *
  *                     ->   ->       ->   ->
- * we call  sqdist = | AM ^ AD | = | OA ^ OM + beta | 
+ * we call  sqdist = | AM ^ AD | = | OA ^ OM + beta |
  *
  *                  ->   ->
- *  with     beta = OA ^ OD 
+ *  with     beta = OA ^ OD
  *
  * The implementation is based on an old integer routine (optimised
  * for machine without math coprocessor), itself inspired by a PL/1
@@ -76,18 +76,18 @@ int dig_prune(struct line_pnts *points, double thresh)
     double *ox, *oy, *nx, *ny;
     double cur_x, cur_y;
     int o_num;
-    int n_num;                  /* points left */
+    int n_num; /* points left */
     int at_num;
-    int ij = 0,                 /* position of farest point */
-        ja, jd, i, j, k, n, inu, it;    /* indicateur de parcours du segment */
+    int ij = 0,                      /* position of farest point */
+        ja, jd, i, j, k, n, inu, it; /* indicateur de parcours du segment */
 
-    double sqdist;              /* square of distance */
-    double fpdist;              /* square of distance from chord to farest point */
-    double t, beta;             /* as explained in commented algorithm  */
+    double sqdist;  /* square of distance */
+    double fpdist;  /* square of distance from chord to farest point */
+    double t, beta; /* as explained in commented algorithm  */
 
-    double dx, dy;              /* temporary variables */
+    double dx, dy; /* temporary variables */
 
-    double sx[18], sy[18];      /* temporary table for processing points */
+    double sx[18], sy[18]; /* temporary table for processing points */
     int nt[17], nu[17];
 
     /* nothing to do if less than 3 points ! */
@@ -134,7 +134,7 @@ int dig_prune(struct line_pnts *points, double thresh)
     if (n_num <= 2)
         return n_num;
 
-    if (thresh == 0.0)          /* Thresh is null, nothing more to do */
+    if (thresh == 0.0) /* Thresh is null, nothing more to do */
         return n_num;
 
     /* some (re)initialisations */
@@ -154,24 +154,25 @@ int dig_prune(struct line_pnts *points, double thresh)
     nu[1] = 0;
     inu = 2;
 
-    while (at_num < o_num) {    /* Position of last point to be    */
-        if (o_num - at_num > 14)        /* processed in a segment.         */
-            n = at_num + 9;     /* There must be at least 6 points */
-        else                    /* in the current segment.         */
+    while (at_num < o_num) {     /* Position of last point to be    */
+        if (o_num - at_num > 14) /* processed in a segment.         */
+            n = at_num + 9;      /* There must be at least 6 points */
+        else                     /* in the current segment.         */
             n = o_num;
-        sx[0] = sx[nu[1]];      /* Last point written becomes      */
-        sy[0] = sy[nu[1]];      /* first of new segment.           */
-        if (inu > 1) {          /* One point was keeped in the     *//* previous segment :              */
-            sx[1] = sx[k];      /* Last point of the old segment   */
-            sy[1] = sy[k];      /* becomes second of the new one.  */
+        sx[0] = sx[nu[1]]; /* Last point written becomes      */
+        sy[0] = sy[nu[1]]; /* first of new segment.           */
+        if (inu >
+            1) { /* One point was keeped in the     */ /* previous segment : */
+            sx[1] = sx[k]; /* Last point of the old segment   */
+            sy[1] = sy[k]; /* becomes second of the new one.  */
             k = 1;
         }
-        else {                  /* No point keeped : farest point  */
-            sx[1] = sx[ij];     /* is loaded in second position    */
-            sy[1] = sy[ij];     /* to avoid cutting lines with     */
-            sx[2] = sx[k];      /* small cuvature.                 */
-            sy[2] = sy[k];      /* First point of previous segment */
-            k = 2;              /* becomes the third one.          */
+        else {              /* No point keeped : farest point  */
+            sx[1] = sx[ij]; /* is loaded in second position    */
+            sy[1] = sy[ij]; /* to avoid cutting lines with     */
+            sx[2] = sx[k];  /* small cuvature.                 */
+            sy[2] = sy[k];  /* First point of previous segment */
+            k = 2;          /* becomes the third one.          */
         }
         /* Loding remaining points         */
         for (j = at_num; j < n; j++) {
@@ -187,7 +188,7 @@ int dig_prune(struct line_pnts *points, double thresh)
         inu = 0;
         it = 0;
         for (;;) {
-            if (jd + 1 == ja)   /* Exploration of segment terminated */
+            if (jd + 1 == ja) /* Exploration of segment terminated */
                 goto endseg;
 
             dx = sx[ja] - sx[jd];
@@ -208,12 +209,14 @@ int dig_prune(struct line_pnts *points, double thresh)
                     fpdist = sqdist;
                 }
             }
-            if (fpdist > t) {   /* We found a point to be keeped    *//* Restart from farest point        */
+            if (fpdist >
+                t) { /* We found a point to be keeped    */ /* Restart from
+                                                               farest point */
                 jd = ij;
                 nt[++it] = ij;
             }
             else
-          endseg:{             /* All points are inside threshold. */
+            endseg : { /* All points are inside threshold. */
                 /* Former start becomes new end     */
                 nu[++inu] = jd;
                 if (--it < 0)

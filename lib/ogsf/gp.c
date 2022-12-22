@@ -1,7 +1,8 @@
 /*!
    \file lib/ogsf/gp.c
 
-   \brief OGSF library - loading and manipulating point sets (lower level functions)
+   \brief OGSF library - loading and manipulating point sets (lower level
+   functions)
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -77,7 +78,8 @@ int gp_num_sites(void)
     geosite *gp;
     int i;
 
-    for (i = 0, gp = Site_top; gp; gp = gp->next, i++) ;
+    for (i = 0, gp = Site_top; gp; gp = gp->next, i++)
+        ;
 
     G_debug(5, "gp_num_sites(): n=%d", i);
 
@@ -100,7 +102,8 @@ geosite *gp_get_last_site(void)
         return NULL;
     }
 
-    for (lp = Site_top; lp->next; lp = lp->next) ;
+    for (lp = Site_top; lp->next; lp = lp->next)
+        ;
 
     G_debug(5, " last site id: %d", lp->gsite_id);
 
@@ -117,7 +120,7 @@ geosite *gp_get_new_site(void)
 {
     geosite *np, *lp;
 
-    np = (geosite *) G_malloc(sizeof(geosite)); /* G_fatal_error */
+    np = (geosite *)G_malloc(sizeof(geosite)); /* G_fatal_error */
     if (!np) {
         return NULL;
     }
@@ -132,11 +135,11 @@ geosite *gp_get_new_site(void)
         Site_top = np;
         np->gsite_id = FIRST_SITE_ID;
     }
-    np->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+    np->style = (gvstyle *)G_malloc(sizeof(gvstyle));
     if (!np->style)
         return NULL;
     G_zero(np->style, sizeof(gvstyle));
-    np->hstyle = (gvstyle *) G_malloc(sizeof(gvstyle));
+    np->hstyle = (gvstyle *)G_malloc(sizeof(gvstyle));
     if (!np->hstyle)
         return NULL;
     G_zero(np->hstyle, sizeof(gvstyle));
@@ -183,7 +186,7 @@ void gp_update_drapesurfs(void)
    \return 1 on success
    \return -1 on failure
  */
-int gp_set_defaults(geosite * gp)
+int gp_set_defaults(geosite *gp)
 {
     float dim;
 
@@ -216,7 +219,7 @@ int gp_set_defaults(geosite * gp)
    \return -1 on failure
    \return 0 on success
  */
-int gp_init_site(geosite * gp)
+int gp_init_site(geosite *gp)
 {
     G_debug(5, "gp_init_site");
 
@@ -255,7 +258,7 @@ void gp_delete_site(int id)
    \return 1 on success
    \return -1 on failure
  */
-int gp_free_site(geosite * fp)
+int gp_free_site(geosite *fp)
 {
     geosite *gp;
     int found = 0;
@@ -304,7 +307,7 @@ int gp_free_site(geosite * fp)
 
    \param fp pointer to geosite struct
  */
-void gp_free_sitemem(geosite * fp)
+void gp_free_sitemem(geosite *fp)
 {
     geopoint *gpt, *tmp;
 
@@ -349,7 +352,7 @@ void gp_free_sitemem(geosite * fp)
    \param hsurf list of surfaces (id)
    \param nsurf number of surfaces
  */
-void gp_set_drapesurfs(geosite * gp, int hsurfs[], int nsurfs)
+void gp_set_drapesurfs(geosite *gp, int hsurfs[], int nsurfs)
 {
     int i;
 

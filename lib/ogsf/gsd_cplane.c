@@ -3,12 +3,12 @@
 
    \brief OGSF library - manipulating surfaces (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -23,7 +23,7 @@ static void init_cplane(void);
 
 static float Cp_pt[4], Cp_norm[MAX_CPLANES][4];
 static float Cp_trans[MAX_CPLANES][3], Cp_rot[MAX_CPLANES][3];
-static int Cp_ison[MAX_CPLANES];        /* also need isdef? */
+static int Cp_ison[MAX_CPLANES]; /* also need isdef? */
 
 static void init_cplane(void)
 {
@@ -159,7 +159,7 @@ void gsd_get_cplanes_state(int *onstate)
 
    \return ADD
  */
-int gsd_get_cplanes(Point4 * planes)
+int gsd_get_cplanes(Point4 *planes)
 {
     int i, ons;
     Point3 thru;
@@ -244,7 +244,7 @@ void gsd_cplane_settrans(int num, float tx, float ty, float tz)
    \param surf2 second surface (geosurf) [unused]
    \param cpnum
  */
-void gsd_draw_cplane_fence(geosurf * surf1, geosurf * surf2, int cpnum)
+void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
 {
     int was_on;
     float len, dir[3], bgn[2], end[2], px, py, fencenorm[3];
@@ -254,7 +254,7 @@ void gsd_draw_cplane_fence(geosurf * surf1, geosurf * surf2, int cpnum)
         gsd_set_clipplane(cpnum, 0);
     }
 
-    /* line on surface (asuming NO TILT) is (-A,B)->(A,-B), 
+    /* line on surface (asuming NO TILT) is (-A,B)->(A,-B),
        extended thru Cp_pt */
     dir[X] = -Cp_norm[cpnum][Y];
     dir[Y] = Cp_norm[cpnum][X];
@@ -319,8 +319,8 @@ void gsd_draw_cplane(int num)
 
     gsd_do_scale(1);
 
-    gsd_translate(Cp_pt[X] + Cp_trans[num][X],
-                  Cp_pt[Y] + Cp_trans[num][Y], Cp_pt[Z] + Cp_trans[num][Z]);
+    gsd_translate(Cp_pt[X] + Cp_trans[num][X], Cp_pt[Y] + Cp_trans[num][Y],
+                  Cp_pt[Z] + Cp_trans[num][Z]);
 
     gsd_rot(Cp_rot[num][Z], 'z');
     gsd_rot(Cp_rot[num][Y], 'y');

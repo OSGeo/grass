@@ -21,8 +21,8 @@
 #define CHTYPE_DANGLE 1
 #define SELECT_DANGLE 2
 
-static void dangles(struct Map_info *, int, int, double,
-                    struct Map_info *, struct ilist *);
+static void dangles(struct Map_info *, int, int, double, struct Map_info *,
+                    struct ilist *);
 
 /*!
    \brief Remove dangles from vector map.
@@ -46,9 +46,8 @@ static void dangles(struct Map_info *, int, int, double,
 
    \return
  */
-void
-Vect_remove_dangles(struct Map_info *Map, int type, double maxlength,
-                    struct Map_info *Err)
+void Vect_remove_dangles(struct Map_info *Map, int type, double maxlength,
+                         struct Map_info *Err)
 {
     dangles(Map, type, REMOVE_DANGLE, maxlength, Err, NULL);
 }
@@ -56,13 +55,13 @@ Vect_remove_dangles(struct Map_info *Map, int type, double maxlength,
 /*!
    \brief Change boundary dangles to lines.
 
-   Change boundary dangles to lines. 
+   Change boundary dangles to lines.
 
    Boundary is considered to be a dangle if on at least one end node
    is no other boundary. If a dangle is formed by more boundaries,
    such string of boundaries is taken as one dangle.
 
-   Optionally deleted dangles are written to error map. 
+   Optionally deleted dangles are written to error map.
 
    Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
 
@@ -70,11 +69,10 @@ Vect_remove_dangles(struct Map_info *Map, int type, double maxlength,
    \param maxlength maxlength of dangles or -1 for all dangles
    \param[out] Err vector map where deleted dangles are written or NULL
 
-   \return 
+   \return
  */
-void
-Vect_chtype_dangles(struct Map_info *Map, double maxlength,
-                    struct Map_info *Err)
+void Vect_chtype_dangles(struct Map_info *Map, double maxlength,
+                         struct Map_info *Err)
 {
     dangles(Map, 0, CHTYPE_DANGLE, maxlength, Err, NULL);
 }
@@ -97,9 +95,8 @@ Vect_chtype_dangles(struct Map_info *Map, double maxlength,
 
    \return
  */
-void
-Vect_select_dangles(struct Map_info *Map, int type, double maxlength,
-                    struct ilist *List)
+void Vect_select_dangles(struct Map_info *Map, int type, double maxlength,
+                         struct ilist *List)
 {
     dangles(Map, type, SELECT_DANGLE, maxlength, NULL, List);
 }
@@ -116,11 +113,11 @@ Vect_select_dangles(struct Map_info *Map, int type, double maxlength,
 
    Parameters:
    Map input map where dangles have to be deleted
-   type type of dangles 
+   type type of dangles
    option dangle option (REMOVE_DANGLE, CHTYPE_DANGLE, SELECT_DANGLE)
    maxlength maxlength of dangles or -1 for all dangles
    Err vector map where deleted dangles are written or NULL
-   List_dangle list of feature (selected dangles) ids 
+   List_dangle list of feature (selected dangles) ids
  */
 static void dangles(struct Map_info *Map, int type, int option,
                     double maxlength, struct Map_info *Err,
@@ -132,19 +129,19 @@ static void dangles(struct Map_info *Map, int type, int option,
     int nnodes, node, node1, node2, next_node;
     int lcount, tmp_next_line = 0;
     double length;
-    int dangles_removed;        /* number of removed dangles */
-    int lines_removed;          /* number of lines removed */
-    struct ilist *List;         /* List of lines in chain */
+    int dangles_removed; /* number of removed dangles */
+    int lines_removed;   /* number of lines removed */
+    struct ilist *List;  /* List of lines in chain */
     char *lmsg;
 
     next_line = tmp_next_line = 0;
     dangles_removed = 0;
     lines_removed = 0;
 
-    type &= GV_LINES;           /* to work only with lines and boundaries */
+    type &= GV_LINES; /* to work only with lines and boundaries */
 
     if (option == CHTYPE_DANGLE) {
-        type = GV_BOUNDARY;     /* process boundaries only */
+        type = GV_BOUNDARY; /* process boundaries only */
         lmsg = _("Changed");
     }
     else if (option == REMOVE_DANGLE) {
@@ -172,7 +169,7 @@ static void dangles(struct Map_info *Map, int type, int option,
 
         nnodelines = Vect_get_node_n_lines(Map, node);
 
-        lcount = 0;             /* number of lines of given type */
+        lcount = 0; /* number of lines of given type */
         for (i = 0; i < nnodelines; i++) {
             line = Vect_get_node_line(Map, node, i);
             G_debug(3, "    node line %d = %d", i, line);
@@ -193,7 +190,8 @@ static void dangles(struct Map_info *Map, int type, int option,
             while (next_line != 0) {
                 Vect_list_append(List, abs(next_line));
 
-                /* Look at the next end of the line if just one another line of the type is connected */
+                /* Look at the next end of the line if just one another line of
+                 * the type is connected */
                 Vect_get_line_nodes(Map, abs(next_line), &node1, &node2);
                 next_node = next_line > 0 ? node2 : node1;
 
@@ -201,7 +199,8 @@ static void dangles(struct Map_info *Map, int type, int option,
 
                 nnodelines = Vect_get_node_n_lines(Map, next_node);
 
-                lcount = 0;     /* number of lines of given type (except current next_line) */
+                lcount = 0; /* number of lines of given type (except current
+                               next_line) */
                 for (i = 0; i < nnodelines; i++) {
                     line = Vect_get_node_line(Map, next_node, i);
                     G_debug(3, "      node line %d = %d", i, line);
@@ -217,7 +216,6 @@ static void dangles(struct Map_info *Map, int type, int option,
                     next_line = tmp_next_line;
                 else
                     next_line = 0;
-
             }
 
             /* Length of the chain */
@@ -228,7 +226,7 @@ static void dangles(struct Map_info *Map, int type, int option,
                 length += Vect_line_length(Points);
             }
 
-            if (maxlength < 0 || length < maxlength) {  /* delete the chain */
+            if (maxlength < 0 || length < maxlength) { /* delete the chain */
                 G_debug(3, "  delete the chain (length=%g)", length);
 
                 for (i = 0; i < List->n_values; i++) {
@@ -244,8 +242,8 @@ static void dangles(struct Map_info *Map, int type, int option,
                     }
                     else if (option == CHTYPE_DANGLE) {
                         G_debug(3, "  rewrite line %d", List->value[i]);
-                        Vect_rewrite_line(Map, List->value[i], GV_LINE,
-                                          Points, Cats);
+                        Vect_rewrite_line(Map, List->value[i], GV_LINE, Points,
+                                          Cats);
                     }
                     else {
                         if (List_dangle) {
@@ -254,11 +252,11 @@ static void dangles(struct Map_info *Map, int type, int option,
                     }
                     lines_removed++;
                 }
-            }                   /* delete the chain */
+            } /* delete the chain */
 
             dangles_removed++;
-        }                       /* lcount == 1 */
-    }                           /* node <= nnodes */
+        } /* lcount == 1 */
+    }     /* node <= nnodes */
     G_verbose_message(_("%s lines: %d"), lmsg, lines_removed);
     G_verbose_message(_("%s dangles: %d"), lmsg, dangles_removed);
 }

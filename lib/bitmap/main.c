@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       bitmap
  * AUTHOR(S):    David Gerdes (CERL) (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      provides basic support for the creation and manipulation of
  *               two dimensional bitmap arrays
@@ -16,13 +15,12 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/bitmap.h>
 
-
 static int dump_map(struct BM *map);
-
 
 int main(int argc, char *argv[])
 {
@@ -49,7 +47,6 @@ int main(int argc, char *argv[])
         BM_set(map, i, i, 1);
         BM_set(map, (SIZE - 1) - i, i, 1);
     }
-
 
     if (dump)
         dump_map(map);
@@ -84,7 +81,6 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-
 static int dump_map(struct BM *map)
 {
     int x, y;
@@ -92,7 +88,6 @@ static int dump_map(struct BM *map)
     for (y = 0; y < map->rows; y++) {
         for (x = 0; x < map->cols; x++) {
             fprintf(stdout, "%c", BM_get(map, x, y) ? '#' : '.');
-
         }
         fprintf(stdout, "\n");
     }

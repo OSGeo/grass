@@ -9,8 +9,8 @@
 
    (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -21,8 +21,8 @@
 #include <math.h>
 #include <grass/vector.h>
 
-#define LENGTH(DX, DY)  (  sqrt( (DX*DX)+(DY*DY) )  )
-#define PI M_PI
+#define LENGTH(DX, DY) (sqrt((DX * DX) + (DY * DY)))
+#define PI             M_PI
 
 /* vector() calculates normalized vector form two points */
 static void vect(double x1, double y1, double x2, double y2, double *x,
@@ -42,21 +42,21 @@ static void vect(double x1, double y1, double x2, double y2, double *x,
     *y = dy / l;
 }
 
-/* find_cross find first crossing between segments from s1 to s2 and from s3 to s4
+/* find_cross find first crossing between segments from s1 to s2 and from s3 to
+ *s4
  ** s5 is set to first segment and s6 to second
  ** neighbours are taken as crossing each other only if overlap
  ** returns: 1 found
  **         -1 found overlap
  **          0 not found
  */
-static int find_cross(struct line_pnts *Points, int s1, int s2, int s3,
-                      int s4, int *s5, int *s6)
+static int find_cross(struct line_pnts *Points, int s1, int s2, int s3, int s4,
+                      int *s5, int *s6)
 {
     int i, j, ret;
     double *x, *y;
 
-    G_debug(5,
-            "find_cross(): npoints = %d, s1 = %d, s2 = %d, s3 = %d, s4 = %d",
+    G_debug(5, "find_cross(): npoints = %d, s1 = %d, s2 = %d, s3 = %d, s4 = %d",
             Points->n_points, s1, s2, s3, s4);
 
     x = Points->x;
@@ -67,9 +67,8 @@ static int find_cross(struct line_pnts *Points, int s1, int s2, int s3,
             if (j == i) {
                 continue;
             }
-            ret =
-                dig_test_for_intersection(x[i], y[i], x[i + 1], y[i + 1],
-                                          x[j], y[j], x[j + 1], y[j + 1]);
+            ret = dig_test_for_intersection(x[i], y[i], x[i + 1], y[i + 1],
+                                            x[j], y[j], x[j + 1], y[j + 1]);
             if (ret == 1 && ((i - j) > 1 || (i - j) < -1)) {
                 *s5 = i;
                 *s6 = j;
@@ -101,9 +100,8 @@ static int point_in_buf(struct line_pnts *Points, double px, double py,
     np = Points->n_points;
     d *= d;
     for (i = 0; i < np - 1; i++) {
-        sd = dig_distance2_point_to_line(px, py, 0,
-                                         Points->x[i], Points->y[i], 0,
-                                         Points->x[i + 1], Points->y[i + 1],
+        sd = dig_distance2_point_to_line(px, py, 0, Points->x[i], Points->y[i],
+                                         0, Points->x[i + 1], Points->y[i + 1],
                                          0, 0, NULL, NULL, NULL, NULL, NULL);
         if (sd <= d) {
             return 1;
@@ -156,22 +154,21 @@ static void clean_parallel(struct line_pnts *Points,
         current = first;
         last = Points->n_points - 2;
         lcount = 0;
-        while (find_cross
-               (Points, current, last - 1, current + 1, last, &sa,
-                &sb) != 0) {
+        while (find_cross(Points, current, last - 1, current + 1, last, &sa,
+                          &sb) != 0) {
             if (lcount == 0) {
                 first = sa;
-            }                   /* move first forward */
+            } /* move first forward */
 
             current = sa + 1;
             last = sb;
             lcount++;
-            G_debug(5, "  current = %d, last = %d, lcount = %d", current,
-                    last, lcount);
+            G_debug(5, "  current = %d, last = %d, lcount = %d", current, last,
+                    lcount);
         }
         if (lcount == 0) {
             break;
-        }                       /* loop not found */
+        } /* loop not found */
 
         /* ensure sa is monotonically increasing, so npn doesn't reset low */
         if (sa > sa_max)
@@ -180,7 +177,7 @@ static void clean_parallel(struct line_pnts *Points,
             break;
 
         /* remove loop if in buffer */
-        if ((sb - sa) == 1) {   /* neighbouring lines overlap */
+        if ((sb - sa) == 1) { /* neighbouring lines overlap */
             j = sb + 1;
             npn = sa + 1;
         }
@@ -193,7 +190,7 @@ static void clean_parallel(struct line_pnts *Points,
                 Vect_append_point(sPoints, x[i], y[i], 0);
             }
             Vect_find_poly_centroid(sPoints, &px, &py);
-            if (point_in_buf(origPoints, px, py, d)) {  /* is loop in buffer ? */
+            if (point_in_buf(origPoints, px, py, d)) { /* is loop in buffer ? */
                 npn = sa + 1;
                 x[npn] = ix;
                 y[npn] = iy;
@@ -203,13 +200,13 @@ static void clean_parallel(struct line_pnts *Points,
                     first = sb;
                 }
             }
-            else {              /* loop is not in buffer */
+            else { /* loop is not in buffer */
                 first = sb;
                 continue;
             }
         }
 
-        for (i = j; i < Points->n_points; i++) {        /* move points down */
+        for (i = j; i < Points->n_points; i++) { /* move points down */
             x[npn] = x[i];
             y[npn] = y[i];
             npn++;
@@ -223,8 +220,8 @@ static void clean_parallel(struct line_pnts *Points,
         for (i = 0; i < Points->n_points - 1; i++) {
             px = (x[i] + x[i + 1]) / 2;
             py = (y[i] + y[i + 1]) / 2;
-            if (point_in_buf(origPoints, x[i], y[i], d * 0.9999)
-                && point_in_buf(origPoints, px, py, d * 0.9999)) {
+            if (point_in_buf(origPoints, x[i], y[i], d * 0.9999) &&
+                point_in_buf(origPoints, px, py, d * 0.9999)) {
                 j++;
             }
             else {
@@ -245,8 +242,8 @@ static void clean_parallel(struct line_pnts *Points,
         for (i = Points->n_points - 1; i >= 1; i--) {
             px = (x[i] + x[i - 1]) / 2;
             py = (y[i] + y[i - 1]) / 2;
-            if (point_in_buf(origPoints, x[i], y[i], d * 0.9999)
-                && point_in_buf(origPoints, px, py, d * 0.9999)) {
+            if (point_in_buf(origPoints, x[i], y[i], d * 0.9999) &&
+                point_in_buf(origPoints, px, py, d * 0.9999)) {
                 j++;
             }
             else {
@@ -286,7 +283,8 @@ static void parallel_line(struct line_pnts *Points, double d, double tol,
         return;
 
     if (np == 1) {
-        Vect_append_point(nPoints, x[0], y[0], 0);      /* ? OK, should make circle for points ? */
+        Vect_append_point(nPoints, x[0], y[0],
+                          0); /* ? OK, should make circle for points ? */
         return;
     }
 
@@ -311,7 +309,8 @@ static void parallel_line(struct line_pnts *Points, double d, double tol,
         ny = y[i + 1] + vy;
         Vect_append_point(nPoints, nx, ny, 0);
 
-        if (i < np - 2) {       /* use polyline instead of arc between line segments */
+        if (i <
+            np - 2) { /* use polyline instead of arc between line segments */
             vect(x[i + 1], y[i + 1], x[i + 2], y[i + 2], &ux, &uy);
             wx = uy * d;
             wy = -ux * d;
@@ -321,7 +320,8 @@ static void parallel_line(struct line_pnts *Points, double d, double tol,
             if (a < 0)
                 a += 2 * PI;
 
-            /* TODO: a <= PI can probably fail because of representation error */
+            /* TODO: a <= PI can probably fail because of representation error
+             */
             if (a <= PI && a > atol) {
                 na = (int)(a / atol);
                 atol2 = a / (na + 1) * side;
@@ -344,15 +344,15 @@ static void parallel_line(struct line_pnts *Points, double d, double tol,
 
    \param InPoints input line
    \param distance create parallel line in distance
-   \param tolerance maximum distance between theoretical arc and polygon segments
-   \param rm_end remove end points falling into distance
-   \param[out] OutPoints output line
+   \param tolerance maximum distance between theoretical arc and polygon
+   segments \param rm_end remove end points falling into distance \param[out]
+   OutPoints output line
 
    \return
  */
-void
-Vect_line_parallel(struct line_pnts *InPoints, double distance,
-                   double tolerance, int rm_end, struct line_pnts *OutPoints)
+void Vect_line_parallel(struct line_pnts *InPoints, double distance,
+                        double tolerance, int rm_end,
+                        struct line_pnts *OutPoints)
 {
     G_debug(4,
             "Vect_line_parallel(): npoints = %d, distance = %f, tolerance = %f",
@@ -375,12 +375,11 @@ Vect_line_parallel(struct line_pnts *InPoints, double distance,
 
    \param InPoints input line
    \param distance create buffer in distance
-   \param tolerance maximum distance between theoretical arc and polygon segments
-   \param[out] OutPoints output line
+   \param tolerance maximum distance between theoretical arc and polygon
+   segments \param[out] OutPoints output line
  */
-void
-Vect_line_buffer(const struct line_pnts *InPoints, double distance,
-                 double tolerance, struct line_pnts *OutPoints)
+void Vect_line_buffer(const struct line_pnts *InPoints, double distance,
+                      double tolerance, struct line_pnts *OutPoints)
 {
     double dangle;
     int side, npoints;
@@ -389,7 +388,7 @@ Vect_line_buffer(const struct line_pnts *InPoints, double distance,
 
     distance = fabs(distance);
 
-    dangle = 2 * acos(1 - tolerance / fabs(distance));  /* angle step */
+    dangle = 2 * acos(1 - tolerance / fabs(distance)); /* angle step */
 
     if (Points == NULL)
         Points = Vect_new_line_struct();
@@ -408,7 +407,7 @@ Vect_line_buffer(const struct line_pnts *InPoints, double distance,
     if (npoints <= 0) {
         return;
     }
-    else if (npoints == 1) {    /* make a circle */
+    else if (npoints == 1) { /* make a circle */
         double angle, x, y;
 
         for (angle = 0; angle < 2 * PI; angle += dangle) {
@@ -419,7 +418,7 @@ Vect_line_buffer(const struct line_pnts *InPoints, double distance,
         /* Close polygon */
         Vect_append_point(OutPoints, OutPoints->x[0], OutPoints->y[0], 0);
     }
-    else {                      /* 2 and more points */
+    else { /* 2 and more points */
         for (side = 0; side < 2; side++) {
             double angle, sangle;
             double lx1, ly1, lx2, ly2;
@@ -454,7 +453,7 @@ Vect_line_buffer(const struct line_pnts *InPoints, double distance,
             vect(lx1, ly1, lx2, ly2, &nx, &ny);
 
             /* starting point */
-            sangle = atan2(-nx, ny);    /* starting angle */
+            sangle = atan2(-nx, ny); /* starting angle */
             sx = lx2 + ny * distance;
             sy = ly2 - nx * distance;
 

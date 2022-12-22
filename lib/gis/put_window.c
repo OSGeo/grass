@@ -48,16 +48,16 @@ int G_put_window(const struct Cell_head *window)
     char *wind = getenv("WIND_OVERRIDE");
 
     return wind ? G_put_element_window(window, "windows", wind)
-        : G_put_element_window(window, "", "WIND");
+                : G_put_element_window(window, "", "WIND");
 }
 
 /*!
  * \brief Write the region
  *
  * Writes the region file (WIND) in the user's current mapset
- * from region. 
+ * from region.
 
- * <b>Warning:</b> Since this routine actually changes the 
+ * <b>Warning:</b> Since this routine actually changes the
  * region, it should only be called by modules which the user knows
  * will change the region. It is probably fair to say that only the
  * <tt>g.region</tt> should call this routine.

@@ -8,7 +8,7 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include "pngdriver.h"

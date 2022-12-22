@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_anderson_darling(double *x, int n)
 {
     int i;
@@ -39,8 +38,7 @@ double *Cdhc_anderson_darling(double *x, int n)
         if (fx >= .99999)
             fx = 0.99999;
 
-        y[1] +=
-            (2.0 * i + 1.0) * log(fx) + (2.0 * (n - i) - 1.0) * log(1 - fx);
+        y[1] += (2.0 * i + 1.0) * log(fx) + (2.0 * (n - i) - 1.0) * log(1 - fx);
     }
     y[1] = -n - y[1] / n;
     y[0] = y[1] * (0.75 / n + 1.0 + 2.25 / (n * n));

@@ -1,10 +1,9 @@
-
 /*****************************************************************************
  *
  * MODULE:       Grass PDE Numerical Library
  * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
+ *                 soerengebbert <at> gmx <dot> de
+ *
  * PURPOSE:      benchmarking the direct solvers
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -26,7 +25,6 @@
 /* prototypes */
 static int bench_solvers(int rows);
 
-
 /* ************************************************************************* */
 /* Performe the solver unit tests ****************************************** */
 
@@ -40,7 +38,6 @@ int bench_solvers_direct(int rows)
     return 1;
 }
 
-
 /* *************************************************************** */
 /* Test all implemented solvers for sparse and normal matrix *** */
 
@@ -51,8 +48,8 @@ int bench_solvers(int rows)
     struct timeval tstart;
     struct timeval tend;
 
-    G_message
-        ("\t * benchmarking gmath lu decomposition solver with unsymmetric matrix\n");
+    G_message("\t * benchmarking gmath lu decomposition solver with "
+              "unsymmetric matrix\n");
 
     les = create_normal_unsymmetric_les(rows);
     gettimeofday(&tstart, NULL);
@@ -62,8 +59,8 @@ int bench_solvers(int rows)
            compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
-    G_message
-        ("\t * benchmarking lu ccmath decomposition solver with unsymmetric matrix\n");
+    G_message("\t * benchmarking lu ccmath decomposition solver with "
+              "unsymmetric matrix\n");
 
     les = create_normal_unsymmetric_les(rows);
     gettimeofday(&tstart, NULL);
@@ -73,9 +70,8 @@ int bench_solvers(int rows)
            compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
-
-    G_message
-        ("\t * benchmarking gauss elimination solver with unsymmetric matrix\n");
+    G_message(
+        "\t * benchmarking gauss elimination solver with unsymmetric matrix\n");
 
     les = create_normal_unsymmetric_les(rows);
     gettimeofday(&tstart, NULL);
@@ -85,8 +81,8 @@ int bench_solvers(int rows)
            compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
-    G_message
-        ("\t * benchmarking gmath cholesky decomposition solver with symmetric matrix\n");
+    G_message("\t * benchmarking gmath cholesky decomposition solver with "
+              "symmetric matrix\n");
 
     les = create_normal_symmetric_les(rows);
     gettimeofday(&tstart, NULL);
@@ -96,8 +92,8 @@ int bench_solvers(int rows)
            compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
-    G_message
-        ("\t * benchmarking ccmath cholesky decomposition solver with symmetric matrix\n");
+    G_message("\t * benchmarking ccmath cholesky decomposition solver with "
+              "symmetric matrix\n");
 
     les = create_normal_symmetric_les(rows);
     gettimeofday(&tstart, NULL);
@@ -107,18 +103,16 @@ int bench_solvers(int rows)
            compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
-    G_message
-        ("\t * benchmarking gmath cholesky band matrix decomposition solver with symmetric band matrix\n");
+    G_message("\t * benchmarking gmath cholesky band matrix decomposition "
+              "solver with symmetric band matrix\n");
 
     les = create_symmetric_band_les(rows);
     gettimeofday(&tstart, NULL);
-    G_math_solver_cholesky_sband(les->A, les->x, les->b, les->rows,
-                                 les->rows);
+    G_math_solver_cholesky_sband(les->A, les->x, les->b, les->rows, les->rows);
     gettimeofday(&tend, NULL);
     printf("Computation time cholesky band matrix decomposition: %g\n",
            compute_time_difference(tstart, tend));
     G_math_free_les(les);
-
 
     return 1;
 }

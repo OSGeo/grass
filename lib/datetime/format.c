@@ -8,10 +8,8 @@
 #include <string.h>
 #include <grass/datetime.h>
 
-
-static char *months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-};
+static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
 /*!
  * \brief
@@ -25,7 +23,7 @@ static char *months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
  * \return int
  */
 
-int datetime_format(const DateTime * dt, char *buf)
+int datetime_format(const DateTime *dt, char *buf)
 {
     /* Format the DateTime structure as a human-readable string */
     /*  Returns 0 when successful, and buf is filled with the

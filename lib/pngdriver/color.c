@@ -9,14 +9,14 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Per Henrik Johansen (original contributor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include <grass/gis.h>
 #include "pngdriver.h"
 
 /*!
-   \brief  Identify a color 
+   \brief  Identify a color
 
    Identify a color that has been set in the reset_color() (found in Reset_clr.c
    file in this directory).  Subsequent graphics calls will use this color.

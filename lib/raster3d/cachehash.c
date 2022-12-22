@@ -7,8 +7,7 @@
 
 /*---------------------------------------------------------------------------*/
 #ifndef GRASS_RASTER3D_H
-typedef struct
-{
+typedef struct {
 
     int nofNames;
     int *index;
@@ -22,7 +21,7 @@ typedef struct
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_hash_reset(Rast3d_cache_hash * h)
+void Rast3d_cache_hash_reset(Rast3d_cache_hash *h)
 {
     int i;
 
@@ -34,7 +33,7 @@ void Rast3d_cache_hash_reset(Rast3d_cache_hash * h)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_hash_dispose(Rast3d_cache_hash * h)
+void Rast3d_cache_hash_dispose(Rast3d_cache_hash *h)
 {
     if (h == NULL)
         return;
@@ -52,7 +51,7 @@ void *Rast3d_cache_hash_new(int nofNames)
 {
     Rast3d_cache_hash *tmp;
 
-    tmp = (Rast3d_cache_hash *) Rast3d_malloc(sizeof(Rast3d_cache_hash));
+    tmp = (Rast3d_cache_hash *)Rast3d_malloc(sizeof(Rast3d_cache_hash));
     if (tmp == NULL) {
         Rast3d_error("Rast3d_cache_hash_new: error in Rast3d_malloc");
         return (void *)NULL;
@@ -74,15 +73,15 @@ void *Rast3d_cache_hash_new(int nofNames)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_hash_remove_name(Rast3d_cache_hash * h, int name)
+void Rast3d_cache_hash_remove_name(Rast3d_cache_hash *h, int name)
 {
     if (name >= h->nofNames)
-        Rast3d_fatal_error
-            ("Rast3d_cache_hash_remove_name: name %i out of range", name);
+        Rast3d_fatal_error(
+            "Rast3d_cache_hash_remove_name: name %i out of range", name);
 
     if (h->active[name] == 0)
-        Rast3d_fatal_error
-            ("Rast3d_cache_hash_remove_name: name %i not in hashtable", name);
+        Rast3d_fatal_error(
+            "Rast3d_cache_hash_remove_name: name %i not in hashtable", name);
 
     h->active[name] = 0;
     if (name == h->lastName)
@@ -91,14 +90,14 @@ void Rast3d_cache_hash_remove_name(Rast3d_cache_hash * h, int name)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_hash_load_name(Rast3d_cache_hash * h, int name, int index)
+void Rast3d_cache_hash_load_name(Rast3d_cache_hash *h, int name, int index)
 {
     if (name >= h->nofNames)
         Rast3d_fatal_error("Rast3d_cache_hash_load_name: name out of range");
 
     if (h->active[name] != 0)
-        Rast3d_fatal_error
-            ("Rast3d_cache_hash_load_name: name already in hashtable");
+        Rast3d_fatal_error(
+            "Rast3d_cache_hash_load_name: name already in hashtable");
 
     h->index[name] = index;
     h->active[name] = 1;
@@ -106,7 +105,7 @@ void Rast3d_cache_hash_load_name(Rast3d_cache_hash * h, int name, int index)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_hash_name2index(Rast3d_cache_hash * h, int name)
+int Rast3d_cache_hash_name2index(Rast3d_cache_hash *h, int name)
 {
     int index;
 

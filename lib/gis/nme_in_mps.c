@@ -56,13 +56,13 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
     *q = 0;
 
     /* copy the mapset part */
-    p++;                        /* skip the @ */
+    p++; /* skip the @ */
     q = mapset;
-    while ((*q++ = *p++)) ;
+    while ((*q++ = *p++))
+        ;
 
     return (*name && *mapset);
 }
-
 
 /*!
    \brief Get fully qualified element name
@@ -131,8 +131,8 @@ char *G_fully_qualified_name(const char *name, const char *mapset)
    \return  0 if name is not fully qualified
    \return -1 if input mapset invalid (mapset != xmapset)
  */
-int G_unqualified_name(const char *name, const char *mapset,
-                       char *xname, char *xmapset)
+int G_unqualified_name(const char *name, const char *mapset, char *xname,
+                       char *xmapset)
 {
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
         /* name is fully qualified */

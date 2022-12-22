@@ -1,6 +1,6 @@
 /*!
  * \file lib/gis/error.c
- * 
+ *
  * \brief GIS Library - Error messages functions
  *
  * (C) 1999-2011 by the GRASS Development Team
@@ -43,9 +43,8 @@
  */
 #define ERR  2
 
-
 /* static int (*error)() = 0; */
-static int (*ext_error)(const char *, int);     /* Roger Bivand 17 June 2000 */
+static int (*ext_error)(const char *, int); /* Roger Bivand 17 June 2000 */
 static int no_warn = FALSE;
 static int no_sleep = TRUE;
 
@@ -141,7 +140,7 @@ void G_important_message(const char *msg, ...)
 
 /*!
  * \brief Print a fatal error message to stderr
- * 
+ *
  * The output format depends on environment variable
  * GRASS_MESSAGE_FORMAT
  *
@@ -191,7 +190,7 @@ void G_fatal_error(const char *msg, ...)
 
 /*!
  * \brief Print a warning message to stderr
- * 
+ *
  * The output format depends on environment variable
  * GRASS_MESSAGE_FORMAT
  *
@@ -215,7 +214,7 @@ void G_warning(const char *msg, ...)
 
 /*!
  * \brief Suppress printing a warning message to stderr
- * 
+ *
  * \param flag a warning message will be suppressed if non-zero value is given
  *
  * \return previous flag
@@ -231,10 +230,10 @@ int G_suppress_warnings(int flag)
 
 /*!
  * \brief Turn on/off no_sleep flag
- * 
+ *
  * If <em>flag</em> is 0, then no pause will occur after printing an
  * error or warning message. Otherwise the pause will occur.
- * 
+ *
  * \param flag if non-zero/zero value is given G_sleep() will be
  * activated/deactivated
  *
@@ -252,7 +251,7 @@ int G_sleep_on_error(int flag)
 /*!
  * \brief Establishes error_routine as the routine that will handle
  * the printing of subsequent error messages.
- * 
+ *
  * \param error_routine routine will be called like this: error_routine(msg,
  * fatal)
  *
@@ -260,20 +259,21 @@ int G_sleep_on_error(int flag)
  */
 void G_set_error_routine(int (*error_routine)(const char *, int))
 {
-    ext_error = error_routine;  /* Roger Bivand 17 June 2000 */
+    ext_error = error_routine; /* Roger Bivand 17 June 2000 */
 }
 
 /*!
  * \brief After this call subsequent error messages will be handled in the
  * default method.
- * 
- * Error messages are printed directly to the screen: ERROR: message or WARNING: message
+ *
+ * Error messages are printed directly to the screen: ERROR: message or WARNING:
+ * message
  *
  * \return 0
  */
 void G_unset_error_routine(void)
 {
-    ext_error = 0;              /* Roger Bivand 17 June 2000 */
+    ext_error = 0; /* Roger Bivand 17 June 2000 */
 }
 
 /* Print info to stderr and optionally to log file and optionally send mail */
@@ -283,10 +283,11 @@ static void print_error(const char *msg, const int type)
 
     if (type == ERR)
         fatal = TRUE;
-    else                        /* WARN */
+    else /* WARN */
         fatal = FALSE;
 
-    if ((type == MSG || type == WARN || type == ERR) && ext_error) {    /* Function defined by application */
+    if ((type == MSG || type == WARN || type == ERR) &&
+        ext_error) { /* Function defined by application */
         ext_error(msg, fatal);
     }
     else {
@@ -308,24 +309,26 @@ static void print_error(const char *msg, const int type)
                 len = lead = strlen(prefix_std[type]);
                 w = (char *)msg;
 
-                while (print_word(stderr, &w, &len, lead)) ;
+                while (print_word(stderr, &w, &len, lead))
+                    ;
             }
             else {
                 fprintf(stderr, "%s%s\n", prefix_std[type], msg);
             }
 
-            if ((type != MSG) && isatty(fileno(stderr))
-                && (G_info_format() == G_INFO_FORMAT_STANDARD)) {       /* Bell */
+            if ((type != MSG) && isatty(fileno(stderr)) &&
+                (G_info_format() == G_INFO_FORMAT_STANDARD)) { /* Bell */
                 fprintf(stderr, "\7");
                 fflush(stderr);
                 if (!no_sleep)
                     G_sleep(5);
             }
-            else if ((type == WARN || type == ERR) && getenv("GRASS_ERROR_MAIL")) {     /* Mail */
+            else if ((type == WARN || type == ERR) &&
+                     getenv("GRASS_ERROR_MAIL")) { /* Mail */
                 mail_msg(msg, fatal);
             }
         }
-        else {                  /* GUI */
+        else { /* GUI */
             print_sentence(stderr, type, msg);
         }
     }
@@ -386,8 +389,8 @@ void G_init_logging(void)
 }
 
 /* Write a message to the log file */
-static int write_error(const char *msg, int fatal,
-                       time_t clock, const char *cwd)
+static int write_error(const char *msg, int fatal, time_t clock,
+                       const char *cwd)
 {
     FILE *log;
 
@@ -429,7 +432,7 @@ static void mail_msg(const char *msg, int fatal)
 }
 
 /* Print one word, new line if necessary */
-static int print_word(FILE * fd, char **word, int *len, const int lead)
+static int print_word(FILE *fd, char **word, int *len, const int lead)
 {
     int wlen, start, totlen;
     int nl;
@@ -452,7 +455,7 @@ static int print_word(FILE * fd, char **word, int *len, const int lead)
         return 0;
     }
 
-    if (start > lead) {         /* add space */
+    if (start > lead) { /* add space */
         totlen = start + wlen + 1;
     }
     else {
@@ -482,7 +485,7 @@ static int print_word(FILE * fd, char **word, int *len, const int lead)
 }
 
 /* Print one message, prefix inserted before each new line */
-static void print_sentence(FILE * fd, const int type, const char *msg)
+static void print_sentence(FILE *fd, const int type, const char *msg)
 {
     char prefix[100];
     const char *start;
@@ -526,7 +529,7 @@ static void print_sentence(FILE * fd, const int type, const char *msg)
 
 /*!
  * \brief Get current message format
- * 
+ *
  * Maybe set to either "standard" or "gui" (normally GRASS takes care)
  *
  * \return grass_info_format value

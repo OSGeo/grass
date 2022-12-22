@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/wind_limits.c
  *
@@ -15,7 +14,6 @@
  */
 
 #include <grass/gis.h>
-
 
 /**
  * \brief Function not yet implemented...
@@ -37,7 +35,6 @@ int G_limit_east(double *east, int proj)
     return 1;
 }
 
-
 /**
  * \brief Function not yet implemented...
  *
@@ -57,7 +54,6 @@ int G_limit_west(double *west, int proj)
 {
     return 1;
 }
-
 
 /**
  * \brief Limit north (y) coordinate
@@ -87,7 +83,6 @@ int G_limit_north(double *north, int proj)
 
     return 1;
 }
-
 
 /**
  * \brief Limit south (y) coordinate

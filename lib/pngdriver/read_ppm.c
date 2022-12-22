@@ -11,7 +11,6 @@
    \author Glynn Clements
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,9 +39,9 @@ void read_ppm(void)
     fgetc(input);
 
     if (i_width != png.width || i_height != png.height)
-        G_fatal_error
-            ("PNG: input file has incorrect dimensions: expected: %dx%d got: %dx%d",
-             png.width, png.height, i_width, i_height);
+        G_fatal_error("PNG: input file has incorrect dimensions: expected: "
+                      "%dx%d got: %dx%d",
+                      png.width, png.height, i_width, i_height);
 
     for (y = 0, p = png.grid; y < png.height; y++) {
         for (x = 0; x < png.width; x++, p++) {
@@ -90,9 +89,9 @@ void read_pgm(void)
     fgetc(input);
 
     if (i_width != png.width || i_height != png.height)
-        G_fatal_error
-            ("PNG: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d",
-             png.width, png.height, i_width, i_height);
+        G_fatal_error("PNG: input mask file has incorrect dimensions: "
+                      "expected: %dx%d got: %dx%d",
+                      png.width, png.height, i_width, i_height);
 
     G_free(mask_name);
 

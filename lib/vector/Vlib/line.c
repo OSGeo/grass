@@ -1,7 +1,7 @@
 /*!
    \file lib/vector/Vlib/line.c
 
-   \brief Vector library - vector feature geometry 
+   \brief Vector library - vector feature geometry
 
    (C) 2001-2009 by the GRASS Development Team
 
@@ -76,7 +76,7 @@ struct line_pnts *Vect__new_line_struct()
  */
 void Vect_destroy_line_struct(struct line_pnts *p)
 {
-    if (p) {                    /* probably a moot test */
+    if (p) { /* probably a moot test */
         if (p->alloc_points) {
             G_free((char *)p->x);
             G_free((char *)p->y);
@@ -116,7 +116,6 @@ int Vect_copy_xyz_to_pnts(struct line_pnts *Points, const double *x,
 
     return 0;
 }
-
 
 /*!
    \brief Reset line
@@ -167,7 +166,7 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
    \brief Insert new point at index position and move all old points
    at that position and above up
 
-   \param Points pointer to line_pnts structure 
+   \param Points pointer to line_pnts structure
    \param index (from 0 to Points->n_points-1)
    \param x,y,z point coordinates
 
@@ -242,12 +241,11 @@ int Vect_line_delete_point(struct line_pnts *Points, int index)
 
    \return number of points
  */
-int Vect_line_get_point(const struct line_pnts *Points, int index,
-                        double *x, double *y, double *z)
+int Vect_line_get_point(const struct line_pnts *Points, int index, double *x,
+                        double *y, double *z)
 {
     if (index < 0 || index > Points->n_points - 1)
-        G_fatal_error("Vect_line_get_point(): %s",
-                      _("Index out of range in"));
+        G_fatal_error("Vect_line_get_point(): %s", _("Index out of range in"));
 
     if (x)
         *x = Points->x[index];
@@ -286,8 +284,8 @@ int Vect_line_prune(struct line_pnts *Points)
         j = 1;
         for (i = 1; i < Points->n_points; i++) {
             if (Points->x[i] != Points->x[j - 1] ||
-                Points->y[i] != Points->y[j - 1]
-                || Points->z[i] != Points->z[j - 1]) {
+                Points->y[i] != Points->y[j - 1] ||
+                Points->z[i] != Points->z[j - 1]) {
                 Points->x[j] = Points->x[i];
                 Points->y[j] = Points->y[i];
                 Points->z[j] = Points->z[i];
@@ -366,7 +364,6 @@ int Vect_append_points(struct line_pnts *Points,
     return n;
 }
 
-
 /*!
    \brief Copy points from line structure to array
 
@@ -380,8 +377,8 @@ int Vect_append_points(struct line_pnts *Points,
 
    \return number of points copied
  */
-int Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x,
-                          double *y, double *z, int *n)
+int Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x, double *y,
+                          double *z, int *n)
 {
     int i;
 
@@ -406,11 +403,12 @@ int Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x,
    \param Points pointer to line_pnts structure
    \param distance distance value
    \param x,y,z pointers to point coordinates or NULL
-   \param angle pointer to angle of line in that point (radians, counter clockwise from x axis) or NULL
-   \param slope pointer to slope angle in radians (positive up)
+   \param angle pointer to angle of line in that point (radians, counter
+   clockwise from x axis) or NULL \param slope pointer to slope angle in radians
+   (positive up)
 
    \return number of segment the point is on (first is 1),
-   \return 0 error when point is outside the line 
+   \return 0 error when point is outside the line
  */
 int Vect_point_on_line(const struct line_pnts *Points, double distance,
                        double *x, double *y, double *z, double *angle,
@@ -418,8 +416,8 @@ int Vect_point_on_line(const struct line_pnts *Points, double distance,
 {
     int j, np, seg = 0;
     double dist = 0, length;
-    double xp = 0, yp = 0, zp = 0, dx = 0, dy = 0, dz = 0, dxy =
-        0, dxyz, k, rest;
+    double xp = 0, yp = 0, zp = 0, dx = 0, dy = 0, dz = 0, dxy = 0, dxyz, k,
+           rest;
 
     G_debug(3, "Vect_point_on_line(): distance = %f", distance);
     if ((distance < 0) || (Points->n_points < 2))
@@ -458,7 +456,7 @@ int Vect_point_on_line(const struct line_pnts *Points, double distance,
     }
     else {
         for (j = 0; j < Points->n_points - 1; j++) {
-            /* dxyz = G_distance(Points->x[j], Points->y[j], 
+            /* dxyz = G_distance(Points->x[j], Points->y[j],
                Points->x[j+1], Points->y[j+1]); */
             dx = Points->x[j + 1] - Points->x[j];
             dy = Points->y[j + 1] - Points->y[j];
@@ -467,8 +465,9 @@ int Vect_point_on_line(const struct line_pnts *Points, double distance,
             dxyz = hypot(dxy, dz);
 
             dist += dxyz;
-            if (dist >= distance) {     /* point is on the current line part */
-                rest = distance - dist + dxyz;  /* from first point of segment to point */
+            if (dist >= distance) { /* point is on the current line part */
+                rest = distance - dist +
+                       dxyz; /* from first point of segment to point */
                 k = rest / dxyz;
 
                 xp = Points->x[j] + k * dx;
@@ -591,7 +590,6 @@ double Vect_line_length(const struct line_pnts *Points)
     return len;
 }
 
-
 /*!
    \brief Calculate line length.
 
@@ -613,9 +611,8 @@ double Vect_line_geodesic_length(const struct line_pnts *Points)
 
     for (j = 0; j < Points->n_points - 1; j++) {
         if (dc == 2)
-            dxy =
-                G_geodesic_distance(Points->x[j], Points->y[j],
-                                    Points->x[j + 1], Points->y[j + 1]);
+            dxy = G_geodesic_distance(Points->x[j], Points->y[j],
+                                      Points->x[j + 1], Points->y[j + 1]);
         else {
             dx = Points->x[j + 1] - Points->x[j];
             dy = Points->y[j + 1] - Points->y[j];
@@ -648,11 +645,9 @@ double Vect_line_geodesic_length(const struct line_pnts *Points)
 
    \return nearest segment (first is 1)
  */
-int Vect_line_distance(const struct line_pnts *points,
-                       double ux, double uy, double uz,
-                       int with_z,
-                       double *px, double *py, double *pz,
-                       double *dist, double *spdist, double *lpdist)
+int Vect_line_distance(const struct line_pnts *points, double ux, double uy,
+                       double uz, int with_z, double *px, double *py,
+                       double *pz, double *dist, double *spdist, double *lpdist)
 {
     int i;
     double distance;
@@ -665,12 +660,9 @@ int Vect_line_distance(const struct line_pnts *points,
     n_points = points->n_points;
 
     if (n_points == 1) {
-        distance =
-            dig_distance2_point_to_line(ux, uy, uz, points->x[0],
-                                        points->y[0], points->z[0],
-                                        points->x[0], points->y[0],
-                                        points->z[0], with_z, NULL, NULL,
-                                        NULL, NULL, NULL);
+        distance = dig_distance2_point_to_line(
+            ux, uy, uz, points->x[0], points->y[0], points->z[0], points->x[0],
+            points->y[0], points->z[0], with_z, NULL, NULL, NULL, NULL, NULL);
         tpx = points->x[0];
         tpy = points->y[0];
         tpz = points->z[0];
@@ -678,27 +670,19 @@ int Vect_line_distance(const struct line_pnts *points,
         tspdist = 0;
         tlpdist = 0;
         segment = 0;
-
     }
     else {
 
-        distance =
-            dig_distance2_point_to_line(ux, uy, uz, points->x[0],
-                                        points->y[0], points->z[0],
-                                        points->x[1], points->y[1],
-                                        points->z[1], with_z, NULL, NULL,
-                                        NULL, NULL, NULL);
+        distance = dig_distance2_point_to_line(
+            ux, uy, uz, points->x[0], points->y[0], points->z[0], points->x[1],
+            points->y[1], points->z[1], with_z, NULL, NULL, NULL, NULL, NULL);
         segment = 1;
 
         for (i = 1; i < n_points - 1; i++) {
-            new_dist = dig_distance2_point_to_line(ux, uy, uz,
-                                                   points->x[i], points->y[i],
-                                                   points->z[i],
-                                                   points->x[i + 1],
-                                                   points->y[i + 1],
-                                                   points->z[i + 1], with_z,
-                                                   NULL, NULL, NULL, NULL,
-                                                   NULL);
+            new_dist = dig_distance2_point_to_line(
+                ux, uy, uz, points->x[i], points->y[i], points->z[i],
+                points->x[i + 1], points->y[i + 1], points->z[i + 1], with_z,
+                NULL, NULL, NULL, NULL, NULL);
             if (new_dist < distance) {
                 distance = new_dist;
                 segment = i + 1;
@@ -706,15 +690,10 @@ int Vect_line_distance(const struct line_pnts *points,
         }
 
         /* we have segment and now we can recalculate other values (speed) */
-        new_dist = dig_distance2_point_to_line(ux, uy, uz,
-                                               points->x[segment - 1],
-                                               points->y[segment - 1],
-                                               points->z[segment - 1],
-                                               points->x[segment],
-                                               points->y[segment],
-                                               points->z[segment], with_z,
-                                               &tpx, &tpy, &tpz, &tspdist,
-                                               NULL);
+        new_dist = dig_distance2_point_to_line(
+            ux, uy, uz, points->x[segment - 1], points->y[segment - 1],
+            points->z[segment - 1], points->x[segment], points->y[segment],
+            points->z[segment], with_z, &tpx, &tpy, &tpz, &tspdist, NULL);
 
         /* calculate distance from beginning of line */
         if (lpdist) {
@@ -769,11 +748,10 @@ int Vect_line_distance(const struct line_pnts *points,
 
    \return nearest segment (first is 1)
  */
-int Vect_line_geodesic_distance(const struct line_pnts *points,
-                                double ux, double uy, double uz,
-                                int with_z,
-                                double *px, double *py, double *pz,
-                                double *dist, double *spdist, double *lpdist)
+int Vect_line_geodesic_distance(const struct line_pnts *points, double ux,
+                                double uy, double uz, int with_z, double *px,
+                                double *py, double *pz, double *dist,
+                                double *spdist, double *lpdist)
 {
     int i;
     double distance;
@@ -802,12 +780,9 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
         segment = 0;
     }
     else {
-        distance =
-            dig_distance2_point_to_line(ux, uy, uz, points->x[0],
-                                        points->y[0], points->z[0],
-                                        points->x[1], points->y[1],
-                                        points->z[1], with_z,
-                                        &tpx, &tpy, &tpz, NULL, NULL);
+        distance = dig_distance2_point_to_line(
+            ux, uy, uz, points->x[0], points->y[0], points->z[0], points->x[1],
+            points->y[1], points->z[1], with_z, &tpx, &tpy, &tpz, NULL, NULL);
 
         distance = G_distance(ux, uy, tpx, tpy);
         if (with_z)
@@ -816,14 +791,10 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
         segment = 1;
 
         for (i = 1; i < n_points - 1; i++) {
-            new_dist = dig_distance2_point_to_line(ux, uy, uz,
-                                                   points->x[i], points->y[i],
-                                                   points->z[i],
-                                                   points->x[i + 1],
-                                                   points->y[i + 1],
-                                                   points->z[i + 1], with_z,
-                                                   &ttpx, &ttpy, &ttpz,
-                                                   NULL, NULL);
+            new_dist = dig_distance2_point_to_line(
+                ux, uy, uz, points->x[i], points->y[i], points->z[i],
+                points->x[i + 1], points->y[i + 1], points->z[i + 1], with_z,
+                &ttpx, &ttpy, &ttpz, NULL, NULL);
 
             new_dist = G_distance(ux, uy, ttpx, ttpy);
             if (with_z)
@@ -881,7 +852,6 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
     return (segment);
 }
 
-
 /*!
    \brief Calculate distance of 2 points
 
@@ -893,12 +863,11 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
 
    \return distance
  */
-double Vect_points_distance(double x1, double y1, double z1,    /* point 1 */
-                            double x2, double y2, double z2,    /* point 2 */
+double Vect_points_distance(double x1, double y1, double z1, /* point 1 */
+                            double x2, double y2, double z2, /* point 2 */
                             int with_z)
 {
     double dx, dy, dz;
-
 
     dx = x2 - x1;
     dy = y2 - y1;
@@ -908,7 +877,6 @@ double Vect_points_distance(double x1, double y1, double z1,    /* point 1 */
         return hypot(hypot(dx, dy), dz);
     else
         return hypot(dx, dy);
-
 }
 
 /*!

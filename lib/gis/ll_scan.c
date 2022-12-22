@@ -1,4 +1,3 @@
-
 /******************************************************************************
  G_lat_scan (buf, lat)
      char *buf;
@@ -24,7 +23,7 @@
        ff is fractions of a second, >= 0
        h  is 'n' or 's' for latitude,
              'e' or 'w' for longitude.
-	     missing for resolution
+             missing for resolution
 
  lat (or lon) is set to the double value for the lat/lon represented in buf.
 

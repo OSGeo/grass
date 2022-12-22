@@ -3,7 +3,7 @@
 
    \brief OGSF library - loading point sets (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -66,7 +66,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    top = gpt = (geopoint *) G_malloc(sizeof(geopoint));
+    top = gpt = (geopoint *)G_malloc(sizeof(geopoint));
     G_zero(gpt, sizeof(geopoint));
     if (!top) {
         return NULL;
@@ -87,17 +87,16 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     while (eof == 0) {
         ltype = Vect_read_next_line(&map, Points, Cats);
         switch (ltype) {
-        case -1:
-            {
-                G_warning(_("Unable to read vector map <%s>"),
-                          G_fully_qualified_name(name, mapset));
-                return NULL;
-            }
-        case -2:               /* EOF */
-            {
-                eof = 1;
-                continue;
-            }
+        case -1: {
+            G_warning(_("Unable to read vector map <%s>"),
+                      G_fully_qualified_name(name, mapset));
+            return NULL;
+        }
+        case -2: /* EOF */
+        {
+            eof = 1;
+            continue;
+        }
         }
         if ((ltype & GV_POINTS)) {
             np++;
@@ -123,10 +122,11 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
             /* initialize style */
             gpt->highlighted = 0;
 
-            G_debug(5, "loading vector point %d x=%f y=%f ncats=%d",
-                    np, Points->x[0], Points->y[0], Cats->n_cats);
+            G_debug(5, "loading vector point %d x=%f y=%f ncats=%d", np,
+                    Points->x[0], Points->y[0], Cats->n_cats);
 
-            gpt->next = (geopoint *) G_malloc(sizeof(geopoint));        /* G_fatal_error */
+            gpt->next =
+                (geopoint *)G_malloc(sizeof(geopoint)); /* G_fatal_error */
             G_zero(gpt->next, sizeof(geopoint));
             if (!gpt->next) {
                 return NULL;
@@ -135,7 +135,6 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
             prev = gpt;
             gpt = gpt->next;
         }
-
     }
     if (np > 0) {
         prev->next = NULL;
@@ -145,8 +144,9 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     Vect_close(&map);
 
     if (!np) {
-        G_warning(_("No points from vector map <%s> fall within current region"),
-                  G_fully_qualified_name(name, mapset));
+        G_warning(
+            _("No points from vector map <%s> fall within current region"),
+            G_fully_qualified_name(name, mapset));
         return (NULL);
     }
     else {
@@ -168,7 +168,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
    \return number of points defined by thematic mapping
    \return -1 on error
  */
-int Gp_load_sites_thematic(geosite * gp, struct Colors *colors)
+int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
 {
     geopoint *gpt;
 
@@ -212,7 +212,7 @@ int Gp_load_sites_thematic(geosite * gp, struct Colors *colors)
               G_fully_qualified_name(gp->filename, mapset));
     npts = nskipped = 0;
     for (gpt = gp->points; gpt; gpt = gpt->next) {
-        gpt->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+        gpt->style = (gvstyle *)G_malloc(sizeof(gvstyle));
         G_zero(gpt->style, sizeof(gvstyle));
 
         /* use default style */
@@ -231,19 +231,18 @@ int Gp_load_sites_thematic(geosite * gp, struct Colors *colors)
 
         /* color */
         if (colors) {
-            if (!Rast_get_c_color
-                ((const CELL *)&cat, &red, &grn, &blu, colors)) {
+            if (!Rast_get_c_color((const CELL *)&cat, &red, &grn, &blu,
+                                  colors)) {
                 G_warning(_("No color rule defined for category %d"), cat);
                 gpt->style->color = gp->style->color;
             }
-            gpt->style->color =
-                (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
-                ((int)((blu) << 16) & BLU_MASK);
+            gpt->style->color = (red & RED_MASK) +
+                                ((int)((grn) << 8) & GRN_MASK) +
+                                ((int)((blu) << 16) & BLU_MASK);
         }
         if (gp->tstyle->color_column) {
-            nvals =
-                db_select_value(driver, Fi->table, Fi->key, cat,
-                                gp->tstyle->color_column, &value);
+            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+                                    gp->tstyle->color_column, &value);
             if (nvals < 1)
                 continue;
             str = db_get_value_string(&value);
@@ -254,17 +253,16 @@ int Gp_load_sites_thematic(geosite * gp, struct Colors *colors)
                 gpt->style->color = gp->style->color;
             }
             else {
-                gpt->style->color =
-                    (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
-                    ((int)((blu) << 16) & BLU_MASK);
+                gpt->style->color = (red & RED_MASK) +
+                                    ((int)((grn) << 8) & GRN_MASK) +
+                                    ((int)((blu) << 16) & BLU_MASK);
             }
         }
 
         /* size */
         if (gp->tstyle->size_column) {
-            nvals =
-                db_select_value(driver, Fi->table, Fi->key, cat,
-                                gp->tstyle->size_column, &value);
+            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+                                    gp->tstyle->size_column, &value);
             if (nvals < 1)
                 continue;
             gpt->style->size = db_get_value_int(&value);
@@ -272,9 +270,8 @@ int Gp_load_sites_thematic(geosite * gp, struct Colors *colors)
 
         /* width */
         if (gp->tstyle->width_column) {
-            nvals =
-                db_select_value(driver, Fi->table, Fi->key, cat,
-                                gp->tstyle->width_column, &value);
+            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+                                    gp->tstyle->width_column, &value);
             if (nvals < 1)
                 continue;
             gpt->style->width = db_get_value_int(&value);
@@ -282,9 +279,8 @@ int Gp_load_sites_thematic(geosite * gp, struct Colors *colors)
 
         /* symbol/marker */
         if (gp->tstyle->symbol_column) {
-            nvals =
-                db_select_value(driver, Fi->table, Fi->key, cat,
-                                gp->tstyle->symbol_column, &value);
+            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+                                    gp->tstyle->symbol_column, &value);
             if (nvals < 1)
                 continue;
             str = db_get_value_string(&value);
@@ -295,8 +291,9 @@ int Gp_load_sites_thematic(geosite * gp, struct Colors *colors)
     }
 
     if (nskipped > 0)
-        G_warning(_("%d points without category. "
-                    "Unable to determine color rules for features without category."),
-                  nskipped);
+        G_warning(
+            _("%d points without category. "
+              "Unable to determine color rules for features without category."),
+            nskipped);
     return npts;
 }

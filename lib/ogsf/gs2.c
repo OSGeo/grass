@@ -1,9 +1,10 @@
 /*!
    \file lib/ogsf/gs2.c
 
-   \brief OGSF library - loading and manipulating surfaces (higher level functions)
+   \brief OGSF library - loading and manipulating surfaces (higher level
+   functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    Plans for handling color maps:
    NOW:
@@ -18,8 +19,8 @@
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -115,11 +116,10 @@ void GS_libinit(void)
 
     Gv.scale = GS_UNIT_SIZE / Longdim;
 
-    G_debug(1, "GS_libinit(): n=%f s=%f w=%f e=%f scale=%f first=%d",
-            Region[0], Region[1], Region[2], Region[3], Gv.scale, first);
+    G_debug(1, "GS_libinit(): n=%f s=%f w=%f e=%f scale=%f first=%d", Region[0],
+            Region[1], Region[2], Region[3], Gv.scale, first);
 
     Cxl_func = void_func;
-
 
     if (first) {
         gs_init();
@@ -197,7 +197,6 @@ int GS_surf_exists(int id)
 
     G_debug(3, "GS_surf_exists(): id=%d", id);
 
-
     if (NULL == gs_get_surf(id)) {
         return (0);
     }
@@ -245,8 +244,6 @@ int GS_new_surface(void)
         return (ns->gsurf_id);
     }
 
-
-
     return (-1);
 }
 
@@ -279,7 +276,7 @@ int GS_new_light(void)
         for (i = 0; i < MAX_LIGHTS; i++) {
             Gv.lights[i].position[X] = Gv.lights[i].position[Y] = 0.0;
             Gv.lights[i].position[Z] = 1.0;
-            Gv.lights[i].position[W] = 0.0;     /* infinite */
+            Gv.lights[i].position[W] = 0.0; /* infinite */
             Gv.lights[i].color[0] = Gv.lights[i].color[1] =
                 Gv.lights[i].color[2] = 1.0;
             Gv.lights[i].ambient[0] = Gv.lights[i].ambient[1] =
@@ -327,7 +324,6 @@ void GS_setlight_position(int num, float xpos, float ypos, float zpos,
     return;
 }
 
-
 /*!
    \brief Get light position
 
@@ -345,7 +341,6 @@ void GS_getlight_position(int num, float *xpos, float *ypos, float *zpos,
             *ypos = Gv.lights[num].position[Y];
             *zpos = Gv.lights[num].position[Z];
             *local = (int)Gv.lights[num].position[W];
-
         }
     }
 
@@ -438,7 +433,6 @@ void GS_getlight_ambient(int num, float *red, float *green, float *blue)
     return;
 }
 
-
 /*!
    \brief Switch off all lights
  */
@@ -515,8 +509,8 @@ void GS_get_modelposition1(float pos[])
     gs_get_datacenter(pos);
     gs_get_data_avg_zmax(&(pos[Z]));
 
-    G_debug(1, "GS_get_modelposition1(): model position: %f %f %f",
-            pos[X], pos[Y], pos[Z]);
+    G_debug(1, "GS_get_modelposition1(): model position: %f %f %f", pos[X],
+            pos[Y], pos[Z]);
 
     return;
 }
@@ -556,7 +550,6 @@ void GS_get_modelposition(float *siz, float *pos)
     return;
 }
 
-
 /*!
    \brief Set decoration, north arrow ??
 
@@ -589,7 +582,7 @@ void GS_set_Narrow(int *pt, int id, float *pos2)
     else {
         gs = gs_get_surf(id);
 
-        /* Need to get model matrix, etc 
+        /* Need to get model matrix, etc
          * to run gluUnProject
          */
         gsd_pushmatrix();
@@ -605,12 +598,12 @@ void GS_set_Narrow(int *pt, int id, float *pos2)
 
             z = (float)gs->zmax + gs->z_trans;
 
-            gluUnProject((GLdouble) pt[X], (GLdouble) pt[Y], (GLdouble) 0.,
-                         modelMatrix, projMatrix, viewport,
-                         &out_near[X], &out_near[Y], &out_near[Z]);
-            gluUnProject((GLdouble) pt[X], (GLdouble) pt[Y], (GLdouble) 1.,
-                         modelMatrix, projMatrix, viewport,
-                         &out_far[X], &out_far[Y], &out_far[Z]);
+            gluUnProject((GLdouble)pt[X], (GLdouble)pt[Y], (GLdouble)0.,
+                         modelMatrix, projMatrix, viewport, &out_near[X],
+                         &out_near[Y], &out_near[Z]);
+            gluUnProject((GLdouble)pt[X], (GLdouble)pt[Y], (GLdouble)1.,
+                         modelMatrix, projMatrix, viewport, &out_far[X],
+                         &out_far[Y], &out_far[Z]);
 
             glPopMatrix();
 
@@ -625,7 +618,6 @@ void GS_set_Narrow(int *pt, int id, float *pos2)
             pos2[Z] = (float)out[Z];
 
             return;
-
         }
     }
     return;
@@ -661,7 +653,7 @@ void GS_draw_X(int id, float *pt)
 
         if (CONST_ATT == gs_get_att_src(gs, ATT_TOPO)) {
             pos[Z] = gs->att[ATT_TOPO].constant;
-            gs = NULL;          /* tells gpd_obj to use given Z val */
+            gs = NULL; /* tells gpd_obj to use given Z val */
         }
         style.color = Gd.bgcol;
         style.symbol = ST_GYRO;
@@ -800,8 +792,8 @@ void GS_draw_flowline_at_xy(int id, float x, float y)
             /* Think about this: */
             /* degenerate line means edge or level edge ? */
             /* next is filled with last point drawn */
-            if (2 > GS_draw_nline_onsurf(id, p1[X], p1[Y],
-                                         p2[X], p2[Y], next, 3)) {
+            if (2 >
+                GS_draw_nline_onsurf(id, p1[X], p1[Y], p2[X], p2[Y], next, 3)) {
                 break;
             }
 
@@ -831,9 +823,7 @@ void GS_draw_fringe(int id, unsigned long clr, float elev, int *where)
             id, clr, elev, where[0], where[1], where[2], where[3]);
     if ((gs = gs_get_surf(id)))
         gsd_display_fringe(gs, clr, elev, where);
-
 }
-
 
 /*!
    \brief Draw legend
@@ -843,7 +833,7 @@ void GS_draw_fringe(int id, unsigned long clr, float elev, int *where)
 
    \param name legend name
    \param fontbase font-base
-   \param size ? 
+   \param size ?
    \param flags legend flags
    \param range values range
    \param pt ?
@@ -881,7 +871,7 @@ void GS_draw_list(GLuint list_id)
  */
 void GS_draw_all_list(void)
 {
-    gsd_calllists(0);           /* not sure if 0 is right - MN */
+    gsd_calllists(0); /* not sure if 0 is right - MN */
     glFlush();
     return;
 }
@@ -954,7 +944,6 @@ void GS_draw_lighting_model(void)
             gsd_cplane_off(i);
         }
     }
-
 
     if (!Modelshowing) {
         GS_get_modelposition(&size, center);
@@ -1224,9 +1213,8 @@ int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
     offset = DRC2OFF(gs, drow, dcol);
 
     if (GET_MAPATT(buff, offset, ftmp)) {
-        return
-            (Gs_get_cat_label(gsds_get_name(gs->att[att].hdata),
-                              drow, dcol, catstr));
+        return (Gs_get_cat_label(gsds_get_name(gs->att[att].hdata), drow, dcol,
+                                 catstr));
     }
 
     sprintf(catstr, _("no data"));
@@ -1342,8 +1330,8 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
             int r, g, b, i;
 
             i = gs->att[att].constant;
-            sprintf(valstr, "R%d G%d B%d",
-                    INT_TO_RED(i, r), INT_TO_GRN(i, g), INT_TO_BLU(i, b));
+            sprintf(valstr, "R%d G%d B%d", INT_TO_RED(i, r), INT_TO_GRN(i, g),
+                    INT_TO_BLU(i, b));
         }
         else {
             sprintf(valstr, "%f", gs->att[att].constant);
@@ -1370,8 +1358,8 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
 
             i = gs_mapcolor(gs_get_att_typbuff(gs, ATT_COLOR, 0),
                             &(gs->att[ATT_COLOR]), offset);
-            sprintf(valstr, "R%d G%d B%d",
-                    INT_TO_RED(i, r), INT_TO_GRN(i, g), INT_TO_BLU(i, b));
+            sprintf(valstr, "R%d G%d B%d", INT_TO_RED(i, r), INT_TO_GRN(i, g),
+                    INT_TO_BLU(i, b));
         }
         else {
             sprintf(valstr, "%f", ftmp);
@@ -1597,7 +1585,6 @@ int GS_delete_surface(int id)
     return -1;
 }
 
-
 /*!
    \brief Load raster map as attribute
 
@@ -1650,12 +1637,12 @@ int GS_load_att_map(int id, const char *filename, int att)
 
     /* Check to see if map is in Region */
     Rast_get_cellhd(filename, mapset, &rast_head);
-    if (rast_head.north <= wind.south ||
-        rast_head.south >= wind.north ||
+    if (rast_head.north <= wind.south || rast_head.south >= wind.north ||
         rast_head.east <= wind.west || rast_head.west >= wind.east) {
 
-        G_warning(_("Raster map <%s> is outside of current region. Load failed."),
-                  G_fully_qualified_name(filename, mapset));
+        G_warning(
+            _("Raster map <%s> is outside of current region. Load failed."),
+            G_fully_qualified_name(filename, mapset));
     }
 
     while (!reuse && (0 < hdata)) {
@@ -1664,8 +1651,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 
         if (0 < (hdata = gsds_findh(filename, &changed, &atty, begin))) {
 
-            G_debug(3,
-                    "GS_load_att_map(): %s already has data handle %d.CF=%x",
+            G_debug(3, "GS_load_att_map(): %s already has data handle %d.CF=%x",
                     filename, hdata, changed);
 
             /* handle found */
@@ -1701,13 +1687,13 @@ int GS_load_att_map(int id, const char *filename, int att)
         }
         /* TODO: FIX THIS stuff with lookup sharing! */
 
-        G_debug(3, "GS_load_att_map(): %s is being reused. hdata=%d",
-                filename, hdata);
+        G_debug(3, "GS_load_att_map(): %s is being reused. hdata=%d", filename,
+                hdata);
     }
     else {
-        G_debug(3,
-                "GS_load_att_map(): %s not loaded in correct form - loading now",
-                filename);
+        G_debug(
+            3, "GS_load_att_map(): %s not loaded in correct form - loading now",
+            filename);
 
         /* not loaded - need to get new dataset handle */
         gs->att[att].hdata = gsds_newh(filename);
@@ -1734,13 +1720,15 @@ int GS_load_att_map(int id, const char *filename, int att)
         }
 
         if (0 == gs_malloc_att_buff(gs, att, ATTY_NULL)) {
-            G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
+            G_fatal_error(
+                _("GS_load_att_map(): Out of memory. Unable to load map"));
         }
 
         switch (atty) {
         case ATTY_MASK:
             if (0 == gs_malloc_att_buff(gs, att, ATTY_MASK)) {
-                G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
             }
 
             ret = Gs_loadmap_as_bitmap(&wind, filename, tbuff->bm);
@@ -1748,41 +1736,45 @@ int GS_load_att_map(int id, const char *filename, int att)
             break;
         case ATTY_CHAR:
             if (0 == gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
-                G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
             }
 
-            ret = Gs_loadmap_as_char(&wind, filename, tbuff->cb,
-                                     tbuff->nm, &has_null);
+            ret = Gs_loadmap_as_char(&wind, filename, tbuff->cb, tbuff->nm,
+                                     &has_null);
 
             break;
         case ATTY_SHORT:
             if (0 == gs_malloc_att_buff(gs, att, ATTY_SHORT)) {
-                G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
             }
 
-            ret = Gs_loadmap_as_short(&wind, filename, tbuff->sb,
-                                      tbuff->nm, &has_null);
+            ret = Gs_loadmap_as_short(&wind, filename, tbuff->sb, tbuff->nm,
+                                      &has_null);
             break;
         case ATTY_FLOAT:
             if (0 == gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
-                G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
             }
 
-            ret = Gs_loadmap_as_float(&wind, filename, tbuff->fb,
-                                      tbuff->nm, &has_null);
+            ret = Gs_loadmap_as_float(&wind, filename, tbuff->fb, tbuff->nm,
+                                      &has_null);
 
             break;
         case ATTY_INT:
         default:
             if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
-                G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
+                G_fatal_error(
+                    _("GS_load_att_map(): Out of memory. Unable to load map"));
             }
 
-            ret = Gs_loadmap_as_int(&wind, filename, tbuff->ib,
-                                    tbuff->nm, &has_null);
+            ret = Gs_loadmap_as_int(&wind, filename, tbuff->ib, tbuff->nm,
+                                    &has_null);
             break;
 
-        }                       /* Done with switch */
+        } /* Done with switch */
 
         if (ret == -1) {
             gsds_free_data_buff(gs->att[att].hdata, ATTY_NULL);
@@ -1798,7 +1790,7 @@ int GS_load_att_map(int id, const char *filename, int att)
             gs_update_curmask(gs);
         }
 
-    }                           /* end if not reuse */
+    } /* end if not reuse */
 
     if (ATT_COLOR == att) {
 #ifdef MAYBE_LATER
@@ -1823,11 +1815,12 @@ int GS_load_att_map(int id, const char *filename, int att)
         else if (ATTY_FLOAT == atty) {
             if (!reuse) {
                 if (0 == gs_malloc_att_buff(gs, att, ATTY_INT)) {
-                    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
+                    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable "
+                                    "to load map"));
                 }
 
-                Gs_pack_colors_float(filename, tbuff->fb, tbuff->ib,
-                                     gs->rows, gs->cols);
+                Gs_pack_colors_float(filename, tbuff->fb, tbuff->ib, gs->rows,
+                                     gs->cols);
                 gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
                 gsds_free_data_buff(gs->att[att].hdata, ATTY_FLOAT);
                 gs->att[att].lookup = NULL;
@@ -2227,8 +2220,8 @@ int GS_set_drawres(int id, int xres, int yres, int xwire, int ywire)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_set_drawres() id=%d xyres=%d/%d xywire=%d/%d",
-            id, xres, yres, xwire, ywire);
+    G_debug(3, "GS_set_drawres() id=%d xyres=%d/%d xywire=%d/%d", id, xres,
+            yres, xwire, ywire);
 
     if (xres < 1 || yres < 1 || xwire < 1 || ywire < 1) {
         return (-1);
@@ -2405,8 +2398,8 @@ void GS_set_trans(int id, float xtrans, float ytrans, float ztrans)
         gs->z_trans = ztrans;
     }
 
-    G_debug(3, "GS_set_trans(): id=%d, x=%f, y=%f, z=%f",
-            id, xtrans, ytrans, ztrans);
+    G_debug(3, "GS_set_trans(): id=%d, x=%f, y=%f, z=%f", id, xtrans, ytrans,
+            ztrans);
 
     return;
 }
@@ -2429,12 +2422,11 @@ void GS_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
         *ztrans = gs->z_trans;
     }
 
-    G_debug(3, "GS_get_trans: id=%d, x=%f, y=%f, z=%f",
-            id, *xtrans, *ytrans, *ztrans);
+    G_debug(3, "GS_get_trans: id=%d, x=%f, y=%f, z=%f", id, *xtrans, *ytrans,
+            *ztrans);
 
     return;
 }
-
 
 /*!
    \brief Get default draw color
@@ -2555,7 +2547,6 @@ void GS_set_focus_real(float *realto)
     return;
 }
 
-
 /*!
    \brief Get focus
 
@@ -2615,7 +2606,7 @@ void GS_set_focus_center_map(int id)
 }
 
 /*!
-   \brief Move viewpoint 
+   \brief Move viewpoint
 
    \param pt 'from' model coordinates
  */
@@ -2766,7 +2757,6 @@ void GS_get_to_real(float *to)
 
     return;
 }
-
 
 /*!
    \brief Get zoom setup
@@ -2926,7 +2916,6 @@ void GS_init_rotation(void)
     Gv.rotate.rot_axes[1] = 0.0;
     Gv.rotate.rot_axes[2] = 0.0;
     Gv.rotate.do_rot = 0;
-
 }
 
 /*!
@@ -2986,8 +2975,10 @@ void GS_set_infocus(void)
  */
 void GS_set_viewport(int left, int right, int bottom, int top)
 {
-    G_debug(3, "GS_set_viewport(): left=%d, right=%d, "
-            "bottom=%d, top=%d", left, right, bottom, top);
+    G_debug(3,
+            "GS_set_viewport(): left=%d, right=%d, "
+            "bottom=%d, top=%d",
+            left, right, bottom, top);
 
     gsd_viewport(left, right, bottom, top);
 
@@ -3144,7 +3135,6 @@ void GS_set_cplane_trans(int num, float dx, float dy, float dz)
 
     return;
 }
-
 
 /*!
    \brief Draw cplace
@@ -3306,8 +3296,8 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
     gsd_real2surf(gs, p1);
     gsd_real2surf(gs, p2);
 
-    G_debug(3, "GS_get_distance_alongsurf(): hs=%d p1=%f,%f p2=%f,%f",
-            hs, x1, y1, x2, y2);
+    G_debug(3, "GS_get_distance_alongsurf(): hs=%d p1=%f,%f p2=%f,%f", hs, x1,
+            y1, x2, y2);
     return gs_distance_onsurf(gs, p1, p2, dist, use_exag);
 }
 
@@ -3342,8 +3332,8 @@ int GS_load_3dview(const char *vname, int surfid)
 }
 
 /************************************************************************
-* Following routines use Graphics Library
-************************************************************************/
+ * Following routines use Graphics Library
+ ************************************************************************/
 
 /*!
    \brief Init viewpoint
@@ -3388,8 +3378,8 @@ void GS_init_view(void)
 
         GS_init_rotation();
 
-        Gv.from_to[FROM][X] = Gv.from_to[FROM][Y] =
-            Gv.from_to[FROM][Z] = GS_UNIT_SIZE / 2.;
+        Gv.from_to[FROM][X] = Gv.from_to[FROM][Y] = Gv.from_to[FROM][Z] =
+            GS_UNIT_SIZE / 2.;
 
         Gv.from_to[TO][X] = GS_UNIT_SIZE / 2.;
         Gv.from_to[TO][Y] = GS_UNIT_SIZE / 2.;
@@ -3437,10 +3427,9 @@ void GS_clear(int col)
      * GLint gdtmp;
      */
     glClearDepth(1.0);
-    glClearColor(((float)((col) & 0xff)) / 255.,
-                 (float)((col) >> 8 & 0xff) / 255.,
-                 (float)((col) >> 16 & 0xff) / 255.,
-                 (float)((col) >> 24 & 0xff) / 255.);
+    glClearColor(
+        ((float)((col)&0xff)) / 255., (float)((col) >> 8 & 0xff) / 255.,
+        (float)((col) >> 16 & 0xff) / 255., (float)((col) >> 24 & 0xff) / 255.);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     Gd.bgcol = col;
@@ -3470,8 +3459,8 @@ double GS_get_aspect(void)
     bottom = tmp[1];
     top = tmp[1] + tmp[3] - 1;
 
-    G_debug(3, "GS_get_aspect(): left=%d, right=%d, top=%d, bottom=%d",
-            left, right, top, bottom);
+    G_debug(3, "GS_get_aspect(): left=%d, right=%d, top=%d, bottom=%d", left,
+            right, top, bottom);
 
     return ((double)(right - left) / (top - bottom));
 }

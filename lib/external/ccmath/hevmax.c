@@ -5,9 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-double hevmax(Cpx * a, Cpx * u, int n)
+
+double hevmax(Cpx *a, Cpx *u, int n)
 {
     Cpx *x, *p, h;
 
@@ -15,7 +17,7 @@ double hevmax(Cpx * a, Cpx * u, int n)
 
     int k, j;
 
-    x = (Cpx *) calloc(n, sizeof(Cpx));
+    x = (Cpx *)calloc(n, sizeof(Cpx));
     x[0].re = 1.;
     e = 0.;
     do {

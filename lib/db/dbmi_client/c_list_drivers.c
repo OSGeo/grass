@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_list_drivers.c
- * 
+ *
  * \brief DBMI Library (client) - list drivers
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -15,7 +15,8 @@
 #include <grass/dbmi.h>
 
 /*!
-   \brief Return comma separated list of existing DB drivers, used for driver parameter options
+   \brief Return comma separated list of existing DB drivers, used for driver
+   parameter options
 
    \return list of db drivers
  */

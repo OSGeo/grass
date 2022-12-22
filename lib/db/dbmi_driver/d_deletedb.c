@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_deletedb.c
- * 
+ *
  * \brief DBMI Library (driver) - delete database
  *
  * (C) 1999-2008 by the GRASS Development Team

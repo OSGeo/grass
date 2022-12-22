@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/writ_zeros.c
  *
@@ -19,7 +18,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-
 
 /**
  * \brief Writes <b>n</b> bytes of zero to file descriptor <b>fd</b>
@@ -56,8 +54,8 @@ void G_write_zeros(int fd, size_t n)
             i = n;
 
         if (write(fd, zeros, i) < 0)
-            G_fatal_error(_("File writing error in %s() %d:%s"),
-                          __func__, errno, strerror(errno));
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
         n -= i;
     }
 }

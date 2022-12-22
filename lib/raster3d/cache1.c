@@ -9,29 +9,26 @@
 
 /*---------------------------------------------------------------------------*/
 
-#define IS_ACTIVE_ELT(elt) (c->locks[elt] != 2)
-#define IS_NOT_ACTIVE_ELT(elt) (c->locks[elt] == 2)
-#define IS_LOCKED_ELT(elt) (c->locks[elt] == 1)
-#define IS_UNLOCKED_ELT(elt) (c->locks[elt] == 0)
-#define IS_NOT_IN_QUEUE_ELT(elt) (IS_LOCKED_ELT (elt))
-#define IS_IN_QUEUE_ELT(elt) (! IS_NOT_IN_QUEUE_ELT (elt))
+#define IS_ACTIVE_ELT(elt)       (c->locks[elt] != 2)
+#define IS_NOT_ACTIVE_ELT(elt)   (c->locks[elt] == 2)
+#define IS_LOCKED_ELT(elt)       (c->locks[elt] == 1)
+#define IS_UNLOCKED_ELT(elt)     (c->locks[elt] == 0)
+#define IS_NOT_IN_QUEUE_ELT(elt) (IS_LOCKED_ELT(elt))
+#define IS_IN_QUEUE_ELT(elt)     (!IS_NOT_IN_QUEUE_ELT(elt))
 
-#define DEACTIVATE_ELT(elt) ((IS_LOCKED_ELT(elt) ? \
-			      (c->nofUnlocked)++ : (0)), \
-			     c->locks[elt] = 2)
-#define LOCK_ELT(elt) ((IS_LOCKED_ELT(elt) ? \
-			(0) : (c->nofUnlocked)--), \
-		       (c->locks[elt] = 1))
-#define UNLOCK_ELT(elt) ((IS_LOCKED_ELT(elt) ? \
-			  (c->nofUnlocked)++ : (0)), \
-                         (c->locks[elt] = 0))
+#define DEACTIVATE_ELT(elt) \
+    ((IS_LOCKED_ELT(elt) ? (c->nofUnlocked)++ : (0)), c->locks[elt] = 2)
+#define LOCK_ELT(elt) \
+    ((IS_LOCKED_ELT(elt) ? (0) : (c->nofUnlocked)--), (c->locks[elt] = 1))
+#define UNLOCK_ELT(elt) \
+    ((IS_LOCKED_ELT(elt) ? (c->nofUnlocked)++ : (0)), (c->locks[elt] = 0))
 
 #define ONE_UNLOCKED_ELT_ONLY (c->first == c->last)
-#define ARE_MIN_UNLOCKED (c->nofUnlocked <= c->minUnlocked)
+#define ARE_MIN_UNLOCKED      (c->nofUnlocked <= c->minUnlocked)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_reset(RASTER3D_cache * c)
+void Rast3d_cache_reset(RASTER3D_cache *c)
 {
     int i;
 
@@ -62,7 +59,7 @@ static int cache_dummy_fun(int tileIndex, const void *tileBuf, void *map)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_dispose(RASTER3D_cache * c)
+void Rast3d_cache_dispose(RASTER3D_cache *c)
 {
     if (c == NULL)
         return;
@@ -138,9 +135,8 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_cache_set_remove_fun(RASTER3D_cache * c, int (*eltRemoveFun)(),
-                            void *eltRemoveFunData)
+void Rast3d_cache_set_remove_fun(RASTER3D_cache *c, int (*eltRemoveFun)(),
+                                 void *eltRemoveFunData)
 {
     c->eltRemoveFun = eltRemoveFun;
     c->eltRemoveFunData = eltRemoveFunData;
@@ -148,9 +144,8 @@ Rast3d_cache_set_remove_fun(RASTER3D_cache * c, int (*eltRemoveFun)(),
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_cache_set_load_fun(RASTER3D_cache * c, int (*eltLoadFun)(),
-                          void *eltLoadFunData)
+void Rast3d_cache_set_load_fun(RASTER3D_cache *c, int (*eltLoadFun)(),
+                               void *eltLoadFunData)
 {
     c->eltLoadFun = eltLoadFun;
     c->eltLoadFunData = eltLoadFunData;
@@ -159,16 +154,15 @@ Rast3d_cache_set_load_fun(RASTER3D_cache * c, int (*eltLoadFun)(),
 /*---------------------------------------------------------------------------*/
 
 void *Rast3d_cache_new_read(int nofElts, int sizeOfElts, int nofNames,
-                            read_fn * eltLoadFun, void *eltLoadFunData)
+                            read_fn *eltLoadFun, void *eltLoadFunData)
 {
-    return Rast3d_cache_new(nofElts, sizeOfElts, nofNames,
-                            cache_dummy_fun, NULL, eltLoadFun,
-                            eltLoadFunData);
+    return Rast3d_cache_new(nofElts, sizeOfElts, nofNames, cache_dummy_fun,
+                            NULL, eltLoadFun, eltLoadFunData);
 }
 
 /*---------------------------------------------------------------------------*/
 
-static void cache_queue_dequeue(RASTER3D_cache * c, int index)
+static void cache_queue_dequeue(RASTER3D_cache *c, int index)
 {
     if (IS_NOT_IN_QUEUE_ELT(index))
         Rast3d_fatal_error("cache_queue_dequeue: index not in queue");
@@ -188,7 +182,7 @@ static void cache_queue_dequeue(RASTER3D_cache * c, int index)
 
 /*---------------------------------------------------------------------------*/
 
-static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
+static void cache_queue_enqueue(RASTER3D_cache *c, int left, int index)
 {
     if (IS_IN_QUEUE_ELT(index))
         Rast3d_fatal_error("cache_queue_enqueue: index already in queue");
@@ -203,7 +197,6 @@ static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
 
     if (left >= 0 && IS_NOT_IN_QUEUE_ELT(left))
         Rast3d_fatal_error("cache_queue_enqueue: position not in queue");
-
 
     if (left == -1) {
         c->next[index] = c->first;
@@ -229,7 +222,7 @@ static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
 
 /*---------------------------------------------------------------------------*/
 
-#if 0                           /* unused */
+#if 0 /* unused */
 static int cache_queue_get_top(RASTER3D_cache * c)
 {
     int top;
@@ -244,14 +237,14 @@ static int cache_queue_get_top(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-static void cache_queue_append(RASTER3D_cache * c, int index)
+static void cache_queue_append(RASTER3D_cache *c, int index)
 {
     cache_queue_enqueue(c, c->last, index);
 }
 
 /*---------------------------------------------------------------------------*/
 
-static void cache_queue_preppend(RASTER3D_cache * c, int index)
+static void cache_queue_preppend(RASTER3D_cache *c, int index)
 {
     cache_queue_enqueue(c, -1, index);
 }
@@ -260,13 +253,13 @@ static void cache_queue_preppend(RASTER3D_cache * c, int index)
 
 /*---------------------------------------------------------------------------*/
 
-                        /* EXPORTED FUNCTIONS */
+/* EXPORTED FUNCTIONS */
 
 /*---------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_lock(RASTER3D_cache * c, int name)
+int Rast3d_cache_lock(RASTER3D_cache *c, int name)
 {
     int index;
 
@@ -291,7 +284,7 @@ int Rast3d_cache_lock(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_lock_intern(RASTER3D_cache * c, int index)
+void Rast3d_cache_lock_intern(RASTER3D_cache *c, int index)
 {
     if (IS_LOCKED_ELT(index))
         return;
@@ -302,7 +295,7 @@ void Rast3d_cache_lock_intern(RASTER3D_cache * c, int index)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_unlock(RASTER3D_cache * c, int name)
+int Rast3d_cache_unlock(RASTER3D_cache *c, int name)
 {
     int index;
 
@@ -323,15 +316,15 @@ int Rast3d_cache_unlock(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_unlock_all(RASTER3D_cache * c)
+int Rast3d_cache_unlock_all(RASTER3D_cache *c)
 {
     int index;
 
     for (index = 0; index < c->nofElts; index++)
         if (IS_LOCKED_ELT(index))
             if (!Rast3d_cache_unlock(c, c->names[index])) {
-                Rast3d_error
-                    ("Rast3d_cache_unlock_all: error in Rast3d_cache_unlock");
+                Rast3d_error(
+                    "Rast3d_cache_unlock_all: error in Rast3d_cache_unlock");
                 return 0;
             }
 
@@ -340,7 +333,7 @@ int Rast3d_cache_unlock_all(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_lock_all(RASTER3D_cache * c)
+int Rast3d_cache_lock_all(RASTER3D_cache *c)
 {
     int index;
 
@@ -353,28 +346,28 @@ int Rast3d_cache_lock_all(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_autolock_on(RASTER3D_cache * c)
+void Rast3d_cache_autolock_on(RASTER3D_cache *c)
 {
     c->autoLock = 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_autolock_off(RASTER3D_cache * c)
+void Rast3d_cache_autolock_off(RASTER3D_cache *c)
 {
     c->autoLock = 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_set_min_unlock(RASTER3D_cache * c, int nofMinUnLocked)
+void Rast3d_cache_set_min_unlock(RASTER3D_cache *c, int nofMinUnLocked)
 {
     c->minUnlocked = nofMinUnLocked;
 }
 
 /*---------------------------------------------------------------------------*/
 
-static int cache_remove_elt(RASTER3D_cache * c, int name, int doFlush)
+static int cache_remove_elt(RASTER3D_cache *c, int name, int doFlush)
 {
     int index;
 
@@ -409,7 +402,7 @@ static int cache_remove_elt(RASTER3D_cache * c, int name, int doFlush)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_remove_elt(RASTER3D_cache * c, int name)
+int Rast3d_cache_remove_elt(RASTER3D_cache *c, int name)
 {
     if (!cache_remove_elt(c, name, 0)) {
         Rast3d_error("Rast3d_cache_remove_elt: error in cache_remove_elt");
@@ -421,7 +414,7 @@ int Rast3d_cache_remove_elt(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_flush(RASTER3D_cache * c, int name)
+int Rast3d_cache_flush(RASTER3D_cache *c, int name)
 {
     if (!cache_remove_elt(c, name, 1)) {
         Rast3d_error("Rast3d_cache_flush: error in cache_remove_elt");
@@ -433,15 +426,15 @@ int Rast3d_cache_flush(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_remove_all(RASTER3D_cache * c)
+int Rast3d_cache_remove_all(RASTER3D_cache *c)
 {
     int index;
 
     for (index = 0; index < c->nofElts; index++)
         if (IS_ACTIVE_ELT(index))
             if (!Rast3d_cache_remove_elt(c, c->names[index])) {
-                Rast3d_error
-                    ("Rast3d_cache_remove_all: error in Rast3d_cache_remove_elt");
+                Rast3d_error("Rast3d_cache_remove_all: error in "
+                             "Rast3d_cache_remove_elt");
                 return 0;
             }
 
@@ -450,15 +443,15 @@ int Rast3d_cache_remove_all(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_flush_all(RASTER3D_cache * c)
+int Rast3d_cache_flush_all(RASTER3D_cache *c)
 {
     int index;
 
     for (index = 0; index < c->nofElts; index++)
         if (IS_ACTIVE_ELT(index))
             if (!Rast3d_cache_flush(c, c->names[index])) {
-                Rast3d_error
-                    ("Rast3d_cache_flush_all: error in Rast3d_cache_flush");
+                Rast3d_error(
+                    "Rast3d_cache_flush_all: error in Rast3d_cache_flush");
                 return 0;
             }
 
@@ -467,7 +460,7 @@ int Rast3d_cache_flush_all(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-void *Rast3d_cache_elt_ptr(RASTER3D_cache * c, int name)
+void *Rast3d_cache_elt_ptr(RASTER3D_cache *c, int name)
 {
     int index, oldName, doUnlock;
 
@@ -503,8 +496,7 @@ void *Rast3d_cache_elt_ptr(RASTER3D_cache * c, int name)
 
     if (doUnlock)
         if (!Rast3d_cache_unlock(c, name)) {
-            Rast3d_error
-                ("Rast3d_cache_elt_ptr: error in Rast3d_cache_unlock");
+            Rast3d_error("Rast3d_cache_elt_ptr: error in Rast3d_cache_unlock");
             return NULL;
         }
 
@@ -518,7 +510,7 @@ void *Rast3d_cache_elt_ptr(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_load(RASTER3D_cache * c, int name)
+int Rast3d_cache_load(RASTER3D_cache *c, int name)
 {
     if (Rast3d_cache_elt_ptr(c, name) == NULL) {
         Rast3d_error("Rast3d_cache_load: error in Rast3d_cache_elt_ptr");
@@ -530,7 +522,7 @@ int Rast3d_cache_load(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_get_elt(RASTER3D_cache * c, int name, void *dst)
+int Rast3d_cache_get_elt(RASTER3D_cache *c, int name, void *dst)
 {
     const void *elt;
 
@@ -547,7 +539,7 @@ int Rast3d_cache_get_elt(RASTER3D_cache * c, int name, void *dst)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_cache_put_elt(RASTER3D_cache * c, int name, const void *src)
+int Rast3d_cache_put_elt(RASTER3D_cache *c, int name, const void *src)
 {
     void *elt;
 
@@ -566,13 +558,13 @@ int Rast3d_cache_put_elt(RASTER3D_cache * c, int name, const void *src)
 
 /*---------------------------------------------------------------------------*/
 
-                        /* TEST FUNCTIONS */
+/* TEST FUNCTIONS */
 
 /*---------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------*/
 
-static void cache_test_print(RASTER3D_cache * c)
+static void cache_test_print(RASTER3D_cache *c)
 {
     int i, al;
     int *a;
@@ -591,8 +583,9 @@ static void cache_test_print(RASTER3D_cache * c)
         a = (int *)Rast3d_cache_elt_ptr(c, c->names[i]);
         /*Rast3d_cache_get_elt (c, c->names[i], a); */
         printf("name %d val %d %s\n", c->names[i], a[17],
-               (IS_LOCKED_ELT(i) ? "locked" :
-                IS_UNLOCKED_ELT(i) ? "unlocked" : ""));
+               (IS_LOCKED_ELT(i)     ? "locked"
+                : IS_UNLOCKED_ELT(i) ? "unlocked"
+                                     : ""));
     }
     printf("\n--------------------------------\n");
 
@@ -610,8 +603,7 @@ static int cache_test_flush_fun(int name, const void *eltPtr, void *data)
 
 /*---------------------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
 
     int *value;
     int size;
@@ -623,10 +615,10 @@ static int cache_test_load_fun(int name, void *eltPtr, void *data)
     const void *src;
 
     printf("loading name %d value %d\n", name,
-           ((cache_test_data_type *) data)->value[17]);
+           ((cache_test_data_type *)data)->value[17]);
 
-    src = ((cache_test_data_type *) data)->value;
-    memcpy(eltPtr, src, ((cache_test_data_type *) data)->size);
+    src = ((cache_test_data_type *)data)->value;
+    memcpy(eltPtr, src, ((cache_test_data_type *)data)->size);
 
     return 0;
 }
@@ -640,13 +632,12 @@ static void cache_test_add(void *c, int name, int val)
     static int firstTime = 1;
 
     if (firstTime) {
-        ctd.value =
-            Rast3d_malloc(((RASTER3D_cache *) c)->eltSize * sizeof(int));
+        ctd.value = Rast3d_malloc(((RASTER3D_cache *)c)->eltSize * sizeof(int));
         firstTime = 0;
     }
 
     ctd.value[17] = val;
-    ctd.size = ((RASTER3D_cache *) c)->eltSize;
+    ctd.size = ((RASTER3D_cache *)c)->eltSize;
 
     Rast3d_cache_load(c, name);
 }
@@ -657,9 +648,8 @@ int MAIN()
 {
     void *c;
 
-    c = Rast3d_cache_new(3, 76 * sizeof(int), 100000,
-                         cache_test_flush_fun, NULL, cache_test_load_fun,
-                         &ctd);
+    c = Rast3d_cache_new(3, 76 * sizeof(int), 100000, cache_test_flush_fun,
+                         NULL, cache_test_load_fun, &ctd);
 
     Rast3d_cache_autolock_on(c);
     cache_test_print(c);

@@ -22,7 +22,7 @@
  * read from the file MYNAME in the PERMANENT mapset. See also \ref
  * Permanent_Mapset for a discussion of the PERMANENT mapset.
  *
- * <b>Note:</b> This name is the first line in the file 
+ * <b>Note:</b> This name is the first line in the file
  * $GISDBASE/$LOCATION_NAME/PERMANENT/MYNAME
  *
  * \return pointer to a string

@@ -9,7 +9,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #ifndef __CAIRODRIVER_H__
@@ -23,7 +23,8 @@
 
 #include <cairo.h>
 
-#if !defined(USE_X11) || !CAIRO_HAS_XLIB_SURFACE || CAIRO_VERSION < CAIRO_VERSION_ENCODE(1,6,0)
+#if !defined(USE_X11) || !CAIRO_HAS_XLIB_SURFACE || \
+    CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 6, 0)
 #undef CAIRO_HAS_XLIB_XRENDER_SURFACE
 #define CAIRO_HAS_XLIB_XRENDER_SURFACE 0
 #endif
@@ -42,27 +43,26 @@
 
 #define DEFAULT_FILE_NAME "map.png"
 
-#define HEADER_SIZE 64
+#define HEADER_SIZE       64
 
 /* Scale for converting colors from [0..255] to cairo's [0.0..1.0] */
-#define COLORSCALE (1.0/255.0)
-#define CAIROCOLOR(a) (((double)(a))*COLORSCALE)
+#define COLORSCALE        (1.0 / 255.0)
+#define CAIROCOLOR(a)     (((double)(a)) * COLORSCALE)
 
 /* File types */
-#define FTYPE_UNKNOWN 0
-#define FTYPE_PPM 1
-#define FTYPE_BMP 2
-#define FTYPE_PNG 3
-#define FTYPE_PDF 4
-#define FTYPE_PS  5
-#define FTYPE_SVG 6
-#define FTYPE_X11 7
+#define FTYPE_UNKNOWN     0
+#define FTYPE_PPM         1
+#define FTYPE_BMP         2
+#define FTYPE_PNG         3
+#define FTYPE_PDF         4
+#define FTYPE_PS          5
+#define FTYPE_SVG         6
+#define FTYPE_X11         7
 
 extern cairo_surface_t *surface;
 extern cairo_t *cairo;
 
-struct cairo_state
-{
+struct cairo_state {
     char *file_name;
     int file_type;
     int width, height, stride;
@@ -93,8 +93,7 @@ extern void Cairo_Bitmap(int, int, int, const unsigned char *);
 extern void Cairo_Color(int, int, int);
 extern void Cairo_Erase(void);
 extern void Cairo_begin_raster(int, int[2][2], double[2][2]);
-extern int Cairo_raster(int, int,
-                        const unsigned char *, const unsigned char *,
+extern int Cairo_raster(int, int, const unsigned char *, const unsigned char *,
                         const unsigned char *, const unsigned char *);
 extern void Cairo_end_raster(void);
 extern void Cairo_Begin(void);

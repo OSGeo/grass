@@ -15,8 +15,8 @@
 #include <grass/glocale.h>
 #include <grass/vedit.h>
 
-static int select_by_query(struct Map_info *, int, int, double,
-                           int, struct line_pnts *, struct line_cats *);
+static int select_by_query(struct Map_info *, int, int, double, int,
+                           struct line_pnts *, struct line_cats *);
 
 static int merge_lists(struct ilist *alist, struct ilist *blist);
 
@@ -24,8 +24,10 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
    \brief Select primitives by query (based on geometry properties)
 
    Currently supported:
-   - QUERY_LENGTH, select all lines longer than threshold (or shorter if threshold is < 0)
-   - QUERY_DANGLE, select all dangles longer than threshold (or shorter if threshold is < 0)
+   - QUERY_LENGTH, select all lines longer than threshold (or shorter if
+   threshold is < 0)
+   - QUERY_DANGLE, select all dangles longer than threshold (or shorter if
+   threshold is < 0)
 
    Perform global query if <i>List</i> is empty otherwise query only
    selected vector objects.
@@ -39,9 +41,8 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
 
    \return number of selected primitives
  */
-int Vedit_select_by_query(struct Map_info *Map,
-                          int type, int layer, double thresh, int query,
-                          struct ilist *List)
+int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
+                          double thresh, int query, struct ilist *List)
 {
     int num, line, i;
     double thresh_tmp;
@@ -60,51 +61,51 @@ int Vedit_select_by_query(struct Map_info *Map,
     }
 
     switch (query) {
-    case QUERY_LENGTH:{
-            if (List->n_values == 0) {
-                /* query all vector objects in vector map */
-                num = Vect_get_num_lines(Map);
-                for (line = 1; line <= num; line++) {
-                    if (select_by_query(Map, line, type, thresh,
-                                        query, Points, Cats))
-                        Vect_list_append(List_query, line);
-                }
+    case QUERY_LENGTH: {
+        if (List->n_values == 0) {
+            /* query all vector objects in vector map */
+            num = Vect_get_num_lines(Map);
+            for (line = 1; line <= num; line++) {
+                if (select_by_query(Map, line, type, thresh, query, Points,
+                                    Cats))
+                    Vect_list_append(List_query, line);
             }
-            else {
-                for (i = 0; i < List->n_values; i++) {
-                    line = List->value[i];
-                    if (select_by_query(Map, line, type, thresh,
-                                        query, Points, Cats)) {
-                        Vect_list_append(List_query, line);
-                    }
-                }
-            }
-            break;
         }
-    case QUERY_DANGLE:{
-            struct ilist *List_dangle;
-
-            List_dangle = Vect_new_list();
-            thresh_tmp = fabs(thresh);
-
-            /* select dangles shorter than 'thresh_tmp' */
-            Vect_select_dangles(Map, type, thresh_tmp, List_dangle);
-
-            if (thresh <= 0.0) {        /* shorter than */
-                for (i = 0; i < List_dangle->n_values; i++) {
-                    Vect_list_append(List_query, List_dangle->value[i]);
+        else {
+            for (i = 0; i < List->n_values; i++) {
+                line = List->value[i];
+                if (select_by_query(Map, line, type, thresh, query, Points,
+                                    Cats)) {
+                    Vect_list_append(List_query, line);
                 }
             }
-            else {              /* longer than */
-                for (i = 1; i <= Vect_get_num_lines(Map); i++) {
-                    if (!Vect_val_in_list(List_dangle, i))
-                        Vect_list_append(List_query, i);
-                }
-            }
-
-            Vect_destroy_list(List_dangle);
-            break;
         }
+        break;
+    }
+    case QUERY_DANGLE: {
+        struct ilist *List_dangle;
+
+        List_dangle = Vect_new_list();
+        thresh_tmp = fabs(thresh);
+
+        /* select dangles shorter than 'thresh_tmp' */
+        Vect_select_dangles(Map, type, thresh_tmp, List_dangle);
+
+        if (thresh <= 0.0) { /* shorter than */
+            for (i = 0; i < List_dangle->n_values; i++) {
+                Vect_list_append(List_query, List_dangle->value[i]);
+            }
+        }
+        else { /* longer than */
+            for (i = 1; i <= Vect_get_num_lines(Map); i++) {
+                if (!Vect_val_in_list(List_dangle, i))
+                    Vect_list_append(List_query, i);
+            }
+        }
+
+        Vect_destroy_list(List_dangle);
+        break;
+    }
     default:
         break;
     }
@@ -126,21 +127,20 @@ int Vedit_select_by_query(struct Map_info *Map,
 /*!
    \brief Query selected primitive
 
-   \return 1 line test positive 
+   \return 1 line test positive
    \return 0 line test negative
    \return -1 on error (line is dead)
  */
 int select_by_query(struct Map_info *Map, int line, int type, double thresh,
-                    int query, struct line_pnts *Points,
-                    struct line_cats *Cats)
+                    int query, struct line_pnts *Points, struct line_cats *Cats)
 {
     int ltype;
     double length;
     int i, cat_curr;
-    int node1, node2, node;     /* nodes */
-    int nnode1, nnode2;         /* number of line in node */
-    double nx, ny, nz;          /* node coordinates */
-    struct ilist *exclude, *found;      /* line id of nearest lines */
+    int node1, node2, node;        /* nodes */
+    int nnode1, nnode2;            /* number of line in node */
+    double nx, ny, nz;             /* node coordinates */
+    struct ilist *exclude, *found; /* line id of nearest lines */
     struct line_cats *Cats_curr;
 
     if (!Vect_line_alive(Map, line))
@@ -153,11 +153,11 @@ int select_by_query(struct Map_info *Map, int line, int type, double thresh,
 
     if (query == QUERY_LENGTH) {
         length = Vect_line_length(Points);
-        if (thresh <= 0.0) {    /* shorter then */
+        if (thresh <= 0.0) { /* shorter then */
             if (length <= fabs(thresh))
                 return 1;
         }
-        else {                  /* longer then */
+        else { /* longer then */
             if (length > thresh)
                 return 1;
         }
@@ -170,7 +170,7 @@ int select_by_query(struct Map_info *Map, int line, int type, double thresh,
         int layer, cat;
 
         layer = 1;
-        Vect_cat_get(Cats, layer, &cat);        /* get first category from layer */
+        Vect_cat_get(Cats, layer, &cat); /* get first category from layer */
         if (!(type & GV_LINES))
             return -1;
         /* check if line is dangle */
@@ -193,11 +193,11 @@ int select_by_query(struct Map_info *Map, int line, int type, double thresh,
             return -1;
 
         length = Vect_line_length(Points);
-        if (thresh <= 0.0) {    /* shorter then */
+        if (thresh <= 0.0) { /* shorter then */
             if (length > fabs(thresh))
                 return -1;
         }
-        else {                  /* longer then */
+        else { /* longer then */
             if (length <= thresh)
                 return -1;
         }
@@ -209,8 +209,8 @@ int select_by_query(struct Map_info *Map, int line, int type, double thresh,
         Vect_get_node_coor(Map, node, &nx, &ny, &nz);
 
         Vect_list_append(exclude, line);
-        Vect_find_line_list(Map, nx, ny, nz,
-                            GV_LINES, 0.0, WITHOUT_Z, exclude, found);
+        Vect_find_line_list(Map, nx, ny, nz, GV_LINES, 0.0, WITHOUT_Z, exclude,
+                            found);
 
         Cats_curr = Vect_new_cats_struct();
 

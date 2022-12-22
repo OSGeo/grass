@@ -22,8 +22,7 @@
 static double min4(double, double, double, double);
 static double min2(double, double);
 
-static struct state
-{
+static struct state {
     int projection;
     double factor;
 } state;
@@ -53,7 +52,7 @@ int G_begin_distance_calculations(void)
     default:
         st->factor = G_database_units_to_meters_factor();
         if (st->factor <= 0.0) {
-            st->factor = 1.0;   /* assume meter grid */
+            st->factor = 1.0; /* assume meter grid */
             return 0;
         }
         return 1;
@@ -89,24 +88,21 @@ double G_distance(double e1, double n1, double e2, double n2)
 
    \return distance value
  */
-double G_distance_between_line_segments(double ax1, double ay1,
-                                        double ax2, double ay2,
-                                        double bx1, double by1,
+double G_distance_between_line_segments(double ax1, double ay1, double ax2,
+                                        double ay2, double bx1, double by1,
                                         double bx2, double by2)
 {
     double ra, rb;
     double x, y;
 
     /* if the segments intersect, then the distance is zero */
-    if (G_intersect_line_segments(ax1, ay1, ax2, ay2,
-                                  bx1, by1, bx2, by2, &ra, &rb, &x, &y) > 0)
+    if (G_intersect_line_segments(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2, &ra,
+                                  &rb, &x, &y) > 0)
         return 0.0;
-    return
-        min4(G_distance_point_to_line_segment(ax1, ay1, bx1, by1, bx2, by2),
-             G_distance_point_to_line_segment(ax2, ay2, bx1, by1, bx2, by2),
-             G_distance_point_to_line_segment(bx1, by1, ax1, ay1, ax2, ay2),
-             G_distance_point_to_line_segment(bx2, by2, ax1, ay1, ax2, ay2)
-        );
+    return min4(G_distance_point_to_line_segment(ax1, ay1, bx1, by1, bx2, by2),
+                G_distance_point_to_line_segment(ax2, ay2, bx1, by1, bx2, by2),
+                G_distance_point_to_line_segment(bx1, by1, ax1, ay1, ax2, ay2),
+                G_distance_point_to_line_segment(bx2, by2, ax1, ay1, ax2, ay2));
 }
 
 /*!
@@ -118,9 +114,8 @@ double G_distance_between_line_segments(double ax1, double ay1,
 
    \return distance
  */
-double G_distance_point_to_line_segment(double xp, double yp,
-                                        double x1, double y1, double x2,
-                                        double y2)
+double G_distance_point_to_line_segment(double xp, double yp, double x1,
+                                        double y1, double x2, double y2)
 {
     double dx, dy;
     double x, y;
@@ -144,8 +139,8 @@ double G_distance_point_to_line_segment(double xp, double yp,
     }
 
     /* find the intersection of the perpendicular with the segment */
-    t = G_intersect_line_segments(xp, yp, xq, yq, x1, y1, x2, y2, &ra,
-                                  &rb, &x, &y);
+    t = G_intersect_line_segments(xp, yp, xq, yq, x1, y1, x2, y2, &ra, &rb, &x,
+                                  &y);
     switch (t) {
     case 0:
     case 1:

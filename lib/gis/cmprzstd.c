@@ -6,7 +6,7 @@
  * FILENAME:    cmprzstd.c
  * AUTHOR(S):   Eric G. Miller <egm2@jps.net>
  *              Markus Metz
- * PURPOSE:     To provide an interface to ZSTD for compressing and 
+ * PURPOSE:     To provide an interface to ZSTD for compressing and
  *              decompressing data using ZSTD.  It's primary use is in
  *              the storage and reading of GRASS floating point rasters.
  *
@@ -15,7 +15,7 @@
  * COPYRIGHT:   (C) 2017 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -69,29 +69,29 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
 int G_zstd_compress_bound(int src_sz)
 {
-    /* ZSTD has a fast version if destLen is large enough 
+    /* ZSTD has a fast version if destLen is large enough
      * to hold a worst case result
      */
 #ifndef HAVE_ZSTD_H
-    G_fatal_error(_("GRASS needs to be compiled with ZSTD for ZSTD compression"));
+    G_fatal_error(
+        _("GRASS needs to be compiled with ZSTD for ZSTD compression"));
     return -1;
 #else
     return ZSTD_compressBound(src_sz);
 #endif
 }
 
-int
-G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
-                int dst_sz)
+int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                    int dst_sz)
 {
     int err, nbytes, buf_sz;
     unsigned char *buf;
 
 #ifndef HAVE_ZSTD_H
-    G_fatal_error(_("GRASS needs to be compiled with ZSTD for ZSTD compression"));
+    G_fatal_error(
+        _("GRASS needs to be compiled with ZSTD for ZSTD compression"));
     return -1;
 #else
 
@@ -118,10 +118,10 @@ G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
     buf = dst;
     buf_sz = G_zstd_compress_bound(src_sz);
     if (buf_sz > dst_sz) {
-        G_warning
-            ("G_zstd_compress(): programmer error, destination is too small");
-        if (NULL == (buf = (unsigned char *)
-                     G_calloc(buf_sz, sizeof(unsigned char))))
+        G_warning(
+            "G_zstd_compress(): programmer error, destination is too small");
+        if (NULL ==
+            (buf = (unsigned char *)G_calloc(buf_sz, sizeof(unsigned char))))
             return -1;
     }
     else
@@ -131,8 +131,8 @@ G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
     err = ZSTD_compress((char *)buf, buf_sz, (char *)src, src_sz, 3);
 
     if (err <= 0 || ZSTD_isError(err)) {
-        G_warning(_("ZSTD compression error %d: %s"),
-                  err, ZSTD_getErrorName(err));
+        G_warning(_("ZSTD compression error %d: %s"), err,
+                  ZSTD_getErrorName(err));
         if (buf != dst)
             G_free(buf);
         return -1;
@@ -159,13 +159,14 @@ G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
 #endif
 }
 
-int
-G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
+                  int dst_sz)
 {
     int err, nbytes;
 
 #ifndef HAVE_ZSTD_H
-    G_fatal_error(_("GRASS needs to be compiled with ZSTD for ZSTD compression"));
+    G_fatal_error(
+        _("GRASS needs to be compiled with ZSTD for ZSTD compression"));
     return -1;
 #else
 
@@ -192,8 +193,8 @@ G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     err = ZSTD_decompress((char *)dst, dst_sz, (char *)src, src_sz);
 
     if (err <= 0 || ZSTD_isError(err)) {
-        G_warning(_("ZSTD compression error %d: %s"),
-                  err, ZSTD_getErrorName(err));
+        G_warning(_("ZSTD compression error %d: %s"), err,
+                  ZSTD_getErrorName(err));
         return -1;
     }
 
@@ -210,6 +211,5 @@ G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     return nbytes;
 #endif
 }
-
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

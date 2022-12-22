@@ -1,7 +1,7 @@
 /*!
  * \file kdtree.c
  *
- * \brief binary search tree 
+ * \brief binary search tree
  *
  * Dynamic balanced k-d tree implementation
  *
@@ -202,8 +202,7 @@ int kdtree_insert(struct kdtree *t, double *c, int uid, int dc)
 int kdtree_remove(struct kdtree *t, double *c, int uid)
 {
     struct kdnode sn, *n;
-    struct kdstack
-    {
+    struct kdstack {
         struct kdnode *n;
         int dir;
     } s[256];
@@ -284,7 +283,8 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
             /* top-down balancing
              * slower but more compact */
             if (!bmode2) {
-                while (kdtree_balance(t, n, bmode)) ;
+                while (kdtree_balance(t, n, bmode))
+                    ;
             }
 
             /* go down */
@@ -305,7 +305,8 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
                  * faster but less compact */
                 kdtree_update_node(t, n);
                 if (bmode2) {
-                    while (kdtree_balance(t, n, bmode)) ;
+                    while (kdtree_balance(t, n, bmode))
+                        ;
                 }
                 top--;
                 if (top >= 0) {
@@ -314,7 +315,7 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
                 if (!bmode2 && top == 0) {
                     iter++;
                     if (iter == 2) {
-                        /* the top node has been visited twice, 
+                        /* the top node has been visited twice,
                          * switch from top-down to bottom-up balancing */
                         iter = 0;
                         bmode2 = 1;
@@ -333,8 +334,7 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
 void kdtree_optimize(struct kdtree *t, int level)
 {
     struct kdnode *n, *n2;
-    struct kdstack
-    {
+    struct kdstack {
         struct kdnode *n;
         int dir;
         char v;
@@ -348,8 +348,8 @@ void kdtree_optimize(struct kdtree *t, int level)
     if (!t->root)
         return;
 
-    G_debug(1, "k-d tree optimization for %zd items, tree depth %d",
-            t->count, t->root->depth);
+    G_debug(1, "k-d tree optimization for %zd items, tree depth %d", t->count,
+            t->root->depth);
 
     nbal = 0;
     top = 0;
@@ -361,9 +361,11 @@ void kdtree_optimize(struct kdtree *t, int level)
         rd = (!n->child[1] ? -1 : n->child[1]->depth);
 
         if (ld < rd)
-            while (kdtree_balance(t, n->child[0], level)) ;
+            while (kdtree_balance(t, n->child[0], level))
+                ;
         else if (ld > rd)
-            while (kdtree_balance(t, n->child[1], level)) ;
+            while (kdtree_balance(t, n->child[1], level))
+                ;
 
         ld = (!n->child[0] ? -1 : n->child[0]->depth);
         rd = (!n->child[1] ? -1 : n->child[1]->depth);
@@ -383,8 +385,10 @@ void kdtree_optimize(struct kdtree *t, int level)
         while (kdtree_balance(t, n, level)) {
             nbal++;
         }
-        while (kdtree_balance(t, n->child[0], level)) ;
-        while (kdtree_balance(t, n->child[1], level)) ;
+        while (kdtree_balance(t, n->child[0], level))
+            ;
+        while (kdtree_balance(t, n->child[1], level))
+            ;
 
         ld = (!n->child[0] ? -1 : n->child[0]->depth);
         rd = (!n->child[1] ? -1 : n->child[1]->depth);
@@ -402,8 +406,10 @@ void kdtree_optimize(struct kdtree *t, int level)
         while (kdtree_balance(t, n, level)) {
             nbal++;
         }
-        while (kdtree_balance(t, n->child[0], level)) ;
-        while (kdtree_balance(t, n->child[1], level)) ;
+        while (kdtree_balance(t, n->child[0], level))
+            ;
+        while (kdtree_balance(t, n->child[1], level))
+            ;
 
         ld = (!n->child[0] ? -1 : n->child[0]->depth);
         rd = (!n->child[1] ? -1 : n->child[1]->depth);
@@ -442,8 +448,10 @@ void kdtree_optimize(struct kdtree *t, int level)
             while (kdtree_balance(t, n, level)) {
                 nbal++;
             }
-            while (kdtree_balance(t, n->child[0], level)) ;
-            while (kdtree_balance(t, n->child[1], level)) ;
+            while (kdtree_balance(t, n->child[0], level))
+                ;
+            while (kdtree_balance(t, n->child[1], level))
+                ;
 
             ld = (!n->child[0] ? -1 : n->child[0]->depth);
             rd = (!n->child[1] ? -1 : n->child[1]->depth);
@@ -490,16 +498,16 @@ void kdtree_optimize(struct kdtree *t, int level)
         }
     }
 
-    G_debug(1, "k-d tree optimization: %d times balanced, new depth %d",
-            nbal, t->root->depth);
+    G_debug(1, "k-d tree optimization: %d times balanced, new depth %d", nbal,
+            t->root->depth);
 
     return;
 }
 
-/* find k nearest neighbors 
+/* find k nearest neighbors
  * results are stored in uid (uids) and d (squared distances)
  * optionally an uid to be skipped can be given
- * useful when searching for the nearest neighbors of an item 
+ * useful when searching for the nearest neighbors of an item
  * that is also in the tree */
 int kdtree_knn(struct kdtree *t, double *c, int *uid, double *d, int k,
                int *skip)
@@ -507,8 +515,7 @@ int kdtree_knn(struct kdtree *t, double *c, int *uid, double *d, int k,
     int i, found;
     double diff, dist, maxdist;
     struct kdnode sn, *n;
-    struct kdstack
-    {
+    struct kdstack {
         struct kdnode *n;
         int dir;
         char v;
@@ -632,8 +639,7 @@ int kdtree_dnn(struct kdtree *t, double *c, int **puid, double **pd,
     int i, k, found;
     double diff, dist;
     struct kdnode sn, *n;
-    struct kdstack
-    {
+    struct kdstack {
         struct kdnode *n;
         int dir;
         char v;
@@ -746,8 +752,7 @@ int kdtree_rnn(struct kdtree *t, double *c, int **puid, int *skip)
 {
     int i, k, found, inside;
     struct kdnode sn, *n;
-    struct kdstack
-    {
+    struct kdstack {
         struct kdnode *n;
         int dir;
         char v;
@@ -873,7 +878,6 @@ int kdtree_traverse(struct kdtrav *trav, double *c, int *uid)
     return kdtree_next(trav, c, uid);
 }
 
-
 /**********************************************/
 /*            internal functions              */
 
@@ -884,9 +888,8 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
     double mindist;
     int rdir, ordir, dir;
     int ld, rd;
-    struct kdnode *n, *rn, *or;
-    struct kdstack
-    {
+    struct kdnode *n, *rn, * or ;
+    struct kdstack {
         struct kdnode *n;
         int dir;
         char v;
@@ -900,7 +903,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
     if (!r->child[0] && !r->child[1])
         return 0;
 
-    /* do not call kdtree_balance in this fn, this can cause 
+    /* do not call kdtree_balance in this fn, this can cause
      * stack overflow due to too many recursive calls */
 
     /* find replacement for r
@@ -911,8 +914,8 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
     rdir = 1;
 
     or = r;
-    ld = (!or->child[0] ? -1 : or->child[0]->depth);
-    rd = (!or->child[1] ? -1 : or->child[1]->depth);
+    ld = (! or->child[0] ? -1 : or->child[0]->depth);
+    rd = (! or->child[1] ? -1 : or->child[1]->depth);
 
     if (ld > rd) {
         rdir = 0;
@@ -922,7 +925,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
      * repeat until replacement is leaf */
     ordir = rdir;
     is_leaf = 0;
-    s[0].n = or;
+    s[0].n = or ;
     s[0].dir = ordir;
     top2 = 1;
     mindist = -1;
@@ -935,7 +938,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 
         n = s[top].n;
         rn = n;
-        mindist = or->c[(int)or->dim] - n->c[(int)or->dim];
+        mindist = or->c[(int) or->dim] - n->c[(int) or->dim];
         if (ordir)
             mindist = -mindist;
 
@@ -960,15 +963,15 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
                 n = s[top].n;
                 if ((cmp(rn, n, or->dim) > 0) == ordir) {
                     rn = n;
-                    mindist = or->c[(int)or->dim] - n->c[(int)or->dim];
+                    mindist = or->c[(int) or->dim] - n->c[(int) or->dim];
                     if (ordir)
                         mindist = -mindist;
                 }
 
                 /* look on the other side ? */
                 dir = s[top].dir;
-                if (n->dim != or->dim &&
-                    mindist >= fabs(n->c[(int)n->dim] - n->c[(int)n->dim])) {
+                if (n->dim != or->dim && mindist >= fabs(n->c[(int)n->dim] -
+                                                         n->c[(int)n->dim])) {
                     /* go down the other side */
                     top++;
                     s[top].n = n->child[!dir];
@@ -989,10 +992,10 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 #ifdef KD_DEBUG
         if (!rn)
             G_fatal_error("No replacement");
-        if (ordir && or->c[(int)or->dim] > rn->c[(int)or->dim])
+        if (ordir && or->c[(int) or->dim] > rn->c[(int) or->dim])
             G_fatal_error("rn is smaller");
 
-        if (!ordir && or->c[(int)or->dim] < rn->c[(int)or->dim])
+        if (!ordir && or->c[(int) or->dim] < rn->c[(int) or->dim])
             G_fatal_error("rn is larger");
 
         if (or->child[1]) {
@@ -1001,11 +1004,11 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
                 int i;
 
                 for (i = 0; i < t->ndims; i++)
-                    G_message("rn c %g, or child c %g",
-                              rn->c[i], or->child[1]->c[i]);
-                G_fatal_error
-                    ("Right child of old root is smaller than rn, dir is %d",
-                     ordir);
+                    G_message("rn c %g, or child c %g", rn->c[i],
+                              or->child[1]->c[i]);
+                G_fatal_error(
+                    "Right child of old root is smaller than rn, dir is %d",
+                    ordir);
             }
         }
         if (or->child[0]) {
@@ -1014,11 +1017,11 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
                 int i;
 
                 for (i = 0; i < t->ndims; i++)
-                    G_message("rn c %g, or child c %g",
-                              rn->c[i], or->child[0]->c[i]);
-                G_fatal_error
-                    ("Left child of old root is larger than rn, dir is %d",
-                     ordir);
+                    G_message("rn c %g, or child c %g", rn->c[i],
+                              or->child[0]->c[i]);
+                G_fatal_error(
+                    "Left child of old root is larger than rn, dir is %d",
+                    ordir);
             }
         }
 #endif
@@ -1069,8 +1072,8 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 
             /* pick a subtree */
             ordir = 1;
-            ld = (!or->child[0] ? -1 : or->child[0]->depth);
-            rd = (!or->child[1] ? -1 : or->child[1]->depth);
+            ld = (! or->child[0] ? -1 : or->child[0]->depth);
+            rd = (! or->child[1] ? -1 : or->child[1]->depth);
             if (ld > rd) {
                 ordir = 0;
             }
@@ -1125,7 +1128,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 
 static int kdtree_balance(struct kdtree *t, struct kdnode *r, int bmode)
 {
-    struct kdnode *or;
+    struct kdnode * or ;
     int dir;
     int rd, ld;
     int old_depth;
@@ -1178,7 +1181,8 @@ static int kdtree_balance(struct kdtree *t, struct kdnode *r, int bmode)
     }
 #endif
 
-    r->child[!dir] = kdtree_insert2(t, r->child[!dir], or, bmode, 1);   /* bmode */
+    r->child[!dir] =
+        kdtree_insert2(t, r->child[!dir], or, bmode, 1); /* bmode */
 
     /* update node */
     kdtree_update_node(t, r);
@@ -1198,8 +1202,7 @@ static struct kdnode *kdtree_insert2(struct kdtree *t, struct kdnode *r,
                                      struct kdnode *nnew, int balance, int dc)
 {
     struct kdnode *n;
-    struct kdstack
-    {
+    struct kdstack {
         struct kdnode *n;
         int dir;
     } s[256];
@@ -1305,7 +1308,8 @@ static struct kdnode *kdtree_insert2(struct kdtree *t, struct kdnode *r,
             /* top-down balancing
              * slower but more compact */
             if (!bmode2) {
-                while (kdtree_balance(t, n, bmode)) ;
+                while (kdtree_balance(t, n, bmode))
+                    ;
             }
 
             /* go down */
@@ -1325,7 +1329,8 @@ static struct kdnode *kdtree_insert2(struct kdtree *t, struct kdnode *r,
                 /* bottom-up balancing
                  * faster but less compact */
                 if (bmode2) {
-                    while (kdtree_balance(t, n, bmode)) ;
+                    while (kdtree_balance(t, n, bmode))
+                        ;
                 }
                 top--;
                 if (top >= 0) {
@@ -1334,7 +1339,7 @@ static struct kdnode *kdtree_insert2(struct kdtree *t, struct kdnode *r,
                 if (!bmode2 && top == 0) {
                     iter++;
                     if (iter == 2) {
-                        /* the top node has been visited twice, 
+                        /* the top node has been visited twice,
                          * switch from top-down to bottom-up balancing */
                         iter = 0;
                         bmode2 = 1;
@@ -1403,5 +1408,5 @@ static int kdtree_next(struct kdtrav *trav, double *c, int *uid)
         return 1;
     }
 
-    return 0;                   /* finished traversing */
+    return 0; /* finished traversing */
 }

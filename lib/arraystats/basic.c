@@ -1,7 +1,6 @@
 #include <math.h>
 #include <grass/arraystats.h>
 
-
 /*provides basic univar stats */
 void AS_basic_stats(double *data, int count, struct GASTATS *stats)
 {
@@ -29,13 +28,11 @@ void AS_basic_stats(double *data, int count, struct GASTATS *stats)
         dev = dev + (data[i] - stats->mean);
     }
 
-
     stats->var = (dev2 - (dev * dev / stats->count)) / stats->count;
     stats->stdev = sqrt(stats->var);
 
     return;
 }
-
 
 void AS_eqdrt(double vectx[], double vecty[], int i1, int i2, double *vabc)
 {

@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/db.c
- * 
+ *
  * \brief DBMI Library (client) - open/close driver/database connection
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -25,8 +25,7 @@
    \return pointer to dbDriver structure
    \return NULL on failure
  */
-dbDriver *db_start_driver_open_database(const char *drvname,
-                                        const char *dbname)
+dbDriver *db_start_driver_open_database(const char *drvname, const char *dbname)
 {
     dbHandle handle;
     dbDriver *driver;
@@ -43,8 +42,8 @@ dbDriver *db_start_driver_open_database(const char *drvname,
     }
     db_set_handle(&handle, dbname, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
-        G_warning(_("Unable to open database <%s> by driver <%s>"),
-                  dbname, drvname);
+        G_warning(_("Unable to open database <%s> by driver <%s>"), dbname,
+                  drvname);
         db_shutdown_driver(driver);
         return NULL;
     }
@@ -59,13 +58,13 @@ dbDriver *db_start_driver_open_database(const char *drvname,
 
    \return DB_OK or DB_FAILED
  */
-int db_close_database_shutdown_driver(dbDriver * driver)
+int db_close_database_shutdown_driver(dbDriver *driver)
 {
     int status;
 
     status = db_close_database(driver);
-    G_debug(2, "db_close_database() result: %d  (%d means success)",
-            status, DB_OK);
+    G_debug(2, "db_close_database() result: %d  (%d means success)", status,
+            DB_OK);
 
     if (db_shutdown_driver(driver) != 0) {
         status = DB_FAILED;

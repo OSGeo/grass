@@ -3,12 +3,12 @@
 
    \brief OGSF library - setting and manipulating keyframes animation
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -37,7 +37,7 @@ static int Interpmode = KF_SPLINE;
 static int Fmode = 0;
 
 /* next & prior already initialized to NULL */
-static int _add_key(Keylist * newk, int force_replace, float precis)
+static int _add_key(Keylist *newk, int force_replace, float precis)
 {
     Keylist *k, *tempk, *prev;
     int found;
@@ -107,7 +107,7 @@ static int _add_key(Keylist * newk, int force_replace, float precis)
     return (1);
 }
 
-static void _remove_key(Keylist * k)
+static void _remove_key(Keylist *k)
 {
     if (k->prior) {
         k->prior->next = k->next;
@@ -130,7 +130,7 @@ static void _remove_key(Keylist * k)
 }
 
 /*!
-   \brief Set interpolation mode 
+   \brief Set interpolation mode
 
    \param mode interpolation mode (KF_LINEAR or KF_SPLINE)
 
@@ -148,7 +148,7 @@ int GK_set_interpmode(int mode)
 }
 
 /*!
-   \brief Set value for tension when interpmode is KF_SPLINE. 
+   \brief Set value for tension when interpmode is KF_SPLINE.
 
    \param tens value tens should be between 0.0; 1.0.
  */
@@ -221,7 +221,10 @@ void GK_print_keys(const char *name)
     for (k = Keys; k; k = k->next) {
 
         fprintf(fp,
-                "{%f {{FromX %f} {FromY %f} {FromZ %f} {DirX %f} {DirY %f} {DirZ %f} {FOV %f} {TWIST %f} {cplane-0 {{pos_x 0.000000} {pos_y 0.000000} {pos_z 0.000000} {blend_type OFF} {rot 0.000000} {tilt 0.000000}}}} keyanimtag%d 0} ",
+                "{%f {{FromX %f} {FromY %f} {FromZ %f} {DirX %f} {DirY %f} "
+                "{DirZ %f} {FOV %f} {TWIST %f} {cplane-0 {{pos_x 0.000000} "
+                "{pos_y 0.000000} {pos_z 0.000000} {blend_type OFF} {rot "
+                "0.000000} {tilt 0.000000}}}} keyanimtag%d 0} ",
                 k->pos, k->fields[KF_FROMX], k->fields[KF_FROMY],
                 k->fields[KF_FROMZ], k->fields[KF_DIRX], k->fields[KF_DIRY],
                 k->fields[KF_DIRZ], k->fields[KF_FOV] / 10.,
@@ -231,7 +234,6 @@ void GK_print_keys(const char *name)
 
     fclose(fp);
     return;
-
 }
 
 /*!
@@ -278,8 +280,8 @@ void GK_update_frames(void)
             Views = NULL;
         }
 
-        Views = gk_make_framesfromkeys
-            (Keys, Numkeys, Viewsteps, loop, 1.0 - Tension);
+        Views = gk_make_framesfromkeys(Keys, Numkeys, Viewsteps, loop,
+                                       1.0 - Tension);
 
         if (!Views) {
             G_warning(_("Check no. of frames requested and keyframes marked"));
@@ -395,21 +397,21 @@ int GK_delete_key(float pos, float precis, int justone)
    particular keyframe - used to compare relative distance to neighboring
    keyframes, it can be any floating point value.
 
-   The fmask value can be any of the following or'd together:    
-   - KF_FROMX_MASK    
-   - KF_FROMY_MASK    
-   - KF_FROMZ_MASK    
-   - KF_FROM_MASK (KF_FROMX_MASK | KF_FROMY_MASK | KF_FROMZ_MASK) 
+   The fmask value can be any of the following or'd together:
+   - KF_FROMX_MASK
+   - KF_FROMY_MASK
+   - KF_FROMZ_MASK
+   - KF_FROM_MASK (KF_FROMX_MASK | KF_FROMY_MASK | KF_FROMZ_MASK)
 
-   - KF_DIRX_MASK    
-   - KF_DIRY_MASK    
-   - KF_DIRZ_MASK    
-   - KF_DIR_MASK (KF_DIRX_MASK | KF_DIRY_MASK | KF_DIRZ_MASK) 
+   - KF_DIRX_MASK
+   - KF_DIRY_MASK
+   - KF_DIRZ_MASK
+   - KF_DIR_MASK (KF_DIRX_MASK | KF_DIRY_MASK | KF_DIRZ_MASK)
 
-   - KF_FOV_MASK    
-   - KF_TWIST_MASK    
+   - KF_FOV_MASK
+   - KF_TWIST_MASK
 
-   - KF_ALL_MASK (KF_FROM_MASK | KF_DIR_MASK | KF_FOV_MASK | KF_TWIST_MASK) 
+   - KF_ALL_MASK (KF_FROM_MASK | KF_DIR_MASK | KF_FOV_MASK | KF_TWIST_MASK)
 
    Other fields will be added later.
 
@@ -426,13 +428,12 @@ int GK_delete_key(float pos, float precis, int justone)
    \return 1 if key is added
    \return -1 key not added
  */
-int GK_add_key(float pos, unsigned long fmask, int force_replace,
-               float precis)
+int GK_add_key(float pos, unsigned long fmask, int force_replace, float precis)
 {
     Keylist *newk;
     float tmp[3];
 
-    if (NULL == (newk = (Keylist *) malloc(sizeof(Keylist)))) {
+    if (NULL == (newk = (Keylist *)malloc(sizeof(Keylist)))) {
         fprintf(stderr, "Out of memory\n");
         return (-1);
     }
@@ -511,7 +512,6 @@ void GK_show_path(int flag)
             gk_draw_path(Views, Viewsteps, Keys);
 
             GS_done_draw();
-
         }
     }
     else {
@@ -565,7 +565,6 @@ void GK_show_site(int flag)
             GP_alldraw_site();
 
             GS_done_draw();
-
         }
     }
     else {
@@ -593,7 +592,6 @@ void GK_show_vol(int flag)
             GVL_alldraw_vol();
 
             GS_done_draw();
-
         }
     }
     else {

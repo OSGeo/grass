@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include "pi.h"
 
-
 /*
  * This code is preliminary. I don't know if it is even
  * correct.
@@ -17,7 +16,7 @@
  * Input is lon, output is lat (all in degrees)
  *
  * Note formula only works if 0 < abs(lon2-lon1) < 180
- * If lon1 == lon2 then geodesic is the merdian lon1 
+ * If lon1 == lon2 then geodesic is the merdian lon1
  * (and the formula will fail)
  * if lon2-lon1=180 then the geodesic is either meridian lon1 or lon2
  */
@@ -27,12 +26,10 @@
  * integrate code from raster/r.surf.idw/ll.c
  */
 
-
 static void adjust_lat(double *);
 static void adjust_lon(double *);
 
-static struct state
-{
+static struct state {
     double A, B;
 } state;
 

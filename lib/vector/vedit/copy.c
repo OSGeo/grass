@@ -22,7 +22,7 @@
    \param List list of selected primitives (to be copied)
 
    \return number of copied primitives
-   \return -1 on error 
+   \return -1 on error
  */
 int Vedit_copy_lines(struct Map_info *Map, struct Map_info *FromMap,
                      struct ilist *List)

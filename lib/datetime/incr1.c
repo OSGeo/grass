@@ -10,7 +10,7 @@ static int _datetime_add_field(DateTime *, DateTime *, int);
 static int _datetime_subtract_field(DateTime *, DateTime *, int);
 
 /*****************************************************************/
-#if 0                           /* unused */
+#if 0  /* unused */
 static double _debug_decimal(DateTime * dt)
 {
     double dtdec = 0.0;
@@ -34,17 +34,18 @@ static double _debug_decimal(DateTime * dt)
 /*****************************************************************/
 
 /*!
- * \brief 
+ * \brief
  *
- * This function changes the 'src' date/time data based on the 'incr'  
- * The type (mode/from/to) of the 'src' can be anything.  
+ * This function changes the 'src' date/time data based on the 'incr'
+ * The type (mode/from/to) of the 'src' can be anything.
  * The mode of the 'incr' must be RELATIVE, and the type (mode/from/to) for
- * 'incr' must be a valid increment for 'src'. See  <b>datetime_is_valid_increment()</b>,
+ * 'incr' must be a valid increment for 'src'. See
+ <b>datetime_is_valid_increment()</b>,
  * <b>datetime_check_increment()</b>
- * Returns:  
- * 0: OK  
- * -1: 'incr' is invalid increment for 'src' 
- * For src.mode ABSOLUTE, 
+ * Returns:
+ * 0: OK
+ * -1: 'incr' is invalid increment for 'src'
+ * For src.mode ABSOLUTE,
  * <ul>
  <li> positive 'incr' moves into the future,
  </li>
@@ -53,9 +54,9 @@ static double _debug_decimal(DateTime * dt)
  <li> BC implies the year is negative, but all else is positive. Also, year==0
  * is illegal: adding 1 year to 1[bc] gives 1[ad]
  </li></ul>
- * The 'fracsec' in 'src' is preserved.  
- * The 'from/to' of the 'src' is preserved.  
- * A timezone in 'src' is allowed - it's presence is ignored.  
+ * The 'fracsec' in 'src' is preserved.
+ * The 'from/to' of the 'src' is preserved.
+ * A timezone in 'src' is allowed - it's presence is ignored.
  * NOTE: There is no datetime_decrement() To decrement, set the 'incr' negative.
 
  *
@@ -64,7 +65,7 @@ static double _debug_decimal(DateTime * dt)
  *  \return int
  */
 
-int datetime_increment(DateTime * src, DateTime * incr)
+int datetime_increment(DateTime *src, DateTime *incr)
 {
     int i, relfrom;
     DateTime cpdt, *dt;
@@ -72,15 +73,15 @@ int datetime_increment(DateTime * src, DateTime * incr)
     if (!datetime_is_valid_increment(src, incr))
         return datetime_error_code();
 
-    /* special case - incrementing a relative might try to increment 
-       or borrow from a "lower" field than src has, 
+    /* special case - incrementing a relative might try to increment
+       or borrow from a "lower" field than src has,
        so we use a copy to change from */
 
     if (src->mode == DATETIME_RELATIVE) {
         datetime_copy(&cpdt, src);
-        relfrom = datetime_in_interval_day_second(src->from)
-            ? DATETIME_DAY : DATETIME_YEAR;
-        datetime_change_from_to(&cpdt, relfrom, src->to, -1);   /* min. from */
+        relfrom = datetime_in_interval_day_second(src->from) ? DATETIME_DAY
+                                                             : DATETIME_YEAR;
+        datetime_change_from_to(&cpdt, relfrom, src->to, -1); /* min. from */
         dt = &cpdt;
     }
     else
@@ -88,9 +89,9 @@ int datetime_increment(DateTime * src, DateTime * incr)
 
     /* need to call carry first? (just to make sure?) */
     /*
-       fprintf (stdout,"DEBUG: INCR %.12lf %.12lf = %.12lf\n", 
-       _debug_decimal(dt), _debug_decimal(incr), 
-       _debug_decimal(dt)+_debug_decimal(incr)); 
+       fprintf (stdout,"DEBUG: INCR %.12lf %.12lf = %.12lf\n",
+       _debug_decimal(dt), _debug_decimal(incr),
+       _debug_decimal(dt)+_debug_decimal(incr));
      */
 
     /* no sign change, just add */
@@ -118,7 +119,7 @@ int datetime_increment(DateTime * src, DateTime * incr)
         }
         _datetime_add_field(dt, incr, DATETIME_YEAR);
     }
-    else {                      /* incr is positive, dt is negative */
+    else { /* incr is positive, dt is negative */
 
         for (i = incr->to; i > DATETIME_YEAR; i--) {
             _datetime_add_field(dt, incr, i);
@@ -126,7 +127,7 @@ int datetime_increment(DateTime * src, DateTime * incr)
         _datetime_subtract_field(dt, incr, DATETIME_YEAR);
     }
     /*
-       fprintf (stdout,"DEBUG: INCR RESULT = %.12lf\n", _debug_decimal(dt)); 
+       fprintf (stdout,"DEBUG: INCR RESULT = %.12lf\n", _debug_decimal(dt));
      */
     if (src->mode == DATETIME_RELATIVE) {
         datetime_change_from_to(dt, src->from, src->to, -1);
@@ -138,22 +139,20 @@ int datetime_increment(DateTime * src, DateTime * incr)
     return 0;
 }
 
-
 /*****************************************************************/
 /*
-   When calling, the field must be 
+   When calling, the field must be
    in the range of src, but this is not enforced here.
 
    The only thing used from the "incr" DateTime is the value of
-   the field being subtracted and the "from" & "to" 
+   the field being subtracted and the "from" & "to"
 
    by the time we get here, if src is RELATIVE, src->from should
    already be minimized to allow borrowing from "lower" fields
 
  */
 
-static int _datetime_subtract_field(DateTime * src, DateTime * incr,
-                                    int field)
+static int _datetime_subtract_field(DateTime *src, DateTime *incr, int field)
 {
 
     if (src->mode == DATETIME_RELATIVE) {
@@ -167,7 +166,8 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
             /* no "-1" here - remember seconds is floating point */
             /* might result in over borrowing, so have to check */
             if (src->second < incr->second) {
-                if ((int)(incr->second - src->second) == (incr->second - src->second)) {        /* diff is integer */
+                if ((int)(incr->second - src->second) ==
+                    (incr->second - src->second)) { /* diff is integer */
                     borrow = 1 + (incr->second - src->second - 1) / 60;
                 }
                 else
@@ -232,7 +232,7 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
             break;
 
         case DATETIME_YEAR:
-            if (src->year < incr->year) {       /* SIGN CHANGE */
+            if (src->year < incr->year) { /* SIGN CHANGE */
                 src->year = incr->year - src->year;
                 datetime_invert_sign(src);
                 tinc.year = 0;
@@ -249,8 +249,7 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
         DateTime srcinc, tinc, cpsrc;
         int i, newdays, borrow = 0;
 
-
-        datetime_copy(&srcinc, incr);   /* makes srcinc valid incr */
+        datetime_copy(&srcinc, incr); /* makes srcinc valid incr */
         switch (field) {
         case DATETIME_SECOND:
             if (src->second < incr->second) {
@@ -292,16 +291,15 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
 
             if (src->day <= incr->day) {
                 datetime_copy(&cpsrc, src);
-                datetime_change_from_to(&cpsrc, DATETIME_YEAR,
-                                        DATETIME_MONTH, -1);
+                datetime_change_from_to(&cpsrc, DATETIME_YEAR, DATETIME_MONTH,
+                                        -1);
                 datetime_set_increment_type(&cpsrc, &tinc);
                 tinc.month = 1;
                 newdays = src->day;
                 while (newdays <= incr->day) {
                     _datetime_subtract_field(&cpsrc, &tinc, DATETIME_MONTH);
-                    newdays +=
-                        datetime_days_in_month(cpsrc.year, cpsrc.month,
-                                               cpsrc.positive);
+                    newdays += datetime_days_in_month(cpsrc.year, cpsrc.month,
+                                                      cpsrc.positive);
                     borrow++;
                 }
                 src->day = newdays;
@@ -313,7 +311,8 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
                    src->month = cpsrc.month;
                    src->positive = cpsrc.positive;
                  */
-                /* check here & below - srcinc may be a day-second interval - mess anything up? */
+                /* check here & below - srcinc may be a day-second interval -
+                 * mess anything up? */
                 srcinc.month = borrow;
                 _datetime_subtract_field(src, &srcinc, DATETIME_MONTH);
             }
@@ -332,24 +331,23 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
             break;
 
         case DATETIME_YEAR:
-            if (src->year <= incr->year) {      /* SIGN CHANGE */
+            if (src->year <= incr->year) { /* SIGN CHANGE */
                 datetime_set_increment_type(src, &tinc);
                 tinc.positive = src->positive;
                 if (datetime_in_interval_year_month(tinc.to)) {
-                    tinc.month = src->month - 1;        /* convert to REL */
+                    tinc.month = src->month - 1; /* convert to REL */
                     src->year = incr->year - src->year + 1;
                     /* +1 to skip 0 */
                     datetime_invert_sign(src);
                     tinc.year = 0;
                     src->month = 1;
-                    datetime_increment(src, &tinc);     /* no sign change */
+                    datetime_increment(src, &tinc); /* no sign change */
                 }
-                else {          /* have to convert to days */
-                    tinc.day = src->day - 1;    /* convert to REL */
+                else {                       /* have to convert to days */
+                    tinc.day = src->day - 1; /* convert to REL */
                     for (i = src->month - 1; i > 0; i--) {
                         tinc.day +=
-                            datetime_days_in_month(src->year, i,
-                                                   src->positive);
+                            datetime_days_in_month(src->year, i, src->positive);
                     }
                     tinc.hour = src->hour;
                     tinc.minute = src->minute;
@@ -361,7 +359,7 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
                     src->day = 1;
                     src->hour = src->minute = 0;
                     src->second = 0;
-                    datetime_increment(src, &tinc);     /* no sign change */
+                    datetime_increment(src, &tinc); /* no sign change */
                 }
             }
             else
@@ -377,7 +375,7 @@ static int _datetime_subtract_field(DateTime * src, DateTime * incr,
 
 /* When absolute is zero, all fields carry toward the future */
 /* When absolute is one, sign of datetime is ignored */
-static int _datetime_carry(DateTime * dt, int absolute)
+static int _datetime_carry(DateTime *dt, int absolute)
 {
     int i, carry;
 
@@ -417,14 +415,14 @@ static int _datetime_carry(DateTime * dt, int absolute)
 
         /* normalize yr-mo */
         if (dt->mode == DATETIME_ABSOLUTE) {
-            if (dt->month > 12) {       /* month will never be zero */
-                carry = (dt->month - 1) / 12;   /* no carry until 13 */
+            if (dt->month > 12) {             /* month will never be zero */
+                carry = (dt->month - 1) / 12; /* no carry until 13 */
                 dt->year += carry;
                 if (dt->year == 0)
                     dt->year = 1;
                 dt->month -= carry * 12;
-                /* 
-                   if(dt->month == 0) dt->month = 1; 
+                /*
+                   if(dt->month == 0) dt->month = 1;
                    shouldn't happen */
             }
         }
@@ -435,7 +433,6 @@ static int _datetime_carry(DateTime * dt, int absolute)
                 dt->month -= carry * 12;
             }
         }
-
     }
 
     /* normalize yr-day */
@@ -445,17 +442,17 @@ static int _datetime_carry(DateTime * dt, int absolute)
                datetime_days_in_month(dt->year, dt->month, dt->positive)) {
             dt->day -=
                 datetime_days_in_month(dt->year, dt->month, dt->positive);
-            if (dt->month == 12) {      /* carry to year */
+            if (dt->month == 12) { /* carry to year */
                 dt->year++;
                 if (dt->year == 0)
                     dt->year = 1;
                 dt->month = 1;
             }
-            else                /* no carry to year */
+            else /* no carry to year */
                 dt->month++;
 
-        }                       /* end while */
-    }                           /* end if */
+        } /* end while */
+    }     /* end if */
 
     /* undo giving year a SIGN, temporarily */
     if (!absolute && dt->mode == DATETIME_ABSOLUTE) {
@@ -470,7 +467,7 @@ static int _datetime_carry(DateTime * dt, int absolute)
     return 0;
 }
 
-static int _datetime_add_field(DateTime * src, DateTime * incr, int field)
+static int _datetime_add_field(DateTime *src, DateTime *incr, int field)
 {
     switch (field) {
     case DATETIME_SECOND:
@@ -493,9 +490,9 @@ static int _datetime_add_field(DateTime * src, DateTime * incr, int field)
         break;
     }
     if (src->mode == DATETIME_RELATIVE)
-        _datetime_carry(src, 1);        /* do carries using absolute values */
+        _datetime_carry(src, 1); /* do carries using absolute values */
     else
-        _datetime_carry(src, 0);        /* do carries toward future */
+        _datetime_carry(src, 0); /* do carries toward future */
 
     return 0;
 }

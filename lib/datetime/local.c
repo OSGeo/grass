@@ -10,21 +10,20 @@
 extern struct tm *localtime();
 extern struct tm *gmtime();
 
-/* 
+/*
  ** NOTE:  the extern variable "timezone" seems to be treated
  ** differently by different OS, and the tm_zone element of struct tm
  ** is missing in some OS (IRIX), so we're converting localtime() and
  ** gmtime() structures to datetimes, then doing a difference to get the
- ** timezone offset.  -Bill Brown 5/31/95 
+ ** timezone offset.  -Bill Brown 5/31/95
  */
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Returns:
- * 0 OK  
- * -1 local timezone info not available 
+ * 0 OK
+ * -1 local timezone info not available
  *
  *  \param minutes
  *  \return int
@@ -64,8 +63,8 @@ int datetime_get_local_timezone(int *minutes)
     datetime_set_minute(&dtg, (int)gm->tm_min);
     datetime_set_second(&dtg, (double)gm->tm_sec);
 
-    datetime_set_type(&dtdiff, DATETIME_RELATIVE,
-                      DATETIME_DAY, DATETIME_SECOND, 0);
+    datetime_set_type(&dtdiff, DATETIME_RELATIVE, DATETIME_DAY, DATETIME_SECOND,
+                      0);
     datetime_difference(&dtl, &dtg, &dtdiff);
     datetime_change_from_to(&dtdiff, DATETIME_MINUTE, DATETIME_MINUTE, 0);
 
@@ -73,25 +72,23 @@ int datetime_get_local_timezone(int *minutes)
     return 0;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
- * set mode/from/to ABSOLUTE/YEAR/SECOND  
- * set the local time into 'dt'  does not set timezone.  
+ * set mode/from/to ABSOLUTE/YEAR/SECOND
+ * set the local time into 'dt'  does not set timezone.
  *
  *  \param dt
  *  \return void
  */
 
-void datetime_get_local_time(DateTime * dt)
+void datetime_get_local_time(DateTime *dt)
 {
     time_t clock;
     struct tm *local;
 
     /* first set dt to absolute full date */
-    datetime_set_type(dt, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
-                      0);
+    datetime_set_type(dt, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND, 0);
 
     /* get the current date/time */
     time(&clock);

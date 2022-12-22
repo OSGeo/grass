@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_drop_col.c
- * 
+ *
  * \brief DBMI Library (driver) - drop column
  *
  * (C) 1999-2008 by the GRASS Development Team

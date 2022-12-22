@@ -12,7 +12,6 @@
 #include <math.h>
 #include <grass/gmath.h>
 
-
 int getg(double w, double *g[2], int size)
 {
     long i, j, totsize, n, g_row;
@@ -28,7 +27,7 @@ int getg(double w, double *g[2], int size)
     sigma = w / (2.0 * sqrt((double)2.0));
     two_ssq = 2.0 * sigma * sigma;
     for (i = 0; i < n; i++) {
-        g_row = i * size;       /* start of row */
+        g_row = i * size; /* start of row */
         for (j = 0; j < n; j++) {
             rsq = i * i + j * j;
             val = (rsq / two_ssq - 1) * exp(-rsq / two_ssq);
@@ -50,7 +49,7 @@ int getg(double w, double *g[2], int size)
         }
     }
 
-    *(g[0] + 0) -= sum;         /* make sure sum of all values is zero */
+    *(g[0] + 0) -= sum; /* make sure sum of all values is zero */
 
     return 0;
 }

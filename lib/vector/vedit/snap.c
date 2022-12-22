@@ -25,9 +25,8 @@
    \return 1 snapped
    \return 0 not snapped
  */
-int Vedit_snap_point(struct Map_info *Map,
-                     int line, double *x, double *y, double *z, double thresh,
-                     int vertex)
+int Vedit_snap_point(struct Map_info *Map, int line, double *x, double *y,
+                     double *z, double thresh, int vertex)
 {
     struct line_pnts *Points;
 
@@ -55,8 +54,7 @@ int Vedit_snap_point(struct Map_info *Map,
             if (i > 0 && i < Points->n_points - 1)
                 if (!vertex)
                     continue;
-            dist = Vect_points_distance(*x, *y, *z,
-                                        Points->x[i], Points->y[i],
+            dist = Vect_points_distance(*x, *y, *z, Points->x[i], Points->y[i],
                                         Points->z[i], WITHOUT_Z);
 
             if (mindist >= dist) {
@@ -96,9 +94,9 @@ int Vedit_snap_point(struct Map_info *Map,
    \return 0 line not snapped
    \return -1 line is dead (if 'line' is > 0)
  */
-int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap,
-                    int nbgmaps, int line, struct line_pnts *Points,
-                    double thresh, int to_vertex)
+int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
+                    int line, struct line_pnts *Points, double thresh,
+                    int to_vertex)
 {
     int i, npoints, node, rewrite;
     double *x, *y, *z;
@@ -107,8 +105,7 @@ int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap,
 
     Cats = Vect_new_cats_struct();
 
-    G_debug(3, "Vedit_snap_line(): thresh=%g, to_vertex=%d", thresh,
-            to_vertex);
+    G_debug(3, "Vedit_snap_line(): thresh=%g, to_vertex=%d", thresh, to_vertex);
 
     if (line > 0 && !Vect_line_alive(Map, line))
         return -1;
@@ -130,21 +127,19 @@ int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap,
         else {
             /* check also background maps */
             for (i = 0; i < nbgmaps; i++) {
-                if (Vedit_snap_point
-                    (BgMap[i], -1, &x[node], &y[node], &z[node], thresh,
-                     to_vertex)) {
+                if (Vedit_snap_point(BgMap[i], -1, &x[node], &y[node], &z[node],
+                                     thresh, to_vertex)) {
                     rewrite = 1;
-                    break;      /* snapped, don't continue */
+                    break; /* snapped, don't continue */
                 }
             }
         }
-    }                           /* for each line vertex */
+    } /* for each line vertex */
 
     /* close boundaries or lines */
     if (!rewrite &&
-        Vect_points_distance(x[0], y[0], z[0],
-                             x[npoints - 1], y[npoints - 1], z[npoints - 1],
-                             WITHOUT_Z) <= thresh) {
+        Vect_points_distance(x[0], y[0], z[0], x[npoints - 1], y[npoints - 1],
+                             z[npoints - 1], WITHOUT_Z) <= thresh) {
         x[npoints - 1] = x[0];
         y[npoints - 1] = y[0];
         z[npoints - 1] = z[0];
@@ -172,9 +167,8 @@ int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap,
    \return number of snapped lines
    \return -1 on error
  */
-int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap,
-                     int nbgmaps, struct ilist *List, double thresh,
-                     int to_vertex)
+int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
+                     struct ilist *List, double thresh, int to_vertex)
 {
     int i, line, type;
     int nlines_modified = 0;
@@ -193,8 +187,8 @@ int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap,
             continue;
         }
 
-        if (Vedit_snap_line(Map, BgMap, nbgmaps,
-                            line, Points, thresh, to_vertex) == 1) {
+        if (Vedit_snap_line(Map, BgMap, nbgmaps, line, Points, thresh,
+                            to_vertex) == 1) {
             if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
                 return -1;
             }

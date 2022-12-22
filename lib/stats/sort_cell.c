@@ -12,21 +12,19 @@ static int ascending(const void *aa, const void *bb)
         return -1;
     return (*a > *b);
 
-
-    if (Rast_is_d_null_value((DCELL *) a) &&
-        Rast_is_d_null_value((DCELL *) b))
+    if (Rast_is_d_null_value((DCELL *)a) && Rast_is_d_null_value((DCELL *)b))
         return 0;
 
-    if (Rast_is_d_null_value((DCELL *) a))
+    if (Rast_is_d_null_value((DCELL *)a))
         return 1;
 
-    if (Rast_is_d_null_value((DCELL *) b))
+    if (Rast_is_d_null_value((DCELL *)b))
         return -1;
 
     return (*a < *b) ? -1 : (*a > *b) ? 1 : 0;
 }
 
-int sort_cell(DCELL * array, int n)
+int sort_cell(DCELL *array, int n)
 {
     int i, j;
 
@@ -45,7 +43,7 @@ int sort_cell(DCELL * array, int n)
     return n;
 }
 
-int sort_cell_w(DCELL(*array)[2], int n)
+int sort_cell_w(DCELL (*array)[2], int n)
 {
     int i, j;
 

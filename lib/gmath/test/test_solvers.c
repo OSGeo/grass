@@ -1,10 +1,9 @@
-
 /*****************************************************************************
  *
  * MODULE:       Grass PDE Numerical Library
  * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
+ *                 soerengebbert <at> gmx <dot> de
+ *
  * PURPOSE:      Unit tests for les solving
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -23,7 +22,7 @@
 #include "test_gmath_lib.h"
 
 #define EPSILON_DIRECT 1.0E-10
-#define EPSILON_ITER 1.0E-4
+#define EPSILON_ITER   1.0E-4
 
 /* prototypes */
 static int test_solvers(void);
@@ -69,12 +68,12 @@ int test_solvers(void)
                   les->rows);
         sum++;
     }
-    G_math_solver_sparse_jacobi(sples->Asp, sples->x, sples->b, les->rows,
-                                250, 1, 0.1e-10);
+    G_math_solver_sparse_jacobi(sples->Asp, sples->x, sples->b, les->rows, 250,
+                                1, 0.1e-10);
     G_math_d_asum_norm(sples->x, &val, sples->rows);
     if ((val - (double)sples->rows) > EPSILON_ITER) {
-        G_warning("Error in G_math_solver_sparse_jacobi abs %2.20f != %i",
-                  val, sples->rows);
+        G_warning("Error in G_math_solver_sparse_jacobi abs %2.20f != %i", val,
+                  sples->rows);
         sum++;
     }
 
@@ -94,12 +93,12 @@ int test_solvers(void)
         sum++;
     }
 
-    G_math_solver_sparse_jacobi(sples->Asp, sples->x, sples->b, les->rows,
-                                250, 1, 0.1e-10);
+    G_math_solver_sparse_jacobi(sples->Asp, sples->x, sples->b, les->rows, 250,
+                                1, 0.1e-10);
     G_math_d_asum_norm(sples->x, &val, sples->rows);
     if ((val - (double)sples->rows) > EPSILON_ITER) {
-        G_warning("Error in G_math_solver_sparse_jacobi abs %2.20f != %i",
-                  val, sples->rows);
+        G_warning("Error in G_math_solver_sparse_jacobi abs %2.20f != %i", val,
+                  sples->rows);
         sum++;
     }
 
@@ -114,8 +113,7 @@ int test_solvers(void)
     G_math_solver_gs(les->A, les->x, les->b, les->rows, 150, 1, 0.1e-9);
     G_math_d_asum_norm(les->x, &val, les->rows);
     if ((val - (double)les->rows) > EPSILON_ITER) {
-        G_warning("Error in G_math_solver_gs abs %2.20f != %i", val,
-                  les->rows);
+        G_warning("Error in G_math_solver_gs abs %2.20f != %i", val, les->rows);
         sum++;
     }
 
@@ -139,8 +137,7 @@ int test_solvers(void)
     G_math_solver_gs(les->A, les->x, les->b, les->rows, 150, 1, 0.1e-9);
     G_math_d_asum_norm(les->x, &val, les->rows);
     if ((val - (double)les->rows) > EPSILON_ITER) {
-        G_warning("Error in G_math_solver_gs abs %2.20f != %i", val,
-                  les->rows);
+        G_warning("Error in G_math_solver_gs abs %2.20f != %i", val, les->rows);
         sum++;
     }
 
@@ -156,8 +153,8 @@ int test_solvers(void)
     G_math_free_les(les);
     G_math_free_les(sples);
 
-    G_message
-        ("\t * testing pcg solver with symmetric bad conditioned matrix and preconditioner 3\n");
+    G_message("\t * testing pcg solver with symmetric bad conditioned matrix "
+              "and preconditioner 3\n");
 
     les = create_normal_symmetric_pivot_les(TEST_NUM_ROWS);
 
@@ -171,8 +168,8 @@ int test_solvers(void)
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing pcg solver with symmetric matrix and preconditioner 1\n");
+    G_message(
+        "\t * testing pcg solver with symmetric matrix and preconditioner 1\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     sples = create_sparse_symmetric_les(TEST_NUM_ROWS);
@@ -199,8 +196,8 @@ int test_solvers(void)
     G_math_free_les(les);
     G_math_free_les(sples);
 
-    G_message
-        ("\t * testing pcg solver with symmetric matrix and preconditioner 2\n");
+    G_message(
+        "\t * testing pcg solver with symmetric matrix and preconditioner 2\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     sples = create_sparse_symmetric_les(TEST_NUM_ROWS);
@@ -227,8 +224,8 @@ int test_solvers(void)
     G_math_free_les(les);
     G_math_free_les(sples);
 
-    G_message
-        ("\t * testing pcg solver with symmetric matrix and preconditioner 3\n");
+    G_message(
+        "\t * testing pcg solver with symmetric matrix and preconditioner 3\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     sples = create_sparse_symmetric_les(TEST_NUM_ROWS);
@@ -263,8 +260,7 @@ int test_solvers(void)
     G_math_solver_cg(les->A, les->x, les->b, les->rows, 250, 0.1e-9);
     G_math_d_asum_norm(les->x, &val, les->rows);
     if ((val - (double)les->rows) > EPSILON_ITER) {
-        G_warning("Error in G_math_solver_cg abs %2.20f != %i", val,
-                  les->rows);
+        G_warning("Error in G_math_solver_cg abs %2.20f != %i", val, les->rows);
         sum++;
     }
     G_math_print_les(les);
@@ -282,17 +278,14 @@ int test_solvers(void)
     G_math_free_les(les);
     G_math_free_les(sples);
 
-
-    G_message
-        ("\t * testing cg solver with symmetric bad conditioned matrix\n");
+    G_message("\t * testing cg solver with symmetric bad conditioned matrix\n");
 
     les = create_normal_symmetric_pivot_les(TEST_NUM_ROWS);
 
     G_math_solver_cg(les->A, les->x, les->b, les->rows, 250, 0.1e-9);
     G_math_d_asum_norm(les->x, &val, les->rows);
     if ((val - (double)les->rows) > EPSILON_ITER) {
-        G_warning("Error in G_math_solver_cg abs %2.20f != %i", val,
-                  les->rows);
+        G_warning("Error in G_math_solver_cg abs %2.20f != %i", val, les->rows);
         sum++;
     }
     G_math_print_les(les);
@@ -352,8 +345,7 @@ int test_solvers(void)
     G_math_free_les(les);
     G_math_free_les(sples);
 
-    G_message
-        ("\t * testing gauss elimination solver with symmetric matrix\n");
+    G_message("\t * testing gauss elimination solver with symmetric matrix\n");
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     G_math_d_asum_norm(les->x, &val, les->rows);
@@ -377,8 +369,8 @@ int test_solvers(void)
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing gauss elimination solver with unsymmetric matrix\n");
+    G_message(
+        "\t * testing gauss elimination solver with unsymmetric matrix\n");
     les = create_normal_unsymmetric_les(TEST_NUM_ROWS);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     G_math_d_asum_norm(les->x, &val, les->rows);
@@ -390,8 +382,7 @@ int test_solvers(void)
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing lu decomposition solver with unsymmetric matrix\n");
+    G_message("\t * testing lu decomposition solver with unsymmetric matrix\n");
     les = create_normal_unsymmetric_les(TEST_NUM_ROWS);
     G_math_solver_lu(les->A, les->x, les->b, les->rows);
 
@@ -404,8 +395,8 @@ int test_solvers(void)
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing gauss elimination solver with symmetric bad conditioned matrix\n");
+    G_message("\t * testing gauss elimination solver with symmetric bad "
+              "conditioned matrix\n");
     les = create_normal_symmetric_pivot_les(TEST_NUM_ROWS);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     G_math_d_asum_norm(les->x, &val, les->rows);
@@ -417,21 +408,20 @@ int test_solvers(void)
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing lu decomposition solver with symmetric bad conditioned matrix\n");
+    G_message("\t * testing lu decomposition solver with symmetric bad "
+              "conditioned matrix\n");
     les = create_normal_symmetric_pivot_les(TEST_NUM_ROWS);
     G_math_solver_lu(les->A, les->x, les->b, les->rows);
     G_math_d_asum_norm(les->x, &val, les->rows);
     if ((val - (double)les->rows) > EPSILON_DIRECT) {
-        G_warning("Error in G_math_solver_lu abs %2.20f != %i", val,
-                  les->rows);
+        G_warning("Error in G_math_solver_lu abs %2.20f != %i", val, les->rows);
         sum++;
     }
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing cholesky decomposition solver with symmetric matrix\n");
+    G_message(
+        "\t * testing cholesky decomposition solver with symmetric matrix\n");
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     /*cholesky */ G_math_solver_cholesky(les->A, les->x, les->b, les->rows,
                                          les->rows);
@@ -444,8 +434,8 @@ int test_solvers(void)
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing cholesky band decomposition solver with symmetric band matrix 1\n");
+    G_message("\t * testing cholesky band decomposition solver with symmetric "
+              "band matrix 1\n");
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     G_math_print_les(les);
     /* Create a band matrix */
@@ -457,16 +447,16 @@ int test_solvers(void)
                                                les->rows, les->rows);
     G_math_d_asum_norm(les->x, &val, les->rows);
     if ((val - (double)les->rows) > EPSILON_DIRECT) {
-        G_warning
-            ("Error in G_math_solver_solver_cholesky_band abs %2.20f != %i",
-             val, les->rows);
+        G_warning(
+            "Error in G_math_solver_solver_cholesky_band abs %2.20f != %i", val,
+            les->rows);
         sum++;
     }
     G_math_print_les(les);
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing cholesky band decomposition solver with symmetric band matrix 2\n");
+    G_message("\t * testing cholesky band decomposition solver with symmetric "
+              "band matrix 2\n");
     les = create_symmetric_band_les(TEST_NUM_ROWS);
     G_math_print_les(les);
 
@@ -474,9 +464,9 @@ int test_solvers(void)
                                                les->rows, les->rows);
     G_math_d_asum_norm(les->x, &val, les->rows);
     if ((val - (double)les->rows) > EPSILON_DIRECT) {
-        G_warning
-            ("Error in G_math_solver_solver_cholesky_band abs %2.20f != %i",
-             val, les->rows);
+        G_warning(
+            "Error in G_math_solver_solver_cholesky_band abs %2.20f != %i", val,
+            les->rows);
         sum++;
     }
     G_math_print_les(les);

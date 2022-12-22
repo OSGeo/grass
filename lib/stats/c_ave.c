@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void c_ave(DCELL * result, DCELL * values, int n, const void *closure)
+void c_ave(DCELL *result, DCELL *values, int n, const void *closure)
 {
     DCELL sum;
     int count;
@@ -24,7 +24,7 @@ void c_ave(DCELL * result, DCELL * values, int n, const void *closure)
         *result = sum / count;
 }
 
-void w_ave(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_ave(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 {
     DCELL sum;
     DCELL count;

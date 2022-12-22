@@ -14,8 +14,8 @@
 
 #include <grass/raster.h>
 
-static void write_rule(DCELL * val, DCELL * min, DCELL * max, int r, int g,
-                       int b, FILE * fp, int perc)
+static void write_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g, int b,
+                       FILE *fp, int perc)
 {
     static DCELL v0;
     static int r0 = -1, g0 = -1, b0 = -1;
@@ -35,11 +35,11 @@ static void write_rule(DCELL * val, DCELL * min, DCELL * max, int r, int g,
    \brief Print color table
 
    \param colors pointer to Colors structure
-   \param min,max minimum and maximum value for percentage output (used only when \p perc is non-zero)
-   \param fp file where to print color table rules
+   \param min,max minimum and maximum value for percentage output (used only
+   when \p perc is non-zero) \param fp file where to print color table rules
    \param perc TRUE for percentage output
  */
-void Rast_print_colors(struct Colors *colors, DCELL min, DCELL max, FILE * fp,
+void Rast_print_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
                        int perc)
 {
     int i, count;
@@ -53,7 +53,7 @@ void Rast_print_colors(struct Colors *colors, DCELL min, DCELL max, FILE * fp,
 
         for (i = lo; i <= hi; i++) {
             unsigned char r, g, b, set;
-            DCELL val = (DCELL) i;
+            DCELL val = (DCELL)i;
 
             Rast_lookup_c_colors(&i, &r, &g, &b, &set, 1, colors);
             write_rule(&val, &min, &max, r, g, b, fp, perc);
@@ -66,8 +66,7 @@ void Rast_print_colors(struct Colors *colors, DCELL min, DCELL max, FILE * fp,
             DCELL val1, val2;
             unsigned char r1, g1, b1, r2, g2, b2;
 
-            Rast_get_fp_color_rule(&val1, &r1, &g1, &b1,
-                                   &val2, &r2, &g2, &b2,
+            Rast_get_fp_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
                                    colors, count - 1 - i);
 
             write_rule(&val1, &min, &max, r1, g1, b1, fp, perc);

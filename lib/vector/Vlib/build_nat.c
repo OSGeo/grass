@@ -23,7 +23,7 @@
 static struct line_pnts *Points;
 
 /*!
-   \brief Build topology 
+   \brief Build topology
 
    \param Map vector map
    \param build build level
@@ -47,7 +47,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
     plus = &(Map->plus);
 
     if (build == plus->built)
-        return 1;               /* Do nothing */
+        return 1; /* Do nothing */
 
     /* Check if upgrade or downgrade */
     if (build < plus->built) {
@@ -65,7 +65,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
         int c;
         grass_int64 npoints;
 
-        /* 
+        /*
          *  We shall go through all primitives in coor file and add
          *  new node for each end point to nodes structure if the node
          *  with the same coordinates doesn't exist yet.
@@ -107,22 +107,20 @@ int Vect_build_nat(struct Map_info *Map, int build)
             /* Add all categories to category index */
             if (build == GV_BUILD_ALL) {
                 for (c = 0; c < Cats->n_cats; c++) {
-                    dig_cidx_add_cat(plus, Cats->field[c], Cats->cat[c],
-                                     line, type);
+                    dig_cidx_add_cat(plus, Cats->field[c], Cats->cat[c], line,
+                                     type);
                 }
-                if (Cats->n_cats == 0)  /* add field 0, cat 0 */
+                if (Cats->n_cats == 0) /* add field 0, cat 0 */
                     dig_cidx_add_cat(plus, 0, 0, line, type);
             }
         }
         G_progress(1, 1);
 
-        G_verbose_message(n_
-                          ("One primitive registered",
-                           "%d primitives registered", plus->n_lines),
+        G_verbose_message(n_("One primitive registered",
+                             "%d primitives registered", plus->n_lines),
                           plus->n_lines);
-        G_verbose_message(n_
-                          ("One vertex registered",
-                           "%" PRId64 " vertices registered", npoints),
+        G_verbose_message(n_("One vertex registered",
+                             "%" PRId64 " vertices registered", npoints),
                           npoints);
 
         plus->built = GV_BUILD_BASE;
@@ -142,7 +140,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
                 /* build */
                 if (plus->Line[line] == NULL)
-                    continue;   /* dead */
+                    continue; /* dead */
 
                 Line = plus->Line[line];
                 if (Line->type != GV_BOUNDARY)
@@ -161,12 +159,12 @@ int Vect_build_nat(struct Map_info *Map, int build)
                     Vect_build_line_area(Map, line, side);
                 }
             }
-            G_verbose_message(n_
-                              ("One area built", "%d areas built",
-                               plus->n_areas), plus->n_areas);
-            G_verbose_message(n_
-                              ("One isle built", "%d isles built",
-                               plus->n_isles), plus->n_isles);
+            G_verbose_message(
+                n_("One area built", "%d areas built", plus->n_areas),
+                plus->n_areas);
+            G_verbose_message(
+                n_("One isle built", "%d isles built", plus->n_isles),
+                plus->n_isles);
         }
         plus->built = GV_BUILD_AREAS;
     }
@@ -204,7 +202,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
                 Line = plus->Line[line];
                 if (!Line)
-                    continue;   /* dead */
+                    continue; /* dead */
 
                 if (Line->type != GV_CENTROID)
                     continue;
@@ -220,11 +218,11 @@ int Vect_build_nat(struct Map_info *Map, int build)
                     Area = plus->Area[area];
                     topo = (struct P_topo_c *)Line->topo;
 
-                    if (Area->centroid == 0) {  /* first */
+                    if (Area->centroid == 0) { /* first */
                         Area->centroid = line;
                         topo->area = area;
                     }
-                    else {      /* duplicate */
+                    else { /* duplicate */
                         topo->area = -area;
                     }
                 }
@@ -234,7 +232,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
     }
 
     /* Add areas to category index */
-    /* add message and G_percent() ? 
+    /* add message and G_percent() ?
      * it seems fast enough, no message / precent needed */
     for (i = 1; i <= plus->n_areas; i++) {
         int c;
@@ -251,7 +249,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
             }
         }
 
-        if (plus->Area[i]->centroid == 0 || Cats->n_cats == 0)  /* no centroid or no cats */
+        if (plus->Area[i]->centroid == 0 ||
+            Cats->n_cats == 0) /* no centroid or no cats */
             dig_cidx_add_cat(plus, 0, 0, i, GV_AREA);
     }
 

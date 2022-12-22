@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/delete_tab.c
- * 
+ *
  * \brief DBMI Library (client) - delete table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -32,8 +32,8 @@ int db_delete_table(const char *drvname, const char *dbname,
     dbDriver *driver;
     dbString sql;
 
-    G_debug(3, "db_delete_table(): driver = %s, db = %s, table = %s\n",
-            drvname, dbname, tblname);
+    G_debug(3, "db_delete_table(): driver = %s, db = %s, table = %s\n", drvname,
+            dbname, tblname);
 
     /* Open driver and database */
     driver = db_start_driver_open_database(drvname, dbname);
