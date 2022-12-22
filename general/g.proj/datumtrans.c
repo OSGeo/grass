@@ -1,7 +1,6 @@
-/*  
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       g.proj 
+ * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
@@ -24,12 +23,12 @@
 #include "local_proto.h"
 
 /**
- * 
+ *
  * \brief Add or replace datum to the current co-ordinate system definition
- * 
+ *
  * \param datum       Use this datum (overrides any datum found in the
  *                    current co-ordinate system definition).
- * 
+ *
  * \return            1 if a change was made, 0 if not.
  **/
 
@@ -52,19 +51,19 @@ int set_datum(char *datum)
     /* Copy old PROJ_INFO, skipping out any keys related
      * to datum or ellipsoid parameters */
     for (i = 0; i < projinfo->nitems; i++) {
-        if (strcmp(projinfo->key[i], "datum") == 0
-            || strcmp(projinfo->key[i], "dx") == 0
-            || strcmp(projinfo->key[i], "dy") == 0
-            || strcmp(projinfo->key[i], "dz") == 0
-            || strcmp(projinfo->key[i], "datumparams") == 0
-            || strcmp(projinfo->key[i], "nadgrids") == 0
-            || strcmp(projinfo->key[i], "towgs84") == 0
-            || strcmp(projinfo->key[i], "ellps") == 0
-            || strcmp(projinfo->key[i], "a") == 0
-            || strcmp(projinfo->key[i], "b") == 0
-            || strcmp(projinfo->key[i], "es") == 0
-            || strcmp(projinfo->key[i], "f") == 0
-            || strcmp(projinfo->key[i], "rf") == 0)
+        if (strcmp(projinfo->key[i], "datum") == 0 ||
+            strcmp(projinfo->key[i], "dx") == 0 ||
+            strcmp(projinfo->key[i], "dy") == 0 ||
+            strcmp(projinfo->key[i], "dz") == 0 ||
+            strcmp(projinfo->key[i], "datumparams") == 0 ||
+            strcmp(projinfo->key[i], "nadgrids") == 0 ||
+            strcmp(projinfo->key[i], "towgs84") == 0 ||
+            strcmp(projinfo->key[i], "ellps") == 0 ||
+            strcmp(projinfo->key[i], "a") == 0 ||
+            strcmp(projinfo->key[i], "b") == 0 ||
+            strcmp(projinfo->key[i], "es") == 0 ||
+            strcmp(projinfo->key[i], "f") == 0 ||
+            strcmp(projinfo->key[i], "rf") == 0)
             continue;
 
         G_set_key_value(projinfo->key[i], projinfo->value[i], temp_projinfo);
@@ -84,10 +83,10 @@ int set_datum(char *datum)
 }
 
 /**
- * 
+ *
  * \brief Add or replace datum transformation parameters to the current
  *        co-ordinate system definition
- * 
+ *
  * \param datumtrans  Index number of parameter set to use, 0 to leave
  *                    unspecified (or remove specific parameters, leaving just
  *                    the datum name), -1 to list the available parameter
@@ -95,7 +94,7 @@ int set_datum(char *datum)
  *
  * \param force       Force editing of parameters even if current co-ordinate
  *                    system already contains fully specified parameters.
- * 
+ *
  * \return            1 if a change was made, 0 if not.
  **/
 
@@ -120,20 +119,20 @@ int set_datumtrans(int datumtrans, int force)
             char *defparams;
 
             paramsets =
-                GPJ_get_default_datum_params_by_name(dstruct.name,
-                                                     &defparams);
+                GPJ_get_default_datum_params_by_name(dstruct.name, &defparams);
             G_free(defparams);
             GPJ_free_datum(&dstruct);
 
-            G_debug(3, "set_datumtrans(): datum transform terms found "
-                    "with %d options", paramsets);
+            G_debug(3,
+                    "set_datumtrans(): datum transform terms found "
+                    "with %d options",
+                    paramsets);
 
             if (paramsets > 1 && (status == 1 || datumtrans != 0))
                 /* Parameters are missing and there is a choice to be
                    made / or / user asked to print datum
                    transformation parameters */
                 force = 1;
-
         }
         else {
             /* Datum name not found in table; can't do anything. */
@@ -154,18 +153,20 @@ int set_datumtrans(int datumtrans, int force)
         struct Key_Value *temp_projinfo;
         int i;
 
-        /* First of all obtain the new parameters 
+        /* First of all obtain the new parameters
          * through the supplied transform number index */
         {
             struct gpj_datum_transform_list *list;
 
             if (datumtrans > paramsets)
-                G_fatal_error
-                    ("Invalid transformation number %d; valid range is 1 to %d",
-                     datumtrans, paramsets);
+                G_fatal_error(
+                    "Invalid transformation number %d; valid range is 1 to %d",
+                    datumtrans, paramsets);
 
-            G_debug(3, "set_datumtrans(): looking up available datum "
-                    "transforms for <%s>", datum);
+            G_debug(3,
+                    "set_datumtrans(): looking up available datum "
+                    "transforms for <%s>",
+                    datum);
 
             list = GPJ_get_datum_transform_by_name(datum);
 
@@ -175,8 +176,8 @@ int set_datumtrans(int datumtrans, int force)
                         struct gpj_datum_transform_list *old = list;
 
                         fprintf(stdout, "---\n%d\nUsed in %s\n%s\n%s\n",
-                                list->count, list->where_used,
-                                list->params, list->comment);
+                                list->count, list->where_used, list->params,
+                                list->comment);
                         list = list->next;
                         GPJ_free_datum_transform(old);
                     } while (list != NULL);
@@ -194,7 +195,6 @@ int set_datumtrans(int datumtrans, int force)
                     } while (list != NULL);
                 }
             }
-
         }
 
         temp_projinfo = G_create_key_value();
@@ -202,12 +202,12 @@ int set_datumtrans(int datumtrans, int force)
         /* Copy old PROJ_INFO, skipping out any keys related
          * to datum parameters */
         for (i = 0; i < projinfo->nitems; i++) {
-            if (strcmp(projinfo->key[i], "dx") == 0
-                || strcmp(projinfo->key[i], "dy") == 0
-                || strcmp(projinfo->key[i], "dz") == 0
-                || strcmp(projinfo->key[i], "datumparams") == 0
-                || strcmp(projinfo->key[i], "nadgrids") == 0
-                || strcmp(projinfo->key[i], "towgs84") == 0)
+            if (strcmp(projinfo->key[i], "dx") == 0 ||
+                strcmp(projinfo->key[i], "dy") == 0 ||
+                strcmp(projinfo->key[i], "dz") == 0 ||
+                strcmp(projinfo->key[i], "datumparams") == 0 ||
+                strcmp(projinfo->key[i], "nadgrids") == 0 ||
+                strcmp(projinfo->key[i], "towgs84") == 0)
                 continue;
 
             G_set_key_value(projinfo->key[i], projinfo->value[i],
@@ -226,7 +226,6 @@ int set_datumtrans(int datumtrans, int force)
         /* Destroy original key/value structure and replace with new one */
         G_free_key_value(projinfo);
         projinfo = temp_projinfo;
-
     }
     G_free(datum);
 

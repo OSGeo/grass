@@ -1,16 +1,15 @@
-
 /****************************************************************
  *
  * MODULE:       d.extract
- * 
+ *
  * AUTHOR(S):    Radim Blazek, Markus Neteler
- *               
+ *
  * PURPOSE:      A graphical vector extractor
- *               
+ *
  * COPYRIGHT:    (C) 2002 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -25,8 +24,8 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-int extract(struct Map_info *, struct Map_info *, int,
-            const struct color_rgb *, const struct color_rgb *);
+int extract(struct Map_info *, struct Map_info *, int, const struct color_rgb *,
+            const struct color_rgb *);
 
 int main(int argc, char **argv)
 {
@@ -40,7 +39,6 @@ int main(int argc, char **argv)
     int r, g, b;
     struct field_info *Fi, *Fin;
     int i, n, tbtype, ret;
-
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -131,20 +129,19 @@ int main(int argc, char **argv)
             continue;
         }
         Fin = Vect_default_field_info(&Out, Fi->number, Fi->name, tbtype);
-        G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'",
-                Fi->driver, Fi->database, Fi->table, Fin->driver,
-                Fin->database, Fin->table);
+        G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'", Fi->driver,
+                Fi->database, Fi->table, Fin->driver, Fin->database,
+                Fin->table);
         Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fin->table, Fi->key,
                             Fin->database, Fin->driver);
 
-        ret = db_copy_table(Fi->driver, Fi->database, Fi->table,
-                            Fin->driver, Vect_subst_var(Fin->database, &Out),
-                            Fin->table);
+        ret = db_copy_table(Fi->driver, Fi->database, Fi->table, Fin->driver,
+                            Vect_subst_var(Fin->database, &Out), Fin->table);
         if (ret == DB_FAILED) {
             G_warning("Unable to copy table");
             continue;
         }
-    }                           /* for of copy table */
+    } /* for of copy table */
 
     Vect_build(&Out, stdout);
     Vect_close(&In);

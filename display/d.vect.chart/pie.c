@@ -6,12 +6,11 @@
 #include <grass/symbol.h>
 #include "global.h"
 
-#define PI  M_PI
+#define PI M_PI
 
 static int init = 0;
 static double sa = 0.0;
 static double ca = 1.0;
-
 
 /* rotates x and y about the origin (xo,yo) by angle radians */
 static void rotate(double *x, double *y, double xo, double yo, int do3d)
@@ -36,10 +35,8 @@ static void rotate(double *x, double *y, double xo, double yo, int do3d)
     return;
 }
 
-
-int
-pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
-    COLOR * colors, int do3d)
+int pie(double cx, double cy, int size, double *val, int ncols, COLOR *ocolor,
+        COLOR *colors, int do3d)
 {
     int i, j, n;
     double a, end_ang, ang, tot_sum, sum, step, r, rminor;
@@ -63,7 +60,7 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
 
     if (tot_sum == 0) {
         Vect_destroy_line_struct(Points);
-        return 0;               /* nothing to draw */
+        return 0; /* nothing to draw */
     }
 
     step = PI / 180;
@@ -175,7 +172,8 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
 
         Vect_reset_line(Points);
 
-        if (val[i] != tot_sum) {        /* all in one slice, don't draw line to center */
+        if (val[i] !=
+            tot_sum) { /* all in one slice, don't draw line to center */
             x = cx;
             y = cy;
             rotate(&x, &y, cx, cy, do3d);
@@ -193,7 +191,8 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
         }
         ang = end_ang;
 
-        if (val[i] != tot_sum) {        /* all in one slice, don't draw line to center */
+        if (val[i] !=
+            tot_sum) { /* all in one slice, don't draw line to center */
             x = cx;
             y = cy;
             rotate(&x, &y, cx, cy, do3d);

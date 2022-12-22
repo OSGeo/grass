@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       d.northarrow
@@ -27,7 +26,7 @@
 
 int fg_color, bg_color, text_color;
 
-//int do_background = TRUE;
+// int do_background = TRUE;
 
 int main(int argc, char **argv)
 {
@@ -49,21 +48,33 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("map annotations"));
     G_add_keyword(_("arrow"));
-    module->description =
-        _("Displays a north arrow on the graphics monitor.");
+    module->description = _("Displays a north arrow on the graphics monitor.");
 
     n_arrow = G_define_option();
     n_arrow->key = "style";
     n_arrow->description = _("North arrow style");
-    n_arrow->options =
-        "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9,fancy_compass,basic_compass,arrow1,arrow2,arrow3,star";
+    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9,fancy_compass,basic_"
+                       "compass,arrow1,arrow2,arrow3,star";
     G_asprintf((char **)&(n_arrow->descriptions),
-               "1a;%s;" "1b;%s;" "2;%s;" "3;%s;" "4;%s;" "5;%s;" "6;%s;"
-               "7a;%s;" "7b;%s;" "8a;%s;" "8b;%s;" "9;%s;" "fancy_compass;%s;"
-               "basic_compass;%s;" "arrow1;%s;" "arrow2;%s;" "arrow3;%s;"
+               "1a;%s;"
+               "1b;%s;"
+               "2;%s;"
+               "3;%s;"
+               "4;%s;"
+               "5;%s;"
+               "6;%s;"
+               "7a;%s;"
+               "7b;%s;"
+               "8a;%s;"
+               "8b;%s;"
+               "9;%s;"
+               "fancy_compass;%s;"
+               "basic_compass;%s;"
+               "arrow1;%s;"
+               "arrow2;%s;"
+               "arrow3;%s;"
                "star;%s;",
-               _("Two color arrowhead"),
-               _("Two color arrowhead with circle"),
+               _("Two color arrowhead"), _("Two color arrowhead with circle"),
                _("Narrow with blending N"), _("Long with small arrowhead"),
                _("Inverted narrow inside a circle"),
                _("Triangle and N inside a circle"),
@@ -83,8 +94,7 @@ int main(int argc, char **argv)
     coords->type = TYPE_DOUBLE;
     coords->answer = "85.0,15.0";
     coords->options = "0-100";
-    coords->label =
-        _("Screen coordinates of the rectangle's top-left corner");
+    coords->label = _("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of the display frame");
 
     rotation_opt = G_define_option();
@@ -131,7 +141,7 @@ int main(int argc, char **argv)
     font->guisection = _("Text");
 
     fsize = G_define_option();
-    fsize->key = "fontsize";    /* size in d.text */
+    fsize->key = "fontsize"; /* size in d.text */
     fsize->type = TYPE_DOUBLE;
     fsize->required = NO;
     fsize->answer = "14";
@@ -173,7 +183,6 @@ int main(int argc, char **argv)
        Similar to 'g.region -n' but use the at=x,y coord for the convergence
        angle calc. (assuming that's the center of the icon)
      */
-
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

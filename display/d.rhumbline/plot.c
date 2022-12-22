@@ -4,8 +4,8 @@
 #include <grass/display.h>
 #include "local_proto.h"
 
-void plot(double lon1, double lat1, double lon2, double lat2,
-          int line_color, int text_color)
+void plot(double lon1, double lat1, double lon2, double lat2, int line_color,
+          int text_color)
 {
     int nsteps = 1000;
     int i;

@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.title
  *
@@ -10,8 +9,8 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -83,11 +82,9 @@ int main(int argc, char **argv)
     simple_mode->key = 's';
     simple_mode->description = _("Do a simple title");
 
-
     /* Check command line */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     map_name = opt1->answer;
 
@@ -110,7 +107,6 @@ int main(int argc, char **argv)
         G_fatal_error(_("Unable to read category file of raster map <%s>"),
                       map_name);
 
-
     if (draw->answer) {
         tmpfile = G_convert_dirseps_to_host(G_tempfile());
         if (!(fp = fopen(tmpfile, "w")))
@@ -119,12 +115,10 @@ int main(int argc, char **argv)
     else
         fp = stdout;
 
-
     if (type == NORMAL)
         normal(&window, &cats, simple_mode->answer, fp);
     else
         fancy(&window, &cats, fp);
-
 
     if (draw->answer) {
         char inarg[GPATH_MAX];

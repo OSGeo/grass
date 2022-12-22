@@ -1,15 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       d.where
- * AUTHOR(S):    James Westervelt and Michael Shapiro (CERL) 
+ * AUTHOR(S):    James Westervelt and Michael Shapiro (CERL)
                   (original contributors)
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Markus Neteler <neteler itc.it>,
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
- *               Jan-Oliver Wagner <jan intevation.de>, 
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      interactive query of location in active display
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
@@ -19,6 +18,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -68,20 +68,18 @@ int main(int argc, char **argv)
 
     latlong = G_define_flag();
     latlong->key = 'l';
-    latlong->description =
-        _("Output lat/long referenced to current ellipsoid");
+    latlong->description = _("Output lat/long referenced to current ellipsoid");
 
     wgs84 = G_define_flag();
     wgs84->key = 'w';
-    wgs84->description =
-        _("Output lat/long referenced to WGS84 ellipsoid using datum "
-          "transformation parameters defined in current location (if available)");
+    wgs84->description = _(
+        "Output lat/long referenced to WGS84 ellipsoid using datum "
+        "transformation parameters defined in current location (if available)");
 
     dcoord = G_define_flag();
     dcoord->key = 'f';
     dcoord->description =
         _("Output frame coordinates of current display monitor (percentage)");
-
 
     /* if (G_parser(argc,argv)) */
     if (G_parser(argc, argv))
@@ -109,7 +107,8 @@ int main(int argc, char **argv)
             G_fatal_error(_("Can't get projection units of current location"));
 
         if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-            G_fatal_error(_("Can't get projection key values of current location"));
+            G_fatal_error(
+                _("Can't get projection key values of current location"));
 
         oproj.pj = NULL;
 
@@ -123,15 +122,17 @@ int main(int argc, char **argv)
             G_set_key_value("proj", "ll", out_proj_info);
 
             /* Check that datumparams are defined for this location (otherwise
-             * the WGS84 values would be meaningless), and if they are set the 
+             * the WGS84 values would be meaningless), and if they are set the
              * output datum to WGS84 */
 #if PROJ_VERSION_MAJOR < 6
             char buff[100], dum[100];
 
             /* PROJ6+ has its own datum transformation parameters */
             if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-                G_fatal_error(_("WGS84 output not possible as this location does not contain\n"
-                               "datum transformation parameters. Try running g.setproj."));
+                G_fatal_error(_(
+                    "WGS84 output not possible as this location does not "
+                    "contain\n"
+                    "datum transformation parameters. Try running g.setproj."));
             else
 #endif
                 G_set_key_value("datum", "wgs84", out_proj_info);
@@ -141,7 +142,8 @@ int main(int argc, char **argv)
             G_set_key_value("meters", "1.0", out_unit_info);
 
             if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
-                G_fatal_error(_("Unable to set up lat/long projection parameters"));
+                G_fatal_error(
+                    _("Unable to set up lat/long projection parameters"));
 
             G_free_key_value(out_proj_info);
             G_free_key_value(out_unit_info);

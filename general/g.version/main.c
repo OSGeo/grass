@@ -1,18 +1,18 @@
-
 /***************************************************************************
-*
-* MODULE: 	g.version
-* AUTHOR(S):	Michael Shapiro, CERL
-*               Andreas Lange - <andreas.lange rhein-main.de>
-*  	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
-*               Extended info by Martin Landa <landa.martin gmail.com>
-* PURPOSE: 	Output GRASS version number, date and copyright message.
-*             
-* COPYRIGHT:  	(C) 2000-2015 by the GRASS Development Team
-*
-*   	    	This program is free software under the GPL (>=v2)
-*   	    	Read the file COPYING that comes with GRASS for details.
-*****************************************************************************/
+ *
+ * MODULE:       g.version
+ * AUTHOR(S):    Michael Shapiro, CERL
+ *               Andreas Lange - <andreas.lange rhein-main.de>
+ *               Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
+ *               Extended info by Martin Landa <landa.martin gmail.com>
+ * PURPOSE:      Output GRASS version number, date and copyright message.
+ *
+ * COPYRIGHT:    (C) 2000-2015 by the GRASS Development Team
+ *
+ *               This program is free software under the GPL (>=v2)
+ *               Read the file COPYING that comes with GRASS for
+ *               details.
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -125,8 +125,8 @@ int main(int argc, char *argv[])
         fprintf(stdout, "build_off_t_size=%lu\n", sizeof(off_t));
     }
     else {
-        fprintf(stdout, "GRASS %s (%s)\n",
-                GRASS_VERSION_NUMBER, GRASS_VERSION_DATE);
+        fprintf(stdout, "GRASS %s (%s)\n", GRASS_VERSION_NUMBER,
+                GRASS_VERSION_DATE);
     }
 
     if (copyright->answer) {
@@ -165,22 +165,23 @@ int main(int argc, char *argv[])
             if (shell->answer) {
                 fprintf(stdout, "libgis_revision=\n");
                 fprintf(stdout, "libgis_date=\n");
-                G_warning
-                    ("GRASS GIS libgis version and date number not available");
+                G_warning(
+                    "GRASS GIS libgis version and date number not available");
                 /* this can be alternatively fatal error or it can cause
                    fatal error later */
             }
             else {
-                fprintf(stdout,
-                        _("Cannot determine GRASS libgis version and date number."
-                         " The GRASS build might be broken."
-                         " Report this to developers or packagers.\n"));
+                fprintf(
+                    stdout,
+                    _("Cannot determine GRASS libgis version and date number."
+                      " The GRASS build might be broken."
+                      " Report this to developers or packagers.\n"));
             }
         }
         if (no_libgis) {
-            G_debug(1,
-                    _("GRASS GIS libgis version and date number don't have the expected format."
-                     " Trying to print the original strings..."));
+            G_debug(1, _("GRASS GIS libgis version and date number don't have "
+                         "the expected format."
+                         " Trying to print the original strings..."));
             G_debug(1, _("GIS_H_VERSION=\"%s\""), GIS_H_VERSION);
             G_debug(1, _("GIS_H_DATE=\"%s\""), GIS_H_DATE);
         }
@@ -190,8 +191,8 @@ int main(int argc, char *argv[])
         char *proj = NULL;
 
 #ifdef HAVE_PROJ_H
-        G_asprintf(&proj, "%d%d%d", PROJ_VERSION_MAJOR,
-                   PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+        G_asprintf(&proj, "%d%d%d", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR,
+                   PROJ_VERSION_PATCH);
 #else
         G_asprintf(&proj, "%d", PJ_VERSION);
 #endif
@@ -199,8 +200,7 @@ int main(int argc, char *argv[])
             if (shell->answer)
                 fprintf(stdout, "proj=%c.%c.%c\n", proj[0], proj[1], proj[2]);
             else
-                fprintf(stdout, "PROJ: %c.%c.%c\n", proj[0], proj[1],
-                        proj[2]);
+                fprintf(stdout, "PROJ: %c.%c.%c\n", proj[0], proj[1], proj[2]);
         }
         else {
             if (shell->answer)
@@ -229,8 +229,7 @@ int main(int argc, char *argv[])
         if (shell->answer)
             fprintf(stdout, "geos=\n");
         else
-            fprintf(stdout, "%s\n",
-                    _("GRASS not compiled with GEOS support"));
+            fprintf(stdout, "%s\n", _("GRASS not compiled with GEOS support"));
 #endif
 #ifdef HAVE_SQLITE
         if (shell->answer)

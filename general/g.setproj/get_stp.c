@@ -11,8 +11,8 @@ void get_stp_proj(char string[])
     char answer[50], buff[50];
 
     while ((code = get_stp_num()) == 0) {
-        if (G_yes
-            ("Are you sure you want to exit without making any changes", 0))
+        if (G_yes("Are you sure you want to exit without making any changes",
+                  0))
             leave(SP_NOCHANGE);
     }
     for (;;) {
@@ -51,7 +51,6 @@ int get_stp_code(int code, char *string, char *paramfile)
     int gotit = 0, stp;
     FILE *fp;
 
-
     sprintf(nad27, "%s%s", G_gisbase(), paramfile);
     fp = fopen(nad27, "r");
     if (fp == NULL) {
@@ -77,10 +76,6 @@ int get_stp_code(int code, char *string, char *paramfile)
     return (gotit);
 }
 
-
-
-
-
 int get_stp_num(void)
 {
     FILE *fipsfile;
@@ -90,7 +85,6 @@ int get_stp_num(void)
     char STabbr[50], COname[50];
 
     sprintf(FIPSfile, "%s/etc/proj/FIPS.code", G_gisbase());
-
 
     for (;;) {
 
@@ -118,22 +112,22 @@ int get_stp_num(void)
                 icode = 1;
                 break;
             }
-        }                       /* end file search */
+        } /* end file search */
         if (icode != 0)
             break;
-        else {                  /* no match */
+        else { /* no match */
             G_warning(_("No match of FIPS state %d county %d"), SFIPS, CFIPS);
             fclose(fipsfile);
         }
     }
 
-/**** SPECIAL CASE FOR MICHIGAN ****, could be mercator or lambert */
+    /**** SPECIAL CASE FOR MICHIGAN ****, could be mercator or lambert */
     if (SFIPS == 26) {
         if (special_case == 2)
             NUM_ZON = NUM_ZON + 10;
     }
 
-/**** SPECIAL CASE FOR ALASKA *****  */
+    /**** SPECIAL CASE FOR ALASKA *****  */
     if (SFIPS == 2) {
         NUM_ZON = NUM_ZON + special_case;
     }
@@ -142,10 +136,7 @@ int get_stp_num(void)
     return (NUM_ZON);
 }
 
-
-
-
-int ask_fips(FILE * fp, int *s, int *c, int *sc)
+int ask_fips(FILE *fp, int *s, int *c, int *sc)
 {
     int ii, FIPS = 0, NUM_ZON, sfips, cfips;
     char STabbr[50], STabbr_prev[50], COname[50], answer[50], buff[256];
@@ -165,7 +156,7 @@ int ask_fips(FILE * fp, int *s, int *c, int *sc)
         G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file2);
     while (fgets(buff, 80, fp) != NULL) {
         sscanf(buff, "%d%d%s%s%d", &sfips, &cfips, STabbr, COname, &NUM_ZON);
-        if (strncmp(STabbr, STabbr_prev, 2) != 0) {     /* TODO CHECK THIS */
+        if (strncmp(STabbr, STabbr_prev, 2) != 0) { /* TODO CHECK THIS */
             fprintf(Tmp_fd1, "%4d -- %s\n", sfips, STabbr);
             fprintf(Tmp_fd2, "%d:%s\n", sfips, STabbr);
         }
@@ -182,8 +173,8 @@ int ask_fips(FILE * fp, int *s, int *c, int *sc)
 
         do {
             fprintf(stderr, "\nSpecify State FIPS (numeric) code\n");
-            fprintf(stderr,
-                    "Enter 'list' for the list of states with corresponding FIPS codes\n");
+            fprintf(stderr, "Enter 'list' for the list of states with "
+                            "corresponding FIPS codes\n");
             fprintf(stderr, "Hit RETURN to cancel request\n");
             fprintf(stderr, ">");
         } while (!G_gets(answer));
@@ -220,7 +211,7 @@ int ask_fips(FILE * fp, int *s, int *c, int *sc)
 
     FIPS = *s;
 
-/**** SPECIAL CASE FOR MICHIGAN ****, could be mercator or lambert */
+    /**** SPECIAL CASE FOR MICHIGAN ****, could be mercator or lambert */
     if (FIPS == 26) {
         /*
            fprintf(stderr,"\nFor Michigan select- 1- East to West\n");
@@ -249,7 +240,7 @@ int ask_fips(FILE * fp, int *s, int *c, int *sc)
         *sc = ii;
     }
 
-/**** SPECIAL CASE FOR ALASKA *****  */
+    /**** SPECIAL CASE FOR ALASKA *****  */
     if (FIPS == 2) {
         ii = 0;
         for (;;) {
@@ -292,7 +283,7 @@ int ask_fips(FILE * fp, int *s, int *c, int *sc)
         if (sfips == *s) {
             fprintf(Tmp_fd1, "%4d -- %s\n", cfips, COname);
             fprintf(Tmp_fd2, "%d:%s\n", cfips, COname);
-        }                       /* ADDED THESE BRACKETS - BB 5/2000 */
+        } /* ADDED THESE BRACKETS - BB 5/2000 */
     }
     fclose(Tmp_fd1);
     fclose(Tmp_fd2);
@@ -306,7 +297,8 @@ int ask_fips(FILE * fp, int *s, int *c, int *sc)
             fprintf(stderr,
                     "\nSpecify County FIPS (numeric) code for state %s\n", a);
             fprintf(stderr,
-                    "Enter 'list' for the list of counties in %s with corresponding FIPS codes\n",
+                    "Enter 'list' for the list of counties in %s with "
+                    "corresponding FIPS codes\n",
                     a);
             fprintf(stderr, "Hit RETURN to cancel request\n");
             fprintf(stderr, ">");

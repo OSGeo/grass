@@ -1,12 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       g.mapsets
  * AUTHOR(S):    Michael Shapiro (CERL),
- *               Greg Koerper (ManTech Environmental Technology) (original contributors), 
+ *               Greg Koerper (ManTech Environmental Technology) (original
+ *                 contributors),
  *               Glynn Clements <glynn gclements.plus.com>
- *               Hamish Bowman <hamish_b yahoo.com>, 
- *               Markus Neteler <neteler itc.it>, 
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Markus Neteler <neteler itc.it>,
  *               Moritz Lennert <mlennert club.worldonline.be>,
  *               Martin Landa <landa.martin gmail.com>,
  *               Huidae Cho <grass4u gmail.com>
@@ -52,8 +52,7 @@ int main(int argc, char *argv[])
     int nmapsets;
 
     struct GModule *module;
-    struct _opt
-    {
+    struct _opt {
         struct Option *mapset, *op, *fs;
         struct Flag *print, *list, *dialog;
     } opt;
@@ -64,11 +63,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
     G_add_keyword(_("search path"));
-    module->label =
-        _("Modifies/prints the user's current mapset search path.");
-    module->description =
-        _("Affects the user's access to data existing "
-          "under the other mapsets in the current location.");
+    module->label = _("Modifies/prints the user's current mapset search path.");
+    module->description = _("Affects the user's access to data existing "
+                            "under the other mapsets in the current location.");
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
     opt.mapset->required = YES;
@@ -184,7 +181,8 @@ int main(int argc, char *argv[])
             append_mapset(&path, mapset);
         }
         if (!cur_found)
-            G_warning(_("Current mapset (<%s>) must always included in the search path"),
+            G_warning(_("Current mapset (<%s>) must always included in the "
+                        "search path"),
                       cur_mapset);
     }
     else if (operation == OP_ADD) {
@@ -242,7 +240,8 @@ int main(int argc, char *argv[])
 
             if (found) {
                 if (strcmp(oldname, cur_mapset) == 0)
-                    G_warning(_("Current mapset (<%s>) must always included in the search path"),
+                    G_warning(_("Current mapset (<%s>) must always included in "
+                                "the search path"),
                               cur_mapset);
                 else
                     G_verbose_message(_("Mapset <%s> removed from search path"),
@@ -333,7 +332,8 @@ void append_mapset(char **path, const char *mapset)
     if (!len) {
         *path[0] = '\0';
         strcat(*path, mapset);
-    } else {
+    }
+    else {
         strcat(*path, " ");
         strcat(*path, mapset);
     }

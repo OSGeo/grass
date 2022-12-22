@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       d.colortable
  * AUTHOR(S):    James Westervelt, CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      display the color table associated with a raster map layer in
  *               the active frame on the graphics monitor
@@ -18,7 +17,6 @@
  *               for details.
  *
  *****************************************************************************/
-
 
 #include <stdlib.h>
 #include <math.h>
@@ -69,8 +67,7 @@ int main(int argc, char **argv)
 
     opt2 = G_define_standard_option(G_OPT_C);
     opt2->answer = DEFAULT_BG_COLOR;
-    opt2->label =
-        _("Color of lines separating the colors of the color table");
+    opt2->label = _("Color of lines separating the colors of the color table");
 
     opt3 = G_define_option();
     opt3->key = "lines";
@@ -92,7 +89,6 @@ int main(int argc, char **argv)
     /* Check command line */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     map_name = opt1->answer;
     fp = Rast_map_is_fp(map_name, "");
@@ -212,7 +208,7 @@ int main(int argc, char **argv)
                 D_end();
                 D_stroke();
                 /* Color box */
-                D_color((CELL) atcat, &colors);
+                D_color((CELL)atcat, &colors);
                 D_pos_abs(cur_dot_col + 4, (cur_dot_row - 3));
                 D_polygon_rel(x_box, y_box, 5);
 
@@ -225,8 +221,8 @@ int main(int argc, char **argv)
             }
             if (atcat > (int)dmax)
                 break;
-        }                       /* col loop */
-    }                           /* int map */
+        } /* col loop */
+    }     /* int map */
 
     else {
 
@@ -263,8 +259,8 @@ int main(int argc, char **argv)
         x_box[2] = (dots_per_col - 6);
         x_box[4] = (6 - dots_per_col);
 
-        G_debug(1, "dots_per_line: %d  dmin=%.2f dmax=%.2f",
-                dots_per_line, dmin, dmax);
+        G_debug(1, "dots_per_line: %d  dmin=%.2f dmax=%.2f", dots_per_line,
+                dmin, dmax);
 
         if (skip_null->answer)
             offset = 1;
@@ -275,8 +271,7 @@ int main(int argc, char **argv)
             if ((r <= 4) && !skip_null->answer)
                 Rast_set_d_null_value(&dval, 1);
             else
-                dval =
-                    dmin + r * (dmax - dmin) / (dots_per_line - 6 - offset);
+                dval = dmin + r * (dmax - dmin) / (dots_per_line - 6 - offset);
 
             D_d_color(dval, &colors);
             D_pos_abs(cur_dot_col + 3, (cur_dot_row - 3) - r);

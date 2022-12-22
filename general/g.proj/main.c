@@ -1,7 +1,6 @@
-/*  
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       g.proj 
+ * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
  *               Shell script style by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Provides a means of reporting the contents of GRASS
@@ -31,50 +30,48 @@ int main(int argc, char *argv[])
 {
     /* TODO: replace most of these flags with an option to select the
      * output format */
-    struct Flag *printinfo,     /* Print contents of PROJ_INFO & PROJ_UNITS */
-     *shellinfo,                /* Print in shell script style              */
-     *printproj4,               /* Print projection in PROJ.4 format        */
-     *datuminfo,                /* Check if datum information is present    */
-     *create,                   /* Create new projection files              */
+    struct Flag *printinfo, /* Print contents of PROJ_INFO & PROJ_UNITS */
+        *shellinfo,         /* Print in shell script style              */
+        *printproj4,        /* Print projection in PROJ.4 format        */
+        *datuminfo,         /* Check if datum information is present    */
+        *create,            /* Create new projection files              */
 #ifdef HAVE_OGR
-     *printwkt,                 /* Print projection in WKT format           */
-     *esristyle,                /* Use ESRI-style WKT format                */
+        *printwkt,  /* Print projection in WKT format           */
+        *esristyle, /* Use ESRI-style WKT format                */
 #endif
-     *dontprettify,             /* Print 'flat' output (no linebreaks)      */
-     *forcedatumtrans;          /* Force override of datumtrans parameters  */
+        *dontprettify,    /* Print 'flat' output (no linebreaks)      */
+        *forcedatumtrans; /* Force override of datumtrans parameters  */
 
-    struct Option *location,    /* Name of new location to create           */
+    struct Option *location, /* Name of new location to create           */
 #ifdef HAVE_OGR
-     *insrid,                   /* spatial reference id (auth name + code   */
-     *inepsg,                   /* EPSG projection code                     */
-     *inwkt,                    /* Input file with projection in WKT format */
-     *inproj4,                  /* Projection in PROJ.4 format              */
-     *ingeo,                    /* Input geo-referenced file readable by 
-                                 * GDAL or OGR                              */
+        *insrid,  /* spatial reference id (auth name + code   */
+        *inepsg,  /* EPSG projection code                     */
+        *inwkt,   /* Input file with projection in WKT format */
+        *inproj4, /* Projection in PROJ.4 format              */
+        *ingeo,   /* Input geo-referenced file readable by
+                   * GDAL or OGR                              */
 #endif
-     *listcodes,                /* list codes of given authority */
-     *datum,                    /* datum to add (or replace existing datum) */
-     *dtrans;                   /* index to datum transform option          */
+        *listcodes, /* list codes of given authority */
+        *datum,     /* datum to add (or replace existing datum) */
+        *dtrans;    /* index to datum transform option          */
     struct GModule *module;
 
     int formats;
     const char *epsg = NULL;
 
     G_set_program_name(argv[0]);
-    G_no_gisinit();             /* We don't call G_gisinit() here because it validates the
-                                 * mapset, whereas this module may legitmately be used 
-                                 * (to create a new location) when none exists */
+    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
+                     * mapset, whereas this module may legitmately be used
+                     * (to create a new location) when none exists */
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
     G_add_keyword(_("create location"));
 #ifdef HAVE_OGR
-    module->label =
-        _("Prints or modifies GRASS projection information files "
-          "(in various co-ordinate system descriptions).");
-    module->description =
-        _("Can also be used to create new GRASS locations.");
+    module->label = _("Prints or modifies GRASS projection information files "
+                      "(in various co-ordinate system descriptions).");
+    module->description = _("Can also be used to create new GRASS locations.");
 #else
     module->description =
         _("Prints and manipulates GRASS projection information files.");
@@ -132,9 +129,8 @@ int main(int argc, char *argv[])
     ingeo->key_desc = "file";
     ingeo->required = NO;
     ingeo->guisection = _("Specification");
-    ingeo->description =
-        _("Name of georeferenced data file to read projection "
-          "information from");
+    ingeo->description = _("Name of georeferenced data file to read projection "
+                           "information from");
 
     inwkt = G_define_option();
     inwkt->key = "wkt";
@@ -203,8 +199,7 @@ int main(int argc, char *argv[])
     dtrans->answer = "0";
     dtrans->guisection = _("Datum");
     dtrans->label = _("Index number of datum transform parameters");
-    dtrans->description =
-        _("\"0\" for unspecified or \"-1\" to list and exit");
+    dtrans->description = _("\"0\" for unspecified or \"-1\" to list and exit");
 
     forcedatumtrans = G_define_flag();
     forcedatumtrans->key = 't';
@@ -229,7 +224,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /* Initialisation & Validation */
 
     /* list codes for given authority */
@@ -247,19 +241,20 @@ int main(int argc, char *argv[])
                (inproj4->answer ? 1 : 0) + (inepsg->answer ? 1 : 0) +
                (insrid->answer ? 1 : 0));
     if (formats > 1)
-        G_fatal_error(_("Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"),
+        G_fatal_error(_("Only one of '%s', '%s', '%s', '%s' or '%s' options "
+                        "may be specified"),
                       ingeo->key, inwkt->key, inproj4->key, inepsg->key,
                       insrid->key);
 
-    /* List supported datums if requested; code originally 
+    /* List supported datums if requested; code originally
      * from G_ask_datum_name() (formerly in libgis) */
     if (datum->answer && strcmp(datum->answer, "list") == 0) {
         const char *dat;
         int i;
 
         for (i = 0; (dat = G_datum_name(i)); i++) {
-            fprintf(stdout, "---\n%d\n%s\n%s\n%s ellipsoid\n",
-                    i, dat, G_datum_description(i), G_datum_ellipsoid(i));
+            fprintf(stdout, "---\n%d\n%s\n%s\n%s ellipsoid\n", i, dat,
+                    G_datum_description(i), G_datum_ellipsoid(i));
         }
 
         exit(EXIT_SUCCESS);
@@ -296,8 +291,8 @@ int main(int argc, char *argv[])
 
     /* Consistency Check */
 
-    if ((cellhd.proj != PROJECTION_XY)
-        && (projinfo == NULL || projunits == NULL))
+    if ((cellhd.proj != PROJECTION_XY) &&
+        (projinfo == NULL || projunits == NULL))
         G_fatal_error(_("Projection files missing"));
 
     /* Override input datum if requested */
@@ -363,5 +358,4 @@ int main(int argc, char *argv[])
         G_free_key_value(projepsg);
 
     exit(EXIT_SUCCESS);
-
 }

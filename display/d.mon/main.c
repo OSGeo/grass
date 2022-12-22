@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       d.mon
@@ -15,8 +14,8 @@
 /*
    Functionality:
 
-   d.mon delegates rendering to Python script [1] through GRASS_RENDER_COMMAND [2].
-   See also document [3].
+   d.mon delegates rendering to Python script [1] through GRASS_RENDER_COMMAND
+   [2]. See also document [3].
 
    [1] display/d.mon/render_cmd.py
    [2] lib/display/r_raster.c
@@ -36,8 +35,8 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *start_opt, *select_opt, *stop_opt, *output_opt,
-        *width_opt, *height_opt, *bgcolor_opt, *res_opt;
+    struct Option *start_opt, *select_opt, *stop_opt, *output_opt, *width_opt,
+        *height_opt, *bgcolor_opt, *res_opt;
     struct Flag *list_flag, *selected_flag, *select_flag, *release_flag,
         *cmd_flag, *truecolor_flag, *update_flag, *x_flag, *sfile_flag;
 
@@ -172,8 +171,8 @@ int main(int argc, char *argv[])
         G_warning(_("Flag -%c has effect only for wx monitors (%s=wx0-7)"),
                   x_flag->key, start_opt->key);
 
-    if (selected_flag->answer || release_flag->answer ||
-        cmd_flag->answer || sfile_flag->answer) {
+    if (selected_flag->answer || release_flag->answer || cmd_flag->answer ||
+        sfile_flag->answer) {
         if (list_flag->answer)
             G_warning(_("Flag -%c ignored"), list_flag->key);
         mon = G_getenv_nofatal("MONITOR");
@@ -189,7 +188,7 @@ int main(int argc, char *argv[])
             else if (sfile_flag->answer) {
                 list_files(mon, stdout);
             }
-            else if (mon) {     /* release */
+            else if (mon) { /* release */
                 G_unsetenv("MONITOR");
                 G_verbose_message(_("Monitor <%s> released"), mon);
                 ret = stop_mon(mon);
@@ -254,11 +253,10 @@ int main(int argc, char *argv[])
 
         G_debug(1, "Monitor width/height = %d/%d", width, height);
 
-        ret =
-            start_mon(start_opt->answer, output_opt->answer,
-                      !select_flag->answer, width, height,
-                      bgcolor_opt->answer, !truecolor_flag->answer,
-                      x_flag->answer, update_flag->answer);
+        ret = start_mon(start_opt->answer, output_opt->answer,
+                        !select_flag->answer, width, height,
+                        bgcolor_opt->answer, !truecolor_flag->answer,
+                        x_flag->answer, update_flag->answer);
         if (output_opt->answer && !update_flag->answer) {
             D_open_driver();
             D_setup_unity(0);

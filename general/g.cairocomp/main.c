@@ -1,9 +1,9 @@
 /*
  * MODULE:       g.cairocomp
  * AUTHOR(S):    Glynn Clements
- * PURPOSE:      g.cairocomp isn't meant for end users. It's an internal tool for use by
- *               a wx GUI.
- *               g.cairocomp composites a series of X pixmaps.
+ * PURPOSE:      g.cairocomp isn't meant for end users. It's an internal tool
+ *               for use by a wx GUI. g.cairocomp composites a series of
+ *               X pixmaps.
  * COPYRIGHT:    (C) 2008 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -53,7 +53,7 @@ static XID read_xid(const char *filename)
 
     fclose(fp);
 
-    return (XID) xid;
+    return (XID)xid;
 }
 
 static void write_xid(const char *filename, XID xid)
@@ -127,9 +127,8 @@ static void init_xlib(const char *scr, const char *vis)
 
     output = XCreatePixmap(dpy, RootWindow(dpy, scrn), width, height, depth);
 
-    surface =
-        cairo_xlib_surface_create_with_xrender_format(dpy, output, screen,
-                                                      format, width, height);
+    surface = cairo_xlib_surface_create_with_xrender_format(
+        dpy, output, screen, format, width, height);
     if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS)
         G_fatal_error(_("Failed to initialize output surface"));
 
@@ -170,9 +169,8 @@ static void overlay(XID src, float alpha)
 {
     cairo_surface_t *src_surf;
 
-    src_surf =
-        cairo_xlib_surface_create_with_xrender_format(dpy, src, screen,
-                                                      format, width, height);
+    src_surf = cairo_xlib_surface_create_with_xrender_format(
+        dpy, src, screen, format, width, height);
     if (cairo_surface_status(src_surf) != CAIRO_STATUS_SUCCESS)
         G_fatal_error(_("Failed to initialize input surface"));
 
@@ -189,10 +187,8 @@ static void overlay(XID src, float alpha)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *in, *out, *visual, *screen, *alpha, *width, *height,
-            *bg;
+    struct {
+        struct Option *in, *out, *visual, *screen, *alpha, *width, *height, *bg;
     } opt;
     struct Flag *flag_d;
     int i;
@@ -281,7 +277,8 @@ int main(int argc, char *argv[])
         double alpha;
 
         if (opt.alpha->answer && !opt.alpha->answers[i])
-            G_fatal_error(_("input= and opacity= must have the same number of values"));
+            G_fatal_error(
+                _("input= and opacity= must have the same number of values"));
 
         alpha = opt.alpha->answer ? atof(opt.alpha->answers[i]) : 1.0;
 

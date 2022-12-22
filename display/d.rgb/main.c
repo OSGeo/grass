@@ -1,16 +1,16 @@
-
 /****************************************************************************
  *
  * MODULE:       d.rgb
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
- *               Markus Neteler <neteler itc.it>, 
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
+ *                 (original contributor)
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Markus Neteler <neteler itc.it>,
  *               Radim Blazek <radim.blazek gmail.com>
  *               Martin Landa <landa.martin gmail.com> (nulls opaque)
- * PURPOSE:      Combine three rasters to form a colour image using red, green,
- *               and blue display channels
+ * PURPOSE:      Combine three rasters to form a colour image using
+ *               red, green, and blue display channels
  * COPYRIGHT:    (C) 2001-2007, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -18,6 +18,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,8 +27,7 @@
 #include <grass/display.h>
 #include <grass/glocale.h>
 
-struct band
-{
+struct band {
     struct Option *opt;
     int file;
     int type;
@@ -35,7 +35,7 @@ struct band
     struct Colors colors;
 };
 
-static char *const color_names[3] = { "red", "green", "blue" };
+static char *const color_names[3] = {"red", "green", "blue"};
 
 int main(int argc, char **argv)
 {
@@ -115,11 +115,9 @@ int main(int argc, char **argv)
             Rast_get_row(B[i].file, B[i].array, row, B[i].type);
 
         if (row == next_row)
-            next_row = D_draw_raster_RGB(next_row,
-                                         B[0].array, B[1].array, B[2].array,
-                                         &B[0].colors, &B[1].colors,
-                                         &B[2].colors, B[0].type, B[1].type,
-                                         B[2].type);
+            next_row = D_draw_raster_RGB(
+                next_row, B[0].array, B[1].array, B[2].array, &B[0].colors,
+                &B[1].colors, &B[2].colors, B[0].type, B[1].type, B[2].type);
         else if (next_row > 0)
             row = next_row;
         else

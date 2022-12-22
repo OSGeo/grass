@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       g.tempfile
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,
  *               Roberto Flor <flor itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Martin Landa <landa.martin gmail.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -16,6 +15,7 @@
  *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>

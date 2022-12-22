@@ -1,14 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       g.parser
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
- *               Paul Kelly <paul-grass stjohnspoint.co.uk>, 
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
+ *                 contributor)
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Cedric Shock <cedricgrass shockfamily.net>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
  *               Radim Blazek <radim.blazek gmail.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2001-2007, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -47,7 +47,8 @@ int main(int argc, char *argv[])
     standard_output = translate_output = separator_nul = FALSE;
 
     /* Detect request to get strings to translate from a file */
-    /* It comes BEFORE the filename to completely avoid confusion with parser.c behaviours */
+    /* It comes BEFORE the filename to completely avoid confusion with parser.c
+     * behaviours */
     if (argc >= 2 && (strcmp(argv[1], "-t") == 0)) {
         /* Turn on translation output */
         translate_output = TRUE;
@@ -67,9 +68,9 @@ int main(int argc, char *argv[])
         argv++, argc--;
     }
 
-    if ((argc < 2) || ((strcmp(argv[1], "help") == 0) ||
-                       (strcmp(argv[1], "-help") == 0) ||
-                       (strcmp(argv[1], "--help") == 0))) {
+    if ((argc < 2) ||
+        ((strcmp(argv[1], "help") == 0) || (strcmp(argv[1], "-help") == 0) ||
+         (strcmp(argv[1], "--help") == 0))) {
         fprintf(stderr, "%s: %s [-t] [-s] [-n] <filename> [<argument> ...]\n",
                 _("Usage"), progname);
         exit(EXIT_FAILURE);
@@ -97,8 +98,7 @@ int main(int argc, char *argv[])
 
         arg = strchr(buff, '\n');
         if (!arg) {
-            fprintf(stderr,
-                    _("Line too long or missing newline at line %d\n"),
+            fprintf(stderr, _("Line too long or missing newline at line %d\n"),
                     ctx.line);
             exit(EXIT_FAILURE);
         }
@@ -151,7 +151,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    /* Stop here successfully if all that was desired was output of text to translate */
+    /* Stop here successfully if all that was desired was output of text to
+     * translate */
     /* Continuing from here would get argc and argv all wrong in G_parser. */
     if (translate_output)
         exit(EXIT_SUCCESS);
@@ -160,5 +161,5 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     return standard_output ? print_options(&ctx, separator_nul ? '\0' : '\n')
-        : reinvoke_script(&ctx, filename);
+                           : reinvoke_script(&ctx, filename);
 }

@@ -1,12 +1,11 @@
 #ifndef __PROTO_H__
 #define __PROTO_H__
-#define DEFAULT_WIDTH 720
+#define DEFAULT_WIDTH  720
 #define DEFAULT_HEIGHT 480
 
-
 /* start */
-int start_mon(const char *, const char *, int, int, int,
-              const char *, int, int, int);
+int start_mon(const char *, const char *, int, int, int, const char *, int, int,
+              int);
 
 /* select.c */
 int select_mon(const char *);

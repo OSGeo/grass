@@ -10,13 +10,13 @@ void create_location(const char *location)
 {
     int ret;
 
-    ret = G_make_location_crs(location, &cellhd, projinfo, projunits,
-                              projsrid, projwkt);
+    ret = G_make_location_crs(location, &cellhd, projinfo, projunits, projsrid,
+                              projwkt);
     if (ret == 0)
         G_message(_("Location <%s> created"), location);
     else if (ret == -1)
-        G_fatal_error(_("Unable to create location <%s>: %s"),
-                      location, strerror(errno));
+        G_fatal_error(_("Unable to create location <%s>: %s"), location,
+                      strerror(errno));
     else if (ret == -2)
         G_fatal_error(_("Unable to create projection files: %s"),
                       strerror(errno));
@@ -34,9 +34,10 @@ void modify_projinfo()
     struct Cell_head old_cellhd;
 
     if (strcmp(mapset, "PERMANENT") != 0)
-        G_fatal_error(_("You must select the PERMANENT mapset before updating the "
-                       "current location's projection (current mapset is <%s>)"),
-                      mapset);
+        G_fatal_error(
+            _("You must select the PERMANENT mapset before updating the "
+              "current location's projection (current mapset is <%s>)"),
+            mapset);
 
     /* Read projection information from current location first */
     G_get_default_window(&old_cellhd);
@@ -72,9 +73,11 @@ void modify_projinfo()
          * number or zone have changed */
         G_put_element_window(&cellhd, "", "DEFAULT_WIND");
         G_put_element_window(&cellhd, "", "WIND");
-        G_message(_("Default region was updated to the new projection, but if you have "
-                   "multiple mapsets `g.region -d` should be run in each to update the "
-                   "region from the default"));
+        G_message(_(
+            "Default region was updated to the new projection, but if you have "
+            "multiple mapsets `g.region -d` should be run in each to update "
+            "the "
+            "region from the default"));
     }
     G_important_message(_("Projection information updated"));
 }

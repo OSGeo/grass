@@ -1,10 +1,10 @@
 /*
  * MODULE:       g.pnmcomp
  * AUTHOR(S):    Glynn Clements
- * PURPOSE:      g.pnmcomp isn't meant for end users. It's an internal tool for use by
- *               a wxGUI.
- *               In essence, g.pnmcomp generates a PPM image by overlaying a series of
- *               PPM/PGM pairs (PPM = RGB image, PGM = alpha channel).
+ * PURPOSE:      g.pnmcomp isn't meant for end users. It's an internal tool for
+ *               use by a wxGUI. In essence, g.pnmcomp generates a PPM image by
+ *               overlaying a series of PPM/PGM pairs (PPM = RGB image,
+ *               PGM = alpha channel).
  * COPYRIGHT:    (C) 2006, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -47,7 +47,7 @@ static void erase(unsigned char *buf, const char *color)
                 *p++ = bg[i];
 }
 
-static int read_line(char *buf, int size, FILE * fp)
+static int read_line(char *buf, int size, FILE *fp)
 {
     for (;;) {
         if (!fgets(buf, size, fp))
@@ -58,7 +58,7 @@ static int read_line(char *buf, int size, FILE * fp)
     }
 }
 
-static void read_header(FILE * fp, unsigned char *magic, int *maxval)
+static void read_header(FILE *fp, unsigned char *magic, int *maxval)
 {
     unsigned int ncols, nrows;
     char buf[80];
@@ -74,8 +74,8 @@ static void read_header(FILE * fp, unsigned char *magic, int *maxval)
         G_fatal_error(_("Invalid PPM file"));
 
     if (ncols != width || nrows != height)
-        G_fatal_error("Expecting %dx%d image but got %dx%d image.",
-                      width, height, ncols, nrows);
+        G_fatal_error("Expecting %dx%d image but got %dx%d image.", width,
+                      height, ncols, nrows);
 
     read_line(buf, sizeof(buf), fp);
 
@@ -270,10 +270,8 @@ static void write_pgm(const char *filename, const unsigned char *buf)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *in, *mask, *alpha, *out, *width, *height, *bg,
-            *outmask;
+    struct {
+        struct Option *in, *mask, *alpha, *out, *width, *height, *bg, *outmask;
     } opt;
     int i;
 
@@ -344,8 +342,7 @@ int main(int argc, char *argv[])
 
     for (i = 0; opt.in->answers[i]; i++) {
         char *infile = opt.in->answers[i];
-        char *maskfile = opt.mask->answer ? opt.mask->answers[i]
-            : NULL;
+        char *maskfile = opt.mask->answer ? opt.mask->answers[i] : NULL;
 
         if (!maskfile)
             opt.mask->answer = NULL;

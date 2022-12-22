@@ -7,8 +7,7 @@
 
 static char *xstrdup(const char *arg)
 {
-    return (G_strcasecmp(arg, "{NULL}") == 0)
-        ? NULL : strdup(arg);
+    return (G_strcasecmp(arg, "{NULL}") == 0) ? NULL : strdup(arg);
 }
 
 int parse_boolean(struct context *ctx, const char *arg)
@@ -19,8 +18,8 @@ int parse_boolean(struct context *ctx, const char *arg)
     if (G_strcasecmp(arg, "no") == 0)
         return NO;
 
-    fprintf(stderr, _("Unknown boolean value \"%s\" at line %d\n"),
-            arg, ctx->line);
+    fprintf(stderr, _("Unknown boolean value \"%s\" at line %d\n"), arg,
+            ctx->line);
 
     return NO;
 }
@@ -101,8 +100,8 @@ void parse_module(struct context *ctx, const char *cmd, const char *arg)
         return;
     }
 
-    fprintf(stderr, _("Unknown module parameter \"%s\" at line %d\n"),
-            cmd, ctx->line);
+    fprintf(stderr, _("Unknown module parameter \"%s\" at line %d\n"), cmd,
+            ctx->line);
 }
 
 void parse_flag(struct context *ctx, const char *cmd, const char *arg)
@@ -138,8 +137,8 @@ void parse_flag(struct context *ctx, const char *cmd, const char *arg)
         return;
     }
 
-    fprintf(stderr, _("Unknown flag parameter \"%s\" at line %d\n"),
-            cmd, ctx->line);
+    fprintf(stderr, _("Unknown flag parameter \"%s\" at line %d\n"), cmd,
+            ctx->line);
 }
 
 int parse_type(struct context *ctx, const char *arg)
@@ -190,7 +189,8 @@ void parse_option(struct context *ctx, const char *cmd, const char *arg)
         return;
     }
 
-    /* Label, description, descriptions, and guisection can all be internationalized */
+    /* Label, description, descriptions, and guisection can all be
+     * internationalized */
     if (G_strcasecmp(cmd, "label") == 0) {
         ctx->option->label = translate(xstrdup(arg));
         return;
@@ -231,8 +231,8 @@ void parse_option(struct context *ctx, const char *cmd, const char *arg)
         return;
     }
 
-    fprintf(stderr, _("Unknown option parameter \"%s\" at line %d\n"),
-            cmd, ctx->line);
+    fprintf(stderr, _("Unknown option parameter \"%s\" at line %d\n"), cmd,
+            ctx->line);
 }
 
 int print_options(const struct context *ctx, int sep)
@@ -254,8 +254,8 @@ int print_options(const struct context *ctx, int sep)
         printf("flag_%c=%d%c", flag->key, flag->answer ? 1 : 0, sep);
 
     for (option = ctx->first_option; option; option = option->next_opt)
-        printf("opt_%s=%s%c", option->key,
-               option->answer ? option->answer : "", sep);
+        printf("opt_%s=%s%c", option->key, option->answer ? option->answer : "",
+               sep);
 
     fflush(stdout);
 

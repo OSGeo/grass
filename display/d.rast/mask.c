@@ -4,23 +4,23 @@
 #include "mask.h"
 #include "local_proto.h"
 
-int init_mask_rules(Mask * mask)
+int init_mask_rules(Mask *mask)
 {
     mask->list = NULL;
     return 0;
 }
 
-int init_d_mask_rules(d_Mask * d_mask)
+int init_d_mask_rules(d_Mask *d_mask)
 {
     d_mask->list = NULL;
     return 0;
 }
 
-int add_mask_rule(Mask * mask, long a, long b, int inf)
+int add_mask_rule(Mask *mask, long a, long b, int inf)
 {
     Interval *I;
 
-    I = (Interval *) G_malloc(sizeof(Interval));
+    I = (Interval *)G_malloc(sizeof(Interval));
     I->low = a <= b ? a : b;
     I->high = a >= b ? a : b;
     I->inf = inf;
@@ -29,11 +29,11 @@ int add_mask_rule(Mask * mask, long a, long b, int inf)
     return 0;
 }
 
-int add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf)
+int add_d_mask_rule(d_Mask *d_mask, double a, double b, int inf)
 {
     d_Interval *I;
 
-    I = (d_Interval *) G_malloc(sizeof(d_Interval));
+    I = (d_Interval *)G_malloc(sizeof(d_Interval));
     I->low = a <= b ? a : b;
     I->high = a >= b ? a : b;
     I->inf = inf;
@@ -42,7 +42,7 @@ int add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf)
     return 0;
 }
 
-int mask_cell_array(CELL * cell, int ncols, Mask * mask, int invert)
+int mask_cell_array(CELL *cell, int ncols, Mask *mask, int invert)
 {
     long x;
 
@@ -56,7 +56,7 @@ int mask_cell_array(CELL * cell, int ncols, Mask * mask, int invert)
     return 0;
 }
 
-int mask_d_cell_array(DCELL * dcell, int ncols, d_Mask * mask, int invert)
+int mask_d_cell_array(DCELL *dcell, int ncols, d_Mask *mask, int invert)
 {
     DCELL x;
 
@@ -70,7 +70,7 @@ int mask_d_cell_array(DCELL * dcell, int ncols, d_Mask * mask, int invert)
     return 0;
 }
 
-int mask_select(long *x, Mask * mask, int invert)
+int mask_select(long *x, Mask *mask, int invert)
 {
     Interval *I;
 
@@ -86,7 +86,7 @@ int mask_select(long *x, Mask * mask, int invert)
     return invert;
 }
 
-int mask_d_select(DCELL * x, d_Mask * mask, int invert)
+int mask_d_select(DCELL *x, d_Mask *mask, int invert)
 {
     d_Interval *I;
 
@@ -102,7 +102,7 @@ int mask_d_select(DCELL * x, d_Mask * mask, int invert)
     return invert;
 }
 
-int mask_match_interval(long x, Interval * I)
+int mask_match_interval(long x, Interval *I)
 {
     if (I->inf < 0)
         return x <= I->low;
@@ -113,7 +113,7 @@ int mask_match_interval(long x, Interval * I)
     return x >= I->low && x <= I->high;
 }
 
-int mask_match_d_interval(DCELL x, d_Interval * I)
+int mask_match_d_interval(DCELL x, d_Interval *I)
 {
     if (I->inf < 0)
         return x <= I->low;

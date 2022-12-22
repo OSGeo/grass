@@ -1,16 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       d.barscale
  *
  * AUTHOR(S):    unknown but from CERL code (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Cedric Shock <cedricgrass shockfamily.net>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Major rewrite for GRASS 7 by Hamish Bowman, June 2013
  *               Adam Laza <ad.laza32@gmail.com>, GSoC 2016
@@ -82,34 +81,29 @@ int main(int argc, char **argv)
     barstyle->key = "style";
     barstyle->description = _("Type of barscale to draw");
     barstyle->options =
-        "classic,line,solid,hollow,full_checker,part_checker,mixed_checker,tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
+        "classic,line,solid,hollow,full_checker,part_checker,mixed_checker,"
+        "tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
     barstyle->answer = "classic";
     barstyle->gisprompt = "old,barscale,barscale";
     barstyle->guisection = _("Style");
-    G_asprintf((char **)&(barstyle->descriptions),
-               "classic;%s;"
-               "line;%s;"
-               "solid;%s;"
-               "hollow;%s;"
-               "full_checker;%s;"
-               "part_checker;%s;"
-               "mixed_checker;%s;"
-               "tail_checker;%s;"
-               "up_ticks;%s;"
-               "down_ticks;%s;"
-               "both_ticks;%s;"
-               "arrow_ends;%s",
-               _("Classic style"),
-               _("Line style"),
-               _("Solid style"),
-               _("Hollow style"),
-               _("Full checker style"),
-               _("Part checker style"),
-               _("Mixed checker style"),
-               _("Tail checker style"),
-               _("Up ticks style"),
-               _("Down ticks style"),
-               _("Both ticks style"), _("Arrow ends style"));
+    G_asprintf(
+        (char **)&(barstyle->descriptions),
+        "classic;%s;"
+        "line;%s;"
+        "solid;%s;"
+        "hollow;%s;"
+        "full_checker;%s;"
+        "part_checker;%s;"
+        "mixed_checker;%s;"
+        "tail_checker;%s;"
+        "up_ticks;%s;"
+        "down_ticks;%s;"
+        "both_ticks;%s;"
+        "arrow_ends;%s",
+        _("Classic style"), _("Line style"), _("Solid style"),
+        _("Hollow style"), _("Full checker style"), _("Part checker style"),
+        _("Mixed checker style"), _("Tail checker style"), _("Up ticks style"),
+        _("Down ticks style"), _("Both ticks style"), _("Arrow ends style"));
 
     coords = G_define_option();
     coords->key = "at";
@@ -117,8 +111,7 @@ int main(int argc, char **argv)
     coords->type = TYPE_DOUBLE;
     coords->answer = "0.0,10.0";
     coords->options = "0-100";
-    coords->label =
-        _("Screen coordinates of the rectangle's top-left corner");
+    coords->label = _("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of the display frame");
 
     length_opt = G_define_option();
@@ -209,12 +202,10 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     G_get_window(&W);
     if (W.proj == PROJECTION_LL)
         G_fatal_error(_("%s does not work with a latitude-longitude location"),
                       argv[0]);
-
 
     north_arrow = n_symbol->answer ? TRUE : FALSE;
 
@@ -279,7 +270,6 @@ int main(int argc, char **argv)
     sscanf(coords->answers[0], "%lf", &east);
     sscanf(coords->answers[1], "%lf", &north);
 
-
     length = atof(length_opt->answer);
     sscanf(segm_opt->answer, "%d", &segm);
 
@@ -335,7 +325,6 @@ int main(int argc, char **argv)
     bg_color = D_parse_color(bg_color_opt->answer, 1);
     if (bg_color == 0)
         do_background = FALSE;
-
 
     D_open_driver();
 
