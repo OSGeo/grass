@@ -480,10 +480,10 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            self.cmdPrompt.CopyHistory(path)
-            self.showNotification.emit(
-                message=_("Command history saved to '{}'".format(path))
-            )
+            if self.cmdPrompt.CopyHistory(path):
+                self.showNotification.emit(
+                    message=_("Command history saved to '{}'".format(path))
+                )
 
         dlg.Destroy()
         event.Skip()

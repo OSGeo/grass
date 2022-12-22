@@ -141,7 +141,8 @@ class GPrompt(object):
         self.ShowStatusText("")
 
     def CopyHistory(self, targetFile):
-        """Copy history file to the target location"""
+        """Copy history file to the target location.
+        Returns True if file is successfully copied."""
         env = grass.gisenv()
         historyFile = os.path.join(
             env["GISDBASE"],
@@ -153,10 +154,12 @@ class GPrompt(object):
             shutil.copyfile(historyFile, targetFile)
         except (IOError, OSError) as e:
             GError(
-                _("Unable to copy .wxgui_history file to {}'.\n\nDetails: {}").format(
-                    historyFile, e
+                _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
+                    historyFile, targetFile, e
                 )
             )
+            return False
+        return True
 
     def GetCommands(self):
         """Get list of launched commands"""
