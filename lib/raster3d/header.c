@@ -15,36 +15,34 @@ int xdrLength;
 
 /*---------------------------------------------------------------------------*/
 
-#define RASTER3D_HEADER_TILEX "TileDimensionX"
-#define RASTER3D_HEADER_TILEY "TileDimensionY"
-#define RASTER3D_HEADER_TILEZ "TileDimensionZ"
-#define RASTER3D_HEADER_TYPE "CellType"
-#define RASTER3D_HEADER_COMPRESSION "useCompression"
-#define RASTER3D_HEADER_USERLE "useRle"
-#define RASTER3D_HEADER_USELZW "useLzw"
-#define RASTER3D_HEADER_PRECISION "Precision"
-#define RASTER3D_HEADER_DATA_OFFSET "nofHeaderBytes"
-#define RASTER3D_HEADER_USEXDR "useXdr"
-#define RASTER3D_HEADER_HASINDEX "hasIndex"
-#define RASTER3D_HEADER_UNIT "Units"
+#define RASTER3D_HEADER_TILEX         "TileDimensionX"
+#define RASTER3D_HEADER_TILEY         "TileDimensionY"
+#define RASTER3D_HEADER_TILEZ         "TileDimensionZ"
+#define RASTER3D_HEADER_TYPE          "CellType"
+#define RASTER3D_HEADER_COMPRESSION   "useCompression"
+#define RASTER3D_HEADER_USERLE        "useRle"
+#define RASTER3D_HEADER_USELZW        "useLzw"
+#define RASTER3D_HEADER_PRECISION     "Precision"
+#define RASTER3D_HEADER_DATA_OFFSET   "nofHeaderBytes"
+#define RASTER3D_HEADER_USEXDR        "useXdr"
+#define RASTER3D_HEADER_HASINDEX      "hasIndex"
+#define RASTER3D_HEADER_UNIT          "Units"
 #define RASTER3D_HEADER_VERTICAL_UNIT "VerticalUnits"
-#define RASTER3D_HEADER_VERSION "Version"
+#define RASTER3D_HEADER_VERSION       "Version"
 
 /*---------------------------------------------------------------------------*/
 
-static int
-Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
-                       int *zone, double *north, double *south, double *east,
-                       double *west, double *top, double *bottom, int *rows,
-                       int *cols, int *depths, double *ew_res, double *ns_res,
-                       double *tb_res, int *tileX, int *tileY, int *tileZ,
-                       int *type, int *compression, int *useRle, int *useLzw,
-                       int *precision, int *dataOffset, int *useXdr,
-                       int *hasIndex, char **unit, int *vertical_unit,
-                       int *version)
+static int Rast3d_readWriteHeader(
+    struct Key_Value *headerKeys, int doRead, int *proj, int *zone,
+    double *north, double *south, double *east, double *west, double *top,
+    double *bottom, int *rows, int *cols, int *depths, double *ew_res,
+    double *ns_res, double *tb_res, int *tileX, int *tileY, int *tileZ,
+    int *type, int *compression, int *useRle, int *useLzw, int *precision,
+    int *dataOffset, int *useXdr, int *hasIndex, char **unit,
+    int *vertical_unit, int *version)
 {
     int returnVal;
-    int (*headerInt)(),(*headerDouble)(),(*headerValue)();
+    int (*headerInt)(), (*headerDouble)(), (*headerValue)();
     int (*headerString)();
 
     if (doRead) {
@@ -83,33 +81,33 @@ Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
     returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEY, tileY);
     returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEZ, tileZ);
 
-    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_TYPE,
-                             "double", "float", DCELL_TYPE, FCELL_TYPE, type);
-    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_COMPRESSION,
-                             "0", "1", 0, 1, compression);
-    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_USERLE,
-                             "0", "1", 0, 1, useRle);
-    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_USELZW,
-                             "0", "1", 0, 1, useLzw);
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_TYPE, "double",
+                             "float", DCELL_TYPE, FCELL_TYPE, type);
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_COMPRESSION, "0", "1",
+                             0, 1, compression);
+    returnVal &=
+        headerValue(headerKeys, RASTER3D_HEADER_USERLE, "0", "1", 0, 1, useRle);
+    returnVal &=
+        headerValue(headerKeys, RASTER3D_HEADER_USELZW, "0", "1", 0, 1, useLzw);
 
     returnVal &= headerInt(headerKeys, RASTER3D_HEADER_PRECISION, precision);
-    returnVal &=
-        headerInt(headerKeys, RASTER3D_HEADER_DATA_OFFSET, dataOffset);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_DATA_OFFSET, dataOffset);
 
-    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_USEXDR,
-                             "0", "1", 0, 1, useXdr);
-    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_HASINDEX,
-                             "0", "1", 0, 1, hasIndex);
+    returnVal &=
+        headerValue(headerKeys, RASTER3D_HEADER_USEXDR, "0", "1", 0, 1, useXdr);
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_HASINDEX, "0", "1", 0,
+                             1, hasIndex);
     returnVal &= headerString(headerKeys, RASTER3D_HEADER_UNIT, unit);
     /* New format and API changes */
     if (!headerInt(headerKeys, RASTER3D_HEADER_VERTICAL_UNIT, vertical_unit))
-        G_warning
-            ("You are using an old raster3d data format, the vertical unit is undefined. "
-             "Please use r3.support to define the vertical unit to avoid this warning.");
+        G_warning("You are using an old raster3d data format, the vertical "
+                  "unit is undefined. "
+                  "Please use r3.support to define the vertical unit to avoid "
+                  "this warning.");
     /* New format and API changes */
     if (!headerInt(headerKeys, RASTER3D_HEADER_VERSION, version)) {
-        G_warning
-            ("You are using an old raster3d data format, the version is undefined.");
+        G_warning("You are using an old raster3d data format, the version is "
+                  "undefined.");
         *version = 1;
     }
 
@@ -122,21 +120,20 @@ Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
 
 /*---------------------------------------------------------------------------*/
 
-int
-Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
-                   double *south, double *east, double *west, double *top,
-                   double *bottom, int *rows, int *cols, int *depths,
-                   double *ew_res, double *ns_res, double *tb_res, int *tileX,
-                   int *tileY, int *tileZ, int *type, int *compression,
-                   int *useRle, int *useLzw, int *precision, int *dataOffset,
-                   int *useXdr, int *hasIndex, char **unit,
-                   int *vertical_unit, int *version)
+int Rast3d_read_header(RASTER3D_Map *map, int *proj, int *zone, double *north,
+                       double *south, double *east, double *west, double *top,
+                       double *bottom, int *rows, int *cols, int *depths,
+                       double *ew_res, double *ns_res, double *tb_res,
+                       int *tileX, int *tileY, int *tileZ, int *type,
+                       int *compression, int *useRle, int *useLzw,
+                       int *precision, int *dataOffset, int *useXdr,
+                       int *hasIndex, char **unit, int *vertical_unit,
+                       int *version)
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
 
-    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName,
-                    map->mapset);
+    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
     if (access(path, R_OK) != 0) {
         Rast3d_error("Rast3d_read_header: unable to find [%s]", path);
         return 0;
@@ -144,18 +141,14 @@ Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
 
     headerKeys = G_read_key_value_file(path);
 
-    if (!Rast3d_readWriteHeader(headerKeys, 1,
-                                proj, zone,
-                                north, south, east, west, top, bottom,
-                                rows, cols, depths,
-                                ew_res, ns_res, tb_res,
-                                tileX, tileY, tileZ,
-                                type, compression, useRle, useLzw, precision,
-                                dataOffset, useXdr, hasIndex, unit,
-                                vertical_unit, version)) {
-        Rast3d_error
-            ("Rast3d_read_header: error extracting header key(s) of file %s",
-             path);
+    if (!Rast3d_readWriteHeader(
+            headerKeys, 1, proj, zone, north, south, east, west, top, bottom,
+            rows, cols, depths, ew_res, ns_res, tb_res, tileX, tileY, tileZ,
+            type, compression, useRle, useLzw, precision, dataOffset, useXdr,
+            hasIndex, unit, vertical_unit, version)) {
+        Rast3d_error(
+            "Rast3d_read_header: error extracting header key(s) of file %s",
+            path);
         return 0;
     }
 
@@ -165,38 +158,32 @@ Rast3d_read_header(RASTER3D_Map * map, int *proj, int *zone, double *north,
 
 /*---------------------------------------------------------------------------*/
 
-int
-Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north,
-                    double south, double east, double west, double top,
-                    double bottom, int rows, int cols, int depths,
-                    double ew_res, double ns_res, double tb_res, int tileX,
-                    int tileY, int tileZ, int type, int compression,
-                    int useRle, int useLzw, int precision, int dataOffset,
-                    int useXdr, int hasIndex, char *unit, int vertical_unit,
-                    int version)
+int Rast3d_write_header(RASTER3D_Map *map, int proj, int zone, double north,
+                        double south, double east, double west, double top,
+                        double bottom, int rows, int cols, int depths,
+                        double ew_res, double ns_res, double tb_res, int tileX,
+                        int tileY, int tileZ, int type, int compression,
+                        int useRle, int useLzw, int precision, int dataOffset,
+                        int useXdr, int hasIndex, char *unit, int vertical_unit,
+                        int version)
 {
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
 
     headerKeys = G_create_key_value();
 
-    if (!Rast3d_readWriteHeader(headerKeys, 0,
-                                &proj, &zone,
-                                &north, &south, &east, &west, &top, &bottom,
-                                &rows, &cols, &depths,
-                                &ew_res, &ns_res, &tb_res,
-                                &tileX, &tileY, &tileZ,
-                                &type, &compression, &useRle, &useLzw,
-                                &precision, &dataOffset, &useXdr, &hasIndex,
-                                &unit, &vertical_unit, &version)) {
-        Rast3d_error
-            ("Rast3d_write_header: error adding header key(s) for file %s",
-             path);
+    if (!Rast3d_readWriteHeader(
+            headerKeys, 0, &proj, &zone, &north, &south, &east, &west, &top,
+            &bottom, &rows, &cols, &depths, &ew_res, &ns_res, &tb_res, &tileX,
+            &tileY, &tileZ, &type, &compression, &useRle, &useLzw, &precision,
+            &dataOffset, &useXdr, &hasIndex, &unit, &vertical_unit, &version)) {
+        Rast3d_error(
+            "Rast3d_write_header: error adding header key(s) for file %s",
+            path);
         return 0;
     }
 
-    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName,
-                    map->mapset);
+    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
     Rast3d_make_mapset_map_directory(map->fileName);
     G_write_key_value_file(path, headerKeys);
 
@@ -207,23 +194,17 @@ Rast3d_write_header(RASTER3D_Map * map, int proj, int zone, double north,
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_rewrite_header(RASTER3D_Map * map)
+int Rast3d_rewrite_header(RASTER3D_Map *map)
 {
-    if (!Rast3d_write_header(map,
-                             map->region.proj, map->region.zone,
-                             map->region.north, map->region.south,
-                             map->region.east, map->region.west,
-                             map->region.top, map->region.bottom,
-                             map->region.rows, map->region.cols,
-                             map->region.depths,
-                             map->region.ew_res, map->region.ns_res,
-                             map->region.tb_res,
-                             map->tileX, map->tileY, map->tileZ,
-                             map->type,
-                             map->compression, map->useRle, map->useLzw,
-                             map->precision, map->offset, map->useXdr,
-                             map->hasIndex, map->unit, map->vertical_unit,
-                             map->version)) {
+    if (!Rast3d_write_header(
+            map, map->region.proj, map->region.zone, map->region.north,
+            map->region.south, map->region.east, map->region.west,
+            map->region.top, map->region.bottom, map->region.rows,
+            map->region.cols, map->region.depths, map->region.ew_res,
+            map->region.ns_res, map->region.tb_res, map->tileX, map->tileY,
+            map->tileZ, map->type, map->compression, map->useRle, map->useLzw,
+            map->precision, map->offset, map->useXdr, map->hasIndex, map->unit,
+            map->vertical_unit, map->version)) {
         G_warning(_("Unable to write header for 3D raster map <%s>"),
                   map->fileName);
         return 0;
@@ -233,26 +214,24 @@ int Rast3d_rewrite_header(RASTER3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Returns a number
- * which encodes multiplicity <em>n</em> of <em>cacheCode</em>. This value can be used
- * to specify the size of the cache.
- * If <em>cacheCode</em> is the size (in tiles) of the cache the function returns
- * <em>cacheCode * n</em>.
- * If <em>cacheCode</em> is RASTER3D_USE_CACHE_DEFAULT the function returns
+ * which encodes multiplicity <em>n</em> of <em>cacheCode</em>. This value can
+ * be used to specify the size of the cache. If <em>cacheCode</em> is the size
+ * (in tiles) of the cache the function returns <em>cacheCode * n</em>. If
+ * <em>cacheCode</em> is RASTER3D_USE_CACHE_DEFAULT the function returns
  * RASTER3D_USE_CACHE_DEFAULT.
  * If <em>cacheCode</em> is RASTER3D_USE_CACHE_??? the function returns a value
- * encoding RASTER3D_USE_CACHE_??? and <em>n</em>. Here RASTER3D_USE_CACHE_??? is one
- * of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+ * encoding RASTER3D_USE_CACHE_??? and <em>n</em>. Here RASTER3D_USE_CACHE_???
+ * is one of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
  * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ, or
- * RASTER3D_USE_CACHE_XYZ, where e.g.  RASTER3D_USE_CACHE_X specifies that the cache
- * should store as many tiles as there exist in one row along the x-axis of the
- * tile cube, and RASTER3D_USE_CACHE_XY specifies that the cache should store as
- * many tiles as there exist in one slice of the tile cube with constant Z
- * coordinate.
+ * RASTER3D_USE_CACHE_XYZ, where e.g.  RASTER3D_USE_CACHE_X specifies that the
+ * cache should store as many tiles as there exist in one row along the x-axis
+ * of the tile cube, and RASTER3D_USE_CACHE_XY specifies that the cache should
+ * store as many tiles as there exist in one slice of the tile cube with
+ * constant Z coordinate.
  *
  *  \param cacheCode
  *  \param n
@@ -274,7 +253,7 @@ int Rast3d_cache_size_encode(int cacheCode, int n)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d__compute_cache_size(RASTER3D_Map * map, int cacheCode)
+int Rast3d__compute_cache_size(RASTER3D_Map *map, int cacheCode)
 {
     int n, size;
 
@@ -313,16 +292,15 @@ int Rast3d__compute_cache_size(RASTER3D_Map * map, int cacheCode)
 /* RASTER3D-Map structure. It also allocates memory for compression and xdr, */
 /* and initializes the index and cache. This function should be taken apart. */
 
-int
-Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression,
-                   int useRle, int useLzw, int type, int precision, int cache,
-                   int hasIndex, int useXdr, int typeIntern,
-                   int nofHeaderBytes, int tileX, int tileY, int tileZ,
-                   int proj, int zone, double north, double south,
-                   double east, double west, double top, double bottom,
-                   int rows, int cols, int depths, double ew_res,
-                   double ns_res, double tb_res, char *unit,
-                   int vertical_unit, int version)
+int Rast3d_fill_header(RASTER3D_Map *map, int operation, int compression,
+                       int useRle, int useLzw, int type, int precision,
+                       int cache, int hasIndex, int useXdr, int typeIntern,
+                       int nofHeaderBytes, int tileX, int tileY, int tileZ,
+                       int proj, int zone, double north, double south,
+                       double east, double west, double top, double bottom,
+                       int rows, int cols, int depths, double ew_res,
+                       double ns_res, double tb_res, char *unit,
+                       int vertical_unit, int version)
 {
     if (!RASTER3D_VALID_OPERATION(operation))
         Rast3d_fatal_error("Rast3d_fill_header: operation not valid\n");
@@ -389,7 +367,7 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression,
 
     if (!RASTER3D_VALID_XDR_OPTION(useXdr))
         Rast3d_fatal_error("Rast3d_fill_header: invalid xdr option");
-    map->useXdr = useXdr;       /* Only kept for backward compatibility */
+    map->useXdr = useXdr; /* Only kept for backward compatibility */
 
     map->offset = nofHeaderBytes;
 
@@ -404,16 +382,17 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression,
     map->numLengthExtern = Rast3d_extern_length(map->type);
 
     map->compression = compression;
-    map->useRle = useRle;       /* Only kept for backward compatibility */
-    map->useLzw = useLzw;       /* Only kept for backward compatibility */
+    map->useRle = useRle; /* Only kept for backward compatibility */
+    map->useLzw = useLzw; /* Only kept for backward compatibility */
     map->precision = precision;
 
 #define RLE_STATUS_BYTES 2
 
     if (map->compression != RASTER3D_NO_COMPRESSION) {
         if (tmpCompress == NULL) {
-            tmpCompressLength = map->tileSize *
-                RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
+            tmpCompressLength =
+                map->tileSize *
+                    RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
                 RLE_STATUS_BYTES;
             tmpCompress = Rast3d_malloc(tmpCompressLength);
             if (tmpCompress == NULL) {
@@ -421,11 +400,13 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression,
                 return 0;
             }
         }
-        else if (map->tileSize *
-                 RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern)
-                 + RLE_STATUS_BYTES > tmpCompressLength) {
-            tmpCompressLength = map->tileSize *
-                RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
+        else if (map->tileSize * RASTER3D_MAX(map->numLengthIntern,
+                                              map->numLengthExtern) +
+                     RLE_STATUS_BYTES >
+                 tmpCompressLength) {
+            tmpCompressLength =
+                map->tileSize *
+                    RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
                 RLE_STATUS_BYTES;
             tmpCompress = Rast3d_realloc(tmpCompress, tmpCompressLength);
             if (tmpCompress == NULL) {
@@ -455,12 +436,10 @@ Rast3d_fill_header(RASTER3D_Map * map, int operation, int compression,
         map->currentIndex = -1;
     }
     else {
-        if (!Rast3d_init_cache(map,
-                               RASTER3D_MAX(1,
-                                            RASTER3D_MIN
-                                            (Rast3d__compute_cache_size
-                                             (map, cache),
-                                             g3d_cache_max / map->tileSize /
+        if (!Rast3d_init_cache(
+                map, RASTER3D_MAX(
+                         1, RASTER3D_MIN(Rast3d__compute_cache_size(map, cache),
+                                         g3d_cache_max / map->tileSize /
                                              map->numLengthIntern)))) {
             Rast3d_error("Rast3d_fill_header: error in Rast3d_init_cache");
             return 0;

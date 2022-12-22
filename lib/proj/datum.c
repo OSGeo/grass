@@ -1,13 +1,14 @@
-
 /**
    \file lib/proj/datum.c
 
-   \brief GProj library - Functions for reading datum parameters from the location database
+   \brief GProj library - Functions for reading datum parameters from the
+location database
 
-   \author Andreas Lange <andreas.lange rhein-main.de>, Paul Kelly <paul-grass stjohnspoint.co.uk>
+   \author Andreas Lange <andreas.lange rhein-main.de>, Paul Kelly <paul-grass
+stjohnspoint.co.uk>
 
    (C) 2003-2008 by the GRASS Development Team
- 
+
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
@@ -24,13 +25,13 @@
 #include "local_proto.h"
 
 /**
- * \brief Look up a string in datum.table file to see if it is a valid datum 
+ * \brief Look up a string in datum.table file to see if it is a valid datum
  *        name and if so place its information into a gpj_datum struct
- * 
+ *
  * \param name String containing datum name to look up
  * \param dstruct gpj_datum struct into which datum parameters will be placed
  *        if found
- * 
+ *
  * \return 1 if datum found, -1 if not
  **/
 
@@ -61,9 +62,9 @@ int GPJ_get_datum_by_name(const char *name, struct gpj_datum *dstruct)
  * \brief "Last resort" function to retrieve a "default" set of datum
  * parameters for a datum (N.B. there really is no such thing as a
  * catch-all default!)
- * 
+ *
  * Kind of a "last resort" function as there really is no such thing
- * as a default set of datum transformation parameters. Only should 
+ * as a default set of datum transformation parameters. Only should
  * really be used where user interaction to choose a set of parameters
  * is not desirable. Use of this function is not likely to result in
  * selection of the optimum set of datum transformation parameters
@@ -71,15 +72,15 @@ int GPJ_get_datum_by_name(const char *name, struct gpj_datum *dstruct)
  *
  * \param name      String containing GRASS datum name for which default
  *                  parameters are to be retrieved
- * 
+ *
  * \param params    Pointer to a pointer which will have memory
  *                  allocated and into which a string containing
  *                  the datum parameters (if present) will
  *                  be placed
- * 
+ *
  * \return          The number of possible parameter sets GRASS knows
  *                  about for this datum
- * 
+ *
  **/
 
 int GPJ_get_default_datum_params_by_name(const char *name, char **params)
@@ -106,30 +107,29 @@ int GPJ_get_default_datum_params_by_name(const char *name, char **params)
     }
 
     return count;
-
 }
 
 /**
- *  
+ *
  * \brief Extract the datum transformation-related parameters for
  *  the current location.
- * 
+ *
  *  This function can be used to test if a location's co-ordinate
  *  system set-up supports datum transformation.
- *  
- * \param name      Pointer to a pointer which will have memory 
- *                  allocated and into which a string containing the 
- *                  datum name (if present) will be placed. Otherwise 
+ *
+ * \param name      Pointer to a pointer which will have memory
+ *                  allocated and into which a string containing the
+ *                  datum name (if present) will be placed. Otherwise
  *                  set to NULL.
- * 
+ *
  * \param params    Pointer to a pointer which will have memory
  *                  allocated and into which a string containing
  *                  the datum parameters (if present) will
  *                  be placed. Otherwise set to NULL.
  *
- * \return  -1 error or no datum information found, 
+ * \return  -1 error or no datum information found,
  *           1 only datum name found, 2 params found
- * 
+ *
  **/
 
 int GPJ_get_datum_params(char **name, char **params)
@@ -144,34 +144,34 @@ int GPJ_get_datum_params(char **name, char **params)
 }
 
 /**
- *  
- * \brief Extract the datum transformation-related parameters from a 
+ *
+ * \brief Extract the datum transformation-related parameters from a
  *  set of general PROJ_INFO parameters.
- * 
+ *
  *  This function can be used to test if a location's co-ordinate
  *  system set-up supports datum transformation.
- *  
+ *
  * \param projinfo  Set of key_value pairs containing
  *                  projection information in PROJ_INFO file
  *                  format
- * 
- * \param datumname Pointer to a pointer which will have memory 
- *                  allocated and into which a string containing the 
- *                  datum name (if present) will be placed. Otherwise 
+ *
+ * \param datumname Pointer to a pointer which will have memory
+ *                  allocated and into which a string containing the
+ *                  datum name (if present) will be placed. Otherwise
  *                  set to NULL.
- * 
+ *
  * \param params    Pointer to a pointer which will have memory
  *                  allocated and into which a string containing
  *                  the datum parameters (if present) will
  *                  be placed. Otherwise set to NULL.
  *
- * \return  -1 error or no datum information found, 
+ * \return  -1 error or no datum information found,
  *           1 only datum name found, 2 params found
- * 
+ *
  **/
 
-int GPJ__get_datum_params(const struct Key_Value *projinfo,
-                          char **datumname, char **params)
+int GPJ__get_datum_params(const struct Key_Value *projinfo, char **datumname,
+                          char **params)
 {
     int returnval = -1;
 
@@ -204,15 +204,13 @@ int GPJ__get_datum_params(const struct Key_Value *projinfo,
         returnval = 2;
     }
     else if (G_find_key_value("towgs84", projinfo) != NULL) {
-        G_asprintf(params, "towgs84=%s",
-                   G_find_key_value("towgs84", projinfo));
+        G_asprintf(params, "towgs84=%s", G_find_key_value("towgs84", projinfo));
         returnval = 2;
     }
-    else if (G_find_key_value("dx", projinfo) != NULL
-             && G_find_key_value("dy", projinfo) != NULL
-             && G_find_key_value("dz", projinfo) != NULL) {
-        G_asprintf(params, "towgs84=%s,%s,%s",
-                   G_find_key_value("dx", projinfo),
+    else if (G_find_key_value("dx", projinfo) != NULL &&
+             G_find_key_value("dy", projinfo) != NULL &&
+             G_find_key_value("dz", projinfo) != NULL) {
+        G_asprintf(params, "towgs84=%s,%s,%s", G_find_key_value("dx", projinfo),
                    G_find_key_value("dy", projinfo),
                    G_find_key_value("dz", projinfo));
         returnval = 2;
@@ -221,23 +219,22 @@ int GPJ__get_datum_params(const struct Key_Value *projinfo,
         *params = NULL;
 
     return returnval;
-
 }
 
 /**
- * \brief Internal function to find all possible sets of 
+ * \brief Internal function to find all possible sets of
  *        transformation parameters for a particular datum
- *  
+ *
  * \param inputname   String containing the datum name we
  *                    are going to look up parameters for
- * 
+ *
  * \return   Pointer to struct gpj_datum_transform_list (a linked
  *           list containing transformation parameters),
  *           or NULL if no suitable parameters were found.
  **/
 
-struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
-                                                                 *inputname)
+struct gpj_datum_transform_list *
+GPJ_get_datum_transform_by_name(const char *inputname)
 {
     FILE *fd;
     char file[GPATH_MAX];
@@ -249,8 +246,8 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 
     GPJ_get_datum_by_name(inputname, &dstruct);
     if (dstruct.dx < 99999 && dstruct.dy < 99999 && dstruct.dz < 99999) {
-        /* Include the old-style dx dy dz parameters from datum.table at the 
-         * start of the list, unless these have been set to all 99999 to 
+        /* Include the old-style dx dy dz parameters from datum.table at the
+         * start of the list, unless these have been set to all 99999 to
          * indicate only entries in datumtransform.table should be used */
         if (current == NULL)
             current = outputlist =
@@ -290,13 +287,12 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 
         if (sscanf(buf, "%99s \"%1023[^\"]\" \"%1023[^\"]\" \"%1023[^\"]\"",
                    name, params, where_used, comment) != 4) {
-            G_warning(_("Error in datum table file <%s>, line %d"), file,
-                      line);
+            G_warning(_("Error in datum table file <%s>, line %d"), file, line);
             continue;
         }
 
         if (G_strcasecmp(inputname, name) == 0) {
-            /* If the datum name in this line matches the one we are 
+            /* If the datum name in this line matches the one we are
              * looking for, add an entry to the linked list */
             if (current == NULL)
                 current = outputlist =
@@ -316,7 +312,6 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
     fclose(fd);
 
     return outputlist;
-
 }
 
 /**
@@ -337,9 +332,9 @@ void GPJ_free_datum_transform(struct gpj_datum_transform_list *item)
 /**
  * \brief Read the current GRASS datum.table from disk and store in
  *        memory
- * 
+ *
  * The datum information is stored in a datum_list linked list structure.
- * 
+ *
  * \return Pointer to first datum_list element in linked list, or NULL
  *         if unable to open datum.table file
  **/
@@ -369,10 +364,9 @@ struct datum_list *read_datum_table(void)
         if (*buf == '\0' || *buf == '#')
             continue;
 
-        if (sscanf(buf, "%s \"%1023[^\"]\" %s dx=%lf dy=%lf dz=%lf",
-                   name, descr, ellps, &dx, &dy, &dz) != 6) {
-            G_warning(_("Error in datum table file <%s>, line %d"), file,
-                      line);
+        if (sscanf(buf, "%s \"%1023[^\"]\" %s dx=%lf dy=%lf dz=%lf", name,
+                   descr, ellps, &dx, &dy, &dz) != 6) {
+            G_warning(_("Error in datum table file <%s>, line %d"), file, line);
             continue;
         }
 
@@ -398,7 +392,7 @@ struct datum_list *read_datum_table(void)
 
 /**
  * \brief Free the memory used for the strings in a gpj_datum struct
- * 
+ *
  * \param dstruct gpj_datum struct to be freed
  **/
 
@@ -412,7 +406,7 @@ void GPJ_free_datum(struct gpj_datum *dstruct)
 
 /**
  * \brief Free the memory used by a datum_list linked list structure
- * 
+ *
  * \param dstruct datum_list struct to be freed
  **/
 

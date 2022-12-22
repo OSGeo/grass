@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2007
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit tests for les creation
-*
-* COPYRIGHT:    (C) 2007 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2007
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit tests for les creation
+ *
+ * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -26,7 +25,6 @@
 /* prototypes */
 static int test_blas_level_3_double(void);
 static int test_blas_level_3_float(void);
-
 
 /* *************************************************************** */
 /* Perfrome the blas level 3 unit tests ************************** */
@@ -79,7 +77,6 @@ int test_blas_level_3_double(void)
     }
     G_math_d_asum_norm(y, &a, rows);
 
-
     if (a != 3 * rows * cols) {
         G_message("Error in G_math_d_aA_B: %f != %f", a,
                   (double)3 * rows * cols);
@@ -92,7 +89,6 @@ int test_blas_level_3_double(void)
     }
     G_math_d_asum_norm(y, &b, rows);
 
-
     if (b != rows * cols) {
         G_message("Error in G_math_d_aA_B: %f != %f", b, (double)rows * cols);
         sum++;
@@ -103,7 +99,6 @@ int test_blas_level_3_double(void)
         G_math_d_Ax(C, x, y, rows, cols);
     }
     G_math_d_asum_norm(y, &c, rows);
-
 
     if (c != 4 * rows * cols) {
         G_message("Error in G_math_d_aA_B: %f != %f", c,
@@ -135,7 +130,6 @@ int test_blas_level_3_double(void)
     }
     G_math_d_asum_norm(y, &d, rows);
 
-
     if (d != 2 * rows * cols * cols) {
         G_message("Error in G_math_d_AB: %f != %f", d,
                   (double)2 * rows * cols * cols);
@@ -156,7 +150,6 @@ int test_blas_level_3_double(void)
 
     return sum;
 }
-
 
 /* *************************************************************** */
 /* ************** F L O A T ************************************** */
@@ -241,7 +234,6 @@ int test_blas_level_3_float(void)
         G_math_f_Ax(C, x, y, rows, cols);
     }
     G_math_f_asum_norm(y, &d, rows);
-
 
     if (d != 2 * rows * cols * cols) {
         G_message("Error in G_math_f_AB: %f != %f", d,

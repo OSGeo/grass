@@ -47,12 +47,11 @@ void P_zero_dim(struct Reg_dimens *dim)
    Interpolated points in Overlap are taken as they are
 
    The buffer zones Elaboration - General and General - Overlap must be
-   large enough to avoid artifacts 
+   large enough to avoid artifacts
  */
 
-int
-P_set_regions(struct Cell_head *Elaboration, struct bound_box *General,
-              struct bound_box *Overlap, struct Reg_dimens dim, int type)
+int P_set_regions(struct Cell_head *Elaboration, struct bound_box *General,
+                  struct bound_box *Overlap, struct Reg_dimens dim, int type)
 {
     /* Set the Elaboration, General, and Overlap region limits
      * Returns 0 on success; -1 on failure*/
@@ -61,7 +60,7 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box *General,
     G_get_window(&orig);
 
     switch (type) {
-    case GENERAL_ROW:          /* General case N-S direction */
+    case GENERAL_ROW: /* General case N-S direction */
         Elaboration->north =
             Elaboration->south + dim.overlap + (2 * dim.edge_h);
         Elaboration->south = Elaboration->north - dim.sn_size;
@@ -71,9 +70,8 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box *General,
         Overlap->S = General->S + dim.overlap;
         return 0;
 
-    case GENERAL_COLUMN:       /* General case E-W direction */
-        Elaboration->west =
-            Elaboration->east - dim.overlap - (2 * dim.edge_v);
+    case GENERAL_COLUMN: /* General case E-W direction */
+        Elaboration->west = Elaboration->east - dim.overlap - (2 * dim.edge_v);
         Elaboration->east = Elaboration->west + dim.ew_size;
         General->W = Elaboration->west + dim.edge_v;
         General->E = Elaboration->east - dim.edge_v;
@@ -81,7 +79,7 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box *General,
         Overlap->E = General->E - dim.overlap;
         return 0;
 
-    case FIRST_ROW:            /* Just started with first row */
+    case FIRST_ROW: /* Just started with first row */
         Elaboration->north = orig.north + 2 * dim.edge_h;
         Elaboration->south = Elaboration->north - dim.sn_size;
         General->N = orig.north;
@@ -90,13 +88,13 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box *General,
         Overlap->S = General->S + dim.overlap;
         return 0;
 
-    case LAST_ROW:             /* Reached last row */
+    case LAST_ROW: /* Reached last row */
         Elaboration->south = orig.south - 2 * dim.edge_h;
         General->S = orig.south;
         Overlap->S = General->S;
         return 0;
 
-    case FIRST_COLUMN:         /* Just started with first column */
+    case FIRST_COLUMN: /* Just started with first column */
         Elaboration->west = orig.west - 2 * dim.edge_v;
         Elaboration->east = Elaboration->west + dim.ew_size;
         General->W = orig.west;
@@ -105,7 +103,7 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box *General,
         Overlap->E = General->E - dim.overlap;
         return 0;
 
-    case LAST_COLUMN:          /* Reached last column */
+    case LAST_COLUMN: /* Reached last column */
         Elaboration->east = orig.east + 2 * dim.edge_v;
         General->E = orig.east;
         Overlap->E = General->E;
@@ -135,14 +133,18 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx,
     edgeN = dim->sn_size - dim->overlap - 2 * dim->edge_h;
 
     /* number of moving windows: E_extension / edgeE */
-    /* remaining steps: total steps - (floor(E_extension / edgeE) * E_extension) / passoE */
-    /* remaining steps must be larger than edge_v + overlap + half of overlap window */
+    /* remaining steps: total steps - (floor(E_extension / edgeE) * E_extension)
+     * / passoE */
+    /* remaining steps must be larger than edge_v + overlap + half of overlap
+     * window */
     total_splines = ceil(E_extension / pe);
     edge_splines = edgeE / pe;
-    n_windows = E_extension / edgeE;    /* without last one */
+    n_windows = E_extension / edgeE; /* without last one */
     if (n_windows > 0) {
-        /* min size of the last overlap window = half of current overlap window */
-        /* max size of the last overlap window = elaboration - 3 * edge - overlap */
+        /* min size of the last overlap window = half of current overlap window
+         */
+        /* max size of the last overlap window = elaboration - 3 * edge -
+         * overlap */
         lastsplines_min =
             ceil((dim->ew_size / 2.0 - (dim->edge_v + dim->overlap)) / pe);
         lastsplines_max =
@@ -154,7 +156,7 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx,
             edgeE = dim->ew_size - dim->overlap - 2 * dim->edge_v;
 
             edge_splines = edgeE / pe;
-            n_windows = E_extension / edgeE;    /* without last one */
+            n_windows = E_extension / edgeE; /* without last one */
             lastsplines = total_splines - edge_splines * n_windows;
             if (ret == 0)
                 ret = 1;
@@ -163,10 +165,12 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx,
 
     total_splines = ceil(N_extension / pn);
     edge_splines = edgeN / pn;
-    n_windows = N_extension / edgeN;    /* without last one */
+    n_windows = N_extension / edgeN; /* without last one */
     if (n_windows > 0) {
-        /* min size of the last overlap window = half of current overlap window */
-        /* max size of the last overlap window = elaboration - 3 * edge - overlap */
+        /* min size of the last overlap window = half of current overlap window
+         */
+        /* max size of the last overlap window = elaboration - 3 * edge -
+         * overlap */
         lastsplines_min =
             ceil((dim->sn_size / 2.0 - (dim->edge_h + dim->overlap)) / pn);
         lastsplines_max =
@@ -178,7 +182,7 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx,
             edgeN = dim->sn_size - dim->overlap - 2 * dim->edge_h;
 
             edge_splines = edgeN / pn;
-            n_windows = N_extension / edgeN;    /* without last one */
+            n_windows = N_extension / edgeN; /* without last one */
             lastsplines = total_splines - edge_splines * n_windows;
             if (ret < 2)
                 ret += 2;
@@ -192,7 +196,8 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx,
 int P_get_edge(int interpolator, struct Reg_dimens *dim, double pe, double pn)
 {
     /* Set the edge regions dimension
-     * Returns 1 on success of bilinear; 2 on success of bicubic, 0 on failure */
+     * Returns 1 on success of bilinear; 2 on success of bicubic, 0 on failure
+     */
     if (interpolator == P_BILINEAR) {
         /* in case of edge artifacts, increase as multiples of 3 */
         dim->edge_v = 9 * pe;
@@ -201,12 +206,12 @@ int P_get_edge(int interpolator, struct Reg_dimens *dim, double pe, double pn)
     }
     else if (interpolator == P_BICUBIC) {
         /* in case of edge artifacts, increase as multiples of 4 */
-        dim->edge_v = 12 * pe;  /*3 */
+        dim->edge_v = 12 * pe; /*3 */
         dim->edge_h = 12 * pn;
         return 2;
     }
     else
-        return 0;               /* The interpolator is neither bilinear nor bicubic!! */
+        return 0; /* The interpolator is neither bilinear nor bicubic!! */
 }
 
 /*----------------------------------------------------------------------------------------*/
@@ -223,8 +228,8 @@ int P_get_BandWidth(int interpolator, int nsplines)
 }
 
 /*----------------------------------------------------------------------------------------*/
-double
-P_Mean_Calc(struct Cell_head *Elaboration, struct Point *obs, int npoints)
+double P_Mean_Calc(struct Cell_head *Elaboration, struct Point *obs,
+                   int npoints)
 {
     int i, mean_count = 0;
     double mean = 0.0;
@@ -236,9 +241,9 @@ P_Mean_Calc(struct Cell_head *Elaboration, struct Point *obs, int npoints)
     mean_box.N += CONTOUR;
     mean_box.S -= CONTOUR;
 
-    for (i = 0; i < npoints; i++) {     /*  */
-        if (Vect_point_in_box
-            (obs[i].coordX, obs[i].coordY, obs[i].coordZ, &mean_box)) {
+    for (i = 0; i < npoints; i++) { /*  */
+        if (Vect_point_in_box(obs[i].coordX, obs[i].coordY, obs[i].coordZ,
+                              &mean_box)) {
             mean_count++;
             mean += obs[i].coordZ;
         }
@@ -316,8 +321,7 @@ double P_estimate_splinestep(struct Map_info *Map, double *dens, double *dist)
 
 struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
                                        struct Cell_head *Elaboration,
-                                       int *num_points, int dim_vect,
-                                       int layer)
+                                       int *num_points, int dim_vect, int layer)
 {
     int line_num, pippo, npoints, cat, type;
     double x, y, z;
@@ -358,17 +362,16 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
             npoints++;
             if (npoints >= pippo) {
                 pippo += dim_vect;
-                obs =
-                    (struct Point *)G_realloc((void *)obs,
-                                              (signed int)pippo *
-                                              sizeof(struct Point));
+                obs = (struct Point *)G_realloc(
+                    (void *)obs, (signed int)pippo * sizeof(struct Point));
             }
 
             /* Storing observation vector */
             obs[npoints - 1].coordX = x;
             obs[npoints - 1].coordY = y;
             obs[npoints - 1].coordZ = z;
-            obs[npoints - 1].lineID = line_num; /* Storing also the line's number */
+            obs[npoints - 1].lineID =
+                line_num; /* Storing also the line's number */
 
             Vect_cat_get(categories, layer, &cat);
             obs[npoints - 1].cat = cat;
@@ -381,7 +384,7 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     return obs;
 }
 
-struct Point *P_Read_Raster_Region_Map(SEGMENT * in_seg,
+struct Point *P_Read_Raster_Region_Map(SEGMENT *in_seg,
                                        struct Cell_head *Elaboration,
                                        struct Cell_head *Original,
                                        int *num_points, int dim_vect)
@@ -408,16 +411,14 @@ struct Point *P_Read_Raster_Region_Map(SEGMENT * in_seg,
     else
         startrow = 0;
     if (Original->north > Elaboration->south) {
-        endrow =
-            (Original->north - Elaboration->south) / Original->ns_res + 1;
+        endrow = (Original->north - Elaboration->south) / Original->ns_res + 1;
         if (endrow > nrows)
             endrow = nrows;
     }
     else
         endrow = nrows;
     if (Elaboration->west > Original->west)
-        startcol =
-            (Elaboration->west - Original->west) / Original->ew_res - 1;
+        startcol = (Elaboration->west - Original->west) / Original->ew_res - 1;
     else
         startcol = 0;
     if (Elaboration->east > Original->west) {
@@ -442,10 +443,9 @@ struct Point *P_Read_Raster_Region_Map(SEGMENT * in_seg,
                     npoints++;
                     if (npoints >= pippo) {
                         pippo += dim_vect;
-                        obs =
-                            (struct Point *)G_realloc((void *)obs,
-                                                      (signed int)pippo *
-                                                      sizeof(struct Point));
+                        obs = (struct Point *)G_realloc(
+                            (void *)obs,
+                            (signed int)pippo * sizeof(struct Point));
                     }
 
                     /* Storing observation vector */
@@ -462,15 +462,14 @@ struct Point *P_Read_Raster_Region_Map(SEGMENT * in_seg,
 }
 
 /*------------------------------------------------------------------------------------------------*/
-int P_Create_Aux2_Table(dbDriver * driver, char *tab_name)
+int P_Create_Aux2_Table(dbDriver *driver, char *tab_name)
 {
     dbTable *auxiliar_tab;
     dbColumn *column;
 
     auxiliar_tab = db_alloc_table(2);
     db_set_table_name(auxiliar_tab, tab_name);
-    db_set_table_description(auxiliar_tab,
-                             "Intermediate interpolated values");
+    db_set_table_description(auxiliar_tab, "Intermediate interpolated values");
 
     column = db_get_table_column(auxiliar_tab, 0);
     db_set_column_name(column, "ID");
@@ -491,15 +490,14 @@ int P_Create_Aux2_Table(dbDriver * driver, char *tab_name)
 }
 
 /*------------------------------------------------------------------------------------------------*/
-int P_Create_Aux4_Table(dbDriver * driver, char *tab_name)
+int P_Create_Aux4_Table(dbDriver *driver, char *tab_name)
 {
     dbTable *auxiliar_tab;
     dbColumn *column;
 
     auxiliar_tab = db_alloc_table(4);
     db_set_table_name(auxiliar_tab, tab_name);
-    db_set_table_description(auxiliar_tab,
-                             "Intermediate interpolated values");
+    db_set_table_description(auxiliar_tab, "Intermediate interpolated values");
 
     column = db_get_table_column(auxiliar_tab, 0);
     db_set_column_name(column, "ID");
@@ -528,7 +526,7 @@ int P_Create_Aux4_Table(dbDriver * driver, char *tab_name)
 }
 
 /*------------------------------------------------------------------------------------------------*/
-int P_Drop_Aux_Table(dbDriver * driver, char *tab_name)
+int P_Drop_Aux_Table(dbDriver *driver, char *tab_name)
 {
     dbString drop;
 
@@ -556,7 +554,7 @@ void P_Aux_to_Raster(double **matrix, int fd)
 
         for (col = 0, ptr = raster; col < ncols;
              col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(DCELL_TYPE))) {
-            Rast_set_d_value(ptr, (DCELL) (matrix[row][col]), DCELL_TYPE);
+            Rast_set_d_value(ptr, (DCELL)(matrix[row][col]), DCELL_TYPE);
         }
         Rast_put_d_row(fd, raster);
     }
@@ -564,9 +562,8 @@ void P_Aux_to_Raster(double **matrix, int fd)
 }
 
 /*------------------------------------------------------------------------------------------------*/
-void
-P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out, dbDriver * driver,
-                char *tab_name)
+void P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out,
+                     dbDriver *driver, char *tab_name)
 {
 
     int more, type, count = 0;

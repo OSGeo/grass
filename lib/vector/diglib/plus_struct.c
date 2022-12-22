@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Dave Gerdes, CERL.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,15 +10,17 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <sys/types.h>
 #include <string.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 #include <grass/version.h>
+
 /*
  * Routines for reading and writing Dig+ structures.
  * return 0 on success, -1 on failure of whatever kind
@@ -27,18 +28,18 @@
  * ie  check for deleted status before calling a write routine
  * in as much as it would be nice to hide that code in here,
  * this is a library routine and we chose to make it dependent on
- * as few external files as possible 
+ * as few external files as possible
  */
 
-/*  These routines assume ptr->alloc_lines  is valid 
- *   Make sure it is initialized before calling 
+/*  These routines assume ptr->alloc_lines  is valid
+ *   Make sure it is initialized before calling
  */
 
 /*
  *  Internally, my default variables for lines/areas/nodes/isles  are type
  *  plus_t  which is typedefed as short.  This limits the current version
  *  to no more than 32K lines, nodes etc. (excluding points)
- *  All in the name of future expansion, I have converted these values to 
+ *  All in the name of future expansion, I have converted these values to
  *  longs in the dig_plus data file.
  *
  *  NOTE: 3.10 changes plus_t to  ints.
@@ -57,7 +58,7 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
         return (-1);
 
-    if (cnt == 0) {             /* dead */
+    if (cnt == 0) { /* dead */
         G_debug(4, "    node is dead");
         Plus->Node[n] = NULL;
         return 0;
@@ -77,7 +78,7 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
     }
 
     if (Plus->with_z)
-        if (0 >= dig__fread_port_P(&n_edges, 1, fp))    /* reserved for edges */
+        if (0 >= dig__fread_port_P(&n_edges, 1, fp)) /* reserved for edges */
             return (-1);
 
     /* here will be edges */
@@ -93,7 +94,6 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
     }
     else
         ptr->z = 0;
-
 
     Plus->Node[n] = ptr;
 
@@ -128,7 +128,7 @@ int dig_Wr_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
     }
 
     if (Plus->with_z)
-        if (0 >= dig__fwrite_port_P(&n_edges, 1, fp))   /* reserved for edges */
+        if (0 >= dig__fwrite_port_P(&n_edges, 1, fp)) /* reserved for edges */
             return (-1);
 
     /* here will be edges */
@@ -156,7 +156,7 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
     if (0 >= dig__fread_port_C(&tp, 1, fp))
         return (-1);
 
-    if (tp == 0) {              /* dead */
+    if (tp == 0) { /* dead */
         G_debug(4, "    line is dead");
         Plus->Line[n] = NULL;
         return 0;
@@ -209,7 +209,8 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
             return -1;
     }
     /* faces */
-    else if ((ptr->type & GV_FACE) && Plus->with_z) {   /* reserved for face edges */
+    else if ((ptr->type & GV_FACE) &&
+             Plus->with_z) { /* reserved for face edges */
         struct P_topo_f *topo = (struct P_topo_f *)ptr->topo;
 
         if (0 >= dig__fread_port_I(&n_edges, 1, fp))
@@ -224,7 +225,8 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
             return -1;
     }
     /* kernels */
-    else if ((ptr->type & GV_KERNEL) && Plus->with_z) { /* reserved for kernel (volume number) */
+    else if ((ptr->type & GV_KERNEL) &&
+             Plus->with_z) { /* reserved for kernel (volume number) */
         struct P_topo_k *topo = (struct P_topo_k *)ptr->topo;
 
         if (0 >= dig__fread_port_P(&(topo->volume), 1, fp))
@@ -300,7 +302,7 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
             return (-1);
     }
     /* faces */
-    else if ((ptr->type & GV_FACE) && Plus->with_z) {   /* reserved for face */
+    else if ((ptr->type & GV_FACE) && Plus->with_z) { /* reserved for face */
         struct P_topo_f *topo = (struct P_topo_f *)ptr->topo;
 
         if (0 >= dig__fwrite_port_I(&n_edges, 1, fp))
@@ -315,7 +317,8 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
             return (-1);
     }
     /* kernels */
-    else if ((ptr->type & GV_KERNEL) && Plus->with_z) { /* reserved for kernel (volume number) */
+    else if ((ptr->type & GV_KERNEL) &&
+             Plus->with_z) { /* reserved for kernel (volume number) */
         struct P_topo_k *topo = (struct P_topo_k *)ptr->topo;
 
         /* volume */
@@ -336,7 +339,7 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile *fp)
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
         return (-1);
 
-    if (cnt == 0) {             /* dead */
+    if (cnt == 0) { /* dead */
         Plus->Area[n] = NULL;
         return 0;
     }
@@ -421,7 +424,7 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile *fp)
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
         return (-1);
 
-    if (cnt == 0) {             /* dead */
+    if (cnt == 0) { /* dead */
         Plus->Isle[n] = NULL;
         return 0;
     }
@@ -484,7 +487,7 @@ int dig_Wr_P_isle(struct Plus_head *Plus, int n, struct gvfile *fp)
    \param[in,out] ptr pointer to Plus_head structure
 
    \return -1 error
-   \return  0 OK 
+   \return  0 OK
  */
 int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 {
@@ -502,44 +505,52 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     ptr->version.topo.back_minor = buf[3];
     byte_order = buf[4];
 
-    G_debug(2,
-            "Topo header: file version %d.%d , supported from GRASS version %d.%d",
-            ptr->version.topo.major, ptr->version.topo.minor,
-            ptr->version.topo.back_major, ptr->version.topo.back_minor);
+    G_debug(
+        2,
+        "Topo header: file version %d.%d , supported from GRASS version %d.%d",
+        ptr->version.topo.major, ptr->version.topo.minor,
+        ptr->version.topo.back_major, ptr->version.topo.back_minor);
 
     G_debug(2, "  byte order %d", byte_order);
 
     /* check version numbers */
     if (ptr->version.topo.major > GV_TOPO_VER_MAJOR ||
         ptr->version.topo.minor > GV_TOPO_VER_MINOR) {
-        /* The file was created by GRASS library with higher version than this one */
+        /* The file was created by GRASS library with higher version than this
+         * one */
 
         if (ptr->version.topo.back_major > GV_TOPO_VER_MAJOR ||
             ptr->version.topo.back_minor > GV_TOPO_VER_MINOR) {
-            /* This version of GRASS lib is lower than the oldest which can read this format */
-            G_debug(1, "Topology format version %d.%d",
-                    ptr->version.topo.major, ptr->version.topo.minor);
-            G_fatal_error
-                (_("This version of GRASS (%d.%d) is too old to read this topology format."
-                  " Try to rebuild topology or upgrade GRASS to at least version %d."),
-                 GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR,
-                 GRASS_VERSION_MAJOR + 1);
+            /* This version of GRASS lib is lower than the oldest which can read
+             * this format */
+            G_debug(1, "Topology format version %d.%d", ptr->version.topo.major,
+                    ptr->version.topo.minor);
+            G_fatal_error(_("This version of GRASS (%d.%d) is too old to read "
+                            "this topology format."
+                            " Try to rebuild topology or upgrade GRASS to at "
+                            "least version %d."),
+                          GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR,
+                          GRASS_VERSION_MAJOR + 1);
             return (-1);
         }
 
-        G_warning(_("Your GRASS version does not fully support topology format %d.%d of the vector."
-                   " Consider to rebuild topology or upgrade GRASS."),
+        G_warning(_("Your GRASS version does not fully support topology format "
+                    "%d.%d of the vector."
+                    " Consider to rebuild topology or upgrade GRASS."),
                   ptr->version.topo.major, ptr->version.topo.minor);
     }
     if (ptr->version.topo.major < GV_TOPO_VER_MAJOR ||
         (ptr->version.topo.major == GV_TOPO_VER_MAJOR &&
          ptr->version.topo.minor < GV_TOPO_VER_MINOR)) {
-        /* The file was created by GRASS library with lower version than this one */
+        /* The file was created by GRASS library with lower version than this
+         * one */
 
         /* This version of GRASS lib can not read this old format */
-        G_warning(_("Old topology format version %d.%d is not supported by this release."
-                   " Try to rebuild topology using v.build or v.build.all module."),
-                  ptr->version.topo.major, ptr->version.topo.minor);
+        G_warning(
+            _("Old topology format version %d.%d is not supported by this "
+              "release."
+              " Try to rebuild topology using v.build or v.build.all module."),
+            ptr->version.topo.major, ptr->version.topo.minor);
         return (-1);
     }
 
@@ -555,7 +566,7 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     /* determine required offset size from header size */
     /* this is not safe in case new fields get added in later versions */
     /* better: add a new field with off_t_size after byte_order? */
-    if (ptr->head_size >= 142 + 32)     /* keep in sync with dig_Wr_Plus_head() */
+    if (ptr->head_size >= 142 + 32) /* keep in sync with dig_Wr_Plus_head() */
         ptr->off_t_size = 8;
     else
         ptr->off_t_size = 4;
@@ -662,7 +673,7 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
         return (-1);
 
     /* determine required offset size from coor file size */
-    if (ptr->coor_size > (off_t) PORT_LONG_MAX) {
+    if (ptr->coor_size > (off_t)PORT_LONG_MAX) {
         /* can only happen when sizeof(off_t) == 8 */
         ptr->off_t_size = 8;
     }
@@ -741,8 +752,7 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
         return (-1);
     if (0 >= dig__fwrite_port_O(&(ptr->Isle_offset), 1, fp, ptr->off_t_size))
         return (-1);
-    if (0 >=
-        dig__fwrite_port_O(&(ptr->Volume_offset), 1, fp, ptr->off_t_size))
+    if (0 >= dig__fwrite_port_O(&(ptr->Volume_offset), 1, fp, ptr->off_t_size))
         return (-1);
     if (0 >= dig__fwrite_port_O(&(ptr->Hole_offset), 1, fp, ptr->off_t_size))
         return (-1);

@@ -19,7 +19,7 @@ static int scan_double(const char *, double *);
 /*!
    \brief ASCII northing to double.
 
-   Converts the ASCII "northing" coordinate string in <i>buf</i> to its 
+   Converts the ASCII "northing" coordinate string in <i>buf</i> to its
    double representation (into <i>northing</i>).
 
    Supported projection codes (see gis.h):
@@ -50,7 +50,7 @@ int G_scan_northing(const char *buf, double *northing, int projection)
 /*!
    \brief ASCII easting to double.
 
-   Converts the ASCII "easting" coordinate string in <i>buf</i> to its 
+   Converts the ASCII "easting" coordinate string in <i>buf</i> to its
    double representation (into <i>easting</i>).
 
    Supported projection codes (see gis.h):
@@ -81,7 +81,7 @@ int G_scan_easting(const char *buf, double *easting, int projection)
 /*!
    \brief ASCII resolution to double.
 
-   Converts the ASCII "resolution" string in <i>buf</i> to its double 
+   Converts the ASCII "resolution" string in <i>buf</i> to its double
    representation (into resolution).
 
    Supported projection codes (see gis.h):
@@ -127,8 +127,8 @@ static int scan_double(const char *buf, double *value)
         if (*buf >= 'a' && *buf <= 'z')
             return 0;
 
-        return 1;               /* success */
+        return 1; /* success */
     }
 
-    return 0;                   /* failure */
+    return 0; /* failure */
 }

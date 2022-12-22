@@ -64,7 +64,6 @@ char *G_location_path(void)
     return location;
 }
 
-
 /*!
    \brief Get current location UNIX-like path (internal use only)
 

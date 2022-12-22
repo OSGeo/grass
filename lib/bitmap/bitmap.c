@@ -26,9 +26,9 @@
  **   BM_file_write (fp, map)           Write bitmap to file
  **
  **   struct BM *
- **   BM_file_read (fp)                 Create bitmap and load from file 
+ **   BM_file_read (fp)                 Create bitmap and load from file
  **
- **   BM_get_map_size (map)             returns size in bytes that bitmap is 
+ **   BM_get_map_size (map)             returns size in bytes that bitmap is
  **                                     taking up.  For diagnosis use.
  */
 
@@ -37,16 +37,14 @@
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 
-
-#define BM_col_to_byte(x)  ((x) >> 3)   /* x / 8 */
-#define BM_col_to_bit(x)   ((x) & 7)    /* x % 8 */
+#define BM_col_to_byte(x) ((x) >> 3) /* x / 8 */
+#define BM_col_to_bit(x)  ((x)&7)    /* x % 8 */
 
 static int Mode = BM_FLAT;
 static int Size = 1;
 
-
 /*!
- * \brief Create bitmap of dimension x/y and return structure token. 
+ * \brief Create bitmap of dimension x/y and return structure token.
  *
  * Bitmap is initialized to all zeros
  *
@@ -82,7 +80,6 @@ struct BM *BM_create(int x, int y)
     return map;
 }
 
-
 /*!
  * \brief Destroy bitmap and free all associated memory
  *
@@ -99,7 +96,6 @@ int BM_destroy(struct BM *map)
 
     return 0;
 }
-
 
 /*
  **  Caller can specify type of data structure to use for bitmap, as
@@ -118,7 +114,7 @@ int BM_destroy(struct BM *map)
  **             but can save several orders of magnitude of memory on large
  **             bitmaps since size of FLAT bitmap is O(M*N)
  **
- **  
+ **
  **  Returns 0  or negative on error;
  **   If error it will print a warning message to stderr and continue
  **   continue by running but will not change the option in error.
@@ -135,7 +131,7 @@ int BM_destroy(struct BM *map)
  * 1:32 compression over using CELL arrays.
  *
  * BM_SPARSE is a linked array of values. This is much more efficient
- * for large, very sparse arrays.  It is slower to access, especially 
+ * for large, very sparse arrays.  It is slower to access, especially
  * for writing, but can save several orders of magnitude of memory on
  * large bitmaps.
  *
@@ -171,7 +167,6 @@ int BM_set_mode(int mode, int size)
     return ret;
 }
 
-
 /*!
  * \brief
  *
@@ -205,7 +200,6 @@ int BM_set(struct BM *map, int x, int y, int val)
     return 0;
 }
 
-
 /*!
  * \brief
  *
@@ -234,7 +228,6 @@ int BM_get(struct BM *map, int x, int y)
     return byte >> BM_col_to_bit(x) & 0x01;
 }
 
-
 /*!
  * \brief
  *
@@ -252,7 +245,6 @@ size_t BM_get_map_size(struct BM *map)
     return (size_t)map->bytes * map->rows;
 }
 
-
 /*!
  * \brief
  *
@@ -268,7 +260,7 @@ size_t BM_get_map_size(struct BM *map)
  *  \return int
  */
 
-int BM_file_write(FILE * fp, struct BM *map)
+int BM_file_write(FILE *fp, struct BM *map)
 {
     char c;
     int i;
@@ -290,14 +282,12 @@ int BM_file_write(FILE * fp, struct BM *map)
 
     for (i = 0; i < map->rows; i++)
         if (map->bytes !=
-            fwrite(&(map->data[i * map->bytes]), sizeof(char), map->bytes,
-                   fp))
+            fwrite(&(map->data[i * map->bytes]), sizeof(char), map->bytes, fp))
             return -1;
     fflush(fp);
 
     return 0;
 }
-
 
 /*!
  * \brief
@@ -312,7 +302,7 @@ int BM_file_write(FILE * fp, struct BM *map)
  *  \return struct BM
  */
 
-struct BM *BM_file_read(FILE * fp)
+struct BM *BM_file_read(FILE *fp)
 {
     struct BM *map;
     char c;
@@ -342,7 +332,6 @@ struct BM *BM_file_read(FILE * fp)
     }
     map->sparse = c;
 
-
     if (fread(&(map->rows), sizeof(map->rows), sizeof(char), fp) !=
         sizeof(char)) {
         free(map);
@@ -365,27 +354,23 @@ struct BM *BM_file_read(FILE * fp)
         return (NULL);
     }
 
-
     for (i = 0; i < map->rows; i++)
         if (map->bytes !=
-            fread(&(map->data[i * map->bytes]), sizeof(char), map->bytes,
-                  fp)) {
+            fread(&(map->data[i * map->bytes]), sizeof(char), map->bytes, fp)) {
             free(map->data);
             free(map);
             return NULL;
         }
 
-
     return map;
 
-  readsparse:
+readsparse:
 
     link_set_chunk_size(500);
     map->token = link_init(sizeof(struct BMlink));
 
-
-    if (NULL == (map->data = (unsigned char *)
-                 malloc(sizeof(struct BMlink *) * map->rows))) {
+    if (NULL == (map->data = (unsigned char *)malloc(sizeof(struct BMlink *) *
+                                                     map->rows))) {
         free(map);
         return (NULL);
     }
@@ -398,7 +383,6 @@ struct BM *BM_file_read(FILE * fp)
             return NULL;
         }
         cnt = i;
-
 
         /* then read them in */
         for (i = 0; i < cnt; i++) {

@@ -17,7 +17,7 @@
 /*!
    \brief Hold signals
 
-   \param hold 
+   \param hold
 
    \return 0
  */

@@ -1,10 +1,9 @@
-
 /*****************************************************************************
  *
  * MODULE:       Grass PDE Numerical Library
  * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
+ *                 soerengebbert <at> gmx <dot> de
+ *
  * PURPOSE:      benchmarking the krylov subspace solvers
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -26,7 +25,6 @@
 /* prototypes */
 static int bench_solvers(int rows);
 
-
 /* ************************************************************************* */
 /* Performe the solver unit tests ****************************************** */
 
@@ -40,7 +38,6 @@ int bench_solvers_krylov(int rows)
     return 1;
 }
 
-
 /* *************************************************************** */
 /* Test all implemented solvers for sparse and normal matrix *** */
 
@@ -52,8 +49,8 @@ int bench_solvers(int rows)
     struct timeval tstart;
     struct timeval tend;
 
-    G_message
-        ("\t * benchmarking pcg solver with symmetric matrix and preconditioner 1\n");
+    G_message("\t * benchmarking pcg solver with symmetric matrix and "
+              "preconditioner 1\n");
 
     les = create_normal_symmetric_les(rows);
     sples = create_sparse_symmetric_les(rows);

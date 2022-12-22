@@ -44,7 +44,8 @@ void G_putenv(const char *name, const char *value)
     char *env;
 
     if (first) {
-        for (i = 0; environ[i]; i++) ;
+        for (i = 0; environ[i]; i++)
+            ;
         newenv = (char **)G_malloc((i + 1) * sizeof(char *));
         for (i = 0; env = environ[i], env; i++)
             newenv[i] = G_store(env);

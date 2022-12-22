@@ -41,16 +41,14 @@ static void row_dotted_fill(int, double, double);
 static int ifloor(double);
 static int iceil(double);
 
-struct point
-{
+struct point {
     double x;
     int y;
 };
 
 #define POINT struct point
 
-static struct state
-{
+static struct state {
     struct Cell_head window;
     double xconv, yconv;
     double left, right, top, bottom;
@@ -71,7 +69,7 @@ static struct state *st = &state;
 #define OK            0
 #define TOO_FEW_EDGES 2
 #define NO_MEMORY     1
-#define OUT_OF_SYNC  -1
+#define OUT_OF_SYNC   -1
 
 /*!
  * \brief Initialize plotting routines
@@ -88,14 +86,15 @@ static struct state *st = &state;
  * <b>Move</b> and <b>Cont</b> are subroutines that will draw lines in x,y
  * space. They will be called as follows:
  * - Move(x, y) move to x,y (no draw)
- * - Cont(x, y) draw from previous position to x,y. Cont(~) is responsible for clipping
+ * - Cont(x, y) draw from previous position to x,y. Cont(~) is responsible for
+ clipping
  *
  * \param t,b,l,r top, bottom, left, right
  * \param move Move function
  * \param Cont Cont function
  */
-void G_setup_plot(double t, double b, double l, double r,
-                  int (*Move)(int, int), int(*Cont)(int, int))
+void G_setup_plot(double t, double b, double l, double r, int (*Move)(int, int),
+                  int (*Cont)(int, int))
 {
     G_get_set_window(&st->window);
 
@@ -105,8 +104,7 @@ void G_setup_plot(double t, double b, double l, double r,
     st->bottom = b;
 
     st->xconv = (st->right - st->left) / (st->window.east - st->window.west);
-    st->yconv =
-        (st->bottom - st->top) / (st->window.north - st->window.south);
+    st->yconv = (st->bottom - st->top) / (st->window.north - st->window.south);
 
     if (st->top < st->bottom) {
         st->ymin = iceil(st->top);
@@ -141,12 +139,11 @@ void G_setup_fill(int gap)
         st->row_fill = row_solid_fill;
 }
 
-#define X(e) (st->left + st->xconv * ((e) - st->window.west))
-#define Y(n) (st->top + st->yconv * (st->window.north - (n)))
+#define X(e)     (st->left + st->xconv * ((e)-st->window.west))
+#define Y(n)     (st->top + st->yconv * (st->window.north - (n)))
 
-#define EAST(x) (st->window.west + ((x)-st->left)/st->xconv)
-#define NORTH(y) (st->window.north - ((y)-st->top)/st->yconv)
-
+#define EAST(x)  (st->window.west + ((x)-st->left) / st->xconv)
+#define NORTH(y) (st->window.north - ((y)-st->top) / st->yconv)
 
 /*!
  * \brief Converts east,north to x,y
@@ -237,7 +234,7 @@ static void fastline(double x1, double y1, double x2, double y2)
     st->cont(ifloor(x2 + 0.5), ifloor(y2 + 0.5));
 }
 
-/* NOTE (shapiro): 
+/* NOTE (shapiro):
  *   I think the adding of 0.5 in slowline is not correct
  *   the output window (left, right, top, bottom) should already
  *   be adjusted for this: left=-0.5; right = window.cols-0.5;
@@ -274,7 +271,7 @@ static void slowline(double x1, double y1, double x2, double y2)
         }
     }
     else {
-        if (dx == dy)           /* they both might be 0 */
+        if (dx == dy) /* they both might be 0 */
             m = 1.;
         else
             m = dx / dy;
@@ -299,9 +296,8 @@ static void slowline(double x1, double y1, double x2, double y2)
     }
 }
 
-static void plot_line(double east1, double north1, double east2,
-                      double north2, void (*line)(double, double, double,
-                                                  double))
+static void plot_line(double east1, double north1, double east2, double north2,
+                      void (*line)(double, double, double, double))
 {
     double x1, x2, y1, y2;
 
@@ -358,7 +354,6 @@ static double wrap_east(double e0, double e1)
 
     return e1;
 }
-
 
 /*!
  * \brief Plot filled polygon with n vertices
@@ -432,7 +427,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
         if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
             return NO_MEMORY;
 
-        shift = 0;              /* shift into window */
+        shift = 0; /* shift into window */
         while (E + shift > st->window.east)
             shift -= 360.0;
         while (E + shift < st->window.west)
@@ -468,10 +463,9 @@ int G_plot_polygon(const double *x, const double *y, int n)
             G_warning("Weird internal error: edge leaves row");
             return OUT_OF_SYNC;
         }
-        st->row_fill(st->P[i].y, st->P[i - 1].x + shift1,
-                     st->P[i].x + shift1);
+        st->row_fill(st->P[i].y, st->P[i - 1].x + shift1, st->P[i].x + shift1);
     }
-    if (st->window.proj == PROJECTION_LL) {     /* now do wrap-around, part 2 */
+    if (st->window.proj == PROJECTION_LL) { /* now do wrap-around, part 2 */
         shift = 0;
         while (W + shift < st->window.west)
             shift += 360.0;
@@ -569,7 +563,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
             if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
                 return NO_MEMORY;
 
-            shift = 0;          /* shift into window */
+            shift = 0; /* shift into window */
             while (E + shift > st->window.east)
                 shift -= 360.0;
             while (E + shift < st->window.west)
@@ -589,7 +583,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
                 y0 = y1;
             }
         }
-    }                           /* for() */
+    } /* for() */
 
     /* check if perimeter has odd number of points */
     if (st->np & 1) {
@@ -631,7 +625,6 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
     }
     G_free(shift1);
     return OK;
-
 }
 
 static int edge(double x0, double y0, double x1, double y1)
@@ -661,17 +654,17 @@ static int edge(double x0, double y0, double x1, double y1)
         ystart = iceil(y0);
         ystop = ifloor(y1);
         if (ystop == y1)
-            ystop--;            /* if line stops at row center, don't include point */
+            ystop--; /* if line stops at row center, don't include point */
     }
     else {
         ystart = iceil(y1);
         ystop = ifloor(y0);
         if (ystop == y0)
-            ystop--;            /* if line stops at row center, don't include point */
+            ystop--; /* if line stops at row center, don't include point */
     }
 
     if (ystart > ystop)
-        return 1;               /* does not cross center line of row */
+        return 1; /* does not cross center line of row */
 
     m = (x0 - x1) / (y0 - y1);
     x = m * (ystart - y0) + x0;
@@ -692,11 +685,11 @@ static int edge_point(double x, int y)
     if (st->np >= st->npalloc) {
         if (st->npalloc > 0) {
             st->npalloc *= 2;
-            st->P = (POINT *) G_realloc(st->P, st->npalloc * sizeof(POINT));
+            st->P = (POINT *)G_realloc(st->P, st->npalloc * sizeof(POINT));
         }
         else {
             st->npalloc = 32;
-            st->P = (POINT *) G_malloc(st->npalloc * sizeof(POINT));
+            st->P = (POINT *)G_malloc(st->npalloc * sizeof(POINT));
         }
         if (st->P == NULL) {
             st->npalloc = 0;
@@ -789,7 +782,6 @@ void G_plot_fx(double (*f)(double), double east1, double east2)
 {
     double east, north, north1;
     double incr;
-
 
     incr = fabs(1.0 / st->xconv);
 

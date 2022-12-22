@@ -1,32 +1,31 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      upwinding stabilization algorithms
-* 		part of the gpde library
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      upwinding stabilization algorithms
+ *                 part of the gpde library
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <math.h>
 #include <grass/N_pde.h>
-
 
 /*! \brief full upwinding stabilization algorithm
  *
  * The arguments are values to compute the local peclet number
  *
- * \param sprod double -- the scalar produkt between the velocity vector and the normal vector between two points
- * \param distance double -- distance between two points
- * \param D double -- diffusion/dispersion tensor part between two points
+ * \param sprod double -- the scalar produkt between the velocity vector and the
+ * normal vector between two points \param distance double -- distance between
+ * two points \param D double -- diffusion/dispersion tensor part between two
+ * points
  *
  * \return the weighting factor
  * */
@@ -54,9 +53,10 @@ double N_full_upwinding(double sprod, double distance, double D)
  *
  * The arguments are values to compute the local peclet number
  *
- * \param sprod double -- the scalar produkt between the velocity vector and the normal vector between two points
- * \param distance double -- distance between two points
- * \param D double -- diffusion/dispersion tensor part between two points
+ * \param sprod double -- the scalar produkt between the velocity vector and the
+ * normal vector between two points \param distance double -- distance between
+ * two points \param D double -- diffusion/dispersion tensor part between two
+ * points
  *
  * \return the weighting factor
  * */

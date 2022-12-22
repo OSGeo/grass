@@ -3,12 +3,12 @@
 
    \brief OGSF library - loading and manipulating volumes
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -89,7 +89,7 @@ int GVL_get_region(float *n, float *s, float *w, float *e, float *t, float *b)
 }
 
 /*!
-   \brief Get window 
+   \brief Get window
 
    \todo gvl_file.c use this - change
 
@@ -143,9 +143,9 @@ int GVL_new_vol(void)
         nvl = gvl_get_new_vol();
 
         gvl_init_vol(nvl, wind3.west + wind3.ew_res / 2.,
-                     wind3.south + wind3.ns_res / 2., wind3.bottom,
-                     wind3.rows, wind3.cols, wind3.depths,
-                     wind3.ew_res, wind3.ns_res, wind3.tb_res);
+                     wind3.south + wind3.ns_res / 2., wind3.bottom, wind3.rows,
+                     wind3.cols, wind3.depths, wind3.ew_res, wind3.ns_res,
+                     wind3.tb_res);
 
         Vol_ID[Next_vol] = nvl->gvol_id;
         ++Next_vol;
@@ -673,7 +673,7 @@ int GVL_isosurf_add(int id)
     if (gvl->n_isosurfs == MAX_ISOSURFS)
         return (-1);
 
-    isosurf = (geovol_isosurf *) G_malloc(sizeof(geovol_isosurf));
+    isosurf = (geovol_isosurf *)G_malloc(sizeof(geovol_isosurf));
     if (!isosurf) {
         return (-1);
     }
@@ -681,7 +681,7 @@ int GVL_isosurf_add(int id)
     gvl_isosurf_init(isosurf);
 
     gvl->n_isosurfs++;
-    gvl->isosurf[gvl->n_isosurfs - 1] = (geovol_isosurf *) isosurf;
+    gvl->isosurf[gvl->n_isosurfs - 1] = (geovol_isosurf *)isosurf;
 
     return (1);
 }
@@ -806,8 +806,8 @@ int GVL_isosurf_move_down(int id, int isosurf_id)
    \return -1 on error
    \return 1 on success
  */
-int GVL_isosurf_get_att(int id, int isosurf_id,
-                        int att, int *set, float *constant, char *mapname)
+int GVL_isosurf_get_att(int id, int isosurf_id, int att, int *set,
+                        float *constant, char *mapname)
 {
     int src;
     geovol_isosurf *isosurf;
@@ -885,8 +885,10 @@ int GVL_isosurf_set_att_const(int id, int isosurf_id, int att, float constant)
 {
     geovol_isosurf *isosurf;
 
-    G_debug(3, "GVL_isosurf_set_att_const() id=%d isosurf_id=%d "
-            "att=%d const=%f", id, isosurf_id, att, constant);
+    G_debug(3,
+            "GVL_isosurf_set_att_const() id=%d isosurf_id=%d "
+            "att=%d const=%f",
+            id, isosurf_id, att, constant);
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -922,8 +924,10 @@ int GVL_isosurf_set_att_map(int id, int isosurf_id, int att,
 {
     geovol_isosurf *isosurf;
 
-    G_debug(3, "GVL_isosurf_set_att_map(): id=%d, isosurf_id=%d "
-            "att=%d map=%s", id, isosurf_id, att, filename);
+    G_debug(3,
+            "GVL_isosurf_set_att_map(): id=%d, isosurf_id=%d "
+            "att=%d map=%s",
+            id, isosurf_id, att, filename);
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -1202,14 +1206,14 @@ int GVL_slice_add(int id)
     if (gvl->n_slices == MAX_SLICES)
         return (-1);
 
-    if (NULL == (slice = (geovol_slice *) G_malloc(sizeof(geovol_slice)))) {
+    if (NULL == (slice = (geovol_slice *)G_malloc(sizeof(geovol_slice)))) {
         return (-1);
     }
 
     gvl_slice_init(slice);
 
     gvl->n_slices++;
-    gvl->slice[gvl->n_slices - 1] = (geovol_slice *) slice;
+    gvl->slice[gvl->n_slices - 1] = (geovol_slice *)slice;
 
     return (1);
 }
@@ -1356,9 +1360,8 @@ int GVL_slice_num_slices(int id)
    \return -1 on error
    \return 1 on success
  */
-int GVL_slice_get_pos(int id, int slice_id,
-                      float *x1, float *x2, float *y1, float *y2, float *z1,
-                      float *z2, int *dir)
+int GVL_slice_get_pos(int id, int slice_id, float *x1, float *x2, float *y1,
+                      float *y2, float *z1, float *z2, int *dir)
 {
     geovol *gvl;
     geovol_slice *slice;
@@ -1417,9 +1420,8 @@ int GVL_slice_get_pos(int id, int slice_id,
    \return -1 on error
    \return 1 on success
  */
-int GVL_slice_set_pos(int id, int slice_id,
-                      float x1, float x2, float y1, float y2, float z1,
-                      float z2, int dir)
+int GVL_slice_set_pos(int id, int slice_id, float x1, float x2, float y1,
+                      float y2, float z1, float z2, int dir)
 {
     geovol *gvl;
     geovol_slice *slice;

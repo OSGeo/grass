@@ -6,8 +6,8 @@
 
 /*--------------------------------------------------------------------------*/
 
-static unsigned char clearMask[9] =
-    { 255, 128, 192, 224, 240, 248, 252, 254, 255 };
+static unsigned char clearMask[9] = {255, 128, 192, 224, 240,
+                                     248, 252, 254, 255};
 
 /*---------------------------------------------------------------------------*/
 
@@ -141,8 +141,7 @@ static void Rast3d_float2Double(float *f, double *d)
     e = (((*c1 & (unsigned char)127) << 1) |
          ((*(c1 + 1) & (unsigned char)128) >> 7));
 
-    if ((*c1 != 0) || (*(c1 + 1) != 0) || (*(c1 + 2) != 0) ||
-        (*(c1 + 3) != 0))
+    if ((*c1 != 0) || (*(c1 + 1) != 0) || (*(c1 + 2) != 0) || (*(c1 + 3) != 0))
         e += 1023 - 127;
     c = e / 16;
 
@@ -183,20 +182,22 @@ static int Rast3d_compareFloats(float *f1, int p1, float *f2, int p2)
     c1 = (unsigned char *)&xdrf1;
     c2 = (unsigned char *)&xdrf2;
 
-    /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d) %d\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *f1 == *f2); */
+    /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d) %d\n", p1, p2, *c1, *(c1 +
+     * 1), *(c1 + 2), *(c1 + 3), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *f1 ==
+     * *f2); */
 
     if ((p1 != -1) && (p1 < 23) && ((p1 < p2) || (p2 == -1)))
         Rast3d_truncFloat(&xdrf2, p1);
     if ((p2 != -1) && (p2 < 23) && ((p2 < p1) || (p1 == -1)))
         Rast3d_truncFloat(&xdrf1, p2);
 
-    /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d) %d\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *f1 == *f2); */
+    /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d) %d\n", p1, p2, *c1, *(c1 +
+     * 1), *(c1 + 2), *(c1 + 3), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *f1 ==
+     * *f2); */
 
     return (*c1 == *c2) && (*(c1 + 1) == *(c2 + 1)) &&
-        (*(c1 + 2) == *(c2 + 2))
-        && (*(c1 + 3) == *(c2 + 3));
+           (*(c1 + 2) == *(c2 + 2)) && (*(c1 + 3) == *(c2 + 3));
 }
-
 
 /*---------------------------------------------------------------------------*/
 
@@ -214,22 +215,26 @@ static int Rast3d_compareDoubles(double *d1, int p1, double *d2, int p2)
     c1 = (unsigned char *)&xdrd1;
     c2 = (unsigned char *)&xdrd2;
 
-    /*    printf ("%d %d (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
+    /*    printf ("%d %d (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n",
+     * p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1
+     * + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 +
+     * 5), *(c2 + 6), *(c2 + 7));  */
 
     if ((p1 != -1) && (p1 < 52) && ((p1 < p2) || (p2 == -1)))
         Rast3d_truncDouble(&xdrd2, p1);
     if ((p2 != -1) && (p2 < 52) && ((p2 < p1) || (p1 == -1)))
         Rast3d_truncDouble(&xdrd1, p2);
 
-    /*    printf ("%d %d (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
+    /*    printf ("%d %d (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n",
+     * p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1
+     * + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 +
+     * 5), *(c2 + 6), *(c2 + 7));  */
 
     return (*c1 == *c2) && (*(c1 + 1) == *(c2 + 1)) &&
-        (*(c1 + 2) == *(c2 + 2))
-        && (*(c1 + 3) == *(c2 + 3)) && (*(c1 + 4) == *(c2 + 4))
-        && (*(c1 + 5) == *(c2 + 5)) && (*(c1 + 6) == *(c2 + 6))
-        && (*(c1 + 7) == *(c2 + 7));
+           (*(c1 + 2) == *(c2 + 2)) && (*(c1 + 3) == *(c2 + 3)) &&
+           (*(c1 + 4) == *(c2 + 4)) && (*(c1 + 5) == *(c2 + 5)) &&
+           (*(c1 + 6) == *(c2 + 6)) && (*(c1 + 7) == *(c2 + 7));
 }
-
 
 /*---------------------------------------------------------------------------*/
 
@@ -244,8 +249,10 @@ static int Rast3d_compareFloatDouble(float *f, int p1, double *d, int p2)
 
     /* need this since assigning a double to a float actually may change the */
     /* bit pattern. an example (in xdr format) is the double */
-    /* (63 237 133 81 81 108 3 32) which truncated to 23 bits precision should */
-    /* become (63 237 133 81 64 0 0 0). however assigned to a float it becomes */
+    /* (63 237 133 81 81 108 3 32) which truncated to 23 bits precision should
+     */
+    /* become (63 237 133 81 64 0 0 0). however assigned to a float it becomes
+     */
     /* (63 237 133 81 96 0 0 0). */
     fTmp = *d;
     dTmp = fTmp;
@@ -257,8 +264,12 @@ static int Rast3d_compareFloatDouble(float *f, int p1, double *d, int p2)
     c1 = (unsigned char *)&xdrd2;
     c2 = (unsigned char *)&xdrd;
 
-    /*      printf ("%d %d (%d %d %d %d) (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n", p1, p2, *((unsigned char *) &xdrf), *(((unsigned char *) &xdrf) + 1), *(((unsigned char *) &xdrf) + 2), *(((unsigned char *) &xdrf) + 3), *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
-
+    /*      printf ("%d %d (%d %d %d %d) (%d %d %d %d %d %d %d %d) (%d %d %d %d
+     * %d %d %d %d)\n", p1, p2, *((unsigned char *) &xdrf), *(((unsigned char *)
+     * &xdrf) + 1), *(((unsigned char *) &xdrf) + 2), *(((unsigned char *)
+     * &xdrf) + 3), *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5),
+     * *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4),
+     * *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
 
     if (((p1 != -1) && ((p1 < p2) || (p2 == -1))) ||
         ((p1 == -1) && ((p2 > 23) || (p2 == -1))))
@@ -266,13 +277,17 @@ static int Rast3d_compareFloatDouble(float *f, int p1, double *d, int p2)
     if ((p2 != -1) && (p2 < 23) && ((p2 < p1) || (p1 == -1)))
         Rast3d_truncDouble(&xdrd2, p2);
 
-    /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n", p1, p2, *((unsigned char *) &xdrf), *(((unsigned char *) &xdrf) + 1), *(((unsigned char *) &xdrf) + 2), *(((unsigned char *) &xdrf) + 3), *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
+    /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d %d %d %d %d) (%d %d %d %d %d
+     * %d %d %d)\n", p1, p2, *((unsigned char *) &xdrf), *(((unsigned char *)
+     * &xdrf) + 1), *(((unsigned char *) &xdrf) + 2), *(((unsigned char *)
+     * &xdrf) + 3), *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5),
+     * *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4),
+     * *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
 
     return (*c1 == *c2) && (*(c1 + 1) == *(c2 + 1)) &&
-        (*(c1 + 2) == *(c2 + 2))
-        && (*(c1 + 3) == *(c2 + 3)) && (*(c1 + 4) == *(c2 + 4))
-        && (*(c1 + 5) == *(c2 + 5)) && (*(c1 + 6) == *(c2 + 6))
-        && (*(c1 + 7) == *(c2 + 7));
+           (*(c1 + 2) == *(c2 + 2)) && (*(c1 + 3) == *(c2 + 3)) &&
+           (*(c1 + 4) == *(c2 + 4)) && (*(c1 + 5) == *(c2 + 5)) &&
+           (*(c1 + 6) == *(c2 + 6)) && (*(c1 + 7) == *(c2 + 7));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -327,11 +342,11 @@ static void compareFilesNocache(void *map, void *map2)
 
                     Rast3d_coord2tile_coord(map2, x, y, z, &xTile, &yTile,
                                             &zTile, &xOffs, &yOffs, &zOffs);
-                    printf("(%d %d %d) (%d %d %d) (%d %d %d) %.20f %.20f\n",
-                           x, y, z, xTile, yTile, zTile, xOffs, yOffs, zOffs,
-                           *n1p, *n2p);
-                    Rast3d_fatal_error
-                        ("compareFilesNocache: files don't match\n");
+                    printf("(%d %d %d) (%d %d %d) (%d %d %d) %.20f %.20f\n", x,
+                           y, z, xTile, yTile, zTile, xOffs, yOffs, zOffs, *n1p,
+                           *n2p);
+                    Rast3d_fatal_error(
+                        "compareFilesNocache: files don't match\n");
                 }
             }
         }
@@ -342,9 +357,8 @@ static void compareFilesNocache(void *map, void *map2)
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Compares the cell-values of file <em>f1</em> in mapset
  * <em>mapset1</em> and file <em>f2</em> in mapset <em>mapset2</em>.
@@ -360,9 +374,8 @@ static void compareFilesNocache(void *map, void *map2)
  *  \return void
  */
 
-void
-Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
-                     const char *mapset2)
+void Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
+                          const char *mapset2)
 {
     void *map, *map2;
     double n1 = 0, n2 = 0;
@@ -380,8 +393,8 @@ Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
                                RASTER3D_TILE_SAME_AS_FILE,
                                RASTER3D_USE_CACHE_DEFAULT);
     if (map == NULL)
-        Rast3d_fatal_error
-            ("Rast3d_compare_files: error in Rast3d_open_cell_old");
+        Rast3d_fatal_error(
+            "Rast3d_compare_files: error in Rast3d_open_cell_old");
 
     Rast3d_print_header(map);
 
@@ -389,8 +402,8 @@ Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
                                 RASTER3D_TILE_SAME_AS_FILE,
                                 RASTER3D_USE_CACHE_DEFAULT);
     if (map2 == NULL)
-        Rast3d_fatal_error
-            ("Rast3d_compare_files: error in Rast3d_open_cell_old");
+        Rast3d_fatal_error(
+            "Rast3d_compare_files: error in Rast3d_open_cell_old");
 
     Rast3d_print_header(map2);
 
@@ -431,13 +444,13 @@ Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
 
         if ((z % tileZ) == 0) {
             if (!Rast3d_unlock_all(map))
-                Rast3d_fatal_error
-                    ("Rast3d_compare_files: error in Rast3d_unlock_all");
+                Rast3d_fatal_error(
+                    "Rast3d_compare_files: error in Rast3d_unlock_all");
         }
         if ((z % tileZ2) == 0) {
             if (!Rast3d_unlock_all(map2))
-                Rast3d_fatal_error
-                    ("Rast3d_compare_files: error in Rast3d_unlock_all");
+                Rast3d_fatal_error(
+                    "Rast3d_compare_files: error in Rast3d_unlock_all");
         }
 
         for (y = 0; y < rows; y++) {
@@ -466,8 +479,8 @@ Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
 
                     Rast3d_coord2tile_coord(map2, x, y, z, &xTile, &yTile,
                                             &zTile, &xOffs, &yOffs, &zOffs);
-                    Rast3d_fatal_error
-                        ("Rast3d_compare_files: files don't match\n");
+                    Rast3d_fatal_error(
+                        "Rast3d_compare_files: files don't match\n");
                 }
             }
         }

@@ -16,8 +16,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 
-struct handler_data_io
-{
+struct handler_data_io {
     struct Map_info *In;
     struct Map_info *Out;
 };

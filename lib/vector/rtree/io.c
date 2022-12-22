@@ -1,20 +1,19 @@
-
 /****************************************************************************
-* MODULE:       R-Tree library 
-*              
-* AUTHOR(S):    Antonin Guttman - original code
-*               Daniel Green (green@superliminal.com) - major clean-up
-*                               and implementation of bounding spheres
-*               Markus Metz - file-based and memory-based R*-tree
-*               
-* PURPOSE:      Multidimensional index
-*
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*****************************************************************************/
+ * MODULE:       R-Tree library
+ *
+ * AUTHOR(S):    Antonin Guttman - original code
+ *               Daniel Green (green@superliminal.com) - major clean-up
+ *                               and implementation of bounding spheres
+ *               Markus Metz - file-based and memory-based R*-tree
+ *
+ * PURPOSE:      Multidimensional index
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -38,8 +37,7 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
 
         t->free_nodes.alloc += 100;
         size = t->free_nodes.alloc * sizeof(off_t);
-        t->free_nodes.pos =
-            (off_t *) realloc((void *)t->free_nodes.pos, size);
+        t->free_nodes.pos = (off_t *)realloc((void *)t->free_nodes.pos, size);
         assert(t->free_nodes.pos);
     }
     t->free_nodes.pos[t->free_nodes.avail++] = pos;
@@ -56,7 +54,8 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
     t->nb[level][which].dirty = 0;
 
     /* make it lru */
-    if (i < NODE_BUFFER_SIZE - 1) {     /* which != t->used[level][NODE_BUFFER_SIZE - 1] */
+    if (i < NODE_BUFFER_SIZE -
+                1) { /* which != t->used[level][NODE_BUFFER_SIZE - 1] */
         /* simple swap does not work here */
         while (i < NODE_BUFFER_SIZE - 1 &&
                t->nb[level][t->used[level][i + 1]].pos != -1) {
@@ -115,8 +114,7 @@ struct RTree_Node *RTreeGetNode(off_t nodepos, int level, struct RTree *t)
 
     /* check mru first */
     while (t->nb[level][t->used[level][i]].pos != nodepos &&
-           t->nb[level][t->used[level][i]].pos >= 0 &&
-           i < NODE_BUFFER_SIZE - 1)
+           t->nb[level][t->used[level][i]].pos >= 0 && i < NODE_BUFFER_SIZE - 1)
         i++;
 
     which = t->used[level][i];
@@ -124,15 +122,15 @@ struct RTree_Node *RTreeGetNode(off_t nodepos, int level, struct RTree *t)
     if (t->nb[level][which].pos != nodepos) {
         /* rewrite node in buffer */
         if (t->nb[level][which].dirty) {
-            RTreeRewriteNode(&(t->nb[level][which].n),
-                             t->nb[level][which].pos, t);
+            RTreeRewriteNode(&(t->nb[level][which].n), t->nb[level][which].pos,
+                             t);
             t->nb[level][which].dirty = 0;
         }
         RTreeReadNode(&(t->nb[level][which].n), nodepos, t);
         t->nb[level][which].pos = nodepos;
     }
     /* make it mru */
-    if (i) {                    /* t->used[level][0] != which */
+    if (i) { /* t->used[level][0] != which */
 #ifdef USAGE_SWAP
         t->used[level][i] = t->used[level][0];
         t->used[level][0] = which;
@@ -217,7 +215,7 @@ void RTreeNodeChanged(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     t->nb[n->level][which].dirty = 1;
 
     /* make it mru */
-    if (i) {                    /* t->used[level][0] != which */
+    if (i) { /* t->used[level][0] != which */
 #ifdef USAGE_SWAP
         t->used[n->level][i] = t->used[n->level][0];
         t->used[n->level][0] = which;

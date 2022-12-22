@@ -5,7 +5,7 @@
  *
  * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
@@ -48,7 +48,7 @@ void Rast_set_c_color(CELL cat, int r, int g, int b, struct Colors *colors)
 
 /*!
  * \brief Set a category color (DCELL)
- * 
+ *
  * See Rast_set_c_color() for detailed information.
  *
  * \param val raster cell value
@@ -76,8 +76,7 @@ void Rast_set_d_color(DCELL val, int r, int g, int b, struct Colors *colors)
  * \param blu blue value
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast_set_null_value_color(int red, int grn, int blu,
-                               struct Colors *colors)
+void Rast_set_null_value_color(int red, int grn, int blu, struct Colors *colors)
 {
     colors->null_red = red;
     colors->null_grn = grn;
@@ -86,7 +85,7 @@ void Rast_set_null_value_color(int red, int grn, int blu,
 }
 
 /*!
- * \brief Set default color value 
+ * \brief Set default color value
  *
  * Sets the default color (in <i>colors</i>) to <i>red, green,
  * blue</i>. This is the color for values which do not have an

@@ -44,8 +44,8 @@ static double scan_double(const char *, double *);
 #define F_TBRES  19
 #define F_DEPTHS 20
 
-#define SET(x) flags|=(1<<x)
-#define TEST(x) (flags&(1<<x))
+#define SET(x)   flags |= (1 << x)
+#define TEST(x)  (flags & (1 << x))
 
 /*!
    \brief Read cell header (for internal use only)
@@ -54,7 +54,7 @@ static double scan_double(const char *, double *);
    \param[out] cellhd pointer to Cell_head structure
    \param is_cellhd ? (unused)
  */
-void G__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
+void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
 {
     int count;
     char **array;
@@ -88,14 +88,15 @@ void G__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
 }
 
 /*!
-   \brief Read window from NULL terminated array of strings (for internal use only)
+   \brief Read window from NULL terminated array of strings (for internal use
+   only)
 
    \param array array of strings
    \param[out] cellhd pointer to Cell_head structure
    \param is_cellhd ? (unused)
  */
-void G__read_Cell_head_array(char **array,
-                             struct Cell_head *cellhd, int is_cellhd)
+void G__read_Cell_head_array(char **array, struct Cell_head *cellhd,
+                             int is_cellhd)
 {
     char *buf;
     char label[200];
@@ -138,8 +139,8 @@ void G__read_Cell_head_array(char **array,
 
         switch (scan_item(buf, label, value)) {
         case -1:
-            G_fatal_error(_("Syntax error in cell header, line %d: %s"),
-                          line, buf);
+            G_fatal_error(_("Syntax error in cell header, line %d: %s"), line,
+                          buf);
         case 0:
             continue;
         case 1:
@@ -177,8 +178,8 @@ void G__read_Cell_head_array(char **array,
         G_debug(3, "region item: %s", buf);
         switch (scan_item(buf, label, value)) {
         case -1:
-            G_fatal_error(_("Syntax error in cell header, line %d: %s"),
-                          line, buf);
+            G_fatal_error(_("Syntax error in cell header, line %d: %s"), line,
+                          buf);
         case 0:
             continue;
         case 1:
@@ -252,11 +253,9 @@ void G__read_Cell_head_array(char **array,
             if (TEST(F_EWRES3))
                 G_fatal_error(_("Duplicate 3D e-w resolution field"));
             if (!G_scan_resolution(value, &cellhd->ew_res3, cellhd->proj))
-                G_fatal_error(_("Invalid 3D e-w resolution field: %s"),
-                              value);
+                G_fatal_error(_("Invalid 3D e-w resolution field: %s"), value);
             if (cellhd->ew_res3 <= 0.0)
-                G_fatal_error(_("Invalid 3D e-w resolution field: %s"),
-                              value);
+                G_fatal_error(_("Invalid 3D e-w resolution field: %s"), value);
             SET(F_EWRES3);
             continue;
         }
@@ -274,11 +273,9 @@ void G__read_Cell_head_array(char **array,
             if (TEST(F_NSRES3))
                 G_fatal_error(_("Duplicate 3D n-s resolution field"));
             if (!G_scan_resolution(value, &cellhd->ns_res3, cellhd->proj))
-                G_fatal_error(_("Invalid 3D n-s resolution field: %s"),
-                              value);
+                G_fatal_error(_("Invalid 3D n-s resolution field: %s"), value);
             if (cellhd->ns_res3 <= 0.0)
-                G_fatal_error(_("Invalid 3D n-s resolution field: %s"),
-                              value);
+                G_fatal_error(_("Invalid 3D n-s resolution field: %s"), value);
             SET(F_NSRES3);
             continue;
         }
@@ -358,8 +355,7 @@ void G__read_Cell_head_array(char **array,
             SET(F_COMP);
             continue;
         }
-        G_fatal_error(_("Syntax error in cell header, line %d: %s"),
-                      line, buf);
+        G_fatal_error(_("Syntax error in cell header, line %d: %s"), line, buf);
     }
 
     /* check some of the fields */
@@ -393,7 +389,7 @@ void G__read_Cell_head_array(char **array,
         if (!TEST(F_ROWS3))
             G_fatal_error(_("Field <%s> missing"), "rows3");
     }
-    else {                      /* use 2D */
+    else { /* use 2D */
         cellhd->ew_res3 = cellhd->ew_res;
         cellhd->ns_res3 = cellhd->ns_res;
         cellhd->cols3 = cellhd->cols;

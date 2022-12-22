@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/asprintf.c
  *
@@ -16,7 +15,7 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  */
 
-#define _GNU_SOURCE             /* enable asprintf */
+#define _GNU_SOURCE /* enable asprintf */
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -27,10 +26,10 @@
 /**
  * \brief Safe replacement for <i>asprintf()</i>.
  *
- * Allocate a string large enough to hold the new output, including the 
- * terminating NULL, and return the number of characters printed. The 
- * pointer out is set to the output string and should be passed to 
- * <i>G_free()</i> to release the allocated storage when it is no longer 
+ * Allocate a string large enough to hold the new output, including the
+ * terminating NULL, and return the number of characters printed. The
+ * pointer out is set to the output string and should be passed to
+ * <i>G_free()</i> to release the allocated storage when it is no longer
  * needed.
  *
  * \param[out] out
@@ -84,11 +83,11 @@ int G_asprintf(char **out, const char *fmt, ...)
 /**
  * \brief Reallocating version of <i>asprintf()</i>.
  *
- * Reallocate a string large enough to hold the output, including the 
- * terminating NULL, and return the number of characters printed.  
- * Contrary to <i>G_asprintf()</i>, any existing buffer pointed to by 
- * out of size osize is used to hold the output and enlarged if 
- * necessary. This is useful when <i>G_rasprintf</i> is called many 
+ * Reallocate a string large enough to hold the output, including the
+ * terminating NULL, and return the number of characters printed.
+ * Contrary to <i>G_asprintf()</i>, any existing buffer pointed to by
+ * out of size osize is used to hold the output and enlarged if
+ * necessary. This is useful when <i>G_rasprintf</i> is called many
  * times in a loop.
  *
  * \param[out] out

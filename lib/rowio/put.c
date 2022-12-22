@@ -15,7 +15,6 @@
 #include <string.h>
 #include <grass/rowio.h>
 
-
 /*!
  * \brief Write a row
  *
@@ -39,7 +38,7 @@
  * \return
  */
 
-int Rowio_put(ROWIO * R, const void *buf, int row)
+int Rowio_put(ROWIO *R, const void *buf, int row)
 {
     int i;
 
@@ -52,5 +51,5 @@ int Rowio_put(ROWIO * R, const void *buf, int row)
             R->rcb[i].dirty = 1;
             return 1;
         }
-    return ((*R->putrow) (R->fd, buf, row, R->len));
+    return ((*R->putrow)(R->fd, buf, row, R->len));
 }

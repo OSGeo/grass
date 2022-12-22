@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/commas.c
  *
@@ -16,7 +15,6 @@
 
 #include <string.h>
 #include <grass/gis.h>
-
 
 /**
  * \brief Inserts commas into a number string.
@@ -70,7 +68,6 @@ int G_insert_commas(char *buf)
 
     return 0;
 }
-
 
 /**
  * \brief Removes commas from number string.
