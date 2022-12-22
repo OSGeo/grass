@@ -221,9 +221,12 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = ''.join(retNameList)
 
-    if not (retName[0] >= 'A' and retName[0] <= 'Z') and \
-            not (retName[0] >= 'a' and retName[0] <= 'z'):
-        retName = 'x' + retName[1:]
+    if (
+        retName
+        and not (retName[0] >= "A" and retName[0] <= "Z")
+        and not (retName[0] >= "a" and retName[0] <= "z")
+    ):
+        retName = "x" + retName[1:]
 
     if mapset:
         retName = retName + '@' + mapset
