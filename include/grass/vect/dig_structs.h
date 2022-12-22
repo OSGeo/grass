@@ -10,7 +10,7 @@
  */
 #include <grass/config.h>
 
-#ifndef  DIG___STRUCTS___
+#ifndef DIG___STRUCTS___
 #define DIG___STRUCTS___
 
 #include <stdio.h>
@@ -43,8 +43,7 @@ typedef int plus_t;
 /*!
    \brief Used by sites lib
  */
-struct site_att
-{
+struct site_att {
     /*!
        \brief Category number
      */
@@ -62,8 +61,7 @@ struct site_att
 /*!
    \brief Bounding box
  */
-struct bound_box
-{
+struct bound_box {
     /*!
        \brief North
      */
@@ -93,8 +91,7 @@ struct bound_box
 /*!
    \brief File definition
  */
-struct gvfile
-{
+struct gvfile {
     /*!
        \brief File descriptor
      */
@@ -131,8 +128,7 @@ struct gvfile
 /*!
    \brief Layer (old: field) information
  */
-struct field_info
-{
+struct field_info {
     /*!
        \brief Layer number
      */
@@ -162,8 +158,7 @@ struct field_info
 /*!
    \brief Database links
  */
-struct dblinks
-{
+struct dblinks {
     /*!
        \brief Pointer to the first field_info structure
      */
@@ -183,8 +178,7 @@ struct dblinks
 
    Set by V1_open_new() or V1_open_old()
  */
-struct Port_info
-{
+struct Port_info {
     /*!
        \brief File byte order
      */
@@ -269,14 +263,12 @@ struct Port_info
 
    The space can be reused, not yet used
  */
-struct recycle
-{
+struct recycle {
     char dummy;
 };
 
 /*! \brief Backward compatibility version info */
-struct Version_info
-{
+struct Version_info {
     /*! \brief Current version (major) */
     int major;
     /*! \brief Current version (minor) */
@@ -292,8 +284,7 @@ struct Version_info
 
    Holds header data of vector map (see \ref vlibMap_info)
  */
-struct dig_head
-{
+struct dig_head {
     /*!
        \brief Organization name
      */
@@ -322,7 +313,7 @@ struct dig_head
        \brief Comments
      */
     char *comment;
-    int proj;                   /* projection */
+    int proj; /* projection */
 
     /*!
        \brief Zone (UTM only)
@@ -377,8 +368,7 @@ struct dig_head
 /*!
    \brief Coor file info
  */
-struct Coor_info
-{
+struct Coor_info {
     /*!
        \brief Total size (in bytes)
      */
@@ -395,8 +385,7 @@ struct Coor_info
    See Vect__build_sfa() (Format_info_ogr and Format_info_pg) for
    implementation issues.
  */
-struct Format_info_offset
-{
+struct Format_info_offset {
     /*!
        \brief Offset list
 
@@ -453,14 +442,12 @@ struct Format_info_offset
        \brief Space allocated for offset list
      */
     int array_alloc;
-
 };
 
 /*!
    \brief Lines cache for reading feature (non-native formats)
  */
-struct Format_info_cache
-{
+struct Format_info_cache {
     /*!
        \brief Lines array
 
@@ -501,7 +488,7 @@ struct Format_info_cache
        \brief Simple feature type (currently used only by PG format)
      */
     SF_FeatureType sf_type;
-    /*! 
+    /*!
        \brief Cache type
 
        Currently used only by PostGIS Topology which allows caching the
@@ -515,8 +502,7 @@ struct Format_info_cache
    \todo Structure size should not change depending on compilation I
    think, do it better
  */
-struct Format_info_ogr
-{
+struct Format_info_ogr {
     /*!
        \brief OGR driver name
      */
@@ -590,7 +576,7 @@ struct Format_info_ogr
      */
     struct Format_info_offset offset;
 
-    /*!                                       
+    /*!
        \brief Next line to be read
 
        Used by V2_read_next_line_ogr()
@@ -601,8 +587,7 @@ struct Format_info_ogr
 /*!
    \brief Non-native format info (PostGIS)
  */
-struct Format_info_pg
-{
+struct Format_info_pg {
     /*!
        \brief Connection string
      */
@@ -684,7 +669,7 @@ struct Format_info_pg
      */
     struct Format_info_cache cache;
 
-    /*! 
+    /*!
        \brief Offset list used for building pseudo-topology (simple
        features access)
      */
@@ -712,8 +697,7 @@ struct Format_info_pg
 /*!
    \brief Non-native format info (currently only OGR is implemented)
  */
-struct Format_info
-{
+struct Format_info {
     /*!
        \brief id?
      */
@@ -731,8 +715,7 @@ struct Format_info
 /*!
    \brief Category index
  */
-struct Cat_index
-{
+struct Cat_index {
     /*!
        \brief Field (layer) number
      */
@@ -783,11 +766,9 @@ struct Cat_index
    Important note: you should NOT store non-topological information in
    topological structures.
  */
-struct Plus_head
-{
+struct Plus_head {
     /*! \brief Backward compatibility version info */
-    struct
-    {
+    struct {
         /*! \brief Version info for topology file */
         struct Version_info topo;
         /*! \brief Version info for spatial index file */
@@ -822,7 +803,7 @@ struct Plus_head
     /*** file header size ***/
 
     /*!
-       \brief Topo header size 
+       \brief Topo header size
      */
     long head_size;
     /*!
@@ -1132,9 +1113,9 @@ struct Plus_head
 
     /*** category index ***/
     /*!
-       \brief Update category index if vector is modified 
+       \brief Update category index if vector is modified
 
-       By default, category index is not updated 
+       By default, category index is not updated
      */
     int update_cidx;
 
@@ -1173,8 +1154,7 @@ struct Plus_head
 
        Note: Vect_set_updated() must be called to maintain this list
      */
-    struct
-    {
+    struct {
         /*!
            \brief Indicates if the list of updated features is maintained
          */
@@ -1204,7 +1184,7 @@ struct Plus_head
          */
         int n_uplines;
         /*!
-           \brief Array of updated nodes 
+           \brief Array of updated nodes
          */
         int *upnodes;
         /*!
@@ -1221,8 +1201,7 @@ struct Plus_head
 /*!
    \brief Graph-related section (see \ref dglib)
  */
-struct Graph_info
-{
+struct Graph_info {
     /*!
        \brief Line type used to build the graph
      */
@@ -1259,10 +1238,9 @@ struct Graph_info
    Vector map info
 
    Maintains all information about an individual open vector map. The
-   structure must be passed to the most vector library routines. 
+   structure must be passed to the most vector library routines.
  */
-struct Map_info
-{
+struct Map_info {
 
     /*** common info for all formats ***/
 
@@ -1343,7 +1321,8 @@ struct Map_info
     /*!
        \brief Location name
 
-       Note: location and gisdbase is useful if changed (v.proj or external apps)
+       Note: location and gisdbase is useful if changed (v.proj or external
+       apps)
      */
     char *location;
     /*!
@@ -1352,7 +1331,7 @@ struct Map_info
     char *gisdbase;
 
     /*!
-       \brief Feature id for sequential access 
+       \brief Feature id for sequential access
 
        Note: Line id starts with 1 - see Vect_read_next_line()
      */
@@ -1361,8 +1340,7 @@ struct Map_info
     /*!
        \brief Constraints for sequential feature access
      */
-    struct
-    {
+    struct {
         /*!
            \brief Non-zero value to enable region constraint
          */
@@ -1452,8 +1430,7 @@ struct Map_info
 /*!
    \brief Topological feature - node
  */
-struct P_node
-{
+struct P_node {
     /*!
        \brief X coordinate
      */
@@ -1495,16 +1472,15 @@ struct P_node
     float *angles;
 };
 
-/*! 
+/*!
    \brief Line topology
  */
-struct P_topo_l
-{
-    /*! 
+struct P_topo_l {
+    /*!
        \brief Start node
      */
     plus_t N1;
-    /*! 
+    /*!
        \brief End node
      */
     plus_t N2;
@@ -1513,21 +1489,20 @@ struct P_topo_l
 /*!
    \brief Boundary topology
  */
-struct P_topo_b
-{
-    /*! 
+struct P_topo_b {
+    /*!
        \brief Start node
      */
     plus_t N1;
-    /*! 
+    /*!
        \brief End node
      */
     plus_t N2;
-    /*! 
+    /*!
        \brief Area number to the left, negative for isle
      */
     plus_t left;
-    /*! 
+    /*!
        \brief Area number to the right, negative for isle
      */
     plus_t right;
@@ -1536,40 +1511,37 @@ struct P_topo_b
 /*!
    \brief Centroid topology
  */
-struct P_topo_c
-{
-    /*! 
+struct P_topo_c {
+    /*!
        \brief Area number, negative for duplicate centroid
      */
     plus_t area;
 };
 
-/*! 
+/*!
    \brief Face topology
  */
-struct P_topo_f
-{
+struct P_topo_f {
     /* TODO */
-    /*! 
+    /*!
        \brief Array of edges
      */
     plus_t E[3];
-    /*! 
+    /*!
        \brief Volume number to the left, negative for hole
      */
     plus_t left;
-    /*! 
+    /*!
        \brief Volume number to the right, negative for hole
      */
     plus_t right;
 };
 
-/*! 
+/*!
    \brief Kernel topology
  */
-struct P_topo_k
-{
-    /*! 
+struct P_topo_k {
+    /*!
        \brief Volume number, negative for duplicate kernel
      */
     plus_t volume;
@@ -1578,8 +1550,7 @@ struct P_topo_k
 /*!
    \brief Vector geometry
  */
-struct P_line
-{
+struct P_line {
     /*!
        \brief Line type
 
@@ -1609,8 +1580,7 @@ struct P_line
 /*!
    \brief Area (topology) info
  */
-struct P_area
-{
+struct P_area {
     /*!
        \brief Number of boundary lines
      */
@@ -1650,8 +1620,7 @@ struct P_area
 /*!
    \brief Isle (topology) info
  */
-struct P_isle
-{
+struct P_isle {
     /*!
        \brief Number of boundary lines
      */
@@ -1679,8 +1648,7 @@ struct P_isle
 /*!
    \brief Feature geometry info - coordinates
  */
-struct line_pnts
-{
+struct line_pnts {
     /*!
        \brief Array of X coordinates
      */
@@ -1706,8 +1674,7 @@ struct line_pnts
 /*!
    \brief Feature category info
  */
-struct line_cats
-{
+struct line_cats {
     /*!
        \brief Array of layers (fields)
      */
@@ -1727,8 +1694,7 @@ struct line_cats
 };
 
 /*! \brief Category list */
-struct cat_list
-{
+struct cat_list {
     /*!
        \brief Category layer (field)
      */
@@ -1754,8 +1720,7 @@ struct cat_list
 /*!
    \brief List of bounding boxes with id
  */
-struct boxlist
-{
+struct boxlist {
     /*!
        \brief Array of ids
      */
@@ -1783,8 +1748,7 @@ struct boxlist
 
    Space allocated is size + 1
  */
-struct varray
-{
+struct varray {
     /*!
        \brief Array size
      */
@@ -1803,8 +1767,7 @@ struct varray
 
    For use in modules
  */
-struct spatial_index
-{
+struct spatial_index {
     /*!
        \brief Pointer to the search tree (R*-Tree)
      */

@@ -54,7 +54,6 @@ extern void G_lubksb(double **a, int n, int *indx, double b[]);
 extern int G_math_findzc(double conv[], int size, double zc[], double thresh,
                          int num_orients);
 
-
 /* *************************************************************** */
 /* ***** WRAPPER FOR CCMATH FUNCTIONS USED IN GRASS ************** */
 /* *************************************************************** */
@@ -105,35 +104,34 @@ extern int G_math_solver_lu(double **, double *, double *, int);
 extern int G_math_solver_cholesky(double **, double *, double *, int, int);
 extern void G_math_solver_cholesky_sband(double **, double *, double *, int,
                                          int);
-extern int G_math_solver_jacobi(double **, double *, double *, int, int,
-                                double, double);
+extern int G_math_solver_jacobi(double **, double *, double *, int, int, double,
+                                double);
 extern int G_math_solver_gs(double **, double *, double *, int, int, double,
                             double);
 
 extern int G_math_solver_pcg(double **, double *, double *, int, int, double,
                              int);
 extern int G_math_solver_cg(double **, double *, double *, int, int, double);
-extern int G_math_solver_cg_sband(double **, double *, double *, int, int,
-                                  int, double);
+extern int G_math_solver_cg_sband(double **, double *, double *, int, int, int,
+                                  double);
 extern int G_math_solver_bicgstab(double **, double *, double *, int, int,
                                   double);
 extern int G_math_solver_sparse_jacobi(G_math_spvector **, double *, double *,
                                        int, int, double, double);
-extern int G_math_solver_sparse_gs(G_math_spvector **, double *, double *,
-                                   int, int, double, double);
-extern int G_math_solver_sparse_pcg(G_math_spvector **, double *, double *,
-                                    int, int, double, int);
-extern int G_math_solver_sparse_cg(G_math_spvector **, double *, double *,
-                                   int, int, double);
-extern int G_math_solver_sparse_bicgstab(G_math_spvector **, double *,
-                                         double *, int, int, double);
+extern int G_math_solver_sparse_gs(G_math_spvector **, double *, double *, int,
+                                   int, double, double);
+extern int G_math_solver_sparse_pcg(G_math_spvector **, double *, double *, int,
+                                    int, double, int);
+extern int G_math_solver_sparse_cg(G_math_spvector **, double *, double *, int,
+                                   int, double);
+extern int G_math_solver_sparse_bicgstab(G_math_spvector **, double *, double *,
+                                         int, int, double);
 
 /* solver algoithms and helper functions */
 extern void G_math_gauss_elimination(double **, double *, int);
 extern void G_math_lu_decomposition(double **, double *, int);
 extern int G_math_cholesky_decomposition(double **, int, int);
-extern void G_math_cholesky_sband_decomposition(double **, double **, int,
-                                                int);
+extern void G_math_cholesky_sband_decomposition(double **, double **, int, int);
 extern void G_math_backward_substitution(double **, double *, double *, int);
 extern void G_math_forward_substitution(double **, double *, double *, int);
 extern void G_math_cholesky_sband_substitution(double **, double *, double *,

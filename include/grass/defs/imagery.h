@@ -59,8 +59,7 @@ int I_put_subgroup(const char *, const char *);
 int I_get_group_ref(const char *, struct Ref *);
 int I_get_group_ref2(const char *, const char *, struct Ref *);
 int I_get_subgroup_ref(const char *, const char *, struct Ref *);
-int I_get_subgroup_ref2(const char *, const char *, const char *,
-                        struct Ref *);
+int I_get_subgroup_ref2(const char *, const char *, const char *, struct Ref *);
 int I_init_ref_color_nums(struct Ref *);
 int I_put_group_ref(const char *, const struct Ref *);
 int I_put_subgroup_ref(const char *, const char *, const struct Ref *);
@@ -117,8 +116,8 @@ int I_list_subgroup_simple(const struct Ref *, FILE *);
 char *I_location_info(const char *);
 
 /* points.c */
-int I_new_control_point(struct Control_Points *, double, double, double,
-                        double, int);
+int I_new_control_point(struct Control_Points *, double, double, double, double,
+                        int);
 int I_get_control_points(const char *, struct Control_Points *);
 int I_put_control_points(const char *, const struct Control_Points *);
 
@@ -143,8 +142,7 @@ int I_compute_scatts(struct Cell_head *, struct scCats *, const char **,
                      const char **, int, struct scCats *, const char **);
 
 int I_create_cat_rast(struct Cell_head *, const char *);
-int I_insert_patch_to_cat_rast(const char *, struct Cell_head *,
-                               const char *);
+int I_insert_patch_to_cat_rast(const char *, struct Cell_head *, const char *);
 
 int I_id_scatt_to_bands(const int, const int, int *, int *);
 int I_bands_to_id_scatt(const int, const int, const int, int *);
@@ -160,8 +158,7 @@ int I_rasterize(double *, int, unsigned char, struct Cell_head *,
 void I_get_signatures_dir(char *, I_SIGFILE_TYPE);
 void I_make_signatures_dir(I_SIGFILE_TYPE);
 int I_signatures_remove(I_SIGFILE_TYPE, const char *);
-int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *,
-                      const char *);
+int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *, const char *);
 int I_signatures_rename(I_SIGFILE_TYPE, const char *, const char *);
 int I_signatures_list_by_type(I_SIGFILE_TYPE, const char *, char ***);
 void I_free_signatures_list(int, char ***);
@@ -187,27 +184,27 @@ int I_InitSigSet(struct SigSet *, int);
 struct ClassSig *I_NewClassSig(struct SigSet *);
 struct SubSig *I_NewSubSig(struct SigSet *, struct ClassSig *);
 int I_ReadSigSet(FILE *, struct SigSet *) WARN_UNUSED_RESULT;
-     int I_SetSigTitle(struct SigSet *, const char *);
-     const char *I_GetSigTitle(const struct SigSet *);
-     int I_SetClassTitle(struct ClassSig *, const char *);
-     const char *I_GetClassTitle(const struct ClassSig *);
-     int I_WriteSigSet(FILE *, const struct SigSet *);
-     char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
+int I_SetSigTitle(struct SigSet *, const char *);
+const char *I_GetSigTitle(const struct SigSet *);
+int I_SetClassTitle(struct ClassSig *, const char *);
+const char *I_GetClassTitle(const struct ClassSig *);
+int I_WriteSigSet(FILE *, const struct SigSet *);
+char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 
 /* sigsetfile.c */
-     FILE *I_fopen_sigset_file_new(const char *);
-     FILE *I_fopen_sigset_file_old(const char *);
+FILE *I_fopen_sigset_file_new(const char *);
+FILE *I_fopen_sigset_file_old(const char *);
 
 /* target.c */
-     int I_get_target(const char *, char *, char *);
-     int I_put_target(const char *, const char *, const char *);
+int I_get_target(const char *, char *, char *);
+int I_put_target(const char *, const char *, const char *);
 
 /* title.c */
-     int I_get_group_title(const char *, char *, int);
-     int I_put_group_title(const char *, const char *);
+int I_get_group_title(const char *, char *, int);
+int I_put_group_title(const char *, const char *);
 
 /* var.c */
-     double I_variance(double, double, int);
-     double I_stddev(double, double, int);
+double I_variance(double, double, int);
+double I_stddev(double, double, int);
 
 #endif

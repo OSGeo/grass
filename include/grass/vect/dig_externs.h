@@ -1,8 +1,7 @@
 #include <grass/gis.h>
 
-#ifndef  DIG___EXTERNS___
+#ifndef DIG___EXTERNS___
 #define DIG___EXTERNS___
-
 
 /*!
    \file include/vect/dig_externs.h
@@ -11,12 +10,17 @@
  */
 
 /* allocation.c */
-void *dig_alloc_space(int, int *, int, void *, int);    /* exits on error, calls _alloc_space () */
-void *dig__alloc_space(int, int *, int, void *, int);   /* returns NULL on error, calls calloc(), _frealloc() */
-void *dig_falloc(int, int);     /* exits on error, calls _falloc () */
-void *dig_frealloc(void *, int, int, int);      /* exits on error, calls _frealloc () */
-void *dig__falloc(int, int);    /* returns NULL on error, calls calloc () */
-void *dig__frealloc(void *, int, int, int);     /* returns NULL on error, calls calloc () */
+void *dig_alloc_space(int, int *, int, void *,
+                      int); /* exits on error, calls _alloc_space () */
+void *
+dig__alloc_space(int, int *, int, void *,
+                 int); /* returns NULL on error, calls calloc(), _frealloc() */
+void *dig_falloc(int, int); /* exits on error, calls _falloc () */
+void *dig_frealloc(void *, int, int,
+                   int);     /* exits on error, calls _frealloc () */
+void *dig__falloc(int, int); /* returns NULL on error, calls calloc () */
+void *dig__frealloc(void *, int, int,
+                    int); /* returns NULL on error, calls calloc () */
 
 /* angle.c */
 float dig_calc_begin_angle(const struct line_pnts *, double);
@@ -34,8 +38,8 @@ int dig_line_box(const struct line_pnts *, struct bound_box *);
    int dig_line_get_box(struct Plus_head *, plus_t, struct bound_box *);
 
    int dig_area_bound_box(struct Map_info *, struct P_area *);
-   int dig_bound_box2(struct line_pnts *, double *, double *, double *, double *,
-   long);
+   int dig_bound_box2(struct line_pnts *, double *, double *, double *, double
+   *, long);
  */
 
 /* category index */
@@ -226,8 +230,8 @@ int dig_Rd_spidx(struct gvfile *, struct Plus_head *);
 
 int dig_dump_spidx(FILE *, const struct Plus_head *);
 
-int rtree_search(struct RTree *, struct RTree_Rect *,
-                 SearchHitCallback, void *, struct Plus_head *);
+int rtree_search(struct RTree *, struct RTree_Rect *, SearchHitCallback, void *,
+                 struct Plus_head *);
 
 /* struct_alloc.c */
 int dig_node_alloc_line(struct P_node *, int);
@@ -264,15 +268,15 @@ void dig_node_reset_updated(struct Plus_head *);
 void dig_node_add_updated(struct Plus_head *, int);
 
 /*********************************************************************
- *		    unused/removed functions
+ *                    unused/removed functions
  *********************************************************************/
 
-
-char *color_name(int);          /* pass it an int, returns the name of the color */
+char *color_name(int); /* pass it an int, returns the name of the color */
 
 char *dig_float_point(char *, int, double);
 
-/* double dig_point_in_area (struct Map_info *, double, double, struct P_area *); */
+/* double dig_point_in_area (struct Map_info *, double, double, struct P_area
+ * *); */
 
 double dig_unit_conversion(void);
 
@@ -293,26 +297,28 @@ plus_t dig_get_next_cont_line(struct Map_info *, plus_t, double, int);
 struct dig_head *dig_get_head(void);
 struct dig_head *dig__get_head(void);
 
-
-/* int dig_check_nodes (struct Map_info *, struct new_node *, struct line_pnts *);
-   int dig_in_area_bbox (struct P_area *, double, double); */
+/* int dig_check_nodes (struct Map_info *, struct new_node *,
+ struct line_pnts *); int dig_in_area_bbox (struct P_area *, double, double); */
 int dig_start_clock(long *);
 int dig_stop_clock(long *);
 char *dig_stop_clock_str(long *);
 int dig_write_file_checks(struct gvfile *, struct Plus_head *);
 int dig_do_file_checks(struct Map_info *, char *, char *);
 
-/* int dig_find_area (struct Map_info *, struct P_area *, double *, double *, double *, double);
-   int dig_find_area2 (struct Map_info *, struct P_area *, double *); */
+/* int dig_find_area (struct Map_info *, struct P_area *, double *, double *,
+   double *, double); int dig_find_area2 (struct Map_info *, struct P_area *,
+   double *); */
 
 int dig_map_to_head(struct Map_info *, struct Plus_head *);
 int dig_head_to_map(struct Plus_head *, struct Map_info *);
 int dig_spindex_init(struct Plus_head *);
 
-/* int dig_snap_line_to_node (struct Map_info *, int, int, struct line_pnts *); */
+/* int dig_snap_line_to_node (struct Map_info *, int, int, struct line_pnts *);
+ */
 
 /* int dig_node_del_line (struct Plus_head *plus, int node, int line);
-   int dig_add_line_to_node (int, int, char, struct Map_info *, struct line_pnts *); */
+   int dig_add_line_to_node (int, int, char, struct Map_info *, struct line_pnts
+   *); */
 int dig_point_to_area(struct Map_info *, double, double);
 int dig_point_to_next_area(struct Map_info *, double, double, double *);
 int dig_point_to_line(struct Map_info *, double, double, char);
@@ -322,8 +328,7 @@ int dig_check_dist(struct Map_info *, int, double, double, double *);
 int dig__check_dist(struct Map_info *, struct line_pnts *, double, double,
                     double *);
 /* int dig_center_check (struct P_line *, int, int, double, double); */
-int dig_point_by_line(struct Map_info *, double, double, double, double,
-                      char);
+int dig_point_by_line(struct Map_info *, double, double, double, double, char);
 /* int dig_by_line_bbox (struct P_line *, double, double, double, double); */
 int dig_write_head_ascii(FILE *, struct dig_head *);
 int dig_read_head_ascii(FILE *, struct dig_head *);

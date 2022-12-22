@@ -95,9 +95,8 @@ int Rast3d_read_doubles(int, int, double *, int);
 /* error.c */
 void Rast3d_skip_error(const char *);
 void Rast3d_print_error(const char *);
-void Rast3d_fatal_error(const char *, ...)
-    __attribute__((format(printf, 1, 2)))
-    __attribute__((noreturn));
+void Rast3d_fatal_error(const char *, ...) __attribute__((format(printf, 1, 2)))
+__attribute__((noreturn));
 void Rast3d_fatal_error_noargs(const char *) __attribute__((noreturn));
 void Rast3d_error(const char *, ...) __attribute__((format(printf, 1, 2)));
 
@@ -131,8 +130,8 @@ int Rast3d_read_ints(int, int, int *, int);
 int Rast3d_key_get_int(struct Key_Value *, const char *, int *);
 int Rast3d_key_get_double(struct Key_Value *, const char *, double *);
 int Rast3d_key_get_string(struct Key_Value *, const char *, char **);
-int Rast3d_key_get_value(struct Key_Value *, const char *, char *, char *,
-                         int, int, int *);
+int Rast3d_key_get_value(struct Key_Value *, const char *, char *, char *, int,
+                         int, int *);
 int Rast3d_key_set_int(struct Key_Value *, const char *, const int *);
 int Rast3d_key_set_double(struct Key_Value *, const char *, const double *);
 int Rast3d_key_set_string(struct Key_Value *, const char *, char *const *);
@@ -180,8 +179,8 @@ int Rast3d_is_null_value_num(const void *, int);
 void Rast3d_set_null_value(void *, int, int);
 
 /* open2.c */
-void *Rast3d_open_new_param(const char *, int, int, RASTER3D_Region *, int,
-                            int, int, int, int, int);
+void *Rast3d_open_new_param(const char *, int, int, RASTER3D_Region *, int, int,
+                            int, int, int, int);
 /* open.c */
 void *Rast3d_open_cell_old_no_header(const char *, const char *);
 void *Rast3d_open_cell_old(const char *, const char *, RASTER3D_Region *, int,
@@ -192,14 +191,14 @@ void *Rast3d_open_new_opt_tile_size(const char *, int, RASTER3D_Region *, int,
 
 /* param.c */
 void Rast3d_set_standard3d_input_params(void);
-int Rast3d_get_standard3d_params(int *, int *, int *, int *, int *,
-                                 int *, int *, int *, int *, int *);
+int Rast3d_get_standard3d_params(int *, int *, int *, int *, int *, int *,
+                                 int *, int *, int *, int *);
 void Rast3d_set_window_params(void);
 char *Rast3d_get_window_params(void);
 
 /* range.c */
-void Rast3d_range_update_from_tile(RASTER3D_Map *, const void *, int, int,
-                                   int, int, int, int, int, int);
+void Rast3d_range_update_from_tile(RASTER3D_Map *, const void *, int, int, int,
+                                   int, int, int, int, int);
 int Rast3d_read_range(const char *, const char *, struct FPRange *);
 int Rast3d_range_load(RASTER3D_Map *);
 void Rast3d_range_min_max(RASTER3D_Map *, double *, double *);
@@ -224,8 +223,8 @@ void Rast3d_location2coord_double(RASTER3D_Region *, double, double, double,
                                   double *, double *, double *);
 void Rast3d_location2coord2(RASTER3D_Region *, double, double, double, int *,
                             int *, int *);
-void Rast3d_coord2location(RASTER3D_Region *, double, double, double,
-                           double *, double *, double *);
+void Rast3d_coord2location(RASTER3D_Region *, double, double, double, double *,
+                           double *, double *);
 /* resample.c */
 void Rast3d_nearest_neighbor(RASTER3D_Map *, int, int, int, void *, int);
 void Rast3d_set_resampling_fun(RASTER3D_Map *, void (*)());
@@ -236,8 +235,8 @@ void Rast3d_get_nearest_neighbor_fun_ptr(void (**)());
 void Rast3d_get_volume_a(void *, double[2][2][2][3], int, int, int, void *,
                          int);
 void Rast3d_get_volume(void *, double, double, double, double, double, double,
-                       double, double, double, double, double, double, int,
-                       int, int, void *, int);
+                       double, double, double, double, double, double, int, int,
+                       int, void *, int);
 void Rast3d_get_aligned_volume(void *, double, double, double, double, double,
                                double, int, int, int, void *, int);
 void Rast3d_make_aligned_volume_file(void *, const char *, double, double,
@@ -249,7 +248,6 @@ float Rast3d_get_float(RASTER3D_Map *, int, int, int);
 double Rast3d_get_double(RASTER3D_Map *, int, int, int);
 void Rast3d_get_window_value(RASTER3D_Map *, double, double, double, void *,
                              int);
-
 
 RASTER3D_Region *Rast3d_window_ptr(void);
 void Rast3d_set_window(RASTER3D_Region *);
@@ -270,14 +268,14 @@ void Rast3d_get_block(RASTER3D_Map *, int, int, int, int, int, int, void *,
 /* header.c */
 int Rast3d_read_header(RASTER3D_Map *, int *, int *, double *, double *,
                        double *, double *, double *, double *, int *, int *,
-                       int *, double *, double *, double *, int *, int *,
+                       int *, double *, double *, double *, int *, int *, int *,
                        int *, int *, int *, int *, int *, int *, int *, int *,
-                       int *, char **, int *, int *);
+                       char **, int *, int *);
 int Rast3d_write_header(RASTER3D_Map *, int, int, double, double, double,
                         double, double, double, int, int, int, double, double,
                         double, int, int, int, int, int, int, int, int, int,
                         int, int, char *, int, int);
-int Rast3d_rewrite_header(RASTER3D_Map * map);
+int Rast3d_rewrite_header(RASTER3D_Map *map);
 int Rast3d_cache_size_encode(int, int);
 int Rast3d__compute_cache_size(RASTER3D_Map *, int);
 int Rast3d_fill_header(RASTER3D_Map *, int, int, int, int, int, int, int, int,
@@ -299,12 +297,12 @@ int Rast3d_tile_precision_map(RASTER3D_Map *);
 int Rast3d_tile_use_cache_map(RASTER3D_Map *);
 void Rast3d_print_header(RASTER3D_Map *);
 void Rast3d_get_region_struct_map(RASTER3D_Map *, RASTER3D_Region *);
-const char *Rast3d_get_unit(RASTER3D_Map * map);
-int Rast3d_get_vertical_unit2(RASTER3D_Map * map);
-const char *Rast3d_get_vertical_unit(RASTER3D_Map * map);
-void Rast3d_set_unit(RASTER3D_Map * map, const char *);
-void Rast3d_set_vertical_unit(RASTER3D_Map * map, const char *);
-void Rast3d_set_vertical_unit2(RASTER3D_Map * map, int);
+const char *Rast3d_get_unit(RASTER3D_Map *map);
+int Rast3d_get_vertical_unit2(RASTER3D_Map *map);
+const char *Rast3d_get_vertical_unit(RASTER3D_Map *map);
+void Rast3d_set_unit(RASTER3D_Map *map, const char *);
+void Rast3d_set_vertical_unit(RASTER3D_Map *map, const char *);
+void Rast3d_set_vertical_unit2(RASTER3D_Map *map, int);
 
 /* index.c */
 int Rast3d_flush_index(RASTER3D_Map *);
@@ -332,15 +330,15 @@ double Rast3d_get_double_region(RASTER3D_Map *, int, int, int);
 void Rast3d_get_value_region(RASTER3D_Map *, int, int, int, void *, int);
 
 /* tilemath.c */
-void Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *, int, int *,
-                                           int *, int *, int);
+void Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *, int, int *, int *,
+                                           int *, int);
 void Rast3d_tile_index2tile(RASTER3D_Map *, int, int *, int *, int *);
 int Rast3d_tile2tile_index(RASTER3D_Map *, int, int, int);
 void Rast3d_tile_coord_origin(RASTER3D_Map *, int, int, int, int *, int *,
                               int *);
 void Rast3d_tile_index_origin(RASTER3D_Map *, int, int *, int *, int *);
-void Rast3d_coord2tile_coord(RASTER3D_Map *, int, int, int, int *, int *,
-                             int *, int *, int *, int *);
+void Rast3d_coord2tile_coord(RASTER3D_Map *, int, int, int, int *, int *, int *,
+                             int *, int *, int *);
 void Rast3d_coord2tile_index(RASTER3D_Map *, int, int, int, int *, int *);
 int Rast3d_coord_in_range(RASTER3D_Map *, int, int, int);
 int Rast3d_tile_index_in_range(RASTER3D_Map *, int);
