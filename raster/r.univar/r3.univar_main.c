@@ -1,14 +1,14 @@
 /*
  * r3.univar
  *
- *  Calculates univariate statistics from the non-null 3d cells of a raster3d map
+ *  Calculates univariate statistics from the non-null 3d cells of a raster3d
+ *  map
  *
  *   Copyright (C) 2004-2007 by the GRASS Development Team
  *   Author(s): Soeren Gebbert
- *              Based on r.univar from Hamish Bowman, University of Otago, New Zealand
- *              and Martin Landa
- *              heapsort code from http://de.wikipedia.org/wiki/Heapsort
- *              Zonal stats: Markus Metz
+ *              Based on r.univar from Hamish Bowman, University of Otago, New
+ *              Zealand and Martin Landa heapsort code from
+ *              http://de.wikipedia.org/wiki/Heapsort Zonal stats: Markus Metz
  *
  *      This program is free software under the GNU General Public
  *      License (>=v2). Read the file COPYING that comes with GRASS
@@ -55,8 +55,7 @@ void set_params()
 
     param.shell_style = G_define_flag();
     param.shell_style->key = 'g';
-    param.shell_style->description =
-        _("Print the stats in shell script style");
+    param.shell_style->description = _("Print the stats in shell script style");
 
     param.extended = G_define_flag();
     param.extended->key = 'e';
@@ -70,14 +69,13 @@ void set_params()
     return;
 }
 
-
 /* *************************************************************** */
 /* **** the main functions for r3.univar ************************* */
 /* *************************************************************** */
 int main(int argc, char *argv[])
 {
-    FCELL val_f;                /* for misc use */
-    DCELL val_d;                /* for misc use */
+    FCELL val_f; /* for misc use */
+    DCELL val_d; /* for misc use */
     int map_type, zmap_type;
     univar_stat *stats;
 
@@ -88,7 +86,7 @@ int main(int argc, char *argv[])
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
     double dmin, dmax;
-    int zone, n_zones /* , use_zone = 0 */ ;
+    int zone, n_zones /* , use_zone = 0 */;
     const char *mapset, *name;
 
     struct GModule *module;
@@ -100,12 +98,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("univariate statistics"));
 
-    module->label =
-        _("Calculates univariate statistics from the non-null cells of a 3D raster map.");
+    module->label = _("Calculates univariate statistics from the non-null "
+                      "cells of a 3D raster map.");
     module->description =
         _("Statistics include number of cells counted, minimum and maximum cell"
-         " values, range, arithmetic mean, population variance, standard deviation,"
-         " coefficient of variation, and sum.");
+          " values, range, arithmetic mean, population variance, standard "
+          "deviation,"
+          " coefficient of variation, and sum.");
 
     /* Define the different options */
     set_params();
@@ -133,10 +132,10 @@ int main(int argc, char *argv[])
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
-    dmin = 0.0 / 0.0;           /* set to nan as default */
-    dmax = 0.0 / 0.0;           /* set to nan as default */
-    zone_info.min = 0.0 / 0.0;  /* set to nan as default */
-    zone_info.max = 0.0 / 0.0;  /* set to nan as default */
+    dmin = 0.0 / 0.0;          /* set to nan as default */
+    dmax = 0.0 / 0.0;          /* set to nan as default */
+    zone_info.min = 0.0 / 0.0; /* set to nan as default */
+    zone_info.max = 0.0 / 0.0; /* set to nan as default */
     zone_info.n_zones = 0;
 
     /* open 3D zoning raster with default region */
@@ -144,14 +143,12 @@ int main(int argc, char *argv[])
         if (NULL == (mapset = G_find_raster3d(zonemap, "")))
             Rast3d_fatal_error(_("3D raster map <%s> not found"), zonemap);
 
-        zmap =
-            Rast3d_open_cell_old(zonemap, G_find_raster3d(zonemap, ""),
-                                 &region, RASTER3D_TILE_SAME_AS_FILE,
-                                 RASTER3D_USE_CACHE_DEFAULT);
+        zmap = Rast3d_open_cell_old(zonemap, G_find_raster3d(zonemap, ""),
+                                    &region, RASTER3D_TILE_SAME_AS_FILE,
+                                    RASTER3D_USE_CACHE_DEFAULT);
 
         if (zmap == NULL)
-            Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
-                               zonemap);
+            Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), zonemap);
 
         zmap_type = Rast3d_tile_type_map(zmap);
 
@@ -184,10 +181,9 @@ int main(int argc, char *argv[])
     if (NULL == G_find_raster3d(infile, ""))
         Rast3d_fatal_error(_("3D raster map <%s> not found"), infile);
 
-    map =
-        Rast3d_open_cell_old(infile, G_find_raster3d(infile, ""), &region,
-                             RASTER3D_TILE_SAME_AS_FILE,
-                             RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(infile, G_find_raster3d(infile, ""), &region,
+                               RASTER3D_TILE_SAME_AS_FILE,
+                               RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), infile);
@@ -212,7 +208,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    for (z = 0; z < depths; z++) {      /* From the bottom to the top */
+    for (z = 0; z < depths; z++) { /* From the bottom to the top */
         if (!(param.shell_style->answer))
             G_percent(z, depths - 1, 2);
         for (y = 0; y < rows; y++) {
@@ -248,9 +244,8 @@ int main(int argc, char *argv[])
 
                                 stats[zone].n_alloc += 1000;
                                 msize = stats[zone].n_alloc * sizeof(FCELL);
-                                stats[zone].fcell_array =
-                                    (FCELL *) G_realloc((void *)stats[zone].
-                                                        fcell_array, msize);
+                                stats[zone].fcell_array = (FCELL *)G_realloc(
+                                    (void *)stats[zone].fcell_array, msize);
                             }
 
                             stats[zone].fcell_array[stats[zone].n] = val_f;
@@ -284,9 +279,8 @@ int main(int argc, char *argv[])
 
                                 stats[zone].n_alloc += 1000;
                                 msize = stats[zone].n_alloc * sizeof(DCELL);
-                                stats[zone].dcell_array =
-                                    (DCELL *) G_realloc((void *)stats[zone].
-                                                        dcell_array, msize);
+                                stats[zone].dcell_array = (DCELL *)G_realloc(
+                                    (void *)stats[zone].dcell_array, msize);
                             }
 
                             stats[zone].dcell_array[stats[zone].n] = val_d;

@@ -29,14 +29,12 @@ const char *mapset, *oname;
 
 int main(int argc, char **argv)
 {
-    struct
-    {
+    struct {
         struct Option *input;
         struct Option *output;
     } params;
 
     struct GModule *module;
-
 
     G_gisinit(argv[0]);
 
@@ -58,7 +56,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     file = params.input->answer;
     oname = params.output->answer;
 
@@ -66,7 +63,6 @@ int main(int argc, char **argv)
 
     if (check_ready())
         G_fatal_error(_("File not found: %s"), file);
-
 
     rdwr_gridatb();
 

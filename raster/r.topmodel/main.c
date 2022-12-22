@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.topmodel
@@ -27,8 +26,7 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *params;
         struct Option *topidxstats;
         struct Option *input;
@@ -39,8 +37,7 @@ int main(int argc, char **argv)
         struct Option *ntopidxclasses;
         struct Option *outtopidxstats;
     } params;
-    struct
-    {
+    struct {
         struct Flag *preprocess;
     } flags;
 
@@ -89,8 +86,8 @@ int main(int argc, char **argv)
     params.topidx = G_define_standard_option(G_OPT_R_INPUT);
     params.topidx->key = "topidx";
     params.topidx->label = _("Name of input topographic index raster map");
-    params.topidx->description =
-        _("Must be clipped to the catchment boundary. Used for generating outtopidxstats");
+    params.topidx->description = _("Must be clipped to the catchment boundary. "
+                                   "Used for generating outtopidxstats");
     params.topidx->required = NO;
     params.topidx->guisection = _("Preprocess");
 

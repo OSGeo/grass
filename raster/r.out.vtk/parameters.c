@@ -1,20 +1,19 @@
-
 /****************************************************************************
-*
-* MODULE:       r.out.vtk  
-*   	    	
-* AUTHOR(S):    Original author 
-*               Soeren Gebbert soerengebbert@gmx.de
-* 		08 23 2005 Berlin
-* PURPOSE:      Converts raster maps into the VTK-Ascii format  
-*
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r.out.vtk
+ *
+ * AUTHOR(S):    Original author
+ *               Soeren Gebbert soerengebbert@gmx.de
+ *                 08 23 2005 Berlin
+ * PURPOSE:      Converts raster maps into the VTK-Ascii format
+ *
+ * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
@@ -55,8 +54,8 @@ void set_params()
 
     param.point = G_define_flag();
     param.point->key = 'p';
-    param.point->description =
-        _("Create VTK point data instead of VTK cell data (if no elevation map is given)");
+    param.point->description = _("Create VTK point data instead of VTK cell "
+                                 "data (if no elevation map is given)");
 
     param.rgbmaps = G_define_option();
     param.rgbmaps->key = "rgbmaps";
@@ -65,8 +64,8 @@ void set_params()
     param.rgbmaps->gisprompt = "old,cell,raster";
     param.rgbmaps->multiple = YES;
     param.rgbmaps->guisection = "Advanced options";
-    param.rgbmaps->description =
-        _("Three (r,g,b) raster maps to create RGB values [redmap,greenmap,bluemap]");
+    param.rgbmaps->description = _("Three (r,g,b) raster maps to create RGB "
+                                   "values [redmap,greenmap,bluemap]");
 
     param.vectmaps = G_define_option();
     param.vectmaps->key = "vectormaps";
@@ -113,7 +112,8 @@ void set_params()
     param.usevertices->key = 'v';
     param.usevertices->guisection = "Advanced options";
     param.usevertices->description =
-        _("Use polydata-vertices for elevation grid creation (to use with vtkDelauny2D)");
+        _("Use polydata-vertices for elevation grid creation (to use with "
+          "vtkDelauny2D)");
 
     param.origin = G_define_flag();
     param.origin->key = 'o';
@@ -127,12 +127,11 @@ void set_params()
     param.coorcorr->description =
         _("Correct the coordinates to match the VTK-OpenGL precision");
 
-
-    /* 
+    /*
      * param.mask = G_define_flag ();
      * param.mask->key = 'm';
      * param.mask->description = _("Use mask (if exists) with input maps");
-     * 
+     *
      * Maybe needed in the future
      * param.xml = G_define_flag ();
      * param.xml->key = 'x';

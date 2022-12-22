@@ -1,13 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       r.spreadpath
- * AUTHOR(S):    Jianping Xu 1995: WIldfire SPread Simulation, WiSpS (original contributor)
+ * AUTHOR(S):    Jianping Xu 1995: WIldfire SPread Simulation, WiSpS (original
+ *                 contributor)
  *               Markus Neteler <neteler itc.it>
- *               Roberto Flor <flor itc.it>, Brad Douglas <rez touchofmadness.com>,
- *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>
+ *               Roberto Flor <flor itc.it>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>
  * PURPOSE:      This is the main program for tracing out the shortest path(s)
- *               based on the raster map showing back path cells from which the   
+ *               based on the raster map showing back path cells from which the
  *               cumulative costs were determined.
  * COPYRIGHT:    (C) 2000-2006 by the GRASS Development Team
  *
@@ -26,7 +28,6 @@
 
 /**********************************************************************/
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,17 +40,13 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
-struct variables
-{
+struct variables {
     char *alias;
     int position;
-} variables[] = {
-    {"x_input", BACKCOL_LAYER},
-    {"y_input", BACKROW_LAYER},
-    {"coor", START_PT},
-    {"output", PATH_LAYER}
-};
+} variables[] = {{"x_input", BACKCOL_LAYER},
+                 {"y_input", BACKROW_LAYER},
+                 {"coor", START_PT},
+                 {"output", PATH_LAYER}};
 
 char path_layer[64];
 char backrow_layer[64];
@@ -60,12 +57,10 @@ char *value;
 int nrows, ncols;
 SEGMENT in_row_seg, in_col_seg, out_seg;
 
-
 int main(int argc, char **argv)
 {
-    int n,
-        backrow, backcol,
-        col, row, len, flag, srows, scols, backrow_fd, backcol_fd, path_fd;
+    int n, backrow, backcol, col, row, len, flag, srows, scols, backrow_fd,
+        backcol_fd, path_fd;
     const char *search_mapset, *path_mapset, *backrow_mapset, *backcol_mapset;
     char *in_row_file, *in_col_file, *out_file;
     CELL *cell;
@@ -152,18 +147,17 @@ int main(int argc, char **argv)
     srows = nrows / 4 + 1;
     scols = ncols / 4 + 1;
 
-    G_verbose_message(_("Reading the input map -%s- and -%s- and creating some temporary files..."),
+    G_verbose_message(_("Reading the input map -%s- and -%s- and creating some "
+                        "temporary files..."),
                       backrow_layer, backcol_layer);
 
     /* Create segmented files for back cell and output layers  */
-    Segment_open(&in_row_seg, in_row_file, nrows, ncols, srows, scols, len,
-                 4);
-    Segment_open(&in_col_seg, in_col_file, nrows, ncols, srows, scols, len,
-                 4);
+    Segment_open(&in_row_seg, in_row_file, nrows, ncols, srows, scols, len, 4);
+    Segment_open(&in_col_seg, in_col_file, nrows, ncols, srows, scols, len, 4);
 
     Segment_open(&out_seg, out_file, nrows, ncols, srows, scols, len, 4);
 
-    /*   Write the back cell layers in the segmented files, and  
+    /*   Write the back cell layers in the segmented files, and
      *   Change UTM coordinates to ROWs and COLUMNs */
     for (row = 0; row < nrows; row++) {
         Rast_get_c_row(backrow_fd, cell, row);
@@ -171,7 +165,7 @@ int main(int argc, char **argv)
         for (col = 0; col < ncols; col++)
             if (cell[col] > 0)
                 cell[col] =
-                    (window.north - cell[col]) / window.ns_res /* - 0.5 */ ;
+                    (window.north - cell[col]) / window.ns_res /* - 0.5 */;
             else
                 cell[col] = -1;
         Segment_put_row(&in_row_seg, cell, row);
@@ -180,7 +174,7 @@ int main(int argc, char **argv)
         for (col = 0; col < ncols; col++)
             if (cell[col] > 0)
                 cell[col] =
-                    (cell[col] - window.west) / window.ew_res /* - 0.5 */ ;
+                    (cell[col] - window.west) / window.ew_res /* - 0.5 */;
         Segment_put_row(&in_col_seg, cell, row);
     }
 
@@ -225,7 +219,7 @@ int main(int argc, char **argv)
             flag = 2;
     }
     else
-        flag = 3;               /* output layer does not previously exist */
+        flag = 3; /* output layer does not previously exist */
 
     /* If the output layer containing the starting positions */
     /* create a linked list of of them  */
@@ -252,8 +246,8 @@ int main(int argc, char **argv)
                     Segment_get(&in_col_seg, value, row, col);
                     insert(&PRESENT_PT, row, col, backrow, backcol);
                 }
-            }                   /* loop over cols */
-        }                       /* loop over rows */
+            } /* loop over cols */
+        }     /* loop over rows */
 
         Rast_close(path_fd);
     }

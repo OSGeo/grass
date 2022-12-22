@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.colors
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               David Johnson
  *
- * PURPOSE:      Allows creation and/or modification of the color table 
+ * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
  *
  * COPYRIGHT:    (C) 2006 by the GRASS Development Team
@@ -37,8 +36,8 @@ int get_stats(struct maps_info *input_maps, struct Cell_stats *statf)
         nrows = Rast_window_rows();
         ncols = Rast_window_cols();
 
-        G_verbose_message(_("(%i/%i) Reading raster map <%s>..."),
-                          i + 1, input_maps->num,
+        G_verbose_message(_("(%i/%i) Reading raster map <%s>..."), i + 1,
+                          input_maps->num,
                           G_fully_qualified_name(input_maps->names[i],
                                                  input_maps->mapsets[i]));
 
@@ -55,8 +54,7 @@ int get_stats(struct maps_info *input_maps, struct Cell_stats *statf)
     return 1;
 }
 
-void get_fp_stats(struct maps_info *input_maps,
-                  struct FP_stats *statf,
+void get_fp_stats(struct maps_info *input_maps, struct FP_stats *statf,
                   DCELL min, DCELL max, int geometric, int geom_abs, int type)
 {
     DCELL *dcell = NULL;
@@ -73,7 +71,8 @@ void get_fp_stats(struct maps_info *input_maps,
 
     if (statf->geometric) {
         if (min * max < 0)
-            G_fatal_error(_("Unable to use logarithmic scaling if range includes zero"));
+            G_fatal_error(
+                _("Unable to use logarithmic scaling if range includes zero"));
 
         if (min < 0) {
             statf->flip = 1;
@@ -117,10 +116,9 @@ void get_fp_stats(struct maps_info *input_maps,
             /* Initiate the default settings */
             Rast3d_init_defaults();
 
-            map3d =
-                Rast3d_open_cell_old(name, mapset, RASTER3D_DEFAULT_WINDOW,
-                                     RASTER3D_TILE_SAME_AS_FILE,
-                                     RASTER3D_USE_CACHE_DEFAULT);
+            map3d = Rast3d_open_cell_old(name, mapset, RASTER3D_DEFAULT_WINDOW,
+                                         RASTER3D_TILE_SAME_AS_FILE,
+                                         RASTER3D_USE_CACHE_DEFAULT);
 
             if (map3d == NULL)
                 Rast3d_fatal_error(_("Error opening 3d raster map"));
@@ -130,9 +128,8 @@ void get_fp_stats(struct maps_info *input_maps,
             ndepths = map3d->window.depths;
         }
 
-        G_verbose_message(_("(%i/%i) Reading map <%s>..."), i,
-                          input_maps->num, G_fully_qualified_name(name,
-                                                                  mapset));
+        G_verbose_message(_("(%i/%i) Reading map <%s>..."), i, input_maps->num,
+                          G_fully_qualified_name(name, mapset));
 
         for (depth = 0; depth < ndepths; depth++) {
             for (row = 0; row < nrows; row++) {

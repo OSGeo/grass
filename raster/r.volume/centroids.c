@@ -1,13 +1,13 @@
 /* Find 'centroids' of all cats.  Most useful with cats which are
  * like clumps (contiguous areas), but will work on any file.
- * Respects the current window and mask. 
+ * Respects the current window and mask.
  * Category zero and negative categories are not done!
  * Returned centroids are (row, col) pairs in n, e.
  * Returned value is 0 for most cases, > 0 if 'both' method
  * selected and some values fell outside 'clumps', and were
  * adjusted.
  * Two methods can be used: 'distance-weighted' and 'counting'.
- * 
+ *
  * Method 0 = 'counting' or 'clump'; centroid point guaranteed
  * to be at a cell of the given category.
  * 1 = Both 0 and 2 are run; if method 2 centroid is on
@@ -16,16 +16,18 @@
  * 2 = 'distance-weighted'; row = sigma(row)/n,
  * col = sigma(col)/n.
  */
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-int centroids(int fd,           /* File descriptor of map layer to process */
+int centroids(int fd, /* File descriptor of map layer to process */
               /* This file is assumed to be opened before calling */
               /*   centroids. */
-              unsigned long *e, unsigned long *n,       /* Pointers to arrays at least max+1 long */
+              unsigned long *e,
+              unsigned long *n, /* Pointers to arrays at least max+1 long */
               int method,       /* 0, 1, or 2; see above. */
               int max)
-{                               /* Highest positive cat number in map layer */
+{ /* Highest positive cat number in map layer */
     CELL *cell_buf, v;
     int i, adjusted, numb, left, right;
     long int *count;
@@ -49,13 +51,13 @@ int centroids(int fd,           /* File descriptor of map layer to process */
     rows = Rast_window_rows();
     cols = Rast_window_cols();
     for (row = 0; row < rows; row++) {
-        Rast_get_c_row(fd, cell_buf, row);      /* get a row */
+        Rast_get_c_row(fd, cell_buf, row); /* get a row */
         for (col = 0; col < cols; col++) {
-            v = cell_buf[col];  /* next cell value in row */
+            v = cell_buf[col]; /* next cell value in row */
             if (v < 1)
-                continue;       /* can't handle 0 or - values */
+                continue; /* can't handle 0 or - values */
             count[v]++;
-            if (method > 0) {   /* acccumulate row, col weights */
+            if (method > 0) { /* acccumulate row, col weights */
                 e[v] += col;
                 n[v] += row;
             }
@@ -83,7 +85,7 @@ int centroids(int fd,           /* File descriptor of map layer to process */
                 v = cell_buf[col];
                 if (v > 0) {
                     if (v == i)
-                        count[i] = 0;   /* weighted is acceptable */
+                        count[i] = 0; /* weighted is acceptable */
                     else
                         adjusted++;
                 }
@@ -104,7 +106,7 @@ int centroids(int fd,           /* File descriptor of map layer to process */
                 continue;
             if (count[v] == 0)
                 continue;
-            if ((--count[v]) == 0) {    /* then this is middle cell */
+            if ((--count[v]) == 0) { /* then this is middle cell */
                 n[v] = row;
                 /* find row-center in this clump */
                 left = right = col;
@@ -127,4 +129,4 @@ int centroids(int fd,           /* File descriptor of map layer to process */
     G_free(cell_buf);
     G_free(count);
     return (adjusted);
-}                               /* end of centroids() */
+} /* end of centroids() */

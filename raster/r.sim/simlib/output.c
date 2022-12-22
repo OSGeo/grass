@@ -20,7 +20,6 @@ void free_walkers()
         G_free(stack);
 }
 
-
 static void output_walker_as_vector(int tt_minutes, int ndigit,
                                     struct TimeStamp *timestamp);
 
@@ -40,7 +39,8 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
     if (outwalk != NULL) {
 
-        /* In case of time series we extent the output name with the time value */
+        /* In case of time series we extent the output name with the time value
+         */
         if (ts == 1) {
             G_snprintf(buf, sizeof(buf), "%s_%.*d", outwalk, ndigit,
                        tt_minutes);
@@ -54,8 +54,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
         else {
             if (Vect_open_new(&Out, outwalk, WITH_Z) < 0)
                 G_fatal_error(_("Unable to create vector map <%s>"), outwalk);
-            G_message("Writing %i walker into vector file %s", nstack,
-                      outwalk);
+            G_message("Writing %i walker into vector file %s", nstack, outwalk);
         }
 
         Points = Vect_new_line_struct();
@@ -87,7 +86,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
     return;
 }
 
-/* Soeren 8. Mar 2011 TODO: 
+/* Soeren 8. Mar 2011 TODO:
  * This function needs to be refractured and splittet into smaller parts */
 int output_data(int tt, double ft)
 {
@@ -116,7 +115,7 @@ int output_data(int tt, double ft)
 
     timemin = (int)(timesec / 60. + 0.5);
     ndigit = 2;
-    /* more compact but harder to read: 
+    /* more compact but harder to read:
        ndigit = (int)floor(log10(timesec)) + 2 */
     if (timemin >= 100)
         ndigit = 3;
@@ -147,8 +146,7 @@ int output_data(int tt, double ft)
     if (depth) {
         depth_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", depth, ndigit,
-                       tt_minutes);
+            G_snprintf(buf, sizeof(buf), "%s.%.*d", depth, ndigit, tt_minutes);
             depth0 = G_store(buf);
             depth_fd = Rast_open_fp_new(depth0);
         }
@@ -159,8 +157,7 @@ int output_data(int tt, double ft)
     if (disch) {
         disch_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", disch, ndigit,
-                       tt_minutes);
+            G_snprintf(buf, sizeof(buf), "%s.%.*d", disch, ndigit, tt_minutes);
             disch0 = G_store(buf);
             disch_fd = Rast_open_fp_new(disch0);
         }
@@ -204,8 +201,7 @@ int output_data(int tt, double ft)
     if (erdep) {
         erdep_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", erdep, ndigit,
-                       tt_minutes);
+            G_snprintf(buf, sizeof(buf), "%s.%.*d", erdep, ndigit, tt_minutes);
             erdep0 = G_store(buf);
             erdep_fd = Rast_open_fp_new(erdep0);
         }
@@ -221,7 +217,7 @@ int output_data(int tt, double ft)
                     Rast_set_f_null_value(depth_cell + j, 1);
                 else {
                     a1 = pow(gama[i][j], 3. / 5.);
-                    depth_cell[j] = (FCELL) a1; /* add conv? */
+                    depth_cell[j] = (FCELL)a1; /* add conv? */
                     gmax = amax1(gmax, a1);
                 }
             }
@@ -234,8 +230,9 @@ int output_data(int tt, double ft)
                     cchez[i][j] == UNDEF)
                     Rast_set_f_null_value(disch_cell + j, 1);
                 else {
-                    a2 = step * gama[i][j] * cchez[i][j];       /* cchez incl. sqrt(sinsl) */
-                    disch_cell[j] = (FCELL) a2; /* add conv? */
+                    a2 = step * gama[i][j] *
+                         cchez[i][j];          /* cchez incl. sqrt(sinsl) */
+                    disch_cell[j] = (FCELL)a2; /* add conv? */
                     dismax = amax1(dismax, a2);
                 }
             }
@@ -247,7 +244,7 @@ int output_data(int tt, double ft)
                 if (zz[i][j] == UNDEF || gammas[i][j] == UNDEF)
                     Rast_set_f_null_value(err_cell + j, 1);
                 else {
-                    err_cell[j] = (FCELL) gammas[i][j];
+                    err_cell[j] = (FCELL)gammas[i][j];
                     gsmax = amax1(gsmax, gammas[i][j]); /* add conv? */
                 }
             }
@@ -259,7 +256,7 @@ int output_data(int tt, double ft)
                 if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
                     Rast_set_f_null_value(conc_cell + j, 1);
                 else {
-                    conc_cell[j] = (FCELL) gama[i][j];
+                    conc_cell[j] = (FCELL)gama[i][j];
                     /*      gsmax = amax1(gsmax, gama[i][j]); */
                 }
             }
@@ -273,7 +270,7 @@ int output_data(int tt, double ft)
                     Rast_set_f_null_value(flux_cell + j, 1);
                 else {
                     a2 = gama[i][j] * slope[i][j];
-                    flux_cell[j] = (FCELL) a2;
+                    flux_cell[j] = (FCELL)a2;
                     dismax = amax1(dismax, a2);
                 }
             }
@@ -285,7 +282,7 @@ int output_data(int tt, double ft)
                 if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
                     Rast_set_f_null_value(erdep_cell + j, 1);
                 else {
-                    erdep_cell[j] = (FCELL) er[i][j];
+                    erdep_cell[j] = (FCELL)er[i][j];
                     ermax = amax1(ermax, er[i][j]);
                     ermin = amin1(ermin, er[i][j]);
                 }
@@ -311,40 +308,37 @@ int output_data(int tt, double ft)
 
         Rast_init_colors(&colors);
 
-        dat1 = (FCELL) 0.;
-        dat2 = (FCELL) 0.001;
+        dat1 = (FCELL)0.;
+        dat2 = (FCELL)0.001;
         Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.05;
-        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255,
-                              &colors);
+        dat2 = (FCELL)0.05;
+        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.1;
-        Rast_add_f_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255,
-                              &colors);
+        dat2 = (FCELL)0.1;
+        Rast_add_f_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.5;
+        dat2 = (FCELL)0.5;
         Rast_add_f_color_rule(&dat1, 0, 127, 255, &dat2, 0, 0, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) gmax;
+        dat2 = (FCELL)gmax;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
-
 
         if (ts == 1) {
             if ((mapst = G_find_file("fcell", depth0, "")) == NULL)
                 G_fatal_error(_("FP raster map <%s> not found"), depth0);
             Rast_write_colors(depth0, mapst, &colors);
-            Rast_quantize_fp_map_range(depth0, mapst, 0., (FCELL) gmax, 0,
-                                       (CELL) gmax);
+            Rast_quantize_fp_map_range(depth0, mapst, 0., (FCELL)gmax, 0,
+                                       (CELL)gmax);
             Rast_free_colors(&colors);
         }
         else {
             if ((mapst = G_find_file("fcell", depth, "")) == NULL)
                 G_fatal_error(_("FP raster map <%s> not found"), depth);
             Rast_write_colors(depth, mapst, &colors);
-            Rast_quantize_fp_map_range(depth, mapst, 0., (FCELL) gmax, 0,
-                                       (CELL) gmax);
+            Rast_quantize_fp_map_range(depth, mapst, 0., (FCELL)gmax, 0,
+                                       (CELL)gmax);
             Rast_free_colors(&colors);
         }
     }
@@ -353,31 +347,29 @@ int output_data(int tt, double ft)
 
         Rast_init_colors(&colors);
 
-        dat1 = (FCELL) 0.;
-        dat2 = (FCELL) 0.0005;
+        dat1 = (FCELL)0.;
+        dat2 = (FCELL)0.0005;
         Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.005;
-        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255,
-                              &colors);
+        dat2 = (FCELL)0.005;
+        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 0, 255, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.05;
-        Rast_add_f_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255,
-                              &colors);
+        dat2 = (FCELL)0.05;
+        Rast_add_f_color_rule(&dat1, 0, 255, 255, &dat2, 0, 127, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.1;
+        dat2 = (FCELL)0.1;
         Rast_add_f_color_rule(&dat1, 0, 127, 255, &dat2, 0, 0, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) dismax;
+        dat2 = (FCELL)dismax;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
 
         if (ts == 1) {
             if ((mapst = G_find_file("cell", disch0, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), disch0);
             Rast_write_colors(disch0, mapst, &colors);
-            Rast_quantize_fp_map_range(disch0, mapst, 0., (FCELL) dismax, 0,
-                                       (CELL) dismax);
+            Rast_quantize_fp_map_range(disch0, mapst, 0., (FCELL)dismax, 0,
+                                       (CELL)dismax);
             Rast_free_colors(&colors);
         }
         else {
@@ -385,8 +377,8 @@ int output_data(int tt, double ft)
             if ((mapst = G_find_file("cell", disch, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), disch);
             Rast_write_colors(disch, mapst, &colors);
-            Rast_quantize_fp_map_range(disch, mapst, 0., (FCELL) dismax, 0,
-                                       (CELL) dismax);
+            Rast_quantize_fp_map_range(disch, mapst, 0., (FCELL)dismax, 0,
+                                       (CELL)dismax);
             Rast_free_colors(&colors);
         }
     }
@@ -395,28 +387,26 @@ int output_data(int tt, double ft)
 
         Rast_init_colors(&colors);
 
-        dat1 = (FCELL) 0.;
-        dat2 = (FCELL) 0.001;
+        dat1 = (FCELL)0.;
+        dat2 = (FCELL)0.001;
         Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.1;
-        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
-                              &colors);
+        dat2 = (FCELL)0.1;
+        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 1.;
-        Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 191, 127, 63,
-                              &colors);
+        dat2 = (FCELL)1.;
+        Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 191, 127, 63, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) dismax;
+        dat2 = (FCELL)dismax;
         Rast_add_f_color_rule(&dat1, 191, 127, 63, &dat2, 0, 0, 0, &colors);
 
         if (ts == 1) {
             if ((mapst = G_find_file("cell", flux0, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), flux0);
             Rast_write_colors(flux0, mapst, &colors);
-            Rast_quantize_fp_map_range(flux0, mapst, 0., (FCELL) dismax, 0,
-                                       (CELL) dismax);
+            Rast_quantize_fp_map_range(flux0, mapst, 0., (FCELL)dismax, 0,
+                                       (CELL)dismax);
             Rast_free_colors(&colors);
         }
         else {
@@ -424,8 +414,8 @@ int output_data(int tt, double ft)
             if ((mapst = G_find_file("cell", flux, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), flux);
             Rast_write_colors(flux, mapst, &colors);
-            Rast_quantize_fp_map_range(flux, mapst, 0., (FCELL) dismax, 0,
-                                       (CELL) dismax);
+            Rast_quantize_fp_map_range(flux, mapst, 0., (FCELL)dismax, 0,
+                                       (CELL)dismax);
             Rast_free_colors(&colors);
         }
     }
@@ -434,42 +424,40 @@ int output_data(int tt, double ft)
 
         Rast_init_colors(&colors);
 
-        dat1 = (FCELL) ermax;
-        dat2 = (FCELL) 0.1;
+        dat1 = (FCELL)ermax;
+        dat2 = (FCELL)0.1;
         Rast_add_f_color_rule(&dat1, 0, 0, 0, &dat2, 0, 0, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.01;
+        dat2 = (FCELL)0.01;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 191, 191, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.0001;
+        dat2 = (FCELL)0.0001;
         Rast_add_f_color_rule(&dat1, 0, 191, 191, &dat2, 170, 255, 255,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.;
+        dat2 = (FCELL)0.;
         Rast_add_f_color_rule(&dat1, 170, 255, 255, &dat2, 255, 255, 255,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) - 0.0001;
+        dat2 = (FCELL)-0.0001;
         Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) - 0.01;
-        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
-                              &colors);
+        dat2 = (FCELL)-0.01;
+        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) - 0.1;
+        dat2 = (FCELL)-0.1;
         Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 255, 0, 0, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) ermin;
+        dat2 = (FCELL)ermin;
         Rast_add_f_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255, &colors);
 
         if (ts == 1) {
             if ((mapst = G_find_file("cell", erdep0, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), erdep0);
             Rast_write_colors(erdep0, mapst, &colors);
-            Rast_quantize_fp_map_range(erdep0, mapst, (FCELL) ermin,
-                                       (FCELL) ermax, (CELL) ermin,
-                                       (CELL) ermax);
+            Rast_quantize_fp_map_range(erdep0, mapst, (FCELL)ermin,
+                                       (FCELL)ermax, (CELL)ermin, (CELL)ermax);
             Rast_free_colors(&colors);
 
             type = "raster";
@@ -484,9 +472,8 @@ int output_data(int tt, double ft)
             if ((mapst = G_find_file("cell", erdep, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), erdep);
             Rast_write_colors(erdep, mapst, &colors);
-            Rast_quantize_fp_map_range(erdep, mapst, (FCELL) ermin,
-                                       (FCELL) ermax, (CELL) ermin,
-                                       (CELL) ermax);
+            Rast_quantize_fp_map_range(erdep, mapst, (FCELL)ermin, (FCELL)ermax,
+                                       (CELL)ermin, (CELL)ermax);
             Rast_free_colors(&colors);
 
             type = "raster";
@@ -512,22 +499,20 @@ int output_data(int tt, double ft)
         else
             Rast_short_history(depth0, type, &hist);
 
-        Rast_append_format_history(&hist,
-                                   "init.walk=%d, maxwalk=%d, remaining walkers=%d",
-                                   nwalk, maxwa, nwalka);
-        Rast_append_format_history(&hist,
-                                   "duration (sec.)=%d, time-serie iteration=%d",
-                                   timesec, tt);
+        Rast_append_format_history(
+            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
+            maxwa, nwalka);
+        Rast_append_format_history(
+            &hist, "duration (sec.)=%d, time-serie iteration=%d", timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    deltap, vmean);
-        Rast_append_format_history(&hist,
-                                   "mean source (si)=%e, mean infil=%e", si0,
-                                   infmean);
+        Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
+                                   si0, infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             elevin, dxin, dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
-                            rain, infil, manin);
+        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s", rain,
+                            infil, manin);
 
         Rast_command_history(&hist);
 
@@ -553,22 +538,20 @@ int output_data(int tt, double ft)
         else
             Rast_short_history(disch0, type, &hist);
 
-        Rast_append_format_history(&hist,
-                                   "init.walkers=%d, maxwalk=%d, rem. walkers=%d",
-                                   nwalk, maxwa, nwalka);
-        Rast_append_format_history(&hist,
-                                   "duration (sec.)=%d, time-serie iteration=%d",
-                                   timesec, tt);
+        Rast_append_format_history(
+            &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", nwalk, maxwa,
+            nwalka);
+        Rast_append_format_history(
+            &hist, "duration (sec.)=%d, time-serie iteration=%d", timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    deltap, vmean);
-        Rast_append_format_history(&hist,
-                                   "mean source (si)=%e, mean infil=%e", si0,
-                                   infmean);
+        Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
+                                   si0, infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             elevin, dxin, dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
-                            rain, infil, manin);
+        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s", rain,
+                            infil, manin);
 
         Rast_command_history(&hist);
 
@@ -594,12 +577,11 @@ int output_data(int tt, double ft)
         else
             Rast_short_history(flux0, type, &hist);
 
-        Rast_append_format_history(&hist,
-                                   "init.walk=%d, maxwalk=%d, remaining walkers=%d",
-                                   nwalk, maxwa, nwalka);
-        Rast_append_format_history(&hist,
-                                   "duration (sec.)=%d, time-serie iteration=%d",
-                                   timesec, tt);
+        Rast_append_format_history(
+            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
+            maxwa, nwalka);
+        Rast_append_format_history(
+            &hist, "duration (sec.)=%d, time-serie iteration=%d", timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    deltap, vmean);
         Rast_append_format_history(&hist, "mean source (si)=%f", si0);
@@ -624,7 +606,6 @@ int output_data(int tt, double ft)
 
     return 1;
 }
-
 
 int output_et()
 {
@@ -680,7 +661,7 @@ int output_et()
                 if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
                     Rast_set_f_null_value(et_cell + j, 1);
                 else {
-                    et_cell[j] = (FCELL) er[i][j];      /* add conv? */
+                    et_cell[j] = (FCELL)er[i][j]; /* add conv? */
                     etmax = amax1(etmax, er[i][j]);
                     etmin = amin1(etmin, er[i][j]);
                 }
@@ -698,7 +679,7 @@ int output_et()
                         trc = 0.;
                     else
                         trc = si[i][j] / sigma[i][j];
-                    tc_cell[j] = (FCELL) trc;
+                    tc_cell[j] = (FCELL)trc;
                     /*  gsmax = amax1(gsmax, trc); */
                 }
             }
@@ -716,49 +697,48 @@ int output_et()
 
         Rast_init_colors(&colors);
 
-        dat1 = (FCELL) etmax;
-        dat2 = (FCELL) 0.1;
+        dat1 = (FCELL)etmax;
+        dat2 = (FCELL)0.1;
         Rast_add_f_color_rule(&dat1, 0, 0, 0, &dat2, 0, 0, 255, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.01;
+        dat2 = (FCELL)0.01;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 191, 191, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.0001;
+        dat2 = (FCELL)0.0001;
         Rast_add_f_color_rule(&dat1, 0, 191, 191, &dat2, 170, 255, 255,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) 0.;
+        dat2 = (FCELL)0.;
         Rast_add_f_color_rule(&dat1, 170, 255, 255, &dat2, 255, 255, 255,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) - 0.0001;
+        dat2 = (FCELL)-0.0001;
         Rast_add_f_color_rule(&dat1, 255, 255, 255, &dat2, 255, 255, 0,
                               &colors);
         dat1 = dat2;
-        dat2 = (FCELL) - 0.01;
-        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
-                              &colors);
+        dat2 = (FCELL)-0.01;
+        Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) - 0.1;
+        dat2 = (FCELL)-0.1;
         Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 255, 0, 0, &colors);
         dat1 = dat2;
-        dat2 = (FCELL) etmin;
+        dat2 = (FCELL)etmin;
         Rast_add_f_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255, &colors);
 
         /*    if (ts == 1) {
            if ((mapst = G_find_file("cell", et0, "")) == NULL)
            G_fatal_error(_("Raster map <%s> not found"), et0);
            Rast_write_colors(et0, mapst, &colors);
-           Rast_quantize_fp_map_range(et0, mapst, (FCELL)etmin, (FCELL)etmax, (CELL)etmin, (CELL)etmax);
-           Rast_free_colors(&colors);
+           Rast_quantize_fp_map_range(et0, mapst, (FCELL)etmin, (FCELL)etmax,
+           (CELL)etmin, (CELL)etmax); Rast_free_colors(&colors);
            }
            else { */
 
         if ((mapst = G_find_file("cell", et, "")) == NULL)
             G_fatal_error(_("Raster map <%s> not found"), et);
         Rast_write_colors(et, mapst, &colors);
-        Rast_quantize_fp_map_range(et, mapst, (FCELL) etmin, (FCELL) etmax,
-                                   (CELL) etmin, (CELL) etmax);
+        Rast_quantize_fp_map_range(et, mapst, (FCELL)etmin, (FCELL)etmax,
+                                   (CELL)etmin, (CELL)etmax);
         Rast_free_colors(&colors);
         /*  } */
     }

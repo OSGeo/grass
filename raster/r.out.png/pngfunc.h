@@ -1,8 +1,6 @@
-#include "png.h"                /* includes zlib.h and setjmp.h */
+#include "png.h" /* includes zlib.h and setjmp.h */
 
-
-typedef struct _jmpbuf_wrapper
-{
+typedef struct _jmpbuf_wrapper {
     jmp_buf jmpbuf;
 } jmpbuf_wrapper;
 
@@ -15,7 +13,7 @@ typedef struct _jmpbuf_wrapper
 #ifndef NONE
 #define NONE 0
 #endif
-#define MAXCOLORS 256
+#define MAXCOLORS   256
 #define MAXCOMMENTS 256
 
 /* function prototypes */

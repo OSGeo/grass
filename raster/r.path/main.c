@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r.path
- *               
+ *
  * AUTHOR(S):    based on r.drain
  *               Markus Metz
- *               
- * PURPOSE:      Tracing paths from starting points following 
- *               input directions.  
+ *
+ * PURPOSE:      Tracing paths from starting points following
+ *               input directions.
  * COPYRIGHT:    (C) 2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -43,8 +42,7 @@
 #define POINTS_INCREMENT 1024
 
 /* start points */
-struct point
-{
+struct point {
     int row;
     int col;
     double value;
@@ -52,8 +50,7 @@ struct point
 };
 
 /* stack points for bitmask directions */
-struct spoint
-{
+struct spoint {
     int row;
     int col;
     int dir;
@@ -62,16 +59,14 @@ struct spoint
 };
 
 /* output path points */
-struct ppoint
-{
+struct ppoint {
     int row;
     int col;
     double value;
 };
 
 /* managed list of output path points */
-struct point_list
-{
+struct point_list {
     struct ppoint *p;
     int n;
     int nalloc;
@@ -117,8 +112,7 @@ int main(int argc, char **argv)
     struct History history;
 
     struct Cell_head window;
-    struct
-    {
+    struct {
         struct Option *dir;
         struct Option *format;
         struct Option *val;
@@ -127,8 +121,7 @@ int main(int argc, char **argv)
         struct Option *rast;
         struct Option *vect;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *copy;
         struct Flag *accum;
         struct Flag *count;
@@ -168,12 +161,11 @@ int main(int argc, char **argv)
     opt.format->required = YES;
     opt.format->options = "auto,degree,45degree,bitmask";
     opt.format->answer = "auto";
-    G_asprintf(&desc,
-               "auto;%s;degree;%s;45degree;%s;bitmask;%s",
-               _("auto-detect direction format"),
-               _("degrees CCW from East"),
-               _("degrees CCW from East divided by 45 (e.g. r.watershed directions)"),
-               _("bitmask encoded directions (e.g. r.cost -b)"));
+    G_asprintf(
+        &desc, "auto;%s;degree;%s;45degree;%s;bitmask;%s",
+        _("auto-detect direction format"), _("degrees CCW from East"),
+        _("degrees CCW from East divided by 45 (e.g. r.watershed directions)"),
+        _("bitmask encoded directions (e.g. r.cost -b)"));
     opt.format->descriptions = desc;
 
     opt.val = G_define_standard_option(G_OPT_R_INPUT);
@@ -265,13 +257,12 @@ int main(int argc, char **argv)
     if (opt.coord->answer) {
         for (i = 0; opt.coord->answers[i] != NULL; i += 2) {
             G_scan_easting(opt.coord->answers[i], &east, G_projection());
-            G_scan_northing(opt.coord->answers[i + 1], &north,
-                            G_projection());
+            G_scan_northing(opt.coord->answers[i + 1], &north, G_projection());
             start_col = (int)Rast_easting_to_col(east, &window);
             start_row = (int)Rast_northing_to_row(north, &window);
 
-            if (start_row < 0 || start_row > nrows ||
-                start_col < 0 || start_col > ncols) {
+            if (start_row < 0 || start_row > nrows || start_col < 0 ||
+                start_col > ncols) {
                 G_warning(_("Starting point %d is outside the current region"),
                           i + 1);
                 continue;
@@ -297,7 +288,7 @@ int main(int argc, char **argv)
             Points = Vect_new_line_struct();
             Cats = Vect_new_cats_struct();
 
-            Vect_set_open_level(1);     /* topology not required */
+            Vect_set_open_level(1); /* topology not required */
 
             if (1 > Vect_open_old(&In, opt.vpoint->answers[i], ""))
                 G_fatal_error(_("Unable to open vector map <%s>"),
@@ -315,7 +306,8 @@ int main(int argc, char **argv)
                 /* register line */
                 type = Vect_read_next_line(&In, Points, Cats);
 
-                /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+                /* Note: check for dead lines is not needed, because they are
+                 * skipped by V1_read_next_line_nat() */
                 if (type == -1) {
                     G_warning(_("Unable to read vector map"));
                     continue;
@@ -329,7 +321,8 @@ int main(int argc, char **argv)
                 start_col = (int)Rast_easting_to_col(Points->x[0], &window);
                 start_row = (int)Rast_northing_to_row(Points->y[0], &window);
 
-                /* effectively just a duplicate check to G_site_in_region() ??? */
+                /* effectively just a duplicate check to G_site_in_region() ???
+                 */
                 if (start_row < 0 || start_row > nrows || start_col < 0 ||
                     start_col > ncols)
                     continue;
@@ -349,9 +342,11 @@ int main(int argc, char **argv)
             }
             Vect_close(&In);
 
-            /* only catches maps out of range until something is found, not after */
+            /* only catches maps out of range until something is found, not
+             * after */
             if (!have_points) {
-                G_warning(_("Starting vector map <%s> contains no points in the current region"),
+                G_warning(_("Starting vector map <%s> contains no points in "
+                            "the current region"),
                           opt.vpoint->answers[i]);
             }
             Vect_destroy_line_struct(Points);
@@ -403,7 +398,8 @@ int main(int argc, char **argv)
     }
     else if (strcmp(opt.format->answer, "45degree") == 0) {
         if (dmax > 8)
-            G_fatal_error(_("Directional degrees divided by 45 can not be > 8"));
+            G_fatal_error(
+                _("Directional degrees divided by 45 can not be > 8"));
         dir_format = DIR_DEG45;
     }
     else if (strcmp(opt.format->answer, "bitmask") == 0) {
@@ -415,27 +411,31 @@ int main(int argc, char **argv)
     else if (strcmp(opt.format->answer, "auto") == 0) {
         if (dmax <= 8) {
             dir_format = DIR_DEG45;
-            G_important_message(_("Input direction format assumed to be degrees CCW from East divided by 45"));
+            G_important_message(_("Input direction format assumed to be "
+                                  "degrees CCW from East divided by 45"));
         }
         else if (dmax <= (1 << 8) - 1) {
             dir_format = DIR_BIT;
-            G_important_message(_("Input direction format assumed to be bitmask encoded without Knight's move"));
+            G_important_message(_("Input direction format assumed to be "
+                                  "bitmask encoded without Knight's move"));
         }
         else if (dmax <= 360) {
             dir_format = DIR_DEG;
-            G_important_message(_("Input direction format assumed to be degrees CCW from East"));
+            G_important_message(_(
+                "Input direction format assumed to be degrees CCW from East"));
         }
         else if (dmax <= (1 << 16) - 1) {
             dir_format = DIR_BIT;
-            G_important_message(_("Input direction format assumed to be bitmask encoded with Knight's move"));
+            G_important_message(_("Input direction format assumed to be "
+                                  "bitmask encoded with Knight's move"));
         }
         else
-            G_fatal_error(_("Unable to detect format of input direction map <%s>"),
-                          dir_name);
+            G_fatal_error(
+                _("Unable to detect format of input direction map <%s>"),
+                dir_name);
     }
     if (dir_format <= 0)
-        G_fatal_error(_("Invalid directions format '%s'"),
-                      opt.format->answer);
+        G_fatal_error(_("Invalid directions format '%s'"), opt.format->answer);
 
     G_verbose_message(_("Reading direction map <%s> ..."), dir_name);
     dir_id = Rast_open_old(dir_name, "");
@@ -459,7 +459,7 @@ int main(int argc, char **argv)
             if (dir_format == DIR_DEG45) {
                 DCELL *dp;
 
-                dp = (DCELL *) dir_buf;
+                dp = (DCELL *)dir_buf;
                 for (j = 0; j < ncols; j++, dp++)
                     *dp *= 45;
             }
@@ -498,10 +498,10 @@ int main(int argc, char **argv)
                 pvout = &Tmp;
             }
 
-            if (!dir_bitmask(dir_fd, val_fd, next_start_pt, &window,
-                             pvout, ppl, out_mode)) {
-                G_warning(_("No path at row %d, col %d"),
-                          next_start_pt->row, next_start_pt->col);
+            if (!dir_bitmask(dir_fd, val_fd, next_start_pt, &window, pvout, ppl,
+                             out_mode)) {
+                G_warning(_("No path at row %d, col %d"), next_start_pt->row,
+                          next_start_pt->col);
             }
             if (pvout) {
                 Vect_build_partial(&Tmp, GV_BUILD_BASE);
@@ -509,15 +509,15 @@ int main(int argc, char **argv)
                 Vect_break_lines(&Tmp, GV_LINE, NULL);
                 Vect_copy_map_lines(&Tmp, &vout);
                 Vect_set_release_support(&Tmp);
-                Vect_close(&Tmp);       /* temporary map is deleted automatically */
+                Vect_close(&Tmp); /* temporary map is deleted automatically */
                 pvout = &vout;
             }
         }
         else {
-            if (!dir_degree(dir_fd, val_fd, next_start_pt, &window,
-                            pvout, ppl, out_mode)) {
-                G_warning(_("No path at row %d, col %d"),
-                          next_start_pt->row, next_start_pt->col);
+            if (!dir_degree(dir_fd, val_fd, next_start_pt, &window, pvout, ppl,
+                            out_mode)) {
+                G_warning(_("No path at row %d, col %d"), next_start_pt->row,
+                          next_start_pt->col);
             }
         }
         next_start_pt = next_start_pt->next;
@@ -530,7 +530,6 @@ int main(int argc, char **argv)
         if (pl.n > 1) {
             /* sort points */
             qsort(pl.p, pl.n, sizeof(struct ppoint), cmp_pp);
-
 
             /* remove duplicates */
             j = 1;
@@ -577,7 +576,7 @@ int main(int argc, char **argv)
             G_percent(1, 1, 1);
             G_free(out_buf);
         }
-        else {                  /* mode = OUT_CPY or OUT_ACC */
+        else { /* mode = OUT_CPY or OUT_ACC */
             DCELL *out_buf;
 
             /* Output could be of the same type as input */
@@ -641,16 +640,14 @@ void pl_add(struct point_list *pl, struct ppoint *p)
 {
     if (pl->n == pl->nalloc) {
         pl->nalloc += POINTS_INCREMENT;
-        pl->p =
-            (struct ppoint *)G_realloc(pl->p,
-                                       pl->nalloc * sizeof(struct ppoint));
+        pl->p = (struct ppoint *)G_realloc(pl->p,
+                                           pl->nalloc * sizeof(struct ppoint));
         if (!pl->p)
             G_fatal_error(_("Unable to increase point list"));
     }
     pl->p[pl->n] = *p;
     pl->n++;
 }
-
 
 /* Jenson Domingue 1988, r.fill.dir:
  * bitmask encoded directions CW from North
@@ -671,16 +668,16 @@ void pl_add(struct point_list *pl, struct ppoint *p)
  *  8192           13           WSW
  * 16384           14           WNW
  * 32768           15           NWN
- * 
  *
- * 8 neighbours 
+ *
+ * 8 neighbours
  *  64 128 1
  *  32  x  2
  *  16  8  4
- * 
+ *
  * log2(value) CW from North starting at NE
  * expanded for Knight's move
- * 
+ *
  *    15     8
  *  14 6  7  0  9
  *     5  X  1
@@ -708,12 +705,10 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
     double x, y;
     double value;
 
-    int col_offset[16] = { 1, 1, 1, 0, -1, -1, -1, 0,
-        1, 2, 2, 1, -1, -2, -2, -1
-    };
-    int row_offset[16] = { -1, 0, 1, 1, 1, 0, -1, -1,
-        -2, -1, 1, 2, 2, 1, -1, -2
-    };
+    int col_offset[16] = {1, 1, 1, 0, -1, -1, -1, 0,
+                          1, 2, 2, 1, -1, -2, -2, -1};
+    int row_offset[16] = {-1, 0,  1, 1, 1, 0, -1, -1,
+                          -2, -1, 1, 2, 2, 1, -1, -2};
 
     dir_buf = Rast_allocate_c_buf();
     val_buf = NULL;
@@ -745,8 +740,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
             /* read input raster */
             val_buf = Rast_allocate_d_buf();
             if (val_row != stackp->row) {
-                lseek(val_fd,
-                      (off_t) stackp->row * window->cols * sizeof(DCELL),
+                lseek(val_fd, (off_t)stackp->row * window->cols * sizeof(DCELL),
                       SEEK_SET);
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
                     window->cols * sizeof(DCELL)) {
@@ -777,7 +771,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 
             /* find direction from this point */
             if (dir_row != next_row) {
-                lseek(dir_fd, (off_t) next_row * window->cols * sizeof(CELL),
+                lseek(dir_fd, (off_t)next_row * window->cols * sizeof(CELL),
                       SEEK_SET);
                 if (read(dir_fd, dir_buf, window->cols * sizeof(CELL)) !=
                     window->cols * sizeof(CELL)) {
@@ -807,7 +801,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
             if (is_stack)
                 cur_dir = stackp->dir;
 
-            /* count paths going from current point and 
+            /* count paths going from current point and
              * get next direction as log2(direction) */
             next_dir = -1;
             npaths = 0;
@@ -841,8 +835,8 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                 else {
                     /* stack point without path ? */
                     if (stackp->dir == 0)
-                        G_warning(_("No path from row %d, col %d"),
-                                  stackp->row, stackp->col);
+                        G_warning(_("No path from row %d, col %d"), stackp->row,
+                                  stackp->col);
 
                     /* drop this point from the stack */
                     G_debug(1, "drop point from stack");
@@ -852,7 +846,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                     break;
                 }
             }
-            else {              /* not a stack point */
+            else { /* not a stack point */
                 if (npaths == 0) {
                     /* should not happen */
                     G_fatal_error(_("Invalid direction %d"), direction);
@@ -888,8 +882,8 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 
             G_debug(1, "next cell at row %d, col %d", next_row, next_col);
 
-            if (next_col >= 0 && next_col < window->cols
-                && next_row >= 0 && next_row < window->rows) {
+            if (next_col >= 0 && next_col < window->cols && next_row >= 0 &&
+                next_row < window->rows) {
 
                 /* add point */
                 if (Out) {
@@ -904,13 +898,14 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                         /* read input raster */
                         if (val_row != next_row) {
                             lseek(val_fd,
-                                  (off_t) next_row * window->cols *
-                                  sizeof(DCELL), SEEK_SET);
-                            if (read
-                                (val_fd, val_buf,
-                                 window->cols * sizeof(DCELL)) !=
+                                  (off_t)next_row * window->cols *
+                                      sizeof(DCELL),
+                                  SEEK_SET);
+                            if (read(val_fd, val_buf,
+                                     window->cols * sizeof(DCELL)) !=
                                 window->cols * sizeof(DCELL)) {
-                                G_fatal_error(_("Unable to read from temp file"));
+                                G_fatal_error(
+                                    _("Unable to read from temp file"));
                             }
                             val_row = next_row;
                         }
@@ -926,11 +921,11 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                     pl_add(pl, &pp);
                 }
 
-                /* avoid circular paths 
+                /* avoid circular paths
                  * avoid tracing the same path segment several times:
-                 * a path can split and later on merge again, 
+                 * a path can split and later on merge again,
                  * then split again, merge again
-                 * path segments are identical from every merge point 
+                 * path segments are identical from every merge point
                  * to the next split point */
                 ngbr_rc.row = next_row;
                 ngbr_rc.col = next_col;
@@ -949,7 +944,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
             else {
                 G_warning(_("Path is leaving the current region"));
             }
-        }                       /* end while */
+        } /* end while */
     }
 
     pavlrc_destroy(visited);
@@ -971,11 +966,12 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                struct point_list *pl, int out_mode)
 {
     /*
-     * The idea is that each cell of the direction surface has a value representing
-     * the direction towards the next cell in the path. The direction is read from 
-     * the input raster, and a simple case/switch is used to determine which cell to
-     * read next. This is repeated via a while loop until a null direction is found.
-     * 
+     * The idea is that each cell of the direction surface has a value
+     * representing the direction towards the next cell in the path. The
+     * direction is read from the input raster, and a simple case/switch is used
+     * to determine which cell to read next. This is repeated via a while loop
+     * until a null direction is found.
+     *
      * directions are degrees CCW from East with East = 360
      */
 
@@ -1015,7 +1011,7 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             /* read input raster */
             val_buf = Rast_allocate_d_buf();
             if (val_row != next_row) {
-                lseek(val_fd, (off_t) next_row * window->cols * sizeof(DCELL),
+                lseek(val_fd, (off_t)next_row * window->cols * sizeof(DCELL),
                       SEEK_SET);
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
                     window->cols * sizeof(DCELL)) {
@@ -1036,12 +1032,12 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
     while (go) {
         go = 0;
         /* Directional algorithm
-         * 1) read cell direction               
-         * 2) shift to cell in that direction           
+         * 1) read cell direction
+         * 2) shift to cell in that direction
          */
         /* find the direction recorded at row,col */
         if (dir_row != next_row) {
-            lseek(dir_fd, (off_t) next_row * window->cols * sizeof(DCELL),
+            lseek(dir_fd, (off_t)next_row * window->cols * sizeof(DCELL),
                   SEEK_SET);
             if (read(dir_fd, dir_buf, window->cols * sizeof(DCELL)) !=
                 window->cols * sizeof(DCELL)) {
@@ -1053,68 +1049,68 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
         neighbour = 0;
         if (!Rast_is_d_null_value(&direction)) {
             neighbour = direction * 10;
-            G_debug(2, "direction read: %lf, neighbour found: %i",
-                    direction, neighbour);
+            G_debug(2, "direction read: %lf, neighbour found: %i", direction,
+                    neighbour);
         }
         switch (neighbour) {
-        case 225:              /* ENE */
+        case 225: /* ENE */
             next_row -= 1;
             next_col += 2;
             break;
-        case 450:              /* NE */
+        case 450: /* NE */
             next_row -= 1;
             next_col += 1;
             break;
-        case 675:              /* NNE */
+        case 675: /* NNE */
             next_row -= 2;
             next_col += 1;
             break;
-        case 900:              /* N */
+        case 900: /* N */
             next_row -= 1;
             break;
-        case 1125:             /* NNW */
+        case 1125: /* NNW */
             next_row -= 2;
             next_col -= 1;
             break;
-        case 1350:             /* NW */
+        case 1350: /* NW */
             next_col -= 1;
             next_row -= 1;
             break;
-        case 1575:             /* WNW */
+        case 1575: /* WNW */
             next_col -= 2;
             next_row -= 1;
             break;
-        case 1800:             /* W */
+        case 1800: /* W */
             next_col -= 1;
             break;
-        case 2025:             /* WSW */
+        case 2025: /* WSW */
             next_row += 1;
             next_col -= 2;
             break;
-        case 2250:             /* SW */
+        case 2250: /* SW */
             next_row += 1;
             next_col -= 1;
             break;
-        case 2475:             /* SSW */
+        case 2475: /* SSW */
             next_row += 2;
             next_col -= 1;
             break;
-        case 2700:             /* S */
+        case 2700: /* S */
             next_row += 1;
             break;
-        case 2925:             /* SSE */
+        case 2925: /* SSE */
             next_row += 2;
             next_col += 1;
             break;
-        case 3150:             /* SE */
+        case 3150: /* SE */
             next_row += 1;
             next_col += 1;
             break;
-        case 3375:             /* ESE */
+        case 3375: /* ESE */
             next_row += 1;
             next_col += 2;
             break;
-        case 3600:             /* E */
+        case 3600: /* E */
             next_col += 1;
             break;
         default:
@@ -1122,7 +1118,7 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             next_row = -1;
             next_col = -1;
             break;
-        }                       /* end switch/case */
+        } /* end switch/case */
 
         if (next_col >= 0 && next_col < window->cols && next_row >= 0 &&
             next_row < window->rows) {
@@ -1139,11 +1135,10 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                     /* read input raster */
                     if (val_row != next_row) {
                         lseek(val_fd,
-                              (off_t) next_row * window->cols * sizeof(DCELL),
+                              (off_t)next_row * window->cols * sizeof(DCELL),
                               SEEK_SET);
-                        if (read
-                            (val_fd, val_buf,
-                             window->cols * sizeof(DCELL)) !=
+                        if (read(val_fd, val_buf,
+                                 window->cols * sizeof(DCELL)) !=
                             window->cols * sizeof(DCELL)) {
                             G_fatal_error(_("Unable to read from temp file"));
                         }
@@ -1165,7 +1160,7 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             npoints++;
         }
 
-    }                           /* end while */
+    } /* end while */
 
     if (Out && Points->n_points > 1) {
         Vect_write_line(Out, GV_LINE, Points, Cats);

@@ -1,7 +1,7 @@
 /*
  * Cell-file area extraction
  *   Boundary tracing algorithm
- * 
+ *
  * Jean Ezell
  * US Army Corps of Engineers
  * Construction Engineering Research Lab
@@ -10,7 +10,7 @@
  * January 1988
  *
  * Fixed 3/2001 by Andrea Aime <aaime@comune.modena.it>
- *   fixed area label problem with r.poly (it was creating more        
+ *   fixed area label problem with r.poly (it was creating more
  *   labels than required if there were islands)
  *
  *************************
@@ -29,7 +29,7 @@
  * the class.  We also keep track of the longest horizontal strip in each
  * area.  The left end of this strip will be used as the position of the
  * label in the dlg label file.
- * 
+ *
  * Global variables:
  *   v_list          pointer to allocated array of pointers to endpoints of
  *                   vertical lines currently under construction
@@ -55,7 +55,7 @@
  *                   mapping of all equivalent area numbers onto one
  *                   number from the class
  *   n_equiv         current length of e_list
- * 
+ *
  * Entry points:
  *   extract_areas   driver for boundary extraction, area labelling
  *                   algorithm
@@ -100,7 +100,7 @@ static int update_width(struct area_table *, int);
 static int nabors(void);
 
 #define get_raster_value(ptr, col) \
-	Rast_get_d_value(G_incr_void_ptr(ptr, (col)*data_size), data_type)
+    Rast_get_d_value(G_incr_void_ptr(ptr, (col)*data_size), data_type)
 
 /* extract_areas - trace boundaries of polygons in file */
 
@@ -109,8 +109,8 @@ int extract_areas(void)
     double nullVal;
     int i;
 
-    row = col = top = 0;        /* get started for read of first */
-    bottom = 1;                 /* line from raster map */
+    row = col = top = 0; /* get started for read of first */
+    bottom = 1;          /* line from raster map */
     area_num = 0;
     tl_area = 0;
     n_alloced_ptrs = 0;
@@ -122,19 +122,19 @@ int extract_areas(void)
     G_message(_("Extracting areas..."));
 
     scan_length = read_next();
-    while (read_next()) {       /* read rest of file, one row at *//*   a time */
+    while (read_next()) { /* read rest of file, one row at */ /*   a time */
         G_percent(row, n_rows + 1, 2);
 
         for (col = 0; col < scan_length - 1; col++) {
-            tl = get_raster_value(buffer[top], col);    /* top left in window */
-            tr = get_raster_value(buffer[top], col + 1);        /* top right */
-            bl = get_raster_value(buffer[bottom], col); /* bottom left */
-            br = get_raster_value(buffer[bottom], col + 1);     /* bottom right */
+            tl = get_raster_value(buffer[top], col); /* top left in window */
+            tr = get_raster_value(buffer[top], col + 1);    /* top right */
+            bl = get_raster_value(buffer[bottom], col);     /* bottom left */
+            br = get_raster_value(buffer[bottom], col + 1); /* bottom right */
             update_list(nabors());
         }
 
-        if (h_ptr != NULPTR)    /* if we have a loose end, */
-            end_hline();        /*   tie it down */
+        if (h_ptr != NULPTR) /* if we have a loose end, */
+            end_hline();     /*   tie it down */
 
         row++;
     }
@@ -158,7 +158,7 @@ int extract_areas(void)
     }
 
     return 0;
-}                               /* extract_areas */
+} /* extract_areas */
 
 /* update_list - maintains linked list of COOR structures which resprsent */
 /* bends in and endpoints of lines separating areas in input file; */
@@ -181,9 +181,9 @@ static int update_list(int i)
         /* Bottom right corner - Point in middle of new line */
         /* (growing) <- ptr2 -><- ptr1 -><- ptr3 -> (growing) */
         /*            (?, col) (row, col) (row, ?) */
-        new_ptr1 = get_ptr();   /* corner point */
-        new_ptr2 = get_ptr();   /* downward-growing point */
-        new_ptr3 = get_ptr();   /* right-growing point */
+        new_ptr1 = get_ptr(); /* corner point */
+        new_ptr2 = get_ptr(); /* downward-growing point */
+        new_ptr3 = get_ptr(); /* right-growing point */
         new_ptr1->bptr = new_ptr2;
         new_ptr1->fptr = new_ptr3;
         new_ptr2->bptr = new_ptr3->bptr = new_ptr1;
@@ -206,7 +206,7 @@ static int update_list(int i)
         /* (fixed) -><- original h_ptr -><- new_ptr -> (growing) */
         /*                (row, col)       (?, col) */
         tl_area = h_ptr->left;
-        new_ptr = get_ptr();    /* downward-growing point */
+        new_ptr = get_ptr(); /* downward-growing point */
         h_ptr->col = col;
         h_ptr->fptr = new_ptr;
         new_ptr->bptr = h_ptr;
@@ -224,19 +224,19 @@ static int update_list(int i)
         tl_area = v_list[col]->left;
         equiv_areas(h_ptr->left, v_list[col]->right);
         equiv_areas(h_ptr->right, v_list[col]->left);
-        v_list[col]->row = row; /* keep downward-growing point */
-        v_list[col]->fptr = h_ptr->bptr;        /*   and join it to predecessor */
-        h_ptr->bptr->fptr = v_list[col];        /*   of right-growing point */
-        free_ptr(h_ptr);        /* right-growing point disappears */
-        h_ptr = NULPTR;         /* turn loose of pointers */
-        write_boundary(v_list[col]);    /* try to write line */
-        v_list[col] = NULPTR;   /* turn loose of pointers */
+        v_list[col]->row = row;          /* keep downward-growing point */
+        v_list[col]->fptr = h_ptr->bptr; /*   and join it to predecessor */
+        h_ptr->bptr->fptr = v_list[col]; /*   of right-growing point */
+        free_ptr(h_ptr);                 /* right-growing point disappears */
+        h_ptr = NULPTR;                  /* turn loose of pointers */
+        write_boundary(v_list[col]);     /* try to write line */
+        v_list[col] = NULPTR;            /* turn loose of pointers */
         break;
     case 5:
         /* Top right corner - Add point to line already under construction */
         /* (fixed) -><- original v_list -><- new_ptr -> (growing) */
         /*                 (row, col)        (row, ?) */
-        new_ptr = get_ptr();    /* right-growing point */
+        new_ptr = get_ptr(); /* right-growing point */
         v_list[col]->row = row;
         new_ptr->bptr = v_list[col];
         new_ptr->left = v_list[col]->left;
@@ -254,7 +254,7 @@ static int update_list(int i)
         end_vline();
         end_hline();
         start_hline();
-        h_ptr->bptr->node = 1;  /* where we came from is a node */
+        h_ptr->bptr->node = 1; /* where we came from is a node */
         h_ptr->left = h_ptr->bptr->left = left;
         h_ptr->right = h_ptr->bptr->right = right;
         break;
@@ -285,7 +285,7 @@ static int update_list(int i)
         end_vline();
         end_hline();
         start_vline();
-        v_list[col]->bptr->node = 1;    /* where we came from is a node */
+        v_list[col]->bptr->node = 1; /* where we came from is a node */
         v_list[col]->left = v_list[col]->bptr->left = left;
         v_list[col]->right = v_list[col]->bptr->right = right;
         /* update_width(a_list + v_list[col]->left,8); */
@@ -325,10 +325,10 @@ static int update_list(int i)
         update_width(a_list_old, 10);
         v_list[col]->right = v_list[col]->bptr->right = right;
         break;
-    }                           /* switch */
+    } /* switch */
 
     return 0;
-}                               /* update_list */
+} /* update_list */
 
 /* end_vline, end_hline - end vertical or horizontal line and try */
 /* to write it out */
@@ -435,17 +435,18 @@ static int nabors(void)
     int br_null = Rast_is_d_null_value(&br);
 
     /* if both a and b are NULLs, thery are equal */
-#define cmp(a, b) (a##_null+b##_null==1 || (a##_null+b##_null==0 && a != b))
+#define cmp(a, b) \
+    (a##_null + b##_null == 1 || (a##_null + b##_null == 0 && a != b))
 
-    if (cmp(tl, tr) != 0) {     /* 0, 4, 5, 6, 8, 9, 10 */
-        if (cmp(tl, bl) != 0) { /* 4, 6, 8, 10 */
-            if (cmp(bl, br) != 0) {     /* 8, 10 */
+    if (cmp(tl, tr) != 0) {         /* 0, 4, 5, 6, 8, 9, 10 */
+        if (cmp(tl, bl) != 0) {     /* 4, 6, 8, 10 */
+            if (cmp(bl, br) != 0) { /* 8, 10 */
                 if (cmp(tr, br) != 0)
                     return (10);
                 else
                     return (8);
             }
-            else {              /* 4, 6 */
+            else { /* 4, 6 */
 
                 if (cmp(tr, br) != 0)
                     return (6);
@@ -453,9 +454,9 @@ static int nabors(void)
                     return (4);
             }
         }
-        else {                  /* 0, 5, 9 */
+        else { /* 0, 5, 9 */
 
-            if (cmp(bl, br) != 0) {     /* 0, 9 */
+            if (cmp(bl, br) != 0) { /* 0, 9 */
                 if (cmp(tr, br) != 0)
                     return (9);
                 else
@@ -465,10 +466,10 @@ static int nabors(void)
                 return (5);
         }
     }
-    else {                      /* 1, 2, 3, 7, 11 */
+    else { /* 1, 2, 3, 7, 11 */
 
-        if (cmp(tl, bl) != 0) { /* 2, 3, 7 */
-            if (cmp(bl, br) != 0) {     /* 3, 7 */
+        if (cmp(tl, bl) != 0) {     /* 2, 3, 7 */
+            if (cmp(bl, br) != 0) { /* 3, 7 */
                 if (cmp(tr, br) != 0)
                     return (7);
                 else
@@ -477,7 +478,7 @@ static int nabors(void)
             else
                 return (2);
         }
-        else {                  /* 1, 11 */
+        else { /* 1, 11 */
 
             if (cmp(bl, br) != 0)
                 return (1);
@@ -495,8 +496,8 @@ static int read_next(void)
 {
     int n;
 
-    top = bottom++;             /* switch top and bottom, */
-    bottom = 1 & bottom;        /*   which are always 0 or 1 */
+    top = bottom++;      /* switch top and bottom, */
+    bottom = 1 & bottom; /*   which are always 0 or 1 */
     n = read_row(buffer[bottom]);
 
     return (n);
@@ -512,9 +513,8 @@ int alloc_areas_bufs(int size)
     buffer[0] = (void *)G_malloc(size * data_size);
     buffer[1] = (void *)G_malloc(size * data_size);
     v_list = (struct COOR **)G_malloc(size * sizeof(*v_list));
-    n_areas = n_equiv = 500;    /* guess at number of areas, equivs */
-    a_list =
-        (struct area_table *)G_malloc(n_areas * sizeof(struct area_table));
+    n_areas = n_equiv = 500; /* guess at number of areas, equivs */
+    a_list = (struct area_table *)G_malloc(n_areas * sizeof(struct area_table));
 
     for (i = 0; i < n_areas; i++) {
         (a_list + i)->width = (a_list + i)->row = (a_list + i)->col = 0;
@@ -553,8 +553,8 @@ static int equiv_areas(int a1, int a2)
         large = a1;
     }
 
-    while (large >= n_equiv)    /* make sure our equivalence tables */
-        more_equivs();          /*   are large enough */
+    while (large >= n_equiv) /* make sure our equivalence tables */
+        more_equivs();       /*   are large enough */
 
     if ((e_list + large)->mapped) {
         if ((e_list + small)->mapped) { /* small mapped, large mapped */
@@ -562,26 +562,26 @@ static int equiv_areas(int a1, int a2)
             small_obj = (e_list + small)->where;
             if (large_obj == small_obj) /* both mapped to same place */
                 return (0);
-            if (small_obj < large_obj)  /* map where large goes to where */
+            if (small_obj < large_obj) /* map where large goes to where */
                 map_area(large_obj, small_obj); /*   small goes */
-            else                /* map where small goes to where */
+            else /* map where small goes to where */
                 map_area(small_obj, large_obj); /*   large goes */
         }
-        else {                  /* small not mapped, large mapped */
+        else { /* small not mapped, large mapped */
 
             large_obj = (e_list + large)->where;
-            if (small == large_obj)     /* large already mapped to small */
+            if (small == large_obj) /* large already mapped to small */
                 return (0);
-            if (small < large_obj)      /* map where large goes to small */
+            if (small < large_obj) /* map where large goes to small */
                 map_area(large_obj, small);
-            else                /* map small to where large goes */
+            else /* map small to where large goes */
                 map_area(small, large_obj);
         }
     }
     else {
-        if ((e_list + small)->mapped)   /* small mapped, large not mapped */
+        if ((e_list + small)->mapped) /* small mapped, large not mapped */
             map_area(large, (e_list + small)->where);
-        else                    /* small not mapped, large not mapped */
+        else /* small not mapped, large not mapped */
             map_area(large, small);
     }
 
@@ -600,8 +600,8 @@ static int equiv_areas(int a1, int a2)
 /*     if count != 0 */
 /*       .ptr gives a pointer to the list of area numbers */
 
-static int map_area(int x, int y        /* map x to y */
-    )
+static int map_area(int x, int y /* map x to y */
+)
 {
     int n, i, *p;
 
@@ -614,12 +614,14 @@ static int map_area(int x, int y        /* map x to y */
         (a_list + y)->col = (a_list + x)->col;
     }
 
-    if (add_to_list(x, y)) {    /* if x is not already in y's list */
+    if (add_to_list(x, y)) { /* if x is not already in y's list */
         n = (e_list + x)->count;
         p = (e_list + x)->ptr;
-        for (i = 0; i < n; i++) {       /* map everything that is currently *//*   mapped onto x onto y; because */
-            (e_list + *p)->where = y;   /*   of this reshuffle, only one */
-            add_to_list(*p++, y);       /*   level of mapping is ever needed */
+        for (i = 0; i < n;
+             i++) { /* map everything that is currently */ /*   mapped onto x
+                                                              onto y; because */
+            (e_list + *p)->where = y; /*   of this reshuffle, only one */
+            add_to_list(*p++, y);     /*   level of mapping is ever needed */
         }
     }
 
@@ -635,31 +637,32 @@ static int add_to_list(int x, int y)
 
     e_list_y = e_list + y;
     n = e_list_y->count;
-    if (n == 0) {               /* first time through--start list */
-        e_list_y->length = 20;  /* initial guess at storage needed */
+    if (n == 0) {              /* first time through--start list */
+        e_list_y->length = 20; /* initial guess at storage needed */
         e_list_y->ptr = (int *)G_malloc(e_list_y->length * sizeof(int));
         *(e_list_y->ptr) = x;
         (e_list_y->count)++;
     }
-    else {                      /* list already started */
+    else { /* list already started */
 
-        for (i = 0; i < n; i++) {       /* check whether x is already *//*   in list */
+        for (i = 0; i < n;
+             i++) { /* check whether x is already */ /*   in list */
             if (*(e_list_y->ptr + i) == x)
-                return (0);     /* if so, we don't need to add it */
+                return (0); /* if so, we don't need to add it */
         }
 
-        if (n + 1 >= e_list_y->length) {        /* add more space for storage *//*   if necessary */
+        if (n + 1 >= e_list_y->length) {
+            /* add more space for storage */ /*   if necessary */
             e_list_y->length += 10;
             e_list_y->ptr =
-                (int *)G_realloc(e_list_y->ptr,
-                                 e_list_y->length * sizeof(int));
+                (int *)G_realloc(e_list_y->ptr, e_list_y->length * sizeof(int));
         }
 
-        *(e_list_y->ptr + n) = x;       /* add x to list */
+        *(e_list_y->ptr + n) = x; /* add x to list */
         (e_list_y->count)++;
     }
 
-    return (1);                 /* indicate addition made */
+    return (1); /* indicate addition made */
 }
 
 /* assign_area - make current area number correspond to the passed */
@@ -689,9 +692,8 @@ static int more_areas(void)
     old_n = n_areas;
     n_areas += 250;
 
-    a_list =
-        (struct area_table *)G_realloc(a_list,
-                                       n_areas * sizeof(struct area_table));
+    a_list = (struct area_table *)G_realloc(
+        a_list, n_areas * sizeof(struct area_table));
     for (i = old_n; i < n_areas; i++) {
         (a_list + i)->width = -1;
         (a_list + i)->free = 1;
@@ -709,9 +711,8 @@ int more_equivs(void)
     old_n = n_equiv;
     n_equiv += 250;
 
-    e_list =
-        (struct equiv_table *)G_realloc(e_list,
-                                        n_equiv * sizeof(struct equiv_table));
+    e_list = (struct equiv_table *)G_realloc(
+        e_list, n_equiv * sizeof(struct equiv_table));
     for (i = old_n; i < n_equiv; i++) {
         (e_list + i)->mapped = (e_list + i)->count = 0;
         (e_list + i)->ptr = NULL;
@@ -727,12 +728,13 @@ static int update_width(struct area_table *ptr, int kase)
     struct equiv_table *ep;
 
     a = (ptr - a_list);
-    for (j = col + 1, w = 0; j < scan_length &&
-         get_raster_value(buffer[bottom], j) == br; j++, w++) ;
+    for (j = col + 1, w = 0;
+         j < scan_length && get_raster_value(buffer[bottom], j) == br; j++, w++)
+        ;
 
     if (a == 0)
-        G_debug(1, "Area 0, %d \t%d \t%d \t%d \t%d", kase, row, col,
-                ptr->width, w);
+        G_debug(1, "Area 0, %d \t%d \t%d \t%d \t%d", kase, row, col, ptr->width,
+                w);
 
     if (a < n_equiv) {
         ep = e_list + a;

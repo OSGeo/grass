@@ -16,24 +16,23 @@ double get_dist(double *dist_to_nbr, double *contour)
         G_begin_distance_calculations();
 
         /* EW Dist at North edge */
-        ew_dist1 = G_distance(window.east, window.north,
-                              window.west, window.north);
+        ew_dist1 =
+            G_distance(window.east, window.north, window.west, window.north);
         /* EW Dist at Center */
         ew_dist2 = G_distance(window.east, (window.north + window.south) / 2.,
-                              window.west,
-                              (window.north + window.south) / 2.);
+                              window.west, (window.north + window.south) / 2.);
         /* EW Dist at South Edge */
-        ew_dist3 = G_distance(window.east, window.south,
-                              window.west, window.south);
+        ew_dist3 =
+            G_distance(window.east, window.south, window.west, window.south);
         /* NS Dist at East edge */
-        ns_dist1 = G_distance(window.east, window.north,
-                              window.east, window.south);
+        ns_dist1 =
+            G_distance(window.east, window.north, window.east, window.south);
         /* NS Dist at Center */
         ns_dist2 = G_distance((window.west + window.east) / 2., window.north,
                               (window.west + window.east) / 2., window.south);
         /* NS Dist at West edge */
-        ns_dist3 = G_distance(window.west, window.north,
-                              window.west, window.south);
+        ns_dist3 =
+            G_distance(window.west, window.north, window.west, window.south);
 
         ew_res = (ew_dist1 + ew_dist2 + ew_dist3) / (3 * window.cols);
         ns_res = (ns_dist1 + ns_dist2 + ns_dist3) / (3 * window.rows);
@@ -63,7 +62,7 @@ double get_dist(double *dist_to_nbr, double *contour)
      * if ns_res == ew_res:
      *             sqrt(2 * (res * res) / 4 = res * 0.354
      *
-     * contour lengths "have been subjectively chosen", 
+     * contour lengths "have been subjectively chosen",
      * no justification why the diagonal contour is shorter
      * BUT: if the diag contour is a bit shorter than the cardinal contour,
      * this is further enhancing the correction for diagonal flow bias
@@ -110,8 +109,8 @@ int do_cum(void)
     POINT point;
     GW_LARGE_INT killer;
     int threshold;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
     WAT_ALT wa, wadown;
     char rtn_value;
     ASP_FLAG af, afdown;
@@ -208,8 +207,8 @@ int do_cum(void)
             if (atanb_flag) {
                 sca_tanb.sca = fabs(value) * (cell_size / contour[np_side]);
 
-                sca_tanb.tanb = get_slope_tci(wa.ele, wadown.ele,
-                                              dist_to_nbr[np_side]);
+                sca_tanb.tanb =
+                    get_slope_tci(wa.ele, wadown.ele, dist_to_nbr[np_side]);
                 seg_put(&atanb, (char *)&sca_tanb, r, c);
             }
 
@@ -237,37 +236,37 @@ int do_cum(void)
 }
 
 /***************************************
- * 
+ *
  * MFD references
- * 
+ *
  * original:
- * Quinn, P., Beven, K., Chevallier, P., and Planchon, 0. 1991. 
- * The prediction of hillslope flow paths for distributed hydrological 
+ * Quinn, P., Beven, K., Chevallier, P., and Planchon, 0. 1991.
+ * The prediction of hillslope flow paths for distributed hydrological
  * modelling using digital terrain models, Hydrol. Process., 5, 59-79.
- * 
+ *
  * modified by Holmgren (1994):
- * Holmgren, P. 1994. Multiple flow direction algorithms for runoff 
+ * Holmgren, P. 1994. Multiple flow direction algorithms for runoff
  * modelling in grid based elevation models: an empirical evaluation
  * Hydrol. Process., 8, 327-334.
- * 
+ *
  * implemented here:
  * Holmgren (1994) with modifications to honour A * path in order to get
  * out of depressions and across obstacles with graceful flow convergence
- * before depressions/obstacles and graceful flow divergence after 
+ * before depressions/obstacles and graceful flow divergence after
  * depressions/obstacles
- * 
+ *
  * Topographic Convergence Index (TCI)
- * tendency of water to accumulate at a given point considering 
- * the gravitational forces to move the water accumulated at that 
+ * tendency of water to accumulate at a given point considering
+ * the gravitational forces to move the water accumulated at that
  * point further downstream
- * 
- * after Quinn et al. (1991), modified and adapted for the modified 
+ *
+ * after Quinn et al. (1991), modified and adapted for the modified
  * Holmgren MFD algorithm
  * TCI: specific catchment area divided by tangens of slope
  * specific catchment area: total catchment area divided by contour line
  * TCI for D8:     A / (L * tanb)
  * TCI for MFD:    A / (SUM(L_i) * (SUM(tanb_i * weight_i) / SUM(weight_i))
- * 
+ *
  * A: total catchment area
  * L_i: contour length towards i_th cell
  * tanb_i: slope = tan(b) towards i_th cell
@@ -290,21 +289,21 @@ int do_cum_mfd(void)
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
     double *dist_to_nbr, *contour, *weight, sum_weight, max_weight;
-    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side /* , max_side */ ;
+    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side /* , max_side */;
     CELL ele, *ele_nbr;
     double prop, max_val;
     int workedon, edge, is_swale, flat;
     char *flag_nbr;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
 
     /* drainage directions bitmask encoded CW from North
      * drainage directions are set for each current cell
-     * 
+     *
      * bit positions, zero-based
-     * 
+     *
      *     X = current cell
-     * 
+     *
      *       6   7   0
      *       5   X   1
      *       4   3   2
@@ -323,8 +322,8 @@ int do_cum_mfd(void)
     cell_size = get_dist(dist_to_nbr, contour);
 
     flag_nbr = (char *)G_malloc(sides * sizeof(char));
-    wat_nbr = (DCELL *) G_malloc(sides * sizeof(DCELL));
-    ele_nbr = (CELL *) G_malloc(sides * sizeof(CELL));
+    wat_nbr = (DCELL *)G_malloc(sides * sizeof(DCELL));
+    ele_nbr = (CELL *)G_malloc(sides * sizeof(CELL));
 
     workedon = 0;
 
@@ -401,14 +400,13 @@ int do_cum_mfd(void)
                         if (!is_null && ele_nbr[ct_dir] <= ele) {
                             if (ele_nbr[ct_dir] < ele) {
                                 weight[ct_dir] =
-                                    mfd_pow(((ele -
-                                              ele_nbr[ct_dir]) /
-                                             dist_to_nbr[ct_dir]), c_fac);
+                                    mfd_pow(((ele - ele_nbr[ct_dir]) /
+                                             dist_to_nbr[ct_dir]),
+                                            c_fac);
                             }
                             if (ele_nbr[ct_dir] == ele) {
                                 weight[ct_dir] =
-                                    mfd_pow((0.5 / dist_to_nbr[ct_dir]),
-                                            c_fac);
+                                    mfd_pow((0.5 / dist_to_nbr[ct_dir]), c_fac);
                             }
                             sum_weight += weight[ct_dir];
                             mfd_cells++;
@@ -438,10 +436,11 @@ int do_cum_mfd(void)
                 continue;
             }
 
-            /* honour A * path 
+            /* honour A * path
              * mfd_cells == 0: fine, SFD along A * path
              * mfd_cells == 1 && astar_not_set == 0: fine, SFD along A * path
-             * mfd_cells > 0 && astar_not_set == 1: A * path not included, add to mfd_cells
+             * mfd_cells > 0 && astar_not_set == 1: A * path not included, add
+             * to mfd_cells
              */
 
             /* MFD, A * path not included, add to mfd_cells */
@@ -488,9 +487,8 @@ int do_cum_mfd(void)
                                 if (wat_nbr[ct_dir] < 0)
                                     wat_nbr[ct_dir] += value * weight[ct_dir];
                                 else
-                                    wat_nbr[ct_dir] =
-                                        value * weight[ct_dir] -
-                                        wat_nbr[ct_dir];
+                                    wat_nbr[ct_dir] = value * weight[ct_dir] -
+                                                      wat_nbr[ct_dir];
                             }
                             valued = wat_nbr[ct_dir];
                             wa.wat = valued;
@@ -512,7 +510,8 @@ int do_cum_mfd(void)
                    } */
 
                 if (fabs(prop - 1.0) > 5E-6f) {
-                    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
+                    G_warning(_("MFD: cumulative proportion of flow "
+                                "distribution not 1.0 but %f"),
                               prop);
                 }
             }
@@ -554,9 +553,9 @@ int do_cum_mfd(void)
     G_percent(do_points, do_points, 1); /* finish it */
 
     if (workedon)
-        G_warning(_("MFD: A * path already processed when distributing flow: %d of %"
-                   PRI_OFF_T " cells"), workedon, do_points);
-
+        G_warning(_("MFD: A * path already processed when distributing flow: "
+                    "%d of %" PRI_OFF_T " cells"),
+                  workedon, do_points);
 
     G_message(_("SECTION 3b: Adjusting drainage directions."));
 
@@ -681,8 +680,7 @@ int do_cum_mfd(void)
                 seg_put(&aspflag, (char *)&afdown, r_max, c_max);
             }
             else {
-                if (er_flag && !is_swale &&
-                    !FLAG_GET(af.flag, RUSLEBLOCKFLAG))
+                if (er_flag && !is_swale && !FLAG_GET(af.flag, RUSLEBLOCKFLAG))
                     slope_length(r, c, r_max, c_max);
             }
         }

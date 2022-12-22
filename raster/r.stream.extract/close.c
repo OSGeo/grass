@@ -11,14 +11,13 @@ int close_streamvect(char *stream_vect)
     CELL stream_id, stream_nbr;
     ASP_FLAG af;
     int next_node;
-    struct sstack
-    {
+    struct sstack {
         int stream_id;
         int next_trib;
     } *nodestack;
     int top = 0, stack_step = 1000;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
     struct Map_info Out;
     static struct line_pnts *Points;
     struct line_cats *Cats;
@@ -98,10 +97,8 @@ int close_streamvect(char *stream_vect)
                 if (top >= stack_step) {
                     /* need more space */
                     stack_step += 1000;
-                    nodestack =
-                        (struct sstack *)G_realloc(nodestack,
-                                                   stack_step *
-                                                   sizeof(struct sstack));
+                    nodestack = (struct sstack *)G_realloc(
+                        nodestack, stack_step * sizeof(struct sstack));
                 }
                 nodestack[top].next_trib = 0;
                 nodestack[top].stream_id = next_node;
@@ -120,9 +117,9 @@ int close_streamvect(char *stream_vect)
 
                 cseg_get(&stream, &stream_nbr, r_nbr, c_nbr);
                 if (stream_nbr <= 0)
-                    G_fatal_error(_("Stream id %d not set, top is %d, parent is %d"),
-                                  stream_id, top,
-                                  nodestack[top - 1].stream_id);
+                    G_fatal_error(
+                        _("Stream id %d not set, top is %d, parent is %d"),
+                        stream_id, top, nodestack[top - 1].stream_id);
 
                 Vect_cat_set(Cats, 1, stream_id);
                 if (stream_node[stream_id].n_trib == 0)
@@ -173,8 +170,7 @@ int close_streamvect(char *stream_vect)
     /* Create database for new vector map */
     Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
     driver = db_start_driver_open_database(Fi->driver,
-                                           Vect_subst_var(Fi->database,
-                                                          &Out));
+                                           Vect_subst_var(Fi->database, &Out));
     if (driver == NULL) {
         G_fatal_error(_("Unable to start driver <%s>"), Fi->driver);
     }
@@ -185,15 +181,15 @@ int close_streamvect(char *stream_vect)
     G_debug(1, "database: %s", Fi->database);
 
     sprintf(buf,
-            "create table %s (%s integer, stream_type varchar(20), type_code integer, network integer)",
+            "create table %s (%s integer, stream_type varchar(20), type_code "
+            "integer, network integer)",
             Fi->table, cat_col_name);
     db_set_string(&dbsql, buf);
 
     if (db_execute_immediate(driver, &dbsql) != DB_OK) {
         db_close_database(driver);
         db_shutdown_driver(driver);
-        G_fatal_error(_("Unable to create table: '%s'"),
-                      db_get_string(&dbsql));
+        G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&dbsql));
     }
 
     if (db_create_index2(driver, Fi->table, cat_col_name) != DB_OK)
@@ -201,16 +197,14 @@ int close_streamvect(char *stream_vect)
 
     if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
                           DB_GROUP | DB_PUBLIC) != DB_OK)
-        G_fatal_error(_("Unable to grant privileges on table <%s>"),
-                      Fi->table);
+        G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
 
     /* stream nodes */
     for (i = 1; i <= n_stream_nodes; i++) {
 
-        sprintf(buf,
-                "insert into %s values ( %" PRI_OFF_T ", \'%s\', %d, %d )",
+        sprintf(buf, "insert into %s values ( %" PRI_OFF_T ", \'%s\', %d, %d )",
                 Fi->table, i,
                 (stream_node[i].n_trib > 0 ? "intermediate" : "start"),
                 (stream_node[i].n_trib > 0), network_id[i]);
@@ -228,8 +222,8 @@ int close_streamvect(char *stream_vect)
     db_commit_transaction(driver);
     db_close_database_shutdown_driver(driver);
 
-    Vect_map_add_dblink(&Out, 1, NULL, Fi->table,
-                        cat_col_name, Fi->database, Fi->driver);
+    Vect_map_add_dblink(&Out, 1, NULL, Fi->table, cat_col_name, Fi->database,
+                        Fi->driver);
 
     G_debug(1, "close vector");
 
@@ -242,7 +236,6 @@ int close_streamvect(char *stream_vect)
 
     return 1;
 }
-
 
 int close_maps(char *stream_rast, char *stream_vect, char *dir_rast)
 {
@@ -271,9 +264,9 @@ int close_maps(char *stream_rast, char *stream_vect, char *dir_rast)
     for (r = 0; r < nrows; r++) {
         G_percent(r, nrows, 2);
         if (stream_rast)
-            Rast_set_c_null_value(cell_buf1, ncols);    /* reset row to all NULL */
+            Rast_set_c_null_value(cell_buf1, ncols); /* reset row to all NULL */
         if (dir_rast)
-            Rast_set_c_null_value(cell_buf2, ncols);    /* reset row to all NULL */
+            Rast_set_c_null_value(cell_buf2, ncols); /* reset row to all NULL */
 
         for (c = 0; c < ncols; c++) {
             if (stream_rast) {
@@ -287,7 +280,6 @@ int close_maps(char *stream_rast, char *stream_vect, char *dir_rast)
                     cell_buf2[c] = af.asp;
                 }
             }
-
         }
         if (stream_rast)
             Rast_put_row(stream_fd, cell_buf1, CELL_TYPE);

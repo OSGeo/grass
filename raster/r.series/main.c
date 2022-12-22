@@ -1,13 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.series
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
+ *                 (original contributor)
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Martin Wegmann <wegmann biozentrum.uni-wuerzburg.de>,
  *               Aaron Saw Min Sern (OpenMP parallelization)
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2002-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -15,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
@@ -27,13 +28,12 @@
 #include <grass/raster.h>
 #include <grass/stats.h>
 
-struct menu
-{
-    stat_func *method;          /* routine to compute new value */
-    stat_func_w *method_w;      /* routine to compute new value (weighted) */
-    RASTER_MAP_TYPE outtype;    /* type of result */
-    char *name;                 /* method name */
-    char *text;                 /* menu display - full description */
+struct menu {
+    stat_func *method;       /* routine to compute new value */
+    stat_func_w *method_w;   /* routine to compute new value (weighted) */
+    RASTER_MAP_TYPE outtype; /* type of result */
+    char *name;              /* method name */
+    char *text;              /* menu display - full description */
 } menu[] = {
     {c_ave, w_ave, DCELL_TYPE, "average", "average value"},
     {c_count, w_count, CELL_TYPE, "count", "count of non-NULL cells"},
@@ -59,19 +59,16 @@ struct menu
     {c_quant, w_quant, DCELL_TYPE, "quantile", "arbitrary quantile"},
     {c_skew, w_skew, DCELL_TYPE, "skewness", "skewness"},
     {c_kurt, w_kurt, DCELL_TYPE, "kurtosis", "kurtosis"},
-    {NULL, NULL, 0, NULL, NULL}
-};
+    {NULL, NULL, 0, NULL, NULL}};
 
-struct input
-{
+struct input {
     const char *name;
     int fd;
     DCELL *buf;
     DCELL weight;
 };
 
-struct output
-{
+struct output {
     const char *name;
     int fd;
     DCELL *buf;
@@ -115,13 +112,11 @@ static int find_method(const char *method_name)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *file, *output, *method, *weights, *quantile,
             *range, *nprocs, *memory;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *nulls, *lazy;
     } flag;
     int i, t;
@@ -140,8 +135,8 @@ int main(int argc, char *argv[])
     struct History history;
     DCELL **values = NULL, **values_tmp = NULL;
 
-    DCELL(**values_w)[2];       /* list of values and weights */
-    DCELL(**values_w_tmp)[2];   /* list of values and weights */
+    DCELL(**values_w)[2];     /* list of values and weights */
+    DCELL(**values_w_tmp)[2]; /* list of values and weights */
     int have_weights;
     int nrows, ncols;
     int row, col;
@@ -185,8 +180,7 @@ int main(int argc, char *argv[])
     parm.quantile->key = "quantile";
     parm.quantile->type = TYPE_DOUBLE;
     parm.quantile->required = NO;
-    parm.quantile->description =
-        _("Quantile to calculate for method=quantile");
+    parm.quantile->description = _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
     parm.quantile->multiple = YES;
 
@@ -232,16 +226,16 @@ int main(int argc, char *argv[])
     nprocs = 1;
 #endif
 
-    lo = -1.0 / 0.0;            /* -inf */
-    hi = 1.0 / 0.0;             /* inf */
+    lo = -1.0 / 0.0; /* -inf */
+    hi = 1.0 / 0.0;  /* inf */
     if (parm.range->answer) {
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);
     }
 
     if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                      parm.input->key, parm.file->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
+                      parm.file->key);
 
     if (!parm.input->answer && !parm.file->answer)
         G_fatal_error(_("Please specify %s= or %s="), parm.input->key,
@@ -270,7 +264,7 @@ int main(int argc, char *argv[])
         max_inputs = 0;
 
         for (;;) {
-            char buf[GNAME_MAX + 50];   /* Name and weight */
+            char buf[GNAME_MAX + 50]; /* Name and weight */
             char tok_buf[GNAME_MAX + 50];
             char *name;
             int ntokens;
@@ -304,8 +298,7 @@ int main(int argc, char *argv[])
                 max_inputs += 100;
                 for (t = 0; t < nprocs; t++)
                     inputs[t] =
-                        G_realloc(inputs[t],
-                                  max_inputs * sizeof(struct input));
+                        G_realloc(inputs[t], max_inputs * sizeof(struct input));
             }
 
             for (t = 0; t < nprocs; t++) {
@@ -313,8 +306,9 @@ int main(int argc, char *argv[])
 
                 p->name = G_store(name);
                 p->weight = weight;
-                G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                                  p->name, p->weight);
+                G_verbose_message(
+                    _("Reading raster map <%s> using weight %f..."), p->name,
+                    p->weight);
                 p->fd = Rast_open_old(p->name, "");
                 if (p->fd < 0)
                     G_fatal_error(_("Unable to open input raster <%s>"),
@@ -342,7 +336,8 @@ int main(int argc, char *argv[])
     else {
         int num_weights;
 
-        for (i = 0; parm.input->answers[i]; i++) ;
+        for (i = 0; parm.input->answers[i]; i++)
+            ;
         num_inputs = i;
 
         if (num_inputs < 1)
@@ -351,12 +346,14 @@ int main(int argc, char *argv[])
         /* count weights */
         num_weights = 0;
         if (parm.weights->answers) {
-            for (i = 0; parm.weights->answers[i]; i++) ;
+            for (i = 0; parm.weights->answers[i]; i++)
+                ;
             num_weights = i;
         }
 
         if (num_weights && num_weights != num_inputs)
-            G_fatal_error(_("input= and weights= must have the same number of values"));
+            G_fatal_error(
+                _("input= and weights= must have the same number of values"));
 
         for (t = 0; t < nprocs; t++) {
             inputs[t] = G_malloc(num_inputs * sizeof(struct input));
@@ -368,7 +365,7 @@ int main(int argc, char *argv[])
                 p->weight = 1.0;
 
                 if (num_weights) {
-                    p->weight = (DCELL) atof(parm.weights->answers[i]);
+                    p->weight = (DCELL)atof(parm.weights->answers[i]);
 
                     if (p->weight < 0)
                         G_fatal_error(_("Weights must be positive"));
@@ -377,8 +374,9 @@ int main(int argc, char *argv[])
                         have_weights = 1;
                 }
 
-                G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                                  p->name, p->weight);
+                G_verbose_message(
+                    _("Reading raster map <%s> using weight %f..."), p->name,
+                    p->weight);
                 p->fd = Rast_open_old(p->name, "");
                 if (p->fd < 0)
                     G_fatal_error(_("Unable to open input raster <%s>"),
@@ -394,15 +392,13 @@ int main(int argc, char *argv[])
                     Rast_close(p->fd);
                 p->buf = Rast_allocate_d_buf();
             }
-
         }
     }
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    bufrows =
-        atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
+    bufrows = atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > nrows) {
         bufrows = nrows;
@@ -420,12 +416,15 @@ int main(int argc, char *argv[])
 #endif
 
     /* process the output maps */
-    for (i = 0; parm.output->answers[i]; i++) ;
+    for (i = 0; parm.output->answers[i]; i++)
+        ;
     num_outputs = i;
 
-    for (i = 0; parm.method->answers[i]; i++) ;
+    for (i = 0; parm.method->answers[i]; i++)
+        ;
     if (num_outputs != i)
-        G_fatal_error(_("output= and method= must have the same number of values"));
+        G_fatal_error(
+            _("output= and method= must have the same number of values"));
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
 
@@ -449,7 +448,8 @@ int main(int argc, char *argv[])
             }
             else {
                 G_warning(_("Method %s not compatible with weights, using "
-                            "unweighed version instead"), method_name);
+                            "unweighed version instead"),
+                          method_name);
 
                 out->method_fn = menu[method].method;
                 out->method_fn_w = NULL;
@@ -461,8 +461,8 @@ int main(int argc, char *argv[])
         }
 
         out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
-            ? atof(parm.quantile->answers[i])
-            : 0;
+                            ? atof(parm.quantile->answers[i])
+                            : 0;
         out->buf = G_calloc((size_t)bufrows * ncols, sizeof(DCELL));
         if (menu[method].outtype == -1)
             out->fd = Rast_open_new(output_name, intype);
@@ -483,10 +483,9 @@ int main(int argc, char *argv[])
         values_w = G_malloc(nprocs * sizeof *values_w);
         values_w_tmp = G_malloc(nprocs * sizeof *values_w_tmp);
         for (t = 0; t < nprocs; t++) {
-            values_w[t] =
-                (DCELL(*)[2]) G_malloc(sizeof(DCELL) * num_inputs * 2);
+            values_w[t] = (DCELL(*)[2])G_malloc(sizeof(DCELL) * num_inputs * 2);
             values_w_tmp[t] =
-                (DCELL(*)[2]) G_malloc(sizeof(DCELL) * num_inputs * 2);
+                (DCELL(*)[2])G_malloc(sizeof(DCELL) * num_inputs * 2);
         }
     }
 
@@ -505,7 +504,7 @@ int main(int argc, char *argv[])
         int start = written;
         int end = written + range;
 
-#pragma omp parallel if(threaded) private(row, col, i)
+#pragma omp parallel if (threaded) private(row, col, i)
         {
             int t_id = 0;
 
@@ -588,24 +587,22 @@ int main(int argc, char *argv[])
                             if (out->method_fn_w) {
                                 memcpy(val_w_tmp, val_w,
                                        num_inputs * 2 * sizeof(DCELL));
-                                (*out->method_fn_w) (&out->buf[s], val_w_tmp,
-                                                     num_inputs,
-                                                     &out->quantile);
+                                (*out->method_fn_w)(&out->buf[s], val_w_tmp,
+                                                    num_inputs, &out->quantile);
                             }
                             else {
                                 memcpy(val_tmp, val,
                                        num_inputs * sizeof(DCELL));
-                                (*out->method_fn) (&out->buf[s], val_tmp,
-                                                   num_inputs,
-                                                   &out->quantile);
+                                (*out->method_fn)(&out->buf[s], val_tmp,
+                                                  num_inputs, &out->quantile);
                             }
                         }
                     }
                 }
 
                 computed++;
-            }                   /* end for loop */
-        }                       /* end parallel region */
+            } /* end for loop */
+        }     /* end parallel region */
 
         /* write output buffer to disk */
         for (i = 0; i < num_outputs; i++) {
@@ -617,7 +614,7 @@ int main(int argc, char *argv[])
         }
         written = end;
 
-    }                           /* end while loop */
+    } /* end while loop */
 
     G_percent(nrows, nrows, 2);
 

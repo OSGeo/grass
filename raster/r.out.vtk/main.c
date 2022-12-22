@@ -1,20 +1,20 @@
-
 /****************************************************************************
-*
-* MODULE:       r.out.vtk  
-*   	    	
-* AUTHOR(S):    Original author 
-*               Soeren Gebbert soerengebbert@gmx.de
-* 		08 23 2005 Berlin
-* PURPOSE:      Converts raster maps into the VTK-Ascii format  
-*
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r.out.vtk
+ *
+ * AUTHOR(S):    Original author
+ *               Soeren Gebbert soerengebbert@gmx.de
+ *                 08 23 2005 Berlin
+ * PURPOSE:      Converts raster maps into the VTK-Ascii format
+ *
+ * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,7 +27,7 @@
 #include "parameters.h"
 #include "globaldefs.h"
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 double x_extent;
 double y_extent;
@@ -44,10 +44,10 @@ int main(int argc, char *argv[])
     int i = 0, polytype = 0;
     char *null_value;
     int out_type;
-    int fd;                     /*Normale maps ;) */
+    int fd; /*Normale maps ;) */
     int rgbfd[3];
     int vectfd[3];
-    int celltype[3] = { 0, 0, 0 };
+    int celltype[3] = {0, 0, 0};
     int headertype;
     double scale = 1.0, llscale = 1.0, eleval = 0.0;
     int digits = 12;
@@ -60,8 +60,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("export"));
     G_add_keyword(_("output"));
     G_add_keyword("VTK");
-    module->description =
-        _("Converts raster maps into the VTK-ASCII format.");
+    module->description = _("Converts raster maps into the VTK-ASCII format.");
 
     /* Get parameters from user */
     set_params();
@@ -72,9 +71,10 @@ int main(int argc, char *argv[])
 
     if (param.input->answers == NULL && param.rgbmaps->answers == NULL &&
         param.vectmaps->answers == NULL) {
-        G_fatal_error(_("No input maps specified. You need to specify at least one input map or three vector maps or three rgb maps."));
+        G_fatal_error(
+            _("No input maps specified. You need to specify at least one input "
+              "map or three vector maps or three rgb maps."));
     }
-
 
     /*open the output */
     if (param.output->answer) {
@@ -120,7 +120,8 @@ int main(int argc, char *argv[])
         scale /= llscale;
     }
 
-    /********************* WRITE ELEVATION *************************************/
+    /********************* WRITE ELEVATION
+     * *************************************/
     if (param.elevationmap->answer) {
         /*If the elevation is set, write the correct Header */
         if (param.usestruct->answer) {
@@ -139,13 +140,12 @@ int main(int argc, char *argv[])
 
         /*The write the Coordinates */
         if (param.usestruct->answer) {
-            write_vtk_structured_coordinates(fd, fp,
-                                             param.elevationmap->answer,
+            write_vtk_structured_coordinates(fd, fp, param.elevationmap->answer,
                                              region, out_type, null_value,
                                              scale, digits);
         }
         else {
-            polytype = QUADS;   /*The default */
+            polytype = QUADS; /*The default */
 
             if (param.usetriangle->answer)
                 polytype = TRIANGLE_STRIPS;
@@ -153,10 +153,9 @@ int main(int argc, char *argv[])
             if (param.usevertices->answer)
                 polytype = VERTICES;
 
-            write_vtk_polygonal_coordinates(fd, fp,
-                                            param.elevationmap->answer,
-                                            region, out_type, null_value,
-                                            scale, polytype, digits);
+            write_vtk_polygonal_coordinates(fd, fp, param.elevationmap->answer,
+                                            region, out_type, null_value, scale,
+                                            polytype, digits);
         }
         Rast_close(fd);
     }
@@ -174,8 +173,8 @@ int main(int argc, char *argv[])
             write_vtk_normal_header(fp, region, eleval / llscale, headertype);
     }
 
-
-  /******************** WRITE THE POINT OR CELL DATA HEADER ******************/
+    /******************** WRITE THE POINT OR CELL DATA HEADER
+     * ******************/
     if (param.input->answers != NULL || param.rgbmaps->answers != NULL) {
         if (param.point->answer || param.elevationmap->answer)
             write_vtk_pointdata_header(fp, region);
@@ -183,12 +182,12 @@ int main(int argc, char *argv[])
             write_vtk_celldata_header(fp, region);
     }
 
-  /********************** WRITE NORMAL DATA; CELL OR POINT *******************/
+    /********************** WRITE NORMAL DATA; CELL OR POINT
+     * *******************/
     /*Loop over all input maps! */
     if (param.input->answers != NULL) {
 
         for (i = 0; param.input->answers[i] != NULL; i++) {
-
 
             G_debug(3, _("Open Raster file %s"), param.input->answers[i]);
 
@@ -202,17 +201,16 @@ int main(int argc, char *argv[])
         }
     }
 
-  /********************** WRITE RGB IMAGE DATA; CELL OR POINT ****************/
+    /********************** WRITE RGB IMAGE DATA; CELL OR POINT
+     * ****************/
     if (param.rgbmaps->answers != NULL) {
         if (param.rgbmaps->answers[0] != NULL &&
             param.rgbmaps->answers[1] != NULL &&
             param.rgbmaps->answers[2] != NULL) {
 
-
             /*Loop over all three rgb input maps! */
             for (i = 0; i < 3; i++) {
-                G_debug(3, _("Open Raster file %s"),
-                        param.rgbmaps->answers[i]);
+                G_debug(3, _("Open Raster file %s"), param.rgbmaps->answers[i]);
 
                 /* open raster map */
                 rgbfd[i] = Rast_open_old(param.rgbmaps->answers[i], "");
@@ -227,11 +225,11 @@ int main(int argc, char *argv[])
 
                 /*Now write the data */
                 write_vtk_rgb_image_data(rgbfd[0], rgbfd[1], rgbfd[2], fp,
-                                         "RGB_Image", region, out_type,
-                                         digits);
+                                         "RGB_Image", region, out_type, digits);
             }
             else {
-                G_warning(_("Wrong RGB maps. Maps should have the same type! RGB output not added!"));
+                G_warning(_("Wrong RGB maps. Maps should have the same type! "
+                            "RGB output not added!"));
                 /*do nothing */
             }
 
@@ -241,12 +239,11 @@ int main(int argc, char *argv[])
         }
     }
 
-  /********************** WRITE VECTOR DATA; CELL OR POINT ****************/
+    /********************** WRITE VECTOR DATA; CELL OR POINT ****************/
     if (param.vectmaps->answers != NULL) {
         if (param.vectmaps->answers[0] != NULL &&
             param.vectmaps->answers[1] != NULL &&
             param.vectmaps->answers[2] != NULL) {
-
 
             /*Loop over all three vect input maps! */
             for (i = 0; i < 3; i++) {
@@ -266,11 +263,11 @@ int main(int argc, char *argv[])
 
                 /*Now write the data */
                 write_vtk_vector_data(vectfd[0], vectfd[1], vectfd[2], fp,
-                                      "Vector_Data", region, out_type,
-                                      digits);
+                                      "Vector_Data", region, out_type, digits);
             }
             else {
-                G_warning(_("Wrong vector maps. Maps should have the same type! Vector output not added!"));
+                G_warning(_("Wrong vector maps. Maps should have the same "
+                            "type! Vector output not added!"));
                 /*do nothing */
             }
 

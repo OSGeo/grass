@@ -1,18 +1,17 @@
-
 /****************************************************************************
-*
-* MODULE:       r.out.gdal
-* AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>
-* PURPOSE:      Exports GRASS raster to GDAL suported formats;
-*               based on GDAL library.
-*
-* COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r.out.gdal
+ * AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>
+ * PURPOSE:      Exports GRASS raster to GDAL suported formats;
+ *               based on GDAL library.
+ *
+ * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -30,11 +29,10 @@ int exact_range_check(double, double, GDALDataType, const char *);
  * -1 if given nodata value was present in data
  * -2 if selected GDAL datatype could not hold all values
  * */
-int exact_checks(GDALDataType export_datatype,
-                 const char *name, const char *mapset,
-                 struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
-                 double nodataval, const char *nodatakey,
-                 int default_nodataval)
+int exact_checks(GDALDataType export_datatype, const char *name,
+                 const char *mapset, struct Cell_head *cellhead,
+                 RASTER_MAP_TYPE maptype, double nodataval,
+                 const char *nodatakey, int default_nodataval)
 {
     double dfCellMin;
     double dfCellMax;
@@ -63,12 +61,12 @@ int exact_checks(GDALDataType export_datatype,
     dfCellMin = TYPE_FLOAT64_MAX;
     dfCellMax = TYPE_FLOAT64_MIN;
 
-    /* Better use selected GDAL datatype instead of 
+    /* Better use selected GDAL datatype instead of
      * the best match with GRASS raster map types ? */
 
     if (maptype == FCELL_TYPE) {
 
-        FCELL fnullval = (FCELL) nodataval;
+        FCELL fnullval = (FCELL)nodataval;
 
         G_debug(1, "FCELL nodata val: %f", fnullval);
 
@@ -76,10 +74,10 @@ int exact_checks(GDALDataType export_datatype,
 
             Rast_get_row(fd, bufer, row, maptype);
             for (col = 0; col < cols; col++) {
-                FCELL fval = ((FCELL *) bufer)[col];
+                FCELL fval = ((FCELL *)bufer)[col];
 
                 if (Rast_is_f_null_value(&fval)) {
-                    ((FCELL *) bufer)[col] = fnullval;
+                    ((FCELL *)bufer)[col] = fnullval;
                     n_nulls++;
                 }
                 else {
@@ -100,7 +98,7 @@ int exact_checks(GDALDataType export_datatype,
     }
     else if (maptype == DCELL_TYPE) {
 
-        DCELL dnullval = (DCELL) nodataval;
+        DCELL dnullval = (DCELL)nodataval;
 
         G_debug(1, "DCELL nodata val: %f", dnullval);
 
@@ -108,10 +106,10 @@ int exact_checks(GDALDataType export_datatype,
 
             Rast_get_row(fd, bufer, row, maptype);
             for (col = 0; col < cols; col++) {
-                DCELL dval = ((DCELL *) bufer)[col];
+                DCELL dval = ((DCELL *)bufer)[col];
 
                 if (Rast_is_d_null_value(&dval)) {
-                    ((DCELL *) bufer)[col] = dnullval;
+                    ((DCELL *)bufer)[col] = dnullval;
                     n_nulls++;
                 }
                 else {
@@ -132,7 +130,7 @@ int exact_checks(GDALDataType export_datatype,
     }
     else {
 
-        CELL inullval = (CELL) nodataval;
+        CELL inullval = (CELL)nodataval;
 
         G_debug(1, "CELL nodata val: %d", inullval);
 
@@ -140,18 +138,18 @@ int exact_checks(GDALDataType export_datatype,
 
             Rast_get_row(fd, bufer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_c_null_value(&((CELL *) bufer)[col])) {
-                    ((CELL *) bufer)[col] = inullval;
+                if (Rast_is_c_null_value(&((CELL *)bufer)[col])) {
+                    ((CELL *)bufer)[col] = inullval;
                     n_nulls++;
                 }
                 else {
-                    if (((CELL *) bufer)[col] == inullval) {
+                    if (((CELL *)bufer)[col] == inullval) {
                         nodatavalmatch = 1;
                     }
-                    if (dfCellMin > ((CELL *) bufer)[col])
-                        dfCellMin = ((CELL *) bufer)[col];
-                    if (dfCellMax < ((CELL *) bufer)[col])
-                        dfCellMax = ((CELL *) bufer)[col];
+                    if (dfCellMin > ((CELL *)bufer)[col])
+                        dfCellMin = ((CELL *)bufer)[col];
+                    if (dfCellMax < ((CELL *)bufer)[col])
+                        dfCellMax = ((CELL *)bufer)[col];
                 }
             }
             G_percent(row + 1, rows, 2);
@@ -171,32 +169,38 @@ int exact_checks(GDALDataType export_datatype,
     /* a default nodata value was used and NULL cells were present */
     if (n_nulls && default_nodataval) {
         if (maptype == CELL_TYPE)
-            G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
-                                 "The value %d will be used to represent no-data values in the input map. "
-                                 "You can specify a nodata value with the %s option."),
-                                (int)nodataval, nodatakey);
+            G_important_message(
+                _("Input raster map contains cells with NULL-value (no-data). "
+                  "The value %d will be used to represent no-data values in "
+                  "the input map. "
+                  "You can specify a nodata value with the %s option."),
+                (int)nodataval, nodatakey);
         else
-            G_important_message(_("Input raster map contains cells with NULL-value (no-data). "
-                                 "The value %g will be used to represent no-data values in the input map. "
-                                 "You can specify a nodata value with the %s option."),
-                                nodataval, nodatakey);
+            G_important_message(
+                _("Input raster map contains cells with NULL-value (no-data). "
+                  "The value %g will be used to represent no-data values in "
+                  "the input map. "
+                  "You can specify a nodata value with the %s option."),
+                nodataval, nodatakey);
     }
 
     /* the nodata value was present in the exported data */
     if (nodatavalmatch && n_nulls) {
         /* default nodataval didn't work */
         if (default_nodataval) {
-            G_warning(_("The default nodata value is present in raster"
-                        "band <%s> and would lead to data loss. Please specify a "
-                        "custom nodata value with the %s parameter."),
-                      name, nodatakey);
+            G_warning(
+                _("The default nodata value is present in raster"
+                  "band <%s> and would lead to data loss. Please specify a "
+                  "custom nodata value with the %s parameter."),
+                name, nodatakey);
         }
         /* user-specified nodataval didn't work */
         else {
-            G_warning(_("The user given nodata value %g is present in raster"
-                        "band <%s> and would lead to data loss. Please specify a "
-                        "different nodata value with the %s parameter."),
-                      nodataval, name, nodatakey);
+            G_warning(
+                _("The user given nodata value %g is present in raster"
+                  "band <%s> and would lead to data loss. Please specify a "
+                  "different nodata value with the %s parameter."),
+                nodataval, name, nodatakey);
         }
         ret = -1;
     }
@@ -212,11 +216,10 @@ int exact_checks(GDALDataType export_datatype,
  * returns 0 on success
  * -1 on raster data read/write error
  * */
-int export_band(GDALDatasetH hMEMDS, int band,
-                const char *name, const char *mapset,
-                struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
-                double nodataval, int suppress_main_colortable,
-                int no_metadata, int writenodata,
+int export_band(GDALDatasetH hMEMDS, int band, const char *name,
+                const char *mapset, struct Cell_head *cellhead,
+                RASTER_MAP_TYPE maptype, double nodataval,
+                int suppress_main_colortable, int no_metadata, int writenodata,
                 double offsetval, double scaleval)
 {
     struct Colors sGrassColors;
@@ -312,7 +315,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
                     sColor.c4 = 255;
 
                     G_debug(3,
-                            "Rast_get_c_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
+                            "Rast_get_c_color: Y, rcount %d, nRed %d, nGreen "
+                            "%d, nBlue %d",
                             rcount, nRed, nGreen, nBlue);
                     GDALSetColorEntry(hCT, iColor, &sColor);
                 }
@@ -323,7 +327,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
                     sColor.c4 = 0;
 
                     G_debug(3,
-                            "Rast_get_c_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
+                            "Rast_get_c_color: N, rcount %d, nRed %d, nGreen "
+                            "%d, nBlue %d",
                             rcount, nRed, nGreen, nBlue);
                     GDALSetColorEntry(hCT, iColor, &sColor);
                 }
@@ -342,14 +347,14 @@ int export_band(GDALDatasetH hMEMDS, int band,
 
             /* Add the rules in reverse order */
             /* This can cause a GDAL warning with many rules, something like
-             * Warning 1: Lost metadata writing to GeoTIFF ... too large to fit in tag. */
+             * Warning 1: Lost metadata writing to GeoTIFF ... too large to fit
+             * in tag. */
             for (i = rcount - 1; i >= 0; i--) {
                 DCELL val1, val2;
                 unsigned char r1, g1, b1, r2, g2, b2;
 
                 Rast_get_fp_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2,
                                        &b2, &sGrassColors, i);
-
 
                 sprintf(key, "COLOR_TABLE_RULE_RGB_%d", rcount - i - 1);
                 sprintf(value, "%e %e %d %d %d %d %d %d", val1, val2, r1, g1,
@@ -383,14 +388,14 @@ int export_band(GDALDatasetH hMEMDS, int band,
     int row, col;
     int n_nulls = 0;
 
-    /* Better use selected GDAL datatype instead of 
+    /* Better use selected GDAL datatype instead of
      * the best match with GRASS raster map types ? */
 
     if (maptype == FCELL_TYPE) {
 
         /* Source datatype understandable by GDAL */
         GDALDataType datatype = GDT_Float32;
-        FCELL fnullval = (FCELL) nodataval;
+        FCELL fnullval = (FCELL)nodataval;
 
         G_debug(1, "FCELL nodata val: %f", fnullval);
 
@@ -398,8 +403,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
 
             Rast_get_row(fd, bufer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_f_null_value(&((FCELL *) bufer)[col])) {
-                    ((FCELL *) bufer)[col] = fnullval;
+                if (Rast_is_f_null_value(&((FCELL *)bufer)[col])) {
+                    ((FCELL *)bufer)[col] = fnullval;
                     if (n_nulls == 0) {
                         GDALSetRasterNoDataValue(hBand, nodataval);
                     }
@@ -407,9 +412,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
                 }
             }
 
-            if (GDALRasterIO
-                (hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
-                 0, 0) >= CE_Failure) {
+            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1,
+                             datatype, 0, 0) >= CE_Failure) {
                 G_warning(_("Unable to write GDAL raster file"));
                 return -1;
             }
@@ -419,7 +423,7 @@ int export_band(GDALDatasetH hMEMDS, int band,
     else if (maptype == DCELL_TYPE) {
 
         GDALDataType datatype = GDT_Float64;
-        DCELL dnullval = (DCELL) nodataval;
+        DCELL dnullval = (DCELL)nodataval;
 
         G_debug(1, "DCELL nodata val: %f", dnullval);
 
@@ -427,8 +431,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
 
             Rast_get_row(fd, bufer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_d_null_value(&((DCELL *) bufer)[col])) {
-                    ((DCELL *) bufer)[col] = dnullval;
+                if (Rast_is_d_null_value(&((DCELL *)bufer)[col])) {
+                    ((DCELL *)bufer)[col] = dnullval;
                     if (n_nulls == 0) {
                         GDALSetRasterNoDataValue(hBand, nodataval);
                     }
@@ -436,9 +440,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
                 }
             }
 
-            if (GDALRasterIO
-                (hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
-                 0, 0) >= CE_Failure) {
+            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1,
+                             datatype, 0, 0) >= CE_Failure) {
                 G_warning(_("Unable to write GDAL raster file"));
                 return -1;
             }
@@ -448,7 +451,7 @@ int export_band(GDALDatasetH hMEMDS, int band,
     else {
 
         GDALDataType datatype = GDT_Int32;
-        CELL inullval = (CELL) nodataval;
+        CELL inullval = (CELL)nodataval;
 
         G_debug(1, "CELL nodata val: %d", inullval);
 
@@ -456,8 +459,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
 
             Rast_get_row(fd, bufer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_c_null_value(&((CELL *) bufer)[col])) {
-                    ((CELL *) bufer)[col] = inullval;
+                if (Rast_is_c_null_value(&((CELL *)bufer)[col])) {
+                    ((CELL *)bufer)[col] = inullval;
                     if (n_nulls == 0) {
                         GDALSetRasterNoDataValue(hBand, nodataval);
                     }
@@ -465,9 +468,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
                 }
             }
 
-            if (GDALRasterIO
-                (hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
-                 0, 0) >= CE_Failure) {
+            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1,
+                             datatype, 0, 0) >= CE_Failure) {
                 G_warning(_("Unable to write GDAL raster file"));
                 return -1;
             }
@@ -554,8 +556,8 @@ int exact_range_check(double min, double max, GDALDataType datatype,
     case GDT_Float32:
     case GDT_CFloat32:
         /* support export of inf / -inf ? */
-        if ((float)min != TYPE_FLOAT32_MIN && (float)max != TYPE_FLOAT32_MAX
-            && (min < TYPE_FLOAT32_MIN || max > TYPE_FLOAT32_MAX)) {
+        if ((float)min != TYPE_FLOAT32_MIN && (float)max != TYPE_FLOAT32_MAX &&
+            (min < TYPE_FLOAT32_MIN || max > TYPE_FLOAT32_MAX)) {
             G_warning(_("Selected GDAL datatype does not cover data range."));
             G_warning(_("GDAL datatype: %s, range: %.7g - %.7g"),
                       GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
@@ -568,7 +570,8 @@ int exact_range_check(double min, double max, GDALDataType datatype,
 
     case GDT_Float64:
     case GDT_CFloat64:
-        /* not possible because DCELL is FLOAT64, not 128bit floating point, but anyway... */
+        /* not possible because DCELL is FLOAT64, not 128bit floating point, but
+         * anyway... */
         /* support export of inf / -inf ? */
         if (min < TYPE_FLOAT64_MIN || max > TYPE_FLOAT64_MAX) {
             G_warning(_("Selected GDAL datatype does not cover data range."));

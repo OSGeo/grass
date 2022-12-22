@@ -11,13 +11,12 @@ static int node_pool_count;
 static CELL *value_pool;
 static int value_pool_count;
 
-#define NODE_INCR 32
+#define NODE_INCR  32
 #define VALUE_INCR 32
 
 static struct Node **sorted_list;
 
-struct Node
-{
+struct Node {
     CELL *values;
     struct Node *left;
     struct Node *right;
@@ -44,7 +43,6 @@ int initialize_cell_stats(int n)
     /* set Node pool to empty */
     node_pool_count = 0;
 
-
     /* empty the has table */
     hashtable = (struct Node **)G_malloc(HASHSIZE * sizeof(struct Node *));
     for (i = 0; i < HASHSIZE; i++)
@@ -56,7 +54,7 @@ int initialize_cell_stats(int n)
 int allocate_values(void)
 {
     value_pool_count = VALUE_INCR;
-    value_pool = (CELL *) G_calloc(nfiles * value_pool_count, sizeof(CELL));
+    value_pool = (CELL *)G_calloc(nfiles * value_pool_count, sizeof(CELL));
     values = value_pool;
 
     return 0;
@@ -67,8 +65,8 @@ struct Node *NewNode(double area)
     struct Node *node;
 
     if (node_pool_count <= 0)
-        node_pool = (struct Node *)G_calloc(node_pool_count =
-                                            NODE_INCR, sizeof(struct Node));
+        node_pool = (struct Node *)G_calloc(node_pool_count = NODE_INCR,
+                                            sizeof(struct Node));
     node = &node_pool[--node_pool_count];
     node->count = 1;
     node->area = area;
@@ -87,7 +85,6 @@ struct Node *NewNode(double area)
     return node;
 }
 
-
 /* Essentially, Rast_quant_add_rule() treats the ranges as half-open,
  *  i.e. the values range from low (inclusive) to high (exclusive).
  *  While half-open ranges are a common concept (e.g. floor() behaves
@@ -95,21 +92,20 @@ struct Node *NewNode(double area)
  *  low and high values are inclusive.
  *  Therefore the quantized max FP cell gets put in the nsteps+1'th bin
  *  and we need to manually place it back in the previous bin. */
-void fix_max_fp_val(CELL * cell, int ncols)
+void fix_max_fp_val(CELL *cell, int ncols)
 {
     while (ncols-- > 0) {
         if (cell[ncols] > nsteps)
-            cell[ncols] = (CELL) nsteps;
+            cell[ncols] = (CELL)nsteps;
         /* { G_debug(5, ". resetting %d to %d", cell[ncols], nsteps); } */
     }
     return;
 }
 
-
 /* we can't compute hash on null values, so we change all
  *  nulls to max+1, set NULL_CELL to max+1, and later compare
  *  with NULL_CELL to chack for nulls */
-void reset_null_vals(CELL * cell, int ncols)
+void reset_null_vals(CELL *cell, int ncols)
 {
     while (ncols-- > 0) {
         if (Rast_is_c_null_value(&cell[ncols]))
@@ -118,8 +114,7 @@ void reset_null_vals(CELL * cell, int ncols)
     return;
 }
 
-
-int update_cell_stats(CELL ** cell, int ncols, double area)
+int update_cell_stats(CELL **cell, int ncols, double area)
 {
     register int i;
     register int hash;
@@ -158,7 +153,7 @@ int update_cell_stats(CELL ** cell, int ncols, double area)
                     }
                 }
 
-                if (i == nfiles) {      /* match */
+                if (i == nfiles) { /* match */
                     q->count++;
                     q->area += area;
                     total_count++;
@@ -232,7 +227,7 @@ int sort_cell_stats(int do_sort)
     if (node_count <= 0)
         return 0;
 
-    G_free(hashtable);          /* make a bit more room */
+    G_free(hashtable); /* make a bit more room */
     sorted_list = (struct Node **)G_calloc(node_count, sizeof(struct Node *));
     for (q = sorted_list, p = node_list; p; p = p->list)
         *q++ = p;
@@ -280,8 +275,7 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
         if (with_percents)
             fprintf(stdout, "%s0.00%%", fs);
         if (with_labels)
-            fprintf(stdout, "%s%s", fs,
-                    Rast_get_c_cat(&null_cell, &labels[i]));
+            fprintf(stdout, "%s%s", fs, Rast_get_c_cat(&null_cell, &labels[i]));
         fprintf(stdout, "\n");
     }
     else {
@@ -317,10 +311,10 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                             (long)node->values[i]);
                     if (with_labels && !is_fp[i])
                         fprintf(stdout, "%s%s", fs,
-                                Rast_get_c_cat((CELL *) & (node->values[i]),
+                                Rast_get_c_cat((CELL *)&(node->values[i]),
                                                &labels[i]));
                 }
-                else {          /* find out which floating point range to print */
+                else { /* find out which floating point range to print */
 
                     if (cat_ranges)
                         Rast_quant_get_ith_rule(&labels[i].q, node->values[i],
@@ -328,9 +322,11 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                                                 &tmp_cell);
                     else {
                         dLow = (DMAX[i] - DMIN[i]) / nsteps *
-                            (double)(node->values[i] - 1) + DMIN[i];
+                                   (double)(node->values[i] - 1) +
+                               DMIN[i];
                         dHigh = (DMAX[i] - DMIN[i]) / nsteps *
-                            (double)node->values[i] + DMIN[i];
+                                    (double)node->values[i] +
+                                DMIN[i];
                     }
                     if (averaged) {
                         /* print averaged values */
@@ -359,7 +355,6 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                                     Rast_get_d_cat(&dHigh, &labels[i]));
                     }
                 }
-
             }
             if (with_areas) {
                 fprintf(stdout, "%s", fs);

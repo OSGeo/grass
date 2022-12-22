@@ -1,13 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       r.resamp.interp
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor),
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
+ *                 (original contributor),
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>,
- *               Dylan Beaudette, Hamish Bowman <hamish_b yahoo.com>,
+ *               Dylan Beaudette,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Metz (lanczos)
  *               Aaron Saw Min Sern (OpenMP parallelization)
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2006-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -27,6 +28,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+
 #define FIRST_THREAD 0
 
 static int neighbors;
@@ -131,8 +133,7 @@ int main(int argc, char *argv[])
     threads = 1;
 #endif
 
-    bufrows =
-        atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
+    bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > dst_w.rows) {
         bufrows = dst_w.rows;
@@ -215,7 +216,7 @@ int main(int argc, char *argv[])
         int start = written;
         int end = written + range;
 
-#pragma omp parallel private(row, col) firstprivate(cur_row) if(threads > 1)
+#pragma omp parallel private(row, col) firstprivate(cur_row) if (threads > 1)
         {
             int t_id = FIRST_THREAD;
 
@@ -224,12 +225,11 @@ int main(int argc, char *argv[])
 #endif
 
             switch (neighbors) {
-            case 1:            /* nearest */
+            case 1: /* nearest */
 #pragma omp for schedule(static)
                 for (row = start; row < end; row++) {
                     double north = Rast_row_to_northing(row + 0.5, &dst_w);
-                    double maprow_f =
-                        Rast_northing_to_row(north, &src_w) - 0.5;
+                    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
                     int maprow0 = (int)floor(maprow_f + 0.5);
 
                     G_percent(computed, dst_w.rows, 2);
@@ -245,10 +245,8 @@ int main(int argc, char *argv[])
                         double c = bufs[t_id][0][mapcol0];
 
                         if (Rast_is_d_null_value(&c)) {
-                            Rast_set_d_null_value(&outbuf
-                                                  [(row -
-                                                    start) * dst_w.cols +
-                                                   col], 1);
+                            Rast_set_d_null_value(
+                                &outbuf[(row - start) * dst_w.cols + col], 1);
                         }
                         else {
                             outbuf[(row - start) * dst_w.cols + col] = c;
@@ -260,12 +258,11 @@ int main(int argc, char *argv[])
                 }
                 break;
 
-            case 2:            /* bilinear */
+            case 2: /* bilinear */
 #pragma omp for schedule(static)
                 for (row = start; row < end; row++) {
                     double north = Rast_row_to_northing(row + 0.5, &dst_w);
-                    double maprow_f =
-                        Rast_northing_to_row(north, &src_w) - 0.5;
+                    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
                     int maprow0 = (int)floor(maprow_f);
                     double v = maprow_f - maprow0;
 
@@ -290,15 +287,12 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c01) ||
                             Rast_is_d_null_value(&c10) ||
                             Rast_is_d_null_value(&c11)) {
-                            Rast_set_d_null_value(&outbuf
-                                                  [(row -
-                                                    start) * dst_w.cols +
-                                                   col], 1);
+                            Rast_set_d_null_value(
+                                &outbuf[(row - start) * dst_w.cols + col], 1);
                         }
                         else {
                             outbuf[(row - start) * dst_w.cols + col] =
-                                Rast_interp_bilinear(u, v, c00, c01, c10,
-                                                     c11);
+                                Rast_interp_bilinear(u, v, c00, c01, c10, c11);
                         }
                     }
 
@@ -307,12 +301,11 @@ int main(int argc, char *argv[])
                 }
                 break;
 
-            case 4:            /* bicubic */
+            case 4: /* bicubic */
 #pragma omp for schedule(static)
                 for (row = start; row < end; row++) {
                     double north = Rast_row_to_northing(row + 0.5, &dst_w);
-                    double maprow_f =
-                        Rast_northing_to_row(north, &src_w) - 0.5;
+                    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
                     int maprow1 = (int)floor(maprow_f);
                     int maprow0 = maprow1 - 1;
                     double v = maprow_f - maprow1;
@@ -367,10 +360,8 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c31) ||
                             Rast_is_d_null_value(&c32) ||
                             Rast_is_d_null_value(&c33)) {
-                            Rast_set_d_null_value(&outbuf
-                                                  [(row -
-                                                    start) * dst_w.cols +
-                                                   col], 1);
+                            Rast_set_d_null_value(
+                                &outbuf[(row - start) * dst_w.cols + col], 1);
                         }
                         else {
                             outbuf[(row - start) * dst_w.cols + col] =
@@ -386,12 +377,11 @@ int main(int argc, char *argv[])
                 }
                 break;
 
-            case 5:            /* lanczos */
+            case 5: /* lanczos */
 #pragma omp for schedule(static)
                 for (row = start; row < end; row++) {
                     double north = Rast_row_to_northing(row + 0.5, &dst_w);
-                    double maprow_f =
-                        Rast_northing_to_row(north, &src_w) - 0.5;
+                    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
                     int maprow1 = (int)floor(maprow_f + 0.5);
                     int maprow0 = maprow1 - 2;
                     double v = maprow_f - maprow1;
@@ -415,11 +405,10 @@ int main(int argc, char *argv[])
                             for (j = mapcol0; j <= mapcol4; j++) {
                                 c[ci] = bufs[t_id][i][j];
                                 if (Rast_is_d_null_value(&(c[ci]))) {
-                                    Rast_set_d_null_value(&outbuf
-                                                          [(row -
-                                                            start) *
-                                                           dst_w.cols + col],
-                                                          1);
+                                    Rast_set_d_null_value(
+                                        &outbuf[(row - start) * dst_w.cols +
+                                                col],
+                                        1);
                                     do_lanczos = 0;
                                     break;
                                 }
@@ -447,7 +436,6 @@ int main(int argc, char *argv[])
             Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
         }
         written = end;
-
     }
 
     G_percent(dst_w.rows, dst_w.rows, 2);
@@ -455,7 +443,6 @@ int main(int argc, char *argv[])
     for (t = 0; t < threads; t++)
         Rast_close(infile[t]);
     Rast_close(outfile);
-
 
     /* record map metadata/history info */
     sprintf(title, "Resample by %s interpolation", method->answer);
@@ -466,8 +453,8 @@ int main(int argc, char *argv[])
     G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
     G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
     Rast_format_history(&history, HIST_DATSRC_2,
-                        "Source map NS res: %s   EW res: %s",
-                        buf_nsres, buf_ewres);
+                        "Source map NS res: %s   EW res: %s", buf_nsres,
+                        buf_ewres);
     Rast_command_history(&history);
     Rast_write_history(rastout->answer, &history);
 
