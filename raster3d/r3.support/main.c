@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:       r3.support (GRASS core)
  *
@@ -12,7 +11,7 @@
  *
  * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
  *
- *               This program is free software under the GNU General 
+ *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that comes
  *               with GRASS for details.
  *
@@ -130,13 +129,15 @@ int main(int argc, char *argv[])
 
     /* Make sure raster exists and set mapset */
     infile = raster->answer;
-    mapset = G_find_raster3d(infile, G_mapset());       /* current mapset only for editing */
+    mapset = G_find_raster3d(infile,
+                             G_mapset()); /* current mapset only for editing */
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
         G_fatal_error(_("3D raster map <%s> not found"), infile);
 
     if (title_opt->answer) {
         strncpy(title, title_opt->answer, MAX_TITLE_LEN);
-        title[MAX_TITLE_LEN - 1] = '\0';        /* strncpy doesn't null terminate over-sized input */
+        title[MAX_TITLE_LEN - 1] =
+            '\0'; /* strncpy doesn't null terminate over-sized input */
         G_strip(title);
         G_debug(3, "map title= [%s]  (%d chars)", title, (int)strlen(title));
 
@@ -188,7 +189,8 @@ int main(int argc, char *argv[])
     if (history_opt->answer) {
         Rast3d_read_history(raster->answer, "", &hist);
 
-        /* two less than defined as if only one less a newline gets appended in the hist file. bug? */
+        /* two less than defined as if only one less a newline gets appended in
+         * the hist file. bug? */
         /* Should be RECORD_LEN, but r.info truncates at > 71 chars */
         if (strlen(history_opt->answer) > 71) {
             int i;
@@ -211,10 +213,9 @@ int main(int argc, char *argv[])
     if (units_opt->answer || vunits_opt->answer) {
         RASTER3D_Map *map;
 
-        map = Rast3d_open_cell_old(raster->answer, G_mapset(),
-                                   RASTER3D_DEFAULT_WINDOW,
-                                   RASTER3D_TILE_SAME_AS_FILE,
-                                   RASTER3D_USE_CACHE_DEFAULT);
+        map = Rast3d_open_cell_old(
+            raster->answer, G_mapset(), RASTER3D_DEFAULT_WINDOW,
+            RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
         /* Modify the units */
         if (units_opt->answer)
@@ -225,7 +226,6 @@ int main(int argc, char *argv[])
 
         Rast3d_rewrite_header(map);
         Rast3d_close(map);
-
     }
 
     if (datasrc1_opt->answer || datasrc2_opt->answer || datadesc_opt->answer) {
@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
         Rast3d_write_history(raster->answer, &hist);
     }
 
-    if (map_opt->answer) {      /* use cats from another map */
+    if (map_opt->answer) { /* use cats from another map */
         int fd;
         struct Categories cats;
 
@@ -254,8 +254,7 @@ int main(int argc, char *argv[])
                           map_opt->answer);
 
         Rast3d_write_cats(infile, &cats);
-        G_message(_("cats table for [%s] set to %s"),
-                  infile, map_opt->answer);
+        G_message(_("cats table for [%s] set to %s"), infile, map_opt->answer);
         Rast_close(fd);
         Rast_free_cats(&cats);
     }

@@ -1,8 +1,7 @@
-
 /**********************************************************
-* I_get_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
-* I_put_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
-**********************************************************/
+ * I_get_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
+ * I_put_group_elev (group, elev_layer, mapset_elev, tl, math_exp, units, nd);
+ **********************************************************/
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
@@ -10,9 +9,7 @@
 #include <grass/glocale.h>
 #include "orthophoto.h"
 
-
 #define IN_BUF 200
-
 
 /* Put the "elev" name into the block file "ELEV" */
 int I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
@@ -21,7 +18,7 @@ int I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     FILE *fd;
 
     /*    G_suppress_warnings(1); */
-    fd = (FILE *) I_fopen_group_elev_new(group);
+    fd = (FILE *)I_fopen_group_elev_new(group);
     /*    G_suppress_warnings(0); */
     if (fd == NULL)
         return 0;
@@ -36,7 +33,6 @@ int I_put_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     return 0;
 }
 
-
 /* Return the elev name from the block file ELEV
    returns 0 on fail,  1 on success */
 int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
@@ -47,8 +43,9 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     FILE *fd;
 
     if (!I_find_group_elev_file(group)) {
-        G_warning(_("Unable to find elevation file for group <%s> in mapset <%s>"),
-                  group, G_mapset());
+        G_warning(
+            _("Unable to find elevation file for group <%s> in mapset <%s>"),
+            group, G_mapset());
         return 0;
     }
 
@@ -57,8 +54,9 @@ int I_get_group_elev(char *group, char *elev, char *mapset_elev, char *tl,
     G_suppress_warnings(0);
 
     if (!fd) {
-        G_warning(_("Unable to open elevation file for group <%s> in mapset <%s>"),
-                  group, G_mapset());
+        G_warning(
+            _("Unable to open elevation file for group <%s> in mapset <%s>"),
+            group, G_mapset());
         G_sleep(3);
 
         return 0;

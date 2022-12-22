@@ -1,12 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.retile
- *   	    	
- * AUTHOR(S):    Original author 
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert <at> googlemail <dot> co
- * 
- * PURPOSE:      Retiles an existing RASTER3D map with user defined x, y and z tile size
+ *
+ * PURPOSE:      Retiles an existing RASTER3D map with user defined x, y and z
+ *               tile size
  *
  * COPYRIGHT:    (C) 2011 by the GRASS Development Team
  *
@@ -15,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,17 +25,17 @@
 #include <grass/glocale.h>
 
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct
-{
+typedef struct {
     struct Option *input, *output, *tiling;
     struct Flag *cache;
 } paramType;
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void fatal_error(void *map, int *fd, int depths, char *errorMsg);        /*Simple Error message */
-static void set_params();       /*Fill the paramType structure */
+static void fatal_error(void *map, int *fd, int depths,
+                        char *errorMsg); /*Simple Error message */
+static void set_params();                /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Error handling ********************************************************** */
@@ -57,11 +58,10 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     Rast3d_fatal_error("%s", errorMsg);
     exit(EXIT_FAILURE);
-
 }
 
 /* ************************************************************************* */
-/* Set up the arguments we are expecting ********************************** */
+/* Set up the arguments we are expecting *********************************** */
 
 /* ************************************************************************* */
 void set_params()
@@ -78,9 +78,8 @@ void set_params()
     param.cache->description = "Disable tile caching";
 }
 
-
 /* ************************************************************************* */
-/* Main function, open the RASTER3D map and create the raster maps ************** */
+/* Main function, open the RASTER3D map and create the raster maps       *** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
@@ -97,8 +96,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("tiling"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Retiles an existing 3D raster map with user defined x, y and z tile size.");
+    module->description = _("Retiles an existing 3D raster map with user "
+                            "defined x, y and z tile size.");
 
     /* Get parameters from user */
     set_params();
@@ -119,17 +118,13 @@ int main(int argc, char *argv[])
     Rast3d_init_defaults();
 
     if (!param.cache->answer)
-        map =
-            Rast3d_open_cell_old(param.input->answer, mapset,
-                                 RASTER3D_DEFAULT_WINDOW,
-                                 RASTER3D_TILE_SAME_AS_FILE,
-                                 RASTER3D_USE_CACHE_DEFAULT);
+        map = Rast3d_open_cell_old(
+            param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+            RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     else
-        map =
-            Rast3d_open_cell_old(param.input->answer, mapset,
-                                 RASTER3D_DEFAULT_WINDOW,
-                                 RASTER3D_TILE_SAME_AS_FILE,
-                                 RASTER3D_NO_CACHE);
+        map = Rast3d_open_cell_old(
+            param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+            RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
@@ -138,9 +133,10 @@ int main(int argc, char *argv[])
     /* Get the tile dimension */
     Rast3d_get_tile_dimension(&tileX, &tileY, &tileZ);
     if (strcmp(param.tiling->answer, "default") != 0) {
-        if (sscanf(param.tiling->answer, "%dx%dx%d",
-                   &tileX, &tileY, &tileZ) != 3) {
-            Rast3d_fatal_error(_("Rast3d_get_standard3d_params: tile dimension value invalid"));
+        if (sscanf(param.tiling->answer, "%dx%dx%d", &tileX, &tileY, &tileZ) !=
+            3) {
+            Rast3d_fatal_error(_(
+                "Rast3d_get_standard3d_params: tile dimension value invalid"));
         }
     }
 

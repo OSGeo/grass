@@ -1,24 +1,23 @@
-
 double solve(
-                /* Solves equation (*f)(x) = 0 on x in [a,b]. Uses half interval method. */
-                /* Requires that (*f)(a) and (*f)(b) have opposite signs.               */
-                /* Returns code=0 if signs are opposite.                                */
-                /* Returns code=1 if signs are both positive.                           */
-                /* Returns code=1 if signs are both negative.                           */
-                double (*f)(double),    /* pointer to function to be solved */
-                double a,       /* minimum value of solution */
-                double b,       /* maximum value of solution */
-                double err,     /* accuracy of solution */
-                int *code       /* error code */
-    )
+    /* Solves equation (*f)(x) = 0 on x in [a,b]. Uses half interval method. */
+    /* Requires that (*f)(a) and (*f)(b) have opposite signs.               */
+    /* Returns code=0 if signs are opposite.                                */
+    /* Returns code=1 if signs are both positive.                           */
+    /* Returns code=1 if signs are both negative.                           */
+    double (*f)(double), /* pointer to function to be solved */
+    double a,            /* minimum value of solution */
+    double b,            /* maximum value of solution */
+    double err,          /* accuracy of solution */
+    int *code            /* error code */
+)
 {
     int signa, signb, signc;
     double fa, fb, fc, c, signaling_nan();
     double dist;
 
-    fa = (*f) (a);
+    fa = (*f)(a);
     signa = fa > 0;
-    fb = (*f) (b);
+    fb = (*f)(b);
     signb = fb > 0;
 
     /* check starting conditions */
@@ -37,7 +36,7 @@ double solve(
         dist = -dist;
     while (dist > err) {
         c = (b + a) / 2;
-        fc = (*f) (c);
+        fc = (*f)(c);
         signc = fc > 0;
         if (signa == signc) {
             a = c;

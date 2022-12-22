@@ -1,24 +1,25 @@
-
 /***************************************************************************
-*
-* MODULE:       r3.info
-*
-* AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova, Bill Brown,
-*               Lubos Mitas, Jaro Hofierka
-*
-* PURPOSE:      Outputs basic information about a user-specified 3D raster map layer.
-*
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r3.info
+ *
+ * AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
+ *               Bill Brown, Lubos Mitas, Jaro Hofierka
+ *
+ * PURPOSE:      Outputs basic information about a user-specified 3D raster map
+ *               layer.
+ *
+ * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 /* \todo
  *    History support still not full implemented.
- *    Only parts of the timestep functionality are implemented, the timzone is missed ;).
+ *    Only parts of the timestep functionality are implemented, the timzone is
+ * missed ;).
  */
 
 /*local prototype */
@@ -31,12 +32,12 @@ int format_double(double value, char *buf);
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
-#define printline(x) fprintf (out," | %-74.74s |\n",x)
-#define divider(x) \
-    fprintf (out," %c",x);\
-    for (i = 0; i < 76; i++)\
-        fprintf(out,"-");\
-    fprintf (out,"%c\n",x)
+#define printline(x) fprintf(out, " | %-74.74s |\n", x)
+#define divider(x)           \
+    fprintf(out, " %c", x);  \
+    for (i = 0; i < 76; i++) \
+        fprintf(out, "-");   \
+    fprintf(out, "%c\n", x)
 
 #define TMP_LENGTH 100
 
@@ -76,8 +77,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("metadata"));
     G_add_keyword(_("voxel"));
     G_add_keyword(_("extent"));
-    module->description =
-        _("Outputs basic information about a user-specified 3D raster map layer.");
+    module->description = _("Outputs basic information about a user-specified "
+                            "3D raster map layer.");
 
     opt1 = G_define_standard_option(G_OPT_R3_MAP);
 
@@ -103,9 +104,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("3D Raster map <%s> not found"), name);
 
     /*We need to open the map */
-    g3map =
-        Rast3d_open_cell_old(name, mapset, RASTER3D_DEFAULT_WINDOW,
-                             RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
+    g3map = Rast3d_open_cell_old(name, mapset, RASTER3D_DEFAULT_WINDOW,
+                                 RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (NULL == g3map)
         G_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
@@ -132,20 +132,18 @@ int main(int argc, char *argv[])
         divider('+');
 
         if (G_asprintf(&line, "Layer:    %-29.29s  Date: %s", name,
-                       hist_ok ? Rast_get_history(&hist,
-                                                  HIST_MAPID) : "??") > 0)
+                       hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??") >
+            0)
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));
 
-
-        if (G_asprintf
-            (&line, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
-             hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??") > 0)
+        if (G_asprintf(
+                &line, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
+                hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??") > 0)
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));
-
 
         if (G_asprintf(&line, "Location: %s", G_location()) > 0)
             printline(line);
@@ -158,8 +156,8 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Cannot allocate memory for string"));
 
         if (G_asprintf(&line, "Title:    %s",
-                       hist_ok ? Rast_get_history(&hist,
-                                                  HIST_TITLE) : "??") > 0)
+                       hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??") >
+            0)
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));
@@ -169,8 +167,8 @@ int main(int argc, char *argv[])
         else
             G_fatal_error(_("Cannot allocate memory for string"));
 
-        if (G_asprintf
-            (&line, "Vertical unit: %s", Rast3d_get_vertical_unit(g3map)))
+        if (G_asprintf(&line, "Vertical unit: %s",
+                       Rast3d_get_vertical_unit(g3map)))
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));
@@ -193,7 +191,6 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Cannot allocate memory for string"));
         }
 
-
         divider('|');
         printline("");
 
@@ -201,20 +198,20 @@ int main(int argc, char *argv[])
             format_double((double)cats.num, tmp1);
         }
 
-        if (G_asprintf
-            (&line, "  Type of Map:  %-20.20s Number of Categories: %-9s",
-             "raster_3d", cats_ok ? tmp1 : "??") > 0)
+        if (G_asprintf(&line,
+                       "  Type of Map:  %-20.20s Number of Categories: %-9s",
+                       "raster_3d", cats_ok ? tmp1 : "??") > 0)
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));
 
         if (G_asprintf(&line, "  Data Type:    %s",
-                       (data_type == FCELL_TYPE ? "FCELL" :
-                        (data_type == DCELL_TYPE ? "DCELL" : "??"))) > 0)
+                       (data_type == FCELL_TYPE
+                            ? "FCELL"
+                            : (data_type == DCELL_TYPE ? "DCELL" : "??"))) > 0)
             printline(line);
         else
             G_fatal_error(_("Cannot allocate memory for string"));
-
 
         if (head_ok) {
             if (G_asprintf(&line, "  Rows:         %d", cellhd.rows) > 0)
@@ -232,9 +229,8 @@ int main(int argc, char *argv[])
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
 
-            if (G_asprintf
-                (&line, "  Total Cells:  %ld",
-                 (long)cellhd.rows * cellhd.cols * cellhd.depths) > 0)
+            if (G_asprintf(&line, "  Total Cells:  %ld",
+                           (long)cellhd.rows * cellhd.cols * cellhd.depths) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -250,8 +246,8 @@ int main(int argc, char *argv[])
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
 
-            if (G_asprintf(&line, "  Number of tiles:      %d",
-                           g3map->nTiles) > 0)
+            if (G_asprintf(&line, "  Number of tiles:      %d", g3map->nTiles) >
+                0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -266,11 +262,11 @@ int main(int argc, char *argv[])
 
             if (data_type == FCELL_TYPE)
                 tileSize = sizeof(FCELL) * g3map->tileX * g3map->tileY *
-                    ((RASTER3D_Map *) g3map)->tileZ;
+                           ((RASTER3D_Map *)g3map)->tileZ;
 
             if (data_type == DCELL_TYPE)
-                tileSize = sizeof(DCELL) * g3map->tileX * g3map->tileY *
-                    g3map->tileZ;
+                tileSize =
+                    sizeof(DCELL) * g3map->tileX * g3map->tileY * g3map->tileZ;
 
             if (G_asprintf(&line, "  Tile size in memory:  %ld Bytes",
                            (long)(tileSize)) > 0)
@@ -278,25 +274,24 @@ int main(int argc, char *argv[])
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
 
-            if (G_asprintf
-                (&line, "  Number of tiles in x, y and  z:   %d, %d, %d",
-                 g3map->nx, g3map->ny, g3map->nz) > 0)
+            if (G_asprintf(&line,
+                           "  Number of tiles in x, y and  z:   %d, %d, %d",
+                           g3map->nx, g3map->ny, g3map->nz) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
 
-            if (G_asprintf
-                (&line, "  Dimension of a tile in x, y, z:   %d, %d, %d",
-                 g3map->tileX, g3map->tileY, g3map->tileZ) > 0)
+            if (G_asprintf(&line,
+                           "  Dimension of a tile in x, y, z:   %d, %d, %d",
+                           g3map->tileX, g3map->tileY, g3map->tileZ) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
 
             printline("");
 
-            if (G_asprintf
-                (&line, "       Projection: %s (zone %d)",
-                 G_database_projection_name(), G_zone()) > 0)
+            if (G_asprintf(&line, "       Projection: %s (zone %d)",
+                           G_database_projection_name(), G_zone()) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -304,9 +299,8 @@ int main(int argc, char *argv[])
             G_format_northing(cellhd.north, tmp1, cellhd.proj);
             G_format_northing(cellhd.south, tmp2, cellhd.proj);
             G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
-            if (G_asprintf
-                (&line, "           N: %10s    S: %10s   Res: %5s", tmp1,
-                 tmp2, tmp3) > 0)
+            if (G_asprintf(&line, "           N: %10s    S: %10s   Res: %5s",
+                           tmp1, tmp2, tmp3) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -314,9 +308,8 @@ int main(int argc, char *argv[])
             G_format_easting(cellhd.east, tmp1, cellhd.proj);
             G_format_easting(cellhd.west, tmp2, cellhd.proj);
             G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
-            if (G_asprintf
-                (&line, "           E: %10s    W: %10s   Res: %5s", tmp1,
-                 tmp2, tmp3) > 0)
+            if (G_asprintf(&line, "           E: %10s    W: %10s   Res: %5s",
+                           tmp1, tmp2, tmp3) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -324,9 +317,8 @@ int main(int argc, char *argv[])
             format_double(cellhd.top, tmp1);
             format_double(cellhd.bottom, tmp2);
             format_double(cellhd.tb_res, tmp3);
-            if (G_asprintf
-                (&line, "           T: %10s    B: %10s   Res: %5s", tmp1,
-                 tmp2, tmp3) > 0)
+            if (G_asprintf(&line, "           T: %10s    B: %10s   Res: %5s",
+                           tmp1, tmp2, tmp3) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -345,9 +337,8 @@ int main(int argc, char *argv[])
             else
                 format_double(dmax, tmp2);
 
-            if (G_asprintf
-                (&line, "  Range of data:   min = %10s max = %10s", tmp1,
-                 tmp2) > 0)
+            if (G_asprintf(&line, "  Range of data:   min = %10s max = %10s",
+                           tmp1, tmp2) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -357,14 +348,14 @@ int main(int argc, char *argv[])
 
         if (hist_ok) {
             printline("  Data Source:");
-            if (G_asprintf
-                (&line, "   %s", Rast_get_history(&hist, HIST_DATSRC_1)) > 0)
+            if (G_asprintf(&line, "   %s",
+                           Rast_get_history(&hist, HIST_DATSRC_1)) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
 
-            if (G_asprintf
-                (&line, "   %s", Rast_get_history(&hist, HIST_DATSRC_2)) > 0)
+            if (G_asprintf(&line, "   %s",
+                           Rast_get_history(&hist, HIST_DATSRC_2)) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -372,8 +363,8 @@ int main(int argc, char *argv[])
             printline("");
 
             printline("  Data Description:");
-            if (G_asprintf
-                (&line, "   %s", Rast_get_history(&hist, HIST_KEYWRD)) > 0)
+            if (G_asprintf(&line, "   %s",
+                           Rast_get_history(&hist, HIST_KEYWRD)) > 0)
                 printline(line);
             else
                 G_fatal_error(_("Cannot allocate memory for string"));
@@ -384,14 +375,13 @@ int main(int argc, char *argv[])
 
                 for (i = 0; i < Rast_history_length(&hist); i++)
 
-            /**************************************/
+                /**************************************/
                 {
-                    if (G_asprintf
-                        (&line, "   %s", Rast_history_line(&hist, i)) > 0)
+                    if (G_asprintf(&line, "   %s",
+                                   Rast_history_line(&hist, i)) > 0)
                         printline(line);
                     else
                         G_fatal_error(_("Cannot allocate memory for string"));
-
                 }
             }
 
@@ -402,7 +392,7 @@ int main(int argc, char *argv[])
 
         fprintf(out, "\n");
     }
-    else {                      /* Print information in shell style */
+    else { /* Print information in shell style */
         if (gflag->answer) {
             sprintf(tmp1, "%f", cellhd.north);
             sprintf(tmp2, "%f", cellhd.south);
@@ -434,8 +424,9 @@ int main(int argc, char *argv[])
             fprintf(out, "depths=%d\n", cellhd.depths);
 
             fprintf(out, "datatype=\"%s\"\n",
-                    data_type == FCELL_TYPE ? "FCELL" :
-                    data_type == DCELL_TYPE ? "DCELL" : "??");
+                    data_type == FCELL_TYPE   ? "FCELL"
+                    : data_type == DCELL_TYPE ? "DCELL"
+                                              : "??");
 
             if (time_ok && (first_time_ok || second_time_ok)) {
                 G_format_timestamp(&ts, timebuff);
@@ -474,10 +465,8 @@ int main(int argc, char *argv[])
                 fprintf(out, "Title:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_TITLE));
                 fprintf(out, "Data Source:\n");
-                fprintf(out, "   %s\n",
-                        Rast_get_history(&hist, HIST_DATSRC_1));
-                fprintf(out, "   %s\n",
-                        Rast_get_history(&hist, HIST_DATSRC_2));
+                fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
+                fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
                 fprintf(out, "Data Description:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_KEYWRD));
                 if (Rast_history_length(&hist)) {
@@ -496,8 +485,7 @@ int main(int argc, char *argv[])
                 fprintf(out, "\"%s\"\n",
                         Rast_get_history(&hist, HIST_DATSRC_2));
                 fprintf(out, "description=");
-                fprintf(out, "\"%s\"\n",
-                        Rast_get_history(&hist, HIST_KEYWRD));
+                fprintf(out, "\"%s\"\n", Rast_get_history(&hist, HIST_KEYWRD));
                 if (Rast_history_length(&hist)) {
                     fprintf(out, "comments=\"");
                     for (i = 0; i < Rast_history_length(&hist); i++)
@@ -514,7 +502,6 @@ int main(int argc, char *argv[])
     /*Close the opened map */
     if (!Rast3d_close(g3map))
         G_fatal_error(_("Unable to close 3D raster map <%s>"), name);
-
 
     return 0;
 }

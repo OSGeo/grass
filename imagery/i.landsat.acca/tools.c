@@ -9,7 +9,6 @@
 
 #include "local_proto.h"
 
-
 /*--------------------------------------------------------
   HISTOGRAM ANALYSIS
   Define un factor de escala = hist_n/100 con objeto
@@ -22,7 +21,7 @@
 
 /* Global variable
    allow use as parameter in the command line */
-int hist_n = 100;               /* interval of real data 100/hist_n */
+int hist_n = 100; /* interval of real data 100/hist_n */
 
 void hist_put(double t, int hist[])
 {
@@ -53,7 +52,7 @@ double moment(int n, int hist[], int k)
         total += hist[i];
         mean += (double)(i * hist[i]);
     }
-    mean /= ((double)total);    /* histogram mean */
+    mean /= ((double)total); /* histogram mean */
 
     value = 0.;
     for (i = 0; i < hist_n; i++) {
@@ -98,15 +97,15 @@ double quantile(double q, int hist[])
 
 int pval(void *rast, int i)
 {
-    void *ptr = (void *)((CELL *) rast + i);
+    void *ptr = (void *)((CELL *)rast + i);
 
     if (Rast_is_c_null_value(ptr))
         return 0;
     else
-        return (int)((CELL *) rast)[i];
+        return (int)((CELL *)rast)[i];
 }
 
-void filter_holes(Gfile * out)
+void filter_holes(Gfile *out)
 {
     int row, col, nrows, ncols;
 
@@ -270,10 +269,10 @@ void filter_holes(Gfile * out)
                 }
             }
             if (pixel[0] != 0) {
-                ((CELL *) tmp.rast)[col] = pixel[0];
+                ((CELL *)tmp.rast)[col] = pixel[0];
             }
             else {
-                Rast_set_c_null_value((CELL *) tmp.rast + col, 1);
+                Rast_set_c_null_value((CELL *)tmp.rast + col, 1);
             }
         }
         Rast_put_row(tmp.fd, tmp.rast, CELL_TYPE);

@@ -6,11 +6,10 @@
 #include <sstream>
 #include <string>
 
-class Output
-{
+class Output {
     static unsigned int pos;
 
-  public:
+public:
     /* begin a line */
     static void Begin()
     {
@@ -19,7 +18,7 @@ class Output
     }
 
     /* print a string */
-    static void Print(const std::string & x)
+    static void Print(const std::string &x)
     {
         pos += x.length();
         fprintf(stderr, "%s", x.c_str());
@@ -34,7 +33,6 @@ class Output
     }
 
     /* end the line */
-
 
     static void End()
     {
@@ -54,7 +52,7 @@ class Output
     }
 
     /* write a s after cnt spaces */
-    static void WriteLn(int cnt, const std::string & s)
+    static void WriteLn(int cnt, const std::string &s)
     {
         Begin();
         Repeat(cnt, ' ');

@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.ortho.init (former i.photo.init)
  * AUTHOR(S):    Mike Baba,  DBA Systems, Inc. (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>
  *               Hamish Bowman
  *
@@ -26,15 +25,12 @@
 #include <grass/glocale.h>
 #include "orthophoto.h"
 
-
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *group_opt,
-        *xc_opt, *yc_opt, *zc_opt,
-        *xcsd_opt, *ycsd_opt, *zcsd_opt,
-        *omega_opt, *phi_opt, *kappa_opt,
-        *omegasd_opt, *phisd_opt, *kappasd_opt;
+    struct Option *group_opt, *xc_opt, *yc_opt, *zc_opt, *xcsd_opt, *ycsd_opt,
+        *zcsd_opt, *omega_opt, *phi_opt, *kappa_opt, *omegasd_opt, *phisd_opt,
+        *kappasd_opt;
     struct Flag *use_flag, *print_flag;
 
     struct Ortho_Image_Group group;
@@ -53,8 +49,7 @@ int main(int argc, char *argv[])
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);
     group_opt->required = YES;
-    group_opt->description =
-        _("Name of imagery group for ortho-rectification");
+    group_opt->description = _("Name of imagery group for ortho-rectification");
 
     xc_opt = G_define_option();
     xc_opt->key = "xc";

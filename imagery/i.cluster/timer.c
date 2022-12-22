@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include "global.h"
 
-
 char *print_time(time_t t)
 {
     int H, M, S;

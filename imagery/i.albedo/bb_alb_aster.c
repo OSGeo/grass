@@ -1,5 +1,5 @@
 /* Broadband albedo Aster
- * After Liang, S.L., 2001. 
+ * After Liang, S.L., 2001.
  * Narrowband to broadband conversion of land surface albedo 1 Algorithms.
  * Remote Sensing of Environment. 2001, 76, 213-238.
  * Input: Ref1, ref3, Ref5, Ref6, Ref8, Ref9

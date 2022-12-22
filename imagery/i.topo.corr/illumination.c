@@ -18,7 +18,7 @@
 
 #include "local_proto.h"
 
-void eval_cosi(Gfile * out, Gfile * dem, double zenith, double azimuth)
+void eval_cosi(Gfile *out, Gfile *dem, double zenith, double azimuth)
 {
     struct Cell_head window;
 
@@ -49,15 +49,15 @@ void eval_cosi(Gfile * out, Gfile * dem, double zenith, double azimuth)
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    cell[0] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));
+    cell[0] = (DCELL *)G_calloc(ncols + 1, sizeof(DCELL));
     Rast_set_d_null_value(cell[0], ncols);
-    cell[1] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));
+    cell[1] = (DCELL *)G_calloc(ncols + 1, sizeof(DCELL));
     Rast_set_d_null_value(cell[1], ncols);
-    cell[2] = (DCELL *) G_calloc(ncols + 1, sizeof(DCELL));
+    cell[2] = (DCELL *)G_calloc(ncols + 1, sizeof(DCELL));
     Rast_set_d_null_value(cell[2], ncols);
 
     /* First row is null */
-    Rast_set_null_value((DCELL *) out->rast, Rast_window_cols(), DCELL_TYPE);
+    Rast_set_null_value((DCELL *)out->rast, Rast_window_cols(), DCELL_TYPE);
     Rast_put_row(out->fd, out->rast, DCELL_TYPE);
     /* Next rows ... */
     for (row = 2; row < nrows; row++) {
@@ -85,7 +85,7 @@ void eval_cosi(Gfile * out, Gfile * dem, double zenith, double azimuth)
                 Rast_is_d_null_value(c5) || Rast_is_d_null_value(c6) ||
                 Rast_is_d_null_value(c7) || Rast_is_d_null_value(c8) ||
                 Rast_is_d_null_value(c9)) {
-                Rast_set_d_null_value((DCELL *) out->rast + col, 1);
+                Rast_set_d_null_value((DCELL *)out->rast + col, 1);
             }
             else {
                 dx = ((*c1 + *c4 + *c4 + *c7) - (*c3 + *c6 + *c6 + *c9)) / H;
@@ -96,17 +96,16 @@ void eval_cosi(Gfile * out, Gfile * dem, double zenith, double azimuth)
                 if (aspect < 0.0)
                     aspect += 2 * PI;
 
-                cos_i =
-                    cos_z * cos(slope) + sin_z * sin(slope) * cos(azimuth -
-                                                                  aspect);
+                cos_i = cos_z * cos(slope) +
+                        sin_z * sin(slope) * cos(azimuth - aspect);
 
-                ((DCELL *) out->rast)[col] = (DCELL) cos_i;
+                ((DCELL *)out->rast)[col] = (DCELL)cos_i;
             }
         }
 
         Rast_put_row(out->fd, out->rast, DCELL_TYPE);
     }
     /* Last row is null */
-    Rast_set_null_value((DCELL *) out->rast, Rast_window_cols(), DCELL_TYPE);
+    Rast_set_null_value((DCELL *)out->rast, Rast_window_cols(), DCELL_TYPE);
     Rast_put_row(out->fd, out->rast, DCELL_TYPE);
 }

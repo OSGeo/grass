@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.clump
@@ -31,9 +30,10 @@
 #define INCR 1024
 
 /* defeats the purpose of padding ... */
-#define CISNULL(r, c) (((c) == 0 || (c) == ncols + 1 ? 1 : \
-                       (FLAG_GET(globals->null_flag, (r), (c - 1)))))
-
+#define CISNULL(r, c)              \
+    (((c) == 0 || (c) == ncols + 1 \
+          ? 1                      \
+          : (FLAG_GET(globals->null_flag, (r), (c - 1)))))
 
 CELL cluster_bands(struct globals *globals)
 {
@@ -60,8 +60,7 @@ CELL cluster_bands(struct globals *globals)
     char *cname;
     int cfd, csize;
     CELL cat;
-    int mwrow, mwrow1, mwrow2, mwnrows, mwcol, mwcol1, mwcol2, mwncols,
-        radiusc;
+    int mwrow, mwrow1, mwrow2, mwnrows, mwcol, mwcol1, mwcol2, mwncols, radiusc;
     double diff, diff2, avgdiff, ka2, hspat, hspat2;
     double hspec, hspecad, hspec2, hspec2ad;
     LARGEINT count;
@@ -85,8 +84,8 @@ CELL cluster_bands(struct globals *globals)
         hspat = 1.5;
     hspat2 = hspat * hspat;
 
-    cellmax = ((CELL) 1 << (sizeof(CELL) * 8 - 2)) - 1;
-    cellmax += ((CELL) 1 << (sizeof(CELL) * 8 - 2));
+    cellmax = ((CELL)1 << (sizeof(CELL) * 8 - 2)) - 1;
+    cellmax += ((CELL)1 << (sizeof(CELL) * 8 - 2));
 
     Ri.mean = NULL;
     Rk.mean = NULL;
@@ -95,16 +94,16 @@ CELL cluster_bands(struct globals *globals)
     /* allocate clump index */
     /* TODO: support smallest label ID > 1 */
     nalloc = INCR;
-    index = (CELL *) G_malloc(nalloc * sizeof(CELL));
+    index = (CELL *)G_malloc(nalloc * sizeof(CELL));
     index[0] = 0;
     renumber = NULL;
 
     /* allocate DCELL buffers two columns larger than current window */
-    prev_in = (DCELL **) G_malloc(sizeof(DCELL *) * (ncols + 2));
-    cur_in = (DCELL **) G_malloc(sizeof(DCELL *) * (ncols + 2));
+    prev_in = (DCELL **)G_malloc(sizeof(DCELL *) * (ncols + 2));
+    cur_in = (DCELL **)G_malloc(sizeof(DCELL *) * (ncols + 2));
 
-    prev_in[0] = (DCELL *) G_malloc(globals->datasize * (ncols + 2) * nin);
-    cur_in[0] = (DCELL *) G_malloc(globals->datasize * (ncols + 2) * nin);
+    prev_in[0] = (DCELL *)G_malloc(globals->datasize * (ncols + 2) * nin);
+    cur_in[0] = (DCELL *)G_malloc(globals->datasize * (ncols + 2) * nin);
 
     Rast_set_d_null_value(cur_in[0], (ncols + 2) * nin);
     Rast_set_d_null_value(prev_in[0], (ncols + 2) * nin);
@@ -116,8 +115,8 @@ CELL cluster_bands(struct globals *globals)
 
     /* allocate CELL buffers two columns larger than current window */
     len = (ncols + 2) * sizeof(CELL);
-    prev_clump = (CELL *) G_malloc(len);
-    cur_clump = (CELL *) G_malloc(len);
+    prev_clump = (CELL *)G_malloc(len);
+    cur_clump = (CELL *)G_malloc(len);
 
     /* temp file for initial clump IDs */
     cname = G_tempfile();
@@ -143,8 +142,7 @@ CELL cluster_bands(struct globals *globals)
         for (col = 1; col <= ncols; col++) {
 
             /* get band values */
-            Segment_get(globals->bands_out, (void *)cur_in[col], row,
-                        col - 1);
+            Segment_get(globals->bands_out, (void *)cur_in[col], row, col - 1);
             Ri.mean = cur_in[col];
 
             if (CISNULL(row, col)) {
@@ -171,7 +169,7 @@ CELL cluster_bands(struct globals *globals)
                 if (mwcol2 > ncols)
                     mwcol2 = ncols;
 
-                ka2 = hspec2;   /* OTB: conductance parameter */
+                ka2 = hspec2; /* OTB: conductance parameter */
 
                 avgdiff = 0;
                 count = 0;
@@ -193,9 +191,8 @@ CELL cluster_bands(struct globals *globals)
                                         mwrow, mwcol);
 
                             /* get spectral distance */
-                            diff2 =
-                                (globals->calculate_similarity) (&Ri, &Rn,
-                                                                 globals);
+                            diff2 = (globals->calculate_similarity)(&Ri, &Rn,
+                                                                    globals);
 
                             avgdiff += sqrt(diff2);
                             count++;
@@ -208,9 +205,11 @@ CELL cluster_bands(struct globals *globals)
                     hspecad = hspec;
                     /* OTB-like, contrast enhancing */
                     hspecad = exp(-avgdiff * avgdiff / (2 * ka2)) * avgdiff;
-                    /* preference for large regions, from Perona Malik 1990 
-                     * if the settings are right, it could be used to reduce noise */
-                    /* hspecad = 1 / (1 + (avgdiff * avgdiff / (2 * hspec2))); */
+                    /* preference for large regions, from Perona Malik 1990
+                     * if the settings are right, it could be used to reduce
+                     * noise */
+                    /* hspecad = 1 / (1 + (avgdiff * avgdiff / (2 * hspec2)));
+                     */
                     hspec2ad = hspecad * hspecad;
                     G_debug(1, "avg spectral diff: %g", avgdiff);
                     G_debug(1, "initial hspec2: %g", hspec2);
@@ -234,8 +233,7 @@ CELL cluster_bands(struct globals *globals)
 
             /* same clump as to the left */
             if (!CISNULL(row, col - 1) &&
-                globals->calculate_similarity(&Ri, &Rk,
-                                              globals) <= hspec2ad) {
+                globals->calculate_similarity(&Ri, &Rk, globals) <= hspec2ad) {
                 OLD = cur_clump[col] = cur_clump[col - 1];
             }
 
@@ -246,8 +244,8 @@ CELL cluster_bands(struct globals *globals)
                 do {
                     Rk.mean = prev_in[bcol];
                     if (row > 0 && !CISNULL(row - 1, bcol) &&
-                        globals->calculate_similarity(&Ri, &Rk,
-                                                      globals) <= hspec2ad) {
+                        globals->calculate_similarity(&Ri, &Rk, globals) <=
+                            hspec2ad) {
                         cur_clump[col] = *temp_clump;
                         if (OLD == 0) {
                             OLD = *temp_clump;
@@ -255,28 +253,30 @@ CELL cluster_bands(struct globals *globals)
                         else {
                             NEW = *temp_clump;
 
-                            /* threshold > 0 and diagonal requires a bit of extra work
-                             * because of bridge cells:
-                             * A similar to B, B similar to C, but A not similar to C
+                            /* threshold > 0 and diagonal requires a bit of
+                             * extra work because of bridge cells: A similar to
+                             * B, B similar to C, but A not similar to C
                              * -> B is bridge cell */
                             if (NEW != OLD) {
                                 CELL *temp_clump2;
 
-                                /* conflict! preserve NEW clump ID and change OLD clump ID.
-                                 * Must go back to the left in the current row and to the right
-                                 * in the previous row to change all the clump values as well.
+                                /* conflict! preserve NEW clump ID and change
+                                 * OLD clump ID. Must go back to the left in the
+                                 * current row and to the right in the previous
+                                 * row to change all the clump values as well.
                                  */
 
                                 /* left of the current row from 1 to col - 1 */
                                 temp_clump2 = cur_clump;
                                 n = col - 1;
                                 while (n-- > 0) {
-                                    temp_clump2++;      /* skip left edge */
+                                    temp_clump2++; /* skip left edge */
                                     if (*temp_clump2 == OLD)
                                         *temp_clump2 = NEW;
                                 }
 
-                                /* right of previous row from col - 1 to ncols */
+                                /* right of previous row from col - 1 to ncols
+                                 */
                                 temp_clump2 = prev_clump + col - 1;
                                 n = ncols - col + 2;
                                 while (n-- > 0) {
@@ -301,8 +301,8 @@ CELL cluster_bands(struct globals *globals)
                 Rk.mean = prev_in[col];
 
                 if (row > 0 && !CISNULL(row - 1, col) &&
-                    globals->calculate_similarity(&Ri, &Rk,
-                                                  globals) <= hspec2ad) {
+                    globals->calculate_similarity(&Ri, &Rk, globals) <=
+                        hspec2ad) {
                     temp_clump = prev_clump + col;
                     cur_clump[col] = *temp_clump;
                     if (OLD == 0) {
@@ -312,16 +312,17 @@ CELL cluster_bands(struct globals *globals)
                         NEW = *temp_clump;
                         if (NEW != OLD) {
 
-                            /* conflict! preserve NEW clump ID and change OLD clump ID.
-                             * Must go back to the left in the current row and to the right
-                             * in the previous row to change all the clump values as well.
+                            /* conflict! preserve NEW clump ID and change OLD
+                             * clump ID. Must go back to the left in the current
+                             * row and to the right in the previous row to
+                             * change all the clump values as well.
                              */
 
                             /* left of the current row from 1 to col - 1 */
                             temp_clump = cur_clump;
                             n = col - 1;
                             while (n-- > 0) {
-                                temp_clump++;   /* skip left edge */
+                                temp_clump++; /* skip left edge */
                                 if (*temp_clump == OLD)
                                     *temp_clump = NEW;
                             }
@@ -330,7 +331,7 @@ CELL cluster_bands(struct globals *globals)
                             temp_clump = prev_clump + col;
                             n = ncols - col;
                             while (n-- > 0) {
-                                temp_clump++;   /* skip col */
+                                temp_clump++; /* skip col */
                                 if (*temp_clump == OLD)
                                     *temp_clump = NEW;
                             }
@@ -345,7 +346,7 @@ CELL cluster_bands(struct globals *globals)
                 }
             }
 
-            if (NEW == 0 || OLD == NEW) {       /* ok */
+            if (NEW == 0 || OLD == NEW) { /* ok */
                 if (OLD == 0) {
                     /* start a new clump */
                     if (label == cellmax)
@@ -355,8 +356,7 @@ CELL cluster_bands(struct globals *globals)
                     cur_clump[col] = label;
                     if (label >= nalloc) {
                         nalloc += INCR;
-                        index =
-                            (CELL *) G_realloc(index, nalloc * sizeof(CELL));
+                        index = (CELL *)G_realloc(index, nalloc * sizeof(CELL));
                     }
                     index[label] = label;
                 }
@@ -365,7 +365,7 @@ CELL cluster_bands(struct globals *globals)
         }
 
         /* write initial clump IDs */
-        /* this works also with writing out cur_clump, but only 
+        /* this works also with writing out cur_clump, but only
          * prev_clump is complete and will not change any more */
         if (row > 0) {
             if (write(cfd, prev_clump + 1, csize) != csize)
@@ -395,7 +395,7 @@ CELL cluster_bands(struct globals *globals)
     G_message(_("Generating renumbering scheme..."));
     G_debug(1, "%d initial labels", label);
     /* allocate final clump ID */
-    renumber = (CELL *) G_malloc((label + 1) * sizeof(CELL));
+    renumber = (CELL *)G_malloc((label + 1) * sizeof(CELL));
     renumber[0] = 0;
     cat = 0;
     G_percent(0, label, 1);
@@ -428,7 +428,7 @@ CELL cluster_bands(struct globals *globals)
      * apply renumbering scheme to initial clump labels *
      ****************************************************/
 
-    /* the input raster is no longer needed, 
+    /* the input raster is no longer needed,
      * using instead the temp file with initial clump labels */
 
     G_message(_("Assigning final region IDs..."));

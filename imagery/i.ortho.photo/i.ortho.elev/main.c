@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.photo.elev
  * AUTHOR(S):    Mike Baba (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>
  *               Hamish Bowman
  *               Markus Metz
@@ -65,8 +64,7 @@ int main(int argc, char *argv[])
     module->description = _("Select or modify the target elevation model.");
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);
-    group_opt->description =
-        _("Name of imagery group for ortho-rectification");
+    group_opt->description = _("Name of imagery group for ortho-rectification");
 
     loc_opt = G_define_standard_option(G_OPT_M_LOCATION);
     loc_opt->required = NO;
@@ -135,8 +133,7 @@ int main(int argc, char *argv[])
         strcpy(nd, nd_opt->answer);
 
     if (!I_get_target(group, location, mapset)) {
-        G_fatal_error(_("Please select a target for group [%s] first"),
-                      group);
+        G_fatal_error(_("Please select a target for group [%s] first"), group);
     }
 
     sprintf(buf, "%s/%s", G_gisdbase(), location);
@@ -147,11 +144,11 @@ int main(int argc, char *argv[])
     /*Report the contents of the ELEVATION file as in the GROUP */
     if (print_flag->answer) {
         /*If the content is empty report an error */
-        if (!I_get_group_elev
-            (group, elev_layer, mapset_elev, location_elev, math_exp, units,
-             nd)) {
-            G_fatal_error(_("Cannot find default elevation map for target in group [%s]"),
-                          group);
+        if (!I_get_group_elev(group, elev_layer, mapset_elev, location_elev,
+                              math_exp, units, nd)) {
+            G_fatal_error(
+                _("Cannot find default elevation map for target in group [%s]"),
+                group);
         }
         /*If there is a content, print it */
         else {
@@ -189,8 +186,9 @@ int main(int argc, char *argv[])
         if (!elev_opt->answer) {
             /* select current location */
             select_current_env();
-            G_fatal_error(_("Elevation map name is missing. Please set '%s' option"),
-                          elev_opt->key);
+            G_fatal_error(
+                _("Elevation map name is missing. Please set '%s' option"),
+                elev_opt->key);
         }
 
         /* return to current Location/mapset to write in the group file */
@@ -226,19 +224,18 @@ int main(int argc, char *argv[])
         I_put_group_elev(group, elev_opt->answer, mapset_elev, location_elev,
                          math_exp, units, nd);
 
-        G_message(_("Group [%s] in location [%s] mapset [%s] now uses elevation map [%s]"),
+        G_message(_("Group [%s] in location [%s] mapset [%s] now uses "
+                    "elevation map [%s]"),
                   group, G_location(), G_mapset(), elev_opt->answer);
     }
     else {
-        G_fatal_error(_("Mapset [%s] in target location [%s] - %s "),
-                      mapset, location,
-                      stat ==
-                      0 ? _("permission denied\n") : _("not found\n"));
+        G_fatal_error(_("Mapset [%s] in target location [%s] - %s "), mapset,
+                      location,
+                      stat == 0 ? _("permission denied\n") : _("not found\n"));
     }
 
     return (EXIT_SUCCESS);
 }
-
 
 int select_current_env(void)
 {

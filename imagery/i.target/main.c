@@ -1,11 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       i.target
- * AUTHOR(S):    Michael Shapiro (USACERL) and Bob Covill (original contributors)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
+ * AUTHOR(S):    Michael Shapiro (USACERL) and Bob Covill
+ *                  (original contributors)
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>
  *
  *               Original INTER author: M. Shapiro
@@ -13,7 +13,7 @@
  *               Rewritten for GRASS6 by Brad Douglas 08/2005
  *               Output existing group into by Hamish Bowman 6/2007
  *
- * PURPOSE:      Targets an imagery group to a GRASS data base location name 
+ * PURPOSE:      Targets an imagery group to a GRASS data base location name
  *               and mapset for reprojection
  * COPYRIGHT:    (C) 2001-2007 by the GRASS Development Team
  *
@@ -29,7 +29,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/imagery.h>
-
 
 int main(int argc, char *argv[])
 {
@@ -70,7 +69,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /* check if current mapset:  (imagery libs are very lacking in this dept)
        - abort if not,
        - remove @mapset part if it is
@@ -80,7 +78,8 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group must exist in the current mapset"));
     }
     else {
-        strcpy(group_name, group->answer);      /* FIXME for buffer overflow (have the parser check that?) */
+        strcpy(group_name, group->answer); /* FIXME for buffer overflow (have
+                                              the parser check that?) */
     }
 
     /* if no setting options are given, print the current target info */
@@ -98,8 +97,9 @@ int main(int argc, char *argv[])
     /* error if -c is specified with other options, or options are incomplete */
     if ((c->answer && (mapset->answer || loc->answer)) ||
         (!c->answer && (!mapset->answer || !loc->answer)))
-        G_fatal_error(_("Use either the Current Mapset and "
-                        "Location Flag (-c)\n OR\n manually enter the variables"));
+        G_fatal_error(
+            _("Use either the Current Mapset and "
+              "Location Flag (-c)\n OR\n manually enter the variables"));
 
     if (c->answer) {
         /* point group target to current mapset and location */
@@ -110,7 +110,8 @@ int main(int argc, char *argv[])
     else {
         /* point group target to specified mapset and location */
 
-        /* TODO: check if it is in current mapset and strip off @mapset part, if present */
+        /* TODO: check if it is in current mapset and strip off @mapset part, if
+         * present */
 
         I_put_target(group_name, loc->answer, mapset->answer);
         G_message(_("Group <%s> targeted for location [%s], mapset [%s]"),

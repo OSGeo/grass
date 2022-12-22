@@ -3,11 +3,10 @@
 #include "orthophoto.h"
 #include <grass/ortholib.h>
 
-#define IN_BUF 100
+#define IN_BUF      100
 #define CAMERA_FILE "CAMERA"
 
-
-int I_read_cam_info(FILE * fd, struct Ortho_Camera_File_Ref *cam_info)
+int I_read_cam_info(FILE *fd, struct Ortho_Camera_File_Ref *cam_info)
 {
     int n;
     char buf[IN_BUF];
@@ -61,15 +60,13 @@ int I_read_cam_info(FILE * fd, struct Ortho_Camera_File_Ref *cam_info)
     return 1;
 }
 
-
-int I_new_fid_point(struct Ortho_Camera_File_Ref *cam_info,
-                    char fid_id[30], double Xf, double Yf)
+int I_new_fid_point(struct Ortho_Camera_File_Ref *cam_info, char fid_id[30],
+                    double Xf, double Yf)
 {
     return 0;
 }
 
-
-int I_write_cam_info(FILE * fd, struct Ortho_Camera_File_Ref *cam_info)
+int I_write_cam_info(FILE *fd, struct Ortho_Camera_File_Ref *cam_info)
 {
     int i;
 
@@ -81,13 +78,11 @@ int I_write_cam_info(FILE * fd, struct Ortho_Camera_File_Ref *cam_info)
     fprintf(fd, "NUM FID       %d \n", cam_info->num_fid);
 
     for (i = 0; i < cam_info->num_fid; i++)
-        fprintf(fd, "  %5s %.17g %.17g \n",
-                cam_info->fiducials[i].fid_id,
+        fprintf(fd, "  %5s %.17g %.17g \n", cam_info->fiducials[i].fid_id,
                 cam_info->fiducials[i].Xf, cam_info->fiducials[i].Yf);
 
     return 0;
 }
-
 
 int I_get_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
 {
@@ -96,8 +91,8 @@ int I_get_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
 
     fd = I_fopen_cam_file_old(camera);
     if (fd == NULL) {
-        G_warning(_("Unable to open camera file '%s' in '%s'"),
-                  camera, G_mapset());
+        G_warning(_("Unable to open camera file '%s' in '%s'"), camera,
+                  G_mapset());
 
         return 0;
     }
@@ -105,8 +100,8 @@ int I_get_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
     stat = I_read_cam_info(fd, cam_info);
     fclose(fd);
     if (stat < 0) {
-        G_warning(_("Bad format in camera file '%s' in '%s'"),
-                  camera, G_mapset());
+        G_warning(_("Bad format in camera file '%s' in '%s'"), camera,
+                  G_mapset());
 
         return 0;
     }
@@ -114,15 +109,14 @@ int I_get_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
     return 1;
 }
 
-
 int I_put_cam_info(char *camera, struct Ortho_Camera_File_Ref *cam_info)
 {
     FILE *fd;
 
     fd = I_fopen_cam_file_new(camera);
     if (fd == NULL) {
-        G_warning(_("Unable to open camera file '%s' in '%s'"),
-                  camera, G_mapset());
+        G_warning(_("Unable to open camera file '%s' in '%s'"), camera,
+                  G_mapset());
 
         return 0;
     }

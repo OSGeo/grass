@@ -5,8 +5,7 @@
 
 #define LIKELIHOOD float
 
-struct files
-{
+struct files {
     int output_fd;
     int goodness_fd;
     struct Categories output_labels;
@@ -19,8 +18,7 @@ struct files
     char *isdata;
 };
 
-struct parms
-{
+struct parms {
     char *output_map;
     char *goodness_map;
     char *group;

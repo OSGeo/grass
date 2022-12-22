@@ -6,8 +6,7 @@ double bb_alb_landsat(double bluechan, double greenchan, double redchan,
 {
     double result;
 
-    result =
-        (0.293 * bluechan + 0.274 * greenchan + 0.233 * redchan +
-         0.156 * nirchan + 0.033 * chan5 + 0.011 * chan7);
+    result = (0.293 * bluechan + 0.274 * greenchan + 0.233 * redchan +
+              0.156 * nirchan + 0.033 * chan5 + 0.011 * chan7);
     return result;
 }

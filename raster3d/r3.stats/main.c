@@ -4,7 +4,7 @@
  *   Copyright (C) 2004-2017 by the GRASS Development Team
  *   Author(s): Soeren Gebbert
  *
- *   Purpose: Generates volume statistics for raster3d maps.           
+ *   Purpose: Generates volume statistics for raster3d maps.
  *
  *      This program is free software under the GNU General Public
  *      License (>=v2). Read the file COPYING that comes with GRASS
@@ -20,12 +20,11 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 int main(int argc, char *argv[])
 {
 
-    float val_f;                /* for misc use */
-    double val_d;               /* for misc use */
+    float val_f;  /* for misc use */
+    double val_d; /* for misc use */
     stat_table *stats = NULL;
     double min, max;
     equal_val_array *eqvals = NULL;
@@ -49,8 +48,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("voxel"));
     G_add_keyword(_("volume"));
-    module->description =
-        _("Generates volume statistics for 3D raster maps.");
+    module->description = _("Generates volume statistics for 3D raster maps.");
 
     /* Define the different options */
 
@@ -65,8 +63,7 @@ int main(int argc, char *argv[])
 
     equal = G_define_flag();
     equal->key = 'e';
-    equal->description =
-        _("Calculate statistics based on equal value groups");
+    equal->description = _("Calculate statistics based on equal value groups");
 
     counts_only = G_define_flag();
     counts_only->key = 'c';
@@ -74,7 +71,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     /*Set the defaults */
     Rast3d_init_defaults();
@@ -90,17 +86,17 @@ int main(int argc, char *argv[])
 
     /* break if the wrong number of subranges are given */
     if (nsteps <= 0)
-        G_fatal_error(_("The number of subranges has to be equal or greater than 1"));
+        G_fatal_error(
+            _("The number of subranges has to be equal or greater than 1"));
 
     infile = inputfile->answer;
 
     if (NULL == G_find_raster3d(infile, ""))
         Rast3d_fatal_error(_("3D raster map <%s> not found"), infile);
 
-    map =
-        Rast3d_open_cell_old(infile, G_find_raster3d(infile, ""), &region,
-                             RASTER3D_TILE_SAME_AS_FILE,
-                             RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(infile, G_find_raster3d(infile, ""), &region,
+                               RASTER3D_TILE_SAME_AS_FILE,
+                               RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), infile);
@@ -122,13 +118,12 @@ int main(int argc, char *argv[])
                         if (!Rast3d_is_null_value_num(&val_f, map_type)) {
                             /*the first entry */
                             if (eqvals == NULL)
-                                eqvals =
-                                    add_equal_val_to_array(eqvals,
-                                                           (double)val_f);
+                                eqvals = add_equal_val_to_array(eqvals,
+                                                                (double)val_f);
                             else
                                 check_equal_value(eqvals, (double)val_f);
 
-                            n++;        /*count non null cells */
+                            n++; /*count non null cells */
                         }
                     }
                     else if (map_type == DCELL_TYPE) {
@@ -136,12 +131,11 @@ int main(int argc, char *argv[])
                         if (!Rast3d_is_null_value_num(&val_d, map_type)) {
                             /*the first entry */
                             if (eqvals == NULL)
-                                eqvals =
-                                    add_equal_val_to_array(eqvals, val_d);
+                                eqvals = add_equal_val_to_array(eqvals, val_d);
                             else
                                 check_equal_value(eqvals, val_d);
 
-                            n++;        /*count non null cells */
+                            n++; /*count non null cells */
                         }
                     }
                 }

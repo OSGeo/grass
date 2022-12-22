@@ -1,20 +1,21 @@
-
 /****************************************************************************
  *
- * MODULE:       r3.cross.rast 
+ * MODULE:       r3.cross.rast
  *
- * AUTHOR(S):    Original author 
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert at gmx de
  *               23 Feb 2006 Berlin
- * PURPOSE:      Creates a cross section 2D map from one RASTER3D raster map based on a 2D elevation map  
+ * PURPOSE:      Creates a cross section 2D map from one RASTER3D raster map
+ *               based on a 2D elevation map
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,23 +26,21 @@
 #include <grass/glocale.h>
 
 /*- param and global variables -----------------------------------------*/
-typedef struct
-{
+typedef struct {
     struct Option *input, *output, *elevation;
     struct Flag *mask;
 } paramType;
 
-paramType param;                /*param */
+paramType param; /*param */
 int globalElevMapType;
 
-
 /*- prototypes --------------------------------------------------------------*/
-void fatal_error(void *map, int elevfd, int outfd, char *errorMsg);     /*Simple Error message */
-void set_params();              /*Fill the paramType structure */
-void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd, int outfd);    /*Write the raster */
-void close_output_map(int fd);  /*close the map */
-
-
+void fatal_error(void *map, int elevfd, int outfd,
+                 char *errorMsg); /*Simple Error message */
+void set_params();                /*Fill the paramType structure */
+void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd,
+                          int outfd); /*Write the raster */
+void close_output_map(int fd);        /*close the map */
 
 /* ************************************************************************* */
 /* Error handling ********************************************************** */
@@ -65,9 +64,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
 
     Rast3d_fatal_error("%s", errorMsg);
     exit(EXIT_FAILURE);
-
 }
-
 
 /* ************************************************************************* */
 /* Close the raster map ********************************************* */
@@ -76,7 +73,6 @@ void close_output_map(int fd)
 {
     Rast_close(fd);
 }
-
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting *********************************** */
@@ -110,8 +106,6 @@ void set_params()
     param.mask->description =
         _("Use 3D raster mask (if exists) with input map");
 }
-
-
 
 /* ************************************************************************* */
 /* Compute the cross section raster map ************************************ */
@@ -156,8 +150,8 @@ void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd,
         /*Read the input map row */
         Rast_get_row(elevfd, elevrast, row, globalElevMapType);
 
-        for (col = 0, ptr = elevrast; col < cols; col++, ptr =
-             G_incr_void_ptr(ptr, Rast_cell_size(globalElevMapType))) {
+        for (col = 0, ptr = elevrast; col < cols; col++,
+            ptr = G_incr_void_ptr(ptr, Rast_cell_size(globalElevMapType))) {
 
             if (Rast_is_null_value(ptr, globalElevMapType)) {
                 if (typeIntern == FCELL_TYPE)
@@ -169,15 +163,15 @@ void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd,
 
             /*Read the elevation value */
             if (globalElevMapType == CELL_TYPE) {
-                intvalue = *(CELL *) ptr;
+                intvalue = *(CELL *)ptr;
                 elevation = intvalue;
             }
             else if (globalElevMapType == FCELL_TYPE) {
-                fvalue = *(FCELL *) ptr;
+                fvalue = *(FCELL *)ptr;
                 elevation = fvalue;
             }
             else if (globalElevMapType == DCELL_TYPE) {
-                dvalue = *(DCELL *) ptr;
+                dvalue = *(DCELL *)ptr;
                 elevation = dvalue;
             }
 
@@ -213,9 +207,9 @@ void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd,
         G_free(fcell);
 }
 
-
 /* ************************************************************************* */
-/* Main function, open the RASTER3D map and create the cross section map ******** */
+/* Main function, open the RASTER3D map and create the cross section map
+ * ******** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
@@ -223,9 +217,9 @@ int main(int argc, char *argv[])
     RASTER3D_Region region;
     struct Cell_head window2d;
     struct GModule *module;
-    void *map = NULL;           /*The 3D Rastermap */
+    void *map = NULL; /*The 3D Rastermap */
     int changemask = 0;
-    int elevfd = -1, outfd = -1;        /*file descriptors */
+    int elevfd = -1, outfd = -1; /*file descriptors */
     int output_type, cols, rows;
 
     /* Initialize GRASS */
@@ -236,8 +230,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("profile"));
     G_add_keyword(_("raster"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Creates cross section 2D raster map from 3D raster map based on 2D elevation map");
+    module->description = _("Creates cross section 2D raster map from 3D "
+                            "raster map based on 2D elevation map");
 
     /* Get parameters from user */
     set_params();
@@ -262,8 +256,8 @@ int main(int argc, char *argv[])
 
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
-        G_message
-            (_("The 2D and 3D region settings are different. Using the 3D raster map settings to adjust the 2D region."));
+        G_message(_("The 2D and 3D region settings are different. Using the 3D "
+                    "raster map settings to adjust the 2D region."));
         G_get_set_window(&window2d);
         window2d.ns_res = region.ns_res;
         window2d.ew_res = region.ew_res;
@@ -272,15 +266,13 @@ int main(int argc, char *argv[])
         Rast_set_window(&window2d);
     }
 
-
     /*******************/
     /*Open the 3d raster map */
 
     /*******************/
-    map = Rast3d_open_cell_old(param.input->answer,
-                               G_find_raster3d(param.input->answer, ""),
-                               &region, RASTER3D_TILE_SAME_AS_FILE,
-                               RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(
+        param.input->answer, G_find_raster3d(param.input->answer, ""), &region,
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
@@ -339,7 +331,6 @@ int main(int argc, char *argv[])
 
         Rast_close(outfd);
         Rast_close(elevfd);
-
     }
     else {
         fatal_error(map, -1, -1,

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.topo.corr
@@ -47,8 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("terrain"));
     G_add_keyword(_("topographic correction"));
-    module->description =
-        _("Computes topographic correction of reflectance.");
+    module->description = _("Computes topographic correction of reflectance.");
 
     /* It defines the different parameters */
 
@@ -59,8 +57,7 @@ int main(int argc, char *argv[])
         _("Name of reflectance raster maps to be corrected topographically");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description =
-        _("Name (flag -i) or prefix for output raster maps");
+    output->description = _("Name (flag -i) or prefix for output raster maps");
 
     base = G_define_standard_option(G_OPT_R_MAP);
     base->key = "basemap";
@@ -99,18 +96,20 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (ilum->answer && azim->answer == NULL)
-        G_fatal_error(_("Solar azimuth is necessary to calculate illumination terrain model"));
+        G_fatal_error(_("Solar azimuth is necessary to calculate illumination "
+                        "terrain model"));
 
     if (!ilum->answer && input->answer == NULL)
-        G_fatal_error
-            (_("Reflectance maps are necessary to make topographic correction"));
+        G_fatal_error(
+            _("Reflectance maps are necessary to make topographic correction"));
 
     zenith = atof(zeni->answer);
     out.type = DCELL_TYPE;
     do_scale = scl->answer;
 
     /* Evaluate only cos_i raster file */
-    /* i.topo.corr -i out=cosi.on07 base=SRTM_v2 zenith=33.3631 azimuth=59.8897 */
+    /* i.topo.corr -i out=cosi.on07 base=SRTM_v2 zenith=33.3631 azimuth=59.8897
+     */
     if (ilum->answer) {
         Rast_get_window(&window);
         azimuth = atof(azim->answer);
@@ -139,13 +138,15 @@ int main(int argc, char *argv[])
         Rast_write_history(out.name, &history);
     }
     /* Evaluate topographic correction for all bands */
-    /* i.topo.corr input=on07.toar.1 out=tcor base=cosi.on07 zenith=33.3631 method=c-factor */
+    /* i.topo.corr input=on07.toar.1 out=tcor base=cosi.on07 zenith=33.3631
+     * method=c-factor */
     else {
-        /*              if (G_strcasecmp(metho->answer, "cosine") == 0)        method = COSINE;
-         *               else if (G_strcasecmp(metho->answer, "percent") == 0)  method = PERCENT;
-         *               else if (G_strcasecmp(metho->answer, "minnaert") == 0) method = MINNAERT;
-         *               else if (G_strcasecmp(metho->answer, "c-factor") == 0) method = C_CORRECT;
-         *               else G_fatal_error(_("Invalid method: %s"), metho->answer);
+        /*              if (G_strcasecmp(metho->answer, "cosine") == 0) method =
+         * COSINE; else if (G_strcasecmp(metho->answer, "percent") == 0)  method
+         * = PERCENT; else if (G_strcasecmp(metho->answer, "minnaert") == 0)
+         * method = MINNAERT; else if (G_strcasecmp(metho->answer, "c-factor")
+         * == 0) method = C_CORRECT; else G_fatal_error(_("Invalid method: %s"),
+         * metho->answer);
          */
 
         if (metho->answer[1] == 'o')
@@ -170,12 +171,14 @@ int main(int argc, char *argv[])
             /* Abre fichero de bandas y el de salida */
             strcpy(band.name, input->answers[i]);
             Rast_get_cellhd(band.name, "", &hd_band);
-            Rast_set_window(&hd_band);  /* Antes de out_open y allocate para mismo size */
+            Rast_set_window(
+                &hd_band); /* Antes de out_open y allocate para mismo size */
             band.fd = Rast_open_old(band.name, "");
             band.type = Rast_get_map_type(band.fd);
             if (band.type != DCELL_TYPE) {
-                G_warning(_("Reflectance of <%s> is not of DCELL type - ignored."),
-                          input->answers[i]);
+                G_warning(
+                    _("Reflectance of <%s> is not of DCELL type - ignored."),
+                    input->answers[i]);
                 Rast_close(band.fd);
                 continue;
             }

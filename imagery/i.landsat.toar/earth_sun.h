@@ -8,8 +8,7 @@
 #ifndef _EARTH_SUN_H
 #define _EARTH_SUN_H
 
-struct ln_vsop
-{
+struct ln_vsop {
     double A;
     double B;
     double C;

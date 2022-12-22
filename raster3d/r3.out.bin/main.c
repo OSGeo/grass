@@ -1,18 +1,17 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.out.bin
  *
- * AUTHOR(S):   Soeren Gebbert
- *   			Based on r.out.bin from: Bob Covill and Glynn Clements
+ * AUTHOR(S):    Soeren Gebbert
+ *                   Based on r.out.bin from: Bob Covill and Glynn Clements
  *
- * PURPOSE:     Exports a GRASS 3D raster map to a binary array.
+ * PURPOSE:      Exports a GRASS 3D raster map to a binary array.
  *
- * COPYRIGHT:   (C) 2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -70,8 +69,8 @@ static void swap_8(void *p)
     q[4] = t;
 }
 
-static void write_cell(FILE * fp, const DCELL in_cell, int as_integer,
-                       int bytes, int swap_flag)
+static void write_cell(FILE *fp, const DCELL in_cell, int as_integer, int bytes,
+                       int swap_flag)
 {
     if (!as_integer) {
         switch (bytes) {
@@ -122,7 +121,7 @@ static void write_cell(FILE * fp, const DCELL in_cell, int as_integer,
         G_fatal_error(_("Error writing data"));
 }
 
-static void raster3d_to_bin(FILE * fp, DCELL null_value, int as_integer,
+static void raster3d_to_bin(FILE *fp, DCELL null_value, int as_integer,
                             int bytes, int byte_swap, int row_swap,
                             int depth_swap)
 {
@@ -161,20 +160,18 @@ static void raster3d_to_bin(FILE * fp, DCELL null_value, int as_integer,
 
                 if (typeIntern == FCELL_TYPE) {
 
-                    Rast3d_get_value(map, col, row, depth, &fvalue,
-                                     FCELL_TYPE);
+                    Rast3d_get_value(map, col, row, depth, &fvalue, FCELL_TYPE);
 
                     if (Rast3d_is_null_value_num(&fvalue, FCELL_TYPE))
                         write_cell(fp, null_value, as_integer, bytes,
                                    byte_swap);
                     else
-                        write_cell(fp, (DCELL) fvalue, as_integer, bytes,
+                        write_cell(fp, (DCELL)fvalue, as_integer, bytes,
                                    byte_swap);
                 }
                 else {
 
-                    Rast3d_get_value(map, col, row, depth, &dvalue,
-                                     DCELL_TYPE);
+                    Rast3d_get_value(map, col, row, depth, &dvalue, DCELL_TYPE);
 
                     if (Rast3d_is_null_value_num(&dvalue, DCELL_TYPE))
                         write_cell(fp, null_value, as_integer, bytes,
@@ -192,16 +189,14 @@ static void raster3d_to_bin(FILE * fp, DCELL null_value, int as_integer,
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input;
         struct Option *output;
         struct Option *null;
         struct Option *order;
         struct Option *bytes;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *row, *depth, *integer;
     } flag;
     char *name;
@@ -222,8 +217,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("export"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Exports a GRASS 3D raster map to a binary array.");
+    module->description = _("Exports a GRASS 3D raster map to a binary array.");
 
     /* Define the different options */
 
@@ -251,7 +245,8 @@ int main(int argc, char *argv[])
     parm.order->required = NO;
     parm.order->options = "big,little,native,swap";
     parm.order->description = _("Output byte order");
-    parm.order->answer = "native";;
+    parm.order->answer = "native";
+    ;
 
     flag.row = G_define_flag();
     flag.row->key = 'r';
@@ -288,7 +283,8 @@ int main(int argc, char *argv[])
 
 #ifndef HAVE_LONG_LONG_INT
     if (as_integer && bytes > 4)
-        G_fatal_error(_("Integer output doesn't support bytes=8 in this build"));
+        G_fatal_error(
+            _("Integer output doesn't support bytes=8 in this build"));
 #endif
 
     if (parm.output->answer)
@@ -303,11 +299,11 @@ int main(int argc, char *argv[])
     else if (G_strcasecmp(parm.order->answer, "little") == 0)
         order = 1;
     else if (G_strcasecmp(parm.order->answer, "native") == 0)
-        order = G_is_little_endian()? 1 : 0;
+        order = G_is_little_endian() ? 1 : 0;
     else if (G_strcasecmp(parm.order->answer, "swap") == 0)
-        order = G_is_little_endian()? 0 : 1;
+        order = G_is_little_endian() ? 0 : 1;
 
-    swap_flag = order == (G_is_little_endian()? 0 : 1);
+    swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
     do_stdout = strcmp("-", outfile) == 0;
 
@@ -324,10 +320,9 @@ int main(int argc, char *argv[])
     Rast3d_get_window(&region);
 
     /* Open the map and use XY cache mode */
-    map = Rast3d_open_cell_old(parm.input->answer,
-                               G_find_raster3d(parm.input->answer, ""),
-                               &region, RASTER3D_TILE_SAME_AS_FILE,
-                               RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(
+        parm.input->answer, G_find_raster3d(parm.input->answer, ""), &region,
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),

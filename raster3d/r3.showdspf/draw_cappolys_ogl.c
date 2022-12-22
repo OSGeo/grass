@@ -1,23 +1,22 @@
 #include <stdio.h>
 #include "vizual.h"
 
-
 #define COLOR3
 
 int draw_cappolys(Headp, D_spec, D_Cap, poly, x, y, direction, index)
-     file_info *Headp;
-     struct dspec *D_spec;
-     struct Cap *D_Cap;
-     struct poly_info *poly;
-     int x;
-     int y;
-     int direction;
-     int index;
+file_info *Headp;
+struct dspec *D_spec;
+struct Cap *D_Cap;
+struct poly_info *poly;
+int x;
+int y;
+int direction;
+int index;
 {
     int yloc, xloc;
     int t;
     double *vertices;
-    double tmpvt[20][3];        /* these are going to be sent to v3d */
+    double tmpvt[20][3]; /* these are going to be sent to v3d */
     float norm[3];
     int nverts;
     short color[3];
@@ -28,9 +27,8 @@ int draw_cappolys(Headp, D_spec, D_Cap, poly, x, y, direction, index)
     vertices = poly->verts;
     nverts = poly->vnum;
 
-
     if (!direction) {
-        direction = -1;         /* was 0,1,  now  -1,1 */
+        direction = -1; /* was 0,1,  now  -1,1 */
         start = nverts - 1;
         stop = -1;
     }

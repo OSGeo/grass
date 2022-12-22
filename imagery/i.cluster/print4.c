@@ -3,12 +3,10 @@
 #include <grass/imagery.h>
 #include <grass/cluster.h>
 
-
 #define FMT1 "%g/%d=%.1f"
 #define FMT2 "%g/%d=?"
 
-
-int print_centroids(FILE * fd, struct Cluster *C)
+int print_centroids(FILE *fd, struct Cluster *C)
 {
     int band, cat;
     char buf[40];

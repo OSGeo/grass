@@ -1,6 +1,5 @@
 /* PURPOSE:      Develop the image segments */
 
-
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
@@ -9,7 +8,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/raster.h>
-#include <grass/segment.h>      /* segmentation library */
+#include <grass/segment.h> /* segmentation library */
 #include "pavl.h"
 #include "iseg.h"
 
@@ -17,13 +16,13 @@ int remove_small_clumps(struct globals *globals);
 
 /* standard gauss function:
  * a * exp(-(x - m)^2 / (2 * stddev^2)
- * a is not needed because the sum of weights is calculated for each 
+ * a is not needed because the sum of weights is calculated for each
  * sampling window
  * (x - m)^2 is the squared difference = diff2
  * stddev^2 is the variance
- * this code can be further simplified, e.g. by supplying 2 * var instead 
+ * this code can be further simplified, e.g. by supplying 2 * var instead
  * of var
- * 
+ *
  * the standard deviation is the bandwidth
  * */
 
@@ -32,12 +31,10 @@ static double gauss_kernel(double diff2, double var)
     return exp(-diff2 / (2 * var));
 }
 
-
 int mean_shift(struct globals *globals)
 {
     int row, col, t, n;
-    int mwrow, mwrow1, mwrow2, mwnrows, mwcol, mwcol1, mwcol2, mwncols,
-        radiusc;
+    int mwrow, mwrow1, mwrow2, mwnrows, mwcol, mwcol1, mwcol2, mwncols, radiusc;
     double hspat, hspec, hspat2, hspec2, sigmaspat2, sigmaspec2;
     double hspecad, hspecad2;
     double ka2;
@@ -83,7 +80,7 @@ int mean_shift(struct globals *globals)
 
     hspat2 = hspat * hspat;
     sigmaspat2 = hspat2 / 9.;
-    radiusc = hspat;            /* radius in cells truncated to integer */
+    radiusc = hspat; /* radius in cells truncated to integer */
     mwnrows = mwncols = radiusc * 2 + 1;
 
     /* estimate spectral bandwidth for given spatial bandwidth */
@@ -95,8 +92,8 @@ int mean_shift(struct globals *globals)
               hspat);
     G_percent_reset();
     for (row = globals->row_min; row < globals->row_max; row++) {
-        G_percent(row - globals->row_min,
-                  globals->row_max - globals->row_min, 4);
+        G_percent(row - globals->row_min, globals->row_max - globals->row_min,
+                  4);
 
         mwrow1 = row - radiusc;
         mwrow2 = mwrow1 + mwnrows;
@@ -138,13 +135,12 @@ int mean_shift(struct globals *globals)
 
                     if (diff2 <= hspat2) {
 
-                        Segment_get(globals->bands_in, (void *)Rn.mean,
-                                    mwrow, mwcol);
+                        Segment_get(globals->bands_in, (void *)Rn.mean, mwrow,
+                                    mwcol);
 
                         /* get spectral distance */
                         diff2 =
-                            (globals->calculate_similarity) (&Rin, &Rn,
-                                                             globals);
+                            (globals->calculate_similarity)(&Rin, &Rn, globals);
 
                         if (mindiff > diff2)
                             mindiff = diff2;
@@ -196,10 +192,10 @@ int mean_shift(struct globals *globals)
         G_message(_("Estimated range bandwidth: %g"), mindiffzeroavg);
     }
     if (do_adaptive) {
-        /* bandwidth is now standard deviation for adaptive bandwidth 
-         * using a gaussian function with range bandwidth used as 
+        /* bandwidth is now standard deviation for adaptive bandwidth
+         * using a gaussian function with range bandwidth used as
          * bandwidth for the gaussian function
-         * the aim is to produce similar but improved results with 
+         * the aim is to produce similar but improved results with
          * adaptive bandwidth
          * thus increase bandwidth */
         hspec = sqrt(hspec);
@@ -237,7 +233,7 @@ int mean_shift(struct globals *globals)
                 hspat *= 1.1;
             hspat2 = hspat * hspat;
             sigmaspat2 = hspat2 / 9.;
-            radiusc = hspat;    /* radius in cells truncated to integer */
+            radiusc = hspat; /* radius in cells truncated to integer */
             mwnrows = mwncols = radiusc * 2 + 1;
 
             /* spectral bandwidth: reduce by 0.7 */
@@ -294,7 +290,7 @@ int mean_shift(struct globals *globals)
                 if (do_adaptive) {
                     /* adapt initial range bandwidth */
 
-                    ka2 = hspec2;       /* OTB: conductance parameter */
+                    ka2 = hspec2; /* OTB: conductance parameter */
 
                     avgdiff = 0;
                     count = 0;
@@ -312,14 +308,12 @@ int mean_shift(struct globals *globals)
 
                             if (diff2 <= hspat2) {
 
-                                Segment_get(globals->bands_in,
-                                            (void *)Rn.mean, mwrow, mwcol);
+                                Segment_get(globals->bands_in, (void *)Rn.mean,
+                                            mwrow, mwcol);
 
                                 /* get spectral distance */
-                                diff2 =
-                                    (globals->calculate_similarity) (&Rin,
-                                                                     &Rn,
-                                                                     globals);
+                                diff2 = (globals->calculate_similarity)(
+                                    &Rin, &Rn, globals);
 
                                 avgdiff += sqrt(diff2);
                                 count++;
@@ -331,11 +325,12 @@ int mean_shift(struct globals *globals)
                         avgdiff /= count;
                         hspecad = hspec;
                         /* OTB-like, contrast enhancing */
-                        hspecad =
-                            exp(-avgdiff * avgdiff / (2 * ka2)) * avgdiff;
-                        /* preference for large regions, from Perona Malik 1990 
-                         * if the settings are right, it could be used to reduce noise */
-                        /* hspecad = 1 / (1 + (avgdiff * avgdiff / (2 * hspec2))); */
+                        hspecad = exp(-avgdiff * avgdiff / (2 * ka2)) * avgdiff;
+                        /* preference for large regions, from Perona Malik 1990
+                         * if the settings are right, it could be used to reduce
+                         * noise */
+                        /* hspecad = 1 / (1 + (avgdiff * avgdiff / (2 *
+                         * hspec2))); */
                         hspecad2 = hspecad * hspecad;
                         G_debug(1, "avg spectral diff: %g", avgdiff);
                         G_debug(1, "initial hspec2: %g", hspec2);
@@ -363,9 +358,8 @@ int mean_shift(struct globals *globals)
                                         mwrow, mwcol);
 
                             /* check spectral distance */
-                            diff2 =
-                                (globals->calculate_similarity) (&Rin, &Rn,
-                                                                 globals);
+                            diff2 = (globals->calculate_similarity)(&Rin, &Rn,
+                                                                    globals);
                             if (diff2 <= hspecad2) {
                                 if (do_gauss)
                                     w *= gauss_kernel(diff2, sigmaspec2);
@@ -389,11 +383,10 @@ int mean_shift(struct globals *globals)
                 /* put new band values */
                 Segment_put(globals->bands_out, (void *)Rout.mean, row, col);
 
-                /* if the squared difference between old and new band values 
+                /* if the squared difference between old and new band values
                  * is larger than alpha2, then increase n_changes */
 
-                diff2 =
-                    (globals->calculate_similarity) (&Rin, &Rout, globals);
+                diff2 = (globals->calculate_similarity)(&Rin, &Rout, globals);
                 if (diff2 > alpha2)
                     n_changes++;
                 if (maxdiff2 < diff2)
@@ -405,7 +398,8 @@ int mean_shift(struct globals *globals)
                   n_changes, sqrt(maxdiff2));
     }
     if (n_changes > 1)
-        G_message(_("Mean shift stopped at %d due to reaching max iteration limit, more changes may be possible"),
+        G_message(_("Mean shift stopped at %d due to reaching max iteration "
+                    "limit, more changes may be possible"),
                   t);
     else
         G_message(_("Mean shift converged after %d iterations"), t);
@@ -504,7 +498,7 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
                     rclist_add(&rilist, rown, coln);
                     FLAG_UNSET(globals->candidate_flag, rown, coln);
                 }
-                else {          /* different neighbour */
+                else { /* different neighbour */
                     /* compare to this cell next.row, next.col */
                     if (!have_Ri) {
                         Segment_get(globals->bands_out, (void *)Ri.mean,
@@ -538,8 +532,8 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
                     }
                 }
             }
-        } while (n--);          /* end do loop - next neighbor */
-    } while (rclist_drop(&rilist, &next));      /* while there are cells to check */
+        } while (n--);                     /* end do loop - next neighbor */
+    } while (rclist_drop(&rilist, &next)); /* while there are cells to check */
 
     rclist_destroy(&rilist);
     if (pngbr_rc)
@@ -553,7 +547,7 @@ static int find_best_neighbour(struct globals *globals, int row, int col,
     return best_n_id;
 }
 
-#if 0                           /* unused */
+#if 0  /* unused */
 static int check_reg_size(struct globals *globals, int minsize, int row,
                           int col)
 {
@@ -670,12 +664,11 @@ static int update_rid(struct globals *globals, int row, int col, int new_id)
                 /* same neighbour */
                 if (ngbr_id == this_id) {
                     rclist_add(&rilist, rown, coln);
-                    Segment_put(&globals->rid_seg, (void *)&new_id, rown,
-                                coln);
+                    Segment_put(&globals->rid_seg, (void *)&new_id, rown, coln);
                 }
             }
-        } while (n--);          /* end do loop - next neighbor */
-    } while (rclist_drop(&rilist, &next));      /* while there are cells to check */
+        } while (n--);                     /* end do loop - next neighbor */
+    } while (rclist_drop(&rilist, &next)); /* while there are cells to check */
 
     rclist_destroy(&rilist);
 
@@ -694,7 +687,7 @@ int remove_small_clumps(struct globals *globals)
 
     /* two possible modes
      * best (most similar) neighbor
-     * neighbor with longest shared boundary 
+     * neighbor with longest shared boundary
      */
 
     if (globals->min_segment_size < 2)
@@ -704,7 +697,7 @@ int remove_small_clumps(struct globals *globals)
               globals->min_segment_size);
 
     /* init renumber */
-    renumber = (CELL *) G_malloc(sizeof(CELL) * (globals->max_rid + 1));
+    renumber = (CELL *)G_malloc(sizeof(CELL) * (globals->max_rid + 1));
     for (i = 0; i <= globals->max_rid; i++)
         renumber[i] = 0;
 
@@ -735,8 +728,8 @@ int remove_small_clumps(struct globals *globals)
     /* go through all cells */
     G_percent_reset();
     for (row = globals->row_min; row < globals->row_max; row++) {
-        G_percent(row - globals->row_min,
-                  globals->row_max - globals->row_min, 2);
+        G_percent(row - globals->row_min, globals->row_max - globals->row_min,
+                  2);
         for (col = globals->col_min; col < globals->col_max; col++) {
             if ((FLAG_GET(globals->null_flag, row, col)))
                 continue;
@@ -787,8 +780,8 @@ int remove_small_clumps(struct globals *globals)
     G_message(_("Renumbering remaining %d segments..."), n_regions);
 
     for (row = globals->row_min; row < globals->row_max; row++) {
-        G_percent(row - globals->row_min,
-                  globals->row_max - globals->row_min, 4);
+        G_percent(row - globals->row_min, globals->row_max - globals->row_min,
+                  4);
         for (col = globals->col_min; col < globals->col_max; col++) {
             if ((FLAG_GET(globals->null_flag, row, col)))
                 continue;

@@ -1,5 +1,5 @@
-
 /**** BallMath.c - Essential routines for ArcBall.  ****/
+
 #include <math.h>
 #include "BallMath.h"
 #include "BallAux.h"
@@ -51,7 +51,7 @@ Quat Qt_FromBallPoints(HVect from, HVect to)
 }
 
 /* Convert a unit quaternion to two points on unit sphere */
-void Qt_ToBallPoints(Quat q, HVect * arcFrom, HVect * arcTo)
+void Qt_ToBallPoints(Quat q, HVect *arcFrom, HVect *arcTo)
 {
     double s;
 
@@ -81,7 +81,7 @@ HVect ConstrainToAxis(HVect loose, HVect axis)
         if (onPlane.z < 0.0)
             onPlane = V3_Negate(onPlane);
         return (V3_Scale(onPlane, 1 / sqrt(norm)));
-    }                           /* else drop through */
+    } /* else drop through */
     if (axis.z == 1) {
         onPlane = V3_(1.0, 0.0, 0.0);
     }
@@ -92,7 +92,7 @@ HVect ConstrainToAxis(HVect loose, HVect axis)
 }
 
 /* Find the index of nearest arc of axis set. */
-int NearestConstraintAxis(HVect loose, HVect * axes, int nAxes)
+int NearestConstraintAxis(HVect loose, HVect *axes, int nAxes)
 {
     HVect onPlane;
     register float max, dot;

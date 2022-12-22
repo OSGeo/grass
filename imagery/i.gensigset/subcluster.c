@@ -7,7 +7,7 @@
 #include <grass/gmath.h>
 #include "local_proto.h"
 
-#define ZERO 1e-10
+#define ZERO              1e-10
 #define SMALLEST_SUBCLUST 1
 
 static void seed();
@@ -24,8 +24,8 @@ static void copy_SubSig();
 
 static int total_nulls, *n_nulls;
 
-void
-subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
+void subcluster(struct SigSet *S, int Class_Index, int *Max_num,
+                int maxsubclasses)
 {
     int nparams_clust;
     int ndata_points;
@@ -81,11 +81,9 @@ subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
     /* check for too many subclasses */
     if (Sig->nsubclasses > maxsubclasses) {
         Sig->nsubclasses = maxsubclasses;
-        G_warning(_("Too many subclasses for class index %d"),
-                  Class_Index + 1);
+        G_warning(_("Too many subclasses for class index %d"), Class_Index + 1);
         G_message(_("Number of subclasses set to %d"), Sig->nsubclasses);
     }
-
 
     /* initialize clustering */
     seed(Sig, nbands);
@@ -113,7 +111,6 @@ subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
 
     copy_ClassSig(min_Sig, Sig, nbands);
 }
-
 
 static void seed(struct ClassSig *Sig, int nbands)
 {
@@ -152,8 +149,8 @@ static void seed(struct ClassSig *Sig, int nbands)
                     R[b1][b2] +=
                         (Sig->ClassData.x[i][b1]) * (Sig->ClassData.x[i][b2]);
             }
-            R[b1][b2] /= (double)(Sig->ClassData.npixels - n_nulls[b1] -
-                                  n_nulls[b2]);
+            R[b1][b2] /=
+                (double)(Sig->ClassData.npixels - n_nulls[b1] - n_nulls[b2]);
             R[b1][b2] -= mean[b1] * mean[b2];
         }
 
@@ -164,12 +161,10 @@ static void seed(struct ClassSig *Sig, int nbands)
     else
         period = 0;
 
-
     /* Seed the means and set the diagonal covariance components */
     for (i = 0; i < Sig->nsubclasses; i++) {
         for (b1 = 0; b1 < nbands; b1++) {
-            if (Rast_is_d_null_value
-                (&Sig->ClassData.x[(int)(i * period)][b1]))
+            if (Rast_is_d_null_value(&Sig->ClassData.x[(int)(i * period)][b1]))
                 Rast_set_d_null_value(&Sig->SubSig[i].means[b1], 1);
             else
                 Sig->SubSig[i].means[b1] =
@@ -189,13 +184,12 @@ static void seed(struct ClassSig *Sig, int nbands)
     compute_constants(Sig, nbands);
 }
 
-
 static double refine_clusters(
-                                 /* Computes ML clustering of data using Gaussian Mixture model.  */
-                                 /* Returns the values of the Rissen constant for the clustering. */
-                                 /* If all clusters are singular, the Sig data structure is       */
-                                 /* returned with Sig->nsubclasses==0 .                           */
-                                 struct ClassSig *Sig, int nbands)
+    /* Computes ML clustering of data using Gaussian Mixture model.  */
+    /* Returns the values of the Rissen constant for the clustering. */
+    /* If all clusters are singular, the Sig data structure is       */
+    /* returned with Sig->nsubclasses==0 .                           */
+    struct ClassSig *Sig, int nbands)
 {
     int nparams_clust;
     int num_params;
@@ -245,8 +239,7 @@ static double refine_clusters(
     /* compute Rissanens expression */
     if (Sig->nsubclasses > 0) {
         num_params = Sig->nsubclasses * nparams_clust - 1;
-        rissanen_const =
-            -ll_new + 0.5 * num_params * log((double)ndata_points);
+        rissanen_const = -ll_new + 0.5 * num_params * log((double)ndata_points);
         rissanen_const /= ndata_points;
         return (rissanen_const);
     }
@@ -254,7 +247,6 @@ static double refine_clusters(
         return ((double)0);
     }
 }
-
 
 static int reestimate(struct ClassSig *Sig, int nbands)
 {
@@ -297,8 +289,8 @@ static int reestimate(struct ClassSig *Sig, int nbands)
                 for (b2 = 0; b2 <= b1; b2++) {
                     Sig->SubSig[i].R[b1][b2] = 0;
                     for (s = 0; s < Data->npixels; s++) {
-                        if (!Rast_is_d_null_value(&Data->x[s][b1])
-                            && !Rast_is_d_null_value(&Data->x[s][b2])) {
+                        if (!Rast_is_d_null_value(&Data->x[s][b1]) &&
+                            !Rast_is_d_null_value(&Data->x[s][b2])) {
                             diff1 = Data->x[s][b1] - Sig->SubSig[i].means[b1];
                             diff2 = Data->x[s][b2] - Sig->SubSig[i].means[b2];
                             Sig->SubSig[i].R[b1][b2] +=
@@ -312,8 +304,8 @@ static int reestimate(struct ClassSig *Sig, int nbands)
         }
         /* For small subclusters */
         else {
-            G_warning(_("Subsignature %d only contains %.0f pixels"),
-                      i, Sig->SubSig[i].N);
+            G_warning(_("Subsignature %d only contains %.0f pixels"), i,
+                      Sig->SubSig[i].N);
 
             Sig->SubSig[i].pi = 0;
 
@@ -327,7 +319,6 @@ static int reestimate(struct ClassSig *Sig, int nbands)
         pi_sum += Sig->SubSig[i].pi;
     }
 
-
     /* Normalize probabilities for subclusters */
     if (pi_sum > 0) {
         for (i = 0; i < Sig->nsubclasses; i++)
@@ -338,12 +329,10 @@ static int reestimate(struct ClassSig *Sig, int nbands)
             Sig->SubSig[i].pi = 0;
     }
 
-
     /* Compute constants and reestimate if any singular subclusters occur */
     singular = compute_constants(Sig, nbands);
     return (singular);
 }
-
 
 static double regroup(struct ClassSig *Sig, int nbands)
 {
@@ -386,9 +375,8 @@ static double regroup(struct ClassSig *Sig, int nbands)
     return (likelihood);
 }
 
-
-static void
-reduce_order(struct ClassSig *Sig, int nbands, int *min_ii, int *min_jj)
+static void reduce_order(struct ClassSig *Sig, int nbands, int *min_ii,
+                         int *min_jj)
 {
     int i, j;
     int min_i = 0, min_j = 0;
@@ -446,8 +434,7 @@ reduce_order(struct ClassSig *Sig, int nbands, int *min_ii, int *min_jj)
     }
 }
 
-
-static double loglike(DCELL * x, struct SubSig *SubSig, int nbands)
+static double loglike(DCELL *x, struct SubSig *SubSig, int nbands)
 {
     int b1, b2;
     double diff1, diff2;
@@ -456,8 +443,7 @@ static double loglike(DCELL * x, struct SubSig *SubSig, int nbands)
     sum = 0;
     for (b1 = 0; b1 < nbands; b1++)
         for (b2 = 0; b2 < nbands; b2++) {
-            if (Rast_is_d_null_value(&x[b1])
-                || Rast_is_d_null_value(&x[b2]))
+            if (Rast_is_d_null_value(&x[b1]) || Rast_is_d_null_value(&x[b2]))
                 continue;
             diff1 = x[b1] - SubSig->means[b1];
             diff2 = x[b2] - SubSig->means[b2];
@@ -468,9 +454,8 @@ static double loglike(DCELL * x, struct SubSig *SubSig, int nbands)
     return (sum);
 }
 
-
-static double
-distance(struct SubSig *SubSig1, struct SubSig *SubSig2, int nbands)
+static double distance(struct SubSig *SubSig1, struct SubSig *SubSig2,
+                       int nbands)
 {
     double dist;
 
@@ -478,7 +463,6 @@ distance(struct SubSig *SubSig1, struct SubSig *SubSig2, int nbands)
     struct SigSet S;
     static struct ClassSig *Sig3;
     static struct SubSig *SubSig3;
-
 
     /* allocate scratch space first time subroutine is called */
     if (first) {
@@ -496,19 +480,18 @@ distance(struct SubSig *SubSig1, struct SubSig *SubSig2, int nbands)
     compute_constants(Sig3, nbands);
 
     /* compute distance */
-    dist = SubSig1->N * SubSig1->cnst + SubSig2->N * SubSig2->cnst
-        - SubSig3->N * SubSig3->cnst;
+    dist = SubSig1->N * SubSig1->cnst + SubSig2->N * SubSig2->cnst -
+           SubSig3->N * SubSig3->cnst;
 
     return (dist);
 }
 
-
 static int compute_constants(
-                                /* invert matrix and compute Sig->SubSig[i].cnst          */
-                                /* Returns singular=1 if a singular subcluster was found. */
-                                /* Returns singular=2 if all subclusters were singular.   */
-                                /* When singular=2 then nsubclasses=0.                    */
-                                struct ClassSig *Sig, int nbands)
+    /* invert matrix and compute Sig->SubSig[i].cnst          */
+    /* Returns singular=1 if a singular subcluster was found. */
+    /* Returns singular=2 if all subclusters were singular.   */
+    /* When singular=2 then nsubclasses=0.                    */
+    struct ClassSig *Sig, int nbands)
 {
     int i, j;
     int b1, b2;
@@ -520,7 +503,6 @@ static int compute_constants(
     static int *indx;
     static double **y;
     static double *col;
-
 
     /* allocate memory first time subroutine is called */
     if (first) {
@@ -553,9 +535,11 @@ static int compute_constants(
                                 nbands);
                 Sig->nsubclasses--;
                 singular = 1;
-                G_warning(_("Removed a singular subsignature number %d (%d remain)"),
-                          i + 1, Sig->nsubclasses);
-                if (Sig->nsubclasses < 0)       /* MN added 12/2001: to avoid endless loop */
+                G_warning(
+                    _("Removed a singular subsignature number %d (%d remain)"),
+                    i + 1, Sig->nsubclasses);
+                if (Sig->nsubclasses <
+                    0) /* MN added 12/2001: to avoid endless loop */
                     Sig->nsubclasses = 1;
             }
         }
@@ -576,12 +560,10 @@ static int compute_constants(
     return (singular);
 }
 
-
 static void add_SubSigs(
-                           /* add SubSig1 and SubSig2 to form SubSig3 */
-                           struct SubSig *SubSig1,
-                           struct SubSig *SubSig2,
-                           struct SubSig *SubSig3, int nbands)
+    /* add SubSig1 and SubSig2 to form SubSig3 */
+    struct SubSig *SubSig1, struct SubSig *SubSig2, struct SubSig *SubSig3,
+    int nbands)
 {
     int b1, b2;
     double wt1, wt2;
@@ -597,11 +579,11 @@ static void add_SubSigs(
 
         /* compute covariance */
         for (b2 = 0; b2 <= b1; b2++) {
-            tmp = (SubSig3->means[b1] - SubSig1->means[b1])
-                * (SubSig3->means[b2] - SubSig1->means[b2]);
+            tmp = (SubSig3->means[b1] - SubSig1->means[b1]) *
+                  (SubSig3->means[b2] - SubSig1->means[b2]);
             SubSig3->R[b1][b2] = wt1 * (SubSig1->R[b1][b2] + tmp);
-            tmp = (SubSig3->means[b1] - SubSig2->means[b1])
-                * (SubSig3->means[b2] - SubSig2->means[b2]);
+            tmp = (SubSig3->means[b1] - SubSig2->means[b1]) *
+                  (SubSig3->means[b2] - SubSig2->means[b2]);
             SubSig3->R[b1][b2] += wt2 * (SubSig2->R[b1][b2] + tmp);
             SubSig3->R[b2][b1] = SubSig3->R[b1][b2];
         }
@@ -613,9 +595,8 @@ static void add_SubSigs(
 }
 
 static void copy_ClassSig(
-                             /* copy Sig1 to Sig2 */
-                             struct ClassSig *Sig1,
-                             struct ClassSig *Sig2, int nbands)
+    /* copy Sig1 to Sig2 */
+    struct ClassSig *Sig1, struct ClassSig *Sig2, int nbands)
 {
     int i;
 
@@ -628,11 +609,9 @@ static void copy_ClassSig(
         copy_SubSig(&(Sig1->SubSig[i]), &(Sig2->SubSig[i]), nbands);
 }
 
-
 static void copy_SubSig(
-                           /* copy SubSig1 to SubSig2 */
-                           struct SubSig *SubSig1,
-                           struct SubSig *SubSig2, int nbands)
+    /* copy SubSig1 to SubSig2 */
+    struct SubSig *SubSig1, struct SubSig *SubSig2, int nbands)
 {
     int b1, b2;
 

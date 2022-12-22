@@ -1,16 +1,16 @@
-
 /****************************************************************************
  *
  * MODULE:       i.evapo.time
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
- * 		 Ines Cherif - icherif@yahoo.com
+ *               Ines Cherif - icherif@yahoo.com
  * PURPOSE:      Integrate in time the evapotranspiration from satellite,
- *		 following a daily pattern from meteorological ETo.
+ *               following a daily pattern from meteorological ETo.
  *
  * COPYRIGHT:    (C) 2008-2009, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU Lesser General Public
- *   	    	 License. Read the file COPYING that comes with GRASS for details.
+ *               This program is free software under the GNU Lesser General
+ *               Public License. Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -25,14 +25,13 @@
 
 int main(int argc, char *argv[])
 {
-    struct Cell_head cellhd;    /*region+header info */
+    struct Cell_head cellhd; /*region+header info */
     int nrows, ncols;
     int row, col;
     struct GModule *module;
-    struct Option *input, *input1, *input2, *input3, *input4, *input5,
-        *output;
-    struct History history;     /*metadata */
-    struct Colors colors;       /*Color rules */
+    struct Option *input, *input1, *input2, *input3, *input4, *input5, *output;
+    struct History history; /*metadata */
+    struct Colors colors;   /*Color rules */
 
     /************************************/
     char *name, *name1, *name2; /*input raster name */
@@ -55,15 +54,16 @@ int main(int argc, char *argv[])
 
     /****************************************/
     int i = 0, j = 0;
-    double etodoy;              /*minimum ETo DOY */
-    double startperiod, endperiod;      /*first and last days (DOYs) of the period studied */
+    double etodoy; /*minimum ETo DOY */
+    double startperiod,
+        endperiod; /*first and last days (DOYs) of the period studied */
     void *inrast[MAXFILES], *inrast1[MAXFILES], *inrast2[MAXFILES];
     DCELL *outrast;
     CELL val1, val2;
 
-    /* RASTER_MAP_TYPE in_data_type[MAXFILES];  *//* ETa */
-    /* RASTER_MAP_TYPE in_data_type1[MAXFILES]; *//* DOY of ETa */
-    /* RASTER_MAP_TYPE in_data_type2[MAXFILES]; *//* ETo */
+    /* RASTER_MAP_TYPE in_data_type[MAXFILES];  */ /* ETa */
+    /* RASTER_MAP_TYPE in_data_type1[MAXFILES]; */ /* DOY of ETa */
+    /* RASTER_MAP_TYPE in_data_type2[MAXFILES]; */ /* ETo */
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE;
 
     /************************************/
@@ -79,8 +79,7 @@ int main(int argc, char *argv[])
     /* Define the different options */
     input = G_define_standard_option(G_OPT_R_INPUTS);
     input->key = "eta";
-    input->description =
-        _("Names of satellite ETa raster maps [mm/d or cm/d]");
+    input->description = _("Names of satellite ETa raster maps [mm/d or cm/d]");
 
     input1 = G_define_standard_option(G_OPT_R_INPUTS);
     input1->key = "eta_doy";
@@ -89,8 +88,8 @@ int main(int argc, char *argv[])
 
     input2 = G_define_standard_option(G_OPT_R_INPUTS);
     input2->key = "eto";
-    input2->description =
-        _("Names of meteorological station ETo raster maps [0-400] [mm/d or cm/d]");
+    input2->description = _("Names of meteorological station ETo raster maps "
+                            "[0-400] [mm/d or cm/d]");
 
     input3 = G_define_option();
     input3->key = "eto_doy_min";
@@ -134,15 +133,16 @@ int main(int argc, char *argv[])
 
     /****************************************/
     if (endperiod < startperiod)
-        G_fatal_error(_("The DOY for end_period can not be smaller than start_period"));
+        G_fatal_error(
+            _("The DOY for end_period can not be smaller than start_period"));
 
     if (etodoy > startperiod)
-        G_fatal_error(_("The DOY for start_period can not be smaller than eto_doy_min"));
+        G_fatal_error(
+            _("The DOY for start_period can not be smaller than eto_doy_min"));
 
     for (; *ptr != NULL; ptr++) {
         if (nfiles > MAXFILES)
-            G_fatal_error(_("Too many ETa files. Only %d allowed."),
-                          MAXFILES);
+            G_fatal_error(_("Too many ETa files. Only %d allowed."), MAXFILES);
         name = *ptr;
         /* Allocate input buffer */
         infd[nfiles] = Rast_open_old(name, "");
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     if (nfiles < 2)
         G_fatal_error(_("The min specified input map is two"));
 
-        /****************************************/
+    /****************************************/
     for (; *ptr1 != NULL; ptr1++) {
         if (nfiles1 == MAXFILES)
             G_fatal_error(_("Too many ETa_doy files. Only %d allowed."),
@@ -170,17 +170,15 @@ int main(int argc, char *argv[])
     if (nfiles1 < 2)
         G_fatal_error(_("The min specified input map is two"));
 
-
-        /****************************************/
+    /****************************************/
     if (nfiles != nfiles1)
         G_fatal_error(_("ETa and ETa_DOY file numbers are not equal!"));
 
-        /****************************************/
+    /****************************************/
 
     for (; *ptr2 != NULL; ptr2++) {
         if (nfiles2 == MAXFILES)
-            G_fatal_error(_("Too many ETo files. Only %d allowed."),
-                          MAXFILES);
+            G_fatal_error(_("Too many ETo files. Only %d allowed."), MAXFILES);
         name2 = *ptr2;
         /* Allocate input buffer */
         infd2[nfiles2] = Rast_open_old(name2, "");
@@ -230,20 +228,20 @@ int main(int argc, char *argv[])
             int d_null = 0;
 
             for (i = 0; i < nfiles; i++) {
-                if (Rast_is_d_null_value(&((DCELL *) inrast[i])[col]))
+                if (Rast_is_d_null_value(&((DCELL *)inrast[i])[col]))
                     d_null = 1;
                 else
-                    d[i] = ((DCELL *) inrast[i])[col];
+                    d[i] = ((DCELL *)inrast[i])[col];
             }
             for (i = 0; i < nfiles1; i++) {
-                if (Rast_is_d_null_value(&((DCELL *) inrast1[i])[col]))
+                if (Rast_is_d_null_value(&((DCELL *)inrast1[i])[col]))
                     d1_null = 1;
                 else
-                    d1[i] = ((DCELL *) inrast1[i])[col];
+                    d1[i] = ((DCELL *)inrast1[i])[col];
             }
 
             for (i = 0; i < nfiles2; i++)
-                d2[i] = ((DCELL *) inrast2[i])[col];
+                d2[i] = ((DCELL *)inrast2[i])[col];
 
             /* Find out the DOY of the eto image    */
             for (i = 0; i < nfiles1; i++) {
@@ -273,14 +271,13 @@ int main(int argc, char *argv[])
                         int k = i - 1;
 
                         while (d1[k] >= startperiod) {
-                            if (d1[k] < 0)      /* case were d1[k] is null */
+                            if (d1[k] < 0) /* case were d1[k] is null */
                                 k = k - 1;
                             else {
                                 DOYbeforeETa[i] = 1 + ((d1[i] + d1[k]) / 2.0);
                                 break;
                             }
                         }
-
                     }
 
                     if (i == (nfiles1 - 1))
@@ -289,7 +286,7 @@ int main(int argc, char *argv[])
                         int k = i + 1;
 
                         while (d1[k] <= endperiod) {
-                            if (d1[k] < 0)      /* case were d1[k] is null */
+                            if (d1[k] < 0) /* case were d1[k] is null */
                                 k = k + 1;
                             else {
                                 DOYafterETa[i] = (d1[i] + d1[k]) / 2.0;

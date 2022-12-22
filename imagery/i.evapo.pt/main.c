@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:	i.evapo.pt
-* AUTHOR:	Yann Chemin yann.chemin@gmail.com 
-*
-* PURPOSE:	To estimate the daily evapotranspiration by means
-*		of Prestley and Taylor method (1972).
-*
-* COPYRIGHT:	(C) 2007-2011 by the GRASS Development Team
-*
-*		This program is free software under the GNU General Public
-*		Licence (>=2). Read the file COPYING that comes with GRASS
-*		for details.
-*
-***************************************************************************/
+ *
+ * MODULE:        i.evapo.pt
+ * AUTHOR:        Yann Chemin yann.chemin@gmail.com
+ *
+ * PURPOSE:       To estimate the daily evapotranspiration by means
+ *                of Prestley and Taylor method (1972).
+ *
+ * COPYRIGHT:     (C) 2007-2011 by the GRASS Development Team
+ *
+ *                This program is free software under the GNU General Public
+ *                Licence (>=2). Read the file COPYING that comes with GRASS
+ *                for details.
+ *
+ ***************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,8 +52,7 @@ int main(int argc, char *argv[])
 
     /* parser stuctures definition */
     struct GModule *module;
-    struct Option *input_RNET, *input_TEMPKA, *input_PATM, *input_G0,
-        *input_PT;
+    struct Option *input_RNET, *input_TEMPKA, *input_PATM, *input_G0, *input_PT;
     struct Option *output;
     struct Flag *zero;
     struct Colors color;
@@ -66,9 +64,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evapotranspiration"));
-    module->description =
-        _("Computes evapotranspiration calculation "
-          "Priestley and Taylor formulation, 1972.");
+    module->description = _("Computes evapotranspiration calculation "
+                            "Priestley and Taylor formulation, 1972.");
 
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
@@ -78,8 +75,7 @@ int main(int argc, char *argv[])
 
     input_G0 = G_define_standard_option(G_OPT_R_INPUT);
     input_G0->key = "soil_heatflux";
-    input_G0->description =
-        _("Name of input soil heat flux raster map [W/m2]");
+    input_G0->description = _("Name of input soil heat flux raster map [W/m2]");
 
     input_TEMPKA = G_define_standard_option(G_OPT_R_INPUT);
     input_TEMPKA->key = "air_temperature";
@@ -159,19 +155,18 @@ int main(int argc, char *argv[])
 
         for (col = 0; col < ncols; col++) {
             /* read current cell from line buffer */
-            d_rnet = ((DCELL *) inrast_RNET)[col];
-            d_tempka = ((DCELL *) inrast_TEMPKA)[col];
-            d_pt_patm = ((DCELL *) inrast_PATM)[col];
-            d_g0 = ((DCELL *) inrast_G0)[col];
+            d_rnet = ((DCELL *)inrast_RNET)[col];
+            d_tempka = ((DCELL *)inrast_TEMPKA)[col];
+            d_pt_patm = ((DCELL *)inrast_PATM)[col];
+            d_g0 = ((DCELL *)inrast_G0)[col];
 
             /*Delta_pt and Ghamma_pt */
             d_pt_delta = pt_delta(d_tempka);
             d_pt_ghamma = pt_ghamma(d_tempka, d_pt_patm);
 
             /*Calculate ET */
-            d_daily_et =
-                pt_daily_et(d_pt_alpha, d_pt_delta, d_pt_ghamma, d_rnet, d_g0,
-                            d_tempka);
+            d_daily_et = pt_daily_et(d_pt_alpha, d_pt_delta, d_pt_ghamma,
+                                     d_rnet, d_g0, d_tempka);
             if (zero->answer && d_daily_et < 0)
                 d_daily_et = 0.0;
 

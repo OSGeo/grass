@@ -1,15 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       i.group
  * AUTHOR(S):    Michael Shapiro (USACERL) (original contributor)
  *               Bob Covill <bcovill tekmap.ns.ca>,
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>
- * PURPOSE:      collect raster map layers into an imagery group by assigning 
+ * PURPOSE:      collect raster map layers into an imagery group by assigning
  *               them to user-named subgroups or other groups
  * COPYRIGHT:    (C) 2001-2007, 2011, 2013 by the GRASS Development Team
  *
@@ -25,7 +24,6 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
-
 /* function prototypes */
 static int add_or_update_group(char group[INAME_LEN], char **rasters, int k);
 static int add_or_update_subgroup(char group[INAME_LEN],
@@ -35,8 +33,7 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k);
 static int remove_subgroup_files(char group[INAME_LEN],
                                  char subgroup[INAME_LEN], char **rasters,
                                  int k);
-static void print_subgroups(const char *group, const char *mapset,
-                            int simple);
+static void print_subgroups(const char *group, const char *mapset, int simple);
 
 int main(int argc, char *argv[])
 {
@@ -67,7 +64,7 @@ int main(int argc, char *argv[])
     sgrp->description = _("Name of imagery subgroup");
 
     rast = G_define_standard_option(G_OPT_R_INPUTS);
-    rast->required = NO;        /* -l flag */
+    rast->required = NO; /* -l flag */
     rast->description = _("Name of raster map(s) to include in group");
     rast->guisection = _("Maps");
 
@@ -100,9 +97,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
-    /* backward comaptibility -> simple list implied l flag list, if there was only l flag 
-       (with s flag added it is not clear, simple_flag is linked to both) */
+    /* backward comaptibility -> simple list implied l flag list, if there was
+       only l flag (with s flag added it is not clear, simple_flag is linked to
+       both) */
     if ((simple_flag->answer && !s->answer) && !l->answer)
         l->answer = TRUE;
 
@@ -147,7 +144,7 @@ int main(int argc, char *argv[])
         fclose(in);
     }
 
-    if (k < 1 && !(l->answer || s->answer))     /* remove if input is requirement */
+    if (k < 1 && !(l->answer || s->answer)) /* remove if input is requirement */
         G_fatal_error(_("No input raster map(s) specified"));
 
     /* Get groups mapset. Remove @mapset if group contains
@@ -159,7 +156,8 @@ int main(int argc, char *argv[])
         /* Remove files from Group */
 
         if (I_find_group(group) == 0) {
-            G_fatal_error(_("Specified group does not exist in current mapset"));
+            G_fatal_error(
+                _("Specified group does not exist in current mapset"));
         }
 
         if (sgrp->answer) {
@@ -185,7 +183,8 @@ int main(int argc, char *argv[])
                 /* list subgroup files */
                 I_get_subgroup_ref2(group, sgrp->answer, mapset, &ref);
                 if (simple_flag->answer) {
-                    G_message(_("Subgroup <%s> of group <%s> references the following raster maps:"),
+                    G_message(_("Subgroup <%s> of group <%s> references the "
+                                "following raster maps:"),
                               sgrp->answer, group);
                     I_list_subgroup_simple(&ref, stdout);
                 }
@@ -199,8 +198,9 @@ int main(int argc, char *argv[])
                 /* list group files */
                 I_get_group_ref2(group, mapset, &ref);
                 if (simple_flag->answer) {
-                    G_message(_("Group <%s> references the following raster maps:"),
-                              group);
+                    G_message(
+                        _("Group <%s> references the following raster maps:"),
+                        group);
                     I_list_group_simple(&ref, stdout);
                 }
                 else
@@ -210,12 +210,13 @@ int main(int argc, char *argv[])
         else {
             if (!can_edit) {
                 /* GTC Group refers to an image group */
-                G_fatal_error(_("Only groups from the current mapset can be edited"));
+                G_fatal_error(
+                    _("Only groups from the current mapset can be edited"));
             }
             /* Create or update Group REF */
             if (I_find_group(group) == 0)
-                G_verbose_message(_("Group <%s> does not yet exist. Creating..."),
-                                  group);
+                G_verbose_message(
+                    _("Group <%s> does not yet exist. Creating..."), group);
 
             if (sgrp->answer) {
                 G_verbose_message(_("Adding raster maps to group <%s>..."),
@@ -280,7 +281,6 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
     return 0;
 }
 
-
 static int add_or_update_subgroup(char group[INAME_LEN],
                                   char subgroup[INAME_LEN], char **rasters,
                                   int k)
@@ -321,7 +321,6 @@ static int add_or_update_subgroup(char group[INAME_LEN],
     return 0;
 }
 
-
 static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
 {
     int m, n, skip;
@@ -333,7 +332,6 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
 
     I_get_group_ref(group, &ref_tmp);
     I_init_group_ref(&ref);
-
 
     G_debug(3, "remove_group_files: ref_tmp.nfiles %d", ref_tmp.nfiles);
     /* Go through existing files to check for duplicates */
@@ -376,7 +374,6 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
 
     return 0;
 }
-
 
 static int remove_subgroup_files(char group[INAME_LEN],
                                  char subgroup[INAME_LEN], char **rasters,
@@ -459,8 +456,8 @@ static void print_subgroups(const char *group, const char *mapset, int simple)
             if (len > max)
                 max = len;
         }
-        fprintf(stdout,
-                _("group <%s> references the following subgroups\n"), group);
+        fprintf(stdout, _("group <%s> references the following subgroups\n"),
+                group);
         fprintf(stdout, "-------------\n");
         tot_len = 0;
         for (i = 0; i < subgs_num; i++) {

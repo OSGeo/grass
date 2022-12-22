@@ -12,7 +12,7 @@ CELL mod09GAsa(CELL pixel)
     CELL qctemp;
 
     /* Select bit 0 and 1 (right-side).
-     * hexadecimal "0x03" => binary "11" 
+     * hexadecimal "0x03" => binary "11"
      * this will set all other bits to null */
     qctemp = pixel & 0x03;
 

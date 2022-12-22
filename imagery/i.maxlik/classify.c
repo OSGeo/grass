@@ -2,14 +2,11 @@
 #include <grass/raster.h>
 #include "global.h"
 
+static double chisq[] = {18.465, 14.860, 13.277, 11.668, 9.488, 7.779,
+                         5.989,  4.878,  3.357,  2.195,  1.649, 1.064,
+                         0.711,  0.429,  0.297,  0.0};
 
-static double chisq[] =
-    { 18.465, 14.860, 13.277, 11.668, 9.488, 7.779, 5.989, 4.878,
-    3.357, 2.195, 1.649, 1.064, 0.711, 0.429, 0.297, 0.0
-};
-
-
-int classify(CELL * class, CELL * reject, int ncols)
+int classify(CELL *class, CELL *reject, int ncols)
 {
     int i, j;
     int nfiles = Ref.nfiles;
@@ -28,8 +25,8 @@ int classify(CELL * class, CELL * reject, int ncols)
             if ((valid_data = !Rast_is_d_null_value(&cell[band][col])))
                 break;
 
-        if (!valid_data) {      /* all nulls are classified as nulls */
-            Rast_set_c_null_value(class++, 1);
+        if (!valid_data) { /* all nulls are classified as nulls */
+            Rast_set_c_null_value(class ++, 1);
             if (reject)
                 Rast_set_c_null_value(reject++, 1);
             continue;
@@ -57,7 +54,6 @@ int classify(CELL * class, CELL * reject, int ncols)
                also have non-negative determinants.
              */
 
-
             s = &S.sig[c];
 
             tot = 0.0;
@@ -79,7 +75,7 @@ int classify(CELL * class, CELL * reject, int ncols)
                 max = tot;
             }
         }
-        *class++ = cc + 1;
+        *class ++ = cc + 1;
 
         if (reject) {
             rej = 2 * (B[cc] - max);

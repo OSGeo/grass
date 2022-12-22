@@ -36,8 +36,7 @@ struct cache *readcell(int fdi, int size, int target_env)
     }
     G_srand48(0);
 
-
-    /* Temporary file must be created in the same location/mapset 
+    /* Temporary file must be created in the same location/mapset
      * where the module was called */
     if (target_env)
         select_current_env();
@@ -48,7 +47,7 @@ struct cache *readcell(int fdi, int size, int target_env)
     if (size > 0)
         nblocks = size * ((1 << 20) / sizeof(block));
     else
-        nblocks = (nx + ny) * 2;        /* guess */
+        nblocks = (nx + ny) * 2; /* guess */
 
     if (nblocks > nx * ny)
         nblocks = nx * ny;
@@ -56,8 +55,8 @@ struct cache *readcell(int fdi, int size, int target_env)
     c = G_malloc(sizeof(struct cache));
     c->stride = nx;
     c->nblocks = nblocks;
-    c->grid = (block **) G_calloc(nx * ny, sizeof(block *));
-    c->blocks = (block *) G_malloc(nblocks * sizeof(block));
+    c->grid = (block **)G_calloc(nx * ny, sizeof(block *));
+    c->blocks = (block *)G_malloc(nblocks * sizeof(block));
     c->refs = (int *)G_malloc(nblocks * sizeof(int));
 
     if (nblocks < nx * ny) {
@@ -78,7 +77,7 @@ struct cache *readcell(int fdi, int size, int target_env)
     for (i = 0; i < c->nblocks; i++)
         c->refs[i] = -1;
 
-    tmpbuf = (DCELL *) G_malloc(nx * sizeof(block));
+    tmpbuf = (DCELL *)G_malloc(nx * sizeof(block));
 
     if (target_env)
         select_target_env();
@@ -97,15 +96,13 @@ struct cache *readcell(int fdi, int size, int target_env)
         for (x = 0; x < nx; x++)
             for (y = 0; y < BDIM; y++)
                 if (c->fd >= 0) {
-                    if (write
-                        (c->fd, &tmpbuf[(y * nx + x) * BDIM],
-                         BDIM * sizeof(DCELL)) < 0)
+                    if (write(c->fd, &tmpbuf[(y * nx + x) * BDIM],
+                              BDIM * sizeof(DCELL)) < 0)
                         G_fatal_error(_("Error writing segment file"));
                 }
                 else
                     memcpy(&c->blocks[BKIDX(c, HI(row), x)][LO(y)][0],
-                           &tmpbuf[(y * nx + x) * BDIM],
-                           BDIM * sizeof(DCELL));
+                           &tmpbuf[(y * nx + x) * BDIM], BDIM * sizeof(DCELL));
     }
 
     G_free(tmpbuf);
@@ -127,7 +124,7 @@ block *get_block(struct cache *c, int idx)
     int replace = G_lrand48() % c->nblocks;
     block *p = &c->blocks[replace];
     int cref = c->refs[replace];
-    off_t offset = (off_t) idx * sizeof(DCELL) << L2BSIZE;
+    off_t offset = (off_t)idx * sizeof(DCELL) << L2BSIZE;
 
     if (c->fd < 0)
         G_fatal_error(_("Internal error: cache miss on fully-cached map"));

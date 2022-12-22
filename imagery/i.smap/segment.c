@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.smap segmentation
@@ -12,6 +11,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/imagery.h>
@@ -19,37 +19,35 @@
 #include "bouman.h"
 #include "region.h"
 
-
 static void init_reg(struct Region *, int, int, int);
 static int increment_reg(struct Region *, int, int, int);
 static int shift_img(DCELL ***, int, struct Region *, int);
 static int shift_ll(LIKELIHOOD ****, struct Region *, int);
 
-
-int segment(struct SigSet *S,   /* class parameters */
+int segment(struct SigSet *S, /* class parameters */
             struct parms *parms, struct files *files)
 {
-    int block_size;             /* size of subregion blocks */
-    int ml;                     /* max likelihood? */
+    int block_size; /* size of subregion blocks */
+    int ml;         /* max likelihood? */
 
-    DCELL ***img;               /* multispectral image, img[band][i][j] */
+    DCELL ***img; /* multispectral image, img[band][i][j] */
     int last_row;
-    int wd, ht;                 /* image width and height */
-    struct Region region;       /* specifies image subregion */
-    int nbands;                 /* number of bands */
-    int nclasses;               /* number of classes */
-    LIKELIHOOD ****ll_pym;      /* pyramid of log likelihoods */
-    unsigned char ***sf_pym;    /* pyramid of segmentations */
-    int D;                      /* number of levels in pyramid */
-    float **goodness;           /* goodness of fit */
-    double *alpha_dec;          /* class transition probabilities */
+    int wd, ht;              /* image width and height */
+    struct Region region;    /* specifies image subregion */
+    int nbands;              /* number of bands */
+    int nclasses;            /* number of classes */
+    LIKELIHOOD ****ll_pym;   /* pyramid of log likelihoods */
+    unsigned char ***sf_pym; /* pyramid of segmentations */
+    int D;                   /* number of levels in pyramid */
+    float **goodness;        /* goodness of fit */
+    double *alpha_dec;       /* class transition probabilities */
     int i;
 
-    ml = parms->ml;             /* use maxl? */
+    ml = parms->ml; /* use maxl? */
     block_size = parms->blocksize;
 
-    wd = Rast_window_cols();    /* get width from GRASS */
-    ht = Rast_window_rows();    /* get height from GRASS */
+    wd = Rast_window_cols(); /* get width from GRASS */
+    ht = Rast_window_rows(); /* get height from GRASS */
 
     /* make blocksize a power of 2 */
     if (block_size < 8)
@@ -58,7 +56,7 @@ int segment(struct SigSet *S,   /* class parameters */
     }
     block_size = 1 << i;
 
-/**** this code may stay the same ******/
+    /**** this code may stay the same ******/
     nbands = S->nbands;
     nclasses = S->nclasses;
 
@@ -72,13 +70,11 @@ int segment(struct SigSet *S,   /* class parameters */
 
     /* allocate image block */
     img =
-        (DCELL ***) multialloc(sizeof(DCELL), 3, nbands, block_size,
-                               block_size);
+        (DCELL ***)multialloc(sizeof(DCELL), 3, nbands, block_size, block_size);
 
     /* allocate memory for log likelihood pyramid */
-    ll_pym =
-        (LIKELIHOOD ****) get_cubic_pyramid(block_size, block_size, nclasses,
-                                            sizeof(LIKELIHOOD));
+    ll_pym = (LIKELIHOOD ****)get_cubic_pyramid(block_size, block_size,
+                                                nclasses, sizeof(LIKELIHOOD));
 
     /* allocate memory for segmentation pyramid */
     sf_pym = (unsigned char ***)get_pyramid(wd, ht, sizeof(char));
@@ -99,8 +95,8 @@ int segment(struct SigSet *S,   /* class parameters */
     last_row = -1;
     do {
         if (last_row != region.ymin)
-            G_message(_("Processing rows %d-%d (of %d)..."),
-                      region.ymin + 1, region.ymax, ht);
+            G_message(_("Processing rows %d-%d (of %d)..."), region.ymin + 1,
+                      region.ymax, ht);
         last_row = region.ymin;
         shift_img(img, nbands, &region, block_size);
         /* this reads grass images into the block defined in region */
@@ -116,7 +112,6 @@ int segment(struct SigSet *S,   /* class parameters */
                 alpha_dec[i] = 1.0;
             seq_MAP(sf_pym, &region, ll_pym, nclasses, alpha_dec, goodness);
         }
-
 
     } while (increment_reg(&region, wd, ht, block_size));
 
@@ -144,8 +139,7 @@ static void init_reg(struct Region *region, int wd, int ht, int block_size)
     region->free.bottom = 1;
 }
 
-static int increment_reg(struct Region *region, int wd, int ht,
-                         int block_size)
+static int increment_reg(struct Region *region, int wd, int ht, int block_size)
 {
 
     /* shift one block to right */
@@ -190,8 +184,8 @@ static int increment_reg(struct Region *region, int wd, int ht,
     return (1);
 }
 
-static int shift_img(DCELL *** img, int nbands,
-                     struct Region *region, int block_size)
+static int shift_img(DCELL ***img, int nbands, struct Region *region,
+                     int block_size)
 {
     static int xoffset = 0;
     static int yoffset = 0;
@@ -216,8 +210,8 @@ static int shift_img(DCELL *** img, int nbands,
     return 0;
 }
 
-static int shift_ll(LIKELIHOOD **** ll_pym,
-                    struct Region *region, int block_size)
+static int shift_ll(LIKELIHOOD ****ll_pym, struct Region *region,
+                    int block_size)
 {
     static int first = 1;
     static int xoffset[20];
@@ -266,10 +260,9 @@ static int shift_ll(LIKELIHOOD **** ll_pym,
     return 0;
 }
 
-
 #ifdef COMMENTED_OUT
-int read_block(DCELL *** img, int wd, int ht, int nbands,
-               struct Region *region, char *infn)
+int read_block(DCELL ***img, int wd, int ht, int nbands, struct Region *region,
+               char *infn)
 {
     static first = 1;
     static unsigned char ***img_buf;
@@ -280,9 +273,8 @@ int read_block(DCELL *** img, int wd, int ht, int nbands,
 
     /* allocate image buffer first time called */
     if (first) {
-        img_buf =
-            (unsigned char ***)multialloc(sizeof(unsigned char), 3, nbands,
-                                          ht, wd);
+        img_buf = (unsigned char ***)multialloc(sizeof(unsigned char), 3,
+                                                nbands, ht, wd);
 
         /* allocate memory for name extension */
         infn_num = (char *)G_malloc((strlen(optarg) + 10) * sizeof(char));

@@ -2,14 +2,14 @@
 #include <grass/gmath.h>
 
 int invert(
-              /* inverts a matrix of arbitrary size input as a 2D array. */
-              double **a,       /* input/output matrix */
-              int n,            /* dimension */
-              double *det,      /* determinant */
-              int *indx,        /* indx = G_alloc_ivector(n);  */
-              double **y,       /* y = G_alloc_matrix(n,n); */
-              double *col       /* col = G_alloc_vector(n); */
-    )
+    /* inverts a matrix of arbitrary size input as a 2D array. */
+    double **a,  /* input/output matrix */
+    int n,       /* dimension */
+    double *det, /* determinant */
+    int *indx,   /* indx = G_alloc_ivector(n);  */
+    double **y,  /* y = G_alloc_matrix(n,n); */
+    double *col  /* col = G_alloc_vector(n); */
+)
 {
     int i, j;
     double d;

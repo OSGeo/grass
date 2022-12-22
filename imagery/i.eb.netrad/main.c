@@ -1,17 +1,16 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.netrad
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
- * PURPOSE:      Calculates the instantaneous net radiation at 
+ * PURPOSE:      Calculates the instantaneous net radiation at
  *               as seen in Bastiaanssen (1995) using time of
  *               satellite overpass.
  *
  * COPYRIGHT:    (C) 2006-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -22,8 +21,8 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-double r_net(double bbalb, double ndvi, double tempk, double dtair,
-             double e0, double tsw, double doy, double utc, double sunzangle);
+double r_net(double bbalb, double ndvi, double tempk, double dtair, double e0,
+             double tsw, double doy, double utc, double sunzangle);
 int main(int argc, char *argv[])
 {
     int nrows, ncols;
@@ -31,9 +30,9 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *input5;
     struct Option *input6, *input7, *input8, *input9, *output1;
-    struct History history;     /*metadata */
-    struct Colors colors;       /*Color rules */
-    char *result;               /*output raster name */
+    struct History history; /*metadata */
+    struct Colors colors;   /*Color rules */
+    char *result;           /*output raster name */
     int infd_albedo, infd_ndvi, infd_tempk, infd_time, infd_dtair;
     int infd_emissivity, infd_tsw, infd_doy, infd_sunzangle;
     int outfd;
@@ -43,7 +42,7 @@ int main(int argc, char *argv[])
     void *inrast_time, *inrast_dtair, *inrast_emissivity, *inrast_tsw;
     void *inrast_doy, *inrast_sunzangle;
     DCELL *outrast;
-    CELL val1, val2;            /*For color range */
+    CELL val1, val2; /*For color range */
 
     G_gisinit(argv[0]);
 
@@ -75,8 +74,8 @@ int main(int argc, char *argv[])
 
     input5 = G_define_standard_option(G_OPT_R_INPUT);
     input5->key = "temperaturedifference2m";
-    input5->description =
-        _("Name of the difference map of temperature from surface skin to about 2 m height [K]");
+    input5->description = _("Name of the difference map of temperature from "
+                            "surface skin to about 2 m height [K]");
 
     input6 = G_define_standard_option(G_OPT_R_INPUT);
     input6->key = "emissivity";
@@ -176,15 +175,15 @@ int main(int argc, char *argv[])
 
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_albedo = (double)((DCELL *) inrast_albedo)[col];
-            d_ndvi = (double)((DCELL *) inrast_ndvi)[col];
-            d_tempk = (double)((DCELL *) inrast_tempk)[col];
-            d_dtair = (double)((DCELL *) inrast_dtair)[col];
-            d_time = (double)((DCELL *) inrast_time)[col];
-            d_emissivity = (double)((DCELL *) inrast_emissivity)[col];
-            d_tsw = (double)((DCELL *) inrast_tsw)[col];
-            d_doy = (double)((DCELL *) inrast_doy)[col];
-            d_sunzangle = (double)((DCELL *) inrast_sunzangle)[col];
+            d_albedo = (double)((DCELL *)inrast_albedo)[col];
+            d_ndvi = (double)((DCELL *)inrast_ndvi)[col];
+            d_tempk = (double)((DCELL *)inrast_tempk)[col];
+            d_dtair = (double)((DCELL *)inrast_dtair)[col];
+            d_time = (double)((DCELL *)inrast_time)[col];
+            d_emissivity = (double)((DCELL *)inrast_emissivity)[col];
+            d_tsw = (double)((DCELL *)inrast_tsw)[col];
+            d_doy = (double)((DCELL *)inrast_doy)[col];
+            d_sunzangle = (double)((DCELL *)inrast_sunzangle)[col];
             /* process NULL Values */
             if (Rast_is_d_null_value(&d_albedo) ||
                 Rast_is_d_null_value(&d_ndvi) ||
@@ -192,14 +191,13 @@ int main(int argc, char *argv[])
                 Rast_is_d_null_value(&d_dtair) ||
                 Rast_is_d_null_value(&d_time) ||
                 Rast_is_d_null_value(&d_emissivity) ||
-                Rast_is_d_null_value(&d_tsw) ||
-                Rast_is_d_null_value(&d_doy) ||
+                Rast_is_d_null_value(&d_tsw) || Rast_is_d_null_value(&d_doy) ||
                 Rast_is_d_null_value(&d_sunzangle)) {
                 Rast_set_d_null_value(&outrast[col], 1);
             }
             else {
 
-                 /************************************/
+                /************************************/
                 /* calculate the net radiation      */
                 d = r_net(d_albedo, d_ndvi, d_tempk, d_dtair, d_emissivity,
                           d_tsw, d_doy, d_time, d_sunzangle);

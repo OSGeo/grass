@@ -25,9 +25,9 @@
    \param north,east,top geographic coordinates
    \param[out] x,y,z pointer to indices of neighbouring voxels
  */
-static void find_nearest_voxels(RASTER3D_Region * region,
-                                const double north, const double east,
-                                const double top, int *x, int *y, int *z)
+static void find_nearest_voxels(RASTER3D_Region *region, const double north,
+                                const double east, const double top, int *x,
+                                int *y, int *z)
 {
     double n_minus, e_minus, t_minus;
     double n_plus, e_plus, t_plus;
@@ -58,11 +58,12 @@ static void find_nearest_voxels(RASTER3D_Region * region,
 
    \param array_values pointer to values of 8 (neigboring) voxels
    \param x,y,z relative coordinates (0 - 1)
-   \param[out] interpolated pointer to the array (of size 3) of interpolated values
+   \param[out] interpolated pointer to the array (of size 3) of interpolated
+   values
  */
-static void trilinear_interpolation(const double *array_values,
-                                    const double x, const double y,
-                                    const double z, double *interpolated)
+static void trilinear_interpolation(const double *array_values, const double x,
+                                    const double y, const double z,
+                                    double *interpolated)
 {
     int i, j;
     double rx, ry, rz, value;
@@ -79,7 +80,6 @@ static void trilinear_interpolation(const double *array_values,
     weights[5] = x * ry * z;
     weights[6] = rx * y * z;
     weights[7] = x * y * z;
-
 
     /* weighted sum of surrounding values */
     for (i = 0; i < 3; i++) {
@@ -102,11 +102,10 @@ static void trilinear_interpolation(const double *array_values,
    \param north,east,top geographic coordinates
    \param[out] x,y,z pointer to relative coordinates (0 - 1)
  */
-static void get_relative_coords_for_interp(RASTER3D_Region * region,
+static void get_relative_coords_for_interp(RASTER3D_Region *region,
                                            const double north,
-                                           const double east,
-                                           const double top, double *x,
-                                           double *y, double *z)
+                                           const double east, const double top,
+                                           double *x, double *y, double *z)
 {
     int col, row, depth;
     double temp;
@@ -115,19 +114,19 @@ static void get_relative_coords_for_interp(RASTER3D_Region * region,
 
     /* x */
     temp = east - region->west - col * region->ew_res;
-    *x = (temp > region->ew_res / 2 ?
-          temp - region->ew_res / 2 : temp + region->ew_res / 2)
-        / region->ew_res;
+    *x = (temp > region->ew_res / 2 ? temp - region->ew_res / 2
+                                    : temp + region->ew_res / 2) /
+         region->ew_res;
     /* y */
     temp = north - region->south - (region->rows - row - 1) * region->ns_res;
-    *y = (temp > region->ns_res / 2 ?
-          temp - region->ns_res / 2 : temp + region->ns_res / 2)
-        / region->ns_res;
+    *y = (temp > region->ns_res / 2 ? temp - region->ns_res / 2
+                                    : temp + region->ns_res / 2) /
+         region->ns_res;
     /* z */
     temp = top - region->bottom - depth * region->tb_res;
-    *z = (temp > region->tb_res / 2 ?
-          temp - region->tb_res / 2 : temp + region->tb_res / 2)
-        / region->tb_res;
+    *z = (temp > region->tb_res / 2 ? temp - region->tb_res / 2
+                                    : temp + region->tb_res / 2) /
+         region->tb_res;
 }
 
 /*!
@@ -141,13 +140,13 @@ static void get_relative_coords_for_interp(RASTER3D_Region * region,
    \return 0 success
    \return -1 out of region
  */
-int interpolate_velocity(RASTER3D_Region * region, RASTER3D_Map ** map,
+int interpolate_velocity(RASTER3D_Region *region, RASTER3D_Map **map,
                          const double north, const double east,
                          const double top, double *vel_x, double *vel_y,
                          double *vel_z)
 {
     int i, j;
-    double values[24];          /* 3 x 8, 3 dimensions, 8 neighbors */
+    double values[24]; /* 3 x 8, 3 dimensions, 8 neighbors */
     double value;
     double interpolated[3];
     int x[8], y[8], z[8];
@@ -173,8 +172,8 @@ int interpolate_velocity(RASTER3D_Region * region, RASTER3D_Map ** map,
     }
 
     /* compute weights */
-    get_relative_coords_for_interp(region, north, east, top,
-                                   &rel_x, &rel_y, &rel_z);
+    get_relative_coords_for_interp(region, north, east, top, &rel_x, &rel_y,
+                                   &rel_z);
 
     trilinear_interpolation(values, rel_x, rel_y, rel_z, interpolated);
     *vel_x = interpolated[0];
@@ -196,10 +195,9 @@ int interpolate_velocity(RASTER3D_Region * region, RASTER3D_Map ** map,
    \return 0 success
    \return -1 out of region
  */
-int get_gradient(RASTER3D_Region * region,
-                 struct Gradient_info *gradient_info, const double north,
-                 const double east, const double top, double *vel_x,
-                 double *vel_y, double *vel_z)
+int get_gradient(RASTER3D_Region *region, struct Gradient_info *gradient_info,
+                 const double north, const double east, const double top,
+                 double *vel_x, double *vel_y, double *vel_z)
 {
 
     int i, d, r, c, count;
@@ -248,15 +246,15 @@ int get_gradient(RASTER3D_Region * region,
         gradient_info->initialized = TRUE;
 
         /* just to be sure, we check that at least one voxel is inside */
-        if (maxx < 0 || minx >= region->cols ||
-            maxy < 0 || miny >= region->rows ||
-            maxz < 0 || minz >= region->depths)
+        if (maxx < 0 || minx >= region->cols || maxy < 0 ||
+            miny >= region->rows || maxz < 0 || minz >= region->depths)
             return -1;
 
         /* these if's are here to handle edge cases
            min is changed to represent the min coords of the 4x4x4 array
            from which the gradient will be computed
-           shift is relative position of the neighbors within this 4x4x4 array */
+           shift is relative position of the neighbors within this 4x4x4 array
+         */
         if (minx == 0 || minx == -1) {
             xshift = minx;
             minx = 0;
@@ -297,8 +295,8 @@ int get_gradient(RASTER3D_Region * region,
         }
 
         /* get the 4x4x4 block of the array */
-        Rast3d_get_block(gradient_info->scalar_map, minx, miny, minz,
-                         4, 4, 4, array.array, DCELL_TYPE);
+        Rast3d_get_block(gradient_info->scalar_map, minx, miny, minz, 4, 4, 4,
+                         array.array, DCELL_TYPE);
         Rast3d_gradient_double(&array, step, &grad_x, &grad_y, &grad_z);
         grad_xyz[0] = &grad_x;
         grad_xyz[1] = &grad_y;
@@ -313,8 +311,7 @@ int get_gradient(RASTER3D_Region * region,
                         if (d + zshift < 0 || d + zshift > 3 ||
                             r + yshift < 0 || r + yshift > 3 ||
                             c + xshift < 0 || c + xshift > 3)
-                            gradient_info->neighbors_values[i * 8 + count] =
-                                0;
+                            gradient_info->neighbors_values[i * 8 + count] = 0;
                         else
                             gradient_info->neighbors_values[i * 8 + count] =
                                 RASTER3D_ARRAY_ACCESS(grad_xyz[i], c + xshift,
@@ -333,7 +330,4 @@ int get_gradient(RASTER3D_Region * region,
     *vel_z = interpolated[2];
 
     return 0;
-
-
-
 }

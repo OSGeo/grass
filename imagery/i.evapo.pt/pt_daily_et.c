@@ -1,13 +1,13 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 
 /*Prestely and Taylor, 1972. */
 double pt_daily_et(double alpha_pt, double delta_pt, double ghamma_pt,
                    double rnet, double g0, double tempka)
 {
     double result, latentHv, t_celsius;
-    double roh_w = 1004.15;     /*mass density of water */
+    double roh_w = 1004.15; /*mass density of water */
     double vap_slope_ratio;
 
     /*Latent Heat of vaporization (W/m2/d) */

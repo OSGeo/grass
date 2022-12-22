@@ -3,13 +3,11 @@
 #include "signature.h"
 #include "local_proto.h"
 
-
 int check_signatures(struct Signature *S)
 {
     int i, j;
     struct Signature temp;
     double *lambda;
-
 
     lambda = (double *)G_calloc(S->nbands, sizeof(double));
     I_init_signatures(&temp, S->nbands);

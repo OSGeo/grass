@@ -1,4 +1,3 @@
-
 /* cp.c */
 int get_control_points(struct Image_Group *, int);
 
@@ -12,8 +11,8 @@ int exec_rectify(struct Image_Group *, int *, char *, char *, int);
 
 /* get_wind.c */
 int get_ref_window(struct Ref *, int *, struct Cell_head *);
-int georef_window(struct Image_Group *, struct Cell_head *,
-                  struct Cell_head *, int, double);
+int georef_window(struct Image_Group *, struct Cell_head *, struct Cell_head *,
+                  int, double);
 
 /* rectify.c */
 int rectify(struct Image_Group *, char *, char *, char *, int, char *);

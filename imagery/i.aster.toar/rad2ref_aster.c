@@ -5,7 +5,7 @@
 
 #define PI M_PI
 
-    /* Conversion of Radiance to Reflectance for ASTER */
+/* Conversion of Radiance to Reflectance for ASTER */
 double rad2ref_aster(double radiance, double doy, double sun_elevation,
                      double k_exo)
 {

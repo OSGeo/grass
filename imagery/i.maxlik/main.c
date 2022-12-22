@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       i.maxlik
  * AUTHOR(S):    Michael Shapiro (USACERL) & Tao Wen (UIUC)
  *               (original contributors)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      maximum likelihood classification of image groups
  * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
@@ -51,8 +50,7 @@ int main(int argc, char *argv[])
     int band;
     int i;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *group, *subgroup, *sigfile, *class, *reject;
     } parm;
     char xmapset[GMAPSET_MAX];
@@ -98,14 +96,13 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     reject_name = parm.reject->answer;
     group = parm.group->answer;
     subgroup = parm.subgroup->answer;
     sigfile = parm.sigfile->answer;
 
-    if (G_unqualified_name
-        (parm.class->answer, G_mapset(), class_name, xmapset) < 0)
+    if (G_unqualified_name(parm.class->answer, G_mapset(), class_name,
+                           xmapset) < 0)
         G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
 
     if (G_legal_filename(class_name) < 0)
@@ -125,7 +122,8 @@ int main(int argc, char *argv[])
         classify(class_cell, reject_cell, ncols);
         if (S.have_oclass) {
             for (int col = 0; col < ncols; col++) {
-                /* Predicted classes start at 1 but signature array is 0 based */
+                /* Predicted classes start at 1 but signature array is 0 based
+                 */
                 class_cell[col] = S.sig[class_cell[col] - 1].oclass;
             }
         }
@@ -155,12 +153,9 @@ int main(int argc, char *argv[])
     if (reject_fd > 0) {
         char *title = NULL;
 
-        char *label[] = { "no data", "0.1%", "0.5%",
-            "1%", "2%", "5%", "10%",
-            "20%", "30%", "50%", "70%",
-            "80%", "90%", "95%", "98%",
-            "99%", "100%", "bad"
-        };
+        char *label[] = {"no data", "0.1%", "0.5%", "1%",  "2%",   "5%",
+                         "10%",     "20%",  "30%",  "50%", "70%",  "80%",
+                         "90%",     "95%",  "98%",  "99%", "100%", "bad"};
         G_asprintf(&title, "Rejection Probability for %s", class_name);
 
         Rast_init_cats(title, &cats);
@@ -171,10 +166,10 @@ int main(int argc, char *argv[])
         Rast_write_cats(reject_name, &cats);
         Rast_free_cats(&cats);
 
-        Rast_make_grey_scale_colors(&colr, (CELL) 1, (CELL) 16);
+        Rast_make_grey_scale_colors(&colr, (CELL)1, (CELL)16);
 
-        Rast_set_c_color((CELL) 0, 0, 255, 0, &colr);
-        Rast_set_c_color((CELL) 17, 255, 0, 0, &colr);
+        Rast_set_c_color((CELL)0, 0, 255, 0, &colr);
+        Rast_set_c_color((CELL)17, 255, 0, 0, &colr);
         Rast_write_colors(reject_name, G_mapset(), &colr);
         Rast_free_colors(&colr);
     }

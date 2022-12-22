@@ -4,7 +4,7 @@
 /* Includes */
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>             /* ??? */
+#include <iostream> /* ??? */
 #include <fstream>
 #include <string>
 #include <cmath>
@@ -13,17 +13,17 @@
 
 using std::string;
 
-using std::ios;
-using std::ifstream;
-using std::ofstream;
-using std::ostringstream;
+using std::cerr;
 using std::cin;
 using std::cout;
-using std::cerr;
 using std::endl;
+using std::ends;
+using std::ifstream;
+using std::ios;
+using std::ofstream;
+using std::ostringstream;
 using std::setprecision;
 using std::setw;
-using std::ends;
 
 using std::numeric_limits;
 
@@ -43,46 +43,40 @@ const double delta = 0.0279f;
 const double xacc = 1.e-06f;
 const double step = 0.0025f;
 
-
 /* Globals */
 /* not sure what the name stands for */
-struct Sixs_sos
-{
+struct Sixs_sos {
     double phasel[10][83];
     double cgaus[83];
     double pdgs[83];
 };
 
-struct Sixs_aer
-{
+struct Sixs_aer {
     double ext[10];
     double ome[10];
     double gasym[10];
     double phase[10];
 };
 
-struct Sixs_aerbas
-{
-    double bdm_ph[10][83];      /* background desert model... */
-    double bbm_ph[10][83];      /* biomass burning model... */
-    double stm_ph[10][83];      /* stratospherique aerosol model... */
-    double dust_ph[10][83];     /* dust model */
-    double wate_ph[10][83];     /* water model */
-    double ocea_ph[10][83];     /* ocean model */
-    double soot_ph[10][83];     /* soot model */
+struct Sixs_aerbas {
+    double bdm_ph[10][83];  /* background desert model... */
+    double bbm_ph[10][83];  /* biomass burning model... */
+    double stm_ph[10][83];  /* stratospherique aerosol model... */
+    double dust_ph[10][83]; /* dust model */
+    double wate_ph[10][83]; /* water model */
+    double ocea_ph[10][83]; /* ocean model */
+    double soot_ph[10][83]; /* soot model */
 
-    double usr_ph[10][83];      /* user defined model from size distribution */
-    double (*ph)[10][83];       /* pointer to current active model */
+    double usr_ph[10][83]; /* user defined model from size distribution */
+    double (*ph)[10][83];  /* pointer to current active model */
 };
 
-struct Sixs_trunc
-{
+struct Sixs_trunc {
     double pha[83];
     double betal[81];
 };
 
-struct Sixs_disc
-{
+struct Sixs_disc {
     double roatm[3][10];
     double dtdir[3][10];
     double dtdif[3][10];

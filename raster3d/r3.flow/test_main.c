@@ -12,8 +12,8 @@
 #include "flowline.h"
 #include "interpolate.h"
 
-static void test_interpolation(RASTER3D_Region * region,
-                               RASTER3D_Map ** input_maps, double north,
+static void test_interpolation(RASTER3D_Region *region,
+                               RASTER3D_Map **input_maps, double north,
                                double east, double top)
 {
     double interpolated[3];
@@ -24,9 +24,8 @@ static void test_interpolation(RASTER3D_Region * region,
         fprintf(stdout, "return=-1\n");
     }
     else
-        fprintf(stdout, "return=0\nvalues=%.10f,%.10f,%.10f\n",
-                interpolated[0], interpolated[1], interpolated[2]);
-
+        fprintf(stdout, "return=0\nvalues=%.10f,%.10f,%.10f\n", interpolated[0],
+                interpolated[1], interpolated[2]);
 }
 
 int main(int argc, char *argv[])
@@ -69,15 +68,12 @@ int main(int argc, char *argv[])
 
     if (strcmp(test_opt->answer, "interpolation") == 0) {
 
-
         if (input_opt->answers) {
             for (i = 0; i < 3; i++) {
-                input_3drasters[i] =
-                    Rast3d_open_cell_old(input_opt->answers[i],
-                                         G_find_raster3d(input_opt->answers
-                                                         [i], ""), &region,
-                                         RASTER3D_TILE_SAME_AS_FILE,
-                                         RASTER3D_USE_CACHE_DEFAULT);
+                input_3drasters[i] = Rast3d_open_cell_old(
+                    input_opt->answers[i],
+                    G_find_raster3d(input_opt->answers[i], ""), &region,
+                    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
                 if (input_3drasters[i] == NULL)
                     Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                                        input_opt->answers[i]);

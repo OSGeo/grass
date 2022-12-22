@@ -1,7 +1,7 @@
 /*!
  * \file rbtree.c
  *
- * \brief binary search tree 
+ * \brief binary search tree
  *
  * Generic balanced binary search tree (Red Black Tree) implementation
  *
@@ -15,7 +15,7 @@
  */
 
 /* balanced binary search tree implementation
- * 
+ *
  * this one is a Red Black Tree, no parent pointers, no threads
  * The core code comes from Julienne Walker's tutorials on binary search trees
  * original license: public domain
@@ -41,7 +41,6 @@ static struct ngbr_stats *nbtree_next(struct NB_TRAV *);
 static struct NB_NODE *nbtree_make_node(size_t, struct ngbr_stats *);
 static int is_red(struct NB_NODE *);
 
-
 int cmp_ngbr(struct ngbr_stats *a, struct ngbr_stats *b)
 {
     if (a->id > 0 || b->id > 0)
@@ -52,7 +51,6 @@ int cmp_ngbr(struct ngbr_stats *a, struct ngbr_stats *b)
         return (a->col - b->col);
     return (a->row - b->row);
 }
-
 
 /* create new tree and initialize
  * returns pointer to new tree, NULL for memory allocation error
@@ -76,8 +74,8 @@ struct NB_TREE *nbtree_create(int nbands, size_t rb_datasize)
 
 /* add an item to a tree
  * non-recursive top-down insertion
- * the algorithm does not allow duplicates and also does not warn about a duplicate
- * returns 1 on success, 0 on failure
+ * the algorithm does not allow duplicates and also does not warn about a
+ * duplicate returns 1 on success, 0 on failure
  */
 int nbtree_insert(struct NB_TREE *tree, struct ngbr_stats *data)
 {
@@ -90,9 +88,10 @@ int nbtree_insert(struct NB_TREE *tree, struct ngbr_stats *data)
             return 0;
     }
     else {
-        struct NB_NODE head = { 0, {0, 0}, {0, 0, 0, 0, 0} };   /* False tree root */
-        struct NB_NODE *g, *t;  /* Grandparent & parent */
-        struct NB_NODE *p, *q;  /* Iterator & parent */
+        struct NB_NODE head = {
+            0, {0, 0}, {0, 0, 0, 0, 0}}; /* False tree root */
+        struct NB_NODE *g, *t;           /* Grandparent & parent */
+        struct NB_NODE *p, *q;           /* Iterator & parent */
         int dir = 0, last = 0;
 
         /* Set up helpers */
@@ -128,7 +127,8 @@ int nbtree_insert(struct NB_TREE *tree, struct ngbr_stats *data)
             last = dir;
             dir = cmp_ngbr(&(q->data), data);
 
-            /* Stop if found. This check also disallows duplicates in the tree */
+            /* Stop if found. This check also disallows duplicates in the tree
+             */
             if (dir == 0)
                 break;
 
@@ -161,15 +161,15 @@ int nbtree_insert(struct NB_TREE *tree, struct ngbr_stats *data)
  */
 int nbtree_remove(struct NB_TREE *tree, struct ngbr_stats *data)
 {
-    struct NB_NODE head = { 0, {0, 0}, {0, 0, 0, 0, 0} };       /* False tree root */
-    struct NB_NODE *q, *p, *g;  /* Helpers */
-    struct NB_NODE *f = NULL;   /* Found item */
+    struct NB_NODE head = {0, {0, 0}, {0, 0, 0, 0, 0}}; /* False tree root */
+    struct NB_NODE *q, *p, *g;                          /* Helpers */
+    struct NB_NODE *f = NULL;                           /* Found item */
     int dir = 1, removed = 0;
 
     assert(tree && data);
 
     if (tree->root == NULL) {
-        return 0;               /* empty tree, nothing to remove */
+        return 0; /* empty tree, nothing to remove */
     }
 
     /* Set up helpers */
@@ -265,7 +265,7 @@ struct ngbr_stats *nbtree_find(struct NB_TREE *tree, struct ngbr_stats *data)
     while (curr_node != NULL) {
         cmp = cmp_ngbr(&(curr_node->data), data);
         if (cmp == 0)
-            return &curr_node->data;    /* found */
+            return &curr_node->data; /* found */
 
         curr_node = curr_node->link[cmp < 0];
     }
@@ -362,7 +362,7 @@ struct ngbr_stats *nbtree_traverse_start(struct NB_TRAV *trav,
         }
     }
 
-    return NULL;                /* should not happen */
+    return NULL; /* should not happen */
 }
 
 /* two functions needed to fully traverse the tree: initialize and continue
@@ -384,7 +384,7 @@ static struct ngbr_stats *nbtree_first(struct NB_TRAV *trav)
         trav->curr_node = trav->curr_node->link[0];
     }
 
-    return &(trav->curr_node->data);    /* return smallest item */
+    return &(trav->curr_node->data); /* return smallest item */
 }
 
 /* continue traversing the tree in ascending order
@@ -421,7 +421,7 @@ static struct ngbr_stats *nbtree_next(struct NB_TRAV *trav)
         return &(trav->curr_node->data);
     }
     else
-        return NULL;            /* finished traversing */
+        return NULL; /* finished traversing */
 }
 
 /* clear the tree: remove all nodes */
@@ -500,8 +500,7 @@ int nbtree_debug(struct NB_TREE *tree, struct NB_NODE *root)
 
         /* Invalid binary search tree:
          * left node >= parent or right node <= parent */
-        if ((ln != NULL && lcmp > -1)
-            || (rn != NULL && rcmp < 1)) {
+        if ((ln != NULL && lcmp > -1) || (rn != NULL && rcmp < 1)) {
             G_warning("Red Black Tree debugging: Binary tree violation");
             return 0;
         }
@@ -530,8 +529,7 @@ int nbtree_debug(struct NB_TREE *tree, struct NB_NODE *root)
 static struct NB_NODE *nbtree_make_node(size_t datasize,
                                         struct ngbr_stats *data)
 {
-    struct NB_NODE *new_node =
-        (struct NB_NODE *)malloc(sizeof(struct NB_NODE));
+    struct NB_NODE *new_node = (struct NB_NODE *)malloc(sizeof(struct NB_NODE));
 
     if (new_node == NULL)
         G_fatal_error("RB Search Tree: Out of memory!");
@@ -545,7 +543,7 @@ static struct NB_NODE *nbtree_make_node(size_t datasize,
     new_node->data.count = data->count;
     memcpy(new_node->data.mean, data->mean, datasize);
 
-    new_node->red = 1;          /* 1 is red, 0 is black */
+    new_node->red = 1; /* 1 is red, 0 is black */
     new_node->link[0] = NULL;
     new_node->link[1] = NULL;
 

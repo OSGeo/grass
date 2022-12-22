@@ -1,6 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 
 /* Gain values LUT for ASTER */
 double gain_aster(int band_number, int gain_code)

@@ -1,4 +1,4 @@
-/* CMD mode from Bob Covill 2001 
+/* CMD mode from Bob Covill 2001
  * exec.c --
  *
  * Loop through all files to be rectified and do the retification.

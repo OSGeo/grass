@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.photo.target
  * AUTHOR(S):    Mike Baba,  DBA Systems, Inc. (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>
  *               Hamish Bowman
  *
@@ -52,8 +51,7 @@ int main(int argc, char *argv[])
     module->description = _("Select or modify the imagery group target.");
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);
-    group_opt->description =
-        _("Name of imagery group for ortho-rectification");
+    group_opt->description = _("Name of imagery group for ortho-rectification");
 
     location_opt = G_define_standard_option(G_OPT_M_LOCATION);
     location_opt->key = "target_location";
@@ -69,7 +67,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     strcpy(group, group_opt->answer);
     strcpy(target_location, location_opt->answer);
@@ -87,15 +84,16 @@ int main(int argc, char *argv[])
     G_setenv_nogisrc("MAPSET", target_mapset);
     G_get_window(&target_window);
     if (target_window.proj == PROJECTION_XY)
-        G_fatal_error(_("Target locations with XY (unreferenced) are not supported"));
+        G_fatal_error(
+            _("Target locations with XY (unreferenced) are not supported"));
     else if (target_window.proj == PROJECTION_LL)
         G_fatal_error(_("Target locations with lon/lat are not supported"));
 
     G_switch_env();
     I_put_target(group, target_location, target_mapset);
 
-    G_message(_("Group [%s] targeted for location [%s], mapset [%s]"),
-              group, target_location, target_mapset);
+    G_message(_("Group [%s] targeted for location [%s], mapset [%s]"), group,
+              target_location, target_mapset);
 
     exit(EXIT_SUCCESS);
 }
