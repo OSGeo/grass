@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.vect.thematic
  * AUTHOR(S):    Moritz Lennert, based on d.vect
@@ -90,8 +89,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("choropleth map"));
     G_add_keyword(_("legend"));
-    module->description =
-        _("Displays a thematic vector map " "in the active graphics frame.");
+    module->description = _("Displays a thematic vector map "
+                            "in the active graphics frame.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
@@ -120,11 +119,9 @@ int main(int argc, char **argv)
     algo_opt->options = "int,std,qua,equ,dis";
     algo_opt->description = _("Algorithm to use for classification");
     desc = NULL;
-    G_asprintf(&desc,
-               "int;%s;std;%s;qua;%s;equ;%s",
-               _("simple intervals"),
-               _("standard deviations"),
-               _("quantiles"), _("equiprobable (normal distribution)"));
+    G_asprintf(&desc, "int;%s;std;%s;qua;%s;equ;%s", _("simple intervals"),
+               _("standard deviations"), _("quantiles"),
+               _("equiprobable (normal distribution)"));
     algo_opt->descriptions = desc;
     /*currently disabled because of bugs       "dis;discontinuities"); */
     algo_opt->guisection = _("Classes");
@@ -168,7 +165,8 @@ int main(int argc, char **argv)
     icon_opt->multiple = NO;
     icon_opt->guisection = _("Symbols");
     icon_opt->answer = "basic/x";
-    /* This could also use ->gisprompt = "old,symbol,symbol" instead of ->options */
+    /* This could also use ->gisprompt = "old,symbol,symbol" instead of
+     * ->options */
     icon_opt->options = icon_files();
     icon_opt->description = _("Point and centroid symbol");
 
@@ -186,7 +184,8 @@ int main(int argc, char **argv)
     icon_line_opt->multiple = NO;
     icon_line_opt->guisection = _("Legend");
     icon_line_opt->answer = "legend/line";
-    /* This could also use ->gisprompt = "old,symbol,symbol" instead of ->options */
+    /* This could also use ->gisprompt = "old,symbol,symbol" instead of
+     * ->options */
     icon_line_opt->options = icon_files();
     icon_line_opt->description = _("Legend symbol for lines");
 
@@ -197,7 +196,8 @@ int main(int argc, char **argv)
     icon_area_opt->multiple = NO;
     icon_area_opt->guisection = _("Legend");
     icon_area_opt->answer = "legend/area";
-    /* This could also use ->gisprompt = "old,symbol,symbol" instead of ->options */
+    /* This could also use ->gisprompt = "old,symbol,symbol" instead of
+     * ->options */
     icon_area_opt->options = icon_files();
     icon_area_opt->description = _("Legend symbol for areas");
 
@@ -210,8 +210,8 @@ int main(int argc, char **argv)
     legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     legend_file_opt->key = "legendfile";
     deprecated = NULL;
-    G_asprintf(&deprecated,
-               "[%s] %s", _("DEPRECATED"), _("Output legend file"));
+    G_asprintf(&deprecated, "[%s] %s", _("DEPRECATED"),
+               _("Output legend file"));
     legend_file_opt->description = deprecated;
     legend_file_opt->required = NO;
     legend_file_opt->guisection = _("Legend");
@@ -231,10 +231,9 @@ int main(int argc, char **argv)
     algoinfo_flag = G_define_flag();
     algoinfo_flag->key = 'e';
     deprecated = NULL;
-    G_asprintf(&deprecated,
-               "[%s] %s",
-               _("DEPRECATED"),
-               _("When printing legend info, include extended statistical info from classification algorithm"));
+    G_asprintf(&deprecated, "[%s] %s", _("DEPRECATED"),
+               _("When printing legend info, include extended statistical info "
+                 "from classification algorithm"));
     algoinfo_flag->description = deprecated;
     algoinfo_flag->guisection = _("Legend");
 
@@ -252,7 +251,8 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
 
     if (algoinfo_flag->answer)
-        G_warning(_("Flag -e is deprecated, set verbose mode with --v to get the extended statistical info."));
+        G_warning(_("Flag -e is deprecated, set verbose mode with --v to get "
+                    "the extended statistical info."));
 
     if (legend_file_opt->answer)
         G_warning(_("Option legendfile is deprecated, either use flag -l "
@@ -274,8 +274,9 @@ int main(int argc, char **argv)
     level = Vect_open_old(&Map, map_name, "");
 
     if (level < 2)
-        G_fatal_error(_("%s: You must build topology on vector map. Run v.build."),
-                      map_name);
+        G_fatal_error(
+            _("%s: You must build topology on vector map. Run v.build."),
+            map_name);
     if (title_opt->answer)
         strcpy(title, title_opt->answer);
     else
@@ -301,34 +302,30 @@ int main(int argc, char **argv)
 
     /*Get CatValArray needed for plotting and for legend calculations */
     db_CatValArray_init(&cvarr);
-    nrec = db_select_CatValArray(driver, fi->table, fi->key,
-                                 column_opt->answer, where_opt->answer,
-                                 &cvarr);
-
+    nrec = db_select_CatValArray(driver, fi->table, fi->key, column_opt->answer,
+                                 where_opt->answer, &cvarr);
 
     G_debug(3, "nrec (%s) = %d", column_opt->answer, nrec);
 
     if (cvarr.ctype != DB_C_TYPE_INT && cvarr.ctype != DB_C_TYPE_DOUBLE)
         G_fatal_error(_("Data (%s) not numeric. "
-                        "Column must be numeric."), column_opt->answer);
+                        "Column must be numeric."),
+                      column_opt->answer);
 
     if (nrec < 0)
         G_fatal_error(_("Cannot select data (%s) from table"),
                       column_opt->answer);
 
     for (i = 0; i < cvarr.n_values; i++) {
-        G_debug(4, "cat = %d  %s = %d", cvarr.value[i].cat,
-                column_opt->answer,
-                (cvarr.ctype ==
-                 DB_C_TYPE_INT ? cvarr.value[i].val.i : (int)cvarr.value[i].
-                 val.d));
+        G_debug(4, "cat = %d  %s = %d", cvarr.value[i].cat, column_opt->answer,
+                (cvarr.ctype == DB_C_TYPE_INT ? cvarr.value[i].val.i
+                                              : (int)cvarr.value[i].val.d));
     }
 
     /*Get the sorted data */
     ret = db_CatValArray_sort_by_value(&cvarr);
     if (ret == DB_FAILED)
         G_fatal_error("Could not sort array of values..");
-
 
     data = (double *)G_malloc((nrec) * sizeof(double));
     for (i = 0; i < nrec; i++)
@@ -345,11 +342,10 @@ int main(int argc, char **argv)
     }
     db_CatValArray_sort(&cvarr);
 
-
     /*Get the list of relevant cats if where option is given */
     if (where_opt->answer) {
-        ncat = db_select_int(driver, fi->table, fi->key, where_opt->answer,
-                             &cats);
+        ncat =
+            db_select_int(driver, fi->table, fi->key, where_opt->answer, &cats);
         chcat = 1;
 
         Vect_array_to_cat_list(cats, ncat, Clist);
@@ -372,72 +368,71 @@ int main(int argc, char **argv)
         bcolor.g = g;
         bcolor.b = b;
     }
-    else if (ret == 2) {        /* none */
+    else if (ret == 2) { /* none */
         has_color = 0;
     }
-    else if (ret == 0) {        /* error */
+    else if (ret == 0) { /* error */
         G_fatal_error(_("Unknown color: [%s]"), bcolor_opt->answer);
     }
 
-
-    /* if both class breaks and (algorithm or classnumber) are given, give precedence to class 
-     * breaks
+    /* if both class breaks and (algorithm or classnumber) are given, give
+     * precedence to class breaks
      */
 
     if (breaks_opt->answers) {
 
         if (algo_opt->answer || nbclass_opt->answer)
-            G_warning(_("You gave both manual breaks and a classification algorithm or a number of classes. The manual breaks have precedence and will thus be used."));
-
+            G_warning(_("You gave both manual breaks and a classification "
+                        "algorithm or a number of classes. The manual breaks "
+                        "have precedence and will thus be used."));
 
         /*Get class breaks */
         nbreaks = 0;
         while (breaks_opt->answers[nbreaks] != NULL)
             nbreaks++;
-        nclass = nbreaks + 1;   /*add one since breaks do not include min and max values */
+        nclass = nbreaks +
+                 1; /*add one since breaks do not include min and max values */
         G_debug(3, "nclass = %d", nclass);
 
         breakpoints = (double *)G_malloc((nbreaks) * sizeof(double));
         for (i = 0; i < nbreaks; i++)
             breakpoints[i] = atof(breaks_opt->answers[i]);
-
     }
     else {
 
         if (algo_opt->answer && nbclass_opt->answer) {
 
-
             nclass = atoi(nbclass_opt->answer);
-            nbreaks = nclass - 1;       /* we need one less classbreaks (min and 
-                                         * max exluded) than classes */
+            nbreaks = nclass - 1; /* we need one less classbreaks (min and
+                                   * max exluded) than classes */
 
             breakpoints = (double *)G_malloc((nbreaks) * sizeof(double));
             for (i = 0; i < nbreaks; i++)
                 breakpoints[i] = 0;
 
             /* Get classbreaks for given algorithm and number of classbreaks.
-             * class_info takes any info coming from the classification algorithms */
+             * class_info takes any info coming from the classification
+             * algorithms */
             class_info =
-                AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt),
-                                         data, nrec, &nbreaks, breakpoints);
-
+                AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt), data,
+                                         nrec, &nbreaks, breakpoints);
         }
         else {
 
-            G_fatal_error(_("You must either give classbreaks or a classification algorithm"));
-
+            G_fatal_error(_("You must either give classbreaks or a "
+                            "classification algorithm"));
         }
     };
-
 
     /* Fill colors */
     colors = (struct color_rgb *)G_malloc(nclass * sizeof(struct color_rgb));
 
-
     if (colors_opt->answers != NULL) {
         for (i = 0; i < nclass; i++) {
             if (colors_opt->answers[i] == NULL)
-                G_fatal_error(_("Not enough colors or error in color specifications.\nNeed %i entries for 'colors' parameter"),
+                G_fatal_error(_("Not enough colors or error in color "
+                                "specifications.\nNeed %i entries for 'colors' "
+                                "parameter"),
                               nclass);
 
             ret = G_str_to_color(colors_opt->answers[i], &r, &g, &b);
@@ -447,10 +442,8 @@ int main(int argc, char **argv)
             colors[i].r = r;
             colors[i].g = g;
             colors[i].b = b;
-
         }
     }
-
 
     if (!nodraw_flag->answer) {
         /* Now's let's prepare the actual plotting */
@@ -464,15 +457,15 @@ int main(int argc, char **argv)
         overlap = 1;
         Vect_get_map_box(&Map, &box);
         if (window.proj != PROJECTION_LL) {
-            overlap =
-                G_window_percentage_overlap(&window, box.N, box.S,
-                                            box.E, box.W);
+            overlap = G_window_percentage_overlap(&window, box.N, box.S, box.E,
+                                                  box.W);
             G_debug(1, "overlap = %f \n", overlap);
         }
 
         if (overlap == 0) {
-            G_message(_("The bounding box of the map is outside the current region, "
-                       "nothing drawn."));
+            G_message(
+                _("The bounding box of the map is outside the current region, "
+                  "nothing drawn."));
             stat = 0;
         }
         else {
@@ -485,10 +478,9 @@ int main(int argc, char **argv)
             D_line_width(default_width);
 
             if (Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0)
-                stat =
-                    dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks,
-                               colors, has_color ? &bcolor : NULL, chcat,
-                               &window, default_width);
+                stat = dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks,
+                                  colors, has_color ? &bcolor : NULL, chcat,
+                                  &window, default_width);
 
             else if ((Vect_get_num_primitives(&Map, GV_POINT) > 0) ||
                      (Vect_get_num_primitives(&Map, GV_LINE) > 0)) {
@@ -498,19 +490,18 @@ int main(int argc, char **argv)
                                   colors, has_color ? &bcolor : NULL);
             }
 
-
             /* reset line width: Do we need to get line width from display
              * driver (not implemented)?  It will help restore previous line
              * width (not just 0) determined by another module (e.g.,
              * d.linewidth). */
             D_line_width(0);
 
-        }                       /* end window check if */
+        } /* end window check if */
 
         D_save_command(G_recreate_command());
         D_close_driver();
 
-    }                           /* end of nodraw_flag condition */
+    } /* end of nodraw_flag condition */
 
     frequencies = (int *)G_malloc((nbreaks + 1) * sizeof(int));
     for (i = 0; i < nbreaks + 1; i++)
@@ -525,8 +516,8 @@ int main(int argc, char **argv)
     G_verbose_message(_("Classification of %s into %i classes\n"),
                       column_opt->answer, nbreaks + 1);
     G_verbose_message(_("Using algorithm: *** %s ***\n"), algo_opt->answer);
-    G_verbose_message(_("Mean: %f\tStandard deviation = %f\n"),
-                      stats.mean, stats.stdev);
+    G_verbose_message(_("Mean: %f\tStandard deviation = %f\n"), stats.mean,
+                      stats.stdev);
 
     if (G_strcasecmp(algo_opt->answer, "dis") == 0)
         G_verbose_message(_("Last chi2 = %f\n"), class_info);
@@ -542,29 +533,26 @@ int main(int argc, char **argv)
         while (TRUE) {
             nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
-                write_into_legend_file("stdout", icon_opt->answer,
-                                       title, stats.min, stats.max,
-                                       breakpoints, nbreaks, size, bcolor,
-                                       colors, default_width, frequencies,
-                                       "point");
+                write_into_legend_file("stdout", icon_opt->answer, title,
+                                       stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors,
+                                       default_width, frequencies, "point");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
             if (nfeatures > 0) {
-                write_into_legend_file("stdout", icon_line_opt->answer,
-                                       title, stats.min, stats.max,
-                                       breakpoints, nbreaks, size, bcolor,
-                                       colors, default_width, frequencies,
-                                       "line");
+                write_into_legend_file("stdout", icon_line_opt->answer, title,
+                                       stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors,
+                                       default_width, frequencies, "line");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
             if (nfeatures > 0) {
-                write_into_legend_file("stdout", icon_area_opt->answer,
-                                       title, stats.min, stats.max,
-                                       breakpoints, nbreaks, size, bcolor,
-                                       colors, default_width, frequencies,
-                                       "area");
+                write_into_legend_file("stdout", icon_area_opt->answer, title,
+                                       stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors,
+                                       default_width, frequencies, "area");
                 break;
             }
         }
@@ -576,29 +564,26 @@ int main(int argc, char **argv)
         while (TRUE) {
             nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
-                write_into_legend_file(leg_file, icon_opt->answer,
-                                       title, stats.min, stats.max,
-                                       breakpoints, nbreaks, size, bcolor,
-                                       colors, default_width, frequencies,
-                                       "point");
+                write_into_legend_file(leg_file, icon_opt->answer, title,
+                                       stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors,
+                                       default_width, frequencies, "point");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
             if (nfeatures > 0) {
-                write_into_legend_file(leg_file, icon_line_opt->answer,
-                                       title, stats.min, stats.max,
-                                       breakpoints, nbreaks, size, bcolor,
-                                       colors, default_width, frequencies,
-                                       "line");
+                write_into_legend_file(leg_file, icon_line_opt->answer, title,
+                                       stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors,
+                                       default_width, frequencies, "line");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
             if (nfeatures > 0) {
-                write_into_legend_file(leg_file, icon_area_opt->answer,
-                                       title, stats.min, stats.max,
-                                       breakpoints, nbreaks, size, bcolor,
-                                       colors, default_width, frequencies,
-                                       "area");
+                write_into_legend_file(leg_file, icon_area_opt->answer, title,
+                                       stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors,
+                                       default_width, frequencies, "area");
                 break;
             }
         }
@@ -610,29 +595,26 @@ int main(int argc, char **argv)
         while (TRUE) {
             nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
-                write_into_legend_file(legend_file_opt->answer,
-                                       icon_opt->answer, title, stats.min,
-                                       stats.max, breakpoints, nbreaks, size,
-                                       bcolor, colors, default_width,
-                                       frequencies, "point");
+                write_into_legend_file(
+                    legend_file_opt->answer, icon_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, "point");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
             if (nfeatures > 0) {
-                write_into_legend_file(legend_file_opt->answer,
-                                       icon_line_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "line");
+                write_into_legend_file(
+                    legend_file_opt->answer, icon_line_opt->answer, title,
+                    stats.min, stats.max, breakpoints, nbreaks, size, bcolor,
+                    colors, default_width, frequencies, "line");
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
             if (nfeatures > 0) {
-                write_into_legend_file(legend_file_opt->answer,
-                                       icon_area_opt->answer, title,
-                                       stats.min, stats.max, breakpoints,
-                                       nbreaks, size, bcolor, colors,
-                                       default_width, frequencies, "area");
+                write_into_legend_file(
+                    legend_file_opt->answer, icon_area_opt->answer, title,
+                    stats.min, stats.max, breakpoints, nbreaks, size, bcolor,
+                    colors, default_width, frequencies, "area");
                 break;
             }
         }
@@ -704,7 +686,7 @@ static char *icon_files(void)
     qsort(list, count, sizeof(char *), cmp);
 
     if (len > 0) {
-        ret = G_malloc((len + 1) * sizeof(char));       /* \0 */
+        ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
         *ret = '\0';
         for (i = 0; i < count; i++) {
             if (i > 0)
