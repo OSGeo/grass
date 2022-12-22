@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -63,8 +62,8 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
             n_points += Points->n_points;
     }
 
-    parray = (POINT *) G_calloc(n_points, sizeof(POINT));
-    pset = (POINT *) G_calloc(n_points, sizeof(POINT));
+    parray = (POINT *)G_calloc(n_points, sizeof(POINT));
+    pset = (POINT *)G_calloc(n_points, sizeof(POINT));
     point_index = (int *)G_calloc(n_points, sizeof(int));
     first = (int *)G_calloc(n_points, sizeof(int));
     line_index = (int *)G_calloc(n_points, sizeof(int));
@@ -72,8 +71,9 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     sel = (int *)G_calloc(n_points, sizeof(int));
     tmp_index = (int *)G_calloc(n_points, sizeof(int));
 
-    /* read points 
-     * TODO: some better/faster method for determining whether two points are the same */
+    /* read points
+     * TODO: some better/faster method for determining whether two points are
+     * the same */
     G_percent_reset();
     G_message(_("Reading data..."));
     index = 0;
@@ -122,9 +122,8 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
                 point_index[i] == point_index[j] ||
                 point_index[i] == point_index[j - 1])
                 continue;
-            double d =
-                point_dist_segment_square(parray[i], parray[j], parray[j - 1],
-                                          with_z);
+            double d = point_dist_segment_square(parray[i], parray[j],
+                                                 parray[j - 1], with_z);
 
             if (d < 4 * threshold2)
                 need[point_index[i]] = 1;
@@ -179,11 +178,9 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
         if (r == -1)
             continue;
         k.a[r][r] += a;
-        if (i + 1 < index && line_index[i + 1] == l &&
-            point_index[i + 1] != -1)
+        if (i + 1 < index && line_index[i + 1] == l && point_index[i + 1] != -1)
             k.a[r][point_index[i + 1]] += b;
-        if (i + 2 < index && line_index[i + 2] == l &&
-            point_index[i + 2] != -1)
+        if (i + 2 < index && line_index[i + 2] == l && point_index[i + 2] != -1)
             k.a[r][point_index[i + 2]] += c;
         if (i >= 1 && line_index[i - 1] == l && point_index[i - 1] != -1)
             k.a[r][point_index[i - 1]] += b;
@@ -242,14 +239,11 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
                 POINT in;
                 int status;
 
-                d = dig_distance2_point_to_line(parray[i].x, parray[i].y,
-                                                parray[i].z, parray[j].x,
-                                                parray[j].y, parray[j].z,
-                                                parray[j - 1].x,
-                                                parray[j - 1].y,
-                                                parray[j - 1].z, with_z,
-                                                &in.x, &in.y, &in.z, &pdist,
-                                                &status);
+                d = dig_distance2_point_to_line(
+                    parray[i].x, parray[i].y, parray[i].z, parray[j].x,
+                    parray[j].y, parray[j].z, parray[j - 1].x, parray[j - 1].y,
+                    parray[j - 1].z, with_z, &in.x, &in.y, &in.z, &pdist,
+                    &status);
 
                 POINT dir;
 
@@ -285,7 +279,6 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
             parray[i].y +=
                 dy.a[point_index[i]][0] - dy_old.a[point_index[i]][0];
         }
-
     }
     index = 0;
     for (i = 1; i <= n_lines; i++) {

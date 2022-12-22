@@ -8,9 +8,9 @@
 #define PI M_PI
 
 int transform_digit_file(struct Map_info *Old, struct Map_info *New,
-                         double ztozero, int swap_xy, int swap_xz,
-                         int swap_yz, int swap_after,
-                         double *trans_params_def, char **columns, int field)
+                         double ztozero, int swap_xy, int swap_xz, int swap_yz,
+                         int swap_after, double *trans_params_def,
+                         char **columns, int field)
 {
     int i, type, cat, line, ret;
     int verbose, format;
@@ -26,7 +26,7 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
     dbDriver *driver;
     dbValue val;
 
-    cat = -1;                   /* dummy value for debugging */
+    cat = -1; /* dummy value for debugging */
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -55,12 +55,12 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
     while (TRUE) {
         type = Vect_read_next_line(Old, Points, Cats);
 
-        if (type == -1) {       /* error */
+        if (type == -1) { /* error */
             ret = 0;
             break;
         }
 
-        if (type == -2) {       /* EOF */
+        if (type == -2) { /* EOF */
             ret = 1;
             break;
         }
@@ -99,7 +99,7 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
 
         /* get transformation parameters */
         if (field > 0) {
-            Vect_cat_get(Cats, field, &cat);    /* get first category */
+            Vect_cat_get(Cats, field, &cat); /* get first category */
             if (cat > -1) {
                 for (j = 0; j <= IDX_ZROT; j++) {
                     if (columns[j] == NULL) {
@@ -119,13 +119,15 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
                         G_fatal_error(_("Unsupported column type of <%s>"),
                                       columns[j]);
                     }
-                    if (db_select_value
-                        (driver, fi->table, fi->key, cat, columns[j],
-                         &val) != 1 || db_test_value_isnull(&val)) {
+                    if (db_select_value(driver, fi->table, fi->key, cat,
+                                        columns[j], &val) != 1 ||
+                        db_test_value_isnull(&val)) {
                         trans_params[j] = trans_params_def[j];
 
-                        G_warning(_("Unable to select value for category %d from table <%s>, column <%s>. "
-                                   "For category %d using default transformation parameter %.3f."),
+                        G_warning(_("Unable to select value for category %d "
+                                    "from table <%s>, column <%s>. "
+                                    "For category %d using default "
+                                    "transformation parameter %.3f."),
                                   cat, fi->table, columns[j], cat,
                                   trans_params[j]);
                     }
@@ -135,7 +137,8 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
                 }
             }
             else {
-                G_warning(_("No category number defined. Using default transformation parameters."));
+                G_warning(_("No category number defined. Using default "
+                            "transformation parameters."));
 
                 for (j = 0; j <= IDX_ZROT; j++) {
                     trans_params[j] = trans_params_def[j];
@@ -146,20 +149,21 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
 
         /* transform points */
         for (i = 0; i < Points->n_points; i++) {
-            G_debug(3, "idx=%d, cat=%d, xshift=%g, yshift=%g, zshift=%g, "
+            G_debug(3,
+                    "idx=%d, cat=%d, xshift=%g, yshift=%g, zshift=%g, "
                     "xscale=%g, yscale=%g, zscale=%g, zrot=%g",
-                    i, cat, trans_params[IDX_XSHIFT],
-                    trans_params[IDX_YSHIFT], trans_params[IDX_ZSHIFT],
-                    trans_params[IDX_XSCALE], trans_params[IDX_YSCALE],
-                    trans_params[IDX_ZSCALE], trans_params[IDX_ZROT]);
+                    i, cat, trans_params[IDX_XSHIFT], trans_params[IDX_YSHIFT],
+                    trans_params[IDX_ZSHIFT], trans_params[IDX_XSCALE],
+                    trans_params[IDX_YSCALE], trans_params[IDX_ZSCALE],
+                    trans_params[IDX_ZROT]);
 
             /* transform point */
             x = trans_params[IDX_XSHIFT] +
-                trans_params[IDX_XSCALE] * Points->x[i] * cos(ang)
-                - trans_params[IDX_YSCALE] * Points->y[i] * sin(ang);
+                trans_params[IDX_XSCALE] * Points->x[i] * cos(ang) -
+                trans_params[IDX_YSCALE] * Points->y[i] * sin(ang);
             y = trans_params[IDX_YSHIFT] +
-                trans_params[IDX_XSCALE] * Points->x[i] * sin(ang)
-                + trans_params[IDX_YSCALE] * Points->y[i] * cos(ang);
+                trans_params[IDX_XSCALE] * Points->x[i] * sin(ang) +
+                trans_params[IDX_YSCALE] * Points->y[i] * cos(ang);
             Points->x[i] = x;
             Points->y[i] = y;
 

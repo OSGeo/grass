@@ -1,11 +1,11 @@
 /****************************************************************
  *
  * MODULE:       v.in.pdal
- * 
+ *
  * AUTHOR(S):    Vaclav Petras
- *               
+ *
  * PURPOSE:      Import LiDAR LAS points using PDAL
- *               
+ *
  * COPYRIGHT:    (C) 2015-2018 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -23,16 +23,14 @@
 #include <pdal/filters/ReprojectionFilter.hpp>
 #include <pdal/filters/StreamCallbackFilter.hpp>
 
-extern "C"
-{
+extern "C" {
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 }
 
-extern "C"
-{
+extern "C" {
 #include "lidar.h"
 #include "projection.h"
 #include "filters.h"
@@ -52,21 +50,20 @@ static void check_layers_not_equal(int primary, int secondary,
     if (primary && primary == secondary)
         G_fatal_error(_("Values of %s and %s are the same."
                         " All categories would be stored only"
-                        " in layer number <%d>"), primary_name,
-                      secondary_name, primary);
+                        " in layer number <%d>"),
+                      primary_name, secondary_name, primary);
 }
 
-static void check_layers_in_list_not_equal(struct Option **options,
-                                           int *values, size_t size)
+static void check_layers_in_list_not_equal(struct Option **options, int *values,
+                                           size_t size)
 {
     size_t layer_index_1, layer_index_2;
     for (layer_index_1 = 0; layer_index_1 < size; layer_index_1++) {
         for (layer_index_2 = 0; layer_index_2 < size; layer_index_2++) {
             if (layer_index_1 != layer_index_2) {
-                check_layers_not_equal(values[layer_index_1],
-                                       values[layer_index_2],
-                                       options[layer_index_1]->key,
-                                       options[layer_index_2]->key);
+                check_layers_not_equal(
+                    values[layer_index_1], values[layer_index_2],
+                    options[layer_index_1]->key, options[layer_index_2]->key);
             }
         }
     }
@@ -74,9 +71,8 @@ static void check_layers_in_list_not_equal(struct Option **options,
 
 void pdal_point_to_grass(struct Map_info *output_vector,
                          struct line_pnts *points, struct line_cats *cats,
-                         pdal::PointRef& point,
-                         struct GLidarLayers *layers, int cat,
-                         pdal::Dimension::Id dim_to_use_as_z)
+                         pdal::PointRef &point, struct GLidarLayers *layers,
+                         int cat, pdal::Dimension::Id dim_to_use_as_z)
 {
     Vect_reset_line(points);
     Vect_reset_cats(cats);
@@ -108,7 +104,7 @@ void pdal_point_to_grass(struct Map_info *output_vector,
         int rgb = red;
         rgb = (rgb << 8) + green;
         rgb = (rgb << 8) + blue;
-        rgb++;  /* cat 0 is not valid, add one */
+        rgb++; /* cat 0 is not valid, add one */
         Vect_cat_set(cats, layers->rgb_layer, rgb);
     }
 
@@ -129,15 +125,16 @@ int main(int argc, char *argv[])
 
     Option *in_opt = G_define_standard_option(G_OPT_F_INPUT);
     in_opt->label = _("LAS input file");
-    in_opt->description =
-        _("LiDAR input files in LAS format (*.las or *.laz)");
+    in_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
 
     Option *out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     Option *id_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
     id_layer_opt->key = "id_layer";
-    id_layer_opt->label = _("Layer number to store generated point ID as category");
-    id_layer_opt->description = _("Set to 1 by default, use -c to not store it");
+    id_layer_opt->label =
+        _("Layer number to store generated point ID as category");
+    id_layer_opt->description =
+        _("Set to 1 by default, use -c to not store it");
     id_layer_opt->answer = NULL;
     id_layer_opt->guisection = _("Categories");
 
@@ -218,28 +215,28 @@ int main(int argc, char *argv[])
     over_flag->key = 'o';
     over_flag->label =
         _("Override projection check (use current location's projection)");
-    over_flag->description =
-        _("Assume that the dataset has same projection as the current location");
+    over_flag->description = _(
+        "Assume that the dataset has same projection as the current location");
     over_flag->guisection = _("Projection");
 
-    // TODO: from the API it seems that also prj file path and proj string will work
+    // TODO: from the API it seems that also prj file path and proj string will
+    // work
     Option *input_srs_opt = G_define_option();
     input_srs_opt->key = "input_srs";
     input_srs_opt->type = TYPE_STRING;
     input_srs_opt->required = NO;
     input_srs_opt->label =
-            _("Input dataset projection (WKT or EPSG, e.g. EPSG:4326)");
+        _("Input dataset projection (WKT or EPSG, e.g. EPSG:4326)");
     input_srs_opt->description =
-            _("Override input dataset coordinate system using EPSG code"
-              " or WKT definition");
+        _("Override input dataset coordinate system using EPSG code"
+          " or WKT definition");
     input_srs_opt->guisection = _("Projection");
 
     Flag *nocats_flag = G_define_flag();
     nocats_flag->key = 'c';
     nocats_flag->label =
         _("Do not automatically add unique ID as category to each point");
-    nocats_flag->description =
-        _("Create only requested layers and categories");
+    nocats_flag->description = _("Create only requested layers and categories");
     /* v.in.lidar has this in Speed but we don't have it here */
     nocats_flag->guisection = _("Categories");
 
@@ -282,8 +279,8 @@ int main(int argc, char *argv[])
     }
 
     /* this is plain C but in sync with v.in.lidar */
-    Option *layer_options[4] = {id_layer_opt, return_layer_opt,
-                                class_layer_opt, rgb_layer_opt};
+    Option *layer_options[4] = {id_layer_opt, return_layer_opt, class_layer_opt,
+                                rgb_layer_opt};
     int layer_values[4] = {layers.id_layer, layers.return_layer,
                            layers.class_layer, layers.rgb_layer};
     check_layers_in_list_not_equal(layer_options, layer_values, 4);
@@ -300,22 +297,18 @@ int main(int argc, char *argv[])
     double ymax = 0;
     bool use_spatial_filter = false;
     if (spatial_opt->answer)
-        use_spatial_filter = spatial_filter_from_option(spatial_opt,
-                                                        &xmin, &ymin,
-                                                        &xmax, &ymax);
+        use_spatial_filter =
+            spatial_filter_from_option(spatial_opt, &xmin, &ymin, &xmax, &ymax);
     else if (region_flag->answer)
-        use_spatial_filter = spatial_filter_from_current_region(&xmin,
-                                                                &ymin,
-                                                                &xmax,
-                                                                &ymax);
+        use_spatial_filter =
+            spatial_filter_from_current_region(&xmin, &ymin, &xmax, &ymax);
 
     double zrange_min, zrange_max;
-    bool use_zrange = zrange_filter_from_option(zrange_opt, &zrange_min,
-                                                &zrange_max);
+    bool use_zrange =
+        zrange_filter_from_option(zrange_opt, &zrange_min, &zrange_max);
     struct ReturnFilter return_filter_struct;
-    bool use_return_filter =
-        return_filter_create_from_string(&return_filter_struct,
-                                         filter_opt->answer);
+    bool use_return_filter = return_filter_create_from_string(
+        &return_filter_struct, filter_opt->answer);
     struct ClassFilter class_filter;
     bool use_class_filter =
         class_filter_create_from_strings(&class_filter, class_opt->answers);
@@ -335,13 +328,13 @@ int main(int argc, char *argv[])
         las_opts.add(count_opt);
     // TODO: free reader
     // using plain pointer because we need to keep the last stage pointer
-    pdal::Stage * reader = factory.createStage(pdal_read_driver);
+    pdal::Stage *reader = factory.createStage(pdal_read_driver);
     if (!reader)
         G_fatal_error("PDAL reader creation failed, a wrong format of <%s>",
                       in_opt->answer);
     reader->setOptions(las_opts);
 
-    pdal::Stage * last_stage = reader;
+    pdal::Stage *last_stage = reader;
     pdal::ReprojectionFilter reprojection_filter;
 
     // we reproject when requested regardless the input projection
@@ -373,12 +366,11 @@ int main(int argc, char *argv[])
                               " the location projection"));
     }
     else if (!reproject_flag->answer) {
-        pdal::SpatialReference spatial_reference = reader->getSpatialReference();
+        pdal::SpatialReference spatial_reference =
+            reader->getSpatialReference();
         if (spatial_reference.empty())
             G_fatal_error(_("The input dataset has undefined projection"));
-        std::string dataset_wkt =
-            spatial_reference.
-            getWKT();
+        std::string dataset_wkt = spatial_reference.getWKT();
         bool proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
         if (!proj_match)
             wkt_projection_mismatch_report(dataset_wkt.c_str());
@@ -468,9 +460,9 @@ int main(int argc, char *argv[])
     // two or more stages.
     auto cb = [=, &cat, &n_outside, &zrange_filtered, &n_filtered,
                &n_class_filtered, &class_filter, &return_filter_struct,
-               &output_vector, &layers](pdal::PointRef& point) -> bool
-    {
-        // TODO: avoid duplication of reading the attributes here and when writing if needed
+               &output_vector, &layers](pdal::PointRef &point) -> bool {
+        // TODO: avoid duplication of reading the attributes here and when
+        // writing if needed
         double x = point.getFieldAs<double>(pdal::Dimension::Id::X);
         double y = point.getFieldAs<double>(pdal::Dimension::Id::Y);
         double z = point.getFieldAs<double>(dim_to_use_as_z);
@@ -492,8 +484,8 @@ int main(int argc, char *argv[])
                 point.getFieldAs<int>(pdal::Dimension::Id::ReturnNumber);
             int n_returns =
                 point.getFieldAs<int>(pdal::Dimension::Id::NumberOfReturns);
-            if (return_filter_is_out
-                (&return_filter_struct, return_n, n_returns)) {
+            if (return_filter_is_out(&return_filter_struct, return_n,
+                                     n_returns)) {
                 n_filtered++;
                 return false;
             }
@@ -506,8 +498,8 @@ int main(int argc, char *argv[])
                 return false;
             }
         }
-        pdal_point_to_grass(&output_vector, points, cats, point,
-                            &layers, cat, dim_to_use_as_z);
+        pdal_point_to_grass(&output_vector, points, cats, point, &layers, cat,
+                            dim_to_use_as_z);
         if (layers.id_layer) {
             // we limit the count of imported points, so we don't
             // need to check if we reached GV_CAT_MAX
@@ -519,7 +511,7 @@ int main(int argc, char *argv[])
     // set the callback and run the actual processing
     stream_filter.setCallback(cb);
     stream_filter.execute(point_table);
-    
+
     // not building topology by default
     Vect_close(&output_vector);
 }

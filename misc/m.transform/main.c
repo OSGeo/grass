@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       m.transform   (nee g.transform)
  * AUTHOR(S):    Brian J. Buckley
  *               Glynn Clements
  *               Hamish Bowman
- * PURPOSE:      Utility to compute transformation based upon GCPs and 
+ * PURPOSE:      Utility to compute transformation based upon GCPs and
  *               output error measurements
  * COPYRIGHT:    (C) 2006-2010 by the GRASS Development Team
  *
@@ -25,14 +24,12 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
-struct Max
-{
+struct Max {
     int idx;
     double val;
 };
 
-struct Stats
-{
+struct Stats {
     struct Max x, y, g;
     double sum2, rms;
 };
@@ -82,7 +79,7 @@ static void diagonal(double *dg, double *d2, double dx, double dy)
 
 static void compute_transformation(void)
 {
-    static const int order_pnts[3] = { 3, 6, 10 };
+    static const int order_pnts[3] = {3, 6, 10};
     int n, i;
 
     equation_stat =
@@ -241,7 +238,7 @@ static void parse_format(void)
 static void dump_cooefs(void)
 {
     int i;
-    static const int order_pnts[3] = { 3, 6, 10 };
+    static const int order_pnts[3] = {3, 6, 10};
 
     for (i = 0; i < order_pnts[order - 1]; i++)
         fprintf(stdout, "E%d=%.15g\n", i, forward ? E12[i] : E21[i]);
@@ -301,7 +298,6 @@ static void do_pt_xforms(void)
         fclose(fp);
 }
 
-
 int main(int argc, char **argv)
 {
     struct Option *grp, *val, *fmt, *xfm_pts;
@@ -336,16 +332,14 @@ int main(int argc, char **argv)
     fmt->multiple = YES;
     fmt->options = "idx,src,dst,fwd,rev,fxy,rxy,fd,rd";
     desc = NULL;
-    G_asprintf(&desc,
-               "idx;%s;src;%s;dst;%s;fwd;%s;rev;%s;fxy;%s;rxy;%s;fd;%s;rd;%s",
-               _("point index"),
-               _("source coordinates"),
-               _("destination coordinates"),
-               _("forward coordinates (destination)"),
-               _("reverse coordinates (source)"),
-               _("forward coordinates difference (destination)"),
-               _("reverse coordinates difference (source)"),
-               _("forward error (destination)"), _("reverse error (source)"));
+    G_asprintf(
+        &desc, "idx;%s;src;%s;dst;%s;fwd;%s;rev;%s;fxy;%s;rxy;%s;fd;%s;rd;%s",
+        _("point index"), _("source coordinates"), _("destination coordinates"),
+        _("forward coordinates (destination)"),
+        _("reverse coordinates (source)"),
+        _("forward coordinates difference (destination)"),
+        _("reverse coordinates difference (source)"),
+        _("forward error (destination)"), _("reverse error (source)"));
     fmt->descriptions = desc;
     fmt->answer = "fd,rd";
     fmt->description = _("Output format");
@@ -356,8 +350,8 @@ int main(int argc, char **argv)
 
     xfm_pts = G_define_standard_option(G_OPT_F_INPUT);
     xfm_pts->required = NO;
-    xfm_pts->label =
-        _("File containing coordinates to transform (\"-\" to read from stdin)");
+    xfm_pts->label = _(
+        "File containing coordinates to transform (\"-\" to read from stdin)");
     xfm_pts->description = _("Local x,y coordinates to target east,north");
 
     rev_flag = G_define_flag();
@@ -371,7 +365,6 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     name = grp->answer;
     order = atoi(val->answer);

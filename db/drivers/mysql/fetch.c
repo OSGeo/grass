@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -19,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_fetch(dbCursor * cn, int position, int *more)
+int db__driver_fetch(dbCursor *cn, int position, int *more)
 {
     cursor *c;
     dbToken token;
@@ -30,7 +29,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(_("Cursor not found"));
         db_d_report_error();
         return DB_FAILED;
@@ -72,7 +71,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
         dbValue *value;
         char *val;
 
-        col = c->cols[i];       /* known column */
+        col = c->cols[i]; /* known column */
 
         column = db_get_table_column(table, i);
         mysqltype = db_get_column_host_type(column);
@@ -96,8 +95,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             value->isNull = 0;
         }
 
-        G_debug(3, "col %d, mysqltype %d, sqltype %d, val = '%s'",
-                col, mysqltype, sqltype, c->row[col]);
+        G_debug(3, "col %d, mysqltype %d, sqltype %d, val = '%s'", col,
+                mysqltype, sqltype, c->row[col]);
 
         /* defined in /usr/include/mysql/mysql_com.h */
         switch (mysqltype) {
@@ -125,89 +124,86 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
              *                        YYMM           TIMESTAMP(4)
              *                        YY             YY
              * MySQL TIMESTAMP >= 4.1: 'YYYY-MM-DD HH:MM:SS' (19 chars) */
-        case MYSQL_TYPE_TIMESTAMP:
-            {
-                char valbuf[25], buf[10];
+        case MYSQL_TYPE_TIMESTAMP: {
+            char valbuf[25], buf[10];
 
-                memset(valbuf, 0, 25);
-                strcpy(valbuf, val);
+            memset(valbuf, 0, 25);
+            strcpy(valbuf, val);
 
-                switch (strlen(val)) {
-                case 2:
-                case 4:
-                case 6:
-                case 10:
-                case 12:
-                    strncpy(buf, val, 2);
-                    buf[2] = 0;
-                    value->t.year = atoi(buf);
-                    strncpy(buf, val + 2, 2);
-                    buf[2] = 0;
-                    value->t.month = atoi(buf);
-                    strncpy(buf, val + 4, 2);
-                    buf[2] = 0;
-                    value->t.day = atoi(buf);
-                    strncpy(buf, val + 6, 2);
-                    buf[2] = 0;
-                    value->t.hour = atoi(buf);
-                    strncpy(buf, val + 8, 2);
-                    buf[2] = 0;
-                    value->t.minute = atoi(buf);
-                    strncpy(buf, val + 10, 2);
-                    buf[2] = 0;
-                    value->t.seconds = atof(buf);
-                    break;
+            switch (strlen(val)) {
+            case 2:
+            case 4:
+            case 6:
+            case 10:
+            case 12:
+                strncpy(buf, val, 2);
+                buf[2] = 0;
+                value->t.year = atoi(buf);
+                strncpy(buf, val + 2, 2);
+                buf[2] = 0;
+                value->t.month = atoi(buf);
+                strncpy(buf, val + 4, 2);
+                buf[2] = 0;
+                value->t.day = atoi(buf);
+                strncpy(buf, val + 6, 2);
+                buf[2] = 0;
+                value->t.hour = atoi(buf);
+                strncpy(buf, val + 8, 2);
+                buf[2] = 0;
+                value->t.minute = atoi(buf);
+                strncpy(buf, val + 10, 2);
+                buf[2] = 0;
+                value->t.seconds = atof(buf);
+                break;
 
-                case 8:
-                case 14:
-                    strncpy(buf, val, 4);
-                    buf[4] = 0;
-                    value->t.year = atoi(buf);
-                    strncpy(buf, val + 4, 2);
-                    buf[2] = 0;
-                    value->t.month = atoi(buf);
-                    strncpy(buf, val + 6, 2);
-                    buf[2] = 0;
-                    value->t.day = atoi(buf);
-                    strncpy(buf, val + 8, 2);
-                    buf[2] = 0;
-                    value->t.hour = atoi(buf);
-                    strncpy(buf, val + 10, 2);
-                    buf[2] = 0;
-                    value->t.minute = atoi(buf);
-                    strncpy(buf, val + 12, 2);
-                    buf[2] = 0;
-                    value->t.seconds = atof(buf);
-                    break;
+            case 8:
+            case 14:
+                strncpy(buf, val, 4);
+                buf[4] = 0;
+                value->t.year = atoi(buf);
+                strncpy(buf, val + 4, 2);
+                buf[2] = 0;
+                value->t.month = atoi(buf);
+                strncpy(buf, val + 6, 2);
+                buf[2] = 0;
+                value->t.day = atoi(buf);
+                strncpy(buf, val + 8, 2);
+                buf[2] = 0;
+                value->t.hour = atoi(buf);
+                strncpy(buf, val + 10, 2);
+                buf[2] = 0;
+                value->t.minute = atoi(buf);
+                strncpy(buf, val + 12, 2);
+                buf[2] = 0;
+                value->t.seconds = atof(buf);
+                break;
 
-                case 19:
-                    ns = sscanf(val, "%4d-%2d-%2d %2d:%2d:%lf",
-                                &(value->t.year), &(value->t.month),
-                                &(value->t.day), &(value->t.hour),
-                                &(value->t.minute), &(value->t.seconds));
+            case 19:
+                ns =
+                    sscanf(val, "%4d-%2d-%2d %2d:%2d:%lf", &(value->t.year),
+                           &(value->t.month), &(value->t.day), &(value->t.hour),
+                           &(value->t.minute), &(value->t.seconds));
 
-                    if (ns != 6) {
-                        db_d_append_error("%s %s",
-                                          _("Unable to scan timestamp: "),
-                                          val);
-                        db_d_report_error();
-                        return DB_FAILED;
-                    }
-                    break;
-
-                default:
-                    db_d_append_error("%s %s",
-                                      _("Unknown timestamp format: "), val);
+                if (ns != 6) {
+                    db_d_append_error("%s %s", _("Unable to scan timestamp: "),
+                                      val);
                     db_d_report_error();
                     return DB_FAILED;
                 }
+                break;
+
+            default:
+                db_d_append_error("%s %s", _("Unknown timestamp format: "),
+                                  val);
+                db_d_report_error();
+                return DB_FAILED;
             }
-            break;
+        } break;
 
             /* MySQL DATE: 'YYYY-MM-DD' */
         case MYSQL_TYPE_DATE:
-            ns = sscanf(val, "%4d-%2d-%2d", &(value->t.year),
-                        &(value->t.month), &(value->t.day));
+            ns = sscanf(val, "%4d-%2d-%2d", &(value->t.year), &(value->t.month),
+                        &(value->t.day));
 
             if (ns != 3) {
                 db_d_append_error("%s %s", _("Unable to scan date: "), val);
@@ -230,14 +226,12 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
             /* MySQL DATETIME: 'YYYY-MM-DD HH:MM:SS' */
         case MYSQL_TYPE_DATETIME:
-            ns = sscanf(val, "%4d-%2d-%2d %2d:%2d:%lf",
-                        &(value->t.year), &(value->t.month),
-                        &(value->t.day), &(value->t.hour),
+            ns = sscanf(val, "%4d-%2d-%2d %2d:%2d:%lf", &(value->t.year),
+                        &(value->t.month), &(value->t.day), &(value->t.hour),
                         &(value->t.minute), &(value->t.seconds));
 
             if (ns != 6) {
-                db_d_append_error("%s %s",
-                                  _("Unable to scan datetime:"), val);
+                db_d_append_error("%s %s", _("Unable to scan datetime:"), val);
                 db_d_report_error();
                 return DB_FAILED;
             }
@@ -257,7 +251,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 }
 
 int db__driver_get_num_rows(cn)
-     dbCursor *cn;
+dbCursor *cn;
 {
     cursor *c;
     dbToken token;
@@ -266,7 +260,7 @@ int db__driver_get_num_rows(cn)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(_("Cursor not found"));
         db_d_report_error();
         return DB_FAILED;

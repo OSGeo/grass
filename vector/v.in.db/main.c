@@ -1,11 +1,10 @@
-
 /******************************************************************************
- * MODULE:       v.in.db 
- *               
+ * MODULE:       v.in.db
+ *
  * AUTHOR(S):    Radim Blazek
- *               
+ *
  * PURPOSE:      Create new vector from db table.
- * 	    
+ *
  * COPYRIGHT:    (C) 2000-2007, 2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -53,8 +52,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword(_("database"));
     G_add_keyword(_("points"));
-    module->description =
-        _("Creates new vector (points) map from database table containing coordinates.");
+    module->description = _("Creates new vector (points) map from database "
+                            "table containing coordinates.");
 
     table_opt = G_define_standard_option(G_OPT_DB_TABLE);
     table_opt->required = YES;
@@ -157,8 +156,8 @@ int main(int argc, char *argv[])
     fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
 
     /* Open driver */
-    driver = db_start_driver_open_database(driver_opt->answer,
-                                           database_opt->answer);
+    driver =
+        db_start_driver_open_database(driver_opt->answer, database_opt->answer);
     if (driver == NULL) {
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       fi->database, fi->driver);
@@ -173,10 +172,11 @@ int main(int argc, char *argv[])
     if (!same_table_flag->answer &&
         db_table_exists(db_get_default_driver_name(),
                         db_get_default_database_name(), outvect->answer) == 1)
-        G_fatal_error(_("Output vector map, table <%s> (driver: <%s>, database: <%s>) "
-                       "already exists"), outvect->answer,
-                      db_get_default_driver_name(),
-                      db_get_default_database_name());
+        G_fatal_error(
+            _("Output vector map, table <%s> (driver: <%s>, database: <%s>) "
+              "already exists"),
+            outvect->answer, db_get_default_driver_name(),
+            db_get_default_database_name());
 
     if (keycol_opt->answer) {
         int coltype;
@@ -192,13 +192,15 @@ int main(int argc, char *argv[])
     }
     else {
         if (same_table_flag->answer) {
-            G_fatal_error(_("Option <%s> must be specified when -%c flag is given"),
-                          keycol_opt->key, same_table_flag->key);
+            G_fatal_error(
+                _("Option <%s> must be specified when -%c flag is given"),
+                keycol_opt->key, same_table_flag->key);
         }
 
         if (strcmp(db_get_default_driver_name(), "sqlite") != 0)
-            G_fatal_error(_("Unable to define key column. This operation is not supported "
-                           "by <%s> driver. You need to define <%s> option."),
+            G_fatal_error(_("Unable to define key column. This operation is "
+                            "not supported "
+                            "by <%s> driver. You need to define <%s> option."),
                           fi->driver, keycol_opt->key);
     }
 
@@ -282,14 +284,18 @@ int main(int argc, char *argv[])
     if (!same_table_flag->answer) {
         G_message(_("Copying attributes..."));
 
-        if (DB_FAILED == db_copy_table_where(driver_opt->answer, database_opt->answer, table_opt->answer, fi->driver, fi->database, fi->table, where_opt->answer)) {    /* where can be NULL */
+        if (DB_FAILED ==
+            db_copy_table_where(driver_opt->answer, database_opt->answer,
+                                table_opt->answer, fi->driver, fi->database,
+                                fi->table,
+                                where_opt->answer)) { /* where can be NULL */
             G_warning(_("Unable to copy table"));
         }
         else {
             Vect_map_add_dblink(&Map, 1, NULL, fi->table,
-                                keycol_opt->answer ? keycol_opt->
-                                answer : GV_KEY_COLUMN, fi->database,
-                                fi->driver);
+                                keycol_opt->answer ? keycol_opt->answer
+                                                   : GV_KEY_COLUMN,
+                                fi->database, fi->driver);
         }
 
         if (!keycol_opt->answer) {
@@ -304,8 +310,8 @@ int main(int argc, char *argv[])
             db_set_error_handler_driver(driver);
 
             /* add key column */
-            sprintf(buf, "ALTER TABLE %s ADD COLUMN %s INTEGER",
-                    fi->table, GV_KEY_COLUMN);
+            sprintf(buf, "ALTER TABLE %s ADD COLUMN %s INTEGER", fi->table,
+                    GV_KEY_COLUMN);
             db_set_string(&sql, buf);
 
             if (db_execute_immediate(driver, &sql) != DB_OK) {
@@ -315,30 +321,30 @@ int main(int argc, char *argv[])
             }
 
             /* update key column */
-            sprintf(buf, "UPDATE %s SET %s = _ROWID_",
-                    fi->table, GV_KEY_COLUMN);
+            sprintf(buf, "UPDATE %s SET %s = _ROWID_", fi->table,
+                    GV_KEY_COLUMN);
             db_set_string(&sql, buf);
 
             if (db_execute_immediate(driver, &sql) != DB_OK) {
                 G_fatal_error(_("Failed to update key column <%s>"),
                               GV_KEY_COLUMN);
             }
-
         }
     }
     else {
         /* do not copy attributes, link original table */
         Vect_map_add_dblink(&Map, 1, NULL, table_opt->answer,
-                            keycol_opt->answer ? keycol_opt->
-                            answer : GV_KEY_COLUMN, database_opt->answer,
-                            driver_opt->answer);
+                            keycol_opt->answer ? keycol_opt->answer
+                                               : GV_KEY_COLUMN,
+                            database_opt->answer, driver_opt->answer);
     }
 
     Vect_build(&Map);
     Vect_close(&Map);
 
     G_done_msg(n_("%d point written to vector map.",
-                  "%d points written to vector map.", count), count);
+                  "%d points written to vector map.", count),
+               count);
 
     return (EXIT_SUCCESS);
 }

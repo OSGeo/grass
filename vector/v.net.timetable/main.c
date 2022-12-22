@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.timetable
@@ -27,8 +26,7 @@ struct Map_info In, Out;
 neta_timetable_result result;
 neta_timetable timetable;
 
-struct segment
-{
+struct segment {
     int from_stop, to_stop;
     int from_time, to_time;
     int route;
@@ -45,8 +43,7 @@ void init_route(int connection, int stop)
 {
     if (result.prev_stop[connection][stop] == -1)
         return;
-    struct segment *seg =
-        (struct segment *)G_calloc(1, sizeof(struct segment));
+    struct segment *seg = (struct segment *)G_calloc(1, sizeof(struct segment));
     int prev_conn = result.prev_conn[connection][stop];
 
     seg->next = head.next;
@@ -57,9 +54,8 @@ void init_route(int connection, int stop)
     if (seg->route == -2)
         seg->from_time = result.dst[prev_conn][seg->from_stop];
     else
-        seg->from_time =
-            NetA_timetable_get_route_time(&timetable, seg->from_stop,
-                                          seg->route);
+        seg->from_time = NetA_timetable_get_route_time(
+            &timetable, seg->from_stop, seg->route);
     seg->to_time = result.dst[connection][stop];
     init_route(prev_conn, seg->from_stop);
 }
@@ -77,7 +73,7 @@ static int int_cmp(const void *a, const void *b)
     return *(int *)a - *(int *)b;
 }
 
-void init_database(struct Map_info *Out, dbDriver ** driver,
+void init_database(struct Map_info *Out, dbDriver **driver,
                    struct field_info **Fi, int layer, char *columns)
 {
     dbString sql;
@@ -106,19 +102,16 @@ void init_database(struct Map_info *Out, dbDriver ** driver,
     if (db_create_index2(*driver, (*Fi)->table, GV_KEY_COLUMN) != DB_OK)
         G_warning(_("Cannot create index"));
 
-    if (db_grant_on_table
-        (*driver, (*Fi)->table, DB_PRIV_SELECT,
-         DB_GROUP | DB_PUBLIC) != DB_OK)
-        G_fatal_error(_("Cannot grant privileges on table <%s>"),
-                      (*Fi)->table);
+    if (db_grant_on_table(*driver, (*Fi)->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
+        G_fatal_error(_("Cannot grant privileges on table <%s>"), (*Fi)->table);
 
     db_free_string(&sql);
     db_begin_transaction(*driver);
 }
 
-void insert_point(dbDriver * driver, char *table, int cat, int path,
-                  int stop_id, int index, int arrival_time,
-                  int departure_time)
+void insert_point(dbDriver *driver, char *table, int cat, int path, int stop_id,
+                  int index, int arrival_time, int departure_time)
 {
     char buf[2000];
     dbString sql;
@@ -137,9 +130,8 @@ void insert_point(dbDriver * driver, char *table, int cat, int path,
     db_free_string(&sql);
 }
 
-void insert_line(dbDriver * driver, char *table, int cat, int path,
-                 int from_id, int to_id, int route_id, int index,
-                 int from_time, int to_time)
+void insert_line(dbDriver *driver, char *table, int cat, int path, int from_id,
+                 int to_id, int route_id, int index, int from_time, int to_time)
 {
     char buf[2000];
     dbString sql;
@@ -205,9 +197,9 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
         if (timetable.route_stops[r][i] == seg->from_stop)
             break;
     for (; timetable.route_stops[r][i] != seg->to_stop; i++)
-        if (NetA_find_path
-            (graph, stop_node[timetable.route_stops[r][i]],
-             stop_node[timetable.route_stops[r][i + 1]], edges, list) != -1) {
+        if (NetA_find_path(graph, stop_node[timetable.route_stops[r][i]],
+                           stop_node[timetable.route_stops[r][i + 1]], edges,
+                           list) != -1) {
             for (j = 0; j < list->n_values; j++) {
                 int type = Vect_read_line(&In, Points, NULL, list->value[j]);
 
@@ -229,21 +221,21 @@ int main(int argc, char *argv[])
 {
     static struct line_pnts *Points, *Cur, *Prev;
     struct line_cats *Cats;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *tfield_opt,  /* Input map: layer with existing timetable */
-     *walk_layer_opt;           /* Input map: layer with existing walking routes between stops */
+    struct Option *tfield_opt, /* Input map: layer with existing timetable */
+        *walk_layer_opt;       /* Input map: layer with existing walking routes
+                                  between stops */
 
-    struct Option *afield_opt,  /* Input map: layer with arc costs */
-     *nfield_opt,               /* Input map: layer with node costs */
-     *afcol, *abcol, *ncol;     /* Input map: cost columns */
+    struct Option *afield_opt, /* Input map: layer with arc costs */
+        *nfield_opt,           /* Input map: layer with node costs */
+        *afcol, *abcol, *ncol; /* Input map: cost columns */
 
-    struct Option *route_id_opt, *stop_time_opt, *to_stop_opt,
-        *walk_length_opt;
+    struct Option *route_id_opt, *stop_time_opt, *to_stop_opt, *walk_length_opt;
     int with_z;
     int tfield, mask_type, afield, nfield;
-    int from_stop, to_stop, start_time, min_change, max_changes,
-        walking_change, ret;
+    int from_stop, to_stop, start_time, min_change, max_changes, walking_change,
+        ret;
     int *stop_pnt, i, nlines, point_counter, *route_pnt;
     int line_counter, index, j;
     struct segment *cur;
@@ -254,7 +246,8 @@ int main(int argc, char *argv[])
     struct field_info *point_Fi, *line_Fi;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -344,8 +337,7 @@ int main(int argc, char *argv[])
     Cur = Vect_new_line_struct();
     Prev = Vect_new_line_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -359,25 +351,27 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
 
-
     /* parse filter option and select appropriate lines */
     tfield = atoi(tfield_opt->answer);
     afield = atoi(afield_opt->answer);
     nfield = atoi(nfield_opt->answer);
 
     init_database(&Out, &point_driver, &point_Fi, 1,
-                  "cat integer, path_id integer, stop_id integer, index integer, arr_time integer, dep_time integer");
-    init_database(&Out, &line_driver, &line_Fi, 2,
-                  "cat integer, path_id integer, from_id integer, to_id integer, route_id integer, index integer, from_time integer, to_time integer");
+                  "cat integer, path_id integer, stop_id integer, index "
+                  "integer, arr_time integer, dep_time integer");
+    init_database(
+        &Out, &line_driver, &line_Fi, 2,
+        "cat integer, path_id integer, from_id integer, to_id integer, "
+        "route_id integer, index integer, from_time integer, to_time integer");
 
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    if (NetA_init_timetable_from_db
-        (&In, tfield, atoi(walk_layer_opt->answer), route_id_opt->answer,
-         stop_time_opt->answer, to_stop_opt->answer, walk_length_opt->answer,
-         &timetable, &route_ids, &stop_ids) != 0)
+    if (NetA_init_timetable_from_db(
+            &In, tfield, atoi(walk_layer_opt->answer), route_id_opt->answer,
+            stop_time_opt->answer, to_stop_opt->answer, walk_length_opt->answer,
+            &timetable, &route_ids, &stop_ids) != 0)
         G_fatal_error(_("Could not initialize the timetables"));
 
     stop_x = (double *)G_calloc(timetable.stops, sizeof(double));
@@ -392,24 +386,21 @@ int main(int argc, char *argv[])
         nnodes = Vect_get_num_nodes(&In);
         stop_node = (int *)G_calloc(timetable.stops, sizeof(int));
         lines =
-            (struct ilist **)G_calloc(timetable.routes,
-                                      sizeof(struct ilist *));
+            (struct ilist **)G_calloc(timetable.routes, sizeof(struct ilist *));
         edges = (int *)G_calloc(nnodes + 1, sizeof(int));
         if (!edges || !stop_node || !lines)
             G_fatal_error(_("Out of memory"));
         for (i = 0; i < timetable.routes; i++)
             lines[i] = Vect_new_list();
 
-        if (0 !=
-            Vect_net_build_graph(&In, mask_type, afield, nfield,
-                                 afcol->answer, abcol->answer, ncol->answer,
-                                 0, 0))
+        if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield,
+                                      afcol->answer, abcol->answer,
+                                      ncol->answer, 0, 0))
             G_fatal_error(_("Unable to build graph for vector map <%s>"),
                           Vect_get_full_name(&In));
 
         graph = Vect_net_get_graph(&In);
     }
-
 
     nlines = Vect_get_num_lines(&In);
     for (i = 1; i <= nlines; i++) {
@@ -422,9 +413,8 @@ int main(int argc, char *argv[])
                 if (Cats->field[j] != tfield)
                     continue;
                 cat = Cats->cat[j];
-                stop_pnt =
-                    (int *)bsearch(&cat, stop_ids, timetable.stops,
-                                   sizeof(int), int_cmp);
+                stop_pnt = (int *)bsearch(&cat, stop_ids, timetable.stops,
+                                          sizeof(int), int_cmp);
                 if (!stop_pnt)
                     continue;
 
@@ -433,9 +423,8 @@ int main(int argc, char *argv[])
                 stop_y[stop] = Points->y[0];
                 stop_z[stop] = Points->z[0];
                 if (afield > 0) {
-                    node =
-                        Vect_find_node(&In, Points->x[0], Points->y[0],
-                                       Points->z[0], 0, 0);
+                    node = Vect_find_node(&In, Points->x[0], Points->y[0],
+                                          Points->z[0], 0, 0);
                     if (!stop_node[stop] && node > 0)
                         stop_node[stop] = node;
                 }
@@ -449,9 +438,8 @@ int main(int argc, char *argv[])
                 if (Cats->field[j] != afield)
                     continue;
                 cat = Cats->cat[j];
-                route_pnt =
-                    (int *)bsearch(&cat, route_ids, timetable.routes,
-                                   sizeof(int), int_cmp);
+                route_pnt = (int *)bsearch(&cat, route_ids, timetable.routes,
+                                           sizeof(int), int_cmp);
                 if (!route_pnt)
                     continue;
                 Vect_list_append(lines[route_pnt - route_ids], i);
@@ -470,35 +458,31 @@ int main(int argc, char *argv[])
 
         if (fgets(buf, sizeof(buf), stdin) == NULL)
             break;
-        ret =
-            sscanf(buf, "%d %lf %lf %lf %lf %d %d %d %d", &path_id, &fx, &fy,
-                   &tx, &ty, &start_time, &min_change, &max_changes,
-                   &walking_change);
+        ret = sscanf(buf, "%d %lf %lf %lf %lf %d %d %d %d", &path_id, &fx, &fy,
+                     &tx, &ty, &start_time, &min_change, &max_changes,
+                     &walking_change);
         if (ret == 9) {
             from_stop = get_nearest_stop(fx, fy, 0, with_z);
             to_stop = get_nearest_stop(tx, ty, 0, with_z);
         }
         else {
-            ret =
-                sscanf(buf, "%d %d %d %d %d %d %d", &path_id, &from_stop,
-                       &to_stop, &start_time, &min_change, &max_changes,
-                       &walking_change);
+            ret = sscanf(buf, "%d %d %d %d %d %d %d", &path_id, &from_stop,
+                         &to_stop, &start_time, &min_change, &max_changes,
+                         &walking_change);
             if (ret < 7) {
                 G_warning(_("Wrong input format: %s"), buf);
                 continue;
             }
 
-            stop_pnt =
-                (int *)bsearch(&from_stop, stop_ids, timetable.stops,
-                               sizeof(int), int_cmp);
+            stop_pnt = (int *)bsearch(&from_stop, stop_ids, timetable.stops,
+                                      sizeof(int), int_cmp);
             if (!stop_pnt) {
                 G_warning(_("No stop with category: %d"), from_stop);
                 continue;
             }
             from_stop = stop_pnt - stop_ids;
-            stop_pnt =
-                (int *)bsearch(&to_stop, stop_ids, timetable.stops,
-                               sizeof(int), int_cmp);
+            stop_pnt = (int *)bsearch(&to_stop, stop_ids, timetable.stops,
+                                      sizeof(int), int_cmp);
             if (!stop_pnt) {
                 G_warning(_("No stop with category: %d"), to_stop);
                 continue;
@@ -511,10 +495,9 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        ret =
-            NetA_timetable_shortest_path(&timetable, from_stop, to_stop,
-                                         start_time, min_change, max_changes,
-                                         walking_change, &result);
+        ret = NetA_timetable_shortest_path(&timetable, from_stop, to_stop,
+                                           start_time, min_change, max_changes,
+                                           walking_change, &result);
         if (ret == -1) {
             G_warning(_("No path between the stops"));
             continue;
@@ -533,8 +516,7 @@ int main(int argc, char *argv[])
         Vect_cat_set(Cats, 1, point_counter);
         Vect_write_line(&Out, GV_POINT, Cur, Cats);
         insert_point(point_driver, point_Fi->table, point_counter, path_id,
-                     stop_ids[from_stop], 1, start_time,
-                     head.next->from_time);
+                     stop_ids[from_stop], 1, start_time, head.next->from_time);
         point_counter++;
         Vect_append_points(Prev, Cur, GV_FORWARD);
         index = 1;
@@ -566,9 +548,9 @@ int main(int argc, char *argv[])
                 dept_time = cur->next->from_time;
             else
                 dept_time = cur->to_time;
-            insert_point(point_driver, point_Fi->table, point_counter,
-                         path_id, stop_ids[cur->to_stop], index + 1,
-                         cur->to_time, dept_time);
+            insert_point(point_driver, point_Fi->table, point_counter, path_id,
+                         stop_ids[cur->to_stop], index + 1, cur->to_time,
+                         dept_time);
 
             Vect_append_points(Points, Prev, GV_FORWARD);
             Vect_append_points(Points, Cur, GV_FORWARD);

@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.allpairs
@@ -25,8 +24,7 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-struct _spnode
-{
+struct _spnode {
     int cat, node;
 };
 
@@ -36,7 +34,7 @@ int main(int argc, char *argv[])
     static struct line_pnts *Points, *aPoints;
     struct line_cats *Cats, **FCats, **BCats;
     struct ilist *List;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *cat_opt, *afield_opt, *nfield_opt, *where_opt, *abcol,
         *afcol, *ncol;
@@ -55,15 +53,16 @@ int main(int argc, char *argv[])
     struct field_info *Fi;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("shortest path"));
-    module->description =
-        _("Computes the shortest path between all pairs of nodes in the network.");
+    module->description = _("Computes the shortest path between all pairs of "
+                            "nodes in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -122,8 +121,7 @@ int main(int argc, char *argv[])
     aPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -150,9 +148,9 @@ int main(int argc, char *argv[])
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
     if (where_opt->answer || cat_opt->answer) {
-        chcat = (NetA_initialise_varray(&In, nfield, GV_POINT,
-                                        where_opt->answer,
-                                        cat_opt->answer, &varray) > 0);
+        chcat =
+            (NetA_initialise_varray(&In, nfield, GV_POINT, where_opt->answer,
+                                    cat_opt->answer, &varray) > 0);
     }
     else
         chcat = 0;
@@ -169,7 +167,8 @@ int main(int argc, char *argv[])
     db_set_error_handler_driver(driver);
 
     sprintf(buf,
-            "create table %s ( cat integer, from_cat integer, to_cat integer, cost double precision)",
+            "create table %s ( cat integer, from_cat integer, to_cat integer, "
+            "cost double precision)",
             Fi->table);
 
     db_set_string(&sql, buf);
@@ -183,15 +182,14 @@ int main(int argc, char *argv[])
         if (strcmp(Fi->driver, "dbf"))
             G_warning(_("Cannot create index"));
     }
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
 
-
-    Vect_net_build_graph(&In, mask_type, afield, nfield,
-                         afcol->answer, abcol->answer, ncol->answer, geo, 0);
+    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                         abcol->answer, ncol->answer, geo, 0);
 
     nnodes = Vect_get_num_primitives(&In, GV_POINT);
 
@@ -224,8 +222,7 @@ int main(int argc, char *argv[])
         Vect_read_line(&In, Points, Cats, i);
 
         node =
-            Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0,
-                           0);
+            Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
         if (node) {
             Vect_cat_get(Cats, nfield, &cat);
             if (cat != -1) {
@@ -256,16 +253,16 @@ int main(int argc, char *argv[])
             if (i == j)
                 continue;
 
-            ret = Vect_net_shortest_path(&In, spnode[i].node,
-                                         spnode[j].node, List, &cost);
+            ret = Vect_net_shortest_path(&In, spnode[i].node, spnode[j].node,
+                                         List, &cost);
 
             if (ret == -1) {
                 /* unreachable */
                 continue;
             }
 
-            sprintf(buf, "insert into %s values (%d, %d, %d, %f)",
-                    Fi->table, cat, spnode[i].cat, spnode[j].cat, cost);
+            sprintf(buf, "insert into %s values (%d, %d, %d, %f)", Fi->table,
+                    cat, spnode[i].cat, spnode[j].cat, cost);
             db_set_string(&sql, buf);
             G_debug(3, "%s", db_get_string(&sql));
 

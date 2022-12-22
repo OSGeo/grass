@@ -54,8 +54,8 @@ int line_overlap_area(struct line_pnts *LPoints, struct line_pnts *OPoints,
             int inside = 1;
 
             for (isle = 0; isle < nisles; isle++) {
-                if (Vect_point_in_poly
-                    (LPoints->x[i], LPoints->y[i], IPoints[isle])) {
+                if (Vect_point_in_poly(LPoints->x[i], LPoints->y[i],
+                                       IPoints[isle])) {
                     inside = 0;
                     break;
                 }

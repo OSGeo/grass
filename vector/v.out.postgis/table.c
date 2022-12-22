@@ -2,7 +2,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-/* Check columns 
+/* Check columns
 
    1) FID column - must be integer
 
@@ -48,15 +48,18 @@ void check_columns(const struct Map_info *Map, const char *layer,
 
         ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
         if (ctype != DB_C_TYPE_INT)
-            G_fatal_error(_("Invalid FID column (%s). FID column must be integer. "
-                           "Please specify different FID column by 'options=\"FID=<name>\"'."),
-                          fid_column);
+            G_fatal_error(
+                _("Invalid FID column (%s). FID column must be integer. "
+                  "Please specify different FID column by "
+                  "'options=\"FID=<name>\"'."),
+                fid_column);
     }
 
     /* check if geometry column already exists in the attribute table */
     if (db_get_table_column_by_name(table, geom_column))
         G_fatal_error(_("Column (%s) already exists in the table. "
-                        "Please specify different geometry column by 'options=\"GEOMETRY_NAME=<name>\"'."),
+                        "Please specify different geometry column by "
+                        "'options=\"GEOMETRY_NAME=<name>\"'."),
                       geom_column);
 
     db_close_database_shutdown_driver(driver);

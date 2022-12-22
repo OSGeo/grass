@@ -19,8 +19,8 @@ void scan_z(struct Map_info *, int, const char *, const char *,
 /* make_colors.c */
 void make_colors(struct Colors *, const char *, DCELL, DCELL, int);
 void load_colors(struct Colors *, const char *, DCELL, DCELL, int);
-void color_rules_to_cats(dbCatValArray *, int, struct Colors *,
-                         struct Colors *, int, DCELL, DCELL);
+void color_rules_to_cats(dbCatValArray *, int, struct Colors *, struct Colors *,
+                         int, DCELL, DCELL);
 
 /* write_rgb.c */
 void write_rgb_values(const struct Map_info *, int, const char *,

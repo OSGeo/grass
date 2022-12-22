@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               3D vector point input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -76,8 +75,6 @@ void clean()
     }
 }
 
-
-
 int min1(int arg1, int arg2)
 {
     int res;
@@ -90,7 +87,6 @@ int min1(int arg1, int arg2)
     }
     return res;
 }
-
 
 int max1(int arg1, int arg2)
 {
@@ -105,7 +101,6 @@ int max1(int arg1, int arg2)
     return res;
 }
 
-
 double amax1(double arg1, double arg2)
 {
     double res;
@@ -118,8 +113,6 @@ double amax1(double arg1, double arg2)
     }
     return res;
 }
-
-
 
 double amin1(double arg1, double arg2)
 {
@@ -134,19 +127,17 @@ double amin1(double arg1, double arg2)
     return res;
 }
 
-#define XA  0.8
+#define XA 0.8
 
 double erfr(double rf2)
 /*
-   approximation of erf for x>XA 
+   approximation of erf for x>XA
  */
 {
-    static double a[5] = { 0.254829592, -0.284496736, 1.421413741,
-        -1.453152027, 1.061405429
-    };
+    static double a[5] = {0.254829592, -0.284496736, 1.421413741, -1.453152027,
+                          1.061405429};
     static double p = 0.3275911;
     double erf, t;
-
 
     if (rf2 > 20.)
         erf = 1.;
@@ -157,8 +148,6 @@ double erfr(double rf2)
     }
     return (erf);
 }
-
-
 
 double crs(double x)
 /*
@@ -184,16 +173,15 @@ double crs(double x)
     if (x < XA) {
         xx = x * x;
         res =
-            tp * xx * (a[1] +
-                       xx * (a[2] +
-                             xx * (a[3] +
-                                   xx * (a[4] +
-                                         xx * (a[5] +
-                                               xx * (a[6] +
-                                                     xx * (a[7] +
-                                                           xx * (a[8] +
-                                                                 xx *
-                                                                 a[9]))))))));
+            tp * xx *
+            (a[1] +
+             xx * (a[2] +
+                   xx * (a[3] +
+                         xx * (a[4] +
+                               xx * (a[5] +
+                                     xx * (a[6] +
+                                           xx * (a[7] +
+                                                 xx * (a[8] + xx * a[9]))))))));
     }
     else {
         res = erf(x) / x;
@@ -202,27 +190,39 @@ double crs(double x)
     return (res);
 }
 
-
 void crs_full(double x, double fi, double *crs, double *crsd, double *crsdr2,
               double *crsdd)
 {
-    static double a[10] =
-        { 1., -1. / 3., 1. / 10., -1. / 42., 1. / (24. * 9.),
--1. / (120. * 11.),
-        1. / (720. * 13.), -1. / (5040. * 15.), 1. / (40320. * 17.),
-            -1. / (362880. * 19.)
-    };
-    static double b[10] =
-        { 0, -2. / 3., 4. / 10., -6. / 42., 8. / (24. * 9.),
--10. / (120. * 11.),
-        12. / (720. * 13.), -14. / (5040. * 15.), 16. / (40320. * 17.),
-            -18. / (362880. * 19.)
-    };
-    static double c[10] =
-        { 0, 0, 8. / 10., -24. / 42., 48. / (24. * 9.), -80. / (120. * 11.),
-        120. / (720. * 13.), -168. / (5040. * 15.),
-            16. * 14. / (40320. * 17.), -18. * 16. / (362880. * 19.)
-    };
+    static double a[10] = {1.,
+                           -1. / 3.,
+                           1. / 10.,
+                           -1. / 42.,
+                           1. / (24. * 9.),
+                           -1. / (120. * 11.),
+                           1. / (720. * 13.),
+                           -1. / (5040. * 15.),
+                           1. / (40320. * 17.),
+                           -1. / (362880. * 19.)};
+    static double b[10] = {0,
+                           -2. / 3.,
+                           4. / 10.,
+                           -6. / 42.,
+                           8. / (24. * 9.),
+                           -10. / (120. * 11.),
+                           12. / (720. * 13.),
+                           -14. / (5040. * 15.),
+                           16. / (40320. * 17.),
+                           -18. / (362880. * 19.)};
+    static double c[10] = {0,
+                           0,
+                           8. / 10.,
+                           -24. / 42.,
+                           48. / (24. * 9.),
+                           -80. / (120. * 11.),
+                           120. / (720. * 13.),
+                           -168. / (5040. * 15.),
+                           16. * 14. / (40320. * 17.),
+                           -18. * 16. / (362880. * 19.)};
     static double tp = 1.1283791671 / 2.;
     double xx, r, r2, fi2, fi4, fi8, tmp1, tmp2;
 
@@ -233,44 +233,41 @@ void crs_full(double x, double fi, double *crs, double *crsd, double *crsdr2,
     if (x < XA) {
         xx = x * x;
         *crs =
-            tp * xx * (a[1] +
-                       xx * (a[2] +
-                             xx * (a[3] +
-                                   xx * (a[4] +
-                                         xx * (a[5] +
-                                               xx * (a[6] +
-                                                     xx * (a[7] +
-                                                           xx * (a[8] +
-                                                                 xx *
-                                                                 a[9]))))))));
+            tp * xx *
+            (a[1] +
+             xx * (a[2] +
+                   xx * (a[3] +
+                         xx * (a[4] +
+                               xx * (a[5] +
+                                     xx * (a[6] +
+                                           xx * (a[7] +
+                                                 xx * (a[8] + xx * a[9]))))))));
         if (crsd != NULL) {
             *crsd =
-                tp * fi4 * (b[1] +
-                            xx * (b[2] +
-                                  xx * (b[3] +
-                                        xx * (b[4] +
-                                              xx * (b[5] +
-                                                    xx * (b[6] +
-                                                          xx * (b[7] +
-                                                                xx * (b[8] +
-                                                                      xx *
-                                                                      b
-                                                                      [9]))))))));
+                tp * fi4 *
+                (b[1] +
+                 xx * (b[2] +
+                       xx * (b[3] +
+                             xx * (b[4] +
+                                   xx * (b[5] +
+                                         xx * (b[6] +
+                                               xx * (b[7] +
+                                                     xx * (b[8] +
+                                                           xx * b[9]))))))));
         }
         if (crsdr2 != NULL) {
             *crsdr2 = *crsd;
         }
         if (crsdd != NULL) {
             *crsdd =
-                tp * fi8 * (c[2] +
-                            xx * (c[3] +
-                                  xx * (c[4] +
-                                        xx * (c[5] +
-                                              xx * (c[6] +
-                                                    xx * (c[7] +
-                                                          xx * (c[8] +
-                                                                xx *
-                                                                c[9])))))));
+                tp * fi8 *
+                (c[2] +
+                 xx * (c[3] +
+                       xx * (c[4] +
+                             xx * (c[5] +
+                                   xx * (c[6] +
+                                         xx * (c[7] +
+                                               xx * (c[8] + xx * c[9])))))));
         }
     }
     else {
@@ -296,8 +293,6 @@ void crs_full(double x, double fi, double *crs, double *crsd, double *crsdr2,
     return;
 }
 
-
-
 /*********solution of system of lin. equations*********/
 
 int LINEQS(int DIM1, int N1, int N2, int *NERROR, double *DETERM)
@@ -312,8 +307,6 @@ int LINEQS(int DIM1, int N1, int N2, int *NERROR, double *DETERM)
     int N0, IROW, LPIV, MAIN1, N, NMIN1, I, I1, I2, I3, I4, I5;
     int DIM, PIVCOL, PIVCO1, TOPX, ENDX, TOPCOL, ENDCOL, EMAT;
     double DETER, PIVOT, SWAP;
-
-
 
     if (N1 == 1) {
         *NERROR = 0;

@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       v.to.3d
  *
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- *               
+ *
  * PURPOSE:      Performs transformation of 2D vector features to 3D
  *
  * COPYRIGHT:    (C) 2008-2010 by the GRASS Development Team
@@ -110,8 +109,7 @@ int main(int argc, char **argv)
         if (opt.height->answer) {
             height = atof(opt.height->answer);
         }
-        trans2d(&In, &Out, type, height, opt.field->answer,
-                opt.column->answer);
+        trans2d(&In, &Out, type, height, opt.field->answer, opt.column->answer);
     }
 
     if (!opt.reverse->answer && !opt.table->answer) {

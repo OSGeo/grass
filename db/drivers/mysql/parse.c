@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -26,7 +25,7 @@
  *  \return DB_OK Success
  *  \return DB_FAILED Failed to parse database
  */
-int parse_conn(const char *str, CONNPAR * conn)
+int parse_conn(const char *str, CONNPAR *conn)
 {
     int i;
     char **tokens, delm[2];
@@ -40,7 +39,7 @@ int parse_conn(const char *str, CONNPAR * conn)
     conn->user = NULL;
     conn->password = NULL;
 
-    if (strchr(str, '=') == NULL) {     /*db name only */
+    if (strchr(str, '=') == NULL) { /*db name only */
         conn->dbname = G_store(str);
     }
     else {
@@ -60,7 +59,8 @@ int parse_conn(const char *str, CONNPAR * conn)
                 if (port <= 0) {
                     db_d_append_error("%s %s",
                                       _("Wrong port number in MySQL database "
-                                        "definition: "), tokens[i] + 5);
+                                        "definition: "),
+                                      tokens[i] + 5);
                     return DB_FAILED;
                 }
                 conn->port = (unsigned int)port;
@@ -79,7 +79,8 @@ int parse_conn(const char *str, CONNPAR * conn)
             else {
                 db_d_append_error("%s %s",
                                   _("Unknown option in database definition "
-                                    "for MySQL: "), tokens[i]);
+                                    "for MySQL: "),
+                                  tokens[i]);
                 return DB_FAILED;
             }
             i++;

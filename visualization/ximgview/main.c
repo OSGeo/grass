@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       ximgview
@@ -51,8 +50,7 @@ static XImage *ximg;
 static GC gc;
 
 extern Colormap InitColorTableFixed(Colormap cmap);
-extern unsigned long find_color(unsigned int r, unsigned int g,
-                                unsigned int b);
+extern unsigned long find_color(unsigned int r, unsigned int g, unsigned int b);
 
 static void create_window(void)
 {
@@ -69,12 +67,8 @@ static void create_window(void)
     xswa.backing_store = NotUseful;
     xswa.background_pixel = BlackPixel(dpy, scrn);
 
-    grwin = XCreateWindow(dpy, RootWindow(dpy, scrn),
-                          0, 0,
-                          800, 600,
-                          0,
-                          DefaultDepth(dpy, scrn),
-                          InputOutput,
+    grwin = XCreateWindow(dpy, RootWindow(dpy, scrn), 0, 0, 800, 600, 0,
+                          DefaultDepth(dpy, scrn), InputOutput,
                           DefaultVisual(dpy, scrn),
                           CWEventMask | CWBackingStore | CWBackPixel, &xswa);
 
@@ -90,8 +84,8 @@ static void create_window(void)
     gc = XCreateGC(dpy, grwin, 0UL, NULL);
 
     xbuf = G_malloc(i_width * i_height * 4);
-    ximg = XCreateImage(dpy, xwa.visual, xwa.depth, ZPixmap,
-                        0, xbuf, i_width, i_height, 32, 0);
+    ximg = XCreateImage(dpy, xwa.visual, xwa.depth, ZPixmap, 0, xbuf, i_width,
+                        i_height, 32, 0);
 
     w_width = xwa.width;
     w_height = xwa.height;
@@ -178,8 +172,7 @@ static void main_loop(void)
         FD_ZERO(&waitset);
         FD_SET(xfd, &waitset);
         errno = 0;
-        if (select(FD_SETSIZE, &waitset, NULL, NULL, &tv) < 0 &&
-            errno != EINTR)
+        if (select(FD_SETSIZE, &waitset, NULL, NULL, &tv) < 0 && errno != EINTR)
             continue;
 
         if (!FD_ISSET(xfd, &waitset) || errno == EINTR)
@@ -266,7 +259,7 @@ static void map_file(const char *filename)
 
     size = HEADER_SIZE + i_width * i_height * 4;
 
-    ptr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, (off_t) 0);
+    ptr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, (off_t)0);
     if (ptr == MAP_FAILED)
         G_fatal_error(_("Unable to map image file"));
 
@@ -278,8 +271,7 @@ static void map_file(const char *filename)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *image, *percent;
     } opt;
     const char *filename;

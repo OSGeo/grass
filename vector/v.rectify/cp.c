@@ -9,15 +9,13 @@
 #include "global.h"
 #include "crs.h"
 
-struct Stats
-{
+struct Stats {
     double x, y, z, g;
     double sum2, rms;
 };
 
-static void update_stats(struct Stats *st, int n,
-                         double dx, double dy, double *dz,
-                         double dg, double d2)
+static void update_stats(struct Stats *st, int n, double dx, double dy,
+                         double *dz, double dg, double d2)
 {
     st->x += dx;
     st->y += dy;
@@ -35,10 +33,9 @@ static void diagonal(double *dg, double *d2, double dx, double dy, double *dz)
     *dg = sqrt(*d2);
 }
 
-
 static void compute_rms(struct Control_Points *cp,
                         struct Control_Points_3D *cp3, int order, int use3d,
-                        int orthorot, char *sep, FILE * fp)
+                        int orthorot, char *sep, FILE *fp)
 {
     int n;
     int count, npoints;
@@ -51,11 +48,12 @@ static void compute_rms(struct Control_Points *cp,
 
     count = 0;
 
-    /* print index, forward difference, backward difference, 
+    /* print index, forward difference, backward difference,
      * forward rms, backward rms */
     if (use3d)
         fprintf(fp,
-                "index%sfwd_dx%sfwd_dy%sfwd_dz%sback_dx%sback_dy%sback_dz%sfwd_RMS%sback_RMS",
+                "index%sfwd_dx%sfwd_dy%sfwd_dz%sback_dx%sback_dy%sback_dz%sfwd_"
+                "RMS%sback_RMS",
                 sep, sep, sep, sep, sep, sep, sep, sep);
     else
         fprintf(fp,
@@ -88,11 +86,11 @@ static void compute_rms(struct Control_Points *cp,
         /* forward: source -> target */
         if (use3d) {
             if (orthorot)
-                CRS_georef_or(cp3->e1[n], cp3->n1[n], cp3->z1[n],
-                              &e2, &n2, &z2, OR12);
+                CRS_georef_or(cp3->e1[n], cp3->n1[n], cp3->z1[n], &e2, &n2, &z2,
+                              OR12);
             else
-                CRS_georef_3d(cp3->e1[n], cp3->n1[n], cp3->z1[n],
-                              &e2, &n2, &z2, E12, N12, Z12, order);
+                CRS_georef_3d(cp3->e1[n], cp3->n1[n], cp3->z1[n], &e2, &n2, &z2,
+                              E12, N12, Z12, order);
 
             fx = fabs(e2 - cp3->e2[n]);
             fy = fabs(n2 - cp3->n2[n]);
@@ -116,11 +114,11 @@ static void compute_rms(struct Control_Points *cp,
         /* backward: target -> source */
         if (use3d) {
             if (orthorot)
-                CRS_georef_or(cp3->e2[n], cp3->n2[n], cp3->z2[n],
-                              &e1, &n1, &z1, OR21);
+                CRS_georef_or(cp3->e2[n], cp3->n2[n], cp3->z2[n], &e1, &n1, &z1,
+                              OR21);
             else
-                CRS_georef_3d(cp3->e2[n], cp3->n2[n], cp3->z2[n],
-                              &e1, &n1, &z1, E21, N21, Z21, order);
+                CRS_georef_3d(cp3->e2[n], cp3->n2[n], cp3->z2[n], &e1, &n1, &z1,
+                              E21, N21, Z21, order);
 
             rx = fabs(e1 - cp3->e1[n]);
             ry = fabs(n1 - cp3->n1[n]);
@@ -141,7 +139,7 @@ static void compute_rms(struct Control_Points *cp,
             update_stats(&rev, n, rx, ry, NULL, rd, rd2);
         }
 
-        /* print index, forward difference, backward difference, 
+        /* print index, forward difference, backward difference,
          * forward rms, backward rms */
         fprintf(fp, "%d", n + 1);
         fprintf(fp, "%s%f%s%f", sep, fx, sep, fy);
@@ -183,10 +181,8 @@ static void compute_rms(struct Control_Points *cp,
     fprintf(fp, "\n");
 }
 
-
-int new_control_point_3d(struct Control_Points_3D *cp,
-                         double e1, double n1, double z1,
-                         double e2, double n2, double z2, int status)
+int new_control_point_3d(struct Control_Points_3D *cp, double e1, double n1,
+                         double z1, double e2, double n2, double z2, int status)
 {
     int i;
     unsigned int size;
@@ -216,7 +212,7 @@ int new_control_point_3d(struct Control_Points_3D *cp,
     return 0;
 }
 
-static int read_control_points(FILE * fd, struct Control_Points *cp)
+static int read_control_points(FILE *fd, struct Control_Points *cp)
 {
     char buf[1000];
     double e1, e2, n1, n2;
@@ -246,7 +242,7 @@ static int read_control_points(FILE * fd, struct Control_Points *cp)
     return 1;
 }
 
-static int read_control_points_3d(FILE * fd, struct Control_Points_3D *cp)
+static int read_control_points_3d(FILE *fd, struct Control_Points_3D *cp)
 {
     char buf[1000];
     double e1, e2, n1, n2, z1, z2;
@@ -255,7 +251,8 @@ static int read_control_points_3d(FILE * fd, struct Control_Points_3D *cp)
     cp->count = 0;
 
     /* read the control point lines. format is:
-       source_east source_north source_height  target_east target_north target_height  status
+       source_east source_north source_height  target_east target_north
+       target_height  status
      */
     cp->e1 = NULL;
     cp->e2 = NULL;
@@ -269,9 +266,8 @@ static int read_control_points_3d(FILE * fd, struct Control_Points_3D *cp)
         G_strip(buf);
         if (*buf == '#' || *buf == 0)
             continue;
-        if (sscanf
-            (buf, "%lf%lf%lf%lf%lf%lf%d", &e1, &n1, &z1, &e2, &n2, &z2,
-             &status) == 7)
+        if (sscanf(buf, "%lf%lf%lf%lf%lf%lf%d", &e1, &n1, &z1, &e2, &n2, &z2,
+                   &status) == 7)
             new_control_point_3d(cp, e1, n1, z1, e2, n2, z2, status);
         else
             return -4;
@@ -280,15 +276,14 @@ static int read_control_points_3d(FILE * fd, struct Control_Points_3D *cp)
     return 1;
 }
 
-
 int get_control_points(char *group, char *pfile, int order, int use3d,
-                       int orthorot, int rms, char *sep, FILE * fpr)
+                       int orthorot, int rms, char *sep, FILE *fpr)
 {
     char msg[200];
     struct Control_Points cp;
     struct Control_Points_3D cp3;
     int ret = 0;
-    int order_pnts[2][3] = { {3, 6, 10}, {4, 10, 20} };
+    int order_pnts[2][3] = {{3, 6, 10}, {4, 10, 20}};
 
     cp.count = cp3.count = 0;
     cp.e1 = cp.e2 = cp3.e1 = cp3.e2 = NULL;
@@ -318,8 +313,8 @@ int get_control_points(char *group, char *pfile, int order, int use3d,
         if (orthorot)
             ret = CRS_compute_georef_equations_or(&cp3, OR12, OR21);
         else
-            ret = CRS_compute_georef_equations_3d(&cp3, E12, N12, Z12,
-                                                  E21, N21, Z21, order);
+            ret = CRS_compute_georef_equations_3d(&cp3, E12, N12, Z12, E21, N21,
+                                                  Z21, order);
     }
     else if (pfile) {
         /* read 2D GCPs from points file */
@@ -345,8 +340,8 @@ int get_control_points(char *group, char *pfile, int order, int use3d,
         if (!I_get_control_points(group, &cp))
             exit(0);
 
-        sprintf(msg, _("Control Point file for group <%s@%s> - "),
-                group, G_mapset());
+        sprintf(msg, _("Control Point file for group <%s@%s> - "), group,
+                G_mapset());
 
         ret = I_compute_georef_equations(&cp, E12, N12, E21, N21, order);
     }
@@ -354,7 +349,8 @@ int get_control_points(char *group, char *pfile, int order, int use3d,
     switch (ret) {
     case 0:
         sprintf(&msg[strlen(msg)],
-                _("Not enough active control points for current order, %d are required."),
+                _("Not enough active control points for current order, %d are "
+                  "required."),
                 (orthorot ? 3 : order_pnts[use3d != 0][order - 1]));
         break;
     case -1:

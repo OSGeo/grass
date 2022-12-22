@@ -1,21 +1,20 @@
-
 /**********************************************************
  *
  * MODULE:       v.drape
- * 
+ *
  * AUTHOR(S):    Radim Blazek, Dylan Beaudette
  *               Maris Nartiss - WHERE support and raster NULL support
  *               OGR support & major rewrite for GRASS 7 by Martin
  *               Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Convert 2D vector to 3D vector by sampling of elevation raster.
- *               
+ *
  * COPYRIGHT:    (C) 2005-2009, 2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
  *               comes with GRASS for details.
- * 
+ *
  **********************************************************/
 
 #include <stdlib.h>
@@ -31,10 +30,9 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *input, *output, *type, *rast, *method,
-            *scale, *where, *layer, *null, *cats;
+    struct {
+        struct Option *input, *output, *type, *rast, *method, *scale, *where,
+            *layer, *null, *cats;
     } opt;
 
     struct Map_info In, Out;
@@ -45,7 +43,7 @@ int main(int argc, char *argv[])
     int otype, layer;
     double scale, null_val;
     INTERP_TYPE method;
-    int fdrast;                 /* file descriptor for raster map is int */
+    int fdrast; /* file descriptor for raster map is int */
     int nlines, line, ltype;
 
     struct Cell_head window;
@@ -59,8 +57,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("sampling"));
     G_add_keyword(_("3D"));
     G_add_keyword(_("surface information"));
-    module->description =
-        _("Converts 2D vector features to 3D by sampling of elevation raster map.");
+    module->description = _("Converts 2D vector features to 3D by sampling of "
+                            "elevation raster map.");
 
     opt.input = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -137,7 +135,7 @@ int main(int argc, char *argv[])
                                  G_FATAL_EXIT);
 
     /* open input vector map */
-    Vect_set_open_level(2);     /* topology required ? */
+    Vect_set_open_level(2); /* topology required ? */
 
     if (Vect_open_old2(&In, opt.input->answer, "", opt.layer->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), opt.input->answer);
@@ -190,8 +188,7 @@ int main(int argc, char *argv[])
             continue;
 
         /* write the new line file, with the updated Points struct */
-        if (sample_raster(fdrast, &window, Points,
-                          method, scale,
+        if (sample_raster(fdrast, &window, Points, method, scale,
                           opt.null->answer ? TRUE : FALSE, null_val)) {
             Vect_write_line(&Out, ltype, Points, Cats);
         }
@@ -205,8 +202,8 @@ int main(int argc, char *argv[])
     if (layer < 0)
         Vect_copy_tables(&In, &Out, 0);
     else
-        Vect_copy_table_by_cat_list(&In, &Out, layer, layer, NULL,
-                                    GV_1TABLE, cat_list);
+        Vect_copy_table_by_cat_list(&In, &Out, layer, layer, NULL, GV_1TABLE,
+                                    cat_list);
 
     /* build topology for output vector */
     Vect_build(&Out);

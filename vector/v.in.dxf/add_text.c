@@ -5,15 +5,15 @@
 void add_text(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
-    char handle[DXF_BUF_SIZE];  /* entity handle, 16 hexadecimal digits */
-    char layer[DXF_BUF_SIZE];   /* layer name */
-    int layer_flag = 0;         /* indicates if a layer name has been found */
-    int xflag = 0;              /* indicates if a x value has been found */
-    int yflag = 0;              /* indicates if a y value has been found */
+    char handle[DXF_BUF_SIZE]; /* entity handle, 16 hexadecimal digits */
+    char layer[DXF_BUF_SIZE];  /* layer name */
+    int layer_flag = 0;        /* indicates if a layer name has been found */
+    int xflag = 0;             /* indicates if a x value has been found */
+    int yflag = 0;             /* indicates if a y value has been found */
 
-    /* double height = 1.0; *//* read in from dxf file */
-    /* double angle = 0.0; *//* read in from dxf file */
-    char label[DXF_BUF_SIZE];   /* read in from dxf file */
+    /* double height = 1.0; */ /* read in from dxf file */
+    /* double angle = 0.0; */  /* read in from dxf file */
+    char label[DXF_BUF_SIZE];  /* read in from dxf file */
     int label_len = 0;
 
     handle[0] = 0;
@@ -26,14 +26,14 @@ void add_text(struct dxf_file *dxf, struct Map_info *Map)
             return;
 
         switch (code) {
-        case 1:                /* label value */
+        case 1: /* label value */
             label_len = strlen(dxf_buf);
             strcpy(label, dxf_buf);
             break;
-        case 5:                /* entity handle */
+        case 5: /* entity handle */
             strcpy(handle, dxf_buf);
             break;
-        case 8:                /* layer name */
+        case 8: /* layer name */
             if (!layer_flag && *dxf_buf) {
                 if (flag_list) {
                     if (!is_layer_in_list(dxf_buf))
@@ -51,32 +51,32 @@ void add_text(struct dxf_file *dxf, struct Map_info *Map)
                 layer_flag = 1;
             }
             break;
-        case 10:               /* x coordinate */
+        case 10: /* x coordinate */
             xpnts[0] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 20:               /* y coordinate */
+        case 20: /* y coordinate */
             ypnts[0] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 30:               /* z coordinate */
+        case 30: /* z coordinate */
             zpnts[0] = atof(dxf_buf);
             break;
-        case 40:               /* text height */
+        case 40: /* text height */
             /* height = atof(dxf_buf); */
             break;
-        case 50:               /* text angle */
+        case 50: /* text angle */
             /* angle = atof(dxf_buf); */
             break;
 
-        case 7:                /* text style name */
-        case 11:               /* alignment point */
-        case 21:               /* alignment point */
-        case 31:               /* alignment point */
-        case 41:               /* relative x scale factor */
-        case 51:               /* oblique angle */
-        case 71:               /* text generation flag */
-        case 72:               /* horizontal text justification type */
+        case 7:  /* text style name */
+        case 11: /* alignment point */
+        case 21: /* alignment point */
+        case 31: /* alignment point */
+        case 41: /* relative x scale factor */
+        case 51: /* oblique angle */
+        case 71: /* text generation flag */
+        case 72: /* horizontal text justification type */
             break;
         }
     }

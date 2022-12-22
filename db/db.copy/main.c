@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       db.copy
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>
  * PURPOSE:      copy a table
  * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
  *
@@ -17,7 +17,6 @@
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-
 
 int main(int argc, char **argv)
 {
@@ -38,7 +37,8 @@ int main(int argc, char **argv)
     module->label = _("Copy a table.");
     module->description =
         _("Either 'from_table' (optionally with 'where') can be used "
-          "or 'select' option, but not 'from_table' and 'select' at the same time.");
+          "or 'select' option, but not 'from_table' and 'select' at the same "
+          "time.");
 
     from_driver = G_define_standard_option(G_OPT_DB_DRIVER);
     from_driver->key = "from_driver";
@@ -84,8 +84,8 @@ int main(int argc, char **argv)
     select->key = "select";
     select->type = TYPE_STRING;
     select->required = NO;
-    select->label =
-        _("Full select statement (only, if 'from_table' and 'where' is not used)");
+    select->label = _("Full select statement (only, if 'from_table' and "
+                      "'where' is not used)");
     select->description =
         _("E.g.: SELECT dedek FROM starobince WHERE obec = 'Frimburg'");
 
@@ -95,42 +95,41 @@ int main(int argc, char **argv)
     /* Check options and copy tables */
     if (from_table->answer) {
         if (select->answer)
-            G_fatal_error(_("Cannot combine 'from_table' and 'select' options"));
+            G_fatal_error(
+                _("Cannot combine 'from_table' and 'select' options"));
 
         if (!db_table_exists(from_driver->answer, from_database->answer,
                              from_table->answer)) {
-            G_warning(_("Table <%s> not found in database <%s> using driver <%s>"),
-                      from_table->answer, from_database->answer,
-                      from_driver->answer);
+            G_warning(
+                _("Table <%s> not found in database <%s> using driver <%s>"),
+                from_table->answer, from_database->answer, from_driver->answer);
             exit(EXIT_FAILURE);
         }
 
         if (where->answer) {
-            ret =
-                db_copy_table_where(from_driver->answer,
-                                    from_database->answer, from_table->answer,
-                                    to_driver->answer, to_database->answer,
-                                    to_table->answer, where->answer);
+            ret = db_copy_table_where(from_driver->answer,
+                                      from_database->answer, from_table->answer,
+                                      to_driver->answer, to_database->answer,
+                                      to_table->answer, where->answer);
         }
         else {
-            ret =
-                db_copy_table(from_driver->answer, from_database->answer,
-                              from_table->answer, to_driver->answer,
-                              to_database->answer, to_table->answer);
+            ret = db_copy_table(from_driver->answer, from_database->answer,
+                                from_table->answer, to_driver->answer,
+                                to_database->answer, to_table->answer);
         }
     }
     else {
         if (!select->answer)
-            G_fatal_error(_("Either 'from_table' or 'select' option must be given."));
+            G_fatal_error(
+                _("Either 'from_table' or 'select' option must be given."));
 
         if (where->answer)
             G_fatal_error(_("Cannot combine 'select' and 'where' options"));
 
-        ret =
-            db_copy_table_select(from_driver->answer, from_database->answer,
-                                 from_table->answer, to_driver->answer,
-                                 to_database->answer, to_table->answer,
-                                 select->answer);
+        ret = db_copy_table_select(from_driver->answer, from_database->answer,
+                                   from_table->answer, to_driver->answer,
+                                   to_database->answer, to_table->answer,
+                                   select->answer);
     }
 
     if (ret == DB_FAILED) {

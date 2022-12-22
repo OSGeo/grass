@@ -1,4 +1,3 @@
-
 /**********************************************************************
  *
  * MODULE:       v.surf.bspline
@@ -9,7 +8,7 @@
  * PURPOSE:      Spline Interpolation
  *
  * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
- *			     Polo Regionale di Como
+ *                             Polo Regionale di Como
  *
  *               This program is free software under the
  *               GNU General Public License (>=v2).
@@ -41,7 +40,8 @@ int main(int argc, char *argv[])
     int nsply, nsplx, nrows, ncols, nsplx_adj, nsply_adj;
     int nsubregion_col, nsubregion_row, subregion_row, subregion_col;
     int subregion = 0, nsubregions = 0;
-    int last_row, last_column, grid, bilin, ext, flag_auxiliar, cross;  /* booleans */
+    int last_row, last_column, grid, bilin, ext, flag_auxiliar,
+        cross; /* booleans */
     double stepN, stepE, lambda, mean;
     double N_extension, E_extension, edgeE, edgeN;
 
@@ -50,9 +50,9 @@ int main(int argc, char *argv[])
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int dim_vect, nparameters, BW;
-    int *lineVect;              /* Vector restoring primitive's ID */
-    double *TN, *Q, *parVect;   /* Interpolating and least-square vectors */
-    double **N, **obsVect;      /* Interpolation and least-square matrix */
+    int *lineVect;            /* Vector restoring primitive's ID */
+    double *TN, *Q, *parVect; /* Interpolating and least-square vectors */
+    double **N, **obsVect;    /* Interpolation and least-square matrix */
 
     SEGMENT out_seg, mask_seg;
     char *out_file, *mask_file;
@@ -67,10 +67,9 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *stepE_opt,
-        *stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt,
-        *mask_opt, *memory_opt, *solver, *error, *iter;
+        *stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt, *mask_opt,
+        *memory_opt, *solver, *error, *iter;
     struct Flag *cross_corr_flag, *spline_step_flag;
-
 
     struct Reg_dimens dims;
     struct Cell_head elaboration_reg, original_reg;
@@ -92,19 +91,21 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("LIDAR"));
-    module->description =
-        _("Performs bicubic or bilinear spline interpolation with Tykhonov regularization.");
+    module->description = _("Performs bicubic or bilinear spline interpolation "
+                            "with Tykhonov regularization.");
 
     cross_corr_flag = G_define_flag();
     cross_corr_flag->key = 'c';
     cross_corr_flag->description =
-        _("Find the best Tykhonov regularizing parameter using a \"leave-one-out\" cross validation method");
+        _("Find the best Tykhonov regularizing parameter using a "
+          "\"leave-one-out\" cross validation method");
 
     spline_step_flag = G_define_flag();
     spline_step_flag->key = 'e';
     spline_step_flag->label = _("Estimate point density and distance");
     spline_step_flag->description =
-        _("Estimate point density and distance in map units for the input vector points within the current region extents and quit");
+        _("Estimate point density and distance in map units for the input "
+          "vector points within the current region extents and quit");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->label = _("Name of input vector point map");
@@ -114,10 +115,10 @@ int main(int argc, char *argv[])
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->required = NO;
-    col_opt->label =
-        _("Name of the attribute column with values to be used for approximation");
-    col_opt->description =
-        _("If not given and input is 3D vector map then z-coordinates are used.");
+    col_opt->label = _("Name of the attribute column with values to be used "
+                       "for approximation");
+    col_opt->description = _(
+        "If not given and input is 3D vector map then z-coordinates are used.");
     col_opt->guisection = _("Settings");
 
     in_ext_opt = G_define_standard_option(G_OPT_V_INPUT);
@@ -167,8 +168,7 @@ int main(int argc, char *argv[])
     type_opt->options = "bilinear,bicubic";
     type_opt->answer = "bilinear";
     type_opt->guisection = _("Settings");
-    G_asprintf((char **)&(type_opt->descriptions),
-               "bilinear;%s;bicubic;%s",
+    G_asprintf((char **)&(type_opt->descriptions), "bilinear;%s;bicubic;%s",
                _("Bilinear interpolation"), _("Bicubic interpolation"));
 
     lambda_f_opt = G_define_option();
@@ -245,7 +245,8 @@ int main(int argc, char *argv[])
         /* Start driver and open db */
         driver = db_start_driver_open_database(drv, db);
         if (driver == NULL)
-            G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
+            G_fatal_error(_("No database connection for driver <%s> is "
+                            "defined. Run db.connect."),
                           drv);
         db_set_error_handler_driver(driver);
 
@@ -258,23 +259,26 @@ int main(int argc, char *argv[])
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
         G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
 
-    Vect_set_open_level(1);     /* WITHOUT TOPOLOGY */
+    Vect_set_open_level(1); /* WITHOUT TOPOLOGY */
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
-        G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
-                      in_opt->answer);
+        G_fatal_error(
+            _("Unable to open vector map <%s> at the topological level"),
+            in_opt->answer);
 
-    bspline_field = 0;          /* assume 3D input */
+    bspline_field = 0; /* assume 3D input */
     bspline_column = col_opt->answer;
 
     with_z = !bspline_column && Vect_is_3d(&In);
 
     if (Vect_is_3d(&In)) {
         if (!with_z)
-            G_verbose_message(_("Input is 3D: using attribute values instead of z-coordinates for approximation"));
+            G_verbose_message(_("Input is 3D: using attribute values instead "
+                                "of z-coordinates for approximation"));
         else
-            G_verbose_message(_("Input is 3D: using z-coordinates for approximation"));
+            G_verbose_message(
+                _("Input is 3D: using z-coordinates for approximation"));
     }
-    else {                      /* 2D */
+    else { /* 2D */
         if (!bspline_column)
             G_fatal_error(_("Input vector map is 2D. Parameter <%s> required."),
                           col_opt->key);
@@ -314,7 +318,8 @@ int main(int argc, char *argv[])
 
             Vect_close(&In);
 
-            G_done_msg(_("Cross validation finished for ew_step = %f and ns_step = %f"),
+            G_done_msg(_("Cross validation finished for ew_step = %f and "
+                         "ns_step = %f"),
                        stepE, stepN);
             exit(EXIT_SUCCESS);
         }
@@ -332,8 +337,9 @@ int main(int argc, char *argv[])
 
         Vect_set_open_level(1); /* WITHOUT TOPOLOGY */
         if (1 > Vect_open_old(&In_ext, in_ext_opt->answer, mapset))
-            G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
-                          in_opt->answer);
+            G_fatal_error(
+                _("Unable to open vector map <%s> at the topological level"),
+                in_opt->answer);
     }
 
     /* Open output map */
@@ -364,10 +370,9 @@ int main(int argc, char *argv[])
         }
         Vect_hist_command(&Out);
 
-        G_verbose_message(_("Points in input vector map <%s> will be interpolated"),
-                          vector);
+        G_verbose_message(
+            _("Points in input vector map <%s> will be interpolated"), vector);
     }
-
 
     /* read z values from attribute table */
     if (bspline_field > 0) {
@@ -385,9 +390,8 @@ int main(int argc, char *argv[])
                           Fi->database, Fi->driver);
         db_set_error_handler_driver(driver_cats);
 
-        nrec =
-            db_select_CatValArray(driver_cats, Fi->table, Fi->key,
-                                  col_opt->answer, NULL, &cvarr);
+        nrec = db_select_CatValArray(driver_cats, Fi->table, Fi->key,
+                                     col_opt->answer, NULL, &cvarr);
         G_debug(3, "nrec = %d", nrec);
 
         ctype = cvarr.ctype;
@@ -410,13 +414,14 @@ int main(int argc, char *argv[])
     driver = db_start_driver_open_database(drv, db);
     if (driver == NULL)
         G_fatal_error(_("No database connection for driver <%s> is defined. "
-                        "Run db.connect."), drv);
+                        "Run db.connect."),
+                      drv);
     db_set_error_handler_driver(driver);
 
     /* Create auxiliary table */
     if (vector) {
-        if ((flag_auxiliar =
-             P_Create_Aux4_Table(driver, table_name)) == FALSE) {
+        if ((flag_auxiliar = P_Create_Aux4_Table(driver, table_name)) ==
+            FALSE) {
             P_Drop_Aux_Table(driver, table_name);
             G_fatal_error(_("Interpolation: Creating table: "
                             "It was impossible to create table <%s>."),
@@ -471,8 +476,8 @@ int main(int argc, char *argv[])
                 SEGSIZE, SEGSIZE);
 
         out_file = G_tempfile();
-        if (Segment_open(&out_seg, out_file, nrows, ncols, SEGSIZE,
-                         SEGSIZE, sizeof(double), segments_in_memory) != 1)
+        if (Segment_open(&out_seg, out_file, nrows, ncols, SEGSIZE, SEGSIZE,
+                         sizeof(double), segments_in_memory) != 1)
             G_fatal_error(_("Can not create temporary file"));
 
         /* initialize output */
@@ -523,15 +528,15 @@ int main(int argc, char *argv[])
     }
 
     /*------------------------------------------------------------------
-      | Subdividing and working with tiles: 									
-      | Each original region will be divided into several subregions. 
-      | Each one will be overlapped by its neighbouring subregions. 
+      | Subdividing and working with tiles:
+      | Each original region will be divided into several subregions.
+      | Each one will be overlapped by its neighbouring subregions.
       | The overlapping is calculated as a fixed OVERLAP_SIZE times
       | the largest spline step plus 2 * edge
       ----------------------------------------------------------------*/
 
     /* Fixing parameters of the elaboration region */
-    P_zero_dim(&dims);          /* Set dim struct to zero */
+    P_zero_dim(&dims); /* Set dim struct to zero */
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
@@ -575,13 +580,13 @@ int main(int argc, char *argv[])
         P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
                       GENERAL_ROW);
 
-        if (elaboration_reg.north > original_reg.north) {       /* First row */
+        if (elaboration_reg.north > original_reg.north) { /* First row */
 
             P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
                           FIRST_ROW);
         }
 
-        if (elaboration_reg.south <= original_reg.south) {      /* Last row */
+        if (elaboration_reg.south <= original_reg.south) { /* Last row */
 
             P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
                           LAST_ROW);
@@ -589,8 +594,7 @@ int main(int argc, char *argv[])
         }
 
         nsply =
-            ceil((elaboration_reg.north -
-                  elaboration_reg.south) / stepN) + 0.5;
+            ceil((elaboration_reg.north - elaboration_reg.south) / stepN) + 0.5;
         G_debug(1, "Interpolation: nsply = %d", nsply);
         /*
            if (nsply > NSPLY_MAX)
@@ -600,16 +604,17 @@ int main(int argc, char *argv[])
         last_column = FALSE;
         subregion_col = 0;
 
-        /* TODO: process each subregion using its own thread (via OpenMP or pthreads) */
-        /*     I'm not sure about pthreads, but you can tell OpenMP to start all at the
-           same time and it will keep num_workers supplied with the next job as free
-           cpus become available */
-        while (last_column == FALSE) {  /* For each subregion column */
+        /* TODO: process each subregion using its own thread (via OpenMP or
+         * pthreads) */
+        /*     I'm not sure about pthreads, but you can tell OpenMP to start all
+           at the same time and it will keep num_workers supplied with the next
+           job as free cpus become available */
+        while (last_column == FALSE) { /* For each subregion column */
             int npoints = 0;
 
             /* needed for sparse points interpolation */
             int npoints_ext, *lineVect_ext = NULL;
-            double **obsVect_ext;       /*, mean_ext = .0; */
+            double **obsVect_ext; /*, mean_ext = .0; */
             struct Point *observ_ext;
 
             subregion_col++;
@@ -621,21 +626,21 @@ int main(int argc, char *argv[])
             P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
                           GENERAL_COLUMN);
 
-            if (elaboration_reg.west < original_reg.west) {     /* First column */
+            if (elaboration_reg.west < original_reg.west) { /* First column */
 
                 P_set_regions(&elaboration_reg, &general_box, &overlap_box,
                               dims, FIRST_COLUMN);
             }
 
-            if (elaboration_reg.east >= original_reg.east) {    /* Last column */
+            if (elaboration_reg.east >= original_reg.east) { /* Last column */
 
                 P_set_regions(&elaboration_reg, &general_box, &overlap_box,
                               dims, LAST_COLUMN);
                 last_column = TRUE;
             }
             nsplx =
-                ceil((elaboration_reg.east -
-                      elaboration_reg.west) / stepE) + 0.5;
+                ceil((elaboration_reg.east - elaboration_reg.west) / stepE) +
+                0.5;
             G_debug(1, "Interpolation: nsplx = %d", nsplx);
             /*
                if (nsplx > NSPLX_MAX)
@@ -647,8 +652,7 @@ int main(int argc, char *argv[])
                     elaboration_reg.north);
             G_debug(1, "Interpolation: WEST:%.2f\t\tEAST:%.2f",
                     elaboration_reg.west, elaboration_reg.east);
-            G_debug(1, "Interpolation: \t\tSOUTH:%.2f",
-                    elaboration_reg.south);
+            G_debug(1, "Interpolation: \t\tSOUTH:%.2f", elaboration_reg.south);
 
 #ifdef DEBUG_SUBREGIONS
             fprintf(stdout, "B 5\n");
@@ -669,16 +673,12 @@ int main(int argc, char *argv[])
             fprintf(stdout, " 1 %d\n", subregion);
 #endif
 
-
-
             /* reading points in interpolation region */
             dim_vect = nsplx * nsply;
             observ_ext = NULL;
             if (grid == FALSE && ext == TRUE) {
-                observ_ext =
-                    P_Read_Vector_Region_Map(&In_ext,
-                                             &elaboration_reg,
-                                             &npoints_ext, dim_vect, 1);
+                observ_ext = P_Read_Vector_Region_Map(
+                    &In_ext, &elaboration_reg, &npoints_ext, dim_vect, 1);
             }
             else
                 npoints_ext = 1;
@@ -686,23 +686,22 @@ int main(int argc, char *argv[])
             if (grid == TRUE && have_mask) {
                 /* any unmasked cells in general region ? */
                 mean = 0;
-                observ_ext =
-                    P_Read_Raster_Region_masked(&mask_seg, &original_reg,
-                                                original_box, general_box,
-                                                &npoints_ext, dim_vect, mean);
+                observ_ext = P_Read_Raster_Region_masked(
+                    &mask_seg, &original_reg, original_box, general_box,
+                    &npoints_ext, dim_vect, mean);
             }
 
             observ = NULL;
             if (npoints_ext > 0) {
-                observ =
-                    P_Read_Vector_Region_Map(&In, &elaboration_reg, &npoints,
-                                             dim_vect, bspline_field);
+                observ = P_Read_Vector_Region_Map(
+                    &In, &elaboration_reg, &npoints, dim_vect, bspline_field);
             }
             else
                 npoints = 1;
 
             G_debug(1,
-                    "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d",
+                    "Interpolation: (%d,%d): Number of points in "
+                    "<elaboration_box> is %d",
                     subregion_row, subregion_col, npoints);
             if (npoints > 0)
                 G_verbose_message(_("%d points found in this subregion"),
@@ -715,17 +714,18 @@ int main(int argc, char *argv[])
                 BW = P_get_BandWidth(bilin, nsply);
 
                 /* Least Squares system */
-                N = G_alloc_matrix(nparameters, BW);    /* Normal matrix */
-                TN = G_alloc_vector(nparameters);       /* vector */
-                parVect = G_alloc_vector(nparameters);  /* Parameters vector */
-                obsVect = G_alloc_matrix(npoints, 3);   /* Observation vector */
-                Q = G_alloc_vector(npoints);    /* "a priori" var-cov matrix */
-                lineVect = G_alloc_ivector(npoints);    /*  */
+                N = G_alloc_matrix(nparameters, BW);   /* Normal matrix */
+                TN = G_alloc_vector(nparameters);      /* vector */
+                parVect = G_alloc_vector(nparameters); /* Parameters vector */
+                obsVect = G_alloc_matrix(npoints, 3);  /* Observation vector */
+                Q = G_alloc_vector(npoints); /* "a priori" var-cov matrix */
+                lineVect = G_alloc_ivector(npoints); /*  */
 
-                for (i = 0; i < npoints; i++) { /* Setting obsVect vector & Q matrix */
+                for (i = 0; i < npoints;
+                     i++) { /* Setting obsVect vector & Q matrix */
                     double dval;
 
-                    Q[i] = 1;   /* Q=I */
+                    Q[i] = 1; /* Q=I */
                     lineVect[i] = observ[i].lineID;
                     obsVect[i][0] = observ[i].coordX;
                     obsVect[i][1] = observ[i].coordY;
@@ -739,21 +739,20 @@ int main(int argc, char *argv[])
                             continue;
 
                         if (ctype == DB_C_TYPE_INT) {
-                            ret =
-                                db_CatValArray_get_value_int(&cvarr, cat,
-                                                             &ival);
+                            ret = db_CatValArray_get_value_int(&cvarr, cat,
+                                                               &ival);
                             obsVect[i][2] = ival;
                             observ[i].coordZ = ival;
                         }
-                        else {  /* DB_C_TYPE_DOUBLE */
-                            ret =
-                                db_CatValArray_get_value_double(&cvarr, cat,
-                                                                &dval);
+                        else { /* DB_C_TYPE_DOUBLE */
+                            ret = db_CatValArray_get_value_double(&cvarr, cat,
+                                                                  &dval);
                             obsVect[i][2] = dval;
                             observ[i].coordZ = dval;
                         }
                         if (ret != DB_OK) {
-                            G_warning(_("Interpolation: (%d,%d): No record for point (cat = %d)"),
+                            G_warning(_("Interpolation: (%d,%d): No record for "
+                                        "point (cat = %d)"),
                                       subregion_row, subregion_col, cat);
                             continue;
                         }
@@ -767,8 +766,8 @@ int main(int argc, char *argv[])
                 /* Mean calculation for every point */
                 mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
-                G_debug(1, "Interpolation: (%d,%d): mean=%lf",
-                        subregion_row, subregion_col, mean);
+                G_debug(1, "Interpolation: (%d,%d): mean=%lf", subregion_row,
+                        subregion_col, mean);
 
                 G_free(observ);
 
@@ -782,8 +781,8 @@ int main(int argc, char *argv[])
                             subregion_row, subregion_col);
                     normalDefBilin(N, TN, Q, obsVect, stepE, stepN, nsplx,
                                    nsply, elaboration_reg.west,
-                                   elaboration_reg.south, npoints,
-                                   nparameters, BW);
+                                   elaboration_reg.south, npoints, nparameters,
+                                   BW);
                     nCorrectGrad(N, lambda, nsplx, nsply, stepE, stepN);
                 }
                 /* Bicubic interpolation */
@@ -806,12 +805,12 @@ int main(int argc, char *argv[])
                     G_math_solver_cholesky_sband(N, parVect, TN, nparameters,
                                                  BW);
 
-
                 G_free_matrix(N);
                 G_free_vector(TN);
                 G_free_vector(Q);
 
-                if (grid == TRUE) {     /* GRID INTERPOLATION ==> INTERPOLATION INTO A RASTER */
+                if (grid == TRUE) { /* GRID INTERPOLATION ==> INTERPOLATION INTO
+                                       A RASTER */
                     G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
                             subregion_row, subregion_col);
 
@@ -823,27 +822,24 @@ int main(int argc, char *argv[])
                                          bilin);
                     }
                     else {
-                        P_Sparse_Raster_Points(&out_seg,
-                                               &elaboration_reg,
-                                               &original_reg, general_box,
-                                               overlap_box, observ_ext,
-                                               parVect, stepE, stepN,
-                                               dims.overlap, nsplx, nsply,
-                                               npoints_ext, bilin, mean);
+                        P_Sparse_Raster_Points(
+                            &out_seg, &elaboration_reg, &original_reg,
+                            general_box, overlap_box, observ_ext, parVect,
+                            stepE, stepN, dims.overlap, nsplx, nsply,
+                            npoints_ext, bilin, mean);
                     }
                 }
-                else {          /* OBSERVATION POINTS INTERPOLATION */
+                else { /* OBSERVATION POINTS INTERPOLATION */
                     if (ext == FALSE) {
                         G_debug(1, "Interpolation: (%d,%d): Sparse_Points...",
                                 subregion_row, subregion_col);
                         P_Sparse_Points(&Out, &elaboration_reg, general_box,
-                                        overlap_box, obsVect, parVect,
-                                        lineVect, stepE, stepN,
-                                        dims.overlap, nsplx, nsply, npoints,
-                                        bilin, Cats, driver, mean,
-                                        table_name);
+                                        overlap_box, obsVect, parVect, lineVect,
+                                        stepE, stepN, dims.overlap, nsplx,
+                                        nsply, npoints, bilin, Cats, driver,
+                                        mean, table_name);
                     }
-                    else {      /* FLAG_EXT == TRUE */
+                    else { /* FLAG_EXT == TRUE */
 
                         /* done that earlier */
                         /*
@@ -858,10 +854,12 @@ int main(int argc, char *argv[])
                            1);
                          */
 
-                        obsVect_ext = G_alloc_matrix(npoints_ext, 3);   /* Observation vector_ext */
+                        obsVect_ext = G_alloc_matrix(
+                            npoints_ext, 3); /* Observation vector_ext */
                         lineVect_ext = G_alloc_ivector(npoints_ext);
 
-                        for (i = 0; i < npoints_ext; i++) {     /* Setting obsVect_ext vector & Q matrix */
+                        for (i = 0; i < npoints_ext;
+                             i++) { /* Setting obsVect_ext vector & Q matrix */
                             obsVect_ext[i][0] = observ_ext[i].coordX;
                             obsVect_ext[i][1] = observ_ext[i].coordY;
                             obsVect_ext[i][2] = observ_ext[i].coordZ - mean;
@@ -875,14 +873,13 @@ int main(int argc, char *argv[])
                         P_Sparse_Points(&Out, &elaboration_reg, general_box,
                                         overlap_box, obsVect_ext, parVect,
                                         lineVect_ext, stepE, stepN,
-                                        dims.overlap, nsplx, nsply,
-                                        npoints_ext, bilin, Cats, driver,
-                                        mean, table_name);
+                                        dims.overlap, nsplx, nsply, npoints_ext,
+                                        bilin, Cats, driver, mean, table_name);
 
                         G_free_matrix(obsVect_ext);
                         G_free_ivector(lineVect_ext);
-                    }           /* END FLAG_EXT == TRUE */
-                }               /* END GRID == FALSE */
+                    } /* END FLAG_EXT == TRUE */
+                }     /* END GRID == FALSE */
                 G_free_vector(parVect);
                 G_free_matrix(obsVect);
                 G_free_ivector(lineVect);
@@ -896,8 +893,8 @@ int main(int argc, char *argv[])
                     G_warning(_("No data within this subregion. "
                                 "Consider increasing spline step values."));
             }
-        }                       /*! END WHILE; last_column = TRUE */
-    }                           /*! END WHILE; last_row = TRUE */
+        } /*! END WHILE; last_column = TRUE */
+    }     /*! END WHILE; last_row = TRUE */
 
     G_verbose_message(_("Writing output..."));
     /* Writing the output raster map */
@@ -905,9 +902,8 @@ int main(int argc, char *argv[])
         int row, col;
         DCELL *drastbuf, dval;
 
-
         if (have_mask) {
-            Segment_close(&mask_seg);   /* close segment structure  */
+            Segment_close(&mask_seg); /* close segment structure  */
         }
 
         drastbuf = Rast_allocate_buf(DCELL_TYPE);
@@ -922,7 +918,7 @@ int main(int argc, char *argv[])
 
         Rast_close(raster);
 
-        Segment_close(&out_seg);        /* close segment structure  */
+        Segment_close(&out_seg); /* close segment structure  */
         /* set map title */
         sprintf(title, "%s interpolation with Tykhonov regularization",
                 type_opt->answer);
@@ -956,4 +952,4 @@ int main(int argc, char *argv[])
     G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
-}                               /*END MAIN */
+} /*END MAIN */

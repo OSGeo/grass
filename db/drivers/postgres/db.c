@@ -29,7 +29,7 @@ static void notice_processor(void *arg, const char *message)
 
 static int create_delete_db();
 
-int db__driver_open_database(dbHandle * handle)
+int db__driver_open_database(dbHandle *handle)
 {
     char buf[500];
     const char *name, *schema, *user, *password, *host, *port;
@@ -60,14 +60,16 @@ int db__driver_open_database(dbHandle * handle)
                            pgconn.dbname, user, password);
 
     G_debug(3,
-            "db_driver_open_database(): host = %s, port = %s, options = %s, tty = %s, "
+            "db_driver_open_database(): host = %s, port = %s, options = %s, "
+            "tty = %s, "
             "dbname = %s, user = %s, password = %s "
-            "schema = %s", host, port, pgconn.options,
-            pgconn.tty, pgconn.dbname, user, password, pgconn.schema);
+            "schema = %s",
+            host, port, pgconn.options, pgconn.tty, pgconn.dbname, user,
+            password, pgconn.schema);
 
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
-        db_d_append_error("%s\n%s",
-                          _("Connection failed."), PQerrorMessage(pg_conn));
+        db_d_append_error("%s\n%s", _("Connection failed."),
+                          PQerrorMessage(pg_conn));
         db_d_report_error();
         PQfinish(pg_conn);
         return DB_FAILED;
@@ -79,7 +81,7 @@ int db__driver_open_database(dbHandle * handle)
     /* Cannot use default schema because link to table can point to
        different database */
     /*
-       if ( schema ) 
+       if ( schema )
        schema = connection.schemaName;
      */
 
@@ -101,13 +103,12 @@ int db__driver_open_database(dbHandle * handle)
     }
 
     /* read internal codes */
-    res = PQexec(pg_conn,
-                 "select oid, typname from pg_type where typname in ( "
-                 "'bit', 'int2', 'int4', 'int8', 'serial', 'oid', "
-                 "'float4', 'float8', 'numeric', "
-                 "'char', 'bpchar', 'varchar', 'text', "
-                 "'time', 'date', 'timestamp', "
-                 "'bool', 'geometry', 'topogeometry') order by oid");
+    res = PQexec(pg_conn, "select oid, typname from pg_type where typname in ( "
+                          "'bit', 'int2', 'int4', 'int8', 'serial', 'oid', "
+                          "'float4', 'float8', 'numeric', "
+                          "'char', 'bpchar', 'varchar', 'text', "
+                          "'time', 'date', 'timestamp', "
+                          "'bool', 'geometry', 'topogeometry') order by oid");
 
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
         db_d_append_error(_("Unable to select data types"));
@@ -168,9 +169,9 @@ int db__driver_open_database(dbHandle * handle)
         else
             type = PG_TYPE_UNKNOWN;
 
-        G_debug(3,
-                "db_driver_open_database(): pgtype = %d, name = %s -> type = %d",
-                pgtype, PQgetvalue(res, row, 1), type);
+        G_debug(
+            3, "db_driver_open_database(): pgtype = %d, name = %s -> type = %d",
+            pgtype, PQgetvalue(res, row, 1), type);
         pg_types[row][1] = type;
     }
 
@@ -196,7 +197,7 @@ int db__driver_close_database()
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_create_database(dbHandle * handle)
+int db__driver_create_database(dbHandle *handle)
 {
     return create_delete_db(handle, TRUE);
 }
@@ -209,13 +210,13 @@ int db__driver_create_database(dbHandle * handle)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_delete_database(dbHandle * handle)
+int db__driver_delete_database(dbHandle *handle)
 {
     return create_delete_db(handle, FALSE);
 }
 
 /* create or drop database */
-int create_delete_db(dbHandle * handle, int create)
+int create_delete_db(dbHandle *handle, int create)
 {
     dbString stmt;
     const char *template_db, *name, *user, *password, *host, *port;
@@ -226,18 +227,20 @@ int create_delete_db(dbHandle * handle, int create)
     db_init_string(&stmt);
 
     template_db = "template1";
-    name = db_get_handle_dbname(handle);        /* database to create */
+    name = db_get_handle_dbname(handle); /* database to create */
 
     if (parse_conn(template_db, &pgconn) == DB_FAILED) {
         db_d_report_error();
         return DB_FAILED;
     }
     G_debug(3,
-            "db_driver_create_database(): host = %s, port = %s, options = %s, tty = %s, "
+            "db_driver_create_database(): host = %s, port = %s, options = %s, "
+            "tty = %s, "
             "dbname = %s, user = %s, password = %s, host = %s, port = %s"
-            "schema = %s", pgconn.host, pgconn.port, pgconn.options,
-            pgconn.tty, pgconn.dbname, pgconn.user, pgconn.password,
-            pgconn.host, pgconn.port, pgconn.schema);
+            "schema = %s",
+            pgconn.host, pgconn.port, pgconn.options, pgconn.tty, pgconn.dbname,
+            pgconn.user, pgconn.password, pgconn.host, pgconn.port,
+            pgconn.schema);
     db_get_login2("pg", template_db, &user, &password, &host, &port);
 
     pg_conn = PQsetdbLogin(host, port, pgconn.options, pgconn.tty,

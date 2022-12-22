@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:      v.out.dxf
  *
@@ -15,8 +14,7 @@
  *              Public License (>=v2). Read the file COPYING that
  *              comes with GRASS for details.
  *
- ****************************************************************************
- */
+ ****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,8 +31,8 @@ FILE *dxf_fp;
 int overwrite;
 
 /* size of text compared to screen=1 */
-#define TEXT_SIZE	.003
-#define CENTERED	4
+#define TEXT_SIZE .003
+#define CENTERED  4
 
 static double do_limits(struct Map_info *);
 static int make_layername(void);
@@ -79,15 +77,16 @@ int main(int argc, char *argv[])
     if (Vect_open_old2(&In, input->answer, "", field->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), input->answer);
 
-    dxf_open(dxf_file);         /* open output */
+    dxf_open(dxf_file); /* open output */
 
-    textsize = do_limits(&In);  /* does header in dxf_fp */
+    textsize = do_limits(&In); /* does header in dxf_fp */
     make_layername();
     dxf_entities();
-    nlines = add_plines(&In, Vect_get_field_number(&In, field->answer), textsize);      /* puts plines in dxf_fp */
+    nlines = add_plines(&In, Vect_get_field_number(&In, field->answer),
+                        textsize); /* puts plines in dxf_fp */
 
     dxf_endsec();
-    dxf_eof();                  /* puts final stuff in dxf_fp, closes file */
+    dxf_eof(); /* puts final stuff in dxf_fp, closes file */
 
     G_done_msg(_("%d features written to '%s'."), nlines, dxf_file);
 
@@ -183,10 +182,10 @@ int add_plines(struct Map_info *Map, int field, double textsize)
         if (ltype & GV_POINTS) {
             dxf_point(layer, Points->x[0], Points->y[0], Points->z[0]);
 
-            dxf_text(llayer, Points->x[0], Points->y[0], Points->z[0],
-                     textsize, CENTERED, cat_num);
+            dxf_text(llayer, Points->x[0], Points->y[0], Points->z[0], textsize,
+                     CENTERED, cat_num);
         }
-        else {                  /* lines */
+        else { /* lines */
             dxf_polyline(layer);
 
             for (i = 0; i < Points->n_points; i++)

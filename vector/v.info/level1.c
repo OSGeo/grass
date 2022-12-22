@@ -27,7 +27,8 @@ int level_one_info(struct Map_info *Map)
 
     Vect_rewind(Map);
     G_message(_("Topology not available for vector map <%s>. "
-                "Registering primitives..."), Vect_get_full_name(Map));
+                "Registering primitives..."),
+              Vect_get_full_name(Map));
     while (TRUE) {
         /* register line */
         type = Vect_read_next_line(Map, Points, Cats);
@@ -45,7 +46,7 @@ int level_one_info(struct Map_info *Map)
         /* count features */
         n_primitives++;
 
-        if (type & GV_POINT)    /* probably most common */
+        if (type & GV_POINT) /* probably most common */
             n_points++;
         else if (type & GV_LINE)
             n_lines++;

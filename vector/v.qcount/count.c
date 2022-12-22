@@ -13,10 +13,11 @@
 #include <grass/vector.h>
 #include "quaddefs.h"
 
-void count_sites(COOR * quads, int nquads, int *counts, double radius,
+void count_sites(COOR *quads, int nquads, int *counts, double radius,
                  struct Map_info *Map, int field)
 /*
- * counts the number of sites in the Map that fall within nquads quads of a certain radius
+ * counts the number of sites in the Map that fall within nquads quads of a
+ * certain radius
  */
 {
 
@@ -44,7 +45,7 @@ void count_sites(COOR * quads, int nquads, int *counts, double radius,
             if (hypot(Points->x[0] - quads[i].x, Points->y[0] - quads[i].y) <=
                 radius) {
                 counts[i]++;
-                break;          /* next point, quads don't overlap */
+                break; /* next point, quads don't overlap */
             }
         }
     }

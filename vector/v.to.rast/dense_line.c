@@ -5,8 +5,7 @@
 #include <grass/glocale.h>
 #include "local.h"
 
-static struct state
-{
+static struct state {
     struct Cell_head window;
     double xconv, yconv;
     double left, right, top, bottom;
@@ -18,11 +17,11 @@ static struct state
 
 static struct state *st = &state;
 
-#define X(e) (st->left + st->xconv * ((e) - st->window.west))
-#define Y(n) (st->top + st->yconv * (st->window.north - (n)))
+#define X(e)     (st->left + st->xconv * ((e)-st->window.west))
+#define Y(n)     (st->top + st->yconv * (st->window.north - (n)))
 
-#define EAST(x) (st->window.west + ((x)-st->left)/st->xconv)
-#define NORTH(y) (st->window.north - ((y)-st->top)/st->yconv)
+#define EAST(x)  (st->window.west + ((x)-st->left) / st->xconv)
+#define NORTH(y) (st->window.north - ((y)-st->top) / st->yconv)
 
 void dense_line(double x1, double y1, double x2, double y2,
                 int (*point)(int, int));
@@ -47,7 +46,6 @@ static int iceil(double x)
     return i;
 }
 
-
 void setup_plot(double t, double b, double l, double r, int (*dot)(int, int))
 {
     G_get_set_window(&st->window);
@@ -58,8 +56,7 @@ void setup_plot(double t, double b, double l, double r, int (*dot)(int, int))
     st->bottom = b;
 
     st->xconv = (st->right - st->left) / (st->window.east - st->window.west);
-    st->yconv =
-        (st->bottom - st->top) / (st->window.north - st->window.south);
+    st->yconv = (st->bottom - st->top) / (st->window.north - st->window.south);
 
     if (st->top < st->bottom) {
         st->ymin = iceil(st->top);
@@ -72,7 +69,6 @@ void setup_plot(double t, double b, double l, double r, int (*dot)(int, int))
 
     st->dot = dot;
 }
-
 
 /* dense line plotting, alternative to G_plot_line2()
  * x1, y1, x2, y2 are col, row numbers */
@@ -200,7 +196,6 @@ void dense_line(double x1, double y1, double x2, double y2,
         if (iy1 < iy2)
             yi += 1;
         xnext = a + m * yi;
-
 
         while (ix1 != ix2) {
             point(ix1, iy1);

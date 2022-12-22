@@ -14,13 +14,11 @@
 #ifndef __FILTERS_H__
 #define __FILTERS_H__
 
-struct ReturnFilter
-{
+struct ReturnFilter {
     int filter;
 };
 
-struct ClassFilter
-{
+struct ClassFilter {
 
     /** NULL terminated list of class numbers represented as string */
     char **str_classes;

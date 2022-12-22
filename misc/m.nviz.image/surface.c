@@ -25,7 +25,7 @@
    \param params module parameters
    \param data nviz data
  */
-int load_rasters(const struct GParams *params, nv_data * data)
+int load_rasters(const struct GParams *params, nv_data *data)
 {
     const char *mapset;
     int i;
@@ -51,19 +51,17 @@ int load_rasters(const struct GParams *params, nv_data * data)
                               params->elev_map->answers[i]);
             }
 
-            id = Nviz_new_map_obj(MAP_OBJ_SURF,
-                                  G_fully_qualified_name(params->elev_map->
-                                                         answers[i], mapset),
-                                  0.0, data);
+            id = Nviz_new_map_obj(
+                MAP_OBJ_SURF,
+                G_fully_qualified_name(params->elev_map->answers[i], mapset),
+                0.0, data);
         }
         else {
             if (i - nelev_map < nelev_const &&
                 strcmp(params->elev_const->answers[i - nelev_map], "")) {
-                id = Nviz_new_map_obj(MAP_OBJ_SURF, NULL,
-                                      atof(params->
-                                           elev_const->answers[i -
-                                                               nelev_map]),
-                                      data);
+                id = Nviz_new_map_obj(
+                    MAP_OBJ_SURF, NULL,
+                    atof(params->elev_const->answers[i - nelev_map]), data);
             }
             else {
                 G_fatal_error(_("Missing topography attribute for surface %d"),
@@ -109,28 +107,29 @@ int load_rasters(const struct GParams *params, nv_data * data)
         /* color */
         /* check for color map */
         if (i < ncolor_map && strcmp(params->color_map->answers[i], "")) {
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(params->color_map->
-                                                 answers[i], mapset), -1.0,
-                          data);
+            Nviz_set_attr(
+                id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
+                G_fully_qualified_name(params->color_map->answers[i], mapset),
+                -1.0, data);
         }
         /* check for color value */
         else if (i - ncolor_map < ncolor_const &&
                  strcmp(params->color_const->answers[i - ncolor_map], "")) {
             Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, CONST_ATT, NULL,
-                          Nviz_color_from_str(params->color_const->answers[i -
-                                                                           ncolor_map]),
+                          Nviz_color_from_str(
+                              params->color_const->answers[i - ncolor_map]),
                           data);
         }
-        else {                  /* use by default elevation map for coloring */
+        else { /* use by default elevation map for coloring */
             if (nelev_map > 0) {
                 Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-                              G_fully_qualified_name(params->
-                                                     elev_map->answers[i],
-                                                     mapset), -1.0, data);
-                G_verbose_message(_("Color attribute not defined, using default <%s>"),
-                                  G_fully_qualified_name(params->elev_map->
-                                                         answers[i], mapset));
+                              G_fully_qualified_name(
+                                  params->elev_map->answers[i], mapset),
+                              -1.0, data);
+                G_verbose_message(
+                    _("Color attribute not defined, using default <%s>"),
+                    G_fully_qualified_name(params->elev_map->answers[i],
+                                           mapset));
             }
             else {
                 G_fatal_error(_("Missing color attribute for surface %d"),
@@ -139,31 +138,32 @@ int load_rasters(const struct GParams *params, nv_data * data)
         }
         /* mask */
         if (i < nmask_map && strcmp(params->mask_map->answers[i], "")) {
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_MASK, MAP_ATT,
-                          G_fully_qualified_name(params->mask_map->answers[i],
-                                                 mapset), -1.0, data);
+            Nviz_set_attr(
+                id, MAP_OBJ_SURF, ATT_MASK, MAP_ATT,
+                G_fully_qualified_name(params->mask_map->answers[i], mapset),
+                -1.0, data);
         }
 
         /* transparency */
         if (i < ntransp_map && strcmp(params->transp_map->answers[i], "")) {
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_TRANSP, MAP_ATT,
-                          G_fully_qualified_name(params->transp_map->
-                                                 answers[i], mapset), -1.0,
-                          data);
+            Nviz_set_attr(
+                id, MAP_OBJ_SURF, ATT_TRANSP, MAP_ATT,
+                G_fully_qualified_name(params->transp_map->answers[i], mapset),
+                -1.0, data);
         }
         else if (i - ntransp_map < ntransp_const &&
                  strcmp(params->transp_const->answers[i - ntransp_map], "")) {
             Nviz_set_attr(id, MAP_OBJ_SURF, ATT_TRANSP, CONST_ATT, NULL,
-                          atof(params->
-                               transp_const->answers[i - ntransp_map]), data);
+                          atof(params->transp_const->answers[i - ntransp_map]),
+                          data);
         }
 
         /* shininess */
         if (i < nshine_map && strcmp(params->shine_map->answers[i], "")) {
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_SHINE, MAP_ATT,
-                          G_fully_qualified_name(params->shine_map->
-                                                 answers[i], mapset), -1.0,
-                          data);
+            Nviz_set_attr(
+                id, MAP_OBJ_SURF, ATT_SHINE, MAP_ATT,
+                G_fully_qualified_name(params->shine_map->answers[i], mapset),
+                -1.0, data);
         }
         else if (i - nshine_map < nshine_const &&
                  strcmp(params->shine_const->answers[i - nshine_map], "")) {
@@ -174,9 +174,10 @@ int load_rasters(const struct GParams *params, nv_data * data)
 
         /* emission */
         if (i < nemit_map && strcmp(params->emit_map->answers[i], "")) {
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_EMIT, MAP_ATT,
-                          G_fully_qualified_name(params->emit_map->answers[i],
-                                                 mapset), -1.0, data);
+            Nviz_set_attr(
+                id, MAP_OBJ_SURF, ATT_EMIT, MAP_ATT,
+                G_fully_qualified_name(params->emit_map->answers[i], mapset),
+                -1.0, data);
         }
         else if (i - nemit_map < nemit_const &&
                  strcmp(params->emit_const->answers[i - nemit_map], "")) {
@@ -239,7 +240,7 @@ void surface_set_draw_mode(const struct GParams *params)
         else if (strcmp(mode, "fine") == 0) {
             draw_mode |= DM_POLY;
         }
-        else {                  /* both */
+        else { /* both */
             draw_mode |= DM_WIRE_POLY;
         }
 
@@ -247,7 +248,7 @@ void surface_set_draw_mode(const struct GParams *params)
         if (strcmp(style, "wire") == 0) {
             draw_mode |= DM_GRID_WIRE;
         }
-        else {                  /* surface */
+        else { /* surface */
             draw_mode |= DM_GRID_SURF;
         }
 
@@ -255,7 +256,7 @@ void surface_set_draw_mode(const struct GParams *params)
         if (strcmp(shade, "flat") == 0) {
             draw_mode |= DM_FLAT;
         }
-        else {                  /* gouraud */
+        else { /* gouraud */
             draw_mode |= DM_GOURAUD;
         }
 
@@ -265,8 +266,8 @@ void surface_set_draw_mode(const struct GParams *params)
         /* resolution */
         resol_fine = atoi(res_fine);
         resol_coarse = atoi(res_coarse);
-        if (GS_set_drawres(id, resol_fine, resol_fine,
-                           resol_coarse, resol_coarse) < 0)
+        if (GS_set_drawres(id, resol_fine, resol_fine, resol_coarse,
+                           resol_coarse) < 0)
             G_fatal_error(_("Unable to set draw mode for surface id %d"), id);
 
         /* wire color */

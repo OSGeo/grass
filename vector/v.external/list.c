@@ -60,7 +60,7 @@ char **format_list(int *count, size_t *len)
         G_strchg(buf, ' ', '_');
         list[(*count)++] = G_store(buf);
         if (len)
-            *len += strlen(buf) + 1;    /* + ',' */
+            *len += strlen(buf) + 1; /* + ',' */
     }
 
     /* order formats by name */
@@ -103,7 +103,7 @@ void list_formats(void)
     G_free(list);
 }
 
-int list_layers(FILE * fd, const char *dsn, char **layer, int print_types,
+int list_layers(FILE *fd, const char *dsn, char **layer, int print_types,
                 int use_ogr)
 {
     if (!use_ogr) {
@@ -141,7 +141,7 @@ void get_table_name(const char *table, char **table_name, char **schema_name)
 }
 
 #ifdef HAVE_POSTGRES
-int list_layers_pg(FILE * fd, const char *conninfo, char **table,
+int list_layers_pg(FILE *fd, const char *conninfo, char **table,
                    int print_types)
 {
     int row, ntables, ret, print_schema;
@@ -158,15 +158,14 @@ int list_layers_pg(FILE * fd, const char *conninfo, char **table,
     conn = PQconnectdb(conninfo);
     G_debug(1, "PQconnectdb(): %s", conninfo);
     if (PQstatus(conn) == CONNECTION_BAD)
-        G_fatal_error("%s\n%s",
-                      _("Connection to PostgreSQL database failed."),
+        G_fatal_error("%s\n%s", _("Connection to PostgreSQL database failed."),
                       PQerrorMessage(conn));
 
     db_init_string(&sql);
-    db_set_string(&sql,
-                  "SELECT f_table_schema, f_table_name, f_geometry_column, type "
-                  "FROM geometry_columns ORDER BY "
-                  "f_table_schema, f_table_name");
+    db_set_string(
+        &sql, "SELECT f_table_schema, f_table_name, f_geometry_column, type "
+              "FROM geometry_columns ORDER BY "
+              "f_table_schema, f_table_name");
     G_debug(2, "SQL: %s", db_get_string(&sql));
     res = PQexec(conn, db_get_string(&sql));
     if (PQresultStatus(res) != PGRES_TUPLES_OK)
@@ -181,9 +180,10 @@ int list_layers_pg(FILE * fd, const char *conninfo, char **table,
     ntables = PQntuples(res);
     G_debug(3, "   nrows = %d", ntables);
     if (fd)
-        G_message(n_("PostGIS database <%s> contains %d feature table:",
-                     "PostGIS database <%s> contains %d feature tables:",
-                     ntables), PQdb(conn), ntables);
+        G_message(
+            n_("PostGIS database <%s> contains %d feature table:",
+               "PostGIS database <%s> contains %d feature tables:", ntables),
+            PQdb(conn), ntables);
 
     /* report also schemas */
     print_schema = FALSE;
@@ -239,7 +239,7 @@ int list_layers_pg(FILE * fd, const char *conninfo, char **table,
 #endif /* HAVE_POSTGRES */
 
 #ifdef HAVE_OGR
-int list_layers_ogr(FILE * fd, const char *dsn, char **layer, int print_types)
+int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 {
     int i, ret;
     int nlayers;
@@ -268,10 +268,10 @@ int list_layers_ogr(FILE * fd, const char *dsn, char **layer, int print_types)
     nlayers = OGR_DS_GetLayerCount(Ogr_ds);
 
     if (fd) {
-        G_message(n_("Data source <%s> (format '%s') contains %d layer:",
-                     "Data source <%s> (format '%s') contains %d layers:",
-                     nlayers),
-                  dsn, OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), nlayers);
+        G_message(
+            n_("Data source <%s> (format '%s') contains %d layer:",
+               "Data source <%s> (format '%s') contains %d layers:", nlayers),
+            dsn, OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), nlayers);
     }
     else if (layer && !(*layer)) {
         /* return first layer by default (if layer not defined) */
@@ -310,16 +310,18 @@ int list_layers_ogr(FILE * fd, const char *dsn, char **layer, int print_types)
                 Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
                 proj_same = 0;
                 G_suppress_warnings(TRUE);
-                if (GPJ_osr_to_grass(&loc_wind, &proj_info,
-                                     &proj_units, Ogr_projection, 0) < 0) {
-                    G_warning(_("Unable to convert input map projection to GRASS "
-                               "format. Projection check cannot be provided for "
-                               "OGR layer <%s>"), layer_name);
+                if (GPJ_osr_to_grass(&loc_wind, &proj_info, &proj_units,
+                                     Ogr_projection, 0) < 0) {
+                    G_warning(
+                        _("Unable to convert input map projection to GRASS "
+                          "format. Projection check cannot be provided for "
+                          "OGR layer <%s>"),
+                        layer_name);
                 }
                 else {
-                    if (TRUE ==
-                        G_compare_projections(loc_proj_info, loc_proj_units,
-                                              proj_info, proj_units))
+                    if (TRUE == G_compare_projections(loc_proj_info,
+                                                      loc_proj_units, proj_info,
+                                                      proj_units))
                         proj_same = 1;
                     else
                         proj_same = 0;
@@ -338,9 +340,8 @@ int list_layers_ogr(FILE * fd, const char *dsn, char **layer, int print_types)
 
                     Ogr_geom_type = OGR_GFld_GetType(Ogr_geomdefn);
                     fprintf(fd, "%s,%s,%d,%s\n", layer_name,
-                            feature_type(OGRGeometryTypeToName
-                                         (Ogr_geom_type)), proj_same,
-                            OGR_GFld_GetNameRef(Ogr_geomdefn));
+                            feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
+                            proj_same, OGR_GFld_GetNameRef(Ogr_geomdefn));
                 }
 #else
                 fprintf(fd, "%s,%s,%d,\n", layer_name,

@@ -23,9 +23,8 @@ void copy_tabs(const struct Map_info *In, struct Map_info *Out)
     fields = (int *)G_malloc(nfields * sizeof(int));
     for (i = 0; i < nfields; i++) {
         nocats[i] = 0;
-        ocats[i] =
-            (int *)G_malloc(Vect_cidx_get_num_cats_by_index(Out, i) *
-                            sizeof(int));
+        ocats[i] = (int *)G_malloc(Vect_cidx_get_num_cats_by_index(Out, i) *
+                                   sizeof(int));
         fields[i] = Vect_cidx_get_field_number(Out, i);
     }
 
@@ -37,7 +36,7 @@ void copy_tabs(const struct Map_info *In, struct Map_info *Out)
             int f, j;
 
             f = -1;
-            for (j = 0; j < nfields; j++) {     /* find field */
+            for (j = 0; j < nfields; j++) { /* find field */
                 if (fields[j] == Cats->field[i]) {
                     f = j;
                     break;
@@ -86,7 +85,7 @@ void copy_tabs(const struct Map_info *In, struct Map_info *Out)
 
         /* Make a list of categories */
         IFi = Vect_get_field(In, fields[i]);
-        if (!IFi) {             /* no table */
+        if (!IFi) { /* no table */
             G_message(_("No attribute table for layer %d"), fields[i]);
             continue;
         }
@@ -96,18 +95,15 @@ void copy_tabs(const struct Map_info *In, struct Map_info *Out)
         ret = db_copy_table_by_ints(IFi->driver, IFi->database, IFi->table,
                                     OFi->driver,
                                     Vect_subst_var(OFi->database, Out),
-                                    OFi->table, IFi->key, ocats[i],
-                                    nocats[i]);
+                                    OFi->table, IFi->key, ocats[i], nocats[i]);
 
         if (ret == DB_FAILED) {
             G_warning(_("Unable to copy table <%s>"), IFi->table);
         }
         else {
 
-            driver = db_start_driver_open_database(OFi->driver,
-                                                   Vect_subst_var(OFi->
-                                                                  database,
-                                                                  Out));
+            driver = db_start_driver_open_database(
+                OFi->driver, Vect_subst_var(OFi->database, Out));
 
             if (!driver) {
                 G_warning(_("Unable to open database <%s> with driver <%s>"),

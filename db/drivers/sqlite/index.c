@@ -1,4 +1,3 @@
-
 /**
  * \file index.c
  *
@@ -18,7 +17,6 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
  * \fn int db__driver_create_index (dbIndex *index)
  *
@@ -28,7 +26,7 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_create_index(dbIndex * index)
+int db__driver_create_index(dbIndex *index)
 {
     int i, ncols;
     sqlite3_stmt *statement;
@@ -71,12 +69,10 @@ int db__driver_create_index(dbIndex * index)
      * but sqlite can not step, the statement needs to be prepared anew again */
     while (1) {
         ret =
-            sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement,
-                            &rest);
+            sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
 
         if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s\n%s",
-                              _("Unable to create index:"),
+            db_d_append_error("%s\n%s\n%s", _("Unable to create index:"),
                               db_get_string(&sql),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
@@ -94,8 +90,7 @@ int db__driver_create_index(dbIndex * index)
             /* try again */
         }
         else if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s",
-                              _("Error in sqlite3_step():"),
+            db_d_append_error("%s\n%s", _("Error in sqlite3_step():"),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
             sqlite3_finalize(statement);

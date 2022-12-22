@@ -15,8 +15,8 @@
    \param field layer number
    \param column attribute column used for height
  */
-void trans2d(struct Map_info *In, struct Map_info *Out, int type,
-             double height, const char *field_name, const char *column)
+void trans2d(struct Map_info *In, struct Map_info *Out, int type, double height,
+             const char *field_name, const char *column)
 {
     int i, ltype, line, field;
     int cat;
@@ -60,16 +60,15 @@ void trans2d(struct Map_info *In, struct Map_info *Out, int type,
         /* column type must numeric */
         ctype = db_column_Ctype(driver, Fi->table, column);
         if (ctype == -1) {
-            G_fatal_error(_("Column <%s> not found in table <%s>"),
-                          column, Fi->table);
+            G_fatal_error(_("Column <%s> not found in table <%s>"), column,
+                          Fi->table);
         }
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
             G_fatal_error(_("Column must be numeric"));
         }
 
         G_message(_("Fetching height from <%s> column..."), column);
-        db_select_CatValArray(driver, Fi->table, Fi->key,
-                              column, NULL, &cvarr);
+        db_select_CatValArray(driver, Fi->table, Fi->key, column, NULL, &cvarr);
 
         G_debug(3, "%d records selected", cvarr.n_values);
 
@@ -83,7 +82,7 @@ void trans2d(struct Map_info *In, struct Map_info *Out, int type,
         if (ltype == -1) {
             G_fatal_error(_("Unable to read vector map"));
         }
-        if (ltype == -2) {      /* EOF */
+        if (ltype == -2) { /* EOF */
             break;
         }
 
@@ -104,7 +103,7 @@ void trans2d(struct Map_info *In, struct Map_info *Out, int type,
 
             if (ctype == DB_C_TYPE_DOUBLE)
                 ret = db_CatValArray_get_value_double(&cvarr, cat, &height);
-            else {              /* integer */
+            else { /* integer */
 
                 int height_i;
 

@@ -13,7 +13,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_grant_on_table(dbString * tableName, int priv, int to)
+int db__driver_grant_on_table(dbString *tableName, int priv, int to)
 {
     PGresult *res;
     dbString sql;
@@ -49,8 +49,7 @@ int db__driver_grant_on_table(dbString * tableName, int priv, int to)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-        db_d_append_error("%s\n%s\n%s",
-                          _("Unable grant on table:"),
+        db_d_append_error("%s\n%s\n%s", _("Unable grant on table:"),
                           db_get_string(&sql), PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(res);

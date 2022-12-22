@@ -15,8 +15,7 @@ int get_target(char *group)
 
     if (group && *group) {
         if (!I_get_target(group, location, mapset)) {
-            sprintf(buf, _("Target information for group <%s> missing"),
-                    group);
+            sprintf(buf, _("Target information for group <%s> missing"), group);
             goto error;
         }
     }
@@ -38,12 +37,11 @@ int get_target(char *group)
         select_current_env();
         return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset,
-            location);
+    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
-  error:
+error:
     strcat(buf, _("Please run i.target for group."));
     strcat(buf, group);
     G_fatal_error("%s", buf);
-    return 1;                   /* never reached */
+    return 1; /* never reached */
 }

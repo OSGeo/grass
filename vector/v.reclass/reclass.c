@@ -2,14 +2,15 @@
  *  created by:         R.L.Glenn, SCS
  *  modified to function by RB 5/2000
  *
- * Function reclass() reads input vector map and writes reclassed elements to output map.
+ * Function reclass() reads input vector map and writes reclassed elements to
+ * output map.
  *
  * Arguments:
  * in_name - name of input vector map
  * out_name - name of output vector map
  * new - reclass table
- * type - elements type 
- * optiond - do not output boundaries between areas with the same cat 
+ * type - elements type
+ * optiond - do not output boundaries between areas with the same cat
  *
  * Returns:
  * number of elements created or -1 on error
@@ -22,7 +23,7 @@
 #include <grass/vector.h>
 
 int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
-            dbCatValArray * cvarr, int dissolve)
+            dbCatValArray *cvarr, int dissolve)
 {
     int i, nlines, line, ltype, old_cat, new_cat;
     int nocat = 0, rclelem = 0, negative = 0;
@@ -44,7 +45,7 @@ int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
         Vect_reset_cats(NewCats);
 
         for (i = 0; i < Cats->n_cats; i++) {
-            if ((ltype & type) && Cats->field[i] == field) {    /* reclass */
+            if ((ltype & type) && Cats->field[i] == field) { /* reclass */
                 old_cat = Cats->cat[i];
                 G_debug(3, "  old_cat = %d", old_cat);
 
@@ -64,7 +65,7 @@ int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
                     rclelem++;
                 }
             }
-            else {              /* copy */
+            else { /* copy */
                 Vect_cat_set(NewCats, Cats->field[i], Cats->cat[i]);
             }
         }
@@ -75,9 +76,9 @@ int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
         G_warning("For %d elements no new category was defined", nocat);
 
     if (negative > 0)
-        G_warning
-            ("For %d elements requested negative category (ignored, no category in output)",
-             negative);
+        G_warning("For %d elements requested negative category (ignored, no "
+                  "category in output)",
+                  negative);
 
     return (rclelem);
 }

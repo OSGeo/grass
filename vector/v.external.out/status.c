@@ -109,13 +109,13 @@ void check_required_options(struct Key_Value *key_val, int use_ogr)
         G_fatal_error(_("Format not defined"));
 
     /* check required options */
-    if (use_ogr) {              /* OGR */
+    if (use_ogr) { /* OGR */
         /* dsn (required) */
         p = G_find_key_value("dsn", key_val);
         if (!p)
             G_fatal_error(_("OGR datasource (dsn) not defined"));
     }
-    else {                      /* PG */
+    else { /* PG */
         char dsn_name[GNAME_MAX];
 
         /* conninfo (required) */

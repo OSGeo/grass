@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -6,7 +5,7 @@
  * AUTHOR(S):  Daniel Bundala
  *
  * PURPOSE:    priority queue / binary heap
- *             
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -19,7 +18,7 @@
 
 #include "pq.h"
 
-int binary_heap_init(int size, binary_heap * bh)
+int binary_heap_init(int size, binary_heap *bh)
 {
     bh->items = 0;
     bh->key = (double *)G_malloc(sizeof(double) * (size + 1));
@@ -33,14 +32,14 @@ int binary_heap_init(int size, binary_heap * bh)
     return 1;
 }
 
-void binary_heap_free(binary_heap * bh)
+void binary_heap_free(binary_heap *bh)
 {
     G_free(bh->key);
     G_free(bh->value);
     return;
 }
 
-void binary_heap_push(double key, int value, binary_heap * bh)
+void binary_heap_push(double key, int value, binary_heap *bh)
 {
     int i = ++(bh->items);
 
@@ -55,7 +54,7 @@ void binary_heap_push(double key, int value, binary_heap * bh)
     return;
 }
 
-int binary_heap_extract_max(binary_heap * bh, int *value)
+int binary_heap_extract_max(binary_heap *bh, int *value)
 {
     int n = bh->items;
 
@@ -63,14 +62,12 @@ int binary_heap_extract_max(binary_heap * bh, int *value)
         return 0;
     *value = bh->value[1];
 
-
     bh->key[1] = bh->key[n];
     bh->value[1] = bh->value[n];
 
     int i = 1;
     double td;
     int tv;
-
 
     while (1) {
         int greater = i;

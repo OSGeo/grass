@@ -6,11 +6,11 @@
  * Read the file GPL.TXT coming with GRASS for details.
  */
 
-#include<stdio.h>
-#include<math.h>
-#include"zufall.h"
+#include <stdio.h>
+#include <math.h>
+#include "zufall.h"
 
-  /* Box-Muller method for Gaussian random numbers */
+/* Box-Muller method for Gaussian random numbers */
 
 int normalen(int n, double *x)
 {
@@ -31,7 +31,7 @@ int normalen(int n, double *x)
     }
     ptr = 0;
 
-  L1:
+L1:
     left = buffsz - klotz1_1.xptr;
     if (nn < left) {
         for (i = 1; i <= nn; ++i)
@@ -48,4 +48,4 @@ int normalen(int n, double *x)
         normal00();
         goto L1;
     }
-}                               /* normalen */
+} /* normalen */

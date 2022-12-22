@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       db.select
@@ -26,12 +25,10 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-struct
-{
+struct {
     char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
     int c, d, h, test_only;
 } parms;
-
 
 /* function prototypes */
 static void parse_command_line(int, char **);
@@ -51,8 +48,9 @@ int main(int argc, char **argv)
 
     if (parms.table) {
         if (!db_table_exists(parms.driver, parms.database, parms.table)) {
-            G_warning(_("Table <%s> not found in database <%s> using driver <%s>"),
-                      parms.table, parms.database, parms.driver);
+            G_warning(
+                _("Table <%s> not found in database <%s> using driver <%s>"),
+                parms.table, parms.database, parms.driver);
             exit(EXIT_FAILURE);
         }
     }
@@ -61,8 +59,8 @@ int main(int argc, char **argv)
     if (parms.input && strcmp(parms.input, "-") != 0) {
         fd = fopen(parms.input, "r");
         if (fd == NULL) {
-            G_fatal_error(_("Unable to open file <%s>: %s"),
-                          parms.input, strerror(errno));
+            G_fatal_error(_("Unable to open file <%s>: %s"), parms.input,
+                          strerror(errno));
         }
     }
     else
@@ -94,7 +92,7 @@ int main(int argc, char **argv)
         db_append_string(&stmt, parms.table);
         stat = sel(driver, &stmt);
     }
-    else {                      /* -> parms.input */
+    else { /* -> parms.input */
         stat = DB_OK;
         while (stat == DB_OK && get_stmt(fd, &stmt)) {
             if (!stmt_is_empty(&stmt))
@@ -111,8 +109,7 @@ int main(int argc, char **argv)
     exit(stat == DB_OK ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
-
-int sel(dbDriver * driver, dbString * stmt)
+int sel(dbDriver *driver, dbString *stmt)
 {
     dbCursor cursor;
     dbTable *table;
@@ -189,11 +186,10 @@ int sel(dbDriver * driver, dbString * stmt)
     return DB_OK;
 }
 
-
 void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table, *sql,
-        *fs, *vs, *nv, *input, *output;
+    struct Option *driver, *database, *table, *sql, *fs, *vs, *nv, *input,
+        *output;
     struct Flag *c, *d, *v, *flag_test;
     struct GModule *module;
     const char *drv, *db;
@@ -303,11 +299,12 @@ void parse_command_line(int argc, char **argv)
     }
 
     if (!parms.input && !parms.sql && !parms.table)
-        G_fatal_error(_("You must provide one of these options: <%s>, <%s>, or <%s>"),
-                      sql->key, input->key, table->key);
+        G_fatal_error(
+            _("You must provide one of these options: <%s>, <%s>, or <%s>"),
+            sql->key, input->key, table->key);
 }
 
-int get_stmt(FILE * fd, dbString * stmt)
+int get_stmt(FILE *fd, dbString *stmt)
 {
     char buf[DB_SQL_MAX], buf2[DB_SQL_MAX];
     size_t len;
@@ -330,8 +327,7 @@ int get_stmt(FILE * fd, dbString * stmt)
     return 1;
 }
 
-
-int stmt_is_empty(dbString * stmt)
+int stmt_is_empty(dbString *stmt)
 {
     char dummy[2];
 

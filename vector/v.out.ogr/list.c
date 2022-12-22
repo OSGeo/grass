@@ -73,7 +73,7 @@ char *OGR_list_write_drivers(void)
     qsort(list, count, sizeof(char *), cmp);
 
     if (len > 0) {
-        ret = G_malloc((len + 1) * sizeof(char));       /* \0 */
+        ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
         *ret = '\0';
         for (i = 0; i < count; i++) {
             if (i > 0)
@@ -131,8 +131,7 @@ void list_formats(void)
         else
             continue;
 
-        fprintf(stdout, " %s (%s): %s\n",
-                GDALGetDriverShortName(hDriver),
+        fprintf(stdout, " %s (%s): %s\n", GDALGetDriverShortName(hDriver),
                 pszRWFlag, GDALGetDriverLongName(hDriver));
     }
 
@@ -146,9 +145,8 @@ void list_formats(void)
         else
             continue;
 
-        fprintf(stdout, " %s (%s): %s\n",
-                OGR_Dr_GetName(poDriver),
-                pszRWFlag, OGR_Dr_GetName(poDriver));
+        fprintf(stdout, " %s (%s): %s\n", OGR_Dr_GetName(poDriver), pszRWFlag,
+                OGR_Dr_GetName(poDriver));
     }
 #endif
 }

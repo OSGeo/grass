@@ -5,18 +5,18 @@
 void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
-    char handle[DXF_BUF_SIZE];  /* entity handle, 16 hexadecimal digits */
-    char layer[DXF_BUF_SIZE];   /* layer name */
-    int layer_flag = 0;         /* indicates if a layer name has been found */
-    int polyline_flag = 0;      /* indicates the type of polyline */
-    int xflag = 0;              /* indicates if a x value has been found */
-    int yflag = 0;              /* indicates if a y value has been found */
-    double elevation = 0.0;     /* elevation */
+    char handle[DXF_BUF_SIZE]; /* entity handle, 16 hexadecimal digits */
+    char layer[DXF_BUF_SIZE];  /* layer name */
+    int layer_flag = 0;        /* indicates if a layer name has been found */
+    int polyline_flag = 0;     /* indicates the type of polyline */
+    int xflag = 0;             /* indicates if a x value has been found */
+    int yflag = 0;             /* indicates if a y value has been found */
+    double elevation = 0.0;    /* elevation */
     int arr_size = 0;
 
     /* variables to create arcs */
-    double bulge = 0.0;         /* for arc curves */
-    double prev_bulge = 0.0;    /* for arc curves */
+    double bulge = 0.0;      /* for arc curves */
+    double prev_bulge = 0.0; /* for arc curves */
 
     handle[0] = 0;
     strcpy(layer, UNIDENTIFIED_LAYER);
@@ -27,10 +27,10 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
             return;
 
         switch (code) {
-        case 5:                /* entity handle */
+        case 5: /* entity handle */
             strcpy(handle, dxf_buf);
             break;
-        case 8:                /* layer name */
+        case 8: /* layer name */
             if (!layer_flag && *dxf_buf) {
                 if (flag_list) {
                     if (!is_layer_in_list(dxf_buf))
@@ -48,31 +48,31 @@ void add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
                 layer_flag = 1;
             }
             break;
-        case 10:               /* x coordinate */
+        case 10: /* x coordinate */
             xpnts[arr_size] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 20:               /* y coordinate */
+        case 20: /* y coordinate */
             ypnts[arr_size] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 38:               /* elevation */
+        case 38: /* elevation */
             elevation = atof(dxf_buf);
             break;
-        case 42:               /* bulge */
+        case 42: /* bulge */
             bulge = atof(dxf_buf);
             break;
-        case 70:               /* polyline flag */
+        case 70: /* polyline flag */
 
             /*******************************************************************
-	     Polyline flag (bit-coded); default is 0:
-	     1 = Closed; 128 = Plinegen
-	     ******************************************************************/
+             Polyline flag (bit-coded); default is 0:
+             1 = Closed; 128 = Plinegen
+             ******************************************************************/
             polyline_flag = atoi(dxf_buf);
             break;
 
-        case 40:               /* starting width */
-        case 41:               /* ending width */
+        case 40: /* starting width */
+        case 41: /* ending width */
             break;
         }
 

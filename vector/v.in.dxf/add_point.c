@@ -5,11 +5,11 @@
 void add_point(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
-    char handle[DXF_BUF_SIZE];  /* entity handle, 16 hexadecimal digits */
-    char layer[DXF_BUF_SIZE];   /* layer name */
-    int layer_flag = 0;         /* indicates if a layer name has been found */
-    int xflag = 0;              /* indicates if a x value has been found */
-    int yflag = 0;              /* indicates if a y value has been found */
+    char handle[DXF_BUF_SIZE]; /* entity handle, 16 hexadecimal digits */
+    char layer[DXF_BUF_SIZE];  /* layer name */
+    int layer_flag = 0;        /* indicates if a layer name has been found */
+    int xflag = 0;             /* indicates if a x value has been found */
+    int yflag = 0;             /* indicates if a y value has been found */
 
     handle[0] = 0;
     strcpy(layer, UNIDENTIFIED_LAYER);
@@ -21,10 +21,10 @@ void add_point(struct dxf_file *dxf, struct Map_info *Map)
             return;
 
         switch (code) {
-        case 5:                /* entity handle */
+        case 5: /* entity handle */
             strcpy(handle, dxf_buf);
             break;
-        case 8:                /* layer name */
+        case 8: /* layer name */
             if (!layer_flag && *dxf_buf) {
                 if (flag_list) {
                     if (!is_layer_in_list(dxf_buf))
@@ -42,19 +42,19 @@ void add_point(struct dxf_file *dxf, struct Map_info *Map)
                 layer_flag = 1;
             }
             break;
-        case 10:               /* x coordinate */
+        case 10: /* x coordinate */
             xpnts[0] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 20:               /* y coordinate */
+        case 20: /* y coordinate */
             ypnts[0] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 30:               /* z coordinate */
+        case 30: /* z coordinate */
             zpnts[0] = atof(dxf_buf);
             break;
 
-        case 50:               /* angle of x axis for the UCS in effect */
+        case 50: /* angle of x axis for the UCS in effect */
             break;
         }
     }

@@ -1,11 +1,13 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:     v.out.ascii
- * AUTHOR(S):  Michael Higgins, U.S. Army Construction Engineering Research Laboratory
- *             James Westervelt, U.S. Army Construction Engineering Research Laboratory
+ * AUTHOR(S):  Michael Higgins, U.S. Army Construction Engineering
+ *               Research Laboratory
+ *             James Westervelt, U.S. Army Construction Engineering
+ *               Research Laboratory
  *             Radim Blazek, ITC-Irst, Trento, Italy
- *             Martin Landa, CTU in Prague, Czech Republic (v.out.ascii.db merged & update (OGR) for GRASS7)
+ *             Martin Landa, CTU in Prague, Czech Republic
+ *               (v.out.ascii.db merged & update (OGR) for GRASS7)
  *
  * PURPOSE:    Writes GRASS vector data as ASCII files
  * COPYRIGHT:  (C) 2000-2009, 2011-2012 by the GRASS Development Team
@@ -14,8 +16,7 @@
  *             Public License (>=v2). Read the file COPYING that comes
  *             with GRASS for details.
  *
- ****************************************************************************
- */
+ ****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,9 +55,8 @@ int main(int argc, char *argv[])
         _("By default only features with category are exported. "
           "To export all features use 'layer=-1'.");
 
-    parse_args(argc, argv, &input, &output, &format, &dp, &delim,
-               &field_name, &columns, &where, &region, &old_format, &header,
-               &cats, &type);
+    parse_args(argc, argv, &input, &output, &format, &dp, &delim, &field_name,
+               &columns, &where, &region, &old_format, &header, &cats, &type);
 
     if (format == GV_ASCII_FORMAT_STD && columns) {
         G_warning(_("Parameter '%s' ignored in standard mode"), "column");
@@ -80,9 +80,11 @@ int main(int argc, char *argv[])
     /* open with topology only if needed */
     if (format == GV_ASCII_FORMAT_WKT ||
         (format == GV_ASCII_FORMAT_STD && (where || clist))) {
-        if (Vect_open_old2(&Map, input, "", field_name) < 2)    /* topology required for areas */
+        if (Vect_open_old2(&Map, input, "", field_name) <
+            2) /* topology required for areas */
             G_warning(_("Unable to open vector map <%s> at topology level. "
-                        "Areas will not be processed."), input);
+                        "Areas will not be processed."),
+                      input);
     }
     else {
         Vect_set_open_level(1); /* topology not needed */
@@ -107,8 +109,9 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Layer <%s> not found"), field_name);
         ret = Vect_str_to_cat_list(cats, clist);
         if (ret > 0)
-            G_fatal_error(n_("%d error in <%s> option",
-                             "%d errors in <%s> option", ret), ret, "cats");
+            G_fatal_error(
+                n_("%d error in <%s> option", "%d errors in <%s> option", ret),
+                ret, "cats");
     }
 
     if (strcmp(output, "-") != 0) {
@@ -147,8 +150,8 @@ int main(int argc, char *argv[])
 
     if (where || columns || clist)
         G_message(_("Fetching data..."));
-    ret = Vect_write_ascii(ascii, att, &Map, ver, format, dp, delim,
-                           region, type, field, clist, (const char *)where,
+    ret = Vect_write_ascii(ascii, att, &Map, ver, format, dp, delim, region,
+                           type, field, clist, (const char *)where,
                            (const char **)columns, header);
 
     if (ret == 0) {

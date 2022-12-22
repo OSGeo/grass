@@ -4,7 +4,7 @@
  *
  */
 
- /******************************************************************************
+/******************************************************************************
  * Copyright (c) 2004, Radim Blazek (blazek@itc.it)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -37,12 +37,12 @@
 
 #define PI M_PI
 
-typedef struct
-{
+typedef struct {
     int lid;
     double start_map, end_map;
-    double start_mp, start_off; /* milepost, offset for the beginning of ref. segment */
-    double end_mp, end_off;     /* milepost, offset for the end of ref. segment */
+    double start_mp,
+        start_off; /* milepost, offset for the beginning of ref. segment */
+    double end_mp, end_off; /* milepost, offset for the end of ref. segment */
 } RSEGMENT;
 
 int cmp_along(const void *pa, const void *pb);
@@ -56,7 +56,8 @@ int main(int argc, char **argv)
     double start, end, station;
     double mp_multip, sta_multip, map_offset;
     double x, y, z, angle, xs, ys, rotate;
-    double sta_l_off, sta_r_off, mp_l_off, mp_r_off;    /* Left and right offset of stationing */
+    double sta_l_off, sta_r_off, mp_l_off,
+        mp_r_off; /* Left and right offset of stationing */
     double l_off, r_off;
     double lab_x_off, lab_y_off, lab_x, lab_y;
     int arseg, nrseg, seg;
@@ -157,15 +158,13 @@ int main(int argc, char **argv)
 
     Xoffset = G_define_option();
     Xoffset->key = "xoffset";
-    Xoffset->description =
-        _("Offset label in label x-direction in map units");
+    Xoffset->description = _("Offset label in label x-direction in map units");
     Xoffset->type = TYPE_DOUBLE;
     Xoffset->answer = "25";
 
     Yoffset = G_define_option();
     Yoffset->key = "yoffset";
-    Yoffset->description =
-        _("Offset label in label y-direction in map units");
+    Yoffset->description = _("Offset label in label y-direction in map units");
     Yoffset->type = TYPE_DOUBLE;
     Yoffset->answer = "5";
 
@@ -242,8 +241,8 @@ int main(int argc, char **argv)
     lfield = atoi(lfield_opt->answer);
     lab_x_off = atof(Xoffset->answer);
     lab_y_off = atof(Yoffset->answer);
-    mp_multip = 1000;           /* Number of map units per MP unit */
-    sta_multip = 100;           /* Number of map units per stationing unit */
+    mp_multip = 1000; /* Number of map units per MP unit */
+    sta_multip = 100; /* Number of map units per stationing unit */
 
     i = 0;
     mp_l_off = 50;
@@ -291,13 +290,13 @@ int main(int argc, char **argv)
     if (db_open_database(rsdriver, &rshandle) != DB_OK)
         G_fatal_error(_("Unable to open database for reference table"));
 
-    /* For each line select all existeng reference segments, sort them along the line
-     *  and fcreate stationing. */
+    /* For each line select all existeng reference segments, sort them along the
+     * line and fcreate stationing. */
 
     G_debug(2, "find_line(): lfield = %d", lfield);
 
     arseg = 1000;
-    rseg = (RSEGMENT *) G_malloc(arseg * sizeof(RSEGMENT));
+    rseg = (RSEGMENT *)G_malloc(arseg * sizeof(RSEGMENT));
 
     nlines = Vect_get_num_lines(&In);
     /* for ( line = 19; line <= 19; line++ ) { */
@@ -311,8 +310,10 @@ int main(int argc, char **argv)
             continue;
 
         sprintf(buf,
-                "select start_map, end_map, start_mp, start_off, end_mp, end_off, lid "
-                "from %s where lcat = %d;", table_opt->answer, cat);
+                "select start_map, end_map, start_mp, start_off, end_mp, "
+                "end_off, lid "
+                "from %s where lcat = %d;",
+                table_opt->answer, cat);
         G_debug(2, "  SQL: %s", buf);
         db_append_string(&stmt, buf);
 
@@ -335,7 +336,7 @@ int main(int argc, char **argv)
 
             if (nrseg == arseg) {
                 arseg += 1000;
-                rseg = (RSEGMENT *) G_realloc(rseg, arseg * sizeof(RSEGMENT));
+                rseg = (RSEGMENT *)G_realloc(rseg, arseg * sizeof(RSEGMENT));
             }
 
             column = db_get_table_column(table, 0);
@@ -399,12 +400,11 @@ int main(int argc, char **argv)
                 G_debug(2, "mp = %d sta = %d station = %f", mp, sta, station);
 
                 G_debug(1, "      get offset");
-                ret =
-                    LR_get_offset(rsdriver, table_opt->answer, "lcat", "lid",
-                                  "start_map", "end_map", "start_mp",
-                                  "start_off", "end_mp", "end_off",
-                                  rseg[seg].lid, mp, sta * sta_multip,
-                                  mp_multip, &lcat, &map_offset);
+                ret = LR_get_offset(rsdriver, table_opt->answer, "lcat", "lid",
+                                    "start_map", "end_map", "start_mp",
+                                    "start_off", "end_mp", "end_off",
+                                    rseg[seg].lid, mp, sta * sta_multip,
+                                    mp_multip, &lcat, &map_offset);
                 /* G_debug(1, "      get offset time = %d", t2 - t1); */
                 G_debug(1, "      get offset");
 
@@ -482,9 +482,7 @@ int main(int argc, char **argv)
                     sta = 0;
                 }
                 station = mp * mp_multip + sta * sta_multip;
-
             }
-
         }
         /* t2 = clock(); */
         t2 = (double)time(NULL);
@@ -493,7 +491,6 @@ int main(int argc, char **argv)
                 nstat);
         /* break; */
         /* debug */
-
     }
 
     db_close_database(rsdriver);
@@ -513,8 +510,8 @@ int main(int argc, char **argv)
 
 int cmp_along(const void *pa, const void *pb)
 {
-    RSEGMENT *p1 = (RSEGMENT *) pa;
-    RSEGMENT *p2 = (RSEGMENT *) pb;
+    RSEGMENT *p1 = (RSEGMENT *)pa;
+    RSEGMENT *p2 = (RSEGMENT *)pb;
 
     if (p1->start_map < p2->start_map)
         return -1;

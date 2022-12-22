@@ -1,6 +1,5 @@
-
 /****************************************************************
- * 
+ *
  * MODULE:       v.net.alloc
  *
  * AUTHOR(S):    Radim Blazek
@@ -8,11 +7,11 @@
  *               Markus Metz (costs from/to centers; attributes)
  *
  * PURPOSE:      Allocate subnets for nearest centers
- *               
+ *
  * COPYRIGHT:    (C) 2001, 2016,2017 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -25,7 +24,6 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "alloc.h"
-
 
 int main(int argc, char **argv)
 {
@@ -65,9 +63,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("network"));
     G_add_keyword(_("cost allocation"));
     module->label = _("Allocates subnets for nearest centers.");
-    module->description =
-        _("Center node must be opened (costs >= 0). "
-          "Costs of center node are used in calculation.");
+    module->description = _("Center node must be opened (costs >= 0). "
+                            "Costs of center node are used in calculation.");
 
     map = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -213,9 +210,8 @@ int main(int argc, char **argv)
             continue;
 
         Vect_read_line(&Map, Points, Cats, i);
-        node =
-            Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0,
-                           0);
+        node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0,
+                              0);
         if (!node) {
             G_warning(_("Point is not connected to the network"));
             continue;
@@ -231,13 +227,12 @@ int main(int argc, char **argv)
                 if (acenters == ncenters) {
                     acenters += 1;
                     Centers =
-                        (CENTER *) G_realloc(Centers,
-                                             acenters * sizeof(CENTER));
+                        (CENTER *)G_realloc(Centers, acenters * sizeof(CENTER));
                 }
                 Centers[ncenters].cat = cat;
                 Centers[ncenters].node = node;
-                G_debug(2, "center = %d node = %d cat = %d", ncenters,
-                        node, cat);
+                G_debug(2, "center = %d node = %d cat = %d", ncenters, node,
+                        cat);
                 ncenters++;
             }
         }
@@ -246,19 +241,21 @@ int main(int argc, char **argv)
     G_message(_("Number of centers: %d (nlayer %d)"), ncenters, nfield);
 
     if (ncenters == 0)
-        G_warning(_("Not enough centers for selected nlayer. Nothing will be allocated."));
+        G_warning(_("Not enough centers for selected nlayer. Nothing will be "
+                    "allocated."));
 
     /* alloc and reset space for all nodes */
     if (turntable_f->answer) {
-        /* if turntable is used we are looking for lines as destinations, instead of the intersections (nodes) */
-        Nodes = (NODE *) G_calloc((nlines * 2 + 2), sizeof(NODE));
+        /* if turntable is used we are looking for lines as destinations,
+         * instead of the intersections (nodes) */
+        Nodes = (NODE *)G_calloc((nlines * 2 + 2), sizeof(NODE));
         for (i = 2; i <= (nlines * 2 + 2); i++) {
-            Nodes[i].center = -1;       /* NOTE: first two items of Nodes are not used */
+            Nodes[i].center =
+                -1; /* NOTE: first two items of Nodes are not used */
         }
-
     }
     else {
-        Nodes = (NODE *) G_calloc((nnodes + 1), sizeof(NODE));
+        Nodes = (NODE *)G_calloc((nnodes + 1), sizeof(NODE));
         for (i = 1; i <= nnodes; i++) {
             Nodes[i].center = -1;
         }
@@ -274,8 +271,7 @@ int main(int argc, char **argv)
         }
         else {
             G_message(_("Calculating costs to centers ..."));
-            alloc_to_centers_loop_tt(&Map, Nodes, Centers, ncenters,
-                                     tucfield);
+            alloc_to_centers_loop_tt(&Map, Nodes, Centers, ncenters, tucfield);
         }
     }
     else {
@@ -331,9 +327,8 @@ int main(int argc, char **argv)
         if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
             G_warning(_("Cannot create index"));
 
-        if (db_grant_on_table
-            (driver, Fi->table, DB_PRIV_SELECT,
-             DB_GROUP | DB_PUBLIC) != DB_OK)
+        if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK)
             G_fatal_error(_("Cannot grant privileges on table <%s>"),
                           Fi->table);
 
@@ -393,8 +388,8 @@ int main(int argc, char **argv)
         }
 
         G_debug(3, "Line %d:", line);
-        G_debug(3, "Arc centers: %d %d (nodes: %d %d)", center1, center2,
-                node1, node2);
+        G_debug(3, "Arc centers: %d %d (nodes: %d %d)", center1, center2, node1,
+                node2);
 
         G_debug(3, "  s1cost = %f n1cost = %f e1cost = %f", s1cost, n1cost,
                 e1cost);
@@ -409,7 +404,8 @@ int main(int argc, char **argv)
             /* Line is reachable at least from one side */
             G_debug(3, "  -> arc is reachable");
 
-            if (center1 == center2) {   /* both nodes in one area -> whole arc in one area */
+            if (center1 ==
+                center2) { /* both nodes in one area -> whole arc in one area */
                 if (center1 != -1)
                     cat = Centers[center1].cat; /* line reachable */
                 else
@@ -423,8 +419,7 @@ int main(int argc, char **argv)
                     ocat = -1;
                     Vect_cat_get(ICats, afield, &ocat);
 
-                    sprintf(buf,
-                            "insert into %s values ( %d, %d, %d )",
+                    sprintf(buf, "insert into %s values ( %d, %d, %d )",
                             Fi->table, ucat, ocat, cat);
                     db_set_string(&sql, buf);
                     G_debug(3, "%s", db_get_string(&sql));
@@ -440,11 +435,12 @@ int main(int argc, char **argv)
 
                 Vect_write_line(&Out, ltype, Points, Cats);
             }
-            else {              /* each node in different area */
+            else { /* each node in different area */
                 /* Check if line is reachable from center */
-                if (center1 == -1 || n1cost == -1 || e1cost == -1) {    /* closed from first node */
-                    G_debug(3,
-                            "    -> arc is not reachable from 1. node -> alloc to 2. node");
+                if (center1 == -1 || n1cost == -1 ||
+                    e1cost == -1) { /* closed from first node */
+                    G_debug(3, "    -> arc is not reachable from 1. node -> "
+                               "alloc to 2. node");
                     cat = Centers[center2].cat;
 
                     if (unique_cats) {
@@ -455,8 +451,7 @@ int main(int argc, char **argv)
                         ocat = -1;
                         Vect_cat_get(ICats, afield, &ocat);
 
-                        sprintf(buf,
-                                "insert into %s values ( %d, %d, %d )",
+                        sprintf(buf, "insert into %s values ( %d, %d, %d )",
                                 Fi->table, ucat, ocat, cat);
                         db_set_string(&sql, buf);
                         G_debug(3, "%s", db_get_string(&sql));
@@ -473,9 +468,10 @@ int main(int argc, char **argv)
                     Vect_write_line(&Out, ltype, Points, Cats);
                     continue;
                 }
-                else if (center2 == -1 || n2cost == -1 || e2cost == -1) {       /* closed from second node */
-                    G_debug(3,
-                            "    -> arc is not reachable from 2. node -> alloc to 1. node");
+                else if (center2 == -1 || n2cost == -1 ||
+                         e2cost == -1) { /* closed from second node */
+                    G_debug(3, "    -> arc is not reachable from 2. node -> "
+                               "alloc to 1. node");
                     cat = Centers[center1].cat;
 
                     if (unique_cats) {
@@ -486,8 +482,7 @@ int main(int argc, char **argv)
                         ocat = -1;
                         Vect_cat_get(ICats, afield, &ocat);
 
-                        sprintf(buf,
-                                "insert into %s values ( %d, %d, %d )",
+                        sprintf(buf, "insert into %s values ( %d, %d, %d )",
                                 Fi->table, ucat, ocat, cat);
                         db_set_string(&sql, buf);
                         G_debug(3, "%s", db_get_string(&sql));
@@ -510,9 +505,11 @@ int main(int argc, char **argv)
                 s1cost += n1cost;
                 s2cost += n2cost;
 
-                /* Check if s1cost + e1cost <= s2cost or s2cost + e2cost <= s1cost !
-                 * Note this check also possibility of (e1cost + e2cost) = 0 */
-                if (s1cost + e1cost <= s2cost) {        /* whole arc reachable from node1 */
+                /* Check if s1cost + e1cost <= s2cost or s2cost + e2cost <=
+                 * s1cost ! Note this check also possibility of (e1cost +
+                 * e2cost) = 0 */
+                if (s1cost + e1cost <=
+                    s2cost) { /* whole arc reachable from node1 */
                     cat = Centers[center1].cat;
 
                     Vect_reset_cats(Cats);
@@ -524,8 +521,7 @@ int main(int argc, char **argv)
                         ocat = -1;
                         Vect_cat_get(ICats, afield, &ocat);
 
-                        sprintf(buf,
-                                "insert into %s values ( %d, %d, %d )",
+                        sprintf(buf, "insert into %s values ( %d, %d, %d )",
                                 Fi->table, ucat, ocat, cat);
                         db_set_string(&sql, buf);
                         G_debug(3, "%s", db_get_string(&sql));
@@ -541,7 +537,8 @@ int main(int argc, char **argv)
 
                     Vect_write_line(&Out, ltype, Points, Cats);
                 }
-                else if (s2cost + e2cost <= s1cost) {   /* whole arc reachable from node2 */
+                else if (s2cost + e2cost <=
+                         s1cost) { /* whole arc reachable from node2 */
                     cat = Centers[center2].cat;
 
                     if (unique_cats) {
@@ -552,8 +549,7 @@ int main(int argc, char **argv)
                         ocat = -1;
                         Vect_cat_get(ICats, afield, &ocat);
 
-                        sprintf(buf,
-                                "insert into %s values ( %d, %d, %d )",
+                        sprintf(buf, "insert into %s values ( %d, %d, %d )",
                                 Fi->table, ucat, ocat, cat);
                         db_set_string(&sql, buf);
                         G_debug(3, "%s", db_get_string(&sql));
@@ -569,19 +565,18 @@ int main(int argc, char **argv)
 
                     Vect_write_line(&Out, ltype, Points, Cats);
                 }
-                else {          /* split */
-                    /* Calculate relative costs - we expect that costs along the line do not change */
+                else { /* split */
+                    /* Calculate relative costs - we expect that costs along the
+                     * line do not change */
                     l = Vect_line_length(Points);
                     e1cost /= l;
                     e2cost /= l;
 
-                    G_debug(3, "  -> s1cost = %f e1cost = %f", s1cost,
-                            e1cost);
-                    G_debug(3, "  -> s2cost = %f e2cost = %f", s2cost,
-                            e2cost);
+                    G_debug(3, "  -> s1cost = %f e1cost = %f", s1cost, e1cost);
+                    G_debug(3, "  -> s2cost = %f e2cost = %f", s2cost, e2cost);
 
-                    /* Costs from both centers to the splitting point must be equal:
-                     * s1cost + l1 * e1cost = s2cost + l2 * e2cost */
+                    /* Costs from both centers to the splitting point must be
+                     * equal: s1cost + l1 * e1cost = s2cost + l2 * e2cost */
                     l1 = (l * e2cost - s1cost + s2cost) / (e1cost + e2cost);
                     l2 = l - l1;
                     G_debug(3, "l = %f l1 = %f l2 = %f", l, l1, l2);
@@ -589,7 +584,8 @@ int main(int argc, char **argv)
                     /* First segment */
                     ret = Vect_line_segment(Points, 0, l1, SPoints);
                     if (ret == 0) {
-                        G_warning(_("Cannot get line segment, segment out of line"));
+                        G_warning(
+                            _("Cannot get line segment, segment out of line"));
                     }
                     else {
                         cat = Centers[center1].cat;
@@ -602,8 +598,7 @@ int main(int argc, char **argv)
                             ocat = -1;
                             Vect_cat_get(ICats, afield, &ocat);
 
-                            sprintf(buf,
-                                    "insert into %s values ( %d, %d, %d )",
+                            sprintf(buf, "insert into %s values ( %d, %d, %d )",
                                     Fi->table, ucat, ocat, cat);
                             db_set_string(&sql, buf);
                             G_debug(3, "%s", db_get_string(&sql));
@@ -623,7 +618,8 @@ int main(int argc, char **argv)
                     /* Second segment */
                     ret = Vect_line_segment(Points, l1, l, SPoints);
                     if (ret == 0) {
-                        G_warning(_("Cannot get line segment, segment out of line"));
+                        G_warning(
+                            _("Cannot get line segment, segment out of line"));
                     }
                     else {
                         Vect_reset_cats(Cats);
@@ -637,8 +633,7 @@ int main(int argc, char **argv)
                             ocat = -1;
                             Vect_cat_get(ICats, afield, &ocat);
 
-                            sprintf(buf,
-                                    "insert into %s values ( %d, %d, %d )",
+                            sprintf(buf, "insert into %s values ( %d, %d, %d )",
                                     Fi->table, ucat, ocat, cat);
                             db_set_string(&sql, buf);
                             G_debug(3, "%s", db_get_string(&sql));
@@ -668,9 +663,8 @@ int main(int argc, char **argv)
                 ocat = -1;
                 Vect_cat_get(ICats, afield, &ocat);
 
-                sprintf(buf,
-                        "insert into %s values ( %d, %d, %d )",
-                        Fi->table, ucat, ocat, -1);
+                sprintf(buf, "insert into %s values ( %d, %d, %d )", Fi->table,
+                        ucat, ocat, -1);
                 db_set_string(&sql, buf);
                 G_debug(3, "%s", db_get_string(&sql));
 

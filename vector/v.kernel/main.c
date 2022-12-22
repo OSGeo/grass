@@ -1,21 +1,19 @@
-
 /****************************************************************************
-*
-* MODULE:       v.kernel
-*
-* AUTHOR(S):    Stefano Menegon, ITC-irst, Trento, Italy
-*               Radim Blazek (additional kernel functions, network part)
-* PURPOSE:      Generates a raster density map from vector points data using 
-*               a moving kernel function or
-*               optionally generates a vector density map on vector network 
-*               with a 1D kernel
-* COPYRIGHT:    (C) 2004-2011 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       v.kernel
+ *
+ * AUTHOR(S):    Stefano Menegon, ITC-irst, Trento, Italy
+ *               Radim Blazek (additional kernel functions, network part)
+ * PURPOSE:      Generates a raster density map from vector points data using
+ *               a moving kernel function or optionally generates a vector
+ *               density map on vector network with a 1D kernel
+ * COPYRIGHT:    (C) 2004-2011 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,49 +26,48 @@
 #include <grass/vector.h>
 #include "global.h"
 
-
-static int ndists;              /* number of distances in dists */
-static double *dists;           /* array of all distances < dmax */
+static int ndists;    /* number of distances in dists */
+static double *dists; /* array of all distances < dmax */
 static int npoints;
 int net = 0;
 static double dimension = 2.;
-
 
 /* define score function L(window size) */
 double L(double smooth)
 {
     int ii;
-    double resL, n /*, term */ ;
+    double resL, n /*, term */;
 
     n = npoints;
     resL = 0.;
     /* term = 1. / pow((2. * M_PI), dimension / 2.); */
 
     for (ii = 0; ii < ndists; ii++) {
-        /*    resL+= gaussianFunction(dists[ii]/smooth,2.,dimension) - 2. * gaussianKernel(dists[ii]/smooth,term); */
-        resL +=
-            gaussianFunction(dists[ii] / smooth, 2.,
-                             dimension) -
-            2. * gaussianFunction(dists[ii] / smooth, 1., dimension);
+        /*    resL+= gaussianFunction(dists[ii]/smooth,2.,dimension) - 2. *
+         * gaussianKernel(dists[ii]/smooth,term); */
+        resL += gaussianFunction(dists[ii] / smooth, 2., dimension) -
+                2. * gaussianFunction(dists[ii] / smooth, 1., dimension);
     }
 
     if (!net)
         resL *= 2.;
 
     resL = (1. / (pow(n, 2.) * pow(smooth, dimension))) *
-        (resL + n * (gaussianFunction(0., 2., dimension) -
-                     2. * gaussianFunction(0., 1., dimension))) +
-        (2. / (n * pow(smooth, dimension))) *
-        gaussianFunction(0., 1., dimension);
+               (resL + n * (gaussianFunction(0., 2., dimension) -
+                            2. * gaussianFunction(0., 1., dimension))) +
+           (2. / (n * pow(smooth, dimension))) *
+               gaussianFunction(0., 1., dimension);
 
-    /* resL = (1./(pow(n,2.)*pow(smooth,dimension))) * (resL + n*( gaussianFunction(0.,2.,dimension) - 2. * gaussianKernel(0.,term)) ) + (2./(n*pow(smooth,dimension)))*gaussianKernel(0.,term);   */
+    /* resL = (1./(pow(n,2.)*pow(smooth,dimension))) * (resL + n*(
+     * gaussianFunction(0.,2.,dimension) - 2. * gaussianKernel(0.,term)) ) +
+     * (2./(n*pow(smooth,dimension)))*gaussianKernel(0.,term);   */
     G_debug(3, "smooth = %e resL = %e", smooth, resL);
-    G_message(_("\tScore Value=%f\tsmoothing parameter (standard deviation)=%f"),
-              resL, smooth);
+    G_message(
+        _("\tScore Value=%f\tsmoothing parameter (standard deviation)=%f"),
+        resL, smooth);
 
     return (resL);
 }
-
 
 int main(int argc, char **argv)
 {
@@ -111,10 +108,10 @@ int main(int argc, char **argv)
     G_add_keyword(_("point density"));
     G_add_keyword(_("heatmap"));
     G_add_keyword(_("hotspot"));
-    module->label =
-        _("Generates a raster density map from vector points map.");
-    module->description = _("Density is computed using a moving kernel. "
-                            "Optionally generates a vector density map on a vector network.");
+    module->label = _("Generates a raster density map from vector points map.");
+    module->description =
+        _("Density is computed using a moving kernel. "
+          "Optionally generates a vector density map on a vector network.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->label = _("Name of input vector map with training points");
@@ -139,8 +136,7 @@ int main(int argc, char **argv)
     net_out_opt->key = "net_output";
     net_out_opt->required = NO;
     net_out_opt->label = _("Name for output vector density map");
-    net_out_opt->description =
-        _("Outputs vector map if network map is given");
+    net_out_opt->description = _("Outputs vector map if network map is given");
     net_out_opt->guisection = _("Network");
 
     radius_opt = G_define_option();
@@ -188,8 +184,7 @@ int main(int argc, char **argv)
     node_opt->options = "none,split";
     node_opt->answer = "none";
     desc = NULL;
-    G_asprintf(&desc,
-               "none;%s;split;%s",
+    G_asprintf(&desc, "none;%s;split;%s",
                _("No method applied at nodes with more than 2 arcs"),
                _("Equal split (Okabe 2009) applied at nodes"));
     node_opt->descriptions = desc;
@@ -206,8 +201,8 @@ int main(int argc, char **argv)
 
     flag_o = G_define_flag();
     flag_o->key = 'o';
-    flag_o->description =
-        _("Try to calculate an optimal radius with given 'radius' taken as maximum (experimental)");
+    flag_o->description = _("Try to calculate an optimal radius with given "
+                            "'radius' taken as maximum (experimental)");
 
     flag_q = G_define_flag();
     flag_q->key = 'q';
@@ -217,7 +212,9 @@ int main(int argc, char **argv)
     flag_normalize = G_define_flag();
     flag_normalize->key = 'n';
     flag_normalize->description =
-        _("In network mode, normalize values by sum of density multiplied by length of each segment. Integral over the output map then gives 1.0 * multiplier");
+        _("In network mode, normalize values by sum of density multiplied by "
+          "length of each segment. Integral over the output map then gives 1.0 "
+          "* multiplier");
     flag_normalize->guisection = _("Network");
 
     flag_multiply = G_define_flag();
@@ -234,10 +231,10 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     if (net_opt->answer && out_opt->answer) {
-        G_warning(_("Use option net_output if you compute network density. "
-                    "Name provided in option output will be used for net_output."));
+        G_warning(
+            _("Use option net_output if you compute network density. "
+              "Name provided in option output will be used for net_output."));
         net_out_opt->answer = out_opt->answer;
         out_opt->answer = NULL;
     }
@@ -279,11 +276,14 @@ int main(int argc, char **argv)
         if (net_opt->answer) {
             if (node_method != NODE_NONE ||
                 kernel_function != KERNEL_GAUSSIAN) {
-                G_fatal_error(_("Optimal standard deviation calculation is supported only for node method 'none' and kernel function 'gaussian'."));
+                G_fatal_error(_(
+                    "Optimal standard deviation calculation is supported only "
+                    "for node method 'none' and kernel function 'gaussian'."));
             }
         }
         else if (kernel_function != KERNEL_GAUSSIAN) {
-            G_fatal_error(_("Optimal standard deviation calculation is supported only for kernel function 'gaussian'."));
+            G_fatal_error(_("Optimal standard deviation calculation is "
+                            "supported only for kernel function 'gaussian'."));
         }
     }
 
@@ -304,13 +304,17 @@ int main(int argc, char **argv)
     G_asprintf(&tmpstr1, n_("%d row", "%d rows", window.rows), window.rows);
     G_asprintf(&tmpstr2, n_("%d column", "%d columns", window.cols),
                window.cols);
-    /* GTC First argument is resolution, second - number of rows as a text, third - number of columns as a text. */
+    /* GTC First argument is resolution, second - number of rows as a text,
+     * third - number of columns as a text. */
     if (G_verbose() > G_verbose_std()) {
-        G_verbose_message(_("Output raster map: resolution: %f\t%s\t%s"),       /* mhh, this assumes square pixels */
-                          window.ew_res, tmpstr1, tmpstr2);
+        G_verbose_message(
+            _("Output raster map: resolution: %f\t%s\t%s"), /* mhh, this assumes
+                                                               square pixels */
+            window.ew_res, tmpstr1, tmpstr2);
     }
     else {
-        G_message(_("Output raster map resolution: %f"), window.ew_res);        /* mhh, this assumes square pixels */
+        G_message(_("Output raster map resolution: %f"),
+                  window.ew_res); /* mhh, this assumes square pixels */
     }
 
     G_free(tmpstr1);
@@ -332,8 +336,7 @@ int main(int argc, char **argv)
         Vect_set_open_level(2);
 
         if (Vect_open_old(&Net, net_opt->answer, "") < 0)
-            G_fatal_error(_("Unable to open vector map <%s>"),
-                          net_opt->answer);
+            G_fatal_error(_("Unable to open vector map <%s>"), net_opt->answer);
 
         Vect_net_build_graph(&Net, GV_LINES, 0, 0, NULL, NULL, NULL, 0, 0);
 
@@ -352,16 +355,15 @@ int main(int argc, char **argv)
             ltype = Vect_read_line(&In, Points, NULL, line);
             if (!(ltype & GV_POINTS))
                 continue;
-            if (Vect_find_line
-                (&Net, Points->x[0], Points->y[0], 0.0, GV_LINES, netmax, 0,
-                 0) == 0)
+            if (Vect_find_line(&Net, Points->x[0], Points->y[0], 0.0, GV_LINES,
+                               netmax, 0, 0) == 0)
                 notreachable++;
         }
 
         if (notreachable > 0)
             G_warning(n_("%d point outside threshold",
-                         "%d points outside threshold",
-                         notreachable), notreachable);
+                         "%d points outside threshold", notreachable),
+                      notreachable);
     }
     else {
         /* check and open the name of output map */
@@ -381,21 +383,24 @@ int main(int argc, char **argv)
 
     /* valutazione distanza ottimale */
     if (flag_o->answer) {
-        /* Note: sigmaOptimal calculates using ALL points (also those outside the region) */
-        G_message(_("Automatic choice of smoothing parameter (radius), maximum possible "
-                   "value of radius is set to %f"), sigma);
+        /* Note: sigmaOptimal calculates using ALL points (also those outside
+         * the region) */
+        G_message(_("Automatic choice of smoothing parameter (radius), maximum "
+                    "possible "
+                    "value of radius is set to %f"),
+                  sigma);
 
-        /* maximum distance 4*sigma (3.9*sigma ~ 1.0000), keep it small, otherwise it takes 
-         * too much points and calculation on network becomes slow */
-        dmax = 4 * sigma;       /* used as maximum value */
+        /* maximum distance 4*sigma (3.9*sigma ~ 1.0000), keep it small,
+         * otherwise it takes too much points and calculation on network becomes
+         * slow */
+        dmax = 4 * sigma; /* used as maximum value */
 
         G_message(_("Using maximum distance between points: %f"), dmax);
 
         if (net_opt->answer) {
             npoints = Vect_get_num_primitives(&In, GV_POINTS);
             /* Warning: each distance is registered twice (both directions) */
-            ndists =
-                compute_all_net_distances(&In, &Net, netmax, &dists, dmax);
+            ndists = compute_all_net_distances(&In, &Net, netmax, &dists, dmax);
         }
         else {
             /* Read points */
@@ -405,12 +410,14 @@ int main(int argc, char **argv)
 
         G_message(_("Number of input points: %d."), npoints);
         G_message(n_("%d distance read from the map.",
-                     "%d distances read from the map.", ndists), ndists);
+                     "%d distances read from the map.", ndists),
+                  ndists);
 
         if (ndists == 0)
-            G_fatal_error(_("Distances between all points are beyond %e (4 * "
-                            "standard deviation), unable to calculate optimal value."),
-                          dmax);
+            G_fatal_error(
+                _("Distances between all points are beyond %e (4 * "
+                  "standard deviation), unable to calculate optimal value."),
+                dmax);
 
         /*  double iii;
            for ( iii = 1.; iii <= 10000; iii++){
@@ -450,13 +457,13 @@ int main(int argc, char **argv)
         struct line_cats *SCats;
         double total = 0.0;
 
-        G_verbose_message(_("Writing output vector map using smooth parameter %f"),
-                          sigma);
+        G_verbose_message(
+            _("Writing output vector map using smooth parameter %f"), sigma);
         G_verbose_message(_("Normalising factor %f"),
-                          1. / gaussianFunction(sigma / 4., sigma,
-                                                dimension));
+                          1. / gaussianFunction(sigma / 4., sigma, dimension));
 
-        /* Divide lines to segments and calculate gaussian for center of each segment */
+        /* Divide lines to segments and calculate gaussian for center of each
+         * segment */
         Points = Vect_new_line_struct();
         SPoints = Vect_new_line_struct();
         SCats = Vect_new_cats_struct();
@@ -477,8 +484,8 @@ int main(int argc, char **argv)
             nseg = (int)(1 + llength / segmax);
             length = llength / nseg;
 
-            G_debug(3, "net line = %d, nseg = %d, seg length = %f", line,
-                    nseg, length);
+            G_debug(3, "net line = %d, nseg = %d, seg length = %f", line, nseg,
+                    length);
 
             for (seg = 0; seg < nseg; seg++) {
                 double offset1, offset2;
@@ -506,8 +513,9 @@ int main(int argc, char **argv)
                     Vect_line_segment(Points, offset1, offset2, SPoints);
 
                     /* TODO!!! remove later
-                       if ( SPoints->n_points > 0 ) 
-                       Vect_append_point( SPoints, SPoints->x[SPoints->n_points-1], 
+                       if ( SPoints->n_points > 0 )
+                       Vect_append_point( SPoints,
+                       SPoints->x[SPoints->n_points-1],
                        SPoints->y[SPoints->n_points-1], 0 );
                      */
                     Vect_reset_cats(SCats);
@@ -548,7 +556,7 @@ int main(int argc, char **argv)
                 if (gaussian > gausmax)
                     gausmax = gaussian;
             }
-            Vect_build_partial(&Out, GV_BUILD_NONE);    /* to force rebuild */
+            Vect_build_partial(&Out, GV_BUILD_NONE); /* to force rebuild */
         }
 
         Vect_close(&Net);
@@ -561,11 +569,10 @@ int main(int argc, char **argv)
         struct bound_box box;
         struct boxlist *NList = Vect_new_boxlist(1);
 
-        G_verbose_message(_("Writing output raster map using smooth parameter %f"),
-                          sigma);
+        G_verbose_message(
+            _("Writing output raster map using smooth parameter %f"), sigma);
         G_verbose_message(_("Normalising factor %f"),
-                          1. / gaussianFunction(sigma / 4., sigma,
-                                                dimension));
+                          1. / gaussianFunction(sigma / 4., sigma, dimension));
 
         for (row = 0; row < window.rows; row++) {
             G_percent(row, window.rows, 2);
@@ -584,7 +591,8 @@ int main(int argc, char **argv)
 
                 if ((col & 31) == 0) {
 
-                    /* create bounding box 32x2*dmax size from the current cell center */
+                    /* create bounding box 32x2*dmax size from the current cell
+                     * center */
                     box.N = N + dmax;
                     box.S = N - dmax;
                     box.E = E + dmax + 32 * window.ew_res;
@@ -626,7 +634,6 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
-
 /* Read points to array return number of points */
 int read_points(struct Map_info *In, double ***coordinate, double dsize)
 {
@@ -660,8 +667,7 @@ int read_points(struct Map_info *In, double ***coordinate, double dsize)
     return (npoints);
 }
 
-
-/* Calculate distances < dmax between all sites in coordinate 
+/* Calculate distances < dmax between all sites in coordinate
  * Return: number of distances in dists */
 double compute_all_distances(double **coordinate, double **dists, int n,
                              double dmax)
@@ -690,8 +696,7 @@ double compute_all_distances(double **coordinate, double **dists, int n,
     return (kk);
 }
 
-
-/* Calculate distances < dmax between all sites in coordinate 
+/* Calculate distances < dmax between all sites in coordinate
  * Return: number of distances in dists */
 double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
                                  double netmax, double **dists, double dmax)
@@ -742,19 +747,17 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
             G_debug(3, "    bline = %d", bline);
             Vect_read_line(In, BPoints, NULL, bline);
 
-            ret =
-                Vect_net_shortest_path_coor(Net, APoints->x[0], APoints->y[0],
-                                            0.0, BPoints->x[0], BPoints->y[0],
-                                            0.0, netmax, netmax, &dist, NULL,
-                                            NULL, NULL, NULL, NULL, NULL,
-                                            NULL);
+            ret = Vect_net_shortest_path_coor(
+                Net, APoints->x[0], APoints->y[0], 0.0, BPoints->x[0],
+                BPoints->y[0], 0.0, netmax, netmax, &dist, NULL, NULL, NULL,
+                NULL, NULL, NULL, NULL);
 
             G_debug(3, "  SP: %f %f -> %f %f", APoints->x[0], APoints->y[0],
                     BPoints->x[0], BPoints->y[0]);
 
             if (ret == 0) {
                 G_debug(3, "not reachable");
-                continue;       /* Not reachable */
+                continue; /* Not reachable */
             }
 
             G_debug(3, "  dist = %f", dist);
@@ -812,9 +815,11 @@ void compute_net_distance(double x, double y, struct Map_info *In,
 
     *gaussian = .0;
 
-    /* The network is usually much bigger than dmax and to calculate shortest path is slow
+    /* The network is usually much bigger than dmax and to calculate shortest
+     * path is slow
      * -> use spatial index to select points
-     * enlarge the box by netmax (max permitted distance between a point and net) */
+     * enlarge the box by netmax (max permitted distance between a point and
+     * net) */
     box.E = x + dmax + netmax;
     box.W = x - dmax - netmax;
     box.N = y + dmax + netmax;
@@ -836,17 +841,14 @@ void compute_net_distance(double x, double y, struct Map_info *In,
         /*Points->y[0], 0.0, netmax, netmax, */
         /*&dist, NULL, NULL, NULL, NULL, NULL, NULL, */
         /*NULL); */
-        ret = Vect_net_shortest_path_coor(Net,
-                                          PointsList->box[i].E,
-                                          PointsList->box[i].N, 0.0,
-                                          x, y, 0.0, netmax, 1.0,
-                                          &dist, NULL,
-                                          NULL, NodesList, FPoints, NULL,
-                                          NULL, NULL);
+        ret = Vect_net_shortest_path_coor(Net, PointsList->box[i].E,
+                                          PointsList->box[i].N, 0.0, x, y, 0.0,
+                                          netmax, 1.0, &dist, NULL, NULL,
+                                          NodesList, FPoints, NULL, NULL, NULL);
 
         if (ret == 0) {
             G_debug(3, "not reachable");
-            continue;           /* Not reachable */
+            continue; /* Not reachable */
         }
 
         /* if (dist <= dmax)
@@ -904,8 +906,8 @@ void compute_distance(double N, double E, double sigma, double term,
         b[0] = NList->box[line].E;
         b[1] = NList->box[line].N;
 
-        if (b[0] <= box->E && b[0] >= box->W &&
-            b[1] <= box->N && b[1] >= box->S) {
+        if (b[0] <= box->E && b[0] >= box->W && b[1] <= box->N &&
+            b[1] >= box->S) {
             dist = euclidean_distance(a, b, 2);
 
             if (dist <= dmax)

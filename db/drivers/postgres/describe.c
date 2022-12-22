@@ -14,7 +14,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_describe_table(dbString * table_name, dbTable ** table)
+int db__driver_describe_table(dbString *table_name, dbTable **table)
 {
     dbString sql;
     PGresult *res;
@@ -28,8 +28,8 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-        db_d_append_error("%s\n%s",
-                          db_get_string(&sql), PQerrorMessage(pg_conn));
+        db_d_append_error("%s\n%s", db_get_string(&sql),
+                          PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(res);
         return DB_FAILED;
@@ -48,7 +48,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 }
 
 /* describe table, if c is not NULL cur->cols and cur->ncols is also set */
-int describe_table(PGresult * res, dbTable ** table, cursor * c)
+int describe_table(PGresult *res, dbTable **table, cursor *c)
 {
     int i, ncols, kcols;
     int pgtype, gpgtype;
@@ -70,7 +70,7 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
         if (sqltype == DB_SQL_TYPE_UNKNOWN)
             continue;
 
-        kcols++;                /* known types */
+        kcols++; /* known types */
     }
 
     G_debug(3, "kcols = %d", kcols);
@@ -104,34 +104,42 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
         fname = PQfname(res, i);
         get_column_info(res, i, &pgtype, &gpgtype, &sqltype, &fsize);
         G_debug(3,
-                "col: %s, kcols %d, pgtype : %d, gpgtype : %d, sqltype %d, fsize : %d",
+                "col: %s, kcols %d, pgtype : %d, gpgtype : %d, sqltype %d, "
+                "fsize : %d",
                 fname, kcols, pgtype, gpgtype, sqltype, fsize);
 
         /* PG types defined in globals.h (and pg_type.h) */
         if (sqltype == DB_SQL_TYPE_UNKNOWN) {
             if (gpgtype == PG_TYPE_POSTGIS_GEOM) {
-                G_debug(1,
-                        "PostgreSQL driver: PostGIS column '%s', type 'geometry' "
-                        "will not be converted", fname);
+                G_debug(
+                    1,
+                    "PostgreSQL driver: PostGIS column '%s', type 'geometry' "
+                    "will not be converted",
+                    fname);
                 continue;
             }
             else if (gpgtype == PG_TYPE_POSTGIS_TOPOGEOM) {
                 G_debug(1,
-                        "PostgreSQL driver: PostGIS column '%s', type 'topogeometry' "
-                        "will not be converted", fname);
+                        "PostgreSQL driver: PostGIS column '%s', type "
+                        "'topogeometry' "
+                        "will not be converted",
+                        fname);
                 continue;
             }
             else {
                 /* Warn, ignore and continue */
-                G_warning(_("PostgreSQL driver: column '%s', type %d is not supported"),
+                G_warning(_("PostgreSQL driver: column '%s', type %d is not "
+                            "supported"),
                           fname, pgtype);
                 continue;
             }
         }
 
         if (gpgtype == PG_TYPE_INT8)
-            G_warning(_("Column '%s' : type int8 (bigint) is stored as integer (4 bytes) "
-                       "some data may be damaged"), fname);
+            G_warning(_("Column '%s' : type int8 (bigint) is stored as integer "
+                        "(4 bytes) "
+                        "some data may be damaged"),
+                      fname);
 
         if (gpgtype == PG_TYPE_VARCHAR && fsize < 0) {
             /* character varying without length modifier: treat as text */
@@ -141,8 +149,10 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
         }
 
         if (gpgtype == PG_TYPE_BOOL)
-            G_warning(_("column '%s' : type bool (boolean) is stored as char(1), values: 0 (false), "
-                       "1 (true)"), fname);
+            G_warning(_("column '%s' : type bool (boolean) is stored as "
+                        "char(1), values: 0 (false), "
+                        "1 (true)"),
+                      fname);
 
         column = db_get_table_column(*table, kcols);
 
@@ -168,7 +178,7 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
         /*
            db_set_column_select_priv_granted (column);
            db_set_column_update_priv_granted (column);
-           db_set_column_update_priv_not_granted (column); 
+           db_set_column_update_priv_not_granted (column);
          */
 
         if (c) {
@@ -181,7 +191,7 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
     return DB_OK;
 }
 
-int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
+int get_column_info(PGresult *res, int col, int *pgtype, int *gpgtype,
                     int *sqltype, int *size)
 {
     *pgtype = (int)PQftype(res, col);
@@ -206,7 +216,8 @@ int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
     case PG_TYPE_BPCHAR:
     case PG_TYPE_VARCHAR:
         *sqltype = DB_SQL_TYPE_CHARACTER;
-        *size = PQfmod(res, col) - 4;   /* Looks strange but works, something better? */
+        *size = PQfmod(res, col) -
+                4; /* Looks strange but works, something better? */
         break;
 
     case PG_TYPE_TEXT:
@@ -224,17 +235,17 @@ int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
         /* I'm not sure if text length is correct for size */
     case PG_TYPE_DATE:
         *sqltype = DB_SQL_TYPE_DATE;
-        *size = 10;             /* YYYY-MM-DD */
+        *size = 10; /* YYYY-MM-DD */
         break;
 
     case PG_TYPE_TIME:
         *sqltype = DB_SQL_TYPE_TIME;
-        *size = 8;              /* HH:MM:SS */
+        *size = 8; /* HH:MM:SS */
         break;
 
     case PG_TYPE_TIMESTAMP:
         *sqltype = DB_SQL_TYPE_TIMESTAMP;
-        *size = 22;             /* YYYY-MM-DD HH:MM:SS+TZ */
+        *size = 22; /* YYYY-MM-DD HH:MM:SS+TZ */
         break;
 
     case PG_TYPE_BOOL:
@@ -250,7 +261,8 @@ int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
     return 0;
 }
 
-/* for given internal postgres type returns GRASS Postgres type (one of PG_TYPE_*) */
+/* for given internal postgres type returns GRASS Postgres type (one of
+ * PG_TYPE_*) */
 int get_gpg_type(int pgtype)
 {
     int i;

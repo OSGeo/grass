@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -20,8 +19,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-struct Point
-{
+struct Point {
     double x;
     double y;
 
@@ -38,8 +36,7 @@ struct Point
     int cat;
 };
 
-struct Line
-{
+struct Line {
     struct Point *p1;
     struct Point *p2;
 };
@@ -58,9 +55,5 @@ struct Line *segment1(struct Point *p);
 struct Line *segment2(struct Point *p);
 struct Point *other1(struct Point *p);
 struct Point *other2(struct Point *p);
-
-
-
-
 
 #endif

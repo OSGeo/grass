@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -19,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_database(dbHandle * handle)
+int db__driver_open_database(dbHandle *handle)
 {
     char *name;
     dbConnection default_connection;
@@ -48,12 +47,12 @@ int db__driver_open_database(dbHandle * handle)
             return DB_FAILED;
         }
 
-        server_args[0] = "mesql";       /* this string is not used */
+        server_args[0] = "mesql"; /* this string is not used */
         G_asprintf(&buf, "--datadir=%s", datadir);
         server_args[1] = buf;
         /* With InnoDB it is very slow to close the database */
-        server_args[2] = "--skip-innodb";       /* OK? */
-        /* Without --bootstrap it complains about missing 
+        server_args[2] = "--skip-innodb"; /* OK? */
+        /* Without --bootstrap it complains about missing
          * mysql.time_zone_leap_second table */
         server_args[3] = "--bootstrap"; /* OK? */
 
@@ -69,15 +68,15 @@ int db__driver_open_database(dbHandle * handle)
         connection = mysql_init(NULL);
         mysql_options(connection, MYSQL_OPT_USE_EMBEDDED_CONNECTION, NULL);
 
-        res =
-            mysql_real_connect(connection, NULL, NULL, NULL, database, 0,
-                               NULL, 0);
+        res = mysql_real_connect(connection, NULL, NULL, NULL, database, 0,
+                                 NULL, 0);
 
         free(datadir);
         free(database);
 
         if (res == NULL) {
-            db_d_append_error(_("Unable to connect to MySQL embedded server: "));
+            db_d_append_error(
+                _("Unable to connect to MySQL embedded server: "));
             db_d_append_error("%s", mysql_error(connection));
             db_d_report_error();
             return DB_FAILED;
@@ -89,7 +88,7 @@ int db__driver_open_database(dbHandle * handle)
 
 int db__driver_close_database(void)
 {
-    mysql_close(connection);    /* this will also release connection */
+    mysql_close(connection); /* this will also release connection */
 
     mysql_server_end();
 

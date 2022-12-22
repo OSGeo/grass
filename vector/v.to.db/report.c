@@ -8,9 +8,9 @@ int report(void)
     int i;
     char left[20], right[20];
 
-    if (!options.print && !(options.option == O_COUNT ||
-                            options.option == O_LENGTH ||
-                            options.option == O_AREA)) {
+    if (!options.print &&
+        !(options.option == O_COUNT || options.option == O_LENGTH ||
+          options.option == O_AREA)) {
         G_warning(_("No totals for selected option"));
         return 0;
     }
@@ -72,20 +72,20 @@ int report(void)
         break;
 
     case O_FD:
-        /* 2.0 * log(perimeter) / log(area) 
+        /* 2.0 * log(perimeter) / log(area)
          * this is neither
          *   log(perimeter) / log(perimeter of equivalent circle)
          *   perimeter of equivalent circle: 2 * sqrt(M_PI * area)
          * nor
          *   log(area of equivalent circle) / log(area)
          *   area of equivalent circle: (perimeter / (2 * sqrt(M_PI))^2
-         * 
-         * avoid division by zero: 
+         *
+         * avoid division by zero:
          * 2.0 * log(1 + perimeter) / log(1 + area) */
         if (G_verbose() > G_verbose_min())
             fprintf(stdout, "cat%sfd\n", options.fs);
         for (i = 0; i < vstat.rcat; i++) {
-            if (Values[i].d1 == 1)      /* log(1) == 0 */
+            if (Values[i].d1 == 1) /* log(1) == 0 */
                 Values[i].d1 += 0.000001;
             Values[i].d1 = 2.0 * log(Values[i].d2) / log(Values[i].d1);
             fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,
@@ -136,7 +136,6 @@ int report(void)
             fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,
                     Values[i].d1);
 
-
         break;
     case O_SINUOUS:
         if (G_verbose() > G_verbose_min())
@@ -167,12 +166,12 @@ int report(void)
                 if (Values[i].i1 >= 0)
                     sprintf(left, "%d", Values[i].i1);
                 else
-                    sprintf(left, "-1");        /* NULL, no area/cat */
+                    sprintf(left, "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count1 > 1) {
                 sprintf(left, "-");
             }
-            else {              /* Values[i].count1 == 0 */
+            else { /* Values[i].count1 == 0 */
                 /* It can be OK if the category is assigned to an element
                    type which is not GV_BOUNDARY */
                 /* -> TODO: print only if there is boundary with that cat */
@@ -183,12 +182,12 @@ int report(void)
                 if (Values[i].i2 >= 0)
                     sprintf(right, "%d", Values[i].i2);
                 else
-                    sprintf(right, "-1");       /* NULL, no area/cat */
+                    sprintf(right, "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count2 > 1) {
                 sprintf(right, "-");
             }
-            else {              /* Values[i].count1 == 0 */
+            else { /* Values[i].count1 == 0 */
                 sprintf(right, "-");
             }
 
@@ -244,22 +243,25 @@ int print_stat(void)
         else
             rcat_report = vstat.rcat;
 
-        G_message(_("%d categories read from vector map (layer %d)"), rcat_report, options.field);      /* don't report cat -1 */
+        G_message(_("%d categories read from vector map (layer %d)"),
+                  rcat_report, options.field); /* don't report cat -1 */
     }
     if (vstat.select > 0)
-        G_message(_("%d records selected from table (layer %d)"),
-                  vstat.select, options.qfield);
+        G_message(_("%d records selected from table (layer %d)"), vstat.select,
+                  options.qfield);
     if (vstat.exist > 0)
-        G_message(_("%d categories read from vector map exist in selection from table"),
+        G_message(_("%d categories read from vector map exist in selection "
+                    "from table"),
                   vstat.exist);
     if (vstat.notexist > 0)
-        G_message(_("%d categories read from vector map don't exist in selection from table"),
+        G_message(_("%d categories read from vector map don't exist in "
+                    "selection from table"),
                   vstat.notexist);
     G_message(_("%d records updated/inserted (layer %d)"), vstat.update,
               options.field);
     if (vstat.error > 0)
-        G_message(_("%d update/insert errors (layer %d)"),
-                  vstat.error, options.field);
+        G_message(_("%d update/insert errors (layer %d)"), vstat.error,
+                  options.field);
     if (vstat.dupl > 0)
         G_message(_("%d categories with more points (coordinates not loaded)"),
                   vstat.dupl);

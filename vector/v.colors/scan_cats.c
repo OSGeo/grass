@@ -6,9 +6,9 @@
 
 static void scan_layer(int, const struct line_cats *, int *, int *);
 
-void scan_cats(const struct Map_info *Map, int field,
-               const char *style, const char *rules,
-               const struct FPRange *range, struct Colors *colors)
+void scan_cats(const struct Map_info *Map, int field, const char *style,
+               const char *rules, const struct FPRange *range,
+               struct Colors *colors)
 {
     int ltype, lmin, lmax, cmin, cmax, line;
     struct line_cats *Cats;
@@ -23,7 +23,7 @@ void scan_cats(const struct Map_info *Map, int field,
         if (ltype == -1)
             G_fatal_error(_("Unable to read vector map"));
         if (ltype == -2)
-            break;              /* EOF */
+            break; /* EOF */
 
         G_progress(++line, 1e4);
 
@@ -51,9 +51,9 @@ void scan_cats(const struct Map_info *Map, int field,
     }
 
     if (style)
-        make_colors(colors, style, (DCELL) cmin, (DCELL) cmax, FALSE);
+        make_colors(colors, style, (DCELL)cmin, (DCELL)cmax, FALSE);
     else if (rules)
-        load_colors(colors, rules, (DCELL) cmin, (DCELL) cmax, FALSE);
+        load_colors(colors, rules, (DCELL)cmin, (DCELL)cmax, FALSE);
 
     Vect_destroy_cats_struct(Cats);
 }

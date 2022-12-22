@@ -1,14 +1,13 @@
-
 /***************************************************************
  *
  * MODULE:       v.univar
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Hamish Bowman, University of Otago, New Zealand (r.univar2)
  *               Martin Landa (extended stats & OGR support)
- *               
+ *
  * PURPOSE:      Univariate Statistics for attribute
- *               
+ *
  * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -30,14 +29,12 @@
  *   reasons to weigh sometimes, but most often I see ratios or rates of
  *   two variables, rather than of a single variable and length or area."
  *   MM 04 2013: Done
- * 
+ *
  * - use geodesic distances for the geometry option (distance to closest
  *   other feature)
- * 
+ *
  * - use sample instead of population mean/stddev
  * */
-
-
 
 #include <stdlib.h>
 #include <string.h>
@@ -59,25 +56,26 @@ struct field_info *Fi;
 dbDriver *Driver;
 dbCatValArray Cvarr;
 int otype, ofield;
-int compatible = 1;             /* types are compatible: point+centroid or line+boundary or area */
-int nmissing = 0;               /* number of missing attributes */
-int nnull = 0;                  /* number of null values */
-int nzero = 0;                  /* number of zero distances */
+int compatible = 1; /* types are compatible: point+centroid or line+boundary
+                       or area */
+int nmissing = 0;   /* number of missing attributes */
+int nnull = 0;      /* number of null values */
+int nzero = 0;      /* number of zero distances */
 int first = 1;
 
 /* Statistics */
-int count = 0;                  /* number of features with non-null attribute */
-int nlines;                     /* number of primitives */
+int count = 0; /* number of features with non-null attribute */
+int nlines;    /* number of primitives */
 double sum = 0.0;
 double sumsq = 0.0;
 double sumcb = 0.0;
 double sumqt = 0.0;
 double sum_abs = 0.0;
-double min = 0.0 / 0.0;         /* init as nan */
+double min = 0.0 / 0.0; /* init as nan */
 double max = 0.0 / 0.0;
-double mean, mean_abs, pop_variance, sample_variance, pop_stdev,
-    sample_stdev, pop_coeff_variation, kurtosis, skewness;
-double total_size = 0.0;        /* total size: length/area */
+double mean, mean_abs, pop_variance, sample_variance, pop_stdev, sample_stdev,
+    pop_coeff_variation, kurtosis, skewness;
+double total_size = 0.0; /* total size: length/area */
 
 /* Extended statistics */
 int perc;
@@ -95,8 +93,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("geometry"));
     module->label =
         _("Calculates univariate statistics of vector map features.");
-    module->description = _("Variance and standard "
-                            "deviation is calculated only for points if specified.");
+    module->description =
+        _("Variance and standard "
+          "deviation is calculated only for points if specified.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
@@ -186,22 +185,26 @@ int main(int argc, char *argv[])
     if ((otype & GV_LINES) && (otype & GV_AREA))
         compatible = 0;
     if (!compatible && geometry->answer)
-        compatible = 1;         /* distances is compatible with GV_POINTS and GV_LINES */
+        compatible =
+            1; /* distances is compatible with GV_POINTS and GV_LINES */
 
     if (!compatible && !weight_flag->answer)
-        compatible = 1;         /* attributes are always compatible without weight */
+        compatible = 1; /* attributes are always compatible without weight */
 
     if (geometry->answer && (otype & GV_AREA))
-        G_fatal_error(_("Geometry distances are not supported for areas. Use '%s' instead."),
+        G_fatal_error(_("Geometry distances are not supported for areas. Use "
+                        "'%s' instead."),
                       "v.distance");
 
     if (!compatible) {
-        G_warning(_("Incompatible vector type(s) specified, only number of features, minimum, maximum and range "
-                   "can be calculated"));
+        G_warning(_("Incompatible vector type(s) specified, only number of "
+                    "features, minimum, maximum and range "
+                    "can be calculated"));
     }
 
     if (ext_flag->answer && (!(otype & GV_POINTS) || geometry->answer)) {
-        G_warning(_("Extended statistics is currently supported only for points/centroids"));
+        G_warning(_("Extended statistics is currently supported only for "
+                    "points/centroids"));
     }
 
     if (geometry->answer)
@@ -240,14 +243,13 @@ void select_from_geometry(void)
                           Fi->database, Fi->driver);
         db_set_error_handler_driver(Driver);
 
-        ncats = db_select_int(Driver, Fi->table, Fi->key, where_opt->answer,
-                              &cats);
+        ncats =
+            db_select_int(Driver, Fi->table, Fi->key, where_opt->answer, &cats);
         if (ncats == -1)
             G_fatal_error(_("Unable select categories from table <%s>"),
                           Fi->table);
 
         db_close_database_shutdown_driver(Driver);
-
     }
     else
         ncats = 0;
@@ -257,8 +259,8 @@ void select_from_geometry(void)
     nlines = Vect_get_num_lines(&Map);
     G_message(_("Calculating geometric distances between %d primitives..."),
               nlines);
-    /* Start calculating the statistics based on distance to all other primitives.
-       Use the centroid of areas and the first point of lines */
+    /* Start calculating the statistics based on distance to all other
+       primitives. Use the centroid of areas and the first point of lines */
     for (i = 1; i <= nlines; i++) {
 
         G_percent(i, nlines, 2);
@@ -288,7 +290,8 @@ void select_from_geometry(void)
             if (!(type & otype))
                 continue;
 
-            /* now calculate the min distance between each point in line i with line j */
+            /* now calculate the min distance between each point in line i with
+             * line j */
             for (k = 0; k < iPoints->n_points; k++) {
                 double dmin = 0.0;
 
@@ -312,8 +315,8 @@ void select_from_geometry(void)
                 }
             }
             if (val > 0 && iPoints->n_points > 1 && jPoints->n_points > 1) {
-                if (Vect_line_check_intersection
-                    (iPoints, jPoints, Vect_is_3d(&Map)))
+                if (Vect_line_check_intersection(iPoints, jPoints,
+                                                 Vect_is_3d(&Map)))
                     val = 0;
             }
             if (val == 0) {
@@ -362,12 +365,13 @@ void select_from_database(void)
     /* check if column exists */
     ctype = db_column_Ctype(Driver, Fi->table, col_opt->answer);
     if (ctype == -1)
-        G_fatal_error(_("Column <%s> not found in table <%s>"),
-                      col_opt->answer, Fi->table);
+        G_fatal_error(_("Column <%s> not found in table <%s>"), col_opt->answer,
+                      Fi->table);
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
         G_fatal_error(_("Only numeric column type is supported"));
 
-    /* Note do not check if the column exists in the table because it may be an expression */
+    /* Note do not check if the column exists in the table because it may be an
+     * expression */
     db_CatValArray_init(&Cvarr);
     nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, col_opt->answer,
                                  where_opt->answer, &Cvarr);
@@ -484,8 +488,8 @@ void select_from_database(void)
 
                     G_debug(3, "cat = %d", Cats->cat[i]);
 
-                    if (db_CatValArray_get_value
-                        (&Cvarr, Cats->cat[i], &catval) != DB_OK) {
+                    if (db_CatValArray_get_value(&Cvarr, Cats->cat[i],
+                                                 &catval) != DB_OK) {
                         G_debug(3, "No record for cat = %d", Cats->cat[i]);
                         nmissing++;
                         continue;
@@ -564,16 +568,15 @@ void summary(void)
             pop_coeff_variation = pop_stdev / (sqrt(sum * sum) / count);
             sample_variance = (sumsq - sum * sum / count) / (count - 1);
             sample_stdev = sqrt(sample_variance);
-            kurtosis =
-                (sumqt / count - 4 * sum * sumcb / (n * n) +
-                 6 * sum * sum * sumsq / (n * n * n) -
-                 3 * sum * sum * sum * sum / (n * n * n * n))
-                / (sample_stdev * sample_stdev * sample_stdev *
-                   sample_stdev) - 3;
-            skewness =
-                (sumcb / n - 3 * sum * sumsq / (n * n) +
-                 2 * sum * sum * sum / (n * n * n))
-                / (sample_stdev * sample_stdev * sample_stdev);
+            kurtosis = (sumqt / count - 4 * sum * sumcb / (n * n) +
+                        6 * sum * sum * sumsq / (n * n * n) -
+                        3 * sum * sum * sum * sum / (n * n * n * n)) /
+                           (sample_stdev * sample_stdev * sample_stdev *
+                            sample_stdev) -
+                       3;
+            skewness = (sumcb / n - 3 * sum * sumsq / (n * n) +
+                        2 * sum * sum * sum / (n * n * n)) /
+                       (sample_stdev * sample_stdev * sample_stdev);
         }
     }
 
@@ -616,8 +619,7 @@ void summary(void)
             fprintf(stdout, "number of zero distances: %d\n", nzero);
         }
         else {
-            fprintf(stdout,
-                    "number of features with non NULL attribute: %d\n",
+            fprintf(stdout, "number of features with non NULL attribute: %d\n",
                     count);
             fprintf(stdout, "number of missing attributes: %d\n", nmissing);
             fprintf(stdout, "number of NULL attributes: %d\n", nnull);
@@ -633,10 +635,8 @@ void summary(void)
                 if (geometry->answer || !weight_flag->answer) {
                     fprintf(stdout, "population standard deviation: %g\n",
                             pop_stdev);
-                    fprintf(stdout, "population variance: %g\n",
-                            pop_variance);
-                    fprintf(stdout,
-                            "population coefficient of variation: %g\n",
+                    fprintf(stdout, "population variance: %g\n", pop_variance);
+                    fprintf(stdout, "population coefficient of variation: %g\n",
                             pop_coeff_variation);
                     fprintf(stdout, "sample standard deviation: %g\n",
                             sample_stdev);
@@ -649,10 +649,11 @@ void summary(void)
     }
 
     /* TODO: mode, skewness, kurtosis */
-    /* Not possible to calculate for point distance, since we don't collect the population */
+    /* Not possible to calculate for point distance, since we don't collect the
+     * population */
     if (ext_flag->answer && compatible &&
-        ((otype & GV_POINTS) || !weight_flag->answer) &&
-        !geometry->answer && count > 0) {
+        ((otype & GV_POINTS) || !weight_flag->answer) && !geometry->answer &&
+        count > 0) {
         double quartile_25 = 0.0, quartile_75 = 0.0, quartile_perc = 0.0;
         double median = 0.0;
         int qpos_25, qpos_75, qpos_perc;
@@ -666,23 +667,23 @@ void summary(void)
 
         if (Cvarr.ctype == DB_C_TYPE_INT) {
             quartile_25 = (Cvarr.value[qpos_25]).val.i;
-            if (count % 2)      /* odd */
+            if (count % 2) /* odd */
                 median = (Cvarr.value[(int)(count / 2)]).val.i;
-            else                /* even */
-                median =
-                    ((Cvarr.value[count / 2 - 1]).val.i +
-                     (Cvarr.value[count / 2]).val.i) / 2.0;
+            else /* even */
+                median = ((Cvarr.value[count / 2 - 1]).val.i +
+                          (Cvarr.value[count / 2]).val.i) /
+                         2.0;
             quartile_75 = (Cvarr.value[qpos_75]).val.i;
             quartile_perc = (Cvarr.value[qpos_perc]).val.i;
         }
-        else {                  /* must be DB_C_TYPE_DOUBLE */
+        else { /* must be DB_C_TYPE_DOUBLE */
             quartile_25 = (Cvarr.value[qpos_25]).val.d;
-            if (count % 2)      /* odd */
+            if (count % 2) /* odd */
                 median = (Cvarr.value[(int)(count / 2)]).val.d;
-            else                /* even */
-                median =
-                    ((Cvarr.value[count / 2 - 1]).val.d +
-                     (Cvarr.value[count / 2]).val.d) / 2.0;
+            else /* even */
+                median = ((Cvarr.value[count / 2 - 1]).val.d +
+                          (Cvarr.value[count / 2]).val.d) /
+                         2.0;
             quartile_75 = (Cvarr.value[qpos_75]).val.d;
             quartile_perc = (Cvarr.value[qpos_perc]).val.d;
         }
@@ -698,8 +699,7 @@ void summary(void)
             if (count % 2)
                 fprintf(stdout, "median (odd number of cells): %g\n", median);
             else
-                fprintf(stdout, "median (even number of cells): %g\n",
-                        median);
+                fprintf(stdout, "median (even number of cells): %g\n", median);
             fprintf(stdout, "3rd quartile: %g\n", quartile_75);
 
             if (perc % 10 == 1 && perc != 11)

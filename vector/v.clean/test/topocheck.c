@@ -1,16 +1,15 @@
-
 /***************************************************************
  *
  * MODULE:       v.topo.check
- * 
+ *
  * AUTHOR(S):    Radim Blazek
- *               
+ *
  * PURPOSE:      Check vector topology.
- *               
+ *
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -76,7 +75,7 @@ int main(int argc, char *argv[])
 
     Vect_copy_head_data(&In, &Out);
 
-    if (!poly_f->answer) {      /* do check */
+    if (!poly_f->answer) { /* do check */
         Vect_copy_map_lines(&In, &Out);
         Vect_build(&Out);
 
@@ -84,8 +83,7 @@ int main(int argc, char *argv[])
         Vect_close(&Out);
 
         if (Vect_open_update(&Out, out_opt->answer, G_mapset()) < 0)
-            G_fatal_error(_("Unable to open vector map <%s>"),
-                          out_opt->answer);
+            G_fatal_error(_("Unable to open vector map <%s>"), out_opt->answer);
 
         /* Count number of areas and total area in input */
         nareas1 = Vect_get_num_areas(&Out);
@@ -148,7 +146,7 @@ int main(int argc, char *argv[])
             exit(1);
         }
     }
-    else {                      /* write polygons */
+    else { /* write polygons */
         n = 0;
         for (i = 1; i <= Vect_get_num_areas(&In); i++) {
             if (!Vect_area_alive(&In, i))

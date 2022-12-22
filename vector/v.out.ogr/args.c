@@ -2,8 +2,8 @@
 
 #include "local_proto.h"
 
-void parse_args(int argc, char **argv,
-                struct Options *options, struct Flags *flags)
+void parse_args(int argc, char **argv, struct Options *options,
+                struct Flags *flags)
 {
     options->input = G_define_standard_option(G_OPT_V_INPUT);
     options->input->label = _("Name of input vector map to export");
@@ -16,9 +16,9 @@ void parse_args(int argc, char **argv,
         "point,line,boundary,centroid,area,face,kernel,auto";
     options->type->answer = "auto";
     options->type->label = _("Feature type(s)");
-    options->type->description =
-        _("Combination of types is not supported "
-          "by all output formats. Default is to use first type found in input vector map.");
+    options->type->description = _("Combination of types is not supported "
+                                   "by all output formats. Default is to use "
+                                   "first type found in input vector map.");
     options->type->guisection = _("Selection");
 
     options->dsn = G_define_standard_option(G_OPT_F_OUTPUT);
@@ -52,8 +52,7 @@ void parse_args(int argc, char **argv,
     options->otype->options = "line,boundary";
     options->otype->answer = "";
     options->otype->description = _("Optionally change default output type");
-    G_asprintf((char **)&options->otype->descriptions,
-               "line;%s;boundary;%s",
+    G_asprintf((char **)&options->otype->descriptions, "line;%s;boundary;%s",
                _("export area boundaries as linestrings"),
                _("export lines as polygons"));
     options->otype->guisection = _("Creation");

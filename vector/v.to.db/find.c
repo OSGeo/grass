@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include  "global.h"
-
+#include "global.h"
 
 static int bsearch_cat(int cat)
 {

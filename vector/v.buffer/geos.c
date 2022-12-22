@@ -6,7 +6,7 @@
 
 #ifdef HAVE_GEOS
 
-static int ring2pts(const GEOSGeometry * geom, struct line_pnts *Points)
+static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 {
     int i, ncoords;
     double x, y, z;
@@ -22,7 +22,8 @@ static int ring2pts(const GEOSGeometry * geom, struct line_pnts *Points)
     z = 0.0;
     ncoords = GEOSGetNumCoordinates(geom);
     if (!ncoords) {
-        G_warning(_("No coordinates in GEOS geometry (can be ok for negative distance)!"));
+        G_warning(_("No coordinates in GEOS geometry (can be ok for negative "
+                    "distance)!"));
         return 0;
     }
     seq = GEOSGeom_getCoordSeq(geom);
@@ -39,11 +40,9 @@ static int ring2pts(const GEOSGeometry * geom, struct line_pnts *Points)
     return 1;
 }
 
-static int geom2ring(GEOSGeometry * geom, struct Map_info *Out,
-                     struct Map_info *Buf,
-                     struct spatial_index *si,
-                     struct line_cats *Cats,
-                     struct buf_contours **arr_bc,
+static int geom2ring(GEOSGeometry *geom, struct Map_info *Out,
+                     struct Map_info *Buf, struct spatial_index *si,
+                     struct line_cats *Cats, struct buf_contours **arr_bc,
                      int *buffers_count, int *arr_bc_alloc)
 {
     int i, nrings, ngeoms, line_id;
@@ -127,8 +126,8 @@ static int geom2ring(GEOSGeometry * geom, struct Map_info *Out,
         ngeoms = GEOSGetNumGeometries(geom);
         for (i = 0; i < ngeoms; i++) {
             geom2 = GEOSGetGeometryN(geom, i);
-            geom2ring((GEOSGeometry *) geom2, Out, Buf, si, Cats,
-                      arr_bc, buffers_count, arr_bc_alloc);
+            geom2ring((GEOSGeometry *)geom2, Out, Buf, si, Cats, arr_bc,
+                      buffers_count, arr_bc_alloc);
         }
     }
     else
@@ -137,11 +136,9 @@ static int geom2ring(GEOSGeometry * geom, struct Map_info *Out,
     return 1;
 }
 
-int geos_buffer(struct Map_info *In, struct Map_info *Out,
-                struct Map_info *Buf, int id, int type, double da,
-                struct spatial_index *si,
-                struct line_cats *Cats,
-                struct buf_contours **arr_bc,
+int geos_buffer(struct Map_info *In, struct Map_info *Out, struct Map_info *Buf,
+                int id, int type, double da, struct spatial_index *si,
+                struct line_cats *Cats, struct buf_contours **arr_bc,
                 int *buffers_count, int *arr_bc_alloc, int flat, int no_caps)
 {
     GEOSGeometry *IGeom = NULL;
@@ -154,17 +151,16 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
     else
         IGeom = Vect_read_line_geos(In, id, &type);
 
-    /* GEOS code comment on the number of quadrant segments:
-     * A value of 8 gives less than 2% max error in the buffer distance.
-     * For a max error of < 1%, use QS = 12.
-     * For a max error of < 0.1%, use QS = 18. */
+        /* GEOS code comment on the number of quadrant segments:
+         * A value of 8 gives less than 2% max error in the buffer distance.
+         * For a max error of < 1%, use QS = 12.
+         * For a max error of < 0.1%, use QS = 18. */
 #ifdef GEOS_3_3
     if (flat || no_caps) {
         GEOSBufferParams *geos_params = GEOSBufferParams_create();
 
-        GEOSBufferParams_setEndCapStyle(geos_params,
-                                        no_caps ? GEOSBUF_CAP_FLAT :
-                                        GEOSBUF_CAP_SQUARE);
+        GEOSBufferParams_setEndCapStyle(
+            geos_params, no_caps ? GEOSBUF_CAP_FLAT : GEOSBUF_CAP_SQUARE);
 
         OGeom = GEOSBufferWithParams(IGeom, geos_params, da);
         GEOSBufferParams_destroy(geos_params);

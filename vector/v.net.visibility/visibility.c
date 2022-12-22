@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -14,13 +13,12 @@
  *
  ****************************************************************/
 
-
 /* TODO take in account if it is long/lat projection */
 
 #include "visibility.h"
 
 /** for all points initiate their vis line to the one directly below
-*/
+ */
 void init_vis(struct Point *points, int num_points, struct Line *lines,
               int num_lines)
 {
@@ -53,10 +51,8 @@ void init_vis(struct Point *points, int num_points, struct Line *lines,
                 if (y1 < points[i].y && (points[i].y - y1) < d) {
                     d = points[i].y - y1;
                     points[i].vis = segment1(p);
-
                 }
             }
-
 
             if (segment2(p) != NULL &&
                 segment_intersect(segment2(p), &points[i], &y2) > -1) {
@@ -66,7 +62,7 @@ void init_vis(struct Point *points, int num_points, struct Line *lines,
                 }
             }
 
-        }                       /* end loop */
+        } /* end loop */
 
         s1 = s2 = NULL;
 
@@ -100,20 +96,19 @@ void init_vis(struct Point *points, int num_points, struct Line *lines,
 
         /* if both weren't deleted, it means there is at least one other
            point on the left, so add the current */
-        /* also there is no point adding the point if there is no segment attached to it */
+        /* also there is no point adding the point if there is no segment
+         * attached to it */
         if ((s1 == NULL || s2 == NULL)) {
             avl_insert(tree, &points[i]);
         }
     }
 
-
     avl_destroy(tree, NULL);
 }
 
-
-
-/** for a pair (p, q) of points, add the edge pq if their are visible to each other
-*/
+/** for a pair (p, q) of points, add the edge pq if
+ *  their are visible to each other
+ */
 void handle(struct Point *p, struct Point *q, struct Map_info *out)
 {
 
@@ -122,7 +117,8 @@ void handle(struct Point *p, struct Point *q, struct Map_info *out)
         report(p, q, out);
     }
     else if (segment1(p) != NULL && q == other1(p)) {
-        /* we need to check if there is another segment at q so it can be set to the vis */
+        /* we need to check if there is another segment at q so it can be set to
+         * the vis */
         if (segment1(q) == segment1(p) && segment2(q) != NULL &&
             left_turn(p, q, other2(q))) {
             p->vis = segment2(q);
@@ -137,7 +133,8 @@ void handle(struct Point *p, struct Point *q, struct Map_info *out)
         report(p, q, out);
     }
     else if (segment2(p) != NULL && q == other2(p)) {
-        /* we need to check if there is another segment at q so it can be set to the vis */
+        /* we need to check if there is another segment at q so it can be set to
+         * the vis */
         if (segment1(q) == segment2(p) && segment2(q) != NULL &&
             left_turn(p, q, other2(q))) {
             p->vis = segment2(q);
@@ -152,25 +149,29 @@ void handle(struct Point *p, struct Point *q, struct Map_info *out)
         report(p, q, out);
     }
     else if (segment1(q) == p->vis && segment1(q) != NULL) {
-        /* we need to check if there is another segment at q so it can be set to the vis */
+        /* we need to check if there is another segment at q so it can be set to
+         * the vis */
         if (segment2(q) != NULL && left_turn(p, q, other2(q)))
             p->vis = segment2(q);
         else
             p->vis = q->vis;
 
-        /* check that p and q are not on the same boundary and that the edge pq is inside the boundary */
+        /* check that p and q are not on the same boundary and that the edge pq
+         * is inside the boundary */
         if (p->cat == -1 || p->cat != q->cat ||
             !point_inside(p, (p->x + q->x) * 0.5, (p->y + q->y) * 0.5))
             report(p, q, out);
     }
     else if (segment2(q) == p->vis && segment2(q) != NULL) {
-        /* we need to check if there is another segment at q so it can be set to the vis */
+        /* we need to check if there is another segment at q so it can be set to
+         * the vis */
         if (segment1(q) != NULL && left_turn(p, q, other1(q)))
             p->vis = segment1(q);
         else
             p->vis = q->vis;
 
-        /* check that p and q are not on the same boundary and that the edge pq is inside the boundary */
+        /* check that p and q are not on the same boundary and that the edge pq
+         * is inside the boundary */
         if (p->cat == -1 || p->cat != q->cat ||
             !point_inside(p, (p->x + q->x) * 0.5, (p->y + q->y) * 0.5))
             report(p, q, out);
@@ -192,15 +193,16 @@ void handle(struct Point *p, struct Point *q, struct Map_info *out)
         else
             p->vis = segment2(q);
 
-        /* check that p and q are not on the same boundary and that the edge pq is inside the boundary */
+        /* check that p and q are not on the same boundary and that the edge pq
+         * is inside the boundary */
         if (p->cat == -1 || p->cat != q->cat ||
             !point_inside(p, (p->x + q->x) * 0.5, (p->y + q->y) * 0.5))
             report(p, q, out);
     }
 }
 
-/** add the edge pq to the map out 
-*/
+/** add the edge pq to the map out
+ */
 void report(struct Point *p, struct Point *q, struct Map_info *out)
 {
     struct line_pnts *sites;
@@ -226,7 +228,7 @@ void report(struct Point *p, struct Point *q, struct Map_info *out)
 }
 
 /** the algorithm that computes the visibility graph
-*/
+ */
 void construct_visibility(struct Point *points, int num_points,
                           struct Line *lines, int num_lines,
                           struct Map_info *out)
@@ -315,10 +317,8 @@ void construct_visibility(struct Point *points, int num_points,
     G_free(p_ninfinity);
 }
 
-
-void visibility_points(struct Point *points, int num_points,
-                       struct Line *lines, int num_lines,
-                       struct Map_info *out, int n)
+void visibility_points(struct Point *points, int num_points, struct Line *lines,
+                       int num_lines, struct Map_info *out, int n)
 {
 
     int i, j, k;
@@ -335,12 +335,12 @@ void visibility_points(struct Point *points, int num_points,
                 if (segment1(&points[j]) == &lines[k] ||
                     segment2(&points[j]) == &lines[k])
                     continue;
-                if (Vect_segment_intersection
-                    (points[num_points - i - 1].x,
-                     points[num_points - i - 1].y, 0, points[j].x,
-                     points[j].y, 0, lines[k].p1->x, lines[k].p1->y, 0,
-                     lines[k].p2->x, lines[k].p2->y, 0, &x1, &y1, &z1, &x2,
-                     &y2, &z2, 0) != 0)
+                if (Vect_segment_intersection(
+                        points[num_points - i - 1].x,
+                        points[num_points - i - 1].y, 0, points[j].x,
+                        points[j].y, 0, lines[k].p1->x, lines[k].p1->y, 0,
+                        lines[k].p2->x, lines[k].p2->y, 0, &x1, &y1, &z1, &x2,
+                        &y2, &z2, 0) != 0)
                     break;
             }
 

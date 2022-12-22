@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -22,7 +21,7 @@
 #include <grass/glocale.h>
 #include "matrix.h"
 
-int matrix_init(int rows, int cols, MATRIX * res)
+int matrix_init(int rows, int cols, MATRIX *res)
 {
 
     int i, j;
@@ -46,7 +45,7 @@ int matrix_init(int rows, int cols, MATRIX * res)
     return 1;
 }
 
-void matrix_free(MATRIX * m)
+void matrix_free(MATRIX *m)
 {
     int i;
 
@@ -56,7 +55,7 @@ void matrix_free(MATRIX * m)
     return;
 }
 
-int matrix_mult(MATRIX * a, MATRIX * b, MATRIX * res)
+int matrix_mult(MATRIX *a, MATRIX *b, MATRIX *res)
 {
     if (a->cols != b->rows)
         return 0;
@@ -77,7 +76,7 @@ int matrix_mult(MATRIX * a, MATRIX * b, MATRIX * res)
     return 1;
 }
 
-int matrix_add_identity(double s, MATRIX * m)
+int matrix_add_identity(double s, MATRIX *m)
 {
     if (m->rows != m->cols)
         return 0;
@@ -92,7 +91,7 @@ int matrix_add_identity(double s, MATRIX * m)
 /* three following functions implements elementary row operations on matrices */
 
 /* auxialiry function for matrix_inverse, swaps two rows of given matrix */
-void matrix_swap_rows(int x, int y, MATRIX * m)
+void matrix_swap_rows(int x, int y, MATRIX *m)
 {
     int i;
 
@@ -108,7 +107,7 @@ void matrix_swap_rows(int x, int y, MATRIX * m)
 
 /* auxiliary function for matrix_inverse, multiplies row of a matrix by
  * a scalar */
-void matrix_row_scalar(int row, double s, MATRIX * m)
+void matrix_row_scalar(int row, double s, MATRIX *m)
 {
     int i;
 
@@ -117,11 +116,11 @@ void matrix_row_scalar(int row, double s, MATRIX * m)
     return;
 }
 
-/* auxiliary function for matrix_inverse, adds a multiple of 
+/* auxiliary function for matrix_inverse, adds a multiple of
  * one row to another.
  * i.e row[ra] = row[ra] + row[rb] * s;
  */
-void matrix_row_add_multiple(int ra, int rb, double s, MATRIX * m)
+void matrix_row_add_multiple(int ra, int rb, double s, MATRIX *m)
 {
     int i;
 
@@ -131,7 +130,7 @@ void matrix_row_add_multiple(int ra, int rb, double s, MATRIX * m)
 }
 
 /* TODO: don't test directly equality to zero */
-int matrix_inverse(MATRIX * a, MATRIX * res, int percents)
+int matrix_inverse(MATRIX *a, MATRIX *res, int percents)
 {
     int i, j;
 
@@ -169,8 +168,8 @@ int matrix_inverse(MATRIX * a, MATRIX * res, int percents)
         if (percents)
             G_percent(i, n, 1);
         for (j = i; j < n; j++) {
-            if (a->a[j][i] != 0) {      /* need to change this row to something */
-                found = 1;      /* more sensible */
+            if (a->a[j][i] != 0) { /* need to change this row to something */
+                found = 1;         /* more sensible */
                 matrix_swap_rows(i, j, a);
                 matrix_swap_rows(i, j, res);
                 break;
@@ -199,7 +198,7 @@ int matrix_inverse(MATRIX * a, MATRIX * res, int percents)
     return 1;
 }
 
-void matrix_mult_scalar(double s, MATRIX * m)
+void matrix_mult_scalar(double s, MATRIX *m)
 {
     int i, j;
 
@@ -208,7 +207,7 @@ void matrix_mult_scalar(double s, MATRIX * m)
             m->a[i][j] *= s;
 }
 
-void matrix_add(MATRIX * a, MATRIX * b, MATRIX * res)
+void matrix_add(MATRIX *a, MATRIX *b, MATRIX *res)
 {
     int i, j;
 
@@ -217,7 +216,7 @@ void matrix_add(MATRIX * a, MATRIX * b, MATRIX * res)
             res->a[i][j] = a->a[i][j] + b->a[i][j];
 }
 
-void matrix_print(MATRIX * a)
+void matrix_print(MATRIX *a)
 {
     int i, j;
 
@@ -231,5 +230,4 @@ void matrix_print(MATRIX * a)
         printf("|%.5lf\n", s);
     }
     printf("\n");
-
 }

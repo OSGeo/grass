@@ -1,7 +1,6 @@
-
- /***************************************************************************
+/***************************************************************************
  *
- * MODULE:     v.out.vtk  
+ * MODULE:     v.out.vtk
  * AUTHOR(S):  Soeren Gebbert
  *
  * PURPOSE:    v.out.vtk: writes ASCII VTK file
@@ -22,17 +21,15 @@
 #include "writeVTK.h"
 #include "local_proto.h"
 
-
 /*Prototype */
 /*Formatted coordinates output */
 static void write_point_coordinates(struct line_pnts *Points, int dp,
-                                    double scale, FILE * ascii);
-
+                                    double scale, FILE *ascii);
 
 /* ************************************************************************* */
 /* This function writes the vtk points and coordinates ********************* */
 /* ************************************************************************* */
-int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
+int write_vtk_points(FILE *ascii, struct Map_info *Map, VTKInfo *info,
                      int *types, int typenum, int dp, double scale)
 {
     int type, cur, i, k, centroid;
@@ -42,7 +39,7 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     static struct line_pnts *Points;
     struct line_cats *Cats;
 
-    Points = Vect_new_line_struct();    /* init line_pnts struct */
+    Points = Vect_new_line_struct(); /* init line_pnts struct */
     Cats = Vect_new_cats_struct();
 
     G_message("Writing coordinates ...");
@@ -193,7 +190,8 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
      */
     /*break if nothing to generate */
     if (info->maxnumpoints == 0)
-        G_fatal_error(_("No coordinates to generate the output! Maybe an empty vector type chosen?"));
+        G_fatal_error(_("No coordinates to generate the output! Maybe an empty "
+                        "vector type chosen?"));
 
     /************************************************/
     /*Write the coordinates into the vtk ascii file */
@@ -222,7 +220,8 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                     write_point_coordinates(Points, dp, scale, ascii);
 
                     if (Cats->n_cats == 0)
-                        info->typeinfo[types[k]]->generatedata = 0;     /*No data generation */
+                        info->typeinfo[types[k]]->generatedata =
+                            0; /*No data generation */
                 }
                 cur++;
             }
@@ -287,11 +286,10 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     return 1;
 }
 
-
 /* ************************************************************************* */
 /* This function writes the vtk cells ************************************** */
 /* ************************************************************************* */
-int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
+int write_vtk_cells(FILE *ascii, struct Map_info *Map, VTKInfo *info,
                     int *types, int typenum)
 {
     int type, i, j, k, centroid;
@@ -305,7 +303,7 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 
     G_message("Writing vtk cells ...");
 
-    Points = Vect_new_line_struct();    /* init line_pnts struct */
+    Points = Vect_new_line_struct(); /* init line_pnts struct */
     Cats = Vect_new_cats_struct();
 
     /*For every available vector type */
@@ -349,19 +347,19 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 
                     if (-1 == (type = Vect_read_next_line(Map, Points, Cats)))
                         break;
-                    if (type == -2)     /* EOF */
+                    if (type == -2) /* EOF */
                         break;
                     if (type == types[k]) {
 
                         /*Check for data generation */
                         if (Cats->n_cats == 0)
-                            info->typeinfo[types[k]]->generatedata = 0; /*No data generation */
+                            info->typeinfo[types[k]]->generatedata =
+                                0; /*No data generation */
 
                         fprintf(ascii, "%i", Points->n_points);
                         while (Points->n_points--) {
                             fprintf(ascii, " %i",
-                                    i +
-                                    info->typeinfo[types[k]]->pointoffset);
+                                    i + info->typeinfo[types[k]]->pointoffset);
                             i++;
                         }
                         fprintf(ascii, "\n");
@@ -377,8 +375,7 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 
             if (info->maxnumpolygons > 0) {
                 if (polykeyword) {
-                    fprintf(ascii, "POLYGONS %i %i\n",
-                            info->maxnumpolygons,
+                    fprintf(ascii, "POLYGONS %i %i\n", info->maxnumpolygons,
                             info->maxnumpolygonpoints + info->maxnumpolygons);
                     polykeyword = 0;
                 }
@@ -389,19 +386,19 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 
                     if (-1 == (type = Vect_read_next_line(Map, Points, Cats)))
                         break;
-                    if (type == -2)     /* EOF */
+                    if (type == -2) /* EOF */
                         break;
                     if (type == types[k]) {
 
                         /*Check for data generation */
                         if (Cats->n_cats == 0)
-                            info->typeinfo[types[k]]->generatedata = 0; /*No data generation */
+                            info->typeinfo[types[k]]->generatedata =
+                                0; /*No data generation */
 
                         fprintf(ascii, "%i", Points->n_points);
                         while (Points->n_points--) {
                             fprintf(ascii, " %i",
-                                    i +
-                                    info->typeinfo[types[k]]->pointoffset);
+                                    i + info->typeinfo[types[k]]->pointoffset);
                             i++;
                         }
                         fprintf(ascii, "\n");
@@ -418,8 +415,7 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 
             if (info->maxnumpolygons > 0) {
                 if (polykeyword) {
-                    fprintf(ascii, "POLYGONS %i %i\n",
-                            info->maxnumpolygons,
+                    fprintf(ascii, "POLYGONS %i %i\n", info->maxnumpolygons,
                             info->maxnumpolygonpoints + info->maxnumpolygons);
                     polykeyword = 0;
                 }
@@ -434,7 +430,8 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 
                     /*Check for data generation */
                     if (Cats->n_cats == 0)
-                        info->typeinfo[types[k]]->generatedata = 0;     /*No data generation */
+                        info->typeinfo[types[k]]->generatedata =
+                            0; /*No data generation */
 
                     fprintf(ascii, "%i", Points->n_points);
                     while (Points->n_points--) {
@@ -444,7 +441,6 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                     }
                     fprintf(ascii, "\n");
                 }
-
             }
         }
     }
@@ -455,7 +451,7 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 /* ************************************************************************* */
 /* This function writes the categories as vtk cell data ******************** */
 /* ************************************************************************* */
-int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
+int write_vtk_cat_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
                        int layer, int *types, int typenum, int dp)
 {
     int type, cat, i, k, centroid;
@@ -466,7 +462,7 @@ int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     int numcelldata =
         info->maxnumvertices + info->maxnumlines + info->maxnumpolygons;
 
-    Points = Vect_new_line_struct();    /* init line_pnts struct */
+    Points = Vect_new_line_struct(); /* init line_pnts struct */
     Cats = Vect_new_cats_struct();
 
     G_message("Writing category cell data ...");
@@ -488,7 +484,7 @@ int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                 while (1) {
                     if (-1 == (type = Vect_read_next_line(Map, Points, Cats)))
                         break;
-                    if (type == -2)     /* EOF */
+                    if (type == -2) /* EOF */
                         break;
                     if (type == types[k]) {
                         Vect_cat_get(Cats, layer, &cat);
@@ -505,7 +501,7 @@ int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                 while (1) {
                     if (-1 == (type = Vect_read_next_line(Map, Points, Cats)))
                         break;
-                    if (type == -2)     /* EOF */
+                    if (type == -2) /* EOF */
                         break;
                     if (type == types[k]) {
                         Vect_cat_get(Cats, layer, &cat);
@@ -522,7 +518,7 @@ int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                 while (1) {
                     if (-1 == (type = Vect_read_next_line(Map, Points, Cats)))
                         break;
-                    if (type == -2)     /* EOF */
+                    if (type == -2) /* EOF */
                         break;
                     if (type == types[k]) {
                         Vect_cat_get(Cats, layer, &cat);
@@ -552,15 +548,14 @@ int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     return 1;
 }
 
+/*
+   Reads the attribute field "name" for current cat and returns the value as a
+   string or NULL on error
 
-/* 
-   Reads the attribute field "name" for current cat and returns the value as a string 
-   or NULL on error 
-
-   Memory for the result string is allocated by this function and must be free'd by
-   the caller.
+   Memory for the result string is allocated by this function and must be free'd
+   by the caller.
  */
-char *get_att(char *name, int cat, struct field_info *Fi, dbDriver * Driver,
+char *get_att(char *name, int cat, struct field_info *Fi, dbDriver *Driver,
               int ncol)
 {
     char buf[2000];
@@ -606,11 +601,10 @@ char *get_att(char *name, int cat, struct field_info *Fi, dbDriver * Driver,
     return (NULL);
 }
 
-
 /* ************************************************************************* */
 /* This function writes numerical attribute table fields as VTK scalars **** */
 /* ************************************************************************* */
-int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
+int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
                       int layer, int *types, int typenum, int dp)
 {
     int type, cat, i, k, centroid;
@@ -630,7 +624,8 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     char *valbuf;
 
     if (layer < 1) {
-        G_warning(_("Cannot export attribute table fields for layer < 1. Skipping export"));
+        G_warning(_("Cannot export attribute table fields for layer < 1. "
+                    "Skipping export"));
         return 1;
     }
 
@@ -666,7 +661,8 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
             /* we don't want to export the category field twice */
             if (strcmp(db_get_column_name(Column), "cat")) {
                 num_atts++;
-                /* fprintf ( stderr, "%i: %s\n", num_atts, db_get_column_name(Column) ); */
+                /* fprintf ( stderr, "%i: %s\n", num_atts,
+                 * db_get_column_name(Column) ); */
             }
         }
     }
@@ -695,12 +691,14 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                  (colctype == DB_C_TYPE_DOUBLE))) {
 
                 if (colctype == DB_C_TYPE_INT) {
-                    /* G_message("  Writing integer scalar %s", db_get_column_name(Column) ); */
+                    /* G_message("  Writing integer scalar %s",
+                     * db_get_column_name(Column) ); */
                     fprintf(ascii, "SCALARS %s int 1\n",
                             db_get_column_name(Column));
                 }
                 if (colctype == DB_C_TYPE_DOUBLE) {
-                    /* *G_message("  Writing double scalar %s", db_get_column_name(Column) ); */
+                    /* *G_message("  Writing double scalar %s",
+                     * db_get_column_name(Column) ); */
                     fprintf(ascii, "SCALARS %s double 1\n",
                             db_get_column_name(Column));
                 }
@@ -720,19 +718,21 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                             if (-1 ==
                                 (type = Vect_read_next_line(Map, NULL, Cats)))
                                 break;
-                            if (type == -2)     /* EOF */
+                            if (type == -2) /* EOF */
                                 break;
                             if (type == types[k]) {
                                 Vect_cat_get(Cats, layer, &cat);
-                                valbuf = get_att((char *)
-                                                 db_get_column_name(Column),
-                                                 cat, Fi, Driver, ncol);
+                                valbuf =
+                                    get_att((char *)db_get_column_name(Column),
+                                            cat, Fi, Driver, ncol);
                                 if (valbuf == NULL) {
-                                    G_fatal_error(_("Error reading value of attribute '%s'"),
+                                    G_fatal_error(_("Error reading value of "
+                                                    "attribute '%s'"),
                                                   db_get_column_name(Column));
                                 }
-                                /* DEBUG 
-                                   fprintf ( stderr, "%s (%i) = %s\n", db_get_column_name(Column), cat, valbuf );
+                                /* DEBUG
+                                   fprintf ( stderr, "%s (%i) = %s\n",
+                                   db_get_column_name(Column), cat, valbuf );
                                  */
                                 fprintf(ascii, " %s", valbuf);
                                 G_free(valbuf);
@@ -749,19 +749,21 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                             if (-1 ==
                                 (type = Vect_read_next_line(Map, NULL, Cats)))
                                 break;
-                            if (type == -2)     /* EOF */
+                            if (type == -2) /* EOF */
                                 break;
                             if (type == types[k]) {
                                 Vect_cat_get(Cats, layer, &cat);
-                                valbuf = get_att((char *)
-                                                 db_get_column_name(Column),
-                                                 cat, Fi, Driver, ncol);
+                                valbuf =
+                                    get_att((char *)db_get_column_name(Column),
+                                            cat, Fi, Driver, ncol);
                                 if (valbuf == NULL) {
-                                    G_fatal_error(_("Error reading value of attribute '%s'"),
+                                    G_fatal_error(_("Error reading value of "
+                                                    "attribute '%s'"),
                                                   db_get_column_name(Column));
                                 }
-                                /* DEBUG 
-                                   fprintf ( stderr, "%s (%i) = %s\n", db_get_column_name(Column), cat, valbuf );
+                                /* DEBUG
+                                   fprintf ( stderr, "%s (%i) = %s\n",
+                                   db_get_column_name(Column), cat, valbuf );
                                  */
                                 fprintf(ascii, " %s", valbuf);
                                 G_free(valbuf);
@@ -778,19 +780,21 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                             if (-1 ==
                                 (type = Vect_read_next_line(Map, NULL, Cats)))
                                 break;
-                            if (type == -2)     /* EOF */
+                            if (type == -2) /* EOF */
                                 break;
                             if (type == types[k]) {
                                 Vect_cat_get(Cats, layer, &cat);
-                                valbuf = get_att((char *)
-                                                 db_get_column_name(Column),
-                                                 cat, Fi, Driver, ncol);
+                                valbuf =
+                                    get_att((char *)db_get_column_name(Column),
+                                            cat, Fi, Driver, ncol);
                                 if (valbuf == NULL) {
-                                    G_fatal_error(_("Error reading value of attribute '%s'"),
+                                    G_fatal_error(_("Error reading value of "
+                                                    "attribute '%s'"),
                                                   db_get_column_name(Column));
                                 }
-                                /* DEBUG 
-                                   fprintf ( stderr, "%s (%i) = %s\n", db_get_column_name(Column), cat, valbuf );
+                                /* DEBUG
+                                   fprintf ( stderr, "%s (%i) = %s\n",
+                                   db_get_column_name(Column), cat, valbuf );
                                  */
                                 fprintf(ascii, " %s", valbuf);
                                 G_free(valbuf);
@@ -803,23 +807,23 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                     /*AREA */
                     if (types[k] == GV_AREA) {
                         Vect_rewind(Map);
-                        for (i = 1;
-                             i <= info->typeinfo[types[k]]->numpolygons;
+                        for (i = 1; i <= info->typeinfo[types[k]]->numpolygons;
                              i++) {
                             centroid = Vect_get_area_centroid(Map, i);
                             if (centroid > 0) {
                                 Vect_read_line(Map, NULL, Cats, centroid);
                             }
                             Vect_cat_get(Cats, layer, &cat);
-                            valbuf =
-                                get_att((char *)db_get_column_name(Column),
-                                        cat, Fi, Driver, ncol);
+                            valbuf = get_att((char *)db_get_column_name(Column),
+                                             cat, Fi, Driver, ncol);
                             if (valbuf == NULL) {
-                                G_fatal_error(_("Error reading value of attribute '%s'"),
-                                              db_get_column_name(Column));
+                                G_fatal_error(
+                                    _("Error reading value of attribute '%s'"),
+                                    db_get_column_name(Column));
                             }
-                            /* DEBUG 
-                               fprintf ( stderr, "%s (%i) = %s\n", db_get_column_name(Column), cat, valbuf );
+                            /* DEBUG
+                               fprintf ( stderr, "%s (%i) = %s\n",
+                               db_get_column_name(Column), cat, valbuf );
                              */
                             fprintf(ascii, " %s", valbuf);
                             G_free(valbuf);
@@ -827,9 +831,9 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
                     }
                 }
                 fprintf(ascii, "\n");
-            }                   /* END (do for all scalars != cat */
+            } /* END (do for all scalars != cat */
         }
-    }                           /* END (step through all numerical attributes) */
+    } /* END (step through all numerical attributes) */
     fprintf(stdout, "\n");
     fflush(stdout);
 
@@ -839,11 +843,10 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     return 1;
 }
 
-
 /* ************************************************************************* */
 /* This function writes attribute table fields as VTK labels            **** */
 /* ************************************************************************* */
-int write_vtk_db_labels(FILE * ascii, struct Map_info *Map, VTKInfo * info,
+int write_vtk_db_labels(FILE *ascii, struct Map_info *Map, VTKInfo *info,
                         int layer, int *types, int typenum, int dp)
 {
     return 1;
@@ -852,20 +855,19 @@ int write_vtk_db_labels(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 /* ************************************************************************* */
 /* This function writes the point coordinates and the geometric feature **** */
 /* ************************************************************************* */
-int write_vtk(FILE * ascii, struct Map_info *Map, int layer, int *types,
+int write_vtk(FILE *ascii, struct Map_info *Map, int layer, int *types,
               int typenum, int dp, double scale, int numatts, int labels)
 {
     VTKInfo *info;
     VTKTypeInfo **typeinfo;
     int i;
-    int infonum =
-        GV_POINT + GV_KERNEL + GV_CENTROID + GV_LINE + GV_BOUNDARY + GV_FACE +
-        GV_AREA;
+    int infonum = GV_POINT + GV_KERNEL + GV_CENTROID + GV_LINE + GV_BOUNDARY +
+                  GV_FACE + GV_AREA;
 
     /*Initiate the typeinfo structure for every supported type */
-    typeinfo = (VTKTypeInfo **) calloc(infonum, sizeof(VTKTypeInfo *));
+    typeinfo = (VTKTypeInfo **)calloc(infonum, sizeof(VTKTypeInfo *));
     for (i = 0; i < infonum; i++) {
-        typeinfo[i] = (VTKTypeInfo *) calloc(1, sizeof(VTKTypeInfo));
+        typeinfo[i] = (VTKTypeInfo *)calloc(1, sizeof(VTKTypeInfo));
         typeinfo[i]->numpoints = 0;
         typeinfo[i]->pointoffset = 0;
         typeinfo[i]->numvertices = 0;
@@ -878,7 +880,7 @@ int write_vtk(FILE * ascii, struct Map_info *Map, int layer, int *types,
     }
 
     /*Initiate the info structure */
-    info = (VTKInfo *) calloc(infonum, sizeof(VTKInfo));
+    info = (VTKInfo *)calloc(infonum, sizeof(VTKInfo));
     info->maxnumpoints = 0;
     info->maxnumvertices = 0;
     info->maxnumlines = 0;
@@ -901,7 +903,7 @@ int write_vtk(FILE * ascii, struct Map_info *Map, int layer, int *types,
         write_vtk_db_data(ascii, Map, info, layer, types, typenum, dp);
     }
 
-    /*5. Write labels (not yet supported) 
+    /*5. Write labels (not yet supported)
        if ( labels ) {
        write_vtk_db_labels(ascii, Map, info, layer, types, typenum, dp);
        }
@@ -921,7 +923,7 @@ int write_vtk(FILE * ascii, struct Map_info *Map, int layer, int *types,
 /* This function writes the point coordinates ****************************** */
 /* ************************************************************************* */
 void write_point_coordinates(struct line_pnts *Points, int dp, double scale,
-                             FILE * ascii)
+                             FILE *ascii)
 {
     char *xstring = NULL, *ystring = NULL, *zstring = NULL;
     double *xptr, *yptr, *zptr;

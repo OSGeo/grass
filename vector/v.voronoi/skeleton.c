@@ -32,8 +32,7 @@ static int next_dist(int line, int side, double mf)
 
     nextdist = totaldist = 0.;
     while (nlines > 1) {
-        nextline =
-            dig_angle_next_line(&(Out.plus), -line, side, GV_LINE, NULL);
+        nextline = dig_angle_next_line(&(Out.plus), -line, side, GV_LINE, NULL);
         Vect_read_line(&Out, Points, NULL, abs(nextline));
         d = Vect_line_length(Points);
         nextdist += d;
@@ -56,8 +55,8 @@ static int next_dist(int line, int side, double mf)
     return (dist > nextdist);
 }
 
-static int loop_test(int line, int node, struct line_pnts *Points,
-                     double l, double mf)
+static int loop_test(int line, int node, struct line_pnts *Points, double l,
+                     double mf)
 {
     int line1, line2, nextline;
     int n1, n2, nspikes, nout;
@@ -83,8 +82,7 @@ static int loop_test(int line, int node, struct line_pnts *Points,
     if (abs(line1) == abs(line2))
         return 1;
 
-    nextline =
-        dig_angle_next_line(&(Out.plus), -line, GV_LEFT, GV_LINE, NULL);
+    nextline = dig_angle_next_line(&(Out.plus), -line, GV_LEFT, GV_LINE, NULL);
     line1 = nextline;
 
     nspikes = 1;
@@ -102,9 +100,8 @@ static int loop_test(int line, int node, struct line_pnts *Points,
 
         if (n1 != node && Vect_get_node_n_lines(&Out, n1) > 2) {
             nspikes++;
-            line2 =
-                dig_angle_next_line(&(Out.plus), -nextline, GV_LEFT, GV_LINE,
-                                    NULL);
+            line2 = dig_angle_next_line(&(Out.plus), -nextline, GV_LEFT,
+                                        GV_LINE, NULL);
 
             if (line2 < 0)
                 Vect_get_line_nodes(&Out, -line2, &n2, NULL);
@@ -125,9 +122,8 @@ static int loop_test(int line, int node, struct line_pnts *Points,
                 nout++;
         }
 
-        nextline =
-            dig_angle_next_line(&(Out.plus), -nextline, GV_RIGHT, GV_LINE,
-                                NULL);
+        nextline = dig_angle_next_line(&(Out.plus), -nextline, GV_RIGHT,
+                                       GV_LINE, NULL);
 
     } while (abs(nextline) != abs(line1));
 
@@ -178,8 +174,7 @@ static int break_loop(int line, int node, struct line_pnts *Points)
     if (abs(line1) == abs(line2))
         return 1;
 
-    nextline =
-        dig_angle_next_line(&(Out.plus), -line, GV_LEFT, GV_LINE, NULL);
+    nextline = dig_angle_next_line(&(Out.plus), -line, GV_LEFT, GV_LINE, NULL);
     firstline = nextline;
 
     do {
@@ -191,9 +186,8 @@ static int break_loop(int line, int node, struct line_pnts *Points)
         if (Vect_get_node_n_lines(&Out, n1) == 1)
             return 0;
 
-        nextline =
-            dig_angle_next_line(&(Out.plus), -nextline, GV_RIGHT, GV_LINE,
-                                NULL);
+        nextline = dig_angle_next_line(&(Out.plus), -nextline, GV_RIGHT,
+                                       GV_LINE, NULL);
 
     } while (abs(nextline) != abs(firstline));
 
@@ -218,8 +212,8 @@ static int break_loop(int line, int node, struct line_pnts *Points)
     return 1;
 }
 
-static int length_test(int line, int node, struct line_pnts *Points,
-                       double l, double mf)
+static int length_test(int line, int node, struct line_pnts *Points, double l,
+                       double mf)
 {
     int line1, line2, nlines;
     int n1;
@@ -523,9 +517,8 @@ int tie_up(void)
         /* get area inner rings */
         n_isles = Vect_get_area_num_isles(&In, area);
         if (n_isles > isl_allocated) {
-            IPoints = (struct line_pnts **)
-                G_realloc(IPoints,
-                          (1 + n_isles) * sizeof(struct line_pnts *));
+            IPoints = (struct line_pnts **)G_realloc(
+                IPoints, (1 + n_isles) * sizeof(struct line_pnts *));
             for (i = isl_allocated; i < n_isles; i++)
                 IPoints[i] = Vect_new_line_struct();
             isl_allocated = n_isles;
@@ -535,7 +528,7 @@ int tie_up(void)
                                  IPoints[i]);
         }
 
-        distmin = 1. / 0.;      /* +inf */
+        distmin = 1. / 0.; /* +inf */
         xmin = x;
         ymin = y;
 

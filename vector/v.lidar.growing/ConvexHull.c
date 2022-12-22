@@ -7,7 +7,7 @@
 
 double **P, **cvxHull, **punti_bordo;
 
-/*----------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 void regGrow8(struct Cell_head Elaboration, struct element_grow **mat,
               double **punti, int *lung, int r, int c, int v, double Th_j,
               int maxP)
@@ -21,7 +21,7 @@ void regGrow8(struct Cell_head Elaboration, struct element_grow **mat,
     punti[*lung][1] = r;
     punti[*lung][2] = mat[r][c].interp;
 
-    assert((*lung)++ < maxP - 1);       /* Condition to finish regGrow8 */
+    assert((*lung)++ < maxP - 1); /* Condition to finish regGrow8 */
 
     if (r - 1 >= 0) {
         if ((mat[r - 1][c].clas > Th_j) && (mat[r - 1][c].clas < v) &&
@@ -89,7 +89,6 @@ int ccw(double **P, int i, int j, int k)
     return a * d - b * c <= 0;
 }
 
-
 int cmpl(const void *a, const void *b)
 {
     double v;
@@ -113,7 +112,8 @@ int make_chain(double **V, int n, int (*cmp)(const void *, const void *))
 
     /* */
     for (i = 2; i < n; i++) {
-        for (j = s; j >= 1 && ccw(V, i, j, j - 1); j--) ;
+        for (j = s; j >= 1 && ccw(V, i, j, j - 1); j--)
+            ;
         s = j + 1;
         t = V[s];
         V[s] = V[i];
@@ -124,13 +124,13 @@ int make_chain(double **V, int n, int (*cmp)(const void *, const void *))
 
 int ch2d(double **P, int n)
 {
-    int u = make_chain(P, n, cmpl);     /* make lower hull */
+    int u = make_chain(P, n, cmpl); /* make lower hull */
 
     if (!n)
         return 0;
     P[n] = P[0];
 
-    return u + make_chain(P + u, n - u + 1, cmph);      /* make upper hull */
+    return u + make_chain(P + u, n - u + 1, cmph); /* make upper hull */
 }
 
 void print_hull(double **P, double **pti, int m, double **h)
@@ -186,15 +186,16 @@ int checkHull(int cR, int cC, double **oldHull, int lungOld)
     return 1;
 }
 
-/*---------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
                 double *maxNS, double *maxEW, struct element_grow **mat,
                 int CBordo)
 {
     int c1;
-    double minBordo, medioBordo;        /*, minBordo1; */
+    double minBordo, medioBordo; /*, minBordo1; */
 
-    /*Calcola coordinate min e max della zona e media delle righe e delle colonne */
+    /*Calcola coordinate min e max della zona e media delle righe e delle
+     * colonne */
     *minNS = punti[0][1];
     *maxNS = punti[0][1];
     *minEW = punti[0][0];
@@ -218,7 +219,8 @@ double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
         if (punti[c1][1] < *minNS)
             *minNS = punti[c1][1];
         /*
-           if ((punti[c1][2] < minBordo1) && (mat[(int)(punti[c1][1])][(int)(punti[c1][0])].clas >= 1)
+           if ((punti[c1][2] < minBordo1) &&
+           (mat[(int)(punti[c1][1])][(int)(punti[c1][0])].clas >= 1)
            && (mat[(int)(punti[c1][1])][(int)(punti[c1][0])].clas < CBordo)) {
            minBordo1 = punti[c1][2];
            }
@@ -232,7 +234,7 @@ double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
     return medioBordo;
 }
 
-/*----------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 double **Pvector(long nl, long nh)
 {
     double **v;
@@ -251,9 +253,8 @@ struct element_grow **P_alloc_element(int rows, int cols)
 
     m = (struct element_grow **)G_calloc((rows + 1),
                                          sizeof(struct element_grow *));
-    m[0] =
-        (struct element_grow *)G_calloc(rows * cols,
-                                        sizeof(struct element_grow));
+    m[0] = (struct element_grow *)G_calloc(rows * cols,
+                                           sizeof(struct element_grow));
 
     for (i = 1; i <= rows; i++)
         m[i] = m[i - 1] + cols;
@@ -285,9 +286,8 @@ struct element_grow **structMatrix(long nrl, long nrh, long ncl, long nch)
     m -= nrl;
 
     /* allocate rows and set pointers to them */
-    m[nrl] =
-        (struct element_grow *)calloc((size_t)(nrow * ncol + NR_END),
-                                      sizeof(struct element_grow));
+    m[nrl] = (struct element_grow *)calloc((size_t)(nrow * ncol + NR_END),
+                                           sizeof(struct element_grow));
     if (!m[nrl])
         nrerror("allocation failure 2 in matrix()");
 
@@ -304,12 +304,12 @@ struct element_grow **structMatrix(long nrl, long nrh, long ncl, long nch)
 void free_Pvector(double **v, long nl, long nh)
 {
 
-    free((FREE_ARG) (v + nl - NR_END));
+    free((FREE_ARG)(v + nl - NR_END));
 }
 
 void free_structmatrix(struct element_grow **m, long nrl, long nrh, long ncl,
                        long nch)
 {
-    free((FREE_ARG) (m[nrl] + ncl - NR_END));
-    free((FREE_ARG) (m + nrl - NR_END));
+    free((FREE_ARG)(m[nrl] + ncl - NR_END));
+    free((FREE_ARG)(m + nrl - NR_END));
 }

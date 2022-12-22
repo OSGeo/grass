@@ -1,20 +1,20 @@
-/* ***************************************************************
- * *
- * * MODULE:       v.out.pov
- * * 
- * * AUTHOR(S):    Radim Blazek
- * *               OGR support by Martin Landa <landa.martin gmail.com>
- * *               
- * * PURPOSE:      Export vector to renderers' format (PovRay)
- * *               
- * * COPYRIGHT:    (C) 2001-2012 by the GRASS Development Team
- * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
- * *               Read the file COPYING that comes with GRASS
- * *               for details.
- * *
- * **************************************************************/
+/***************************************************************
+ *
+ * MODULE:       v.out.pov
+ *
+ * AUTHOR(S):    Radim Blazek
+ *               OGR support by Martin Landa <landa.martin gmail.com>
+ *
+ * PURPOSE:      Export vector to renderers' format (PovRay)
+ *
+ * COPYRIGHT:    (C) 2001-2012 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -73,8 +73,9 @@ int main(int argc, char *argv[])
     zmod_opt->type = TYPE_STRING;
     zmod_opt->required = NO;
     zmod_opt->description = _("Modifier for z coordinates");
-    zmod_opt->description = _("This string is appended to each z coordinate. "
-                              "Examples: '*10', '+1000', '*10+100', '*exaggeration'");
+    zmod_opt->description =
+        _("This string is appended to each z coordinate. "
+          "Examples: '*10', '+1000', '*10+100', '*exaggeration'");
 
     objmod_opt = G_define_option();
     objmod_opt->key = "objmod";
@@ -104,8 +105,7 @@ int main(int argc, char *argv[])
     /* Open output file */
     if ((fd = fopen(out_opt->answer, "w")) == NULL) {
         Vect_close(&In);
-        G_fatal_error(_("Unable to create output file <%s>"),
-                      out_opt->answer);
+        G_fatal_error(_("Unable to create output file <%s>"), out_opt->answer);
     }
 
     if (zmod_opt->answer == NULL)
@@ -117,9 +117,8 @@ int main(int argc, char *argv[])
     nareas = Vect_get_num_areas(&In);
     count = 0;
     /* Lines */
-    if ((otype &
-         (GV_POINTS | GV_LINES | GV_BOUNDARY | GV_CENTROID | GV_FACE |
-          GV_KERNEL))) {
+    if ((otype & (GV_POINTS | GV_LINES | GV_BOUNDARY | GV_CENTROID | GV_FACE |
+                  GV_KERNEL))) {
         for (i = 1; i <= nlines; i++) {
             G_percent(i, nlines, 2);
             type = Vect_read_line(&In, Points, Cats, i);
@@ -144,28 +143,28 @@ int main(int argc, char *argv[])
             case GV_LINE:
             case GV_BOUNDARY:
                 if (Points->n_points < 2)
-                    break;      /* At least 2 points */
+                    break; /* At least 2 points */
 
                 fprintf(fd, "sphere_sweep { linear_spline %d,\n",
                         Points->n_points);
                 for (j = 0; j < Points->n_points; j++) {
-                    fprintf(fd, " <%f, %f %s, %f>, %s\n",
-                            Points->x[j], Points->z[j], zmod_opt->answer,
-                            Points->y[j], size_opt->answer);
+                    fprintf(fd, " <%f, %f %s, %f>, %s\n", Points->x[j],
+                            Points->z[j], zmod_opt->answer, Points->y[j],
+                            size_opt->answer);
                 }
                 fprintf(fd, " %s\n}\n", objmod_opt->answer);
                 count++;
                 break;
             case GV_FACE:
                 if (Points->n_points < 3)
-                    break;      /* At least 3 points */
+                    break; /* At least 3 points */
 
-                Vect_append_point(Points, Points->x[0], Points->y[0], Points->z[0]);    /* close */
+                Vect_append_point(Points, Points->x[0], Points->y[0],
+                                  Points->z[0]); /* close */
                 fprintf(fd, "polygon { %d, \n", Points->n_points);
                 for (j = 0; j < Points->n_points; j++) {
-                    fprintf(fd, " <%f, %f %s, %f>\n",
-                            Points->x[j], Points->z[j], zmod_opt->answer,
-                            Points->y[j]);
+                    fprintf(fd, " <%f, %f %s, %f>\n", Points->x[j],
+                            Points->z[j], zmod_opt->answer, Points->y[j]);
                 }
                 fprintf(fd, " %s\n}\n", objmod_opt->answer);
                 count++;
@@ -195,9 +194,8 @@ int main(int argc, char *argv[])
                 for (j = 0; j < Points->n_points; j++) {
                     fprintf(fd, "polygon { %d, \n", Points->n_points);
                     for (j = 0; j < Points->n_points; j++) {
-                        fprintf(fd, " <%f, %f %s, %f>\n",
-                                Points->x[j], Points->z[j], zmod_opt->answer,
-                                Points->y[j]);
+                        fprintf(fd, " <%f, %f %s, %f>\n", Points->x[j],
+                                Points->z[j], zmod_opt->answer, Points->y[j]);
                     }
                     fprintf(fd, " %s\n}\n", objmod_opt->answer);
                 }
@@ -205,8 +203,8 @@ int main(int argc, char *argv[])
                 /* TODO: Isles */
                 /*
                    for ( k = 0; k < Vect_get_area_num_isles (&In, i); k++ ) {
-                   Vect_get_isle_points ( &In, Vect_get_area_isle (&In, i, k), Points );
-                   for ( j = 0; j < Points->n_points; j++ ) {
+                   Vect_get_isle_points ( &In, Vect_get_area_isle (&In, i, k),
+                   Points ); for ( j = 0; j < Points->n_points; j++ ) {
                    }
                    }
                  */
@@ -219,8 +217,7 @@ int main(int argc, char *argv[])
     Vect_close(&In);
 
     /* Summary */
-    G_done_msg(n_("%d feature written.",
-                  "%d features written.", count), count);
+    G_done_msg(n_("%d feature written.", "%d features written.", count), count);
 
     exit(EXIT_SUCCESS);
 }

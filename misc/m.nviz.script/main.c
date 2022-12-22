@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       m.nviz.script  (nee d.nviz)
@@ -9,7 +8,7 @@
  *   do_profile-- calculate camera and eye coordinates from
  *                raster map
  *   move --      part of screen coords
- *   cont --      part of screen coords 
+ *   cont --      part of screen coords
  *   read_rast -- return camera and eye coordinates
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -45,7 +44,7 @@ int main(int argc, char *argv[])
 {
     const char *name;
     char outfile[GNAME_MAX];
-    int fd /*, projection */ ;
+    int fd /*, projection */;
     char buf[512], buf1[1024], buf2[1024];
 
     /* int screen_x, screen_y; */
@@ -54,13 +53,11 @@ int main(int argc, char *argv[])
     double e1, e2, n1, n2;
     RASTER_MAP_TYPE data_type;
     struct Cell_head window;
-    struct
-    {
+    struct {
         struct Option *opt1, *route, *name, *output, *dist, *ht, *frames,
             *start;
         struct Flag *f, *c, *k, *o, *e;
-    }
-    parm;
+    } parm;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -118,7 +115,6 @@ int main(int argc, char *argv[])
     parm.start->required = NO;
     parm.start->description = _("Start frame number (default=0)");
 
-
     parm.f = G_define_flag();
     parm.f->key = 'f';
     parm.f->description = _("Full render -- Save images");
@@ -139,7 +135,6 @@ int main(int argc, char *argv[])
     parm.e = G_define_flag();
     parm.e->key = 'e';
     parm.e->description = _("Enable vector and sites drawing");
-
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -191,11 +186,11 @@ int main(int argc, char *argv[])
     else
         sprintf(img_name, "NVIZ");
 
-
     /* Open ASCII file for output */
     /* append ".nvscr" to filename if it doesn't already have it */
     strncpy(outfile, parm.output->answer, GNAME_MAX - 7);
-    outfile[GNAME_MAX - 7] = '\0';      /* strncpy() doesn't null terminate the string */
+    outfile[GNAME_MAX - 7] =
+        '\0'; /* strncpy() doesn't null terminate the string */
     if (strcmp(&outfile[strlen(outfile) - 6], ".nvscr") != 0)
         strcat(outfile, ".nvscr");
 
@@ -207,10 +202,9 @@ int main(int argc, char *argv[])
     /* Done with file */
 
     /* Output initial startup stuff */
-    sprintf(buf1,
-            "## REGION: n=%f s=%f e=%f w=%f\n## Input=%s Dist=%f Ht=%f\n",
-            window.north, window.south, window.east, window.west, outfile,
-            DIST, HT);
+    sprintf(buf1, "## REGION: n=%f s=%f e=%f w=%f\n## Input=%s Dist=%f Ht=%f\n",
+            window.north, window.south, window.east, window.west, outfile, DIST,
+            HT);
 
     sprintf(buf2, "\nset FRAMES %d\n", no_frames);
     strcat(buf1, buf2);
@@ -250,7 +244,6 @@ int main(int argc, char *argv[])
     if (k < 6) {
         /* Only one coordinate pair supplied */
         G_fatal_error(_("You must provide at least four points %d"), k);
-
     }
     else {
         for (i = 0; i <= k - 2; i += 2) {
@@ -268,12 +261,11 @@ int main(int argc, char *argv[])
     }
     /* done with coordinates */
 
-
     /* Output final part of script */
     /* generate key-frame script */
     if (key_frames) {
         strcpy(buf, outfile);
-        buf[strlen(outfile) - 6] = '\0';        /* skip extension */
+        buf[strlen(outfile) - 6] = '\0'; /* skip extension */
         strcat(buf, ".kanim");
         fprintf(fp, "\n## The following saves the animation to a format\n");
         fprintf(fp, "## suitable for editing with the kanimator panel\n");
@@ -327,15 +319,13 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 
-}                               /* Done with main */
-
-
+} /* Done with main */
 
 /* ************************************
  * Calculate camera and eye coordinates
  **************************************/
-int do_profile(double e1, double e2, double n1, double n2,
-               const char *name, int fd, int data_type)
+int do_profile(double e1, double e2, double n1, double n2, const char *name,
+               int fd, int data_type)
 {
     float rows, cols, LEN;
     double Y, X, AZI;
@@ -356,8 +346,8 @@ int do_profile(double e1, double e2, double n1, double n2,
     if (rows >= 0 && cols < 0) {
         /* SE Quad or due east */
         AZI = fabs(atan((rows / cols)));
-        Y = (double)DIST *sin(AZI);
-        X = (double)DIST *cos(AZI);
+        Y = (double)DIST * sin(AZI);
+        X = (double)DIST * cos(AZI);
 
         if (e != 0.0 && (e != e1 || n != n1)) {
             dist -= G_distance(e, n, e1, n1);
@@ -369,8 +359,8 @@ int do_profile(double e1, double e2, double n1, double n2,
     if (rows < 0 && cols <= 0) {
         /* NE Quad  or due north */
         AZI = fabs(atan((cols / rows)));
-        X = (double)DIST *sin(AZI);
-        Y = (double)DIST *cos(AZI);
+        X = (double)DIST * sin(AZI);
+        Y = (double)DIST * cos(AZI);
 
         if (e != 0.0 && (e != e1 || n != n1)) {
             dist -= G_distance(e, n, e1, n1);
@@ -382,8 +372,8 @@ int do_profile(double e1, double e2, double n1, double n2,
     if (rows > 0 && cols >= 0) {
         /* SW Quad or due south */
         AZI = fabs(atan((rows / cols)));
-        X = (double)DIST *cos(AZI);
-        Y = (double)DIST *sin(AZI);
+        X = (double)DIST * cos(AZI);
+        Y = (double)DIST * sin(AZI);
 
         if (e != 0.0 && (e != e1 || n != n1)) {
             dist -= G_distance(e, n, e1, n1);
@@ -395,8 +385,8 @@ int do_profile(double e1, double e2, double n1, double n2,
     if (rows <= 0 && cols > 0) {
         /* NW Quad  or due west */
         AZI = fabs(atan((rows / cols)));
-        X = (double)DIST *cos(AZI);
-        Y = (double)DIST *sin(AZI);
+        X = (double)DIST * cos(AZI);
+        Y = (double)DIST * sin(AZI);
 
         if (e != 0.0 && (e != e1 || n != n1)) {
             dist -= G_distance(e, n, e1, n1);
@@ -408,18 +398,15 @@ int do_profile(double e1, double e2, double n1, double n2,
     /* dist is not used ! */
 
     return 0;
-}                               /* done with do_profile */
-
+} /* done with do_profile */
 
 /*****************************
  * read_rast
  * function to get raster value at set location
  * and output nviz script
-*****************************/
-int read_rast
-    (double east,
-     double north,
-     double rrdist, int fd, int out_type, RASTER_MAP_TYPE data_type)
+ *****************************/
+int read_rast(double east, double north, double rrdist, int fd, int out_type,
+              RASTER_MAP_TYPE data_type)
 {
     int row, col, nrows, ncols;
     struct Cell_head window;
@@ -430,7 +417,6 @@ int read_rast
     DCELL *dcell;
     double camera_height;
 
-
     G_get_window(&window);
     nrows = window.rows;
     ncols = window.cols;
@@ -439,14 +425,14 @@ int read_rast
     col = (int)(0.5 + D_u_to_a_col(east));
 
     if (row < 0 || row > nrows || col < 0 || col > ncols) {
-        G_debug(3, "Fail: row=%d  nrows=%d   col=%d  ncols=%d", row, nrows,
-                col, ncols);
-        G_warning(_("Skipping this point, selected point is outside region. "
-                    "Perhaps the camera setback distance puts it beyond the edge?"));
+        G_debug(3, "Fail: row=%d  nrows=%d   col=%d  ncols=%d", row, nrows, col,
+                ncols);
+        G_warning(
+            _("Skipping this point, selected point is outside region. "
+              "Perhaps the camera setback distance puts it beyond the edge?"));
         frame++;
         return 1;
     }
-
 
     if (data_type == CELL_TYPE) {
         cell = Rast_allocate_c_buf();
@@ -480,7 +466,7 @@ int read_rast
 
     /* Output script commands */
 
-/*************************/
+    /*************************/
 
     /* Set camera Height value */
     if (camera_height == 9999.)
@@ -493,8 +479,8 @@ int read_rast
 
     if (out_type) {
         /* Set Camera Position */
-        sprintf(buf2, "\nSendScriptLine \"Nmove_to_real %f %f %f\"",
-                east, north, camera_height);
+        sprintf(buf2, "\nSendScriptLine \"Nmove_to_real %f %f %f\"", east,
+                north, camera_height);
         key_time += (rrdist + fabs(camera_height - OLD_DEPTH)) / 10000.;
     }
     else {
@@ -506,8 +492,7 @@ int read_rast
 
         /* Use frame number for now -- TODO figure even increment
          * based on no. of frames and distance */
-        sprintf(buf,
-                "\nSendScriptLine \"Nadd_key %f KF_ALL_MASK 1 0.0\"\n",
+        sprintf(buf, "\nSendScriptLine \"Nadd_key %f KF_ALL_MASK 1 0.0\"\n",
                 key_time);
         strcat(buf2, buf);
         cnt++;

@@ -5,8 +5,8 @@
 
 #include "proto.h"
 
-void copy_tabs(struct Map_info *In, struct Map_info *Out,
-               int nfields, int *fields, int *ncats, int **cats)
+void copy_tabs(struct Map_info *In, struct Map_info *Out, int nfields,
+               int *fields, int *ncats, int **cats)
 {
     int i, ttype, ntabs;
 
@@ -47,7 +47,7 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
 
         /* Make a list of categories */
         IFi = Vect_get_field(In, fields[i]);
-        if (!IFi) {             /* no table */
+        if (!IFi) { /* no table */
             G_warning(_("No table for layer %d"), fields[i]);
             continue;
         }
@@ -55,17 +55,14 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
         OFi = Vect_default_field_info(Out, IFi->number, IFi->name, ttype);
 
         if (ncats[i] > 0)
-            ret =
-                db_copy_table_by_ints(IFi->driver, IFi->database, IFi->table,
-                                      OFi->driver,
-                                      Vect_subst_var(OFi->database, Out),
-                                      OFi->table, IFi->key, cats[i],
-                                      ncats[i]);
+            ret = db_copy_table_by_ints(
+                IFi->driver, IFi->database, IFi->table, OFi->driver,
+                Vect_subst_var(OFi->database, Out), OFi->table, IFi->key,
+                cats[i], ncats[i]);
         else
-            ret = db_copy_table_where(IFi->driver, IFi->database, IFi->table,
-                                      OFi->driver,
-                                      Vect_subst_var(OFi->database, Out),
-                                      OFi->table, "0 = 1");
+            ret = db_copy_table_where(
+                IFi->driver, IFi->database, IFi->table, OFi->driver,
+                Vect_subst_var(OFi->database, Out), OFi->table, "0 = 1");
 
         if (ret == DB_FAILED) {
             G_warning(_("Unable to copy table for layer %d"), fields[i]);
@@ -76,9 +73,8 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
         }
 
         /* create index on key column */
-        Driver = db_start_driver_open_database(OFi->driver,
-                                               Vect_subst_var(OFi->database,
-                                                              Out));
+        Driver = db_start_driver_open_database(
+            OFi->driver, Vect_subst_var(OFi->database, Out));
         if (Driver == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           OFi->database, OFi->driver);
@@ -86,9 +82,8 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
 
         if (db_create_index2(Driver, OFi->table, IFi->key) != DB_OK)
             G_warning(_("Unable to create index"));
-        if (db_grant_on_table
-            (Driver, OFi->table, DB_PRIV_SELECT,
-             DB_GROUP | DB_PUBLIC) != DB_OK)
+        if (db_grant_on_table(Driver, OFi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK)
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           OFi->table);
         db_close_database_shutdown_driver(Driver);

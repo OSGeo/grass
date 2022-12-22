@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -30,6 +29,5 @@ int cmp_points(const void *v1, const void *v2, void *param);
 
 void quickSort(struct Point a[], int l, int r);
 int partition(struct Point a[], int l, int r);
-
 
 #endif

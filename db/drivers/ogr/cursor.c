@@ -30,14 +30,14 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_close_cursor(dbCursor * dbc)
+int db__driver_close_cursor(dbCursor *dbc)
 {
     cursor *c;
 
     G_debug(3, "db_driver_close_cursor()");
 
     /* get my cursor via the dbc token */
-    c = (cursor *) db_find_token(db_get_cursor_token(dbc));
+    c = (cursor *)db_find_token(db_get_cursor_token(dbc));
     if (c == NULL)
         return DB_FAILED;
 
@@ -60,7 +60,7 @@ cursor *alloc_cursor()
     cursor *c;
 
     /* allocate the cursor */
-    c = (cursor *) db_malloc(sizeof(cursor));
+    c = (cursor *)db_malloc(sizeof(cursor));
     if (c == NULL) {
         db_d_append_error(_("Unable to allocate cursor"));
         return NULL;
@@ -82,7 +82,7 @@ cursor *alloc_cursor()
 
    \param c pointer to cursor
  */
-void free_cursor(cursor * c)
+void free_cursor(cursor *c)
 {
     if (c->hFeature)
         OGR_F_Destroy(c->hFeature);

@@ -22,8 +22,8 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
     if (dxf_find_header(dxf)) {
         /* code == 0: end of the header section */
         code = dxf_get_code(dxf);
-        while (code != 0) {     /* ENDSEC */
-            if (code == -2)     /* EOF */
+        while (code != 0) { /* ENDSEC */
+            if (code == -2) /* EOF */
                 return 0;
 
             /* only looking for header groups (code == 9) */
@@ -36,7 +36,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
                 /* read in lines and process information until a 9
                  * or a 0 is read in */
                 while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
-                    if (code == -2)     /* EOF */
+                    if (code == -2) /* EOF */
                         return 0;
 
                     switch (code) {
@@ -61,7 +61,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
                 /* read in lines and process information until a 9
                  * or a 0 is read in */
                 while ((code = dxf_get_code(dxf)) != 9 && code != 0) {
-                    if (code == -2)     /* EOF */
+                    if (code == -2) /* EOF */
                         return 0;
 
                     switch (code) {
@@ -160,7 +160,8 @@ int find_next_header_variable(struct dxf_file *dxf)
      * code  0: ENDSEC
      * code -2: EOF
      */
-    while ((code = dxf_get_code(dxf)) != 9 && code != 0 && code != -2) ;
+    while ((code = dxf_get_code(dxf)) != 9 && code != 0 && code != -2)
+        ;
 
     return code;
 }
@@ -187,7 +188,7 @@ static void make_head(struct Map_info *Map)
 {
     char *organization;
 
-    if ((organization = getenv("GRASS_ORGANIZATION")))  /* added MN 5/2001 */
+    if ((organization = getenv("GRASS_ORGANIZATION"))) /* added MN 5/2001 */
         Vect_set_organization(Map, organization);
     else
         Vect_set_organization(Map, "GRASS Development Team");

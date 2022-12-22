@@ -41,23 +41,25 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
 
     parm->output = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    parm->operator = G_define_option();
-    parm->operator-> key = "operator";
-    parm->operator-> type = TYPE_STRING;
-    parm->operator-> required = YES;
-    parm->operator-> multiple = NO;
-    parm->operator-> label =
+    parm->operator= G_define_option();
+    parm->operator->key = "operator";
+    parm->operator->type = TYPE_STRING;
+    parm->operator->required = YES;
+    parm->operator->multiple = NO;
+    parm->operator->label =
         _("Operator defines required relation between features");
-    parm->operator-> description =
-        _("A feature is written to output if the result of operation 'ainput operator binput' is true. "
-         "An input feature is considered to be true, if category of given layer is defined.");
-    parm->operator-> answer = "overlap";
+    parm->operator->description =
+        _("A feature is written to output if the result of operation 'ainput "
+          "operator binput' is true. "
+          "An input feature is considered to be true, if category of given "
+          "layer is defined.");
+    parm->operator->answer = "overlap";
     desc = NULL;
 #ifndef HAVE_GEOS
-    parm->operator-> options = "overlap";
-    G_asprintf(&desc,
-               "overlap;%s", _("features partially or completely overlap"));
-    parm->operator-> descriptions = desc;
+    parm->operator->options = "overlap";
+    G_asprintf(&desc, "overlap;%s",
+               _("features partially or completely overlap"));
+    parm->operator->descriptions = desc;
 
     parm->relate = NULL;
 #else
@@ -83,9 +85,9 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
                _("features spatially overlap (using GEOS)"),
                _("feature A is spatially related to feature B (using GEOS, "
                  "requires 'relate' option)"));
-    parm->operator-> options =
-        "overlap,equals,disjoint,intersects,touches,crosses,within,contains,overlaps,relate";
-    parm->operator-> descriptions = desc;
+    parm->operator->options = "overlap,equals,disjoint,intersects,touches,"
+                              "crosses,within,contains,overlaps,relate";
+    parm->operator->descriptions = desc;
 
     parm->relate = G_define_option();
     parm->relate->key = "relate";

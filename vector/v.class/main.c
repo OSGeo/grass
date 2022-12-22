@@ -1,13 +1,12 @@
-
 /***************************************************************
  *
  * MODULE:       v.class
- * 
+ *
  * AUTHOR(S):    Moritz Lennert
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Create data classes, mainly for thematic mapping
- *               
+ *
  * COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -67,11 +66,14 @@ int main(int argc, char *argv[])
     algo_opt->options = "int,std,qua,equ,dis";
     algo_opt->description = _("Algorithm to use for classification");
     desc = NULL;
-    G_asprintf(&desc, "int;%s;" "std;%s;" "qua;%s;" "equ;%s",
+    G_asprintf(&desc,
+               "int;%s;"
+               "std;%s;"
+               "qua;%s;"
+               "equ;%s",
                /* "dis;%s" */
-               _("simple intervals"),
-               _("standard deviations"),
-               _("quantiles"), _("equiprobable (normal distribution)"));
+               _("simple intervals"), _("standard deviations"), _("quantiles"),
+               _("equiprobable (normal distribution)"));
     /* _("discontinuities"));currently disabled because of bugs */
     algo_opt->descriptions = desc;
 
@@ -112,11 +114,11 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Fi->database, Fi->driver);
 
-    /* Note: do not check if the column exists in the table because it may be an expression */
+    /* Note: do not check if the column exists in the table because it may be an
+     * expression */
 
-    nrec =
-        db_select_CatValArray(Driver, Fi->table, Fi->key, col_opt->answer,
-                              where_opt->answer, &Cvarr);
+    nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, col_opt->answer,
+                                 where_opt->answer, &Cvarr);
     G_debug(2, "nrec = %d", nrec);
 
     ctype = Cvarr.ctype;
@@ -132,7 +134,6 @@ int main(int argc, char *argv[])
     if (ret == DB_FAILED)
         G_fatal_error(_("Unable to sort array of values"));
 
-
     data = (double *)G_malloc((nrec) * sizeof(double));
     for (i = 0; i < nrec; i++)
         data[i] = 0.0;
@@ -146,10 +147,10 @@ int main(int argc, char *argv[])
             data[i] = Cvarr.value[i].val.d;
     }
 
-
-
     nbclass = atoi(nbclass_opt->answer);
-    nbreaks = nbclass - 1;      /* we need one less classbreaks (min and max exluded) than classes */
+    nbreaks =
+        nbclass -
+        1; /* we need one less classbreaks (min and max exluded) than classes */
 
     classbreaks = (double *)G_malloc((nbreaks) * sizeof(double));
     for (i = 0; i < nbreaks; i++)
@@ -158,15 +159,14 @@ int main(int argc, char *argv[])
     /* Get classbreaks for given algorithm and number of classbreaks.
      * finfo takes any info coming from the classification algorithms
      * equ algorithm can alter number of class breaks */
-    finfo =
-        AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt),
-                                 data, nrec, &nbreaks, classbreaks);
-
+    finfo = AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt), data,
+                                     nrec, &nbreaks, classbreaks);
 
     if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
-        G_warning(_("The discontinuities algorithm indicates that some "
-                    "class breaks are not statistically significant at "
-                    "alpha=0.05. You are advised to reduce the number of classes."));
+        G_warning(
+            _("The discontinuities algorithm indicates that some "
+              "class breaks are not statistically significant at "
+              "alpha=0.05. You are advised to reduce the number of classes."));
 
     /*output to be piped to other modules ? */
     if (shell_flag->answer) {
@@ -175,7 +175,6 @@ int main(int argc, char *argv[])
             fprintf(stdout, "%f,", classbreaks[i]);
         fprintf(stdout, "%f", classbreaks[nbreaks - 1]);
         fprintf(stdout, "\n");
-
     }
     else {
 
@@ -184,8 +183,7 @@ int main(int argc, char *argv[])
             frequencies[i] = 0;
 
         ret =
-            AS_class_frequencies(data, nrec, nbreaks, classbreaks,
-                                 frequencies);
+            AS_class_frequencies(data, nrec, nbreaks, classbreaks, frequencies);
         AS_basic_stats(data, nrec, &stats);
 
         min = data[0];
@@ -213,11 +211,11 @@ int main(int argc, char *argv[])
                 frequencies[0]);
 
         for (i = 1; i < nbreaks; i++) {
-            fprintf(stdout, "%15.5f%15.5f%15i\n",
-                    classbreaks[i - 1], classbreaks[i], frequencies[i]);
+            fprintf(stdout, "%15.5f%15.5f%15i\n", classbreaks[i - 1],
+                    classbreaks[i], frequencies[i]);
         }
-        fprintf(stdout, "%15.5f%15.5f%15i\n",
-                classbreaks[nbreaks - 1], max, frequencies[nbreaks]);
+        fprintf(stdout, "%15.5f%15.5f%15i\n", classbreaks[nbreaks - 1], max,
+                frequencies[nbreaks]);
 
         fprintf(stdout, _("\nNote: Minimum of first class is including\n\n"));
     }

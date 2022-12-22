@@ -1,12 +1,11 @@
-
 /***************************************************************
  *
  * MODULE:       v.build
- * 
+ *
  * AUTHOR(S):    Radim Blazek
- *               
+ *
  * PURPOSE:      Build topology
- *               
+ *
  * COPYRIGHT:    (C) 2001, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -46,8 +45,8 @@ int main(int argc, char *argv[])
 
     err_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     err_opt->key = "error";
-    err_opt->description =
-        _("Name for output vector map where erroneous vector features are written to");
+    err_opt->description = _("Name for output vector map where erroneous "
+                             "vector features are written to");
     err_opt->required = NO;
     err_opt->guisection = _("Errors");
 
@@ -61,21 +60,20 @@ int main(int argc, char *argv[])
     opt->description =
         _("Build topology or dump topology or indices to standard output");
     opt_desc = NULL;
-    G_asprintf(&opt_desc,
-               "build;%s;dump;%s;sdump;%s;cdump;%s;fdump;%s",
-               _("build topology"),
-               _("write topology to stdout"),
+    G_asprintf(&opt_desc, "build;%s;dump;%s;sdump;%s;cdump;%s;fdump;%s",
+               _("build topology"), _("write topology to stdout"),
                _("write spatial index to stdout"),
                _("write category index to stdout"),
-               _("write feature index to stdout (OGR simple-feature-based formats only)"));
+               _("write feature index to stdout (OGR simple-feature-based "
+                 "formats only)"));
     opt->descriptions = opt_desc;
     opt->required = YES;
 
     chk = G_define_flag();
     chk->key = 'e';
     chk->label = _("Extensive checks for topological errors");
-    chk->description =
-        _("Perform in-depth checks for topological errors when building topology");
+    chk->description = _("Perform in-depth checks for topological errors when "
+                         "building topology");
     chk->guisection = _("Errors");
 
     if (G_parser(argc, argv))
@@ -105,8 +103,10 @@ int main(int argc, char *argv[])
     if (build) {
         if (G_name_is_fully_qualified(map_opt->answer, xname, xmapset)) {
             if (0 == G_strcasecmp(xmapset, "OGR")) {
-                G_fatal_error(_("Direct read access to OGR layers is not supported by this module. "
-                               "Run %s to create a link as GRASS vector map in the current mapset."),
+                G_fatal_error(_("Direct read access to OGR layers is not "
+                                "supported by this module. "
+                                "Run %s to create a link as GRASS vector map "
+                                "in the current mapset."),
                               "'v.external'");
             }
             if (0 != strcmp(xmapset, G_mapset())) {
@@ -117,8 +117,7 @@ int main(int argc, char *argv[])
         Vect_set_open_level(1);
 
         if (Vect_open_old(&Map, map_opt->answer, G_mapset()) < 0)
-            G_fatal_error(_("Unable to open vector map <%s>"),
-                          map_opt->answer);
+            G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
 
         Vect_build(&Map);
     }
@@ -180,7 +179,6 @@ int main(int argc, char *argv[])
 
             if (err)
                 Vect_write_line(&Err, type, Points, Cats);
-
         }
 
         narea = Vect_get_num_areas(&Map);

@@ -6,7 +6,6 @@
 #include <grass/glocale.h>
 #include "local.h"
 
-
 int vect_to_rast(const char *vector_map, const char *raster_map,
                  const char *field_name, const char *column, int cache_mb,
                  int use, double value, int value_type, const char *rgbcolumn,
@@ -17,9 +16,9 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
     struct line_pnts *Points;
     int i, j, field;
     struct cat_list *cat_list = NULL;
-    int fd;                     /* for raster map */
-    int nareas, nlines;         /* number of converted features */
-    int /* nareas_all, */ nplines_all;  /* number of all areas, points/lines */
+    int fd;                            /* for raster map */
+    int nareas, nlines;                /* number of converted features */
+    int /* nareas_all, */ nplines_all; /* number of all areas, points/lines */
     int stat;
     int format;
     int pass, npasses;
@@ -44,10 +43,8 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
     if (field > 0)
         cat_list = Vect_cats_set_constraint(&Map, field, where, cats);
 
-
     if ((use == USE_Z) && !(Vect_is_3d(&Map)))
-        G_fatal_error(_("Vector map <%s> is not 3D"),
-                      Vect_get_full_name(&Map));
+        G_fatal_error(_("Vector map <%s> is not 3D"), Vect_get_full_name(&Map));
 
     switch (use) {
     case USE_ATTR:
@@ -56,28 +53,28 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
             G_fatal_error(_("Database connection not defined for layer <%s>"),
                           field_name);
 
-        if ((Driver =
-             db_start_driver_open_database(Fi->driver, Fi->database)) == NULL)
+        if ((Driver = db_start_driver_open_database(Fi->driver,
+                                                    Fi->database)) == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
         db_set_error_handler_driver(Driver);
 
-        /* Note do not check if the column exists in the table because it may be expression */
+        /* Note do not check if the column exists in the table because it may be
+         * expression */
 
-        if ((nrec =
-             db_select_CatValArray(Driver, Fi->table, Fi->key, column, where,
-                                   &cvarr)) == -1)
+        if ((nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, column,
+                                          where, &cvarr)) == -1)
             G_fatal_error(_("Column <%s> not found"), column);
         G_debug(3, "nrec = %d", nrec);
 
         ctype = cvarr.ctype;
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-            G_fatal_error(_("Column type (%s) not supported (did you mean 'label_column'?)"),
+            G_fatal_error(_("Column type (%s) not supported (did you mean "
+                            "'label_column'?)"),
                           db_sqltype_name(ctype));
 
         if (nrec < 0)
-            G_fatal_error(_("No records selected from table <%s>"),
-                          Fi->table);
+            G_fatal_error(_("No records selected from table <%s>"), Fi->table);
 
         G_debug(1, "%d records selected from table", nrec);
 
@@ -102,7 +99,8 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
             }
         }
         if (j) {
-            G_important_message(_("%d of %d records in column <%s> are empty and replaced with 0 (zero)"),
+            G_important_message(_("%d of %d records in column <%s> are empty "
+                                  "and replaced with 0 (zero)"),
                                 j, nrec, column);
         }
 
@@ -141,11 +139,13 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
 
     if (use != USE_Z && use != USE_D && (ftype & GV_AREA)) {
         nareas = sort_areas(&Map, Points, field, cat_list);
-        G_verbose_message(_("Number of areas selected from vector map <%s>: %d"),
-                          vector_map, nareas);
+        G_verbose_message(
+            _("Number of areas selected from vector map <%s>: %d"), vector_map,
+            nareas);
     }
     if (nareas > 0 && dense) {
-        G_warning(_("Area conversion and line densification are mutually exclusive, disabling line densification."));
+        G_warning(_("Area conversion and line densification are mutually "
+                    "exclusive, disabling line densification."));
         dense = 0;
     }
 
@@ -165,9 +165,10 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
         stat = 0;
 
         if ((use != USE_Z && use != USE_D) && nareas) {
-            if (do_areas
-                (&Map, Points, &cvarr, ctype, use, value, value_type) < 0) {
-                G_warning(_("Problem processing areas from vector map <%s>, continuing..."),
+            if (do_areas(&Map, Points, &cvarr, ctype, use, value, value_type) <
+                0) {
+                G_warning(_("Problem processing areas from vector map <%s>, "
+                            "continuing..."),
                           vector_map);
                 stat = -1;
                 break;
@@ -175,11 +176,11 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
         }
 
         if (nlines) {
-            if ((nlines =
-                 do_lines(&Map, Points, &cvarr, ctype, field, cat_list,
-                          use, value, value_type, ftype,
-                          &nplines_all, dense)) < 0) {
-                G_warning(_("Problem processing lines from vector map <%s>, continuing..."),
+            if ((nlines = do_lines(&Map, Points, &cvarr, ctype, field, cat_list,
+                                   use, value, value_type, ftype, &nplines_all,
+                                   dense)) < 0) {
+                G_warning(_("Problem processing lines from vector map <%s>, "
+                            "continuing..."),
                           vector_map);
                 stat = -1;
                 break;

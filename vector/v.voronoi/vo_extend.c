@@ -7,7 +7,7 @@
 /*-extend_line()  finds coordinates along the boundary of a window
  *                  that also lie on a specified line (ax+by=c). The
  *                  line can cross at least two boundaries---the line
- *                  that intersects the midpoint of s1 and s2 determines 
+ *                  that intersects the midpoint of s1 and s2 determines
  *                  which coordinates are placed in (c_x, c_y).
  *
  * The limits of the window are described by:
@@ -26,11 +26,11 @@
  *    returns: 0 on error, 1 otherwise
  */
 
-int extend_line(double s, double n, double w, double e,
-                double a, double b, double c, double x, double y,
-                double *c_x, double *c_y, int knownPointAtLeft)
+int extend_line(double s, double n, double w, double e, double a, double b,
+                double c, double x, double y, double *c_x, double *c_y,
+                int knownPointAtLeft)
 {
-    double nx, ny;              /* intersection coordinates */
+    double nx, ny; /* intersection coordinates */
 
     if (x >= w && x <= e && y >= s && y <= n) {
         /* horizontal line? */
@@ -50,8 +50,7 @@ int extend_line(double s, double n, double w, double e,
         /* south */
         nx = (c - b * (s - ycenter)) / a + xcenter;
         if (Vect_point_in_box(nx, s, 0.0, &Box) &&
-            ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
-        {
+            ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft))) {
             *c_x = nx;
             *c_y = s;
             return 1;
@@ -60,8 +59,7 @@ int extend_line(double s, double n, double w, double e,
         /* north */
         nx = (c - b * (n - ycenter)) / a + xcenter;
         if (Vect_point_in_box(nx, n, 0.0, &Box) &&
-            ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
-        {
+            ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft))) {
             *c_x = nx;
             *c_y = n;
             return 1;

@@ -30,7 +30,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_describe_table(dbString * table_name, dbTable ** table)
+int db__driver_describe_table(dbString *table_name, dbTable **table)
 {
     int i, nlayers;
     OGRLayerH hLayer = NULL;
@@ -43,9 +43,8 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     for (i = 0; i < nlayers; i++) {
         hLayer = OGR_DS_GetLayer(hDs, i);
         hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
-        if (G_strcasecmp
-            ((char *)OGR_FD_GetName(hFeatureDefn),
-             db_get_string(table_name)) == 0) {
+        if (G_strcasecmp((char *)OGR_FD_GetName(hFeatureDefn),
+                         db_get_string(table_name)) == 0) {
             break;
         }
         hLayer = NULL;
@@ -71,14 +70,14 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 /*!
    \brief Describe table
 
-   If c is not NULL cur->cols and cur->ncols is also set 
+   If c is not NULL cur->cols and cur->ncols is also set
    cursor may be null
 
    \param hLayer OGR layer
    \param[put] table pointer to dbTable
    \param c pointer to cursor
  */
-int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
+int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 {
     int i, ncols, kcols, col;
     dbColumn *column;
@@ -110,11 +109,11 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 #if GDAL_VERSION_NUM >= 2000000
             ogrType != OFTInteger64 &&
 #endif
-            ogrType != OFTReal &&
-            ogrType != OFTString && ogrType != OFTDate &&
+            ogrType != OFTReal && ogrType != OFTString && ogrType != OFTDate &&
             ogrType != OFTTime && ogrType != OFTDateTime) {
-            G_warning(_("OGR driver: column '%s', OGR type %d is not supported"),
-                      fieldName, ogrType);
+            G_warning(
+                _("OGR driver: column '%s', OGR type %d is not supported"),
+                fieldName, ogrType);
             cols[i] = 0;
         }
         else {
@@ -152,7 +151,7 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
         db_set_column_host_type(column, OFTInteger);
         db_set_column_sqltype(column, DB_SQL_TYPE_INTEGER);
         db_set_column_name(column, fidcol);
-        db_set_column_length(column, 11);       /* ??? */
+        db_set_column_length(column, 11); /* ??? */
         db_set_column_precision(column, 0);
 
         col = 1;
@@ -163,14 +162,14 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 
     for (i = 0; i < ncols; i++, col++) {
         int sqlType = DB_SQL_TYPE_UNKNOWN;
-        int size = 0, precision = 0 /* , scale */ ;
+        int size = 0, precision = 0 /* , scale */;
 
         hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, i);
         ogrType = OGR_Fld_GetType(hFieldDefn);
         fieldName = OGR_Fld_GetNameRef(hFieldDefn);
 
         if (!(cols[i])) {
-            continue;           /* unknown type */
+            continue; /* unknown type */
         }
 
         switch (ogrType) {
@@ -179,18 +178,20 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
         case OFTInteger64:
 #endif
             sqlType = DB_SQL_TYPE_INTEGER;
-            size = OGR_Fld_GetWidth(hFieldDefn);        /* OK ? */
+            size = OGR_Fld_GetWidth(hFieldDefn); /* OK ? */
             precision = 0;
 #if GDAL_VERSION_NUM >= 2000000
             if (ogrType == OFTInteger64)
-                G_warning(_("Column '%s' : type int8 (bigint) is stored as integer (4 bytes) "
-                           "some data may be damaged"), fieldName);
+                G_warning(_("Column '%s' : type int8 (bigint) is stored as "
+                            "integer (4 bytes) "
+                            "some data may be damaged"),
+                          fieldName);
 #endif
             break;
 
         case OFTReal:
             sqlType = DB_SQL_TYPE_DOUBLE_PRECISION;
-            size = OGR_Fld_GetWidth(hFieldDefn);        /* OK ? */
+            size = OGR_Fld_GetWidth(hFieldDefn); /* OK ? */
             precision = OGR_Fld_GetPrecision(hFieldDefn);
             break;
 
@@ -213,9 +214,10 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
             break;
         }
 
-        G_debug(3,
-                "   %d: field %d : ogrType = %d, name = %s, size=%d precision=%d",
-                i, col, ogrType, fieldName, size, precision);
+        G_debug(
+            3,
+            "   %d: field %d : ogrType = %d, name = %s, size=%d precision=%d",
+            i, col, ogrType, fieldName, size, precision);
 
         column = db_get_table_column(*table, col);
 
@@ -225,7 +227,7 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
         db_set_column_length(column, size);
         db_set_column_precision(column, precision);
 
-        /* TODO 
+        /* TODO
            scale = 0;
            db_set_column_scale (column, scale);
          */
@@ -239,7 +241,7 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
         /*
            db_set_column_select_priv_granted (column);
            db_set_column_update_priv_granted (column);
-           db_set_column_update_priv_not_granted (column); 
+           db_set_column_update_priv_not_granted (column);
          */
     }
 

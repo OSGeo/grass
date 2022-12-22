@@ -17,7 +17,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
+int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     PGresult *res;
     cursor *c;
@@ -51,8 +51,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     c->res = PQexec(pg_conn, str);
 
     if (!c->res || PQresultStatus(c->res) != PGRES_TUPLES_OK) {
-        db_d_append_error("%s\n%s\n%s",
-                          _("Unable to select:"),
+        db_d_append_error("%s\n%s\n%s", _("Unable to select:"),
                           db_get_string(sel), PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(c->res);

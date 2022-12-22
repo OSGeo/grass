@@ -1,12 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       v.to.rast
- * AUTHOR(S):    Original code: Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+ * AUTHOR(S):    Original code: Michael Shapiro, U.S. Army Construction
+ *                 Engineering Research Laboratory
  *               Stream directions: Jaro Hofierka and Helena Mitasova
  *               Radim Blazek <radim.blazek gmail.com> (GRASS 6 update)
- *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_b yahoo.com>, Markus Neteler <neteler itc.it>
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Markus Neteler <neteler itc.it>
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz (labelcol, cats, where options)
  * PURPOSE:      Converts vector map to raster map
@@ -72,10 +74,8 @@ int main(int argc, char *argv[])
     use_opt->options = "attr,cat,val,z,dir";
     use_opt->description = _("Source of raster values");
     desc = NULL;
-    G_asprintf(&desc,
-               "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
-               _("read values from attribute table"),
-               _("use category values"),
+    G_asprintf(&desc, "attr;%s;cat;%s;val;%s;z;%s;dir;%s",
+               _("read values from attribute table"), _("use category values"),
                _("use value specified by value option"),
                _("use z coordinate (points or contours only)"),
                _("line direction in degrees CCW from east (lines only)"));
@@ -95,8 +95,7 @@ int main(int argc, char *argv[])
 
     label_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     label_opt->key = "label_column";
-    label_opt->description =
-        _("Name of column used as raster category labels");
+    label_opt->description = _("Name of column used as raster category labels");
     label_opt->guisection = _("Attributes");
 
     val_opt = G_define_option();
@@ -131,22 +130,26 @@ int main(int argc, char *argv[])
     case 'a':
         use = USE_ATTR;
         if (!col->answer)
-            G_fatal_error(_("Column parameter missing (or use value parameter)"));
+            G_fatal_error(
+                _("Column parameter missing (or use value parameter)"));
         break;
     case 'c':
         use = USE_CAT;
         if (col->answer)
-            G_fatal_error(_("Column parameter cannot be combined with use of category values option"));
+            G_fatal_error(_("Column parameter cannot be combined with use of "
+                            "category values option"));
         break;
     case 'v':
         use = USE_VAL;
         if (col->answer || label_opt->answer || rgbcol_opt->answer)
-            G_fatal_error(_("Column parameter cannot be combined with use of value option"));
+            G_fatal_error(_("Column parameter cannot be combined with use of "
+                            "value option"));
         break;
     case 'z':
         use = USE_Z;
         if (col->answer || label_opt->answer || rgbcol_opt->answer)
-            G_fatal_error(_("Column parameter cannot be combined with use of z coordinate"));
+            G_fatal_error(_("Column parameter cannot be combined with use of z "
+                            "coordinate"));
         break;
     case 'd':
         use = USE_D;
@@ -162,8 +165,7 @@ int main(int argc, char *argv[])
     if (vect_to_rast(input->answer, output->answer, field_opt->answer,
                      col->answer, cache_mb, use, value, value_type,
                      rgbcol_opt->answer, label_opt->answer, type,
-                     where_opt->answer, cats_opt->answer,
-                     dense_flag->answer)) {
+                     where_opt->answer, cats_opt->answer, dense_flag->answer)) {
         exit(EXIT_FAILURE);
     }
 

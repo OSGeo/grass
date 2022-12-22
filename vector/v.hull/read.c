@@ -4,8 +4,8 @@
 
 #include "hull.h"
 
-int loadSiteCoordinates(struct Map_info *Map, struct Point **points,
-                        int region, struct Cell_head *window, int field,
+int loadSiteCoordinates(struct Map_info *Map, struct Point **points, int region,
+                        struct Cell_head *window, int field,
                         struct cat_list *cat_list)
 {
     int i, pointIdx;
@@ -36,17 +36,14 @@ int loadSiteCoordinates(struct Map_info *Map, struct Point **points,
                     sites->z[i]);
 
             if (region &&
-                !Vect_point_in_box(sites->x[i], sites->y[i], sites->z[i],
-                                   &box))
+                !Vect_point_in_box(sites->x[i], sites->y[i], sites->z[i], &box))
                 continue;
 
             G_debug(4, "Point in the box");
 
             if ((pointIdx % ALLOC_CHUNK) == 0)
-                *points = (struct Point *)G_realloc(*points,
-                                                    (pointIdx +
-                                                     ALLOC_CHUNK) *
-                                                    sizeof(struct Point));
+                *points = (struct Point *)G_realloc(
+                    *points, (pointIdx + ALLOC_CHUNK) * sizeof(struct Point));
 
             (*points)[pointIdx].x = sites->x[i];
             (*points)[pointIdx].y = sites->y[i];
@@ -56,9 +53,8 @@ int loadSiteCoordinates(struct Map_info *Map, struct Point **points,
     }
 
     if (pointIdx > 0)
-        *points = (struct Point *)G_realloc(*points,
-                                            (pointIdx +
-                                             1) * sizeof(struct Point));
+        *points = (struct Point *)G_realloc(*points, (pointIdx + 1) *
+                                                         sizeof(struct Point));
 
     return pointIdx;
 }

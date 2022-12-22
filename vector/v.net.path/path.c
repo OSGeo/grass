@@ -8,23 +8,22 @@
 #include <grass/glocale.h>
 
 /* Result code */
-#define SP_OK          0        /* Path found */
-#define SP_UNREACHABLE 1        /* Node is not reachable */
-#define SP_NOPOINT     2        /* Missing point of given category */
+#define SP_OK           0 /* Path found */
+#define SP_UNREACHABLE  1 /* Node is not reachable */
+#define SP_NOPOINT      2 /* Missing point of given category */
 
-#define INPUT_MODE_NODE  1
-#define INPUT_MODE_COOR  2
+#define INPUT_MODE_NODE 1
+#define INPUT_MODE_COOR 2
 
-typedef struct
-{                               /* category index */
-    int cat;                    /* line category */
-    int line;                   /* line number */
+typedef struct { /* category index */
+    int cat;     /* line category */
+    int line;    /* line number */
 } CIDX;
 
 int cmp(const void *, const void *);
 
-int path(struct Map_info *In, struct Map_info *Out, char *filename,
-         int nfield, double maxdist, int segments, int tucfield, int use_ttb)
+int path(struct Map_info *In, struct Map_info *Out, char *filename, int nfield,
+         double maxdist, int segments, int tucfield, int use_ttb)
 {
     FILE *in_file = NULL;
     int i, nlines, line, npoints, type, cat, id, fcat, tcat, fline, tline,
@@ -59,7 +58,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 
     /* Create category index for input points */
     npoints = Vect_get_num_primitives(In, GV_POINT);
-    Cidx = (CIDX *) G_malloc(npoints * sizeof(CIDX));
+    Cidx = (CIDX *)G_malloc(npoints * sizeof(CIDX));
 
     nlines = Vect_get_num_lines(In);
     count = 0;
@@ -98,8 +97,10 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
     db_set_error_handler_driver(driver);
 
     sprintf(buf,
-            "create table %s ( cat integer, id integer, fcat integer, tcat integer, "
-            "sp integer, cost double precision, fdist double precision, tdist double precision )",
+            "create table %s ( cat integer, id integer, fcat integer, tcat "
+            "integer, "
+            "sp integer, cost double precision, fdist double precision, tdist "
+            "double precision )",
             Fi->table);
 
     db_set_string(&sql, buf);
@@ -112,13 +113,14 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
     if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
         G_warning(_("Cannot create index"));
 
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
 
-    /* Read stdin, find shortest path, and write connecting line and new database record */
+    /* Read stdin, find shortest path, and write connecting line and new
+     * database record */
     cat = 0;
     formaterr = nopoint = unreachable = 0;
     while (1) {
@@ -137,9 +139,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 
         sp = SP_OK;
 
-        ret =
-            sscanf(buf, "%d %lf %lf %lf %lf %s", &id, &fx, &fy, &tx, &ty,
-                   dummy);
+        ret = sscanf(buf, "%d %lf %lf %lf %lf %s", &id, &fx, &fy, &tx, &ty,
+                     dummy);
         if (ret == 5) {
             input_mode = INPUT_MODE_COOR;
             if (fx == tx && fy == ty) {
@@ -157,9 +158,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
             input_mode = INPUT_MODE_NODE;
 
             /* From */
-            Citem =
-                (CIDX *) bsearch((void *)&fcat, Cidx, npoints, sizeof(CIDX),
-                                 cmp);
+            Citem = (CIDX *)bsearch((void *)&fcat, Cidx, npoints, sizeof(CIDX),
+                                    cmp);
             if (Citem == NULL) {
                 G_warning(_("No point with category [%d]"), fcat);
                 sp = SP_NOPOINT;
@@ -170,9 +170,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
             else {
                 fline = Citem->line;
                 type = Vect_read_line(In, Points, NULL, fline);
-                fnode =
-                    Vect_find_node(In, Points->x[0], Points->y[0],
-                                   Points->z[0], 0, 0);
+                fnode = Vect_find_node(In, Points->x[0], Points->y[0],
+                                       Points->z[0], 0, 0);
                 if (fnode == 0)
                     sp = SP_NOPOINT;
                 /* Vect_get_line_nodes(In, fline, &fnode, NULL); */
@@ -181,9 +180,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
                     fline, fnode);
 
             /* To */
-            Citem =
-                (CIDX *) bsearch((void *)&tcat, Cidx, npoints, sizeof(CIDX),
-                                 cmp);
+            Citem = (CIDX *)bsearch((void *)&tcat, Cidx, npoints, sizeof(CIDX),
+                                    cmp);
             if (Citem == NULL) {
                 G_warning(_("No point with category [%d]"), tcat);
                 sp = SP_NOPOINT;
@@ -194,9 +192,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
             else {
                 tline = Citem->line;
                 type = Vect_read_line(In, Points, NULL, tline);
-                tnode =
-                    Vect_find_node(In, Points->x[0], Points->y[0],
-                                   Points->z[0], 0, 0);
+                tnode = Vect_find_node(In, Points->x[0], Points->y[0],
+                                       Points->z[0], 0, 0);
                 if (tnode == 0)
                     sp = SP_NOPOINT;
                 /* Vect_get_line_nodes(In, tline, &tnode, NULL); */
@@ -215,14 +212,13 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 
         G_debug(3, "mode = %d", input_mode);
 
-        cat++;                  /* Output category */
+        cat++; /* Output category */
         cost = fdist = tdist = 0;
 
         if (input_mode == INPUT_MODE_NODE) {
             if (use_ttb)
-                ret =
-                    Vect_net_ttb_shortest_path(In, fnode, 0, tnode, 0,
-                                               tucfield, AList, &cost);
+                ret = Vect_net_ttb_shortest_path(In, fnode, 0, tnode, 0,
+                                                 tucfield, AList, &cost);
             else
                 ret = Vect_net_shortest_path(In, fnode, tnode, AList, &cost);
 
@@ -230,7 +226,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
                 sp = SP_UNREACHABLE;
                 unreachable++;
                 G_warning(_("Point with category [%d] is not reachable "
-                            "from point with category [%d]"), tcat, fcat);
+                            "from point with category [%d]"),
+                          tcat, fcat);
             }
             else {
                 /* Write new line connecting 'from' and 'to' */
@@ -274,29 +271,25 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
                 }
             }
         }
-        else {                  /* INPUT_MODE_COOR */
+        else { /* INPUT_MODE_COOR */
             fcat = tcat = 0;
 
             if (use_ttb)
-                ret =
-                    Vect_net_ttb_shortest_path_coor(In, fx, fy, 0.0, tx, ty,
-                                                    0.0, maxdist, maxdist,
-                                                    tucfield, &cost,
-                                                    OPoints, AList, NULL,
-                                                    FPoints, TPoints, &fdist,
-                                                    &tdist);
+                ret = Vect_net_ttb_shortest_path_coor(
+                    In, fx, fy, 0.0, tx, ty, 0.0, maxdist, maxdist, tucfield,
+                    &cost, OPoints, AList, NULL, FPoints, TPoints, &fdist,
+                    &tdist);
             else
-                ret =
-                    Vect_net_shortest_path_coor(In, fx, fy, 0.0, tx, ty, 0.0,
-                                                maxdist, maxdist, &cost,
-                                                OPoints, AList, NULL, FPoints,
-                                                TPoints, &fdist, &tdist);
+                ret = Vect_net_shortest_path_coor(
+                    In, fx, fy, 0.0, tx, ty, 0.0, maxdist, maxdist, &cost,
+                    OPoints, AList, NULL, FPoints, TPoints, &fdist, &tdist);
 
             if (ret == 0) {
                 sp = SP_UNREACHABLE;
                 unreachable++;
                 G_warning(_("Point %f,%f is not reachable from "
-                            "point %f,%f"), tx, ty, fx, fy);
+                            "point %f,%f"),
+                          tx, ty, fx, fy);
             }
             else {
                 Vect_reset_cats(Cats);
@@ -326,7 +319,6 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
                     /* From last node to point */
                     if (TPoints->n_points > 0)
                         Vect_write_line(Out, GV_LINE, TPoints, Cats);
-
                 }
                 else {
                     if (OPoints->n_points > 0)
@@ -335,8 +327,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
             }
         }
 
-        sprintf(buf,
-                "insert into %s values ( %d, %d, %d, %d, %d, %f, %f, %f)",
+        sprintf(buf, "insert into %s values ( %d, %d, %d, %d, %d, %f, %f, %f)",
                 Fi->table, cat, id, fcat, tcat, sp, cost, fdist, tdist);
         db_set_string(&sql, buf);
         G_debug(3, "%s", db_get_string(&sql));
@@ -365,15 +356,16 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
         G_warning(_("[%d] points of given category missing"), nopoint);
     if (unreachable)
         G_warning(_("%d destination(s) unreachable (including points out "
-                    "of threshold)"), unreachable);
+                    "of threshold)"),
+                  unreachable);
 
     return 1;
 }
 
 int cmp(const void *pa, const void *pb)
 {
-    CIDX *p1 = (CIDX *) pa;
-    CIDX *p2 = (CIDX *) pb;
+    CIDX *p1 = (CIDX *)pa;
+    CIDX *p2 = (CIDX *)pb;
 
     if (p1->cat < p2->cat)
         return -1;

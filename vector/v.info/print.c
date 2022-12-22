@@ -7,12 +7,12 @@
 
 #include "local_proto.h"
 
-#define printline(x) G_faprintf (stdout, " | %-74.74s |\n", x)
-#define divider(x) \
-        fprintf (stdout, " %c", x); \
-        for (i = 0; i < 76; i++ ) \
-                fprintf ( stdout, "-" ); \
-        fprintf (stdout, "%c\n", x)
+#define printline(x) G_faprintf(stdout, " | %-74.74s |\n", x)
+#define divider(x)             \
+    fprintf(stdout, " %c", x); \
+    for (i = 0; i < 76; i++)   \
+        fprintf(stdout, "-");  \
+    fprintf(stdout, "%c\n", x)
 
 /* cloned from lib/gis/wind_format.c */
 void format_double(double value, char *buf)
@@ -77,7 +77,6 @@ void print_topo(const struct Map_info *Map)
         nprimitives += Vect_get_num_primitives(Map, GV_KERNEL);
     }
 
-
     fprintf(stdout, "nodes=%d\n", Vect_get_num_nodes(Map));
     fflush(stdout);
 
@@ -138,11 +137,13 @@ void print_columns(const struct Map_info *Map, const char *input_opt,
     num_dblinks = Vect_get_num_dblinks(Map);
 
     if (num_dblinks <= 0) {
-        G_fatal_error(_("Database connection for map <%s> is not defined in DB file"),
-                      input_opt);
+        G_fatal_error(
+            _("Database connection for map <%s> is not defined in DB file"),
+            input_opt);
     }
 
-    G_message(_("Displaying column types/names for database connection of layer <%s>:"),
+    G_message(_("Displaying column types/names for database connection of "
+                "layer <%s>:"),
               field_opt);
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL)
@@ -164,9 +165,8 @@ void print_columns(const struct Map_info *Map, const char *input_opt,
     ncols = db_get_table_number_of_columns(table);
     for (col = 0; col < ncols; col++)
         fprintf(stdout, "%s|%s\n",
-                db_sqltype_name(db_get_column_sqltype
-                                (db_get_table_column
-                                 (table, col))),
+                db_sqltype_name(
+                    db_get_column_sqltype(db_get_table_column(table, col))),
                 db_get_column_name(db_get_table_column(table, col)));
 
     db_close_database(driver);
@@ -215,13 +215,11 @@ void print_shell(const struct Map_info *Map, const char *field_opt)
     }
 
     if (map_type == GV_FORMAT_OGR || map_type == GV_FORMAT_OGR_DIRECT) {
-        fprintf(stdout, "format=%s,%s\n",
-                Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
+        fprintf(stdout, "format=%s,%s\n", Vect_maptype_info(Map),
+                Vect_get_finfo_format_info(Map));
         fprintf(stdout, "ogr_layer=%s\n", Vect_get_finfo_layer_name(Map));
         fprintf(stdout, "ogr_dsn=%s\n", Vect_get_finfo_dsn_name(Map));
-        fprintf(stdout, "feature_type=%s\n",
-                Vect_get_finfo_geometry_type(Map));
-
+        fprintf(stdout, "feature_type=%s\n", Vect_get_finfo_geometry_type(Map));
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
         int topo_format;
@@ -230,16 +228,14 @@ void print_shell(const struct Map_info *Map, const char *field_opt)
 
         finfo = Vect_get_finfo(Map);
 
-        fprintf(stdout, "format=%s,%s\n",
-                Vect_maptype_info(Map), Vect_get_finfo_format_info(Map));
+        fprintf(stdout, "format=%s,%s\n", Vect_maptype_info(Map),
+                Vect_get_finfo_format_info(Map));
         fprintf(stdout, "pg_table=%s\n", Vect_get_finfo_layer_name(Map));
         fprintf(stdout, "pg_dbname=%s\n", Vect_get_finfo_dsn_name(Map));
         fprintf(stdout, "geometry_column=%s\n", finfo->pg.geom_column);
-        fprintf(stdout, "feature_type=%s\n",
-                Vect_get_finfo_geometry_type(Map));
-        topo_format =
-            Vect_get_finfo_topology_info(Map, &toposchema_name,
-                                         &topogeom_column, NULL);
+        fprintf(stdout, "feature_type=%s\n", Vect_get_finfo_geometry_type(Map));
+        topo_format = Vect_get_finfo_topology_info(Map, &toposchema_name,
+                                                   &topogeom_column, NULL);
         if (topo_format == GV_TOPO_POSTGIS) {
             fprintf(stdout, "pg_topo_schema=%s\n", toposchema_name);
             fprintf(stdout, "pg_topo_column=%s\n", topogeom_column);
@@ -317,8 +313,7 @@ void print_info(const struct Map_info *Map)
 
     G_saprintf(line, "%-17s%s", _("Name of creator:"), Vect_get_person(Map));
     printline(line);
-    G_saprintf(line, "%-17s%s", _("Organization:"),
-               Vect_get_organization(Map));
+    G_saprintf(line, "%-17s%s", _("Organization:"), Vect_get_organization(Map));
     printline(line);
     G_saprintf(line, "%-17s%s", _("Source date:"), Vect_get_map_date(Map));
     printline(line);
@@ -381,20 +376,15 @@ void print_info(const struct Map_info *Map)
                    Vect_get_finfo_geometry_type(Map));
         printline(line);
 
-
-
-        topo_format = Vect_get_finfo_topology_info(Map,
-                                                   &toposchema_name,
-                                                   &topogeom_column,
-                                                   &topo_geo_only);
+        topo_format = Vect_get_finfo_topology_info(
+            Map, &toposchema_name, &topogeom_column, &topo_geo_only);
         if (topo_format == GV_TOPO_POSTGIS) {
             G_saprintf(line, "%-17s%s (%s %s%s)", _("Topology:"), "PostGIS",
                        _("schema:"), toposchema_name,
                        topo_geo_only ? ", topo-geo-only: yes" : "");
             printline(line);
 
-            G_saprintf(line, "%-17s%s", _("Topology column:"),
-                       topogeom_column);
+            G_saprintf(line, "%-17s%s", _("Topology column:"), topogeom_column);
         }
         else
             G_saprintf(line, "%-17s%s", _("Topology:"),
@@ -407,62 +397,52 @@ void print_info(const struct Map_info *Map)
         printline(line);
     }
 
-
     divider('|');
 
-    G_saprintf(line, "  %s: %s (%s: %i)",
-               _("Type of map"), _("vector"), _("level"), Vect_level(Map));
+    G_saprintf(line, "  %s: %s (%s: %i)", _("Type of map"), _("vector"),
+               _("level"), Vect_level(Map));
     printline(line);
 
     if (Vect_level(Map) > 0) {
         printline("");
-        G_saprintf(line,
-                   "  %-24s%-9d       %-22s%-9d",
-                   _("Number of points:"),
+        G_saprintf(line, "  %-24s%-9d       %-22s%-9d", _("Number of points:"),
                    Vect_get_num_primitives(Map, GV_POINT),
                    _("Number of centroids:"),
                    Vect_get_num_primitives(Map, GV_CENTROID));
         printline(line);
-        G_saprintf(line,
-                   "  %-24s%-9d       %-22s%-9d",
-                   _("Number of lines:"),
+        G_saprintf(line, "  %-24s%-9d       %-22s%-9d", _("Number of lines:"),
                    Vect_get_num_primitives(Map, GV_LINE),
                    _("Number of boundaries:"),
                    Vect_get_num_primitives(Map, GV_BOUNDARY));
         printline(line);
-        G_saprintf(line,
-                   "  %-24s%-9d       %-22s%-9d",
-                   _("Number of areas:"),
-                   Vect_get_num_areas(Map),
-                   _("Number of islands:"), Vect_get_num_islands(Map));
+        G_saprintf(line, "  %-24s%-9d       %-22s%-9d", _("Number of areas:"),
+                   Vect_get_num_areas(Map), _("Number of islands:"),
+                   Vect_get_num_islands(Map));
         printline(line);
         if (Vect_is_3d(Map)) {
-            G_saprintf(line,
-                       "  %-24s%-9d       %-22s%-9d",
-                       _("Number of faces:"),
-                       Vect_get_num_primitives(Map, GV_FACE),
-                       _("Number of kernels:"),
-                       Vect_get_num_primitives(Map, GV_KERNEL));
+            G_saprintf(
+                line, "  %-24s%-9d       %-22s%-9d", _("Number of faces:"),
+                Vect_get_num_primitives(Map, GV_FACE), _("Number of kernels:"),
+                Vect_get_num_primitives(Map, GV_KERNEL));
             printline(line);
-            G_saprintf(line,
-                       "  %-24s%-9d       %-22s%-9d",
-                       _("Number of volumes:"),
-                       Vect_get_num_volumes(Map),
+            G_saprintf(line, "  %-24s%-9d       %-22s%-9d",
+                       _("Number of volumes:"), Vect_get_num_volumes(Map),
                        _("Number of holes:"), Vect_get_num_holes(Map));
             printline(line);
         }
         printline("");
 
-        G_saprintf(line, "  %-24s%s",
-                   _("Map is 3D:"), Vect_is_3d(Map) ? _("Yes") : _("No"));
+        G_saprintf(line, "  %-24s%s", _("Map is 3D:"),
+                   Vect_is_3d(Map) ? _("Yes") : _("No"));
         printline(line);
-        G_saprintf(line, "  %-24s%-9d",
-                   _("Number of dblinks:"), Vect_get_num_dblinks(Map));
+        G_saprintf(line, "  %-24s%-9d", _("Number of dblinks:"),
+                   Vect_get_num_dblinks(Map));
         printline(line);
     }
 
     printline("");
-    /* this differs from r.info in that proj info IS taken from the map here, not the location settings */
+    /* this differs from r.info in that proj info IS taken from the map here,
+     * not the location settings */
     /* Vect_get_proj_name() and _zone() are typically unset?! */
     if (G_projection() == PROJECTION_UTM) {
         int utm_zone;
@@ -471,13 +451,11 @@ void print_info(const struct Map_info *Map)
         utm_zone = Vect_get_zone(Map);
         utm_zone_str = format_zone(utm_zone);
 
-        G_saprintf(line, "  %s: %s (%s %s)",
-                   _("Projection"), Vect_get_proj_name(Map),
-                   _("zone"), utm_zone_str);
+        G_saprintf(line, "  %s: %s (%s %s)", _("Projection"),
+                   Vect_get_proj_name(Map), _("zone"), utm_zone_str);
     }
     else
-        G_saprintf(line, "  %s: %s",
-                   _("Projection"), Vect_get_proj_name(Map));
+        G_saprintf(line, "  %s: %s", _("Projection"), Vect_get_proj_name(Map));
 
     printline(line);
     printline("");
@@ -497,8 +475,8 @@ void print_info(const struct Map_info *Map)
     if (Vect_is_3d(Map)) {
         format_double(box.B, tmp1);
         format_double(box.T, tmp2);
-        sprintf(line, "              %c: %17s    %c: %17s",
-                'B', tmp1, 'T', tmp2);
+        sprintf(line, "              %c: %17s    %c: %17s", 'B', tmp1, 'T',
+                tmp2);
         printline(line);
     }
     printline("");

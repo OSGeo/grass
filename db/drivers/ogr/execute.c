@@ -25,7 +25,7 @@
 static int parse_sql_update(const char *, char **, column_info **, int *,
                             char **);
 
-int db__driver_execute_immediate(dbString * sql)
+int db__driver_execute_immediate(dbString *sql)
 {
     char *where, *table;
     int res, ncols, i;
@@ -77,9 +77,8 @@ int db__driver_execute_immediate(dbString * sql)
         hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, cols[i].index);
         cols[i].type = OGR_Fld_GetType(hFieldDefn);
 
-        G_debug(3, "\t\tcol=%s, val=%s, idx=%d, type=%d, qidx=%d",
-                cols[i].name, cols[i].value, cols[i].index, cols[i].type,
-                cols[i].qindex);
+        G_debug(3, "\t\tcol=%s, val=%s, idx=%d, type=%d, qidx=%d", cols[i].name,
+                cols[i].value, cols[i].index, cols[i].type, cols[i].qindex);
     }
 
     /* update features */
@@ -102,7 +101,8 @@ int db__driver_execute_immediate(dbString * sql)
 #if GDAL_VERSION_NUM >= 2000000
                      cols[i].type != OFTInteger64 ||
 #endif
-                     cols[i].type != OFTReal) && *(cols[i].value) == '\'') {
+                     cols[i].type != OFTReal) &&
+                    *(cols[i].value) == '\'') {
                     value = G_strchg(cols[i].value, '\'', ' ');
                     G_strip(value);
                 }
@@ -128,7 +128,7 @@ int db__driver_execute_immediate(dbString * sql)
     return DB_OK;
 }
 
-int parse_sql_update(const char *sql, char **table, column_info ** cols,
+int parse_sql_update(const char *sql, char **table, column_info **cols,
                      int *ncols, char **where)
 {
     int nprefix, n;
@@ -142,7 +142,7 @@ int parse_sql_update(const char *sql, char **table, column_info ** cols,
     if (G_strncasecmp(sql, prefix, nprefix) != 0)
         return 1;
 
-    p = (char *)sql + nprefix;  /* skip 'UPDATE' */
+    p = (char *)sql + nprefix; /* skip 'UPDATE' */
     if (*p != ' ')
         return 1;
     p++;
@@ -163,7 +163,7 @@ int parse_sql_update(const char *sql, char **table, column_info ** cols,
     if (G_strncasecmp(p, "SET", 3) != 0)
         return 1;
 
-    p += 3;                     /* skip 'SET' */
+    p += 3; /* skip 'SET' */
 
     if (*p != ' ')
         return 1;
@@ -187,7 +187,7 @@ int parse_sql_update(const char *sql, char **table, column_info ** cols,
 
     token = G_tokenize2(c, ",", "'");
     *ncols = G_number_of_tokens(token);
-    *cols = (column_info *) G_malloc(sizeof(column_info) * (*ncols));
+    *cols = (column_info *)G_malloc(sizeof(column_info) * (*ncols));
 
     for (n = 0; n < (*ncols); n++) {
         G_chop(token[n]);

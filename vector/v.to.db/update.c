@@ -27,15 +27,18 @@ int update(struct Map_info *Map)
     /* layer to find table to read from */
     qFi = Vect_get_field(Map, options.qfield);
     if (options.option == O_QUERY && qFi == NULL)
-        G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
+        G_fatal_error(_("Database connection not defined for layer %d. Use "
+                        "v.db.connect first."),
                       options.qfield);
     /* layer to find table to write to */
     if ((Fi = Vect_get_field(Map, options.field)) == NULL)
-        G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
+        G_fatal_error(_("Database connection not defined for layer %d. Use "
+                        "v.db.connect first."),
                       options.field);
     if (qFi) {
         G_debug(3,
-                "Reading from map <%s>, query layer %d (table <%s>): updating table <%s>, column <%s>",
+                "Reading from map <%s>, query layer %d (table <%s>): updating "
+                "table <%s>, column <%s>",
                 options.name, options.qfield, qFi->table, Fi->table, Fi->key);
     }
     else {
@@ -113,10 +116,11 @@ int update(struct Map_info *Map)
 
         case O_BBOX:
             sprintf(buf2,
-                    "%s %s = %.15g, %s = %.15g, %s = %.15g, %s = %.15g where %s = %d",
+                    "%s %s = %.15g, %s = %.15g, %s = %.15g, %s = %.15g where "
+                    "%s = %d",
                     buf1, options.col[0], Values[i].d1, options.col[1],
-                    Values[i].d2, options.col[2], Values[i].d3,
-                    options.col[3], Values[i].d4, Fi->key, Values[i].cat);
+                    Values[i].d2, options.col[2], Values[i].d3, options.col[3],
+                    Values[i].d4, Fi->key, Values[i].cat);
             break;
 
         case O_COMPACT:
@@ -128,17 +132,17 @@ int update(struct Map_info *Map)
             break;
 
         case O_FD:
-            /* 2.0 * log(perimeter) / log(area) 
+            /* 2.0 * log(perimeter) / log(area)
              * this is neither
              *   log(perimeter) / log(perimeter of equivalent circle)
              *   perimeter of equivalent circle: 2 * sqrt(M_PI * area)
              * nor
              *   log(area of equivalent circle) / log(area)
              *   area of equivalent circle: (perimeter / (2 * sqrt(M_PI))^2
-             * 
-             * avoid division by zero: 
+             *
+             * avoid division by zero:
              * 2.0 * log(1 + perimeter) / log(1 + area) */
-            if (Values[i].d1 == 1)      /* log(1) == 0 */
+            if (Values[i].d1 == 1) /* log(1) == 0 */
                 Values[i].d1 += 0.000001;
             Values[i].d1 = 2.0 * log(Values[i].d2) / log(Values[i].d1);
             sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
@@ -149,7 +153,8 @@ int update(struct Map_info *Map)
         case O_START:
         case O_END:
             if (Values[i].count1 > 1) {
-                G_warning(_("More elements of category %d, nothing loaded to database"),
+                G_warning(_("More elements of category %d, nothing loaded to "
+                            "database"),
                           Values[i].cat);
                 vstat.dupl++;
                 continue;
@@ -165,8 +170,8 @@ int update(struct Map_info *Map)
                         Values[i].cat);
             }
             else {
-                sprintf(buf2, "%s %s = %.15g, %s = %.15g  where %s = %d",
-                        buf1, options.col[0], Values[i].d1, options.col[1],
+                sprintf(buf2, "%s %s = %.15g, %s = %.15g  where %s = %d", buf1,
+                        options.col[0], Values[i].d1, options.col[1],
                         Values[i].d2, Fi->key, Values[i].cat);
             }
             break;
@@ -176,12 +181,12 @@ int update(struct Map_info *Map)
                 if (Values[i].i1 >= 0)
                     sprintf(left, "%d", Values[i].i1);
                 else
-                    sprintf(left, "-1");        /* NULL, no area/cat */
+                    sprintf(left, "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count1 > 1) {
                 sprintf(left, "null");
             }
-            else {              /* Values[i].count1 == 0 */
+            else { /* Values[i].count1 == 0 */
                 /* It can be OK if the category is assigned to an element
                    type which is not GV_BOUNDARY */
                 /* -> TODO: print only if there is boundary with that cat */
@@ -192,12 +197,12 @@ int update(struct Map_info *Map)
                 if (Values[i].i2 >= 0)
                     sprintf(right, "%d", Values[i].i2);
                 else
-                    sprintf(right, "-1");       /* NULL, no area/cat */
+                    sprintf(right, "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count2 > 1) {
                 sprintf(right, "null");
             }
-            else {              /* Values[i].count1 == 0 */
+            else { /* Values[i].count1 == 0 */
                 sprintf(right, "null");
             }
 
@@ -229,8 +234,8 @@ int update(struct Map_info *Map)
                             db_get_string(&strval), Fi->key, Values[i].cat);
                     break;
                 case (DB_C_TYPE_DATETIME):
-                    sprintf(buf2, "%s '%s' where %s = %d", buf1,
-                            Values[i].str1, Fi->key, Values[i].cat);
+                    sprintf(buf2, "%s '%s' where %s = %d", buf1, Values[i].str1,
+                            Fi->key, Values[i].cat);
                     break;
                 }
             }
@@ -240,16 +245,15 @@ int update(struct Map_info *Map)
         db_set_string(&stmt, buf2);
 
         /* category exist in DB table ? */
-        cex =
-            (int *)bsearch((void *)&fcat, catexst, vstat.select, sizeof(int),
-                           srch);
+        cex = (int *)bsearch((void *)&fcat, catexst, vstat.select, sizeof(int),
+                             srch);
 
         if (options.option == O_CAT) {
-            if (cex == NULL) {  /* cat does not exist in DB */
+            if (cex == NULL) { /* cat does not exist in DB */
                 upd = 1;
                 vstat.notexist++;
             }
-            else {              /* cat exists in DB */
+            else { /* cat exists in DB */
                 G_warning(_("Record (cat %d) already exists (not inserted)"),
                           fcat);
                 upd = 0;
@@ -257,13 +261,13 @@ int update(struct Map_info *Map)
             }
         }
         else {
-            if (cex == NULL) {  /* cat does not exist in DB */
+            if (cex == NULL) { /* cat does not exist in DB */
                 G_warning(_("Record (cat %d) does not exist (not updated)"),
                           fcat);
                 upd = 0;
                 vstat.notexist++;
             }
-            else {              /* cat exists in DB */
+            else { /* cat exists in DB */
                 upd = 1;
                 vstat.exist++;
             }

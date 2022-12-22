@@ -41,4 +41,4 @@ int zufalli(int *seed)
         /* L1: */
     }
     return 0;
-}                               /* zufalli_ */
+} /* zufalli_ */

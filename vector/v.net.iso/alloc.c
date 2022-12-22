@@ -8,8 +8,8 @@
 #include <grass/glocale.h>
 #include "alloc.h"
 
-int alloc_from_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
-                               CENTER * Centers, int ncenters, int tucfield)
+int alloc_from_centers_loop_tt(struct Map_info *Map, NODE *Nodes,
+                               CENTER *Centers, int ncenters, int tucfield)
 {
     int center, line, nlines, i;
     int node1;
@@ -25,7 +25,7 @@ int alloc_from_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
     nlines = Vect_get_num_lines(Map);
 
     for (i = 2; i <= (nlines * 2 + 2); i++) {
-        Nodes[i].center = -1;   /* NOTE: first two items of Nodes are not used */
+        Nodes[i].center = -1; /* NOTE: first two items of Nodes are not used */
         Nodes[i].cost = -1;
         Nodes[i].edge = 0;
     }
@@ -53,15 +53,15 @@ int alloc_from_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
                 if (i == 1)
                     cat *= -1;
 
-                ret =
-                    Vect_net_ttb_shortest_path(Map, node1, 0, cat, 1,
-                                               tucfield, NULL, &cost);
+                ret = Vect_net_ttb_shortest_path(Map, node1, 0, cat, 1,
+                                                 tucfield, NULL, &cost);
                 if (ret == -1) {
                     continue;
-                }               /* node unreachable */
+                } /* node unreachable */
 
-                /* We must add center node costs (not calculated by Vect_net_shortest_path() ), but
-                 *  only if center and node are not identical, because at the end node cost is add later */
+                /* We must add center node costs (not calculated by
+                 * Vect_net_shortest_path() ), but only if center and node are
+                 * not identical, because at the end node cost is add later */
                 if (ret != 1)
                     cost += n1cost;
 
@@ -85,8 +85,8 @@ int alloc_from_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
     return 0;
 }
 
-int alloc_to_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
-                             CENTER * Centers, int ncenters, int tucfield)
+int alloc_to_centers_loop_tt(struct Map_info *Map, NODE *Nodes, CENTER *Centers,
+                             int ncenters, int tucfield)
 {
     int center, line, nlines, i;
     int node1;
@@ -102,7 +102,7 @@ int alloc_to_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
     nlines = Vect_get_num_lines(Map);
 
     for (i = 2; i <= (nlines * 2 + 2); i++) {
-        Nodes[i].center = -1;   /* NOTE: first two items of Nodes are not used */
+        Nodes[i].center = -1; /* NOTE: first two items of Nodes are not used */
         Nodes[i].cost = -1;
         Nodes[i].edge = 0;
     }
@@ -130,15 +130,15 @@ int alloc_to_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
                 if (i == 1)
                     cat *= -1;
 
-                ret =
-                    Vect_net_ttb_shortest_path(Map, cat, 1, node1, 0,
-                                               tucfield, NULL, &cost);
+                ret = Vect_net_ttb_shortest_path(Map, cat, 1, node1, 0,
+                                                 tucfield, NULL, &cost);
                 if (ret == -1) {
                     continue;
-                }               /* node unreachable */
+                } /* node unreachable */
 
-                /* We must add center node costs (not calculated by Vect_net_shortest_path() ), but
-                 *  only if center and node are not identical, because at the end node cost is add later */
+                /* We must add center node costs (not calculated by
+                 * Vect_net_shortest_path() ), but only if center and node are
+                 * not identical, because at the end node cost is add later */
                 if (ret != 1)
                     cost += n1cost;
 
@@ -162,7 +162,7 @@ int alloc_to_centers_loop_tt(struct Map_info *Map, NODE * Nodes,
     return 0;
 }
 
-int alloc_from_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
+int alloc_from_centers(dglGraph_s *graph, NODE *Nodes, CENTER *Centers,
                        int ncenters)
 {
     int i, nnodes;
@@ -189,8 +189,8 @@ int alloc_from_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
         int v = Centers[i].node;
 
         if (Nodes[v].cost == 0)
-            continue;           /* ignore duplicates */
-        Nodes[v].cost = 0;      /* make sure all centers are processed first */
+            continue;      /* ignore duplicates */
+        Nodes[v].cost = 0; /* make sure all centers are processed first */
         Nodes[v].center = i;
         dglHeapData_u heap_data;
 
@@ -222,8 +222,7 @@ int alloc_from_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
                 continue;
         }
 
-        dglEdgeset_T_Initialize(&et, graph,
-                                dglNodeGet_OutEdgeset(graph, node));
+        dglEdgeset_T_Initialize(&et, graph, dglNodeGet_OutEdgeset(graph, node));
 
         for (edge = dglEdgeset_T_First(&et); edge;
              edge = dglEdgeset_T_Next(&et)) {
@@ -248,7 +247,7 @@ int alloc_from_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
     return 0;
 }
 
-int alloc_to_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
+int alloc_to_centers(dglGraph_s *graph, NODE *Nodes, CENTER *Centers,
                      int ncenters)
 {
     int i, nnodes;
@@ -258,8 +257,8 @@ int alloc_to_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
     dglInt32_t ncost;
 
     if (graph->Version < 2) {
-        G_warning
-            ("Directed graph must be version 2 or 3 for distances to centers");
+        G_warning(
+            "Directed graph must be version 2 or 3 for distances to centers");
         return -1;
     }
 
@@ -281,8 +280,8 @@ int alloc_to_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
         int v = Centers[i].node;
 
         if (Nodes[v].cost == 0)
-            continue;           /* ignore duplicates */
-        Nodes[v].cost = 0;      /* make sure all centers are processed first */
+            continue;      /* ignore duplicates */
+        Nodes[v].cost = 0; /* make sure all centers are processed first */
         Nodes[v].center = i;
         dglHeapData_u heap_data;
 
@@ -314,8 +313,7 @@ int alloc_to_centers(dglGraph_s * graph, NODE * Nodes, CENTER * Centers,
                 continue;
         }
 
-        dglEdgeset_T_Initialize(&et, graph,
-                                dglNodeGet_InEdgeset(graph, node));
+        dglEdgeset_T_Initialize(&et, graph, dglNodeGet_InEdgeset(graph, node));
 
         for (edge = dglEdgeset_T_First(&et); edge;
              edge = dglEdgeset_T_Next(&et)) {

@@ -14,7 +14,7 @@ void scan_cats(const char *name, const char *layer, int *cmin, int *cmax)
 
     *cmin = *cmax = -1;
 
-    Vect_set_open_level(1);     /* no topology required */
+    Vect_set_open_level(1); /* no topology required */
     if (Vect_open_old2(&Map, name, "", layer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), name);
 
@@ -30,7 +30,7 @@ void scan_cats(const char *name, const char *layer, int *cmin, int *cmax)
         if (ltype == -1)
             G_fatal_error(_("Unable to read vector map"));
         if (ltype == -2)
-            break;              /* EOF */
+            break; /* EOF */
 
         scan_layer(ilayer, Cats, &lmin, &lmax);
 

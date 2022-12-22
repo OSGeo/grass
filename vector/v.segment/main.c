@@ -1,15 +1,15 @@
-
 /***************************************************************
  *
  * MODULE:       v.segment
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Hamish Bowman (offset bits)
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Reversed & percent offsets by Huidae Cho <grass4u gmail.com>
- *               
- * PURPOSE:      Generate segments or points from input map and segments read from stdin 
- *               
+ *
+ * PURPOSE:      Generate segments or points from input map and segments read
+ *from stdin
+ *
  * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -28,11 +28,11 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-int read_point_input(char *buf, char *stype, int *id, int *lcat,
-                     double *offset, double *side_offset, int *rev, int *pct);
-int read_line_input(char *buf, char *stype, int *id, int *lcat,
-                    double *offset1, double *offset2, double *side_offset,
-                    int *rev1, int *pct1, int *rev2, int *pct2);
+int read_point_input(char *buf, char *stype, int *id, int *lcat, double *offset,
+                     double *side_offset, int *rev, int *pct);
+int read_line_input(char *buf, char *stype, int *id, int *lcat, double *offset1,
+                    double *offset2, double *side_offset, int *rev1, int *pct1,
+                    int *rev2, int *pct2);
 int find_line(struct Map_info *Map, int lfield, int cat);
 void offset_pt_90(double *, double *, double, double);
 
@@ -83,15 +83,13 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     LCats = Vect_new_cats_struct();
     SCats = Vect_new_cats_struct();
     LPoints = Vect_new_line_struct();
     SPoints = Vect_new_line_struct();
     PlPoints = Vect_new_line_struct();
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     if (file_opt->answer && strcmp(file_opt->answer, "-") != 0) {
         /* open input file */
@@ -151,7 +149,6 @@ int main(int argc, char **argv)
             G_debug(2, "point: %d %d %s%f%s %f", id, lcat, rev1 ? "-" : "",
                     offset1, pct1 ? "%" : "", side_offset);
 
-
             /* OK, write point */
             line = find_line(&In, lfield, lcat);
             if (line == 0) {
@@ -167,12 +164,12 @@ int main(int argc, char **argv)
             if (rev1)
                 offset1 = len - offset1;
 
-            ret = Vect_point_on_line(LPoints, offset1, &x, &y, &z, &angle,
-                                     NULL);
+            ret =
+                Vect_point_on_line(LPoints, offset1, &x, &y, &z, &angle, NULL);
             if (ret == 0) {
                 G_warning(_("Unable to get point on line: cat = %d offset = %f "
-                           "(line length = %.15g)\n%s"), lcat, offset1, len,
-                          buf);
+                            "(line length = %.15g)\n%s"),
+                          lcat, offset1, len, buf);
                 break;
             }
 
@@ -193,8 +190,8 @@ int main(int argc, char **argv)
             }
             lines_read++;
             G_debug(2, "line: %d %d %s%f%s %s%f%s %f", id, lcat,
-                    rev1 ? "-" : "", offset1, pct1 ? "%" : "",
-                    rev2 ? "-" : "", offset2, pct2 ? "%" : "", side_offset);
+                    rev1 ? "-" : "", offset1, pct1 ? "%" : "", rev2 ? "-" : "",
+                    offset2, pct2 ? "%" : "", side_offset);
 
             line = find_line(&In, lfield, lcat);
             if (line == 0) {
@@ -238,9 +235,8 @@ int main(int argc, char **argv)
             Vect_cat_set(SCats, 1, id);
 
             if (fabs(side_offset) > 0.0) {
-                Vect_line_parallel2(SPoints, side_offset, side_offset,
-                                    0.0, 1, FALSE, side_offset / 10.,
-                                    PlPoints);
+                Vect_line_parallel2(SPoints, side_offset, side_offset, 0.0, 1,
+                                    FALSE, side_offset / 10., PlPoints);
 
                 Vect_write_line(&Out, GV_LINE, PlPoints, SCats);
                 G_debug(3, "  segment n_points = %d", PlPoints->n_points);
@@ -255,31 +251,31 @@ int main(int argc, char **argv)
         default:
             G_warning(_("Incorrect segment type: %s"), buf);
         }
-
     }
 
     Vect_build(&Out);
 
-    G_message(n_("%d point read from input",
-                 "%d points read from input", points_read), points_read);
+    G_message(n_("%d point read from input", "%d points read from input",
+                 points_read),
+              points_read);
     /* GTC Number of lost points */
-    G_asprintf(&tmpstr1,
-               n_("%d lost", "%d lost", points_read - points_written),
+    G_asprintf(&tmpstr1, n_("%d lost", "%d lost", points_read - points_written),
                points_read - points_written);
     /* GTC %s is replaced with message indicating number of lost points. */
     G_message(n_("%d point written to output map (%s)",
-                 "%d points written to output map (%s)",
-                 points_written), points_written, tmpstr1);
+                 "%d points written to output map (%s)", points_written),
+              points_written, tmpstr1);
     G_free(tmpstr1);
-    G_message(n_("%d line read from input",
-                 "%d lines read from input", lines_read), lines_read);
+    G_message(
+        n_("%d line read from input", "%d lines read from input", lines_read),
+        lines_read);
     /* GTC Number of lost lines */
     G_asprintf(&tmpstr1, n_("%d lost", "%d lost", lines_read - lines_written),
                lines_read - lines_written);
     /* GTC %s is replaced with message indicating number of lost lines. */
     G_message(n_("%d line written to output map (%s)",
-                 "%d lines written to output map (%s)",
-                 lines_written), lines_written, tmpstr1);
+                 "%d lines written to output map (%s)", lines_written),
+              lines_written, tmpstr1);
     G_free(tmpstr1);
 
     /* Free, close ... */
@@ -291,8 +287,8 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
-int read_point_input(char *buf, char *stype, int *id, int *lcat,
-                     double *offset, double *side_offset, int *rev, int *pct)
+int read_point_input(char *buf, char *stype, int *id, int *lcat, double *offset,
+                     double *side_offset, int *rev, int *pct)
 {
     char offsetbuf[100];
     int ret;
@@ -325,9 +321,9 @@ int read_point_input(char *buf, char *stype, int *id, int *lcat,
     return 1;
 }
 
-int read_line_input(char *buf, char *stype, int *id, int *lcat,
-                    double *offset1, double *offset2, double *side_offset,
-                    int *rev1, int *pct1, int *rev2, int *pct2)
+int read_line_input(char *buf, char *stype, int *id, int *lcat, double *offset1,
+                    double *offset2, double *side_offset, int *rev1, int *pct1,
+                    int *rev2, int *pct2)
 {
     char offset1buf[100];
     char offset2buf[100];
@@ -404,9 +400,8 @@ int find_line(struct Map_info *Map, int lfield, int lcat)
     return 0;
 }
 
-
-/* calculate a point perpendicular to the current line angle, offset by a distance
- * works in the x,y plane.
+/* calculate a point perpendicular to the current line angle, offset by a
+ * distance works in the x,y plane.
  */
 void offset_pt_90(double *x, double *y, double angle, double distance)
 {

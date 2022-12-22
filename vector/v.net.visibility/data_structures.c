@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -14,7 +13,6 @@
  *
  ****************************************************************/
 #include "data_structures.h"
-
 
 /* stack variables */
 static int stack_index = 0;
@@ -53,7 +51,7 @@ void init_stack(int size)
 }
 
 /** compare the points along the x axis
-*/
+ */
 int cmp_points(const void *v1, const void *v2, void *param)
 {
     struct Point *p1 = (struct Point *)v1;
@@ -81,9 +79,7 @@ void quickSort(struct Point a[], int l, int r)
         quickSort(a, l, j - 1);
         quickSort(a, j + 1, r);
     }
-
 }
-
 
 int partition(struct Point a[], int l, int r)
 {
@@ -137,7 +133,6 @@ int partition(struct Point a[], int l, int r)
         t = a[i];
         a[i] = a[j];
         a[j] = t;
-
     }
 
     if (a[l].line1 != NULL) {
@@ -171,7 +166,6 @@ int partition(struct Point a[], int l, int r)
     t = a[l];
     a[l] = a[j];
     a[j] = t;
-
 
     return j;
 }

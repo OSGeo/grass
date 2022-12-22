@@ -1,16 +1,15 @@
 #include <math.h>
 #include "global.h"
 
-#define RSTEP 5.0
-#define DEG_TO_RAD (M_PI/180.0)
+#define RSTEP      5.0
+#define DEG_TO_RAD (M_PI / 180.0)
 
-int make_arc(int offset,        /* offset into array of points */
-             double centerx, double centery,
-             double radius, double start_angle, double finish_angle,
-             double zcoor)
+int make_arc(int offset, /* offset into array of points */
+             double centerx, double centery, double radius, double start_angle,
+             double finish_angle, double zcoor)
 {
-    float theta;                /* the angle used for calculating a given point */
-    float alpha;                /* theta converted into radians for use in math */
+    float theta; /* the angle used for calculating a given point */
+    float alpha; /* theta converted into radians for use in math */
     int arr_size;
 
     arr_size = offset;
@@ -59,7 +58,7 @@ int make_arc(int offset,        /* offset into array of points */
         }
     }
     /* this insures that the last point will be correct */
-    alpha = finish_angle * DEG_TO_RAD;  /* converting to radians */
+    alpha = finish_angle * DEG_TO_RAD; /* converting to radians */
     xpnts[arr_size] = radius * cos(alpha) + centerx;
     ypnts[arr_size] = radius * sin(alpha) + centery;
     zpnts[arr_size] = zcoor;
@@ -87,7 +86,7 @@ int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
     else if (prev_bulge < 0.0)
         arc_tan = (-1.0) * prev_bulge;
 
-    if (arc_tan == 0.0) {       /* straight line segment */
+    if (arc_tan == 0.0) { /* straight line segment */
         arr_size++;
         if (arr_size == arr_max) {
             arr_max += ARR_INCR;
@@ -98,7 +97,7 @@ int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
     }
     else if (!(xpnts[arr_size - 1] == xpnts[arr_size] &&
                ypnts[arr_size - 1] == ypnts[arr_size]))
-        /* make an arc */
+    /* make an arc */
     {
         /* compute cent_x, cent_y, ang1, ang2 */
         if (prev_bulge > 0.0) {
@@ -142,7 +141,7 @@ int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
             ang2 = (half_alpha + beta) / DEG_TO_RAD + 270.0;
             ang1 = (beta - half_alpha) / DEG_TO_RAD + 270.0;
         }
-        else {                  /* 270 <= beta < 360 */
+        else { /* 270 <= beta < 360 */
 
             beta -= 270.0;
             cent_y = y2 - rad * sin(half_alpha + beta);
@@ -151,14 +150,14 @@ int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
             ang1 = (beta - half_alpha) / DEG_TO_RAD;
         }
 
-        arr_size--;             /* disregard last 2 points */
+        arr_size--; /* disregard last 2 points */
         if (prev_bulge < 0.0)
-            arc_arr_size = make_arc(arr_size, cent_x, cent_y,
-                                    -rad, ang2, ang1, zpnts[0]);
+            arc_arr_size =
+                make_arc(arr_size, cent_x, cent_y, -rad, ang2, ang1, zpnts[0]);
         /* arc is going in clockwise direction from x2 to x1 */
         else
-            arc_arr_size = make_arc(arr_size, cent_x, cent_y,
-                                    rad, ang1, ang2, zpnts[0]);
+            arc_arr_size =
+                make_arc(arr_size, cent_x, cent_y, rad, ang1, ang2, zpnts[0]);
         arr_size += arc_arr_size;
         while (arr_size >= arr_max) {
             arr_max += ARR_INCR;
@@ -166,7 +165,7 @@ int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
             ypnts = (double *)G_realloc(ypnts, arr_max * sizeof(double));
             zpnts = (double *)G_realloc(zpnts, arr_max * sizeof(double));
         }
-    }                           /* arc */
+    } /* arc */
 
     return arr_size;
 }

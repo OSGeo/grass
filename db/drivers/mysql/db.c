@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -19,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_database(dbHandle * handle)
+int db__driver_open_database(dbHandle *handle)
 {
     const char *name;
     dbConnection default_connection;
@@ -45,10 +44,11 @@ int db__driver_open_database(dbHandle * handle)
             return DB_FAILED;
         }
 
-        G_debug(3, "host = %s, port = %d, dbname = %s, "
+        G_debug(3,
+                "host = %s, port = %d, dbname = %s, "
                 "user = %s, password = %s",
-                connpar.host, connpar.port, connpar.dbname,
-                connpar.user, connpar.password);
+                connpar.host, connpar.port, connpar.dbname, connpar.user,
+                connpar.password);
 
         db_get_login2("mysql", name, &user, &password, &host, &port);
 
@@ -57,8 +57,7 @@ int db__driver_open_database(dbHandle * handle)
                                  connpar.dbname, port, NULL, 0);
 
         if (res == NULL) {
-            db_d_append_error("%s\n%s",
-                              _("Connection failed."),
+            db_d_append_error("%s\n%s", _("Connection failed."),
                               mysql_error(connection));
             db_d_report_error();
             return DB_FAILED;
@@ -70,7 +69,7 @@ int db__driver_open_database(dbHandle * handle)
 
 int db__driver_close_database(void)
 {
-    mysql_close(connection);    /* this will also release connection */
+    mysql_close(connection); /* this will also release connection */
 
     return DB_OK;
 }

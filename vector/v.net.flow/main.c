@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.flow
@@ -24,13 +23,12 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out, cut_map;
     static struct line_pnts *Points;
     struct line_cats *Cats;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out, *cut_out;
     struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol;
     struct Option *catsource_opt, *wheresource_opt;
@@ -51,15 +49,16 @@ int main(int argc, char *argv[])
     struct field_info *Fi;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("flow"));
-    module->description =
-        _("Computes the maximum flow between two sets of nodes in the network.");
+    module->description = _(
+        "Computes the maximum flow between two sets of nodes in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -134,8 +133,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -184,8 +182,8 @@ int main(int argc, char *argv[])
     if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
         G_warning(_("Cannot create index"));
 
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
@@ -193,17 +191,14 @@ int main(int argc, char *argv[])
     source_list = Vect_new_list();
     sink_list = Vect_new_list();
 
-    if (NetA_initialise_varray
-        (&In, nfield, GV_POINT,
-         wheresource_opt->answer, catsource_opt->answer,
-         &varray_source) <= 0) {
+    if (NetA_initialise_varray(&In, nfield, GV_POINT, wheresource_opt->answer,
+                               catsource_opt->answer, &varray_source) <= 0) {
         G_fatal_error(_("No source features selected. "
-                       "Please check options '%s', '%s'."),
+                        "Please check options '%s', '%s'."),
                       catsource_opt->key, wheresource_opt->key);
     }
-    if (NetA_initialise_varray
-        (&In, nfield, GV_POINT, wheresink_opt->answer,
-         catsink_opt->answer, &varray_sink) <= 0) {
+    if (NetA_initialise_varray(&In, nfield, GV_POINT, wheresink_opt->answer,
+                               catsink_opt->answer, &varray_sink) <= 0) {
         G_fatal_error(_("No sink features selected. "
                         "Please check options '%s', '%s'."),
                       catsink_opt->key, wheresink_opt->key);
@@ -222,9 +217,8 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    if (0 !=
-        Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                             abcol->answer, ncol->answer, 0, 0))
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, 0, 0))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(&In));
 
@@ -254,7 +248,7 @@ int main(int argc, char *argv[])
 
             Vect_cat_get(Cats, afield, &cat);
             if (cat == -1)
-                continue;       /*TODO: warning? */
+                continue; /*TODO: warning? */
             sprintf(buf, "insert into %s values (%d, %f)", Fi->table, cat,
                     flow[i] / (double)In.dgraph.cost_multip);
             db_set_string(&sql, buf);

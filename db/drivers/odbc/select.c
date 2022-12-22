@@ -4,7 +4,7 @@
 #include "proto.h"
 #include <stdio.h>
 
-int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
+int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     cursor *c;
     SQLRETURN ret;
@@ -24,18 +24,16 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 
     sql = db_get_string(sel);
 
-    ret = SQLExecDirect(c->stmt, (SQLCHAR *) sql, SQL_NTS);
+    ret = SQLExecDirect(c->stmt, (SQLCHAR *)sql, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
-                      sizeof(msg), NULL);
-        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)", sql, msg,
-                          (int)err);
+        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg, sizeof(msg),
+                      NULL);
+        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)", sql, msg, (int)err);
         db_d_report_error();
         return DB_FAILED;
     }
 
     describe_table(c->stmt, &table);
-
 
     db_set_cursor_table(dbc, table);
 
@@ -45,8 +43,8 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     /* set dbCursor's token for my cursor */
     db_set_cursor_token(dbc, c->token);
 
-    /* It seems that there is no function in ODBC to get number of selected rows.
-     *  SQLRowCount() works for insert, update, delete. */
+    /* It seems that there is no function in ODBC to get number of selected
+     * rows. SQLRowCount() works for insert, update, delete. */
     nrows = 0;
     while (1) {
         ret = SQLFetchScroll(c->stmt, SQL_FETCH_NEXT, 0);

@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.distance
@@ -9,7 +8,8 @@
  * PURPOSE:    Computes shortest distance via the network between
  *             two given sets of features.
  *
- * COPYRIGHT:  (C) 2009-2010, 2012 by Daniel Bundala, and the GRASS Development Team
+ * COPYRIGHT:  (C) 2009-2010, 2012 by Daniel Bundala, and the GRASS
+ *             Development Team
  *
  *             This program is free software under the
  *             GNU General Public License (>=v2).
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     static struct line_pnts *Points, *PPoints;
     struct line_cats *Cats, *TCats;
     struct ilist *slist;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *catf_opt, *fieldf_opt, *wheref_opt;
     struct Option *catt_opt, *fieldt_opt, *wheret_opt, *typet_opt;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     struct ilist *nodest;
     int i, j, nnodes, nlines;
     int *dst, *nodes_to_features;
-    int from_nr;                /* 'from' features not reachable */
+    int from_nr; /* 'from' features not reachable */
     dglInt32_t **nxt;
     struct line_cats **on_path;
     char *segdir;
@@ -59,7 +59,8 @@ int main(int argc, char *argv[])
     struct field_info *Fi;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -68,9 +69,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("shortest path"));
     module->label = _("Computes shortest distance via the network between "
                       "the given sets of features.");
-    module->description =
-        _("Finds the shortest paths from each 'from' point to the nearest 'to' feature "
-         "and various information about this relation are uploaded to the attribute table.");
+    module->description = _("Finds the shortest paths from each 'from' point "
+                            "to the nearest 'to' feature "
+                            "and various information about this relation are "
+                            "uploaded to the attribute table.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -183,8 +185,7 @@ int main(int argc, char *argv[])
     TCats = Vect_new_cats_struct();
     slist = G_new_ilist();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -197,7 +198,6 @@ int main(int argc, char *argv[])
         Vect_close(&In);
         G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
-
 
     if (geo_f->answer) {
         geo = 1;
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
     nlines = Vect_get_num_lines(&In);
 
     dst = (int *)G_calloc(nnodes + 1, sizeof(int));
-    nxt = (dglInt32_t **) G_calloc(nnodes + 1, sizeof(dglInt32_t *));
+    nxt = (dglInt32_t **)G_calloc(nnodes + 1, sizeof(dglInt32_t *));
     nodes_to_features = (int *)G_calloc(nnodes + 1, sizeof(int));
     on_path =
         (struct line_cats **)G_calloc(nlines + 1, sizeof(struct line_cats *));
@@ -259,9 +259,8 @@ int main(int argc, char *argv[])
     if (nodest->n_values == 0)
         G_fatal_error(_("No 'to' features"));
 
-    if (0 !=
-        Vect_net_build_graph(&In, atype, afield, nfield, afcol->answer,
-                             abcol->answer, ncol->answer, geo, 2))
+    if (0 != Vect_net_build_graph(&In, atype, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, geo, 2))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(&In));
 
@@ -282,9 +281,10 @@ int main(int argc, char *argv[])
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    sprintf(buf,
-            "create table %s ( cat integer, tcat integer, dist double precision)",
-            Fi->table);
+    sprintf(
+        buf,
+        "create table %s ( cat integer, tcat integer, dist double precision)",
+        Fi->table);
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));
@@ -296,8 +296,8 @@ int main(int argc, char *argv[])
     if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
         G_warning(_("Cannot create index"));
 
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
@@ -319,9 +319,8 @@ int main(int argc, char *argv[])
                 continue;
 
             if (type & GV_POINTS) {
-                node =
-                    Vect_find_node(&In, Points->x[0], Points->y[0],
-                                   Points->z[0], 0, 0);
+                node = Vect_find_node(&In, Points->x[0], Points->y[0],
+                                      Points->z[0], 0, 0);
             }
             else {
                 Vect_get_line_nodes(&In, i, &node, NULL);
@@ -384,7 +383,6 @@ int main(int argc, char *argv[])
                 Vect_cat_set(Cats, 1, cat);
                 Vect_write_line(&Out, GV_LINE, PPoints, Cats);
             }
-
         }
     }
 
@@ -424,8 +422,8 @@ int main(int argc, char *argv[])
 
     if (from_nr)
         G_warning(n_("%d 'from' feature was not reachable",
-                     "%d 'from' features were not reachable",
-                     from_nr), from_nr);
+                     "%d 'from' features were not reachable", from_nr),
+                  from_nr);
 
     exit(EXIT_SUCCESS);
 }

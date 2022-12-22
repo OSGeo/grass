@@ -1,13 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       v.patch
- * AUTHOR(S):    Dave Gerdes, U.S.Army Construction Engineering Research Laboratory
- *               (original contributor)
+ * AUTHOR(S):    Dave Gerdes, U.S.Army Construction Engineering
+ *                 Research Laboratory (original contributor)
  *               Radim Blazek <radim.blazek gmail.com> (update to GRASS 6)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com> (bbox)
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -26,7 +26,8 @@
  */
 
 /*
- **  Written by Dave Gerdes  8/1988, US Army Construction Engineering Research Lab
+ **  Written by Dave Gerdes  8/1988, US Army Construction
+ **    Engineering Research Lab
  **  Upgrade to 5.7 Radim Blazek
  */
 #include <stdlib.h>
@@ -38,11 +39,10 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-int patch(struct Map_info *, struct Map_info *, int, int *,
-          struct Map_info *);
-int copy_records(dbDriver * driver_in, dbString * table_name_in,
-                 dbDriver * driver_out, dbString * table_name_out,
-                 char *, int, int);
+int patch(struct Map_info *, struct Map_info *, int, int *, struct Map_info *);
+int copy_records(dbDriver *driver_in, dbString *table_name_in,
+                 dbDriver *driver_out, dbString *table_name_out, char *, int,
+                 int);
 int max_cat(struct Map_info *Map, int layer);
 
 int main(int argc, char *argv[])
@@ -84,8 +84,8 @@ int main(int argc, char *argv[])
     bbox = G_define_standard_option(G_OPT_V_OUTPUT);
     bbox->required = NO;
     bbox->key = "bbox";
-    bbox->description =
-        _("Name for output vector map where bounding boxes of input vector maps are written to");
+    bbox->description = _("Name for output vector map where bounding boxes of "
+                          "input vector maps are written to");
 
     no_input_topo_flag = G_define_flag();
     no_input_topo_flag->key = 'n';
@@ -95,10 +95,9 @@ int main(int argc, char *argv[])
 
     force_z_flag = G_define_flag();
     force_z_flag->key = 'z';
-    force_z_flag->label =
-        _("Expect z coordinate even when not using topology");
-    force_z_flag->description =
-        _("Applicable when input is points with z coordinate but without topology");
+    force_z_flag->label = _("Expect z coordinate even when not using topology");
+    force_z_flag->description = _("Applicable when input is points with z "
+                                  "coordinate but without topology");
 
     table_flag = G_define_flag();
     table_flag->key = 'e';
@@ -155,18 +154,18 @@ int main(int argc, char *argv[])
             fi_out = Vect_get_field(&OutMap, 1);
             if (fi_out) {
                 key = G_store(fi_out->key);
-                driver_out =
-                    db_start_driver_open_database(fi_out->driver,
-                                                  fi_out->database);
+                driver_out = db_start_driver_open_database(fi_out->driver,
+                                                           fi_out->database);
                 if (!driver_out) {
-                    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                                  fi_out->database, fi_out->driver);
+                    G_fatal_error(
+                        _("Unable to open database <%s> by driver <%s>"),
+                        fi_out->database, fi_out->driver);
                 }
                 db_set_error_handler_driver(driver_out);
 
                 db_set_string(&table_name_out, fi_out->table);
-                if (db_describe_table(driver_out, &table_name_out, &table_out)
-                    != DB_OK) {
+                if (db_describe_table(driver_out, &table_name_out,
+                                      &table_out) != DB_OK) {
                     G_fatal_error(_("Unable to describe table <%s>"),
                                   fi_out->table);
                 }
@@ -193,12 +192,12 @@ int main(int argc, char *argv[])
             if (fi_in) {
                 dbTable **table;
 
-                driver_in =
-                    db_start_driver_open_database(fi_in->driver,
-                                                  fi_in->database);
+                driver_in = db_start_driver_open_database(fi_in->driver,
+                                                          fi_in->database);
                 if (!driver_in) {
-                    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                                  fi_in->database, fi_in->driver);
+                    G_fatal_error(
+                        _("Unable to open database <%s> by driver <%s>"),
+                        fi_in->database, fi_in->driver);
                 }
                 db_set_error_handler_driver(driver_in);
 
@@ -211,8 +210,8 @@ int main(int argc, char *argv[])
                 }
 
                 db_set_string(&table_name_in, fi_in->table);
-                if (db_describe_table(driver_in, &table_name_in, table)
-                    != DB_OK) {
+                if (db_describe_table(driver_in, &table_name_in, table) !=
+                    DB_OK) {
                     G_fatal_error(_("Unable to describe table <%s>"),
                                   fi_in->table);
                 }
@@ -238,8 +237,7 @@ int main(int argc, char *argv[])
                     else {
                         char tmpbuf[4096];
 
-                        sprintf(tmpbuf, ",%s",
-                                db_get_column_name(column_out));
+                        sprintf(tmpbuf, ",%s", db_get_column_name(column_out));
                         strcat(colnames, tmpbuf);
                     }
                 }
@@ -249,8 +247,8 @@ int main(int argc, char *argv[])
             if (i > 0 || append->answer) {
                 int ncols, col;
 
-                if (!table_in ||
-                    (table_out && !table_in) || (!table_out && table_in)) {
+                if (!table_in || (table_out && !table_in) ||
+                    (!table_out && table_in)) {
                     G_fatal_error(_("Missing table for <%s>"), in_name);
                 }
 
@@ -283,43 +281,37 @@ int main(int argc, char *argv[])
                         column_in = db_get_table_column(table_in, col2);
 
                         if (G_strcasecmp(db_get_column_name(column_in),
-                                         db_get_column_name(column_out)) ==
-                            0) {
+                                         db_get_column_name(column_out)) == 0) {
                             colmatch = col2;
                         }
                         col2++;
                     }
                     if (colmatch < 0) {
                         G_fatal_error(_("No column <%s> in input map <%s>"),
-                                      db_get_column_name(column_out),
-                                      in_name);
+                                      db_get_column_name(column_out), in_name);
                     }
 
                     ctype_in =
                         db_sqltype_to_Ctype(db_get_column_sqltype(column_in));
                     ctype_out =
-                        db_sqltype_to_Ctype(db_get_column_sqltype
-                                            (column_out));
+                        db_sqltype_to_Ctype(db_get_column_sqltype(column_out));
                     if (ctype_in != ctype_out) {
-                        G_fatal_error(_("Column types differ: "
-                                        " <%s> from <%s> is <%s> and"
-                                        " <%s> from <%s> is <%s>"),
-                                      db_get_column_name(column_in),
-                                      in_name,
-                                      db_sqltype_name(db_get_column_sqltype
-                                                      (column_in)),
-                                      db_get_column_name(column_out),
-                                      meta_name,
-                                      db_sqltype_name(db_get_column_sqltype
-                                                      (column_out)));
+                        G_fatal_error(
+                            _("Column types differ: "
+                              " <%s> from <%s> is <%s> and"
+                              " <%s> from <%s> is <%s>"),
+                            db_get_column_name(column_in), in_name,
+                            db_sqltype_name(db_get_column_sqltype(column_in)),
+                            db_get_column_name(column_out), meta_name,
+                            db_sqltype_name(db_get_column_sqltype(column_out)));
                     }
                     if (ctype_in == DB_C_TYPE_STRING &&
                         db_get_column_length(column_in) !=
-                        db_get_column_length(column_out)) {
+                            db_get_column_length(column_out)) {
                         G_fatal_error(_("Length of string columns differ"));
                     }
-                    if (G_strcasecmp(key,
-                                     db_get_column_name(column_out)) == 0) {
+                    if (G_strcasecmp(key, db_get_column_name(column_out)) ==
+                        0) {
                         keycol = col;
                     }
                 }
@@ -352,7 +344,7 @@ int main(int argc, char *argv[])
     }
 
     if (bbox_name) {
-        if (Vect_open_new(&BBoxMap, bbox_name, out_is_3d) < 0)  /* TODO 3D */
+        if (Vect_open_new(&BBoxMap, bbox_name, out_is_3d) < 0) /* TODO 3D */
             G_fatal_error(_("Unable to create vector map <%s>"), bbox_name);
         Vect_hist_command(&BBoxMap);
     }
@@ -369,10 +361,8 @@ int main(int argc, char *argv[])
             fi_out->key = key;
         }
         if (fi_out) {
-            driver_out =
-                db_start_driver_open_database(fi_out->driver,
-                                              Vect_subst_var(fi_out->database,
-                                                             &OutMap));
+            driver_out = db_start_driver_open_database(
+                fi_out->driver, Vect_subst_var(fi_out->database, &OutMap));
             if (!driver_out) {
                 G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                               fi_out->database, fi_out->driver);
@@ -387,8 +377,7 @@ int main(int argc, char *argv[])
 
         if (!append->answer) {
             if (db_create_table(driver_out, table_out) != DB_OK) {
-                G_fatal_error(_("Unable to create table <%s>"),
-                              fi_out->table);
+                G_fatal_error(_("Unable to create table <%s>"), fi_out->table);
             }
 
             /* do not allow duplicate keys */
@@ -396,14 +385,13 @@ int main(int argc, char *argv[])
                 DB_OK)
                 G_warning(_("Unable to create index"));
 
-            if (db_grant_on_table
-                (driver_out, fi_out->table, DB_PRIV_SELECT,
-                 DB_GROUP | DB_PUBLIC) != DB_OK)
+            if (db_grant_on_table(driver_out, fi_out->table, DB_PRIV_SELECT,
+                                  DB_GROUP | DB_PUBLIC) != DB_OK)
                 G_fatal_error(_("Unable to grant privileges on table <%s>"),
                               fi_out->table);
 
-            Vect_map_add_dblink(&OutMap, 1, NULL, fi_out->table,
-                                fi_in->key, fi_out->database, fi_out->driver);
+            Vect_map_add_dblink(&OutMap, 1, NULL, fi_out->table, fi_in->key,
+                                fi_out->database, fi_out->driver);
 
             /* avoid Vect_subst_var() below */
             fi_out = Vect_get_field(&OutMap, 1);
@@ -417,7 +405,7 @@ int main(int argc, char *argv[])
         in_name = old->answers[i++];
         G_important_message(_("Patching vector map <%s>..."), in_name);
         if (bbox_name)
-            Vect_set_open_level(2);     /* needed for Vect_map_box() */
+            Vect_set_open_level(2); /* needed for Vect_map_box() */
         else
             Vect_set_open_level(1);
         if (Vect_open_old(&InMap, in_name, "") < 0)
@@ -435,38 +423,38 @@ int main(int argc, char *argv[])
         }
         G_debug(2, "maxcat = %d add_cat = %d", maxcat, add_cat);
 
-        ret =
-            patch(&InMap, &OutMap, add_cat, &maxcat,
-                  bbox_name ? &BBoxMap : NULL);
+        ret = patch(&InMap, &OutMap, add_cat, &maxcat,
+                    bbox_name ? &BBoxMap : NULL);
         if (ret < 0)
             G_warning(_("Error reading vector map <%s> - "
-                        "some data may not be correct"), in_name);
+                        "some data may not be correct"),
+                      in_name);
 
         if (do_table) {
             fi_in = Vect_get_field(&InMap, 1);
             if (fi_in) {
 
-                /* SQLite does not like to have the same database opened twice */
-                if (strcmp(fi_in->driver, fi_out->driver) == 0
-                    && strcmp(fi_in->database, fi_out->database) == 0) {
+                /* SQLite does not like to have the same database opened twice
+                 */
+                if (strcmp(fi_in->driver, fi_out->driver) == 0 &&
+                    strcmp(fi_in->database, fi_out->database) == 0) {
                     G_debug(3, "Use the same driver");
                     driver_in = driver_out;
                 }
                 else {
-                    driver_in =
-                        db_start_driver_open_database(fi_in->driver,
-                                                      fi_in->database);
+                    driver_in = db_start_driver_open_database(fi_in->driver,
+                                                              fi_in->database);
                     if (!driver_in) {
-                        G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                                      fi_in->database, fi_in->driver);
+                        G_fatal_error(
+                            _("Unable to open database <%s> by driver <%s>"),
+                            fi_in->database, fi_in->driver);
                     }
                     db_set_error_handler_driver(driver_in);
                 }
 
                 db_set_string(&table_name_in, fi_in->table);
-                copy_records(driver_in, &table_name_in,
-                             driver_out, &table_name_out,
-                             colnames, keycol, add_cat);
+                copy_records(driver_in, &table_name_in, driver_out,
+                             &table_name_out, colnames, keycol, add_cat);
 
                 if (driver_in != driver_out)
                     db_close_database_shutdown_driver(driver_in);
@@ -537,8 +525,7 @@ int main(int argc, char *argv[])
 
             if (snap >= 0) {
                 G_message("%s", separator);
-                G_message(_("Snapping boundaries (threshold = %.3e)..."),
-                          snap);
+                G_message(_("Snapping boundaries (threshold = %.3e)..."), snap);
                 Vect_snap_lines(&OutMap, GV_BOUNDARY, snap, NULL);
             }
 
@@ -550,11 +537,14 @@ int main(int argc, char *argv[])
             G_message(_("Removing duplicates..."));
             Vect_remove_duplicates(&OutMap, GV_BOUNDARY, NULL);
 
-            /* in non-pathological cases, the bulk of the cleaning is now done */
+            /* in non-pathological cases, the bulk of the cleaning is now done
+             */
 
-            /* Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
-             * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
-             * and Vect_clean_small_angles_at_nodes() until no more small angles are found */
+            /* Vect_clean_small_angles_at_nodes() can change the geometry so
+             * that new intersections are created. We must call
+             * Vect_break_lines(), Vect_remove_duplicates() and
+             * Vect_clean_small_angles_at_nodes() until no more small angles are
+             * found */
             do {
                 G_message("%s", separator);
                 G_message(_("Breaking boundaries..."));
@@ -566,9 +556,8 @@ int main(int argc, char *argv[])
 
                 G_message("%s", separator);
                 G_message(_("Cleaning boundaries at nodes..."));
-                nmodif =
-                    Vect_clean_small_angles_at_nodes(&OutMap, GV_BOUNDARY,
-                                                     NULL);
+                nmodif = Vect_clean_small_angles_at_nodes(&OutMap, GV_BOUNDARY,
+                                                          NULL);
             } while (nmodif > 0);
 
             /* merge boundaries */
@@ -614,10 +603,9 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
-int copy_records(dbDriver * driver_in, dbString * table_name_in,
-                 dbDriver * driver_out, dbString * table_name_out,
-                 char *colnames, int keycol, int add_cat)
+int copy_records(dbDriver *driver_in, dbString *table_name_in,
+                 dbDriver *driver_out, dbString *table_name_out, char *colnames,
+                 int keycol, int add_cat)
 {
     int ncols, col;
     dbCursor cursor;
@@ -654,8 +642,7 @@ int copy_records(dbDriver * driver_in, dbString * table_name_in,
         if (!more)
             break;
 
-        sprintf(buf, "insert into %s values ( ",
-                db_get_string(table_name_out));
+        sprintf(buf, "insert into %s values ( ", db_get_string(table_name_out));
         db_set_string(&sql, buf);
 
         for (col = 0; col < ncols; col++) {
@@ -729,10 +716,11 @@ int patch(struct Map_info *InMap, struct Map_info *OutMap, int add_cat,
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    /* TODO:    
-       OutMap->head.orig_scale = GREATER (OutMap->head.orig_scale, InMap->head.orig_scale);
-       OutMap->head.digit_thresh = 0;
-       OutMap->head.map_thresh = GREATER (OutMap->head.map_thresh, InMap->head.map_thresh);
+    /* TODO:
+       OutMap->head.orig_scale = GREATER (OutMap->head.orig_scale,
+       InMap->head.orig_scale); OutMap->head.digit_thresh = 0;
+       OutMap->head.map_thresh = GREATER (OutMap->head.map_thresh,
+       InMap->head.map_thresh);
      */
 
     while ((type = Vect_read_next_line(InMap, Points, Cats)) > 0) {
@@ -749,7 +737,7 @@ int patch(struct Map_info *InMap, struct Map_info *OutMap, int add_cat,
         Vect_write_line(OutMap, type, Points, Cats);
     }
 
-    if (BBoxMap) {              /* inspired by v.in.region */
+    if (BBoxMap) { /* inspired by v.in.region */
         struct bound_box box;
         double diff_long, mid_long;
         static int cat;
@@ -791,7 +779,7 @@ int patch(struct Map_info *InMap, struct Map_info *OutMap, int add_cat,
 
         /* centroid */
         Vect_reset_line(Points);
-        Vect_cat_set(Cats, 1, ++cat);   /* first layer */
+        Vect_cat_set(Cats, 1, ++cat); /* first layer */
         Vect_append_point(Points, (box.W + box.E) / 2, (box.S + box.N) / 2,
                           0.0);
 

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.overlay
@@ -10,7 +9,7 @@
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2003-2016 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -68,7 +67,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("intersection"));
     G_add_keyword(_("union"));
     module->description =
-        _("Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators.");
+        _("Overlays two vector maps offering clip, intersection, difference, "
+          "symmetrical difference, union operators.");
 
     in_opt[0] = G_define_standard_option(G_OPT_V_INPUT);
     in_opt[0]->label = _("Name of input vector map (A)");
@@ -112,15 +112,15 @@ int main(int argc, char *argv[])
           "Input feature is considered to be true, if "
           "category of given layer is defined.");
     desc = NULL;
-    G_asprintf(&desc,
-               "and;%s;or;%s;not;%s;xor;%s",
+    G_asprintf(&desc, "and;%s;or;%s;not;%s;xor;%s",
                _("also known as 'intersection' in GIS"),
                _("also known as 'union' in GIS (only for atype=area)"),
                _("also known as 'difference' (features from ainput not "
                  "overlaid by features from binput)"),
-               _("also known as 'symmetrical difference' (features from either ainput or binput but "
-                "not those from ainput overlaid by binput (only "
-                "for atype=area)"));
+               _("also known as 'symmetrical difference' (features from either "
+                 "ainput or binput but "
+                 "not those from ainput overlaid by binput (only "
+                 "for atype=area)"));
     operator_opt->descriptions = desc;
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -170,16 +170,16 @@ int main(int argc, char *argv[])
         table_type = GV_MTABLE;
 
     if (operator_opt->answer[0] == 'a')
-        operator = OP_AND;
+        operator= OP_AND;
 
     else if (operator_opt->answer[0] == 'o')
-        operator = OP_OR;
+        operator= OP_OR;
 
     else if (operator_opt->answer[0] == 'n')
-        operator = OP_NOT;
+        operator= OP_NOT;
 
     else if (operator_opt->answer[0] == 'x')
-        operator = OP_XOR;
+        operator= OP_XOR;
 
     else
         G_fatal_error(_("Unknown operator '%s'"), operator_opt->answer);
@@ -191,15 +191,14 @@ int main(int argc, char *argv[])
 
     for (input = 0; input < 2; input++) {
         Vect_set_open_level(2);
-        if (Vect_open_old2
-            (&(In[input]), in_opt[input]->answer, "",
-             field_opt[input]->answer) < 0)
+        if (Vect_open_old2(&(In[input]), in_opt[input]->answer, "",
+                           field_opt[input]->answer) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"),
                           in_opt[input]->answer);
         field[input] =
             Vect_get_field_number(&(In[input]), field_opt[input]->answer);
     }
-    if (type[0] == 0) {         /* atype=auto */
+    if (type[0] == 0) { /* atype=auto */
         type[0] = Vect_read_next_line(&(In[0]), NULL, NULL);
         if (type[0] == -1)
             G_fatal_error(_("Unable to determine feature type for <%s>"),
@@ -208,14 +207,15 @@ int main(int argc, char *argv[])
             type[0] = GV_AREA;
 
         if (!(type[0] & (GV_LINE | GV_AREA)))
-            G_fatal_error(_("Invalid feature type (%d) for <%s>. Only '%s' or '%s' supported."),
+            G_fatal_error(_("Invalid feature type (%d) for <%s>. Only '%s' or "
+                            "'%s' supported."),
                           type[0], in_opt[0]->key, "line", "area");
         G_debug(1, "auto -> atype=%d", type[0]);
     }
 
     /* OP_OR, OP_XOR is not supported for lines,
        mostly because I'am not sure if they make enouhg sense */
-    if (type[0] == GV_LINE && (operator == OP_OR || operator == OP_XOR))
+    if (type[0] == GV_LINE && (operator== OP_OR || operator== OP_XOR))
         G_fatal_error(_("Operator '%s' is not supported for type line"),
                       operator_opt->answer);
 
@@ -248,20 +248,20 @@ int main(int argc, char *argv[])
     /* Open database */
     if (ofield[0] > 0 && !(table_flag->answer)) {
         db_init_string(&stmt);
-        driver =
-            db_start_driver_open_database(Fi->driver,
-                                          Vect_subst_var(Fi->database, &Out));
+        driver = db_start_driver_open_database(
+            Fi->driver, Vect_subst_var(Fi->database, &Out));
         if (driver == NULL) {
             Vect_close(&Out);
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
         }
         db_set_error_handler_driver(driver);
-        if (db_table_exists(Fi->driver,
-                            Vect_subst_var(Fi->database, &Out), Fi->table)) {
+        if (db_table_exists(Fi->driver, Vect_subst_var(Fi->database, &Out),
+                            Fi->table)) {
             if (overwrite) {
-                G_warning(_("Table <%s> already exists and will be overwritten"),
-                          Fi->table);
+                G_warning(
+                    _("Table <%s> already exists and will be overwritten"),
+                    Fi->table);
                 db_set_string(&stmt, Fi->table);
                 db_drop_table(driver, &stmt);
             }
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
                 if (!(ltype & GV_BOUNDARY))
                     continue;
             }
-            else {              /* GV_LINE */
+            else { /* GV_LINE */
                 if (!(ltype & type[input]))
                     continue;
             }
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
             if (Points->n_points > 0) {
                 j = 1;
                 for (i = 1; i < Points->n_points; i++) {
-                    Points->z[i] = 0;   /* Tmp, Out are 2D */
+                    Points->z[i] = 0; /* Tmp, Out are 2D */
                     if (Points->x[i] != Points->x[j - 1] ||
                         Points->y[i] != Points->y[j - 1]) {
                         Points->x[j] = Points->x[i];
@@ -329,10 +329,9 @@ int main(int argc, char *argv[])
 
             /* TODO: figure out a reasonable threshold */
             if (Points->n_points > vertices) {
-                int start = 0;  /* number of coordinates written */
+                int start = 0; /* number of coordinates written */
 
-                vertices =
-                    Points->n_points / (Points->n_points / vertices + 1);
+                vertices = Points->n_points / (Points->n_points / vertices + 1);
 
                 /* split */
                 while (start < Points->n_points - 1) {
@@ -366,7 +365,8 @@ int main(int argc, char *argv[])
             Vect_close(&Tmp);
             Vect_close(&Out);
             Vect_delete(out_opt->answer);
-            G_fatal_error(_("No %s features found in vector map <%s>. Verify '%s' parameter."),
+            G_fatal_error(_("No %s features found in vector map <%s>. Verify "
+                            "'%s' parameter."),
                           type_opt[input]->answer,
                           Vect_get_full_name(&(In[input])),
                           type_opt[input]->key);
@@ -375,9 +375,9 @@ int main(int argc, char *argv[])
         /* Allocate attributes */
         attr[input].n = 0;
         /* this may be more than necessary */
-        attr[input].attr = (ATTR *)
-            G_calloc(Vect_cidx_get_type_count
-                     (&(In[input]), field[input], type[input]), sizeof(ATTR));
+        attr[input].attr = (ATTR *)G_calloc(
+            Vect_cidx_get_type_count(&(In[input]), field[input], type[input]),
+            sizeof(ATTR));
 
         index = Vect_cidx_get_field_index(&(In[input]), field[input]);
 
@@ -386,8 +386,8 @@ int main(int argc, char *argv[])
             for (i = 0; i < ncats; i++) {
                 int cat, ctype, id;
 
-                Vect_cidx_get_cat_by_index(&(In[input]), index, i, &cat,
-                                           &ctype, &id);
+                Vect_cidx_get_cat_by_index(&(In[input]), index, i, &cat, &ctype,
+                                           &id);
                 if (!(ctype & type[input]))
                     continue;
 
@@ -425,27 +425,27 @@ int main(int argc, char *argv[])
             }
 
             /* Open input driver and database */
-            if (strcmp(inFi->driver, Fi->driver) == 0
-                && strcmp(inFi->database,
-                          Vect_subst_var(Fi->database, &Out)) == 0) {
+            if (strcmp(inFi->driver, Fi->driver) == 0 &&
+                strcmp(inFi->database, Vect_subst_var(Fi->database, &Out)) ==
+                    0) {
                 G_debug(3, "Use the same driver");
                 in_driver = driver;
             }
             else {
                 in_driver =
-                    db_start_driver_open_database(inFi->driver,
-                                                  inFi->database);
+                    db_start_driver_open_database(inFi->driver, inFi->database);
                 if (in_driver == NULL) {
-                    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                                  inFi->database, inFi->driver);
+                    G_fatal_error(
+                        _("Unable to open database <%s> by driver <%s>"),
+                        inFi->database, inFi->driver);
                 }
             }
 
             sprintf(buf, "select * from %s", inFi->table);
             db_set_string(&sql, buf);
 
-            if (db_open_select_cursor(in_driver, &sql, &cursor, DB_SEQUENTIAL)
-                != DB_OK)
+            if (db_open_select_cursor(in_driver, &sql, &cursor,
+                                      DB_SEQUENTIAL) != DB_OK)
                 G_fatal_error(_("Unable to select attributes"));
 
             Table = db_get_cursor_table(&cursor);
@@ -525,7 +525,6 @@ int main(int argc, char *argv[])
                     ctype = db_sqltype_to_Ctype(sqltype);
                     Value = db_get_column_value(Column);
 
-
                     if (G_strcasecmp(db_get_column_name(Column), inFi->key) ==
                         0) {
                         cat = db_get_value_int(Value);
@@ -547,8 +546,7 @@ int main(int argc, char *argv[])
                         }
                         else {
                             db_double_quote_string(&value_string);
-                            sprintf(buf, "'%s'",
-                                    db_get_string(&value_string));
+                            sprintf(buf, "'%s'", db_get_string(&value_string));
                             db_append_string(&sql, buf);
                         }
                         break;
@@ -563,7 +561,8 @@ int main(int argc, char *argv[])
                         }
                         break;
                     default:
-                        G_warning(_("Unknown column type '%s' of column '%s', values lost"),
+                        G_warning(_("Unknown column type '%s' of column '%s', "
+                                    "values lost"),
                                   db_sqltype_name(sqltype),
                                   db_get_column_name(Column));
                         db_append_string(&sql, "null");
@@ -574,7 +573,7 @@ int main(int argc, char *argv[])
                 if (!at)
                     continue;
 
-                /* if ( !at->used ) continue; *//* We don't know yet */
+                /* if ( !at->used ) continue; */ /* We don't know yet */
 
                 at->values = G_store(db_get_string(&sql));
                 G_debug(3, "values: %s", at->values);
@@ -619,9 +618,8 @@ int main(int argc, char *argv[])
         if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
             G_warning(_("Unable to create index"));
 
-        if (db_grant_on_table
-            (driver, Fi->table, DB_PRIV_SELECT,
-             DB_GROUP | DB_PUBLIC) != DB_OK)
+        if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK)
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           Fi->table);
 
@@ -637,7 +635,7 @@ int main(int argc, char *argv[])
         area_area(In, field, &Tmp, &Out, Fi, driver, operator, ofield, attr,
                   BList, snap_thresh);
     }
-    else {                      /* LINE x AREA */
+    else { /* LINE x AREA */
         line_area(In, field, &Tmp, &Out, Fi, driver, operator, ofield, attr,
                   BList);
     }
@@ -686,8 +684,8 @@ void copy_table(struct Map_info *In, struct Map_info *Out, int infield,
 
     list = Vect_new_list();
     Vect_cidx_get_unique_cats_by_index(Out, findex, list);
-    Vect_copy_table_by_cats(In, Out, infield, outfield, NULL,
-                            table_type, list->value, list->n_values);
+    Vect_copy_table_by_cats(In, Out, infield, outfield, NULL, table_type,
+                            list->value, list->n_values);
 
     Vect_destroy_list(list);
 }

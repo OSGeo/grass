@@ -1,5 +1,4 @@
-/*
- ***************************************************************
+/***************************************************************
  *
  * MODULE:       v.out.ogr
  *
@@ -19,7 +18,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-
 
 #include <grass/gis.h>
 #include <grass/gprojects.h>
@@ -58,8 +56,10 @@ int main(int argc, char *argv[])
     dbString dbstring;
     dbColumn *Column;
 
-    int n_feat;                 /* number of written features */
-    int n_nocat, n_noatt;       /* number of features without cats/atts written/skip */
+    /* number of written features */
+    int n_feat;
+    /* number of features without cats/atts written/skip */
+    int n_nocat, n_noatt;
 
     /* OGR */
     int drn;
@@ -85,10 +85,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("output"));
     G_add_keyword("OGR");
 
-    module->label =
-        _("Exports a vector map layer to any of the supported OGR vector formats.");
-    module->description =
-        _("By default a vector map layer is exported to OGC GeoPackage format.");
+    module->label = _("Exports a vector map layer to any of the supported OGR "
+                      "vector formats.");
+    module->description = _(
+        "By default a vector map layer is exported to OGC GeoPackage format.");
     module->overwrite = TRUE;
 
     /* parse & read options */
@@ -102,8 +102,10 @@ int main(int argc, char *argv[])
     /* check for weird options */
     if (G_strncasecmp(options.dsn->answer, "PG:", 3) == 0 &&
         strcmp(options.format->answer, "PostgreSQL") != 0)
-        G_warning(_("Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" "
-                   "format (\"%s\" given)"), options.format->answer);
+        G_warning(_("Data source starts with \"PG:\" prefix, expecting "
+                    "\"PostgreSQL\" "
+                    "format (\"%s\" given)"),
+                  options.format->answer);
 
     /* parse dataset creation options */
     i = 0;
@@ -178,18 +180,19 @@ int main(int argc, char *argv[])
                     G_debug(3, "Adding volumes to export list.");
                 }
                 else {
-                    if (strcmp(options.type->answers[num_types - 1], "face")
-                        != 0) {
-                        /* only put faces on export list if that's not the case already */
-                        options.type->answers[num_types++] =
-                            G_store("volume");
+                    if (strcmp(options.type->answers[num_types - 1], "face") !=
+                        0) {
+                        /* only put faces on export list if that's not the case
+                         * already */
+                        options.type->answers[num_types++] = G_store("volume");
                         G_debug(3, "Adding volumes to export list.");
                     }
                 }
             }
 
             if (num_types == 0) {
-                G_warning(_("Unable to determine input map's vector feature type(s)."));
+                G_warning(_(
+                    "Unable to determine input map's vector feature type(s)."));
             }
         }
         field = Vect_get_field_number(&In, options.field->answer);
@@ -252,8 +255,7 @@ int main(int argc, char *argv[])
         ((GV_KERNEL & otype) && (GV_LINES & otype)) ||
         ((GV_KERNEL & otype) && (GV_AREA & otype)) ||
         ((GV_KERNEL & otype) && (GV_FACE & otype)) ||
-        ((GV_KERNEL & otype) && (GV_VOLUME & otype))
-        ) {
+        ((GV_KERNEL & otype) && (GV_VOLUME & otype))) {
         G_warning(_("The combination of types is not supported"
                     " by all formats."));
         wkbtype = wkbUnknown;
@@ -315,9 +317,8 @@ int main(int argc, char *argv[])
                     G_debug(1, "found bound crs");
                     source_crs = proj_get_source_crs(NULL, obj);
                     if (source_crs) {
-                        inwkt =
-                            G_store(proj_as_wkt
-                                    (NULL, source_crs, PJ_WKT2_LATEST, NULL));
+                        inwkt = G_store(proj_as_wkt(NULL, source_crs,
+                                                    PJ_WKT2_LATEST, NULL));
                         if (inwkt && !*inwkt) {
                             G_free(inwkt);
                             inwkt = NULL;
@@ -354,12 +355,11 @@ int main(int argc, char *argv[])
     if (flags.new->answer) {
         const char *name;
 
-        name =
-            options.layer->answer ? options.layer->answer : options.
-            input->answer;
+        name = options.layer->answer ? options.layer->answer
+                                     : options.input->answer;
 
-        create_ogr_layer(dsn, options.format->answer, name,
-                         wkbtype, papszDSCO, papszLCO);
+        create_ogr_layer(dsn, options.format->answer, name, wkbtype, papszDSCO,
+                         papszLCO);
 
         G_message(_("OGR layer <%s> created in datasource <%s> (format '%s')"),
                   name, options.dsn->answer, options.format->answer);
@@ -371,11 +371,10 @@ int main(int argc, char *argv[])
     else
         donocat = 0;
 
-    if ((GV_AREA & otype) && Vect_get_num_islands(&In) > 0 &&
-        flags.cat->answer)
+    if ((GV_AREA & otype) && Vect_get_num_islands(&In) > 0 && flags.cat->answer)
         G_warning(_("The map contains islands. With the -c flag, "
-                    "islands will appear as filled areas, not holes in the output map."));
-
+                    "islands will appear as filled areas, not holes in the "
+                    "output map."));
 
     /* check what users wants to export and what's present in the map */
     if (Vect_get_num_primitives(&In, GV_POINT) > 0 && !(otype & GV_POINTS))
@@ -417,7 +416,8 @@ int main(int argc, char *argv[])
                      "Verify 'type' parameter.",
                      "%d areas found, but not requested to be exported. "
                      "Verify 'type' parameter.",
-                     Vect_get_num_areas(&In)), Vect_get_num_areas(&In));
+                     Vect_get_num_areas(&In)),
+                  Vect_get_num_areas(&In));
 
     if (Vect_get_num_primitives(&In, GV_FACE) > 0 && !(otype & GV_FACE))
         G_warning(n_("%d face found, but not requested to be exported. "
@@ -432,7 +432,8 @@ int main(int argc, char *argv[])
                      "Verify 'type' parameter.",
                      "%d volumes found, but not requested to be exported. "
                      "Verify 'type' parameter.",
-                     Vect_get_num_volumes(&In)), Vect_get_num_volumes(&In));
+                     Vect_get_num_volumes(&In)),
+                  Vect_get_num_volumes(&In));
 
     /* warn and eventually abort if there is nothing to be exported */
     num_to_export = 0;
@@ -550,8 +551,7 @@ int main(int argc, char *argv[])
         G_debug(1, "Append to OGR layer");
 #if GDAL_VERSION_NUM >= 2020000
         hDS =
-            GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL,
-                       NULL);
+            GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL, NULL);
 
         if (hDS == NULL) {
             G_debug(1, "Create OGR data source");
@@ -570,9 +570,8 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 2020000
         if (flags.update->answer) {
             G_debug(1, "Update OGR data source");
-            hDS =
-                GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL,
-                           NULL);
+            hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL,
+                             NULL);
         }
         else {
             G_debug(1, "Create OGR data source");
@@ -612,12 +611,14 @@ int main(int argc, char *argv[])
 
         found = TRUE;
         if (!overwrite && !flags.append->answer) {
-            G_fatal_error(_("Layer <%s> already exists in OGR data source '%s'"),
-                          options.layer->answer, options.dsn->answer);
+            G_fatal_error(
+                _("Layer <%s> already exists in OGR data source '%s'"),
+                options.layer->answer, options.dsn->answer);
         }
         else if (overwrite) {
-            G_warning(_("OGR layer <%s> already exists and will be overwritten"),
-                      options.layer->answer);
+            G_warning(
+                _("OGR layer <%s> already exists and will be overwritten"),
+                options.layer->answer);
 #if GDAL_VERSION_NUM >= 2020000
             GDALDatasetDeleteLayer(hDS, i);
 #else
@@ -629,14 +630,14 @@ int main(int argc, char *argv[])
 
     if (flags.append->answer && !found) {
         G_warning(_("OGR layer <%s> doesn't exists, "
-                    "creating new OGR layer instead"), options.layer->answer);
+                    "creating new OGR layer instead"),
+                  options.layer->answer);
         flags.append->answer = FALSE;
     }
 
     /* Automatically append driver options for 3D output to layer
        creation options if '2' is not given. */
-    if (!flags.force2d->answer &&
-        Vect_is_3d(&In) &&
+    if (!flags.force2d->answer && Vect_is_3d(&In) &&
         strcmp(options.format->answer, "ESRI_Shapefile") == 0) {
         /* find right option */
         char shape_geom[20];
@@ -674,7 +675,8 @@ int main(int argc, char *argv[])
             shpt = CSLFetchNameValue(papszLCO, "SHPT");
             if (!shpt || shpt[strlen(shpt) - 1] != 'Z') {
                 G_warning(_("Vector map <%s> is 3D. "
-                            "Use format specific layer creation options SHPT (parameter 'lco') "
+                            "Use format specific layer creation options SHPT "
+                            "(parameter 'lco') "
                             "to export in 3D rather than 2D (default)"),
                           options.input->answer);
             }
@@ -686,14 +688,16 @@ int main(int argc, char *argv[])
             dim = CSLFetchNameValue(papszLCO, "DIM");
             if (!dim || strcmp(dim, "3") != 0) {
                 G_warning(_("Vector map <%s> is 3D. "
-                            "Use format specific layer creation options DIM (parameter 'lco') "
+                            "Use format specific layer creation options DIM "
+                            "(parameter 'lco') "
                             "to export in 3D rather than 2D (default)."),
                           options.input->answer);
             }
         }
         else {
             G_warning(_("Vector map <%s> is 3D. "
-                        "Use format specific layer creation options (parameter 'lco') "
+                        "Use format specific layer creation options (parameter "
+                        "'lco') "
                         "to export in 3D rather than 2D (default)."),
                       options.input->answer);
         }
@@ -717,8 +721,7 @@ int main(int argc, char *argv[])
     CSLDestroy(papszLCO);
     if (Ogr_layer == NULL) {
         if (flags.append->answer)
-            G_fatal_error(_("OGR layer <%s> not found"),
-                          options.layer->answer);
+            G_fatal_error(_("OGR layer <%s> not found"), options.layer->answer);
         else
             G_fatal_error(_("Unable to create OGR layer"));
     }
@@ -728,16 +731,18 @@ int main(int argc, char *argv[])
     /* Vector attributes -> OGR fields */
     if (field > 0) {
         G_debug(1, "Create attribute table");
-        doatt = 1;              /* do attributes */
+        doatt = 1; /* do attributes */
         Fi = Vect_get_field(&In, field);
         if (Fi == NULL) {
             char create_field = TRUE;
 
-            G_warning(_("No attribute table found -> using only category numbers as attributes"));
+            G_warning(_("No attribute table found -> using only category "
+                        "numbers as attributes"));
             /* if we have no more than a 'cat' column, then that has to
                be exported in any case */
             if (flags.nocat->answer) {
-                G_warning(_("Exporting 'cat' anyway, as it is the only attribute table field"));
+                G_warning(_("Exporting 'cat' anyway, as it is the only "
+                            "attribute table field"));
                 flags.nocat->answer = FALSE;
             }
 
@@ -781,8 +786,8 @@ int main(int argc, char *argv[])
                 colsqltype = db_get_column_sqltype(Column);
                 colctype[i] = db_sqltype_to_Ctype(colsqltype);
                 colwidth = db_get_column_length(Column);
-                G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
-                        i, colname[i], colsqltype, colctype[i], colwidth);
+                G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d", i,
+                        colname[i], colsqltype, colctype[i], colwidth);
 
                 switch (colctype[i]) {
                 case DB_C_TYPE_INT:
@@ -823,8 +828,9 @@ int main(int argc, char *argv[])
                         /* skip existing fields */
                         continue;
                     else
-                        G_warning(_("New attribute column <%s> added to the table"),
-                                  colname[i]);
+                        G_warning(
+                            _("New attribute column <%s> added to the table"),
+                            colname[i]);
                 }
 
                 Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
@@ -863,37 +869,34 @@ int main(int argc, char *argv[])
         strcmp(options.format->answer, "OpenFileGDB") == 0) {
         outer_ring_ccw = 0;
     }
-    G_debug(1, "Format \"%s\", outer ring %s",
-            options.format->answer, (outer_ring_ccw ? "CCW" : "CW"));
+    G_debug(1, "Format \"%s\", outer ring %s", options.format->answer,
+            (outer_ring_ccw ? "CCW" : "CW"));
 
     /* Lines (run always to count features of different type) */
     if (otype & (GV_POINTS | GV_LINES | GV_KERNEL | GV_FACE)) {
-        G_message(n_("Exporting %d feature...",
-                     "Exporting %d features...",
+        G_message(n_("Exporting %d feature...", "Exporting %d features...",
                      Vect_get_num_primitives(&In, otype)),
                   Vect_get_num_primitives(&In, otype));
 
-        n_feat +=
-            export_lines(&In, field, otype,
-                         flags.multi->answer ? TRUE : FALSE, donocat,
-                         ftype == GV_BOUNDARY ? TRUE : FALSE, Ogr_featuredefn,
-                         Ogr_layer, Fi, Driver, ncol, colctype, colname,
-                         doatt, flags.nocat->answer ? TRUE : FALSE, &n_noatt,
-                         &n_nocat);
+        n_feat += export_lines(
+            &In, field, otype, flags.multi->answer ? TRUE : FALSE, donocat,
+            ftype == GV_BOUNDARY ? TRUE : FALSE, Ogr_featuredefn, Ogr_layer, Fi,
+            Driver, ncol, colctype, colname, doatt,
+            flags.nocat->answer ? TRUE : FALSE, &n_noatt, &n_nocat);
     }
 
     /* Areas (run always to count features of different type) */
     if (Vect_get_num_areas(&In) > 0 && (otype & GV_AREA)) {
         G_message(n_("Exporting %d area (may take some time)...",
                      "Exporting %d areas (may take some time)...",
-                     Vect_get_num_areas(&In)), Vect_get_num_areas(&In));
+                     Vect_get_num_areas(&In)),
+                  Vect_get_num_areas(&In));
 
-        n_feat +=
-            export_areas(&In, field, flags.multi->answer ? TRUE : FALSE,
-                         donocat, Ogr_featuredefn, Ogr_layer, Fi, Driver,
-                         ncol, colctype, colname, doatt,
-                         flags.nocat->answer ? TRUE : FALSE, &n_noatt,
-                         &n_nocat, outer_ring_ccw);
+        n_feat += export_areas(&In, field, flags.multi->answer ? TRUE : FALSE,
+                               donocat, Ogr_featuredefn, Ogr_layer, Fi, Driver,
+                               ncol, colctype, colname, doatt,
+                               flags.nocat->answer ? TRUE : FALSE, &n_noatt,
+                               &n_nocat, outer_ring_ccw);
     }
 
     /*
@@ -903,9 +906,9 @@ int main(int argc, char *argv[])
        which output format would know the difference?
      */
     if (Vect_get_num_volumes(&In) > 0 && (otype & GV_VOLUME)) {
-        G_message(n_("Exporting %d volume...",
-                     "Exporting %d volumes...",
-                     Vect_get_num_volumes(&In)), Vect_get_num_volumes(&In));
+        G_message(n_("Exporting %d volume...", "Exporting %d volumes...",
+                     Vect_get_num_volumes(&In)),
+                  Vect_get_num_volumes(&In));
         G_warning(_("Export of volumes not implemented yet. Skipping."));
     }
 
@@ -928,19 +931,24 @@ int main(int argc, char *argv[])
     if (n_noatt > 0)
         G_important_message(n_("%d feature without attributes was written",
                                "%d features without attributes were written",
-                               n_noatt), n_noatt);
+                               n_noatt),
+                            n_noatt);
 
     if (n_nocat > 0) {
         if (donocat)
             G_important_message(n_("%d feature without category was written",
                                    "%d features without category were written",
-                                   n_nocat), n_nocat);
+                                   n_nocat),
+                                n_nocat);
         else
             G_warning(n_("%d feature without category was skipped. "
-                         "Features without category are written only when -%c flag is given.",
+                         "Features without category are written only when -%c "
+                         "flag is given.",
                          "%d features without category were skipped. "
-                         "Features without category are written only when -%c flag is given.",
-                         n_nocat), n_nocat, flags.cat->key);
+                         "Features without category are written only when -%c "
+                         "flag is given.",
+                         n_nocat),
+                      n_nocat, flags.cat->key);
     }
 
     /* Enable this? May be confusing that for area type are not
@@ -954,10 +962,9 @@ int main(int argc, char *argv[])
     if (n_feat < 1)
         G_warning(_("Output layer is empty, no features written"));
     G_done_msg(n_("%d feature (%s type) written to <%s> (%s format).",
-                  "%d features (%s type) written to <%s> (%s format).",
-                  n_feat), n_feat,
-               OGRGeometryTypeToName(wkbtype),
-               options.layer->answer, options.format->answer);
+                  "%d features (%s type) written to <%s> (%s format).", n_feat),
+               n_feat, OGRGeometryTypeToName(wkbtype), options.layer->answer,
+               options.format->answer);
 
     exit(EXIT_SUCCESS);
 }

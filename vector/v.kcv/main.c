@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.kcv
@@ -9,14 +8,14 @@
  *
  * PURPOSE:    Randomly partition points into test/train sets.
  *
- * COPYRIGHT:  (C) 2001-2020 by James Darrell McCauley, and the GRASS Development Team
+ * COPYRIGHT:  (C) 2001-2020 by James Darrell McCauley, and the GRASS
+ *             Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2).  Read the file COPYING that
  *             comes with GRASS for details.
  *
  ****************************************************************/
-
 
 #include <stdlib.h>
 #include <math.h>
@@ -33,8 +32,7 @@ int main(int argc, char *argv[])
     int idx, *line_idx, lines_left;
     double (*rng)(void) = G_drand48;
     int nsites, p, np, min_count, spill;
-    struct partition
-    {
+    struct partition {
         int id, count, max;
     } *part;
     int last_pidx;
@@ -51,15 +49,13 @@ int main(int argc, char *argv[])
     char buf[2000];
     dbString sql;
 
-
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("points"));
     G_add_keyword(_("point pattern"));
     G_add_keyword(_("sampling"));
-    module->description =
-        _("Randomly partition points into test/train sets.");
+    module->description = _("Randomly partition points into test/train sets.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
@@ -96,8 +92,9 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
     if (Vect_open_old2(&Map, map_opt->answer, G_mapset(), field_opt->answer) <
         2) {
-        G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
-                      map_opt->answer, 2);
+        G_fatal_error(
+            _("Unable to open vector map <%s> at topological level %d"),
+            map_opt->answer, 2);
     }
 
     layer = Vect_get_field_number(&Map, field_opt->answer);
@@ -145,8 +142,9 @@ int main(int argc, char *argv[])
             int ctype = db_sqltype_to_Ctype(sqltype);
 
             if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
-                G_fatal_error(_("Column <%s> already exists but is not numeric"),
-                              col_opt->answer);
+                G_fatal_error(
+                    _("Column <%s> already exists but is not numeric"),
+                    col_opt->answer);
             }
         }
         else
@@ -160,8 +158,7 @@ int main(int argc, char *argv[])
         G_debug(3, "SQL: %s", db_get_string(&sql));
 
         if (db_execute_immediate(Driver, &sql) != DB_OK) {
-            G_fatal_error(_("Unable to alter table: %s"),
-                          db_get_string(&sql));
+            G_fatal_error(_("Unable to alter table: %s"), db_get_string(&sql));
         }
     }
 
@@ -169,7 +166,8 @@ int main(int argc, char *argv[])
         Vect_set_open_level(1);
         Vect_close(&Map);
         if (Vect_open_update_head(&Map, map_opt->answer, G_mapset()) < 1)
-            G_fatal_error(_("Unable to modify vector map stored in other mapset"));
+            G_fatal_error(
+                _("Unable to modify vector map stored in other mapset"));
         Vect_map_add_dblink(&Map, layer, Fi->name, Fi->table, Fi->key,
                             Fi->database, Fi->driver);
         Vect_close(&Map);
@@ -184,10 +182,11 @@ int main(int argc, char *argv[])
         G_important_message(_("Select privileges were granted on the table"));
 
         Vect_set_open_level(2);
-        if (Vect_open_old2
-            (&Map, map_opt->answer, G_mapset(), field_opt->answer) < 2) {
-            G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
-                          map_opt->answer, 2);
+        if (Vect_open_old2(&Map, map_opt->answer, G_mapset(),
+                           field_opt->answer) < 2) {
+            G_fatal_error(
+                _("Unable to open vector map <%s> at topological level %d"),
+                map_opt->answer, 2);
         }
     }
 
@@ -202,7 +201,7 @@ int main(int argc, char *argv[])
     G_debug(1, "min count: %d", min_count);
 
     /* number of partitions that need min_count + 1 features */
-    spill = nsites - np * min_count;    /* nsites % np, but modulus is evil */
+    spill = nsites - np * min_count; /* nsites % np, but modulus is evil */
     G_debug(1, "spill: %d", spill);
 
     /* array of available partitions */
@@ -215,7 +214,7 @@ int main(int argc, char *argv[])
 
     /* initialization of arrays */
     for (p = 0; p < np; p++) {
-        part[p].id = p + 1;     /* partition ids */
+        part[p].id = p + 1; /* partition ids */
         part[p].count = 0;
         part[p].max = min_count;
     }
@@ -271,11 +270,11 @@ int main(int argc, char *argv[])
             continue;
         }
         if (nlinks < 1)
-            sprintf(buf, "insert into %s (%s, %s) values (%d, %d)",
-                    Fi->table, Fi->key, col_opt->answer, cat, part[p].id);
+            sprintf(buf, "insert into %s (%s, %s) values (%d, %d)", Fi->table,
+                    Fi->key, col_opt->answer, cat, part[p].id);
         else
-            sprintf(buf, "update %s set %s = %d where %s = %d",
-                    Fi->table, col_opt->answer, part[p].id, Fi->key, cat);
+            sprintf(buf, "update %s set %s = %d where %s = %d", Fi->table,
+                    col_opt->answer, part[p].id, Fi->key, cat);
 
         db_set_string(&sql, buf);
 

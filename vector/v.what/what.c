@@ -13,7 +13,7 @@
 static int nlines = 50;
 
 #define WDTH 5
-#define SEP "------------------------------------------------------------------"
+#define SEP  "------------------------------------------------------------------"
 
 static void F_generate(const char *drvname, const char *dbname,
                        const char *tblname, const char *key, int keyval,
@@ -32,11 +32,12 @@ static void F_generate(const char *drvname, const char *dbname,
     dbValue *value;
 
     G_debug(2,
-            "F_generate(): drvname = '%s', dbname = '%s', tblname = '%s', key = '%s', keyval = %d",
+            "F_generate(): drvname = '%s', dbname = '%s', tblname = '%s', key "
+            "= '%s', keyval = %d",
             drvname, dbname, tblname, key, keyval);
 
     db_init_string(&sql);
-    db_init_string(&html);      /* here is the result stored */
+    db_init_string(&html); /* here is the result stored */
     db_init_string(&str);
 
     G_debug(2, "Open driver");
@@ -93,8 +94,8 @@ static void F_generate(const char *drvname, const char *dbname,
             case OUTPUT_JSON:
                 formbuf = G_str_replace(db_get_string(&str), "\\", "\\\\");
                 formbuf = G_str_replace(formbuf, "\"", "\\\"");
-                sprintf(buf, "%s\"%s\": \"%s\"", col == 0 ? "" : ",\n",
-                        colname, formbuf);
+                sprintf(buf, "%s\"%s\": \"%s\"", col == 0 ? "" : ",\n", colname,
+                        formbuf);
                 G_free(formbuf);
                 break;
             case OUTPUT_SCRIPT:
@@ -176,8 +177,8 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
                         j == 1 ? "" : ",", Cats->field[i], Cats->cat[i]);
                 break;
             default:
-                fprintf(stdout, _("Layer: %d\nCategory: %d\n"),
-                        Cats->field[i], Cats->cat[i]);
+                fprintf(stdout, _("Layer: %d\nCategory: %d\n"), Cats->field[i],
+                        Cats->cat[i]);
                 break;
             }
             Fi = Vect_get_field(Map, Cats->field[i]);
@@ -193,19 +194,22 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
                 case OUTPUT_JSON:
                     /* escape backslash to create valid JSON */
                     formbuf2 = G_str_replace(Fi->database, "\\", "\\\\");
-                    fprintf(stdout,
-                            ",\n\"Driver\": \"%s\",\n\"Database\": \"%s\",\n\"Table\": \"%s\",\n\"Key_column\": \"%s\"",
-                            Fi->driver, formbuf2, Fi->table, Fi->key);
+                    fprintf(
+                        stdout,
+                        ",\n\"Driver\": \"%s\",\n\"Database\": "
+                        "\"%s\",\n\"Table\": \"%s\",\n\"Key_column\": \"%s\"",
+                        Fi->driver, formbuf2, Fi->table, Fi->key);
                     G_free(formbuf2);
                     break;
                 default:
                     fprintf(stdout,
-                            _("\nDriver: %s\nDatabase: %s\nTable: %s\nKey column: %s\n"),
+                            _("\nDriver: %s\nDatabase: %s\nTable: %s\nKey "
+                              "column: %s\n"),
                             Fi->driver, Fi->database, Fi->table, Fi->key);
                     break;
                 }
-                F_generate(Fi->driver, Fi->database, Fi->table,
-                           Fi->key, Cats->cat[i], output, &form, columns);
+                F_generate(Fi->driver, Fi->database, Fi->table, Fi->key,
+                           Cats->cat[i], output, &form, columns);
 
                 switch (output) {
                 case OUTPUT_SCRIPT:
@@ -224,11 +228,11 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
                 G_free(Fi);
             }
             if (output == OUTPUT_JSON)
-                fprintf(stdout, "}");   /* for cat */
+                fprintf(stdout, "}"); /* for cat */
         }
     }
     if (output == OUTPUT_JSON)
-        fprintf(stdout, "]");   /* for list of cats */
+        fprintf(stdout, "]"); /* for list of cats */
 }
 
 void what(struct Map_info *Map, int nvects, char **vect, double east,
@@ -259,7 +263,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
     /* if you really want USfeet, try G_database_units_to_meters_factor()
        here, but then watch that sq_miles is not affected too */
     sqm_to_sqft = 1 / (0.0254 * 0.0254 * 12 * 12);
-
 
     for (i = 0; i < nvects; i++) {
         int nfeats;
@@ -294,15 +297,13 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             line = area = 0;
             type = (GV_POINTS & qtype);
             if (type)
-                line =
-                    Vect_find_line(&Map[i], east, north, 0.0, type, maxdist,
-                                   0, 0);
+                line = Vect_find_line(&Map[i], east, north, 0.0, type, maxdist,
+                                      0, 0);
 
             type = ((GV_LINE | GV_BOUNDARY | GV_FACE) & qtype);
             if (line == 0 && type)
-                line =
-                    Vect_find_line(&Map[i], east, north, 0.0, type, maxdist,
-                                   0, 0);
+                line = Vect_find_line(&Map[i], east, north, 0.0, type, maxdist,
+                                      0, 0);
 
             if (line == 0 && (qtype & GV_AREA))
                 area = Vect_find_area(&Map[i], east, north);
@@ -331,12 +332,12 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             if (nfeats > 0 || G_verbose() >= G_verbose_std()) {
                 switch (output) {
                 case OUTPUT_SCRIPT:
-                    fprintf(stdout, "East=%s\nNorth=%s\n", east_buf,
-                            north_buf);
+                    fprintf(stdout, "East=%s\nNorth=%s\n", east_buf, north_buf);
                     break;
                 case OUTPUT_JSON:
                     fprintf(stdout,
-                            "{\"Coordinates\": {\"East\": \"%s\", \"North\": \"%s\"}",
+                            "{\"Coordinates\": {\"East\": \"%s\", \"North\": "
+                            "\"%s\"}",
                             east_buf, north_buf);
                     break;
                 default:
@@ -360,8 +361,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
         case OUTPUT_JSON:
             if (!i) {
                 fprintf(stdout, "%s\"Maps\": [",
-                        nfeats > 0 || G_verbose() >= G_verbose_std()?
-                        ",\n" : "{");
+                        nfeats > 0 || G_verbose() >= G_verbose_std() ? ",\n"
+                                                                     : "{");
             }
             else
                 fprintf(stdout, ",");
@@ -450,7 +451,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     l = Vect_line_length(Points);
             }
 
-
             if (topo) {
                 int n, node[2], nnodes, nnlines, nli, nodeline, left, right;
                 float angle;
@@ -462,9 +462,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 switch (output) {
                 case OUTPUT_SCRIPT:
                     fprintf(stdout, "Feature_max_distance=%f\n", maxdist);
-                    fprintf(stdout,
-                            "Id=%d\nType=%s\nLeft=%d\nRight=%d\n",
-                            line, buf, left, right);
+                    fprintf(stdout, "Id=%d\nType=%s\nLeft=%d\nRight=%d\n", line,
+                            buf, left, right);
                     if (type & GV_LINES)
                         fprintf(stdout, "Length=%f\n", l);
                     break;
@@ -472,7 +471,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     fprintf(stdout, "%s\"Feature_max_distance\": %f",
                             multiple ? "" : ",\n", maxdist);
                     fprintf(stdout,
-                            ",\n\"Id\": %d,\n\"Type\": \"%s\",\n\"Left\": %d,\n\"Right\": %d",
+                            ",\n\"Id\": %d,\n\"Type\": \"%s\",\n\"Left\": "
+                            "%d,\n\"Right\": %d",
                             line, buf, left, right);
                     if (type & GV_LINES)
                         fprintf(stdout, ",\n\"Length\": %f", l);
@@ -481,15 +481,15 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     fprintf(stdout, "Looking for features within: %f\n",
                             maxdist);
                     fprintf(stdout,
-                            _("Id: %d\nType: %s\nLeft: %d\nRight: %d\n"),
-                            line, buf, left, right);
+                            _("Id: %d\nType: %s\nLeft: %d\nRight: %d\n"), line,
+                            buf, left, right);
                     if (type & GV_LINES)
                         fprintf(stdout, _("Length: %f\n"), l);
                     break;
                 }
                 if (type & GV_LINES)
                     nnodes = 2;
-                else            /* points */
+                else /* points */
                     nnodes = 0;
 
                 if (nnodes > 0)
@@ -504,30 +504,32 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     switch (output) {
                     case OUTPUT_SCRIPT:
                         fprintf(stdout,
-                                _("Node[%d]=%d\nNumber_lines=%d\nCoordinates=%.6f,%.6f,%.6f\n"),
+                                _("Node[%d]=%d\nNumber_lines=%d\nCoordinates=%."
+                                  "6f,%.6f,%.6f\n"),
                                 n, node[n], nnlines, nx, ny, nz);
                         break;
                     case OUTPUT_JSON:
                         fprintf(stdout,
-                                _(",\n\"Node[%d]\": %d,\n\"Number_lines\": %d,\n\"Coordinates\": %.6f,%.6f,%.6f"),
+                                _(",\n\"Node[%d]\": %d,\n\"Number_lines\": "
+                                  "%d,\n\"Coordinates\": %.6f,%.6f,%.6f"),
                                 n, node[n], nnlines, nx, ny, nz);
                         break;
                     default:
                         fprintf(stdout,
-                                _("Node[%d]: %d\nNumber of lines: %d\nCoordinates: %.6f, %.6f, %.6f\n"),
+                                _("Node[%d]: %d\nNumber of lines: "
+                                  "%d\nCoordinates: %.6f, %.6f, %.6f\n"),
                                 n, node[n], nnlines, nx, ny, nz);
                         break;
                     }
 
                     for (nli = 0; nli < nnlines; nli++) {
-                        nodeline =
-                            Vect_get_node_line(&(Map[i]), node[n], nli);
+                        nodeline = Vect_get_node_line(&(Map[i]), node[n], nli);
                         angle =
                             Vect_get_node_line_angle(&(Map[i]), node[n], nli);
                         switch (output) {
                         case OUTPUT_SCRIPT:
-                            fprintf(stdout, "Id=%d\nAngle=%.8f\n",
-                                    nodeline, angle);
+                            fprintf(stdout, "Id=%d\nAngle=%.8f\n", nodeline,
+                                    angle);
                             break;
                         case OUTPUT_JSON:
                             fprintf(stdout, ",\n\"Id\": %d,\n\"Angle\": %.8f",
@@ -550,8 +552,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                         fprintf(stdout, "Length=%f\n", l);
                     break;
                 case OUTPUT_JSON:
-                    fprintf(stdout, "%s\"Type\": \"%s\"",
-                            multiple ? "" : ",\n", buf);
+                    fprintf(stdout, "%s\"Type\": \"%s\"", multiple ? "" : ",\n",
+                            buf);
                     fprintf(stdout, ",\n\"Id\": %d", line);
                     if (type & GV_LINES)
                         fprintf(stdout, ",\n\"Length\": %f", l);
@@ -579,8 +581,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                                 Points->z[0]);
                         break;
                     default:
-                        fprintf(stdout, _("Point height: %f\n"),
-                                Points->z[0]);
+                        fprintf(stdout, _("Point height: %f\n"), Points->z[0]);
                         break;
                     }
                 }
@@ -616,24 +617,26 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                             break;
                         case OUTPUT_JSON:
                             fprintf(stdout,
-                                    ",\n\"Line_height_min\": %f,\n\"Line_height_max\": %f",
+                                    ",\n\"Line_height_min\": "
+                                    "%f,\n\"Line_height_max\": %f",
                                     min, max);
                             break;
                         default:
-                            fprintf(stdout,
-                                    _("Line height min: %f\nLine height max: %f\n"),
-                                    min, max);
+                            fprintf(
+                                stdout,
+                                _("Line height min: %f\nLine height max: %f\n"),
+                                min, max);
                             break;
                         }
                     }
                 }
-            }                   /* if height */
+            } /* if height */
 
             write_cats(&Map[i], field[i], Cats, showextra, output, columns);
 
             if (output == OUTPUT_JSON && multiple)
                 fprintf(stdout, "}");
-        }                       /* for lineList */
+        } /* for lineList */
 
         for (j = 0; j < areaList->n_values; j++) {
             int area, centroid;
@@ -685,7 +688,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 }
             }
 
-
             sq_meters = Vect_get_area_area(&Map[i], area);
             hectares = sq_meters / 10000.;
             /* 1 acre = 1 chain(66') * 1 furlong(10 chains),
@@ -693,23 +695,21 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             acres = (sq_meters * sqm_to_sqft) / (66 * 660);
             sq_miles = acres / 640.;
 
-
             if (topo) {
                 int nisles, isleidx, isle, isle_area;
 
                 nisles = Vect_get_area_num_isles(&Map[i], area);
                 switch (output) {
                 case OUTPUT_SCRIPT:
-                    fprintf(stdout, "Area=%d\nNumber_isles=%d\n", area,
-                            nisles);
+                    fprintf(stdout, "Area=%d\nNumber_isles=%d\n", area, nisles);
                     break;
                 case OUTPUT_JSON:
                     fprintf(stdout, ",\n\"Area\": %d,\n\"Number_isles\": %d",
                             area, nisles);
                     break;
                 default:
-                    fprintf(stdout, _("Area: %d\nNumber of isles: %d\n"),
-                            area, nisles);
+                    fprintf(stdout, _("Area: %d\nNumber of isles: %d\n"), area,
+                            nisles);
                     break;
                 }
 
@@ -739,8 +739,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                         break;
                     case OUTPUT_JSON:
                         fprintf(stdout,
-                                ",\n\"Island\": %d,\n\"Island_area\": %d",
-                                isle, isle_area);
+                                ",\n\"Island\": %d,\n\"Island_area\": %d", isle,
+                                isle_area);
                         break;
                     default:
                         fprintf(stdout, _("Island: %d In area: %d\n"), isle,
@@ -781,16 +781,16 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
             if (output == OUTPUT_JSON && multiple)
                 fprintf(stdout, "}");
-        }                       /* for areaList */
+        } /* for areaList */
 
         if (output == OUTPUT_JSON) {
             if (multiple)
-                fprintf(stdout, "]");   /* for features */
-            fprintf(stdout, "}");       /* for map */
+                fprintf(stdout, "]"); /* for features */
+            fprintf(stdout, "}");     /* for map */
         }
     }
     if (output == OUTPUT_JSON)
-        fprintf(stdout, "]}\n");        /* for nvects */
+        fprintf(stdout, "]}\n"); /* for nvects */
 
     fflush(stdout);
 }

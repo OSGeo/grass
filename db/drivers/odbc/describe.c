@@ -7,11 +7,11 @@
 #include "globals.h"
 #include "proto.h"
 
-int set_column_type(dbColumn * column, int otype);
+int set_column_type(dbColumn *column, int otype);
 
 int db__driver_describe_table(table_name, table)
-     dbString *table_name;
-     dbTable **table;
+dbString *table_name;
+dbTable **table;
 {
     char *name = NULL;
     SQLINTEGER err;
@@ -27,16 +27,15 @@ int db__driver_describe_table(table_name, table)
 
     name = db_get_string(table_name);
 
-    SQLSetStmtAttr(c->stmt, SQL_MAX_ROWS, (SQLPOINTER *) 1, 0);
+    SQLSetStmtAttr(c->stmt, SQL_MAX_ROWS, (SQLPOINTER *)1, 0);
 
     sprintf(s, "select * from %s", name);
 
-    ret = SQLExecDirect(c->stmt, (SQLCHAR *) s, SQL_NTS);
+    ret = SQLExecDirect(c->stmt, (SQLCHAR *)s, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
-                      sizeof(msg), NULL);
-        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n", s, msg,
-                          (int)err);
+        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg, sizeof(msg),
+                      NULL);
+        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n", s, msg, (int)err);
         db_d_report_error();
         return DB_FAILED;
     }
@@ -51,7 +50,7 @@ int db__driver_describe_table(table_name, table)
     /* set the table description */
     db_set_table_description(*table, "");
 
-    /* 
+    /*
        db_set_table_delete_priv_granted (*table);
        db_set_table_delete_priv_not_granted (*table);
        db_set_table_insert_priv_granted (*table);
@@ -61,10 +60,9 @@ int db__driver_describe_table(table_name, table)
     return DB_OK;
 }
 
-
 int describe_table(stmt, table)
-     SQLHSTMT stmt;
-     dbTable **table;
+SQLHSTMT stmt;
+dbTable **table;
 {
     dbColumn *column;
     int col;
@@ -94,7 +92,8 @@ int describe_table(stmt, table)
                         sizeof(charval), NULL, NULL);
         db_set_column_name(column, (const char *)charval);
 
-        /* label(title) is not description, but I did not found better attribute and it can say something about column */
+        /* label(title) is not description, but I did not found better attribute
+         * and it can say something about column */
         SQLColAttribute(stmt, col + 1, SQL_COLUMN_LABEL, charval,
                         sizeof(charval), NULL, NULL);
         db_set_column_description(column, (const char *)charval);
@@ -125,9 +124,9 @@ int describe_table(stmt, table)
            db_set_column_update_priv_not_granted (column);
          */
 
-        /* because set_column_type() uses other attributes (length, precision,...) must be called at the end */
-        SQLColAttribute(stmt, col + 1, SQL_COLUMN_TYPE, NULL, 0, NULL,
-                        &intval);
+        /* because set_column_type() uses other attributes (length,
+         * precision,...) must be called at the end */
+        SQLColAttribute(stmt, col + 1, SQL_COLUMN_TYPE, NULL, 0, NULL, &intval);
         set_column_type(column, intval);
         db_set_column_host_type(column, intval);
 
@@ -145,8 +144,8 @@ int describe_table(stmt, table)
 }
 
 int set_column_type(column, otype)
-     dbColumn *column;
-     int otype;
+dbColumn *column;
+int otype;
 {
     int dbtype;
 
@@ -169,7 +168,7 @@ int set_column_type(column, otype)
         if (db_get_column_precision(column) == 24)
             dbtype = DB_SQL_TYPE_REAL;
         else
-            dbtype = DB_SQL_TYPE_DOUBLE_PRECISION;      /* precision == 53 */
+            dbtype = DB_SQL_TYPE_DOUBLE_PRECISION; /* precision == 53 */
         break;
     case SQL_DECIMAL:
         dbtype = DB_SQL_TYPE_DECIMAL;

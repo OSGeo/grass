@@ -27,11 +27,14 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *handle,
     Cats = Vect_new_cats_struct();
     if (!flag_table) {
         i = get_field_cat(Map, layer, &field, &cat);
-        sprintf(buf, "insert into %s (%s"
+        sprintf(buf,
+                "insert into %s (%s"
                 ", layer"
                 ", entity"
                 ", handle"
-                ", label" ") values (%d, '", Fi[i]->table, Fi[i]->key, cat);
+                ", label"
+                ") values (%d, '",
+                Fi[i]->table, Fi[i]->key, cat);
 
         if (layer) {
             db_set_string(&str, layer);
@@ -197,20 +200,16 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
         type = GV_MTABLE;
 
     Fi = (struct field_info **)G_realloc(Fi,
-                                         (i +
-                                          1) * sizeof(struct field_info *));
+                                         (i + 1) * sizeof(struct field_info *));
 
     Fi[i] = Vect_default_field_info(Map, *field, field_name, type);
 
     if (!driver) {
-        driver =
-            db_start_driver_open_database(Fi[i]->driver,
-                                          Vect_subst_var(Fi[i]->database,
-                                                         Map));
+        driver = db_start_driver_open_database(
+            Fi[i]->driver, Vect_subst_var(Fi[i]->database, Map));
         if (!driver)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                          Vect_subst_var(Fi[i]->database, Map),
-                          Fi[i]->driver);
+                          Vect_subst_var(Fi[i]->database, Map), Fi[i]->driver);
         db_set_error_handler_driver(driver);
 
         db_begin_transaction(driver);
@@ -221,29 +220,30 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
 
     /* capital table names are a pain in SQL */
     G_str_to_lower(Fi[i]->table);
-    sprintf(buf, "create table %s (cat integer"
+    sprintf(buf,
+            "create table %s (cat integer"
             ", layer varchar(%d)"
             ", entity varchar(%d)"
             ", handle varchar(16)"
             ", label varchar(%d)"
-            ")", Fi[i]->table, DXF_BUF_SIZE, DXF_BUF_SIZE, DXF_BUF_SIZE);
+            ")",
+            Fi[i]->table, DXF_BUF_SIZE, DXF_BUF_SIZE, DXF_BUF_SIZE);
     db_set_string(&sql, buf);
 
     if (db_execute_immediate(driver, &sql) != DB_OK)
         G_fatal_error(_("Unable to create table: %s"), db_get_string(&sql));
     db_free_string(&sql);
 
-    if (db_grant_on_table
-        (driver, Fi[i]->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+    if (db_grant_on_table(driver, Fi[i]->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Unable to grant privileges on table <%s>"),
                       Fi[i]->table);
     if (db_create_index2(driver, Fi[i]->table, Fi[i]->key) != DB_OK)
         G_warning(_("Unable to create index for table <%s>, key <%s>"),
                   Fi[i]->table, Fi[i]->key);
 
-    if (Vect_map_add_dblink
-        (Map, *field, field_name, Fi[i]->table, GV_KEY_COLUMN,
-         Fi[i]->database, Fi[i]->driver))
+    if (Vect_map_add_dblink(Map, *field, field_name, Fi[i]->table,
+                            GV_KEY_COLUMN, Fi[i]->database, Fi[i]->driver))
         G_warning(_("Unable to add database link for vector map <%s>"),
                   Vect_get_full_name(Map));
 

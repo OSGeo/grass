@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       db.execute
@@ -25,8 +24,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-struct
-{
+struct {
     const char *driver, *database, *schema, *sql, *input;
     int i;
 } parms;
@@ -54,8 +52,8 @@ int main(int argc, char **argv)
     if (parms.input && strcmp(parms.input, "-") != 0) {
         fd = fopen(parms.input, "r");
         if (fd == NULL) {
-            G_fatal_error(_("Unable to open file <%s>: %s"),
-                          parms.input, strerror(errno));
+            G_fatal_error(_("Unable to open file <%s>: %s"), parms.input,
+                          strerror(errno));
         }
     }
     else {
@@ -82,7 +80,7 @@ int main(int argc, char **argv)
         ret = db_execute_immediate(driver, &stmt);
 
         if (ret != DB_OK) {
-            if (parms.i) {      /* ignore SQL errors */
+            if (parms.i) { /* ignore SQL errors */
                 G_warning(_("Error while executing: '%s'"),
                           db_get_string(&stmt));
                 error++;
@@ -93,7 +91,7 @@ int main(int argc, char **argv)
             }
         }
     }
-    else {                      /* parms.input */
+    else { /* parms.input */
         while (get_stmt(fd, &stmt)) {
             if (stmt_is_empty(&stmt))
                 continue;
@@ -102,7 +100,7 @@ int main(int argc, char **argv)
             ret = db_execute_immediate(driver, &stmt);
 
             if (ret != DB_OK) {
-                if (parms.i) {  /* ignore SQL errors */
+                if (parms.i) { /* ignore SQL errors */
                     G_warning(_("Error while executing: '%s'"),
                               db_get_string(&stmt));
                     error++;
@@ -120,7 +118,6 @@ int main(int argc, char **argv)
 
     exit(error ? EXIT_FAILURE : EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {
@@ -177,8 +174,8 @@ static void parse_command_line(int argc, char **argv)
         exit(EXIT_SUCCESS);
 
     if (!sql->answer && !input->answer) {
-        G_fatal_error(_("You must provide <%s> or <%s> option"),
-                      sql->key, input->key);
+        G_fatal_error(_("You must provide <%s> or <%s> option"), sql->key,
+                      input->key);
     }
 
     parms.driver = driver->answer;
@@ -189,7 +186,7 @@ static void parse_command_line(int argc, char **argv)
     parms.i = i->answer ? TRUE : FALSE;
 }
 
-int get_stmt(FILE * fd, dbString * stmt)
+int get_stmt(FILE *fd, dbString *stmt)
 {
     char buf[DB_SQL_MAX], buf2[DB_SQL_MAX];
     size_t len;
@@ -212,7 +209,7 @@ int get_stmt(FILE * fd, dbString * stmt)
     return 1;
 }
 
-int stmt_is_empty(dbString * stmt)
+int stmt_is_empty(dbString *stmt)
 {
     char dummy[2];
 
@@ -221,7 +218,7 @@ int stmt_is_empty(dbString * stmt)
 
 void error_handler(void *p)
 {
-    dbDriver *driver = (dbDriver *) p;
+    dbDriver *driver = (dbDriver *)p;
 
     db_close_database(driver);
     db_shutdown_driver(driver);

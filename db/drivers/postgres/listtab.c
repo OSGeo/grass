@@ -15,7 +15,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
+int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 {
     int i, j, nrows, trows, vrows, ncols, tablecol, tschemacol, viewcol,
         vschemacol;
@@ -26,17 +26,16 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     *tlist = NULL;
     *tcount = 0;
 
-
     /* Get table names */
-    sprintf(buf, "SELECT * FROM pg_tables WHERE schemaname %s "
+    sprintf(buf,
+            "SELECT * FROM pg_tables WHERE schemaname %s "
             " ('pg_catalog', 'information_schema') ORDER BY tablename",
             system ? "IN" : "NOT IN");
     G_debug(2, "SQL: %s", buf);
 
     rest = PQexec(pg_conn, buf);
     if (!rest || PQresultStatus(rest) != PGRES_TUPLES_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to select table names."),
+        db_d_append_error("%s\n%s", _("Unable to select table names."),
                           PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(rest);
@@ -54,17 +53,16 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
             tschemacol = i;
     }
 
-
     /* Get view names */
-    sprintf(buf, "SELECT * FROM pg_views WHERE schemaname %s "
+    sprintf(buf,
+            "SELECT * FROM pg_views WHERE schemaname %s "
             " ('pg_catalog', 'information_schema') ORDER BY viewname",
             system ? "IN" : "NOT IN");
     G_debug(2, "SQL: %s", buf);
 
     resv = PQexec(pg_conn, buf);
     if (!resv || PQresultStatus(resv) != PGRES_TUPLES_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to select view names."),
+        db_d_append_error("%s\n%s", _("Unable to select view names."),
                           PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(resv);
@@ -81,8 +79,6 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
         if (strcmp(PQfname(resv, i), "schemaname") == 0)
             vschemacol = i;
     }
-
-
 
     trows = PQntuples(rest);
     vrows = PQntuples(resv);
@@ -109,7 +105,6 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 
     PQclear(rest);
 
-
     for (j = 0; j < vrows; j++) {
         if (vschemacol >= 0) {
             sprintf(buf, "%s.%s", (char *)PQgetvalue(resv, j, vschemacol),
@@ -123,7 +118,6 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     }
 
     PQclear(resv);
-
 
     *tlist = list;
     *tcount = nrows;

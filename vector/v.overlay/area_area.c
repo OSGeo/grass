@@ -1,11 +1,10 @@
-/*
- *****************************************************************************
- *  
- *  MODULE: v.overlay 
+/*****************************************************************************
+ *
+ *  MODULE: v.overlay
  *
  *  AUTHOR(S): Radim Blazek, Markus Metz
- *  
- ******************************************************************************/
+ *
+ ****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -25,9 +24,9 @@ static int cmp_int(const void *a, const void *b)
 }
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
-              struct Map_info *Out, struct field_info *Fi,
-              dbDriver * driver, int operator, int *ofield,
-              ATTRIBUTES * attr, struct ilist *BList, double snap)
+              struct Map_info *Out, struct field_info *Fi, dbDriver *driver,
+              int operator, int * ofield, ATTRIBUTES *attr, struct ilist *BList,
+              double snap)
 {
     int ret, input, line, nlines, area, nareas;
     int in_centr, out_cat;
@@ -99,8 +98,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                     G_ilist_add(BList, ret);
 #else
                     ret =
-                        Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points,
-                                          Cats);
+                        Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points, Cats);
 #endif
 
                     snapped_lines++;
@@ -111,15 +109,16 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         Vect_destroy_boxlist(boxlist);
         Vect_destroy_list(reflist);
 
-        G_verbose_message(n_("%d boundary snapped",
-                             "%d boundaries snapped",
-                             snapped_lines), snapped_lines);
+        G_verbose_message(
+            n_("%d boundary snapped", "%d boundaries snapped", snapped_lines),
+            snapped_lines);
     }
 
     /* same procedure like for v.in.ogr:
-     * Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
-     * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
-     * and Vect_clean_small_angles_at_nodes() until no more small dangles are found */
+     * Vect_clean_small_angles_at_nodes() can change the geometry so that new
+     * intersections are created. We must call Vect_break_lines(),
+     * Vect_remove_duplicates() and Vect_clean_small_angles_at_nodes() until no
+     * more small dangles are found */
     do {
         G_message(_("Breaking lines..."));
         Vect_break_lines_list(Tmp, NULL, BList, GV_BOUNDARY, NULL);
@@ -132,8 +131,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         nmodif = Vect_clean_small_angles_at_nodes(Tmp, GV_BOUNDARY, NULL);
     } while (nmodif > 0);
 
-    /* ?: May be result of Vect_break_lines() + Vect_remove_duplicates() any dangle or bridge?
-     * In that case, calls to Vect_remove_dangles() and Vect_remove_bridges() would be also necessary */
+    /* ?: May be result of Vect_break_lines() + Vect_remove_duplicates() any
+     * dangle or bridge? In that case, calls to Vect_remove_dangles() and
+     * Vect_remove_bridges() would be also necessary */
 
     G_set_verbose(0);
     /* should be fast, be silent */
@@ -176,11 +176,11 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     /* Calculate new centroids for all areas */
     nareas = Vect_get_num_areas(Tmp);
 
-    Centr = (CENTR *) G_malloc((nareas + 1) * sizeof(CENTR));   /* index from 1 ! */
+    Centr =
+        (CENTR *)G_malloc((nareas + 1) * sizeof(CENTR)); /* index from 1 ! */
     for (area = 1; area <= nareas; area++) {
-        ret =
-            Vect_get_point_in_area(Tmp, area, &(Centr[area].x),
-                                   &(Centr[area].y));
+        ret = Vect_get_point_in_area(Tmp, area, &(Centr[area].x),
+                                     &(Centr[area].y));
         if (ret < 0) {
             G_warning(_("Cannot calculate area centroid"));
             Centr[area].valid = 0;
@@ -227,24 +227,20 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                 int i, j;
                 int nisles;
 
-
                 Vect_read_line(&(In[input]), NULL, Cats, in_centr);
                 Vect_get_area_points(&(In[input]), area, APoints);
                 nisles = Vect_get_area_num_isles(&(In[input]), area);
                 if (nisles > nisles_alloc) {
-                    IPoints =
-                        G_realloc(IPoints,
-                                  (nisles + 10) * sizeof(struct line_pnts *));
+                    IPoints = G_realloc(
+                        IPoints, (nisles + 10) * sizeof(struct line_pnts *));
                     for (isle = nisles_alloc; isle < nisles + 10; isle++)
                         IPoints[isle] = Vect_new_line_struct();
                     nisles_alloc = nisles + 10;
                 }
                 for (isle = 0; isle < nisles; isle++) {
-                    int isle_id =
-                        Vect_get_area_isle(&(In[input]), area, isle);
+                    int isle_id = Vect_get_area_isle(&(In[input]), area, isle);
 
-                    Vect_get_isle_points(&(In[input]), isle_id,
-                                         IPoints[isle]);
+                    Vect_get_isle_points(&(In[input]), isle_id, IPoints[isle]);
                 }
 
                 Vect_line_box(APoints, &box);
@@ -256,9 +252,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                     int centr_in_area;
 
                     ocentr = List->value[j];
-                    centr_in_area = Vect_point_in_poly(Centr[ocentr].x,
-                                                       Centr[ocentr].y,
-                                                       APoints);
+                    centr_in_area = Vect_point_in_poly(
+                        Centr[ocentr].x, Centr[ocentr].y, APoints);
                     if (centr_in_area == 1) {
                         for (isle = 0; isle < nisles; isle++) {
                             if (Vect_point_in_poly(Centr[ocentr].x,
@@ -307,21 +302,18 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         /* check the condition */
         switch (operator) {
         case OP_AND:
-            if (!
-                (Centr[area].cat[0]->n_cats > 0 &&
-                 Centr[area].cat[1]->n_cats > 0))
+            if (!(Centr[area].cat[0]->n_cats > 0 &&
+                  Centr[area].cat[1]->n_cats > 0))
                 continue;
             break;
         case OP_OR:
-            if (!
-                (Centr[area].cat[0]->n_cats > 0 ||
-                 Centr[area].cat[1]->n_cats > 0))
+            if (!(Centr[area].cat[0]->n_cats > 0 ||
+                  Centr[area].cat[1]->n_cats > 0))
                 continue;
             break;
         case OP_NOT:
-            if (!
-                (Centr[area].cat[0]->n_cats > 0 &&
-                 !(Centr[area].cat[1]->n_cats > 0)))
+            if (!(Centr[area].cat[0]->n_cats > 0 &&
+                  !(Centr[area].cat[1]->n_cats > 0)))
                 continue;
             break;
         case OP_XOR:
@@ -339,16 +331,17 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         Vect_append_point(Points, Centr[area].x, Centr[area].y, 0.0);
 
         if (ofield[0] > 0) {
-            /* Add new cats for all combinations of input cats (-1 in cycle for null) */
+            /* Add new cats for all combinations of input cats (-1 in cycle for
+             * null) */
             for (i = -1; i < Centr[area].cat[0]->n_cats; i++) {
                 int j;
 
                 if (i == -1 && Centr[area].cat[0]->n_cats > 0)
-                    continue;   /* no need to make null */
+                    continue; /* no need to make null */
 
                 for (j = -1; j < Centr[area].cat[1]->n_cats; j++) {
                     if (j == -1 && Centr[area].cat[1]->n_cats > 0)
-                        continue;       /* no need to make null */
+                        continue; /* no need to make null */
 
                     if (ofield[0] > 0)
                         Vect_cat_set(Cats, ofield[0], out_cat);
@@ -465,7 +458,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     for (line = 1; line <= nlines; line++) {
         int i, ltype, side[2], centr[2];
 
-        G_percent(line, nlines, 1);     /* must be before any continue */
+        G_percent(line, nlines, 1); /* must be before any continue */
 
         if (!Vect_line_alive(Tmp, line))
             continue;
@@ -485,7 +478,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
             if (side[i] > 0) {
                 area = side[i];
             }
-            else {              /* island */
+            else { /* island */
                 area = Vect_get_isle_area(Tmp, abs(side[i]));
             }
 

@@ -25,7 +25,7 @@
    \param params module parameters
    \param data nviz data
  */
-void draw_cplane(const struct GParams *params, nv_data * data)
+void draw_cplane(const struct GParams *params, nv_data *data)
 {
     int i, id, ncplanes;
     float trans_x, trans_y, trans_z;

@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,7 +29,8 @@ int add_column(int tab, int type, char *name, int width, int decimals)
     int c;
 
     G_debug(3,
-            "add_column(): tab = %d, type = %d, name = %s, width = %d, decimals = %d",
+            "add_column(): tab = %d, type = %d, name = %s, width = %d, "
+            "decimals = %d",
             tab, type, name, width, decimals);
 
     /* truncate column name */
@@ -57,9 +57,8 @@ int add_column(int tab, int type, char *name, int width, int decimals)
 
     if (db.tables[tab].ncols == db.tables[tab].acols) {
         db.tables[tab].acols += 15;
-        db.tables[tab].cols =
-            (COLUMN *) G_realloc(db.tables[tab].cols,
-                                 db.tables[tab].acols * sizeof(TABLE));
+        db.tables[tab].cols = (COLUMN *)G_realloc(
+            db.tables[tab].cols, db.tables[tab].acols * sizeof(TABLE));
     }
 
     strncpy(db.tables[tab].cols[c].name, name, DBF_COL_NAME - 1);
@@ -129,8 +128,8 @@ int drop_column(int tab, char *name)
         }
 
         db.tables[tab].rows[i].values =
-            (VALUE *) G_realloc(db.tables[tab].rows[i].values,
-                                db.tables[tab].ncols * sizeof(VALUE));
+            (VALUE *)G_realloc(db.tables[tab].rows[i].values,
+                               db.tables[tab].ncols * sizeof(VALUE));
     }
     return DB_OK;
 }

@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -6,7 +5,7 @@
  * AUTHOR(S):  Daniel Bundala, Markus Metz
  *
  * PURPOSE:    miscellaneous functions of v.generalize
- *          
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -72,10 +71,9 @@ int get_furthest(struct line_pnts *Points, int a, int b, int with_z,
     int status;
 
     for (i = a + 1; i < b; i++) {
-        di = dig_distance2_point_to_line(Points->x[i], Points->y[i],
-                                         Points->z[i], x0, y0, z0, x1, y1, z1,
-                                         with_z, &px, &py, &pz, &pdist,
-                                         &status);
+        di = dig_distance2_point_to_line(
+            Points->x[i], Points->y[i], Points->z[i], x0, y0, z0, x1, y1, z1,
+            with_z, &px, &py, &pz, &pdist, &status);
         if (di > d) {
             d = di;
             index = i;
@@ -85,12 +83,12 @@ int get_furthest(struct line_pnts *Points, int a, int b, int with_z,
     return index;
 }
 
-/* TODO: The collection of categories is horrible in current version! 
+/* TODO: The collection of categories is horrible in current version!
  * Everything repeats many times. We need some data structure
  * implementing set! */
 int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
 {
-    /* this is the (mostly) code from v.extract, it should be moved to 
+    /* this is the (mostly) code from v.extract, it should be moved to
      * some vector library (probably) */
 
     int nlines, line, nfields;
@@ -108,9 +106,8 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
     fields = (int *)G_malloc(nfields * sizeof(int));
     for (i = 0; i < nfields; i++) {
         nocats[i] = 0;
-        ocats[i] =
-            (int *)G_malloc(Vect_cidx_get_num_cats_by_index(In, i) *
-                            sizeof(int));
+        ocats[i] = (int *)G_malloc(Vect_cidx_get_num_cats_by_index(In, i) *
+                                   sizeof(int));
         fields[i] = Vect_cidx_get_field_number(In, i);
     }
     nlines = Vect_get_num_lines(Out);
@@ -119,7 +116,7 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
         for (i = 0; i < Cats->n_cats; i++) {
             int f = 0, j;
 
-            for (j = 0; j < nfields; j++) {     /* find field */
+            for (j = 0; j < nfields; j++) { /* find field */
                 if (fields[j] == Cats->field[i]) {
                     f = j;
                     break;
@@ -166,7 +163,7 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
         G_message(_("Layer %d"), fields[i]);
         /* Make a list of categories */
         IFi = Vect_get_field(In, fields[i]);
-        if (!IFi) {             /* no table */
+        if (!IFi) { /* no table */
             G_warning(_("Database connection not defined for layer %d"),
                       fields[i]);
             continue;
@@ -175,10 +172,9 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
         OFi = Vect_default_field_info(Out, IFi->number, IFi->name, ttype);
 
         ret = db_copy_table_by_ints(IFi->driver, IFi->database, IFi->table,
-                                    OFi->driver, Vect_subst_var(OFi->database,
-                                                                Out),
-                                    OFi->table, IFi->key, ocats[i],
-                                    nocats[i]);
+                                    OFi->driver,
+                                    Vect_subst_var(OFi->database, Out),
+                                    OFi->table, IFi->key, ocats[i], nocats[i]);
 
         if (ret == DB_FAILED) {
             G_warning(_("Unable to copy table <%s>"), IFi->table);
@@ -263,7 +259,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     }
 
     /* test node angles
-     * an area can be built only if there are no two lines with the same 
+     * an area can be built only if there are no two lines with the same
      * angle at the same node */
     /* line start */
     angle1 = dig_calc_begin_angle(Points, 0);
@@ -300,9 +296,8 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
         }
     }
     else {
-        node =
-            dig_find_node(&(Out->plus), Points->x[i], Points->y[i],
-                          Points->z[i]);
+        node = dig_find_node(&(Out->plus), Points->x[i], Points->y[i],
+                             Points->z[i]);
     }
 
     if (node) {
@@ -349,15 +344,14 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
         Vect_read_line(Out, BPoints, NULL, bline);
 
-        /* Vect_line_intersection is quite slow, hopefully not so bad because only few 
-         * intersections should be found if any */
+        /* Vect_line_intersection is quite slow, hopefully not so bad because
+         * only few intersections should be found if any */
 
         AXLines = BXLines = NULL;
-        Vect_line_intersection2(Points, BPoints, &box, &List->box[i],
-                                &AXLines, &BXLines, &naxlines, &nbxlines, 0);
+        Vect_line_intersection2(Points, BPoints, &box, &List->box[i], &AXLines,
+                                &BXLines, &naxlines, &nbxlines, 0);
 
-        G_debug(4,
-                "bline = %d intersect = %d naxlines = %d nbxlines = %d",
+        G_debug(4, "bline = %d intersect = %d naxlines = %d nbxlines = %d",
                 bline, intersect, naxlines, nbxlines);
 
         /* Free */
@@ -423,9 +417,9 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
         else
             Vect_append_points(BPoints2, Points, dir);
 
-        BPoints2->n_points--;   /* skip last point, avoids duplicates */
+        BPoints2->n_points--; /* skip last point, avoids duplicates */
     }
-    BPoints2->n_points++;       /* close polygon */
+    BPoints2->n_points++; /* close polygon */
 
     if (centr > 0) {
         int ret;
@@ -485,9 +479,9 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
         else
             Vect_append_points(BPoints2, Points, dir);
 
-        BPoints2->n_points--;   /* skip last point, avoids duplicates */
+        BPoints2->n_points--; /* skip last point, avoids duplicates */
     }
-    BPoints2->n_points++;       /* close polygon */
+    BPoints2->n_points++; /* close polygon */
 
     if (centr > 0) {
         int ret;
@@ -517,8 +511,8 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
     /* all fine:
      * areas/isles can be built
-     * no intersection with another boundary, e.g. isle attachment will be preserved
-     * centroids are still on the correct side of the boundary */
+     * no intersection with another boundary, e.g. isle attachment will be
+     * preserved centroids are still on the correct side of the boundary */
 
     if (!topo_debug) {
         /* update only those parts of topology that actually get changed */
@@ -655,8 +649,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                 for (j = 0; j < nisles_l_o; j++) {
                     G_message("old %d new %d", isles_l_o[j], isles_l_n[j]);
                 }
-                G_fatal_error("New isle to the left %d is wrong",
-                              isles_l_n[i]);
+                G_fatal_error("New isle to the left %d is wrong", isles_l_n[i]);
             }
         }
         k++;
@@ -687,8 +680,8 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     /* Check position of centroids */
     if (centr_l_n != centr_l_o || centr_r_n != centr_r_o) {
         /* should not happen if the above topo checks work as expected */
-        G_warning
-            ("The modified boundary changes attachment of centroid -> topo checks failed");
+        G_warning("The modified boundary changes attachment of centroid -> "
+                  "topo checks failed");
 
         if (centr_l_n != centr_l_o) {
             G_warning("Left area/isle old: %d, new: %d", left_o, left_n);
@@ -703,15 +696,12 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                 ret1 = (BPoints->x[0] >= abox.W && BPoints->x[0] <= abox.E &&
                         BPoints->y[0] >= abox.S && BPoints->y[0] <= abox.N);
 
-                ret2 =
-                    Vect_point_in_area_outer_ring(BPoints->x[0],
-                                                  BPoints->y[0], Out,
-                                                  area_l_n, &abox);
+                ret2 = Vect_point_in_area_outer_ring(
+                    BPoints->x[0], BPoints->y[0], Out, area_l_n, &abox);
 
                 Vect_get_area_points(Out, area_l_n, BPoints2);
                 ret3 =
-                    Vect_point_in_poly(BPoints->x[0], BPoints->y[0],
-                                       BPoints2);
+                    Vect_point_in_poly(BPoints->x[0], BPoints->y[0], BPoints2);
 
                 if (ret2 != ret3) {
                     G_warning("Left old centroid in new area box: %d", ret1);
@@ -724,8 +714,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
         }
         if (centr_r_n != centr_r_o) {
             G_warning("Right area/isle old: %d, new: %d", right_o, right_n);
-            G_warning("Right centroid old: %d, new: %d", centr_r_o,
-                      centr_r_n);
+            G_warning("Right centroid old: %d, new: %d", centr_r_o, centr_r_n);
 
             if (centr_r_o) {
                 int ret1, ret2, ret3;
@@ -736,15 +725,12 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                 ret1 = (BPoints->x[0] >= abox.W && BPoints->x[0] <= abox.E &&
                         BPoints->y[0] >= abox.S && BPoints->y[0] <= abox.N);
 
-                ret2 =
-                    Vect_point_in_area_outer_ring(BPoints->x[0],
-                                                  BPoints->y[0], Out,
-                                                  area_r_n, &abox);
+                ret2 = Vect_point_in_area_outer_ring(
+                    BPoints->x[0], BPoints->y[0], Out, area_r_n, &abox);
 
                 Vect_get_area_points(Out, area_r_n, BPoints2);
                 ret3 =
-                    Vect_point_in_poly(BPoints->x[0], BPoints->y[0],
-                                       BPoints2);
+                    Vect_point_in_poly(BPoints->x[0], BPoints->y[0], BPoints2);
 
                 if (ret2 != ret3) {
                     G_warning("Right old centroid in new area box: %d", ret1);
@@ -787,14 +773,13 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                               area_l_n);
 
                     G_warning("New left centroid on outer ring: %d",
-                              Vect_point_in_area_outer_ring(BPoints->x[0],
-                                                            BPoints->y[0],
-                                                            Out, area_l_n,
-                                                            &areabox));
+                              Vect_point_in_area_outer_ring(
+                                  BPoints->x[0], BPoints->y[0], Out, area_l_n,
+                                  &areabox));
 
-                    G_warning("Best area for new left centroid: %d",
-                              Vect_find_area(Out, BPoints->x[0],
-                                             BPoints->y[0]));
+                    G_warning(
+                        "Best area for new left centroid: %d",
+                        Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
                 }
                 else
                     G_warning("New left centroid is not in new left area");
@@ -809,14 +794,13 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                               area_l_n);
 
                     G_warning("Old left centroid on outer ring: %d",
-                              Vect_point_in_area_outer_ring(BPoints->x[0],
-                                                            BPoints->y[0],
-                                                            Out, area_l_n,
-                                                            &areabox));
+                              Vect_point_in_area_outer_ring(
+                                  BPoints->x[0], BPoints->y[0], Out, area_l_n,
+                                  &areabox));
 
-                    G_warning("Best area for old left centroid: %d",
-                              Vect_find_area(Out, BPoints->x[0],
-                                             BPoints->y[0]));
+                    G_warning(
+                        "Best area for old left centroid: %d",
+                        Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
                 }
                 else
                     G_warning("Old left centroid is not in new left area");
@@ -838,14 +822,13 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                               area_r_n);
 
                     G_warning("New right centroid on outer ring: %d",
-                              Vect_point_in_area_outer_ring(BPoints->x[0],
-                                                            BPoints->y[0],
-                                                            Out, area_r_n,
-                                                            &areabox));
+                              Vect_point_in_area_outer_ring(
+                                  BPoints->x[0], BPoints->y[0], Out, area_r_n,
+                                  &areabox));
 
-                    G_warning("Best area for new right centroid: %d",
-                              Vect_find_area(Out, BPoints->x[0],
-                                             BPoints->y[0]));
+                    G_warning(
+                        "Best area for new right centroid: %d",
+                        Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
                 }
                 else
                     G_warning("New right centroid is not in new right area");
@@ -860,14 +843,13 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                               area_r_n);
 
                     G_warning("Old right centroid on outer ring: %d",
-                              Vect_point_in_area_outer_ring(BPoints->x[0],
-                                                            BPoints->y[0],
-                                                            Out, area_r_n,
-                                                            &areabox));
+                              Vect_point_in_area_outer_ring(
+                                  BPoints->x[0], BPoints->y[0], Out, area_r_n,
+                                  &areabox));
 
-                    G_warning("Best area for old right centroid: %d",
-                              Vect_find_area(Out, BPoints->x[0],
-                                             BPoints->y[0]));
+                    G_warning(
+                        "Best area for old right centroid: %d",
+                        Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
                 }
                 else
                     G_warning("Old right centroid is not in new right area");

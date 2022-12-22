@@ -1,13 +1,12 @@
-
 /***************************************************************
  *
  * MODULE:       v.type
- * 
+ *
  * AUTHOR(S):    Radim Blazek
- *               OGR support by Martin Landa <landa.martin gmail.com>               
+ *               OGR support by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Feature type manipulations
- *               
+ *
  * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -69,8 +68,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     switch (from_opt->answer[0]) {
     case 'p':
@@ -114,15 +112,12 @@ int main(int argc, char *argv[])
     }
     /* check type compatibility */
     if (((from_type & (GV_POINT | GV_CENTROID | GV_KERNEL)) &&
-         (to_type & (GV_LINE | GV_BOUNDARY | GV_FACE))
-        ) || ((from_type & (GV_LINE | GV_BOUNDARY | GV_FACE)) &&
-              (to_type & (GV_POINT | GV_CENTROID | GV_KERNEL))
-        )
-        )
+         (to_type & (GV_LINE | GV_BOUNDARY | GV_FACE))) ||
+        ((from_type & (GV_LINE | GV_BOUNDARY | GV_FACE)) &&
+         (to_type & (GV_POINT | GV_CENTROID | GV_KERNEL))))
         G_fatal_error(_("Incompatible types"));
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();

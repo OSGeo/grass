@@ -45,7 +45,6 @@ static int write_skeleton(struct line_pnts *Points)
         }
     }
 
-
     if (!ret && area1 != area2) {
         ret = 1;
         if (!Vect_get_area_centroid(&In, area2))
@@ -89,7 +88,6 @@ int vo_write(void)
     return 1;
 }
 
-
 int write_ep(struct Edge *e)
 {
     static struct line_pnts *Points = NULL;
@@ -106,7 +104,7 @@ int write_ep(struct Edge *e)
     if (in_area && e->reg[le]->sitenbr == e->reg[re]->sitenbr)
         return 0;
 
-    if (e->ep[le] != NULL && e->ep[re] != NULL) {       /* both end defined */
+    if (e->ep[le] != NULL && e->ep[re] != NULL) { /* both end defined */
         x1 = e->ep[le]->coord.x + xcenter;
         y1 = e->ep[le]->coord.y + ycenter;
         x2 = e->ep[re]->coord.x + xcenter;
@@ -147,9 +145,8 @@ int write_ep(struct Edge *e)
             x2 = (e->reg[le]->coord.x + e->reg[re]->coord.x) / 2.0 + xcenter;
             y2 = (e->reg[le]->coord.y + e->reg[re]->coord.y) / 2.0 + ycenter;
             knownPointAtLeft = 0;
-            if (!extend_line(Box.S, Box.N, Box.W, Box.E,
-                             e->a, e->b, e->c, x2, y2, &x1, &y1,
-                             knownPointAtLeft)) {
+            if (!extend_line(Box.S, Box.N, Box.W, Box.E, e->a, e->b, e->c, x2,
+                             y2, &x1, &y1, knownPointAtLeft)) {
 
                 G_warning("Undefined edge, unable to extend line");
 
@@ -157,9 +154,8 @@ int write_ep(struct Edge *e)
             }
             knownPointAtLeft = 1;
         }
-        if (extend_line(Box.S, Box.N, Box.W, Box.E,
-                        e->a, e->b, e->c, x1, y1, &x2, &y2,
-                        knownPointAtLeft)) {
+        if (extend_line(Box.S, Box.N, Box.W, Box.E, e->a, e->b, e->c, x1, y1,
+                        &x2, &y2, knownPointAtLeft)) {
 
             /* Don't write zero length */
             if (x1 == x2 && y1 == y2)

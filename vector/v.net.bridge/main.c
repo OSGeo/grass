@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.bridge
@@ -28,10 +27,9 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     static struct line_pnts *Points;
     struct line_cats *Cats;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol,
-        *method_opt;
+    struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol, *method_opt;
     char *desc;
     int with_z;
     int afield, nfield, mask_type;
@@ -40,7 +38,8 @@ int main(int argc, char *argv[])
     struct ilist *bridge_list, *articulation_list;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -93,9 +92,8 @@ int main(int argc, char *argv[])
     method_opt->multiple = NO;
     method_opt->options = "bridge,articulation";
     desc = NULL;
-    G_asprintf(&desc,
-               "bridge;%s;articulation;%s",
-               _("Finds bridges"), _("Finds articulation points"));
+    G_asprintf(&desc, "bridge;%s;articulation;%s", _("Finds bridges"),
+               _("Finds articulation points"));
     method_opt->descriptions = desc;
     method_opt->description = _("Feature type");
 
@@ -108,8 +106,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -123,14 +120,12 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
 
-
     /* parse filter option and select appropriate lines */
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    if (0 !=
-        Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                             abcol->answer, ncol->answer, 0, 0))
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, 0, 0))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(&In));
 

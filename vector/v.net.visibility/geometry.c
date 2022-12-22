@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -17,7 +16,7 @@
 #include "geometry.h"
 
 /** true if q lies nearer to p than segment e, i.e. pq and e don't intersect
-*/
+ */
 int before(struct Point *p, struct Point *q, struct Line *e)
 {
     double x1, y1, z1, x2, y2, z2;
@@ -26,16 +25,15 @@ int before(struct Point *p, struct Point *q, struct Line *e)
     if (e == NULL)
         return 1;
 
-    status =
-        Vect_segment_intersection(p->x, p->y, 0, q->x, q->y, 0, e->p1->x,
-                                  e->p1->y, 0, e->p2->x, e->p2->y, 0, &x1,
-                                  &y1, &z1, &x2, &y2, &z2, 0) == 0;
+    status = Vect_segment_intersection(p->x, p->y, 0, q->x, q->y, 0, e->p1->x,
+                                       e->p1->y, 0, e->p2->x, e->p2->y, 0, &x1,
+                                       &y1, &z1, &x2, &y2, &z2, 0) == 0;
 
     return status;
 }
 
 /** returns true if p3 is left of the directed line p1p2
-*/
+ */
 int left_turn(struct Point *p1, struct Point *p2, struct Point *p3)
 {
     double a, b, c, d;
@@ -54,7 +52,7 @@ int left_turn(struct Point *p1, struct Point *p2, struct Point *p3)
 }
 
 /** returns true if p is in between the segment e along the x axis
-*/
+ */
 int in_between(struct Point *p, struct Line *e)
 {
     int a = e->p1->x <= p->x && e->p2->x >= p->x;
@@ -63,9 +61,8 @@ int in_between(struct Point *p, struct Line *e)
     return a || b;
 }
 
-
-/** tests if the point (x, y ) is inside the boundary of p 
-*/
+/** tests if the point (x, y ) is inside the boundary of p
+ */
 int point_inside(struct Point *p, double x, double y)
 {
     int c = 0;
@@ -73,8 +70,7 @@ int point_inside(struct Point *p, double x, double y)
     struct Point *n2 = other2(p);
 
     do {
-        if ((((n1->y <= y) && (y < n2->y)) ||
-             ((n2->y <= y) && (y < n1->y))) &&
+        if ((((n1->y <= y) && (y < n2->y)) || ((n2->y <= y) && (y < n1->y))) &&
             (x < (n2->x - n1->x) * (y - n1->y) / (n2->y - n1->y) + n1->x))
             c = !c;
 
@@ -86,8 +82,8 @@ int point_inside(struct Point *p, double x, double y)
     return c;
 }
 
-/** returns 1 if the segment intersect with the half line starting from p pointing downards
-	x and y are the intersection point
+/** returns 1 if the segment intersect with the half line starting from p
+   pointing downards x and y are the intersection point
 */
 int segment_intersect(struct Line *line, struct Point *p, double *y)
 {
@@ -112,5 +108,4 @@ int segment_intersect(struct Line *line, struct Point *p, double *y)
     }
     else
         return -1;
-
 }

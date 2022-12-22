@@ -7,9 +7,9 @@
 #include "proto.h"
 
 int select_lines(struct Map_info *aIn, int atype, int afield,
-                 struct Map_info *bIn, int btype, int bfield,
-                 int cat_flag, int operator, const char *relate,
-                 int *ALines, int *AAreas, int *nskipped)
+                 struct Map_info *bIn, int btype, int bfield, int cat_flag,
+                 int operator, const char * relate, int *ALines, int *AAreas,
+                 int *nskipped)
 {
     int i, ai;
     int nblines, bline, ltype;
@@ -52,7 +52,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
             struct bound_box bbox;
 
             G_debug(3, "bline = %d", bline);
-            G_percent(bline, nblines, 1);       /* must be before any continue */
+            G_percent(bline, nblines, 1); /* must be before any continue */
 
             /* Check type */
             ltype = Vect_get_line_type(bIn, bline);
@@ -96,16 +96,17 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator != OP_OVERLAP) {
+                    if (operator!= OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_line_geos(bIn, bline, &ltype);
                         if (!BGeom)
-                            G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
+                            G_fatal_error(_("Unable to read line id %d from "
+                                            "vector map <%s>"),
                                           bline, Vect_get_full_name(bIn));
 
-                        if (line_relate_geos(aIn, BGeom, aline,
-                                             operator, relate)) {
+                        if (line_relate_geos(aIn, BGeom, aline, operator,
+                                             relate)) {
                             ALines[aline] = 1;
                             nfound += 1;
                         }
@@ -116,8 +117,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                             Vect_read_line(bIn, BPoints, NULL, bline);
                         Vect_read_line(aIn, APoints, NULL, aline);
 
-                        if (Vect_line_check_intersection2
-                            (BPoints, APoints, 0)) {
+                        if (Vect_line_check_intersection2(BPoints, APoints,
+                                                          0)) {
                             ALines[aline] = 1;
                             nfound += 1;
                         }
@@ -147,16 +148,17 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator != OP_OVERLAP) {
+                    if (operator!= OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_line_geos(bIn, bline, &ltype);
                         if (!BGeom)
-                            G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
+                            G_fatal_error(_("Unable to read line id %d from "
+                                            "vector map <%s>"),
                                           bline, Vect_get_full_name(bIn));
 
-                        if (area_relate_geos(aIn, BGeom, aarea,
-                                             operator, relate)) {
+                        if (area_relate_geos(aIn, BGeom, aarea, operator,
+                                             relate)) {
                             add_aarea(aIn, aarea, ALines, AAreas);
                             nfound += 1;
                         }
@@ -168,10 +170,9 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         Vect_get_area_points(aIn, aarea, OPoints);
                         nisles = Vect_get_area_num_isles(aIn, aarea);
                         if (nisles >= isles_alloc) {
-                            IPoints =
-                                G_realloc(IPoints,
-                                          (nisles +
-                                           10) * sizeof(struct line_pnts *));
+                            IPoints = G_realloc(IPoints,
+                                                (nisles + 10) *
+                                                    sizeof(struct line_pnts *));
                             for (i = isles_alloc; i < nisles + 10; i++)
                                 IPoints[i] = Vect_new_line_struct();
                             isles_alloc = nisles + 10;
@@ -181,8 +182,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                             Vect_get_isle_points(aIn, isle, IPoints[i]);
                         }
 
-                        if (line_overlap_area
-                            (BPoints, OPoints, IPoints, nisles)) {
+                        if (line_overlap_area(BPoints, OPoints, IPoints,
+                                              nisles)) {
                             add_aarea(aIn, aarea, ALines, AAreas);
                             nfound += 1;
                         }
@@ -248,15 +249,16 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator != OP_OVERLAP) {
+                    if (operator!= OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_area_geos(bIn, barea);
                         if (!BGeom)
-                            G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
+                            G_fatal_error(_("Unable to read area id %d from "
+                                            "vector map <%s>"),
                                           barea, Vect_get_full_name(bIn));
-                        if (line_relate_geos
-                            (aIn, BGeom, aline, operator, relate)) {
+                        if (line_relate_geos(aIn, BGeom, aline, operator,
+                                             relate)) {
                             ALines[aline] = 1;
                             nfound += 1;
                         }
@@ -268,11 +270,9 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                             Vect_get_area_points(bIn, barea, OPoints);
                             nisles = Vect_get_area_num_isles(bIn, barea);
                             if (nisles >= isles_alloc) {
-                                IPoints =
-                                    G_realloc(IPoints,
-                                              (nisles +
-                                               10) *
-                                              sizeof(struct line_pnts *));
+                                IPoints = G_realloc(
+                                    IPoints,
+                                    (nisles + 10) * sizeof(struct line_pnts *));
                                 for (i = isles_alloc; i < nisles + 10; i++)
                                     IPoints[i] = Vect_new_line_struct();
                                 isles_alloc = nisles + 10;
@@ -285,8 +285,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
                         Vect_read_line(aIn, APoints, NULL, aline);
 
-                        if (line_overlap_area
-                            (APoints, OPoints, IPoints, nisles)) {
+                        if (line_overlap_area(APoints, OPoints, IPoints,
+                                              nisles)) {
                             ALines[aline] = 1;
                             nfound += 1;
                         }
@@ -319,15 +319,16 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator != OP_OVERLAP) {
+                    if (operator!= OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_area_geos(bIn, barea);
                         if (!BGeom)
-                            G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
+                            G_fatal_error(_("Unable to read area id %d from "
+                                            "vector map <%s>"),
                                           barea, Vect_get_full_name(bIn));
-                        if (area_relate_geos
-                            (aIn, BGeom, aarea, operator, relate)) {
+                        if (area_relate_geos(aIn, BGeom, aarea, operator,
+                                             relate)) {
                             found = 1;
                         }
 #endif
@@ -338,11 +339,9 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                             Vect_get_area_points(bIn, barea, OPoints);
                             nisles = Vect_get_area_num_isles(bIn, barea);
                             if (nisles >= isles_alloc) {
-                                IPoints =
-                                    G_realloc(IPoints,
-                                              (nisles +
-                                               10) *
-                                              sizeof(struct line_pnts *));
+                                IPoints = G_realloc(
+                                    IPoints,
+                                    (nisles + 10) * sizeof(struct line_pnts *));
                                 for (i = isles_alloc; i < nisles + 10; i++)
                                     IPoints[i] = Vect_new_line_struct();
                                 isles_alloc = nisles + 10;
@@ -355,8 +354,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
                         /* A inside B ? */
                         Vect_read_line(aIn, APoints, NULL, acentroid);
-                        if (line_overlap_area
-                            (APoints, OPoints, IPoints, nisles)) {
+                        if (line_overlap_area(APoints, OPoints, IPoints,
+                                              nisles)) {
                             found = 1;
                         }
 
@@ -368,9 +367,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                             abox.T = PORT_DOUBLE_MAX;
                             abox.B = -PORT_DOUBLE_MAX;
 
-                            if (Vect_point_in_area
-                                (BPoints->x[0], BPoints->y[0], aIn, aarea,
-                                 &abox)) {
+                            if (Vect_point_in_area(BPoints->x[0], BPoints->y[0],
+                                                   aIn, aarea, &abox)) {
                                 found = 1;
                             }
                         }
@@ -381,8 +379,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                             for (i = 0; i < BoundList->n_values; i++) {
                                 Vect_read_line(aIn, APoints, NULL,
                                                abs(BoundList->value[i]));
-                                if (line_overlap_area
-                                    (APoints, OPoints, IPoints, nisles)) {
+                                if (line_overlap_area(APoints, OPoints, IPoints,
+                                                      nisles)) {
                                     found = 1;
                                     break;
                                 }
@@ -397,13 +395,12 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
                                 isle = Vect_get_area_isle(aIn, aarea, j);
 
-                                Vect_get_isle_boundaries(aIn, isle,
-                                                         BoundList);
+                                Vect_get_isle_boundaries(aIn, isle, BoundList);
                                 for (i = 0; i < BoundList->n_values; i++) {
                                     Vect_read_line(aIn, APoints, NULL,
                                                    abs(BoundList->value[i]));
-                                    if (line_overlap_area
-                                        (APoints, OPoints, IPoints, nisles)) {
+                                    if (line_overlap_area(APoints, OPoints,
+                                                          IPoints, nisles)) {
                                         found = 1;
                                         break;
                                     }

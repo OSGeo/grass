@@ -1,20 +1,20 @@
-/* ***************************************************************
- * *
- * * MODULE:       v.clean
- * * 
- * * AUTHOR(S):    Radim Blazek
- * *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
- * *
- * * PURPOSE:      Clean vector features
- * *               
- * * COPYRIGHT:    (C) 2001-2009, 2011 by the GRASS Development Team
- * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
- * *               Read the file COPYING that comes with GRASS
- * *               for details.
- * *
- * **************************************************************/
+/***************************************************************
+ *
+ * MODULE:       v.clean
+ *
+ * AUTHOR(S):    Radim Blazek
+ *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
+ *
+ * PURPOSE:      Clean vector features
+ *
+ * COPYRIGHT:    (C) 2001-2009, 2011 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -32,12 +32,10 @@ int main(int argc, char *argv[])
     struct Map_info In, Out, Err, *pErr;
     int i, otype, with_z, native;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *in, *field, *out, *type, *tool, *thresh, *err;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *no_build, *combine;
     } flag;
     int *tools, ntools, atools;
@@ -76,45 +74,52 @@ int main(int argc, char *argv[])
     opt.tool->type = TYPE_STRING;
     opt.tool->required = YES;
     opt.tool->multiple = YES;
-    opt.tool->options =
-        "break,snap,rmdangle,chdangle,rmbridge,chbridge,rmdupl,rmdac,bpol,prune,"
-        "rmarea,rmline,rmsa";
+    opt.tool->options = "break,snap,rmdangle,chdangle,rmbridge,chbridge,rmdupl,"
+                        "rmdac,bpol,prune,"
+                        "rmarea,rmline,rmsa";
     opt.tool->description = _("Cleaning tool");
     desc = NULL;
-    G_asprintf(&desc,
-               "break;%s;"
-               "rmdupl;%s;"
-               "rmdangle;%s;"
-               "chdangle;%s;"
-               "rmbridge;%s;"
-               "chbridge;%s;"
-               "snap;%s;"
-               "rmdac;%s;"
-               "bpol;%s;"
-               "prune;%s;"
-               "rmarea;%s;"
-               "rmline;%s;"
-               "rmsa;%s",
-               _("break lines at each intersection"),
-               _("remove duplicate geometry features (pay attention to categories!)"),
-               _("remove dangles, threshold ignored if < 0"),
-               _("change the type of boundary dangle to line, "
-                 "threshold ignored if < 0, input line type is ignored"),
-               _("remove bridges connecting area and island or 2 islands"),
-               _("change the type of bridges connecting area and island "
-                 "or 2 islands from boundary to line"),
-               _("snap lines to vertex in threshold"),
-               _("remove duplicate area centroids ('type' option ignored)"),
-               _("break (topologically clean) polygons (imported from "
-                 "non topological format, like ShapeFile). Boundaries are broken on each "
-                 "point shared between 2 and more polygons where angles of segments are different"),
-               _("remove vertices in threshold from lines and boundaries, "
-                 "boundary is pruned only if topology is not damaged (new intersection, "
-                 "changed attachment of centroid), first and last segment of the boundary "
-                 "is never changed"),
-               _("remove small areas, the longest boundary with adjacent area is removed"),
-               _("remove all lines or boundaries of zero length, threshold is ignored"),
-               _("remove small angles between lines at nodes"));
+    G_asprintf(
+        &desc,
+        "break;%s;"
+        "rmdupl;%s;"
+        "rmdangle;%s;"
+        "chdangle;%s;"
+        "rmbridge;%s;"
+        "chbridge;%s;"
+        "snap;%s;"
+        "rmdac;%s;"
+        "bpol;%s;"
+        "prune;%s;"
+        "rmarea;%s;"
+        "rmline;%s;"
+        "rmsa;%s",
+        _("break lines at each intersection"),
+        _("remove duplicate geometry features (pay attention to categories!)"),
+        _("remove dangles, threshold ignored if < 0"),
+        _("change the type of boundary dangle to line, "
+          "threshold ignored if < 0, input line type is ignored"),
+        _("remove bridges connecting area and island or 2 islands"),
+        _("change the type of bridges connecting area and island "
+          "or 2 islands from boundary to line"),
+        _("snap lines to vertex in threshold"),
+        _("remove duplicate area centroids ('type' option ignored)"),
+        _("break (topologically clean) polygons (imported from "
+          "non topological format, like ShapeFile). Boundaries are broken on "
+          "each "
+          "point shared between 2 and more polygons where angles of segments "
+          "are different"),
+        _("remove vertices in threshold from lines and boundaries, "
+          "boundary is pruned only if topology is not damaged (new "
+          "intersection, "
+          "changed attachment of centroid), first and last segment of the "
+          "boundary "
+          "is never changed"),
+        _("remove small areas, the longest boundary with adjacent area is "
+          "removed"),
+        _("remove all lines or boundaries of zero length, threshold is "
+          "ignored"),
+        _("remove small angles between lines at nodes"));
     opt.tool->descriptions = desc;
 
     opt.thresh = G_define_option();
@@ -140,8 +145,7 @@ int main(int argc, char *argv[])
 
     otype = Vect_option_to_types(opt.type);
 
-    Vect_check_input_output_name(opt.in->answer, opt.out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(opt.in->answer, opt.out->answer, G_FATAL_EXIT);
     if (opt.err->answer) {
         Vect_check_input_output_name(opt.in->answer, opt.err->answer,
                                      G_FATAL_EXIT);
@@ -198,9 +202,11 @@ int main(int argc, char *argv[])
     G_debug(1, "ntools = %d", ntools);
     threshs = (double *)G_malloc(ntools * sizeof(double));
 
-    /* TODO: threshold might be recalculated with optional geodesic support to meters */
+    /* TODO: threshold might be recalculated with optional geodesic support to
+     * meters */
     if (G_projection() == PROJECTION_LL)
-        G_important_message(_("Note: In latitude-longitude coordinate system specify threshold in degree unit"));
+        G_important_message(_("Note: In latitude-longitude coordinate system "
+                              "specify threshold in degree unit"));
 
     /* Read thresholds */
     for (i = 0; i < ntools; i++)
@@ -276,10 +282,10 @@ int main(int argc, char *argv[])
 
     G_message(SEP);
 
-    /* Input vector may be both on level 1 and 2. Level 2 is necessary for 
-     * virtual centroids (shapefile/OGR) and level 1 is better if input is too big 
-     * and build in previous module (like v.in.ogr or other call to v.clean) would take 
-     * a long time */
+    /* Input vector may be both on level 1 and 2. Level 2 is necessary for
+     * virtual centroids (shapefile/OGR) and level 1 is better if input is too
+     * big and build in previous module (like v.in.ogr or other call to v.clean)
+     * would take a long time */
     if (Vect_open_old2(&In, opt.in->answer, "", opt.field->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), opt.in->answer);
 
@@ -310,17 +316,17 @@ int main(int argc, char *argv[])
     native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
     if (!native) {
-        /* area cleaning tools might produce unexpected results for 
+        /* area cleaning tools might produce unexpected results for
          * non-native vectors */
-        G_warning(_("Topological cleaning works best with native GRASS vector format"));
+        G_warning(_(
+            "Topological cleaning works best with native GRASS vector format"));
         /* Copy attributes (OGR format) */
         Vect_copy_map_dblinks(&In, &Out, TRUE);
     }
 
     /* This works for both level 1 and 2 */
-    Vect_copy_map_lines_field(&In,
-                              Vect_get_field_number(&In, opt.field->answer),
-                              &Out);
+    Vect_copy_map_lines_field(
+        &In, Vect_get_field_number(&In, opt.field->answer), &Out);
 
     if (native) {
         /* Copy attribute tables (native format only) */
@@ -330,7 +336,8 @@ int main(int argc, char *argv[])
     Vect_set_release_support(&In);
     Vect_close(&In);
 
-    /* Start with GV_BUILD_NONE and for each tool use unly the necessary level! */
+    /* Start with GV_BUILD_NONE and for each tool use unly the necessary level!
+     */
 
     for (i = 0; i < ntools; i++) {
         if (tools[i] == TOOL_RMDAC || tools[i] == TOOL_PRUNE ||
@@ -414,8 +421,7 @@ int main(int argc, char *argv[])
                     G_message(_("Tool: Remove duplicates"));
                     Vect_remove_duplicates(&Out, otype, pErr);
                     G_message(_("Tool: Remove small angles at nodes"));
-                    nmod =
-                        Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
+                    nmod = Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
                 } while (nmod > 0);
                 if (otype & GV_LINES) {
                     G_message(_("Tool: Merge lines"));
@@ -457,9 +463,8 @@ int main(int argc, char *argv[])
                     G_message(_("Tool: Split lines"));
                     split_lines(&Out, otype, pErr);
                 }
-                while ((nmod =
-                        Vect_clean_small_angles_at_nodes(&Out, otype,
-                                                         pErr)) > 0) {
+                while ((nmod = Vect_clean_small_angles_at_nodes(&Out, otype,
+                                                                pErr)) > 0) {
                     count += nmod;
                     G_message(_("Tool: Break lines at intersections"));
                     Vect_break_lines(&Out, otype, pErr);
@@ -474,7 +479,8 @@ int main(int argc, char *argv[])
             }
             break;
         case TOOL_RMLINE:
-            G_message(_("Tool: Remove all lines and boundaries of zero length"));
+            G_message(
+                _("Tool: Remove all lines and boundaries of zero length"));
             count = remove_zero_line(&Out, otype, pErr);
             break;
         }
@@ -488,7 +494,7 @@ int main(int argc, char *argv[])
         Vect_build(&Out);
     }
     else {
-        Vect_build_partial(&Out, GV_BUILD_NONE);        /* -> topo not saved */
+        Vect_build_partial(&Out, GV_BUILD_NONE); /* -> topo not saved */
     }
     Vect_close(&Out);
 

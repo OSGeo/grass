@@ -1,20 +1,19 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek, Daniel Calvelo
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000,2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-* DBF API:      http://shapelib.maptools.org/dbf_api.html
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek, Daniel Calvelo
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000,2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ * DBF API:      http://shapelib.maptools.org/dbf_api.html
+ *****************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,23 +26,21 @@
 #include "proto.h"
 
 /* Results of eval_node */
-#define NODE_FALSE  0
-#define NODE_TRUE   1
-#define NODE_VALUE  2
-#define NODE_NULL   3
-#define NODE_ERROR  4
+#define NODE_FALSE 0
+#define NODE_TRUE  1
+#define NODE_VALUE 2
+#define NODE_NULL  3
+#define NODE_ERROR 4
 
 int yyparse(void);
-void get_col_def(SQLPSTMT * st, int col, int *type, int *width,
-                 int *decimals);
-int sel(SQLPSTMT * st, int tab, int **set);
-void eval_val(int tab, int row, int col, SQLPVALUE * inval,
-              SQLPVALUE * result);
-int set_val(int tab, int row, int col, SQLPVALUE * val);
+void get_col_def(SQLPSTMT *st, int col, int *type, int *width, int *decimals);
+int sel(SQLPSTMT *st, int tab, int **set);
+void eval_val(int tab, int row, int col, SQLPVALUE *inval, SQLPVALUE *result);
+int set_val(int tab, int row, int col, SQLPVALUE *val);
 double eval_node(SQLPNODE *, int, int, SQLPVALUE *);
 int eval_node_type(SQLPNODE *, int);
 
-int execute(char *sql, cursor * c)
+int execute(char *sql, cursor *c)
 {
     int i, j, tab, ret;
     SQLPSTMT *st;
@@ -55,11 +52,11 @@ int execute(char *sql, cursor * c)
     int dtype, stype;
     int width, decimals;
     char *tmpsql, name[500];
-    SQLPVALUE *calctmp;         /* store for calculated values in UPDATE, if any */
+    SQLPVALUE *calctmp; /* store for calculated values in UPDATE, if any */
 
     /* parse sql statement */
-    /* I don't know why, but if the statement ends by string in quotes 'xxx' and is not 
-     *  followed by space or '\n' it is not parsed properly -> */
+    /* I don't know why, but if the statement ends by string in quotes 'xxx' and
+     * is not followed by space or '\n' it is not parsed properly -> */
     tmpsql = (char *)G_malloc(strlen(sql) + 2);
     sprintf(tmpsql, "%s ", sql);
     st = sqpInitStmt();
@@ -68,9 +65,8 @@ int execute(char *sql, cursor * c)
 
     if (yyparse() != 0) {
         G_free(tmpsql);
-        db_d_append_error("%s (%s) %s\n%s\n",
-                          _("SQL parser error"),
-                          st->errmsg, _("in statement:"), sql);
+        db_d_append_error("%s (%s) %s\n%s\n", _("SQL parser error"), st->errmsg,
+                          _("in statement:"), sql);
         sqpFreeStmt(st);
         return DB_FAILED;
     }
@@ -78,7 +74,7 @@ int execute(char *sql, cursor * c)
 
     G_debug(3, "SQL statement parsed successfully: %s", sql);
 
-    /* sqpPrintStmt(st); *//* debug output only */
+    /* sqpPrintStmt(st); */ /* debug output only */
 
     /* find table */
     tab = find_table(st->table);
@@ -87,7 +83,8 @@ int execute(char *sql, cursor * c)
         return DB_FAILED;
     }
 
-    /* For DROP we have to call load_table_head() because it reads permissions */
+    /* For DROP we have to call load_table_head() because it reads permissions
+     */
     if ((st->command != SQLP_CREATE)) {
         ret = load_table_head(tab);
         if (ret == DB_FAILED) {
@@ -98,8 +95,7 @@ int execute(char *sql, cursor * c)
 
     if ((st->command == SQLP_DROP) || (st->command == SQLP_DELETE) ||
         (st->command == SQLP_INSERT) || (st->command == SQLP_UPDATE) ||
-        (st->command == SQLP_ADD_COLUMN) || (st->command == SQLP_DROP_COLUMN)
-        ) {
+        (st->command == SQLP_ADD_COLUMN) || (st->command == SQLP_DROP_COLUMN)) {
         if (db.tables[tab].write == FALSE) {
             db_d_append_error(_("Unable to modify table, "
                                 "don't have write permission for DBF file."));
@@ -109,20 +105,19 @@ int execute(char *sql, cursor * c)
 
     /* find columns */
     ncols = st->nCol;
-    if (st->command == SQLP_INSERT || st->command == SQLP_SELECT
-        || st->command == SQLP_UPDATE || st->command == SQLP_DROP_COLUMN) {
-        if (ncols > 0) {        /* columns were specified */
+    if (st->command == SQLP_INSERT || st->command == SQLP_SELECT ||
+        st->command == SQLP_UPDATE || st->command == SQLP_DROP_COLUMN) {
+        if (ncols > 0) { /* columns were specified */
             cols = (int *)G_malloc(ncols * sizeof(int));
             for (i = 0; i < ncols; i++) {
                 cols[i] = find_column(tab, st->Col[i].s);
                 if (cols[i] == -1) {
-                    db_d_append_error(_("Column '%s' not found"),
-                                      st->Col[i].s);
+                    db_d_append_error(_("Column '%s' not found"), st->Col[i].s);
                     return DB_FAILED;
                 }
             }
         }
-        else {                  /* all columns */
+        else { /* all columns */
 
             ncols = db.tables[tab].ncols;
             cols = (int *)G_malloc(ncols * sizeof(int));
@@ -138,9 +133,9 @@ int execute(char *sql, cursor * c)
             if (st->Val[i].type != SQLP_NULL && st->Val[i].type != SQLP_EXPR) {
                 dtype = db.tables[tab].cols[col].type;
                 stype = st->Val[i].type;
-                if ((dtype == DBF_INT && stype != SQLP_I)
-                    || (dtype == DBF_DOUBLE && stype == SQLP_S)
-                    || (dtype == DBF_CHAR && stype != SQLP_S)) {
+                if ((dtype == DBF_INT && stype != SQLP_I) ||
+                    (dtype == DBF_DOUBLE && stype == SQLP_S) ||
+                    (dtype == DBF_CHAR && stype != SQLP_S)) {
                     db_d_append_error(_("Incompatible value type."));
                     return DB_FAILED;
                 }
@@ -163,11 +158,10 @@ int execute(char *sql, cursor * c)
         /* Add column to each row */
         for (i = 0; i < db.tables[tab].nrows; i++) {
             db.tables[tab].rows[i].values =
-                (VALUE *) G_realloc(db.tables[tab].rows[i].values,
-                                    db.tables[tab].ncols * sizeof(VALUE));
+                (VALUE *)G_realloc(db.tables[tab].rows[i].values,
+                                   db.tables[tab].ncols * sizeof(VALUE));
 
-            dbval =
-                &(db.tables[tab].rows[i].values[db.tables[tab].ncols - 1]);
+            dbval = &(db.tables[tab].rows[i].values[db.tables[tab].ncols - 1]);
             dbval->i = 0;
             dbval->d = 0.0;
             dbval->c = NULL;
@@ -223,14 +217,13 @@ int execute(char *sql, cursor * c)
         /* add row */
         if (db.tables[tab].nrows == db.tables[tab].arows) {
             db.tables[tab].arows += 1000;
-            db.tables[tab].rows =
-                (ROW *) G_realloc(db.tables[tab].rows,
-                                  db.tables[tab].arows * sizeof(ROW));
+            db.tables[tab].rows = (ROW *)G_realloc(
+                db.tables[tab].rows, db.tables[tab].arows * sizeof(ROW));
         }
         dbrows = db.tables[tab].rows;
         row = db.tables[tab].nrows;
         dbrows[row].values =
-            (VALUE *) G_calloc(db.tables[tab].ncols, sizeof(VALUE));
+            (VALUE *)G_calloc(db.tables[tab].ncols, sizeof(VALUE));
         dbrows[row].alive = TRUE;
 
         /* set to null */
@@ -278,7 +271,7 @@ int execute(char *sql, cursor * c)
         for (i = 0; i < nrows; i++) {
             SQLPVALUE *temp_p;
 
-            calctmp = (SQLPVALUE *) G_malloc((st->nVal) * sizeof(SQLPVALUE));
+            calctmp = (SQLPVALUE *)G_malloc((st->nVal) * sizeof(SQLPVALUE));
             row = selset[i];
             for (j = 0; j < st->nVal; j++) {
                 col = cols[j];
@@ -311,9 +304,9 @@ int execute(char *sql, cursor * c)
             db.tables[tab].updated = TRUE;
         }
         break;
-
     }
-    if (st->command != SQLP_SELECT) {   /* because statement is released with cursor */
+    if (st->command !=
+        SQLP_SELECT) { /* because statement is released with cursor */
         sqpFreeStmt(st);
         if (cols)
             G_free(cols);
@@ -323,7 +316,7 @@ int execute(char *sql, cursor * c)
 }
 
 /* for given parser result and column index finds dbf column definition */
-void get_col_def(SQLPSTMT * st, int col, int *type, int *width, int *decimals)
+void get_col_def(SQLPSTMT *st, int col, int *type, int *width, int *decimals)
 {
     switch (st->ColType[col]) {
     case (SQLP_INTEGER):
@@ -336,9 +329,10 @@ void get_col_def(SQLPSTMT * st, int col, int *type, int *width, int *decimals)
         *width = st->ColWidth[col];
         *decimals = 0;
         break;
-    case (SQLP_DATE):          /* DATE treated as string unless SHAPELIB/DBFLIB supports date type */
+    case (SQLP_DATE): /* DATE treated as string unless SHAPELIB/DBFLIB supports
+                         date type */
         *type = DBF_CHAR;
-        *width = 10;            /* 2004-01-23 = 10 chars */
+        *width = 10; /* 2004-01-23 = 10 chars */
         *decimals = 0;
         break;
     case (SQLP_DOUBLE):
@@ -349,7 +343,7 @@ void get_col_def(SQLPSTMT * st, int col, int *type, int *width, int *decimals)
     }
 }
 
-void eval_val(int tab, int row, int col, SQLPVALUE * inval, SQLPVALUE * val)
+void eval_val(int tab, int row, int col, SQLPVALUE *inval, SQLPVALUE *val)
 {
 
     double retval;
@@ -388,21 +382,21 @@ void eval_val(int tab, int row, int col, SQLPVALUE * inval, SQLPVALUE * val)
                 val->d = atof(val->s);
             }
             else {
-                G_fatal_error
-                    ("This should not happen: wrong return type in parsing.");
+                G_fatal_error(
+                    "This should not happen: wrong return type in parsing.");
             }
         }
         else if (retval == NODE_ERROR) {
-            G_fatal_error
-                ("This should not happen: got a wrong expression structure after parsing.");
+            G_fatal_error("This should not happen: got a wrong expression "
+                          "structure after parsing.");
         }
         else {
-            G_fatal_error
-                ("Unknown return value calling eval_node from eval_val");
+            G_fatal_error(
+                "Unknown return value calling eval_node from eval_val");
         }
     }
     else {
-        /* 
+        /*
          * TODO: maybe use this function to perform type "conversion",
          * i.e. setting all of s,i,d to the same "value",as is done with
          * the result of eval_node above.
@@ -411,12 +405,12 @@ void eval_val(int tab, int row, int col, SQLPVALUE * inval, SQLPVALUE * val)
     }
 }
 
-int set_val(int tab, int row, int col, SQLPVALUE * val)
+int set_val(int tab, int row, int col, SQLPVALUE *val)
 {
     VALUE *dbval;
 
     dbval = &(db.tables[tab].rows[row].values[col]);
-    /* For debugging purposes; see FIXME below      
+    /* For debugging purposes; see FIXME below
        fprintf(stderr, "In set_val : ");
        fprintf(stderr, val->type==SQLP_EXPR?"sqlp_expr":
        val->type==SQLP_NULL?"sqlp_null":
@@ -530,15 +524,14 @@ static int cmp_row_desc(const void *pa, const void *pb)
 {
 
     return -cmp_row_asc(pa, pb);
-
 }
 
 /* Select records, sets 'selset' to new array of items and returns
  *  number of items or -1 for error */
-int sel(SQLPSTMT * st, int tab, int **selset)
+int sel(SQLPSTMT *st, int tab, int **selset)
 {
     int i, ret, condition;
-    int *set;                   /* pointer to array of indexes to rows */
+    int *set; /* pointer to array of indexes to rows */
     int aset, nset;
 
     G_debug(2, "sel(): tab = %d", tab);
@@ -568,7 +561,8 @@ int sel(SQLPSTMT * st, int tab, int **selset)
         }
         else if (node_type == SQLP_S || node_type == SQLP_I ||
                  node_type == SQLP_D) {
-            db_d_append_error(_("Result of WHERE condition is not of type BOOL."));
+            db_d_append_error(
+                _("Result of WHERE condition is not of type BOOL."));
             return -1;
         }
         else if (node_type == SQLP_NULL) {
@@ -583,11 +577,12 @@ int sel(SQLPSTMT * st, int tab, int **selset)
                 condition = eval_node(st->upperNodeptr, tab, i, &value);
                 G_debug(4, "condition = %d", condition);
 
-                if (condition == NODE_ERROR) {  /* e.g. division by 0 */
-                    db_d_append_error(_("Error in evaluation of WHERE condition."));
+                if (condition == NODE_ERROR) { /* e.g. division by 0 */
+                    db_d_append_error(
+                        _("Error in evaluation of WHERE condition."));
                     return -1;
                 }
-                else if (condition == NODE_TRUE) {      /* true */
+                else if (condition == NODE_TRUE) { /* true */
                     if (nset == aset) {
                         aset += 1000;
                         set = (int *)G_realloc(set, aset * sizeof(int));
@@ -595,19 +590,22 @@ int sel(SQLPSTMT * st, int tab, int **selset)
                     set[nset] = i;
                     nset++;
                 }
-                else if (condition != NODE_FALSE && condition != NODE_NULL) {   /* Should not happen */
-                    db_d_append_error(_("Unknown result (%d) of WHERE evaluation"),
-                                      condition);
+                else if (condition != NODE_FALSE &&
+                         condition != NODE_NULL) { /* Should not happen */
+                    db_d_append_error(
+                        _("Unknown result (%d) of WHERE evaluation"),
+                        condition);
                     return -1;
                 }
             }
         }
-        else {                  /* Should not happen */
-            db_d_append_error(_("Unknown WHERE condition type (bug in DBF driver)."));
+        else { /* Should not happen */
+            db_d_append_error(
+                _("Unknown WHERE condition type (bug in DBF driver)."));
             return -1;
         }
     }
-    else {                      /* Select all */
+    else { /* Select all */
         aset = db.tables[tab].nrows;
         set = (int *)G_realloc(set, aset * sizeof(int));
         for (i = 0; i < db.tables[tab].nrows; i++) {
@@ -641,8 +639,6 @@ int sel(SQLPSTMT * st, int tab, int **selset)
         else {
             qsort(set, nset, sizeof(int), cmp_row_asc);
         }
-
-
     }
 
     *selset = set;
@@ -651,18 +647,18 @@ int sel(SQLPSTMT * st, int tab, int **selset)
 
 /* Evaluate node recursively.
  *
- * Returns: 
- *    NODE_NULL  result/value is unknown   
- *    NODE_TRUE   
- *    NODE_FALSE  
- *    NODE_VALUE result is a value stored in 'value' 
- *               (if value is not NULL otherwise NODE_NULL is returned and value is not set)
- *    NODE_ERROR e.g. division by 0
+ * Returns:
+ *    NODE_NULL  result/value is unknown
+ *    NODE_TRUE
+ *    NODE_FALSE
+ *    NODE_VALUE result is a value stored in 'value'
+ *               (if value is not NULL otherwise NODE_NULL is returned and value
+ * is not set) NODE_ERROR e.g. division by 0
  *
- * If results is NODE_VALUE, the 'value' is set, if value is type SQLP_S the string is not duplicated
- * and only pointer is set -> do not free value->s 
+ * If results is NODE_VALUE, the 'value' is set, if value is type SQLP_S the
+ * string is not duplicated and only pointer is set -> do not free value->s
  */
-double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
+double eval_node(SQLPNODE *nptr, int tab, int row, SQLPVALUE *value)
 {
     int left, right;
     SQLPVALUE left_value, right_value;
@@ -801,14 +797,15 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
             if (left == NODE_NULL || right == NODE_NULL) {
                 return NODE_NULL;
             }
-            else if (left_value.type == SQLP_S) {       /* we checked before if right is also string */
+            else if (left_value.type ==
+                     SQLP_S) { /* we checked before if right is also string */
                 if (left_value.s && right_value.s &&
                     strcmp(left_value.s, right_value.s) == 0)
                     return NODE_TRUE;
                 else
                     return NODE_FALSE;
             }
-            else {              /* numbers */
+            else { /* numbers */
                 if (left_dval == right_dval)
                     return NODE_TRUE;
                 else
@@ -820,14 +817,15 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
             if (left == NODE_NULL || right == NODE_NULL) {
                 return NODE_NULL;
             }
-            else if (left_value.type == SQLP_S) {       /* we checked before if right is also string */
+            else if (left_value.type ==
+                     SQLP_S) { /* we checked before if right is also string */
                 if (left_value.s && right_value.s &&
                     strcmp(left_value.s, right_value.s) != 0)
                     return NODE_TRUE;
                 else
                     return NODE_FALSE;
             }
-            else {              /* numbers */
+            else { /* numbers */
                 if (left_dval != right_dval)
                     return NODE_TRUE;
                 else
@@ -913,7 +911,8 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
             else if (left == NODE_TRUE && right == NODE_TRUE) {
                 return NODE_TRUE;
             }
-            else if (left == NODE_VALUE || right == NODE_VALUE) {       /* Should not happen */
+            else if (left == NODE_VALUE ||
+                     right == NODE_VALUE) { /* Should not happen */
                 db_d_append_error(_("Value operand for AND"));
                 return NODE_ERROR;
             }
@@ -927,7 +926,8 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
             else if (left == NODE_TRUE || right == NODE_TRUE) {
                 return NODE_TRUE;
             }
-            else if (left == NODE_VALUE || right == NODE_VALUE) {       /* Should not happen */
+            else if (left == NODE_VALUE ||
+                     right == NODE_VALUE) { /* Should not happen */
                 db_d_append_error(_("Value operand for OR"));
                 return NODE_ERROR;
             }
@@ -942,7 +942,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
             else if (right == NODE_TRUE) {
                 return NODE_FALSE;
             }
-            else if (right == NODE_VALUE) {     /* Should not happen */
+            else if (right == NODE_VALUE) { /* Should not happen */
                 db_d_append_error(_("Value operand for NOT"));
                 return NODE_ERROR;
             }
@@ -956,12 +956,12 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
         }
     }
 
-    return NODE_ERROR;          /* Not reached */
+    return NODE_ERROR; /* Not reached */
 }
 
 /* Recursively get value/expression type.
  * Returns: node type (SQLP_S, SQLP_I, SQLP_D, SQLP_NULL, SQLP_BOOL)
- *          -1 on error (if types in expression are not compatible) 
+ *          -1 on error (if types in expression are not compatible)
  *
  * Rules:
  *      Values (in SQL Statement):
@@ -974,7 +974,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
  *        DBF_INT             -> SQLP_I
  *        DBF_DOUBLE          -> SQLP_D
  *      Arithetical Expressions :
- *        side1   side2           exp  
+ *        side1   side2           exp
  *        SQLP_S    ALL           ALL    -> error
  *        SQLP_NULL SQLP_I        ALL    -> SQLP_NULL
  *        SQLP_NULL SQLP_D        ALL    -> SQLP_NULL
@@ -983,7 +983,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
  *        SQLP_I    SQLP_D        ALL    -> SQLP_D
  *        SQLP_D    SQLP_D        ALL    -> SQLP_D
  *      Comparisons :
- *        side1     side2     exp  
+ *        side1     side2     exp
  *        SQLP_S    SQLP_S    =,<>,~          -> SQLP_BOOL
  *        SQLP_S    SQLP_S    <,<=,>,>=       -> error
  *        SQLP_S    SQLP_I    ALL             -> error
@@ -994,9 +994,10 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
  *        SQLP_I    ALL       ~               -> error
  *        SQLP_D    ALL       ~               -> error
  *        SQLP_NULL ALL       ALL             -> SQLP_NULL
- *      Logical expressions 
- *        In general, if we know that the result is NULL regardless actual values it returns SQLP_NULL
- *        so that tests for individual rows are not performed, otherwise SQLP_BOOL
+ *      Logical expressions
+ *        In general, if we know that the result is NULL regardless actual
+ *        values it returns SQLP_NULL so that tests for individual rows are
+ *        not performed, otherwise SQLP_BOOL
  *        SQLP_BOOL SQLP_BOOL AND               -> SQLP_BOOL
  *        SQLP_BOOL SQLP_NULL AND               -> SQLP_NULL
  *        SQLP_NULL SQLP_NULL AND               -> SQLP_NULL
@@ -1006,7 +1007,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
  *        SQLP_BOOL -         NOT               -> SQLP_BOOL
  *        SQLP_NULL -         NOT               -> SQLP_NULL
  */
-int eval_node_type(SQLPNODE * nptr, int tab)
+int eval_node_type(SQLPNODE *nptr, int tab)
 {
     int left, right;
     int ccol;
@@ -1058,7 +1059,8 @@ int eval_node_type(SQLPNODE * nptr, int tab)
         case SQLP_MLTP:
         case SQLP_DIV:
             if (left == SQLP_S || right == SQLP_S) {
-                db_d_append_error(_("Arithmetical operation with strings is not allowed"));
+                db_d_append_error(
+                    _("Arithmetical operation with strings is not allowed"));
                 return -1;
             }
             else if (left == SQLP_NULL || right == SQLP_NULL) {
@@ -1080,7 +1082,8 @@ int eval_node_type(SQLPNODE * nptr, int tab)
         case SQLP_NE:
             if ((left == SQLP_S && (right == SQLP_I || right == SQLP_D)) ||
                 (right == SQLP_S && (left == SQLP_I || left == SQLP_D))) {
-                db_d_append_error(_("Comparison between string and number is not allowed"));
+                db_d_append_error(
+                    _("Comparison between string and number is not allowed"));
                 return -1;
             }
             else if (left == SQLP_NULL || right == SQLP_NULL) {
@@ -1095,8 +1098,9 @@ int eval_node_type(SQLPNODE * nptr, int tab)
         case SQLP_GT:
         case SQLP_GE:
             if (left == SQLP_S || right == SQLP_S) {
-                db_d_append_error(_("Comparison '%s' between strings not allowed"),
-                                  sqpOperatorName(nptr->oper));
+                db_d_append_error(
+                    _("Comparison '%s' between strings not allowed"),
+                    sqpOperatorName(nptr->oper));
                 return -1;
             }
             else if (left == SQLP_NULL || right == SQLP_NULL) {
@@ -1153,5 +1157,5 @@ int eval_node_type(SQLPNODE * nptr, int tab)
         }
     }
 
-    return -1;                  /* Not reached */
+    return -1; /* Not reached */
 }

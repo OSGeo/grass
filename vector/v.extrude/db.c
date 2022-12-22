@@ -6,7 +6,7 @@
    returns 0 on success -1 on failure
  */
 int get_height(const struct field_info *Fi, const char *hcolumn,
-               dbDriver * driver, int cat, double *height)
+               dbDriver *driver, int cat, double *height)
 {
     int more;
     double objheight;
@@ -19,14 +19,14 @@ int get_height(const struct field_info *Fi, const char *hcolumn,
     dbValue *value;
 
     db_init_string(&sql);
-    sprintf(query, "SELECT %s FROM %s WHERE %s = %d",
-            hcolumn, Fi->table, Fi->key, cat);
+    sprintf(query, "SELECT %s FROM %s WHERE %s = %d", hcolumn, Fi->table,
+            Fi->key, cat);
     G_debug(3, "SQL: %s", query);
     db_set_string(&sql, query);
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
         G_fatal_error(_("Unable to select attributes category %d"), cat);
     table = db_get_cursor_table(&cursor);
-    column = db_get_table_column(table, 0);     /* first column */
+    column = db_get_table_column(table, 0); /* first column */
 
     if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
         return -1;

@@ -1,13 +1,12 @@
-
 /****************************************************************
  *
  * MODULE:       v.sample (based on s.sample)
  *
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
- * 	         http://mccauley-usa.com/
+ *                  http://mccauley-usa.com/
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *
- * PURPOSE:      GRASS program to sample a raster map at site locations.   
+ * PURPOSE:      GRASS program to sample a raster map at site locations.
  *
  * Modification History:
  * <04 Jan 1994> - began coding (jdm)
@@ -16,7 +15,7 @@
  * <24 Jan 1994> - got rid of diagnostic messages. Revised to 0.3B (jdm)
  * ?? Revised to 0.4B (jdm)
  * <19 Dec 1994> - fixed bug in readsites, added html. Revised to 0.5B (jdm)
- * <02 Jan 1995> - cleaned Gmakefile, man page, html. 
+ * <02 Jan 1995> - cleaned Gmakefile, man page, html.
  *                 fixed memory error in bilinear and cubic 0.6B (jdm)
  * <25 Feb 1995> - cleaned 'gcc -Wall' warnings 0.7B (jdm)
  * <15 Jun 1995> - fixed pointer error for G_{col,row}_to_{easting,northing}.
@@ -29,7 +28,7 @@
  *               Public License (>=v2).  Read the file COPYING that
  *               comes with GRASS for details.
  *
-**************************************************************/
+ **************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,12 +45,11 @@ int main(int argc, char **argv)
 {
     double scale, predicted, actual;
     INTERP_TYPE method = INTERP_UNKNOWN;
-    int fdrast;                 /* file descriptor for raster map is int */
+    int fdrast; /* file descriptor for raster map is int */
     struct Cell_head window;
     struct GModule *module;
     struct Map_info In, Out;
-    struct
-    {
+    struct {
         struct Option *input, *output, *rast, *z, *column, *method, *field;
     } parm;
 
@@ -75,8 +73,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("sampling"));
     G_add_keyword(_("raster"));
-    module->description =
-        _("Samples a raster map at vector point locations.");
+    module->description = _("Samples a raster map at vector point locations.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
     parm.input->label = _("Name of input vector point map");
@@ -105,8 +102,7 @@ int main(int argc, char **argv)
     parm.z->required = NO;
     parm.z->answer = "1.0";
     parm.z->label = _("Scaling factor for values read from raster map");
-    parm.z->description =
-        _("Sampled values will be multiplied by this factor");
+    parm.z->description = _("Sampled values will be multiplied by this factor");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -121,8 +117,7 @@ int main(int argc, char **argv)
     Vect_set_open_level(2);
 
     if (Vect_open_old2(&In, parm.input->answer, "", parm.field->answer) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"),
-                      parm.input->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
 
     field = Vect_get_field_number(&In, parm.field->answer);
 
@@ -146,15 +141,16 @@ int main(int argc, char **argv)
 
     ctype = cvarr.ctype;
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-        G_fatal_error(_("Column type <%s> not supported (must be integer or double precision)"),
+        G_fatal_error(_("Column type <%s> not supported (must be integer or "
+                        "double precision)"),
                       db_sqltype_name(ctype));
 
     if (nrecords < 0)
         G_fatal_error(_("Unable to select data from table"));
 
     G_verbose_message(n_("%d record selected from table",
-                         "%d records selected from table",
-                         nrecords), nrecords);
+                         "%d records selected from table", nrecords),
+                      nrecords);
 
     db_close_database_shutdown_driver(Driver);
 
@@ -173,9 +169,8 @@ int main(int argc, char **argv)
     Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fi->table, Fi->key,
                         Fi->database, Fi->driver);
 
-    Driver =
-        db_start_driver_open_database(Fi->driver,
-                                      Vect_subst_var(Fi->database, &Out));
+    Driver = db_start_driver_open_database(Fi->driver,
+                                           Vect_subst_var(Fi->database, &Out));
     if (Driver == NULL)
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Fi->database, Fi->driver);
@@ -183,8 +178,10 @@ int main(int argc, char **argv)
 
     db_begin_transaction(Driver);
     sprintf(buf,
-            "create table %s ( cat integer, pnt_val double precision, rast_val double precision, "
-            "diff double precision)", Fi->table);
+            "create table %s ( cat integer, pnt_val double precision, rast_val "
+            "double precision, "
+            "diff double precision)",
+            Fi->table);
     db_set_string(&sql, buf);
 
     if (db_execute_immediate(Driver, &sql) != DB_OK)
@@ -193,10 +190,9 @@ int main(int argc, char **argv)
     if (db_create_index2(Driver, Fi->table, Fi->key) != DB_OK)
         G_warning(_("Cannot create index"));
 
-    if (db_grant_on_table
-        (Driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-        G_fatal_error(_("Unable to grant privileges on table <%s>"),
-                      Fi->table);
+    if (db_grant_on_table(Driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
+        G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi->table);
 
     G_message(_("Reading points..."));
     Points = Vect_new_line_struct();
@@ -256,8 +252,8 @@ int main(int argc, char **argv)
         Vect_reset_cats(Cats);
         Vect_cat_set(Cats, 1, cat);
 
-        sprintf(buf, "insert into %s values ( %d, %e, %e, %e )",
-                Fi->table, cat, actual, predicted, predicted - actual);
+        sprintf(buf, "insert into %s values ( %d, %e, %e, %e )", Fi->table, cat,
+                actual, predicted, predicted - actual);
         db_set_string(&sql, buf);
 
         if (db_execute_immediate(Driver, &sql) != DB_OK)

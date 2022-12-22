@@ -6,14 +6,13 @@
 #define NODE_EQUAL_SPLIT            2
 #define NODE_CONTINUOUS_EQUAL_SPLIT 3
 
-#define KERNEL_UNIFORM      0
-#define KERNEL_TRIANGULAR   1
-#define KERNEL_EPANECHNIKOV 2
-#define KERNEL_QUARTIC      3
-#define KERNEL_TRIWEIGHT    4
-#define KERNEL_GAUSSIAN     5
-#define KERNEL_COSINE       6
-
+#define KERNEL_UNIFORM              0
+#define KERNEL_TRIANGULAR           1
+#define KERNEL_EPANECHNIKOV         2
+#define KERNEL_QUARTIC              3
+#define KERNEL_TRIWEIGHT            4
+#define KERNEL_GAUSSIAN             5
+#define KERNEL_COSINE               6
 
 void setKernelFunction(int function, int dimension, double bandwidth,
                        double *term);

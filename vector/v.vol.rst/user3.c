@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               3D vector point input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -54,10 +53,10 @@
 
 int secpar_loop(int ngstc, int nszc, int i)
 {
-    double dnorm1, ro, dx2, dy2, dz2, grad1, grad2, slp, grad, oor1, oor2,
-        curn, curm, curg, dxy2, dxz2, dyz2;
-    double dg1, dg2, dg3, dg4, dg5, dg6, h11, h12, h22, h13, h23, h33,
-        dm1, dm2, dm3, dm4, dm5, dm6, dnorm5;
+    double dnorm1, ro, dx2, dy2, dz2, grad1, grad2, slp, grad, oor1, oor2, curn,
+        curm, curg, dxy2, dxz2, dyz2;
+    double dg1, dg2, dg3, dg4, dg5, dg6, h11, h12, h22, h13, h23, h33, dm1, dm2,
+        dm3, dm4, dm5, dm6, dnorm5;
     double gradmin;
     int bmask = 1;
     static int first_t = 1;
@@ -67,7 +66,7 @@ int secpar_loop(int ngstc, int nszc, int i)
     /*
        for (i = ngstc; i <= nszc; i++)
        { */
-    /*      
+    /*
        if(maskmap != NULL)
        {
        bmask = BM_get(bitmask, i, k);
@@ -78,20 +77,20 @@ int secpar_loop(int ngstc, int nszc, int i)
         dz2 = adz[i] * adz[i];
         grad1 = dx2 + dy2;
         grad2 = dx2 + dy2 + dz2;
-        grad = sqrt(grad2);     /* gradient */
+        grad = sqrt(grad2); /* gradient */
         /* slope in %        slp = 100. * grad; */
         /* slope in degrees
            slp = ro * atan (grad); */
         slp = atan(grad);
         if ((aspect1 != NULL) || (aspect2 != NULL)) {
             if (grad <= gradmin) {
-                oor1 = 0.;      /* horiz. angle */
-                oor2 = 0.;      /* vertical angle */
+                oor1 = 0.; /* horiz. angle */
+                oor2 = 0.; /* vertical angle */
             }
         }
 
-/***********aspect from r.slope.aspect, with adx, ady computed
-	from interpol. function RST **************************/
+        /***********aspect from r.slope.aspect, with adx, ady computed
+                from interpol. function RST **************************/
 
         if (aspect1 != NULL) {
             if (adx[i] == 0) {
@@ -111,7 +110,7 @@ int secpar_loop(int ngstc, int nszc, int i)
             }
         }
 
- /** vertical angle */
+        /** vertical angle */
         if (aspect2 != NULL) {
             if (adz[i] == 0) {
                 oor2 = 0.;
@@ -127,9 +126,9 @@ int secpar_loop(int ngstc, int nszc, int i)
             dxy2 = 2. * adxy[i] * adx[i] * ady[i];
             dxz2 = 2. * adxz[i] * adx[i] * adz[i];
             dyz2 = 2. * adyz[i] * ady[i] * adz[i];
-            curn =
-                -(adxx[i] * dx2 + dxy2 + dxz2 + dyz2 + adzz[i] * dz2 +
-                  adyy[i] * dy2) / grad2;
+            curn = -(adxx[i] * dx2 + dxy2 + dxz2 + dyz2 + adzz[i] * dz2 +
+                     adyy[i] * dy2) /
+                   grad2;
         }
         if (gcurv != NULL) {
             dg1 = -adxx[i] * adyy[i] * adzz[i];
@@ -207,11 +206,11 @@ int secpar_loop(int ngstc, int nszc, int i)
         if (aspect2 != NULL)
             adz[i] = oor2 / ro;
         if (ncurv != NULL)
-            adxx[i] = curn;     /* change of gradient */
+            adxx[i] = curn; /* change of gradient */
         if (gcurv != NULL)
-            adyy[i] = curg;     /* Gaussian curvature */
+            adyy[i] = curg; /* Gaussian curvature */
         if (mcurv != NULL)
-            adxy[i] = curm;     /* Mean curvature */
+            adxy[i] = curm; /* Mean curvature */
         /*printf(" parametre grad %lf\n", slp); */
     }
     /*      } secapr loop */
@@ -219,13 +218,9 @@ int secpar_loop(int ngstc, int nszc, int i)
     return 1;
 }
 
-
-
-
-int
-COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
-       int n_levs, int n_points, struct quadruple *points,
-       struct point_3d skip_point)
+int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
+           int n_levs, int n_points, struct quadruple *points,
+           struct point_3d skip_point)
 /*C
    C       INTERPOLATION BY FUNCTIONAL METHOD : TPS + complete regul.
    c
@@ -237,9 +232,8 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     static double *wz1 = NULL;
     double amaxa;
     double stepix, stepiy, stepiz, RO, xx, yy, zz, xg, yg, zg, xx2;
-    double wm, dx, dy, dz, dxx, dyy, dxy, dxz, dyz, dzz, h, bmgd1,
-        bmgd2, etar, zcon, r, ww, wz, r2, hcell, zzcell2,
-        etarcell, rcell, wwcell, zzcell;
+    double wm, dx, dy, dz, dxx, dyy, dxy, dxz, dyz, dzz, h, bmgd1, bmgd2, etar,
+        zcon, r, ww, wz, r2, hcell, zzcell2, etarcell, rcell, wwcell, zzcell;
     double x_crs, x_crsd, x_crsdd, x_crsdr2;
     int n1, k1, k2, k, i1, l, l1, n4, n5, m, i;
     int /* NGST, */ LSIZE, ngstc, nszc, ngstr, nszr, ngstl, nszl;
@@ -321,11 +315,11 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
         k1 = k * n1 + 1;
         k2 = k + 1;
         i1 = k1 + k;
-        if (rsm < 0.) {         /*indicates variable smoothing */
+        if (rsm < 0.) { /*indicates variable smoothing */
             A[i1] = points[k - 1].sm;
         }
         else {
-            A[i1] = RO;         /* constant smoothing */
+            A[i1] = RO; /* constant smoothing */
         }
         for (l = k2; l <= n_points; l++) {
             xx = points[k - 1].x - points[l - 1].x;
@@ -336,7 +330,8 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
             if (etar == 0.) {
                 /*              printf ("ident. points in segm.  \n");
                    printf ("x[%d]=%lf,x[%d]=%lf,y[%d]=%lf,y[%d]=%lf\n",
-                   k - 1, points[k - 1].x, l - 1, points[l - 1].x, k - 1, points[k - 1].y, l - 1, points[l - 1].y); */
+                   k - 1, points[k - 1].x, l - 1, points[l - 1].x, k - 1,
+                   points[k - 1].y, l - 1, points[l - 1].y); */
             }
             i1 = k1 + l;
             A[i1] = crs(etar);
@@ -404,7 +399,8 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
         ngstl = (int)(z_or / tb_res + 0.5) + 1;
         nszl = ngstl + n_levs - 1;
 
-        /*        fprintf(stderr," Progress percentage for each segment ..." ); */
+        /*        fprintf(stderr," Progress percentage for each segment ..." );
+         */
         /*fprintf(stderr,"Before loops,ngstl = %d,nszl =%d\n",ngstl,nszl); */
         for (i = ngstl; i <= nszl; i++) {
             /*fprintf(stderr,"level=%d\n",i); */
@@ -429,7 +425,8 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
                 for (l = ngstc; l <= nszc; l++) {
                     LSIZE = LSIZE + 1;
                     if (maskmap != NULL)
-                        bmask = BM_get(bitmask, l - 1, k - 1);  /*bug fix 02/03/00 jh */
+                        bmask = BM_get(bitmask, l - 1,
+                                       k - 1); /*bug fix 02/03/00 jh */
                     xg = (l - ngstc) * stepix;
                     ww = 0.;
                     wwcell = 0.;
@@ -453,7 +450,9 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
                             xx2 = xx * xx;
                             if ((cellinp != NULL) && (cellout != NULL) &&
                                 (i == ngstl)) {
-                                zcon = (double)(cell[l - 1] * zmult - z_or) - z_orig_in * zmult;        /* bug fix 02/03/00 jh */
+                                zcon =
+                                    (double)(cell[l - 1] * zmult - z_or) -
+                                    z_orig_in * zmult; /* bug fix 02/03/00 jh */
                                 zcon = zcon / dnorm;
                                 zzcell = zcon - points[m - 1].z;
                                 zzcell2 = zzcell * zzcell;
@@ -465,9 +464,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
                             r = sqrt(r2);
                             etar = (fi * r) / 2.;
 
-                            crs_full(etar, fi,
-                                     &x_crs,
-                                     cond1 ? &x_crsd : NULL,
+                            crs_full(etar, fi, &x_crs, cond1 ? &x_crsd : NULL,
                                      cond2 ? &x_crsdr2 : NULL,
                                      cond2 ? &x_crsdd : NULL);
                             h = h + b[m] * x_crs;
@@ -483,14 +480,11 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
                                 dyy = dyy + bmgd2 * w2[m] + bmgd1 * w2[m];
                                 dzz = dzz + bmgd2 * wz2[m] + bmgd1 * wz2[m];
                                 dxy =
-                                    dxy + bmgd2 * xx * w[m] +
-                                    bmgd1 * xx * w[m];
-                                dxz =
-                                    dxz + bmgd2 * xx * wz1[m] +
-                                    bmgd1 * xx * wz1[m];
-                                dyz =
-                                    dyz + bmgd2 * w[m] * wz1[m] +
-                                    bmgd1 * w[m] * wz1[m];
+                                    dxy + bmgd2 * xx * w[m] + bmgd1 * xx * w[m];
+                                dxz = dxz + bmgd2 * xx * wz1[m] +
+                                      bmgd1 * xx * wz1[m];
+                                dyz = dyz + bmgd2 * w[m] * wz1[m] +
+                                      bmgd1 * w[m] * wz1[m];
                             }
                         }
                         ww = h + wmin;
@@ -512,24 +506,25 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
                             zmaxacell = amax1(wwcell, zmaxacell);
                             zminacell = amin1(wwcell, zminacell);
                         }
-                        if ((ww > wmax + 0.1 * (wmax - wmin))
-                            || (ww < wmin - 0.1 * (wmax - wmin))) {
+                        if ((ww > wmax + 0.1 * (wmax - wmin)) ||
+                            (ww < wmin - 0.1 * (wmax - wmin))) {
                             static int once = 0;
 
                             if (!once) {
                                 once = 1;
                                 fprintf(stderr, "WARNING:\n");
-                                fprintf(stderr,
-                                        "Overshoot -- increase in tension suggested.\n");
+                                fprintf(stderr, "Overshoot -- increase in "
+                                                "tension suggested.\n");
                                 fprintf(stderr,
                                         "Overshoot occurs at (%d,%d,%d) cell\n",
                                         l, k, i);
                                 fprintf(stderr,
-                                        "The w-value is %lf, wmin is %lf,wmax is %lf\n",
+                                        "The w-value is %lf, wmin is %lf,wmax "
+                                        "is %lf\n",
                                         ww, wmin, wmax);
                             }
                         }
-                    }           /* skip here if you are in masked area, ww should be 0 */
+                    } /* skip here if you are in masked area, ww should be 0 */
                     az[l] = ww;
                     adx[l] = dx;
                     ady[l] = dy;
@@ -542,16 +537,15 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
                     adyz[l] = dyz;
                     adzz[l] = dzz;
                     if ((gradient != NULL) || (aspect1 != NULL) ||
-                        (aspect2 != NULL)
-                        || (ncurv != NULL) || (gcurv != NULL) ||
-                        (mcurv != NULL))
+                        (aspect2 != NULL) || (ncurv != NULL) ||
+                        (gcurv != NULL) || (mcurv != NULL))
                         if (!(secpar_loop(ngstc, nszc, l))) {
                             clean();
                             G_fatal_error(_("Secpar_loop failed"));
                         }
                     if ((cellinp != NULL) && (cellout != NULL) &&
                         (i == ngstl)) {
-                        zero_array_cell[l - 1] = (FCELL) (wwcell);
+                        zero_array_cell[l - 1] = (FCELL)(wwcell);
                     }
                     if (outz != NULL) {
                         zero_array1[l - 1] = (float)(az[l] * sciz);
@@ -574,111 +568,90 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
                     if (mcurv != NULL) {
                         zero_array7[l - 1] = (float)(adxy[l]);
                     }
-                }               /* columns */
+                } /* columns */
                 ind = nsizc * (k - 1) + (ngstc - 1);
                 ind1 = ngstc - 1;
                 offset2 = offset + ind; /* rows*cols offset */
 
                 if ((cellinp != NULL) && (cellout != NULL) && (i == ngstl)) {
-                    G_fseek(Tmp_fd_cell, ((off_t) ind * sizeof(FCELL)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array_cell + ind1, sizeof(FCELL),
-                          nszc - ngstc + 1, Tmp_fd_cell))) {
+                    G_fseek(Tmp_fd_cell, ((off_t)ind * sizeof(FCELL)), 0);
+                    if (!(fwrite(zero_array_cell + ind1, sizeof(FCELL),
+                                 nszc - ngstc + 1, Tmp_fd_cell))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
                 if (outz != NULL) {
-                    G_fseek(Tmp_fd_z, (off_t) (offset2 * sizeof(float)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array1 + ind1, sizeof(float), nszc - ngstc + 1,
-                          Tmp_fd_z))) {
+                    G_fseek(Tmp_fd_z, (off_t)(offset2 * sizeof(float)), 0);
+                    if (!(fwrite(zero_array1 + ind1, sizeof(float),
+                                 nszc - ngstc + 1, Tmp_fd_z))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
                 if (gradient != NULL) {
-                    G_fseek(Tmp_fd_dx, (off_t) (offset2 * sizeof(float)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array2 + ind1, sizeof(float), nszc - ngstc + 1,
-                          Tmp_fd_dx))) {
+                    G_fseek(Tmp_fd_dx, (off_t)(offset2 * sizeof(float)), 0);
+                    if (!(fwrite(zero_array2 + ind1, sizeof(float),
+                                 nszc - ngstc + 1, Tmp_fd_dx))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
                 if (aspect1 != NULL) {
-                    G_fseek(Tmp_fd_dy, (off_t) (offset2 * sizeof(float)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array3 + ind1, sizeof(float), nszc - ngstc + 1,
-                          Tmp_fd_dy))) {
+                    G_fseek(Tmp_fd_dy, (off_t)(offset2 * sizeof(float)), 0);
+                    if (!(fwrite(zero_array3 + ind1, sizeof(float),
+                                 nszc - ngstc + 1, Tmp_fd_dy))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
                 if (aspect2 != NULL) {
-                    G_fseek(Tmp_fd_dz, (off_t) (offset2 * sizeof(float)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array4 + ind1, sizeof(float), nszc - ngstc + 1,
-                          Tmp_fd_dz))) {
+                    G_fseek(Tmp_fd_dz, (off_t)(offset2 * sizeof(float)), 0);
+                    if (!(fwrite(zero_array4 + ind1, sizeof(float),
+                                 nszc - ngstc + 1, Tmp_fd_dz))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
                 if (ncurv != NULL) {
-                    G_fseek(Tmp_fd_xx, (off_t) (offset2 * sizeof(float)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array5 + ind1, sizeof(float), nszc - ngstc + 1,
-                          Tmp_fd_xx))) {
+                    G_fseek(Tmp_fd_xx, (off_t)(offset2 * sizeof(float)), 0);
+                    if (!(fwrite(zero_array5 + ind1, sizeof(float),
+                                 nszc - ngstc + 1, Tmp_fd_xx))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
                 if (gcurv != NULL) {
-                    G_fseek(Tmp_fd_yy, (off_t) (offset2 * sizeof(float)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array6 + ind1, sizeof(float), nszc - ngstc + 1,
-                          Tmp_fd_yy))) {
+                    G_fseek(Tmp_fd_yy, (off_t)(offset2 * sizeof(float)), 0);
+                    if (!(fwrite(zero_array6 + ind1, sizeof(float),
+                                 nszc - ngstc + 1, Tmp_fd_yy))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
                 if (mcurv != NULL) {
-                    G_fseek(Tmp_fd_xy, (off_t) (offset2 * sizeof(float)), 0);
-                    if (!
-                        (fwrite
-                         (zero_array7 + ind1, sizeof(float), nszc - ngstc + 1,
-                          Tmp_fd_xy))) {
+                    G_fseek(Tmp_fd_xy, (off_t)(offset2 * sizeof(float)), 0);
+                    if (!(fwrite(zero_array7 + ind1, sizeof(float),
+                                 nszc - ngstc + 1, Tmp_fd_xy))) {
                         clean();
-                        G_fatal_error
-                            (_("Not enough disk space--cannot write files"));
+                        G_fatal_error(
+                            _("Not enough disk space--cannot write files"));
                     }
                 }
-
             }
         }
-    }                           /* falls here if LINEQS() returns 0 */
+    } /* falls here if LINEQS() returns 0 */
     /*    total++; */
     /*fprintf(stderr,"wminac=%lf,wmaxac=%lf\n",zminac,zmaxac); */
     return 1;
-
 }
-
-
-
 
 int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
 /*
@@ -686,8 +659,8 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
    c
  */
 {
-    double errmax, h, xx, yy, r2, hz, zz, ww, err, xmm, ymm,
-        zmm, /* wmm, */ r, etar;
+    double errmax, h, xx, yy, r2, hz, zz, ww, err, xmm, ymm, zmm, /* wmm, */ r,
+        etar;
     int n1, mm, m, mmax, inside;
 
     errmax = .0;
@@ -710,9 +683,8 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
 
             xmm = (points[mm - 1].x * dnorm) + xmn + current_region.west;
             ymm = (points[mm - 1].y * dnorm) + ymn + current_region.south;
-            zmm =
-                (points[mm - 1].z * dnorm) / zmult + zmn / zmult +
-                current_region.bottom;
+            zmm = (points[mm - 1].z * dnorm) / zmult + zmn / zmult +
+                  current_region.bottom;
 
             if ((xmm >= xmn + current_region.west) &&
                 (xmm <= xmx + current_region.west) &&
@@ -738,23 +710,24 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
         ertot = amax1(errmax, ertot);
         if (errmax > ertre) {
             xmm = (points[mmax - 1].x * dnorm) +
-                ((struct octdata *)(root->data))->x_orig;
+                  ((struct octdata *)(root->data))->x_orig;
             ymm = (points[mmax - 1].y * dnorm) +
-                ((struct octdata *)(root->data))->y_orig;
+                  ((struct octdata *)(root->data))->y_orig;
             zmm = (points[mmax - 1].z * dnorm) +
-                ((struct octdata *)(root->data))->z_orig;
+                  ((struct octdata *)(root->data))->z_orig;
             /* wmm = points[mmax - 1].w + wmin; */
-            /*      printf (" max. error = %f at point i = %d \n", errmax, mmax);
-               printf (" x(i) = %f  y(i) = %f \n", xmm, ymm);
-               printf (" z(i) = %f  w(i) = %f \n", zmm, wmm); */
+            /*      printf (" max. error = %f at point i = %d \n", errmax,
+               mmax); printf (" x(i) = %f  y(i) = %f \n", xmm, ymm); printf ("
+               z(i) = %f  w(i) = %f \n", zmm, wmm); */
         }
     }
 
     /* cv stuff */
     if (cv) {
 
-        h = b[n1];              /* check this if h=b[0] used in 2d should be applied here */
-        for (m = 1; m <= n_points; m++) {       /* number of points is already 1 less (skip_point) */
+        h = b[n1]; /* check this if h=b[0] used in 2d should be applied here */
+        for (m = 1; m <= n_points;
+             m++) { /* number of points is already 1 less (skip_point) */
             xx = points[m - 1].x - skip_point.x;
             yy = points[m - 1].y - skip_point.y;
             zz = points[m - 1].z - skip_point.z;
@@ -771,9 +744,8 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
         err = hz - ww;
         xmm = (skip_point.x * dnorm) + xmn + current_region.west;
         ymm = (skip_point.y * dnorm) + ymn + current_region.south;
-        zmm =
-            (skip_point.z * dnorm) / zmult + zmn / zmult +
-            current_region.bottom;
+        zmm = (skip_point.z * dnorm) / zmult + zmn / zmult +
+              current_region.bottom;
 
         if ((xmm >= xmn + current_region.west) &&
             (xmm <= xmx + current_region.west) &&
@@ -788,8 +760,7 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
         if (inside == 1)
             point_save(xmm, ymm, zmm, err);
 
-    }                           /* cv */
-
+    } /* cv */
 
     return 1;
 }

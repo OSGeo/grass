@@ -18,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_fetch(dbCursor * cn, int position, int *more)
+int db__driver_fetch(dbCursor *cn, int position, int *more)
 {
     cursor *c;
     dbToken token;
@@ -29,7 +29,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(_("Cursor not found"));
         db_d_report_error();
         return DB_FAILED;
@@ -69,7 +69,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
         dbColumn *column;
         dbValue *value;
 
-        col = c->cols[i];       /* known cols */
+        col = c->cols[i]; /* known cols */
 
         column = db_get_table_column(table, i);
         gpgtype = db_get_column_host_type(column);
@@ -87,9 +87,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             value->isNull = 0;
         }
 
-        G_debug(3, "row %d, col %d, gpgtype %d, sqltype %d: val = '%s'",
-                c->row, col, gpgtype, sqltype, PQgetvalue(c->res, c->row,
-                                                          col));
+        G_debug(3, "row %d, col %d, gpgtype %d, sqltype %d: val = '%s'", c->row,
+                col, gpgtype, sqltype, PQgetvalue(c->res, c->row, col));
 
         switch (gpgtype) {
             int ns, tz;
@@ -116,8 +115,9 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             value->d = atof(PQgetvalue(c->res, c->row, col));
             break;
 
-            /* Note: we have set DATESTYLE TO ISO in db_driver_open_select_cursor() so datetime
-             *       format should be ISO */
+            /* Note: we have set DATESTYLE TO ISO in
+             * db_driver_open_select_cursor() so datetime format should be ISO
+             */
 
         case PG_TYPE_DATE:
             /* Example: '1999-01-25' */
@@ -125,8 +125,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
                         &(value->t.year), &(value->t.month), &(value->t.day));
 
             if (ns != 3) {
-                db_d_append_error("%s %s",
-                                  _("Unable to scan date:"),
+                db_d_append_error("%s %s", _("Unable to scan date:"),
                                   PQgetvalue(c->res, c->row, col));
                 db_d_report_error();
                 return DB_FAILED;
@@ -143,8 +142,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
                         &(value->t.seconds));
 
             if (ns != 3) {
-                db_d_append_error("%s %s",
-                                  _("Unable to scan time:"),
+                db_d_append_error("%s %s", _("Unable to scan time:"),
                                   PQgetvalue(c->res, c->row, col));
                 db_d_report_error();
                 return DB_FAILED;
@@ -193,7 +191,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     return DB_OK;
 }
 
-int db__driver_get_num_rows(dbCursor * cn)
+int db__driver_get_num_rows(dbCursor *cn)
 {
     cursor *c;
     dbToken token;
@@ -202,7 +200,7 @@ int db__driver_get_num_rows(dbCursor * cn)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(_("Taken not found"));
         db_d_report_error();
         return DB_FAILED;

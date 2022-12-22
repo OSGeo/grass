@@ -11,7 +11,7 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
     OGRLayerH hLayer;
 
     pszDriverName = G_store(format);
-    G_strchg(pszDriverName, '_', ' ');  /* '_' -> ' ' */
+    G_strchg(pszDriverName, '_', ' '); /* '_' -> ' ' */
 
     /* start driver */
     hDriver = get_driver_by_name(pszDriverName);
@@ -26,8 +26,7 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
     hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
 #endif
     if (hDS == NULL) {
-        G_fatal_error(_("Creation of output OGR datasource <%s> failed"),
-                      dsn);
+        G_fatal_error(_("Creation of output OGR datasource <%s> failed"), dsn);
     }
 
     G_free(pszDriverName);

@@ -1,43 +1,42 @@
-/* ***************************************************************
- * *
- * * MODULE:       v.clean
- * * 
- * * AUTHOR(S):    Radim Blazek
- * *               
- * * PURPOSE:      Clean lines - prune lines / boundaries
- * *               
- * * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
- * *               Read the file COPYING that comes with GRASS
- * *               for details.
- * *
- * **************************************************************/
+/***************************************************************
+ *
+ * MODULE:       v.clean
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Clean lines - prune lines / boundaries
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ ***************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-
-/* Pruning of boundaries MUST NOT destroy topology of areas. This is guaranteed by 3 rules:
+/* Pruning of boundaries MUST NOT destroy topology of areas. This is guaranteed
+ * by 3 rules:
  *
  * 1) first and lst segment of the boundary is never changed
- * 
+ *
  * 2) if pruned boundary would cross another boundary, pruning is not done
  *    (original boundary is left unchanged)
  *
  * 3) position of centroids on the left and right side is checked and pruning
- *    is not done if centroid would be attached to another area 
+ *    is not done if centroid would be attached to another area
  */
 
-int
-prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
+int prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 {
     int line, type, nlines;
-    int nremoved = 0;           /* number of removed vertices */
-    int nvertices = 0;          /* number of input vertices in given type */
-    int not_pruned_lines = 0;   /* number of not pruned because of topology */
+    int nremoved = 0;         /* number of removed vertices */
+    int nvertices = 0;        /* number of input vertices in given type */
+    int not_pruned_lines = 0; /* number of not pruned because of topology */
     int norig;
     struct line_pnts *Points, *TPoints, *BPoints, *Points_orig;
     struct line_cats *Cats;
@@ -84,14 +83,13 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
                 }
                 nremoved += norig - Points->n_points;
             }
-
         }
         else if (type == GV_BOUNDARY) {
-            int i, intersect, newline, left_old, right_old, left_new,
-                right_new, newline_err;
+            int i, intersect, newline, left_old, right_old, left_new, right_new,
+                newline_err;
 
             if (norig < 5)
-                continue;       /* Nothing can be removed */
+                continue; /* Nothing can be removed */
 
             /* Make a copy of points without first and last segment */
             Vect_reset_line(TPoints);
@@ -104,7 +102,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
             Vect_line_prune_thresh(TPoints, thresh);
 
             if (TPoints->n_points == norig - 2)
-                continue;       /* no pruning done */
+                continue; /* no pruning done */
 
             /* Append first and last point */
             Vect_line_insert_point(TPoints, 0, Points->x[0], Points->y[0],
@@ -112,7 +110,8 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
             Vect_append_point(TPoints, Points->x[norig - 1],
                               Points->y[norig - 1], Points->z[norig - 1]);
 
-            /* Check intersection of the pruned boundary with other boundaries */
+            /* Check intersection of the pruned boundary with other boundaries
+             */
             Vect_line_box(TPoints, &box);
             Vect_select_lines_by_box(Out, &box, GV_BOUNDARY, List);
 
@@ -128,13 +127,13 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 
                 Vect_read_line(Out, BPoints, NULL, bline);
 
-                /* Vect_line_intersection is quite slow, hopefully not so bad because only few 
-                 * intersections should be found if any */
+                /* Vect_line_intersection is quite slow, hopefully not so bad
+                 * because only few intersections should be found if any */
 
                 AXLines = BXLines = NULL;
                 Vect_line_intersection(TPoints, BPoints, &box, &List->box[i],
-                                       &AXLines, &BXLines,
-                                       &naxlines, &nbxlines, 0);
+                                       &AXLines, &BXLines, &naxlines, &nbxlines,
+                                       0);
 
                 G_debug(4,
                         "bline = %d intersect = %d naxlines = %d nbxlines = %d",
@@ -163,8 +162,8 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
             }
 
             if (intersect) {
-                G_debug(3,
-                        "The pruned boundary instersects another boundary -> not pruned");
+                G_debug(3, "The pruned boundary instersects another boundary "
+                           "-> not pruned");
                 not_pruned_lines++;
                 continue;
             }
@@ -198,8 +197,8 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
                 right_new = Vect_get_area_centroid(Out, right_new);
 
             if (left_new != left_old || right_new != right_old) {
-                G_debug(3,
-                        "The pruned boundary changes attachment of centroid -> not pruned");
+                G_debug(3, "The pruned boundary changes attachment of centroid "
+                           "-> not pruned");
                 Vect_rewrite_line(Out, newline, type, Points, Cats);
                 if (Err) {
                     Vect_delete_line(Err, newline_err);
@@ -213,13 +212,15 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
         }
     }
 
-    G_important_message(_("%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"),
+    G_important_message(_("%d vertices from input %d (vertices of given type) "
+                          "removed, i.e. %.2f %%"),
                         nremoved, nvertices,
                         100.0 * nremoved / (nvertices ? nvertices : 1));
 
     if (not_pruned_lines > 0)
-        G_message(_("%d boundaries not pruned because pruning would damage topology"),
-                  not_pruned_lines);
+        G_message(
+            _("%d boundaries not pruned because pruning would damage topology"),
+            not_pruned_lines);
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(Points_orig);

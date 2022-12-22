@@ -17,7 +17,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_create_index(dbIndex * index)
+int db__driver_create_index(dbIndex *index)
 {
     int i, ncols;
     PGresult *res;
@@ -57,8 +57,7 @@ int db__driver_create_index(dbIndex * index)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-        db_d_append_error("%s: %s\n%s",
-                          _("Unable to create index"),
+        db_d_append_error("%s: %s\n%s", _("Unable to create index"),
                           db_get_string(&sql), PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(res);

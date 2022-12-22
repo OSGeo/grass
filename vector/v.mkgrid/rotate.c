@@ -6,8 +6,8 @@ static double ca = 1.0;
 void set_angle(double angle)
 {
     if (angle != 0) {
-	sa = sin(angle);
-	ca = cos(angle);
+        sa = sin(angle);
+        ca = cos(angle);
     }
 }
 
@@ -17,7 +17,7 @@ void rotate(double *x, double *y, double xo, double yo, double angle)
     double tmpx, tmpy;
 
     if (angle == 0)
-	return;
+        return;
 
     /* first translate */
     tmpx = *x - xo;
