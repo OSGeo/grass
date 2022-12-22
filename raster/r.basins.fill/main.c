@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.basins.fill
@@ -14,7 +13,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 /*====================================================================*/
 /* program to propagate the link label into the hillslope areas;      */
@@ -33,7 +32,6 @@
 #include "local_proto.h"
 
 #define NOMASK 1
-
 
 int main(int argc, char *argv[])
 {
@@ -58,8 +56,7 @@ int main(int argc, char *argv[])
 
     drain_opt = G_define_standard_option(G_OPT_R_INPUT);
     drain_opt->key = "cnetwork";
-    drain_opt->description =
-        _("Name of input coded stream network raster map");
+    drain_opt->description = _("Name of input coded stream network raster map");
 
     ridge_opt = G_define_standard_option(G_OPT_R_INPUT);
     ridge_opt->key = "tnetwork";
@@ -81,7 +78,8 @@ int main(int argc, char *argv[])
 
     drain_name = drain_opt->answer;
 
-    /* this isn't a nice thing to do. Rast_align_window() should be used first */
+    /* this isn't a nice thing to do. Rast_align_window() should be used first
+     */
     Rast_get_cellhd(drain_name, "", &window);
     Rast_set_window(&window);
 
@@ -97,7 +95,8 @@ int main(int argc, char *argv[])
 
     partfd = Rast_open_c_new(part_name);
 
-    /* run through file and set streams to zero at locations where ridges exist */
+    /* run through file and set streams to zero at locations where ridges exist
+     */
     for (row = 0; row < nrows; row++) {
         for (col = 0; col < ncols; col++)
             if (ridge[row * ncols + col] != 0)

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two 
+ * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
  * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
@@ -28,12 +27,11 @@
 
 /* this code assumes that list1 and list2 have at least one cell in each */
 
-void
-find_minimum_distance(const struct CatEdgeList *list1,
-                      const struct CatEdgeList *list2, double *east1,
-                      double *north1, double *east2, double *north2,
-                      double *distance, const struct Cell_head *region,
-                      int overlap, const char *name1, const char *name2)
+void find_minimum_distance(const struct CatEdgeList *list1,
+                           const struct CatEdgeList *list2, double *east1,
+                           double *north1, double *east2, double *north2,
+                           double *distance, const struct Cell_head *region,
+                           int overlap, const char *name1, const char *name2)
 {
     int i1, i2;
     double dist;
@@ -44,7 +42,6 @@ find_minimum_distance(const struct CatEdgeList *list1,
     int zerro_row, zerro_col;
 
     int nulldistance = 0;
-
 
     if (overlap)
         nulldistance = null_distance(name1, name2, &zerro_row, &zerro_col);
@@ -90,7 +87,8 @@ int null_distance(const char *name1, const char *name2, int *zerro_row,
     int nrows, ncols, row, col;
     void *cell1, *cell2;
 
-    /* NOTE: no need to control, if the map exists. it should be checked in edge.c */
+    /* NOTE: no need to control, if the map exists. it should be checked in
+     * edge.c */
     mapset = G_find_raster2(name1, "");
     maptype1 = Rast_map_type(name1, mapset);
     mapd1 = Rast_open_old(name1, mapset);
@@ -119,25 +117,25 @@ int null_distance(const char *name1, const char *name2, int *zerro_row,
             /* first raster */
             switch (maptype1) {
             case CELL_TYPE:
-                cell1 = ((CELL **) inrast1)[col];
+                cell1 = ((CELL **)inrast1)[col];
                 break;
             case FCELL_TYPE:
-                cell1 = ((FCELL **) inrast1)[col];
+                cell1 = ((FCELL **)inrast1)[col];
                 break;
             case DCELL_TYPE:
-                cell1 = ((DCELL **) inrast1)[col];
+                cell1 = ((DCELL **)inrast1)[col];
                 break;
             }
             /* second raster */
             switch (maptype2) {
             case CELL_TYPE:
-                cell2 = ((CELL **) inrast2)[col];
+                cell2 = ((CELL **)inrast2)[col];
                 break;
             case FCELL_TYPE:
-                cell2 = ((FCELL **) inrast2)[col];
+                cell2 = ((FCELL **)inrast2)[col];
                 break;
             case DCELL_TYPE:
-                cell2 = ((DCELL **) inrast2)[col];
+                cell2 = ((DCELL **)inrast2)[col];
                 break;
             }
 

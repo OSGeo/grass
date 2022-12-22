@@ -38,7 +38,7 @@
 #include <grass/glocale.h>
 #include <grass/rowio.h>
 
-#define PAD 2
+#define PAD     2
 #define MAX_ROW 7
 
 static int n_rows, n_cols;
@@ -46,20 +46,18 @@ static int work_file;
 static char *work_file_name;
 static ROWIO row_io;
 
-
 /* function prototypes */
 static int write_row(int file, const void *buf, int row, int buf_len);
 static int read_row(int file, void *buf, int row, int buf_len);
-
 
 CELL *get_a_row(int row)
 {
     if (row < 0 || row >= n_rows)
         return (NULL);
-    return ((CELL *) Rowio_get(&row_io, row));
+    return ((CELL *)Rowio_get(&row_io, row));
 }
 
-int put_a_row(int row, CELL * buf)
+int put_a_row(int row, CELL *buf)
 {
     /* rowio.h defines this withe 2nd argument as char * */
     Rowio_put(&row_io, (char *)buf, row);
@@ -67,16 +65,15 @@ int put_a_row(int row, CELL * buf)
     return 0;
 }
 
-
 static int read_row(int file, void *buf, int row, int buf_len)
 {
-    lseek(file, ((off_t) row) * buf_len, 0);
+    lseek(file, ((off_t)row) * buf_len, 0);
     return (read(file, buf, buf_len) == buf_len);
 }
 
 static int write_row(int file, const void *buf, int row, int buf_len)
 {
-    lseek(file, ((off_t) row) * buf_len, 0);
+    lseek(file, ((off_t)row) * buf_len, 0);
     return (write(file, buf, buf_len) == buf_len);
 }
 
@@ -105,7 +102,8 @@ int open_file(char *name)
     G_asprintf(&tmpstr1, n_("%d row", "%d rows", n_rows), n_rows);
     /* GTC Count of raster columns */
     G_asprintf(&tmpstr2, n_("%d column", "%d columns", n_cols), n_cols);
-    /* GTC First argument is the raster map name, second and third - a string representing number of rows and cols */
+    /* GTC First argument is the raster map name, second and third - a string
+     * representing number of rows and cols */
     G_message(_("Raster map <%s> - %s X %s"), name, tmpstr1, tmpstr2);
     G_free(tmpstr1);
     G_free(tmpstr2);
@@ -123,7 +121,7 @@ int open_file(char *name)
                       work_file_name, errno);
     }
     buf_len = n_cols * sizeof(CELL);
-    buf = (CELL *) G_malloc(buf_len);
+    buf = (CELL *)G_malloc(buf_len);
     Rast_set_c_null_value(buf, n_cols);
     for (i = 0; i < PAD; i++) {
         if (write(work_file, buf, buf_len) != buf_len) {

@@ -1,5 +1,4 @@
-
- /****************************************************************************
+/****************************************************************************
  *
  * MODULE:    r.in.pdal
  *
@@ -16,17 +15,15 @@
  *
  *****************************************************************************/
 
-
 #include "grasslidarfilter.h"
 
-
-bool GrassLidarFilter::processOne(pdal::PointRef & point)
+bool GrassLidarFilter::processOne(pdal::PointRef &point)
 {
     using pdal::Dimension::Id;
 
-    double x = point.getFieldAs < double >(Id::X);
-    double y = point.getFieldAs < double >(Id::Y);
-    double z = point.getFieldAs < double >(Id::Z);
+    double x = point.getFieldAs<double>(Id::X);
+    double y = point.getFieldAs<double>(Id::Y);
+    double z = point.getFieldAs<double>(Id::Z);
 
     n_processed_++;
 
@@ -39,7 +36,7 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
         }
     }
     if (use_irange_) {
-        double intensity = point.getFieldAs < double >(Id::Intensity);
+        double intensity = point.getFieldAs<double>(Id::Intensity);
 
         intensity *= iscale_;
         if (intensity < imin_ || intensity > imax_) {
@@ -48,7 +45,7 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
         }
     }
     if (use_drange_) {
-        double value = point.getFieldAs < double >(dim_to_import_);
+        double value = point.getFieldAs<double>(dim_to_import_);
 
         value *= dscale_;
         if (value < dmin_ || value > dmax_) {
@@ -63,7 +60,7 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
                                       base_raster_data_type_, x, y, &base_z))
             z -= base_z;
         else
-            return false;       // skip points outside of base raster
+            return false; // skip points outside of base raster
     }
     if (use_zrange_) {
         if (z < zmin_ || z > zmax_) {
@@ -72,8 +69,8 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
         }
     }
     if (use_return_filter_) {
-        int return_n = point.getFieldAs < int >(Id::ReturnNumber);
-        int n_returns = point.getFieldAs < int >(Id::NumberOfReturns);
+        int return_n = point.getFieldAs<int>(Id::ReturnNumber);
+        int n_returns = point.getFieldAs<int>(Id::NumberOfReturns);
 
         if (return_filter_is_out(&return_filter_, return_n, n_returns)) {
             return_filtered_++;
@@ -81,7 +78,7 @@ bool GrassLidarFilter::processOne(pdal::PointRef & point)
         }
     }
     if (use_class_filter_) {
-        int point_class = point.getFieldAs < int >(Id::Classification);
+        int point_class = point.getFieldAs<int>(Id::Classification);
 
         if (class_filter_is_out(&class_filter_, point_class)) {
             n_class_filtered_++;

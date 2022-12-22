@@ -1,12 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.reclass
  * AUTHOR(S):    James Westervelt, Michael Shapiro, CERL (original contributors)
- *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_b yahoo.com>, Jan-Oliver Wagner <jan intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
  *               Markus Neteler <neteler itc.it>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -14,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,8 +38,7 @@ int main(int argc, char *argv[])
     FILE *srcfp;
     int tty;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output, *title, *rules;
     } parm;
 
@@ -86,8 +87,7 @@ int main(int argc, char *argv[])
     if (strcmp(parm.rules->answer, "-") != 0) {
         srcfp = fopen(parm.rules->answer, "r");
         if (!srcfp)
-            G_fatal_error(_("Cannot open rules file <%s>"),
-                          parm.rules->answer);
+            G_fatal_error(_("Cannot open rules file <%s>"), parm.rules->answer);
     }
     tty = isatty(fileno(srcfp));
 
@@ -99,8 +99,9 @@ int main(int argc, char *argv[])
     any = 0;
 
     if (tty) {
-        fprintf(stderr,
-                _("Enter rule(s), \"end\" when done, \"help\" if you need it\n"));
+        fprintf(
+            stderr,
+            _("Enter rule(s), \"end\" when done, \"help\" if you need it\n"));
         if (map_type == FCELL_TYPE)
             fprintf(stderr, _("FCELL: Data range is %.7g to %.7g\n"),
                     (double)min, (double)max);

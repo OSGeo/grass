@@ -57,16 +57,16 @@ int header(int unit1, int unit2)
         len2 = max(strlen(east), strlen(west));
         len2 = max(len2, strlen(ew_res));
 
-        sprintf(buf, "%-9s north: %*s    east: %*s",
-                "", len1, north, len2, east);
+        sprintf(buf, "%-9s north: %*s    east: %*s", "", len1, north, len2,
+                east);
         pbuf(buf);
 
-        sprintf(buf, "%-9s south: %*s    west: %*s",
-                "REGION", len1, south, len2, west);
+        sprintf(buf, "%-9s south: %*s    west: %*s", "REGION", len1, south,
+                len2, west);
         pbuf(buf);
 
-        sprintf(buf, "%-9s res:   %*s    res:  %*s",
-                "", len1, ns_res, len2, ew_res);
+        sprintf(buf, "%-9s res:   %*s    res:  %*s", "", len1, ns_res, len2,
+                ew_res);
         pbuf(buf);
 
         divider("|");
@@ -97,8 +97,8 @@ int header(int unit1, int unit2)
                 G_strip(title);
             if (title == NULL || *title == 0)
                 title = "(untitled)";
-            sprintf(buf, "%-*s%*s%s (%s in %s)", len1, label,
-                    i * 2, "", title, layers[i].name, layers[i].mapset);
+            sprintf(buf, "%-*s%*s%s (%s in %s)", len1, label, i * 2, "", title,
+                    layers[i].name, layers[i].mapset);
 
             pbuf(buf);
             label = "";
@@ -176,9 +176,8 @@ int lcr(const char *left, const char *center, const char *right, char *buf,
     sc = (n - lc) / 2 - ll;
     sr = n - lr - lc - (n - lc) / 2;
 
-    sprintf(buf, "%s%*s%s%*s%s",
-            left,
-            sc > 0 ? sc : 0, "", center, sc > 0 ? sr : sr + sc, "", right);
+    sprintf(buf, "%s%*s%s%*s%s", left, sc > 0 ? sc : 0, "", center,
+            sc > 0 ? sr : sr + sc, "", right);
 
     return 0;
 }

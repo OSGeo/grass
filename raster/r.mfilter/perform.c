@@ -7,8 +7,8 @@
 #include "filter.h"
 #include "local_proto.h"
 
-int perform_filter(const char *in_name, const char *out_name,
-                   FILTER * filter, int nfilters, int repeat)
+int perform_filter(const char *in_name, const char *out_name, FILTER *filter,
+                   int nfilters, int repeat)
 {
     int *in;
     int *out;

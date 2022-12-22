@@ -7,7 +7,7 @@
 
 /* To add a new multitype function, use the function below to initialize
  * the function pointer to each of the three typed functions.  The function
- * pointers and the function prototypes are defined in a header file.   
+ * pointers and the function prototypes are defined in a header file.
  * The actual functions follow. */
 
 int (*is_null)(void *);
@@ -82,23 +82,22 @@ void set_func_pointers(int in_type)
     }
 
     return;
-
 }
 
 /* check for null values */
 int is_null_c(void *value)
 {
-    return Rast_is_c_null_value((CELL *) value);
+    return Rast_is_c_null_value((CELL *)value);
 }
 
 int is_null_f(void *value)
 {
-    return Rast_is_f_null_value((FCELL *) value);
+    return Rast_is_f_null_value((FCELL *)value);
 }
 
 int is_null_d(void *value)
 {
-    return Rast_is_d_null_value((DCELL *) value);
+    return Rast_is_d_null_value((DCELL *)value);
 }
 
 /* return the size of the current type */
@@ -123,7 +122,7 @@ void *get_min_c(void *v1, void *v2)
     void *rc;
 
     rc = v2;
-    if (*(CELL *) v1 < *(CELL *) v2)
+    if (*(CELL *)v1 < *(CELL *)v2)
         rc = v1;
     return rc;
 }
@@ -133,7 +132,7 @@ void *get_min_f(void *v1, void *v2)
     void *rc;
 
     rc = v2;
-    if (*(FCELL *) v1 < *(FCELL *) v2)
+    if (*(FCELL *)v1 < *(FCELL *)v2)
         rc = v1;
     return rc;
 }
@@ -143,7 +142,7 @@ void *get_min_d(void *v1, void *v2)
     void *rc;
 
     rc = v2;
-    if (*(DCELL *) v1 < *(DCELL *) v2)
+    if (*(DCELL *)v1 < *(DCELL *)v2)
         rc = v1;
     return rc;
 }
@@ -154,7 +153,7 @@ void *get_max_c(void *v1, void *v2)
     void *rc;
 
     rc = v2;
-    if (*(CELL *) v1 > *(CELL *) v2)
+    if (*(CELL *)v1 > *(CELL *)v2)
         rc = v1;
     return rc;
 }
@@ -164,7 +163,7 @@ void *get_max_f(void *v1, void *v2)
     void *rc;
 
     rc = v2;
-    if (*(FCELL *) v1 > *(FCELL *) v2)
+    if (*(FCELL *)v1 > *(FCELL *)v2)
         rc = v1;
     return rc;
 }
@@ -174,7 +173,7 @@ void *get_max_d(void *v1, void *v2)
     void *rc;
 
     rc = v2;
-    if (*(DCELL *) v1 > *(DCELL *) v2)
+    if (*(DCELL *)v1 > *(DCELL *)v2)
         rc = v1;
     return rc;
 }
@@ -182,33 +181,33 @@ void *get_max_d(void *v1, void *v2)
 /* Read one line from a raster map */
 void get_row_c(int fd, void *row, int n)
 {
-    Rast_get_c_row(fd, (CELL *) row, n);
+    Rast_get_c_row(fd, (CELL *)row, n);
 }
 
 void get_row_f(int fd, void *row, int n)
 {
-    Rast_get_f_row(fd, (FCELL *) row, n);
+    Rast_get_f_row(fd, (FCELL *)row, n);
 }
 
 void get_row_d(int fd, void *row, int n)
 {
-    Rast_get_d_row(fd, (DCELL *) row, n);
+    Rast_get_d_row(fd, (DCELL *)row, n);
 }
 
 /* Write one row to a raster map */
 void put_row_c(int fd, void *row)
 {
-    Rast_put_c_row(fd, (CELL *) row);
+    Rast_put_c_row(fd, (CELL *)row);
 }
 
 void put_row_f(int fd, void *row)
 {
-    Rast_put_f_row(fd, (FCELL *) row);
+    Rast_put_f_row(fd, (FCELL *)row);
 }
 
 void put_row_d(int fd, void *row)
 {
-    Rast_put_d_row(fd, (DCELL *) row);
+    Rast_put_d_row(fd, (DCELL *)row);
 }
 
 /* Allocate memory for one line of data */
@@ -230,97 +229,97 @@ void *get_buf_d(void)
 /* initialize memory to a minimum value */
 void set_min_c(void *v)
 {
-    *(CELL *) v = INT_MIN;
+    *(CELL *)v = INT_MIN;
 }
 
 void set_min_f(void *v)
 {
-    *(FCELL *) v = FLT_MIN;
+    *(FCELL *)v = FLT_MIN;
 }
 
 void set_min_d(void *v)
 {
-    *(DCELL *) v = DBL_MIN;
+    *(DCELL *)v = DBL_MIN;
 }
 
 /* initialize memory to a maximum value */
 void set_max_c(void *v)
 {
-    *(CELL *) v = INT_MAX;
+    *(CELL *)v = INT_MAX;
 }
 
 void set_max_f(void *v)
 {
-    *(FCELL *) v = FLT_MAX;
+    *(FCELL *)v = FLT_MAX;
 }
 
 void set_max_d(void *v)
 {
-    *(DCELL *) v = DBL_MAX;
+    *(DCELL *)v = DBL_MAX;
 }
 
 /* get the difference between two values, returned in the first pointer */
 void diff_c(void *v1, void *v2)
 {
-    *(CELL *) v1 -= *(CELL *) v2;
+    *(CELL *)v1 -= *(CELL *)v2;
 }
 
 void diff_f(void *v1, void *v2)
 {
-    *(FCELL *) v1 -= *(FCELL *) v2;
+    *(FCELL *)v1 -= *(FCELL *)v2;
 }
 
 void diff_d(void *v1, void *v2)
 {
-    *(DCELL *) v1 -= *(DCELL *) v2;
+    *(DCELL *)v1 -= *(DCELL *)v2;
 }
 
 /* get the sum of two values, returned in the first pointer */
 void sum_c(void *v1, void *v2)
 {
-    *(CELL *) v1 += *(CELL *) v2;
+    *(CELL *)v1 += *(CELL *)v2;
 }
 
 void sum_f(void *v1, void *v2)
 {
-    *(FCELL *) v1 += *(FCELL *) v2;
+    *(FCELL *)v1 += *(FCELL *)v2;
 }
 
 void sum_d(void *v1, void *v2)
 {
-    *(DCELL *) v1 += *(DCELL *) v2;
+    *(DCELL *)v1 += *(DCELL *)v2;
 }
 
 /* get the quotient of two values, returned in the first pointer */
 void quot_c(void *v1, void *v2)
 {
-    *(CELL *) v1 /= *(CELL *) v2;
+    *(CELL *)v1 /= *(CELL *)v2;
 }
 
 void quot_f(void *v1, void *v2)
 {
-    *(FCELL *) v1 /= *(FCELL *) v2;
+    *(FCELL *)v1 /= *(FCELL *)v2;
 }
 
 void quot_d(void *v1, void *v2)
 {
-    *(DCELL *) v1 /= *(DCELL *) v2;
+    *(DCELL *)v1 /= *(DCELL *)v2;
 }
 
 /* get the product of two values, returned in the first pointer */
 void prod_c(void *v1, void *v2)
 {
-    *(CELL *) v1 *= *(CELL *) v2;
+    *(CELL *)v1 *= *(CELL *)v2;
 }
 
 void prod_f(void *v1, void *v2)
 {
-    *(FCELL *) v1 *= *(FCELL *) v2;
+    *(FCELL *)v1 *= *(FCELL *)v2;
 }
 
 void prod_d(void *v1, void *v2)
 {
-    *(DCELL *) v1 *= *(DCELL *) v2;
+    *(DCELL *)v1 *= *(DCELL *)v2;
 }
 
 /* probably not a function of general interest */
@@ -331,9 +330,9 @@ double slope_c(void *line1, void *line2, double cnst)
     CELL *pedge;
 
     rc = -HUGE_VAL;
-    pedge = (CELL *) line2;
+    pedge = (CELL *)line2;
     if (!Rast_is_c_null_value(pedge)) {
-        rc = (*(CELL *) line1 - *pedge) / cnst;
+        rc = (*(CELL *)line1 - *pedge) / cnst;
     }
     return rc;
 }
@@ -344,9 +343,9 @@ double slope_f(void *line1, void *line2, double cnst)
     FCELL *pedge;
 
     rc = -HUGE_VAL;
-    pedge = (FCELL *) line2;
+    pedge = (FCELL *)line2;
     if (!Rast_is_f_null_value(pedge)) {
-        rc = (*(FCELL *) line1 - *pedge) / cnst;
+        rc = (*(FCELL *)line1 - *pedge) / cnst;
     }
     return rc;
 }
@@ -357,9 +356,9 @@ double slope_d(void *line1, void *line2, double cnst)
     DCELL *pedge;
 
     rc = -HUGE_VAL;
-    pedge = (DCELL *) line2;
+    pedge = (DCELL *)line2;
     if (!Rast_is_d_null_value(pedge)) {
-        rc = (*(DCELL *) line1 - *pedge) / cnst;
+        rc = (*(DCELL *)line1 - *pedge) / cnst;
     }
     return rc;
 }
@@ -397,7 +396,7 @@ int retreat_band3(int fh, struct band3 *bnd)
         rc = 0;
     else {
         rc = read(fh, bnd->b[0], bnd->sz);
-        lseek(fh, (off_t) - 2 * bnd->sz, SEEK_CUR);
+        lseek(fh, (off_t)-2 * bnd->sz, SEEK_CUR);
     }
     return rc;
 }

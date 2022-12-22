@@ -1,11 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.out.mpeg
  * AUTHOR(S):    Bill Brown, CERL (original contributor)
- *               Brad Douglas <rez touchofmadness.com>, Markus Neteler <neteler itc.it>,
- *               Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>,
- *               Jan-Oliver Wagner <jan intevation.de>, Paul Kelly <paul-grass stjohnspoint.co.uk>
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
+ *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  *               Paolo Zatelli <paolo.zatelli unitn.it>
  *
  * PURPOSE:      combines a series of GRASS raster maps into a single MPEG-1
@@ -23,12 +25,12 @@
  * This code is in the public domain. Specifically, we give to the public
  * domain all rights for future licensing of the source code, all resale
  * rights, and all publishing rights.
- * 
+ *
  * We ask, but do not require, that the following message be included in
  * all derived works:
- *     "Portions developed at the US Army Construction Engineering 
+ *     "Portions developed at the US Army Construction Engineering
  *     Research Laboratories, Champaign, Illinois."
- * 
+ *
  * USACERL GIVES NO WARRANTY, EXPRESSED OR IMPLIED,
  * FOR THE SOFTWARE AND/OR DOCUMENTATION PROVIDED, INCLUDING, WITHOUT
  * LIMITATION, WARRANTY OF MERCHANTABILITY AND WARRANTY OF FITNESS FOR A
@@ -49,11 +51,10 @@
 #include "rom_proto.h"
 
 #define MAXIMAGES 400
-#define DEF_MAX 500
-#define DEF_MIN 200
-#define MAXVIEWS    4
-#define BORDER_W    2
-
+#define DEF_MAX   500
+#define DEF_MIN   200
+#define MAXVIEWS  4
+#define BORDER_W  2
 
 /* global variables */
 int nrows, ncols, numviews, quality;
@@ -61,16 +62,14 @@ char *vfiles[MAXVIEWS][MAXIMAGES];
 char outfile[GPATH_MAX];
 const char *encoder;
 
-float vscale, scale;            /* resampling scale factors */
+float vscale, scale; /* resampling scale factors */
 int irows, icols, vrows, vcols;
 int frames;
-
 
 /* function prototypes */
 static int load_files(void);
 static int use_r_out(void);
-static char **gee_wildfiles(const char *wildarg, const char *element,
-                            int *num);
+static char **gee_wildfiles(const char *wildarg, const char *element, int *num);
 static void parse_command(struct Option **viewopts,
                           char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
                           int *numframes);
@@ -81,9 +80,8 @@ static int check_encoder(const char *encoder)
 
     prev = G_suppress_warnings(1);
 
-    status = G_spawn_ex(encoder, encoder,
-                        SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
-                        NULL);
+    status = G_spawn_ex(encoder, encoder, SF_REDIRECT_FILE, SF_STDERR,
+                        SF_MODE_OUT, G_DEV_NULL, NULL);
 
     G_suppress_warnings(prev);
 
@@ -187,7 +185,7 @@ int main(int argc, char **argv)
 
     scale = 1.0;
 
-    {                           /* find animation image size */
+    { /* find animation image size */
         int max, min;
         char *p;
 
@@ -197,7 +195,7 @@ int main(int argc, char **argv)
         if ((p = getenv("GMPEG_SIZE")))
             max = min = atoi(p);
 
-        if (longdim > max)      /* scale down */
+        if (longdim > max) /* scale down */
             scale = (float)max / longdim;
         else if (longdim < min) /* scale up */
             scale = (float)min / longdim;
@@ -229,7 +227,6 @@ int main(int argc, char **argv)
 
     return (EXIT_SUCCESS);
 }
-
 
 static int load_files(void)
 {
@@ -271,18 +268,18 @@ static int load_files(void)
         for (vnum = 0; vnum < numviews; vnum++) {
             if (icols == vcols) {
                 vxoff = BORDER_W;
-                vyoff = (irows == vrows) ? BORDER_W :
-                    BORDER_W + vnum * (BORDER_W + vrows);
+                vyoff = (irows == vrows) ? BORDER_W
+                                         : BORDER_W + vnum * (BORDER_W + vrows);
             }
             else if (irows == vrows) {
-                vxoff = (icols == vcols) ? BORDER_W :
-                    BORDER_W + vnum * (BORDER_W + vcols);
+                vxoff = (icols == vcols) ? BORDER_W
+                                         : BORDER_W + vnum * (BORDER_W + vcols);
                 vyoff = BORDER_W;
             }
-            else {              /* 4 views */
+            else { /* 4 views */
                 /* assumes we want:
                    view1        view2
-                   view3        view4   
+                   view3        view4
                  */
                 vxoff = vnum % 2 ? BORDER_W : vcols + 2 * BORDER_W;
                 vyoff = vnum > 1 ? vrows + 2 * BORDER_W : BORDER_W;
@@ -304,8 +301,8 @@ static int load_files(void)
                 Rast_get_row(fd, voidc, (int)(row / vscale), rtype);
 
                 rowoff = (vyoff + row) * ncols;
-                Rast_lookup_colors(voidc, tr, tg, tb,
-                                   tset, tsiz, &colors, rtype);
+                Rast_lookup_colors(voidc, tr, tg, tb, tset, tsiz, &colors,
+                                   rtype);
 
                 for (col = 0; col < vcols; col++) {
                     coff = (int)(col / vscale);
@@ -334,14 +331,12 @@ static int load_files(void)
     }
 
     mpfilename = G_tempfile();
-    write_params(mpfilename, yfiles, outfile, cnt, quality, y_rows, y_cols,
-                 0);
+    write_params(mpfilename, yfiles, outfile, cnt, quality, y_rows, y_cols, 0);
 
     if (G_verbose() <= G_verbose_min())
-        ret = G_spawn(encoder, encoder, mpfilename,
-                      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, G_DEV_NULL,
-                      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
-                      NULL);
+        ret = G_spawn(encoder, encoder, mpfilename, SF_REDIRECT_FILE, SF_STDOUT,
+                      SF_MODE_OUT, G_DEV_NULL, SF_REDIRECT_FILE, SF_STDERR,
+                      SF_MODE_OUT, G_DEV_NULL, NULL);
     else
         ret = G_spawn(encoder, encoder, mpfilename, NULL);
 
@@ -371,10 +366,9 @@ static int use_r_out(void)
     write_params(mpfilename, vfiles[0], outfile, frames, quality, 0, 0, 1);
 
     if (G_verbose() <= G_verbose_min())
-        ret = G_spawn(encoder, encoder, mpfilename,
-                      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, G_DEV_NULL,
-                      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
-                      NULL);
+        ret = G_spawn(encoder, encoder, mpfilename, SF_REDIRECT_FILE, SF_STDOUT,
+                      SF_MODE_OUT, G_DEV_NULL, SF_REDIRECT_FILE, SF_STDERR,
+                      SF_MODE_OUT, G_DEV_NULL, NULL);
     else
         ret = G_spawn(encoder, encoder, mpfilename, NULL);
 
@@ -388,8 +382,7 @@ static int use_r_out(void)
 
 /* ###################################################### */
 
-static void mlist(const char *element, const char *wildarg,
-                  const char *outfile)
+static void mlist(const char *element, const char *wildarg, const char *outfile)
 {
     int n;
     const char *mapset;
@@ -406,10 +399,8 @@ static void mlist(const char *element, const char *wildarg,
         sprintf(pattern_arg, "pattern=%s", wildarg);
         sprintf(mapset_arg, "mapset=%s", mapset);
 
-        G_spawn_ex("g.list", "g.list",
-                   type_arg, pattern_arg, mapset_arg,
-                   SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_APPEND, outfile,
-                   NULL);
+        G_spawn_ex("g.list", "g.list", type_arg, pattern_arg, mapset_arg,
+                   SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_APPEND, outfile, NULL);
     }
 }
 
@@ -436,8 +427,8 @@ static char **parse(const char *filename, int *num)
 
         if (num_files >= max_files) {
             max_files += 50;
-            files = (char **)G_realloc((void *)files,
-                                       max_files * sizeof(char *));
+            files =
+                (char **)G_realloc((void *)files, max_files * sizeof(char *));
         }
 
         files[num_files++] = G_store(buf);
@@ -450,8 +441,7 @@ static char **parse(const char *filename, int *num)
     return files;
 }
 
-static char **gee_wildfiles(const char *wildarg, const char *element,
-                            int *num)
+static char **gee_wildfiles(const char *wildarg, const char *element, int *num)
 {
     char *tfile;
     char **files;
@@ -469,8 +459,8 @@ static char **gee_wildfiles(const char *wildarg, const char *element,
 
 /********************************************************************/
 static void parse_command(struct Option **viewopts,
-                          char *vfiles[MAXVIEWS][MAXIMAGES],
-                          int *numviews, int *numframes)
+                          char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
+                          int *numframes)
 {
     int i, j, k;
 

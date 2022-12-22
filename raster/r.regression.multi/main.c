@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r.regression.multi
- * 
+ *
  * AUTHOR(S):    Markus Metz
- * 
+ *
  * PURPOSE:      Calculates multiple linear regression from raster maps:
  *               y = b0 + b1*x1 + b2*x2 + ... +  bn*xn + e
- * 
+ *
  * COPYRIGHT:    (C) 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -24,19 +23,18 @@
 #include <grass/glocale.h>
 #include <grass/raster.h>
 
-struct MATRIX
-{
-    int n;                      /* SIZE OF THIS MATRIX (N x N) */
+struct MATRIX {
+    int n; /* SIZE OF THIS MATRIX (N x N) */
     double *v;
 };
 
-#define M(m,row,col) (m)->v[((row) * ((m)->n)) + (col)]
+#define M(m, row, col) (m)->v[((row) * ((m)->n)) + (col)]
 
 static int solvemat(struct MATRIX *m, double a[], double B[])
 {
     int i, j, i2, j2, imark;
     double factor, temp;
-    double pivot;               /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
+    double pivot; /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
 
     for (i = 0; i < m->n; i++) {
         j = i;
@@ -101,12 +99,12 @@ static int solvemat(struct MATRIX *m, double a[], double B[])
 
 int main(int argc, char *argv[])
 {
-    unsigned int r, c, rows, cols;      /*  totals  */
+    unsigned int r, c, rows, cols; /*  totals  */
     int *mapx_fd, mapy_fd, mapres_fd, mapest_fd;
     int i, j, k, n_predictors;
     double *sumX, sumY, *sumsqX, sumsqY, *sumXY;
     double *meanX, meanY, *varX, varY, *sdX, sdY;
-    double yest, yres;          /* estimated y, residual */
+    double yest, yres; /* estimated y, residual */
     double /* sumYest, */ *SSerr_without;
 
     /* double SE; */
@@ -117,8 +115,7 @@ int main(int argc, char *argv[])
     struct MATRIX *m, *m_all;
     double **B, Rsq, Rsqadj, F, /* t, */ AIC, AICc, BIC;
     unsigned int count = 0;
-    DCELL **mapx_buf, *mapy_buf, *mapx_val, mapy_val, *mapres_buf,
-        *mapest_buf;
+    DCELL **mapx_buf, *mapy_buf, *mapx_val, mapy_val, *mapres_buf, *mapest_buf;
     char *name;
     struct Option *input_mapx, *input_mapy, *output_res, *output_est,
         *output_opt;
@@ -158,7 +155,8 @@ int main(int argc, char *argv[])
     output_opt->key = "output";
     output_opt->required = NO;
     output_opt->description =
-        (_("ASCII file for storing regression coefficients (output to screen if file not specified)."));
+        (_("ASCII file for storing regression coefficients (output to screen "
+           "if file not specified)."));
 
     shell_style = G_define_flag();
     shell_style->key = 'g';
@@ -179,7 +177,8 @@ int main(int argc, char *argv[])
     cols = region.cols;
 
     /* count x maps */
-    for (i = 0; input_mapx->answers[i]; i++) ;
+    for (i = 0; input_mapx->answers[i]; i++)
+        ;
     n_predictors = i;
 
     /* allocate memory for x maps */
@@ -191,8 +190,8 @@ int main(int argc, char *argv[])
     meanX = (double *)G_malloc(n_predictors * sizeof(double));
     varX = (double *)G_malloc(n_predictors * sizeof(double));
     sdX = (double *)G_malloc(n_predictors * sizeof(double));
-    mapx_buf = (DCELL **) G_malloc(n_predictors * sizeof(DCELL *));
-    mapx_val = (DCELL *) G_malloc((n_predictors + 1) * sizeof(DCELL));
+    mapx_buf = (DCELL **)G_malloc(n_predictors * sizeof(DCELL *));
+    mapx_val = (DCELL *)G_malloc((n_predictors + 1) * sizeof(DCELL));
 
     /* ordinary least squares */
     m = NULL;
@@ -433,8 +432,7 @@ int main(int argc, char *argv[])
                 SSerr_without[k - 1] += yresi * yresi;
 
                 varX[k - 1] =
-                    (mapx_val[k] - meanX[k - 1]) * (mapx_val[k] -
-                                                    meanX[k - 1]);
+                    (mapx_val[k] - meanX[k - 1]) * (mapx_val[k] - meanX[k - 1]);
             }
         }
 
@@ -450,18 +448,17 @@ int main(int argc, char *argv[])
     Rsq = 1 - (SSerr / SStot);
     fprintf(stdout, "Rsq=%f\n", Rsq);
     /* adjusted coefficient of determination */
-    Rsqadj =
-        1 - ((SSerr * (count - 1)) / (SStot * (count - n_predictors - 1)));
+    Rsqadj = 1 - ((SSerr * (count - 1)) / (SStot * (count - n_predictors - 1)));
     fprintf(stdout, "Rsqadj=%f\n", Rsqadj);
     /* RMSE */
     fprintf(stdout, "RMSE=%f\n", sqrt(SSerr / count));
     /* MAE */
     fprintf(stdout, "MAE=%f\n", SAE / count);
     /* F statistic */
-    /* F = ((SStot - SSerr) / (n_predictors)) / (SSerr / (count - n_predictors));
-     * , or: */
-    F = ((SStot - SSerr) * (count - n_predictors -
-                            1)) / (SSerr * (n_predictors));
+    /* F = ((SStot - SSerr) / (n_predictors)) / (SSerr / (count -
+     * n_predictors)); , or: */
+    F = ((SStot - SSerr) * (count - n_predictors - 1)) /
+        (SSerr * (n_predictors));
     fprintf(stdout, "F=%f\n", F);
 
     i = 0;
@@ -476,9 +473,8 @@ int main(int argc, char *argv[])
     /* AIC, corrected AIC, and BIC information criteria for the full model */
     AIC = count * log(SSerr / count) + 2 * (n_predictors + 1);
     fprintf(stdout, "AIC=%f\n", AIC);
-    AICc =
-        AIC + (2 * n_predictors * (n_predictors + 1)) / (count -
-                                                         n_predictors - 1);
+    AICc = AIC +
+           (2 * n_predictors * (n_predictors + 1)) / (count - n_predictors - 1);
     fprintf(stdout, "AICc=%f\n", AICc);
     BIC = count * log(SSerr / count) + log(count) * (n_predictors + 1);
     fprintf(stdout, "BIC=%f\n", BIC);
@@ -540,7 +536,8 @@ int main(int argc, char *argv[])
              * after Lothar Sachs, Angewandte Statistik:
              * F = (Rsq - Rsqi) * (count - n_predictors - 1) / (1 - Rsq) */
             /* same like Sumsq / SE */
-            /* same like (SSerr_without[i] / SSerr - 1) * (count - n_predictors - 1) */
+            /* same like (SSerr_without[i] / SSerr - 1) * (count - n_predictors
+             * - 1) */
             /* same like R-stats when entered in R-stats as last predictor */
             F = (SSerr_without[i] / SSerr - 1) * (count - n_predictors - 1);
             fprintf(stdout, "F%d=%f\n", i + 1, F);
@@ -549,18 +546,14 @@ int main(int argc, char *argv[])
              * the model without predictor [i] */
             AIC = count * log(SSerr_without[i] / count) + 2 * (n_predictors);
             fprintf(stdout, "AIC%d=%f\n", i + 1, AIC);
-            AICc =
-                AIC + (2 * (n_predictors - 1) * n_predictors) / (count -
-                                                                 n_predictors
-                                                                 - 2);
+            AICc = AIC + (2 * (n_predictors - 1) * n_predictors) /
+                             (count - n_predictors - 2);
             fprintf(stdout, "AICc%d=%f\n", i + 1, AICc);
-            BIC =
-                count * log(SSerr_without[i] / count) + (n_predictors -
-                                                         1) * log(count);
+            BIC = count * log(SSerr_without[i] / count) +
+                  (n_predictors - 1) * log(count);
             fprintf(stdout, "BIC%d=%f\n", i + 1, BIC);
         }
     }
-
 
     for (i = 0; i < n_predictors; i++) {
         Rast_close(mapx_fd[i]);

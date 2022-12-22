@@ -1,17 +1,16 @@
-
 /****************************************************************************
  *
  * MODULE:       r.water.outlet
  * AUTHOR(S):    Charles Ehlschlaeger, USACERL (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jan-Oliver Wagner <jan intevation.de>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
  *               Soeren Gebbert <soeren.gebbert gmx.de>
- * PURPOSE:      this program makes a watershed basin raster map using the 
- *               drainage pointer map, from an outlet point defined by an 
+ * PURPOSE:      this program makes a watershed basin raster map using the
+ *               drainage pointer map, from an outlet point defined by an
  *               easting and a northing.
  * COPYRIGHT:    (C) 1999-2006, 2010, 2013 by the GRASS Development Team
  *
@@ -31,8 +30,7 @@
 #include "basin.h"
 #include "outletP.h"
 
-SHORT drain[3][3] = { {7, 6, 5}, {8, -17, 4}, {1, 2, 3}
-};
+SHORT drain[3][3] = {{7, 6, 5}, {8, -17, 4}, {1, 2, 3}};
 
 int nrows, ncols;
 char *drain_ptrs;
@@ -42,8 +40,7 @@ CELL *bas;
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output, *coords;
     } opt;
     double N, E;
@@ -91,8 +88,8 @@ int main(int argc, char *argv[])
     G_debug(1, "easting = %.4f northing = %.4f", E, N);
     if (E < window.west || E > window.east || N < window.south ||
         N > window.north) {
-        G_warning(_("Ignoring point outside computation region: %.4f,%.4f"),
-                  E, N);
+        G_warning(_("Ignoring point outside computation region: %.4f,%.4f"), E,
+                  N);
     }
 
     G_get_set_window(&window);
@@ -103,7 +100,7 @@ int main(int argc, char *argv[])
 
     drain_ptrs =
         (char *)G_malloc(sizeof(char) * size_array(&pt_seg, nrows, ncols));
-    bas = (CELL *) G_calloc(size_array(&ba_seg, nrows, ncols), sizeof(CELL));
+    bas = (CELL *)G_calloc(size_array(&ba_seg, nrows, ncols), sizeof(CELL));
     cell_buf = Rast_allocate_c_buf();
 
     for (row = 0; row < nrows; row++) {

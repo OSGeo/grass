@@ -1,7 +1,8 @@
 /*
  * r.univar
  *
- *  Calculates univariate statistics from the non-null cells of a GRASS raster map
+ *  Calculates univariate statistics from the non-null cells of a GRASS raster
+ *  map
  *
  *   Copyright (C) 2004-2006, 2012 by the GRASS Development Team
  *   Author(s): Hamish Bowman, University of Otago, New Zealand
@@ -65,8 +66,7 @@ void set_params()
 
     param.shell_style = G_define_flag();
     param.shell_style->key = 'g';
-    param.shell_style->description =
-        _("Print the stats in shell script style");
+    param.shell_style->description = _("Print the stats in shell script style");
     param.shell_style->guisection = _("Formatting");
 
     param.extended = G_define_flag();
@@ -83,15 +83,16 @@ void set_params()
     param.use_rast_region = G_define_flag();
     param.use_rast_region->key = 'r';
     param.use_rast_region->description =
-        _("Use the native resolution and extent of the raster map, instead of the current region");
+        _("Use the native resolution and extent of the raster map, instead of "
+          "the current region");
 
     return;
 }
 
 static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
-static void process_raster(univar_stat * stats, int *fd,
-                           int *fdz, const struct Cell_head *region);
+static void process_raster(univar_stat *stats, int *fd, int *fdz,
+                           const struct Cell_head *region);
 
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
@@ -118,12 +119,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("zonal statistics"));
     G_add_keyword(_("parallel"));
 
-    module->label =
-        _("Calculates univariate statistics from the non-null cells of a raster map.");
+    module->label = _("Calculates univariate statistics from the non-null "
+                      "cells of a raster map.");
     module->description =
         _("Statistics include number of cells counted, minimum and maximum cell"
-         " values, range, arithmetic mean, population variance, standard deviation,"
-         " coefficient of variation, and sum.");
+          " values, range, arithmetic mean, population variance, standard "
+          "deviation,"
+          " coefficient of variation, and sum.");
 
     /* Define the different options */
     set_params();
@@ -132,7 +134,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (param.zonefile->answer && param.use_rast_region->answer) {
-        G_fatal_error(_("zones option and region flag -r are mutually exclusive"));
+        G_fatal_error(
+            _("zones option and region flag -r are mutually exclusive"));
     }
 
     name = param.output_file->answer;
@@ -150,7 +153,8 @@ int main(int argc, char *argv[])
     if (param.extended->answer) {
         /* Calculation of extended statistics is not parallelized yet */
         if (nprocs > 1)
-            G_warning(_("Computing extending statistics is not parallelized yet. Ignoring threads setting."));
+            G_warning(_("Computing extending statistics is not parallelized "
+                        "yet. Ignoring threads setting."));
         nprocs = 1;
     }
     else {
@@ -158,15 +162,16 @@ int main(int argc, char *argv[])
     }
 #else
     if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring threads setting."));
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
     nprocs = 1;
 #endif
 
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
-    zone_info.min = 0.0 / 0.0;  /* set to nan as default */
-    zone_info.max = 0.0 / 0.0;  /* set to nan as default */
+    zone_info.min = 0.0 / 0.0; /* set to nan as default */
+    zone_info.max = 0.0 / 0.0; /* set to nan as default */
     zone_info.n_zones = 0;
 
     fdz = NULL;
@@ -196,15 +201,13 @@ int main(int argc, char *argv[])
     }
 
     /* count the input rasters given */
-    for (p = (char **)param.inputfile->answers, rasters = 0;
-         *p; p++, rasters++) ;
+    for (p = (char **)param.inputfile->answers, rasters = 0; *p; p++, rasters++)
+        ;
 
     /* process all input rasters */
     int map_type = param.extended->answer ? -2 : -1;
 
-    stats = ((map_type == -1)
-             ? create_univar_stat_struct(-1, 0)
-             : 0);
+    stats = ((map_type == -1) ? create_univar_stat_struct(-1, 0) : 0);
 
     for (p = param.inputfile->answers; *p; p++) {
 
@@ -303,9 +306,8 @@ static univar_stat *univar_stat_with_percentiles(int map_type)
     return stats;
 }
 
-static void
-process_raster(univar_stat * stats, int *fd, int *fdz,
-               const struct Cell_head *region)
+static void process_raster(univar_stat *stats, int *fd, int *fdz,
+                           const struct Cell_head *region)
 {
     /* use G_window_rows(), G_window_cols() here? */
     const unsigned int rows = region->rows;
@@ -341,7 +343,7 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
 
     int computed = 0;
 
-#pragma omp parallel if(nprocs > 1)
+#pragma omp parallel if (nprocs > 1)
     {
         int i;
         int t_id = 0;
@@ -405,7 +407,8 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
 
                 if (param.extended->answer) {
                     /* check allocated memory */
-                    /* parallelization is disabled, local variable reflects global state */
+                    /* parallelization is disabled, local variable reflects
+                     * global state */
                     if (stats[zone].n + n[zone] >= stats[zone].n_alloc) {
                         stats[zone].n_alloc += 1000;
                         size_t msize;
@@ -413,27 +416,27 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
                         switch (map_type) {
                         case DCELL_TYPE:
                             msize = stats[zone].n_alloc * sizeof(DCELL);
-                            stats[zone].dcell_array =
-                                (DCELL *) G_realloc((void *)stats[zone].
-                                                    dcell_array, msize);
-                            stats[zone].nextp =
-                                (void *)&(stats[zone].dcell_array[stats[zone].n + n[zone]]);
+                            stats[zone].dcell_array = (DCELL *)G_realloc(
+                                (void *)stats[zone].dcell_array, msize);
+                            stats[zone].nextp = (void *)&(
+                                stats[zone]
+                                    .dcell_array[stats[zone].n + n[zone]]);
                             break;
                         case FCELL_TYPE:
                             msize = stats[zone].n_alloc * sizeof(FCELL);
-                            stats[zone].fcell_array =
-                                (FCELL *) G_realloc((void *)stats[zone].
-                                                    fcell_array, msize);
-                            stats[zone].nextp =
-                                (void *)&(stats[zone].fcell_array[stats[zone].n + n[zone]]);
+                            stats[zone].fcell_array = (FCELL *)G_realloc(
+                                (void *)stats[zone].fcell_array, msize);
+                            stats[zone].nextp = (void *)&(
+                                stats[zone]
+                                    .fcell_array[stats[zone].n + n[zone]]);
                             break;
                         case CELL_TYPE:
                             msize = stats[zone].n_alloc * sizeof(CELL);
-                            stats[zone].cell_array =
-                                (CELL *) G_realloc((void *)stats[zone].
-                                                   cell_array, msize);
-                            stats[zone].nextp =
-                                (void *)&(stats[zone].cell_array[stats[zone].n + n[zone]]);
+                            stats[zone].cell_array = (CELL *)G_realloc(
+                                (void *)stats[zone].cell_array, msize);
+                            stats[zone].nextp = (void *)&(
+                                stats[zone]
+                                    .cell_array[stats[zone].n + n[zone]]);
                             break;
                         default:
                             break;
@@ -445,9 +448,9 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
                         G_incr_void_ptr(stats[zone].nextp, value_sz);
                 }
 
-                val = ((map_type == DCELL_TYPE) ? *((DCELL *) ptr)
-                       : (map_type == FCELL_TYPE) ? *((FCELL *) ptr)
-                       : *((CELL *) ptr));
+                val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
+                       : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
+                                                  : *((CELL *)ptr));
 
                 sum[zone] += val;
                 sumsq[zone] += val * val;
@@ -463,13 +466,13 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
                     zptr++;
                 n[zone]++;
 
-            }                   /* end column loop */
+            } /* end column loop */
             if (!(param.shell_style->answer)) {
 #pragma omp atomic update
                 computed++;
                 G_percent(computed, rows, 2);
             }
-        }                       /* end row loop */
+        } /* end row loop */
 
         for (i = 0; i < n_alloc; i++) {
 #pragma omp atomic update
@@ -499,7 +502,7 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
 #endif
         }
 
-    }                           /* end parallel region */
+    } /* end parallel region */
 
     for (t = 0; t < nprocs; t++) {
         G_free(raster_row[t]);
@@ -513,5 +516,4 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
     }
     if (!(param.shell_style->answer))
         G_percent(rows, rows, 2);
-
 }

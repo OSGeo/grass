@@ -2,7 +2,7 @@
 #include <grass/gis.h>
 #include "watershed.h"
 
-int free_input(INPUT * input)
+int free_input(INPUT *input)
 {
     if (input->com_line_ram)
         G_free(input->com_line_ram);
@@ -15,7 +15,7 @@ int free_input(INPUT * input)
     return 0;
 }
 
-int free_output(OUTPUT * output)
+int free_output(OUTPUT *output)
 {
     int c;
 

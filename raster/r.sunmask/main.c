@@ -1,13 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       r.sunmask
  * AUTHOR(S):    Janne Soimasuo, Finland 1994 (original contributor)
  *               update to FP by Huidae Cho <grass4u gmail.com> 2001
  *               added solpos algorithm feature by Markus Neteler 2001
- *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Hamish Bowman <hamish_b yahoo.com>, Paul Kelly <paul-grass stjohnspoint.co.uk>
- * PURPOSE:      
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Paul Kelly <paul-grass stjohnspoint.co.uk>
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -50,29 +51,31 @@
 #include "global.h"
 #include "solpos00.h"
 
-float asol, phi0, sun_zenith, sun_azimuth;      /* from nadir, from north */
+float asol, phi0, sun_zenith, sun_azimuth; /* from nadir, from north */
 int sunset;
 
 /* to be displayed in r.sunmask */
 static char *SOLPOSVERSION = "11 April 2001";
 
-extern struct posdata pd, *pdat;        /* declare a posdata struct and a pointer for
-                                           it (if desired, the structure could be
-                                           allocated dynamically with G_malloc) */
+extern struct posdata pd, *pdat; /* declare a posdata struct and a pointer for
+                                    it (if desired, the structure could be
+                                    allocated dynamically with G_malloc) */
 struct Cell_head window;
 
-union RASTER_PTR
-{
+union RASTER_PTR {
     void *v;
     CELL *c;
     FCELL *f;
     DCELL *d;
 };
 
-#ifdef	RASTER_VALUE_FUNC
+#ifdef RASTER_VALUE_FUNC
 double raster_value(union RASTER_PTR buf, int data_type, int col);
 #else
-#define	raster_value(buf, data_type, col)	((double)(data_type == CELL_TYPE ? buf.c[col] : (data_type == FCELL_TYPE ? buf.f[col] : buf.d[col])))
+#define raster_value(buf, data_type, col) \
+    ((double)(data_type == CELL_TYPE      \
+                  ? buf.c[col]            \
+                  : (data_type == FCELL_TYPE ? buf.f[col] : buf.d[col])))
 #endif
 
 int main(int argc, char *argv[])
@@ -87,10 +90,9 @@ int main(int argc, char *argv[])
     struct FPRange fprange;
     double drow, dcol;
     int elev_fd, output_fd, zeros;
-    struct
-    {
-        struct Option *opt1, *opt2, *opt3, *opt4, *north, *east, *year,
-            *month, *day, *hour, *minutes, *seconds, *timezone;
+    struct {
+        struct Option *opt1, *opt2, *opt3, *opt4, *north, *east, *year, *month,
+            *day, *hour, *minutes, *seconds, *timezone;
     } parm;
     struct Flag *flag1, *flag3, *flag4;
     struct GModule *module;
@@ -117,11 +119,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("solar"));
     G_add_keyword(_("sun position"));
     G_add_keyword(_("shadow"));
-    module->label =
-        _("Calculates cast shadow areas from sun position and elevation raster map.");
-    module->description =
-        _("Either exact sun position (A) is specified, or date/time to calculate "
-         "the sun position (B) by r.sunmask itself.");
+    module->label = _("Calculates cast shadow areas from sun position and "
+                      "elevation raster map.");
+    module->description = _(
+        "Either exact sun position (A) is specified, or date/time to calculate "
+        "the sun position (B) by r.sunmask itself.");
 
     parm.opt1 = G_define_standard_option(G_OPT_R_ELEV);
 
@@ -142,8 +144,7 @@ int main(int argc, char *argv[])
     parm.opt4->type = TYPE_DOUBLE;
     parm.opt4->required = NO;
     parm.opt4->options = "0-360";
-    parm.opt4->description =
-        _("Azimuth of the sun in degrees from north (A)");
+    parm.opt4->description = _("Azimuth of the sun in degrees from north (A)");
     parm.opt4->guisection = _("Position");
 
     parm.year = G_define_option();
@@ -200,8 +201,8 @@ int main(int argc, char *argv[])
     parm.timezone->type = TYPE_INTEGER;
     parm.timezone->required = NO;
     parm.timezone->label = _("Timezone");
-    parm.timezone->description =
-        _("East positive, offset from GMT, also use to adjust daylight savings");
+    parm.timezone->description = _(
+        "East positive, offset from GMT, also use to adjust daylight savings");
     parm.timezone->guisection = _("Time");
 
     parm.east = G_define_option();
@@ -250,7 +251,7 @@ int main(int argc, char *argv[])
         east = (window.west - window.east) / 2. + window.east;
         G_message(_("Using map center coordinates: %f %f"), east, north);
     }
-    else {                      /* user defined east, north: */
+    else { /* user defined east, north: */
 
         sscanf(parm.north->answer, "%lf", &north);
         sscanf(parm.east->answer, "%lf", &east);
@@ -264,31 +265,35 @@ int main(int argc, char *argv[])
        either user defines directly sun position or it is calculated */
 
     if (parm.opt3->answer && parm.opt4->answer)
-        solparms = 1;           /* opt3 & opt4 complete */
+        solparms = 1; /* opt3 & opt4 complete */
     else
-        solparms = 0;           /* calculate sun position */
+        solparms = 0; /* calculate sun position */
 
     if (parm.year->answer && parm.month->answer && parm.day->answer &&
         parm.hour->answer && parm.minutes->answer && parm.seconds->answer &&
         parm.timezone->answer)
-        locparms = 1;           /* complete */
+        locparms = 1; /* complete */
     else
         locparms = 0;
 
-    if (solparms && locparms)   /* both defined */
-        G_fatal_error(_("Either define sun position or location/date/time parameters"));
+    if (solparms && locparms) /* both defined */
+        G_fatal_error(
+            _("Either define sun position or location/date/time parameters"));
 
     if (!solparms && !locparms) /* nothing defined */
-        G_fatal_error(_("Neither sun position nor east/north, date/time/timezone definition are complete"));
+        G_fatal_error(_("Neither sun position nor east/north, "
+                        "date/time/timezone definition are complete"));
 
     /* if here, one definition was complete */
     if (locparms) {
-        G_message(_("Calculating sun position... (using solpos (V. %s) from NREL)"),
-                  SOLPOSVERSION);
+        G_message(
+            _("Calculating sun position... (using solpos (V. %s) from NREL)"),
+            SOLPOSVERSION);
         use_solpos = 1;
     }
     else {
-        G_message(_("Using user defined sun azimuth, altitude settings (ignoring eventual other values)"));
+        G_message(_("Using user defined sun azimuth, altitude settings "
+                    "(ignoring eventual other values)"));
         use_solpos = 0;
     }
 
@@ -318,29 +323,29 @@ int main(int argc, char *argv[])
        - time: local time from your watch
 
        Order of parameters:
-       long, lat, timezone, year, month, day, hour, minutes, seconds 
+       long, lat, timezone, year, month, day, hour, minutes, seconds
      */
 
     if (use_solpos) {
         G_debug(3, "\nlat:%f  long:%f", north, east);
-        retval =
-            calc_solar_position(east, north, timezone, year, month, day,
-                                hour, minutes, seconds);
+        retval = calc_solar_position(east, north, timezone, year, month, day,
+                                     hour, minutes, seconds);
 
-        /* Remove +0.5 above if you want round-down instead of round-to-nearest */
-        sretr = (int)floor(pdat->sretr);        /* sunrise */
+        /* Remove +0.5 above if you want round-down instead of round-to-nearest
+         */
+        sretr = (int)floor(pdat->sretr); /* sunrise */
         dsretr = pdat->sretr;
-        sretr_sec = (int)
-            floor(((dsretr - floor(dsretr)) * 60 -
-                   floor((dsretr - floor(dsretr)) * 60)) * 60);
-        ssetr = (int)floor(pdat->ssetr);        /* sunset */
+        sretr_sec = (int)floor(((dsretr - floor(dsretr)) * 60 -
+                                floor((dsretr - floor(dsretr)) * 60)) *
+                               60);
+        ssetr = (int)floor(pdat->ssetr); /* sunset */
         dssetr = pdat->ssetr;
-        ssetr_sec = (int)
-            floor(((dssetr - floor(dssetr)) * 60 -
-                   floor((dssetr - floor(dssetr)) * 60)) * 60);
+        ssetr_sec = (int)floor(((dssetr - floor(dssetr)) * 60 -
+                                floor((dssetr - floor(dssetr)) * 60)) *
+                               60);
 
         /* print the results */
-        if (retval == 0) {      /* error check */
+        if (retval == 0) { /* error check */
             if (flag3->answer) {
                 if (flag4->answer) {
                     fprintf(stdout, "date=%d/%02d/%02d\n", pdat->year,
@@ -351,66 +356,69 @@ int main(int argc, char *argv[])
                     fprintf(stdout, "decimaltime=%f\n",
                             pdat->hour + (pdat->minute * 100.0 / 60.0 +
                                           pdat->second * 100.0 / 3600.0) /
-                            100.);
+                                             100.);
                     fprintf(stdout, "longitudine=%f\n", pdat->longitude);
                     fprintf(stdout, "latitude=%f\n", pdat->latitude);
                     fprintf(stdout, "timezone=%f\n", pdat->timezone);
                     fprintf(stdout, "sunazimuth=%f\n", pdat->azim);
-                    fprintf(stdout, "sunangleabovehorizon=%f\n",
-                            pdat->elevref);
+                    fprintf(stdout, "sunangleabovehorizon=%f\n", pdat->elevref);
 
                     if (sretr / 60 <= 24) {
-                        fprintf(stdout, "sunrise=%02d:%02d:%02d\n",
-                                sretr / 60, sretr % 60, sretr_sec);
+                        fprintf(stdout, "sunrise=%02d:%02d:%02d\n", sretr / 60,
+                                sretr % 60, sretr_sec);
                         fprintf(stdout, "sunset=%02d:%02d:%02d\n", ssetr / 60,
                                 ssetr % 60, ssetr_sec);
                     }
                 }
                 else {
                     fprintf(stdout,
-                            "%d/%02d/%02d, daynum: %d, time: %02i:%02i:%02i (decimal time: %f)\n",
+                            "%d/%02d/%02d, daynum: %d, time: %02i:%02i:%02i "
+                            "(decimal time: %f)\n",
                             pdat->year, pdat->month, pdat->day, pdat->daynum,
                             pdat->hour, pdat->minute, pdat->second,
                             pdat->hour + (pdat->minute * 100.0 / 60.0 +
                                           pdat->second * 100.0 / 3600.0) /
-                            100.);
+                                             100.);
                     fprintf(stdout, "long: %f, lat: %f, timezone: %f\n",
                             pdat->longitude, pdat->latitude, pdat->timezone);
                     fprintf(stdout,
-                            "Solar position: sun azimuth: %f, sun angle above horz. (refraction corrected): %f\n",
+                            "Solar position: sun azimuth: %f, sun angle above "
+                            "horz. (refraction corrected): %f\n",
                             pdat->azim, pdat->elevref);
 
                     if (sretr / 60 <= 24) {
                         fprintf(stdout,
-                                "Sunrise time (without refraction): %02d:%02d:%02d\n",
+                                "Sunrise time (without refraction): "
+                                "%02d:%02d:%02d\n",
                                 sretr / 60, sretr % 60, sretr_sec);
                         fprintf(stdout,
-                                "Sunset time  (without refraction): %02d:%02d:%02d\n",
+                                "Sunset time  (without refraction): "
+                                "%02d:%02d:%02d\n",
                                 ssetr / 60, ssetr % 60, ssetr_sec);
                     }
                 }
             }
-            sunrise = pdat->sretr / 60.;        /* decimal minutes */
+            sunrise = pdat->sretr / 60.; /* decimal minutes */
             sunset = pdat->ssetr / 60.;
             current_time =
                 pdat->hour + (pdat->minute / 60.) + (pdat->second / 3600.);
         }
-        else                    /* fatal error in G_calc_solar_position() */
+        else /* fatal error in G_calc_solar_position() */
             G_fatal_error(_("Please correct settings"));
     }
 
     if (use_solpos) {
         dalti = pdat->elevref;
         dazi = pdat->azim;
-    }                           /* otherwise already defined */
-
+    } /* otherwise already defined */
 
     /* check sunrise */
     if (use_solpos) {
         G_debug(3, "current_time:%f sunrise:%f", current_time, sunrise);
         if ((current_time < sunrise)) {
             if (sretr / 60 <= 24)
-                G_message(_("Time (%02i:%02i:%02i) is before sunrise (%02d:%02d:%02d)"),
+                G_message(_("Time (%02i:%02i:%02i) is before sunrise "
+                            "(%02d:%02d:%02d)"),
                           pdat->hour, pdat->minute, pdat->second, sretr / 60,
                           sretr % 60, sretr_sec);
             else
@@ -421,9 +429,10 @@ int main(int argc, char *argv[])
         }
         if ((current_time > sunset)) {
             if (sretr / 60 <= 24)
-                G_message(_("Time (%02i:%02i:%02i) is after sunset (%02d:%02d:%02d)"),
-                          pdat->hour, pdat->minute, pdat->second, ssetr / 60,
-                          ssetr % 60, ssetr_sec);
+                G_message(
+                    _("Time (%02i:%02i:%02i) is after sunset (%02d:%02d:%02d)"),
+                    pdat->hour, pdat->minute, pdat->second, ssetr / 60,
+                    ssetr % 60, ssetr_sec);
             else
                 G_message(_("Time (%02i:%02i:%02i) is after sunset"),
                           pdat->hour, pdat->minute, pdat->second);
@@ -431,7 +440,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (flag3->answer && (use_solpos == 1)) {   /* we only want the sun position */
+    if (flag3->answer &&
+        (use_solpos == 1)) { /* we only want the sun position */
         exit(EXIT_SUCCESS);
     }
     else if (flag3->answer && (use_solpos == 0)) {
@@ -449,7 +459,7 @@ int main(int argc, char *argv[])
     data_type = Rast_get_map_type(elev_fd);
     elevbuf.v = Rast_allocate_buf(data_type);
     tmpbuf.v = Rast_allocate_buf(data_type);
-    outbuf.v = Rast_allocate_buf(CELL_TYPE);    /* binary map */
+    outbuf.v = Rast_allocate_buf(CELL_TYPE); /* binary map */
 
     if (data_type == CELL_TYPE) {
         if ((Rast_read_range(name, "", &range)) < 0)
@@ -491,13 +501,13 @@ int main(int argc, char *argv[])
             while (OK == 1) {
                 east += estep;
                 north += nstep;
-                if (north > window.north || north < window.south
-                    || east > window.east || east < window.west)
+                if (north > window.north || north < window.south ||
+                    east > window.east || east < window.west)
                     OK = 0;
                 else {
-                    maxh = tan(alti) *
-                        sqrt((north1 - north) * (north1 - north) +
-                             (east1 - east) * (east1 - east));
+                    maxh =
+                        tan(alti) * sqrt((north1 - north) * (north1 - north) +
+                                         (east1 - east) * (east1 - east));
                     if ((maxh) > (dmax - dvalue))
                         OK = 0;
                     else {
@@ -529,15 +539,14 @@ int main(int argc, char *argv[])
 
     /* writing history file */
     Rast_short_history(outname, "raster", &hist);
-    Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation map %s",
-                        name);
+    Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation map %s", name);
     Rast_command_history(&hist);
     Rast_write_history(outname, &hist);
 
     exit(EXIT_SUCCESS);
 }
 
-#ifdef	RASTER_VALUE_FUNC
+#ifdef RASTER_VALUE_FUNC
 double raster_value(union RASTER_PTR buf, int data_type, int col)
 {
     double retval;

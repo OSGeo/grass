@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       r.out.ppm
  * AUTHOR(S):    Bill Brown, USA-CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      converts a GRASS raster map into a PPM image (obeying REGION)
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
@@ -47,16 +46,13 @@ int main(int argc, char *argv[])
     FILE *fp;
     char *tmpstr1, *tmpstr2;
 
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("export"));
     G_add_keyword(_("output"));
-    module->description =
-        _("Converts a GRASS raster map to a PPM image file.");
-
+    module->description = _("Converts a GRASS raster map to a PPM image file.");
 
     rast = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -97,7 +93,7 @@ int main(int argc, char *argv[])
         strcat(ofile, ".ppm");
     }
 
-    /*G_get_set_window (&w); *//* 10/99 MN: check for current region */
+    /*G_get_set_window (&w); */ /* 10/99 MN: check for current region */
     G_get_window(&w);
 
     G_asprintf(&tmpstr1, n_("row = %d", "rows = %d", w.rows), w.rows);
@@ -152,7 +148,6 @@ int main(int argc, char *argv[])
         /* max intensity val */
     }
 
-
     G_important_message(_("Converting..."));
 
     {
@@ -162,20 +157,20 @@ int main(int argc, char *argv[])
 
         rtype = Rast_get_map_type(cellfile);
         if (rtype == CELL_TYPE)
-            voidc = (CELL *) cell_buf;
+            voidc = (CELL *)cell_buf;
         else if (rtype == FCELL_TYPE)
-            voidc = (FCELL *) fcell_buf;
+            voidc = (FCELL *)fcell_buf;
         else if (rtype == DCELL_TYPE)
-            voidc = (DCELL *) dcell_buf;
+            voidc = (DCELL *)dcell_buf;
         else
             exit(1);
 
-        if (!gscale->answer) {  /* 24BIT COLOR IMAGE */
+        if (!gscale->answer) { /* 24BIT COLOR IMAGE */
             for (row = 0; row < w.rows; row++) {
                 G_percent(row, w.rows, 5);
                 Rast_get_row(cellfile, (void *)voidc, row, rtype);
-                Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set,
-                                   w.cols, &colors, rtype);
+                Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set, w.cols,
+                                   &colors, rtype);
 
                 for (col = 0; col < w.cols; col++) {
                     if (set[col]) {
@@ -191,31 +186,34 @@ int main(int argc, char *argv[])
                 }
             }
         }
-        else {                  /* GREYSCALE IMAGE */
+        else { /* GREYSCALE IMAGE */
             for (row = 0; row < w.rows; row++) {
 
                 G_percent(row, w.rows, 5);
                 Rast_get_row(cellfile, (void *)voidc, row, rtype);
-                Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set,
-                                   w.cols, &colors, rtype);
+                Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set, w.cols,
+                                   &colors, rtype);
 
                 for (col = 0; col < w.cols; col++) {
 
 #ifdef XV_STYLE
                     /*.33R+ .5G+ .17B */
-                    putc((((ored[col]) * 11 + (ogrn[col]) * 16
-                           + (oblu[col]) * 5) >> 5), fp);
+                    putc((((ored[col]) * 11 + (ogrn[col]) * 16 +
+                           (oblu[col]) * 5) >>
+                          5),
+                         fp);
 #else
                     /*NTSC Y equation: .30R+ .59G+ .11B */
-                    putc((((ored[col]) * 19 + (ogrn[col]) * 38
-                           + (oblu[col]) * 7) >> 6), fp);
+                    putc((((ored[col]) * 19 + (ogrn[col]) * 38 +
+                           (oblu[col]) * 7) >>
+                          6),
+                         fp);
 #endif
                 }
             }
         }
 
         Rast_free_colors(&colors);
-
     }
     G_free(cell_buf);
     G_free(fcell_buf);

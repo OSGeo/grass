@@ -39,7 +39,7 @@ void new_stats(const char *name, struct Reclass *reclass)
     /* allocate histogram list */
     histo2.num += range.max - range.min + 1;
 
-    histo2.list = (LIST *) G_calloc(histo2.num, sizeof(LIST));
+    histo2.list = (LIST *)G_calloc(histo2.num, sizeof(LIST));
 
     /* set all counts to 0 */
     i = 0;

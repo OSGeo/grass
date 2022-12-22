@@ -4,8 +4,7 @@
 #include <grass/glocale.h>
 #include "Gwater.h"
 
-
-int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
+int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
 {
     char *filename;
     int errflag;
@@ -16,11 +15,9 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     cseg->mapset = NULL;
 
     filename = G_tempfile();
-    if (0 >
-        (errflag =
-         Segment_open(&(cseg->seg), filename, Rast_window_rows(),
-                      Rast_window_cols(), srows, scols, sizeof(CELL),
-                      nsegs_in_memory))) {
+    if (0 > (errflag = Segment_open(&(cseg->seg), filename, Rast_window_rows(),
+                                    Rast_window_cols(), srows, scols,
+                                    sizeof(CELL), nsegs_in_memory))) {
         if (errflag == -1) {
             G_warning(_("File name is invalid"));
             return -1;

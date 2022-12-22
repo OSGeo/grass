@@ -2,7 +2,7 @@
 #include <grass/raster.h>
 #include "format.h"
 
-int getformat(FILE * fd, int raster_type, int *null)
+int getformat(FILE *fd, int raster_type, int *null)
 {
     char buf[1024];
     long x;
@@ -29,7 +29,7 @@ int getformat(FILE * fd, int raster_type, int *null)
             continue;
         if (sscanf(buf + 1, "%ld", &x) != 1)
             continue;
-        cat = (CELL) x;
+        cat = (CELL)x;
         /* if we want to write zeros, we must use CELL */
         if (cat == 0)
             return USE_CELL;

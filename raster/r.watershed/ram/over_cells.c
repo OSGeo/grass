@@ -1,9 +1,8 @@
 #include "Gwater.h"
-#define BIGNEG	-9999999
+#define BIGNEG -9999999
 
-int
-overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num,
-                         CELL * hih_ele)
+int overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num,
+                             CELL *hih_ele)
 {
     int r, rr, c, cc;
     CELL new_ele, /* new_max_ele, */ value;
@@ -38,8 +37,8 @@ overland_cells_recursive(int row, int col, CELL basin_num, CELL haf_num,
 }
 
 /* non-recursive version */
-int
-overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
+int overland_cells(int row, int col, CELL basin_num, CELL haf_num,
+                   CELL *hih_ele)
 {
     int r, c, rr, cc, next_r, next_c;
     int top = 0, idx;
@@ -67,10 +66,8 @@ overland_cells(int row, int col, CELL basin_num, CELL haf_num, CELL * hih_ele)
                     if (asp[idx] == drain[rr][cc]) {
                         if (top >= ocs_alloced) {
                             ocs_alloced += bas_thres;
-                            ocs =
-                                (OC_STACK *) G_realloc(ocs,
-                                                       ocs_alloced *
-                                                       sizeof(OC_STACK));
+                            ocs = (OC_STACK *)G_realloc(
+                                ocs, ocs_alloced * sizeof(OC_STACK));
                         }
                         ocs[top].row = r;
                         ocs[top].col = c;

@@ -2,11 +2,9 @@
 
 #include "local_proto.h"
 
-
 int adjcellhd(struct Cell_head *cellhd)
 {
     int retval;
-
 
     retval = 0;
 

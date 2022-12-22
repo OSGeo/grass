@@ -2,8 +2,7 @@
 #include <grass/segment.h>
 #include "point.h"
 
-
-void insert(POINT ** pres_pt, int row, int col, int backrow, int backcol)
+void insert(POINT **pres_pt, int row, int col, int backrow, int backcol)
 {
     extern POINT *head_start_pt;
     POINT *new_pt;

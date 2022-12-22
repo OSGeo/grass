@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       r.his
  * AUTHOR(S):    Glynn Clements - glynn.clements@virgin.net
@@ -48,7 +47,7 @@ int main(int argc, char **argv)
     int b_used;
     int bg_r, bg_g, bg_b;
     int bgcolor_state;
-    int draw_nulls;             /* 0 as nulls, 1 draw using bgcolor, 2 draw from table */
+    int draw_nulls; /* 0 as nulls, 1 draw using bgcolor, 2 draw from table */
     struct Cell_head window;
     struct Colors hue_colors;
     struct Colors int_colors;
@@ -235,9 +234,8 @@ int main(int argc, char **argv)
     make_gray_scale(&gray_colors);
 
     /* Now do the work */
-    intensity = 255;            /* default is to not change intensity */
-    saturation = 255;           /* default is to not change saturation */
-
+    intensity = 255;  /* default is to not change intensity */
+    saturation = 255; /* default is to not change saturation */
 
     for (atrow = 0; atrow < window.rows; atrow++) {
         G_percent(atrow, window.rows, 2);
@@ -252,9 +250,8 @@ int main(int argc, char **argv)
                                 dummy, sat_n);
 
         for (atcol = 0; atcol < window.cols; atcol++) {
-            if (hue_n[atcol]
-                || (int_used && int_n[atcol])
-                || (sat_used && sat_n[atcol])) {
+            if (hue_n[atcol] || (int_used && int_n[atcol]) ||
+                (sat_used && sat_n[atcol])) {
                 if (draw_nulls == 0) {
                     /* write nulls where nulls are by default */
                     Rast_set_c_null_value(&r_array[atcol], 1);
@@ -278,9 +275,9 @@ int main(int argc, char **argv)
             if (sat_used)
                 saturation = sat_r[atcol];
 
-            HIS_to_RGB(hue_r[atcol], hue_g[atcol], hue_b[atcol],
-                       intensity, saturation,
-                       &r_array[atcol], &g_array[atcol], &b_array[atcol]);
+            HIS_to_RGB(hue_r[atcol], hue_g[atcol], hue_b[atcol], intensity,
+                       saturation, &r_array[atcol], &g_array[atcol],
+                       &b_array[atcol]);
         }
 
         if (r_used)

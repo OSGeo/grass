@@ -1,4 +1,3 @@
-
 /**********************************************************************
  *
  * MODULE:       r.resamp.bspline
@@ -24,7 +23,7 @@
 #include <math.h>
 #include "bspline.h"
 
-#define SEGSIZE 	64
+#define SEGSIZE 64
 
 /*--------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -33,7 +32,7 @@ int main(int argc, char *argv[])
     int nsply, nsplx, row, col, nrows, ncols, nsplx_adj, nsply_adj;
     int nsubregion_col, nsubregion_row, subregion_row, subregion_col;
     int subregion = 0, nsubregions = 0;
-    int last_row, last_column, interp_method;   /* booleans */
+    int last_row, last_column, interp_method; /* booleans */
     double lambda, mean;
     double N_extension, E_extension, edgeE, edgeN;
     double stepN, stepE;
@@ -41,15 +40,14 @@ int main(int argc, char *argv[])
     char title[64];
 
     int dim_vect, nparameters, BW;
-    double *TN, *Q, *parVect;   /* Interpolating and least-square vectors */
-    double **N, **obsVect;      /* Interpolation and least-square matrix */
+    double *TN, *Q, *parVect; /* Interpolating and least-square vectors */
+    double **N, **obsVect;    /* Interpolation and least-square matrix */
 
     SEGMENT in_seg, out_seg, mask_seg;
     char *in_file, *out_file, *mask_file;
     double seg_size;
     int seg_mb, segments_in_memory;
     int have_mask;
-
 
     int inrastfd, outrastfd;
     DCELL *drastbuf, dval;
@@ -84,8 +82,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("bilinear"));
     G_add_keyword(_("bicubic"));
     G_add_keyword(_("no-data filling"));
-    module->description =
-        _("Performs bilinear or bicubic spline interpolation with Tykhonov regularization.");
+    module->description = _("Performs bilinear or bicubic spline interpolation "
+                            "with Tykhonov regularization.");
 
     in_opt = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -108,16 +106,16 @@ int main(int argc, char *argv[])
     stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
-    stepE_opt->description =
-        _("Length of each spline step in the east-west direction. Default: 1.5 * ewres.");
+    stepE_opt->description = _("Length of each spline step in the east-west "
+                               "direction. Default: 1.5 * ewres.");
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
     stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
-    stepN_opt->description =
-        _("Length of each spline step in the north-south direction. Default: 1.5 * nsres.");
+    stepN_opt->description = _("Length of each spline step in the north-south "
+                               "direction. Default: 1.5 * nsres.");
     stepN_opt->guisection = _("Settings");
 
     method_opt = G_define_standard_option(G_OPT_R_INTERP_TYPE);
@@ -125,8 +123,7 @@ int main(int argc, char *argv[])
     method_opt->options = "bilinear,bicubic";
     method_opt->answer = "bicubic";
     method_opt->guisection = _("Settings");
-    G_asprintf((char **)&(method_opt->descriptions),
-               "bilinear;%s;bicubic;%s",
+    G_asprintf((char **)&(method_opt->descriptions), "bilinear;%s;bicubic;%s",
                _("Bilinear interpolation"), _("Bicubic interpolation"));
 
     lambda_f_opt = G_define_option();
@@ -146,7 +143,8 @@ int main(int argc, char *argv[])
     cross_corr_flag = G_define_flag();
     cross_corr_flag->key = 'c';
     cross_corr_flag->description =
-        _("Find the best Tykhonov regularizing parameter using a \"leave-one-out\" cross validation method");
+        _("Find the best Tykhonov regularizing parameter using a "
+          "\"leave-one-out\" cross validation method");
 
     memory_opt = G_define_standard_option(G_OPT_MEMORYMB);
 
@@ -194,15 +192,15 @@ int main(int argc, char *argv[])
         stepN = src_reg.ns_res * 1.5;
 
     /*------------------------------------------------------------------
-      | Subdividing and working with tiles: 									
-      | Each original region will be divided into several subregions. 
-      | Each one will be overlaped by its neighbouring subregions. 
+      | Subdividing and working with tiles:
+      | Each original region will be divided into several subregions.
+      | Each one will be overlaped by its neighbouring subregions.
       | The overlapping is calculated as a fixed OVERLAP_SIZE times
       | the largest spline step plus 2 * orlo
       ----------------------------------------------------------------*/
 
     /* Fixing parameters of the elaboration region */
-    P_zero_dim(&dims);          /* Set dim struct to zero */
+    P_zero_dim(&dims); /* Set dim struct to zero */
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
@@ -337,9 +335,9 @@ int main(int argc, char *argv[])
                     got_one++;
                 }
                 if (Segment_put(&in_seg, &dval, row, col) < 0)
-                    G_fatal_error(_("Can not write to temp file"));;
+                    G_fatal_error(_("Can not write to temp file"));
+                ;
             }
-
         }
         if (!got_one)
             G_fatal_error(_("Only NULL cells in input raster"));
@@ -370,10 +368,11 @@ int main(int argc, char *argv[])
         else {
             G_debug(1, "Cross validation finished correctly");
 
-            G_done_msg(_("Cross validation finished for ew_step = %f and ns_step = %f"),
+            G_done_msg(_("Cross validation finished for ew_step = %f and "
+                         "ns_step = %f"),
                        stepE, stepN);
 
-            Segment_close(&in_seg);     /* release memory  */
+            Segment_close(&in_seg); /* release memory  */
 
             exit(EXIT_SUCCESS);
         }
@@ -442,7 +441,8 @@ int main(int argc, char *argv[])
                         null_count++;
                 }
                 if (Segment_put(&mask_seg, &mask_val, row, col) < 0)
-                    G_fatal_error(_("Can not write to temp file"));;
+                    G_fatal_error(_("Can not write to temp file"));
+                ;
             }
         }
 
@@ -473,7 +473,8 @@ int main(int argc, char *argv[])
         G_percent(row, nrows, 2);
         for (col = 0; col < ncols; col++) {
             if (Segment_put(&out_seg, &dval, row, col) < 0)
-                G_fatal_error(_("Can not write to temp file"));;
+                G_fatal_error(_("Can not write to temp file"));
+            ;
         }
     }
     G_percent(row, nrows, 2);
@@ -506,16 +507,17 @@ int main(int argc, char *argv[])
         align_interp_boxes(&general_box, &overlap_box, &dest_reg,
                            last_general_box, last_overlap_box, GENERAL_ROW);
 
-        if (elaboration_reg.north > dest_reg.north) {   /* First row */
+        if (elaboration_reg.north > dest_reg.north) { /* First row */
 
             P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
                           FIRST_ROW);
-            /* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_ROW); */
+            /* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_ROW);
+             */
             align_interp_boxes(&general_box, &overlap_box, &dest_reg,
                                last_general_box, last_overlap_box, FIRST_ROW);
         }
 
-        if (elaboration_reg.south <= dest_reg.south) {  /* Last row */
+        if (elaboration_reg.south <= dest_reg.south) { /* Last row */
 
             P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
                           LAST_ROW);
@@ -523,8 +525,7 @@ int main(int argc, char *argv[])
         }
 
         nsply =
-            ceil((elaboration_reg.north -
-                  elaboration_reg.south) / stepN) + 0.5;
+            ceil((elaboration_reg.north - elaboration_reg.south) / stepN) + 0.5;
         G_debug(1, "Interpolation: nsply = %d", nsply);
 
         elaboration_reg.east = dest_reg.west;
@@ -534,9 +535,9 @@ int main(int argc, char *argv[])
         overlap_box.E = dest_box.W;
         general_box.E = dest_box.W;
 
-        while (last_column == FALSE) {  /* For each subregion column */
+        while (last_column == FALSE) { /* For each subregion column */
             int npoints = 0;
-            int npoints_marked = 1;     /* default: all points in output */
+            int npoints_marked = 1; /* default: all points in output */
 
             subregion_col++;
             subregion++;
@@ -551,7 +552,8 @@ int main(int argc, char *argv[])
 
             /* only works if source reg = dest reg with buffer */
             /* messing with elaboration region is dangerous... */
-            /* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_COLUMN); */
+            /* align_elaboration_box(&elaboration_reg, &src_reg,
+             * GENERAL_COLUMN); */
             align_interp_boxes(&general_box, &overlap_box, &dest_reg,
                                last_general_box, last_overlap_box,
                                GENERAL_COLUMN);
@@ -560,21 +562,22 @@ int main(int argc, char *argv[])
 
                 P_set_regions(&elaboration_reg, &general_box, &overlap_box,
                               dims, FIRST_COLUMN);
-                /* align_elaboration_box(&elaboration_reg, &src_reg, GENERAL_COLUMN); */
+                /* align_elaboration_box(&elaboration_reg, &src_reg,
+                 * GENERAL_COLUMN); */
                 align_interp_boxes(&general_box, &overlap_box, &dest_reg,
                                    last_general_box, last_overlap_box,
                                    FIRST_COLUMN);
             }
 
-            if (elaboration_reg.east >= dest_reg.east) {        /* Last column */
+            if (elaboration_reg.east >= dest_reg.east) { /* Last column */
 
                 P_set_regions(&elaboration_reg, &general_box, &overlap_box,
                               dims, LAST_COLUMN);
                 last_column = TRUE;
             }
             nsplx =
-                ceil((elaboration_reg.east -
-                      elaboration_reg.west) / stepE) + 0.5;
+                ceil((elaboration_reg.east - elaboration_reg.west) / stepE) +
+                0.5;
             G_debug(1, "Interpolation: nsplx = %d", nsplx);
 
             if (grid_opt->answer) {
@@ -597,14 +600,14 @@ int main(int argc, char *argv[])
             G_debug(1, "reading points from input raster...");
             dim_vect = nsplx * nsply;
 
-            observ =
-                P_Read_Raster_Region_Map(&in_seg, &elaboration_reg,
-                                         &src_reg, &npoints, dim_vect);
+            observ = P_Read_Raster_Region_Map(&in_seg, &elaboration_reg,
+                                              &src_reg, &npoints, dim_vect);
 
             G_debug(1, "%d valid points", npoints);
 
             G_debug(1,
-                    "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d",
+                    "Interpolation: (%d,%d): Number of points in "
+                    "<elaboration_box> is %d",
                     subregion_row, subregion_col, npoints);
 
             /* Mean calculation for observed non-NULL points */
@@ -612,8 +615,8 @@ int main(int argc, char *argv[])
                 mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
             else
                 mean = 0;
-            G_debug(1, "Interpolation: (%d,%d): mean=%lf",
-                    subregion_row, subregion_col, mean);
+            G_debug(1, "Interpolation: (%d,%d): mean=%lf", subregion_row,
+                    subregion_col, mean);
 
             observ_marked = NULL;
 
@@ -622,21 +625,19 @@ int main(int argc, char *argv[])
 
                 G_debug(1, "collect unmasked output cells");
 
-                observ_marked =
-                    P_Read_Raster_Region_masked(&mask_seg, &dest_reg,
-                                                dest_box, general_box,
-                                                &npoints_marked, dim_vect,
-                                                mean);
+                observ_marked = P_Read_Raster_Region_masked(
+                    &mask_seg, &dest_reg, dest_box, general_box,
+                    &npoints_marked, dim_vect, mean);
 
                 G_debug(1, "%d cells marked in general", npoints_marked);
                 if (npoints_marked == 0) {
                     G_free(observ_marked);
                     observ_marked = NULL;
-                    npoints = 1;        /* disable warning below */
+                    npoints = 1; /* disable warning below */
                 }
             }
 
-            if (npoints > 0 && npoints_marked > 0) {    /*  */
+            if (npoints > 0 && npoints_marked > 0) { /*  */
                 int i;
 
                 nparameters = nsplx * nsply;
@@ -644,14 +645,15 @@ int main(int argc, char *argv[])
                                      nsply > nsplx ? nsply : nsplx);
 
                 /* Least Squares system */
-                N = G_alloc_matrix(nparameters, BW);    /* Normal matrix */
-                TN = G_alloc_vector(nparameters);       /* vector */
-                parVect = G_alloc_vector(nparameters);  /* Parameters vector */
-                obsVect = G_alloc_matrix(npoints, 3);   /* Observation vector */
-                Q = G_alloc_vector(npoints);    /* "a priori" var-cov matrix */
+                N = G_alloc_matrix(nparameters, BW);   /* Normal matrix */
+                TN = G_alloc_vector(nparameters);      /* vector */
+                parVect = G_alloc_vector(nparameters); /* Parameters vector */
+                obsVect = G_alloc_matrix(npoints, 3);  /* Observation vector */
+                Q = G_alloc_vector(npoints); /* "a priori" var-cov matrix */
 
-                for (i = 0; i < npoints; i++) { /* Setting obsVect vector & Q matrix */
-                    Q[i] = 1;   /* Q=I */
+                for (i = 0; i < npoints;
+                     i++) {   /* Setting obsVect vector & Q matrix */
+                    Q[i] = 1; /* Q=I */
                     obsVect[i][0] = observ[i].coordX;
                     obsVect[i][1] = observ[i].coordY;
                     obsVect[i][2] = observ[i].coordZ - mean;
@@ -666,8 +668,8 @@ int main(int argc, char *argv[])
                             subregion_row, subregion_col);
                     normalDefBilin(N, TN, Q, obsVect, stepE, stepN, nsplx,
                                    nsply, elaboration_reg.west,
-                                   elaboration_reg.south, npoints,
-                                   nparameters, BW);
+                                   elaboration_reg.south, npoints, nparameters,
+                                   BW);
                     nCorrectGrad(N, lambda, nsplx, nsply, stepE, stepN);
                 }
                 /* Bicubic interpolation */
@@ -688,32 +690,28 @@ int main(int argc, char *argv[])
                 G_free_vector(TN);
                 G_free_vector(Q);
 
-                if (!observ_marked) {   /* interpolate full output raster */
+                if (!observ_marked) { /* interpolate full output raster */
                     G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
                             subregion_row, subregion_col);
 
                     P_Regular_Points(&elaboration_reg, &dest_reg, general_box,
-                                     overlap_box, &out_seg,
-                                     parVect, stepN, stepE, dims.overlap,
-                                     mean, nsplx, nsply, nrows, ncols,
-                                     interp_method);
+                                     overlap_box, &out_seg, parVect, stepN,
+                                     stepE, dims.overlap, mean, nsplx, nsply,
+                                     nrows, ncols, interp_method);
                 }
-                else {          /* only interpolate selected cells */
+                else { /* only interpolate selected cells */
 
                     G_debug(1, "Interpolation of %d selected cells...",
                             npoints_marked);
 
-                    P_Sparse_Raster_Points(&out_seg,
-                                           &elaboration_reg, &dest_reg,
-                                           general_box, overlap_box,
-                                           observ_marked, parVect,
-                                           stepE, stepN,
+                    P_Sparse_Raster_Points(&out_seg, &elaboration_reg,
+                                           &dest_reg, general_box, overlap_box,
+                                           observ_marked, parVect, stepE, stepN,
                                            dims.overlap, nsplx, nsply,
-                                           npoints_marked, interp_method,
-                                           mean);
+                                           npoints_marked, interp_method, mean);
 
                     G_free(observ_marked);
-                }               /* end NULL cells */
+                } /* end NULL cells */
                 G_free_vector(parVect);
                 G_free_matrix(obsVect);
             }
@@ -724,13 +722,13 @@ int main(int argc, char *argv[])
                     G_warning(_("No data within this subregion. "
                                 "Consider increasing the spline step."));
             }
-        }                       /*! END WHILE; last_column = TRUE */
-    }                           /*! END WHILE; last_row = TRUE */
+        } /*! END WHILE; last_column = TRUE */
+    }     /*! END WHILE; last_row = TRUE */
 
-    Segment_close(&in_seg);     /* release memory  */
+    Segment_close(&in_seg); /* release memory  */
 
     if (have_mask) {
-        Segment_close(&mask_seg);       /* release memory  */
+        Segment_close(&mask_seg); /* release memory  */
     }
 
     G_message(_("Writing output..."));
@@ -759,7 +757,7 @@ int main(int argc, char *argv[])
             G_warning("only NULL cells in output raster");
     }
 
-    Segment_close(&out_seg);    /* release memory  */
+    Segment_close(&out_seg); /* release memory  */
 
     Rast_close(outrastfd);
 
@@ -781,4 +779,4 @@ int main(int argc, char *argv[])
     G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
-}                               /*END MAIN */
+} /*END MAIN */

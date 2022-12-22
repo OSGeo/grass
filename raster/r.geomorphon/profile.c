@@ -3,36 +3,34 @@
 
 #define JSON_MIN_INDENT 1
 #define YAML_MIN_INDENT 0
-#define XML_MIN_INDENT 1
-#define MAX_STR_LEN GNAME_MAX
-#define MAX_TOKENS 20000
+#define XML_MIN_INDENT  1
+#define MAX_STR_LEN     GNAME_MAX
+#define MAX_TOKENS      20000
 #define MAX_STACK_ELEMS 100
 
-#define WRITE_INDENT(f, indent) \
+#define WRITE_INDENT(f, indent)       \
     if (!write_indent((f), (indent))) \
-	return 0
+    return 0
 
 /*
  * Instead of using a variadic macro or defining multiple arities just write
  * one value at a time.
  */
-#define WRITE_VAL(f, format, v) \
-    if (fprintf ((f), (format), (v)) < 0) \
-	return 0
+#define WRITE_VAL(f, format, v)          \
+    if (fprintf((f), (format), (v)) < 0) \
+    return 0
 
-typedef enum
-{
-    T_INT,                      /* integer             */
-    T_BLN,                      /* boolean             */
-    T_DBL,                      /* double              */
-    T_MTR,                      /* metres              */
-    T_STR,                      /* string              */
-    T_SSO,                      /* start of sub-object */
-    T_ESO,                      /* end of sub-object   */
+typedef enum {
+    T_INT, /* integer             */
+    T_BLN, /* boolean             */
+    T_DBL, /* double              */
+    T_MTR, /* metres              */
+    T_STR, /* string              */
+    T_SSO, /* start of sub-object */
+    T_ESO, /* end of sub-object   */
 } toktype;
 
-static struct token
-{
+static struct token {
     toktype type;
     char key[MAX_STR_LEN];
     int int_val;
@@ -137,7 +135,7 @@ void prof_eso()
     size++;
 }
 
-void prof_pattern(const double o_elevation, const PATTERN * p)
+void prof_pattern(const double o_elevation, const PATTERN *p)
 {
     unsigned i;
 
@@ -202,7 +200,7 @@ void prof_map_info()
     prof_eso();
 }
 
-static unsigned write_indent(FILE * f, unsigned char indent)
+static unsigned write_indent(FILE *f, unsigned char indent)
 {
     while (indent--)
         WRITE_VAL(f, "%s", "  ");
@@ -251,7 +249,7 @@ static const char *format_token_common(const struct token *t)
  * make sure it never drops below the initial value within the loop, even if
  * it would bounce back later. Return 1 on no error.
  */
-static unsigned write_json(FILE * f)
+static unsigned write_json(FILE *f)
 {
     unsigned i, indent = JSON_MIN_INDENT;
 
@@ -260,8 +258,10 @@ static unsigned write_json(FILE * f)
         const char *val;
 
         /* Add a comma unless there is no data tokens immediately after. */
-        const char *comma = (i + 1 == size) ||
-            (i + 1 < size && token[i + 1].type == T_ESO) ? "" : ",";
+        const char *comma =
+            (i + 1 == size) || (i + 1 < size && token[i + 1].type == T_ESO)
+                ? ""
+                : ",";
 
         switch (token[i].type) {
         case T_SSO:
@@ -293,7 +293,7 @@ static unsigned write_json(FILE * f)
     return 1;
 }
 
-static unsigned write_yaml(FILE * f)
+static unsigned write_yaml(FILE *f)
 {
     unsigned i, indent = YAML_MIN_INDENT;
 
@@ -342,7 +342,7 @@ static const char *stack_pop()
     return stack[--stack_size];
 }
 
-static unsigned write_xml(FILE * f)
+static unsigned write_xml(FILE *f)
 {
     unsigned i, indent = XML_MIN_INDENT;
 
@@ -384,7 +384,7 @@ static unsigned write_xml(FILE * f)
     return 1;
 }
 
-unsigned prof_write(FILE * f, const char *format)
+unsigned prof_write(FILE *f, const char *format)
 {
     if (!strcmp("json", format))
         return write_json(f);

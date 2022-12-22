@@ -4,9 +4,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 /*
- * check_stats() - Check and update statistics 
+ * check_stats() - Check and update statistics
  *
  * RETURN: EXIT_SUCCESS / EXIT_FAILURE
  */
@@ -46,7 +45,8 @@ int check_stats(const char *name)
     /* Update categories if needed */
     if (!cats_ok) {
         G_message(_("   Updating the number of categories for "
-                    "[%s]\n\n"), name);
+                    "[%s]\n\n"),
+                  name);
         Rast_write_cats(name, &cats);
         Rast_free_cats(&cats);
     }

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.sim.water: main program for hydrologic and sediment transport
@@ -53,14 +52,14 @@
 
 /********************************/
 /* #define NWALK        "1000000" */
-#define DIFFC	"0.8"
-#define HMAX	"0.3"
-#define HALPHA	"4.0"
-#define	HBETA	"0.5"
-#define NITER   "10"
-#define ITEROUT "2"
-#define DENSITY "200"
-#define RAINVAL "50"
+#define DIFFC    "0.8"
+#define HMAX     "0.3"
+#define HALPHA   "4.0"
+#define HBETA    "0.5"
+#define NITER    "10"
+#define ITEROUT  "2"
+#define DENSITY  "200"
+#define RAINVAL  "50"
 #define MANINVAL "0.1"
 #define INFILVAL "0.0"
 
@@ -117,9 +116,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("overland flow"));
     G_add_keyword(_("model"));
     G_add_keyword(_("parallel"));
-    module->description =
-        _("Overland flow hydrologic simulation using "
-          "path sampling method (SIMWE).");
+    module->description = _("Overland flow hydrologic simulation using "
+                            "path sampling method (SIMWE).");
 
     parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
 
@@ -143,8 +141,7 @@ int main(int argc, char *argv[])
     parm.rainval->type = TYPE_DOUBLE;
     parm.rainval->answer = RAINVAL;
     parm.rainval->required = NO;
-    parm.rainval->description =
-        _("Rainfall excess rate unique value [mm/hr]");
+    parm.rainval->description = _("Rainfall excess rate unique value [mm/hr]");
     parm.rainval->guisection = _("Input");
 
     parm.infil = G_define_standard_option(G_OPT_R_INPUT);
@@ -187,8 +184,7 @@ int main(int argc, char *argv[])
     parm.observation = G_define_standard_option(G_OPT_V_INPUT);
     parm.observation->key = "observation";
     parm.observation->required = NO;
-    parm.observation->label =
-        _("Name of sampling locations vector points map");
+    parm.observation->label = _("Name of sampling locations vector points map");
     parm.observation->guisection = _("Input");
 
     parm.depth = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -222,7 +218,8 @@ int main(int argc, char *argv[])
     parm.logfile->key = "logfile";
     parm.logfile->required = NO;
     parm.logfile->description =
-        _("Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored.");
+        _("Name for sampling points output text file. For each observation "
+          "vector point the time series of sediment transport is stored.");
     parm.logfile->guisection = _("Output");
 
     parm.nwalk = G_define_option();
@@ -400,7 +397,8 @@ int main(int argc, char *argv[])
 
     sscanf(parm.threads->answer, "%d", &threads);
     if (threads < 1) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads will be set on <%d>"),
+        G_warning(_("<%d> is not valid number of threads. Number of threads "
+                    "will be set on <%d>"),
                   threads, abs(threads));
         threads = abs(threads);
     }

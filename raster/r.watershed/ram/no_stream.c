@@ -1,12 +1,12 @@
 #include "Gwater.h"
 
-int no_stream(int row, int col, CELL basin_num,
-              double stream_length, CELL old_elev)
+int no_stream(int row, int col, CELL basin_num, double stream_length,
+              CELL old_elev)
 {
     int r, rr, c, cc, uprow = 0, upcol = 0;
     double slope;
     CELL downdir, asp_value, hih_ele, new_ele, aspect;
-    DCELL dvalue, max_drain;    /* flow acc is now DCELL */
+    DCELL dvalue, max_drain; /* flow acc is now DCELL */
     int updir, riteflag, leftflag, thisdir;
 
     while (1) {
@@ -45,7 +45,7 @@ int no_stream(int row, int col, CELL basin_num,
                     else
                         stream_length += window.ew_res;
                 }
-                else {          /* sides == 4 */
+                else { /* sides == 4 */
                     asp_value = asp[SEG_INDEX(asp_seg, uprow, upcol)];
                     if (downdir == 2 || downdir == 6) {
                         if (asp_value == 2 || asp_value == 6)
@@ -53,7 +53,7 @@ int no_stream(int row, int col, CELL basin_num,
                         else
                             stream_length += diag;
                     }
-                    else {      /* downdir == 4,8 */
+                    else { /* downdir == 4,8 */
                         if (asp_value == 4 || asp_value == 8)
                             stream_length += window.ew_res;
                         else
@@ -68,8 +68,8 @@ int no_stream(int row, int col, CELL basin_num,
                         aspect = asp[SEG_INDEX(asp_seg, r, c)];
                         if (aspect == drain[rr][cc]) {
                             thisdir = updrain[rr][cc];
-                            switch (haf_basin_side
-                                    (updir, (int)downdir, thisdir)) {
+                            switch (
+                                haf_basin_side(updir, (int)downdir, thisdir)) {
                             case LEFT:
                                 overland_cells(r, c, basin_num, basin_num - 1,
                                                &new_ele);

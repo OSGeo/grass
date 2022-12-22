@@ -1,4 +1,3 @@
-
 /***************************************************
  * these routines determine the printf format used
  * by floating point values
@@ -9,6 +8,7 @@
  * format_double() does the formating with the
  *     parms determined by format_parms()
  ***************************************************/
+
 #include <string.h>
 #include "global.h"
 

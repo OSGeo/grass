@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.regression.line
- * 
+ *
  * AUTHOR(S):    Dr. Agustin Lobo
  *               Markus Metz (conversion to C for speed)
- * 
+ *
  * PURPOSE:      Calculates linear regression from two raster maps:
  *               y = a + b*x
- * 
+ *
  * COPYRIGHT:    (C) 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -27,7 +26,7 @@
 
 int main(int argc, char *argv[])
 {
-    unsigned int r, c, rows, cols;      /*  totals  */
+    unsigned int r, c, rows, cols; /*  totals  */
     int map1_fd, map2_fd;
     double sumX, sumY, sumsqX, sumsqY, sumXY;
     double meanX, meanY, varX, varY, sdX, sdY;
@@ -62,7 +61,8 @@ int main(int argc, char *argv[])
     output_opt->key = "output";
     output_opt->required = NO;
     output_opt->description =
-        (_("ASCII file for storing regression coefficients (output to screen if file not specified)."));
+        (_("ASCII file for storing regression coefficients (output to screen "
+           "if file not specified)."));
 
     shell_style = G_define_flag();
     shell_style->key = 'g';

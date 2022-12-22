@@ -1,13 +1,16 @@
-
 /****************************************************************************
  *
  * MODULE:       r.in.ascii
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, Hamish Bowman <hamish_b yahoo.com>,
- *               Roberto Flor <flor itc.it>, Roger Miller <rgrmill rt66 com>,
- *               Brad Douglas <rez touchofmadness.com>, Huidae Cho <grass4u gmail.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Roberto Flor <flor itc.it>,
+ *               Roger Miller <rgrmill rt66 com>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Huidae Cho <grass4u gmail.com>,
  *               Glynn Clements <glynn gclements.plus.com>
- *               Jachym Cepicky <jachym les-ejk.cz>, Jan-Oliver Wagner <jan intevation.de>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
  *               Justin Hickey <jhickey hpcc.nectec.or.th>
  * PURPOSE:      Import ASCII or SURFER files
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
@@ -17,6 +20,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,14 +30,12 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 FILE *Tmp_fd = NULL;
 char *Tmp_file = NULL;
 
 const float GS_BLANK = 1.70141E+038;
 
 static int file_cpy(FILE *, FILE *);
-
 
 int main(int argc, char *argv[])
 {
@@ -51,12 +53,10 @@ int main(int argc, char *argv[])
     double x;
     char y[128];
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output, *title, *mult, *nv, *type;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *s;
     } flag;
     char *null_val_str;
@@ -191,7 +191,6 @@ int main(int argc, char *argv[])
         G_fatal_error(_("OOPS: cols changed from %d to %d"), ncols,
                       Rast_window_cols());
 
-
     rast_ptr = Rast_allocate_buf(data_type);
     rast = rast_ptr;
     cf = Rast_open_new(output, data_type);
@@ -209,7 +208,7 @@ int main(int argc, char *argv[])
                     Rast_set_null_value(rast_ptr, 1, data_type);
                 }
                 else {
-                    Rast_set_d_value(rast_ptr, (DCELL) (x * mult), data_type);
+                    Rast_set_d_value(rast_ptr, (DCELL)(x * mult), data_type);
                 }
             }
             else {
@@ -256,8 +255,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
-static int file_cpy(FILE * from, FILE * to)
+static int file_cpy(FILE *from, FILE *to)
 {
     char buf[BUFSIZ];
     size_t size;

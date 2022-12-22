@@ -1,28 +1,28 @@
 /*
- **  Original Algorithm:    H. Mitasova, L. Mitas, J. Hofierka, M. Zlocha 
+ **  Original Algorithm:    H. Mitasova, L. Mitas, J. Hofierka, M. Zlocha
  **  GRASS Implementation:  J. Caplan, M. Ruesink  1995
  **
- **  US Army Construction Engineering Research Lab, University of Illinois 
+ **  US Army Construction Engineering Research Lab, University of Illinois
  **
- **  Copyright  J. Caplan, H. Mitasova, L. Mitas, J. Hofierka, 
+ **  Copyright  J. Caplan, H. Mitasova, L. Mitas, J. Hofierka,
  **      M. Zlocha
  **
- **This program is free software; you can redistribute it and/or
- **modify it under the terms of the GNU General Public License
- **as published by the Free Software Foundation; either version 2
- **of the License, or (at your option) any later version.
+ ** This program is free software; you can redistribute it and/or
+ ** modify it under the terms of the GNU General Public License
+ ** as published by the Free Software Foundation; either version 2
+ ** of the License, or (at your option) any later version.
  **
- **This program is distributed in the hope that it will be useful,
- **but WITHOUT ANY WARRANTY; without even the implied warranty of
- **MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- **GNU General Public License for more details.
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
  **
- **You should have received a copy of the GNU General Public License
- **along with this program; if not, write to the Free Software
- **Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program; if not, write to the Free Software
+ ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ ** MA 02110-1301 USA
  **
  */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,10 +33,9 @@
 #include "r.flow.h"
 #include "mem.h"
 
-
-#define OLD 0                   /* magic        */
-#define NEW 1                   /*              */
-#define TEMP 2                  /*      numbers */
+#define OLD  0 /* magic        */
+#define NEW  1 /*              */
+#define TEMP 2 /*      numbers */
 
 /****************************** Annoyances ******************************/
 
@@ -48,9 +47,12 @@ static const char *tmp_name(const char *fullname)
     const char *el = element;
 
     G_temp_element(element);
-    while (*fullname++ == *location++) ;
-    while (*fullname++ == *mapset++) ;
-    while (*fullname++ == *el++) ;
+    while (*fullname++ == *location++)
+        ;
+    while (*fullname++ == *mapset++)
+        ;
+    while (*fullname++ == *el++)
+        ;
 
     return fullname;
 }
@@ -70,8 +72,7 @@ static int open_existing_cell_file(char *fname, struct Cell_head *chd)
     return Rast_open_old(fname, mapset);
 }
 
-static int compare_regions(const struct Cell_head *a,
-                           const struct Cell_head *b)
+static int compare_regions(const struct Cell_head *a, const struct Cell_head *b)
 {
     return (fabs(a->ew_res - b->ew_res) < 1e-6 * b->ew_res &&
             fabs(a->ns_res - b->ns_res) < 1e-6 * b->ns_res);
@@ -85,7 +86,8 @@ void read_input_files(void)
 
     fd = open_existing_cell_file(parm.elevin, &hd);
     if (!compare_regions(&region, &hd))
-        G_fatal_error(_("Elevation raster map resolution differs from current region resolution"));
+        G_fatal_error(_("Elevation raster map resolution differs from current "
+                        "region resolution"));
 
     G_important_message(_("Reading input raster map <%s>..."), parm.elevin);
     for (row = 0; row < region.rows; row++) {
@@ -105,8 +107,7 @@ void read_input_files(void)
             G_fatal_error(_("Resolution of aspect file differs from "
                             "current region resolution"));
 
-        G_important_message(_("Reading input raster map <%s>..."),
-                            parm.aspin);
+        G_important_message(_("Reading input raster map <%s>..."), parm.aspin);
         for (row = 0; row < region.rows; row++) {
             G_percent(row, region.rows, 5);
             Rast_get_d_row(fd, as.buf[row], row);
@@ -237,7 +238,7 @@ void write_density_file(void)
     val2 = 1000;
     Rast_add_c_color_rule(&val1, 0, 127, 255, &val2, 0, 0, 255, &colors);
     val1 = 1000;
-    val2 = (CELL) dsmax;
+    val2 = (CELL)dsmax;
     Rast_add_c_color_rule(&val1, 0, 0, 255, &val2, 0, 0, 0, &colors);
 
     if ((mapset = G_find_file("cell", parm.dsout, "")) == NULL)

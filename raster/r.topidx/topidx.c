@@ -69,8 +69,7 @@ void calculate_atanb(void)
                         is_atbv_unprocessed(i - 1, j - 1))
                         continue;
 
-                    if ((is_cv_null(i - 1, j) ||
-                         cv(i - 1, j) > cv(i, j)) &&
+                    if ((is_cv_null(i - 1, j) || cv(i - 1, j) > cv(i, j)) &&
                         !is_atbv_null(i - 1, j) &&
                         is_atbv_unprocessed(i - 1, j))
                         continue;
@@ -83,13 +82,11 @@ void calculate_atanb(void)
                         continue;
                 }
                 if (j > 0 &&
-                    (is_cv_null(i, j - 1) ||
-                     cv(i, j - 1) > cv(i, j)) &&
+                    (is_cv_null(i, j - 1) || cv(i, j - 1) > cv(i, j)) &&
                     !is_atbv_null(i, j - 1) && is_atbv_unprocessed(i, j - 1))
                     continue;
                 if (j + 1 < window.cols &&
-                    (is_cv_null(i, j + 1) ||
-                     cv(i, j + 1) > cv(i, j)) &&
+                    (is_cv_null(i, j + 1) || cv(i, j + 1) > cv(i, j)) &&
                     !is_atbv_null(i, j + 1) && is_atbv_unprocessed(i, j + 1))
                     continue;
                 if (i + 1 < window.rows) {
@@ -99,8 +96,7 @@ void calculate_atanb(void)
                         !is_atbv_null(i + 1, j - 1) &&
                         is_atbv_unprocessed(i + 1, j - 1))
                         continue;
-                    if ((is_cv_null(i + 1, j) ||
-                         cv(i + 1, j) > cv(i, j)) &&
+                    if ((is_cv_null(i + 1, j) || cv(i + 1, j) > cv(i, j)) &&
                         !is_atbv_null(i + 1, j) &&
                         is_atbv_unprocessed(i + 1, j))
                         continue;
@@ -111,7 +107,7 @@ void calculate_atanb(void)
                         is_atbv_unprocessed(i + 1, j + 1))
                         continue;
                 }
-                /* find the outflow directions and calculate 
+                /* find the outflow directions and calculate
                  * the sum of weights
                  */
                 sum = 0.0;
@@ -119,8 +115,7 @@ void calculate_atanb(void)
                     route[k] = 0.0;
                 nroute = 0;
                 if (i > 0) {
-                    if (j > 0 &&
-                        !is_cv_null(i - 1, j - 1) &&
+                    if (j > 0 && !is_cv_null(i - 1, j - 1) &&
                         cv(i, j) - cv(i - 1, j - 1) > ZERO) {
                         tanB[0] = (cv(i, j) - cv(i - 1, j - 1)) * dx2;
                         route[0] = 0.354 * dx * tanB[0];
@@ -134,8 +129,7 @@ void calculate_atanb(void)
                         sum += route[1];
                         nroute++;
                     }
-                    if (j + 1 < window.cols &&
-                        !is_cv_null(i - 1, j + 1) &&
+                    if (j + 1 < window.cols && !is_cv_null(i - 1, j + 1) &&
                         cv(i, j) - cv(i - 1, j + 1) > ZERO) {
                         tanB[2] = (cv(i, j) - cv(i - 1, j + 1)) * dx2;
                         route[2] = 0.354 * dx * tanB[2];
@@ -143,8 +137,8 @@ void calculate_atanb(void)
                         nroute++;
                     }
                 }
-                if (j > 0 &&
-                    !is_cv_null(i, j - 1) && cv(i, j) - cv(i, j - 1) > ZERO) {
+                if (j > 0 && !is_cv_null(i, j - 1) &&
+                    cv(i, j) - cv(i, j - 1) > ZERO) {
                     tanB[3] = (cv(i, j) - cv(i, j - 1)) * dx1;
                     route[3] = 0.5 * dx * tanB[3];
                     sum += route[3];
@@ -160,8 +154,7 @@ void calculate_atanb(void)
                     }
                 }
                 if (i + 1 < window.rows) {
-                    if (j > 0 &&
-                        !is_cv_null(i + 1, j - 1) &&
+                    if (j > 0 && !is_cv_null(i + 1, j - 1) &&
                         cv(i, j) - cv(i + 1, j - 1) > ZERO) {
                         tanB[6] = (cv(i, j) - cv(i + 1, j - 1)) * dx2;
                         route[6] = 0.354 * dx * tanB[6];
@@ -175,8 +168,7 @@ void calculate_atanb(void)
                         sum += route[7];
                         nroute++;
                     }
-                    if (j + 1 < window.cols &&
-                        !is_cv_null(i + 1, j + 1) &&
+                    if (j + 1 < window.cols && !is_cv_null(i + 1, j + 1) &&
                         cv(i, j) - cv(i + 1, j + 1) > ZERO) {
                         tanB[8] = (cv(i, j) - cv(i + 1, j + 1)) * dx2;
                         route[8] = 0.354 * dx * tanB[8];

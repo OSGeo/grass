@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -18,7 +17,6 @@
 
 #include "coin.h"
 #include <grass/glocale.h>
-
 
 int print_coin(int Conformat, int out_cols, int tofile)
 {
@@ -81,14 +79,13 @@ int print_coin(int Conformat, int out_cols, int tofile)
             sprintf(topformat, "+%%%d.%ds+", width, width);
             sprintf(midformat, "|%%%d.%ds|", width, width);
             if (Conformat != 'x')
-                sprintf(namformat,
-                        "|        | %%-%ds|    Panel Row Total    |",
+                sprintf(namformat, "|        | %%-%ds|    Panel Row Total    |",
                         width - 34);
             else
                 sprintf(namformat, "|        | %%-%ds|", width - 10);
         }
 
-        /* Determine if room enough for Table Row Total at end of last panel    */
+        /* Determine if room enough for Table Row Total at end of last panel */
         addflag = 0;
         if (at_panel == (num_panels - 1) &&
             (last_col - first_col) < (out_cols - 2)) {
@@ -99,7 +96,7 @@ int print_coin(int Conformat, int out_cols, int tofile)
         if (Conformat == 'x')
             addflag = 0;
 
-    /*========================================================================*/
+        /*========================================================================*/
         /* panel line       */
         fprintf(dumpfile, "Panel #%d of %d\n", at_panel + 1, num_panels);
         fprintf(dumpfile, topformat, midline);
@@ -107,14 +104,14 @@ int print_coin(int Conformat, int out_cols, int tofile)
             fprintf(dumpfile, fillformat, fill, "+-----------------------+");
         fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+        /*========================================================================*/
         /* name line        */
         fprintf(dumpfile, namformat, map1name);
         if (addflag)
             fprintf(dumpfile, fillformat, fill, "|    Table Row Total    |");
         fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+        /*========================================================================*/
         /* cat line         */
         fprintf(dumpfile, "|   cat# |");
         for (Cndex = first_col; Cndex < last_col; Cndex++)
@@ -125,13 +122,13 @@ int print_coin(int Conformat, int out_cols, int tofile)
             fprintf(dumpfile, fillformat, fill, "|   w cat 0 | w/o cat 0 |");
         fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+        /*========================================================================*/
         fprintf(dumpfile, midformat, midline);
         if (addflag)
             fprintf(dumpfile, fillformat, fill, "|-----------------------|");
         fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+        /*========================================================================*/
         /* body of table    */
         t_rowcount = 0;
         t_rowarea = 0;
@@ -178,18 +175,18 @@ int print_coin(int Conformat, int out_cols, int tofile)
         }
         if (Conformat != 'y') {
 
-    /*========================================================================*/
+            /*========================================================================*/
             fprintf(dumpfile, midformat, midline);
             if (addflag)
                 fprintf(dumpfile, fillformat, fill,
                         "|-----------------------|");
             fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+            /*========================================================================*/
             /* 'Total' line at bottom of panel  */
             fprintf(dumpfile, "|Total   |");
             for (Cndex = first_col; Cndex < last_col; Cndex++)
-                fprintf(dumpfile, "           |");      /*Cndex); */
+                fprintf(dumpfile, "           |"); /*Cndex); */
             if (Conformat != 'x')
                 fprintf(dumpfile, "           |           |");
             if (addflag)
@@ -197,7 +194,7 @@ int print_coin(int Conformat, int out_cols, int tofile)
                         "|           |           |");
             fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+            /*========================================================================*/
             /* column totals including row 0    */
             fprintf(dumpfile, "|with 0  |");
             colcount_no_0 = colcount = 0;
@@ -213,13 +210,13 @@ int print_coin(int Conformat, int out_cols, int tofile)
                 }
             }
 
-            /* Grand Totals of Panel Row totals (including/excluding col 0)     */
+            /* Grand Totals of Panel Row totals (including/excluding col 0) */
             if (Conformat != 'x') {
                 print_entry(Conformat, colcount, colarea);
                 print_entry(Conformat, colcount_no_0, colarea_no_0);
             }
 
-            /* Grand Totals of Table Row totals (including/excluding col 0)     */
+            /* Grand Totals of Table Row totals (including/excluding col 0) */
             if (addflag) {
                 fprintf(dumpfile, fillformat, fill, "|");
                 print_entry(Conformat, t_rowcount, t_rowarea);
@@ -233,14 +230,14 @@ int print_coin(int Conformat, int out_cols, int tofile)
             }
             fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+            /*========================================================================*/
             fprintf(dumpfile, midformat, midline);
             if (addflag)
                 fprintf(dumpfile, fillformat, fill,
                         "|-----------------------|");
             fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+            /*========================================================================*/
             /* column totals excluding row 0    */
             fprintf(dumpfile, "|w/o 0   |");
             colcount_no_0 = colcount = 0;
@@ -256,13 +253,13 @@ int print_coin(int Conformat, int out_cols, int tofile)
                 }
             }
 
-            /* Grand Totals of Panel Row totals (including/excluding col 0)     */
+            /* Grand Totals of Panel Row totals (including/excluding col 0) */
             if (Conformat != 'x') {
                 print_entry(Conformat, colcount, colarea);
                 print_entry(Conformat, colcount_no_0, colarea_no_0);
             }
 
-            /* Grand Totals of Table Row totals (including/excluding col 0)     */
+            /* Grand Totals of Table Row totals (including/excluding col 0) */
             if (addflag) {
                 fprintf(dumpfile, fillformat, fill, "|");
                 rowcount_no_0 = rowcount = t_rowcount;
@@ -280,7 +277,7 @@ int print_coin(int Conformat, int out_cols, int tofile)
             }
             fprintf(dumpfile, "\n");
 
-    /*========================================================================*/
+            /*========================================================================*/
         }
         fprintf(dumpfile, topformat, midline);
         if (addflag)
@@ -288,7 +285,7 @@ int print_coin(int Conformat, int out_cols, int tofile)
         fprintf(dumpfile, "\n\n");
     }
 
-/*========================================================================*/
+    /*========================================================================*/
     /* Table Row Total Panel (if no room at end of last panel)      */
     if (!addflag && Conformat != 'x') {
         /* header       */

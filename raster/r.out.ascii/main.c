@@ -1,6 +1,4 @@
-/*
- *
- ****************************************************************************
+/******************************************************************************
  *
  * MODULE:     r.out.ascii
  * AUTHOR(S):  Michael Shapiro
@@ -10,11 +8,10 @@
  * COPYRIGHT:  (C) 2000 by the GRASS Development Team
  *
  *             This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *             License (>=v2). Read the file COPYING that comes with GRASS
+ *             for details.
  *
- ****************************************************************************
- */
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,28 +22,25 @@
 #include "localproto.h"
 #include <grass/glocale.h>
 
-
 int main(int argc, char *argv[])
 {
     RASTER_MAP_TYPE out_type, map_type;
     char *name;
     char *null_str;
-    char surfer_null_str[13] = { "1.70141e+038" };
+    char surfer_null_str[13] = {"1.70141e+038"};
     int fd;
     int nrows, ncols, dp, width;
     int rc;
     FILE *fp;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map;
         struct Option *output;
         struct Option *dp;
         struct Option *width;
         struct Option *null;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *noheader;
         struct Flag *surfer;
         struct Flag *modflow;
@@ -83,8 +77,8 @@ int main(int argc, char *argv[])
     parm.width->key = "width";
     parm.width->type = TYPE_INTEGER;
     parm.width->required = NO;
-    parm.width->description =
-        _("Number of values printed before wrapping a line (only SURFER or MODFLOW format)");
+    parm.width->description = _("Number of values printed before wrapping a "
+                                "line (only SURFER or MODFLOW format)");
 
     parm.null = G_define_standard_option(G_OPT_M_NULL_VALUE);
     parm.null->answer = "*";

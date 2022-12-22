@@ -50,7 +50,6 @@ void compute_weights(const char *function_type, double factor)
         weight = exponential;
     }
 
-
     ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
     for (i = 0; i < ncb.nsize; i++)
         ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));

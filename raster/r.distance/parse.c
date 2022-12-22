@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two 
+ * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
  * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
@@ -36,7 +35,7 @@ void parse(int argc, char *argv[], struct Parms *parms)
         _("Name of two input raster maps for computing inter-class distances");
 
     fs = G_define_standard_option(G_OPT_F_SEP);
-    fs->answer = ":";           /* colon is default output fs */
+    fs->answer = ":"; /* colon is default output fs */
 
     sort = G_define_option();
     sort->key = "sort";
@@ -46,8 +45,7 @@ void parse(int argc, char *argv[], struct Parms *parms)
     sort->label = _("Sort output by distance");
     sort->description = _("Default: sorted by categories");
     sort->options = "asc,desc";
-    G_asprintf((char **)&(sort->descriptions),
-               "asc;%s;desc;%s",
+    G_asprintf((char **)&(sort->descriptions), "asc;%s;desc;%s",
                _("Sort by distance in ascending order"),
                _("Sort by distance in descending order"));
 
@@ -57,8 +55,7 @@ void parse(int argc, char *argv[], struct Parms *parms)
 
     overlap = G_define_flag();
     overlap->key = 'o';
-    overlap->description =
-        _("Report zero distance if rasters are overlapping");
+    overlap->description = _("Report zero distance if rasters are overlapping");
 
     null = G_define_flag();
     null->key = 'n';

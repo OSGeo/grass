@@ -16,7 +16,7 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
     int have_colors = 0;
     int nrows, ncols;
     int indx;
-    int complex = FALSE;        /* TODO */
+    int complex = FALSE; /* TODO */
 
     char **GDALmetadata;
     GDALRasterAttributeTableH gdal_rat;
@@ -37,18 +37,18 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
             if (!strncmp("COLOR_TABLE_RULE_RGB_", GDALmetadata[0], 21)) {
                 char *p;
 
-                for (p = GDALmetadata[0]; *p != '=' && *p != '\0'; p++) ;
+                for (p = GDALmetadata[0]; *p != '=' && *p != '\0'; p++)
+                    ;
 
                 if (*p == '=') {
                     p++;
                 }
                 if (p && *p != '\0') {
-                    if (sscanf(p, "%lf %lf %d %d %d %d %d %d",
-                               &val1, &val2, &r1, &g1, &b1, &r2, &g2,
-                               &b2) == 8) {
+                    if (sscanf(p, "%lf %lf %d %d %d %d %d %d", &val1, &val2,
+                               &r1, &g1, &b1, &r2, &g2, &b2) == 8) {
 
-                        Rast_add_d_color_rule(&val1, r1, g1, b1,
-                                              &val2, r2, g2, b2, &colors);
+                        Rast_add_d_color_rule(&val1, r1, g1, b1, &val2, r2, g2,
+                                              b2, &colors);
                         have_colors = 1;
                     }
                 }
@@ -189,9 +189,9 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
                         g2 = GDALRATGetValueAsDouble(gdal_rat, indx, gmaxc);
                         b2 = GDALRATGetValueAsDouble(gdal_rat, indx, bmaxc);
 
-                        Rast_add_d_color_rule(&val1, r1 * cf, g1 * cf,
-                                              b1 * cf, &val2, r2 * cf,
-                                              g2 * cf, b2 * cf, &colors);
+                        Rast_add_d_color_rule(&val1, r1 * cf, g1 * cf, b1 * cf,
+                                              &val2, r2 * cf, g2 * cf, b2 * cf,
+                                              &colors);
                     }
                 }
             }
@@ -206,7 +206,6 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
                     r1 = GDALRATGetValueAsDouble(gdal_rat, indx, rc);
                     g1 = GDALRATGetValueAsDouble(gdal_rat, indx, gc);
                     b1 = GDALRATGetValueAsDouble(gdal_rat, indx, bc);
-
 
                     if (r1 > 0.0 && r1 < 1.0)
                         cf = 255;
@@ -235,8 +234,7 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
                 else {
                     /* fetch color table */
                     for (indx = 0; indx < nrows; indx++) {
-                        val1 =
-                            GDALRATGetValueAsDouble(gdal_rat, indx, minmaxc);
+                        val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minmaxc);
 
                         r1 = GDALRATGetValueAsDouble(gdal_rat, indx, rc);
                         g1 = GDALRATGetValueAsDouble(gdal_rat, indx, gc);
@@ -259,7 +257,7 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
 
     /* colors in raster color table? */
 
-    if (!have_colors && !complex &&GDALGetRasterColorTable(hBand) != NULL) {
+    if (!have_colors && !complex && GDALGetRasterColorTable(hBand) != NULL) {
         GDALColorTableH hCT;
         struct Colors colors;
         int iColor;
@@ -276,26 +274,26 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
             if (sEntry.c4 == 0)
                 continue;
 
-            Rast_set_c_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3,
-                             &colors);
+            Rast_set_c_color(iColor, sEntry.c1, sEntry.c2, sEntry.c3, &colors);
         }
 
         Rast_write_colors((char *)output, G_mapset(), &colors);
         Rast_free_colors(&colors);
         have_colors = 1;
     }
-    if (!have_colors) {         /* no color table present */
+    if (!have_colors) { /* no color table present */
 
         /* types are defined in GDAL: ./core/gdal.h */
         if ((GDALGetRasterDataType(hBand) == GDT_Byte)) {
             /* found 0..255 data: we set to grey scale: */
             struct Colors colors;
 
-            G_verbose_message(_("Setting grey color table for <%s> (8bit, full range)"),
-                              output);
+            G_verbose_message(
+                _("Setting grey color table for <%s> (8bit, full range)"),
+                output);
 
             Rast_init_colors(&colors);
-            Rast_make_grey_scale_colors(&colors, 0, 255);       /* full range */
+            Rast_make_grey_scale_colors(&colors, 0, 255); /* full range */
             Rast_write_colors((char *)output, G_mapset(), &colors);
             Rast_free_colors(&colors);
         }
@@ -305,13 +303,14 @@ void transfer_colormap(GDALRasterBandH hBand, const char *output)
             struct Range range;
             CELL min, max;
 
-            G_verbose_message(_("Setting grey color table for <%s> (16bit, image range)"),
-                              output);
+            G_verbose_message(
+                _("Setting grey color table for <%s> (16bit, image range)"),
+                output);
             Rast_read_range((char *)output, G_mapset(), &range);
             Rast_get_range_min_max(&range, &min, &max);
 
             Rast_init_colors(&colors);
-            Rast_make_grey_scale_colors(&colors, min, max);     /* image range */
+            Rast_make_grey_scale_colors(&colors, min, max); /* image range */
             Rast_write_colors((char *)output, G_mapset(), &colors);
             Rast_free_colors(&colors);
         }

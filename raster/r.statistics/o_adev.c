@@ -7,11 +7,10 @@
 #include <grass/glocale.h>
 #include "method.h"
 
-#define MEM  1024
+#define MEM 1024
 
 /* function prototypes */
 static int a_dev(double *, int, double *);
-
 
 int o_adev(const char *basemap, const char *covermap, const char *outputmap,
            int usecats, struct Categories *cats)
@@ -48,7 +47,7 @@ int o_adev(const char *basemap, const char *covermap, const char *outputmap,
         }
 
         if (usecats)
-            sscanf(Rast_get_c_cat((CELL *) & covercat, cats), "%lf", &x);
+            sscanf(Rast_get_c_cat((CELL *)&covercat, cats), "%lf", &x);
         else
             x = covercat;
 
@@ -60,7 +59,6 @@ int o_adev(const char *basemap, const char *covermap, const char *outputmap,
             }
             tab[count++] = x;
         }
-
     }
     if (first) {
         catb = catc = 0;
@@ -76,13 +74,12 @@ int o_adev(const char *basemap, const char *covermap, const char *outputmap,
     return 0;
 }
 
-
 /***********************************************************************
-*
-*  Given an array of data[1...n], this routine returns its average
-*  deviation adev.
-*
-************************************************************************/
+ *
+ *  Given an array of data[1...n], this routine returns its average
+ *  deviation adev.
+ *
+ ************************************************************************/
 
 static int a_dev(double *data, int n, double *adev)
 {
@@ -97,12 +94,12 @@ static int a_dev(double *data, int n, double *adev)
     *adev = 0.0;
     s = 0.0;
 
-    for (i = 0; i < n; i++)     /* First pass to get the mean     */
+    for (i = 0; i < n; i++) /* First pass to get the mean     */
         s += data[i];
     ave = s / n;
 
     for (i = 0; i < n; i++) {
-        *adev += fabs(data[i] - ave);   /* deviation from the mean             */
+        *adev += fabs(data[i] - ave); /* deviation from the mean             */
     }
 
     *adev /= n;

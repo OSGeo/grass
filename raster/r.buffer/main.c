@@ -1,24 +1,23 @@
-
 /***************************************************************************
-*
-* MODULE:    r.buffer
-*
-* AUTHOR(S): Michael Shapiro, US Army Construction Engineering Research Laboratory
-*	     James Westervelt, US Army CERL
-*
-* PURPOSE:   This program creates distance zones from non-zero
-*	     cells in a grid layer. Distances are specified in
-*	     meters (on the command-line). Window does not have to
-*	     have square cells. Works both for planimetric (UTM,
-*	     State Plane) and lat-long.
-*
-* COPYRIGHT: (c) 2006 by the GRASS Development Team
-*
-*	     This program is free software under the GNU General Public
-*	     License (>=v2). Read the file COPYING that comes with GRASS
-*	     for details.
-*
-**************************************************************************/
+ *
+ * MODULE:       r.buffer
+ *
+ * AUTHOR(S):    Michael Shapiro, US Army Construction Engineering Research
+ *               Laboratory James Westervelt, US Army CERL
+ *
+ * PURPOSE:      This program creates distance zones from non-zero
+ *               cells in a grid layer. Distances are specified in
+ *               meters (on the command-line). Window does not have to
+ *               have square cells. Works both for planimetric (UTM,
+ *               State Plane) and lat-long.
+ *
+ * COPYRIGHT:    (c) 2006 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -90,8 +89,7 @@ int main(int argc, char *argv[])
 
     flag2 = G_define_flag();
     flag2->key = 'z';
-    flag2->description =
-        _("Ignore zero (0) data cells instead of NULL cells");
+    flag2->description = _("Ignore zero (0) data cells instead of NULL cells");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -104,7 +102,7 @@ int main(int argc, char *argv[])
     zone_list = opt3->answers;
     units = opt4->answer;
 
-    ZEROFLAG = 0;               /* default: use NULL for non-data cells */
+    ZEROFLAG = 0; /* default: use NULL for non-data cells */
     ZEROFLAG = (flag2->answer);
 
     mapset = G_find_raster2(input, "");
@@ -129,7 +127,6 @@ int main(int argc, char *argv[])
     /* parse distances */
     if (!(count = parse_distances(zone_list, to_meters)))
         G_fatal_error(_("Parse distances error"));
-
 
     /* need to keep track of distance zones - in memory.
      * process MAX_DIST at a time
@@ -164,12 +161,11 @@ int main(int argc, char *argv[])
     /* write map history (meta data) */
     Rast_short_history(output, "raster", &hist);
     Rast_set_history(&hist, HIST_DATSRC_1, input);
-    Rast_append_format_history(&hist, "Buffer distance%s:",
-                               ndist > 1 ? "s" : "");
+    Rast_append_format_history(&hist,
+                               "Buffer distance%s:", ndist > 1 ? "s" : "");
     Rast_append_format_history(&hist, " %s %s", opt3->answer, units);
     Rast_command_history(&hist);
     Rast_write_history(output, &hist);
-
 
     exit(EXIT_SUCCESS);
 }

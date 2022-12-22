@@ -12,7 +12,6 @@
 /* outputs are binary digit files and a supplemental area file */
 /* to be used to improve the dlg labelling process */
 
-
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -23,11 +22,9 @@
 #include <grass/vector.h>
 #include "global.h"
 
-
 /* function prototypes */
 static int write_bnd(struct COOR *, struct COOR *, int);
 static int write_smooth_bnd(struct COOR *, struct COOR *, int);
-
 
 /* write_line - attempt to write a line to output */
 /* just returns if line is not completed yet */
@@ -37,33 +34,35 @@ int write_boundary(struct COOR *seed)
     int dir, line_type, n, n1;
 
     point = seed;
-    if ((dir = at_end(point))) {        /* already have one end of line */
+    if ((dir = at_end(point))) { /* already have one end of line */
         line_begin = point;
         line_end = find_end(point, dir, &line_type, &n);
         if (line_type == OPEN)
-            return (-1);        /* unfinished line */
+            return (-1); /* unfinished line */
         direction = dir;
     }
-    else {                      /* in middle of a line */
+    else { /* in middle of a line */
         line_end = find_end(point, FORWARD, &line_type, &n);
-        if (line_type == OPEN)  /* line not finished */
+        if (line_type == OPEN) /* line not finished */
             return (-1);
 
-        if (line_type == END) { /* found one end at least *//* look for other one */
+        if (line_type ==
+            END) { /* found one end at least */ /* look for other one */
             line_begin = find_end(point, BACKWARD, &line_type, &n1);
-            if (line_type == OPEN)      /* line not finished */
+            if (line_type == OPEN) /* line not finished */
                 return (-1);
-            if (line_type == LOOP) {    /* this should NEVER be the case */
+            if (line_type == LOOP) { /* this should NEVER be the case */
                 return (-1);
             }
-            direction = at_end(line_begin);     /* found both ends now; total length */
-            n += n1;            /*   is sum of distances to each end */
+            direction =
+                at_end(line_begin); /* found both ends now; total length */
+            n += n1;                /*   is sum of distances to each end */
         }
         else {
             /* line_type = LOOP by default */
             /* already have correct length */
-            line_begin = line_end;      /* end and beginning are the same */
-            direction = FORWARD;        /* direction is arbitrary */
+            line_begin = line_end; /* end and beginning are the same */
+            direction = FORWARD;   /* direction is arbitrary */
         }
     }
     dir = direction;
@@ -80,7 +79,8 @@ int write_boundary(struct COOR *seed)
     n1 = 0;
 
     /* skip first and last point */
-    while ((point = move(point)) == line_begin) ;
+    while ((point = move(point)) == line_begin)
+        ;
 
     while (point && point != line_end) {
         last = point;
@@ -96,7 +96,8 @@ int write_boundary(struct COOR *seed)
         if (last->fptr != NULPTR)
             if (last->fptr->fptr == last)
                 last->fptr->fptr = NULPTR;
-        /* it can be NULL after the previous line, even though before it wasn't */
+        /* it can be NULL after the previous line, even though before it wasn't
+         */
         if (last->fptr != NULPTR)
             if (last->fptr->bptr == last)
                 last->fptr->bptr = NULPTR;
@@ -123,12 +124,12 @@ int write_boundary(struct COOR *seed)
     return (0);
 }
 
-
 /* write_bnd - actual writing part of write_line */
 /* writes binary and ASCII digit files and supplemental file */
-static int write_bnd(struct COOR *line_begin, struct COOR *line_end,    /* start and end point of line */
-                     int n      /* number of points to write */
-    )
+static int write_bnd(struct COOR *line_begin,
+                     struct COOR *line_end, /* start and end point of line */
+                     int n                  /* number of points to write */
+)
 {
     static struct line_pnts *points = NULL;
     double x;
@@ -167,14 +168,15 @@ static int write_bnd(struct COOR *line_begin, struct COOR *line_end,    /* start
     return 0;
 }
 
-
 /* write_smooth_bnd - actual writing part of write_line for smoothed lines */
 /* writes binary and ASCII digit files and supplemental file */
 #define SNAP_THRESH 0.00001
 
-static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,     /* start and end point of line */
-                            int n       /* number of points to write */
-    )
+static int
+write_smooth_bnd(struct COOR *line_begin,
+                 struct COOR *line_end, /* start and end point of line */
+                 int n                  /* number of points to write */
+)
 {
     static struct line_pnts *points = NULL;
     double x, y;
@@ -201,19 +203,21 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,     
             G_debug(3, " row: %d col: %d\n", p->row, p->col);
 
         last = p;
-        if ((p = move(p)) == NULPTR) {  /* this should NEVER happen */
+        if ((p = move(p)) == NULPTR) { /* this should NEVER happen */
             G_debug(3, "write_smooth_bnd:  line terminated unexpectedly\n");
-            G_debug(3, "  previous (%d) point %d (%d,%d,%d) %p %p\n",
-                    direction, i, last->row, last->col, last->node,
-                    (void *)last->fptr, (void *)last->bptr);
+            G_debug(3, "  previous (%d) point %d (%d,%d,%d) %p %p\n", direction,
+                    i, last->row, last->col, last->node, (void *)last->fptr,
+                    (void *)last->bptr);
 
             exit(EXIT_FAILURE);
         }
 
         idy = (p->row - last->row);
         idx = (p->col - last->col);
-        dy = (idy > 0) ? 0.5 : ((idy < 0) ? -0.5 : 0.0);        /* dy = 0.0, 0.5, or -0.5 */
-        dx = (idx > 0) ? 0.5 : ((idx < 0) ? -0.5 : 0.0);        /* dx = 0.0, 0.5, or -0.5 */
+        dy = (idy > 0) ? 0.5
+                       : ((idy < 0) ? -0.5 : 0.0); /* dy = 0.0, 0.5, or -0.5 */
+        dx = (idx > 0) ? 0.5
+                       : ((idx < 0) ? -0.5 : 0.0); /* dx = 0.0, 0.5, or -0.5 */
         y = cell_head.north - (last->row + dy) * cell_head.ns_res;
         x = cell_head.west + (last->col + dx) * cell_head.ew_res;
         total++;
@@ -223,7 +227,7 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,     
         x = cell_head.west + (p->col - dx) * cell_head.ew_res;
         total++;
         Vect_append_point(points, x, y, 0.0);
-    }                           /* end of for i */
+    } /* end of for i */
 
     y = cell_head.north - (double)p->row * cell_head.ns_res;
     x = cell_head.west + (double)p->col * cell_head.ew_res;
@@ -241,10 +245,11 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,     
 }
 
 /* write_area - make table of area equivalences and write attribute file */
-int write_area(struct area_table *a_list,       /* list of areas */
-               struct equiv_table *e_list,      /* list of equivalences between areas */
-               int n_areas,     /* lengths of e_list, a_list */
-               int n_equiv)
+int write_area(
+    struct area_table *a_list,  /* list of areas */
+    struct equiv_table *e_list, /* list of equivalences between areas */
+    int n_areas,                /* lengths of e_list, a_list */
+    int n_equiv)
 {
     struct line_pnts *points = Vect_new_line_struct();
     int n, i;
@@ -292,16 +297,15 @@ int write_area(struct area_table *a_list,       /* list of areas */
             !Rast_is_d_null_value(&(p->cat))) {
             char buf[1000];
 
-            if (value_flag) {   /* raster value */
+            if (value_flag) { /* raster value */
                 cat = (int)p->cat;
             }
-            else {              /* sequence */
+            else { /* sequence */
                 cat = catNum;
                 catNum++;
             }
 
-            x = cell_head.west + (p->col +
-                                  (p->width / 2.0)) * cell_head.ew_res;
+            x = cell_head.west + (p->col + (p->width / 2.0)) * cell_head.ew_res;
             y = cell_head.north - (p->row + 0.5) * cell_head.ns_res;
 
             switch (data_type) {

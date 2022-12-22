@@ -1,4 +1,3 @@
-
 /***********************************************************
  *
  *                 insertHa.c (for spread)
@@ -11,9 +10,8 @@
 #include "costHa.h"
 #include "local_proto.h"
 
-void
-insertHa(float new_min_cost, float angle, int row, int col,
-         struct costHa *heap, long *heap_len)
+void insertHa(float new_min_cost, float angle, int row, int col,
+              struct costHa *heap, long *heap_len)
 {
     long vacant;
 

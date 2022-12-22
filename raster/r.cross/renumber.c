@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cross
@@ -21,7 +20,6 @@
 #include "local_proto.h"
 #include <grass/raster.h>
 #include <grass/glocale.h>
-
 
 int renumber(int in, int out)
 {

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.surf.fractal
@@ -15,22 +14,22 @@
 #include <grass/glocale.h>
 #include "frac.h"
 
-const char *rast_out_name,      /* Name of the raster output file.      */
- *mapset_out;
+const char *rast_out_name, /* Name of the raster output file.      */
+    *mapset_out;
 
-int fd_out,                     /* File descriptor of output raster     */
-  Steps;                        /* Number of intermediate images.       */
+int fd_out, /* File descriptor of output raster     */
+    Steps;  /* Number of intermediate images.       */
 
-double H;                       /* Hausdorff-Besickovitch dimension.    */
+double H; /* Hausdorff-Besickovitch dimension.    */
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *rast_out;    /* Structure for output raster     */
-    struct Option *frac_dim;    /* Fractal dimension of surface.   */
-    struct Option *num_images;  /* Number of images to produce.    */
+    struct Option *rast_out;   /* Structure for output raster     */
+    struct Option *frac_dim;   /* Fractal dimension of surface.   */
+    struct Option *num_images; /* Number of images to produce.    */
 
-    G_gisinit(argv[0]);         /* Link with GRASS interface.      */
+    G_gisinit(argv[0]); /* Link with GRASS interface.      */
 
     module = G_define_module();
     G_add_keyword(_("raster"));
@@ -55,8 +54,8 @@ int main(int argc, char *argv[])
     num_images->required = NO;
     num_images->answer = "0";
 
-    if (G_parser(argc, argv))   /* Performs the prompting for      */
-        exit(EXIT_FAILURE);     /* keyboard input.                 */
+    if (G_parser(argc, argv)) /* Performs the prompting for      */
+        exit(EXIT_FAILURE);   /* keyboard input.                 */
 
     rast_out_name = rast_out->answer;
     sscanf(frac_dim->answer, "%lf", &H);
@@ -65,8 +64,7 @@ int main(int argc, char *argv[])
 
     G_debug(1, "Steps %d", Steps);
 
-    mapset_out = G_mapset();    /* Set output to current mapset.  */
-
+    mapset_out = G_mapset(); /* Set output to current mapset.  */
 
     /*--------------------------------------------------------------------*/
     /*               CHECK FRACTAL DIMENSION IS WITHIN LIMITS             */

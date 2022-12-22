@@ -5,9 +5,8 @@
 #include <grass/glocale.h>
 #include "Gwater.h"
 
-int
-seg_open(SSEG * sseg, GW_LARGE_INT rows, GW_LARGE_INT cols, int row_in_seg,
-         int col_in_seg, int nsegs_in_memory, int size_struct)
+int seg_open(SSEG *sseg, GW_LARGE_INT rows, GW_LARGE_INT cols, int row_in_seg,
+             int col_in_seg, int nsegs_in_memory, int size_struct)
 {
     char *filename;
     int errflag;
@@ -16,9 +15,9 @@ seg_open(SSEG * sseg, GW_LARGE_INT rows, GW_LARGE_INT cols, int row_in_seg,
     sseg->fd = -1;
 
     filename = G_tempfile();
-    if (0 > (errflag = Segment_open(&(sseg->seg), filename, rows, cols,
-                                    row_in_seg, col_in_seg,
-                                    size_struct, nsegs_in_memory))) {
+    if (0 >
+        (errflag = Segment_open(&(sseg->seg), filename, rows, cols, row_in_seg,
+                                col_in_seg, size_struct, nsegs_in_memory))) {
         if (errflag == -1) {
             G_warning(_("File name is invalid"));
             return -1;

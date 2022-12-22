@@ -1,7 +1,7 @@
 #include "Gwater.h"
 
-CELL def_basin(int row, int col, CELL basin_num,
-               double stream_length, CELL old_elev)
+CELL def_basin(int row, int col, CELL basin_num, double stream_length,
+               CELL old_elev)
 {
     int r, rr, c, cc, ct, new_r[9], new_c[9];
     CELL downdir, direction, asp_value, value, new_elev;
@@ -34,8 +34,8 @@ CELL def_basin(int row, int col, CELL basin_num,
             return (basin_num);
         }
         if (ct >= 2) {
-            basin_num = split_stream(row, col, new_r, new_c, ct,
-                                     basin_num, stream_length, old_elev);
+            basin_num = split_stream(row, col, new_r, new_c, ct, basin_num,
+                                     stream_length, old_elev);
             return (basin_num);
         }
         oldupdir = drain[row - new_r[1] + 1][col - new_c[1] + 1];
@@ -79,7 +79,7 @@ CELL def_basin(int row, int col, CELL basin_num,
             else
                 stream_length += window.ew_res;
         }
-        else {                  /* sides == 4 */
+        else { /* sides == 4 */
 
             asp_value = asp[SEG_INDEX(asp_seg, row, col)];
             if (asp_value < 0)
@@ -91,7 +91,7 @@ CELL def_basin(int row, int col, CELL basin_num,
                 else
                     stream_length += diag;
             }
-            else {              /* asp_value == 4, 8 */
+            else { /* asp_value == 4, 8 */
 
                 if (new_c[1] != col)
                     stream_length += window.ew_res;

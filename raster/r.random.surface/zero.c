@@ -5,7 +5,6 @@
 
 #include "ransurf.h"
 
-
 void ZeroMapCells(void)
 {
     int Row, Col;

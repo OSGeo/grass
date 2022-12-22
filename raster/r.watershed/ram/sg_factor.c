@@ -55,9 +55,9 @@ int sg_factor(void)
 
 int len_slp_equ(double slope_length, double sin_theta, double S, int r, int c)
 {
-    double ril, s_l_exp,        /* m                            */
-      rill_ratio,               /* Beta                         */
-      L;
+    double ril, s_l_exp, /* m                            */
+        rill_ratio,      /* Beta                         */
+        L;
 
     rill_ratio = (sin_theta / 0.0896) / (3.0 * pow(sin_theta, 0.8) + 0.56);
     if (ril_flag) {

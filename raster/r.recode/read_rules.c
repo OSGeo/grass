@@ -20,8 +20,7 @@ int report_range(void)
             G_fatal_error(_("Unable to read f_range for map %s"), name);
 
         Rast_get_fp_range_min_max(&drange, &old_dmin, &old_dmax);
-        if (Rast_is_d_null_value(&old_dmin) ||
-            Rast_is_d_null_value(&old_dmax))
+        if (Rast_is_d_null_value(&old_dmin) || Rast_is_d_null_value(&old_dmax))
             G_message(_("Data range is empty"));
         else {
             sprintf(buff, "%.10f", old_dmin);
@@ -39,13 +38,13 @@ int report_range(void)
     if (Rast_is_c_null_value(&old_min) || Rast_is_c_null_value(&old_max))
         G_message(_("Integer data range of %s is empty"), name);
     else
-        G_message(_("Integer data range of %s is %d to %d"),
-                  name, (int)old_min, (int)old_max);
+        G_message(_("Integer data range of %s is %d to %d"), name, (int)old_min,
+                  (int)old_max);
 
     return 0;
 }
 
-int read_rules(FILE * fp)
+int read_rules(FILE *fp)
 {
     char buf[1024];
     DCELL oLow, oHigh, nLow, nHigh;
@@ -86,9 +85,12 @@ int read_rules(FILE * fp)
             G_message(_("Enter a rule in one of these formats:"));
             G_message(" ");
             G_message(_("old_low:old_high:new_low:new_high"));
-            G_message(_("old_low:old_high:new_val      (i.e. new_high == new_low)"));
-            G_message(_("*:old_val:new_val             (interval [inf, old_val])"));
-            G_message(_("old_val:*:new_val             (interval [old_val, inf])"));
+            G_message(
+                _("old_low:old_high:new_val      (i.e. new_high == new_low)"));
+            G_message(
+                _("*:old_val:new_val             (interval [inf, old_val])"));
+            G_message(
+                _("old_val:*:new_val             (interval [old_val, inf])"));
             G_message(" ");
             G_message(_("When finished type \"end\"."));
 
@@ -96,7 +98,7 @@ int read_rules(FILE * fp)
         }
 
         /* we read and record into quant table all values, even int as doubles
-           we convert the range and domain values to the right format when we 
+           we convert the range and domain values to the right format when we
            lookup the values in the quant table */
         switch (sscanf(buf, "%lf:%lf:%lf:%lf", &oLow, &oHigh, &nLow, &nHigh)) {
         case 3:
@@ -121,24 +123,23 @@ int read_rules(FILE * fp)
             else if (sscanf(buf, "*:%lf:%lf", &oHigh, &nLow) == 2) {
                 update_type(&out_type, nLow);
                 update_rules(buf);
-                Rast_fpreclass_set_neg_infinite_rule(&rcl_struct, oHigh,
-                                                     nLow);
+                Rast_fpreclass_set_neg_infinite_rule(&rcl_struct, oHigh, nLow);
             }
             else
                 G_message(_("%s is not a valid rule"), buf);
             break;
-        }                       /* switch */
-    }                           /* loop */
+        } /* switch */
+    }     /* loop */
     return nrules;
 }
 
-int update_type(RASTER_MAP_TYPE * map_type, DCELL val)
+int update_type(RASTER_MAP_TYPE *map_type, DCELL val)
 {
     /* check if val is not an integer number */
     if (make_dcell)
         *map_type = DCELL_TYPE;
     else {
-        if ((DCELL) ((CELL) val) != val)
+        if ((DCELL)((CELL)val) != val)
             *map_type = FCELL_TYPE;
     }
     return 0;

@@ -26,7 +26,7 @@ int o_min(const char *basemap, const char *covermap, const char *outputmap,
 
         if (basecat != catb) {
             write_reclass(reclass, catb, catc,
-                          Rast_get_c_cat((CELL *) & catc, cats), usecats);
+                          Rast_get_c_cat((CELL *)&catc, cats), usecats);
             catb = basecat;
             catc = covercat;
         }
@@ -39,7 +39,7 @@ int o_min(const char *basemap, const char *covermap, const char *outputmap,
         catb = catc = 0;
     }
 
-    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) & catc, cats),
+    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *)&catc, cats),
                   usecats);
 
     G_popen_close(&stats_child);

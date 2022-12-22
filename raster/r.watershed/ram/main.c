@@ -1,9 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       ram - uses virtual memory
  * AUTHOR(S):    Charles Ehlschlaeger, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, Roberto Flor <flor itc.it>, 
+ *               Markus Neteler <neteler itc.it>, Roberto Flor <flor itc.it>,
  *               Brad Douglas <rez touchofmadness.com>,
  *               Hamish Bowman <hamish_b yahoo com>,
  *               Markus Metz <markus.metz.giswork gmail.com>
@@ -46,17 +45,16 @@ double *s_l, *s_g, *l_s;
 CELL one, zero;
 double ril_value, d_one, d_zero;
 int sides;
-int drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
-int updrain[3][3] = { {3, 2, 1}, {4, 0, 8}, {5, 6, 7} };
-int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
-int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
+int drain[3][3] = {{7, 6, 5}, {8, 0, 4}, {1, 2, 3}};
+int updrain[3][3] = {{3, 2, 1}, {4, 0, 8}, {5, 6, 7}};
+int nextdr[8] = {1, -1, 0, 0, -1, 1, 1, -1};
+int nextdc[8] = {0, 0, -1, 1, 1, -1, 1, -1};
 
 char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 char ril_name[GNAME_MAX], rtn_name[GNAME_MAX], dep_name[GNAME_MAX];
 const char *this_mapset;
-char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
-    thr_name[8];
+char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
 char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
     sg_name[GNAME_MAX];
 char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX],
@@ -90,11 +88,9 @@ int main(int argc, char *argv[])
             fp = fopen(arm_name, "w");
         }
         bas =
-            (CELL *) G_calloc(sizeof(CELL),
-                              size_array(&bas_seg, nrows, ncols));
+            (CELL *)G_calloc(sizeof(CELL), size_array(&bas_seg, nrows, ncols));
         haf =
-            (CELL *) G_calloc(sizeof(CELL),
-                              size_array(&haf_seg, nrows, ncols));
+            (CELL *)G_calloc(sizeof(CELL), size_array(&haf_seg, nrows, ncols));
 
         G_message(_("SECTION %d: Watershed determination."), tot_parts - 1);
         find_pourpts();

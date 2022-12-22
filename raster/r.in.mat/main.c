@@ -23,11 +23,12 @@
  *    map_northern_edge
  *    map_southern_edge    in decimal form (ie not DDD:MM:SS)
  *    map_eastern_edge
- *    map_western_edge  
+ *    map_western_edge
  *
  *  ALL OTHER MATRICES WILL BE PASSED OVER. (cleanly, I hope)
  *
- *   tip: Save a version 4 MAT-File with the command "save filename.mat map_* -v4"
+ *   tip: Save a version 4 MAT-File with the command "save filename.mat map_*
+ * -v4"
  */
 
 /* #define DEBUG */
@@ -42,34 +43,37 @@
 /* typedef unsigned short uint16;
    typedef unsigned int uint32; */
 
-/* is_nan():  fn to test if incoming data point is either a IEEE NaN or a GRASS CELL null */
+/* is_nan():  fn to test if incoming data point is either a IEEE NaN or a GRASS
+ * CELL null */
 int is_nan(void *, RASTER_MAP_TYPE);
-
 
 int main(int argc, char *argv[])
 {
 
-    int i, row, col;            /* counters */
+    int i, row, col; /* counters */
 
-    int machine_endianness, file_endianness /*, endian_mismatch */ ;    /* 0=little, 1=big */
-    int data_format;            /* 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
-    int data_type;              /* 0=numbers  1=text */
-    int format_block;           /* combo of endianness, 0, data_format, and type */
-    int realflag = 0;           /* 0=only real values used */
+    int machine_endianness,
+        file_endianness /*, endian_mismatch */; /* 0=little, 1=big */
+    int data_format;  /* 0=double  1=float  2=32bit signed int  5=8bit unsigned
+                         int (ie text) */
+    int data_type;    /* 0=numbers  1=text */
+    int format_block; /* combo of endianness, 0, data_format, and type */
+    int realflag = 0; /* 0=only real values used */
 
     /* should type be specifically uint32 ??? */
 
-    char array_name[65];        /* 65 = 64 + null-terminator */
+    char array_name[65]; /* 65 = 64 + null-terminator */
     int name_len;
-    int mrows, ncols;           /* text/data/map array dimensions */
+    int mrows, ncols; /* text/data/map array dimensions */
 
-    int *pval_i;                /* for misc use */
-    float *pval_f;              /* for misc use */
-    double *pval_d;             /* for misc use */
-    char c;                     /* for misc use */
+    int *pval_i;    /* for misc use */
+    float *pval_f;  /* for misc use */
+    double *pval_d; /* for misc use */
+    char c;         /* for misc use */
 
     char map_name[65], map_title[1024]; /* 65 = 64 + null-terminator */
-    double map_name_d[1024];    /* I'm not sure why you'd save char strings as double, but whatever */
+    double map_name_d[1024]; /* I'm not sure why you'd save char strings as
+                                double, but whatever */
 
     int have_name, have_data, have_title, have_n, have_s, have_e, have_w;
 
@@ -90,9 +94,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
-    module->description =
-        _("Imports a binary MAT-File(v4) to a GRASS raster.");
-
+    module->description = _("Imports a binary MAT-File(v4) to a GRASS raster.");
 
     /* Define the different options */
     inputfile = G_define_standard_option(G_OPT_F_INPUT);
@@ -107,14 +109,13 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-  /******  SETUP  ****************************************************/
+    /******  SETUP  ****************************************************/
     /* Check Endian State of Host Computer */
     if (G_is_little_endian())
         machine_endianness = 0; /* ie little endian */
     else
         machine_endianness = 1; /* ie big endian */
-    G_debug(1, "Machine is %s endian.",
-            machine_endianness ? "big" : "little");
+    G_debug(1, "Machine is %s endian.", machine_endianness ? "big" : "little");
 
     infile = inputfile->answer;
     outfile = outputfile->answer;
@@ -130,9 +131,9 @@ int main(int argc, char *argv[])
     /* Check Endian State of File */
     if (fread(&format_block, sizeof(int), 1, fp1) != 1)
         G_fatal_error(_("Error reading data"));
-    G_fseek(fp1, 0, SEEK_SET);  /* frewind() */
+    G_fseek(fp1, 0, SEEK_SET); /* frewind() */
 
-    file_endianness = format_block / 1000;      /* 0=little, 1=big */
+    file_endianness = format_block / 1000; /* 0=little, 1=big */
     /* if (file_endianness != machine_endianness)
        endian_mismatch = 1;
        else
@@ -141,12 +142,10 @@ int main(int argc, char *argv[])
     G_debug(1, "File is %s endian.\n", file_endianness ? "big" : "little");
 
     if (format_block > 51)
-        G_warning
-            ("Only little endian MAT-File(v4) binaries have been tested so far! Probably won't work.");
+        G_warning("Only little endian MAT-File(v4) binaries have been tested "
+                  "so far! Probably won't work.");
 
-
-
-  /******  READ MAP  ****************************************************/
+    /******  READ MAP  ****************************************************/
     G_verbose_message(_("Reading MAT-File..."));
 
     while (!feof(fp1)) {
@@ -158,17 +157,18 @@ int main(int argc, char *argv[])
         if (feof(fp1))
             break;
 
-        /* 4 byte data format block = endianness*1000 + data_format*10 + data_type */
-        /*   0=double   1=float   2=32bit signed int   5=8bit unsigned int(text)   */
+        /* 4 byte data format block = endianness*1000 + data_format*10 +
+         * data_type */
+        /*   0=double   1=float   2=32bit signed int   5=8bit unsigned int(text)
+         */
         data_format = format_block / 10;
-        if (data_format != 0 && data_format != 1 &&
-            data_format != 2 && data_format != 5)
+        if (data_format != 0 && data_format != 1 && data_format != 2 &&
+            data_format != 5)
             G_fatal_error("format [%d]", data_format);
 
-        data_type = format_block - data_format * 10;    /* 0=numbers  1=text */
+        data_type = format_block - data_format * 10; /* 0=numbers  1=text */
         if (data_type != 0 && data_type != 1)
             G_fatal_error("type [%d]", data_type);
-
 
         /* 4 byte number of rows & columns */
         if (fread(&mrows, sizeof(int), 1, fp1) != 1)
@@ -183,7 +183,6 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Error reading data"));
         if (realflag != 0)
             G_fatal_error(_("Array contains imaginary data"));
-
 
         /* length of array_name+1 */
         if (fread(&name_len, sizeof(int), 1, fp1) != 1)
@@ -216,7 +215,7 @@ int main(int argc, char *argv[])
                 if (fread(&map_name, sizeof(char), ncols, fp1) != ncols)
                     G_fatal_error(_("Error reading data"));
             }
-            else if (data_format == 0) {        /* sigh.. */
+            else if (data_format == 0) { /* sigh.. */
                 if (fread(&map_name_d, sizeof(double), ncols, fp1) != ncols)
                     G_fatal_error(_("Error reading data"));
                 for (i = 0; i < ncols; i++)
@@ -226,14 +225,13 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Error reading 'map_name' array"));
 
             map_name[ncols] = '\0';
-            G_strip(map_name);  /* remove leading and trailing whitespace */
+            G_strip(map_name); /* remove leading and trailing whitespace */
             G_debug(1, "map name= <%s>", map_name);
         }
 
         else if (strcmp(array_name, "map_northern_edge") == 0) {
             have_n = 1;
-            if (mrows != 1 || ncols != 1 || data_format != 0 ||
-                data_type != 0)
+            if (mrows != 1 || ncols != 1 || data_format != 0 || data_type != 0)
                 G_fatal_error(_("Invalid 'map_northern_edge' array"));
             if (fread(&region.north, sizeof(double), 1, fp1) != 1)
                 G_fatal_error(_("Error reading data"));
@@ -242,8 +240,7 @@ int main(int argc, char *argv[])
 
         else if (strcmp(array_name, "map_southern_edge") == 0) {
             have_s = 1;
-            if (mrows != 1 || ncols != 1 || data_format != 0 ||
-                data_type != 0)
+            if (mrows != 1 || ncols != 1 || data_format != 0 || data_type != 0)
                 G_fatal_error(_("Invalid 'map_southern_edge' array"));
             if (fread(&region.south, sizeof(double), 1, fp1) != 1)
                 G_fatal_error(_("Error reading data"));
@@ -252,8 +249,7 @@ int main(int argc, char *argv[])
 
         else if (strcmp(array_name, "map_eastern_edge") == 0) {
             have_e = 1;
-            if (mrows != 1 || ncols != 1 || data_format != 0 ||
-                data_type != 0)
+            if (mrows != 1 || ncols != 1 || data_format != 0 || data_type != 0)
                 G_fatal_error(_("Invalid 'map_eastern_edge' array"));
             if (fread(&region.east, sizeof(double), 1, fp1) != 1)
                 G_fatal_error(_("Error reading data"));
@@ -262,8 +258,7 @@ int main(int argc, char *argv[])
 
         else if (strcmp(array_name, "map_western_edge") == 0) {
             have_w = 1;
-            if (mrows != 1 || ncols != 1 || data_format != 0 ||
-                data_type != 0)
+            if (mrows != 1 || ncols != 1 || data_format != 0 || data_type != 0)
                 G_fatal_error(_("Invalid 'map_western_edge' array"));
             if (fread(&region.west, sizeof(double), 1, fp1) != 1)
                 G_fatal_error(_("Error reading data"));
@@ -279,8 +274,9 @@ int main(int argc, char *argv[])
                 if (fread(&map_title, sizeof(char), ncols, fp1) != ncols)
                     G_fatal_error(_("Error reading data"));
             }
-            else if (data_format == 0) {        /* sigh.. */
-                if (fread(&map_name_d, sizeof(double), ncols, fp1) != ncols)    /* note reusing variable */
+            else if (data_format == 0) { /* sigh.. */
+                if (fread(&map_name_d, sizeof(double), ncols, fp1) !=
+                    ncols) /* note reusing variable */
                     G_fatal_error(_("Error reading data"));
                 for (i = 0; i < ncols; i++)
                     map_title[i] = (char)map_name_d[i];
@@ -302,15 +298,15 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Invalid 'map_data' array"));
 
             switch (data_format) {
-                /*   0=double       1=float   2=32bit signed int   5=8bit unsigned int(text)   */
+                /*   0=double       1=float   2=32bit signed int   5=8bit
+                 * unsigned int(text)   */
             case 0:
                 G_debug(1, " double map");
                 map_type = DCELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread
-                    (array_data, sizeof(double), (size_t)mrows * ncols, fp1)
-                    != (mrows * ncols))
+                if (fread(array_data, sizeof(double), (size_t)mrows * ncols,
+                          fp1) != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
             case 1:
@@ -318,9 +314,8 @@ int main(int argc, char *argv[])
                 map_type = FCELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread
-                    (array_data, sizeof(float), (size_t)mrows * ncols, fp1)
-                    != (mrows * ncols))
+                if (fread(array_data, sizeof(float), (size_t)mrows * ncols,
+                          fp1) != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
             case 2:
@@ -328,19 +323,20 @@ int main(int argc, char *argv[])
                 map_type = CELL_TYPE;
                 array_data =
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-                if (fread(array_data, sizeof(int), (size_t)mrows * ncols, fp1)
-                    != (mrows * ncols))
+                if (fread(array_data, sizeof(int), (size_t)mrows * ncols,
+                          fp1) != (mrows * ncols))
                     G_fatal_error(_("Error reading data"));
                 break;
             default:
                 G_fatal_error(_("Please contact the GRASS development team"));
             }
-        }                       /* endif map_data */
+        } /* endif map_data */
 
         else {
             G_important_message(_("Skipping unknown array '%s'"), array_name);
             switch (data_format) {
-                /*   0=double       1=float   2=32bit signed int   5=8bit unsigned int(text)   */
+                /*   0=double       1=float   2=32bit signed int   5=8bit
+                 * unsigned int(text)   */
             case 0:
                 G_fseek(fp1, mrows * ncols * sizeof(double), SEEK_CUR);
                 break;
@@ -358,16 +354,14 @@ int main(int argc, char *argv[])
             }
         }
 
-        G_debug(3, "Read array '%s' [%d,%d] format=%d type=%d\n",
-                array_name, ncols, mrows, data_format, data_type);
+        G_debug(3, "Read array '%s' [%d,%d] format=%d type=%d\n", array_name,
+                ncols, mrows, data_format, data_type);
 
-    }                           /* while !EOF */
+    } /* while !EOF */
 
-
-  /******  WRITE MAP  ****************************************************/
+    /******  WRITE MAP  ****************************************************/
     if (0 == have_data)
         G_fatal_error(_("No 'map_data' array found in <%s>"), infile);
-
 
     /* set map name */
     if (have_name) {
@@ -389,8 +383,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    G_strip(map_name);          /* remove leading and trailing whitespace */
-
+    G_strip(map_name); /* remove leading and trailing whitespace */
 
     /* set region info */
     if (G_projection() != PROJECTION_XY) {
@@ -439,10 +432,8 @@ int main(int argc, char *argv[])
         rastline_ptr = raster;
         for (col = 0; col < ncols; col++) {
             array_ptr = array_data;
-            array_ptr =
-                G_incr_void_ptr(array_ptr,
-                                (row +
-                                 col * mrows) * Rast_cell_size(map_type));
+            array_ptr = G_incr_void_ptr(
+                array_ptr, (row + col * mrows) * Rast_cell_size(map_type));
 
             if (is_nan(array_ptr, map_type))
                 Rast_set_null_value(rastline_ptr, 1, map_type);
@@ -450,22 +441,20 @@ int main(int argc, char *argv[])
                 switch (map_type) {
                 case CELL_TYPE:
                     pval_i = (int *)array_ptr;
-                    Rast_set_c_value(rastline_ptr, (CELL) pval_i[0],
-                                     map_type);
+                    Rast_set_c_value(rastline_ptr, (CELL)pval_i[0], map_type);
                     break;
                 case FCELL_TYPE:
                     pval_f = (float *)array_ptr;
-                    Rast_set_f_value(rastline_ptr, (FCELL) pval_f[0],
-                                     map_type);
+                    Rast_set_f_value(rastline_ptr, (FCELL)pval_f[0], map_type);
                     break;
                 case DCELL_TYPE:
                     pval_d = (double *)array_ptr;
-                    Rast_set_d_value(rastline_ptr, (DCELL) pval_d[0],
-                                     map_type);
+                    Rast_set_d_value(rastline_ptr, (DCELL)pval_d[0], map_type);
                     break;
                 default:
                     Rast_close(cf);
-                    G_fatal_error(_("Please contact the GRASS development team"));
+                    G_fatal_error(
+                        _("Please contact the GRASS development team"));
                 }
             }
             rastline_ptr =
@@ -491,13 +480,12 @@ int main(int argc, char *argv[])
         G_percent(row, mrows, 5);
     }
 
-    G_percent(row, mrows, 5);   /* finish it off */
+    G_percent(row, mrows, 5); /* finish it off */
 
     Rast_close(cf);
 
     G_free(array_data);
     G_free(raster);
-
 
     if (!have_title)
         strncpy(map_title, infile, 1023);
@@ -513,11 +501,10 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
-
 int is_nan(void *p, RASTER_MAP_TYPE dtype)
 {
-    /* fn to test if incoming data point is either a IEEE NaN or a GRASS CELL null
+    /* fn to test if incoming data point is either a IEEE NaN or a GRASS CELL
+     * null
      *
      *   Takes a value of type RASTER_MAP_TYPE stored at memory address "p"
      *   Returns 1 if we think it is a null, 0 otherwise
@@ -529,7 +516,8 @@ int is_nan(void *p, RASTER_MAP_TYPE dtype)
     double *pval_d;
 
     switch (dtype) {
-    case CELL_TYPE:            /* int doesn't have a IEEE NaN value, but we'll accept GRASS's version */
+    case CELL_TYPE: /* int doesn't have a IEEE NaN value, but we'll accept
+                       GRASS's version */
         if (Rast_is_null_value(p, dtype))
             return 1;
         break;
@@ -551,10 +539,9 @@ int is_nan(void *p, RASTER_MAP_TYPE dtype)
     return 0;
 }
 
-
 #ifdef NOTYET
 /* for endian swapping, sometime in the future .. */
-static void SwabShort(uint16 * wp)
+static void SwabShort(uint16 *wp)
 {
     register char *cp = (char *)wp;
     int t;
@@ -564,7 +551,7 @@ static void SwabShort(uint16 * wp)
     cp[0] = t;
 }
 
-static void SwabLong(uint32 * lp)
+static void SwabLong(uint32 *lp)
 {
     register char *cp = (char *)lp;
     int t;
@@ -579,7 +566,7 @@ static void SwabLong(uint32 * lp)
 
 static void SwabFloat(float *fp)
 {
-    SwabLong((uint32 *) fp);
+    SwabLong((uint32 *)fp);
 }
 
 static void SwabDouble(double *dp)

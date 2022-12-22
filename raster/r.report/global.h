@@ -13,21 +13,19 @@
 
 extern struct Cell_head window;
 
-struct _layer_
-{
+struct _layer_ {
     const char *name;
     const char *mapset;
     struct Categories labels;
-    int nlen;                   /* num chars of largest cat when printed */
-    int clen;                   /* num chars for cat label when printed */
+    int nlen; /* num chars of largest cat when printed */
+    int clen; /* num chars for cat label when printed */
 };
 
 #define LAYER struct _layer_
 extern LAYER *layers;
 extern int nlayers;
 
-struct _gstats_
-{
+struct _gstats_ {
     CELL *cats;
     double area;
     long count;
@@ -38,8 +36,7 @@ extern GSTATS *Gstats;
 extern int nstats;
 
 #define MAX_UNITS 10
-struct _units_
-{
+struct _units_ {
     double factor;
     int type;
     int len;
@@ -127,14 +124,14 @@ double area_sum(int *, int);
 long count_sum(int *, int);
 int same_cats(int, int, int);
 
-#define EVERYTHING 0
-#define REPORT_ONLY 1
-#define STATS_ONLY 2
+#define EVERYTHING    0
+#define REPORT_ONLY   1
+#define STATS_ONLY    2
 
-#define ACRES		1
-#define HECTARES	2
-#define SQ_MILES	3
-#define PERCENT_COVER	4
-#define CELL_COUNTS	5
-#define SQ_METERS	6
-#define SQ_KILOMETERS	7
+#define ACRES         1
+#define HECTARES      2
+#define SQ_MILES      3
+#define PERCENT_COVER 4
+#define CELL_COUNTS   5
+#define SQ_METERS     6
+#define SQ_KILOMETERS 7

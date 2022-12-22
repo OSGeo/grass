@@ -1,4 +1,3 @@
-
 /****************************************************************/
 /* find_normal() - Function to find the set of normal equations */
 /*                 that allow a quadratic trend surface to be   */
@@ -9,29 +8,25 @@
 
 #include "param.h"
 
-void find_normal(double **normal,       /* Matrix of cross-products.    */
+void find_normal(double **normal, /* Matrix of cross-products.    */
                  double *w)
-{                               /* Weights matrix.                */
-    int edge = EDGE;            /* Store (wsize-1)/2 to save    */
+{                    /* Weights matrix.                */
+    int edge = EDGE; /* Store (wsize-1)/2 to save    */
 
     /* on computation               */
 
-    double x, y,                /* Local coordinates of window. */
-      x1 = 0, y1 = 0,           /* coefficients of X-products.  */
-        x2 = 0, y2 = 0,
-        x3 = 0, y3 = 0,
-        x4 = 0, y4 = 0,
-        xy2 = 0, x2y = 0, xy3 = 0, x3y = 0, x2y2 = 0, xy = 0, N = 0;
+    double x, y,        /* Local coordinates of window. */
+        x1 = 0, y1 = 0, /* coefficients of X-products.  */
+        x2 = 0, y2 = 0, x3 = 0, y3 = 0, x4 = 0, y4 = 0, xy2 = 0, x2y = 0,
+        xy3 = 0, x3y = 0, x2y2 = 0, xy = 0, N = 0;
 
-    int row, col;               /* Pass through local window.   */
-
+    int row, col; /* Pass through local window.   */
 
     /* Initialise sums-of-squares and cross products matrix */
 
     for (row = 0; row < 6; row++)
         for (col = 0; col < 6; col++)
             normal[row][col] = 0.0;
-
 
     /* Calculate matrix of sums of squares and cross products */
 
@@ -60,7 +55,6 @@ void find_normal(double **normal,       /* Matrix of cross-products.    */
             y1 += y * *(w + row * wsize + col);
 
             N += *(w + row * wsize + col);
-
         }
 
     /* --- Store cross-product matrix elements. --- */
@@ -93,7 +87,6 @@ void find_normal(double **normal,       /* Matrix of cross-products.    */
     normal[5][5] = N;
 }
 
-
 /****************************************************************/
 /* find_obs() - Function to find the observed vector as part of */
 /*              the set of normal equations for least squares.  */
@@ -101,20 +94,19 @@ void find_normal(double **normal,       /* Matrix of cross-products.    */
 
 /****************************************************************/
 
-void find_obs(DCELL * z,        /* Local window of elevs.       */
-              double *obs,      /* Observed column vector.      */
+void find_obs(DCELL *z,    /* Local window of elevs.       */
+              double *obs, /* Observed column vector.      */
               double *w)
-{                               /* Weighting matrix.              */
+{ /* Weighting matrix.              */
 
-    int row, col,               /* Counts through local window. */
-      edge = EDGE,              /* EDGE = (wsize-1)/2.          */
-        offset;                 /* Array offset for weights & z */
+    int row, col,    /* Counts through local window. */
+        edge = EDGE, /* EDGE = (wsize-1)/2.          */
+        offset;      /* Array offset for weights & z */
 
-    double x, y;                /* Local window coordinates.    */
+    double x, y; /* Local window coordinates.    */
 
-    for (row = 0; row < 6; row++)       /* Initialise column vector.        */
+    for (row = 0; row < 6; row++) /* Initialise column vector.        */
         obs[row] = 0.0;
-
 
     for (row = 0; row < wsize; row++)
         for (col = 0; col < wsize; col++) {
@@ -128,11 +120,10 @@ void find_obs(DCELL * z,        /* Local window of elevs.       */
             obs[3] += *(w + offset) * *(z + offset) * x;
             obs[4] += *(w + offset) * *(z + offset) * y;
 
-            if (!constrained)   /* If constrained, should remain 0.0 */
+            if (!constrained) /* If constrained, should remain 0.0 */
                 obs[5] += *(w + offset) * *(z + offset);
         }
 }
-
 
 /****************************************************************/
 /* find_weight() Function to find the weightings matrix for the */
@@ -146,22 +137,21 @@ void find_obs(DCELL * z,        /* Local window of elevs.       */
 
 void find_weight(double *weight_ptr)
 {
-    int edge = EDGE;            /* EDGE = (wsize-1)/2.          */
-    int row, col;               /* Counts through the rows and  */
+    int edge = EDGE; /* EDGE = (wsize-1)/2.          */
+    int row, col;    /* Counts through the rows and  */
 
     /* columns of weights matrix.   */
 
-    double dist;                /* Distance to centre of kernel. */
-
+    double dist; /* Distance to centre of kernel. */
 
     /* --- Find inverse distance of all cells to centre. --- */
 
     for (row = 0; row < wsize; row++)
         for (col = 0; col < wsize; col++) {
-            dist = 1.0 /
-                pow(sqrt
-                    ((edge - col) * (edge - col) +
-                     (edge - row) * (edge - row)) + 1.0, exponent);
+            dist = 1.0 / pow(sqrt((edge - col) * (edge - col) +
+                                  (edge - row) * (edge - row)) +
+                                 1.0,
+                             exponent);
             *(weight_ptr + row * wsize + col) = dist;
         }
 }

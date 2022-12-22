@@ -25,13 +25,13 @@ univar_stat *create_univar_stat_struct(int map_type, int n_perc)
     if (n_zones == 0)
         n_zones = 1;
 
-    stats = (univar_stat *) G_calloc(n_zones, sizeof(univar_stat));
+    stats = (univar_stat *)G_calloc(n_zones, sizeof(univar_stat));
 
     for (i = 0; i < n_zones; i++) {
         stats[i].sum = 0.0;
         stats[i].sumsq = 0.0;
-        stats[i].min = 0.0 / 0.0;       /* set to nan as default */
-        stats[i].max = 0.0 / 0.0;       /* set to nan as default */
+        stats[i].min = 0.0 / 0.0; /* set to nan as default */
+        stats[i].max = 0.0 / 0.0; /* set to nan as default */
         stats[i].n_perc = n_perc;
         if (n_perc > 0)
             stats[i].perc = (double *)G_malloc(n_perc * sizeof(double));
@@ -64,17 +64,15 @@ univar_stat *create_univar_stat_struct(int map_type, int n_perc)
            }
            }
          */
-
     }
 
     return stats;
 }
 
-
 /* *************************************************************** */
 /* **** univar_stat destructor *********************************** */
 /* *************************************************************** */
-void free_univar_stat_struct(univar_stat * stats)
+void free_univar_stat_struct(univar_stat *stats)
 {
     int i;
     int n_zones = zone_info.n_zones;
@@ -98,11 +96,10 @@ void free_univar_stat_struct(univar_stat * stats)
     return;
 }
 
-
 /* *************************************************************** */
 /* **** compute and print univar statistics to stdout ************ */
 /* *************************************************************** */
-int print_stats(univar_stat * stats)
+int print_stats(univar_stat *stats)
 {
     int z, n_zones = zone_info.n_zones;
 
@@ -119,21 +116,20 @@ int print_stats(univar_stat * stats)
         unsigned int i;
         size_t qpos_25, qpos_75, *qpos_perc;
 
-        /* all these calculations get promoted to doubles, so any DIV0 becomes nan */
+        /* all these calculations get promoted to doubles, so any DIV0 becomes
+         * nan */
         mean = stats[z].sum / stats[z].n;
-        variance =
-            (stats[z].sumsq -
-             stats[z].sum * stats[z].sum / stats[z].n) / stats[z].n;
+        variance = (stats[z].sumsq - stats[z].sum * stats[z].sum / stats[z].n) /
+                   stats[z].n;
         if (variance < GRASS_EPSILON)
             variance = 0.0;
         stdev = sqrt(variance);
-        var_coef = (stdev / mean) * 100.;       /* perhaps stdev/fabs(mean) ? */
+        var_coef = (stdev / mean) * 100.; /* perhaps stdev/fabs(mean) ? */
 
         if (stats[z].n == 0)
             stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
         sprintf(sum_str, "%.15g", stats[z].sum);
         G_trim_decimal(sum_str);
-
 
         if (!param.shell_style->answer) {
             if (zone_info.n_zones) {
@@ -146,8 +142,7 @@ int print_stats(univar_stat * stats)
                     stats[z].size);
             fprintf(stdout, "total null cells: %lu\n\n",
                     stats[z].size - stats[z].n);
-            fprintf(stdout,
-                    "Of the non-null cells:\n----------------------\n");
+            fprintf(stdout, "Of the non-null cells:\n----------------------\n");
         }
 
         if (param.shell_style->answer) {
@@ -185,12 +180,10 @@ int print_stats(univar_stat * stats)
             fprintf(stdout, "sum: %s\n", sum_str);
         }
 
-
         /* TODO: mode, skewness, kurtosis */
         if (param.extended->answer) {
             qpos_perc = (size_t *)G_calloc(stats[z].n_perc, sizeof(size_t));
-            quartile_perc =
-                (double *)G_calloc(stats[z].n_perc, sizeof(double));
+            quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
 
             if (stats[z].n == 0) {
                 quartile_25 = median = quartile_75 = 0.0 / 0.0;
@@ -212,9 +205,8 @@ int print_stats(univar_stat * stats)
                     quartile_25 = (double)stats[z].cell_array[qpos_25];
                     if (stats[z].n % 2) /* odd */
                         median =
-                            (double)stats[z].
-                            cell_array[(int)(stats[z].n / 2)];
-                    else        /* even */
+                            (double)stats[z].cell_array[(int)(stats[z].n / 2)];
+                    else /* even */
                         median =
                             (double)(stats[z].cell_array[stats[z].n / 2 - 1] +
                                      stats[z].cell_array[stats[z].n / 2]) /
@@ -232,12 +224,10 @@ int print_stats(univar_stat * stats)
                     quartile_25 = (double)stats[z].fcell_array[qpos_25];
                     if (stats[z].n % 2) /* odd */
                         median =
-                            (double)stats[z].
-                            fcell_array[(int)(stats[z].n / 2)];
-                    else        /* even */
+                            (double)stats[z].fcell_array[(int)(stats[z].n / 2)];
+                    else /* even */
                         median =
-                            (double)(stats[z].
-                                     fcell_array[stats[z].n / 2 - 1] +
+                            (double)(stats[z].fcell_array[stats[z].n / 2 - 1] +
                                      stats[z].fcell_array[stats[z].n / 2]) /
                             2.0;
                     quartile_75 = (double)stats[z].fcell_array[qpos_75];
@@ -253,10 +243,10 @@ int print_stats(univar_stat * stats)
                     quartile_25 = stats[z].dcell_array[qpos_25];
                     if (stats[z].n % 2) /* odd */
                         median = stats[z].dcell_array[(int)(stats[z].n / 2)];
-                    else        /* even */
-                        median =
-                            (stats[z].dcell_array[stats[z].n / 2 - 1] +
-                             stats[z].dcell_array[stats[z].n / 2]) / 2.0;
+                    else /* even */
+                        median = (stats[z].dcell_array[stats[z].n / 2 - 1] +
+                                  stats[z].dcell_array[stats[z].n / 2]) /
+                                 2.0;
                     quartile_75 = stats[z].dcell_array[qpos_75];
                     for (i = 0; i < stats[z].n_perc; i++) {
                         quartile_perc[i] = stats[z].dcell_array[qpos_perc[i]];
@@ -291,7 +281,6 @@ int print_stats(univar_stat * stats)
                             median);
                 fprintf(stdout, "3rd quartile: %g\n", quartile_75);
 
-
                 for (i = 0; i < stats[z].n_perc; i++) {
                     if (stats[z].perc[i] == (int)stats[z].perc[i]) {
                         /* percentile is an exact integer */
@@ -322,7 +311,8 @@ int print_stats(univar_stat * stats)
             G_free((void *)qpos_perc);
         }
 
-        /* G_message() prints to stderr not stdout: disabled. this \n is printed above with zone */
+        /* G_message() prints to stderr not stdout: disabled. this \n is printed
+         * above with zone */
         /* if (!(param.shell_style->answer))
            G_message("\n"); */
     }
@@ -330,7 +320,7 @@ int print_stats(univar_stat * stats)
     return 1;
 }
 
-int print_stats_table(univar_stat * stats)
+int print_stats_table(univar_stat *stats)
 {
     unsigned int i;
     int z, n_zones = zone_info.n_zones;
@@ -397,15 +387,15 @@ int print_stats_table(univar_stat * stats)
 
         i = 0;
 
-        /* all these calculations get promoted to doubles, so any DIV0 becomes nan */
+        /* all these calculations get promoted to doubles, so any DIV0 becomes
+         * nan */
         mean = stats[z].sum / stats[z].n;
-        variance =
-            (stats[z].sumsq -
-             stats[z].sum * stats[z].sum / stats[z].n) / stats[z].n;
+        variance = (stats[z].sumsq - stats[z].sum * stats[z].sum / stats[z].n) /
+                   stats[z].n;
         if (variance < GRASS_EPSILON)
             variance = 0.0;
         stdev = sqrt(variance);
-        var_coef = (stdev / mean) * 100.;       /* perhaps stdev/fabs(mean) ? */
+        var_coef = (stdev / mean) * 100.; /* perhaps stdev/fabs(mean) ? */
 
         if (stats[z].n == 0)
             stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
@@ -429,8 +419,7 @@ int print_stats_table(univar_stat * stats)
         /* max */
         fprintf(stdout, "%.15g%s", stats[z].max, zone_info.sep);
         /* range */
-        fprintf(stdout, "%.15g%s", stats[z].max - stats[z].min,
-                zone_info.sep);
+        fprintf(stdout, "%.15g%s", stats[z].max - stats[z].min, zone_info.sep);
         /* mean */
         fprintf(stdout, "%.15g%s", mean, zone_info.sep);
         /* mean of abs */
@@ -454,9 +443,7 @@ int print_stats_table(univar_stat * stats)
         /* TODO: mode, skewness, kurtosis */
         if (param.extended->answer) {
             qpos_perc = (int *)G_calloc(stats[z].n_perc, sizeof(int));
-            quartile_perc =
-                (double *)G_calloc(stats[z].n_perc, sizeof(double));
-
+            quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
 
             if (stats[z].n == 0) {
                 quartile_25 = median = quartile_75 = 0.0 / 0.0;
@@ -478,9 +465,8 @@ int print_stats_table(univar_stat * stats)
                     quartile_25 = (double)stats[z].cell_array[qpos_25];
                     if (stats[z].n % 2) /* odd */
                         median =
-                            (double)stats[z].
-                            cell_array[(int)(stats[z].n / 2)];
-                    else        /* even */
+                            (double)stats[z].cell_array[(int)(stats[z].n / 2)];
+                    else /* even */
                         median =
                             (double)(stats[z].cell_array[stats[z].n / 2 - 1] +
                                      stats[z].cell_array[stats[z].n / 2]) /
@@ -498,12 +484,10 @@ int print_stats_table(univar_stat * stats)
                     quartile_25 = (double)stats[z].fcell_array[qpos_25];
                     if (stats[z].n % 2) /* odd */
                         median =
-                            (double)stats[z].
-                            fcell_array[(int)(stats[z].n / 2)];
-                    else        /* even */
+                            (double)stats[z].fcell_array[(int)(stats[z].n / 2)];
+                    else /* even */
                         median =
-                            (double)(stats[z].
-                                     fcell_array[stats[z].n / 2 - 1] +
+                            (double)(stats[z].fcell_array[stats[z].n / 2 - 1] +
                                      stats[z].fcell_array[stats[z].n / 2]) /
                             2.0;
                     quartile_75 = (double)stats[z].fcell_array[qpos_75];
@@ -519,10 +503,10 @@ int print_stats_table(univar_stat * stats)
                     quartile_25 = stats[z].dcell_array[qpos_25];
                     if (stats[z].n % 2) /* odd */
                         median = stats[z].dcell_array[(int)(stats[z].n / 2)];
-                    else        /* even */
-                        median =
-                            (stats[z].dcell_array[stats[z].n / 2 - 1] +
-                             stats[z].dcell_array[stats[z].n / 2]) / 2.0;
+                    else /* even */
+                        median = (stats[z].dcell_array[stats[z].n / 2 - 1] +
+                                  stats[z].dcell_array[stats[z].n / 2]) /
+                                 2.0;
                     quartile_75 = stats[z].dcell_array[qpos_75];
                     for (i = 0; i < stats[z].n_perc; i++) {
                         quartile_perc[i] = stats[z].dcell_array[qpos_perc[i]];
@@ -552,7 +536,6 @@ int print_stats_table(univar_stat * stats)
         fprintf(stdout, "\n");
 
         /* zone z finished */
-
     }
 
     return 1;

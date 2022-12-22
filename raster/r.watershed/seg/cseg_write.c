@@ -3,7 +3,7 @@
 #include <grass/segment.h>
 #include "Gwater.h"
 
-int cseg_write_cellfile(CSEG * cseg, char *map_name)
+int cseg_write_cellfile(CSEG *cseg, char *map_name)
 {
     int map_fd;
     GW_LARGE_INT row, rows;
@@ -18,7 +18,7 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
         Segment_get_row(&(cseg->seg), buffer, row);
         Rast_put_row(map_fd, buffer, CELL_TYPE);
     }
-    G_percent(row, rows, 1);    /* finish it */
+    G_percent(row, rows, 1); /* finish it */
     G_free(buffer);
     Rast_close(map_fd);
     return 0;

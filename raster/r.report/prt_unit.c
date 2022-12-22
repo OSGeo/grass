@@ -1,6 +1,5 @@
 #include "global.h"
 
-
 int print_unit(int i, int ns, int nl)
 {
     char num[50];
@@ -17,20 +16,19 @@ int print_unit(int i, int ns, int nl)
         k++;
         area = area_sum(&k, nl - 1);
         if (unit[i].eformat)
-            scient_format(100.0 * area_sum(&ns, nl) / area,
-                          num, unit[i].len, unit[i].dp);
+            scient_format(100.0 * area_sum(&ns, nl) / area, num, unit[i].len,
+                          unit[i].dp);
         else
-            format_double(100.0 * area_sum(&ns, nl) / area,
-                          num, unit[i].len, unit[i].dp);
-
+            format_double(100.0 * area_sum(&ns, nl) / area, num, unit[i].len,
+                          unit[i].dp);
     }
     else {
         if (unit[i].eformat)
-            scient_format(area_sum(&ns, nl) * unit[i].factor,
-                          num, unit[i].len, unit[i].dp);
+            scient_format(area_sum(&ns, nl) * unit[i].factor, num, unit[i].len,
+                          unit[i].dp);
         else
-            format_double(area_sum(&ns, nl) * unit[i].factor,
-                          num, unit[i].len, unit[i].dp);
+            format_double(area_sum(&ns, nl) * unit[i].factor, num, unit[i].len,
+                          unit[i].dp);
     }
     fprintf(stdout, "|%s", num);
 

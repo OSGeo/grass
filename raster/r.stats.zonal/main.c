@@ -1,8 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       r.stats.zonal
- *               
+ *
  * AUTHOR(S):    Glynn Clements; loosely based upon r.statistics, by
  *               Martin Schroeder, Geographisches Institut Heidelberg, Germany
  *
@@ -25,27 +24,26 @@
 #include <grass/spawn.h>
 #include <grass/glocale.h>
 
-#define FUNC_COUNT      1       /* Count                 */
-#define FUNC_SUM        2       /* Sum                   */
-#define FUNC_MIN        3       /* Minimum               */
-#define FUNC_MAX        4       /* Maximum               */
-#define FUNC_RANGE      5       /* Range                 */
-#define FUNC_AVERAGE    6       /* Average (mean)        */
-#define FUNC_ADEV       7       /* Average deviation     */
-#define FUNC_VARIANCE1  8       /* Variance              */
-#define FUNC_STDDEV1    9       /* Standard deviation    */
-#define FUNC_SKEWNESS1 10       /* Skewness              */
-#define FUNC_KURTOSIS1 11       /* Kurtosis              */
-#define FUNC_VARIANCE2 12       /* Variance              */
-#define FUNC_STDDEV2   13       /* Standard deviation    */
-#define FUNC_SKEWNESS2 14       /* Skewness              */
-#define FUNC_KURTOSIS2 15       /* Kurtosis              */
+#define FUNC_COUNT     1  /* Count                 */
+#define FUNC_SUM       2  /* Sum                   */
+#define FUNC_MIN       3  /* Minimum               */
+#define FUNC_MAX       4  /* Maximum               */
+#define FUNC_RANGE     5  /* Range                 */
+#define FUNC_AVERAGE   6  /* Average (mean)        */
+#define FUNC_ADEV      7  /* Average deviation     */
+#define FUNC_VARIANCE1 8  /* Variance              */
+#define FUNC_STDDEV1   9  /* Standard deviation    */
+#define FUNC_SKEWNESS1 10 /* Skewness              */
+#define FUNC_KURTOSIS1 11 /* Kurtosis              */
+#define FUNC_VARIANCE2 12 /* Variance              */
+#define FUNC_STDDEV2   13 /* Standard deviation    */
+#define FUNC_SKEWNESS2 14 /* Skewness              */
+#define FUNC_KURTOSIS2 15 /* Kurtosis              */
 
-struct menu
-{
-    const char *name;           /* method name */
-    int val;                    /* number of function */
-    const char *text;           /* menu display - full description */
+struct menu {
+    const char *name; /* method name */
+    int val;          /* number of function */
+    const char *text; /* menu display - full description */
 };
 
 extern struct menu menu[];
@@ -72,20 +70,17 @@ struct menu menu[] = {
      "(2-pass) Skewness of values in specified objects"},
     {"kurtosis2", FUNC_KURTOSIS2,
      "(2-pass) Kurtosis of values in specified objects"},
-    {0, 0, 0}
-};
+    {0, 0, 0}};
 
 int main(int argc, char **argv)
 {
     static DCELL *count, *sum, *mean, *sumu, *sum2, *sum3, *sum4, *min, *max;
     DCELL *result;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *method, *basemap, *covermap, *output;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *c, *r;
     } flag;
     char methods[2048];
@@ -109,8 +104,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("zonal statistics"));
-    module->description =
-        _("Calculates category or object oriented statistics (accumulator-based statistics).");
+    module->description = _("Calculates category or object oriented statistics "
+                            "(accumulator-based statistics).");
 
     opt.basemap = G_define_standard_option(G_OPT_R_BASE);
 
@@ -170,8 +165,8 @@ int main(int argc, char **argv)
             break;
 
     if (!menu[i].name) {
-        G_warning(_("<%s=%s> unknown %s"), opt.method->key,
-                  opt.method->answer, opt.method->key);
+        G_warning(_("<%s=%s> unknown %s"), opt.method->key, opt.method->answer,
+                  opt.method->key);
         G_usage();
         exit(EXIT_FAILURE);
     }
@@ -276,7 +271,7 @@ int main(int argc, char **argv)
 
             v = cover_buf[col];
             if (usecats)
-                sscanf(Rast_get_c_cat((CELL *) & v, &cats), "%lf", &v);
+                sscanf(Rast_get_c_cat((CELL *)&v, &cats), "%lf", &v);
 
             if (count)
                 count[n]++;
@@ -355,7 +350,7 @@ int main(int argc, char **argv)
 
                 v = cover_buf[col];
                 if (usecats)
-                    sscanf(Rast_get_c_cat((CELL *) & v, &cats), "%lf", &v);
+                    sscanf(Rast_get_c_cat((CELL *)&v, &cats), "%lf", &v);
                 d = v - mean[n];
 
                 if (sumu)
@@ -421,9 +416,9 @@ int main(int argc, char **argv)
         for (i = 0; i < ncats; i++) {
             double n = count[i];
             double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
-            double skew = (sum3[i] / n - 3 * sum[i] * sum2[i] / (n * n)
-                           + 2 * sum[i] * sum[i] * sum[i] / (n * n * n))
-                / (pow(var, 1.5));
+            double skew = (sum3[i] / n - 3 * sum[i] * sum2[i] / (n * n) +
+                           2 * sum[i] * sum[i] * sum[i] / (n * n * n)) /
+                          (pow(var, 1.5));
 
             result[i] = skew;
         }
@@ -432,12 +427,12 @@ int main(int argc, char **argv)
         for (i = 0; i < ncats; i++) {
             double n = count[i];
             double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
-            double kurt = (sum4[i] / n - 4 * sum[i] * sum3[i] / (n * n)
-                           + 6 * sum[i] * sum[i] * sum2[i] / (n * n * n)
-                           -
-                           3 * sum[i] * sum[i] * sum[i] * sum[i] / (n * n *
-                                                                    n * n))
-                / (var * var) - 3;
+            double kurt =
+                (sum4[i] / n - 4 * sum[i] * sum3[i] / (n * n) +
+                 6 * sum[i] * sum[i] * sum2[i] / (n * n * n) -
+                 3 * sum[i] * sum[i] * sum[i] * sum[i] / (n * n * n * n)) /
+                    (var * var) -
+                3;
 
             result[i] = kurt;
         }

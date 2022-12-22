@@ -1,23 +1,22 @@
-
 /****************************************************************************
  *
  * MODULE:       r.texture
  * AUTHOR(S):    Carmine Basco - basco@unisannio.it
- *               with hints from: 
- * 			prof. Giulio Antoniol - antoniol@ieee.org
- * 			prof. Michele Ceccarelli - ceccarelli@unisannio.it
+ *               with hints from:
+ *                         prof. Giulio Antoniol - antoniol@ieee.org
+ *                         prof. Michele Ceccarelli - ceccarelli@unisannio.it
  *               Markus Metz (optimization and bug fixes)
  *
  * PURPOSE:      Create map raster with textural features.
  *
- * COPYRIGHT:    (C) 2003 by University of Sannio (BN), Benevento, Italy 
+ * COPYRIGHT:    (C) 2003 by University of Sannio (BN), Benevento, Italy
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose and without fee is hereby granted. This 
+ * documentation for any purpose and without fee is hereby granted. This
  * software is provided "as is" without express or implied warranty.
  *
  *****************************************************************************/
@@ -30,13 +29,12 @@
 #include <grass/glocale.h>
 #include "h_measure.h"
 
-struct menu
-{
-    char *name;                 /* measure name */
-    char *desc;                 /* menu display - full description */
-    char *suffix;               /* output suffix */
-    char useme;                 /* calculate this measure if set */
-    int idx;                    /* measure index */
+struct menu {
+    char *name;   /* measure name */
+    char *desc;   /* menu display - full description */
+    char *suffix; /* output suffix */
+    char useme;   /* calculate this measure if set */
+    int idx;      /* measure index */
 };
 
 /* modify this table to add new measures */
@@ -54,8 +52,7 @@ static struct menu menu[] = {
     {"de", "Difference Entropy", "_DE", 0, 11},
     {"moc1", "Measure of Correlation-1", "_MOC-1", 0, 12},
     {"moc2", "Measure of Correlation-2", "_MOC-2", 0, 13},
-    {NULL, NULL, NULL, 0, -1}
-};
+    {NULL, NULL, NULL, 0, -1}};
 
 static int find_measure(const char *measure_name)
 {
@@ -80,12 +77,12 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col, first_row, last_row, first_col, last_col;
     int i, j;
-    CELL **data;                /* Data structure containing image */
+    CELL **data; /* Data structure containing image */
     DCELL *dcell_row;
     struct FPRange range;
     DCELL min, max, inscale;
-    FCELL measure;              /* Containing measure done */
-    int dist, size;             /* dist = value of distance, size = s. of moving window */
+    FCELL measure;  /* Containing measure done */
+    int dist, size; /* dist = value of distance, size = s. of moving window */
     int offset;
     int have_px, have_py, have_pxpys, have_pxpyd;
     int infd, *outfd;
@@ -120,7 +117,8 @@ int main(int argc, char *argv[])
     opt_size->description = _("The size of moving window (odd and >= 3)");
     opt_size->answer = "3";
 
-    /* Textural character is in direct relation of the spatial size of the texture primitives. */
+    /* Textural character is in direct relation of the spatial size of the
+     * texture primitives. */
 
     opt_dist = G_define_option();
     opt_dist->key = "distance";
@@ -150,8 +148,9 @@ int main(int argc, char *argv[])
     flag_ind = G_define_flag();
     flag_ind->key = 's';
     flag_ind->label = _("Separate output for each angle (0, 45, 90, 135)");
-    flag_ind->description = _("Angles are counterclockwise from east: "
-                              "0 is East to West, 45 is North-East to South-West");
+    flag_ind->description =
+        _("Angles are counterclockwise from east: "
+          "0 is East to West, 45 is North-East to South-West");
 
     flag_all = G_define_flag();
     flag_all->key = 'a';
@@ -177,7 +176,8 @@ int main(int argc, char *argv[])
     if (dist <= 0)
         G_fatal_error(_("The distance between two samples must be > 0"));
     if (dist >= size)
-        G_fatal_error(_("The distance between two samples must be smaller than the size of the moving window"));
+        G_fatal_error(_("The distance between two samples must be smaller than "
+                        "the size of the moving window"));
 
     n_measures = 0;
     if (flag_all->answer) {
@@ -198,7 +198,8 @@ int main(int argc, char *argv[])
         }
     }
     if (!n_measures)
-        G_fatal_error(_("Nothing to compute. Use at least one textural measure."));
+        G_fatal_error(
+            _("Nothing to compute. Use at least one textural measure."));
 
     measure_idx = G_malloc(n_measures * sizeof(int));
     j = 0;
@@ -260,7 +261,8 @@ int main(int argc, char *argv[])
                         Rast_open_new(mapname[i * 4 + j], out_data_type);
                 }
                 else {
-                    G_fatal_error(_("At least one of the requested output maps exists. Use --o to overwrite."));
+                    G_fatal_error(_("At least one of the requested output maps "
+                                    "exists. Use --o to overwrite."));
                 }
             }
         }
@@ -270,7 +272,8 @@ int main(int argc, char *argv[])
                 outfd[i] = Rast_open_new(mapname[i], out_data_type);
             }
             else {
-                G_fatal_error(_("At least one of the requested output maps exists. Use --o to overwrite."));
+                G_fatal_error(_("At least one of the requested output maps "
+                                "exists. Use --o to overwrite."));
             }
         }
     }
@@ -310,10 +313,10 @@ int main(int argc, char *argv[])
             if (Rast_is_d_null_value(&(dcell_row[i])))
                 data[j][i] = -1;
             else if (inscale) {
-                data[j][i] = (CELL) ((dcell_row[i] - min) * inscale);
+                data[j][i] = (CELL)((dcell_row[i] - min) * inscale);
             }
             else
-                data[j][i] = (CELL) dcell_row[i];
+                data[j][i] = (CELL)dcell_row[i];
         }
     }
 
@@ -325,9 +328,10 @@ int main(int argc, char *argv[])
 
     /* *************************************************************************************************
      *
-     * Compute of the matrix S.G.L.D. (Spatial Gray-Level Dependence Matrices) or co-occurrence matrix.
-     * The image is analized for piece, every piece is naming moving window (s.w.). The s.w. must be    
-     * square with number of size's samples odd, that because we want the sample at the center of matrix. 
+     * Compute of the matrix S.G.L.D. (Spatial Gray-Level Dependence Matrices)
+     *or co-occurrence matrix. The image is analized for piece, every piece is
+     *naming moving window (s.w.). The s.w. must be square with number of size's
+     *samples odd, that because we want the sample at the center of matrix.
      *
      ***************************************************************************************************/
 
@@ -368,8 +372,8 @@ int main(int argc, char *argv[])
         /*process the data */
         for (col = first_col; col < last_col; col++) {
 
-            if (!set_vars
-                (data, row, col, size, offset, dist, flag_null->answer)) {
+            if (!set_vars(data, row, col, size, offset, dist,
+                          flag_null->answer)) {
                 for (i = 0; i < n_outputs; i++)
                     Rast_set_f_null_value(&(fbuf[i][col]), 1);
                 continue;
@@ -381,7 +385,7 @@ int main(int argc, char *argv[])
                 /* for all requested textural measures */
                 for (j = 0; j < n_measures; j++) {
 
-                    measure = (FCELL) h_measure(menu[measure_idx[j]].idx);
+                    measure = (FCELL)h_measure(menu[measure_idx[j]].idx);
 
                     if (flag_ind->answer) {
                         /* output for each angle separately */

@@ -5,7 +5,7 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-void get_line(FILE * fp, char *buffer)
+void get_line(FILE *fp, char *buffer)
 {
     char *str;
 
@@ -121,8 +121,7 @@ void read_input(void)
 
         get_line(fp, buf);
         if (sscanf(buf, "%lf %lf", &d, &Ad_r) == 2) {
-            params.d =
-                (double *)G_realloc(params.d, (i + 1) * sizeof(double));
+            params.d = (double *)G_realloc(params.d, (i + 1) * sizeof(double));
             params.Ad =
                 (double *)G_realloc(params.Ad, (i + 1) * sizeof(double));
             params.d[i] = d;
@@ -146,11 +145,10 @@ void read_input(void)
 
         get_line(fp, buf);
         if (sscanf(buf, "%lf %lf", &atb, &Aatb_r) == 2) {
-            topidxstats.atb = (double *)G_realloc(topidxstats.atb,
-                                                  (i + 1) * sizeof(double));
+            topidxstats.atb =
+                (double *)G_realloc(topidxstats.atb, (i + 1) * sizeof(double));
             topidxstats.Aatb_r = (double *)G_realloc(topidxstats.Aatb_r,
-                                                     (i +
-                                                      1) * sizeof(double));
+                                                     (i + 1) * sizeof(double));
             topidxstats.atb[i] = atb;
             topidxstats.Aatb_r[i++] = Aatb_r;
         }
@@ -179,8 +177,7 @@ void read_input(void)
         get_line(fp, buf);
         if (sscanf(buf, "%lf %lf", &R, &Ep) == 2) {
             input.R = (double *)G_realloc(input.R, (i + 1) * sizeof(double));
-            input.Ep =
-                (double *)G_realloc(input.Ep, (i + 1) * sizeof(double));
+            input.Ep = (double *)G_realloc(input.Ep, (i + 1) * sizeof(double));
             input.R[i] = R;
             input.Ep[i++] = Ep;
         }
@@ -213,23 +210,26 @@ void write_output(void)
         G_fatal_error(_("Unable to create output file <%s>"), file.output);
 
     fprintf(fp, "# r.topmodel output file for %s\n", params.name);
-    fprintf(fp, "# Run time: %.4d-%.2d-%.2d %.2d:%.2d:%.2d\n",
-            ltime->tm_year, ltime->tm_mon, ltime->tm_mday,
-            ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
+    fprintf(fp, "# Run time: %.4d-%.2d-%.2d %.2d:%.2d:%.2d\n", ltime->tm_year,
+            ltime->tm_mon, ltime->tm_mday, ltime->tm_hour, ltime->tm_min,
+            ltime->tm_sec);
     fprintf(fp, "#\n");
     fprintf(fp, "# Qt_peak [m^3/timestep]:  Peak total flow\n");
     fprintf(fp, "# tt_peak [timestep]:      Peak time for total flow\n");
     fprintf(fp, "# Qt_mean [m^3/timestep]:  Mean total flow\n");
-    fprintf(fp,
-            "# lnTe [ln(m^2/timestep)]: ln of the average transmissivity at the soil surface\n");
+    fprintf(fp, "# lnTe [ln(m^2/timestep)]: ln of the average transmissivity "
+                "at the soil surface\n");
     fprintf(fp, "# vch [m/timestep]:        Main channel routing velocity\n");
-    fprintf(fp,
-            "# vr [m/timestep]:         Internal subcatchment routing velocity\n");
+    fprintf(
+        fp,
+        "# vr [m/timestep]:         Internal subcatchment routing velocity\n");
     fprintf(fp, "# lambda [ln(m^2)]:        Average topographic index\n");
-    fprintf(fp,
-            "# qss [m/timestep]:        Saturated subsurface flow per unit area\n");
-    fprintf(fp,
-            "# qs0 [m/timestep]:        Initial subsurface flow per unit area\n");
+    fprintf(
+        fp,
+        "# qss [m/timestep]:        Saturated subsurface flow per unit area\n");
+    fprintf(
+        fp,
+        "# qs0 [m/timestep]:        Initial subsurface flow per unit area\n");
     fprintf(fp,
             "# ntopidxclasses:          Number of topographic index classes\n");
     fprintf(fp, "# dt [h]:                  Time step\n");
@@ -238,37 +238,38 @@ void write_output(void)
     fprintf(fp,
             "# delay [timestep]:        Routing delay in the main channel\n");
     fprintf(fp, "# tc [timestep]:           Time of concentration\n");
-    fprintf(fp,
-            "# tcsub [timestep]:        Time of concentration in the subcatchment\n");
+    fprintf(fp, "# tcsub [timestep]:        Time of concentration in the "
+                "subcatchment\n");
     fprintf(fp, "#\n");
-    fprintf(fp,
-            "# tch [timestep]:          Routing time to the catchment outlet\n");
+    fprintf(
+        fp,
+        "# tch [timestep]:          Routing time to the catchment outlet\n");
     fprintf(fp,
             "# Ad [m^2]:                Difference in the contribution area\n");
     fprintf(fp, "# Qt [m^3/timestep]:       Total flow\n");
     fprintf(fp, "# qt [m/timestep]:         Total flow per unit area\n");
-    fprintf(fp,
-            "# qo [m/timestep]:         Saturated overland flow per unit area\n");
+    fprintf(
+        fp,
+        "# qo [m/timestep]:         Saturated overland flow per unit area\n");
     fprintf(fp, "# qs [m/timestep]:         Subsurface flow per unit area\n");
-    fprintf(fp,
-            "# qv [m/timestep]:         Vertical drainage flux from unsaturated zone\n");
+    fprintf(fp, "# qv [m/timestep]:         Vertical drainage flux from "
+                "unsaturated zone\n");
     fprintf(fp, "# S_mean [m]:              Mean saturation deficit\n");
     if (params.infex) {
         fprintf(fp, "# f [m/timestep]:          Infiltration rate\n");
-        fprintf(fp,
-                "# fex [m/timestep]:        Infiltration excess runoff\n");
+        fprintf(fp, "# fex [m/timestep]:        Infiltration excess runoff\n");
     }
 
     if (misc.timestep || misc.topidxclass) {
         fprintf(fp, "#\n");
         fprintf(fp, "# Srz [m]:                 Root zone storage deficit\n");
-        fprintf(fp,
-                "# Suz [m]:                 Unsaturated zone storage (gravity drainage)\n");
-        fprintf(fp,
-                "# S [m]:                   Local saturated zone deficit due to gravity drainage\n");
+        fprintf(fp, "# Suz [m]:                 Unsaturated zone storage "
+                    "(gravity drainage)\n");
+        fprintf(fp, "# S [m]:                   Local saturated zone deficit "
+                    "due to gravity drainage\n");
         fprintf(fp, "# Ea [m/timestep]:         Actual evapotranspiration\n");
-        fprintf(fp,
-                "# ex [m/timestep]:         Excess flow from fully saturated area per unit area\n");
+        fprintf(fp, "# ex [m/timestep]:         Excess flow from fully "
+                    "saturated area per unit area\n");
     }
     fprintf(fp, "\n");
 
@@ -321,16 +322,15 @@ void write_output(void)
         }
     }
 
-    fprintf(fp, "%10s %10s %10s %10s %10s %10s %10s",
-            "timestep", "Qt", "qt", "qo", "qs", "qv", "S_mean");
+    fprintf(fp, "%10s %10s %10s %10s %10s %10s %10s", "timestep", "Qt", "qt",
+            "qo", "qs", "qv", "S_mean");
     if (params.infex)
         fprintf(fp, " %10s %10s", "f", "fex");
     fprintf(fp, "\n");
 
     for (i = 0; i < input.ntimesteps; i++) {
-        fprintf(fp, "%10d %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e",
-                i + 1, misc.Qt[i],
-                misc.qt[i][misc.ntopidxclasses],
+        fprintf(fp, "%10d %10.3e %10.3e %10.3e %10.3e %10.3e %10.3e", i + 1,
+                misc.Qt[i], misc.qt[i][misc.ntopidxclasses],
                 misc.qo[i][misc.ntopidxclasses], misc.qs[i],
                 misc.qv[i][misc.ntopidxclasses], misc.S_mean[i]);
         if (params.infex)
@@ -356,8 +356,8 @@ void write_output(void)
             fprintf(fp, "%10s ", "timestep");
         }
 
-        fprintf(fp, "%10s %10s %10s %10s %10s %10s %10s %10s %10s\n",
-                "qt", "qo", "qs", "qv", "Srz", "Suz", "S", "Ea", "ex");
+        fprintf(fp, "%10s %10s %10s %10s %10s %10s %10s %10s %10s\n", "qt",
+                "qo", "qs", "qv", "Srz", "Suz", "S", "Ea", "ex");
 
         for (i = st; i < et; i++)
             for (j = si; j < ei; j++) {
@@ -368,13 +368,13 @@ void write_output(void)
                     fprintf(fp, "%10d ", i + 1);
                 }
 
-                fprintf(fp, "%10.3e %10.3e %10.3e "
+                fprintf(fp,
+                        "%10.3e %10.3e %10.3e "
                         "%10.3e %10.3e %10.3e "
                         "%10.3e %10.3e %10.3e\n",
-                        misc.qt[i][j], misc.qo[i][j],
-                        misc.qs[i], misc.qv[i][j],
-                        misc.Srz[i][j], misc.Suz[i][j],
-                        misc.S[i][j], misc.Ea[i][j], misc.ex[i][j]);
+                        misc.qt[i][j], misc.qo[i][j], misc.qs[i], misc.qv[i][j],
+                        misc.Srz[i][j], misc.Suz[i][j], misc.S[i][j],
+                        misc.Ea[i][j], misc.ex[i][j]);
             }
     }
 

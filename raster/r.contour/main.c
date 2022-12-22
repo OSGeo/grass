@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.contour
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Terry Baker - CERL
  *               Andrea Aime <aaime liberto it>
  *
- * PURPOSE:      Produces a vector map of specified contours from a 
+ * PURPOSE:      Produces a vector map of specified contours from a
  *               raster map layer.
  *
  * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
@@ -33,9 +32,9 @@
  *   into outout, so that small spurs, single points and so on won't be
  *   present and the output will be more clear (that's optional anyway);
  * o in my opinion there were minor memory handling problems in r.contour,
- *   I've corrected them (Head.map_name was not guaranteed to be properly          
- *   terminated, Points structures in contour function were not                    
- *   deallocated).    
+ *   I've corrected them (Head.map_name was not guaranteed to be properly
+ *   terminated, Points structures in contour function were not
+ *   deallocated).
  */
 
 #include <stdio.h>
@@ -165,15 +164,13 @@ int main(int argc, char *argv[])
         Vect_map_add_dblink(&Map, Fi->number, Fi->name, Fi->table, Fi->key,
                             Fi->database, Fi->driver);
 
-        Driver =
-            db_start_driver_open_database(Fi->driver,
-                                          Vect_subst_var(Fi->database, &Map));
+        Driver = db_start_driver_open_database(
+            Fi->driver, Vect_subst_var(Fi->database, &Map));
         if (Driver == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
 
-        sprintf(buf,
-                "create table %s ( cat integer, level double precision )",
+        sprintf(buf, "create table %s ( cat integer, level double precision )",
                 Fi->table);
 
         db_set_string(&sql, buf);
@@ -189,9 +186,8 @@ int main(int argc, char *argv[])
             G_warning(_("Unable to create index for table <%s>, key <%s>"),
                       Fi->table, Fi->key);
 
-        if (db_grant_on_table
-            (Driver, Fi->table, DB_PRIV_SELECT,
-             DB_GROUP | DB_PUBLIC) != DB_OK)
+        if (db_grant_on_table(Driver, Fi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK)
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           Fi->table);
     }
@@ -225,7 +221,7 @@ int main(int argc, char *argv[])
     }
     Vect_build(&Map);
 
-    /* if a contour line hits a border of NULL cells, it traces 
+    /* if a contour line hits a border of NULL cells, it traces
      * itself back until it hits a border of NULL cells again,
      * then goes back to the starting point
      * -> cleaning is needed */
@@ -252,28 +248,26 @@ DCELL **get_z_array(int fd, int nrow, int ncol)
     DCELL **z_array;
     int i;
 
-    z_array = (DCELL **) G_malloc(nrow * sizeof(DCELL *));
+    z_array = (DCELL **)G_malloc(nrow * sizeof(DCELL *));
 
     G_message(_("Reading data..."));
 
     for (i = 0; i < nrow; i++) {
-        z_array[i] = (DCELL *) G_malloc(ncol * sizeof(DCELL));
+        z_array[i] = (DCELL *)G_malloc(ncol * sizeof(DCELL));
         Rast_get_d_row(fd, z_array[i], i);
         G_percent(i + 1, nrow, 2);
     }
     return z_array;
 }
 
-
 /********************************************************************/
-double *getlevels(struct Option *levels,
-                  struct Option *max, struct Option *min,
+double *getlevels(struct Option *levels, struct Option *max, struct Option *min,
                   struct Option *step, struct FPRange *range, int *num)
 {
     double dmax, dmin, dstep;
     int nlevels, i, k, n;
     double j;
-    DCELL zmin, zmax;           /* min and max data values */
+    DCELL zmin, zmax; /* min and max data values */
     double *lev;
     double tmp;
 
@@ -304,19 +298,20 @@ double *getlevels(struct Option *levels,
             }
         }
     }
-    else {                      /* step */
+    else { /* step */
 
         dstep = atof(step->answer);
         /* fix if step < 1, Roger Bivand 1/2001: */
 
-        dmax = (max->answer) ? atof(max->answer) :
-            dstep == 0 ? (G_fatal_error(_("This step value is not allowed")),
-                          0) : zmax - fmod(zmax, dstep);
-        dmin =
-            (min->answer) ? atof(min->answer) : dstep ==
-            0 ? (G_fatal_error(_("This step value is not allowed")),
-                 0) : fmod(zmin, dstep) ? zmin - fmod(zmin,
-                                                      dstep) + dstep : zmin;
+        dmax = (max->answer) ? atof(max->answer)
+               : dstep == 0
+                   ? (G_fatal_error(_("This step value is not allowed")), 0)
+                   : zmax - fmod(zmax, dstep);
+        dmin = (min->answer) ? atof(min->answer)
+               : dstep == 0
+                   ? (G_fatal_error(_("This step value is not allowed")), 0)
+               : fmod(zmin, dstep) ? zmin - fmod(zmin, dstep) + dstep
+                                   : zmin;
 
         while (dmin < zmin) {
             dmin += dstep;
@@ -339,8 +334,7 @@ double *getlevels(struct Option *levels,
         dmin = dmin < zmin ? zmin : dmin;
         dmax = dmax > zmax ? zmax : dmax;
 
-        G_verbose_message(_("Range of levels: min = %f, max = %f"), dmin,
-                          dmax);
+        G_verbose_message(_("Range of levels: min = %f, max = %f"), dmin, dmax);
 
         nlevels = (dmax - dmin) / dstep + 2;
         lev = (double *)G_malloc(nlevels * sizeof(double));
@@ -356,14 +350,13 @@ double *getlevels(struct Option *levels,
     return lev;
 }
 
-
 /********************************************************************/
-/*      parse the matrix and offset values that exactly match a                 */
+/*      parse the matrix and offset values that exactly match a */
 /*      contour level. Contours values are added DBL_EPSILON*val, which */
 /*      is defined in K&R as the minimum double x such as 1.0+x != 1.0  */
 
 /********************************************************************/
-void displaceMatrix(DCELL ** z, int nrow, int ncol, double *lev, int nlevels)
+void displaceMatrix(DCELL **z, int nrow, int ncol, double *lev, int nlevels)
 {
     int i, j, k;
     double *currRow;

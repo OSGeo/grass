@@ -1,12 +1,12 @@
 #ifndef __G_WATER_H__
 #define __G_WATER_H__
 
-
 /* program to map out drainage basin structure  */
 /* this one uses the A * search algorithm       */
 /* written by Chuck Ehlschlaeger                */
 /* updated by Markus Metz                       */
 /* last modified 22/10/09                       */
+
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -16,67 +16,72 @@
 #include "cseg.h"
 #include "flag.h"
 
-#define AR_SIZE			16
-#define AR_INCR			16
-#define NOMASK			1
-#define MIN_SLOPE		.00001
-#define MIN_GRADIENT_DEGREES	1
-#define DEG_TO_RAD		((2 * M_PI) / 360.)
-#define METER_TO_FOOT		(1 / 0.3048)
-#define MAX_BYTES		10485760
-#define PAGE_BLOCK		1024
-#define SROW			64
-#define SCOL   			64
-#define RITE			1
-#define LEFT			2
-#define NEITHER			0
-#define ABS(x)	(((x) < 0) ? -(x) : (x))
-#define TSTSTR(a)	(fprintf (stderr, "%s\n", a))
-#define TST(a)		(fprintf (stderr, "%e\n", (double) (a)))
+#define AR_SIZE              16
+#define AR_INCR              16
+#define NOMASK               1
+#define MIN_SLOPE            .00001
+#define MIN_GRADIENT_DEGREES 1
+#define DEG_TO_RAD           ((2 * M_PI) / 360.)
+#define METER_TO_FOOT        (1 / 0.3048)
+#define MAX_BYTES            10485760
+#define PAGE_BLOCK           1024
+#define SROW                 64
+#define SCOL                 64
+#define RITE                 1
+#define LEFT                 2
+#define NEITHER              0
+#define ABS(x)               (((x) < 0) ? -(x) : (x))
+#define TSTSTR(a)            (fprintf(stderr, "%s\n", a))
+#define TST(a)               (fprintf(stderr, "%e\n", (double)(a)))
 
 /* flag positions */
-#define NULLFLAG         0      /* elevation is NULL */
-#define EDGEFLAG         1      /* edge cell */
-#define INLISTFLAG       2      /* in open A* list */
-#define WORKEDFLAG       3      /* in closed A* list/ accumulation done */
-#define SWALEFLAG        4      /* swale */
-#define PITFLAG          5      /* user-defined real depression */
-#define RUSLEBLOCKFLAG   6      /* is RUSLE block */
-                          /* #define XXXFLAG   7 *//* last bit unused */
+#define NULLFLAG             0 /* elevation is NULL */
+#define EDGEFLAG             1 /* edge cell */
+#define INLISTFLAG           2 /* in open A* list */
+#define WORKEDFLAG           3 /* in closed A* list/ accumulation done */
+#define SWALEFLAG            4 /* swale */
+#define PITFLAG              5 /* user-defined real depression */
+#define RUSLEBLOCKFLAG       6 /* is RUSLE block */
+/* #define XXXFLAG   7 */      /* last bit unused */
 
-
-#define POINT       struct points
-POINT {
+#define POINT                struct points
+POINT
+{
     int r, c;
 };
 
-#define HEAP_PNT    struct heap_point
-HEAP_PNT {
+#define HEAP_PNT struct heap_point
+HEAP_PNT
+{
     GW_LARGE_INT added;
     CELL ele;
     POINT pnt;
 };
 
-#define WAT_ALT    struct wat_altitude
-WAT_ALT {
+#define WAT_ALT struct wat_altitude
+WAT_ALT
+{
     CELL ele;
     DCELL wat;
 };
 
-#define A_TANB    struct sca_tanb
-A_TANB {
+#define A_TANB struct sca_tanb
+A_TANB
+{
     DCELL sca;
     DCELL tanb;
 };
 
-#define ASP_FLAG    struct aspect_flag
-ASP_FLAG {
+#define ASP_FLAG struct aspect_flag
+ASP_FLAG
+{
     char asp;
     char flag;
 };
 
 #define OC_STACK struct overland_cells_stack
-OC_STACK {
+OC_STACK
+{
     int row, col;
 };
 
@@ -143,7 +148,7 @@ extern FILE *fp;
  * haf_flag    write half-basin output
  * er_flag     do RUSLE
  * sb_flag     ???
- * sg_flag     write RUSLE S factor     
+ * sg_flag     write RUSLE S factor
  * sl_flag     slope length, unused
  * ls_flag     write RUSLE LS factor
  */
@@ -198,6 +203,5 @@ CELL split_stream(int, int, int[], int[], int, CELL, double, CELL);
 
 /* usage.c */
 void usage(char *);
-
 
 #endif /* __G_WATER_H__ */

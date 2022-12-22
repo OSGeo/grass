@@ -4,9 +4,8 @@
 #include <grass/raster.h>
 #include "method.h"
 
-int
-o_mode(const char *basemap, const char *covermap, const char *outputmap,
-       int usecats, struct Categories *cats)
+int o_mode(const char *basemap, const char *covermap, const char *outputmap,
+           int usecats, struct Categories *cats)
 {
     struct Popen stats_child, reclass_child;
     FILE *stats, *reclass;
@@ -29,7 +28,7 @@ o_mode(const char *basemap, const char *covermap, const char *outputmap,
 
         if (basecat != catb) {
             write_reclass(reclass, catb, catc,
-                          Rast_get_c_cat((CELL *) & catc, cats), usecats);
+                          Rast_get_c_cat((CELL *)&catc, cats), usecats);
             catb = basecat;
             catc = covercat;
             max = value;
@@ -45,7 +44,7 @@ o_mode(const char *basemap, const char *covermap, const char *outputmap,
         catb = catc = 0;
     }
 
-    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) & catc, cats),
+    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *)&catc, cats),
                   usecats);
 
     G_popen_close(&stats_child);

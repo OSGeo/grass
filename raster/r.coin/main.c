@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -46,28 +45,27 @@ char *fill, *midline;
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map1, *map2, *units;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *w;
     } flag;
 
     fill =
-        "                                                                                                                                       ";
+        "                                                                      "
+        "                                                                 ";
     midline =
-        "------------------------------------------------------------------------------------------------------------------------------------";
+        "----------------------------------------------------------------------"
+        "--------------------------------------------------------------";
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
-    module->description =
-        _("Tabulates the mutual occurrence (coincidence) "
-          "of categories for two raster map layers.");
+    module->description = _("Tabulates the mutual occurrence (coincidence) "
+                            "of categories for two raster map layers.");
 
     parm.map1 = G_define_standard_option(G_OPT_R_INPUT);
     parm.map1->key = "first";

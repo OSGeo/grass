@@ -1,12 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.quant
  * AUTHOR(S):    Michael Shapiro, Olga Waupotitsch, CERL (original contributors)
- *               Markus Neteler <neteler itc.it>, Roberto Flor <flor itc.it>,
- *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Roberto Flor <flor itc.it>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -26,7 +27,7 @@
 struct Quant quant_struct;
 CELL old_min, old_max;
 DCELL old_dmin, old_dmax;
-char **name;                    /* input map names */
+char **name; /* input map names */
 int noi;
 
 int main(int argc, char *argv[])
@@ -118,10 +119,11 @@ int main(int argc, char *argv[])
     if (range->answer)
         i++;
     if (i == 1)
-        G_fatal_error(_("%s= and %s= must be used together"),
-                      fprange->key, range->key);
+        G_fatal_error(_("%s= and %s= must be used together"), fprange->key,
+                      range->key);
 
-    for (noi = 0; input->answers[noi]; noi++) ;
+    for (noi = 0; input->answers[noi]; noi++)
+        ;
     name = G_malloc(noi * sizeof(char *));
     /* read and check inputs */
     for (noi = 0; input->answers[noi]; noi++) {
@@ -146,7 +148,7 @@ int main(int argc, char *argv[])
     }
 
     else if (basename)
-        /* set the quant to that of basemap */
+    /* set the quant to that of basemap */
     {
         if (Rast_map_type(basename, "") == CELL_TYPE)
             G_fatal_error(_("%s is integer map, it can't be used as basemap"),
@@ -159,13 +161,14 @@ int main(int argc, char *argv[])
 
     else if (fprange->answer) {
         if (sscanf(fprange->answer, "%lf,%lf", &new_dmin, &new_dmax) != 2)
-            G_fatal_error(_("invalid value for %s= <%s>"),
-                          fprange->key, fprange->answer);
+            G_fatal_error(_("invalid value for %s= <%s>"), fprange->key,
+                          fprange->answer);
         if (sscanf(range->answer, "%d,%d", &new_min, &new_max) != 2)
-            G_fatal_error(_("invalid value for %s= <%s>"),
-                          range->key, range->answer);
-        G_message(_("Setting quant rules for input map(s) to (%f,%f) -> (%d,%d)"),
-                  new_dmin, new_dmax, new_min, new_max);
+            G_fatal_error(_("invalid value for %s= <%s>"), range->key,
+                          range->answer);
+        G_message(
+            _("Setting quant rules for input map(s) to (%f,%f) -> (%d,%d)"),
+            new_dmin, new_dmax, new_min, new_max);
         Rast_quant_add_rule(&quant_struct, new_dmin, new_dmax, new_min,
                             new_max);
     }
@@ -175,14 +178,14 @@ int main(int argc, char *argv[])
             G_fatal_error("No rules specified");
     }
 
-    else {                      /* ask user for quant rules */
+    else { /* ask user for quant rules */
         if (!read_rules("-")) {
             if (isatty(0))
                 G_message(_("No rules specified. Quant table(s) not changed."));
             else
                 G_fatal_error(_("No rules specified"));
         }
-    }                           /* use rules */
+    } /* use rules */
 
     for (i = 0; i < noi; i++) {
         Rast_write_quant(name[i], G_mapset(), &quant_struct);

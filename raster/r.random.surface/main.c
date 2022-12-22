@@ -1,16 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       r.random.surface
- * AUTHOR(S):    Charles Ehlschlaeger, Michael Goodchild, and Chih-chang Lin; 
- *                      (National Center for Geographic Information and 
+ * AUTHOR(S):    Charles Ehlschlaeger, Michael Goodchild, and Chih-chang Lin;
+ *                      (National Center for Geographic Information and
  *                      Analysis, University of California, Santa Barbara)
  *                      (original contributors)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      generates a spatially dependent random surface
  * COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
@@ -137,7 +136,8 @@ int main(int argc, char **argv)
         for (DoFilter = 0; DoFilter < NumFilters; DoFilter++) {
             CopyFilter(&Filter, AllFilters[DoFilter]);
             G_debug(1,
-                    "Starting filter #%d, distance: %.*lf, exponent: %.*lf, flat: %.*lf",
+                    "Starting filter #%d, distance: %.*lf, exponent: %.*lf, "
+                    "flat: %.*lf",
                     DoFilter, Digits(2.0 * Filter.MaxDist, 6),
                     2.0 * Filter.MaxDist, Digits(1.0 / Filter.Exp, 6),
                     1.0 / Filter.Exp, Digits(Filter.Mult, 6), Filter.Mult);

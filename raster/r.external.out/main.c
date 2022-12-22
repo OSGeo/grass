@@ -1,8 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       r.external.out
- *               
+ *
  * AUTHOR(S):    Glynn Clements, based on r.out.gdal
  *
  * PURPOSE:      Make GRASS write raster maps utilizing the GDAL library.
@@ -54,8 +53,7 @@ static void list_formats(void)
         else
             continue;
 
-        fprintf(stdout, "  %s (%s): %s\n",
-                GDALGetDriverShortName(hDriver),
+        fprintf(stdout, "  %s (%s): %s\n", GDALGetDriverShortName(hDriver),
                 pszRWFlag, GDALGetDriverLongName(hDriver));
     }
 }
@@ -166,8 +164,8 @@ static void check_format(const char *format)
     G_fatal_error(_("Format <%s> does not support writing"), format);
 }
 
-static void make_link(const char *dir, const char *ext,
-                      const char *format, char **options)
+static void make_link(const char *dir, const char *ext, const char *format,
+                      char **options)
 {
     struct Key_Value *key_val = G_create_key_value();
     char *opt_str = NULL;
@@ -223,8 +221,7 @@ static void make_link(const char *dir, const char *ext,
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *dir, *ext, *format, *opts;
     } parm;
     struct Flag *flag_f, *flag_r, *flag_p;
@@ -239,7 +236,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("output"));
     G_add_keyword(_("external"));
     module->description =
-        _("Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format.");
+        _("Redirects raster output to file utilizing GDAL library rather than "
+          "storing in GRASS raster format.");
 
     parm.dir = G_define_option();
     parm.dir->key = "directory";

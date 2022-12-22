@@ -6,8 +6,8 @@
 #include <grass/gis.h>
 #include "method.h"
 
-FILE *run_stats(struct Popen *child,
-                const char *basemap, const char *covermap, const char *mode)
+FILE *run_stats(struct Popen *child, const char *basemap, const char *covermap,
+                const char *mode)
 {
     char input[6 + GNAME_MAX + 1 + GMAPSET_MAX + 1 + GNAME_MAX + 1 +
                GMAPSET_MAX + 1];
@@ -22,7 +22,8 @@ FILE *run_stats(struct Popen *child,
     argv[3] = "separator=space";
     argv[4] = NULL;
 
-    /* maybe use r.stats's output= option instead of reading from stdout here, whatever's easier. */
+    /* maybe use r.stats's output= option instead of reading from stdout here,
+     * whatever's easier. */
     fp = G_popen_read(child, argv[0], argv);
     if (!fp)
         G_fatal_error("error running r.stats");

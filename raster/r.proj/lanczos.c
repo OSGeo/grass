@@ -18,18 +18,18 @@
 #include "r.proj.h"
 
 void p_lanczos(struct cache *ibuffer,   /* input buffer                  */
-               void *obufptr,   /* ptr in output buffer          */
-               int cell_type,   /* raster map type of obufptr    */
-               double col_idx,  /* column index (decimal)        */
-               double row_idx,  /* row index (decimal)           */
+               void *obufptr,           /* ptr in output buffer          */
+               int cell_type,           /* raster map type of obufptr    */
+               double col_idx,          /* column index (decimal)        */
+               double row_idx,          /* row index (decimal)           */
                struct Cell_head *cellhd /* information of output map     */
-    )
+)
 {
-    int row;                    /* row indices for interp        */
-    int col;                    /* column indices for interp     */
+    int row; /* row indices for interp        */
+    int col; /* column indices for interp     */
     int i, j, k;
-    double t, u;                /* intermediate slope            */
-    FCELL result;               /* result of interpolation       */
+    double t, u;  /* intermediate slope            */
+    FCELL result; /* result of interpolation       */
     DCELL c[25];
 
     /* cut indices to integer */
@@ -37,8 +37,8 @@ void p_lanczos(struct cache *ibuffer,   /* input buffer                  */
     col = (int)floor(col_idx);
 
     /* check for out of bounds of map - if out of bounds set NULL value     */
-    if (row - 2 < 0 || row + 2 >= cellhd->rows ||
-        col - 2 < 0 || col + 2 >= cellhd->cols) {
+    if (row - 2 < 0 || row + 2 >= cellhd->rows || col - 2 < 0 ||
+        col + 2 >= cellhd->cols) {
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
@@ -65,16 +65,16 @@ void p_lanczos(struct cache *ibuffer,   /* input buffer                  */
     Rast_set_f_value(obufptr, result, cell_type);
 }
 
-void p_lanczos_f(struct cache *ibuffer, /* input buffer                  */
-                 void *obufptr, /* ptr in output buffer          */
-                 int cell_type, /* raster map type of obufptr    */
-                 double col_idx,        /* column index (decimal)        */
-                 double row_idx,        /* row index (decimal)           */
-                 struct Cell_head *cellhd       /* information of output map     */
-    )
+void p_lanczos_f(struct cache *ibuffer,   /* input buffer                  */
+                 void *obufptr,           /* ptr in output buffer          */
+                 int cell_type,           /* raster map type of obufptr    */
+                 double col_idx,          /* column index (decimal)        */
+                 double row_idx,          /* row index (decimal)           */
+                 struct Cell_head *cellhd /* information of output map     */
+)
 {
-    int row;                    /* row indices for interp        */
-    int col;                    /* column indices for interp     */
+    int row; /* row indices for interp        */
+    int col; /* column indices for interp     */
     FCELL cell;
 
     /* cut indices to integer */

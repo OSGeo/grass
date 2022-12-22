@@ -39,8 +39,7 @@ void list_formats(void)
         else
             pszRWFlag = "ro";
 
-        fprintf(stdout, " %s (%s): %s\n",
-                GDALGetDriverShortName(hDriver),
+        fprintf(stdout, " %s (%s): %s\n", GDALGetDriverShortName(hDriver),
                 pszRWFlag, GDALGetDriverLongName(hDriver));
     }
 }
@@ -54,8 +53,8 @@ void list_bands(struct Cell_head *cellhd, GDALDatasetH hDS)
     GDALRasterBandH hBand;
     GDALDataType gdal_type;
 
-    if (GPJ_wkt_to_grass(cellhd, &proj_info,
-                         &proj_units, GDALGetProjectionRef(hDS), 0) < 0) {
+    if (GPJ_wkt_to_grass(cellhd, &proj_info, &proj_units,
+                         GDALGetProjectionRef(hDS), 0) < 0) {
         proj_same = 0;
     }
     else {
@@ -66,16 +65,14 @@ void list_bands(struct Cell_head *cellhd, GDALDatasetH hDS)
             loc_proj_units = G_get_projunits();
         }
 
-
         if (loc_wind.proj != cellhd->proj ||
-            (G_compare_projections
-             (loc_proj_info, loc_proj_units, proj_info, proj_units)) < 0) {
+            (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
+                                   proj_units)) < 0) {
             proj_same = 0;
         }
         else {
             proj_same = 1;
         }
-
     }
 
     n_bands = GDALGetRasterCount(hDS);
@@ -87,6 +84,5 @@ void list_bands(struct Cell_head *cellhd, GDALDatasetH hDS)
 
         fprintf(stdout, "%d,%s,%d\n", i_band, GDALGetDataTypeName(gdal_type),
                 proj_same);
-
     }
 }

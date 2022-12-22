@@ -10,7 +10,7 @@
 #include "local.h"
 
 /* get the slope between two cells and return a slope direction */
-void check(CELL newdir, CELL * dir, void *center, void *edge, double cnst,
+void check(CELL newdir, CELL *dir, void *center, void *edge, double cnst,
            double *oldslope)
 {
     double newslope;
@@ -29,11 +29,10 @@ void check(CELL newdir, CELL * dir, void *center, void *edge, double cnst,
     }
 
     return;
-
 }
 
 /* determine the flow direction at each cell on one row */
-void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir,
+void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL *dir,
                    struct metrics m)
 {
     int j, inc;
@@ -100,7 +99,7 @@ void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir,
 
 void filldir(int fe, int fd, int nl, struct band3 *bnd, struct metrics *m)
 {
-    int i, bufsz;               /* use off_t bufsz for large files ? MM */
+    int i, bufsz; /* use off_t bufsz for large files ? MM */
     CELL *dir;
 
     /* determine the flow direction in each cell.  On outer rows and columns

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,10 +16,9 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include "distance.h"
-
 
 int process_right(int from_row, int to_row, int start_col, int first_zone)
 {
@@ -31,7 +29,6 @@ int process_right(int from_row, int to_row, int start_col, int first_zone)
     register int incr;
     register int farthest;
 
-
     /* find cells to the right
      * stop at right edge, or when ncols is bigger than the last zone,
      * or when we see a 1 in the map
@@ -41,7 +38,6 @@ int process_right(int from_row, int to_row, int start_col, int first_zone)
     from_ptr = map + MAPINDEX(from_row, col);
     to_ptr = map + MAPINDEX(to_row, col);
     farthest = distances[ndist - 1].ncols;
-
 
     /* planimetric grids will look for ncols^2
      * and can use fact that (n+1)^2 = n^2 + 2n + 1
@@ -54,7 +50,7 @@ int process_right(int from_row, int to_row, int start_col, int first_zone)
 
     ncols = 0;
     while (1) {
-        if (col >= window.cols - 1) {   /* global wrap-around */
+        if (col >= window.cols - 1) { /* global wrap-around */
             if (!wrap_ncols)
                 return window.cols;
             col = -1;

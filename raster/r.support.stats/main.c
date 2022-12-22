@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:        r.support.stats
  *
@@ -21,12 +20,10 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *raster;
     } parm;
 

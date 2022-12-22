@@ -3,12 +3,12 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-#define	TOLERANCE	0.00001
-#define	MAX_ITER	20
-#define	NUM_TERMS	10
-#define	PONDING_NO	0
-#define	PONDING_STARTED	1
-#define	PONDING_YES	2
+#define TOLERANCE       0.00001
+#define MAX_ITER        20
+#define NUM_TERMS       10
+#define PONDING_NO      0
+#define PONDING_STARTED 1
+#define PONDING_YES     2
 
 /* Calculates the infiltrate rate (m/hr) for the given time step. For variable
  * names and equation numbers in comments, refer to Beven (1984).
@@ -144,8 +144,9 @@ double calculate_infiltration(int timestep, double R)
                 break;
         }
         if (i == MAX_ITER)
-            G_warning(_("Maximum number of iterations exceeded at time step %d"),
-                      timestep);
+            G_warning(
+                _("Maximum number of iterations exceeded at time step %d"),
+                timestep);
 
         /* ponding time: tp will remain the same until next ponding occurs */
         tp = t - input.dt + (I - cumI) / R;
@@ -201,7 +202,8 @@ double calculate_infiltration(int timestep, double R)
          * Eq. (8).
          */
         f1 = -(log(IC) - (log(IC) + sum) / exp(C / params.m) - lambda) /
-            (params.K0 / params.m) - (t - tp);
+                 (params.K0 / params.m) -
+             (t - tp);
         /* inverse of Eq. (7) in hr/m */
         f2 = (exp(I / params.m) - 1.0) / (IC * params.K0 / params.m);
         /* -(Eq. (8) - (t-tp)) * Eq. (7): cumulative infiltration in a short

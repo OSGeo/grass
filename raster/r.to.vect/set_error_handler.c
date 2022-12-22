@@ -1,8 +1,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 
-struct handler_input
-{
+struct handler_input {
     struct Map_info *Map;
     dbDriver **driver;
 };
@@ -23,7 +22,7 @@ static void error_handler(void *p)
     }
 }
 
-void set_error_handler(struct Map_info *Map, dbDriver ** driver)
+void set_error_handler(struct Map_info *Map, dbDriver **driver)
 {
     struct handler_input *input = G_malloc(sizeof(struct handler_input));
 

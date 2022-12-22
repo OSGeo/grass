@@ -4,12 +4,12 @@
  * This code is in the public domain. Specifically, we give to the public
  * domain all rights for future licensing of the source code, all resale
  * rights, and all publishing rights.
- * 
+ *
  * We ask, but do not require, that the following message be included in
  * all derived works:
- *     "Portions developed at the US Army Construction Engineering 
+ *     "Portions developed at the US Army Construction Engineering
  *     Research Laboratories, Champaign, Illinois."
- * 
+ *
  * USACERL GIVES NO WARRANTY, EXPRESSED OR IMPLIED,
  * FOR THE SOFTWARE AND/OR DOCUMENTATION PROVIDED, INCLUDING, WITHOUT
  * LIMITATION, WARRANTY OF MERCHANTABILITY AND WARRANTY OF FITNESS FOR A
@@ -25,12 +25,11 @@
 #include <grass/glocale.h>
 #include "rom_proto.h"
 
-
 #ifndef USE_PPM
 
 /*******************************************************/
-void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
-               int *y_rows, int *y_cols, char *filename)
+void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols, int *y_rows,
+               int *y_cols, char *filename)
 {
     register int x, y;
     register unsigned char *dy0, *dy1;
@@ -69,10 +68,10 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
         }
 
         cy = (unsigned char *)G_malloc(rows * cols * sizeof(unsigned char));
-        cr = (unsigned char *)G_malloc((rows / 2) * (cols / 2)
-                                       * sizeof(unsigned char));
-        cb = (unsigned char *)G_malloc((rows / 2) * (cols / 2)
-                                       * sizeof(unsigned char));
+        cr = (unsigned char *)G_malloc((rows / 2) * (cols / 2) *
+                                       sizeof(unsigned char));
+        cb = (unsigned char *)G_malloc((rows / 2) * (cols / 2) *
+                                       sizeof(unsigned char));
 
         first = 0;
     }
@@ -109,29 +108,19 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
 
             dy1[1] = (mult299[src1[3]] + mult587[src1[4]] + mult114[src1[5]]);
 
-            *dcb = ((mult16874[*src0] +
-                     mult33126[src0[1]] +
-                     mult5[src0[2]] +
-                     mult16874[*src1] +
-                     mult33126[src1[1]] +
-                     mult5[src1[2]] +
-                     mult16874[src0[3]] +
-                     mult33126[src0[4]] +
-                     mult5[src0[5]] +
-                     mult16874[src1[3]] +
-                     mult33126[src1[4]] + mult5[src1[5]]) / 4) + 128;
+            *dcb = ((mult16874[*src0] + mult33126[src0[1]] + mult5[src0[2]] +
+                     mult16874[*src1] + mult33126[src1[1]] + mult5[src1[2]] +
+                     mult16874[src0[3]] + mult33126[src0[4]] + mult5[src0[5]] +
+                     mult16874[src1[3]] + mult33126[src1[4]] + mult5[src1[5]]) /
+                    4) +
+                   128;
 
-            *dcr = ((mult5[*src0] +
-                     mult41869[src0[1]] +
-                     mult08131[src0[2]] +
-                     mult5[*src1] +
-                     mult41869[src1[1]] +
-                     mult08131[src1[2]] +
-                     mult5[src0[3]] +
-                     mult41869[src0[4]] +
-                     mult08131[src0[5]] +
-                     mult5[src1[3]] +
-                     mult41869[src1[4]] + mult08131[src1[5]]) / 4) + 128;
+            *dcr = ((mult5[*src0] + mult41869[src0[1]] + mult08131[src0[2]] +
+                     mult5[*src1] + mult41869[src1[1]] + mult08131[src1[2]] +
+                     mult5[src0[3]] + mult41869[src0[4]] + mult08131[src0[5]] +
+                     mult5[src1[3]] + mult41869[src1[4]] + mult08131[src1[5]]) /
+                    4) +
+                   128;
         }
     }
 
@@ -151,10 +140,9 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
 }
 #endif
 
-
 /*******************************************************/
-void write_ppm(char *tr, char *tg, char *tb, int nrows, int ncols,
-               int *y_rows, int *y_cols, char *filename)
+void write_ppm(char *tr, char *tg, char *tb, int nrows, int ncols, int *y_rows,
+               int *y_cols, char *filename)
 {
     register int x, y;
     static int rows, cols;
@@ -202,10 +190,9 @@ void write_ppm(char *tr, char *tg, char *tb, int nrows, int ncols,
     fclose(ofp);
 }
 
-
 /*******************************************************/
-void write_params(char *mpfilename, char *yfiles[], char *outfile,
-                  int frames, int quality, int y_rows, int y_cols, int fly)
+void write_params(char *mpfilename, char *yfiles[], char *outfile, int frames,
+                  int quality, int y_rows, int y_cols, int fly)
 {
     FILE *fp;
     char dir[1000], *enddir;
@@ -321,7 +308,6 @@ void write_params(char *mpfilename, char *yfiles[], char *outfile,
 
     fclose(fp);
 }
-
 
 /*******************************************************/
 void clean_files(char *file, char *files[], int num)

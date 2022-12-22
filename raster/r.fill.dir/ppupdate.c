@@ -6,8 +6,7 @@
 #include <grass/glocale.h>
 #include "tinf.h"
 
-struct links
-{
+struct links {
     int next;
     int next_alt;
     void *pp;
@@ -53,7 +52,6 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
         set_max(list[i].pp_alt);
 
         list[i].trace = 0;
-
     }
 
     lseek(fe, 0, SEEK_SET);
@@ -72,7 +70,7 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
         for (j = 1; j < basins->ns - 1; j += 1) {
 
             /* check to see if the cell is non-null and in a basin */
-            here = (CELL *) basins->b[1] + j;
+            here = (CELL *)basins->b[1] + j;
             if (Rast_is_c_null_value(here) || *here < 0)
                 continue;
 
@@ -84,38 +82,38 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
 
                 switch (n) {
                 case 0:
-                    that_basin = *((CELL *) basins->b[0] + j + 1);
+                    that_basin = *((CELL *)basins->b[0] + j + 1);
                     that_elev = elev->b[0] + (j + 1) * bpe();
                     break;
                 case 1:
-                    that_basin = *((CELL *) basins->b[1] + j + 1);
+                    that_basin = *((CELL *)basins->b[1] + j + 1);
                     that_elev = elev->b[1] + (j + 1) * bpe();
                     break;
                 case 2:
-                    that_basin = *((CELL *) basins->b[2] + j + 1);
+                    that_basin = *((CELL *)basins->b[2] + j + 1);
                     that_elev = elev->b[2] + (j + 1) * bpe();
                     break;
                 case 3:
-                    that_basin = *((CELL *) basins->b[2] + j);
+                    that_basin = *((CELL *)basins->b[2] + j);
                     that_elev = elev->b[2] + j * bpe();
                     break;
                 case 4:
-                    that_basin = *((CELL *) basins->b[2] + j - 1);
+                    that_basin = *((CELL *)basins->b[2] + j - 1);
                     that_elev = elev->b[2] + (j - 1) * bpe();
                     break;
                 case 5:
-                    that_basin = *((CELL *) basins->b[1] + j - 1);
+                    that_basin = *((CELL *)basins->b[1] + j - 1);
                     that_elev = elev->b[1] + (j - 1) * bpe();
                     break;
                 case 6:
-                    that_basin = *((CELL *) basins->b[0] + j - 1);
+                    that_basin = *((CELL *)basins->b[0] + j - 1);
                     that_elev = elev->b[0] + (j - 1) * bpe();
                     break;
                 case 7:
-                    that_basin = *((CELL *) basins->b[0] + j);
+                    that_basin = *((CELL *)basins->b[0] + j);
                     that_elev = elev->b[0] + j * bpe();
 
-                }               /* end switch */
+                } /* end switch */
 
                 /* see if we're on a boundary */
                 if (that_basin != ii) {
@@ -129,7 +127,8 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
                     }
                     if (get_min(barrier_height, list[ii].pp) ==
                         barrier_height) {
-                        /* save the old list entry in case we need it to fix a loop */
+                        /* save the old list entry in case we need it to fix a
+                         * loop */
                         if (list[ii].next != that_basin) {
                             memcpy(list[ii].pp_alt, list[ii].pp, bpe());
                             list[ii].next_alt = list[ii].next;
@@ -145,14 +144,13 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
                         memcpy(list[ii].pp_alt, barrier_height, bpe());
                         list[ii].next_alt = that_basin;
                     }
-                }               /* end if */
+                } /* end if */
 
-            }                   /* end neighbor cells */
+            } /* end neighbor cells */
 
-        }                       /* end cell */
+        } /* end cell */
 
-    }                           /* end row */
-
+    } /* end row */
 
     /* Look for pairs of basins that drain to each other */
     for (i = 1; i <= nbasins; i += 1) {
@@ -162,15 +160,16 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
         n = list[i].next;
         if (list[n].next == i) {
             /* we have a pair */
-            /* find out how large the elevation difference would be for a change in 
-             * each basin */
+            /* find out how large the elevation difference would be for a change
+             * in each basin */
             memcpy(that_elev, list[n].pp_alt, bpe());
             diff(that_elev, list[n].pp);
 
             memcpy(this_elev, list[i].pp_alt, bpe());
             diff(this_elev, list[i].pp);
 
-            /* switch pour points in the basin where it makes the smallest change */
+            /* switch pour points in the basin where it makes the smallest
+             * change */
             if (get_min(this_elev, that_elev) == this_elev) {
                 list[i].next = list[i].next_alt;
                 list[i].next_alt = n;
@@ -187,11 +186,11 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
                 this_elev = list[n].pp;
                 list[n].pp = list[n].pp_alt;
                 list[n].pp_alt = this_elev;
-            }                   /* end fix */
+            } /* end fix */
 
-        }                       /* end problem */
+        } /* end problem */
 
-    }                           /* end loop */
+    } /* end loop */
 
     /* backtrace drainages from the bottom and adjust pour points */
     for (i = 1; i <= nbasins; i += 1) {
@@ -212,7 +211,7 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
                           errno, strerror(errno));
         for (j = 0; j < basins->ns; j += 1) {
-            ii = *((CELL *) basins->b[1] + j);
+            ii = *((CELL *)basins->b[1] + j);
             if (ii <= 0)
                 continue;
             this_elev = elev->b[1] + j * bpe();

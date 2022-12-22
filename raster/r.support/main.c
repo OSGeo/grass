@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:       r.support (GRASS core)
  *
@@ -13,7 +12,7 @@
  *
  * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
  *
- *               This program is free software under the GNU General 
+ *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that comes
  *               with GRASS for details.
  *
@@ -33,9 +32,9 @@
 
 int main(int argc, char *argv[])
 {
-    char rname[GNAME_MAX];      /* Reclassed map name */
-    char rmapset[GMAPSET_MAX];  /* Reclassed mapset   */
-    const char *mapset;         /* Raster mapset      */
+    char rname[GNAME_MAX];     /* Reclassed map name */
+    char rmapset[GMAPSET_MAX]; /* Reclassed mapset   */
+    const char *mapset;        /* Raster mapset      */
     struct Cell_head cellhd;
     struct GModule *module;
     struct Option *raster, *title_opt, *history_opt;
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
     struct Option *map_opt, *units_opt, *vdatum_opt;
     struct Option *load_opt, *save_opt;
     struct Flag *stats_flag, *null_flag, *del_flag, *semantic_label_rm_flag;
-    int is_reclass;             /* Is raster reclass? */
+    int is_reclass; /* Is raster reclass? */
     const char *infile;
     struct History hist;
 
@@ -169,10 +168,10 @@ int main(int argc, char *argv[])
 
     /* Make sure raster exists and set mapset */
     infile = raster->answer;
-    mapset = G_find_raster2(infile, G_mapset());        /* current mapset only for editing */
+    mapset = G_find_raster2(infile,
+                            G_mapset()); /* current mapset only for editing */
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
-        G_fatal_error(_("Raster map <%s> not found in current mapset"),
-                      infile);
+        G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
 
     if (semantic_label_rm_flag->answer && semantic_label_opt->answer)
         G_fatal_error(_("Semantic label removal and setting semantic "
@@ -230,7 +229,8 @@ int main(int argc, char *argv[])
     if (history_opt->answer) {
         Rast_read_history(raster->answer, "", &hist);
 
-        /* two less than defined as if only one less a newline gets appended in the hist file. bug? */
+        /* two less than defined as if only one less a newline gets appended in
+         * the hist file. bug? */
         /* Should be RECORD_LEN, but r.info truncates at > 71 chars */
         if (strlen(history_opt->answer) > 71) {
             int i;
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
         Rast_write_history(raster->answer, &hist);
     }
 
-    if (map_opt->answer) {      /* use cats from another map */
+    if (map_opt->answer) { /* use cats from another map */
         int fd;
         struct Categories cats;
 
@@ -282,8 +282,7 @@ int main(int argc, char *argv[])
                           map_opt->answer);
 
         Rast_write_cats(infile, &cats);
-        G_message(_("cats table for [%s] set to %s"),
-                  infile, map_opt->answer);
+        G_message(_("cats table for [%s] set to %s"), infile, map_opt->answer);
         Rast_close(fd);
         Rast_free_cats(&cats);
     }
@@ -299,12 +298,11 @@ int main(int argc, char *argv[])
     if (semantic_label_rm_flag->answer)
         G_remove_misc("cell_misc", "semantic_label", infile);
 
-    if (title_opt->answer || history_opt->answer || units_opt->answer
-        || vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer
-        || datadesc_opt->answer || map_opt->answer
-        || semantic_label_opt->answer || semantic_label_rm_flag->answer)
+    if (title_opt->answer || history_opt->answer || units_opt->answer ||
+        vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer ||
+        datadesc_opt->answer || map_opt->answer || semantic_label_opt->answer ||
+        semantic_label_rm_flag->answer)
         exit(EXIT_SUCCESS);
-
 
     /* Check the histogram and range */
     if (stats_flag->answer)
@@ -351,8 +349,7 @@ int main(int argc, char *argv[])
         /* Write a file of no-nulls */
         G_message(_("Removing null file for [%s]...\n"), raster->answer);
 
-        G_file_name_misc(path, "cell_misc", "null", raster->answer,
-                         G_mapset());
+        G_file_name_misc(path, "cell_misc", "null", raster->answer, G_mapset());
         unlink(path);
         G_file_name_misc(path, "cell_misc", "nullcmpr", raster->answer,
                          G_mapset());

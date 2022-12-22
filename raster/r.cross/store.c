@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cross
@@ -18,15 +17,14 @@
 
 #include "glob.h"
 
-
-int store_reclass(CELL result, int primary, CELL * cat)
+int store_reclass(CELL result, int primary, CELL *cat)
 {
     int i;
     CELL *rcats;
 
-    reclass = (RECLASS *) G_realloc(reclass, (result + 1) * sizeof(RECLASS));
+    reclass = (RECLASS *)G_realloc(reclass, (result + 1) * sizeof(RECLASS));
     reclass[result].result = result;
-    reclass[result].cat = rcats = (CELL *) G_malloc(nfiles * sizeof(CELL));
+    reclass[result].cat = rcats = (CELL *)G_malloc(nfiles * sizeof(CELL));
 
     /*
      * the primary file may not have been the first on the command line

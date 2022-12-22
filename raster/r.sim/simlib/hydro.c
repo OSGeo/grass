@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       simwe library
@@ -27,9 +26,9 @@
 #include <grass/simlib.h>
 /*
  * Soeren 8. Mar 2011 TODO:
- * Put all these global variables into several meaningful structures and 
+ * Put all these global variables into several meaningful structures and
  * document use and purpose.
- * 
+ *
  */
 
 struct _points points;
@@ -87,7 +86,6 @@ double **gama, **gammas, **si, **inf, **sigma;
 float **dc, **tau, **er, **ct, **trap;
 float **dif;
 
-
 /* int iflag[MAXW]; */
 struct point3D *w;
 struct point3D *stack;
@@ -111,7 +109,7 @@ double rain_val;
 double manin_val;
 double infil_val;
 
-struct History history;         /* holds meta-data (title, comments,..) */
+struct History history; /* holds meta-data (title, comments,..) */
 
 /* **************************************************** */
 /*       create walker representation of si */
@@ -122,12 +120,12 @@ void main_loop(void)
 {
 
     int i, ii, l, k;
-    int icoub /*, nmult */ ;
+    int icoub /*, nmult */;
     int iw, iblock, lw;
     int itime, iter1;
 
     /* int nfiterh, nfiterw; */
-    int mgen /* , mgen2, mgen3 */ ;
+    int mgen /* , mgen2, mgen3 */;
     int nblock;
 
     /* int icfl; */
@@ -139,7 +137,7 @@ void main_loop(void)
     double factor, conn, gaux, gauy;
     double d1, addac, decr;
     double barea, sarea, walkwe;
-    double gen, gen2, /* wei2, wei3, */ wei /* , weifac */ ;
+    double gen, gen2, /* wei2, wei3, */ wei /* , weifac */;
     float eff;
 
     nblock = 1;
@@ -165,12 +163,12 @@ void main_loop(void)
         walkwe = 0.;
         barea = stepx * stepy;
         sarea = bresx * bresy;
-        G_debug(2, " barea,sarea,rwalk,sisum: %f %f %f %f", barea, sarea,
-                rwalk, sisum);
+        G_debug(2, " barea,sarea,rwalk,sisum: %f %f %f %f", barea, sarea, rwalk,
+                sisum);
         /* write hh.walkers0 */
 
         for (k = 0; k < my; k++) {
-            for (l = 0; l < mx; l++) {  /* run thru the whole area */
+            for (l = 0; l < mx; l++) { /* run thru the whole area */
                 if (zz[k][l] != UNDEF) {
 
                     x = xp0 + stepx * (double)(l);
@@ -183,9 +181,8 @@ void main_loop(void)
                     /*if (si[k][l] != 0.) { */
                     /* this stuff later for multiscale */
 
-                    gen2 =
-                        (double)maxwab *si[k][l] / (si0 *
-                                                    (double)(mx2o * my2o));
+                    gen2 = (double)maxwab * si[k][l] /
+                           (si0 * (double)(mx2o * my2o));
                     gen2 = gen2 * (barea / sarea);
                     /* mgen2 = (int)gen2;
                        wei2 = gen2 / (double)(mgen2 + 1);
@@ -197,12 +194,13 @@ void main_loop(void)
                     /*              } else {
                        nmult = 1;
                        weifac = 1.;
-                       fprintf(stderr, "\n zero rainfall excess in cell"); 
+                       fprintf(stderr, "\n zero rainfall excess in cell");
                        } */
 
-                    /*G_debug(2, " gen,gen2,wei,wei2,mgen3,nmult: %f %f %f %f %d %d",gen,gen2,wei,wei2,mgen3,nmult);
+                    /*G_debug(2, " gen,gen2,wei,wei2,mgen3,nmult: %f %f %f %f %d
+                     * %d",gen,gen2,wei,wei2,mgen3,nmult);
                      */
-                    for (iw = 1; iw <= mgen + 1; iw++) {        /* assign walkers */
+                    for (iw = 1; iw <= mgen + 1; iw++) { /* assign walkers */
                         w[lw].x = x + stepx * (simwe_rand() - 0.5);
                         w[lw].y = y + stepy * (simwe_rand() - 0.5);
                         w[lw].m = wei;
@@ -221,7 +219,7 @@ void main_loop(void)
                          */
                         lw++;
                     }
-                }               /*DEFined area */
+                } /*DEFined area */
             }
         }
         nwalk = lw;
@@ -231,8 +229,7 @@ void main_loop(void)
         stxm = stepx * (double)(mx + 1) - xmin;
         stym = stepy * (double)(my + 1) - ymin;
         nwalka = 0;
-        deldif = sqrt(deltap) * frac;   /* diffuse factor */
-
+        deldif = sqrt(deltap) * frac; /* diffuse factor */
 
         factor = deltap * sisum / (rwalk * (double)nblock);
 
@@ -242,18 +239,18 @@ void main_loop(void)
         /*       main loop over the projection time */
         /* *********************************************************** */
 
-
         G_debug(2, "main loop over the projection time... ");
 
-        for (i = 1; i <= miter; i++) {  /* iteration loop depending on simulation time and deltap */
+        for (i = 1; i <= miter;
+             i++) { /* iteration loop depending on simulation time and deltap */
             G_percent(i, miter, 1);
             iter1 = i / iterout;
             iter1 *= iterout;
             if (iter1 == i) {
                 /* nfiterw = i / iterout + 10;
                    nfiterh = i / iterout + 40; */
-                G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d",
-                        iblock, i, miter, nwalk, nwalka);
+                G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
+                        i, miter, nwalk, nwalka);
             }
 
             if (nwalka == 0 && i > 1)
@@ -275,12 +272,13 @@ void main_loop(void)
             vely = 0.0;
             eff = 0.0;
 
-#pragma omp parallel firstprivate(l,lw,k,decr,d1,hhc,velx,vely,eff,gaux,gauy)   //nwalka
+#pragma omp parallel firstprivate(l, lw, k, decr, d1, hhc, velx, vely, eff, \
+                                  gaux, gauy) // nwalka
             {
 #if defined(_OPENMP)
                 int steps =
-                    (int)((((double)nwalk) /
-                           ((double)omp_get_num_threads())) + 0.5);
+                    (int)((((double)nwalk) / ((double)omp_get_num_threads())) +
+                          0.5);
                 int tid = omp_get_thread_num();
                 int min_loop = tid * steps;
                 int max_loop =
@@ -290,7 +288,7 @@ void main_loop(void)
 #else
                 for (lw = 0; lw < nwalk; lw++) {
 #endif
-                    if (w[lw].m > EPS) {        /* check the walker weight */
+                    if (w[lw].m > EPS) { /* check the walker weight */
                         ++nwalka;
                         l = (int)((w[lw].x + stxm) / stepx) - mx - 1;
                         k = (int)((w[lw].y + stym) / stepy) - my - 1;
@@ -307,23 +305,31 @@ void main_loop(void)
                         }
 
                         if (zz[k][l] != UNDEF) {
-                            if (infil != NULL) {        /* infiltration part */
+                            if (infil != NULL) { /* infiltration part */
                                 if (inf[k][l] - si[k][l] > 0.) {
 
-                                    decr = pow(addac * w[lw].m, 3. / 5.);       /* decreasing factor in m */
+                                    decr = pow(
+                                        addac * w[lw].m,
+                                        3. / 5.); /* decreasing factor in m */
                                     if (inf[k][l] > decr) {
-                                        inf[k][l] -= decr;      /* decrease infilt. in cell and eliminate the walker */
+                                        inf[k][l] -=
+                                            decr; /* decrease infilt. in cell
+                                                     and eliminate the walker */
                                         w[lw].m = 0.;
                                     }
                                     else {
-                                        w[lw].m -= pow(inf[k][l], 5. / 3.) / addac;     /* use just proportional part of the walker weight */
+                                        w[lw].m -=
+                                            pow(inf[k][l], 5. / 3.) /
+                                            addac; /* use just proportional part
+                                                      of the walker weight */
                                         inf[k][l] = 0.;
-
                                     }
                                 }
                             }
 
-                            gama[k][l] += (addac * w[lw].m);    /* add walker weigh to water depth or conc. */
+                            gama[k][l] +=
+                                (addac * w[lw].m); /* add walker weigh to water
+                                                      depth or conc. */
 
                             d1 = gama[k][l] * conn;
 #if defined(_OPENMP)
@@ -334,7 +340,9 @@ void main_loop(void)
 #endif
                             hhc = pow(d1, 3. / 5.);
 
-                            if (hhc > hhmax && wdepth == NULL) {        /* increased diffusion if w.depth > hhmax */
+                            if (hhc > hhmax &&
+                                wdepth == NULL) { /* increased diffusion if
+                                                     w.depth > hhmax */
                                 dif[k][l] = (halpha + 1) * deldif;
                                 velx = vavg[lw].x;
                                 vely = vavg[lw].y;
@@ -345,18 +353,19 @@ void main_loop(void)
                                 vely = v2[k][l];
                             }
 
+                            if (traps != NULL && trap[k][l] != 0.) { /* traps */
 
-                            if (traps != NULL && trap[k][l] != 0.) {    /* traps */
-
-                                eff = simwe_rand();     /* random generator */
+                                eff = simwe_rand(); /* random generator */
 
                                 if (eff <= trap[k][l]) {
-                                    velx = -0.1 * v1[k][l];     /* move it slightly back */
+                                    velx = -0.1 *
+                                           v1[k][l]; /* move it slightly back */
                                     vely = -0.1 * v2[k][l];
                                 }
                             }
 
-                            w[lw].x += (velx + dif[k][l] * gaux);       /* move the walker */
+                            w[lw].x +=
+                                (velx + dif[k][l] * gaux); /* move the walker */
                             w[lw].y += (vely + dif[k][l] * gauy);
 
                             if (hhc > hhmax && wdepth == NULL) {
@@ -364,9 +373,10 @@ void main_loop(void)
                                 vavg[lw].y = hbeta * (vavg[lw].y + v2[k][l]);
                             }
 
-                            if (w[lw].x <= xmin || w[lw].y <= ymin || w[lw].x
-                                >= xmax || w[lw].y >= ymax) {
-                                w[lw].m = 1e-10;        /* eliminate walker if it is out of area */
+                            if (w[lw].x <= xmin || w[lw].y <= ymin ||
+                                w[lw].x >= xmax || w[lw].y >= ymax) {
+                                w[lw].m = 1e-10; /* eliminate walker if it is
+                                                    out of area */
                             }
                             else {
                                 if (wdepth != NULL) {
@@ -377,17 +387,19 @@ void main_loop(void)
                                     w[lw].m *= sigma[k][l];
                                 }
 
-                            }   /* else */
-                        }       /*DEFined area */
+                            } /* else */
+                        }     /*DEFined area */
                         else {
-                            w[lw].m = 1e-10;    /* eliminate walker if it is out of area */
+                            w[lw].m = 1e-10; /* eliminate walker if it is out of
+                                                area */
                         }
                     }
-                }               /* lw loop */
+                } /* lw loop */
             }
-            /* Changes made by Soeren 8. Mar 2011 to replace the site walker output implementation */
-            /* Save all walkers located within the computational region and with valid 
-               z coordinates */
+            /* Changes made by Soeren 8. Mar 2011 to replace the site walker
+             * output implementation */
+            /* Save all walkers located within the computational region and with
+               valid z coordinates */
             if (outwalk != NULL && (i == miter || i == iter1)) {
                 nstack = 0;
 
@@ -409,7 +421,7 @@ void main_loop(void)
 
                         nstack++;
                     }
-                }               /* lw loop */
+                } /* lw loop */
             }
 
             if (i == iter1 && ts == 1) {
@@ -451,9 +463,9 @@ void main_loop(void)
                 }
                 fprintf(points.output, "\n");
             }
-        }                       /* miter */
+        } /* miter */
 
-      L_800:
+    L_800:
         /* Soeren 8. Mar 2011: Why is this commented out? */
         /*        if (iwrib != nblock) {
            icount = icoub / iwrib;
@@ -466,14 +478,13 @@ void main_loop(void)
            }
            } */
 
-
         if (err != NULL) {
             for (k = 0; k < my; k++) {
                 for (l = 0; l < mx; l++) {
                     if (zz[k][l] != UNDEF) {
                         d1 = gama[k][l] * (double)conn;
                         gammas[k][l] += pow(d1, 3. / 5.);
-                    }           /* DEFined area */
+                    } /* DEFined area */
                 }
             }
         }
@@ -495,5 +506,4 @@ void main_loop(void)
         fclose(points.output);
 
     points.is_open = 0;
-
 }

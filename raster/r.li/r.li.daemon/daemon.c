@@ -1,4 +1,3 @@
-
 /**
  * \file daemon.c
  *
@@ -13,7 +12,7 @@
  * \version 1.0
  *
  * \include
- * 
+ *
  */
 #include <stdlib.h>
 #include <stddef.h>
@@ -35,8 +34,8 @@
 #include <grass/glocale.h>
 #include "daemon.h"
 
-int calculateIndex(char *file, rli_func * f,
-                   char **parameters, char *raster, char *output)
+int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
+                   char *output)
 {
 
     char pathSetup[GPATH_MAX], out[GPATH_MAX], parsed;
@@ -82,7 +81,6 @@ int calculateIndex(char *file, rli_func * f,
     G_debug(1, "r.li.daemon pathSetup: [%s]", pathSetup);
     parsed = parseSetup(pathSetup, l, g, raster);
 
-
     /*########################################################
        -----------------open output file ---------------------
        ####################################################### */
@@ -119,11 +117,10 @@ int calculateIndex(char *file, rli_func * f,
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
             G_fatal_error(_("Cannot create %s directory"), out);
-        if (snprintf
-            (out, GPATH_MAX, "%s%s%c%s", rlipath, "output", HOST_DIRSEP,
-             output) >= GPATH_MAX)
-            G_fatal_error(_("Filepath '%s%s%c%s' exceeds max length"),
-                          rlipath, "output", HOST_DIRSEP, output);
+        if (snprintf(out, GPATH_MAX, "%s%s%c%s", rlipath, "output", HOST_DIRSEP,
+                     output) >= GPATH_MAX)
+            G_fatal_error(_("Filepath '%s%s%c%s' exceeds max length"), rlipath,
+                          "output", HOST_DIRSEP, output);
         if ((res = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
             G_fatal_error(_("Cannot create %s output"), out);
     }
@@ -190,7 +187,6 @@ int calculateIndex(char *file, rli_func * f,
        actually never returned. */
     return 0;
 }
-
 
 int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 {
@@ -344,7 +340,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
     else if (strcmp("MASKEDSAMPLEAREA", token) == 0) {
         double rel_sa_x, rel_sa_y, rel_sa_rl, rel_sa_cl;
         int aid = 1;
-        char maskname[GNAME_MAX] = { '\0' };
+        char maskname[GNAME_MAX] = {'\0'};
 
         do {
             rel_sa_x = atof(strtok(NULL, "|"));
@@ -422,7 +418,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
     else if (strcmp("MASKEDOVERLAYAREA", token) == 0) {
         double sa_n, sa_s, sa_w, sa_e;
         int aid = 1;
-        char maskname[GNAME_MAX] = { '\0' };
+        char maskname[GNAME_MAX] = {'\0'};
         msg m;
 
         /* Get the window setting. g.region raster=<input raster> */
@@ -487,7 +483,8 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
         token = strtok(NULL, "\n");
         if (strcmp(token, raster) != 0)
             G_fatal_error(_("The configuration file can only be used "
-                            "with the <%s> raster map"), token);
+                            "with the <%s> raster map"),
+                          token);
         close(setup);
         return NORMAL;
     }
@@ -596,7 +593,8 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
         r_strat_len = (int)rint(g->rows / r_strat);
         c_strat_len = (int)rint(g->cols / c_strat);
         if (r_strat_len < g->rl || c_strat_len < g->cl)
-            G_fatal_error(_("Too many stratified random sample for raster map"));
+            G_fatal_error(
+                _("Too many stratified random sample for raster map"));
         loop = r_strat * c_strat;
         G_srand48(0);
         for (i = 0; i < loop; i++) {
@@ -606,9 +604,9 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
                 m.type = AREA;
                 m.f.f_a.aid = i;
                 m.f.f_a.x = (int)g->sf_x + ((i % c_strat) * c_strat_len) +
-                    (G_lrand48() % (c_strat_len - g->cl));
+                            (G_lrand48() % (c_strat_len - g->cl));
                 m.f.f_a.y = (int)g->sf_y + (rint(i / c_strat) * r_strat_len) +
-                    (G_lrand48() % (r_strat_len - g->rl));
+                            (G_lrand48() % (r_strat_len - g->rl));
                 m.f.f_a.rl = g->rl;
                 m.f.f_a.cl = g->cl;
                 insertNode(l, m);
@@ -617,10 +615,9 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
                 m.type = MASKEDAREA;
                 m.f.f_ma.aid = i;
                 m.f.f_ma.x = (int)g->sf_x + ((i % c_strat) * c_strat_len) +
-                    (G_lrand48() % (c_strat_len - g->cl));
-                m.f.f_ma.y =
-                    (int)g->sf_y + (rint(i / c_strat) * r_strat_len) +
-                    (G_lrand48() % (r_strat_len - g->rl));
+                             (G_lrand48() % (c_strat_len - g->cl));
+                m.f.f_ma.y = (int)g->sf_y + (rint(i / c_strat) * r_strat_len) +
+                             (G_lrand48() % (r_strat_len - g->rl));
                 m.f.f_ma.rl = g->rl;
                 m.f.f_ma.cl = g->cl;
                 strcpy(m.f.f_ma.mask, g->maskname);
@@ -636,8 +633,7 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
     return ERROR;
 }
 
-
-int next_Area(int parsed, struct list *l, struct g_area *g, msg * m)
+int next_Area(int parsed, struct list *l, struct g_area *g, msg *m)
 {
     if (parsed == NORMAL) {
         if (l->size == 0)
@@ -655,7 +651,6 @@ int next_Area(int parsed, struct list *l, struct g_area *g, msg * m)
         return next(g, m);
     }
 }
-
 
 int print_Output(int out, msg m)
 {
@@ -678,7 +673,6 @@ int print_Output(int out, msg m)
     }
 }
 
-
 int error_Output(int out, msg m)
 {
     if (m.type != ERROR)
@@ -695,11 +689,10 @@ int error_Output(int out, msg m)
     }
 }
 
-
 int raster_Output(int fd, int aid, struct g_area *g, double res)
 {
     double toPut = res;
-    off_t offset = (off_t) aid * sizeof(double);
+    off_t offset = (off_t)aid * sizeof(double);
 
     if (lseek(fd, offset, SEEK_SET) != offset) {
         G_message(_("Cannot make lseek"));
@@ -711,7 +704,6 @@ int raster_Output(int fd, int aid, struct g_area *g, double res)
     else
         return 0;
 }
-
 
 int write_raster(int mv_fd, int random_access, struct g_area *g)
 {
@@ -745,7 +737,6 @@ int write_raster(int mv_fd, int random_access, struct g_area *g)
         }
 
         Rast_put_row(mv_fd, cell_buf, DCELL_TYPE);
-
     }
 
     Rast_set_d_null_value(cell_buf, Rast_window_cols() + 1);

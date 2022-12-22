@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.kappa
@@ -55,13 +54,11 @@ int main(int argc, char **argv)
 {
     int i;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map, *ref, *output, *titles, *format;
     } parms;
 
-    struct
-    {
+    struct {
         struct Flag *m, *w, *h;
     } flags;
 

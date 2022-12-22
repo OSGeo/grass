@@ -98,8 +98,8 @@ int get_stats(void)
         tokens = G_tokenize(buf, ":");
         i = 0;
         ns = nstats++;
-        Gstats = (GSTATS *) G_realloc(Gstats, nstats * sizeof(GSTATS));
-        Gstats[ns].cats = (CELL *) G_calloc(nlayers, sizeof(long));
+        Gstats = (GSTATS *)G_realloc(Gstats, nstats * sizeof(GSTATS));
+        Gstats[ns].cats = (CELL *)G_calloc(nlayers, sizeof(long));
         for (nl = 0; nl < nlayers; nl++) {
             if (sscanf(tokens[i], "%d", &Gstats[ns].cats[nl]) != 1) {
                 if (tokens[i][0] == '*')

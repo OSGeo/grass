@@ -1,18 +1,17 @@
-
 /****************************************************************************
  *
  * MODULE:       r.usler
  * AUTHOR(S):    Natalia Medvedeva - natmead@gmail.com
- *		 Yann Chemin - yann.chemin@gmail.com
- * PURPOSE:      Calculates USLE R factor 
- * 		 Rainfall Erosion index according to four methods 
+ *               Yann Chemin - yann.chemin@gmail.com
+ * PURPOSE:      Calculates USLE R factor
+ *               Rainfall Erosion index according to four methods
  *
  * COPYRIGHT:    (C) 2002-2008, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
- * 
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
  *****************************************************************************/
 
 #include <stdio.h>
@@ -31,14 +30,14 @@ int main(int argc, char *argv[])
 {
     int nrows, ncols;
     int row, col;
-    char *nameflag;             /*Switch for particular method */
+    char *nameflag; /*Switch for particular method */
     struct GModule *module;
     struct Option *input1, *input2, *output;
-    struct History history;     /*metadata */
+    struct History history; /*metadata */
     char *desc;
 
     /************************************/
-    char *result;               /*output raster name */
+    char *result; /*output raster name */
     int infd_annual_pmm;
     int outfd;
     char *annual_pmm;
@@ -74,10 +73,9 @@ int main(int argc, char *argv[])
     input1->description = _("Name of USLE R equation");
     input1->options = "roose, morgan, foster, elswaify";
     desc = NULL;
-    G_asprintf(&desc,
-               "roose;%s;morgan;%s;foster;%s;elswaify;%s",
-               _("Roosle (1975)"),
-               _("Morgan (1974)"), _("Foster (1981)"), _("El-Swaify (1985)"));
+    G_asprintf(&desc, "roose;%s;morgan;%s;foster;%s;elswaify;%s",
+               _("Roosle (1975)"), _("Morgan (1974)"), _("Foster (1981)"),
+               _("El-Swaify (1985)"));
     input1->descriptions = desc;
     input1->answer = "morgan";
 
@@ -113,7 +111,7 @@ int main(int argc, char *argv[])
 
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_annual_pmm = ((DCELL *) inrast_annual_pmm)[col];
+            d_annual_pmm = ((DCELL *)inrast_annual_pmm)[col];
             if (Rast_is_d_null_value(&d_annual_pmm))
                 Rast_set_d_null_value(&outrast[col], 1);
             else {

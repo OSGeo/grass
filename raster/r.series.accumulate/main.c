@@ -1,12 +1,11 @@
-
 /****************************************************************************
- * 
+ *
  * MODULE:       r.series.accumulate
  * AUTHOR(S):    Markus Metz
  *               Soeren Gebbert
  *               based on r.series
- * PURPOSE:      Calculates (accumulated) raster value means, growing degree days
- *               (GDDs) or Winkler indices from several input maps.
+ * PURPOSE:      Calculates (accumulated) raster value means, growing degree
+ *               days (GDDs) or Winkler indices from several input maps.
  * COPYRIGHT:    (C) 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -14,6 +13,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -25,21 +25,19 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#define METHOD_GDD 1
-#define METHOD_MEAN 2
+#define METHOD_GDD     1
+#define METHOD_MEAN    2
 #define METHOD_WINKLER 3
-#define METHOD_BEDD 4
-#define METHOD_HUGLIN 5
+#define METHOD_BEDD    4
+#define METHOD_HUGLIN  5
 
-struct map_info
-{
+struct map_info {
     const char *name;
     int fd;
     DCELL *buf;
 };
 
-struct map_info_out
-{
+struct map_info_out {
     const char *name;
     int fd;
     void *buf;
@@ -48,13 +46,11 @@ struct map_info_out
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *input, *basemap, *file, *output,
-            *range, *scale, *shift, *lower, *upper, *limits, *method;
+    struct {
+        struct Option *input, *basemap, *file, *output, *range, *scale, *shift,
+            *lower, *upper, *limits, *method;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *nulls, *lazy, *float_output;
     } flag;
     int i;
@@ -119,14 +115,15 @@ int main(int argc, char *argv[])
     parm.lower = G_define_standard_option(G_OPT_R_INPUT);
     parm.lower->key = "lower";
     parm.lower->required = NO;
-    parm.lower->description =
-        _("The raster map specifying the lower accumulation limit, also called baseline");
+    parm.lower->description = _("The raster map specifying the lower "
+                                "accumulation limit, also called baseline");
 
     parm.upper = G_define_standard_option(G_OPT_R_INPUT);
     parm.upper->key = "upper";
     parm.upper->required = NO;
     parm.upper->description =
-        _("The raster map specifying the upper accumulation limit, also called cutoff. Only applied to BEDD computation.");
+        _("The raster map specifying the upper accumulation limit, also called "
+          "cutoff. Only applied to BEDD computation.");
 
     parm.range = G_define_option();
     parm.range->key = "range";
@@ -139,8 +136,8 @@ int main(int argc, char *argv[])
     parm.limits->type = TYPE_DOUBLE;
     parm.limits->key_desc = "lower,upper";
     parm.limits->answer = "10,30";
-    parm.limits->description =
-        _("Use these limits in case lower and/or upper input maps are not defined");
+    parm.limits->description = _("Use these limits in case lower and/or upper "
+                                 "input maps are not defined");
 
     parm.method = G_define_option();
     parm.method->key = "method";
@@ -149,8 +146,8 @@ int main(int argc, char *argv[])
     parm.method->required = NO;
     parm.method->options = "gdd,bedd,huglin,mean";
     parm.method->answer = "gdd";
-    parm.method->label =
-        "This method will be applied to compute the accumulative values from the input maps";
+    parm.method->label = "This method will be applied to compute the "
+                         "accumulative values from the input maps";
     G_asprintf(&desc, "gdd;%s;mean;%s;bedd;%s;huglin;%s",
                _("Growing Degree Days or Winkler indices"),
                _("Mean: sum(input maps)/(number of input maps)"),
@@ -174,8 +171,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    lo = -1.0 / 0.0;            /* -inf */
-    hi = 1.0 / 0.0;             /* inf */
+    lo = -1.0 / 0.0; /* -inf */
+    hi = 1.0 / 0.0;  /* inf */
 
     method = METHOD_GDD;
     if (G_strncasecmp(parm.method->answer, "gdd", 3) == 0)
@@ -208,12 +205,12 @@ int main(int argc, char *argv[])
         tshift = 0.;
 
     if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                      parm.input->key, parm.file->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
+                      parm.file->key);
 
     if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify %s= or %s="),
-                      parm.input->key, parm.file->key);
+        G_fatal_error(_("Please specify %s= or %s="), parm.input->key,
+                      parm.file->key);
 
     max_inputs = 0;
 
@@ -262,7 +259,8 @@ int main(int argc, char *argv[])
         fclose(in);
     }
     else {
-        for (i = 0; parm.input->answers[i]; i++) ;
+        for (i = 0; parm.input->answers[i]; i++)
+            ;
         num_inputs = i;
 
         if (num_inputs < 1)
@@ -344,7 +342,7 @@ int main(int argc, char *argv[])
                 Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
         }
 
-#pragma omp for schedule (static) private (col)
+#pragma omp for schedule(static) private(col)
         for (col = 0; col < ncols; col++) {
             int null = 0, non_null = 0;
             DCELL min, max, avg, value;

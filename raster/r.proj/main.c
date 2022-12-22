@@ -1,58 +1,58 @@
-
 /***************************************************************************
 *
-* MODULE:       r.proj
+* MODULE:        r.proj
 *
-* AUTHOR(S):    Martin Schroeder
-*		 University of Heidelberg
-*		 Dept. of Geography
-*		 emes@geo0.geog.uni-heidelberg.de
+* AUTHOR(S):     Martin Schroeder
+*                  University of Heidelberg
+*                  Dept. of Geography
+*                  emes@geo0.geog.uni-heidelberg.de
 *
-* 		 (With the help of a lot of existing GRASS sources, in
-*		  particular v.proj)
+*                  (With the help of a lot of existing GRASS sources, in
+*                  particular v.proj)
 *
-* PURPOSE:      r.proj converts a map to a new geographic projection. It reads a
-*	        map from a different location, projects it and write it out
-*	        to the current location. The projected data is resampled with
-*	        one of three different methods: nearest neighbor, bilinear and
-*	        cubic convolution.
+* PURPOSE:       r.proj converts a map to a new geographic projection. It reads
+                 a map from a different location, projects it and write it out
+*                to the current location. The projected data is resampled with
+*                one of three different methods: nearest neighbor, bilinear and
+*                cubic convolution.
 *
-* COPYRIGHT:    (C) 2001, 2011 by the GRASS Development Team
+* COPYRIGHT:     (C) 2001, 2011 by the GRASS Development Team
 *
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
+*                This program is free software under the GNU General Public
+*                License (>=v2). Read the file COPYING that comes with GRASS
+*                for details.
 *
 * Changes
-*		 Morten Hulden <morten@untamo.net>, Aug 2000:
-*		 - aborts if input map is outside current location.
-*		 - can handle projections (conic, azimuthal etc) where
-*		 part of the map may fall into areas where south is
-*		 upward and east is leftward.
-*		 - avoids passing location edge coordinates to PROJ
-*		 (they may be invalid in some projections).
-*		 - output map will be clipped to borders of the current region.
-*		 - output map cell edges and centers will coinside with those
-*		 of the current region.
-*		 - output map resolution (unless changed explicitly) will
-*		 match (exactly) the resolution of the current region.
-*		 - if the input map is smaller than the current region, the
-*		 output map will only cover the overlapping area.
+*                Morten Hulden <morten@untamo.net>, Aug 2000:
+*                - aborts if input map is outside current location.
+*                - can handle projections (conic, azimuthal etc) where
+*                part of the map may fall into areas where south is
+*                upward and east is leftward.
+*                - avoids passing location edge coordinates to PROJ
+*                (they may be invalid in some projections).
+*                - output map will be clipped to borders of the current region.
+*                - output map cell edges and centers will coinside with those
+*                of the current region.
+*                - output map resolution (unless changed explicitly) will
+*                match (exactly) the resolution of the current region.
+*                - if the input map is smaller than the current region, the
+*                output map will only cover the overlapping area.
 *                - if the input map is larger than the current region, only the
-*		 needed amount of memory will be allocated for the projection
+*                 needed amount of memory will be allocated for the projection
 *
-*		 Bugfixes 20050328: added floor() before (int) typecasts to in avoid
-*		 asymmetrical rounding errors. Added missing offset outcellhd.ew_res/2
-*		 to initial xcoord for each row in main projection loop (we want to  project
-*		 center of cell, not border).
+*                Bugfixes 20050328: added floor() before (int) typecasts to in
+*                avoid  asymmetrical rounding errors. Added missing offset
+*                outcellhd.ew_res/2 to initial xcoord for each row in main
+*                projection loop (we want to  project center of cell, not
+*                border).
 *
 *                Glynn Clements 2006: Use G_interp_* functions, modified
-*                  version of r.proj which uses a tile cache instead  of loading the
-*                  entire map into memory.
-*                Markus Metz 2010: lanczos and lanczos fallback interpolation methods
+*                version of r.proj which uses a tile cache instead  of loading
+*                the entire map into memory.
+*                Markus Metz 2010: lanczos and lanczos fallback interpolation
+*                methods
 
 *****************************************************************************/
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,74 +73,72 @@ struct menu menu[] = {
     {p_bilinear_f, "bilinear_f", "bilinear interpolation with fallback"},
     {p_cubic_f, "bicubic_f", "bicubic interpolation with fallback"},
     {p_lanczos_f, "lanczos_f", "lanczos filter with fallback"},
-    {NULL, NULL, NULL}
-};
+    {NULL, NULL, NULL}};
 
 static char *make_ipol_list(void);
 static char *make_ipol_desc(void);
 
 int main(int argc, char **argv)
 {
-    char *mapname,              /* ptr to name of output layer  */
-     *setname,                  /* ptr to name of input mapset  */
-     *ipolname;                 /* name of interpolation method */
+    char *mapname, /* ptr to name of output layer  */
+        *setname,  /* ptr to name of input mapset  */
+        *ipolname; /* name of interpolation method */
 
-    int fdi,                    /* input map file descriptor    */
-      fdo,                      /* output map file descriptor   */
-      method,                   /* position of method in table  */
-      permissions,              /* mapset permissions           */
-      cell_type,                /* output celltype              */
-      cell_size,                /* size of a cell in bytes      */
-      row, col,                 /* counters                     */
-      irows, icols,             /* original rows, cols          */
-      orows, ocols, have_colors,        /* Input map has a colour table */
-      overwrite,                /* Overwrite                    */
-      curr_proj;                /* output projection (see gis.h) */
+    int fdi,                       /* input map file descriptor    */
+        fdo,                       /* output map file descriptor   */
+        method,                    /* position of method in table  */
+        permissions,               /* mapset permissions           */
+        cell_type,                 /* output celltype              */
+        cell_size,                 /* size of a cell in bytes      */
+        row, col,                  /* counters                     */
+        irows, icols,              /* original rows, cols          */
+        orows, ocols, have_colors, /* Input map has a colour table */
+        overwrite,                 /* Overwrite                    */
+        curr_proj;                 /* output projection (see gis.h) */
 
-    void *obuffer;              /* buffer that holds one output row     */
+    void *obuffer; /* buffer that holds one output row     */
 
-    struct cache *ibuffer;      /* buffer that holds the input map      */
-    func interpolate;           /* interpolation routine        */
+    struct cache *ibuffer; /* buffer that holds the input map      */
+    func interpolate;      /* interpolation routine        */
 
-    double xcoord2,             /* temporary x coordinates      */
-      ycoord2,                  /* temporary y coordinates      */
-      onorth, osouth,           /* save original border coords  */
-      oeast, owest, inorth, isouth, ieast, iwest;
+    double xcoord2,     /* temporary x coordinates      */
+        ycoord2,        /* temporary y coordinates      */
+        onorth, osouth, /* save original border coords  */
+        oeast, owest, inorth, isouth, ieast, iwest;
     char north_str[30], south_str[30], east_str[30], west_str[30];
 
-    struct Colors colr;         /* Input map colour table       */
+    struct Colors colr; /* Input map colour table       */
     struct History history;
 
-    struct pj_info iproj,       /* input map proj parameters    */
-      oproj,                    /* output map proj parameters   */
-      tproj;                    /* transformation parameters   */
+    struct pj_info iproj, /* input map proj parameters    */
+        oproj,            /* output map proj parameters   */
+        tproj;            /* transformation parameters   */
 
-    struct Key_Value *in_proj_info,     /* projection information of    */
-     *in_unit_info,             /* input and output mapsets     */
-     *out_proj_info, *out_unit_info;
+    struct Key_Value *in_proj_info, /* projection information of    */
+        *in_unit_info,              /* input and output mapsets     */
+        *out_proj_info, *out_unit_info;
 
     struct GModule *module;
 
-    struct Flag *list,          /* list files in source location */
-     *nocrop,                   /* don't crop output map        */
-     *print_bounds,             /* print output bounds and exit */
-     *gprint_bounds;            /* same but print shell style   */
+    struct Flag *list,  /* list files in source location */
+        *nocrop,        /* don't crop output map        */
+        *print_bounds,  /* print output bounds and exit */
+        *gprint_bounds; /* same but print shell style   */
 
-    struct Option *imapset,     /* name of input mapset         */
-     *inmap,                    /* name of input layer          */
-     *inlocation,               /* name of input location       */
-     *outmap,                   /* name of output layer         */
-     *indbase,                  /* name of input database       */
-     *interpol,                 /* interpolation method         */
-     *memory,                   /* amount of memory for cache   */
-     *res;                      /* resolution of target map     */
+    struct Option *imapset, /* name of input mapset         */
+        *inmap,             /* name of input layer          */
+        *inlocation,        /* name of input location       */
+        *outmap,            /* name of output layer         */
+        *indbase,           /* name of input database       */
+        *interpol,          /* interpolation method         */
+        *memory,            /* amount of memory for cache   */
+        *res;               /* resolution of target map     */
 
 #ifdef HAVE_PROJ_H
-    struct Option *pipeline;    /* name of custom PROJ pipeline */
+    struct Option *pipeline; /* name of custom PROJ pipeline */
 #endif
-    struct Cell_head incellhd,  /* cell header of input map     */
-      outcellhd;                /* and output map               */
-
+    struct Cell_head incellhd, /* cell header of input map     */
+        outcellhd;             /* and output map               */
 
     G_gisinit(argv[0]);
 
@@ -149,8 +147,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
-    module->description =
-        _("Re-projects a raster map from given location to the current location.");
+    module->description = _("Re-projects a raster map from given location to "
+                            "the current location.");
 
     inlocation = G_define_standard_option(G_OPT_M_LOCATION);
     inlocation->required = YES;
@@ -222,8 +220,8 @@ int main(int argc, char **argv)
 
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
-    gprint_bounds->description =
-        _("Print input map's bounds in the current projection and exit (shell style)");
+    gprint_bounds->description = _("Print input map's bounds in the current "
+                                   "projection and exit (shell style)");
     gprint_bounds->guisection = _("Print");
 
     /* The parser checks if the map already exists in current mapset,
@@ -234,22 +232,21 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /* get the method */
     for (method = 0; (ipolname = menu[method].name); method++)
         if (strcmp(ipolname, interpol->answer) == 0)
             break;
 
     if (!ipolname)
-        G_fatal_error(_("<%s=%s> unknown %s"),
-                      interpol->key, interpol->answer, interpol->key);
+        G_fatal_error(_("<%s=%s> unknown %s"), interpol->key, interpol->answer,
+                      interpol->key);
     interpolate = menu[method].method;
 
     mapname = outmap->answer ? outmap->answer : inmap->answer;
-    if (mapname && !list->answer && !overwrite &&
-        !print_bounds->answer && !gprint_bounds->answer &&
-        G_find_raster(mapname, G_mapset()))
-        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+    if (mapname && !list->answer && !overwrite && !print_bounds->answer &&
+        !gprint_bounds->answer && G_find_raster(mapname, G_mapset()))
+        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the "
+                        "--overwrite flag"),
                       "output", mapname);
 
     setname = imapset->answer ? imapset->answer : G_store(G_mapset());
@@ -260,7 +257,7 @@ int main(int argc, char **argv)
 #else
         G_warning(_("Input and output locations are the same"));
 #endif
-    G_get_window(&outcellhd);
+        G_get_window(&outcellhd);
 
     if (gprint_bounds->answer && !print_bounds->answer)
         print_bounds->answer = gprint_bounds->answer;
@@ -274,7 +271,8 @@ int main(int argc, char **argv)
         G_fatal_error(_("Unable to get projection units of output raster map"));
 
     if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
-        G_fatal_error(_("Unable to get projection key values of output raster map"));
+        G_fatal_error(
+            _("Unable to get projection key values of output raster map"));
 
     oproj.srid = G_get_projsrid();
     oproj.wkt = G_get_projwkt();
@@ -287,11 +285,11 @@ int main(int argc, char **argv)
     G_setenv_nogisrc("MAPSET", setname);
 
     permissions = G_mapset_permissions(setname);
-    if (permissions < 0)        /* can't access mapset       */
-        G_fatal_error(_("Mapset <%s> in input location <%s> - %s"),
-                      setname, inlocation->answer,
+    if (permissions < 0) /* can't access mapset       */
+        G_fatal_error(_("Mapset <%s> in input location <%s> - %s"), setname,
+                      inlocation->answer,
                       permissions == 0 ? _("permission denied")
-                      : _("not found"));
+                                       : _("not found"));
 
     /* if requested, list the raster maps in source location - MN 5/2001 */
     if (list->answer) {
@@ -306,15 +304,16 @@ int main(int argc, char **argv)
             fprintf(stdout, "%s\n", srclist[i]);
         }
         fflush(stdout);
-        exit(EXIT_SUCCESS);     /* leave r.proj after listing */
+        exit(EXIT_SUCCESS); /* leave r.proj after listing */
     }
 
     if (!inmap->answer)
         G_fatal_error(_("Required parameter <%s> not set"), inmap->key);
 
     if (!G_find_raster(inmap->answer, setname))
-        G_fatal_error(_("Raster map <%s> in location <%s> in mapset <%s> not found"),
-                      inmap->answer, inlocation->answer, setname);
+        G_fatal_error(
+            _("Raster map <%s> in location <%s> in mapset <%s> not found"),
+            inmap->answer, inlocation->answer, setname);
 
     /* Read input map colour table */
     have_colors = Rast_read_colors(inmap->answer, setname, &colr);
@@ -376,10 +375,9 @@ int main(int argc, char **argv)
     orows = outcellhd.rows;
     ocols = outcellhd.cols;
 
-
     if (print_bounds->answer) {
-        G_message(_("Input map <%s@%s> in location <%s>:"),
-                  inmap->answer, setname, inlocation->answer);
+        G_message(_("Input map <%s@%s> in location <%s>:"), inmap->answer,
+                  setname, inlocation->answer);
 
         /* reproject input raster extents from input to output */
         G_set_window(&incellhd);
@@ -408,8 +406,8 @@ int main(int argc, char **argv)
         G_format_easting(iwest, west_str, curr_proj);
 
         if (gprint_bounds->answer) {
-            fprintf(stdout, "n=%s s=%s w=%s e=%s rows=%d cols=%d\n",
-                    north_str, south_str, west_str, east_str, irows, icols);
+            fprintf(stdout, "n=%s s=%s w=%s e=%s rows=%d cols=%d\n", north_str,
+                    south_str, west_str, east_str, irows, icols);
         }
         else {
             fprintf(stdout, "Source cols: %d\n", icols);
@@ -448,7 +446,8 @@ int main(int argc, char **argv)
         bordwalk(&outcellhd, &incellhd, &oproj, &iproj, &tproj, PJ_FWD);
     }
 
-    /* Add 2 cells on each side for bilinear/cubic & future interpolation methods */
+    /* Add 2 cells on each side for bilinear/cubic & future interpolation
+     * methods */
     /* (should probably be a factor based on input and output resolution) */
     incellhd.north += 2 * incellhd.ns_res;
     incellhd.east += 2 * incellhd.ew_res;
@@ -515,7 +514,7 @@ int main(int argc, char **argv)
     }
 #endif
 
-    if (res->answer != NULL)    /* set user defined resolution */
+    if (res->answer != NULL) /* set user defined resolution */
         outcellhd.ns_res = outcellhd.ew_res = atof(res->answer);
 
     G_adjust_Cell_head(&outcellhd, 0, 0);
@@ -571,12 +570,12 @@ int main(int argc, char **argv)
 
     if (strcmp(interpol->answer, "nearest") == 0) {
         fdo = Rast_open_new(mapname, cell_type);
-        obuffer = (CELL *) Rast_allocate_output_buf(cell_type);
+        obuffer = (CELL *)Rast_allocate_output_buf(cell_type);
     }
     else {
         fdo = Rast_open_fp_new(mapname);
         cell_type = FCELL_TYPE;
-        obuffer = (FCELL *) Rast_allocate_output_buf(cell_type);
+        obuffer = (FCELL *)Rast_allocate_output_buf(cell_type);
     }
 
     cell_size = Rast_cell_size(cell_type);
@@ -586,7 +585,7 @@ int main(int argc, char **argv)
 
     G_important_message(_("Projecting..."));
     for (row = 0; row < outcellhd.rows; row++) {
-        /* obufptr = obuffer */ ;
+        /* obufptr = obuffer */;
 
         G_percent(row, outcellhd.rows - 1, 2);
 
@@ -594,20 +593,20 @@ int main(int argc, char **argv)
         /* parallelization does not always work,
          * segfaults in the interpolation functions
          * can happen */
-#pragma omp parallel for schedule (static)
+#pragma omp parallel for schedule(static)
 #endif
 
         for (col = 0; col < outcellhd.cols; col++) {
             void *obufptr =
                 (void *)((const unsigned char *)obuffer + col * cell_size);
 
-            double xcoord1 = xcoord2 + (col) * outcellhd.ew_res;
+            double xcoord1 = xcoord2 + (col)*outcellhd.ew_res;
             double ycoord1 = ycoord2;
 
             /* project coordinates in output matrix to       */
             /* coordinates in input matrix                   */
-            if (GPJ_transform(&oproj, &iproj, &tproj, PJ_FWD,
-                              &xcoord1, &ycoord1, NULL) < 0) {
+            if (GPJ_transform(&oproj, &iproj, &tproj, PJ_FWD, &xcoord1,
+                              &ycoord1, NULL) < 0) {
                 G_fatal_error(_("Error in %s"), "GPJ_transform()");
                 Rast_set_null_value(obufptr, 1, cell_type);
             }
@@ -621,8 +620,8 @@ int main(int argc, char **argv)
                 double row_idx = (incellhd.north - ycoord1) / incellhd.ns_res;
 
                 /* and resample data point               */
-                interpolate(ibuffer, obufptr, cell_type,
-                            col_idx, row_idx, &incellhd);
+                interpolate(ibuffer, obufptr, cell_type, col_idx, row_idx,
+                            &incellhd);
             }
 
             /* obufptr = G_incr_void_ptr(obufptr, cell_size); */

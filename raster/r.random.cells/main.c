@@ -1,12 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.random.cells
- * AUTHOR(S):    Charles Ehlschlaeger; National Center for Geographic Information
- *               and Analysis, University of California, Santa Barbara (original contributor)
+ * AUTHOR(S):    Charles Ehlschlaeger; National Center for Geographic
+ *                 Information and Analysis, University of California,
+ *                 Santa Barbara (original contributor)
  *               Markus Neteler <neteler itc.it>
  *               Roberto Flor <flor itc.it>,
- *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      generates a random sets of cells that are at least
  *               some distance apart
  * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
@@ -16,6 +17,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>

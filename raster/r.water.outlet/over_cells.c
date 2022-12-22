@@ -1,8 +1,9 @@
 #include "basin.h"
 
-#define INCR	64
+#define INCR     64
 #define ONE_CELL struct one_cell
-ONE_CELL {
+ONE_CELL
+{
     int r, c;
 };
 
@@ -16,7 +17,7 @@ int overland_cells(int row, int col)
         size_more = nrows;
     else
         size_more = ncols;
-    Acells = (ONE_CELL *) G_malloc(size_more * sizeof(ONE_CELL));
+    Acells = (ONE_CELL *)G_malloc(size_more * sizeof(ONE_CELL));
     num_cells = 1;
     Acells[0].r = row;
     Acells[0].c = col;
@@ -32,9 +33,8 @@ int overland_cells(int row, int col)
                         (bas[SEG_INDEX(ba_seg, r, c)] == 0)) {
                         if (num_cells == size_more) {
                             size_more += INCR;
-                            Acells = (ONE_CELL *) G_realloc(Acells,
-                                                            size_more *
-                                                            sizeof(ONE_CELL));
+                            Acells = (ONE_CELL *)G_realloc(
+                                Acells, size_more * sizeof(ONE_CELL));
                         }
                         Acells[num_cells].r = r;
                         Acells[num_cells++].c = c;

@@ -1,7 +1,7 @@
 #include <math.h>
 #include "contour.h"
 
-int find_con(int r, int c, double *d1, double *d2, DCELL * con1, DCELL * con2)
+int find_con(int r, int c, double *d1, double *d2, DCELL *con1, DCELL *con2)
 {
     int ct, low_ct, node_ct;
     int rr, cc, dor, doc;
@@ -39,8 +39,8 @@ int find_con(int r, int c, double *d1, double *d2, DCELL * con1, DCELL * con2)
         cc = zero[ct].c;
         dor = ABS(rr - r);
         doc = ABS(cc - c);
-        if (rr >= 0 && cc >= 0 && rr < nrows && cc < ncols
-            && zero[ct].d < shortest && !flag_get(mask, rr, cc)) {
+        if (rr >= 0 && cc >= 0 && rr < nrows && cc < ncols &&
+            zero[ct].d < shortest && !flag_get(mask, rr, cc)) {
             value = con[rr][cc];
             if (Rast_is_d_null_value(&value))
                 zero = addpts(zero, r, c, rr, cc, &node_ct);

@@ -1,12 +1,11 @@
-
 /*********************************************************************
  *
- *	collect_ori.c	in ~/r.spread2
+ *        collect_ori.c        in ~/r.spread2
  *
- *	functin to collect the spread origins from the source map and
- *	put them into a min-heap; also marks the origin locations and
- *	the other locations to avoid redundant computation and to be
- *	able to terminate.
+ *        functin to collect the spread origins from the source map and
+ *        put them into a min-heap; also marks the origin locations and
+ *        the other locations to avoid redundant computation and to be
+ *        able to terminate.
  *********************************************************************/
 
 #include <stdio.h>
@@ -17,7 +16,7 @@
 #include "costHa.h"
 #include "local_proto.h"
 
-#define DATA(map, r, c)		(map)[(r) * ncols + (c)]
+#define DATA(map, r, c) (map)[(r)*ncols + (c)]
 
 /*#define DEBUG */
 
@@ -45,7 +44,8 @@ int y_out;
 
 /**
  * \param start_fd start raster map
- * \param start_is_time 1 if start map values should be used instead of init_time
+ * \param start_is_time 1 if start map values should be used instead of
+ * init_time
  *
  * Other variables passed as global variables.
  */
@@ -70,9 +70,9 @@ void collect_ori(int start_fd, int start_is_time)
             if (*(cell + col) > 0) {
                 /*Check if starting sources legally ? */
                 if (DATA(map_base, row, col) <= 0) {
-                    G_warning
-                        ("Can't start from a BARRIER at cell (%d,%d), request ignored",
-                         col, row);
+                    G_warning("Can't start from a BARRIER at cell (%d,%d), "
+                              "request ignored",
+                              col, row);
                     continue;
                 }
 

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.to.vect
@@ -26,11 +25,11 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-/* 
+/*
  * Attributes for lines are ignored. For points and area by default unique new
  * category is assigned to each and raster value is written to 'value' column.
  * Labels are written to 'label' column if exists. If value flag (-v) is used
- * and type is CELL, raster values are used as categories. 
+ * and type is CELL, raster values are used as categories.
  *
  * 2007/2: attributes for lines supported
  */
@@ -38,7 +37,7 @@
 int data_type;
 int data_size;
 struct Map_info Map;
-int input_fd;                   /* input raster map descriptor */
+int input_fd; /* input raster map descriptor */
 struct line_cats *Cats;
 struct Cell_head cell_head;
 
@@ -49,10 +48,10 @@ int row_length, row_count, n_rows;
 int total_areas;
 int n_alloced_ptrs;
 
-int smooth_flag;                /* this is 0 for no smoothing, 1 for smoothing of lines */
-int value_flag;                 /* use raster values as categories */
+int smooth_flag; /* this is 0 for no smoothing, 1 for smoothing of lines */
+int value_flag;  /* use raster values as categories */
 struct Categories RastCats;
-int has_cats;                   /* Category labels available */
+int has_cats; /* Category labels available */
 struct field_info *Fi;
 dbDriver *driver;
 dbString sql, label;
@@ -68,7 +67,6 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *out_opt, *feature_opt, *column_name;
     struct Flag *smooth_flg, *value_flg, *z_flg, *no_topol, *notab_flg;
     int feature, notab_flag;
-
 
     G_gisinit(argv[0]);
 
@@ -101,8 +99,8 @@ int main(int argc, char *argv[])
 
     value_flg = G_define_flag();
     value_flg->key = 'v';
-    value_flg->description =
-        _("Use raster values as categories instead of unique sequence (CELL only)");
+    value_flg->description = _("Use raster values as categories instead of "
+                               "unique sequence (CELL only)");
     value_flg->guisection = _("Attributes");
 
     z_flg = G_define_flag();
@@ -139,16 +137,20 @@ int main(int argc, char *argv[])
 
     if (value_flag && data_type != CELL_TYPE) {
         if (!notab_flag)
-            G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be written to the table."));
+            G_warning(_("Raster is not CELL, '-v' flag ignored, raster values "
+                        "will be written to the table."));
         else if (z_flg->answer)
-            G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be z coordinate."));
+            G_warning(_("Raster is not CELL, '-v' flag ignored, raster values "
+                        "will be z coordinate."));
         else
-            G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be lost."));
+            G_warning(_("Raster is not CELL, '-v' flag ignored, raster values "
+                        "will be lost."));
         value_flag = 0;
     }
 
     if (!value_flag && notab_flag) {
-        G_warning(_("Categories will be unique sequence, raster values will be lost."));
+        G_warning(_(
+            "Categories will be unique sequence, raster values will be lost."));
     }
 
     set_error_handler(&Map, &driver);
@@ -173,17 +175,16 @@ int main(int argc, char *argv[])
 
     /* Create table */
     if ((feature & (GV_AREA | GV_POINT | GV_LINE)) &&
-        (!value_flag || (value_flag && has_cats)) && !(z_flg->answer)
-        && !notab_flag) {
+        (!value_flag || (value_flag && has_cats)) && !(z_flg->answer) &&
+        !notab_flag) {
         char buf[1000];
 
         Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
         Vect_map_add_dblink(&Map, 1, NULL, Fi->table, GV_KEY_COLUMN,
                             Fi->database, Fi->driver);
 
-        driver =
-            db_start_driver_open_database(Fi->driver,
-                                          Vect_subst_var(Fi->database, &Map));
+        driver = db_start_driver_open_database(
+            Fi->driver, Vect_subst_var(Fi->database, &Map));
         if (driver == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
@@ -193,7 +194,7 @@ int main(int argc, char *argv[])
         sprintf(buf, "create table %s ( cat integer", Fi->table);
         db_append_string(&sql, buf);
 
-        if (!value_flag) {      /* add value to the table */
+        if (!value_flag) { /* add value to the table */
             if (data_type == CELL_TYPE) {
                 db_append_string(&sql, ", ");
                 db_append_string(&sql, column_name->answer);
@@ -227,20 +228,17 @@ int main(int argc, char *argv[])
         G_debug(3, "%s", db_get_string(&sql));
 
         if (db_execute_immediate(driver, &sql) != DB_OK)
-            G_fatal_error(_("Unable to create table: %s"),
-                          db_get_string(&sql));
+            G_fatal_error(_("Unable to create table: %s"), db_get_string(&sql));
 
         if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
             G_warning(_("Unable to create index"));
 
-        if (db_grant_on_table
-            (driver, Fi->table, DB_PRIV_SELECT,
-             DB_GROUP | DB_PUBLIC) != DB_OK)
+        if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK)
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           Fi->table);
 
         db_begin_transaction(driver);
-
     }
     else {
         driver = NULL;
@@ -262,7 +260,7 @@ int main(int argc, char *argv[])
         alloc_areas_bufs(row_length + 2);
         extract_areas();
     }
-    else {                      /* GV_POINT */
+    else { /* GV_POINT */
 
         extract_points(z_flg->answer);
     }
@@ -285,7 +283,8 @@ int main(int argc, char *argv[])
             /* register line */
             type = Vect_read_next_line(&Map, NULL, Cats);
 
-            /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+            /* Note: check for dead lines is not needed, because they are
+             * skipped by V1_read_next_line_nat() */
             if (type == -1) {
                 G_warning(_("Unable to read vector map"));
                 break;
@@ -319,7 +318,9 @@ int main(int argc, char *argv[])
                 /* find label, slow -> TODO faster */
                 db_set_string(&label, "");
                 for (i = 0; i < RastCats.ncats; i++) {
-                    if (cat == (int)RastCats.q.table[i].dLow) { /* cats are in dLow/High not in cLow/High !!! */
+                    if (cat == (int)RastCats.q.table[i]
+                                   .dLow) { /* cats are in dLow/High not in
+                                               cLow/High !!! */
                         db_set_string(&label, RastCats.labels[i]);
                         db_double_quote_string(&label);
                         break;

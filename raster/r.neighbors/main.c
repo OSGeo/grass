@@ -1,17 +1,19 @@
-
 /****************************************************************************
  *
  * MODULE:       r.neighbors
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, Bob Covill <bcovill tekmap.ns.ca>,
- *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
- *               Jachym Cepicky <jachym les-ejk.cz>, Jan-Oliver Wagner <jan intevation.de>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Bob Covill <bcovill tekmap.ns.ca>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
  *               Radim Blazek <radim.blazek gmail.com>,
  *               Aaron Saw Min Sern (OpenMP parallelization)
  *
- * PURPOSE:      Makes each cell category value a function of the category values 
- *               assigned to the cells around it, and stores new cell values in an
- *               output raster map layer
+ * PURPOSE:      Makes each cell category value a function of the category
+ *               values assigned to the cells around it, and stores new cell
+ *               values in an output raster map layer
  * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -19,6 +21,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
@@ -35,34 +38,25 @@
 
 typedef int (*ifunc)(void);
 
-struct menu
-{
-    stat_func *method;          /* routine to compute new value */
-    stat_func_w *method_w;      /* routine to compute new value (weighted) */
-    ifunc cat_names;            /* routine to make category names */
-    int copycolr;               /* flag if color table can be copied */
-    int half;                   /* whether to add 0.5 to result (redundant) */
-    int otype;                  /* output type */
-    char *name;                 /* method name */
-    char *text;                 /* menu display - full description */
+struct menu {
+    stat_func *method;     /* routine to compute new value */
+    stat_func_w *method_w; /* routine to compute new value (weighted) */
+    ifunc cat_names;       /* routine to make category names */
+    int copycolr;          /* flag if color table can be copied */
+    int half;              /* whether to add 0.5 to result (redundant) */
+    int otype;             /* output type */
+    char *name;            /* method name */
+    char *text;            /* menu display - full description */
 };
 
-struct weight_functions
-{
-    char *name;                 /* name  of the weight type */
-    char *text;                 /* weight types display - full description */
+struct weight_functions {
+    char *name; /* name  of the weight type */
+    char *text; /* weight types display - full description */
 };
 
-enum out_type
-{
-    T_FLOAT = 1,
-    T_INT = 2,
-    T_COUNT = 3,
-    T_COPY = 4,
-    T_SUM = 5
-};
+enum out_type { T_FLOAT = 1, T_INT = 2, T_COUNT = 3, T_COPY = 4, T_SUM = 5 };
 
-#define NO_CATS 0
+#define NO_CATS      0
 #define FIRST_THREAD 0
 
 /* modify this table to add new methods */
@@ -79,8 +73,7 @@ static struct menu menu[] = {
     {c_sum, w_sum, NO_CATS, 1, 0, T_SUM, "sum", "sum of values"},
     {c_count, w_count, NO_CATS, 0, 0, T_COUNT, "count",
      "count of non-NULL values"},
-    {c_var, w_var, NO_CATS, 0, 1, T_FLOAT, "variance",
-     "statistical variance"},
+    {c_var, w_var, NO_CATS, 0, 1, T_FLOAT, "variance", "statistical variance"},
     {c_divr, NULL, divr_cats, 0, 0, T_INT, "diversity",
      "number of different values"},
     {c_intr, NULL, intr_cats, 0, 0, T_INT, "interspersion",
@@ -91,13 +84,11 @@ static struct menu menu[] = {
      "ninetieth percentile"},
     {c_quant, w_quant, NO_CATS, 1, 0, T_FLOAT, "quantile",
      "arbitrary quantile"},
-    {0, 0, 0, 0, 0, 0, 0, 0}
-};
+    {0, 0, 0, 0, 0, 0, 0, 0}};
 
 struct ncb ncb;
 
-struct output
-{
+struct output {
     const char *name;
     char title[1024];
     int fd;
@@ -163,8 +154,7 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct History history;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output, *selection;
         struct Option *method, *size;
         struct Option *title;
@@ -175,16 +165,15 @@ int main(int argc, char *argv[])
         struct Option *nprocs;
         struct Option *memory;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *align, *circle;
     } flag;
 
-    DCELL **values;             /* list of neighborhood values */
-    DCELL **values_tmp;         /* list of neighborhood values */
+    DCELL **values;     /* list of neighborhood values */
+    DCELL **values_tmp; /* list of neighborhood values */
 
-    DCELL(**values_w)[2];       /* list of neighborhood values and weights */
-    DCELL(**values_w_tmp)[2];   /* list of neighborhood values and weights */
+    DCELL(**values_w)[2];     /* list of neighborhood values and weights */
+    DCELL(**values_w_tmp)[2]; /* list of neighborhood values and weights */
 
     G_gisinit(argv[0]);
 
@@ -208,8 +197,8 @@ int main(int argc, char *argv[])
     parm.selection = G_define_standard_option(G_OPT_R_INPUT);
     parm.selection->key = "selection";
     parm.selection->required = NO;
-    parm.selection->description =
-        _("Name of an input raster map to select the cells which should be processed");
+    parm.selection->description = _("Name of an input raster map to select the "
+                                    "cells which should be processed");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->multiple = YES;
@@ -251,8 +240,7 @@ int main(int argc, char *argv[])
                "gaussian;%s;"
                "exponential;%s;"
                "file;%s;",
-               _("No weighting"),
-               _("Gaussian weighting function"),
+               _("No weighting"), _("Gaussian weighting function"),
                _("Exponential weighting function"),
                _("File with a custom weighting matrix"));
     parm.weighting_function->description = _("Weighting function");
@@ -264,7 +252,8 @@ int main(int argc, char *argv[])
     parm.weighting_factor->required = NO;
     parm.weighting_factor->multiple = NO;
     parm.weighting_factor->description =
-        _("Factor used in the selected weighting function (ignored for none and file)");
+        _("Factor used in the selected weighting function (ignored for none "
+          "and file)");
 
     parm.weight = G_define_standard_option(G_OPT_F_INPUT);
     parm.weight->key = "weight";
@@ -276,8 +265,7 @@ int main(int argc, char *argv[])
     parm.quantile->type = TYPE_DOUBLE;
     parm.quantile->required = NO;
     parm.quantile->multiple = YES;
-    parm.quantile->description =
-        _("Quantile to calculate for method=quantile");
+    parm.quantile->description = _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
     parm.quantile->guisection = _("Neighborhood");
 
@@ -323,10 +311,9 @@ int main(int argc, char *argv[])
     ncb.threads = 1;
 #endif
 
-    if (strcmp(parm.weighting_function->answer, "none") &&
-        flag.circle->answer)
-        G_fatal_error(_("-%c and %s= are mutually exclusive"),
-                      flag.circle->key, parm.weighting_function->answer);
+    if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
+        G_fatal_error(_("-%c and %s= are mutually exclusive"), flag.circle->key,
+                      parm.weighting_function->answer);
 
     if (strcmp(parm.weighting_function->answer, "file") == 0 &&
         !parm.weight->answer)
@@ -369,10 +356,12 @@ int main(int argc, char *argv[])
     map_type = Rast_get_map_type(in_fd[FIRST_THREAD]);
 
     /* process the output maps */
-    for (i = 0; parm.output->answers[i]; i++) ;
+    for (i = 0; parm.output->answers[i]; i++)
+        ;
     num_outputs = i;
 
-    for (i = 0; parm.method->answers[i]; i++) ;
+    for (i = 0; parm.method->answers[i]; i++)
+        ;
     if (num_outputs != i)
         G_fatal_error(_("%s= and %s= must have the same number of values"),
                       parm.output->key, parm.method->key);
@@ -414,7 +403,8 @@ int main(int argc, char *argv[])
             }
             else {
                 if (strcmp(parm.weighting_function->answer, "none")) {
-                    G_warning(_("Method %s not compatible with weighing window, using weight mask instead"),
+                    G_warning(_("Method %s not compatible with weighing "
+                                "window, using weight mask instead"),
                               method_name);
                     if (!have_weights_mask) {
                         weights_mask();
@@ -434,8 +424,8 @@ int main(int argc, char *argv[])
         if (out->copycolr)
             copycolr = 1;
         out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
-            ? atof(parm.quantile->answers[i])
-            : 0;
+                            ? atof(parm.quantile->answers[i])
+                            : 0;
         out->buf = G_malloc(sizeof(DCELL) * brows * ncols);
         out->fd = Rast_open_new(output_name, otype);
         /* TODO: method=mode should propagate its type */
@@ -444,8 +434,8 @@ int main(int argc, char *argv[])
         if (parm.title->answer)
             strcpy(out->title, parm.title->answer);
         else
-            sprintf(out->title, "%dx%d neighborhood: %s of %s",
-                    ncb.nsize, ncb.nsize, menu[method].name, ncb.oldcell);
+            sprintf(out->title, "%dx%d neighborhood: %s of %s", ncb.nsize,
+                    ncb.nsize, menu[method].name, ncb.oldcell);
     }
 
     /* copy color table? */
@@ -516,7 +506,7 @@ int main(int argc, char *argv[])
         }
 #pragma omp parallel private(row, col, n, i, t) if (ncb.threads > 1)
         {
-#if defined (_OPENMP)
+#if defined(_OPENMP)
             t = omp_get_thread_num();
 #endif
             int brow_idx = range * t / ncb.threads;
@@ -533,14 +523,14 @@ int main(int argc, char *argv[])
                 readcell(in_fd[t], readrow[t]++, nrows, ncols, t);
 
                 if (selection)
-                    Rast_get_null_value_row(selection_fd[t], selection[t],
-                                            row);
+                    Rast_get_null_value_row(selection_fd[t], selection[t], row);
 
                 for (col = 0; col < ncols; col++) {
 
                     if (selection && selection[t][col]) {
-                        /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
-                         * Thus original data start is shifted by ncb.dist! */
+                        /* ncb.buf length is region row length + 2 * ncb.dist
+                         * (eq. floor(neighborhood/2)) Thus original data start
+                         * is shifted by ncb.dist! */
                         for (i = 0; i < num_outputs; i++)
                             outputs[i].buf[brow_idx * ncols + col] =
                                 ncb.buf[t][ncb.dist][col + ncb.dist];
@@ -563,14 +553,14 @@ int main(int argc, char *argv[])
                             if (out->method_fn_w) {
                                 memcpy(values_w_tmp[t], values_w[t],
                                        sizeof(DCELL) * n * 2);
-                                (*out->method_fn_w) (rp, values_w_tmp[t], n,
-                                                     &out->quantile);
+                                (*out->method_fn_w)(rp, values_w_tmp[t], n,
+                                                    &out->quantile);
                             }
                             else {
                                 memcpy(values_tmp[t], values[t],
                                        sizeof(DCELL) * n);
-                                (*out->method_fn) (rp, values_tmp[t], n,
-                                                   &out->quantile);
+                                (*out->method_fn)(rp, values_tmp[t], n,
+                                                  &out->quantile);
                             }
                         }
                     }

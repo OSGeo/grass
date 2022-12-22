@@ -20,8 +20,9 @@ void setup_window(struct Cell_head *cellhd, GDALDatasetH hDS, int *flip)
 
     if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None) {
         if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0)
-            G_fatal_error(_("Input raster map is rotated - cannot import. "
-                            "You may use 'gdalwarp' to transform the map to North-up."));
+            G_fatal_error(
+                _("Input raster map is rotated - cannot import. "
+                  "You may use 'gdalwarp' to transform the map to North-up."));
         if (adfGeoTransform[1] <= 0.0) {
             G_message(_("Applying horizontal flip"));
             *flip |= FLIP_H;
@@ -80,12 +81,12 @@ void update_default_window(struct Cell_head *cellhd)
     cur_wind.west = MIN(cur_wind.west, cellhd->west);
     cur_wind.east = MAX(cur_wind.east, cellhd->east);
 
-    cur_wind.rows = (int)ceil((cur_wind.north - cur_wind.south)
-                              / cur_wind.ns_res);
+    cur_wind.rows =
+        (int)ceil((cur_wind.north - cur_wind.south) / cur_wind.ns_res);
     cur_wind.south = cur_wind.north - cur_wind.rows * cur_wind.ns_res;
 
-    cur_wind.cols = (int)ceil((cur_wind.east - cur_wind.west)
-                              / cur_wind.ew_res);
+    cur_wind.cols =
+        (int)ceil((cur_wind.east - cur_wind.west) / cur_wind.ew_res);
     cur_wind.east = cur_wind.west + cur_wind.cols * cur_wind.ew_res;
 
     if (strcmp(G_mapset(), "PERMANENT") == 0) {

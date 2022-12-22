@@ -17,13 +17,12 @@
 /* function prototypes */
 static int blank_line(void *buf);
 
-
 /* move - move to next point in line */
 
 struct COOR *move(struct COOR *point)
 {
     if (direction == FORWARD) {
-        if (point->fptr == NULL)        /* at open end of line */
+        if (point->fptr == NULL) /* at open end of line */
             return (NULL);
         if (point->fptr->fptr == point) /* direction change coming up */
             direction = BACKWARD;
@@ -141,7 +140,8 @@ void insert_value(int cat, int val, double dval)
     if (has_cats) {
         char *lab;
 
-        lab = Rast_get_c_cat(&val, &RastCats);  /*cats are loaded only for CELL type */
+        lab = Rast_get_c_cat(&val,
+                             &RastCats); /*cats are loaded only for CELL type */
 
         db_set_string(&label, lab);
         db_double_quote_string(&label);
@@ -155,7 +155,6 @@ void insert_value(int cat, int val, double dval)
 
     if (db_execute_immediate(driver, &sql) != DB_OK)
         G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
-
 }
 
 int free_ptr(struct COOR *ptr)

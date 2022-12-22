@@ -1,4 +1,3 @@
-
 /*
  *      nearest.c - returns the nearest neighbor to a given
  *                  x,y position
@@ -10,14 +9,14 @@
 #include "r.proj.h"
 
 void p_nearest(struct cache *ibuffer,   /* input buffer                  */
-               void *obufptr,   /* ptr in output buffer          */
-               int cell_type,   /* raster map type of obufptr    */
-               double col_idx,  /* column index in input matrix  */
-               double row_idx,  /* row index in input matrix     */
+               void *obufptr,           /* ptr in output buffer          */
+               int cell_type,           /* raster map type of obufptr    */
+               double col_idx,          /* column index in input matrix  */
+               double row_idx,          /* row index in input matrix     */
                struct Cell_head *cellhd /* cell header of input layer    */
-    )
+)
 {
-    int row, col;               /* row/col of nearest neighbor   */
+    int row, col; /* row/col of nearest neighbor   */
     FCELL cell;
 
     /* cut indices to integer */

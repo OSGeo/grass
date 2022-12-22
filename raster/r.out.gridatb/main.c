@@ -54,8 +54,7 @@ static void rdwr_gridatb(const char *iname, const char *file)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input;
         struct Option *output;
     } params;

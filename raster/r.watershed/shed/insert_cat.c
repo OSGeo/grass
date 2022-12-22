@@ -1,6 +1,6 @@
 #include "watershed.h"
 
-int insert_cat(CAT * cat, CELL value, int num_cells)
+int insert_cat(CAT *cat, CELL value, int num_cells)
 {
     CAT *temp_cat;
 
@@ -36,7 +36,7 @@ CAT *new_cat(CELL value, int num_cat)
 {
     CAT *new;
 
-    new = (CAT *) G_malloc(sizeof(CAT));
+    new = (CAT *)G_malloc(sizeof(CAT));
     new->num_cat = num_cat;
     new->cat_val = value;
     return (new);

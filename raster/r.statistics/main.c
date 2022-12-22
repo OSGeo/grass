@@ -1,8 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       r.statistics
- *               
+ *
  * AUTHOR(S):    Martin Schroeder, Geographisches Institut Heidelberg, Germany
  *
  * PURPOSE:      Category or object oriented statistics
@@ -37,8 +36,7 @@ struct menu menu[] = {
     {"min", o_min, "Minimum of values in specified objects"},
     {"max", o_max, "Maximum of values in specified objects"},
     {"sum", o_sum, "Sum of values in specified objects"},
-    {NULL, NULL, NULL}
-};
+    {NULL, NULL, NULL}};
 
 int main(int argc, char **argv)
 {
@@ -101,10 +99,12 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
 
     if (Rast_map_is_fp(basemap->answer, "") != 0)
-        G_fatal_error(_("This module currently only works for integer (CELL) maps"));
+        G_fatal_error(
+            _("This module currently only works for integer (CELL) maps"));
 
     if (Rast_map_is_fp(covermap->answer, "") != 0)
-        G_fatal_error(_("This module currently only works for integer (CELL) maps"));
+        G_fatal_error(
+            _("This module currently only works for integer (CELL) maps"));
 
     if (Rast_read_cats(covermap->answer, "", &cats) < 0)
         G_fatal_error(_("Unable to read category file of raster map <%s>"),
@@ -122,8 +122,8 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    (*menu[o_method].func) (basemap->answer, covermap->answer,
-                            outputmap->answer, flag_c->answer, &cats);
+    (*menu[o_method].func)(basemap->answer, covermap->answer, outputmap->answer,
+                           flag_c->answer, &cats);
 
     return 0;
 }

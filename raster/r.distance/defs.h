@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two 
+ * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
  * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
@@ -23,39 +22,36 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-struct EdgeList                 /* keep track of edge cells */
+struct EdgeList /* keep track of edge cells */
 {
-    struct CatEdgeList
-    {
-        CELL cat;               /* category number */
-        int *row, *col;         /* arrays of pixels indexes */
-        int ncells;             /* count of edges cells with this cat */
-        int nalloc;             /* length of allocation for row,col */
-    } *catlist;                 /* array of cat:edgelists */
-    int ncats;                  /* number of cats */
-    int nalloc;                 /* length of allocation for catlist */
-    int count;                  /* total number of edge cells */
+    struct CatEdgeList {
+        CELL cat;       /* category number */
+        int *row, *col; /* arrays of pixels indexes */
+        int ncells;     /* count of edges cells with this cat */
+        int nalloc;     /* length of allocation for row,col */
+    } *catlist;         /* array of cat:edgelists */
+    int ncats;          /* number of cats */
+    int nalloc;         /* length of allocation for catlist */
+    int count;          /* total number of edge cells */
 };
 
-struct Map
-{
-    const char *name;           /* raster map name */
-    const char *mapset;         /* raster map mapset */
-    const char *fullname;       /* raster map fully qualified name */
-    struct Categories labels;   /* category labels */
-    struct EdgeList edges;      /* edge cells */
+struct Map {
+    const char *name;         /* raster map name */
+    const char *mapset;       /* raster map mapset */
+    const char *fullname;     /* raster map fully qualified name */
+    struct Categories labels; /* category labels */
+    struct EdgeList edges;    /* edge cells */
 };
 
-struct Parms
-{
-    struct Map map1, map2;      /* two raster maps to analyze */
-    int labels;                 /* boolean: report includes cat labels */
-    char *fs;                   /* report field separator     */
-    int overlap;                /* checking for overlapping, than distance is 0 */
-    int null;                   /* report null objects as * */
-    int sort;                   /* 0: sort by cat1,cat2 (default)
-                                   1: sort by distance in ascending order
-                                   2: sort by distance in descending order */
+struct Parms {
+    struct Map map1, map2; /* two raster maps to analyze */
+    int labels;            /* boolean: report includes cat labels */
+    char *fs;              /* report field separator     */
+    int overlap;           /* checking for overlapping, than distance is 0 */
+    int null;              /* report null objects as * */
+    int sort;              /* 0: sort by cat1,cat2 (default)
+                              1: sort by distance in ascending order
+                              2: sort by distance in descending order */
 };
 
 /* distance.c */

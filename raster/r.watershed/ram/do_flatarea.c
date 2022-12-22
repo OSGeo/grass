@@ -1,4 +1,3 @@
-
 /**********************************************************************
  *
  * flat area beautification after Garbrecht and Martz (1997)
@@ -9,9 +8,8 @@
  *
  * the method is modified for speed, only one pass is necessary to get
  * the gradient away from higher terrain
- * 
+ *
  *********************************************************************/
-
 
 #include <limits.h>
 #include <assert.h>
@@ -21,14 +19,12 @@
 #include "Gwater.h"
 #include "do_astar.h"
 
-struct pq_node
-{
+struct pq_node {
     int idx;
     struct pq_node *next;
 };
 
-struct pq
-{
+struct pq {
     struct pq_node *first, *last;
     int size;
 };
@@ -102,8 +98,7 @@ int pq_destroy(struct pq *q)
     return 0;
 }
 
-struct orders
-{
+struct orders {
     int index, uphill, downhill;
     char flag;
 };
@@ -120,7 +115,7 @@ int cmp_orders(const void *a, const void *b)
  * return 0 if nothing was modidied
  * return 1 if elevation was modified
  */
-int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
+int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 {
     int upr, upc, r, c, ct_dir;
     CELL is_in_list, is_worked, this_in_list;
@@ -180,8 +175,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
                     inc_order.index = index_up;
                     inc_order.flag = 0;
                     /* not yet added to queue */
-                    if ((order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL) {
+                    if ((order_found = rbtree_find(order_tree, &inc_order)) ==
+                        NULL) {
                         n_flat_cells++;
 
                         /* add to down queue if not yet in there */
@@ -210,8 +205,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         return 0;
     }
 
-    G_debug(2, "%d flat cells, %d cells in tree, %d start cells",
-            n_flat_cells, (int)order_tree->count, counter);
+    G_debug(2, "%d flat cells, %d cells in tree, %d start cells", n_flat_cells,
+            (int)order_tree->count, counter);
 
     pq_destroy(down_pq);
     down_pq = pq_create();
@@ -238,7 +233,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         uphill_order = order_found->uphill;
 
         if (last_order > uphill_order)
-            G_warning(_("queue error: last uphill order %d > current uphill order %d"),
+            G_warning(_("queue error: last uphill order %d > current uphill "
+                        "order %d"),
                       last_order, uphill_order);
 
         /* debug */
@@ -269,8 +265,9 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
 
                     inc_order.index = index_up;
                     if ((nbr_order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL) {
-                        G_fatal_error(_("flat cell escaped in uphill correction"));
+                             rbtree_find(order_tree, &inc_order)) == NULL) {
+                        G_fatal_error(
+                            _("flat cell escaped in uphill correction"));
                     }
 
                     /* not yet added to queue */
@@ -284,8 +281,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
                     }
                 }
                 /* add focus cell to down queue */
-                if (!this_in_list && !is_in_down_queue &&
-                    ele_nbr != ele && !is_in_list && !is_worked) {
+                if (!this_in_list && !is_in_down_queue && ele_nbr != ele &&
+                    !is_in_list && !is_worked) {
                     pq_add(index_doer, down_pq);
                     /* set downhill order to 0 */
                     order_found->downhill = 0;
@@ -320,7 +317,8 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         downhill_order = order_found->downhill;
 
         if (last_order > downhill_order)
-            G_warning(_("queue error: last downhill order %d > current downhill order %d"),
+            G_warning(_("queue error: last downhill order %d > current "
+                        "downhill order %d"),
                       last_order, downhill_order);
 
         /* debug */
@@ -348,15 +346,17 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
 
                     inc_order.index = index_up;
                     if ((nbr_order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL)
-                        G_fatal_error(_("flat cell escaped in downhill correction"));
+                             rbtree_find(order_tree, &inc_order)) == NULL)
+                        G_fatal_error(
+                            _("flat cell escaped in downhill correction"));
 
                     /* not yet added to queue */
                     if (nbr_order_found->downhill == -1) {
 
                         /* add to down queue */
                         pq_add(index_up, down_pq);
-                        /* set nbr downhill order = current downhill order + 1 */
+                        /* set nbr downhill order = current downhill order + 1
+                         */
                         nbr_order_found->downhill = downhill_order;
 
                         /* add to up queue */
@@ -405,8 +405,9 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
         }
         alt_new[index_doer] +=
             (uphill_order +
-             (double)(max_downhill_order - downhill_order) / 2.0 +
-             0.5) / 2.0 + 0.5;
+             (double)(max_downhill_order - downhill_order) / 2.0 + 0.5) /
+                2.0 +
+            0.5;
 
         /* check all neighbours, breadth first search */
         for (ct_dir = 0; ct_dir < sides; ct_dir++) {
@@ -424,14 +425,14 @@ int do_flatarea(int index, CELL ele, CELL * alt_org, CELL * alt_new)
 
                     inc_order.index = index_up;
                     if ((nbr_order_found =
-                         rbtree_find(order_tree, &inc_order)) == NULL)
+                             rbtree_find(order_tree, &inc_order)) == NULL)
                         G_fatal_error(_("flat cell escaped in adjustment"));
 
                     /* not yet added to queue */
                     if (nbr_order_found->flag == 0) {
                         if (is_in_list)
-                            G_warning
-                                ("adjustment: in_list cell should be in queue");
+                            G_warning(
+                                "adjustment: in_list cell should be in queue");
                         /* add to up queue */
                         pq_add(index_up, up_pq);
                         nbr_order_found->flag = 1;

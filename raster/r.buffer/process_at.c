@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,7 +16,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include "distance.h"
 
@@ -26,7 +25,7 @@ int process_at(int from_row, int to_row, int start_col, int first_zone)
     register MAPTYPE *to_ptr, *from_ptr;
     register int col, cur_zone;
 
-    /* find all adjacent 1 cells 
+    /* find all adjacent 1 cells
      * stop at last 1 in the from_row
      * return position of last 1
      */

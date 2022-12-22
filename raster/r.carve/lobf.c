@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.carve
@@ -15,39 +14,36 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
-/* 
+/*
  * Routines to create a line of best fit when given a set of coord pairs.
  */
 
 #include "enforce.h"
 #include <grass/glocale.h>
 
-
 /*
  * pg_init - initialize PointGrp variables
  */
-void pg_init(PointGrp * pg)
+void pg_init(PointGrp *pg)
 {
     pg->sum_x = pg->sum_y = pg->sum_xy = pg->sum_x_sq = 0.0;
     pg->npts = 0;
 }
 
-
 /*
  * pg_y_from_x - determine y value for a given x value in a PointGrp
  */
-double pg_y_from_x(PointGrp * pg, const double x)
+double pg_y_from_x(PointGrp *pg, const double x)
 {
     return ((pg->slope * x) + pg->yinter);
 }
 
-
 /*
  * pg_addpt - Add a point to a PointGrp
  */
-void pg_addpt(PointGrp * pg, Point2 pt)
+void pg_addpt(PointGrp *pg, Point2 pt)
 {
     if (pg->npts < MAX_PTS - 1) {
         double x = pt[0];
@@ -76,29 +72,26 @@ void pg_addpt(PointGrp * pg, Point2 pt)
             pg->slope = pg->yinter = 0.0;
         }
         else {
-            pg->slope = DET2_2(pg->sum_xy, pg->sum_x, pg->sum_y, pg->npts) /
-                denom;
+            pg->slope =
+                DET2_2(pg->sum_xy, pg->sum_x, pg->sum_y, pg->npts) / denom;
             pg->yinter =
-                DET2_2(pg->sum_x_sq, pg->sum_xy, pg->sum_x,
-                       pg->sum_y) / denom;
+                DET2_2(pg->sum_x_sq, pg->sum_xy, pg->sum_x, pg->sum_y) / denom;
         }
     }
 }
 
-
 /*
  * pg_getpoints - returns the Point2 structure from a PointGrp
  */
-Point2 *pg_getpoints(PointGrp * pg)
+Point2 *pg_getpoints(PointGrp *pg)
 {
     return pg->pnts;
 }
 
-
 /*
  * pg_getpoints_reversed - reverse points in PointGrp and returns Point2
  */
-Point2 *pg_getpoints_reversed(PointGrp * pg)
+Point2 *pg_getpoints_reversed(PointGrp *pg)
 {
     int i;
     int iter = pg->npts / 2;

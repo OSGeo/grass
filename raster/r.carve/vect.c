@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.carve
@@ -15,13 +14,12 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdio.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "enforce.h"
-
 
 /*
  * open_new_vect - opens new vector map for writing
@@ -37,7 +35,6 @@ int open_new_vect(struct Map_info *map, char *vect)
 
     return 1;
 }
-
 
 /*
  * close_vect - builds vector support and frees up resources

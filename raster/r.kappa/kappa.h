@@ -2,21 +2,18 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-struct _gstats_
-{
+struct _gstats_ {
     long *cats;
     long count;
 };
 
-struct _layer_
-{
+struct _layer_ {
     const char *name;
     const char *mapset;
     struct Categories labels;
 };
 
-struct _metrics_
-{
+struct _metrics_ {
     long observations;
     long correct;
     long *matrix;

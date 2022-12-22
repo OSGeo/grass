@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -14,12 +13,11 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
- 
+
 ***************************************************************************/
 
 #include <stdio.h>
 #include <string.h>
-
 
 int format_double(double v, char *buf, int n)
 {

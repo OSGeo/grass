@@ -5,7 +5,7 @@
 
 #include "local_proto.h"
 
-void add_row_area(DCELL * top, DCELL * bottom, double sz, struct Cell_head *w,
+void add_row_area(DCELL *top, DCELL *bottom, double sz, struct Cell_head *w,
                   double *low, double *high)
 {
     double guess1, guess2, mag, tedge1[3], tedge2[3], crossp[3];
@@ -13,15 +13,15 @@ void add_row_area(DCELL * top, DCELL * bottom, double sz, struct Cell_head *w,
 
     for (col = 0; col < w->cols - 1; col++) {
 
-        /* 
+        /*
            For each cell**, we triangulate the four corners in
            two different ways, 1) UppperLeft to LowerRight diagonal
-           and 2) LowerLeft to UpperRight diagonal.  Then we add the 
+           and 2) LowerLeft to UpperRight diagonal.  Then we add the
            smaller of the two areas to "low" and the greater of
-           the two areas to "high". 
+           the two areas to "high".
 
            ** here, the "cell" is actually the quadrangle formed by
-           the center point of four cells, since these are the 
+           the center point of four cells, since these are the
            known elevation points.
          */
 
@@ -29,8 +29,7 @@ void add_row_area(DCELL * top, DCELL * bottom, double sz, struct Cell_head *w,
         if (Rast_is_d_null_value(&(bottom[col + 1])) ||
             Rast_is_d_null_value(&(top[col])) ||
             Rast_is_d_null_value(&(top[col + 1])) ||
-            Rast_is_d_null_value(&(bottom[col]))
-            )
+            Rast_is_d_null_value(&(bottom[col])))
             continue;
 
         /* guess1 --- ul to lr diag */
@@ -85,12 +84,11 @@ void add_row_area(DCELL * top, DCELL * bottom, double sz, struct Cell_head *w,
         *low += (guess1 < guess2) ? guess1 : guess2;
         *high += (guess1 < guess2) ? guess2 : guess1;
 
-    }                           /* ea col */
-
+    } /* ea col */
 }
 
 /* calculate the running area of null data cells */
-void add_null_area(DCELL * rast, struct Cell_head *region, double *area)
+void add_null_area(DCELL *rast, struct Cell_head *region, double *area)
 {
     int col;
 

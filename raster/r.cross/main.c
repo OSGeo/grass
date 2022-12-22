@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cross
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *
- * PURPOSE:      Creates a cross product of the category values from 
+ * PURPOSE:      Creates a cross product of the category values from
  *               multiple raster map layers.
  *
  * COPYRIGHT:    (C) 2006 by the GRASS Development Team
@@ -34,7 +33,6 @@ CELL *table;
 
 static int cmp(const void *, const void *);
 
-
 int main(int argc, char *argv[])
 {
     int fd[NFILES];
@@ -51,12 +49,10 @@ int main(int argc, char *argv[])
     char buf[1024];
     CELL result;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *z;
     } flag;
 
@@ -138,7 +134,7 @@ int main(int argc, char *argv[])
 
     /* build the renumbering/reclass and the new cats file */
     qsort(reclass, result, sizeof(RECLASS), cmp);
-    table = (CELL *) G_calloc(result, sizeof(CELL));
+    table = (CELL *)G_calloc(result, sizeof(CELL));
     for (i = 0; i < nfiles; i++) {
         mapset = G_find_raster2(names[i], "");
         Rast_read_cats(names[i], mapset, &labels[i]);
@@ -164,7 +160,7 @@ int main(int argc, char *argv[])
     Rast_write_cats(output, &pcats);
     Rast_free_cats(&pcats);
     if (result > 0) {
-        Rast_make_random_colors(&pcolr, (CELL) 1, result);
+        Rast_make_random_colors(&pcolr, (CELL)1, result);
         Rast_write_colors(output, G_mapset(), &pcolr);
     }
 

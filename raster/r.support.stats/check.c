@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:        r.support.stats
  *
@@ -21,9 +20,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 /*
- * check_stats() - Check and update statistics 
+ * check_stats() - Check and update statistics
  *
  * RETURN: 0 on success / 1 on failure
  */
@@ -59,11 +57,9 @@ int check_stats(const char *name)
         G_percent(i, histo_num, 2);
 
         if (data_type == CELL_TYPE)
-            Rast_update_range(Rast_get_histogram_cat(i--, &histogram),
-                              &range);
+            Rast_update_range(Rast_get_histogram_cat(i--, &histogram), &range);
         else
-            Rast_update_fp_range((DCELL)
-                                 Rast_get_histogram_cat(i--, &histogram),
+            Rast_update_fp_range((DCELL)Rast_get_histogram_cat(i--, &histogram),
                                  &fprange);
     }
 

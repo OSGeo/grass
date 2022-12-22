@@ -1,5 +1,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
+
 /*
  * creates new category and color structures from the patching
  * files category and color files
@@ -48,9 +49,8 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                 if (n && !Rast_find_cell_stat(n, &count, statf)) {
                     if (do_cats) {
                         Rast_update_cell_stats(&n, 1, statf);
-                        Rast_set_c_cat(&n, &n,
-                                       Rast_get_c_cat((CELL *) & n, &pcats),
-                                       cats);
+                        Rast_set_c_cat(
+                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
                     }
                     if (do_colr) {
                         Rast_get_c_color(&n, &red, &grn, &blu, &pcolr);

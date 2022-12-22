@@ -11,7 +11,6 @@
 #include "ransurf.h"
 #include "local_proto.h"
 
-
 void Init(void)
 {
     struct Cell_head Region;
@@ -77,9 +76,8 @@ void Init(void)
     for (i = 0; (Name = Output->answers[i]); i++) {
         for (j = i - 1; j >= 0; j--) {
             if (strcmp(OutNames[j], Name) == 0)
-                G_fatal_error
-                    (_("Rastar map <%s> repeated, maps must be unique"),
-                     Name);
+                G_fatal_error(
+                    _("Rastar map <%s> repeated, maps must be unique"), Name);
         }
 
         OutNames = (char **)G_realloc(OutNames, (i + 1) * sizeof(char *));
@@ -102,8 +100,8 @@ void Init(void)
     else {
         for (i = 0; (Number = SeedStuff->answers[i]) && i < NumMaps; i++) {
             sscanf(Number, "%d", &(Seeds[i]));
-        }                       /* /for */
-    }                           /* /else */
+        } /* /for */
+    }     /* /else */
 
     CellBuffer = Rast_allocate_c_buf();
     CatInfo.NumValue = (int *)G_malloc(CatInfo.NumCat * sizeof(int));
@@ -111,7 +109,7 @@ void Init(void)
     CatInfo.Min = (double *)G_malloc(CatInfo.NumCat * sizeof(double));
     CatInfo.Max = (double *)G_malloc(CatInfo.NumCat * sizeof(double));
     NumFilters = 1;
-    AllFilters = (FILTER *) G_malloc(sizeof(FILTER));
+    AllFilters = (FILTER *)G_malloc(sizeof(FILTER));
     /*
        if( ! Distance->answers) {
        NumDist = 1;
@@ -137,8 +135,8 @@ void Init(void)
     if (Distance->answer) {
         sscanf(Distance->answer, "%lf", &(AllFilters[NumDist].MaxDist));
         if (AllFilters[NumDist].MaxDist < 0.0)
-            G_fatal_error(_("Distance value (%d): %lf must be >= 0.0"),
-                          NumDist, AllFilters[NumDist].MaxDist);
+            G_fatal_error(_("Distance value (%d): %lf must be >= 0.0"), NumDist,
+                          AllFilters[NumDist].MaxDist);
 
         NumDist++;
     }
@@ -146,7 +144,7 @@ void Init(void)
        NumExp = 0;
        if( Exponent->answers) {
        for (i = 0; Number = Exponent->answers[i]; i++) {
-       if(NumExp == NumFilters) 
+       if(NumExp == NumFilters)
        AllFilters = (FILTER *) G_realloc(
        AllFilters, ++NumFilters * sizeof( FILTER));
        sscanf( Number, "%lf", &(AllFilters[NumExp].Exp));
@@ -174,7 +172,7 @@ void Init(void)
     /*
        if( Weight->answers) {
        for (i = 0; Number = Weight->answers[i]; i++) {
-       if(NumWeight == NumFilters) 
+       if(NumWeight == NumFilters)
        AllFilters = (FILTER *) G_realloc(
        AllFilters, ++NumFilters * sizeof( FILTER));
        sscanf( Numbers, "%lf", &(AllFilters[NumWeight].Mult));
@@ -189,9 +187,9 @@ void Init(void)
     if (Weight->answer) {
         sscanf(Weight->answer, "%lf", &(AllFilters[NumWeight].Mult));
         if (AllFilters[NumWeight].Mult > AllFilters[NumWeight].MaxDist)
-            G_fatal_error(_("Flat value (%lf) must be less than distance value (%lf)"),
-                          AllFilters[NumWeight].Mult,
-                          AllFilters[NumWeight].MaxDist);
+            G_fatal_error(
+                _("Flat value (%lf) must be less than distance value (%lf)"),
+                AllFilters[NumWeight].Mult, AllFilters[NumWeight].MaxDist);
 
         NumWeight++;
     }
@@ -200,12 +198,12 @@ void Init(void)
         sprintf(String, " dist=");
         strcat(Buf, String);
         for (i = 0; i < NumDist - 1; i++) {
-            sprintf(String, "%.*lf,",
-                    Digits(AllFilters[i].MaxDist, 6), AllFilters[i].MaxDist);
+            sprintf(String, "%.*lf,", Digits(AllFilters[i].MaxDist, 6),
+                    AllFilters[i].MaxDist);
             strcat(Buf, String);
         }
-        sprintf(String, "%.*lf",
-                Digits(AllFilters[i].MaxDist, 6), AllFilters[i].MaxDist);
+        sprintf(String, "%.*lf", Digits(AllFilters[i].MaxDist, 6),
+                AllFilters[i].MaxDist);
         strcat(Buf, String);
     }
 
@@ -232,12 +230,12 @@ void Init(void)
         sprintf(String, " exp=");
         strcat(Buf, String);
         for (i = 0; i < NumExp - 1; i++) {
-            sprintf(String, "%.*lf,",
-                    Digits(AllFilters[i].Exp, 6), AllFilters[i].Exp);
+            sprintf(String, "%.*lf,", Digits(AllFilters[i].Exp, 6),
+                    AllFilters[i].Exp);
             strcat(Buf, String);
         }
-        sprintf(String, "%.*lf",
-                Digits(AllFilters[i].Exp, 6), AllFilters[i].Exp);
+        sprintf(String, "%.*lf", Digits(AllFilters[i].Exp, 6),
+                AllFilters[i].Exp);
         strcat(Buf, String);
     }
 
@@ -248,13 +246,13 @@ void Init(void)
         sprintf(String, " flat=");
         strcat(Buf, String);
         for (i = 0; i < NumWeight - 1; i++) {
-            sprintf(String, "%.*lf,",
-                    Digits(AllFilters[i].Mult, 6), AllFilters[i].Mult);
+            sprintf(String, "%.*lf,", Digits(AllFilters[i].Mult, 6),
+                    AllFilters[i].Mult);
             strcat(Buf, String);
             G_debug(3, "(AllFilters[i].Mult):%.12lf", AllFilters[i].Mult);
         }
-        sprintf(String, "%.*lf",
-                Digits(AllFilters[i].Mult, 6), AllFilters[i].Mult);
+        sprintf(String, "%.*lf", Digits(AllFilters[i].Mult, 6),
+                AllFilters[i].Mult);
         strcat(Buf, String);
     }
 

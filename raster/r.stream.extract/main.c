@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.stream.extract
@@ -13,6 +12,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
@@ -29,7 +29,7 @@ GW_LARGE_INT n_stream_nodes, n_alloc_nodes;
 POINT *outlets;
 struct snode *stream_node;
 GW_LARGE_INT n_outlets, n_alloc_outlets;
-char drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
+char drain[3][3] = {{7, 6, 5}, {8, 0, 4}, {1, 2, 3}};
 
 char sides;
 int c_fac;
@@ -47,16 +47,14 @@ CELL *astar_order;
 
 int main(int argc, char *argv[])
 {
-    struct
-    {
+    struct {
         struct Option *ele, *acc, *depression;
         struct Option *threshold, *d8cut;
         struct Option *mont_exp;
         struct Option *min_stream_length;
         struct Option *memory;
     } input;
-    struct
-    {
+    struct {
         struct Option *stream_rast;
         struct Option *stream_vect;
         struct Option *dir_rast;
@@ -86,8 +84,8 @@ int main(int argc, char *argv[])
     input.acc->key = "accumulation";
     input.acc->label = _("Name of input accumulation raster map");
     input.acc->required = NO;
-    input.acc->description =
-        _("Stream extraction will use provided accumulation instead of calculating it anew");
+    input.acc->description = _("Stream extraction will use provided "
+                               "accumulation instead of calculating it anew");
     input.acc->guisection = _("Input maps");
 
     input.depression = G_define_standard_option(G_OPT_R_INPUT);
@@ -120,10 +118,10 @@ int main(int argc, char *argv[])
     input.mont_exp->type = TYPE_DOUBLE;
     input.mont_exp->required = NO;
     input.mont_exp->answer = "0";
-    input.mont_exp->label =
-        _("Montgomery exponent for slope, disabled with 0");
+    input.mont_exp->label = _("Montgomery exponent for slope, disabled with 0");
     input.mont_exp->description =
-        _("Montgomery: accumulation is multiplied with pow(slope,mexp) and then compared with threshold");
+        _("Montgomery: accumulation is multiplied with pow(slope,mexp) and "
+          "then compared with threshold");
 
     input.min_stream_length = G_define_option();
     input.min_stream_length->key = "stream_length";
@@ -196,19 +194,20 @@ int main(int argc, char *argv[])
     else {
         d8cut = atof(input.d8cut->answer);
         if (d8cut < 0)
-            G_fatal_error(_("d8cut must be positive or zero but is %f"),
-                          d8cut);
+            G_fatal_error(_("d8cut must be positive or zero but is %f"), d8cut);
     }
 
     /* Montgomery stream initiation */
     if (input.mont_exp->answer) {
         mont_exp = atof(input.mont_exp->answer);
         if (mont_exp < 0)
-            G_fatal_error(_("Montgomery exponent must be positive or zero but is %f"),
-                          mont_exp);
+            G_fatal_error(
+                _("Montgomery exponent must be positive or zero but is %f"),
+                mont_exp);
         if (mont_exp > 3)
-            G_warning(_("Montgomery exponent is %f, recommended range is 0.0 - 3.0"),
-                      mont_exp);
+            G_warning(
+                _("Montgomery exponent is %f, recommended range is 0.0 - 3.0"),
+                mont_exp);
     }
     else
         mont_exp = 0;
@@ -217,8 +216,9 @@ int main(int argc, char *argv[])
     if (input.min_stream_length->answer) {
         min_stream_length = atoi(input.min_stream_length->answer);
         if (min_stream_length < 0)
-            G_fatal_error(_("Minimum stream length must be positive or zero but is %d"),
-                          min_stream_length);
+            G_fatal_error(
+                _("Minimum stream length must be positive or zero but is %d"),
+                min_stream_length);
     }
     else
         min_stream_length = 0;
@@ -232,9 +232,9 @@ int main(int argc, char *argv[])
         memory = 300;
 
     /* Check for some output map */
-    if ((output.stream_rast->answer == NULL)
-        && (output.stream_vect->answer == NULL)
-        && (output.dir_rast->answer == NULL)) {
+    if ((output.stream_rast->answer == NULL) &&
+        (output.stream_vect->answer == NULL) &&
+        (output.dir_rast->answer == NULL)) {
         G_fatal_error(_("At least one output raster maps must be specified"));
     }
 
@@ -264,8 +264,9 @@ int main(int argc, char *argv[])
     /* set global variables */
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    sides = 8;                  /* not a user option */
-    c_fac = 5;                  /* not a user option, MFD covergence factor 5 gives best results */
+    sides = 8; /* not a user option */
+    c_fac =
+        5; /* not a user option, MFD covergence factor 5 gives best results */
 
     /* segment structures */
     seg_rows = seg_cols = 64;
@@ -301,7 +302,7 @@ int main(int argc, char *argv[])
     if (num_open_segs > num_seg_total) {
         heap_mem += (num_open_segs - num_seg_total) * memory_divisor;
         heap_mem -= (num_open_segs - num_seg_total) * seg2kb *
-            sizeof(HEAP_PNT) / (4. * 1024.);
+                    sizeof(HEAP_PNT) / (4. * 1024.);
         num_open_segs = num_seg_total;
     }
     if (num_open_segs < 16) {
@@ -324,7 +325,7 @@ int main(int argc, char *argv[])
              sizeof(WAT_ALT), 1);
     if (num_open_segs * 2 > num_seg_total)
         heap_mem += (num_open_segs * 2 - num_seg_total) * seg2kb *
-            sizeof(WAT_ALT) / 1024.;
+                    sizeof(WAT_ALT) / 1024.;
     cseg_open(&stream, seg_rows, seg_cols, num_open_segs / 2.);
 
     seg_open(&aspflag, nrows, ncols, seg_rows, seg_cols, num_open_segs * 2,
@@ -372,20 +373,20 @@ int main(int argc, char *argv[])
     if (n_points % seg_cols > 0)
         num_seg_total++;
     /* no need to have more segments open than exist */
-    num_open_array_segs =
-        (1 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
+    num_open_array_segs = (1 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
     if (num_open_array_segs > num_seg_total)
         num_open_array_segs = num_seg_total;
     if (num_open_array_segs < 2)
         num_open_array_segs = 2;
 
-    G_debug(1, "A* search heap open segments %d, total %d",
-            num_open_array_segs, num_seg_total);
+    G_debug(1, "A* search heap open segments %d, total %d", num_open_array_segs,
+            num_seg_total);
     G_debug(1, "segment size for heap points: %d", seg_cols);
-    /* the search heap will not hold more than 5% of all points at any given time ? */
+    /* the search heap will not hold more than 5% of all points at any given
+     * time ? */
     /* chances are good that the heap will fit into one large segment */
-    seg_open(&search_heap, 1, n_points + 1, 1, seg_cols,
-             num_open_array_segs, sizeof(HEAP_PNT), 0);
+    seg_open(&search_heap, 1, n_points + 1, 1, seg_cols, num_open_array_segs,
+             sizeof(HEAP_PNT), 0);
 
     /********************/
     /*    processing    */

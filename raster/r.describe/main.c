@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.describe
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *
- * PURPOSE:      Prints terse list of category values found in a raster 
+ * PURPOSE:      Prints terse list of category values found in a raster
  *               map layer.
  *
  * COPYRIGHT:    (C) 2006 by the GRASS Development Team
@@ -23,7 +22,6 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-
 int main(int argc, char *argv[])
 {
     int as_int;
@@ -33,16 +31,14 @@ int main(int argc, char *argv[])
     int nsteps;
     char *no_data_str;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Flag *one;
         struct Flag *r;
         struct Flag *d;
         struct Flag *i;
         struct Flag *n;
     } flag;
-    struct
-    {
+    struct {
         struct Option *map;
         struct Option *nv;
         struct Option *nsteps;
@@ -105,8 +101,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("%s = %s -- must be greater than zero"),
                       option.nsteps->key, option.nsteps->answer);
 
-    describe(option.map->answer, compact, no_data_str,
-             range, windowed, nsteps, as_int, flag.n->answer);
+    describe(option.map->answer, compact, no_data_str, range, windowed, nsteps,
+             as_int, flag.n->answer);
 
     return EXIT_SUCCESS;
 }
