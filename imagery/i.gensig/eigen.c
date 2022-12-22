@@ -3,17 +3,16 @@
 #include <math.h>
 double **matrix(), *vector();
 
-
 /* Computes eigenvalues (and eigen vectors if desired) for      *
  *  symmetric matices.                                          */
-int eigen(double **M,           /* Input matrix */
-          double *lambda,       /* Output eigenvalues */
-          int n                 /* Input matrix dimension */
-    )
+int eigen(double **M,     /* Input matrix */
+          double *lambda, /* Output eigenvalues */
+          int n           /* Input matrix dimension */
+)
 {
     int i, j;
     double **a, *e;
-    int stat;                   /* 0 error, 1 ok */
+    int stat; /* 0 error, 1 ok */
 
     a = matrix(1, n, 1, n);
     lambda--;
@@ -27,8 +26,8 @@ int eigen(double **M,           /* Input matrix */
     stat = tqli(lambda, e, n, a);
 
     /* Returns eigenvectors */
-    /*  for(i=1; i<=n; i++) 
-       for(j=1; j<=n; j++) 
+    /*  for(i=1; i<=n; i++)
+       for(j=1; j<=n; j++)
        M[i-1][j-1] = a[i][j]; */
 
     free_matrix(a, 1, n, 1, n);
@@ -37,8 +36,7 @@ int eigen(double **M,           /* Input matrix */
     return stat;
 }
 
-
-#define SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
+#define SIGN(a, b) ((b) < 0 ? -fabs(a) : fabs(a))
 
 int tqli(double d[], double e[], int n, double **z)
 {
@@ -58,7 +56,7 @@ int tqli(double d[], double e[], int n, double **z)
             }
             if (m != l) {
                 if (iter++ == 30)
-                    return 0;   /*Too many iterations in TQLI */
+                    return 0; /*Too many iterations in TQLI */
                 g = (d[l + 1] - d[l]) / (2.0 * e[l]);
                 r = sqrt((g * g) + 1.0);
                 g = d[m] - d[l] + e[l] / (g + SIGN(r, g));
@@ -100,8 +98,6 @@ int tqli(double d[], double e[], int n, double **z)
     return 1;
 }
 
-
-
 int tred2(double **a, int n, double d[], double e[])
 {
     int l, k, j, i;
@@ -127,7 +123,8 @@ int tred2(double **a, int n, double d[], double e[])
                 a[i][l] = f - g;
                 f = 0.0;
                 for (j = 1; j <= l; j++) {
-                    /* Next statement can be omitted if eigenvectors not wanted */
+                    /* Next statement can be omitted if eigenvectors not wanted
+                     */
                     a[j][i] = a[i][j] / h;
                     g = 0.0;
                     for (k = 1; k <= j; k++)

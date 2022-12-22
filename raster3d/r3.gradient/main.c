@@ -1,7 +1,6 @@
-
 /****************************************************************************
- * 
- * MODULE:       r3.gradient     
+ *
+ * MODULE:       r3.gradient
  * AUTHOR(S):    Anna Petrasova kratochanna <at> gmail <dot> com
  * PURPOSE:      Computes gradient of a 3D raster map
  * COPYRIGHT:    (C) 2014 by the GRASS Development Team
@@ -11,6 +10,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     block_opt = G_define_option();
     block_opt->key = "blocksize";
     block_opt->multiple = TRUE;
-    block_opt->answer = "30,30,20";     /* based on testing */
+    block_opt->answer = "30,30,20"; /* based on testing */
     block_opt->key_desc = "size_x,size_y,size_z";
     block_opt->description = _("Size of blocks");
 
@@ -106,46 +106,43 @@ int main(int argc, char *argv[])
     step[1] = region.ns_res;
     step[2] = region.tb_res;
 
-    input = Rast3d_open_cell_old(input_opt->answer,
-                                 G_find_raster3d(input_opt->answer, ""),
-                                 &region, RASTER3D_TILE_SAME_AS_FILE,
-                                 RASTER3D_USE_CACHE_DEFAULT);
+    input = Rast3d_open_cell_old(
+        input_opt->answer, G_find_raster3d(input_opt->answer, ""), &region,
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (!input)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                            input_opt->answer);
 
     for (i = 0; i < 3; i++) {
-        output[i] =
-            Rast3d_open_new_opt_tile_size(output_opt->answers[i],
-                                          RASTER3D_USE_CACHE_DEFAULT,
-                                          &region, DCELL_TYPE, 32);
+        output[i] = Rast3d_open_new_opt_tile_size(output_opt->answers[i],
+                                                  RASTER3D_USE_CACHE_DEFAULT,
+                                                  &region, DCELL_TYPE, 32);
         if (!output[i]) {
             Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                                output_opt->answers[i]);
         }
-
     }
 
     blocks = G_calloc(N, sizeof(struct Gradient_block));
     if (!blocks)
         G_fatal_error(_("Failed to allocate memory for blocks"));
     for (i = 0; i < N; i++) {
-        blocks[i].input.array = G_malloc(((block_x + 2) * (block_y + 2)
-                                          * (block_z + 2)) * sizeof(DCELL));
-        blocks[i].dx.array = G_malloc(((block_x + 2) * (block_y + 2)
-                                       * (block_z + 2)) * sizeof(DCELL));
-        blocks[i].dy.array = G_malloc(((block_x + 2) * (block_y + 2)
-                                       * (block_z + 2)) * sizeof(DCELL));
-        blocks[i].dz.array = G_malloc(((block_x + 2) * (block_y + 2)
-                                       * (block_z + 2)) * sizeof(DCELL));
+        blocks[i].input.array = G_malloc(
+            ((block_x + 2) * (block_y + 2) * (block_z + 2)) * sizeof(DCELL));
+        blocks[i].dx.array = G_malloc(
+            ((block_x + 2) * (block_y + 2) * (block_z + 2)) * sizeof(DCELL));
+        blocks[i].dy.array = G_malloc(
+            ((block_x + 2) * (block_y + 2) * (block_z + 2)) * sizeof(DCELL));
+        blocks[i].dz.array = G_malloc(
+            ((block_x + 2) * (block_y + 2) * (block_z + 2)) * sizeof(DCELL));
     }
 
     bl_indices = G_calloc(N * 3, sizeof(int));
     bl_overlap = G_calloc(N * 6, sizeof(int));
 
     max_i = (int)ceil(region.cols / (float)block_x) *
-        (int)ceil(region.rows / (float)block_y) *
-        (int)ceil(region.depths / (float)block_z);
+            (int)ceil(region.rows / (float)block_y) *
+            (int)ceil(region.depths / (float)block_z);
     i = j = 0;
     index_z = 0;
 
@@ -168,8 +165,7 @@ int main(int argc, char *argv[])
                 start_y = fmax(index_y - 1, 0);
                 n_y = fmin(index_y + block_y, region.rows - 1) - start_y + 1;
                 start_z = fmax(index_z - 1, 0);
-                n_z =
-                    fmin(index_z + block_z, region.depths - 1) - start_z + 1;
+                n_z = fmin(index_z + block_z, region.depths - 1) - start_z + 1;
 
                 /* adjust offset on edges */
                 /* start offset */
@@ -215,102 +211,64 @@ int main(int argc, char *argv[])
                 blocks[j].dx.sz = blocks[j].dy.sz = blocks[j].dz.sz = n_z;
 
                 /* read */
-                Rast3d_get_block(input, start_x, start_y, start_z,
-                                 n_x, n_y, n_z, blocks[j].input.array,
-                                 DCELL_TYPE);
+                Rast3d_get_block(input, start_x, start_y, start_z, n_x, n_y,
+                                 n_z, blocks[j].input.array, DCELL_TYPE);
                 if ((j + 1) == N || i == max_i - 1) {
 
                     /* compute gradient */
-                    /* disabled openMP #pragma omp parallel for schedule (static) private (k) */
+                    /* disabled openMP #pragma omp parallel for schedule
+                     * (static) private (k) */
                     for (k = 0; k <= j; k++) {
                         Rast3d_gradient_double(&(blocks[k].input), step,
-                                               &(blocks[k].dx),
-                                               &(blocks[k].dy),
+                                               &(blocks[k].dx), &(blocks[k].dy),
                                                &(blocks[k].dz));
                     }
 
                     /* write */
                     for (k = 0; k <= j; k++) {
                         for (c = 0;
-                             c <
-                             blocks[k].input.sx - bl_overlap[k * 6 + 0] -
-                             bl_overlap[k * 6 + 1]; c++) {
-                            for (r = 0;
-                                 r <
-                                 blocks[k].input.sy - bl_overlap[k * 6 + 2] -
-                                 bl_overlap[k * 6 + 3]; r++) {
-                                for (d = 0;
-                                     d <
-                                     blocks[k].input.sz - bl_overlap[k * 6 +
-                                                                     4] -
-                                     bl_overlap[k * 6 + 5]; d++) {
-                                    value =
-                                        RASTER3D_ARRAY_ACCESS(&(blocks[k].dx),
-                                                              c +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         0],
-                                                              r +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         2],
-                                                              d +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         4]);
+                             c < blocks[k].input.sx - bl_overlap[k * 6 + 0] -
+                                     bl_overlap[k * 6 + 1];
+                             c++) {
+                            for (r = 0; r < blocks[k].input.sy -
+                                                bl_overlap[k * 6 + 2] -
+                                                bl_overlap[k * 6 + 3];
+                                 r++) {
+                                for (d = 0; d < blocks[k].input.sz -
+                                                    bl_overlap[k * 6 + 4] -
+                                                    bl_overlap[k * 6 + 5];
+                                     d++) {
+                                    value = RASTER3D_ARRAY_ACCESS(
+                                        &(blocks[k].dx),
+                                        c + bl_overlap[k * 6 + 0],
+                                        r + bl_overlap[k * 6 + 2],
+                                        d + bl_overlap[k * 6 + 4]);
                                     Rast3d_put_value(output[0],
-                                                     c + bl_indices[k * 3 +
-                                                                    0],
-                                                     r + bl_indices[k * 3 +
-                                                                    1],
-                                                     d + bl_indices[k * 3 +
-                                                                    2],
+                                                     c + bl_indices[k * 3 + 0],
+                                                     r + bl_indices[k * 3 + 1],
+                                                     d + bl_indices[k * 3 + 2],
                                                      &value, DCELL_TYPE);
 
-                                    value =
-                                        RASTER3D_ARRAY_ACCESS(&(blocks[k].dy),
-                                                              c +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         0],
-                                                              r +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         2],
-                                                              d +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         4]);
+                                    value = RASTER3D_ARRAY_ACCESS(
+                                        &(blocks[k].dy),
+                                        c + bl_overlap[k * 6 + 0],
+                                        r + bl_overlap[k * 6 + 2],
+                                        d + bl_overlap[k * 6 + 4]);
                                     Rast3d_put_value(output[1],
-                                                     c + bl_indices[k * 3 +
-                                                                    0],
-                                                     r + bl_indices[k * 3 +
-                                                                    1],
-                                                     d + bl_indices[k * 3 +
-                                                                    2],
+                                                     c + bl_indices[k * 3 + 0],
+                                                     r + bl_indices[k * 3 + 1],
+                                                     d + bl_indices[k * 3 + 2],
                                                      &value, DCELL_TYPE);
 
-                                    value =
-                                        RASTER3D_ARRAY_ACCESS(&(blocks[k].dz),
-                                                              c +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         0],
-                                                              r +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         2],
-                                                              d +
-                                                              bl_overlap[k *
-                                                                         6 +
-                                                                         4]);
+                                    value = RASTER3D_ARRAY_ACCESS(
+                                        &(blocks[k].dz),
+                                        c + bl_overlap[k * 6 + 0],
+                                        r + bl_overlap[k * 6 + 2],
+                                        d + bl_overlap[k * 6 + 4]);
                                     Rast3d_put_value(output[2],
-                                                     c + bl_indices[k * 3 +
-                                                                    0],
-                                                     r + bl_indices[k * 3 +
-                                                                    1],
-                                                     d + bl_indices[k * 3 +
-                                                                    2],
+                                                     c + bl_indices[k * 3 + 0],
+                                                     r + bl_indices[k * 3 + 1],
+                                                     d + bl_indices[k * 3 + 2],
                                                      &value, DCELL_TYPE);
                                 }
                             }

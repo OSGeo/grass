@@ -1,6 +1,6 @@
 /* rectification code */
 
-/* 1/2002: updated to GRASS 5 write routines and 
+/* 1/2002: updated to GRASS 5 write routines and
    CELL/FP elevation - Markus Neteler
  */
 
@@ -38,14 +38,13 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
 
     ibuffer = readcell(infd, seg_mb_img, 0);
 
-    Rast_close(infd);           /* (pmx) 17 april 2000 */
+    Rast_close(infd); /* (pmx) 17 april 2000 */
 
-    G_message(_("Rectify <%s@%s> (location <%s>)"),
-              name, mapset, G_location());
+    G_message(_("Rectify <%s@%s> (location <%s>)"), name, mapset, G_location());
     select_target_env();
     G_set_window(&target_window);
-    G_message(_("into  <%s@%s> (location <%s>) ..."),
-              result, G_mapset(), G_location());
+    G_message(_("into  <%s@%s> (location <%s>) ..."), result, G_mapset(),
+              G_location());
 
     nrows = target_window.rows;
     ncols = target_window.cols;
@@ -89,8 +88,7 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
             I_ortho_ref(e1, n1, z1, &ex1, &nx1, &zx1, &group->camera_ref,
                         group->XC, group->YC, group->ZC, group->M);
 
-            G_debug(5,
-                    "\t\tAfter ortho ref (photo cords): ex = %f \t nx =  %f",
+            G_debug(5, "\t\tAfter ortho ref (photo cords): ex = %f \t nx =  %f",
                     ex1, nx1);
 
             /* photo coordinates ex1, nx1 to image coordinates ex, nx */
@@ -111,7 +109,7 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
     }
     G_percent(1, 1, 1);
 
-    Rast_close(outfd);          /* (pmx) 17 april 2000 */
+    Rast_close(outfd); /* (pmx) 17 april 2000 */
     G_free(trast);
 
     close(ibuffer->fd);
@@ -119,15 +117,16 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
 
     Rast_get_cellhd(result, G_mapset(), &cellhd);
 
-    if (cellhd.proj == 0) {     /* x,y imagery */
+    if (cellhd.proj == 0) { /* x,y imagery */
         cellhd.proj = target_window.proj;
         cellhd.zone = target_window.zone;
     }
 
     if (target_window.proj != cellhd.proj) {
         cellhd.proj = target_window.proj;
-        G_warning(_("Raster map <%s@%s>: projection don't match current settings"),
-                  name, mapset);
+        G_warning(
+            _("Raster map <%s@%s>: projection don't match current settings"),
+            name, mapset);
     }
 
     if (target_window.zone != cellhd.zone) {

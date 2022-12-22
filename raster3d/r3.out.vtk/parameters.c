@@ -1,20 +1,20 @@
-
 /****************************************************************************
-*
-* MODULE:       r3.out.vtk  
-*   	    	
-* AUTHOR(S):    Original author 
-*               Soeren Gebbert soerengebbert at gmx de
-* 		27 Feb 2006 Berlin
-* PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format  
-*
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r3.out.vtk
+ *
+ * AUTHOR(S):    Original author
+ *               Soeren Gebbert soerengebbert at gmx de
+ *                 27 Feb 2006 Berlin
+ * PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format
+ *
+ * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "parameters.h"
@@ -68,24 +68,24 @@ void set_params()
     param.structgrid->key = 's';
     param.structgrid->guisection = "Surface options";
     param.structgrid->description =
-        _("Create 3D elevation output with a top and a bottom surface, both raster maps are required.");
-
+        _("Create 3D elevation output with a top and a bottom surface, both "
+          "raster maps are required.");
 
     param.rgbmaps = G_define_standard_option(G_OPT_R3_INPUT);
     param.rgbmaps->key = "rgbmaps";
     param.rgbmaps->required = NO;
     param.rgbmaps->multiple = YES;
     param.rgbmaps->guisection = "Advanced options";
-    param.rgbmaps->description =
-        _("Three (R,G,B) 3D raster maps to create RGB values [redmap,greenmap,bluemap]");
+    param.rgbmaps->description = _("Three (R,G,B) 3D raster maps to create RGB "
+                                   "values [redmap,greenmap,bluemap]");
 
     param.vectormaps = G_define_standard_option(G_OPT_V_OUTPUT);
     param.vectormaps->key = "vectormaps";
     param.vectormaps->required = NO;
     param.vectormaps->multiple = YES;
     param.vectormaps->guisection = "Advanced options";
-    param.vectormaps->description =
-        _("Three (x,y,z) 3D raster maps to create vector values [xmap,ymap,zmap]");
+    param.vectormaps->description = _("Three (x,y,z) 3D raster maps to create "
+                                      "vector values [xmap,ymap,zmap]");
 
     param.elevscale = G_define_option();
     param.elevscale->key = "zscale";
@@ -126,9 +126,8 @@ void set_params()
     param.scalell = G_define_flag();
     param.scalell->key = 'l';
     param.scalell->guisection = "Advanced options";
-    param.scalell->description =
-        _("Do not convert the top-bottom resolution in case of lat long projection to meters");
-
+    param.scalell->description = _("Do not convert the top-bottom resolution "
+                                   "in case of lat long projection to meters");
 
     /* Maybe needed in the future
      * param.xml = G_define_flag ();

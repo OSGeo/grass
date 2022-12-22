@@ -22,11 +22,8 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-
 /* this should be updated when the file version changes */
 #define FILE_VERSION "4.3"
-
-
 
 /*
  * New grid file format for VIS-5D:
@@ -46,13 +43,11 @@
  * Grid data is stored as either:
  *     1-byte unsigned integers  (255=missing)
  *     2-byte unsigned integers  (65535=missing)
- *     4-byte IEEE floats        ( >1.0e30 = missing) 
+ *     4-byte IEEE floats        ( >1.0e30 = missing)
  *
  * All numeric values are stored in big endian order.  All floating point
  * values are in IEEE format.
  */
-
-
 
 /*
  * Updates:
@@ -60,9 +55,6 @@
  * April 13, 1995, brianp
  *   finished Cray support for 2-byte and 4-byte compress modes
  */
-
-
-
 
 #include <grass/config.h>
 #include <assert.h>
@@ -74,6 +66,7 @@
 #include "binio.h"
 #include "v5d.h"
 #include "vis5d.h"
+
 #ifndef SEEK_SET
 #define SEEK_SET 0
 #endif
@@ -84,8 +77,6 @@
 #define SEEK_END 2
 #endif
 
-
-
 /*
  * Currently defined tags:
  * Note:  the notation a[i] doesn't mean a is an array of i elements,
@@ -93,75 +84,67 @@
  *
  * Tags marked as PHASED OUT should be readable but are no longer written.
  * Old tag numbers can't be reused!
- * 
+ *
  */
-
 
 /*      TAG NAME        VALUE       DATA (comments)                     */
 
 /*----------------------------------------------------------------------*/
-#define TAG_ID          0x5635440a      /* hex encoding of "V5D\n"          */
+#define TAG_ID              0x5635440a /* hex encoding of "V5D\n"          */
 
 /* general stuff 1000+ */
-#define TAG_VERSION     1000    /* char*10 FileVersion              */
-#define TAG_NUMTIMES    1001    /* int*4 NumTimes                   */
-#define TAG_NUMVARS     1002    /* int*4 NumVars                    */
-#define TAG_VARNAME     1003    /* int*4 var; char*10 VarName[var]  */
+#define TAG_VERSION         1000 /* char*10 FileVersion              */
+#define TAG_NUMTIMES        1001 /* int*4 NumTimes                   */
+#define TAG_NUMVARS         1002 /* int*4 NumVars                    */
+#define TAG_VARNAME         1003 /* int*4 var; char*10 VarName[var]  */
 
-#define TAG_NR          1004    /* int*4 Nr                         */
-#define TAG_NC          1005    /* int*4 Nc                         */
-#define TAG_NL          1006    /* int*4 Nl  (Nl for all vars)      */
-#define TAG_NL_VAR      1007    /* int*4 var; int*4 Nl[var]         */
-#define TAG_LOWLEV_VAR  1008    /* int*4 var; int*4 LowLev[var]     */
+#define TAG_NR              1004 /* int*4 Nr                         */
+#define TAG_NC              1005 /* int*4 Nc                         */
+#define TAG_NL              1006 /* int*4 Nl  (Nl for all vars)      */
+#define TAG_NL_VAR          1007 /* int*4 var; int*4 Nl[var]         */
+#define TAG_LOWLEV_VAR      1008 /* int*4 var; int*4 LowLev[var]     */
 
-#define TAG_TIME        1010    /* int*4 t;  int*4 TimeStamp[t]     */
-#define TAG_DATE        1011    /* int*4 t;  int*4 DateStamp[t]     */
+#define TAG_TIME            1010 /* int*4 t;  int*4 TimeStamp[t]     */
+#define TAG_DATE            1011 /* int*4 t;  int*4 DateStamp[t]     */
 
-#define TAG_MINVAL      1012    /* int*4 var;  real*4 MinVal[var]   */
-#define TAG_MAXVAL      1013    /* int*4 var;  real*4 MaxVal[var]   */
+#define TAG_MINVAL          1012 /* int*4 var;  real*4 MinVal[var]   */
+#define TAG_MAXVAL          1013 /* int*4 var;  real*4 MaxVal[var]   */
 
-#define TAG_COMPRESS    1014    /* int*4 CompressMode; (#bytes/grid) */
+#define TAG_COMPRESS        1014 /* int*4 CompressMode; (#bytes/grid) */
 
-#define TAG_UNITS       1015    /* int *4 var; char*20 Units[var]   */
+#define TAG_UNITS           1015 /* int *4 var; char*20 Units[var]   */
 
 /* vertical coordinate system 2000+ */
-#define TAG_VERTICAL_SYSTEM 2000        /* int*4 VerticalSystem             */
-#define TAG_VERT_ARGS    2100   /* int*4 n;  real*4 VertArgs[0..n-1] */
+#define TAG_VERTICAL_SYSTEM 2000 /* int*4 VerticalSystem             */
+#define TAG_VERT_ARGS       2100 /* int*4 n;  real*4 VertArgs[0..n-1] */
 
-#define TAG_BOTTOMBOUND  2001   /* real*4 BottomBound     (PHASED OUT)  */
-#define TAG_LEVINC       2002   /* real*4 LevInc      (PHASED OUT)      */
-#define TAG_HEIGHT       2003   /* int*4 l;  real*4 Height[l] (PHASED OUT) */
-
+#define TAG_BOTTOMBOUND     2001 /* real*4 BottomBound     (PHASED OUT)  */
+#define TAG_LEVINC          2002 /* real*4 LevInc      (PHASED OUT)      */
+#define TAG_HEIGHT          2003 /* int*4 l;  real*4 Height[l] (PHASED OUT) */
 
 /* projection 3000+ */
-#define TAG_PROJECTION   3000   /* int*4 projection:                    */
-                                    /*   0 = generic linear                 */
-                                    /*   1 = cylindrical equidistant        */
-                                    /*   2 = Lambert conformal/Polar Stereo */
-                                    /*   3 = rotated equidistant            */
-#define TAG_PROJ_ARGS    3100   /* int *4 n;  real*4 ProjArgs[0..n-1]   */
+#define TAG_PROJECTION      3000 /* int*4 projection:                    */
+                                 /*   0 = generic linear                 */
+                                 /*   1 = cylindrical equidistant        */
+                                 /*   2 = Lambert conformal/Polar Stereo */
+                                 /*   3 = rotated equidistant            */
+#define TAG_PROJ_ARGS       3100 /* int *4 n;  real*4 ProjArgs[0..n-1]   */
 
-#define TAG_NORTHBOUND   3001   /* real*4 NorthBound       (PHASED OUT) */
-#define TAG_WESTBOUND    3002   /* real*4 WestBound        (PHASED OUT) */
-#define TAG_ROWINC       3003   /* real*4 RowInc           (PHASED OUT) */
-#define TAG_COLINC       3004   /* real*4 ColInc           (PHASED OUT) */
-#define TAG_LAT1         3005   /* real*4 Lat1             (PHASED OUT) */
-#define TAG_LAT2         3006   /* real*4 Lat2             (PHASED OUT) */
-#define TAG_POLE_ROW     3007   /* real*4 PoleRow          (PHASED OUT) */
-#define TAG_POLE_COL     3008   /* real*4 PoleCol          (PHASED OUT) */
-#define TAG_CENTLON      3009   /* real*4 CentralLon       (PHASED OUT) */
-#define TAG_CENTLAT      3010   /* real*4 CentralLat       (PHASED OUT) */
-#define TAG_CENTROW      3011   /* real*4 CentralRow       (PHASED OUT) */
-#define TAG_CENTCOL      3012   /* real*4 CentralCol       (PHASED OUT) */
-#define TAG_ROTATION     3013   /* real*4 Rotation         (PHASED OUT) */
+#define TAG_NORTHBOUND      3001 /* real*4 NorthBound       (PHASED OUT) */
+#define TAG_WESTBOUND       3002 /* real*4 WestBound        (PHASED OUT) */
+#define TAG_ROWINC          3003 /* real*4 RowInc           (PHASED OUT) */
+#define TAG_COLINC          3004 /* real*4 ColInc           (PHASED OUT) */
+#define TAG_LAT1            3005 /* real*4 Lat1             (PHASED OUT) */
+#define TAG_LAT2            3006 /* real*4 Lat2             (PHASED OUT) */
+#define TAG_POLE_ROW        3007 /* real*4 PoleRow          (PHASED OUT) */
+#define TAG_POLE_COL        3008 /* real*4 PoleCol          (PHASED OUT) */
+#define TAG_CENTLON         3009 /* real*4 CentralLon       (PHASED OUT) */
+#define TAG_CENTLAT         3010 /* real*4 CentralLat       (PHASED OUT) */
+#define TAG_CENTROW         3011 /* real*4 CentralRow       (PHASED OUT) */
+#define TAG_CENTCOL         3012 /* real*4 CentralCol       (PHASED OUT) */
+#define TAG_ROTATION        3013 /* real*4 Rotation         (PHASED OUT) */
 
-
-#define TAG_END                9999
-
-
-
-
-
+#define TAG_END             9999
 
 /**********************************************************************/
 
@@ -169,17 +152,15 @@
 
 /**********************************************************************/
 
-
 float pressure_to_height(float pressure)
 {
-    return (float)DEFAULT_LOG_EXP *log((double)pressure / DEFAULT_LOG_SCALE);
+    return (float)DEFAULT_LOG_EXP * log((double)pressure / DEFAULT_LOG_SCALE);
 }
 
 float height_to_pressure(float height)
 {
-    return (float)DEFAULT_LOG_SCALE *exp((double)height / DEFAULT_LOG_EXP);
+    return (float)DEFAULT_LOG_SCALE * exp((double)height / DEFAULT_LOG_EXP);
 }
-
 
 /*
  * Return current file position.
@@ -189,7 +170,6 @@ static off_t ltell(int f)
 {
     return lseek(f, 0, SEEK_CUR);
 }
-
 
 /*
  * Copy up to maxlen characters from src to dst stopping upon whitespace
@@ -210,8 +190,6 @@ static int copy_string2(char *dst, const char *src, int maxlen)
     }
     return strlen(dst);
 }
-
-
 
 /*
  * Copy up to maxlen characters from src to dst stopping upon whitespace
@@ -234,8 +212,6 @@ static int copy_string(char *dst, const char *src, int maxlen)
     return i;
 }
 
-
-
 /*
  * Convert a date from YYDDD format to days since Jan 1, 1900.
  */
@@ -246,12 +222,11 @@ int v5dYYDDDtoDays(int yyddd)
     iy = yyddd / 1000;
     id = yyddd - 1000 * iy;
     if (iy < 50)
-        iy += 100;              /* WLH 31 July 96 << 31 Dec 99 */
+        iy += 100; /* WLH 31 July 96 << 31 Dec 99 */
     idays = 365 * iy + (iy - 1) / 4 + id;
 
     return idays;
 }
-
 
 /*
  * Convert a time from HHMMSS format to seconds since midnight.
@@ -267,8 +242,6 @@ int v5dHHMMSStoSeconds(int hhmmss)
     return s + m * 60 + h * 60 * 60;
 }
 
-
-
 /*
  * Convert a day since Jan 1, 1900 to YYDDD format.
  */
@@ -279,14 +252,13 @@ int v5dDaysToYYDDD(int days)
     iy = (4 * days) / 1461;
     id = days - (365 * iy + (iy - 1) / 4);
     if (iy > 99)
-        iy = iy - 100;          /* WLH 31 July 96 << 31 Dec 99 */
+        iy = iy - 100; /* WLH 31 July 96 << 31 Dec 99 */
     /* iy = iy + 1900; is the right way to fix this, but requires
        changing all places where dates are printed - procrastinate */
     iyyddd = iy * 1000 + id;
 
     return iyyddd;
 }
-
 
 /*
  * Convert a time in seconds since midnight to HHMMSS format.
@@ -301,14 +273,10 @@ int v5dSecondsToHHMMSS(int seconds)
     return hh * 10000 + mm * 100 + ss;
 }
 
-
-
-
-void v5dPrintStruct(const v5dstruct * v)
+void v5dPrintStruct(const v5dstruct *v)
 {
-    static char day[7][10] = { "Sunday", "Monday", "Tuesday", "Wednesday",
-        "Thursday", "Friday", "Saturday"
-    };
+    static char day[7][10] = {"Sunday",   "Monday", "Tuesday", "Wednesday",
+                              "Thursday", "Friday", "Saturday"};
     int time, var, i;
     int maxnl;
 
@@ -343,12 +311,12 @@ void v5dPrintStruct(const v5dstruct * v)
 
     printf("NumVars = %d\n", v->NumVars);
 
-    printf
-        ("Var  Name       Units      Rows  Cols  Levels LowLev  MinVal       MaxVal\n");
+    printf("Var  Name       Units      Rows  Cols  Levels LowLev  MinVal       "
+           "MaxVal\n");
     for (var = 0; var < v->NumVars; var++) {
-        printf("%3d  %-10s %-10s %3d   %3d   %3d    %3d",
-               var + 1, v->VarName[var], v->Units[var],
-               v->Nr, v->Nc, v->Nl[var], v->LowLev[var]);
+        printf("%3d  %-10s %-10s %3d   %3d   %3d    %3d", var + 1,
+               v->VarName[var], v->Units[var], v->Nr, v->Nc, v->Nl[var],
+               v->LowLev[var]);
         if (v->MinVal[var] > v->MaxVal[var]) {
             printf("     MISSING      MISSING\n");
         }
@@ -364,10 +332,8 @@ void v5dPrintStruct(const v5dstruct * v)
     for (time = 0; time < v->NumTimes; time++) {
         int i = v->TimeStamp[time];
 
-        printf("%3d        %05d       %5d:%02d:%02d     %s\n",
-               time + 1,
-               v->DateStamp[time],
-               i / 10000, (i / 100) % 100, i % 100,
+        printf("%3d        %05d       %5d:%02d:%02d     %s\n", time + 1,
+               v->DateStamp[time], i / 10000, (i / 100) % 100, i % 100,
                day[v5dYYDDDtoDays(v->DateStamp[time]) % 7]);
     }
     printf("\n");
@@ -457,15 +423,13 @@ void v5dPrintStruct(const v5dstruct * v)
     }
 }
 
-
-
 /*
  * Compute the location of a compressed grid within a file.
  * Input:  v - pointer to v5dstruct describing the file header.
  *         time, var - which timestep and variable.
  * Return:  file offset in bytes
  */
-static off_t grid_position(const v5dstruct * v, int time, int var)
+static off_t grid_position(const v5dstruct *v, int time, int var)
 {
     int i;
     off_t pos;
@@ -483,8 +447,6 @@ static off_t grid_position(const v5dstruct * v, int time, int var)
     return pos;
 }
 
-
-
 /*
  * Compute the ga and gb (de)compression values for a grid.
  * Input:  nr, nc, nl - size of grid
@@ -497,9 +459,8 @@ static off_t grid_position(const v5dstruct * v, int time, int var)
  * Side effect:  the MinVal[var] and MaxVal[var] fields in g may be
  *               updated with new values.
  */
-static void compute_ga_gb(int nr, int nc, int nl,
-                          const float data[], int compressmode,
-                          float ga[], float gb[],
+static void compute_ga_gb(int nr, int nc, int nl, const float data[],
+                          int compressmode, float ga[], float gb[],
                           float *minval, float *maxval)
 {
 #ifdef SIMPLE_COMPRESSION
@@ -544,8 +505,8 @@ static void compute_ga_gb(int nr, int nc, int nl,
      * Compress grid on level-by-level basis.
      */
 #define SMALLVALUE -1.0e30
-#define BIGVALUE 1.0e30
-#define ABS(x)   ( ((x) < 0.0) ? -(x) : (x) )
+#define BIGVALUE   1.0e30
+#define ABS(x)     (((x) < 0.0) ? -(x) : (x))
     float gridmin, gridmax;
     float levmin[MAXLEVELS], levmax[MAXLEVELS];
     float d[MAXLEVELS], dmax;
@@ -620,13 +581,13 @@ static void compute_ga_gb(int nr, int nc, int nl,
             dmax = d[lev];
     }
 
-   /*** Compute ga (scale) and gb (bias) for each grid level */
+    /*** Compute ga (scale) and gb (bias) for each grid level */
     if (dmax == 0.0) {
 
-      /*** Special cases ***/
+        /*** Special cases ***/
         if (gridmin == gridmax) {
 
-         /*** whole grid is of same value ***/
+            /*** whole grid is of same value ***/
             for (lev = 0; lev < nl; lev++) {
                 ga[lev] = gridmin;
                 gb[lev] = 0.0;
@@ -634,7 +595,7 @@ static void compute_ga_gb(int nr, int nc, int nl,
         }
         else {
 
-         /*** every layer is of a single value ***/
+            /*** every layer is of a single value ***/
             for (lev = 0; lev < nl; lev++) {
                 ga[lev] = levmin[lev];
                 gb[lev] = 0.0;
@@ -643,7 +604,7 @@ static void compute_ga_gb(int nr, int nc, int nl,
     }
     else {
 
-      /*** Normal cases ***/
+        /*** Normal cases ***/
         if (compressmode == 1) {
 #define ORIGINAL
 #ifdef ORIGINAL
@@ -689,9 +650,6 @@ static void compute_ga_gb(int nr, int nc, int nl,
 #endif
 }
 
-
-
-
 /*
  * Compress a 3-D grid from floats to 1-byte unsigned integers.
  * Input: nr, nc, nl - size of grid
@@ -706,14 +664,13 @@ static void compute_ga_gb(int nr, int nc, int nl,
  *          minval, maxval - the min and max grid values
  */
 void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
-                     const float data[],
-                     void *compdata, float ga[], float gb[],
+                     const float data[], void *compdata, float ga[], float gb[],
                      float *minval, float *maxval)
 {
     int nrnc = nr * nc;
     int nrncnl = nr * nc * nl;
-    V5Dubyte *compdata1 = (V5Dubyte *) compdata;
-    V5Dushort *compdata2 = (V5Dushort *) compdata;
+    V5Dubyte *compdata1 = (V5Dubyte *)compdata;
+    V5Dushort *compdata2 = (V5Dushort *)compdata;
 
     /* compute ga, gb values */
     compute_ga_gb(nr, nc, nl, data, compressmode, ga, gb, minval, maxval);
@@ -726,7 +683,7 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
         for (lev = 0; lev < nl; lev++) {
             float one_over_a, b;
 
-            b = gb[lev] - 0.0001;       /* subtract an epsilon so the int((d-b)/a) */
+            b = gb[lev] - 0.0001; /* subtract an epsilon so the int((d-b)/a) */
             /* expr below doesn't get mis-truncated. */
             if (ga[lev] == 0.0) {
                 one_over_a = 1.0;
@@ -739,10 +696,9 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
                     compdata1[p] = 255;
                 }
                 else {
-                    compdata1[p] =
-                        (V5Dubyte) (int)((data[p] - b) * one_over_a);
+                    compdata1[p] = (V5Dubyte)(int)((data[p] - b) * one_over_a);
                     if (compdata1[p] >= 255) {
-                        compdata1[p] = (V5Dubyte) (int)(255.0 - .0001);
+                        compdata1[p] = (V5Dubyte)(int)(255.0 - .0001);
                     }
                 }
             }
@@ -772,10 +728,10 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
                     compvalue = 65535;
                 }
                 else {
-                    compvalue = (V5Dushort) (int)((data[p] - b) * one_over_a);
+                    compvalue = (V5Dushort)(int)((data[p] - b) * one_over_a);
                 }
-                compdata1[p * 2 + 0] = compvalue >> 8;  /* upper byte */
-                compdata1[p * 2 + 1] = compvalue & 0xffu;       /* lower byte */
+                compdata1[p * 2 + 0] = compvalue >> 8;    /* upper byte */
+                compdata1[p * 2 + 1] = compvalue & 0xffu; /* lower byte */
             }
 #else
             for (i = 0; i < nrnc; i++, p++) {
@@ -783,8 +739,7 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
                     compdata2[p] = 65535;
                 }
                 else {
-                    compdata2[p] =
-                        (V5Dushort) (int)((data[p] - b) * one_over_a);
+                    compdata2[p] = (V5Dushort)(int)((data[p] - b) * one_over_a);
                 }
             }
             /* TODO: byte-swapping on little endian??? */
@@ -805,8 +760,6 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
     }
 }
 
-
-
 /*
  * Decompress a 3-D grid from 1-byte integers to 4-byte floats.
  * Input:  nr, nc, nl - size of grid
@@ -816,13 +769,13 @@ void v5dCompressGrid(int nr, int nc, int nl, int compressmode,
  *         data - address to put decompressed values
  * Output:  data - uncompressed floating point data values
  */
-void v5dDecompressGrid(int nr, int nc, int nl, int compressmode,
-                       void *compdata, float ga[], float gb[], float data[])
+void v5dDecompressGrid(int nr, int nc, int nl, int compressmode, void *compdata,
+                       float ga[], float gb[], float data[])
 {
     int nrnc = nr * nc;
     int nrncnl = nr * nc * nl;
-    V5Dubyte *compdata1 = (V5Dubyte *) compdata;
-    V5Dushort *compdata2 = (V5Dushort *) compdata;
+    V5Dubyte *compdata1 = (V5Dubyte *)compdata;
+    V5Dushort *compdata2 = (V5Dushort *)compdata;
 
     if (compressmode == 1) {
         int p, i, lev;
@@ -889,7 +842,7 @@ void v5dDecompressGrid(int nr, int nc, int nl, int compressmode,
                     data[p] = MISSING;
                 }
                 else {
-                    data[p] = (float)compvalue *a + b;
+                    data[p] = (float)compvalue * a + b;
                 }
             }
 #else
@@ -918,27 +871,22 @@ void v5dDecompressGrid(int nr, int nc, int nl, int compressmode,
     }
 }
 
-
-
-
 /*
  * Return the size (in bytes) of the 3-D grid specified by time and var.
  * Input:  v - pointer to v5dstruct describing the file
  *         time, var - which timestep and variable
  * Return:  number of data points.
  */
-int v5dSizeofGrid(const v5dstruct * v, int time, int var)
+int v5dSizeofGrid(const v5dstruct *v, int time, int var)
 {
     return v->Nr * v->Nc * v->Nl[var] * v->CompressMode;
 }
-
-
 
 /*
  * Initialize a v5dstructure to reasonable initial values.
  * Input:  v - pointer to v5dstruct.
  */
-void v5dInitStruct(v5dstruct * v)
+void v5dInitStruct(v5dstruct *v)
 {
     int i;
 
@@ -962,8 +910,6 @@ void v5dInitStruct(v5dstruct * v)
     v->FileDesc = -1;
 }
 
-
-
 /*
  * Return a pointer to a new, initialized v5dstruct.
  */
@@ -971,33 +917,29 @@ v5dstruct *v5dNewStruct(void)
 {
     v5dstruct *v;
 
-    v = (v5dstruct *) G_malloc(sizeof(v5dstruct));
+    v = (v5dstruct *)G_malloc(sizeof(v5dstruct));
     if (v) {
         v5dInitStruct(v);
     }
     return v;
 }
 
-
-
 /*
  * Free an initialized v5dstruct. (Todd Plessel)
  */
-void v5dFreeStruct(v5dstruct * v)
+void v5dFreeStruct(v5dstruct *v)
 {
     /*assert( v5dVerifyStruct( v ) ); */
     G_free(v);
     v = 0;
 }
 
-
-
 /*
  * Do some checking that the information in a v5dstruct is valid.
  * Input:  v - pointer to v5dstruct
  * Return:  1 = g is ok, 0 = g is invalid
  */
-int v5dVerifyStruct(const v5dstruct * v)
+int v5dVerifyStruct(const v5dstruct *v)
 {
     int var, i, invalid, maxnl;
 
@@ -1012,8 +954,8 @@ int v5dVerifyStruct(const v5dstruct * v)
         invalid = 1;
     }
     else if (v->NumVars > MAXVARS) {
-        printf("Too many variables: %d  (Maximum is %d)\n",
-               v->NumVars, MAXVARS);
+        printf("Too many variables: %d  (Maximum is %d)\n", v->NumVars,
+               MAXVARS);
         invalid = 1;
     }
 
@@ -1031,8 +973,8 @@ int v5dVerifyStruct(const v5dstruct * v)
         invalid = 1;
     }
     else if (v->NumTimes > MAXTIMES) {
-        printf("Too many timesteps: %d  (Maximum is %d)\n",
-               v->NumTimes, MAXTIMES);
+        printf("Too many timesteps: %d  (Maximum is %d)\n", v->NumTimes,
+               MAXTIMES);
         invalid = 1;
     }
 
@@ -1110,9 +1052,9 @@ int v5dVerifyStruct(const v5dstruct * v)
         /* Check that Height values increase upward */
         for (i = 1; i < maxnl; i++) {
             if (v->VertArgs[i] <= v->VertArgs[i - 1]) {
-                printf
-                    ("Height[%d]=%f <= Height[%d]=%f, level heights must increase\n",
-                     i, v->VertArgs[i], i - 1, v->VertArgs[i - 1]);
+                printf("Height[%d]=%f <= Height[%d]=%f, level heights must "
+                       "increase\n",
+                       i, v->VertArgs[i], i - 1, v->VertArgs[i - 1]);
                 invalid = 1;
                 break;
             }
@@ -1122,10 +1064,10 @@ int v5dVerifyStruct(const v5dstruct * v)
         /* Check that Pressure values decrease upward */
         for (i = 1; i < maxnl; i++) {
             if (v->VertArgs[i] <= v->VertArgs[i - 1]) {
-                printf
-                    ("Pressure[%d]=%f >= Pressure[%d]=%f, level pressures must decrease\n",
-                     i, height_to_pressure(v->VertArgs[i]), i - 1,
-                     height_to_pressure(v->VertArgs[i - 1]));
+                printf("Pressure[%d]=%f >= Pressure[%d]=%f, level pressures "
+                       "must decrease\n",
+                       i, height_to_pressure(v->VertArgs[i]), i - 1,
+                       height_to_pressure(v->VertArgs[i - 1]));
                 invalid = 1;
                 break;
             }
@@ -1136,9 +1078,8 @@ int v5dVerifyStruct(const v5dstruct * v)
         invalid = 1;
     }
 
-
     switch (v->Projection) {
-    case 0:                    /* Generic */
+    case 0: /* Generic */
         if (v->ProjArgs[2] == 0.0) {
             printf("Row Increment (ProjArgs[2]) can't be zero\n");
             invalid = 1;
@@ -1148,7 +1089,7 @@ int v5dVerifyStruct(const v5dstruct * v)
             invalid = 1;
         }
         break;
-    case 1:                    /* Cylindrical equidistant */
+    case 1: /* Cylindrical equidistant */
         if (v->ProjArgs[2] < 0.0) {
             printf("Row Increment (ProjArgs[2]) = %g  (must be >=0.0)\n",
                    v->ProjArgs[2]);
@@ -1160,7 +1101,7 @@ int v5dVerifyStruct(const v5dstruct * v)
             invalid = 1;
         }
         break;
-    case 2:                    /* Lambert Conformal */
+    case 2: /* Lambert Conformal */
         if (v->ProjArgs[0] < -90.0 || v->ProjArgs[0] > 90.0) {
             printf("Lat1 (ProjArgs[0]) out of range: %g\n", v->ProjArgs[0]);
             invalid = 1;
@@ -1175,7 +1116,7 @@ int v5dVerifyStruct(const v5dstruct * v)
             invalid = 1;
         }
         break;
-    case 3:                    /* Stereographic */
+    case 3: /* Stereographic */
         if (v->ProjArgs[0] < -90.0 || v->ProjArgs[0] > 90.0) {
             printf("Central Latitude (ProjArgs[0]) out of range: ");
             printf("%g  (must be in +/-90)\n", v->ProjArgs[0]);
@@ -1192,7 +1133,7 @@ int v5dVerifyStruct(const v5dstruct * v)
             invalid = 1;
         }
         break;
-    case 4:                    /* Rotated */
+    case 4: /* Rotated */
         /* WLH 4-21-95 */
         if (v->ProjArgs[2] <= 0.0) {
             printf("Row Increment (ProjArgs[2]) = %g  (must be >=0.0)\n",
@@ -1228,8 +1169,6 @@ int v5dVerifyStruct(const v5dstruct * v)
     return !invalid;
 }
 
-
-
 /*
  * Get the McIDAS file number and grid number associated with the grid
  * identified by time and var.
@@ -1237,8 +1176,7 @@ int v5dVerifyStruct(const v5dstruct * v)
  *         time, var - timestep and variable of grid
  * Output:  mcfile, mcgrid - McIDAS grid file number and grid number
  */
-int v5dGetMcIDASgrid(v5dstruct * v, int time, int var,
-                     int *mcfile, int *mcgrid)
+int v5dGetMcIDASgrid(v5dstruct *v, int time, int var, int *mcfile, int *mcgrid)
 {
     if (time < 0 || time >= v->NumTimes) {
         printf("Bad time argument to v5dGetMcIDASgrid: %d\n", time);
@@ -1254,8 +1192,6 @@ int v5dGetMcIDASgrid(v5dstruct * v, int time, int var,
     return 1;
 }
 
-
-
 /*
  * Set the McIDAS file number and grid number associated with the grid
  * identified by time and var.
@@ -1264,7 +1200,7 @@ int v5dGetMcIDASgrid(v5dstruct * v, int time, int var,
  *         mcfile, mcgrid - McIDAS grid file number and grid number
  * Return:  1 = ok, 0 = error (bad time or var)
  */
-int v5dSetMcIDASgrid(v5dstruct * v, int time, int var, int mcfile, int mcgrid)
+int v5dSetMcIDASgrid(v5dstruct *v, int time, int var, int mcfile, int mcgrid)
 {
     if (time < 0 || time >= v->NumTimes) {
         printf("Bad time argument to v5dSetMcIDASgrid: %d\n", time);
@@ -1280,15 +1216,11 @@ int v5dSetMcIDASgrid(v5dstruct * v, int time, int var, int mcfile, int mcgrid)
     return 1;
 }
 
-
-
 /**********************************************************************/
 
 /*****                    Input Functions                         *****/
 
 /**********************************************************************/
-
-
 
 /*
  * Read the header from a COMP* file and return results in the v5dstruct.
@@ -1296,7 +1228,7 @@ int v5dSetMcIDASgrid(v5dstruct * v, int time, int var, int mcfile, int mcgrid)
  *         v - pointer to a v5dstruct.
  * Return:  1 = ok, 0 = error.
  */
-static int read_comp_header(int f, v5dstruct * v)
+static int read_comp_header(int f, v5dstruct *v)
 {
     unsigned int id;
 
@@ -1513,37 +1445,34 @@ static int read_comp_header(int f, v5dstruct * v)
         for (i = 0; i < v->NumVars; i++) {
             v->GridSize[i] = gridsize;
         }
-        v->SumGridSizes = (off_t) gridsize *v->NumVars;
+        v->SumGridSizes = (off_t)gridsize * v->NumVars;
 
         /* read McIDAS numbers??? */
 
         /* size (in bytes) of all header info */
         v->FirstGridPos =
             9 * 4 + v->Nl[0] * 4 + v->NumVars * 16 + gridtimes * 16;
-
     }
 
-    v->CompressMode = 1;        /* one byte per grid point */
-    v->Projection = 1;          /* Cylindrical equidistant */
+    v->CompressMode = 1; /* one byte per grid point */
+    v->Projection = 1;   /* Cylindrical equidistant */
     v->FileVersion[0] = 0;
 
     return 1;
 }
 
-
-
 /*
  * Read a compressed grid from a COMP* file.
  * Return:  1 = ok, 0 = error.
  */
-static int read_comp_grid(v5dstruct * v, int time, int var,
-                          float *ga, float *gb, void *compdata)
+static int read_comp_grid(v5dstruct *v, int time, int var, float *ga, float *gb,
+                          void *compdata)
 {
     unsigned int pos;
     V5Dubyte bias;
     int i, n, nl;
     int f;
-    V5Dubyte *compdata1 = (V5Dubyte *) compdata;
+    V5Dubyte *compdata1 = (V5Dubyte *)compdata;
 
     f = v->FileDesc;
 
@@ -1597,7 +1526,7 @@ static int read_comp_grid(v5dstruct * v, int time, int var,
                 ga[i] = 1.0 / ga[i];
             }
         }
-        bias = 128;             /* 125 ??? */
+        bias = 128; /* 125 ??? */
     }
 
     /* read compressed grid data */
@@ -1614,17 +1543,15 @@ static int read_comp_grid(v5dstruct * v, int time, int var,
     return 1;
 }
 
-
-
 /*
  * Read a v5d file header.
  * Input:  f - file opened for reading.
  *         v - pointer to v5dstruct to store header info into.
  * Return:  1 = ok, 0 = error.
  */
-static int read_v5d_header(v5dstruct * v)
+static int read_v5d_header(v5dstruct *v)
 {
-#define SKIP(N)   lseek( f, N, SEEK_CUR )
+#define SKIP(N) lseek(f, N, SEEK_CUR)
     int end_of_header = 0;
     unsigned int id;
     int idlen, var, numargs;
@@ -1650,7 +1577,7 @@ static int read_v5d_header(v5dstruct * v)
         return 0;
     }
 
-    v->CompressMode = 1;        /* default */
+    v->CompressMode = 1; /* default */
 
     while (!end_of_header) {
         int tag, length;
@@ -1667,9 +1594,9 @@ static int read_v5d_header(v5dstruct * v)
             read_bytes(f, v->FileVersion, 10);
             /* Check if reading a file made by a future version of Vis5D */
             if (strcmp(v->FileVersion, FILE_VERSION) > 0) {
-                G_warning
-                    ("Trying to read a version %s file, you should upgrade Vis5D",
-                     v->FileVersion);
+                G_warning("Trying to read a version %s file, you should "
+                          "upgrade Vis5D",
+                          v->FileVersion);
             }
             break;
         case TAG_NUMTIMES:
@@ -1681,7 +1608,7 @@ static int read_v5d_header(v5dstruct * v)
             read_int4(f, &v->NumVars);
             break;
         case TAG_VARNAME:
-            assert(length == 14);       /* 1 int + 10 char */
+            assert(length == 14); /* 1 int + 10 char */
             read_int4(f, &var);
             read_bytes(f, v->VarName[var], 10);
             break;
@@ -1791,7 +1718,7 @@ static int read_v5d_header(v5dstruct * v)
         case TAG_PROJECTION:
             assert(length == 4);
             read_int4(f, &v->Projection);
-            if (v->Projection < 0 || v->Projection > 4) {       /* WLH 4-21-95 */
+            if (v->Projection < 0 || v->Projection > 4) { /* WLH 4-21-95 */
                 printf("Error while reading header, bad projection (%d)\n",
                        v->Projection);
                 return 0;
@@ -1893,7 +1820,7 @@ static int read_v5d_header(v5dstruct * v)
             else if (v->Projection == 3) {
                 read_float4(f, &v->ProjArgs[1]);
             }
-            else if (v->Projection == 4) {      /* WLH 4-21-95 */
+            else if (v->Projection == 4) { /* WLH 4-21-95 */
                 read_float4(f, &v->ProjArgs[5]);
             }
             else {
@@ -1905,7 +1832,7 @@ static int read_v5d_header(v5dstruct * v)
             if (v->Projection == 3) {
                 read_float4(f, &v->ProjArgs[0]);
             }
-            else if (v->Projection == 4) {      /* WLH 4-21-95 */
+            else if (v->Projection == 4) { /* WLH 4-21-95 */
                 read_float4(f, &v->ProjArgs[4]);
             }
             else {
@@ -1932,7 +1859,7 @@ static int read_v5d_header(v5dstruct * v)
             break;
         case TAG_ROTATION:
             assert(length == 4);
-            if (v->Projection == 4) {   /* WLH 4-21-95 */
+            if (v->Projection == 4) { /* WLH 4-21-95 */
                 read_float4(f, &v->ProjArgs[6]);
             }
             else {
@@ -1952,7 +1879,6 @@ static int read_v5d_header(v5dstruct * v)
             lseek(f, length, SEEK_CUR);
             break;
         }
-
     }
 
     v5dVerifyStruct(v);
@@ -1973,9 +1899,6 @@ static int read_v5d_header(v5dstruct * v)
 #undef SKIP
 }
 
-
-
-
 /*
  * Open a v5d file for reading.
  * Input:  filename - name of v5d file to open
@@ -1983,7 +1906,7 @@ static int read_v5d_header(v5dstruct * v)
  *             if a struct should be dynamically allocated.
  * Return:  NULL if error, else v or a pointer to a new v5dstruct if v was NULL
  */
-v5dstruct *v5dOpenFile(const char *filename, v5dstruct * v)
+v5dstruct *v5dOpenFile(const char *filename, v5dstruct *v)
 {
     int fd;
 
@@ -2013,9 +1936,6 @@ v5dstruct *v5dOpenFile(const char *filename, v5dstruct * v)
     }
 }
 
-
-
-
 /*
  * Read a compressed grid from a v5d file.
  * Input:  v - pointer to v5dstruct describing the file
@@ -2024,8 +1944,8 @@ v5dstruct *v5dOpenFile(const char *filename, v5dstruct * v)
  *         compdata - address of where to store compressed grid data.
  * Return:  1 = ok, 0 = error.
  */
-int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
-                          float *ga, float *gb, void *compdata)
+int v5dReadCompressedGrid(v5dstruct *v, int time, int var, float *ga, float *gb,
+                          void *compdata)
 {
     int n, k = 0;
     off_t pos;
@@ -2036,8 +1956,7 @@ int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
         return 0;
     }
     if (var < 0 || var >= v->NumVars) {
-        printf("Error in v5dReadCompressedGrid: bad var argument (%d)\n",
-               var);
+        printf("Error in v5dReadCompressedGrid: bad var argument (%d)\n", var);
         return 0;
     }
 
@@ -2071,7 +1990,6 @@ int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
     }
     return k;
 
-
     /*
        n = v->Nr * v->Nc * v->Nl[var] * v->CompressMode;
        if (read( v->FileDesc, compdata, n )==n)
@@ -2081,9 +1999,6 @@ int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
      */
 }
 
-
-
-
 /*
  * Read a grid from a v5d file, decompress it and return it.
  * Input:  v - pointer to v5dstruct describing file header
@@ -2092,7 +2007,7 @@ int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
  * Output:  data - the grid data
  * Return:  1 = ok, 0 = error.
  */
-int v5dReadGrid(v5dstruct * v, int time, int var, float data[])
+int v5dReadGrid(v5dstruct *v, int time, int var, float data[])
 {
     float ga[MAXLEVELS], gb[MAXLEVELS];
     void *compdata;
@@ -2130,16 +2045,13 @@ int v5dReadGrid(v5dstruct * v, int time, int var, float data[])
     }
 
     /* decompress the data */
-    v5dDecompressGrid(v->Nr, v->Nc, v->Nl[var], v->CompressMode,
-                      compdata, ga, gb, data);
+    v5dDecompressGrid(v->Nr, v->Nc, v->Nl[var], v->CompressMode, compdata, ga,
+                      gb, data);
 
     /* free compdata */
     G_free(compdata);
     return 1;
 }
-
-
-
 
 /**********************************************************************/
 
@@ -2147,12 +2059,11 @@ int v5dReadGrid(v5dstruct * v, int time, int var, float data[])
 
 /**********************************************************************/
 
-
-
-static int write_tag(v5dstruct * v, int tag, int length, int newfile)
+static int write_tag(v5dstruct *v, int tag, int length, int newfile)
 {
     if (!newfile) {
-        /* have to check that there's room in header to write this tagged item */
+        /* have to check that there's room in header to write this tagged item
+         */
         if (v->CurPos + 8 + length > v->FirstGridPos) {
             printf("Error: out of header space!\n");
             /* Out of header space! */
@@ -2168,8 +2079,6 @@ static int write_tag(v5dstruct * v, int tag, int length, int newfile)
     return 1;
 }
 
-
-
 /*
  * Write the information in the given v5dstruct as a v5d file header.
  * Note that the current file position is restored when this function
@@ -2178,7 +2087,7 @@ static int write_tag(v5dstruct * v, int tag, int length, int newfile)
  *         v - pointer to v5dstruct
  * Return:  1 = ok, 0 = error.
  */
-static int write_v5d_header(v5dstruct * v)
+static int write_v5d_header(v5dstruct *v)
 {
     int var, time, maxnl;
     off_t filler;
@@ -2217,7 +2126,9 @@ static int write_v5d_header(v5dstruct * v)
     /*
      * Write the tagged header info
      */
-#define WRITE_TAG( V, T, L )  if (!write_tag(V,T,L,newfile))  return 0;
+#define WRITE_TAG(V, T, L)            \
+    if (!write_tag(V, T, L, newfile)) \
+        return 0;
 
     /* ID */
     WRITE_TAG(v, TAG_ID, 0);
@@ -2329,8 +2240,6 @@ static int write_v5d_header(v5dstruct * v)
     return 1;
 }
 
-
-
 /*
  * Open a v5d file for writing.  If the named file already exists,
  * it will be deleted.
@@ -2338,7 +2247,7 @@ static int write_v5d_header(v5dstruct * v)
  *         v - pointer to v5dstruct with the header info to write.
  * Return:  1 = ok, 0 = error.
  */
-int v5dCreateFile(const char *filename, v5dstruct * v)
+int v5dCreateFile(const char *filename, v5dstruct *v)
 {
     mode_t mask;
     int fd;
@@ -2360,8 +2269,6 @@ int v5dCreateFile(const char *filename, v5dstruct * v)
     }
 }
 
-
-
 /*
  * Open a v5d file for updating/appending and read the header info.
  * Input:  filename - name of v5d file to open for updating.
@@ -2369,7 +2276,7 @@ int v5dCreateFile(const char *filename, v5dstruct * v)
  *             put.  If v is NULL a v5dstruct will be allocated and returned.
  * Return:  NULL if error, else v or a pointer to a new v5dstruct if v as NULL
  */
-v5dstruct *v5dUpdateFile(const char *filename, v5dstruct * v)
+v5dstruct *v5dUpdateFile(const char *filename, v5dstruct *v)
 {
     int fd;
 
@@ -2396,8 +2303,6 @@ v5dstruct *v5dUpdateFile(const char *filename, v5dstruct * v)
     }
 }
 
-
-
 /*
  * Write a compressed grid to a v5d file.
  * Input:  v - pointer to v5dstruct describing the file
@@ -2406,7 +2311,7 @@ v5dstruct *v5dUpdateFile(const char *filename, v5dstruct * v)
  *         compdata - address of array of compressed data values
  * Return:  1 = ok, 0 = error.
  */
-int v5dWriteCompressedGrid(const v5dstruct * v, int time, int var,
+int v5dWriteCompressedGrid(const v5dstruct *v, int time, int var,
                            const float *ga, const float *gb,
                            const void *compdata)
 {
@@ -2420,15 +2325,13 @@ int v5dWriteCompressedGrid(const v5dstruct * v, int time, int var,
         return 0;
     }
     if (time < 0 || time >= v->NumTimes) {
-        printf
-            ("Error in v5dWriteCompressedGrid: bad timestep argument (%d)\n",
-             time);
+        printf("Error in v5dWriteCompressedGrid: bad timestep argument (%d)\n",
+               time);
         return 0;
     }
     if (var < 0 || var >= v->NumVars) {
-        printf
-            ("Error in v5dWriteCompressedGrid: bad variable argument (%d)\n",
-             var);
+        printf("Error in v5dWriteCompressedGrid: bad variable argument (%d)\n",
+               var);
         return 0;
     }
 
@@ -2436,8 +2339,7 @@ int v5dWriteCompressedGrid(const v5dstruct * v, int time, int var,
     pos = grid_position(v, time, var);
     if (lseek(v->FileDesc, pos, SEEK_SET) < 0) {
         /* lseek failed, return error */
-        printf
-            ("Error in v5dWrite[Compressed]Grid: seek failed, disk full?\n");
+        printf("Error in v5dWrite[Compressed]Grid: seek failed, disk full?\n");
         return 0;
     }
 
@@ -2460,8 +2362,7 @@ int v5dWriteCompressedGrid(const v5dstruct * v, int time, int var,
 
     if (k == 0) {
         /* Error while writing */
-        printf
-            ("Error in v5dWrite[Compressed]Grid: write failed, disk full?\n");
+        printf("Error in v5dWrite[Compressed]Grid: write failed, disk full?\n");
     }
     return k;
 
@@ -2477,9 +2378,6 @@ int v5dWriteCompressedGrid(const v5dstruct * v, int time, int var,
      */
 }
 
-
-
-
 /*
  * Compress a grid and write it to a v5d file.
  * Input:  v - pointer to v5dstruct describing the file
@@ -2487,7 +2385,7 @@ int v5dWriteCompressedGrid(const v5dstruct * v, int time, int var,
  *         data - address of uncompressed grid data
  * Return:  1 = ok, 0 = error.
  */
-int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[])
+int v5dWriteGrid(v5dstruct *v, int time, int var, const float data[])
 {
     float ga[MAXLEVELS], gb[MAXLEVELS];
     void *compdata;
@@ -2526,8 +2424,8 @@ int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[])
     }
 
     /* compress the grid data */
-    v5dCompressGrid(v->Nr, v->Nc, v->Nl[var], v->CompressMode, data,
-                    compdata, ga, gb, &min, &max);
+    v5dCompressGrid(v->Nr, v->Nc, v->Nl[var], v->CompressMode, data, compdata,
+                    ga, gb, &min, &max);
 
     /* update min and max value */
     if (min < v->MinVal[var])
@@ -2544,15 +2442,13 @@ int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[])
     return n;
 }
 
-
-
 /*
  * Close a v5d file which was opened with open_v5d_file() or
  * create_v5d_file().
  * Input: f - file descriptor
  * Return:  1 = ok, 0 = error
  */
-int v5dCloseFile(v5dstruct * v)
+int v5dCloseFile(v5dstruct *v)
 {
     int status = 1;
 
@@ -2577,33 +2473,24 @@ int v5dCloseFile(v5dstruct * v)
     return status;
 }
 
-
-
-
 /**********************************************************************/
 
 /*****           Simple v5d file writing functions.               *****/
 
 /**********************************************************************/
 
-
-
 static v5dstruct *Simple = NULL;
-
-
 
 /*
  * Create a new v5d file specifying both a map projection and vertical
  * coordinate system.  See README file for argument details.
  * Return:  1 = ok, 0 = error.
  */
-int v5dCreate(const char *name, int numtimes, int numvars,
-              int nr, int nc, const int nl[],
-              const char varname[MAXVARS][10],
-              const int timestamp[], const int datestamp[],
-              int compressmode,
-              int projection,
-              const float proj_args[], int vertical, const float vert_args[])
+int v5dCreate(const char *name, int numtimes, int numvars, int nr, int nc,
+              const int nl[], const char varname[MAXVARS][10],
+              const int timestamp[], const int datestamp[], int compressmode,
+              int projection, const float proj_args[], int vertical,
+              const float vert_args[])
 {
     int var, time, maxnl, i;
 
@@ -2662,18 +2549,14 @@ int v5dCreate(const char *name, int numtimes, int numvars,
     }
 }
 
-
-
 /*
  * Create a new v5d file using minimal information.
  * Return:  1 = ok, 0 = error.  See README file for argument details.
  */
-int v5dCreateSimple(const char *name, int numtimes, int numvars,
-                    int nr, int nc, int nl,
-                    const char varname[MAXVARS][10],
+int v5dCreateSimple(const char *name, int numtimes, int numvars, int nr, int nc,
+                    int nl, const char varname[MAXVARS][10],
                     const int timestamp[], const int datestamp[],
-                    float northlat, float latinc,
-                    float westlon, float loninc,
+                    float northlat, float latinc, float westlon, float loninc,
                     float bottomhgt, float hgtinc)
 {
     int nlvar[MAXVARS];
@@ -2697,12 +2580,10 @@ int v5dCreateSimple(const char *name, int numtimes, int numvars,
     vert_args[0] = bottomhgt;
     vert_args[1] = hgtinc;
 
-    return v5dCreate(name, numtimes, numvars, nr, nc, nlvar,
-                     varname, timestamp, datestamp, compressmode,
-                     projection, proj_args, vertical, vert_args);
+    return v5dCreate(name, numtimes, numvars, nr, nc, nlvar, varname, timestamp,
+                     datestamp, compressmode, projection, proj_args, vertical,
+                     vert_args);
 }
-
-
 
 /*
  * Set lowest levels for each variable (other than default of 0).
@@ -2724,7 +2605,6 @@ int v5dSetLowLev(int lowlev[])
         return 0;
     }
 }
-
 
 /*
  * Set the units for a variable.
@@ -2751,8 +2631,6 @@ int v5dSetUnits(int var, const char *units)
     }
 }
 
-
-
 /*
  * Write a grid to a v5d file.
  * Input:  time - timestep in [1,NumTimes]
@@ -2778,8 +2656,6 @@ int v5dWrite(int time, int var, const float data[])
     }
 }
 
-
-
 /*
  * Close a v5d file after the last grid has been written to it.
  * Return:  1 = ok, 0 = error
@@ -2798,14 +2674,11 @@ int v5dClose(void)
     }
 }
 
-
-
 /**********************************************************************/
 
 /*****                FORTRAN-callable simple output              *****/
 
 /**********************************************************************/
-
 
 /*
  * Create a v5d file.  See README file for argument descriptions.
@@ -2820,14 +2693,12 @@ int V5DCREATE
 int v5dcreate
 #endif
 #endif
- 
-    (const char *name, const int *numtimes, const int *numvars,
-   const int *nr, const int *nc, const int nl[],
-   const char varname[][10],
-   const int timestamp[], const int datestamp[],
-   const int *compressmode,
-   const int *projection,
-   const float proj_args[], const int *vertical, const float vert_args[])
+
+    (const char *name, const int *numtimes, const int *numvars, const int *nr,
+     const int *nc, const int nl[], const char varname[][10],
+     const int timestamp[], const int datestamp[], const int *compressmode,
+     const int *projection, const float proj_args[], const int *vertical,
+     const float vert_args[])
 {
     char filename[100];
     char names[MAXVARS][10];
@@ -2935,7 +2806,7 @@ int v5dcreate
 
     switch (*vertical) {
     case 0:
-        /* WLH 31 Oct 96  -  just fall through 
+        /* WLH 31 Oct 96  -  just fall through
            args = 4;
            break;
          */
@@ -2967,13 +2838,10 @@ int v5dcreate
     }
 
     return v5dCreate(filename, *numtimes, *numvars, *nr, *nc, nl,
-                     (const char (*)[10])names, timestamp, datestamp,
-                     *compressmode,
-                     *projection, proj_args, *vertical, vert_args);
+                     (const char(*)[10])names, timestamp, datestamp,
+                     *compressmode, *projection, proj_args, *vertical,
+                     vert_args);
 }
-
-
-
 
 /*
  * Create a simple v5d file.  See README file for argument descriptions.
@@ -2988,14 +2856,12 @@ int V5DCREATESIMPLE
 int v5dcreatesimple
 #endif
 #endif
- 
-    (const char *name, const int *numtimes, const int *numvars,
-   const int *nr, const int *nc, const int *nl,
-   const char varname[][10],
-   const int timestamp[], const int datestamp[],
-   const float *northlat, const float *latinc,
-   const float *westlon, const float *loninc,
-   const float *bottomhgt, const float *hgtinc)
+
+    (const char *name, const int *numtimes, const int *numvars, const int *nr,
+     const int *nc, const int *nl, const char varname[][10],
+     const int timestamp[], const int datestamp[], const float *northlat,
+     const float *latinc, const float *westlon, const float *loninc,
+     const float *bottomhgt, const float *hgtinc)
 {
     int compressmode, projection, vertical;
     float projarg[100], vertarg[MAXLEVELS];
@@ -3028,12 +2894,9 @@ int v5dcreatesimple
     return v5dcreate
 #endif
 #endif
-        (name, numtimes, numvars, nr, nc, varnl,
-         varname, timestamp, datestamp, &compressmode,
-         &projection, projarg, &vertical, vertarg);
+        (name, numtimes, numvars, nr, nc, varnl, varname, timestamp, datestamp,
+         &compressmode, &projection, projarg, &vertical, vertarg);
 }
-
-
 
 /*
  * Set lowest levels for each variable (other than default of 0).
@@ -3049,12 +2912,10 @@ int V5DSETLOWLEV
 int v5dsetlowlev
 #endif
 #endif
-  (int *lowlev)
+    (int *lowlev)
 {
     return v5dSetLowLev(lowlev);
 }
-
-
 
 /*
  * Set the units for a variable.
@@ -3071,12 +2932,10 @@ int V5DSETUNITS
 int v5dsetunits
 #endif
 #endif
-  (int *var, char *name)
+    (int *var, char *name)
 {
     return v5dSetUnits(*var, name);
 }
-
-
 
 /*
  * Write a grid of data to the file.
@@ -3094,12 +2953,10 @@ int V5DWRITE
 int v5dwrite
 #endif
 #endif
-  (const int *time, const int *var, const float *data)
+    (const int *time, const int *var, const float *data)
 {
     return v5dWrite(*time, *var, data);
 }
-
-
 
 /*
  * Specify the McIDAS GR3D file number and grid number which correspond
@@ -3117,7 +2974,7 @@ int V5DMCFILE
 int v5dmcfile
 #endif
 #endif
-  (const int *time, const int *var, const int *mcfile, const int *mcgrid)
+    (const int *time, const int *var, const int *mcfile, const int *mcgrid)
 {
     if (*time < 1 || *time > Simple->NumTimes) {
         printf("Bad time argument to v5dSetMcIDASgrid: %d\n", *time);
@@ -3132,8 +2989,6 @@ int v5dmcfile
     Simple->McGrid[*time - 1][*var - 1] = (short)*mcgrid;
     return 1;
 }
-
-
 
 /*
  * Close a simple v5d file.
