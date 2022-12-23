@@ -1547,8 +1547,17 @@ def get_multi_addon_addons_which_install_only_html_man_page():
     )
     if not os.path.exists(addons_paths_file):
         get_addons_paths(gg_addons_base_dir=options["prefix"])
-    with open(addons_paths_file) as f:
-        addons_paths = json.loads(f.read())
+    try:
+        with open(addons_paths_file) as f:
+            addons_paths = json.loads(f.read())
+    except EnvironmentError:
+        gscript.warning(
+            _(
+                "It is not possible to determine which multi-addons install"
+                " only the manual HTML page, because the <{}> does not exist."
+            ).format(get_addons_paths.json_file)
+        )
+        return addons
 
     for addon in addons_paths["tree"]:
         if re.match(addon_pattern, addon["path"]) and addon["type"] == "blob":
