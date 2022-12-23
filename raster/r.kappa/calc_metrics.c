@@ -246,16 +246,12 @@ static int longcomp(const void *aa, const void *bb)
 /* Implements improved Kahan–Babuska algorithm by Neumaier, A. 1974 */
 void update_sum(double *sum, double *c, double value)
 {
-    double tmp;
-
-    tmp = *sum + value;
+    double tmp = *sum + value;
 
     if (fabs(*sum) >= fabs(value))
-        *c = *c + (*sum - tmp) + value;
+        *c += (*sum - tmp) + value;
     else
-        *c = *c + (value - tmp) + *sum;
+        *c += (value - tmp) + *sum;
 
     *sum = tmp;
-
-    return;
 }
