@@ -78,14 +78,14 @@ class Frame(wx.Frame):
     def draw(self):
         app = self.app
         size = self.GetSize()
-        x0 = (size.GetWidth() - app.i_width) / 2
-        y0 = (size.GetHeight() - app.i_height) / 2
+        x0 = (size.GetWidth() - app.i_width) // 2
+        y0 = (size.GetHeight() - app.i_height) // 2
         dc = wx.PaintDC(self)
         data = app.imgbuf.reshape((app.i_height, app.i_width, 4))
         data = data[::, ::, 2::-1]
         fn = getattr(data, "tobytes", getattr(data, "tostring"))
         image = wx.Image(app.i_width, app.i_height, fn())
-        dc.DrawBitmap(BitmapFromImage(image), int(x0), int(y0), False)
+        dc.DrawBitmap(BitmapFromImage(image), x0, y0, False)
 
     def redraw(self, ev):
         if self.app.fraction > 0.001:
