@@ -943,7 +943,7 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        self.mapnotebook.DeletePage(self.GetMapDisplay())
+        self.mapnotebook.DeleteMapPage(self.GetMapDisplay())
         maptree.Close(True)
 
         self.currentPage = None
@@ -971,7 +971,7 @@ class GMFrame(wx.Frame):
         )
         if is_docked:
             map_page = self.mapnotebook.GetPage(pgnum_dict["mapnotebook"])
-            self.mapnotebook.DeletePage(map_page)
+            self.mapnotebook.DeleteMapPage(map_page)
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
@@ -1637,7 +1637,7 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
-            self.mapnotebook.SetPageText(page=self.GetMapDisplay(), text=name)
+            self.mapnotebook.SetMapPageText(page=self.GetMapDisplay(), text=name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):

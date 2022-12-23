@@ -1,5 +1,5 @@
 """
-@package frame.notebook
+@package main_window.notebook
 
 @brief Custom AuiNotebook class and class for undocked AuiNotebook frame
 
@@ -56,9 +56,6 @@ class MapNotebook(aui.AuiNotebook):
     ):
         self.parent = parent
         super().__init__(parent=self.parent, id=wx.ID_ANY, agwStyle=agwStyle)
-        client_size = self.parent.GetClientSize()
-        self.SetPosition(wx.Point(client_size.x, client_size.y))
-        self.SetSize(430, 200)
 
         self.SetArtProvider(SimpleTabArt())
 
@@ -71,24 +68,24 @@ class MapNotebook(aui.AuiNotebook):
 
     def UndockMapDisplay(self, page):
         """Undock active map display to independent MapFrame object"""
-        idx = self.GetPageIndex(page)
-        text = self.GetPageText(idx)
-        self.RemovePage(idx)
-        fr = MapPageFrame(parent=self.parent, mapdisplay=page, title=text)
-        page.Reparent(fr)
+        index = self.GetPageIndex(page)
+        text = self.GetPageText(index)
+        self.RemovePage(index)
+        frame = MapPageFrame(parent=self.parent, mapdisplay=page, title=text)
+        page.Reparent(frame)
         page.SetDockingCallback(self.DockMapDisplay)
-        fr.sizer.Add(page, proportion=1, flag=wx.EXPAND)
-        fr.Show()
+        frame.sizer.Add(page, proportion=1, flag=wx.EXPAND)
+        frame.Show()
         page.Show()
         page.onFocus.emit()
 
     def DockMapDisplay(self, page):
         """Dock independent MapFrame object back to Aui.Notebook"""
-        fr = page.GetParent()
+        frame = page.GetParent()
         page.Reparent(self)
         page.SetDockingCallback(self.UndockMapDisplay)
-        self.AddPage(page, fr.GetTitle())
-        fr.closeFrameNoEvent()
+        self.AddPage(page, frame.GetTitle())
+        frame.closeFrameNoEvent()
 
     def AddPage(self, *args, **kwargs):
         """Overrides Aui.Notebook AddPage method.
@@ -108,28 +105,20 @@ class MapNotebook(aui.AuiNotebook):
         if not page.IsDocked():
             wx.CallLater(500, page.GetParent().Raise)
 
-    def DeletePage(self, page):
-        """Overrides Aui.Notebook DeletePage method.
-        Decides whether to destroy a MapNotebook page
+    def DeleteMapPage(self, page):
+        """Decides whether to delete a MapNotebook page
+        or close an undocked independent frame"""
+        if page.IsDocked():
+            self.DeletePage(self.GetPageIndex(page))
+        else:
+            page.Close()
+
+    def SetMapPageText(self, page, text):
+        """Decides whether sets title to MapNotebook page
         or an undocked independent frame"""
-        try:
-            super().DeletePage(self.GetPageIndex(page))
-        except Exception:
-            pass
-
-        if not page.IsDocked():
-            page.Destroy()
-
-    def SetPageText(self, page, text):
-        """Overrides Aui.Notebook SetPageText method.
-        Decides whether sets title to MapNotebook page
-        or an undocked independent frame"""
-        try:
-            super().SetPageText(page_idx=self.GetPageIndex(page), text=text)
-        except Exception:
-            pass
-
-        if not page.IsDocked():
+        if page.IsDocked():
+            self.SetPageText(page_idx=self.GetPageIndex(page), text=text)
+        else:
             frame = page.GetParent()
             frame.SetTitle(text)
             wx.CallLater(500, frame.Raise)

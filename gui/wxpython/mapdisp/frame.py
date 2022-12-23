@@ -120,6 +120,9 @@ class MapPanel(SingleMapPanel):
         # distinguishes whether map panel is docked or not
         self._docked = True
 
+        # undock/dock bound method
+        self._docking_callback = None
+
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
 
@@ -668,12 +671,13 @@ class MapPanel(SingleMapPanel):
 
     def SetDockingCallback(self, function):
         """Sets docking bound method to dock or undock"""
-        self.docking_callback = function
+        self._docking_callback = function
 
     def OnDockUndock(self, event):
         """Dock or undock map display panel to independent MapFrame"""
-        self.docking_callback(self)
-        self._docked = not self._docked
+        if self._docking_callback:
+            self._docking_callback(self)
+            self._docked = not self._docked
 
     def IsDocked(self):
         return self._docked
