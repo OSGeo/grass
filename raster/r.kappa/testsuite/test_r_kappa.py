@@ -149,6 +149,8 @@ class CalculationCorrectness1Test(TestCase):
     # 4   0  14 4  0  -     0.000 0.000 0.222 0.000 0.000
     # 5   1  17 0  0  1.000 1.000 0.056 0.056 0.056 1.000
     # 6   2  13 2  1  0.667 0.500 0.111 0.222 0.167 0.400
+    # Correct MCC value was calculated manually and validated with
+    # mcc function of R package mltools.
 
     def test_standard_output(self):
         out = read_command(

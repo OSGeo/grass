@@ -152,8 +152,8 @@ void calc_metrics(void)
         /* theta 2 */
         update_sum(&pC, &pCc, pi[i] * pj[i]);
     }
-    p0 = p0 + p0c;
-    pC = pC + pCc;
+    p0 += p0c;
+    pC += pCc;
     if (pC != 1)
         metrics->kappa = (p0 - pC) / (1 - pC);
     else
@@ -184,8 +184,8 @@ void calc_metrics(void)
                            metrics->observations);
         }
     }
-    inter1 = inter1 + inter1c;
-    inter2 = inter2 + inter2c;
+    inter1 += inter1c;
+    inter2 += inter2c;
     metrics->kappa_variance = (inter1 + pow((1 - p0), 2.) * inter2 -
                                pow((p0 * pC - 2 * pC + p0), 2.)) /
                               pow((1 - pC), 4.) / metrics->observations;
@@ -199,9 +199,9 @@ void calc_metrics(void)
         update_sum(&spk2, &spk2c, metrics->row_sum[i] * metrics->row_sum[i]);
         update_sum(&stk2, &stk2c, metrics->col_sum[i] * metrics->col_sum[i]);
     }
-    spktk = spktk + spktkc;
-    spk2 = spk2 + spk2c;
-    stk2 = stk2 + stk2c;
+    spktk += spktkc;
+    spk2 += spk2c;
+    stk2 += stk2c;
     unrooted = (metrics->observations * metrics->observations - spk2) *
                (metrics->observations * metrics->observations - stk2);
     if (unrooted <= 0.0) {
