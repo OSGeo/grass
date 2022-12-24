@@ -251,8 +251,6 @@ int main(int argc, char **argv)
     if (opt_input->answer) {
         sep = G_option_to_separator(opt_sep);
         file_name = opt_input->answer;
-        if (!file_name)
-            G_fatal_error(_("Unable to open input file <%s>"), file_name);
     }
     else {
         sep = "|";

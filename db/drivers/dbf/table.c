@@ -40,6 +40,9 @@
 /* add table to database */
 int add_table(char *table, char *name)
 {
+    int res;
+    size_t buf_s;
+
     G_debug(2, "add_table(): table = %s name = %s", table, name);
 
     if (db.atables == db.ntables) {
@@ -49,11 +52,18 @@ int add_table(char *table, char *name)
 
     strcpy(db.tables[db.ntables].name, table);
 
+    buf_s = sizeof(db.tables[db.ntables].file);
 #ifdef __MINGW32__
-    sprintf(db.tables[db.ntables].file, "%s\\%s", db.name, name);
+    res = snprintf(db.tables[db.ntables].file, buf_s, "%s\\%s", db.name, name);
 #else
-    sprintf(db.tables[db.ntables].file, "%s/%s", db.name, name);
+    res = snprintf(db.tables[db.ntables].file, buf_s, "%s/%s", db.name, name);
 #endif
+    if (res >= buf_s) {
+        db_d_append_error(_("Unable to add table %s to %s. "
+                            "The file path is too long."),
+                          name, db.name);
+        return DB_FAILED;
+    }
 
     db.tables[db.ntables].alive = TRUE;
     db.tables[db.ntables].described = FALSE;
