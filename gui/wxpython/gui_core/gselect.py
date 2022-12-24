@@ -3099,25 +3099,24 @@ class SignatureSelect(wx.ComboBox):
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
 
+        items = []
+        if mapsets:
+            for mapset in mapsets:
+                self._append_mapset_signatures(mapset, element, items)
+        else:
+            self._append_mapset_signatures(None, element, items)
+        self.SetItems(items)
+        self.SetValue("")
+
+    def _append_mapset_signatures(self, mapset, element, items):
         # A workaround to list signature files before a separate
         # signature management module is developed
         try:
             from grass.lib.gis import G_gisinit
 
             G_gisinit("")
-            items = []
-            if mapsets:
-                for mapset in mapsets:
-                    self._append_mapset_signatures(mapset, element, items)
-            else:
-                self._append_mapset_signatures(None, element, items)
-            self.SetItems(items)
         except Exception:
-            pass
-
-        self.SetValue("")
-
-    def _append_mapset_signatures(self, mapset, element, items):
+            return
         try:
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,
