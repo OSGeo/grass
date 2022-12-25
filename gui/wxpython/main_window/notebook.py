@@ -89,7 +89,7 @@ class MapNotebook(aui.AuiNotebook):
 
     def AddPage(self, *args, **kwargs):
         """Overrides Aui.Notebook AddPage method.
-        Adds page to notebook and make it current"""
+        Adds page to notebook and makes it current"""
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
 
@@ -97,10 +97,7 @@ class MapNotebook(aui.AuiNotebook):
         """Overrides Aui.Notebook SetSelectionToPage method.
         Decides whether to set selection to a MapNotebook page
         or an undocked independent frame"""
-        try:
-            super().SetSelection(self.GetPageIndex(page))
-        except Exception:
-            pass
+        self.SetSelection(self.GetPageIndex(page))
 
         if not page.IsDocked():
             wx.CallLater(500, page.GetParent().Raise)

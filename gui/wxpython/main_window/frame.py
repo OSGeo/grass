@@ -923,10 +923,10 @@ class GMFrame(wx.Frame):
         Also change active map notebook tab."""
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
-        try:
+
+        if hasattr(self.currentPage, "maptree"):
             self.mapnotebook.SetSelectionToPage(self.GetMapDisplay())
-        except Exception:
-            pass
+
         event.Skip()
 
     def OnCBPageClosing(self, event):
