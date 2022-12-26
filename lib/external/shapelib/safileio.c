@@ -74,7 +74,7 @@
 #include <string.h>
 #include <stdio.h>
 
-SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $");
+SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $")
 
 #ifdef SHPAPI_UTF8_HOOKS
 #   ifdef SHPAPI_WINDOWS

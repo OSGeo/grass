@@ -1226,9 +1226,10 @@ DBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName,
     else if( psDBF->pachFieldType[iField] == 'N'
              || psDBF->pachFieldType[iField] == 'F' )
     {
-    if( psDBF->panFieldDecimals[iField] > 0
-            || psDBF->panFieldSize[iField] >= 10 )
+    if( psDBF->panFieldDecimals[iField] > 0 ) {
+        /* || psDBF->panFieldSize[iField] >= 10 ) */ /* GDAL bug #809 */
         return( FTDouble );
+    }
     else
         return( FTInteger );
     }
