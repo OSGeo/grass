@@ -167,8 +167,8 @@ void D_close_driver(void)
 
     COM_Graph_close();
 
-    if (cmd)
-        system(cmd);
+    if (cmd && system(cmd) == -1)
+        G_warning(_("GRASS_NOTIFY command <%s> failed"), cmd);
 }
 
 /*!
