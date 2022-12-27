@@ -455,7 +455,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             ):
                 event.Skip()
             else:
-                self.DeleteRange(self.prompt_pos_end, self.GetSelectionEnd() - self.prompt_pos_end)
+                self.DeleteRange(
+                    self.prompt_pos_end, self.GetSelectionEnd() - self.prompt_pos_end
+                )
                 self.ClearSelections()
                 self.GotoPos(self.prompt_pos_end)
         elif (
