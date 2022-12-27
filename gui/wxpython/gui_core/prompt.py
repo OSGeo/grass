@@ -222,8 +222,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     def CanEdit(self):
         """Return true if editing should succeed."""
         if self.GetSelectionStart() != self.GetSelectionEnd():
-            if self.GetSelectionStart() >= self.prompt_pos_end \
-                   and self.GetSelectionEnd() >= self.prompt_pos_end:
+            if (
+                self.GetSelectionStart() >= self.prompt_pos_end
+                and self.GetSelectionEnd() >= self.prompt_pos_end
+            ):
                 return True
             else:
                 return False
