@@ -1550,13 +1550,7 @@ def get_multi_addon_addons_which_install_only_html_man_page():
     try:
         with open(addons_paths_file) as f:
             addons_paths = json.loads(f.read())
-    except EnvironmentError:
-        gscript.warning(
-            _(
-                "It is not possible to determine which multi-addons install"
-                " only the manual HTML page, because the <{}> does not exist."
-            ).format(get_addons_paths.json_file)
-        )
+    except OSError:
         return addons
 
     for addon in addons_paths["tree"]:
