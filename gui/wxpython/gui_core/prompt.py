@@ -187,10 +187,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetUseHorizontalScrollBar(True)
 
         # prompt of the interpreter
-        self.sysps3 = str(sys.ps3)
-        self.write(self.sysps3)
+        self.prompt_string = ">>> "
+        self.write(self.prompt_string)
         self.DocumentEnd()
-        self.promptPosEnd = self.GetCurrentPos()
+        self.prompt_pos_end = self.GetCurrentPos()
 
         # support light and dark mode
         bg_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
@@ -221,7 +221,14 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
     def CanEdit(self):
         """Return true if editing should succeed."""
-        return self.GetCurrentPos() >= self.promptPosEnd
+        if self.GetSelectionStart() != self.GetSelectionEnd():
+            if self.GetSelectionStart() >= self.prompt_pos_end \
+                   and self.GetSelectionEnd() >= self.prompt_pos_end:
+                return True
+            else:
+                return False
+        else:
+            return self.GetCurrentPos() >= self.prompt_pos_end
 
     def OnTextSelectionChanged(self, event):
         """Copy selected text to clipboard and skip event.
@@ -299,7 +306,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         text += end
 
         self.AddText(compl)
-        pos = len(text) + self.promptPosEnd
+        pos = len(text) + self.prompt_pos_end
         self.SetCurrentPos(pos)
 
         cmd = text.strip().split(" ")[0]
@@ -445,17 +452,19 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.CallTipSetBackground("#f4f4d1")
             self.CallTipSetForeground("BLACK")
             self.CallTipShow(pos, info["usage"] + "\n\n" + info["description"])
-        elif event.GetKeyCode() in (wx.WXK_DELETE, wx.WXK_BACK):
-            if not self.CanEdit():
-                return
-            event.Skip()
+        elif event.GetKeyCode() == wx.WXK_BACK:
+            if pos > self.prompt_pos_end:
+                event.Skip()
+        elif event.GetKeyCode() == wx.WXK_DELETE:
+            if self.CanEdit():
+                event.Skip()
         elif (
             event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER)
             and not self.AutoCompActive()
         ):
             # run command on line when <return> is pressed
             line = self.GetCurLine()[0].strip()
-            self._runCmd(line.lstrip(self.sysps3))
+            self._runCmd(line.lstrip(self.prompt_string))
         elif (
             event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and not self.AutoCompActive()
         ):
@@ -482,9 +491,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 txt = ""
 
             # clear current line and insert command history
-            self.GotoPos(self.promptPosEnd)
+            self.GotoPos(self.prompt_pos_end)
             self.DelLineRight()
-            self.InsertText(self.promptPosEnd, txt)
+            self.InsertText(self.prompt_pos_end, txt)
             self.LineEnd()
 
             self.ShowStatusText("")
@@ -661,7 +670,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Returns all text left of the caret"""
         pos = self.GetCurrentPos()
         self.HomeExtend()
-        entry = self.GetSelectedText().lstrip(self.sysps3)
+        entry = self.GetSelectedText().lstrip(self.prompt_string)
         self.SetCurrentPos(pos)
         return entry
 
@@ -674,5 +683,5 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
     def OnCmdErase(self, event):
         """Erase command prompt"""
-        self.GotoPos(self.promptPosEnd)
+        self.GotoPos(self.prompt_pos_end)
         self.DelLineRight()
