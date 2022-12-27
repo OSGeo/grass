@@ -219,9 +219,67 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # signal to notify selected command
         self.commandSelected = Signal("GPromptSTC.commandSelected")
 
-    def CanEdit(self):
-        """Return true if editing should succeed."""
-        return self.GetCurrentPos() >= self.prompt_pos_end
+    def _lstripPrompt(self, text):
+        """Return text without a prompt string."""
+        prompt_string_size = len(self.prompt_string)
+        if text[:prompt_string_size] == self.prompt_string:
+            text = text[prompt_string_size:]
+        return text
+
+    def _clip(self, data):
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.UsePrimarySelection(False)
+            wx.TheClipboard.SetData(data)
+            wx.TheClipboard.Flush()
+            wx.TheClipboard.Close()
+
+    def CanManipulate(self):
+        """Return true if text is selected and can be further manipulate (cut, edit etc.)."""
+        if (
+            self.GetSelectionStart() != self.GetSelectionEnd()
+            and self.GetSelectionEnd() >= self.prompt_pos_end
+        ):
+            return True
+        if self.GetCurrentPos() >= self.prompt_pos_end:
+            return True
+        return False
+
+    def Cut(self):
+        """Cut the selection. Do not cut the part which include the prompt string."""
+        if self.CanManipulate() and self.CanCopy():
+            if self.AutoCompActive():
+                self.AutoCompCancel()
+            if self.CallTipActive():
+                self.CallTipCancel()
+            self.Copy()
+            if self.GetSelectionStart() < self.prompt_pos_end:
+                end = self.GetSelectionEnd()
+                self.SetSelectionStart(len(self.prompt_string))
+                self.SetSelectionEnd(end)
+            self.ReplaceSelection("")
+
+    def Paste(self):
+        """Replace selection with clipboard contents. Trim the prompt string if needed."""
+        if self.CanManipulate() and wx.TheClipboard.Open():
+            data = wx.TextDataObject()
+            if wx.TheClipboard.GetData(data):
+                self.ReplaceSelection("")
+                command = data.GetText()
+                command = command.rstrip()
+                command = self._lstripPrompt(text=command)
+                self.write(command)
+            wx.TheClipboard.Close()
+            pos = self.GetSelectionStart() + len(command)
+            self.SetCurrentPos(pos)
+
+    def Copy(self):
+        """Copy selection with trimming the prompt string if needed."""
+        if self.CanCopy():
+            command = self.GetSelectedText()
+            command = command.replace(os.linesep + self.prompt_string, os.linesep)
+            command = self._lstripPrompt(text=command)
+            data = wx.TextDataObject(command)
+            self._clip(data)
 
     def OnTextSelectionChanged(self, event):
         """Copy selected text to clipboard and skip event.
@@ -427,8 +485,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     def OnKeyPressed(self, event):
         """Key pressed capture special treatment for tabulator to show help"""
         pos = self.GetCurrentPos()
+        controlDown = event.ControlDown()
+
         if event.GetKeyCode() == wx.WXK_TAB:
-            if not self.CanEdit():
+            if not self.CanManipulate():
                 return
             # show GRASS command calltips (to hide press 'ESC')
             entry = self.GetTextLeft()
@@ -460,6 +520,17 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 )
                 self.ClearSelections()
                 self.GotoPos(self.prompt_pos_end)
+        # Cut to the clipboard.
+        elif (controlDown) and event.GetKeyCode() in (ord("X"), ord("x")):
+            self.Cut()
+
+        # Copy to the clipboard.
+        elif (controlDown) and event.GetKeyCode() in (ord("C"), ord("c")):
+            self.Copy()
+
+        # Paste from the clipboard.
+        elif (controlDown) and event.GetKeyCode() in (ord("V"), ord("v")):
+            self.Paste()
         elif (
             event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER)
             and not self.AutoCompActive()
@@ -508,7 +579,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         .. todo::
             event.ControlDown() for manual autocomplete
         """
-        if not self.CanEdit():
+        if not self.CanManipulate():
             return
 
         # keycodes used: "." = 46, "=" = 61, "-" = 45
