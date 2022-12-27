@@ -221,16 +221,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
     def CanEdit(self):
         """Return true if editing should succeed."""
-        if self.GetSelectionStart() != self.GetSelectionEnd():
-            if (
-                self.GetSelectionStart() >= self.prompt_pos_end
-                and self.GetSelectionEnd() >= self.prompt_pos_end
-            ):
-                return True
-            else:
-                return False
-        else:
-            return self.GetCurrentPos() >= self.prompt_pos_end
+        return self.GetCurrentPos() >= self.prompt_pos_end
 
     def OnTextSelectionChanged(self, event):
         """Copy selected text to clipboard and skip event.
@@ -458,8 +449,15 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             if pos > self.prompt_pos_end:
                 event.Skip()
         elif event.GetKeyCode() == wx.WXK_DELETE:
-            if self.CanEdit():
+            if (
+                self.GetSelectionStart() >= self.prompt_pos_end
+                and self.GetSelectionEnd() >= self.prompt_pos_end
+            ):
                 event.Skip()
+            else:
+                self.DeleteRange(self.prompt_pos_end, self.GetSelectionEnd() - self.prompt_pos_end)
+                self.ClearSelections()
+                self.GotoPos(self.prompt_pos_end)
         elif (
             event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER)
             and not self.AutoCompActive()
