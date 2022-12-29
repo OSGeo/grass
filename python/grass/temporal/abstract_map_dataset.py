@@ -919,17 +919,24 @@ class AbstractMapDataset(AbstractDataset):
         :return: The SQL statements if execute=False, else an empty string,
                  None in case of a failure
         """
-
-        # TODO: it must be possible to delete a map from a temporal
-        # database even if the map is in a different mapset,
-        # as long as the temporal database of the current mapset is used
-
-        mapset = get_current_mapset()
+        if (
+            get_enable_mapset_check() is True
+            and self.get_mapset() != get_current_mapset()
+        ):
+            self.msgr.fatal(
+                _(
+                    "Unable to delete dataset <%(ds)s> of type "
+                    "%(type)s from the temporal database. The mapset"
+                    " of the dataset does not match the current "
+                    "mapset"
+                )
+                % {"ds": self.get_id(), "type": self.get_type()}
+            )
 
         dbif, connection_state_changed = init_dbif(dbif)
         statement = ""
 
-        if self.is_in_db(dbif, mapset=mapset):
+        if self.is_in_db(dbif):
 
             # SELECT all needed information from the database
             self.metadata.select(dbif)
@@ -947,7 +954,7 @@ class AbstractMapDataset(AbstractDataset):
             statement += self.base.get_delete_statement()
 
         if execute:
-            dbif.execute_transaction(statement, mapset=mapset)
+            dbif.execute_transaction(statement)
             statement = ""
 
         # Remove the timestamp from the file system
@@ -995,13 +1002,25 @@ class AbstractMapDataset(AbstractDataset):
                 % {"type": self.get_type(), "map": self.get_map_id()},
             )
 
-        mapset = get_current_mapset()
+        if (
+            get_enable_mapset_check() is True
+            and self.get_mapset() != get_current_mapset()
+        ):
+            self.msgr.fatal(
+                _(
+                    "Unable to unregister dataset <%(ds)s> of type "
+                    "%(type)s from the temporal database. The mapset"
+                    " of the dataset does not match the current "
+                    "mapset"
+                )
+                % {"ds": self.get_id(), "type": self.get_type()}
+            )
 
         statement = ""
         dbif, connection_state_changed = init_dbif(dbif)
 
         # Get all datasets in which this map is registered
-        datasets = self.get_registered_stds(dbif, mapset=mapset)
+        datasets = self.get_registered_stds(dbif)
 
         # For each stds in which the map is registered
         if datasets is not None:
@@ -1017,7 +1036,7 @@ class AbstractMapDataset(AbstractDataset):
                     stds.update_from_registered_maps(dbif)
 
         if execute:
-            dbif.execute_transaction(statement, mapset=mapset)
+            dbif.execute_transaction(statement)
             statement = ""
 
         if connection_state_changed:
@@ -1025,7 +1044,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return statement
 
-    def get_registered_stds(self, dbif=None, mapset=None):
+    def get_registered_stds(self, dbif=None):
         """Return all space time dataset ids in which this map is registered
         as as a list of strings, or None if this map is not
         registered in any space time dataset.
@@ -1036,7 +1055,7 @@ class AbstractMapDataset(AbstractDataset):
         """
         dbif, connection_state_changed = init_dbif(dbif)
 
-        self.stds_register.select(dbif, mapset)
+        self.stds_register.select(dbif)
         datasets = self.stds_register.get_registered_stds()
 
         if datasets is not None and datasets != "" and datasets.find("@") >= 0:
@@ -1049,8 +1068,6 @@ class AbstractMapDataset(AbstractDataset):
 
         return datasets
 
-    # this fn should not be in a class for maps,
-    # but instead in a class for stds: AbstractSpaceTimeDataset ?
     def add_stds_to_register(self, stds_id, dbif=None, execute=True):
         """Add a new space time dataset to the register
 
@@ -1063,13 +1080,9 @@ class AbstractMapDataset(AbstractDataset):
 
         :return: The SQL statements if execute=False, else an empty string
         """
-        self.msgr.debug(2, "AbstractMapDataset.add_stds_to_register")
-
         dbif, connection_state_changed = init_dbif(dbif=dbif)
 
-        # only modify database in current mapset
-        mapset = get_current_mapset()
-        datasets = self.get_registered_stds(dbif=dbif, mapset=mapset)
+        datasets = self.get_registered_stds(dbif=dbif)
 
         if stds_id is None or stds_id == "":
             return ""
@@ -1091,7 +1104,7 @@ class AbstractMapDataset(AbstractDataset):
         statement = ""
 
         if execute is True:
-            self.stds_register.update(dbif=dbif, mapset=mapset)
+            self.stds_register.update(dbif=dbif)
         else:
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
@@ -1113,12 +1126,9 @@ class AbstractMapDataset(AbstractDataset):
 
         :return: The SQL statements if execute=False, else an empty string
         """
-        self.msgr.debug(2, "AbstractMapDataset.remove_stds_from_register")
         dbif, connection_state_changed = init_dbif(dbif)
 
-        # only modify database in current mapset
-        mapset = get_current_mapset()
-        datasets = self.get_registered_stds(dbif=dbif, mapset=mapset)
+        datasets = self.get_registered_stds(dbif=dbif)
 
         # Check if no datasets are present
         if datasets is None:
@@ -1148,7 +1158,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return statement
 
-    def read_semantic_label_from_grass(self):
+    def read_band_reference_from_grass(self):
         """Read the band identifier of this map from the map metadata
         in the GRASS file system based spatial database and
         set the internal band identifier that should be insert/updated
@@ -1159,13 +1169,13 @@ class AbstractMapDataset(AbstractDataset):
         """
         pass
 
-    def set_semantic_label(self, semantic_label):
-        """Set semantic label identifier
+    def set_band_reference(self, band_reference):
+        """Set band reference identifier
 
         Currently only implemented in RasterDataset. Otherwise
         report a warning.
         """
-        self.msgr.warning(_("semantic labels can only be assigned to raster maps"))
+        self.msgr.warning(_("Band references can only be assigned to raster maps"))
 
 
 ###############################################################################

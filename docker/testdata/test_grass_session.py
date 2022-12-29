@@ -15,7 +15,7 @@ with Session(
         input="/tmp/simple.laz",
         output="count_1",
         method="n",
-        flags="g",
+        flags="s",
         resolution=1,
         overwrite=True,
     )

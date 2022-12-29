@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       PS driver
@@ -24,7 +25,7 @@ const struct driver *PS_Driver(void)
     static int initialized;
 
     if (initialized)
-        return &drv;
+	return &drv;
 
     drv.name = "ps";
     drv.Box = PS_Box;

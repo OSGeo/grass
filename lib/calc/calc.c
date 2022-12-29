@@ -1,3 +1,4 @@
+
 #include <unistd.h>
 #include <signal.h>
 
@@ -12,7 +13,7 @@ int columns;
 
 /****************************************************************************/
 
-static void handle_fpe(int n)
+static RETSIGTYPE handle_fpe(int n)
 {
     floating_point_exception = 1;
     floating_point_exception_occurred = 1;
@@ -58,3 +59,4 @@ void calc_init(int cols)
 }
 
 /****************************************************************************/
+

@@ -11,6 +11,7 @@
  *
  */
 
+
 #include "filters.h"
 
 #include "lidar.h"
@@ -19,6 +20,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
 
 int spatial_filter_from_option(struct Option *option, double *xmin,
                                double *ymin, double *xmax, double *ymax)
@@ -45,8 +47,8 @@ int spatial_filter_from_option(struct Option *option, double *xmin,
     return TRUE;
 }
 
-int spatial_filter_from_current_region(double *xmin, double *ymin, double *xmax,
-                                       double *ymax)
+int spatial_filter_from_current_region(double *xmin, double *ymin,
+                                       double *xmax, double *ymax)
 {
     struct Cell_head region;
 
@@ -58,7 +60,8 @@ int spatial_filter_from_current_region(double *xmin, double *ymin, double *xmax,
     return TRUE;
 }
 
-int zrange_filter_from_option(struct Option *option, double *zmin, double *zmax)
+int zrange_filter_from_option(struct Option *option, double *zmin,
+                              double *zmax)
 {
     if (option->answer != NULL) {
         if (option->answers[0] == NULL || option->answers[1] == NULL)

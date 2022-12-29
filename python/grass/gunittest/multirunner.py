@@ -27,11 +27,7 @@ if sys.version_info.major >= 3:
 
 
 def _get_encoding():
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getdefaultlocale()[1]
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -121,20 +117,21 @@ def main():
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
-    grass_executable = args.grassbin
+    # grass8bin = 'C:\Program Files (x86)\GRASS GIS 8.0.git\grass.bat'
+    grass8bin = args.grassbin  # TODO: can be used if pressent
 
     # Software
-    # query GRASS GIS itself for its GISBASE
-    # we assume that the start script is available and in the PATH
+    # query GRASS GIS 8 itself for its GISBASE
+    # we assume that GRASS GIS' start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
-    startcmd = grass_executable + " --config path"
+    startcmd = grass8bin + " --config path"
     p = subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     out, err = p.communicate()
     if p.returncode != 0:
         print(
-            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+            "ERROR: Cannot find GRASS GIS 8 start script (%s):\n%s" % (startcmd, err),
             file=sys.stderr,
         )
         return 1
@@ -153,14 +150,14 @@ def main():
     os.environ["GISDBASE"] = text_to_string(gisdb)
 
     # import GRASS Python package for initialization
-    import grass.script as gs
+    import grass.script.setup as gsetup
 
     # launch session
     # we need some location and mapset here
     # TODO: can init work without it or is there some demo location in dist?
     location = locations[0].split(":")[0]
     mapset = "PERMANENT"
-    gs.setup.init(gisbase, gisdb, location, mapset)
+    gsetup.init(gisbase, gisdb, location, mapset)
 
     reports = []
     for location, location_type in zip(locations, locations_types):

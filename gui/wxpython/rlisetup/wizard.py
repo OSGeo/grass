@@ -649,7 +649,6 @@ class FirstPage(TitledPage):
             )
             self.newconftxt.SetValue("")
             self.conf_name = ""
-        event.Skip()
 
     def OnNameChanged(self, event):
         """Name of configuration file has changed"""

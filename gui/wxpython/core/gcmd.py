@@ -541,7 +541,7 @@ class CommandThread(Thread):
         self._want_abort = False
         self.aborted = False
 
-        self.daemon = True
+        self.setDaemon(True)
 
         # set message formatting
         self.message_format = os.getenv("GRASS_MESSAGE_FORMAT")
@@ -783,11 +783,7 @@ def GetDefaultEncoding(forceUTF8=False):
 
     :return: system encoding (can be None)
     """
-    try:
-        # Python >= 3.11
-        enc = locale.getencoding()
-    except AttributeError:
-        enc = locale.getdefaultlocale()[1]
+    enc = locale.getdefaultlocale()[1]
     if forceUTF8 and (enc is None or enc == "UTF8"):
         return "UTF-8"
 

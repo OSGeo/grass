@@ -4,6 +4,7 @@
 #include <grass/gis.h>
 #include "vector.h"
 
+
 /* init vector structure */
 void vector_init(void)
 {
@@ -16,8 +17,8 @@ void vector_init(void)
 void vector_alloc(void)
 {
     if (vector.count == vector.alloc) {
-        vector.alloc += 20;
-        vector.layer =
-            (LAYER *)G_realloc(vector.layer, vector.alloc * sizeof(LAYER));
+	vector.alloc += 20;
+	vector.layer =
+	    (LAYER *) G_realloc(vector.layer, vector.alloc * sizeof(LAYER));
     }
 }

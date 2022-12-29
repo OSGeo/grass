@@ -18,4 +18,5 @@ int pattern_matching(int *pattern)
         result = MIN(result, test);
     }
     return ((result & source) == source) ? 1 : 0;
+
 }

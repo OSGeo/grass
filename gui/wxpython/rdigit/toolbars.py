@@ -21,7 +21,6 @@ from icons.icon import MetaIcon
 from gui_core.widgets import FloatValidator
 import wx.lib.colourselect as csel
 from gui_core.wrap import TextCtrl, StaticText, ColourSelect
-from gui_core.toolbars import BaseIcons
 
 
 rdigitIcons = {
@@ -30,6 +29,8 @@ rdigitIcons = {
     "point": MetaIcon(img="point-create", label=_("Digitize point")),
     "save": MetaIcon(img="save", label=_("Save raster map")),
     "undo": MetaIcon(img="undo", label=_("Undo")),
+    "help": MetaIcon(img="help", label=_("Raster Digitizer manual")),
+    "quit": MetaIcon(img="quit", label=_("Quit raster digitizer")),
 }
 
 
@@ -113,45 +114,33 @@ class RDigitToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("area", rdigitIcons["area"].label),
+                    "area",
                     rdigitIcons["area"],
                     lambda event: self._controller.SelectType("area"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("line", rdigitIcons["line"].label),
+                    "line",
                     rdigitIcons["line"],
                     lambda event: self._controller.SelectType("line"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("point", rdigitIcons["point"].label),
+                    "point",
                     rdigitIcons["point"],
                     lambda event: self._controller.SelectType("point"),
                     wx.ITEM_CHECK,
                 ),
                 (None,),
                 (None,),
+                ("undo", rdigitIcons["undo"], lambda event: self._controller.Undo()),
+                ("save", rdigitIcons["save"], lambda event: self._controller.Save()),
                 (
-                    ("undo", rdigitIcons["undo"].label),
-                    rdigitIcons["undo"],
-                    lambda event: self._controller.Undo(),
-                ),
-                (
-                    ("save", rdigitIcons["save"].label),
-                    rdigitIcons["save"],
-                    lambda event: self._controller.Save(),
-                ),
-                (
-                    ("help", BaseIcons["help"].label),
-                    BaseIcons["help"],
+                    "help",
+                    rdigitIcons["help"],
                     lambda event: self._giface.Help("wxGUI.rdigit"),
                 ),
-                (
-                    ("quit", BaseIcons["quit"].label),
-                    BaseIcons["quit"],
-                    lambda event: self._controller.Stop(),
-                ),
+                ("quit", rdigitIcons["quit"], lambda event: self._controller.Stop()),
             )
         )
 

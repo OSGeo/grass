@@ -11,7 +11,8 @@
 
 /***************************************************************/
 
-struct point {
+struct point
+{
     int row, col, backrow, backcol;
     struct point *next;
 };

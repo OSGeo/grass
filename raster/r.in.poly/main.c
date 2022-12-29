@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.in.poly
@@ -10,12 +11,12 @@
  *               for details.
  *
  *****************************************************************************/
-
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +26,6 @@ int main(int argc, char *argv[])
     int raster_type;
     int null_value;
     int *null;
-
     null = &null_value;
 
     G_gisinit(argv[0]);
@@ -34,11 +34,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     module->description =
-        _("Creates raster maps from ASCII polygon/line/point data files.");
+	_("Creates raster maps from ASCII polygon/line/point data files.");
+
 
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->description = _("Name of input file; or \"-\" to read from stdin");
-
+ 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     title = G_define_option();
@@ -66,11 +67,11 @@ int main(int argc, char *argv[])
     rows->answer = "4096";
 
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
     sscanf(rows->answer, "%d", &n);
     if (n < 1)
-        G_fatal_error(_("Minimum number of rows to hold in memory is 1"));
+	G_fatal_error(_("Minimum number of rows to hold in memory is 1"));
 
     if (strcmp(type->answer, "CELL") == 0)
         raster_type = CELL_TYPE;
@@ -86,6 +87,5 @@ int main(int argc, char *argv[])
     else
         null = NULL;
 
-    exit(poly_to_rast(input->answer, output->answer, title->answer, n,
-                      raster_type, null));
+    exit(poly_to_rast(input->answer, output->answer, title->answer, n, raster_type, null));
 }

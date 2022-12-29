@@ -59,12 +59,10 @@ from gui_core.wrap import (
     HyperlinkCtrl,
     Menu,
     NewId,
-    Slider,
     SpinCtrl,
     StaticBox,
     StaticText,
     TextCtrl,
-    ListBox,
 )
 
 
@@ -871,7 +869,7 @@ class GroupDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gLayerBox = ListBox(
+        self.gLayerBox = wx.ListBox(
             parent=self.gListPanel,
             id=wx.ID_ANY,
             size=(-1, 150),
@@ -986,7 +984,8 @@ class GroupDialog(wx.Dialog):
         if not check:
             self.gLayerBox.DeselectAll()
         else:
-            self.gLayerBox.SelectAll()
+            for item in range(self.subgListBox.GetCount()):
+                self.gLayerBox.Select(item)
 
         event.Skip()
 
@@ -1106,13 +1105,8 @@ class GroupDialog(wx.Dialog):
 
     def OnRemoveLayer(self, event):
         """Remove layer from listbox"""
-        # After removal of last selected item by .Delete,
-        # ListBox selects the last of remaining items in the list
-        # and thus adds a new item to GetSelections
-        # Items are removed in reverse order to maintain positional number
-        # of other selected items (ListBox is dynamic!)
-        selections = sorted(self.gLayerBox.GetSelections(), reverse=True)
-        for sel in selections:
+        while self.gLayerBox.GetSelections():
+            sel = self.gLayerBox.GetSelections()[0]
             m = self.gLayerBox.GetString(sel)
             self.gLayerBox.Delete(sel)
             self.gmaps.remove(m)
@@ -1823,17 +1817,17 @@ class SetOpacityDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(vgap=5, hgap=5)
-        box.AddGrowableCol(0)
-        self.value = Slider(
+        self.value = wx.Slider(
             panel,
             id=wx.ID_ANY,
             value=int(self.opacity * 100),
             style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_TOP | wx.SL_LABELS,
             minValue=0,
             maxValue=100,
+            size=(350, -1),
         )
 
-        box.Add(self.value, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
+        box.Add(self.value, flag=wx.ALIGN_CENTRE, pos=(0, 0), span=(1, 2))
         box.Add(
             StaticText(parent=panel, id=wx.ID_ANY, label=_("transparent")), pos=(1, 0)
         )
@@ -1868,10 +1862,7 @@ class SetOpacityDialog(wx.Dialog):
         panel.SetSizer(sizer)
         sizer.Fit(panel)
 
-        w, h = self.GetBestSize()
-        self.SetSize(wx.Size(w, h))
-        self.SetMaxSize(wx.Size(-1, h))
-        self.SetMinSize(wx.Size(w, h))
+        self.SetSize(self.GetBestSize())
 
         self.Layout()
 
@@ -2016,7 +2007,7 @@ class ImageSizeDialog(wx.Dialog):
         sizer.Add(btnsizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
-        sizer.Fit(self)
+        sizer.Fit(self.panel)
         self.Layout()
 
     def GetValues(self):

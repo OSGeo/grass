@@ -26,7 +26,6 @@ import sys
 import copy
 import wx
 import json
-import collections.abc
 
 from core import globalvar
 from core.gcmd import GException, GError
@@ -153,7 +152,6 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
-                "singleWindow": {"enabled": False},
             },
             #
             # datacatalog
@@ -190,7 +188,9 @@ class Settings:
                 "menustyle": {"selection": 1},
                 "gSelectPopupHeight": {"value": 200},
                 "iconTheme": {"type": "grass"},
-                "commandNotebook": {"selection": 0},
+                "commandNotebook": {
+                    "selection": 0 if sys.platform in ("win32", "darwin") else 1
+                },
             },
             #
             # language
@@ -799,8 +799,8 @@ class Settings:
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
-            _("Combined (labels and tool names)"),
-            _("Expert (tool names only)"),
+            _("Combined (labels and module names)"),
+            _("Expert (module names only)"),
         )
         self.internalSettings["appearance"]["gSelectPopupHeight"]["min"] = 50
         # there is also maxHeight given to TreeCtrlComboPopup.GetAdjustedSize
@@ -808,6 +808,7 @@ class Settings:
         self.internalSettings["appearance"]["commandNotebook"]["choices"] = (
             _("Basic top"),
             _("Basic left"),
+            _("Fancy green"),
             _("List left"),
         )
 
@@ -899,22 +900,9 @@ class Settings:
 
         :param settings: dict where to store settings (None for self.userSettings)
         """
-
-        def update_nested_dict_by_dict(dictionary, update):
-            """Recursively update nested dictionary by another nested dictionary"""
-            for key, value in update.items():
-                if isinstance(value, collections.abc.Mapping):
-                    dictionary[key] = update_nested_dict_by_dict(
-                        dictionary.get(key, {}), value
-                    )
-                else:
-                    dictionary[key] = value
-            return dictionary
-
         try:
             with open(self.filePath, "r") as f:
-                update = json.load(f, object_hook=settings_JSON_decode_hook)
-                update_nested_dict_by_dict(settings, update)
+                settings.update(json.load(f, object_hook=settings_JSON_decode_hook))
         except json.JSONDecodeError as e:
             sys.stderr.write(
                 _("Unable to read settings file <{path}>:\n{err}").format(

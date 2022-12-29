@@ -18,10 +18,9 @@
 
 
 import os
-import sys
 import unittest
+import sys
 from pathlib import Path
-
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -30,7 +29,7 @@ from grass.gunittest.main import test
 def can_import_folium():
     """Test folium import to see if test can be run."""
     try:
-        import folium  # noqa
+        import folium
 
         return True
     except ImportError:

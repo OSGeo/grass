@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
-enum state { S_TOPLEVEL, S_MODULE, S_FLAG, S_OPTION, S_RULES };
+enum state
+{
+    S_TOPLEVEL,
+    S_MODULE,
+    S_FLAG,
+    S_OPTION,
+    S_RULES
+};
 
-struct context {
+struct context
+{
     struct GModule *module;
     struct Option *option;
     struct Flag *flag;

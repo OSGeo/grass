@@ -44,6 +44,7 @@ if sys.version_info.major >= 3:
         else:
             return str(value)
 
+
 else:
 
     def GetUnicodeValue(value):

@@ -4,8 +4,7 @@
 parameters.
 
 <ul>
-  <li>ARVI: Atmospherically Resistant Vegetation Index</li>
-  <li>CI: Crust Index</li>
+  <li>ARVI: atmospherically resistant vegetation indices</li>
   <li>DVI: Difference Vegetation Index</li>
   <li>EVI: Enhanced Vegetation Index</li>
   <li>EVI2: Enhanced Vegetation Index 2</li>
@@ -78,23 +77,6 @@ arvi( redchan, nirchan, bluechan )
 
 ARVI = (nirchan - (2.0*redchan - bluechan)) / 
        ( nirchan + (2.0*redchan - bluechan))
-</pre></div>
-
-<b>CI: Crust Index</b> 
-<p>
-Advantage is taken of a unique spectral feature of soil biogenic crust
-containing cyanobacteria. It has been shown that the special phycobilin
-pigment in cyanobacteria contributes in producing a relatively higher
-reflectance in the blue spectral region than the same type of substrate
-without the biogenic crust. The spectral crust index (CI) is based on
-the normalized difference between the RED and the BLUE spectral values
-(Karnieli, 1997, DOI: 10.1080/014311697218368).
-
-<div class="code"><pre>
-ci ( bluechan, redchan )
-
-CI = 1 - (redchan - bluechan) / 
-       (redchan + bluechan)
 </pre></div>
 
 <p>
@@ -335,6 +317,7 @@ i.vi blue=band.1 red=band.3 nir=band.4 viname=evi output=evi
 r.univar -e evi
 </pre></div>
 
+
 <h3>Calculation of EVI2</h3>
 
 The calculation of EVI2 from the reflectance values is done as follows:
@@ -344,6 +327,7 @@ g.region raster=band.3 -p
 i.vi red=band.3 nir=band.4 viname=evi2 output=evi2
 r.univar -e evi2
 </pre></div>
+
 
 <h3>Calculation of GARI</h3>
 
@@ -355,6 +339,7 @@ i.vi blue=band.1 green=band.2 red=band.3 nir=band.4 viname=gari output=gari
 r.univar -e gari
 </pre></div>
 
+
 <h3>Calculation of GEMI</h3>
 
 The calculation of GEMI from the reflectance values is done as follows:
@@ -364,6 +349,7 @@ g.region raster=band.3 -p
 i.vi red=band.3 nir=band.4 viname=gemi output=gemi
 r.univar -e gemi
 </pre></div>
+
 
 <h3>Calculation of GVI</h3>
 
@@ -376,6 +362,7 @@ g.region raster=band.3 -p
 i.vi blue=band.1 green=band.2 red=band.3 nir=band.4 band5=band.5 band7=band.7 viname=gvi output=gvi
 r.univar -e gvi
 </pre></div>
+
 
 <h3>Calculation of IPVI</h3>
 
@@ -441,6 +428,7 @@ i.vi red=band.3 nir=band.4 viname=pvi output=pvi
 r.univar -e pvi
 </pre></div>
 
+
 <h3>Calculation of SAVI</h3>
 
 The calculation of SAVI from the reflectance values is done as follows:
@@ -451,6 +439,7 @@ i.vi red=band.3 nir=band.4 viname=savi output=savi
 r.univar -e savi
 </pre></div>
 
+
 <h3>Calculation of SR</h3>
 
 The calculation of SR from the reflectance values is done as follows:
@@ -460,6 +449,7 @@ g.region raster=band.3 -p
 i.vi red=band.3 nir=band.4 viname=sr output=sr
 r.univar -e sr
 </pre></div>
+
 
 <h3>Calculation of VARI</h3>
 
@@ -591,6 +581,16 @@ California Institute of Technology, email: terrill@mars1.gps.caltech.edu
 	     Caltech, Mail Code 170-25<br>
 	     Pasadena, CA  91125
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="i.albedo.html">i.albedo</a>,
+<a href="i.aster.toar.html">i.aster.toar</a>,
+<a href="i.landsat.toar.html">i.landsat.toar</a>,
+<a href="i.atcorr.html">i.atcorr</a>,
+<a href="i.tasscap.html">i.tasscap</a>
+</em>
+
 <h2>REFERENCES</h2>
 
 AVHRR, Landsat TM5:
@@ -603,17 +603,11 @@ thesis, Wageningen Agricultural Univ., The Netherland, 271 pp.
 <li> <a href="http://www.indexdatabase.de/db/i.php">Index DataBase: List of available Indices</a></li>
 </ul>
 
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="i.albedo.html">i.albedo</a>,
-<a href="i.aster.toar.html">i.aster.toar</a>,
-<a href="i.landsat.toar.html">i.landsat.toar</a>,
-<a href="i.atcorr.html">i.atcorr</a>,
-<a href="i.tasscap.html">i.tasscap</a>
-</em>
-
 <h2>AUTHORS</h2>
-
 Baburao Kamble, Asian Institute of Technology, Thailand<br>
 Yann Chemin, Asian Institute of Technology, Thailand
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

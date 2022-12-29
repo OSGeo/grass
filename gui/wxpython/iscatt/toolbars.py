@@ -41,8 +41,8 @@ class MainToolbar(BaseToolbar):
             "selectGroup": MetaIcon(
                 img="layer-group-add", label=_("Select imagery group")
             ),
-            "settings": BaseIcons["settings"],
-            "help": BaseIcons["help"],
+            "settings": BaseIcons["settings"].SetLabel(_("Settings")),
+            "help": MetaIcon(img="help", label=_("Show manual")),
             "add_scatt_pl": MetaIcon(
                 img="layer-raster-analyze", label=_("Add scatter plot")
             ),
@@ -65,61 +65,53 @@ class MainToolbar(BaseToolbar):
 
         tools = [
             (
-                ("add_scatt", icons["add_scatt_pl"].label),
+                "add_scatt",
                 icons["add_scatt_pl"],
                 lambda event: self.scatt_mgr.AddScattPlot(),
             ),
             (None,),
             (
-                ("cats_mgr", icons["cats_mgr"].label),
+                "cats_mgr",
                 icons["cats_mgr"],
                 lambda event: self.parent.ShowCategoryPanel(event.IsChecked()),
                 wx.ITEM_CHECK,
             ),
             (None,),
             (
-                ("pan", icons["pan"].label),
+                "pan",
                 icons["pan"],
                 lambda event: self.SetPloltsMode(event, "pan"),
                 wx.ITEM_CHECK,
             ),
             (
-                ("zoom", icons["zoomIn"].label),
+                "zoom",
                 icons["zoomIn"],
                 lambda event: self.SetPloltsMode(event, "zoom"),
                 wx.ITEM_CHECK,
             ),
             (
-                ("zoom_extend", icons["zoomExtent"].label),
+                "zoom_extend",
                 icons["zoomExtent"],
                 lambda event: self.SetPloltsMode(event, "zoom_extend"),
                 wx.ITEM_CHECK,
             ),
             (None,),
             (
-                ("sel_pol_mode", icons["selCatPol"].label),
+                "sel_pol_mode",
                 icons["selCatPol"],
                 self.ActivateSelectionPolygonMode,
                 wx.ITEM_CHECK,
             ),
             (None,),
-            (
-                ("settings", icons["settings"].label),
-                icons["settings"],
-                self.OnSettings,
-            ),
-            (
-                ("help", icons["help"].label),
-                icons["help"],
-                self.OnHelp,
-            ),
+            ("settings", icons["settings"], self.OnSettings),
+            ("help", icons["help"], self.OnHelp),
         ]
 
         if self.opt_tools and "add_group" in self.opt_tools:
             tools.insert(
                 0,
                 (
-                    ("selectGroup", icons["selectGroup"].label),
+                    "selectGroup",
                     icons["selectGroup"],
                     lambda event: self.scatt_mgr.SetData(),
                 ),
@@ -133,7 +125,7 @@ class MainToolbar(BaseToolbar):
     def SetPloltsMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
-            for i_tool_data in self.controller.data:
+            for i_tool_data in self._data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                     continue
@@ -159,7 +151,7 @@ class MainToolbar(BaseToolbar):
         self.UnsetMode()
 
     def UnsetMode(self):
-        for i_tool_data in self.controller.data:
+        for i_tool_data in self._data:
             i_tool_name = i_tool_data[0]
             if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                 continue
@@ -235,42 +227,42 @@ class EditingToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("sel_add", self.icons["sel_add"].label),
+                    "sel_add",
                     self.icons["sel_add"],
                     lambda event: self.scatt_mgr.ProcessSelectionPolygons("add"),
                 ),
                 (
-                    ("sel_remove", self.icons["sel_remove"].label),
+                    "sel_remove",
                     self.icons["sel_remove"],
                     lambda event: self.scatt_mgr.ProcessSelectionPolygons("remove"),
                 ),
                 (None,),
                 (
-                    ("add_vertex", self.icons["editLine"].label),
+                    "add_vertex",
                     self.icons["editLine"],
                     lambda event: self.SetMode(event, "add_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("add_boundary_vertex", self.icons["addVertex"].label),
+                    "add_boundary_vertex",
                     self.icons["addVertex"],
                     lambda event: self.SetMode(event, "add_boundary_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("move_vertex", self.icons["moveVertex"].label),
+                    "move_vertex",
                     self.icons["moveVertex"],
                     lambda event: self.SetMode(event, "move_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("delete_vertex", self.icons["removeVertex"].label),
+                    "delete_vertex",
                     self.icons["removeVertex"],
                     lambda event: self.SetMode(event, "delete_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("remove_polygon", self.icons["delete"].label),
+                    "remove_polygon",
                     self.icons["delete"],
                     lambda event: self.SetMode(event, "remove_polygon"),
                     wx.ITEM_CHECK,
@@ -281,7 +273,7 @@ class EditingToolbar(BaseToolbar):
     def SetMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
-            for i_tool_data in self.controller.data:
+            for i_tool_data in self._data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name:
                     continue
@@ -300,7 +292,7 @@ class EditingToolbar(BaseToolbar):
             self.UnsetMode()
 
     def UnsetMode(self):
-        for i_tool_data in self.controller.data:
+        for i_tool_data in self._data:
             i_tool_name = i_tool_data[0]
             if not i_tool_name:
                 continue
@@ -337,12 +329,12 @@ class CategoryToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("add_class", self.icons["add_class"].label),
+                    "add_class",
                     self.icons["add_class"],
                     lambda event: self.cats_mgr.AddCategory(),
                 ),
                 (
-                    ("remove_class", self.icons["remove_class"].label),
+                    "remove_class",
                     self.icons["remove_class"],
                     lambda event: self.cats_list.DeleteCategory(),
                 ),

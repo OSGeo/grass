@@ -526,8 +526,9 @@ msgid "Add existing or create new database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
+#, fuzzy
 msgid "Create new mapset in current location"
-msgstr ""
+msgstr "สร้าง mapset ใหม่"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
 msgid "Create new location in current GRASS database"
@@ -643,9 +644,9 @@ msgid "{name}  (owner: {owner})"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:237
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{name}"
-msgstr ""
+msgstr "เปลี่ยนชื่อ"
 
 #: ../gui/wxpython/datacatalog/tree.py:791
 #, python-brace-format
@@ -689,8 +690,9 @@ msgid "Rename map"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1064
+#, fuzzy
 msgid "Cannot rename mapset"
-msgstr ""
+msgstr "สร้าง mapset ใหม่"
 
 #: ../gui/wxpython/datacatalog/tree.py:1074
 #, python-brace-format
@@ -698,8 +700,9 @@ msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1084
+#, fuzzy
 msgid "Cannot rename location"
-msgstr ""
+msgstr "Canonical correlation"
 
 #: ../gui/wxpython/datacatalog/tree.py:1093
 #, python-brace-format
@@ -835,28 +838,33 @@ msgid "&Switch mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
+#, fuzzy
 msgid "&Delete mapset"
-msgstr ""
+msgstr "ลบทั้งหมด"
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
+#, fuzzy
 msgid "&Rename mapset"
-msgstr ""
+msgstr "สร้าง mapset ใหม่"
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
+#, fuzzy
 msgid "&Create mapset"
-msgstr ""
+msgstr "สร้าง mapset ใหม่"
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
+#, fuzzy
 msgid "&Delete location"
-msgstr ""
+msgstr "ลบทั้งหมด"
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
 msgid "&Rename location"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
+#, fuzzy
 msgid "&Create new location"
-msgstr ""
+msgstr "สร้าง mapset ใหม่"
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
 msgid "&Download sample location"
@@ -875,8 +883,9 @@ msgid "&Delete locations"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
+#, fuzzy
 msgid "&Delete mapsets"
-msgstr ""
+msgstr "ลบทั้งหมด"
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -892,12 +901,14 @@ msgid "Choose GRASS data directory:"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:112
+#, fuzzy
 msgid "Do you want to create a location?"
-msgstr ""
+msgstr "สร้าง mapset ใหม่"
 
 #: ../gui/wxpython/datacatalog/catalog.py:115
+#, fuzzy
 msgid "Create location?"
-msgstr ""
+msgstr "สร้าง Stationing"
 
 #: ../gui/wxpython/datacatalog/catalog.py:199
 msgid "Link external raster data  [r.external]"
@@ -920,12 +931,14 @@ msgid "Unpack GRASS raster map  [r.unpack]"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:224
+#, fuzzy
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr ""
+msgstr "ปรับปรุง metadata ของแผนที่เชิงเส้น."
 
 #: ../gui/wxpython/datacatalog/catalog.py:230
+#, fuzzy
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
-msgstr ""
+msgstr "สร้าง แผนที่เชิงภาพ จากไฟล์ข้อมูล ASCII รูปปิด/เส้น/จุด"
 
 #: ../gui/wxpython/datacatalog/catalog.py:234
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
@@ -1960,8 +1973,9 @@ msgid "Set spatial extent in 2D view"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:565
+#, fuzzy
 msgid "Use saved region:"
-msgstr ""
+msgstr "ย่อ/ขยาย ไปที่ขอบเขตที่บันทึกไว้"
 
 #: ../gui/wxpython/animation/dialogs.py:575
 msgid "Animate region change"
@@ -2727,8 +2741,9 @@ msgid "Classes"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:169
+#, fuzzy
 msgid "Interactive Scatter Plot Tool"
-msgstr ""
+msgstr "แก้ไขค่าหมวดหมู่ แบบโต้ตอบ"
 
 #: ../gui/wxpython/iscatt/frame.py:401
 msgid "scatter plot"
@@ -3757,8 +3772,9 @@ msgid "Define new GRASS Location"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:186
+#, fuzzy
 msgid "Change"
-msgstr ""
+msgstr "เปลี่ยนค่า"
 
 #: ../gui/wxpython/location_wizard/wizard.py:202
 #: ../gui/wxpython/gui_core/forms.py:1142
@@ -3931,8 +3947,9 @@ msgid "Enter WKT parameters string:"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1498
+#, fuzzy
 msgid "Select CRS from a list"
-msgstr ""
+msgstr "เลือกแบบอักษร"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1514
 msgid "Filter by EPSG code or description:"
@@ -4661,8 +4678,9 @@ msgid "Coordinates can be obtained for example by right-clicking on Map Display.
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:209 ../gui/wxpython/tplot/frame.py:264
+#, fuzzy
 msgid "Show simple linear regression line"
-msgstr ""
+msgstr "การเสื่อมถอย เชิงเส้น"
 
 #: ../gui/wxpython/tplot/frame.py:226
 msgid "STRDS"
@@ -5840,8 +5858,9 @@ msgid "Edit point"
 msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:74
+#, fuzzy
 msgid "Vector Network Analysis Tool"
-msgstr ""
+msgstr "วเคราะหโครงขาย"
 
 #: ../gui/wxpython/vnet/dialogs.py:193
 msgid "Point list toolbar"
@@ -7792,8 +7811,9 @@ msgid "Thematic mapping for vector map in 3D view"
 msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
+#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr ""
+msgstr "ตัวคำนวนแผนที่"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -8910,8 +8930,9 @@ msgid "Statistics for Profile(s)"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:43
+#, fuzzy
 msgid "Histogram Tool"
-msgstr ""
+msgstr "Histogram"
 
 #: ../gui/wxpython/wxplot/histogram.py:51
 msgid "Histogram of"
@@ -10823,8 +10844,9 @@ msgid "Neighborhood points"
 msgstr "จุดรอบข้าง"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
+#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr ""
+msgstr "สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 msgid "Overlay rasters"
@@ -13835,8 +13857,9 @@ msgid "Abort download"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:80
+#, fuzzy
 msgid "Invalid mapset name"
-msgstr ""
+msgstr "ชื่อตาราง"
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -13853,8 +13876,9 @@ msgid "Name for the new mapset:"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:186
+#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr ""
+msgstr "สร้าง mapset ใหม่"
 
 #: ../gui/wxpython/startup/guiutils.py:212
 msgid "Do you want to import {}to the newly created location?"
@@ -13926,8 +13950,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
+#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr ""
+msgstr "ลบข้อมูลที่เลือก"
 
 #: ../gui/wxpython/startup/guiutils.py:430
 #, python-brace-format
@@ -13940,8 +13965,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:435
+#, fuzzy
 msgid "Delete selected mapsets"
-msgstr ""
+msgstr "ลบข้อมูลที่เลือก"
 
 #: ../gui/wxpython/startup/guiutils.py:448
 msgid "Error when deleting mapsets"
@@ -13968,8 +13994,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:499
+#, fuzzy
 msgid "Unable to delete selected locations"
-msgstr ""
+msgstr "ลบข้อมูลที่เลือก"
 
 #: ../gui/wxpython/startup/guiutils.py:515
 #, python-brace-format
@@ -13982,8 +14009,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:520
+#, fuzzy
 msgid "Delete selected locations"
-msgstr ""
+msgstr "ลบข้อมูลที่เลือก"
 
 #: ../gui/wxpython/startup/guiutils.py:533
 msgid "Error when deleting locations"
@@ -14024,8 +14052,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
+#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr ""
+msgstr "ลบข้อมูลที่เลือก"
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14053,8 +14082,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:641
+#, fuzzy
 msgid "Mapset is in use"
-msgstr ""
+msgstr "เข้าถึง Mapset"
 
 #: ../gui/wxpython/startup/guiutils.py:653
 msgid "Error when removing lock file"
@@ -14687,8 +14717,9 @@ msgid "Dbf driver does not support usage of SQL functions."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:78
+#, fuzzy
 msgid "Attribute Table Manager"
-msgstr ""
+msgstr "คัดลอกรายละเอียด"
 
 #: ../gui/wxpython/dbmgr/manager.py:81
 #, python-brace-format
@@ -16110,7 +16141,7 @@ msgid "EPSG code:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "PROJ string (required):"
+msgid "Proj.4 string (required):"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
@@ -16118,7 +16149,7 @@ msgid "EPSG file:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
-msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
+msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
@@ -16424,8 +16455,9 @@ msgid "Template:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2000
+#, fuzzy
 msgid "SQL Query Utility"
-msgstr ""
+msgstr "การค้นหาแบบ SQL"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2016
 msgid " SQL statement "
@@ -18818,5 +18850,5 @@ msgstr "คำนวน univariate statistics จาก non-null 3d cells ขอ
 msgid "Digitize"
 msgstr "ดิจิไทซ์"
 
-msgid "New GIS data directory"
-msgstr "ไดเรคโทรี GIS Data ใหม่ "
+#~ msgid "New GIS data directory"
+#~ msgstr "ไดเรคโทรี GIS Data ใหม่ "

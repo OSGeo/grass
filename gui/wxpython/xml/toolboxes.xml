@@ -306,10 +306,6 @@
         <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
       <separator/>
-      <module-item name="r.in.wms">
-        <label>WMS/WMTS import</label>
-      </module-item>
-      <separator/>
       <module-item name="r.unpack">
         <label>Unpack raster map</label>
       </module-item>
@@ -351,9 +347,6 @@
       </module-item>
       <module-item name="v.in.lidar">
         <label>LAS LiDAR points import</label>
-      </module-item>
-      <module-item name="v.in.pdal">
-        <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
       <separator/>
       <module-item name="v.unpack">
@@ -691,9 +684,6 @@
       <module-item name="r.tileset">
         <label>Tiling</label>
       </module-item>
-      <module-item name="r.buildvrt">
-        <label>Build a VRT (Virtual Raster)</label>
-      </module-item>
     </items>
   </toolbox>
   <toolbox name="ManageRasterColors">
@@ -806,9 +796,6 @@
       </module-item>
       <module-item name="r.cost">
         <label>Cost surface</label>
-      </module-item>
-      <module-item name="r.path">
-        <label>Trace a path</label>
       </module-item>
       <module-item name="r.walk">
         <label>Cumulative movement costs</label>
@@ -1086,10 +1073,6 @@
       <module-item name="r.fillnulls">
         <label>Fill NULL cells</label>
       </module-item>
-      <separator/>
-      <module-item name="r.fill.stats">
-        <label>Fill NULL cells using IDW</label>
-      </module-item>
     </items>
   </toolbox>
   <toolbox name="RasterReportsAndStatistics">
@@ -1211,9 +1194,7 @@
         <label>Split polylines</label>
       </module-item>
       <separator/>
-      <module-item name="v.clean">
-        <label>Clean vector map</label>
-      </module-item>
+      <wxgui-item name="CleanVectorMap"/>
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>
       </module-item>
@@ -2035,7 +2016,6 @@
       <wxgui-item name="TplotTool"/>
       <wxgui-item name="TimelineTool"/>
       <wxgui-item name="VDigit"/>
-      <wxgui-item name="RDigit"/>
     </items>
   </toolbox>
 </toolboxes>

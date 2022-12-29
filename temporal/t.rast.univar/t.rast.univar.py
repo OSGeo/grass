@@ -26,20 +26,9 @@
 # % keyword: statistics
 # % keyword: raster
 # % keyword: time
-# % keyword: parallel
 # %end
 
 # %option G_OPT_STRDS_INPUT
-# %end
-
-# %option G_OPT_R_INPUT
-# % key: zones
-# % description: Raster map used for zoning, must be of type CELL
-# % required: no
-# %end
-
-# %option G_OPT_M_NPROCS
-# % required: no
 # %end
 
 # %option G_OPT_F_OUTPUT
@@ -71,28 +60,24 @@
 # % guisection: Formatting
 # %end
 
-import grass.script as gs
+import grass.script as grass
+
 
 ############################################################################
 
 
 def main():
-    # Get the options and flags
-    options, flags = gs.parser()
-
     # lazy imports
     import grass.temporal as tgis
 
-    # Define variables
+    # Get the options
     input = options["input"]
-    zones = options["zones"]
     output = options["output"]
-    nprocs = int(options["nprocs"])
     where = options["where"]
     extended = flags["e"]
     no_header = flags["u"]
     rast_region = bool(flags["r"])
-    separator = gs.separator(options["separator"])
+    separator = grass.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()
@@ -102,24 +87,11 @@ def main():
     if output == "-":
         output = None
 
-    # Check if zones map exists and is of type CELL
-    if zones:
-        if gs.raster.raster_info(zones)["datatype"] != "CELL":
-            gs.fatal(_("Zoning raster must be of type CELL"))
-
     tgis.print_gridded_dataset_univar_statistics(
-        "strds",
-        input,
-        output,
-        where,
-        extended,
-        no_header=no_header,
-        fs=separator,
-        rast_region=rast_region,
-        zones=zones,
-        nprocs=nprocs,
+        "strds", input, output, where, extended, no_header, separator, rast_region
     )
 
 
 if __name__ == "__main__":
+    options, flags = grass.parser()
     main()

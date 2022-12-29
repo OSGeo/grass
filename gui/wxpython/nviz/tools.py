@@ -51,13 +51,7 @@ from gui_core.gselect import VectorDBInfo
 from core.gcmd import GMessage, RunCommand
 from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
-from gui_core.widgets import (
-    ScrolledPanel,
-    NumTextCtrl,
-    FloatSlider,
-    SymbolButton,
-    GNotebook,
-)
+from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
 from gui_core.gselect import Select
 from gui_core.wrap import (
     Window,
@@ -66,7 +60,6 @@ from gui_core.wrap import (
     ToggleButton,
     Button,
     TextCtrl,
-    Slider,
     StaticText,
     StaticBox,
     CheckListBox,
@@ -82,7 +75,7 @@ from nviz.mapwindow import (
 from .wxnviz import DM_FLAT, DM_GOURAUD, MAX_ISOSURFS
 
 
-class NvizToolWindow(GNotebook):
+class NvizToolWindow(FN.FlatNotebook):
     """Nviz (3D view) tools panel"""
 
     def __init__(
@@ -101,7 +94,12 @@ class NvizToolWindow(GNotebook):
         self.mapWindow = display.GetWindow()
         self._display = self.mapWindow.GetDisplay()
 
-        GNotebook.__init__(self, parent, style=style)
+        if globalvar.hasAgw:
+            kwargs["agwStyle"] = style
+        else:
+            kwargs["style"] = style
+        FN.FlatNotebook.__init__(self, parent, id, **kwargs)
+        self.SetTabAreaColour(globalvar.FNPageColor)
 
         self.win = {}  # window ids
         self.page = {}  # page ids
@@ -3061,7 +3059,7 @@ class NvizToolWindow(GNotebook):
         gridSizer.Add(label, pos=(4, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         # sliders
         for i, coord in enumerate(("x1", "x2")):
-            slider = Slider(
+            slider = wx.Slider(
                 parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
             )
             self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
@@ -3070,7 +3068,7 @@ class NvizToolWindow(GNotebook):
             gridSizer.Add(slider, pos=(1, i + 1), flag=wx.ALIGN_CENTER | wx.EXPAND)
 
         for i, coord in enumerate(("y1", "y2")):
-            slider = Slider(
+            slider = wx.Slider(
                 parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
             )
             self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
@@ -3079,7 +3077,7 @@ class NvizToolWindow(GNotebook):
             gridSizer.Add(slider, pos=(2, i + 1), flag=wx.ALIGN_CENTER | wx.EXPAND)
 
         for i, coord in enumerate(("z1", "z2")):
-            slider = Slider(
+            slider = wx.Slider(
                 parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
             )
             self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
@@ -3158,7 +3156,7 @@ class NvizToolWindow(GNotebook):
         if floatSlider:
             slider = FloatSlider(**kwargs)
         else:
-            slider = Slider(**kwargs)
+            slider = wx.Slider(**kwargs)
 
         slider.SetName("slider")
         if bind[0]:
@@ -5145,10 +5143,10 @@ class NvizToolWindow(GNotebook):
 
         if pageId == "view":
             self.SetPage("view")
-            hmin = int(self.mapWindow.iview["height"]["min"])
-            hmax = int(self.mapWindow.iview["height"]["max"])
-            hval = int(self.mapWindow.iview["height"]["value"])
-            zmin = int(self.mapWindow.view["z-exag"]["min"])
+            hmin = self.mapWindow.iview["height"]["min"]
+            hmax = self.mapWindow.iview["height"]["max"]
+            hval = self.mapWindow.iview["height"]["value"]
+            zmin = self.mapWindow.view["z-exag"]["min"]
             zmax = self.mapWindow.view["z-exag"]["max"]
             zval = self.mapWindow.view["z-exag"]["value"]
 
@@ -5778,7 +5776,7 @@ class NvizToolWindow(GNotebook):
 
 class PositionWindow(Window):
     """Abstract position control window, see subclasses
-    ViewPositionWindow and LightPositionWindow"""
+    ViewPostionWindow and LightPositionWindow"""
 
     def __init__(self, parent, mapwindow, id=wx.ID_ANY, **kwargs):
         self.mapWindow = mapwindow
@@ -5806,8 +5804,8 @@ class PositionWindow(Window):
             y = y * h
         self.pdc.Clear()
         self.pdc.BeginDrawing()
-        self.pdc.DrawLine(w // 2, h // 2, int(x), int(y))
-        self.pdc.DrawCircle(int(x), int(y), 5)
+        self.pdc.DrawLine(w / 2, h / 2, x, y)
+        self.pdc.DrawCircle(x, y, 5)
         self.pdc.EndDrawing()
 
     def OnPaint(self, event):

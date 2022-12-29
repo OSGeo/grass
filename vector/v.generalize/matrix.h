@@ -1,3 +1,4 @@
+
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -21,7 +22,8 @@
 
 #include <grass/vector.h>
 
-typedef struct {
+typedef struct
+{
     int rows, cols;
     double **a;
 } MATRIX;

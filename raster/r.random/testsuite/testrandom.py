@@ -35,8 +35,8 @@ class Testrr(TestCase):
         self.runModule("g.remove", flags="f", type="vector", name=self.vector)
         self.runModule("g.remove", flags="f", type="raster", name=self.raster)
 
-    def test_flag_n(self):
-        """Testing flag n"""
+    def test_flag_z(self):
+        """Testing flag z"""
         string = """area_cat|count|sum
         1|0|null
         2|0|null
@@ -55,22 +55,26 @@ class Testrr(TestCase):
             cover=self.cover,
             npoints=100,
             vector=self.vector,
-            flags="n",
-            seed=1,
+            flags="z",
         )
         r_random.outputs.stdout = string
         self.assertLooksLike(reference=string, actual=r_random.outputs.stdout)
 
-    def test_flag_z(self):
-        """Testing flag z"""
+    def test_flag_i(self):
+        """Testing flag i"""
+        self.assertModule(
+            "r.random", input=self.input, cover=self.cover, npoints=100, flags="i"
+        )
+
+    def test_flag_d(self):
+        """Testing flag d"""
         self.assertModule(
             "r.random",
             input=self.input,
             cover=self.cover,
             npoints=100,
             vector=self.vector,
-            flags="z",
-            seed=1,
+            flags="d",
         )
         self.assertModule("v.info", map=self.vector, flags="t")
         topology = dict(points=100, lines=0, areas=0, map3d=1)
@@ -85,7 +89,7 @@ class Testrr(TestCase):
             npoints=36011,
             vector=self.vector,
             flags="b",
-            seed=1,
+            overwrite=True,
         )
         self.assertModule("v.info", map=self.vector, flags="t")
         topology = dict(points=36011, lines=0, areas=0)

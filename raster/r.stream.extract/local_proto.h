@@ -1,3 +1,4 @@
+
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
@@ -5,43 +6,40 @@
 #include "flag.h"
 #include "seg.h"
 
-#define INDEX(r, c) ((r)*ncols + (c))
-#define MAXDEPTH    1000 /* maximum supported tree depth of stream network */
+#define INDEX(r, c) ((r) * ncols + (c))
+#define MAXDEPTH 1000     /* maximum supported tree depth of stream network */
 
 #define POINT       struct a_point
-POINT
-{
+POINT {
     int r, c;
 };
 
-#define HEAP_PNT struct heap_point
-HEAP_PNT
-{
-    GW_LARGE_INT added;
-    CELL ele;
-    POINT pnt;
+#define HEAP_PNT    struct heap_point
+HEAP_PNT {
+   GW_LARGE_INT added;
+   CELL ele;
+   POINT pnt;
 };
 
-#define WAT_ALT struct wat_altitude
-WAT_ALT
-{
-    CELL ele;
-    DCELL wat;
+#define WAT_ALT    struct wat_altitude
+WAT_ALT {
+   CELL ele;
+   DCELL wat;
 };
 
-#define ASP_FLAG struct aspect_flag
-ASP_FLAG
-{
-    char asp;
-    char flag;
+#define ASP_FLAG    struct aspect_flag
+ASP_FLAG {
+   char asp;
+   char flag;
 };
 
-struct snode {
+struct snode
+{
     int r, c;
     int id;
-    int n_trib;       /* number of tributaries */
-    int n_trib_total; /* number of all upstream stream segments */
-    int n_alloc;      /* n allocated tributaries */
+    int n_trib;           /* number of tributaries */
+    int n_trib_total;     /* number of all upstream stream segments */
+    int n_alloc;          /* n allocated tributaries */
     int *trib;
 };
 
@@ -63,7 +61,6 @@ extern int have_depressions;
 extern SSEG search_heap;
 extern SSEG astar_pts;
 extern SSEG watalt, aspflag;
-
 /* extern BSEG bitflags, asp; */
 extern CSEG stream;
 

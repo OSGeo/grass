@@ -7,7 +7,7 @@ functions, and additional toolbars (vector digitizer, 3d view).
 Can be used either from Layer Manager or as d.mon backend.
 
 Classes:
- - mapdisp::MapPanel
+ - mapdisp::MapFrame
 
 (C) 2006-2016 by the GRASS Development Team
 
@@ -17,8 +17,8 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapPanel, handlers support)
-@author Anna Kratochvilova <kratochanna gmail.com> (SingleMapPanel)
+@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapFrame, handlers support)
+@author Anna Kratochvilova <kratochanna gmail.com> (SingleMapFrame)
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
@@ -36,7 +36,8 @@ from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapPanel, FrameMixin
+from gui_core.mapdisp import SingleMapFrame
+from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
@@ -62,8 +63,8 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapPanel(SingleMapPanel):
-    """Main panel for map display window. Drawing takes place in
+class MapFrame(SingleMapFrame):
+    """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
 
@@ -90,10 +91,10 @@ class MapPanel(SingleMapPanel):
         :param lmgr: Layer Manager
         :param map: instance of render.Map
         :param auimgr: AUI manager
-        :param name: panel name
-        :param kwargs: wx.Panel attributes
+        :param name: frame name
+        :param kwargs: wx.Frame attributes
         """
-        SingleMapPanel.__init__(
+        SingleMapFrame.__init__(
             self,
             parent=parent,
             title=title,
@@ -118,16 +119,20 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already actived.
-        self.starting3dMode = Signal("MapPanel.starting3dMode")
+        self.starting3dMode = Signal("MapFrame.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
-        self.ending3dMode = Signal("MapPanel.ending3dMode")
+        self.ending3dMode = Signal("MapFrame.ending3dMode")
 
         # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapPanel.closingDisplay")
+        self.closingDisplay = Signal("MapFrame.closingDisplay")
 
         # Emitted when closing display by closing its window.
-        self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
+        self.closingVNETDialog = Signal("MapFrame.closingVNETDialog")
+
+        # properties are shared in other objects, so defining here
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
 
         #
         # Add toolbars
@@ -138,7 +143,6 @@ class MapPanel(SingleMapPanel):
         #
         # Add statusbar
         #
-        self.statusbar = None
         self.statusbarManager = None
         if statusbar:
             # items for choice
@@ -146,12 +150,19 @@ class MapPanel(SingleMapPanel):
                 sb.SbCoordinates,
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
+                sb.SbShowRegion,
+                sb.SbAlignExtent,
+                sb.SbResolution,
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
+                sb.SbProjection,
             ]
-            self.statusbarItemsDisabledInNviz = (
+            self.statusbarItemsHiddenInNviz = (
+                sb.SbAlignExtent,
                 sb.SbDisplayGeometry,
+                sb.SbShowRegion,
+                sb.SbResolution,
                 sb.SbMapScale,
             )
             self.statusbar = self.CreateStatusbar(statusbarItems)
@@ -196,8 +207,7 @@ class MapPanel(SingleMapPanel):
         self.MapWindow2D.zoomChanged.connect(self.StatusbarUpdate)
 
         # register context menu actions
-        if self.statusbar:
-            self._registerContextMenuActions()
+        self._registerContextMenuActions()
 
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
@@ -214,6 +224,7 @@ class MapPanel(SingleMapPanel):
         #
         # Bind various events
         #
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         #
@@ -232,8 +243,7 @@ class MapPanel(SingleMapPanel):
         )
 
         # statusbar
-        if self.statusbar:
-            self.AddStatusbarPane()
+        self.AddStatusbarPane()
 
         self._mgr.Update()
 
@@ -448,10 +458,10 @@ class MapPanel(SingleMapPanel):
         )
         # update status bar
 
-        self.statusbarManager.DisableStatusbarItemsByClass(
-            self.statusbarItemsDisabledInNviz
+        self.statusbarManager.HideStatusbarChoiceItemsByClass(
+            self.statusbarItemsHiddenInNviz
         )
-        self.mapWindowProperties.sbItem = 0
+        self.statusbarManager.SetMode(0)
 
         # erase map window
         self.MapWindow.EraseMap()
@@ -548,12 +558,13 @@ class MapPanel(SingleMapPanel):
             pass
 
         # update status bar
-        self.SetStatusText(_("Please wait, unloading data..."), 0)
-        self.statusbarManager.disabledItems = {}
-        self.mapWindowProperties.sbItem = UserSettings.Get(
-            group="display", key="statusbarMode", subkey="selection"
+        self.statusbarManager.ShowStatusbarChoiceItemsByClass(
+            self.statusbarItemsHiddenInNviz
         )
-
+        self.statusbarManager.SetMode(
+            UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
+        )
+        self.SetStatusText(_("Please wait, unloading data..."), 0)
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
             _("Switching back to 2D view mode..."),
@@ -948,7 +959,7 @@ class MapPanel(SingleMapPanel):
     def CleanUp(self):
         """Clean up before closing map display.
         End digitizer/nviz."""
-        Debug.msg(2, "MapPanel.CleanUp()")
+        Debug.msg(2, "MapFrame.CleanUp()")
         self.Map.Clean()
         # close edited map and 3D tools properly
         if self.GetToolbar("vdigit"):
@@ -966,15 +977,13 @@ class MapPanel(SingleMapPanel):
         """Window closed.
         Also close associated layer tree page
         """
-        Debug.msg(2, "MapPanel.OnCloseWindow()")
+        Debug.msg(2, "MapFrame.OnCloseWindow()")
         if self.canCloseDisplayCallback:
-            pgnum_dict = self.canCloseDisplayCallback(
-                askIfSaveWorkspace=askIfSaveWorkspace
-            )
-            if pgnum_dict is not None:
+            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
+            if pgnum is not None:
                 self.CleanUp()
-                if pgnum_dict["layers"] > -1:
-                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                if pgnum > -1:
+                    self.closingDisplay.emit(page_index=pgnum)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
@@ -1479,7 +1488,7 @@ class MapPanel(SingleMapPanel):
         """Set display extents to match selected raster (including
         NULLs) or vector map.
         """
-        Debug.msg(3, "MapPanel.OnZoomToMap()")
+        Debug.msg(3, "MapFrame.OnZoomToMap()")
         self.MapWindow.ZoomToMap(layers=None)
 
     def OnZoomToRaster(self, event):
@@ -1562,7 +1571,8 @@ class MapPanel(SingleMapPanel):
         self.mapWindowProperties.autoRender = render
         if self.statusbarManager:
             self.statusbarManager.SetMode(mode)
-        self.mapWindowProperties.useDefinedProjection = projection
+            self.StatusbarUpdate()
+            self.SetProperty("projection", projection)
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
@@ -1689,61 +1699,3 @@ class MapPanel(SingleMapPanel):
         """Quit VDigit"""
         # disable the toolbar
         self.RemoveToolbar("vdigit", destroy=True)
-
-
-class MapDisplay(FrameMixin, MapPanel):
-    """Map display for wrapping map panel with frame methods"""
-
-    def __init__(self, parent, giface, id, tree, lmgr, idx, Map, title, **kwargs):
-        # init map panel
-        MapPanel.__init__(
-            self,
-            parent=parent,
-            giface=giface,
-            id=id,
-            tree=tree,
-            lmgr=lmgr,
-            Map=Map,
-            title=title,
-            **kwargs,
-        )
-        # set system icon
-        parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-        # use default frame window layout
-        client_disp = wx.ClientDisplayRect()
-        if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-            idx = 4 + idx * 4
-            try:
-                x, y = map(int, dim.split(",")[idx : idx + 2])
-                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                if x == 1:
-                    # Get client display x offset (OS panel)
-                    x = client_disp[0]
-                if y == 1:
-                    # Get client display y offset (OS panel)
-                    y = client_disp[1]
-                parent.SetPosition((x, y))
-                parent.SetSize((w, h))
-            except Exception:
-                pass
-        else:
-            # Set client display x, y offset (OS panel)
-            parent.SetPosition((client_disp[0], client_disp[1]))
-
-        # bindings
-        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-
-        # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts()
-
-        # add Map Display panel to Map Display frame
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self, proportion=1, flag=wx.EXPAND)
-        parent.SetSizer(sizer)
-        parent.Layout()

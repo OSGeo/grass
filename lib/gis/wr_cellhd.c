@@ -1,3 +1,4 @@
+
 /*!
  * \file lib/gis/wr_cellhd.c
  *
@@ -16,6 +17,7 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
+
 /**
  * \brief Write cell header or window.
  *
@@ -25,7 +27,8 @@
  * \return
  */
 
-void G__write_Cell_head(FILE *fd, const struct Cell_head *cellhd, int is_cellhd)
+void G__write_Cell_head(FILE * fd,
+			const struct Cell_head *cellhd, int is_cellhd)
 {
     char buf[1024];
     int fmt;
@@ -57,10 +60,11 @@ void G__write_Cell_head(FILE *fd, const struct Cell_head *cellhd, int is_cellhd)
     fprintf(fd, "n-s resol:  %s\n", buf);
 
     if (is_cellhd) {
-        fprintf(fd, "format:     %d\n", cellhd->format);
-        fprintf(fd, "compressed: %d\n", cellhd->compressed);
+	fprintf(fd, "format:     %d\n", cellhd->format);
+	fprintf(fd, "compressed: %d\n", cellhd->compressed);
     }
 }
+
 
 /**
  * \brief Write 3D cell header or window.
@@ -71,8 +75,8 @@ void G__write_Cell_head(FILE *fd, const struct Cell_head *cellhd, int is_cellhd)
  * \return
  */
 
-void G__write_Cell_head3(FILE *fd, const struct Cell_head *cellhd,
-                         int is_cellhd)
+void G__write_Cell_head3(FILE * fd,
+			 const struct Cell_head *cellhd, int is_cellhd)
 {
     char buf[1024];
     int fmt;

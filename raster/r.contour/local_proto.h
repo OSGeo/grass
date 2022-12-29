@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.contour
@@ -26,7 +27,7 @@ int checkedge(DCELL, DCELL, double);
 /* main.c */
 DCELL **get_z_array(int, int, int);
 double *getlevels(struct Option *, struct Option *, struct Option *,
-                  struct Option *, struct FPRange *, int *);
+		  struct Option *, struct FPRange *, int *);
 void displaceMatrix(DCELL **, int, int, double *, int);
 
 #endif /* __LOCAL_PROTO_H__ */

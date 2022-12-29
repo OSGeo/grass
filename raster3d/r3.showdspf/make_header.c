@@ -2,9 +2,9 @@
 #include <grass/raster3d.h>
 
 int viz_make_header(hf, dmin, dmax, g3reg)
-file_info *hf;
-double dmin, dmax;
-RASTER3D_Region *g3reg;
+     file_info *hf;
+     double dmin, dmax;
+     RASTER3D_Region *g3reg;
 {
 
     hf->min = dmin;
@@ -36,4 +36,6 @@ RASTER3D_Region *g3reg;
        hf->proj
        hf->type
      */
+
+
 }

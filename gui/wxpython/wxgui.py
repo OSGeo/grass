@@ -30,7 +30,6 @@ from grass.script.core import set_raise_on_error
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
-from core.settings import UserSettings
 
 import wx
 
@@ -84,13 +83,7 @@ class GMApp(wx.App):
 
         def show_main_gui():
             # create and show main frame
-            single = UserSettings.Get(
-                group="general", key="singleWindow", subkey="enabled"
-            )
-            if single:
-                from main_window.frame import GMFrame
-            else:
-                from lmgr.frame import GMFrame
+            from lmgr.frame import GMFrame
 
             mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
             mainframe.Show()

@@ -1,6 +1,7 @@
 #define _l_parms_h
 
-struct parms {
+struct parms
+{
     char *training_map;
     char *group;
     char *subgroup;

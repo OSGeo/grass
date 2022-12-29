@@ -15,6 +15,7 @@
 #include <grass/gis.h>
 #include "pi.h"
 
+
 static struct state {
     double M;
 } state;
@@ -53,8 +54,8 @@ double G_darea0_on_sphere(double lat)
  * \brief Calculates area between latitudes.
  *
  * This routine shows how to calculate area between two lats, but
- * isn't efficient for row by row since G_darea0_on_sphere() will
- * be called twice for the same lat, once as a <i>south</i> then
+ * isn't efficient for row by row since G_darea0_on_sphere() will 
+ * be called twice for the same lat, once as a <i>south</i> then 
  * again as a <i>north</i>.
  *
  * Returns the area between latitudes <i>north</i> and <i>south</i>

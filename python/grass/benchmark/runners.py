@@ -14,7 +14,6 @@
 
 """Basic functions for benchmarking modules"""
 
-import random
 import shutil
 from types import SimpleNamespace
 
@@ -69,7 +68,7 @@ def benchmark_single(module, label, repeat=5):
     )
 
 
-def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
+def benchmark_nprocs(module, label, max_nprocs, repeat=5):
     """Benchmark module using values of nprocs up to *max_nprocs*.
 
     *module* is an instance of PyGRASS Module class or any object which
@@ -83,16 +82,13 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     to generate a continuous range of integer values from 1 up to *max_nprocs*.
     *repeat* sets how many times the each run is repeated.
     So, the module will run ``max_nprocs * repeat`` times.
-    Runs are executed in random order, set *shuffle* to false if they
-    need to be executed in order based on number of threads.
 
     *label* is a text to add to the result (for user-facing display).
     Optional *nprocs* is passed to the module if present.
 
     Returns an object with attributes *times* (list of average execution times),
-    *all_times* (list of lists of measured execution times),
-    *efficiency* (parallel efficiency), *nprocs* (list of *nprocs* values used),
-    and *label* (the provided parameter as is).
+    *all_times* (list of lists of measured execution times), *nprocs*
+    (list of *nprocs* values used), and *label* (the provided parameter as is).
     """
     term_size = shutil.get_terminal_size()
     if hasattr(module, "get_bash"):
@@ -105,31 +101,28 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     serial_avg = None
     avg_times = []
     all_times = []
-    efficiency = []
     nprocs_list = list(range(1, max_nprocs + 1))
-    nprocs_list_shuffled = sorted(nprocs_list * repeat)
-    if shuffle:
-        random.shuffle(nprocs_list_shuffled)
-    times = {}
-    print("\u2500" * term_size.columns)
-    for nprocs in nprocs_list_shuffled:
-        module.update(nprocs=nprocs)
-        module.run()
-        print(f"Run with {nprocs} thread(s) took {module.time}s\n")
-        if nprocs in times:
-            times[nprocs] += [module.time]
-        else:
-            times[nprocs] = [module.time]
-    for nprocs in sorted(times):
-        avg = sum(times[nprocs]) / repeat
+    for nprocs in nprocs_list:
+        print("\u2500" * term_size.columns)
+        print(f"Benchmark with {nprocs} thread(s)...\n")
+        time_sum = 0
+        measured_times = []
+        for _ in range(repeat):
+            module.update(nprocs=nprocs)
+            module.run()
+            print(f"{module.time}s")
+            time_sum += module.time
+            measured_times.append(module.time)
+
+        avg = time_sum / repeat
         avg_times.append(avg)
-        all_times.append(times[nprocs])
+        all_times.append(measured_times)
         if nprocs == 1:
             serial_avg = avg
         if avg < min_avg:
             min_avg = avg
             min_time = nprocs
-        efficiency.append(serial_avg / (nprocs * avg))
+        print(f"\nResult - {avg}s")
 
     print("\u2500" * term_size.columns)
     if serial_avg is not None:
@@ -139,7 +132,6 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     return SimpleNamespace(
         all_times=all_times,
         times=avg_times,
-        efficiency=efficiency,
         nprocs=nprocs_list,
         label=label,
     )

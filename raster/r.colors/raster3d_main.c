@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r3.colors
@@ -19,7 +20,7 @@
 
 #include "local_proto.h"
 
-/* This is the main function for r3.colors */
+/* This is the main function for r3.colors*/
 int main(int argc, char **argv)
 {
     return edit_colors(argc, argv, RASTER3D_TYPE, "raster3d", "Raster3d");

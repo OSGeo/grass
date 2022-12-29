@@ -48,9 +48,9 @@ class RPCDefs(object):
     G_LOCATION = 12
     G_GISDBASE = 13
     READ_MAP_FULL_INFO = 14
-    WRITE_SEMANTIC_LABEL = 15
-    READ_SEMANTIC_LABEL = 16
-    REMOVE_SEMANTIC_LABEL = 17
+    WRITE_BAND_REFERENCE = 15
+    READ_BAND_REFERENCE = 16
+    REMOVE_BAND_REFERENCE = 17
     G_FATAL_ERROR = 49
 
     TYPE_RASTER = 0
@@ -525,12 +525,12 @@ def _remove_timestamp(lock, conn, data):
 ###############################################################################
 
 
-def _read_semantic_label(lock, conn, data):
+def _read_band_reference(lock, conn, data):
     """Read the file based GRASS band identifier
     the result using the provided pipe.
 
     The result to be sent via pipe is the return value of
-    Rast_read_semantic_label: either a semantic label string or None.
+    Rast_read_bandref: either a band reference string or None.
 
     :param lock: A multiprocessing.Lock instance
     :param conn: A multiprocessing.Pipe instance used to send True or False
@@ -538,7 +538,7 @@ def _read_semantic_label(lock, conn, data):
                  mapset, layer, timestring]
 
     """
-    semantic_label = None
+    bandref = None
     try:
         maptype = data[1]
         name = data[2]
@@ -548,27 +548,27 @@ def _read_semantic_label(lock, conn, data):
         if maptype == RPCDefs.TYPE_RASTER:
             # Must use temporary variable to work around
             # ValueError: ctypes objects containing pointers cannot be pickled
-            ret = libraster.Rast_read_semantic_label(name, mapset)
+            ret = libraster.Rast_read_bandref(name, mapset)
             if ret:
-                semantic_label = decode(ret)
+                bandref = decode(ret)
         else:
             logging.error(
-                "Unable to read semantic label. " "Unsupported map type %s" % maptype
+                "Unable to read band reference. " "Unsupported map type %s" % maptype
             )
             return -1
     except:
         raise
     finally:
-        conn.send(semantic_label)
+        conn.send(bandref)
 
 
 ###############################################################################
 
 
-def _write_semantic_label(lock, conn, data):
+def _write_band_reference(lock, conn, data):
     """Write the file based GRASS band identifier.
 
-    Rises ValueError on invalid semantic label.
+    Rises ValueError on invalid band reference.
     Always sends back True.
 
     :param lock: A multiprocessing.Lock instance
@@ -582,15 +582,15 @@ def _write_semantic_label(lock, conn, data):
         name = data[2]
         # mapset = data[3]
         # layer = data[4]
-        semantic_label = data[5]
+        bandref = data[5]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            if libraster.Rast_legal_semantic_label(semantic_label) is False:
-                raise ValueError(_("Invalid semantic label"))
-            libraster.Rast_write_semantic_label(name, semantic_label)
+            if libraster.Rast_legal_bandref(bandref) < 0:
+                raise ValueError(_("Invalid band reference"))
+            libraster.Rast_write_bandref(name, bandref)
         else:
             logging.error(
-                "Unable to write semantic label. " "Unsupported map type %s" % maptype
+                "Unable to write band reference. " "Unsupported map type %s" % maptype
             )
             return -2
     except:
@@ -602,7 +602,7 @@ def _write_semantic_label(lock, conn, data):
 ###############################################################################
 
 
-def _remove_semantic_label(lock, conn, data):
+def _remove_band_reference(lock, conn, data):
     """Remove the file based GRASS band identifier.
 
     The value to be send via pipe is the return value of G_remove_misc.
@@ -621,10 +621,10 @@ def _remove_semantic_label(lock, conn, data):
         # layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
+            check = libgis.G_remove_misc("cell_misc", "bandref", name)
         else:
             logging.error(
-                "Unable to remove semantic label. " "Unsupported map type %s" % maptype
+                "Unable to remove band reference. " "Unsupported map type %s" % maptype
             )
             return -2
     except:
@@ -744,11 +744,9 @@ def _read_raster_info(name, mapset):
         libraster.Rast_init_fp_range(byref(range))
         ret = libraster.Rast_read_fp_range(name, mapset, byref(range))
         if ret < 0:
-            logging.warning(_("Unable to read range file"))
-            kvp["min"] = None
-            kvp["max"] = None
-        elif ret == 2:
-            logging.warning(_("Raster range file is empty"))
+            logging.error(_("Unable to read range file"))
+            return None
+        if ret == 2:
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -762,11 +760,9 @@ def _read_raster_info(name, mapset):
         libraster.Rast_init_range(byref(range))
         ret = libraster.Rast_read_range(name, mapset, byref(range))
         if ret < 0:
-            logging.warning(_("Unable to read range file"))
-            kvp["min"] = None
-            kvp["max"] = None
-        elif ret == 2:
-            logging.warning(_("Raster range file is empty"))
+            logging.error(_("Unable to read range file"))
+            return None
+        if ret == 2:
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -1121,9 +1117,9 @@ def c_library_server(lock, conn):
     functions[RPCDefs.G_LOCATION] = _get_location
     functions[RPCDefs.G_GISDBASE] = _get_gisdbase
     functions[RPCDefs.READ_MAP_FULL_INFO] = _read_map_full_info
-    functions[RPCDefs.WRITE_SEMANTIC_LABEL] = _write_semantic_label
-    functions[RPCDefs.READ_SEMANTIC_LABEL] = _read_semantic_label
-    functions[RPCDefs.REMOVE_SEMANTIC_LABEL] = _remove_semantic_label
+    functions[RPCDefs.WRITE_BAND_REFERENCE] = _write_band_reference
+    functions[RPCDefs.READ_BAND_REFERENCE] = _read_band_reference
+    functions[RPCDefs.REMOVE_BAND_REFERENCE] = _remove_band_reference
     functions[RPCDefs.G_FATAL_ERROR] = _fatal_error
 
     libgis.G_gisinit("c_library_server")
@@ -1453,8 +1449,8 @@ class CLibrariesInterface(RPCServerBase):
         )
         return self.safe_receive("write_raster_timestamp")
 
-    def remove_raster_semantic_label(self, name, mapset):
-        """Remove a file based raster semantic label
+    def remove_raster_band_reference(self, name, mapset):
+        """Remove a file based raster band reference
 
         :param name: The name of the map
         :param mapset: The mapset of the map
@@ -1462,48 +1458,48 @@ class CLibrariesInterface(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.REMOVE_SEMANTIC_LABEL, RPCDefs.TYPE_RASTER, name, mapset, None]
+            [RPCDefs.REMOVE_BAND_REFERENCE, RPCDefs.TYPE_RASTER, name, mapset, None]
         )
-        return self.safe_receive("remove_raster_semantic_label")
+        return self.safe_receive("remove_raster_timestamp")
 
-    def read_raster_semantic_label(self, name, mapset):
-        """Read a file based raster semantic label
+    def read_raster_band_reference(self, name, mapset):
+        """Read a file based raster band reference
 
-        Returns semantic label or None
+        Returns band reference or None
 
         :param name: The name of the map
         :param mapset: The mapset of the map
-        :returns: The return value of Rast_read_semantic_label
+        :returns: The return value of Rast_read_bandref
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.READ_SEMANTIC_LABEL, RPCDefs.TYPE_RASTER, name, mapset, None]
+            [RPCDefs.READ_BAND_REFERENCE, RPCDefs.TYPE_RASTER, name, mapset, None]
         )
-        return self.safe_receive("read_raster_semantic_label")
+        return self.safe_receive("read_raster_band_reference")
 
-    def write_raster_semantic_label(self, name, mapset, semantic_label):
-        """Write a file based raster semantic label
+    def write_raster_band_reference(self, name, mapset, band_reference):
+        """Write a file based raster band reference
 
         Note:
-            Only semantic labels of maps from the current mapset can be written.
+            Only band references of maps from the current mapset can be written.
 
         :param name: The name of the map
         :param mapset: The mapset of the map
-        :param semantic_label: semantic label
+        :param band_reference: band reference identifier
         :returns: always True
         """
         self.check_server()
         self.client_conn.send(
             [
-                RPCDefs.WRITE_SEMANTIC_LABEL,
+                RPCDefs.WRITE_BAND_REFERENCE,
                 RPCDefs.TYPE_RASTER,
                 name,
                 mapset,
                 None,
-                semantic_label,
+                band_reference,
             ]
         )
-        return self.safe_receive("write_raster_semantic_label")
+        return self.safe_receive("write_raster_band_reference")
 
     def raster3d_map_exists(self, name, mapset):
         """Check if a 3D raster map exists in the spatial database

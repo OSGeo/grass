@@ -1,8 +1,9 @@
+
 /****************************************************************
  * MODULE:     v.path.obstacles
  *
  * AUTHOR(S):  Maximilian Maldacker
- *
+ *  
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -29,5 +30,6 @@ int left_turn(struct Point *p1, struct Point *p2, struct Point *p3);
 int before(struct Point *p, struct Point *q, struct Line *e);
 
 int segment_intersect(struct Line *line, struct Point *p, double *y);
+
 
 #endif

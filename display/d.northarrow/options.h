@@ -1,3 +1,4 @@
+
 /* globals */
 extern int fg_color;
 extern int bg_color;

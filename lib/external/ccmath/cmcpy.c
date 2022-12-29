@@ -5,13 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
-
 #include "ccmath.h"
-
-void cmcpy(Cpx *a, Cpx *b, int n)
+void cmcpy(Cpx * a, Cpx * b, int n)
 {
     int i;
 
     for (i = 0; i < n; ++i)
-        *a++ = *b++;
+	*a++ = *b++;
 }

@@ -13,6 +13,7 @@ import os
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 import unittest
+from grass.script import shutil_which
 
 
 class BasicTest(TestCase):
@@ -71,7 +72,7 @@ class BasicTest(TestCase):
         """
         self.runModule("g.remove", flags="f", type="vector", name=self.imported_points)
 
-    @unittest.skipIf(shutil.which("v.in.pdal") is None, "Cannot find v.in.pdal")
+    @unittest.skipIf(shutil_which("v.in.pdal") is None, "Cannot find v.in.pdal")
     def test_same_data(self):
         """Test to see if the standard outputs are created"""
         self.assertModule(

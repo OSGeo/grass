@@ -17,12 +17,11 @@ __Build the docker with__:
 
 ```bash
 docker build \
-         --file docker/debian/Dockerfile \
+         --file docker/debian/Dockerfile_debian_pdal \
          --tag grass-py3-pdal:latest-debian .
 ```
 
-View the images available using `sudo docker images` and open a bash terminal
-with:
+View the images available using `sudo docker images` and open a bash terminal with:
 
 ```bash
 $ docker run -it grass-py3-pdal:latest-debian /bin/bash
@@ -34,14 +33,14 @@ __To build a stable version__:
 change to the releasebranch or tag you want to build:
 
 ```bash
-git checkout remotes/origin/releasebranch_8_2
+git checkout remotes/origin/releasebranch_7_8
 ```
 
 and build and enter with:
 
 ```bash
 $ docker build \
-         -f docker/debian/Dockerfile \
+         -f docker/debian/Dockerfile_debian_pdal \
          -t grass-py3-pdal:stable-debian .
 
 $ docker run -it grass-py3-pdal:stable-debian /bin/bash

@@ -30,7 +30,6 @@ from .core import (
     get_tgis_message_interface,
     get_tgis_dbmi_paramstyle,
     SQLDatabaseInterfaceConnection,
-    get_current_mapset,
 )
 
 ###############################################################################
@@ -289,15 +288,12 @@ class SQLDatabaseInterface(DictSQLSerializer):
         sql = self.get_delete_statement()
         # print(sql)
 
-        # must use the temporal database of the current mapset,
-        # also if the map to be deleted is in a different mapset
-        mapset = get_current_mapset()
         if dbif:
-            dbif.execute(sql, mapset=mapset)
+            dbif.execute(sql, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.execute(sql, mapset=mapset)
+            dbif.execute(sql, mapset=self.mapset)
             dbif.close()
 
     def get_is_in_db_statement(self):
@@ -313,32 +309,25 @@ class SQLDatabaseInterface(DictSQLSerializer):
             + "';\n"
         )
 
-    def is_in_db(self, dbif=None, mapset=None):
+    def is_in_db(self, dbif=None):
         """Check if this object is present in the temporal database
 
         :param dbif: The database interface to be used,
                      if None a temporary connection will be established
-        :param mapset: The mapset with a temporal database to be used
-                       The mapset of the database can be different from
-                       the mapset of the map
         :return: True if this object is present in the temporal database,
                  False otherwise
         """
 
         sql = self.get_is_in_db_statement()
 
-        # default: search temporal database in the mapset of the map
-        if mapset is None:
-            mapset = self.mapset
-
         if dbif:
-            dbif.execute(sql, mapset=mapset)
-            row = dbif.fetchone(mapset=mapset)
+            dbif.execute(sql, mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.execute(sql, mapset=mapset)
-            row = dbif.fetchone(mapset=mapset)
+            dbif.execute(sql, mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
             dbif.close()
 
         # Nothing found
@@ -370,7 +359,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             self.get_select_statement(), mapset=self.mapset
         )
 
-    def select(self, dbif=None, mapset=None):
+    def select(self, dbif=None):
         """Select the content from the temporal database and store it
         in the internal dictionary structure
 
@@ -381,26 +370,20 @@ class SQLDatabaseInterface(DictSQLSerializer):
         # print(sql)
         # print(args)
 
-        # default: use the temporal database in the mapset of this map
-        if mapset is None:
-            mapset = self.mapset
-
-        self.msgr.debug(2, "SQLDatabaseInterface.select() from mapset %s" % mapset)
-
         if dbif:
             if len(args) == 0:
-                dbif.execute(sql, mapset=mapset)
+                dbif.execute(sql, mapset=self.mapset)
             else:
-                dbif.execute(sql, args, mapset=mapset)
-            row = dbif.fetchone(mapset=mapset)
+                dbif.execute(sql, args, mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
             if len(args) == 0:
-                dbif.execute(sql, mapset=mapset)
+                dbif.execute(sql, mapset=self.mapset)
             else:
-                dbif.execute(sql, args, mapset=mapset)
-            row = dbif.fetchone(mapset=mapset)
+                dbif.execute(sql, args, mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
             dbif.close()
 
         # Nothing found
@@ -430,10 +413,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        # mapset must be the mapset of the temporal database
-        # not of the map
-        mapset = get_current_mapset()
-        return dbif.mogrify_sql_statement(self.get_insert_statement(), mapset=mapset)
+        return dbif.mogrify_sql_statement(
+            self.get_insert_statement(), mapset=self.mapset
+        )
 
     def insert(self, dbif=None):
         """Serialize the content of this object and store it in the temporal
@@ -446,15 +428,12 @@ class SQLDatabaseInterface(DictSQLSerializer):
         # print(sql)
         # print(args)
 
-        # use the temporal database in the current mapset
-        mapset = get_current_mapset()
-
         if dbif:
-            dbif.execute(sql, args, mapset=mapset)
+            dbif.execute(sql, args, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.execute(sql, args, mapset=mapset)
+            dbif.execute(sql, args, mapset=self.mapset)
             dbif.close()
 
     def get_update_statement(self, ident=None):
@@ -482,15 +461,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         :param ident: The identifier to be updated, useful for renaming
         :return: The UPDATE string
         """
-
-        # use the temporal database in the current mapset
-        mapset = get_current_mapset()
-
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
         return dbif.mogrify_sql_statement(
-            self.get_update_statement(ident), mapset=mapset
+            self.get_update_statement(ident), mapset=self.mapset
         )
 
     def update(self, dbif=None, ident=None):
@@ -506,19 +481,16 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if self.ident is None:
             self.msgr.fatal(_("Missing identifier"))
 
-        # use the temporal database in the current mapset
-        mapset = get_current_mapset()
-
         sql, args = self.get_update_statement(ident)
         # print(sql)
         # print(args)
 
         if dbif:
-            dbif.execute(sql, args, mapset=mapset)
+            dbif.execute(sql, args, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.execute(sql, args, mapset=mapset)
+            dbif.execute(sql, args, mapset=self.mapset)
             dbif.close()
 
     def get_update_all_statement(self, ident=None):
@@ -550,7 +522,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_update_all_statement(ident))
+        return dbif.mogrify_sql_statement(
+            self.get_update_all_statement(ident), mapset=self.mapset
+        )
 
     def update_all(self, dbif=None, ident=None):
         """Serialize the content of this object, including None objects,
@@ -563,19 +537,16 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if self.ident is None:
             self.msgr.fatal(_("Missing identifier"))
 
-        # use the temporal database in the current mapset
-        mapset = get_current_mapset()
-
         sql, args = self.get_update_all_statement(ident)
         # print(sql)
         # print(args)
 
         if dbif:
-            dbif.execute(sql, args, mapset=mapset)
+            dbif.execute(sql, args, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.execute(sql, args, mapset=mapset)
+            dbif.execute(sql, args, mapset=self.mapset)
             dbif.close()
 
 

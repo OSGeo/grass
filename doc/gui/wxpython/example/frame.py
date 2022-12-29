@@ -4,8 +4,7 @@
 @brief Example tool for displaying raster map and related information
 
 Classes:
- - frame::ExampleMapPanel
- - frame::ExampleMapDisplay
+ - frame::ExampleMapFrame
  - frame::ExampleInfoTextManager
 
 (C) 2011-2014 by the GRASS Development Team
@@ -28,17 +27,16 @@ if __name__ == "__main__":
 # So we need to import it before any of the GUI code.
 from grass.script import core as gcore
 
-from gui_core.mapdisp import SingleMapPanel, FrameMixin
+from gui_core.mapdisp import SingleMapFrame
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
 from mapdisp import statusbar as sb
 from core.render import Map
 from core.debug import Debug
 from core.gcmd import RunCommand, GError
-from core import globalvar
 
-from example.toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
-from example.dialogs import ExampleMapDialog
+from toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
+from dialogs import ExampleMapDialog
 
 # It is possible to call grass library functions (in C) directly via ctypes
 # however this is less stable. Example is available in trunk/doc/python/, ctypes
@@ -54,13 +52,13 @@ from example.dialogs import ExampleMapDialog
 #     errMsg = _("Loading raster lib failed.\n%s") % e
 
 
-class ExampleMapPanel(SingleMapPanel):
-    """! Main panel of example tool.
+class ExampleMapFrame(SingleMapFrame):
+    """! Main frame of example tool.
 
-    Inherits from SingleMapPanel, so map is displayed in one map widow.
-    In case two map windows are needed, use DoubleMapPanel from (gui_core.mapdisp).
+    Inherits from SingleMapFrame, so map is displayed in one map widow.
+    In case two map windows are needed, use DoubleMapFrame from (gui_core.mapdisp).
 
-    @see IClassMapPanel in iclass.frame
+    @see IClassMapFrame in iclass.frame
     """
 
     def __init__(
@@ -73,13 +71,14 @@ class ExampleMapPanel(SingleMapPanel):
         name="exampleWindow",
         **kwargs,
     ):
-        """!Map Panel constructor
+        """!Map Frame constructor
 
         @param parent (no parent is expected)
         @param title window title
         @param toolbars list of active toolbars (default value represents all toolbars)
+        @param size default size
         """
-        SingleMapPanel.__init__(
+        SingleMapFrame.__init__(
             self, parent=parent, title=title, name=name, Map=Map(), **kwargs
         )
 
@@ -87,7 +86,7 @@ class ExampleMapPanel(SingleMapPanel):
         # and set debug level from 1 to 5 (higher to lower level functions).
         # To enable debug mode write:
         # > g.gisenv set=WX_DEBUG=5
-        Debug.msg(1, "ExampleMapPanel.__init__()")
+        Debug.msg(1, "ExampleMapFrame.__init__()")
 
         #
         # Add toolbars to aui manager
@@ -110,15 +109,36 @@ class ExampleMapPanel(SingleMapPanel):
         #
 
         # choose items in statusbar choice, which makes sense for your application
-        statusbarItems = [
+        self.statusbarItems = [
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
+            sb.SbProjection,
         ]
-        self.statusbar = self.CreateStatusbar(statusbarItems)
+
+        # create statusbar and its manager
+        statusbar = self.CreateStatusBar(number=4, style=0)
+        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
+
+        # fill statusbar manager
+        self.statusbarManager.AddStatusbarItemsByClass(
+            self.statusbarItems, mapframe=self, statusbar=statusbar
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3)
+        )
+
+        self.statusbarManager.Update()
 
         # create map window
         self.MapWindow = BufferedMapWindow(
@@ -144,6 +164,7 @@ class ExampleMapPanel(SingleMapPanel):
         self.GetMapToolbar().SelectDefault()
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         self.SetSize(size)
 
@@ -152,9 +173,19 @@ class ExampleMapPanel(SingleMapPanel):
         gcore.del_temp_region()
 
     def OnCloseWindow(self, event):
-        """!Destroy panel"""
-        self._mgr.UnInit()
+        """!Destroy frame"""
         self.Destroy()
+
+    def IsStandalone(self):
+        """!Check if application is standalone.
+
+        Standalone application can work without parent.
+        Parent can be e.g. Layer Manager.
+        """
+        if self.parent:
+            return False
+
+        return True
 
     def InitVariables(self):
         """!Initialize any variables nneded by application"""
@@ -193,9 +224,6 @@ class ExampleMapPanel(SingleMapPanel):
             .Left(),
         )
 
-        # statusbar
-        self.AddStatusbarPane()
-
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
 
@@ -206,8 +234,7 @@ class ExampleMapPanel(SingleMapPanel):
         """
         # see wx.aui.AuiPaneInfo documentation for understanding all options
         if name == "MapToolbar":
-            if "MapToolbar" not in self.toolbars:
-                self.toolbars[name] = ExampleMapToolbar(self, self._toolSwitcher)
+            self.toolbars[name] = ExampleMapToolbar(self, self._toolSwitcher)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -227,8 +254,7 @@ class ExampleMapPanel(SingleMapPanel):
             )
 
         if name == "MiscToolbar":
-            if "MiscToolbar" not in self.toolbars:
-                self.toolbars[name] = ExampleMiscToolbar(self)
+            self.toolbars[name] = ExampleMiscToolbar(self)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -248,8 +274,7 @@ class ExampleMapPanel(SingleMapPanel):
             )
 
         if name == "MainToolbar":
-            if "MainToolbar" not in self.toolbars:
-                self.toolbars[name] = ExampleMainToolbar(self)
+            self.toolbars[name] = ExampleMainToolbar(self)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -300,7 +325,7 @@ class ExampleMapPanel(SingleMapPanel):
 
         @param name layer (raster) name
         """
-        Debug.msg(3, "ExampleMapPanel.SetLayer(): name=%s" % name)
+        Debug.msg(3, "ExampleMapFrame.SetLayer(): name=%s" % name)
 
         # this simple application enables to keep only one raster
         self.GetMap().DeleteAllLayers()
@@ -351,39 +376,6 @@ class ExampleMapPanel(SingleMapPanel):
         """
         stats = self.ComputeStatitistics()
         self.info.WriteStatistics(name=self.currentRaster, statDict=stats)
-
-
-class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
-    """Map display for wrapping map panel with frame methods"""
-
-    def __init__(self, parent, giface, **kwargs):
-
-        # init map panel
-        ExampleMapPanel.__init__(
-            self,
-            parent=parent,
-            giface=giface,
-            **kwargs,
-        )
-        # set system icon
-        parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-
-        # bindings
-        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-
-        # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts()
-
-        # add Map Display panel to Map Display frame
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self, proportion=1, flag=wx.EXPAND)
-        parent.SetSizer(sizer)
-        parent.Layout()
 
 
 class ExampleInfoTextManager:

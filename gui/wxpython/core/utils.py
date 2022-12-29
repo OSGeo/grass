@@ -227,10 +227,8 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = "".join(retNameList)
 
-    if (
-        retName
-        and not (retName[0] >= "A" and retName[0] <= "Z")
-        and not (retName[0] >= "a" and retName[0] <= "z")
+    if not (retName[0] >= "A" and retName[0] <= "Z") and not (
+        retName[0] >= "a" and retName[0] <= "z"
     ):
         retName = "x" + retName[1:]
 
@@ -670,9 +668,7 @@ def _parseFormats(output, writableOnly=False):
             continue
         if name in (
             "PostgreSQL",
-            "PostgreSQL/PostGIS",
             "SQLite",
-            "SQLite / Spatialite",
             "ODBC",
             "ESRI Personal GeoDatabase",
             "Rasterlite",

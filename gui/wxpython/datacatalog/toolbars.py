@@ -53,49 +53,6 @@ icons = {
 }
 
 
-class DataCatalogSearch(SearchCtrl):
-    def __init__(self, parent, filter_function):
-        super().__init__(parent)
-        self.filter_function = filter_function
-        self.filter_element = None
-        self.SetDescriptiveText(_("Search"))
-        self.ShowCancelButton(True)
-        self.Bind(
-            wx.EVT_TEXT,
-            lambda event: self.filter_function(self.GetValue(), self.filter_element),
-        )
-        self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.filter_function(""))
-        filterMenu = wx.Menu()
-        item = filterMenu.AppendRadioItem(-1, "All")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        item = filterMenu.AppendRadioItem(-1, "Raster maps")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        item = filterMenu.AppendRadioItem(-1, "Vector maps")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        item = filterMenu.AppendRadioItem(-1, "3D raster maps")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        self.SetMenu(filterMenu)
-        helpTip = _(
-            "Type to search database by map type or name. "
-            "Use Python regular expressions to refine your search."
-        )
-        self.SetToolTip(helpTip)
-
-    def OnFilterMenu(self, event):
-        """Decide the element to filter by"""
-        filterMenu = self.GetMenu().GetMenuItems()
-        self.filter_element = None
-        if filterMenu[1].IsChecked():
-            self.filter_element = "raster"
-        elif filterMenu[2].IsChecked():
-            self.filter_element = "vector"
-        elif filterMenu[3].IsChecked():
-            self.filter_element = "raster_3d"
-        # trigger filter on change
-        if self.GetValue():
-            self.filter_function(self.GetValue(), self.filter_element)
-
-
 class DataCatalogToolbar(BaseToolbar):
     """Main data catalog toolbar"""
 
@@ -105,6 +62,36 @@ class DataCatalogToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
+        self.filter_element = None
+        self.filter = SearchCtrl(parent=self)
+        self.filter.SetDescriptiveText(_("Search"))
+        self.filter.ShowCancelButton(True)
+        self.filter.SetSize((150, self.filter.GetBestSize()[1]))
+        self.filter.Bind(
+            wx.EVT_TEXT,
+            lambda event: self.parent.Filter(
+                self.filter.GetValue(), self.filter_element
+            ),
+        )
+        self.filter.Bind(
+            wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.parent.Filter("")
+        )
+        self.AddControl(self.filter)
+        filterMenu = wx.Menu()
+        item = filterMenu.AppendRadioItem(-1, "All")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "Raster maps")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "Vector maps")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "3D raster maps")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        self.filter.SetMenu(filterMenu)
+        help = _(
+            "Type to search database by map type or name. "
+            "Use Python regular expressions to refine your search."
+        )
+        self.SetToolShortHelp(self.filter.GetId(), help)
         # realize the toolbar
         self.Realize()
 
@@ -114,59 +101,40 @@ class DataCatalogToolbar(BaseToolbar):
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         return self._getToolbarData(
             (
+                ("reloadTree", icons["reloadTree"], self.parent.OnReloadTree),
                 (
-                    ("reloadTree", icons["reloadTree"].label),
-                    icons["reloadTree"],
-                    self.parent.OnReloadTree,
-                ),
-                (
-                    ("reloadMapset", icons["reloadMapset"].label),
+                    "reloadMapset",
                     icons["reloadMapset"],
                     self.parent.OnReloadCurrentMapset,
                 ),
+                ("lock", icons["locked"], self.OnSetRestriction, wx.ITEM_CHECK),
+                ("addGrassDB", icons["addGrassDB"], self.parent.OnAddGrassDB),
+                ("addLocation", icons["addLocation"], self.parent.OnCreateLocation),
                 (
-                    ("lock", icons["locked"].label),
-                    icons["locked"],
-                    self.OnSetRestriction,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("addGrassDB", icons["addGrassDB"].label),
-                    icons["addGrassDB"],
-                    self.parent.OnAddGrassDB,
-                ),
-                (
-                    ("addLocation", icons["addLocation"].label),
-                    icons["addLocation"],
-                    self.parent.OnCreateLocation,
-                ),
-                (
-                    ("downloadLocation", icons["downloadLocation"].label),
+                    "downloadLocation",
                     icons["downloadLocation"],
                     self.parent.OnDownloadLocation,
                 ),
-                (
-                    ("addMapset", icons["addMapset"].label),
-                    icons["addMapset"],
-                    self.parent.OnCreateMapset,
-                ),
-                (
-                    ("importRaster", icons["importRaster"].label),
-                    icons["importRaster"],
-                    self.parent.OnImportGdalLayers,
-                ),
-                (
-                    ("importVector", icons["importVector"].label),
-                    icons["importVector"],
-                    self.parent.OnImportOgrLayers,
-                ),
-                (
-                    ("importLayer", icons["importLayer"].label),
-                    icons["importLayer"],
-                    self.parent.OnImportMenu,
-                ),
+                ("addMapset", icons["addMapset"], self.parent.OnCreateMapset),
+                ("importRaster", icons["importRaster"], self.parent.OnImportGdalLayers),
+                ("importVector", icons["importVector"], self.parent.OnImportOgrLayers),
+                ("importLayer", icons["importLayer"], self.parent.OnImportMenu),
             )
         )
+
+    def OnFilterMenu(self, event):
+        """Decide the element to filter by"""
+        filterMenu = self.filter.GetMenu().GetMenuItems()
+        self.filter_element = None
+        if filterMenu[1].IsChecked():
+            self.filter_element = "raster"
+        elif filterMenu[2].IsChecked():
+            self.filter_element = "vector"
+        elif filterMenu[3].IsChecked():
+            self.filter_element = "raster_3d"
+        # trigger filter on change
+        if self.filter.GetValue():
+            self.parent.Filter(self.filter.GetValue(), self.filter_element)
 
     def OnSetRestriction(self, event):
         if self.GetToolState(self.lock):

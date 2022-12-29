@@ -11,6 +11,7 @@
  *
  *****************************************************************************/
 
+
 #ifndef GRASS_COUNT_DECIMATION_H
 #define GRASS_COUNT_DECIMATION_H
 
@@ -28,8 +29,9 @@ struct CountDecimationControl {
     int limit_n_counter;
 };
 
-void count_decimation_init(struct CountDecimationControl *control, int *skip,
-                           int *preserve, int *offset, int *limit);
+void count_decimation_init(struct CountDecimationControl *control,
+                           int *skip, int *preserve,
+                           int *offset, int *limit);
 int count_decimation_is_valid(struct CountDecimationControl *control);
 int count_decimation_is_noop(struct CountDecimationControl *control);
 void count_decimation_init_from_str(struct CountDecimationControl *control,

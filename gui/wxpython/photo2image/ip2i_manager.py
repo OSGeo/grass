@@ -7,8 +7,7 @@ and click GCP creation
 
 Classes:
  - ip2i_manager::GCPWizard
- - ip2i_manager::GCPPanel
- - ip2i_manager::GCPDisplay
+ - ip2i_manager::GCP
  - ip2i_manager::GCPList
  - ip2i_manager::EditGCP
  - ip2i_manager::GrSettingsDialog
@@ -42,10 +41,9 @@ import grass.script as grass
 from core import utils, globalvar
 from core.render import Map
 from gui_core.gselect import Select
-from gui_core.mapdisp import FrameMixin
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
-from photo2image.ip2i_mapdisplay import MapPanel
+from photo2image.ip2i_mapdisplay import MapFrame
 from gui_core.wrap import (
     SpinCtrl,
     Button,
@@ -204,32 +202,23 @@ class GCPWizard(object):
         #
         # start GCP Manager
         #
-        # create superior Map Display frame
-        mapframe = wx.Frame(
-            parent=None,
-            id=wx.ID_ANY,
-            size=globalvar.MAP_WINDOW_SIZE,
-            style=wx.DEFAULT_FRAME_STYLE,
-            title=name,
-        )
-        gcpmgr = GCPDisplay(
-            parent=mapframe,
+        self.gcpmgr = GCP(
+            self.parent,
             giface=self._giface,
             grwiz=self,
-            id=wx.ID_ANY,
+            size=globalvar.MAP_WINDOW_SIZE,
+            toolbars=["gcpdisp"],
             Map=self.SrcMap,
             lmgr=self.parent,
-            title=name,
             camera=camera,
         )
 
         # load GCPs
-        gcpmgr.InitMapDisplay()
-        gcpmgr.CenterOnScreen()
-        gcpmgr.Show()
+        self.gcpmgr.InitMapDisplay()
+        self.gcpmgr.CenterOnScreen()
+        self.gcpmgr.Show()
         # need to update AUI here for wingrass
-        gcpmgr._mgr.Update()
-
+        self.gcpmgr._mgr.Update()
         self.SwitchEnv("target")
 
     def SetSrcEnv(self, location, mapset):
@@ -295,7 +284,7 @@ class GCPWizard(object):
         event.Skip()
 
 
-class GCPPanel(MapPanel, ColumnSorterMixin):
+class GCP(MapFrame, ColumnSorterMixin):
     """
     Manages ground control points for georectifying. Calculates RMS statistics.
     Calls i.rectify or v.rectify to georectify map.
@@ -325,7 +314,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.camera = camera
 
-        MapPanel.__init__(
+        # wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
+        MapFrame.__init__(
             self,
             parent=parent,
             giface=self._giface,
@@ -596,6 +586,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
+        self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         self.SetSettings()
 
@@ -678,7 +669,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             ]
         )  # backward error
 
-        if self.statusbarManager.GetMode() == 5:  # go to
+        if self.statusbarManager.GetMode() == 8:  # go to
             self.StatusbarUpdate()
 
     def DeleteGCP(self, event):
@@ -722,7 +713,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.UpdateColours()
 
-        if self.statusbarManager.GetMode() == 5:  # go to
+        if self.statusbarManager.GetMode() == 8:  # go to
             self.StatusbarUpdate()
             if self.list.selectedkey > 0:
                 self.statusbarManager.SetProperty("gotoGCP", self.list.selectedkey)
@@ -1044,7 +1035,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
+        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapFrame?
         # self.grwiz.SwitchEnv('source')
         pass
 
@@ -1344,7 +1335,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # SD
         if GCPcount > 0:
             self.rmsmean = sum_fwd_err / GCPcount
-            self.rmssd = (sumsq_fwd_err - self.rmsmean**2) ** 0.5
+            self.rmssd = (sumsq_fwd_err - self.rmsmean ** 2) ** 0.5
             self.rmsthresh = self.rmsmean + sdfactor * self.rmssd
         else:
             self.rmsthresh = 0
@@ -1594,7 +1585,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """Adjust Map Windows after GCP Map Display has been resized"""
         # re-render image on idle
         self.resize = grass.clock()
-        super(MapPanel, self).OnSize(event)
+        super(MapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows"""
@@ -1615,44 +1606,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             elif self.resize:
                 event.RequestMore()
         pass
-
-
-class GCPDisplay(FrameMixin, GCPPanel):
-    """Map display for wrapping map panel with frame methods"""
-
-    def __init__(self, parent, giface, grwiz, id, lmgr, Map, title, camera, **kwargs):
-        # init map panel
-        GCPPanel.__init__(
-            self,
-            parent=parent,
-            giface=giface,
-            grwiz=grwiz,
-            id=id,
-            lmgr=lmgr,
-            Map=Map,
-            title=title,
-            camera=camera,
-            **kwargs,
-        )
-        # set system icon
-        parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-
-        # bind to frame
-        parent.Bind(wx.EVT_CLOSE, self.OnQuit)
-
-        # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts()
-
-        # add Map Display panel to Map Display frame
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self, proportion=1, flag=wx.EXPAND)
-        parent.SetSizer(sizer)
-        parent.Layout()
 
 
 class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):

@@ -19,8 +19,6 @@ at various levels:
   modules
 * **GRASS GIS Temporal Framework** implements the temporal GIS functionality
   of GRASS GIS and provides an API to implement spatio-temporal processing modules
-* **grass.jupyter package** offers classes and setup functions for
-  running GRASS GIS in Jupyter Notebooks
 * **Testing GRASS GIS source code and modules** using gunittest package
 * **exceptions package** contains exceptions used by other packages
 * **imaging package** is a library to create animated images and films
@@ -29,12 +27,11 @@ at various levels:
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    script_intro
    pygrass_index
    temporal_framework
-   grass.jupyter
    exceptions
    imaging
    gunittest_testing

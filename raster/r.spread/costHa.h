@@ -1,3 +1,4 @@
+
 /*************************************************
  *
  *   costHa.h - Data structure for costHa (spread)
@@ -8,7 +9,8 @@
  *************************************************/
 #ifndef COSTHA_H
 #define COSTHA_H 1
-struct costHa {
+struct costHa
+{
     float min_cost, angle;
     int row, col;
 };

@@ -372,7 +372,6 @@ class TimelineFrame(wx.Frame):
                         facecolors=color,
                         edgecolor="black",
                         alpha=ALPHA,
-                        picker=True,
                     )
                 )
             else:
@@ -383,7 +382,6 @@ class TimelineFrame(wx.Frame):
                         marker="o",
                         linestyle="None",
                         color=color,
-                        picker=True,
                     )[0]
                 )
 

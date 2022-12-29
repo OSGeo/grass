@@ -63,7 +63,6 @@ STLIB_SUFFIX        = @STLIB_SUFFIX@
 #shared libs
 SHLIB_PREFIX        = lib
 SHLIB_LD            = @SHLIB_LD@
-SHLIB_LDX           = @SHLIB_LDX@
 SHLIB_LDFLAGS       = @SHLIB_LD_FLAGS@
 SHLIB_CFLAGS        = @SHLIB_CFLAGS@
 SHLIB_SUFFIX        = @SHLIB_SUFFIX@

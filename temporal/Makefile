@@ -2,7 +2,6 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	t.connect \
-	t.copy \
 	t.create \
 	t.support \
 	t.topology \

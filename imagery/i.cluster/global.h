@@ -26,7 +26,7 @@ extern int mcs;
 extern char *group;
 extern char *subgroup;
 extern struct Ref ref;
-extern char **semantic_labels;
+extern char **bandrefs;
 extern char outsigfile[GNAME_MAX + GMAPSET_MAX];
 extern char *insigfile;
 extern char *reportfile;

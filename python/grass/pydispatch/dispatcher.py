@@ -158,7 +158,7 @@ def connect(receiver, signal=Any, sender=Any, weak=True):
         try:
             weakSender = weakref.ref(sender, remove)
             senders[senderkey] = weakSender
-        except Exception:
+        except:
             pass
 
     receiverID = id(receiver)
@@ -175,7 +175,7 @@ def connect(receiver, signal=Any, sender=Any, weak=True):
             sendersBack[receiverID] = current = []
         if senderkey not in current:
             current.append(senderkey)
-    except Exception:
+    except:
         pass
 
     receivers.append(receiver)
@@ -401,7 +401,7 @@ def _cleanupConnections(senderkey, signal):
     """Delete any empty signals for senderkey. Delete senderkey if empty."""
     try:
         receivers = connections[senderkey][signal]
-    except Exception:
+    except:
         pass
     else:
         if not receivers:
@@ -428,7 +428,7 @@ def _removeSender(senderkey):
     # could be weakly referenced.
     try:
         del senders[senderkey]
-    except Exception:
+    except:
         pass
 
 
@@ -489,7 +489,7 @@ def _killBackref(receiver, senderkey):
     while senderkey in set:
         try:
             set.remove(senderkey)
-        except Exception:
+        except:
             break
     if not set:
         try:

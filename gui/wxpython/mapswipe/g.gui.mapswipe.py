@@ -59,8 +59,7 @@ def main():
 
     from core.settings import UserSettings
     from core.giface import StandaloneGrassInterface
-    from core import globalvar
-    from mapswipe.frame import SwipeMapDisplay
+    from mapswipe.frame import SwipeMapFrame
 
     driver = UserSettings.Get(group="display", key="driver", subkey="type")
     if driver == "png":
@@ -80,15 +79,10 @@ def main():
 
     app = wx.App()
 
-    # show main frame
-    frame = wx.Frame(
+    frame = SwipeMapFrame(
         parent=None,
-        size=globalvar.MAP_WINDOW_SIZE,
-        title=_("Map Swipe Tool - GRASS GIS"),
-    )
-    frame = SwipeMapDisplay(
-        parent=frame,
         giface=StandaloneGrassInterface(),
+        title=_("Map Swipe Tool - GRASS GIS"),
     )
 
     if first:

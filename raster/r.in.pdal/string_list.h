@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.in.pdal
@@ -18,12 +19,14 @@
 #ifndef __STRING_LIST_H__
 #define __STRING_LIST_H__
 
+
 /* A list which keeps multiple strings
  *
  * Intended for list of file names read from a file.
  */
 
-struct StringList {
+struct StringList
+{
     int num_items;
     int max_items;
     char **items;

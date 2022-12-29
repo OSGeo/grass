@@ -15,7 +15,7 @@ int I_cluster_distinct(struct Cluster *, double);
 
 /* c_exec.c */
 int I_cluster_exec(struct Cluster *, int, int, double, double, int, int (*)(),
-                   int *);
+		   int *);
 /* c_execmem.c */
 int I_cluster_exec_allocate(struct Cluster *);
 int I_cluster_exec_free(struct Cluster *);

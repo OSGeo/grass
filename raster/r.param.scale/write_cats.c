@@ -1,21 +1,22 @@
+
 /*****************************************************************************/
 
 /***                                                                       ***/
 
 /***                            write_cats()                               ***/
 
-/***           Writes out category file for morphometric features          ***/
+/***   	        Writes out category file for morphometric features	   ***/
 
 /***               Jo Wood, Project ASSIST, 7th February 1995              ***/
 
 /***                                                                       ***/
 
 /*****************************************************************************/
-
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "param.h"
+
 
 void write_cats(void)
 {

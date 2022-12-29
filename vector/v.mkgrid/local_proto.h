@@ -7,3 +7,4 @@ int write_grid(struct grid_description *, struct Map_info *, int, int, int);
 
 /* hexgrid.c */
 int hexgrid(struct grid_description *, struct Map_info *, int, int);
+

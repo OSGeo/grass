@@ -57,11 +57,7 @@ class TestRasterTile(TestCase):
     def test_random_raster(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
-            "r.random",
-            input=self.input,
-            npoints=self.npoints,
-            raster=self.raster,
-            seed=1,
+            "r.random", input=self.input, npoints=self.npoints, raster=self.raster
         )
         # check if random raster was created
         self.assertRasterExists(
@@ -71,11 +67,7 @@ class TestRasterTile(TestCase):
     def test_random_vector(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
-            "r.random",
-            input=self.input,
-            npoints=self.npoints,
-            vector=self.vector,
-            seed=1,
+            "r.random", input=self.input, npoints=self.npoints, vector=self.vector
         )
         # check if random vector was created
         self.assertVectorExists(
@@ -92,7 +84,6 @@ class TestRasterTile(TestCase):
             input=self.input,
             npoints=self.npoints,
             raster=self.raster + "_null",
-            seed=1,
         )
         # check if random raster ( with NULL values )  was created
         self.assertRasterExists(
@@ -107,7 +98,6 @@ class TestRasterTile(TestCase):
             input=self.input,
             npoints=self.npoints,
             vector=self.vector + "_null",
-            seed=1,
         )
         # check if random vector ( with NULL values ) was created
         self.assertVectorExists(
@@ -124,7 +114,6 @@ class TestRasterTile(TestCase):
             input=self.input,
             npoints=self.npoints,
             raster=self.raster + "_without_topology",
-            seed=1,
         )
         # check if random raster ( without topology )  was created
         self.assertRasterExists(
@@ -140,7 +129,6 @@ class TestRasterTile(TestCase):
             input=self.input,
             npoints=self.npoints,
             vector=self.vector + "_without_topology",
-            seed=1,
         )
         # check if random vector ( without topology ) was created
         self.assertVectorExists(
@@ -152,30 +140,28 @@ class TestRasterTile(TestCase):
             vector=self.vector + "_without_topology", reference=topology
         )
 
-    def test_random_raster_flag_z(self):
+    def test_random_raster_flag_d(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
             "r.random",
-            flags="z",
+            flags="d",
             input=self.input,
             npoints=self.npoints,
             raster=self.raster + "_3D",
-            seed=1,
         )
         # check if random raster ( 3D points )  was created
         self.assertRasterExists(
             self.raster, msg="landcover_1m_raster_random_3D not created"
         )
 
-    def test_vector_random_flag_z(self):
+    def test_vector_random_flag_d(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
             "r.random",
-            flags="z",
+            flags="d",
             input=self.input,
             npoints=self.npoints,
             vector=self.vector + "_3D",
-            seed=1,
         )
         # check if random vector ( 3D points ) was created
         self.assertVectorExists(
@@ -192,7 +178,6 @@ class TestRasterTile(TestCase):
             npoints=self.npoints,
             cover="landcover_1m",
             raster=self.raster + "_cover_landcover_1m",
-            seed=1,
         )
         # check if random raster ( 3D points )  was created
         self.assertRasterExists(
@@ -200,7 +185,7 @@ class TestRasterTile(TestCase):
             msg="landcover_1m_raster_random_cover_landcover_1m was not created",
         )
 
-    def test_random_vector_cover(self):
+    def test_vector_random_flag_d(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
             "r.random",
@@ -208,7 +193,6 @@ class TestRasterTile(TestCase):
             npoints=self.npoints,
             cover="landcover_1m",
             vector=self.vector + "_cover_landcover_1m",
-            seed=1,
         )
         # check if random vector ( 3D points ) was created
         self.assertVectorExists(

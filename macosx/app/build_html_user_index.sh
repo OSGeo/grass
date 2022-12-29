@@ -38,7 +38,7 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
 <html>
 <head>
  <title>$2</title>
- <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
+ <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">
  <meta name=\"Author\" content=\"GRASS Development Team\">" > $1
 if [ "$3" ] ; then
 	echo " <meta name=\"AppleTitle\" content=\"$2\">
@@ -175,7 +175,7 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
 <html>
 <head>
  <title></title>
- <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
+ <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">
  <meta http-equiv=\"Refresh\" content=\"0; $GISBASE/docs/html/$i.html\">
 </head>
 <body>

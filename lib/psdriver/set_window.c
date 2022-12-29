@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       PNG driver
@@ -21,5 +22,5 @@
 void PS_Set_window(double t, double b, double l, double r)
 {
     output("%.1f %.1f %.1f %.1f %s\n", t, b, l, r,
-           ps.encapsulated ? "EPSWINDOW" : "WINDOW");
+	   ps.encapsulated ? "EPSWINDOW" : "WINDOW");
 }

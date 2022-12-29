@@ -1,4 +1,5 @@
-/*****************************************************************************
+/*
+ ****************************************************************************
  *
  * MODULE:       v.decimate
  * AUTHOR(S):    Vaclav Petras
@@ -10,6 +11,7 @@
  *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 
 /* using the most-specific-first order of includes */
 #include "count_decimation.h"
@@ -24,11 +26,13 @@
 
 void copy_tabs(const struct Map_info *In, struct Map_info *Out);
 
-struct DecimationContext {
-    int use_z; /*!< TRUE or FALSE */
+struct DecimationContext
+{
+    int use_z;                  /*!< TRUE or FALSE */
     double zdiff;
-    int unique_cats; /*!< TRUE or FALSE */
+    int unique_cats;            /*!< TRUE or FALSE */
 };
+
 
 static int if_add_point(struct DecimationPoint *point, void *point_data,
                         struct DecimationPoint **point_list, size_t npoints,
@@ -49,21 +53,23 @@ static int if_add_point(struct DecimationPoint *point, void *point_data,
     return TRUE;
 }
 
-struct WriteContext {
+
+struct WriteContext
+{
     struct Map_info *voutput;
     struct line_pnts *line;
     struct line_cats *cats;
     int write_cats;
 };
 
+
 static void write_point(struct WriteContext *context, int cat, double x,
                         double y, double z, struct line_cats *cats)
 {
     if (Vect_append_point(context->line, x, y, z) != 1)
-        G_fatal_error(
-            "Unable to create a point in vector map (probably out of memory)");
+        G_fatal_error
+            ("Unable to create a point in vector map (probably out of memory)");
     struct line_cats *cats_to_write = context->cats;
-
     /* only when writing cats use the ones from parameter, otherwise
      * use the default (which is assumed to be empty) */
     if (context->write_cats && cats)
@@ -72,8 +78,8 @@ static void write_point(struct WriteContext *context, int cat, double x,
     Vect_reset_line(context->line);
 }
 
-static void on_add_point(struct DecimationPoint *point, void *point_data,
-                         void *context)
+
+static void on_add_point(struct DecimationPoint *point, void *point_data, void *context)
 {
     write_point((struct WriteContext *)context, point->cat, point->x, point->y,
                 point->z, (struct line_cats *)point_data);
@@ -88,6 +94,7 @@ static int point_in_region_2d(struct Cell_head *region, double x, double y)
     return TRUE;
 }
 
+
 static int point_in_region_3d(struct Cell_head *region, double x, double y,
                               double z)
 {
@@ -98,6 +105,7 @@ static int point_in_region_3d(struct Cell_head *region, double x, double y,
 }
 
 /* TODO: max tries per grid cell (useful?) */
+
 
 int main(int argc, char **argv)
 {
@@ -203,8 +211,7 @@ int main(int argc, char **argv)
     limit_per_cell_opt->required = NO;
     limit_per_cell_opt->label = _("Preserve only n points per grid cell");
     limit_per_cell_opt->description =
-        _("Preserves only the given number of points per grid cell in "
-          "grid-based decimation");
+        _("Preserves only the given number of points per grid cell in grid-based decimation");
     limit_per_cell_opt->guisection = _("Grid");
 
     grid_decimation_flg = G_define_flag();
@@ -230,7 +237,8 @@ int main(int argc, char **argv)
 
     nocats_flag = G_define_flag();
     nocats_flag->key = 'x';
-    nocats_flag->label = _("Store only the coordinates, throw away categories");
+    nocats_flag->label =
+        _("Store only the coordinates, throw away categories");
     nocats_flag->description =
         _("Do not story any categories even if they are present in input data");
     nocats_flag->guisection = _("Speed");
@@ -245,11 +253,12 @@ int main(int argc, char **argv)
     G_option_required(skip_opt, preserve_opt, offset_opt, limit_opt,
                       grid_decimation_flg, zrange_opt, cats_opt, NULL);
     /* this doesn't play well with GUI dialog unless we add defaults to options
-     * the default values would solve it but looks strange in the manual
+     * the default values would solve it but looks strange in the manual 
      * this we use explicit check in the code */
     /* G_option_exclusive(skip_opt, preserve_opt, NULL); */
-    G_option_requires(grid_decimation_flg, first_point_flg, limit_per_cell_opt,
-                      use_z_flg, zdiff_opt, cat_in_grid_flg, NULL);
+    G_option_requires(grid_decimation_flg, first_point_flg,
+                      limit_per_cell_opt, use_z_flg, zdiff_opt,
+                      cat_in_grid_flg, NULL);
     G_option_requires(first_point_flg, grid_decimation_flg, NULL);
     G_option_requires(limit_per_cell_opt, grid_decimation_flg, NULL);
     G_option_requires(use_z_flg, grid_decimation_flg, NULL);
@@ -275,8 +284,8 @@ int main(int argc, char **argv)
     struct cat_list *allowed_cats = NULL;
 
     if (layer > 0)
-        allowed_cats =
-            Vect_cats_set_constraint(&vinput, layer, NULL, cats_opt->answer);
+        allowed_cats = Vect_cats_set_constraint(&vinput, layer, NULL,
+                                                cats_opt->answer);
 
     struct line_pnts *line = Vect_new_line_struct();
     struct line_cats *cats = Vect_new_cats_struct();
@@ -332,9 +341,9 @@ int main(int argc, char **argv)
      */
     struct CountDecimationControl count_decimation_control;
 
-    count_decimation_init_from_str(&count_decimation_control, skip_opt->answer,
-                                   preserve_opt->answer, offset_opt->answer,
-                                   limit_opt->answer);
+    count_decimation_init_from_str(&count_decimation_control,
+                                   skip_opt->answer, preserve_opt->answer,
+                                   offset_opt->answer, limit_opt->answer);
     if (!count_decimation_is_valid(&count_decimation_control))
         G_fatal_error(_("Settings for count-based decimation are not valid"));
     /* TODO: implement count_decimation_is_invalid_reason() */
@@ -346,7 +355,6 @@ int main(int argc, char **argv)
                         " to do nothing and no other options has been set."));
 
     struct Cell_head comp_region;
-
     Rast_get_window(&comp_region);
     if (use_zrange) {
         comp_region.bottom = zrange_min;
@@ -401,10 +409,9 @@ int main(int argc, char **argv)
         if (ltype == -1)
             G_fatal_error(_("Unable to read vector map"));
         if (ltype == -2)
-            break; /* end of the map */
+            break;              /* end of the map */
 
         double x, y, z;
-
         Vect_line_get_point(line, 0, &x, &y, &z);
 
         /* selections/filters */
@@ -429,32 +436,33 @@ int main(int argc, char **argv)
          * - some points miss category (not handled)
          * Here we assume that only one cat has meaning for grid decimation.
          * If no layer available, cat contains junk and shouldn't be used.
-         *
-         * TODO done
+	 * 
+	 * TODO done
          */
-        cat = -1;
+	cat = -1;
         if (layer > 0) {
-            if (allowed_cats) {
-                int i;
+	    if (allowed_cats) {
+		int i;
 
-                for (i = 0; i < cats->n_cats; i++) {
-                    if (cats->field[i] == layer &&
-                        Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
-                        cat = cats->cat[i];
-                        break;
-                    }
-                }
-                return 0;
-            }
-            else
-                Vect_cat_get(cats, layer, &cat);
-            if (cat < 0)
-                continue;
-        }
+		for (i = 0; i < cats->n_cats; i++) {
+		    if (cats->field[i] == layer &&
+			Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
+			cat = cats->cat[i];
+			break;
+		    }
+		}
+		return 0;
+	    }
+	    else
+		Vect_cat_get(cats, layer, &cat);
+	    if (cat < 0)
+		continue;
+	}
 
         /* using callback when using grid, direct call otherwise */
         if (do_grid_decimation)
-            grid_decimation_try_add_point(&grid_decimation, cat, x, y, z, cats);
+            grid_decimation_try_add_point(&grid_decimation, cat, x, y, z,
+                                          cats);
         else
             write_point(&write_context, cat, x, y, z, cats);
 
@@ -473,9 +481,9 @@ int main(int argc, char **argv)
     Vect_close(&vinput);
     if (!notopo_flag->answer) {
         Vect_build(&voutput);
-        if (write_context.write_cats == TRUE && !notab_flag->answer) {
-            copy_tabs(&vinput, &voutput);
-        }
+	if (write_context.write_cats == TRUE && !notab_flag->answer) {
+	    copy_tabs(&vinput, &voutput);
+	}
     }
     Vect_close(&voutput);
 

@@ -36,6 +36,7 @@ from grass.script import utils as gutils
 from core import globalvar
 from gui_core.dialogs import SqlQueryFrame, SetOpacityDialog, TextEntryDialog
 from gui_core.forms import GUI
+from mapdisp.frame import MapFrame
 from core.render import Map
 from core.utils import GetLayerNameFromCmd, ltype2command
 from core.debug import Debug
@@ -45,6 +46,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from gui_core.widgets import MapValidator
 from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
+from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 
 
 TREE_ITEM_HEIGHT = 25
@@ -93,7 +95,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self,
         parent,
         giface,
-        createNewMapDisplay,
         id=wx.ID_ANY,
         style=wx.SUNKEN_BORDER,
         ctstyle=CT.TR_HAS_BUTTONS
@@ -109,11 +110,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if "style" in kwargs:
             ctstyle |= kwargs["style"]
             del kwargs["style"]
+        self.displayIndex = kwargs["idx"]
+        del kwargs["idx"]
         self.lmgr = kwargs["lmgr"]
         del kwargs["lmgr"]
         # GIS Manager notebook for layer tree
         self.notebook = kwargs["notebook"]
         del kwargs["notebook"]
+        showMapDisplay = kwargs["showMapDisplay"]
+        del kwargs["showMapDisplay"]
 
         self._giface = giface
         self.treepg = parent  # notebook page holding layer tree
@@ -153,7 +158,28 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setGradient()
 
         # init associated map display
-        self.mapdisplay = createNewMapDisplay(layertree=self)
+        pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
+            self._giface, self
+        )
+        self.mapdisplay = MapFrame(
+            self,
+            giface=self._gifaceForDisplay,
+            id=wx.ID_ANY,
+            pos=pos,
+            size=globalvar.MAP_WINDOW_SIZE,
+            style=wx.DEFAULT_FRAME_STYLE,
+            tree=self,
+            lmgr=self.lmgr,
+            Map=self.Map,
+            title=title,
+        )
+
+        # show new display
+        if showMapDisplay is True:
+            self.mapdisplay.Show()
+            self.mapdisplay.Refresh()
+            self.mapdisplay.Update()
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))
@@ -433,8 +459,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 "export-pg",
                 "export-attr",
                 "pack",
-                "check",
-                "uncheck",
             ):
                 self.popupID[key] = NewId()
 
@@ -454,30 +478,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID["rename"], _("Rename"))
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id=self.popupID["rename"])
 
-        if numSelected > 1:
-            item = wx.MenuItem(
-                self.popupMenu,
-                id=self.popupID["check"],
-                text=_("Check selected layers"),
-            )
-            self.popupMenu.AppendItem(item)
-            self.Bind(
-                wx.EVT_MENU,
-                self.OnCheckUncheckSelectedLayer,
-                id=self.popupID["check"],
-            )
-            item = wx.MenuItem(
-                self.popupMenu,
-                id=self.popupID["uncheck"],
-                text=_("Uncheck selected layers"),
-            )
-            self.popupMenu.AppendItem(item)
-            self.Bind(
-                wx.EVT_MENU,
-                self.OnCheckUncheckSelectedLayer,
-                id=self.popupID["uncheck"],
-            )
-
         # when multiple maps are selected of different types
         # we cannot zoom or change region
         # because g.region can handle only the same type
@@ -491,7 +491,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
-                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
+                if ltype != "raster_3d":
                     item = wx.MenuItem(
                         self.popupMenu,
                         id=self.popupID["opacity"],
@@ -515,11 +515,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU, self.OnPopupProperties, id=self.popupID["properties"]
                 )
 
-                if ltype in (
-                    "raster",
-                    "vector",
-                    "raster_3d",
-                ) and self.mapdisplay.IsPaneShown("3d"):
+                if (
+                    ltype
+                    in (
+                        "raster",
+                        "vector",
+                        "raster_3d",
+                    )
+                    and self.mapdisplay.IsPaneShown("3d")
+                ):
                     self.popupMenu.Append(self.popupID["nviz"], _("3D view properties"))
                     self.Bind(
                         wx.EVT_MENU, self.OnNvizProperties, id=self.popupID["nviz"]
@@ -1248,12 +1252,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         .. todo::
             vector/volume
         """
-        if not UserSettings.Get(
-            group="general",
-            key="singleWindow",
-            subkey="enabled",
-        ):
-            self.lmgr.notebook.SetSelectionByName("nviz")
+        self.lmgr.notebook.SetSelectionByName("nviz")
         ltype = self.GetLayerInfo(self.layer_selected, key="type")
         if ltype == "raster":
             self.lmgr.nviz.SetPage("surface")
@@ -1334,15 +1333,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         "@" + mapset, "@" + newname
                     )
                     self.SetItemText(item, newlabel)
-
-    def OnCheckUncheckSelectedLayer(self, event):
-        """Check/uncheck selected layer(s)"""
-        check = wx.CHK_CHECKED
-        if event.GetId() == self.popupID["uncheck"]:
-            check = wx.CHK_UNCHECKED
-        self.hitCheckbox = True
-        for layer in self.GetSelections():
-            self.CheckItem(layer, checked=check)
 
     def AddLayer(
         self,
@@ -1824,9 +1814,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         If the user is clicking on checkbox, selection change is vetoed.
         """
         if self.hitCheckbox:
-            # Prevent the scrollbar from scrolling up when a layer item
-            # is checked or unchecked
-            self.EnsureVisible(event.GetItem())
             event.Veto()
 
     def OnChangeSel(self, event):

@@ -73,43 +73,28 @@ def main():
     set_gui_path()
 
     from core.render import Map
-    from core.globalvar import ICONDIR
-    from mapdisp.frame import MapPanel
-    from gui_core.mapdisp import FrameMixin
+    from mapdisp.frame import MapFrame
     from mapdisp.main import DMonGrassInterface
     from core.settings import UserSettings
 
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
-    class RDigitMapDisplay(FrameMixin, MapPanel):
-        """Map display for wrapping map panel with r.digit mathods and frame methods"""
-
+    class RDigitMapFrame(MapFrame):
         def __init__(
             self,
-            parent,
             new_map=None,
             base_map=None,
             edit_map=None,
             map_type=None,
         ):
-            MapPanel.__init__(
-                self, parent=parent, Map=Map(), giface=DMonGrassInterface(None)
+            MapFrame.__init__(
+                self,
+                parent=None,
+                Map=Map(),
+                giface=DMonGrassInterface(None),
+                title=_("Raster Digitizer - GRASS GIS"),
+                size=(850, 600),
             )
-
-            # set system icon
-            parent.SetIcon(
-                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
-            )
-
-            # bindings
-            parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-
-            # extend shortcuts and create frame accelerator table
-            self.shortcuts_table.append(
-                (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11)
-            )
-            self._initShortcuts()
-
             # this giface issue not solved yet, we must set mapframe afterwards
             self._giface._mapframe = self
             self._giface.mapCreated.connect(self.OnMapCreated)
@@ -140,12 +125,6 @@ def main():
             # use Close instead of QuitRDigit for standalone tool
             self.rdigit.quitDigitizer.disconnect(self.QuitRDigit)
             self.rdigit.quitDigitizer.connect(lambda: self.Close())
-
-            # add Map Display panel to Map Display frame
-            sizer = wx.BoxSizer(wx.VERTICAL)
-            sizer.Add(self, proportion=1, flag=wx.EXPAND)
-            parent.SetSizer(sizer)
-            parent.Layout()
 
         def _addLayer(self, name, ltype="raster"):
             """Add layer into map
@@ -229,14 +208,7 @@ def main():
         os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     app = wx.App()
-    frame = wx.Frame(
-        None,
-        id=wx.ID_ANY,
-        size=(850, 600),
-        style=wx.DEFAULT_FRAME_STYLE,
-        title=_("Raster Digitizer - GRASS GIS"),
-    )
-    frame = RDigitMapDisplay(parent=frame, **kwargs)
+    frame = RDigitMapFrame(**kwargs)
     frame.Show()
 
     app.MainLoop()

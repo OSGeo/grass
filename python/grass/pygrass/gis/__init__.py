@@ -20,6 +20,7 @@ import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
 from grass.script.utils import encode, decode
 from grass.pygrass.utils import getenv
+from grass.pygrass.gis.region import Region
 
 test_vector_name = "Gis_test_vector"
 test_raster_name = "Gis_test_raster"
@@ -439,14 +440,15 @@ class VisibleMapset(object):
 
     def read(self):
         """Return the mapsets in the search path"""
-        try:
-            with open(self.spath, "r") as f:
-                lines = f.readlines()
-                if lines:
-                    return [line.strip() for line in lines]
-                return [self.mapset]
-        except FileNotFoundError:
-            return [self.mapset, "PERMANENT"]
+        with open(self.spath, "ab+") as f:
+            lines = f.readlines()
+            if lines:
+                return [decode(line.strip()) for line in lines]
+        lns = [
+            "PERMANENT",
+        ]
+        self._write(lns)
+        return lns
 
     def _write(self, mapsets):
         """Write to SEARCH_PATH file the changes in the search path
@@ -454,12 +456,9 @@ class VisibleMapset(object):
         :param mapsets: a list of mapset's names
         :type mapsets: list
         """
-        with open(self.spath, "w") as f:
-            ms = self.location.mapsets()
-            for m in mapsets:
-                if m in ms:
-                    f.write(m)
-                    f.write("\n")
+        with open(self.spath, "wb+") as f:
+            ms = [decode(m) for m in self.location.mapsets()]
+            f.write(b"\n".join([encode(m) for m in mapsets if m in ms]))
 
     def add(self, mapset):
         """Add a mapset to the search path
@@ -469,7 +468,7 @@ class VisibleMapset(object):
         """
         if mapset not in self.read() and mapset in self.location:
             with open(self.spath, "a+") as f:
-                f.write("%s\n" % mapset)
+                f.write("\n%s" % mapset)
         else:
             raise TypeError("Mapset not found")
 
@@ -489,10 +488,10 @@ class VisibleMapset(object):
         :param mapsets: a list of mapset's names
         :type mapsets: list
         """
-        final = self.read()
-        final.extend(
-            [m for m in mapsets if m in self.location.mapsets() and m not in final]
-        )
+        ms = [decode(m) for m in self.location.mapsets()]
+        final = [decode(m) for m in self.read()]
+        mapsets = [decode(m) for m in mapsets]
+        final.extend([m for m in mapsets if m in ms and m not in final])
         self._write(final)
 
     def reset(self):

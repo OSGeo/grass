@@ -8,4 +8,5 @@ void DistDecay(double *Effect, int R, int C)
     G_debug(3, "(C):%d", C);
 
     *Effect = BigF.F[R + BigF.RowPlus][C + BigF.ColPlus];
+
 }

@@ -3,6 +3,7 @@
 #include <grass/cdhc.h>
 #include "local_proto.h"
 
+
 double *Cdhc_kolmogorov_smirnov(double *x, int n)
 {
     static double y[2];

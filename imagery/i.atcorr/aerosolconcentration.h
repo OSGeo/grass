@@ -29,8 +29,9 @@ c                                                                      c
 c**********************************************************************/
 struct AtmosModel;
 
-struct AerosolConcentration {
-    /* aerosol concentration parameters */
+struct AerosolConcentration
+{
+	/* aerosol concentration parameters */
     double taer55;
 
 private:
@@ -41,14 +42,10 @@ private:
 
 public:
     /* Set the visibility, this will overide any previous estimates of taer55 */
-    void set_visibility(const double vis, const AtmosModel &atms)
-    {
-        if (vis > 0)
-            oda550(vis, atms);
-    }
+    void set_visibility (const double vis, const AtmosModel &atms) { if(vis > 0) oda550(vis, atms); }
     void print();
-    static AerosolConcentration Parse(const long int iaer,
-                                      const AtmosModel &atms);
+    static AerosolConcentration Parse(const long int iaer, const AtmosModel &atms);
 };
 
 #endif /* AEROSOLCONCENTRATION_H */
+

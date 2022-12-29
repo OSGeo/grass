@@ -663,8 +663,7 @@ class PyEditToolbar(BaseToolbar):
             # TODO: better icons for overwrite modes
             "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
             "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
-            "help": BaseIcons["help"],
-            "quit": BaseIcons["quit"],
+            "quit": MetaIcon(img="quit", label=_("Quit Simple Python Editor")),
         }
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
@@ -680,39 +679,19 @@ class PyEditToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                (
-                    ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
-                    self.icons["open"],
-                    self.parent.OnOpen,
-                ),
-                (
-                    ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
-                    self.icons["save"],
-                    self.parent.OnSave,
-                ),
+                ("open", self.icons["open"], self.parent.OnOpen),
+                ("save", self.icons["save"], self.parent.OnSave),
                 (None,),
+                ("run", self.icons["run"], self.parent.OnRun),
                 (
-                    ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
-                    self.icons["run"],
-                    self.parent.OnRun,
-                ),
-                (
-                    ("overwrite", self.icons["overwriteTrue"].label),
+                    "overwrite",
                     self.icons["overwriteTrue"],
                     self.OnSetOverwrite,
                     wx.ITEM_CHECK,
                 ),
                 (None,),
-                (
-                    ("help", self.icons["help"].label),
-                    self.icons["help"],
-                    self.parent.OnHelp,
-                ),
-                (
-                    ("quit", self.icons["quit"].label),
-                    self.icons["quit"],
-                    self.parent.OnClose,
-                ),
+                ("help", BaseIcons["help"], self.parent.OnHelp),
+                ("quit", self.icons["quit"], self.parent.OnClose),
             )
         )
 

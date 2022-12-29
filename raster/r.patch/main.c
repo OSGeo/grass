@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.patch
@@ -7,22 +8,16 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>,
- *               Huidae Cho <grass4u gmail.com>,
- *               Aaron Saw Min Sern (OpenMP parallelization)
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
-
-#if defined(_OPENMP)
-#include <omp.h>
-#endif
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
 #include <grass/gis.h>
@@ -33,7 +28,7 @@
 
 int main(int argc, char *argv[])
 {
-    int **infd;
+    int *infd;
     struct Categories cats;
     struct Cell_stats *statf;
     struct Colors colr;
@@ -43,13 +38,10 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE out_type, map_type;
     size_t out_cell_size;
     struct History history;
-    void **presult, **patch;
-    void *outbuf;
-    int bufrows;
+    void *presult, *patch;
     int nfiles;
     char *rname;
-    int i, t;
-    int nprocs;
+    int i;
     int row, nrows, ncols;
     int use_zero, no_support;
     char *new_name;
@@ -60,7 +52,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Flag *zeroflag, *nosupportflag;
-    struct Option *opt1, *opt2, *threads, *memory;
+    struct Option *opt1, *opt2;
 
     G_gisinit(argv[0]);
 
@@ -72,7 +64,6 @@ int main(int argc, char *argv[])
     G_add_keyword(_("patching"));
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("series"));
-    G_add_keyword(_("parallel"));
     module->description =
         _("Creates a composite raster map layer by using "
           "known category values from one (or more) map layer(s) "
@@ -85,9 +76,6 @@ int main(int argc, char *argv[])
 
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt2->description = _("Name for resultant raster map");
-
-    threads = G_define_standard_option(G_OPT_M_NPROCS);
-    memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     /* Define the different flags */
 
@@ -102,18 +90,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    sscanf(threads->answer, "%d", &nprocs);
-    if (nprocs < 1)
-        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
-
     use_zero = (zeroflag->answer);
     no_support = (nosupportflag->answer);
 
@@ -121,15 +97,12 @@ int main(int argc, char *argv[])
 
     out_type = CELL_TYPE;
 
-    for (ptr = names, nfiles = 0; *ptr != NULL; ptr++, nfiles++)
-        ;
+    for (ptr = names, nfiles = 0; *ptr != NULL; ptr++, nfiles++) ;
 
     if (nfiles < 2)
         G_fatal_error(_("The minimum number of input raster maps is two"));
 
-    infd = G_malloc(nprocs * sizeof(int *));
-    for (t = 0; t < nprocs; t++)
-        infd[t] = G_malloc(nfiles * sizeof(int));
+    infd = G_malloc(nfiles * sizeof(int));
     statf = G_malloc(nfiles * sizeof(struct Cell_stats));
     cellhd = G_malloc(nfiles * sizeof(struct Cell_head));
 
@@ -137,11 +110,9 @@ int main(int argc, char *argv[])
         const char *name = names[i];
         int fd;
 
-        for (t = 0; t < nprocs; t++) {
-            infd[t][i] = Rast_open_old(name, "");
-        }
+        fd = Rast_open_old(name, "");
 
-        fd = infd[0][i];
+        infd[i] = fd;
 
         map_type = Rast_get_map_type(fd);
         if (map_type == FCELL_TYPE && out_type == CELL_TYPE)
@@ -153,123 +124,52 @@ int main(int argc, char *argv[])
 
         Rast_get_cellhd(name, "", &cellhd[i]);
     }
-    if (!no_support && nprocs > 1 && out_type == CELL_TYPE) {
-        no_support = true;
-        G_warning(_("Creating support files (labels, color table) disabled for "
-                    "nprocs > 1"));
-    }
 
     out_cell_size = Rast_cell_size(out_type);
 
     rname = opt2->answer;
     outfd = Rast_open_new(new_name = rname, out_type);
 
-    presult = G_malloc(nprocs * sizeof *presult);
-    patch = G_malloc(nprocs * sizeof *patch);
-    for (t = 0; t < nprocs; t++) {
-        presult[t] = Rast_allocate_buf(out_type);
-    }
-    for (t = 0; t < nprocs; t++) {
-        patch[t] = Rast_allocate_buf(out_type);
-    }
+    presult = Rast_allocate_buf(out_type);
+    patch = Rast_allocate_buf(out_type);
 
     Rast_get_window(&window);
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    bufrows = atoi(memory->answer) * (((1 << 20) / out_cell_size) / ncols);
-    /* set the output buffer rows to be at most covering the entire map */
-    if (bufrows > nrows) {
-        bufrows = nrows;
-    }
-    /* but at least the number of threads */
-    if (bufrows < nprocs) {
-        bufrows = nprocs;
-    }
-
-    outbuf = G_malloc(out_cell_size * ncols * bufrows);
-
     G_verbose_message(_("Percent complete..."));
+    for (row = 0; row < nrows; row++) {
+        double north_edge, south_edge;
 
-    int computed = 0;
-    int written = 0;
+        G_percent(row, nrows, 2);
+        Rast_get_row(infd[0], presult, row, out_type);
 
-    while (written < nrows) {
-        int start = written;
-        int end = start + bufrows;
+        north_edge = Rast_row_to_northing(row, &window);
+        south_edge = north_edge - window.ns_res;
 
-        if (end > nrows)
-            end = nrows;
+        if (out_type == CELL_TYPE)
+            Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
+        for (i = 1; i < nfiles; i++) {
+            /* check if raster i overlaps with the current row */
+            if (south_edge >= cellhd[i].north ||
+                north_edge <= cellhd[i].south ||
+                window.west >= cellhd[i].east ||
+                window.east <= cellhd[i].west)
+                continue;
 
-#pragma omp parallel private(i) if (nprocs > 1)
-        {
-            int t_id = 0;
-
-#if defined(_OPENMP)
-            t_id = omp_get_thread_num();
-#endif
-            void *local_presult = presult[t_id];
-            void *local_patch = patch[t_id];
-            int *local_infd = infd[t_id];
-
-#pragma omp for schedule(static)
-            for (row = start; row < end; row++) {
-                double north_edge, south_edge;
-
-                G_percent(computed, nrows, 2);
-                Rast_get_row(local_infd[0], local_presult, row, out_type);
-
-                north_edge = Rast_row_to_northing(row, &window);
-                south_edge = north_edge - window.ns_res;
-
-                if (out_type == CELL_TYPE && !no_support)
-                    Rast_update_cell_stats((CELL *)local_presult, ncols,
-                                           &statf[0]);
-                for (i = 1; i < nfiles; i++) {
-                    /* check if raster i overlaps with the current row */
-                    if (south_edge >= cellhd[i].north ||
-                        north_edge <= cellhd[i].south ||
-                        window.west >= cellhd[i].east ||
-                        window.east <= cellhd[i].west)
-                        continue;
-
-                    Rast_get_row(local_infd[i], local_patch, row, out_type);
-                    if (!do_patch(local_presult, local_patch, &statf[i], ncols,
-                                  out_type, out_cell_size, use_zero,
-                                  no_support))
-                        break;
-                }
-                void *p = G_incr_void_ptr(outbuf, out_cell_size *
-                                                      (row - start) * ncols);
-                memcpy(p, local_presult, out_cell_size * ncols);
-
-#pragma omp atomic update
-                computed++;
-            }
-
-        } /* end parallel region */
-
-        for (row = start; row < end; row++) {
-            void *p =
-                G_incr_void_ptr(outbuf, out_cell_size * (row - start) * ncols);
-            Rast_put_row(outfd, p, out_type);
+            Rast_get_row(infd[i], patch, row, out_type);
+            if (!do_patch(presult, patch, &statf[i], ncols, out_type,
+                          out_cell_size, use_zero))
+                break;
         }
-
-        written = end;
-
-    } /* end while loop */
-    G_percent(nrows, nrows, 2);
-
-    for (t = 0; t < nprocs; t++) {
-        G_free(patch[t]);
-        G_free(presult[t]);
+        Rast_put_row(outfd, presult, out_type);
     }
+    G_percent(row, nrows, 2);
+
     G_free(patch);
     G_free(presult);
-
-    for (t = 0; t < nprocs; t++)
-        for (i = 0; i < nfiles; i++)
-            Rast_close(infd[t][i]);
+    for (i = 0; i < nfiles; i++)
+        Rast_close(infd[i]);
 
     if (!no_support) {
         /*

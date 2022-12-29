@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.thin
@@ -41,6 +42,7 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
+
 int main(int argc, char *argv[])
 {
     char *input, *output;
@@ -54,8 +56,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("geometry"));
-    module->description = _("Thins non-null cells that denote linear "
-                            "features in a raster map layer.");
+    module->description =
+	_("Thins non-null cells that denote linear "
+	  "features in a raster map layer.");
 
     opt1 = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -69,7 +72,7 @@ int main(int argc, char *argv[])
     opt3->description = _("Maximal number of iterations");
 
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
     input = opt1->answer;
     output = opt2->answer;

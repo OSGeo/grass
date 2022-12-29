@@ -29,3 +29,4 @@ void D_erase(const char *color)
     COM_Close();
     COM_Fill();
 }
+

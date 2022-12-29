@@ -13,6 +13,7 @@ from abc import ABCMeta, abstractmethod
 from .core import (
     get_tgis_message_interface,
     init_dbif,
+    get_enable_mapset_check,
     get_current_mapset,
 )
 from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
@@ -102,7 +103,7 @@ class AbstractDataset(
         """Check if the spatial and temporal topology was build
 
         :return: A dictionary with "spatial" and "temporal" as keys that
-                 have boolean values
+                 have boolen values
         """
         d = {}
         d["spatial"] = self.is_spatial_topology_build()
@@ -353,7 +354,7 @@ class AbstractDataset(
         """Return the spatial extent"""
         return self.spatial_extent
 
-    def select(self, dbif=None, mapset=None):
+    def select(self, dbif=None):
         """Select temporal dataset entry from database and fill
         the internal structure
 
@@ -362,33 +363,27 @@ class AbstractDataset(
         from the temporal database.
 
         :param dbif: The database interface to be used
-        :param mapset: The dbif connection to be used
         """
 
         dbif, connection_state_changed = init_dbif(dbif)
 
-        # default mapset is mapset of this instance
-        if mapset is None:
-            mapset = self.get_mapset()
-
-        self.base.select(dbif, mapset=mapset)
-        self.temporal_extent.select(dbif, mapset=mapset)
-        self.spatial_extent.select(dbif, mapset=mapset)
-        self.metadata.select(dbif, mapset=mapset)
+        self.base.select(dbif)
+        self.temporal_extent.select(dbif)
+        self.spatial_extent.select(dbif)
+        self.metadata.select(dbif)
         if self.is_stds() is False:
-            self.stds_register.select(dbif, mapset=mapset)
+            self.stds_register.select(dbif)
 
         if connection_state_changed:
             dbif.close()
 
-    def is_in_db(self, dbif=None, mapset=None):
+    def is_in_db(self, dbif=None):
         """Check if the dataset is registered in the database
 
         :param dbif: The database interface to be used
-        :param mapset: The dbif connection to be used
         :return: True if the dataset is registered in the database
         """
-        return self.base.is_in_db(dbif, mapset)
+        return self.base.is_in_db(dbif)
 
     @abstractmethod
     def delete(self):
@@ -405,16 +400,21 @@ class AbstractDataset(
                  empty string otherwise
         """
 
-        # it must be possible to insert a map from a different
-        # mapset in the temporal database of the current mapset
-        # the temporal database must be in the current mapset
+        if (
+            get_enable_mapset_check() is True
+            and self.get_mapset() != get_current_mapset()
+        ):
+            self.msgr.fatal(
+                _(
+                    "Unable to insert dataset <%(ds)s> of type "
+                    "%(type)s in the temporal database. The mapset "
+                    "of the dataset does not match the current "
+                    "mapset"
+                )
+                % {"ds": self.get_id(), "type": self.get_type()}
+            )
 
         dbif, connection_state_changed = init_dbif(dbif)
-
-        self.msgr.debug(2, "AbstractDataset.insert...")
-
-        # only modify database in current mapset
-        mapset = get_current_mapset()
 
         # Build the INSERT SQL statement
         statement = self.base.get_insert_statement_mogrified(dbif)
@@ -424,10 +424,8 @@ class AbstractDataset(
         if self.is_stds() is False:
             statement += self.stds_register.get_insert_statement_mogrified(dbif)
 
-        self.msgr.debug(2, "insert with %s" % statement)
         if execute:
-            # database to be modified must be in the current mapset
-            dbif.execute_transaction(statement, mapset=mapset)
+            dbif.execute_transaction(statement)
             if connection_state_changed:
                 dbif.close()
             return ""
@@ -448,6 +446,20 @@ class AbstractDataset(
         :return: The SQL update statement in case execute=False, or an
                  empty string otherwise
         """
+
+        if (
+            get_enable_mapset_check() is True
+            and self.get_mapset() != get_current_mapset()
+        ):
+            self.msgr.fatal(
+                _(
+                    "Unable to update dataset <%(ds)s> of type "
+                    "%(type)s in the temporal database. The mapset "
+                    "of the dataset does not match the current "
+                    "mapset"
+                )
+                % {"ds": self.get_id(), "type": self.get_type()}
+            )
 
         dbif, connection_state_changed = init_dbif(dbif)
 
@@ -482,6 +494,20 @@ class AbstractDataset(
         :return: The SQL update statement in case execute=False, or an
                  empty string otherwise
         """
+
+        if (
+            get_enable_mapset_check() is True
+            and self.get_mapset() != get_current_mapset()
+        ):
+            self.msgr.fatal(
+                _(
+                    "Unable to update dataset <%(ds)s> of type "
+                    "%(type)s in the temporal database. The mapset"
+                    " of the dataset does not match the current "
+                    "mapset"
+                )
+                % {"ds": self.get_id(), "type": self.get_type()}
+            )
 
         dbif, connection_state_changed = init_dbif(dbif)
 

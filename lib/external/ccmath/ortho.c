@@ -15,26 +15,26 @@ void ortho(double *e, int n)
     double *p, *q, c, s, a, unfl();
 
     for (i = 0, p = e; i < n; ++i) {
-        for (j = 0; j < n; ++j) {
-            if (i == j)
-                *p++ = 1.;
-            else
-                *p++ = 0.;
-        }
+	for (j = 0; j < n; ++j) {
+	    if (i == j)
+		*p++ = 1.;
+	    else
+		*p++ = 0.;
+	}
     }
     for (i = 0, m = n - 1; i < m; ++i) {
-        for (j = i + 1; j < n; ++j) {
-            a = tpi * unfl();
-            c = cos(a);
-            s = sin(a);
-            p = e + n * i;
-            q = e + n * j;
-            for (k = 0; k < n; ++k) {
-                a = *p * c + *q * s;
-                *q = *q * c - *p * s;
-                *p++ = a;
-                ++q;
-            }
-        }
+	for (j = i + 1; j < n; ++j) {
+	    a = tpi * unfl();
+	    c = cos(a);
+	    s = sin(a);
+	    p = e + n * i;
+	    q = e + n * j;
+	    for (k = 0; k < n; ++k) {
+		a = *p * c + *q * s;
+		*q = *q * c - *p * s;
+		*p++ = a;
+		++q;
+	    }
+	}
     }
 }

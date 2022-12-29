@@ -358,7 +358,6 @@ class VectorSelectBase:
         if ret == 0:
             tree = self._giface.GetLayerTree()
             if tree:
-                outMap = f"{outMap}@{grass.gisenv()['MAPSET']}"
                 tree.AddLayer(
                     ltype="vector",
                     lname=outMap,

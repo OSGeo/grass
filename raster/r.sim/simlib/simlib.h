@@ -5,12 +5,14 @@
  * \brief This is the interface for the simlib (SIMWE) library.
  */
 
+
 #define NUM_THREADS "1"
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
 
-struct WaterParams {
+struct WaterParams
+{
     double xmin, ymin, xmax, ymax;
     double mayy, miyy, maxx, mixx;
     int mx, my;
@@ -30,7 +32,7 @@ struct WaterParams {
     double stepx, stepy, xp0, yp0;
     double chmean, si0, deltap, deldif, cch, hhc, halpha;
     double eps;
-    int nstack;
+    int nstack; 
     int iterout, mx2o, my2o;
     int miter, nwalka;
     double timec;
@@ -84,15 +86,17 @@ void main_loop(void);
 int output_data(int, double);
 void free_walkers();
 
-struct options {
+struct options
+{
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
-        *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
-        *density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
-        *tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval, *infilval,
-        *logfile, *seed, *threads;
+	*observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
+	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
+	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
+	*infilval, *logfile, *seed, *threads;
 };
 
-struct flags {
+struct flags
+{
     struct Flag *mscale, *tserie, *generateSeed;
 };
 

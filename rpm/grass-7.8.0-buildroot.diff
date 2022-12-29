@@ -1,0 +1,23 @@
+diff -up grass-7.8.0/include/Make/Install.make.sopwith grass-7.8.0/include/Make/Install.make
+--- grass-7.8.0/include/Make/Install.make.sopwith	2019-09-13 15:07:19.127928851 -0400
++++ grass-7.8.0/include/Make/Install.make	2019-09-13 15:25:55.583419717 -0400
+@@ -91,6 +91,10 @@ else
+ STARTUP = $(UNIX_BIN)/$(GRASS_NAME)
+ endif
+ 
++ifndef GISBASE_RUNTIME
++GISBASE_RUNTIME=$(INST_DIR)
++endif
++
+ FONTCAP = etc/fontcap
+ TMPGISRC = demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+ PLATMAKE = include/Make/Platform.make
+@@ -125,7 +129,7 @@ $(INST_DIR) $(UNIX_BIN):
+ 	$(MAKE_DIR_CMD) $@
+ 
+ $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
+-	sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
++	sed -e 's#'@GISBASE@'#'$(GISBASE_RUNTIME)'#g' \
+ 	    -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
+ 	    -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
+ 	    $< > $@

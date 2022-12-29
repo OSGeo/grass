@@ -1,3 +1,4 @@
+
 /**
  * \file lib/segment/release.c
  *
@@ -15,15 +16,16 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
+
 /**
  * \fn int Segment_release (SEGMENT *SEG)
  *
  * \brief Free memory allocated to segment.
  *
- * Releases the allocated memory associated with the segment file
+ * Releases the allocated memory associated with the segment file 
  * <b>seg</b>.
  *
- * <b>Note:</b> Does not close the file. Does not flush the data which
+ * <b>Note:</b> Does not close the file. Does not flush the data which 
  * may be pending from previous <i>Segment_put()</i> calls.
  *
  * \param[in,out] SEG segment
@@ -31,15 +33,15 @@
  * \return -1 if SEGMENT is not available (not open)
  */
 
-int Segment_release(SEGMENT *SEG)
+int Segment_release(SEGMENT * SEG)
 {
     int i;
 
     if (SEG->open != 1)
-        return -1;
+	return -1;
 
     for (i = 0; i < SEG->nseg; i++)
-        G_free(SEG->scb[i].buf);
+	G_free(SEG->scb[i].buf);
     G_free(SEG->scb);
 
     G_free(SEG->freeslot);

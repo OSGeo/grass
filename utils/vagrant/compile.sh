@@ -43,6 +43,7 @@ if [ ! -f "include/Make/Platform.make" ] ; then
         --with-postgres-includes=`pg_config --includedir` \
         --with-mysql-includes=`mysql_config --include | sed -e 's/-I//'` \
         --with-proj-share=/usr/share/proj \
+        --with-wxwidgets=/usr/bin/wx-config \
         --with-python \
         --with-cairo \
         --with-liblas

@@ -4,7 +4,7 @@ Purpose:    Tests v.profile input parsing and simle output generation.
             Uses NC Basic data set.
 
 Author:     Maris Nartiss
-Copyright:  (C) 2017, 2022 by Maris Nartiss and the GRASS Development Team
+Copyright:  (C) 2017 by Maris Nartiss and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
             License (>=v2). Read the file COPYING that comes with GRASS
             for details.
@@ -48,30 +48,10 @@ Number,Distance,cat,dbl_1,dbl_2,int_1
 3,2960.822,1,626382.68026139,228917.44816672,1
 """
 
-multi_line_in = """\
-L 8
-  1 1
-  1 3
-  2 3
-  2 1
-  3 1
-  3 3
-  4 3
-  4 1
-"""
-multi_line_out = """\
-Number|Distance
-1|1.00
-2|2.00
-3|3.00
-4|4.00
-"""
-
 
 class TestProfiling(TestCase):
     to_remove = []
     points = "test_v_profile_points"
-    multiline = "test_v_profile_multiline"
     in_points = "poi_names_wake"
     in_map = "roadsmajor"
     where = "cat='354'"
@@ -83,25 +63,16 @@ class TestProfiling(TestCase):
         """Create vector map with points for sampling"""
         cls.runModule("v.in.ascii", input="-", output=cls.points, stdin=buf_points)
         cls.to_remove.append(cls.points)
-        cls.runModule(
-            "v.in.ascii",
-            flags="n",
-            input="-",
-            format="standard",
-            output=cls.multiline,
-            stdin=multi_line_in,
-        )
-        cls.to_remove.append(cls.multiline)
 
     @classmethod
     def tearDownClass(cls):
         """Remove vector maps"""
-        for to_remove in cls.to_remove:
+        if cls.to_remove:
             cls.runModule(
                 "g.remove",
                 flags="f",
                 type="vector",
-                name=",".join(to_remove),
+                name=",".join(cls.to_remove),
                 verbose=True,
             )
 
@@ -233,18 +204,6 @@ class TestProfiling(TestCase):
             profile_where="cat=193",
         )
         vpro.run()
-
-    def testMultiCrossing(self):
-        """If profile crosses single line multiple times, all crossings
-        should be reported"""
-        vpro = SimpleModule(
-            "v.profile",
-            input=self.multiline,
-            coordinates=(0, 2, 5, 2),
-            buffer=10,
-        )
-        vpro.run()
-        self.assertLooksLike(reference=multi_line_out, actual=vpro.outputs.stdout)
 
 
 if __name__ == "__main__":

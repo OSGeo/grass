@@ -1,3 +1,4 @@
+
 /***************************************************************/
 /*                                                             */
 /*        cost.h    in   ~/src/Gcost                           */
@@ -6,13 +7,13 @@
 /*      point structure containing various attributes of       */
 /*      a grid cell.                                           */
 /*                                                             */
-
 /***************************************************************/
 
 #ifndef __COST_H__
 #define __COST_H__
 
-struct cost {
+struct cost
+{
     double min_cost;
     long age;
     int row;

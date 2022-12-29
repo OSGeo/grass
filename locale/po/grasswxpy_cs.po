@@ -522,20 +522,23 @@ msgid "Reload current GRASS mapset only"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:31
+#, fuzzy
 msgid "Restrict edits to the current mapset only"
-msgstr ""
+msgstr "Vytvořit kopii v aktuálním mapsetu"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:34
+#, fuzzy
 msgid "Allow edits outside of the current mapset"
-msgstr ""
+msgstr "Vytvořit kopii v aktuálním mapsetu"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:37
 msgid "Add existing or create new database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
+#, fuzzy
 msgid "Create new mapset in current location"
-msgstr ""
+msgstr "Vytvořit nový mapset ve vybrané lokaci"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
 msgid "Create new location in current GRASS database"
@@ -546,22 +549,26 @@ msgid "Download sample location to current GRASS database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:49
+#, fuzzy
 msgid "Import raster data  [r.import]"
-msgstr ""
+msgstr "Import rastrových dat"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:52
+#, fuzzy
 msgid "Import vector data  [v.import]"
-msgstr ""
+msgstr "Import vektorových dat"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:55
+#, fuzzy
 msgid "Select another import option"
-msgstr ""
+msgstr "Vybrat podle jiné vrstvy"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:72
 #: ../gui/wxpython/modules/extensions.py:74
 #: ../gui/wxpython/gui_core/menu.py:152
+#, fuzzy
 msgid "Search"
-msgstr ""
+msgstr "Hledat:"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:91
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
@@ -627,8 +634,9 @@ msgid "Overwrite?"
 msgstr "Přepsat?"
 
 #: ../gui/wxpython/datacatalog/tree.py:224
+#, fuzzy
 msgid "name unknown"
-msgstr ""
+msgstr "neznámý"
 
 #: ../gui/wxpython/datacatalog/tree.py:226
 #, python-brace-format
@@ -651,9 +659,9 @@ msgid "{name}  (owner: {owner})"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:237
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{name}"
-msgstr ""
+msgstr "Přejmenovat"
 
 #: ../gui/wxpython/datacatalog/tree.py:791
 #, python-brace-format
@@ -698,8 +706,9 @@ msgid "Rename map"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1064
+#, fuzzy
 msgid "Cannot rename mapset"
-msgstr ""
+msgstr "Přejmenovat mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1074
 #, python-brace-format
@@ -707,8 +716,9 @@ msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1084
+#, fuzzy
 msgid "Cannot rename location"
-msgstr ""
+msgstr "Vytvořit novou lokaci"
 
 #: ../gui/wxpython/datacatalog/tree.py:1093
 #, python-brace-format
@@ -844,48 +854,58 @@ msgid "&Switch mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
+#, fuzzy
 msgid "&Delete mapset"
-msgstr ""
+msgstr "Odstranit mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
+#, fuzzy
 msgid "&Rename mapset"
-msgstr ""
+msgstr "Přejmenovat mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
+#, fuzzy
 msgid "&Create mapset"
-msgstr ""
+msgstr "Vytvořit nový mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
+#, fuzzy
 msgid "&Delete location"
-msgstr ""
+msgstr "Odstranit lokaci"
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
+#, fuzzy
 msgid "&Rename location"
-msgstr ""
+msgstr "Přejmenovat vybranou lokaci"
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
+#, fuzzy
 msgid "&Create new location"
-msgstr ""
+msgstr "Vytvořit novou lokaci"
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
+#, fuzzy
 msgid "&Download sample location"
-msgstr ""
+msgstr "Přejmenovat vybranou lokaci"
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1842
+#, fuzzy
 msgid "&Delete GRASS database from disk"
-msgstr ""
+msgstr "1. Vyberte adresář databáze GRASS GISu"
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
+#, fuzzy
 msgid "&Delete locations"
-msgstr ""
+msgstr "Odstranit lokaci"
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
+#, fuzzy
 msgid "&Delete mapsets"
-msgstr ""
+msgstr "Odstranit mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -901,40 +921,48 @@ msgid "Choose GRASS data directory:"
 msgstr "Vybrat adresář s daty GRASSu:"
 
 #: ../gui/wxpython/datacatalog/catalog.py:112
+#, fuzzy
 msgid "Do you want to create a location?"
-msgstr ""
+msgstr "Přejete si založit lokaci GRASSu <%s>?"
 
 #: ../gui/wxpython/datacatalog/catalog.py:115
+#, fuzzy
 msgid "Create location?"
-msgstr ""
+msgstr "Vytvořit novou lokaci?"
 
 #: ../gui/wxpython/datacatalog/catalog.py:199
+#, fuzzy
 msgid "Link external raster data  [r.external]"
-msgstr ""
+msgstr "Připojit externí rastrová data"
 
 #: ../gui/wxpython/datacatalog/catalog.py:203
+#, fuzzy
 msgid "Link external vector data  [v.external]"
-msgstr ""
+msgstr "Připojit externí vektorová data"
 
 #: ../gui/wxpython/datacatalog/catalog.py:209
+#, fuzzy
 msgid "Set raster output format  [r.external.out]"
-msgstr ""
+msgstr "Nastavit výstupní formát rastrů"
 
 #: ../gui/wxpython/datacatalog/catalog.py:213
+#, fuzzy
 msgid "Set vector output format  [v.external.out]"
-msgstr ""
+msgstr "Nastavit výstupní formát vektorů"
 
 #: ../gui/wxpython/datacatalog/catalog.py:220
 msgid "Unpack GRASS raster map  [r.unpack]"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:224
+#, fuzzy
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr ""
+msgstr "Aktualizuje matadata vektorové vrstvy."
 
 #: ../gui/wxpython/datacatalog/catalog.py:230
+#, fuzzy
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
-msgstr ""
+msgstr "Vytvoří rastrové mapy z ASCII polygonových/liniových/bodových datových souborů."
 
 #: ../gui/wxpython/datacatalog/catalog.py:234
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
@@ -946,12 +974,14 @@ msgid "Link external data"
 msgstr "Připojit externí data"
 
 #: ../gui/wxpython/datacatalog/catalog.py:242
+#, fuzzy
 msgid "More options..."
-msgstr ""
+msgstr "Nastavit volby..."
 
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
+#, fuzzy
 msgid "Data Catalog"
-msgstr ""
+msgstr "Datová délka"
 
 #: ../gui/wxpython/datacatalog/frame.py:47
 msgid "Close GRASS GIS Data Catalog"
@@ -1476,11 +1506,11 @@ msgid "circle"
 msgstr "kruh"
 
 #: ../gui/wxpython/core/settings.py:1054
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Unable to read settings file <{path}>:\n"
 "{err}"
-msgstr ""
+msgstr "Nelze vytvořit soubor <%s>"
 
 #: ../gui/wxpython/core/settings.py:1069
 #, python-format
@@ -1788,8 +1818,9 @@ msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
 
 #: ../gui/wxpython/animation/g.gui.animation.py:134
+#, fuzzy
 msgid "Animation Tool - GRASS GIS"
-msgstr ""
+msgstr "Nástroj pro animace"
 
 #: ../gui/wxpython/animation/temporal_manager.py:110
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
@@ -1996,12 +2027,14 @@ msgid "Set spatial extent in 2D view"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:565
+#, fuzzy
 msgid "Use saved region:"
-msgstr ""
+msgstr "Uložit region:"
 
 #: ../gui/wxpython/animation/dialogs.py:575
+#, fuzzy
 msgid "Animate region change"
-msgstr ""
+msgstr "Zpět předchozí změny"
 
 #: ../gui/wxpython/animation/dialogs.py:581
 msgid "End region:"
@@ -2378,8 +2411,9 @@ msgid "Invalid"
 msgstr ""
 
 #: ../gui/wxpython/animation/frame.py:51
+#, fuzzy
 msgid "Animation Tool"
-msgstr ""
+msgstr "Nástroj pro animace"
 
 #: ../gui/wxpython/animation/frame.py:157 ../gui/wxpython/mapswipe/frame.py:290
 msgid "Main Toolbar"
@@ -2763,8 +2797,9 @@ msgid "Classes"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:169
+#, fuzzy
 msgid "Interactive Scatter Plot Tool"
-msgstr ""
+msgstr "Interaktivně editovat hodnoty kategorií"
 
 #: ../gui/wxpython/iscatt/frame.py:401
 msgid "scatter plot"
@@ -2859,8 +2894,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/timeline/g.gui.timeline.py:63
+#, fuzzy
 msgid "Timeline Tool - GRASS GIS"
-msgstr ""
+msgstr "Vítejte v GRASS GIS"
 
 #: ../gui/wxpython/timeline/frame.py:38
 #, python-brace-format
@@ -3433,8 +3469,9 @@ msgid "Yes"
 msgstr "Budiž"
 
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:55
+#, fuzzy
 msgid "Graphical Modeler - GRASS GIS"
-msgstr ""
+msgstr "Grafické modelování"
 
 #: ../gui/wxpython/gmodeler/frame.py:78 ../gui/wxpython/lmgr/toolbars.py:155
 #: ../gui/wxpython/gui_core/forms.py:1458
@@ -3805,8 +3842,9 @@ msgid "Define new GRASS Location"
 msgstr "Definujte novou lokaci GRASSu"
 
 #: ../gui/wxpython/location_wizard/wizard.py:186
+#, fuzzy
 msgid "Change"
-msgstr ""
+msgstr "rozmezí"
 
 #: ../gui/wxpython/location_wizard/wizard.py:202
 #: ../gui/wxpython/gui_core/forms.py:1142
@@ -3814,24 +3852,28 @@ msgid "This option is required"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
+#, fuzzy
 msgid "(optional)"
-msgstr ""
+msgstr "Volitelné"
 
 #: ../gui/wxpython/location_wizard/wizard.py:216
 msgid "Name of location directory in GIS Data Directory"
 msgstr "Název adresáře lokace v adresáři s daty GRASSu"
 
 #: ../gui/wxpython/location_wizard/wizard.py:237
+#, fuzzy
 msgid "Description of location directory in GIS Data Directory"
-msgstr ""
+msgstr "Název adresáře lokace v adresáři s daty GRASSu"
 
 #: ../gui/wxpython/location_wizard/wizard.py:253
+#, fuzzy
 msgid "Location will be created in GRASS database:"
-msgstr ""
+msgstr "Lokace již v adresáři databáze GRASSu existuje."
 
 #: ../gui/wxpython/location_wizard/wizard.py:277
+#, fuzzy
 msgid "Name '{}' is not a valid name for location. Please use only ASCII characters excluding characters {} and space."
-msgstr ""
+msgstr "Název <%(name)s> není platným názvem lokace nebo mapsetu. Používejte pouze znaky ASCII kromě %(chars)s a mezery."
 
 #: ../gui/wxpython/location_wizard/wizard.py:280
 #: ../gui/wxpython/modules/import_export.py:248
@@ -3853,21 +3895,25 @@ msgid "Title of the location is limited only to one line and 256 characters. The
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:335
+#, fuzzy
 msgid "Select Coordinate Reference System (CRS)"
-msgstr ""
+msgstr "Zvolit EPSG kód souřadnicového referenčního systému"
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
+#, fuzzy
 msgid "Select CRS from a list by EPSG or description"
-msgstr ""
+msgstr "Vyberte ze seznamu transformací datumu"
 
 #: ../gui/wxpython/location_wizard/wizard.py:352
 #: ../gui/wxpython/location_wizard/wizard.py:1358
+#, fuzzy
 msgid "Read CRS from a georeferenced data file"
-msgstr ""
+msgstr "Načíst kartografické zobrazení a datum z již georeferencovaného souboru"
 
 #: ../gui/wxpython/location_wizard/wizard.py:354
+#, fuzzy
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr ""
+msgstr "Vytvořit obecný kartézský souřadnicový systém (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 #: ../gui/wxpython/location_wizard/wizard.py:1437
@@ -3885,8 +3931,9 @@ msgid "Define custom CRS"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:374
+#, fuzzy
 msgid "Additional methods:"
-msgstr ""
+msgstr "Další volby:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:500
 #: ../gui/wxpython/location_wizard/wizard.py:1018
@@ -3975,20 +4022,23 @@ msgid "Select georeferenced file"
 msgstr "Zvolte georeferencovaný soubor"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1450
+#, fuzzy
 msgid "Enter WKT parameters string:"
-msgstr ""
+msgstr "Vložte PROJ.4 parametry:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1498
+#, fuzzy
 msgid "Select CRS from a list"
-msgstr ""
+msgstr "Vybrat písmo"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1514
 msgid "Filter by EPSG code or description:"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1517
+#, fuzzy
 msgid "Find more information at:"
-msgstr ""
+msgstr "Upravit informace o kategoriích"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1531
 #: ../gui/wxpython/location_wizard/wizard.py:1744
@@ -4721,8 +4771,9 @@ msgid "Coordinates can be obtained for example by right-clicking on Map Display.
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:209 ../gui/wxpython/tplot/frame.py:264
+#, fuzzy
 msgid "Show simple linear regression line"
-msgstr ""
+msgstr "Lineární regrese"
 
 #: ../gui/wxpython/tplot/frame.py:226
 msgid "STRDS"
@@ -4880,8 +4931,9 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:168
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
+#, fuzzy
 msgid "Temporal Plot Tool - GRASS GIS"
-msgstr ""
+msgstr "Vítejte v GRASS GIS"
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -5903,8 +5955,9 @@ msgid "Edit point"
 msgstr "Upravit bod"
 
 #: ../gui/wxpython/vnet/dialogs.py:74
+#, fuzzy
 msgid "Vector Network Analysis Tool"
-msgstr ""
+msgstr "Analýza vektorové sítě"
 
 #: ../gui/wxpython/vnet/dialogs.py:193
 msgid "Point list toolbar"
@@ -6282,16 +6335,19 @@ msgid "Overwrite map"
 msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:90
+#, fuzzy
 msgid "Raster Digitizer - GRASS GIS"
-msgstr ""
+msgstr "Rastrová digitalizace"
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:158
+#, fuzzy
 msgid "Raster map <{}> not found in current mapset."
-msgstr ""
+msgstr "Rastrová mapa <%s> nebyla nalezena."
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:174
+#, fuzzy
 msgid "Base raster map <{}> not found in current mapset."
-msgstr ""
+msgstr "3D rastrová mapa <%s> nebyla nalezena."
 
 #: ../gui/wxpython/rdigit/toolbars.py:27
 msgid "Digitize area"
@@ -6523,8 +6579,9 @@ msgid "Show 3D view mode manual"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:94
+#, fuzzy
 msgid "GRASS GIS"
-msgstr ""
+msgstr "Ukončit GRASS GIS"
 
 #: ../gui/wxpython/lmgr/frame.py:129
 msgid "There were some issues when loading menu or Modules tab:"
@@ -6551,8 +6608,9 @@ msgid "3D view Toolbar"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:302
+#, fuzzy
 msgid "Rename current Map Display"
-msgstr ""
+msgstr "Přejmenovat mapové okno"
 
 #: ../gui/wxpython/lmgr/frame.py:362
 #: ../gui/wxpython/gui_core/preferences.py:322
@@ -6808,9 +6866,9 @@ msgid "Unable to start Temporal Plot Tool."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2083
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Map Display {number}"
-msgstr ""
+msgstr "Mapové okno"
 
 #: ../gui/wxpython/lmgr/frame.py:2179
 msgid "Add selected map layers into layer tree"
@@ -7420,8 +7478,9 @@ msgid "Reproject selected layers"
 msgstr ""
 
 #: ../gui/wxpython/modules/histogram.py:296
+#, fuzzy
 msgid "Histogram Tool  [d.histogram]"
-msgstr ""
+msgstr "Nástroj pro histogramy GRASS GISu (d.histogram)"
 
 #: ../gui/wxpython/modules/histogram.py:436
 msgid "Select font for histogram text"
@@ -7860,8 +7919,9 @@ msgid "Thematic mapping for vector map in 3D view"
 msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
+#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr ""
+msgstr "Rastrový mapový kalkulátor"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -8613,8 +8673,9 @@ msgid "WARNING"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:114
+#, fuzzy
 msgid "Setup for r.li modules"
-msgstr ""
+msgstr "Hledat moduly"
 
 #: ../gui/wxpython/rlisetup/frame.py:131
 msgid "Available sampling area configuration files"
@@ -8770,24 +8831,27 @@ msgid "Remove text"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:203
+#, fuzzy
 msgid "Text properties"
-msgstr ""
+msgstr "Vlastnosti prvku"
 
 #: ../gui/wxpython/mapwin/decorations.py:226
 msgid "Remove scale bar"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:227
+#, fuzzy
 msgid "Scale bar properties"
-msgstr ""
+msgstr "Vlastnosti dat"
 
 #: ../gui/wxpython/mapwin/decorations.py:239
 msgid "Remove north arrow"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:240
+#, fuzzy
 msgid "North arrow properties"
-msgstr ""
+msgstr "Nastavení směrové růžice"
 
 #: ../gui/wxpython/mapwin/decorations.py:252
 #: ../gui/wxpython/mapwin/decorations.py:265
@@ -8795,12 +8859,14 @@ msgid "Remove legend"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:253
+#, fuzzy
 msgid "Vector legend properties"
-msgstr ""
+msgstr "Legenda vektoru"
 
 #: ../gui/wxpython/mapwin/decorations.py:266
+#, fuzzy
 msgid "Raster legend properties"
-msgstr ""
+msgstr "Legenda rastru"
 
 #: ../gui/wxpython/mapwin/buffered.py:259
 msgid "Copy coordinates to clipboard"
@@ -8978,8 +9044,9 @@ msgid "Statistics for Profile(s)"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:43
+#, fuzzy
 msgid "Histogram Tool"
-msgstr ""
+msgstr "Histogram"
 
 #: ../gui/wxpython/wxplot/histogram.py:51
 msgid "Histogram of"
@@ -10891,8 +10958,9 @@ msgid "Neighborhood points"
 msgstr "Analýza okolí"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
+#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr ""
+msgstr "Hodnota každé buňky v novém rastru bude funkcí hodnot kategorii sousedních buněk a bude uložena jako hodnota ve výstupní rastrové mapě."
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 msgid "Overlay rasters"
@@ -13557,16 +13625,18 @@ msgid "Attribute table manager"
 msgstr "Správce atributových tabulek"
 
 #: ../gui/wxpython/menustrings.py:2000
+#, fuzzy
 msgid "Launch Data Catalog."
-msgstr ""
+msgstr "Spustí nástroj pro animace"
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2018
+#, fuzzy
 msgid "Interactive editing and digitization of vector maps."
-msgstr ""
+msgstr "Interaktivní správa vektorové tabulky barev"
 
 #: ../gui/wxpython/menustrings.py:2023
 msgid "Create new model"
@@ -13891,8 +13961,9 @@ msgid "Location named <%s> already exists, rename it first"
 msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:563
+#, fuzzy
 msgid "Location Download"
-msgstr ""
+msgstr "&Průvodce vytvořením location"
 
 #: ../gui/wxpython/startup/locdownload.py:611
 msgid "Do you want to cancel location download?"
@@ -13903,8 +13974,9 @@ msgid "Abort download"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:80
+#, fuzzy
 msgid "Invalid mapset name"
-msgstr ""
+msgstr "Neplatný název"
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -13921,8 +13993,9 @@ msgid "Name for the new mapset:"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:186
+#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr ""
+msgstr "Nelze vytvořit nový mapset: %s"
 
 #: ../gui/wxpython/startup/guiutils.py:212
 #, fuzzy
@@ -13945,23 +14018,32 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:269
+#, fuzzy
 msgid "Unable to rename selected mapset"
-msgstr ""
+msgstr "Nelze odstranit mapset"
 
 #: ../gui/wxpython/startup/guiutils.py:280
 #: ../gui/wxpython/startup/guiutils.py:334
+#, fuzzy
 msgid ""
 "Current name: {}\n"
 "\n"
 "Enter new name:"
 msgstr ""
+"Aktuální jméno: %s\n"
+"\n"
+"Vložte nové jméno:"
 
 #: ../gui/wxpython/startup/guiutils.py:294
+#, fuzzy
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "{}"
 msgstr ""
+"Nelze přejmenovat mapset. \n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:319
 #, python-brace-format
@@ -13974,15 +14056,20 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:323
+#, fuzzy
 msgid "Unable to rename selected location"
-msgstr ""
+msgstr "Nelze vytvořit lokaci"
 
 #: ../gui/wxpython/startup/guiutils.py:347
+#, fuzzy
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "{}"
 msgstr ""
+"Nelze přejmenovat lokaci. \n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:410
 #, python-brace-format
@@ -13995,11 +14082,12 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
+#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr ""
+msgstr "Nelze odstranit mapset"
 
 #: ../gui/wxpython/startup/guiutils.py:430
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following mapsets?\n"
 "\n"
@@ -14007,10 +14095,14 @@ msgid ""
 "\n"
 "All maps included in these mapsets will be permanently deleted!"
 msgstr ""
+"Přejete si opravdu odstranit <%(mapset)s> z lokace <%(location)s>?\n"
+"\n"
+"VŠECHNY MAPY tohoto mapsetu budou NENÁVRATNĚ SMAZÁNY!"
 
 #: ../gui/wxpython/startup/guiutils.py:435
+#, fuzzy
 msgid "Delete selected mapsets"
-msgstr ""
+msgstr "Odstranit vybraný mapset"
 
 #: ../gui/wxpython/startup/guiutils.py:448
 msgid "Error when deleting mapsets"
@@ -14037,11 +14129,12 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:499
+#, fuzzy
 msgid "Unable to delete selected locations"
-msgstr ""
+msgstr "Nelze odstranit lokaci"
 
 #: ../gui/wxpython/startup/guiutils.py:515
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following locations?\n"
 "\n"
@@ -14049,14 +14142,19 @@ msgid ""
 "\n"
 "All mapsets included in these locations will be permanently deleted!"
 msgstr ""
+"Přejete si opravdu odstranit lokaci <%s>?\n"
+"\n"
+"VŠECHNY MAPY této lokace budou NENÁVRATNĚ SMAZÁNY!"
 
 #: ../gui/wxpython/startup/guiutils.py:520
+#, fuzzy
 msgid "Delete selected locations"
-msgstr ""
+msgstr "Odstranit vybranou lokaci"
 
 #: ../gui/wxpython/startup/guiutils.py:533
+#, fuzzy
 msgid "Error when deleting locations"
-msgstr ""
+msgstr "Přejmenovat vybranou lokaci"
 
 #: ../gui/wxpython/startup/guiutils.py:535
 #, python-brace-format
@@ -14079,8 +14177,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:572
+#, fuzzy
 msgid "Unable to delete selected GRASS database"
-msgstr ""
+msgstr "Nelze odstranit lokaci"
 
 #: ../gui/wxpython/startup/guiutils.py:580
 #, python-brace-format
@@ -14093,8 +14192,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
+#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr ""
+msgstr "Odstranit vybraný mapset"
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14111,7 +14211,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:631
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "User {user} is already running GRASS in selected mapset <{mapset}>\n"
 " (file {lockpath} created {timestamp} found).\n"
@@ -14120,22 +14220,32 @@ msgid ""
 "\n"
 "Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
 msgstr ""
+"GRASS je již s vybraným mapsetem <%(mapset)s> spuštěn\n"
+"(nalezen soubor %(lock)s).\n"
+"\n"
+"Souběžné použití není povoleno.\n"
+"\n"
+"Přejete si odstranit .gislock (k této operaci potřebujete příslušné oprávnění) a pokračovat?"
 
 #: ../gui/wxpython/startup/guiutils.py:641
+#, fuzzy
 msgid "Mapset is in use"
-msgstr ""
+msgstr "Přístup k mapsetu"
 
 #: ../gui/wxpython/startup/guiutils.py:653
 msgid "Error when removing lock file"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:654
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Unable to remove {lockpath}.\n"
 "\n"
 " Details: {error}."
 msgstr ""
+"'%(lock)s' nelze odstranit.\n"
+"\n"
+"Detaily: %(reason)s"
 
 #: ../gui/wxpython/startup/guiutils.py:693
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:593
@@ -14154,12 +14264,14 @@ msgid "Data file <%(name)s> imported successfully. The location's default region
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:717
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Current GRASS database is <%(dbase)s>.\n"
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"Současná location je <%(loc)s>.\n"
+"Současný mapset je <%(mapset)s>."
 
 #: ../gui/wxpython/startup/guiutils.py:743
 #, python-format
@@ -14776,8 +14888,9 @@ msgid "Dbf driver does not support usage of SQL functions."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:78
+#, fuzzy
 msgid "Attribute Table Manager"
-msgstr ""
+msgstr "Správce atributových tabulek"
 
 #: ../gui/wxpython/dbmgr/manager.py:81
 #, python-brace-format
@@ -14878,8 +14991,9 @@ msgid "Loading attribute data for vector map <%s>..."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:56
+#, fuzzy
 msgid "Attribute Table Manager - GRASS GIS"
-msgstr ""
+msgstr "Správce atributových tabulek GRASS GISu - "
 
 #: ../gui/wxpython/web_services/widgets.py:136
 msgid " Requested data settings "
@@ -15397,8 +15511,9 @@ msgid "Deactive overwrite"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:638
+#, fuzzy
 msgid "Quit Simple Python Editor"
-msgstr ""
+msgstr "Editor Pythonu"
 
 #: ../gui/wxpython/gui_core/goutput.py:126
 msgid "Command prompt"
@@ -16199,16 +16314,16 @@ msgid "EPSG code:"
 msgstr "Kód EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "PROJ string (required):"
-msgstr "Řetězec PROJ (vyžadováno):"
+msgid "Proj.4 string (required):"
+msgstr "Řetězec Proj.4 (vyžadováno):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
 msgstr "Soubor s kódy EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
-msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
-msgstr "Načíst kódy EPSG (buďte trpěliví), vložit kód EPSG nebo vložit přímo řetězec PROJ."
+msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
+msgstr "Načíst kódy EPSG (buďte trpěliví), vložit kód EPSG nebo vložit přímo řetězec Proj.4."
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"
@@ -16518,8 +16633,9 @@ msgid "Template:"
 msgstr "Šablona:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2000
+#, fuzzy
 msgid "SQL Query Utility"
-msgstr ""
+msgstr "Dotaz SQL"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2016
 msgid " SQL statement "
@@ -16542,8 +16658,9 @@ msgid "Do you want to quit GRASS GIS including shell or just close the GUI?"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2369
+#, fuzzy
 msgid "Do you want to quit GRASS GIS?"
-msgstr ""
+msgstr "Přejete si založit lokaci GRASSu <%s>?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2448
 msgid "Select font:"
@@ -16715,8 +16832,9 @@ msgid "Double-click to run selected module"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:164
+#, fuzzy
 msgid "&Run..."
-msgstr ""
+msgstr "&Spustit"
 
 #: ../gui/wxpython/gui_core/menu.py:165
 msgid "Run selected module from the tree"
@@ -16736,8 +16854,9 @@ msgid "Documentation for %s is now open in the web browser"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:356
+#, fuzzy
 msgid "&Recent Files"
-msgstr ""
+msgstr "Textové soubory"
 
 #: ../gui/wxpython/icons/icon.py:39
 #, python-format
@@ -17233,8 +17352,9 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:67
+#, fuzzy
 msgid "Vector Digitizer - GRASS GIS"
-msgstr ""
+msgstr "Vektorová digitalizace"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:83
 #, python-format
@@ -19195,137 +19315,137 @@ msgstr "&Stáhnout"
 msgid "Animation already axists"
 msgstr "Animace již existuje"
 
-msgid "GRASS GIS Raster Map Calculator"
-msgstr "GRASS GIS rastrový mapový kalkulátor"
+#~ msgid "GRASS GIS Raster Map Calculator"
+#~ msgstr "GRASS GIS rastrový mapový kalkulátor"
 
-msgid "GRASS GIS 3D Raster Map Calculator"
-msgstr "GRASS GIS 3D rastrový mapový kalkulátor"
+#~ msgid "GRASS GIS 3D Raster Map Calculator"
+#~ msgstr "GRASS GIS 3D rastrový mapový kalkulátor"
 
-msgid "Define GRASS Database and Location Name"
-msgstr "Definujte adresář databáze GRASSu a název lokace"
+#~ msgid "Define GRASS Database and Location Name"
+#~ msgstr "Definujte adresář databáze GRASSu a název lokace"
 
-msgid "GIS Data Directory:"
-msgstr "Adresář GIS dat:"
+#~ msgid "GIS Data Directory:"
+#~ msgstr "Adresář GIS dat:"
 
-msgid "Project Location"
-msgstr "Lokace projektu"
+#~ msgid "Project Location"
+#~ msgstr "Lokace projektu"
 
-msgid "Location Title"
-msgstr "Název lokace"
+#~ msgid "Location Title"
+#~ msgstr "Název lokace"
 
-msgid "Choose method for creating a new location"
-msgstr "Zvolte způsob vytvoření nové lokace"
+#~ msgid "Choose method for creating a new location"
+#~ msgstr "Zvolte způsob vytvoření nové lokace"
 
-msgid "Select EPSG code of spatial reference system"
-msgstr "Zvolit EPSG kód souřadnicového referenčního systému"
+#~ msgid "Select EPSG code of spatial reference system"
+#~ msgstr "Zvolit EPSG kód souřadnicového referenčního systému"
 
-msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
-msgstr "Načíst kartografické zobrazení a datum ze souboru typu Well Known Text (WKT) .prj"
+#~ msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
+#~ msgstr "Načíst kartografické zobrazení a datum ze souboru typu Well Known Text (WKT) .prj"
 
-msgid "Select coordinate system parameters from a list"
-msgstr "Zvolit parametry souřadnicového systému ze seznamu"
+#~ msgid "Select coordinate system parameters from a list"
+#~ msgstr "Zvolit parametry souřadnicového systému ze seznamu"
 
-msgid "Specify projection and datum terms using custom PROJ.4 parameters"
-msgstr "Určit kartografické zobrazení a datum s použitím PROJ.4 parametrů"
+#~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+#~ msgstr "Určit kartografické zobrazení a datum s použitím PROJ.4 parametrů"
 
-msgid "Choose projection"
-msgstr "Vybrat kartografické zobrazení"
+#~ msgid "Choose projection"
+#~ msgstr "Vybrat kartografické zobrazení"
 
-msgid "Choose EPSG Code"
-msgstr "Zvolte kód EPSG"
+#~ msgid "Choose EPSG Code"
+#~ msgstr "Zvolte kód EPSG"
 
-msgid "Path to the EPSG-codes file:"
-msgstr "Cesta k souboru s kódy EPSG:"
+#~ msgid "Path to the EPSG-codes file:"
+#~ msgstr "Cesta k souboru s kódy EPSG:"
 
-msgid "Choose EPSG codes file"
-msgstr "Vyberte soubor s kódy EPSG"
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "Vyberte soubor s kódy EPSG"
 
-msgid "Choose method of specifying georeferencing parameters"
-msgstr "Zvolte metodu nebo specifikujte parametry georeference"
+#~ msgid "Choose method of specifying georeferencing parameters"
+#~ msgstr "Zvolte metodu nebo specifikujte parametry georeference"
 
-msgid "Location Title:"
-msgstr "Popis lokace:"
+#~ msgid "Location Title:"
+#~ msgstr "Popis lokace:"
 
-msgid "Location wizard canceled. Location not created."
-msgstr "Průvodce vytvořením lokace byl zavřen. Lokace nebyla vytvořena."
+#~ msgid "Location wizard canceled. Location not created."
+#~ msgstr "Průvodce vytvořením lokace byl zavřen. Lokace nebyla vytvořena."
 
-msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
-msgstr "Lokace <%(loc)s> bude vytvořena v adresáři s GIS daty <%(dir)s>. Je potřeba změnit výchozí adresář s GIS daty na úvodní obrazovce GRASSu."
+#~ msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
+#~ msgstr "Lokace <%(loc)s> bude vytvořena v adresáři s GIS daty <%(dir)s>. Je potřeba změnit výchozí adresář s GIS daty na úvodní obrazovce GRASSu."
 
-msgid "New GIS data directory"
-msgstr "Nový adresář GIS dat"
+#~ msgid "New GIS data directory"
+#~ msgstr "Nový adresář GIS dat"
 
-msgid "Common formats import"
-msgstr "Import z běžných formátů"
+#~ msgid "Common formats import"
+#~ msgstr "Import z běžných formátů"
 
-msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
-msgstr "Exportuje vektorovou vrstvu do některého z podporovaných vektorových formátů OGR. Ve výchozím nastavení je vrstva exportována do formátu Esri Shapefile."
+#~ msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
+#~ msgstr "Exportuje vektorovou vrstvu do některého z podporovaných vektorových formátů OGR. Ve výchozím nastavení je vrstva exportována do formátu Esri Shapefile."
 
-msgid "Reports and Statistics"
-msgstr "Zprávy, výpisy a statistiky"
+#~ msgid "Reports and Statistics"
+#~ msgstr "Zprávy, výpisy a statistiky"
 
-msgid "Click here to show search module engine"
-msgstr "Klikněte zde pro zobrazení vyhledávacího modulu"
+#~ msgid "Click here to show search module engine"
+#~ msgstr "Klikněte zde pro zobrazení vyhledávacího modulu"
 
-msgid "Click here to hide search module engine"
-msgstr "Klikněte zde pro skrytí vyhledávacího modulu"
+#~ msgid "Click here to hide search module engine"
+#~ msgstr "Klikněte zde pro skrytí vyhledávacího modulu"
 
-msgid "GRASS GIS Animation tool"
-msgstr "Nástroj pro animace GRASS GISu"
+#~ msgid "GRASS GIS Animation tool"
+#~ msgstr "Nástroj pro animace GRASS GISu"
 
-msgid "Import/link raster or vector data"
-msgstr "Importovat/připojit rastrová nebo vektorová data"
+#~ msgid "Import/link raster or vector data"
+#~ msgstr "Importovat/připojit rastrová nebo vektorová data"
 
-msgid "GRASS GIS %s Layer Manager"
-msgstr "Správce vrstev GRASS GISu %s"
+#~ msgid "GRASS GIS %s Layer Manager"
+#~ msgstr "Správce vrstev GRASS GISu %s"
 
-msgid "Switch to new location?"
-msgstr "Přepnout na novou lokaci?"
+#~ msgid "Switch to new location?"
+#~ msgstr "Přepnout na novou lokaci?"
 
-msgid "Do you want to set the default region extents and resolution now?"
-msgstr "Přejete si nyní nastavit výchozí nastavení regionu a jeho rozlišení?"
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr "Přejete si nyní nastavit výchozí nastavení regionu a jeho rozlišení?"
 
-msgid "Location <%s> created"
-msgstr "Lokace <%s> vytvořena"
+#~ msgid "Location <%s> created"
+#~ msgstr "Lokace <%s> vytvořena"
 
-msgid "GRASS GIS Vector Network Analysis Tool"
-msgstr "Nástroj pro analýzu vektorové sítě GRASS GISu"
+#~ msgid "GRASS GIS Vector Network Analysis Tool"
+#~ msgstr "Nástroj pro analýzu vektorové sítě GRASS GISu"
 
-msgid "GRASS GIS Attribute Table Manager"
-msgstr "Správce atributových tabulek GRASS GISu"
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "Správce atributových tabulek GRASS GISu"
 
-msgid "GRASS GIS Graphical Modeler"
-msgstr "GRASS GIS grafické modelování"
+#~ msgid "GRASS GIS Graphical Modeler"
+#~ msgstr "GRASS GIS grafické modelování"
 
-msgid "GRASS GIS - Map display"
-msgstr "GRASS GIS - Mapové okno"
+#~ msgid "GRASS GIS - Map display"
+#~ msgstr "GRASS GIS - Mapové okno"
 
-msgid "GRASS GIS Histogramming Tool (d.histogram)"
-msgstr "Nástroj pro histogramy GRASS GISu (d.histogram)"
+#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
+#~ msgstr "Nástroj pro histogramy GRASS GISu (d.histogram)"
 
-msgid "Set raster output format"
-msgstr "Nastavit výstupní formát rastrů"
+#~ msgid "Set raster output format"
+#~ msgstr "Nastavit výstupní formát rastrů"
 
-msgid "Set vector output format"
-msgstr "Nastavit výstupní formát vektorů"
+#~ msgid "Set vector output format"
+#~ msgstr "Nastavit výstupní formát vektorů"
 
-msgid "Search:"
-msgstr "Hledat:"
+#~ msgid "Search:"
+#~ msgstr "Hledat:"
 
-msgid "GRASS GIS Attribute Table Manager - "
-msgstr "Správce atributových tabulek GRASS GISu - "
+#~ msgid "GRASS GIS Attribute Table Manager - "
+#~ msgstr "Správce atributových tabulek GRASS GISu - "
 
-msgid "Unable to create location"
-msgstr "Nelze vytvořit lokaci"
+#~ msgid "Unable to create location"
+#~ msgstr "Nelze vytvořit lokaci"
 
-msgid "Read projection and datum terms from a georeferenced data file"
-msgstr "Načíst kartografické zobrazení a datum z již georeferencovaného souboru"
+#~ msgid "Read projection and datum terms from a georeferenced data file"
+#~ msgstr "Načíst kartografické zobrazení a datum z již georeferencovaného souboru"
 
-msgid "Create a generic Cartesian coordinate system (XY)"
-msgstr "Vytvořit obecný kartézský souřadnicový systém (XY)"
+#~ msgid "Create a generic Cartesian coordinate system (XY)"
+#~ msgstr "Vytvořit obecný kartézský souřadnicový systém (XY)"
 
-msgid "Do you want to create GRASS location <%s>?"
-msgstr "Přejete si založit lokaci GRASSu <%s>?"
+#~ msgid "Do you want to create GRASS location <%s>?"
+#~ msgstr "Přejete si založit lokaci GRASSu <%s>?"
 
-msgid "Create new location?"
-msgstr "Vytvořit novou lokaci?"
+#~ msgid "Create new location?"
+#~ msgstr "Vytvořit novou lokaci?"

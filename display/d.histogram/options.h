@@ -1,3 +1,4 @@
+
 extern char *map_name;
 extern int color;
 extern float size;
@@ -8,9 +9,9 @@ extern int nodata;
 extern int nsteps;
 extern int cat_ranges;
 
-#define PIE   1
-#define BAR   2
-#define COUNT 3
-#define AREA  4
-#define YES   1
-#define NO    0
+#define PIE	1
+#define BAR	2
+#define COUNT   3
+#define AREA	4
+#define YES     1
+#define NO      0

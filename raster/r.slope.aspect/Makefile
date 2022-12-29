@@ -2,9 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = r.slope.aspect
 
-LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB) $(OMPLIB)
+LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)
-EXTRA_CFLAGS = $(OMPCFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

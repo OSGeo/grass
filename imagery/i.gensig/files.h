@@ -1,4 +1,5 @@
-struct files {
+struct files
+{
     int train_fd;
     CELL *train_cell;
     int ncats;

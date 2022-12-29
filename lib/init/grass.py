@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2022 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -42,7 +42,6 @@ import sys
 import os
 import errno
 import atexit
-import datetime
 import gettext
 import shutil
 import signal
@@ -56,7 +55,6 @@ import locale
 import uuid
 import unicodedata
 import argparse
-import json
 
 
 # mechanism meant for debugging this script (only)
@@ -66,11 +64,7 @@ _DEBUG = None
 # for wxpath
 _WXPYTHON_BASE = None
 
-try:
-    # Python >= 3.11
-    ENCODING = locale.getencoding()
-except AttributeError:
-    ENCODING = locale.getdefaultlocale()[1]
+ENCODING = locale.getdefaultlocale()[1]
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -97,15 +91,13 @@ else:
     os.environ["GISBASE"] = GISBASE
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
-GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-GRASS_VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
 CONFIG_PROJSHARE = os.environ.get("GRASS_PROJSHARE", "@CONFIG_PROJSHARE@")
 
 # Get the system name
-WINDOWS = sys.platform.startswith("win")
-CYGWIN = sys.platform.startswith("cygwin")
-MACOS = sys.platform.startswith("darwin")
+WINDOWS = sys.platform == "win32"
+CYGWIN = "cygwin" in sys.platform
+MACOSX = "darwin" in sys.platform
 
 
 def decode(bytes_, encoding=ENCODING):
@@ -395,7 +387,7 @@ def help_message(default_gui):
             gui_detail=_("and set as default"),
             config=_("print GRASS configuration parameters"),
             config_detail=_(
-                "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
+                "options: arch,build,compiler,date,path,revision,svn_revision,version"
             ),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
@@ -447,8 +439,8 @@ def get_grass_config_dir():
     Configuration directory is for example used for grass env file
     (the one which caries mapset settings from session to session).
     """
-    if WINDOWS:
-        grass_config_dirname = f"GRASS{GRASS_VERSION_MAJOR}"
+    if sys.platform == "win32":
+        grass_config_dirname = "GRASS8"
         win_conf_path = os.getenv("APPDATA")
         # this can happen with some strange settings
         if not win_conf_path:
@@ -467,7 +459,7 @@ def get_grass_config_dir():
             )
         directory = os.path.join(win_conf_path, grass_config_dirname)
     else:
-        grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
+        grass_config_dirname = ".grass8"
         directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
     if not os.path.isdir(directory):
         try:
@@ -497,9 +489,10 @@ def create_tmp(user, gis_lock):
     if not tmp:
         tmp = tempfile.gettempdir()
 
-    tmpdir_name = f"grass{GRASS_VERSION_MAJOR}-{user}-{gis_lock}"
     if tmp:
-        tmpdir = os.path.join(tmp, tmpdir_name)
+        tmpdir = os.path.join(
+            tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
+        )
         try:
             os.mkdir(tmpdir, 0o700)
         except:  # noqa: E722
@@ -508,7 +501,9 @@ def create_tmp(user, gis_lock):
     if not tmp:
         for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
             tmp = ttmp
-            tmpdir = os.path.join(tmp, tmpdir_name)
+            tmpdir = os.path.join(
+                tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
+            )
             try:
                 os.mkdir(tmpdir, 0o700)
             except:  # noqa: E722
@@ -518,9 +513,11 @@ def create_tmp(user, gis_lock):
 
     if not tmp:
         fatal(
-            _("Unable to create temporary directory <{tmpdir_name}>! Exiting.").format(
-                tmpdir_name=tmpdir_name
+            _(
+                "Unable to create temporary directory <grass8-%(user)s-"
+                "%(lock)s>! Exiting."
             )
+            % {"user": user, "lock": gis_lock}
         )
 
     # promoting the variable even if it was not defined before
@@ -649,7 +646,11 @@ def create_fallback_session(gisrc, tmpdir):
     """Creates fallback temporary session"""
     # Create temporary location
     set_mapset(
-        gisrc=gisrc, geofile="XY", create_new=True, tmp_location=True, tmpdir=tmpdir
+        gisrc=gisrc,
+        geofile="XY",
+        create_new=True,
+        tmp_location=True,
+        tmpdir=tmpdir,
     )
 
 
@@ -714,13 +715,7 @@ def set_paths(grass_config_dir):
     # addons (base)
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if not addon_base:
-        if MACOS:
-            version = f"{GRASS_VERSION_MAJOR}.{GRASS_VERSION_MINOR}"
-            addon_base = os.path.join(
-                os.getenv("HOME"), "Library", "GRASS", version, "Addons"
-            )
-        else:
-            addon_base = os.path.join(grass_config_dir, "addons")
+        addon_base = os.path.join(grass_config_dir, "addons")
         os.environ["GRASS_ADDON_BASE"] = addon_base
     if not WINDOWS:
         path_prepend(os.path.join(addon_base, "scripts"), "PATH")
@@ -821,7 +816,7 @@ def set_browser():
     # GRASS_HTML_BROWSER
     browser = os.getenv("GRASS_HTML_BROWSER")
     if not browser:
-        if MACOS:
+        if MACOSX:
             # OSX doesn't execute browsers from the shell PATH - route through a
             # script
             browser = gpath("etc", "html_browser_mac.sh")
@@ -856,7 +851,7 @@ def set_browser():
                     browser = b
                     break
 
-    elif MACOS:
+    elif MACOSX:
         # OSX doesn't execute browsers from the shell PATH - route through a
         # script
         os.environ["GRASS_HTML_BROWSER_MACOSX"] = "-b %s" % browser
@@ -890,7 +885,7 @@ MAPSET: <UNKNOWN>
 def check_gui(expected_gui):
     grass_gui = expected_gui
     # Check if we are running X windows by checking the DISPLAY variable
-    if os.getenv("DISPLAY") or WINDOWS or MACOS:
+    if os.getenv("DISPLAY") or WINDOWS or MACOSX:
         # Check if python is working properly
         if expected_gui in ("wxpython", "gtext"):
             nul = open(os.devnull, "w")
@@ -1144,13 +1139,11 @@ def set_mapset(
                     # create new location based on the provided EPSG/...
                     if not geofile:
                         fatal(_("Provide CRS to create a location"))
-                    if not tmp_location:
-                        # Report report only when new location is not temporary.
-                        message(
-                            _("Creating new GRASS GIS location <{}>...").format(
-                                location_name
-                            )
+                    message(
+                        _("Creating new GRASS GIS location <{}>...").format(
+                            location_name
                         )
+                    )
                     create_location(gisdbase, location_name, geofile)
                 else:
                     # 'location_name' is a valid GRASS location,
@@ -1179,10 +1172,9 @@ def set_mapset(
                         if geofile:
                             fatal(
                                 _(
-                                    "No CRS is needed for creating mapset <{mapset}>, "
-                                    "but <{geofile}> was provided as CRS."
+                                    "No CRS is needed for creating mapset."
                                     " Did you mean to create a new location?"
-                                ).format(mapset=mapset, geofile=geofile)
+                                )
                             )
                         message(
                             _("Creating new GRASS GIS mapset <{}>...").format(mapset)
@@ -1299,7 +1291,7 @@ def load_env(grass_env_file):
     # \1 and \2 are a variable name and its value, respectively.
     export_re = re.compile("^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
 
-    for line in readfile(grass_env_file).splitlines():
+    for line in readfile(grass_env_file).split(os.linesep):
         # match ^export lines
         m = export_re.match(line)
         # if not ^export lines, skip
@@ -1377,26 +1369,29 @@ def set_language(grass_config_dir):
     # See discussion for Windows not following its own documentation and
     # not accepting ISO codes as valid locale identifiers
     # http://bugs.python.org/issue10466
-    # As this code relies heavily on various locale calls, it is necessary
-    # to track related python changes:
-    # https://bugs.python.org/issue43557
+    language = "None"  # Such string sometimes is present in wx file
     encoding = None
 
     # Override value is stored in wxGUI preferences file.
+    # As it's the only thing required, we'll just grep it out.
     try:
-        with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
-            try:
-                language = json.load(json_file)["language"]["locale"]["lc_all"]
-            except KeyError:
-                language = None
-    except FileNotFoundError:
-        language = None
+        fd = open(os.path.join(grass_config_dir, "wx"), "r")
+    except:
+        # Even if there is no override, we still need to set locale.
+        pass
+    else:
+        for line in fd:
+            if re.search("^language", line):
+                line = line.rstrip(" %s" % os.linesep)
+                language = "".join(line.split(";")[-1:])
+                break
+        fd.close()
 
     # Backwards compatibility with old wx preferences files
     if language == "C":
         language = "en"
 
-    if not language:
+    if language == "None" or language == "" or not language:
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
@@ -1418,11 +1413,7 @@ def set_language(grass_config_dir):
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        try:
-            # Python >= 3.11
-            language, encoding = locale.getlocale()
-        except AttributeError:
-            language, encoding = locale.getdefaultlocale()
+        language, encoding = locale.getdefaultlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"
@@ -1564,7 +1555,10 @@ def set_language(grass_config_dir):
         del os.environ["LC_ALL"]  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    gettext.install("grasslibs", gpath("locale"))
+    if encoding:
+        gettext.install("grasslibs", gpath("locale"), codeset=encoding)
+    else:
+        gettext.install("grasslibs", gpath("locale"))
 
 
 def lock_mapset(mapset_path, force_gislock_removal, user):
@@ -1664,26 +1658,18 @@ def get_shell():
 
     # cygwin has many problems with the shell setup
     # below, so i hardcoded everything here.
-    if CYGWIN:
+    if sys.platform == "cygwin":
         sh = "CYGWIN"
         shellname = "GNU Bash (Cygwin)"
         os.environ["SHELL"] = "/usr/bin/bash.exe"
         os.environ["OSTYPE"] = "cygwin"
     else:
-        # In a Docker container the 'SHELL' variable may not be set
-        # unless 'ENV SHELL /bin/bash' is set in Dockerfile. However, often Bash
-        # is available, so we try Bash first and fall back to sh if needed.
-        sh = os.getenv("SHELL")
-        if sh:
-            sh = os.path.basename(sh)
-        else:
-            # If SHELL is not set, see if there is Bash and use it.
-            if shutil.which("bash"):
-                sh = "bash"
-            else:
-                # Fallback to sh if there is no Bash on path.
-                sh = "sh"
-            # Ensure the variable is set.
+        # in docker the 'SHELL' variable may not be
+        # visible in a Python session unless 'ENV SHELL /bin/bash' is set in Dockerfile
+        try:
+            sh = os.path.basename(os.getenv("SHELL"))
+        except:
+            sh = "sh"
             os.environ["SHELL"] = sh
 
         if WINDOWS and sh:
@@ -1733,20 +1719,18 @@ def get_grass_env_file(sh, grass_config_dir):
     return grass_env_file
 
 
-# No reason to use list over Sequence except that
-# importing of Sequence changed in Python 3.9.
-# (Replace list by Sequence in the future.)
-def run_batch_job(batch_job: list):
+def run_batch_job(batch_job):
     """Runs script, module or any command
 
-    :param batch_job: executable and parameters as a list
-    """
-    # Lazy-import to avoid dependency during standard import time.
-    # pylint: disable=import-outside-toplevel
-    import grass.script as gs
+    If *batch_job* is a string (insecure) shell=True is used for execution.
 
-    batch_job_string = " ".join(batch_job)  # for messages only
-    gs.verbose(_("Executing <%s> ...") % batch_job_string)
+    :param batch_job: executable and parameters in a list or a string
+    """
+    batch_job_string = batch_job
+    if not isinstance(batch_job, six.string_types):
+        # for messages only
+        batch_job_string = " ".join(batch_job)
+    message(_("Executing <%s> ...") % batch_job_string)
 
     def script_path(batch_job):
         """Adjust script path
@@ -1758,7 +1742,9 @@ def run_batch_job(batch_job: list):
         script_in_addon_path = None
         if "GRASS_ADDON_BASE" in os.environ:
             script_in_addon_path = os.path.join(
-                os.environ["GRASS_ADDON_BASE"], "scripts", batch_job[0]
+                os.environ["GRASS_ADDON_BASE"],
+                "scripts",
+                batch_job[0],
             )
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
@@ -1771,7 +1757,8 @@ def run_batch_job(batch_job: list):
         proc = Popen(batch_job, shell=False, env=os.environ)
     except OSError as error:
         error_message = _("Execution of <{cmd}> failed:\n" "{error}").format(
-            cmd=batch_job_string, error=error
+            cmd=batch_job_string,
+            error=error,
         )
         # No such file or directory
         if error.errno == errno.ENOENT:
@@ -1783,7 +1770,7 @@ def run_batch_job(batch_job: list):
         else:
             fatal(error_message)
     returncode = proc.wait()
-    gs.verbose(_("Execution of <%s> finished.") % batch_job_string)
+    message(_("Execution of <%s> finished.") % batch_job_string)
     return returncode
 
 
@@ -1883,15 +1870,6 @@ def show_info(shellname, grass_gui, default_gui):
     message("")
 
 
-def start_shell():
-    if WINDOWS:
-        # "$ETC/run" doesn't work at all???
-        process = subprocess.Popen([os.getenv("SHELL")])
-    else:
-        process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
-    return process
-
-
 def csh_startup(location, grass_env_file):
     userhome = os.getenv("HOME")  # save original home
     home = location
@@ -1935,7 +1913,7 @@ def csh_startup(location, grass_env_file):
     f.close()
     writefile(tcshrc, readfile(cshrc))
 
-    process = start_shell()
+    process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
     os.environ["HOME"] = userhome
     return process
 
@@ -1944,7 +1922,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == "bash":
         # set bash history to record an unlimited command history
-        sh_history_limit = ""  # unlimited
+        sh_history_limit = "-1"  # unlimited
         os.environ["HISTSIZE"] = sh_history_limit
         os.environ["HISTFILESIZE"] = sh_history_limit
         sh_history = ".bash_history"
@@ -2037,21 +2015,6 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """.format(
             sh_history=sh_history
         )
-        # Ubuntu sudo creates a file .sudo_as_admin_successful and bash checks
-        # for this file in the home directory from /etc/bash.bashrc and prints a
-        # message if it's not detected. This can be suppressed with either
-        # creating the file ~/.sudo_as_admin_successful (it's always empty) or
-        # by creating a file ~/.hushlogin (also an empty file)
-        # Here we create the file in the Mapset directory if it exists in the
-        # user's home directory.
-        sudo_success_file = ".sudo_as_admin_successful"
-        if os.path.exists(os.path.join(userhome, sudo_success_file)):
-            try:
-                # Open with append so that if the file already exists there
-                # isn't any error.
-                fh = open(os.path.join(home, sudo_success_file), "a")
-            finally:
-                fh.close()
 
     # double curly brackets means single one for format function
     # setting LOCATION for backwards compatibility
@@ -2094,7 +2057,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
         for line in readfile(env_file).splitlines():
             # Bug related to OS X "SIP", see
             # https://trac.osgeo.org/grass/ticket/3462#comment:13
-            if MACOS or not line.startswith("export"):
+            if MACOSX or not line.startswith("export"):
                 f.write(line + "\n")
 
     f.write('export PATH="%s"\n' % os.getenv("PATH"))
@@ -2103,15 +2066,22 @@ PROMPT_COMMAND=grass_prompt\n""".format(
     f.write('trap "exit" TERM\n')
     f.close()
 
-    process = start_shell()
+    process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
     os.environ["HOME"] = userhome
     return process
 
 
 def default_startup(location, location_name):
     """Start shell making no assumptions about what is supported in PS1"""
-    os.environ["PS1"] = "GRASS > "
-    return start_shell()
+    if WINDOWS:
+        os.environ["PS1"] = "GRASS > "
+        # "$ETC/run" doesn't work at all???
+        process = subprocess.Popen([os.getenv("SHELL")])
+    else:
+        os.environ["PS1"] = "GRASS > "
+        process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
+
+    return process
 
 
 def done_message():
@@ -2123,21 +2093,17 @@ def done_message():
 
 
 def clean_temp():
-    """Clean mapset temporary directory
-
-    Simple wrapper around the library function avoiding the need to solve imports at
-    the top level. This can hopefully be avoided in the future.
-    """
-    from grass.script import setup as gsetup
-
-    gsetup.clean_temp()
+    message(_("Cleaning up temporary files..."))
+    nul = open(os.devnull, "w")
+    call([gpath("etc", "clean_temp")], stdout=nul)
+    nul.close()
 
 
-def clean_all(*, start_time):
+def clean_all():
     from grass.script import setup as gsetup
 
     # clean default sqlite db
-    gsetup.clean_default_db(modified_after=start_time)
+    gsetup.clean_default_db()
     # remove leftover temp files
     clean_temp()
     # save 'last used' GISRC after removing variables which shouldn't
@@ -2161,18 +2127,9 @@ def io_is_interactive():
 
 
 def print_params(params):
-    """Write compile flags and other configuration to stdout"""
+    """Write compile flags and other configuration to stderr"""
     if not params:
-        params = [
-            "arch",
-            "build",
-            "compiler",
-            "path",
-            "python_path",
-            "revision",
-            "version",
-            "date",
-        ]
+        params = ["arch", "build", "compiler", "path", "revision", "version", "date"]
 
     # check if we are dealing with parameters which require dev files
     dev_params = ["arch", "compiler", "build", "date"]
@@ -2188,8 +2145,6 @@ def print_params(params):
     for arg in params:
         if arg == "path":
             sys.stdout.write("%s\n" % GISBASE)
-        elif arg in ["python_path", "python-path"]:
-            sys.stdout.write("%s\n" % gpath("etc", "python"))
         elif arg == "arch":
             val = grep("ARCH", linesplat)
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
@@ -2389,8 +2344,8 @@ def classic_parser(argv, default_gui):
         params.batch_job = parsed_args.exec
     # Cases to execute immediatelly
     if parsed_args.version:
-        sys.stdout.write("GRASS GIS %s" % GRASS_VERSION)
-        sys.stdout.write("\n" + readfile(gpath("etc", "license")))
+        message("GRASS GIS %s" % GRASS_VERSION)
+        message("\n" + readfile(gpath("etc", "license")))
         sys.exit()
     if parsed_args.config is not None:
         # None if not provided, empty list if present without values.
@@ -2545,9 +2500,7 @@ def main():
             )
         create_initial_gisrc(gisrc)
 
-    if not params.batch_job and not params.exit_grass:
-        # Only for interactive sessions, not for 'one operation' sessions.
-        message(_("Starting GRASS GIS..."))
+    message(_("Starting GRASS GIS..."))
 
     # Ensure GUI is set
     if params.batch_job or params.exit_grass:
@@ -2572,7 +2525,8 @@ def main():
         from grass.grassdb.checks import can_start_in_mapset
 
         last_mapset_usable = can_start_in_mapset(
-            mapset_path=last_mapset_path, ignore_lock=params.force_gislock_removal
+            mapset_path=last_mapset_path,
+            ignore_lock=params.force_gislock_removal,
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
@@ -2671,8 +2625,6 @@ def main():
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
-    start_time = datetime.datetime.now(datetime.timezone.utc)
-
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
     atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
@@ -2692,12 +2644,12 @@ def main():
     # only non-error, interactive version continues from here
     if params.batch_job:
         returncode = run_batch_job(params.batch_job)
-        clean_all(start_time=start_time)
+        clean_all()
         sys.exit(returncode)
     elif params.exit_grass:
         # clean always at exit, cleans whatever is current mapset based on
         # the GISRC env variable
-        clean_all(start_time=start_time)
+        clean_all()
         sys.exit(0)
     else:
         if use_shell:
@@ -2752,7 +2704,7 @@ def main():
         close_gui()
 
         # here we are at the end of grass session
-        clean_all(start_time=start_time)
+        clean_all()
         mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
         if not params.tmp_location or (
             params.tmp_location and mapset_settings.gisdbase != os.environ["TMPDIR"]

@@ -6,7 +6,6 @@
 Classes:
  - menu::Menu
  - menu::SearchModuleWindow
- - menu::RecentFilesMenu
 
 (C) 2010-2013 by the GRASS Development Team
 
@@ -167,17 +166,17 @@ class SearchModuleWindow(wx.Panel):
             self, id=wx.ID_ANY, label=_("Adva&nced search...")
         )
         self._btnAdvancedSearch.SetToolTip(
-            _("Do advanced search using %s tool") % "g.search.module"
+            _("Do advanced search using %s module") % "g.search.module"
         )
         # tree
         self._tree = CTreeView(model=model, parent=self)
-        self._tree.SetToolTip(_("Double-click to run selected tool"))
+        self._tree.SetToolTip(_("Double-click to run selected module"))
 
         # buttons
         self._btnRun = Button(self, id=wx.ID_OK, label=_("&Run..."))
-        self._btnRun.SetToolTip(_("Run selected tool from the tree"))
+        self._btnRun.SetToolTip(_("Run selected module from the tree"))
         self._btnHelp = Button(self, id=wx.ID_ANY, label=_("H&elp"))
-        self._btnHelp.SetToolTip(_("Show manual for selected tool from the tree"))
+        self._btnHelp.SetToolTip(_("Show manual for selected module from the tree"))
 
         # bindings
         self._search.Bind(wx.EVT_TEXT, lambda evt: self.Filter(evt.GetString()))
@@ -310,20 +309,19 @@ class RecentFilesMenu:
 
     Signal FileRequested is emitted if you request file from recent
     files menu
-
     :param str path: file path you requested
     :param bool file_exists: file path exists or not
     :param obj file_history: file history obj instance
 
 
     :param str app_name: required for group name of recent files path
-                         written into the .recent_files file
+    written into the .recent_files file
     :param obj parent_menu: menu widget instance where be inserted
-                            recent files menu on the specified position
+    recent files menu on the specified position
     :param int pos: position (index) where insert recent files menu in
-                    the parent menu
+    the parent menu
     :param int history_len: the maximum number of file paths written
-                            into the .recent_files file to app name group
+    into the .recent_files file to app name group
     """
 
     recent_files = ".recent_files"

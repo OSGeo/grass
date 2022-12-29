@@ -537,22 +537,25 @@ msgid "Download sample location to current GRASS database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:49
+#, fuzzy
 msgid "Import raster data  [r.import]"
-msgstr ""
+msgstr "Εισαγωγή raster δεδομένων"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:52
 msgid "Import vector data  [v.import]"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:55
+#, fuzzy
 msgid "Select another import option"
-msgstr ""
+msgstr "Επιλογή μεθόδους παρεμβολής:"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:72
 #: ../gui/wxpython/modules/extensions.py:74
 #: ../gui/wxpython/gui_core/menu.py:152
+#, fuzzy
 msgid "Search"
-msgstr ""
+msgstr "Πρόσθετο Εύρεσης"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:91
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
@@ -618,8 +621,9 @@ msgid "Overwrite?"
 msgstr "Αντικατάσταση;"
 
 #: ../gui/wxpython/datacatalog/tree.py:224
+#, fuzzy
 msgid "name unknown"
-msgstr ""
+msgstr "άγνωστο"
 
 #: ../gui/wxpython/datacatalog/tree.py:226
 #, python-brace-format
@@ -642,9 +646,9 @@ msgid "{name}  (owner: {owner})"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:237
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{name}"
-msgstr ""
+msgstr "Μετονομασία"
 
 #: ../gui/wxpython/datacatalog/tree.py:791
 #, python-brace-format
@@ -698,8 +702,9 @@ msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1084
+#, fuzzy
 msgid "Cannot rename location"
-msgstr ""
+msgstr "Μετονομασία επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/datacatalog/tree.py:1093
 #, python-brace-format
@@ -835,32 +840,39 @@ msgid "&Switch mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
+#, fuzzy
 msgid "&Delete mapset"
-msgstr ""
+msgstr "Διαγραγή επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
+#, fuzzy
 msgid "&Rename mapset"
-msgstr ""
+msgstr "Μετεονομασ&ία"
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
+#, fuzzy
 msgid "&Create mapset"
-msgstr ""
+msgstr "Δημιουργ&ία πίνακα"
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
+#, fuzzy
 msgid "&Delete location"
-msgstr ""
+msgstr "Διαγραφή επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
+#, fuzzy
 msgid "&Rename location"
-msgstr ""
+msgstr "Μετονομασία επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
+#, fuzzy
 msgid "&Create new location"
-msgstr ""
+msgstr "Αλλαγή στην νέα Περιοχή;"
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
+#, fuzzy
 msgid "&Download sample location"
-msgstr ""
+msgstr "Μετονομασία επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
@@ -871,12 +883,14 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
+#, fuzzy
 msgid "&Delete locations"
-msgstr ""
+msgstr "Διαγραφή επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
+#, fuzzy
 msgid "&Delete mapsets"
-msgstr ""
+msgstr "Διαγραγή επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -892,12 +906,14 @@ msgid "Choose GRASS data directory:"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:112
+#, fuzzy
 msgid "Do you want to create a location?"
-msgstr ""
+msgstr "Θέλετε να αποθηκευσετε τις αλλαγές στο μοντέλο;"
 
 #: ../gui/wxpython/datacatalog/catalog.py:115
+#, fuzzy
 msgid "Create location?"
-msgstr ""
+msgstr "Επιλογές δημιουργίας:"
 
 #: ../gui/wxpython/datacatalog/catalog.py:199
 msgid "Link external raster data  [r.external]"
@@ -937,12 +953,14 @@ msgid "Link external data"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:242
+#, fuzzy
 msgid "More options..."
-msgstr ""
+msgstr "Επιλογές δημιουργίας:"
 
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
+#, fuzzy
 msgid "Data Catalog"
-msgstr ""
+msgstr "Μήκος δεδομένων"
 
 #: ../gui/wxpython/datacatalog/frame.py:47
 msgid "Close GRASS GIS Data Catalog"
@@ -1452,11 +1470,11 @@ msgid "circle"
 msgstr ""
 
 #: ../gui/wxpython/core/settings.py:1054
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Unable to read settings file <{path}>:\n"
 "{err}"
-msgstr ""
+msgstr "Αδυναμία ανάγνωσης αρχείου ρυθμίσεων:  <%s>\n"
 
 #: ../gui/wxpython/core/settings.py:1069
 #, python-format
@@ -1963,12 +1981,14 @@ msgid "Set spatial extent in 2D view"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:565
+#, fuzzy
 msgid "Use saved region:"
-msgstr ""
+msgstr "Χρησιμοποιήσε καθορισμένη προβολή"
 
 #: ../gui/wxpython/animation/dialogs.py:575
+#, fuzzy
 msgid "Animate region change"
-msgstr ""
+msgstr "Αναίρεση προηγούμενων μεταβολών"
 
 #: ../gui/wxpython/animation/dialogs.py:581
 msgid "End region:"
@@ -2826,8 +2846,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/timeline/g.gui.timeline.py:63
+#, fuzzy
 msgid "Timeline Tool - GRASS GIS"
-msgstr ""
+msgstr "Καλώς ορίσατε στο GRASS GIS"
 
 #: ../gui/wxpython/timeline/frame.py:38
 #, python-brace-format
@@ -3401,8 +3422,9 @@ msgid "Yes"
 msgstr "Ναί"
 
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:55
+#, fuzzy
 msgid "Graphical Modeler - GRASS GIS"
-msgstr ""
+msgstr "Κλείσιμο Graphical Manager"
 
 #: ../gui/wxpython/gmodeler/frame.py:78 ../gui/wxpython/lmgr/toolbars.py:155
 #: ../gui/wxpython/gui_core/forms.py:1458
@@ -3773,8 +3795,9 @@ msgid "Define new GRASS Location"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:186
+#, fuzzy
 msgid "Change"
-msgstr ""
+msgstr "όριο:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:202
 #: ../gui/wxpython/gui_core/forms.py:1142
@@ -3782,8 +3805,9 @@ msgid "This option is required"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
+#, fuzzy
 msgid "(optional)"
-msgstr ""
+msgstr "Προερετικό"
 
 #: ../gui/wxpython/location_wizard/wizard.py:216
 msgid "Name of location directory in GIS Data Directory"
@@ -3943,12 +3967,14 @@ msgid "Select georeferenced file"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1450
+#, fuzzy
 msgid "Enter WKT parameters string:"
-msgstr ""
+msgstr "Εισάγετε παραμέτρους για '"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1498
+#, fuzzy
 msgid "Select CRS from a list"
-msgstr ""
+msgstr "Επιλοφή γραμματοσηράς"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1514
 msgid "Filter by EPSG code or description:"
@@ -4677,8 +4703,9 @@ msgid "Coordinates can be obtained for example by right-clicking on Map Display.
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:209 ../gui/wxpython/tplot/frame.py:264
+#, fuzzy
 msgid "Show simple linear regression line"
-msgstr ""
+msgstr "Γραμμική συσχέτιση"
 
 #: ../gui/wxpython/tplot/frame.py:226
 msgid "STRDS"
@@ -4836,8 +4863,9 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:168
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
+#, fuzzy
 msgid "Temporal Plot Tool - GRASS GIS"
-msgstr ""
+msgstr "Καλώς ορίσατε στο GRASS GIS"
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -6239,12 +6267,14 @@ msgid "Raster Digitizer - GRASS GIS"
 msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:158
+#, fuzzy
 msgid "Raster map <{}> not found in current mapset."
-msgstr ""
+msgstr "Ο 3D raster χάρτης <%s> δεν βρέθηκε"
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:174
+#, fuzzy
 msgid "Base raster map <{}> not found in current mapset."
-msgstr ""
+msgstr "Ο 3D raster χάρτης <%s> δεν βρέθηκε"
 
 #: ../gui/wxpython/rdigit/toolbars.py:27
 msgid "Digitize area"
@@ -6476,8 +6506,9 @@ msgid "Show 3D view mode manual"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:94
+#, fuzzy
 msgid "GRASS GIS"
-msgstr ""
+msgstr "Σχετικα με το GRASS GIS"
 
 #: ../gui/wxpython/lmgr/frame.py:129
 msgid "There were some issues when loading menu or Modules tab:"
@@ -6761,9 +6792,9 @@ msgid "Unable to start Temporal Plot Tool."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2083
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Map Display {number}"
-msgstr ""
+msgstr "Εμφάνηση γεωμετρίας"
 
 #: ../gui/wxpython/lmgr/frame.py:2179
 msgid "Add selected map layers into layer tree"
@@ -7370,8 +7401,9 @@ msgid "Reproject selected layers"
 msgstr ""
 
 #: ../gui/wxpython/modules/histogram.py:296
+#, fuzzy
 msgid "Histogram Tool  [d.histogram]"
-msgstr ""
+msgstr "Δημιουργεία ιστογράματος με το d.histogram"
 
 #: ../gui/wxpython/modules/histogram.py:436
 msgid "Select font for histogram text"
@@ -7810,8 +7842,9 @@ msgid "Thematic mapping for vector map in 3D view"
 msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
+#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr ""
+msgstr "Raster map calculator"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -8563,8 +8596,9 @@ msgid "WARNING"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:114
+#, fuzzy
 msgid "Setup for r.li modules"
-msgstr ""
+msgstr "Πρόσθετο Εύρεσης"
 
 #: ../gui/wxpython/rlisetup/frame.py:131
 msgid "Available sampling area configuration files"
@@ -8720,24 +8754,27 @@ msgid "Remove text"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:203
+#, fuzzy
 msgid "Text properties"
-msgstr ""
+msgstr "Ιδιότητες Δεδομένου"
 
 #: ../gui/wxpython/mapwin/decorations.py:226
 msgid "Remove scale bar"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:227
+#, fuzzy
 msgid "Scale bar properties"
-msgstr ""
+msgstr "Ιδιότητες Δεδομένου"
 
 #: ../gui/wxpython/mapwin/decorations.py:239
 msgid "Remove north arrow"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:240
+#, fuzzy
 msgid "North arrow properties"
-msgstr ""
+msgstr "Ιδιότητες Δεδομένου"
 
 #: ../gui/wxpython/mapwin/decorations.py:252
 #: ../gui/wxpython/mapwin/decorations.py:265
@@ -8745,12 +8782,14 @@ msgid "Remove legend"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:253
+#, fuzzy
 msgid "Vector legend properties"
-msgstr ""
+msgstr "Ιδιότητες σχέσης"
 
 #: ../gui/wxpython/mapwin/decorations.py:266
+#, fuzzy
 msgid "Raster legend properties"
-msgstr ""
+msgstr "Ιδιότητες σχέσης"
 
 #: ../gui/wxpython/mapwin/buffered.py:259
 msgid "Copy coordinates to clipboard"
@@ -8928,8 +8967,9 @@ msgid "Statistics for Profile(s)"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:43
+#, fuzzy
 msgid "Histogram Tool"
-msgstr ""
+msgstr "Ιστογραμμα"
 
 #: ../gui/wxpython/wxplot/histogram.py:51
 msgid "Histogram of"
@@ -13853,8 +13893,9 @@ msgid "Abort download"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:80
+#, fuzzy
 msgid "Invalid mapset name"
-msgstr ""
+msgstr "Άκυρο:"
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -13871,8 +13912,9 @@ msgid "Name for the new mapset:"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:186
+#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr ""
+msgstr "Αδυναμία διαγραφής Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:212
 #, fuzzy
@@ -13898,23 +13940,26 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:269
+#, fuzzy
 msgid "Unable to rename selected mapset"
-msgstr ""
+msgstr "Αδυναμία διαγραφής Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:280
 #: ../gui/wxpython/startup/guiutils.py:334
+#, fuzzy
 msgid ""
 "Current name: {}\n"
 "\n"
 "Enter new name:"
-msgstr ""
+msgstr "Εισαγωγή νέου ονόματος:"
 
 #: ../gui/wxpython/startup/guiutils.py:294
+#, fuzzy
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "{}"
-msgstr ""
+msgstr "Αδυναμία διαγραφής Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:319
 #, python-brace-format
@@ -13927,15 +13972,17 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:323
+#, fuzzy
 msgid "Unable to rename selected location"
-msgstr ""
+msgstr "Αδυναμία διαγραφής επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:347
+#, fuzzy
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "{}"
-msgstr ""
+msgstr "Αδυναμία διαγραφής επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:410
 #, python-brace-format
@@ -13948,8 +13995,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
+#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr ""
+msgstr "Αδυναμία διαγραφής Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:430
 #, python-brace-format
@@ -13962,12 +14010,14 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:435
+#, fuzzy
 msgid "Delete selected mapsets"
-msgstr ""
+msgstr "Διαγραγή επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:448
+#, fuzzy
 msgid "Error when deleting mapsets"
-msgstr ""
+msgstr "Σφάλμα κατα την ανάγνωση του αρχείου '%s'."
 
 #: ../gui/wxpython/startup/guiutils.py:450
 #, python-brace-format
@@ -13990,8 +14040,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:499
+#, fuzzy
 msgid "Unable to delete selected locations"
-msgstr ""
+msgstr "Αδυναμία διαγραφής επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:515
 #, python-brace-format
@@ -14004,12 +14055,14 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:520
+#, fuzzy
 msgid "Delete selected locations"
-msgstr ""
+msgstr "Διαγραφή επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:533
+#, fuzzy
 msgid "Error when deleting locations"
-msgstr ""
+msgstr "Σφάλμα κατα την ανάγνωση του αρχείου '%s'."
 
 #: ../gui/wxpython/startup/guiutils.py:535
 #, python-brace-format
@@ -14032,8 +14085,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:572
+#, fuzzy
 msgid "Unable to delete selected GRASS database"
-msgstr ""
+msgstr "Αδυναμία διαγραφής επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:580
 #, python-brace-format
@@ -14046,8 +14100,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
+#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr ""
+msgstr "Διαγραγή επιλεγμένης Τοποθεσίας"
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14079,8 +14134,9 @@ msgid "Mapset is in use"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:653
+#, fuzzy
 msgid "Error when removing lock file"
-msgstr ""
+msgstr "Σφάλμα κατα την ανάγνωση του αρχείου '%s'."
 
 #: ../gui/wxpython/startup/guiutils.py:654
 #, python-brace-format
@@ -14105,12 +14161,14 @@ msgid "Data file <%(name)s> imported successfully. The location's default region
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:717
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Current GRASS database is <%(dbase)s>.\n"
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"Η τρέχουσα Τοποθεσία ειναι <%(loc)s>.\n"
+"Η τρέχουσα Συλλογή Χαρτών είναι η <%(mapset)s>."
 
 #: ../gui/wxpython/startup/guiutils.py:743
 #, python-format
@@ -14245,8 +14303,9 @@ msgid "Table"
 msgstr "Πίνακας"
 
 #: ../gui/wxpython/dbmgr/base.py:1154 ../gui/wxpython/dbmgr/base.py:2277
+#, fuzzy
 msgid " (read-only)"
-msgstr ""
+msgstr "(μονο για ανάγνωση)"
 
 #: ../gui/wxpython/dbmgr/base.py:1168
 msgid "SQL Query"
@@ -14714,13 +14773,14 @@ msgid "Dbf driver does not support usage of SQL functions."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:78
+#, fuzzy
 msgid "Attribute Table Manager"
-msgstr ""
+msgstr "Εφαρμογή δήλωσης SQL και κλείσιμο του διαλόγου"
 
 #: ../gui/wxpython/dbmgr/manager.py:81
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{document} (read-only)"
-msgstr ""
+msgstr "(μονο για ανάγνωση)"
 
 #: ../gui/wxpython/dbmgr/manager.py:100
 #, python-format
@@ -16137,16 +16197,16 @@ msgid "EPSG code:"
 msgstr "Κωδικός EPSG"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "PROJ string (required):"
-msgstr "PROJ ορισμός (απαιτείται)"
+msgid "Proj.4 string (required):"
+msgstr "Proj.4 ορισμός (απαιτείται)"
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
 msgstr "Αρχείο EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
-msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
-msgstr "Φόρτωση κωδικών EPSG (αναμείνατε), εισάγετε κωδικό EPSG ή απευθείας ορισμό PROJ "
+msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
+msgstr "Φόρτωση κωδικών EPSG (αναμείνατε), εισάγετε κωδικό EPSG ή απευθείας ορισμό Proj.4 "
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"
@@ -16451,8 +16511,9 @@ msgid "Template:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2000
+#, fuzzy
 msgid "SQL Query Utility"
-msgstr ""
+msgstr "ερώτηση SQL"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2016
 msgid " SQL statement "
@@ -16475,8 +16536,9 @@ msgid "Do you want to quit GRASS GIS including shell or just close the GUI?"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2369
+#, fuzzy
 msgid "Do you want to quit GRASS GIS?"
-msgstr ""
+msgstr "Θέλετε να αποθηκευσετε τις αλλαγές στο μοντέλο;"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2448
 msgid "Select font:"
@@ -16669,8 +16731,9 @@ msgid "Documentation for %s is now open in the web browser"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:356
+#, fuzzy
 msgid "&Recent Files"
-msgstr ""
+msgstr "Αρχεία κειμένου"
 
 #: ../gui/wxpython/icons/icon.py:39
 #, python-format
@@ -17166,8 +17229,9 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:67
+#, fuzzy
 msgid "Vector Digitizer - GRASS GIS"
-msgstr ""
+msgstr "Εγχειρίδιο διανυσματικού ψηφιοποιητή"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:83
 #, python-format
@@ -18704,8 +18768,9 @@ msgid "labels: "
 msgstr ""
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:51
+#, fuzzy
 msgid "Cartographic Composer - GRASS GIS"
-msgstr ""
+msgstr "Χαρτογραφική Σύνθεση"
 
 #, fuzzy
 msgid "The copied layer needs to be reprojected:"
@@ -18823,35 +18888,35 @@ msgstr "3D μάσκα"
 msgid "Volume"
 msgstr "Όγκος"
 
-msgid "Choose projection"
-msgstr "Επιλογή προβολής"
+#~ msgid "Choose projection"
+#~ msgstr "Επιλογή προβολής"
 
-msgid "Choose EPSG Code"
-msgstr "Επιλογή EPGS κωδικού:"
+#~ msgid "Choose EPSG Code"
+#~ msgstr "Επιλογή EPGS κωδικού:"
 
-msgid "Choose EPSG codes file"
-msgstr "Επιλογή αρχείου κοδικών EPSG "
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "Επιλογή αρχείου κοδικών EPSG "
 
-msgid "Do you want to set the default region extents and resolution now?"
-msgstr "Θέλετε να θέσετε τα προεπιλεγμένα όρια και ανάλυση της Τοποθεσίας;"
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr "Θέλετε να θέσετε τα προεπιλεγμένα όρια και ανάλυση της Τοποθεσίας;"
 
-msgid "Location <%s> created"
-msgstr "Η Τοποθεσία <%s> δημιουργήθηκε"
+#~ msgid "Location <%s> created"
+#~ msgstr "Η Τοποθεσία <%s> δημιουργήθηκε"
 
-msgid "Maximum number of animations is %s."
-msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %s. "
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %s. "
 
-msgid ""
-"Location <%s> created.\n"
-"\n"
-"Do you want to switch to the new location?"
-msgstr ""
-"Η Τοποθεσία <%s> δημιουργήθηκε.\n"
-"\n"
-"Θέλετε να γίνει αλλαγή στην νέα Τοποθεσία;"
+#~ msgid ""
+#~ "Location <%s> created.\n"
+#~ "\n"
+#~ "Do you want to switch to the new location?"
+#~ msgstr ""
+#~ "Η Τοποθεσία <%s> δημιουργήθηκε.\n"
+#~ "\n"
+#~ "Θέλετε να γίνει αλλαγή στην νέα Τοποθεσία;"
 
-msgid "Switch to new location?"
-msgstr "Αλλαγή στην νέα Περιοχή;"
+#~ msgid "Switch to new location?"
+#~ msgstr "Αλλαγή στην νέα Περιοχή;"
 
-msgid " (readonly)"
-msgstr "(μονο για ανάγνωση)"
+#~ msgid " (readonly)"
+#~ msgstr "(μονο για ανάγνωση)"

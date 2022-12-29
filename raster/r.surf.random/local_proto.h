@@ -1,2 +1,2 @@
 /* randsurf.c */
-int randsurf(char *, double, double, int);
+int randsurf(char *, int, int, int);

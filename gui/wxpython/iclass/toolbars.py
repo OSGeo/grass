@@ -100,66 +100,18 @@ class IClassMapToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                (
-                    ("displaymap", icons["display"].label),
-                    icons["display"],
-                    self.parent.OnDraw,
-                ),
-                (
-                    ("rendermap", icons["render"].label),
-                    icons["render"],
-                    self.parent.OnRender,
-                ),
-                (
-                    ("erase", icons["erase"].label),
-                    icons["erase"],
-                    self.parent.OnErase,
-                ),
+                ("displaymap", icons["display"], self.parent.OnDraw),
+                ("rendermap", icons["render"], self.parent.OnRender),
+                ("erase", icons["erase"], self.parent.OnErase),
                 (None,),
-                (
-                    ("pan", icons["pan"].label),
-                    icons["pan"],
-                    self.parent.OnPan,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("zoomIn", icons["zoomIn"].label),
-                    icons["zoomIn"],
-                    self.parent.OnZoomIn,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("zoomOut", icons["zoomOut"].label),
-                    icons["zoomOut"],
-                    self.parent.OnZoomOut,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("zoomRegion", icons["zoomRegion"].label),
-                    icons["zoomRegion"],
-                    self.parent.OnZoomToWind,
-                ),
-                (
-                    ("zoomMenu", icons["zoomMenu"].label),
-                    icons["zoomMenu"],
-                    self.parent.OnZoomMenu,
-                ),
+                ("pan", icons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
+                ("zoomIn", icons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
+                ("zoomOut", icons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
+                ("zoomRegion", icons["zoomRegion"], self.parent.OnZoomToWind),
+                ("zoomMenu", icons["zoomMenu"], self.parent.OnZoomMenu),
                 (None,),
-                (
-                    ("zoomBack", icons["zoomBack"].label),
-                    icons["zoomBack"],
-                    self.parent.OnZoomBack,
-                ),
-                (
-                    ("zoomToMap", icons["zoomExtent"].label),
-                    icons["zoomExtent"],
-                    self.parent.OnZoomToMap,
-                ),
-                (
-                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
-                    BaseIcons["mapDispSettings"],
-                    self.parent.OnMapDisplayProperties,
-                ),
+                ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
+                ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
             )
         )
 
@@ -207,38 +159,18 @@ class IClassToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("selectGroup", icons["selectGroup"].label),
+                    "selectGroup",
                     icons["selectGroup"],
                     lambda event: self.parent.AddBands(),
                 ),
                 (None,),
-                (
-                    ("classManager", icons["classManager"].label),
-                    icons["classManager"],
-                    self.parent.OnCategoryManager,
-                ),
+                ("classManager", icons["classManager"], self.parent.OnCategoryManager),
                 (None,),
-                (
-                    ("runAnalysis", icons["run"].label),
-                    icons["run"],
-                    self.parent.OnRunAnalysis,
-                ),
+                ("runAnalysis", icons["run"], self.parent.OnRunAnalysis),
                 (None,),
-                (
-                    ("importAreas", icons["importAreas"].label),
-                    icons["importAreas"],
-                    self.parent.OnImportAreas,
-                ),
-                (
-                    ("exportAreas", icons["exportAreas"].label),
-                    icons["exportAreas"],
-                    self.parent.OnExportAreas,
-                ),
-                (
-                    ("sigFile", icons["sigFile"].label),
-                    icons["sigFile"],
-                    self.parent.OnSaveSigFile,
-                ),
+                ("importAreas", icons["importAreas"], self.parent.OnImportAreas),
+                ("exportAreas", icons["exportAreas"], self.parent.OnExportAreas),
+                ("sigFile", icons["sigFile"], self.parent.OnSaveSigFile),
             )
         )
 
@@ -371,26 +303,10 @@ class IClassMapManagerToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                (
-                    ("addRast", BaseIcons["addRast"].label),
-                    BaseIcons["addRast"],
-                    self.OnAddRast,
-                ),
-                (
-                    ("addRgb", iClassIcons["addRgb"].label),
-                    iClassIcons["addRgb"],
-                    self.OnAddRGB,
-                ),
-                (
-                    ("delRast", iClassIcons["delCmd"].label),
-                    iClassIcons["delCmd"],
-                    self.OnDelRast,
-                ),
-                (
-                    ("setOpacity", iClassIcons["opacity"].label),
-                    iClassIcons["opacity"],
-                    self.OnSetOpacity,
-                ),
+                ("addRast", BaseIcons["addRast"], self.OnAddRast),
+                ("addRgb", iClassIcons["addRgb"], self.OnAddRGB),
+                ("delRast", iClassIcons["delCmd"], self.OnDelRast),
+                ("setOpacity", iClassIcons["opacity"], self.OnSetOpacity),
             )
         )
 
@@ -446,15 +362,7 @@ class IClassMiscToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                (
-                    ("help", icons["help"].label),
-                    icons["help"],
-                    self.parent.OnHelp,
-                ),
-                (
-                    ("quit", icons["quit"].label),
-                    icons["quit"],
-                    self.parent.OnCloseWindow,
-                ),
+                ("help", icons["help"], self.parent.OnHelp),
+                ("quit", icons["quit"], self.parent.OnCloseWindow),
             )
         )

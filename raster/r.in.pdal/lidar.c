@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.in.pdal
@@ -11,6 +12,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 
 #include "lidar.h"
 
@@ -36,11 +38,16 @@ struct class_table class_val[] = {
     {10, "Reserved for ASPRS Definition"},
     {11, "Reserved for ASPRS Definition"},
     {12, "Overlap Points"},
-    {13 /* 13 - 31 */, "Reserved for ASPRS Definition"},
-    {0, 0}};
+    {13 /* 13 - 31 */ , "Reserved for ASPRS Definition"},
+    {0, 0}
+};
 
 struct class_table class_type[] = {
-    {5, "Synthetic"}, {6, "Key-point"}, {7, "Withheld"}, {0, 0}};
+    {5, "Synthetic"},
+    {6, "Key-point"},
+    {7, "Withheld"},
+    {0, 0}
+};
 
 int return_to_cat(int return_n, int n_returns)
 {

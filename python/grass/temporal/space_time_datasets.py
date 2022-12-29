@@ -236,9 +236,12 @@ class RasterDataset(AbstractMapDataset):
         array back into grass.
         """
 
+        a = garray.array()
+
         if self.map_exists():
-            return garray.array(self.get_map_id())
-        return garray.array()
+            a.read(self.get_map_id())
+
+        return a
 
     def reset(self, ident):
         """Reset the internal structure and set the identifier"""
@@ -343,42 +346,42 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def read_semantic_label_from_grass(self):
-        """Read the semantic label of this map from the map metadata
+    def read_band_reference_from_grass(self):
+        """Read the band identifier of this map from the map metadata
         in the GRASS file system based spatial database and
-        set the internal semantic label that should be insert/updated
+        set the internal band identifier that should be insert/updated
         in the temporal database.
 
-        :return: True if success, False if semantic labels could not be
+        :return: True if success, False if band references could not be
                  read (due to an error or because not being present)
         """
 
-        semantic_label = self.ciface.read_raster_semantic_label(
+        band_ref = self.ciface.read_raster_band_reference(
             self.get_name(), self.get_mapset()
         )
 
-        if not semantic_label:
+        if not band_ref:
             return False
 
-        self.metadata.set_semantic_label(semantic_label)
+        self.metadata.set_band_reference(band_ref)
 
         return True
 
-    def write_semantic_label_to_grass(self):
-        """Write the semantic label of this map into the map metadata in
+    def write_band_reference_to_grass(self):
+        """Write the band identifier of this map into the map metadata in
         the GRASS file system based spatial database.
 
         Internally the libgis API functions are used for writing
 
         :return: True if success, False on error
         """
-        check = self.ciface.write_raster_semantic_label(
-            self.get_name(), self.get_mapset(), self.metadata.get_semantic_label()
+        check = self.ciface.write_raster_band_reference(
+            self.get_name(), self.get_mapset(), self.metadata.get_band_reference()
         )
         if check == -1:
             self.msgr.error(
                 _(
-                    "Unable to write semantic label for raster map <%s>"
+                    "Unable to write band identifier for raster map <%s>"
                     % (self.get_name())
                 )
             )
@@ -437,29 +440,29 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_rows(rows)
             self.metadata.set_number_of_cells(ncells)
 
-            # Fill semantic label if defined
-            semantic_label = self.ciface.read_raster_semantic_label(
+            # Fill band reference if defined
+            band_ref = self.ciface.read_raster_band_reference(
                 self.get_name(), self.get_mapset()
             )
-            if semantic_label:
-                self.metadata.set_semantic_label(semantic_label)
+            if band_ref:
+                self.metadata.set_band_reference(band_ref)
 
             return True
 
         return False
 
-    def set_semantic_label(self, semantic_label):
-        """Set semantic label identifier
+    def set_band_reference(self, band_reference):
+        """Set band reference identifier
 
-        Metadata is updated in order to propagate semantic label into
+        Metadata is updated in order to propagate band identifier into
         temporal DB.
 
-        File-based semantic label stored in GRASS data base.
+        File-based band identifier stored in GRASS data base.
 
-        :param str semantic_label: semantic label (eg. S2_1)
+        :param str band_reference: band reference identifier (eg. S2_1)
         """
-        self.metadata.set_semantic_label(semantic_label)
-        self.write_semantic_label_to_grass()
+        self.metadata.set_band_reference(band_reference)
+        self.write_band_reference_to_grass()
 
 
 ###############################################################################
@@ -659,9 +662,12 @@ class Raster3DDataset(AbstractMapDataset):
         array back into grass.
         """
 
+        a = garray.array3d()
+
         if self.map_exists():
-            return garray.array3d(self.get_map_id())
-        return garray.array3d()
+            a.read(self.get_map_id())
+
+        return a
 
     def reset(self, ident):
         """Reset the internal structure and set the identifier"""
@@ -1190,12 +1196,12 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-    def set_semantic_label(self, semantic_label):
-        """Set semantic label
+    def set_band_reference(self, band_reference):
+        """Set band reference identifier
 
-        :param str semantic_label: semantic label (eg. S2_1)
+        :param str band_reference: band reference identifier (eg. S2_1)
         """
-        self.semantic_label = semantic_label
+        self.band_reference = band_reference
 
     def is_stds(self):
         """Return True if this class is a space time dataset

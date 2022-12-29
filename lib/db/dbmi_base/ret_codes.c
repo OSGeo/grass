@@ -1,28 +1,28 @@
 /*!
-   \file lib/db/dbmi_base/ret_codes.c
+  \file lib/db/dbmi_base/ret_codes.c
+  
+  \brief DBMI Library (base) - return codes (internal use only)
 
-   \brief DBMI Library (base) - return codes (internal use only)
-
-   \todo Are we as restrictive here as for vector names?
-
-   (C) 1999-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
-
-   \author Joel Jones (CERL/UIUC), Radim Blazek
-   \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
- */
+  \todo Are we as restrictive here as for vector names?
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
 
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \brief Send success code
+  \brief Send success code
 
-   \return DB_OK
- */
+  \return DB_OK
+*/
 int db__send_success()
 {
     DB_SEND_INT(DB_OK);
@@ -30,10 +30,10 @@ int db__send_success()
 }
 
 /*!
-   \brief Send failure code
+  \brief Send failure code
 
-   \return DB_OK
- */
+  \return DB_OK
+*/
 int db__send_failure()
 {
     DB_SEND_INT(DB_FAILED);
@@ -42,12 +42,12 @@ int db__send_failure()
 }
 
 /*!
-   \brief Receive return code
+  \brief Receive return code
+  
+  \param[out] ret_code return code
 
-   \param[out] ret_code return code
-
-   \return DB_OK on success
- */
+  \return DB_OK on success
+*/
 int db__recv_return_code(int *ret_code)
 {
     dbString err_msg;
@@ -57,12 +57,12 @@ int db__recv_return_code(int *ret_code)
 
     /* if OK, we're done here */
     if (*ret_code == DB_OK)
-        return DB_OK;
+	return DB_OK;
 
     /* should be DB_FAILED */
     if (*ret_code != DB_FAILED) {
-        db_protocol_error();
-        return DB_PROTOCOL_ERR;
+	db_protocol_error();
+	return DB_PROTOCOL_ERR;
     }
     /* get error message from driver */
     db_init_string(&err_msg);

@@ -1,3 +1,4 @@
+
 /***************************************************************/
 /*                                                             */
 /*       stash.h     in    ~/src/Gcost                         */
@@ -14,12 +15,13 @@
 
 #include <stdio.h>
 
-#define CUM_COST_LAYER 1
-#define COST_LAYER     2
-#define START_PT       3
-#define MOVE_DIR_LAYER 4
+#define      CUM_COST_LAYER        1
+#define      COST_LAYER            2
+#define      START_PT              3
+#define      MOVE_DIR_LAYER        4
 
-struct start_pt {
+struct start_pt
+{
     int row;
     int col;
     int value;

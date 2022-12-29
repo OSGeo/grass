@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton <michael.barton@asu.edu>
 @author Vaclav Petras <wenzeslaus gmail.com> (copy&paste customization)
-@author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
 import os
@@ -86,7 +85,7 @@ class GPrompt(object):
                     env["GISDBASE"],
                     env["LOCATION_NAME"],
                     env["MAPSET"],
-                    ".wxgui_history",
+                    ".bash_history",
                 ),
                 encoding="utf-8",
                 mode="r",

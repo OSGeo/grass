@@ -4,9 +4,7 @@
 @brief Map Swipe Frame
 
 Classes:
- - frame::SwipeMapPanel
- - frame::SwipeMapDisplay
- - frame::MapSplitter
+ - dialogs::SwipeMapDialog
 
 (C) 2012 by the GRASS Development Team
 
@@ -21,15 +19,14 @@ import wx
 
 import grass.script as grass
 
-from gui_core.mapdisp import DoubleMapPanel, FrameMixin
+from gui_core.mapdisp import DoubleMapFrame
 from gui_core.dialogs import GetImageHandlers
-from gui_core.wrap import Slider
+from mapwin.base import MapWindowProperties
 from core.render import Map
 from mapdisp import statusbar as sb
 from core.debug import Debug
 from core.gcmd import GError, GMessage
 from core.layerlist import LayerListToRendererConverter
-from core import globalvar
 from gui_core.query import QueryDialog, PrepareQueryResults
 
 from mapswipe.toolbars import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
@@ -37,11 +34,11 @@ from mapswipe.mapwindow import SwipeBufferedWindow
 from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
 
 
-class SwipeMapPanel(DoubleMapPanel):
+class SwipeMapFrame(DoubleMapFrame):
     def __init__(
         self, parent=None, giface=None, title=_("Map Swipe"), name="swipe", **kwargs
     ):
-        DoubleMapPanel.__init__(
+        DoubleMapFrame.__init__(
             self,
             parent=parent,
             title=title,
@@ -50,7 +47,7 @@ class SwipeMapPanel(DoubleMapPanel):
             secondMap=Map(),
             **kwargs,
         )
-        Debug.msg(1, "SwipeMapPanel.__init__()")
+        Debug.msg(1, "SwipeMapFrame.__init__()")
         #
         # Add toolbars
         #
@@ -64,9 +61,11 @@ class SwipeMapPanel(DoubleMapPanel):
         #
         self.splitter = MapSplitter(parent=self, id=wx.ID_ANY)
 
-        self.sliderH = Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
-        self.sliderV = Slider(self, id=wx.ID_ANY, style=wx.SL_VERTICAL)
+        self.sliderH = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
+        self.sliderV = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_VERTICAL)
 
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
         self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
         self.firstMapWindow = SwipeBufferedWindow(
             parent=self.splitter,
@@ -99,9 +98,13 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
+            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
@@ -116,6 +119,7 @@ class SwipeMapPanel(DoubleMapPanel):
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         self.SetSize((800, 600))
 
@@ -152,14 +156,14 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def ActivateFirstMap(self, event=None):
         """Switch tracking direction"""
-        super(SwipeMapPanel, self).ActivateFirstMap(event)
+        super(SwipeMapFrame, self).ActivateFirstMap(event)
 
         self.firstMapWindow.ClearLines()
         self.firstMapWindow.Refresh()
 
     def ActivateSecondMap(self, event=None):
         """Switch tracking direction"""
-        super(SwipeMapPanel, self).ActivateSecondMap(event)
+        super(SwipeMapFrame, self).ActivateSecondMap(event)
 
         self.secondMapWindow.ClearLines()
         self.secondMapWindow.Refresh()
@@ -189,7 +193,7 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def OnSliderPositionChanging(self, event):
         """Slider changes its position, sash must be moved too."""
-        Debug.msg(5, "SwipeMapPanel.OnSliderPositionChanging()")
+        Debug.msg(5, "SwipeMapFrame.OnSliderPositionChanging()")
 
         self.GetFirstWindow().movingSash = True
         self.GetSecondWindow().movingSash = True
@@ -201,29 +205,29 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def OnSliderPositionChanged(self, event):
         """Slider position changed, sash must be moved too."""
-        Debug.msg(5, "SwipeMapPanel.OnSliderPositionChanged()")
+        Debug.msg(5, "SwipeMapFrame.OnSliderPositionChanged()")
 
         self.splitter.SetSashPosition(event.GetPosition())
         self.splitter.OnSashChanged(None)
 
     def OnSashChanging(self, event):
         """Sash position is changing, slider must be moved too."""
-        Debug.msg(5, "SwipeMapPanel.OnSashChanging()")
+        Debug.msg(5, "SwipeMapFrame.OnSashChanging()")
 
         self.slider.SetValue(self.splitter.GetSashPosition())
         event.Skip()
 
     def OnSashChanged(self, event):
         """Sash position changed, slider must be moved too."""
-        Debug.msg(5, "SwipeMapPanel.OnSashChanged()")
+        Debug.msg(5, "SwipeMapFrame.OnSashChanged()")
 
         self.OnSashChanging(event)
         event.Skip()
 
     def OnSize(self, event):
-        Debug.msg(4, "SwipeMapPanel.OnSize()")
+        Debug.msg(4, "SwipeMapFrame.OnSize()")
         self.resize = grass.clock()
-        super(SwipeMapPanel, self).OnSize(event)
+        super(SwipeMapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
         if self.resize and grass.clock() - self.resize > 0.2:
@@ -497,7 +501,7 @@ class SwipeMapPanel(DoubleMapPanel):
 
         :param name: layer (raster) name
         """
-        Debug.msg(3, "SwipeMapPanel.SetLayer(): name=%s" % name)
+        Debug.msg(3, "SwipeMapFrame.SetLayer(): name=%s" % name)
 
         # this simple application enables to keep only one raster
         mapInstance.DeleteAllLayers()
@@ -515,7 +519,7 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def OnSwitchWindows(self, event):
         """Switch windows position."""
-        Debug.msg(3, "SwipeMapPanel.OnSwitchWindows()")
+        Debug.msg(3, "SwipeMapFrame.OnSwitchWindows()")
 
         splitter = self.splitter
         w1, w2 = splitter.GetWindow1(), splitter.GetWindow2()
@@ -635,7 +639,7 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def OnSwitchOrientation(self, event):
         """Switch orientation of the sash."""
-        Debug.msg(3, "SwipeMapPanel.OnSwitchOrientation()")
+        Debug.msg(3, "SwipeMapFrame.OnSwitchOrientation()")
 
         splitter = self.splitter
         splitter.Unsplit()
@@ -678,10 +682,10 @@ class SwipeMapPanel(DoubleMapPanel):
         # hide/show slider
         if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
             self._mgr.GetPane("sliderV").Show(mode == "swipe")
-            size = self.splitter.GetSize()[1] // 2
+            size = self.splitter.GetSize()[1] / 2
         else:
             self._mgr.GetPane("sliderH").Show(mode == "swipe")
-            size = self.splitter.GetSize()[0] // 2
+            size = self.splitter.GetSize()[0] / 2
         # set sash in the middle
         self.splitter.SetSashPosition(size)
         self.slider.SetValue(size)
@@ -827,38 +831,6 @@ class SwipeMapPanel(DoubleMapPanel):
         if self._inputDialog:
             self._inputDialog.UnInit()
         self.Destroy()
-
-
-class SwipeMapDisplay(FrameMixin, SwipeMapPanel):
-    """Map display for wrapping map panel with frame methods"""
-
-    def __init__(self, parent, giface, **kwargs):
-        # init map panel
-        SwipeMapPanel.__init__(
-            self,
-            parent=parent,
-            giface=giface,
-            **kwargs,
-        )
-        # set system icon
-        parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-
-        # bindings
-        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-
-        # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts()
-
-        # add Map Display panel to Map Display frame
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self, proportion=1, flag=wx.EXPAND)
-        parent.SetSizer(sizer)
-        parent.Layout()
 
 
 class MapSplitter(wx.SplitterWindow):

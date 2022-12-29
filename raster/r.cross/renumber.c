@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cross
@@ -21,6 +22,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+
 int renumber(int in, int out)
 {
     CELL *cell, *c;
@@ -30,15 +32,15 @@ int renumber(int in, int out)
 
     G_message(_("%s: STEP 3 ... "), G_program_name());
     for (row = 0; row < nrows; row++) {
-        G_percent(row, nrows, 5);
-        Rast_get_c_row(in, c = cell, row);
-        col = ncols;
-        while (col-- > 0) {
-            if (!Rast_is_c_null_value(c))
-                *c = table[*c];
-            c++;
-        }
-        Rast_put_row(out, cell, CELL_TYPE);
+	G_percent(row, nrows, 5);
+	Rast_get_c_row(in, c = cell, row);
+	col = ncols;
+	while (col-- > 0) {
+	    if (!Rast_is_c_null_value(c))
+		*c = table[*c];
+	    c++;
+	}
+	Rast_put_row(out, cell, CELL_TYPE);
     }
     G_percent(row, nrows, 10);
     G_free(cell);

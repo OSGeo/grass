@@ -56,7 +56,6 @@ libpythonclean:
 	-rm -f src/pygrass.*rst
 	-rm -f src/script.rst
 	-rm -f src/temporal.rst
-	-rm -f src/grass*.rst
 
 libpythonapidoc:
 	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
@@ -67,7 +66,6 @@ libpythonapidoc:
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../pygrass/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../script/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../temporal/)
-	$(call run_grass,$(SPHINXAPIDOC) --module-first -T -f -o src/ ../../grass)
 
 libpythonhtml: checksphinx
 	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"

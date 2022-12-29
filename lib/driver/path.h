@@ -1,3 +1,4 @@
+
 #ifndef DRIVERLIB_PATH_H
 #define DRIVERLIB_PATH_H
 
@@ -32,3 +33,4 @@ void path_close(struct path *);
 void path_stroke(struct path *, void (*)(double, double, double, double));
 
 #endif
+

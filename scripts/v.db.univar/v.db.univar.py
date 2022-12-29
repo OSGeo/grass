@@ -42,14 +42,6 @@
 # % options: 0-100
 # % multiple: yes
 # %end
-# %option
-# % key: format
-# % type: string
-# % multiple: no
-# % options: plain,json,shell
-# % label: Output format
-# % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval
-# %end
 # %flag
 # % key: e
 # % description: Extended statistics (quartiles and 90th percentile)
@@ -95,7 +87,6 @@ def main():
             passflags = "g"
         else:
             passflags = passflags + "g"
-    output_format = options["format"]
 
     try:
         gscript.run_command(
@@ -106,7 +97,6 @@ def main():
             driver=driver,
             perc=perc,
             where=where,
-            format=output_format,
             flags=passflags,
         )
     except CalledModuleError:

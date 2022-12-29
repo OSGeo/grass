@@ -48,7 +48,7 @@ def float_or_dms(s):
     """
     if s[-1] in ["E", "W", "N", "S"]:
         s = s[:-1]
-    return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
+    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(":")))
 
 
 def separator(sep):
@@ -163,11 +163,7 @@ class KeyValue(dict):
 
 
 def _get_encoding():
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getdefaultlocale()[1]
     if not encoding:
         encoding = "UTF-8"
     return encoding

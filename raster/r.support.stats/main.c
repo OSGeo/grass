@@ -1,4 +1,5 @@
-/***********************************************************************
+/*
+ **********************************************************************
  *
  * MODULE:        r.support.stats
  *
@@ -20,11 +21,13 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct {
-        struct Option *raster;
+    struct
+    {
+	struct Option *raster;
     } parm;
 
     /* Initialize GIS engine */
@@ -39,7 +42,7 @@ int main(int argc, char *argv[])
 
     /* parse command-line options */
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
     check_stats(parm.raster->answer);
 

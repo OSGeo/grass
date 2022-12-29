@@ -11,6 +11,7 @@
  *
  *****************************************************************************/
 
+
 /* TODO: change int */
 /* TODO: revise names */
 
@@ -20,8 +21,10 @@
 
 #include <stdlib.h>
 
-void count_decimation_init(struct CountDecimationControl *control, int *skip,
-                           int *preserve, int *offset, int *limit)
+
+void count_decimation_init(struct CountDecimationControl *control,
+                           int *skip, int *preserve,
+                           int *offset, int *limit)
 {
     control->skip_every = 0;
     control->preserve_every = 0;
@@ -42,6 +45,7 @@ void count_decimation_init(struct CountDecimationControl *control, int *skip,
         control->limit_n = *limit;
 }
 
+
 int count_decimation_is_valid(struct CountDecimationControl *control)
 {
     if (control->skip_every == 1)
@@ -51,10 +55,11 @@ int count_decimation_is_valid(struct CountDecimationControl *control)
     return TRUE;
 }
 
+
 int count_decimation_is_noop(struct CountDecimationControl *control)
 {
-    if (control->skip_every < 2 && control->preserve_every < 2 &&
-        !control->offset_n && !control->limit_n)
+    if (control->skip_every < 2 && control->preserve_every < 2
+            && !control->offset_n && !control->limit_n)
         return TRUE;
     return FALSE;
 }
@@ -82,6 +87,7 @@ void count_decimation_init_from_str(struct CountDecimationControl *control,
         control->limit_n = atoi(limit);
 }
 
+
 /* TODO: eliminate noop cases */
 int count_decimation_is_out(struct CountDecimationControl *control)
 {
@@ -91,7 +97,7 @@ int count_decimation_is_out(struct CountDecimationControl *control)
             return TRUE;
         }
         else {
-            control->offset_n = 0; /* disable offset check */
+            control->offset_n = 0;  /* disable offset check */
         }
     }
     if (control->skip_every) {
@@ -114,6 +120,7 @@ int count_decimation_is_out(struct CountDecimationControl *control)
     }
     return FALSE;
 }
+
 
 int count_decimation_is_end(struct CountDecimationControl *control)
 {

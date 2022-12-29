@@ -23,6 +23,7 @@ db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf' \
   to_table=geonames 
 </pre></div>
 
+
 <h3>From PostgreSQL to DBF</h3>
 
 <div class="code"><pre>
@@ -31,6 +32,7 @@ db.copy from_driver=pg  from_database="host=pgserver.example.org,dbname=testdb" 
   to_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf' to_table=origtable
 </pre></div>
 
+
 <h3>From PostgreSQL to PostgreSQL with condition</h3>
 
 <div class="code"><pre>
@@ -38,6 +40,7 @@ db.copy from_driver=pg  from_database="host=localhost,dbname=testdb" \
   from_table=geonames to_driver=pg to_database="host=localhost,dbname=testdb" \
   to_table=selection where="cat &lt; 500" 
 </pre></div>
+
 
 <h3>From DBF to SQLite</h3>
 
@@ -50,6 +53,7 @@ db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf' \
 sqlitebrowser $HOME/grassdata/nc_spm_08/user1/sqlite/sqlite.db
 </pre></div>
 
+
 <h3>From SQLite to DBF</h3>
 
 <div class="code"><pre>
@@ -57,6 +61,7 @@ db.copy from_driver=sqlite from_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlit
    from_table=ammprv to_driver=dbf to_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
    to_table=ammprv
 </pre></div>
+
 
 <h2>SEE ALSO</h2>
 
@@ -73,3 +78,8 @@ db.copy from_driver=sqlite from_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlit
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-irst, Trento, Italy
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->

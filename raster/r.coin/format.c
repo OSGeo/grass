@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -13,11 +14,12 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-
+ 
 ***************************************************************************/
 
 #include <stdio.h>
 #include <string.h>
+
 
 int format_double(double v, char *buf, int n)
 {
@@ -28,8 +30,8 @@ int format_double(double v, char *buf, int n)
     sprintf(buf, fmt, v);
 
     for (k = n; strlen(buf) > n; k--) {
-        sprintf(fmt, "%%%d.%dg", n, k);
-        sprintf(buf, fmt, v);
+	sprintf(fmt, "%%%d.%dg", n, k);
+	sprintf(buf, fmt, v);
     }
 
     return 0;

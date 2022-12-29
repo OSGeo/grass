@@ -1,3 +1,4 @@
+
 /***************************************************************/
 /*                                                             */
 /*      stash.h         in r.spreadpath                        */
@@ -10,10 +11,10 @@
 /***************************************************************/
 
 #include <stdio.h>
-#define BACKCOL_LAYER 1
-#define BACKROW_LAYER 2
-#define START_PT      3
-#define PATH_LAYER    4
+#define      BACKCOL_LAYER      1
+#define      BACKROW_LAYER      2
+#define      START_PT           3
+#define      PATH_LAYER         4
 
 #include "point.h"
 

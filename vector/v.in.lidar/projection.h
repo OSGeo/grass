@@ -11,6 +11,7 @@
  *
  *****************************************************************************/
 
+
 #ifndef PROJECTION_CHECKS_H
 #define PROJECTION_CHECKS_H
 
@@ -21,7 +22,8 @@ void projection_mismatch_report(struct Cell_head cellhd,
                                 struct Key_Value *proj_info,
                                 struct Key_Value *proj_units, int err);
 
-void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
+void projection_check_wkt(struct Cell_head cellhd,
+                          struct Cell_head loc_wind,
                           const char *projstr, int override, int verbose);
 
 #endif /* PROJECTION_CHECKS_H */

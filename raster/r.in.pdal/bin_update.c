@@ -20,18 +20,20 @@
 #include "point_binning.h"
 #include "bin_update.h"
 
+
 static int new_node(struct BinIndex *bin_index, size_t size)
 {
     int n = bin_index->num_nodes++;
 
     if (bin_index->num_nodes >= bin_index->max_nodes) {
         bin_index->max_nodes += SIZE_INCREMENT;
-        bin_index->nodes =
-            G_realloc(bin_index->nodes, (size_t)bin_index->max_nodes * size);
+        bin_index->nodes = G_realloc(bin_index->nodes,
+                                     (size_t)bin_index->max_nodes * size);
     }
 
     return n;
 }
+
 
 void update_val(void *array, int cols, int row, int col,
                 RASTER_MAP_TYPE map_type, double value)
@@ -41,6 +43,7 @@ void update_val(void *array, int cols, int row, int col,
     Rast_set_d_value(ptr, value, map_type);
     return;
 }
+
 
 void update_n(void *array, int cols, int row, int col)
 {
@@ -53,6 +56,7 @@ void update_n(void *array, int cols, int row, int col)
     return;
 }
 
+
 void update_min(void *array, int cols, int row, int col,
                 RASTER_MAP_TYPE map_type, double value)
 {
@@ -60,14 +64,15 @@ void update_min(void *array, int cols, int row, int col,
     DCELL old_val;
 
     if (Rast_is_null_value(ptr, map_type))
-        Rast_set_d_value(ptr, (DCELL)value, map_type);
+        Rast_set_d_value(ptr, (DCELL) value, map_type);
     else {
         old_val = Rast_get_d_value(ptr, map_type);
         if (value < old_val)
-            Rast_set_d_value(ptr, (DCELL)value, map_type);
+            Rast_set_d_value(ptr, (DCELL) value, map_type);
     }
     return;
 }
+
 
 void update_max(void *array, int cols, int row, int col,
                 RASTER_MAP_TYPE map_type, double value)
@@ -76,11 +81,11 @@ void update_max(void *array, int cols, int row, int col,
     DCELL old_val;
 
     if (Rast_is_null_value(ptr, map_type))
-        Rast_set_d_value(ptr, (DCELL)value, map_type);
+        Rast_set_d_value(ptr, (DCELL) value, map_type);
     else {
         old_val = Rast_get_d_value(ptr, map_type);
         if (value > old_val)
-            Rast_set_d_value(ptr, (DCELL)value, map_type);
+            Rast_set_d_value(ptr, (DCELL) value, map_type);
     }
 
     return;
@@ -107,6 +112,7 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
 
     return;
 }
+
 
 /* Implements Welford algorithm */
 void update_m2(void *n_array, void *mean_array, void *m2_array, int cols,
@@ -141,6 +147,7 @@ void update_m2(void *n_array, void *mean_array, void *m2_array, int cols,
     return;
 }
 
+
 void update_moving_mean(void *array, int cols, int row, int col,
                         RASTER_MAP_TYPE rtype, double value, int n)
 {
@@ -155,6 +162,7 @@ void update_moving_mean(void *array, int cols, int row, int col,
     update_val(array, cols, row, col, rtype, value);
     return;
 }
+
 
 /* add node to sorted, single linked list
  * returns id if head has to be saved to index array, otherwise -1 */
@@ -180,14 +188,14 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
         ((struct z_node *)bin_index->nodes)[last_id].next = newnode_id;
         return -1;
     }
-    else if (node_id == head_id) { /* pole position, insert as head */
+    else if (node_id == head_id) {      /* pole position, insert as head */
         newnode_id = new_node(bin_index, sizeof(struct z_node));
         ((struct z_node *)bin_index->nodes)[newnode_id].next = head_id;
         head_id = newnode_id;
         ((struct z_node *)bin_index->nodes)[newnode_id].z = z;
         return (head_id);
     }
-    else { /* somewhere in the middle, insert */
+    else {                      /* somewhere in the middle, insert */
         newnode_id = new_node(bin_index, sizeof(struct z_node));
         ((struct z_node *)bin_index->nodes)[newnode_id].z = z;
         ((struct z_node *)bin_index->nodes)[newnode_id].next = node_id;
@@ -195,6 +203,7 @@ int add_z_node(struct BinIndex *bin_index, int head, double z)
         return -1;
     }
 }
+
 
 void add_cnt_node(struct BinIndex *bin_index, int head, int value)
 {
@@ -221,16 +230,19 @@ void add_cnt_node(struct BinIndex *bin_index, int head, int value)
     return;
 }
 
+
 /* Unlike the other functions, this one is not using map_type (RASTER_MAP_TYPE)
  * because the values (z) are always doubles and the index is integer. */
-void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
-                        int row, int col, double value)
+void update_bin_z_index(struct BinIndex *bin_index, void *index_array,
+                        int cols, int row, int col, double value)
 {
     int head_id;
     void *ptr = index_array;
 
-    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
-                                   Rast_cell_size(CELL_TYPE));
+    ptr =
+        G_incr_void_ptr(ptr,
+                        (((size_t)row * cols) +
+                         col) * Rast_cell_size(CELL_TYPE));
 
     /* first node */
     if (Rast_is_null_value(ptr, CELL_TYPE)) {
@@ -254,14 +266,17 @@ void update_bin_z_index(struct BinIndex *bin_index, void *index_array, int cols,
     return;
 }
 
+
 void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
                           int cols, int row, int col, int value)
 {
     int head_id;
     void *ptr = index_array;
 
-    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
-                                   Rast_cell_size(CELL_TYPE));
+    ptr =
+        G_incr_void_ptr(ptr,
+                        (((size_t)row * cols) +
+                         col) * Rast_cell_size(CELL_TYPE));
 
     /* first node */
     if (Rast_is_null_value(ptr, CELL_TYPE)) {
@@ -281,6 +296,7 @@ void update_bin_cnt_index(struct BinIndex *bin_index, void *index_array,
     return;
 }
 
+
 /* Co-moment value update */
 void update_com_node(struct com_node *cn, int item, double x, double y)
 {
@@ -292,15 +308,18 @@ void update_com_node(struct com_node *cn, int item, double x, double y)
     cn->comoment[item] = cn->comoment[item] + dx * (y - cn->meany[item]);
 }
 
+
 void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
-                          int cols, int row, int col, double x, double y,
-                          double z)
+                          int cols, int row, int col,
+                          double x, double y, double z)
 {
     int node_id;
     void *ptr = index_array;
 
-    ptr = G_incr_void_ptr(ptr, (((size_t)row * cols) + col) *
-                                   Rast_cell_size(CELL_TYPE));
+    ptr =
+        G_incr_void_ptr(ptr,
+                        (((size_t)row * cols) +
+                         col) * Rast_cell_size(CELL_TYPE));
 
     if (Rast_is_null_value(ptr, CELL_TYPE)) {
         node_id = new_node(bin_index, sizeof(struct com_node));
@@ -323,31 +342,41 @@ void update_bin_com_index(struct BinIndex *bin_index, void *index_array,
 
     /* update values */
     ((struct com_node *)bin_index->nodes)[node_id].n++;
-    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 0, x, x);
-    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 1, x, y);
-    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 2, x, z);
-    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 3, y, y);
-    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 4, x, z);
-    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]), 5, z, z);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
+                    0, x, x);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
+                    1, x, y);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
+                    2, x, z);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
+                    3, y, y);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
+                    4, x, z);
+    update_com_node(&(((struct com_node *)bin_index->nodes)[node_id]),
+                    5, z, z);
 
     return;
 }
 
+
 /* 0 on NULL, 1 on success */
-int row_array_get_value_row_col(void *array, int arr_row, int arr_col, int cols,
-                                RASTER_MAP_TYPE rtype, double *value)
+int row_array_get_value_row_col(void *array, int arr_row, int arr_col,
+                                int cols, RASTER_MAP_TYPE rtype,
+                                double *value)
 {
     void *ptr = array;
 
-    ptr = G_incr_void_ptr(ptr, (((size_t)arr_row * cols) + arr_col) *
-                                   Rast_cell_size(rtype));
+    ptr =
+        G_incr_void_ptr(ptr,
+                        (((size_t)arr_row * cols) +
+                         arr_col) * Rast_cell_size(rtype));
     if (Rast_is_null_value(ptr, rtype))
         return 0;
     if (rtype == DCELL_TYPE)
-        *value = (double)*(DCELL *)ptr;
+        *value = (double)*(DCELL *) ptr;
     else if (rtype == FCELL_TYPE)
-        *value = (double)*(FCELL *)ptr;
+        *value = (double)*(FCELL *) ptr;
     else
-        *value = (double)*(CELL *)ptr;
+        *value = (double)*(CELL *) ptr;
     return 1;
 }

@@ -5,7 +5,8 @@
 
 #include <stdio.h>
 
-struct comment {
+struct comment
+{
     double x, y;
     char *font;
     int fontsize;

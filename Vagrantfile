@@ -63,6 +63,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "proj-bin",
       "libreadline-dev",
       "libsqlite3-dev",
+      "libwxgtk3.0-gtk3-dev",
       "libxmu-dev",
       "python3",
       "python3-wxgtk4.0",

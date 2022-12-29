@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       v.in.lidar
@@ -10,6 +11,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 
 #ifndef VECTOR_MASK_H
 #define VECTOR_MASK_H
@@ -25,8 +27,7 @@ struct VectorMask {
     int inverted;
 };
 
-void VectorMask_init(struct VectorMask *vector_mask, const char *name,
-                     const char *layer, int invert_mask);
+void VectorMask_init(struct VectorMask *vector_mask, const char *name, const char *layer, int invert_mask);
 void VectorMask_destroy(struct VectorMask *vector_mask);
 int VectorMask_point_in(struct VectorMask *vector_mask, double x, double y);
 

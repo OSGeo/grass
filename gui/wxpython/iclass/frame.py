@@ -5,8 +5,7 @@
 for spectral signature analysis.
 
 Classes:
- - frame::IClassMapPanel
- - frame::IClassMapDisplay
+ - frame::IClassMapFrame
  - frame::MapManager
 
 (C) 2006-2013 by the GRASS Development Team
@@ -43,12 +42,12 @@ from mapdisp import statusbar as sb
 from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
-from gui_core.mapdisp import DoubleMapPanel, FrameMixin
-from core import globalvar
+from gui_core.mapdisp import DoubleMapFrame
 from core.render import Map
 from core.gcmd import RunCommand, GMessage, GError
 from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import Menu
+from mapwin.base import MapWindowProperties
 from dbmgr.vinfo import VectorDBInfo
 
 from iclass.digit import IClassVDigitWindow, IClassVDigit
@@ -71,7 +70,7 @@ from iclass.plots import PlotPanel
 from grass.pydispatch.signal import Signal
 
 
-class IClassMapPanel(DoubleMapPanel):
+class IClassMapFrame(DoubleMapFrame):
     """wxIClass main frame
 
     It has two map windows one for digitizing training areas and one for
@@ -95,10 +94,10 @@ class IClassMapPanel(DoubleMapPanel):
         """
         :param parent: (no parent is expected)
         :param title: window title
-        :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+        :param toolbars: dictionary of active toolbars (defalult value represents all toolbars)
         :param size: default size
         """
-        DoubleMapPanel.__init__(
+        DoubleMapFrame.__init__(
             self,
             parent=parent,
             title=title,
@@ -112,7 +111,8 @@ class IClassMapPanel(DoubleMapPanel):
         else:
             self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
-
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
         # show computation region by defaut
         self.mapWindowProperties.showRegion = True
 
@@ -153,8 +153,8 @@ class IClassMapPanel(DoubleMapPanel):
         # Signals
         #
 
-        self.groupSet = Signal("IClassMapPanel.groupSet")
-        self.categoryChanged = Signal("IClassMapPanel.categoryChanged")
+        self.groupSet = Signal("IClassMapFrame.groupSet")
+        self.categoryChanged = Signal("IClassMapFrame.categoryChanged")
 
         self.InitStatistics()
 
@@ -193,9 +193,13 @@ class IClassMapPanel(DoubleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
+            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()
@@ -209,6 +213,7 @@ class IClassMapPanel(DoubleMapPanel):
 
         wx.CallAfter(self.AddTrainingAreaMap)
 
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         self.SendSizeEvent()
@@ -473,7 +478,7 @@ class IClassMapPanel(DoubleMapPanel):
     def OnUpdateActive(self, event):
         """
         .. todo::
-            move to DoubleMapPanel?
+            move to DoubleMapFrame?
         """
         if self.GetMapToolbar().GetActiveMap() == 0:
             self.MapWindow = self.firstMapWindow
@@ -490,7 +495,7 @@ class IClassMapPanel(DoubleMapPanel):
     def UpdateActive(self, win):
         """
         .. todo::
-            move to DoubleMapPanel?
+            move to DoubleMapFrame?
         """
         mapTb = self.GetMapToolbar()
         # optionally disable tool zoomback tool
@@ -501,13 +506,13 @@ class IClassMapPanel(DoubleMapPanel):
         self.StatusbarUpdate()
 
     def ActivateFirstMap(self, event=None):
-        DoubleMapPanel.ActivateFirstMap(self, event)
+        DoubleMapFrame.ActivateFirstMap(self, event)
         self.GetMapToolbar().Enable(
             "zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1)
         )
 
     def ActivateSecondMap(self, event=None):
-        DoubleMapPanel.ActivateSecondMap(self, event)
+        DoubleMapFrame.ActivateSecondMap(self, event)
         self.GetMapToolbar().Enable(
             "zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1)
         )
@@ -1356,17 +1361,17 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomIn(event)
+        super(IClassMapFrame, self).OnZoomIn(event)
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomOut(event)
+        super(IClassMapFrame, self).OnZoomOut(event)
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
-        super(IClassMapPanel, self).OnPan(event)
+        super(IClassMapFrame, self).OnPan(event)
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):
@@ -1384,38 +1389,6 @@ class IClassMapPanel(DoubleMapPanel):
         :return: trainingMapManager, previewMapManager
         """
         return self.trainingMapManager, self.previewMapManager
-
-
-class IClassMapDisplay(FrameMixin, IClassMapPanel):
-    """Map display for wrapping map panel with frame methods"""
-
-    def __init__(self, parent, giface, **kwargs):
-        # init map panel
-        IClassMapPanel.__init__(
-            self,
-            parent=parent,
-            giface=giface,
-            **kwargs,
-        )
-        # set system icon
-        parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-
-        # bindings
-        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-
-        # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts()
-
-        # add Map Display panel to Map Display frame
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self, proportion=1, flag=wx.EXPAND)
-        parent.SetSizer(sizer)
-        parent.Layout()
 
 
 class MapManager:
@@ -1616,12 +1589,7 @@ class MapManager:
 def test():
     app = wx.App()
 
-    frame = wx.Frame(
-        parent=None,
-        size=globalvar.MAP_WINDOW_SIZE,
-        title=_("Supervised Classification Tool"),
-    )
-    frame = IClassMapDisplay(parent=frame)
+    frame = IClassMapFrame()
     frame.Show()
     app.MainLoop()
 

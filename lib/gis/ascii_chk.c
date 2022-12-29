@@ -1,3 +1,4 @@
+
 /*!
  * \file lib/gis/ascii_chk.c
  *
@@ -15,13 +16,15 @@
 
 #include <grass/gis.h>
 
-#define TAB   011
-#define SPACE 040
+
+#define TAB	011
+#define SPACE	040
+
 
 /**
  * \brief Removes non-ascii characters from buffer.
  *
- * Updates <b>string</b> with non_ascii characters removed, except for
+ * Updates <b>string</b> with non_ascii characters removed, except for 
  * tabs, which are turned into spaces.
  *
  * \param[in,out] string buffer to have non-ascii characters removed
@@ -36,11 +39,11 @@ void G_ascii_check(char *string)
     ptr2 = string;
 
     while (*ptr1) {
-        if ((*ptr1 >= 040) && (*ptr1 <= 0176))
-            *ptr2++ = *ptr1;
-        else if (*ptr1 == TAB)
-            *ptr2++ = SPACE;
-        ptr1++;
+	if ((*ptr1 >= 040) && (*ptr1 <= 0176))
+	    *ptr2++ = *ptr1;
+	else if (*ptr1 == TAB)
+	    *ptr2++ = SPACE;
+	ptr1++;
     }
     *ptr2 = 0;
 }

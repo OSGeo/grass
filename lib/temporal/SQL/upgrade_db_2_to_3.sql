@@ -6,11 +6,11 @@
 
 -- raster_metadata_table.sql
 ALTER TABLE raster_metadata
- ADD COLUMN semantic_label VARCHAR;
+ ADD COLUMN band_reference VARCHAR;
 
 -- strds_metadata_table.sql
 ALTER TABLE strds_metadata
- ADD COLUMN number_of_semantic_labels INTEGER;
+ ADD COLUMN number_of_bands INTEGER;
 
 -- tgis_metadata
 UPDATE tgis_metadata

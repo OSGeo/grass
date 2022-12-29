@@ -91,7 +91,7 @@ html2pdfdoccomplete:
 	$(call html_pdf vector,v.*.html)
 
 changelog:
-	@ echo "creating ChangeLog file (following the 'main' branch only)..."
+	@ echo "creating ChangeLog file (following 'master' only)..."
 	@ # utils/gitlog2changelog.py creates a GNU style ChangeLog file:
 	python utils/gitlog2changelog.py
 

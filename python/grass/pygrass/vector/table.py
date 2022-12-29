@@ -33,7 +33,7 @@ from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 
 from grass.pygrass.vector import sql
-from grass.lib.ctypes_preamble import ReturnString
+from grass.lib.ctypes_preamble import String
 
 
 if sys.version_info.major >= 3:
@@ -45,7 +45,6 @@ if sys.version_info.major >= 3:
 test_vector_name = "table_doctest_map"
 
 DRIVERS = ("sqlite", "pg")
-UNSUPPORTED_DRIVERS = ("ogr", "dbf")
 
 
 def get_path(path, vect_name=None):
@@ -679,7 +678,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.name)
 
     def _set_name(self, name):
-        self.c_fieldinfo.contents.name = ReturnString(name)
+        self.c_fieldinfo.contents.name = String(name)
 
     name = property(fget=_get_name, fset=_set_name, doc="Set and obtain name vale")
 
@@ -687,7 +686,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.table)
 
     def _set_table(self, new_name):
-        self.c_fieldinfo.contents.table = ReturnString(new_name)
+        self.c_fieldinfo.contents.table = String(new_name)
 
     table_name = property(
         fget=_get_table, fset=_set_table, doc="Set and obtain table name value"
@@ -697,7 +696,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.key)
 
     def _set_key(self, key):
-        self.c_fieldinfo.contents.key = ReturnString(key)
+        self.c_fieldinfo.contents.key = String(key)
 
     key = property(fget=_get_key, fset=_set_key, doc="Set and obtain cat value")
 
@@ -705,7 +704,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.database)
 
     def _set_database(self, database):
-        self.c_fieldinfo.contents.database = ReturnString(database)
+        self.c_fieldinfo.contents.database = String(database)
 
     database = property(
         fget=_get_database, fset=_set_database, doc="Set and obtain database value"
@@ -715,18 +714,10 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver in DRIVERS:
-            self.c_fieldinfo.contents.driver = ReturnString(driver)
-        elif driver in UNSUPPORTED_DRIVERS:
-            raise NotImplementedError(
-                "The database driver %s is not supported by PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
-            )
-        else:
-            raise ValueError(
-                "The database driver %s is not known to PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
-            )
+        if driver not in ("sqlite", "pg"):
+            str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
+            raise TypeError(str_err)
+        self.c_fieldinfo.contents.driver = String(driver)
 
     driver = property(
         fget=_get_driver,
