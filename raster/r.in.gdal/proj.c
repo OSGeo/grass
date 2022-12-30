@@ -132,14 +132,19 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
         if (proj_trouble == 2) {
             G_fatal_error(_("Unable to convert input map projection to GRASS "
 <<<<<<< HEAD
+<<<<<<< HEAD
                             "format; cannot create new project."));
 =======
                             "format; cannot create new location."));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                            "format; cannot create new location."));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         }
         else {
             if (0 != G_make_location_crs(outloc, cellhd, proj_info, proj_units,
                                          srid, wkt)) {
+<<<<<<< HEAD
 <<<<<<< HEAD
                 G_fatal_error(_("Unable to create new project <%s>"), outloc);
             }
@@ -149,6 +154,11 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             }
             G_message(_("Location <%s> created"), outloc);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                G_fatal_error(_("Unable to create new location <%s>"), outloc);
+            }
+            G_message(_("Location <%s> created"), outloc);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
             G_unset_window(); /* new location, projection, and window */
             G_get_window(cellhd);
@@ -207,6 +217,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             int i_value;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             strcpy(error_msg,
                    _("Coordinate reference system of dataset does not"
                      " appear to match current project.\n\n"));
@@ -214,16 +225,24 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             strcpy(error_msg, _("Projection of dataset does not"
                                 " appear to match current location.\n\n"));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            strcpy(error_msg, _("Projection of dataset does not"
+                                " appear to match current location.\n\n"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
             /* TODO: output this info sorted by key: */
             if (loc_wind.proj != cellhd->proj || err != -2) {
                 /* error in proj_info */
                 if (loc_proj_info != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     strcat(error_msg, _("Project PROJ_INFO is:\n"));
 =======
                     strcat(error_msg, _("Location PROJ_INFO is:\n"));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    strcat(error_msg, _("Location PROJ_INFO is:\n"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     for (i_value = 0; i_value < loc_proj_info->nitems;
                          i_value++)
                         sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -232,6 +251,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                     strcat(error_msg, "\n");
                 }
                 else {
+<<<<<<< HEAD
 <<<<<<< HEAD
                     strcat(error_msg, _("Project PROJ_INFO is:\n"));
                     if (loc_wind.proj == PROJECTION_XY)
@@ -250,6 +270,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                         sprintf(error_msg + strlen(error_msg),
                                 "Project proj = %d (unknown), zone = %d\n",
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     strcat(error_msg, _("Location PROJ_INFO is:\n"));
                     if (loc_wind.proj == PROJECTION_XY)
                         sprintf(error_msg + strlen(error_msg),
@@ -266,7 +288,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                     else
                         sprintf(error_msg + strlen(error_msg),
                                 "Location proj = %d (unknown), zone = %d\n",
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                                 loc_wind.proj, cellhd->zone);
                 }
 
@@ -341,10 +366,14 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                 /* error in proj_units */
                 if (loc_proj_units != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     strcat(error_msg, "Project PROJ_UNITS is:\n");
 =======
                     strcat(error_msg, "Location PROJ_UNITS is:\n");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    strcat(error_msg, "Location PROJ_UNITS is:\n");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     for (i_value = 0; i_value < loc_proj_units->nitems;
                          i_value++)
                         sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -364,6 +393,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             if (!check_only) {
                 strcat(error_msg, _("\nIn case of no significant differences "
 <<<<<<< HEAD
+<<<<<<< HEAD
                                     "in the CRS definitions,"
                                     " use the -o flag to ignore them and use"
                                     " current project definition.\n"));
@@ -371,13 +401,18 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                                     "the input dataset using "
                                     "the 'project' parameter.\n"));
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                                     "in the projection definitions,"
                                     " use the -o flag to ignore them and use"
                                     " current location definition.\n"));
                 strcat(error_msg, _("Consider generating a new location from "
                                     "the input dataset using "
                                     "the 'location' parameter.\n"));
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             }
 
             if (check_only)
@@ -396,12 +431,17 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             else
                 msg_fn = G_verbose_message;
 <<<<<<< HEAD
+<<<<<<< HEAD
             msg_fn(_("Coordinate reference system of input dataset and current "
                      "project appear to match"));
 =======
             msg_fn(_("Projection of input dataset and current location "
                      "appear to match"));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            msg_fn(_("Projection of input dataset and current location "
+                     "appear to match"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             if (check_only) {
                 GDALClose(hDS);
                 exit(EXIT_SUCCESS);

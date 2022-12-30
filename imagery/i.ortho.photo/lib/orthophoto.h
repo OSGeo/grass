@@ -118,12 +118,17 @@ int I_convert_con_points(char *, struct Ortho_Control_Points *,
                          struct Ortho_Control_Points *, double[3], double[3]);
 /* georef.c */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
                             double[3], double[3]);
 =======
 int I_compute_ref_equations(struct Ortho_Photo_Points *, double *, double *,
                             double *, double *);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int I_compute_ref_equations(struct Ortho_Photo_Points *, double *, double *,
+                            double *, double *);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 /* orthoref.c */
 int I_compute_ortho_equations(struct Ortho_Control_Points *,
                               struct Ortho_Camera_File_Ref *,

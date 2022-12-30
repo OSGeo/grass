@@ -2,6 +2,7 @@
  * r.in.pdal Functions printing out various information on input LAS files
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  *
 =======
  *  
@@ -9,6 +10,9 @@
 =======
  *
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ *
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  *   Copyright 2021 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss
  *
@@ -19,6 +23,7 @@
 
 #include "info.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <cmath>
 =======
 
@@ -27,6 +32,9 @@
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 void get_extent(struct StringList *infiles, double *min_x, double *max_x,
                 double *min_y, double *max_y, double *min_z, double *max_z)
 {
@@ -34,10 +42,14 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
     bool first = 1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
 =======
     *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = 0.0 / 0.0;
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = 0.0 / 0.0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     for (int i = 0; i < infiles->num_items; i++) {
         const char *infile = infiles->items[i];
@@ -55,6 +67,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         las_reader.prepare(table);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         const pdal::LasHeader &las_header = las_reader.header();
 =======
         pdal::LasHeader las_header = las_reader.header();
@@ -62,6 +75,9 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 =======
         const pdal::LasHeader &las_header = las_reader.header();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        const pdal::LasHeader &las_header = las_reader.header();
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (first) {
             *min_x = las_header.minX();
             *min_y = las_header.minY();
@@ -91,11 +107,14 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 void print_extent(struct StringList *infiles)
 {
     double min_x, max_x, min_y, max_y, min_z, max_z;
@@ -103,10 +122,14 @@ void print_extent(struct StringList *infiles)
     get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n", max_y, min_y, max_x,
             min_x, min_z, max_z);
 }
 
+<<<<<<< HEAD
 =======
     fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
             max_y, min_y, max_x, min_x, min_z, max_z);
@@ -120,6 +143,8 @@ void print_extent(struct StringList *infiles)
 }
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 void print_lasinfo(struct StringList *infiles)
 {
     pdal::StageFactory factory;
@@ -127,12 +152,16 @@ void print_lasinfo(struct StringList *infiles)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     std::cout << std::endl
               << "Using PDAL library version '"
               << pdal::Config::fullVersionString() << "'" << std::endl
               << std::endl;
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     std::cout << std::endl << "Using PDAL library version '" <<
@@ -140,6 +169,8 @@ void print_lasinfo(struct StringList *infiles)
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     for (int i = 0; i < infiles->num_items; i++) {
         const char *infile = infiles->items[i];
@@ -157,6 +188,9 @@ void print_lasinfo(struct StringList *infiles)
         las_reader.prepare(table);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         const pdal::LasHeader &h = las_reader.header();
         pdal::PointLayoutPtr point_layout = table.layout();
         const pdal::Dimension::IdList &dims = point_layout->dims();
@@ -195,6 +229,7 @@ void print_lasinfo(struct StringList *infiles)
         }
         std::cout << "Compressed: " << (h.compressed() ? "true" : "false")
                   << "\n";
+<<<<<<< HEAD
 =======
         pdal::LasHeader las_header = las_reader.header();
 =======
@@ -242,6 +277,8 @@ void print_lasinfo(struct StringList *infiles)
         std::cout << "Compressed: " << (h.compressed() ? "true" : "false")
                   << "\n";
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         bool first = 1;
 

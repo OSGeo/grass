@@ -375,9 +375,12 @@ int mc33_process_cube(int c_ndx, float *v)
             return OFFSET_T7_1 + m_config; /* 7.1 */
         };
 <<<<<<< HEAD
+<<<<<<< HEAD
         break; /* will not reach this as previous switch is exhaustive */
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     case 8:
         return OFFSET_T8 + m_config;
@@ -563,9 +566,12 @@ int mc33_process_cube(int c_ndx, float *v)
             fprintf(stderr, "Marching Cubes: Impossible case 13?\n");
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         break; /* will not reach this as previous switch is exhaustive */
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     case 14:
         return OFFSET_T14 + m_config;

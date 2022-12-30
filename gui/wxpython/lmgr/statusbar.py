@@ -23,9 +23,12 @@ import grass.script as gs
 
 from core.gcmd import RunCommand
 <<<<<<< HEAD
+<<<<<<< HEAD
 from core.watchdog import watchdog_used
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 from gui_core.wrap import Button
 
 
@@ -67,10 +70,14 @@ class SbMain:
 
     def SetStatusText(self, *args):
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Override wx.StatusBar method"""
 =======
         """Overide wx.StatusBar method"""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        """Overide wx.StatusBar method"""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.GetWidget().SetStatusText(*args)
 
 
@@ -92,6 +99,7 @@ class SbMask:
         self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
         self.giface.currentMapsetChanged.connect(self.Refresh)
 <<<<<<< HEAD
+<<<<<<< HEAD
         if not watchdog_used:
             self.giface.grassdbChanged.connect(self.dbChanged)
         self.Refresh()
@@ -103,11 +111,16 @@ class SbMask:
         :param str newname: new map
         """
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.giface.grassdbChanged.connect(self._dbChanged)
         self.Refresh()
 
     def _dbChanged(self, map=None, newname=None):
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if map == self.mask_layer or newname == self.mask_layer:
             self.Refresh()
             self.giface.updateMap.emit()

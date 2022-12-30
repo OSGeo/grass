@@ -5,6 +5,7 @@ MENU
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   https://grass.osgeo.org/grass-devel/manuals/wxGUI.toolboxes.html
 =======
   https://grass.osgeo.org/grass80/manuals/wxGUI.toolboxes.html
@@ -15,6 +16,9 @@ MENU
 =======
   https://grass.osgeo.org/grass-devel/manuals/wxGUI.toolboxes.html
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  https://grass.osgeo.org/grass-devel/manuals/wxGUI.toolboxes.html
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
   (../docs/wxgui_sphinx/src/)
 - additionally
   https://trac.osgeo.org/grass/wiki/wxGUIDevelopment/Toolboxes

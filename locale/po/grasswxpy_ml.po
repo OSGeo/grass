@@ -2369,7 +2369,10 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/toolbars.py:35
 =======
 #: ../gui/wxpython/datacatalog/toolbars.py:40
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Create new mapset in current location"
 msgstr ""
 
@@ -2381,6 +2384,7 @@ msgstr ""
 msgid "Download sample location to current GRASS database"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/toolbars.py:45
 msgid "Import raster data  [r.import]"
@@ -2394,6 +2398,13 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:52
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../gui/wxpython/datacatalog/toolbars.py:49
+msgid "Import raster data  [r.import]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/toolbars.py:52
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Import vector data  [v.import]"
 msgstr ""
 
@@ -17635,7 +17646,10 @@ msgid "Multiple import"
 =======
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:69
@@ -18878,7 +18892,10 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/frame.py:130
 =======
 #: ../gui/wxpython/rlisetup/frame.py:114
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Setup for r.li modules"
 msgstr ""
 
@@ -19507,9 +19524,17 @@ msgstr "വർക്സ്പേസ് സംഭരിച്ചു വെക്�
 =======
 #: ../gui/wxpython/startup/guiutils.py:80
 msgid "Invalid mapset name"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:106
+msgid "Invalid location name"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
+<<<<<<< HEAD
 #: ../gui/wxpython/lmgr/toolbars.py:63
 #, fuzzy
 msgid "Open workspace"
@@ -19653,6 +19678,18 @@ msgstr ""
 #, python-format
 msgid "Type %s to add raster or vector to the layer tree."
 =======
+=======
+#: ../gui/wxpython/startup/guiutils.py:131
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:469
+#, python-format
+msgid "Invalid line in GISRC file (%s):%s\n"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:171
+msgid "Name for the new mapset:"
+msgstr ""
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../gui/wxpython/startup/guiutils.py:186
 msgid "Unable to create new mapset: {}"
 msgstr ""
@@ -21282,7 +21319,10 @@ msgid "Rendering map layers"
 =======
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/animation/provider.py:559

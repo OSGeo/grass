@@ -278,10 +278,14 @@ int main(int argc, char **argv)
     /* Because the line feature identified by one id (lidcol) may be split
      *  to more line parts, and milepost may be in threshold for more such
 <<<<<<< HEAD
+<<<<<<< HEAD
      * parts, so that if each line part would be processed separately, it could
 =======
      * parts, so that if each line part would be processed separetely, it could
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+     * parts, so that if each line part would be processed separetely, it could
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
      * be attached to more parts, it is better to process always whole line
      * feature (all parts) of one id at the same time, and attache mileposts
      * always to nearest one */
@@ -616,10 +620,14 @@ int main(int argc, char **argv)
         G_debug(debug, "  %d mileposts attached to line(s)", nmposts);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Go thorough all attached MPs and fill in info about MPs to 'lines'
 =======
         /* Go thourough all attached MPs and fill in info about MPs to 'lines'
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* Go thourough all attached MPs and fill in info about MPs to 'lines'
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
          * table */
         last = -1;
         for (j = 0; j < nmposts; j++) {

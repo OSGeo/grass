@@ -35,10 +35,14 @@ void extract_init(struct SigSet *S)
             SubS = &(C->SubSig[i]);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             /* Test for symmetric  matrix */
 =======
             /* Test for symetric  matrix */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            /* Test for symetric  matrix */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             for (b1 = 0; b1 < nbands; b1++)
                 for (b2 = 0; b2 < nbands; b2++) {
                     if (SubS->R[b1][b2] != SubS->R[b2][b1])

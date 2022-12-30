@@ -58,7 +58,10 @@ double A[14] = {0,   545, 709,  429, 301, 235, 242,
                 199, 0,   1121, 224, 179, 163, 170};
 
 /* B Coeficients in E = IA(.474U)^B (s), where U is wind at 20 ft (mi/h) */
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 double B[14] = {0,    -1.21, -1.32, -1.19, -1.05, -0.92, -0.94,
                 0.83, 0,     -1.51, -0.89, -0.81, -0.78, -0.79};
 

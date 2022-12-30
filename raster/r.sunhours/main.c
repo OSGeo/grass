@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
         /* read current projection info */
         if ((in_proj_info = G_get_projinfo()) == NULL)
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_fatal_error(_("Cannot get projection info of current project"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
@@ -244,6 +245,23 @@ int main(int argc, char *argv[])
         oproj.pj = NULL;
         tproj.def = NULL;
 
+=======
+            G_fatal_error(_("Cannot get projection info of current location"));
+
+        if ((in_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(_("Cannot get projection units of current location"));
+
+        if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+            G_fatal_error(
+                _("Cannot get projection key values of current location"));
+
+        G_free_key_value(in_proj_info);
+        G_free_key_value(in_unit_info);
+
+        oproj.pj = NULL;
+        tproj.def = NULL;
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
     }

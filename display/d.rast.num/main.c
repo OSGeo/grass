@@ -34,7 +34,10 @@
  *   models such AGNPS which uses the cell number for all its correspondence.
 =======
  *   models such AGNPS which uses the cell number for all its correspondance.
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  *
  */
 
@@ -141,11 +144,14 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /* Setup driver and check important information */
     D_open_driver();
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     map_name = opt.map->answer;
 
@@ -237,7 +243,10 @@ int main(int argc, char **argv)
 
     D_open_driver();
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if (opt.font->answer)
         D_font(opt.font->answer);
     else if (opt.path->answer)

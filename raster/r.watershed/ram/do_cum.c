@@ -285,8 +285,11 @@ int do_cum_mfd(void)
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
 <<<<<<< HEAD
+<<<<<<< HEAD
     size_t this_index, down_index, nbr_index;
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     int this_index, down_index, nbr_index;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -513,6 +516,7 @@ int do_cum_mfd(void)
     if (workedon)
         G_warning(n_("MFD: A * path already processed when distributing flow: "
 <<<<<<< HEAD
+<<<<<<< HEAD
                      "%d of %zu cell",
                      "MFD: A * path already processed when distributing flow: "
                      "%d of %zu cells",
@@ -521,6 +525,11 @@ int do_cum_mfd(void)
                      "MFD: A * path already processed when distributing flow: "
                      "%d of %d cells",
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                     "%d of %d cell",
+                     "MFD: A * path already processed when distributing flow: "
+                     "%d of %d cells",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                      do_points),
                   workedon, do_points);
 
@@ -620,6 +629,7 @@ int do_cum_mfd(void)
                 asp[this_index] = aspect;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             /*
             if (mfd_cells == 1)
                 mfdir = (1 << nextmfd[max_side]);
@@ -632,6 +642,12 @@ int do_cum_mfd(void)
 
                 is_swale = FLAG_GET(swale, r, c);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (mfd_cells == 1)
+                /* mfdir = (1 << nextmfd[max_side]); */
+
+                is_swale = FLAG_GET(swale, r, c);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             /* start new stream */
             value = ABS(value) + 0.5;
             if (!is_swale && (int)value >= threshold && stream_cells < 1 &&

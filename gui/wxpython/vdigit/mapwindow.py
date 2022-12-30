@@ -136,6 +136,7 @@ class VDigitWindow(BufferedMapWindow):
         kc = event.GetKeyCode()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         default_tools = {
             "addPoint": {
                 "evt": True,
@@ -332,6 +333,88 @@ class VDigitWindow(BufferedMapWindow):
         if not shift:
             tool = tools.get(kc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        tools = {
+            ord("P"): {
+                "event": wx.CommandEvent(id=self.toolbar.addPoint),
+                "tool": self.toolbar.OnAddPoint,
+            },
+            ord("L"): {
+                "event": wx.CommandEvent(id=self.toolbar.addLine),
+                "tool": self.toolbar.OnAddLine,
+            },
+            ord("A"): {
+                "event": wx.CommandEvent(id=self.toolbar.addArea),
+                "tool": self.toolbar.OnAddArea,
+            },
+            ord("B"): {
+                "event": None,
+                "tool": self.toolbar.OnAddBoundary,
+            },
+            ord("C"): {
+                "event": None,
+                "tool": self.toolbar.OnAddCentroid,
+            },
+            ord("V"): {
+                "event": wx.CommandEvent(id=self.toolbar.addVertex),
+                "tool": self.toolbar.OnAddVertex,
+            },
+            ord("X"): {
+                "event": wx.CommandEvent(id=self.toolbar.removeVertex),
+                "tool": self.toolbar.OnRemoveVertex,
+            },
+            ord("G"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveVertex),
+                "tool": self.toolbar.OnMoveVertex,
+            },
+            ord("D"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteLine),
+                "tool": self.toolbar.OnDeleteLine,
+            },
+            ord("F"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteArea),
+                "tool": self.toolbar.OnDeleteArea,
+            },
+            ord("E"): {
+                "event": wx.CommandEvent(id=self.toolbar.editLine),
+                "tool": self.toolbar.OnEditLine,
+            },
+            ord("M"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveLine),
+                "tool": self.toolbar.OnMoveLine,
+            },
+            ord("J"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayCats),
+                "tool": self.toolbar.OnDisplayCats,
+            },
+            ord("K"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayAttr),
+                "tool": self.toolbar.OnDisplayAttr,
+            },
+            ord("Z"): {
+                "event": wx.CommandEvent(id=self.toolbar.undo),
+                "tool": self.toolbar.OnUndo,
+            },
+            ord("Y"): {
+                "event": wx.CommandEvent(id=self.toolbar.redo),
+                "tool": self.toolbar.OnRedo,
+            },
+            ord("T"): {
+                "event": wx.CommandEvent(id=self.toolbar.settings),
+                "tool": self.toolbar.OnSettings,
+            },
+            ord("H"): {
+                "event": wx.CommandEvent(id=self.toolbar.help),
+                "tool": self.toolbar.OnHelp,
+            },
+            ord("Q"): {
+                "event": wx.CommandEvent(id=self.toolbar.quit),
+                "tool": self.toolbar.OnExit,
+            },
+        }
+        if not shift:
+            tool = tools.get(kc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             if tool:
                 event = self.toolbar.OnTool(tool["event"])
                 tool["tool"](event)

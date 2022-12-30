@@ -35,8 +35,11 @@ int main(int argc, char **argv)
     struct Option *inopt, *dbdriver, *dbdatabase, *dbtable, *field_opt, *dbkey,
         *sep_opt;
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct Flag *print, *columns, *delete, *shell_print;
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     struct Flag *overwrite, *print, *columns, *delete, *shell_print;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     dbDriver *driver;
@@ -279,6 +282,7 @@ int main(int argc, char **argv)
                 if (ret == 1) {
                     /* field already defined */
 <<<<<<< HEAD
+<<<<<<< HEAD
                     if (!G_get_overwrite())
                         G_fatal_error(_("Use --overwrite to overwrite "
                                         "existing link for layer <%d>"),
@@ -287,6 +291,11 @@ int main(int argc, char **argv)
                         G_fatal_error(_("Use -o to overwrite existing link "
                                         "for layer <%d>"),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    if (!overwrite->answer)
+                        G_fatal_error(_("Use -o to overwrite existing link "
+                                        "for layer <%d>"),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                                       field);
                     else {
                         dbColumn *column;

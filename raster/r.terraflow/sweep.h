@@ -95,10 +95,14 @@ public:
     {
         static char buf[20];
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%7.3f", p.accu);
 =======
         sprintf(buf, "%7.3f", p.accu);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "%7.3f", p.accu);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 };
@@ -116,10 +120,14 @@ public:
     {
         static char buf[20];
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%7.3f", p.tci);
 =======
         sprintf(buf, "%7.3f", p.tci);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "%7.3f", p.tci);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 };
@@ -169,16 +177,22 @@ public:
 class flowPriority {
 public:
 <<<<<<< HEAD
+<<<<<<< HEAD
     elevation_type h{0.0};
     toporank_type toporank{0};
 =======
     elevation_type h;
     toporank_type toporank;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    elevation_type h;
+    toporank_type toporank;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     /* points at same heights are processed in increasing order of their
        topological rank; overall, this gives topological order and
        guarantees that flow is never puhsed backwards. Note: of course,
        this is a way of waving hands on topological sorting.  */
+<<<<<<< HEAD
 <<<<<<< HEAD
     dimension_type i{0}, j{0};
 
@@ -259,12 +273,53 @@ public:
         if (a.h < b.h)
             return 1;
 
+=======
+    dimension_type i, j;
+
+public:
+    flowPriority(elevation_type a = 0, toporank_type b = 0,
+                 dimension_type c = 0, dimension_type d = 0)
+        : h(a), toporank(b), i(c), j(d)
+    {
+    }
+
+    flowPriority(const flowPriority &p)
+        : h(p.h), toporank(p.toporank), i(p.i), j(p.j)
+    {
+    }
+
+    ~flowPriority() {}
+
+    elevation_type field1() const { return h; }
+
+    dimension_type coord1() const { return i; }
+    dimension_type coord2() const { return j; }
+    void set(elevation_type g_h, toporank_type g_a, dimension_type g_i,
+             dimension_type g_j)
+    {
+        h = g_h;
+        toporank = g_a;
+        i = g_i;
+        j = g_j;
+    }
+
+    static int compare(const flowPriority &a, const flowPriority &b)
+    {
+        if (a.h > b.h)
+            return -1;
+        if (a.h < b.h)
+            return 1;
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (a.toporank < b.toporank)
             return -1;
         if (a.toporank > b.toporank)
             return 1;
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (a.i < b.i)
             return -1;
         if (a.i > b.i)
@@ -372,6 +427,7 @@ public:
 
     /***************************************************************/
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* return the elevation window */
     genericWindow<elevation_type> getElevWindow() const { return elevwin; }
 
@@ -407,6 +463,26 @@ public:
 
     /***************************************************************/
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    ~sweepItemBaseType() {}
+
+    /***************************************************************/
+    /* return the elevation window */
+    genericWindow<elevation_type> getElevWindow() const { return elevwin; }
+
+    /***************************************************************/
+    /* return the elevation window */
+    genericWindow<T> getTopoRankWindow() const { return toporwin; }
+
+    /***************************************************************/
+    /* return coordinates */
+    dimension_type getI() const { return i; }
+
+    /***************************************************************/
+    dimension_type getJ() const { return j; }
+
+    /***************************************************************/
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     /* return the elevation of the item */
     elevation_type getElev() const { return elevwin.get(); }
 
@@ -490,6 +566,7 @@ public:
 class flowValue {
 public:
 <<<<<<< HEAD
+<<<<<<< HEAD
     flowaccumulation_type value{0};
 
 public:
@@ -505,6 +582,15 @@ public:
     ~flowValue() {}
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    flowaccumulation_type value;
+
+public:
+    flowValue(flowaccumulation_type x = 0) : value(x) {}
+
+    ~flowValue() {}
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     flowaccumulation_type get() const { return value; }
     friend ostream &operator<<(ostream &s, const flowValue &elt)
     {
@@ -520,13 +606,19 @@ public:
         return elt;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     flowValue operator=(const flowValue &elt)
     {
         value = elt.value;
         return *this;
     }
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     flowValue operator!=(const flowValue &elt) { return value != elt.value; }
     flowValue operator==(const flowValue &elt) { return value == elt.value; }
 
@@ -551,6 +643,7 @@ public:
 /************************************************************/
 class flowStructure {
 private:
+<<<<<<< HEAD
 <<<<<<< HEAD
     flowPriority prio{};
     flowValue val{};
@@ -578,11 +671,30 @@ public:
     */
     flowStructure(const flowStructure &fl) : prio(fl.prio), val(fl.val) {}
 
+=======
+    flowPriority prio;
+    flowValue val;
+
+public:
+    flowStructure(const flowPriority &p = 0, const flowValue &e = 0)
+        : prio(p), val(e)
+    {
+    }
+
+    /* flowStructure(const flowValue &e, const flowPriority &p):
+           prio(p), val(e) {}
+    */
+    flowStructure(const flowStructure &fl) : prio(fl.prio), val(fl.val) {}
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     ~flowStructure() {}
 
     flowPriority getPriority() const { return prio; }
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     flowValue getValue() const { return val; }
 
     friend ostream &operator<<(ostream &s, const flowStructure &fl)

@@ -24,10 +24,14 @@
 int M__hold_signals(int hold)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
 =======
     void (*sig)() = hold ? SIG_IGN : SIG_DFL;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    void (*sig)() = hold ? SIG_IGN : SIG_DFL;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     signal(SIGINT, sig);
 

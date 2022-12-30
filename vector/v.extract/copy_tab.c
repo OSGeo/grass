@@ -9,7 +9,10 @@
 void copy_tabs(struct Map_info *In, int field, int new_cat,
 =======
 void copy_tabs(const struct Map_info *In, int field, int new_cat,
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                struct Map_info *Out)
 {
     int nlines, line, i;

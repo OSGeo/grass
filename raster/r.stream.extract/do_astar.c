@@ -62,6 +62,7 @@ int do_astar(void)
         G_percent(count++, n_points, 1);
         if (count > n_points)
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_fatal_error(_("%" PRId64 " surplus points"), heap_size);
 
         if (heap_size > n_points)
@@ -162,6 +163,100 @@ int do_astar(void)
         seg_put(&aspflag, (char *)&af, r, c);
     } /* end A* search */
 
+=======
+            G_fatal_error(_("%" PRI_OFF_T " surplus points"), heap_size);
+
+        if (heap_size > n_points)
+            G_fatal_error(_("Too many points in heap %" PRI_OFF_T
+                            ", should be %" PRI_OFF_T ""),
+                          heap_size, n_points);
+
+        heap_p = heap_drop();
+
+        r = heap_p.pnt.r;
+        c = heap_p.pnt.c;
+
+        ele_val = heap_p.ele;
+
+        for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+            /* get r, c (r_nbr, c_nbr) for neighbours */
+            r_nbr = r + nextdr[ct_dir];
+            c_nbr = c + nextdc[ct_dir];
+            slope[ct_dir] = -1;
+            ele_nbr[ct_dir] = 0;
+            skip_diag = 0;
+
+            /* check that neighbour is within region */
+            if (r_nbr < 0 || r_nbr >= nrows || c_nbr < 0 || c_nbr >= ncols)
+                continue;
+
+            seg_get(&aspflag, (char *)&af, r_nbr, c_nbr);
+            is_in_list = FLAG_GET(af.flag, INLISTFLAG);
+            is_worked = FLAG_GET(af.flag, WORKEDFLAG);
+            if (!is_worked) {
+                seg_get(&watalt, (char *)&wa, r_nbr, c_nbr);
+                ele_nbr[ct_dir] = wa.ele;
+                slope[ct_dir] =
+                    get_slope(ele_val, ele_nbr[ct_dir], dist_to_nbr[ct_dir]);
+            }
+            /* avoid diagonal flow direction bias */
+            if (!is_in_list || (!is_worked && af.asp < 0)) {
+                if (ct_dir > 3 && slope[ct_dir] > 0) {
+                    if (slope[nbr_ew[ct_dir]] >= 0) {
+                        /* slope to ew nbr > slope to center */
+                        if (slope[ct_dir] < get_slope(ele_nbr[nbr_ew[ct_dir]],
+                                                      ele_nbr[ct_dir], ew_res))
+                            skip_diag = 1;
+                    }
+                    if (!skip_diag && slope[nbr_ns[ct_dir]] >= 0) {
+                        /* slope to ns nbr > slope to center */
+                        if (slope[ct_dir] < get_slope(ele_nbr[nbr_ns[ct_dir]],
+                                                      ele_nbr[ct_dir], ns_res))
+                            skip_diag = 1;
+                    }
+                }
+            }
+
+            if (!skip_diag) {
+                if (!is_in_list) {
+                    ele_up = ele_nbr[ct_dir];
+                    af.asp = drain[r_nbr - r + 1][c_nbr - c + 1];
+                    heap_add(r_nbr, c_nbr, ele_up);
+                    FLAG_SET(af.flag, INLISTFLAG);
+                    seg_put(&aspflag, (char *)&af, r_nbr, c_nbr);
+                }
+                else if (!is_worked) {
+                    if (FLAG_GET(af.flag, EDGEFLAG)) {
+                        /* neighbour is edge in list, not yet worked */
+                        if (af.asp < 0 && slope[ct_dir] > 0) {
+                            /* adjust flow direction for edge cell */
+                            af.asp = drain[r_nbr - r + 1][c_nbr - c + 1];
+                            seg_put(&aspflag, (char *)&af, r_nbr, c_nbr);
+                        }
+                    }
+                    else if (FLAG_GET(af.flag, DEPRFLAG)) {
+                        G_debug(3, "real depression");
+                        /* neighbour is inside real depression, not yet worked
+                         */
+                        if (af.asp == 0 && ele_val <= ele_nbr[ct_dir]) {
+                            af.asp = drain[r_nbr - r + 1][c_nbr - c + 1];
+                            FLAG_UNSET(af.flag, DEPRFLAG);
+                            seg_put(&aspflag, (char *)&af, r_nbr, c_nbr);
+                        }
+                    }
+                }
+            }
+        } /* end neighbours */
+        /* add astar points to sorted list for flow accumulation and stream
+         * extraction */
+        first_cum--;
+        seg_put(&astar_pts, (char *)&heap_p.pnt, 0, first_cum);
+        seg_get(&aspflag, (char *)&af, r, c);
+        FLAG_SET(af.flag, WORKEDFLAG);
+        seg_put(&aspflag, (char *)&af, r, c);
+    } /* end A* search */
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     G_percent(n_points, n_points, 1); /* finish it */
 
     return 1;

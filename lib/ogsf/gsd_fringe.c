@@ -536,9 +536,13 @@ void gsd_fringe_horiz_line2(float bot, geosurf *surf, int row, int side)
         pt[Z] = pt[Z] * surf->z_exag;
         gsd_vert_func(pt);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         cnt++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        cnt++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     col--;

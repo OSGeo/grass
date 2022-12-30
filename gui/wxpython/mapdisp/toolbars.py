@@ -121,11 +121,15 @@ class MapToolbar(BaseToolbar):
             self._giface.WriteLog(
                 _(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "Note that the wxGUI's vector digitizer is disabled in this "
                     "installation."
 =======
                     "Note that the wxGUI's vector digitizer is disabled in this installation. "
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+                    "Note that the wxGUI's vector digitizer is disabled in this installation. "
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     "Please keep an eye out for updated versions of GRASS. "
                     'In the meantime you can use "v.edit" for non-interactive editing '
                     "from the Develop vector map menu."
@@ -174,6 +178,7 @@ class MapToolbar(BaseToolbar):
         """Toolbar data"""
         data = (
             (
+<<<<<<< HEAD
 <<<<<<< HEAD
                 ("renderMap", BaseIcons["render"].label),
                 BaseIcons["render"],
@@ -256,6 +261,8 @@ class MapToolbar(BaseToolbar):
                 self.parent.OnMapDisplayProperties,
             ),
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 (
                     ("renderMap", BaseIcons["render"].label),
                     BaseIcons["render"],

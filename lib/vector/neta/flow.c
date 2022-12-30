@@ -176,10 +176,14 @@ int NetA_flow(dglGraph_s *graph, struct ilist *source_list,
  */
 int NetA_min_cut(dglGraph_s *graph, struct ilist *source_list,
 <<<<<<< HEAD
+<<<<<<< HEAD
                  struct ilist *sink_list UNUSED, int *flow, struct ilist *cut)
 =======
                  struct ilist *sink_list, int *flow, struct ilist *cut)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                 struct ilist *sink_list, int *flow, struct ilist *cut)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     int nnodes, i;
     dglEdgesetTraverser_s et;

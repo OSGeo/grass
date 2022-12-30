@@ -22,12 +22,15 @@ from .core import (
     get_current_mapset,
     get_tgis_db_version_from_metadata,
 <<<<<<< HEAD
+<<<<<<< HEAD
 )
 from .abstract_dataset import (
     AbstractDataset,
     AbstractDatasetComparisonKeyStartTime,
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 )
 from .temporal_granularity import (
     check_granularity_string,
@@ -1568,6 +1571,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # spatial extent as well
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             # check keys in first row
             # note that 'if "bottom" in row' does not work
             # because row is not a dict but some db backend object
@@ -1612,6 +1616,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             obj_list.append(copy.copy(map))
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # use all columns
         rows = self.get_registered_maps(None, where, order, dbif)
 
@@ -1729,7 +1735,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
                     "{br} LIKE '{si}\_%' {esc} OR {br} LIKE '%\_{si}' {esc} OR "
                     "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                         br="semantic_label",
                         si=shortcut_identifier,
                         orig=self.semantic_label.upper(),
@@ -1915,6 +1924,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if self.semantic_label:
                 where = self._update_where_statement_by_semantic_label(where)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
             # filter by semantic label identifier
             if spatial_extent:
@@ -1923,6 +1933,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 )
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
             if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])
@@ -2867,6 +2879,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         ).read()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         # Comment out update of semantic labels for DB version < 3
         if get_tgis_db_version_from_metadata() < 3:
             sql = sql.replace(
@@ -2877,6 +2890,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 "count(distinct semantic_label)", "-- count(distinct semantic_label)"
             )
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         for version in range(3, get_tgis_db_version_from_metadata() + 1):
             sqlfile = os.path.join(
                 sql_path,
@@ -2886,7 +2901,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             )
             if os.path.exists(sqlfile):
                 sql += open(sqlfile).read()
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())

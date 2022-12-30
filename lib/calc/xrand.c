@@ -36,10 +36,14 @@ int f_rand(int argc, const int *argt, void **args)
                 hi = tmp;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             res[i] = (lo == hi) ? lo : (int)(lo + x % (unsigned int)(hi - lo));
 =======
             res[i] = (lo == hi) ? lo : lo + x % (unsigned int)(hi - lo);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            res[i] = (lo == hi) ? lo : lo + x % (unsigned int)(hi - lo);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         }
         return 0;
     }

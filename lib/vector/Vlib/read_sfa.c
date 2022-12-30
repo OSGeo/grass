@@ -7,10 +7,14 @@
 
    See read_ogr.c (OGR interface) and read_pg.c (PostGIS interface)
 <<<<<<< HEAD
+<<<<<<< HEAD
    for implementation issues.
 =======
    for imlementation issues.
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   for imlementation issues.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
    (C) 2011-2012 by the GRASS Development Team
 

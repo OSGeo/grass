@@ -13,6 +13,7 @@
 
 void disp_matrix(double **a, double *x, double *z, int n)
 <<<<<<< HEAD
+<<<<<<< HEAD
                         /* Displays matrices used to solve a
                            set of linear equations in the form
 
@@ -30,6 +31,19 @@ void disp_matrix(double **a, double *x, double *z, int n)
                            | a(n,0) a(n,1) ... a(n,n) |    | xn |    | zn |
                            -                        -      -  -      -  -
 
+=======
+                        /* Displays matrices used to solve a 
+                           set of linear equations in the form 
+
+                           _                        _      _  _      _  _ 
+                           | a(0,0) a(0,1) ... a(0,n) |    | x0 |    | z0 |
+                           | a(1,0) a(1,1) ... a(1,n) |    | x1 |    | z1 |
+                           |    :           :   ...   :    | .  | :  | =  | :  |
+                           |    :           :   ...   :    |    | :  |    | :  |
+                           | a(n,0) a(n,1) ... a(n,n) |    | xn |    | zn |
+                           -                        -      -  -      -  -
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                          */
 {
 
@@ -67,6 +81,9 @@ void disp_wind(CELL * z)
 }
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
 extern int dummy_for_iso_compilers; /* suppress -Wempty-translation-unit */
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

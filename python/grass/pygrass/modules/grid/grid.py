@@ -9,7 +9,10 @@ from __future__ import (
     print_function,
     unicode_literals,
 )
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 import contextlib
 import os
 import sys
@@ -33,7 +36,10 @@ from grass.pygrass.modules.grid.split import (
 )
 =======
 from grass.pygrass.modules.grid.split import split_region_tiles
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
@@ -528,7 +534,10 @@ class GridModule:
         self.bboxes = split_region_in_overlapping_tiles(
 =======
         self.bboxes = split_region_tiles(
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             region=region, width=self.width, height=self.height, overlap=overlap
         )
         if mapset_prefix:

@@ -164,10 +164,14 @@ static void G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
             /*printf ("%d\n", ((*src & mask) >> nBits) << nBits); */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (8 - nBits < precision) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 cp1++;
 
                 /*printf ("%d %d\n", *cp1, (*src & mask) << (8 - nBits)); */
@@ -342,10 +346,14 @@ static void G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
         if (nBits && precision) {
             *cp1 |= (unsigned char)((unsigned char)(*src & mask) >> nBits);
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (8 - nBits < precision) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 cp1++;
                 *cp1 = (unsigned char)(((unsigned char)(*src & mask))
                                        << (8 - nBits));
@@ -500,10 +508,14 @@ static void G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
             *dst = (unsigned char)((*cp1 << nBits) & mask);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (8 - nBits < precision) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 cp1++;
                 *dst |= (unsigned char)((*cp1 >> (8 - nBits)) & mask);
                 nBits += precision - 8;
@@ -671,10 +683,14 @@ static void G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
             *dst = (unsigned char)((*cp1 << nBits) & mask);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (8 - nBits < precision) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 cp1++;
                 *dst |= (unsigned char)((*cp1 >> (8 - nBits)) & mask);
                 nBits += precision - 8;

@@ -84,10 +84,14 @@ void *Rowio_get(ROWIO *R, int row)
    \brief Flush data
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param R pointer to ROWIO structure
 =======
    \param R pointer to ROWIO strcuture
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \param R pointer to ROWIO strcuture
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  */
 void Rowio_flush(ROWIO *R)
 {

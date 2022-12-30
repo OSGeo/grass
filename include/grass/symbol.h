@@ -63,10 +63,14 @@ typedef struct {
     double yscale; /* scale in x dimension */
     double xscale; /* scale in y dimension */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int count, alloc; /* number of parts */
 =======
     int count, alloc; /* numer of parts */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int count, alloc; /* numer of parts */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     SYMBPART **part;  /* objects ( parts ) */
 } SYMBOL;
 

@@ -146,10 +146,14 @@ static void main_loop(void)
         fd_set waitset;
         struct timeval tv;
 <<<<<<< HEAD
+<<<<<<< HEAD
         unsigned long delay = 0;
 =======
         unsigned long delay;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        unsigned long delay;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         while (XPending(dpy) > 0) {
             XEvent event;
@@ -231,10 +235,14 @@ static int read_bmp_header(const unsigned char *p)
     if (get_4(&p) != 0)
         return 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (get_4(&p) != (unsigned int)i_width * i_height * 4)
 =======
     if (get_4(&p) != i_width * i_height * 4)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (get_4(&p) != i_width * i_height * 4)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         return 0;
 
     if (size != HEADER_SIZE + i_width * i_height * 4)

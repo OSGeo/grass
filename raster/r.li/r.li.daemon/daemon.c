@@ -69,6 +69,7 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* conf files go into ~/.grass8/r.li/ */
     sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
             HOST_DIRSEP);
@@ -83,6 +84,11 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
             HOST_DIRSEP);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /* conf files go into ~/.grass8/r.li/ */
+    sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
+            HOST_DIRSEP);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     sprintf(testpath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
             HOST_DIRSEP);
@@ -113,6 +119,7 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* text file output */
         /* check if ~/.grass8/ exists */
 =======
@@ -126,6 +133,10 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
         /* text file output */
         /* check if ~/.grass8/ exists */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* text file output */
+        /* check if ~/.grass8/ exists */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sprintf(out, "%s", G_config_path());
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
@@ -134,13 +145,17 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         /* check if ~/.grass8/r.li/ exists */
         sprintf(out, "%s", rlipath);
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
             G_fatal_error(_("Cannot create %s directory"), out);
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         /* check if ~/.grass7/r.li/output exists */
@@ -175,6 +190,9 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
 
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         /* check if ~/.grass7/r.li/output exists */
         if (snprintf(out, GPATH_MAX, "%s%s", rlipath, "output") >= GPATH_MAX)
             G_fatal_error(_("Filepath '%s%s' exceeds max length"), rlipath,
@@ -188,7 +206,10 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
                           "output", HOST_DIRSEP, output);
         if ((res = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
             G_fatal_error(_("Cannot create %s output"), out);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /*#######################################################
@@ -749,10 +770,14 @@ int error_Output(int out, msg m)
         sprintf(s, "ERROR %i", m.f.f_d.aid);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
 =======
         if (write(out, s, strlen(s)) == strlen(s))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (write(out, s, strlen(s)) == strlen(s))
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             return 1;
         else
             return 0;
@@ -760,8 +785,11 @@ int error_Output(int out, msg m)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int raster_Output(int fd, int aid, struct g_area *g UNUSED, double res)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int raster_Output(int fd, int aid, struct g_area *g, double res)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {

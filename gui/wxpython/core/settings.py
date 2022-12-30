@@ -153,6 +153,7 @@ class Settings:
                     "resAlign": {"enabled": False},
                 },
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "singleWinPanesLayoutPos": {
                     "enabled": False,
                     "pos": "",
@@ -160,6 +161,9 @@ class Settings:
 =======
                 "singleWindow": {"enabled": False},
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                "singleWindow": {"enabled": False},
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             },
             #
             # datacatalog
@@ -199,9 +203,12 @@ class Settings:
                 "iconTheme": {"type": "grass"},
                 "commandNotebook": {"selection": 0},
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "singleWindow": {"enabled": True},
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             },
             #
             # language

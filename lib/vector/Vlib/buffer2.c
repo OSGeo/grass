@@ -134,8 +134,11 @@ static void line_coefficients(double x1, double y1, double x2, double y2,
  * Finds intersection of two straight lines. Returns 0 if the lines are
  * parallel, 1 if they cross, 2 if they are the same line.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * !!!!!!!!!!!!!!!! FIX THIS TOLERANCE CONSTANTS BAD (and UGLY) CODE !!!!!!!!!
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  * !!!!!!!!!!!!!!!! FIX THIS TOLLERANCE CONSTANTS BAD (and UGLY) CODE !!!!!!!!!
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  */
@@ -1037,7 +1040,10 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
     if (Points->n_points == 1)
         return Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
                                   round, tol, oPoints);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     /* initializations */
     tPoints = Vect_new_line_struct();
@@ -1082,16 +1088,22 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
    \param[out] iPoints array of output polygon's holes (cw order)
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void Vect_area_buffer2(struct Map_info *Map, int area, double da, double db,
                        double dalpha, int round, int caps, double tol,
                        struct line_pnts **oPoints, struct line_pnts ***iPoints,
                        int *inner_count)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 void Vect_area_buffer2(const struct Map_info *Map, int area, double da,
                        double db, double dalpha, int round, int caps,
                        double tol, struct line_pnts **oPoints,
                        struct line_pnts ***iPoints, int *inner_count)
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     struct line_pnts *tPoints, *outer;
     struct line_pnts **isles;

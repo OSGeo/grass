@@ -28,8 +28,11 @@
    \return NULL on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct P_node *dig_alloc_node(void)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 struct P_node *dig_alloc_node()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -129,8 +132,11 @@ int dig_alloc_nodes(struct Plus_head *Plus, int add)
    \return NULL on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct P_line *dig_alloc_line(void)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 struct P_line *dig_alloc_line()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -272,8 +278,11 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
    \return NULL on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct P_area *dig_alloc_area(void)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 struct P_area *dig_alloc_area()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -311,8 +320,11 @@ void dig_free_area(struct P_area *Area)
    \return NULL on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct P_isle *dig_alloc_isle(void)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 struct P_isle *dig_alloc_isle()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -501,8 +513,11 @@ int dig_isle_alloc_line(struct P_isle *isle, int add)
    \brief For now just print message and return error code
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int dig_out_of_memory(void)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int dig_out_of_memory()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {

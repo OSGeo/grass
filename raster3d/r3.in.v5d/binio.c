@@ -143,8 +143,11 @@ static void c_to_if(long *t, const long *f)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* IEEE single precision to Cray */
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 /* IEEE single precison to Cray */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 static void if_to_c(long *t, const long *f)

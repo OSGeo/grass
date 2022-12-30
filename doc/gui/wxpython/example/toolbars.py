@@ -113,6 +113,7 @@ class ExampleMainToolbar(BaseToolbar):
         return self._getToolbarData(
             (
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (
                     ("addRaster", BaseIcons["addRast"].label),
                     BaseIcons["addRast"],
@@ -120,11 +121,16 @@ class ExampleMainToolbar(BaseToolbar):
                 ),
             )
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 ("addRaster", BaseIcons["addRast"].label),
                 BaseIcons["addRast"],
                 self.parent.OnSelectRaster,
             ),
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         )
 
 
@@ -145,6 +151,7 @@ class ExampleMiscToolbar(BaseToolbar):
         return self._getToolbarData(
             (
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (
                     ("help", icons["help"].label),
                     icons["help"],
@@ -157,6 +164,8 @@ class ExampleMiscToolbar(BaseToolbar):
                 ),
             )
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 ("help", icons["help"].label),
                 icons["help"],
                 self.parent.OnHelp,
@@ -166,5 +175,8 @@ class ExampleMiscToolbar(BaseToolbar):
                 icons["quit"],
                 self.parent.OnCloseWindow,
             ),
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         )

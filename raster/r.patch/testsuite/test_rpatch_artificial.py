@@ -274,6 +274,7 @@ class TestSmallDataOverlap(TestCase):
             self.cell_ba_result_threaded, self.cell_ba, precision=0
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 class TestCELLColorCategory(TestCase):
@@ -409,6 +410,8 @@ class TestCELLColorCategory(TestCase):
         self.assertNotEqual(color, table)
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 
 if __name__ == "__main__":

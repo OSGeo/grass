@@ -184,11 +184,15 @@ class VDigitToolbar(BaseToolbar):
                 img="line-delete",
                 label=_(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "Delete selected point(s), line(s), boundary(ies) or "
                     "centroid(s) (Ctrl+D)"
 =======
                     "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -218,11 +222,15 @@ class VDigitToolbar(BaseToolbar):
                 img="line-move",
                 label=_(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "Move selected point(s), line(s), boundary(ies) or "
                     "centroid(s) (Ctrl+M)"
 =======
                     "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -461,11 +469,14 @@ class VDigitToolbar(BaseToolbar):
             f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.toolSwitcher and event:
             self.toolSwitcher.ToolChanged(event.GetId())
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
@@ -473,10 +484,15 @@ class VDigitToolbar(BaseToolbar):
 
         aId = self.action.get("id", -1)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         if event:
             BaseToolbar.OnTool(self, event)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if event:
+            BaseToolbar.OnTool(self, event)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:

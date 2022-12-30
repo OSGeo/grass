@@ -89,7 +89,10 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         (size_t)res != nBytes) {
 =======
     if (read(map->cacheFD, tileBuf, nBytes) != nBytes) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_readFun: can't read file");
         return 0;
     }
@@ -120,7 +123,10 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         (size_t)res != nBytes + sizeof(int)) {
 =======
     if (read(map->cacheFD, xdr, nBytes + sizeof(int)) != nBytes + sizeof(int)) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_readFun: can't read file");
         return 0;
     }
@@ -135,7 +141,10 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 =======
     if (write(map->cacheFD, xdr, nBytes + sizeof(int)) !=
         nBytes + sizeof(int)) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_readFun: can't write file");
         return 0;
     }
@@ -174,7 +183,10 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
         (size_t)res != nBytes) {
 =======
     if (write(map->cacheFD, tileBuf, nBytes) != nBytes) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_writeFun: can't write file");
         return 0;
     }

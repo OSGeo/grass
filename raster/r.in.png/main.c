@@ -42,12 +42,16 @@ typedef struct {
 #define C_A 5
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static channel channels[6] = {{.suffix = ""},   {.suffix = ""},
                               {.suffix = ".r"}, {.suffix = ".g"},
                               {.suffix = ".b"}, {.suffix = ".a"}};
 =======
 static channel channels[6] = {{""}, {""}, {".r"}, {".g"}, {".b"}, {".a"}};
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static channel channels[6] = {{""}, {""}, {".r"}, {".g"}, {".b"}, {".a"}};
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 static int Header;
 static int Float;
@@ -338,11 +342,15 @@ static void read_png(void)
     linesize = png_get_rowbytes(png_ptr, info_ptr);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     png_buffer = G_malloc((size_t)interlace ? (size_t)height * linesize
                                             : (size_t)linesize);
 =======
     png_buffer = G_malloc(interlace ? height * linesize : linesize);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    png_buffer = G_malloc(interlace ? height * linesize : linesize);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     if (interlace) {
         png_rows = G_malloc(height * sizeof(png_bytep));

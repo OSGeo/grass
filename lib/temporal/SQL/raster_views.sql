@@ -18,8 +18,11 @@ CREATE VIEW raster_view_abs_time AS SELECT
             A4.nsres, A4.ewres, A4.min, A4.max,
             A4.number_of_cells, A4.semantic_label, A5.registered_stds
 <<<<<<< HEAD
+<<<<<<< HEAD
             FROM raster_base A1, raster_absolute_time A2,
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             FROM raster_base A1, raster_absolute_time A2, 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             raster_spatial_extent A3, raster_metadata A4,
@@ -38,8 +41,11 @@ CREATE VIEW raster_view_rel_time AS SELECT
             A4.nsres, A4.ewres, A4.min, A4.max,
             A4.number_of_cells, A4.semantic_label, A5.registered_stds
 <<<<<<< HEAD
+<<<<<<< HEAD
             FROM raster_base A1, raster_relative_time A2,
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             FROM raster_base A1, raster_relative_time A2, 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             raster_spatial_extent A3, raster_metadata A4,

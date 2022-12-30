@@ -41,6 +41,7 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
     Rast_close(infd); /* (pmx) 17 april 2000 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_message(_("Rectify <%s@%s> (project <%s>)"), name, mapset, G_location());
     select_target_env();
     G_set_window(&target_window);
@@ -51,6 +52,12 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
     G_set_window(&target_window);
     G_message(_("into  <%s@%s> (location <%s>) ..."), result, G_mapset(),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    G_message(_("Rectify <%s@%s> (location <%s>)"), name, mapset, G_location());
+    select_target_env();
+    G_set_window(&target_window);
+    G_message(_("into  <%s@%s> (location <%s>) ..."), result, G_mapset(),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
               G_location());
 
     nrows = target_window.rows;

@@ -40,10 +40,14 @@
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 float rem(long int, long int); /* remainder function */
 =======
 float rem(); /* remainder function */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+float rem(); /* remainder function */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 /* normalized coordinates & dimensions of pie-chart components */
 

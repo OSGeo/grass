@@ -99,10 +99,14 @@ private:
     void save(); /* .mie file */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* defined models' initializations */
 =======
     /* defined models' initilizations */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /* defined models' initilizations */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     void bdm();
     void bbm();
     void stm();

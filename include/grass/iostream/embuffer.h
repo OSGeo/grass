@@ -138,10 +138,14 @@ public:
         return (x.k == y.k);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     friend merge_key operator+(const merge_key &x, const merge_key &y UNUSED)
 =======
     friend merge_key operator+(const merge_key &x, const merge_key &y)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    friend merge_key operator+(const merge_key &x, const merge_key &y)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     {
         assert(0);
         return x;
@@ -207,10 +211,14 @@ private:
     // the buffers can be depleted to fill the internal pq;
     // keep an array which counts, for each stream, how many elements
 <<<<<<< HEAD
+<<<<<<< HEAD
     // have been deleted (implicitly from the beginning of stream)
 =======
     // have been deleted (implicitely from the beginning of stream)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    // have been deleted (implicitely from the beginning of stream)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     long *deleted;
 
     // nb of items in each substream; this can be found out by calling
@@ -420,6 +428,7 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
 {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     assert(level >= 1);
 
     char str[100];
@@ -427,17 +436,23 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
              "em_buffer: allocate %d AMI_STREAM*, total %ld\n", arity,
              (long)(arity * sizeof(AMI_STREAM<T> *)));
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     assert((level >= 1) && (basesize >= 0));
 
     char str[100];
     sprintf(str, "em_buffer: allocate %d AMI_STREAM*, total %ld\n", arity,
             (long)(arity * sizeof(AMI_STREAM<T> *)));
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
     // allocate STREAM* array
     data = new AMI_STREAM<T> *[arity];
 
     // allocate deleted array
+<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(str, sizeof(str), "em_buffer: allocate deleted array: %ld\n",
              (long)(arity * sizeof(long)));
@@ -445,10 +460,15 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
     sprintf(str, "em_buffer: allocate deleted array: %ld\n",
             (long)(arity * sizeof(long)));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(str, "em_buffer: allocate deleted array: %ld\n",
+            (long)(arity * sizeof(long)));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
     deleted = new long[arity];
 
     // allocate streamsize array
+<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(str, sizeof(str), "em_buffer: allocate streamsize array: %ld\n",
              (long)(arity * sizeof(long)));
@@ -456,11 +476,16 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
     sprintf(str, "em_buffer: allocate streamsize array: %ld\n",
             (long)(arity * sizeof(long)));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(str, "em_buffer: allocate streamsize array: %ld\n",
+            (long)(arity * sizeof(long)));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
     streamsize = new unsigned long[arity];
 
 #ifdef SAVE_MEMORY
     // allocate name array
+<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(str, sizeof(str), "em_buffer: allocate name array: %ld\n",
              (long)(arity * sizeof(char *)));
@@ -468,6 +493,10 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
     sprintf(str, "em_buffer: allocate name array: %ld\n",
             (long)(arity * sizeof(char *)));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(str, "em_buffer: allocate name array: %ld\n",
+            (long)(arity * sizeof(char *)));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
     name = new char *[arity];
     assert(name);
@@ -565,10 +594,14 @@ em_buffer<T, Key>::~em_buffer()
 // find its length
 template <class T, class Key>
 <<<<<<< HEAD
+<<<<<<< HEAD
 void em_buffer<T, Key>::check_name(unsigned int i UNUSED)
 =======
 void em_buffer<T, Key>::check_name(unsigned int i)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void em_buffer<T, Key>::check_name(unsigned int i)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
 
 #ifdef EMBUF_CHECK_NAME
@@ -600,10 +633,14 @@ AMI_STREAM<T> *em_buffer<T, Key>::get_stream(unsigned int i)
 {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     assert(i < index);
 =======
     assert(i >= 0 && i < index);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    assert(i >= 0 && i < index);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::get_stream");
@@ -663,10 +700,14 @@ void em_buffer<T, Key>::put_stream(unsigned int i)
 {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     assert(i < index);
 =======
     assert(i >= 0 && i < index);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    assert(i >= 0 && i < index);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::put_stream");
@@ -930,10 +971,14 @@ AMI_STREAM<T> *em_buffer<T, Key>::sort()
 
     AMI_STREAM<T> *sorted_stream =
 <<<<<<< HEAD
+<<<<<<< HEAD
         new AMI_STREAM<T>(); /* will be deleted in insert() */
 =======
         new AMI_STREAM<T>(); /* will be deleteed in insert() */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        new AMI_STREAM<T>(); /* will be deleteed in insert() */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     assert(sorted_stream);
 
     // merge the streams into sorted stream
@@ -986,6 +1031,7 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
 
     char str[200];
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_buffer::substream_merge: allocate keys array, total %ldB\n",
              (long)((long)arity * sizeof(merge_key<Key>)));
@@ -994,6 +1040,11 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
             "em_buffer::substream_merge: allocate keys array, total %ldB\n",
             (long)((long)arity * sizeof(merge_key<Key>)));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(str,
+            "em_buffer::substream_merge: allocate keys array, total %ldB\n",
+            (long)((long)arity * sizeof(merge_key<Key>)));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
 
     // keys array is initialized with smallest key from each stream (only
@@ -1073,10 +1124,14 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT) IF
 <<<<<<< HEAD
+<<<<<<< HEAD
     // I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
 =======
     // I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    // I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     // AND EVERYTHING SCREWS UP..
 
     return AMI_ERROR_NO_ERROR;
@@ -1135,7 +1190,10 @@ long em_buffer<T, Key>::insert(T *a, long n)
    skipped (were deleted) from the beginning of stream;
 =======
    skipped (were deleted) from the beginning fo stream;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
    return the number of items actually inserted */
 template <class T, class Key>

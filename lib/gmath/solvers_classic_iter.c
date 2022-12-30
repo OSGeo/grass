@@ -65,18 +65,24 @@ int G_math_solver_sparse_jacobi(G_math_spvector **Asp, double *x, double *b,
         {
             if (k == 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 for (j = 0; j < (unsigned int)rows; j++) {
                     Enew[j] = x[j];
                 }
             }
             for (i = 0; i < (unsigned int)rows; i++) {
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 for (j = 0; j < rows; j++) {
                     Enew[j] = x[j];
                 }
             }
             for (i = 0; i < rows; i++) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 E = 0;
                 center = 0;
                 for (j = 0; j < Asp[i]->cols; j++) {
@@ -87,10 +93,14 @@ int G_math_solver_sparse_jacobi(G_math_spvector **Asp, double *x, double *b,
                 Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             for (j = 0; j < (unsigned int)rows; j++) {
 =======
             for (j = 0; j < rows; j++) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            for (j = 0; j < rows; j++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
 
                 x[j] = Enew[j];
@@ -153,18 +163,24 @@ int G_math_solver_sparse_gs(G_math_spvector **Asp, double *x, double *b,
         {
             if (k == 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 for (j = 0; j < (unsigned int)rows; j++) {
                     Enew[j] = x[j];
                 }
             }
             for (i = 0; i < (unsigned int)rows; i++) {
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 for (j = 0; j < rows; j++) {
                     Enew[j] = x[j];
                 }
             }
             for (i = 0; i < rows; i++) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 E = 0;
                 center = 0;
                 for (j = 0; j < Asp[i]->cols; j++) {
@@ -175,10 +191,14 @@ int G_math_solver_sparse_gs(G_math_spvector **Asp, double *x, double *b,
                 Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             for (j = 0; j < (unsigned int)rows; j++) {
 =======
             for (j = 0; j < rows; j++) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            for (j = 0; j < rows; j++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
 
                 x[j] = Enew[j];

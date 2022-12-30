@@ -75,6 +75,7 @@ def is_location_valid(path, location=None):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     :param path: Path to a Location or to a GRASS GIS database directory
 =======
     :param database: Path to a Location or to a GRASS GIS database directory
@@ -82,6 +83,9 @@ def is_location_valid(path, location=None):
 =======
     :param path: Path to a Location or to a GRASS GIS database directory
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+    :param path: Path to a Location or to a GRASS GIS database directory
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     :param location: name of a Location if not part of *path*
     """
     # DEFAULT_WIND file should not be required until you do something
@@ -91,6 +95,7 @@ def is_location_valid(path, location=None):
     if location:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         path = os.path.join(path, location)
 =======
         path = os.path.join(location)
@@ -98,6 +103,9 @@ def is_location_valid(path, location=None):
 =======
         path = os.path.join(path, location)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+        path = os.path.join(path, location)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     return os.access(os.path.join(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
 
 

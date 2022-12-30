@@ -3,10 +3,14 @@
  * MODULE:       r.out.gdal
  * AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>, Markus Metz
 <<<<<<< HEAD
+<<<<<<< HEAD
  * PURPOSE:      Exports GRASS raster to GDAL supported formats;
 =======
  * PURPOSE:      Exports GRASS raster to GDAL suported formats;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ * PURPOSE:      Exports GRASS raster to GDAL suported formats;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  *               based on GDAL library.
  *               Replaces r.out.gdal.sh script which used the gdal_translate
  *               executable and GDAL grass-format plugin.
@@ -1052,6 +1056,7 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
     case GDT_Float32:
     case GDT_CFloat32:
 <<<<<<< HEAD
+<<<<<<< HEAD
         return NAN;
 
     case GDT_Float64:
@@ -1064,6 +1069,13 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
     case GDT_CFloat64:
         return 0.0 / 0.0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        return 0.0 / 0.0;
+
+    case GDT_Float64:
+    case GDT_CFloat64:
+        return 0.0 / 0.0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     default:
         return 0;

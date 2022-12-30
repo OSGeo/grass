@@ -184,10 +184,14 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 
     if (perline == 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         unsigned int max_len = 0;
 =======
         int max_len = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        int max_len = 0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         for (i = 0; i < num_items; i++) {
             /* Find maximum filename length */

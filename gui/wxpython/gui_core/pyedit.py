@@ -663,7 +663,10 @@ class PyEditToolbar(BaseToolbar):
             "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactivate overwrite")),
 =======
             "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             "help": BaseIcons["help"],
             "quit": BaseIcons["quit"],
         }

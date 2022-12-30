@@ -306,12 +306,15 @@
         <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <separator/>
       <module-item name="r.in.wms">
         <label>WMS/WMTS import</label>
       </module-item>
 =======
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
       <separator/>
       <module-item name="r.in.wms">
         <label>WMS/WMTS import</label>
@@ -1222,11 +1225,14 @@
         <label>Clean vector map</label>
       </module-item>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <module-item name="v.fill.holes">
         <label>Fill holes in areas</label>
       </module-item>
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>
       </module-item>

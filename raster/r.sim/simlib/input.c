@@ -300,7 +300,10 @@ int input_data(void)
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     int if_rain = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -332,6 +335,7 @@ int input_data(void)
     if (rain != NULL) {
         si = read_double_raster_map(rows, cols, rain, unitconv);
 <<<<<<< HEAD
+<<<<<<< HEAD
     }
     else if (rain_val >= 0.0) { /* If no value set its set to -999.99 */
         si = create_double_matrix(rows, cols, rain_val * unitconv);
@@ -339,6 +343,8 @@ int input_data(void)
     else {
         si = create_double_matrix(rows, cols, (double)UNDEF);
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if_rain = 1;
     }
     else if (rain_val >= 0.0) { /* If no value set its set to -999.99 */
@@ -348,7 +354,10 @@ int input_data(void)
     else {
         si = create_double_matrix(rows, cols, (double)UNDEF);
         if_rain = 0;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* Update elevation map */
@@ -383,7 +392,10 @@ int input_data(void)
             trap = read_float_raster_map(rows, cols, traps, 1.0);
         else
             trap = create_float_matrix(rows, cols, (double)UNDEF);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* Traps */
@@ -617,10 +629,14 @@ int grad_check(void)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*! compute transport capacity limited erosion/deposition et
 =======
     /*! compute transport capacity limted erosion/deposition et
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /*! compute transport capacity limted erosion/deposition et
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
      *   as a divergence of sediment transport capacity
      *   \f$
      D_T({\bf r})= \nabla\cdot {\bf T}({\bf r})

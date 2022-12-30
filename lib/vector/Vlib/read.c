@@ -44,11 +44,15 @@ static int format2(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
                                         struct line_cats *) = {
 =======
 static int (*Read_next_line_array[][3])() = {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int (*Read_next_line_array[][3])() = {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -68,6 +72,7 @@ static int (*Read_next_line_array[][3])() = {
 #endif
 };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
                                 struct line_cats *, int) = {V2_read_line_nat
@@ -101,6 +106,22 @@ static int (*Read_line_array[])() = {V2_read_line_nat
                                      ,
                                      format
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int (*Read_line_array[])() = {V2_read_line_nat
+#ifdef HAVE_OGR
+                                     ,
+                                     V2_read_line_sfa, V2_read_line_sfa
+#else
+                                     ,
+                                     format, format
+#endif
+#ifdef HAVE_POSTGRES
+                                     ,
+                                     V2_read_line_pg
+#else
+                                     ,
+                                     format
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #endif
 };
 
@@ -116,8 +137,11 @@ static int (*Read_line_array[])() = {V2_read_line_nat
    \return -1 on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_get_next_line_id(struct Map_info *Map)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int Vect_get_next_line_id(const struct Map_info *Map)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -153,10 +177,14 @@ int Vect_get_next_line_id(const struct Map_info *Map)
    \return -2 nothing to read
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_read_next_line(struct Map_info *Map, struct line_pnts *line_p,
 =======
 int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                         struct line_cats *line_c)
 {
     int ret;
@@ -195,10 +223,14 @@ int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
    \return -2 nothing to read
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_read_line(struct Map_info *Map, struct line_pnts *line_p,
 =======
 int Vect_read_line(const struct Map_info *Map, struct line_pnts *line_p,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_read_line(const struct Map_info *Map, struct line_pnts *line_p,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                    struct line_cats *line_c, int line)
 {
     int ret;
@@ -284,8 +316,11 @@ int Vect_node_alive(struct Map_info *Map, int node)
    \return 0 area is dead or index is out of range
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_area_alive(struct Map_info *Map, int area)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int Vect_area_alive(const struct Map_info *Map, int area)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -312,8 +347,11 @@ int Vect_area_alive(const struct Map_info *Map, int area)
    \return 0 isle is dead or index is out of range
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_isle_alive(struct Map_info *Map, int isle)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int Vect_isle_alive(const struct Map_info *Map, int isle)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -342,8 +380,11 @@ int Vect_isle_alive(const struct Map_info *Map, int isle)
    \return -1 on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 off_t Vect_get_line_offset(struct Map_info *Map, int line)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 off_t Vect_get_line_offset(const struct Map_info *Map, int line)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {

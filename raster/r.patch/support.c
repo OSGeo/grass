@@ -2,6 +2,7 @@
 #include <grass/raster.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
  * Merges the statf[] arrays for each thread into
  * Thread 0 for use in the support computation.
@@ -37,6 +38,8 @@ void merge_threads(struct Cell_stats **thread_statf, int nprocs, int nfiles)
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 /*
  * creates new category and color structures from the patching
  * files category and color files
@@ -88,6 +91,7 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                         Rast_set_c_cat(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
 =======
                             &n, &n, Rast_get_c_cat((CELL *) &n, &pcats), cats);
@@ -95,12 +99,16 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
 =======
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     }
                     if (do_colr) {
                         Rast_get_c_color(&n, &red, &grn, &blu, &pcolr);
                         Rast_set_c_color(n, red, grn, blu, colr);
                     }
                 }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         }
@@ -112,6 +120,10 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
         }
         else {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        }
+        else {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             /* the color would be the color of the first map,
              * possibly not covering the range of the other maps */
             *colr_ok = 0;

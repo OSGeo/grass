@@ -13,10 +13,14 @@ extern DCELL f_d(DCELL);
 /* #define k_sb    4.903  //[MJ/m2*h]   Stefan Bolzman constant */
 #define cp      1.013  /* [kJ/kg*degC] specific heat of moist air */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define epsilon 0.622  /* [-] ratio of molecular weight of water to dry air */
 =======
 #define epsilon 0.622  /* [-] ratio of molecular weigth of water to dry air */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#define epsilon 0.622  /* [-] ratio of molecular weigth of water to dry air */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #define Po      101.3  /* [kPa] atmospheric pressure at sea level */
 #define Tko     293.16 /* [K] reference temperature at sea level */
 #define eta     0.0065 /* [K/m] constant lapse rate */
@@ -102,12 +106,17 @@ DCELL calc_ETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int night, DCELL Rh,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day UNUSED,
                         DCELL Rh, DCELL hc UNUSED)
 =======
 DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day, DCELL Rh,
                         DCELL hc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day, DCELL Rh,
+                        DCELL hc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     DCELL ea, delta, gamma, lambda;
     DCELL P, ed, ETaero, ETp;
@@ -164,7 +173,10 @@ DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day, DCELL Rh,
    /* calculus psichiometric constant gamma [hPa/degC] with cp=1.005[KJ/(Kg*K)] */
    gamma        = ((1.005*P)/(0.622*lambda))*0.001;
 <<<<<<< HEAD
+<<<<<<< HEAD
    }
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #endif

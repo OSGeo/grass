@@ -45,7 +45,10 @@ public:
      */
 =======
     /* Set the visibility, this will overide any previous estimates of taer55 */
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     void set_visibility(const double vis, const AtmosModel &atms)
     {
         if (vis > 0)

@@ -114,10 +114,14 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
         count = vsnprintf(buf, osize, fmt, ap);
         va_end(ap);
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (count >= 0 && (size_t)count < osize)
 =======
         if (count >= 0 && count < osize)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (count >= 0 && count < osize)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             break;
         if (count > -1)
             osize = count + 1;

@@ -17,17 +17,23 @@ import os
 import weakref
 import shutil
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 import grass.script as gs
 
 from .map import Map
 from .region import RegionManagerForTimeSeries
 <<<<<<< HEAD
+<<<<<<< HEAD
 from .utils import save_gif
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 
 def fill_none_values(names):
@@ -138,9 +144,12 @@ class TimeSeriesMap:
     # pylint: disable=too-many-instance-attributes
     # Need more attributes to build timeseriesmap visuals
 <<<<<<< HEAD
+<<<<<<< HEAD
     # pylint: disable=duplicate-code
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def __init__(
         self,
@@ -486,17 +495,24 @@ class TimeSeriesMap:
         param str text_color: color to use for the text.
         """
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # Create a GIF from the PNG images
         import PIL.Image  # pylint: disable=import-outside-toplevel
         import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
         import PIL.ImageFont  # pylint: disable=import-outside-toplevel
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         # Render images if they have not been already
         if not self._layers_rendered:
             self.render()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         input_files = []
         for date in self._dates:
@@ -512,6 +528,8 @@ class TimeSeriesMap:
             text_size=text_size,
             text_color=text_color,
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # filepath to output GIF
         if not filename.endswith(".gif"):
             raise ValueError(_("filename must end in '.gif'"))
@@ -538,7 +556,10 @@ class TimeSeriesMap:
             save_all=True,
             duration=duration,
             loop=0,
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         )
 
         # Display the GIF

@@ -29,7 +29,10 @@ from grass.script.core import warning
 from grass.pygrass.vector import sql
 from grass.lib.ctypes_preamble import ReturnString
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 
 if sys.version_info.major >= 3:
