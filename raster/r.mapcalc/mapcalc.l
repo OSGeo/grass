@@ -93,6 +93,9 @@ static int get_input_stream(char *buf, int max_size)
 
 %}
 
+%option nounput
+%option noinput
+
 W		[ \t\r]+
 N		[^ ^#@,"'\000-\037()\[\]+\-*/%><!=&|?:;~]+
 I		[0-9]+

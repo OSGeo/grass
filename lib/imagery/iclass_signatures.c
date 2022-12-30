@@ -33,8 +33,6 @@
 
 #include "iclass_local_proto.h"
 
-
-
 /*!
    \brief Initialize signatures.
 
@@ -50,12 +48,8 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
 
     I_init_signatures(sigs, refer->nfiles);
     for (unsigned int i = refer->nfiles; i--;) {
-        sigs->bandrefs[i] = Rast_read_bandref(refer->file[i].name, refer->file[i].mapset);
-        if (!sigs->bandrefs[i]) {
-            G_warning(_("Raster map <%s@%s> lacks band reference"),
-                refer->file[i].name, refer->file[i].mapset);
-            return 0;
-        }
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
+            refer->file[i].name, refer->file[i].mapset);
     }
 
     return 1;
@@ -68,7 +62,7 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
    \param statistics pointer to statistics structure
  */
 void I_iclass_add_signature(struct Signature *sigs,
-			    IClass_statistics * statistics)
+                            IClass_statistics *statistics)
 {
     int sn;
 
@@ -95,10 +89,10 @@ void I_iclass_add_signature(struct Signature *sigs,
     sigs->sig[sn - 1].b = b;
 
     for (b1 = 0; b1 < sigs->nbands; b1++) {
-	sigs->sig[sn - 1].mean[b1] = statistics->band_mean[b1];
-	for (b2 = 0; b2 <= b1; b2++) {
-	    sigs->sig[sn - 1].var[b1][b2] = var_signature(statistics, b1, b2);
-	}
+        sigs->sig[sn - 1].mean[b1] = statistics->band_mean[b1];
+        for (b2 = 0; b2 <= b1; b2++) {
+            sigs->sig[sn - 1].var[b1][b2] = var_signature(statistics, b1, b2);
+        }
     }
 }
 
@@ -117,11 +111,9 @@ int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
 
     G_debug(3, "I_write_signatures(): file_name=%s", file_name);
 
-    if (!
-	(outsig_fd =
-	 I_fopen_signature_file_new(file_name))) {
-	G_warning(_("Unable to open output signature file '%s'"), file_name);
-	return 0;
+    if (!(outsig_fd = I_fopen_signature_file_new(file_name))) {
+        G_warning(_("Unable to open output signature file '%s'"), file_name);
+        return 0;
     }
 
     I_write_signatures(outsig_fd, sigs);

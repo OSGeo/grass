@@ -17,6 +17,7 @@ import subprocess
 import sys
 import collections
 import re
+from collections.abc import Iterable
 
 from .utils import ensure_dir
 from .checkers import text_to_keyvalue
@@ -36,7 +37,7 @@ def keyvalue_to_text(keyvalue, sep="=", vsep="\n", isep=",", last_vertical=None)
     items = []
     for key, value in keyvalue.items():
         # TODO: use isep for iterables other than strings
-        if not isinstance(value, str) and isinstance(value, collections.Iterable):
+        if not isinstance(value, str) and isinstance(value, Iterable):
             # TODO: this does not work for list of non-strings
             value = isep.join(value)
         items.append("{key}{sep}{value}".format(key=key, sep=sep, value=value))
@@ -497,9 +498,13 @@ def html_file_preview(filename):
     return html.getvalue()
 
 
-def returncode_to_html_text(returncode):
+def returncode_to_html_text(returncode, timed_out=None):
     if returncode:
-        return '<span style="color: red">FAILED</span>'
+        if timed_out is not None:
+            extra = f" (timeout >{timed_out}s)"
+        else:
+            extra = ""
+        return f'<span style="color: red">FAILED{extra}</span>'
     else:
         # alternatives: SUCCEEDED, passed, OK
         return '<span style="color: green">succeeded</span>'
@@ -660,9 +665,16 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         super(GrassTestFilesHtmlReporter, self).start_file_test(module)
         self.main_index.flush()  # to get previous lines to the report
 
-    def end_file_test(self, module, cwd, returncode, stdout, stderr, test_summary):
+    def end_file_test(
+        self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
+    ):
         super(GrassTestFilesHtmlReporter, self).end_file_test(
-            module=module, cwd=cwd, returncode=returncode, stdout=stdout, stderr=stderr
+            module=module,
+            cwd=cwd,
+            returncode=returncode,
+            stdout=stdout,
+            stderr=stderr,
+            timed_out=timed_out,
         )
         # considering others according to total is OK when we more or less
         # know that input data make sense (total >= errors + failures)
@@ -706,7 +718,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             "<tr>".format(
                 d=to_web_path(module.tested_dir),
                 m=module.name,
-                status=returncode_to_html_text(returncode),
+                status=returncode_to_html_text(returncode, timed_out),
                 stests=successes,
                 ftests=bad_ones,
                 ntests=total,
@@ -758,7 +770,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                 file_path=os.path.join(
                     module.tested_dir, "testsuite", module.name + "." + module.file_type
                 ),
-                status=returncode_to_html_text(returncode),
+                status=returncode_to_html_text(returncode, timed_out),
                 stests=successes,
                 ftests=bad_ones,
                 ntests=total,
@@ -904,9 +916,16 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
             text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
             summary_file.write(text)
 
-    def end_file_test(self, module, cwd, returncode, stdout, stderr, test_summary):
+    def end_file_test(
+        self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
+    ):
         super(GrassTestFilesKeyValueReporter, self).end_file_test(
-            module=module, cwd=cwd, returncode=returncode, stdout=stdout, stderr=stderr
+            module=module,
+            cwd=cwd,
+            returncode=returncode,
+            stdout=stdout,
+            stderr=stderr,
+            timed_out=timed_out,
         )
         # TODO: considering others according to total, OK?
         # here we are using 0 for total but HTML reporter is using None
@@ -996,9 +1015,16 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         # get the above line and all previous ones to the report
         self._stream.flush()
 
-    def end_file_test(self, module, cwd, returncode, stdout, stderr, test_summary):
+    def end_file_test(
+        self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
+    ):
         super(GrassTestFilesTextReporter, self).end_file_test(
-            module=module, cwd=cwd, returncode=returncode, stdout=stdout, stderr=stderr
+            module=module,
+            cwd=cwd,
+            returncode=returncode,
+            stdout=stdout,
+            stderr=stderr,
+            timed_out=timed_out,
         )
 
         if returncode:
@@ -1009,7 +1035,9 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
                 self._stream.write(text.read())
             self._stream.write(width * "=")
             self._stream.write("\n")
-            self._stream.write("FAILED {file}".format(file=module.file_path))
+            self._stream.write(f"FAILED {module.file_path}")
+            if timed_out:
+                self._stream.write(f" - Timeout >{timed_out}s")
             num_failed = test_summary.get("failures", 0)
             num_failed += test_summary.get("errors", 0)
             if num_failed:
@@ -1126,13 +1154,18 @@ class TestsuiteDirReporter(object):
 
             # TODO: keyvalue method should have types for keys function
             # perhaps just the current post processing function is enough
-            test_file_authors = summary["test_file_authors"]
+            test_file_authors = summary.get("test_file_authors")
+            if not test_file_authors:
+                test_file_authors = []
             if type(test_file_authors) is not list:
                 test_file_authors = [test_file_authors]
             test_files_authors.extend(test_file_authors)
 
             file_total += 1
-            file_successes += 0 if summary["returncode"] else 1
+            # Use non-zero return code in case it is missing.
+            # (This can happen when the test has timed out.)
+            return_code = summary.get("returncode", 1)
+            file_successes += 0 if return_code else 1
 
             pass_per = success_to_html_percent(total=total, successes=successes)
             row = (
@@ -1143,7 +1176,7 @@ class TestsuiteDirReporter(object):
                 "<td>{ftests}</td><td>{ptests}</td>"
                 "<tr>".format(
                     f=test_file_name,
-                    status=returncode_to_html_text(summary["returncode"]),
+                    status=returncode_to_html_text(return_code),
                     stests=successes,
                     ftests=bad_ones,
                     ntests=total,

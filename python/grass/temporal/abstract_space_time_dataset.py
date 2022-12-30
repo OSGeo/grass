@@ -21,7 +21,7 @@ from .core import (
     get_sql_template_path,
     get_tgis_metadata,
     get_current_mapset,
-    get_enable_mapset_check,
+    get_tgis_db_version_from_metadata,
 )
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .temporal_granularity import (
@@ -63,13 +63,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.map_counter = 0
 
         # SpaceTimeRasterDataset related only
-        self.band_reference = None
+        self.semantic_label = None
 
-    def get_name(self, band_reference=True):
-        """Get dataset name including band reference filter if enabled.
+    def get_name(self, semantic_label=True):
+        """Get dataset name including semantic label filter if enabled.
 
-        :param bool band_reference: True to return dataset name
-        including band reference filter if defined
+        :param bool semantic_label: True to return dataset name
+        including semantic label filter if defined
         (eg. "landsat.L8_1") otherwise dataset name is returned only
         (eg. "landsat").
 
@@ -78,8 +78,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
         dataset_name = super(AbstractSpaceTimeDataset, self).get_name()
 
-        if band_reference and self.band_reference:
-            return "{}.{}".format(dataset_name, self.band_reference)
+        if semantic_label and self.semantic_label:
+            return "{}.{}".format(dataset_name, self.semantic_label)
 
         return dataset_name
 
@@ -305,7 +305,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Granularity can be of absolute time or relative time.
         In case of absolute time a string containing an integer
-        value and the time unit (years, months, days, hours, minuts,
+        value and the time unit (years, months, days, hours, minutes,
         seconds). In case of relative time an integer value is expected.
 
         :return: The granularity
@@ -321,7 +321,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Granularity can be of absolute time or relative time.
         In case of absolute time a string containing an integer
-        value and the time unit (years, months, days, hours, minuts,
+        value and the time unit (years, months, days, hours, minutes,
         seconds). In case of relative time an integer value is expected.
 
         This method only modifies this object and does not commit
@@ -1479,18 +1479,26 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if row["key"] == "tgis_db_version":
                     db_version = int(float(row["value"]))
 
-        if db_version >= 1:
-            has_bt_columns = True
-            columns = "id,start_time,end_time, west,east,south,north,bottom,top"
-        else:
-            has_bt_columns = False
-            columns = "id,start_time,end_time, west,east,south,north"
-
-        rows = self.get_registered_maps(columns, where, order, dbif)
+        # use all columns
+        rows = self.get_registered_maps(None, where, order, dbif)
 
         if rows is not None:
+            has_bt_columns = False
+            has_semantic_label = False
+            first_row = True
             for row in rows:
+                if first_row:
+                    first_row = False
+                    # check keys in first row
+                    # note that 'if "bottom" in row' does not work
+                    # because row is not a dict but some db backend object
+                    if "bottom" in row.keys() and "top" in row.keys():
+                        has_bt_columns = True
+                    if "semantic_label" in row.keys():
+                        has_semantic_label = True
+
                 map = self.get_new_map_instance(row["id"])
+                # time
                 if self.is_time_absolute():
                     map.set_absolute_time(row["start_time"], row["end_time"])
                 elif self.is_time_relative():
@@ -1499,6 +1507,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         row["end_time"],
                         self.get_relative_time_unit(),
                     )
+                # space
                 # The fast way
                 if has_bt_columns:
                     map.set_spatial_extent_from_values(
@@ -1513,6 +1522,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 else:
                     map.spatial_extent.select(dbif)
 
+                # labels
+                if (
+                    has_semantic_label
+                    and row["semantic_label"] is not None
+                    and row["semantic_label"] != "None"
+                ):
+                    map.metadata.set_semantic_label(row["semantic_label"])
+
                 obj_list.append(copy.copy(map))
 
         if connection_state_changed:
@@ -1520,10 +1537,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
-    def _update_where_statement_by_band_reference(self, where):
-        """Update given SQL WHERE statement by band reference.
+    def _update_where_statement_by_semantic_label(self, where):
+        """Update given SQL WHERE statement by semantic label.
 
-        Call this method only when self.band_reference is defined.
+        Call this method only when self.semantic_label is defined.
 
         :param str where: SQL WHERE statement to be updated
 
@@ -1537,7 +1554,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 else:
                     return "{0:02d}".format(int(value))
             except ValueError:
-                return value
+                return None
 
             return None
 
@@ -1548,35 +1565,39 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             where = ""
 
         # be case-insensitive
-        if "_" in self.band_reference:
-            # fully-qualified band reference
-            where += "band_reference IN ('{}'".format(self.band_reference.upper())
+        if "_" in self.semantic_label:
+            # fully-qualified semantic label, do not modify
+            where += "semantic_label IN ('{}'".format(self.semantic_label)
 
             # be zero-padding less sensitive
-            shortcut, identifier = self.band_reference.split("_", -1)
-            identifier_zp = leading_zero(identifier)
-            if identifier_zp:
-                where += ", '{fl}_{zp}'".format(
-                    fl=shortcut.upper(), zp=identifier_zp.upper()
-                )
+            try:
+                shortcut, identifier = self.semantic_label.split("_", -1)
+                identifier_zp = leading_zero(identifier)
+                if identifier_zp:
+                    where += ", '{fl}_{zp}'".format(
+                        fl=shortcut.upper(), zp=identifier_zp.upper()
+                    )
+            except ValueError:
+                # any number of "_" is allowed in semantic labels
+                pass
 
             # close WHERE statement
             where += ")"
         else:
             # shortcut or band identifier given
-            shortcut_identifier = leading_zero(self.band_reference)
+            shortcut_identifier = leading_zero(self.semantic_label)
             if shortcut_identifier:
                 where += (
                     "{br} LIKE '{si}\_%' {esc} OR {br} LIKE '%\_{si}' {esc} OR "
                     "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
-                        br="band_reference",
+                        br="semantic_label",
                         si=shortcut_identifier,
-                        orig=self.band_reference.upper(),
+                        orig=self.semantic_label.upper(),
                         esc="ESCAPE '\\'",
                     )
                 )
             else:
-                where += "band_reference = '{}'".format(self.band_reference)
+                where += "semantic_label = '{}'".format(self.semantic_label)
 
         return where
 
@@ -1622,9 +1643,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     self.get_map_register(),
                 )
 
-            # filter by band reference identifier
-            if self.band_reference:
-                where = self._update_where_statement_by_band_reference(where)
+            # filter by semantic label identifier
+            if self.semantic_label:
+                where = self._update_where_statement_by_semantic_label(where)
 
             if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])
@@ -1746,15 +1767,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 granularity
 
         """
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to shift dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset "
-                    "of the dataset does not match the current "
+                    "of the database does not match the current "
                     "mapset"
                 )
                 % ({"ds": self.get_id()}, {"type": self.get_type()})
@@ -1924,15 +1942,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to snap dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset "
-                    "of the dataset does not match the current "
+                    "of the database does not match the current "
                     "mapset"
                 )
                 % ({"ds": self.get_id()}, {"type": self.get_type()})
@@ -2034,15 +2049,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to rename dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset "
-                    "of the dataset does not match the current "
+                    "of the database does not match the current "
                     "mapset"
                 )
                 % ({"ds": self.get_id()}, {"type": self.get_type()})
@@ -2126,15 +2138,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             % (self.get_new_map_instance(ident=None).get_type(), self.get_id())
         )
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to delete dataset <%(ds)s> of type "
                     "%(type)s from the temporal database. The mapset"
-                    " of the dataset does not match the current "
+                    " of the database does not match the current "
                     "mapset"
                 )
                 % {"ds": self.get_id(), "type": self.get_type()}
@@ -2190,6 +2199,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         is_registered = False
 
+        # TODO: use mapset of the corresponding stds
+
         # Check if map is already registered
         if stds_register_table is not None:
             if dbif.get_dbmi().paramstyle == "qmark":
@@ -2227,14 +2238,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :return: True if success, False otherwise
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        # only modify database in current mapset
+        mapset = get_current_mapset()
+
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to register map in dataset <%(ds)s> of "
-                    "type %(type)s. The mapset of the dataset does "
+                    "type %(type)s. The mapset of the database does "
                     "not match the current mapset"
                 )
                 % {"ds": self.get_id(), "type": self.get_type()}
@@ -2242,7 +2253,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         dbif, connection_state_changed = init_dbif(dbif)
 
-        if map.is_in_db(dbif) is False:
+        if map.is_in_db(dbif, mapset=self.get_mapset()) is False:
             dbif.close()
             self.msgr.fatal(
                 _(
@@ -2273,8 +2284,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 % (map.get_type(), map.get_map_id(), map.get_type(), self.get_id()),
             )
 
-        # First select all data from the database
-        map.select(dbif)
+        # First select all data from the database in the current mapset
+        map.select(dbif, mapset=mapset)
 
         if not map.check_for_correct_time():
             if map.get_layer():
@@ -2368,9 +2379,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     % {"id": self.get_id(), "map": map.get_map_id()}
                 )
 
-        if get_enable_mapset_check() is True and stds_mapset != map_mapset:
+        if stds_mapset != mapset:
             dbif.close()
-            self.msgr.fatal(_("Only maps from the same mapset can be registered"))
+            self.msgr.fatal(
+                _("Maps can only registered in a database in the current mapset")
+            )
 
         # Check if map is already registered
         if self.is_map_registered(map_id, dbif=dbif):
@@ -2399,7 +2412,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         statement += dbif.mogrify_sql_statement((sql, (map_id,)))
 
         # Now execute the insert transaction
-        dbif.execute_transaction(statement)
+        # only databases in the current mapset can be modified
+        dbif.execute_transaction(statement, mapset=stds_mapset)
 
         if connection_state_changed:
             dbif.close()
@@ -2426,18 +2440,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 string, None in case of a failure
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        # only modify database in current mapset
+        mapset = get_current_mapset()
+
+        if self.get_mapset() != mapset:
+            self.msgr.debug(1, "STDS name <%s>" % self.get_name())
+            dbif.close()
             self.msgr.fatal(
-                _(
-                    "Unable to unregister map from dataset <%(ds)s>"
-                    " of type %(type)s in the temporal database."
-                    " The mapset of the dataset does not match the"
-                    " current mapset"
-                )
-                % {"ds": self.get_id(), "type": self.get_type()}
+                _("Maps can only unregistered in a database in the current mapset")
             )
 
         statement = ""
@@ -2487,7 +2497,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             statement += dbif.mogrify_sql_statement((sql, (map.get_id(),)))
 
         if execute:
-            dbif.execute_transaction(statement)
+            dbif.execute_transaction(statement, mapset=mapset)
             statement = ""
 
         if connection_state_changed:
@@ -2514,15 +2524,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to update dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset"
-                    " of the dataset does not match the current "
+                    " of the database does not match the current "
                     "mapset"
                 )
                 % {"ds": self.get_id(), "type": self.get_type()}
@@ -2576,13 +2583,24 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             ),
             "r",
         ).read()
+
+        for version in range(3, get_tgis_db_version_from_metadata() + 1):
+            sqlfile = os.path.join(
+                sql_path,
+                "update_"
+                + self.get_type()
+                + "_metadata_template_v{}.sql".format(version),
+            )
+            if os.path.exists(sqlfile):
+                sql += open(sqlfile).read()
+
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
 
         sql_script += sql
         sql_script += "\n"
 
-        dbif.execute_transaction(sql_script)
+        dbif.execute_transaction(sql_script, mapset=self.base.mapset)
 
         # Read and validate the selected end time
         self.select(dbif)
@@ -2662,7 +2680,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
                 sql = sql.replace("STDS", self.get_type())
 
-            dbif.execute_transaction(sql)
+            dbif.execute_transaction(sql, mapset=self.base.mapset)
 
         # Count the temporal map types
         maps = self.get_registered_maps_as_objects(dbif=dbif)

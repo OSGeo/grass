@@ -170,10 +170,10 @@ RUN echo "  => Configure and compile grass";\
     rm -rf /var/cache/apk/*; \
     rm -rf /root/.cache; \
     # Remove unnecessary grass files
-    rm -rf /usr/local/grass80/demolocation; \
-    rm -rf /usr/local/grass80/fonts; \
-    rm -rf /usr/local/grass80/gui; \
-    rm -rf /usr/local/grass80/share;
+    rm -rf /usr/local/grass83/demolocation; \
+    rm -rf /usr/local/grass83/fonts; \
+    rm -rf /usr/local/grass83/gui; \
+    rm -rf /usr/local/grass83/share;
 
 
 # Unset environmental variables to avoid later compilation issues

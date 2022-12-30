@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.describe
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *
- * PURPOSE:      Prints terse list of category values found in a raster 
+ * PURPOSE:      Prints terse list of category values found in a raster
  *               map layer.
  *
  * COPYRIGHT:    (C) 2006 by the GRASS Development Team
@@ -23,7 +22,6 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-
 int main(int argc, char *argv[])
 {
     int as_int;
@@ -33,19 +31,17 @@ int main(int argc, char *argv[])
     int nsteps;
     char *no_data_str;
     struct GModule *module;
-    struct
-    {
-	struct Flag *one;
-	struct Flag *r;
-	struct Flag *d;
-	struct Flag *i;
-	struct Flag *n;
+    struct {
+        struct Flag *one;
+        struct Flag *r;
+        struct Flag *d;
+        struct Flag *i;
+        struct Flag *n;
     } flag;
-    struct
-    {
-	struct Option *map;
-	struct Option *nv;
-	struct Option *nsteps;
+    struct {
+        struct Option *map;
+        struct Option *nv;
+        struct Option *nsteps;
     } option;
 
     G_gisinit(argv[0]);
@@ -54,7 +50,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("metadata"));
     module->description =
-	_("Prints terse list of category values found in a raster map layer.");
+        _("Prints terse list of category values found in a raster map layer.");
 
     /* define different options */
     option.map = G_define_standard_option(G_OPT_R_MAP);
@@ -93,7 +89,7 @@ int main(int argc, char *argv[])
     flag.i->description = _("Read floating-point map as integer");
 
     if (0 > G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     compact = (!flag.one->answer);
     range = flag.r->answer;
@@ -102,11 +98,11 @@ int main(int argc, char *argv[])
     no_data_str = option.nv->answer;
 
     if (sscanf(option.nsteps->answer, "%d", &nsteps) != 1 || nsteps < 1)
-	G_fatal_error(_("%s = %s -- must be greater than zero"),
-		      option.nsteps->key, option.nsteps->answer);
+        G_fatal_error(_("%s = %s -- must be greater than zero"),
+                      option.nsteps->key, option.nsteps->answer);
 
-    describe(option.map->answer, compact, no_data_str,
-	     range, windowed, nsteps, as_int, flag.n->answer);
+    describe(option.map->answer, compact, no_data_str, range, windowed, nsteps,
+             as_int, flag.n->answer);
 
     return EXIT_SUCCESS;
 }

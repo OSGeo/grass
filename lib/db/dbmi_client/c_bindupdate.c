@@ -1,6 +1,6 @@
 /*!
  * \file lib/db/dbmi_client/c_bindupdate.c
- * 
+ *
  * \brief DBMI Library (client) - bind update
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,14 +16,14 @@
 #include "macros.h"
 
 /*!
-  \brief ?
-  
-  \param cursor db cursor
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db_bind_update(dbCursor * cursor)
+   \brief ?
+
+   \param cursor db cursor
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db_bind_update(dbCursor *cursor)
 {
     int ret_code;
 
@@ -34,13 +34,13 @@ int db_bind_update(dbCursor * cursor)
     /* send the argument(s) to the procedure */
     DB_SEND_TOKEN(&cursor->token);
     DB_SEND_SHORT_ARRAY(cursor->column_flags,
-			db_get_cursor_number_of_columns(cursor));
+                        db_get_cursor_number_of_columns(cursor));
 
     /* get the return code for the procedure call */
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;

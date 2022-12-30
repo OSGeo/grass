@@ -68,10 +68,6 @@ from threading import Thread
 
 import wx
 
-try:
-    import wx.lib.agw.flatnotebook as FN
-except ImportError:
-    import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
@@ -115,7 +111,6 @@ from gui_core.widgets import (
     FloatValidator,
     FormListbook,
     FormNotebook,
-    GNotebook,
     PlacementValidator,
 )
 from core.giface import Notification, StandaloneGrassInterface
@@ -173,7 +168,7 @@ class UpdateThread(Thread):
         self.event = event
         self.eventId = eventId
         self.task = task
-        self.setDaemon(True)
+        self.daemon = True
 
         # list of functions which updates the dialog
         self.data = {}
@@ -439,7 +434,7 @@ class UpdateQThread(Thread):
         Thread.__init__(self, **kwds)
 
         self.parent = parent  # cmdPanel
-        self.setDaemon(True)
+        self.daemon = True
 
         self.requestQ = requestQ
         self.resultQ = resultQ
@@ -575,7 +570,6 @@ class TaskFrame(wx.Frame):
         self._gconsole = self.notebookpanel._gconsole
         if self._gconsole:
             self._gconsole.mapCreated.connect(self.OnMapCreated)
-            self._gconsole.updateMap.connect(lambda: self._giface.updateMap.emit())
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
             self.goutput.showNotification.connect(
@@ -1053,13 +1047,7 @@ class CmdPanel(wx.Panel):
         elif style == 1:  # basic left
             self.notebook = FormNotebook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 2:  # fancy green
-            self.notebook = GNotebook(
-                self, style=globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON
-            )
-            self.notebook.SetTabAreaColour(globalvar.FNPageColor)
-            self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 3:
+        elif style == 2:  # list left
             self.notebook = FormListbook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChange)
         self.notebook.Refresh()
@@ -1281,7 +1269,6 @@ class CmdPanel(wx.Panel):
                             txt2 = SpinCtrl(
                                 parent=which_panel,
                                 id=wx.ID_ANY,
-                                size=globalvar.DIALOG_SPIN_SIZE,
                                 min=minValue,
                                 max=maxValue,
                             )
@@ -1428,14 +1415,13 @@ class CmdPanel(wx.Panel):
                         which_sizer.Add(win, proportion=0, flag=style, border=5)
 
                 elif p.get("type", "") == "integer":
-                    minValue = -1e9
-                    maxValue = 1e9
+                    minValue = int(-1e9)
+                    maxValue = int(1e9)
                     value = self._getValue(p)
 
                     win = SpinCtrl(
                         parent=which_panel,
                         value=p.get("default", ""),
-                        size=globalvar.DIALOG_SPIN_SIZE,
                         min=minValue,
                         max=maxValue,
                     )
@@ -2049,7 +2035,11 @@ class CmdPanel(wx.Panel):
                         )
                         if p.get("value", "") and os.path.isfile(p["value"]):
                             ifbb.Clear()
-                            enc = locale.getdefaultlocale()[1]
+                            try:
+                                # Python >= 3.11
+                                enc = locale.getencoding()
+                            except AttributeError:
+                                enc = locale.getdefaultlocale()[1]
                             with codecs.open(
                                 p["value"], encoding=enc, errors="ignore"
                             ) as f:
@@ -2276,7 +2266,7 @@ class CmdPanel(wx.Panel):
                         )
                         p["wxId"] = [self.win1.GetId()]
 
-                        def OnCheckItem(index, flag):
+                        def OnCheckItem(index=None, flag=None, event=None):
                             layers = list()
                             geometry = None
                             for layer, match, listId in self.win1.GetLayers():
@@ -2291,7 +2281,13 @@ class CmdPanel(wx.Panel):
                             # TODO: v.import has no geometry option
                             self.OnUpdateValues()  # TODO: replace by signal
 
-                        self.win1.OnCheckItem = OnCheckItem
+                        from core.globalvar import CheckWxVersion
+
+                        if CheckWxVersion([4, 1, 0]):
+                            self.win1.Bind(wx.EVT_LIST_ITEM_CHECKED, OnCheckItem)
+                            self.win1.Bind(wx.EVT_LIST_ITEM_UNCHECKED, OnCheckItem)
+                        else:
+                            self.win1.OnCheckItem = OnCheckItem
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
@@ -2602,7 +2598,11 @@ class CmdPanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             f = codecs.open(path, encoding=enc, mode="w", errors="replace")
             try:
                 f.write(text + os.linesep)
@@ -2626,7 +2626,11 @@ class CmdPanel(wx.Panel):
                 filename = grass.tempfile()
                 win.SetValue(filename)
 
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             f = codecs.open(filename, encoding=enc, mode="w", errors="replace")
             try:
                 f.write(text)

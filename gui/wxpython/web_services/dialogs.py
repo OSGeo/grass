@@ -71,6 +71,11 @@ class WSDialogBase(wx.Dialog):
                 "",
                 "",
             ],
+            "NASA GIBS WMTS": [
+                "http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi",
+                "",
+                "",
+            ],
             "tiles.maps.eox.at (Sentinel-2)": [
                 "https://tiles.maps.eox.at/wms",
                 "",
@@ -478,8 +483,8 @@ class WSDialogBase(wx.Dialog):
 
     def OnChooseWs(self, event):
         """Show panel corresponding to selected web service."""
-        choosen_r = event.GetInt()
-        self._showWsPanel(self.web_service_sel[choosen_r])
+        chosen_r = event.GetInt()
+        self._showWsPanel(self.web_service_sel[chosen_r])
 
     def _showWsPanel(self, ws):
         """Helper function"""

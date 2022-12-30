@@ -100,7 +100,6 @@ MANDIR = $(MANBASEDIR)/man$(MANSECT)
 HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/utils/g.html2man.py
 
 GDAL_LINK = $(USE_GDAL)
-GDAL_DYNAMIC = 1
 
 DEPFILE = depend.mk
 
@@ -235,15 +234,7 @@ DISPLAYDEPS += $(CAIRODRIVERLIB)
 endif
 
 ifneq ($(GDAL_LINK),)
-ifneq ($(GDAL_DYNAMIC),)
-ifneq ($(MINGW),)
-RASTERDEPS += -lkernel32
-else
-RASTERDEPS += $(DLLIB)
-endif
-else
 RASTERDEPS += $(GDALLIBS)
-endif
 endif
 
 ifeq ($(OPENGL_WINDOWS),1)
@@ -270,11 +261,7 @@ $(1)LIB = -l$$($(1)_LIBNAME) $$($(1)DEPS)
 else
 $(1)LIB = -l$$($(1)_LIBNAME)
 endif
-ifneq ($(1),IOSTREAM)
 $(1)DEP = $$(BASE_LIBDIR)/$$(LIB_PREFIX)$$($(1)_LIBNAME)$$(LIB_SUFFIX)
-else
-$(1)DEP = $$(BASE_LIBDIR)/$$(STLIB_PREFIX)$$($(1)_LIBNAME)$$(STLIB_SUFFIX)
-endif
 endef
 
 $(foreach lib,$(libs),$(eval $(call lib_rules,$(firstword $(subst :, ,$(lib))),$(lastword $(subst :, ,$(lib))))))

@@ -48,6 +48,28 @@ For calculating univariate statistics from a raster map based on vector polygon
 map and uploads statistics to new attribute columns, see
 <em><a href="v.rast.stats.html">v.rast.stats</a></em>.
 
+<h3>PERFORMANCE</h3>
+
+<p>
+<em>r.univar</em> suports parallel processing using OpenMP. The user
+can specify the number of threads to be used with the <b>nprocs</b> parameter.
+However, parallelization is disabled when the <b>-e</b> extended statistics
+flag is used.
+
+<p>
+Due to the differences in summation order, users may encounter small floating points
+discrepancies when <em>r.univar</em> is run on very large raster files when different
+<b>nprocs</b> parameters are used. However, since the work allocation among threads
+is static, users should expect to have the same results when run with the same 
+number of threads.
+
+<div align="center" style="margin: 10px">
+    <img src="r_univar_benchmark_size.png" alt="benchmark for number of cells" border="0">
+    <br>
+    <i>Figure: Benchmark shows execution time for different
+    number of cells and cores. See benchmark scripts in source code. </i>
+    </div>
+
 <h2>EXAMPLES</h2>
 
 <h3>Univariate statistics</h3>
@@ -237,15 +259,9 @@ To be implemented <i>mode, skewness, kurtosis</i>.
 <a href="v.univar.html">v.univar</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Hamish Bowman, Otago University, New Zealand<br>
 Extended statistics by Martin Landa<br>
 Multiple input map support by Ivan Shmakov<br>
 Zonal loop by Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

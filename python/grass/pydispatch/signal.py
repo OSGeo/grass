@@ -174,7 +174,7 @@ class Signal(object):
 
         >>> signal1.disconnect(sys.stdout.flush)  #doctest: +ELLIPSIS
         Traceback (most recent call last):
-        DispatcherKeyError: 'No receivers found for signal <__main__.Signal object at 0x...> from sender _Any'
+        DispatcherKeyError: 'No receivers found for signal ...'
 
         Disconnecting the non-exiting or unknown handler will result in error.
 

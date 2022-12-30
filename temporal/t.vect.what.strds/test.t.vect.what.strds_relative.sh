@@ -12,7 +12,7 @@ r.mapcalc --o expr="prec_4 = 400"
 r.mapcalc --o expr="prec_5 = 500.0"
 r.mapcalc --o expr="prec_6 = 600.0"
 
-v.random --o -z output=soil_1 npoints=5 zmin=0 zmax=100 column=heigh seed=1
+v.random --o -z output=soil_1 npoints=5 zmin=0 zmax=100 column=height seed=1
 v.random --o -z output=soil_2 npoints=5 zmin=0 zmax=100 column=height seed=2
 v.random --o -z output=soil_3 npoints=5 zmin=0 zmax=100 column=height seed=3
 

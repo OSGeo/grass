@@ -1,15 +1,15 @@
 /*!
-  \file lib/manage/read_list.c
-  
-  \brief Manage Library - Read list of elements
-  
-  (C) 2001-2011 by the GRASS Development Team
- 
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Original author CERL
-*/
+   \file lib/manage/read_list.c
+
+   \brief Manage Library - Read list of elements
+
+   (C) 2001-2011 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL
+ */
 
 #include <string.h>
 #include <stdlib.h>
@@ -26,25 +26,25 @@ struct list *list;
 static void format_error(char *, int, char *);
 
 /*!
-  \brief Read list of elements
+   \brief Read list of elements
 
-  Format:
+   Format:
 
-  \code
+   \code
    # ... comments
    main element:alias:description:menu text
-      sub element:description
-      sub element:description
-	  .
-	  .
-	  .
-  \endcode
+   sub element:description
+   sub element:description
+   .
+   .
+   .
+   \endcode
 
-  \param check_if_empty TRUE for check if element is empty
+   \param check_if_empty TRUE for check if element is empty
 
-  \return 0
-  \return 1
-*/
+   \return 0
+   \return 1
+ */
 int M_read_list(int check_if_empty, int *num)
 {
     FILE *fd;
@@ -64,65 +64,64 @@ int M_read_list(int check_if_empty, int *num)
 
     env = getenv("ELEMENT_LIST");
     if (env)
-	strcpy(element_list, env);
+        strcpy(element_list, env);
     else
-	sprintf(element_list, "%s/etc/element_list", G_gisbase());
+        sprintf(element_list, "%s/etc/element_list", G_gisbase());
     fd = fopen(element_list, "r");
 
     if (!fd)
-	G_fatal_error(_("Unable to open data base element list '%s'"), element_list);
+        G_fatal_error(_("Unable to open data base element list '%s'"),
+                      element_list);
 
     line = 0;
     while (G_getl(buf, sizeof(buf), fd)) {
-	line++;
-	if (*buf == '#')
-	    continue;
-	if (*buf == ' ' || *buf == '\t') {	/* support element */
-	    *desc = 0;
-	    if (sscanf(buf, "%[^:]:%[^\n]", elem, desc) < 1)
-		continue;
-	    if (*elem == '#')
-		continue;
-	    if (nlist == 0)
-		format_error(element_list, line, buf);
+        line++;
+        if (*buf == '#')
+            continue;
+        if (*buf == ' ' || *buf == '\t') { /* support element */
+            *desc = 0;
+            if (sscanf(buf, "%[^:]:%[^\n]", elem, desc) < 1)
+                continue;
+            if (*elem == '#')
+                continue;
+            if (nlist == 0)
+                format_error(element_list, line, buf);
 
-	    G_strip(elem);
-	    G_strip(desc);
-	    M__add_element(elem, desc);
-	}
-	else {			/* main element */
+            G_strip(elem);
+            G_strip(desc);
+            M__add_element(elem, desc);
+        }
+        else { /* main element */
 
-	    if (sscanf
-		(buf, "%[^:]:%[^:]:%[^:]:%[^\n]", elem, alias, desc,
-		 text) != 4)
-		format_error(element_list, line, buf);
+            if (sscanf(buf, "%[^:]:%[^:]:%[^:]:%[^\n]", elem, alias, desc,
+                       text) != 4)
+                format_error(element_list, line, buf);
 
-	    G_strip(elem);
-	    G_strip(alias);
-	    G_strip(desc);
-	    G_strip(text);
+            G_strip(elem);
+            G_strip(alias);
+            G_strip(desc);
+            G_strip(text);
 
-	    list =
-		(struct list *)G_realloc(list, (nlist + 1) * sizeof(*list));
-	    list[nlist].mainelem = G_store(elem);
-	    list[nlist].alias = G_store(alias);
-	    list[nlist].maindesc = G_store(desc);
-	    list[nlist].text = G_store(text);
-	    list[nlist].nelem = 0;
-	    list[nlist].element = 0;
-	    list[nlist].desc = 0;
-	    list[nlist].status = 0;
-	    if (!check_if_empty || !M__empty(elem)) {
-		list[nlist].status = 1;
-		any = 1;
-	    }
-	    nlist++;
-	    M__add_element(elem, desc);
-	}
+            list = (struct list *)G_realloc(list, (nlist + 1) * sizeof(*list));
+            list[nlist].mainelem = G_store(elem);
+            list[nlist].alias = G_store(alias);
+            list[nlist].maindesc = G_store(desc);
+            list[nlist].text = G_store(text);
+            list[nlist].nelem = 0;
+            list[nlist].element = 0;
+            list[nlist].desc = 0;
+            list[nlist].status = 0;
+            if (!check_if_empty || !M__empty(elem)) {
+                list[nlist].status = 1;
+                any = 1;
+            }
+            nlist++;
+            M__add_element(elem, desc);
+        }
     }
 
     if (num)
-	*num = nlist;
+        *num = nlist;
 
     fclose(fd);
 
@@ -131,6 +130,6 @@ int M_read_list(int check_if_empty, int *num)
 
 void format_error(char *element_list, int line, char *buf)
 {
-    G_fatal_error(_("Format error: file ('%s') line (%d) - %s"), element_list, line,
-		  buf);
+    G_fatal_error(_("Format error: file ('%s') line (%d) - %s"), element_list,
+                  line, buf);
 }

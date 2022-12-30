@@ -2,16 +2,16 @@
 #include <unistd.h>
 #include "Gwater.h"
 
-int dseg_close(DSEG * dseg)
+int dseg_close(DSEG *dseg)
 {
     Segment_close(&(dseg->seg));
     if (dseg->name) {
-	G_free(dseg->name);
-	dseg->name = NULL;
+        G_free(dseg->name);
+        dseg->name = NULL;
     }
     if (dseg->mapset) {
-	G_free(dseg->mapset);
-	dseg->mapset = NULL;
+        G_free(dseg->mapset);
+        dseg->mapset = NULL;
     }
     return 0;
 }
