@@ -218,10 +218,14 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
     skip = 0;
     vertex_count = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
     i = first; /* stmt not necessary */
 =======
     i = first; /* stmt not necssary */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    i = first; /* stmt not necssary */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     do {
         if (!skip) {

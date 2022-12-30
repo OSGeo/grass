@@ -28,11 +28,17 @@ when investigating automated checks of formatting.
 If you think the _ignore-revs_ file contains commits which should be never
 ignored with `git blame`, please open an issue.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 ## On GitHub
 
 GitHub interface does not allow to use the ignore-revs file. However, it is
 easy to move over a revision by pressing "View blame prior to this change"
 which is the icon between commit info and line numbers.
+<<<<<<< HEAD
 >>>>>>> 392c6e8e0b (pygrass: Add update parameters method to Module (#1712))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

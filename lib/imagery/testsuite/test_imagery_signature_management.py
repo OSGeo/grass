@@ -9,9 +9,12 @@ Read the file COPYING that comes with GRASS
 for details
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 import os
 import shutil
 import ctypes
@@ -35,9 +38,12 @@ from grass.lib.imagery import (
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
 <<<<<<< HEAD
+<<<<<<< HEAD
     I_SIGFILE_TYPE_LIBSVM,
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     I_find_signature,
     I_signatures_remove,
     I_signatures_copy,
@@ -46,11 +52,15 @@ from grass.lib.imagery import (
     I_free_signatures_list,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     I_get_signatures_dir,
     I_make_signatures_dir,
 )
 
 
+<<<<<<< HEAD
 class GetSignaturesDirTestCase(TestCase):
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
@@ -79,6 +89,8 @@ class MakeSignaturesDirTestCase(TestCase):
 )
 
 
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 class GetSignaturesElementTestCase(TestCase):
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
@@ -92,7 +104,10 @@ class GetSignaturesElementTestCase(TestCase):
 
 
 class MakeSignaturesElementTestCase(TestCase):
+<<<<<<< HEAD
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     @classmethod
     def setUpClass(cls):
         cls.org_mapset = Mapset()
@@ -110,6 +125,7 @@ class MakeSignaturesElementTestCase(TestCase):
     def test_make_sig(self):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 =======
         I__make_signatures_element(I_SIGFILE_TYPE_SIG)
@@ -117,12 +133,16 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
         )
         # There should not be any side effects of calling function multiple times
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 =======
         I__make_signatures_element(I_SIGFILE_TYPE_SIG)
@@ -130,6 +150,9 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
         )
@@ -137,6 +160,7 @@ class MakeSignaturesElementTestCase(TestCase):
     def test_make_sigset(self):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 =======
         I__make_signatures_element(I_SIGFILE_TYPE_SIGSET)
@@ -144,12 +168,16 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
         )
         # There should not be any side effects of calling function multiple times
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 =======
         I__make_signatures_element(I_SIGFILE_TYPE_SIGSET)
@@ -157,10 +185,14 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
         )
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def test_make_libsvm(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
@@ -175,12 +207,15 @@ class MakeSignaturesElementTestCase(TestCase):
 
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 class SignaturesRemoveTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
@@ -190,17 +225,24 @@ class SignaturesRemoveTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        cls.sigdirs = []
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     @classmethod
     def tearDownClass(cls):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
+<<<<<<< HEAD
 =======
 
     @classmethod
@@ -216,6 +258,8 @@ class SignaturesRemoveTestCase(TestCase):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_remove_existing_sig(self):
         # This test will fail if run in PERMANENT!
@@ -223,13 +267,19 @@ class SignaturesRemoveTestCase(TestCase):
         sig_name1 = tempname(10)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         open(sigfile_name1, "a").close()
         sig_name2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/sig/{sig_name2}"
@@ -243,6 +293,7 @@ class SignaturesRemoveTestCase(TestCase):
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         open(sigfile_name3, "a").close()
+<<<<<<< HEAD
 =======
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
@@ -265,6 +316,8 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # Try to remove with wrong type
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, sig_name2)
         self.assertEqual(ret, 1)
@@ -297,13 +350,19 @@ class SignaturesRemoveTestCase(TestCase):
         sig_name1 = tempname(10)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         open(sigfile_name1, "a").close()
         sig_name2 = tempname(10)
         # Do not create sig_name2 matching file
@@ -313,6 +372,7 @@ class SignaturesRemoveTestCase(TestCase):
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         open(sigfile_name3, "a").close()
+<<<<<<< HEAD
 =======
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
@@ -331,6 +391,8 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # Now remove one (should fail as file is absent)
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
         self.assertEqual(ret, 1)
@@ -352,13 +414,19 @@ class SignaturesRemoveTestCase(TestCase):
         sig_name1 = tempname(10)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         open(sigfile_name1, "a").close()
         sig_name2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/sigset/{sig_name2}"
@@ -372,6 +440,7 @@ class SignaturesRemoveTestCase(TestCase):
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         open(sigfile_name3, "a").close()
+<<<<<<< HEAD
 =======
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
@@ -394,6 +463,8 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # Try to remove with wrong type
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
         self.assertEqual(ret, 1)
@@ -426,13 +497,19 @@ class SignaturesRemoveTestCase(TestCase):
         sig_name1 = tempname(10)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         open(sigfile_name1, "a").close()
         sig_name2 = tempname(10)
         # Do not create sig_name2 matching file
@@ -442,6 +519,7 @@ class SignaturesRemoveTestCase(TestCase):
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         open(sigfile_name3, "a").close()
+<<<<<<< HEAD
 =======
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
@@ -460,6 +538,8 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # Now remove one (should fail as file doesn't exist)
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, sig_name2)
         self.assertEqual(ret, 1)
@@ -476,6 +556,7 @@ class SignaturesRemoveTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def test_remove_existing_libsvm(self):
         # This test will fail if run in PERMANENT!
@@ -559,12 +640,15 @@ class SignaturesRemoveTestCase(TestCase):
 
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 class SignaturesCopyTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
@@ -574,14 +658,20 @@ class SignaturesCopyTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        cls.sigdirs = []
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # A mapset with a random name
         cls.src_mapset_name = tempname(10)
         G_make_mapset(None, None, cls.src_mapset_name)
@@ -590,6 +680,9 @@ class SignaturesCopyTestCase(TestCase):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # Create fake signature files
         os.makedirs(f"{cls.src_mapset_path}/signatures/sig/")
         cls.src_sig = tempname(10)
@@ -597,6 +690,7 @@ class SignaturesCopyTestCase(TestCase):
         os.makedirs(cls.src_sig_dir)
         cls.sigdirs.append(cls.src_sig_dir)
         f = open(f"{cls.src_sig_dir}/sig", "w")
+<<<<<<< HEAD
 =======
         os.makedirs(f"{cls.src_mapset_path}/signatures/sig/")
         cls.src_sig = tempname(10)
@@ -612,18 +706,24 @@ class SignaturesCopyTestCase(TestCase):
         cls.sigdirs.append(cls.src_sig_dir)
         f = open(f"{cls.src_sig_dir}/sig", "w")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sig file")
         f.close()
         os.makedirs(f"{cls.src_mapset_path}/signatures/sigset/")
         cls.src_sigset = tempname(10)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         cls.src_sigset_dir = f"{cls.src_mapset_path}/signatures/sigset/{cls.src_sigset}"
         os.makedirs(cls.src_sigset_dir)
         cls.sigdirs.append(cls.src_sigset_dir)
         f = open(f"{cls.src_sigset_dir}/sig", "w")
+<<<<<<< HEAD
 <<<<<<< HEAD
         f.write("A sigset file")
         f.close()
@@ -643,11 +743,16 @@ class SignaturesCopyTestCase(TestCase):
         f.write("A sigset file")
         f.close()
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+        f.write("A sigset file")
+        f.close()
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     @classmethod
     def tearDownClass(cls):
         # Remove random mapset created during setup
         shutil.rmtree(cls.src_mapset_path, ignore_errors=True)
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         for d in cls.sigdirs:
@@ -663,6 +768,10 @@ class SignaturesCopyTestCase(TestCase):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_copy_to_wrong_mapset(self):
         rnd_name = "{0}@{0}".format(tempname(10))
@@ -684,6 +793,7 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ret, 1)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def test_libsvm_does_not_exist(self):
         ret = I_signatures_copy(
             I_SIGFILE_TYPE_LIBSVM, tempname(10), self.mapset_name, tempname(10)
@@ -692,6 +802,8 @@ class SignaturesCopyTestCase(TestCase):
 
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     def test_success_unqualified_sig(self):
         dst = tempname(10)
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
@@ -703,6 +815,7 @@ class SignaturesCopyTestCase(TestCase):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
 =======
         self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
@@ -710,6 +823,9 @@ class SignaturesCopyTestCase(TestCase):
 =======
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertEqual(ret, 0)
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
@@ -717,12 +833,16 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
 
     def test_success_fq_sig(self):
         dst_name = tempname(10)
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
+<<<<<<< HEAD
 =======
 
     def test_success_fq_sig(self):
@@ -738,6 +858,8 @@ class SignaturesCopyTestCase(TestCase):
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
@@ -755,12 +877,16 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_success_unqualified_sigset(self):
         dst = tempname(10)
@@ -775,6 +901,7 @@ class SignaturesCopyTestCase(TestCase):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
 =======
         self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
@@ -782,6 +909,9 @@ class SignaturesCopyTestCase(TestCase):
 =======
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertEqual(ret, 0)
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
@@ -789,12 +919,16 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
 
     def test_success_fq_sigset(self):
         dst_name = tempname(10)
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
+<<<<<<< HEAD
 =======
 
     def test_success_fq_sigset(self):
@@ -810,6 +944,8 @@ class SignaturesCopyTestCase(TestCase):
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(
@@ -829,10 +965,14 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(
             os.path.isfile(f"{self.mpath}/signatures/sigset/{dst_name}/sig")
         )
 
+<<<<<<< HEAD
     def test_success_unqualified_libsvm(self):
         dst = tempname(10)
         ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, dst, self.mapset_name)
@@ -883,12 +1023,15 @@ class SignaturesCopyTestCase(TestCase):
         )
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 class SignaturesRenameTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
@@ -898,17 +1041,24 @@ class SignaturesRenameTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        cls.sigdirs = []
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     @classmethod
     def tearDownClass(cls):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
+<<<<<<< HEAD
 =======
 
     @classmethod
@@ -924,6 +1074,8 @@ class SignaturesRenameTestCase(TestCase):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_rename_from_wrong_mapset(self):
         rnd_name = "{0}@{0}".format(tempname(10))
@@ -944,10 +1096,13 @@ class SignaturesRenameTestCase(TestCase):
         self.assertEqual(ret, 1)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def test_libsvm_does_not_exist(self):
         ret = I_signatures_rename(I_SIGFILE_TYPE_LIBSVM, tempname(10), tempname(10))
         self.assertEqual(ret, 1)
 
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     def test_success_unqualified_sig(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sig/{src_sig}"
@@ -958,6 +1113,7 @@ class SignaturesRenameTestCase(TestCase):
         f.close()
         dst = tempname(10)
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
+<<<<<<< HEAD
 =======
     def test_success_unqualified_sig(self):
         src_sig = tempname(10)
@@ -974,6 +1130,8 @@ class SignaturesRenameTestCase(TestCase):
 =======
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
@@ -986,6 +1144,9 @@ class SignaturesRenameTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
 
     def test_success_fq_sig(self):
@@ -999,6 +1160,7 @@ class SignaturesRenameTestCase(TestCase):
         dst_name = tempname(10)
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
+<<<<<<< HEAD
 =======
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
@@ -1022,6 +1184,8 @@ class SignaturesRenameTestCase(TestCase):
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
@@ -1038,6 +1202,9 @@ class SignaturesRenameTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
 
     def test_success_unqualified_sigset(self):
@@ -1050,6 +1217,7 @@ class SignaturesRenameTestCase(TestCase):
         f.close()
         dst = tempname(10)
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
+<<<<<<< HEAD
 =======
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
@@ -1070,6 +1238,8 @@ class SignaturesRenameTestCase(TestCase):
 =======
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
@@ -1082,6 +1252,9 @@ class SignaturesRenameTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
 
     def test_success_fq_sigset(self):
@@ -1095,6 +1268,7 @@ class SignaturesRenameTestCase(TestCase):
         dst_name = tempname(10)
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
+<<<<<<< HEAD
 =======
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
@@ -1118,6 +1292,8 @@ class SignaturesRenameTestCase(TestCase):
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst_name}")
         dst = dst_name + "@" + self.mapset_name
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
@@ -1134,10 +1310,14 @@ class SignaturesRenameTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertTrue(
             os.path.isfile(f"{self.mpath}/signatures/sigset/{dst_name}/sig")
         )
 
+<<<<<<< HEAD
     def test_success_unqualified_libsvm(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/libsvm/{src_sig}"
@@ -1195,6 +1375,8 @@ class SignaturesRenameTestCase(TestCase):
         )
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 class SignaturesListByTypeTestCase(TestCase):
     @classmethod
@@ -1204,6 +1386,7 @@ class SignaturesListByTypeTestCase(TestCase):
         cls.mapset_name = Mapset().name
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         cls.sigdirs = []
 =======
         cls.sigfiles = []
@@ -1211,14 +1394,20 @@ class SignaturesListByTypeTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        cls.sigdirs = []
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # A mapset with a random name
         cls.rnd_mapset_name = tempname(10)
         G_make_mapset(None, None, cls.rnd_mapset_name)
@@ -1228,14 +1417,18 @@ class SignaturesListByTypeTestCase(TestCase):
         os.makedirs(f"{cls.rnd_mapset_path}/signatures/sig/")
         os.makedirs(f"{cls.rnd_mapset_path}/signatures/sigset/")
 <<<<<<< HEAD
+<<<<<<< HEAD
         os.makedirs(f"{cls.rnd_mapset_path}/signatures/libsvm/")
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     @classmethod
     def tearDownClass(cls):
         # Remove random mapset created during setup
         shutil.rmtree(cls.rnd_mapset_path, ignore_errors=True)
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         for d in cls.sigdirs:
@@ -1251,6 +1444,10 @@ class SignaturesListByTypeTestCase(TestCase):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_no_sigs_at_all(self):
         # There should be no signatures in the mapset with random
@@ -1263,19 +1460,25 @@ class SignaturesListByTypeTestCase(TestCase):
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         self.assertEqual(ret, 0)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_LIBSVM, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         self.assertEqual(ret, 0)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_sig_in_different_mapset(self):
         # Should return 0 signatures from a different mapset
@@ -1285,6 +1488,7 @@ class SignaturesListByTypeTestCase(TestCase):
         os.makedirs(sig_dir)
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1304,6 +1508,8 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sig file")
         f.close()
         sig_list = self.list_ptr()
@@ -1312,6 +1518,9 @@ class SignaturesListByTypeTestCase(TestCase):
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         shutil.rmtree(sig_dir)
         self.assertEqual(ret, 0)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
@@ -1321,6 +1530,7 @@ class SignaturesListByTypeTestCase(TestCase):
         os.makedirs(sig_dir)
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
+<<<<<<< HEAD
 =======
         os.remove(sig_file)
 =======
@@ -1341,12 +1551,15 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sigset file")
         f.close()
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir)
@@ -1379,12 +1592,21 @@ class SignaturesListByTypeTestCase(TestCase):
         # Case when only a single signature file is present
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+        shutil.rmtree(sig_dir)
+        self.assertEqual(ret, 0)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
+
+    def test_single_sig(self):
+        # Case when only a single signature file is present
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # Sig type
         rnd_sig = tempname(10)
         sig_dir = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig}"
         os.makedirs(sig_dir)
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
+<<<<<<< HEAD
 =======
         rnd_sig = tempname(10)
         sig_file = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig}"
@@ -1398,12 +1620,15 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sig file")
         f.close()
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir)
@@ -1413,12 +1638,18 @@ class SignaturesListByTypeTestCase(TestCase):
 =======
         shutil.rmtree(sig_dir)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        shutil.rmtree(sig_dir)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertEqual(ret, 1)
         val = utils.decode(sig_list[0])
         self.assertEqual(val, f"{rnd_sig}@{self.rnd_mapset_name}")
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # SigSet type
         # SigSet equals sig. Just testing branching inside.
         rnd_sigset = tempname(10)
@@ -1426,6 +1657,7 @@ class SignaturesListByTypeTestCase(TestCase):
         os.makedirs(sig_dir)
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
+<<<<<<< HEAD
 =======
         # SigSet equals sig. Just testing branching inside.
         rnd_sigset = tempname(10)
@@ -1441,12 +1673,15 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigdirs.append(sig_dir)
         f = open(f"{sig_dir}/sig", "w")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sigset file")
         f.close()
         sigset_list = self.list_ptr()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir)
@@ -1456,10 +1691,14 @@ class SignaturesListByTypeTestCase(TestCase):
 =======
         shutil.rmtree(sig_dir)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        shutil.rmtree(sig_dir)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertEqual(ret, 1)
         val = utils.decode(sigset_list[0])
         self.assertEqual(val, f"{rnd_sigset}@{self.rnd_mapset_name}")
         I_free_signatures_list(ret, ctypes.byref(sigset_list))
+<<<<<<< HEAD
 <<<<<<< HEAD
         # libsvm type
         rnd_sig = tempname(10)
@@ -1478,6 +1717,8 @@ class SignaturesListByTypeTestCase(TestCase):
         val = utils.decode(sig_list[0])
         self.assertEqual(val, f"{rnd_sig}@{self.rnd_mapset_name}")
         I_free_signatures_list(ret, ctypes.byref(sig_list))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_multiple_sigs(self):
         # Should result into a multiple sigs returned
@@ -1494,6 +1735,7 @@ class SignaturesListByTypeTestCase(TestCase):
         os.makedirs(sig_dir2)
         self.sigdirs.append(sig_dir2)
         f = open(f"{sig_dir2}/sig", "w")
+<<<<<<< HEAD
 =======
 
     def test_multiple_sigs(self):
@@ -1517,6 +1759,8 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigdirs.append(sig_dir2)
         f = open(f"{sig_dir2}/sig", "w")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sig file")
         f.close()
         # POINTER(POINTER(c_char))
@@ -1524,6 +1768,7 @@ class SignaturesListByTypeTestCase(TestCase):
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir1)
@@ -1536,6 +1781,10 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertEqual(ret, 2)
         golden = (
             f"{rnd_sig1}@{self.rnd_mapset_name}",
@@ -1546,6 +1795,9 @@ class SignaturesListByTypeTestCase(TestCase):
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # SigSet type
         rnd_sigset1 = tempname(10)
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset1}"
@@ -1559,6 +1811,7 @@ class SignaturesListByTypeTestCase(TestCase):
         os.makedirs(sig_dir2)
         self.sigdirs.append(sig_dir2)
         f = open(f"{sig_dir2}/sig", "w")
+<<<<<<< HEAD
 =======
         # Ditto for sigset
 =======
@@ -1582,12 +1835,15 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigdirs.append(sig_dir2)
         f = open(f"{sig_dir2}/sig", "w")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sigset file")
         f.close()
         sigset_list = self.list_ptr()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir1)
@@ -1600,6 +1856,10 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertEqual(ret, 2)
         golden = (
             f"{rnd_sigset1}@{self.rnd_mapset_name}",
@@ -1608,6 +1868,7 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertIn(utils.decode(sigset_list[0]), golden)
         self.assertIn(utils.decode(sigset_list[1]), golden)
         I_free_signatures_list(ret, ctypes.byref(sigset_list))
+<<<<<<< HEAD
 <<<<<<< HEAD
         # libsvm type
         rnd_sig1 = tempname(10)
@@ -1641,19 +1902,27 @@ class SignaturesListByTypeTestCase(TestCase):
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_multiple_sigs_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIGSET case
         rnd_sig1 = tempname(10)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         f = open(f"{sig_dir1}/sig", "w")
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sig file")
         f.close()
         rnd_sig2 = tempname(10)
@@ -1663,6 +1932,7 @@ class SignaturesListByTypeTestCase(TestCase):
         f = open(f"{sig_dir2}/sig", "w")
         f.write("A sig file")
         f.close()
+<<<<<<< HEAD
 =======
         sig_file1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
         f = open(sig_file1, "w")
@@ -1682,6 +1952,8 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list)
@@ -1710,6 +1982,7 @@ class SignaturesListByTypeTestCase(TestCase):
         G_reset_mapsets()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 =======
@@ -1720,6 +1993,10 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # There could be more sigs if this is not an empty mapset
         self.assertTrue(ret >= 2)
         ret_list = list(map(utils.decode, sig_list[:ret]))
@@ -1732,13 +2009,19 @@ class SignaturesListByTypeTestCase(TestCase):
         rnd_sig1 = tempname(10)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sig1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         f = open(f"{sig_dir1}/sig", "w")
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         f.write("A sigset file")
         f.close()
         rnd_sig2 = tempname(10)
@@ -1783,6 +2066,7 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertIn(golden[1], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 
+<<<<<<< HEAD
     def test_multiple_libsvms_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIG and SIGSET case
         rnd_sig1 = tempname(10)
@@ -1867,6 +2151,8 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertIn(golden[1], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 if __name__ == "__main__":
     test()

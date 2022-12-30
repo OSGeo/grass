@@ -10,7 +10,10 @@ void write_rgb_values(struct Map_info *Map, int layer, const char *column_name,
 =======
 void write_rgb_values(const struct Map_info *Map, int layer,
                       const char *column_name, struct Colors *colors)
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     int ctype, nrec, i;
     int red, grn, blu;

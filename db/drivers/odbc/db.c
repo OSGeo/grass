@@ -39,6 +39,7 @@ int db__driver_open_database(dbHandle *handle)
 
         return DB_FAILED;
 <<<<<<< HEAD
+<<<<<<< HEAD
     }
 
     /* Find ODBC DB driver */
@@ -82,6 +83,8 @@ int db__driver_open_database(dbHandle *handle)
         db_free_string(&sql);
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     return DB_OK;

@@ -27923,6 +27923,837 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
 msgid "Apriori Phi (roll) standard deviation"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
+msgid "Apriori Kappa (yaw) standard deviation"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:121
+msgid "Use initial values at run time"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:125
+msgid "Print initial values"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:137
+#, c-format
+msgid "Group [%s] not found"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:150
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:154
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:158
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:162
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:166
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:170
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:174
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:178
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:182
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:186
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:190
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:194
+#, c-format
+msgid "Option '%s' is required for new exposure info"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:160
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:203
+#: ../misc/m.transform/main.c:96
+#, c-format
+msgid "Error conducting transform (%d)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:320
+msgid "Poorly placed image to photo control points"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:322
+msgid "Poorly placed image to target control points"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:324
+#: ../misc/m.transform/main.c:196
+msgid "Insufficient memory"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:326
+#: ../misc/m.transform/main.c:198
+msgid "Parameter error"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:328
+#: ../misc/m.transform/main.c:200
+msgid "No active control points"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:417
+#: ../display/d.mon/stop.c:66 ../vector/v.out.vtk/main.c:174
+#: ../vector/v.profile/main.c:330 ../vector/v.edit/main.c:82
+#: ../vector/v.net/main.c:100 ../vector/v.out.ascii/main.c:126
+#: ../general/g.pnmcomp/main.c:242 ../general/g.pnmcomp/main.c:259
+#: ../raster3d/r3.out.vtk/main.c:421 ../misc/m.nviz.script/main.c:202
+#: ../misc/m.transform/main.c:276 ../raster/r.recode/main.c:90
+#: ../raster/r.in.lidar/main.c:651 ../raster/r.horizon/main.c:389
+#: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:176
+#: ../raster/r.category/main.c:173 ../raster/r.out.ascii/main.c:158
+#, c-format
+msgid "Unable to open file <%s>"
+msgstr "Não consegui abrir o arquivo <%s>"
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:436
+#: ../misc/m.transform/main.c:295
+#, c-format
+msgid "Invalid coordinates: [%s]"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:460
+msgid "GCP"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:462
+#: ../misc/m.transform/main.c:320
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:475
+#: ../misc/m.transform/main.c:341
+msgid "point index"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:476
+#: ../misc/m.transform/main.c:342
+msgid "source coordinates"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:477
+#: ../misc/m.transform/main.c:343
+msgid "destination coordinates"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:478
+#: ../misc/m.transform/main.c:344
+msgid "forward coordinates (destination)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:479
+#: ../misc/m.transform/main.c:345
+msgid "reverse coordinates (source)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:480
+#: ../misc/m.transform/main.c:346
+msgid "forward coordinates difference (destination)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:481
+#: ../misc/m.transform/main.c:347
+msgid "reverse coordinates difference (source)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:482
+#: ../misc/m.transform/main.c:348
+msgid "forward error (destination)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:483
+#: ../misc/m.transform/main.c:349
+msgid "reverse error (source)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:486
+#: ../vector/v.out.ascii/args.c:55 ../misc/m.transform/main.c:352
+msgid "Output format"
+msgstr "Formato de saída"
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:490
+#: ../misc/m.transform/main.c:356
+msgid "Display summary information"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:496
+#: ../misc/m.transform/main.c:361
+msgid "File containing coordinates to transform (\"-\" to read from stdin)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:497
+msgid "Local x,y,z coordinates to target east,north,height"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:501
+#: ../misc/m.transform/main.c:366
+msgid "Reverse transform of coords file or coeff. dump"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:502
+msgid "Target east,north,height coordinates to local x,y,z"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:506
+#: ../misc/m.transform/main.c:371
+msgid "Display transform matrix coefficients"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:528
+#, c-format
+msgid "Can not read reference points for group <%s>"
+msgstr ""
+
+#: ../imagery/i.rectify/get_wind.c:180
+#, c-format
+msgid "Region N=%f S=%f E=%f W=%f"
+msgstr ""
+
+#: ../imagery/i.rectify/get_wind.c:182
+#, c-format
+msgid "Resolution EW=%f NS=%f"
+msgstr ""
+
+#: ../imagery/i.rectify/main.c:85
+#: ../locale/scriptstrings/v.ply.rectify_to_translate.c:5
+#: ../vector/v.rectify/main.c:71
+msgid "rectify"
+msgstr "retificar"
+
+#: ../imagery/i.rectify/main.c:88
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+#: ../imagery/i.rectify/main.c:110 ../vector/v.rectify/main.c:105
+msgid "Rectification polynomial order (1-3)"
+msgstr "Ordem polinomial de retificação (1-3)"
+
+#: ../imagery/i.rectify/main.c:141
+msgid "Use thin plate spline"
+msgstr ""
+
+#: ../imagery/i.rectify/main.c:176 ../vector/v.rectify/main.c:146
+#, c-format
+msgid "Invalid order (%d); please enter 1 to %d"
+msgstr "Solicitação inválida (%d); por favor insira 1 para %d"
+
+#: ../imagery/i.rectify/cp.c:12 ../vector/v.rectify/cp.c:350
+#, c-format
+msgid "Control Point file for group <%s@%s> - "
+msgstr "Arquivo de Ponto de controle para o grupo <%s@%s> -"
+
+#: ../imagery/i.rectify/cp.c:24
+msgid "Not enough active control points for thin plate spline."
+msgstr ""
+
+#: ../imagery/i.rectify/cp.c:31 ../imagery/i.rectify/cp.c:55
+msgid "Not enough memory to solve transformation equations."
+msgstr ""
+
+#: ../imagery/i.rectify/cp.c:34
+msgid "Invalid order."
+msgstr ""
+
+#: ../imagery/i.rectify/cp.c:47 ../vector/v.rectify/cp.c:359
+#, c-format
+msgid "Not enough active control points for current order, %d are required."
+msgstr "Não há pontos de controle ativos suficientes para a solicitação atual, %dsão necessários."
+
+#: ../imagery/i.rectify/cp.c:58 ../vector/v.rectify/cp.c:370
+msgid "Invalid order"
+msgstr "Solicitação inválida"
+
+#: ../imagery/i.albedo/main.c:96
+msgid "albedo"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:101
+#: ../locale/scriptstrings/i.lswt_to_translate.c:5
+msgid "AVHRR"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:103
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:116
+msgid "MODIS (7 input bands:1,2,3,4,5,6,7)"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:120
+msgid "NOAA AVHRR (2 input bands:1,2)"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:124
+msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
+msgstr "Landsat 5+7 (6 bandas de entrada:1,2,3,4,5,7)"
+
+#: ../imagery/i.albedo/main.c:128
+msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:132
+msgid "ASTER (6 input bands:1,3,5,6,8,9)"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:136
+msgid "Aggressive mode (Landsat)"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:138 ../imagery/i.albedo/main.c:145
+msgid "Albedo dry run to calculate some water to beach/sand/desert stretching, a kind of simple atmospheric correction"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:143
+msgid "Soft mode (MODIS)"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:181
+msgid "At least two raster maps are required"
+msgstr ""
+
+#: ../imagery/i.maxlik/open.c:27
+#, c-format
+msgid "Subgroup <%s> of group <%s> doesn't have any raster maps. The subgroup must have at least 2 raster maps."
+msgstr ""
+
+#: ../imagery/i.maxlik/open.c:30
+#, c-format
+msgid "Subgroup <%s> of group <%s> only has 1 raster map. The subgroup must have at least 2 raster maps."
+msgstr ""
+
+#: ../imagery/i.maxlik/open.c:47
+#, c-format
+msgid "Unable to open signature file <%s>"
+msgstr ""
+
+#: ../imagery/i.maxlik/main.c:68
+msgid "Classifies the cell spectral reflectances in imagery data."
+msgstr ""
+
+#: ../imagery/i.maxlik/main.c:70
+msgid "Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+#: ../imagery/i.maxlik/main.c:84
+msgid "Generated by either i.cluster, g.gui.iclass, or i.gensig"
+msgstr ""
+
+#: ../imagery/i.maxlik/main.c:94
+msgid "Name for output raster map holding reject threshold results"
+msgstr ""
+
+#: ../imagery/i.maxlik/main.c:106
+#, c-format
+msgid "<%s> does not match the current mapset"
+msgstr ""
+
+#: ../imagery/i.maxlik/invert.c:28
+#, c-format
+msgid "Signature %d is not valid (ill-conditioned) - ignored"
+msgstr ""
+
+#: ../imagery/i.maxlik/invert.c:31
+#, c-format
+msgid "Signature %d is not valid (singular) - ignored"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:74
+#: ../locale/scriptstrings/i.pansharpen_to_translate.c:8
+msgid "PCA"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:75
+msgid "principal components analysis"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:76
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+#: ../imagery/i.pca/main.c:82
+msgid "Name of two or more input raster maps or imagery group"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:85
+#: ../locale/scriptstrings/r.futures.parallelpga_to_translate.c:25
+#: ../locale/scriptstrings/i.lswt_to_translate.c:11
+msgid "Name for output basename raster map(s)"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:87
+msgid "A numerical suffix will be added for each component map"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:96
+msgid "Rescaling range for output maps"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:98
+msgid "For no rescaling use 0,0"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:99
+#: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:42
+#: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:46
+msgid "Rescale"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:108
+msgid "Cumulative percent importance for filtering"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:109 ../imagery/i.pca/main.c:120
+#: ../locale/scriptstrings/i.landsat.download_to_translate.c:14
+#: ../locale/scriptstrings/i.landsat.download_to_translate.c:16
+#: ../locale/scriptstrings/i.landsat.download_to_translate.c:18
+#: ../locale/scriptstrings/i.landsat.download_to_translate.c:20
+#: ../locale/scriptstrings/i.landsat.download_to_translate.c:22
+#: ../locale/scriptstrings/i.landsat.download_to_translate.c:24
+#: ../locale/scriptstrings/i.sentinel.import_to_translate.c:9
+#: ../locale/scriptstrings/i.sentinel.import_to_translate.c:11
+#: ../locale/scriptstrings/i.sentinel.import_to_translate.c:14
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:18
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:20
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:22
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:24
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:26
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:28
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:30
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:32
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:34
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:36
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:11
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:13
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:15
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:17
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:19
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:21
+#: ../locale/scriptstrings/i.landsat.import_to_translate.c:9
+#: ../locale/scriptstrings/i.landsat.import_to_translate.c:11
+#: ../locale/scriptstrings/i.landsat.import_to_translate.c:14
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:12
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:14
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:16
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:18
+#: ../raster/r.mfilter/main.c:80 ../raster/r.mfilter/main.c:99
+msgid "Filter"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:113
+msgid "Normalize (center and scale) input maps"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:114
+msgid "Default: center only"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:118
+msgid "Output will be filtered input bands"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:119
+msgid "Apply inverse PCA after PCA"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:154
+msgid "Sorry, at least 2 input bands must be provided"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:169
+#, c-format
+msgid "'%s' must be positive"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:171
+#, c-format
+msgid "'%s' must be < 100"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:197 ../raster/r.covar/main.c:110
+msgid "No non-null values"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:233
+msgid "Not enough principal components left for filtering"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:235
+#, c-format
+msgid "Using %d of %d principal components for filtering"
+msgstr ""
+
+#: ../imagery/i.pca/main.c:297
+msgid "Scale range length should be > 0. Using default values: 0,255."
+msgstr ""
+
+#: ../imagery/i.pca/main.c:343
+msgid "Computing covariance matrix..."
+msgstr ""
+
+#: ../imagery/i.pca/main.c:456
+#, c-format
+msgid "Rescaling to range %d,%d..."
+msgstr ""
+
+#: ../imagery/i.pca/main.c:464
+msgid "Calculating principal components..."
+msgstr ""
+
+#: ../imagery/i.pca/support.c:50
+msgid "Eigen values, (vectors), and [percent importance]:"
+msgstr ""
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:1
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr ""
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:2
+#: ../locale/scriptstrings/v.import_to_translate.c:2
+#: ../locale/scriptstrings/v.in.geonames_to_translate.c:2
+#: ../locale/scriptstrings/v.surf.nnbathy_to_translate.c:2
+#: ../locale/scriptstrings/v.in.gps_to_translate.c:2
+#: ../locale/scriptstrings/v.maxent.swd_to_translate.c:2
+#: ../locale/scriptstrings/v.stream.profiler_to_translate.c:2
+#: ../locale/scriptstrings/d.vect.colbp_to_translate.c:3
+#: ../locale/scriptstrings/v.in.gns_to_translate.c:2
+#: ../locale/scriptstrings/v.ply.rectify_to_translate.c:2
+#: ../locale/scriptstrings/v.external.all_to_translate.c:2
+#: ../locale/scriptstrings/v.what.spoly_to_translate.c:2
+#: ../locale/scriptstrings/v.build.all_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.export_to_translate.c:4
+#: ../locale/scriptstrings/d.what.vect_to_translate.c:3
+#: ../locale/scriptstrings/v.stream.order_to_translate.c:2
+#: ../locale/scriptstrings/v.what.strds.timestamp_to_translate.c:2
+#: ../locale/scriptstrings/v.db.droptable_to_translate.c:2
+#: ../locale/scriptstrings/v.in.lines_to_translate.c:2
+#: ../locale/scriptstrings/i.ann.maskrcnn.detect_to_translate.c:3
+#: ../locale/scriptstrings/v.rast.bufferstats_to_translate.c:2
+#: ../locale/scriptstrings/v.what.rast.multi_to_translate.c:2
+#: ../locale/scriptstrings/v.what.strds_to_translate.c:2
+#: ../locale/scriptstrings/v.in.wfs_to_translate.c:2
+#: ../locale/scriptstrings/v.fixed.segmentpoints_to_translate.c:2
+#: ../locale/scriptstrings/v.colors2_to_translate.c:2
+#: ../locale/scriptstrings/v.unpack_to_translate.c:2
+#: ../locale/scriptstrings/r.connectivity.corridors_to_translate.c:3
+#: ../locale/scriptstrings/v.in.osm_to_translate.c:3
+#: ../locale/scriptstrings/v.stream.inbasin_to_translate.c:2
+#: ../locale/scriptstrings/v.gsflow.reaches_to_translate.c:2
+#: ../locale/scriptstrings/v.profile.points_to_translate.c:2
+#: ../locale/scriptstrings/d.vect.colhist_to_translate.c:3
+#: ../locale/scriptstrings/v.transects_to_translate.c:2
+#: ../locale/scriptstrings/v.db.droprow_to_translate.c:2
+#: ../locale/scriptstrings/v.in.wfs2_to_translate.c:2
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:2
+#: ../locale/scriptstrings/r.gsflow.hydrodem_to_translate.c:2
+#: ../locale/scriptstrings/d.what.rast_to_translate.c:3
+#: ../locale/scriptstrings/v.surf.icw_to_translate.c:2
+#: ../locale/scriptstrings/v.centerline_to_translate.c:2
+#: ../locale/scriptstrings/v.db.pyupdate_to_translate.c:2
+#: ../locale/scriptstrings/v.to.lines_to_translate.c:2
+#: ../locale/scriptstrings/v.area.weigh_to_translate.c:2
+#: ../locale/scriptstrings/v.in.e00_to_translate.c:2
+#: ../locale/scriptstrings/v.median_to_translate.c:2
+#: ../locale/scriptstrings/v.lidar.mcc_to_translate.c:2
+#: ../locale/scriptstrings/v.in.natura2000_to_translate.c:2
+#: ../locale/scriptstrings/v.net.curvedarcs_to_translate.c:2
+#: ../locale/scriptstrings/v.in.pygbif_to_translate.c:2
+#: ../locale/scriptstrings/r.connectivity.distance_to_translate.c:3
+#: ../locale/scriptstrings/v.dissolve_to_translate.c:2
+#: ../locale/scriptstrings/v.civil_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:4
+#: ../locale/scriptstrings/v.convert.all_to_translate.c:2
+#: ../locale/scriptstrings/v.link.precip_to_translate.c:2
+#: ../locale/scriptstrings/v.pack_to_translate.c:2
+#: ../locale/scriptstrings/v.in.gbif_to_translate.c:2
+#: ../locale/scriptstrings/v.explode_to_translate.c:4
+#: ../locale/scriptstrings/v.class.mlpy_to_translate.c:2
+#: ../locale/scriptstrings/v.report_to_translate.c:2
+#: ../locale/scriptstrings/v.krige_to_translate.c:2
+#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:2
+#: ../locale/scriptstrings/v.rast.stats_to_translate.c:2
+#: ../locale/scriptstrings/v.in.geopaparazzi_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:4
+#: ../locale/scriptstrings/v.db.update_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:4
+#: ../locale/scriptstrings/t.vect.observe.strds_to_translate.c:4
+#: ../locale/scriptstrings/r.vect.stats_to_translate.c:3
+#: ../locale/scriptstrings/v.tin.to.rast_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:4
+#: ../locale/scriptstrings/v.in.survey_to_translate.c:2
+#: ../locale/scriptstrings/v.faultdirections_to_translate.c:3
+#: ../locale/scriptstrings/v.stats_to_translate.c:2
+#: ../locale/scriptstrings/v.centroids_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:4
+#: ../locale/scriptstrings/v.mapcalc_to_translate.c:2
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:2
+#: ../locale/scriptstrings/v.concave.hull_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:4
+#: ../locale/scriptstrings/v.db.join_to_translate.c:2
+#: ../locale/scriptstrings/i.ann.maskrcnn.train_to_translate.c:3
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.algebra_to_translate.c:4
+#: ../locale/scriptstrings/v.flexure_to_translate.c:2
+#: ../locale/scriptstrings/v.what.vect_to_translate.c:2
+#: ../locale/scriptstrings/v.in.mapgen_to_translate.c:2
+#: ../locale/scriptstrings/v.isochrones_to_translate.c:2
+#: ../locale/scriptstrings/r.green.hydro.closest_to_translate.c:2
+#: ../locale/scriptstrings/d.vect.thematic2_to_translate.c:4
+#: ../locale/scriptstrings/v.neighborhoodmatrix_to_translate.c:2
+#: ../locale/scriptstrings/v.stream.network_to_translate.c:2
+#: ../locale/scriptstrings/v.clip_to_translate.c:2
+#: ../locale/scriptstrings/v.gsflow.grid_to_translate.c:2
+#: ../locale/scriptstrings/v.out.gps_to_translate.c:2
+#: ../locale/scriptstrings/v.gsflow.mapdata_to_translate.c:2
+#: ../locale/scriptstrings/r.sample.category_to_translate.c:6
+#: ../locale/scriptstrings/v.out.png_to_translate.c:2
+#: ../locale/scriptstrings/r.connectivity.network_to_translate.c:3
+#: ../locale/scriptstrings/v.gsflow.gravres_to_translate.c:2
+#: ../locale/scriptstrings/v.clean.ogr_to_translate.c:2
+#: ../locale/scriptstrings/v.habitat.dem_to_translate.c:2
+#: ../locale/scriptstrings/r.surf.nnbathy_to_translate.c:2
+#: ../locale/scriptstrings/v.vect.stats.multi_to_translate.c:2
+#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:2
+#: ../locale/scriptstrings/v.gsflow.export_to_translate.c:2
+#: ../locale/scriptstrings/v.in.csv_to_translate.c:2
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:5
+#: ../locale/scriptstrings/v.gsflow.hruparams_to_translate.c:2
+#: ../locale/scriptstrings/v.in.redlist_to_translate.c:2
+#: ../locale/scriptstrings/v.build.pg_to_translate.c:2
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:2
+#: ../locale/scriptstrings/v.strds.stats_to_translate.c:2
+#: ../locale/scriptstrings/v.gsflow.segments_to_translate.c:2
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:2
+#: ../visualization/ximgview/main.c:293 ../display/d.legend.vect/main.c:52
+#: ../display/d.vect/main.c:75 ../display/d.extract/main.c:50
+#: ../vector/v.in.lidar/main.c:136 ../vector/v.out.vtk/main.c:47
+#: ../vector/v.lidar.edgedetection/main.c:75 ../vector/v.to.rast3/main.c:48
+#: ../vector/v.net.iso/main.c:76 ../vector/v.parallel/main.c:49
+#: ../vector/v.net.visibility/main.c:45 ../vector/v.out.dxf/main.c:56
+#: ../vector/v.external/main.c:52 ../vector/v.what.rast/main.c:71
+#: ../vector/v.lidar.correction/main.c:71 ../vector/v.sample/main.c:75
+#: ../vector/v.out.svg/main.c:77 ../vector/v.segment/main.c:60
+#: ../vector/v.net.connectivity/main.c:52 ../vector/v.what/main.c:62
+#: ../vector/v.clean/main.c:51 ../vector/v.clean/test/topocheck.c:42
+#: ../vector/v.buffer/main.c:221 ../vector/v.decimate/main.c:124
+#: ../vector/v.db.select/main.c:72 ../vector/v.to.rast/main.c:44
+#: ../vector/v.net.flow/main.c:58 ../vector/v.net.bridge/main.c:47
+#: ../vector/v.generalize/main.c:76 ../vector/v.out.lidar/main.c:473
+#: ../vector/v.class/main.c:45 ../vector/v.net.alloc/main.c:64
+#: ../vector/v.surf.bspline/main.c:91 ../vector/v.kernel/main.c:109
+#: ../vector/v.profile/main.c:153 ../vector/v.normal/main.c:72
+#: ../vector/v.net.salesman/main.c:127 ../vector/v.build/main.c:36
+#: ../vector/v.hull/main.c:52 ../vector/v.delaunay/main.c:85
+#: ../vector/v.type/main.c:38 ../vector/v.external.out/main.c:43
+#: ../vector/v.drape/main.c:56 ../vector/v.out.postgis/main.c:44
+#: ../vector/v.surf.rst/main.c:147 ../vector/v.perturb/main.c:62
+#: ../vector/v.info/print.c:453 ../vector/v.info/main.c:37
+#: ../vector/v.what.rast3/main.c:64 ../vector/v.random/main.c:100
+#: ../vector/v.edit/main.c:55 ../vector/v.in.db/main.c:52
+#: ../vector/v.lrs/v.lrs.label/main.c:102 ../vector/v.lrs/v.lrs.where/main.c:57
+#: ../vector/v.lrs/v.lrs.segment/main.c:71
+#: ../vector/v.lrs/v.lrs.create/main.c:121 ../vector/v.net.path/main.c:42
+#: ../vector/v.neighbors/main.c:128 ../vector/v.net.centrality/main.c:96
+#: ../vector/v.outlier/main.c:69 ../vector/v.distance/main.c:121
+#: ../vector/v.mkgrid/main.c:70 ../vector/v.transform/main.c:70
+#: ../vector/v.out.ogr/main.c:83 ../vector/v.patch/main.c:73
+#: ../vector/v.db.connect/main.c:52 ../vector/v.in.ogr/main.c:219
+#: ../vector/v.out.pov/main.c:46 ../vector/v.net.spanningtree/main.c:46
+#: ../vector/v.net.timetable/main.c:260 ../vector/v.colors.out/main.c:49
+#: ../vector/v.cluster/main.c:90 ../vector/v.proj/main.c:72
+#: ../vector/v.in.ascii/main.c:70 ../vector/v.timestamp/main.c:35
+#: ../vector/v.net/main.c:47 ../vector/v.category/main.c:75
+#: ../vector/v.to.3d/main.c:36 ../vector/v.net.components/main.c:72
+#: ../vector/v.label.sa/main.c:38 ../vector/v.to.points/main.c:53
+#: ../vector/v.qcount/main.c:60 ../vector/v.lidar.growing/main.c:75
+#: ../vector/v.vect.stats/main.c:133 ../vector/v.split/main.c:54
+#: ../vector/v.out.ascii/main.c:47 ../vector/v.in.dwg/main.c:82
+#: ../vector/v.in.dxf/main.c:64 ../vector/v.extrude/main.c:67
+#: ../vector/v.in.region/main.c:41 ../vector/v.univar/main.c:92
+#: ../vector/v.vol.rst/main.c:235 ../vector/v.extract/main.c:78
+#: ../vector/v.support/main.c:39 ../vector/v.rectify/main.c:70
+#: ../vector/v.kcv/main.c:55 ../vector/v.build.polylines/main.c:110
+#: ../vector/v.net.steiner/main.c:346 ../vector/v.label/main.c:59
+#: ../vector/v.net.allpairs/main.c:61 ../vector/v.surf.idw/main.c:87
+#: ../vector/v.to.db/main.c:38 ../vector/v.voronoi/main.c:123
+#: ../vector/v.reclass/main.c:67 ../vector/v.overlay/main.c:63
+#: ../vector/v.net.distance/main.c:66 ../vector/v.select/main.c:50
+#: ../vector/v.colors/main.c:55 ../doc/vector/v.example/main.c:50
+#: ../misc/m.nviz.script/main.c:73 ../misc/m.nviz.image/main.c:53
+#: ../raster/r.random/main.c:54 ../raster/r.contour/main.c:91
+msgid "vector"
+msgstr "vetor"
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:3
+#: ../locale/scriptstrings/db.univar_to_translate.c:4
+#: ../locale/scriptstrings/db.in.ogr_to_translate.c:4
+#: ../locale/scriptstrings/v.what.strds.timestamp_to_translate.c:7
+#: ../locale/scriptstrings/v.db.droptable_to_translate.c:3
+#: ../locale/scriptstrings/v.what.rast.multi_to_translate.c:7
+#: ../locale/scriptstrings/v.what.strds_to_translate.c:7
+#: ../locale/scriptstrings/db.out.ogr_to_translate.c:5
+#: ../locale/scriptstrings/db.test_to_translate.c:3
+#: ../locale/scriptstrings/v.db.droprow_to_translate.c:3
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:4
+#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.pyupdate_to_translate.c:3
+#: ../locale/scriptstrings/db.droptable_to_translate.c:3
+#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.update_to_translate.c:3
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:3
+#: ../locale/scriptstrings/v.db.join_to_translate.c:3
+#: ../locale/scriptstrings/v.what.vect_to_translate.c:7
+#: ../locale/scriptstrings/v.vect.stats.multi_to_translate.c:3
+#: ../locale/scriptstrings/db.join_to_translate.c:3
+#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:3
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.strds.stats_to_translate.c:7
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:3
+#: ../vector/v.what.rast/main.c:76 ../vector/v.db.select/main.c:73
+#: ../vector/v.class/main.c:47 ../vector/v.what.rast3/main.c:69
+#: ../vector/v.distance/main.c:124 ../vector/v.db.connect/main.c:53
+#: ../vector/v.vect.stats/main.c:134 ../vector/v.univar/main.c:95
+#: ../vector/v.to.db/main.c:39 ../db/db.select/main.c:266
+#: ../db/db.createdb/main.c:72 ../db/db.connect/main.c:44
+#: ../db/db.columns/main.c:100 ../db/db.execute/main.c:138
+#: ../db/db.databases/main.c:96 ../db/db.describe/main.c:130
+#: ../db/db.copy/main.c:36 ../db/db.dropdb/main.c:72 ../db/db.tables/main.c:98
+msgid "attribute table"
+msgstr "tabela de atributos"
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
+#: ../locale/scriptstrings/db.univar_to_translate.c:2
+#: ../locale/scriptstrings/db.in.ogr_to_translate.c:2
+#: ../locale/scriptstrings/v.db.droptable_to_translate.c:4
+#: ../locale/scriptstrings/db.out.ogr_to_translate.c:2
+#: ../locale/scriptstrings/db.test_to_translate.c:2
+#: ../locale/scriptstrings/v.db.droprow_to_translate.c:4
+#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:2
+#: ../locale/scriptstrings/v.db.pyupdate_to_translate.c:4
+#: ../locale/scriptstrings/db.droptable_to_translate.c:2
+#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.update_to_translate.c:4
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:5
+#: ../locale/scriptstrings/v.db.join_to_translate.c:4
+#: ../locale/scriptstrings/v.what.vect_to_translate.c:4
+#: ../locale/scriptstrings/db.join_to_translate.c:2
+#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:4
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:4
+#: ../vector/v.db.select/main.c:74 ../vector/v.in.db/main.c:54
+#: ../vector/v.distance/main.c:123 ../vector/v.db.connect/main.c:54
+#: ../vector/v.vect.stats/main.c:135 ../vector/v.to.db/main.c:40
+#: ../db/db.select/main.c:265 ../db/db.login/main.c:40
+#: ../db/db.createdb/main.c:71 ../db/db.connect/main.c:43
+#: ../db/db.columns/main.c:99 ../db/db.execute/main.c:137
+#: ../db/db.databases/main.c:95 ../db/db.describe/main.c:129
+#: ../db/db.copy/main.c:35 ../db/db.dropdb/main.c:71 ../db/db.tables/main.c:97
+#: ../db/db.drivers/main.c:71
+msgid "database"
+msgstr "banco de dados"
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:5
+msgid "Name of new attribute table (default: vector map name)"
+msgstr ""
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:6
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:8
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:9
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:12
+msgid "Definition"
+msgstr ""
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:7
+msgid "Layer number where to add new attribute table"
+msgstr ""
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:10
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:6
+msgid "Name and type of the new column(s) ('name type [,name type, ...]')"
+msgstr ""
+
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:11
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:7
+msgid "Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: 'label varchar(250), value integer'"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:1
+msgid "Imports and performs atmospheric correction of Sentinel-2 images."
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:4
+#: ../locale/scriptstrings/i.sentinel.import_to_translate.c:4
+#: ../locale/scriptstrings/i.tasscap_to_translate.c:7
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:4
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:4
+#: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:4
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:4
+msgid "Sentinel"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:5
+#: ../locale/scriptstrings/g.extension_to_translate.c:7
+#: ../locale/scriptstrings/i.landsat.download_to_translate.c:5
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:5
+#: ../locale/scriptstrings/g.download.location_to_translate.c:5
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:5
+msgid "download"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:6
+#: ../locale/scriptstrings/v.import_to_translate.c:3
+#: ../locale/scriptstrings/v.in.geonames_to_translate.c:3
+#: ../locale/scriptstrings/v.in.gps_to_translate.c:3
+#: ../locale/scriptstrings/v.in.gns_to_translate.c:3
+#: ../locale/scriptstrings/r.import_to_translate.c:3
+#: ../locale/scriptstrings/v.ply.rectify_to_translate.c:3
+#: ../locale/scriptstrings/r.in.wcs_to_translate.c:3
+#: ../locale/scriptstrings/db.in.ogr_to_translate.c:3
+#: ../locale/scriptstrings/v.in.lines_to_translate.c:3
+#: ../locale/scriptstrings/r.in.pdal_to_translate.c:3
+#: ../locale/scriptstrings/r.unpack_to_translate.c:3
+#: ../locale/scriptstrings/v.in.wfs_to_translate.c:3
+#: ../locale/scriptstrings/r.in.wms_to_translate.c:3
+#: ../locale/scriptstrings/v.unpack_to_translate.c:3
+#: ../locale/scriptstrings/r.in.aster_to_translate.c:3
+#: ../locale/scriptstrings/v.in.osm_to_translate.c:4
+#: ../locale/scriptstrings/i.in.probav_to_translate.c:3
+#: ../locale/scriptstrings/r.in.srtm_to_translate.c:3
+#: ../locale/scriptstrings/v.in.wfs2_to_translate.c:3
+#: ../locale/scriptstrings/i.sentinel.import_to_translate.c:5
+#: ../locale/scriptstrings/i.modis.download_to_translate.c:3
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:3
+#: ../locale/scriptstrings/v.in.e00_to_translate.c:3
+#: ../locale/scriptstrings/v.convert.all_to_translate.c:3
+#: ../locale/scriptstrings/v.in.survey_to_translate.c:3
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:3
+#: ../locale/scriptstrings/g.download.location_to_translate.c:6
+#: ../locale/scriptstrings/r.in.usgs_to_translate.c:2
+#: ../locale/scriptstrings/v.in.mapgen_to_translate.c:3
+#: ../locale/scriptstrings/i.landsat.import_to_translate.c:5
+#: ../locale/scriptstrings/i.modis.import_to_translate.c:3
+#: ../locale/scriptstrings/r.in.srtm.region_to_translate.c:3
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:3
+#: ../locale/scriptstrings/v.gsflow.mapdata_to_translate.c:3
+#: ../locale/scriptstrings/v.in.csv_to_translate.c:3
+#: ../locale/scriptstrings/r.in.nasadem_to_translate.c:3
+#: ../locale/scriptstrings/i.in.spotvgt_to_translate.c:3
+#: ../vector/v.in.lidar/main.c:137 ../vector/v.external/main.c:53
+#: ../vector/v.in.db/main.c:53 ../vector/v.in.ogr/main.c:220
+#: ../vector/v.proj/main.c:75 ../vector/v.in.ascii/main.c:71
+#: ../vector/v.in.dwg/main.c:83 ../vector/v.in.dxf/main.c:65
+#: ../raster3d/r3.in.bin/main.c:253 ../raster3d/r3.in.ascii/main.c:355
+#: ../raster3d/r3.in.v5d/main.c:179 ../raster3d/r3.in.lidar/main.c:163
+#: ../raster/r.in.gdal/main.c:127 ../raster/r.in.xyz/main.c:159
+#: ../raster/r.in.png/main.c:520 ../raster/r.in.bin/main.c:258
+#: ../raster/r.in.lidar/main.c:109 ../raster/r.external/main.c:58
+#: ../raster/r.in.gridatb/main.c:46 ../raster/r.in.ascii/main.c:70
+#: ../raster/r.in.poly/main.c:35 ../raster/r.proj/main.c:150
+#: ../raster/r.in.mat/main.c:92
+msgid "import"
+msgstr "importar"
+
+#: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:8
+msgid "Name of the directory where the image and metadata file are stored (*.SAFE)"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -40216,7 +41047,10 @@ msgstr ""
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
 msgid "image collections"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/g.proj.identify_to_translate.c:8
 msgid "Input EPSG code"
@@ -65407,7 +66241,10 @@ msgstr "Linha de perfilagem"
 #: ../vector/v.profile/main.c:247
 msgid "Profiling line map"
 msgstr "Mapa de linhas de perfil"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../vector/v.out.vtk/main.c:150 ../vector/v.out.ascii/args.c:110
 msgid "Failed to interpret 'dp' parameter as an integer"
@@ -71832,6 +72669,7 @@ msgstr ""
 #: ../vector/v.vol.rst/main.c:493
 msgid "Crossvalidation cannot be computed simultanuously with output grids or devi file"
 msgstr "A validação cruzada não pode ser calculada simultaneamente com grades de saída ou arquivo devi"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../vector/v.what/what.c:562
@@ -71985,6 +72823,8 @@ msgstr "Mapa raster de elevação para extração de altura"
 #: ../vector/v.drape/main.c:91 ../vector/v.extrude/main.c:135
 msgid "Scale factor sampled raster values"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../vector/v.drape/main.c:98 ../vector/v.extrude/main.c:142
 msgid "Height for sampled raster NULL values"
@@ -98181,6 +99021,7 @@ msgstr ""
 #~ msgid "Reading data ..."
 #~ msgstr "Rotacionando dados ... "
 
+<<<<<<< HEAD
 #~ msgid ""
 #~ "Unable to convert input raster map projection information to GRASS format "
 #~ "for checking"
@@ -98946,3 +99787,53 @@ msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específ
 #~ msgid "Missing attribute table for vector map <%s>"
 #~ msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid ""
+"You can switch the history by commands:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgstr ""
+"Você pode alternar o histórico com os comandos:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+
+msgid "Missing table"
+msgstr "Tabela faltando"
+
+msgid "No features of type (%s) found in vector map <%s>"
+msgstr "Nenhuma feição do tipo (%s) encontrada no mapa vetorial <%s>"
+
+msgid "Number of rows: %d"
+msgstr "Número de linhas: %d"
+
+msgid "Key columns differ"
+msgstr "As colunas chave são diferentes"
+
+msgid "Number of columns differ"
+msgstr "O número de colunas difere"
+
+msgid "Column types differ"
+msgstr "Os tipos de coluna são diferentes"
+
+msgid "Start of 1. MP >= end of 2. MP for points' cats %[d], [%d]"
+msgstr "Início de 1. MP >= fim de 2. MP para categorias de pontos % [d], [%d]"
+
+msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgstr "Faz com que cada valor de célula seja uma função dos valores de atributo designados aos pontos de vetor ou centroides ao seu redor e armazena novos valores de célula em um mapa raster de saída."
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
+msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) menor"
+
+msgid "DONE: compressed file is %lu %s (%.2f%) smaller"
+msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) menor"
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
+msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) maior"
+
+msgid "DONE: compressed file is %lu %s (%.2f%) larger"
+msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) maior"
+
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
+msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de formato (parâmetro 'lco') para exportar <em 3D em vez de 2D (padrão)."
+
+#~ msgid "Missing attribute table for vector map <%s>"
+#~ msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

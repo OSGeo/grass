@@ -28617,6 +28617,260 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
 msgid "Launch Data Catalog."
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2007
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2018
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2023
+msgid "Create new model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2025
+msgid "Load model from file"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2029
+msgid "Save model to file"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2031
+msgid "Close model file"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2032
+msgid "Export to image"
+msgstr "படம் ஆக மாற்று"
+
+#: ../gui/wxpython/menustrings.py:2033
+msgid "Export model to image"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2034
+msgid "Export to Python"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2035
+msgid "Export model to Python script"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2036
+msgid "Quit modeler"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2037
+msgid "Close modeler window"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2041
+msgid "&Model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2042
+msgid "Add command"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2043
+msgid "Add action (GRASS command) to model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2044
+msgid "Add data"
+msgstr "தகவல்களைச் சேர்"
+
+#: ../gui/wxpython/menustrings.py:2045
+msgid "Add data item to model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2046
+msgid "Define relation"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2047
+msgid "Define relation between data and action items"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2048
+msgid "Add loop / series"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2049
+msgid "Adds loop (series) to model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2050
+msgid "Add condition"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2051
+msgid "Adds condition (if/else) to model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2053
+msgid "Adds comment to model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2054
+msgid "Remove item"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2055
+msgid "Remove action/data from model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2057
+msgid "Model properties (name, purpose, etc.)"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2058
+msgid "Delete intermediate data"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2059
+msgid "Delete intermediate data defined in the model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2061
+msgid "Run entire model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2062
+msgid "Validate model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2063
+msgid "Validate entire model"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2066
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2067
+msgid "About Graphical Modeler"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2068
+msgid "Display information about Graphical Modeler"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2073 ../gui/wxpython/psmap/toolbars.py:75
+msgid "Specify paper size, margins and orientation"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2074
+msgid "Load instruction file"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2075 ../gui/wxpython/psmap/toolbars.py:68
+msgid "Load text file with mapping instructions"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2076
+msgid "Export instruction file"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2077 ../gui/wxpython/psmap/toolbars.py:66
+msgid "Generate text file with mapping instructions"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2078
+msgid "Export to PostScript"
+msgstr "PostScript ஆக மாற்று"
+
+#: ../gui/wxpython/menustrings.py:2079 ../gui/wxpython/psmap/toolbars.py:70
+msgid "Generate PostScript output"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2080
+msgid "Export to PDF"
+msgstr "pdf ஆக மாற்று"
+
+#: ../gui/wxpython/menustrings.py:2081 ../gui/wxpython/psmap/toolbars.py:72
+msgid "Generate PDF output"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2082 ../gui/wxpython/menustrings.py:2083
+msgid "Launch ps.map dialog"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2085
+msgid "Close Cartographic Composer"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2086
+msgid "&Insert"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2087 ../gui/wxpython/psmap/toolbars.py:80
+#: ../gui/wxpython/psmap/dialogs.py:837 ../gui/wxpython/psmap/dialogs.py:891
+msgid "Map frame"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2088
+msgid "Add or edit map frame"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2090
+msgid "Add or edit raster map"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2092
+msgid "Add or edit vector map"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2093
+msgid "Map legend"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2094
+msgid "Add or edit raster and vector legend"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2095 ../gui/wxpython/psmap/toolbars.py:91
+msgid "Map info"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2096
+msgid "Add or edit map info"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2098
+msgid "Add or edit scale bar"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2106 ../gui/wxpython/psmap/toolbars.py:83
+msgid "Delete selected object"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2109
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2110
+msgid "About Cartographic Composer"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2111
+msgid "Display information about Cartographic Composer"
+msgstr ""
+
+#: ../gui/wxpython/startup/locdownload.py:204
+#, python-brace-format
+msgid "ZIP file is unreadable: {0}"
+msgstr ""
+
+#: ../gui/wxpython/startup/locdownload.py:223
+#, python-brace-format
+msgid "Archive file is unreadable: {0}"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -30314,7 +30568,10 @@ msgid "Rendering map layers"
 =======
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/animation/provider.py:562
@@ -32032,6 +32289,14 @@ msgid "labels: "
 msgstr ""
 
 #, fuzzy, python-format
+<<<<<<< HEAD
+=======
+#~ msgid "Unable to rename mapset: %s"
+#~ msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
+
+<<<<<<< HEAD
+#, fuzzy, python-format
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #~ msgid "Unable to rename location: %s"
 #~ msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
 
@@ -32042,5 +32307,10 @@ msgstr ""
 msgid "GRASS GIS Data Catalog"
 msgstr "GRASS GIS தகவல் அட்டவணை"
 
+=======
+msgid "GRASS GIS Data Catalog"
+msgstr "GRASS GIS தகவல் அட்டவணை"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Search:"
 msgstr "தேடு:"

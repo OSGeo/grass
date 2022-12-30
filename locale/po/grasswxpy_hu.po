@@ -18147,7 +18147,10 @@ msgstr "Szín tábla import vagy export"
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:55
 msgid "Graphical Modeler - GRASS GIS"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/modules/colorrules.py:448
 msgid "Choose file to load color table"
@@ -18520,7 +18523,10 @@ msgstr "Új GRASS hely definiálása"
 #: ../gui/wxpython/location_wizard/wizard.py:186
 msgid "Change"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/modules/colorrules.py:985
 msgid "fp range"
@@ -21495,7 +21501,10 @@ msgstr "Kiválasztott rétegek átvetítése"
 #: ../gui/wxpython/modules/histogram.py:298
 =======
 #: ../gui/wxpython/modules/histogram.py:296
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Histogram Tool  [d.histogram]"
 msgstr ""
 
@@ -21811,7 +21820,10 @@ msgstr ""
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/modules/mcalc_builder.py:71
 msgid "3D Raster Map Calculator"
@@ -22858,7 +22870,10 @@ msgstr "FIGYELMEZTETÉS"
 #: ../gui/wxpython/rlisetup/frame.py:130
 =======
 #: ../gui/wxpython/rlisetup/frame.py:114
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Setup for r.li modules"
 msgstr ""
 
@@ -22963,7 +22978,10 @@ msgstr "Térkép eszközsor"
 #: ../gui/wxpython/mapwin/decorations.py:203
 msgid "Text properties"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/main_window/frame.py:973 ../gui/wxpython/lmgr/frame.py:850
 msgid "Choose model to run"
@@ -23367,6 +23385,13 @@ msgstr "Kilépés a GRASS GUI-ból"
 =======
 #: ../gui/wxpython/wxplot/histogram.py:43
 msgid "Histogram Tool"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../gui/wxpython/wxplot/histogram.py:51
+msgid "Histogram of"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -26638,7 +26663,10 @@ msgstr "Térkép rétegek rajzolása"
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
 msgstr "PROJ szöveg (kötelező):"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/animation/provider.py:562
 msgid "Overlaying map layers"
@@ -29314,6 +29342,7 @@ msgid "labels: "
 msgstr "címkék:"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #~ msgid "Abort download location"
 #~ msgstr "Hely letöltés megszakítása"
 
@@ -29326,6 +29355,9 @@ msgstr "címkék:"
 =======
 <<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<<<<<<< HEAD
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #~ msgid "Use defined projection"
 #~ msgstr "Felhasználó definiált vetület"
 
@@ -29343,7 +29375,26 @@ msgstr "címkék:"
 msgid "Cartographic Composer - GRASS GIS"
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../gui/wxpython/psmap/g.gui.psmap.py:51
+msgid "Cartographic Composer - GRASS GIS"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
+<<<<<<< HEAD
+=======
+#~ msgid "Download sample location"
+#~ msgstr "Minta hely letöltése"
+
+<<<<<<< HEAD
+#, fuzzy, python-format
+#~ msgid "Unable to rename mapset: %s"
+#~ msgstr ""
+#~ "Nem tudom átnevezni a térképcsoportot.\n"
+#~ "\n"
+#~ "%s"
+
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, fuzzy, python-format
 #~ msgid "Unable to rename location: %s"
 #~ msgstr ""
@@ -29867,3 +29918,217 @@ msgstr "Új hely létrehozása?"
 msgid "GRASS GIS Histogramming Tool (d.histogram)"
 msgstr "GRASS GIS hisztogram eszköz (d.histogram)"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Failed to display layer: not in current mapset or invalid layer"
+msgstr "Nem sikerült a réteget megjeleníteni: nincs az aktuális térképcsoportban vagy hibás réteg"
+
+msgid "Animation already axists"
+msgstr "Animáció már létezik"
+
+msgid "GRASS GIS Raster Map Calculator"
+msgstr "GRASS GIS raszter térkép kalkulátor"
+
+msgid "GRASS GIS 3D Raster Map Calculator"
+msgstr "GRASS GIS 3D raszter térkép kalkulátor"
+
+msgid "Define GRASS Database and Location Name"
+msgstr "GRASS adatbázis és hely név megadása"
+
+msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
+msgstr "Ez a beállítás lehetővé teszi az alapértelmezett számítási régió azonnali beállítását a hely létrehozása után. Az alapértelmezett számítási régió később beállítható az importált adatok alapján a g.region használatával."
+
+msgid "Create user mapset"
+msgstr "Felhasználói térképcsoport létrehozás"
+
+msgid "This option allows creating user mapset immediately after new location is created. Note that GRASS always creates PERMANENT mapset."
+msgstr "Ez  a beállítás lehetővé teszi felhasználói térképcsoportok azonnali létrehozását a hely létrehozása után. Vegye észre, hogy a GRASS mindig létrehozza a PERMANENT térképcsoportot."
+
+msgid "GIS Data Directory:"
+msgstr "GISadat könyvtár:"
+
+msgid "Project Location"
+msgstr "Projekt hely"
+
+msgid "Location Title"
+msgstr "Hely név"
+
+msgid "Choose method for creating a new location"
+msgstr "Válasszon módszert az új hely létrehozásához"
+
+msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
+msgstr "Olvass be a vetületet és a dátumot egy Well Known Text (WKT) .prj fájlból"
+
+msgid "Select coordinate system parameters from a list"
+msgstr "Válassza ki a koordináta-rendszer paramétereit egy listából"
+
+msgid "Simple methods:"
+msgstr "Egyszerű módszerek:"
+
+msgid "Advanced methods:"
+msgstr "Haladó módszerek:"
+
+msgid "Choose projection"
+msgstr "Válasszon vetületet"
+
+msgid "Select Well Known Text (WKT) .prj file"
+msgstr "Válasszon Well Known Text (WKT) .prj fájlt"
+
+msgid "WKT .prj file:"
+msgstr "WKT .prj fáll:"
+
+msgid "Choose EPSG Code"
+msgstr "Válasszon EPSG kódot"
+
+msgid "Path to the EPSG-codes file:"
+msgstr "Elérési út az EPSG kódok fájlhoz:"
+
+msgid "Choose EPSG codes file"
+msgstr "Válasszon EPSG kódok fájlt"
+
+msgid "Location Title:"
+msgstr "Hely név:"
+
+msgid "Location wizard canceled. Location not created."
+msgstr "a hely varázsló futása megszakadt. A helyet nem hoztam létre."
+
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
+msgstr "<%(loc)s> helyet a <%(dir)s> GIS adat könyvtárban hoztam létre. Meg kell változtatnia az alapértelmezett GIS adat könyvtárat a GRASS induló képernyőjén."
+
+msgid "New GIS data directory"
+msgstr "Új GIS adatkönyvtár"
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
+msgstr "Vektor térkép réteg export bármelyik támogatott OGR vektor formátumba. Alapértelmezés szerint a vektor térkép réteget ESRI shape fájl formátumba exportáljuk."
+
+msgid "Reports and Statistics"
+msgstr "Jelentések és statisztikák"
+
+msgid "GRASS GIS Vector Digitizer"
+msgstr "GRASS GIS vektor dgitalizáló"
+
+msgid "Documents"
+msgstr "Dokumentációk"
+
+msgid "My Documents"
+msgstr "Dokumentumaim"
+
+msgid "GRASS GIS Simple Python Editor"
+msgstr "GRASS GIS Egyszerű Python szerkesztő"
+
+msgid "GRASS GIS Cartographic Composer"
+msgstr "GRASS GIS kartográfiai szerkesztő"
+
+msgid "GRASS GIS Animation tool"
+msgstr "GRASS GIS animáció eszköz"
+
+msgid "Start region:"
+msgstr "Kezdő régió:"
+
+msgid "GRASS GIS %s Layer Manager"
+msgstr "GRASS GIS %s réteg kezelő"
+
+msgid "Switch to new location?"
+msgstr "Váltás az új helyre?"
+
+msgid "Do you want to set the default region extents and resolution now?"
+msgstr "Be akarja állítani az alapértelmezett régió terjedelmét és a felbontást most?"
+
+msgid "Location <%s> created"
+msgstr "<%s> helyet létrehoztam"
+
+msgid "Unable to exit GRASS shell: unknown PID"
+msgstr "Nem tudok kilépni a GRASS burokból: ismeretlen PID"
+
+msgid "Remove vector legend"
+msgstr "Vektor jelmagyarázat eltávolítás"
+
+msgid "GRASS GIS Vector Network Analysis Tool"
+msgstr "GRASS GIS vektor hálózat elemzés eszköz"
+
+msgid "Click to allow editing other mapsets"
+msgstr "Kattintson más térképcsoportok szerkesztésének az engedélyezéséhez"
+
+msgid "GRASS GIS Attribute Table Manager"
+msgstr "GRASS GIS attribútum tábla kezelő"
+
+msgid "GRASS GIS Graphical Modeler"
+msgstr "GRASS GIS Grafikus Modellező"
+
+msgid "Maximum number of animations is %s."
+msgstr "Az animációk maximális száma %s."
+
+msgid "Animate region change (2D view only)"
+msgstr "Területváltozás animálása (csak 2D nézet)"
+
+msgid "GRASS GIS Temporal Plot Tool"
+msgstr "GRASS GIS időbeli rajz eszköz"
+
+msgid "GRASS GIS Location Download"
+msgstr "GRASS GIS hely letöltés"
+
+msgid "Unpack GRASS raster map"
+msgstr "GRASS raszter térkép kicsomagolása"
+
+msgid "Set raster output format"
+msgstr "Raszter output formátum beállítás"
+
+msgid "Unpack GRASS vector map"
+msgstr "GRASS vektor térkép kicsomagolás"
+
+msgid "Set vector output format"
+msgstr "Vektor output formátum beállítás"
+
+msgid ""
+"Location <%s> created.\n"
+"\n"
+"Do you want to switch to the new location?"
+msgstr ""
+"<%s> helyet létrehoztam.\n"
+"\n"
+"Át akar váltani az új helyre?"
+
+msgid "Search:"
+msgstr "Keresés:"
+
+msgid "GRASS locations in {0}"
+msgstr "GRASS hely ebben {0}"
+
+msgid " (readonly)"
+msgstr "(csak olvasható)"
+
+msgid "GRASS GIS Attribute Table Manager - "
+msgstr "GRASS GIS attribútum tábla kezelő -"
+
+msgid "GRASS GIS Setup for r.li modules"
+msgstr "GRASS GIS beállítás az r.li modulhoz"
+
+msgid "Resize legend"
+msgstr "Jelmagyarázat átméretezés"
+
+msgid "Optional location title, you can leave this field blank."
+msgstr "Opcionális hely cím, ezt a mezőt üresen hagyhatja."
+
+msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
+msgstr "<%(name)s> név nem megfelelő név egy helyhez. Csak az ASCII karaktereket használja kivéve %(chars)s és a szóközt."
+
+msgid "Unable to create location"
+msgstr "Nem tudom létrehozni a helyet"
+
+msgid "Select EPSG code of spatial reference system"
+msgstr "Válasszon EPSG kódot a vetülethez"
+
+msgid "Read projection and datum terms from a georeferenced data file"
+msgstr "Olvass be a vetületet és a dátumot egy georeferált adatfájlból"
+
+msgid "Create a generic Cartesian coordinate system (XY)"
+msgstr "Hozzon létre egy általános derékszögű koordináta-rendszert (XY)"
+
+msgid "Do you want to create GRASS location <%s>?"
+msgstr "Létre akar hozni egy GRASS helyet <%s>?"
+
+msgid "Create new location?"
+msgstr "Új hely létrehozása?"
+
+msgid "GRASS GIS Histogramming Tool (d.histogram)"
+msgstr "GRASS GIS hisztogram eszköz (d.histogram)"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

@@ -113,7 +113,10 @@ int main(int argc, char *argv[])
     char *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
 =======
     void *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         *index_array;
     void *raster_row, *ptr;
     struct Cell_head region;
@@ -129,12 +132,17 @@ int main(int argc, char *argv[])
     unsigned long count, count_total;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     double min = NAN;
     double max = NAN;
 =======
     double min = 0.0 / 0.0; /* init as nan */
     double max = 0.0 / 0.0; /* init as nan */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double min = 0.0 / 0.0; /* init as nan */
+    double max = 0.0 / 0.0; /* init as nan */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     double zscale = 1.0;
     double vscale = 1.0;
     size_t offset, n_offset;
@@ -736,10 +744,14 @@ int main(int argc, char *argv[])
 
             G_chop(buff); /* remove leading and trailing whitespace from the
 <<<<<<< HEAD
+<<<<<<< HEAD
                              string.  unneeded?? */
 =======
                              string.  unneded?? */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                             string.  unneded?? */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             tokens = G_tokenize(buff, fs);
             ntokens = G_number_of_tokens(tokens);
 
@@ -1249,10 +1261,14 @@ int scan_bounds(FILE *fp, int xcol, int ycol, int zcol, int vcol, char *fs,
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_chop(buff); /* remove leading and trailing whitespace. unneeded?? */
 =======
         G_chop(buff); /* remove leading and trailing whitespace. unneded?? */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_chop(buff); /* remove leading and trailing whitespace. unneded?? */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         tokens = G_tokenize(buff, fs);
         ntokens = G_number_of_tokens(tokens);
 

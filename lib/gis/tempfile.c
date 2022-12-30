@@ -173,6 +173,7 @@ void G__temp_element(char *element, int tmp)
         G_make_mapset_object_group_tmp(element);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     
@@ -180,6 +181,9 @@ void G__temp_element(char *element, int tmp)
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }
 

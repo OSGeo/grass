@@ -4798,6 +4798,7 @@ void IWave::planetscope0f10(int iwa)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Following filter function created using create_iwave.py */
 
 void IWave::aviris(int iwa)
@@ -6436,6 +6437,8 @@ void IWave::aviris(int iwa)
 }
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 /* filter functions must be defined above */
 
 double IWave::equivwl() const
@@ -6455,6 +6458,7 @@ double IWave::equivwl() const
     }
 
     return wlwave / seb;
+<<<<<<< HEAD
 <<<<<<< HEAD
 }
 
@@ -7930,6 +7934,8 @@ void IWave::hyperion_swir(int iwa)
     }
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 }
 
 void IWave::parse()
@@ -7944,10 +7950,14 @@ void IWave::parse()
     cin >> iwave;
     cin.ignore(numeric_limits<int>::max(), '\n');
 <<<<<<< HEAD
+<<<<<<< HEAD
     printf("iwave = %d\n", iwave);
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if (iwave == 0 || iwave == -2) {
         cin >> ffu.wlinf;
         cin >> ffu.wlsup;
@@ -8037,6 +8047,7 @@ void IWave::parse()
         else if (iwave <= 208)
             worldview4(iwave - 203);
 <<<<<<< HEAD
+<<<<<<< HEAD
         else if (iwave <= 432)
             aviris(iwave - 208);
         else if (iwave <= 481)
@@ -8045,6 +8056,8 @@ void IWave::parse()
             hyperion_swir(iwave - 481);
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         else
             G_warning(_("Unsupported iwave value: %d"), iwave);
 
@@ -8307,6 +8320,7 @@ void IWave::print()
                                   string(" worldview 4 green"),
                                   string(" worldview 4 red"),
 <<<<<<< HEAD
+<<<<<<< HEAD
                                   string(" worldview 4 nir"),
                                   string(" aviris b1-224"),
                                   string(" hyperion vnir b8-57"),
@@ -8314,6 +8328,9 @@ void IWave::print()
 =======
                                   string(" worldview 4 nir")};
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                  string(" worldview 4 nir")};
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     Output::Begin();
     Output::Repeat(22, ' ');

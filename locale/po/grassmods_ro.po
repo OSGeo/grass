@@ -27743,6 +27743,13 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
 msgid "Apriori Phi (roll) standard deviation"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
+msgid "Apriori Kappa (yaw) standard deviation"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -39831,7 +39838,10 @@ msgstr ""
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
 msgid "image collections"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/g.proj.identify_to_translate.c:8
 msgid "Input EPSG code"
@@ -85923,6 +85933,7 @@ msgstr "Tip de geometrie necunoscut"
 #~ msgid "Not enough memory for adx"
 #~ msgstr "Memorie insuficientă pentru adx"
 
+<<<<<<< HEAD
 #~ msgid "Not enough memory for ady"
 #~ msgstr "Memorie insuficientă pentru ady"
 
@@ -85963,5 +85974,10 @@ msgstr "Tip de geometrie necunoscut"
 msgid "<%s> not found"
 msgstr "<%s> nu a fost găsit"
 
+=======
+msgid "<%s> not found"
+msgstr "<%s> nu a fost găsit"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "%s=%s,%s: files are the same, no copy required"
 msgstr "%s=%s,%s: fișierele sunt la fel, nici o copiere nu este necesară"

@@ -20,10 +20,14 @@
 import os
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 import sys
 import unittest
 from pathlib import Path
 
+<<<<<<< HEAD
 =======
 import unittest
 =======
@@ -36,6 +40,8 @@ from pathlib import Path
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -46,6 +52,7 @@ def can_import_folium():
     try:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         import folium  # noqa
 =======
         import folium
@@ -53,6 +60,9 @@ def can_import_folium():
 =======
         import folium  # noqa
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        import folium  # noqa
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         return True
     except ImportError:

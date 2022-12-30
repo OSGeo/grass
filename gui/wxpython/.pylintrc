@@ -320,10 +320,14 @@ ignore-on-opaque-inference=yes
 # for classes with dynamically set attributes). This supports the use of
 # qualified names.
 <<<<<<< HEAD
+<<<<<<< HEAD
 ignored-classes=optparse.Values,thread._local,_thread._local,main_window.page.MainPageBase
 =======
 ignored-classes=optparse.Values,thread._local,_thread._local
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ignored-classes=optparse.Values,thread._local,_thread._local
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 # List of module names for which member attributes should not be checked
 # (useful for modules/projects where namespaces are manipulated during runtime
@@ -384,10 +388,14 @@ init-import=no
 # List of qualified module names which can have objects that can redefine
 # builtins.
 <<<<<<< HEAD
+<<<<<<< HEAD
 redefining-builtins-modules=past.builtins,future.builtins,builtins,io
 =======
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 
 [SIMILARITIES]

@@ -45,10 +45,14 @@ int main(int argc, char *argv[])
     char *null_value;
     int out_type;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int fd; /*Normal maps ;) */
 =======
     int fd; /*Normale maps ;) */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int fd; /*Normale maps ;) */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     int rgbfd[3];
     int vectfd[3];
     int celltype[3] = {0, 0, 0};
@@ -95,10 +99,14 @@ int main(int argc, char *argv[])
     /*Correct the coordinates, so the precision of VTK is not hurt :( */
     if (param.coorcorr->answer) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         /*Get the default region for coordinate correction */
 =======
         /*Get the default region for coordiante correction */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /*Get the default region for coordiante correction */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         G_get_default_window(&default_region);
 
         /*Use the center of the current region as extent */

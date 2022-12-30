@@ -12,6 +12,7 @@
  * to project the input map on the output region, trimming this down to
  * the smallest possible rectangular region.
 <<<<<<< HEAD
+<<<<<<< HEAD
  *
  * Simply using corner and midpoints (original r.proj) will only work
  * between cylindrical projections. In other projections, though he input
@@ -20,6 +21,8 @@
  * discontinuous area.
  *
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  *
  * Simply using corner and midpoints (original r.proj) will only work
  * between cylindrical projections. In other projections, though he input
@@ -27,7 +30,10 @@
  * any shape and its position can be rotated any way. It can even be a
  * discontinous area.
  *
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  * In many projections, especially when large areas are displayed, the edges
  * of rectangular GRASS regions do not necessarily represent east, west, north
  * and south. Naming the region edges accordingly (as is regions and cellhd) can

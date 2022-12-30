@@ -200,7 +200,10 @@ int G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
  * is at least the upper bound (no need to test for buffer overflow)
 =======
  * is at least the upper bound (no need to test for buffer overlflow)
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  * read comments on the specific compressor interfaces
  */
 int G_compress_bound(int src_sz, int number)

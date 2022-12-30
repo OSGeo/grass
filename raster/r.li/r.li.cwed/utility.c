@@ -36,12 +36,17 @@ char **split_arg(char *linea, char separatore, long *numerotoken)
     char *copialinea; /* line copy */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     long i;    /* find token number */
     size_t it; /* iterator */
 =======
     long i;  /* find token number */
     long it; /* iterator */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    long i;  /* find token number */
+    long it; /* iterator */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     long num;
 
     int term; /* =0 if last token has not /0 */

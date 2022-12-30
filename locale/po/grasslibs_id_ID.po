@@ -10389,7 +10389,10 @@ msgstr "Rekap basis data untuk cat %d tidak ada"
 #, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/vector/Vlib/net_build.c:467
 msgid "Cannot add network arc representing turn."
@@ -12537,6 +12540,7 @@ msgstr ""
 msgid "Attempt to delete not registered line %d from node %d"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/vector/diglib/spindex_rw.c:100 ../lib/vector/diglib/spindex_rw.c:109
 msgid "Topology file must be written before spatial index file"
 msgstr ""
@@ -12805,5 +12809,7 @@ msgstr "[%s]: Tidak ada warna seperti itu"
 #~ msgid "Unbale to open raster <%s>"
 #~ msgstr "Tidak dapat membuka raster <%s>"
 
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "Salin %s <%s> ke current mapset sebagai <%s>"

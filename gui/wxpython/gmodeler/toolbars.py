@@ -60,6 +60,7 @@ class ModelerToolbar(BaseToolbar):
             ),
             "actionAdd": MetaIcon(
 <<<<<<< HEAD
+<<<<<<< HEAD
                 img="module-add",
                 label=_("Add GRASS tool (module) to model") + " (Ctrl+Alt+A)",
             ),
@@ -68,6 +69,9 @@ class ModelerToolbar(BaseToolbar):
 =======
                 img="module-add", label=_("Add GRASS tool (module) to model")
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                img="module-add", label=_("Add GRASS tool (module) to model")
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             ),
             "relation": MetaIcon(
                 img="relation-create",
@@ -82,9 +86,12 @@ class ModelerToolbar(BaseToolbar):
             "run": MetaIcon(img="execute", label=_("Run model") + " (Ctrl+Alt+R)"),
             "validate": MetaIcon(img="check", label=_("Validate model")),
 <<<<<<< HEAD
+<<<<<<< HEAD
             "settings": MetaIcon(img="modeler-settings", label=_("Modeler settings")),
             "properties": MetaIcon(img="options", label=_("Set model properties")),
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             "settings": BaseIcons["settings"],
             "properties": MetaIcon(img="options", label=_("Show model properties")),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -98,6 +105,7 @@ class ModelerToolbar(BaseToolbar):
 
         data = (
             (
+<<<<<<< HEAD
 <<<<<<< HEAD
                 ("new", icons["new"].label.rsplit(" ", 1)[0]),
                 icons["new"],
@@ -189,6 +197,8 @@ class ModelerToolbar(BaseToolbar):
             ),
             (None,),
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 (
                     ("new", icons["new"].label.rsplit(" ", 1)[0]),
                     icons["new"],

@@ -109,6 +109,7 @@ def main():
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     grass_executable = args.grassbin
 
     # Software
@@ -144,12 +145,22 @@ def main():
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass_executable + " --config path"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    grass_executable = args.grassbin
+
+    # Software
+    # query GRASS GIS itself for its GISBASE
+    # we assume that the start script is available and in the PATH
+    # the shell=True is here because of MS Windows? (code taken from wiki)
+    startcmd = grass_executable + " --config path"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     p = subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     out, err = p.communicate()
     if p.returncode != 0:
         print(
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -163,6 +174,9 @@ def main():
 =======
             "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             file=sys.stderr,
         )
         return 1

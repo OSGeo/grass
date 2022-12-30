@@ -55,6 +55,12 @@ class TestRasterUnivar(TestCase):
             overwrite=True,
         )
 
+        cls.runModule(
+            "r.mapcalc",
+            expression="zones = int(if(row() <= 5, 1, if(row() >= 20, 3, 2)))",
+            overwrite=True,
+        )
+
         cls.runModule("r.mapcalc", expression="a_1 = 100", overwrite=True)
         cls.runModule("r.mapcalc", expression="a_2 = 200", overwrite=True)
         cls.runModule("r.mapcalc", expression="a_3 = 300", overwrite=True)
@@ -100,6 +106,7 @@ class TestRasterUnivar(TestCase):
         )
         cls.runModule(
 <<<<<<< HEAD
+<<<<<<< HEAD
             "t.create",
             type="strds",
             temporaltype="absolute",
@@ -111,6 +118,8 @@ class TestRasterUnivar(TestCase):
         cls.runModule(
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             "t.register",
             flags="i",
             type="raster",
@@ -141,6 +150,7 @@ class TestRasterUnivar(TestCase):
             overwrite=True,
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
         cls.runModule(
             "t.register",
             flags="i",
@@ -153,11 +163,14 @@ class TestRasterUnivar(TestCase):
         )
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.runModule("t.remove", flags="df", type="strds", inputs="A")
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         cls.runModule("t.remove", flags="df", type="strds", inputs="B")
@@ -171,6 +184,14 @@ class TestRasterUnivar(TestCase):
 =======
         cls.runModule("t.remove", flags="df", type="strds", inputs="B")
         cls.runModule("g.remove", flags="f", type="raster", name="zones")
+=======
+        cls.runModule("t.remove", flags="df", type="strds", inputs="B")
+        cls.runModule("g.remove", flags="f", type="raster", name="zones")
+
+        cls.del_temp_region()
+
+    def test_with_all_maps(self):
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         cls.del_temp_region()
 
@@ -203,7 +224,10 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 
     def test_with_subset_of_maps(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         t_rast_univar = SimpleModule(
@@ -231,7 +255,10 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 
     def test_coarser_resolution(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         t_rast_univar = SimpleModule(
@@ -260,9 +287,12 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 
     def test_subset_with_output(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.runModule("g.region", **self.default_region, res=10)
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         self.assertModule(
             "t.rast.univar",
@@ -288,8 +318,11 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def test_subset_with_extended_statistics_and_output(self):
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     def test_subset_with_output_coarse_resolution(self):
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -368,16 +401,22 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
             verbose=True,
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.runModule("g.region", **self.default_region, res=1)
         self.assertModule(t_rast_univar)
 
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.runModule("g.region", res=1)
         self.assertModule(t_rast_univar)
 
         print(t_rast_univar.outputs.stdout.split("\n"))
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         univar_text = """id|semantic_label|start|end|zone|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
 a_1@PERMANENT||2001-01-01 00:00:00|2001-04-01 00:00:00|1|100|100|100|100|0|0|0|60000|0|600|600
 a_1@PERMANENT||2001-01-01 00:00:00|2001-04-01 00:00:00|2|100|100|100|100|0|0|0|168000|0|1680|1680
@@ -411,10 +450,14 @@ a_4@PERMANENT||2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|2
             verbose=True,
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.runModule("g.region", **self.default_region, res=1)
 =======
         self.runModule("g.region", res=1)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.runModule("g.region", res=1)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(t_rast_univar)
 
         univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
@@ -442,10 +485,14 @@ b_4@PERMANENT|S2_B1|2001-10-01 00:00:00|2002-01-01 00:00:00|440|440|440|440|0|0|
             verbose=True,
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.runModule("g.region", **self.default_region, res=1)
 =======
         self.runModule("g.region", res=1)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.runModule("g.region", res=1)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(t_rast_univar)
 
         univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
@@ -462,6 +509,7 @@ b_4@PERMANENT|S2_B1|2001-10-01 00:00:00|2002-01-01 00:00:00|440|440|440|440|0|0|
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def test_with_spatial_filter_intersects(self):
         """Test spatial filter overlaps"""
@@ -544,6 +592,8 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 if __name__ == "__main__":
     from grass.gunittest.main import test

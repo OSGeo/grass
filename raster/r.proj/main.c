@@ -32,10 +32,14 @@
 *                (they may be invalid in some projections).
 *                - output map will be clipped to borders of the current region.
 <<<<<<< HEAD
+<<<<<<< HEAD
 *                - output map cell edges and centers will coincide with those
 =======
 *                - output map cell edges and centers will coinside with those
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+*                - output map cell edges and centers will coinside with those
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 *                of the current region.
 *                - output map resolution (unless changed explicitly) will
 *                match (exactly) the resolution of the current region.
@@ -152,12 +156,17 @@ int main(int argc, char **argv)
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
 <<<<<<< HEAD
+<<<<<<< HEAD
     module->description = _("Re-projects a raster map from given project to "
                             "the current project.");
 =======
     module->description = _("Re-projects a raster map from given location to "
                             "the current location.");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    module->description = _("Re-projects a raster map from given location to "
+                            "the current location.");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     inlocation = G_define_standard_option(G_OPT_M_LOCATION);
     inlocation->required = YES;
@@ -267,10 +276,14 @@ int main(int argc, char **argv)
         G_fatal_error(_("Input and output locations can not be the same"));
 #else
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Input and output projects are the same"));
 =======
         G_warning(_("Input and output locations are the same"));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_warning(_("Input and output locations are the same"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #endif
         G_get_window(&outcellhd);
 
@@ -302,10 +315,14 @@ int main(int argc, char **argv)
     permissions = G_mapset_permissions(setname);
     if (permissions < 0) /* can't access mapset       */
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Mapset <%s> in input project <%s> - %s"), setname,
 =======
         G_fatal_error(_("Mapset <%s> in input location <%s> - %s"), setname,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_fatal_error(_("Mapset <%s> in input location <%s> - %s"), setname,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                       inlocation->answer,
                       permissions == 0 ? _("permission denied")
                                        : _("not found"));
@@ -316,10 +333,14 @@ int main(int argc, char **argv)
         char **srclist;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_verbose_message(_("Checking project <%s> mapset <%s>"),
 =======
         G_verbose_message(_("Checking location <%s> mapset <%s>"),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_verbose_message(_("Checking location <%s> mapset <%s>"),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                           inlocation->answer, setname);
         srclist = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
                          G_getenv_nofatal("LOCATION_NAME"), setname);
@@ -336,10 +357,14 @@ int main(int argc, char **argv)
     if (!G_find_raster(inmap->answer, setname))
         G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
             _("Raster map <%s> in project <%s> in mapset <%s> not found"),
 =======
             _("Raster map <%s> in location <%s> in mapset <%s> not found"),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            _("Raster map <%s> in location <%s> in mapset <%s> not found"),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             inmap->answer, inlocation->answer, setname);
 
     /* Read input map colour table */
@@ -386,10 +411,14 @@ int main(int argc, char **argv)
 
     if (G_projection() == PROJECTION_XY)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Unable to work with unprojected data (xy project)"));
 =======
         G_fatal_error(_("Unable to work with unprojected data (xy location)"));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_fatal_error(_("Unable to work with unprojected data (xy location)"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     /* Save default borders so we can show them later */
     inorth = incellhd.north;
@@ -408,10 +437,14 @@ int main(int argc, char **argv)
 
     if (print_bounds->answer) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_message(_("Input map <%s@%s> in project <%s>:"), inmap->answer,
 =======
         G_message(_("Input map <%s@%s> in location <%s>:"), inmap->answer,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_message(_("Input map <%s@%s> in location <%s>:"), inmap->answer,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                   setname, inlocation->answer);
 
         /* reproject input raster extents from input to output */

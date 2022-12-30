@@ -24,8 +24,11 @@
    \return string buffer with logname
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 const char *db_whoami(void)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 const char *db_whoami()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {

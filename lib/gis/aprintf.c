@@ -200,6 +200,7 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                     ;
                 if (*c) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     va_list aq;
                     char tmp;
 
@@ -272,6 +273,69 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                                 _("Failed to parse string specifier: %s"), p);
                         }
 
+=======
+                    va_list ap_copy;
+                    char tmp;
+
+                    /* copy ap for ovprintf() */
+                    va_copy(ap_copy, ap);
+
+                    /* found a conversion specifier */
+                    if (*c == 's') {
+                        /* if this is a string specifier */
+                        int width = -1, prec = -1, use_ovprintf = 1;
+                        char *p_tmp, *s;
+
+                        *p_spec = 0;
+                        p_spec = spec;
+                        if (*p_spec == '-')
+                            /* alignment */
+                            p_spec++;
+                        if (*p_spec == '*') {
+                            /* read width from next argument */
+                            width = va_arg(ap, int);
+
+                            p_spec++;
+                        }
+                        else if (*p_spec >= '0' && *p_spec <= '9') {
+                            /* read width */
+                            p_tmp = p_spec;
+                            while (*p_spec >= '0' && *p_spec <= '9')
+                                p_spec++;
+                            tmp = *p_spec;
+                            *p_spec = 0;
+                            width = atoi(p_tmp);
+                            *p_spec = tmp;
+                        }
+                        if (*p_spec == '.') {
+                            /* precision */
+                            p_spec++;
+                            if (*p_spec == '*') {
+                                /* read precision from next argument */
+                                prec = va_arg(ap, int);
+
+                                p_spec++;
+                            }
+                            else if (*p_spec >= '0' && *p_spec <= '9') {
+                                /* read precision */
+                                p_tmp = p_spec;
+                                while (*p_spec >= '0' && *p_spec <= '9')
+                                    p_spec++;
+                                tmp = *p_spec;
+                                *p_spec = 0;
+                                prec = atoi(p_tmp);
+                                *p_spec = tmp;
+                            }
+                        }
+                        if (*p_spec) {
+                            /* illegal string specifier? */
+                            va_end(ap_copy);
+                            *(q + 1) = 0;
+                            G_fatal_error(
+                                _("Failed to parse string specifier: %s"), p);
+                        }
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                         s = va_arg(ap, char *);
 
                         if (width > 0) {
@@ -303,10 +367,14 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                             tmp = *(q + 1);
                             *(q + 1) = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
                             nbytes += ovprintf(opts, p, aq);
 =======
                             nbytes += ovprintf(opts, p, ap_copy);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                            nbytes += ovprintf(opts, p, ap_copy);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                             *(q + 1) = tmp;
                         }
                     }
@@ -315,10 +383,14 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         tmp = *(q + 1);
                         *(q + 1) = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
                         nbytes += ovprintf(opts, p, aq);
 =======
                         nbytes += ovprintf(opts, p, ap_copy);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        nbytes += ovprintf(opts, p, ap_copy);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                         *(q + 1) = tmp;
 
                         /* once ap is passed to another function that calls
@@ -366,10 +438,14 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         }
                     }
 <<<<<<< HEAD
+<<<<<<< HEAD
                     va_end(aq);
 =======
                     va_end(ap_copy);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    va_end(ap_copy);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     break;
                 }
                 else if (p_spec - spec < SPEC_BUF_SIZE - 2)

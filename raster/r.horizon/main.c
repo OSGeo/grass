@@ -12,10 +12,13 @@ This program was written in 2006 by Thomas Huld and Tomas Cebecauer,
 Joint Research Centre of the European Commission, based on bits of the r.sun
 module by Jaro Hofierka
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 Program was refactored by Anna Petrasova to remove most global variables.
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 *******************************************************************************/
 /*
@@ -46,6 +49,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <grass/parson.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define WHOLE_RASTER   1
 #define SINGLE_POINT   0
 #define RAD            (180. / M_PI)
@@ -63,6 +67,8 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #define DISTANCE1(x1, x2, y1, y2) \
     (sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #define WHOLE_RASTER      1
 #define SINGLE_POINT      0
 #define RAD               (180. / M_PI)
@@ -168,6 +174,7 @@ typedef struct {
 } HorizonProperties;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct {
     int n, m, m100, n100;
     double stepx, stepy, stepxy;
@@ -219,6 +226,10 @@ double distance(double x1, double x2, double y1, double y2, double coslatsq)
 =======
 /* why not use G_distance() here which switches to geodesic/great
    circle distance as needed? */
+=======
+/* why not use G_distance() here which switches to geodesic/great
+   circle distance as needed? */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 double distance(double x1, double x2, double y1, double y2)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -242,6 +253,7 @@ int main(int argc, char *argv[])
         struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
             *start, *end, *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff,
 <<<<<<< HEAD
+<<<<<<< HEAD
             *maxdistance, *format, *output;
     } parm;
 
@@ -254,6 +266,13 @@ int main(int argc, char *argv[])
     struct {
         struct Flag *degreeOutput, *compassOutput;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            *maxdistance, *output;
+    } parm;
+
+    struct {
+        struct Flag *degreeOutput, *compassOutput;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     } flag;
 
     G_gisinit(argv[0]);
@@ -320,9 +339,12 @@ int main(int argc, char *argv[])
         _("For horizon rasters, read from the DEM an extra buffer around the "
           "present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
     parm.bufferzone->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     parm.bufferzone->guisection = _("Raster mode");
 
     parm.e_buff = G_define_option();
@@ -332,9 +354,12 @@ int main(int argc, char *argv[])
     parm.e_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer eastward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
     parm.e_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     parm.e_buff->guisection = _("Raster mode");
 
     parm.w_buff = G_define_option();
@@ -344,9 +369,12 @@ int main(int argc, char *argv[])
     parm.w_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer westward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
     parm.w_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     parm.w_buff->guisection = _("Raster mode");
 
     parm.n_buff = G_define_option();
@@ -356,9 +384,12 @@ int main(int argc, char *argv[])
     parm.n_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer northward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
     parm.n_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     parm.n_buff->guisection = _("Raster mode");
 
     parm.s_buff = G_define_option();
@@ -368,9 +399,12 @@ int main(int argc, char *argv[])
     parm.s_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer southward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
     parm.s_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     parm.s_buff->guisection = _("Raster mode");
 
     parm.maxdistance = G_define_option();
@@ -388,11 +422,15 @@ int main(int argc, char *argv[])
     parm.coord = G_define_standard_option(G_OPT_M_COORDS);
     parm.coord->description =
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Coordinate(s) for which you want to calculate the horizon");
     parm.coord->multiple = YES;
 =======
         _("Coordinate for which you want to calculate the horizon");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        _("Coordinate for which you want to calculate the horizon");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     parm.coord->guisection = _("Point mode");
 
     parm.dist = G_define_option();
@@ -452,12 +490,17 @@ int main(int argc, char *argv[])
     geometry.offsety = 0.5;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     geometry.n /*n_cols */ = cellhd.cols;
     geometry.m /*n_rows */ = cellhd.rows;
 =======
     n /*n_cols */ = cellhd.cols;
     m /*n_rows */ = cellhd.rows;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    n /*n_cols */ = cellhd.cols;
+    m /*n_rows */ = cellhd.rows;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     geometry.n100 = ceil(geometry.n / 100.);
     geometry.m100 = ceil(geometry.m / 100.);
@@ -476,7 +519,10 @@ int main(int argc, char *argv[])
         G_important_message(_("Note: In latitude-longitude coordinate system "
                               "specify buffers in degree unit"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     elevin = parm.elevin->answer;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -487,6 +533,7 @@ int main(int argc, char *argv[])
     int point_count = 0;
     if (parm.coord->answer == NULL) {
         G_debug(1, "Setting mode: WHOLE_RASTER");
+<<<<<<< HEAD
 <<<<<<< HEAD
         mode = WHOLE_RASTER;
     }
@@ -531,6 +578,38 @@ int main(int argc, char *argv[])
 
 =======
         setMode(WHOLE_RASTER);
+=======
+        setMode(WHOLE_RASTER);
+    }
+    else {
+        G_debug(1, "Setting mode: SINGLE_POINT");
+        setMode(SINGLE_POINT);
+        if (sscanf(parm.coord->answer, "%lf,%lf", &xcoord, &ycoord) != 2) {
+            G_fatal_error(_(
+                "Can't read the coordinates from the \"coordinate\" option."));
+        }
+
+        if (xcoord < cellhd.west || xcoord >= cellhd.east ||
+            ycoord <= cellhd.south || ycoord > cellhd.north) {
+            G_fatal_error(_("Coordinates are outside of the current region"));
+        }
+
+        /* Transform the coordinates to row/column */
+
+        /*
+           xcoord = (int) ((xcoord-xmin)/stepx);
+           ycoord = (int) ((ycoord-ymin)/stepy);
+         */
+
+        /* Open ASCII file for output or stdout */
+        outfile = parm.output->answer;
+
+        if ((strcmp("-", outfile)) == 0) {
+            fp = stdout;
+        }
+        else if (NULL == (fp = fopen(outfile, "w")))
+            G_fatal_error(_("Unable to open file <%s>"), outfile);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
     else {
         G_debug(1, "Setting mode: SINGLE_POINT");
@@ -565,6 +644,7 @@ int main(int argc, char *argv[])
     settings.single_direction = 0;
     if (parm.direction->answer != NULL)
 <<<<<<< HEAD
+<<<<<<< HEAD
         sscanf(parm.direction->answer, "%lf", &settings.single_direction);
 
     settings.step = 0;
@@ -578,6 +658,8 @@ int main(int argc, char *argv[])
         }
 
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sscanf(parm.direction->answer, "%lf", &single_direction);
 
     if (WHOLE_RASTER == isMode()) {
@@ -586,11 +668,15 @@ int main(int argc, char *argv[])
                             "size. Aborting."));
         }
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (parm.horizon->answer == NULL) {
             G_fatal_error(
                 _("You didn't specify a horizon raster name. Aborting."));
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
         settings.horizon_basename = parm.horizon->answer;
         if (parm.step->answer != NULL) {
@@ -609,6 +695,8 @@ int main(int argc, char *argv[])
         }
         if (settings.end < 0.0 || settings.end > 360.0) {
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         horizon = parm.horizon->answer;
         if (parm.step->answer != NULL) {
             str_step = parm.step->answer;
@@ -625,7 +713,10 @@ int main(int argc, char *argv[])
                 _("Negative values of start angle are not allowed. Aborting."));
         }
         if (end < 0.0 || end > 360.0) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             G_fatal_error(_("End angle is not between 0 and 360. Aborting."));
         }
         if (settings.start >= settings.end) {
@@ -642,18 +733,24 @@ int main(int argc, char *argv[])
                 _("You didn't specify an angle step size. Aborting."));
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         sscanf(parm.step->answer, "%lf", &settings.step);
     }
 
     if (settings.step == 0.0) {
         settings.step = 360.;
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sscanf(parm.step->answer, "%lf", &step);
     }
 
     if (step == 0.0) {
         step = 360.;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
     double bufferZone = 0., ebufferZone = 0., wbufferZone = 0.,
            nbufferZone = 0., sbufferZone = 0.;
@@ -689,12 +786,19 @@ int main(int argc, char *argv[])
     settings.fixedMaxLength = BIG;
     if (parm.maxdistance->answer != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (sscanf(parm.maxdistance->answer, "%lf", &settings.fixedMaxLength) !=
             1)
             G_fatal_error(_("Could not read maximum distance. Aborting."));
     }
     G_debug(1, "Using maxdistance %f",
             settings.fixedMaxLength); /* predefined as BIG */
+=======
+        if (sscanf(parm.maxdistance->answer, "%lf", &fixedMaxLength) != 1)
+            G_fatal_error(_("Could not read maximum distance. Aborting."));
+    }
+    G_debug(1, "Using maxdistance %f", fixedMaxLength); /* predefined as BIG */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
        attempt to contrain to current region
@@ -702,6 +806,7 @@ int main(int argc, char *argv[])
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
      */
+<<<<<<< HEAD
     sscanf(parm.dist->answer, "%lf", &geometry.distxy);
     if (geometry.distxy < 0.5 || geometry.distxy > 1.5)
 =======
@@ -720,6 +825,11 @@ int main(int argc, char *argv[])
     sscanf(parm.dist->answer, "%lf", &dist);
     if (dist < 0.5 || dist > 1.5)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+    sscanf(parm.dist->answer, "%lf", &dist);
+    if (dist < 0.5 || dist > 1.5)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         G_fatal_error(_("The distance value must be 0.5-1.5. Aborting."));
 
     geometry.stepxy = geometry.distxy * 0.5 * (geometry.stepx + geometry.stepy);
@@ -737,6 +847,7 @@ int main(int argc, char *argv[])
         if (nbufferZone == 0.)
             nbufferZone = bufferZone;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         /* adjust buffer to multiples of resolution */
         ebufferZone = (int)(ebufferZone / geometry.stepx) * geometry.stepx;
@@ -787,6 +898,29 @@ int main(int argc, char *argv[])
         m100 = ceil(m / 100.);
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        new_cellhd.rows += (int)((nbufferZone + sbufferZone) / stepy);
+        new_cellhd.cols += (int)((ebufferZone + wbufferZone) / stepx);
+
+        new_cellhd.north += nbufferZone;
+        new_cellhd.south -= sbufferZone;
+        new_cellhd.east += ebufferZone;
+        new_cellhd.west -= wbufferZone;
+
+        xmin = new_cellhd.west;
+        ymin = new_cellhd.south;
+        xmax = new_cellhd.east;
+        ymax = new_cellhd.north;
+        deltx = fabs(new_cellhd.east - new_cellhd.west);
+        delty = fabs(new_cellhd.north - new_cellhd.south);
+
+        n /* n_cols */ = new_cellhd.cols;
+        m /* n_rows */ = new_cellhd.rows;
+        G_debug(1, "%lf %lf %lf %lf \n", ymax, ymin, xmin, xmax);
+        n100 = ceil(n / 100.);
+        m100 = ceil(m / 100.);
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         Rast_set_window(&new_cellhd);
     }
 
@@ -857,7 +991,10 @@ int main(int argc, char *argv[])
     calculate(xcoord, ycoord, (int)(ebufferZone / stepx),
               (int)(wbufferZone / stepx), (int)(sbufferZone / stepy),
               (int)(nbufferZone / stepy));
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     exit(EXIT_SUCCESS);
 }
@@ -865,8 +1002,11 @@ int main(int argc, char *argv[])
 /**********************end of main.c*****************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int INPUT(Geometry *geometry, const char *elevin)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int INPUT(void)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -890,7 +1030,10 @@ int INPUT(void)
     }
     for (l = 0; l < m100; l++) {
         z100[l] = (float *)G_malloc(sizeof(float) * (n100));
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
     /*read Z raster */
 
@@ -908,7 +1051,10 @@ int INPUT(void)
 
         for (j = 0; j < n; j++) {
             row_rev = m - row - 1;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
             if (!Rast_is_f_null_value(cell1 + j))
                 z[row_rev][j] = (float)cell1[j];
@@ -919,6 +1065,7 @@ int INPUT(void)
     Rast_close(fd1);
 
     /* create low resolution array 100 */
+<<<<<<< HEAD
 <<<<<<< HEAD
     for (int i = 0; i < geometry->m100; i++) {
         int lmax = (i + 1) * 100;
@@ -942,6 +1089,13 @@ int INPUT(void)
         if (lmax > m)
             lmax = m;
 
+=======
+    for (i = 0; i < m100; i++) {
+        lmax = (i + 1) * 100;
+        if (lmax > m)
+            lmax = m;
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         for (j = 0; j < n100; j++) {
             zmax = SMALL;
             kmax = (j + 1) * 100;
@@ -953,7 +1107,10 @@ int INPUT(void)
                 }
             }
             z100[i][j] = zmax;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             G_debug(3, "%d %d %lf\n", i, j, z100[i][j]);
         }
     }
@@ -967,7 +1124,10 @@ int INPUT(void)
     for (i = 0; i < m; i++) {
         for (j = 0; j < n; j++) {
             zmax = amax1(zmax, z[i][j]);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         }
     }
 
@@ -975,9 +1135,12 @@ int INPUT(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int OUTGR(const Settings *settings, char *shad_filename,
           struct Cell_head *cellhd)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int OUTGR(int numrows, int numcols)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -992,7 +1155,10 @@ int OUTGR(int numrows, int numcols)
     if (settings->horizon_basename != NULL) {
 =======
     if (horizon != NULL) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         cell1 = Rast_allocate_f_buf();
         fd1 = Rast_open_fp_new(shad_filename);
     }
@@ -1017,7 +1183,10 @@ int OUTGR(int numrows, int numcols)
 
         if (horizon != NULL) {
             for (j = 0; j < numcols; j++) {
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 if (horizon_raster[i][j] == UNDEFZ)
                     Rast_set_f_null_value(cell1 + j, 1);
                 else
@@ -1033,7 +1202,10 @@ int OUTGR(int numrows, int numcols)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 double amax1(arg1, arg2)
 double arg1;
 double arg2;
@@ -1094,7 +1266,10 @@ int arg2;
     return res;
 }
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 /**********************************************************/
 
 void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
@@ -1164,7 +1339,10 @@ void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
     }
     if (cosangle != 0.) {
         distcosangle = 100. / (distxy * cosangle);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     origin_angle->stepsinangle = geometry->stepxy * origin_angle->sinangle;
@@ -1198,6 +1376,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     origin_point.z_orig = z[yindex][xindex];
     G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex,
             origin_point.z_orig);
@@ -1211,6 +1390,8 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double xp = geometry->xmin + origin_point.xg0;
     double yp = geometry->ymin + origin_point.yg0;
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     tanh0 = -1.0 / 0.0; /* -inf */
     length = 0;
 
@@ -1250,10 +1431,13 @@ void calculate_shadow()
 
     if (printCount < 1)
         printCount = 1;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     double angle = (settings->single_direction * deg2rad) + pihalf;
     double printangle = settings->single_direction;
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     origin_point.maxlength = settings->fixedMaxLength;
     /* JSON variables and formating */
@@ -1292,6 +1476,7 @@ void calculate_shadow()
             shadow_angle *= rad2deg;
         }
 
+<<<<<<< HEAD
         if (settings->compassOutput) {
             double tmpangle;
 
@@ -1418,21 +1603,95 @@ void calculate_shadow()
 
         angle += dfr_rad;
 
+=======
+        ip = jp = 0;
+
+        sx = xx0 * invstepx;
+        sy = yy0 * invstepy;
+        ip100 = floor(sx / 100.);
+        jp100 = floor(sy / 100.);
+
+        if ((G_projection() != PROJECTION_LL)) {
+
+            longitude = xp;
+            latitude = yp;
+
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(_("Error in %s"), "GPJ_transform()");
+        }
+        else { /* ll projection */
+            latitude = yp;
+            longitude = xp;
+        }
+        latitude *= deg2rad;
+        longitude *= deg2rad;
+
+        delt_lat = -0.0001 * cos(angle);
+        delt_lon = 0.0001 * sin(angle) / cos(latitude);
+
+        latitude = (latitude + delt_lat) * rad2deg;
+        longitude = (longitude + delt_lon) * rad2deg;
+
+        if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV, &longitude, &latitude,
+                          NULL) < 0)
+            G_fatal_error(_("Error in %s"), "GPJ_transform()");
+
+        delt_east = longitude - xp;
+        delt_nor = latitude - yp;
+
+        delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
+
+        stepsinangle = stepxy * delt_nor / delt_dist;
+        stepcosangle = stepxy * delt_east / delt_dist;
+
+        shadow_angle = horizon_height();
+
+        if (degreeOutput) {
+            shadow_angle *= rad2deg;
+        }
+        printangle = angle * rad2deg - 90.;
+        if (printangle < 0.)
+            printangle += 360;
+        else if (printangle >= 360.)
+            printangle -= 360;
+
+        if (compassOutput) {
+            double tmpangle;
+
+            tmpangle = 360. - printangle + 90.;
+            if (tmpangle >= 360.)
+                tmpangle = tmpangle - 360.;
+            fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
+        }
+        else {
+            fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+        }
+
+        angle += dfr_rad;
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (angle < 0.)
             angle += twopi;
         else if (angle > twopi)
             angle -= twopi;
     } /* end of for loop over angles */
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /*////////////////////////////////////////////////////////////////////// */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int new_point(const Geometry *geometry, const OriginPoint *origin_point,
               const OriginAngle *origin_angle, SearchPoint *search_point,
               HorizonProperties *horizon)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int new_point()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -1492,7 +1751,10 @@ int new_point()
             succes2 = test_low_res();
             if (succes2 == 1) {
                 zp = z[jp][ip];
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 return (1);
             }
         }
@@ -1501,10 +1763,13 @@ int new_point()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
                  const OriginAngle *origin_angle, SearchPoint *search_point,
                  const HorizonProperties *horizon)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int test_low_res()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -1538,11 +1803,15 @@ int test_low_res()
         z2 = z_orig + curvature_diff + length * tanh0;
         zp100 = z100[jp100][ip100];
         G_debug(2, "ip:%d jp:%d z2:%lf zp100:%lf \n", ip, jp, z2, zp100);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         if (zp100 <= z2)
         /*skip to the next lowres cell */
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             int delx = 32000;
             int dely = 32000;
@@ -1612,6 +1881,38 @@ int test_low_res()
             G_debug(2, "  %lf %lf\n", xx0, yy0);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
+=======
+            delx = 32000;
+            dely = 32000;
+            if (cosangle > 0.) {
+                sx = xx0 * invstepx + offsetx;
+                delx =
+                    floor(fabs((ceil(sx / 100.) - (sx / 100.)) * distcosangle));
+            }
+            if (cosangle < 0.) {
+                sx = xx0 * invstepx + offsetx;
+                delx = floor(
+                    fabs((floor(sx / 100.) - (sx / 100.)) * distcosangle));
+            }
+            if (sinangle > 0.) {
+                sy = yy0 * invstepy + offsety;
+                dely =
+                    floor(fabs((ceil(sy / 100.) - (sy / 100.)) * distsinangle));
+            }
+            else if (sinangle < 0.) {
+                sy = yy0 * invstepy + offsety;
+                dely = floor(
+                    fabs((floor(jp / 100.) - (sy / 100.)) * distsinangle));
+            }
+
+            mindel = min(delx, dely);
+            G_debug(2, "%d %d %d %lf %lf\n", ip, jp, mindel, xg0, yg0);
+
+            yy0 = yy0 + (mindel * stepsinangle);
+            xx0 = xx0 + (mindel * stepcosangle);
+            G_debug(2, "  %lf %lf\n", xx0, yy0);
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             return (3);
         }
         else {
@@ -1625,16 +1926,20 @@ int test_low_res()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 HorizonProperties horizon_height(const Geometry *geometry,
                                  const OriginPoint *origin_point,
                                  const OriginAngle *origin_angle)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 double searching()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     SearchPoint search_point;
     HorizonProperties horizon;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     search_point.ip = 0;
     search_point.jp = 0;
@@ -1703,6 +2008,32 @@ double searching()
 
         if (length >= maxlength) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (zp == UNDEFZ)
+        return 0;
+
+    while (1) {
+        succes = new_point();
+
+        if (succes != 1) {
+            break;
+        }
+
+        /* curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS)); */
+        curvature_diff = 0.5 * length * length * invEarth;
+
+        z2 = z_orig + curvature_diff + length * tanh0;
+
+        if (z2 < zp) {
+            tanh0 = (zp - z_orig - curvature_diff) / length;
+        }
+
+        if (z2 >= zmax) {
+            break;
+        }
+
+        if (length >= maxlength) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             break;
         }
     }
@@ -1721,7 +2052,10 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
 =======
 void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
                int buffer_s, int buffer_n)
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     int hor_row_start = buffer_s;
     int hor_row_end = geometry->m - buffer_n;
@@ -1733,6 +2067,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
     int hor_numcols = geometry->n - (buffer_e + buffer_w);
 
     if ((G_projection() == PROJECTION_LL)) {
+<<<<<<< HEAD
 <<<<<<< HEAD
         ll_correction = true;
     }
@@ -1766,6 +2101,11 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
         ll_correction = TRUE;
     }
 
+=======
+        ll_correction = TRUE;
+    }
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if (isMode() == SINGLE_POINT) {
         /* Calculate the horizon for one single point */
 
@@ -1791,7 +2131,10 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 
         calculate_shadow();
         fclose(fp);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
     else {
         dfr_rad = settings->step * deg2rad;
@@ -1801,6 +2144,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
             ++arrayNumInt;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     size_t decimals = G_get_num_decimals(settings->str_step);
 
@@ -1821,9 +2165,41 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 =======
         /****************************************************************/
         /*  The loop over raster points starts here!                    */
+=======
+        /****************************************************************/
+        /*  The loop over raster points starts here!                    */
 
         /****************************************************************/
 
+        if (horizon != NULL) {
+            horizon_raster =
+                (float **)G_malloc(sizeof(float *) * (hor_numrows));
+            for (l = 0; l < hor_numrows; l++) {
+                horizon_raster[l] =
+                    (float *)G_malloc(sizeof(float) * (hor_numcols));
+            }
+
+            for (j = 0; j < hor_numrows; j++) {
+                for (i = 0; i < hor_numcols; i++)
+                    horizon_raster[j][i] = 0.;
+            }
+        }
+
+        /* definition of horizon angle in loop */
+        if (step == 0.0) {
+            dfr_rad = 0;
+            arrayNumInt = 1;
+            sprintf(shad_filename, "%s", horizon);
+        }
+        else {
+            dfr_rad = step * deg2rad;
+            arrayNumInt = (int)((end - start) / fabs(step));
+        }
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+        /****************************************************************/
+
+<<<<<<< HEAD
         if (horizon != NULL) {
             horizon_raster =
                 (float **)G_malloc(sizeof(float *) * (hor_numrows));
@@ -1940,6 +2316,11 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
         for (k = 0; k < arrayNumInt; k++) {
             struct History history;
 
+=======
+        for (k = 0; k < arrayNumInt; k++) {
+            struct History history;
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             angle = (start + single_direction) * deg2rad + (dfr_rad * k);
             angle_deg = angle * rad2deg + 0.0001;
 
@@ -2095,6 +2476,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
             Rast_write_history(shad_filename, &history);
             G_free(shad_filename);
         }
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 }

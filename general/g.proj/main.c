@@ -64,12 +64,18 @@ int main(int argc, char *argv[])
      * (to create a new location) when none exists. */
     G_set_program_name(argv[0]);
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_no_gisinit();
 =======
     G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
                      * mapset, whereas this module may legitmately be used
                      * (to create a new location) when none exists */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
+                     * mapset, whereas this module may legitmately be used
+                     * (to create a new location) when none exists */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     module = G_define_module();
     G_add_keyword(_("general"));
@@ -79,10 +85,14 @@ int main(int argc, char *argv[])
     module->label = _("Prints or modifies GRASS projection information files "
                       "(in various co-ordinate system descriptions).");
 <<<<<<< HEAD
+<<<<<<< HEAD
     module->description = _("Can also be used to create new GRASS projects.");
 =======
     module->description = _("Can also be used to create new GRASS locations.");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    module->description = _("Can also be used to create new GRASS locations.");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #else
     module->description =
         _("Prints and manipulates GRASS projection information files.");
@@ -116,6 +126,7 @@ int main(int argc, char *argv[])
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef HAVE_OGR
     dontprettify->description = _("Print 'flat' output with no linebreaks "
                                   "(applies to WKT and PROJ.4 output)");
@@ -131,6 +142,14 @@ int main(int argc, char *argv[])
 #endif
           "PROJ.4 output)");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    dontprettify->description =
+        _("Print 'flat' output with no linebreaks (applies to "
+#ifdef HAVE_OGR
+          "WKT and "
+#endif
+          "PROJ.4 output)");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #ifdef HAVE_OGR
     printwkt = G_define_flag();
@@ -332,6 +351,7 @@ int main(int argc, char *argv[])
 #endif
                (create->answer ? 1 : 0));
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (formats > 1) {
 #ifdef HAVE_OGR
         G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
@@ -346,6 +366,8 @@ int main(int argc, char *argv[])
 #endif
     }
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if (formats > 1)
         G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
 #ifdef HAVE_OGR

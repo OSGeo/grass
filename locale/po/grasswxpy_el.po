@@ -2401,8 +2401,14 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/toolbars.py:45
 =======
 #: ../gui/wxpython/datacatalog/toolbars.py:49
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Import raster data  [r.import]"
 msgstr ""
 
@@ -2411,8 +2417,11 @@ msgid "Import vector data  [v.import]"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/toolbars.py:52
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/toolbars.py:51
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -2420,6 +2429,10 @@ msgid "Select another import option"
 =======
 #: ../gui/wxpython/datacatalog/toolbars.py:55
 msgid "Select another import option"
+=======
+#: ../gui/wxpython/datacatalog/toolbars.py:55
+msgid "Select another import option"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:72
@@ -2834,8 +2847,14 @@ msgid "More options..."
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Data Catalog"
 msgstr ""
 
@@ -5094,10 +5113,13 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/gcp/manager.py:3579
 #: ../gui/wxpython/image2target/ii2t_manager.py:3499
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2561
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../gui/wxpython/gcp/manager.py:3574
 #: ../gui/wxpython/image2target/ii2t_manager.py:3481
@@ -5206,6 +5228,15 @@ msgstr "Αριθμός κατηγορίας"
 =======
 #: ../gui/wxpython/timeline/g.gui.timeline.py:63
 msgid "Timeline Tool - GRASS GIS"
+=======
+#: ../gui/wxpython/timeline/g.gui.timeline.py:63
+msgid "Timeline Tool - GRASS GIS"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:38
+#, python-brace-format
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {0}"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -8119,8 +8150,11 @@ msgid "Defines vector output format utilizing OGR library."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/menustrings.py:173 ../gui/wxpython/menustrings.py:1213
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../gui/wxpython/menustrings.py:173 ../gui/wxpython/menustrings.py:1211
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -9782,6 +9816,11 @@ msgstr "Γραμμική συσχέτιση"
 msgid "Show simple linear regression line"
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../gui/wxpython/tplot/frame.py:209 ../gui/wxpython/tplot/frame.py:264
+msgid "Show simple linear regression line"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/menustrings.py:556 ../gui/wxpython/menustrings.py:1521
 msgid "Calculates linear regression from two raster maps: y = a + b*x."
@@ -10770,7 +10809,10 @@ msgstr "Εισαγωγή για επιβλεπόμενο SMAP"
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
 msgid "Temporal Plot Tool - GRASS GIS"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/menustrings.py:804 ../gui/wxpython/menustrings.py:1769
 msgid "Support Vector Machines classification (SVM)"
@@ -16405,7 +16447,10 @@ msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:174
 msgid "Base raster map <{}> not found in current mapset."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/rdigit/controller.py:160
@@ -17123,6 +17168,7 @@ msgid "Unable to parse settings '%s'"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/core/render.py:186
 #, python-format
 msgid "<%(name)s>: layer type <%(type)s> is not supported"
@@ -17366,6 +17412,15 @@ msgstr "Εμφάνηση γεωμετρίας"
 #: ../gui/wxpython/lmgr/frame.py:2083
 #, python-brace-format
 msgid "Map Display {number}"
+=======
+#: ../gui/wxpython/lmgr/frame.py:2083
+#, python-brace-format
+msgid "Map Display {number}"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:2179
+msgid "Add selected map layers into layer tree"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -17986,7 +18041,10 @@ msgstr ""
 #: ../gui/wxpython/modules/histogram.py:296
 msgid "Histogram Tool  [d.histogram]"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/mapdisp/toolbars.py:34
 msgid "Select vector feature(s)"
@@ -18438,7 +18496,10 @@ msgstr "Πολλαπλή εισαγωγή"
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/modules/import_export.py:69
 msgid "List of raster layers"
@@ -19681,7 +19742,10 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/frame.py:130
 =======
 #: ../gui/wxpython/rlisetup/frame.py:114
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Setup for r.li modules"
 msgstr ""
 
@@ -19785,6 +19849,13 @@ msgstr "Εργαλειοθήκη Χάρτη"
 =======
 #: ../gui/wxpython/mapwin/decorations.py:203
 msgid "Text properties"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../gui/wxpython/mapwin/decorations.py:226
+msgid "Remove scale bar"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -24685,7 +24756,10 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:80
 msgid "Invalid mapset name"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/main_window/frame.py:1653 ../gui/wxpython/lmgr/frame.py:1502
 msgid "GRASS version"
@@ -24974,8 +25048,14 @@ msgstr ""
 =======
 #: ../gui/wxpython/startup/guiutils.py:717
 #, python-format
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Note that cell values can only be displayed for regions of less than 10,000 "
 "cells."
@@ -29748,6 +29828,110 @@ msgstr ""
 =======
 #: ../gui/wxpython/psmap/g.gui.psmap.py:51
 msgid "Cartographic Composer - GRASS GIS"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#, fuzzy
+msgid "The copied layer needs to be reprojected:"
+msgstr "Επίπεδο προς αφαίρεση"
+
+msgid "Kriging"
+msgstr "Kriging"
+
+msgid "Ready."
+msgstr "Έτοιμο."
+
+msgid ":"
+msgstr ":"
+
+msgid "Work in progress! No functionality provided."
+msgstr "Εργασίες σε εξέλιξη! Δεν παρέχεται καμία λειτουργικοτητα."
+
+#, fuzzy
+msgid "legend"
+msgstr "Προσθήκη λεζάντας"
+
+#, fuzzy
+msgid "Hide {overlay}"
+msgstr "Προσθήκη επιπέδου"
+
+msgid "Add text layer"
+msgstr "Προσθήκη επιπέδου κειμένου"
+
+#, fuzzy
+msgid "Show/hide scale bar"
+msgstr "Κλίμακα"
+
+#, fuzzy
+msgid "Show/hide legend"
+msgstr "Εμφάνηση υπομνήματος"
+
+msgid "Map layers"
+msgstr "Επίπεδα χαρτη"
+
+#, fuzzy
+msgid "Temporary map '%s' with result "
+msgstr "Το αρχείο υπάρχει."
+
+#, fuzzy
+msgid "Vector map %s already exists. "
+msgstr "Το αρχείο υπάρχει."
+
+#, fuzzy
+msgid "Temporary map %s  already exists.\n"
+msgstr "Το αρχείο υπάρχει."
+
+#, fuzzy
+msgid "Temporary map '%s' was changed outside "
+msgstr "Το αρχείο υπάρχει."
+
+msgid "Exit GUI"
+msgstr "Έξοδος απο το GUI"
+
+#, fuzzy
+msgid "No mapsets readable"
+msgstr "Εγχειρίδιο διανυσματικού ψηφιοποιητή"
+
+#, fuzzy
+msgid "Editing"
+msgstr "Επικαιροποίησημοντέλου...."
+
+#, fuzzy
+msgid "Renaming"
+msgstr "Μετονομασία"
+
+#, fuzzy
+msgid "Copying"
+msgstr "Διανυσματικές γραμμές"
+
+#, fuzzy
+msgid "List raster3D dataset maps"
+msgstr "Λίστα επιπέδων"
+
+#, fuzzy
+msgid "Extract subset of raster3D dataset"
+msgstr "Εισαγωγή raster δεδομένων"
+
+msgid "Repository"
+msgstr "Αποθήκη"
+
+msgid "GEOnet import"
+msgstr "Εισαγωγή GEOnet"
+
+#, fuzzy
+msgid "Select space time raster dataset(s):"
+msgstr "Εισαγωγή raster δεδομένων"
+
+#, fuzzy
+msgid "Data file <%(name)s> imported successfully."
+msgstr "Ο διανυσματικός χάρτης <%(name)s> (%(type)s) απεφορτώθηκε επιτυχώς."
+
+#, fuzzy
+msgid ""
+"Welcome to GRASS GIS %s%s\n"
+"The world's leading open source GIS"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -29759,6 +29943,7 @@ msgstr ""
 #~ msgid "Unable to rename location: %s"
 #~ msgstr "Αδυναμία διαγραφής επιλεγμένης Τοποθεσίας"
 
+<<<<<<< HEAD
 #, fuzzy, python-format
 #~ msgid "Unable to delete location: %s"
 #~ msgstr "Αδυναμία διαγραφής επιλεγμένης Τοποθεσίας"
@@ -29950,3 +30135,40 @@ msgstr "Αλλαγή στην νέα Περιοχή;"
 msgid " (readonly)"
 msgstr "(μονο για ανάγνωση)"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Volume"
+msgstr "Όγκος"
+
+msgid "Choose projection"
+msgstr "Επιλογή προβολής"
+
+msgid "Choose EPSG Code"
+msgstr "Επιλογή EPGS κωδικού:"
+
+msgid "Choose EPSG codes file"
+msgstr "Επιλογή αρχείου κοδικών EPSG "
+
+msgid "Do you want to set the default region extents and resolution now?"
+msgstr "Θέλετε να θέσετε τα προεπιλεγμένα όρια και ανάλυση της Τοποθεσίας;"
+
+msgid "Location <%s> created"
+msgstr "Η Τοποθεσία <%s> δημιουργήθηκε"
+
+msgid "Maximum number of animations is %s."
+msgstr "Ο μέγιστος αριθμός κινουμένων είναι: %s. "
+
+msgid ""
+"Location <%s> created.\n"
+"\n"
+"Do you want to switch to the new location?"
+msgstr ""
+"Η Τοποθεσία <%s> δημιουργήθηκε.\n"
+"\n"
+"Θέλετε να γίνει αλλαγή στην νέα Τοποθεσία;"
+
+msgid "Switch to new location?"
+msgstr "Αλλαγή στην νέα Περιοχή;"
+
+msgid " (readonly)"
+msgstr "(μονο για ανάγνωση)"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

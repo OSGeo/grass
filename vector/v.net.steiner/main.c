@@ -404,10 +404,14 @@ int main(int argc, char **argv)
     geo_f->key = 'g';
     geo_f->description =
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Use geodesic calculation for longitude-latitude projects");
 =======
         _("Use geodesic calculation for longitude-latitude locations");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        _("Use geodesic calculation for longitude-latitude locations");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -639,11 +643,14 @@ int main(int argc, char **argv)
         G_debug(1, "arc cat = %d", cat);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
     G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
             StNodes->n_values);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
             StNodes->n_values);
@@ -672,9 +679,13 @@ int main(int argc, char **argv)
             Vect_write_line(&Out, ltype, Points, Cats);
             G_debug(1, "node cat = %d", cat);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             k++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            k++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         }
     }
 

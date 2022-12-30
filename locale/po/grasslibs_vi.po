@@ -10207,7 +10207,10 @@ msgstr "Không thể tạo tập tin đề mục cho bản đồ vector <%s>"
 #, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/vector/Vlib/header.c:131
 #, c-format
@@ -12955,6 +12958,7 @@ msgstr "[%s]: Không có màu này"
 #~ "điểm vec-tơ. (mô-đun phải được cập nhật vào thư viện vec-tơ của GRASS 6)"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #~ msgid "Cannot fetch row"
 #~ msgstr "Không thể lấy hàng"
 
@@ -12965,5 +12969,10 @@ msgid "Invalid offset (%ld)"
 msgstr "Độ lệch không hợp lệ (%ld)"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
+=======
+msgid "Invalid offset (%ld)"
+msgstr "Độ lệch không hợp lệ (%ld)"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "Chép %s < %s> vào bộ bản độ hiện tại thành <%s>"

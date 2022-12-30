@@ -18351,6 +18351,7 @@ msgid "Enter raster category values or percents"
 msgstr "Introduceți valorile de categorie raster sau procente"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/modules/colorrules.py:983
 #: ../gui/wxpython/modules/colorrules.py:1685
 #: ../gui/wxpython/modules/colorrules.py:1691
@@ -18360,6 +18361,314 @@ msgstr "interval"
 =======
 #: ../gui/wxpython/location_wizard/wizard.py:186
 msgid "Change"
+=======
+#: ../gui/wxpython/gmodeler/frame.py:450 ../gui/wxpython/gmodeler/frame.py:600
+msgid "Create new model?"
+msgstr "Creați model nou?"
+
+#: ../gui/wxpython/gmodeler/frame.py:487
+msgid "Choose model file"
+msgstr "Alegeți fișierul model"
+
+#: ../gui/wxpython/gmodeler/frame.py:489 ../gui/wxpython/gmodeler/frame.py:549
+#: ../gui/wxpython/lmgr/frame.py:616
+msgid "GRASS Model File (*.gxm)|*.gxm"
+msgstr "Fișier Model GRASS (*.gxm)|*.gxm"
+
+#: ../gui/wxpython/gmodeler/frame.py:510
+#, python-format
+msgid "%(items)d items (%(actions)d actions) loaded into model"
+msgstr "%(items)d elemente (%(actions)d actions) încărcate in model"
+
+#: ../gui/wxpython/gmodeler/frame.py:522 ../gui/wxpython/gmodeler/frame.py:566
+#, python-format
+msgid "Model file <%s> already exists. Do you want to overwrite this file?"
+msgstr "Fișierul model <%s> există deja. Doriți să suprascrieți fișierul?"
+
+#: ../gui/wxpython/gmodeler/frame.py:525 ../gui/wxpython/menustrings.py:2027
+msgid "Save model"
+msgstr "Salvează model"
+
+#: ../gui/wxpython/gmodeler/frame.py:534 ../gui/wxpython/gmodeler/frame.py:584
+#, python-format
+msgid "File <%s> saved"
+msgstr "Fișier <%s> salvat"
+
+#: ../gui/wxpython/gmodeler/frame.py:547
+msgid "Choose file to save current model"
+msgstr "Alege fișierul pentru a salca modelul curent"
+
+#: ../gui/wxpython/gmodeler/frame.py:569 ../gui/wxpython/iclass/frame.py:1122
+msgid "File already exists"
+msgstr "Fișierul există deja"
+
+#: ../gui/wxpython/gmodeler/frame.py:666
+msgid "Model is empty. Nothing to validate."
+msgstr "Modelul este gol. Nimic nu este validat."
+
+#: ../gui/wxpython/gmodeler/frame.py:676
+#, python-format
+msgid ""
+"Model is not valid.\n"
+"\n"
+"%s"
+msgstr ""
+"Modelul nu este valid.\n"
+"\n"
+"%s"
+
+#: ../gui/wxpython/gmodeler/frame.py:680
+msgid "Model is valid."
+msgstr "Modelul este valid."
+
+#: ../gui/wxpython/gmodeler/frame.py:740 ../gui/wxpython/gmodeler/frame.py:747
+#, python-format
+msgid "Model exported to <%s>"
+msgstr "Model exportat ca <%s>"
+
+#: ../gui/wxpython/gmodeler/frame.py:890 ../gui/wxpython/menustrings.py:2052
+msgid "Add comment"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:900
+msgid "Empty comment. Nothing to add to the model."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:936
+msgid "wxGUI Graphical Modeler"
+msgstr "wxGUI Modelare Grafică"
+
+#: ../gui/wxpython/gmodeler/frame.py:1055
+#, python-format
+msgid ""
+"Reading model file <%s> failed.\n"
+"Invalid file, unable to parse XML document.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1067
+msgid "Please wait, loading model..."
+msgstr "Vă rugăm să așteptați, încărcare model..."
+
+#: ../gui/wxpython/gmodeler/frame.py:1133
+msgid "Writing current settings to model file failed."
+msgstr "Scrierea setărilor curente pentru fișierul model a eșuat."
+
+#: ../gui/wxpython/gmodeler/frame.py:1144 ../gui/wxpython/lmgr/frame.py:1716
+#, python-format
+msgid "Unable to open file <%s> for writing."
+msgstr "Nu s-a putut deschide fișierul <%s> pentru scriere."
+
+#: ../gui/wxpython/gmodeler/frame.py:1508
+msgid "Disable"
+msgstr "Dezactivează"
+
+#: ../gui/wxpython/gmodeler/frame.py:1514
+msgid "Enable"
+msgstr "Activează"
+
+#: ../gui/wxpython/gmodeler/frame.py:1522
+#: ../gui/wxpython/gmodeler/frame.py:1617
+msgid "Set label"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1528
+#: ../gui/wxpython/gmodeler/frame.py:1631
+msgid "Set comment"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1538
+msgid "Add control point"
+msgstr "Adaugă punct de control"
+
+#: ../gui/wxpython/gmodeler/frame.py:1545
+msgid "Remove control point"
+msgstr "Elimină punctul de control"
+
+#: ../gui/wxpython/gmodeler/frame.py:1559
+msgid "Intermediate"
+msgstr "Intermediar"
+
+#: ../gui/wxpython/gmodeler/frame.py:1572 ../gui/wxpython/nviz/tools.py:1571
+#: ../gui/wxpython/nviz/tools.py:1785 ../gui/wxpython/lmgr/frame.py:348
+#: ../gui/wxpython/vdigit/preferences.py:160
+msgid "Display"
+msgstr "Afișare"
+
+#: ../gui/wxpython/gmodeler/frame.py:1589 ../gui/wxpython/lmgr/layertree.py:487
+msgid "Properties"
+msgstr "Proprietăți"
+
+#: ../gui/wxpython/gmodeler/frame.py:1731
+msgid "List of variables - right-click to delete"
+msgstr "Lista variabilelor - click dreapta pentru a șterge"
+
+#: ../gui/wxpython/gmodeler/frame.py:1736
+#: ../gui/wxpython/gmodeler/frame.py:1783
+#: ../gui/wxpython/location_wizard/wizard.py:215
+#: ../gui/wxpython/gui_core/ghelp.py:398 ../gui/wxpython/gui_core/ghelp.py:400
+#: ../gui/wxpython/gui_core/ghelp.py:473
+msgid "Name"
+msgstr "Nume"
+
+#: ../gui/wxpython/gmodeler/frame.py:1737
+#: ../gui/wxpython/gmodeler/frame.py:1790 ../gui/wxpython/dbmgr/base.py:2911
+msgid "Data type"
+msgstr "Tipul datei"
+
+#: ../gui/wxpython/gmodeler/frame.py:1738
+#: ../gui/wxpython/gmodeler/frame.py:1796
+msgid "Default value"
+msgstr "Valoare implicită"
+
+#: ../gui/wxpython/gmodeler/frame.py:1739
+#: ../gui/wxpython/gmodeler/frame.py:1803
+#: ../gui/wxpython/location_wizard/wizard.py:235
+#: ../gui/wxpython/location_wizard/wizard.py:500
+#: ../gui/wxpython/location_wizard/wizard.py:1018
+#: ../gui/wxpython/location_wizard/wizard.py:1208
+#: ../gui/wxpython/location_wizard/wizard.py:1530
+#: ../gui/wxpython/location_wizard/wizard.py:1743
+msgid "Description"
+msgstr "Descriere"
+
+#: ../gui/wxpython/gmodeler/frame.py:1744
+msgid "Add new variable"
+msgstr "Adaugă variabilă nouă"
+
+#: ../gui/wxpython/gmodeler/frame.py:1748
+msgid "integer"
+msgstr "întreg"
+
+#: ../gui/wxpython/gmodeler/frame.py:1749
+msgid "float"
+msgstr "real"
+
+#: ../gui/wxpython/gmodeler/frame.py:1750
+msgid "string"
+msgstr "șir de caractere"
+
+#: ../gui/wxpython/gmodeler/frame.py:1751
+#: ../gui/wxpython/gui_core/dialogs.py:1467
+#: ../gui/wxpython/gui_core/dialogs.py:1713 ../gui/wxpython/gcp/manager.py:389
+#: ../gui/wxpython/image2target/ii2t_manager.py:396
+#: ../gui/wxpython/psmap/dialogs.py:924
+msgid "raster"
+msgstr "raster"
+
+#: ../gui/wxpython/gmodeler/frame.py:1752
+#: ../gui/wxpython/gui_core/dialogs.py:1467 ../gui/wxpython/gcp/manager.py:389
+#: ../gui/wxpython/image2target/ii2t_manager.py:396
+#: ../gui/wxpython/psmap/dialogs.py:927
+msgid "vector"
+msgstr "vector"
+
+#: ../gui/wxpython/gmodeler/frame.py:1753
+msgid "region"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1754
+msgid "mapset"
+msgstr "mapset"
+
+#: ../gui/wxpython/gmodeler/frame.py:1755
+#: ../gui/wxpython/gui_core/forms.py:1848
+msgid "file"
+msgstr "fișier"
+
+#: ../gui/wxpython/gmodeler/frame.py:1756
+msgid "dir"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1763
+msgid "Add new variable to the model"
+msgstr "Adaugă variabilă nouă la model"
+
+#: ../gui/wxpython/gmodeler/frame.py:1886
+msgid "List of items - right-click to delete"
+msgstr "Lista elementelor - click dreapta pentru a șterge"
+
+#: ../gui/wxpython/gmodeler/frame.py:1892
+msgid "In loop"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1893
+msgid "Parameterized"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1949
+msgid "No items to selected."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1985
+msgid "Python script"
+msgstr "Script Python"
+
+#: ../gui/wxpython/gmodeler/frame.py:1991
+msgid "Run python script"
+msgstr "Rulează script python"
+
+#: ../gui/wxpython/gmodeler/frame.py:1994
+msgid "Save python script to file"
+msgstr "Salvează scriptul python ca fișier"
+
+#: ../gui/wxpython/gmodeler/frame.py:1997
+msgid ""
+"Refresh python script based on the model.\n"
+"It will discards all local changes."
+msgstr ""
+"Reîncarcă script python bazat pe model.\n"
+"Acest lucru va înlătura modificările locale."
+
+#: ../gui/wxpython/gmodeler/frame.py:2035
+#, python-format
+msgid "Unable to launch Python script. %s"
+msgstr "Nu s-a putut lansa scriptul Python. %s"
+
+#: ../gui/wxpython/gmodeler/frame.py:2070
+#: ../gui/wxpython/gui_core/pyedit.py:383
+msgid "Choose file to save"
+msgstr "Alege fișier pentru salvare"
+
+#: ../gui/wxpython/gmodeler/frame.py:2075
+#: ../gui/wxpython/gui_core/pyedit.py:385
+#: ../gui/wxpython/gui_core/pyedit.py:450
+msgid "Python script (*.py)|*.py"
+msgstr "Script Python (*.py)|*.py"
+
+#: ../gui/wxpython/gmodeler/frame.py:2092 ../gui/wxpython/wxplot/profile.py:375
+#: ../gui/wxpython/gui_core/pyedit.py:401
+#, python-format
+msgid "File <%s> already exists. Do you want to overwrite this file?"
+msgstr "Fișierul <%s> există deja. Doriți să suprascrieți fișierul?"
+
+#: ../gui/wxpython/gmodeler/frame.py:2095
+#: ../gui/wxpython/gui_core/pyedit.py:403
+msgid "Save file"
+msgstr "Salvează fișier"
+
+#: ../gui/wxpython/gmodeler/frame.py:2132
+msgid "Python script is locally modificated. Refresh will discard all changes. Do you really want to continue?"
+msgstr "Scriptul Python a fost modificat local. Reîncărcarea va înlătura toate modificările. Doriți să continuați acest lucru?"
+
+#: ../gui/wxpython/gmodeler/frame.py:2135
+msgid "Update"
+msgstr "Actualizare"
+
+#: ../gui/wxpython/location_wizard/wizard.py:173
+#: ../gui/wxpython/location_wizard/wizard.py:2305
+msgid "Define new GRASS Location"
+msgstr "Definirea unei locații noi GRASS"
+
+#: ../gui/wxpython/location_wizard/wizard.py:186
+msgid "Change"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:202
+#: ../gui/wxpython/gui_core/forms.py:1142
+msgid "This option is required"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -18504,6 +18813,13 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1498
 msgid "Select CRS from a list"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:1514
+msgid "Filter by EPSG code or description:"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -18518,6 +18834,21 @@ msgstr "Salvează culoare la coloana:"
 =======
 #: ../gui/wxpython/location_wizard/wizard.py:1517
 msgid "Find more information at:"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:1531
+#: ../gui/wxpython/location_wizard/wizard.py:1744
+#: ../gui/wxpython/vnet/dialogs.py:371
+msgid "Parameters"
+msgstr "Parametrii"
+
+#: ../gui/wxpython/location_wizard/wizard.py:1680
+#: ../gui/wxpython/gui_core/preferences.py:1909
+#, python-brace-format
+msgid "Unable to read EPGS codes: {0}"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -21165,7 +21496,10 @@ msgstr ""
 #: ../gui/wxpython/modules/histogram.py:298
 =======
 #: ../gui/wxpython/modules/histogram.py:296
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Histogram Tool  [d.histogram]"
 msgstr ""
 
@@ -21534,7 +21868,10 @@ msgstr ""
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/modules/mcalc_builder.py:71
 msgid "3D Raster Map Calculator"
@@ -22533,7 +22870,10 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/frame.py:130
 =======
 #: ../gui/wxpython/rlisetup/frame.py:114
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Setup for r.li modules"
 msgstr ""
 
@@ -22637,6 +22977,13 @@ msgstr "Bara de instrumente pentru hartă"
 =======
 #: ../gui/wxpython/mapwin/decorations.py:203
 msgid "Text properties"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../gui/wxpython/mapwin/decorations.py:226
+msgid "Remove scale bar"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -28275,16 +28622,22 @@ msgstr "Harta vectorială <%s> adăugată"
 =======
 #: ../gui/wxpython/startup/guiutils.py:717
 #, python-format
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Current workspace is not empty. Do you want to store current settings to "
 "workspace file?"
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Spațiul de lucru curent nu este gol. Doriți să stocați setările curente "
 "pentru fișierul din spațiul de lucru?"
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/workspace.py:76
 msgid "Create new workspace?"
@@ -32929,6 +33282,7 @@ msgid "labels: "
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #~ msgid "Location Name:"
 #~ msgstr "Numele locației:"
 
@@ -32942,8 +33296,16 @@ msgstr ""
 =======
 <<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<<<<<<< HEAD
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #~ msgid "Show comp. extent"
 #~ msgstr "Afișează gama"
+=======
+#: ../gui/wxpython/psmap/g.gui.psmap.py:51
+msgid "Cartographic Composer - GRASS GIS"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #~ msgid "Display mode"
 #~ msgstr "Modul de afișare"
@@ -32960,6 +33322,7 @@ msgstr ""
 #~ msgid "MASK"
 #~ msgstr "MASCĂ"
 
+<<<<<<< HEAD
 #~ msgid "Extent"
 #~ msgstr "Extindere"
 
@@ -33781,3 +34144,492 @@ msgstr "Doriți să creați locația GRASS <%s>?"
 msgid "Create new location?"
 msgstr "Creați locație nouă?"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Numeric column:"
+msgstr "Coloană numerică:"
+
+msgid "Kriging"
+msgstr "Kriging"
+
+msgid "Name for the output raster map:"
+msgstr "Nume pentru harta raster rezultată:"
+
+msgid "Export variance map as well: "
+msgstr "Exportă harta de varianță ca:"
+
+msgid "Kriging Module"
+msgstr "Modulul Kriging"
+
+msgid "Ready."
+msgstr "Gata."
+
+msgid "Variogram fitting"
+msgstr "Ajustarea variogramelor"
+
+msgid "Plot/refresh variogram"
+msgstr "Desenează/Recrează variograma"
+
+msgid ":"
+msgstr ":"
+
+msgid "Kriging techniques"
+msgstr "Tehnici Kriging"
+
+msgid "Block size:"
+msgstr "Dimensiunea blocului:"
+
+msgid "Auto-fit variogram"
+msgstr "Ajustarea automată a variogramei"
+
+msgid "Model: "
+msgstr "Model:"
+
+msgid "Work in progress! No functionality provided."
+msgstr "Lucru în progres! Nici o funcționalitatea nu este furnizată."
+
+msgid "Region"
+msgstr "Regiune"
+
+msgid "Display region"
+msgstr "Afișează regiune"
+
+#, fuzzy
+msgid "legend"
+msgstr "Legendă"
+
+#, fuzzy
+msgid "Hide {overlay}"
+msgstr "Adaugă strat"
+
+msgid "Show text object"
+msgstr "Afișează obiectul text"
+
+msgid ""
+"Drag text with mouse in pointer mode to position.\n"
+"Double-click to change options"
+msgstr ""
+"Deplasați textul cu mouse-ul.\n"
+"Dublu click pentru a schimba opțiunile"
+
+msgid "Add text layer"
+msgstr "Adaugă text stratului"
+
+#, fuzzy
+msgid "Show/hide scale bar"
+msgstr "Scara"
+
+#, fuzzy
+msgid "Show/hide legend"
+msgstr "Afișează legendă"
+
+#, fuzzy
+msgid "Show/hide north arrow"
+msgstr "Adaugă scara și săgeata nord"
+
+msgid "Ordinary or block kriging"
+msgstr "Kriging ordinar sau pe blocuri"
+
+msgid "Performs ordinary or block kriging."
+msgstr "Efectuează Kriging ordinar sau pe blocuri."
+
+msgid "Overlays two vector maps."
+msgstr "Suprapunerea două hărți vectoriale."
+
+msgid "Print/add/remove a timestamp for a 3D raster map"
+msgstr "Printează/adaugă/elimină timestamp pentru o hartă raster 3D"
+
+msgid ""
+"Units of current projection are not supported,\n"
+" meters will be used!"
+msgstr ""
+"Unitățile proiecției curente nu sunt acceptate,\n"
+" va fi utilizat metrul!"
+
+msgid "Unsupported units"
+msgstr "Unități neacceptate"
+
+msgid "Map layers"
+msgstr "Straturile tematice ale hărții"
+
+#, fuzzy
+msgid "Temporary map '%s' with result "
+msgstr "Mapset <%s> există deja."
+
+#, fuzzy
+msgid "Vector map %s already exists. "
+msgstr "Mapset <%s> există deja."
+
+#, fuzzy
+msgid "Temporary map %s  already exists.\n"
+msgstr "Mapset <%s> există deja."
+
+#, fuzzy
+msgid "Temporary map '%s' was changed outside "
+msgstr "Mapset <%s> există deja."
+
+msgid "Exit GUI"
+msgstr "Închide GUI"
+
+#, fuzzy
+msgid "Invalid input data"
+msgstr "Intrare invalidă"
+
+#, fuzzy
+msgid "No mapsets readable"
+msgstr "Previzualizarea nu este disponibilă"
+
+#, fuzzy
+msgid "Editing"
+msgstr "Validarea modelului..."
+
+#, fuzzy
+msgid "Renaming"
+msgstr "Redenumește"
+
+#, fuzzy
+msgid "Copying"
+msgstr "Copiază tabel"
+
+#, fuzzy
+msgid "List raster3D dataset maps"
+msgstr "Lista %s layere"
+
+#, fuzzy
+msgid "Extract subset of raster3D dataset"
+msgstr "Import date de tip raster"
+
+#, fuzzy
+msgid "Raster3D calculations"
+msgstr "Calculator raster"
+
+#, fuzzy
+msgid "Univariate raster3D dataset statistics"
+msgstr "Statistici univariate pentru raster"
+
+msgid "Repository"
+msgstr "Depozit"
+
+msgid "Load settings:"
+msgstr "Încarcă setările:"
+
+msgid "Unable to render map layer <%s>."
+msgstr "Nu s-a putut reda stratul <%s>."
+
+msgid "Unable to render overlay <%s>."
+msgstr "Nu s-a putut reda suprapunerea <%s>."
+
+msgid "Historical GRASS vector import"
+msgstr "Importă vector realizat într-o versiune mai veche de GRASS"
+
+msgid "Historical GRASS vector import (all maps)"
+msgstr "Importă vector realizat într-o versiune mai veche de GRASS (toate hărțile)"
+
+msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
+msgstr "Convertește toate hărțile vectoriale din versiunile vechi de GRASS din mapset-ul curent în formatul actual."
+
+#, fuzzy
+msgid "GPS data import"
+msgstr "Importă GPSBabel GPS"
+
+msgid "GEOnet import"
+msgstr "Importă GEOnet"
+
+msgid "Multiple import formats using OGR"
+msgstr "Importă formate multiple folosind OGR"
+
+msgid "Packs up a raster map and support files for copying."
+msgstr "Împachetează harta raster și fișierele suport pentru copiere."
+
+msgid "Multiple GPS export formats using GPSBabel"
+msgstr "Exportă formate multiple GPS folosind GPSBabel"
+
+#, fuzzy
+msgid "Packs up a vector map and support files for copying."
+msgstr "Împachetează harta raster și fișierele suport pentru copiere."
+
+msgid "Common export formats using OGR"
+msgstr "Exportă formate comune folosind OGR"
+
+msgid "IDW from raster points (alternate method for sparse points)"
+msgstr "IDW din puncte raster (metodă alternativă pentru puncte rare)"
+
+msgid "Create optimally placed labels"
+msgstr "Crează etichete plasate optim"
+
+msgid "Bit pattern comparison "
+msgstr "Comparația model 'parte cu parte'"
+
+#, fuzzy
+msgid "Launches graphical attribute table manager."
+msgstr "Închide gestionarea tabelei de atribute"
+
+#, fuzzy
+msgid "Select space time raster dataset(s):"
+msgstr "Selectează mapsetul sursă:"
+
+msgid "Set computational region from selected map(s) (ignore NULLs)"
+msgstr "Setează regiunea de calcul pentru harta selectată (ignoră valorile nule)"
+
+#, fuzzy
+msgid "Data file <%(name)s> imported successfully."
+msgstr "Datele vectoriale <%(name)s> au fost importate cu succes."
+
+#, fuzzy
+msgid "Add default servers"
+msgstr "Adaugă buclă / serii"
+
+msgid "Choose project location and mapset"
+msgstr "Alege proiecția locației și mapset-ului"
+
+msgid "Manage"
+msgstr "Gestionează"
+
+#, fuzzy
+msgid ""
+"Welcome to GRASS GIS %s%s\n"
+"The world's leading open source GIS"
+msgstr ""
+"Bine ați venit la GRASS GIS %s\n"
+"Liderul mondial SIG open source"
+
+msgid ""
+"Select an existing project location and mapset\n"
+"or define a new location"
+msgstr ""
+"Selectează o locație și un mapset existente\n"
+"sau definește o locație nouă"
+
+msgid ""
+"Project location\n"
+"(projection/coordinate system)"
+msgstr ""
+"Proiecția locației\n"
+"(proiecție/sistem de coordonate)"
+
+msgid ""
+"Accessible mapsets\n"
+"(directories of GIS files)"
+msgstr ""
+"Mapset-uri accesibile\n"
+"(directoare ale fișierelor SIG)"
+
+msgid "Define new location"
+msgstr "Definește locație nouă"
+
+msgid ""
+"Rename/delete selected\n"
+"mapset or location"
+msgstr ""
+"Redenumire/ștergere selectată\n"
+"mapset sau locație"
+
+msgid "Start &GRASS"
+msgstr "Pornește &GRASS"
+
+#, fuzzy
+msgid "Warning: "
+msgstr "Atenție"
+
+msgid "Starting GRASS for the first time"
+msgstr "Pornește GRASS pentru prima dată"
+
+#, fuzzy
+msgid "Develop 3D rasters"
+msgstr "Dezvoltă harta raster"
+
+#, fuzzy
+msgid "Add linked layers into layer tree ({mightNotWork})"
+msgstr "Adaugă straturile de legătură în arborele de straturi"
+
+#, fuzzy
+msgid "Add imported layers into layer tree ({mightNotWork})"
+msgstr "Adaugă straturile importate în arborele de straturi"
+
+msgid "Imports older versions of GRASS vector maps."
+msgstr "Importă hărți vectoriale realizate în versiuni mai vechi de GRASS."
+
+msgid "Vector to volume"
+msgstr "Vector în volume"
+
+msgid "Sites to vector"
+msgstr "Situri în vector"
+
+msgid "V&olumes"
+msgstr "V&olume"
+
+msgid "Develop volumes"
+msgstr "Dezvoltare volume"
+
+msgid "3D Mask"
+msgstr "Mască 3D"
+
+msgid "Volume calculator"
+msgstr "Calculator pentru volume"
+
+msgid "Basic volume metadata"
+msgstr "Metadata volumului de bază"
+
+msgid "Voxel statistics"
+msgstr "Statistici pentru voxel"
+
+msgid "Volume"
+msgstr "Volume"
+
+msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
+msgstr "Importă fișiere de țară US-NGA GEOnet Names Server (GNS) într-o hartă vectorială punctuală GRASS."
+
+#, fuzzy
+msgid "Outputs a raster map showing the anisotropic cumulative cost. Computes anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost."
+msgstr "Crează o hartă raster care arată costul cumulat anisotropic al deplasării dintre locații geografice diferite pe o hartă raster de elevație ale cărui celule are valori ce reprezintă elevația combinată cu stratul raster de intrare, cel din urmă având valori ale celulelor ce reprezintă costul de frecare."
+
+msgid "Surface interpolation utility for raster map."
+msgstr "Utilitate de interpolare a suprafeței pentru harta raster."
+
+msgid "Surface generation program."
+msgstr "Program pentru generarea suprafeței."
+
+msgid "Compares bit patterns with a raster map."
+msgstr "Compară modelul 'parte cu parte' cu harta raster."
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset."
+msgstr "Calculează statistici univariate din celulele 3D nenule ale hărții raster3d."
+
+msgid "Digitize"
+msgstr "Digitizează"
+
+msgid "&Fetch"
+msgstr "&Obține"
+
+msgid "Fetch list of available modules from GRASS Addons SVN repository"
+msgstr "Obțina lista modulelor disponibile de la GRASS Addons SVN"
+
+msgid "Animation already axists"
+msgstr "Animația există deja"
+
+msgid "GRASS GIS Raster Map Calculator"
+msgstr "Calculator GRASS GIS pentru harta raster"
+
+msgid "GRASS GIS 3D Raster Map Calculator"
+msgstr "Calculator GRASS GIS pentru harta raster 3D"
+
+msgid "Define GRASS Database and Location Name"
+msgstr "Definiță baza de date GRASS și numele locației"
+
+msgid "GIS Data Directory:"
+msgstr "Directorul de date GIS:"
+
+msgid "Project Location"
+msgstr "Proiecția locației"
+
+msgid "Location Title"
+msgstr "Titlul locației"
+
+msgid "Optional location title, you can leave this field blank."
+msgstr "Titlul locației opționa, puteți lăsa câmpul necompletat."
+
+msgid "Choose method for creating a new location"
+msgstr "Alegeți metoda pentru crearea unei locații noi"
+
+msgid "Select coordinate system parameters from a list"
+msgstr "Selectați parametrii sistemului de coordonate dintr-o listă"
+
+msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+msgstr "Specificați proiecția și termenii de referință folosind parametrii PROJ.4"
+
+msgid "Choose projection"
+msgstr "Alege proiecție"
+
+msgid "Choose EPSG Code"
+msgstr "Alegeți codul EPSG"
+
+msgid "Path to the EPSG-codes file:"
+msgstr "Calea către EPSG- fișier coduri:"
+
+msgid "Choose EPSG codes file"
+msgstr "Alegeți fișier EPSG coduri"
+
+msgid "Choose method of specifying georeferencing parameters"
+msgstr "Alegeți metoda de specificare a parametrilor de georefențiere"
+
+msgid "Location Title:"
+msgstr "Titlul locației:"
+
+msgid "Location wizard canceled. Location not created."
+msgstr "Locație wizard anulată. Locația nu a fost creată. "
+
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
+msgstr "Locația <%(loc)s> va fi creată în directorul de date GIS <%(dir)s>. Va fi nevoie să schimbați directorul de date GIS implicit în fereastra de pornire GRASS."
+
+msgid "New GIS data directory"
+msgstr "Director de date GIS nou"
+
+msgid "Common formats import"
+msgstr "Importă formate comune"
+
+msgid "Click here to show search module engine"
+msgstr "Click aici pentru a afișa motorul de căutare a modulelor"
+
+msgid "Click here to hide search module engine"
+msgstr "Click aici pentru a ascunde motorul de căutare a modulelor"
+
+msgid "Import/link raster or vector data"
+msgstr "Importă/leago date raster sau vector"
+
+msgid ""
+"Location <%s> created.\n"
+"\n"
+"Do you want to switch to the new location?"
+msgstr ""
+"Locația <%s> creată.\n"
+"\n"
+"Doriți să comutați la noua locație?"
+
+msgid "Switch to new location?"
+msgstr "Comutați la noua locație?"
+
+msgid "Do you want to set the default region extents and resolution now?"
+msgstr "Doriți să setați extinderea regiunii și rezoluția acum?"
+
+msgid "Location <%s> created"
+msgstr "Locația <%s> creată"
+
+msgid "GRASS GIS Attribute Table Manager"
+msgstr "Gestionare tabelă de atribute GRASS"
+
+msgid "GRASS GIS - Map display"
+msgstr "GRASS GIS - Fereastra de vizualizare"
+
+msgid "GRASS GIS Histogramming Tool (d.histogram)"
+msgstr "Intrument GRASS GIS pentru histogramă (d.histogram)"
+
+msgid "Set raster output format"
+msgstr "Setează formatul de ieșire al rasterului"
+
+msgid "Set vector output format"
+msgstr "Setează formatul de ieșire al vectorului"
+
+msgid " (readonly)"
+msgstr "(doar citire)"
+
+msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
+msgstr "Nume <%(name)s> nu este un nume valid pentru locație. Vă rugăm utilizați doar caractere ASCII excluzând %(chars)s și spații."
+
+msgid "Unable to create location"
+msgstr "Nu s-a putut crea locația"
+
+msgid "Select EPSG code of spatial reference system"
+msgstr "Selectați codul EPSG a sistemului de referință spațial"
+
+msgid "Read projection and datum terms from a georeferenced data file"
+msgstr "Citiți proiecția și termenii de referință dintr-un fișier de date georeferențiate"
+
+msgid "Create a generic Cartesian coordinate system (XY)"
+msgstr "Creați un sistem generic de coordonate carteziene (XY)"
+
+msgid "Do you want to create GRASS location <%s>?"
+msgstr "Doriți să creați locația GRASS <%s>?"
+
+msgid "Create new location?"
+msgstr "Creați locație nouă?"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

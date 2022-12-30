@@ -4392,7 +4392,10 @@ msgstr "Error de formato: archivo ('% s') línea (% d) -% s"
 #, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/gis/mkstemp.c:133
 msgid "Attempt to create read-only temporary file"
@@ -11261,7 +11264,10 @@ msgstr ""
 #, c-format
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/vector/Vlib/write_nat.c:420
 #, c-format
@@ -13212,6 +13218,7 @@ msgid ""
 "%.8e3E"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/vector/diglib/test.c:105
 #, c-format
 msgid ""
@@ -15624,3 +15631,96 @@ msgstr "Copiar %s <%s> al Directorio de mapas actual con el nombre <%s>"
 msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "which is missing."
+msgstr "el cual no se ha encontrado."
+
+msgid "whose header file can't be opened."
+msgstr "cuyo archivo de encabezado no se puede abrir."
+
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "No ha sido posible abrir el archivo de encabezado para mapa ráster <%s@%s>"
+
+msgid "shell script to be processed as batch job"
+msgstr "script de shell a ser procesado como trabajo en lote"
+
+msgid "Change file permission to 'executable' for <%s>"
+msgstr "Cambie los permisos del archivo a 'ejecutable' para <%s>"
+
+msgid "Illegal row value"
+msgstr "Valor de fila no admitido"
+
+msgid "Illegal col value"
+msgstr "Valor de columna no admitido"
+
+msgid "Illegal n-s3 resolution value"
+msgstr "Valor de la resolución norte-sur 3D (n-s3) no admitido"
+
+msgid "Illegal row3 value"
+msgstr "Valor de fila 3D (row3) no admitido"
+
+msgid "Illegal e-w3 resolution value"
+msgstr "Valor de resolución este-oeste 3D (e-w3) no admitido"
+
+msgid "Illegal col3 value"
+msgstr "Valor de columna 3D (col3) no admitido"
+
+msgid "Illegal n-s resolution value <%lf>"
+msgstr "Valor de resolución norte-sur (n-s)  <%If> no admitido"
+
+msgid "Illegal e-w resolution value"
+msgstr "Valor de resolución este-oeste (e-w) no admitido"
+
+msgid "North must be north of South"
+msgstr "La coordenada Norte debe estar al norte de la coordenada Sur."
+
+msgid "North must be larger than South"
+msgstr "El valor de la coordenada Norte debe ser mayor que el valor de la coordenada Sur."
+
+msgid "East must be larger than West"
+msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
+
+msgid "Invalid coordinates"
+msgstr "Coordenadas no válidas."
+
+msgid "Illegal n-s resolution value"
+msgstr "Valor de resolución norte-sur (n-s) no admitido"
+
+msgid "Illegal t-b3 resolution value"
+msgstr "El valor de la resolución cima - fondo 3D (t-b3) no es admisible."
+
+msgid "Illegal depths value"
+msgstr "Valor de profundidad no admitido"
+
+msgid "Top must be larger than Bottom"
+msgstr "El valor del límite superior, debe ser mayor que el del límite inferior."
+
+msgid ""
+"{}\n"
+"Switching to text based interface mode.\n"
+"\n"
+"Hit RETURN to continue.\n"
+msgstr ""
+"{}\n"
+"Cambiando al modo de interfaz basada en texto.\n"
+"\n"
+"De Enter para continuar.\n"
+
+msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
+msgstr "No elexiste el Directorio de mapas <{mapset}> en la Localización <{loc}>. Es posible crear un nuevo Direx¿ctorio de mapas usando '-c'"
+
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
+msgstr "No ha sido posible leer archivo de encabezado para mapa ráster <%s@%s>. Es un mapa de reclasificación del mapa ráster <%s@%s> %s"
+
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es mayor de lo que debiera (%ld bytes sobrantes)"
+
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es menor de lo que debería ser (faltan %ld bytes)."
+
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Copiar %s <%s> al Directorio de mapas actual con el nombre <%s>"
+
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

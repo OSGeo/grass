@@ -158,7 +158,10 @@ void Nviz_destroy_render_window(struct render_window *rwin)
 int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
 =======
 int Nviz_create_render_window(struct render_window *rwin, void *display,
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                               int width, int height)
 {
 #if defined(OPENGL_X11)

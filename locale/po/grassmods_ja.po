@@ -27703,7 +27703,10 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
 msgid "Apriori Phi (roll) standard deviation"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../imagery/i.atcorr/geomcond.cpp:232
 msgid "No possibility to compute lat. and long."
@@ -39980,7 +39983,10 @@ msgstr ""
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
 msgid "image collections"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/g.proj.identify_to_translate.c:8
 #, fuzzy
@@ -49694,7 +49700,10 @@ msgstr "ベクトルライン"
 #: ../raster/r.null/main.c:63
 msgid "no-data"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/r.series.boxplot_to_translate.c:39
 #, fuzzy
@@ -76917,6 +76926,7 @@ msgid "Problem parsing coordinates [%s]"
 msgstr "座標 [%s] を横文解析できません"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.graph/do_graph.c:98
 msgid "Unable to read color"
 msgstr "色を読み込めません"
@@ -76925,6 +76935,66 @@ msgstr "色を読み込めません"
 msgid "Unable to open color rule"
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../raster/r.colors/edit_colors.c:426
+#, c-format
+msgid "Color table 'grey.eq' is not supported for floating point %s map"
+msgstr ""
+
+#: ../raster/r.colors/edit_colors.c:433
+#, c-format
+msgid "Color table 'grey.log' is not supported for floating point %s map"
+msgstr ""
+
+#: ../raster/r.colors/edit_colors.c:539
+#, c-format
+msgid "Color table for %s map <%s> set to '%s'"
+msgstr ""
+
+#: ../raster/r.colors/stats.c:40
+#, c-format
+msgid "(%i/%i) Reading raster map <%s>..."
+msgstr ""
+
+#: ../raster/r.colors/stats.c:75
+msgid "Unable to use logarithmic scaling if range includes zero"
+msgstr ""
+
+#: ../raster/r.colors/stats.c:123
+msgid "Error opening 3d raster map"
+msgstr ""
+
+#: ../raster/r.colors/stats.c:130
+#, c-format
+msgid "(%i/%i) Reading map <%s>..."
+msgstr ""
+
+#: ../raster/r.colors/rules.c:42
+#, c-format
+msgid "Enter rules, \"end\" when done, \"help\" if you need it.\n"
+msgstr ""
+
+#: ../raster/r.colors/rules.c:51
+#, c-format
+msgid "fp: Data range is %s to %s\n"
+msgstr ""
+
+#: ../raster/r.colors/rules.c:55
+#, c-format
+msgid "Data range is %ld to %ld\n"
+msgstr ""
+
+#: ../raster/r.colors/rules.c:66
+#, c-format
+msgid ""
+"Your color rules do not cover the whole range of data!\n"
+" (rules %f to %f but data %f to %f)"
+msgstr ""
+
+#: ../raster/r.colors/rules.c:81
+msgid "Unable to open color rule"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../display/d.graph/do_graph.c:372
 msgid "Cannot read symbol, cannot display points"
@@ -84533,6 +84603,7 @@ msgstr ""
 #~ msgid "Output buffer map"
 #~ msgstr "出力フォーマット"
 
+<<<<<<< HEAD
 #~ msgid "Text color, either a standard GRASS color or R:G:B triplet"
 #~ msgstr "テキストカラー, 標準GRASSカラーまたはR:G:B triplet"
 
@@ -85408,5 +85479,17 @@ msgstr ""
 "コマンドで履歴を切り換えられます:\n"
 "履歴 -w; 履歴 -r %s/.bash_history; HISTFILE=%s/.bash_history"
 
+=======
+msgid "<%s> not found"
+msgstr "<%s>は見つかりません"
+
+msgid ""
+"You can switch the history by commands:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgstr ""
+"コマンドで履歴を切り換えられます:\n"
+"履歴 -w; 履歴 -r %s/.bash_history; HISTFILE=%s/.bash_history"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "%s=%s,%s: files are the same, no copy required"
 msgstr "%s=%s,%s: ファイルは同じです、 コピーは必要ありません"

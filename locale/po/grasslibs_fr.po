@@ -2820,6 +2820,19 @@ msgstr "erreur dans la table du fichier de datums, ligne %d"
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:170
 =======
 #: ../lib/gis/aprintf.c:140
+<<<<<<< HEAD
+=======
+#, c-format
+msgid "Failed to print %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:254
+#, c-format
+msgid "Failed to parse string specifier: %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:343
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Failed to print %s"
 msgstr ""
@@ -2936,7 +2949,10 @@ msgid "Illegal number of rows: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Illegal e-w resolution value: %g"
 msgstr ""
@@ -2950,7 +2966,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:217
 =======
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
 msgstr ""
@@ -2959,7 +2978,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:221
 =======
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "North must be larger than South, but %g (north) <= %g (south"
 msgstr ""
@@ -2968,7 +2990,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:229
 =======
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "East must be larger than West, but %g (east) <= %g (west)"
 msgstr ""
@@ -2981,7 +3006,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:274
 =======
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Invalid coordinates: negative number of rows"
 msgstr ""
 
@@ -3001,7 +3029,10 @@ msgstr "Les résolutions NS et EO sont différentes"
 #: ../lib/gis/adj_cellhd.c:173
 =======
 #: ../lib/gis/adj_cellhd.c:175
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
 msgstr ""
@@ -3015,7 +3046,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:191
 =======
 #: ../lib/gis/adj_cellhd.c:193
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr ""
@@ -3029,7 +3063,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:206
 =======
 #: ../lib/gis/adj_cellhd.c:208
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Illegal t-b resolution value: %g"
 msgstr ""
@@ -3038,7 +3075,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:211
 =======
 #: ../lib/gis/adj_cellhd.c:213
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Illegal depths value: %d"
 msgstr ""
@@ -3047,7 +3087,10 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:234
 =======
 #: ../lib/gis/adj_cellhd.c:236
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
 msgstr ""
@@ -3880,6 +3923,7 @@ msgid "Invalid east field: %s"
 msgstr "Champ d'est invalide : %s"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/rd_cellhd.c:217
 msgid "Duplicate west field"
 msgstr "Champ Ouest dupliqué"
@@ -4144,6 +4188,8 @@ msgstr "Variable '%s' non définie"
 msgid "Attempt to create read-only temporary file"
 msgstr "Tentative de création d'un fichier temporaire en lecture-seule"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../lib/manage/do_copy.c:43
 #, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
@@ -5557,7 +5603,10 @@ msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/gis/gisinit.c:67 ../lib/gis/gisinit.c:118
 #, c-format
@@ -6263,6 +6312,7 @@ msgid "Unable to write range file for <%s>"
 msgstr "Impossible d'écrire le fichier de plage pour <%s>"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/raster/range.c:465 ../lib/raster/range.c:479
 #: ../lib/raster/range.c:497 ../lib/raster/range.c:502
 #, c-format
@@ -6502,6 +6552,8 @@ msgstr "afficher les paramètres de configuration GRASS"
 #: ../lib/init/grass.py:383
 #, fuzzy
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../lib/vector/Vlib/write.c:234
 msgid "Unable to rewrite feature/offset %"
 msgstr ""
@@ -14008,6 +14060,7 @@ msgstr ""
 "de catégories. Essayez de reconstruire la topologie ou de mettre à jour "
 "GRASS vers la version %d."
 
+<<<<<<< HEAD
 #: ../lib/vector/diglib/test.c:56
 msgid "Unable to open test.tmp file"
 msgstr "Impossible d'ouvrir le fichier test.tmp"
@@ -16362,6 +16415,144 @@ msgstr "[%s] : cette couleur n'existe pas"
 #~ "\n"
 #~ "Utilisez 'ne pas définir GRASS_BATCH_JOB' pour désactiver le traitement "
 #~ "des tâches par lot."
+=======
+msgid "which is missing."
+msgstr "qui est manquant."
+
+msgid "whose header file can't be opened."
+msgstr "dont le fichier d'en-tête ne peut être ouvert."
+
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "Impossible d'ouvrir le fichier d'en-tête de la carte raster <%s@%s>"
+
+msgid "shell script to be processed as batch job"
+msgstr "script shell à exécuter par lot"
+
+msgid "Mapset <{}> already exists. Ignoring the request to create it. Note that this warning may become an error in future versions."
+msgstr "Le jeux de carte <{}> existe déjà. Requête de création ignorée. Cet avertissement pourra devenir une erreur dans les versions futures."
+
+msgid ""
+"Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
+"\n"
+"Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
+msgstr ""
+"Un fichier de tâches <%s> a été défini dans la variable 'GRASS_BATCH_JOB' mais n'est pas trouvé. Fermeture.\n"
+"\n"
+"Utiliser 'réinitialiser GRASS_BATCH_JOB' pour désactiver la liste de tâches de calcul."
+
+msgid "Change file permission to 'executable' for <%s>"
+msgstr "Modifier les permissions du fichier vers 'exécutable' pour <%s>"
+
+msgid "Illegal row value"
+msgstr "Valeur de ligne illégale"
+
+msgid "Illegal col value"
+msgstr "Valeur de colonne illégale"
+
+msgid "Illegal n-s3 resolution value"
+msgstr "Valeur de résolution n-s 3D illégale"
+
+msgid "Illegal row3 value"
+msgstr "Valeur de ligne 3D illégale"
+
+msgid "Illegal e-w3 resolution value"
+msgstr "Valeur de résolution e-o 3D illégale"
+
+msgid "Illegal col3 value"
+msgstr "Valeur de colonne 3D illégale"
+
+msgid "Unable to rewrite feature/offset %lu in vector map <%s>"
+msgstr "Impossible de réécrire l'entité/décalage %lu dans la carte vecteur <%s>"
+
+msgid "Unable to delete feature/offset %lu from vector map <%s>"
+msgstr "Impossible de supprimer l'entité/décalage %lu dans la carte vecteur <%s>"
+
+msgid "Invalid offset (%ld)"
+msgstr "Décalage invalide (%ld)"
+
+msgid "Illegal n-s resolution value <%lf>"
+msgstr "Valeur <%lf> de résolution n-s illégale"
+
+msgid "Illegal e-w resolution value"
+msgstr "Valeur de résolution e-o illégale"
+
+msgid "North must be north of South"
+msgstr "Le Nord doit être au nord du Sud"
+
+msgid "North must be larger than South"
+msgstr "Le Nord doit être plus grand que le Sud"
+
+msgid "East must be larger than West"
+msgstr "L'Est doit être plus grand que l'Ouest"
+
+msgid "Invalid coordinates"
+msgstr "Coordonnées invalides"
+
+msgid "Illegal n-s resolution value"
+msgstr "Valeur de résolution n-s illégale"
+
+msgid "Illegal t-b3 resolution value"
+msgstr "Valeur de résolution h-b 3D illégale"
+
+msgid "Illegal depths value"
+msgstr "Valeur de profondeur illégale"
+
+msgid "Top must be larger than Bottom"
+msgstr "Le haut doit être plus grand que le bas"
+
+msgid ""
+"The python command does not work as expected!\n"
+"Please check your GRASS_PYTHON environment variable.\n"
+"Use the -help option for details.\n"
+msgstr ""
+"La commande python ne fonctionne pas comme prévu !\n"
+"Merci de vérifier votre variable d'environnement GRASS_PYTHON.\n"
+"Utilisez l'option -help pour plus de détails.\n"
+
+msgid ""
+"{}\n"
+"Switching to text based interface mode.\n"
+"\n"
+"Hit RETURN to continue.\n"
+msgstr ""
+"{}\n"
+"Bascule vers l'interface en mode texte.\n"
+"\n"
+"Appuyez sur ENTRÉE pour continuer.\n"
+
+msgid ""
+"It appears that the X Windows system is not active.\n"
+"A graphical based user interface is not supported.\n"
+"(DISPLAY variable is not set.)\n"
+"Switching to text based interface mode.\n"
+"\n"
+"Hit RETURN to continue.\n"
+msgstr ""
+"Il semblerait que le système X Xindows ne soit pas ac(if.\n"
+"L'interface graphique utilisateur n'est pas supportée.\n"
+"(DISPLAY n'est pas défini.)\n"
+"Bascule vers une interface en mode texte.\n"
+"\n"
+"Appuyez sur ENTRER pour continuer.\n"
+
+msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
+msgstr "Le jeu de cartes <{mapset}> n'existe pas dans le secteur GRASS <{loc}>. Il est possible de créer un nouveau jeu de cartes avec l'option '-c'."
+
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
+msgstr "Impossible de lire le fichier header de la carte raster <%s@%s>. II s'agit d'une reclassification de <%s@%s> %s"
+
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus grand qu'il ne devrait (%ld bytes en trop)"
+
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait (%ld bytes en moins)"
+
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Copie %s <%s> vers <%s> dans le jeu de cartes courant"
+
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr "Pour exécuter le module <%s>, ajouter un tiret-bas à la fin de l'option <%s> pour éviter un conflit avec les mots-clefs Python. Le tiret-bas est obsolète dans GRASS 7.0 et sera supprimé dans la version 7.1."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #~ msgid "Change file permission to 'executable' for '%s'"
 #~ msgstr "Changer les permissions du fichier '%s' pour 'exécutable'"

@@ -9,14 +9,23 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 <<<<<<< HEAD
+<<<<<<< HEAD
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 "POT-Creation-Date: 2024-02-09 06:51-0700\n"
 =======
 "POT-Creation-Date: 2022-04-20 07:10-0400\n"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+"POT-Creation-Date: 2022-04-20 07:10-0400\n"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +36,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: ../temporal/t.connect/main.c:34
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
 #: ../locale/scriptstrings/t.snap_to_translate.c:2
@@ -90,6 +100,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.to.rast3_to_translate.c:2
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:2
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:2
 #: ../locale/scriptstrings/t.remove_to_translate.c:2
 #: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:2
@@ -148,11 +160,15 @@ msgstr ""
 #: ../locale/scriptstrings/t.create_to_translate.c:2
 #: ../locale/scriptstrings/t.rast.null_to_translate.c:2
 #: ../locale/scriptstrings/v.strds.stats_to_translate.c:3
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:2
 msgid "temporal"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../temporal/t.connect/main.c:35 ../general/g.gisenv/main.c:43
 #: ../general/g.region/main.c:61 ../general/g.mapset/main.c:50
@@ -188,6 +204,8 @@ msgstr ""
 
 #: ../temporal/t.connect/main.c:37
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../temporal/t.connect/main.c:35 ../display/d.fontlist/main.c:46
 #: ../display/d.font/main.c:46 ../display/d.colorlist/main.c:36
 #: ../general/g.mapsets/main.c:64 ../general/g.region/main.c:66
@@ -211,11 +229,15 @@ msgid "metadata"
 msgstr ""
 
 #: ../temporal/t.connect/main.c:38
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../temporal/t.connect/main.c:42 ../db/db.connect/main.c:50
 msgid "Print current connection parameters and exit"
@@ -256,33 +278,45 @@ msgstr ""
 #: ../locale/scriptstrings/i.landsat.import_to_translate.c:30
 #: ../locale/scriptstrings/v.unpack_to_translate.c:13
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../temporal/t.connect/main.c:42 ../db/db.connect/main.c:51
 msgid "Print current connection parameters and exit"
 msgstr ""
 
 #: ../temporal/t.connect/main.c:43 ../imagery/i.group/main.c:87
 #: ../imagery/i.group/main.c:92 ../imagery/i.group/main.c:97
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/g.extension_to_translate.c:17
 #: ../locale/scriptstrings/g.extension_to_translate.c:19
 #: ../locale/scriptstrings/g.extension_to_translate.c:21
 #: ../locale/scriptstrings/g.extension_to_translate.c:23
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/t.rast.import.netcdf_to_translate.c:36
 #: ../locale/scriptstrings/i.modis.import_to_translate.c:16
 #: ../locale/scriptstrings/i.modis.import_to_translate.c:18
 #: ../locale/scriptstrings/r.unpack_to_translate.c:12
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.unpack_to_translate.c:12
 #: ../locale/scriptstrings/i.landsat.download_to_translate.c:34
 #: ../locale/scriptstrings/v.unpack_to_translate.c:13
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:35
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:37
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.in.pygbif_to_translate.c:16
 #: ../locale/scriptstrings/v.in.pygbif_to_translate.c:19
 #: ../locale/scriptstrings/v.in.pygbif_to_translate.c:21
 #: ../locale/scriptstrings/v.in.pygbif_to_translate.c:23
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:35
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:37
@@ -316,6 +350,8 @@ msgstr ""
 #: ../display/d.mon/main.c:118 ../display/d.mon/main.c:124
 #: ../display/d.mon/main.c:130
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.download_to_translate.c:50
 #: ../locale/scriptstrings/i.landsat.import_to_translate.c:30
 #: ../locale/scriptstrings/i.modis.import_to_translate.c:16
@@ -365,8 +401,14 @@ msgstr ""
 #: ../raster/r.colors/edit_colors.c:173 ../raster/r.sunmask/main.c:232
 #: ../raster/r.sunmask/main.c:238 ../raster/r.proj/main.c:209
 #: ../raster/r.proj/main.c:219 ../raster/r.proj/main.c:225
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Print"
 msgstr ""
 
@@ -376,12 +418,17 @@ msgstr ""
 
 #: ../temporal/t.connect/main.c:49 ../temporal/t.connect/main.c:55
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../temporal/t.connect/main.c:61 ../temporal/t.connect/main.c:66
 #: ../temporal/t.connect/main.c:70 ../general/g.gisenv/main.c:66
 =======
 #: ../temporal/t.connect/main.c:60 ../temporal/t.connect/main.c:65
 #: ../temporal/t.connect/main.c:69 ../general/g.gisenv/main.c:66
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../temporal/t.connect/main.c:60 ../temporal/t.connect/main.c:65
+#: ../temporal/t.connect/main.c:69 ../general/g.gisenv/main.c:66
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../general/g.gisenv/main.c:74 ../general/g.gisenv/main.c:84
 #: ../db/db.connect/main.c:64 ../db/db.connect/main.c:70
 #: ../db/db.connect/main.c:82 ../db/db.connect/main.c:91
@@ -398,6 +445,7 @@ msgid "Overwrite current settings if initialized"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../temporal/t.connect/main.c:60
 msgid "Print current connection parameter in shell style and exit"
 msgstr ""
@@ -408,6 +456,8 @@ msgstr ""
 
 #: ../temporal/t.connect/main.c:112
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../temporal/t.connect/main.c:59
 msgid "Print current connection parameter in shell style and exit"
 msgstr ""
@@ -417,7 +467,10 @@ msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
 #: ../temporal/t.connect/main.c:111
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid ""
 "Default TGIS driver / database set to:\n"
@@ -426,27 +479,37 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../temporal/t.connect/main.c:119
 msgid "Default TGIS driver is not set"
 msgstr ""
 
 #: ../temporal/t.connect/main.c:122
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../temporal/t.connect/main.c:118
 msgid "Default TGIS driver is not set"
 msgstr ""
 
 #: ../temporal/t.connect/main.c:121
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Default TGIS database is not set"
 msgstr ""
 
 #: ../temporal/t.connect/main.c:133 ../db/db.connect/main.c:171
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../db/db.connect/main.c:198
 =======
 #: ../db/db.connect/main.c:197
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../db/db.connect/main.c:197
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -454,6 +517,7 @@ msgid ""
 "database: %s"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../doc/raster/r.example/main.c:83 ../raster/r.external/main.c:57
 #: ../raster/r.quantile/main.c:297 ../raster/r.terraflow/main.cpp:457
@@ -10302,16 +10366,22 @@ msgstr ""
 #: ../imagery/i.atcorr/main.cpp:617 ../imagery/i.atcorr/main.cpp:621
 #: ../imagery/i.atcorr/main.cpp:627
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.acca/main.c:57
 #: ../imagery/i.landsat.acca/algorithm.c:380
 #: ../imagery/i.landsat.acca/tools.c:126 ../imagery/i.landsat.toar/main.c:406
 #: ../imagery/i.landsat.toar/main.c:544 ../raster/r.random/random.c:43
 #: ../raster/r.random/random.c:47 ../raster/r.mapcalc/map3.c:518
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to open raster map <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../raster/r.mapcalc/map3.c:607 ../raster/r.sunhours/main.c:335
 #: ../raster/r.sunhours/main.c:346 ../raster/r.sunhours/main.c:357
@@ -10321,6 +10391,8 @@ msgstr ""
 #: ../imagery/i.landsat.acca/tools.c:135 ../imagery/i.atcorr/main.cpp:634
 #: ../imagery/i.atcorr/main.cpp:639
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.acca/main.c:70
 #, c-format
 msgid ""
@@ -10596,11 +10668,15 @@ msgstr ""
 #: ../imagery/i.landsat.acca/tools.c:136 ../imagery/i.landsat.toar/main.c:566
 #: ../raster/r.sunhours/main.c:325 ../raster/r.sunhours/main.c:336
 #: ../raster/r.sunhours/main.c:347 ../raster/r.mapcalc/map3.c:607
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to create raster map <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../raster/r.mapcalc/map3.c:631
 msgid "Unable to close output raster map"
@@ -22850,6 +22926,8 @@ msgstr ""
 #: ../imagery/i.cluster/open_files.c:62 ../imagery/i.smap/openfiles.c:28
 #: ../imagery/i.maxlik/open.c:44
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.acca/algorithm.c:237
 msgid "Processing first pass..."
 msgstr ""
@@ -22979,11 +23057,15 @@ msgstr ""
 
 #: ../imagery/i.smap/openfiles.c:29 ../imagery/i.cluster/open_files.c:62
 #: ../imagery/i.maxlik/open.c:42
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to read signature file <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.cluster/open_files.c:65 ../imagery/i.maxlik/open.c:47
 #, c-format
@@ -22993,6 +23075,8 @@ msgstr ""
 #: ../imagery/i.cluster/open_files.c:71 ../imagery/i.smap/openfiles.c:40
 #: ../imagery/i.cca/main.c:136 ../imagery/i.maxlik/open.c:52
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.smap/openfiles.c:33
 #, c-format
 msgid "Signature file <%s> is invalid"
@@ -23005,7 +23089,10 @@ msgstr ""
 
 #: ../imagery/i.smap/openfiles.c:42 ../imagery/i.cca/main.c:140
 #: ../imagery/i.cluster/open_files.c:71 ../imagery/i.maxlik/open.c:51
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid ""
 "Signature - group member semantic label mismatch.\n"
@@ -23013,6 +23100,7 @@ msgid ""
 "Imagery group bands without signatures: %s"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.cluster/open_files.c:74 ../imagery/i.smap/openfiles.c:43
 #: ../imagery/i.cca/main.c:139 ../imagery/i.maxlik/open.c:55
@@ -23205,6 +23293,8 @@ msgstr ""
 #: ../imagery/i.smap/parse.c:61 ../imagery/i.maxlik/open.c:16
 #: ../imagery/i.gensigset/parse.c:48
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.smap/openfiles.c:45 ../imagery/i.smap/openfiles.c:46
 #: ../imagery/i.cca/main.c:143 ../imagery/i.cca/main.c:144
 #: ../imagery/i.cluster/open_files.c:74 ../imagery/i.cluster/open_files.c:75
@@ -23243,11 +23333,15 @@ msgstr ""
 #: ../imagery/i.smap/parse.c:61 ../imagery/i.gensig/parse.c:41
 #: ../imagery/i.cluster/main.c:170 ../imagery/i.gensigset/parse.c:47
 #: ../imagery/i.maxlik/open.c:17
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Group <%s> not found in current mapset"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.cluster/main.c:172 ../imagery/i.gensig/parse.c:45
 #: ../imagery/i.smap/parse.c:65 ../imagery/i.cca/main.c:116
@@ -23257,15 +23351,23 @@ msgstr ""
 #: ../imagery/i.cca/main.c:119 ../imagery/i.cluster/main.c:173
 #: ../imagery/i.gensigset/parse.c:50 ../imagery/i.maxlik/open.c:20
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.smap/parse.c:64 ../imagery/i.gensig/parse.c:44
+#: ../imagery/i.cca/main.c:119 ../imagery/i.cluster/main.c:173
+#: ../imagery/i.gensigset/parse.c:50 ../imagery/i.maxlik/open.c:20
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Subgroup <%s> in group <%s> not found"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.cluster/main.c:178 ../imagery/i.gensig/parse.c:50
 #: ../imagery/i.svm.predict/main.c:125 ../imagery/i.svm.train/main.c:265
 #: ../imagery/i.maxlik/main.c:106 ../imagery/i.gensigset/parse.c:58
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.smap/segment.c:67
 msgid "Number of classes must be < 256"
 msgstr ""
@@ -23640,11 +23742,15 @@ msgstr ""
 
 #: ../imagery/i.gensig/parse.c:47 ../imagery/i.cluster/main.c:177
 #: ../imagery/i.gensigset/parse.c:54 ../imagery/i.maxlik/main.c:106
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "<%s> does not match the current mapset"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.cluster/main.c:191
 #, c-format
@@ -23877,6 +23983,8 @@ msgstr ""
 
 #: ../imagery/i.evapo.pm/main.c:60
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.gensig/write_sig.c:14 ../imagery/i.gensigset/write_sig.c:12
 #, c-format
 msgid "Unable to create signature file <%s>"
@@ -24964,7 +25072,10 @@ msgid "Transform completed.\n"
 msgstr ""
 
 #: ../imagery/i.evapo.pm/main.c:61
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Computes potential evapotranspiration calculation with hourly Penman-"
 "Monteith."
@@ -25007,6 +25118,7 @@ msgid "Use Night-time"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.landsat.toar/landsat_met.c:119
 #, c-format
 msgid "Metadata file <%s> not found"
@@ -25021,6 +25133,8 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:68
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.his.rgb/main.c:47 ../imagery/i.rgb.his/main.c:47
 #: ../display/d.his/main.c:64 ../raster/r.his/main.c:68
 msgid "color transformation"
@@ -25123,12 +25237,16 @@ msgid "Use Hargreaves-Samani (1985)"
 msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:69
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Calculates top-of-atmosphere radiance or reflectance and temperature for "
 "Landsat MSS/TM/ETM+/OLI"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:71 ../imagery/i.aster.toar/main.c:97
 #: ../imagery/i.atcorr/main.cpp:467
@@ -25155,10 +25273,14 @@ msgstr ""
 =======
 #: ../imagery/i.landsat.toar/main.c:75
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.landsat.toar/main.c:75
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:7
 msgid "atmospheric correction"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:76 ../imagery/i.modis.qc/main.c:172
 #: ../imagery/i.albedo/main.c:98 ../imagery/i.aster.toar/main.c:101
@@ -25196,6 +25318,8 @@ msgstr ""
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:86
 #: ../locale/scriptstrings/v.to.rast.multi_to_translate.c:22
 #: ../locale/scriptstrings/r.droka_to_translate.c:10
@@ -25211,7 +25335,10 @@ msgid "Name of Landsat metadata file (.met or MTL.txt)"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:94 ../imagery/i.landsat.toar/main.c:116
 #: ../imagery/i.landsat.toar/main.c:125 ../imagery/i.landsat.toar/main.c:134
 #: ../imagery/i.landsat.toar/main.c:142 ../imagery/i.landsat.toar/main.c:151
@@ -25227,11 +25354,15 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:99
 msgid "Spacecraft sensor"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:101
 msgid "Required only if 'metfile' not given (recommended for sanity)"
@@ -25243,6 +25374,8 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:107
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:100
 msgid "Required only if 'metfile' not given (recommended for sanity)"
 msgstr ""
@@ -25252,7 +25385,10 @@ msgid "Landsat-1 MSS"
 msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:106
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Landsat-2 MSS"
 msgstr ""
 
@@ -25264,6 +25400,7 @@ msgstr ""
 msgid "Landsat-4 MSS"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:108
 msgid "Landsat-5 MSS"
@@ -25378,6 +25515,8 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:219
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:109
 msgid "Landsat-5 MSS"
 msgstr ""
@@ -25503,11 +25642,15 @@ msgid "Output at-sensor radiance instead of reflectance for all bands"
 msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:226
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Input raster maps use as extension the number of the band instead the code"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:224
 msgid "Print output metadata info"
@@ -25515,16 +25658,22 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:249 ../imagery/i.landsat.toar/main.c:257
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:230
 msgid "Print output metadata info"
 msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:256 ../imagery/i.landsat.toar/main.c:264
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Illegal date format: [%s] (yyyy-mm-dd)"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:280
 msgid "Please use a metadata keyword with -p"
@@ -25536,6 +25685,8 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:331
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:286
 msgid "Please use a metadata keyword with -p"
 msgstr ""
@@ -25545,11 +25696,15 @@ msgid "Failed to identify satellite"
 msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:337
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Lacking '%s' and/or '%s' for this satellite"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:338
 msgid "Landsat-7 requires band gain with 9 (H/L) characters"
@@ -25557,28 +25712,40 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:358
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:343
 msgid "Landsat-7 requires band gain with 9 (H/L) characters"
 msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:363
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unknown satellite type (defined by '%s')"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:404 ../imagery/i.landsat.toar/main.c:556
 =======
 #: ../imagery/i.landsat.toar/main.c:410 ../imagery/i.landsat.toar/main.c:559
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.landsat.toar/main.c:410 ../imagery/i.landsat.toar/main.c:559
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to read data type of raster map <%s>"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:549
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:534 ../raster/r.topidx/topidx.c:41
 #: ../raster/r.flow/main.c:314
 msgid "Calculating..."
@@ -25591,20 +25758,28 @@ msgid "Raster map <%s> already exists and will be overwritten"
 msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:552
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Raster map <%s> exists. Skipping."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:573
 =======
 #: ../imagery/i.landsat.toar/main.c:575
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.landsat.toar/main.c:575
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Writing %s of <%s> to <%s>..."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.landsat.toar/main.c:575
 msgid "temperature"
@@ -25616,6 +25791,8 @@ msgstr ""
 
 #: ../imagery/i.modis.qc/main.c:170
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.landsat.toar/main.c:579
 msgid "temperature"
 msgstr ""
@@ -26693,11 +26870,15 @@ msgid "imagery quality assessment"
 msgstr ""
 
 #: ../imagery/i.modis.qc/main.c:171
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.landsat8.swlst_to_translate.c:5
 msgid "land surface temperature"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.modis.qc/main.c:171
 msgid "vegetation"
@@ -26708,6 +26889,8 @@ msgstr ""
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:5
 #: ../locale/scriptstrings/i.modis.download_to_translate.c:4
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.modis.qc/main.c:172
 msgid "vegetation"
 msgstr ""
@@ -26716,11 +26899,15 @@ msgstr ""
 #: ../locale/scriptstrings/i.modis.download_to_translate.c:4
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:5
 #: ../locale/scriptstrings/i.modis.import_to_translate.c:4
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.lswt_to_translate.c:4
 msgid "MODIS"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.modis.qc/main.c:175
 msgid "Extracts quality control parameters from MODIS QC layers."
@@ -27041,6 +27228,8 @@ msgstr ""
 
 #: ../imagery/i.modis.qc/main.c:370
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.modis.qc/main.c:176
 msgid "Extracts quality control parameters from MODIS QC layers."
 msgstr ""
@@ -27359,12 +27548,16 @@ msgid "mod13Q1: if shadow is present in pixel"
 msgstr ""
 
 #: ../imagery/i.modis.qc/main.c:365
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Band number of MODIS product (mod09Q1=[1,2],mod09A1=[1-7],m[o/y]d09GA=[1-7],"
 "m[o/y]d09CMG=[1-7], mcd43B2q=[1-7])"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.modis.qc/main.c:375
 msgid "Band 1: Red"
@@ -27423,6 +27616,8 @@ msgstr ""
 
 #: ../imagery/i.modis.qc/main.c:432
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.modis.qc/main.c:369
 msgid "Band 1: Red"
 msgstr ""
@@ -27479,12 +27674,16 @@ msgid "mod09Q1 product only has 2 bands"
 msgstr ""
 
 #: ../imagery/i.modis.qc/main.c:425
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "This bit flag is only available for MOD09A1s @ 500m or MOD09CMG @ 5000m "
 "products"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.modis.qc/main.c:438
 msgid "This bit flag is only available for MOD09GAs @ 500m products"
@@ -27888,6 +28087,8 @@ msgid "Group [%s] targeted for project (location) [%s], mapset [%s]"
 =======
 msgid "Group [%s] targeted for location [%s], mapset [%s]"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.modis.qc/main.c:429
 msgid "This bit flag is only available for MOD09GAs @ 500m products"
 msgstr ""
@@ -27941,8 +28142,14 @@ msgstr ""
 #: ../raster/r.stats.zonal/main.c:483 ../raster/r.proj/readcell.c:59
 #: ../raster/r.proj/readcell.c:129
 msgid "Unable to open temporary file"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:74
@@ -27950,6 +28157,7 @@ msgstr ""
 msgid "Allocating memory and reading input map..."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:10
 #: ../imagery/i.rectify/report.c:10
@@ -27998,6 +28206,8 @@ msgstr ""
 #, c-format
 msgid "Converting units to meters, factor=%.6f"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:102
 #: ../imagery/i.rectify/readcell.c:89 ../raster/r.proj/readcell.c:92
 msgid "Error writing segment file"
@@ -28206,7 +28416,10 @@ msgstr ""
 #: ../imagery/i.rectify/rectify.c:116
 #, c-format
 msgid "Raster map <%s@%s>: zone don't match current settings"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:12
@@ -28221,12 +28434,17 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:23
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.rectify/cp.c:27 ../imagery/i.rectify/cp.c:52
 #: ../vector/v.rectify/cp.c:357
 =======
 #: ../imagery/i.rectify/cp.c:27 ../imagery/i.rectify/cp.c:51
 #: ../vector/v.rectify/cp.c:363
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.rectify/cp.c:27 ../imagery/i.rectify/cp.c:51
+#: ../vector/v.rectify/cp.c:363
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Poorly placed control points."
 msgstr ""
 
@@ -28235,12 +28453,17 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:54
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:60
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.rectify/cp.c:28 ../imagery/i.rectify/cp.c:53
 #: ../vector/v.rectify/cp.c:358
 =======
 #: ../imagery/i.rectify/cp.c:28 ../imagery/i.rectify/cp.c:52
 #: ../vector/v.rectify/cp.c:364
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.rectify/cp.c:28 ../imagery/i.rectify/cp.c:52
+#: ../vector/v.rectify/cp.c:364
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid " Can not generate the transformation equation."
 msgstr ""
 
@@ -28277,6 +28500,7 @@ msgstr ""
 msgid " Run OPTION 5 of i.ortho.photo!"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.ortho.photo/i.ortho.rectify/rectify.c:43
 #, c-format
@@ -28424,6 +28648,8 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:46
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:13
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:98
 #: ../imagery/i.rectify/target.c:13 ../vector/v.rectify/target.c:18
@@ -28780,12 +29006,16 @@ msgid "8 - Ortho-rectify imagery files"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:50
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Interactively creates or modifies entries in a camera initial exposure "
 "station file for imagery group referenced by a sub-block."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:57
 msgid "Initial Camera Exposure X-coordinate"
@@ -28845,6 +29075,8 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:132
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:62
 msgid "Initial Camera Exposure X-coordinate"
 msgstr ""
@@ -28902,11 +29134,15 @@ msgid "Print initial values"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:137
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Group [%s] not found"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:145
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:149
@@ -28921,6 +29157,8 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:185
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:189
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:150
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:154
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:158
@@ -28933,14 +29171,20 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:186
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:190
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:194
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Option '%s' is required for new exposure info"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.rectify/cp.c:12 ../vector/v.rectify/cp.c:343
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:160
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:203
 #: ../misc/m.transform/main.c:96
@@ -29122,7 +29366,10 @@ msgid "Invalid order (%d); please enter 1 to %d"
 msgstr ""
 
 #: ../imagery/i.rectify/cp.c:12 ../vector/v.rectify/cp.c:350
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Control Point file for group <%s@%s> - "
 msgstr ""
@@ -29131,6 +29378,7 @@ msgstr ""
 msgid "Not enough active control points for thin plate spline."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.rectify/cp.c:32 ../imagery/i.rectify/cp.c:57
 msgid "Not enough memory to solve transformation equations."
@@ -29142,6 +29390,8 @@ msgstr ""
 
 #: ../imagery/i.rectify/cp.c:47 ../vector/v.rectify/cp.c:352
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.rectify/cp.c:31 ../imagery/i.rectify/cp.c:55
 msgid "Not enough memory to solve transformation equations."
 msgstr ""
@@ -29151,11 +29401,15 @@ msgid "Invalid order."
 msgstr ""
 
 #: ../imagery/i.rectify/cp.c:47 ../vector/v.rectify/cp.c:359
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Not enough active control points for current order, %d are required."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.rectify/cp.c:60 ../vector/v.rectify/cp.c:365
 msgid "Invalid order"
@@ -29262,15 +29516,21 @@ msgid "Name for output raster map (blue)"
 msgstr ""
 
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.rectify/cp.c:58 ../vector/v.rectify/cp.c:370
 msgid "Invalid order"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.albedo/main.c:96
 msgid "albedo"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.albedo/main.c:100 ../imagery/i.aster.toar/main.c:102
 #: ../locale/scriptstrings/r.in.aster_to_translate.c:5
@@ -29279,11 +29539,14 @@ msgstr ""
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.albedo/main.c:101
 #: ../locale/scriptstrings/i.lswt_to_translate.c:5
 msgid "AVHRR"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.albedo/main.c:104
 msgid "Computes broad band albedo from surface reflectance."
@@ -29311,6 +29574,8 @@ msgstr ""
 
 #: ../imagery/i.albedo/main.c:137
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.albedo/main.c:103
 msgid "Computes broad band albedo from surface reflectance."
 msgstr ""
@@ -29336,7 +29601,10 @@ msgid "ASTER (6 input bands:1,3,5,6,8,9)"
 msgstr ""
 
 #: ../imagery/i.albedo/main.c:136
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Aggressive mode (Landsat)"
 msgstr ""
 
@@ -29346,6 +29614,7 @@ msgid ""
 "kind of simple atmospheric correction"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.albedo/main.c:144
 msgid "Soft mode (MODIS)"
@@ -29357,15 +29626,21 @@ msgid "Too many input maps. Only %d allowed."
 msgstr ""
 
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.albedo/main.c:143
 msgid "Soft mode (MODIS)"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.albedo/main.c:181
 msgid "At least two raster maps are required"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.fft/main.c:80 ../imagery/i.ifft/main.c:80
 msgid "Fast Fourier Transform"
@@ -31343,6 +31618,8 @@ msgstr ""
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.maxlik/open.c:27
 #, c-format
 msgid ""
@@ -31351,10 +31628,14 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.maxlik/open.c:32
 =======
 #: ../imagery/i.maxlik/open.c:30
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.maxlik/open.c:30
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid ""
 "Subgroup <%s> of group <%s> only has 1 raster map. The subgroup must have at "
@@ -31362,16 +31643,23 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../imagery/i.maxlik/open.c:39
 =======
 #: ../imagery/i.maxlik/open.c:36
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../imagery/i.maxlik/open.c:36
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to open signature file <%s>"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.maxlik/main.c:68
 msgid "Classifies the cell spectral reflectances in imagery data."
 msgstr ""
@@ -31390,7 +31678,10 @@ msgstr ""
 msgid "Name for output raster map holding reject threshold results"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.maxlik/invert.c:28
 #, c-format
 msgid "Signature %d is not valid (ill-conditioned) - ignored"
@@ -31401,6 +31692,7 @@ msgstr ""
 msgid "Signature %d is not valid (singular) - ignored"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../imagery/i.maxlik/main.c:66
 msgid "Classifies the cell spectral reflectances in imagery data."
@@ -37797,6 +38089,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.stream.order_to_translate.c:14
 msgid "The Python recursion limit that should be used (Python default is 1000)"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../imagery/i.pca/main.c:74
 #: ../locale/scriptstrings/i.pansharpen_to_translate.c:8
 msgid "PCA"
@@ -38225,7 +38519,10 @@ msgstr ""
 msgid ""
 "Types depend on database backend, but all support VARCHAR(), INT, DOUBLE "
 "PRECISION and DATE. Example: 'label varchar(250), value integer'"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:1
@@ -38233,7 +38530,10 @@ msgid "Imports and performs atmospheric correction of Sentinel-2 images."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:4
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:4
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:7
@@ -38308,7 +38608,10 @@ msgstr ""
 msgid "import"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:8
 msgid ""
 "Name of the directory where the image and metadata file are stored (*.SAFE)"
@@ -38319,7 +38622,10 @@ msgid "Name of input visibility raster map (in m)"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:10
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:25
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:35
@@ -38442,7 +38748,10 @@ msgstr ""
 msgid "Input"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:11
 msgid "Select the proper Atmospheric model"
 msgstr ""
@@ -38472,7 +38781,10 @@ msgid "Suffix for output raster maps"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:20
 msgid "Rescale output raster map"
 msgstr ""
@@ -38619,7 +38931,10 @@ msgstr ""
 msgid "Output"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:22
 msgid "Name for output text file to be used as input in i.sentinel.mask"
 msgstr ""
@@ -38629,7 +38944,10 @@ msgid "Prefix for topographic corrected images"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:28
 #: ../locale/scriptstrings/v.to.rast.multi_to_translate.c:29
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:15
@@ -38647,7 +38965,10 @@ msgstr ""
 msgid "Cache size for raster rows"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:30
 msgid "Use AOD instead visibility"
 msgstr ""
@@ -38657,7 +38978,10 @@ msgid "Create the input text file for i.sentinel.mask"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:34
 #: ../locale/scriptstrings/r.in.wcs_to_translate.c:8
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:22
@@ -38665,7 +38989,10 @@ msgstr ""
 msgid "Reproject raster data using r.import if needed"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:36
 msgid "Skip import of Sentinel bands"
 msgstr ""
@@ -38674,6 +39001,7 @@ msgstr ""
 msgid "Computes topographic correction of reflectance"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/r.extract_to_translate.c:1
 msgid "Extracts specified categories of an integer input map."
@@ -39175,6 +39503,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:8
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:40
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:24
 #: ../locale/scriptstrings/i.landsat.import_to_translate.c:25
@@ -40105,12 +40435,16 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:15
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:9
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "A numerical suffix separated by an underscore will be attached to create a "
 "unique identifier"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/t.vect.algebra_to_translate.c:9
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:11
@@ -40118,6 +40452,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:12
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:11
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:10
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:10
 #: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:10
@@ -40141,12 +40477,16 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:11
 #: ../locale/scriptstrings/t.vect.algebra_to_translate.c:9
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:11
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Check the spatial topology of temporally related maps and process only "
 "spatially related maps"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/r.diversity_to_translate.c:1
 msgid ""
@@ -40172,6 +40512,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.diversity_to_translate.c:9
 msgid "Preserve configuration files"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.mblend_to_translate.c:1
 msgid "Blends two rasters of different spatial resolution."
 msgstr ""
@@ -40470,7 +40812,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.isis3mt_to_translate.c:8
 msgid "Align ISIS3 data to the extents of the current GRASS region"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:1
@@ -40496,13 +40841,19 @@ msgid "Alias-name(s) for species (default: map names)."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:9
 #: ../locale/scriptstrings/r.out.maxent_swd_to_translate.c:11
 msgid "Environmental parameter map(s)"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:10
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:12
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:14
@@ -40532,8 +40883,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:21
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "Thin species and background points"
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 msgid "Background SWD file"
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -42105,6 +42459,8 @@ msgid ""
 "Perform a dry run, compute all dependencies and module calls but don't run "
 "them"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "include the original columns in input layers in export to swd file"
 msgstr ""
 
@@ -42239,7 +42595,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.to.vect.tiled_to_translate.c:25
 msgid "Number of tiles in y direction"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 <<<<<<< HEAD
@@ -42250,7 +42609,10 @@ msgid "Build a linked stream network: each link knows its downstream link"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.stream.profiler_to_translate.c:3
 #: ../locale/scriptstrings/v.stream.order_to_translate.c:4
 #: ../locale/scriptstrings/v.stream.inbasin_to_translate.c:3
@@ -42313,13 +42675,19 @@ msgstr ""
 msgid "geomorphology"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.stream.profiler_to_translate.c:6
 msgid "Starting line segment category"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.stream.profiler_to_translate.c:7
 #: ../locale/scriptstrings/v.stream.inbasin_to_translate.c:11
 #: ../locale/scriptstrings/v.stream.inbasin_to_translate.c:13
@@ -42360,7 +42728,10 @@ msgstr ""
 msgid "layer,column"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.stream.profiler_to_translate.c:8
 msgid "Vector input of stream network created by r.stream.extract"
 msgstr ""
@@ -42410,7 +42781,11 @@ msgid "output file for data on smoothed grid"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<<<<<<< HEAD
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.select_to_translate.c:1
 msgid ""
 "Select maps from space time datasets by topological relationships to other "
@@ -45887,6 +46262,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.plane_to_translate.c:8
 msgid "Elevation coordinate of a point on the plane"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/d.vect.colbp_to_translate.c:1
 msgid "Draws the boxplot of values in a vector attribute column"
 msgstr ""
@@ -46057,7 +46434,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.in.gns_to_translate.c:5
 msgid "Name of input uncompressed GNS file from NGA (with .txt extension)"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.import_to_translate.c:1
@@ -46075,7 +46455,10 @@ msgid "Input band(s) to select (default is all bands)"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.import_to_translate.c:11
 #: ../locale/scriptstrings/i.landsat.import_to_translate.c:15
 msgid "Resampling method to use for reprojection"
@@ -46104,7 +46487,10 @@ msgstr ""
 msgid "region;extent of current region;input;extent of input map"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.import_to_translate.c:17
 msgid "Resolution of output raster map (default: estimated)"
 msgstr ""
@@ -46120,7 +46506,10 @@ msgid "Resolution of output raster map (use with option resolution=value)"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.import_to_translate.c:22
 #: ../raster/r.in.gdal/main.c:163 ../raster/r.in.bin/main.c:298
 #: ../raster/r.external/main.c:90 ../raster/r.buildvrt/main.c:102
@@ -46129,11 +46518,15 @@ msgstr ""
 msgid "Title for resultant raster map"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.import_to_translate.c:24
 msgid "Estimate resolution only"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/r.import_to_translate.c:30
 #: ../locale/scriptstrings/v.import_to_translate.c:28
@@ -46146,6 +46539,9 @@ msgstr ""
 =======
 <<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<<<<<<< HEAD
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.in.usgs_to_translate.c:1
 msgid "Download user-requested products through the USGS TNM API"
 msgstr ""
@@ -47380,6 +47776,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.shade_to_translate.c:11
 msgid "Percent to brighten"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.import_to_translate.c:25
 #: ../locale/scriptstrings/r.import_to_translate.c:27
 #: ../locale/scriptstrings/i.landsat.download_to_translate.c:30
@@ -47514,7 +47912,10 @@ msgstr ""
 #: ../locale/scriptstrings/i.signature.remove_to_translate.c:11
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:10
 msgid "The name of the input signature file to copy"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.estimap.recreation_to_translate.c:1
@@ -47924,13 +48325,19 @@ msgid "Distance metric to areas of highest recreation opportunity spectrum"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.estimap.recreation_to_translate.c:110
 #: ../raster/r.report/parse.c:45
 msgid "Units to report"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.estimap.recreation_to_translate.c:111
 msgid "Units to report the demand distribution"
 msgstr ""
@@ -47943,6 +48350,7 @@ msgstr ""
 msgid "Timestamp for the recreation potential raster map"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/v.flexure_to_translate.c:1
 msgid "Lithospheric flexure: gridded deflections from scattered point loads"
@@ -47967,6 +48375,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.flexure_to_translate.c:11
 msgid "Output vector points map of vertical deflections [m]"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.pansharpen_to_translate.c:1
 msgid ""
 "Image fusion algorithms to sharpen multispectral with high-res panchromatic "
@@ -48530,7 +48940,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.vif_to_translate.c:20
 msgid "low-memory option (will use full raster layers)"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:1
@@ -48538,7 +48951,10 @@ msgid "Lists registered maps of a space time raster dataset."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:5
 #: ../locale/scriptstrings/g.compare.md5_to_translate.c:4
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:5
@@ -48548,7 +48964,10 @@ msgstr ""
 msgid "list"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:7
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:7
 #: ../locale/scriptstrings/t.list_to_translate.c:10
@@ -48556,7 +48975,10 @@ msgid "Sort the space time dataset by category"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:8
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:15
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:17
@@ -48599,13 +49021,17 @@ msgstr ""
 msgid "Method used for data listing"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:13
 msgid ""
 "The granule to be used for listing. The granule must be specified as string "
 "eg.: absolute time \"1 months\" or relative time \"1\""
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/v.convert.all_to_translate.c:1
 msgid ""
@@ -49097,6 +49523,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.surf.icw_to_translate.c:15
 msgid "Use (d^n)*log(d) instead of 1/(d^n) for radial basis function"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:16
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:8
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:8
@@ -49464,7 +49892,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/d.out.file_to_translate.c:8
 msgid "Images"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.basin_to_translate.c:1
@@ -49472,7 +49903,10 @@ msgid "Morphometric characterization of river basins"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.basin_to_translate.c:4
 #: ../raster/r.watershed/front/main.c:78 ../raster/r.water.outlet/main.c:59
 #: ../raster/r.basins.fill/main.c:56
@@ -49493,16 +49927,22 @@ msgstr ""
 msgid "output prefix (must start with a letter)"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.basin_to_translate.c:7
 msgid "coordinates of the outlet (east,north)"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../locale/scriptstrings/r.basin_to_translate.c:9
 #: ../locale/scriptstrings/r.threshold_to_translate.c:4
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:5
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.basin_to_translate.c:8
 #: ../locale/scriptstrings/v.in.gbif_to_translate.c:7
 #: ../locale/scriptstrings/v.habitat.dem_to_translate.c:12
@@ -49512,7 +49952,10 @@ msgstr ""
 #: ../locale/scriptstrings/r.basin_to_translate.c:9
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:5
 #: ../locale/scriptstrings/r.threshold_to_translate.c:4
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "threshold"
 msgstr ""
 
@@ -49525,6 +49968,7 @@ msgid "No maps output"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../locale/scriptstrings/r.richdem.resolveflats_to_translate.c:1
 msgid "Directs flow from flat areas on depression-filled DEMs"
 msgstr ""
@@ -49536,6 +49980,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.richdem.resolveflats_to_translate.c:5
 msgid "Output DEM with flats resolved for continuous flow"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/d.what.vect_to_translate.c:1
 msgid ""
 "Allows the user to interactively query vector map layers at user-selected "
@@ -49909,7 +50355,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.richdem.breachdepressions_to_translate.c:6
 msgid "Output DEM with depressions breached"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.stream.watersheds_to_translate.c:1
@@ -49919,14 +50368,20 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.stream.watersheds_to_translate.c:4
 #: ../locale/scriptstrings/r.stream.variables_to_translate.c:4
 #: ../raster/r.watershed/front/main.c:80
 msgid "drainage"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.stream.watersheds_to_translate.c:6
 msgid "Name of the drainage direction raster (generated with r.watershed)"
 msgstr ""
@@ -49941,6 +50396,7 @@ msgid ""
 "streams should be stored"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/r.connectivity.network_to_translate.c:1
 msgid ""
@@ -50063,6 +50519,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.to.vect.lines_to_translate.c:8
 msgid "Sample vertically (default is to sample horizontally)"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.stream.watersheds_to_translate.c:9
 #: ../locale/scriptstrings/r.stream.variables_to_translate.c:14
 msgid "Number of CPUs used for the parallel computation"
@@ -53320,7 +53778,10 @@ msgstr ""
 msgid ""
 "Perform a dry run, compute all dependencies and module calls but don't run "
 "them"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.gsflow.reaches_to_translate.c:1
@@ -53328,7 +53789,10 @@ msgid "Build stream \"reaches\" that link PRMS segments to MODFLOW cells"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.gsflow.reaches_to_translate.c:5
 #: ../locale/scriptstrings/r.gsflow.hydrodem_to_translate.c:5
 #: ../locale/scriptstrings/r.gsflow.hydrodem_to_translate.c:6
@@ -53341,13 +53805,19 @@ msgstr ""
 msgid "GSFLOW"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.gsflow.reaches_to_translate.c:6
 msgid "PRMS stream segments"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.gsflow.reaches_to_translate.c:8
 #: ../locale/scriptstrings/r.gsflow.hydrodem_to_translate.c:8
 #: ../locale/scriptstrings/v.gsflow.grid_to_translate.c:11
@@ -53355,7 +53825,10 @@ msgstr ""
 msgid "MODFLOW grid"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.gsflow.reaches_to_translate.c:10
 msgid "DEM for slope along reaches"
 msgstr ""
@@ -53420,6 +53893,7 @@ msgstr ""
 msgid "Streambed unsaturated zone saturated hydraulic conductivity [m/day]"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/t.rast.extract_to_translate.c:1
 msgid "Extracts a subset of a space time raster datasets."
@@ -53544,6 +54018,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.out.kde_to_translate.c:10
 msgid "Method to scale transparency"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.in.probav_to_translate.c:1
 msgid ""
 "Imports PROBA-V NDVI data in netCDF format into a raster map with real NDVI "
@@ -55520,7 +55996,10 @@ msgstr ""
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
 #: ../raster/r.in.lidar/main.c:234
 msgid "pth percentile of the values"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:1
@@ -55540,7 +56019,10 @@ msgid "Name of the vector map layer of the segments"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:5
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:7
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:9
@@ -55570,7 +56052,10 @@ msgstr ""
 msgid "Input columns"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:6
 msgid "Name of the vector map layer of the structure of the plants"
 msgstr ""
@@ -55843,7 +56328,10 @@ msgid "Maintenace costs per kW"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:96
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
@@ -55853,7 +56341,10 @@ msgstr ""
 msgid "Maintenance"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
 msgstr ""
@@ -55882,7 +56373,10 @@ msgid "Efficiency of electro-mechanical components"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:107
 #: ../locale/scriptstrings/r.green.hydro.technical_to_translate.c:38
 #: ../locale/scriptstrings/r.green.hydro.planning_to_translate.c:12
@@ -55890,7 +56384,10 @@ msgstr ""
 msgid "Number of operative hours per year [hours/year]"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:109
 msgid "Constant to assess the revenues"
 msgstr ""
@@ -55913,6 +56410,7 @@ msgstr ""
 msgid "Output raster map with the value upper part of the soil"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/r.viewshed.exposure_to_translate.c:1
 msgid "Visual exposure to defined exposure source."
@@ -58344,6 +58842,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:1
 msgid "Lists registered maps of a space time vector dataset."
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:1
 msgid "Converts vector polygons or points to lines."
 msgstr ""
@@ -58613,7 +59113,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.bioclim_to_translate.c:15
 msgid "Number of quartals to use"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.rgb_to_translate.c:1
@@ -58645,6 +59148,7 @@ msgstr ""
 msgid "Blue channel raster map name"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/t.register_to_translate.c:1
 msgid ""
@@ -60835,6 +61339,8 @@ msgid ""
 "Insert the integer value for a multiple of standard deviation (to be summed "
 "to the mean of the magnitude values )"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.agent.aco_to_translate.c:1
 #: ../locale/scriptstrings/r.agent.rand_to_translate.c:1
 msgid "Agents wander around on the terrain, marking paths to new locations."
@@ -61083,7 +61589,10 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.planning_to_translate.c:34
 #: ../locale/scriptstrings/r.green.hydro.recommended_to_translate.c:32
 msgid "Name of output vector with viewed areas"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:1
@@ -61093,19 +61602,28 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:3
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:3
 msgid "color"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:6
 msgid "input map"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:7
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:9
 #: ../locale/scriptstrings/g.proj.all_to_translate.c:11
@@ -61118,7 +61636,10 @@ msgstr ""
 msgid "Raster"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:8
 msgid "output map"
 msgstr ""
@@ -61141,7 +61662,10 @@ msgid "Recode layer to get consecutive category values"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.object.thickness_to_translate.c:1
 msgid ""
 "Evaluates minimum, maximum and mean thickness of objects of a given category "
@@ -61482,19 +62006,28 @@ msgstr ""
 msgid "Ranked raster map"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.rock.stability_to_translate.c:1
 msgid "A tool for preliminary rock failure susceptibility mapping."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.rock.stability_to_translate.c:2
 #: ../locale/scriptstrings/r.droka_to_translate.c:2
 msgid "rock mass"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.rock.stability_to_translate.c:3
 msgid "planar failure"
 msgstr ""
@@ -61544,6 +62077,7 @@ msgstr ""
 msgid "Dip of the joint (0-90). For SMR_wedge output"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/i.landsat.download_to_translate.c:1
 msgid ""
@@ -61867,6 +62401,8 @@ msgid ""
 "Names of the vector columns to be created and to store sampled raster "
 "values, one name for each STRDS"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:1
 msgid ""
 "Performs spatio-temporal mapcalc expressions on temporally sampled maps of "
@@ -62504,7 +63040,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.structure_to_translate.c:26
 msgid "Name of output vector map with the structure of the plants"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.civil_to_translate.c:1
@@ -62798,6 +63337,7 @@ msgstr ""
 msgid "Create backup file"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/d.what.vect_to_translate.c:1
 msgid ""
@@ -63802,6 +64342,8 @@ msgstr ""
 #: ../locale/scriptstrings/m.crawl.thredds_to_translate.c:23
 msgid "Number of cores to use for crawling thredds server"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:1
 msgid ""
 "Calculates univariate statistics of attributes for each registered vector "
@@ -64952,7 +65494,10 @@ msgstr ""
 msgid ""
 "This will not work in cases when region is handled in a special way such as "
 "GUI"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.krige_to_translate.c:1
@@ -65026,6 +65571,7 @@ msgstr ""
 msgid "If omitted, will be <input name>_kriging.var"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/r.object.spatialautocor_to_translate.c:1
 msgid "Spatial autocorrelation of raster objects"
@@ -65151,6 +65697,8 @@ msgstr ""
 #: ../locale/scriptstrings/m.csw.update_to_translate.c:23
 msgid "Remove and print not valid CSW connections resources from XML file"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/t.sample_to_translate.c:1
 msgid ""
 "Samples the input space time dataset(s) with a sample space time dataset and "
@@ -65729,7 +66277,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.mess_to_translate.c:26
 msgid "Remove individual environmental similarity layers (IES)"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/i.variance_to_translate.c:1
@@ -65752,6 +66303,7 @@ msgstr ""
 msgid "Step of resolution variation"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:1
 msgid ""
@@ -65979,6 +66531,8 @@ msgstr ""
 #: ../locale/scriptstrings/i.spectral_to_translate.c:16
 msgid "output to text file"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/r.richdem.resolveflats_to_translate.c:1
 msgid "Directs flow from flat areas on depression-filled DEMs"
 msgstr ""
@@ -67340,7 +67894,10 @@ msgstr ""
 #: ../locale/scriptstrings/r.out.ntv2_to_translate.c:10
 msgid ""
 "Minor ellipsoid axis of the transformation grid's input coordinate system"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.fidimo_to_translate.c:1
@@ -67469,6 +68026,7 @@ msgstr ""
 msgid "Statistical Intervals"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/i.landsat.qa_to_translate.c:1
 msgid ""
@@ -67982,6 +68540,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.flowfill_to_translate.c:12
 msgid "Output water depth at the end of the run"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/i.landsat8.swlst_to_translate.c:1
 msgid ""
 "Practical split-window algorithm estimating Land Surface Temperature from "
@@ -68198,7 +68758,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.faultdirections_to_translate.c:8
 msgid "Use absolute values in legend, instead of percentages"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.stats_to_translate.c:1
@@ -68258,6 +68821,7 @@ msgid "Read from existing CSV files"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../locale/scriptstrings/t.rast.to.rast3_to_translate.c:1
 msgid "Converts a space time raster dataset into a 3D raster map."
 msgstr ""
@@ -68271,6 +68835,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:7
 msgid "Basename for output raster maps"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.centroids_to_translate.c:1
 msgid "Adds missing centroids to closed boundaries."
 msgstr ""
@@ -68956,7 +69522,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:8
 msgid "URL of ZIP, TAR.GZ, or other similar archive"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:1
@@ -68972,22 +69541,31 @@ msgid "Layer where to join"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.db.join_to_translate.c:8
 #: ../locale/scriptstrings/v.flexure_to_translate.c:7
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:10
 msgid "column"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.db.join_to_translate.c:9
 msgid "Identifier column (e.g.: cat) in the vector table to be used for join"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../locale/scriptstrings/v.db.join_to_translate.c:14
 msgid "Columns to exclude from the other table"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.db.join_to_translate.c:10
 #: ../locale/scriptstrings/db.join_to_translate.c:6
 msgid "Other table name"
@@ -74139,7 +74717,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.create_to_translate.c:6
 msgid "Type of the output space time dataset"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.mlR_to_translate.c:1
@@ -74375,6 +74956,7 @@ msgid "Include class probabilities in classification results"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../locale/scriptstrings/v.gsflow.hruparams_to_translate.c:6
 msgid "Elevation raster"
 msgstr ""
@@ -74402,6 +74984,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.gsflow.hruparams_to_translate.c:17
 msgid "Aspect from r.slope.aspect"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.in.redlist_to_translate.c:1
 msgid "importing of IUCN Red List Spatial Data"
 msgstr ""
@@ -74812,7 +75396,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:30
 msgid "Path where move and copy the mapset"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/r.in.ahn_to_translate.c:1
@@ -74866,6 +75453,7 @@ msgstr ""
 msgid "Basename of the new generated 3D raster maps"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../locale/scriptstrings/r.slope.direction_to_translate.c:1
 msgid "Calculates slope following a direction raster."
@@ -75041,6 +75629,8 @@ msgstr ""
 #, c-format
 msgid "Paper '%s' not found, using defaults"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:1
 msgid ""
 "Adds one or more columns to the attribute table connected to a given vector "
@@ -75083,7 +75673,10 @@ msgstr ""
 msgid ""
 "Number of pixels to pass to the prediction method. GRASS GIS reads raster by-"
 "row so chunksize is rounded down based on the number of columns"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../ps/ps.map/do_psfiles.c:20
@@ -75091,6 +75684,7 @@ msgstr ""
 msgid "Reading PostScript include file <%s> ..."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../ps/ps.map/eps.c:18
 #, c-format
@@ -75364,6 +75958,8 @@ msgstr ""
 #: ../ps/ps.map/ps_vpoints.c:188 ../ps/ps.map/ps_vpoints.c:229
 #: ../ps/ps.map/ps_vpoints.c:238
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../ps/ps.map/ps_vareas.c:67 ../ps/ps.map/ps_vareas.c:78
 #: ../ps/ps.map/ps_vlines.c:84
 msgid "Read error in vector map"
@@ -75373,11 +75969,15 @@ msgstr ""
 #: ../ps/ps.map/ps_vpoints.c:160 ../ps/ps.map/ps_vpoints.c:171
 #: ../ps/ps.map/ps_vpoints.c:195 ../ps/ps.map/ps_vpoints.c:236
 #: ../ps/ps.map/ps_vpoints.c:246
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "No record for category [%d]"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../ps/ps.map/ps_vareas.c:107 ../ps/ps.map/ps_vlines.c:121
 #: ../ps/ps.map/ps_vpoints.c:194
@@ -75385,10 +75985,15 @@ msgstr ""
 #: ../ps/ps.map/ps_vareas.c:108 ../ps/ps.map/ps_vlines.c:125
 #: ../ps/ps.map/ps_vpoints.c:201
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../ps/ps.map/ps_vareas.c:108 ../ps/ps.map/ps_vlines.c:125
+#: ../ps/ps.map/ps_vpoints.c:201
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Invalid RGB color definition in column <%s> for category [%d]"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../ps/ps.map/ps_vareas.c:158 ../ps/ps.map/ps_vlines.c:53
 #: ../ps/ps.map/ps_vpoints.c:68
@@ -75492,6 +76097,8 @@ msgstr ""
 #: ../ps/ps.map/r_group.c:29
 msgid "Can't get group information"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../ps/ps.map/ps_vareas.c:161 ../ps/ps.map/ps_vlines.c:56
 #: ../ps/ps.map/ps_vpoints.c:71
 msgid "Cannot load data from table"
@@ -75508,7 +76115,10 @@ msgstr ""
 
 #: ../ps/ps.map/r_vlegend.c:97
 msgid "illegal vlegend sub-request"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../ps/ps.map/r_instructions.c:62
@@ -75528,18 +76138,27 @@ msgid "illegal maploc request"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../ps/ps.map/r_instructions.c:129 ../ps/ps.map/main.c:220
 msgid "illegal copies request"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../ps/ps.map/r_instructions.c:144 ../ps/ps.map/r_instructions.c:340
 msgid "no raster map selected yet"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../ps/ps.map/r_instructions.c:149 ../ps/ps.map/r_instructions.c:464
 #: ../ps/ps.map/getgrid.c:63 ../ps/ps.map/getgrid.c:87
 #: ../ps/ps.map/getgrid.c:173 ../ps/ps.map/getgrid.c:197
@@ -75548,7 +76167,10 @@ msgstr ""
 msgid "illegal color request"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../ps/ps.map/r_instructions.c:160
 msgid "illegal value list"
 msgstr ""
@@ -75610,6 +76232,7 @@ msgid "illegal request"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../visualization/ximgview/main.c:78
 msgid "Unable to get window attributes"
 msgstr ""
@@ -75640,6 +76263,8 @@ msgstr ""
 
 #: ../visualization/ximgview/color.c:88 ../visualization/ximgview/color.c:285
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../ps/ps.map/ps_raster.c:42
 msgid "Can't create temporary PostScript mask file."
 msgstr ""
@@ -76061,11 +76686,15 @@ msgid "Text labels: 'fontsize' given so ignoring 'size'"
 msgstr ""
 
 #: ../visualization/ximgview/color.c:90 ../visualization/ximgview/color.c:288
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unknown visual class [%d]."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../visualization/ximgview/color.c:236
 msgid "Unable to get sufficient gray shades."
@@ -88770,6 +89399,8 @@ msgstr ""
 
 #: ../display/d.profile/main.c:65
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../visualization/ximgview/color.c:239
 msgid "Unable to get sufficient gray shades."
 msgstr ""
@@ -88816,20 +89447,28 @@ msgid "Image file"
 msgstr ""
 
 #: ../display/d.profile/main.c:68
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to read range for %s"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.profile/main.c:76
 =======
 #: ../display/d.profile/main.c:79
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.profile/main.c:79
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to read FP range for %s"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.profile/main.c:197
 msgid "Plots profile of a transect."
@@ -88845,6 +89484,8 @@ msgstr ""
 
 #: ../display/d.profile/main.c:260
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.profile/main.c:195
 msgid "Plots profile of a transect."
 msgstr ""
@@ -88862,7 +89503,10 @@ msgid "Use map's range recorded range"
 msgstr ""
 
 #: ../display/d.profile/main.c:257
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "At least two points are required"
 msgstr ""
 
@@ -88870,6 +89514,7 @@ msgstr ""
 msgid "Lists the available fonts."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.fontlist/main.c:52
 msgid "List fonts (default; provided for compatibility with d.font)"
@@ -88880,6 +89525,8 @@ msgid "List fonts verbosely"
 msgstr ""
 
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.fontlist/main.c:51
 msgid "List fonts (default; provided for compatibility with d.font)"
 msgstr ""
@@ -89054,7 +89701,10 @@ msgstr ""
 msgid "Invalid coordinates"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.chart/main.c:65
 msgid "chart maps"
 msgstr ""
@@ -89072,10 +89722,14 @@ msgstr ""
 #: ../display/d.vect.chart/main.c:105 ../display/d.vect.chart/main.c:112
 #: ../display/d.vect.chart/main.c:117 ../display/d.vect.chart/main.c:123
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.chart/main.c:128 ../display/d.vect.chart/main.c:146
 =======
 #: ../display/d.vect.chart/main.c:129 ../display/d.vect.chart/main.c:148
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.chart/main.c:129 ../display/d.vect.chart/main.c:148
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Chart properties"
 msgstr ""
 
@@ -89103,6 +89757,7 @@ msgstr ""
 msgid "Colors used to fill charts"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.chart/main.c:127
 msgid "Center the bar chart around a data point"
@@ -89478,6 +90133,8 @@ msgstr ""
 #: ../display/d.vect.thematic/display.c:51 ../display/d.vect/lines.c:99
 #: ../display/d.vect/lines.c:328
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.chart/main.c:128
 msgid "Center the bar chart around a data point"
 msgstr ""
@@ -89808,14 +90465,20 @@ msgstr ""
 
 #: ../display/d.vect.thematic/display.c:51 ../display/d.vect/lines.c:107
 #: ../display/d.vect/lines.c:339
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to read symbol <%s>, unable to display points"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/display.c:117 ../display/d.vect/lines.c:158
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/display.c:75 ../display/d.vect/dir.c:30
 #: ../display/d.vect/lines.c:143 ../display/d.vect/zcoor.c:38
 #: ../display/d.vect/topo.c:52 ../display/d.vect/vert.c:27
@@ -89834,7 +90497,10 @@ msgid "Unable to read vector map"
 msgstr ""
 
 #: ../display/d.vect.thematic/display.c:118 ../display/d.vect/lines.c:175
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "%d point plotted"
 msgid_plural "%d points plotted"
@@ -89842,10 +90508,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/display.c:120 ../display/d.vect/lines.c:161
 =======
 #: ../display/d.vect.thematic/display.c:121 ../display/d.vect/lines.c:177
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/display.c:121 ../display/d.vect/lines.c:177
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "%d line plotted"
 msgid_plural "%d lines plotted"
@@ -89853,10 +90523,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/display.c:124 ../display/d.vect/lines.c:165
 =======
 #: ../display/d.vect.thematic/display.c:125 ../display/d.vect/lines.c:179
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/display.c:125 ../display/d.vect/lines.c:179
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "%d centroid plotted"
 msgid_plural "%d centroids plotted"
@@ -89864,10 +90538,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/display.c:128 ../display/d.vect/lines.c:169
 =======
 #: ../display/d.vect.thematic/display.c:129 ../display/d.vect/lines.c:181
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/display.c:129 ../display/d.vect/lines.c:181
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "%d boundary plotted"
 msgid_plural "%d boundaries plotted"
@@ -89875,16 +90553,21 @@ msgstr[0] ""
 msgstr[1] ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/display.c:131 ../display/d.vect/lines.c:172
 =======
 #: ../display/d.vect.thematic/display.c:132 ../display/d.vect/lines.c:183
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/display.c:132 ../display/d.vect/lines.c:183
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "%d face plotted"
 msgid_plural "%d faces plotted"
 msgstr[0] ""
 msgstr[1] ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:90
 msgid "choropleth map"
@@ -89930,6 +90613,8 @@ msgstr ""
 #: ../display/d.vect.thematic/main.c:166 ../display/d.vect.thematic/main.c:177
 #: ../display/d.vect/main.c:167 ../display/d.vect/main.c:178
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:87
 msgid "choropleth map"
 msgstr ""
@@ -89997,12 +90682,16 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:168 ../display/d.vect.thematic/main.c:178
 #: ../display/d.vect/main.c:168 ../display/d.vect/main.c:178
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:185 ../display/d.vect/main.c:191
 #: ../display/d.vect/main.c:327
 msgid "Symbols"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:171 ../display/d.vect/main.c:172
 msgid "Point and centroid symbol"
@@ -90010,16 +90699,22 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:178 ../display/d.legend.vect/main.c:84
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:172 ../display/d.vect/main.c:172
 msgid "Point and centroid symbol"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:179 ../display/d.legend.vect/main.c:88
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:179
 msgid "Symbol size"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:185 ../display/d.vect.thematic/main.c:197
 #: ../display/d.vect.thematic/main.c:207 ../display/d.vect.thematic/main.c:217
@@ -90028,13 +90723,18 @@ msgstr ""
 #: ../display/d.vect/main.c:201 ../display/d.vect/main.c:211
 #: ../display/d.vect/main.c:219 ../display/d.vect/main.c:332
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:186 ../display/d.vect.thematic/main.c:197
 #: ../display/d.vect.thematic/main.c:206 ../display/d.vect.thematic/main.c:218
 #: ../display/d.vect.thematic/main.c:224 ../display/d.vect.thematic/main.c:229
 #: ../display/d.vect.thematic/main.c:239 ../display/d.vect.thematic/main.c:244
 #: ../display/d.vect/main.c:202 ../display/d.vect/main.c:212
 #: ../display/d.vect/main.c:220 ../display/d.vect/main.c:332
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Legend"
 msgstr ""
 
@@ -90042,6 +90742,7 @@ msgstr ""
 msgid "Legend symbol for lines"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:202
 msgid "Legend symbol for areas"
@@ -90057,6 +90758,8 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:214
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:201
 msgid "Legend symbol for areas"
 msgstr ""
@@ -90070,7 +90773,10 @@ msgid "DEPRECATED"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:215
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Output legend file"
 msgstr ""
 
@@ -90079,15 +90785,20 @@ msgid "Do not draw map, only output the legend information"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:235
 =======
 #: ../display/d.vect.thematic/main.c:237
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/main.c:237
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "When printing legend info, include extended statistical info from "
 "classification algorithm"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:242 ../display/d.vect/main.c:331
 msgid "Do not show this layer in vector legend"
@@ -90095,12 +90806,17 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:254
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:243 ../display/d.vect/main.c:331
 msgid "Do not show this layer in vector legend"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:255
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Flag -e is deprecated, set verbose mode with --v to get the extended "
 "statistical info."
@@ -90114,14 +90830,19 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:278
 =======
 #: ../display/d.vect.thematic/main.c:277
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/main.c:277
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "%s: You must build topology on vector map. Run v.build."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:289
 msgid "'layer' must be > 0"
@@ -90129,6 +90850,8 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:311
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:288
 msgid "'layer' must be > 0"
 msgstr ""
@@ -90161,11 +90884,15 @@ msgid "Unable to open database <%s>"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:312
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:316 ../display/d.vect.thematic/plot1.c:138
 #: ../display/d.vect.thematic/plot1.c:165
@@ -90177,20 +90904,28 @@ msgstr ""
 =======
 #: ../display/d.vect.thematic/main.c:379
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/main.c:379
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unknown color: [%s]"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:385
 =======
 #: ../display/d.vect.thematic/main.c:390
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/main.c:390
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "You gave both manual breaks and a classification algorithm or a number of "
 "classes. The manual breaks have precedence and will thus be used."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:422
 msgid "You must either give classbreaks or a classification algorithm"
@@ -90198,12 +90933,17 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:433
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:427
 msgid "You must either give classbreaks or a classification algorithm"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:440
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid ""
 "Not enough colors or error in color specifications.\n"
@@ -90211,14 +90951,19 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:440
 =======
 #: ../display/d.vect.thematic/main.c:445
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/main.c:445
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Error interpreting color %s"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:455
 msgid "Plotting ..."
@@ -90226,21 +90971,30 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:467
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:462
 msgid "Plotting ..."
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:474
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "The bounding box of the map is outside the current region, nothing drawn."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:515
 =======
 #: ../display/d.vect.thematic/main.c:523
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/main.c:523
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid ""
 "\n"
@@ -90248,17 +91002,24 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:516
 =======
 #: ../display/d.vect.thematic/main.c:525
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect.thematic/main.c:525
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Classification of %s into %i classes\n"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect.thematic/main.c:523
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:527 ../vector/v.class/main.c:203
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
@@ -90270,11 +91031,15 @@ msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:533
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Last chi2 = %f\n"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect.thematic/plot1.c:122
 msgid "Color definition column not specified"
@@ -90664,6 +91429,8 @@ msgid ""
 "Unable to display topology, not available.Please try to rebuild topology "
 "using v.build or v.build.all."
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect.thematic/main.c:535 ../vector/v.class/main.c:211
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
@@ -91111,7 +91878,10 @@ msgstr ""
 
 #: ../display/d.legend.vect/draw.c:238
 msgid "Invalid value for color type in legend file. Use one of 'lf' or 'ps'."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../display/d.vect/opt.c:126
@@ -91119,6 +91889,7 @@ msgstr ""
 msgid "Unknown color: '%s'"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect/label.c:32
 msgid "Topology level required for drawing centroids for OGR layers"
@@ -91256,6 +92027,8 @@ msgstr ""
 
 #: ../display/d.vect/main.c:159
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/lines.c:121
 msgid ""
 "Unable to display features by id, topology not available. Please try to "
@@ -91378,7 +92151,10 @@ msgid "These values will be scaled by width_scale"
 msgstr ""
 
 #: ../display/d.vect/main.c:160
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Scale factor for width_column"
 msgstr ""
 
@@ -91395,6 +92171,7 @@ msgid "Name of numeric column containing symbol rotation angle"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect/main.c:194
 msgid "Measured in degrees CCW from east"
 msgstr ""
@@ -91405,6 +92182,8 @@ msgstr ""
 
 #: ../display/d.vect/main.c:214
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:195
 msgid "Measured in degrees CCW from east"
 msgstr ""
@@ -91414,7 +92193,10 @@ msgid "Area/boundary symbol for legend"
 msgstr ""
 
 #: ../display/d.vect/main.c:215
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Line symbol for legend"
 msgstr ""
 
@@ -91423,7 +92205,10 @@ msgid "Label to display after symbol in vector legend"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:227 ../display/d.vect/main.c:234
 #: ../display/d.vect/main.c:241 ../display/d.vect/main.c:246
 #: ../display/d.vect/main.c:253 ../display/d.vect/main.c:260
@@ -91432,7 +92217,10 @@ msgstr ""
 msgid "Labels"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:229
 msgid "Layer number for labels (default: the given layer number)"
 msgstr ""
@@ -91500,6 +92288,7 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect/main.c:351
 msgid "Region size is lower than minreg, nothing displayed"
 msgstr ""
@@ -91510,6 +92299,8 @@ msgstr ""
 
 #: ../display/d.vect/main.c:373
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:350
 msgid "Region size is lower than minreg, nothing displayed"
 msgstr ""
@@ -91519,7 +92310,10 @@ msgid "Region size is greater than maxreg, nothing displayed"
 msgstr ""
 
 #: ../display/d.vect/main.c:371
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid ""
 "The -%c flag and <%s> option cannot be used together, the -%c flag will be "
@@ -91527,19 +92321,27 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect/main.c:398 ../display/d.vect/main.c:404
 =======
 #: ../display/d.vect/main.c:395 ../display/d.vect/main.c:401
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect/main.c:395 ../display/d.vect/main.c:401
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Option <%s> must be > 0"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect/main.c:409
 =======
 #: ../display/d.vect/main.c:405
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.vect/main.c:405
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "%d error in cat option"
 msgid_plural "%d errors in cat option"
@@ -91547,22 +92349,29 @@ msgstr[0] ""
 msgstr[1] ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect/main.c:426
 msgid "Plotting..."
 msgstr ""
 
 #: ../display/d.vect/main.c:438
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:421
 msgid "Plotting..."
 msgstr ""
 
 #: ../display/d.vect/main.c:432
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "The bounding box of the map is outside the current region, nothing drawn"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.vect/main.c:510
 msgid "Rendering failed"
@@ -91794,6 +92603,8 @@ msgstr ""
 #, c-format
 msgid "Range file for <%s> not available"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.vect/main.c:503
 msgid "Rendering failed"
 msgstr ""
@@ -92188,7 +92999,10 @@ msgstr ""
 #: ../display/d.graph/main.c:91
 #, c-format
 msgid "Graph file <%s> not found"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../display/d.mon/list.c:80
@@ -92200,6 +93014,7 @@ msgid "No monitors running"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.mon/list.c:116 ../scripts/d.what.rast/d.what.rast.py:35
 <<<<<<< HEAD
 #: ../scripts/d.what.vect/d.what.vect.py:35
@@ -92209,7 +93024,14 @@ msgstr ""
 #: ../display/d.mon/list.c:116 ../scripts/d.what.vect/d.what.vect.py:35
 #: ../scripts/d.what.rast/d.what.rast.py:35 ../scripts/d.redraw/d.redraw.py:39
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../display/d.mon/list.c:116 ../scripts/d.what.vect/d.what.vect.py:35
+#: ../scripts/d.what.rast/d.what.rast.py:35 ../scripts/d.redraw/d.redraw.py:39
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format, python-format
 msgid "Unable to open file '%s'"
 msgstr ""
@@ -92220,6 +93042,7 @@ msgid "No support files found for monitor <%s>"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.mon/select.c:14
 #, c-format
 msgid "Monitor <%s> is already selected"
@@ -92229,6 +93052,9 @@ msgstr ""
 =======
 #: ../display/d.mon/stop.c:18 ../display/d.mon/select.c:30
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.mon/stop.c:18 ../display/d.mon/select.c:30
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Monitor <%s> is not running"
 msgstr ""
@@ -92248,6 +93074,7 @@ msgstr ""
 msgid "Unable to read file <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.mon/start.c:68
 #, c-format
@@ -92290,6 +93117,8 @@ msgstr ""
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.mon/main.c:53
 msgid "Controls graphics display monitors from the command line."
 msgstr ""
@@ -92300,12 +93129,17 @@ msgstr ""
 
 #: ../display/d.mon/main.c:60 ../display/d.mon/main.c:67
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.mon/main.c:74 ../display/d.mon/main.c:140
 #: ../display/d.mon/main.c:146
 =======
 #: ../display/d.mon/main.c:74 ../display/d.mon/main.c:135
 #: ../display/d.mon/main.c:140
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.mon/main.c:74 ../display/d.mon/main.c:135
+#: ../display/d.mon/main.c:140
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Manage"
 msgstr ""
 
@@ -92317,6 +93151,7 @@ msgstr ""
 msgid "Name of monitor to select"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.mon/main.c:80
 msgid "Default value: 720"
@@ -92388,6 +93223,8 @@ msgstr ""
 
 #: ../display/d.mon/main.c:171
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.mon/main.c:79
 msgid "Default value: 720"
 msgstr ""
@@ -92457,11 +93294,15 @@ msgid "Requires 'start=wx0-7'"
 msgstr ""
 
 #: ../display/d.mon/main.c:163
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Flag -%c has effect only for wx monitors (%s=wx0-7)"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.mon/main.c:181
 msgid "Currently selected monitor:"
@@ -92469,6 +93310,8 @@ msgstr ""
 
 #: ../display/d.mon/main.c:185
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.mon/main.c:169 ../general/g.mapsets/main.c:136
 #: ../general/g.mapsets/main.c:138 ../general/g.mapsets/main.c:148
 #, c-format
@@ -92480,20 +93323,28 @@ msgid "Currently selected monitor:"
 msgstr ""
 
 #: ../display/d.mon/main.c:177
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "List of commands for monitor <%s>:"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.mon/main.c:193
 =======
 #: ../display/d.mon/main.c:185
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../display/d.mon/main.c:185
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Monitor <%s> released"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.mon/main.c:198
 msgid "No monitor selected"
@@ -92501,16 +93352,22 @@ msgstr ""
 
 #: ../display/d.mon/main.c:217
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.mon/main.c:190
 msgid "No monitor selected"
 msgstr ""
 
 #: ../display/d.mon/main.c:209
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Either <%s>, <%s> or <%s> must be given"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../display/d.info/main.c:36
 msgid "Displays information about the active display monitor."
@@ -93727,6 +94584,8 @@ msgstr ""
 =======
 #: ../scripts/v.db.addcolumn/v.db.addcolumn.py:58
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../display/d.mon/main.c:214 ../general/g.mapsets/main.c:140
 #: ../general/g.mapsets/main.c:150 ../general/g.mapsets/main.c:158
 #, c-format
@@ -124157,12 +125016,19 @@ msgstr ""
 #: ../scripts/v.db.addcolumn/v.db.addcolumn.py:58
 #: ../scripts/v.db.addtable/v.db.addtable.py:73
 #: ../scripts/v.db.update/v.db.update.py:73
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Vector map <%s> not found in current mapset"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:66
 msgid ""
@@ -124191,12 +125057,20 @@ msgstr ""
 #: ../scripts/v.rast.stats/v.rast.stats.py:175
 #: ../scripts/v.rast.stats/v.rast.stats.py:186
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/v.rast.stats/v.rast.stats.py:136
 #: ../scripts/v.rast.stats/v.rast.stats.py:175
 #: ../scripts/v.rast.stats/v.rast.stats.py:186
 #: ../scripts/v.db.addcolumn/v.db.addcolumn.py:65
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/v.db.update/v.db.update.py:80
 msgid ""
 "There is no table connected to this map. Run v.db.connect or v.db.addtable "
@@ -124220,14 +125094,23 @@ msgid "Updating the database ..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:242
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:241
 =======
 #: ../scripts/v.rast.stats/v.rast.stats.py:242
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/v.rast.stats/v.rast.stats.py:242
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid ""
 "Statistics calculated from raster map <{raster}> and uploaded to attribute "
@@ -124235,21 +125118,33 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:249
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:248
 =======
 #: ../scripts/v.rast.stats/v.rast.stats.py:250
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/v.rast.stats/v.rast.stats.py:250
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Failed to upload statistics to attribute table of vector map <%s>."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:286
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:285
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -124265,6 +125160,8 @@ msgstr ""
 =======
 #: ../scripts/v.rast.stats/v.rast.stats.py:343
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/v.rast.stats/v.rast.stats.py:287
 msgid "An error occurred while converting vector to raster"
 msgstr ""
@@ -124274,8 +125171,14 @@ msgid "No categories found in raster map"
 msgstr ""
 
 #: ../scripts/v.rast.stats/v.rast.stats.py:345
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid ""
 "Not all vector categories converted to raster.                         "
@@ -124283,18 +125186,28 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:429
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:428
 =======
 #: ../scripts/v.rast.stats/v.rast.stats.py:430
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/v.rast.stats/v.rast.stats.py:430
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Cannot create column <%s> (already present). "
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:430
 msgid "Use -c flag to update values in this column."
@@ -124302,6 +125215,8 @@ msgstr ""
 
 #: ../scripts/v.rast.stats/v.rast.stats.py:440
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:429
 msgid "Use -c flag to update values in this column."
@@ -124309,20 +125224,31 @@ msgstr ""
 
 #: ../scripts/v.rast.stats/v.rast.stats.py:439
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/v.rast.stats/v.rast.stats.py:431
 msgid "Use -c flag to update values in this column."
 msgstr ""
 
 #: ../scripts/v.rast.stats/v.rast.stats.py:441
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Adding columns '%s'"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:446
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/v.rast.stats/v.rast.stats.py:445
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -124375,6 +125301,8 @@ msgstr ""
 #: ../scripts/v.db.update/v.db.update.py:112
 msgid "Either <value> or <qcolumn> must be given"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/v.rast.stats/v.rast.stats.py:447
 msgid "Adding columns failed. Exiting."
 msgstr ""
@@ -124734,7 +125662,10 @@ msgstr ""
 #: ../scripts/i.oif/i.oif.py:144
 msgid ""
 "The Optimum Index Factor analysis result (best combination shown first):"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:129
@@ -124793,6 +125724,7 @@ msgstr ""
 msgid "Filtered SPOT VEGETATION NDVI map <%s>."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/g.extension.all/g.extension.all.py:61
 #, python-format
@@ -124868,6 +125800,8 @@ msgstr ""
 #, python-format
 msgid "Unable to process extension:%s"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/db.droptable/db.droptable.py:70
 #: ../scripts/db.dropcolumn/db.dropcolumn.py:59
 msgid "Forcing ..."
@@ -124929,7 +125863,10 @@ msgstr ""
 #: ../scripts/g.manual/g.manual.py:132
 #, python-format
 msgid "Flags -%c and -%c are mutually exclusive"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../scripts/v.report/v.report.py:124
@@ -124947,6 +125884,7 @@ msgid ""
 "this."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/v.pack/v.pack.py:65
 #, python-format
@@ -125057,6 +125995,8 @@ msgstr ""
 #: ../scripts/v.in.wfs/v.in.wfs.py:233
 msgid "WFS import failed"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/d.what.vect/d.what.vect.py:44 ../scripts/d.frame/d.frame.py:282
 #: ../scripts/d.what.rast/d.what.rast.py:44 ../scripts/d.redraw/d.redraw.py:34
 #: ../scripts/d.out.file/d.out.file.py:58 ../scripts/d.to.rast/d.to.rast.py:44
@@ -125629,7 +126569,10 @@ msgstr ""
 
 #: ../scripts/r.in.wms/wms_gdal_drv.py:196
 msgid "Incorrect WMS query"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:112
@@ -125658,32 +126601,45 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.what.strds/v.what.strds.py:240
 =======
 #: ../scripts/v.what.strds/v.what.strds.py:241
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../scripts/v.what.strds/v.what.strds.py:241
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.what.strds/v.what.strds.py:269
 =======
 #: ../scripts/v.what.strds/v.what.strds.py:270
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../scripts/v.what.strds/v.what.strds.py:270
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable to add column %s to vector map <%s> "
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/v.what.strds/v.what.strds.py:285
 =======
 #: ../scripts/v.what.strds/v.what.strds.py:286
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../scripts/v.what.strds/v.what.strds.py:286
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/r.mapcalc.simple/r.mapcalc.simple.py:107
 msgid "The expression is an empty string"
@@ -125692,6 +126648,8 @@ msgstr ""
 #: ../scripts/r.mapcalc.simple/r.mapcalc.simple.py:141
 msgid "Expression: {}"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/d.frame/d.frame.py:96 ../scripts/d.frame/d.frame.py:127
 #, python-format
 msgid "Unable to get monitor info. %s"
@@ -125725,7 +126683,10 @@ msgstr ""
 #, python-format
 msgid ""
 "Frame <%s> already found. An existing frame can be overwritten by '%s' flag."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../scripts/i.spectral/i.spectral.py:121
@@ -125774,7 +126735,10 @@ msgid "No data returned from query"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/r.in.srtm/r.in.srtm.py:169
 msgid "This module only operates in LatLong locations"
 msgstr ""
@@ -126049,7 +127013,10 @@ msgstr ""
 msgid "RESULT: OK"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/i.pansharpen/i.pansharpen.py:109
 msgid "Required dependency NumPy not found. Exiting."
 msgstr ""
@@ -126070,18 +127037,24 @@ msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:213
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "Converting image channels to 8bit for processing"
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:299
 msgid "Rescaling image channels to 8bit for processing"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Converting image chanels to 8bit for processing"
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:299
 msgid "Rescaling image chanels to 8bit for processing"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:405
@@ -126157,8 +127130,11 @@ msgid "Transforming back to RGB color space and sharpening..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/i.pansharpen/i.pansharpen.py:585
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/i.pansharpen/i.pansharpen.py:584
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -126183,6 +127159,8 @@ msgid "Histogram matching..."
 msgstr ""
 
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/i.pansharpen/i.pansharpen.py:585
 msgid "Using PCA/inverse PCA algorithm"
 msgstr ""
@@ -126516,7 +127494,10 @@ msgstr ""
 msgid "Cannot colorize, python-termcolor is not installed"
 msgstr ""
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/v.db.addtable/v.db.addtable.py:79
 #, python-format
 msgid "Using vector map name as table name: <%s>"
@@ -126561,6 +127542,7 @@ msgid "Current attribute table links:"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/i.tasscap/i.tasscap.py:317
 #, python-format
 msgid "Satellite %s..."
@@ -126581,6 +127563,8 @@ msgstr ""
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/r3.in.xyz/r3.in.xyz.py:255
 msgid "The 2D and 3D region settings are different. Can not continue."
 msgstr ""
@@ -126612,6 +127596,7 @@ msgstr ""
 msgid "Done. 3D raster map <%s> created."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/r.mask/r.mask.py:100
 msgid "Either parameter <raster> or parameter <vector> is required"
@@ -126985,6 +127970,8 @@ msgstr ""
 =======
 #: ../scripts/g.extension/g.extension.py:582
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/v.db.update/v.db.update.py:90
 msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr ""
@@ -127062,8 +128049,14 @@ msgid ""
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:396
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid ""
 "Download file from <{url}>, failed. File is not on the server or check your "
@@ -127071,21 +128064,33 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:601
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:597
 =======
 #: ../scripts/g.extension/g.extension.py:411
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:411
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "'%s' required. Please install '%s' first."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:665
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:661
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -127129,6 +128134,8 @@ msgstr ""
 =======
 #: ../scripts/g.extension/g.extension.py:938
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:475
 msgid "List of installed extensions (toolboxes):"
 msgstr ""
@@ -127165,15 +128172,24 @@ msgid ""
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:753
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Fetching list of extensions from GRASS-Addons SVN repository (be patient)..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:949
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:945
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -127191,6 +128207,8 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:952
 #: ../scripts/g.extension/g.extension.py:987
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:760
 msgid "Flag 'c' ignored, addons metadata file not available"
 msgstr ""
@@ -127201,16 +128219,25 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:767
 #: ../scripts/g.extension/g.extension.py:802
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Checking for '%s' modules..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:964
 #: ../scripts/g.extension/g.extension.py:998
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:960
 #: ../scripts/g.extension/g.extension.py:994
@@ -127218,11 +128245,19 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:775
 #: ../scripts/g.extension/g.extension.py:809
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:775
+#: ../scripts/g.extension/g.extension.py:809
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable to fetch '%s'"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1160
 msgid "$GISBASE not defined"
@@ -127230,6 +128265,8 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1164
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1156
 msgid "$GISBASE not defined"
@@ -127237,6 +128274,8 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1160
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:829
 msgid "Path to the source code:"
 msgstr ""
@@ -127246,28 +128285,46 @@ msgid "$GISBASE not defined"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:978
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1175
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1171
 =======
 #: ../scripts/g.extension/g.extension.py:989
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:989
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Installing toolbox <%s>..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1185
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1181
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -127291,6 +128348,8 @@ msgstr ""
 =======
 #: ../scripts/g.extension/g.extension.py:1230
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:999
 msgid "Nothing to install"
 msgstr ""
@@ -127308,29 +128367,47 @@ msgid "Updating extension modules metadata file..."
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1048
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Installation of <%s> successfully finished"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1240
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1236
 =======
 #: ../scripts/g.extension/g.extension.py:1054
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1054
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "This add-on module will not function until you set the GRASS_ADDON_BASE "
 "environment variable (see \"g.manual variables\")"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1275
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1271
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -127346,6 +128423,8 @@ msgstr ""
 =======
 #: ../scripts/g.extension/g.extension.py:1284
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:1089
 msgid "Unable to read addons metadata file from the remote server"
 msgstr ""
@@ -127355,54 +128434,90 @@ msgid "No addons metadata available"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1102
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "No addons metadata available for <%s>"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1347
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1343
 =======
 #: ../scripts/g.extension/g.extension.py:1161
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1161
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Unable to read addons metadata file from the remote server: {0}"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1352
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1348
 =======
 #: ../scripts/g.extension/g.extension.py:1166
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1166
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format, python-brace-format
 msgid "Unable to parse '%s': {0}"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1538
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1534
 =======
 #: ../scripts/g.extension/g.extension.py:1366
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1366
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1608
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1603
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -127420,67 +128535,107 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:1706
 #: ../scripts/g.extension/g.extension.py:1740
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:1435
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1535
 #: ../scripts/g.extension/g.extension.py:1559
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1836
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1831
 =======
 #: ../scripts/g.extension/g.extension.py:1644
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1644
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1871
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1866
 =======
 #: ../scripts/g.extension/g.extension.py:1665
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1665
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1888
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1883
 =======
 #: ../scripts/g.extension/g.extension.py:1675
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1675
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1891
 #: ../scripts/g.extension/g.extension.py:1900
 #: ../scripts/g.extension/g.extension.py:1907
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1886
 #: ../scripts/g.extension/g.extension.py:1895
 #: ../scripts/g.extension/g.extension.py:1902
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:1678
 #, python-format
 msgid "Fetching <%s> from GRASS GIS Addons repository (be patient)..."
@@ -127489,38 +128644,63 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:1684
 #: ../scripts/g.extension/g.extension.py:1691
 #: ../scripts/g.extension/g.extension.py:1698
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1922
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1917
 =======
 #: ../scripts/g.extension/g.extension.py:1713
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1713
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1930
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1925
 =======
 #: ../scripts/g.extension/g.extension.py:1721
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:1721
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1935
 msgid "Extension <{}> not found"
@@ -127528,6 +128708,8 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1963
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1930
 msgid "Extension <{}> not found"
@@ -127535,6 +128717,8 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1958
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:1726
 #: ../scripts/g.extension/g.extension.py:2052
 #, python-format
@@ -127542,8 +128726,14 @@ msgid "Extension <%s> not found"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1754
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid ""
 "Unknown extension (addon) source type '{0}'. Please report this to the grass-"
@@ -127551,8 +128741,11 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1974
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:1969
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -127603,6 +128796,8 @@ msgstr ""
 =======
 #: ../scripts/g.extension/g.extension.py:2196
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:1785
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
@@ -127644,17 +128839,27 @@ msgid "Updating addons metadata file..."
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1988
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<<<<<<< HEAD
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:2201
 =======
 #: ../scripts/g.extension/g.extension.py:1993
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../scripts/g.extension/g.extension.py:1993
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
@@ -127665,21 +128870,33 @@ msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2214
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2209
 =======
 #: ../scripts/g.extension/g.extension.py:2001
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2001
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2265
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2260
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -127694,7 +128911,13 @@ msgstr ""
 =======
 #: ../scripts/g.extension/g.extension.py:2157
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2157
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid ""
 "Unable to create '{filename}': {error}. Is the GRASS GIS documentation "
@@ -127703,57 +128926,94 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2388
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2383
 =======
 #: ../scripts/g.extension/g.extension.py:2176
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2176
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2416
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2411
 =======
 #: ../scripts/g.extension/g.extension.py:2202
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2202
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2423
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2418
 =======
 #: ../scripts/g.extension/g.extension.py:2209
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2209
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2468
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2463
 =======
 #: ../scripts/g.extension/g.extension.py:2253
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2253
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2481
 msgid "GRASS_ADDON_BASE is not defined, installing to ~/.grass{}/addons"
@@ -127761,6 +129021,8 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:2490
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2476
 msgid "GRASS_ADDON_BASE is not defined, installing to ~/.grass{}/addons"
@@ -127768,14 +129030,22 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:2485
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:2265
 #, python-format
 msgid "GRASS_ADDON_BASE is not defined, installing to ~/.grass%s/addons"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:2274
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid ""
 "You don't have permission to install extension to <{0}>. Try to run {1} with "
@@ -127783,27 +129053,45 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2582
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2577
 =======
 #: ../scripts/g.extension/g.extension.py:2364
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2364
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2587
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2582
 =======
 #: ../scripts/g.extension/g.extension.py:2370
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2370
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid ""
 "Not using {service} as known hosting service because the URL ends with "
@@ -127811,21 +129099,33 @@ msgid ""
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2608
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2603
 =======
 #: ../scripts/g.extension/g.extension.py:2390
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+#: ../scripts/g.extension/g.extension.py:2390
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2641
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../scripts/g.extension/g.extension.py:2636
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
@@ -128132,6 +129432,8 @@ msgstr ""
 #, python-format
 msgid "Generating output raster map <%s>..."
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/g.extension/g.extension.py:2519
 msgid "Cannot open URL: {}"
 msgstr ""
@@ -128162,5 +129464,8 @@ msgstr ""
 #: ../scripts/db.in.ogr/db.in.ogr.py:184
 #, python-format
 msgid "Imported table <%s> with %d rows"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""

@@ -28147,7 +28147,10 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
 msgid "Apriori Phi (roll) standard deviation"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../imagery/i.atcorr/geomcond.cpp:232
 msgid "No possibility to compute lat. and long."
@@ -40546,7 +40549,10 @@ msgstr ""
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
 msgid "image collections"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/g.proj.identify_to_translate.c:8
 #, fuzzy
@@ -49963,7 +49969,10 @@ msgstr "Linee vettoriali"
 #: ../raster/r.null/main.c:63
 msgid "no-data"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/r.series.boxplot_to_translate.c:39
 #, fuzzy
@@ -79494,6 +79503,7 @@ msgid "Problem parsing coordinates [%s]"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.graph/do_graph.c:98
 msgid "Unable to read color"
 msgstr "Non è possibile leggere il colore"
@@ -79502,6 +79512,11 @@ msgstr "Non è possibile leggere il colore"
 msgid "Unable to open color rule"
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#: ../raster/r.colors/rules.c:81
+msgid "Unable to open color rule"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../display/d.graph/do_graph.c:372
 msgid "Cannot read symbol, cannot display points"
@@ -87813,11 +87828,29 @@ msgstr "Le colonne chiave sono differenti"
 msgid "Column types differ"
 msgstr "I tipi di colonna sono differenti"
 
+<<<<<<< HEAD
 msgid "Missing table"
 msgstr "Tabella mancante"
 
 msgid "Number of columns differ"
 msgstr "Il numero di colonne è differente"
 
+=======
+msgid "<%s> not found"
+msgstr "<%s> non trovato"
+
+msgid "Key columns differ"
+msgstr "Le colonne chiave sono differenti"
+
+msgid "Column types differ"
+msgstr "I tipi di colonna sono differenti"
+
+msgid "Missing table"
+msgstr "Tabella mancante"
+
+msgid "Number of columns differ"
+msgstr "Il numero di colonne è differente"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "%s=%s,%s: files are the same, no copy required"
 msgstr "%s=%s,%s: sono gli stessi file, non è richiesto copiarli"

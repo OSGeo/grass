@@ -55,10 +55,14 @@ int exec_rectify(struct Image_Group *group, int *ref_list, char *extension,
         colr_ok = Rast_read_colors(name, mapset, &colr) > 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Initialize History */
 =======
         /* Initialze History */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* Initialze History */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (Rast_read_history(name, mapset, &hist) < 0)
             Rast_short_history(result, type, &hist);
 

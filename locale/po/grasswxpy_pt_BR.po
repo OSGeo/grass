@@ -385,9 +385,14 @@ msgid ""
 "Adjusts the viewing height above the surface (angle of view automatically "
 "adjusts to maintain the same center of view)"
 msgstr ""
+<<<<<<< HEAD
 "Ajusta a altura de visualização acima da superfície (o ângulo de "
 "visualização se ajusta automaticamente para manter o mesmo centro de "
 "visualização)"
+=======
+"Falha ao executar o comando '%(command)s'. Detalhes:\n"
+"%(error)s"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/nviz/tools.py:403
 msgid "Adjusts the relative height of features above the plane of the surface"
@@ -412,6 +417,7 @@ msgstr "Z-exag:"
 #: ../gui/wxpython/nviz/tools.py:461
 msgid "Look:"
 msgstr ""
+<<<<<<< HEAD
 "Falha ao executar o comando '%(command)s'. Detalhes:\n"
 "%(error)s"
 
@@ -432,13 +438,18 @@ msgstr ""
 msgid "center"
 msgstr "centro"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "Não foi possível iniciar o digitalizador vetorial wxGUI.\n"
 "Detalhes: %s"
 
 #: ../gui/wxpython/mapdisp/frame.py:302
 msgid "Vector Digitizer Toolbar"
 msgstr "Barra de ferramentas do Digitalizador Vetorial"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/nviz/tools.py:482
 msgid "Resets the view to the original default center of view"
@@ -454,15 +465,21 @@ msgid ""
 "orients approximately north south."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Define o visualizador diretamente sobre a posição central da cena. Esta "
 "visualização top orienta aproximadamente norte ao sul."
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "Não foi possível mudar para o modo de exibição 3D.\n"
 "A extensão Nviz python não foi encontrada ou carregada corretamente.\n"
 "Voltando para o modo de exibição 2D.\n"
 "\n"
 "Detalhes: %s"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/nviz/tools.py:498
 msgid "reset"
@@ -2699,15 +2716,21 @@ msgid ""
 "fly-through mode (Map Display toolbar) to achieve smooth motion."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Pressione o botão 'Gravar' e comece a mudar a visualização. Recomenda-se "
 "usar o modo fly-through (barra de ferramentas Map Display) para obter um "
 "movimento suave."
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "A Ferramenta Gráfico de Dispersão Interativo não pode ser usada.\n"
 "O número de células (linhas*colunas) <%d> na região atual é maior que o limite máximo <%d>.\n"
 "\n"
 "Você pode reduzir o número de células na região atual usando o comando <g.region>."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/nviz/tools.py:574
 msgid "Record"
@@ -2780,6 +2803,7 @@ msgid ""
 "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Os nomes dos arquivos gerados serão semelhantes a este: prefixo_1.ppm, "
 "prefixo_2.ppm,..."
 
@@ -2787,6 +2811,8 @@ msgstr ""
 msgid "File format:"
 msgstr "Formato do arquivo:"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "O número de células (linhas*cols) <%d> na região atual é maior que o limite recomendado <%d>.\n"
 "É altamente recomendável reduzir o número de células na região atual para um número abaixo do limite recomendado.\n"
 "Isso pode ser feito pelo comando <g.region>.\n"
@@ -2796,7 +2822,10 @@ msgstr "Formato do arquivo:"
 #: ../gui/wxpython/iscatt/controllers.py:287
 msgid "Scatter plot with same band combination (regardless x y order) is already displayed."
 msgstr "Um gráfico de dispersão com a mesma combinação de bandas (independentemente da ordem x y) já está em exibição."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/nviz/tools.py:758 ../gui/wxpython/nviz/tools.py:2417
 #: ../gui/wxpython/nviz/preferences.py:438
@@ -5861,7 +5890,10 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:371
 msgid "Parameters"
 msgstr "Parâmetros"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/datacatalog/infomanager.py:58
 #, python-brace-format
@@ -5954,6 +5986,9 @@ msgid ""
 "enable loading of current mapset only. You can change that later in GUI "
 "Settings, General tab."
 msgstr ""
+"Não foi possível criar nova location. Location <%(loc)s> não foi criada.\n"
+"\n"
+"Detalhes: %(err)s"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:75
 msgid "Enable loading current mapset only"
@@ -5993,6 +6028,7 @@ msgstr "Código EPSG ausente."
 #: ../gui/wxpython/location_wizard/wizard.py:2595
 msgid "IAU code missing."
 msgstr "Código IAU ausente."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/datacatalog/infomanager.py:96
@@ -6003,6 +6039,8 @@ msgid ""
 "switch to a different Location or remove lock file and switch to the last "
 "used mapset."
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/datacatalog/infomanager.py:109
 #, python-brace-format
@@ -6673,6 +6711,7 @@ msgstr ""
 =======
 msgid "File <%s> not found."
 msgstr "Arquivo <%s> não encontrado."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/history/tree.py:191
@@ -6683,6 +6722,8 @@ msgstr "Remover"
 #: ../gui/wxpython/history/tree.py:465
 msgid "Cannot be parsed into command"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/history/tree.py:491
@@ -6714,6 +6755,7 @@ msgstr "Definir extensão e resolução da região padrão"
 #: ../gui/wxpython/location_wizard/dialogs.py:108
 msgid "&Set region"
 msgstr "&Definir região"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/history/browser.py:40
@@ -7112,6 +7154,10 @@ msgstr ""
 "%s"
 =======
 =======
+=======
+
+#: ../gui/wxpython/location_wizard/dialogs.py:140
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Invalid location selected."
 msgstr "Location inválida selecionada."
 
@@ -7126,6 +7172,7 @@ msgstr "Clique aqui para mostrar as configurações 3D"
 #: ../gui/wxpython/location_wizard/dialogs.py:191
 msgid "Click here to hide 3D settings"
 msgstr "Clique aqui para ocultar as configurações 3D"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 >>>>>>> 476ef44553 (libpython: Save and load benchmark results (#1711))
 
@@ -7138,6 +7185,8 @@ msgid ""
 "\n"
 "No mapsets will be deleted."
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/startup/guiutils.py:378
 msgid "Unable to delete selected mapsets"
@@ -7308,7 +7357,10 @@ msgstr ""
 =======
 msgid "Rows: %d"
 msgstr "Linhas: %d"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/startup/guiutils.py:662
@@ -7328,7 +7380,10 @@ msgstr ""
 =======
 msgid "Cols: %d"
 msgstr "Colunas: %d"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/startup/guiutils.py:693
@@ -7348,7 +7403,10 @@ msgstr ""
 =======
 msgid "Cells: %d"
 msgstr "Células: %d"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/startup/guiutils.py:712
 #: ../gui/wxpython/lmgr/workspace.py:159
@@ -7364,6 +7422,7 @@ msgstr ""
 =======
 msgid "Depth: %d"
 msgstr "Profundidade: %d"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/startup/guiutils.py:711
@@ -7487,6 +7546,8 @@ msgstr ""
 #: ../gui/wxpython/gcp/manager.py:784
 msgid "Map Display Web Service Layer(s)"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gcp/manager.py:791 ../gui/wxpython/gcp/manager.py:3188
 #: ../gui/wxpython/image2target/ii2t_manager.py:796
@@ -7517,6 +7578,7 @@ msgstr "Você deve selecionar um mapa de origem para continuar"
 #: ../gui/wxpython/image2target/ii2t_manager.py:953
 #: ../gui/wxpython/image2target/ii2t_manager.py:989
 #, python-format
+<<<<<<< HEAD
 msgid ""
 "No maps in selected group <%s>.\n"
 "Please edit group or select another group."
@@ -7537,6 +7599,8 @@ msgstr "Gerenciar Pontos de Controle no Solo"
 #: ../gui/wxpython/image2target/ii2t_manager.py:1315
 #: ../gui/wxpython/photo2image/ip2i_manager.py:689
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "3D Cells: %d"
 msgstr "Células 3D: %d"
 
@@ -7741,11 +7805,15 @@ msgid ""
 "10+ points for 3rd order."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Pontos insuficientes definidos e ativos (marcados) para o método de "
 "retificação selecionado (ordem: %d).\n"
 =======
 "Pontos insuficientes definidos e ativos (marcados) para o método de retificação selecionado (ordem: %d).\n"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+"Pontos insuficientes definidos e ativos (marcados) para o método de retificação selecionado (ordem: %d).\n"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "3+ pontos necessários para 1ª ordem,\n"
 "6+ pontos para 2ª ordem e\n"
 "Mais de 10 pontos para a 3ª ordem."
@@ -7776,7 +7844,10 @@ msgstr "Transformando <%s>..."
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1032
 msgid "Writing output image to group, please wait..."
 msgstr "Gravando imagem de saída para o grupo, por favor, aguarde..."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gcp/manager.py:1901
 #: ../gui/wxpython/image2target/ii2t_manager.py:1842
@@ -7897,7 +7968,10 @@ msgstr "destino X"
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1547
 msgid "target Y"
 msgstr "destino Y"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gcp/manager.py:2478 ../gui/wxpython/gcp/manager.py:2497
 #: ../gui/wxpython/image2target/ii2t_manager.py:2418
@@ -7964,7 +8038,10 @@ msgstr "origem Y:"
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1758
 msgid "target Y:"
 msgstr "destino Y:"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gcp/manager.py:2831
 #: ../gui/wxpython/image2target/ii2t_manager.py:2772
@@ -8164,7 +8241,10 @@ msgstr "Selecione o mapa raster de destino para exibir:"
 #: ../gui/wxpython/image2target/ii2t_manager.py:3008
 msgid "Rectification"
 msgstr "Retificação"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/gcp/manager.py:3100
@@ -8267,7 +8347,10 @@ msgstr "substituir mapa de resultados"
 #: ../gui/wxpython/image2target/ii2t_manager.py:3059
 msgid "Extension for output maps:"
 msgstr "Extensão para mapas de saída:"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gcp/manager.py:3331
 #: ../gui/wxpython/image2target/ii2t_manager.py:3282
@@ -8411,10 +8494,13 @@ msgid "Save display geometry to named region"
 msgstr "Salvar a geometria de exibição na região nomeada"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/gcp/statusbar.py:36
 #: ../gui/wxpython/image2target/ii2t_statusbar.py:36
 #: ../gui/wxpython/photo2image/ip2i_statusbar.py:36
 =======
+=======
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 <<<<<<< HEAD
 #: ../gui/wxpython/gcp/statusbar.py:37
 #: ../gui/wxpython/image2target/ii2t_statusbar.py:37
@@ -8426,6 +8512,16 @@ msgstr "Número da categoria"
 =======
 #: ../gui/wxpython/tplot/frame.py:98
 msgid "Temporal Plot Tool"
+=======
+#: ../gui/wxpython/tplot/frame.py:98
+msgid "Temporal Plot Tool"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:184
+msgid ""
+"Raster temporal dataset (strds)\n"
+"Press ENTER after typing the name or select with the combobox"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -8925,6 +9021,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
 msgstr "Este módulo requer o módulo NumPy, que não pôde ser importado. Provavelmente não está instalado (não faz parte da distribuição padrão do Python). Consulte o site Numeric Python (http://numpy.scipy.org) para obter informações sobre como baixar source ou binários."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/location_wizard/wizard.py:2722
@@ -8943,6 +9040,8 @@ msgstr "Arquivo <%s> não encontrado."
 #: ../gui/wxpython/location_wizard/wizard.py:2758
 msgid "WKT string missing."
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/location_wizard/dialogs.py:40
 msgid "Set default region extent and resolution"
@@ -8977,7 +9076,10 @@ msgstr "Linhas: %d"
 =======
 msgid "Vector map <%s> not found"
 msgstr "Mapa vetorial <%s> não encontrado"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/location_wizard/dialogs.py:202
 #: ../gui/wxpython/location_wizard/dialogs.py:594
@@ -9176,7 +9278,10 @@ msgstr "A abertura da visualização 3D não foi bem-sucedida. Tente alterar o v
 #, python-format
 msgid "Image is too large, your OpenGL implementation supports maximum texture size %d px."
 msgstr "A imagem é muito grande, sua implementação OpenGL suporta o tamanho máximo de textura de %d px."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/location_wizard/dialogs.py:251
 #: ../gui/wxpython/location_wizard/dialogs.py:598
@@ -9446,6 +9551,7 @@ msgstr "Tipo de camada não suportado '%s'"
 #: ../gui/wxpython/nviz/mapwindow.py:1690
 msgid "Unable to unload raster map"
 msgstr "Não é possível descarregar o mapa raster"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/gmodeler/preferences.py:695
@@ -9706,6 +9812,8 @@ msgstr "Lista de variáveis ​​- clique com o botão direito para excluir"
 #: ../gui/wxpython/gmodeler/panels.py:1422 ../gui/wxpython/dbmgr/base.py:3006
 msgid "Data type"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gmodeler/panels.py:1366
 #: ../gui/wxpython/gmodeler/panels.py:1428
@@ -9942,11 +10050,14 @@ msgstr "Camada de ponto vetorial não encontrada (id = %d)"
 #, python-format
 msgid "Unable to set data layer properties (id = %d)"
 msgstr "Não é possível definir as propriedades da camada de dados (id = %d)"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/gmodeler/toolbars.py:76
 msgid "Add comment to model"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gmodeler/toolbars.py:78 ../gui/wxpython/menustrings.py:201
 #: ../gui/wxpython/menustrings.py:2099
@@ -10154,10 +10265,14 @@ msgid ""
 "%s"
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "O modelo não é válido. Quer rodar assim mesmo?\n"
 =======
 "Falha ao definir as propriedades da camada de dados.\n"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+"Falha ao definir as propriedades da camada de dados.\n"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "\n"
 "%s"
 
@@ -10801,7 +10916,10 @@ msgstr "Barra de escala %d"
 #: ../gui/wxpython/nviz/tools.py:5178
 msgid "None"
 msgstr "Nenhuma"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gmodeler/frame.py:85 ../gui/wxpython/gui_core/forms.py:1520
 #: ../gui/wxpython/lmgr/toolbars.py:208
@@ -10955,6 +11073,7 @@ msgstr "Editar ponto"
 
 #: ../gui/wxpython/vnet/dialogs.py:74
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 #, fuzzy
 msgid "{} script contains local modifications"
@@ -10963,6 +11082,10 @@ msgstr "O script Python contém modificações locais"
 msgid "Vector Network Analysis Tool"
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Vector Network Analysis Tool"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/gmodeler/frame.py:260 ../gui/wxpython/gmodeler/frame.py:2239
@@ -11061,7 +11184,10 @@ msgstr "Estilo do resultado da análise:"
 #, python-format
 msgid "Color table style %s:"
 msgstr "Estilo da tabela de cores:%s"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gmodeler/frame.py:311 ../gui/wxpython/core/gconsole.py:715
 #, python-format
@@ -11259,6 +11385,7 @@ msgstr ""
 =======
 msgid "Invert colors %s:"
 msgstr "Inverter cores %s:"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/gmodeler/frame.py:1786
@@ -11270,6 +11397,8 @@ msgstr "Lista de variáveis ​​- clique com o botão direito para excluir"
 #: ../gui/wxpython/gmodeler/frame.py:1847 ../gui/wxpython/dbmgr/base.py:2994
 msgid "Data type"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/gmodeler/frame.py:1791
 #: ../gui/wxpython/gmodeler/frame.py:1853
@@ -11295,6 +11424,7 @@ msgstr "Cor para ponto não utilizado:"
 #: ../gui/wxpython/vnet/dialogs.py:1271
 msgid "Color for Start/From/Source/Used point:"
 msgstr "Cor para ponto de Início/De/Origem/Usado:"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/gmodeler/frame.py:1807
@@ -11367,6 +11497,8 @@ msgstr ""
 #: ../gui/wxpython/main_window/frame.py:719 ../gui/wxpython/lmgr/frame.py:649
 msgid "Python"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/gmodeler/frame.py:2056
@@ -11376,6 +11508,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:1277
 msgid "Color for selected point:"
 msgstr "Cor para o ponto selecionado:"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/gmodeler/frame.py:2078
@@ -11427,6 +11560,8 @@ msgstr "Não foi possível iniciar o script Python. %s"
 #: ../gui/wxpython/gmodeler/frame.py:2253
 msgid "Run script - enabled only for basic Python scripts"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/menustrings.py:3 ../gui/wxpython/menustrings.py:2055
 #: ../gui/wxpython/menustrings.py:2105
@@ -11690,11 +11825,14 @@ msgstr "Largura do ponto:"
 #: ../gui/wxpython/vnet/dialogs.py:1292
 msgid "Maximum number of results in history:"
 msgstr "Número máximo de resultados no histórico:"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/menustrings.py:63 ../gui/wxpython/menustrings.py:1101
 msgid "WMS/WMTS import"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/menustrings.py:64 ../gui/wxpython/menustrings.py:1102
@@ -11706,6 +11844,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/dialogs.py:1636
 msgid "Save analysis result"
 msgstr "Salvar o resultado da análise"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/menustrings.py:65 ../gui/wxpython/menustrings.py:1105
@@ -11810,6 +11949,8 @@ msgstr "Importa mapas vetoriais Mapgen ou Matlab-ASCII para o GRASS."
 #: ../gui/wxpython/menustrings.py:91 ../gui/wxpython/menustrings.py:1131
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/menustrings.py:92 ../gui/wxpython/menustrings.py:1132
 msgid "Unpack vector map"
@@ -20503,6 +20644,7 @@ msgstr ""
 msgid "Vector map '%s' does not exist."
 msgstr "O mapa vetorial '%s' não existe."
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #: ../gui/wxpython/vnet/vnet_data.py:166
 msgid "Vector map was not chosen."
@@ -20513,6 +20655,8 @@ msgstr "O mapa vetorial não foi escolhido."
 =======
 #: ../gui/wxpython/vnet/vnet_data.py:172
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/vnet/vnet_data.py:172
 msgid "Vector map was not chosen."
@@ -20541,6 +20685,7 @@ msgstr "camada de categorias únicas"
 msgid "Chosen %s '%s' does not exist in vector map '%s'.\n"
 msgstr "%s '%s' escolhido não existe no mapa vetorial '%s'.\n"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #: ../gui/wxpython/vnet/vnet_data.py:188
 #, python-format
@@ -20561,6 +20706,8 @@ msgstr ""
 =======
 #: ../gui/wxpython/vnet/vnet_data.py:251
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/vnet/vnet_data.py:195
 #, python-format
@@ -20690,11 +20837,15 @@ msgid ""
 "Showed result may not correspond original analysis result."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "O mapa temporário '%s' com o resultado foi alterado fora da ferramenta de "
 "análise de rede vetorial.\n"
 =======
 "O mapa temporário '%s' com o resultado foi alterado fora da ferramenta de análise de rede vetorial.\n"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+"O mapa temporário '%s' com o resultado foi alterado fora da ferramenta de análise de rede vetorial.\n"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "O resultado mostrado pode não corresponder ao resultado da análise original."
 
 #: ../gui/wxpython/vnet/vnet_core.py:233
@@ -20743,11 +20894,15 @@ msgid ""
 "Topology column may not correspond to changed situation."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "O mapa de entrada '%s' para análise foi alterado fora da ferramenta de "
 "análise de rede vetorial.\n"
 =======
 "O mapa de entrada '%s' para análise foi alterado fora da ferramenta de análise de rede vetorial.\n"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+"O mapa de entrada '%s' para análise foi alterado fora da ferramenta de análise de rede vetorial.\n"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "A coluna de topologia pode não corresponder à situação alterada."
 
 #: ../gui/wxpython/vnet/vnet_core.py:958
@@ -20787,6 +20942,7 @@ msgstr ""
 msgid "Overwrite map"
 msgstr "Substituir mapa"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #: ../gui/wxpython/vnet/toolbars.py:50
 msgid "Insert points from Map Display"
@@ -20801,6 +20957,8 @@ msgstr ""
 #: ../gui/wxpython/vnet/toolbars.py:54
 msgid "Activate mode for turns editing"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/vnet/toolbars.py:57
@@ -20808,7 +20966,10 @@ msgid "Activate mode for global turns editing"
 =======
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:158
 msgid "Raster map <{}> not found in current mapset."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/vnet/toolbars.py:59
@@ -21020,6 +21181,7 @@ msgstr ""
 #: ../gui/wxpython/rdigit/toolbars.py:27
 msgid "Digitize area"
 msgstr "Digitalizar área"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/rdigit/controller.py:122
@@ -21063,10 +21225,13 @@ msgstr "Falha ao definir a tabela de cores padrão para o mapa raster editado"
 #: ../gui/wxpython/rdigit/toolbars.py:28
 msgid "Digitize area"
 msgstr "Digitalizar área"
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rdigit/toolbars.py:29
 msgid "Digitize line"
 msgstr "Digitalizar linha"
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 #: ../gui/wxpython/rdigit/toolbars.py:30
@@ -21083,6 +21248,8 @@ msgstr "Desfazer"
 
 #: ../gui/wxpython/rdigit/toolbars.py:47
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rdigit/toolbars.py:31
 msgid "Digitize point"
@@ -21129,7 +21296,10 @@ msgstr ""
 #: ../gui/wxpython/rdigit/toolbars.py:94
 msgid "Width of currently digitized line or diameter of a digitized point in map units."
 msgstr "Largura da linha atualmente digitalizada ou diâmetro de um ponto digitalizado em unidades de mapa."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rdigit/toolbars.py:168
 msgid "New raster map"
@@ -23088,7 +23258,10 @@ msgstr "Reprojetar camadas selecionadas"
 #: ../gui/wxpython/modules/histogram.py:298
 =======
 #: ../gui/wxpython/modules/histogram.py:296
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Histogram Tool  [d.histogram]"
 msgstr ""
 
@@ -23132,7 +23305,10 @@ msgstr ""
 #: ../gui/wxpython/modules/vclean.py:85
 msgid "prune lines/boundaries"
 msgstr "aparar linhas/fronteiras"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/modules/extensions.py:227
 #, python-format
@@ -23462,11 +23638,15 @@ msgstr "Mapeamento temático para mapa vetorial em visualização 3D"
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 msgstr "Calculadora de mapa raster"
 =======
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/modules/mcalc_builder.py:71
 msgid "3D Raster Map Calculator"
@@ -24133,12 +24313,18 @@ msgstr "Selecione mapas e defina o nome"
 msgid "Name for new configuration file to create"
 msgstr "Nome para o novo arquivo de configuração a ser criado"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:519
 msgid "Raster map to use to select areas"
 msgstr "Mapa raster a ser usado para selecionar áreas"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:530
 msgid "Raster map to use to select areas"
@@ -24188,11 +24374,15 @@ msgstr "O vetor %s não tem áreas, por favor selecione outro vetor"
 #, python-format
 msgid "Vector %s has no table connected, please select another vector"
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgstr ""
 "O vetor %s não tem uma tabela conectada, por favor selecione outro vetor"
 =======
 msgstr "O vetor %s não tem uma tabela conectada, por favor selecione outro vetor"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+msgstr "O vetor %s não tem uma tabela conectada, por favor selecione outro vetor"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:763
 msgid "Insert sampling frame parameter"
@@ -24263,11 +24453,15 @@ msgstr "Número de regiões a serem desenhadas:"
 #: ../gui/wxpython/rlisetup/wizard.py:1037
 msgid "Do you want to overwrite existing temporal maps if they exist?"
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgstr ""
 "Você deseja substituir os mapas temporais existentes, se eles existirem?"
 =======
 msgstr "Você deseja substituir os mapas temporais existentes, se eles existirem?"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+msgstr "Você deseja substituir os mapas temporais existentes, se eles existirem?"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1044
 msgid "Do you want to check vector areas?"
@@ -24289,7 +24483,10 @@ msgstr "Analisando todas as feições vetoriais..."
 msgid "Analysing vector"
 msgstr "Analisando vetor"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1080
 msgid "All feature are been analyzed."
@@ -24317,7 +24514,10 @@ msgstr "Desenhe a região das janelas móveis"
 #: ../gui/wxpython/rlisetup/sampling_frame.py:407
 msgid "Draw sampling region"
 msgstr "Desenhe a região de amostragem"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1180
 msgid "All feature are been analyzed."
@@ -24400,7 +24600,10 @@ msgid "Systematic contiguous"
 =======
 #: ../gui/wxpython/rlisetup/wizard.py:1235
 msgid "Systematic contiguos"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr "Contiguo sistemático"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1353
@@ -24413,7 +24616,10 @@ msgid "Systematic non contiguous"
 =======
 #: ../gui/wxpython/rlisetup/wizard.py:1237
 msgid "Systematic non contiguos"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr "Não contiguo sistemático"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1355
@@ -24425,7 +24631,10 @@ msgstr "Centrado em locais"
 msgid "What number of Sampling Units to use?"
 msgstr "Qual número de unidades de amostragem usar?"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1322
 msgid "Insert number of row strates"
@@ -24446,7 +24655,10 @@ msgstr "Definir unidades da amostra"
 #: ../gui/wxpython/rlisetup/wizard.py:1408
 msgid "Set moving windows"
 msgstr "Definir janelas móveis"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1451
 msgid "Insert number of row strates"
@@ -24472,6 +24684,7 @@ msgstr "Definir janelas móveis"
 #: ../gui/wxpython/rlisetup/wizard.py:1713
 msgid "Draw sampling units"
 msgstr "Desenhar unidades de amostragem"
+<<<<<<< HEAD
 
 #: ../gui/wxpython/rlisetup/wizard.py:1624
 msgid "Number of sampling area to draw:"
@@ -24485,6 +24698,12 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1799
 =======
+=======
+
+#: ../gui/wxpython/rlisetup/wizard.py:1469
+msgid "Number of sampling area to draw:"
+msgstr "Número da área de amostragem a ser desenhada:"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1566
 msgid "Draw Sampling "
@@ -24508,7 +24727,10 @@ msgstr "Selecione a área de amostra 1 de"
 #: ../gui/wxpython/rlisetup/wizard.py:1652
 msgid "Select sample area "
 msgstr "Selecione a área de amostra"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1865
 #: ../gui/wxpython/rlisetup/functions.py:156
@@ -24523,7 +24745,10 @@ msgstr ""
 =======
 msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
 msgstr "O mapa raster <%s> já existe. Remova ou renomeie os mapas com o prefixo '%s' ou selecione a opção para substituir os mapas existentes"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/wizard.py:1920
 #: ../gui/wxpython/rlisetup/functions.py:140
@@ -24676,7 +24901,10 @@ msgstr "ATENÇÃO: "
 #: ../gui/wxpython/rlisetup/frame.py:130
 =======
 #: ../gui/wxpython/rlisetup/frame.py:114
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Setup for r.li modules"
 msgstr ""
 
@@ -24739,11 +24967,15 @@ msgstr ""
 =======
 msgid "Set the new name for %s \"                                            \"configuration file"
 msgstr "Defina o novo nome para o arquivo de configuração %s \"                                            \""
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/rlisetup/frame.py:279
 msgid "Rename configuration file"
 msgstr "Renomear arquivo de configuração"
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 #: ../gui/wxpython/main_window/frame.py:125 ../gui/wxpython/lmgr/frame.py:109
@@ -24755,6 +24987,8 @@ msgstr ""
 #: ../gui/wxpython/main_window/frame.py:158
 msgid "There were some issues when loading menu or Tools:"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/main_window/frame.py:304 ../gui/wxpython/lmgr/frame.py:360
 msgid "Rename current Map Display"
@@ -24847,6 +25081,7 @@ msgstr "Unidades não reconhecidas, a medição falhou."
 #, python-brace-format
 msgid "Area: {area} {unit}\n"
 msgstr "Área: {area} {unit}\n"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/main_window/frame.py:526
@@ -24854,6 +25089,17 @@ msgstr "Área: {area} {unit}\n"
 #: ../gui/wxpython/lmgr/frame.py:907
 msgid "Close Map Display {}"
 msgstr "Fechar Exibição do Mapa {}"
+=======
+
+#: ../gui/wxpython/mapwin/decorations.py:183
+#: ../gui/wxpython/mapwin/decorations.py:297
+msgid ""
+"Please install Python Imaging Library (PIL)\n"
+"for better control of legend and other decorations."
+msgstr ""
+"Instale Python Imaging Library (PIL)\n"
+"para melhor controle de legendas e outras decorações."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/main_window/frame.py:588 ../gui/wxpython/lmgr/frame.py:181
 msgid "Workspace Toolbar"
@@ -24881,7 +25127,10 @@ msgstr ""
 #: ../gui/wxpython/mapwin/decorations.py:202
 msgid "Remove text"
 msgstr "Remover texto"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/main_window/frame.py:921 ../gui/wxpython/lmgr/frame.py:798
 #, fuzzy
@@ -25308,6 +25557,8 @@ msgstr ""
 >>>>>>> 476ef44553 (libpython: Save and load benchmark results (#1711))
 msgid "Constrain map to region geometry?"
 msgstr ""
+"%d arquivos criados:\n"
+"%s"
 
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:99
 msgid "Please provide a group name to process"
@@ -25400,6 +25651,7 @@ msgstr "Nenhum arquivo gerado."
 #: ../gui/wxpython/wxplot/profile.py:416
 msgid "Statistics for Profile(s)"
 msgstr "Estatísticas para Perfil(is)"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 <<<<<<< HEAD
@@ -25430,6 +25682,12 @@ msgstr ""
 #: ../gui/wxpython/lmgr/layertree.py:70
 msgid "Add thematic chart layer"
 msgstr "Adicionar camada de diagrama temático"
+=======
+
+#: ../gui/wxpython/wxplot/histogram.py:43
+msgid "Histogram Tool"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/layertree.py:72
 msgid "Add grid layer"
@@ -25974,11 +26232,14 @@ msgstr "Mostrar legenda"
 #, python-format
 msgid "Plot settings saved to file '%s'."
 msgstr "Configurações de plotagem salvas no arquivo '%s'."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/lmgr/toolbars.py:93
 msgid "Add multiple raster or vector map layers (Ctrl+Shift+L)"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/toolbars.py:96
 msgid "Add raster map layer (Ctrl+Shift+R)"
@@ -25996,6 +26257,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/toolbars.py:39 ../gui/wxpython/iclass/dialogs.py:280
 msgid "Class manager"
 msgstr "Gerente de classe"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/lmgr/toolbars.py:107
@@ -26005,6 +26267,8 @@ msgstr "Adicionar várias camadas de mapa vetoriais (temática, chart...)"
 #: ../gui/wxpython/lmgr/toolbars.py:111
 msgid "Add web service layer (WMS, WMTS, NASA OnEarth)"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/toolbars.py:113
 msgid "Add group"
@@ -30239,6 +30503,7 @@ msgstr "Gerenciador de tabela de atributos"
 
 #: ../gui/wxpython/menustrings.py:2000
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 #, fuzzy
 msgid "Delete map layer"
@@ -30247,6 +30512,10 @@ msgstr "Camada de mapa inteira"
 msgid "Launch Data Catalog."
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Launch Data Catalog."
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/toolbars.py:203
 msgid "Start new map display"
@@ -30262,7 +30531,10 @@ msgid "Launch user-defined script"
 =======
 #: ../gui/wxpython/menustrings.py:2018
 msgid "Interactive editing and digitization of vector maps."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:215 ../gui/wxpython/lmgr/pyshell.py:80
@@ -30620,6 +30892,7 @@ msgstr "Download em andamento, aguarde até que seja concluído"
 #, python-format
 msgid "Location named <%s> already exists, download canceled"
 msgstr "A location chamada <%s> já existe, download cancelado"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/lmgr/pyshell.py:50
@@ -30640,11 +30913,18 @@ msgstr "Apague todo o texto do shell"
 #: ../gui/wxpython/lmgr/pyshell.py:78
 msgid "Simple &editor"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/pyshell.py:135
 #, python-format
+<<<<<<< HEAD
 msgid "Raster or vector map <%s> not found"
 msgstr ""
+=======
+msgid "Download failed: %s"
+msgstr "Falha no download: %s"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/pyshell.py:141
 #, python-format
@@ -30711,6 +30991,7 @@ msgstr "Deseja importar <%(name)s> para a nova Location criada?"
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:537
 msgid "Import data?"
 msgstr "Importar dados?"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/lmgr/workspace.py:72
@@ -30736,6 +31017,8 @@ msgstr "Arquivo de área de trabalho GRASS (*.gxw)|*.gxw"
 #: ../gui/wxpython/lmgr/workspace.py:136
 msgid "Most likely the database, location or mapset does not exist"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/workspace.py:139
 #, python-brace-format
@@ -30966,12 +31249,17 @@ msgid ""
 "Invalid file, unable to parse XML document."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Leitura do arquivo de área de trabalho <%s> falhou.\n"
 "Arquivo inválido, não consegui verificar documento XML."
 =======
 "A importação de <%(name)s> falhou.\n"
 "Razão:%(msg)s"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+"A importação de <%(name)s> falhou.\n"
+"Razão:%(msg)s"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/workspace.py:191
 msgid "Please wait, loading workspace..."
@@ -31008,6 +31296,7 @@ msgstr ""
 =======
 msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
 msgstr "Arquivo de dados <%(name)s> importado com sucesso. A região padrão do local foi definida a partir deste mapa importado."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 <<<<<<< HEAD
@@ -31018,6 +31307,8 @@ msgstr "Arquivo de dados <%(name)s> importado com sucesso. A região padrão do 
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 msgid "There were some issues when loading menu or Tools tab:"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/frame.py:1305
 msgid "No location/mapset provided. Operation canceled."
@@ -31038,8 +31329,14 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/manager.py:113
 =======
 #: ../gui/wxpython/startup/guiutils.py:717
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid ""
 <<<<<<< HEAD
@@ -31087,7 +31384,10 @@ msgstr "Pode exibir apenas 256 colunas."
 #, python-brace-format
 msgid "Incorrect encoding {enc} used. Set encoding in GUI Settings or set GRASS_DB_ENCODING variable."
 msgstr "Codificação {enc} incorreta usada. Defina a codificação em Configurações da GUI ou defina a variável GRASS_DB_ENCODING."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/dbmgr/manager.py:144
 msgid "Manage layers"
@@ -31105,7 +31405,10 @@ msgstr "Fechar Gerenciador de Tabela de Atributos"
 #: ../gui/wxpython/dbmgr/base.py:313
 msgid "Viewing limit: 100000 records."
 msgstr "Limite de visualização: 100000 registros."
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/dbmgr/manager.py:157
 msgid "Reload currently selected attribute data"
@@ -31146,6 +31449,9 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:55
 msgid "Attribute Table Manager - GRASS GIS"
 msgstr ""
+"Erro ao carregar os dados do atributo. Número do registro: %(rec)d . Não foi possível converter o valor '%(val)s' na coluna-chave (%(key)s) para inteiro.\n"
+"\n"
+"Detalhes: %(detail)s"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:107 ../gui/wxpython/dbmgr/base.py:2362
 msgid "Database connection"
@@ -32071,11 +32377,14 @@ msgstr "Recarregar dados de atributos selecionados atualmente"
 #: ../gui/wxpython/dbmgr/manager.py:147
 msgid "Reload all attribute data (drop current selection)"
 msgstr "Recarregar todos os dados de atributos (descartar a seleção atual)"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 #: ../gui/wxpython/dbmgr/base.py:2672
 msgid "Drop selected column"
 msgstr ""
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/dbmgr/base.py:2680
 msgid "Drop all columns"
@@ -32248,11 +32557,15 @@ msgstr ""
 "Nenhuma tabela de atributos encontrada.\n"
 "\n"
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Você deseja criar uma nova tabela de atributos e definir um link para o mapa "
 "vetorial <%s>?"
 =======
 "Você deseja criar uma nova tabela de atributos e definir um link para o mapa vetorial <%s>?"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+"Você deseja criar uma nova tabela de atributos e definir um link para o mapa vetorial <%s>?"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/dbmgr/dialogs.py:85
 msgid "Create table?"
@@ -32266,7 +32579,10 @@ msgstr "Fechar caixa de diálogo ao enviar"
 msgid "No attributes found"
 msgstr "Nenhum atributo encontrado"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/dbmgr/dialogs.py:121
 msgid "Define attributes"
@@ -32275,7 +32591,10 @@ msgstr "Definir atributos"
 #: ../gui/wxpython/dbmgr/dialogs.py:123
 msgid "Display attributes"
 msgstr "Mostrar atributos"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/dbmgr/dialogs.py:128
 msgid "Define attributes"
@@ -33404,7 +33723,10 @@ msgstr "&Próximo"
 #: ../gui/wxpython/gui_core/ghelp.py:798
 msgid "&Previous"
 msgstr "&Anterior"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/animation/dialogs.py:1676
 msgid "Multiple raster maps"
@@ -33888,7 +34210,10 @@ msgstr "Inválido"
 #: ../gui/wxpython/gui_core/preferences.py:1721
 msgid "EPSG code:"
 msgstr "Código EPSG:"
+<<<<<<< HEAD
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 <<<<<<< HEAD
 #: ../gui/wxpython/animation/provider.py:444
@@ -33902,7 +34227,10 @@ msgstr "Renderizando camadas do mapa"
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
 msgstr "String PROJ (obrigatório):"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/animation/provider.py:562
 msgid "Overlaying map layers"
@@ -34579,9 +34907,21 @@ msgstr ""
 msgid "Directory {t} not removed."
 msgstr "O diretório {t} não foi removido."
 
+<<<<<<< HEAD
 #: ../gui/wxpython/animation/frame.py:50
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/animation/frame.py:49
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Animation Tool"
 msgstr ""
+=======
+#: ../gui/wxpython/gcp/manager.py:1785
+#: ../gui/wxpython/image2target/ii2t_manager.py:1701
+#, python-format
+msgid "Transforming <%s>..."
+msgstr "Transformando <%s>..."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/animation/frame.py:193
 msgid "Animation Toolbar"
@@ -37386,6 +37726,7 @@ msgstr "rótulos:"
 #~ "Calcula estadísticas univariantes a partir de celdas no nulas de un mapa "
 #~ "ráster."
 
+<<<<<<< HEAD
 #, fuzzy
 #~ msgid "Digitize"
 #~ msgstr "Digitalizar"
@@ -37571,12 +37912,111 @@ msgstr "Você deseja sair do GRASS incluindo o prompt do shell ou apenas fechar 
 msgid "Double-click or Ctrl-Enter to run selected module"
 msgstr "Clique duas vezes ou Ctrl-Enter para executar o módulo selecionado"
 
+=======
+msgid "GRASS GIS Vector Digitizer"
+msgstr "Digitalizador vetorial do GRASS GIS"
+
+msgid "GRASS GIS Animation tool"
+msgstr "Ferramenta de Animação GRASS GIS"
+
+msgid "Start region:"
+msgstr "Região de partida:"
+
+msgid "Import/link raster or vector data"
+msgstr "Importar/ligar dados raster ou vetoriais"
+
+msgid "Switch to new location?"
+msgstr "Mudar para a nova Location?"
+
+msgid "Location <%s> created"
+msgstr "Location <%s> criada"
+
+msgid "Click to allow editing other mapsets"
+msgstr "Clicar para permitir edição de outros Mapsets"
+
+msgid "GRASS GIS Data Catalog"
+msgstr "Catálogo de dados do GRASS GIS"
+
+msgid "Editing {name}"
+msgstr "Editando {name}"
+
+msgid "Maximum number of animations is %s."
+msgstr "Número máximo de animações são %s."
+
+msgid "Animate region change (2D view only)"
+msgstr "Animar mudança de região (somente visualização 2D) "
+
+msgid "GRASS GIS Temporal Plot Tool"
+msgstr "Ferramenta de plotagem temporal GRASS GIS"
+
+msgid "GRASS GIS Histogramming Tool (d.histogram)"
+msgstr "Ferramenta de Histograma GRASS GIS (d.histogram)"
+
+msgid "GRASS GIS Raster Map Calculator"
+msgstr "Calculadora de Mapa Raster GRASS GIS "
+
+msgid "GRASS GIS 3D Raster Map Calculator"
+msgstr "Calculadora de Mapa Raster 3D GRASS GIS "
+
+msgid "GRASS GIS Timeline Tool"
+msgstr "GRASS GIS Timeline"
+
+msgid "Click to restrict editing to current mapset only"
+msgstr "Clicar para restringir edição apenas ao Mapset atual"
+
+msgid "Search:"
+msgstr "Buscar:"
+
+msgid "Type to search database by map type or name. Use prefix 'r:', 'v:' and 'r3:'to show only raster, vector or 3D raster data, respectively. Use Python regular expressions to refine your search."
+msgstr "Busca no banco de dados por tipo ou nome do mapa. Utilize os prefixos 'r:', 'v:' e 'r3:' para filtrar raster, vetor ou raster 3D, respectivamente. Expressões regulares do Python podem ser utilizadas para refinar a busca."
+
+msgid "Common formats import"
+msgstr "Importação de formatos comuns"
+
+msgid "Import of common formats with reprojection"
+msgstr "Importação de formatos comuns com reprojeção"
+
+msgid "Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly."
+msgstr "Importa dados raster para um mapa raster GRASS usando a biblioteca GDAL e reprojeta em tempo real."
+
+msgid "Imports a raster map as GRASS GIS specific archive file (packed with r.pack)"
+msgstr "Importa um mapa raster como arquivo de arquivo específico do GRASS GIS (compactado com r.pack)"
+
+msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
+msgstr "Importa dados vetoriais para um mapa vetorial GRASS usando a biblioteca OGR e reprojeta em tempo real."
+
+msgid "Imports a vector map as GRASS GIS specific archive file (packed with v.pack)"
+msgstr "Importa um mapa vetorial como arquivo de arquivo específico do GRASS GIS (empacotado com v.pack)"
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
+msgstr "Exporta uma camada de mapa vetorial para qualquer um dos formatos vetoriais OGR suportados. Por padrão, uma camada de mapa vetorial é exportada para o formato Esri Shapefile."
+
+msgid "Copies available data files in the current mapset search path to the user's current mapset."
+msgstr "Copia os arquivos de dados disponíveis no caminho de pesquisa do mapset atual para o mapset atual do usuário."
+
+msgid "Generates a raster map containing distances to nearest raster features."
+msgstr "Gera um mapa raster contendo distâncias para as feições raster mais próximas."
+
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgstr "Ferramenta de análise de vizinhança para mapas de pontos vetoriais. Torna cada valor de célula uma função dos valores de atributo atribuídos aos pontos vetoriais ou centroides ao seu redor e armazena novos valores de célula em um mapa raster de saída."
+
+msgid "GRASS GIS SQL Query Utility"
+msgstr "GRASS GIS SQL Query Utility"
+
+msgid "Do you want to quit GRASS including shell prompt or just close the GUI?"
+msgstr "Você deseja sair do GRASS incluindo o prompt do shell ou apenas fechar a GUI?"
+
+msgid "Double-click or Ctrl-Enter to run selected module"
+msgstr "Clique duas vezes ou Ctrl-Enter para executar o módulo selecionado"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "GRASS GIS Cartographic Composer"
 msgstr "Compositor Cartográfico GRASS GIS"
 
 msgid "GRASS GIS Map Swipe"
 msgstr "Deslizar a Tela GRASS GIS"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 #~ msgid ""
@@ -37614,6 +38054,10 @@ msgstr "Deslizar a Tela GRASS GIS"
 msgid "Allocates subnets for nearest centers (direction from center). center node must be opened (costs >= 0). Costs of center node are used in calculation"
 msgstr "Aloca sub-redes para os centros mais próximos (direção do centro). o nó central deve ser aberto (custos >= 0). Os custos do nó central são usados ​​no cálculo"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Allocates subnets for nearest centers (direction from center). center node must be opened (costs >= 0). Costs of center node are used in calculation"
+msgstr "Aloca sub-redes para os centros mais próximos (direção do centro). o nó central deve ser aberto (custos >= 0). Os custos do nó central são usados ​​no cálculo"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Splits net by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
 msgstr "Divide a rede por isolinhas de custo. Divide a rede em bandas entre as isolinhas de custo (direção do centro). O nó central deve ser aberto (custos >= 0). Os custos do nó central são usados ​​no cálculo."
@@ -37622,6 +38066,7 @@ msgid "Attaches, deletes or reports vector categories to map geometry."
 msgstr "Anexa, exclui ou relata categorias de vetores para mapear a geometria."
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #~ msgid "Creates a Voronoi diagram in current region from an input vector map containing points or centroids."
 #~ msgstr "Cria um diagrama de Voronoi na região atual de um mapa vetorial de entrada contendo pontos ou centroides."
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
@@ -37629,10 +38074,15 @@ msgstr "Anexa, exclui ou relata categorias de vetores para mapear a geometria."
 msgid "Creates a Voronoi diagram in current region from an input vector map containing points or centroids."
 msgstr "Cria um diagrama de Voronoi na região atual de um mapa vetorial de entrada contendo pontos ou centroides."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Creates a Voronoi diagram in current region from an input vector map containing points or centroids."
+msgstr "Cria um diagrama de Voronoi na região atual de um mapa vetorial de entrada contendo pontos ou centroides."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Reports and Statistics"
 msgstr "Relatórios e estatísticas"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
 <<<<<<< HEAD
@@ -37646,6 +38096,10 @@ msgstr "Relatórios e estatísticas"
 msgid "Registers raster, vector and raster3d maps in a space time datasets."
 msgstr "Registra mapas raster, vetoriais e raster3d em conjuntos de dados de espaço-tempo."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Registers raster, vector and raster3d maps in a space time datasets."
+msgstr "Registra mapas raster, vetoriais e raster3d em conjuntos de dados de espaço-tempo."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Documents"
 msgstr "Documentos"
@@ -37694,6 +38148,7 @@ msgstr "Definir o banco de dados GRASS e o Nome da Location"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #~ msgid ""
 #~ "This option allows setting default computation region immediately after "
 #~ "new location is created. Default computation region can be defined later "
@@ -37710,6 +38165,10 @@ msgstr "Definir o banco de dados GRASS e o Nome da Location"
 msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
 msgstr "Esta opção permite definir a região de computação padrão imediatamente após a criação da nova location. A região de computação padrão pode ser definida posteriormente usando g.region com base nos dados importados."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
+msgstr "Esta opção permite definir a região de computação padrão imediatamente após a criação da nova location. A região de computação padrão pode ser definida posteriormente usando g.region com base nos dados importados."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Create user mapset"
 msgstr "Criar mapset do usuário"
@@ -37723,6 +38182,7 @@ msgstr "Location do projeto"
 msgid "Location Title"
 msgstr "Título da Location"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #~ msgid "Optional location title, you can leave this field blank."
 <<<<<<< HEAD
@@ -37744,6 +38204,8 @@ msgstr "Título da Location"
 #~ msgstr "Nome <%(name)s> não é um nome válido para location. Use apenas caracteres ASCII excluindo %(chars)s e espaço."
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Optional location title, you can leave this field blank."
 msgstr "Título da location é opcional, você pode deixar este campo em branco."
 
@@ -37754,8 +38216,14 @@ msgstr "Título da location é opcional, você pode deixar este campo em branco.
 =======
 msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
 msgstr "Nome <%(name)s> não é um nome válido para location. Use apenas caracteres ASCII excluindo %(chars)s e espaço."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
 >>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 49258e3437 (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Unable to create location"
 msgstr "Não foi possível criar location"
@@ -37766,6 +38234,7 @@ msgstr "Escolha o método para criar uma nova location"
 msgid "Select EPSG code of spatial reference system"
 msgstr "Selecione o código EPSG do sistema de referência espacial"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #~ msgid "Read projection and datum terms from a georeferenced data file"
 <<<<<<< HEAD
@@ -37783,16 +38252,22 @@ msgstr "Selecione o código EPSG do sistema de referência espacial"
 #~ msgstr "Leia os termos de projeção e dado de um arquivo Well Known Text (WKT) .prj"
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Read projection and datum terms from a georeferenced data file"
 msgstr "Leia os termos de projeção e dado de um arquivo de dados georreferenciados"
 
 msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
 msgstr "Leia os termos de projeção e dado de um arquivo Well Known Text (WKT) .prj"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Select coordinate system parameters from a list"
 msgstr "Selecione os parâmetros do sistema de coordenadas de uma lista"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
 <<<<<<< HEAD
@@ -37806,6 +38281,10 @@ msgstr "Selecione os parâmetros do sistema de coordenadas de uma lista"
 msgid "Specify projection and datum terms using custom PROJ.4 parameters"
 msgstr "Especifique termos de projeção e dado usando parâmetros PROJ.4 personalizados"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+msgstr "Especifique termos de projeção e dado usando parâmetros PROJ.4 personalizados"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Create a generic Cartesian coordinate system (XY)"
 msgstr "Crie um sistema de coordenadas cartesianas genérico (XY)"
@@ -37835,6 +38314,7 @@ msgid "Choose EPSG codes file"
 msgstr "Escolha o arquivo de códigos EPSG"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #~ msgid "Choose method of specifying georeferencing parameters"
 <<<<<<< HEAD
 #~ msgstr ""
@@ -37846,6 +38326,10 @@ msgstr "Escolha o arquivo de códigos EPSG"
 msgid "Choose method of specifying georeferencing parameters"
 msgstr "Escolha o método de especificação de parâmetros de georreferenciamento"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Choose method of specifying georeferencing parameters"
+msgstr "Escolha o método de especificação de parâmetros de georreferenciamento"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "Location Title:"
 msgstr "Título da Location:"
@@ -37859,6 +38343,7 @@ msgstr "Criar nova location?"
 msgid "Location wizard canceled. Location not created."
 msgstr "Assistente de location cancelado. A location não foi criada."
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 #~ msgid ""
@@ -37877,6 +38362,10 @@ msgstr "Assistente de location cancelado. A location não foi criada."
 msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
 msgstr "A location <%(loc)s> será criada no diretório de dados GIS <%(dir)s>. Você precisará alterar o diretório de dados GIS padrão na tela de inicialização do GRASS."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
+msgstr "A location <%(loc)s> será criada no diretório de dados GIS <%(dir)s>. Você precisará alterar o diretório de dados GIS padrão na tela de inicialização do GRASS."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 msgid "New GIS data directory"
 msgstr "Novo diretório de dados GIS"
@@ -37887,6 +38376,7 @@ msgstr "Editor GRASS GIS Simple Python"
 msgid "Click here to show search module engine"
 msgstr "Clique aqui para mostrar o mecanismo do módulo de pesquisa"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #~ msgid "Click here to hide search module engine"
 #~ msgstr "Clique aqui para ocultar o mecanismo do módulo de pesquisa"
@@ -37924,3 +38414,7 @@ msgstr "Clique aqui para mostrar o mecanismo do módulo de pesquisa"
 msgid "Click here to hide search module engine"
 msgstr "Clique aqui para ocultar o mecanismo do módulo de pesquisa"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Click here to hide search module engine"
+msgstr "Clique aqui para ocultar o mecanismo do módulo de pesquisa"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

@@ -70,10 +70,14 @@ typedef struct _tgisMapList {
 void tgis_init_map_list(tgisMapList *list);
 void tgis_free_map_list(tgisMapList *list);
 <<<<<<< HEAD
+<<<<<<< HEAD
 tgisMapList *tgis_new_map_list(void);
 =======
 tgisMapList *tgis_new_map_list();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+tgisMapList *tgis_new_map_list();
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 /*! Insert a new map to the map list */
 void tgis_map_list_insert(tgisMapList *list, char *name, char *mapset,
@@ -182,10 +186,14 @@ typedef struct _tgisDataset {
 void tgis_init_dataset_list(tgisDatasetList *list);
 void tgis_free_dataset_list(tgisDatasetList *list);
 <<<<<<< HEAD
+<<<<<<< HEAD
 tgisDatasetList *tgis_new_dataset_list(void);
 =======
 tgisDatasetList *tgis_new_dataset_list();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+tgisDatasetList *tgis_new_dataset_list();
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 /*! Insert a new dataset to the dataset list */
 void tgis_dataset_list_insert(tgisDatasetList *list, char *name, char *mapset,

@@ -926,10 +926,14 @@ int G_spawn(const char *command, ...)
     va_start(va, command);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (;;) {
 =======
     for (i = 0;; i++) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0;; i++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         const char *arg = va_arg(va, const char *);
 
         args[num_args++] = arg;

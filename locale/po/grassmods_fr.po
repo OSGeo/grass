@@ -28066,6 +28066,22 @@ msgid "Name of target mapset for ortho-rectification"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
+<<<<<<< HEAD
+=======
+#, c-format
+msgid "Unable to access target location/mapset %s/%s"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
+msgid "Target locations with XY (unreferenced) are not supported"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:92
+msgid "Target locations with lon/lat are not supported"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:97
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to access target location/mapset %s/%s"
 msgstr ""
@@ -51983,7 +51999,10 @@ msgstr "Style de ligne"
 #: ../raster/r.null/main.c:63
 msgid "no-data"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/v.scatterplot_to_translate.c:64
 #, fuzzy
@@ -69915,7 +69934,10 @@ msgid ""
 =======
 #: ../vector/v.neighbors/main.c:134
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:152
@@ -69943,7 +69965,10 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:284
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "All points fall outside of the current computational region"
 msgstr ""
 
@@ -70292,12 +70317,16 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:652
 #, c-format
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid ""
 "Vector map <%s> is 3D. Use format specific layer creation options (parameter "
 "'lco') to export in 3D rather than 2D (default)."
 =======
 msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:672
@@ -73690,7 +73719,10 @@ msgstr ""
 #: ../general/g.mapset/main.c:208
 msgid "Mapset switched."
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../display/d.text/main.c:181
 msgid "Line spacing"
@@ -76727,6 +76759,7 @@ msgid "Option <%s> must be > 0"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../display/d.vect/main.c:409
 #, c-format
 msgid "%d error in cat option"
@@ -77070,6 +77103,8 @@ msgstr ""
 #: ../display/d.mon/main.c:146
 msgid "Manage"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #: ../raster/r.compress/main.c:219
 #, c-format
 msgid "DONE: uncompressed file is %lu %s (%.2f%%) smaller"
@@ -77088,7 +77123,10 @@ msgstr ""
 #: ../raster/r.compress/main.c:225
 #, c-format
 msgid "DONE: compressed file is %lu %s (%.2f%%) larger"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../display/d.mon/main.c:65
@@ -89275,6 +89313,7 @@ msgstr ""
 msgid "Missing table"
 msgstr "Table manquante"
 
+<<<<<<< HEAD
 msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
 msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus petit"
 
@@ -89284,5 +89323,19 @@ msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus petit"
 msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
 msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus grand"
 
+=======
+msgid "Missing table"
+msgstr "Table manquante"
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
+msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus petit"
+
+msgid "DONE: compressed file is %lu %s (%.2f%) smaller"
+msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus petit"
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
+msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus grand"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "DONE: compressed file is %lu %s (%.2f%) larger"
 msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus grand"

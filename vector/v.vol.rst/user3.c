@@ -237,7 +237,10 @@ int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     int n1, k1, k2, k, i1, l, l1, n4, n5, m, i;
     int /* NGST, */ LSIZE, ngstc, nszc, ngstr, nszr, ngstl, nszl;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     int POINT();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int ind, ind1;

@@ -28,10 +28,14 @@
 /*!
    \brief This structure keeps info about geometry parts above current
 <<<<<<< HEAD
+<<<<<<< HEAD
    geometry, path to current geometry in the feature. First 'part' number
 =======
    geometry, path to curent geometry in the feature. First 'part' number
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   geometry, path to curent geometry in the feature. First 'part' number
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
    however is feature id */
 struct geom_parts {
     int *part;

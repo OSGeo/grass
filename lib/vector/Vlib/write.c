@@ -32,7 +32,24 @@ static off_t write_dummy(struct Map_info *Map UNUSED, int type UNUSED,
 {
     G_warning("Vect_write_line() %s", _("for this format/level not supported"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+    return -1;
+}
+
+static off_t rewrite_dummy()
+{
+    G_warning("Vect_rewrite_line() %s",
+              _("for this format/level not supported"));
+    return -1;
+}
+
+static int delete_dummy()
+{
+    G_warning("Vect_delete_line() %s",
+              _("for this format/level not supported"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     return -1;
 }
 
@@ -108,12 +125,16 @@ static off_t format_l2(struct Map_info *Map UNUSED, off_t line UNUSED,
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
                                            const struct line_pnts *,
                                            const struct line_cats *) = {
 =======
 static off_t (*Vect_write_line_array[][3])() = {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static off_t (*Vect_write_line_array[][3])() = {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     {write_dummy, V1_write_line_nat, V2_write_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -134,12 +155,16 @@ static off_t (*Vect_write_line_array[][3])() = {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
                                              const struct line_pnts *,
                                              const struct line_cats *) = {
 =======
 static off_t (*Vect_rewrite_line_array[][3])() = {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static off_t (*Vect_rewrite_line_array[][3])() = {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     {rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -148,18 +173,24 @@ static off_t (*Vect_rewrite_line_array[][3])() = {
 #else
     ,
 <<<<<<< HEAD
+<<<<<<< HEAD
     {rewrite_dummy, format_l2, format_l2},
     {rewrite_dummy, format_l2, format_l2}
 =======
     {rewrite_dummy, format_l, format_l},
     {rewrite_dummy, format_l, format_l}
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    {rewrite_dummy, format_l, format_l},
+    {rewrite_dummy, format_l, format_l}
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #endif
 #ifdef HAVE_POSTGRES
     ,
     {rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_pg}
 #else
     ,
+<<<<<<< HEAD
 <<<<<<< HEAD
     {rewrite_dummy, format_l2, format_l2}
 #endif
@@ -189,6 +220,49 @@ static int (*Vect_delete_line_array[][3])() = {
 #else
     ,
     {delete_dummy, format, format}
+=======
+    {rewrite_dummy, format_l, format_l}
+#endif
+};
+
+static int (*Vect_delete_line_array[][3])() = {
+    {delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
+#ifdef HAVE_OGR
+    ,
+    {delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa},
+    {delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa}
+#else
+    ,
+    {delete_dummy, format, format},
+    {delete_dummy, format, format}
+#endif
+#ifdef HAVE_POSTGRES
+    ,
+    {delete_dummy, V1_delete_line_pg, V2_delete_line_pg}
+#else
+    ,
+    {delete_dummy, format, format}
+#endif
+};
+
+static int (*Vect_restore_line_array[][3])() = {
+    {restore_dummy, V1_restore_line_nat, V2_restore_line_nat}
+#ifdef HAVE_OGR
+    ,
+    {restore_dummy, restore_dummy, restore_dummy},
+    {restore_dummy, restore_dummy, restore_dummy}
+#else
+    ,
+    {restore_dummy, format, format},
+    {restore_dummy, format, format}
+#endif
+#ifdef HAVE_POSTGRES
+    ,
+    {restore_dummy, restore_dummy, restore_dummy}
+#else
+    ,
+    {restore_dummy, format, format}
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #endif
 };
 
@@ -295,10 +369,14 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
     G_debug(3,
             "Vect_rewrite_line(): name = %s, format = %d, level = %d, "
 <<<<<<< HEAD
+<<<<<<< HEAD
             "line/offset = %" PRId64,
 =======
             "line/offset = %" PRI_OFF_T,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            "line/offset = %" PRI_OFF_T,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             Map->name, Map->format, Map->level, line);
 
     if (!check_map(Map))
@@ -308,10 +386,14 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
                                                               points, cats);
     if (ret == -1)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Unable to rewrite feature/offset %" PRId64
 =======
         G_warning(_("Unable to rewrite feature/offset %" PRI_OFF_T
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_warning(_("Unable to rewrite feature/offset %" PRI_OFF_T
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     " in vector map <%s>"),
                   line, Vect_get_name(Map));
 
@@ -345,10 +427,14 @@ int Vect_delete_line(struct Map_info *Map, off_t line)
 
     if (ret == -1)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Unable to delete feature/offset %" PRId64
 =======
         G_warning(_("Unable to delete feature/offset %" PRI_OFF_T
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_warning(_("Unable to delete feature/offset %" PRI_OFF_T
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     " from vector map <%s>"),
                   line, Vect_get_name(Map));
 
@@ -375,12 +461,17 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
 
     G_debug(3,
 <<<<<<< HEAD
+<<<<<<< HEAD
             "Vect_restore_line(): name = %s, level = %d, offset = %" PRId64
             ", line = %" PRId64,
 =======
             "Vect_restore_line(): name = %s, level = %d, offset = %" PRI_OFF_T
             ", line = %" PRI_OFF_T,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            "Vect_restore_line(): name = %s, level = %d, offset = %" PRI_OFF_T
+            ", line = %" PRI_OFF_T,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             Map->name, Map->level, offset, line);
 
     if (!check_map(Map))
@@ -391,10 +482,14 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
 
     if (ret == -1)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Unable to restore feature/offset %" PRId64
 =======
         G_warning(_("Unable to restore feature/offset %" PRI_OFF_T
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_warning(_("Unable to restore feature/offset %" PRI_OFF_T
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     " in vector map <%s>"),
                   offset, Vect_get_name(Map));
 

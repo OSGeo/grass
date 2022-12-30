@@ -19,7 +19,10 @@ void scan_cats(const struct Map_info *, int, const char *, const char *,
 int scan_attr(const struct Map_info *, int, const char *, const char *,
               const char *, const struct FPRange *, struct Colors *,
               struct Colors *, int);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 /* scan_z.c */
 void scan_z(struct Map_info *, int, const char *, const char *,
@@ -37,6 +40,9 @@ void write_rgb_values(struct Map_info *, int, const char *, struct Colors *);
 =======
 void write_rgb_values(const struct Map_info *, int, const char *,
                       struct Colors *);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 /* read_rgb.c */
 void rgb2colr(struct Map_info *, int, const char *, struct Colors *);

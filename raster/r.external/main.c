@@ -107,7 +107,10 @@ int main(int argc, char *argv[])
         _("Override projection check (use current location's projection)");
     flag.o->description = _(
         "Assume that the dataset has same projection as the current location");
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     flag.j = G_define_flag();
     flag.j->key = 'j';

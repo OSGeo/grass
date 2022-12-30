@@ -51,10 +51,13 @@ static int by_point(const void *, const void *);
 static int tty = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 enum OutputFormat { PLAIN, JSON };
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int main(int argc, char *argv[])
 {
     int i, j;
@@ -101,6 +104,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     JSON_Value *root_value = NULL, *point_value, *layer_value;
     JSON_Array *root_array;
     JSON_Object *point_object, *layer_object;
@@ -109,6 +113,8 @@ int main(int argc, char *argv[])
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     G_gisinit(argv[0]);
 
     /* Set description */
@@ -289,10 +295,14 @@ int main(int argc, char *argv[])
 
     /* print header row */
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (format == PLAIN && flg.header->answer) {
 =======
     if (flg.header->answer) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (flg.header->answer) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (flg.cat->answer) {
             fprintf(stdout, "cat%s", fs);
         }
@@ -503,14 +513,19 @@ int main(int argc, char *argv[])
 
         /* report data from re-ordered cache */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         for (point = 0; point < point_cnt; point++) {
 
             G_debug(1, "%s|%s at col %d, row %d\n", cache[point].east_buf,
                     cache[point].north_buf, cache[point].col, cache[point].row);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             if (format == PLAIN) {
 
@@ -614,6 +629,8 @@ int main(int argc, char *argv[])
                 json_array_append_value(root_array, point_value);
             }
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             if (flg.cat->answer) {
                 fprintf(stdout, "%d%s", cache[point].cat, fs);
             }
@@ -658,7 +675,10 @@ int main(int argc, char *argv[])
                     fprintf(stdout, "%s%s", fs, cache[point].clr_buf[i]);
             }
             fprintf(stdout, "\n");
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         }
 
         if (cache_report & !tty)
@@ -668,6 +688,7 @@ int main(int argc, char *argv[])
         cache_hit_tot += cache_hit;
         cache_miss_tot += cache_miss;
         cache_hit = cache_miss = 0;
+<<<<<<< HEAD
 <<<<<<< HEAD
     }
 
@@ -682,6 +703,8 @@ int main(int argc, char *argv[])
         json_value_free(root_value);
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     if (!opt.coords->answers && !opt.points->answers && tty)

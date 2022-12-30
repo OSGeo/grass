@@ -357,9 +357,13 @@ class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
 
     def __init__(self, parent, giface, **kwargs):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # init map panel
         ExampleMapPanel.__init__(
             self,

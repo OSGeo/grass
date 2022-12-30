@@ -22,7 +22,10 @@ msgstr ""
 =======
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
 "PO-Revision-Date: 2022-05-23 10:50+0000\n"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/de/>\n"
@@ -32,10 +35,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 <<<<<<< HEAD
+<<<<<<< HEAD
 "X-Generator: Weblate 5.0\n"
 
 #: ../lib/nviz/render.c:43
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "X-Generator: Weblate 4.12.2\n"
 
 #: ../lib/init/grass.py:209
@@ -629,7 +635,10 @@ msgid "Concurrent mapset locking is not supported on Windows"
 msgstr ""
 "Sperren gleichzeitiger Zugriffe auf ein Mapset ist unter Windows nicht "
 "möglich."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/nviz/render.c:186
 msgid "Unable to get visual info"
@@ -660,16 +669,22 @@ msgstr ""
 #: ../lib/nviz/render.c:353
 #, c-format
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "Unable to set current context (CGL error = %d)"
 msgstr ""
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "There are classbreaks outside the range min-max. Number of classes reduced "
 "to %i, but using probabilities for %i classes."
 msgstr ""
 "Klassengrenzen außerhalb der min-max Spanne. Anzahl der Klassen auf %i "
 "reduziert. Verwende dennoch die Wahrscheinlichkeiten für %i Klassen. "
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/nviz/render.c:390
 #, c-format
@@ -2546,7 +2561,10 @@ msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
 "Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende --"
 "quiet."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/gis/parser.c:566
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
@@ -2721,9 +2739,12 @@ msgstr ""
 #: ../lib/gis/open.c:69
 #, c-format
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
 msgstr "G__open(read): mapset <%s> passt nicht zu xmapset <%s>."
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Module built against version %s but trying to use version %s. You need to "
 "rebuild GRASS GIS or untangle multiple installations."
@@ -2731,7 +2752,10 @@ msgstr ""
 "Das Module wurde mit Version %s gebaut, aber versucht Version %s zu "
 "verwenden. Sie müssen GRASS erneut bauen oder verschiedene Installationen "
 "entwirren."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/gis/open.c:90
 #, c-format
@@ -3697,7 +3721,10 @@ msgstr "Datenbank Schema"
 #: ../lib/gis/parser_standard_options.c:200
 =======
 #: ../lib/gis/parser_standard_options.c:198
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
@@ -3847,7 +3874,10 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:453
 =======
 #: ../lib/gis/parser_standard_options.c:454
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Number of digits used as mantissa in the internal map storage, 0 -23 for "
 "float, 0 - 52 for double, max or default"
@@ -3861,7 +3891,10 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:473
 =======
 #: ../lib/gis/parser_standard_options.c:474
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "The dimensions of the tiles used in the output raster3d map (XxYxZ or "
 "default: 16x16x8)"
@@ -4110,7 +4143,10 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:931
 =======
 #: ../lib/gis/parser_standard_options.c:917
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "WHERE conditions of SQL statement without 'where' keyword used in the "
 "temporal GIS framework"
@@ -4281,7 +4317,10 @@ msgid "Duplicate west field"
 msgid ""
 "Data inconsistent. Value computed for scatter plot is out of initialized "
 "range."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/gis/rd_cellhd.c:219
@@ -4329,6 +4368,29 @@ msgid ""
 "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
 "is not current mapset"
 msgstr ""
+<<<<<<< HEAD
+=======
+
+#: ../lib/imagery/iscatt_core.c:817
+msgid "Corrupted category raster conditions file (fseek failed)"
+msgstr ""
+
+#: ../lib/imagery/iscatt_core.c:972 ../lib/imagery/iclass_statistics.c:227
+#, c-format
+msgid "prepare_signature: scan line %d has odd number of points."
+msgstr ""
+
+#: ../lib/imagery/iscatt_core.c:981 ../lib/imagery/iclass_statistics.c:237
+msgid "signature: perimeter points out of order."
+msgstr ""
+
+#: ../lib/imagery/sigsetfile.c:41
+#, c-format
+msgid ""
+"Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
+"is not current mapset"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "Kann die Signatur-Datei <%s> für die Untergruppe <%s> der Gruppe <%s> - <%s> "
 "nicht erstellen, da es nicht im aktuellen Mapset ist."
 
@@ -4526,8 +4588,15 @@ msgstr ""
 #: ../lib/gis/view.c:169
 #, c-format
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "Unable to open %s for writing"
 msgstr "Kann %s nicht zum Schreiben öffnen."
+=======
+msgid ""
+"Neither %s (managed by d.mon command) nor %s (used for direct rendering) "
+"defined"
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/gis/view.c:254 ../lib/gis/view.c:471
 #, c-format
@@ -4548,6 +4617,7 @@ msgid ""
 "defined"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
+<<<<<<< HEAD
 " Das in \"%s\" abgespeicherte Fenster ist komplett außerhalb des derzeitigen "
 "GRASS Fensters."
 
@@ -4562,6 +4632,8 @@ msgstr ""
 
 #: ../lib/gis/timestamp.c:292
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "\n"
 "++ Führe Tests für ccmath wrapper aus ++"
 
@@ -4803,6 +4875,7 @@ msgid "Invalid timestamp file for vector map <%s@%s>"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/timestamp.c:525
 #, c-format
 msgid "Unable to create timestamp file for vector map <%s@%s>"
@@ -4861,6 +4934,14 @@ msgid "Incomplete GRASS session: Variable '%s' not set"
 msgstr "Variable '%s' nicht gesetzt"
 =======
 #: ../lib/manage/do_copy.c:43
+=======
+#: ../lib/manage/do_copy.c:43
+#, c-format
+msgid "Copying %s <%s> to current mapset as <%s>"
+msgstr ""
+
+#: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
 msgstr ""
@@ -4906,11 +4987,15 @@ msgstr "Vector memory mode wird nicht unterstützt, verwende 'AUTO'."
 msgid ""
 "This version of GRASS (%d.%d) is too old to read this topology format. Try "
 "to rebuild topology or upgrade GRASS to at least version %d."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/gis/mapset_msc.c:223
 #, c-format
+<<<<<<< HEAD
 <<<<<<< HEAD
 msgid "Unable to make mapset element %s (%s): %s"
 msgstr "Kann das Mapset Element %s (%s) nicht erzeugen: %s."
@@ -4928,10 +5013,16 @@ msgid ""
 "Your GRASS version does not fully support topology format %d.%d of the "
 "vector. Consider to rebuild topology or upgrade GRASS."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid ""
+"Your GRASS version does not fully support topology format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/gis/cmprzlib.c:199
 #, c-format
+<<<<<<< HEAD
 <<<<<<< HEAD
 msgid "ZLIB decompression error %d: %s"
 =======
@@ -4939,6 +5030,11 @@ msgid ""
 "Old topology format version %d.%d is not supported by this release. Try to "
 "rebuild topology using v.build or v.build.all module."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid ""
+"Old topology format version %d.%d is not supported by this release. Try to "
+"rebuild topology using v.build or v.build.all module."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/gis/mapset.c:38
@@ -4958,16 +5054,22 @@ msgstr ""
 #: ../lib/gis/lrand48.c:90
 #, c-format
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "gettimeofday failed: %s"
 msgstr "gettimeofday fehlgeschlagen: %s"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Attempt to read line angle for the line which is not connected to the node: "
 "node %d, line %d"
 msgstr ""
 "Versuche den Winkel der Linie, die nicht an den Knoten angebunden ist, zu "
 "lesen: Knoten %d, Linie %d"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/gis/lrand48.c:121
 msgid "Pseudo-random number generator not seeded"
@@ -5251,12 +5353,15 @@ msgid ""
 "errors you need to rebuild the module against GRASS GIS version %s."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 "Das Module wurde mit Version %s gebaut, aber versucht Version %s zu "
 "verwenden. Sie müssen GRASS erneut bauen oder verschiedene Installationen "
 "entwirren."
 
 #: ../lib/gis/gisinit.c:67 ../lib/gis/gisinit.c:118
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 "\n"
 "++ Führe grundlegende Tests aus ++"
 
@@ -10657,7 +10762,10 @@ msgstr ""
 msgid ""
 "Unable to open header file for raster map <%s@%s>. It seems that some "
 "previous step failed and created an incomplete raster map."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/raster/put_row.c:413
@@ -11285,7 +11393,10 @@ msgstr ""
 #: ../lib/raster/set_window.c:133
 =======
 #: ../lib/raster/set_window.c:131
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Rast_set_read_window(): projection/zone differs from that of currently open "
 "raster maps"
@@ -12720,8 +12831,15 @@ msgstr "Kann Datei mit Kontrollpunkten der Gruppe [%s in %s] nicht erzeugen."
 #: ../lib/imagery/list_subgp.c:90
 #, c-format
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "subgroup <%s> of group <%s> is empty\n"
 msgstr "Untergruppe <%s> der Gruppe <%s> ist leer\n"
+=======
+msgid ""
+"The transformation pipeline contains an '%s' step. Remove this step if "
+"easting and northing are swapped in the output."
+msgstr ""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/imagery/list_subgp.c:103
 #, c-format
@@ -13008,7 +13126,10 @@ msgstr "Kein Zentroid für Fläche %d definiert. Fläche nicht exportiert."
 msgid "Unable to restore feature/offset %lu in vector map <%s>"
 msgstr ""
 "Feature/Offset %lu in Vektorkarte <%s> kann nicht wiederhergestellt werden."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/imagery/georef_tps.c:267 ../lib/imagery/georef_tps.c:271
 #: ../lib/imagery/georef_tps.c:275 ../lib/imagery/georef_tps.c:281
@@ -13071,7 +13192,10 @@ msgstr "Kann die NULL-Datei <%s> nicht öffnen."
 
 msgid "ERROR: <%s> is not a valid GRASS location"
 msgstr "FEHLER: <%s> ist keine gültige GRASS location"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/imagery/iscatt_core.c:81
 #, c-format
@@ -13084,6 +13208,7 @@ msgid "Unable to write into category raster condition file <%s>."
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/imagery/iscatt_core.c:250
 #, c-format
 msgid "Unable to open category raster conditions file <%s>."
@@ -13094,18 +13219,24 @@ msgstr ""
 msgid "Unable to find patch raster <%s>."
 msgstr ""
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Hit RETURN to continue"
 msgstr "RETURN zum Weitermachen drücken"
 
 msgid "Vector map <%s> is not opened on topology level"
 msgstr "Vektorkarte <%s> ist nicht im Topologielevel geöffnet."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/imagery/iscatt_core.c:274
 #, c-format
 msgid "Resolutions of patch <%s> and patched file <%s> are not same."
 msgstr ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #: ../lib/imagery/iscatt_core.c:300 ../lib/imagery/iscatt_core.c:341
 #, c-format
@@ -13115,6 +13246,10 @@ msgstr ""
 msgid "Removing empty 3D raster maps"
 msgstr "Entfernen der leeren 3D Rasterkarte"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "Removing empty 3D raster maps"
+msgstr "Entfernen der leeren 3D Rasterkarte"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/imagery/iscatt_core.c:331
 #, c-format
@@ -15497,6 +15632,7 @@ msgid "Too many categories (%d), unable to set cat %d (layer %d)"
 msgstr "Zuviele Kategorien (%d), kann cat %d (Layer %d) nicht setzen."
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/cats.c:420
 #, c-format
 msgid "Unable to convert category string '%s' (from '%s') to category range"
@@ -15504,13 +15640,18 @@ msgstr ""
 "Kann die Kategorie-Zeichenkette '%s' (von '%s') nicht in eine "
 "Kategoriespanne konvertieren."
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
 "Dev note: Angepasste sites Bibliothek für Vektorpunkte verwendet. (Modul "
 "sollte für die GRASS 6 Vector Library aktualisiert werden)."
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/vector/Vlib/cats.c:573 ../lib/vector/Vlib/cats.c:677
 msgid "Layer number must be > 0 for category constraints"
@@ -15570,6 +15711,7 @@ msgstr ""
 "Ungültiger Name der Vektorkarte <%s>. SQL-Schlüsselwort darf nicht als "
 "Vektorkartenname benutzt werden."
 
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/legal_vname.c:104 ../lib/vector/Vlib/legal_vname.c:109
 #, c-format
 msgid "Output vector map name <%s> is not in the current mapset (%s)"
@@ -17148,5 +17290,61 @@ msgstr "Top muss größer sein als Bottom."
 msgid "Unable to open header file for raster map <%s@%s>"
 msgstr "Kann Header-Datei der Rasterkarte <%s@%s> nicht öffnen."
 
+=======
+msgid "which is missing."
+msgstr "welche fehlt."
+
+msgid "whose header file can't be opened."
+msgstr "deren Header-Datei nicht geöffnet werden kann."
+
+msgid "Illegal row value"
+msgstr "Ungültiger Zeilenwert."
+
+msgid "Illegal col value"
+msgstr "Ungültiger Spaltenwert."
+
+msgid "Illegal n-s3 resolution value"
+msgstr "Ungültige N-S3 Auflösung."
+
+msgid "Illegal row3 value"
+msgstr "Ungültiger row3-Wert."
+
+msgid "Illegal e-w3 resolution value"
+msgstr "Ungültige E-W3 Auflösung."
+
+msgid "Illegal col3 value"
+msgstr "Ungültiger col3-Wert."
+
+msgid "Illegal e-w resolution value"
+msgstr "Ungültige O-W Ausdehnung."
+
+msgid "North must be north of South"
+msgstr "Nordwert muss nördlich des Südwertes liegen."
+
+msgid "North must be larger than South"
+msgstr "Nordwert muss größer als der Südwert sein"
+
+msgid "East must be larger than West"
+msgstr "Ostwert muss größer als der Westwert sein."
+
+msgid "Invalid coordinates"
+msgstr "Ungültige Koordinaten."
+
+msgid "Illegal n-s resolution value"
+msgstr "Ungültige N-S Auflösung."
+
+msgid "Illegal t-b3 resolution value"
+msgstr "Ungültige t-b3 Auflösung."
+
+msgid "Illegal depths value"
+msgstr "Ungültiger Tiefenwert."
+
+msgid "Top must be larger than Bottom"
+msgstr "Top muss größer sein als Bottom."
+
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "Kann Header-Datei der Rasterkarte <%s@%s> nicht öffnen."
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "Kopiere %s <%s> in das aktuelle Mapset als <%s>"

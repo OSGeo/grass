@@ -77,7 +77,10 @@ EMPQueueAdaptive<T, Key>::EMPQueueAdaptive(size_t inMem)
 // This more resembles the original constructor which is greedy
 =======
 // This more resembles the original constuctor which is greedy
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 template <class T, class Key>
 EMPQueueAdaptive<T, Key>::EMPQueueAdaptive()
 {
@@ -97,10 +100,14 @@ EMPQueueAdaptive<T, Key>::EMPQueueAdaptive()
 
 //------------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 // This method initialized the PQ based on the memory passed
 =======
 // This metod initialized the PQ based on the memory passed
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+// This metod initialized the PQ based on the memory passed
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 // into it
 template <class T, class Key>
 void EMPQueueAdaptive<T, Key>::initPQ(size_t initMem)

@@ -3736,6 +3736,7 @@ msgid "ERROR: Option key not defined"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/parser_help.c:198
 msgid "Flags:"
 msgstr ""
@@ -4009,6 +4010,301 @@ msgid "<%s> in mapset <%s>"
 msgstr "<%s>在地图集<%s>中"
 =======
 #: ../lib/manage/do_copy.c:43
+=======
+#: ../lib/manage/do_copy.c:43
+#, c-format
+msgid "Copying %s <%s> to current mapset as <%s>"
+msgstr ""
+
+#: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
+#, c-format
+msgid "Unable to copy <%s> to current mapset as <%s>"
+msgstr ""
+
+#: ../lib/manage/do_copy.c:72
+#, c-format
+msgid "%s copied"
+msgstr ""
+
+#: ../lib/manage/do_list.c:30
+#, c-format
+msgid "%s: invalid index %d"
+msgstr ""
+
+#: ../lib/vector/diglib/file.c:159
+msgid "Writing to file loaded to memory not supported"
+msgstr ""
+
+#: ../lib/vector/diglib/file.c:197
+msgid "Unable to load file to memory, file not open"
+msgstr ""
+
+#: ../lib/vector/diglib/file.c:212
+msgid "Vector memory mode not supported, using 'AUTO'"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_struct.c:523
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this topology format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#: ../lib/vector/diglib/plus_struct.c:529
+#, c-format
+msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+
+#: ../lib/vector/diglib/plus_struct.c:539
+#, c-format
+msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology using v.build or v.build.all module."
+msgstr ""
+
+#: ../lib/vector/diglib/plus_struct.c:563 ../lib/vector/diglib/portable.c:208
+#: ../lib/vector/diglib/portable.c:241 ../lib/vector/diglib/portable.c:683
+msgid "Vector exceeds supported file size limit"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_node.c:213
+#, c-format
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgstr ""
+
+#: ../lib/vector/diglib/port_init.c:158
+#, c-format
+msgid "Unable to find '%x' in %s"
+msgstr ""
+
+#: ../lib/vector/diglib/frmt.c:45 ../lib/vector/diglib/frmt.c:70
+#, c-format
+msgid "Vector format not recognized: %s"
+msgstr ""
+
+#: ../lib/vector/diglib/frmt.c:79 ../lib/vector/diglib/frmt.c:88
+#, c-format
+msgid "Vector format '%s' not supported"
+msgstr ""
+
+#: ../lib/vector/diglib/frmt.c:97
+#, c-format
+msgid "Format definition is not correct: %s"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:218 ../lib/vector/diglib/plus_area.c:718
+#, c-format
+msgid "Line %d already has area/isle %d to left"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:228 ../lib/vector/diglib/plus_area.c:726
+#, c-format
+msgid "Line %d already has area/isle %d to right"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:282
+msgid "Isle already registered in area"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:316
+msgid "Attempt to delete isle from dead area"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:324
+#, c-format
+msgid "Attempt to delete not registered isle %d from area %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:371
+msgid "Attempt to delete dead area"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:410
+#, c-format
+msgid "Dead centroid %d registered for area (bug in the vector library)"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:433
+#, c-format
+msgid "Attempt to delete area %d info from dead isle %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:784
+#, c-format
+msgid "Attempt to delete isle %d info from dead area %d"
+msgstr ""
+
+#: ../lib/vector/diglib/cindex_rw.c:156
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this category index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:99 ../lib/vector/diglib/spindex_rw.c:107
+msgid "Topology file must be written before spatial index file"
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:303
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:309
+#, c-format
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:318
+#, c-format
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex.c:450
+#, c-format
+msgid "Unable to delete node %d from spatial index"
+msgstr ""
+
+#: ../lib/vector/diglib/spindex.c:493
+#, c-format
+msgid "Unable to delete line %d from spatial index"
+msgstr ""
+
+#: ../lib/vector/diglib/spindex.c:529
+msgid "Attempt to delete sidx for dead area"
+msgstr ""
+
+#: ../lib/vector/diglib/spindex.c:546
+#, c-format
+msgid "Unable to delete area %d from spatial index"
+msgstr ""
+
+#: ../lib/vector/diglib/spindex.c:595
+#, c-format
+msgid "Unable to delete isle %d from spatial index"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:58
+msgid "Unable to open test.tmp file"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:75
+#, c-format
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:89
+#, c-format
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:104
+#, c-format
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:119
+#, c-format
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:134
+#, c-format
+msgid "Error in read/write portable int, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:150
+#, c-format
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:165
+#, c-format
+msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_line.c:262 ../lib/vector/diglib/plus_line.c:302
+#, c-format
+msgid "Attempt to delete not registered line %d from node %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:222
+msgid "Unable read topology for nodes"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:227
+#, c-format
+msgid "Unable to read topology for node %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:232
+msgid "Unable read topology for lines"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:237
+#, c-format
+msgid "Unable to read topology for line %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:242
+msgid "Unable to read topo for areas"
+msgstr "无法为区域读取拓扑"
+
+#: ../lib/vector/diglib/plus.c:247
+#, c-format
+msgid "Unable read topology for area %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:252
+msgid "Unable to read topology for isles"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:257
+#, c-format
+msgid "Unable to read topology for isle %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:279 ../lib/vector/diglib/plus.c:305
+msgid "Unable to write head to plus file"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:284
+msgid "Unable to write nodes to plus file"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:289
+msgid "Unable to write lines to plus file"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:294
+msgid "Unable to write areas to plus file"
+msgstr ""
+
+#: ../lib/vector/diglib/plus.c:299
+msgid "Unable to write isles to plus file"
+msgstr ""
+
+#: ../lib/vector/vedit/delete.c:40
+#, c-format
+msgid "Attempt to delete dead feature (%d)"
+msgstr ""
+
+#: ../lib/vector/vedit/delete.c:72
+#, c-format
+msgid "No area found for centroid %d"
+msgstr ""
+
+#: ../lib/vector/vedit/delete.c:76
+#, c-format
+msgid "Duplicate centroid %d, unable to delete area"
+msgstr ""
+
+#: ../lib/vector/vedit/delete.c:105
+#, c-format
+msgid "Area %d without centroid"
+msgstr ""
+
+#: ../lib/vector/vedit/delete.c:121
+#, c-format
+msgid "Area %d has no boundaries"
+msgstr ""
+
+#: ../lib/vector/vedit/cats.c:63
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
 msgstr ""
@@ -11731,6 +12027,7 @@ msgstr "[%s]: 没有此颜色"
 #~ msgid "Unable to open null file <%s>"
 #~ msgstr "G_spawn：无法打开文件%s"
 
+<<<<<<< HEAD
 #~ msgid "ERROR: option <%s>: <%s> exists.\n"
 #~ msgstr "错误：选项<%s>：<%s>已存在。\n"
 
@@ -11833,5 +12130,49 @@ msgstr "非法的3D顶到底的分辨率值"
 msgid "Illegal depths value"
 msgstr "非法的深度值"
 
+=======
+msgid "Illegal row value"
+msgstr "非法的行值"
+
+msgid "Illegal col value"
+msgstr "非法的列值"
+
+msgid "Illegal n-s3 resolution value"
+msgstr "非法的3D南北向分辨率值"
+
+msgid "Illegal row3 value"
+msgstr "非法的3D的行值"
+
+msgid "Illegal e-w3 resolution value"
+msgstr "非法的3D东西向分辨率值"
+
+msgid "Illegal col3 value"
+msgstr "非法的3D的列值"
+
+msgid "Illegal e-w resolution value"
+msgstr "非法的东西向分辨率值"
+
+msgid "North must be north of South"
+msgstr "北必须在南的北边"
+
+msgid "North must be larger than South"
+msgstr "北纬值必须比南纬值大"
+
+msgid "East must be larger than West"
+msgstr "东经值必须比西经值大"
+
+msgid "Invalid coordinates"
+msgstr "无效的坐标"
+
+msgid "Illegal n-s resolution value"
+msgstr "非法的南北向分辨率值"
+
+msgid "Illegal t-b3 resolution value"
+msgstr "非法的3D顶到底的分辨率值"
+
+msgid "Illegal depths value"
+msgstr "非法的深度值"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "Top must be larger than Bottom"
 msgstr "顶部的值必须比底部的值大"

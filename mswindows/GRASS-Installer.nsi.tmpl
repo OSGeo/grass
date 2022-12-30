@@ -804,7 +804,10 @@ Function DownloadInstallMSRuntime
 	untgz::extract -d "$TEMP\$ORIGINAL_UNTAR_FOLDER" -zbz2 "$TEMP\$ARCHIVE_NAME"
 =======
 	untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
 	

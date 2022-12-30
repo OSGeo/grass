@@ -19,10 +19,14 @@
 #include "proto.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_list_tables(dbString **tlist, int *tcount, int system UNUSED)
 =======
 int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int db__driver_list_tables(dbString **tlist, int *tcount, int system)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     int i;
     dbString *list;
@@ -37,10 +41,14 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 
     if (res == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         db_d_append_error("%s\n%s", _("Unable get list of tables:"),
 =======
         db_d_append_error("%s\%s", _("Unable get list of tables:"),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        db_d_append_error("%s\%s", _("Unable get list of tables:"),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                           mysql_error(connection));
         db_d_report_error();
         return DB_FAILED;

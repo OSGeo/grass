@@ -6,8 +6,11 @@
  *               directories for GRASS stroke and Freetype-compatible fonts.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * COPYRIGHT:    (C) 2007-2024 by the GRASS Development Team
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  * COPYRIGHT:    (C) 2007-2015 by the GRASS Development Team
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
@@ -69,13 +72,19 @@ int main(int argc, char *argv[])
         "Generates the font configuration file by scanning various directories "
         "for fonts.");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     overwrite = G_define_flag();
     overwrite->key = 'o';
     overwrite->description =
         _("Overwrite font configuration file if already existing");
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     tostdout = G_define_flag();
     tostdout->key = 's';
@@ -107,18 +116,24 @@ int main(int argc, char *argv[])
 
         if (!access(fontcapfile, F_OK)) { /* File exists? */
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (!G_get_overwrite())
                 G_fatal_error(_("Fontcap file %s already exists; use "
                                 "--overwrite flag if you "
                                 "wish to overwrite it"),
                               fontcapfile);
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             if (!overwrite->answer)
                 G_fatal_error(
                     _("Fontcap file %s already exists; use -%c flag if you "
                       "wish to overwrite it"),
                     fontcapfile, overwrite->key);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         }
     }
 

@@ -10208,6 +10208,14 @@ msgstr "Un s-a putut citi harta vectorială <%s>"
 #: ../lib/raster/get_cellhd.c:70
 #, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../lib/raster/get_cellhd.c:78
+#, c-format
+msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 

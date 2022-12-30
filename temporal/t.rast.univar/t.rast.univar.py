@@ -90,6 +90,7 @@
 # %end
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # %rules
 # % requires: percentile,-e
 # % exclusive: zones,-r
@@ -97,6 +98,8 @@
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 import grass.script as gs
 
 ############################################################################
@@ -121,6 +124,7 @@ def main():
     rast_region = bool(flags["r"])
     separator = gs.separator(options["separator"])
 <<<<<<< HEAD
+<<<<<<< HEAD
     percentile = None
     if options["percentile"]:
         try:
@@ -132,6 +136,8 @@ def main():
                 )
             )
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     # Make sure the temporal database exists
@@ -154,6 +160,7 @@ def main():
         where,
         extended,
 <<<<<<< HEAD
+<<<<<<< HEAD
         percentile=percentile,
         no_header=no_header,
         fs=separator,
@@ -161,11 +168,16 @@ def main():
         rast_region=rast_region,
         region_relation=region_relation,
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         no_header=no_header,
         fs=separator,
         rast_region=rast_region,
         zones=zones,
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         nprocs=nprocs,
     )
 

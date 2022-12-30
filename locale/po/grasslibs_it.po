@@ -12194,6 +12194,7 @@ msgid "Illegal vector map name <%s>. Must start with a letter."
 msgstr ""
 "Nome non valido per il vettoriale <%s>. Deve cominciare con una lettera."
 
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/legal_vname.c:61
 #, c-format
 msgid "Illegal vector map name <%s>. Character '%c' not allowed."
@@ -14228,3 +14229,70 @@ msgstr "Copia %s <%s> al mapset corrente come <%s>"
 msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr "per eseguire il modulo <%s> aggiungere il trattino basso alla fine dell'opzione <%s> per evitare conflitti con le parole chiave di Python. Il trattino basso all'inizio è obsoleto in GRASS GIS 7.0 e sarà rimosso nella versione 7.1."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+msgid "which is missing."
+msgstr "che non è presente."
+
+msgid "whose header file can't be opened."
+msgstr "il cui header file non può essere aperto."
+
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "Impossibile aprire il file di intestazione per il raster <%s@%s>"
+
+msgid "shell script to be processed as batch job"
+msgstr "script di shell da eseguire come batch job"
+
+msgid "Illegal row value"
+msgstr "Valore di riga non valido"
+
+msgid "Illegal col value"
+msgstr "Valore illegale di col"
+
+msgid "Illegal n-s3 resolution value"
+msgstr "Valore di risoluzione n-s3 non valido"
+
+msgid "Illegal row3 value"
+msgstr "Valore di row3 non valido"
+
+msgid "Illegal e-w3 resolution value"
+msgstr "Valore di risoluzione e-w3 non valido"
+
+msgid "Illegal col3 value"
+msgstr "valore col3 illegale"
+
+msgid "Illegal e-w resolution value"
+msgstr "Il valore di risoluzione e-w non è corretto"
+
+msgid "North must be north of South"
+msgstr "Il Nord deve essere a nord del Sud"
+
+msgid "North must be larger than South"
+msgstr "Il Nord deve essere più grande del Sud"
+
+msgid "East must be larger than West"
+msgstr "L'Est deve essere più grande dell'Ovest"
+
+msgid "Invalid coordinates"
+msgstr "Coordinate non valide"
+
+msgid "Illegal n-s resolution value"
+msgstr "Il valore di risoluzione n-s non è corretto"
+
+msgid "Illegal t-b3 resolution value"
+msgstr "valore di risoluzione t-b3 non valido"
+
+msgid "Illegal depths value"
+msgstr "valore di profondità non valido"
+
+msgid "Top must be larger than Bottom"
+msgstr "Il Nord deve essere più grande del Sud"
+
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
+msgstr "Impossibile leggere il file dell'intestazione per la mappa raster <%s@%s>. È una riclassificazione della mappa raster <%s@%s> %s"
+
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Copia %s <%s> al mapset corrente come <%s>"
+
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr "per eseguire il modulo <%s> aggiungere il trattino basso alla fine dell'opzione <%s> per evitare conflitti con le parole chiave di Python. Il trattino basso all'inizio è obsoleto in GRASS GIS 7.0 e sarà rimosso nella versione 7.1."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

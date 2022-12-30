@@ -218,7 +218,10 @@ int main(int argc, char *argv[])
        mostly because I'am not sure if they make enough sense */
 =======
        mostly because I'am not sure if they make enouhg sense */
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if (type[0] == GV_LINE && (operator== OP_OR || operator== OP_XOR))
         G_fatal_error(_("Operator '%s' is not supported for type line"),
                       operator_opt->answer);

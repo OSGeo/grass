@@ -34,8 +34,11 @@ void HTML_Graph_close(void)
 
     /*
 <<<<<<< HEAD
+<<<<<<< HEAD
      * examine the list of polygons, if a polygon wholly exists inside of
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
      * exmaine the list of polygons, if a polygon wholly exists inside of
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
      * another polygon, then remove it.

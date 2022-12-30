@@ -27335,7 +27335,10 @@ msgstr ""
 #, c-format
 msgid "Unable to access target location/mapset %s/%s"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../imagery/i.atcorr/computations.cpp:178
 msgid "Check aerosol measurements or plane altitude"
@@ -39375,6 +39378,13 @@ msgstr "현재 로케이션의 투영 정보를 얻을 수 없습니다"
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
 msgid "image collections"
+<<<<<<< HEAD
+=======
+msgstr ""
+
+#: ../locale/scriptstrings/i.band_to_translate.c:6
+msgid "Name of band reference identifier (example: S2_1)"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -48815,7 +48825,10 @@ msgstr "널 자료"
 #: ../raster/r.null/main.c:63
 msgid "no-data"
 msgstr ""
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/r.series.diversity_to_translate.c:12
 #, fuzzy
@@ -84733,6 +84746,7 @@ msgstr ""
 #~ msgstr "pj_do_proj2 내에 오류"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #~ msgid "Error in pj_do_proj3"
 #~ msgstr "pj_do_proj3 내에 오류"
 
@@ -84787,5 +84801,16 @@ msgid "Makes each cell value a function of the attribute values assigned to the 
 msgstr "각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
+=======
+msgid "Can not read control points for group <%s>"
+msgstr "그룹 <%s>를 위한 제어점을 읽을 수 없습니다"
+
+msgid "<%s> not found"
+msgstr "<%s>를 찾을 수 없습니다"
+
+msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgstr "각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 msgid "%s=%s,%s: files are the same, no copy required"
 msgstr "%s=%s,%s: 파일이 똑같아서 복사할 필요가 없습니다"

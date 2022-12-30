@@ -20,12 +20,17 @@
 /** for all points initiate their vis line to the one directly below
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void init_vis(struct Point *points, int num_points, struct Line *lines UNUSED,
               int num_lines UNUSED)
 =======
 void init_vis(struct Point *points, int num_points, struct Line *lines,
               int num_lines)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void init_vis(struct Point *points, int num_points, struct Line *lines,
+              int num_lines)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     int i;
     double d;

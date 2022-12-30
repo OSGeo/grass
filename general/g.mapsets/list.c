@@ -6,12 +6,36 @@
 #include <grass/parson.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Function to initialize a JSON object with a mapsets array
 static JSON_Object *initialize_json_object(void)
 {
     JSON_Value *root_value = json_value_init_object();
     if (!root_value) {
         G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+=======
+void list_available_mapsets(const char **mapset_name, int nmapsets,
+                            const char *fs)
+{
+    int n;
+
+    G_message(_("Available mapsets:"));
+
+    for (n = 0; n < nmapsets; n++) {
+        fprintf(stdout, "%s", mapset_name[n]);
+        if (n < nmapsets - 1) {
+            if (strcmp(fs, "newline") == 0)
+                fprintf(stdout, "\n");
+            else if (strcmp(fs, "space") == 0)
+                fprintf(stdout, " ");
+            else if (strcmp(fs, "comma") == 0)
+                fprintf(stdout, ",");
+            else if (strcmp(fs, "tab") == 0)
+                fprintf(stdout, "\t");
+            else
+                fprintf(stdout, "%s", fs);
+        }
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     JSON_Object *root_object = json_value_get_object(root_value);
@@ -26,6 +50,7 @@ static JSON_Object *initialize_json_object(void)
     return root_object;
 }
 
+<<<<<<< HEAD
 // Function to serialize and print JSON object
 static void serialize_and_print_json_object(JSON_Value *root_value)
 {
@@ -60,6 +85,18 @@ void list_available_mapsets(const char **mapset_name, int nmapsets,
     for (n = 0; n < nmapsets; n++) {
         fprintf(stdout, "%s", mapset_name[n]);
         if (n < nmapsets - 1) {
+=======
+void list_accessible_mapsets(const char *fs)
+{
+    int n;
+    const char *name;
+
+    G_message(_("Accessible mapsets:"));
+    for (n = 0; (name = G_get_mapset_name(n)); n++) {
+        /* match each mapset to its numeric equivalent */
+        fprintf(stdout, "%s", name);
+        if (G_get_mapset_name(n + 1)) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             if (strcmp(fs, "newline") == 0)
                 fprintf(stdout, "\n");
             else if (strcmp(fs, "space") == 0)

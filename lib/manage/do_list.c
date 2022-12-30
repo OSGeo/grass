@@ -33,6 +33,7 @@ void M_do_list(int n, const char *mapset)
     if (n < 0) {
         for (i = 0; i < nlist; i++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_list_element(list[i].element[0], list[i].desc[0], mapset, NULL);
         }
     }
@@ -47,5 +48,14 @@ void M_do_list(int n, const char *mapset)
         G_list_element(list[n].element[0], list[n].desc[0], mapset,
                        (int (*)())0);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            G_list_element(list[i].element[0], list[i].desc[0], mapset,
+                           (int (*)())0);
+        }
+    }
+    else {
+        G_list_element(list[n].element[0], list[n].desc[0], mapset,
+                       (int (*)())0);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 }

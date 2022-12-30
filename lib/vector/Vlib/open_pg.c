@@ -55,12 +55,15 @@ static char **scan_array(const char *);
 static int remap_node(const struct Format_info_offset *, int);
 static int remap_line(const struct Plus_head *, off_t, int);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #define NOPG_UNUSED
 #else
 #define NOPG_UNUSED UNUSED
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #endif
 
 /*!
@@ -327,9 +330,12 @@ int V1_open_new_pg(struct Map_info *Map NOPG_UNUSED,
    \return -1 on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect__open_topo_pg(struct Map_info *Map NOPG_UNUSED,
                        int head_only NOPG_UNUSED, int update NOPG_UNUSED)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int Vect__open_topo_pg(struct Map_info *Map, int head_only, int update)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
@@ -1757,8 +1763,11 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
    Print out NOTICE message only on verbose level
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void notice_processor(void *arg UNUSED, const char *message)
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 void notice_processor(void *arg, const char *message)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {

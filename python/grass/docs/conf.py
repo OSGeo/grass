@@ -129,10 +129,14 @@ master_doc = "index"
 # General information about the project.
 project = "Python library documentation"
 <<<<<<< HEAD
+<<<<<<< HEAD
 copyright = "2024, GRASS Development Team"
 =======
 copyright = "2022, GRASS Development Team"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+copyright = "2022, GRASS Development Team"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -371,7 +375,10 @@ epub_copyright = copyright
 =======
 epub_publisher = "GRASS Development Team"
 epub_copyright = "2022, GRASS Development Team"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 # The basename for the epub file. It defaults to the project name.
 # epub_basename = u'wxGUI'
