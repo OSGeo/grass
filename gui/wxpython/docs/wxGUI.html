@@ -5,7 +5,6 @@
 GRASS GIS. Its main features include displaying geographical data
 in 2D and 3D, calling GRASS GIS modules, and interacting with data.
 
-
 <h3>Overview</h3>
 The GUI is composed of <em>three</em> main components:
 
@@ -18,7 +17,9 @@ The GUI is composed of <em>three</em> main components:
   set of map layers in the layer manager. The user may start multiple map 
   displays during a session. The map layers for each display are grouped
   under different tabs in the Layer Manager.</li>
-  <li><a href="wxGUI.modules.html">Module dialogs</a> enable running GRASS modules.</li>
+  <li><a href="wxGUI.modules.html">Module dialogs</a> enable running GRASS modules
+  that can be searched and launched via Tools tab.
+  </li>
 </ul>
 
 <h3>Layer Manager</h3>
@@ -34,7 +35,7 @@ top of the screen.
 
 <center>
 <br>
-<img src="wxGUI_layer_manager.jpg" border="1" alt="screenshot"><br><br>
+<img src="wxGUI_layer_manager.png" border="1" alt="screenshot"><br><br>
 Figure: Layer Manager screenshot on Ubuntu
 </center>
 
@@ -637,7 +638,6 @@ the computational region extents.
   <dd>Render map (re-renders map)</dd>
 </dl>
 
-
 <h3>Starting the GUI from command line</h3>
 
 By default, the GUI is always started, but if only the command line (shell) is
@@ -681,13 +681,11 @@ if GRASS GIS is running with a command line (a shell in a terminal application).
 Exiting the shell (typically by the <tt>exit</tt> command) ends the GRASS session
 including any running GUIs.
 
-
 <h3>Background information</h3>
 
 <b>wxGUI</b> is a native <em>Graphical User Interface</em> (GUI) for
 GRASS GIS written in <a href="http://www.python.org">Python</a>
 using <a href="http://www.wxpython.org">wxPython</a> library.
-
 
 <h2>SEE ALSO</h2>
 
@@ -719,8 +717,3 @@ Tereza Fiedlerova, OSGeoREL, Czech Technical University in Prague, Czech Republi
 Matej Krejci, OSGeoREL, Czech Technical University in Prague, Czech Republic<br><br>
 
 Icons created by <a href="http://robert.szczepanek.pl">Robert Szczepanek</a>, Poland (<a href="https://github.com/Cracert/GIS-icons">Git repository</a>)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -38,10 +38,10 @@ PlotIcons = {
         img="layer-raster-profile",
         label=_("Draw transect in map display window to profile"),
     ),
-    "options": MetaIcon(img="settings", label=_("Plot options")),
+    "options": BaseIcons["settings"],
     "statistics": MetaIcon(img="stats", label=_("Plot statistics")),
     "save": MetaIcon(img="save", label=_("Save profile data to CSV file")),
-    "quit": BaseIcons["quit"].SetLabel(_("Quit plot tool")),
+    "quit": BaseIcons["quit"],
 }
 
 
@@ -182,8 +182,6 @@ class BasePlotFrame(wx.Frame):
 
         self.zoom = False  # zooming disabled
         self.drag = False  # draging disabled
-        # vertical and horizontal scrollbars
-        self.client.showScrollbars = True
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)

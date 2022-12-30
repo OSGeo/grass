@@ -29,14 +29,12 @@ const char *mapset, *oname;
 
 int main(int argc, char **argv)
 {
-    struct
-    {
-	struct Option *input;
-	struct Option *output;
+    struct {
+        struct Option *input;
+        struct Option *output;
     } params;
 
     struct GModule *module;
-
 
     G_gisinit(argv[0]);
 
@@ -45,7 +43,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     module->description =
-	_("Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map.");
+        _("Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map.");
 
     params.input = G_define_standard_option(G_OPT_F_INPUT);
     params.input->description = _("GRIDATB i/o map file");
@@ -56,8 +54,7 @@ int main(int argc, char **argv)
     params.output->required = YES;
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
+        exit(EXIT_FAILURE);
 
     file = params.input->answer;
     oname = params.output->answer;
@@ -65,8 +62,7 @@ int main(int argc, char **argv)
     mapset = G_mapset();
 
     if (check_ready())
-	G_fatal_error(_("File not found: %s"), file);
-
+        G_fatal_error(_("File not found: %s"), file);
 
     rdwr_gridatb();
 

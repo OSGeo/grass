@@ -35,12 +35,6 @@ int Rast__check_for_auto_masking(void);
 void Rast_suppress_masking(void);
 void Rast_unsuppress_masking(void);
 
-/* bands.c */
-int Rast_has_band_reference(const char *, const char *);
-int Rast_read_band_reference(const char *, const char *, char **, char **);
-int Rast_write_band_reference(const char *, const char *, const char *);
-int Rast_remove_band_reference(const char *);
-
 /* cats.c */
 int Rast_read_cats(const char *, const char *, struct Categories *);
 int Rast_read_vector_cats(const char *, const char *, struct Categories *);
@@ -56,31 +50,30 @@ void Rast_mark_f_cats(const FCELL *, int, struct Categories *);
 void Rast_mark_d_cats(const DCELL *, int, struct Categories *);
 int Rast_mark_cats(const void *, int, struct Categories *, RASTER_MAP_TYPE);
 void Rast_rewind_cats(struct Categories *);
-char *Rast_get_next_marked_d_cat(struct Categories *, DCELL *, DCELL *,
-				 long *);
-char *Rast_get_next_marked_c_cat(struct Categories *, CELL *, CELL *,
-				 long *);
-char *Rast_get_next_marked_f_cat(struct Categories *, FCELL *, FCELL *,
-				     long *);
-char *Rast_get_next_marked_cat(struct Categories *, void *, void *,
-			       long *, RASTER_MAP_TYPE);
-int Rast_set_c_cat(const CELL *, const CELL *, const char *, struct Categories *);
-int Rast_set_f_cat(const FCELL *, const FCELL *, const char *, struct Categories *);
-int Rast_set_d_cat(const DCELL *, const DCELL *, const char *, struct Categories *);
+char *Rast_get_next_marked_d_cat(struct Categories *, DCELL *, DCELL *, long *);
+char *Rast_get_next_marked_c_cat(struct Categories *, CELL *, CELL *, long *);
+char *Rast_get_next_marked_f_cat(struct Categories *, FCELL *, FCELL *, long *);
+char *Rast_get_next_marked_cat(struct Categories *, void *, void *, long *,
+                               RASTER_MAP_TYPE);
+int Rast_set_c_cat(const CELL *, const CELL *, const char *,
+                   struct Categories *);
+int Rast_set_f_cat(const FCELL *, const FCELL *, const char *,
+                   struct Categories *);
+int Rast_set_d_cat(const DCELL *, const DCELL *, const char *,
+                   struct Categories *);
 int Rast_set_cat(const void *, const void *, const char *, struct Categories *,
-		 RASTER_MAP_TYPE);
+                 RASTER_MAP_TYPE);
 void Rast_write_cats(const char *, struct Categories *);
 void Rast_write_vector_cats(const char *, struct Categories *);
-char *Rast_get_ith_d_cat(const struct Categories *, int, DCELL *,
-			 DCELL *);
+char *Rast_get_ith_d_cat(const struct Categories *, int, DCELL *, DCELL *);
 char *Rast_get_ith_f_cat(const struct Categories *, int, void *, void *);
 char *Rast_get_ith_c_cat(const struct Categories *, int, void *, void *);
 char *Rast_get_ith_cat(const struct Categories *, int, void *, void *,
-		       RASTER_MAP_TYPE);
+                       RASTER_MAP_TYPE);
 void Rast_init_cats(const char *, struct Categories *);
 void Rast_set_cats_title(const char *, struct Categories *);
 void Rast_set_cats_fmt(const char *, double, double, double, double,
-			   struct Categories *);
+                       struct Categories *);
 void Rast_free_cats(struct Categories *);
 void Rast_copy_cats(struct Categories *, const struct Categories *);
 int Rast_number_of_cats(struct Categories *);
@@ -100,7 +93,7 @@ char *Rast_get_cell_title(const char *, const char *);
 
 /* cellstats_eq.c */
 int Rast_cell_stats_histo_eq(struct Cell_stats *, CELL, CELL, CELL, CELL, int,
-			     void (*)(CELL, CELL, CELL));
+                             void (*)(CELL, CELL, CELL));
 
 /* close.c */
 void Rast_close(int);
@@ -139,7 +132,7 @@ void Rast__color_reset(struct Colors *);
 
 /* color_get.c */
 int Rast_get_color(const void *, int *, int *, int *, struct Colors *,
-		   RASTER_MAP_TYPE);
+                   RASTER_MAP_TYPE);
 int Rast_get_c_color(const CELL *, int *, int *, int *, struct Colors *);
 int Rast_get_f_color(const FCELL *, int *, int *, int *, struct Colors *);
 int Rast_get_d_color(const DCELL *, int *, int *, int *, struct Colors *);
@@ -148,7 +141,8 @@ void Rast_get_default_color(int *, int *, int *, const struct Colors *);
 
 /* color_hist.c */
 void Rast_make_histogram_eq_colors(struct Colors *, struct Cell_stats *);
-void Rast_make_histogram_log_colors(struct Colors *, struct Cell_stats *, int, int);
+void Rast_make_histogram_log_colors(struct Colors *, struct Cell_stats *, int,
+                                    int);
 
 /* color_init.c */
 void Rast_init_colors(struct Colors *);
@@ -161,22 +155,22 @@ void Rast_invert_colors(struct Colors *);
 
 /* color_look.c */
 void Rast_lookup_c_colors(const CELL *, unsigned char *, unsigned char *,
-			  unsigned char *, unsigned char *, int,
-			  struct Colors *);
+                          unsigned char *, unsigned char *, int,
+                          struct Colors *);
 void Rast_lookup_colors(const void *, unsigned char *, unsigned char *,
-			unsigned char *, unsigned char *, int,
-			struct Colors *, RASTER_MAP_TYPE);
+                        unsigned char *, unsigned char *, int, struct Colors *,
+                        RASTER_MAP_TYPE);
 void Rast_lookup_f_colors(const FCELL *, unsigned char *, unsigned char *,
-			  unsigned char *, unsigned char *, int,
-			  struct Colors *);
+                          unsigned char *, unsigned char *, int,
+                          struct Colors *);
 void Rast_lookup_d_colors(const DCELL *, unsigned char *, unsigned char *,
-			  unsigned char *, unsigned char *, int,
-			  struct Colors *);
+                          unsigned char *, unsigned char *, int,
+                          struct Colors *);
 void Rast__lookup_colors(const void *, unsigned char *, unsigned char *,
-			 unsigned char *, unsigned char *, int, struct Colors *,
-			 int, int, RASTER_MAP_TYPE);
+                         unsigned char *, unsigned char *, int, struct Colors *,
+                         int, int, RASTER_MAP_TYPE);
 void Rast__interpolate_color_rule(DCELL, unsigned char *, unsigned char *,
-				  unsigned char *, const struct _Color_Rule_ *);
+                                  unsigned char *, const struct _Color_Rule_ *);
 
 /* color_org.c */
 void Rast__organize_colors(struct Colors *);
@@ -195,54 +189,48 @@ void Rast_get_d_color_range(DCELL *, DCELL *, const struct Colors *);
 
 /* color_read.c */
 int Rast_read_colors(const char *, const char *, struct Colors *);
-int Rast__read_colors(const char *, const char *, const char *, struct Colors *);
+int Rast__read_colors(const char *, const char *, const char *,
+                      struct Colors *);
 void Rast_mark_colors_as_fp(struct Colors *);
 
 /* color_remove.c */
 int Rast_remove_colors(const char *, const char *);
 
 /* color_rule.c */
-void Rast_add_d_color_rule(const DCELL *, int, int, int,
-			   const DCELL *, int, int, int,
-			   struct Colors *);
-void Rast_add_f_color_rule(const FCELL *, int, int, int,
-			   const FCELL *, int, int, int,
-			   struct Colors *);
-void Rast_add_c_color_rule(const CELL *, int, int, int,
-			   const CELL *, int, int, int,
-			   struct Colors *);
-void Rast_add_color_rule(const void *, int, int, int,
-			 const void *, int, int, int,
-			 struct Colors *, RASTER_MAP_TYPE);
-int Rast_add_modular_d_color_rule(const DCELL *, int, int, int,
-				  const DCELL *, int, int, int,
-				  struct Colors *);
-int Rast_add_modular_f_color_rule(const FCELL *, int, int, int,
-				  const FCELL *, int, int, int,
-				  struct Colors *);
-int Rast_add_modular_c_color_rule(const CELL *, int, int, int,
-				  const CELL *, int, int, int,
-				  struct Colors *);
-int Rast_add_modular_color_rule(const void *, int, int, int,
-				const void *, int, int, int,
-				struct Colors *, RASTER_MAP_TYPE);
+void Rast_add_d_color_rule(const DCELL *, int, int, int, const DCELL *, int,
+                           int, int, struct Colors *);
+void Rast_add_f_color_rule(const FCELL *, int, int, int, const FCELL *, int,
+                           int, int, struct Colors *);
+void Rast_add_c_color_rule(const CELL *, int, int, int, const CELL *, int, int,
+                           int, struct Colors *);
+void Rast_add_color_rule(const void *, int, int, int, const void *, int, int,
+                         int, struct Colors *, RASTER_MAP_TYPE);
+int Rast_add_modular_d_color_rule(const DCELL *, int, int, int, const DCELL *,
+                                  int, int, int, struct Colors *);
+int Rast_add_modular_f_color_rule(const FCELL *, int, int, int, const FCELL *,
+                                  int, int, int, struct Colors *);
+int Rast_add_modular_c_color_rule(const CELL *, int, int, int, const CELL *,
+                                  int, int, int, struct Colors *);
+int Rast_add_modular_color_rule(const void *, int, int, int, const void *, int,
+                                int, int, struct Colors *, RASTER_MAP_TYPE);
 
 /* color_rule_get.c */
 int Rast_colors_count(const struct Colors *);
 int Rast_get_fp_color_rule(DCELL *, unsigned char *, unsigned char *,
-		       unsigned char *, DCELL *, unsigned char *,
-		       unsigned char *, unsigned char *,
-		       const struct Colors *, int);
+                           unsigned char *, DCELL *, unsigned char *,
+                           unsigned char *, unsigned char *,
+                           const struct Colors *, int);
 
 /* color_rules.c */
-typedef int read_rule_fn(void *, DCELL, DCELL,
-			 DCELL *, int *, int *, int *, int *, int *, int *);
+typedef int read_rule_fn(void *, DCELL, DCELL, DCELL *, int *, int *, int *,
+                         int *, int *, int *);
 int Rast_parse_color_rule(DCELL, DCELL, const char *, DCELL *, int *, int *,
-		       int *, int *, int *, int *);
+                          int *, int *, int *, int *);
 const char *Rast_parse_color_rule_error(int);
 int Rast_read_color_rule(void *, DCELL, DCELL, DCELL *, int *, int *, int *,
-		      int *, int *, int *);
-int Rast_read_color_rules(struct Colors *, DCELL, DCELL, read_rule_fn *, void *);
+                         int *, int *, int *);
+int Rast_read_color_rules(struct Colors *, DCELL, DCELL, read_rule_fn *,
+                          void *);
 int Rast_load_colors(struct Colors *, const char *, CELL, CELL);
 int Rast_load_fp_colors(struct Colors *, const char *, DCELL, DCELL);
 void Rast_make_colors(struct Colors *, const char *, CELL, CELL);
@@ -264,9 +252,9 @@ void Rast__write_colors(FILE *, struct Colors *);
 
 /* color_xform.c */
 void Rast_histogram_eq_colors(struct Colors *, struct Colors *,
-			   struct Cell_stats *);
-void Rast_histogram_eq_fp_colors(struct Colors *,
-			      struct Colors *, struct FP_stats *);
+                              struct Cell_stats *);
+void Rast_histogram_eq_fp_colors(struct Colors *, struct Colors *,
+                                 struct FP_stats *);
 void Rast_log_colors(struct Colors *, struct Colors *, int);
 void Rast_abs_log_colors(struct Colors *, struct Colors *, int);
 
@@ -284,37 +272,37 @@ void Rast_fpreclass_init(struct FPReclass *);
 void Rast_fpreclass_set_domain(struct FPReclass *, DCELL, DCELL);
 void Rast_fpreclass_set_range(struct FPReclass *, DCELL, DCELL);
 int Rast_fpreclass_get_limits(const struct FPReclass *, DCELL *, DCELL *,
-			   DCELL *, DCELL *);
+                              DCELL *, DCELL *);
 int Rast_fpreclass_nof_rules(const struct FPReclass *);
-void Rast_fpreclass_get_ith_rule(const struct FPReclass *, int, DCELL *, DCELL *,
-			      DCELL *, DCELL *);
+void Rast_fpreclass_get_ith_rule(const struct FPReclass *, int, DCELL *,
+                                 DCELL *, DCELL *, DCELL *);
 void Rast_fpreclass_set_neg_infinite_rule(struct FPReclass *, DCELL, DCELL);
 int Rast_fpreclass_get_neg_infinite_rule(const struct FPReclass *, DCELL *,
-				      DCELL *);
+                                         DCELL *);
 void Rast_fpreclass_set_pos_infinite_rule(struct FPReclass *, DCELL, DCELL);
 int Rast_fpreclass_get_pos_infinite_rule(const struct FPReclass *, DCELL *,
-				      DCELL *);
+                                         DCELL *);
 void Rast_fpreclass_add_rule(struct FPReclass *, DCELL, DCELL, DCELL, DCELL);
 void Rast_fpreclass_reverse_rule_order(struct FPReclass *);
 DCELL Rast_fpreclass_get_cell_value(const struct FPReclass *, DCELL);
 void Rast_fpreclass_perform_di(const struct FPReclass *, const DCELL *, CELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_df(const struct FPReclass *, const DCELL *, FCELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_dd(const struct FPReclass *, const DCELL *, DCELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_fi(const struct FPReclass *, const FCELL *, CELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_ff(const struct FPReclass *, const FCELL *, FCELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_fd(const struct FPReclass *, const FCELL *, DCELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_ii(const struct FPReclass *, const CELL *, CELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_if(const struct FPReclass *, const CELL *, FCELL *,
-			    int);
+                               int);
 void Rast_fpreclass_perform_id(const struct FPReclass *, const CELL *, DCELL *,
-			    int);
+                               int);
 /* gdal.c */
 void Rast_init_gdal(void);
 struct GDAL_link *Rast_get_gdal_link(const char *, const char *);
@@ -338,12 +326,11 @@ void Rast_get_null_value_row(int, char *, int);
 int Rast__read_null_bits(int, int, unsigned char *);
 
 /* get_row_colr.c */
-void Rast_get_row_colors(int, int, struct Colors *,
-			 unsigned char *, unsigned char *, unsigned char *,
-			 unsigned char *);
+void Rast_get_row_colors(int, int, struct Colors *, unsigned char *,
+                         unsigned char *, unsigned char *, unsigned char *);
 /* histo_eq.c */
-void Rast_histogram_eq(const struct Histogram *, unsigned char **,
-		       CELL *, CELL *);
+void Rast_histogram_eq(const struct Histogram *, unsigned char **, CELL *,
+                       CELL *);
 
 /* histogram.c */
 void Rast_init_histogram(struct Histogram *);
@@ -372,11 +359,11 @@ void Rast_short_history(const char *, const char *, struct History *);
 int Rast_command_history(struct History *);
 void Rast_append_history(struct History *, const char *);
 void Rast_append_format_history(struct History *, const char *, ...)
-    __attribute__ ((format(printf, 2, 3)));
+    __attribute__((format(printf, 2, 3)));
 const char *Rast_get_history(struct History *, int);
 void Rast_set_history(struct History *, int, const char *);
 void Rast_format_history(struct History *, int, const char *, ...)
-    __attribute__ ((format(printf, 3, 4)));
+    __attribute__((format(printf, 3, 4)));
 void Rast_clear_history(struct History *);
 void Rast_free_history(struct History *);
 int Rast_history_length(struct History *);
@@ -393,16 +380,14 @@ void Rast__error_handler(void *);
 DCELL Rast_interp_linear(double, DCELL, DCELL);
 DCELL Rast_interp_bilinear(double, double, DCELL, DCELL, DCELL, DCELL);
 DCELL Rast_interp_cubic(double, DCELL, DCELL, DCELL, DCELL);
-DCELL Rast_interp_bicubic(double, double,
-		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
-		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
-		       DCELL);
+DCELL Rast_interp_bicubic(double, double, DCELL, DCELL, DCELL, DCELL, DCELL,
+                          DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
+                          DCELL, DCELL, DCELL, DCELL);
 DCELL Rast_interp_lanczos(double, double, DCELL *);
 DCELL Rast_interp_cubic_bspline(double, DCELL, DCELL, DCELL, DCELL);
-DCELL Rast_interp_bicubic_bspline(double, double,
-		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
-		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
-		       DCELL);
+DCELL Rast_interp_bicubic_bspline(double, double, DCELL, DCELL, DCELL, DCELL,
+                                  DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
+                                  DCELL, DCELL, DCELL, DCELL, DCELL, DCELL);
 int Rast_option_to_interp_type(const struct Option *);
 
 /* mask_info.c */
@@ -413,11 +398,11 @@ int Rast__mask_info(char *, char *);
 int Rast_maskfd(void);
 
 /* null_val.c */
-#define Rast_is_c_null_value(cellVal)	\
-    (*(const CELL *)(cellVal) == (CELL) 0x80000000)
-#define Rast_is_f_null_value(fcellVal)	\
+#define Rast_is_c_null_value(cellVal) \
+    (*(const CELL *)(cellVal) == (CELL)0x80000000)
+#define Rast_is_f_null_value(fcellVal) \
     (*(const FCELL *)(fcellVal) != *(const FCELL *)(fcellVal))
-#define Rast_is_d_null_value(dcellVal)	\
+#define Rast_is_d_null_value(dcellVal) \
     (*(const DCELL *)(dcellVal) != *(const DCELL *)(dcellVal))
 
 void Rast__set_null_value(void *, int, int, RASTER_MAP_TYPE);
@@ -426,6 +411,7 @@ void Rast_set_c_null_value(CELL *, int);
 void Rast_set_f_null_value(FCELL *, int);
 void Rast_set_d_null_value(DCELL *, int);
 int Rast_is_null_value(const void *, RASTER_MAP_TYPE);
+
 #ifndef Rast_is_c_null_value
 int Rast_is_c_null_value(const CELL *);
 #endif
@@ -487,10 +473,10 @@ int Rast_quant_is_round(const struct Quant *);
 void Rast_quant_truncate(struct Quant *);
 void Rast_quant_round(struct Quant *);
 int Rast_quant_get_limits(const struct Quant *, DCELL *, DCELL *, CELL *,
-		       CELL *);
+                          CELL *);
 int Rast_quant_nof_rules(const struct Quant *);
-void Rast_quant_get_ith_rule(const struct Quant *, int, DCELL *, DCELL *, CELL *,
-			  CELL *);
+void Rast_quant_get_ith_rule(const struct Quant *, int, DCELL *, DCELL *,
+                             CELL *, CELL *);
 void Rast_quant_set_neg_infinite_rule(struct Quant *, DCELL, CELL);
 int Rast_quant_get_neg_infinite_rule(const struct Quant *, DCELL *, CELL *);
 void Rast_quant_set_pos_infinite_rule(struct Quant *, DCELL, CELL);
@@ -501,7 +487,7 @@ CELL Rast_quant_get_cell_value(struct Quant *, DCELL);
 void Rast_quant_perform_d(struct Quant *, const DCELL *, CELL *, int);
 void Rast_quant_perform_f(struct Quant *, const FCELL *, CELL *, int);
 struct Quant_table *Rast__quant_get_rule_for_d_raster_val(const struct Quant *,
-						       DCELL);
+                                                          DCELL);
 
 /* quant_io.c */
 int Rast__quant_import(const char *, const char *, struct Quant *);
@@ -512,7 +498,7 @@ void Rast_truncate_fp_map(const char *, const char *);
 void Rast_round_fp_map(const char *, const char *);
 void Rast_quantize_fp_map(const char *, const char *, CELL, CELL);
 void Rast_quantize_fp_map_range(const char *, const char *, DCELL, DCELL, CELL,
-				CELL);
+                                CELL);
 void Rast_write_quant(const char *, const char *, const struct Quant *);
 int Rast_read_quant(const char *, const char *, struct Quant *);
 
@@ -528,7 +514,7 @@ void Rast_update_fp_range(DCELL, struct FPRange *);
 void Rast_row_update_range(const CELL *, int, struct Range *);
 void Rast__row_update_range(const CELL *, int, struct Range *, int);
 void Rast_row_update_fp_range(const void *, int, struct FPRange *,
-			  RASTER_MAP_TYPE);
+                              RASTER_MAP_TYPE);
 void Rast_init_range(struct Range *);
 void Rast_get_range_min_max(const struct Range *, CELL *, CELL *);
 void Rast_init_fp_range(struct FPRange *);
@@ -550,11 +536,15 @@ DCELL Rast_get_d_value(const void *, RASTER_MAP_TYPE);
 /* raster_metadata.c */
 char *Rast_read_units(const char *, const char *);
 char *Rast_read_vdatum(const char *, const char *);
+char *Rast_read_semantic_label(const char *, const char *);
+char *Rast_get_semantic_label_or_name(const char *, const char *);
 void Rast_write_units(const char *, const char *);
 void Rast_write_vdatum(const char *, const char *);
+void Rast_write_semantic_label(const char *, const char *);
+bool Rast_legal_semantic_label(const char *);
 
 /* rast_to_img_string.c */
-int Rast_map_to_img_str(char *, int, unsigned char*);
+int Rast_map_to_img_str(char *, int, unsigned char *);
 
 /* reclass.c */
 int Rast_is_reclass(const char *, const char *, char *, char *);
@@ -564,10 +554,14 @@ void Rast_free_reclass(struct Reclass *);
 int Rast_put_reclass(const char *, const struct Reclass *);
 
 /* sample.c */
-DCELL Rast_get_sample_nearest(int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL Rast_get_sample_bilinear(int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL Rast_get_sample_cubic(int, const struct Cell_head *, struct Categories *, double, double, int);
-DCELL Rast_get_sample(int, const struct Cell_head *, struct Categories *, double, double, int, INTERP_TYPE);
+DCELL Rast_get_sample_nearest(int, const struct Cell_head *,
+                              struct Categories *, double, double, int);
+DCELL Rast_get_sample_bilinear(int, const struct Cell_head *,
+                               struct Categories *, double, double, int);
+DCELL Rast_get_sample_cubic(int, const struct Cell_head *, struct Categories *,
+                            double, double, int);
+DCELL Rast_get_sample(int, const struct Cell_head *, struct Categories *,
+                      double, double, int, INTERP_TYPE);
 
 /* set_window.c */
 void Rast__init_window(void);

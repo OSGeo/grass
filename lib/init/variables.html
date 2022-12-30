@@ -49,7 +49,6 @@ into GRASS, store them in:<br>
 <tt>$HOME/.grass8/cshrc</tt></li>
 </ul>
 
-
 <h2>Setting GRASS gisenv variables</h2>
 
 Use <em><a href="g.gisenv.html">g.gisenv</a></em> within GRASS. This permanently
@@ -234,7 +233,12 @@ PERMANENT
   <dt>GRASS_PERL</dt>
   <dd>[used during install process for generating man pages]<br>
     set Perl with path.</dd>
-  
+
+  <dt>GRASS_PROXY</dt>
+  <dd>[used during addon install/reinstall process for generating man
+    pages (download commit from GitHub API server and remote modules.xml file)]<br>
+    set the proxy with: <tt>GRASS_PROXY="http=&lt;value&gt;,ftp=&lt;value&gt;"</tt>.</dd>
+
   <dt>GRASS_SKIP_MAPSET_OWNER_CHECK</dt>
   <dd>By default it is not possible to work with MAPSETs that are
     not owned by current user. Setting this variable to any non-empty value
@@ -535,6 +539,13 @@ g.gisenv set=DEBUG=0
 # set to 6 GB (default: 300 MB)
 g.gisenv set="MEMORYMB=6000"
 </pre></div>
+  
+  <dt>NPROCS</dt>
+  <dd>sets the number of threads for parallel computing
+<div class="code"><pre>
+# set to use 12 threads (default: 1)
+g.gisenv set="NPROCS=12"
+</pre></div></dd>
 
   <dt>OVERWRITE</dt>
   <dd>[all modules]<br>
@@ -582,8 +593,3 @@ Note: On MS Windows the files are stored in <tt>%APPDATA%</tt>.
   <a href="g.gisenv.html">g.gisenv</a>,
   <a href="g.parser.html">g.parser</a>
 </em>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

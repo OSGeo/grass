@@ -9,7 +9,7 @@ static int font_index;
 int font_init_freetype(const char *name, int index)
 {
     if (filename)
-	G_free(filename);
+        G_free(filename);
     filename = G_store(name);
 
     font_index = index;

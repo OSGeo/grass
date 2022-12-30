@@ -60,10 +60,11 @@ class LayerList(object):
 
     def __iter__(self):
         """Iterates over the contents of the list."""
-        item = self._tree.GetFirstChild(self._tree.root)[0]
-        while item and item.IsOk():
-            yield Layer(item, self._tree.GetPyData(item))
-            item = self._tree.GetNextItem(item)
+        if self._tree:
+            item = self._tree.GetFirstChild(self._tree.root)[0]
+            while item and item.IsOk():
+                yield Layer(item, self._tree.GetPyData(item))
+                item = self._tree.GetNextItem(item)
 
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
@@ -234,6 +235,9 @@ class LayerManagerGrassInterface(object):
     def WriteError(self, text):
         self.lmgr._gconsole.WriteError(text=text)
 
+    def GetLog(self, err=False):
+        return self.lmgr._gconsole.GetLog(err=err)
+
     def GetLayerTree(self):
         return self.lmgr.GetLayerTree()
 
@@ -257,23 +261,6 @@ class LayerManagerGrassInterface(object):
 
     def UpdateCmdHistory(self, cmd):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
-
-    def ShowStatusbar(self, show=True):
-        self.lmgr.GetMapDisplay().ShowStatusbar(show)
-
-    def IsStatusbarShown(self):
-        return self.lmgr.GetMapDisplay().IsStatusbarShown()
-
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.lmgr.GetMapDisplay().RemoveToolbar
-        else:
-            action = self.lmgr.GetMapDisplay().AddToolbar
-        for toolbar in self.lmgr.GetMapDisplay().GetToolbarNames():
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        return self.lmgr.GetMapDisplay().GetMapToolbar().IsShown()
 
 
 class LayerManagerGrassInterfaceForMapDisplay(object):

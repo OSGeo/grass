@@ -35,6 +35,7 @@ SUBDIRS = \
 	r.in.gridatb \
 	r.in.lidar \
 	r.in.mat \
+	r.in.pdal \
 	r.in.png \
 	r.in.poly \
 	r.in.xyz \
@@ -48,6 +49,7 @@ SUBDIRS = \
 	r.mode \
 	r.neighbors \
 	r.null \
+	r.object.geometry \
 	r.out.ascii \
 	r.out.bin \
 	r.out.gdal \

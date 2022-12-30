@@ -175,7 +175,7 @@ class ModelSearchDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-        """Graphical modeler module search window
+        """Graphical modeler tool search window
 
         :param parent: parent window
         :param id: window id
@@ -214,9 +214,11 @@ class ModelSearchDialog(wx.Dialog):
             parent=self.panel, model=menuModel.GetModel(), showTip=True
         )
         self.search.moduleSelected.connect(
-            lambda name: self.cmd_prompt.SetTextAndFocus(name + " ")
+            lambda name: (
+                self.cmd_prompt.SetText(name + " "),
+                self.label.SetValue(name),
+            )
         )
-        wx.CallAfter(self.cmd_prompt.SetFocus)
 
         self.label = TextCtrl(parent=self.panel, id=wx.ID_ANY)
         self.comment = TextCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.TE_MULTILINE)
@@ -313,7 +315,7 @@ class ModelSearchDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "'%s' is not a GRASS module.\n\n"
+                    "'%s' is not a GRASS tool.\n\n"
                     "Unable to add new action to the model."
                 )
                 % cmd[0],

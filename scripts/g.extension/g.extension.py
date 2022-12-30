@@ -77,7 +77,6 @@
 # % description: Specific branch to fetch addon from (only used when fetching from git)
 # % required: no
 # % multiple: no
-# % answer: main
 # %end
 
 # %flag
@@ -165,10 +164,17 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as etree
-from distutils.dir_util import copy_tree
+
+if sys.version_info.major == 3 and sys.version_info.minor < 8:
+    from distutils.dir_util import copy_tree
+else:
+    from functools import partial
+
+    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
 from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError
+from six.moves.urllib.parse import urlparse
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
@@ -191,6 +197,16 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
+GIT_URL = "https://github.com/OSGeo/grass-addons"
+
+# MAKE command
+# GRASS Makefile are type of GNU Make and not BSD Make
+# On FreeBSD (and other BSD and maybe unix) we have to
+# use GNU Make program often "gmake" to distinct with the (bsd) "make"
+if sys.platform.startswith("freebsd"):
+    MAKE = "gmake"
+else:
+    MAKE = "make"
 
 
 def replace_shebang_win(python_file):
@@ -234,6 +250,78 @@ def urlopen(url, *args, **kwargs):
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
+def get_version_branch(major_version):
+    """Check if version branch for the current GRASS version exists,
+    if not, take branch for the previous version
+    For the official repo we assume that at least one version branch is present"""
+    version_branch = f"grass{major_version}"
+    try:
+        urlrequest.urlopen(f"{GIT_URL}/tree/{version_branch}/src")
+    except URLError:
+        version_branch = "grass{}".format(int(major_version) - 1)
+    return version_branch
+
+
+def get_github_branches(
+    github_api_url="https://api.github.com/repos/OSGeo/grass-addons/branches",
+    version_only=True,
+):
+    """Get ordered list of branch names in repo using github API
+    For the official repo we assume that at least one version branch is present
+    Due to strict rate limits in the github API (60 calls per hour) this function
+    is currently not used."""
+    req = urlrequest.urlopen(github_api_url)
+    content = json.loads(req.read())
+    branches = [repo_branch["name"] for repo_branch in content]
+    if version_only:
+        branches = [
+            version_branch
+            for version_branch in branches
+            if version_branch.startswith("grass")
+        ]
+    branches.sort()
+    return branches
+
+
+def get_default_branch(full_url):
+    """Get default branch for repository in known hosting services
+    (currently only implemented for github, gitlab and bitbucket API)
+    In all other cases "main" is used as default"""
+    # Parse URL
+    url_parts = urlparse(full_url)
+    # Get organization and repository component
+    try:
+        organization, repository = url_parts.path.split("/")[1:3]
+    except URLError:
+        gscript.fatal(
+            _(
+                "Cannot retrieve organization and repository from URL: <{}>.".format(
+                    full_url
+                )
+            )
+        )
+    # Construct API call and retrieve default branch
+    api_calls = {
+        "github.com": f"https://api.github.com/repos/{organization}/{repository}",
+        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",
+        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",
+    }
+    # Try to get default branch via API. The API call is known to fail a) if the full_url
+    # does not belong to an implemented hosting service or b) if the rate limit of the
+    # API is exceeded
+    try:
+        req = urlrequest.urlopen(api_calls.get(url_parts.netloc))
+        content = json.loads(req.read())
+        # For github and gitlab
+        default_branch = content.get("default_branch")
+        # For bitbucket
+        if not default_branch:
+            default_branch = content.get("development").get("name")
+    except URLError:
+        default_branch = "main"
+    return default_branch
+
+
 def download_addons_paths_file(url, response_format, *args, **kwargs):
     """Generates JSON file containing the download URLs of the official
     Addons
@@ -272,7 +360,6 @@ def download_addons_paths_file(url, response_format, *args, **kwargs):
                 ),
             )
         return response
-
     except HTTPError as err:
         if err.code == 403 and err.msg == "rate limit exceeded":
             gscript.warning(
@@ -307,14 +394,25 @@ def etree_fromfile(filename):
 
 def etree_fromurl(url):
     """Create XML element tree from a given URL"""
-    file_ = urlopen(url)
+    try:
+        file_ = urlopen(url)
+    except URLError:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>,"
+                " failed. File is not on the server or"
+                " check your internet connection.".format(
+                    url=url,
+                ),
+            ),
+        )
     return etree.fromstring(file_.read())
 
 
 def check_progs():
     """Check if the necessary programs are available"""
     # git to be tested once supported instead of `svn`
-    for prog in ("make", "gcc", "svn"):
+    for prog in (MAKE, "gcc", "svn"):
         if not grass.find_program(prog, "--help"):
             grass.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
 
@@ -1180,6 +1278,68 @@ def install_extension_xml(edict):
     return None
 
 
+def get_multi_addon_addons_which_install_only_html_man_page():
+    """Get multi-addon addons which install only manual html page
+
+    :return list addons: list of multi-addon addons which install
+                         only manual html page
+    """
+    addons = []
+    all_addon_dirs = []
+    addon_dirs_with_source_module = []  # *.py, *.c file
+    addon_pattern = re.compile(r".*{}".format(options["extension"]))
+    addon_src_file_pattern = re.compile(r".*.py$|.*.c$")
+
+    addons_paths_file = os.path.join(
+        options["prefix"],
+        get_addons_paths.json_file,
+    )
+    if not os.path.exists(addons_paths_file):
+        get_addons_paths(gg_addons_base_dir=options["prefix"])
+    with open(addons_paths_file) as f:
+        addons_paths = json.loads(f.read())
+
+    for addon in addons_paths["tree"]:
+        if re.match(addon_pattern, addon["path"]) and addon["type"] == "blob":
+            if re.match(addon_src_file_pattern, addon["path"]):
+                # Add addon dirs which contains source module *.py, *.c file
+                addon_dirs_with_source_module.append(
+                    os.path.dirname(addon["path"]),
+                )
+        elif re.match(addon_pattern, addon["path"]) and addon["type"] == "tree":
+            # Add all addon dirs
+            all_addon_dirs.append(addon["path"])
+
+    for addon in set(all_addon_dirs) ^ set(addon_dirs_with_source_module):
+        addons.append(os.path.basename(addon))
+    return addons
+
+
+def filter_multi_addon_addons(mlist):
+    """Filter out list of multi-addon addons which contains
+    and installs only *.html manual page, without source/binary
+    excutable module and doesn't need to check metadata.
+
+    e.g. the i.sentinel multi-addon consists of several full i.sentinel.*
+    addons along with a i.sentinel.html overview file.
+
+
+    :param list mlist: list of multi-addons (groups of addons
+                       with respective addon overview HTML pages)
+
+    :return list mlist: list of individual multi-addons without respective
+                        addon overview HTML pages
+    """
+    # Filters out add-ons that only contain the *.html man page,
+    # e.g. multi-addon i.sentinel (root directory) contains only
+    # the *.html manual page for installation, it does not need
+    # to check if metadata is available if there is no executable module.
+    for addon in get_multi_addon_addons_which_install_only_html_man_page():
+        if addon in mlist:
+            mlist.pop(mlist.index(addon))
+    return mlist
+
+
 def install_module_xml(mlist):
     """Update XML files with metadata about installed modules and toolbox
     of an private addon
@@ -1193,6 +1353,12 @@ def install_module_xml(mlist):
 
     # read XML file
     tree = etree_fromfile(xml_file)
+
+    # Filter multi-addon addons
+    if len(mlist) > 1:
+        mlist = filter_multi_addon_addons(
+            mlist.copy()
+        )  # mlist.copy() keep the original list of add-ons
 
     # update tree
     for name in mlist:
@@ -1272,24 +1438,16 @@ def install_module_xml(mlist):
 def install_extension_win(name):
     """Install extension on MS Windows"""
     grass.message(
-        _("Downloading precompiled GRASS Addons <%s>...") % options["extension"]
+        _("Downloading precompiled GRASS Addons <{}>...").format(options["extension"])
     )
 
     # build base URL
-    if build_platform == "x86_64":
-        platform = build_platform
-    else:
-        platform = "x86"
     base_url = (
         "http://wingrass.fsv.cvut.cz/"
-        "grass%(major)s%(minor)s/%(platform)s/addons/"
-        "grass-%(major)s.%(minor)s.%(patch)s"
-        % {
-            "platform": platform,
-            "major": version[0],
-            "minor": version[1],
-            "patch": version[2],
-        }
+        "grass{major}{minor}/addons/"
+        "grass-{major}.{minor}.{patch}".format(
+            major=version[0], minor=version[1], patch=version[2]
+        )
     )
 
     # resolve ZIP URL
@@ -1403,8 +1561,6 @@ def download_source_code_official_github(url, name, outdev, directory=None):
     """
     if not directory:
         directory = os.path.join(os.getcwd, name)
-    classchar = name.split(".", 1)[0]
-    moduleclass = expand_module_class_name(classchar)
     if grass.call(["svn", "export", url, directory], stdout=outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
     return directory
@@ -1555,7 +1711,7 @@ def download_source_code(
             response = urlopen(url)
         except URLError:
             # Try download add-on from 'master' branch if default "main" fails
-            if branch == "main":
+            if not branch:
                 try:
                     url = url.replace("main", "master")
                     gscript.message(
@@ -1611,8 +1767,6 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
-    # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
-    source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass7/"
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -1648,7 +1802,8 @@ def install_extension_std_platforms(name, source, url, branch):
                             try:
                                 modulename = line.split("=")[1].strip()
                                 if modulename:
-                                    module_list.append(modulename)
+                                    if modulename not in module_list:
+                                        module_list.append(modulename)
                                 else:
                                     grass.fatal(pgm_not_found_message)
                             except IndexError:
@@ -1684,7 +1839,7 @@ def install_extension_std_platforms(name, source, url, branch):
     }
 
     make_cmd = [
-        "make",
+        MAKE,
         "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
         "RUN_GISRC=%s" % os.environ["GISRC"],
         "BIN=%s" % dirs["bin"],
@@ -1694,11 +1849,11 @@ def install_extension_std_platforms(name, source, url, branch):
         "SCRIPTDIR=%s" % dirs["script"],
         "STRINGDIR=%s" % dirs["string"],
         "ETC=%s" % os.path.join(dirs["etc"]),
-        "SOURCE_URL=%s" % source_url,
+        "SOURCE_URL=%s" % url,
     ]
 
     install_cmd = [
-        "make",
+        MAKE,
         "MODULE_TOPDIR=%s" % gisbase,
         "ARCH_DISTDIR=%s" % os.path.join(TMPDIR, name),
         "INST_DIR=%s" % options["prefix"],
@@ -1997,9 +2152,6 @@ def check_style_file(name):
     dist_file = os.path.join(os.getenv("GISBASE"), "docs", "html", name)
     addons_file = os.path.join(options["prefix"], "docs", "html", name)
 
-    if os.path.isfile(addons_file):
-        return
-
     try:
         shutil.copyfile(dist_file, addons_file)
     except OSError as error:
@@ -2035,6 +2187,8 @@ def check_dirs():
     create_dir(os.path.join(options["prefix"], "docs", "html"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
+    check_style_file("hamburger_menu.svg")
+    check_style_file("hamburger_menu_close.svg")
     check_style_file("grassdocs.css")
     create_dir(os.path.join(options["prefix"], "etc"))
     create_dir(os.path.join(options["prefix"], "docs", "man", "man1"))
@@ -2066,11 +2220,19 @@ def update_manual_page(module):
     # fix logo URL
     pattern = r'''<a href="([^"]+)"><img src="grass_logo.png"'''
     for match in re.finditer(pattern, shtml):
+        if match.group(1)[:4] == "http":
+            continue
         pos.append(match.start(1))
 
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
+    # Multi-addon
+    if len(addons) > 1:
+        for a in get_multi_addon_addons_which_install_only_html_man_page():
+            # Add multi-addon addons which install only manual html page
+            addons.append(a)
+
     for match in re.finditer(pattern, shtml):
         if match.group(1)[:4] == "http":
             continue
@@ -2138,9 +2300,12 @@ def resolve_xmlurl_prefix(url, source=None):
     'https://grass.osgeo.org/addons/'
     """
     gscript.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
-    if source == "official":
+    if source in ("official", "official_fork"):
         # use pregenerated modules XML file
-        url = "https://grass.osgeo.org/addons/grass%s/" % version[0]
+        # Define branch to fetch from (latest or current version)
+        version_branch = get_version_branch(version[0])
+
+        url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
     # the exact action depends on subsequent code (somewhere)
 
@@ -2218,7 +2383,10 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            suffix = match["url_end"].format(name=name, branch=branch)
+            suffix = match["url_end"].format(
+                name=name,
+                branch=branch if branch else get_default_branch(url),
+            )
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
@@ -2299,76 +2467,63 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module') # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
-    if not url and name:
+    # Handle URL for the offical repo
+    if name and (not url or fork):
         module_class = get_module_class_name(name)
         # note: 'trunk' is required to make URL usable for 'svn export' call
-        git_url = (
-            "https://github.com/OSGeo/grass-addons/trunk/"
-            "grass{version}/{module_class}/{module_name}".format(
-                version=version[0], module_class=module_class, module_name=name
-            )
-        )
-        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
-        #            'grass{version}/{module_class}/{module_name}?format=zip' \
-        #            .format(version=version[0],
-        #                    module_class=module_class, module_name=name)
-        # return 'official', trac_url
-        return "official", git_url
-
-    if url and fork:
-        module_class = get_module_class_name(name)
-
-        # note: 'trunk' is required to make URL usable for 'svn export' call
-        if branch in ["master", "main"]:
-            svn_reference = "trunk"
+        # and fetches the default branch
+        if not branch:
+            # Fetch from default branch
+            version_branch = get_version_branch(version[0])
+            try:
+                url = url.rstrip("/") if url else GIT_URL
+                urlrequest.urlopen(f"{url}/tree/{version_branch}/src")
+                svn_reference = "branches/{}".format(version_branch)
+            except URLError:
+                svn_reference = "trunk"
         else:
             svn_reference = "branches/{}".format(branch)
 
-        git_url = (
-            "{url}/{branch}/"
-            "grass{version}/{module_class}/{module_name}".format(
-                url=url,
-                version=version[0],
-                module_class=module_class,
-                module_name=name,
-                branch=svn_reference,
-            )
-        )
-        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
-        #            'grass{version}/{module_class}/{module_name}?format=zip' \
-        #            .format(version=version[0],
-        #                    module_class=module_class, module_name=name)
-        # return 'official', trac_url
-        return "official_fork", git_url
+        if not url or url == GIT_URL:
+            # Set URL for the given GRASS version
+            git_url = f"{GIT_URL}/{svn_reference}/src/{module_class}/{name}"
+            return "official", git_url
+        else:
+            # Forks from the official repo should reflect the current structure
+            url = url.rstrip("/")
+            git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
+            return "official_fork", git_url
 
     # Check if URL can be found
     # Catch corner case if local URL is given starting with file://
     url = url[6:] if url.startswith("file://") else url
     if not os.path.exists(url):
         url_validated = False
+        message = None
         if url.startswith("http"):
             try:
                 open_url = urlopen(url)
                 open_url.close()
                 url_validated = True
-            except:
-                pass
+            except URLError as error:
+                message = error
         else:
             try:
                 open_url = urlopen("http://" + url)
                 open_url.close()
                 url_validated = True
-            except:
-                pass
+            except URLError as error:
+                message = error
             try:
                 open_url = urlopen("https://" + url)
                 open_url.close()
                 url_validated = True
-            except:
-                pass
-
+            except URLError as error:
+                message = error
         if not url_validated:
-            grass.fatal(_("Cannot open URL: {}".format(url)))
+            grass.fatal(
+                _("Cannot open URL <{url}>: {error}").format(url=url, error=message)
+            )
 
     # Handle local URLs
     if os.path.isdir(url):
@@ -2397,15 +2552,16 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
 
 def get_addons_paths(gg_addons_base_dir):
-    """Get and save extensions paths as 'extensions_paths.json' json file
-    in the $GRASS_ADDON_BASE dir. The file serves as a list of all addons,
-    and their paths (mkhmtl.py tool)
-    """
-    get_addons_paths.json_file = "addons_paths.json"
+    """Get and save addons paths from GRASS GIS Addons GitHub repo API
+    as 'addons_paths.json' file in the gg_addons_base_dir. The file
+    serves as a list of all addons, and their paths (required for
+    mkhmtl.py tool)
 
-    url = (
-        "https://api.github.com/repos/OSGeo/grass-addons/git/trees/" "main?recursive=1"
-    )
+    :param str gg_addons_base_dir: dir path where addons are installed
+    """
+    # Define branch to fetch from (latest or current version)
+    addons_branch = get_version_branch(version[0])
+    url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
 
     response = download_addons_paths_file(
         url=url,
@@ -2417,6 +2573,9 @@ def get_addons_paths(gg_addons_base_dir):
             os.path.join(gg_addons_base_dir, get_addons_paths.json_file), "w"
         ) as f:
             json.dump(addons_paths, f)
+
+
+get_addons_paths.json_file = "addons_paths.json"
 
 
 def main():
@@ -2436,6 +2595,8 @@ def main():
         proxy = urlrequest.ProxyHandler(PROXIES)
         opener = urlrequest.build_opener(proxy)
         urlrequest.install_opener(opener)
+        # Required for mkhtml.py script (get addon git commit from GitHub API server)
+        os.environ["GRASS_PROXY"] = options["proxy"]
 
     # define path
     options["prefix"] = resolve_install_prefix(
@@ -2505,10 +2666,5 @@ if __name__ == "__main__":
 
     grass_version = grass.version()
     version = grass_version["version"].split(".")
-    # TODO: update temporary workaround of using grass7 subdir of addon-repo, see
-    #       https://github.com/OSGeo/grass-addons/issues/528
-    version[0] = 7
-    version[1] = 9
-    build_platform = grass_version["build_platform"].split("-", 1)[0]
 
     sys.exit(main())

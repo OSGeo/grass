@@ -31,7 +31,7 @@ void Rast_put_cellhd(const char *name, struct Cell_head *cellhd)
 
     fp = G_fopen_new("cellhd", name);
     if (!fp)
-	G_fatal_error(_("Unable to create header file for <%s>"), name);
+        G_fatal_error(_("Unable to create header file for <%s>"), name);
 
     G__write_Cell_head(fp, cellhd, 1);
     fclose(fp);

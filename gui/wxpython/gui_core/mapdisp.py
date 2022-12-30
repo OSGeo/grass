@@ -4,9 +4,9 @@
 @brief Base classes for Map display window
 
 Classes:
- - mapdisp::MapFrameBase
- - mapdisp::SingleMapFrame
- - mapdisp::DoubleMapFrame
+ - mapdisp::MapPanelBase
+ - mapdisp::SingleMapPanel
+ - mapdisp::DoubleMapPanel
 
 (C) 2009-2014 by the GRASS Development Team
 
@@ -19,21 +19,21 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
 import sys
 import six
 
 import wx
 
-from core import globalvar
 from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
+from mapdisp import statusbar as sb
+from mapwin.base import MapWindowProperties
 
 from grass.script import core as grass
 
 
-class MapFrameBase(wx.Frame):
+class MapPanelBase(wx.Panel):
     """Base class for map display window
 
     Derived class must use (create and initialize) \c statusbarManager
@@ -49,7 +49,7 @@ class MapFrameBase(wx.Frame):
     It is expected that derived class will call _setUpMapWindow().
 
     Derived class can has one or more map windows (and map renders)
-    but implementation of MapFrameBase expects that one window and
+    but implementation of MapPanelBase expects that one window and
     one map will be current.
     Current instances of map window and map renderer should be returned
     by methods GetWindow() and GetMap() respectively.
@@ -62,7 +62,6 @@ class MapFrameBase(wx.Frame):
         parent=None,
         id=wx.ID_ANY,
         title="",
-        style=wx.DEFAULT_FRAME_STYLE,
         auimgr=None,
         name="",
         **kwargs,
@@ -75,31 +74,27 @@ class MapFrameBase(wx.Frame):
         :param parent: gui parent
         :param id: wx id
         :param title: window title
-        :param style: \c wx.Frame style
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param auimgr: AUI manager (if \c None, wx.aui.AuiManager is used)
-        :param name: frame name
-        :param kwargs: arguments passed to \c wx.Frame
+        :param name: panel name
+        :param kwargs: arguments passed to \c wx.Panel
         """
 
         self.parent = parent
 
-        wx.Frame.__init__(self, parent, id, title, style=style, name=name, **kwargs)
-
-        #
-        # set the size & system icon
-        #
-        self.SetClientSize(self.GetSize())
-        self.iconsize = (16, 16)
-
-        self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
+        wx.Panel.__init__(self, parent, id, name=name, **kwargs)
 
         # toolbars
         self.toolbars = {}
+        self.iconsize = (16, 16)
+
+        # properties are shared in other objects, so defining here
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+        # update statusbar when user-defined projection changed
+        self.mapWindowProperties.useDefinedProjectionChanged.connect(
+            self.StatusbarUpdate
+        )
 
         #
         # Fancy gui
@@ -115,23 +110,22 @@ class MapFrameBase(wx.Frame):
         self._toolSwitcher = ToolSwitcher()
         self._toolSwitcher.toggleToolChanged.connect(self._onToggleTool)
 
-        self._initShortcuts()
-
-    def _initShortcuts(self):
-
-        # set accelerator table (fullscreen, close window)
-        shortcuts_table = (
-            (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11),
+        # set accelerator table
+        self.shortcuts_table = [
             (self.OnCloseWindow, wx.ACCEL_CTRL, ord("W")),
             (self.OnRender, wx.ACCEL_CTRL, ord("R")),
             (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
-        )
+        ]
+
+        self._initShortcuts()
+
+    def _initShortcuts(self):
+        """init shortcuts to acceleration table"""
         accelTable = []
-        for handler, entry, kdb in shortcuts_table:
+        for handler, entry, kdb in self.shortcuts_table:
             wxId = NewId()
             self.Bind(wx.EVT_MENU, handler, id=wxId)
             accelTable.append((entry, kdb, wxId))
-
         self.SetAcceleratorTable(wx.AcceleratorTable(accelTable))
 
     def _initMap(self, Map):
@@ -142,13 +136,13 @@ class MapFrameBase(wx.Frame):
                 % "g.region"
             )
 
-        Debug.msg(2, "MapFrame._initMap():")
+        Debug.msg(2, "MapPanel._initMap():")
         Map.ChangeMapSize(self.GetClientSize())
         Map.region = Map.GetRegion()  # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
 
     def _resize(self):
-        Debug.msg(1, "MapFrame._resize():")
+        Debug.msg(1, "MapPanel_resize():")
         wm, hw = self.MapWindow.GetClientSize()
         wf, hf = self.GetSize()
         dw = wf - wm
@@ -167,14 +161,6 @@ class MapFrameBase(wx.Frame):
         # update statusbar
         self.StatusbarUpdate()
 
-    def OnFullScreen(self, event):
-        """!Switch fullscreen mode, hides also toolbars"""
-        for toolbar in self.toolbars.keys():
-            self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
-        self._mgr.Update()
-        self.ShowFullScreen(not self.IsFullScreen())
-        event.Skip()
-
     def OnCloseWindow(self, event):
         self.Destroy()
 
@@ -183,11 +169,17 @@ class MapFrameBase(wx.Frame):
 
     def SetProperty(self, name, value):
         """Sets property"""
-        self.statusbarManager.SetProperty(name, value)
+        if hasattr(self.mapWindowProperties, name):
+            setattr(self.mapWindowProperties, name, value)
+        else:
+            self.statusbarManager.SetProperty(name, value)
 
     def GetProperty(self, name):
         """Returns property"""
-        return self.statusbarManager.GetProperty(name)
+        if hasattr(self.mapWindowProperties, name):
+            return getattr(self.mapWindowProperties, name)
+        else:
+            return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -217,7 +209,7 @@ class MapFrameBase(wx.Frame):
 
         Debug.msg(
             4,
-            "MapFrameBase.GetPPM(): size: px=%d,%d mm=%f,%f "
+            "MapPanelBase.GetPPM(): size: px=%d,%d mm=%f,%f "
             "in=%f,%f ppi: sys=%d,%d com=%d,%d; ppm=%f,%f"
             % (
                 dpSizePx[0],
@@ -272,7 +264,7 @@ class MapFrameBase(wx.Frame):
         widthCm = region["cols"] / ppm[0] * 100
 
         Debug.msg(
-            4, "MapFrame.GetMapScale(): width_cm=%f, height_cm=%f" % (widthCm, heightCm)
+            4, "MapPanel.GetMapScale(): width_cm=%f, height_cm=%f" % (widthCm, heightCm)
         )
 
         xscale = (region["e"] - region["w"]) / (region["cols"] / ppm[0])
@@ -281,7 +273,7 @@ class MapFrameBase(wx.Frame):
 
         Debug.msg(
             3,
-            "MapFrame.GetMapScale(): xscale=%f, yscale=%f -> scale=%f"
+            "MapPanel.GetMapScale(): xscale=%f, yscale=%f -> scale=%f"
             % (xscale, yscale, scale),
         )
 
@@ -320,7 +312,7 @@ class MapFrameBase(wx.Frame):
     def StatusbarUpdate(self):
         """Update statusbar content"""
         if self.statusbarManager:
-            Debug.msg(5, "MapFrameBase.StatusbarUpdate()")
+            Debug.msg(5, "MapPanelBase.StatusbarUpdate()")
             self.statusbarManager.Update()
 
     def IsAutoRendered(self):
@@ -339,6 +331,54 @@ class MapFrameBase(wx.Frame):
             if self.statusbarManager.GetMode() == 0:
                 self.statusbarManager.ShowItem("coordinates")
 
+    def CreateStatusbar(self, statusbarItems):
+        """Create statusbar (default items)."""
+        # create statusbar and its manager
+        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
+        statusbar.SetMinHeight(24)
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
+        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
+
+        # fill statusbar manager
+        self.statusbarManager.AddStatusbarItemsByClass(
+            statusbarItems, mapframe=self, statusbar=statusbar
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=2)
+        )
+        return statusbar
+
+    def AddStatusbarPane(self):
+        """Add statusbar as a pane"""
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
+
+    def ShowStatusbar(self, show):
+        """Show/hide statusbar and associated pane"""
+        self._mgr.GetPane("statusbar").Show(show)
+        self._mgr.Update()
+
+    def IsStatusbarShown(self):
+        """Check if statusbar is shown"""
+        return self._mgr.GetPane("statusbar").IsShown()
+
     def StatusbarReposition(self):
         """Reposition items in statusbar"""
         if self.statusbarManager:
@@ -347,11 +387,49 @@ class MapFrameBase(wx.Frame):
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
         for toolbar in six.itervalues(self.toolbars):
-            toolbar.EnableLongHelp(enable)
+            if toolbar:
+                toolbar.EnableLongHelp(enable)
 
-    def IsStandalone(self):
-        """Check if map frame is standalone"""
-        raise NotImplementedError("IsStandalone")
+    def ShowAllToolbars(self, show=True):
+        if not show:  # hide
+            action = self.RemoveToolbar
+        else:
+            action = self.AddToolbar
+        for toolbar in self.GetToolbarNames():
+            action(toolbar)
+
+    def AreAllToolbarsShown(self):
+        return self.GetMapToolbar().IsShown()
+
+    def GetToolbarNames(self):
+        """Return toolbar names"""
+        return list(self.toolbars.keys())
+
+    def AddToolbar(self):
+        """Add defined toolbar to the window"""
+        raise NotImplementedError("AddToolbar")
+
+    def RemoveToolbar(self, name, destroy=False):
+        """Removes defined toolbar from the window
+
+        :param name toolbar to remove
+        :param destroy True to destroy otherwise toolbar is only hidden
+        """
+        self._mgr.DetachPane(self.toolbars[name])
+        if destroy:
+            self._toolSwitcher.RemoveToolbarFromGroup("mouseUse", self.toolbars[name])
+            self.toolbars[name].Destroy()
+            self.toolbars.pop(name)
+        else:
+            self.toolbars[name].Hide()
+
+        self._mgr.Update()
+
+    def IsPaneShown(self, name):
+        """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
+        if self._mgr.GetPane(name).IsOk():
+            return self._mgr.GetPane(name).IsShown()
+        return False
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
@@ -414,11 +492,24 @@ class MapFrameBase(wx.Frame):
         """Set display geometry to match default region settings"""
         self.MapWindow.ZoomToDefault()
 
+    def OnMapDisplayProperties(self, event):
+        """Show Map Display Properties dialog"""
+        from mapdisp.properties import MapDisplayPropertiesDialog
 
-class SingleMapFrame(MapFrameBase):
-    """Frame with one map window.
+        dlg = MapDisplayPropertiesDialog(
+            parent=self,
+            mapframe=self,
+            properties=self.mapWindowProperties,
+            sbmanager=self.statusbarManager,
+        )
+        dlg.CenterOnParent()
+        dlg.Show()
 
-    It is base class for frames which needs only one map.
+
+class SingleMapPanel(MapPanelBase):
+    """Panel with one map window.
+
+    It is base class for panels which needs only one map.
 
     Derived class should have \c self.MapWindow or
     it has to override GetWindow() methods.
@@ -433,7 +524,6 @@ class SingleMapFrame(MapFrameBase):
         giface=None,
         id=wx.ID_ANY,
         title="",
-        style=wx.DEFAULT_FRAME_STYLE,
         Map=None,
         auimgr=None,
         name="",
@@ -444,18 +534,16 @@ class SingleMapFrame(MapFrameBase):
         :param parent: gui parent
         :param id: wx id
         :param title: window title
-        :param style: \c wx.Frame style
         :param map: instance of render.Map
-        :param name: frame name
-        :param kwargs: arguments passed to MapFrameBase
+        :param name: panel name
+        :param kwargs: arguments passed to MapPanelBase
         """
 
-        MapFrameBase.__init__(
+        MapPanelBase.__init__(
             self,
             parent=parent,
             id=id,
             title=title,
-            style=style,
             auimgr=auimgr,
             name=name,
             **kwargs,
@@ -489,10 +577,10 @@ class SingleMapFrame(MapFrameBase):
         self.StatusbarUpdate()
 
 
-class DoubleMapFrame(MapFrameBase):
-    """Frame with two map windows.
+class DoubleMapPanel(MapPanelBase):
+    """Panel with two map windows.
 
-    It is base class for frames which needs two maps.
+    It is base class for panels which needs two maps.
     There is no primary and secondary map. Both maps are equal.
     However, one map is current.
 
@@ -506,8 +594,8 @@ class DoubleMapFrame(MapFrameBase):
     (when using class or when writing class itself).
 
     .. todo:
-        Use it in GCP manager (probably changes to both DoubleMapFrame
-        and GCP MapFrame will be necessary).
+        Use it in GCP manager (probably changes to both DoubleMapPanel
+        and GCP MapPanel will be necessary).
     """
 
     def __init__(
@@ -515,7 +603,6 @@ class DoubleMapFrame(MapFrameBase):
         parent=None,
         id=wx.ID_ANY,
         title=None,
-        style=wx.DEFAULT_FRAME_STYLE,
         firstMap=None,
         secondMap=None,
         auimgr=None,
@@ -531,17 +618,15 @@ class DoubleMapFrame(MapFrameBase):
         :param parent: gui parent
         :param id: wx id
         :param title: window title
-        :param style: \c wx.Frame style
-        :param name: frame name
-        :param kwargs: arguments passed to MapFrameBase
+        :param name: panel name
+        :param kwargs: arguments passed to MapPanelBase
         """
 
-        MapFrameBase.__init__(
+        MapPanelBase.__init__(
             self,
             parent=parent,
             id=id,
             title=title,
-            style=style,
             auimgr=auimgr,
             name=name,
             **kwargs,
@@ -633,7 +718,6 @@ class DoubleMapFrame(MapFrameBase):
     def SetBindRegions(self, on):
         """Set or unset binding display regions."""
         self._bindRegions = on
-
         if on:
             if self.MapWindow == self.firstMapWindow:
                 self.firstMapWindow.zoomChanged.connect(self.OnZoomChangedFirstMap)
@@ -721,3 +805,67 @@ class DoubleMapFrame(MapFrameBase):
     def Draw(self, mapToDraw):
         """Re-display current map composition"""
         mapToDraw.UpdateMap(render=False)
+
+
+class FrameMixin:
+    """Mixin class for wx.Panel that provides methods standardly
+    used on wx.Frame widget"""
+
+    def Show(self):
+        self.GetParent().Show()
+
+    def SetTitle(self, name):
+        self.GetParent().SetTitle(name)
+
+    def Raise(self):
+        self.GetParent().Raise()
+
+    def SetFocus(self):
+        self.GetParent().SetFocus()
+
+    def CenterOnScreen(self):
+        self.GetParent().CenterOnScreen()
+
+    def CentreOnScreen(self):
+        self.GetParent().CentreOnScreen()
+
+    def IsFullScreen(self):
+        return self.GetParent().IsFullScreen()
+
+    def IsIconized(self):
+        self.GetParent().IsIconized()
+
+    def Maximize(self):
+        self.GetParent().Maximize()
+
+    def ShowFullScreen(self, show):
+        for toolbar in self.toolbars.keys():
+            self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
+        if self.statusbar:
+            self._mgr.GetPane("statusbar").Show(self.IsFullScreen())
+        self._mgr.Update()
+
+        self.GetParent().ShowFullScreen(show)
+
+    def OnFullScreen(self, event):
+        """!Switches frame to fullscreen mode, hides toolbars and statusbar"""
+        self.ShowFullScreen(not self.IsFullScreen())
+        event.Skip()
+
+    def BindToFrame(self, *args):
+        self.GetParent().Bind(*args)
+
+    def Destroy(self):
+        self.GetParent().Destroy()
+
+    def GetPosition(self):
+        return self.GetParent().GetPosition()
+
+    def SetPosition(self, pt):
+        self.GetParent().SetPosition(pt)
+
+    def GetSize(self):
+        return self.GetParent().GetSize()
+
+    def SetSize(self, *args):
+        self.GetParent().SetSize(*args)
