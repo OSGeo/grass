@@ -55,6 +55,7 @@ int db__driver_open_database(dbHandle *handle)
 
         connection = mysql_init(NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
         res =
             mysql_real_connect(connection, host, user, password, connpar.dbname,
                                port != NULL ? atoi(port) : 0, NULL, 0);
@@ -62,6 +63,10 @@ int db__driver_open_database(dbHandle *handle)
         res = mysql_real_connect(connection, host, user, password,
                                  connpar.dbname, port, NULL, 0);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        res = mysql_real_connect(connection, host, user, password,
+                                 connpar.dbname, port, NULL, 0);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         if (res == NULL) {
             db_d_append_error("%s\n%s", _("Connection failed."),
@@ -69,6 +74,7 @@ int db__driver_open_database(dbHandle *handle)
             db_d_report_error();
             return DB_FAILED;
         }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         db_init_string(&sql);
@@ -91,6 +97,8 @@ int db__driver_open_database(dbHandle *handle)
         db_free_string(&sql);
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     return DB_OK;

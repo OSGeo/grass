@@ -8,10 +8,14 @@
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
 <<<<<<< HEAD
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2007-2024 by Glynn Clements
 =======
 # COPYRIGHT:    (C) 2007-2022 by Glynn Clements
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+# COPYRIGHT:    (C) 2007-2022 by Glynn Clements
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -51,6 +55,7 @@ HEADERS = {
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
@@ -93,10 +98,13 @@ def get_version_branch(major_version, addons_git_repo_url):
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
 addons_url = ""
 grass_git_branch = "main"
+<<<<<<< HEAD
 <<<<<<< HEAD
 major, minor, patch = None, None, None
 if grass_version != "unknown":
@@ -119,6 +127,8 @@ if grass_version != "unknown":
             ),
         ),
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
     base_url = "https://github.com/OSGeo"
@@ -127,7 +137,10 @@ if grass_version != "unknown":
     )
     addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
         base_url=base_url, major=major
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     )
 
 
@@ -224,10 +237,14 @@ def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """Get default Git commit and commit date, when getting commit from
     local Git, local JSON file and remote GitHub REST API server wasn't
 <<<<<<< HEAD
+<<<<<<< HEAD
     successful.
 =======
     successfull.
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    successfull.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     :param str src_dir: addon source dir
     :param str datetime_format: output commit datetime format
@@ -279,10 +296,14 @@ def get_git_commit_from_file(
     :return dict git_log: dict which store last commit and commnit date
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Accessed date time if getting commit from JSON file wasn't successful
 =======
     # Accessed date time if getting commit from JSON file wasn't successfull
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    # Accessed date time if getting commit from JSON file wasn't successfull
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     json_file_path = os.path.join(
@@ -315,6 +336,7 @@ def get_git_commit_from_rest_api_for_addon_repo(
     :return dict git_log: dict which store last commit and commnit date
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
@@ -339,6 +361,8 @@ def get_git_commit_from_rest_api_for_addon_repo(
                     commit_datetime=commit[0]["commit"]["author"]["date"],
                 )
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     # Accessed date time if getting commit from GitHub REST API wasn't successfull
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
@@ -361,7 +385,10 @@ def get_git_commit_from_rest_api_for_addon_repo(
             git_log["date"] = format_git_commit_date_from_rest_api(
                 commit_datetime=commit[0]["commit"]["author"]["date"],
             )
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     return git_log
 
 
@@ -424,9 +451,13 @@ def has_src_code_git(src_dir, is_addon):
         os.chdir(topdir)
     try:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         process_result = subprocess.run(
             [
                 "git",
@@ -577,8 +608,11 @@ def read_file(name):
             s = f.read()
         return s
 <<<<<<< HEAD
+<<<<<<< HEAD
     except OSError:
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     except IOError:
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return ""
@@ -749,6 +783,7 @@ def get_addon_path():
     """Check if pgm is in the addons list and get addon path
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Make or update list of the official addons source
     code paths g.extension prefix parameter plus /grass-addons directory
     using Git repository
@@ -757,6 +792,9 @@ def get_addon_path():
 =======
     return: pgm path if pgm is addon else None
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    return: pgm path if pgm is addon else None
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     """
 <<<<<<< HEAD
     addons_base_dir = os.getenv("GRASS_ADDON_BASE")
@@ -829,6 +867,7 @@ def get_addon_path():
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if addon_base:
 <<<<<<< HEAD
+<<<<<<< HEAD
         """'addons_paths.json' is file created during install extension
         check get_addons_paths() function in the g.extension.py file
         """
@@ -844,6 +883,8 @@ def get_addon_path():
     return None, None
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         # addons_paths.json is file created during install extension
         # check get_addons_paths() function in the g.extension.py file
         addons_file = "addons_paths.json"
@@ -865,7 +906,10 @@ def get_addon_path():
         for addon in addons_paths["tree"]:
             if pgm == pathlib.Path(addon["path"]).name:
                 return addon["path"]
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 
 # process header
@@ -1022,6 +1066,7 @@ if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Process Source code section
 branches = "branches"
 tree = "tree"
@@ -1049,6 +1094,13 @@ if index_name:
     tree = "tree"
     commits = "commits"
 
+=======
+if index_name:
+    branches = "branches"
+    tree = "tree"
+    commits = "commits"
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if branches in url_source:
         url_log = url_source.replace(branches, commits)
         url_source = url_source.replace(branches, tree)

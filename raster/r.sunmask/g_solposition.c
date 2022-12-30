@@ -65,10 +65,14 @@ long calc_solar_position(double longitude, double latitude, double timezone,
     if (window.proj == 0)
         G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
             _("Unable to calculate sun position in projects without CRS. "
 =======
             _("Unable to calculate sun position in un-projected locations. "
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            _("Unable to calculate sun position in un-projected locations. "
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
               "Specify sunposition directly."));
 
     pdat = &pd; /* point to the structure for convenience */
@@ -102,6 +106,7 @@ long calc_solar_position(double longitude, double latitude, double timezone,
         /* read current projection info */
         if ((in_proj_info = G_get_projinfo()) == NULL)
             G_fatal_error(
+<<<<<<< HEAD
 <<<<<<< HEAD
                 _("Unable to get projection info of current project"));
 
@@ -156,6 +161,46 @@ long calc_solar_position(double longitude, double latitude, double timezone,
         G_debug(1, "Transformation to lat/long:");
         G_debug(1, "OUT: longitude: %f, latitude: %f", longitude, latitude);
 
+=======
+                _("Unable to get projection info of current location"));
+
+        if ((in_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(
+                _("Unable to get projection units of current location"));
+
+        if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+            G_fatal_error(
+                _("Unable to get projection key values of current location"));
+
+        G_free_key_value(in_proj_info);
+        G_free_key_value(in_unit_info);
+
+        /* Try using pj_print_proj_params() instead of all this */
+        G_debug(1, "Projection found in location:");
+        G_debug(1, "IN: meter: %f zone: %i proj: %s (iproj struct)",
+                iproj.meters, iproj.zone, iproj.proj);
+        G_debug(1, "IN coord: longitude: %f, latitude: %f", longitude,
+                latitude);
+
+        oproj.pj = NULL;
+        tproj.def = NULL;
+
+        if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+            G_fatal_error(_("Unable to initialize coordinate transformation"));
+
+        /* XX do the transform
+         *               outx        outy    in_info  out_info */
+
+        if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude, &latitude,
+                          NULL) < 0)
+            G_fatal_error(
+                _("Error in %s (projection of input coordinate pair)"),
+                "GPJ_transform()");
+
+        G_debug(1, "Transformation to lat/long:");
+        G_debug(1, "OUT: longitude: %f, latitude: %f", longitude, latitude);
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     } /* transform if not LL */
 
     pdat->longitude = longitude; /* Note that latitude and longitude are  */

@@ -28,10 +28,14 @@ static int make_dir(const char *path, int mode);
 
    \param path full path
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param mode mode (unused, defaults to chmod 0777 on non-Windows systems)
 =======
    \param mode mode
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \param mode mode
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
    \param parentdirs parent directories
 
    \return DB_OK on success

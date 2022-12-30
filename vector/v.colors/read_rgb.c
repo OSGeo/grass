@@ -9,7 +9,10 @@
 void rgb2colr(struct Map_info *Map, int layer, const char *rgb_column,
 =======
 void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
               struct Colors *colors)
 {
     int i, ret, nskipped;

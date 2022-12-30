@@ -12,10 +12,14 @@
 struct link_head {
     VOID_T **ptr_array; /* array of pointers to chunks */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int max_ptr;        /* num of chunks allocated */
 =======
     int max_ptr;        /* num of chunks alloced */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int max_ptr;        /* num of chunks alloced */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     int alloced;        /* size of ptr_array */
     int chunk_size;     /* size of alloc chucks in units */
     int unit_size;      /* size of each user defined unit */

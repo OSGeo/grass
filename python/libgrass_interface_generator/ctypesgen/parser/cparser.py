@@ -127,10 +127,14 @@ class CParser(object):
 
     def handle_error(self, message, filename, lineno):
 <<<<<<< HEAD
+<<<<<<< HEAD
         """A parse error occurred.
 =======
         """A parse error occured.
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        """A parse error occured.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         The default implementation prints `lineno` and `message` to stderr.
         The parser will try to recover from errors by synchronising at the

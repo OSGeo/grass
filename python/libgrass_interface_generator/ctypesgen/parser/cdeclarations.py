@@ -261,10 +261,14 @@ class Attrib(dict):
 
         According to https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html,
 <<<<<<< HEAD
+<<<<<<< HEAD
         an attribute can also be preceded/followed by a double underscore
 =======
         an attribute can also be preceeded/followed by a double underscore
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        an attribute can also be preceeded/followed by a double underscore
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ('__').
         """
 

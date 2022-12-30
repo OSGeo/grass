@@ -252,10 +252,14 @@ void open_write_rgb_maps(input_maps *in, RASTER3D_Region region, FILE *fp,
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             /*Set the pointer to null so we know later that these files are
 =======
             /*Set the pointer to null so we noe later that these files are
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            /*Set the pointer to null so we noe later that these files are
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
              * already closed */
             if (i == 0)
                 in->map_r = NULL;

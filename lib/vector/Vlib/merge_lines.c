@@ -146,10 +146,14 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
                         Vect_read_line(Map, NULL, Cats, abs(curr_line));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                         /* categories must be identical */
 =======
                         /* catgories must be identical */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        /* catgories must be identical */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                         if (compare_cats(MCats, Cats) == 0)
                             next_line = curr_line;
                     }

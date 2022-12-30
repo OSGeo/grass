@@ -380,9 +380,13 @@ int readbounds(void)
         /* count number of valid boundaries */
         nlines = Vect_get_node_n_lines(&In, node);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         nconnected = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        nconnected = 0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         Vect_reset_list(linelist);
         Vect_reset_list(arealist);
 
@@ -398,9 +402,13 @@ int readbounds(void)
                 Vect_list_append(linelist, line);
                 Vect_list_append(arealist, area_id);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 nconnected++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                nconnected++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             }
         }
 

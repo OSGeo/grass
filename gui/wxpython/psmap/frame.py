@@ -500,10 +500,14 @@ class PsMapFrame(wx.Frame):
                     im = PILImage.fromarray(np.rot90(im_array, 3))
                 im.save(self.imgName, format="PNG")
 <<<<<<< HEAD
+<<<<<<< HEAD
             except OSError:
 =======
             except (IOError, OSError):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            except (IOError, OSError):
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 del busy
                 program = self._getGhostscriptProgramName()
                 dlg = HyperlinkDialog(
@@ -515,6 +519,7 @@ class PsMapFrame(wx.Frame):
                     ),
                     hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                     hyperlinkLabel=_(
+<<<<<<< HEAD
                         "You can download {program} {arch} version here."
                     ).format(
                         program=program,
@@ -524,12 +529,17 @@ class PsMapFrame(wx.Frame):
 =======
                     hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                     hyperlinkLabel=_(
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                         "You can donwload {program} {arch} version here."
                     ).format(
                         program=program,
                         arch="64bit" if "64" in program else "32bit",
                     ),
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 )
                 dlg.ShowModal()
                 dlg.Destroy()

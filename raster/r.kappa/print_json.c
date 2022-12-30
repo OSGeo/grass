@@ -5,10 +5,14 @@
 #include "local_proto.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void print_json(void)
 =======
 void print_json()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void print_json()
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     bool first;
     FILE *fd;
@@ -122,6 +126,7 @@ void print_json()
             fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     fprintf(fd, "],\n");
     if (metrics->mcc == na_value)
         fprintf(fd, "    \"mcc\": null\n");
@@ -130,6 +135,9 @@ void print_json()
 =======
     fprintf(fd, "]\n");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    fprintf(fd, "]\n");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     fprintf(fd, "}\n");
     if (output != NULL)

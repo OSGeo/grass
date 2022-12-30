@@ -314,9 +314,13 @@ AMI_STREAM<T> *singleMerge(queue<char *> *streamList, Compare *cmp)
     SDEBUG rheap.print(cerr);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     int i = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int i = 0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     while (!rheap.empty()) {
         // mergedStr->write_item( rheap.extract_min() );
         // xxx should check error here
@@ -324,9 +328,13 @@ AMI_STREAM<T> *singleMerge(queue<char *> *streamList, Compare *cmp)
         mergedStr->write_item(elt);
         // SDEBUG cerr << "smerge: written " << elt << endl;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         i++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        i++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 
     SDEBUG cout << "..done\n";

@@ -7,6 +7,7 @@ DSTDIR = $(ETC)/python/grass/benchmark
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULES = app plots results runners __main__
 =======
 MODULES = plots results runners
@@ -14,6 +15,9 @@ MODULES = plots results runners
 =======
 MODULES = app plots results runners __main__
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
+=======
+MODULES = app plots results runners __main__
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

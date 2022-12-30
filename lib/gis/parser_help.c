@@ -102,10 +102,14 @@ static void usage(FILE *fp, int markers)
             fprintf(fp, "{{{KEYWORDS}}}\n");
         fprintf(fp, "%s\n ", _("Keywords:"));
 <<<<<<< HEAD
+<<<<<<< HEAD
         G__print_keywords(fp, NULL, FALSE);
 =======
         G__print_keywords(fp, NULL);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G__print_keywords(fp, NULL);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         fprintf(fp, "\n");
     }
 

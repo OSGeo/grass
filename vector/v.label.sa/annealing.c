@@ -49,10 +49,14 @@ static unsigned int overlaps_removed = 0;
  @params The commandline parameters.
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
 =======
 void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void simulate_annealing(label_t *labels, int n_labels, struct params *p)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     /* The temperature of the system */
     double T;
@@ -101,9 +105,13 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                 successes++;
                 consec_successes++;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 tot_better++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                tot_better++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             }
             /* else apply with probability p=e^(-dE/T) */
             else {
@@ -118,23 +126,33 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                     successes++;
                     consec_successes++;
 <<<<<<< HEAD
+<<<<<<< HEAD
                 }
                 else {
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     tot_worse++;
                 }
                 else {
                     tot_ign++;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     consec_successes = 0;
                 }
             }
             /* decrease immediately */
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (consec_successes > (unsigned int)(5 * n_labels)) {
 =======
             if (consec_successes > (5 * n_labels)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (consec_successes > (5 * n_labels)) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 consec_successes = 0;
                 break;
             }

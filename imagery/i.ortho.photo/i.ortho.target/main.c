@@ -58,10 +58,14 @@ int main(int argc, char *argv[])
     location_opt->required = YES;
     location_opt->description =
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Name of target project (location) for ortho-rectification");
 =======
         _("Name of target location for ortho-rectification");
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        _("Name of target location for ortho-rectification");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
     mapset_opt->key = "target_mapset";
@@ -82,16 +86,21 @@ int main(int argc, char *argv[])
     stat = G_mapset_permissions(target_mapset);
     if (stat != 1) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Unable to access target project/mapset %s/%s"),
 =======
         G_fatal_error(_("Unable to access target location/mapset %s/%s"),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_fatal_error(_("Unable to access target location/mapset %s/%s"),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                       target_location, target_mapset);
     }
 
     G_setenv_nogisrc("MAPSET", target_mapset);
     G_get_window(&target_window);
     if (target_window.proj == PROJECTION_XY)
+<<<<<<< HEAD
 <<<<<<< HEAD
         G_fatal_error(_("Target projects (locations) with XY (unreferenced) "
                         "are not supported"));
@@ -104,10 +113,17 @@ int main(int argc, char *argv[])
     else if (target_window.proj == PROJECTION_LL)
         G_fatal_error(_("Target locations with lon/lat are not supported"));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_fatal_error(
+            _("Target locations with XY (unreferenced) are not supported"));
+    else if (target_window.proj == PROJECTION_LL)
+        G_fatal_error(_("Target locations with lon/lat are not supported"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     G_switch_env();
     I_put_target(group, target_location, target_mapset);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     G_message(_("Group [%s] targeted for project (location) [%s], mapset [%s]"),
               group, target_location, target_mapset);
@@ -115,6 +131,10 @@ int main(int argc, char *argv[])
     G_message(_("Group [%s] targeted for location [%s], mapset [%s]"), group,
               target_location, target_mapset);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    G_message(_("Group [%s] targeted for location [%s], mapset [%s]"), group,
+              target_location, target_mapset);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     exit(EXIT_SUCCESS);
 }

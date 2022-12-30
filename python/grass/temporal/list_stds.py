@@ -266,11 +266,15 @@ def _write_table(rows, column_names, output_format, separator, file):
         _write_yaml(rows=rows, column_names=column_names, file=file)
     elif output_format == "plain":
 <<<<<<< HEAD
+<<<<<<< HEAD
         # No particular reason for this separator except that this is the original
         # behavior.
 =======
         # No particular reason for this separator expect that this is the original behavior.
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        # No particular reason for this separator expect that this is the original behavior.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if not separator:
             separator = "\t"
         _write_plain(rows=rows, header=column_names, separator=separator, file=file)
@@ -323,9 +327,13 @@ def _get_get_registered_maps_as_objects_delta_gran(
     records = []
     for map_object in maps:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if isinstance(map_object, list):
             if len(map_object) > 0:
                 map_object = map_object[0]
@@ -469,6 +477,7 @@ def _get_list_of_maps_stds(
                     name=dataset.get_id(),
                     element_type=element_type,
 <<<<<<< HEAD
+<<<<<<< HEAD
                     detail=(
                         _(
                             "Dataset is empty or where clause is too constrained or "
@@ -478,12 +487,17 @@ def _get_list_of_maps_stds(
                         else _("Dataset is empty")
                     ),
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     detail=_(
                         "Dataset is empty or where clause is too constrained or incorrect"
                     )
                     if where
                     else _("Dataset is empty"),
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 )
             )
     if connection_state_changed:

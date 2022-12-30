@@ -10,10 +10,14 @@
  *                   spread cell and stored in a linked list of type
  *                   cell_ptrHa - select() ;
 <<<<<<< HEAD
+<<<<<<< HEAD
  *                        A) calculates the cumulative cost (time) of the
 =======
  *                        A) caculates the cumulative cost (time) of the
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ *                        A) caculates the cumulative cost (time) of the
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  *                           end cell of each link - calculate();
  *                        B) compares this new cumulative cost (time) with
  *                           the previously computed cumulative time/cost,

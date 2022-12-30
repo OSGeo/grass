@@ -53,11 +53,16 @@ static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
    \return -1 on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_get_point_in_area(struct Map_info *Map, int area, double *X, double *Y)
 =======
 int Vect_get_point_in_area(const struct Map_info *Map, int area, double *X,
                            double *Y)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_get_point_in_area(const struct Map_info *Map, int area, double *X,
+                           double *Y)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     static struct line_pnts *Points;
     static struct line_pnts **IPoints;
@@ -103,7 +108,10 @@ static int comp_double(const void *i, const void *j)
     if (*(const double *)i < *(const double *)j)
 =======
     if (*i < *j)
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         return -1;
 
     return (*(const double *)i > *(const double *)j);
@@ -586,10 +594,14 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
 
     qsort(Intersects->x, (size_t)Intersects->n_points, sizeof(double),
 <<<<<<< HEAD
+<<<<<<< HEAD
           comp_double);
 =======
           (void *)comp_double);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+          (void *)comp_double);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     max = 0;
     maxpos = 0;
@@ -642,10 +654,14 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
 
         qsort(Intersects->y, (size_t)Intersects->n_points, sizeof(double),
 <<<<<<< HEAD
+<<<<<<< HEAD
               comp_double);
 =======
               (void *)comp_double);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+              (void *)comp_double);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         max = 0;
         maxpos = 0;
@@ -869,6 +885,7 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
    \return 2 - on the boundary
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_point_in_area_outer_ring(double X, double Y, struct Map_info *Map,
                                   int area, struct bound_box *box)
 =======
@@ -876,6 +893,11 @@ int Vect_point_in_area_outer_ring(double X, double Y,
                                   const struct Map_info *Map, int area,
                                   struct bound_box *box)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_point_in_area_outer_ring(double X, double Y,
+                                  const struct Map_info *Map, int area,
+                                  struct bound_box *box)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     static int first = 1;
     int n_intersects, inter;

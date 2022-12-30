@@ -234,8 +234,11 @@ int Vect_build_nat(struct Map_info *Map, int build)
     /* Add areas to category index */
     /* add message and G_percent() ?
 <<<<<<< HEAD
+<<<<<<< HEAD
      * it seems fast enough, no message / percent needed */
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
      * it seems fast enough, no message / precent needed */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     for (i = 1; i <= plus->n_areas; i++) {

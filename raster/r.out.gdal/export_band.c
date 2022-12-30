@@ -3,10 +3,14 @@
  * MODULE:       r.out.gdal
  * AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
  * PURPOSE:      Exports GRASS raster to GDAL supported formats;
 =======
  * PURPOSE:      Exports GRASS raster to GDAL suported formats;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ * PURPOSE:      Exports GRASS raster to GDAL suported formats;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  *               based on GDAL library.
  *
  * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team

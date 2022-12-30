@@ -111,9 +111,13 @@ DLLS="
 	/mingw64/bin/libbz2-1.dll
 	/mingw64/bin/libiconv-2.dll
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	/mingw64/bin/libexpat-1.dll
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+	/mingw64/bin/libexpat-1.dll
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 	/mingw64/bin/libfontconfig-1.dll
 	/mingw64/bin/libgfortran-5.dll
 	/mingw64/bin/libbrotlidec.dll
@@ -137,9 +141,13 @@ DLLS="
 	/mingw64/bin/libblas.dll
 	/mingw64/bin/liblapack.dll
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	/mingw64/bin/libomp.dll
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+	/mingw64/bin/libomp.dll
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 	/mingw64/bin/libquadmath-0.dll
 "
 
@@ -201,11 +209,15 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
 		--with-bzlib \
 <<<<<<< HEAD
+<<<<<<< HEAD
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
 		--without-pdal
 =======
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
 	touch mswindows/osgeo4w/configure-stamp
 fi

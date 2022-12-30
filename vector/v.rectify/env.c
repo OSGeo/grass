@@ -39,7 +39,10 @@ int show_env(void)
     fprintf(stderr, "env(%d) switch to project %s, mapset %s\n", which_env,
 =======
     fprintf(stderr, "env(%d) switch to LOCATION %s, MAPSET %s\n", which_env,
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             G_getenv_nofatal("LOCATION_NAME") == NULL
                 ? "?"
                 : G_getenv_nofatal("LOCATION_NAME"),

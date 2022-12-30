@@ -99,14 +99,20 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *driver, int ncol,
                         /* if this is 'cat', then execute the following only if
                          * the '-s' flag was NOT given */
 <<<<<<< HEAD
+<<<<<<< HEAD
                         OGR_F_SetFieldNull(Ogr_feature, ogrfieldnum);
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #if GDAL_VERSION_NUM >= 2020000
                         OGR_F_SetFieldNull(Ogr_feature, ogrfieldnum);
 #else
                         OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
 #endif
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                     }
 
                     /* prevent writing NULL values */
@@ -140,14 +146,20 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *driver, int ncol,
                         }
                     }
 <<<<<<< HEAD
+<<<<<<< HEAD
                     else
                         OGR_F_SetFieldNull(Ogr_feature, ogrfieldnum);
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #if GDAL_VERSION_NUM >= 2020000
                     else
                         OGR_F_SetFieldNull(Ogr_feature, ogrfieldnum);
 #endif
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 }
             }
             db_close_cursor(&cursor);

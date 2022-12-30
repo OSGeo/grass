@@ -94,12 +94,17 @@ void *LargeMemory::alloc(size_t leng)
     if (stats) {
         char buf[BUFSIZ], buf2[32];
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
                  formatNumber(buf2, leng), (unsigned long)p);
 =======
         sprintf(buf, "allocated large memory: %s 0x%lX",
                 formatNumber(buf2, leng), (unsigned long)p);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "allocated large memory: %s 0x%lX",
+                formatNumber(buf2, leng), (unsigned long)p);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         stats->comment(buf);
     }
     return p;
@@ -127,12 +132,17 @@ void LargeMemory::free(void *p)
     if (stats) {
         char buf[BUFSIZ], buf2[32];
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
                  formatNumber(buf2, len[i]), (unsigned long)p);
 =======
         sprintf(buf, "freed large memory: %s 0x%lX", formatNumber(buf2, len[i]),
                 (unsigned long)p);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "freed large memory: %s 0x%lX", formatNumber(buf2, len[i]),
+                (unsigned long)p);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         stats->comment(buf);
     }
 

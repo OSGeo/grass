@@ -52,6 +52,9 @@ int G_make_mapset_element(const char *p_element)
 /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
    \brief Create directory for group of elements of a given type.
 
    Creates the specified element directory in the current mapset.
@@ -72,6 +75,7 @@ int G_make_mapset_element(const char *p_element)
 
    \sa G_make_mapset_dir_object()
    \sa G_make_mapset_object_group_tmp()
+<<<<<<< HEAD
 =======
     \brief Create directory for group of elements of a given type.
 =======
@@ -102,6 +106,8 @@ int G_make_mapset_element(const char *p_element)
    \sa G_make_mapset_dir_object()
    \sa G_make_mapset_object_group_tmp()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  */
 int G_make_mapset_object_group(const char *type)
 {
@@ -114,6 +120,9 @@ int G_make_mapset_object_group(const char *type)
 /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
    \brief Create directory for an object of a given type.
 
    Creates the specified element directory in the current mapset.
@@ -138,6 +147,7 @@ int G_make_mapset_object_group(const char *type)
    \return 1 on success
 
    \sa G_make_mapset_object_group()
+<<<<<<< HEAD
 =======
     \brief Create directory for an object of a given type.
 =======
@@ -171,6 +181,8 @@ int G_make_mapset_object_group(const char *type)
 =======
    \sa G_make_mapset_object_group()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  */
 int G_make_mapset_dir_object(const char *type, const char *name)
 {
@@ -206,6 +218,9 @@ int G_make_mapset_element_tmp(const char *p_element)
 /*!
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
    \brief Create directory for type of objects in the temporary directory.
 
    See G_file_name_tmp() for details.
@@ -220,6 +235,7 @@ int G_make_mapset_element_tmp(const char *p_element)
    \return 1 on success
  */
 int G_make_mapset_object_group_tmp(const char *type)
+<<<<<<< HEAD
 =======
     \brief Create directory for type of objects in the temporary directory.
 =======
@@ -227,17 +243,48 @@ int G_make_mapset_object_group_tmp(const char *type)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    See G_file_name_tmp() for details.
+=======
+{
+    char path[GPATH_MAX];
+
+    G_file_name_tmp(path, NULL, NULL, G_mapset());
+    return make_mapset_element_no_fail_on_race(path, type);
+}
+
+/*!
+   \brief Create directory for type of objects in the temporary directory.
+
+   See G_file_name_basedir() for details.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
    \param type object type (e.g., `cell`)
 
    \note
+<<<<<<< HEAD
    Use G_make_mapset_object_group_tmp() for creating common, shared
    directories which are for multiple concrete elements (objects).
+=======
+   Use G_make_mapset_object_group_basedir() for creating common, shared
+   directories for temporary data.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
    \return 0 no element defined
    \return 1 on success
  */
+<<<<<<< HEAD
 int G_make_mapset_object_group_tmp(const char *type)
+=======
+int G_make_mapset_object_group_basedir(const char *type, const char *basedir)
+{
+    char path[GPATH_MAX];
+
+    G_file_name_basedir(path, NULL, NULL, G_mapset(), basedir);
+    return make_mapset_element_no_fail_on_race(path, type);
+}
+
+int make_mapset_element_impl(const char *p_path, const char *p_element,
+                             bool race_ok)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     char path[GPATH_MAX];
 
@@ -329,10 +376,14 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
     while (1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (*element == '/' || *element == 0) {
             *p = 0;
             char *msg = NULL;
 
+<<<<<<< HEAD
 =======
 	if (*element == '/' || *element == 0) {
 	    *p = 0;
@@ -344,6 +395,8 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
             char *msg = NULL;
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             if (access(path, 0) != 0) {
                 /* Assuming that directory does not exist. */
                 if (G_mkdir(path) != 0) {
@@ -353,6 +406,9 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
             if (access(path, 0) != 0 || (msg && !race_ok)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                 /* Directory is not accessible even after attempt to create it.
                  */
                 if (msg) {
@@ -372,6 +428,7 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
                 return 1;
         }
         *p++ = *element++;
+<<<<<<< HEAD
 =======
                 /* Directory is not accessible even after attempt to create it. */
 =======
@@ -403,6 +460,8 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
         }
         *p++ = *element++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
 }
 
@@ -411,6 +470,7 @@ int make_mapset_element(const char *p_path, const char *p_element)
     return make_mapset_element_impl(p_path, p_element, false);
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 int make_mapset_element_no_fail_on_race(const char *p_path,
@@ -422,10 +482,15 @@ int make_mapset_element_no_fail_on_race(const char *p_path, const char *p_elemen
 int make_mapset_element_no_fail_on_race(const char *p_path,
                                         const char *p_element)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int make_mapset_element_no_fail_on_race(const char *p_path,
+                                        const char *p_element)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     return make_mapset_element_impl(p_path, p_element, true);
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -433,6 +498,8 @@ int make_mapset_element_no_fail_on_race(const char *p_path,
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 /*!
    \brief Create misc element in the current mapset.
 
@@ -446,6 +513,7 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return G_make_mapset_dir_object(dir, name);
 =======
     G_make_mapset_dir_object(dir, name);
@@ -453,6 +521,9 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
 =======
     return G_make_mapset_dir_object(dir, name);
 >>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
+=======
+    return G_make_mapset_dir_object(dir, name);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 }
 
 static int check_owner(const struct stat *info)

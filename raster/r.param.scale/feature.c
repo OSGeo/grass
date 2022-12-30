@@ -30,10 +30,14 @@ DCELL feature(double *coeff)
         b = C_B * zscale, c = C_C * zscale, d = C_D * zscale, e = C_E * zscale;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     double maxic, minic, /* Minimum and maximum curvature.      */
 =======
     double maxic, minic, /* Minimium and maximum curvature.      */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double maxic, minic, /* Minimium and maximum curvature.      */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         slope,           /* Slope.                               */
         crosc;           /* Cross-sectional curvature.           */
 

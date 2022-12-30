@@ -352,10 +352,14 @@ int main(int argc, char *argv[])
 
     if (bufcol_opt->answer && field == -1)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("The column option requires a valid layer."));
 =======
         G_fatal_error(_("The bufcol option requires a valid layer."));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_fatal_error(_("The bufcol option requires a valid layer."));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     tolerance = 0.01;
     if (tol_opt->answer) {

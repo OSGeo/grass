@@ -37,12 +37,17 @@
 # %option G_OPT_R_INPUT
 # % key: zones
 <<<<<<< HEAD
+<<<<<<< HEAD
 # % label: Raster map with zones to compute statistics for
 # % description: Raster map with zones to compute statistics for (needs to be CELL)
 =======
 # % label: Raster map withh zones to compute statistics for
 # % description: Raster map withh zones to compute statistics for (needs to be CELL)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+# % label: Raster map withh zones to compute statistics for
+# % description: Raster map withh zones to compute statistics for (needs to be CELL)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 # % required: no
 # %end
 

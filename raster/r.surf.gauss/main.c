@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /****** INITIALISE RANDOM NUMBER GENERATOR ******/
     if (seed->answer) {
@@ -84,6 +85,8 @@ int main(int argc, char *argv[])
     }
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     sscanf(mean->answer, "%lf", &gauss_mean);
     sscanf(sigma->answer, "%lf", &gauss_sigma);

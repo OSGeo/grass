@@ -134,6 +134,7 @@ class NotebookController:
 
     def AddPage(self, *args, **kwargs):
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Add a new page
 
         :param str name: use this param if notebooks has ability to
@@ -146,6 +147,8 @@ class NotebookController:
                          work correctly.
         """
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         """Add a new page"""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if "name" in kwargs:
@@ -155,6 +158,7 @@ class NotebookController:
         self.classObject.AddPage(self.widget, *args, **kwargs)
 
     def InsertPage(self, *args, **kwargs):
+<<<<<<< HEAD
 <<<<<<< HEAD
         """Insert a new page
 
@@ -168,6 +172,8 @@ class NotebookController:
                          work correctly.
         """
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         """Insert a new page"""
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if "name" in kwargs:
@@ -177,10 +183,13 @@ class NotebookController:
         try:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
 <<<<<<< HEAD
+<<<<<<< HEAD
         except (
             TypeError
         ) as e:  # documentation says 'index', but certain versions of wx require 'n'
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             kwargs["n"] = kwargs["index"]
@@ -1264,10 +1273,14 @@ class SearchModuleWidget(wx.Panel):
         if self._showTip:
             self._searchTip = StaticWrapText(
 <<<<<<< HEAD
+<<<<<<< HEAD
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
 =======
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             )
 
         if self._showChoice:
@@ -1333,10 +1346,14 @@ class SearchModuleWidget(wx.Panel):
                 self.OnSelectModule()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         label = _("{} tools matched").format(len(commands))
 =======
         label = _("%d tools match") % len(commands)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        label = _("%d tools match") % len(commands)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if self._showTip:
             self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 

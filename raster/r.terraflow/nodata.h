@@ -60,10 +60,14 @@ public:
     {
         static char buf[8];
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
 =======
         sprintf(buf, CCLABEL_FMT, p.label);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, CCLABEL_FMT, p.label);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 

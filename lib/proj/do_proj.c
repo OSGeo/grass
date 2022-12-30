@@ -697,6 +697,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
             proj_list_destroy(op_list);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* following code copied from proj_create_crs_to_crs_from_pj()
          * in proj src/4D_api.cpp
          * using PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
@@ -721,6 +722,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
          * in proj src/4D_api.cpp
          * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* follwing code copied from proj_create_crs_to_crs_from_pj()
+         * in proj src/4D_api.cpp
+         * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         /* now use the current region as area of interest */
         operation_ctx =
@@ -729,6 +735,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
             PJ_DEFAULT_CTX, operation_ctx, xmin, ymin, xmax, ymax);
         proj_operation_factory_context_set_spatial_criterion(
             PJ_DEFAULT_CTX, operation_ctx,
+<<<<<<< HEAD
 <<<<<<< HEAD
             PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION);
         /* from GDAL OGRProjCT::ListCoordinateOperations() */
@@ -967,6 +974,122 @@ int GPJ_init_transform(const struct pj_info *info_in,
             proj_area_destroy(pj_area);
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+        proj_operation_factory_context_set_grid_availability_use(
+            PJ_DEFAULT_CTX, operation_ctx,
+            PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+        /* The operations are sorted with the most relevant ones first:
+         * by descending area (intersection of the transformation area
+         * with the area of interest, or intersection of the
+         * transformation with the area of use of the CRS),
+         * and by increasing accuracy.
+         * Operations with unknown accuracy are sorted last,
+         * whatever their area.
+         */
+        op_list = proj_create_operations(PJ_DEFAULT_CTX, in_pj, out_pj,
+                                         operation_ctx);
+        proj_operation_factory_context_destroy(operation_ctx);
+        op_count_area = 0;
+        if (op_list)
+            op_count_area = proj_list_get_count(op_list);
+        if (op_count_area == 0) {
+            /* no operations */
+            info_trans->pj = NULL;
+        }
+        else if (op_count_area == 1) {
+            info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
+        }
+        else { /* op_count_area > 1 */
+            /* can't use pj_create_prepared_operations()
+             * this is a PROJ-internal function
+             * trust the sorting of PROJ and use the first one */
+            info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
+        }
+        if (op_list)
+            proj_list_destroy(op_list);
+
+        /* try proj_create_crs_to_crs() */
+        /*
+           G_debug(1, "trying %s to %s", indef, outdef);
+         */
+
+        /* proj_create_crs_to_crs() does not work because it calls
+         * proj_create_crs_to_crs_from_pj() which calls
+         * proj_operation_factory_context_set_spatial_criterion()
+         * with PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
+         * instead of
+         * PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT
+         *
+         * fixed in PROJ master, probably available with PROJ 7.3.x */
+
+        /*
+           info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
+           indef,
+           outdef,
+           pj_area);
+         */
+
+        if (in_pj)
+            proj_destroy(in_pj);
+        if (out_pj)
+            proj_destroy(out_pj);
+
+        if (info_trans->pj) {
+            const char *projstr;
+            PJ *pj_norm = NULL;
+
+            G_debug(1, "proj_create_crs_to_crs() succeeded with PROJ%d",
+                    PROJ_VERSION_MAJOR);
+
+            projstr =
+                proj_as_proj_string(NULL, info_trans->pj, PJ_PROJ_5, NULL);
+
+            info_trans->def = G_store(projstr);
+
+            if (projstr) {
+                /* make sure axis order is easting, northing
+                 * proj_normalize_for_visualization() requires
+                 * source and target CRS
+                 * -> does not work with ll equivalent of input:
+                 * no target CRS in +proj=pipeline +step +inv %s */
+                pj_norm = proj_normalize_for_visualization(PJ_DEFAULT_CTX,
+                                                           info_trans->pj);
+
+                if (!pj_norm) {
+                    G_warning(
+                        _("proj_normalize_for_visualization() failed for '%s'"),
+                        info_trans->def);
+                }
+                else {
+                    projstr =
+                        proj_as_proj_string(NULL, pj_norm, PJ_PROJ_5, NULL);
+                    if (projstr && *projstr) {
+                        proj_destroy(info_trans->pj);
+                        info_trans->pj = pj_norm;
+                        info_trans->def = G_store(projstr);
+                    }
+                    else {
+                        proj_destroy(pj_norm);
+                        G_warning(_("No PROJ definition for normalized version "
+                                    "of '%s'"),
+                                  info_trans->def);
+                    }
+                }
+                G_important_message(_("Selected PROJ pipeline:"));
+                G_important_message(_("%s"), info_trans->def);
+                G_important_message("************************");
+            }
+            else {
+                proj_destroy(info_trans->pj);
+                info_trans->pj = NULL;
+            }
+        }
+
+        if (pj_area)
+            proj_area_destroy(pj_area);
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         if (insrid)
             G_free(insrid);
         if (outsrid)

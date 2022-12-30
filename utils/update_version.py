@@ -144,10 +144,13 @@ def update_minor(args):
     micro = version_file.micro
     minor = int(version_file.minor)
 <<<<<<< HEAD
+<<<<<<< HEAD
     minor += 1
     if micro.endswith("dev"):
         micro = "0dev"
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     if args.dev:
         if not minor % 2:
             sys.exit(
@@ -164,7 +167,10 @@ def update_minor(args):
         else:
             # Even will be released, so adding micro version.
             micro = "0dev"
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     else:
         sys.exit("Updating version from a non-dev VERSION file is not possible")
     write_version_file(
@@ -256,6 +262,7 @@ def status(args):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def suggest_message(args):
     """Print suggestion for a commit message
 
@@ -280,6 +287,8 @@ def suggest_message(args):
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 def main():
     """Translate sub-commands to function calls"""
     parser = argparse.ArgumentParser(
@@ -315,11 +324,17 @@ def main():
         "minor", help="increase minor (x.Y.z) version (uses dev in micro)"
     )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     subparser.add_argument(
         "--dev", action="store_true", help="increase development-only version"
     )
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    subparser.add_argument(
+        "--dev", action="store_true", help="increase development-only version"
+    )
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     subparser.set_defaults(func=update_minor)
 
     subparser = subparsers.add_parser(
@@ -336,6 +351,7 @@ def main():
     subparser.set_defaults(func=status)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     subparser = subparsers.add_parser(
         "suggest", help="suggest a commit message for new version"
     )
@@ -343,6 +359,8 @@ def main():
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     args = parser.parse_args()
     args.func(args)
 

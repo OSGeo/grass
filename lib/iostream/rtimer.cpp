@@ -39,6 +39,7 @@
 #include <strings.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <grass/iostream/rtimer.h>
 
 #define BUFMAX 256
@@ -62,6 +63,11 @@ char *rt_sprint_safe(char *buf, Rtimer rt)
 // #include <rtimer.h>
 #include <grass/iostream/rtimer.h>
 
+=======
+// #include <rtimer.h>
+#include <grass/iostream/rtimer.h>
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 char *rt_sprint_safe(char *buf, Rtimer rt)
 {
     if (rt_w_useconds(rt) == 0) {
@@ -77,7 +83,10 @@ char *rt_sprint_safe(char *buf, Rtimer rt)
                 rt_w_useconds(rt) / 1000000,
                 100.0 * (rt_u_useconds(rt) + rt_s_useconds(rt)) /
                     rt_w_useconds(rt));
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     }
     return buf;
 }

@@ -253,17 +253,23 @@ static void dangles(struct Map_info *Map, int type, int option,
                     lines_removed++;
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
                 dangles_removed++;
             } /* delete the chain */
         }     /* lcount == 1 */
     }         /* node <= nnodes */
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             } /* delete the chain */
 
             dangles_removed++;
         } /* lcount == 1 */
     }     /* node <= nnodes */
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     G_verbose_message(_("%s lines: %d"), lmsg, lines_removed);
     G_verbose_message(_("%s dangles: %d"), lmsg, dangles_removed);
 }

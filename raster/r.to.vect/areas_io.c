@@ -127,6 +127,7 @@ int write_boundary(struct COOR *seed)
 /* write_bnd - actual writing part of write_line */
 /* writes binary and ASCII digit files and supplemental file */
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int
 write_bnd(struct COOR *line_begin,
           struct COOR *line_end UNUSED, /* start and end point of line */
@@ -136,6 +137,11 @@ static int write_bnd(struct COOR *line_begin,
                      struct COOR *line_end, /* start and end point of line */
                      int n                  /* number of points to write */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int write_bnd(struct COOR *line_begin,
+                     struct COOR *line_end, /* start and end point of line */
+                     int n                  /* number of points to write */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 )
 {
     static struct line_pnts *points = NULL;
@@ -182,12 +188,17 @@ static int write_bnd(struct COOR *line_begin,
 static int
 write_smooth_bnd(struct COOR *line_begin,
 <<<<<<< HEAD
+<<<<<<< HEAD
                  struct COOR *line_end UNUSED, /* start and end point of line */
                  int n                         /* number of points to write */
 =======
                  struct COOR *line_end, /* start and end point of line */
                  int n                  /* number of points to write */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                 struct COOR *line_end, /* start and end point of line */
+                 int n                  /* number of points to write */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 )
 {
     static struct line_pnts *points = NULL;

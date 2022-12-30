@@ -44,6 +44,7 @@ int classify(CELL *class, CELL *reject, int ncols)
             /*
                The test only works if  the  covariance  matrix  is  non-negative
 <<<<<<< HEAD
+<<<<<<< HEAD
                definite (sometimes  called positive semi-definite), and this is
                a requirement of the maximum-likelihood estimator.  This
                assumption is  theoretically  true  for random samples of
@@ -54,6 +55,8 @@ int classify(CELL *class, CELL *reject, int ncols)
                is that the determinant be positive but this is not sufficient.
                All  principal  minors  must also have non-negative determinants.
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                definite (sometimes  called positve semi-definite), and this is a
                requirement of the maximum-likelihood estimator.  This assumption
                is  theorically  true  for random samples of normally distributed
@@ -63,7 +66,10 @@ int classify(CELL *class, CELL *reject, int ncols)
                think  it does.  A necessary condition is that the determinant be
                positive but this is not sufficient. All  principal  minors  must
                also have non-negative determinants.
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
              */
 
             s = &S.sig[c];

@@ -65,10 +65,14 @@ void *db_malloc(int n)
    \param m entity size
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    \return pointer to allocated memory
 =======
    \return pointer to allocated memmory
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \return pointer to allocated memmory
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  */
 void *db_calloc(int n, int m)
 {
@@ -93,10 +97,14 @@ void *db_calloc(int n, int m)
    \param n number of newly allocated bytes
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    \return pointer to allocated memory
 =======
    \return pointer to allocated memmory
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \return pointer to allocated memmory
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
  */
 void *db_realloc(void *s, int n)
 {

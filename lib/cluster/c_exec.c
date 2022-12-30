@@ -32,10 +32,14 @@
 int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
                    double convergence, double separation, int min_class_size,
 <<<<<<< HEAD
+<<<<<<< HEAD
                    int (*checkpoint)(struct Cluster *, int), int *interrupted)
 =======
                    int (*checkpoint)(), int *interrupted)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                   int (*checkpoint)(), int *interrupted)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     int changes;
 

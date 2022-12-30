@@ -183,7 +183,10 @@ class BasePlotFrame(wx.Frame):
         self.drag = False  # dragging disabled
 =======
         self.drag = False  # draging disabled
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)

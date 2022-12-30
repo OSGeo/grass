@@ -9,10 +9,14 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
 =======
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
    \author Glynn Clements
  */
 

@@ -50,6 +50,7 @@ def save_results_to_file(results, filename):
     text = save_results(results)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     with open(filename, "w", encoding="utf-8") as file:
 =======
     with open(filename, "w") as file:
@@ -57,6 +58,9 @@ def save_results_to_file(results, filename):
 =======
     with open(filename, "w", encoding="utf-8") as file:
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    with open(filename, "w", encoding="utf-8") as file:
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         file.write(text)
 
 
@@ -77,13 +81,17 @@ def load_results_from_file(filename):
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     with open(filename, "r", encoding="utf-8") as file:
         return load_results(file.read())
 
 
 def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
+<<<<<<< HEAD
 =======
     with open(filename, "r") as file:
         return load_results(file.read())
@@ -95,6 +103,8 @@ def join_results(results, prefixes=None):
 =======
 def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     """Join multiple lists of results together
 
     The *results* argument either needs to be a list of result objects
@@ -113,6 +123,9 @@ def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
         for result in result_list:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             if select and not select(result):
                 continue
             result = copy.deepcopy(result)
@@ -138,6 +151,7 @@ def join_results_from_files(
         select=select,
         prefixes_as_labels=prefixes_as_labels,
     )
+<<<<<<< HEAD
 =======
 =======
             if select and not select(result):
@@ -174,3 +188,5 @@ def join_results_from_files(
         prefixes_as_labels=prefixes_as_labels,
     )
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

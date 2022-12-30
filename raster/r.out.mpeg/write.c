@@ -193,10 +193,14 @@ void write_ppm(char *tr, char *tg, char *tb, int nrows, int ncols, int *y_rows,
 /*******************************************************/
 void write_params(char *mpfilename, char *yfiles[], char *outfile, int frames,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   int quality, int y_rows UNUSED, int y_cols UNUSED, int fly)
 =======
                   int quality, int y_rows, int y_cols, int fly)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                  int quality, int y_rows, int y_cols, int fly)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     FILE *fp;
     char dir[1000], *enddir;

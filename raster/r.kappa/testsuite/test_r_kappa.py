@@ -150,10 +150,13 @@ class CalculationCorrectness1Test(TestCase):
     # 5   1  17 0  0  1.000 1.000 0.056 0.056 0.056 1.000
     # 6   2  13 2  1  0.667 0.500 0.111 0.222 0.167 0.400
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Correct MCC value was calculated manually and validated with
     # mcc function of R package mltools.
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def test_standard_output(self):
         out = read_command(
@@ -187,9 +190,12 @@ class CalculationCorrectness1Test(TestCase):
         vals = rows[28].split()
         self.assertTrue(self.match(vals[0], 0.52091))
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.assertTrue(self.match(vals[2], 0.55930))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         # Overall characteristics
         vals = rows[31].split()
@@ -293,9 +299,12 @@ class CalculationCorrectness2Test(TestCase):
         vals = rows[28].split()
         self.assertTrue(self.match(vals[0], 0.0))
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.assertTrue(self.match(vals[2], "NA"))
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         # Overall characteristics
         vals = rows[31].split()
@@ -355,9 +364,12 @@ class JSONOutputTest(TestCase):
                 "users_accuracy": [100.0, None, 80.0, 0.0, 100.0, 50.0],
                 "conditional_kappa": [1.0, None, 0.742857, 0.0, 1.0, 0.400],
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "mcc": 0.55930,
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             }
         )
 
@@ -398,9 +410,12 @@ class JSONOutputTest(TestCase):
                 "users_accuracy": [None, None, None, None, None, 0.0],
                 "conditional_kappa": [None, None, None, None, None, 0.0],
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "mcc": None,
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             }
         )
 
@@ -432,9 +447,12 @@ class JSONOutputTest(TestCase):
                 "users_accuracy": [],
                 "conditional_kappa": [],
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "mcc": None,
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             }
         )
 
@@ -466,9 +484,12 @@ class JSONOutputTest(TestCase):
                 "users_accuracy": [],
                 "conditional_kappa": [],
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "mcc": None,
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             }
         )
 

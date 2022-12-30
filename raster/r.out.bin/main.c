@@ -486,10 +486,14 @@ int main(int argc, char *argv[])
         convert_row(out_buf, in_buf, ncols, is_fp, bytes, swap_flag, null_val);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (fwrite(out_buf, bytes, ncols, fp) != (size_t)ncols)
 =======
         if (fwrite(out_buf, bytes, ncols, fp) != ncols)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (fwrite(out_buf, bytes, ncols, fp) != ncols)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             G_fatal_error(_("Error writing data"));
     }
 

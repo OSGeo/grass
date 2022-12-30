@@ -101,6 +101,7 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbCompRegionExtent,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
@@ -118,6 +119,11 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbMapScale,
             sb.SbGoTo,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
@@ -169,10 +175,14 @@ class SwipeMapPanel(DoubleMapPanel):
     def ActivateFirstMap(self, event=None):
         """Switch tracking direction"""
 <<<<<<< HEAD
+<<<<<<< HEAD
         super().ActivateFirstMap(event)
 =======
         super(SwipeMapPanel, self).ActivateFirstMap(event)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(SwipeMapPanel, self).ActivateFirstMap(event)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         self.firstMapWindow.ClearLines()
         self.firstMapWindow.Refresh()
@@ -180,10 +190,14 @@ class SwipeMapPanel(DoubleMapPanel):
     def ActivateSecondMap(self, event=None):
         """Switch tracking direction"""
 <<<<<<< HEAD
+<<<<<<< HEAD
         super().ActivateSecondMap(event)
 =======
         super(SwipeMapPanel, self).ActivateSecondMap(event)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(SwipeMapPanel, self).ActivateSecondMap(event)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
         self.secondMapWindow.ClearLines()
         self.secondMapWindow.Refresh()
@@ -248,10 +262,14 @@ class SwipeMapPanel(DoubleMapPanel):
         Debug.msg(4, "SwipeMapPanel.OnSize()")
         self.resize = grass.clock()
 <<<<<<< HEAD
+<<<<<<< HEAD
         super().OnSize(event)
 =======
         super(SwipeMapPanel, self).OnSize(event)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(SwipeMapPanel, self).OnSize(event)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     def OnIdle(self, event):
         if self.resize and grass.clock() - self.resize > 0.2:
@@ -302,10 +320,14 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Row(1)
                 .Position(0)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMain"].GetBestSize()),
 =======
                 .BestSize((self.toolbars["swipeMain"].GetBestSize())),
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+                .BestSize((self.toolbars["swipeMain"].GetBestSize())),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             )
 
         if name == "swipeMap":
@@ -328,10 +350,14 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Row(1)
                 .Position(1)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMap"].GetBestSize()),
 =======
                 .BestSize((self.toolbars["swipeMap"].GetBestSize())),
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+                .BestSize((self.toolbars["swipeMap"].GetBestSize())),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             )
 
         if name == "swipeMisc":
@@ -354,10 +380,14 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Row(1)
                 .Position(2)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMisc"].GetBestSize()),
 =======
                 .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+                .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             )
 
     def _addPanes(self):

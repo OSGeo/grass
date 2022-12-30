@@ -103,7 +103,31 @@ class MapWindowProperties:
     def useDefinedProjection(self):
         return self._useDefinedProjection
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+
+    @useDefinedProjection.setter
+    def useDefinedProjection(self, value):
+        if value != self._useDefinedProjection:
+            self._useDefinedProjection = value
+            self.useDefinedProjectionChanged.emit(value=value)
+
+    @property
+    def epsg(self):
+        return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+    @property
+    def sbItem(self):
+        return self._sbItem
+
+    @sbItem.setter
+    def sbItem(self, mode):
+        if mode != self._sbItem:
+            self._sbItem = mode
+            self.sbItemChanged.emit(mode=mode)
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     @useDefinedProjection.setter
     def useDefinedProjection(self, value):

@@ -166,7 +166,10 @@ int G_put_3dview(const char *fname, const struct G_3dview *View,
 =======
 int G_put_3dview(const char *fname, const char *mapset,
                  const struct G_3dview *View, const struct Cell_head *Win)
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 {
     FILE *fp;
 

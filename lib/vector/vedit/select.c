@@ -35,10 +35,14 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
    \param Map pointer to Map_info
    \param type feature type
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param layer layer number (unused)
 =======
    \param layer layer number
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \param layer layer number
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
    \param thresh threshold value (< 0 for 'shorter', > 0 for 'longer')
    \param query query (length, dangle, ...)
    \param[in,out] List list of selected features
@@ -46,10 +50,14 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
    \return number of selected primitives
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer UNUSED,
 =======
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                           double thresh, int query, struct ilist *List)
 {
     int num, line, i;

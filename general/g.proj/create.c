@@ -14,6 +14,7 @@ void create_location(const char *location)
                               projwkt);
     if (ret == 0)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_message(_("Project <%s> created"), location);
     else if (ret == -1)
         G_fatal_error(_("Unable to create project <%s>: %s"), location,
@@ -22,6 +23,11 @@ void create_location(const char *location)
     else if (ret == -1)
         G_fatal_error(_("Unable to create location <%s>: %s"), location,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_message(_("Location <%s> created"), location);
+    else if (ret == -1)
+        G_fatal_error(_("Unable to create location <%s>: %s"), location,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
                       strerror(errno));
     else if (ret == -2)
         G_fatal_error(_("Unable to create projection files: %s"),
@@ -29,16 +35,22 @@ void create_location(const char *location)
     else
         /* Shouldn't happen */
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Unable to create project <%s>"), location);
 
     G_message(_("You can switch to the new project by\n`%s=%s`"),
               "g.mapset mapset=PERMANENT project", location);
 =======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         G_fatal_error(_("Unable to create location <%s>"), location);
 
     G_message(_("You can switch to the new location by\n`%s=%s`"),
               "g.mapset mapset=PERMANENT location", location);
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 }
 
 void modify_projinfo(void)
@@ -50,11 +62,15 @@ void modify_projinfo(void)
         G_fatal_error(
             _("You must select the PERMANENT mapset before updating the "
 <<<<<<< HEAD
+<<<<<<< HEAD
               "current project's coordinate reference system"
               " (current mapset is <%s>)"),
 =======
               "current location's projection (current mapset is <%s>)"),
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+              "current location's projection (current mapset is <%s>)"),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             mapset);
 
     /* Read projection information from current location first */
