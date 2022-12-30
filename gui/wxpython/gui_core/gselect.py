@@ -61,13 +61,6 @@ import wx.lib.filebrowsebutton as filebrowse
 import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
-from grass.lib.imagery import (
-    I_SIGFILE_TYPE_SIG,
-    I_SIGFILE_TYPE_SIGSET,
-    I_signatures_list_by_type,
-    I_free_signatures_list,
-)
-from grass.pygrass.utils import decode
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
@@ -2009,11 +2002,16 @@ class GdalSelect(wx.Panel):
             self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 db_formats = self.dbFormats.values()
                 if "PostgreSQL" in db_formats:
 =======
                 if "PostgreSQL" in self.dbFormats.values():
 >>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
+=======
+                db_formats = self.dbFormats.values()
+                if "PostgreSQL" in db_formats:
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL")
                 elif "PostgreSQL/PostGIS" in db_formats:
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL/PostGIS")
@@ -2300,8 +2298,13 @@ class GdalSelect(wx.Panel):
                     "r.external", quiet=True, read=True, flags="t", input=dsn
                 )
 
+<<<<<<< HEAD
                 # v.external returns info for individual bands, however projection is
                 # shared by all bands -> (it is possible to take first line)
+=======
+                # v.external returns info for individual bands, however projection is shared by all bands ->
+                # (it is possible to take first line)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
                 lines = ret.splitlines()
                 projectionMatch = "0"
@@ -3173,29 +3176,41 @@ class SignatureSelect(wx.ComboBox):
 =======
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
 
-        sig_type = None
+        items = []
+        if mapsets:
+            for mapset in mapsets:
+                self._append_mapset_signatures(mapset, element, items)
+        else:
+            self._append_mapset_signatures(None, element, items)
+        self.SetItems(items)
+        self.SetValue("")
+
+    def _append_mapset_signatures(self, mapset, element, items):
+        try:
+            from grass.lib.imagery import (
+                I_SIGFILE_TYPE_SIG,
+                I_SIGFILE_TYPE_SIGSET,
+                I_signatures_list_by_type,
+                I_free_signatures_list,
+            )
+        except ImportError as e:
+            sys.stderr.write(
+                _("Unable to import C imagery library functions: %s\n") % e
+            )
+            return
         # Extend here if a new signature type is introduced
         if element == "signatures/sig":
             sig_type = I_SIGFILE_TYPE_SIG
         elif element == "signatures/sigset":
             sig_type = I_SIGFILE_TYPE_SIGSET
-        items = []
-        if sig_type is not None:
-            if mapsets:
-                for mapset in mapsets:
-                    self._append_mapset_signatures(mapset, sig_type, items)
-            else:
-                self._append_mapset_signatures(None, sig_type, items)
-        self.SetItems(items)
-        self.SetValue("")
-
-    def _append_mapset_signatures(self, mapset, sig_type, items):
+        else:
+            return
         list_ptr = ctypes.POINTER(ctypes.c_char_p)
         sig_list = list_ptr()
         count = I_signatures_list_by_type(sig_type, mapset, ctypes.byref(sig_list))
         for n in range(count):
-            items.append(decode(sig_list[n]))
-        I_free_signatures_list(count, sig_list)
+            items.append(grass.decode(sig_list[n]))
+        I_free_signatures_list(count, ctypes.byref(sig_list))
 
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 

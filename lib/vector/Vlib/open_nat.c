@@ -152,12 +152,20 @@ int check_coor(struct Map_info *Map)
     if (dif > 0) {
         G_warning(
             _("Coor file of vector map <%s@%s> is larger than it should be "
+<<<<<<< HEAD
               "(%" PRId64 " bytes excess)"),
+=======
+              "(%" PRI_OFF_T " bytes excess)"),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             Map->name, Map->mapset, dif);
     }
     else if (dif < 0) {
         G_warning(_("Coor file of vector <%s@%s> is shorter than it should be "
+<<<<<<< HEAD
                     "(%" PRId64 " bytes missing)."),
+=======
+                    "(%" PRI_OFF_T " bytes missing)."),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                   Map->name, Map->mapset, -dif);
     }
     return 1;

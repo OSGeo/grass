@@ -9,6 +9,7 @@
 
 /*---------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 static int Rast3d__readWindow(struct Key_Value *windowKeys, int *proj,
                               int *zone, double *north, double *south,
                               double *east, double *west, double *top,
@@ -16,6 +17,26 @@ static int Rast3d__readWindow(struct Key_Value *windowKeys, int *proj,
                               double *ew_res, double *ns_res, double *tb_res)
 {
     int returnVal;
+=======
+static int Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead,
+                                  int *proj, int *zone, double *north,
+                                  double *south, double *east, double *west,
+                                  double *top, double *bottom, int *rows,
+                                  int *cols, int *depths, double *ew_res,
+                                  double *ns_res, double *tb_res)
+{
+    int returnVal;
+    int (*windowInt)(), (*windowDouble)();
+
+    if (doRead) {
+        windowDouble = Rast3d_key_get_double;
+        windowInt = Rast3d_key_get_int;
+    }
+    else {
+        windowDouble = Rast3d_key_set_double;
+        windowInt = Rast3d_key_set_int;
+    }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     returnVal = 1;
     returnVal &= Rast3d_key_get_int(windowKeys, RASTER3D_REGION_PROJ, proj);
@@ -164,12 +185,21 @@ int Rast3d_read_window(RASTER3D_Region *window, const char *windowName)
 
         windowKeys = G_read_key_value_file(path);
 
+<<<<<<< HEAD
         if (!Rast3d__readWindow(
                 windowKeys, &(window->proj), &(window->zone), &(window->north),
                 &(window->south), &(window->east), &(window->west),
                 &(window->top), &(window->bottom), &(window->rows),
                 &(window->cols), &(window->depths), &(window->ew_res),
                 &(window->ns_res), &(window->tb_res))) {
+=======
+        if (!Rast3d_readWriteWindow(
+                windowKeys, 1, &(window->proj), &(window->zone),
+                &(window->north), &(window->south), &(window->east),
+                &(window->west), &(window->top), &(window->bottom),
+                &(window->rows), &(window->cols), &(window->depths),
+                &(window->ew_res), &(window->ns_res), &(window->tb_res))) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             Rast3d_error(
                 "Rast3d_read_window: error extracting window key(s) of file %s",
                 path);

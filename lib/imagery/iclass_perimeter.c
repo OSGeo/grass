@@ -217,7 +217,11 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
         (IClass_point *)G_calloc(count, sizeof(IClass_point)); /* TODO test */
     skip = 0;
     vertex_count = 0;
+<<<<<<< HEAD
     i = first; /* stmt not necessary */
+=======
+    i = first; /* stmt not necssary */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     do {
         if (!skip) {

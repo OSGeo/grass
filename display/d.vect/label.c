@@ -187,12 +187,24 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
         Xoffset = -(R - L) / 2;
     if (lattr->xref == LRIGHT)
         Xoffset = -(R - L);
+<<<<<<< HEAD
+=======
+    if (lattr->yref == LCENTER)
+        Yoffset = -(B - T) / 2;
+    if (lattr->yref == LBOTTOM)
+        Yoffset = -(B - T);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (lattr->has_bgcolor || lattr->has_bcolor) {
         xarr[0] = xarr[1] = xarr[4] = L + Xoffset;
         xarr[2] = xarr[3] = R + Xoffset;
+<<<<<<< HEAD
         yarr[0] = yarr[3] = yarr[4] = B;
         yarr[1] = yarr[2] = T;
+=======
+        yarr[0] = yarr[3] = yarr[4] = B + Yoffset;
+        yarr[1] = yarr[2] = T + Yoffset;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         if (lattr->has_bgcolor) {
             D_RGB_color(lattr->bgcolor.R, lattr->bgcolor.G, lattr->bgcolor.B);

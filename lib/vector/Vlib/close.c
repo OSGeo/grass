@@ -40,6 +40,7 @@ static int format(struct Map_info *map UNUSED)
 }
 #endif
 
+<<<<<<< HEAD
 static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
 #ifdef HAVE_OGR
                                                      ,
@@ -56,6 +57,24 @@ static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
 #else
                                                      ,
                                                      {clo_dummy, format}
+=======
+static int (*Close_array[][2])() = {{clo_dummy, V1_close_nat}
+#ifdef HAVE_OGR
+                                    ,
+                                    {clo_dummy, V1_close_ogr},
+                                    {clo_dummy, V1_close_ogr}
+#else
+                                    ,
+                                    {clo_dummy, format},
+                                    {clo_dummy, format}
+#endif
+#ifdef HAVE_POSTGRES
+                                    ,
+                                    {clo_dummy, V1_close_pg}
+#else
+                                    ,
+                                    {clo_dummy, format}
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #endif
 };
 

@@ -652,8 +652,12 @@ template <class T>
 char *AMI_STREAM<T>::sprint()
 {
     static char desc[BUFSIZ + 256];
+<<<<<<< HEAD
     snprintf(desc, sizeof(desc), "[AMI_STREAM %s %ld]", path,
              (long)stream_len());
+=======
+    sprintf(desc, "[AMI_STREAM %s %ld]", path, (long)stream_len());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return desc;
 }
 

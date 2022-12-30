@@ -610,9 +610,15 @@ void N_print_array_2d_info(N_array_2d *data)
     fprintf(stdout, "Offset: %i\n", data->offset);
     fprintf(stdout, "Internal cols: %i\n", data->cols_intern);
     fprintf(stdout, "Internal rows: %i\n", data->rows_intern);
+<<<<<<< HEAD
     fprintf(stdout, "CELL array pointer: %p\n", (void *)data->cell_array);
     fprintf(stdout, "FCELL array pointer: %p\n", (void *)data->fcell_array);
     fprintf(stdout, "DCELL array pointer: %p\n", (void *)data->dcell_array);
+=======
+    fprintf(stdout, "CELL array pointer: %p\n", data->cell_array);
+    fprintf(stdout, "FCELL array pointer: %p\n", data->fcell_array);
+    fprintf(stdout, "DCELL array pointer: %p\n", data->dcell_array);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     return;
 }

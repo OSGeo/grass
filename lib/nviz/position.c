@@ -117,7 +117,11 @@ int Nviz_set_focus_map(int type, int id)
    \param data nviz data [unused]
    \param x,y,z focus coordinates
  */
+<<<<<<< HEAD
 int Nviz_get_focus(nv_data *data UNUSED, float *x, float *y, float *z)
+=======
+int Nviz_get_focus(nv_data *data, float *x, float *y, float *z)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     float realto[3];
 
@@ -138,7 +142,11 @@ int Nviz_get_focus(nv_data *data UNUSED, float *x, float *y, float *z)
    \param data nviz data [unused]
    \param x, y, z focus coordinates
  */
+<<<<<<< HEAD
 int Nviz_set_focus(nv_data *data UNUSED, float x, float y, float z)
+=======
+int Nviz_set_focus(nv_data *data, float x, float y, float z)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     float realto[3];
 
@@ -157,7 +165,11 @@ int Nviz_set_focus(nv_data *data UNUSED, float x, float y, float z)
 
    \param data nviz data [unused]
  */
+<<<<<<< HEAD
 int Nviz_has_focus(nv_data *data UNUSED)
+=======
+int Nviz_has_focus(nv_data *data)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     float realto[3];
 
@@ -183,7 +195,11 @@ float Nviz_get_xyrange(nv_data *data)
    \param data nviz data [unused]
    \param min,max z range
  */
+<<<<<<< HEAD
 int Nviz_get_zrange(nv_data *data UNUSED, float *min, float *max)
+=======
+int Nviz_get_zrange(nv_data *data, float *min, float *max)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     GS_get_zrange_nz(min, max);
     return 1;
@@ -194,7 +210,11 @@ int Nviz_get_zrange(nv_data *data UNUSED, float *min, float *max)
 
    \param data nviz data [unused]
  */
+<<<<<<< HEAD
 float Nviz_get_longdim(nv_data *data UNUSED)
+=======
+float Nviz_get_longdim(nv_data *data)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     float dim;
 

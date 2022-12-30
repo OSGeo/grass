@@ -40,8 +40,12 @@ private:
     void oda550(const double v, const AtmosModel &atms);
 
 public:
+<<<<<<< HEAD
     /* Set the visibility, this will override any previous estimates of taer55
      */
+=======
+    /* Set the visibility, this will overide any previous estimates of taer55 */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     void set_visibility(const double vis, const AtmosModel &atms)
     {
         if (vis > 0)

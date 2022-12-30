@@ -133,6 +133,7 @@ class NotebookController:
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
     def AddPage(self, *args, **kwargs):
+<<<<<<< HEAD
         """Add a new page
 
         :param str name: use this param if notebooks has ability to
@@ -144,6 +145,9 @@ class NotebookController:
                          the page based on the position index would not
                          work correctly.
         """
+=======
+        """Add a new page"""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -151,6 +155,7 @@ class NotebookController:
         self.classObject.AddPage(self.widget, *args, **kwargs)
 
     def InsertPage(self, *args, **kwargs):
+<<<<<<< HEAD
         """Insert a new page
 
         :param str name: use this param if notebooks has ability to
@@ -162,15 +167,22 @@ class NotebookController:
                          the page based on the position index would not
                          work correctly.
         """
+=======
+        """Insert a new page"""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
         try:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
+<<<<<<< HEAD
         except (
             TypeError
         ) as e:  # documentation says 'index', but certain versions of wx require 'n'
+=======
+        except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
             self.classObject.InsertPage(self.widget, *args, **kwargs)
@@ -1251,7 +1263,11 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
+<<<<<<< HEAD
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
+=======
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             )
 
         if self._showChoice:
@@ -1316,7 +1332,11 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
+<<<<<<< HEAD
         label = _("{} tools matched").format(len(commands))
+=======
+        label = _("%d tools match") % len(commands)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if self._showTip:
             self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 

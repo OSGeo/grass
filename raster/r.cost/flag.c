@@ -20,7 +20,11 @@ FLAG *flag_create(int nrows, int ncols)
     if (!new_flag->array)
         G_fatal_error(_("Out of memory!"));
 
+<<<<<<< HEAD
     temp = (unsigned char *)G_malloc((size_t)nrows * new_flag->leng *
+=======
+    temp = (unsigned char *)G_malloc(nrows * new_flag->leng *
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                      sizeof(unsigned char));
 
     if (!temp)

@@ -43,8 +43,12 @@ static int format2(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
 }
 #endif
 
+<<<<<<< HEAD
 static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
                                         struct line_cats *) = {
+=======
+static int (*Read_next_line_array[][3])() = {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -64,6 +68,7 @@ static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
 #endif
 };
 
+<<<<<<< HEAD
 static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
                                 struct line_cats *, int) = {V2_read_line_nat
 #ifdef HAVE_OGR
@@ -80,6 +85,22 @@ static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
 #else
                                                             ,
                                                             format2
+=======
+static int (*Read_line_array[])() = {V2_read_line_nat
+#ifdef HAVE_OGR
+                                     ,
+                                     V2_read_line_sfa, V2_read_line_sfa
+#else
+                                     ,
+                                     format, format
+#endif
+#ifdef HAVE_POSTGRES
+                                     ,
+                                     V2_read_line_pg
+#else
+                                     ,
+                                     format
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #endif
 };
 
@@ -94,7 +115,11 @@ static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
    \return feature id
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_get_next_line_id(struct Map_info *Map)
+=======
+int Vect_get_next_line_id(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     G_debug(3, "Vect_get_next_line()");
 
@@ -127,7 +152,11 @@ int Vect_get_next_line_id(struct Map_info *Map)
    \return -1 on error
    \return -2 nothing to read
  */
+<<<<<<< HEAD
 int Vect_read_next_line(struct Map_info *Map, struct line_pnts *line_p,
+=======
+int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         struct line_cats *line_c)
 {
     int ret;
@@ -165,7 +194,11 @@ int Vect_read_next_line(struct Map_info *Map, struct line_pnts *line_p,
    \return -1 on failure
    \return -2 nothing to read
  */
+<<<<<<< HEAD
 int Vect_read_line(struct Map_info *Map, struct line_pnts *line_p,
+=======
+int Vect_read_line(const struct Map_info *Map, struct line_pnts *line_p,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                    struct line_cats *line_c, int line)
 {
     int ret;
@@ -250,7 +283,11 @@ int Vect_node_alive(struct Map_info *Map, int node)
    \return 1 area alive
    \return 0 area is dead or index is out of range
  */
+<<<<<<< HEAD
 int Vect_area_alive(struct Map_info *Map, int area)
+=======
+int Vect_area_alive(const struct Map_info *Map, int area)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (area < 1 || area > Map->plus.n_areas) {
         G_warning(_("Area index is out of range"));
@@ -274,7 +311,11 @@ int Vect_area_alive(struct Map_info *Map, int area)
    \return 1 isle alive
    \return 0 isle is dead or index is out of range
  */
+<<<<<<< HEAD
 int Vect_isle_alive(struct Map_info *Map, int isle)
+=======
+int Vect_isle_alive(const struct Map_info *Map, int isle)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (isle < 1 || isle > Map->plus.n_isles) {
         G_warning(_("Isle index is out of range"));
@@ -300,7 +341,11 @@ int Vect_isle_alive(struct Map_info *Map, int isle)
    \return feature offset
    \return -1 on error
  */
+<<<<<<< HEAD
 off_t Vect_get_line_offset(struct Map_info *Map, int line)
+=======
+off_t Vect_get_line_offset(const struct Map_info *Map, int line)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (line < 1 || line > Map->plus.n_lines) {
         return -1;

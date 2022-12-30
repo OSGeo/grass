@@ -171,7 +171,11 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
    \param x,y,z point coordinates
 
    \return number of points
+<<<<<<< HEAD
    \return -1 on error (allocation)
+=======
+   \return -1 on error (alocation)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  */
 int Vect_line_insert_point(struct line_pnts *Points, int index, double x,
                            double y, double z)

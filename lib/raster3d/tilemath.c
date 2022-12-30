@@ -344,7 +344,11 @@ void Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type,
                 "%li z %li\n",
                 tileSize, x, y, z);
 
+<<<<<<< HEAD
         if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
+=======
+        if (tileSize <= maxSize * 1024)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             break;
 
         /* Compute weighted tile sizes. Take care that the tile size is computed

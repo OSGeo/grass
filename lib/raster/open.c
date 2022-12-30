@@ -466,7 +466,11 @@ void Rast_set_cell_format(int n)
     R__.nbytes = n + 1;
     if (R__.nbytes <= 0)
         R__.nbytes = 1;
+<<<<<<< HEAD
     if (R__.nbytes > (int)sizeof(CELL))
+=======
+    if (R__.nbytes > sizeof(CELL))
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         R__.nbytes = sizeof(CELL);
 }
 

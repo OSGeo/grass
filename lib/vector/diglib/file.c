@@ -164,7 +164,11 @@ size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb,
 }
 
 /*!
+<<<<<<< HEAD
    \brief Initialize gvfile structure
+=======
+   \brief Initialize gvfile strcuture
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    \param[in,out] file pointer to gvfile structure
  */

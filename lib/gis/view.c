@@ -160,8 +160,13 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
  * \return -1 on error
  */
 
+<<<<<<< HEAD
 int G_put_3dview(const char *fname, const struct G_3dview *View,
                  const struct Cell_head *Win)
+=======
+int G_put_3dview(const char *fname, const char *mapset,
+                 const struct G_3dview *View, const struct Cell_head *Win)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     FILE *fp;
 

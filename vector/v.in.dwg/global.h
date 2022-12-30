@@ -27,7 +27,11 @@
 
 /* transformation, first level is 0 ( called from main ) and transformation
  *  for this level is 0,0,0, 1,1,1, 0 so that no transformation is done on first
+<<<<<<< HEAD
  * level (not effective but better readable?) */
+=======
+ * level (not efective but better readable?) */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 typedef struct {
     double dx, dy, dz;
     double xscale, yscale, zscale;

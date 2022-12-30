@@ -68,8 +68,13 @@ static void read_hersh(const char *filename)
         char buf[8];
         struct glyph *glyph;
         int coords;
+<<<<<<< HEAD
         unsigned int i, idx, count;
         int c;
+=======
+        unsigned int idx, count;
+        int c, i;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         switch (c = fgetc(fp)) {
         case '\r':
@@ -146,7 +151,11 @@ static void read_fontmap(const char *name)
     fp = fopen(buf, "r");
     if (!fp) {
         G_warning("Unable to open font map '%s': %s. "
+<<<<<<< HEAD
                   "Try running 'g.mkfontcap --overwrite'",
+=======
+                  "Try running 'g.mkfontcap -o'",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                   buf, strerror(errno));
         return;
     }

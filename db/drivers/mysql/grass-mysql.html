@@ -71,7 +71,11 @@ for example v.to.db, v.distance and v.what.rast.
 
 <h2>Privileges</h2>
 
+<<<<<<< HEAD
 Because MySQL does not support groups of users and because
+=======
+Because MySQL does not support groups of users and because 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 only MySQL 'root' can grant privileges to other users
 GRASS cannot automatically grant select privileges on created
 tables to group of users.
@@ -88,7 +92,11 @@ mysql&gt; GRANT SELECT ON mydb.* TO ''@'%';
 
 <h2>Schemas</h2>
 
+<<<<<<< HEAD
 Because MySQL does not support database schemas the parameter
+=======
+Because MySQL does not support database schemas the parameter 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 'schema' of module db.connect should never be set to any
 value. If you set that parameter for MySQL driver GRASS will
 try to write tables to the specified schema which will result
@@ -96,7 +104,11 @@ in errors.
 
 <h2>Groups</h2>
 
+<<<<<<< HEAD
 MySQL does not support user groups. Any settings specified
+=======
+MySQL does not support user groups. Any settings specified 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 by 'group' parameter of module db.connect are ignored by
 GRASS for MySQL driver.
 
@@ -115,7 +127,11 @@ found in the <a href="http://dev.mysql.com/doc/refman/5.7/en/reserved-words.html
 
 <h2>Credits</h2>
 
+<<<<<<< HEAD
 Development of the driver was sponsored by
+=======
+Development of the driver was sponsored by 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <a href="http://www.faunalia.it">Faunalia</a> (Italy)
 as part of a project for <a href="http://www.atac.roma.it/">ATAC</a>.
 

@@ -48,8 +48,17 @@ static GDALDatasetH opends(char *dsname, const char **doo, GDALDriverH *hDriver)
 {
     GDALDatasetH hDS = NULL;
 
+<<<<<<< HEAD
     hDS =
         GDALOpenEx(dsname, GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, doo, NULL);
+=======
+#if GDAL_VERSION_NUM >= 2000000
+    hDS =
+        GDALOpenEx(dsname, GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, doo, NULL);
+#else
+    hDS = GDALOpen(dsname, GA_ReadOnly);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (hDS == NULL)
         G_fatal_error(_("Unable to open datasource <%s>"), dsname);
     G_add_error_handler(error_handler_ds, hDS);
@@ -139,9 +148,15 @@ int main(int argc, char *argv[])
     parm.target->key = "target";
     parm.target->type = TYPE_STRING;
     parm.target->required = NO;
+<<<<<<< HEAD
     parm.target->label = _("Name of GCPs target project (location)");
     parm.target->description = _("Name of project to create or to read "
                                  "CRS from for GCPs transformation");
+=======
+    parm.target->label = _("Name of GCPs target location");
+    parm.target->description = _("Name of location to create or to read "
+                                 "projection from for GCPs transformation");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     parm.target->key_desc = "name";
     parm.target->guisection = _("Projection");
 
@@ -213,9 +228,16 @@ int main(int argc, char *argv[])
 
     flag_o = G_define_flag();
     flag_o->key = 'o';
+<<<<<<< HEAD
     flag_o->label = _("Override projection check (use current project's CRS)");
     flag_o->description = _("Assume that the dataset has the same coordinate "
                             "reference system as the current project");
+=======
+    flag_o->label =
+        _("Override projection check (use current location's projection)");
+    flag_o->description = _(
+        "Assume that the dataset has same projection as the current location");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     flag_o->guisection = _("Projection");
 
     flag_j = G_define_flag();
@@ -257,9 +279,15 @@ int main(int argc, char *argv[])
 
     flag_c = G_define_flag();
     flag_c->key = 'c';
+<<<<<<< HEAD
     flag_c->description =
         _("Create the project specified by the \"project\" parameter and exit."
           " Do not import the raster file.");
+=======
+    flag_c->description = _(
+        "Create the location specified by the \"location\" parameter and exit."
+        " Do not import the raster file.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     flag_r = G_define_flag();
     flag_r->key = 'r';
@@ -342,6 +370,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     if (parm.target->answer && parm.outloc->answer &&
         strcmp(parm.target->answer, parm.outloc->answer) == 0) {
+<<<<<<< HEAD
         G_fatal_error(_("You have to specify a target project different from "
                         "output project"));
     }
@@ -352,6 +381,18 @@ int main(int argc, char *argv[])
 
     if (flag_l->answer && G_projection() != PROJECTION_LL)
         G_fatal_error(_("The '-l' flag only works in Lat/Lon projects"));
+=======
+        G_fatal_error(_("You have to specify a target location different from "
+                        "output location"));
+    }
+
+    if (flag_c->answer && parm.outloc->answer == NULL) {
+        G_fatal_error(_("You need to specify valid location name."));
+    }
+
+    if (flag_l->answer && G_projection() != PROJECTION_LL)
+        G_fatal_error(_("The '-l' flag only works in Lat/Lon locations"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (num_digits < 0)
         G_fatal_error(_("The number of digits for band numbering must be equal "
@@ -368,7 +409,11 @@ int main(int argc, char *argv[])
 
     croptoregion = flag_r->answer;
     if (flag_r->answer && parm.outloc->answer) {
+<<<<<<< HEAD
         G_warning(_("Disabling '-r' flag for new project"));
+=======
+        G_warning(_("Disabling '-r' flag for new location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         croptoregion = 0;
     }
 
@@ -976,8 +1021,14 @@ int main(int argc, char *argv[])
                 /* create target location */
                 if (!hSRS || GPJ_osr_to_grass(&gcpcellhd, &proj_info,
                                               &proj_units, hSRS, 0) == 1) {
+<<<<<<< HEAD
                     G_warning(_("Unable to convert input map CRS to GRASS "
                                 "format; cannot create new project."));
+=======
+                    G_warning(
+                        _("Unable to convert input map projection to GRASS "
+                          "format; cannot create new location."));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 }
                 else {
                     const char *authkey, *authname, *authcode;
@@ -1032,18 +1083,30 @@ int main(int argc, char *argv[])
                     if (0 != G_make_location_crs(
                                  parm.target->answer, &gcpcellhd, proj_info,
                                  proj_units, gdalsrid, gdalwkt)) {
+<<<<<<< HEAD
                         G_fatal_error(_("Unable to create new project <%s>"),
+=======
+                        G_fatal_error(_("Unable to create new location <%s>"),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                       parm.target->answer);
                     }
                     /* switch back to import location */
                     G_switch_env();
 
+<<<<<<< HEAD
                     G_message(_("Project <%s> created"), parm.target->answer);
+=======
+                    G_message(_("Location <%s> created"), parm.target->answer);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     /* set the group's target */
                     I_put_target(output, parm.target->answer, "PERMANENT");
                     G_message(_("The target for the output group <%s> has been "
                                 "set to "
+<<<<<<< HEAD
                                 "project <%s>, mapset <PERMANENT>."),
+=======
+                                "location <%s>, mapset <PERMANENT>."),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                               output, parm.target->answer);
                 }
             }
@@ -1082,7 +1145,11 @@ int main(int argc, char *argv[])
 
         if (strcmp(G_mapset(), "PERMANENT") == 0) {
             G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
+<<<<<<< HEAD
             G_message(_("Default region for this project updated"));
+=======
+            G_message(_("Default region for this location updated"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         G_put_window(&cur_wind);
         G_message(_("Region for the current mapset updated"));
@@ -1131,18 +1198,33 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 
         /* Get projection info from target location */
         if ((out_proj_info = G_get_projinfo()) == NULL)
+<<<<<<< HEAD
             G_fatal_error(_("Unable to get CRS info of target project"));
         if ((out_unit_info = G_get_projunits()) == NULL)
             G_fatal_error(_("Unable to get CRS units of target project"));
         if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
             G_fatal_error(_("Unable to get CRS key values of target project"));
+=======
+            G_fatal_error(
+                _("Unable to get projection info of target location"));
+        if ((out_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(
+                _("Unable to get projection units of target location"));
+        if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
+            G_fatal_error(
+                _("Unable to get projection key values of target location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         tproj->def = NULL;
         if (GPJ_init_transform(iproj, oproj, tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
     else { /* can't access target mapset */
         /* access to mapset PERMANENT in target location is not required */
+<<<<<<< HEAD
         sprintf(errbuf, _("Mapset <%s> in target project <%s> - "),
+=======
+        sprintf(errbuf, _("Mapset <%s> in target location <%s> - "),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 target_mapset, pszDstLoc);
         strcat(errbuf,
                permissions == 0 ? _("permission denied") : _("not found"));

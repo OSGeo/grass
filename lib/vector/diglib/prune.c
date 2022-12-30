@@ -78,11 +78,19 @@ int dig_prune(struct line_pnts *points, double thresh)
     int o_num;
     int n_num; /* points left */
     int at_num;
+<<<<<<< HEAD
     int ij = 0,                      /* position of farthest point */
         ja, jd, i, j, k, n, inu, it; /* indicateur de parcours du segment */
 
     double sqdist;  /* square of distance */
     double fpdist;  /* square of distance from chord to farthest point */
+=======
+    int ij = 0,                      /* position of farest point */
+        ja, jd, i, j, k, n, inu, it; /* indicateur de parcours du segment */
+
+    double sqdist;  /* square of distance */
+    double fpdist;  /* square of distance from chord to farest point */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     double t, beta; /* as explained in commented algorithm  */
 
     double dx, dy; /* temporary variables */
@@ -167,14 +175,22 @@ int dig_prune(struct line_pnts *points, double thresh)
             sy[1] = sy[k]; /* becomes second of the new one.  */
             k = 1;
         }
+<<<<<<< HEAD
         else {              /* No point keeped : farthest point  */
+=======
+        else {              /* No point keeped : farest point  */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             sx[1] = sx[ij]; /* is loaded in second position    */
             sy[1] = sy[ij]; /* to avoid cutting lines with     */
             sx[2] = sx[k];  /* small cuvature.                 */
             sy[2] = sy[k];  /* First point of previous segment */
             k = 2;          /* becomes the third one.          */
         }
+<<<<<<< HEAD
         /* Loading remaining points         */
+=======
+        /* Loding remaining points         */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (j = at_num; j < n; j++) {
             k++;
             sx[k] = ox[j];
@@ -211,7 +227,11 @@ int dig_prune(struct line_pnts *points, double thresh)
             }
             if (fpdist >
                 t) { /* We found a point to be keeped    */ /* Restart from
+<<<<<<< HEAD
                                                                farthest point */
+=======
+                                                               farest point */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 jd = ij;
                 nt[++it] = ij;
             }

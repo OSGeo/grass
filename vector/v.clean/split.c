@@ -91,7 +91,11 @@ int split_lines(struct Map_info *Map, int otype, struct Map_info *Err)
 /* split a line using split_distance
  * returns number of split points */
 int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
+<<<<<<< HEAD
                struct line_cats *Cats, struct Map_info *Err UNUSED,
+=======
+               struct line_cats *Cats, struct Map_info *Err,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                double split_distance)
 {
     int i, n_segs = 0;

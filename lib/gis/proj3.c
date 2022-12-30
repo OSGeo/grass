@@ -63,7 +63,11 @@ const char *G_database_unit_name(int plural)
 
    \return units id
  */
+<<<<<<< HEAD
 int G_database_unit(void)
+=======
+int G_database_unit()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int units;
     const char *name;

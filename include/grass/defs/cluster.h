@@ -14,8 +14,13 @@ int I_cluster_clear(struct Cluster *);
 int I_cluster_distinct(struct Cluster *, double);
 
 /* c_exec.c */
+<<<<<<< HEAD
 int I_cluster_exec(struct Cluster *, int, int, double, double, int,
                    int (*)(struct Cluster *, int), int *);
+=======
+int I_cluster_exec(struct Cluster *, int, int, double, double, int, int (*)(),
+                   int *);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /* c_execmem.c */
 int I_cluster_exec_allocate(struct Cluster *);
 int I_cluster_exec_free(struct Cluster *);

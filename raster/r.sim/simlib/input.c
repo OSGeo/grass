@@ -299,6 +299,10 @@ int input_data(void)
     int rows = my, cols = mx; /* my and mx are global variables */
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
+<<<<<<< HEAD
+=======
+    int if_rain = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     G_debug(1, "Running MAR 2011 version, started modifications on 20080211");
     G_debug(1, "Reading input data");
@@ -327,17 +331,30 @@ int input_data(void)
     /* Rain: read rain map or use a single value for all cells */
     if (rain != NULL) {
         si = read_double_raster_map(rows, cols, rain, unitconv);
+<<<<<<< HEAD
     }
     else if (rain_val >= 0.0) { /* If no value set its set to -999.99 */
         si = create_double_matrix(rows, cols, rain_val * unitconv);
     }
     else {
         si = create_double_matrix(rows, cols, (double)UNDEF);
+=======
+        if_rain = 1;
+    }
+    else if (rain_val >= 0.0) { /* If no value set its set to -999.99 */
+        si = create_double_matrix(rows, cols, rain_val * unitconv);
+        if_rain = 1;
+    }
+    else {
+        si = create_double_matrix(rows, cols, (double)UNDEF);
+        if_rain = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* Update elevation map */
     copy_matrix_undef_double_to_float_values(rows, cols, si, zz);
 
+<<<<<<< HEAD
     /* Infiltration: read map or use a single value */
     if (infil != NULL) {
         inf = read_double_raster_map(rows, cols, infil, unitconv);
@@ -347,6 +364,26 @@ int input_data(void)
     }
     else {
         inf = create_double_matrix(rows, cols, (double)UNDEF);
+=======
+    /* Load infiltration and traps if rain is present */
+    if (if_rain == 1) {
+        /* Infiltration: read map or use a single value */
+        if (infil != NULL) {
+            inf = read_double_raster_map(rows, cols, infil, unitconv);
+        }
+        else if (infil_val >= 0.0) { /* If no value set its set to -999.99 */
+            inf = create_double_matrix(rows, cols, infil_val * unitconv);
+        }
+        else {
+            inf = create_double_matrix(rows, cols, (double)UNDEF);
+        }
+
+        /* Traps */
+        if (traps != NULL)
+            trap = read_float_raster_map(rows, cols, traps, 1.0);
+        else
+            trap = create_float_matrix(rows, cols, (double)UNDEF);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* Traps */
@@ -579,7 +616,11 @@ int grad_check(void)
         }
     }
 
+<<<<<<< HEAD
     /*! compute transport capacity limited erosion/deposition et
+=======
+    /*! compute transport capacity limted erosion/deposition et
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
      *   as a divergence of sediment transport capacity
      *   \f$
      D_T({\bf r})= \nabla\cdot {\bf T}({\bf r})

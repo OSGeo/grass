@@ -1,7 +1,11 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 #include <math.h>
+<<<<<<< HEAD
 double **matrix(int, int, int, int), *vector(int, int);
+=======
+double **matrix(), *vector();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* Computes eigenvalues (and eigen vectors if desired) for      *
  *  symmetric matices.                                          */

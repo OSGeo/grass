@@ -149,7 +149,11 @@ class MainToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
             for i_tool_data in self.controller.data:
+<<<<<<< HEAD
                 i_tool_name = get_tool_name(i_tool_data[0])
+=======
+                i_tool_name = i_tool_data[0]
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                     continue
                 if i_tool_name == tool_name:
@@ -174,7 +178,11 @@ class MainToolbar(BaseToolbar):
 
     def UnsetMode(self):
         for i_tool_data in self.controller.data:
+<<<<<<< HEAD
             i_tool_name = get_tool_name(i_tool_data[0])
+=======
+            i_tool_name = i_tool_data[0]
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                 continue
             i_tool_id = vars(self)[i_tool_name]
@@ -296,7 +304,11 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
             for i_tool_data in self.controller.data:
+<<<<<<< HEAD
                 i_tool_name = get_tool_name(i_tool_data[0])
+=======
+                i_tool_name = i_tool_data[0]
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 if not i_tool_name:
                     continue
                 if i_tool_name == tool_name:
@@ -314,7 +326,11 @@ class EditingToolbar(BaseToolbar):
 
     def UnsetMode(self):
         for i_tool_data in self.controller.data:
+<<<<<<< HEAD
             i_tool_name = get_tool_name(i_tool_data[0])
+=======
+            i_tool_name = i_tool_data[0]
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if not i_tool_name:
                 continue
             i_tool_id = vars(self)[i_tool_name]

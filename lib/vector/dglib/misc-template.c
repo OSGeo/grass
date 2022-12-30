@@ -25,9 +25,14 @@
 /*
  * Edge Traversing
  */
+<<<<<<< HEAD
 int DGL_EDGE_T_INITIALIZE_FUNC(dglGraph_s *pGraph,
                                dglEdgeTraverser_s *pT UNUSED,
                                dglEdgePrioritizer_s *pEP UNUSED)
+=======
+int DGL_EDGE_T_INITIALIZE_FUNC(dglGraph_s *pGraph, dglEdgeTraverser_s *pT,
+                               dglEdgePrioritizer_s *pEP)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 #if defined(_DGL_V1)
     pGraph->iErrno = DGL_ERR_NotSupported;
@@ -277,7 +282,11 @@ int DGL_EDGESET_T_INITIALIZE_FUNC(dglGraph_s *pGraph, dglEdgesetTraverser_s *pT,
     return 0;
 }
 
+<<<<<<< HEAD
 void DGL_EDGESET_T_RELEASE_FUNC(dglEdgesetTraverser_s *pT UNUSED)
+=======
+void DGL_EDGESET_T_RELEASE_FUNC(dglEdgesetTraverser_s *pT)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 }
 

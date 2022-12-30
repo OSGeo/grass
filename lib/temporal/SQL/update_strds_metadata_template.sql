@@ -9,6 +9,7 @@
 -- SPACETIME_ID is a placeholder for specific stds id: name@mapset
 -- for TGIS < 3 the lines for semantic lables get replaced / commented out
 
+<<<<<<< HEAD
 UPDATE strds_metadata
    SET
        -- Update the min and max values
@@ -40,3 +41,39 @@ UPDATE strds_metadata
             SPACETIME_REGISTER_TABLE.id = raster_metadata.id
        ) AS new_stats
  WHERE strds_metadata.id = 'SPACETIME_ID';
+=======
+-- Update the min and max values
+UPDATE strds_metadata SET min_min = 
+       (SELECT min(min) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE strds_metadata SET min_max = 
+       (SELECT max(min) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE strds_metadata SET max_min = 
+       (SELECT min(max) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE strds_metadata SET max_max = 
+       (SELECT max(max) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+-- Update the resolution
+UPDATE strds_metadata SET nsres_min = 
+       (SELECT min(nsres) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE strds_metadata SET nsres_max = 
+       (SELECT max(nsres) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE strds_metadata SET ewres_min = 
+       (SELECT min(ewres) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE strds_metadata SET ewres_max = 
+       (SELECT max(ewres) FROM raster_metadata WHERE raster_metadata.id IN 
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

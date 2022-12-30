@@ -24,7 +24,11 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
         else
             scient_format(v, buf, *n, *dp);
 
+<<<<<<< HEAD
         if ((int)strlen(buf) <= *n)
+=======
+        if (strlen(buf) <= *n)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             break;
 
         if (*dp) {

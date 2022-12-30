@@ -16,7 +16,11 @@
 int dareatheme(struct Map_info *Map, struct cat_list *Clist,
                dbCatValArray *cvarr, double *breaks, int nbreaks,
                const struct color_rgb *colors, const struct color_rgb *bcolor,
+<<<<<<< HEAD
                int chcat, struct Cell_head *window, int default_width UNUSED)
+=======
+               int chcat, struct Cell_head *window, int default_width)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 
     int num, area, isle, n_isles, n_points;

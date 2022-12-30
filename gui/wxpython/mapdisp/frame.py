@@ -63,7 +63,11 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
+<<<<<<< HEAD
 class MapPanel(SingleMapPanel, MainPageBase):
+=======
+class MapPanel(SingleMapPanel):
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -131,13 +135,23 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.onFocus = Signal("MapPanel.onFocus")
 
         # Emitted when starting (switching to) 3D mode.
+<<<<<<< HEAD
         # Parameter firstTime specifies if 3D was already activated.
+=======
+        # Parameter firstTime specifies if 3D was already actived.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.starting3dMode = Signal("MapPanel.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
         self.ending3dMode = Signal("MapPanel.ending3dMode")
 
         # Emitted when closing display by closing its window.
+<<<<<<< HEAD
+=======
+        self.closingDisplay = Signal("MapPanel.closingDisplay")
+
+        # Emitted when closing display by closing its window.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
 
         #
@@ -163,6 +177,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
@@ -173,17 +188,20 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 sb.SbShowRegion,
                 sb.SbAlignExtent,
                 sb.SbResolution,
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
-                sb.SbProjection,
             ]
-            self.statusbarItemsHiddenInNviz = (
-                sb.SbAlignExtent,
+            self.statusbarItemsDisabledInNviz = (
                 sb.SbDisplayGeometry,
+<<<<<<< HEAD
                 sb.SbShowRegion,
                 sb.SbResolution,
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 sb.SbMapScale,
             )
             self.statusbar = self.CreateStatusbar(statusbarItems)
@@ -238,11 +256,16 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
         # register context menu actions
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.statusbar:
             self._registerContextMenuActions()
 =======
         self._registerContextMenuActions()
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+        if self.statusbar:
+            self._registerContextMenuActions()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
@@ -306,7 +329,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
 >>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 =======
         # statusbar
-        self.AddStatusbarPane()
+        if self.statusbar:
+            self.AddStatusbarPane()
 
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
         self._mgr.Update()
@@ -1186,6 +1210,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         Also close associated layer tree page
         """
 <<<<<<< HEAD
+<<<<<<< HEAD
         Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseCallback:
             pgnum_dict = self.canCloseCallback(askIfSaveWorkspace=askIfSaveWorkspace)
@@ -1210,6 +1235,17 @@ class MapPanel(SingleMapPanel, MainPageBase):
                             frame.Destroy()
                     else:
                         self.closingPage.emit(pgnum_dict=pgnum_dict)
+=======
+        Debug.msg(2, "MapPanel.OnCloseWindow()")
+        if self.canCloseDisplayCallback:
+            pgnum_dict = self.canCloseDisplayCallback(
+                askIfSaveWorkspace=askIfSaveWorkspace
+            )
+            if pgnum_dict is not None:
+                self.CleanUp()
+                if pgnum_dict["layers"] > -1:
+                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
@@ -1702,10 +1738,14 @@ class MapPanel(SingleMapPanel, MainPageBase):
         NULLs) or vector map.
         """
 <<<<<<< HEAD
+<<<<<<< HEAD
         Debug.msg(3, "MapPanel.OnZoomToMap()")
 =======
         Debug.msg(3, "MapFrame.OnZoomToMap()")
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+        Debug.msg(3, "MapPanel.OnZoomToMap()")
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.MapWindow.ZoomToMap(layers=None)
 
     def OnZoomToRaster(self, event):
@@ -1957,6 +1997,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
         # disable the toolbar
         self.RemoveToolbar("vdigit", destroy=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 class MapDisplay(FrameMixin, MapPanel):
@@ -2015,5 +2058,8 @@ class MapDisplay(FrameMixin, MapPanel):
         sizer.Add(self, proportion=1, flag=wx.EXPAND)
         parent.SetSizer(sizer)
         parent.Layout()
+<<<<<<< HEAD
 =======
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

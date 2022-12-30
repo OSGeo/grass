@@ -53,7 +53,11 @@ int main(int argc, char **argv)
 
     units = G_define_standard_option(G_OPT_M_UNITS);
     units->label = _("Units");
+<<<<<<< HEAD
     units->description = _("Default: project map units");
+=======
+    units->description = _("Default: location map units");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     shell = G_define_flag();
     shell->key = 'g';

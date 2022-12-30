@@ -120,7 +120,11 @@ void main_loop(void)
 {
 
     int i, ii, l, k;
+<<<<<<< HEAD
     /* int icoub, nmult */;
+=======
+    int icoub /*, nmult */;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int iw, iblock, lw;
     int itime, iter1;
 
@@ -141,7 +145,11 @@ void main_loop(void)
     float eff;
 
     nblock = 1;
+<<<<<<< HEAD
     /* icoub = 0; */
+=======
+    icoub = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* icfl = 0; */
     nstack = 0;
 
@@ -157,7 +165,11 @@ void main_loop(void)
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
+<<<<<<< HEAD
         /* ++icoub; */
+=======
+        ++icoub;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         lw = 0;
         walkwe = 0.;
@@ -305,7 +317,11 @@ void main_loop(void)
                         }
 
                         if (zz[k][l] != UNDEF) {
+<<<<<<< HEAD
                             if (inf[k][l] != UNDEF) { /* infiltration part */
+=======
+                            if (infil != NULL) { /* infiltration part */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                 if (inf[k][l] - si[k][l] > 0.) {
 
                                     decr = pow(

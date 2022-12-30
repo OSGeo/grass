@@ -140,8 +140,12 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
                 *cp++ = bufs[id][mid][i];
 
             /* write row */
+<<<<<<< HEAD
             if (write(out[id], cellp, buflen) < 0)
                 G_fatal_error("Error writing temporary file");
+=======
+            write(out[id], cellp, buflen);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #pragma omp atomic update
             work++;
         }

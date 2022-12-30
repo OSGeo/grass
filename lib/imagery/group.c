@@ -45,7 +45,11 @@ int I_get_group(char *group)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
+<<<<<<< HEAD
     stat = (fscanf(fd, "%255s", group) == 1);
+=======
+    stat = (fscanf(fd, "%s", group) == 1);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     fclose(fd);
     return stat;
 }
@@ -77,7 +81,11 @@ int I_get_subgroup(const char *group, char *subgroup)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
+<<<<<<< HEAD
     stat = (fscanf(fd, "%255s", subgroup) == 1);
+=======
+    stat = (fscanf(fd, "%s", subgroup) == 1);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     fclose(fd);
     return stat;
 }
@@ -199,8 +207,13 @@ static int get_ref(const char *group, const char *subgroup, const char *gmapset,
         return 0;
 
     while (G_getl2(buf, sizeof buf, fd)) {
+<<<<<<< HEAD
         int n = sscanf(buf, "%255s %255s %15s", name, mapset,
                        color); /* better use INAME_LEN */
+=======
+        n = sscanf(buf, "%255s %255s %15s", name, mapset,
+                   color); /* better use INAME_LEN */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (n == 2 || n == 3) {
             I_add_file_to_group_ref(name, mapset, ref);
             if (n == 3)
@@ -261,7 +274,11 @@ int I_init_ref_color_nums(struct Ref *ref)
     ref->blu.index = NULL;
 
     if (ref->nfiles <= 0 || ref->red.n >= 0 || ref->blu.n >= 0 ||
+<<<<<<< HEAD
         ref->grn.n >= 0)
+=======
+        ref->blu.n >= 0)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return 1;
     switch (ref->nfiles) {
     case 1:

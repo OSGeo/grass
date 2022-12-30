@@ -40,7 +40,11 @@ void G_free_ilist(struct ilist *list)
  * \return list The pointer to a new allocated integer list
  *
  * */
+<<<<<<< HEAD
 struct ilist *G_new_ilist(void)
+=======
+struct ilist *G_new_ilist()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     struct ilist *l = G_malloc(sizeof(struct ilist));
 

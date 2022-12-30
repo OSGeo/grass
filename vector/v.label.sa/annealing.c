@@ -48,7 +48,11 @@ static unsigned int overlaps_removed = 0;
  @param n_labels The size of the labels array.
  @params The commandline parameters.
  */
+<<<<<<< HEAD
 void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
+=======
+void simulate_annealing(label_t *labels, int n_labels, struct params *p)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     /* The temperature of the system */
     double T;
@@ -96,6 +100,10 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
                 lp->current_candidate = c;
                 successes++;
                 consec_successes++;
+<<<<<<< HEAD
+=======
+                tot_better++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             }
             /* else apply with probability p=e^(-dE/T) */
             else {
@@ -109,13 +117,24 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
                     lp->current_candidate = c;
                     successes++;
                     consec_successes++;
+<<<<<<< HEAD
                 }
                 else {
+=======
+                    tot_worse++;
+                }
+                else {
+                    tot_ign++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     consec_successes = 0;
                 }
             }
             /* decrease immediately */
+<<<<<<< HEAD
             if (consec_successes > (unsigned int)(5 * n_labels)) {
+=======
+            if (consec_successes > (5 * n_labels)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 consec_successes = 0;
                 break;
             }

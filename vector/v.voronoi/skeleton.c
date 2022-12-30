@@ -528,7 +528,11 @@ int tie_up(void)
                                  IPoints[i]);
         }
 
+<<<<<<< HEAD
         distmin = INFINITY;
+=======
+        distmin = 1. / 0.; /* +inf */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         xmin = x;
         ymin = y;
 

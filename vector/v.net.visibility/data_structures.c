@@ -52,7 +52,11 @@ void init_stack(int size)
 
 /** compare the points along the x axis
  */
+<<<<<<< HEAD
 int cmp_points(const void *v1, const void *v2, void *param UNUSED)
+=======
+int cmp_points(const void *v1, const void *v2, void *param)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     struct Point *p1 = (struct Point *)v1;
     struct Point *p2 = (struct Point *)v2;

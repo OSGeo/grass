@@ -759,12 +759,26 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
+<<<<<<< HEAD
             status = Status.ABORTED
+=======
+<<<<<<< HEAD
+            status = "aborted"
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 061ba6c577 (wxpyimgview: explicit conversion to int (#2704))
         elif event.returncode != 0:
             msg = _("Command ended with non-zero return code {returncode}").format(
                 returncode=event.returncode
             )
+<<<<<<< HEAD
             status = Status.FAILED
+=======
+<<<<<<< HEAD
+            status = "failed"
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 061ba6c577 (wxpyimgview: explicit conversion to int (#2704))
         else:
             msg = _("Command finished")
             status = Status.SUCCESS
@@ -858,3 +872,34 @@ class GConsole(wx.EvtHandler):
 
     def OnProcessPendingOutputWindowEvents(self, event):
         wx.GetApp().ProcessPendingEvents()
+<<<<<<< HEAD
+=======
+
+    def UpdateHistoryFile(self, command):
+        """Update history file
+
+        :param command: the command given as a string
+        """
+        env = grass.gisenv()
+        try:
+            filePath = os.path.join(
+                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".wxgui_history"
+            )
+            fileHistory = codecs.open(filePath, encoding="utf-8", mode="a")
+        except IOError as e:
+            GError(
+                _("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s")
+                % {"filePath": filePath, "error": e},
+                parent=self._guiparent,
+            )
+            return
+
+        try:
+            fileHistory.write(command + os.linesep)
+        finally:
+            fileHistory.close()
+
+        # update wxGUI prompt
+        if self._giface:
+            self._giface.UpdateCmdHistory(command)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

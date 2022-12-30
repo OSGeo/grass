@@ -25,7 +25,13 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
+<<<<<<< HEAD
 """  # noqa: E501
+=======
+"""
+
+from __future__ import print_function
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 import os
 import sys
@@ -470,6 +476,7 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
         StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
 
 
+<<<<<<< HEAD
 class DMonFrame(MapFrame):
     def OnZoomToMap(self, event):
         layers = self.MapWindow.GetMap().GetListOfLayers()
@@ -514,6 +521,11 @@ class DMonFrame(MapFrame):
 class DMonDisplay(FrameMixin, MapPanel):
     """Map display for wrapping map panel with d.mon mathods and frame methods"""
 
+=======
+class DMonDisplay(FrameMixin, MapPanel):
+    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
         # init map panel
         MapPanel.__init__(

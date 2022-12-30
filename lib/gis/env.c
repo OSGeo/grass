@@ -3,7 +3,11 @@
 
    \brief GIS library - environment routines
 
+<<<<<<< HEAD
    (C) 2001-2024 by the GRASS Development Team
+=======
+   (C) 2001-2022 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -122,7 +126,11 @@ void G__read_gisrc_env(void)
  *
  * Calls G_fatal_error when the GISRC variable is not set.
  */
+<<<<<<< HEAD
 void G__read_gisrc_path(void)
+=======
+void G__read_gisrc_path()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     st->gisrc = getenv("GISRC");
     if (!st->gisrc) {

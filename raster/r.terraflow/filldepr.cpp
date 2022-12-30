@@ -72,9 +72,14 @@ elevation_type *fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
 }
 
 /************************************************************/
+<<<<<<< HEAD
 elevation_type *
 ext_fill_depression(AMI_STREAM<boundaryType> *boundaryStr UNUSED,
                     cclabel_type maxWatersheds UNUSED)
+=======
+elevation_type *ext_fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
+                                    cclabel_type maxWatersheds)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     G_fatal_error(
         _("Fill_depressions do not fit in memory. Not implemented yet"));

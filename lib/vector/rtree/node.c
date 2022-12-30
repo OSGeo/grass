@@ -292,7 +292,11 @@ void RTreeDestroyNode(struct RTree_Node *n, int nodes)
 {
     int i;
 
+<<<<<<< HEAD
     if (n->level > 0) { /* it is not leaf -> destroy children */
+=======
+    if (n->level > 0) { /* it is not leaf -> destroy childs */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (i = 0; i < nodes; i++) {
             if (n->branch[i].child.ptr) {
                 RTreeDestroyNode(n->branch[i].child.ptr, nodes);

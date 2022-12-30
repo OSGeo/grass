@@ -15,16 +15,29 @@ Please read _all_ text below.
 - (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 - (I) CODE OPTIMIZATION
 - (J) DEBUGGING OPTIONS
+<<<<<<< HEAD
 - (K) SUPPORT
 - (L) GRASS GIS PROGRAMMER'S MANUAL
 - (M) CONTRIBUTING CODE AND PATCHES
+=======
+- (K) LARGE FILE SUPPORT (for raster maps)
+- (L) SUPPORT
+- (M) GRASS GIS PROGRAMMER'S MANUAL
+- (N) CONTRIBUTING CODE AND PATCHES
+- (O) DRAFT TUTORIAL
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 ## PREREQUISITES
 
 The install order matters. GRASS needs at least two libraries
 which have to be installed before installing/compiling GRASS:
+<<<<<<< HEAD
 For links to the software, see [REQUIREMENTS.md](REQUIREMENTS.md) in this
 directory.
+=======
+For links to the software, see ./REQUIREMENTS.html in this
+directory:
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 Installation order:
 
@@ -54,6 +67,10 @@ repository (<https://github.com/OSGeo/grass/>) or as a auto-generated snapshot
 contains the date when the snapshot was created (checked out from
 the GitHub repository), e.g. grass-3.7.git_src_snapshot_2022_04_27.tar.gz
 from <https://grass.osgeo.org/grass-devel/source/snapshot/>
+<<<<<<< HEAD
+=======
+Further instructions at <https://trac.osgeo.org/grass/wiki/DownloadSource>
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 ## (B) COMPILATION
 
@@ -67,7 +84,11 @@ The command,
 ```
 
 explains the options used to disable the compilation of non-mandatory
+<<<<<<< HEAD
 GRASS modules. See [REQUIREMENTS.md](REQUIREMENTS.md) for details on dependencies.
+=======
+GRASS modules. See REQUIREMENTS.html for details on dependencies.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux
 distributions, FreeBSD, AIX, etc) are available at:
 <https://grasswiki.osgeo.org/wiki/Compile_and_Install>
@@ -146,6 +167,21 @@ make
 make install
 ```
 
+<<<<<<< HEAD
+=======
+To fully enable 64bit library usage for GRASS on 64bit platforms,
+the following additional parameters are recommended/required:
+
+```bash
+./configure \
+   --enable-64bit \
+   --with-libs=/usr/lib64 \
+   ...
+```
+
+See also CODE OPTIMIZATION below.
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 ## (D) INSTALLATION (first time)
 
 After compilation, the resulting code is stored in the directory
@@ -267,8 +303,12 @@ better settings to us):
 CFLAGS="-mcpu=athlon -O2" # AMD Athlon processor with code optimisations
 CFLAGS="-mcpu=pentium" # Intel Pentium processor
 CFLAGS="-mcpu=pentium4" # Intel Pentium4 processor
+<<<<<<< HEAD
 CFLAGS="-O2 -msse -msse2 -mfpmath=sse \
         -minline-all-stringops" # Intel XEON 64bit processor
+=======
+CFLAGS="-O2 -msse -msse2 -mfpmath=sse -minline-all-stringops" # Intel XEON 64bit processor
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 CFLAGS="-mtune=nocona -m64 -minline-all-stringops" # Intel Pentium 64bit processor
 ```
 
@@ -310,7 +350,29 @@ CFLAGS="-g -Wall" ./configure
 See also the file ./doc/debugging.txt and the Wiki page
 <https://grasswiki.osgeo.org/wiki/GRASS_Debugging>
 
+<<<<<<< HEAD
 ## (K) SUPPORT
+=======
+## (K) LARGE FILE SUPPORT (for raster maps)
+
+GRASS GIS includes improved support for reading and writing large files
+(> 2GB) if it is possible in your operating system. If you compile with
+
+```bash
+configure [...] --enable-largefile
+```
+
+you should be able to have raster and vector maps which are larger than 2GB.
+
+While most code has been updated, individual programs may not yet work with
+large files - please report.
+
+See also
+<https://grasswiki.osgeo.org/wiki/GRASS_GIS_Performance>
+<https://grasswiki.osgeo.org/wiki/Software_requirements_specification>
+
+## (L) SUPPORT
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 Note that this code is still actively being developed and errors inevitably
 turn up. If you find a bug, please report it to the GRASS bug tracking system
@@ -319,17 +381,32 @@ so we can fix it. See <https://grass.osgeo.org/contribute/>
 If you are interested in helping to develop GRASS, please join the GRASS
 developers mailing list. See <https://grass.osgeo.org/development/>
 
+<<<<<<< HEAD
 ## (L) GRASS PROGRAMMER'S MANUAL
+=======
+## (M) GRASS PROGRAMMER'S MANUAL
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 The Programmer's manual is generated with doxygen from the source code.
 Please see the README file and the files at:
 <https://grass.osgeo.org/programming8/>
 
+<<<<<<< HEAD
 ## (M) CONTRIBUTING CODE AND PATCHES
+=======
+## (N) CONTRIBUTING CODE AND PATCHES
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 Please see ./SUBMITTING in this directory, or better,
 <https://trac.osgeo.org/grass/wiki/Submitting>
 
+<<<<<<< HEAD
+=======
+## (O) TUTORIALS
+
+<https://grass.osgeo.org/learn/newcomers/>
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 ## Authors
 
 Markus Neteler and the GRASS Development Team

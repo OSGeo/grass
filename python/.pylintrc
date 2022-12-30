@@ -84,7 +84,11 @@ confidence=
 # can either give multiple identifiers separated by comma (,) or put this
 # option multiple times (only on the command line, not in the configuration
 # file where it should appear only once). You can also use "--disable=all" to
+<<<<<<< HEAD
 # disable everything first and then re-enable specific checks. For example, if
+=======
+# disable everything first and then reenable specific checks. For example, if
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 # you want to run only the similarities checker, you can use "--disable=all
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
@@ -95,8 +99,12 @@ disable=raw-checker-failed,
         file-ignored,
         suppressed-message,
         deprecated-pragma,
+<<<<<<< HEAD
         use-symbolic-message-instead,
         duplicate-code
+=======
+        use-symbolic-message-instead
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -294,7 +302,11 @@ init-import=no
 
 # List of qualified module names which can have objects that can redefine
 # builtins.
+<<<<<<< HEAD
 redefining-builtins-modules=past.builtins,future.builtins,builtins,io
+=======
+redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 [SIMILARITIES]

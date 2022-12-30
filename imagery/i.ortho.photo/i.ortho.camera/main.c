@@ -209,8 +209,12 @@ int main(int argc, char *argv[])
 
         I_put_group_camera(group, camera);
 
+<<<<<<< HEAD
         G_message(_("Group [%s] in project (location) [%s] mapset [%s] now "
                     "uses camera "
+=======
+        G_message(_("Group [%s] in location [%s] mapset [%s] now uses camera "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "file [%s]"),
                   group, location, mapset, camera);
     }

@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /****************************************************************************
 =======
 
  /****************************************************************************
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+/****************************************************************************
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * MODULE:    r.in.pdal
  *
@@ -47,9 +51,13 @@
 extern "C" {
 =======
 
+<<<<<<< HEAD
 extern "C"
 {
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+extern "C" {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/gprojects.h>
@@ -61,11 +69,15 @@ extern "C"
 #include "info.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 extern "C" {
 =======
 extern "C"
 {
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+extern "C" {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include "lidar.h"
 #include "projection.h"
 #include "filters.h"
@@ -76,9 +88,12 @@ extern "C"
 #define BUFFSIZE GPATH_MAX
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 int main(int argc, char *argv[])
 {
     int out_fd;
@@ -93,10 +108,14 @@ int main(int argc, char *argv[])
     struct Cell_head region;
     struct Cell_head input_region;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int rows, cols; /* scan box size */
 =======
     int rows, cols;             /* scan box size */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    int rows, cols; /* scan box size */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     char buff[BUFFSIZE];
 
@@ -120,12 +139,17 @@ int main(int argc, char *argv[])
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("binning"));
 <<<<<<< HEAD
+<<<<<<< HEAD
     module->description = _("Creates a raster map from LAS LiDAR points using "
                             "univariate statistics.");
 =======
     module->description =
         _("Creates a raster map from LAS LiDAR points using univariate statistics.");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    module->description = _("Creates a raster map from LAS LiDAR points using "
+                            "univariate statistics.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Option *input_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
 
@@ -159,10 +183,14 @@ int main(int argc, char *argv[])
         "n,min,max,range,sum,mean,stddev,variance,coeff_var,median,mode,"
         "percentile,skewness,trimmean,sidnmax,sidnmin,ev1,ev2,ev3";
 <<<<<<< HEAD
+<<<<<<< HEAD
     method_opt->answer = const_cast<char *>("mean");
 =======
     method_opt->answer = const_cast < char *>("mean");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    method_opt->answer = const_cast<char *>("mean");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     method_opt->guisection = _("Statistic");
     G_asprintf((char **)&(method_opt->descriptions),
@@ -209,21 +237,29 @@ int main(int argc, char *argv[])
 
     type_opt->required = NO;
 <<<<<<< HEAD
+<<<<<<< HEAD
     type_opt->answer = const_cast<char *>("FCELL");
 =======
     type_opt->answer = const_cast < char *>("FCELL");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    type_opt->answer = const_cast<char *>("FCELL");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Option *base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
 
     base_raster_opt->key = "base_raster";
     base_raster_opt->required = NO;
 <<<<<<< HEAD
+<<<<<<< HEAD
     base_raster_opt->label = _("Subtract raster values from the Z coordinates");
 =======
     base_raster_opt->label =
         _("Subtract raster values from the Z coordinates");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    base_raster_opt->label = _("Subtract raster values from the Z coordinates");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     base_raster_opt->description =
         _("The scale for Z is applied beforehand, the range filter for"
           " Z afterwards");
@@ -246,10 +282,14 @@ int main(int argc, char *argv[])
     zscale_opt->type = TYPE_DOUBLE;
     zscale_opt->required = NO;
 <<<<<<< HEAD
+<<<<<<< HEAD
     zscale_opt->answer = const_cast<char *>("1.0");
 =======
     zscale_opt->answer = const_cast < char *>("1.0");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    zscale_opt->answer = const_cast<char *>("1.0");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     zscale_opt->description = _("Scale to apply to Z data");
     zscale_opt->guisection = _("Transform");
@@ -261,11 +301,15 @@ int main(int argc, char *argv[])
     irange_opt->required = NO;
     irange_opt->key_desc = "min,max";
 <<<<<<< HEAD
+<<<<<<< HEAD
     irange_opt->description = _("Filter range for intensity values (min,max)");
 =======
     irange_opt->description =
         _("Filter range for intensity values (min,max)");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    irange_opt->description = _("Filter range for intensity values (min,max)");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     irange_opt->guisection = _("Selection");
 
     Option *iscale_opt = G_define_option();
@@ -274,10 +318,14 @@ int main(int argc, char *argv[])
     iscale_opt->type = TYPE_DOUBLE;
     iscale_opt->required = NO;
 <<<<<<< HEAD
+<<<<<<< HEAD
     iscale_opt->answer = const_cast<char *>("1.0");
 =======
     iscale_opt->answer = const_cast < char *>("1.0");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    iscale_opt->answer = const_cast<char *>("1.0");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     iscale_opt->description = _("Scale to apply to intensity values");
     iscale_opt->guisection = _("Transform");
@@ -324,8 +372,13 @@ int main(int argc, char *argv[])
           " matching cordinate system can be imported");
     reproject_flag->guisection = _("Projection");
 
+<<<<<<< HEAD
     // TODO: from the API it seems that also prj file path and proj string will work
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    // TODO: from the API it seems that also prj file path and proj string will
+    // work
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     Option *input_srs_opt = G_define_option();
 
     input_srs_opt->key = "input_srs";
@@ -358,12 +411,17 @@ int main(int argc, char *argv[])
     trim_opt->label =
         _("Discard given percentage of the smallest and largest values");
 <<<<<<< HEAD
+<<<<<<< HEAD
     trim_opt->description = _("Discard <trim> percent of the smallest and "
                               "<trim> percent of the largest observations");
 =======
     trim_opt->description =
         _("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    trim_opt->description = _("Discard <trim> percent of the smallest and "
+                              "<trim> percent of the largest observations");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     trim_opt->guisection = _("Statistic");
 
     Option *res_opt = G_define_option();
@@ -380,11 +438,15 @@ int main(int argc, char *argv[])
     return_filter_opt->type = TYPE_STRING;
     return_filter_opt->required = NO;
 <<<<<<< HEAD
+<<<<<<< HEAD
     return_filter_opt->label = _("Only import points of selected return type");
 =======
     return_filter_opt->label =
         _("Only import points of selected return type");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    return_filter_opt->label = _("Only import points of selected return type");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return_filter_opt->description =
         _("If not specified, all points are imported");
     return_filter_opt->options = "first,last,mid";
@@ -398,6 +460,7 @@ int main(int argc, char *argv[])
     class_filter_opt->required = NO;
     class_filter_opt->label = _("Only import points of selected class(es)");
 <<<<<<< HEAD
+<<<<<<< HEAD
     class_filter_opt->description =
         _("Input is comma separated integers. "
           "If not specified, all points are imported.");
@@ -405,6 +468,11 @@ int main(int argc, char *argv[])
     class_filter_opt->description = _("Input is comma separated integers. "
                                       "If not specified, all points are imported.");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    class_filter_opt->description =
+        _("Input is comma separated integers. "
+          "If not specified, all points are imported.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     class_filter_opt->guisection = _("Selection");
 
     Option *dimension_opt = G_define_option();
@@ -416,10 +484,14 @@ int main(int argc, char *argv[])
     dimension_opt->options =
         "z,intensity,number,returns,direction,angle,class,source";
 <<<<<<< HEAD
+<<<<<<< HEAD
     dimension_opt->answer = const_cast<char *>("z");
 =======
     dimension_opt->answer = const_cast < char *>("z");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    dimension_opt->answer = const_cast<char *>("z");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     dimension_opt->guisection = _("Selection");
     G_asprintf((char **)&(dimension_opt->descriptions),
@@ -429,13 +501,19 @@ int main(int argc, char *argv[])
                "returns;%s;"
                "direction;%s;"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                "angle;%s;"
                "class;%s;"
                "source;%s",
                _("Z coordinate"),
+<<<<<<< HEAD
 =======
                "angle;%s;" "class;%s;" "source;%s", _("Z coordinate"),
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                /* GTC: LAS LiDAR point property */
                _("Intensity"),
                /* GTC: LAS LiDAR point property */
@@ -492,9 +570,14 @@ int main(int argc, char *argv[])
           "the current project");
 =======
         _("Override projection check (use current location's projection)");
+<<<<<<< HEAD
     over_flag->description =
         _("Assume that the dataset has same projection as the current location");
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    over_flag->description = _(
+        "Assume that the dataset has same projection as the current location");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     over_flag->guisection = _("Projection");
 
     Flag *base_rast_res_flag = G_define_flag();
@@ -519,9 +602,12 @@ int main(int argc, char *argv[])
         _("Print data file extent in shell script style and then exit");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
@@ -530,9 +616,12 @@ int main(int argc, char *argv[])
     G_option_required(output_opt, print_extent_flag, print_info_flag, NULL);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (G_parser(argc, argv))
         return EXIT_FAILURE;
 
@@ -542,11 +631,15 @@ int main(int argc, char *argv[])
     if (file_list_opt->answer) {
         if (access(file_list_opt->answer, F_OK) != 0)
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
 =======
             G_fatal_error(_("File <%s> does not exist"),
                           file_list_opt->answer);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         string_list_from_file(&infiles, file_list_opt->answer);
     }
     else {
@@ -566,16 +659,22 @@ int main(int argc, char *argv[])
 
     /* we could use rules but this gives more info and allows continuing */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (set_region_flag->answer && !(extents_flag->answer || res_opt->answer ||
                                      base_rast_res_flag->answer)) {
         G_warning(_("Flag %c makes sense only with %s option or -%c flag or "
                     "-%c flag"),
+<<<<<<< HEAD
 =======
     if (set_region_flag->answer &&
         !(extents_flag->answer || res_opt->answer ||
           base_rast_res_flag->answer)) {
         G_warning(_("Flag %c makes sense only with %s option or -%c flag or -%c flag"),
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                   set_region_flag->key, res_opt->key, extents_flag->key,
                   base_rast_res_flag->key);
         /* avoid the call later on */
@@ -616,6 +715,7 @@ int main(int argc, char *argv[])
     Rast_get_window(&region);
     /* G_get_window seems to be unreliable if the location has been changed */
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_get_set_window(
         &loc_wind); /* TODO: v.in.lidar uses G_get_default_window() */
 
@@ -626,6 +726,13 @@ int main(int argc, char *argv[])
 
     /* Region is set based on whole point cloud that could be larger than imported part */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    G_get_set_window(
+        &loc_wind); /* TODO: v.in.lidar uses G_get_default_window() */
+
+    /* Region is set based on whole point cloud that could be larger than
+     * imported part */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (extents_flag->answer) {
         double min_x, max_x, min_y, max_y, min_z, max_z;
 
@@ -641,6 +748,7 @@ int main(int argc, char *argv[])
 
     /* Set up filtering options */
     if (!extents_flag->answer) {
+<<<<<<< HEAD
 <<<<<<< HEAD
         use_spatial_filter =
             spatial_filter_from_current_region(&xmin, &ymin, &xmax, &ymax);
@@ -665,26 +773,34 @@ int main(int argc, char *argv[])
         use_spatial_filter = spatial_filter_from_current_region(&xmin,
                                                                 &ymin,
                                                                 &xmax, &ymax);
+=======
+        use_spatial_filter =
+            spatial_filter_from_current_region(&xmin, &ymin, &xmax, &ymax);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     double zrange_min, zrange_max;
-    bool use_zrange = range_filter_from_option(zrange_opt, &zrange_min,
-                                               &zrange_max);
+    bool use_zrange =
+        range_filter_from_option(zrange_opt, &zrange_min, &zrange_max);
     double irange_min, irange_max;
-    bool use_irange = range_filter_from_option(irange_opt, &irange_min,
-                                               &irange_max);
+    bool use_irange =
+        range_filter_from_option(irange_opt, &irange_min, &irange_max);
     double drange_min, drange_max;
-    bool use_drange = range_filter_from_option(drange_opt, &drange_min,
-                                               &drange_max);
+    bool use_drange =
+        range_filter_from_option(drange_opt, &drange_min, &drange_max);
     struct ReturnFilter return_filter_struct;
-    bool use_return_filter =
-        return_filter_create_from_string(&return_filter_struct,
-                                         return_filter_opt->answer);
+    bool use_return_filter = return_filter_create_from_string(
+        &return_filter_struct, return_filter_opt->answer);
     struct ClassFilter class_filter;
+<<<<<<< HEAD
     bool use_class_filter = class_filter_create_from_strings(&class_filter,
                                                              class_filter_opt->
                                                              answers);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    bool use_class_filter = class_filter_create_from_strings(
+        &class_filter, class_filter_opt->answers);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
                       trim_opt->answer);
@@ -829,10 +945,14 @@ int main(int argc, char *argv[])
             Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
             /* TODO: make it only as small as the output is or points are */
 <<<<<<< HEAD
+<<<<<<< HEAD
             Rast_set_input_window(&input_region); /* we have split window */
 =======
             Rast_set_input_window(&input_region);       /* we have split window */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+            Rast_set_input_window(&input_region); /* we have split window */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         else {
             Rast_get_input_window(&input_region);
@@ -854,10 +974,14 @@ int main(int argc, char *argv[])
     G_message(_("Reading data..."));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     std::vector<pdal::Stage *> readers;
 =======
     std::vector < pdal::Stage * >readers;
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    std::vector<pdal::Stage *> readers;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     pdal::StageFactory factory;
     pdal::MergeFilter merge_filter;
     /* loop of input files */
@@ -873,6 +997,7 @@ int main(int argc, char *argv[])
         las_opts.add(las_opt);
         // stages created by factory are destroyed with the factory
 <<<<<<< HEAD
+<<<<<<< HEAD
         pdal::Stage *reader = factory.createStage(pdal_read_driver);
         if (!reader)
             G_fatal_error("PDAL reader creation failed, a wrong format of <%s>",
@@ -884,6 +1009,12 @@ int main(int argc, char *argv[])
                 ("PDAL reader creation failed, a wrong format of <%s>",
                  infile);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+        pdal::Stage *reader = factory.createStage(pdal_read_driver);
+        if (!reader)
+            G_fatal_error("PDAL reader creation failed, a wrong format of <%s>",
+                          infile);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         reader->setOptions(las_opts);
         readers.push_back(reader);
         merge_filter.setInput(*reader);
@@ -893,10 +1024,14 @@ int main(int argc, char *argv[])
     // merge filter puts the n readers into one stage,
     // so we don't have to worry about the list of stages later
 <<<<<<< HEAD
+<<<<<<< HEAD
     pdal::Stage *last_stage = &merge_filter;
 =======
     pdal::Stage * last_stage = &merge_filter;
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    pdal::Stage *last_stage = &merge_filter;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     pdal::ReprojectionFilter reprojection_filter;
 
     // we reproject when requested regardless of the input projection
@@ -912,12 +1047,17 @@ int main(int argc, char *argv[])
         // TODO: try catch for user input error
         if (input_srs_opt->answer)
 <<<<<<< HEAD
+<<<<<<< HEAD
             o4.add<std::string>("in_srs", input_srs_opt->answer);
         o4.add<std::string>("out_srs", proj_wkt);
 =======
             o4.add < std::string > ("in_srs", input_srs_opt->answer);
         o4.add < std::string > ("out_srs", proj_wkt);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+            o4.add<std::string>("in_srs", input_srs_opt->answer);
+        o4.add<std::string>("out_srs", proj_wkt);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         reprojection_filter.setOptions(o4);
         reprojection_filter.setInput(*last_stage);
         last_stage = &reprojection_filter;
@@ -942,10 +1082,14 @@ int main(int argc, char *argv[])
     if (use_class_filter)
         grass_filter.set_class_filter(class_filter);
 <<<<<<< HEAD
+<<<<<<< HEAD
     grass_filter.set_z_scale(zscale); // Default is 1 == no scale
 =======
     grass_filter.set_z_scale(zscale);   // Default is 1 == no scale
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    grass_filter.set_z_scale(zscale); // Default is 1 == no scale
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     grass_filter.set_intensity_scale(iscale);
     grass_filter.set_d_scale(dscale);
     grass_filter.setInput(*last_stage);
@@ -955,6 +1099,7 @@ int main(int argc, char *argv[])
     binning_writer.set_output_scale(output_scale);
     binning_writer.setInput(grass_filter);
 <<<<<<< HEAD
+<<<<<<< HEAD
     // stream_filter.setInput(*last_stage);
     //  there is no difference between 1 and 10k points in memory
     //  consumption, so using 10k in case it is faster for some cases
@@ -963,6 +1108,11 @@ int main(int argc, char *argv[])
     // there is no difference between 1 and 10k points in memory
     // consumption, so using 10k in case it is faster for some cases
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    // stream_filter.setInput(*last_stage);
+    //  there is no difference between 1 and 10k points in memory
+    //  consumption, so using 10k in case it is faster for some cases
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     pdal::point_count_t point_table_capacity = 10000;
     pdal::FixedPointTable point_table(point_table_capacity);
     binning_writer.prepare(point_table);
@@ -1023,15 +1173,21 @@ int main(int argc, char *argv[])
                             "Check dimension name spelling."));
         if (!(strcmp(dimension_opt->answer, "z") == 0))
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             G_warning(
                 _("Both dimension and user dimension parameters are specified. "
                   "Using '%s' as the dimension to import."),
                 user_dimension_opt->answer);
+<<<<<<< HEAD
 =======
             G_warning(_("Both dimension and user dimension parameters are specified. "
                        "Using '%s' as the dimension to import."),
                       user_dimension_opt->answer);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     // this is just for sure, we tested the individual dimensions before
@@ -1043,12 +1199,17 @@ int main(int argc, char *argv[])
 
     // TODO: add percentage printing to one of the filters
 <<<<<<< HEAD
+<<<<<<< HEAD
     binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype,
                                cols);
 =======
     binning_writer.set_binning(&region, &point_binning, &bin_index_nodes,
                                rtype, cols);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    binning_writer.set_binning(&region, &point_binning, &bin_index_nodes, rtype,
+                               cols);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     binning_writer.dim_to_import(dim_to_import);
     if (base_raster_opt->answer)
         binning_writer.set_base_raster(&base_segment, &input_region,
@@ -1063,12 +1224,17 @@ int main(int argc, char *argv[])
     for (int row = 0; row < rows; row++) {
         /* assemble final values into a row */
 <<<<<<< HEAD
+<<<<<<< HEAD
         write_values(&point_binning, &bin_index_nodes, raster_row, row, cols,
                      rtype);
 =======
         write_values(&point_binning, &bin_index_nodes, raster_row, row,
                      cols, rtype);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+        write_values(&point_binning, &bin_index_nodes, raster_row, row, cols,
+                     rtype);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_percent(row, rows, 10);
 
         /* write out line of raster data */
@@ -1080,10 +1246,14 @@ int main(int argc, char *argv[])
         Segment_close(&base_segment);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_percent(1, 1, 1); /* flush */
 =======
     G_percent(1, 1, 1);         /* flush */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    G_percent(1, 1, 1); /* flush */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     G_free(raster_row);
 
     G_message(_(GPOINT_COUNT_FORMAT " points found in input file(s)"),
@@ -1124,6 +1294,7 @@ int main(int argc, char *argv[])
 
     if (infiles.num_items > 1) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buff, BUFFSIZE,
                  _("Raster map <%s> created."
                    " " GPOINT_COUNT_FORMAT
@@ -1140,10 +1311,18 @@ int main(int argc, char *argv[])
                         " " GPOINT_COUNT_FORMAT
                         " points from %d files found in region."), outmap,
                 grass_filter.num_passed(), infiles.num_items);
+=======
+        sprintf(buff,
+                _("Raster map <%s> created."
+                  " " GPOINT_COUNT_FORMAT
+                  " points from %d files found in region."),
+                outmap, grass_filter.num_passed(), infiles.num_items);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     else {
-        sprintf(buff, _("Raster map <%s> created."
-                        " " GPOINT_COUNT_FORMAT " points found in region."),
+        sprintf(buff,
+                _("Raster map <%s> created."
+                  " " GPOINT_COUNT_FORMAT " points found in region."),
                 outmap, grass_filter.num_passed());
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     }

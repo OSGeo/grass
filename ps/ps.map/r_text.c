@@ -20,6 +20,12 @@
 #define UPPER    1
 #define CENTER   2
 
+<<<<<<< HEAD
+=======
+extern char *get_color_name();
+extern int get_color_number();
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 static char *help[] = {"font        fontname",
                        "color       color",
                        "width       #",

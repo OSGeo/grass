@@ -8,10 +8,16 @@ Status: Adopted (6 April 2007)
 
 ## Summary
 
+<<<<<<< HEAD
 A GRASS Project Steering Committee ([PSC](https://trac.osgeo.org/grass/wiki/PSC))
 is proposed to formalize control over the GRASS codebase and to facilitate GRASS
 project management issues. It is desired to keep the administrational overhead
 as low as possible.
+=======
+A GRASS Project Steering Committee ([PSC](https://trac.osgeo.org/grass/wiki/PSC)) is proposed to formalize control
+over the GRASS codebase and to facilitate GRASS project management issues.
+It is desired to keep the administrational overhead as low as possible.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 This document describes how the GRASS Project Steering Committee
 determines membership, and makes decisions on GRASS project issues.
@@ -42,8 +48,12 @@ currently include:
 
 * Maintaining submitter guidelines and making all developers aware of them.
 * Granting write access to the source code repository for new developers.
+<<<<<<< HEAD
 * Enforcing the submitter guidelines, with the ultimate sanction against
   non-compliance being removal of write access to the source code repository.
+=======
+* Enforcing the submitter guidelines, with the ultimate sanction against non-compliance being removal of write access to the source code repository.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 In general, once write access has been granted, developers are allowed to
 make changes to the codebase as they see fit. For controversial or
@@ -61,8 +71,12 @@ community can request the PSC to choose options best preserving the
 quality of the GRASS project.
 
 Removal of write access to the source code repository is handled as a
+<<<<<<< HEAD
 proposal to the committee as described below in the
 [Operation of the PSC](#operation-of-the-psc) section.
+=======
+proposal to the committee as described below in the [Operation of the PSC](#operation-of-the-psc) section.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 ### Legal aspects
 
@@ -96,7 +110,11 @@ exists for the purpose of PSC discussions. When a
 decision is required of the PSC, it will be presented by any member to the
 mailing list in the form of a proposal. A decision will then be achieved
 by discussion of the proposal on the mailing list until a consensus is
+<<<<<<< HEAD
 reached. Voting on issues is also permissible and may be used as a means
+=======
+reached. Voting on issues is also permissable and may be used as a means
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 to reach a consensus or, only in case of extreme cases of disagreement, to
 force a decision. Any member may call a vote on any proposal. The voting
 procedure is outlined in a separate document:

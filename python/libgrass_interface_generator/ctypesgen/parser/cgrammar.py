@@ -108,7 +108,11 @@ tokens = reserved_keyword_tokens + reserved_keyword_tokens_new + (
     # Pragma
     "PRAGMA", "PRAGMA_END", "PRAGMA_PACK",
 
+<<<<<<< HEAD
     # Delimiters
+=======
+    # Delimeters
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     "PERIOD", "ELLIPSIS", "LPAREN", "RPAREN", "LBRACKET",
     "RBRACKET", "LBRACE", "RBRACE", "COMMA", "SEMI",
     "COLON",

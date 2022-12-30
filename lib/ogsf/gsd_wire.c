@@ -439,7 +439,11 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
    \return 1
  */
+<<<<<<< HEAD
 int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
+=======
+int gsd_wire_surf_func(geosurf *gs, int (*user_func)())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     return (1);
 }

@@ -73,7 +73,11 @@ public:
     char *operator()(const elevation_type &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%.1f", (float)p);
+=======
+        sprintf(buf, "%.1f", (float)p);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 };
@@ -83,13 +87,21 @@ public:
     char *operator()(const direction_type &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p);
+=======
+        sprintf(buf, "%3d", p);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
     char *operator()(const waterWindowBaseType &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p.dir);
+=======
+        sprintf(buf, "%3d", p.dir);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 #if (0)
@@ -108,19 +120,31 @@ public:
     char *operator()(const labelElevType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
     char *operator()(const waterGridType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
     char *operator()(const waterType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 };
@@ -130,7 +154,11 @@ public:
     char *operator()(const waterGridType &p)
     {
         static char buf[3];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%1u", p.depth);
+=======
+        sprintf(buf, "%1u", p.depth);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 };
@@ -138,7 +166,11 @@ public:
 char *verbosedir(const std::string &s)
 {
     static char buf[BUFSIZ];
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+=======
+    sprintf(buf, "dump/%s", s.c_str());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return buf;
 }
 
@@ -365,7 +397,11 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
     char path[BUFSIZ];
     char *base_dir = getenv(STREAM_TMPDIR);
     assert(base_dir);
+<<<<<<< HEAD
     snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+=======
+    sprintf(path, "%s/flowStream", base_dir);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     flowStream = new AMI_STREAM<waterWindowBaseType>(path);
     /*flowStream->persist(PERSIST_PERSISTENT); */
     if (stats)
@@ -523,7 +559,11 @@ void assignFinalDirections(AMI_STREAM<plateauStats> *statstr,
 /* ********************************************************************** */
 class directionElevationMerger {
 public:
+<<<<<<< HEAD
     waterGridType operator()(elevation_type el, direction_type dir UNUSED,
+=======
+    waterGridType operator()(elevation_type el, direction_type dir,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                              const waterType &p)
     {
         /* check that no (boundary) nodata values got in here */

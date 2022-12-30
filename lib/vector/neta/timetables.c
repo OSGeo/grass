@@ -341,7 +341,11 @@ static neta_heap_data *new_heap_data(int conns, int v)
    \param heap ?
  */
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
+<<<<<<< HEAD
                           int v, int route, int rows UNUSED, int update,
+=======
+                          int v, int route, int rows, int update,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                           neta_timetable_result *result, dglHeap_s *heap)
 {
     if (result->dst[new_conns][to] == -1 ||

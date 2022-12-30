@@ -140,8 +140,12 @@ int db_get_table_number_of_columns(dbTable *table)
     return table->numColumns;
 }
 
+<<<<<<< HEAD
 static void set_all_column_privs(dbTable *table,
                                  void (*set_column_priv)(dbColumn *))
+=======
+static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int col, ncols;
     dbColumn *column;
@@ -153,8 +157,12 @@ static void set_all_column_privs(dbTable *table,
     }
 }
 
+<<<<<<< HEAD
 static int get_all_column_privs(dbTable *table,
                                 int (*get_column_priv)(dbColumn *))
+=======
+static int get_all_column_privs(dbTable *table, int (*get_column_priv)())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int priv, col, ncols;
     dbColumn *column;
@@ -417,7 +425,11 @@ dbTable *db_clone_table(dbTable *src)
 }
 
 /*!
+<<<<<<< HEAD
    \brief Create SQL CREATE string from table definition
+=======
+   \brief Create SQL CREATE sring from table definition
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    \param table pointer to dbTable
    \param sql dbString to store the SQL CREATE string

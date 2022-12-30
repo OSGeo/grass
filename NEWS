@@ -4,11 +4,15 @@ GRASS GIS 8
  o https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures80
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  o https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures82
 =======
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+ o https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures82
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 GRASS GIS 7
  o https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78

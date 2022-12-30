@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
+<<<<<<< HEAD
 # (C) 2003-2024 Markus Neteler and the GRASS Development Team
+=======
+# (C) 2003-2022 Markus Neteler and the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 # Authors:
 #   Markus Neteler
 #   Glynn Clements

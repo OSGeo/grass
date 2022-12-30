@@ -5,7 +5,11 @@
 #include <grass/colors.h>
 #include <grass/glocale.h>
 
+<<<<<<< HEAD
 void rgb2colr(struct Map_info *Map, int layer, const char *rgb_column,
+=======
+void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
               struct Colors *colors)
 {
     int i, ret, nskipped;

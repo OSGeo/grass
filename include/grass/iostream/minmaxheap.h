@@ -93,8 +93,13 @@ public:
     BasicMinMaxHeap(HeapIndex size) : maxsize(size)
     {
         char str[100];
+<<<<<<< HEAD
         snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
                  (long)((size + 1) * sizeof(T)));
+=======
+        sprintf(str, "BasicMinMaxHeap: allocate %ld\n",
+                (long)((size + 1) * sizeof(T)));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         // MEMORY_LOG(str);
 
         lastindex = 0;

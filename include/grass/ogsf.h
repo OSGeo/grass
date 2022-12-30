@@ -243,10 +243,17 @@ typedef struct {
 
 /* maybe add transformation matrix? */
 typedef struct {
+<<<<<<< HEAD
     IFLAG att_src;          /* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
     IFLAG att_type;         /* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
     int hdata;              /* handle to dataset */
     int (*user_func)(void); /* Not yet supported */
+=======
+    IFLAG att_src;  /* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
+    IFLAG att_type; /* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
+    int hdata;      /* handle to dataset */
+    int (*user_func)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     float constant;
     int *lookup; /* TODO: use transform instead */
     float min_nz, max_nz, range_nz;
@@ -336,7 +343,11 @@ typedef struct g_vect {
     /* also maybe center & rotate? */
     geoline *lines;
     geoline *fastlines;
+<<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
+=======
+    int (*bgn_read)(), (*end_read)(), (*nxt_line)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     struct g_vect *next;
     void *clientdata;
 
@@ -370,7 +381,11 @@ typedef struct g_site {
     transform attr_trans;
     float x_trans, y_trans, z_trans;
     geopoint *points;
+<<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
+=======
+    int (*bgn_read)(), (*end_read)(), (*nxt_site)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     struct g_site *next;
     void *clientdata;
 
@@ -399,7 +414,11 @@ typedef struct {
     IFLAG att_src;
 
     int hfile;
+<<<<<<< HEAD
     int (*user_func)(void); /* unused */
+=======
+    int (*user_func)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     float constant;
 
     void *att_data;
@@ -482,8 +501,13 @@ typedef struct { /* need to add elements here for off_screen drawing */
     int bgcol;
 } geodisplay;
 
+<<<<<<< HEAD
 extern void (*Cxl_func)(void);
 extern void (*Swap_func)(void); /* unused */
+=======
+extern void (*Cxl_func)();
+extern void (*Swap_func)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* Key frames */
 /* these have to be 1 << KF_id_index */

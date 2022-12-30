@@ -17,7 +17,11 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
+<<<<<<< HEAD
  * terrain. The terrain is NOT viewed as a tessellation of flat cells,
+=======
+ * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -267,8 +271,12 @@ int main(int argc, char *argv[])
         }
         else {
             /*set it */
+<<<<<<< HEAD
             snprintf(buf, sizeof(buf), "%s=%s", STREAM_TMPDIR,
                      viewOptions.streamdir);
+=======
+            sprintf(buf, "%s=%s", STREAM_TMPDIR, viewOptions.streamdir);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             G_debug(1, "setting %s ", buf);
             putenv(buf);
             if (getenv(STREAM_TMPDIR) == NULL) {

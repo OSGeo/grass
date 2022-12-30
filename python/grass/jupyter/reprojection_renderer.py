@@ -104,7 +104,11 @@ class ReprojectionRenderer:
             input=full_name,
             output=tgt_name,
             mapset=mapset,
+<<<<<<< HEAD
             project=env_info["LOCATION_NAME"],
+=======
+            location=env_info["LOCATION_NAME"],
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             dbase=env_info["GISDBASE"],
             resolution=self._region_manager.resolution,
             env=self._psmerc_env,
@@ -153,7 +157,11 @@ class ReprojectionRenderer:
             input=name,
             output=new_name,
             mapset=mapset,
+<<<<<<< HEAD
             project=env_info["LOCATION_NAME"],
+=======
+            location=env_info["LOCATION_NAME"],
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             dbase=env_info["GISDBASE"],
             env=self._wgs84_env,
         )

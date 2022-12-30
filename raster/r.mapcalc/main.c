@@ -85,6 +85,7 @@ int main(int argc, char **argv)
     region->required = NO;
     region->answer = "current";
     region->options = "current,intersect,union";
+<<<<<<< HEAD
     region->description = _("The computational region that should be used.");
     desc = NULL;
     G_asprintf(&desc,
@@ -97,6 +98,15 @@ int main(int argc, char **argv)
                _("union computes the union extent of all map regions "
                  "and uses the smallest resolution"));
     region->descriptions = desc;
+=======
+    region->description = _(
+        "The computational region that should be used.\n"
+        "               - current uses the current region of the mapset.\n"
+        "               - intersect computes the intersection region between\n"
+        "                 all input maps and uses the smallest resolution\n"
+        "               - union computes the union extent of all map regions\n"
+        "                 and uses the smallest resolution");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     file = G_define_standard_option(G_OPT_F_INPUT);
     file->key = "file";

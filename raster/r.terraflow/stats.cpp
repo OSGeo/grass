@@ -16,7 +16,10 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
 #include <cinttypes>
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -90,7 +93,11 @@ int noclobberFile(char *fname)
             else { /* file exists */
                 char buf[BUFSIZ];
                 G_debug(1, "file %s exists - renaming.\n", fname);
+<<<<<<< HEAD
                 snprintf(buf, BUFSIZ, "%s.old", fname);
+=======
+                sprintf(buf, "%s.old", fname);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 if (rename(fname, buf) != 0) {
                     G_fatal_error("%s", fname);
                 }
@@ -112,7 +119,11 @@ char *noclobberFileName(char *fname)
         else { /* file exists */
             char buf[BUFSIZ];
             G_debug(1, "file %s exists - renaming.\n", fname);
+<<<<<<< HEAD
             snprintf(buf, BUFSIZ, "%s.old", fname);
+=======
+            sprintf(buf, "%s.old", fname);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (rename(fname, buf) != 0) {
                 G_fatal_error("%s", fname);
             }
@@ -138,7 +149,11 @@ char *statsRecorder::timestamp()
 {
     static char buf[BUFSIZ];
     rt_stop(tm);
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "[%.1f] ", rt_seconds(tm));
+=======
+    sprintf(buf, "[%.1f] ", rt_seconds(tm));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return buf;
 }
 
@@ -160,20 +175,29 @@ void statsRecorder::comment(const char *s, const int verbose)
 void statsRecorder::comment(const char *s1, const char *s2)
 {
     char buf[BUFSIZ];
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "%s%s", s1, s2);
+=======
+    sprintf(buf, "%s%s", s1, s2);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     comment(buf);
 }
 
 void statsRecorder::comment(const int n)
 {
     char buf[BUFSIZ];
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "%d", n);
+=======
+    sprintf(buf, "%d", n);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     comment(buf);
 }
 
 char *formatNumber(char *buf, off_t val)
 {
     if (val > (1 << 30)) {
+<<<<<<< HEAD
         snprintf(buf, BUFSIZ, "%.2fG (%" PRId64 ")", (double)val / (1 << 30),
                  val);
     }
@@ -187,6 +211,18 @@ char *formatNumber(char *buf, off_t val)
     }
     else {
         snprintf(buf, BUFSIZ, "%" PRId64, val);
+=======
+        sprintf(buf, "%.2fG (%" PRI_OFF_T ")", (double)val / (1 << 30), val);
+    }
+    else if (val > (1 << 20)) {
+        sprintf(buf, "%.2fM (%" PRI_OFF_T ")", (double)val / (1 << 20), val);
+    }
+    else if (val > (1 << 10)) {
+        sprintf(buf, "%.2fK (%" PRI_OFF_T ")", (double)val / (1 << 10), val);
+    }
+    else {
+        sprintf(buf, "%" PRI_OFF_T, val);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     return buf;
 }

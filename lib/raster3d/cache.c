@@ -84,8 +84,12 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if ((res = read(map->cacheFD, tileBuf, nBytes)) < 0 ||
         (size_t)res != nBytes) {
+=======
+    if (read(map->cacheFD, tileBuf, nBytes) != nBytes) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_readFun: can't read file");
         return 0;
     }
@@ -111,8 +115,12 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if ((res = read(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
         (size_t)res != nBytes + sizeof(int)) {
+=======
+    if (read(map->cacheFD, xdr, nBytes + sizeof(int)) != nBytes + sizeof(int)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_readFun: can't read file");
         return 0;
     }
@@ -121,8 +129,13 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if ((res = write(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
         (size_t)res != nBytes + sizeof(int)) {
+=======
+    if (write(map->cacheFD, xdr, nBytes + sizeof(int)) !=
+        nBytes + sizeof(int)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_readFun: can't write file");
         return 0;
     }
@@ -156,8 +169,12 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
         Rast3d_error("cacheWrite_writeFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if ((res = write(map->cacheFD, tileBuf, nBytes)) < 0 ||
         (size_t)res != nBytes) {
+=======
+    if (write(map->cacheFD, tileBuf, nBytes) != nBytes) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error("cacheWrite_writeFun: can't write file");
         return 0;
     }

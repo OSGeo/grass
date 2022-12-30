@@ -100,7 +100,11 @@ int N_copy_gradient_2d(N_gradient_2d *source, N_gradient_2d *target)
  * field at position [row][col]
  *
  *  This function returns the gradient of a cell at position [row][col] from the
+<<<<<<< HEAD
  * input gradient field. Returned is a new structure of type N_gradient_2d.
+=======
+ * input gradient field. Returend is a new structure of type N_gradient_2d.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  *  \param field N_gradient_field_2d * - A two dimensional gradient field
  *  \param gradient N_gradient_2d * - the gradient structure which should be

@@ -1,6 +1,7 @@
 8
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 4
 0dev
 2024
@@ -11,3 +12,8 @@
 dev
 2021
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+3
+dev
+2022
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

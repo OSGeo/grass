@@ -663,7 +663,11 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
+<<<<<<< HEAD
         super().end_file_test(
+=======
+        super(GrassTestFilesHtmlReporter, self).end_file_test(
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -914,7 +918,11 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
+<<<<<<< HEAD
         super().end_file_test(
+=======
+        super(GrassTestFilesKeyValueReporter, self).end_file_test(
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -1020,7 +1028,11 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
+<<<<<<< HEAD
         super().end_file_test(
+=======
+        super(GrassTestFilesTextReporter, self).end_file_test(
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -1039,6 +1051,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             self._stream.write("\n")
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             self._stream.write(f"FAILED {module.file_path}")
             if timed_out:
                 self._stream.write(f" - Timeout >{timed_out}s")
@@ -1048,6 +1061,11 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 =======
             self._stream.write("FAILED {file}".format(file=module.file_path))
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+            self._stream.write(f"FAILED {module.file_path}")
+            if timed_out:
+                self._stream.write(f" - Timeout >{timed_out}s")
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             num_failed = test_summary.get("failures", 0)
             num_failed += test_summary.get("errors", 0)
             if num_failed:

@@ -53,10 +53,17 @@ class SbManager:
 
     Statusbar manager manages items added by AddStatusbarItem method.
     Provides progress bar (SbProgress).
+<<<<<<< HEAD
     Items with position 0 are shown according to selection in Map Display settings
     dialog. Only one item of the same class is supposed to be in statusbar. Manager
     user have to create statusbar on his own, add items to manager and call Update
     method to show particular widgets.
+=======
+    Items with position 0 are shown according to selection in Map Display settings dialog.
+    Only one item of the same class is supposed to be in statusbar.
+    Manager user have to create statusbar on his own, add items to manager
+    and call Update method to show particular widgets.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     User settings (group = 'display', key = 'statusbarMode', subkey = 'selection')
     are taken into account.
 
@@ -266,6 +273,7 @@ class SbManager:
         self.statusbar.SetStatusText(self._oldStatus, 0)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def SetMode(self, mode):
         """Sets current mode and updates statusbar
 =======
@@ -279,6 +287,10 @@ class SbManager:
             if self.mapFrame.IsAutoRendered():
                 self.mapFrame.GetWindow().UpdateMap(render=False)
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    def SetMode(self, mode):
+        """Sets current mode and updates statusbar
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         Mode is usually driven by user through map display settings.
         """
@@ -299,9 +311,14 @@ class SbManager:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     def OnContextMenu(self, event):
         """Popup context menu enabling to choose a widget that will be shown in
         statusbar."""
+=======
+    def OnContextMenu(self, event):
+        """Popup context menu enabling to choose a widget that will be shown in statusbar."""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         def setSbItemProperty(idx):
             self.mapFrame.mapWindowProperties.sbItem = idx
@@ -329,10 +346,13 @@ class SbManager:
         menu.Destroy()
         event.Skip()
 
+<<<<<<< HEAD
 =======
 >>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 =======
 >>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 class SbItem:
     """Base class for statusbar items.
@@ -400,8 +420,12 @@ class SbItem:
         self.mapFrame.StatusbarEnableLongHelp(longHelp)
 
     def Update(self):
+<<<<<<< HEAD
         """Called when statusbar action is activated (e.g. through Map Display
         settings)."""
+=======
+        """Called when statusbar action is activated (e.g. through Map Display settings)."""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self._update(longHelp=False)
 
 
@@ -444,6 +468,7 @@ class SbRender(SbItem):
         self.Show()
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 class SbShowRegion(SbItem):
@@ -613,6 +638,8 @@ class SbResolution(SbItem):
 
 
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 class SbMapScale(SbItem):
     """Editable combobox to get/set current map scale.
 

@@ -41,7 +41,11 @@ struct _label_point {
  * This structure represents a label for a vector feature */
 struct _label {
 
+<<<<<<< HEAD
     struct line_pnts *skyline; /**< The skyline of the text, as an offset
+=======
+    struct line_pnts *skyline; /**< The skyline of the text, as an offest
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                 *  from the label point */
     struct bound_box bb;
     double size;
@@ -59,7 +63,11 @@ struct _label {
 
     int cat; /**< the cat of the feature */
 
+<<<<<<< HEAD
     int type; /**< The feature type (point, line, area) */
+=======
+    int type; /**< The feture type (point, line, area) */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     struct line_pnts *shape; /**< The points for the feature that this
                               *  label belongs to */

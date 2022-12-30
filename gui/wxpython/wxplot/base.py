@@ -179,7 +179,11 @@ class BasePlotFrame(wx.Frame):
         self.properties["legend"] = UserSettings.Get(group=self.plottype, key="legend")
 
         self.zoom = False  # zooming disabled
+<<<<<<< HEAD
         self.drag = False  # dragging disabled
+=======
+        self.drag = False  # draging disabled
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)

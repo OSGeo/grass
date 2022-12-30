@@ -12,7 +12,11 @@
 
    calls G_fatal_error() on error
  */
+<<<<<<< HEAD
 void check_columns(struct Map_info *Map, const char *layer,
+=======
+void check_columns(const struct Map_info *Map, const char *layer,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                    const char *fid_column, const char *geom_column)
 {
     struct field_info *fi;

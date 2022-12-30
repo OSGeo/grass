@@ -138,9 +138,16 @@ int D_open_driver(void)
     drv = (p && G_strcasecmp(p, "png") == 0)    ? PNG_Driver()
           : (p && G_strcasecmp(p, "ps") == 0)   ? PS_Driver()
           : (p && G_strcasecmp(p, "html") == 0) ? HTML_Driver()
+<<<<<<< HEAD
                                                 :
 #ifdef USE_CAIRO
                                                 Cairo_Driver();
+=======
+          :
+#ifdef USE_CAIRO
+          (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
+                                               : Cairo_Driver();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #else
                                                 PNG_Driver();
 #endif

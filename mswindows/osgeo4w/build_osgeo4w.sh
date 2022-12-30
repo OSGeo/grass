@@ -18,7 +18,11 @@ set -e
 # compile
 export PATH=${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin
 export C_INCLUDE_PATH=".:${OSGEO4W_ROOT_MSYS}/include:${SRC}/dist.${ARCH}/include:/c/msys64/mingw64/include"
+<<<<<<< HEAD
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python312
+=======
+export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python39
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 export ARCH=x86_64-w64-mingw32
 
 ./configure \
@@ -63,8 +67,12 @@ export ARCH=x86_64-w64-mingw32
     --with-opengl=windows \
     --with-bzlib \
     --with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \
+<<<<<<< HEAD
     --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
     --without-pdal
+=======
+    --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 make
 

@@ -59,11 +59,19 @@ int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
               int ttype, double *fx, double *fy, double *fz, double *falong,
               double *fangle, double *tx, double *ty, double *tz,
               double *talong, double *tangle, double *dist, int with_z);
+<<<<<<< HEAD
 int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
               const struct bound_box *abox, double *fx, double *fy, double *fz,
               double *falong, double *fangle, double *tx, double *ty,
               double *tz, double *talong, double *tangle, double *dist,
               int with_z);
+=======
+int line2area(const struct Map_info *To, struct line_pnts *Points, int type,
+              int area, const struct bound_box *abox, double *fx, double *fy,
+              double *fz, double *falong, double *fangle, double *tx,
+              double *ty, double *tz, double *talong, double *tangle,
+              double *dist, int with_z);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* print.c */
 int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *, char *);

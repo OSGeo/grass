@@ -22,7 +22,11 @@ static int cur_x, cur_y;
 static int format;
 static CELL *cell;
 
+<<<<<<< HEAD
 static int (*dot)(int, int);
+=======
+static int (*dot)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 static int cell_dot(int, int);
 static int fcell_dot(int, int);
 static int dcell_dot(int, int);

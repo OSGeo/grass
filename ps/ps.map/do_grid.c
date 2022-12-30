@@ -89,8 +89,13 @@ int do_grid_cross(void)
 
     g_north = floor(PS.w.north / PS.grid) * PS.grid;
     g_east = floor(PS.w.east / PS.grid) * PS.grid;
+<<<<<<< HEAD
     for (; g_north >= PS.w.south; g_north -= PS.grid) {
         for (; g_east > PS.w.west; g_east -= PS.grid) {
+=======
+    for (j = 0; g_north >= PS.w.south; j++, g_north -= PS.grid) {
+        for (k = 0; g_east > PS.w.west; k++, g_east -= PS.grid) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             if (g_north == PS.w.north || g_north == PS.w.south)
                 continue;

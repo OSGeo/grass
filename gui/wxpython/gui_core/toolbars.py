@@ -83,7 +83,10 @@ BaseIcons = {
     "mapDispSettings": MetaIcon(
         img="monitor-settings", label=_("Map Display Settings")
     ),
+<<<<<<< HEAD
     "docking": MetaIcon(img="monitor-dock", label=_("(Un)dock")),
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 

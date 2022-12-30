@@ -105,9 +105,12 @@ class MapPanel(SingleMapPanel):
         # create statusbar and its manager
         self.statusbar = self.CreateStatusbar(statusbarItems)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         self.statusbarManager.SetMode(8)  # goto GCP
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         #
         # Init map display (buffered DC & set default cursor)

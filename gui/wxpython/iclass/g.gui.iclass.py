@@ -65,11 +65,16 @@ def main():
 
     from core.settings import UserSettings
 <<<<<<< HEAD
+<<<<<<< HEAD
     from core import globalvar
     from iclass.frame import IClassMapDisplay
 =======
     from iclass.frame import IClassMapFrame
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+    from core import globalvar
+    from iclass.frame import IClassMapDisplay
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     group_name = subgroup_name = map_name = trainingmap_name = None
 
@@ -110,6 +115,7 @@ def main():
 
     # show main frame
 <<<<<<< HEAD
+<<<<<<< HEAD
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
@@ -118,6 +124,11 @@ def main():
         parent=None,
         giface=None,
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+    frame = wx.Frame(
+        parent=None,
+        size=globalvar.MAP_WINDOW_SIZE,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         title=_("Supervised Classification Tool - GRASS GIS"),
     )
     frame = IClassMapDisplay(

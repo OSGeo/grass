@@ -29,6 +29,14 @@ int gaussurf(char *out, /* Name of raster maps to be opened.    */
 
     int row_count, col_count;
 
+<<<<<<< HEAD
+=======
+    /****** INITIALISE RANDOM NUMBER GENERATOR ******/
+
+    /* You can set GRASS_RANDOM_SEED for repeatability */
+    G_math_srand_auto();
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /****** OPEN CELL FILES AND GET CELL DETAILS ******/
 
     fd_out = Rast_open_new(out, DCELL_TYPE);

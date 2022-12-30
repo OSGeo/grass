@@ -94,8 +94,12 @@ class IClassMapPanel(DoubleMapPanel):
         """
         :param parent: (no parent is expected)
         :param title: window title
+<<<<<<< HEAD
         :param toolbars: dictionary of active toolbars (default value represents all
                          toolbars)
+=======
+        :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         :param size: default size
         """
         DoubleMapPanel.__init__(
@@ -113,7 +117,11 @@ class IClassMapPanel(DoubleMapPanel):
             self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
 
+<<<<<<< HEAD
         # show computation region by default
+=======
+        # show computation region by defaut
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.mapWindowProperties.showRegion = True
 
         self.firstMapWindow = IClassVDigitWindow(
@@ -194,6 +202,7 @@ class IClassMapPanel(DoubleMapPanel):
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
 <<<<<<< HEAD
+<<<<<<< HEAD
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
@@ -206,6 +215,11 @@ class IClassMapPanel(DoubleMapPanel):
             sb.SbGoTo,
             sb.SbProjection,
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()
@@ -1393,17 +1407,29 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
+<<<<<<< HEAD
         super().OnZoomIn(event)
+=======
+        super(IClassMapPanel, self).OnZoomIn(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
+<<<<<<< HEAD
         super().OnZoomOut(event)
+=======
+        super(IClassMapPanel, self).OnZoomOut(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
+<<<<<<< HEAD
         super().OnPan(event)
+=======
+        super(IClassMapPanel, self).OnPan(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):

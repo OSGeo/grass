@@ -4,6 +4,7 @@ The <em>v.dissolve</em> module is used to merge adjacent or overlapping
 features in a vector map that share the same category value. The
 resulting merged feature(s) retain this category value.
 
+<<<<<<< HEAD
 <center>
 <img src="v_dissolve_zipcodes.png">
 <img src="v_dissolve_towns.png">
@@ -154,6 +155,8 @@ double precision</code>. Type specification is mandatory when SQL
 syntax is used in <b>aggregate_columns</b> (and
 <b>aggregate_methods</b> is omitted).
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <h2>NOTES</h2>
 
 GRASS defines a vector area as a composite entity consisting of a set
@@ -171,7 +174,6 @@ Merging of areas can also be accomplished using <tt>v.extract -d</tt>
 which provides some additional options. In fact, <em>v.dissolve</em> is
 simply a front-end to that module. The use of the <em>column</em>
 parameter adds a call to <em>v.reclass</em> before.
-
 
 <h2>EXAMPLES</h2>
 
@@ -206,6 +208,7 @@ v.clean clc2000_patched out=clc2000_clean tool=snap,break,rmdupl thresh=.01
 v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
 </pre></div>
 
+<<<<<<< HEAD
 <h3>Attribute aggregation</h3>
 
 While dissolving, we can aggregate attribute values of the original features.
@@ -358,6 +361,8 @@ cat	DOTURBAN_N	names
 </pre></div>
 
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <h2>SEE ALSO</h2>
 
 <em>
@@ -371,7 +376,13 @@ cat	DOTURBAN_N	names
 
 <h2>AUTHORS</h2>
 
+<<<<<<< HEAD
 M. Hamish Bowman, Department of Marine Science, Otago University, New Zealand (module)<br>
 Markus Neteler (column support)<br>
 Trevor Wiens (help page)<br>
 Vaclav Petras, NC State University, Center for Geospatial Analytics, GeoForAll Lab (aggregate statistics)
+=======
+module: M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
+Markus Neteler for column support<br>
+help page: Trevor Wiens
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

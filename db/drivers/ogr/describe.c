@@ -105,7 +105,14 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
         ogrType = OGR_Fld_GetType(hFieldDefn);
         fieldName = OGR_Fld_GetNameRef(hFieldDefn);
 
+<<<<<<< HEAD
         if (ogrType != OFTInteger && ogrType != OFTInteger64 &&
+=======
+        if (ogrType != OFTInteger &&
+#if GDAL_VERSION_NUM >= 2000000
+            ogrType != OFTInteger64 &&
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             ogrType != OFTReal && ogrType != OFTString && ogrType != OFTDate &&
             ogrType != OFTTime && ogrType != OFTDateTime) {
             G_warning(
@@ -171,15 +178,29 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 
         switch (ogrType) {
         case OFTInteger:
+<<<<<<< HEAD
         case OFTInteger64:
             sqlType = DB_SQL_TYPE_INTEGER;
             size = OGR_Fld_GetWidth(hFieldDefn); /* OK ? */
             precision = 0;
+=======
+#if GDAL_VERSION_NUM >= 2000000
+        case OFTInteger64:
+#endif
+            sqlType = DB_SQL_TYPE_INTEGER;
+            size = OGR_Fld_GetWidth(hFieldDefn); /* OK ? */
+            precision = 0;
+#if GDAL_VERSION_NUM >= 2000000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (ogrType == OFTInteger64)
                 G_warning(_("Column '%s' : type int8 (bigint) is stored as "
                             "integer (4 bytes) "
                             "some data may be damaged"),
                           fieldName);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             break;
 
         case OFTReal:

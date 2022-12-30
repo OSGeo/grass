@@ -7,11 +7,19 @@
         "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "bands": {
             "1": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 443.9,
                     "bandwidth (nm)": 27
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 443.9,
+                    "bandwidth (nm)": 27
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 442.3,
                     "bandwidth (nm)": 45
                 },
@@ -19,11 +27,19 @@
                 "tag": "Visible (Coastal/Aerosol)"
             },
             "2": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 496.6,
                     "bandwidth (nm)": 98
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 496.6,
+                    "bandwidth (nm)": 98
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 492.1,
                     "bandwidth (nm)": 98
                 },
@@ -31,11 +47,19 @@
                 "tag": "Visible (Blue)"
             },
             "3": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 560.0,
                     "bandwidth (nm)": 45
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 560.0,
+                    "bandwidth (nm)": 45
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 559.0,
                     "bandwidth (nm)": 46
                 },
@@ -43,11 +67,19 @@
                 "tag": "Visible (Green)"
             },
             "4": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 664.5,
                     "bandwidth (nm)": 38
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 664.5,
+                    "bandwidth (nm)": 38
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 665.0,
                     "bandwidth (nm)": 39
                 },
@@ -55,11 +87,19 @@
                 "tag": "Visible (Red)"
             },
             "5": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 703.9,
                     "bandwidth (nm)": 19
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 703.9,
+                    "bandwidth (nm)": 19
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 703.8,
                     "bandwidth (nm)": 20
                 },
@@ -67,11 +107,19 @@
                 "tag": "Vegetation Red Edge 1"
             },
             "6": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 740.2,
                     "bandwidth (nm)": 18
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 740.2,
+                    "bandwidth (nm)": 18
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 739.1,
                     "bandwidth (nm)": 18
                 },
@@ -79,11 +127,19 @@
                 "tag": "Vegetation Red Edge 2"
             },
             "7": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 782.5,
                     "bandwidth (nm)": 28
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 782.5,
+                    "bandwidth (nm)": 28
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 779.7,
                     "bandwidth (nm)": 28
                 },
@@ -91,11 +147,19 @@
                 "tag": "Vegetation Red Edge 3"
             },
             "8": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 835.1,
                     "bandwidth (nm)": 145
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 835.1,
+                    "bandwidth (nm)": 145
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 833.0,
                     "bandwidth (nm)": 133
                 },
@@ -103,11 +167,19 @@
                 "tag": "Near-Infrared"
             },
             "8A": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 864.8,
                     "bandwidth (nm)": 33
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 864.8,
+                    "bandwidth (nm)": 33
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 864.0,
                     "bandwidth (nm)": 32
                 },
@@ -115,11 +187,19 @@
                 "tag": "Narrow Near-Infrared"
             },
             "9": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 945.0,
                     "bandwidth (nm)": 26
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 945.0,
+                    "bandwidth (nm)": 26
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 943.2,
                     "bandwidth (nm)": 27
                 },
@@ -127,11 +207,19 @@
                 "tag": "Water vapour"
             },
             "10": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 1373.5,
                     "bandwidth (nm)": 75
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 1373.5,
+                    "bandwidth (nm)": 75
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 1376.9,
                     "bandwidth (nm)": 76
                 },
@@ -139,11 +227,19 @@
                 "tag": "SWIR - Cirrus"
             },
             "11": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 1613.7,
                     "bandwidth (nm)": 143
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 1613.7,
+                    "bandwidth (nm)": 143
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 1610.4,
                     "bandwidth (nm)": 141
                 },
@@ -151,11 +247,19 @@
                 "tag": "SWIR 1"
             },
             "12": {
+<<<<<<< HEAD
                 "Sentinel 2A": {
                     "central wavelength (nm)": 2202.4,
                     "bandwidth (nm)": 242
                 },
                 "Sentinel 2B": {
+=======
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 2202.4,
+                    "bandwidth (nm)": 242
+                },
+                "Sentinel 2B" : {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "central wavelength (nm)": 2185.7,
                     "bandwidth (nm)": 238
                 },

@@ -271,6 +271,10 @@ struct ellps_list *read_ellipsoid_table(int fatal)
             current->es = e2;
             current->rf = rf;
             current->next = NULL;
+<<<<<<< HEAD
+=======
+            count++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         else {
             err++;

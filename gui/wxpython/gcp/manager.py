@@ -1694,8 +1694,12 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
+<<<<<<< HEAD
         # TODO: it is here just to remove old or obsolete beavior of base class
         #       gcp/MapPanel?
+=======
+        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         # self.grwiz.SwitchEnv('source')
         pass
 

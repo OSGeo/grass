@@ -73,7 +73,11 @@ int db__driver_open_database(dbHandle *handle)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
+<<<<<<< HEAD
 int db__driver_close_database(void)
+=======
+int db__driver_close_database()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     G_debug(3, "db_driver_close_database()");
 

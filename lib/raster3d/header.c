@@ -32,6 +32,7 @@ int xdrLength;
 
 /*---------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 static int Rast3d__readHeader(
     struct Key_Value *headerKeys, int *proj, int *zone, double *north,
     double *south, double *east, double *west, double *top, double *bottom,
@@ -51,6 +52,33 @@ static int Rast3d__readHeader(
     headerInt = Rast3d_key_get_int;
     headerString = Rast3d_key_get_string;
     headerValue = Rast3d_key_get_value;
+=======
+static int Rast3d_readWriteHeader(
+    struct Key_Value *headerKeys, int doRead, int *proj, int *zone,
+    double *north, double *south, double *east, double *west, double *top,
+    double *bottom, int *rows, int *cols, int *depths, double *ew_res,
+    double *ns_res, double *tb_res, int *tileX, int *tileY, int *tileZ,
+    int *type, int *compression, int *useRle, int *useLzw, int *precision,
+    int *dataOffset, int *useXdr, int *hasIndex, char **unit,
+    int *vertical_unit, int *version)
+{
+    int returnVal;
+    int (*headerInt)(), (*headerDouble)(), (*headerValue)();
+    int (*headerString)();
+
+    if (doRead) {
+        headerDouble = Rast3d_key_get_double;
+        headerInt = Rast3d_key_get_int;
+        headerString = Rast3d_key_get_string;
+        headerValue = Rast3d_key_get_value;
+    }
+    else {
+        headerDouble = Rast3d_key_set_double;
+        headerInt = Rast3d_key_set_int;
+        headerString = Rast3d_key_set_string;
+        headerValue = Rast3d_key_set_value;
+    }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     returnVal = 1;
     returnVal &= headerInt(headerKeys, RASTER3D_REGION_PROJ, proj);
@@ -107,6 +135,7 @@ static int Rast3d__readHeader(
 
     if (returnVal)
         return 1;
+<<<<<<< HEAD
 
     Rast3d_error("Rast3d_readWriteHeader: error reading/writing header");
     return 0;
@@ -187,6 +216,8 @@ static int Rast3d__writeHeader(
 
     if (returnVal)
         return 1;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Rast3d_error("Rast3d_readWriteHeader: error reading/writing header");
     return 0;
@@ -215,11 +246,19 @@ int Rast3d_read_header(RASTER3D_Map *map, int *proj, int *zone, double *north,
 
     headerKeys = G_read_key_value_file(path);
 
+<<<<<<< HEAD
     if (!Rast3d__readHeader(headerKeys, proj, zone, north, south, east, west,
                             top, bottom, rows, cols, depths, ew_res, ns_res,
                             tb_res, tileX, tileY, tileZ, type, compression,
                             useRle, useLzw, precision, dataOffset, useXdr,
                             hasIndex, unit, vertical_unit, version)) {
+=======
+    if (!Rast3d_readWriteHeader(
+            headerKeys, 1, proj, zone, north, south, east, west, top, bottom,
+            rows, cols, depths, ew_res, ns_res, tb_res, tileX, tileY, tileZ,
+            type, compression, useRle, useLzw, precision, dataOffset, useXdr,
+            hasIndex, unit, vertical_unit, version)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Rast3d_error(
             "Rast3d_read_header: error extracting header key(s) of file %s",
             path);
@@ -246,8 +285,13 @@ int Rast3d_write_header(RASTER3D_Map *map, int proj, int zone, double north,
 
     headerKeys = G_create_key_value();
 
+<<<<<<< HEAD
     if (!Rast3d__writeHeader(
             headerKeys, &proj, &zone, &north, &south, &east, &west, &top,
+=======
+    if (!Rast3d_readWriteHeader(
+            headerKeys, 0, &proj, &zone, &north, &south, &east, &west, &top,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             &bottom, &rows, &cols, &depths, &ew_res, &ns_res, &tb_res, &tileX,
             &tileY, &tileZ, &type, &compression, &useRle, &useLzw, &precision,
             &dataOffset, &useXdr, &hasIndex, &unit, &vertical_unit, &version)) {

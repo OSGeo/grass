@@ -7,7 +7,11 @@
  */
 static unsigned int a = 69069U, c = 244045795U;
 static unsigned int s, h, sbuf[256];
+<<<<<<< HEAD
 double unfl(void)
+=======
+double unfl()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int i;
 

@@ -32,7 +32,11 @@
 char *labelElevType::printLabel(const labelElevType &p)
 {
     static char buf[8];
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return buf;
 }
 
@@ -175,7 +179,11 @@ ostream &operator<<(ostream &s, const labelElevType &p)
 char *waterType::printLabel(const waterType &p)
 {
     static char buf[8];
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return buf;
 }
 
@@ -247,7 +255,11 @@ void createWaterWindows(AMI_STREAM<waterGridType> *mergedWaterStr,
 void generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
                         const dimension_type nrows, const dimension_type ncols,
                         AMI_STREAM<labelElevType> *labeledWater,
+<<<<<<< HEAD
                         AMI_STREAM<boundaryType> *boundaryStr UNUSED)
+=======
+                        AMI_STREAM<boundaryType> *boundaryStr)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     AMI_err ae;
     waterWindowType *winp, prevWin;

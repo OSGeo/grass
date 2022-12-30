@@ -313,12 +313,20 @@ AMI_STREAM<T> *singleMerge(queue<char *> *streamList, Compare *cmp)
     ReplacementHeap<T, Compare> rheap(arity, streamList);
     SDEBUG rheap.print(cerr);
 
+<<<<<<< HEAD
+=======
+    int i = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     while (!rheap.empty()) {
         // mergedStr->write_item( rheap.extract_min() );
         // xxx should check error here
         elt = rheap.extract_min();
         mergedStr->write_item(elt);
         // SDEBUG cerr << "smerge: written " << elt << endl;
+<<<<<<< HEAD
+=======
+        i++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     SDEBUG cout << "..done\n";

@@ -62,7 +62,11 @@ class MapPanel(SingleMapPanel):
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param map: instance of render.Map
         :param auimgs: AUI manager
+<<<<<<< HEAD
         :param kwargs: wx.Panel attributes
+=======
+        :param kwargs: wx.Panel attribures
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         """
 
         SingleMapPanel.__init__(
@@ -113,9 +117,12 @@ class MapPanel(SingleMapPanel):
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
         self.statusbarManager.SetMode(8)  # goto GCP
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         #
         # Init map display (buffered DC & set default cursor)
         #

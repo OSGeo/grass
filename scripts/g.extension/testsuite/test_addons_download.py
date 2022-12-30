@@ -12,15 +12,23 @@ COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
            for details.
 """
 
+<<<<<<< HEAD
 import re
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import sys
 import unittest
 
 from pathlib import Path
+<<<<<<< HEAD
 from urllib import request as urlrequest
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
+=======
+
+from grass.gunittest.case import TestCase
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
 
@@ -42,10 +50,13 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         install_prefix / "docs" / "html" / "r.example.plus.html",
     ]
 
+<<<<<<< HEAD
     request_headers = {
         "User-Agent": "Mozilla/5.0",
     }
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     def setUp(self):
         """Make sure we are not dealing with some old files"""
         if self.install_prefix.exists():
@@ -162,6 +173,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             if file.suffix != ".html" and file.suffix != ".py":
                 self.assertModule(str(file), help=True)
 
+<<<<<<< HEAD
     def test_github_install_official_non_exists_module(self):
         """Test installing non exists extension from official addons repository"""
         extension = "non_exists_extension"
@@ -234,6 +246,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             gextension.outputs.stderr,
         )
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 if __name__ == "__main__":
     test()

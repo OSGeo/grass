@@ -57,7 +57,11 @@ struct feat_parts {
 };
 
 /* area_pg.c */
+<<<<<<< HEAD
 int Vect__get_area_points_pg(struct Map_info *, const plus_t *, int,
+=======
+int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                              struct line_pnts *);
 
 /* build_pg.c */

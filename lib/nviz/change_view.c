@@ -315,14 +315,22 @@ void Nviz_init_rotation(void)
    Changes viewpoint and viewdir.
    Based on visualization/nviz/src/togl_flythrough.c and simplified.
 
+<<<<<<< HEAD
    \param data nviz data [unused]
+=======
+   \param data nviz data
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
    \param fly_info values computed from mouse movement
    \param scale rate of movement
    \param lateral type of movement
 
  */
+<<<<<<< HEAD
 void Nviz_flythrough(nv_data *data UNUSED, float *fly_info, int *scale,
                      int lateral)
+=======
+void Nviz_flythrough(nv_data *data, float *fly_info, int *scale, int lateral)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     float dir[3], from[4], cur_from[4], cur_dir[4];
     float speed, h, p, sh, ch, sp, cp;

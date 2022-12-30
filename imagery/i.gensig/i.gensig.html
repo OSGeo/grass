@@ -23,6 +23,7 @@ to actually create the final classified map.
 
 <p>
 <<<<<<< HEAD
+<<<<<<< HEAD
 This module generates signature files of type "sig". Use module
 <a href="i.signatures.html">i.signatures</a> to manage generated signature files.
 
@@ -35,12 +36,19 @@ of other scenes as long as they consist of same raster bands
 (semantic labels match).
 =======
 All raster maps used to generate signature file must have band reference
+=======
+All raster maps used to generate signature file can have semantic label
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 set. Use <em><a href="r.support.html">r.support</a></em> to set
-band references of each member of the imagery group.
+semantic labels of each member of the imagery group.
 Signatures generated for one scene are suitable for classification
 of other scenes as long as they consist of same raster bands
+<<<<<<< HEAD
 (band references match).
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+(semantic labels match).
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 <h2>OPTIONS</h2>
 
@@ -89,10 +97,14 @@ and covariance matrices) for each class in the training map
 that is associated with the band files in the subgroup
 select (see <a href="#subgroup">above</a>). Resultant singature file
 <<<<<<< HEAD
+<<<<<<< HEAD
 can be used with any other imagery group as long as semantic labels
 =======
 can be used with any other imagery group as long as band references
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+can be used with any other imagery group as long as semantic labels
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 match.
 </dl>
 
@@ -109,6 +121,7 @@ SIG file "lsat7_2000_gensig":
  1 1
  2 #
 <<<<<<< HEAD
+<<<<<<< HEAD
  3 Semantic_label1
  4 #water
  5 4186
@@ -121,6 +134,9 @@ SIG file "lsat7_2000_gensig":
 12 0.393218 1.2184 2.63628 9.61528 9.36025 5.85314
 =======
  3 Band_reference1
+=======
+ 3 Semantic_label1
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  4 #water
  5 4186
  6 67.9508 48.7346 37.8915 15.3129 13.8473 12.0855 
@@ -137,10 +153,14 @@ SIG file "lsat7_2000_gensig":
 <li> Line 1: version number (currently always 1)
 <li> Line 2: text label
 <<<<<<< HEAD
+<<<<<<< HEAD
 <li> Line 3: Space separated list of semantic labels
 =======
 <li> Line 3: Space separated list of band references
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+<li> Line 3: Space separated list of semantic labels
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <li> Line 4: text label of class
 <li> Line 5: number of points in class
 <li> Line 6: mean values per band of the class
@@ -167,6 +187,7 @@ Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 <br>
 <<<<<<< HEAD
+<<<<<<< HEAD
 Semantic label support: Maris Nartiss,
 University of Latvia
 =======
@@ -178,3 +199,7 @@ University of Latvia
 <i>Last changed: $Date$</i>
 -->
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+Semantic label support: Maris Nartiss,
+University of Latvia
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

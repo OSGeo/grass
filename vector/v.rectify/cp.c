@@ -14,7 +14,11 @@ struct Stats {
     double sum2, rms;
 };
 
+<<<<<<< HEAD
 static void update_stats(struct Stats *st, int n UNUSED, double dx, double dy,
+=======
+static void update_stats(struct Stats *st, int n, double dx, double dy,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                          double *dz, double dg, double d2)
 {
     st->x += dx;
