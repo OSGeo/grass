@@ -30,7 +30,11 @@
 
    \return 0 on success
  */
+<<<<<<< HEAD
 int Vect_print_header(struct Map_info *Map)
+=======
+int Vect_print_header(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     fprintf(stdout, "\nSelected information from dig header\n");
     fprintf(stdout, " Organization:  %s\n", Vect_get_organization(Map));
@@ -61,7 +65,11 @@ int Vect_read_header(struct Map_info *Map)
 
    \return 0
  */
+<<<<<<< HEAD
 int Vect_write_header(struct Map_info *Map)
+=======
+int Vect_write_header(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     /* do some sanity checking here */
     Vect__write_head(Map);
@@ -189,7 +197,11 @@ int Vect__read_head(struct Map_info *Map)
 
    \return string containing name
  */
+<<<<<<< HEAD
 const char *Vect_get_name(struct Map_info *Map)
+=======
+const char *Vect_get_name(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     return Map->name;
 }
@@ -201,7 +213,11 @@ const char *Vect_get_name(struct Map_info *Map)
 
    \return string containing mapset name
  */
+<<<<<<< HEAD
 const char *Vect_get_mapset(struct Map_info *Map)
+=======
+const char *Vect_get_mapset(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     return Map->mapset;
 }
@@ -367,7 +383,11 @@ int Vect_set_map_name(struct Map_info *Map, const char *str)
 
    \return string containing map name
  */
+<<<<<<< HEAD
 const char *Vect_get_map_name(struct Map_info *Map)
+=======
+const char *Vect_get_map_name(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     return Map->head.map_name;
 }
@@ -516,7 +536,11 @@ int Vect_set_proj(struct Map_info *Map, int proj)
    \return PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
    \return PROJECTION_LL  3 - Latitude-Longitude
  */
+<<<<<<< HEAD
 int Vect_get_proj(struct Map_info *Map)
+=======
+int Vect_get_proj(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     return (Map->head.proj);
 }

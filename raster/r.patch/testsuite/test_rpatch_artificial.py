@@ -273,6 +273,7 @@ class TestSmallDataOverlap(TestCase):
         self.assertRastersNoDifference(
             self.cell_ba_result_threaded, self.cell_ba, precision=0
         )
+<<<<<<< HEAD
 
 
 class TestCELLColorCategory(TestCase):
@@ -406,6 +407,8 @@ class TestCELLColorCategory(TestCase):
         self.assertNotEqual(color, table)
         color = call_module("r.colors.out", map=self.cell_ab_s_result_threaded).strip()
         self.assertNotEqual(color, table)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 if __name__ == "__main__":

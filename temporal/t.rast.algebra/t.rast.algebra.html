@@ -3,7 +3,11 @@
 <em>t.rast.algebra</em> performs temporal and spatial map algebra operations on
 space time raster datasets (STRDS) using the temporal raster algebra.
 <p>
+<<<<<<< HEAD
 The module expects an <b>expression</b> as input parameter in the
+=======
+The module expects an <b>expression</b> as input parameter in the 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 following form:
 <p>
 <b>"result = expression"</b>
@@ -566,6 +570,7 @@ and temporal operators:
 C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
 </pre></div>
 
+<<<<<<< HEAD
 <h3>Compute DOY for spatio-temporal conditions</h3>
 Compute the DOY for all maps from STRDS A where conditions are met at three
 consecutive time intervals (e.g. temperature > 0):
@@ -574,6 +579,8 @@ B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
 </pre></div>
 
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <h2>SEE ALSO</h2>
 
 <em>

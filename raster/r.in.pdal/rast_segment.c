@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /****************************************************************************
 =======
 
  /****************************************************************************
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+/****************************************************************************
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * MODULE:    r.in.pdal
  *
@@ -27,10 +31,14 @@
 #include "rast_segment.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void rast_segment_load(SEGMENT *segment, int rowio,
 =======
 static void rast_segment_load(SEGMENT * segment, int rowio,
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+static void rast_segment_load(SEGMENT *segment, int rowio,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                               RASTER_MAP_TYPE map_type)
 {
     void *raster_row = Rast_allocate_input_buf(map_type);
@@ -46,12 +54,17 @@ static void rast_segment_load(SEGMENT * segment, int rowio,
 /* TODO: close function */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void rast_segment_open(SEGMENT *segment, const char *name,
                        RASTER_MAP_TYPE *map_type)
 =======
 void rast_segment_open(SEGMENT * segment, const char *name,
                        RASTER_MAP_TYPE * map_type)
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+void rast_segment_open(SEGMENT *segment, const char *name,
+                       RASTER_MAP_TYPE *map_type)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     /* TODO: check if not passing the mapset is OK */
     int rowio = Rast_open_old(name, "");
@@ -67,6 +80,7 @@ void rast_segment_open(SEGMENT * segment, const char *name,
                      Rast_input_window_cols(), segment_rows, segment_cols,
                      Rast_cell_size(*map_type), segments_in_memory) != 1)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(
             _("Cannot create temporary file with segments of a raster map"));
     rast_segment_load(segment, rowio, *map_type);
@@ -77,14 +91,21 @@ void rast_segment_open(SEGMENT * segment, const char *name,
 int rast_segment_get_value_xy(SEGMENT *base_segment,
 =======
         G_fatal_error(_("Cannot create temporary file with segments of a raster map"));
+=======
+        G_fatal_error(
+            _("Cannot create temporary file with segments of a raster map"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     rast_segment_load(segment, rowio, *map_type);
-    Rast_close(rowio);          /* we won't need the raster again */
+    Rast_close(rowio); /* we won't need the raster again */
 }
 
-
 /* 0 on out of region or NULL, 1 on success */
+<<<<<<< HEAD
 int rast_segment_get_value_xy(SEGMENT * base_segment,
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+int rast_segment_get_value_xy(SEGMENT *base_segment,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                               struct Cell_head *input_region,
                               RASTER_MAP_TYPE rtype, double x, double y,
                               double *value)
@@ -96,12 +117,17 @@ int rast_segment_get_value_xy(SEGMENT * base_segment,
     /* skip points which are outside the base raster
      * (null propagation) */
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (base_row < 0 || base_col < 0 || base_row >= input_region->rows ||
         base_col >= input_region->cols)
 =======
     if (base_row < 0 || base_col < 0 ||
         base_row >= input_region->rows || base_col >= input_region->cols)
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    if (base_row < 0 || base_col < 0 || base_row >= input_region->rows ||
+        base_col >= input_region->cols)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return 0;
     if (rtype == DCELL_TYPE) {
         DCELL tmp;

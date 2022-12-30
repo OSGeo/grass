@@ -11,6 +11,27 @@ ordered by <b>start_time</b>.
 <em>t.rast.series</em> is a simple wrapper for the raster module
 <b>r.series</b>. It supports a subset of the aggregation methods of
 <b>r.series</b>.
+  
+<h2>NOTES</h2>
+
+To avoid problems with too many open files, by default, the maximum 
+number of open files is set to 1000. If the number of input raster 
+files exceeds this number, the <b>-z</b> flag will be invoked. Because this 
+will slow down processing, the user can set a higher limit with the 
+<b>file_limit</b> parameter. Note that <b>file_limit</b> limit should not exceed the 
+user-specific limit on open files set by your operating system. See the 
+<a 
+href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing#Number_of_open_files_limitation">Wiki</a> 
+for more information. 
+
+<h2>Performance</h2>
+To enable parallel processing, the user can specify the number of threads to be
+used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
+(default 300 MB) can also be provided to determine the size of the buffer in MB for
+computation. Both parameters are passed to <a href="r.series.html">r.series</a>.
+To take advantage of the parallelization, GRASS GIS
+needs to be compiled with OpenMP enabled.
+
 
 <h2>NOTES</h2>
 

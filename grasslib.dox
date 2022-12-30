@@ -3,6 +3,7 @@
        by M. Neteler 2/2004
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * updated 8/2005, 2006-2024
 =======
      * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018, 2019, 2021
@@ -10,6 +11,9 @@
 =======
      * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018, 2019, 2021
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+     * updated 8/2005, 2006-2008, 2010-2011, 2017-2022
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
   -->
 
 <a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
@@ -31,7 +35,11 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
+<<<<<<< HEAD
 &copy; 2000-2024 by the GRASS Development Team
+=======
+&copy; 2000-2022 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
@@ -45,6 +53,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <!--
@@ -64,6 +73,13 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 -->
 \image html "grass8_arch.png" "GRASS GIS 8 Architecture"
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+<!--
+  original:
+  doc/grass_arch.odg
+-->
+\image html "grass_arch.png" "GRASS GIS Architecture"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 \section libsOverview Libraries
 
@@ -76,6 +92,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - vector: \ref vectorlib
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  - Temporal GIS API: See https://grass.osgeo.org/grass-devel/manuals/libpython/temporal_framework.html
 =======
  - Temporal GIS API: See https://grass.osgeo.org/grass80/manuals/libpython/temporal_framework.html
@@ -83,6 +100,9 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 =======
  - Temporal GIS API: See https://grass.osgeo.org/grass80/manuals/libpython/temporal_framework.html
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+ - Temporal GIS API: See https://grass.osgeo.org/grass-devel/manuals/libpython/temporal_framework.html
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 \section libs Further libraries
 
@@ -145,6 +165,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass-devel/manuals/libpython/)
 =======
  - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass80/manuals/libpython/)
@@ -152,6 +173,9 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 =======
  - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass80/manuals/libpython/)
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+ - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass-devel/manuals/libpython/)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 \subsection projlibs Projection Libraries
 

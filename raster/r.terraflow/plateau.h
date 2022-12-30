@@ -48,7 +48,11 @@ public:
     static char *printLabel(const plateauType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
+=======
+        sprintf(buf, CCLABEL_FMT, p.cclabel);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return buf;
     }
 

@@ -164,7 +164,11 @@ int thin_streams(void)
 
     G_free(nodestack);
 
+<<<<<<< HEAD
     G_verbose_message(_("%d of %" PRId64 " stream segments were thinned"),
+=======
+    G_verbose_message(_("%d of %" PRI_OFF_T " stream segments were thinned"),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                       n_thinned, n_stream_nodes);
 
     return 1;

@@ -65,11 +65,19 @@ void prod_d(void *, void *);
  * its argument list to the list below */
 
 extern int (*is_null)(void *);
+<<<<<<< HEAD
 extern size_t (*bpe)(void);
 extern void *(*get_max)(void *, void *);
 extern void *(*get_min)(void *, void *);
 extern void (*get_row)(int, void *, int);
 extern void *(*get_buf)(void);
+=======
+extern size_t (*bpe)();
+extern void *(*get_max)(void *, void *);
+extern void *(*get_min)(void *, void *);
+extern void (*get_row)(int, void *, int);
+extern void *(*get_buf)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 extern void (*put_row)(int, void *);
 extern double (*slope)(void *, void *, double);
 extern void (*set_min)(void *);

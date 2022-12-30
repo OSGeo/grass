@@ -18,7 +18,11 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
+=======
+# COPYRIGHT:    (C) 2000-2022 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -380,8 +384,12 @@ def help_message(default_gui):
             gui_detail=_("and set as default"),
             config=_("print GRASS configuration parameters"),
             config_detail=_(
+<<<<<<< HEAD
                 "options: arch,build,compiler,date,path,python_path,revision,"
                 "svn_revision,version"
+=======
+                "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             ),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
@@ -434,6 +442,7 @@ def get_grass_config_dir():
     (the one which caries mapset settings from session to session).
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     if WINDOWS:
         grass_config_dirname = f"GRASS{GRASS_VERSION_MAJOR}"
 =======
@@ -443,6 +452,10 @@ def get_grass_config_dir():
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+    if WINDOWS:
+        grass_config_dirname = f"GRASS{GRASS_VERSION_MAJOR}"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         win_conf_path = os.getenv("APPDATA")
         # this can happen with some strange settings
         if not win_conf_path:
@@ -463,6 +476,7 @@ def get_grass_config_dir():
     else:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
 =======
         grass_config_dirname = ".grass8"
@@ -470,6 +484,9 @@ def get_grass_config_dir():
 =======
         grass_config_dirname = ".grass8"
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
     if not os.path.isdir(directory):
         try:
@@ -502,12 +519,16 @@ def create_tmp(user, gis_lock):
     tmpdir_name = f"grass{GRASS_VERSION_MAJOR}-{user}-{gis_lock}"
     if tmp:
 <<<<<<< HEAD
+<<<<<<< HEAD
         tmpdir = os.path.join(tmp, tmpdir_name)
 =======
         tmpdir = os.path.join(
             tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
         )
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        tmpdir = os.path.join(tmp, tmpdir_name)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         try:
             os.mkdir(tmpdir, 0o700)
         except:  # noqa: E722
@@ -517,12 +538,16 @@ def create_tmp(user, gis_lock):
         for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
             tmp = ttmp
 <<<<<<< HEAD
+<<<<<<< HEAD
             tmpdir = os.path.join(tmp, tmpdir_name)
 =======
             tmpdir = os.path.join(
                 tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
             )
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+            tmpdir = os.path.join(tmp, tmpdir_name)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             try:
                 os.mkdir(tmpdir, 0o700)
             except:  # noqa: E722
@@ -533,6 +558,7 @@ def create_tmp(user, gis_lock):
     if not tmp:
         fatal(
 <<<<<<< HEAD
+<<<<<<< HEAD
             _("Unable to create temporary directory <{tmpdir_name}>! Exiting.").format(
                 tmpdir_name=tmpdir_name
 =======
@@ -540,6 +566,10 @@ def create_tmp(user, gis_lock):
                 "Unable to create temporary directory <grass8-%(user)s-"
                 "%(lock)s>! Exiting."
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+            _("Unable to create temporary directory <{tmpdir_name}>! Exiting.").format(
+                tmpdir_name=tmpdir_name
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             )
         )
 
@@ -1164,11 +1194,19 @@ def set_mapset(
                         fatal(cannot_create_location_reason(gisdbase, location_name))
                     # create new location based on the provided EPSG/...
                     if not geofile:
+<<<<<<< HEAD
                         fatal(_("Provide CRS to create a project"))
                     if not tmp_location:
                         # Report report only when new location is not temporary.
                         message(
                             _("Creating new GRASS GIS project <{}>...").format(
+=======
+                        fatal(_("Provide CRS to create a location"))
+                    if not tmp_location:
+                        # Report report only when new location is not temporary.
+                        message(
+                            _("Creating new GRASS GIS location <{}>...").format(
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                 location_name
                             )
                         )
@@ -1202,6 +1240,7 @@ def set_mapset(
                                 _(
                                     "No CRS is needed for creating mapset <{mapset}>, "
                                     "but <{geofile}> was provided as CRS."
+<<<<<<< HEAD
                                     " Did you mean to create a new project?"
                                 ).format(mapset=mapset, geofile=geofile)
                             )
@@ -1210,6 +1249,10 @@ def set_mapset(
                                 _("Creating new GRASS GIS mapset <{}>...").format(
                                     mapset
                                 )
+=======
+                                    " Did you mean to create a new location?"
+                                ).format(mapset=mapset, geofile=geofile)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                             )
                         # create mapset directory
                         os.mkdir(path)

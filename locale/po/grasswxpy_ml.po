@@ -2370,24 +2370,52 @@ msgstr ""
 msgid "Add existing or create new database"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/toolbars.py:35
+<<<<<<< HEAD
 #, fuzzy
 msgid "Create new mapset in current project"
 msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:39
 msgid "Create new project (location) in current GRASS database"
+=======
+=======
+#: ../gui/wxpython/datacatalog/toolbars.py:40
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+msgid "Create new mapset in current location"
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
 msgid "Download sample project (location) to current GRASS database"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/toolbars.py:46
 msgid "Import raster data  [r.import]"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:49
+=======
+#: ../gui/wxpython/datacatalog/toolbars.py:42
+msgid "Download sample location to current GRASS database"
+msgstr ""
+
+<<<<<<< HEAD
+#: ../gui/wxpython/datacatalog/toolbars.py:45
+msgid "Import raster data  [r.import]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/toolbars.py:48
+=======
+#: ../gui/wxpython/datacatalog/toolbars.py:49
+msgid "Import raster data  [r.import]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/toolbars.py:52
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Import vector data  [v.import]"
 msgstr ""
 
@@ -2395,10 +2423,26 @@ msgstr ""
 msgid "Select another import option"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/toolbars.py:62
 #: ../gui/wxpython/history/browser.py:389 ../gui/wxpython/gui_core/menu.py:204
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/datacatalog/toolbars.py:61
+#: ../gui/wxpython/history/browser.py:61 ../gui/wxpython/gui_core/menu.py:164
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 #: ../gui/wxpython/modules/extensions.py:76
 msgid "Search"
+=======
+#: ../gui/wxpython/datacatalog/toolbars.py:72
+#: ../gui/wxpython/modules/extensions.py:74
+#: ../gui/wxpython/gui_core/menu.py:152
+msgid "Search"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/toolbars.py:91
+msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:80
@@ -2443,7 +2487,361 @@ msgstr ""
 msgid "Maximum segment length:"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:2036
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:2031
+=======
+#: ../gui/wxpython/datacatalog/tree.py:104
+#, python-brace-format
+msgid "Failed to read mapsets from location <{l}>."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:123
+#, python-brace-format
+msgid "Failed to read maps from location <{l}>."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:196
+#, python-brace-format
+msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:201
+#: ../gui/wxpython/animation/dialogs.py:1644
+#: ../gui/wxpython/rdigit/dialogs.py:104 ../gui/wxpython/lmgr/layertree.py:1079
+#: ../gui/wxpython/modules/colorrules.py:683
+#: ../gui/wxpython/gui_core/dialogs.py:490 ../gui/wxpython/gcp/manager.py:1697
+msgid "Overwrite?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:224
+msgid "name unknown"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:226
+#, python-brace-format
+msgid "{name}  (current)"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:228
+#, python-brace-format
+msgid "{name}  (in use, owner: {owner})"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:232
+#, python-brace-format
+msgid "{name}  (in use)"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:234
+#, python-brace-format
+msgid "{name}  (owner: {owner})"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:237
+#, python-brace-format
+msgid "{name}"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:791
+#, python-brace-format
+msgid ""
+"Map <{0}@{1}> is not in the current location and therefore cannot be displayed.\n"
+"\n"
+"To display this map switch to mapset <{1}> first."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:797
+#, fuzzy
+msgid "Unable to display the map"
+msgstr "മാപ്പ്സെറ്റ് എടുത്തുകളയാൻ പറ്റുനില്ല"
+
+#: ../gui/wxpython/datacatalog/tree.py:903
+#, python-brace-format
+msgid "{c} maps marked for moving."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:905
+#, python-brace-format
+msgid "Map <{layer}> marked for moving."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:916
+#, python-brace-format
+msgid "{c} maps marked for copying."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:918
+#, python-brace-format
+msgid "Map <{layer}> marked for copying."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:930
+#: ../gui/wxpython/datacatalog/tree.py:1209
+msgid "New name"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:931
+msgid "Rename map"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1064
+msgid "Cannot rename mapset"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1074
+#, python-brace-format
+msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1084
+msgid "Cannot rename location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1093
+#, python-brace-format
+msgid "Renaming location <{oldlocation}> to <{newlocation}> completed"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1104
+#, python-brace-format
+msgid "Renaming map <{name}>..."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1116
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1130
+msgid "No map selected for copying."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1132
+msgid "No map selected for moving."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1149
+#: ../gui/wxpython/datacatalog/tree.py:1160
+#, python-brace-format
+msgid "New name for <{n}>"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1150
+#: ../gui/wxpython/datacatalog/tree.py:1161
+#: ../gui/wxpython/datacatalog/tree.py:1209
+msgid "Select new name"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1171
+#, python-brace-format
+msgid "Copying <{name}>..."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1173
+#, python-brace-format
+msgid "Moving <{name}>..."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1187
+#: ../gui/wxpython/datacatalog/tree.py:1189
+msgid "g.copy completed"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1205
+msgid "Reprojection is not implemented for 3D rasters"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1254
+#: ../gui/wxpython/datacatalog/tree.py:1344
+msgid "g.remove completed"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1319
+#, python-brace-format
+msgid "Do you really want to delete map(s) <{m}>?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1321
+#, python-brace-format
+msgid "Do you really want to delete {n} maps?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1322
+msgid "Delete map"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1323
+#, python-brace-format
+msgid "Deleting {name}..."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1481
+msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1490
+msgid "To move or copy maps to other location, please drag them to a mapset in the destination location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1714
+msgid "&Cut"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1720
+msgid "&Copy"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1724
+msgid "Copy &name"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1728
+#: ../gui/wxpython/datacatalog/tree.py:1768
+#: ../gui/wxpython/datacatalog/tree.py:1854
+msgid "&Paste"
+msgstr ""
+
+#. GTC Delete mapset
+#: ../gui/wxpython/datacatalog/tree.py:1734 ../gui/wxpython/gis_set.py:208
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:202
+msgid "&Delete"
+msgstr ""
+
+#. GTC Rename mapset
+#: ../gui/wxpython/datacatalog/tree.py:1739 ../gui/wxpython/gis_set.py:204
+#: ../gui/wxpython/dbmgr/base.py:2424
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:198
+msgid "&Rename"
+msgstr "നാമം മാറ്റുക"
+
+#: ../gui/wxpython/datacatalog/tree.py:1749
+msgid "&Display layers"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1751
+msgid "&Display layer"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1755
+msgid "Show &metadata"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1774
+msgid "&Switch mapset"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1784
+msgid "&Delete mapset"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1790
+msgid "&Rename mapset"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1803
+msgid "&Create mapset"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1807
+msgid "&Delete location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1813
+msgid "&Rename location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1828
+msgid "&Create new location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1832
+msgid "&Download sample location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1836
+msgid "&Remove GRASS database from data catalog"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1842
+msgid "&Delete GRASS database from disk"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1868
+msgid "&Delete locations"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1880
+msgid "&Delete mapsets"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1892
+msgid "No available options"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:39
+msgid "Data catalog"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:104
+#: ../gui/wxpython/location_wizard/wizard.py:308
+msgid "Choose GRASS data directory:"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:112
+msgid "Do you want to create a location?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:115
+msgid "Create location?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:199
+msgid "Link external raster data  [r.external]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:203
+msgid "Link external vector data  [v.external]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:209
+msgid "Set raster output format  [r.external.out]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:213
+msgid "Set vector output format  [v.external.out]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:220
+msgid "Unpack GRASS raster map  [r.unpack]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:224
+msgid "Unpack GRASS vector map  [v.unpack]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:230
+msgid "Create raster map from x,y,z data  [r.in.xyz]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:234
+msgid "Create vector map from x,y,z data  [v.in.ascii]"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:239
+#: ../gui/wxpython/menustrings.py:160 ../gui/wxpython/menustrings.py:1182
+msgid "Link external data"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/catalog.py:242
+msgid "More options..."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Data Catalog"
 msgstr ""
 
@@ -2617,9 +3015,744 @@ msgstr ""
 msgid "Double-click to open the tool"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/history/tree.py:191
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/history/tree.py:120
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 #, fuzzy
 msgid "&Remove"
+=======
+#: ../gui/wxpython/animation/temporal_manager.py:347
+#, python-format
+msgid "Topology of Space time dataset %s is invalid."
+msgstr ""
+
+#: ../gui/wxpython/animation/data.py:64
+msgid "No animation name selected."
+msgstr ""
+
+#: ../gui/wxpython/animation/data.py:130
+msgid "No workspace file selected."
+msgstr ""
+
+#: ../gui/wxpython/animation/data.py:133
+#, python-format
+msgid "File %s not found"
+msgstr ""
+
+#: ../gui/wxpython/animation/data.py:142
+#, python-format
+msgid "Animation %d"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:60
+msgid "Adjust speed of animation"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:107
+msgid "Simple mode"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:112
+msgid "Frame duration:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:113
+#: ../gui/wxpython/animation/dialogs.py:154
+msgid "ms"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:146
+msgid "Temporal mode"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:151
+msgid "Time unit:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:153
+msgid "Duration of time unit:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:225
+msgid "year"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:226
+msgid "month"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:227
+msgid "day"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:228
+msgid "hour"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:229
+msgid "minute"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:230
+msgid "second"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:295
+msgid "Animation speed is too high."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:333
+msgid "Edit animation"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:347
+#: ../gui/wxpython/animation/dialogs.py:1959
+#: ../gui/wxpython/gmodeler/preferences.py:54
+#: ../gui/wxpython/gui_core/preferences.py:273
+#: ../gui/wxpython/vdigit/preferences.py:149
+msgid "General"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:351
+msgid "Advanced"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:382
+msgid "top left"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:383
+msgid "top right"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:384
+msgid "bottom left"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:385
+msgid "bottom right"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:401
+msgid "Select 2D or 3D view"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:409
+#: ../gui/wxpython/gmodeler/preferences.py:706
+#: ../gui/wxpython/vnet/dialogs.py:1652
+#: ../gui/wxpython/gui_core/gselect.py:1556
+#: ../gui/wxpython/gui_core/gselect.py:1571
+#: ../gui/wxpython/gui_core/gselect.py:1573
+#: ../gui/wxpython/gui_core/widgets.py:1432
+msgid "Name:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:416
+msgid "Window position:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:426
+msgid "View mode:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:437
+msgid ""
+"For 3D animation, please select only one space-time dataset\n"
+"or one series of map layers."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:480
+#: ../gui/wxpython/psmap/dialogs.py:3398
+msgid "Show raster legend"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:482
+#: ../gui/wxpython/lmgr/layertree.py:92
+msgid "Set options"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:503
+msgid "3D view parameters"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:511
+msgid "Workspace file:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:513
+msgid "Choose workspace file to import 3D view parameters"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:515
+#: ../gui/wxpython/animation/dialogs.py:1118
+#: ../gui/wxpython/animation/dialogs.py:1237
+#: ../gui/wxpython/animation/dialogs.py:1273
+#: ../gui/wxpython/animation/dialogs.py:1297
+#: ../gui/wxpython/animation/dialogs.py:1328
+#: ../gui/wxpython/location_wizard/wizard.py:1370
+#: ../gui/wxpython/location_wizard/wizard.py:1731
+#: ../gui/wxpython/tplot/frame.py:327 ../gui/wxpython/nviz/tools.py:623
+#: ../gui/wxpython/modules/import_export.py:808
+#: ../gui/wxpython/gui_core/gselect.py:1195
+#: ../gui/wxpython/gui_core/gselect.py:1495
+#: ../gui/wxpython/gui_core/gselect.py:1511
+#: ../gui/wxpython/gui_core/gselect.py:1558
+#: ../gui/wxpython/gui_core/gselect.py:1594
+#: ../gui/wxpython/gui_core/forms.py:1849
+#: ../gui/wxpython/gui_core/forms.py:1940 ../gui/wxpython/psmap/dialogs.py:2682
+#: ../gui/wxpython/psmap/dialogs.py:3021 ../gui/wxpython/psmap/dialogs.py:5800
+msgid "Browse"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:522
+msgid "Parameter for animation:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:561
+msgid "Set spatial extent in 2D view"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:565
+msgid "Use saved region:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:575
+msgid "Animate region change"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:581
+msgid "End region:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:587
+msgid "Zoom value:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:588
+msgid "N-S/E-W distances in map units used to gradually reduce region."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:595
+msgid "N-S:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:598
+msgid "E-W:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:709
+msgid "Only one series or space-time dataset is accepted for 3D mode."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:717
+msgid "No map series or space-time dataset added."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:755
+#: ../gui/wxpython/animation/dialogs.py:765
+msgid "Region information is not complete"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:779
+#: ../gui/wxpython/animation/controller.py:297
+#: ../gui/wxpython/wxplot/dialogs.py:602 ../gui/wxpython/psmap/dialogs.py:595
+#: ../gui/wxpython/psmap/dialogs.py:1424 ../gui/wxpython/psmap/dialogs.py:1450
+#: ../gui/wxpython/psmap/dialogs.py:1499 ../gui/wxpython/psmap/dialogs.py:5104
+msgid "Invalid input"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:789
+msgid "Add, edit or remove animations"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:801
+msgid "List of animations"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:812 ../gui/wxpython/dbmgr/base.py:2376
+#: ../gui/wxpython/psmap/dialogs.py:1736
+msgid "Add"
+msgstr "ചേർക്കുക"
+
+#: ../gui/wxpython/animation/dialogs.py:814
+msgid "Edit"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:816
+#: ../gui/wxpython/animation/dialogs.py:1050
+#: ../gui/wxpython/gmodeler/frame.py:1504 ../gui/wxpython/lmgr/layertree.py:444
+#: ../gui/wxpython/rlisetup/frame.py:139 ../gui/wxpython/menustrings.py:956
+#: ../gui/wxpython/menustrings.py:1901
+#: ../gui/wxpython/gui_core/simplelmgr.py:466
+msgid "Remove"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:873
+#: ../gui/wxpython/animation/controller.py:235
+#, python-format
+msgid "Maximum number of animations is %d."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:925
+#: ../gui/wxpython/animation/controller.py:264
+msgid "More animations are using one window. Please select different window for each animation."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:964
+#: ../gui/wxpython/psmap/dialogs.py:525
+msgid "Format"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:967 ../gui/wxpython/nviz/tools.py:779
+msgid "Decorations"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:972 ../gui/wxpython/tplot/frame.py:345
+#: ../gui/wxpython/lmgr/layertree.py:732 ../gui/wxpython/menustrings.py:984
+#: ../gui/wxpython/menustrings.py:1929
+msgid "Export"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1026
+msgid "Add time stamp"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1026
+#: ../gui/wxpython/menustrings.py:2102
+msgid "Add image"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1068
+msgid "Add time stamp, image or text decoration by one of the buttons above."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1070
+msgid "Add image or text decoration by one of the buttons above."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1091
+msgid "Font settings:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1096
+msgid "Sample text"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1099
+#: ../gui/wxpython/gui_core/preferences.py:521
+#: ../gui/wxpython/gui_core/preferences.py:799
+msgid "Set font"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1116
+msgid "Image file:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1117
+msgid "Choose image file"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1133
+msgid "Text:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1154
+msgid "Placement as percentage of screen coordinates (X: 0, Y: 0 is top left):"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1175
+#: ../gui/wxpython/psmap/dialogs.py:242
+msgid "X:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1177
+#: ../gui/wxpython/psmap/dialogs.py:244
+msgid "Y:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1189
+msgid "image sequence"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1189
+msgid "animated GIF"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1189
+msgid "SWF"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1189
+msgid "AVI"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1201
+msgid "Export to:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1226 ../gui/wxpython/nviz/tools.py:629
+msgid "File prefix:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1228
+msgid "animation_"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1230 ../gui/wxpython/nviz/tools.py:637
+msgid "File format:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1235
+#: ../gui/wxpython/gui_core/gselect.py:1509
+#: ../gui/wxpython/gui_core/gselect.py:1592
+msgid "Directory:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1236
+msgid "Choose directory for export"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1271
+msgid "GIF file:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1272
+#: ../gui/wxpython/animation/dialogs.py:1296
+#: ../gui/wxpython/animation/dialogs.py:1327
+msgid "Choose file to save animation"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1295
+msgid "SWF file:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1318
+msgid ""
+"Program 'ffmpeg' was not found.\n"
+"Please install it first and make sure\n"
+"it's in the PATH variable."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1326
+msgid "AVI file:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1334
+msgid "Video codec:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1338
+msgid "Additional options:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1342
+msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1379
+#, python-format
+msgid "Current frame rate: %.2f fps"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1511
+#, python-format
+msgid "File %s not found."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1515
+msgid "Decoration image file is missing."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1524
+#, python-format
+msgid "Directory %s not found."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1528
+msgid "Export directory is missing."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1587
+msgid "Time stamp"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1588
+#: ../gui/wxpython/menustrings.py:2101 ../gui/wxpython/psmap/toolbars.py:97
+#: ../gui/wxpython/psmap/dialogs.py:5723 ../gui/wxpython/psmap/dialogs.py:5786
+msgid "Image"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1589
+#: ../gui/wxpython/menustrings.py:2099 ../gui/wxpython/psmap/toolbars.py:89
+#: ../gui/wxpython/psmap/dialogs.py:5187 ../gui/wxpython/psmap/dialogs.py:5196
+msgid "Text"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1614
+#, python-brace-format
+msgid "Exported file directory '{base_dir}' does not exist."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1618
+msgid "Export file is missing."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1639
+#, python-brace-format
+msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1718
+msgid "Add space-time dataset layer"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1743
+msgid "Multiple raster maps"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1744
+msgid "Multiple vector maps"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1745
+msgid "Multiple 3D raster maps"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1746
+msgid "Space time raster dataset"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1747
+msgid "Space time vector dataset"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1748
+msgid "Space time 3D raster dataset"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1787
+msgid "Input data type:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1868
+msgid "Select raster/vector maps."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1897
+msgid "Please select maps or dataset first."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1926
+msgid "Animation Tool settings"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1969
+#: ../gui/wxpython/nviz/preferences.py:204 ../gui/wxpython/nviz/tools.py:462
+#: ../gui/wxpython/web_services/widgets.py:314
+#: ../gui/wxpython/gui_core/preferences.py:884
+msgid "Background color:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:1990
+msgid "Number of parallel processes:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2019
+msgid "Text foreground color:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2040
+msgid "Text background color:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2072
+#: ../gui/wxpython/timeline/frame.py:302
+msgid "Time"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2082
+msgid "Absolute time format:"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2102
+msgid "Click and then press key up or down to preview different date and time formats. Type custom format string."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2113
+msgid "Learn more about formatting options"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2127
+msgid "Display instances with no data"
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2130
+msgid "When animating instant-based data which have irregular timestamps you can display 'no data frame' (checked option) or keep last frame."
+msgstr ""
+
+#: ../gui/wxpython/animation/dialogs.py:2161
+msgid "Invalid"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:51
+msgid "Animation Tool"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:157 ../gui/wxpython/mapswipe/frame.py:290
+msgid "Main Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:167
+msgid "Animation Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:179 ../gui/wxpython/lmgr/frame.py:163
+#: ../gui/wxpython/mapswipe/frame.py:301
+msgid "Misc Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:279
+msgid "Loading data"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:287
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:603
+#: ../gui/wxpython/animation/controller.py:597
+#, python-format
+msgid "%(from)s %(dash)s %(to)s"
+msgstr ""
+
+#: ../gui/wxpython/animation/frame.py:608
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#: ../gui/wxpython/animation/controller.py:442
+msgid "Failed to display legend."
+msgstr ""
+
+#: ../gui/wxpython/animation/controller.py:474
+msgid "Inconsistent number of maps, please check input data."
+msgstr ""
+
+#: ../gui/wxpython/animation/controller.py:504
+msgid "No animation to export."
+msgstr ""
+
+#: ../gui/wxpython/animation/controller.py:541
+msgid "Preparing export, please wait..."
+msgstr ""
+
+#: ../gui/wxpython/animation/controller.py:604
+#, python-format
+msgid "%(start)s %(unit)s"
+msgstr ""
+
+#: ../gui/wxpython/animation/controller.py:623
+msgid "Exporting animation, please wait..."
+msgstr ""
+
+#: ../gui/wxpython/animation/provider.py:418
+msgid "Rendering map layers"
+msgstr ""
+
+#: ../gui/wxpython/animation/provider.py:531
+msgid "Overlaying map layers"
+msgstr ""
+
+#: ../gui/wxpython/animation/provider.py:758
+#, python-brace-format
+msgid "Directory {t} not removed."
+msgstr ""
+
+#: ../gui/wxpython/iscatt/core_c.py:24
+msgid "Loading ctypes libs failed"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:44 ../gui/wxpython/iclass/toolbars.py:42
+#: ../gui/wxpython/iclass/dialogs.py:44
+msgid "Select imagery group"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:46 ../gui/wxpython/iscatt/toolbars.py:144
+#: ../gui/wxpython/nviz/tools.py:2269 ../gui/wxpython/vnet/dialogs.py:955
+#: ../gui/wxpython/gui_core/toolbars.py:84
+msgid "Settings"
+msgstr "സജ്ജീകരണം"
+
+#: ../gui/wxpython/iscatt/toolbars.py:49 ../gui/wxpython/vnet/toolbars.py:137
+#: ../gui/wxpython/gui_core/toolbars.py:71
+msgid "Show manual"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:52
+msgid "Add scatter plot"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:55
+msgid "Select area with polygon"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:58
+msgid "Pan mode for scatter plots"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:61
+msgid "Zoom mode for scatter plots (left mouse button, wheel)"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:64
+msgid "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:67
+msgid "Show/hide class manager"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:173
+#: ../gui/wxpython/iscatt/toolbars.py:174
+msgid "Include selected area to class"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:176
+#: ../gui/wxpython/iscatt/toolbars.py:177
+msgid "Exclude selected area from class"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:179
+msgid "Add new vertex"
+msgstr "പുതിയ അഗ്രം ചേർക്കുക"
+
+#: ../gui/wxpython/iscatt/toolbars.py:180
+msgid "Add new vertex to polygon boundary scatter plot"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:182
+msgid "Create selection polygon"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:183
+msgid "Add new vertex between last and first points of the boundary"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:185
+msgid "Move vertex"
+msgstr "അഗ്രം നീക്കുക"
+
+#: ../gui/wxpython/iscatt/toolbars.py:186
+msgid "Move boundary vertex"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/toolbars.py:188
+msgid "Remove vertex"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr "അഗ്രം എടുത്തു കളയുക"
 
 #: ../gui/wxpython/history/tree.py:465
@@ -4232,7 +5365,155 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:2531
 #, python-format
 msgid ""
+<<<<<<< HEAD
 "Unable to create new project. Project <%(loc)s> not created.\n"
+=======
+<<<<<<< HEAD
+"Unable to create new location. Location <%(loc)s> not created.\n"
+=======
+"v.build failed:\n"
+"%s"
+msgstr ""
+
+#: ../gui/wxpython/iscatt/iscatt_core.py:334
+#, python-format
+msgid ""
+"v.to.rast failed:\n"
+"%s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/g.gui.timeline.py:63
+msgid "Timeline Tool - GRASS GIS"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:38
+#, python-brace-format
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {0}"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:71
+msgid "Timeline Tool"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:134 ../gui/wxpython/tplot/frame.py:353
+#: ../gui/wxpython/nviz/preferences.py:405 ../gui/wxpython/nviz/tools.py:847
+#: ../gui/wxpython/nviz/tools.py:1886
+msgid "Draw"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:136 ../gui/wxpython/tplot/frame.py:356
+#: ../gui/wxpython/menustrings.py:2065 ../gui/wxpython/menustrings.py:2108
+msgid "Help"
+msgstr "സഹായം"
+
+#: ../gui/wxpython/timeline/frame.py:140
+msgid "3D plot of spatio-temporal extents"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:143
+msgid "3D plot of spatio-temporal extents (matplotlib >= 1.0.0)"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:148
+msgid "Select space time dataset(s):"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:179 ../gui/wxpython/tplot/frame.py:385
+#: ../gui/wxpython/tplot/frame.py:498
+#, python-format
+msgid "Dataset <%s> not found in temporal database"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:195 ../gui/wxpython/tplot/frame.py:403
+#: ../gui/wxpython/tplot/frame.py:517
+msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:214 ../gui/wxpython/tplot/frame.py:420
+#: ../gui/wxpython/tplot/frame.py:527
+msgid "Datasets have different time unit which is not allowed."
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:235
+#, python-brace-format
+msgid "Dataset <{name}> is empty"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:293
+#, python-format
+msgid "X [%s]"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:294
+#, python-format
+msgid "Y [%s]"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:296
+msgid "X"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:297
+msgid "Y"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:373 ../gui/wxpython/tplot/frame.py:650
+#, python-format
+msgid "Time [%s]"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:479 ../gui/wxpython/tplot/frame.py:1022
+#, python-format
+msgid "Please specify the space time dataset <%s>."
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:481 ../gui/wxpython/tplot/frame.py:1025
+msgid "Ambiguous dataset name"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:565 ../gui/wxpython/tplot/frame.py:1169
+#, python-format
+msgid "Space time raster dataset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:567 ../gui/wxpython/tplot/frame.py:1171
+#, python-format
+msgid "Space time vector dataset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:569 ../gui/wxpython/tplot/frame.py:1173
+#, python-format
+msgid "Space time 3D raster dataset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:571
+#, python-format
+msgid "Mapset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:572
+#, python-format
+msgid "Map name: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:574
+#, python-format
+msgid "Start time: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:577
+#, python-format
+msgid "End time: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:581
+msgid "WARNING: invalid topology"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:583
+msgid ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 "\n"
 "Details: %(err)s"
 msgstr ""
@@ -5235,8 +6516,501 @@ msgstr ""
 msgid "Delete intermediate data when finish"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/menustrings.py:3 ../gui/wxpython/menustrings.py:2060
 #: ../gui/wxpython/menustrings.py:2110
+=======
+#: ../gui/wxpython/gmodeler/model.py:3508
+#: ../gui/wxpython/gmodeler/frame.py:2038 ../gui/wxpython/gui_core/forms.py:617
+#: ../gui/wxpython/modules/mcalc_builder.py:169
+msgid "&Run"
+msgstr "ഓടുക"
+
+#: ../gui/wxpython/gmodeler/model.py:3556 ../gui/wxpython/gmodeler/frame.py:173
+msgid "Variables"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:85 ../gui/wxpython/gui_core/forms.py:1520
+#: ../gui/wxpython/lmgr/toolbars.py:208
+msgid "Graphical Modeler"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:170
+msgid "Model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:171
+msgid "Items"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:179 ../gui/wxpython/gui_core/forms.py:2518
+msgid "Command output"
+msgstr "ആജ്ഞയുടെ ഉത്പന്നം"
+
+#: ../gui/wxpython/gmodeler/frame.py:251
+msgid "{} script contains local modifications"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:260 ../gui/wxpython/gmodeler/frame.py:2239
+#: ../gui/wxpython/gmodeler/frame.py:2260
+msgid "{} script is up-to-date"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:281
+msgid "Redrawing model..."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:308 ../gui/wxpython/core/gconsole.py:712
+#, python-format
+msgid "%d sec"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:311 ../gui/wxpython/core/gconsole.py:715
+#, python-format
+msgid "%(min)d min %(sec)d sec"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:324 ../gui/wxpython/core/gconsole.py:737
+msgid "Command finished"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:337
+msgid "Model computation finished"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:354
+msgid "Do you want to save changes in the model?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:357
+msgid "Do you want to store current model settings to model file?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:364
+msgid "Quit Graphical Modeler"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:433
+#, python-format
+msgid "%d intermediate maps deleted from current mapset"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:442
+msgid "No intermediate data to delete."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:447
+#, python-format
+msgid "Do you want to permanently delete data?%s"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:448
+msgid "Delete intermediate data?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:470 ../gui/wxpython/gmodeler/frame.py:620
+msgid ""
+"Current model is not empty. Do you want to store current settings to model "
+"file?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:474 ../gui/wxpython/gmodeler/frame.py:624
+msgid "Create new model?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:514
+msgid "Choose model file"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:516 ../gui/wxpython/gmodeler/frame.py:572
+#: ../gui/wxpython/main_window/frame.py:954 ../gui/wxpython/lmgr/frame.py:851
+msgid "GRASS Model File (*.gxm)|*.gxm"
+msgstr "ഗ്രാസ്സ് മൊഡൽ ഫയൽ (*.gxm)|*.gxm"
+
+#: ../gui/wxpython/gmodeler/frame.py:534
+#, python-format
+msgid "%(items)d items (%(actions)d actions) loaded into model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:548 ../gui/wxpython/gmodeler/frame.py:590
+#, python-format
+msgid "Model file <%s> already exists. Do you want to overwrite this file?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:552 ../gui/wxpython/menustrings.py:2061
+msgid "Save model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:560 ../gui/wxpython/gmodeler/frame.py:606
+#, python-format
+msgid "File <%s> saved"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:570
+msgid "Choose file to save current model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:692
+msgid "Model is empty. Nothing to validate."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:701
+#, python-format
+msgid ""
+"Model is not valid.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:704
+msgid "Model is valid."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:765 ../gui/wxpython/gmodeler/frame.py:772
+#, python-format
+msgid "Model exported to <%s>"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:913 ../gui/wxpython/menustrings.py:2086
+msgid "Add comment"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:921
+msgid "Empty comment. Nothing to add to the model."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:958
+msgid "wxGUI Graphical Modeler"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1116
+#, python-format
+msgid ""
+"Reading model file <%s> failed.\n"
+"Invalid file, unable to parse XML document.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1127
+msgid "Please wait, loading model..."
+msgstr "ദയവായി കാത്ത് നിൽക്കുക. മാത്രിക തുടങ്ങുന്നു..."
+
+#: ../gui/wxpython/gmodeler/frame.py:1193
+msgid "Writing current settings to model file failed."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1205 ../gui/wxpython/lmgr/workspace.py:449
+#, python-format
+msgid "Unable to open file <%s> for writing."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1577 ../gui/wxpython/menustrings.py:970
+#: ../gui/wxpython/menustrings.py:1933
+#: ../gui/wxpython/gui_core/simplelmgr.py:515
+#: ../gui/wxpython/rlisetup/frame.py:159 ../gui/wxpython/lmgr/layertree.py:451
+#: ../gui/wxpython/animation/dialogs.py:788
+#: ../gui/wxpython/animation/dialogs.py:1030
+msgid "Remove"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1581
+msgid "Disable"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1584
+msgid "Enable"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1589
+#: ../gui/wxpython/gmodeler/frame.py:1667
+msgid "Set label"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1592
+#: ../gui/wxpython/gmodeler/frame.py:1683
+msgid "Set comment"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1597
+msgid "Add control point"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1599
+msgid "Remove control point"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1613
+msgid "Intermediate"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1642 ../gui/wxpython/lmgr/layertree.py:513
+msgid "Properties"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1786
+msgid "List of variables - right-click to delete"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1791
+#: ../gui/wxpython/gmodeler/frame.py:1847 ../gui/wxpython/dbmgr/base.py:2994
+msgid "Data type"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1791
+#: ../gui/wxpython/gmodeler/frame.py:1853
+msgid "Default value"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1797
+msgid "Add new variable"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1805
+msgid "integer"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1806
+msgid "float"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1807
+msgid "string"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1810
+msgid "region"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1811
+msgid "mapset"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1812
+#: ../gui/wxpython/gui_core/forms.py:2019
+msgid "file"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1813
+msgid "dir"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1822
+msgid "Add new variable to the model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1940
+msgid "List of items - right-click to delete"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1945
+msgid "In loop"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1945
+msgid "Parameterized"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:1993
+msgid "No items to selected."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2032
+msgid "Python script"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2039
+#: ../gui/wxpython/gmodeler/frame.py:2248
+msgid "Run script"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2042
+msgid "Save the script to a file"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2047
+msgid ""
+"Refresh the script based on the model.\n"
+"It will discard all local changes."
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2055
+#: ../gui/wxpython/gui_core/preferences.py:347
+#: ../gui/wxpython/main_window/frame.py:719 ../gui/wxpython/lmgr/frame.py:649
+msgid "Python"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2056
+msgid "PyWPS"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2078
+msgid "Python script type"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2110
+msgid ""
+"{} script is locally modified. Refresh will discard all changes. Do you "
+"really want to continue?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2114
+msgid "Update"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2146
+#: ../gui/wxpython/gui_core/pyedit.py:401
+msgid "Choose file to save"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2149
+#: ../gui/wxpython/gui_core/pyedit.py:403
+#: ../gui/wxpython/gui_core/pyedit.py:474
+msgid "Python script (*.py)|*.py"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2167 ../gui/wxpython/wxplot/profile.py:399
+#: ../gui/wxpython/gui_core/pyedit.py:421
+#, python-format
+msgid "File <%s> already exists. Do you want to overwrite this file?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2170
+#: ../gui/wxpython/gui_core/pyedit.py:424
+msgid "Save file"
+msgstr ""
+
+<<<<<<< HEAD
+#: ../gui/wxpython/gmodeler/frame.py:2200
+=======
+#: ../gui/wxpython/gmodeler/frame.py:2132
+msgid "Python script is locally modificated. Refresh will discard all changes. Do you really want to continue?"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2135
+msgid "Update"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:173
+#: ../gui/wxpython/location_wizard/wizard.py:2305
+msgid "Define new GRASS Location"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:186
+msgid "Change"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:202
+#: ../gui/wxpython/gui_core/forms.py:1142
+msgid "This option is required"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:205
+msgid "(optional)"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:216
+msgid "Name of location directory in GIS Data Directory"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:237
+msgid "Description of location directory in GIS Data Directory"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:253
+msgid "Location will be created in GRASS database:"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:277
+msgid "Name '{}' is not a valid name for location. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:280
+#: ../gui/wxpython/modules/import_export.py:248
+#: ../gui/wxpython/gui_core/widgets.py:855
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1090
+msgid "Invalid name"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:290
+msgid "Location '{}' already exists. Please consider using another name for your location."
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:293
+msgid "Existing location path"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:325
+msgid "Title of the location is limited only to one line and 256 characters. The rest of the text will be ignored."
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:335
+msgid "Select Coordinate Reference System (CRS)"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:346
+msgid "Select CRS from a list by EPSG or description"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:352
+#: ../gui/wxpython/location_wizard/wizard.py:1358
+msgid "Read CRS from a georeferenced data file"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:354
+msgid "Create a generic cartesian coordinate system (XY)"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:357
+#: ../gui/wxpython/location_wizard/wizard.py:1437
+msgid "Specify CRS using WKT string"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:360
+#: ../gui/wxpython/location_wizard/wizard.py:1959
+msgid "Specify CRS using PROJ.4 string"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:362
+#: ../gui/wxpython/location_wizard/wizard.py:479
+msgid "Define custom CRS"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:374
+msgid "Additional methods:"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:500
+#: ../gui/wxpython/location_wizard/wizard.py:1018
+#: ../gui/wxpython/location_wizard/wizard.py:1208
+#: ../gui/wxpython/location_wizard/wizard.py:1529
+#: ../gui/wxpython/location_wizard/wizard.py:1742
+msgid "Code"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:504
+msgid "Projection code:"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:512
+#: ../gui/wxpython/location_wizard/wizard.py:1031
+#: ../gui/wxpython/location_wizard/wizard.py:1225
+msgid "Search in description:"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:687
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+#, python-format
+msgid "Unable to launch Python script. %s"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/frame.py:2253
+msgid "Run script - enabled only for basic Python scripts"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:3 ../gui/wxpython/menustrings.py:2055
+#: ../gui/wxpython/menustrings.py:2105
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 msgid "&File"
 msgstr "ഫയൽ"
 
@@ -5328,8 +7102,17 @@ msgstr ""
 msgid "Open new map display window"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/menustrings.py:28
 msgid "Render all map displays"
+=======
+#: ../gui/wxpython/location_wizard/wizard.py:1498
+msgid "Select CRS from a list"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:1514
+msgid "Filter by EPSG code or description:"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:29
@@ -10065,7 +11848,865 @@ msgstr ""
 #: ../gui/wxpython/wxplot/profile.py:460
 #, python-format
 msgid ""
+<<<<<<< HEAD
 "%d files created:\n"
+=======
+"Insufficient points defined and active (checked) for selected rectification method (order: %d).\n"
+"3+ points needed for 1st order,\n"
+"6+ points for 2nd order, and\n"
+"10+ points for 3rd order."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1010
+#: ../gui/wxpython/gcp/manager.py:1732
+#: ../gui/wxpython/image2target/ii2t_manager.py:1661
+msgid "Rectifying images, please wait..."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1032
+msgid "Writing output image to group, please wait..."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1062
+#: ../gui/wxpython/gcp/manager.py:1831
+#: ../gui/wxpython/image2target/ii2t_manager.py:1747
+msgid "GCP Manager settings"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1107
+#: ../gui/wxpython/gcp/manager.py:1878
+#: ../gui/wxpython/image2target/ii2t_manager.py:1794
+msgid "Quit GCP Manager"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1108
+#: ../gui/wxpython/gcp/manager.py:1879
+#: ../gui/wxpython/image2target/ii2t_manager.py:1795
+msgid "Save ground control points?"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1186
+#: ../gui/wxpython/gcp/manager.py:1959
+msgid ""
+"Could not calculate RMS Error.\n"
+"Possible error with m.transform."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1314
+#: ../gui/wxpython/gcp/manager.py:2087
+msgid ""
+"Could not calculate new extends.\n"
+"Possible error with m.transform."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1446
+#: ../gui/wxpython/gcp/manager.py:2219
+#: ../gui/wxpython/image2target/ii2t_manager.py:2132
+msgid "Adjust source display to target display"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1451
+#: ../gui/wxpython/gcp/manager.py:2224
+#: ../gui/wxpython/image2target/ii2t_manager.py:2137
+msgid "Adjust target display to source display"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1525
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1543
+#: ../gui/wxpython/vnet/widgets.py:95 ../gui/wxpython/vnet/vnet_data.py:261
+#: ../gui/wxpython/gcp/manager.py:2298 ../gui/wxpython/gcp/manager.py:2316
+#: ../gui/wxpython/image2target/ii2t_manager.py:2211
+#: ../gui/wxpython/image2target/ii2t_manager.py:2231
+msgid "use"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1526
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1544
+msgid "source X"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1527
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1545
+msgid "source Y"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1528
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1546
+msgid "target X"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1529
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1547
+msgid "target Y"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1530
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1548
+#: ../gui/wxpython/gcp/manager.py:2303 ../gui/wxpython/gcp/manager.py:2321
+#: ../gui/wxpython/image2target/ii2t_manager.py:2218
+#: ../gui/wxpython/image2target/ii2t_manager.py:2238
+msgid "Forward error"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1531
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1549
+#: ../gui/wxpython/gcp/manager.py:2304 ../gui/wxpython/gcp/manager.py:2322
+#: ../gui/wxpython/image2target/ii2t_manager.py:2219
+#: ../gui/wxpython/image2target/ii2t_manager.py:2239
+msgid "Backward error"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1686
+#: ../gui/wxpython/gcp/manager.py:2459
+#: ../gui/wxpython/image2target/ii2t_manager.py:2378
+msgid "Invalid coordinate value. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1724
+#: ../gui/wxpython/gcp/manager.py:2637
+#: ../gui/wxpython/image2target/ii2t_manager.py:2553
+msgid "Edit GCP"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1736
+#: ../gui/wxpython/gcp/manager.py:2649
+#: ../gui/wxpython/image2target/ii2t_manager.py:2565
+msgid "Ground Control Point No."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1755
+msgid "source X:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1756
+msgid "target X:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1757
+msgid "source Y:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1758
+msgid "target Y:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1894
+#: ../gui/wxpython/gcp/manager.py:2808 ../gui/wxpython/vdigit/preferences.py:97
+#: ../gui/wxpython/image2target/ii2t_manager.py:2731
+#: ../gui/wxpython/psmap/dialogs.py:2659
+msgid "Symbology"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1903
+#: ../gui/wxpython/gcp/manager.py:2817
+#: ../gui/wxpython/image2target/ii2t_manager.py:2740
+msgid "Highlight highest RMS error only"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1916
+#: ../gui/wxpython/gcp/manager.py:2830
+#: ../gui/wxpython/image2target/ii2t_manager.py:2753
+msgid "Highlight RMS error > M + SD * factor:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1920
+#: ../gui/wxpython/gcp/manager.py:2833
+#: ../gui/wxpython/image2target/ii2t_manager.py:2756
+msgid ""
+"Highlight GCPs with an RMS error larger than \n"
+"mean + standard deviation * given factor. \n"
+"Recommended values for this factor are between 1 and 2."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1943
+#: ../gui/wxpython/gcp/manager.py:2856
+#: ../gui/wxpython/image2target/ii2t_manager.py:2779
+msgid "Symbol settings"
+msgstr "അടയാളത്തിന്റ്റെ സജ്ജീകരണം"
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1951
+#: ../gui/wxpython/nviz/preferences.py:372
+#: ../gui/wxpython/nviz/preferences.py:574
+#: ../gui/wxpython/nviz/preferences.py:640 ../gui/wxpython/nviz/tools.py:1420
+#: ../gui/wxpython/nviz/tools.py:2151 ../gui/wxpython/nviz/tools.py:2293
+#: ../gui/wxpython/mapswipe/dialogs.py:283
+#: ../gui/wxpython/gui_core/preferences.py:1513
+#: ../gui/wxpython/gcp/manager.py:2864
+#: ../gui/wxpython/image2target/ii2t_manager.py:2787
+#: ../gui/wxpython/psmap/dialogs.py:2383 ../gui/wxpython/psmap/dialogs.py:2539
+msgid "Color:"
+msgstr "നിറം:"
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1971
+#: ../gui/wxpython/gcp/manager.py:2884
+#: ../gui/wxpython/image2target/ii2t_manager.py:2807
+msgid "Color for high RMS error:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1991
+#: ../gui/wxpython/gcp/manager.py:2904
+#: ../gui/wxpython/image2target/ii2t_manager.py:2827
+msgid "Color for selected GCP:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2011
+#: ../gui/wxpython/gcp/manager.py:2924
+#: ../gui/wxpython/image2target/ii2t_manager.py:2847
+msgid "Color for unused GCPs:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2027
+#: ../gui/wxpython/gcp/manager.py:2940
+#: ../gui/wxpython/image2target/ii2t_manager.py:2863
+msgid "Show unused GCPs"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2044
+#: ../gui/wxpython/gui_core/preferences.py:1440
+#: ../gui/wxpython/gcp/manager.py:2957
+#: ../gui/wxpython/image2target/ii2t_manager.py:2880
+msgid "Symbol size:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2066
+#: ../gui/wxpython/vnet/dialogs.py:1288 ../gui/wxpython/mapswipe/dialogs.py:330
+#: ../gui/wxpython/gui_core/preferences.py:1408
+#: ../gui/wxpython/gcp/manager.py:2979
+#: ../gui/wxpython/image2target/ii2t_manager.py:2902
+#: ../gui/wxpython/psmap/dialogs.py:6797
+msgid "Line width:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2112
+#: ../gui/wxpython/gcp/manager.py:752 ../gui/wxpython/gcp/manager.py:3032
+#: ../gui/wxpython/image2target/ii2t_manager.py:743
+#: ../gui/wxpython/image2target/ii2t_manager.py:2954
+msgid "Select source map to display:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2126
+#: ../gui/wxpython/gcp/manager.py:778 ../gui/wxpython/gcp/manager.py:3046
+#: ../gui/wxpython/image2target/ii2t_manager.py:769
+#: ../gui/wxpython/image2target/ii2t_manager.py:2968
+msgid "Select target raster map to display:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2151
+#: ../gui/wxpython/gcp/manager.py:3086
+#: ../gui/wxpython/image2target/ii2t_manager.py:3008
+msgid "Rectification"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2160
+#: ../gui/wxpython/gcp/manager.py:3095
+#: ../gui/wxpython/image2target/ii2t_manager.py:3017
+msgid "Select rectification order"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2162
+#: ../gui/wxpython/gcp/manager.py:3097
+#: ../gui/wxpython/image2target/ii2t_manager.py:3019
+msgid "1st order"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2163
+#: ../gui/wxpython/gcp/manager.py:3098
+#: ../gui/wxpython/image2target/ii2t_manager.py:3020
+msgid "2nd order"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2164
+#: ../gui/wxpython/gcp/manager.py:3099
+#: ../gui/wxpython/image2target/ii2t_manager.py:3021
+msgid "3rd order"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2176
+#: ../gui/wxpython/gcp/manager.py:3111
+#: ../gui/wxpython/image2target/ii2t_manager.py:3033
+msgid "Select interpolation method:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2192
+#: ../gui/wxpython/gcp/manager.py:3127
+#: ../gui/wxpython/image2target/ii2t_manager.py:3049
+msgid "clip to computational region in target location"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2202
+#: ../gui/wxpython/gcp/manager.py:584 ../gui/wxpython/gcp/manager.py:3148
+#: ../gui/wxpython/image2target/ii2t_manager.py:591
+#: ../gui/wxpython/image2target/ii2t_manager.py:3059
+msgid "Extension for output maps:"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2243
+#: ../gui/wxpython/gcp/manager.py:3189
+#: ../gui/wxpython/image2target/ii2t_manager.py:3100
+msgid "RMS threshold factor must be > 0"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2246
+#: ../gui/wxpython/gcp/manager.py:3192
+#: ../gui/wxpython/image2target/ii2t_manager.py:3103
+msgid ""
+"RMS threshold factor is < 1\n"
+"Too many points might be highlighted"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2406
+#: ../gui/wxpython/gcp/manager.py:3405
+#: ../gui/wxpython/image2target/ii2t_manager.py:3287
+#, python-format
+msgid "GCP Manager settings saved to file '%s'."
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:48
+msgid "GRASS GIS Manage Location of Tick Points on a Scanned Photo"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:174
+#: ../gui/wxpython/gcp/mapdisplay.py:174
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:174
+msgid "GCP List"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:179
+#: ../gui/wxpython/gcp/mapdisplay.py:179
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:179
+msgid "Source Display"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:183
+#: ../gui/wxpython/gcp/mapdisplay.py:183
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:183
+msgid "Target Display"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:272
+#: ../gui/wxpython/gcp/mapdisplay.py:273
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:273
+msgid "GCP Display toolbar"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:285
+#: ../gui/wxpython/gcp/mapdisplay.py:286
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:286
+msgid "GCP Manager toolbar"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:471
+#: ../gui/wxpython/gcp/mapdisplay.py:472
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:472
+msgid "Zoom to computational region (set with g.region)"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:485
+#: ../gui/wxpython/gcp/mapdisplay.py:486
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:486
+msgid "Set computational region from display"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:43
+#, python-brace-format
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:98
+msgid "Temporal Plot Tool"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:184
+msgid ""
+"Raster temporal dataset (strds)\n"
+"Press ENTER after typing the name or select with the combobox"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:193
+msgid "X and Y coordinates separated by comma:"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:205
+msgid "Coordinates can be obtained for example by right-clicking on Map Display."
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:209 ../gui/wxpython/tplot/frame.py:264
+msgid "Show simple linear regression line"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:226
+msgid "STRDS"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:234
+msgid ""
+"Vector temporal dataset (stvds)\n"
+"Press ENTER after typing the name or select with the combobox"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:248
+msgid "Select attribute column"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:261
+msgid "Select category of vector(s)"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:284
+msgid "STVDS"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:291
+msgid "Set title for the plot"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:296
+msgid "Set label for X axis"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:301
+msgid "Set label for Y axis"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:313
+msgid "Labels"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:320
+msgid "Path for output CSV file with plotted data"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:326
+msgid "CVS path"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:332
+msgid "Do you want the CSV header?"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:373 ../gui/wxpython/tplot/frame.py:922
+#: ../gui/wxpython/tplot/frame.py:926 ../gui/wxpython/tplot/frame.py:947
+#: ../gui/wxpython/tplot/frame.py:1073
+msgid "Invalid input coordinates"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:464
+#, python-brace-format
+msgid "Category {ca} is not on vector map {ma} and it will be not used"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:483
+msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:488
+msgid "With Vector temporal dataset you have to select an attribute column"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:540
+msgid "Difference number of vector layers and maps in the vector temporal dataset"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:582
+#, python-brace-format
+msgid "No connection between vector map {vmap} and layer {la}"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:648
+#, python-format
+msgid "Temporal resolution: %s"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:748
+msgid "Problem getting data from raster temporal dataset. Empty list of values."
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:797
+#, python-brace-format
+msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:848
+msgid "Problem getting data from vector temporal dataset. Empty list of values."
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:879
+#, python-brace-format
+msgid "{pa} already exists, do you want to overwrite?"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:881
+msgid "File exists"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:886
+msgid "Please change name of output CSV file or "
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:913
+msgid "Incorrect coordinates format, should be: x,y"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:931
+msgid "Seed point outside the current region"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:943
+msgid "Invalid input raster dataset"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:960
+msgid "Invalid input vector dataset"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:1066 ../gui/wxpython/tplot/frame.py:1124
+msgid "Invalid input temporal dataset"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:1145
+msgid "Datasets have different number of values"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:1175
+#, python-brace-format
+msgid "Value for {date} is {val}"
+msgstr ""
+
+#: ../gui/wxpython/tplot/frame.py:1178
+msgid "Press Del to dismiss."
+msgstr ""
+
+#: ../gui/wxpython/tplot/g.gui.tplot.py:143
+msgid "With stvds you have to set 'attr' option"
+msgstr ""
+
+#: ../gui/wxpython/tplot/g.gui.tplot.py:147
+msgid "With stvds it is not possible to use 'coordinates' and 'cats' options together"
+msgstr ""
+
+#: ../gui/wxpython/tplot/g.gui.tplot.py:150
+msgid "With stvds you have to use 'coordinates' or 'cats' option"
+msgstr ""
+
+#: ../gui/wxpython/tplot/g.gui.tplot.py:168
+#: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
+msgid "Temporal Plot Tool - GRASS GIS"
+msgstr ""
+
+#: ../gui/wxpython/nviz/wxnviz.py:35
+msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
+msgstr ""
+
+#: ../gui/wxpython/nviz/wxnviz.py:362 ../gui/wxpython/nviz/wxnviz.py:373
+#: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:77
+#: ../gui/wxpython/modules/histogram.py:411
+#: ../gui/wxpython/iclass/g.gui.iclass.py:89
+#, python-format
+msgid "Raster map <%s> not found"
+msgstr ""
+
+#: ../gui/wxpython/nviz/wxnviz.py:450 ../gui/wxpython/iclass/g.gui.iclass.py:96
+#: ../gui/wxpython/dbmgr/sqlbuilder.py:66
+#: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:47
+#, python-format
+msgid "Vector map <%s> not found"
+msgstr ""
+
+#: ../gui/wxpython/nviz/wxnviz.py:520 ../gui/wxpython/nviz/wxnviz.py:532
+#, python-format
+msgid "3d raster map <%s> not found"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:35
+msgid "3D view default settings"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:62
+msgid "Revert settings to default, changes are not applied"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:69
+#: ../gui/wxpython/nviz/preferences.py:74 ../gui/wxpython/nviz/tools.py:89
+msgid "View"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:86 ../gui/wxpython/nviz/tools.py:289
+msgid "Perspective:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:90
+#: ../gui/wxpython/nviz/preferences.py:161
+#: ../gui/wxpython/nviz/preferences.py:180
+msgid "value:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:103
+msgid "step:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:118
+#: ../gui/wxpython/nviz/preferences.py:300
+msgid "Position:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:122
+#: ../gui/wxpython/nviz/preferences.py:304
+msgid "x:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:157
+msgid "Twist:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:176 ../gui/wxpython/nviz/tools.py:384
+msgid "Z-exag:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:198 ../gui/wxpython/nviz/tools.py:455
+msgid "Image Appearance"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:237
+msgid "Fly-through"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:247
+msgid "Move exag:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:260
+msgid "Turn exag:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:287 ../gui/wxpython/nviz/tools.py:763
+msgid "Lighting"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:292
+msgid "Light"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:330
+msgid "z:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:345 ../gui/wxpython/nviz/tools.py:2163
+msgid "Brightness:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:359 ../gui/wxpython/nviz/tools.py:2180
+msgid "Ambient:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:398 ../gui/wxpython/nviz/tools.py:702
+#: ../gui/wxpython/nviz/tools.py:2233
+msgid "Surface"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:414 ../gui/wxpython/nviz/tools.py:853
+#: ../gui/wxpython/nviz/tools.py:1893
+msgid "Mode:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:420 ../gui/wxpython/nviz/tools.py:856
+msgid "coarse"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:421 ../gui/wxpython/nviz/tools.py:857
+msgid "fine"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:422 ../gui/wxpython/nviz/tools.py:858
+msgid "both"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:435 ../gui/wxpython/nviz/tools.py:938
+msgid "Fine mode:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:447
+#: ../gui/wxpython/nviz/preferences.py:478 ../gui/wxpython/nviz/tools.py:896
+#: ../gui/wxpython/nviz/tools.py:942
+msgid "resolution:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:466 ../gui/wxpython/nviz/tools.py:893
+msgid "Coarse mode:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:496 ../gui/wxpython/nviz/tools.py:911
+msgid "style:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:502 ../gui/wxpython/nviz/tools.py:914
+msgid "wire"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:503 ../gui/wxpython/nviz/tools.py:915
+msgid "surface"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:517
+msgid "wire color:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:546 ../gui/wxpython/nviz/tools.py:717
+msgid "Vector"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:552 ../gui/wxpython/nviz/tools.py:1484
+msgid "Vector lines"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:592 ../gui/wxpython/nviz/tools.py:1646
+msgid "Vector points"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:598
+msgid "Automatic size"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:599
+msgid "Icon size is set automatically based on landscape dimensions."
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:607
+#: ../gui/wxpython/mapswipe/dialogs.py:353
+msgid "Size:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:623
+msgid "Marker:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/preferences.py:724
+#, python-format
+msgid "3D view settings saved to file <%s>."
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:244
+msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:515
+#, python-format
+msgid "Image is too large, your OpenGL implementation supports maximum texture size %d px."
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1033
+msgid "Easting"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1034
+msgid "Northing"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1035
+msgid "Elevation"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1041
+msgid "Surface map name"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1044
+msgid "Surface map elevation"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1046
+msgid "Surface map color"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1057
+msgid "XY distance from previous"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1060
+msgid "XYZ distance from previous"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1063
+msgid "Distance along surface"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1067
+msgid "Distance along exag. surface"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1071
+msgid "No point on surface"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1555
+msgid "Loading raster map"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1559
+msgid "Loading 3d raster map"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1567
+msgid "failed"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1570
+#, python-format
+msgid "Unsupported layer type '%s'"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1690
+msgid "Unable to unload raster map"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1691 ../gui/wxpython/nviz/tools.py:824
+#: ../gui/wxpython/lmgr/layertree.py:1038 ../gui/wxpython/menustrings.py:2089
+#: ../gui/wxpython/psmap/dialogs.py:1545
+msgid "Raster map"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1695
+msgid "Unable to unload 3d raster map"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1696
+msgid "3d raster map"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1708
+msgid "unloaded successfully"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1764
+#, python-format
+msgid "Loading vector map <%(name)s> (%(type)s) failed"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1827
+#, python-format
+msgid "Unable to unload vector map <%(name)s> (%(type)s)"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:1831
+#, python-format
+msgid "Vector map <%(name)s> (%(type)s) unloaded successfully"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:2208
+#, python-format
+msgid "Vector point layer not found (id = %d)"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:2210
+#, python-format
+msgid "Unable to set data layer properties (id = %d)"
+msgstr ""
+
+#: ../gui/wxpython/nviz/mapwindow.py:2214
+#, python-format
+msgid ""
+"Setting data layer properties failed.\n"
+"\n"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 "%s"
 msgstr ""
 
@@ -14247,7 +16888,292 @@ msgstr ""
 msgid "Please specify name for a new raster map"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/rdigit/dialogs.py:109
+=======
+#: ../gui/wxpython/rdigit/dialogs.py:100
+#, python-format
+msgid "Raster map <%s> already exists in the current mapset. Do you want to overwrite it?"
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:125
+msgid "Please select first the raster map"
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:157
+msgid "Right click to finish area"
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:162
+msgid "Right click to finish line"
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:306
+msgid "Do you want to save changes?"
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:307
+msgid "Save raster map changes"
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:389
+msgid "Failed to create backup copy of edited raster map."
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:422
+#: ../gui/wxpython/rdigit/controller.py:440
+msgid "Failed to create new raster map."
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:539
+#: ../gui/wxpython/rdigit/controller.py:567
+msgid "Rasterizing..."
+msgstr ""
+
+#: ../gui/wxpython/rdigit/controller.py:608
+msgid "Failed to set default color table for edited raster map"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/menudata.py:44
+msgid "Unable to parse user toolboxes XML files. Default main menu will be loaded."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/menudata.py:70
+msgid "Unable to parse user toolboxes XML files. Default module tree will be loaded."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:48
+msgid "Start new map display"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:51
+msgid "Create new workspace (Ctrl+N)"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:54
+msgid "Open existing workspace file (Ctrl+O)"
+msgstr "നിലവിലുള്ള വർക്സ്പേസ് തുറക്കുക(Ctrl+O)"
+
+#: ../gui/wxpython/lmgr/toolbars.py:57
+msgid "Save current workspace to file (Ctrl+S)"
+msgstr "എപ്പെളത്തെ വർക്സ്പേസ് ശേഖരിച്ച് വയ്ക്കുക(Ctrl+S)"
+
+#: ../gui/wxpython/lmgr/toolbars.py:89
+msgid "Add multiple raster or vector map layers (Ctrl+Shift+L)"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:91
+msgid "Add raster map layer (Ctrl+Shift+R)"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:94
+msgid "Add various raster map layers (RGB, HIS, shaded relief...)"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:96
+msgid "Add vector map layer (Ctrl+Shift+V)"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:99
+msgid "Add various vector map layers (thematic, chart...)"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:102
+msgid "Add web service layer (WMS, WMTS, NASA OnEarth)"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:105
+msgid "Add group"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:108
+msgid "Add various overlays"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:111
+msgid "Remove selected map layer(s) from layer tree"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:153
+#: ../gui/wxpython/modules/mcalc_builder.py:55
+msgid "Raster Map Calculator"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:157
+msgid "Georectifier"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:159 ../gui/wxpython/menustrings.py:205
+#: ../gui/wxpython/menustrings.py:1995 ../gui/wxpython/psmap/frame.py:57
+msgid "Cartographic Composer"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:161
+msgid "Launch user-defined script"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:163 ../gui/wxpython/lmgr/pyshell.py:74
+msgid "Open a simple Python code editor"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:198
+msgid "GUI settings"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:199
+msgid "GRASS manual"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:227
+msgid "Edit selected vector map"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:230
+msgid "Show attribute data for selected vector map"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:262
+msgid "Generate command for m.nviz.image"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:263
+msgid "Generate command for m.nviz.image based on current state"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:266
+msgid "3D view mode settings"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:267
+msgid "Show 3D view mode settings dialog"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/toolbars.py:270
+msgid "Show 3D view mode manual"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:94
+msgid "GRASS GIS"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:129
+msgid "There were some issues when loading menu or Modules tab:"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:157
+msgid "Workspace Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:160
+msgid "Data Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:166
+msgid "Tools Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:169
+msgid "Vector Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:172
+msgid "3D view Toolbar"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:302
+msgid "Rename current Map Display"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:362
+#: ../gui/wxpython/gui_core/preferences.py:322
+#: ../gui/wxpython/gui_core/preferences.py:1113
+msgid "Modules"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:382
+msgid "Console"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:404
+#: ../gui/wxpython/gui_core/preferences.py:339
+msgid "Python"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:614
+msgid "Choose model to run"
+msgstr "തുടാങ്ങാനുള്ള മാത്രിക തിരഞെടുക്കുക"
+
+#: ../gui/wxpython/lmgr/frame.py:703
+msgid "Do you want to save changes in the workspace?"
+msgstr "വർക്സ്പേസിലെ വിവരങ്ങൾ സംഭരിച്ചുവെക്കുക വെക്കണമൊ ?"
+
+#: ../gui/wxpython/lmgr/frame.py:705
+msgid "Do you want to store current settings to workspace file?"
+msgstr "വർക്സ്പേസിലെ രംഗസജ്ജീകരണം ഫയലിൽ സംഭരിച്ചുവെക്കുക വെക്കണമൊ ?"
+
+#: ../gui/wxpython/lmgr/frame.py:785
+#, python-format
+msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:967 ../gui/wxpython/lmgr/frame.py:2040
+msgid "Selected map layer is not vector."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:973
+msgid "Editing is allowed only for vector maps from the current mapset."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:999
+msgid "Choose script file to run"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1001
+msgid "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1012
+#, python-format
+msgid "Script file '%s' doesn't exist. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1021
+#, python-format
+msgid "Script <%s> is not executable. Do you want to set the permissions that allows you to run this script (note that you must be the owner of the file)?"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1026
+msgid "Set permission?"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1036
+msgid "Unable to set permission. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1050
+#, python-format
+msgid "Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this directory to GRASS_ADDON_PATH?"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1052
+msgid "Update Addons path?"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1058
+#, python-format
+msgid "Launching script '%s'..."
+msgstr "സ്ക്രിപ്റ്റ് ഫയൽ തുടങ്ങുന്നു '%s'..."
+
+#: ../gui/wxpython/lmgr/frame.py:1074
+msgid "No location/mapset provided. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1114
+msgid "No mapset provided. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1151
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid ""
 "Raster map <%s> already exists in the current mapset. Do you want to "
@@ -14646,7 +17572,32 @@ msgid ""
 "ERROR: Unable to read WIND file: %s\n"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/core/render.py:1112
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/core/render.py:1111
+=======
+#: ../gui/wxpython/lmgr/frame.py:1902
+msgid "Unable to start Timeline Tool."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1913
+msgid "Unable to start Temporal Plot Tool."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:2083
+#, python-brace-format
+msgid "Map Display {number}"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:2179
+msgid "Add selected map layers into layer tree"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:2212 ../gui/wxpython/lmgr/frame.py:2249
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid "Unable to zoom to raster map <%s>."
 msgstr ""
@@ -15273,8 +18224,13 @@ msgstr ""
 msgid "Thematic mapping for vector map in 3D view"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/modules/import_export.py:50
 msgid "Multiple import"
+=======
+#: ../gui/wxpython/modules/mcalc_builder.py:58
+msgid "3D Raster Map Calculator"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:69
@@ -16514,7 +19470,11 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/rlisetup/frame.py:130
+=======
+#: ../gui/wxpython/rlisetup/frame.py:114
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Setup for r.li modules"
 msgstr ""
 
@@ -17139,10 +20099,16 @@ msgstr "നിലവിലുള്ള വർക്സ്പേസ് തുറ�
 msgid "Save current workspace to file (Ctrl+S)"
 msgstr "എപ്പെളത്തെ വർക്സ്പേസ് ശേഖരിച്ച് വയ്ക്കുക(Ctrl+S)"
 
+<<<<<<< HEAD
 #: ../gui/wxpython/lmgr/toolbars.py:58
 #, fuzzy
 msgid "New workspace"
 msgstr "വർക്സ്പേസ് സംഭരിച്ചു വെക്കുക"
+=======
+#: ../gui/wxpython/startup/guiutils.py:80
+msgid "Invalid mapset name"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../gui/wxpython/lmgr/toolbars.py:63
 #, fuzzy
@@ -17282,9 +20248,18 @@ msgstr ""
 msgid "Type %s for more GRASS scripting related information."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/lmgr/pyshell.py:52
 #, python-format
 msgid "Type %s to add raster or vector to the layer tree."
+=======
+#: ../gui/wxpython/startup/guiutils.py:186
+msgid "Unable to create new mapset: {}"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:212
+msgid "Do you want to import {}to the newly created location?"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/lmgr/pyshell.py:74
@@ -17344,6 +20319,7 @@ msgid ""
 "Do you want to proceed with opening the workspace anyway?"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/lmgr/workspace.py:148
 msgid "Proceed with opening of the workspace?"
 msgstr ""
@@ -17359,6 +20335,203 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/workspace.py:179
 #: ../gui/wxpython/animation/nviztask.py:40
+=======
+#: ../gui/wxpython/startup/guiutils.py:269
+msgid "Unable to rename selected mapset"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:280
+#: ../gui/wxpython/startup/guiutils.py:334
+msgid ""
+"Current name: {}\n"
+"\n"
+"Enter new name:"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:294
+msgid ""
+"Unable to rename mapset.\n"
+"\n"
+"{}"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:319
+#, python-brace-format
+msgid ""
+"Cannot rename location <{location}> for the following reasons:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"No location will be renamed."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:323
+msgid "Unable to rename selected location"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:347
+msgid ""
+"Unable to rename location.\n"
+"\n"
+"{}"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:410
+#, python-brace-format
+msgid ""
+"Cannot delete one or more mapsets for the following reasons:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"No mapsets will be deleted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:414
+msgid "Unable to delete selected mapsets"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:430
+#, python-brace-format
+msgid ""
+"Do you want to continue with deleting one or more of the following mapsets?\n"
+"\n"
+"{deletes}\n"
+"\n"
+"All maps included in these mapsets will be permanently deleted!"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:435
+msgid "Delete selected mapsets"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:448
+msgid "Error when deleting mapsets"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:450
+#, python-brace-format
+msgid ""
+"The following error occured when deleting mapset <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of mapsets was interrupted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:495
+#, python-brace-format
+msgid ""
+"Cannot delete one or more locations for the following reasons:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"No locations will be deleted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:499
+msgid "Unable to delete selected locations"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:515
+#, python-brace-format
+msgid ""
+"Do you want to continue with deleting one or more of the following locations?\n"
+"\n"
+"{deletes}\n"
+"\n"
+"All mapsets included in these locations will be permanently deleted!"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:520
+msgid "Delete selected locations"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:533
+msgid "Error when deleting locations"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:535
+#, python-brace-format
+msgid ""
+"The following error occured when deleting location <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of locations was interrupted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:568
+#, python-brace-format
+msgid ""
+"Cannot delete GRASS database from disk for the following reason:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"GRASS database will not be deleted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:572
+msgid "Unable to delete selected GRASS database"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:580
+#, python-brace-format
+msgid ""
+"Do you want to delete the following GRASS database from disk?\n"
+"\n"
+"{grassdb}\n"
+"\n"
+"The directory will be permanently deleted!"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:585
+msgid "Delete selected GRASS database"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:597
+msgid "Error when deleting GRASS database"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:599
+#, python-brace-format
+msgid ""
+"The following error occured when deleting database <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of GRASS database was interrupted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:631
+#, python-brace-format
+msgid ""
+"User {user} is already running GRASS in selected mapset <{mapset}>\n"
+" (file {lockpath} created {timestamp} found).\n"
+"\n"
+"Concurrent use not allowed.\n"
+"\n"
+"Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:641
+msgid "Mapset is in use"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:653
+msgid "Error when removing lock file"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:654
+#, python-brace-format
+msgid ""
+"Unable to remove {lockpath}.\n"
+"\n"
+" Details: {error}."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:693
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:593
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
@@ -17382,6 +20555,7 @@ msgstr "ഈ പേരിലുള്ള വർക്സ്പേസ്<%s> ന�
 msgid "Writing current settings to workspace file failed."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/lmgr/workspace.py:467
 msgid "Do you want to save changes in the workspace?"
 msgstr "വർക്സ്പേസിലെ വിവരങ്ങൾ സംഭരിച്ചുവെക്കുക വെക്കണമൊ ?"
@@ -17416,6 +20590,24 @@ msgstr ""
 msgid ""
 "Database connection for vector map <%s> is not defined in DB file. You can "
 "define new connection in 'Manage layers' tab."
+=======
+#: ../gui/wxpython/startup/guiutils.py:717
+#, python-format
+msgid ""
+"Current GRASS database is <%(dbase)s>.\n"
+"Current location is <%(loc)s>.\n"
+"Current mapset is <%(mapset)s>."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:743
+#, python-format
+msgid "Current mapset is <%s>."
+msgstr "നിലവിലുള്ള മാപ്പ്സെറ്റാൺ <%s>"
+
+#: ../gui/wxpython/dbmgr/base.py:170
+#, python-format
+msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:123
@@ -17584,7 +20776,24 @@ msgstr ""
 msgid "Dbf driver does not support usage of SQL functions."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/dbmgr/base.py:185
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/dbmgr/base.py:184
+=======
+#: ../gui/wxpython/dbmgr/manager.py:78
+msgid "Attribute Table Manager"
+msgstr ""
+
+#: ../gui/wxpython/dbmgr/manager.py:81
+#, python-brace-format
+msgid "{document} (read-only)"
+msgstr ""
+
+#: ../gui/wxpython/dbmgr/manager.py:100
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid ""
 "Attribute table <%s> not found. For creating the table switch to 'Manage "
@@ -18684,15 +21893,678 @@ msgstr ""
 msgid "Invalid"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/animation/provider.py:444
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/animation/provider.py:443
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 msgid "Rendering map layers"
+=======
+#: ../gui/wxpython/gui_core/preferences.py:1739
+msgid "PROJ string (required):"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../gui/wxpython/animation/provider.py:562
 msgid "Overlaying map layers"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/animation/provider.py:792
+=======
+<<<<<<< HEAD
+#: ../gui/wxpython/animation/provider.py:789
+=======
+#: ../gui/wxpython/gui_core/preferences.py:1773
+msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1781
+msgid "&Load EPSG codes"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1801
+msgid "Coordinates format"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1809
+msgid "Lat/long projections"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1830
+msgid "Precision:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1916
+#, python-format
+msgid "Unable to read EPSG codes: %s"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1949
+#: ../gui/wxpython/gui_core/preferences.py:1961
+#: ../gui/wxpython/gui_core/preferences.py:1973
+#, python-format
+msgid "EPSG code %s not found"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1983
+msgid "Select default display font"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1997
+msgid "Failed to set default display font. Try different font."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:2016
+msgid "Select default output font"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:2105
+msgid "Manage access to mapsets"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:2120
+msgid ""
+"Check a mapset to make it accessible, uncheck it to hide it.\n"
+"  Notes:\n"
+"    - The current mapset is always accessible.\n"
+"    - You may only write to the current mapset.\n"
+"    - You may only write to mapsets which you own."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:2197
+msgid "Owner"
+msgstr "ഉടമസ്ഥൻ"
+
+#: ../gui/wxpython/gui_core/dialogs.py:74
+msgid "Required item is not set."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:105
+msgid "Select GRASS location and mapset"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:125
+msgid "Location or mapset is not defined."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:135
+msgid "Name of GRASS location:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:146
+#: ../gui/wxpython/gui_core/dialogs.py:203
+msgid "Name of mapset:"
+msgstr "മാപ്പ്സെറ്റിന്റെ പേർ:"
+
+#: ../gui/wxpython/gui_core/dialogs.py:175
+msgid "Select mapset in GRASS location"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:195
+msgid "Name of mapset is missing."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:216
+#: ../gui/wxpython/vdigit/toolbars.py:840
+#: ../gui/wxpython/vdigit/toolbars.py:997
+#: ../gui/wxpython/vdigit/toolbars.py:1095
+msgid "Select vector map"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:230
+msgid "Name of vector map is missing."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:292
+msgid "Create attribute table"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:326
+msgid "Name of new vector map is missing."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:348
+msgid "Name for new vector map:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:450
+#, python-format
+msgid "Unable to create vector map <%s>."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:455
+#, python-format
+msgid ""
+"Invalid or empty key column.\n"
+"Unable to create vector map <%s>."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:486
+#, python-format
+msgid "Vector map <%s> already exists in the current mapset. Do you want to overwrite it?"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:576
+msgid "Load region:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:582
+msgid "Save region:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:634
+msgid "Name cannot begin with '.' and must not contain space, quotes, '/', ''', '@', ',', '=', '*', and all other non-alphanumeric characters."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:650
+msgid "Create or edit imagery groups"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:684
+msgid "Apply changes to selected group and close dialog"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:685
+msgid "Apply changes to selected group"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:686
+msgid "Close dialog, changes are not applied"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:727
+#: ../gui/wxpython/gui_core/dialogs.py:1524
+msgid "Put here a regular expression. Characters '.*' stand for anything, character '^' stands for the beginning and '$' for the end."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:734
+msgid "Select existing group or enter name of new group:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:745
+msgid "Edit/create subgroup"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:758
+msgid "Select existing subgroup or enter name of new subgroup:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:791
+#: ../gui/wxpython/gui_core/dialogs.py:859
+#: ../gui/wxpython/gui_core/dialogs.py:1509
+msgid "Pattern:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:809
+#: ../gui/wxpython/gui_core/dialogs.py:877
+#: ../gui/wxpython/gui_core/dialogs.py:1533
+msgid "List of maps:"
+msgstr "മാപ്പിന്റെ പട്ടിക:"
+
+#: ../gui/wxpython/gui_core/dialogs.py:825
+msgid "Select map layers and add them to the list."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:830
+msgid "Remove selected layer(s) from list."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:887
+msgid "Check maps from group to be included into subgroup."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1051
+msgid "Add selected map layers into group"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1188
+#, python-format
+msgid "Group <%s> was changed, do you want to apply changes?"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1191
+#: ../gui/wxpython/gui_core/dialogs.py:1207
+msgid "Unapplied changes"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1204
+#, python-format
+msgid "Subgroup <%s> was changed, do you want to apply changes?"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1261
+msgid "No raster maps selected."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1290
+#, python-format
+msgid "No changes to apply in group <%s>."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1293
+#, python-format
+msgid "Group <%s> was successfully created."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1295
+#, python-format
+msgid "Group <%s> was successfully changed."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1298
+#, python-format
+msgid "Creating of new group <%s> failed."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1300
+#, python-format
+msgid "Changing of group <%s> failed."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1339
+msgid "No group selected."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1344
+msgid "No subgroup selected."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1451
+msgid "Use fully-qualified map names"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1477
+msgid "Map type:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1492
+msgid "Select toggle"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1499
+msgid "Mapset:"
+msgstr "മാപ്പ്സെറ്റ്:"
+
+#: ../gui/wxpython/gui_core/dialogs.py:1593
+msgid "Invert selection"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1736
+#, python-format
+msgid "Dynamic series (%s)"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1763
+msgid "Set Map Layer Opacity"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1794
+#: ../gui/wxpython/psmap/dialogs.py:6379 ../gui/wxpython/psmap/dialogs.py:6406
+#: ../gui/wxpython/psmap/dialogs.py:6732 ../gui/wxpython/psmap/dialogs.py:6762
+msgid "transparent"
+msgstr "പ്രസന്നമായ "
+
+#: ../gui/wxpython/gui_core/dialogs.py:1797
+msgid "opaque"
+msgstr "അതാര്യമായ"
+
+#: ../gui/wxpython/gui_core/dialogs.py:1898
+msgid "Set image size"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1913
+msgid "Image size"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:1960
+msgid "Template:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2000
+msgid "SQL Query Utility"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2016
+msgid " SQL statement "
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2064
+msgid "Symbols"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2099
+msgid "Symbol directory:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2111
+msgid "Symbol name:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2364
+msgid "Do you want to quit GRASS GIS including shell or just close the GUI?"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2369
+msgid "Do you want to quit GRASS GIS?"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2448
+msgid "Select font:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2479
+msgid "Character encoding:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2497
+#: ../gui/wxpython/psmap/dialogs.py:397 ../gui/wxpython/psmap/dialogs.py:4980
+msgid "Font size:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/dialogs.py:2549
+msgid "Example"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/wrap.py:208
+msgid "Clear"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/wrap.py:210
+msgid "&Clear"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/wrap.py:223
+msgid "&Cancel"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/wrap.py:235
+msgid "&Close"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/wrap.py:245
+msgid "Apply"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:564
+msgid "Enter parameters for '"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:576
+msgid "Close this window without executing the command (Ctrl+Q)"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:607
+msgid "Run the command (Ctrl+R)"
+msgstr "ആജ്ന നടപക്കുക(Ctrl+R)"
+
+#: ../gui/wxpython/gui_core/forms.py:631
+msgid "Show manual page of the command (Ctrl+H)"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:670
+msgid "Add created map(s) into layer tree"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:700
+msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:885
+#, python-format
+msgid "'%s' copied to clipboard"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:975 ../gui/wxpython/gui_core/forms.py:989
+msgid "Required"
+msgstr "ആവശ്യമായത്"
+
+#: ../gui/wxpython/gui_core/forms.py:978 ../gui/wxpython/gui_core/forms.py:990
+msgid "Optional"
+msgstr "ഐച്ഛിക"
+
+#: ../gui/wxpython/gui_core/forms.py:1073
+#: ../gui/wxpython/gui_core/forms.py:2105
+msgid "Parameterized in model"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:1163
+msgid "[multiple]"
+msgstr "[അനേകം]"
+
+#: ../gui/wxpython/gui_core/forms.py:1221
+msgid "valid range"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:1578
+msgid "Show graphical representation of temporal extent of dataset(s) ."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:1845
+#: ../gui/wxpython/gui_core/forms.py:1936
+#, python-format
+msgid "Choose %s"
+msgstr "തിരഞ്ഞെടുക്കുക %s"
+
+#: ../gui/wxpython/gui_core/forms.py:1890
+msgid "Load and edit content of a file"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:1893
+msgid "&Save as"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:1895
+msgid "Save content to a file for further use"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:1900
+msgid "or enter values directly:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:1902
+msgid "Enter file content directly instead of specifying a file. Temporary file will be automatically created."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:2318
+msgid "Manual"
+msgstr "ഹസ്തവിഷയകമായ"
+
+#: ../gui/wxpython/gui_core/forms.py:2362
+msgid "Nothing to load."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:2370
+#, python-format
+msgid ""
+"Unable to load file.\n"
+"\n"
+"Reason: %s"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:2400
+msgid "Save input as..."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:2733
+msgid "No dataset given."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:2902
+#: ../gui/wxpython/gui_core/forms.py:2919
+#, python-format
+msgid "Unable to parse command '%s'"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:2926
+#, python-format
+msgid "%(cmd)s: parameter '%(key)s' not available"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/forms.py:3008
+msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:155
+msgid "Adva&nced search..."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:157
+#, python-format
+msgid "Do advanced search using %s module"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:161
+msgid "Double-click to run selected module"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:164
+msgid "&Run..."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:165
+msgid "Run selected module from the tree"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:166
+msgid "H&elp"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:168
+msgid "Show manual for selected module from the tree"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:278
+#, python-format
+msgid "Documentation for %s is now open in the web browser"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:356
+msgid "&Recent Files"
+msgstr ""
+
+#: ../gui/wxpython/icons/icon.py:39
+#, python-format
+msgid "Unknown iconset '%s', using default 'grass'...\n"
+msgstr ""
+
+#: ../gui/wxpython/icons/icon.py:57
+#, python-format
+msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+msgstr ""
+
+#: ../gui/wxpython/gcp/mapdisplay.py:48 ../gui/wxpython/gcp/manager.py:994
+#: ../gui/wxpython/image2target/ii2t_manager.py:952
+msgid "Manage Ground Control Points"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:150
+#: ../gui/wxpython/image2target/ii2t_manager.py:179
+msgid "Setup for georectification"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:183 ../gui/wxpython/gcp/manager.py:187
+#: ../gui/wxpython/image2target/ii2t_manager.py:212
+#: ../gui/wxpython/image2target/ii2t_manager.py:216
+msgid "Georectifying setup canceled."
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:374
+#: ../gui/wxpython/image2target/ii2t_manager.py:381
+msgid "Select map type and location/mapset"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:388
+#: ../gui/wxpython/image2target/ii2t_manager.py:395
+msgid "Map type to georectify"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:399
+#: ../gui/wxpython/image2target/ii2t_manager.py:406
+msgid "Select source location:"
+msgstr "ലൊക്കെഷന്റ്റെ ഉറവിടം തിരഞെടുക്കുക"
+
+#: ../gui/wxpython/gcp/manager.py:420
+#: ../gui/wxpython/image2target/ii2t_manager.py:427
+msgid "Select source mapset:"
+msgstr "മാപ്പ്സെറ്റിന്റ്റെ ഉറവിടം തിരഞെടുക്കുക"
+
+#: ../gui/wxpython/gcp/manager.py:476
+#: ../gui/wxpython/image2target/ii2t_manager.py:483
+msgid "You must select a valid location before selecting a mapset"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:489
+#: ../gui/wxpython/image2target/ii2t_manager.py:496
+msgid "You must select a valid location and mapset in order to continue"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:511
+#: ../gui/wxpython/image2target/ii2t_manager.py:518
+msgid "Select image/map group to georectify"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:533
+msgid "Select/create group:"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:550
+#: ../gui/wxpython/image2target/ii2t_manager.py:557
+msgid "Create group if none exists"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:564
+#: ../gui/wxpython/image2target/ii2t_manager.py:571
+msgid "Add vector map to group..."
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:655
+msgid "No vector maps."
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:662
+#: ../gui/wxpython/image2target/ii2t_manager.py:655
+msgid "You must select a valid image/map group in order to continue"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:669
+#: ../gui/wxpython/image2target/ii2t_manager.py:662
+msgid "You must enter an map name extension in order to continue"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:738
+#: ../gui/wxpython/image2target/ii2t_manager.py:731
+msgid "Select maps to display for ground control point (GCP) creation"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:743
+msgid "Map Display Web Service Layer(s)"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:802 ../gui/wxpython/gcp/manager.py:3060
+#: ../gui/wxpython/image2target/ii2t_manager.py:792
+#: ../gui/wxpython/image2target/ii2t_manager.py:2982
+msgid "Select target vector map to display:"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:874
+#: ../gui/wxpython/image2target/ii2t_manager.py:864
+msgid "You must select a source map in order to continue"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:901 ../gui/wxpython/gcp/manager.py:920
+#: ../gui/wxpython/image2target/ii2t_manager.py:891
+#: ../gui/wxpython/image2target/ii2t_manager.py:922
+#, python-format
+msgid ""
+"No maps in selected group <%s>.\n"
+"Please edit group or select another group."
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:1691
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
 #, python-brace-format
 msgid "Directory {t} not removed."
 msgstr ""
@@ -18719,7 +22591,926 @@ msgstr ""
 msgid "to %(to)s"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../gui/wxpython/psmap/instructions.py:151
+=======
+#: ../gui/wxpython/gcp/manager.py:1790
+#: ../gui/wxpython/image2target/ii2t_manager.py:1706
+#, python-format
+msgid "Rectifying vector map <%s>, please wait..."
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:1825
+#: ../gui/wxpython/image2target/ii2t_manager.py:1741
+#, python-format
+msgid "Georectification of vector map <%s> failed"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2299 ../gui/wxpython/gcp/manager.py:2317
+#: ../gui/wxpython/image2target/ii2t_manager.py:2212
+#: ../gui/wxpython/image2target/ii2t_manager.py:2232
+msgid "source E"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2300 ../gui/wxpython/gcp/manager.py:2318
+#: ../gui/wxpython/image2target/ii2t_manager.py:2213
+#: ../gui/wxpython/image2target/ii2t_manager.py:2233
+msgid "source N"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2301 ../gui/wxpython/gcp/manager.py:2319
+#: ../gui/wxpython/image2target/ii2t_manager.py:2215
+#: ../gui/wxpython/image2target/ii2t_manager.py:2235
+msgid "target E"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2302 ../gui/wxpython/gcp/manager.py:2320
+#: ../gui/wxpython/image2target/ii2t_manager.py:2216
+#: ../gui/wxpython/image2target/ii2t_manager.py:2236
+msgid "target N"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2506
+#: ../gui/wxpython/image2target/ii2t_manager.py:2427
+msgid "Create vector map group"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2581
+#: ../gui/wxpython/image2target/ii2t_manager.py:2502
+msgid "Select vector map(s) to add to group:"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2668
+#: ../gui/wxpython/image2target/ii2t_manager.py:2585
+msgid "source E:"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2669
+#: ../gui/wxpython/image2target/ii2t_manager.py:2586
+msgid "target E:"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2670
+#: ../gui/wxpython/image2target/ii2t_manager.py:2587
+msgid "source N:"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:2671
+#: ../gui/wxpython/image2target/ii2t_manager.py:2588
+msgid "target N:"
+msgstr ""
+
+#: ../gui/wxpython/gcp/manager.py:3136
+msgid "overwrite result map"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:110
+msgid "Select area/boundary/centroid tool"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:136
+msgid "Digitize new point"
+msgstr "പുതിയ ബിന്ധു ഡിജിറ്റൈസ് ചെയ്യുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:137
+#: ../gui/wxpython/vdigit/toolbars.py:146
+#: ../gui/wxpython/vdigit/toolbars.py:149
+msgid "Left: new point"
+msgstr "എടത്: പുതിയ ബിന്ദു"
+
+#: ../gui/wxpython/vdigit/toolbars.py:139
+msgid "Digitize new line"
+msgstr "പുതിയ വര ഡിജിറ്റൈസ് ചെയ്യുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:140
+#: ../gui/wxpython/vdigit/toolbars.py:143
+#: ../gui/wxpython/vdigit/toolbars.py:167
+msgid "Left: new point; Ctrl+Left: undo last point; Right: close line"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:142
+msgid "Digitize new boundary"
+msgstr "പുതിയ അതിർത്തി ഡിജിറ്റൈസ് ചെയ്യുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:145
+msgid "Digitize new centroid"
+msgstr "പുതിയ നടു ബിന്ധു ഡിജിറ്റൈസ് ചെയ്യുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:148
+msgid "Digitize new area (boundary without category)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:151
+msgid "Add new vertex to line or boundary"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:152
+#: ../gui/wxpython/vdigit/toolbars.py:155
+#: ../gui/wxpython/vdigit/toolbars.py:158
+#: ../gui/wxpython/vdigit/toolbars.py:170
+#: ../gui/wxpython/vdigit/toolbars.py:173
+#: ../gui/wxpython/vdigit/toolbars.py:176
+#: ../gui/wxpython/vdigit/toolbars.py:185
+msgid "Left: Select; Ctrl+Left: Unselect; Right: Confirm"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:154
+msgid "Delete selected point(s), line(s), boundary(ies) or centroid(s)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:157
+msgid "Delete selected area(s)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:160
+msgid "Display/update attributes"
+msgstr "ഫീച്ചറുകൾ കാണിക്കുകയൊ/മാറ്റം വരുത്തുകയൊ ചെയ്യുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:161
+#: ../gui/wxpython/vdigit/toolbars.py:164
+msgid "Left: Select"
+msgstr "എടത്: തിരഞ്ഞെടുക്കുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:163
+msgid "Display/update categories"
+msgstr "കാറ്റഗറികൾ കാണിക്കുകയൊ/മാറ്റം വരുത്തുകയൊ ചെയ്യുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:166
+msgid "Edit selected line/boundary"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:169
+msgid "Move selected point(s), line(s), boundary(ies) or centroid(s)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:172
+msgid "Move selected vertex"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:175
+msgid "Remove selected vertex"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:177
+#: ../gui/wxpython/vdigit/preferences.py:32
+msgid "Digitization settings"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:178
+msgid "Quit digitizer"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:179
+msgid "Quit digitizer and save changes"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:180
+msgid "Vector Digitizer manual"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:181
+msgid "Show Vector Digitizer manual"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:183
+msgid "Additional tools (copy, flip, connect, etc.)"
+msgstr "കൂടുതൽ ഉള്ള വഴികൾ (പകർത്തുക,ഞൊട്ടുക,യോജിപ്പിക്കുക,മുതലായവ.)"
+
+#: ../gui/wxpython/vdigit/toolbars.py:188
+msgid "Undo previous changes"
+msgstr "മുൻപ് വരുത്തിയ മാറ്റങ്ങൾ ഇല്ലാതാക്കുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:190
+msgid "Redo"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:191
+msgid "Redo previous changes"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:558
+msgid "Break selected lines/boundaries at intersection"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:560
+msgid "Connect selected lines/boundaries"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:562
+msgid "Copy categories"
+msgstr "കാറ്റഗറിയുടെ പതിപ്പ് ഉണ്ടാക്കുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:564
+msgid "Copy features from (background) vector map"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:566
+msgid "Copy attributes"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:568
+msgid "Feature type conversion"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:570
+msgid "Flip selected lines/boundaries"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:572
+msgid "Merge selected lines/boundaries"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:574
+msgid "Snap selected lines/boundaries (only to nodes)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:576
+msgid "Split line/boundary"
+msgstr "ലൈനൊ/അതിർത്തിയൊ വിഘടിപിക്കുക"
+
+#: ../gui/wxpython/vdigit/toolbars.py:578
+msgid "Query features"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:580
+msgid "Z bulk-labeling of 3D lines"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:602 ../gui/wxpython/vdigit/wxdigit.py:68
+msgid "No vector map open for editing."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:607
+msgid "Select background vector map"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:767
+msgid "Vector map is not 3D. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:872
+#, python-format
+msgid ""
+"Topology for vector map <%s> is not available. Topology is required by digitizer.\n"
+"Do you want to rebuild topology (takes some time) and open the vector map for editing?"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:877
+msgid "Digitizer error"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:902
+#, python-format
+msgid "Please wait, opening vector map <%s> for editing..."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:940
+#, python-format
+msgid "Unsupported feature type '%(type)s'. Unable to edit OGR layer <%(layer)s>."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:1010
+#, python-format
+msgid "Do you want to save changes in vector map <%s>?"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:1013
+msgid "Save changes?"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:1020
+#, python-format
+msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:1038
+#, python-format
+msgid "Editing of vector map <%s> successfully finished"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:1103
+#: ../gui/wxpython/vdigit/toolbars.py:1110
+msgid "New vector map"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:61
+msgid "Digitization Error"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:66
+#, python-format
+msgid "Unable to open vector map <%s>."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:69
+msgid "Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:76
+#, python-format
+msgid ""
+"Writing new feature failed. Operation canceled.\n"
+"\n"
+"Reason: %s"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:85
+#, python-format
+msgid "Reading feature id %d failed. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:93
+#, python-format
+msgid "Database link %d not available. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:101
+#, python-format
+msgid "Unable to start database driver <%s>. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:111
+#, python-format
+msgid "Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:119
+#, python-format
+msgid "Unable to execute SQL query '%s'. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:127
+#, python-format
+msgid "Feature id %d is marked as dead. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:135
+#, python-format
+msgid "Unsupported feature type %d. Operation canceled."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:504
+#, python-format
+msgid "Unknown feature type '%s'"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdigit.py:509
+msgid "Not enough points for line"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:67
+msgid "Vector Digitizer - GRASS GIS"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:83
+#, python-format
+msgid "Vector digitizer not available. %s"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:88
+#, python-format
+msgid "Vector map <%s> not found in current mapset. New vector map can be created by providing '-c' flag."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:92
+#, python-format
+msgid "New vector map <%s> created"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:99
+#, python-format
+msgid "Unable to create new vector map <%s>"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdisplay.py:1032
+#, python-format
+msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdisplay.py:1037
+msgid "Topology missing"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:63
+msgid "Apply changes for this session"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:67
+msgid "Close dialog and save changes to user settings file"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:201
+msgid "Snapping"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:210
+msgid "Snapping threshold"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:219
+msgid "screen pixels"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:219
+msgid "map units"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:239
+msgid "Snap also to vertex"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:249
+#: ../gui/wxpython/vdigit/preferences.py:904
+#: ../gui/wxpython/vdigit/preferences.py:918
+#: ../gui/wxpython/vdigit/preferences.py:922
+#, python-format
+msgid "Snapping threshold is %(value).1f %(units)s"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:267
+msgid "Select vector features"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:287
+msgid "Select threshold"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:308
+msgid "Select only features inside of selection bounding box"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:315
+msgid "By default are selected all features overlapping selection bounding box "
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:318
+msgid "Check for duplicates"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:344
+msgid "Digitize lines/boundaries"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:348
+msgid "Break lines at intersection"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:371
+msgid "Digitize areas"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:375
+msgid "Close boundary (snap to the start node)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:398
+msgid "Save changes"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:401
+msgid "Save changes on exit"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:422
+msgid "Query tool"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:433
+msgid "Choose query tool"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:441
+msgid "Select by box"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:459
+#: ../gui/wxpython/vdigit/preferences.py:693
+msgid "length"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:471
+msgid "Select lines"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:474
+#: ../gui/wxpython/vdigit/preferences.py:528
+msgid "shorter than"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:474
+#: ../gui/wxpython/vdigit/preferences.py:528
+msgid "longer than"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:513
+msgid "dangle"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:525
+msgid "Select dangles"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:592
+msgid "Digitize new feature"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:597
+msgid "Add new record into table"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:612
+msgid "Mode"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:612
+#: ../gui/wxpython/vdigit/preferences.py:644
+msgid "Next to use"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:626
+msgid "Category number"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:642
+msgid "Category mode"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:644
+msgid "Manual entry"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:644
+msgid "No category"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:667
+msgid "Delete existing feature(s)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:672
+msgid "Delete record from table"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:690
+msgid "Geometry attributes"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:695
+msgid "perimeter"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:766
+msgid "Note: These settings are stored in the workspace not in the vector digitizer preferences."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:795
+msgid "Digitize new line segment"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:796
+msgid "Digitize new line/boundary"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:797
+msgid "Highlight"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:798
+msgid "Highlight (duplicates)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:800
+#: ../gui/wxpython/psmap/toolbars.py:103
+msgid "Line"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:801
+msgid "Boundary (no area)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:802
+msgid "Boundary (one area)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:803
+msgid "Boundary (two areas)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:804
+msgid "Centroid (in area)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:805
+msgid "Centroid (outside area)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:806
+msgid "Centroid (duplicate in area)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:807
+msgid "Node (one line)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:808
+msgid "Node (two lines)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:809
+msgid "Vertex"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:810
+msgid "Area (closed boundary + centroid)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:811
+msgid "Direction"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:895
+msgid "Snapping disabled"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:899
+#, python-format
+msgid "Snapping threshold is %(value).1f %(units)s (based on comp. resolution)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/preferences.py:955
+#, python-format
+msgid "Vector digitizer settings saved to file <%s>."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:78
+msgid "List of categories - right-click to delete"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:109
+msgid "Add new category"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:152
+msgid "Ignore changes and close dialog"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:247 ../gui/wxpython/vdigit/dialogs.py:471
+#, python-format
+msgid ""
+"Unable to add new layer/category <%(layer)s/%(category)s>.\n"
+"Layer and category number must be integer.\n"
+"Layer number must be greater than zero."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:445
+msgid "Unable to update vector map."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:621
+#, python-format
+msgid "%d lines selected for z bulk-labeling"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:629
+msgid "Set value"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:636
+msgid "Starting value"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:648
+msgid "Step"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:691
+msgid "List of duplicates"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:799
+msgid "Feature id"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/dialogs.py:800
+msgid "Layer (Categories)"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/mapwindow.py:427
+msgid "Update categories"
+msgstr ""
+
+#: ../gui/wxpython/vdigit/mapwindow.py:551
+#: ../gui/wxpython/vdigit/mapwindow.py:960
+msgid "No vector map selected for editing."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/mapwindow.py:560
+msgid "Nothing to do. Choose appropriate tool from digitizer toolbar."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/mapwindow.py:1094
+msgid "Z bulk-labeling dialog"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:248
+#, python-format
+msgid "GRASS GIS %s startup%s"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:534
+#, python-format
+msgid "Do you want to import <%(name)s> to the newly created location?"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:551
+msgid "New mapset:"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:614
+msgid ""
+"Mapset <PERMANENT> is required for valid GRASS location.\n"
+"\n"
+"This mapset cannot be renamed."
+msgstr ""
+"മാപ്പ്സെറ്റ് <PERMANENT> ഗ്രാസ്സ് ലൊകേഷനിൽ ഉണ്ടായിരിക്കണം.\n"
+"\n"
+"ഈ മപ്സെറ്റിന്റെ പേർ മാറ്റാനും പറ്റില്ല"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:620
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:663
+#, python-format
+msgid ""
+"Current name: %s\n"
+"\n"
+"Enter new name:"
+msgstr ""
+"ഇപ്പൊഴുള്ള പേർ: %s\n"
+"\n"
+"പുതിയ പേർ:"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:636
+#, python-format
+msgid ""
+"Unable to rename mapset.\n"
+"\n"
+"Mapset <%s> already exists in location."
+msgstr ""
+"മാപ്പ്സെറ്റ് പേർ മാറ്റാൻ പറ്റുനില്ല\n"
+"\n"
+"മാപ്പ്സെറ്റ് <%s> ലൊക്കെഷനിൽ ഉണ്ട്"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:650
+#, python-format
+msgid ""
+"Unable to rename mapset.\n"
+"\n"
+"%s"
+msgstr ""
+"മാപ്പ്സെറ്റ് പേർ മാറ്റാൻ പറ്റുനില്ല\n"
+"\n"
+"%s"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:679
+#, python-format
+msgid ""
+"Unable to rename location.\n"
+"\n"
+"Location <%s> already exists in GRASS database."
+msgstr ""
+"ലൊക്കെഷൻ പേർ മാറ്റാൻ പറ്റുനില്ല\n"
+"\n"
+"ലൊക്കെഷൻ <%s> ഗ്രാസ്സിൽ ഉണ്ട്"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:694
+#, python-format
+msgid ""
+"Unable to rename location.\n"
+"\n"
+"%s"
+msgstr ""
+"ലൊക്കെഷൻ പേർ മാറ്റാൻ പറ്റുനില്ല\n"
+"\n"
+"%s"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:708
+msgid ""
+"Mapset <PERMANENT> is required for valid GRASS location.\n"
+"\n"
+"This mapset cannot be deleted."
+msgstr ""
+"മാപ്പ്സെറ്റ് <PERMANENT> ഗ്രാസ്സ് ലൊകേഷനിൽ ഉണ്ടായിരിക്കണം.\n"
+"\n"
+"ഈ മാപ്പ്സെറ്റ് കളയാൻ പറ്റില്ല"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:715
+#, python-format
+msgid ""
+"Do you want to continue with deleting mapset <%(mapset)s> from location <%(location)s>?\n"
+"\n"
+"ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
+msgstr ""
+"നിങ്ങൾ തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് <%(mapset)s> ലോക്കേഷനിൽ <%(location)s> നിന്നും എടുത്തുകളയണമോ ?\n"
+"\n"
+"എല്ലാ മാപ്പുകളും സ്തിരമയി എടുത്തുകളയുന്നതാണ്!!"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:729
+msgid "Unable to delete mapset"
+msgstr "മാപ്പ്സെറ്റ് എടുത്തുകളയാൻ പറ്റുനില്ല"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:743
+#, python-format
+msgid ""
+"Do you want to continue with deleting location <%s>?\n"
+"\n"
+"ALL MAPS included in this location will be PERMANENTLY DELETED!"
+msgstr ""
+"നിങ്ങൾ തിരഞ്ഞെടുത്ത ലൊക്കെഷൻ എടുത്തുകളയണമോ <%s>?\n"
+"\n"
+"എല്ലാ മാപ്പുകളും സ്തിരമയി എടുത്തുകളയുന്നതാണ്!!"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:759
+msgid "Unable to delete location"
+msgstr "ലൊക്കെഷൻ എടുത്തുകളയാൻ പറ്റുനില്ല"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:932
+msgid "Enter name for new mapset:"
+msgstr "പുതിയ മാപ്പ്സെറ്റിൻടേ പേർ എഴുതുക"
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:947
+#, python-format
+msgid "Mapset <%s> already exists."
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:954
+#, python-format
+msgid ""
+"Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
+"\n"
+"Are you really sure that you want to create this mapset?"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:959
+msgid "Reserved mapset name"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1085
+#, python-format
+msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:540
+msgid "Select group:"
+msgstr "ഗ്രൂപ്പ് തിരഞെടുക്കുക:"
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:1485
+msgid "Writing CONTROL_POINTS file failed"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:1497
+#, python-format
+msgid "CONTROL_POINTS file saved for group <%s>"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:1546
+msgid "Reading CONTROL_POINTS file failed"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:1874
+msgid ""
+"Could not calculate RMS Error.\n"
+"Possible error with i.ortho.transform."
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:2000
+msgid ""
+"Could not calculate new extends.\n"
+"Possible error with i.ortho.transform."
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:2214
+#: ../gui/wxpython/image2target/ii2t_manager.py:2234
+msgid "source Z"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:2217
+#: ../gui/wxpython/image2target/ii2t_manager.py:2237
+msgid "target Z"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:2589
+msgid "source Z:"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_manager.py:2590
+msgid "target Z:"
+msgstr ""
+
+#: ../gui/wxpython/image2target/ii2t_mapdisplay.py:48
+msgid "GRASS GIS Manage Ground Control Points"
+msgstr ""
+
+#: ../gui/wxpython/psmap/instructions.py:150
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, python-format
 msgid ""
 "Unable to open file\n"

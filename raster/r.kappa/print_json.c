@@ -4,7 +4,11 @@
 #include "kappa.h"
 #include "local_proto.h"
 
+<<<<<<< HEAD
 void print_json(void)
+=======
+void print_json()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     bool first;
     FILE *fd;
@@ -117,11 +121,15 @@ void print_json(void)
         else
             fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
     }
+<<<<<<< HEAD
     fprintf(fd, "],\n");
     if (metrics->mcc == na_value)
         fprintf(fd, "    \"mcc\": null\n");
     else
         fprintf(fd, "    \"mcc\": %.5f\n", metrics->mcc);
+=======
+    fprintf(fd, "]\n");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     fprintf(fd, "}\n");
     if (output != NULL)

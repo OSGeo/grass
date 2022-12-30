@@ -380,6 +380,11 @@ struct datum_list *read_datum_table(void)
         current->dy = dy;
         current->dz = dz;
         current->next = NULL;
+<<<<<<< HEAD
+=======
+
+        count++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     fclose(fd);

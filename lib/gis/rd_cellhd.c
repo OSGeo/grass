@@ -52,8 +52,14 @@ static double scan_double(const char *, double *);
 
    \param fp file descriptor
    \param[out] cellhd pointer to Cell_head structure
+<<<<<<< HEAD
  */
 void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd)
+=======
+   \param is_cellhd ? (unused)
+ */
+void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int count;
     char **array;
@@ -92,8 +98,15 @@ void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd)
 
    \param array array of strings
    \param[out] cellhd pointer to Cell_head structure
+<<<<<<< HEAD
  */
 void G__read_Cell_head_array(char **array, struct Cell_head *cellhd)
+=======
+   \param is_cellhd ? (unused)
+ */
+void G__read_Cell_head_array(char **array, struct Cell_head *cellhd,
+                             int is_cellhd)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     char *buf;
     char label[200];

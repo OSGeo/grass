@@ -7,7 +7,11 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2007-2024 by Glynn Clements
+=======
+# COPYRIGHT:    (C) 2007-2022 by Glynn Clements
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -47,6 +51,7 @@ HEADERS = {
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
+<<<<<<< HEAD
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
@@ -86,10 +91,13 @@ def get_version_branch(major_version, addons_git_repo_url):
     return version_branch
 
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
 addons_url = ""
 grass_git_branch = "main"
+<<<<<<< HEAD
 major, minor, patch = None, None, None
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
@@ -110,6 +118,16 @@ if grass_version != "unknown":
                 urlparse.urljoin(base_url, "grass-addons/"),
             ),
         ),
+=======
+if grass_version != "unknown":
+    major, minor, patch = grass_version.split(".")
+    base_url = "https://github.com/OSGeo"
+    trunk_url = "{base_url}/grass/tree/{branch}/".format(
+        base_url=base_url, branch=grass_git_branch
+    )
+    addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
+        base_url=base_url, major=major
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     )
 
 
@@ -205,7 +223,11 @@ def download_git_commit(url, response_format, *args, **kwargs):
 def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """Get default Git commit and commit date, when getting commit from
     local Git, local JSON file and remote GitHub REST API server wasn't
+<<<<<<< HEAD
     successful.
+=======
+    successfull.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     :param str src_dir: addon source dir
     :param str datetime_format: output commit datetime format
@@ -256,7 +278,11 @@ def get_git_commit_from_file(
 
     :return dict git_log: dict which store last commit and commnit date
     """
+<<<<<<< HEAD
     # Accessed date time if getting commit from JSON file wasn't successful
+=======
+    # Accessed date time if getting commit from JSON file wasn't successfull
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     json_file_path = os.path.join(
@@ -288,6 +314,7 @@ def get_git_commit_from_rest_api_for_addon_repo(
 
     :return dict git_log: dict which store last commit and commnit date
     """
+<<<<<<< HEAD
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
@@ -311,6 +338,30 @@ def get_git_commit_from_rest_api_for_addon_repo(
                 git_log["date"] = format_git_commit_date_from_rest_api(
                     commit_datetime=commit[0]["commit"]["author"]["date"],
                 )
+=======
+    # Accessed date time if getting commit from GitHub REST API wasn't successfull
+    if not git_log:
+        git_log = get_default_git_log(src_dir=src_dir)
+    grass_addons_url = (
+        "https://api.github.com/repos/osgeo/grass-addons/commits?"
+        "path={path}&page=1&per_page=1&sha=grass{major}".format(
+            path=addon_path,
+            major=major,
+        )
+    )  # sha=git_branch_name
+
+    response = download_git_commit(
+        url=grass_addons_url,
+        response_format="application/json",
+    )
+    if response:
+        commit = json.loads(response.read())
+        if commit:
+            git_log["commit"] = commit[0]["sha"]
+            git_log["date"] = format_git_commit_date_from_rest_api(
+                commit_datetime=commit[0]["commit"]["author"]["date"],
+            )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return git_log
 
 
@@ -372,6 +423,10 @@ def has_src_code_git(src_dir, is_addon):
     else:
         os.chdir(topdir)
     try:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         process_result = subprocess.run(
             [
                 "git",
@@ -521,7 +576,11 @@ def read_file(name):
         with open(name) as f:
             s = f.read()
         return s
+<<<<<<< HEAD
     except OSError:
+=======
+    except IOError:
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return ""
 
 
@@ -689,11 +748,15 @@ def update_toc(data):
 def get_addon_path():
     """Check if pgm is in the addons list and get addon path
 
+<<<<<<< HEAD
     Make or update list of the official addons source
     code paths g.extension prefix parameter plus /grass-addons directory
     using Git repository
 
     :return str|None: pgm path if pgm is addon else None
+=======
+    return: pgm path if pgm is addon else None
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     """
 <<<<<<< HEAD
     addons_base_dir = os.getenv("GRASS_ADDON_BASE")
@@ -765,6 +828,7 @@ def get_addon_path():
 =======
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if addon_base:
+<<<<<<< HEAD
         """'addons_paths.json' is file created during install extension
         check get_addons_paths() function in the g.extension.py file
         """
@@ -779,6 +843,29 @@ def get_addon_path():
                     return True, addon["path"]
     return None, None
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        # addons_paths.json is file created during install extension
+        # check get_addons_paths() function in the g.extension.py file
+        addons_file = "addons_paths.json"
+        addons_paths = os.path.join(addon_base, addons_file)
+        if not os.path.exists(addons_paths):
+            # Compiled addon has own dir e.g. ~/.grass8/addons/db.join/
+            # with bin/ docs/ etc/ scripts/ subdir, required for compilation
+            # addons on osgeo lxd container server and generation of
+            # modules.xml file (build-xml.py script), when addons_paths.json
+            # file is stored one level dir up
+            addons_paths = os.path.join(
+                os.path.abspath(os.path.join(addon_base, "..")),
+                addons_file,
+            )
+            if not os.path.exists(addons_paths):
+                return
+        with open(addons_paths) as f:
+            addons_paths = json.load(f)
+        for addon in addons_paths["tree"]:
+            if pgm == pathlib.Path(addon["path"]).name:
+                return addon["path"]
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 # process header
@@ -934,6 +1021,7 @@ else:
 if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
+<<<<<<< HEAD
 # Process Source code section
 branches = "branches"
 tree = "tree"
@@ -955,6 +1043,37 @@ if git_commit["commit"] == "unknown":
 else:
     date_tag = "Latest change: {date} in commit: {commit}".format(
         date=git_commit["date"], commit=git_commit["commit"]
+=======
+if index_name:
+    branches = "branches"
+    tree = "tree"
+    commits = "commits"
+
+    if branches in url_source:
+        url_log = url_source.replace(branches, commits)
+        url_source = url_source.replace(branches, tree)
+    else:
+        url_log = url_source.replace(tree, commits)
+
+    git_commit = get_last_git_commit(
+        src_dir=curdir,
+        addon_path=addon_path if addon_path else None,
+        is_addon=True if addon_path else False,
+    )
+    if git_commit["commit"] == "unknown":
+        date_tag = "Accessed: {date}".format(date=git_commit["date"])
+    else:
+        date_tag = "Latest change: {date} in commit: {commit}".format(
+            date=git_commit["date"], commit=git_commit["commit"]
+        )
+    sys.stdout.write(
+        sourcecode.substitute(
+            URL_SOURCE=url_source,
+            PGM=pgm,
+            URL_LOG=url_log,
+            DATE_TAG=date_tag,
+        )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     )
 sys.stdout.write(
     sourcecode.substitute(

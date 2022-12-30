@@ -37,11 +37,17 @@
    \param tucfield field with unique categories used in the turntable
    \param afcol column with forward costs for arc
    \param abcol column with backward costs for arc (if NULL, back costs =
+<<<<<<< HEAD
           forward costs)
    \param ncol column with costs for nodes (if NULL, do not use
           node costs)
    \param geo use geodesic calculation for length (LL)
    \param algorithm not used (in future code for algorithm)
+=======
+   forward costs), \param ncol column with costs for nodes (if NULL, do not use
+   node costs), \param geo use geodesic calculation for length (LL), \param
+   algorithm not used (in future code for algorithm)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    \return 0 on success, 1 on error
  */
@@ -49,7 +55,11 @@
 int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                              int nfield, int tfield, int tucfield,
                              const char *afcol, const char *abcol,
+<<<<<<< HEAD
                              const char *ncol, int geo, int algorithm UNUSED)
+=======
+                             const char *ncol, int geo, int algorithm)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     /* TODO very long function, split into smaller ones */
     int i, j, from, to, line, nlines, nnodes, ret, type, cat, skipped, cfound;
@@ -431,7 +441,11 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
 
             if (ret != DB_OK) {
                 G_warning(
+<<<<<<< HEAD
                     _("Database record for turn with cat = %d is not found. "
+=======
+                    _("Database record for turn with cat = %d in not found. "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                       "(The turn was skipped."),
                     i);
                 continue;

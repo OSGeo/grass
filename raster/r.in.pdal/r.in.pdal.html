@@ -255,6 +255,7 @@ the analysis itself but it can also speed up the processing.
 LiDAR points can contain a lot of attributes besides their coordinates.
 By default <em>r.in.pdal</em> will use point Z coordinate as the output
 <<<<<<< HEAD
+<<<<<<< HEAD
 raster value source. The <em>dimension</em> option allows using different
 point attributes as an output instead of Z value. In case if other than Z
 value is chosen, output map type will be set to CELL. Explanation
@@ -263,6 +264,11 @@ raster value source. The <em>dimension</em> option allows to use different
 point attributes as an output instead of Z value. In case if other than Z
 value is choosen, output map type will be set to CELL. Explanation
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+raster value source. The <em>dimension</em> option allows using different
+point attributes as an output instead of Z value. In case if other than Z
+value is chosen, output map type will be set to CELL. Explanation
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 of various attributes can be found in LAS Specification chapter "Point
 Data Records". Be ware - not all attributes might be present and also
 their value ranges and meaning might vary between LAS file producers.
@@ -353,10 +359,14 @@ Point Z axis values can be altered by scaling parameter set by <em>zscale</em>.
 Each point X axis value is multiplied by provided value before any
 filtering or further transformation takes place. In the same way act
 <<<<<<< HEAD
+<<<<<<< HEAD
 <em>iscale</em> and <em>dscale</em> parameters - values are multiplied
 =======
 <em>iscale</em> and <em>dscale</em> parametres – values are multiplied
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+<em>iscale</em> and <em>dscale</em> parameters - values are multiplied
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 before range filters <em>irange</em> or <em>drnage</em> are applied (if present).
 <p>
 Output value scaling can be performed independently of filtering by providing
@@ -653,9 +663,12 @@ gscript.run_command('r.in.pdal', file=file_list_name,
 </pre></div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <h2>KNOWN ISSUES</h2>
 
 <ul>
@@ -669,9 +682,12 @@ If you encounter any problems (or solutions!) please contact the GRASS
 Development Team.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <h2>SEE ALSO</h2>
 
 <em>
@@ -696,9 +712,12 @@ Development Team.
 (LiDAR point cloud repository)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <h2>REFERENCES</h2>
 
 <ul>
@@ -723,6 +742,7 @@ Maris Nartiss, <a href="https://www.geo.lu.lv/">LU GZZF</a>
 (refactoring, additional filters, custom dimension support)
 <br>
 <<<<<<< HEAD
+<<<<<<< HEAD
 based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann
 =======
 based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann<br>
@@ -732,3 +752,6 @@ based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann<br>
 <i>Last changed: $Date$</i>
 -->
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

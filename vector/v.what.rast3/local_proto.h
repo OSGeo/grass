@@ -2,7 +2,11 @@
 
 struct order {
     int cat;   /* point category */
+<<<<<<< HEAD
     int count; /* number of points with category 'cat' */
+=======
+    int count; /* nuber of points with category 'cat' */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     double x;
     double y;
     double z;

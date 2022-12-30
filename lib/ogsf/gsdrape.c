@@ -1063,7 +1063,11 @@ int get_horz_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 
    \return number of intersects
  */
+<<<<<<< HEAD
 int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir UNUSED)
+=======
+int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int fdig, ldig, incr, hits, num, offset;
     int vrow, vcol, drow1, drow2, dcol1, dcol2;

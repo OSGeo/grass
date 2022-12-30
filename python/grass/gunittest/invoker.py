@@ -33,7 +33,16 @@ from .utils import silent_rmtree, ensure_dir
 import grass.script as gs
 from grass.script.utils import decode, _get_encoding
 
+<<<<<<< HEAD
 maketrans = str.maketrans
+=======
+try:
+    from string import maketrans
+except ImportError:
+    maketrans = str.maketrans
+
+import collections
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 # TODO: this might be more extend then update
@@ -127,8 +136,12 @@ class GrassTestFilesInvoker:
         os.mkdir(mapset_dir)
         # TODO: default region in mapset will be what?
         # copy DEFAULT_WIND file from PERMANENT to WIND
+<<<<<<< HEAD
         # TODO: this should be a function in grass.script (used also in gis_set.py,
         # PyGRASS also has its way with Mapset)
+=======
+        # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         shutil.copy(
             os.path.join(gisdbase, location, "PERMANENT", "DEFAULT_WIND"),
             os.path.join(mapset_dir, "WIND"),
@@ -202,6 +215,9 @@ class GrassTestFilesInvoker:
                 check=False,
             )
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             stdout = p.stdout
             stderr = p.stderr
             returncode = p.returncode
@@ -214,10 +230,14 @@ class GrassTestFilesInvoker:
             if stdout is None:
                 stdout = ""
             if stderr is None:
+<<<<<<< HEAD
                 stderr = (
                     f"Process has timed out in {timeout}s and produced no error "
                     "output.\n"
                 )
+=======
+                stderr = f"Process has timed out in {timeout}s and produced no error output.\n"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             # Return code is None if the process times out.
             # Rest of the code expects success to evaluate as False.
             # So, we assign a failing return code.
@@ -225,11 +245,14 @@ class GrassTestFilesInvoker:
             returncode = 1
             timed_out = timeout
 
+<<<<<<< HEAD
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
 
 =======
         stdout, stderr = p.communicate()
         returncode = p.returncode
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
 
 <<<<<<< HEAD

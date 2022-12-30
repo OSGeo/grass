@@ -230,6 +230,7 @@ def test_tiling(tmp_path, width, height, processes):
 
         info = gs.raster_info("slope")
         assert info["min"] > 0
+<<<<<<< HEAD
 
 
 @pytest.mark.parametrize(
@@ -265,3 +266,5 @@ def test_patching_error(tmp_path, processes, backend):
 
         info = gs.parse_command("r.univar", flags="g", map=surface)
         assert int(info["null_cells"]) == 0
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

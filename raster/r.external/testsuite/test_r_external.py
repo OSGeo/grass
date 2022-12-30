@@ -2,7 +2,10 @@
 
 @author Markus Neteler
 """
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 from grass.gunittest.case import TestCase
 
 
@@ -23,6 +26,10 @@ class TestGdalImport(TestCase):
         )
 
     def test_1(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "r.external",
             "Register GTiff Format",
@@ -51,6 +58,10 @@ class TestGdalImport(TestCase):
         )
 
     def test_2(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "r.external",
             "Register GTiff Format",
@@ -79,6 +90,10 @@ class TestGdalImport(TestCase):
         )
 
     def test_3(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "r.external",
             "Register AAIGrid Format",
@@ -107,6 +122,10 @@ class TestGdalImport(TestCase):
         )
 
     def test_4(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "r.external",
             "Register netCDF Format",
@@ -135,6 +154,10 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_1(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "r.external",
             "Register netCDF Format",
@@ -173,6 +196,10 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_2(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "r.external",
             "Register netCDF Format",
@@ -211,6 +238,10 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_3(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "r.external",
             "Register netCDF Format",

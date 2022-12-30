@@ -40,6 +40,15 @@ public:
     T src() const { return key; };
     T dst() const { return value; };
 
+<<<<<<< HEAD
+=======
+    keyvalue operator=(const keyvalue &that)
+    {
+        key = that.key;
+        value = that.value;
+        return *this;
+    };
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int operator!=(const keyvalue &e2) const
     {
         return (key != e2.key) || (value != e2.value);
@@ -141,12 +150,16 @@ private:
 
 public:
     ccforest();
+<<<<<<< HEAD
     ccforest(const ccforest &) = delete;
     ccforest &operator=(const ccforest &) = delete;
     ccforest(ccforest &&) = delete;
     ccforest &operator=(ccforest &&) = delete;
     ~ccforest();
 
+=======
+    ~ccforest();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     void insert(const T &i, const T &j); /* insert edge (i,j) */
     T findNextRoot(const T &i);          /* find root where i >= prev i */
     void printRootStream();

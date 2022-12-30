@@ -88,9 +88,14 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
     }
 
 #ifdef HAVE_ICONV_H
+<<<<<<< HEAD
     if (enc) {
         G_freea(enc);
     }
+=======
+    if (enc)
+        G_freea(enc);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (conv != (iconv_t)-1)
         iconv_close(conv);
@@ -152,7 +157,11 @@ void G__usage_xml(void)
 
     if (st->module_info.keywords) {
         fprintf(stdout, "\t<keywords>\n\t\t");
+<<<<<<< HEAD
         G__print_keywords(stdout, print_escaped_for_xml, FALSE);
+=======
+        G__print_keywords(stdout, print_escaped_for_xml);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         fprintf(stdout, "\n\t</keywords>\n");
     }
 

@@ -44,7 +44,11 @@ int main(int argc, char *argv[])
     int line, nlines, layer, nosplit, fixedlength;
     double length = -1;
     int vertices = 0;
+<<<<<<< HEAD
     double (*line_length)(const struct line_pnts *);
+=======
+    double (*line_length)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int geodesic = 0;
 
     G_gisinit(argv[0]);

@@ -81,7 +81,11 @@ static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
     return 1;
 }
 
+<<<<<<< HEAD
 /* Helper for converting multipoligons to GRASS polygons */
+=======
+/* Helper for converting multipoligons to GRASS poligons */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 static void add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer)
 {
     const GEOSGeometry *geom2;
@@ -705,7 +709,11 @@ int main(int argc, char *argv[])
             /* driver IS initialized here in case if Fi != NULL */
             if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL) !=
                 DB_OK)
+<<<<<<< HEAD
                 G_warning(_("Unable to get attribute data for cat %d"),
+=======
+                G_warning(_("Unabale to get attribute data for cat %d"),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                           resultset[j].cat);
             else {
                 nrows = db_get_num_rows(&cursor);
@@ -714,13 +722,21 @@ int main(int argc, char *argv[])
 
                 if (nrows > 0) {
                     if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+<<<<<<< HEAD
                         G_warning(_("Error while retrieving database record "
+=======
+                        G_warning(_("Error while retreiving database record "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                     "for cat %d"),
                                   resultset[j].cat);
                     }
                     else {
                         for (col = 0; col < ncols; col++) {
+<<<<<<< HEAD
                             /* Column description retrieving is fast, as they
+=======
+                            /* Column description retreiving is fast, as they
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                              * live in provided table structure */
                             column = db_get_table_column(table, col);
                             db_convert_column_value_to_string(column, &valstr);

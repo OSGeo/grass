@@ -4,6 +4,7 @@ This directory contains scripts to check some functionality of GRASS GIS.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 GRASS GIS testsuite documentation: <https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
 =======
 GRASS GIS testsuite documentation: https://grass.osgeo.org/grass80/manuals/libpython/gunittest_testing.html
@@ -11,6 +12,9 @@ GRASS GIS testsuite documentation: https://grass.osgeo.org/grass80/manuals/libpy
 =======
 GRASS GIS testsuite documentation: https://grass.osgeo.org/grass80/manuals/libpython/gunittest_testing.html
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+GRASS GIS testsuite documentation: <https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 ## Simple test data
 
@@ -35,3 +39,7 @@ Since 2020: For a more advanced test suite, see
 
 Until 2019: For a more advanced test suite, see
 <http://fatra.cnr.ncsu.edu/grassgistests/summary_report/>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

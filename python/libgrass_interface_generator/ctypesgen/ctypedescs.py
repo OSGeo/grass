@@ -123,7 +123,11 @@ def visit_type_and_collect_info(ctype):
     return structs, enums, typedefs, errors, identifiers
 
 
+<<<<<<< HEAD
 # Remove one level of indirection from function pointer; needed for typedefs
+=======
+# Remove one level of indirection from funtion pointer; needed for typedefs
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 # and function parameters.
 def remove_function_pointer(t):
     if type(t) == CtypesPointer and type(t.destination) == CtypesFunction:

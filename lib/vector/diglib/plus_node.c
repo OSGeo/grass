@@ -25,7 +25,11 @@ static double dist_squared(double, double, double, double);
  *
  * Line will be negative if END node
  *
+<<<<<<< HEAD
  * 'node' must of course already exist space will be allocated to add 'line' to
+=======
+ * 'node' must of course already exist space will be alloced to add 'line' to
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * array
  *
  * Lines are sorted in increasing angle order and

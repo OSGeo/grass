@@ -11,7 +11,11 @@ int btree_update(BTREE *B, const void *key, int keylen, const void *data,
     int p = 0;
     int q;
     int N;
+<<<<<<< HEAD
     int (*cmp)(const void *, const void *);
+=======
+    int (*cmp)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int dir;
 
     /* first node is special case */

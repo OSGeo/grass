@@ -70,7 +70,11 @@ int main(int argc, char *argv[])
                           raster->answer, output->answer);
 }
 
+<<<<<<< HEAD
 int patchAreaDistributionSD(int fd, char **par UNUSED, struct area_entry *ad,
+=======
+int patchAreaDistributionSD(int fd, char **par, struct area_entry *ad,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                             double *result)
 {
     double indice = 0;

@@ -25,7 +25,10 @@ struct _metrics_ {
     double kappa;
     double kappa_variance;
     double *conditional_kappa;
+<<<<<<< HEAD
     double mcc;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 };
 
 extern struct Cell_head window;

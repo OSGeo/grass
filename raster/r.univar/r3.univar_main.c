@@ -132,10 +132,17 @@ int main(int argc, char *argv[])
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
+<<<<<<< HEAD
     dmin = NAN;
     dmax = NAN;
     zone_info.min = 0;
     zone_info.max = 0;
+=======
+    dmin = 0.0 / 0.0;          /* set to nan as default */
+    dmax = 0.0 / 0.0;          /* set to nan as default */
+    zone_info.min = 0.0 / 0.0; /* set to nan as default */
+    zone_info.max = 0.0 / 0.0; /* set to nan as default */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     zone_info.n_zones = 0;
 
     /* open 3D zoning raster with default region */
@@ -200,7 +207,11 @@ int main(int argc, char *argv[])
         n_zones = 1;
 
     stats = create_univar_stat_struct(map_type, i);
+<<<<<<< HEAD
     for (i = 0; i < (unsigned int)n_zones; i++) {
+=======
+    for (i = 0; i < n_zones; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         unsigned int j;
 
         for (j = 0; j < stats[i].n_perc; j++) {

@@ -347,10 +347,14 @@ class Module:
     >>> neighbors.inputs.quantile = 0.5
     >>> neighbors.get_bash()
 <<<<<<< HEAD
+<<<<<<< HEAD
     'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 =======
     'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 output=mapB'
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     >>> new_neighbors1 = copy.deepcopy(neighbors)
     >>> new_neighbors1.inputs.input = "mapD"
@@ -358,15 +362,20 @@ class Module:
     >>> new_neighbors1.inputs.quantile = 0.5
     >>> new_neighbors1.get_bash()
 <<<<<<< HEAD
+<<<<<<< HEAD
     'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 =======
     'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 output=mapB'
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     >>> new_neighbors2 = copy.deepcopy(neighbors)
     >>> new_neighbors2(input="mapD", size=3, run_=False)
     Module('r.neighbors')
     >>> new_neighbors2.get_bash()
+<<<<<<< HEAD
 <<<<<<< HEAD
     'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
@@ -380,16 +389,27 @@ class Module:
     >>> neighbors.get_bash()
     'r.neighbors size=3 method=average weighting_function=none'
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
+
+    >>> neighbors = Module("r.neighbors")
+    >>> neighbors.get_bash()
+    'r.neighbors size=3 method=average weighting_function=none nprocs=1 memory=300'
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
 <<<<<<< HEAD
+<<<<<<< HEAD
     'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
 =======
     'r.neighbors input=mapA size=3 method=average weighting_function=none output=mapB'
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     >>> mapcalc = Module(
     ...     "r.mapcalc", expression="test_a = 1", overwrite=True, run_=False

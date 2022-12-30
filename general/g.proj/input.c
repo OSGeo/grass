@@ -117,6 +117,7 @@ int input_wkt(char *wktfile)
     if (infd) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         size_t wktlen;
 
         wktlen = fread(buff, 1, sizeof(buff), infd);
@@ -147,6 +148,21 @@ int input_wkt(char *wktfile)
 	/* Get rid of newlines */
 	G_squeeze(buff);
 >>>>>>> b3579a4902 (g.proj: fix reading input WKT (#1582))
+=======
+        size_t wktlen;
+
+        wktlen = fread(buff, 1, sizeof(buff), infd);
+        if (wktlen == sizeof(buff))
+            G_fatal_error(_("Input WKT definition is too long"));
+        if (ferror(infd))
+            G_fatal_error(_("Error reading WKT definition"));
+        else
+            fclose(infd);
+        /* terminate WKT string */
+        buff[wktlen] = '\0';
+        /* Get rid of newlines */
+        G_squeeze(buff);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     else
         G_fatal_error(_("Unable to open file '%s' for reading"), wktfile);

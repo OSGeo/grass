@@ -50,7 +50,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("settings"));
     module->label = _("Changes/reports current mapset.");
     module->description = _("Optionally create new mapset or list available "
+<<<<<<< HEAD
                             "mapsets in given project (location).");
+=======
+                            "mapsets in given location.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
     opt.mapset->required = YES;

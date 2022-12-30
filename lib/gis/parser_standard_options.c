@@ -694,12 +694,21 @@ struct Option *G_define_standard_option(int opt)
         break;
 
     case G_OPT_M_LOCATION:
+<<<<<<< HEAD
         Opt->key = "project";
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
         Opt->label = _("Project (location) name");
         Opt->description = _("Project name (not path to project)");
+=======
+        Opt->key = "location";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->label = _("Location name");
+        Opt->description = _("Location name (not location path)");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Opt->gisprompt = "old,location,location";
         Opt->key_desc = "name";
         break;
@@ -784,8 +793,12 @@ struct Option *G_define_standard_option(int opt)
         Opt->description = _("Number of threads for parallel computing");
         break;
 
+<<<<<<< HEAD
     /* Spatio-temporal modules of the temporal GIS framework */
 >>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+        /* Spatio-temporal modules of the temporal GIS framework */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     case G_OPT_STDS_INPUT:
         Opt->key = "input";
         Opt->type = TYPE_STRING;

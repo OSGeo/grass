@@ -314,6 +314,37 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(askOnQuit, pos=(row, 0), span=(1, 2))
 
+<<<<<<< HEAD
+=======
+        row += 1
+        hideSearch = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '%s' tab (requires GUI restart)") % _("Tools"),
+            name="IsChecked",
+        )
+        hideSearch.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="search")
+        )
+        self.winId["manager:hideTabs:search"] = hideSearch.GetId()
+
+        gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hidePyShell = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '%s' tab (requires GUI restart)") % _("Python"),
+            name="IsChecked",
+        )
+        hidePyShell.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="pyshell")
+        )
+        self.winId["manager:hideTabs:pyshell"] = hidePyShell.GetId()
+
+        gridSizer.Add(hidePyShell, pos=(row, 0), span=(1, 2))
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         #
         # Selected text is copied to clipboard
         #
@@ -481,6 +512,19 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
+        singleWindow = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Use single-window mode (experimental, requires GUI restart)"),
+            name="IsChecked",
+        )
+        singleWindow.SetValue(
+            self.settings.Get(group="general", key="singleWindow", subkey="enabled")
+        )
+        self.winId["general:singleWindow:enabled"] = singleWindow.GetId()
+        gridSizer.Add(singleWindow, pos=(row, 0), span=(1, 2))
+
+        row += 1
         posDisplay = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
@@ -1971,11 +2015,21 @@ class PreferencesDialog(PreferencesBaseDialog):
                 size = mapdisp.GetSize()
 
                 # window size must be larger than zero, not minimized
+<<<<<<< HEAD
                 # do not save dim when mapdisp is docked within single window
                 if (not mapdisp.IsDockable() or not mapdisp.IsDocked()) and (
                     size[0] > 0 and size[1] > 0
                 ):
                     dim += f",{pos[0]},{pos[1]},{size[0]},{size[1]}"
+=======
+                # when mapdisp is inside single window (panel has no IsIconized), don't save dim
+                if (
+                    hasattr(mapdisp, "IsIconized")
+                    and not mapdisp.IsIconized()
+                    and (size[0] > 0 and size[1] > 0)
+                ):
+                    dim += ",%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             if single_window:
                 # single window mode

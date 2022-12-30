@@ -71,12 +71,21 @@ struct globals {
     char *bsuf;     /* suffix to be appended to input bands */
 
     /* general segmentation */
+<<<<<<< HEAD
     int method;                         /* Segmentation method code */
     int (*method_fn)(struct globals *); /* Segmentation method function */
     int nn;                             /* number of neighbors, 4 or 8 */
     double max_diff;                    /* max possible difference */
     double alpha;                       /* similarity threshold */
     int end_t;                          /* maximum number of iterations */
+=======
+    int method;         /* Segmentation method code */
+    int (*method_fn)(); /* Segmentation method function */
+    int nn;             /* number of neighbors, 4 or 8 */
+    double max_diff;    /* max possible difference */
+    double alpha;       /* similarity threshold */
+    int end_t;          /* maximum number of iterations */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* region growing */
     int min_segment_size; /* smallest number of pixels/cells allowed in a final
@@ -120,7 +129,11 @@ struct globals {
     FLAG *candidate_flag,
         *null_flag; /*TODO, need some way to remember MASK/NULL values.  Was
                        using -1, 0, 1 in int array.  Better to use 2 FLAG
+<<<<<<< HEAD
                        structures, better readability? */
+=======
+                       structures, better readibility? */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* number of remaining cells to check */
     LARGEINT candidate_count;

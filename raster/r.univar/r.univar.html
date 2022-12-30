@@ -51,15 +51,26 @@ map and uploads statistics to new attribute columns, see
 <h3>PERFORMANCE</h3>
 
 <p>
+<<<<<<< HEAD
 <em>r.univar</em> supports parallel processing using OpenMP. The user
 can specify the number of threads to be used with the <b>nprocs</b> parameter.
 However, parallelization is disabled when the MASK is set.
+=======
+<em>r.univar</em> suports parallel processing using OpenMP. The user
+can specify the number of threads to be used with the <b>nprocs</b> parameter.
+However, parallelization is disabled when the <b>-e</b> extended statistics
+flag is used.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 <p>
 Due to the differences in summation order, users may encounter small floating points
 discrepancies when <em>r.univar</em> is run on very large raster files when different
 <b>nprocs</b> parameters are used. However, since the work allocation among threads
+<<<<<<< HEAD
 is static, users should expect to have the same results when run with the same
+=======
+is static, users should expect to have the same results when run with the same 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 number of threads.
 
 <div align="center" style="margin: 10px">

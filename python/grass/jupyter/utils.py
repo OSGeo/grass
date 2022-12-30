@@ -4,32 +4,46 @@
 # PURPOSE:   This module contains utility functions for InteractiveMap.
 #
 <<<<<<< HEAD
+<<<<<<< HEAD
 # COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
 =======
 # COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Utility functions warpping existing processes in a suitable way"""
 from pathlib import Path
 =======
 import os
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+"""Utility functions warpping existing processes in a suitable way"""
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import grass.script as gs
 
 
 def get_region(env=None):
     """Returns current computational region as dictionary.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     Additionally, it adds long key names.
 =======
     Adds long key names.
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+
+    Additionally, it adds long key names.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     """
     region = gs.region(env=env)
     region["east"] = region["e"]
@@ -58,6 +72,9 @@ def reproject_region(region, from_proj, to_proj):
     """
     region = region.copy()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     # reproject all corners, otherwise reproj. region may be underestimated
     # even better solution would be reprojecting vector region like in r.import
     proj_input = (
@@ -66,9 +83,12 @@ def reproject_region(region, from_proj, to_proj):
         f"{region['east']} {region['south']}\n"
         f"{region['west']} {region['south']}\n"
     )
+<<<<<<< HEAD
 =======
     proj_input = "{east} {north}\n{west} {south}".format(**region)
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     proc = gs.start_command(
         "m.proj",
         input="-",
@@ -86,6 +106,9 @@ def reproject_region(region, from_proj, to_proj):
     proj_output, stderr = proc.communicate()
     if proc.returncode:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
@@ -101,6 +124,7 @@ def reproject_region(region, from_proj, to_proj):
     region["north"] = max(latitude_list)
     region["west"] = min(longitude_list)
     region["south"] = min(latitude_list)
+<<<<<<< HEAD
     return region
 
 
@@ -120,6 +144,8 @@ def estimate_resolution(raster, mapset, location, dbase, env):
     region["north"] = nlat
     region["west"] = wlon
     region["south"] = slat
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     return region
 
 
@@ -185,6 +211,9 @@ def setup_location(name, path, epsg, src_env):
     gs.create_location(path, name, epsg=epsg, overwrite=True)
     # Reproject region
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     set_target_region(src_env, new_env)
     return rcfile, new_env
 
@@ -194,6 +223,7 @@ def set_target_region(src_env, tgt_env):
 
     Number of rows and columns is preserved.
     """
+<<<<<<< HEAD
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
     to_proj = get_location_proj_string(env=tgt_env)
@@ -202,6 +232,11 @@ def set_target_region(src_env, tgt_env):
     from_proj = get_location_proj_string(src_env)
     to_proj = get_location_proj_string(env=new_env)
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+    region = get_region(env=src_env)
+    from_proj = get_location_proj_string(src_env)
+    to_proj = get_location_proj_string(env=tgt_env)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     new_region = reproject_region(region, from_proj, to_proj)
     # Set region to match original region extent
     gs.run_command(
@@ -210,6 +245,7 @@ def set_target_region(src_env, tgt_env):
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
+<<<<<<< HEAD
 <<<<<<< HEAD
         rows=new_region["rows"],
         cols=new_region["cols"],
@@ -328,3 +364,51 @@ def save_gif(
     )
     return rcfile, new_env
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+        rows=new_region["rows"],
+        cols=new_region["cols"],
+        env=tgt_env,
+    )
+
+
+def get_map_name_from_d_command(module, **kwargs):
+    """Returns map name from display command.
+
+    Assumes only positional parameters.
+    When more maps are present (e.g., d.rgb), it returns only 1.
+    Returns empty string if fails to find it.
+    """
+    special = {"d.his": "hue", "d.legend": "raster", "d.rgb": "red", "d.shade": "shade"}
+    parameter = special.get(module, "map")
+    return kwargs.get(parameter, "")
+
+
+def get_rendering_size(region, width, height, default_width=600, default_height=400):
+    """Returns the rendering width and height based
+    on the region aspect ratio.
+
+    :param dict region: region dictionary
+    :param integer width: rendering width (can be None)
+    :param integer height: rendering height (can be None)
+    :param integer default_width: default rendering width (can be None)
+    :param integer default_height: default rendering height (can be None)
+
+    :return tuple (width, height): adjusted width and height
+
+    When both width and height are provided, values are returned without
+    adjustment. When one value is provided, the other is computed
+    based on the region aspect ratio. When no dimension is given,
+    the default width or height is used and the other dimension computed.
+    """
+    if width and height:
+        return (width, height)
+    region_width = region["e"] - region["w"]
+    region_height = region["n"] - region["s"]
+    if width:
+        return (width, round(width * region_height / region_width))
+    if height:
+        return (round(height * region_width / region_height), height)
+    if region_height > region_width:
+        return (round(default_height * region_width / region_height), default_height)
+    return (default_width, round(default_width * region_height / region_width))
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

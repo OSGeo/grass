@@ -68,7 +68,11 @@ int main(int argc, char *argv[])
 
     loc_opt = G_define_standard_option(G_OPT_M_LOCATION);
     loc_opt->required = NO;
+<<<<<<< HEAD
     loc_opt->description = _("Name of the target project (location)");
+=======
+    loc_opt->description = _("Name of the target location");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
     mapset_opt->required = NO;
@@ -138,8 +142,12 @@ int main(int argc, char *argv[])
 
     sprintf(buf, "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
+<<<<<<< HEAD
         G_fatal_error(_("Target project (location) [%s] not found\n"),
                       location);
+=======
+        G_fatal_error(_("Target location [%s] not found\n"), location);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /*Report the contents of the ELEVATION file as in the GROUP */
@@ -225,6 +233,7 @@ int main(int argc, char *argv[])
         I_put_group_elev(group, elev_opt->answer, mapset_elev, location_elev,
                          math_exp, units, nd);
 
+<<<<<<< HEAD
         G_message(
             _("Group [%s] in project (location) [%s] mapset [%s] now uses "
               "elevation map [%s]"),
@@ -233,6 +242,15 @@ int main(int argc, char *argv[])
     else {
         G_fatal_error(_("Mapset [%s] in target project (location) [%s] - %s "),
                       mapset, location,
+=======
+        G_message(_("Group [%s] in location [%s] mapset [%s] now uses "
+                    "elevation map [%s]"),
+                  group, G_location(), G_mapset(), elev_opt->answer);
+    }
+    else {
+        G_fatal_error(_("Mapset [%s] in target location [%s] - %s "), mapset,
+                      location,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                       stat == 0 ? _("permission denied\n") : _("not found\n"));
     }
 

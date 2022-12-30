@@ -1,16 +1,24 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+<<<<<<< HEAD
 #            Anna Petrasova <kratochanna AT gmail>
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #
 # PURPOSE:   This module contains functions for interactive visualizations
 #            in Jupyter Notebooks.
 #
+<<<<<<< HEAD
 # COPYRIGHT: (C) 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
+=======
+# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
+<<<<<<< HEAD
 """Interactive visualizations map with folium or ipyleaflet"""
 
 import base64
@@ -35,6 +43,20 @@ def get_backend(interactive_map):
 class Layer:  # pylint: disable=too-few-public-methods
     """Base class for overlaing raster or vector layer
     on a folium or ipyleaflet map.
+=======
+"""Interactive visualizations map with folium"""
+
+from .reprojection_renderer import ReprojectionRenderer
+
+
+class Raster:
+    """Overlays rasters on folium maps.
+
+    Basic Usage:
+    >>> m = folium.Map()
+    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+    >>> m
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     """
 
     def __init__(
@@ -48,6 +70,7 @@ class Layer:  # pylint: disable=too-few-public-methods
     ):
         """Reproject GRASS raster, export to PNG, and compute bounding box.
 
+<<<<<<< HEAD
         param str name: layer name
         param str title: title of layer to display in layer control legend
         param bool use_region: use computational region of current mapset
@@ -57,6 +80,21 @@ class Layer:  # pylint: disable=too-few-public-methods
         """
         self._name = name
         self._layer_kwargs = kwargs
+=======
+        param str name: raster name
+        param str title: title of raster to display in layer control legend
+        param bool use_region: use computational region of current mapset
+        param str saved_region: name of saved computation region
+        param renderer: instance of ReprojectionRenderer
+        **kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay()
+        """
+        import folium  # pylint: disable=import-outside-toplevel
+
+        self._folium = folium
+
+        self._name = name
+        self._overlay_kwargs = kwargs
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self._title = title
         if not self._title:
             self._title = self._name
@@ -67,6 +105,7 @@ class Layer:  # pylint: disable=too-few-public-methods
             )
         else:
             self._renderer = renderer
+<<<<<<< HEAD
 
 
 class Raster(Layer):
@@ -93,12 +132,15 @@ class Raster(Layer):
     ):
         """Reproject GRASS raster, export to PNG, and compute bounding box."""
         super().__init__(name, title, use_region, saved_region, renderer, **kwargs)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         # Render overlay
         # By doing this here instead of in add_to, we avoid rendering
         # twice if added to multiple maps. This mimics the behavior
         # folium.raster_layers.ImageOverlay()
         self._filename, self._bounds = self._renderer.render_raster(name)
 
+<<<<<<< HEAD
     def add_to(self, interactive_map):
         """Add raster to map object which is an instance of either
         folium.Map or ipyleaflet.Map"""
@@ -130,15 +172,39 @@ class Raster(Layer):
 
 class Vector(Layer):
     """Adds vectors to a folium or ipyleaflet map.
+=======
+    def add_to(self, folium_map):
+        """Add raster to folium map with folium.raster_layers.ImageOverlay()
+
+        A folium map is an instance of folium.Map.
+        """
+        # Overlay image on folium map
+        img = self._folium.raster_layers.ImageOverlay(
+            image=self._filename,
+            bounds=self._bounds,
+            name=self._title,
+            **self._overlay_kwargs,
+        )
+
+        # Add image to map
+        img.add_to(folium_map)
+
+
+class Vector:
+    """Adds vectors to a folium map.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Basic Usage:
     >>> m = folium.Map()
     >>> gj.Vector("roadsmajor").add_to(m)
     >>> m
+<<<<<<< HEAD
 
     >>> m = ipyleaflet.Map()
     >>> gj.Vector("roadsmajor").add_to(m)
     >>> m
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     """
 
     def __init__(
@@ -150,6 +216,7 @@ class Vector(Layer):
         renderer=None,
         **kwargs,
     ):
+<<<<<<< HEAD
         """Reproject GRASS vector and export to GeoJSON."""
         super().__init__(name, title, use_region, saved_region, renderer, **kwargs)
         self._filename = self._renderer.render_vector(name)
@@ -183,6 +250,45 @@ class Vector(Layer):
 
 class InteractiveMap:
     """This class creates interactive GRASS maps with folium or ipyleaflet.
+=======
+        """Reproject GRASS vector and export to folium-ready PNG. Also computes bounding
+        box for PNG overlay in folium map.
+
+        param str name: vector name
+        param str title: title of vector to display in layer control legend
+        param bool use_region: use computational region of current mapset
+        param str saved_region: name of saved computation region
+        renderer: instance of ReprojectionRenderer
+        **kwargs: keyword arguments passed to folium.GeoJson()
+        """
+        import folium  # pylint: disable=import-outside-toplevel
+
+        self._folium = folium
+
+        self._name = name
+        self._title = title
+        if not self._title:
+            self._title = self._name
+        self._geojson_kwargs = kwargs
+
+        if not renderer:
+            self._renderer = ReprojectionRenderer(
+                use_region=use_region, saved_region=saved_region
+            )
+        else:
+            self._renderer = renderer
+        self._filename = self._renderer.render_vector(name)
+
+    def add_to(self, folium_map):
+        """Add vector to folium map with folium.GeoJson()"""
+        self._folium.GeoJson(
+            str(self._filename), name=self._title, **self._geojson_kwargs
+        ).add_to(folium_map)
+
+
+class InteractiveMap:
+    """This class creates interactive GRASS maps with folium.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Basic Usage:
 
@@ -201,6 +307,7 @@ class InteractiveMap:
         API_key=None,  # pylint: disable=invalid-name
         use_region=False,
         saved_region=None,
+<<<<<<< HEAD
         map_backend=None,
     ):
         """Creates a blank folium/ipyleaflet map centered on g.region.
@@ -212,13 +319,23 @@ class InteractiveMap:
         In case of folium backend, tiles parameter is passed directly
         to folium.Map() which supports several built-in tilesets
         (including "OpenStreetMap", "Stamen Toner", "Stamen Terrain",
+=======
+    ):
+        """Creates a blank folium map centered on g.region.
+
+        tiles parameter is passed directly to folium.Map() which supports several
+        built-in tilesets (including "OpenStreetMap", "Stamen Toner", "Stamen Terrain",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         "Stamen Watercolor", "Mapbox Bright", "Mapbox Control Room", "CartoDB positron",
         "CartoDB dark_matter") as well as custom tileset URL (i.e.
         "http://{s}.yourtiles.com/{z}/{x}/{y}.png"). For more information, visit
         folium documentation:
         https://python-visualization.github.io/folium/modules.html
+<<<<<<< HEAD
         In case of ipyleaflet, only the tileset name and not the URL is
         currently supported.
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         Raster and vector data are always reprojected to Pseudo-Mercator.
         With use_region=True or saved_region=myregion, the region extent
@@ -236,6 +353,7 @@ class InteractiveMap:
         :param str API_key: API key for Mapbox or Cloudmade tiles
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
+<<<<<<< HEAD
         :param str map_backend: "ipyleaflet" or "folium" or None
         """
         self._ipyleaflet = None
@@ -278,11 +396,18 @@ class InteractiveMap:
         if self._ipyleaflet:
             import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
             import xyzservices  # pylint: disable=import-outside-toplevel
+=======
+        """
+        import folium  # pylint: disable=import-outside-toplevel
+
+        self._folium = folium
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         # Store height and width
         self.width = width
         self.height = height
 
+<<<<<<< HEAD
         if self._ipyleaflet:
             basemap = xyzservices.providers.query_name(tiles)
             if API_key and basemap.get("accessToken"):
@@ -299,6 +424,15 @@ class InteractiveMap:
                 tiles=tiles,
                 API_key=API_key,  # pylint: disable=invalid-name
             )
+=======
+        # Create Folium Map
+        self.map = self._folium.Map(
+            width=self.width,
+            height=self.height,
+            tiles=tiles,
+            API_key=API_key,  # pylint: disable=invalid-name
+        )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         # Set LayerControl default
         self.layer_control = False
         self.layer_control_object = None
@@ -309,18 +443,30 @@ class InteractiveMap:
 
     def add_vector(self, name, title=None, **kwargs):
         """Imports vector into temporary WGS84 location, re-formats to a GeoJSON and
+<<<<<<< HEAD
         adds to map.
+=======
+        adds to folium map.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         :param str name: name of vector to be added to map;
                          positional-only parameter
         :param str title: vector name for layer control
+<<<<<<< HEAD
         :**kwargs: keyword arguments passed to GeoJSON overlay
+=======
+        :**kwargs: keyword arguments passed to folium.GeoJson()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         """
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_raster(self, name, title=None, **kwargs):
         """Imports raster into temporary WGS84 location,
+<<<<<<< HEAD
         exports as png and overlays on a map.
+=======
+        exports as png and overlays on folium map.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         Color table for the raster can be modified with `r.colors` before calling
         this function.
@@ -332,13 +478,18 @@ class InteractiveMap:
 
         :param str name: name of raster to add to display; positional-only parameter
         :param str title: raster name for layer control
+<<<<<<< HEAD
         :**kwargs: keyword arguments passed to image overlay
+=======
+        :**kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         """
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
         """Add layer control to display"
 
+<<<<<<< HEAD
         Accepts keyword arguments to be passed to layer control object"""
 
         self.layer_control = True
@@ -350,10 +501,21 @@ class InteractiveMap:
     def show(self):
         """This function returns a folium figure or ipyleaflet map object
         with a GRASS raster and/or vector overlaid on a basemap.
+=======
+        Accepts keyword arguments to be passed to folium.LayerControl()"""
+
+        self.layer_control = True
+        self.layer_control_object = self._folium.LayerControl(**kwargs)
+
+    def show(self):
+        """This function returns a folium figure object with a GRASS raster
+        overlayed on a basemap.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
 
+<<<<<<< HEAD
         self.map.fit_bounds(self._renderer.get_bbox())
         if self._folium:
             if self.layer_control:
@@ -366,6 +528,17 @@ class InteractiveMap:
         if self.layer_control:
             self.map.add(self.layer_control_object)
         return self.map
+=======
+        if self.layer_control:
+            self.map.add_child(self.layer_control_object)
+        # Create Figure
+        fig = self._folium.Figure(width=self.width, height=self.height)
+        # Add map to figure
+        fig.add_child(self.map)
+        self.map.fit_bounds(self._renderer.get_bbox())
+
+        return fig
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     def save(self, filename):
         """Save map as an html map.

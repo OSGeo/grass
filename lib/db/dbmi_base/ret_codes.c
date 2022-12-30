@@ -23,7 +23,11 @@
 
    \return DB_OK
  */
+<<<<<<< HEAD
 int db__send_success(void)
+=======
+int db__send_success()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DB_SEND_INT(DB_OK);
     return DB_OK;
@@ -34,7 +38,11 @@ int db__send_success(void)
 
    \return DB_OK
  */
+<<<<<<< HEAD
 int db__send_failure(void)
+=======
+int db__send_failure()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DB_SEND_INT(DB_FAILED);
     DB_SEND_C_STRING(db_get_error_msg());

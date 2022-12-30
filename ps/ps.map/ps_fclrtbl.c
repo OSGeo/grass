@@ -42,7 +42,11 @@ int PS_fcolortable(void)
     unsigned int max_label_length = 0;
     int label_posn, label_xref, label_yref;
 
+<<<<<<< HEAD
     /* let user know what's happening */
+=======
+    /* let user know what's happenning */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     G_message(_("Creating color table for <%s in %s>..."), ct.name, ct.mapset);
 
     /* Get color range */

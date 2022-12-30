@@ -555,7 +555,11 @@ int do_cum_mfd(void)
 
     if (workedon)
         G_warning(_("MFD: A * path already processed when distributing flow: "
+<<<<<<< HEAD
                     "%d of %" PRId64 " cells"),
+=======
+                    "%d of %" PRI_OFF_T " cells"),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                   workedon, do_points);
 
     G_message(_("SECTION 3b: Adjusting drainage directions."));
@@ -664,12 +668,19 @@ int do_cum_mfd(void)
                 else
                     af.asp = drain[r - r_max + 1][c - c_max + 1];
             }
+<<<<<<< HEAD
             /*
             if (mfd_cells == 1)
                 mfdir = (1 << nextmfd[max_side]);
             */
 
             is_swale = FLAG_GET(af.flag, SWALEFLAG);
+=======
+            if (mfd_cells == 1)
+                /* mfdir = (1 << nextmfd[max_side]); */
+
+                is_swale = FLAG_GET(af.flag, SWALEFLAG);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             /* start new stream */
             if (!is_swale && fabs(value) >= threshold && stream_cells < 1 &&
                 swale_cells < 1 && !flat) {

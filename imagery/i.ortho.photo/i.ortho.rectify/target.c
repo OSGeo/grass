@@ -16,7 +16,11 @@ int get_target(char *group)
 
     sprintf(buf, "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
+<<<<<<< HEAD
         sprintf(buf, _("Target project (location) <%s> not found"), location);
+=======
+        sprintf(buf, _("Target location <%s> not found"), location);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         goto error;
     }
     select_target_env();

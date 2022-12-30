@@ -6,7 +6,12 @@
  *
  ******************************************************************************
  * Copyright (c) 1999, 2001, Frank Warmerdam
+<<<<<<< HEAD
  * Copyright (c) 2011-2019, Even Rouault <even dot rouault at spatialys.com>
+=======
+ * Copyright (c) 2011-2013, Even Rouault <even dot rouault at mines-paris dot
+ *org>
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * This software is available under the following "MIT Style" license,
  * or at the option of the licensee under the LGPL (see COPYING).  This
@@ -45,7 +50,13 @@
 #include <string.h>
 
 SHP_CVSID("$Id$")
+<<<<<<< HEAD
 
+=======
+#ifndef CPL_UNUSED
+#define CPL_UNUSED
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 typedef unsigned char uchar;
 
 #if UINT_MAX == 65535
@@ -65,6 +76,7 @@ typedef unsigned int int32;
 #define MAX(a, b) ((a > b) ? a : b)
 #endif
 
+<<<<<<< HEAD
 #ifndef USE_CPL
 #if defined(_MSC_VER)
 #if _MSC_VER < 1900
@@ -83,6 +95,12 @@ typedef unsigned int int32;
 #else
 #define CPL_UNUSED
 #endif
+=======
+#if defined(WIN32) || defined(_WIN32)
+#ifndef snprintf
+#define snprintf _snprintf
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #endif
 
 #if defined(CPL_LSB)
@@ -90,6 +108,7 @@ typedef unsigned int int32;
 #elif defined(CPL_MSB)
 #define bBigEndian true
 #else
+<<<<<<< HEAD
 static bool bBigEndian;
 #endif
 
@@ -99,21 +118,35 @@ static bool bBigEndian;
 #else
 #define STATIC_CAST(type, x) ((type)(x))
 #define SHPLIB_NULLPTR       NULL
+=======
+static int bBigEndian;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #endif
 
 /************************************************************************/
 /*                              SwapWord()                              */
 /*                                                                      */
 /*      Swap a 2, 4 or 8 byte word.                                     */
+
 /************************************************************************/
 
 static void SwapWord(int length, void *wordP)
 {
+<<<<<<< HEAD
     for (int i = 0; i < length / 2; i++) {
         const uchar temp = STATIC_CAST(uchar *, wordP)[i];
         STATIC_CAST(uchar *, wordP)
         [i] = STATIC_CAST(uchar *, wordP)[length - i - 1];
         STATIC_CAST(uchar *, wordP)[length - i - 1] = temp;
+=======
+    int i;
+    uchar temp;
+
+    for (i = 0; i < length / 2; i++) {
+        temp = ((uchar *)wordP)[i];
+        ((uchar *)wordP)[i] = ((uchar *)wordP)[length - i - 1];
+        ((uchar *)wordP)[length - i - 1] = temp;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 }
 
@@ -122,26 +155,50 @@ static void SwapWord(int length, void *wordP)
 /*                                                                      */
 /*      A realloc cover function that will access a NULL pointer as     */
 /*      a valid input.                                                  */
+
 /************************************************************************/
 
 static void *SfRealloc(void *pMem, int nNewSize)
 {
+<<<<<<< HEAD
     if (pMem == SHPLIB_NULLPTR)
         return malloc(nNewSize);
     else
         return realloc(pMem, nNewSize);
+=======
+    if (pMem == NULL)
+        return ((void *)malloc(nNewSize));
+    else
+        return ((void *)realloc(pMem, nNewSize));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /************************************************************************/
 /*                          SHPWriteHeader()                            */
 /*                                                                      */
+<<<<<<< HEAD
 /*      Write out a header for the .shp and .shx files as well as the    */
 /*    contents of the index (.shx) file.                */
+=======
+/*      Write out a header for the .shp and .shx files as well as the   */
+/*      contents of the index (.shx) file.                              */
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /************************************************************************/
 
 void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
 {
+<<<<<<< HEAD
     if (psSHP->fpSHX == SHPLIB_NULLPTR) {
+=======
+    uchar abyHeader[100];
+    int i;
+    int32 i32;
+    double dValue;
+    int32 *panSHX;
+
+    if (psSHP->fpSHX == NULL) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psSHP->sHooks.Error("SHPWriteHeader failed : SHX file is closed");
         return;
     }
@@ -149,12 +206,22 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
     /* -------------------------------------------------------------------- */
     /*      Prepare header block for .shp file.                             */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
 
     uchar abyHeader[100] = {0};
     abyHeader[2] = 0x27; /* magic cookie */
     abyHeader[3] = 0x0a;
 
     int32 i32 = psSHP->nFileSize / 2; /* file size */
+=======
+    for (i = 0; i < 100; i++)
+        abyHeader[i] = 0;
+
+    abyHeader[2] = 0x27; /* magic cookie */
+    abyHeader[3] = 0x0a;
+
+    i32 = psSHP->nFileSize / 2; /* file size */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     ByteCopy(&i32, abyHeader + 24, 4);
     if (!bBigEndian)
         SwapWord(4, abyHeader + 24);
@@ -169,7 +236,11 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
     if (bBigEndian)
         SwapWord(4, abyHeader + 32);
 
+<<<<<<< HEAD
     double dValue = psSHP->adBoundsMin[0]; /* set bounds */
+=======
+    dValue = psSHP->adBoundsMin[0]; /* set bounds */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     ByteCopy(&dValue, abyHeader + 36, 8);
     if (bBigEndian)
         SwapWord(8, abyHeader + 36);
@@ -214,12 +285,16 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
     /* -------------------------------------------------------------------- */
     if (psSHP->sHooks.FSeek(psSHP->fpSHP, 0, 0) != 0 ||
         psSHP->sHooks.FWrite(abyHeader, 100, 1, psSHP->fpSHP) != 1) {
+<<<<<<< HEAD
         char szErrorMsg[200];
 
         snprintf(szErrorMsg, sizeof(szErrorMsg),
                  "Failure writing .shp header: %s", strerror(errno));
         szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
         psSHP->sHooks.Error(szErrorMsg);
+=======
+        psSHP->sHooks.Error("Failure writing .shp header");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return;
     }
 
@@ -230,6 +305,7 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
     ByteCopy(&i32, abyHeader + 24, 4);
     if (!bBigEndian)
         SwapWord(4, abyHeader + 24);
+<<<<<<< HEAD
 
     if (psSHP->sHooks.FSeek(psSHP->fpSHX, 0, 0) != 0 ||
         psSHP->sHooks.FWrite(abyHeader, 100, 1, psSHP->fpSHX) != 1) {
@@ -240,20 +316,35 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
         szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
         psSHP->sHooks.Error(szErrorMsg);
 
+=======
+
+    if (psSHP->sHooks.FSeek(psSHP->fpSHX, 0, 0) != 0 ||
+        psSHP->sHooks.FWrite(abyHeader, 100, 1, psSHP->fpSHX) != 1) {
+        psSHP->sHooks.Error("Failure writing .shx header");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return;
     }
 
     /* -------------------------------------------------------------------- */
     /*      Write out the .shx contents.                                    */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     int32 *panSHX =
         STATIC_CAST(int32 *, malloc(sizeof(int32) * 2 * psSHP->nRecords));
     if (panSHX == SHPLIB_NULLPTR) {
+=======
+    panSHX = (int32 *)malloc(sizeof(int32) * 2 * psSHP->nRecords);
+    if (panSHX == NULL) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psSHP->sHooks.Error("Failure allocatin panSHX");
         return;
     }
 
+<<<<<<< HEAD
     for (int i = 0; i < psSHP->nRecords; i++) {
+=======
+    for (i = 0; i < psSHP->nRecords; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         panSHX[i * 2] = psSHP->panRecOffset[i] / 2;
         panSHX[i * 2 + 1] = psSHP->panRecSize[i] / 2;
         if (!bBigEndian)
@@ -262,6 +353,7 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
             SwapWord(4, panSHX + i * 2 + 1);
     }
 
+<<<<<<< HEAD
     if (STATIC_CAST(int, psSHP->sHooks.FWrite(panSHX, sizeof(int32) * 2,
                                               psSHP->nRecords, psSHP->fpSHX)) !=
         psSHP->nRecords) {
@@ -271,6 +363,11 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
                  "Failure writing .shx contents: %s", strerror(errno));
         szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
         psSHP->sHooks.Error(szErrorMsg);
+=======
+    if ((int)psSHP->sHooks.FWrite(panSHX, sizeof(int32) * 2, psSHP->nRecords,
+                                  psSHP->fpSHX) != psSHP->nRecords) {
+        psSHP->sHooks.Error("Failure writing .shx contents");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     free(panSHX);
@@ -284,6 +381,7 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
 
 /************************************************************************/
 /*                              SHPOpen()                               */
+
 /************************************************************************/
 
 SHPHandle SHPAPI_CALL SHPOpen(const char *pszLayer, const char *pszAccess)
@@ -293,6 +391,7 @@ SHPHandle SHPAPI_CALL SHPOpen(const char *pszLayer, const char *pszAccess)
     SASetupDefaultHooks(&sHooks);
 
     return SHPOpenLL(pszLayer, pszAccess, &sHooks);
+<<<<<<< HEAD
 }
 
 /************************************************************************/
@@ -309,6 +408,8 @@ static int SHPGetLenWithoutExtension(const char *pszBasename)
         }
     }
     return nLen;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /************************************************************************/
@@ -316,16 +417,30 @@ static int SHPGetLenWithoutExtension(const char *pszBasename)
 /*                                                                      */
 /*      Open the .shp and .shx files based on the basename of the       */
 /*      files or either file name.                                      */
+
 /************************************************************************/
 
 SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
                                 SAHooks *psHooks)
 {
+<<<<<<< HEAD
+=======
+    char *pszFullname, *pszBasename;
+    SHPHandle psSHP;
+
+    uchar *pabyBuf;
+    int i;
+    double dValue;
+    int bLazySHXLoading = FALSE;
+    size_t nFullnameLen;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* -------------------------------------------------------------------- */
     /*      Ensure the access string is one of the legal ones.  We          */
     /*      ensure the result string indicates binary to avoid common       */
     /*      problems on Windows.                                            */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     bool bLazySHXLoading = false;
     if (strcmp(pszAccess, "rb+") == 0 || strcmp(pszAccess, "r+b") == 0 ||
         strcmp(pszAccess, "r+") == 0) {
@@ -333,13 +448,21 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     }
     else {
         bLazySHXLoading = strchr(pszAccess, 'l') != SHPLIB_NULLPTR;
+=======
+    if (strcmp(pszAccess, "rb+") == 0 || strcmp(pszAccess, "r+b") == 0 ||
+        strcmp(pszAccess, "r+") == 0)
+        pszAccess = "r+b";
+    else {
+        bLazySHXLoading = strchr(pszAccess, 'l') != NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         pszAccess = "rb";
     }
 
-/* -------------------------------------------------------------------- */
-/*  Establish the byte order on this machine.           */
-/* -------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------- */
+    /*  Establish the byte order on this machine.           */
+    /* -------------------------------------------------------------------- */
 #if !defined(bBigEndian)
+<<<<<<< HEAD
     {
         int i = 1;
         if (*((uchar *)&i) == 1)
@@ -347,17 +470,29 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
         else
             bBigEndian = true;
     }
+=======
+    i = 1;
+    if (*((uchar *)&i) == 1)
+        bBigEndian = FALSE;
+    else
+        bBigEndian = TRUE;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #endif
 
     /* -------------------------------------------------------------------- */
     /*  Initialize the info structure.                  */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     SHPHandle psSHP = STATIC_CAST(SHPHandle, calloc(sizeof(SHPInfo), 1));
+=======
+    psSHP = (SHPHandle)calloc(sizeof(SHPInfo), 1);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     psSHP->bUpdated = FALSE;
     memcpy(&(psSHP->sHooks), psHooks, sizeof(SAHooks));
 
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     /*  Open the .shp and .shx files.  Note that files pulled from  */
     /*  a PC to Unix with upper case filenames won't work!      */
     /* -------------------------------------------------------------------- */
@@ -381,11 +516,52 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
         free(pszMessage);
 
         free(psSHP);
+=======
+    /*  Compute the base (layer) name.  If there is any extension   */
+    /*  on the passed in filename we will strip it off.         */
+    /* -------------------------------------------------------------------- */
+    pszBasename = (char *)malloc(strlen(pszLayer) + 5);
+    strcpy(pszBasename, pszLayer);
+    for (i = (int)strlen(pszBasename) - 1;
+         i > 0 && pszBasename[i] != '.' && pszBasename[i] != '/' &&
+         pszBasename[i] != '\\';
+         i--) {
+    }
+
+    if (pszBasename[i] == '.')
+        pszBasename[i] = '\0';
+
+    /* -------------------------------------------------------------------- */
+    /*  Open the .shp and .shx files.  Note that files pulled from  */
+    /*  a PC to Unix with upper case filenames won't work!      */
+    /* -------------------------------------------------------------------- */
+    nFullnameLen = strlen(pszBasename) + 5;
+    pszFullname = (char *)malloc(nFullnameLen);
+    snprintf(pszFullname, nFullnameLen, "%s.shp", pszBasename);
+    psSHP->fpSHP = psSHP->sHooks.FOpen(pszFullname, pszAccess);
+    if (psSHP->fpSHP == NULL) {
+        snprintf(pszFullname, nFullnameLen, "%s.SHP", pszBasename);
+        psSHP->fpSHP = psSHP->sHooks.FOpen(pszFullname, pszAccess);
+    }
+
+    if (psSHP->fpSHP == NULL) {
+        size_t nMessageLen = strlen(pszBasename) * 2 + 256;
+        char *pszMessage = (char *)malloc(nMessageLen);
+
+        snprintf(pszMessage, nMessageLen, "Unable to open %s.shp or %s.SHP.",
+                 pszBasename, pszBasename);
+        psHooks->Error(pszMessage);
+        free(pszMessage);
+
+        free(psSHP);
+        free(pszBasename);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         free(pszFullname);
 
         return SHPLIB_NULLPTR;
     }
 
+<<<<<<< HEAD
     memcpy(pszFullname + nLenWithoutExtension, ".shx", 5);
     psSHP->fpSHX = psSHP->sHooks.FOpen(pszFullname, pszAccess);
     if (psSHP->fpSHX == SHPLIB_NULLPTR) {
@@ -412,10 +588,40 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     }
 
     free(pszFullname);
+=======
+    snprintf(pszFullname, nFullnameLen, "%s.shx", pszBasename);
+    psSHP->fpSHX = psSHP->sHooks.FOpen(pszFullname, pszAccess);
+    if (psSHP->fpSHX == NULL) {
+        snprintf(pszFullname, nFullnameLen, "%s.SHX", pszBasename);
+        psSHP->fpSHX = psSHP->sHooks.FOpen(pszFullname, pszAccess);
+    }
+
+    if (psSHP->fpSHX == NULL) {
+        size_t nMessageLen = strlen(pszBasename) * 2 + 256;
+        char *pszMessage = (char *)malloc(nMessageLen);
+
+        snprintf(pszMessage, nMessageLen,
+                 "Unable to open %s.shx or %s.SHX."
+                 "Try --config SHAPE_RESTORE_SHX true to restore or create it",
+                 pszBasename, pszBasename);
+        psHooks->Error(pszMessage);
+        free(pszMessage);
+
+        psSHP->sHooks.FClose(psSHP->fpSHP);
+        free(psSHP);
+        free(pszBasename);
+        free(pszFullname);
+        return (NULL);
+    }
+
+    free(pszFullname);
+    free(pszBasename);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* -------------------------------------------------------------------- */
     /*  Read the file size from the SHP file.               */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     uchar *pabyBuf = STATIC_CAST(uchar *, malloc(100));
     if (psSHP->sHooks.FRead(pabyBuf, 100, 1, psSHP->fpSHP) != 1) {
         psSHP->sHooks.Error(".shp file is unreadable, or corrupt.");
@@ -430,6 +636,16 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     psSHP->nFileSize = (STATIC_CAST(unsigned int, pabyBuf[24]) << 24) |
                        (pabyBuf[25] << 16) | (pabyBuf[26] << 8) | pabyBuf[27];
     if (psSHP->nFileSize < UINT_MAX / 2)
+=======
+    pabyBuf = (uchar *)malloc(100);
+    psSHP->sHooks.FRead(pabyBuf, 100, 1, psSHP->fpSHP);
+
+    psSHP->nFileSize =
+        ((unsigned int)pabyBuf[24] * 256 * 256 * 256 +
+         (unsigned int)pabyBuf[25] * 256 * 256 +
+         (unsigned int)pabyBuf[26] * 256 + (unsigned int)pabyBuf[27]);
+    if (psSHP->nFileSize < 0xFFFFFFFFU / 2)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psSHP->nFileSize *= 2;
     else
         psSHP->nFileSize = (UINT_MAX / 2) * 2;
@@ -443,6 +659,7 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
         psSHP->sHooks.Error(".shx file is unreadable, or corrupt.");
         psSHP->sHooks.FClose(psSHP->fpSHP);
         psSHP->sHooks.FClose(psSHP->fpSHX);
+<<<<<<< HEAD
         free(pabyBuf);
         free(psSHP);
 
@@ -451,11 +668,22 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
 
     psSHP->nRecords = pabyBuf[27] | (pabyBuf[26] << 8) | (pabyBuf[25] << 16) |
                       ((pabyBuf[24] & 0x7F) << 24);
+=======
+        free(psSHP);
+
+        return (NULL);
+    }
+
+    psSHP->nRecords = pabyBuf[27] + pabyBuf[26] * 256 +
+                      pabyBuf[25] * 256 * 256 +
+                      (pabyBuf[24] & 0x7F) * 256 * 256 * 256;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     psSHP->nRecords = (psSHP->nRecords - 50) / 4;
 
     psSHP->nShapeType = pabyBuf[32];
 
     if (psSHP->nRecords < 0 || psSHP->nRecords > 256000000) {
+<<<<<<< HEAD
         char szErrorMsg[200];
 
         snprintf(szErrorMsg, sizeof(szErrorMsg),
@@ -464,22 +692,45 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
                  psSHP->nRecords);
         szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
         psSHP->sHooks.Error(szErrorMsg);
+=======
+        char szError[200];
+
+        snprintf(szError, sizeof(szError),
+                 "Record count in .shp header is %d, which seems\n"
+                 "unreasonable.  Assuming header is corrupt.",
+                 psSHP->nRecords);
+        psSHP->sHooks.Error(szError);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psSHP->sHooks.FClose(psSHP->fpSHP);
         psSHP->sHooks.FClose(psSHP->fpSHX);
         free(psSHP);
         free(pabyBuf);
 
+<<<<<<< HEAD
         return SHPLIB_NULLPTR;
+=======
+        return (NULL);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* If a lot of records are advertized, check that the file is big enough */
     /* to hold them */
     if (psSHP->nRecords >= 1024 * 1024) {
+<<<<<<< HEAD
         psSHP->sHooks.FSeek(psSHP->fpSHX, 0, 2);
         const SAOffset nFileSize = psSHP->sHooks.FTell(psSHP->fpSHX);
         if (nFileSize > 100 &&
             nFileSize / 2 < STATIC_CAST(SAOffset, psSHP->nRecords * 4 + 50)) {
             psSHP->nRecords = STATIC_CAST(int, (nFileSize - 100) / 8);
+=======
+        SAOffset nFileSize;
+
+        psSHP->sHooks.FSeek(psSHP->fpSHX, 0, 2);
+        nFileSize = psSHP->sHooks.FTell(psSHP->fpSHX);
+        if (nFileSize > 100 &&
+            nFileSize / 2 < (SAOffset)(psSHP->nRecords * 4 + 50)) {
+            psSHP->nRecords = (int)((nFileSize - 100) / 8);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         psSHP->sHooks.FSeek(psSHP->fpSHX, 100, 0);
     }
@@ -487,8 +738,11 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     /* -------------------------------------------------------------------- */
     /*      Read the bounds.                                                */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     double dValue;
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (bBigEndian)
         SwapWord(8, pabyBuf + 36);
     memcpy(&dValue, pabyBuf + 36, 8);
@@ -537,6 +791,7 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     /* -------------------------------------------------------------------- */
     psSHP->nMaxRecords = psSHP->nRecords;
 
+<<<<<<< HEAD
     psSHP->panRecOffset =
         STATIC_CAST(unsigned int *,
                     malloc(sizeof(unsigned int) * MAX(1, psSHP->nMaxRecords)));
@@ -560,6 +815,27 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
             psSHP->nRecords);
         szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
         psSHP->sHooks.Error(szErrorMsg);
+=======
+    psSHP->panRecOffset = (unsigned int *)malloc(sizeof(unsigned int) *
+                                                 MAX(1, psSHP->nMaxRecords));
+    psSHP->panRecSize = (unsigned int *)malloc(sizeof(unsigned int) *
+                                               MAX(1, psSHP->nMaxRecords));
+    if (bLazySHXLoading)
+        pabyBuf = NULL;
+    else
+        pabyBuf = (uchar *)malloc(8 * MAX(1, psSHP->nRecords));
+
+    if (psSHP->panRecOffset == NULL || psSHP->panRecSize == NULL ||
+        (!bLazySHXLoading && pabyBuf == NULL)) {
+        char szError[200];
+
+        snprintf(
+            szError, sizeof(szError),
+            "Not enough memory to allocate requested memory (nRecords=%d).\n"
+            "Probably broken SHP file",
+            psSHP->nRecords);
+        psSHP->sHooks.Error(szError);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psSHP->sHooks.FClose(psSHP->fpSHP);
         psSHP->sHooks.FClose(psSHP->fpSHX);
         if (psSHP->panRecOffset)
@@ -569,7 +845,11 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
         if (pabyBuf)
             free(pabyBuf);
         free(psSHP);
+<<<<<<< HEAD
         return SHPLIB_NULLPTR;
+=======
+        return (NULL);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     if (bLazySHXLoading) {
@@ -577,6 +857,7 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
                sizeof(unsigned int) * MAX(1, psSHP->nMaxRecords));
         memset(psSHP->panRecSize, 0,
                sizeof(unsigned int) * MAX(1, psSHP->nMaxRecords));
+<<<<<<< HEAD
         free(pabyBuf); // sometimes make cppcheck happy, but
         return (psSHP);
     }
@@ -591,6 +872,19 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
                  psSHP->nRecords, strerror(errno));
         szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
         psSHP->sHooks.Error(szErrorMsg);
+=======
+        return (psSHP);
+    }
+
+    if ((int)psSHP->sHooks.FRead(pabyBuf, 8, psSHP->nRecords, psSHP->fpSHX) !=
+        psSHP->nRecords) {
+        char szError[200];
+
+        snprintf(szError, sizeof(szError),
+                 "Failed to read all values for %d records in .shx file.",
+                 psSHP->nRecords);
+        psSHP->sHooks.Error(szError);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         /* SHX is short or unreadable for some reason. */
         psSHP->sHooks.FClose(psSHP->fpSHP);
@@ -600,12 +894,17 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
         free(pabyBuf);
         free(psSHP);
 
+<<<<<<< HEAD
         return SHPLIB_NULLPTR;
+=======
+        return (NULL);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* In read-only mode, we can close the SHX now */
     if (strcmp(pszAccess, "rb") == 0) {
         psSHP->sHooks.FClose(psSHP->fpSHX);
+<<<<<<< HEAD
         psSHP->fpSHX = SHPLIB_NULLPTR;
     }
 
@@ -639,6 +938,41 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
             SHPClose(psSHP);
             free(pabyBuf);
             return SHPLIB_NULLPTR;
+=======
+        psSHP->fpSHX = NULL;
+    }
+
+    for (i = 0; i < psSHP->nRecords; i++) {
+        unsigned int nOffset, nLength;
+
+        memcpy(&nOffset, pabyBuf + i * 8, 4);
+        if (!bBigEndian)
+            SwapWord(4, &nOffset);
+
+        memcpy(&nLength, pabyBuf + i * 8 + 4, 4);
+        if (!bBigEndian)
+            SwapWord(4, &nLength);
+
+        if (nOffset > (unsigned int)INT_MAX) {
+            char str[128];
+
+            snprintf(str, sizeof(str), "Invalid offset for entity %d", i);
+
+            psSHP->sHooks.Error(str);
+            SHPClose(psSHP);
+            free(pabyBuf);
+            return NULL;
+        }
+        if (nLength > (unsigned int)(INT_MAX / 2 - 4)) {
+            char str[128];
+
+            snprintf(str, sizeof(str), "Invalid length for entity %d", i);
+
+            psSHP->sHooks.Error(str);
+            SHPClose(psSHP);
+            free(pabyBuf);
+            return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         psSHP->panRecOffset[i] = nOffset * 2;
         psSHP->panRecSize[i] = nLength * 2;
@@ -654,6 +988,7 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
 /*      Open the .shp and .shx files based on the basename of the       */
 /*      files or either file name. It generally invokes SHPRestoreSHX() */
 /*      in case when bRestoreSHX equals true.                           */
+
 /************************************************************************/
 
 SHPHandle SHPAPI_CALL SHPOpenLLEx(const char *pszLayer, const char *pszAccess,
@@ -667,7 +1002,11 @@ SHPHandle SHPAPI_CALL SHPOpenLLEx(const char *pszLayer, const char *pszAccess,
         }
     }
 
+<<<<<<< HEAD
     return SHPLIB_NULLPTR;
+=======
+    return (NULL);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /************************************************************************/
@@ -675,28 +1014,59 @@ SHPHandle SHPAPI_CALL SHPOpenLLEx(const char *pszLayer, const char *pszAccess,
 /*                                                                      */
 /*      Restore .SHX file using associated .SHP file.                   */
 /*                                                                      */
+
 /************************************************************************/
 
 int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
                               SAHooks *psHooks)
 {
+<<<<<<< HEAD
+=======
+    char *pszFullname, *pszBasename;
+    SAFile fpSHP, fpSHX;
+
+    uchar *pabyBuf;
+    int i;
+    size_t nFullnameLen;
+    unsigned int nSHPFilesize;
+
+    size_t nMessageLen;
+    char *pszMessage;
+
+    unsigned int nCurrentSHPOffset = 100;
+    size_t nRealSHXContentSize = 100;
+
+    const char pszSHXAccess[] = "w+b";
+    char *pabySHXHeader;
+    char abyReadedRecord[8];
+    unsigned int niRecord = 0;
+    unsigned int nRecordLength = 0;
+    unsigned int nRecordOffset = 50;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* -------------------------------------------------------------------- */
     /*      Ensure the access string is one of the legal ones.  We          */
     /*      ensure the result string indicates binary to avoid common       */
     /*      problems on Windows.                                            */
     /* -------------------------------------------------------------------- */
     if (strcmp(pszAccess, "rb+") == 0 || strcmp(pszAccess, "r+b") == 0 ||
+<<<<<<< HEAD
         strcmp(pszAccess, "r+") == 0) {
         pszAccess = "r+b";
     }
+=======
+        strcmp(pszAccess, "r+") == 0)
+        pszAccess = "r+b";
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     else {
         pszAccess = "rb";
     }
 
-/* -------------------------------------------------------------------- */
-/*  Establish the byte order on this machine.                           */
-/* -------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------- */
+    /*  Establish the byte order on this machine.                           */
+    /* -------------------------------------------------------------------- */
 #if !defined(bBigEndian)
+<<<<<<< HEAD
     {
         int i = 1;
         if (*((uchar *)&i) == 1)
@@ -732,12 +1102,61 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
 
         free(pszFullname);
 
+=======
+    i = 1;
+    if (*((uchar *)&i) == 1)
+        bBigEndian = FALSE;
+    else
+        bBigEndian = TRUE;
+#endif
+
+    /* -------------------------------------------------------------------- */
+    /*  Compute the base (layer) name.  If there is any extension           */
+    /*  on the passed in filename we will strip it off.                     */
+    /* -------------------------------------------------------------------- */
+    pszBasename = (char *)malloc(strlen(pszLayer) + 5);
+    strcpy(pszBasename, pszLayer);
+    for (i = (int)strlen(pszBasename) - 1;
+         i > 0 && pszBasename[i] != '.' && pszBasename[i] != '/' &&
+         pszBasename[i] != '\\';
+         i--) {
+    }
+
+    if (pszBasename[i] == '.')
+        pszBasename[i] = '\0';
+
+    /* -------------------------------------------------------------------- */
+    /*  Open the .shp file.  Note that files pulled from                    */
+    /*  a PC to Unix with upper case filenames won't work!                  */
+    /* -------------------------------------------------------------------- */
+    nFullnameLen = strlen(pszBasename) + 5;
+    pszFullname = (char *)malloc(nFullnameLen);
+    snprintf(pszFullname, nFullnameLen, "%s.shp", pszBasename);
+    fpSHP = psHooks->FOpen(pszFullname, pszAccess);
+    if (fpSHP == NULL) {
+        snprintf(pszFullname, nFullnameLen, "%s.SHP", pszBasename);
+        fpSHP = psHooks->FOpen(pszFullname, pszAccess);
+    }
+
+    if (fpSHP == NULL) {
+        nMessageLen = strlen(pszBasename) * 2 + 256;
+        pszMessage = (char *)malloc(nMessageLen);
+        snprintf(pszMessage, nMessageLen, "Unable to open %s.shp or %s.SHP.",
+                 pszBasename, pszBasename);
+        psHooks->Error(pszMessage);
+        free(pszMessage);
+
+        free(pszBasename);
+        free(pszFullname);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return (0);
     }
 
     /* -------------------------------------------------------------------- */
     /*  Read the file size from the SHP file.                               */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     uchar *pabyBuf = STATIC_CAST(uchar *, malloc(100));
     if (psHooks->FRead(pabyBuf, 100, 1, fpSHP) != 1) {
         psHooks->Error(".shp file is unreadable, or corrupt.");
@@ -753,10 +1172,21 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
                                 (pabyBuf[25] << 16) | (pabyBuf[26] << 8) |
                                 pabyBuf[27];
     if (nSHPFilesize < UINT_MAX / 2)
+=======
+    pabyBuf = (uchar *)malloc(100);
+    psHooks->FRead(pabyBuf, 100, 1, fpSHP);
+
+    nSHPFilesize =
+        ((unsigned int)pabyBuf[24] * 256 * 256 * 256 +
+         (unsigned int)pabyBuf[25] * 256 * 256 +
+         (unsigned int)pabyBuf[26] * 256 + (unsigned int)pabyBuf[27]);
+    if (nSHPFilesize < 0xFFFFFFFFU / 2)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         nSHPFilesize *= 2;
     else
         nSHPFilesize = (UINT_MAX / 2) * 2;
 
+<<<<<<< HEAD
     memcpy(pszFullname + nLenWithoutExtension, ".shx", 5);
     const char pszSHXAccess[] = "w+b";
     SAFile fpSHX = psHooks->FOpen(pszFullname, pszSHXAccess);
@@ -774,6 +1204,25 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
         free(pabyBuf);
         free(pszFullname);
 
+=======
+    snprintf(pszFullname, nFullnameLen, "%s.shx", pszBasename);
+    fpSHX = psHooks->FOpen(pszFullname, pszSHXAccess);
+
+    if (fpSHX == NULL) {
+        nMessageLen = strlen(pszBasename) * 2 + 256;
+        pszMessage = (char *)malloc(nMessageLen);
+        snprintf(pszMessage, nMessageLen,
+                 "Error opening file %s.shx for writing", pszBasename);
+        psHooks->Error(pszMessage);
+        free(pszMessage);
+
+        psHooks->FClose(fpSHX);
+
+        free(pabyBuf);
+        free(pszBasename);
+        free(pszFullname);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return (0);
     }
 
@@ -781,6 +1230,7 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
     /*  Open SHX and create it using SHP file content.                      */
     /* -------------------------------------------------------------------- */
     psHooks->FSeek(fpSHP, 100, 0);
+<<<<<<< HEAD
     char *pabySHXHeader = STATIC_CAST(char *, malloc(100));
     memcpy(pabySHXHeader, pabyBuf, 100);
     psHooks->FWrite(pabySHXHeader, 100, 1, fpSHX);
@@ -804,24 +1254,56 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
 
             psHooks->FWrite(abyReadRecord, 8, 1, fpSHX);
 
+=======
+    pabySHXHeader = (char *)malloc(100);
+    memcpy(pabySHXHeader, pabyBuf, 100);
+    psHooks->FWrite(pabySHXHeader, 100, 1, fpSHX);
+
+    while (nCurrentSHPOffset < nSHPFilesize) {
+        if (psHooks->FRead(&niRecord, 4, 1, fpSHP) == 1 &&
+            psHooks->FRead(&nRecordLength, 4, 1, fpSHP) == 1) {
+            if (!bBigEndian)
+                SwapWord(4, &nRecordOffset);
+            memcpy(abyReadedRecord, &nRecordOffset, 4);
+            memcpy(abyReadedRecord + 4, &nRecordLength, 4);
+
+            psHooks->FWrite(abyReadedRecord, 8, 1, fpSHX);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (!bBigEndian)
                 SwapWord(4, &nRecordOffset);
             if (!bBigEndian)
                 SwapWord(4, &nRecordLength);
             nRecordOffset += nRecordLength + 4;
+<<<<<<< HEAD
             // nCurrentRecordOffset += 8;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             nCurrentSHPOffset += 8 + nRecordLength * 2;
 
             psHooks->FSeek(fpSHP, nCurrentSHPOffset, 0);
             nRealSHXContentSize += 8;
         }
         else {
+<<<<<<< HEAD
             psHooks->Error("Error parsing .shp to restore .shx");
+=======
+            nMessageLen = strlen(pszBasename) * 2 + 256;
+            pszMessage = (char *)malloc(nMessageLen);
+            snprintf(pszMessage, nMessageLen,
+                     "Error parsing .shp to restore .shx");
+            psHooks->Error(pszMessage);
+            free(pszMessage);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             psHooks->FClose(fpSHX);
             psHooks->FClose(fpSHP);
 
             free(pabySHXHeader);
+<<<<<<< HEAD
+=======
+            free(pszBasename);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             free(pszFullname);
 
             return (0);
@@ -837,7 +1319,13 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
     psHooks->FClose(fpSHP);
     psHooks->FClose(fpSHX);
 
+<<<<<<< HEAD
     free(pszFullname);
+=======
+    free(pabyBuf);
+    free(pszFullname);
+    free(pszBasename);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     free(pabySHXHeader);
 
     return (1);
@@ -845,17 +1333,31 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
 
 /************************************************************************/
 /*                              SHPClose()                              */
+<<<<<<< HEAD
 /*                                           */
 /*    Close the .shp and .shx files.                    */
+=======
+/*                                                                      */
+/*      Close the .shp and .shx files.                                  */
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /************************************************************************/
 
 void SHPAPI_CALL SHPClose(SHPHandle psSHP)
 {
+<<<<<<< HEAD
     if (psSHP == SHPLIB_NULLPTR)
         return;
 
     /* -------------------------------------------------------------------- */
     /*    Update the header if we have modified anything.            */
+=======
+    if (psSHP == NULL)
+        return;
+
+    /* -------------------------------------------------------------------- */
+    /*      Update the header if we have modified anything.                 */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* -------------------------------------------------------------------- */
     if (psSHP->bUpdated)
         SHPWriteHeader(psSHP);
@@ -866,6 +1368,7 @@ void SHPAPI_CALL SHPClose(SHPHandle psSHP)
     free(psSHP->panRecOffset);
     free(psSHP->panRecSize);
 
+<<<<<<< HEAD
     if (psSHP->fpSHX != SHPLIB_NULLPTR)
         psSHP->sHooks.FClose(psSHP->fpSHX);
     psSHP->sHooks.FClose(psSHP->fpSHP);
@@ -878,6 +1381,20 @@ void SHPAPI_CALL SHPClose(SHPHandle psSHP)
         free(psSHP->pabyObjectBuf);
     }
     if (psSHP->psCachedObject != SHPLIB_NULLPTR) {
+=======
+    if (psSHP->fpSHX != NULL)
+        psSHP->sHooks.FClose(psSHP->fpSHX);
+    psSHP->sHooks.FClose(psSHP->fpSHP);
+
+    if (psSHP->pabyRec != NULL) {
+        free(psSHP->pabyRec);
+    }
+
+    if (psSHP->pabyObjectBuf != NULL) {
+        free(psSHP->pabyObjectBuf);
+    }
+    if (psSHP->psCachedObject != NULL) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         free(psSHP->psCachedObject);
     }
 
@@ -886,6 +1403,7 @@ void SHPAPI_CALL SHPClose(SHPHandle psSHP)
 
 /************************************************************************/
 /*                    SHPSetFastModeReadObject()                        */
+
 /************************************************************************/
 
 /* If setting bFastMode = TRUE, the content of SHPReadObject() is owned by the
@@ -898,10 +1416,16 @@ void SHPAPI_CALL SHPClose(SHPHandle psSHP)
 void SHPAPI_CALL SHPSetFastModeReadObject(SHPHandle hSHP, int bFastMode)
 {
     if (bFastMode) {
+<<<<<<< HEAD
         if (hSHP->psCachedObject == SHPLIB_NULLPTR) {
             hSHP->psCachedObject =
                 STATIC_CAST(SHPObject *, calloc(1, sizeof(SHPObject)));
             assert(hSHP->psCachedObject != SHPLIB_NULLPTR);
+=======
+        if (hSHP->psCachedObject == NULL) {
+            hSHP->psCachedObject = (SHPObject *)calloc(1, sizeof(SHPObject));
+            assert(hSHP->psCachedObject != NULL);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
 
@@ -912,11 +1436,13 @@ void SHPAPI_CALL SHPSetFastModeReadObject(SHPHandle hSHP, int bFastMode)
 /*                             SHPGetInfo()                             */
 /*                                                                      */
 /*      Fetch general information about the shape file.                 */
+
 /************************************************************************/
 
 void SHPAPI_CALL SHPGetInfo(SHPHandle psSHP, int *pnEntities, int *pnShapeType,
                             double *padfMinBound, double *padfMaxBound)
 {
+<<<<<<< HEAD
     if (psSHP == SHPLIB_NULLPTR)
         return;
 
@@ -930,6 +1456,23 @@ void SHPAPI_CALL SHPGetInfo(SHPHandle psSHP, int *pnEntities, int *pnShapeType,
         if (padfMinBound != SHPLIB_NULLPTR)
             padfMinBound[i] = psSHP->adBoundsMin[i];
         if (padfMaxBound != SHPLIB_NULLPTR)
+=======
+    int i;
+
+    if (psSHP == NULL)
+        return;
+
+    if (pnEntities != NULL)
+        *pnEntities = psSHP->nRecords;
+
+    if (pnShapeType != NULL)
+        *pnShapeType = psSHP->nShapeType;
+
+    for (i = 0; i < 4; i++) {
+        if (padfMinBound != NULL)
+            padfMinBound[i] = psSHP->adBoundsMin[i];
+        if (padfMaxBound != NULL)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             padfMaxBound[i] = psSHP->adBoundsMax[i];
     }
 }
@@ -939,6 +1482,7 @@ void SHPAPI_CALL SHPGetInfo(SHPHandle psSHP, int *pnEntities, int *pnShapeType,
 /*                                                                      */
 /*      Create a new shape file and return a handle to the open         */
 /*      shape file with read/write access.                              */
+
 /************************************************************************/
 
 SHPHandle SHPAPI_CALL SHPCreate(const char *pszLayer, int nShapeType)
@@ -955,11 +1499,13 @@ SHPHandle SHPAPI_CALL SHPCreate(const char *pszLayer, int nShapeType)
 /*                                                                      */
 /*      Create a new shape file and return a handle to the open         */
 /*      shape file with read/write access.                              */
+
 /************************************************************************/
 
 SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
                                   SAHooks *psHooks)
 {
+<<<<<<< HEAD
 /* -------------------------------------------------------------------- */
 /*      Establish the byte order on this system.                        */
 /* -------------------------------------------------------------------- */
@@ -1006,17 +1552,85 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
 
     free(pszFullname);
     pszFullname = SHPLIB_NULLPTR;
+=======
+    char *pszBasename = NULL, *pszFullname = NULL;
+    int i;
+    SAFile fpSHP = NULL, fpSHX = NULL;
+    uchar abyHeader[100];
+    int32 i32;
+    double dValue;
+    size_t nFullnameLen;
+
+    /* -------------------------------------------------------------------- */
+    /*      Establish the byte order on this system.                        */
+    /* -------------------------------------------------------------------- */
+#if !defined(bBigEndian)
+    i = 1;
+    if (*((uchar *)&i) == 1)
+        bBigEndian = FALSE;
+    else
+        bBigEndian = TRUE;
+#endif
+
+    /* -------------------------------------------------------------------- */
+    /*      Compute the base (layer) name.  If there is any extension       */
+    /*      on the passed in filename we will strip it off.                 */
+    /* -------------------------------------------------------------------- */
+    pszBasename = (char *)malloc(strlen(pszLayer) + 5);
+    strcpy(pszBasename, pszLayer);
+    for (i = (int)strlen(pszBasename) - 1;
+         i > 0 && pszBasename[i] != '.' && pszBasename[i] != '/' &&
+         pszBasename[i] != '\\';
+         i--) {
+    }
+
+    if (pszBasename[i] == '.')
+        pszBasename[i] = '\0';
+
+    /* -------------------------------------------------------------------- */
+    /*      Open the two files so we can write their headers.               */
+    /* -------------------------------------------------------------------- */
+    nFullnameLen = strlen(pszBasename) + 5;
+    pszFullname = (char *)malloc(nFullnameLen);
+    snprintf(pszFullname, nFullnameLen, "%s.shp", pszBasename);
+    fpSHP = psHooks->FOpen(pszFullname, "wb");
+    if (fpSHP == NULL) {
+        psHooks->Error("Failed to create file .shp file.");
+        goto error;
+    }
+
+    snprintf(pszFullname, nFullnameLen, "%s.shx", pszBasename);
+    fpSHX = psHooks->FOpen(pszFullname, "wb");
+    if (fpSHX == NULL) {
+        psHooks->Error("Failed to create file .shx file.");
+        goto error;
+    }
+
+    free(pszFullname);
+    pszFullname = NULL;
+    free(pszBasename);
+    pszBasename = NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* -------------------------------------------------------------------- */
     /*      Prepare header block for .shp file.                             */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     uchar abyHeader[100];
     memset(abyHeader, 0, sizeof(abyHeader));
+=======
+    for (i = 0; i < 100; i++)
+        abyHeader[i] = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     abyHeader[2] = 0x27; /* magic cookie */
     abyHeader[3] = 0x0a;
 
+<<<<<<< HEAD
     int32 i32 = 50; /* file size */
+=======
+    i32 = 50; /* file size */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     ByteCopy(&i32, abyHeader + 24, 4);
     if (!bBigEndian)
         SwapWord(4, abyHeader + 24);
@@ -1031,7 +1645,11 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
     if (bBigEndian)
         SwapWord(4, abyHeader + 32);
 
+<<<<<<< HEAD
     double dValue = 0.0; /* set bounds */
+=======
+    dValue = 0.0; /* set bounds */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     ByteCopy(&dValue, abyHeader + 36, 8);
     ByteCopy(&dValue, abyHeader + 44, 8);
     ByteCopy(&dValue, abyHeader + 52, 8);
@@ -1041,6 +1659,7 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
     /*      Write .shp file header.                                         */
     /* -------------------------------------------------------------------- */
     if (psHooks->FWrite(abyHeader, 100, 1, fpSHP) != 1) {
+<<<<<<< HEAD
         char szErrorMsg[200];
 
         snprintf(szErrorMsg, sizeof(szErrorMsg),
@@ -1052,6 +1671,10 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
         psHooks->FClose(fpSHP);
         psHooks->FClose(fpSHX);
         return NULL;
+=======
+        psHooks->Error("Failed to write .shp header.");
+        goto error;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* -------------------------------------------------------------------- */
@@ -1063,6 +1686,7 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
         SwapWord(4, abyHeader + 24);
 
     if (psHooks->FWrite(abyHeader, 100, 1, fpSHX) != 1) {
+<<<<<<< HEAD
         char szErrorMsg[200];
 
         snprintf(szErrorMsg, sizeof(szErrorMsg),
@@ -1074,6 +1698,10 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
         psHooks->FClose(fpSHP);
         psHooks->FClose(fpSHX);
         return NULL;
+=======
+        psHooks->Error("Failed to write .shx header.");
+        goto error;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* -------------------------------------------------------------------- */
@@ -1083,6 +1711,20 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
     psHooks->FClose(fpSHX);
 
     return (SHPOpenLL(pszLayer, "r+b", psHooks));
+<<<<<<< HEAD
+=======
+
+error:
+    if (pszFullname)
+        free(pszFullname);
+    if (pszBasename)
+        free(pszBasename);
+    if (fpSHP)
+        psHooks->FClose(fpSHP);
+    if (fpSHX)
+        psHooks->FClose(fpSHX);
+    return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /************************************************************************/
@@ -1090,6 +1732,7 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
 /*                                                                      */
 /*      Compute a bounds rectangle for a shape, and set it into the     */
 /*      indicated location in the record.                               */
+
 /************************************************************************/
 
 static void _SHPSetBounds(uchar *pabyRec, SHPObject *psShape)
@@ -1112,10 +1755,16 @@ static void _SHPSetBounds(uchar *pabyRec, SHPObject *psShape)
 /*                                                                      */
 /*      Recompute the extents of a shape.  Automatically done by        */
 /*      SHPCreateObject().                                              */
+
 /************************************************************************/
 
 void SHPAPI_CALL SHPComputeExtents(SHPObject *psObject)
 {
+<<<<<<< HEAD
+=======
+    int i;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* -------------------------------------------------------------------- */
     /*      Build extents for this object.                                  */
     /* -------------------------------------------------------------------- */
@@ -1126,7 +1775,11 @@ void SHPAPI_CALL SHPComputeExtents(SHPObject *psObject)
         psObject->dfMMin = psObject->dfMMax = psObject->padfM[0];
     }
 
+<<<<<<< HEAD
     for (int i = 0; i < psObject->nVertices; i++) {
+=======
+    for (i = 0; i < psObject->nVertices; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psObject->dfXMin = MIN(psObject->dfXMin, psObject->padfX[i]);
         psObject->dfYMin = MIN(psObject->dfYMin, psObject->padfY[i]);
         psObject->dfZMin = MIN(psObject->dfZMin, psObject->padfZ[i]);
@@ -1144,6 +1797,7 @@ void SHPAPI_CALL SHPComputeExtents(SHPObject *psObject)
 /*                                                                      */
 /*      Create a shape object.  It should be freed with                 */
 /*      SHPDestroyObject().                                             */
+
 /************************************************************************/
 
 SHPObject SHPAPI_CALL1(*)
@@ -1152,13 +1806,21 @@ SHPObject SHPAPI_CALL1(*)
                     int nVertices, const double *padfX, const double *padfY,
                     const double *padfZ, const double *padfM)
 {
+<<<<<<< HEAD
     SHPObject *psObject =
         STATIC_CAST(SHPObject *, calloc(1, sizeof(SHPObject)));
+=======
+    SHPObject *psObject;
+    int i, bHasM, bHasZ;
+
+    psObject = (SHPObject *)calloc(1, sizeof(SHPObject));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     psObject->nSHPType = nSHPType;
     psObject->nShapeId = nShapeId;
     psObject->bMeasureIsUsed = FALSE;
 
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     /*    Establish whether this shape type has M, and Z values.        */
     /* -------------------------------------------------------------------- */
     bool bHasM;
@@ -1168,16 +1830,33 @@ SHPObject SHPAPI_CALL1(*)
         nSHPType == SHPT_POLYGONM || nSHPType == SHPT_MULTIPOINTM) {
         bHasM = true;
         bHasZ = false;
+=======
+    /*      Establish whether this shape type has M, and Z values.          */
+    /* -------------------------------------------------------------------- */
+    if (nSHPType == SHPT_ARCM || nSHPType == SHPT_POINTM ||
+        nSHPType == SHPT_POLYGONM || nSHPType == SHPT_MULTIPOINTM) {
+        bHasM = TRUE;
+        bHasZ = FALSE;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     else if (nSHPType == SHPT_ARCZ || nSHPType == SHPT_POINTZ ||
              nSHPType == SHPT_POLYGONZ || nSHPType == SHPT_MULTIPOINTZ ||
              nSHPType == SHPT_MULTIPATCH) {
+<<<<<<< HEAD
         bHasM = true;
         bHasZ = true;
     }
     else {
         bHasM = false;
         bHasZ = false;
+=======
+        bHasM = TRUE;
+        bHasZ = TRUE;
+    }
+    else {
+        bHasM = FALSE;
+        bHasZ = FALSE;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* -------------------------------------------------------------------- */
@@ -1190,19 +1869,32 @@ SHPObject SHPAPI_CALL1(*)
         nSHPType == SHPT_MULTIPATCH) {
         psObject->nParts = MAX(1, nParts);
 
+<<<<<<< HEAD
         psObject->panPartStart =
             STATIC_CAST(int *, calloc(sizeof(int), psObject->nParts));
         psObject->panPartType =
             STATIC_CAST(int *, malloc(sizeof(int) * psObject->nParts));
+=======
+        psObject->panPartStart = (int *)calloc(sizeof(int), psObject->nParts);
+        psObject->panPartType = (int *)malloc(sizeof(int) * psObject->nParts);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         psObject->panPartStart[0] = 0;
         psObject->panPartType[0] = SHPP_RING;
 
+<<<<<<< HEAD
         for (int i = 0; i < nParts; i++) {
             if (panPartStart != SHPLIB_NULLPTR)
                 psObject->panPartStart[i] = panPartStart[i];
 
             if (panPartType != SHPLIB_NULLPTR)
+=======
+        for (i = 0; i < nParts; i++) {
+            if (panPartStart != NULL)
+                psObject->panPartStart[i] = panPartStart[i];
+
+            if (panPartType != NULL)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 psObject->panPartType[i] = panPartType[i];
             else
                 psObject->panPartType[i] = SHPP_RING;
@@ -1216,6 +1908,7 @@ SHPObject SHPAPI_CALL1(*)
     /*      Capture vertices.  Note that X, Y, Z and M are optional.        */
     /* -------------------------------------------------------------------- */
     if (nVertices > 0) {
+<<<<<<< HEAD
         const size_t nSize = sizeof(double) * nVertices;
         psObject->padfX =
             STATIC_CAST(double *, padfX ? malloc(nSize)
@@ -1237,6 +1930,24 @@ SHPObject SHPAPI_CALL1(*)
             memcpy(psObject->padfZ, padfZ, nSize);
         if (padfM != SHPLIB_NULLPTR && bHasM) {
             memcpy(psObject->padfM, padfM, nSize);
+=======
+        psObject->padfX = (double *)calloc(sizeof(double), nVertices);
+        psObject->padfY = (double *)calloc(sizeof(double), nVertices);
+        psObject->padfZ = (double *)calloc(sizeof(double), nVertices);
+        psObject->padfM = (double *)calloc(sizeof(double), nVertices);
+
+        for (i = 0; i < nVertices; i++) {
+            if (padfX != NULL)
+                psObject->padfX[i] = padfX[i];
+            if (padfY != NULL)
+                psObject->padfY[i] = padfY[i];
+            if (padfZ != NULL && bHasZ)
+                psObject->padfZ[i] = padfZ[i];
+            if (padfM != NULL && bHasM)
+                psObject->padfM[i] = padfM[i];
+        }
+        if (padfM != NULL && bHasM)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psObject->bMeasureIsUsed = TRUE;
         }
     }
@@ -1255,14 +1966,20 @@ SHPObject SHPAPI_CALL1(*)
 /*                                                                      */
 /*      Create a simple (common) shape object.  Destroy with            */
 /*      SHPDestroyObject().                                             */
+
 /************************************************************************/
 
 SHPObject SHPAPI_CALL1(*)
     SHPCreateSimpleObject(int nSHPType, int nVertices, const double *padfX,
                           const double *padfY, const double *padfZ)
 {
+<<<<<<< HEAD
     return (SHPCreateObject(nSHPType, -1, 0, SHPLIB_NULLPTR, SHPLIB_NULLPTR,
                             nVertices, padfX, padfY, padfZ, SHPLIB_NULLPTR));
+=======
+    return (SHPCreateObject(nSHPType, -1, 0, NULL, NULL, nVertices, padfX,
+                            padfY, padfZ, NULL));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /************************************************************************/
@@ -1270,11 +1987,21 @@ SHPObject SHPAPI_CALL1(*)
 /*                                                                      */
 /*      Write out the vertices of a new structure.  Note that it is     */
 /*      only possible to write vertices at the end of the file.         */
+
 /************************************************************************/
 
 int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
                                SHPObject *psObject)
 {
+<<<<<<< HEAD
+=======
+    unsigned int nRecordOffset, nRecordSize = 0;
+    int i;
+    uchar *pabyRec;
+    int32 i32;
+    int bExtendFile = FALSE;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     psSHP->bUpdated = TRUE;
 
     /* -------------------------------------------------------------------- */
@@ -1302,6 +2029,7 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
         unsigned int *panRecOffsetNew;
         unsigned int *panRecSizeNew;
 
+<<<<<<< HEAD
         panRecOffsetNew = STATIC_CAST(
             unsigned int *, SfRealloc(psSHP->panRecOffset,
                                       sizeof(unsigned int) * nNewMaxRecords));
@@ -1313,6 +2041,17 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
             unsigned int *, SfRealloc(psSHP->panRecSize,
                                       sizeof(unsigned int) * nNewMaxRecords));
         if (panRecSizeNew == SHPLIB_NULLPTR)
+=======
+        panRecOffsetNew = (unsigned int *)SfRealloc(
+            psSHP->panRecOffset, sizeof(unsigned int) * nNewMaxRecords);
+        if (panRecOffsetNew == NULL)
+            return -1;
+        psSHP->panRecOffset = panRecOffsetNew;
+
+        panRecSizeNew = (unsigned int *)SfRealloc(
+            psSHP->panRecSize, sizeof(unsigned int) * nNewMaxRecords);
+        if (panRecSizeNew == NULL)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             return -1;
         psSHP->panRecSize = panRecSizeNew;
 
@@ -1322,6 +2061,7 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     /* -------------------------------------------------------------------- */
     /*      Initialize record.                                              */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     uchar *pabyRec =
         STATIC_CAST(uchar *, malloc(psObject->nVertices * 4 * sizeof(double) +
                                     psObject->nParts * 8 + 128));
@@ -1333,6 +2073,22 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     /* -------------------------------------------------------------------- */
     unsigned int nRecordSize = 0;
     const bool bFirstFeature = psSHP->nRecords == 0;
+=======
+    pabyRec = (uchar *)malloc(psObject->nVertices * 4 * sizeof(double) +
+                              psObject->nParts * 8 + 128);
+    if (pabyRec == NULL)
+        return -1;
+
+    /* -------------------------------------------------------------------- */
+    /*  Extract vertices for a Polygon or Arc.                              */
+    /* -------------------------------------------------------------------- */
+    if (psObject->nSHPType == SHPT_POLYGON ||
+        psObject->nSHPType == SHPT_POLYGONZ ||
+        psObject->nSHPType == SHPT_POLYGONM || psObject->nSHPType == SHPT_ARC ||
+        psObject->nSHPType == SHPT_ARCZ || psObject->nSHPType == SHPT_ARCM ||
+        psObject->nSHPType == SHPT_MULTIPATCH) {
+        int32 nPoints, nParts;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (psObject->nSHPType == SHPT_POLYGON ||
         psObject->nSHPType == SHPT_POLYGONZ ||
@@ -1359,7 +2115,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
          */
         ByteCopy(psObject->panPartStart, pabyRec + 44 + 8,
                  4 * psObject->nParts);
+<<<<<<< HEAD
         for (int i = 0; i < psObject->nParts; i++) {
+=======
+        for (i = 0; i < psObject->nParts; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (bBigEndian)
                 SwapWord(4, pabyRec + 44 + 8 + 4 * i);
             nRecordSize += 4;
@@ -1371,7 +2131,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
         if (psObject->nSHPType == SHPT_MULTIPATCH) {
             memcpy(pabyRec + nRecordSize, psObject->panPartType,
                    4 * psObject->nParts);
+<<<<<<< HEAD
             for (int i = 0; i < psObject->nParts; i++) {
+=======
+            for (i = 0; i < psObject->nParts; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 if (bBigEndian)
                     SwapWord(4, pabyRec + nRecordSize);
                 nRecordSize += 4;
@@ -1381,7 +2145,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
         /*
          * Write the (x,y) vertex values.
          */
+<<<<<<< HEAD
         for (int i = 0; i < psObject->nVertices; i++) {
+=======
+        for (i = 0; i < psObject->nVertices; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             ByteCopy(psObject->padfX + i, pabyRec + nRecordSize, 8);
             ByteCopy(psObject->padfY + i, pabyRec + nRecordSize + 8, 8);
 
@@ -1410,7 +2178,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
                 SwapWord(8, pabyRec + nRecordSize);
             nRecordSize += 8;
 
+<<<<<<< HEAD
             for (int i = 0; i < psObject->nVertices; i++) {
+=======
+            for (i = 0; i < psObject->nVertices; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 ByteCopy(psObject->padfZ + i, pabyRec + nRecordSize, 8);
                 if (bBigEndian)
                     SwapWord(8, pabyRec + nRecordSize);
@@ -1439,7 +2211,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
                 SwapWord(8, pabyRec + nRecordSize);
             nRecordSize += 8;
 
+<<<<<<< HEAD
             for (int i = 0; i < psObject->nVertices; i++) {
+=======
+            for (i = 0; i < psObject->nVertices; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 ByteCopy(psObject->padfM + i, pabyRec + nRecordSize, 8);
                 if (bBigEndian)
                     SwapWord(8, pabyRec + nRecordSize);
@@ -1449,15 +2225,24 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     }
 
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     /*  Extract vertices for a MultiPoint.                    */
+=======
+    /*  Extract vertices for a MultiPoint.                                  */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* -------------------------------------------------------------------- */
     else if (psObject->nSHPType == SHPT_MULTIPOINT ||
              psObject->nSHPType == SHPT_MULTIPOINTZ ||
              psObject->nSHPType == SHPT_MULTIPOINTM) {
+<<<<<<< HEAD
         int32 nPoints = psObject->nVertices;
+=======
+        int32 nPoints;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         _SHPSetBounds(pabyRec + 12, psObject);
 
+<<<<<<< HEAD
         if (bBigEndian)
             SwapWord(4, &nPoints);
         ByteCopy(&nPoints, pabyRec + 44, 4);
@@ -1466,6 +2251,18 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
             ByteCopy(psObject->padfX + i, pabyRec + 48 + i * 16, 8);
             ByteCopy(psObject->padfY + i, pabyRec + 48 + i * 16 + 8, 8);
 
+=======
+        _SHPSetBounds(pabyRec + 12, psObject);
+
+        if (bBigEndian)
+            SwapWord(4, &nPoints);
+        ByteCopy(&nPoints, pabyRec + 44, 4);
+
+        for (i = 0; i < psObject->nVertices; i++) {
+            ByteCopy(psObject->padfX + i, pabyRec + 48 + i * 16, 8);
+            ByteCopy(psObject->padfY + i, pabyRec + 48 + i * 16 + 8, 8);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (bBigEndian)
                 SwapWord(8, pabyRec + 48 + i * 16);
             if (bBigEndian)
@@ -1485,7 +2282,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
                 SwapWord(8, pabyRec + nRecordSize);
             nRecordSize += 8;
 
+<<<<<<< HEAD
             for (int i = 0; i < psObject->nVertices; i++) {
+=======
+            for (i = 0; i < psObject->nVertices; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 ByteCopy(psObject->padfZ + i, pabyRec + nRecordSize, 8);
                 if (bBigEndian)
                     SwapWord(8, pabyRec + nRecordSize);
@@ -1506,7 +2307,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
                 SwapWord(8, pabyRec + nRecordSize);
             nRecordSize += 8;
 
+<<<<<<< HEAD
             for (int i = 0; i < psObject->nVertices; i++) {
+=======
+            for (i = 0; i < psObject->nVertices; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 ByteCopy(psObject->padfM + i, pabyRec + nRecordSize, 8);
                 if (bBigEndian)
                     SwapWord(8, pabyRec + nRecordSize);
@@ -1516,7 +2321,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     }
 
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     /*      Write point.                            */
+=======
+    /*      Write point.                                                    */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* -------------------------------------------------------------------- */
     else if (psObject->nSHPType == SHPT_POINT ||
              psObject->nSHPType == SHPT_POINTZ ||
@@ -1553,13 +2362,21 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     else if (psObject->nSHPType == SHPT_NULL) {
         nRecordSize = 12;
     }
+<<<<<<< HEAD
     else {
         /* unknown type */
         assert(false);
+=======
+
+    else {
+        /* unknown type */
+        assert(FALSE);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* -------------------------------------------------------------------- */
     /*      Establish where we are going to put this record. If we are      */
+<<<<<<< HEAD
     /*      rewriting the last record of the file, then we can update it in */
     /*      place. Otherwise if rewriting an existing record, and it will   */
     /*      fit, then put it  back where the original came from.  Otherwise */
@@ -1583,6 +2400,22 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
                      "The current record of size %u cannot be added.",
                      psSHP->nFileSize, nRecordSize);
             str[sizeof(str) - 1] = '\0';
+=======
+    /*      rewriting and existing record, and it will fit, then put it     */
+    /*      back where the original came from.  Otherwise write at the end. */
+    /* -------------------------------------------------------------------- */
+    if (nShapeId == -1 || psSHP->panRecSize[nShapeId] < nRecordSize - 8) {
+        unsigned int nExpectedSize = psSHP->nFileSize + nRecordSize;
+
+        if (nExpectedSize < psSHP->nFileSize) // due to unsigned int overflow
+        {
+            char str[128];
+
+            snprintf(str, sizeof(str),
+                     "Failed to write shape object. "
+                     "File size cannot reach %u + %u.",
+                     psSHP->nFileSize, nRecordSize);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(str);
             free(pabyRec);
             return -1;
@@ -1598,8 +2431,12 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     /* -------------------------------------------------------------------- */
     /*      Set the shape type, record number, and record size.             */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     int32 i32 =
         (nShapeId < 0) ? psSHP->nRecords + 1 : nShapeId + 1; /* record # */
+=======
+    i32 = (nShapeId < 0) ? psSHP->nRecords + 1 : nShapeId + 1; /* record # */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (!bBigEndian)
         SwapWord(4, &i32);
     ByteCopy(&i32, pabyRec, 4);
@@ -1617,6 +2454,7 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     /* -------------------------------------------------------------------- */
     /*      Write out record.                                               */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
 
     /* -------------------------------------------------------------------- */
     /*      Guard FSeek with check for whether we're already at position;   */
@@ -1647,16 +2485,31 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
         szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
         psSHP->sHooks.Error(szErrorMsg);
 
+=======
+    if (psSHP->sHooks.FSeek(psSHP->fpSHP, nRecordOffset, 0) != 0) {
+        psSHP->sHooks.Error("Error in psSHP->sHooks.FSeek() while writing "
+                            "object to .shp file.");
+        free(pabyRec);
+        return -1;
+    }
+    if (psSHP->sHooks.FWrite(pabyRec, nRecordSize, 1, psSHP->fpSHP) < 1) {
+        psSHP->sHooks.Error("Error in psSHP->sHooks.Fwrite() while writing "
+                            "object to .shp file.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         free(pabyRec);
         return -1;
     }
 
     free(pabyRec);
 
+<<<<<<< HEAD
     if (bAppendToLastRecord) {
         psSHP->nFileSize = psSHP->panRecOffset[nShapeId] + nRecordSize;
     }
     else if (bAppendToFile) {
+=======
+    if (bExtendFile) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (nShapeId == -1)
             nShapeId = psSHP->nRecords++;
 
@@ -1666,9 +2519,16 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
     psSHP->panRecSize[nShapeId] = nRecordSize - 8;
 
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     /*    Expand file wide bounds based on this shape.            */
     /* -------------------------------------------------------------------- */
     if (bFirstFeature) {
+=======
+    /*      Expand file wide bounds based on this shape.                    */
+    /* -------------------------------------------------------------------- */
+    if (psSHP->adBoundsMin[0] == 0.0 && psSHP->adBoundsMax[0] == 0.0 &&
+        psSHP->adBoundsMin[1] == 0.0 && psSHP->adBoundsMax[1] == 0.0) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (psObject->nSHPType == SHPT_NULL || psObject->nVertices == 0) {
             psSHP->adBoundsMin[0] = psSHP->adBoundsMax[0] = 0.0;
             psSHP->adBoundsMin[1] = psSHP->adBoundsMax[1] = 0.0;
@@ -1685,7 +2545,11 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
         }
     }
 
+<<<<<<< HEAD
     for (int i = 0; i < psObject->nVertices; i++) {
+=======
+    for (i = 0; i < psObject->nVertices; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psSHP->adBoundsMin[0] = MIN(psSHP->adBoundsMin[0], psObject->padfX[i]);
         psSHP->adBoundsMin[1] = MIN(psSHP->adBoundsMin[1], psObject->padfY[i]);
         psSHP->adBoundsMax[0] = MAX(psSHP->adBoundsMax[0], psObject->padfX[i]);
@@ -1709,16 +2573,28 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle psSHP, int nShapeId,
 
 /************************************************************************/
 /*                         SHPAllocBuffer()                             */
+
 /************************************************************************/
 
 static void *SHPAllocBuffer(unsigned char **pBuffer, int nSize)
 {
+<<<<<<< HEAD
     if (pBuffer == SHPLIB_NULLPTR)
         return calloc(1, nSize);
 
     unsigned char *pRet = *pBuffer;
     if (pRet == SHPLIB_NULLPTR)
         return SHPLIB_NULLPTR;
+=======
+    unsigned char *pRet;
+
+    if (pBuffer == NULL)
+        return calloc(1, nSize);
+
+    pRet = *pBuffer;
+    if (pRet == NULL)
+        return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     (*pBuffer) += nSize;
     return pRet;
@@ -1726,11 +2602,13 @@ static void *SHPAllocBuffer(unsigned char **pBuffer, int nSize)
 
 /************************************************************************/
 /*                    SHPReallocObjectBufIfNecessary()                  */
+
 /************************************************************************/
 
 static unsigned char *SHPReallocObjectBufIfNecessary(SHPHandle psSHP,
                                                      int nObjectBufSize)
 {
+<<<<<<< HEAD
     if (nObjectBufSize == 0) {
         nObjectBufSize = 4 * sizeof(double);
     }
@@ -1740,6 +2618,17 @@ static unsigned char *SHPReallocObjectBufIfNecessary(SHPHandle psSHP,
         pBuffer = STATIC_CAST(unsigned char *,
                               realloc(psSHP->pabyObjectBuf, nObjectBufSize));
         if (pBuffer != SHPLIB_NULLPTR) {
+=======
+    unsigned char *pBuffer;
+
+    if (nObjectBufSize == 0) {
+        nObjectBufSize = 4 * sizeof(double);
+    }
+    if (nObjectBufSize > psSHP->nObjectBufSize) {
+        pBuffer =
+            (unsigned char *)realloc(psSHP->pabyObjectBuf, nObjectBufSize);
+        if (pBuffer != NULL) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->pabyObjectBuf = pBuffer;
             psSHP->nObjectBufSize = nObjectBufSize;
         }
@@ -1754,12 +2643,19 @@ static unsigned char *SHPReallocObjectBufIfNecessary(SHPHandle psSHP,
 /************************************************************************/
 /*                          SHPReadObject()                             */
 /*                                                                      */
+<<<<<<< HEAD
 /*      Read the vertices, parts, and other non-attribute information    */
 /*    for one shape.                            */
+=======
+/*      Read the vertices, parts, and other non-attribute information   */
+/*      for one shape.                                                  */
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /************************************************************************/
 
 SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
 {
+<<<<<<< HEAD
     /* -------------------------------------------------------------------- */
     /*      Validate the record/entity number.                              */
     /* -------------------------------------------------------------------- */
@@ -1773,10 +2669,31 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         unsigned int nOffset;
         unsigned int nLength;
 
+=======
+    int nEntitySize, nRequiredSize;
+    SHPObject *psShape;
+    char szErrorMsg[128];
+    int nSHPType;
+    int nBytesRead;
+
+    /* -------------------------------------------------------------------- */
+    /*      Validate the record/entity number.                              */
+    /* -------------------------------------------------------------------- */
+    if (hEntity < 0 || hEntity >= psSHP->nRecords)
+        return (NULL);
+
+    /* -------------------------------------------------------------------- */
+    /*      Read offset/length from SHX loading if necessary.               */
+    /* -------------------------------------------------------------------- */
+    if (psSHP->panRecOffset[hEntity] == 0 && psSHP->fpSHX != NULL) {
+        unsigned int nOffset, nLength;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (psSHP->sHooks.FSeek(psSHP->fpSHX, 100 + 8 * hEntity, 0) != 0 ||
             psSHP->sHooks.FRead(&nOffset, 1, 4, psSHP->fpSHX) != 4 ||
             psSHP->sHooks.FRead(&nLength, 1, 4, psSHP->fpSHX) != 4) {
             char str[128];
+<<<<<<< HEAD
             snprintf(str, sizeof(str),
                      "Error in fseek()/fread() reading object from .shx file "
                      "at offset %d",
@@ -1785,12 +2702,23 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
 
             psSHP->sHooks.Error(str);
             return SHPLIB_NULLPTR;
+=======
+
+            snprintf(str, sizeof(str),
+                     "Error in fseek()/fread() reading object from .shx file "
+                     "at offset %d",
+                     100 + 8 * hEntity);
+
+            psSHP->sHooks.Error(str);
+            return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         if (!bBigEndian)
             SwapWord(4, &nOffset);
         if (!bBigEndian)
             SwapWord(4, &nLength);
 
+<<<<<<< HEAD
         if (nOffset > STATIC_CAST(unsigned int, INT_MAX)) {
             char str[128];
             snprintf(str, sizeof(str), "Invalid offset for entity %d", hEntity);
@@ -1806,6 +2734,23 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
 
             psSHP->sHooks.Error(str);
             return SHPLIB_NULLPTR;
+=======
+        if (nOffset > (unsigned int)INT_MAX) {
+            char str[128];
+
+            snprintf(str, sizeof(str), "Invalid offset for entity %d", hEntity);
+
+            psSHP->sHooks.Error(str);
+            return NULL;
+        }
+        if (nLength > (unsigned int)(INT_MAX / 2 - 4)) {
+            char str[128];
+
+            snprintf(str, sizeof(str), "Invalid length for entity %d", hEntity);
+
+            psSHP->sHooks.Error(str);
+            return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
 
         psSHP->panRecOffset[hEntity] = nOffset * 2;
@@ -1815,9 +2760,17 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
     /* -------------------------------------------------------------------- */
     /*      Ensure our record buffer is large enough.                       */
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     const int nEntitySize = psSHP->panRecSize[hEntity] + 8;
     if (nEntitySize > psSHP->nBufSize) {
         int nNewBufSize = nEntitySize;
+=======
+    nEntitySize = psSHP->panRecSize[hEntity] + 8;
+    if (nEntitySize > psSHP->nBufSize) {
+        uchar *pabyRecNew;
+        int nNewBufSize = nEntitySize;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (nNewBufSize < INT_MAX - nNewBufSize / 3)
             nNewBufSize += nNewBufSize / 3;
         else
@@ -1825,6 +2778,7 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
 
         /* Before allocating too much memory, check that the file is big enough
          */
+<<<<<<< HEAD
         /* and do not trust the file size in the header the first time we */
         /* need to allocate more than 10 MB */
         if (nNewBufSize >= 10 * 1024 * 1024) {
@@ -1864,13 +2818,54 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         if (pabyRecNew == SHPLIB_NULLPTR) {
             char szErrorMsg[160];
             snprintf(szErrorMsg, sizeof(szErrorMsg),
+=======
+        if (nEntitySize >= 10 * 1024 * 1024 &&
+            (psSHP->panRecOffset[hEntity] >= psSHP->nFileSize ||
+             (unsigned int)nEntitySize >
+                 psSHP->nFileSize - psSHP->panRecOffset[hEntity])) {
+            /* We do as is we didn't trust the file size in the header */
+            SAOffset nFileSize;
+
+            psSHP->sHooks.FSeek(psSHP->fpSHP, 0, 2);
+            nFileSize = psSHP->sHooks.FTell(psSHP->fpSHP);
+            if (nFileSize >= 0xFFFFFFFFU)
+                psSHP->nFileSize = 0xFFFFFFFFU;
+            else
+                psSHP->nFileSize = (unsigned int)nFileSize;
+
+            if (psSHP->panRecOffset[hEntity] >= psSHP->nFileSize ||
+                (unsigned int)nEntitySize >
+                    psSHP->nFileSize - psSHP->panRecOffset[hEntity]) {
+                char str[128];
+
+                snprintf(str, sizeof(str),
+                         "Error in fread() reading object of size %u at offset "
+                         "%u from .shp file",
+                         nEntitySize, psSHP->panRecOffset[hEntity]);
+
+                psSHP->sHooks.Error(str);
+                return NULL;
+            }
+        }
+
+        pabyRecNew = (uchar *)SfRealloc(psSHP->pabyRec, nNewBufSize);
+        if (pabyRecNew == NULL) {
+            char szError[200];
+
+            snprintf(szError, sizeof(szError),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                      "Not enough memory to allocate requested memory "
                      "(nNewBufSize=%d). "
                      "Probably broken SHP file",
                      nNewBufSize);
+<<<<<<< HEAD
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
             psSHP->sHooks.Error(szErrorMsg);
             return SHPLIB_NULLPTR;
+=======
+            psSHP->sHooks.Error(szError);
+            return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
 
         /* Only set new buffer size after successful alloc */
@@ -1879,8 +2874,13 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
     }
 
     /* In case we were not able to reallocate the buffer on a previous step */
+<<<<<<< HEAD
     if (psSHP->pabyRec == SHPLIB_NULLPTR) {
         return SHPLIB_NULLPTR;
+=======
+    if (psSHP->pabyRec == NULL) {
+        return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* -------------------------------------------------------------------- */
@@ -1893,17 +2893,29 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
          * for example to detect if file is truncated.
          */
         char str[128];
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         snprintf(str, sizeof(str),
                  "Error in fseek() reading object from .shp file at offset %u",
                  psSHP->panRecOffset[hEntity]);
         str[sizeof(str) - 1] = '\0';
 
         psSHP->sHooks.Error(str);
+<<<<<<< HEAD
         return SHPLIB_NULLPTR;
     }
 
     const int nBytesRead = STATIC_CAST(
         int, psSHP->sHooks.FRead(psSHP->pabyRec, 1, nEntitySize, psSHP->fpSHP));
+=======
+        return NULL;
+    }
+
+    nBytesRead =
+        (int)psSHP->sHooks.FRead(psSHP->pabyRec, 1, nEntitySize, psSHP->fpSHP);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* Special case for a shapefile whose .shx content length field is not equal
      */
@@ -1918,6 +2930,7 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
     if (nBytesRead >= 8 && nBytesRead == nEntitySize - 8) {
         /* Do a sanity check */
         int nSHPContentLength;
+<<<<<<< HEAD
         memcpy(&nSHPContentLength, psSHP->pabyRec + 4, 4);
         if (!bBigEndian)
             SwapWord(4, &(nSHPContentLength));
@@ -1932,6 +2945,23 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
 
             psSHP->sHooks.Error(str);
             return SHPLIB_NULLPTR;
+=======
+
+        memcpy(&nSHPContentLength, psSHP->pabyRec + 4, 4);
+        if (!bBigEndian)
+            SwapWord(4, &(nSHPContentLength));
+        if (nSHPContentLength < 0 || nSHPContentLength > INT_MAX / 2 - 4 ||
+            2 * nSHPContentLength + 8 != nBytesRead) {
+            char str[128];
+
+            snprintf(str, sizeof(str),
+                     "Sanity check failed when trying to recover from "
+                     "inconsistent .shx/.shp with shape %d",
+                     hEntity);
+
+            psSHP->sHooks.Error(str);
+            return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
     else if (nBytesRead != nEntitySize) {
@@ -1940,6 +2970,7 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
          * for example to detect if file is truncated.
          */
         char str[128];
+<<<<<<< HEAD
         snprintf(str, sizeof(str),
                  "Error in fread() reading object of size %d at offset %u from "
                  ".shp file",
@@ -1960,54 +2991,107 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         return SHPLIB_NULLPTR;
     }
     int nSHPType;
+=======
+
+        snprintf(str, sizeof(str),
+                 "Error in fread() reading object of size %u at offset %u from "
+                 ".shp file",
+                 nEntitySize, psSHP->panRecOffset[hEntity]);
+
+        psSHP->sHooks.Error(str);
+        return NULL;
+    }
+
+    if (8 + 4 > nEntitySize) {
+        snprintf(szErrorMsg, sizeof(szErrorMsg),
+                 "Corrupted .shp file : shape %d : nEntitySize = %d", hEntity,
+                 nEntitySize);
+        psSHP->sHooks.Error(szErrorMsg);
+        return NULL;
+    }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     memcpy(&nSHPType, psSHP->pabyRec + 8, 4);
 
     if (bBigEndian)
         SwapWord(4, &(nSHPType));
 
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     /*    Allocate and minimally initialize the object.            */
     /* -------------------------------------------------------------------- */
     SHPObject *psShape;
+=======
+    /*      Allocate and minimally initialize the object.                   */
+    /* -------------------------------------------------------------------- */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (psSHP->bFastModeReadObject) {
         if (psSHP->psCachedObject->bFastModeReadObject) {
             psSHP->sHooks.Error("Invalid read pattern in fast read mode. "
                                 "SHPDestroyObject() should be called.");
+<<<<<<< HEAD
             return SHPLIB_NULLPTR;
+=======
+            return NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
 
         psShape = psSHP->psCachedObject;
         memset(psShape, 0, sizeof(SHPObject));
     }
+<<<<<<< HEAD
     else {
         psShape = STATIC_CAST(SHPObject *, calloc(1, sizeof(SHPObject)));
     }
+=======
+    else
+        psShape = (SHPObject *)calloc(1, sizeof(SHPObject));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     psShape->nShapeId = hEntity;
     psShape->nSHPType = nSHPType;
     psShape->bMeasureIsUsed = FALSE;
     psShape->bFastModeReadObject = psSHP->bFastModeReadObject;
 
     /* ==================================================================== */
+<<<<<<< HEAD
     /*  Extract vertices for a Polygon or Arc.                */
+=======
+    /*  Extract vertices for a Polygon or Arc.                              */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* ==================================================================== */
     if (psShape->nSHPType == SHPT_POLYGON || psShape->nSHPType == SHPT_ARC ||
         psShape->nSHPType == SHPT_POLYGONZ ||
         psShape->nSHPType == SHPT_POLYGONM || psShape->nSHPType == SHPT_ARCZ ||
         psShape->nSHPType == SHPT_ARCM ||
         psShape->nSHPType == SHPT_MULTIPATCH) {
+<<<<<<< HEAD
         if (40 + 8 + 4 > nEntitySize) {
             char szErrorMsg[160];
             snprintf(szErrorMsg, sizeof(szErrorMsg),
                      "Corrupted .shp file : shape %d : nEntitySize = %d",
                      hEntity, nEntitySize);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+        int32 nPoints, nParts;
+        int i, nOffset;
+        unsigned char *pBuffer = NULL;
+        unsigned char **ppBuffer = NULL;
+
+        if (40 + 8 + 4 > nEntitySize) {
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Corrupted .shp file : shape %d : nEntitySize = %d",
+                     hEntity, nEntitySize);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
         }
         /* --------------------------------------------------------------------
          */
+<<<<<<< HEAD
         /*    Get the X/Y bounds.                        */
+=======
+        /*      Get the X/Y bounds. */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         /* --------------------------------------------------------------------
          */
         memcpy(&(psShape->dfXMin), psSHP->pabyRec + 8 + 4, 8);
@@ -2030,9 +3114,13 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         /*      to proper size. */
         /* --------------------------------------------------------------------
          */
+<<<<<<< HEAD
         int32 nPoints;
         memcpy(&nPoints, psSHP->pabyRec + 40 + 8, 4);
         int32 nParts;
+=======
+        memcpy(&nPoints, psSHP->pabyRec + 40 + 8, 4);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         memcpy(&nParts, psSHP->pabyRec + 36 + 8, 4);
 
         if (bBigEndian)
@@ -2043,11 +3131,17 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         /* nPoints and nParts are unsigned */
         if (/* nPoints < 0 || nParts < 0 || */
             nPoints > 50 * 1000 * 1000 || nParts > 10 * 1000 * 1000) {
+<<<<<<< HEAD
             char szErrorMsg[160];
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             snprintf(szErrorMsg, sizeof(szErrorMsg),
                      "Corrupted .shp file : shape %d, nPoints=%u, nParts=%u.",
                      hEntity, nPoints, nParts);
+<<<<<<< HEAD
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
@@ -2056,7 +3150,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         /* With the previous checks on nPoints and nParts, */
         /* we should not overflow here and after */
         /* since 50 M * (16 + 8 + 8) = 1 600 MB */
+<<<<<<< HEAD
         int nRequiredSize = 44 + 8 + 4 * nParts + 16 * nPoints;
+=======
+        nRequiredSize = 44 + 8 + 4 * nParts + 16 * nPoints;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (psShape->nSHPType == SHPT_POLYGONZ ||
             psShape->nSHPType == SHPT_ARCZ ||
             psShape->nSHPType == SHPT_MULTIPATCH) {
@@ -2066,28 +3164,41 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             nRequiredSize += 4 * nParts;
         }
         if (nRequiredSize > nEntitySize) {
+<<<<<<< HEAD
             char szErrorMsg[160];
             snprintf(szErrorMsg, sizeof(szErrorMsg),
                      "Corrupted .shp file : shape %d, nPoints=%u, nParts=%u, "
                      "nEntitySize=%d.",
                      hEntity, nPoints, nParts, nEntitySize);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Corrupted .shp file : shape %d, nPoints=%d, nParts=%d, "
+                     "nEntitySize=%d.",
+                     hEntity, nPoints, nParts, nEntitySize);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
         }
 
+<<<<<<< HEAD
         unsigned char *pBuffer = SHPLIB_NULLPTR;
         unsigned char **ppBuffer = SHPLIB_NULLPTR;
 
         if (psShape->bFastModeReadObject) {
             const int nObjectBufSize =
+=======
+        if (psShape->bFastModeReadObject) {
+            int nObjectBufSize =
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 4 * sizeof(double) * nPoints + 2 * sizeof(int) * nParts;
             pBuffer = SHPReallocObjectBufIfNecessary(psSHP, nObjectBufSize);
             ppBuffer = &pBuffer;
         }
 
         psShape->nVertices = nPoints;
+<<<<<<< HEAD
         psShape->padfX = STATIC_CAST(
             double *, SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints));
         psShape->padfY = STATIC_CAST(
@@ -2116,12 +3227,41 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
                      "Probably broken SHP file",
                      nPoints, nParts, hEntity);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+        psShape->padfX =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+        psShape->padfY =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+        psShape->padfZ =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+        psShape->padfM =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+
+        psShape->nParts = nParts;
+        psShape->panPartStart =
+            (int *)SHPAllocBuffer(ppBuffer, nParts * sizeof(int));
+        psShape->panPartType =
+            (int *)SHPAllocBuffer(ppBuffer, nParts * sizeof(int));
+
+        if (psShape->padfX == NULL || psShape->padfY == NULL ||
+            psShape->padfZ == NULL || psShape->padfM == NULL ||
+            psShape->panPartStart == NULL || psShape->panPartType == NULL) {
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Not enough memory to allocate requested memory "
+                     "(nPoints=%d, nParts=%d) for shape %d. "
+                     "Probably broken SHP file",
+                     hEntity, nPoints, nParts);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
         }
 
+<<<<<<< HEAD
         for (int i = 0; STATIC_CAST(int32, i) < nParts; i++)
+=======
+        for (i = 0; (int32)i < nParts; i++)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psShape->panPartType[i] = SHPP_RING;
 
         /* --------------------------------------------------------------------
@@ -2130,7 +3270,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         /* --------------------------------------------------------------------
          */
         memcpy(psShape->panPartStart, psSHP->pabyRec + 44 + 8, 4 * nParts);
+<<<<<<< HEAD
         for (int i = 0; STATIC_CAST(int32, i) < nParts; i++) {
+=======
+        for (i = 0; (int32)i < nParts; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (bBigEndian)
                 SwapWord(4, psShape->panPartStart + i);
 
@@ -2139,33 +3283,49 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
                 (psShape->panPartStart[i] >= psShape->nVertices &&
                  psShape->nVertices > 0) ||
                 (psShape->panPartStart[i] > 0 && psShape->nVertices == 0)) {
+<<<<<<< HEAD
                 char szErrorMsg[160];
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 snprintf(szErrorMsg, sizeof(szErrorMsg),
                          "Corrupted .shp file : shape %d : panPartStart[%d] = "
                          "%d, nVertices = %d",
                          hEntity, i, psShape->panPartStart[i],
                          psShape->nVertices);
+<<<<<<< HEAD
                 szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 psSHP->sHooks.Error(szErrorMsg);
                 SHPDestroyObject(psShape);
                 return SHPLIB_NULLPTR;
             }
             if (i > 0 &&
                 psShape->panPartStart[i] <= psShape->panPartStart[i - 1]) {
+<<<<<<< HEAD
                 char szErrorMsg[160];
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 snprintf(szErrorMsg, sizeof(szErrorMsg),
                          "Corrupted .shp file : shape %d : panPartStart[%d] = "
                          "%d, panPartStart[%d] = %d",
                          hEntity, i, psShape->panPartStart[i], i - 1,
                          psShape->panPartStart[i - 1]);
+<<<<<<< HEAD
                 szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 psSHP->sHooks.Error(szErrorMsg);
                 SHPDestroyObject(psShape);
                 return SHPLIB_NULLPTR;
             }
         }
 
+<<<<<<< HEAD
         int nOffset = 44 + 8 + 4 * nParts;
+=======
+        nOffset = 44 + 8 + 4 * nParts;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         /* --------------------------------------------------------------------
          */
@@ -2174,7 +3334,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
          */
         if (psShape->nSHPType == SHPT_MULTIPATCH) {
             memcpy(psShape->panPartType, psSHP->pabyRec + nOffset, 4 * nParts);
+<<<<<<< HEAD
             for (int i = 0; STATIC_CAST(int32, i) < nParts; i++) {
+=======
+            for (i = 0; (int32)i < nParts; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 if (bBigEndian)
                     SwapWord(4, psShape->panPartType + i);
             }
@@ -2187,7 +3351,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         /*      Copy out the vertices from the record. */
         /* --------------------------------------------------------------------
          */
+<<<<<<< HEAD
         for (int i = 0; STATIC_CAST(int32, i) < nPoints; i++) {
+=======
+        for (i = 0; (int32)i < nPoints; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             memcpy(psShape->padfX + i, psSHP->pabyRec + nOffset + i * 16, 8);
 
             memcpy(psShape->padfY + i, psSHP->pabyRec + nOffset + i * 16 + 8,
@@ -2217,7 +3385,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             if (bBigEndian)
                 SwapWord(8, &(psShape->dfZMax));
 
+<<<<<<< HEAD
             for (int i = 0; STATIC_CAST(int32, i) < nPoints; i++) {
+=======
+            for (i = 0; (int32)i < nPoints; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 memcpy(psShape->padfZ + i,
                        psSHP->pabyRec + nOffset + 16 + i * 8, 8);
                 if (bBigEndian)
@@ -2227,7 +3399,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             nOffset += 16 + 8 * nPoints;
         }
         else if (psShape->bFastModeReadObject) {
+<<<<<<< HEAD
             psShape->padfZ = SHPLIB_NULLPTR;
+=======
+            psShape->padfZ = NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
 
         /* --------------------------------------------------------------------
@@ -2238,7 +3414,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         /*      (options), and the M shapes. */
         /* --------------------------------------------------------------------
          */
+<<<<<<< HEAD
         if (nEntitySize >= STATIC_CAST(int, nOffset + 16 + 8 * nPoints)) {
+=======
+        if (nEntitySize >= (int)(nOffset + 16 + 8 * nPoints)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             memcpy(&(psShape->dfMMin), psSHP->pabyRec + nOffset, 8);
             memcpy(&(psShape->dfMMax), psSHP->pabyRec + nOffset + 8, 8);
 
@@ -2247,7 +3427,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             if (bBigEndian)
                 SwapWord(8, &(psShape->dfMMax));
 
+<<<<<<< HEAD
             for (int i = 0; STATIC_CAST(int32, i) < nPoints; i++) {
+=======
+            for (i = 0; (int32)i < nPoints; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 memcpy(psShape->padfM + i,
                        psSHP->pabyRec + nOffset + 16 + i * 8, 8);
                 if (bBigEndian)
@@ -2256,27 +3440,50 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             psShape->bMeasureIsUsed = TRUE;
         }
         else if (psShape->bFastModeReadObject) {
+<<<<<<< HEAD
             psShape->padfM = SHPLIB_NULLPTR;
+=======
+            psShape->padfM = NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
 
     /* ==================================================================== */
+<<<<<<< HEAD
     /*  Extract vertices for a MultiPoint.                    */
+=======
+    /*  Extract vertices for a MultiPoint.                                  */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* ==================================================================== */
     else if (psShape->nSHPType == SHPT_MULTIPOINT ||
              psShape->nSHPType == SHPT_MULTIPOINTM ||
              psShape->nSHPType == SHPT_MULTIPOINTZ) {
+<<<<<<< HEAD
         if (44 + 4 > nEntitySize) {
             char szErrorMsg[160];
             snprintf(szErrorMsg, sizeof(szErrorMsg),
                      "Corrupted .shp file : shape %d : nEntitySize = %d",
                      hEntity, nEntitySize);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+        int32 nPoints;
+        int i, nOffset;
+        unsigned char *pBuffer = NULL;
+        unsigned char **ppBuffer = NULL;
+
+        if (44 + 4 > nEntitySize) {
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Corrupted .shp file : shape %d : nEntitySize = %d",
+                     hEntity, nEntitySize);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
         }
+<<<<<<< HEAD
         int32 nPoints;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         memcpy(&nPoints, psSHP->pabyRec + 44, 4);
 
         if (bBigEndian)
@@ -2284,43 +3491,67 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
 
         /* nPoints is unsigned */
         if (/* nPoints < 0 || */ nPoints > 50 * 1000 * 1000) {
+<<<<<<< HEAD
             char szErrorMsg[160];
             snprintf(szErrorMsg, sizeof(szErrorMsg),
                      "Corrupted .shp file : shape %d : nPoints = %u", hEntity,
                      nPoints);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Corrupted .shp file : shape %d : nPoints = %d", hEntity,
+                     nPoints);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
         }
 
+<<<<<<< HEAD
         int nRequiredSize = 48 + nPoints * 16;
+=======
+        nRequiredSize = 48 + nPoints * 16;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (psShape->nSHPType == SHPT_MULTIPOINTZ) {
             nRequiredSize += 16 + nPoints * 8;
         }
         if (nRequiredSize > nEntitySize) {
+<<<<<<< HEAD
             char szErrorMsg[160];
             snprintf(szErrorMsg, sizeof(szErrorMsg),
                      "Corrupted .shp file : shape %d : nPoints = %u, "
                      "nEntitySize = %d",
                      hEntity, nPoints, nEntitySize);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Corrupted .shp file : shape %d : nPoints = %d, "
+                     "nEntitySize = %d",
+                     hEntity, nPoints, nEntitySize);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
         }
 
+<<<<<<< HEAD
         unsigned char *pBuffer = SHPLIB_NULLPTR;
         unsigned char **ppBuffer = SHPLIB_NULLPTR;
 
         if (psShape->bFastModeReadObject) {
             const int nObjectBufSize = 4 * sizeof(double) * nPoints;
+=======
+        if (psShape->bFastModeReadObject) {
+            int nObjectBufSize = 4 * sizeof(double) * nPoints;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             pBuffer = SHPReallocObjectBufIfNecessary(psSHP, nObjectBufSize);
             ppBuffer = &pBuffer;
         }
 
         psShape->nVertices = nPoints;
 
+<<<<<<< HEAD
         psShape->padfX = STATIC_CAST(
             double *, SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints));
         psShape->padfY = STATIC_CAST(
@@ -2341,12 +3572,34 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
                      "Probably broken SHP file",
                      nPoints, hEntity);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+        psShape->padfX =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+        psShape->padfY =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+        psShape->padfZ =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+        psShape->padfM =
+            (double *)SHPAllocBuffer(ppBuffer, sizeof(double) * nPoints);
+
+        if (psShape->padfX == NULL || psShape->padfY == NULL ||
+            psShape->padfZ == NULL || psShape->padfM == NULL) {
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Not enough memory to allocate requested memory "
+                     "(nPoints=%d) for shape %d. "
+                     "Probably broken SHP file",
+                     hEntity, nPoints);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
         }
 
+<<<<<<< HEAD
         for (int i = 0; STATIC_CAST(int32, i) < nPoints; i++) {
+=======
+        for (i = 0; (int32)i < nPoints; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             memcpy(psShape->padfX + i, psSHP->pabyRec + 48 + 16 * i, 8);
             memcpy(psShape->padfY + i, psSHP->pabyRec + 48 + 16 * i + 8, 8);
 
@@ -2356,11 +3609,19 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
                 SwapWord(8, psShape->padfY + i);
         }
 
+<<<<<<< HEAD
         int nOffset = 48 + 16 * nPoints;
 
         /* --------------------------------------------------------------------
          */
         /*    Get the X/Y bounds.                        */
+=======
+        nOffset = 48 + 16 * nPoints;
+
+        /* --------------------------------------------------------------------
+         */
+        /*      Get the X/Y bounds. */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         /* --------------------------------------------------------------------
          */
         memcpy(&(psShape->dfXMin), psSHP->pabyRec + 8 + 4, 8);
@@ -2391,7 +3652,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             if (bBigEndian)
                 SwapWord(8, &(psShape->dfZMax));
 
+<<<<<<< HEAD
             for (int i = 0; STATIC_CAST(int32, i) < nPoints; i++) {
+=======
+            for (i = 0; (int32)i < nPoints; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 memcpy(psShape->padfZ + i,
                        psSHP->pabyRec + nOffset + 16 + i * 8, 8);
                 if (bBigEndian)
@@ -2401,7 +3666,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             nOffset += 16 + 8 * nPoints;
         }
         else if (psShape->bFastModeReadObject)
+<<<<<<< HEAD
             psShape->padfZ = SHPLIB_NULLPTR;
+=======
+            psShape->padfZ = NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         /* --------------------------------------------------------------------
          */
@@ -2411,7 +3680,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
         /*      (options), and the M shapes. */
         /* --------------------------------------------------------------------
          */
+<<<<<<< HEAD
         if (nEntitySize >= STATIC_CAST(int, nOffset + 16 + 8 * nPoints)) {
+=======
+        if (nEntitySize >= (int)(nOffset + 16 + 8 * nPoints)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             memcpy(&(psShape->dfMMin), psSHP->pabyRec + nOffset, 8);
             memcpy(&(psShape->dfMMax), psSHP->pabyRec + nOffset + 8, 8);
 
@@ -2420,7 +3693,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             if (bBigEndian)
                 SwapWord(8, &(psShape->dfMMax));
 
+<<<<<<< HEAD
             for (int i = 0; STATIC_CAST(int32, i) < nPoints; i++) {
+=======
+            for (i = 0; (int32)i < nPoints; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 memcpy(psShape->padfM + i,
                        psSHP->pabyRec + nOffset + 16 + i * 8, 8);
                 if (bBigEndian)
@@ -2429,7 +3706,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             psShape->bMeasureIsUsed = TRUE;
         }
         else if (psShape->bFastModeReadObject)
+<<<<<<< HEAD
             psShape->padfM = SHPLIB_NULLPTR;
+=======
+            psShape->padfM = NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* ==================================================================== */
@@ -2438,6 +3719,11 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
     else if (psShape->nSHPType == SHPT_POINT ||
              psShape->nSHPType == SHPT_POINTM ||
              psShape->nSHPType == SHPT_POINTZ) {
+<<<<<<< HEAD
+=======
+        int nOffset;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         psShape->nVertices = 1;
         if (psShape->bFastModeReadObject) {
             psShape->padfX = &(psShape->dfXMin);
@@ -2448,19 +3734,32 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
             psShape->padfM[0] = 0.0;
         }
         else {
+<<<<<<< HEAD
             psShape->padfX = STATIC_CAST(double *, calloc(1, sizeof(double)));
             psShape->padfY = STATIC_CAST(double *, calloc(1, sizeof(double)));
             psShape->padfZ = STATIC_CAST(double *, calloc(1, sizeof(double)));
             psShape->padfM = STATIC_CAST(double *, calloc(1, sizeof(double)));
+=======
+            psShape->padfX = (double *)calloc(1, sizeof(double));
+            psShape->padfY = (double *)calloc(1, sizeof(double));
+            psShape->padfZ = (double *)calloc(1, sizeof(double));
+            psShape->padfM = (double *)calloc(1, sizeof(double));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
 
         if (20 + 8 + ((psShape->nSHPType == SHPT_POINTZ) ? 8 : 0) >
             nEntitySize) {
+<<<<<<< HEAD
             char szErrorMsg[160];
             snprintf(szErrorMsg, sizeof(szErrorMsg),
                      "Corrupted .shp file : shape %d : nEntitySize = %d",
                      hEntity, nEntitySize);
             szErrorMsg[sizeof(szErrorMsg) - 1] = '\0';
+=======
+            snprintf(szErrorMsg, sizeof(szErrorMsg),
+                     "Corrupted .shp file : shape %d : nEntitySize = %d",
+                     hEntity, nEntitySize);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             psSHP->sHooks.Error(szErrorMsg);
             SHPDestroyObject(psShape);
             return SHPLIB_NULLPTR;
@@ -2522,6 +3821,7 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(SHPHandle psSHP, int hEntity)
 
 /************************************************************************/
 /*                            SHPTypeName()                             */
+
 /************************************************************************/
 
 const char SHPAPI_CALL1(*) SHPTypeName(int nSHPType)
@@ -2576,6 +3876,7 @@ const char SHPAPI_CALL1(*) SHPTypeName(int nSHPType)
 
 /************************************************************************/
 /*                          SHPPartTypeName()                           */
+
 /************************************************************************/
 
 const char SHPAPI_CALL1(*) SHPPartTypeName(int nPartType)
@@ -2606,11 +3907,16 @@ const char SHPAPI_CALL1(*) SHPPartTypeName(int nPartType)
 
 /************************************************************************/
 /*                          SHPDestroyObject()                          */
+
 /************************************************************************/
 
 void SHPAPI_CALL SHPDestroyObject(SHPObject *psShape)
 {
+<<<<<<< HEAD
     if (psShape == SHPLIB_NULLPTR)
+=======
+    if (psShape == NULL)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return;
 
     if (psShape->bFastModeReadObject) {
@@ -2618,6 +3924,7 @@ void SHPAPI_CALL SHPDestroyObject(SHPObject *psShape)
         return;
     }
 
+<<<<<<< HEAD
     if (psShape->padfX != SHPLIB_NULLPTR)
         free(psShape->padfX);
     if (psShape->padfY != SHPLIB_NULLPTR)
@@ -2730,6 +4037,23 @@ static int SHPRewindIsInnerRing(const SHPObject *psObject, int iOpRing,
         }
     } /* for iCheckRing */
     return bInner;
+=======
+    if (psShape->padfX != NULL)
+        free(psShape->padfX);
+    if (psShape->padfY != NULL)
+        free(psShape->padfY);
+    if (psShape->padfZ != NULL)
+        free(psShape->padfZ);
+    if (psShape->padfM != NULL)
+        free(psShape->padfM);
+
+    if (psShape->panPartStart != NULL)
+        free(psShape->panPartStart);
+    if (psShape->panPartType != NULL)
+        free(psShape->panPartType);
+
+    free(psShape);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /************************************************************************/
@@ -2737,10 +4061,16 @@ static int SHPRewindIsInnerRing(const SHPObject *psObject, int iOpRing,
 /*                                                                      */
 /*      Reset the winding of polygon objects to adhere to the           */
 /*      specification.                                                  */
+
 /************************************************************************/
 
 int SHPAPI_CALL SHPRewindObject(CPL_UNUSED SHPHandle hSHP, SHPObject *psObject)
 {
+<<<<<<< HEAD
+=======
+    int iOpRing, bAltered = 0;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* -------------------------------------------------------------------- */
     /*      Do nothing if this is not a polygon object.                     */
     /* -------------------------------------------------------------------- */
@@ -2753,6 +4083,7 @@ int SHPAPI_CALL SHPRewindObject(CPL_UNUSED SHPHandle hSHP, SHPObject *psObject)
         return 0;
 
     /* -------------------------------------------------------------------- */
+<<<<<<< HEAD
     /*      Test if all points have the same Z value.                       */
     /* -------------------------------------------------------------------- */
     int bSameZ = TRUE;
@@ -2762,10 +4093,89 @@ int SHPAPI_CALL SHPRewindObject(CPL_UNUSED SHPHandle hSHP, SHPObject *psObject)
             if (psObject->padfZ[iVert] != psObject->padfZ[0]) {
                 bSameZ = FALSE;
                 break;
+=======
+    /*      Process each of the rings.                                      */
+    /* -------------------------------------------------------------------- */
+    for (iOpRing = 0; iOpRing < psObject->nParts; iOpRing++) {
+        int bInner, iVert, nVertCount, nVertStart, iCheckRing;
+        double dfSum, dfTestX, dfTestY;
+
+        /* --------------------------------------------------------------------
+         */
+        /*      Determine if this ring is an inner ring or an outer ring */
+        /*      relative to all the other rings.  For now we assume the */
+        /*      first ring is outer and all others are inner, but eventually */
+        /*      we need to fix this to handle multiple island polygons and */
+        /*      unordered sets of rings. */
+        /*                                                                      */
+        /* --------------------------------------------------------------------
+         */
+
+        /* Use point in the middle of segment to avoid testing
+         * common points of rings.
+         */
+        dfTestX = (psObject->padfX[psObject->panPartStart[iOpRing]] +
+                   psObject->padfX[psObject->panPartStart[iOpRing] + 1]) /
+                  2;
+        dfTestY = (psObject->padfY[psObject->panPartStart[iOpRing]] +
+                   psObject->padfY[psObject->panPartStart[iOpRing] + 1]) /
+                  2;
+
+        bInner = FALSE;
+        for (iCheckRing = 0; iCheckRing < psObject->nParts; iCheckRing++) {
+            int iEdge;
+
+            if (iCheckRing == iOpRing)
+                continue;
+
+            nVertStart = psObject->panPartStart[iCheckRing];
+
+            if (iCheckRing == psObject->nParts - 1)
+                nVertCount =
+                    psObject->nVertices - psObject->panPartStart[iCheckRing];
+            else
+                nVertCount = psObject->panPartStart[iCheckRing + 1] -
+                             psObject->panPartStart[iCheckRing];
+
+            for (iEdge = 0; iEdge < nVertCount; iEdge++) {
+                int iNext;
+
+                if (iEdge < nVertCount - 1)
+                    iNext = iEdge + 1;
+                else
+                    iNext = 0;
+
+                /* Rule #1:
+                 * Test whether the edge 'straddles' the horizontal ray from the
+                 * test point (dfTestY,dfTestY) The rule #1 also excludes edges
+                 * colinear with the ray.
+                 */
+                if ((psObject->padfY[iEdge + nVertStart] < dfTestY &&
+                     dfTestY <= psObject->padfY[iNext + nVertStart]) ||
+                    (psObject->padfY[iNext + nVertStart] < dfTestY &&
+                     dfTestY <= psObject->padfY[iEdge + nVertStart])) {
+                    /* Rule #2:
+                     * Test if edge-ray intersection is on the right from the
+                     * test point (dfTestY,dfTestY)
+                     */
+                    double const intersect =
+                        (psObject->padfX[iEdge + nVertStart] +
+                         (dfTestY - psObject->padfY[iEdge + nVertStart]) /
+                             (psObject->padfY[iNext + nVertStart] -
+                              psObject->padfY[iEdge + nVertStart]) *
+                             (psObject->padfX[iNext + nVertStart] -
+                              psObject->padfX[iEdge + nVertStart]));
+
+                    if (intersect < dfTestX) {
+                        bInner = !bInner;
+                    }
+                }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             }
         }
     }
 
+<<<<<<< HEAD
     /* -------------------------------------------------------------------- */
     /*      Process each of the rings.                                      */
     /* -------------------------------------------------------------------- */
@@ -2773,10 +4183,26 @@ int SHPAPI_CALL SHPRewindObject(CPL_UNUSED SHPHandle hSHP, SHPObject *psObject)
     for (int iOpRing = 0; iOpRing < psObject->nParts; iOpRing++) {
         const int nVertStart = psObject->panPartStart[iOpRing];
         const int nVertCount = SHPGetPartVertexCount(psObject, iOpRing);
+=======
+        /* --------------------------------------------------------------------
+         */
+        /*      Determine the current order of this ring so we will know if */
+        /*      it has to be reversed. */
+        /* --------------------------------------------------------------------
+         */
+        nVertStart = psObject->panPartStart[iOpRing];
+
+        if (iOpRing == psObject->nParts - 1)
+            nVertCount = psObject->nVertices - psObject->panPartStart[iOpRing];
+        else
+            nVertCount = psObject->panPartStart[iOpRing + 1] -
+                         psObject->panPartStart[iOpRing];
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         if (nVertCount < 2)
             continue;
 
+<<<<<<< HEAD
         /* If a ring has a non-constant Z value, then consider it as an outer */
         /* ring. */
         /* NOTE: this is a rough approximation. If we were smarter, */
@@ -2836,6 +4262,27 @@ int SHPAPI_CALL SHPRewindObject(CPL_UNUSED SHPHandle hSHP, SHPObject *psObject)
                 continue;
             }
         }
+=======
+        dfSum = psObject->padfX[nVertStart] *
+                (psObject->padfY[nVertStart + 1] -
+                 psObject->padfY[nVertStart + nVertCount - 1]);
+        for (iVert = nVertStart + 1; iVert < nVertStart + nVertCount - 1;
+             iVert++) {
+            dfSum += psObject->padfX[iVert] *
+                     (psObject->padfY[iVert + 1] - psObject->padfY[iVert - 1]);
+        }
+
+        dfSum += psObject->padfX[iVert] *
+                 (psObject->padfY[nVertStart] - psObject->padfY[iVert - 1]);
+
+        /* --------------------------------------------------------------------
+         */
+        /*      Reverse if necessary. */
+        /* --------------------------------------------------------------------
+         */
+        if ((dfSum < 0.0 && bInner) || (dfSum > 0.0 && !bInner)) {
+            int i;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         /* --------------------------------------------------------------------
          */
@@ -2863,9 +4310,17 @@ int SHPAPI_CALL SHPRewindObject(CPL_UNUSED SHPHandle hSHP, SHPObject *psObject)
          */
         if ((dfSum < 0.0 && bInner) || (dfSum > 0.0 && !bInner)) {
             bAltered++;
+<<<<<<< HEAD
             for (int i = 0; i < nVertCount / 2; i++) {
                 /* Swap X */
                 double dfSaved = psObject->padfX[nVertStart + i];
+=======
+            for (i = 0; i < nVertCount / 2; i++) {
+                double dfSaved;
+
+                /* Swap X */
+                dfSaved = psObject->padfX[nVertStart + i];
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 psObject->padfX[nVertStart + i] =
                     psObject->padfX[nVertStart + nVertCount - i - 1];
                 psObject->padfX[nVertStart + nVertCount - i - 1] = dfSaved;

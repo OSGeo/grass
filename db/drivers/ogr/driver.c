@@ -25,7 +25,11 @@
 
    \return DB_OK on success
  */
+<<<<<<< HEAD
 int db__driver_init(int argc UNUSED, char *argv[] UNUSED)
+=======
+int db__driver_init(int argc, char *argv[])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     init_error();
     return DB_OK;
@@ -36,7 +40,11 @@ int db__driver_init(int argc UNUSED, char *argv[] UNUSED)
 
    \return DB_OK
  */
+<<<<<<< HEAD
 int db__driver_finish(void)
+=======
+int db__driver_finish()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     return DB_OK;
 }

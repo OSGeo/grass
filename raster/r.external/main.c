@@ -98,9 +98,16 @@ int main(int argc, char *argv[])
 
     flag.o = G_define_flag();
     flag.o->key = 'o';
+<<<<<<< HEAD
     flag.o->label = _("Override projection check (use current project's CRS)");
     flag.o->description = _("Assume that the dataset has the same coordinate "
                             "reference system as the current project");
+=======
+    flag.o->label =
+        _("Override projection check (use current location's projection)");
+    flag.o->description = _(
+        "Assume that the dataset has same projection as the current location");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     flag.j = G_define_flag();
     flag.j->key = 'j';

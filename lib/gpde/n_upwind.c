@@ -22,7 +22,11 @@
  *
  * The arguments are values to compute the local peclet number
  *
+<<<<<<< HEAD
  * \param sprod double -- the scalar product between the velocity vector and the
+=======
+ * \param sprod double -- the scalar produkt between the velocity vector and the
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * normal vector between two points \param distance double -- distance between
  * two points \param D double -- diffusion/dispersion tensor part between two
  * points
@@ -53,7 +57,11 @@ double N_full_upwinding(double sprod, double distance, double D)
  *
  * The arguments are values to compute the local peclet number
  *
+<<<<<<< HEAD
  * \param sprod double -- the scalar product between the velocity vector and the
+=======
+ * \param sprod double -- the scalar produkt between the velocity vector and the
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * normal vector between two points \param distance double -- distance between
  * two points \param D double -- diffusion/dispersion tensor part between two
  * points

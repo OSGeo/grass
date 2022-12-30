@@ -182,7 +182,11 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
             G_math_d_Ax(A, x, v, rows, rows);
 
         G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
+<<<<<<< HEAD
         /*perform the preconditioning */
+=======
+        /*performe the preconditioning */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_math_Ax_sparse(M, r, p, rows);
 
         /* scalar product */
@@ -238,7 +242,11 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
                 G_math_d_ax_by(r, v, r, 1.0, -1.0 * mygamma, rows);
             }
 
+<<<<<<< HEAD
             /*perform the preconditioning */
+=======
+            /*performe the preconditioning */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             G_math_Ax_sparse(M, r, z, rows);
 
             /* scalar product */
@@ -759,7 +767,11 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
     if (A != NULL) {
 #pragma omp parallel for schedule(static) private(i, j, sum) \
     shared(A, Msp, rows, cols, prec)
+<<<<<<< HEAD
         for (i = 0; i < (unsigned int)rows; i++) {
+=======
+        for (i = 0; i < rows; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             G_math_spvector *spvect = G_math_alloc_spvector(1);
 
             switch (prec) {
@@ -790,7 +802,11 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
     else {
 #pragma omp parallel for schedule(static) private(i, j, sum) \
     shared(Asp, Msp, rows, cols, prec)
+<<<<<<< HEAD
         for (i = 0; i < (unsigned int)rows; i++) {
+=======
+        for (i = 0; i < rows; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             G_math_spvector *spvect = G_math_alloc_spvector(1);
 
             switch (prec) {

@@ -428,7 +428,11 @@ class Info:
                 )
             if layer_db_link.layer != layer:
                 raise RuntimeError(
+<<<<<<< HEAD
                     "The database link for layer %d of <%s> references layer %d."
+=======
+                    "The databse link for layer %d of <%s> references layer %d."
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     % (layer, self.name, layer_db_link.layer)
                 )
             self.layer = layer

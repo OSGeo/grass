@@ -61,7 +61,11 @@ int read_rules(FILE *fp)
         G_message(_("Enter the rule or 'help' for the format description"));
     }
     Rast_fpreclass_init(&rcl_struct);
+<<<<<<< HEAD
     for (;;) {
+=======
+    for (line = 1;; line++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (isatty(fileno(fp)))
             fprintf(stderr, "> ");
 

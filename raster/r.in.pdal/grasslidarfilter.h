@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /****************************************************************************
 =======
 
  /****************************************************************************
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+/****************************************************************************
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * MODULE:    r.in.pdal
  *
@@ -21,6 +25,7 @@
  *****************************************************************************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifndef GRASSLIDARFILTER_H
 #define GRASSLIDARFILTER_H
 
@@ -33,6 +38,12 @@ extern "C" {
 extern "C"
 {
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+#ifndef GRASSLIDARFILTER_H
+#define GRASSLIDARFILTER_H
+
+extern "C" {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include "filters.h"
 #include "lidar.h"
 #include "rast_segment.h"
@@ -55,12 +66,18 @@ extern "C"
 #include <pdal/Streamable.hpp>
 #include <pdal/Dimension.hpp>
 
+<<<<<<< HEAD
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 /* All GRASS GIS filters which are similar across multiple modules
  * put together as one PDAL Stage class.
  */
 <<<<<<< HEAD
+=======
+/* All GRASS GIS filters which are similar across multiple modules
+ * put together as one PDAL Stage class.
+ */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 class GrassLidarFilter : public pdal::Filter, public pdal::Streamable {
 public:
     GrassLidarFilter()
@@ -72,6 +89,7 @@ public:
           return_filtered_(0), n_class_filtered_(0), zscale_(1), iscale_(1),
           dscale_(1), use_class_filter_(false), use_return_filter_(false),
           base_segment_(nullptr)
+<<<<<<< HEAD
     {
     }
     std::string getName() const { return "filters.grasslidar"; }
@@ -115,6 +133,11 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
         return "filters.grasslidar";
     }
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    {
+    }
+    std::string getName() const { return "filters.grasslidar"; }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     void dim_to_import(pdal::Dimension::Id dim_to_import)
     {
@@ -122,11 +145,15 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
 =======
     void set_spatial_filter(double xmin, double xmax,
                             double ymin, double ymax)
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     {
         use_spatial_filter_ = true;
         xmin_ = xmin;
@@ -169,17 +196,23 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
         n_class_filtered_ = 0;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
                          RASTER_MAP_TYPE rtype)
 =======
     void set_base_raster(SEGMENT * base_segment,
                          struct Cell_head *region, RASTER_MAP_TYPE rtype)
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
+                         RASTER_MAP_TYPE rtype)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     {
         base_segment_ = base_segment;
         input_region_ = region;
         base_raster_data_type_ = rtype;
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
     void set_z_scale(double scale) { zscale_ = scale; }
     void set_intensity_scale(double scale) { iscale_ = scale; }
@@ -209,43 +242,29 @@ private:
     {
         dscale_ = scale;
     }
+=======
+    void set_z_scale(double scale) { zscale_ = scale; }
+    void set_intensity_scale(double scale) { iscale_ = scale; }
+    void set_d_scale(double scale) { dscale_ = scale; }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
-    gpoint_count num_processed()
-    {
-        return n_processed_;
-    }
-    gpoint_count num_passed()
-    {
-        return n_passed_;
-    }
-    gpoint_count num_return_filtered()
-    {
-        return return_filtered_;
-    }
-    gpoint_count num_class_filtered()
-    {
-        return n_class_filtered_;
-    }
-    gpoint_count num_zrange_filtered()
-    {
-        return zrange_filtered_;
-    }
-    gpoint_count num_irange_filtered()
-    {
-        return irange_filtered_;
-    }
-    gpoint_count num_drange_filtered()
-    {
-        return drange_filtered_;
-    }
-    gpoint_count num_spatially_filtered()
-    {
-        return n_outside_;
-    }
+    gpoint_count num_processed() { return n_processed_; }
+    gpoint_count num_passed() { return n_passed_; }
+    gpoint_count num_return_filtered() { return return_filtered_; }
+    gpoint_count num_class_filtered() { return n_class_filtered_; }
+    gpoint_count num_zrange_filtered() { return zrange_filtered_; }
+    gpoint_count num_irange_filtered() { return irange_filtered_; }
+    gpoint_count num_drange_filtered() { return drange_filtered_; }
+    gpoint_count num_spatially_filtered() { return n_outside_; }
 
+<<<<<<< HEAD
   private:
     virtual void filter(pdal::PointView & view)
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+private:
+    virtual void filter(pdal::PointView &view)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     {
         pdal::PointRef p(view, 0);
         for (pdal::PointId idx = 0; idx < view.size(); ++idx) {
@@ -254,10 +273,14 @@ private:
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual bool processOne(pdal::PointRef &point);
 =======
     virtual bool processOne(pdal::PointRef & point);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    virtual bool processOne(pdal::PointRef &point);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     pdal::Dimension::Id dim_to_import_;
 
@@ -299,6 +322,7 @@ private:
 
     // not implemented
 <<<<<<< HEAD
+<<<<<<< HEAD
     GrassLidarFilter &operator=(const GrassLidarFilter &);
     GrassLidarFilter(const GrassLidarFilter &);
 };
@@ -310,4 +334,10 @@ private:
 
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    GrassLidarFilter &operator=(const GrassLidarFilter &);
+    GrassLidarFilter(const GrassLidarFilter &);
+};
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #endif // GRASSLIDARFILTER_H

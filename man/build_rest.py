@@ -9,7 +9,11 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
+<<<<<<< HEAD
 # (C) 2003-2024 by Luca Delucchi and the GRASS Development Team
+=======
+# (C) 2003-2022 by Luca Delucchi and the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 import os
 import string
@@ -169,8 +173,13 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
+<<<<<<< HEAD
  2003-2024 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 """  # noqa: E501
+=======
+ 2003-2022 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+"""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 )
 
 cmd1_tmpl = string.Template(r"""*`$cmd.\* <${cmd}>` *""")

@@ -178,8 +178,12 @@ void com_par_const(double longitTime, struct SunGeometryConstDay *sungeom,
 
 void com_par(struct SunGeometryConstDay *sungeom,
              struct SunGeometryVarDay *sunVarGeom,
+<<<<<<< HEAD
              struct GridGeometry *gridGeom, double latitude,
              double longitude UNUSED)
+=======
+             struct GridGeometry *gridGeom, double latitude, double longitude)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     double pom, xpom, ypom;
     double costimeAngle;
@@ -370,8 +374,12 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                    }
                  */
                 s = sunSlopeGeom->lum_C31_l *
+<<<<<<< HEAD
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l +
                             timeOffset) +
+=======
+                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     sunSlopeGeom->lum_C33_l; /* Jenco */
             }
 
@@ -396,8 +404,12 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                    }
                  */
                 s = sunSlopeGeom->lum_C31_l *
+<<<<<<< HEAD
                         cos(-sungeom->timeAngle - sunSlopeGeom->longit_l +
                             timeOffset) +
+=======
+                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     sunSlopeGeom->lum_C33_l; /* Jenco */
             }
         }
@@ -412,7 +424,11 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
            }
          */
         s = sunSlopeGeom->lum_C31_l *
+<<<<<<< HEAD
                 cos(-sungeom->timeAngle - sunSlopeGeom->longit_l + timeOffset) +
+=======
+                cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             sunSlopeGeom->lum_C33_l; /* Jenco */
     }
 

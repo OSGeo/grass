@@ -110,7 +110,11 @@ void alloc_edges(unsigned int n)
         free_list_e[i] = e;
 }
 
+<<<<<<< HEAD
 void free_memory(void)
+=======
+void free_memory()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     G_free(sites);
     G_free(edges);

@@ -1506,7 +1506,11 @@ class Grammar(object):
         self.Precedence   = {}      # Precedence rules for each terminal. Contains tuples of the
                                     # form ('right',level) or ('nonassoc', level) or ('left',level)
 
+<<<<<<< HEAD
         self.UsedPrecedence = set() # Precedence rules that were actually used by the grammar.
+=======
+        self.UsedPrecedence = set() # Precedence rules that were actually used by the grammer.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                     # This is only used to provide error checking and to generate
                                     # a warning about unused precedence rules.
 

@@ -65,7 +65,11 @@ def generate_map(rows, cols, fname):
         for r in fname:
             Module(
                 "r.random.surface",
+<<<<<<< HEAD
                 high=255,
+=======
+                maximum=255,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 output=temp,
                 overwrite=True,
             )

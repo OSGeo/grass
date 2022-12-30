@@ -2,9 +2,13 @@
 
 @author Anna Petrasova
 """
+<<<<<<< HEAD
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
+=======
+from grass.gunittest.case import TestCase
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import grass.script as gs
 
 
@@ -42,10 +46,13 @@ class TestRegion(TestCase):
         self.assertEqual(n_default, region["n"])
         self.assertEqual(res_default, region["nsres"])
 
+<<<<<<< HEAD
     def test_f_flag(self):
         line = call_module("g.region", flags="fglecn3", capture_stdout=True)
         self.assertEqual(1, len(line.splitlines()))
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 if __name__ == "__main__":
     from grass.gunittest.main import test

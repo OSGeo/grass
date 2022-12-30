@@ -147,8 +147,11 @@ long int estimate_mem_needed(long int cols, char *mode)
     return (mem_count);
 }
 
+<<<<<<< HEAD
 #define WEIGHT_MATRIX_LINE_LENGTH 80
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /*
  * Prints the spatial weights matrix to the console.
  * This uses a fixed layout which may not be able to print very
@@ -157,8 +160,14 @@ long int estimate_mem_needed(long int cols, char *mode)
 void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
+<<<<<<< HEAD
     char weight_matrix_line_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
     char weight_matrix_weight_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
+=======
+    int weight_matrix_line_length = 80;
+    char weight_matrix_line_buf[weight_matrix_line_length + 1];
+    char weight_matrix_weight_buf[weight_matrix_line_length + 1];
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     G_message(_("Spatial weights neighborhood (cells):"));
     for (i = 0; i < rows; i++) {
@@ -174,7 +183,11 @@ void print_weights_matrix(long int rows, long int cols)
             }
             if (strlen(weight_matrix_weight_buf) +
                     strlen(weight_matrix_line_buf) >
+<<<<<<< HEAD
                 WEIGHT_MATRIX_LINE_LENGTH) {
+=======
+                weight_matrix_line_length) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 strncpy(weight_matrix_line_buf, "[line too long to print]",
                         WEIGHT_MATRIX_LINE_LENGTH);
                 break;
@@ -194,14 +207,22 @@ void print_weights_matrix(long int rows, long int cols)
 void *get_input_row(unsigned long row_idx)
 {
     unsigned long i;
+<<<<<<< HEAD
     char *my_cell = NULL;
+=======
+    void *my_cell = NULL;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     my_cell = CELL_INPUT_HANDLES[row_idx];
 
     for (i = 0; i < PADDING_WIDTH; i++)
         my_cell += CELL_IN_SIZE;
 
+<<<<<<< HEAD
     return (void *)my_cell;
+=======
+    return (my_cell);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /* NEIGHBORHOOD STATISTICS
@@ -233,8 +254,13 @@ void *get_input_row(unsigned long row_idx)
  * types of information to be collected.
  */
 
+<<<<<<< HEAD
 void collect_values_unfiltered(double val1, double val2, double min UNUSED,
                                double max UNUSED, stats_struct *stats)
+=======
+void collect_values_unfiltered(double val1, double val2, double min, double max,
+                               stats_struct *stats)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     stats->values[stats->num_values] = val1;
     stats->certainty += val2;
@@ -249,9 +275,14 @@ void collect_values_filtered(double val1, double val2, double min, double max,
     }
 }
 
+<<<<<<< HEAD
 void collect_values_and_weights_unfiltered(double val1, double val2,
                                            double min UNUSED, double max UNUSED,
                                            stats_struct *stats)
+=======
+void collect_values_and_weights_unfiltered(double val1, double val2, double min,
+                                           double max, stats_struct *stats)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     stats->values[stats->num_values] = val1;
     stats->weights[stats->num_values] = val2;
@@ -268,8 +299,12 @@ void collect_values_and_weights_filtered(double val1, double val2, double min,
 }
 
 void collect_values_and_frequencies_unfiltered(double val1, double val2,
+<<<<<<< HEAD
                                                double min UNUSED,
                                                double max UNUSED,
+=======
+                                               double min, double max,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                                stats_struct *stats)
 {
     unsigned long i;
@@ -512,7 +547,11 @@ void init_handles(void)
 void advance_one_row(int file_desc, long current_row)
 {
     unsigned long i, j;
+<<<<<<< HEAD
     char *cell_input;
+=======
+    void *cell_input;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     static unsigned long replace_row =
         0; /* points to the row which will be replaced next */
     unsigned long replace_pos = 0;

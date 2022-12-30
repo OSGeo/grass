@@ -91,8 +91,12 @@ public:
         assert(n >= 0);
 
         char str[100];
+<<<<<<< HEAD
         snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
                  (long)(maxsize * sizeof(T)));
+=======
+        sprintf(str, "im_buffer: allocate %ld\n", (long)(maxsize * sizeof(T)));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         MEMORY_LOG(str);
 
         data = new T[maxsize];
@@ -112,7 +116,11 @@ public:
     // insert an item in buffer in next free position; fail if buffer full
     bool insert(T &x);
 
+<<<<<<< HEAD
     // insert n items in buffer; return the number of items actually inserted
+=======
+    // insert n items in buffer; return the number of items acually inserted
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     unsigned long insert(T *x, unsigned long n);
 
     //(quick)sort (ascending order) the buffer (in place);
@@ -134,7 +142,11 @@ public:
     // return i'th item in buffer
     T get_item(unsigned long i) const
     {
+<<<<<<< HEAD
         assert(i < size);
+=======
+        assert((i >= 0) && (i < size));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return data[i];
     }
 
@@ -240,7 +252,11 @@ bool im_buffer<T>::insert(T &x)
 }
 
 /************************************************************/
+<<<<<<< HEAD
 // insert n items in buffer; return the number of items actually inserted
+=======
+// insert n items in buffer; return the number of items acually inserted
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 template <class T>
 unsigned long im_buffer<T>::insert(T *x, unsigned long n)
 {
@@ -334,7 +350,11 @@ void im_buffer<T>::reset(unsigned long start, unsigned long n)
         sorted = false;
         return;
     }
+<<<<<<< HEAD
     assert(start + n <= size);
+=======
+    assert((start >= 0) && (start + n <= size));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     size = n;
     if (n) {
         memmove(data, data + start, n * sizeof(T));
@@ -372,7 +392,11 @@ void im_buffer<T>::print_range() const
 #endif
         assert(data);
 
+<<<<<<< HEAD
         // determine min and  max
+=======
+        // determin min and  max
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         T min, max;
         min = data[0];
         if (sorted) {

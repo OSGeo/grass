@@ -77,7 +77,10 @@ int main(int argc, char *argv[])
     struct bound_box box;
     struct Cell_head window;
     struct GModule *module;
+<<<<<<< HEAD
     char xname[GNAME_MAX], xmapset[GNAME_MAX];
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     struct {
         struct Option *input, *field, *cats, *where, *output, *nsites, *zmin,
             *zmax, *zcol, *ztype, *seed;
@@ -224,7 +227,10 @@ int main(int argc, char *argv[])
             Vect_close(&In);
             G_fatal_error(_("No areas in vector map <%s>"), parm.input->answer);
         }
+<<<<<<< HEAD
         G_unqualified_name(parm.input->answer, G_mapset(), xname, xmapset);
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* create new vector map */
@@ -363,7 +369,11 @@ int main(int argc, char *argv[])
 
         count = 0;
 
+<<<<<<< HEAD
         for (i = 1; i <= (unsigned int)nareas; i++) {
+=======
+        for (i = 1; i <= nareas; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             if (!Vect_get_area_centroid(&In, i))
                 continue;
@@ -485,7 +495,11 @@ int main(int argc, char *argv[])
             cat_area = -1;
             if (field > 0) {
                 if (cat_list) {
+<<<<<<< HEAD
                     for (i = 0; i < (unsigned int)Cats->n_cats; i++) {
+=======
+                    for (i = 0; i < Cats->n_cats; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         if (Cats->field[i] == field &&
                             Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
                             cat_area = Cats->cat[i];
@@ -534,8 +548,12 @@ int main(int argc, char *argv[])
                     Vect_append_point(Points, x, y, 0.0);
 
                 if (!notable) {
+<<<<<<< HEAD
                     snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table,
                              Fi->key);
+=======
+                    sprintf(buf, "insert into %s (%s", Fi->table, Fi->key);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     db_set_string(&sql, buf);
                     if (parm.zcol->answer) {
                         snprintf(buf, DB_SQL_MAX, ", %s", parm.zcol->answer);
@@ -690,8 +708,12 @@ int main(int argc, char *argv[])
                     Vect_reset_cats(Cats);
                 }
 
+<<<<<<< HEAD
                 snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table,
                          Fi->key);
+=======
+                sprintf(buf, "insert into %s (%s", Fi->table, Fi->key);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 db_set_string(&sql, buf);
                 if (parm.zcol->answer) {
                     snprintf(buf, DB_SQL_MAX, ", %s", parm.zcol->answer);

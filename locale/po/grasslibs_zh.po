@@ -1989,7 +1989,482 @@ msgstr ""
 
 #: ../lib/gis/open.c:90
 #, c-format
+<<<<<<< HEAD
 msgid "G__open(read): Unable to open '%s': %s"
+=======
+msgid "MAPSET %s - permission denied"
+msgstr "地图集%s - 权限拒绝"
+
+#: ../lib/gis/gisinit.c:69
+#, c-format
+msgid "MAPSET %s not found at %s"
+msgstr ""
+
+#: ../lib/gis/gisinit.c:104
+msgid "System not initialized. Programmer forgot to call G_gisinit()."
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprzlib.c:100
+#: ../lib/gis/cmprzlib.c:179 ../lib/gis/cmprzstd.c:102
+#: ../lib/gis/cmprzstd.c:176 ../lib/gis/cmprbzip.c:104
+#: ../lib/gis/cmprbzip.c:183 ../lib/gis/compress.c:335
+msgid "No source buffer"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:92 ../lib/gis/cmprlz4.c:159 ../lib/gis/cmprzlib.c:103
+#: ../lib/gis/cmprzlib.c:182 ../lib/gis/cmprzstd.c:105
+#: ../lib/gis/cmprzstd.c:179 ../lib/gis/cmprbzip.c:107
+#: ../lib/gis/cmprbzip.c:186
+msgid "No destination buffer"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:99 ../lib/gis/cmprlz4.c:166 ../lib/gis/cmprzlib.c:110
+#: ../lib/gis/cmprzlib.c:189 ../lib/gis/cmprzstd.c:112
+#: ../lib/gis/cmprzstd.c:186 ../lib/gis/cmprbzip.c:114
+#: ../lib/gis/cmprbzip.c:193 ../lib/gis/compress.c:337
+#, c-format
+msgid "Invalid source buffer size %d"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:101 ../lib/gis/cmprlz4.c:168 ../lib/gis/cmprzlib.c:112
+#: ../lib/gis/cmprzlib.c:191 ../lib/gis/cmprzstd.c:114
+#: ../lib/gis/cmprzstd.c:188 ../lib/gis/cmprbzip.c:116
+#: ../lib/gis/cmprbzip.c:195 ../lib/gis/compress.c:257
+#, c-format
+msgid "Invalid destination buffer size %d"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:121
+msgid "LZ4 compression error"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:177
+msgid "LZ4 decompression error"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:186 ../lib/gis/cmprzlib.c:215 ../lib/gis/cmprzstd.c:206
+#: ../lib/gis/cmprbzip.c:219
+#, c-format
+msgid "Got uncompressed size %d, expected %d"
+msgstr ""
+
+#: ../lib/gis/distance.c:154
+#, c-format
+msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:84
+msgid "Description:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:103
+msgid "Keywords:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:111
+msgid "Usage:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:141
+msgid "ERROR: Option key not defined"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:198
+msgid "Flags:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:223 ../lib/gis/parser_interface.c:329
+#: ../lib/gis/parser_rest.c:164 ../lib/gis/parser_html.c:179
+msgid "Allow output files to overwrite existing files"
+msgstr "允许输出文件覆盖已存文件"
+
+#: ../lib/gis/parser_help.c:225 ../lib/gis/parser_interface.c:337
+#: ../lib/gis/parser_html.c:183
+msgid "Print usage summary"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:226 ../lib/gis/parser_interface.c:344
+#: ../lib/gis/parser_rest.c:168 ../lib/gis/parser_html.c:186
+msgid "Verbose module output"
+msgstr "Verbose模式输出"
+
+#: ../lib/gis/parser_help.c:227 ../lib/gis/parser_interface.c:351
+#: ../lib/gis/parser_rest.c:171 ../lib/gis/parser_html.c:189
+msgid "Quiet module output"
+msgstr "Quiet模式输出"
+
+#: ../lib/gis/parser_help.c:228
+msgid "Super quiet module output"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:229 ../lib/gis/parser_html.c:192
+msgid "Force launching GUI dialog"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:238
+msgid "Parameters:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:261
+#, c-format
+msgid "  %*s   default: %s\n"
+msgstr "  %*s   默认值： %s\n"
+
+#: ../lib/gis/parser_help.c:287
+#, c-format
+msgid "  %*s   options: "
+msgstr "  %*s   选项： "
+
+#: ../lib/gis/proj3.c:124 ../lib/vector/Vlib/header.c:556
+msgid "Unknown projection"
+msgstr "未知的投影"
+
+#: ../lib/gis/error.c:362
+msgid "WARNING: "
+msgstr "警告："
+
+#: ../lib/gis/list.c:83
+#, c-format
+msgid "no %s files available in current mapset\n"
+msgstr ""
+
+#: ../lib/gis/list.c:86
+#, c-format
+msgid "no %s files available in mapset <%s>\n"
+msgstr "在地图集 %s 中没有可用的 %s 文件\n"
+
+#: ../lib/gis/list.c:132
+#, c-format
+msgid "%s files available in mapset <%s>:\n"
+msgstr "在地图集 %s 中可用的 %s 文件：\n"
+
+#: ../lib/gis/list.c:204
+msgid "G_list: Unknown element type"
+msgstr "G_list:未知元素类型"
+
+#: ../lib/gis/alloc.c:44 ../lib/gis/alloc.c:86 ../lib/gis/alloc.c:132
+#, c-format
+msgid "Current region rows: %d, cols: %d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:47
+#, c-format
+msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:89
+#, c-format
+msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:135
+#, c-format
+msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/parser_json.c:373
+#, c-format
+msgid "Input string not understood: <%s>. Multiple '@' chars?"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:90
+#, c-format
+msgid "Unable to make mapset element %s (%s): %s"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:94
+#, c-format
+msgid "Unable to access mapset element %s (%s): %s"
+msgstr ""
+
+#: ../lib/gis/paths.c:201
+#, c-format
+msgid "Unable to open file <%s> for reading"
+msgstr ""
+
+#: ../lib/gis/paths.c:217
+#, c-format
+msgid "Unable to fetch security info for <%s>"
+msgstr ""
+
+#: ../lib/gis/datum.c:160
+#, c-format
+msgid "unable to open datum table file: %s"
+msgstr "无法打开基准面表文件：%s"
+
+#: ../lib/gis/datum.c:182
+#, c-format
+msgid "error in datum table file, line %d"
+msgstr "在基准面表文件的第%d行有错误"
+
+#: ../lib/gis/aprintf.c:140
+#, c-format
+msgid "Failed to print %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:254
+#, c-format
+msgid "Failed to parse string specifier: %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:343
+#, c-format
+msgid "Format specifier exceeds the buffer size (%d)"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:531 ../lib/gis/make_loc.c:581
+#: ../lib/gis/key_value3.c:33
+#, c-format
+msgid "Unable to open output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:545 ../lib/gis/make_loc.c:595
+#: ../lib/gis/get_projinfo.c:196 ../lib/gis/get_projinfo.c:311
+#: ../lib/gis/key_value3.c:39
+#, c-format
+msgid "Error closing output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
+#, c-format
+msgid "Unable to open ellipsoid table file <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
+#, c-format
+msgid "Invalid a: field '%s' in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:356
+#, c-format
+msgid "Invalid ellipsoid '%s' in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:370
+#, c-format
+msgid "Invalid es: field '%s' in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:383
+#, c-format
+msgid "No ellipsoid info given in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/view.c:176
+#, c-format
+msgid "Unable to open %s for writing"
+msgstr "无法为写入打开%s"
+
+#: ../lib/gis/view.c:262 ../lib/gis/view.c:479
+#, c-format
+msgid "Unable to open %s for reading"
+msgstr "无法为读取打开%s"
+
+#: ../lib/gis/view.c:465
+#, c-format
+msgid "GRASS window when view was saved:\n"
+msgstr "保存视图时，GRASS窗口：\n"
+
+#: ../lib/gis/view.c:545
+#, c-format
+msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgstr " \"%s\"中保存的窗口完全在当前GRASS窗口之外。"
+
+#: ../lib/gis/view.c:549
+#, c-format
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr "只有 %d %%的窗口(存储于\"%s\"中)与当前GRASS窗口重叠。"
+
+#: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
+#, c-format
+msgid "Unable to seek: %s"
+msgstr ""
+
+#: ../lib/gis/seek.c:58
+msgid "Seek offset out of range"
+msgstr ""
+
+#: ../lib/gis/done_msg.c:38
+#, c-format
+msgid "%s complete. %s"
+msgstr "%s 完成。 %s"
+
+#: ../lib/gis/proj2.c:63
+msgid "Latitude-Longitude"
+msgstr "纬度 - 经度"
+
+#: ../lib/gis/proj2.c:65
+msgid "Other Projection"
+msgstr "其它投影"
+
+#: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
+#, c-format
+msgid "Illegal n-s resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
+#, c-format
+msgid "Illegal number of rows: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
+#, c-format
+msgid "Illegal e-w resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
+#, c-format
+msgid "Illegal number of columns: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
+#, c-format
+msgid "North must be north of South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
+#, c-format
+msgid "North must be larger than South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
+#, c-format
+msgid "East must be larger than West, but %g (east) <= %g (west)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
+msgid "Invalid coordinates: negative number of columns"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
+msgid "Invalid coordinates: negative number of rows"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
+msgid "NS resolution has been changed"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:129 ../lib/gis/adj_cellhd.c:295
+msgid "EW resolution has been changed"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:132 ../lib/gis/adj_cellhd.c:298
+msgid "NS and EW resolutions are different"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:175
+#, c-format
+msgid "Illegal n-s resolution value for 3D: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:184
+#, c-format
+msgid "Illegal number of rows for 3D: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:193
+#, c-format
+msgid "Illegal e-w resolution value for 3D: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:202
+#, c-format
+msgid "Illegal number of columns for 3D: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:208
+#, c-format
+msgid "Illegal t-b resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:213
+#, c-format
+msgid "Illegal depths value: %d"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:236
+#, c-format
+msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:283
+msgid "Invalid coordinates: negative number of depths"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:317
+#, c-format
+msgid "East (%.15g) is not larger than West (%.15g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:352
+#, c-format
+msgid "Illegal latitude for North: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:354
+#, c-format
+msgid "Illegal latitude for South: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:360
+#, c-format
+msgid "Illegal longitude for West: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:364
+#, c-format
+msgid "Illegal longitude for East: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:392
+#, c-format
+msgid "NS extent does not match NS resolution: %g cells difference"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:401
+#, c-format
+msgid "%g cells missing to reach 90 degree north"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:404 ../lib/gis/adj_cellhd.c:418
+#: ../lib/gis/adj_cellhd.c:432
+#, c-format
+msgid "Subtle input data rounding error of north boundary (%g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:414
+#, c-format
+msgid "90 degree north is exceeded by %g cells"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:443
+msgid "Illegal latitude for North"
+msgstr "非法的北纬"
+
+#: ../lib/gis/adj_cellhd.c:451
+#, c-format
+msgid "%g cells missing to reach 90 degree south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:454 ../lib/gis/adj_cellhd.c:468
+#: ../lib/gis/adj_cellhd.c:482
+#, c-format
+msgid "Subtle input data rounding error of south boundary (%g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:464
+#, c-format
+msgid "90 degree south is exceeded by %g cells"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:493
+msgid "Illegal latitude for South"
+msgstr "非法的南纬"
+
+#: ../lib/gis/adj_cellhd.c:522
+#, c-format
+msgid "EW extent does not match EW resolution: %g cells difference"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/gis/open.c:99
@@ -3260,6 +3735,7 @@ msgstr ""
 msgid "ERROR: Option key not defined"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/gis/parser_help.c:198
 msgid "Flags:"
 msgstr ""
@@ -3531,14 +4007,508 @@ msgstr ""
 #, c-format
 msgid "<%s> in mapset <%s>"
 msgstr "<%s>在地图集<%s>中"
+=======
+#: ../lib/manage/do_copy.c:43
+#, c-format
+msgid "Copying %s <%s> to current mapset as <%s>"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/raster/mask_info.c:46
 msgid "none"
 msgstr "无"
 
+<<<<<<< HEAD
 #: ../lib/raster/mask_info.c:49
 msgid "not known"
 msgstr "未知"
+=======
+#: ../lib/vector/Vlib/build.c:986
+msgid "Number of isles: -"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1014
+#, c-format
+msgid "Unable to create topo file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1022
+msgid "Error writing out topo file"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1211
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1234
+#, c-format
+msgid "%s is no longer supported"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1257
+msgid "Spatial index not available, can not be saved"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1269
+#, c-format
+msgid "Unable to create spatial index file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1278
+msgid "Error writing out spatial index file"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_duplicates.c:199
+#, c-format
+msgid "Removed duplicates: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/constraint.c:150
+msgid "Layer constraint ignored for non-native vector formats"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:361
+msgid "Line is not looped"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:443
+#, c-format
+msgid "Unexpected result of line_intersection() res = %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:589
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:600
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:648
+msgid "side != 0 feature not implemented"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
+msgid "zero area size"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
+msgid "Line was not closed"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:909 ../lib/vector/Vlib/buffer2.c:960
+msgid "Vect_get_point_in_poly() failed"
+msgstr ""
+
+#: ../lib/vector/Vlib/dgraph.c:432
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:96
+#, c-format
+msgid "%d errors in category string"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:142 ../lib/vector/Vlib/array.c:267
+msgid "Mixed area and other type requested for vector array"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:152 ../lib/vector/Vlib/array.c:175
+#: ../lib/vector/Vlib/array.c:304 ../lib/vector/Vlib/array.c:336
+msgid "Not enough space in vector array"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:292
+#, c-format
+msgid "Unable to select record from table <%s> (key %s, where %s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_nat.c:398
+msgid "Attempt to access feature with invalid id (%"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_nat.c:404
+#, c-format
+msgid "Attempt to access alive feature %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_nat.c:566 ../lib/vector/Vlib/write_nat.c:602
+#, c-format
+msgid "%s: Area %d does not exist"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_nat.c:756
+#, c-format
+msgid "Attempt to access dead area %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:140 ../lib/vector/Vlib/map.c:246
+msgid "Vector map name is not SQL compliant"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:144
+#, c-format
+msgid "Unable to find vector map <%s> in <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:156 ../lib/vector/Vlib/map.c:250
+#: ../lib/vector/Vlib/open.c:821
+#, c-format
+msgid "Vector map <%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:160 ../lib/vector/Vlib/open.c:813
+#: ../lib/vector/Vlib/open.c:826
+#, c-format
+msgid "Unable to delete vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:180 ../lib/vector/Vlib/map.c:268
+#, c-format
+msgid "Unable to copy vector map <%s> to <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:193 ../lib/vector/Vlib/map.c:203
+#: ../lib/vector/Vlib/map.c:275 ../lib/vector/Vlib/open.c:301
+#: ../lib/vector/Vlib/open.c:437
+#: ../lib/python/temporal/c_libraries_interface.py:884 ../lib/ogsf/gv3.c:66
+#: ../lib/ogsf/gv3.c:338 ../lib/ogsf/gp3.c:62 ../lib/ogsf/gp3.c:196
+#, c-format, python-format
+msgid "Unable to open vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:318 ../lib/vector/Vlib/close_nat.c:102
+#: ../lib/vector/Vlib/copy.c:764
+#, c-format
+msgid "Unable to copy table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:332 ../lib/vector/Vlib/map.c:463
+#, c-format
+msgid "Unable to delete table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:347
+#, c-format
+msgid "Unable to create index for table <%s>, key <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:403
+#, c-format
+msgid "Ignoring invalid mapset: %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:408
+#, c-format
+msgid "Invalid vector map name <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:418
+#, c-format
+msgid "Unable to open header file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:450
+#, c-format
+msgid "Unable to find table <%s> linked to vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:473
+#, c-format
+msgid "Table <%s> linked to vector map <%s> does not exist"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:486
+#, c-format
+msgid "Unable to open directory '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:500
+#, c-format
+msgid "Unable to delete file '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:520
+#, c-format
+msgid "Unable to rename directory '%s' to '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:529
+#, c-format
+msgid "Unable to remove directory '%s': %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:124 ../lib/vector/Vlib/write_pg.c:158
+#: ../lib/vector/Vlib/write_pg.c:197 ../lib/vector/Vlib/write_pg.c:295
+#: ../lib/vector/Vlib/write_pg.c:355 ../lib/vector/Vlib/write_pg.c:477
+#: ../lib/vector/Vlib/close.c:275 ../lib/vector/Vlib/simple_features.c:336
+#: ../lib/vector/Vlib/open_pg.c:143 ../lib/vector/Vlib/open_pg.c:200
+#: ../lib/vector/Vlib/open_pg.c:299 ../lib/vector/Vlib/open_pg.c:349
+#: ../lib/vector/Vlib/header_finfo.c:47 ../lib/vector/Vlib/header_finfo.c:86
+#: ../lib/vector/Vlib/header_finfo.c:123 ../lib/vector/Vlib/header_finfo.c:171
+#: ../lib/vector/Vlib/write_sfa.c:306 ../lib/vector/Vlib/area.c:94
+#: ../lib/vector/Vlib/area.c:499 ../lib/vector/Vlib/read_pg.c:91
+#: ../lib/vector/Vlib/read_pg.c:214 ../lib/vector/Vlib/read_pg.c:298
+#: ../lib/vector/Vlib/read_pg.c:416 ../lib/vector/Vlib/build_sfa.c:721
+#: ../lib/vector/Vlib/copy.c:428 ../lib/vector/Vlib/rewind_pg.c:56
+#: ../lib/vector/Vlib/rewind_pg.c:81 ../lib/vector/Vlib/build_pg.c:117
+#: ../lib/vector/Vlib/close_pg.c:99 ../lib/vector/Vlib/close_pg.c:146
+msgid "GRASS is not compiled with PostgreSQL support"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:188 ../lib/vector/Vlib/write_pg.c:256
+#: ../lib/vector/Vlib/write_sfa.c:164 ../lib/vector/Vlib/write_ogr.c:96
+msgid "Unable to rewrite feature (incompatible feature types)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:286
+#, c-format
+msgid "Unable to rewrite feature %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:322 ../lib/vector/Vlib/write_pg.c:812
+#: ../lib/vector/Vlib/write_pg.c:1214 ../lib/vector/Vlib/write_pg.c:1372
+#: ../lib/vector/Vlib/simple_features.c:324
+msgid "No connection defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
+msgid "Invalid offset (%"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:348 ../lib/vector/Vlib/write_ogr.c:140
+msgid "Unable to delete feature"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:453
+#, c-format
+msgid "Unable to delete feature (%s) %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:555 ../lib/vector/Vlib/write_pg.c:1302
+#: ../lib/vector/Vlib/write_sfa.c:349
+msgid "Boundary is not closed. Skipping."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:613 ../lib/vector/Vlib/write_pg.c:881
+#: ../lib/vector/Vlib/open.c:1355 ../lib/vector/Vlib/build_pg.c:413
+msgid "Unable to open PG file"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:667 ../lib/vector/Vlib/ascii.c:428
+#: ../lib/db/dbmi_client/column.c:136 ../lib/python/script/db.py:50
+#, c-format, python-format
+msgid "Unable to describe table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:738 ../lib/vector/Vlib/write_pg.c:1177
+#: ../lib/vector/Vlib/write_pg.c:1286 ../lib/vector/Vlib/write_pg.c:1799
+#: ../lib/vector/Vlib/write_pg.c:2328 ../lib/vector/Vlib/write_pg.c:2361
+#: ../lib/vector/Vlib/read_pg.c:884 ../lib/vector/Vlib/read_pg.c:1192
+#: ../lib/vector/Vlib/read_pg.c:1362 ../lib/vector/Vlib/read_pg.c:1455
+#, c-format
+msgid "Unsupported feature type %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:774
+#, c-format
+msgid "Building spatial index on <%s>..."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:842
+#, c-format
+msgid "Schema <%s> doesn't exist, created"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:921
+#, c-format
+msgid "Creating topology schema <%s>..."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:935
+#, c-format
+msgid "Adding new topology column <%s>..."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1073 ../lib/vector/Vlib/open_pg.c:85
+#: ../lib/vector/Vlib/open_pg.c:232
+msgid "Connection string not defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1078 ../lib/vector/Vlib/write_pg.c:1218
+#: ../lib/vector/Vlib/write_pg.c:1376 ../lib/vector/Vlib/open_pg.c:90
+#: ../lib/vector/Vlib/open_pg.c:237
+msgid "PostGIS feature table not defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1106 ../lib/vector/Vlib/write_ogr.c:306
+#, c-format
+msgid "Unsupported geometry type (%d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1119 ../lib/vector/Vlib/write_ogr.c:340
+#, c-format
+msgid "More layers defined, using driver <%s> and database <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1124 ../lib/vector/Vlib/write_ogr.c:346
+msgid "Database connection not defined. Unable to write attributes."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1131
+msgid "Unable to create new PostGIS feature table"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1145
+msgid "Unable to create new PostGIS topology schema"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1239 ../lib/vector/Vlib/write_pg.c:1404
+#: ../lib/vector/Vlib/write_ogr.c:414
+#, c-format
+msgid "No category defined for layer %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1241 ../lib/vector/Vlib/write_pg.c:1406
+#: ../lib/vector/Vlib/write_ogr.c:416
+#, c-format
+msgid "Feature has more categories, using category %d (from layer %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1252
+#, c-format
+msgid "Point skipped (output feature type: %s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1259
+#, c-format
+msgid "Line skipped (output feature type: %s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1266
+#, c-format
+msgid "Centroid skipped (output feature type: %s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1273
+#, c-format
+msgid "Boundary skipped (output feature type: %s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1280
+#, c-format
+msgid "Face skipped (output feature type: %s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1366
+#, c-format
+msgid "Invalid feature type (%d) for nodes"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1380
+msgid "PostGIS topology schema not defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1881
+msgid "Trying to insert 3D data into feature table which store 2D data only"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1886
+msgid "Trying to insert 2D data into feature table which store 3D data only"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:1911
+msgid "Unable to insert topological element into PostGIS Topology schema"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2008 ../lib/vector/Vlib/write_ogr.c:585
+#, c-format
+msgid "Unable to select attributes for category %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2012 ../lib/vector/Vlib/write_ogr.c:591
+#: ../lib/db/dbmi_client/copy_tab.c:338
+#, c-format
+msgid "Unable to fetch data from table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2017 ../lib/vector/Vlib/write_ogr.c:597
+#, c-format
+msgid "No database record for category %d, no attributes will be written"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2043
+#, c-format
+msgid "FID column must be integer, column <%s> ignored!"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2077 ../lib/vector/Vlib/write_ogr.c:659
+#, c-format
+msgid "Unsupported column type %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2084
+msgid "Invalid value for FID column: NULL"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2176
+#, c-format
+msgid "Invalid feature %d (max: %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2190
+#, c-format
+msgid "Invalid feature type (%d) for node"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2194
+#, c-format
+msgid "Invalid node %d (%d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2272
+#, c-format
+msgid "Unable to determine next left/right edge for edge %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2277
+msgid "Unable to insert new edge. Topology not available."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2419 ../lib/vector/Vlib/write_pg.c:2426
+msgid "Invalid topology"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2625 ../lib/vector/Vlib/write_pg.c:2722
+#, c-format
+msgid "Attempt to access non-existing feature %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2656
+msgid "Unable to determine next left/right edge"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2742
+msgid "Unable to create new face"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2880 ../lib/vector/Vlib/write_pg.c:2892
+#, c-format
+msgid "Unable to delete node %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:2948 ../lib/vector/Vlib/ascii.c:404
+#: ../lib/vector/Vlib/write_ogr.c:193 ../lib/db/dbmi_client/db.c:41
+#: ../lib/db/dbmi_client/copy_tab.c:107 ../lib/db/dbmi_client/copy_tab.c:127
+#, c-format
+msgid "Unable to start driver <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:84
+#, c-format
+msgid "Error reading ASCII file: (bad type) [%s]"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/raster/vrt.c:83
 #, c-format
@@ -4019,8 +4989,24 @@ msgstr ""
 msgid "Unable to write range file for <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/raster/range.c:465 ../lib/raster/range.c:479
 #: ../lib/raster/range.c:497 ../lib/raster/range.c:502
+=======
+#: ../lib/vector/Vlib/write.c:234
+msgid "Unable to rewrite feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:266
+msgid "Unable to delete feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:299
+msgid "Unable to restore feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:308
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to write stats file for <%s>"
 msgstr ""
@@ -10800,44 +11786,52 @@ msgstr "[%s]: 没有此颜色"
 #~ msgid "The error message: %s"
 #~ msgstr "错误信息： %s"
 
-#~ msgid "Illegal row value"
-#~ msgstr "非法的行值"
+msgid "Illegal row value"
+msgstr "非法的行值"
 
-#~ msgid "Illegal col value"
-#~ msgstr "非法的列值"
+msgid "Illegal col value"
+msgstr "非法的列值"
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "非法的3D南北向分辨率值"
+msgid "Illegal n-s3 resolution value"
+msgstr "非法的3D南北向分辨率值"
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "非法的3D的行值"
+msgid "Illegal row3 value"
+msgstr "非法的3D的行值"
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "非法的3D东西向分辨率值"
+msgid "Illegal e-w3 resolution value"
+msgstr "非法的3D东西向分辨率值"
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "非法的3D的列值"
+msgid "Illegal col3 value"
+msgstr "非法的3D的列值"
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "非法的东西向分辨率值"
+msgid "Illegal e-w resolution value"
+msgstr "非法的东西向分辨率值"
 
-#~ msgid "North must be north of South"
-#~ msgstr "北必须在南的北边"
+msgid "North must be north of South"
+msgstr "北必须在南的北边"
 
+<<<<<<< HEAD
 #~ msgid "East must be larger than West"
 #~ msgstr "东经值必须比西经值大"
+=======
+msgid "North must be larger than South"
+msgstr "北纬值必须比南纬值大"
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "无效的坐标"
+msgid "East must be larger than West"
+msgstr "东经值必须比西经值大"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "非法的南北向分辨率值"
+msgid "Invalid coordinates"
+msgstr "无效的坐标"
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "非法的3D顶到底的分辨率值"
+msgid "Illegal n-s resolution value"
+msgstr "非法的南北向分辨率值"
 
-#~ msgid "Illegal depths value"
-#~ msgstr "非法的深度值"
+msgid "Illegal t-b3 resolution value"
+msgstr "非法的3D顶到底的分辨率值"
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "顶部的值必须比底部的值大"
+msgid "Illegal depths value"
+msgstr "非法的深度值"
+
+msgid "Top must be larger than Bottom"
+msgstr "顶部的值必须比底部的值大"

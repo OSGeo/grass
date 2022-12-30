@@ -659,7 +659,11 @@ class PyEditToolbar(BaseToolbar):
             "run": MetaIcon(img="execute", label=_("Run (Ctrl+R)")),
             # TODO: better icons for overwrite modes
             "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
+<<<<<<< HEAD
             "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactivate overwrite")),
+=======
+            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             "help": BaseIcons["help"],
             "quit": BaseIcons["quit"],
         }

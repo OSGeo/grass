@@ -101,7 +101,11 @@ static void usage(FILE *fp, int markers)
         if (markers)
             fprintf(fp, "{{{KEYWORDS}}}\n");
         fprintf(fp, "%s\n ", _("Keywords:"));
+<<<<<<< HEAD
         G__print_keywords(fp, NULL, FALSE);
+=======
+        G__print_keywords(fp, NULL);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         fprintf(fp, "\n");
     }
 

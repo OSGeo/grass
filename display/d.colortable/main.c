@@ -253,7 +253,11 @@ int main(int argc, char **argv)
 
         /* Color ramp box */
         /* get separate color for each pixel */
+<<<<<<< HEAD
         /* first 5 pixels draw null color */
+=======
+        /* fisrt 5 pixels draw null color */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         y_box[1] = -1;
         y_box[3] = 1;
         x_box[2] = (dots_per_col - 6);

@@ -861,13 +861,19 @@ int G_matvect_extract_vector(mat_struct *mt, vtype vt, int indx)
     case RVEC: {
         mt->type = ROWVEC_;
         mt->v_indx = indx;
+<<<<<<< HEAD
         break;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     case CVEC: {
         mt->type = COLVEC_;
         mt->v_indx = indx;
+<<<<<<< HEAD
         break;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     default: {
@@ -1293,7 +1299,11 @@ double G_vector_norm1(vec_struct *vc)
 
     if (!vc->is_init) {
         G_warning(_("Matrix is not initialised"));
+<<<<<<< HEAD
         return NAN;
+=======
+        return 0.0 / 0.0; /* NaN */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     idx = (vc->v_indx > 0) ? vc->v_indx : 0;

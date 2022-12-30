@@ -17,9 +17,7 @@ SUBDIRS = \
 =======
 SUBDIRS = \
 	app \
-	bandref \
 	benchmark \
-	ctypes \
 	exceptions \
 >>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
 	grassdb \
@@ -30,6 +28,9 @@ SUBDIRS = \
 	pygrass \
 	script \
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 	semantic_label \
 	temporal \
 	utils

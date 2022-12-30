@@ -273,6 +273,13 @@ void G__wps_print_process_description(void)
                     }
                     if (strcmp(token, "vector") == 0) {
                         data_type = TYPE_VECTOR;
+<<<<<<< HEAD
+=======
+                        if (is_input == 1)
+                            num_vector_inputs++;
+                        if (is_output == 1)
+                            num_vector_outputs++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     }
                     /* Modules may have different types of space time datasets
                      * as inputs */
@@ -288,6 +295,13 @@ void G__wps_print_process_description(void)
                     }
                     if (strcmp(token, "stvds") == 0) {
                         data_type = TYPE_STVDS;
+<<<<<<< HEAD
+=======
+                        if (is_input == 1)
+                            num_stvds_inputs++;
+                        if (is_output == 1)
+                            num_stvds_outputs++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     }
                     if (strcmp(token, "file") == 0) {
                         data_type = TYPE_PLAIN_TEXT;
@@ -613,10 +627,14 @@ static void wps_print_process_description_begin(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (abstract) {
         fprintf(stdout, "\t\t<ows:Abstract>");
         fprintf(stdout, "https://grass.osgeo.org/grass-devel/manuals/%s.html",
                 identifier);
+<<<<<<< HEAD
 =======
 
     if(abstract)
@@ -627,6 +645,8 @@ static void wps_print_process_description_begin(
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         fprintf(stdout, "</ows:Abstract>\n");
     }
 

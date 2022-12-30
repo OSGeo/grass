@@ -997,10 +997,15 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
     G_debug(4, "update_band_vals()");
 
     if (rs->count >= globals->min_reg_size) {
+<<<<<<< HEAD
         char buf[100];
         snprintf(buf, sizeof(buf), "%" PRI_LONG, globals->min_reg_size);
         G_fatal_error(_("Region stats should go in tree, %d >= %s"), rs->count,
                       buf);
+=======
+        G_fatal_error(_("Region stats should go in tree, %d >= %" PRI_LONG ""),
+                      rs->count, globals->min_reg_size);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     Segment_get(&globals->rid_seg, (void *)&rid, row, col);

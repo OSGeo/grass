@@ -82,7 +82,10 @@ def register_maps_in_space_time_dataset(
     start_time_in_file = False
     end_time_in_file = False
     semantic_label_in_file = False
+<<<<<<< HEAD
     overwrite = gs.overwrite()
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     msgr = get_tgis_message_interface()
 
@@ -128,6 +131,13 @@ def register_maps_in_space_time_dataset(
     currcon[mapset] = dbif.connections[mapset]
     dbif.connections = currcon
 
+    # create new stds only in the current mapset
+    # remove all connections to any other mapsets
+    # ugly hack !
+    currcon = {}
+    currcon[mapset] = dbif.connections[mapset]
+    dbif.connections = currcon
+
     # The name of the space time dataset is optional
     if name:
         sp = open_old_stds(name, type, dbif)
@@ -149,10 +159,25 @@ def register_maps_in_space_time_dataset(
         maplist = maps.split(",")
 
         # Build the map list again with the ids
+<<<<<<< HEAD
         for idx, maplist_item in enumerate(maplist):
             maplist[idx] = {
                 "id": AbstractMapDataset.build_id_from_search_path(maplist_item, type)
             }
+=======
+        for count in range(len(maplist)):
+            row = {}
+            mapname = maplist[count]
+            map_mapset = mapset
+            if "@" not in mapname:
+                found = gscript.find_file(element=type, name=mapname)
+                if found["mapset"] is not None and len(found["mapset"]) > 0:
+                    map_mapset = found["mapset"]
+            mapid = AbstractMapDataset.build_id(mapname, map_mapset, None)
+
+            row["id"] = mapid
+            maplist[count] = row
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     # Read the map list from file
     if file:
@@ -202,12 +227,27 @@ def register_maps_in_space_time_dataset(
             if end_time_in_file:
                 row["end"] = line_list[2].strip()
 
+<<<<<<< HEAD
+=======
+            if start_time_in_file and not end_time_in_file:
+                row["start"] = line_list[1].strip()
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if semantic_label_in_file:
                 idx = 3 if end_time_in_file else 2
                 # case-sensitive, the user decides on the band name
                 row["semantic_label"] = line_list[idx].strip()
 
+<<<<<<< HEAD
             row["id"] = AbstractMapDataset.build_id_from_search_path(mapname, type)
+=======
+            map_mapset = mapset
+            if "@" not in mapname:
+                found = gscript.find_file(element=type, name=mapname)
+                if found["mapset"] is not None and len(found["mapset"]) > 0:
+                    map_mapset = found["mapset"]
+            row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             maplist.append(row)
 
@@ -262,15 +302,24 @@ def register_maps_in_space_time_dataset(
             end = row["end"]
 
         # Use the semantic label from file
+<<<<<<< HEAD
         if "semantic_label" in row:
             semantic_label = row["semantic_label"]
+=======
+        if "semantic_label" in maplist[count]:
+            semantic_label = maplist[count]["semantic_label"]
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         else:
             semantic_label = None
 
         is_in_db = map_object.is_in_db(dbif, mapset)
 
         # Put the map into the database of the current mapset
+<<<<<<< HEAD
         if not is_in_db:
+=======
+        if not map.is_in_db(dbif, mapset):
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             # Break in case no valid time is provided
             if (start == "" or start is None) and not map_object.has_grass_timestamp():
                 dbif.close()
@@ -403,10 +452,17 @@ def register_maps_in_space_time_dataset(
             # semantic label defined in input file
             # -> update raster metadata
             # -> write band identifier to GRASS data base
+<<<<<<< HEAD
             map_object.set_semantic_label(semantic_label)
         else:
             # Try to read semantic label from GRASS data base if defined
             map_object.read_semantic_label_from_grass()
+=======
+            map.set_semantic_label(semantic_label)
+        else:
+            # Try to read semantic label from GRASS data base if defined
+            map.read_semantic_label_from_grass()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         if is_in_db:
             #  Gather the SQL update statement
@@ -435,7 +491,11 @@ def register_maps_in_space_time_dataset(
     # Finally Register the maps in the space time dataset
     if name and map_object_list:
         num_maps = len(map_object_list)
+<<<<<<< HEAD
         for count, map_object in enumerate(map_object_list):
+=======
+        for map in map_object_list:
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if count % 50 == 0:
                 msgr.percent(count, num_maps, 1)
             sp.register_map(map=map_object, dbif=dbif)

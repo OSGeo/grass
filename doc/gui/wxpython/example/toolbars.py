@@ -112,12 +112,19 @@ class ExampleMainToolbar(BaseToolbar):
         """!Toolbar data"""
         return self._getToolbarData(
             (
+<<<<<<< HEAD
                 (
                     ("addRaster", BaseIcons["addRast"].label),
                     BaseIcons["addRast"],
                     self.parent.OnSelectRaster,
                 ),
             )
+=======
+                ("addRaster", BaseIcons["addRast"].label),
+                BaseIcons["addRast"],
+                self.parent.OnSelectRaster,
+            ),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         )
 
 
@@ -137,6 +144,7 @@ class ExampleMiscToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
+<<<<<<< HEAD
                 (
                     ("help", icons["help"].label),
                     icons["help"],
@@ -148,4 +156,15 @@ class ExampleMiscToolbar(BaseToolbar):
                     self.parent.OnCloseWindow,
                 ),
             )
+=======
+                ("help", icons["help"].label),
+                icons["help"],
+                self.parent.OnHelp,
+            ),
+            (
+                ("quit", icons["quit"].label),
+                icons["quit"],
+                self.parent.OnCloseWindow,
+            ),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         )

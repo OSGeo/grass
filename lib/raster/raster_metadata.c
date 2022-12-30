@@ -3,10 +3,14 @@
 
    \brief Raster library - Functions to read and write raster "units",
 <<<<<<< HEAD
+<<<<<<< HEAD
    "semantic label" and "vertical datum" meta-data info
 =======
    "band reference" and "vertical datum" meta-data info
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+   "semantic label" and "vertical datum" meta-data info
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    (C) 2007-2009, 2021 by Hamish Bowman, Maris Nartiss,
    and the GRASS Development Team
@@ -87,6 +91,7 @@ void Rast_write_vdatum(const char *name, const char *str)
 
 /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
  * \brief Get a raster map semantic label metadata string
  *
  * Read raster semantic label metadata file and put string in to str
@@ -95,10 +100,16 @@ void Rast_write_vdatum(const char *name, const char *str)
  *
  * Read the raster's band reference metadata file and put string in str
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+ * \brief Get a raster map semantic label metadata string
+ *
+ * Read raster semantic label metadata file and put string in to str
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * \param name raster map name
  * \param mapset mapset name
  *
+<<<<<<< HEAD
 <<<<<<< HEAD
  * \return  string representing semantic label on success
  * \return  NULL on error
@@ -135,25 +146,52 @@ char *Rast_get_semantic_label_or_name(const char *name, const char *mapset)
  * with Rast_legal_semantic_label().
 =======
  * \return  string representing band reference on success
+=======
+ * \return  string representing semantic label on success
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * \return  NULL on error
  */
-char *Rast_read_bandref(const char *name, const char *mapset)
+char *Rast_read_semantic_label(const char *name, const char *mapset)
 {
-    return misc_read_line("bandref", name, mapset);
+    return misc_read_line("semantic_label", name, mapset);
 }
 
 /*!
- * \brief Write a string into a raster's band reference metadata file
+ * \brief Get a raster map semantic label or fall back to its name
+ *
+ * Use this function if a semantic label is needed but not mandated.
+ *
+ * \param name raster map name
+ * \param mapset mapset name
+ *
+ * \return  string representing semantic label or map name
+ */
+char *Rast_get_semantic_label_or_name(const char *name, const char *mapset)
+{
+    char *buff;
+
+    buff = Rast_read_semantic_label(name, mapset);
+    return buff ? buff : G_store(name);
+}
+
+/*!
+ * \brief Write a string into a rasters semantic label metadata file
  *
  * Raster map must exist in the current mapset.
  *
+<<<<<<< HEAD
  * It is up to the caller to validate band reference string in advance
  * with Rast_legal_bandref().
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+ * It is up to the caller to validate semantic label string in advance
+ * with Rast_legal_semantic_label().
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * \param name raster map name
  * \param str  string containing data to be written
  */
+<<<<<<< HEAD
 <<<<<<< HEAD
 void Rast_write_semantic_label(const char *name, const char *str)
 {
@@ -204,53 +242,60 @@ bool Rast_legal_semantic_label(const char *semantic_label)
     return true;
 =======
 void Rast_write_bandref(const char *name, const char *str)
+=======
+void Rast_write_semantic_label(const char *name, const char *str)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
-    misc_write_line("bandref", name, str);
+    misc_write_line("semantic_label", name, str);
 }
 
 /*!
- * \brief Check for legal band reference
+ * \brief Check for legal semantic label
  *
- * Legal band identifiers must be legal GRASS file names.
- * They are in format <shortcut>_<bandname>.
- * Band identifiers are capped in legth to GNAME_MAX.
+ * Legal semantic label must be a legal GRASS file name.
+ * Semantic labels are capped in legth to GNAME_MAX.
  *
- * This function will return -1 if provided band id is not considered
- * to be valid.
- * This function does not check if band id maps to any entry in band
- * metadata files as not all band id's have files with extra metadata.
+ * This function will return false if provided semantic label is not
+ * considered to be valid.
+ * This function does not check if semantic label maps to any entry in
+ * metadata files of semantic labels as not all semantic labels have
+ * files with extra metadata.
  *
  * The function prints a warning on error.
  *
- * \param bandref band reference to check
+ * \param semantic label reference to check
  *
- * \return 1 success
- * \return -1 failure
+ * \return true success
+ * \return false failure
  */
-int Rast_legal_bandref(const char *bandref)
+bool Rast_legal_semantic_label(const char *semantic_label)
 {
     const char *s;
 
-    if (strlen(bandref) >= GNAME_MAX) {
-        G_warning(_("Band reference is too long"));
-        return -1;
+    if (strlen(semantic_label) >= GNAME_MAX) {
+        G_warning(_("Semantic label is too long"));
+        return false;
     }
 
-    if (G_legal_filename(bandref) != 1)
-        return -1;
+    if (G_legal_filename(semantic_label) != 1)
+        return false;
 
-    s = bandref;
+    s = semantic_label;
     while (*s) {
-	if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
-	      (*s >= '0' && *s <= '9') || *s == '_'  || *s == '-')) {
-	    G_warning(_("Character '%c' not allowed in band reference."), *s);
-	    return -1;
-	}
-	s++;
+        if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
+              (*s >= '0' && *s <= '9') || *s == '_' || *s == '-')) {
+            G_warning(_("Character '%c' not allowed in a semantic label."), *s);
+            return false;
+        }
+        s++;
     }
 
+<<<<<<< HEAD
     return 1;
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    return true;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /*!
@@ -311,6 +356,7 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
     fp = G_fopen_new_misc("cell_misc", elem, name);
     if (!fp) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(
             _("Unable to create <%s> metadata file for raster map <%s@%s>"),
             elem, name, G_mapset());
@@ -321,16 +367,28 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
             elem, name, G_mapset());
     } /* This else block is unnecessary but helps to silence static code analysis tools */
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+        G_fatal_error(
+            _("Unable to create <%s> metadata file for raster map <%s@%s>"),
+            elem, name, G_mapset());
+    } /* This else block is unnecessary but helps to silence static code
+         analysis tools */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     else {
         fprintf(fp, "%s\n", str);
 
         if (fclose(fp) != 0)
+<<<<<<< HEAD
 <<<<<<< HEAD
             G_fatal_error(
                 _("Error closing <%s> metadata file for raster map <%s@%s>"),
 =======
             G_fatal_error(_("Error closing <%s> metadata file for raster map <%s@%s>"),
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+            G_fatal_error(
+                _("Error closing <%s> metadata file for raster map <%s@%s>"),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 elem, name, G_mapset());
     }
 }

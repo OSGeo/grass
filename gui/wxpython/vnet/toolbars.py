@@ -85,7 +85,11 @@ class PointListToolbar(BaseToolbar):
                     icons["pointDelete"],
                     self.OnDeletePoint,
                 ),
+<<<<<<< HEAD
                 (None,),  # ,
+=======
+                (None,)  # ,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 # ('isec_turn_edit', icons['isec_turn_edit'],
                 # self.dialog.OnDefIsecTurnCosts,
                 # wx.ITEM_CHECK),

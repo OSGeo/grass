@@ -358,13 +358,18 @@ class RasterDataset(AbstractMapDataset):
     def read_semantic_label_from_grass(self):
         """Read the semantic label of this map from the map metadata
         in the GRASS file system based spatial database and
+<<<<<<< HEAD
         set the internal semantic label that should be inserted/updated
+=======
+        set the internal semantic label that should be insert/updated
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         in the temporal database.
 
         :return: True if success, False if semantic labels could not be
                  read (due to an error or because not being present)
         """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         semantic_label = self.ciface.read_raster_semantic_label(
             self.get_name(), self.get_mapset()
@@ -378,6 +383,13 @@ class RasterDataset(AbstractMapDataset):
 
         if not band_ref:
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+        semantic_label = self.ciface.read_raster_semantic_label(
+            self.get_name(), self.get_mapset()
+        )
+
+        if not semantic_label:
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             return False
 
         self.metadata.set_semantic_label(semantic_label)
@@ -467,6 +479,7 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_number_of_cells(ncells)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             # Fill semantic label if defined
             semantic_label = self.ciface.read_raster_semantic_label(
                 self.get_name(), self.get_mapset()
@@ -481,6 +494,14 @@ class RasterDataset(AbstractMapDataset):
             if band_ref:
                 self.metadata.set_band_reference(band_ref)
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+            # Fill semantic label if defined
+            semantic_label = self.ciface.read_raster_semantic_label(
+                self.get_name(), self.get_mapset()
+            )
+            if semantic_label:
+                self.metadata.set_semantic_label(semantic_label)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             return True
 

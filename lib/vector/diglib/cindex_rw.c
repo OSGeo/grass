@@ -14,7 +14,10 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
 #include <inttypes.h>
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include <stdlib.h>
 #include <sys/types.h>
 #include <string.h>
@@ -67,7 +70,11 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
 
         ci = &(plus->cidx[i]);
 
+<<<<<<< HEAD
         G_debug(3, "cidx %d head offset: %" PRId64, i, dig_ftell(fp));
+=======
+        G_debug(3, "cidx %d head offset: %" PRI_OFF_T, i, dig_ftell(fp));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         /* Field number */
         if (0 >= dig__fwrite_port_I(&(ci->field), 1, fp))
@@ -102,10 +109,17 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
         /* Offset */
         if (0 >= dig__fwrite_port_O(&(ci->offset), 1, fp, plus->off_t_size))
             return (0);
+<<<<<<< HEAD
         G_debug(3, "cidx %d offset: %" PRId64, i, ci->offset);
     }
 
     G_debug(3, "cidx body offset %" PRId64, dig_ftell(fp));
+=======
+        G_debug(3, "cidx %d offset: %" PRI_OFF_T, i, ci->offset);
+    }
+
+    G_debug(3, "cidx body offset %" PRI_OFF_T, dig_ftell(fp));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     return (0);
 }
@@ -114,7 +128,11 @@ int dig_write_cidx_head(struct gvfile *fp, struct Plus_head *plus)
    \brief Read header of cidx file
 
    \param fp pointer to gvfile structure
+<<<<<<< HEAD
    \param plus pointer to Plus_head structure
+=======
+   \param plus pointer to Plus_head strcuture
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    \return 0 OK
    \return -1 error

@@ -2084,7 +2084,451 @@ msgstr ""
 #: ../lib/gis/compress.c:370 ../lib/gis/compress.c:395
 #: ../lib/gis/compress.c:439
 #, c-format
+<<<<<<< HEAD
 msgid "Unable to write %d bytes: %s"
+=======
+msgid "  %*s   default: %s\n"
+msgstr "  %*s   domyślnie: %s\n"
+
+#: ../lib/gis/parser_help.c:287
+#, c-format
+msgid "  %*s   options: "
+msgstr "  %*s   opcje: "
+
+#: ../lib/gis/proj3.c:124 ../lib/vector/Vlib/header.c:556
+msgid "Unknown projection"
+msgstr "Nieznane odwzorowanie"
+
+#: ../lib/gis/error.c:362
+msgid "WARNING: "
+msgstr "UWAGA: "
+
+#: ../lib/gis/list.c:83
+#, c-format
+msgid "no %s files available in current mapset\n"
+msgstr "brak plików %s w bieżącym mapsecie\n"
+
+#: ../lib/gis/list.c:86
+#, c-format
+msgid "no %s files available in mapset <%s>\n"
+msgstr "brak plików %s w mapsecie <%s>\n"
+
+#: ../lib/gis/list.c:132
+#, c-format
+msgid "%s files available in mapset <%s>:\n"
+msgstr "%s plików dostępnych w mapsecie <%s>:\n"
+
+#: ../lib/gis/list.c:204
+msgid "G_list: Unknown element type"
+msgstr "G_list: Nieznany typ elementu"
+
+#: ../lib/gis/alloc.c:44 ../lib/gis/alloc.c:86 ../lib/gis/alloc.c:132
+#, c-format
+msgid "Current region rows: %d, cols: %d"
+msgstr "Bieżący region ma %d wierszy, %d kolumn"
+
+#: ../lib/gis/alloc.c:47
+#, c-format
+msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr "G_malloc: nie można przydzielić %lu bajtów pamięci w %s:%d"
+
+#: ../lib/gis/alloc.c:89
+#, c-format
+msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
+msgstr "G_calloc: nie można przydzielić %lu * %lu bajtów pamięci w %s:%d"
+
+#: ../lib/gis/alloc.c:135
+#, c-format
+msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr "G_realloc: nie można przydzielić %lu bajtów pamięci w %s:%d"
+
+#: ../lib/gis/parser_json.c:373
+#, c-format
+msgid "Input string not understood: <%s>. Multiple '@' chars?"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:90
+#, c-format
+msgid "Unable to make mapset element %s (%s): %s"
+msgstr "Nie można utworzyć elementu mapsetu %s (%s): %s"
+
+#: ../lib/gis/mapset_msc.c:94
+#, c-format
+msgid "Unable to access mapset element %s (%s): %s"
+msgstr "Nie można uzyskać dostępu do elementu mapsetu %s (%s): %s"
+
+#: ../lib/gis/paths.c:201
+#, c-format
+msgid "Unable to open file <%s> for reading"
+msgstr "Nie można otworzyć pliku <%s> do odczytu"
+
+#: ../lib/gis/paths.c:217
+#, c-format
+msgid "Unable to fetch security info for <%s>"
+msgstr "Nie można zapisać historii dla <%s>"
+
+#: ../lib/gis/datum.c:160
+#, c-format
+msgid "unable to open datum table file: %s"
+msgstr "nie można otworzyć pliku tabeli datum: %s"
+
+#: ../lib/gis/datum.c:182
+#, c-format
+msgid "error in datum table file, line %d"
+msgstr "błąd w pliku tabeli datum, linia %d"
+
+#: ../lib/gis/aprintf.c:140
+#, c-format
+msgid "Failed to print %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:254
+#, c-format
+msgid "Failed to parse string specifier: %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:343
+#, c-format
+msgid "Format specifier exceeds the buffer size (%d)"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:531 ../lib/gis/make_loc.c:581
+#: ../lib/gis/key_value3.c:33
+#, c-format
+msgid "Unable to open output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:545 ../lib/gis/make_loc.c:595
+#: ../lib/gis/get_projinfo.c:196 ../lib/gis/get_projinfo.c:311
+#: ../lib/gis/key_value3.c:39
+#, c-format
+msgid "Error closing output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
+#, c-format
+msgid "Unable to open ellipsoid table file <%s>"
+msgstr "Nie można otworzyć pliku tabeli elipsoid <%s>"
+
+#: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
+#, c-format
+msgid "Invalid a: field '%s' in file %s in <%s>"
+msgstr "Błędne a: pole '%s' w pliku %s w <%s>"
+
+#: ../lib/gis/get_ellipse.c:356
+#, c-format
+msgid "Invalid ellipsoid '%s' in file %s in <%s>"
+msgstr "Błędna elipsoida '%s' w pliku %s w <%s>"
+
+#: ../lib/gis/get_ellipse.c:370
+#, c-format
+msgid "Invalid es: field '%s' in file %s in <%s>"
+msgstr "Błędne es: pole '%s' w pliku %s w <%s>"
+
+#: ../lib/gis/get_ellipse.c:383
+#, c-format
+msgid "No ellipsoid info given in file %s in <%s>"
+msgstr "Brak informacji o elipsoidzie w pliku %s w <%s>"
+
+#: ../lib/gis/view.c:176
+#, c-format
+msgid "Unable to open %s for writing"
+msgstr "Nie można otworzyć %s do zapisu"
+
+#: ../lib/gis/view.c:262 ../lib/gis/view.c:479
+#, c-format
+msgid "Unable to open %s for reading"
+msgstr "Nie można otworzyć %s do odczytu"
+
+#: ../lib/gis/view.c:465
+#, c-format
+msgid "GRASS window when view was saved:\n"
+msgstr "Region GRASS w momencie zapisu widoku:\n"
+
+#: ../lib/gis/view.c:545
+#, c-format
+msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgstr " Region zapisany w \"%s\" jest całkowicie poza bieżącym regionem GRASS."
+
+#: ../lib/gis/view.c:549
+#, c-format
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr " Tylko %d%% regionu zapisanego w \"%s\" pokrywa się z obecnym regionem GRASS."
+
+#: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
+#, c-format
+msgid "Unable to seek: %s"
+msgstr ""
+
+#: ../lib/gis/seek.c:58
+msgid "Seek offset out of range"
+msgstr "Przesunięcie przeszukiwania jest poza zakresem"
+
+#: ../lib/gis/done_msg.c:38
+#, c-format
+msgid "%s complete. %s"
+msgstr "%s wykonane. %s"
+
+#: ../lib/gis/proj2.c:63
+msgid "Latitude-Longitude"
+msgstr "szerokość-długość geograficzna"
+
+#: ../lib/gis/proj2.c:65
+msgid "Other Projection"
+msgstr "Inne odwzorowanie"
+
+#: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
+#, c-format
+msgid "Illegal n-s resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
+#, c-format
+msgid "Illegal number of rows: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
+#, c-format
+msgid "Illegal e-w resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
+#, c-format
+msgid "Illegal number of columns: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
+#, c-format
+msgid "North must be north of South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
+#, c-format
+msgid "North must be larger than South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
+#, c-format
+msgid "East must be larger than West, but %g (east) <= %g (west)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
+msgid "Invalid coordinates: negative number of columns"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
+msgid "Invalid coordinates: negative number of rows"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
+msgid "NS resolution has been changed"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:129 ../lib/gis/adj_cellhd.c:295
+msgid "EW resolution has been changed"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:132 ../lib/gis/adj_cellhd.c:298
+msgid "NS and EW resolutions are different"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:175
+#, c-format
+msgid "Illegal n-s resolution value for 3D: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:184
+#, c-format
+msgid "Illegal number of rows for 3D: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:193
+#, c-format
+msgid "Illegal e-w resolution value for 3D: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:202
+#, c-format
+msgid "Illegal number of columns for 3D: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:208
+#, c-format
+msgid "Illegal t-b resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:213
+#, c-format
+msgid "Illegal depths value: %d"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:236
+#, c-format
+msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:283
+msgid "Invalid coordinates: negative number of depths"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:317
+#, c-format
+msgid "East (%.15g) is not larger than West (%.15g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:352
+#, c-format
+msgid "Illegal latitude for North: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:354
+#, c-format
+msgid "Illegal latitude for South: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:360
+#, c-format
+msgid "Illegal longitude for West: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:364
+#, c-format
+msgid "Illegal longitude for East: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:392
+#, c-format
+msgid "NS extent does not match NS resolution: %g cells difference"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:401
+#, c-format
+msgid "%g cells missing to reach 90 degree north"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:404 ../lib/gis/adj_cellhd.c:418
+#: ../lib/gis/adj_cellhd.c:432
+#, c-format
+msgid "Subtle input data rounding error of north boundary (%g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:414
+#, c-format
+msgid "90 degree north is exceeded by %g cells"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:443
+msgid "Illegal latitude for North"
+msgstr "Niedozwolona szerokość geograficzna dla granicy północnej"
+
+#: ../lib/gis/adj_cellhd.c:451
+#, c-format
+msgid "%g cells missing to reach 90 degree south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:454 ../lib/gis/adj_cellhd.c:468
+#: ../lib/gis/adj_cellhd.c:482
+#, c-format
+msgid "Subtle input data rounding error of south boundary (%g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:464
+#, c-format
+msgid "90 degree south is exceeded by %g cells"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:493
+msgid "Illegal latitude for South"
+msgstr "Niedozwolona szerokość geograficzna dla granicy południowej"
+
+#: ../lib/gis/adj_cellhd.c:522
+#, c-format
+msgid "EW extent does not match EW resolution: %g cells difference"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:528
+#, c-format
+msgid "360 degree EW extent is exceeded by %g cells"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:534
+#, c-format
+msgid "%g cells missing to cover 360 degree EW extent"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:569
+msgid "Invalid NS resolution"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:574
+msgid "Invalid EW resolution"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:579
+msgid "Invalid North"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:584
+msgid "Invalid South"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:589
+msgid "Invalid West"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:594
+msgid "Invalid East"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:647
+#, c-format
+msgid "NS resolution rounded from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:680 ../lib/gis/adj_cellhd.c:735
+#, c-format
+msgid "North rounded from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:692
+#, c-format
+msgid "South adjusted from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:707 ../lib/gis/adj_cellhd.c:750
+#, c-format
+msgid "South rounded from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:719
+#, c-format
+msgid "North adjusted from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:773
+#, c-format
+msgid "EW resolution rounded from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:806 ../lib/gis/adj_cellhd.c:861
+#, c-format
+msgid "West rounded from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:818
+#, c-format
+msgid "East adjusted from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:833 ../lib/gis/adj_cellhd.c:876
+#, c-format
+msgid "East rounded from %s to %s"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:845
+#, c-format
+msgid "West adjusted from %s to %s"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/gis/get_projinfo.c:40 ../lib/gis/get_projinfo.c:69
@@ -3403,7 +3847,503 @@ msgid ""
 "rebuild GRASS GIS or untangle multiple installations."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/gis/gisinit.c:82
+=======
+#: ../lib/gmath/test/bench_solver_direct.c:34
+msgid ""
+"\n"
+"++ Running direct solver benchmark ++"
+msgstr ""
+"\n"
+"++ Trwa test wydajności metody bezpośredniej ++"
+
+#: ../lib/gmath/test/test_blas1.c:40
+msgid ""
+"\n"
+"++ Running blas level 1 unit tests ++"
+msgstr ""
+
+#: ../lib/gmath/test/test_blas1.c:47
+msgid ""
+"\n"
+"-- blas level 1 unit tests failure --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 1 nie powiodły się --"
+
+#: ../lib/gmath/test/test_blas1.c:49
+msgid ""
+"\n"
+"-- blas level 1 unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 1 powiodły się --"
+
+#: ../lib/gmath/test/test_main.c:47
+#: ../lib/vector/rtree/test_suite/test_main.c:44
+#: ../lib/db/dbmi_base/test/test_main.c:47
+msgid "Choose the unit tests to run"
+msgstr "Wybierz testy jednostkowe do wykonania"
+
+#: ../lib/gmath/test/test_main.c:54 ../lib/db/dbmi_base/test/test_main.c:54
+msgid "Choose the integration tests to run"
+msgstr "Wybierz testy integracji do wykonania"
+
+#: ../lib/gmath/test/test_main.c:61
+msgid "The size of the matrices and vectors for benchmarking"
+msgstr "Rozmiar macierzy i wektorów do testu wydajności"
+
+#: ../lib/gmath/test/test_main.c:68
+msgid "Choose solver benchmark"
+msgstr "Wybierz test wydajności metody"
+
+#: ../lib/gmath/test/test_main.c:75
+msgid "Choose blas benchmark"
+msgstr "Wybierz test wydajności blas"
+
+#: ../lib/gmath/test/test_main.c:79 ../lib/db/dbmi_base/test/test_main.c:58
+msgid "Run all unit tests"
+msgstr "Przeprowadź wszystkie testy"
+
+#: ../lib/gmath/test/test_main.c:83 ../lib/db/dbmi_base/test/test_main.c:62
+msgid "Run all integration tests"
+msgstr "Przeprowadź wszystkie testy integracji"
+
+#: ../lib/gmath/test/test_main.c:87 ../lib/db/dbmi_base/test/test_main.c:66
+msgid "Run all unit and integration tests"
+msgstr "Przeprowadź wszystkie testy jednostkowe i integracji"
+
+#: ../lib/gmath/test/test_main.c:106
+msgid "Performs benchmarks, unit and integration tests for the gmath library"
+msgstr "Wykonuje testy wydajności, jednostkowe i integracji dla biblioteki gmath"
+
+#: ../lib/gmath/test/bench_solver_krylov.c:34
+msgid ""
+"\n"
+"++ Running krylov solver benchmark ++"
+msgstr ""
+"\n"
+"++ Trwają testy wydajności metody Krylowa ++"
+
+#: ../lib/gmath/test/bench_blas2.c:35
+msgid ""
+"\n"
+"++ Running blas level 2 benchmark ++"
+msgstr ""
+"\n"
+"++ Trwa test wydajności blas poziomu 2 ++"
+
+#: ../lib/gmath/test/test_blas2.c:38
+msgid ""
+"\n"
+"++ Running blas level 2 unit tests ++"
+msgstr ""
+
+#: ../lib/gmath/test/test_blas2.c:44
+msgid ""
+"\n"
+"-- blas level 2 unit tests failure --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 2 nie powiodły się --"
+
+#: ../lib/gmath/test/test_blas2.c:46
+msgid ""
+"\n"
+"-- blas level 2 unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 2 powiodły się --"
+
+#: ../lib/gmath/test/bench_blas3.c:34
+msgid ""
+"\n"
+"++ Running blas level 3 benchmark ++"
+msgstr ""
+"\n"
+"++ Trwa test wydajności blas poziomu 3 ++"
+
+#: ../lib/gmath/test/test_matrix_conversion.c:37
+msgid ""
+"\n"
+"++ Running matrix conversion unit tests ++"
+msgstr ""
+
+#: ../lib/gmath/test/test_matrix_conversion.c:42
+msgid ""
+"\n"
+"-- Matrix conversion unit tests failure --"
+msgstr ""
+
+#: ../lib/gmath/test/test_matrix_conversion.c:44
+msgid ""
+"\n"
+"-- Matrix conversion unit tests finished successfully --"
+msgstr ""
+
+#: ../lib/gmath/test/test_blas3.c:38
+msgid ""
+"\n"
+"++ Running blas level 3 unit tests ++"
+msgstr ""
+
+#: ../lib/gmath/test/test_blas3.c:44
+msgid ""
+"\n"
+"-- blas level 3 unit tests failure --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 3 nie powiodły się --"
+
+#: ../lib/gmath/test/test_blas3.c:46
+msgid ""
+"\n"
+"-- blas level 3 unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe blas poziomu 3 powiodły się --"
+
+#: ../lib/gmath/test/test_solvers.c:37
+msgid ""
+"\n"
+"++ Running solver unit tests ++"
+msgstr ""
+"\n"
+"++ Trwają testy jednostkowe metod ++"
+
+#: ../lib/gmath/test/test_solvers.c:42
+msgid ""
+"\n"
+"-- Solver unit tests failure --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe metod nie powiodły się --"
+
+#: ../lib/gmath/test/test_solvers.c:44
+msgid ""
+"\n"
+"-- Solver unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Testy jednostkowe metod powiodły się --"
+
+#: ../lib/manage/do_remove.c:42
+#, c-format
+msgid "Removing %s <%s>"
+msgstr "Usuwanie <%s@%s>"
+
+#: ../lib/manage/do_remove.c:57 ../lib/manage/do_rename.c:54
+#: ../lib/vector/Vlib/map.c:264 ../lib/vector/Vlib/open.c:235
+#: ../lib/vector/Vlib/legal_vname.c:141 ../lib/vector/Vlib/legal_vname.c:144
+#: ../lib/ogsf/gv3.c:60 ../lib/ogsf/gv3.c:333 ../lib/ogsf/gp3.c:56
+#: ../lib/ogsf/gp3.c:191
+#, c-format
+msgid "Vector map <%s> not found"
+msgstr "Nie znaleziono mapy wektorowej <%s>"
+
+#: ../lib/manage/do_remove.c:65
+msgid "Unable to delete vector map"
+msgstr ""
+
+#: ../lib/manage/do_remove.c:78 ../lib/manage/do_rename.c:76
+#: ../lib/gpde/n_arrays_io.c:273 ../lib/ogsf/gvl3.c:40
+#: ../lib/ogsf/gvl_file.c:427
+#, c-format
+msgid "3D raster map <%s> not found"
+msgstr "Nie znaleziono mapy rastrowej 3D <%s>"
+
+#: ../lib/manage/do_remove.c:85
+#, c-format
+msgid "Unable to remove %s element"
+msgstr ""
+
+#: ../lib/manage/do_remove.c:89 ../lib/manage/do_remove.c:109
+#: ../lib/manage/do_rename.c:87 ../lib/manage/do_rename.c:107
+#: ../lib/manage/do_copy.c:61
+#, c-format
+msgid "%s is missing"
+msgstr "%s brakuje"
+
+#: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
+#, c-format
+msgid "%s removed"
+msgstr "%s usunięte"
+
+#: ../lib/manage/do_remove.c:105
+#, c-format
+msgid "Unable to remove %s"
+msgstr "Nie można usunąć %s"
+
+#: ../lib/manage/do_remove.c:121
+#, c-format
+msgid "<%s> nothing removed"
+msgstr "<%s> niczego nie usunięto"
+
+#: ../lib/manage/do_rename.c:42
+#, c-format
+msgid "Rename %s <%s> to <%s>"
+msgstr "Zmień nazwę %s <%s> na <%s>"
+
+#: ../lib/manage/do_rename.c:62
+#, c-format
+msgid "Unable to rename vector map <%s> to <%s>"
+msgstr "Nie można zmienić nazwy mapy wektorowej <%s> na <%s>"
+
+#: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
+#, c-format
+msgid "Unable to rename %s"
+msgstr "Nie można zmienić nazwy %s"
+
+#: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
+#, c-format
+msgid "%s renamed"
+msgstr "%s zmieniono nazwę"
+
+#: ../lib/manage/do_rename.c:119
+#, c-format
+msgid "<%s> nothing renamed"
+msgstr "<%s>  nie zmieniono nazwy"
+
+#: ../lib/manage/option.c:47
+#, c-format
+msgid "%s to be %s"
+msgstr "%s na %s"
+
+#: ../lib/manage/option.c:51
+msgid "Raster"
+msgstr "Raster"
+
+#: ../lib/manage/option.c:53
+msgid "Vector"
+msgstr "Wektor"
+
+#: ../lib/manage/option.c:55
+msgid "Region"
+msgstr "Region"
+
+#: ../lib/manage/option.c:57
+msgid "Group"
+msgstr "Grupa"
+
+#: ../lib/manage/read_list.c:73
+#, c-format
+msgid "Unable to open data base element list '%s'"
+msgstr ""
+
+#: ../lib/manage/read_list.c:134
+#, c-format
+msgid "Format error: file ('%s') line (%d) - %s"
+msgstr ""
+
+#: ../lib/manage/do_copy.c:43
+#, c-format
+msgid "Copying %s <%s> to current mapset as <%s>"
+msgstr ""
+
+#: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
+#, c-format
+msgid "Unable to copy <%s> to current mapset as <%s>"
+msgstr "Nie można skopiować <%s> do bieżącego mapsetu jako <%s>"
+
+#: ../lib/manage/do_copy.c:72
+#, c-format
+msgid "%s copied"
+msgstr "%s skopiowane"
+
+#: ../lib/manage/do_list.c:30
+#, c-format
+msgid "%s: invalid index %d"
+msgstr ""
+
+#: ../lib/vector/diglib/file.c:159
+msgid "Writing to file loaded to memory not supported"
+msgstr "Zapis do pliku załadowanego do pamięci nie jest obsługiwany"
+
+#: ../lib/vector/diglib/file.c:197
+msgid "Unable to load file to memory, file not open"
+msgstr "Nie można wczytać pliku do pamięci; plik nie został otwarty"
+
+#: ../lib/vector/diglib/file.c:212
+msgid "Vector memory mode not supported, using 'AUTO'"
+msgstr "Tryb wektorów w pamięci nie jest obsługiwany; użyto 'AUTO'"
+
+#: ../lib/vector/diglib/plus_struct.c:523
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this topology format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#: ../lib/vector/diglib/plus_struct.c:529
+#, c-format
+msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+
+#: ../lib/vector/diglib/plus_struct.c:539
+#, c-format
+msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology using v.build or v.build.all module."
+msgstr ""
+
+#: ../lib/vector/diglib/plus_struct.c:563 ../lib/vector/diglib/portable.c:208
+#: ../lib/vector/diglib/portable.c:241 ../lib/vector/diglib/portable.c:683
+msgid "Vector exceeds supported file size limit"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_node.c:213
+#, c-format
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgstr "Próba odczytu kąta linii nie połączonej z węzłem: węzeł %d, linia %d"
+
+#: ../lib/vector/diglib/port_init.c:158
+#, c-format
+msgid "Unable to find '%x' in %s"
+msgstr ""
+
+#: ../lib/vector/diglib/frmt.c:45 ../lib/vector/diglib/frmt.c:70
+#, c-format
+msgid "Vector format not recognized: %s"
+msgstr ""
+
+#: ../lib/vector/diglib/frmt.c:79 ../lib/vector/diglib/frmt.c:88
+#, c-format
+msgid "Vector format '%s' not supported"
+msgstr ""
+
+#: ../lib/vector/diglib/frmt.c:97
+#, c-format
+msgid "Format definition is not correct: %s"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:218 ../lib/vector/diglib/plus_area.c:718
+#, c-format
+msgid "Line %d already has area/isle %d to left"
+msgstr "Linia %d już ma obszar/wyspę %d po lewej"
+
+#: ../lib/vector/diglib/plus_area.c:228 ../lib/vector/diglib/plus_area.c:726
+#, c-format
+msgid "Line %d already has area/isle %d to right"
+msgstr "Linia %d już ma obszar/wyspę %d po prawej"
+
+#: ../lib/vector/diglib/plus_area.c:282
+msgid "Isle already registered in area"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:316
+msgid "Attempt to delete isle from dead area"
+msgstr "Próba usunięcia wyspy z martwego obszaru"
+
+#: ../lib/vector/diglib/plus_area.c:324
+#, c-format
+msgid "Attempt to delete not registered isle %d from area %d"
+msgstr "Próba usunięcia nie zarejestrowanej wyspy %d z obszaru %d"
+
+#: ../lib/vector/diglib/plus_area.c:371
+msgid "Attempt to delete dead area"
+msgstr "Próba usunięcia martwego obszaru"
+
+#: ../lib/vector/diglib/plus_area.c:410
+#, c-format
+msgid "Dead centroid %d registered for area (bug in the vector library)"
+msgstr "Martwy centroid %d zarejestrowany dla obszaru (bug w bibliotece vector)"
+
+#: ../lib/vector/diglib/plus_area.c:433
+#, c-format
+msgid "Attempt to delete area %d info from dead isle %d"
+msgstr "Próba usunięcia informacji o obszarze %d z martwej wyspy %d"
+
+#: ../lib/vector/diglib/plus_area.c:784
+#, c-format
+msgid "Attempt to delete isle %d info from dead area %d"
+msgstr "Próba usunięcia informacji o wyspie %d z martwego obszaru %d"
+
+#: ../lib/vector/diglib/cindex_rw.c:156
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this category index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:99 ../lib/vector/diglib/spindex_rw.c:107
+msgid "Topology file must be written before spatial index file"
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:303
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:309
+#, c-format
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex_rw.c:318
+#, c-format
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
+msgstr ""
+
+#: ../lib/vector/diglib/spindex.c:450
+#, c-format
+msgid "Unable to delete node %d from spatial index"
+msgstr "Nie można usunąć węzła %d z indeksu przestrzennego"
+
+#: ../lib/vector/diglib/spindex.c:493
+#, c-format
+msgid "Unable to delete line %d from spatial index"
+msgstr "Nie można usunąć linii %d z indeksu przestrzennego"
+
+#: ../lib/vector/diglib/spindex.c:529
+msgid "Attempt to delete sidx for dead area"
+msgstr "Próba usunięcia sidx dla martwego obszaru"
+
+#: ../lib/vector/diglib/spindex.c:546
+#, c-format
+msgid "Unable to delete area %d from spatial index"
+msgstr "Nie można usunąć obszaru %d z indeksu przestrzennego"
+
+#: ../lib/vector/diglib/spindex.c:595
+#, c-format
+msgid "Unable to delete isle %d from spatial index"
+msgstr "Nie można usunąć wyspy %d z indeksu przestrzennego"
+
+#: ../lib/vector/diglib/test.c:58
+msgid "Unable to open test.tmp file"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:75
+#, c-format
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:89
+#, c-format
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:104
+#, c-format
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:119
+#, c-format
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:134
+#, c-format
+msgid "Error in read/write portable int, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:150
+#, c-format
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#: ../lib/vector/diglib/test.c:165
+#, c-format
+msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_line.c:262 ../lib/vector/diglib/plus_line.c:302
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "MAPSET %s - dostęp zabroniony"
@@ -3601,8 +4541,23 @@ msgstr "Nie można otworzyć pliku GDAL"
 
 #: ../lib/raster/gdal.c:302 ../lib/raster/open.c:615
 #, c-format
+<<<<<<< HEAD
 msgid "Invalid map type <%d>"
 msgstr "Niedozwolony typ mapy <%d>"
+=======
+msgid "Unable to rewrite feature %d"
+msgstr "Nie można ponownie zapisać obiektu %d"
+
+#: ../lib/vector/Vlib/write_pg.c:322 ../lib/vector/Vlib/write_pg.c:812
+#: ../lib/vector/Vlib/write_pg.c:1214 ../lib/vector/Vlib/write_pg.c:1372
+#: ../lib/vector/Vlib/simple_features.c:324
+msgid "No connection defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
+msgid "Invalid offset (%"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/raster/gdal.c:308
 #, c-format
@@ -4067,8 +5022,24 @@ msgstr ""
 msgid "Unable to write range file for <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/raster/range.c:465 ../lib/raster/range.c:479
 #: ../lib/raster/range.c:497 ../lib/raster/range.c:502
+=======
+#: ../lib/vector/Vlib/write.c:234
+msgid "Unable to rewrite feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:266
+msgid "Unable to delete feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:299
+msgid "Unable to restore feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:308
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to write stats file for <%s>"
 msgstr ""
@@ -8091,6 +9062,7 @@ msgstr ""
 msgid "Corrupted data"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/read_pg.c:1272
 #, c-format
 msgid "Unable to parse '%s'"
@@ -8348,6 +9320,12 @@ msgid ""
 msgstr ""
 "Nie znaleziono wpisu bazy danych dla węzła %d (cat = %d), koszt ustawiono na "
 "0"
+=======
+#: ../lib/raster/get_cellhd.c:70
+#, c-format
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/vector/Vlib/net_build.c:467
 msgid "Cannot add network arc representing turn."
@@ -10978,56 +11956,64 @@ msgstr "[%s]: Nie ma takiego koloru"
 #~ msgid "Unable to seek"
 #~ msgstr "Nie można przeszukać"
 
-#~ msgid "which is missing."
-#~ msgstr ", której brak."
+msgid "which is missing."
+msgstr ", której brak."
 
-#~ msgid "whose header file can't be opened."
-#~ msgstr ", której pliku nagłówkowego nie można otworzyć."
+msgid "whose header file can't be opened."
+msgstr ", której pliku nagłówkowego nie można otworzyć."
 
-#~ msgid "Illegal row value"
-#~ msgstr "Niedozwolona wartość wiersza"
+msgid "Illegal row value"
+msgstr "Niedozwolona wartość wiersza"
 
-#~ msgid "Illegal col value"
-#~ msgstr "Niedozwolona wartość kolumny"
+msgid "Illegal col value"
+msgstr "Niedozwolona wartość kolumny"
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "Niedozwolona wartość rozdzielczości n-s3"
+msgid "Illegal n-s3 resolution value"
+msgstr "Niedozwolona wartość rozdzielczości n-s3"
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "Niedozwolona wartość row3"
+msgid "Illegal row3 value"
+msgstr "Niedozwolona wartość row3"
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "Niedozwolona wartość rozdzielczości e-w3"
+msgid "Illegal e-w3 resolution value"
+msgstr "Niedozwolona wartość rozdzielczości e-w3"
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "Niedozwolona wartość col3"
+msgid "Illegal col3 value"
+msgstr "Niedozwolona wartość col3"
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "Niedozwolona wartość rozdzielczości e-w"
+msgid "Illegal e-w resolution value"
+msgstr "Niedozwolona wartość rozdzielczości e-w"
 
-#~ msgid "North must be north of South"
-#~ msgstr "Północ musi być na północ od południa"
+msgid "North must be north of South"
+msgstr "Północ musi być na północ od południa"
 
+<<<<<<< HEAD
 #~ msgid "East must be larger than West"
 #~ msgstr "Wartość dla wschodu musi być większa niż dla zachodu"
+=======
+msgid "North must be larger than South"
+msgstr "Wartość dla północy musi być większa niż dla południa"
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "Błędne współrzędne"
+msgid "East must be larger than West"
+msgstr "Wartość dla wschodu musi być większa niż dla zachodu"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "Niedozwolona wartość rozdzielczości n-s"
+msgid "Invalid coordinates"
+msgstr "Błędne współrzędne"
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "Niedozwolona wartość rozdzielczości t-b3"
+msgid "Illegal n-s resolution value"
+msgstr "Niedozwolona wartość rozdzielczości n-s"
 
-#~ msgid "Illegal depths value"
-#~ msgstr "Niedozwolona wartość głębi"
+msgid "Illegal t-b3 resolution value"
+msgstr "Niedozwolona wartość rozdzielczości t-b3"
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "Wartość górnej granicy musi być większa od dolnej"
+msgid "Illegal depths value"
+msgstr "Niedozwolona wartość głębi"
 
-#~ msgid "Unable to open header file for raster map <%s@%s>"
-#~ msgstr "Nie można odczytać pliku nagłówkowego mapy rastrowej <%s@%s>"
+msgid "Top must be larger than Bottom"
+msgstr "Wartość górnej granicy musi być większa od dolnej"
 
-#~ msgid "Copy %s <%s> to current mapset as <%s>"
-#~ msgstr "Kopiuj %s <%s> do bieżącego mapsetu jako <%s>"
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "Nie można odczytać pliku nagłówkowego mapy rastrowej <%s@%s>"
+
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Kopiuj %s <%s> do bieżącego mapsetu jako <%s>"

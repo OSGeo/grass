@@ -26,7 +26,11 @@
 
 /* prototypes */
 static int test_table(void);
+<<<<<<< HEAD
 static dbColumn *create_column(const char *name, const char *description,
+=======
+static dbColumn *create_column(const char *name, const char *desctiption,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                int sqltype);
 
 /* ************************************************************************* */
@@ -174,7 +178,11 @@ dbColumn *create_column(const char *name, const char *description, int sqltype)
     db_set_value_double(&column->defaultValue, 0.5);
     db_set_value_double(&column->value, 10.5);
 
+<<<<<<< HEAD
     db_set_column_description(column, description);
+=======
+    db_set_column_description(column, desctiption);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     db_set_column_host_type(column, 1);
     db_set_column_length(column, 8);
     db_set_column_name(column, name);

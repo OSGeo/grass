@@ -5,6 +5,7 @@ between two sets of nodes.
 
 <h2>NOTES</h2>
 
+<<<<<<< HEAD
 The two sets of nodes are called <em>sources</em> and <em>sink</em>
 and <em>v.net.flow</em> finds the maximum flow from the former to
 the latter ones. Edge capacities can be specified by <b>arc_column</b>
@@ -21,6 +22,24 @@ the flow information is linked to the <b>output</b> map. The table
 consists of two columns: <em>cat</em> and <em>flow</em> and stores
 the flow along each line. Negative flow means that "water" is
 flowing in the backward direction. <b>Cut</b> map contains the edges
+=======
+The two sets of nodes are called <em>sources</em> and <em>sink</em> 
+and <em>v.net.flow</em> finds the maximum flow from the former to 
+the latter ones. Edge capacities can be specified by <b>arc_column</b> 
+for forward direction and <b>arc_backward_column</b> for backward direction. If 
+the latter parameter is omitted then the same capacity is used in 
+either direction. The sets are given by the respective <b>cats</b>, 
+<b>layer</b> and <b>where</b> parameters. Maximum flow corresponds 
+to the maximum amount of water possibly flowing through the network 
+preserving the capacity constraints and minimum cut to the set of edges 
+of minimum total capacity completely separating sources from sinks. 
+The cut produced by this module corresponds to the first fully 
+saturated edges from sources to sinks. An attribute table containing 
+the flow information is linked to the <b>output</b> map. The table 
+consists of two columns: <em>cat</em> and <em>flow</em> and stores 
+the flow along each line. Negative flow means that "water" is 
+flowing in the backward direction. <b>Cut</b> map contains the edges 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 in the minimum cut.
 <br>
 A famous <a href="http://en.wikipedia.org/wiki/Max-flow_min-cut_theorem">result</a>

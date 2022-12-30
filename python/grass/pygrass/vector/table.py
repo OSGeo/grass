@@ -28,6 +28,14 @@ from grass.script.core import warning
 
 from grass.pygrass.vector import sql
 from grass.lib.ctypes_preamble import ReturnString
+<<<<<<< HEAD
+=======
+
+
+if sys.version_info.major >= 3:
+    long = int
+    unicode = str
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 # For test purposes

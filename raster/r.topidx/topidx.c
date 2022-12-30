@@ -41,7 +41,11 @@ void calculate_atanb(void)
     G_important_message(_("Calculating..."));
 
     nsink = 0;
+<<<<<<< HEAD
     for (; natb < ncells;) {
+=======
+    for (iter = 1; natb < ncells; iter++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         /*
            for(i=0;i<80;i++)
            fprintf(stderr,"\b");

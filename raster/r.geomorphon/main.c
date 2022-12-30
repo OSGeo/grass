@@ -105,6 +105,7 @@ int main(int argc, char **argv)
 
     struct GModule *module;
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct Option *opt_input, *opt_output[o_size], *par_search_radius,
         *par_skip_radius, *par_flat_threshold, *par_flat_distance,
         *par_comparison, *par_coords, *par_profiledata, *par_profileformat;
@@ -124,6 +125,11 @@ int main(int argc, char **argv)
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+    struct Option *opt_input, *opt_output[o_size], *par_search_radius,
+        *par_skip_radius, *par_flat_threshold, *par_flat_distance,
+        *par_comparison, *par_coords, *par_profiledata, *par_profileformat;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     struct Flag *flag_units, *flag_extended;
 
     struct History history;
@@ -368,11 +374,15 @@ int main(int argc, char **argv)
             if (window_square > WINDOW_THRESHOLD &&
                 window_square / search_square > 10)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_warning(
                     _("There may be a notable processing delay because the "
                       "computational region is %lu times larger than "
                       "necessary"),
                     window_square / search_square);
+<<<<<<< HEAD
 =======
                 G_warning(_("There may be a notable processing delay because the "
                            "computational region is %lu times larger than necessary"),
@@ -381,6 +391,8 @@ int main(int argc, char **argv)
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
 

@@ -26,7 +26,11 @@ typedef struct {
     int lineoffset;
     int numpolygons; /* The number of polygons */
     int polygonoffset;
+<<<<<<< HEAD
     int generatedata; /* If 0 the category data is not complete */
+=======
+    int generatedata; /* If 0 the categorie data is not complete */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 } VTKTypeInfo;
 
 /* essential vtk file information */

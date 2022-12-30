@@ -99,6 +99,7 @@ int load_rasters(const struct GParams *params, nv_data *data)
 
     for (i = 0; i < nsurfs; i++) {
         id = surf_list[i];
+<<<<<<< HEAD
         /* color */
         /* check for color map */
         if (i < ncolor_map && strcmp(params->color_map->answers[i], "")) {
@@ -107,6 +108,16 @@ int load_rasters(const struct GParams *params, nv_data *data)
                 G_fatal_error(_("Raster map <%s> not found"),
                               params->color_map->answers[i]);
             }
+=======
+        mapset = G_find_raster2(params->color_map->answers[i], "");
+        if (mapset == NULL) {
+            G_fatal_error(_("Raster map <%s> not found"),
+                          params->color_map->answers[i]);
+        }
+        /* color */
+        /* check for color map */
+        if (i < ncolor_map && strcmp(params->color_map->answers[i], "")) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             Nviz_set_attr(
                 id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
                 G_fully_qualified_name(params->color_map->answers[i], mapset),

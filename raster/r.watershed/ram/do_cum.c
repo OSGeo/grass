@@ -105,11 +105,18 @@ int do_cum(void)
     int r_nbr, c_nbr, ct_dir, np_side, edge;
     CELL is_swale, aspect, ele_nbr;
     DCELL value, valued;
+<<<<<<< HEAD
     size_t killer;
     int threshold;
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
     size_t this_index, down_index, nbr_index;
+=======
+    int killer, threshold;
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
+    int this_index, down_index, nbr_index;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     double *dist_to_nbr, *contour;
     double cell_size;
 
@@ -277,7 +284,11 @@ int do_cum_mfd(void)
     int workedon, edge, flat;
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
+<<<<<<< HEAD
     size_t this_index, down_index, nbr_index;
+=======
+    int this_index, down_index, nbr_index;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* drainage directions bitmask encoded CW from North
      * drainage directions are set for each current cell
@@ -501,9 +512,15 @@ int do_cum_mfd(void)
     }
     if (workedon)
         G_warning(n_("MFD: A * path already processed when distributing flow: "
+<<<<<<< HEAD
                      "%d of %zu cell",
                      "MFD: A * path already processed when distributing flow: "
                      "%d of %zu cells",
+=======
+                     "%d of %d cell",
+                     "MFD: A * path already processed when distributing flow: "
+                     "%d of %d cells",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                      do_points),
                   workedon, do_points);
 
@@ -602,12 +619,19 @@ int do_cum_mfd(void)
                     aspect = -aspect;
                 asp[this_index] = aspect;
             }
+<<<<<<< HEAD
             /*
             if (mfd_cells == 1)
                 mfdir = (1 << nextmfd[max_side]);
             */
 
             is_swale = FLAG_GET(swale, r, c);
+=======
+            if (mfd_cells == 1)
+                /* mfdir = (1 << nextmfd[max_side]); */
+
+                is_swale = FLAG_GET(swale, r, c);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             /* start new stream */
             value = ABS(value) + 0.5;
             if (!is_swale && (int)value >= threshold && stream_cells < 1 &&

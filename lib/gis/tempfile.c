@@ -172,10 +172,14 @@ void G__temp_element(char *element, int tmp)
     else
         G_make_mapset_object_group_tmp(element);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
     
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }
 

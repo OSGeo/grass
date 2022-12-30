@@ -10,7 +10,12 @@
  *
  ******************************************************************************
  * Copyright (c) 1999, Frank Warmerdam
+<<<<<<< HEAD
  * Copyright (c) 2012-2016, Even Rouault <even dot rouault at spatialys.com>
+=======
+ * Copyright (c) 2012-2013, Even Rouault <even dot rouault at mines-paris dot
+ *org>
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * This software is available under the following "MIT Style" license,
  * or at the option of the licensee under the LGPL (see COPYING).  This
@@ -37,6 +42,112 @@
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
  *
+<<<<<<< HEAD
+=======
+ * $Log: shapefil.h,v $
+ * Revision 1.52  2011-12-11 22:26:46  fwarmerdam
+ * upgrade .qix access code to use SAHooks (gdal #3365)
+ *
+ * Revision 1.51  2011-07-24 05:59:25  fwarmerdam
+ * minimize use of CPLError in favor of SAHooks.Error()
+ *
+ * Revision 1.50  2011-05-13 17:35:17  fwarmerdam
+ * added DBFReorderFields() and DBFAlterFields() functions (from Even)
+ *
+ * Revision 1.49  2011-04-16 14:38:21  fwarmerdam
+ * avoid warnings with gcc on SHP_CVSID
+ *
+ * Revision 1.48  2010-08-27 23:42:52  fwarmerdam
+ * add SHPAPI_CALL attribute in code
+ *
+ * Revision 1.47  2010-01-28 11:34:34  fwarmerdam
+ * handle the shape file length limits more gracefully (#3236)
+ *
+ * Revision 1.46  2008-11-12 14:28:15  fwarmerdam
+ * DBFCreateField() now works on files with records
+ *
+ * Revision 1.45  2008/11/11 17:47:10  fwarmerdam
+ * added DBFDeleteField() function
+ *
+ * Revision 1.44  2008/01/16 20:05:19  bram
+ * Add file hooks that accept UTF-8 encoded filenames on some platforms.  Use
+ *SASetupUtf8Hooks tosetup the hooks and check SHPAPI_UTF8_HOOKS for its
+ *availability.  Currently, this is only available on the Windows platform that
+ *decodes the UTF-8 filenames to wide character strings and feeds them to
+ *_wfopen and _wremove.
+ *
+ * Revision 1.43  2008/01/10 16:35:30  fwarmerdam
+ * avoid _ prefix on #defined symbols (bug 1840)
+ *
+ * Revision 1.42  2007/12/18 18:28:14  bram
+ * - create hook for client specific atof (bugzilla ticket 1615)
+ * - check for NULL handle before closing cpCPG file, and close after reading.
+ *
+ * Revision 1.41  2007/12/15 20:25:32  bram
+ * dbfopen.c now reads the Code Page information from the DBF file, and exports
+ * this information as a string through the DBFGetCodePage function.  This is
+ * either the number from the LDID header field ("LDID/<number>") or as the
+ * content of an accompanying .CPG file.  When creating a DBF file, the code can
+ * be set using DBFCreateEx.
+ *
+ * Revision 1.40  2007/12/06 07:00:25  fwarmerdam
+ * dbfopen now using SAHooks for fileio
+ *
+ * Revision 1.39  2007/12/04 20:37:56  fwarmerdam
+ * preliminary implementation of hooks api for io and errors
+ *
+ * Revision 1.38  2007/11/21 22:39:56  fwarmerdam
+ * close shx file in readonly mode (GDAL #1956)
+ *
+ * Revision 1.37  2007/10/27 03:31:14  fwarmerdam
+ * limit default depth of tree to 12 levels (gdal ticket #1594)
+ *
+ * Revision 1.36  2007/09/10 23:33:15  fwarmerdam
+ * Upstreamed support for visibility flag in SHPAPI_CALL for the needs
+ * of GDAL (gdal ticket #1810).
+ *
+ * Revision 1.35  2007/09/03 19:48:10  fwarmerdam
+ * move DBFReadAttribute() static dDoubleField into dbfinfo
+ *
+ * Revision 1.34  2006/06/17 15:33:32  fwarmerdam
+ * added pszWorkField - bug 1202 (rso)
+ *
+ * Revision 1.33  2006/02/15 01:14:30  fwarmerdam
+ * added DBFAddNativeFieldType
+ *
+ * Revision 1.32  2006/01/26 15:07:32  fwarmerdam
+ * add bMeasureIsUsed flag from Craig Bruce: Bug 1249
+ *
+ * Revision 1.31  2006/01/05 01:27:27  fwarmerdam
+ * added dbf deletion mark/fetch
+ *
+ * Revision 1.30  2005/01/03 22:30:13  fwarmerdam
+ * added support for saved quadtrees
+ *
+ * Revision 1.29  2004/09/26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
+ * Revision 1.28  2003/12/29 06:02:18  fwarmerdam
+ * added cpl_error.h option
+ *
+ * Revision 1.27  2003/04/21 18:30:37  warmerda
+ * added header write/update public methods
+ *
+ * Revision 1.26  2002/09/29 00:00:08  warmerda
+ * added FTLogical and logical attribute read/write calls
+ *
+ * Revision 1.25  2002/05/07 13:46:30  warmerda
+ * added DBFWriteAttributeDirectly().
+ *
+ * Revision 1.24  2002/04/10 16:59:54  warmerda
+ * added SHPRewindObject
+ *
+ * Revision 1.23  2002/01/15 14:36:07  warmerda
+ * updated email address
+ *
+ * Revision 1.22  2002/01/15 14:32:00  warmerda
+ * try to improve SHPAPI_CALL docs
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  */
 
 #include <stdio.h>
@@ -51,6 +162,7 @@ extern "C" {
 
 /************************************************************************/
 /*                        Configuration options.                        */
+
 /************************************************************************/
 
 /* -------------------------------------------------------------------- */
@@ -172,6 +284,7 @@ void SHPAPI_CALL SASetupUtf8Hooks(SAHooks *psHooks);
 
 /************************************************************************/
 /*                             SHP Support.                             */
+
 /************************************************************************/
 typedef struct tagSHPObject SHPObject;
 
@@ -306,11 +419,16 @@ int SHPAPI_CALL SHPWriteObject(SHPHandle hSHP, int iShape, SHPObject *psObject);
 void SHPAPI_CALL SHPDestroyObject(SHPObject *psObject);
 void SHPAPI_CALL SHPComputeExtents(SHPObject *psObject);
 SHPObject SHPAPI_CALL1(*)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     SHPCreateObject(int nSHPType, int nShapeId, int nParts,
                     const int *panPartStart, const int *panPartType,
                     int nVertices, const double *padfX, const double *padfY,
                     const double *padfZ, const double *padfM);
 SHPObject SHPAPI_CALL1(*)
+<<<<<<< HEAD
     SHPCreateSimpleObject(int nSHPType, int nVertices, const double *padfX,
                           const double *padfY, const double *padfZ);
 
@@ -319,6 +437,17 @@ int SHPAPI_CALL SHPRewindObject(SHPHandle hSHP, SHPObject *psObject);
 void SHPAPI_CALL SHPClose(SHPHandle hSHP);
 void SHPAPI_CALL SHPWriteHeader(SHPHandle hSHP);
 
+=======
+
+    SHPCreateSimpleObject(int nSHPType, int nVertices, const double *padfX,
+                          const double *padfY, const double *padfZ);
+
+int SHPAPI_CALL SHPRewindObject(SHPHandle hSHP, SHPObject *psObject);
+
+void SHPAPI_CALL SHPClose(SHPHandle hSHP);
+void SHPAPI_CALL SHPWriteHeader(SHPHandle hSHP);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 const char SHPAPI_CALL1(*) SHPTypeName(int nSHPType);
 const char SHPAPI_CALL1(*) SHPPartTypeName(int nPartType);
 
@@ -359,6 +488,7 @@ typedef struct {
 } SHPTree;
 
 SHPTree SHPAPI_CALL1(*)
+<<<<<<< HEAD
     SHPCreateTree(SHPHandle hSHP, int nDimension, int nMaxDepth,
                   double *padfBoundsMin, double *padfBoundsMax);
 void SHPAPI_CALL SHPDestroyTree(SHPTree *hTree);
@@ -390,6 +520,44 @@ int SHPAPI_CALL1(*)
     SHPSearchDiskTreeEx(SHPTreeDiskHandle hDiskTree, double *padfBoundsMin,
                         double *padfBoundsMax, int *pnShapeCount);
 
+=======
+
+    SHPCreateTree(SHPHandle hSHP, int nDimension, int nMaxDepth,
+                  double *padfBoundsMin, double *padfBoundsMax);
+void SHPAPI_CALL SHPDestroyTree(SHPTree *hTree);
+
+int SHPAPI_CALL SHPWriteTree(SHPTree *hTree, const char *pszFilename);
+
+int SHPAPI_CALL SHPTreeAddShapeId(SHPTree *hTree, SHPObject *psObject);
+int SHPAPI_CALL SHPTreeRemoveShapeId(SHPTree *hTree, int nShapeId);
+
+void SHPAPI_CALL SHPTreeTrimExtraNodes(SHPTree *hTree);
+
+int SHPAPI_CALL1(*)
+
+    SHPTreeFindLikelyShapes(SHPTree *hTree, double *padfBoundsMin,
+                            double *padfBoundsMax, int *);
+int SHPAPI_CALL SHPCheckBoundsOverlap(double *, double *, double *, double *,
+                                      int);
+
+int SHPAPI_CALL1(*)
+
+    SHPSearchDiskTree(FILE *fp, double *padfBoundsMin, double *padfBoundsMax,
+                      int *pnShapeCount);
+
+typedef struct SHPDiskTreeInfo *SHPTreeDiskHandle;
+
+SHPTreeDiskHandle SHPAPI_CALL SHPOpenDiskTree(const char *pszQIXFilename,
+                                              SAHooks *psHooks);
+
+void SHPAPI_CALL SHPCloseDiskTree(SHPTreeDiskHandle hDiskTree);
+
+int SHPAPI_CALL1(*)
+
+    SHPSearchDiskTreeEx(SHPTreeDiskHandle hDiskTree, double *padfBoundsMin,
+                        double *padfBoundsMax, int *pnShapeCount);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 int SHPAPI_CALL SHPWriteTreeLL(SHPTree *hTree, const char *pszFilename,
                                SAHooks *psHooks);
 
@@ -405,17 +573,29 @@ SBNSearchHandle SHPAPI_CALL SBNOpenDiskTree(const char *pszSBNFilename,
 void SHPAPI_CALL SBNCloseDiskTree(SBNSearchHandle hSBN);
 
 int SHPAPI_CALL1(*)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     SBNSearchDiskTree(SBNSearchHandle hSBN, double *padfBoundsMin,
                       double *padfBoundsMax, int *pnShapeCount);
 
 int SHPAPI_CALL1(*)
+<<<<<<< HEAD
     SBNSearchDiskTreeInteger(SBNSearchHandle hSBN, int bMinX, int bMinY,
                              int bMaxX, int bMaxY, int *pnShapeCount);
 
+=======
+
+    SBNSearchDiskTreeInteger(SBNSearchHandle hSBN, int bMinX, int bMinY,
+                             int bMaxX, int bMaxY, int *pnShapeCount);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 void SHPAPI_CALL SBNSearchFreeIds(int *panShapeId);
 
 /************************************************************************/
 /*                             DBF Support.                             */
+
 /************************************************************************/
 typedef struct {
     SAHooks sHooks;
@@ -424,17 +604,26 @@ typedef struct {
 
     int nRecords;
 
+<<<<<<< HEAD
     int nRecordLength; /* Must fit on uint16 */
     int nHeaderLength; /* File header length (32) + field
                           descriptor length + spare space.
                           Must fit on uint16 */
+=======
+    int nRecordLength;
+    int nHeaderLength;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int nFields;
     int *panFieldOffset;
     int *panFieldSize;
     int *panFieldDecimals;
     char *pachFieldType;
 
+<<<<<<< HEAD
     char *pszHeader; /* Field descriptors */
+=======
+    char *pszHeader;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     int nCurrentRecord;
     int bCurrentRecordModified;
@@ -457,10 +646,13 @@ typedef struct {
     int nUpdateYearSince1900; /* 0-255 */
     int nUpdateMonth;         /* 1-12 */
     int nUpdateDay;           /* 1-31 */
+<<<<<<< HEAD
 
     int bWriteEndOfFileChar; /* defaults to TRUE */
 
     int bRequireNextWriteSeek;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 } DBFInfo;
 
 typedef DBFInfo *DBFHandle;
@@ -470,6 +662,7 @@ typedef enum {
     FTInteger,
     FTDouble,
     FTLogical,
+<<<<<<< HEAD
     FTDate,
     FTInvalid
 } DBFFieldType;
@@ -482,6 +675,12 @@ typedef enum {
 #define XBASE_FLDNAME_LEN_WRITE 10
 /* Normally only 254 characters should be used. We tolerate 255 historically */
 #define XBASE_FLD_MAX_WIDTH     255
+=======
+    FTInvalid
+} DBFFieldType;
+
+#define XBASE_FLDHDR_SZ 32
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 DBFHandle SHPAPI_CALL DBFOpen(const char *pszDBFFile, const char *pszAccess);
 DBFHandle SHPAPI_CALL DBFOpenLL(const char *pszDBFFile, const char *pszAccess,
@@ -552,8 +751,11 @@ const char SHPAPI_CALL1(*) DBFGetCodePage(DBFHandle psDBF);
 
 void SHPAPI_CALL DBFSetLastModifiedDate(DBFHandle psDBF, int nYYSince1900,
                                         int nMM, int nDD);
+<<<<<<< HEAD
 
 void SHPAPI_CALL DBFSetWriteEndOfFileChar(DBFHandle psDBF, int bWriteFlag);
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #ifdef __cplusplus
 }

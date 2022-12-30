@@ -148,8 +148,14 @@ def main():
         if len(rows) > max_files_open:
             grass.warning(
                 _(
+<<<<<<< HEAD
                     "Processing over {} maps: activating -z flag of r.series which "
                     "slows down processing.".format(max_files_open)
+=======
+                    "Processing over {} maps: activating -z flag of r.series which slows down processing.".format(
+                        max_files_open
+                    )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 )
             )
             flag += "z"

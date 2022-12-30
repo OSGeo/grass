@@ -535,6 +535,10 @@ void gsd_fringe_horiz_line2(float bot, geosurf *surf, int row, int side)
         GET_MAPATT(buff, offset, pt[Z]);
         pt[Z] = pt[Z] * surf->z_exag;
         gsd_vert_func(pt);
+<<<<<<< HEAD
+=======
+        cnt++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     col--;

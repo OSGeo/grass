@@ -376,7 +376,11 @@ int main(int argc, char **argv)
         for (i = 0; i < nrows; i++) {
             Rast_get_d_row(fd, map_buf, i);
             if (write(val_fd, map_buf, ncols * sizeof(DCELL)) !=
+<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
+=======
+                ncols * sizeof(DCELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_fatal_error(_("Unable to write to tempfile"));
             }
         }
@@ -447,7 +451,11 @@ int main(int argc, char **argv)
         for (i = 0; i < nrows; i++) {
             Rast_get_c_row(dir_id, dir_buf, i);
             if (write(dir_fd, dir_buf, ncols * sizeof(CELL)) !=
+<<<<<<< HEAD
                 ncols * (int)sizeof(CELL)) {
+=======
+                ncols * sizeof(CELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_fatal_error(_("Unable to write to tempfile"));
             }
         }
@@ -464,7 +472,11 @@ int main(int argc, char **argv)
                     *dp *= 45;
             }
             if (write(dir_fd, dir_buf, ncols * sizeof(DCELL)) !=
+<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
+=======
+                ncols * sizeof(DCELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_fatal_error(_("Unable to write to tempfile"));
             }
         }
@@ -743,7 +755,11 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                 lseek(val_fd, (off_t)stackp->row * window->cols * sizeof(DCELL),
                       SEEK_SET);
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
+<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
+=======
+                    window->cols * sizeof(DCELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     G_fatal_error(_("Unable to read from temp file"));
                 }
                 val_row = stackp->row;
@@ -774,7 +790,11 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                 lseek(dir_fd, (off_t)next_row * window->cols * sizeof(CELL),
                       SEEK_SET);
                 if (read(dir_fd, dir_buf, window->cols * sizeof(CELL)) !=
+<<<<<<< HEAD
                     window->cols * (int)sizeof(CELL)) {
+=======
+                    window->cols * sizeof(CELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     G_fatal_error(_("Unable to read from temp file"));
                 }
                 dir_row = next_row;
@@ -903,7 +923,11 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                                   SEEK_SET);
                             if (read(val_fd, val_buf,
                                      window->cols * sizeof(DCELL)) !=
+<<<<<<< HEAD
                                 window->cols * (int)sizeof(DCELL)) {
+=======
+                                window->cols * sizeof(DCELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                 G_fatal_error(
                                     _("Unable to read from temp file"));
                             }
@@ -1014,7 +1038,11 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                 lseek(val_fd, (off_t)next_row * window->cols * sizeof(DCELL),
                       SEEK_SET);
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
+<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
+=======
+                    window->cols * sizeof(DCELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     G_fatal_error(_("Unable to read from temp file"));
                 }
                 val_row = next_row;
@@ -1040,7 +1068,11 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             lseek(dir_fd, (off_t)next_row * window->cols * sizeof(DCELL),
                   SEEK_SET);
             if (read(dir_fd, dir_buf, window->cols * sizeof(DCELL)) !=
+<<<<<<< HEAD
                 window->cols * (int)sizeof(DCELL)) {
+=======
+                window->cols * sizeof(DCELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_fatal_error(_("Unable to read from temp file"));
             }
             dir_row = next_row;
@@ -1139,7 +1171,11 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                               SEEK_SET);
                         if (read(val_fd, val_buf,
                                  window->cols * sizeof(DCELL)) !=
+<<<<<<< HEAD
                             window->cols * (int)sizeof(DCELL)) {
+=======
+                            window->cols * sizeof(DCELL)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                             G_fatal_error(_("Unable to read from temp file"));
                         }
                         val_row = next_row;

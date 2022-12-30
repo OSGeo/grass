@@ -1016,6 +1016,10 @@ class AbstractMapDataset(AbstractDataset):
         statement = ""
 
         if self.is_in_db(dbif, mapset=mapset):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             # SELECT all needed information from the database
             self.metadata.select(dbif)
 
@@ -1176,7 +1180,7 @@ class AbstractMapDataset(AbstractDataset):
         statement = ""
 
         if execute is True:
-            self.stds_register.update(dbif=dbif)
+            self.stds_register.update(dbif=dbif, mapset=mapset)
         else:
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 

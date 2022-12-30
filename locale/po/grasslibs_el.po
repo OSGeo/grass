@@ -2003,8 +2003,283 @@ msgstr ""
 
 #: ../lib/gis/open.c:69
 #, c-format
+<<<<<<< HEAD
 msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
 msgstr "G__open(read): mapset <%s> δεν ταιριάζει με το xmapset <%s>"
+=======
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgstr ""
+
+#: ../lib/gis/gisinit.c:66
+#, c-format
+msgid "MAPSET %s - permission denied"
+msgstr "MAPSET %s - δεν επιτρέπεται η πρόσβαση"
+
+#: ../lib/gis/gisinit.c:69
+#, c-format
+msgid "MAPSET %s not found at %s"
+msgstr ""
+
+#: ../lib/gis/gisinit.c:104
+msgid "System not initialized. Programmer forgot to call G_gisinit()."
+msgstr "Το σύστημα δεν έχει αρχικοποιηθεί. Ο προγραμματιστής ξέχασει να καλέσει G_gisinit()."
+
+#: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprzlib.c:100
+#: ../lib/gis/cmprzlib.c:179 ../lib/gis/cmprzstd.c:102
+#: ../lib/gis/cmprzstd.c:176 ../lib/gis/cmprbzip.c:104
+#: ../lib/gis/cmprbzip.c:183 ../lib/gis/compress.c:335
+msgid "No source buffer"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:92 ../lib/gis/cmprlz4.c:159 ../lib/gis/cmprzlib.c:103
+#: ../lib/gis/cmprzlib.c:182 ../lib/gis/cmprzstd.c:105
+#: ../lib/gis/cmprzstd.c:179 ../lib/gis/cmprbzip.c:107
+#: ../lib/gis/cmprbzip.c:186
+msgid "No destination buffer"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:99 ../lib/gis/cmprlz4.c:166 ../lib/gis/cmprzlib.c:110
+#: ../lib/gis/cmprzlib.c:189 ../lib/gis/cmprzstd.c:112
+#: ../lib/gis/cmprzstd.c:186 ../lib/gis/cmprbzip.c:114
+#: ../lib/gis/cmprbzip.c:193 ../lib/gis/compress.c:337
+#, c-format
+msgid "Invalid source buffer size %d"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:101 ../lib/gis/cmprlz4.c:168 ../lib/gis/cmprzlib.c:112
+#: ../lib/gis/cmprzlib.c:191 ../lib/gis/cmprzstd.c:114
+#: ../lib/gis/cmprzstd.c:188 ../lib/gis/cmprbzip.c:116
+#: ../lib/gis/cmprbzip.c:195 ../lib/gis/compress.c:257
+#, c-format
+msgid "Invalid destination buffer size %d"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:121
+msgid "LZ4 compression error"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:177
+msgid "LZ4 decompression error"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:186 ../lib/gis/cmprzlib.c:215 ../lib/gis/cmprzstd.c:206
+#: ../lib/gis/cmprbzip.c:219
+#, c-format
+msgid "Got uncompressed size %d, expected %d"
+msgstr ""
+
+#: ../lib/gis/distance.c:154
+#, c-format
+msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:84
+msgid "Description:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:103
+msgid "Keywords:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:111
+msgid "Usage:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:141
+msgid "ERROR: Option key not defined"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:198
+msgid "Flags:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:223 ../lib/gis/parser_interface.c:329
+#: ../lib/gis/parser_rest.c:164 ../lib/gis/parser_html.c:179
+msgid "Allow output files to overwrite existing files"
+msgstr "Επιτρέπει τα εξαγόμενα αρχεία να επικαλύπτουν τα υπάρχοντα"
+
+#: ../lib/gis/parser_help.c:225 ../lib/gis/parser_interface.c:337
+#: ../lib/gis/parser_html.c:183
+msgid "Print usage summary"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:226 ../lib/gis/parser_interface.c:344
+#: ../lib/gis/parser_rest.c:168 ../lib/gis/parser_html.c:186
+msgid "Verbose module output"
+msgstr "Verbose module εξαγωγή"
+
+#: ../lib/gis/parser_help.c:227 ../lib/gis/parser_interface.c:351
+#: ../lib/gis/parser_rest.c:171 ../lib/gis/parser_html.c:189
+msgid "Quiet module output"
+msgstr "Quiet module εξαγωγή"
+
+#: ../lib/gis/parser_help.c:228
+msgid "Super quiet module output"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:229 ../lib/gis/parser_html.c:192
+msgid "Force launching GUI dialog"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:238
+msgid "Parameters:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:261
+#, c-format
+msgid "  %*s   default: %s\n"
+msgstr "  %*s   προεπιλογή: %s\n"
+
+#: ../lib/gis/parser_help.c:287
+#, c-format
+msgid "  %*s   options: "
+msgstr "  %*s   επιλογές: "
+
+#: ../lib/gis/proj3.c:124 ../lib/vector/Vlib/header.c:556
+msgid "Unknown projection"
+msgstr ""
+
+#: ../lib/gis/error.c:362
+msgid "WARNING: "
+msgstr "ΠΡΟΣΟΧΗ:"
+
+#: ../lib/gis/list.c:83
+#, c-format
+msgid "no %s files available in current mapset\n"
+msgstr "no %s αρχεία διαθέσιμα στο τρέχον mapset\n"
+
+#: ../lib/gis/list.c:86
+#, c-format
+msgid "no %s files available in mapset <%s>\n"
+msgstr "no %s αρχεία διαθέσιμα στο mapset <%s>\n"
+
+#: ../lib/gis/list.c:132
+#, c-format
+msgid "%s files available in mapset <%s>:\n"
+msgstr "%s αρχεία διαθέσιμα στο mapset <%s>:\n"
+
+#: ../lib/gis/list.c:204
+msgid "G_list: Unknown element type"
+msgstr "G_list: Άγνωστος τύπος στοιχείου"
+
+#: ../lib/gis/alloc.c:44 ../lib/gis/alloc.c:86 ../lib/gis/alloc.c:132
+#, c-format
+msgid "Current region rows: %d, cols: %d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:47
+#, c-format
+msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:89
+#, c-format
+msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:135
+#, c-format
+msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/parser_json.c:373
+#, c-format
+msgid "Input string not understood: <%s>. Multiple '@' chars?"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:90
+#, c-format
+msgid "Unable to make mapset element %s (%s): %s"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:94
+#, c-format
+msgid "Unable to access mapset element %s (%s): %s"
+msgstr ""
+
+#: ../lib/gis/paths.c:201
+#, c-format
+msgid "Unable to open file <%s> for reading"
+msgstr ""
+
+#: ../lib/gis/paths.c:217
+#, c-format
+msgid "Unable to fetch security info for <%s>"
+msgstr ""
+
+#: ../lib/gis/datum.c:160
+#, c-format
+msgid "unable to open datum table file: %s"
+msgstr "Αδυναμία ανοίγματος αρχείο πίνακα datum: %s"
+
+#: ../lib/gis/datum.c:182
+#, c-format
+msgid "error in datum table file, line %d"
+msgstr "Σφάλμα στο αρχείο πίνακα datum, γραμμή %d"
+
+#: ../lib/gis/aprintf.c:140
+#, c-format
+msgid "Failed to print %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:254
+#, c-format
+msgid "Failed to parse string specifier: %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:343
+#, c-format
+msgid "Format specifier exceeds the buffer size (%d)"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:531 ../lib/gis/make_loc.c:581
+#: ../lib/gis/key_value3.c:33
+#, c-format
+msgid "Unable to open output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:545 ../lib/gis/make_loc.c:595
+#: ../lib/gis/get_projinfo.c:196 ../lib/gis/get_projinfo.c:311
+#: ../lib/gis/key_value3.c:39
+#, c-format
+msgid "Error closing output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
+#, c-format
+msgid "Unable to open ellipsoid table file <%s>"
+msgstr "Αδυναμία ανοίγματος πίνακα ελλειψοειδούς από αρχείο <%s>"
+
+#: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
+#, c-format
+msgid "Invalid a: field '%s' in file %s in <%s>"
+msgstr "Λάθος a: πεδίο '%s' στο αρχείο %s στο <%s>"
+
+#: ../lib/gis/get_ellipse.c:356
+#, c-format
+msgid "Invalid ellipsoid '%s' in file %s in <%s>"
+msgstr "Λάθος ελλειψοειδές '%s' στο αρχείο %s στο <%s>"
+
+#: ../lib/gis/get_ellipse.c:370
+#, c-format
+msgid "Invalid es: field '%s' in file %s in <%s>"
+msgstr "Λάθος es: πεδίο '%s' στο αρχείο %s στο <%s>"
+
+#: ../lib/gis/get_ellipse.c:383
+#, c-format
+msgid "No ellipsoid info given in file %s in <%s>"
+msgstr "Δεν έχουν δωθεί πληροφορίες για το ελλειψοειδές στο αρχείο %s στο <%s>"
+
+#: ../lib/gis/view.c:176
+#, c-format
+msgid "Unable to open %s for writing"
+msgstr "Αδυναμία ανοίγματος %s για εγγραφή"
+
+#: ../lib/gis/view.c:262 ../lib/gis/view.c:479
+#, c-format
+msgid "Unable to open %s for reading"
+msgstr "Αδυναμία ανοίγματος %s για ανάγνωση"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/gis/open.c:90
 #, c-format
@@ -2016,6 +2291,7 @@ msgstr ""
 msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
 msgstr "G__open(write): xmapset <%s> != G_mapset() <%s>"
 
+<<<<<<< HEAD
 #: ../lib/gis/open.c:123
 #, c-format
 msgid "G__open(write): Unable to open '%s': %s"
@@ -2024,18 +2300,139 @@ msgstr ""
 #: ../lib/gis/compress.c:143 ../lib/gis/compress.c:205
 #: ../lib/gis/compress.c:222 ../lib/gis/compress.c:237
 msgid "Request for unsupported compressor"
+=======
+#: ../lib/gis/proj2.c:63
+msgid "Latitude-Longitude"
+msgstr "Γεωγραφικό πλάτος - Γεωγραφικό μήκος"
+
+#: ../lib/gis/proj2.c:65
+msgid "Other Projection"
+msgstr "Άλλη προβολή"
+
+#: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
+#, c-format
+msgid "Illegal n-s resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
+#, c-format
+msgid "Illegal number of rows: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
+#, c-format
+msgid "Illegal e-w resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
+#, c-format
+msgid "Illegal number of columns: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
+#, c-format
+msgid "North must be north of South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
+#, c-format
+msgid "North must be larger than South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
+#, c-format
+msgid "East must be larger than West, but %g (east) <= %g (west)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
+msgid "Invalid coordinates: negative number of columns"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
+msgid "Invalid coordinates: negative number of rows"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
+msgid "NS resolution has been changed"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../lib/gis/compress.c:252
 msgid "No destination buffer allocated"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/gis/compress.c:259
+=======
+#: ../lib/gis/adj_cellhd.c:132 ../lib/gis/adj_cellhd.c:298
+msgid "NS and EW resolutions are different"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:175
+#, c-format
+msgid "Illegal n-s resolution value for 3D: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:184
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Invalid read size %d"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/gis/compress.c:279
+=======
+#: ../lib/gis/adj_cellhd.c:193
+#, c-format
+msgid "Illegal e-w resolution value for 3D: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:202
+#, c-format
+msgid "Illegal number of columns for 3D: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:208
+#, c-format
+msgid "Illegal t-b resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:213
+#, c-format
+msgid "Illegal depths value: %d"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:236
+#, c-format
+msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:283
+msgid "Invalid coordinates: negative number of depths"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:317
+#, c-format
+msgid "East (%.15g) is not larger than West (%.15g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:352
+#, c-format
+msgid "Illegal latitude for North: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:354
+#, c-format
+msgid "Illegal latitude for South: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:360
+#, c-format
+msgid "Illegal longitude for West: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:364
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to read %d bytes: end of file"
 msgstr ""
@@ -3342,6 +3739,7 @@ msgstr ""
 msgid "ZLIB decompression error %d: %s"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/gis/mapset.c:38
 msgid "MAPSET is not set"
 msgstr "MAPSET δεν έχει οριστεί"
@@ -3555,14 +3953,314 @@ msgstr ""
 #, c-format
 msgid "<%s> in mapset <%s>"
 msgstr "<%s> στο mapset <%s>"
+=======
+#: ../lib/manage/do_copy.c:43
+#, c-format
+msgid "Copying %s <%s> to current mapset as <%s>"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/raster/mask_info.c:46
 msgid "none"
 msgstr "κανένα"
 
+<<<<<<< HEAD
 #: ../lib/raster/mask_info.c:49
 msgid "not known"
 msgstr "άγνωστο"
+=======
+#: ../lib/vector/Vlib/build.c:958
+#, c-format
+msgid "Number of areas: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:959
+#, c-format
+msgid "Number of isles: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:964
+#, c-format
+msgid "Number of areas without centroid: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:969
+#, c-format
+msgid "Number of centroids exceeds number of areas: %d > %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:973
+#, c-format
+msgid "Number of incorrect boundaries: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:977
+#, c-format
+msgid "Number of centroids outside area: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:981
+#, c-format
+msgid "Number of duplicate centroids: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:985
+msgid "Number of areas: -"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:986
+msgid "Number of isles: -"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1014
+#, c-format
+msgid "Unable to create topo file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1022
+msgid "Error writing out topo file"
+msgstr "Σφάλμα κατά την εγγραφή του χάρτη"
+
+#: ../lib/vector/Vlib/build.c:1211
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1234
+#, c-format
+msgid "%s is no longer supported"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1257
+msgid "Spatial index not available, can not be saved"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1269
+#, c-format
+msgid "Unable to create spatial index file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:1278
+msgid "Error writing out spatial index file"
+msgstr "Σφάλμα εγγραφής χωρικών δεδομένων στο αρχείο"
+
+#: ../lib/vector/Vlib/remove_duplicates.c:199
+#, c-format
+msgid "Removed duplicates: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/constraint.c:150
+msgid "Layer constraint ignored for non-native vector formats"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:361
+msgid "Line is not looped"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:443
+#, c-format
+msgid "Unexpected result of line_intersection() res = %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:589
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:600
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:648
+msgid "side != 0 feature not implemented"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
+msgid "zero area size"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
+msgid "Line was not closed"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:909 ../lib/vector/Vlib/buffer2.c:960
+msgid "Vect_get_point_in_poly() failed"
+msgstr ""
+
+#: ../lib/vector/Vlib/dgraph.c:432
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:96
+#, c-format
+msgid "%d errors in category string"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:142 ../lib/vector/Vlib/array.c:267
+msgid "Mixed area and other type requested for vector array"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:152 ../lib/vector/Vlib/array.c:175
+#: ../lib/vector/Vlib/array.c:304 ../lib/vector/Vlib/array.c:336
+msgid "Not enough space in vector array"
+msgstr ""
+
+#: ../lib/vector/Vlib/array.c:292
+#, c-format
+msgid "Unable to select record from table <%s> (key %s, where %s)"
+msgstr "Αδυναμία επιλογής της εγγραφής <%s> (κλειδί %s, όπου %s)"
+
+#: ../lib/vector/Vlib/write_nat.c:398
+msgid "Attempt to access feature with invalid id (%"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_nat.c:404
+#, c-format
+msgid "Attempt to access alive feature %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_nat.c:566 ../lib/vector/Vlib/write_nat.c:602
+#, c-format
+msgid "%s: Area %d does not exist"
+msgstr "%s: Επιδάνεια %d δεν υπάρχει"
+
+#: ../lib/vector/Vlib/write_nat.c:756
+#, c-format
+msgid "Attempt to access dead area %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:140 ../lib/vector/Vlib/map.c:246
+msgid "Vector map name is not SQL compliant"
+msgstr "Ο διανυσματικός χάρτης δεν είναι συμβατός με SQL"
+
+#: ../lib/vector/Vlib/map.c:144
+#, c-format
+msgid "Unable to find vector map <%s> in <%s>"
+msgstr "Αδυναμία αντιγραφής διανυσματικού χάρτη <%s> σε <%s>"
+
+#: ../lib/vector/Vlib/map.c:156 ../lib/vector/Vlib/map.c:250
+#: ../lib/vector/Vlib/open.c:821
+#, c-format
+msgid "Vector map <%s> already exists and will be overwritten"
+msgstr "Ο διανυσματικός χάρτης <%s> υπάρχει ήδη και θα αντικατασταθεί (overwritten)"
+
+#: ../lib/vector/Vlib/map.c:160 ../lib/vector/Vlib/open.c:813
+#: ../lib/vector/Vlib/open.c:826
+#, c-format
+msgid "Unable to delete vector map <%s>"
+msgstr "Αδυναμία διαγραφής διανυσματικού χάρτη <%s>"
+
+#: ../lib/vector/Vlib/map.c:180 ../lib/vector/Vlib/map.c:268
+#, c-format
+msgid "Unable to copy vector map <%s> to <%s>"
+msgstr "Αδυναμία αντιγραφής διανυσματικού χάρτη <%s> σε <%s>"
+
+#: ../lib/vector/Vlib/map.c:193 ../lib/vector/Vlib/map.c:203
+#: ../lib/vector/Vlib/map.c:275 ../lib/vector/Vlib/open.c:301
+#: ../lib/vector/Vlib/open.c:437
+#: ../lib/python/temporal/c_libraries_interface.py:884 ../lib/ogsf/gv3.c:66
+#: ../lib/ogsf/gv3.c:338 ../lib/ogsf/gp3.c:62 ../lib/ogsf/gp3.c:196
+#, c-format, python-format
+msgid "Unable to open vector map <%s>"
+msgstr "Αδυναμία ανοίγματος διανυσματικού χάρτη <%s>"
+
+#: ../lib/vector/Vlib/map.c:318 ../lib/vector/Vlib/close_nat.c:102
+#: ../lib/vector/Vlib/copy.c:764
+#, c-format
+msgid "Unable to copy table <%s>"
+msgstr "Αδυναμία αντιγραφής πίνακα <%s>"
+
+#: ../lib/vector/Vlib/map.c:332 ../lib/vector/Vlib/map.c:463
+#, c-format
+msgid "Unable to delete table <%s>"
+msgstr "Αδυναμία διαγραφής πίνακα <%s>"
+
+#: ../lib/vector/Vlib/map.c:347
+#, c-format
+msgid "Unable to create index for table <%s>, key <%s>"
+msgstr "Αδυναμία δημιουργίας καταλόγου για τον πίνακα <%s>, κλειδί <%s>"
+
+#: ../lib/vector/Vlib/map.c:403
+#, c-format
+msgid "Ignoring invalid mapset: %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:408
+#, c-format
+msgid "Invalid vector map name <%s>"
+msgstr "Λάθος όνομα διανυσματικού χάρτη <%s>"
+
+#: ../lib/vector/Vlib/map.c:418
+#, c-format
+msgid "Unable to open header file for vector map <%s>"
+msgstr "Αδυναμία ανοίγματος header αρχείου διανυσματικού χάρτη <%s>"
+
+#: ../lib/vector/Vlib/map.c:450
+#, c-format
+msgid "Unable to find table <%s> linked to vector map <%s>"
+msgstr "Αδυναμία εύρεσης του πίνακα <%s> που είναι συνδεδεμένος με τον διανυσματικό χάρτη <%s>"
+
+#: ../lib/vector/Vlib/map.c:473
+#, c-format
+msgid "Table <%s> linked to vector map <%s> does not exist"
+msgstr "Ο πίνακας <%s> που είναι συνδεδεμένος με τον διανυσματικό χάρτη <%s> δεν υπάρχει"
+
+#: ../lib/vector/Vlib/map.c:486
+#, c-format
+msgid "Unable to open directory '%s'"
+msgstr "Αδυναμία ανοίγματος καταλόγου συστήματος '%s'"
+
+#: ../lib/vector/Vlib/map.c:500
+#, c-format
+msgid "Unable to delete file '%s'"
+msgstr "Αδυναμία διαγραφής αρχείου '%s'"
+
+#: ../lib/vector/Vlib/map.c:520
+#, c-format
+msgid "Unable to rename directory '%s' to '%s'"
+msgstr "Αδυναμία μετονομασίας καταλόγου συστήματος '%s' σε '%s'"
+
+#: ../lib/vector/Vlib/map.c:529
+#, c-format
+msgid "Unable to remove directory '%s': %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:124 ../lib/vector/Vlib/write_pg.c:158
+#: ../lib/vector/Vlib/write_pg.c:197 ../lib/vector/Vlib/write_pg.c:295
+#: ../lib/vector/Vlib/write_pg.c:355 ../lib/vector/Vlib/write_pg.c:477
+#: ../lib/vector/Vlib/close.c:275 ../lib/vector/Vlib/simple_features.c:336
+#: ../lib/vector/Vlib/open_pg.c:143 ../lib/vector/Vlib/open_pg.c:200
+#: ../lib/vector/Vlib/open_pg.c:299 ../lib/vector/Vlib/open_pg.c:349
+#: ../lib/vector/Vlib/header_finfo.c:47 ../lib/vector/Vlib/header_finfo.c:86
+#: ../lib/vector/Vlib/header_finfo.c:123 ../lib/vector/Vlib/header_finfo.c:171
+#: ../lib/vector/Vlib/write_sfa.c:306 ../lib/vector/Vlib/area.c:94
+#: ../lib/vector/Vlib/area.c:499 ../lib/vector/Vlib/read_pg.c:91
+#: ../lib/vector/Vlib/read_pg.c:214 ../lib/vector/Vlib/read_pg.c:298
+#: ../lib/vector/Vlib/read_pg.c:416 ../lib/vector/Vlib/build_sfa.c:721
+#: ../lib/vector/Vlib/copy.c:428 ../lib/vector/Vlib/rewind_pg.c:56
+#: ../lib/vector/Vlib/rewind_pg.c:81 ../lib/vector/Vlib/build_pg.c:117
+#: ../lib/vector/Vlib/close_pg.c:99 ../lib/vector/Vlib/close_pg.c:146
+msgid "GRASS is not compiled with PostgreSQL support"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:188 ../lib/vector/Vlib/write_pg.c:256
+#: ../lib/vector/Vlib/write_sfa.c:164 ../lib/vector/Vlib/write_ogr.c:96
+msgid "Unable to rewrite feature (incompatible feature types)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:286
+#, c-format
+msgid "Unable to rewrite feature %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:322 ../lib/vector/Vlib/write_pg.c:812
+#: ../lib/vector/Vlib/write_pg.c:1214 ../lib/vector/Vlib/write_pg.c:1372
+#: ../lib/vector/Vlib/simple_features.c:324
+msgid "No connection defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
+msgid "Invalid offset (%"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/raster/vrt.c:83
 #, c-format
@@ -4047,8 +4745,24 @@ msgstr ""
 msgid "Unable to write range file for <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/raster/range.c:465 ../lib/raster/range.c:479
 #: ../lib/raster/range.c:497 ../lib/raster/range.c:502
+=======
+#: ../lib/vector/Vlib/write.c:234
+msgid "Unable to rewrite feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:266
+msgid "Unable to delete feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:299
+msgid "Unable to restore feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:308
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to write stats file for <%s>"
 msgstr ""
@@ -8059,6 +8773,7 @@ msgstr ""
 msgid "Length of input WKB is too small"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/read_pg.c:1097
 #, c-format
 msgid "Invalid cache index %d (max: %d)"
@@ -8323,6 +9038,904 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Database record for turn with cat = %d is not found. (The turn was skipped."
+=======
+#: ../lib/raster/get_cellhd.c:70
+#, c-format
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
+msgstr ""
+
+#: ../lib/raster/get_cellhd.c:78
+#, c-format
+msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
+msgstr ""
+
+#: ../lib/raster/interp.c:211
+#, c-format
+msgid "Unknown interpolation method: %s"
+msgstr ""
+
+#: ../lib/raster/format.c:162
+#, c-format
+msgid "Fail of initial read of compressed file [%s in %s]"
+msgstr "Σφάλμα αρχικής προσπέλασης του συμπιεσμένου αρχείου [%s in %s]"
+
+#: ../lib/raster/format.c:176
+#, c-format
+msgid "Fail of initial read of compressed null file [%s in %s]"
+msgstr ""
+
+#: ../lib/raster/mask_info.c:43
+#, c-format
+msgid "<%s> in mapset <%s>"
+msgstr "<%s> στο mapset <%s>"
+
+#: ../lib/raster/mask_info.c:46
+msgid "none"
+msgstr "κανένα"
+
+#: ../lib/raster/mask_info.c:49
+msgid "not known"
+msgstr "άγνωστο"
+
+#: ../lib/raster/quant_rw.c:88
+#, c-format
+msgid "Unable to read fp range for raster map <%s>"
+msgstr ""
+
+#: ../lib/raster/quant_rw.c:92
+#, c-format
+msgid "Raster map <%s> is empty"
+msgstr ""
+
+#: ../lib/raster/quant_rw.c:157
+#, c-format
+msgid "Unable to write quant rules: raster map <%s> is integer"
+msgstr ""
+
+#: ../lib/raster/quant_rw.c:166
+#, c-format
+msgid "Unable to write quant rules for raster map <%s>"
+msgstr ""
+
+#: ../lib/raster/color_read.c:103
+msgid "missing"
+msgstr ""
+
+#: ../lib/raster/color_read.c:106
+msgid "invalid"
+msgstr ""
+
+#: ../lib/raster/color_read.c:112
+#, c-format
+msgid "Color support for <%s@%s> %s"
+msgstr ""
+
+#: ../lib/raster/open.c:192
+#, c-format
+msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
+msgstr "Αδυναμία ανοίγματος ραστερ χάρτη <%s@%s> αφού είναι ένα reclass του ραστερ χάρτη <%s@%s> , ο οποίος δεν υπάρχει"
+
+#: ../lib/raster/open.c:197
+#, c-format
+msgid "Error reading reclass file for raster map <%s>"
+msgstr ""
+
+#: ../lib/raster/open.c:208
+#, c-format
+msgid "Error reading map type for raster map <%s>"
+msgstr ""
+
+#: ../lib/raster/open.c:216
+#, c-format
+msgid "Raster map <%s@%s>: format field in header file invalid"
+msgstr "Το φορμά του ράστερ χάρτη <%s@%s>: στο κεφαλικό αρχείο (header) είναι λανθασμένο"
+
+#: ../lib/raster/open.c:235
+#, c-format
+msgid "Compression with %s is not supported in this GRASS GIS installation"
+msgstr ""
+
+#: ../lib/raster/open.c:239
+#, c-format
+msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
+msgstr ""
+
+#: ../lib/raster/open.c:246
+#, c-format
+msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
+msgstr ""
+
+#: ../lib/raster/open.c:251
+#, c-format
+msgid "Raster map <%s>: bytes per cell (%d) too large"
+msgstr ""
+
+#: ../lib/raster/open.c:278
+#, c-format
+msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgstr ""
+
+#: ../lib/raster/open.c:289
+#, c-format
+msgid "Unable to open %s file for raster map <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/open.c:327
+#, c-format
+msgid "Error reading format for <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/open.c:535
+msgid "Unable to create GDAL link"
+msgstr ""
+
+#: ../lib/raster/open.c:607 ../lib/raster/gdal.c:484
+#, c-format
+msgid "Invalid map type <%d>"
+msgstr ""
+
+#: ../lib/raster/open.c:612 ../lib/raster/open.c:768
+#, c-format
+msgid "Raster map <%s> is not in the current mapset (%s)"
+msgstr "Ο ραστερ χάρτης <%s> δεν ανήκει στο τρέχον mapset (%s)"
+
+#: ../lib/raster/open.c:619
+#, c-format
+msgid "<%s> is an illegal file name"
+msgstr "<%s> είναι μη επιτρεπτό όνομα αρχείου"
+
+#: ../lib/raster/open.c:634 ../lib/raster/open.c:715 ../lib/raster/open.c:791
+#, c-format
+msgid "No temp files available: %s"
+msgstr ""
+
+#: ../lib/raster/open.c:764
+#, c-format
+msgid "Raster map <%s> does not exist in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/raster/open.c:830
+msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
+msgstr ""
+
+#: ../lib/raster/open.c:888
+#, c-format
+msgid "Raster map <%s> not found in mapset <%s>"
+msgstr "Ο χάρτης raster  <%s> δεν βρέθηκε στο mapset <%s>"
+
+#: ../lib/raster/open.c:949
+#, c-format
+msgid "Unable to find '%s'"
+msgstr "Αδυναμία εύρεσης '%s'"
+
+#: ../lib/raster/open.c:960
+#, c-format
+msgid "Invalid type: field '%s' in file '%s'"
+msgstr "Εσφαλμένος τύπος: το πεδίο '%s' στο αρχείο '%s'"
+
+#: ../lib/raster/open.c:965
+#, c-format
+msgid "Missing type: field in file '%s'"
+msgstr ""
+
+#: ../lib/raster/open.c:970
+#, c-format
+msgid "Raster map <%s> is not xdr: byte_order: %s"
+msgstr "Ο χάρτης raster  <%s> δεν είναι xdr: byte_order: %s"
+
+#: ../lib/raster/open.c:1039
+msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgstr ""
+
+#: ../lib/raster/histogram.c:55
+#, c-format
+msgid "Histogram for [%s in %s] missing (run r.support)"
+msgstr "Το ιστόγραμμα για [%s in %s] λείπει (run r.support)"
+
+#: ../lib/raster/histogram.c:62
+#, c-format
+msgid "Can't read histogram for [%s in %s]"
+msgstr "Δεν μπορεί να αναγνωστεί το ιστόγραμμα για [%s in %s]"
+
+#: ../lib/raster/histogram.c:66 ../lib/raster/histogram.c:73
+#, c-format
+msgid "Invalid histogram file for [%s in %s]"
+msgstr "Λάθος αρχείο ιστογράμματοςγια [%s in %s]"
+
+#: ../lib/raster/histogram.c:331
+#, c-format
+msgid "Unable to create histogram file for <%s>"
+msgstr ""
+
+#: ../lib/raster/cats.c:109
+#, c-format
+msgid "Category support for <%s@%s> missing"
+msgstr ""
+
+#: ../lib/raster/cats.c:112
+#, c-format
+msgid "Category support for <%s@%s> invalid"
+msgstr ""
+
+#: ../lib/raster/cats.c:145
+#, c-format
+msgid "Category support for vector map <%s@%s> missing"
+msgstr ""
+
+#: ../lib/raster/cats.c:149
+#, c-format
+msgid "Category support for vector map <%s@%s> invalid"
+msgstr ""
+
+#: ../lib/raster/cats.c:971
+#, c-format
+msgid "Unable to open %s file for map <%s>"
+msgstr ""
+
+#: ../lib/raster/quant_io.c:43
+#, c-format
+msgid "Floating data range for raster map <%s> is empty"
+msgstr ""
+
+#: ../lib/raster/quant_io.c:52
+#, c-format
+msgid "Integer data range for raster map <%s> is empty"
+msgstr ""
+
+#: ../lib/raster/quant_io.c:105
+#, c-format
+msgid "Attempt to open quantization table for CELL raster map <%s>"
+msgstr ""
+
+#: ../lib/raster/quant_io.c:135
+#, c-format
+msgid "Quantization file for raster map <%s> is missing"
+msgstr ""
+
+#: ../lib/raster/quant_io.c:145
+#, c-format
+msgid "Quantization file for raster map <%s> is empty"
+msgstr ""
+
+#: ../lib/raster/history.c:115 ../lib/raster/history.c:123
+#, c-format
+msgid "Unable to get history information for <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/history.c:162
+#, c-format
+msgid "Unable to write history information for <%s>"
+msgstr ""
+
+#: ../lib/raster/history.c:235
+#, c-format
+msgid "generated by %s"
+msgstr ""
+
+#: ../lib/raster/color_rand.c:33
+#, c-format
+msgid "Rast_make_random_colors: min (%d) > max (%d)"
+msgstr ""
+
+#: ../lib/raster/sample.c:70
+msgid "Unknown interpolation type"
+msgstr "Άγνωστος τύπος παρεμβολής"
+
+#: ../lib/raster/sample.c:327
+msgid "\"no data\" label found; setting to zero"
+msgstr "\"no data\" εττικέτα βρέθηκε; χρησιμοποιώ το μηδέν"
+
+#: ../lib/raster/auto_mask.c:69
+msgid "Unable to open automatic MASK file"
+msgstr "Αδυναμία αυτόματου ανοίγματος του MASK αρχείου"
+
+#: ../lib/raster/band_reference.c:102
+#, fuzzy, c-format
+msgid "Unable to create band file for <%s>"
+msgstr "Αδυναμία δημιουργίας πίνακα <%s>"
+
+#: ../lib/raster/gdal.c:89
+#, c-format
+msgid "Unable to locate symbol <%s>"
+msgstr "Αδυναμία εντοπισμού συμβόλου <%s>"
+
+#: ../lib/raster/gdal.c:149
+msgid "Unable to load GDAL library"
+msgstr "Αδυναμία φόρτωσης βιβλιοθήκης GDAL "
+
+#: ../lib/raster/gdal.c:382
+msgid "Unable to open GDAL file"
+msgstr ""
+
+#: ../lib/raster/gdal.c:490
+#, c-format
+msgid "Unable to get <%s> driver"
+msgstr ""
+
+#: ../lib/raster/gdal.c:499
+#, c-format
+msgid "Unable to create <%s> dataset using <%s> driver"
+msgstr ""
+
+#: ../lib/raster/gdal.c:507
+#, c-format
+msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
+msgstr ""
+
+#: ../lib/raster/gdal.c:513
+msgid "Unable to get in-memory raster driver"
+msgstr ""
+
+#: ../lib/raster/gdal.c:520
+#, c-format
+msgid "Unable to create <%s> dataset using memory driver"
+msgstr ""
+
+#: ../lib/raster/gdal.c:524
+#, c-format
+msgid "Driver <%s> does not support creating rasters"
+msgstr ""
+
+#: ../lib/raster/gdal.c:540
+msgid "Unable to set geo transform"
+msgstr ""
+
+#: ../lib/raster/gdal.c:544
+msgid "Unable to set projection"
+msgstr ""
+
+#: ../lib/raster/gdal.c:548
+#, c-format
+msgid "Unable to create cell_misc/%s/gdal file"
+msgstr ""
+
+#: ../lib/raster/gdal.c:564
+#, c-format
+msgid "Error writing cell_misc/%s/gdal file"
+msgstr ""
+
+#: ../lib/raster/gdal.c:612
+#, c-format
+msgid "Unable to create output file <%s> using driver <%s>"
+msgstr ""
+
+#: ../lib/raster/alloc_cell.c:151
+#, c-format
+msgid "Rast__null_bitstream_size: cols (%d) is negative"
+msgstr ""
+
+#: ../lib/raster/init.c:61
+msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
+msgstr ""
+
+#: ../lib/raster/init.c:112
+#, c-format
+msgid "Unknown compression method <%s>, using default %s"
+msgstr ""
+
+#: ../lib/raster/init.c:116
+#, c-format
+msgid "No compression is not supported for GRASS raster maps, using default %s"
+msgstr ""
+
+#: ../lib/raster/init.c:123
+#, c-format
+msgid "This GRASS version does not support %s compression, using default %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:121
+#, c-format
+msgid "Error writing uncompressed FP data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:131
+#, c-format
+msgid "Error writing compressed FP data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:391 ../lib/raster/put_row.c:397
+#, c-format
+msgid "Error writing compressed data for row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/put_row.c:407
+#, c-format
+msgid "Error writing uncompressed data for row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/put_row.c:467
+#, c-format
+msgid "Error writing data via GDAL for row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/put_row.c:491
+msgid "GDAL output doesn't support writing null rows separately"
+msgstr ""
+
+#: ../lib/raster/put_row.c:494
+#, c-format
+msgid "No null file for <%s>"
+msgstr ""
+
+#: ../lib/raster/put_row.c:521 ../lib/raster/put_row.c:526
+#, c-format
+msgid "Error writing compressed null data for row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/put_row.c:560 ../lib/raster/put_row.c:563
+#, c-format
+msgid "Error writing null row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/put_row.c:688
+#, c-format
+msgid "put_raster_row: raster map <%s> not open for write - request ignored"
+msgstr ""
+
+#: ../lib/raster/put_row.c:695
+msgid "put_raster_row: unopened file descriptor - request ignored"
+msgstr ""
+
+#: ../lib/raster/null_val.c:64
+msgid "EmbedGivenNulls: wrong data type"
+msgstr ""
+
+#: ../lib/raster/null_val.c:114
+msgid "Rast_set_null_value: wrong data type!"
+msgstr ""
+
+#: ../lib/raster/reclass.c:168
+#, c-format
+msgid "Too many reclass categories for <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/reclass.c:171
+#, c-format
+msgid "Illegal reclass format in header file for <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/reclass.c:273
+msgid "Illegal reclass request"
+msgstr "Μη αποδεκτή εντολή κατηγοριοποίησης"
+
+#: ../lib/raster/reclass.c:278
+msgid "Illegal reclass type"
+msgstr "Μη αποδεκτός τύπος κατηγοριοποίησης"
+
+#: ../lib/raster/reclass.c:284
+#, c-format
+msgid "Unable to create header file for <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/reclass.c:332
+#, c-format
+msgid "Unable to create dependency file in <%s@%s>"
+msgstr ""
+
+#: ../lib/raster/set_window.c:48
+msgid "Rast_set_window() called while window split"
+msgstr ""
+
+#: ../lib/raster/set_window.c:131
+msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
+msgstr ""
+
+#: ../lib/raster/set_window.c:158
+#, c-format
+msgid "Input window changed while maps are open for read. Map name <%s>"
+msgstr ""
+
+#: ../lib/raster/set_window.c:174
+#, c-format
+msgid "Output window changed while maps are open for write. Map name <%s>"
+msgstr ""
+
+#: ../lib/raster/color_rules.c:120
+msgid "syntax error in the color rule"
+msgstr ""
+
+#: ../lib/raster/color_rules.c:122
+msgid "syntax error in the color format"
+msgstr ""
+
+#: ../lib/raster/color_rules.c:130
+msgid "percentage not in range 0-100"
+msgstr "Το ποσοστό δεν είναι στο εύρος 0-100"
+
+#: ../lib/raster/color_rules.c:132
+msgid "invalid value"
+msgstr "Εσφαλμένη τιμή"
+
+#: ../lib/raster/color_rules.c:134
+msgid "unknown error"
+msgstr "Άγνωστο λάθος"
+
+#: ../lib/raster/color_rules.c:180
+#, c-format
+msgid "bad rule (%s): [%s]"
+msgstr "Εσφαλμένος κανόνας (%s): [%s]"
+
+#: ../lib/raster/color_rules.c:232
+msgid "Unknown error reading color rule"
+msgstr ""
+
+#: ../lib/raster/color_rules.c:330
+#, c-format
+msgid "Unable to load color rules <%s>"
+msgstr ""
+
+#: ../lib/segment/format.c:143
+msgid "Segment format: file size too large"
+msgstr ""
+
+#: ../lib/segment/format.c:144
+msgid "Please recompile with Large File Support (LFS)"
+msgstr ""
+
+#: ../lib/segment/open.c:57
+msgid "Using memory cache"
+msgstr ""
+
+#: ../lib/segment/open.c:70
+msgid "Using disk cache"
+msgstr ""
+
+#: ../lib/segment/open.c:73
+msgid "Segment file name is NULL"
+msgstr ""
+
+#: ../lib/segment/open.c:78
+msgid "Segment file exists already"
+msgstr ""
+
+#: ../lib/segment/open.c:86
+msgid "Unable to create segment file"
+msgstr ""
+
+#: ../lib/segment/open.c:94
+msgid "Could not write segment file"
+msgstr ""
+
+#: ../lib/segment/open.c:98
+msgid "Illegal segment configuration parameter(s)"
+msgstr ""
+
+#: ../lib/segment/open.c:107
+msgid "Unable to re-open segment file"
+msgstr ""
+
+#: ../lib/segment/open.c:114
+msgid "Could not read segment file"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:100 ../lib/proj/do_proj.c:109
+#: ../lib/proj/do_proj.c:426 ../lib/proj/do_proj.c:432
+#: ../lib/proj/do_proj.c:476 ../lib/proj/do_proj.c:483
+#: ../lib/proj/do_proj.c:778 ../lib/proj/do_proj.c:793
+#: ../lib/proj/do_proj.c:805 ../lib/proj/do_proj.c:885
+#, c-format
+msgid "proj_create() failed for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:284
+#, c-format
+msgid "Unrecognized SRID '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:298
+#, c-format
+msgid "Unrecognized WKT '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:316
+msgid "Unable to create PROJ object"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:393
+msgid "Input coordinate system is NULL"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:396
+msgid "Input coordinate system definition is NULL"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:417
+msgid "A custom pipeline requires input and output projection info"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:445
+#, c-format
+msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
+msgstr ""
+
+#: ../lib/proj/do_proj.c:525
+#, c-format
+msgid "Input CRS not available for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:546
+#, c-format
+msgid "Output CRS not available for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:573
+#, c-format
+msgid "Found %d possible transformations"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:585
+#, c-format
+msgid "proj_normalize_for_visualization() failed for operation %d"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:596
+#, c-format
+msgid "Operation %d:"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:598
+#, c-format
+msgid "Description: %s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:603
+#, c-format
+msgid "Area of use: %s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:608
+#, c-format
+msgid "Accuracy within area of use: %g m"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:615
+#, c-format
+msgid "Remarks: %s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:620
+#, c-format
+msgid "Scope: %s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:628
+msgid "PROJ string:"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:635
+msgid "See also output of:"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:638
+#, c-format
+msgid "Please provide the appropriate PROJ string with the %s option"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:740
+#, c-format
+msgid "proj_normalize_for_visualization() failed for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:753
+#, c-format
+msgid "No PROJ definition for normalized version of '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:757
+msgid "Selected PROJ pipeline:"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:758
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:894
+#, c-format
+msgid "Unable to create latlong equivalent for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:945
+msgid "No input projection"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:948 ../lib/proj/do_proj.c:1167
+msgid "No transformation object"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:1045 ../lib/proj/do_proj.c:1335
+#, c-format
+msgid "proj_trans() failed: %s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:1078
+msgid "No output projection"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:1107 ../lib/proj/do_proj.c:1388
+#: ../lib/proj/do_proj.c:1515 ../lib/proj/do_proj.c:1677
+#, c-format
+msgid "pj_transform() failed: %s"
+msgstr "pj_transform() απέτυχε: %s"
+
+#: ../lib/proj/do_proj.c:1473 ../lib/proj/do_proj.c:1636
+#, c-format
+msgid "proj_trans() failed: %d"
+msgstr ""
+
+#: ../lib/proj/datum.c:277 ../lib/proj/datum.c:357
+#, c-format
+msgid "Unable to open datum table file <%s>"
+msgstr "Αδυναμία ανοίγματος του αρχείου που περιέχει τον πίνακα datum <%s>"
+
+#: ../lib/proj/datum.c:290 ../lib/proj/datum.c:371
+#, c-format
+msgid "Error in datum table file <%s>, line %d"
+msgstr "Σφάλμα στο αρχείο που περιέχει τον πίνακα datum <%s>, γραμμή %d"
+
+#: ../lib/proj/convert.c:194
+msgid "Unable parse GRASS PROJ_INFO file"
+msgstr "Αδυναμία ανάλυσης GRASS PROJ_INFO αρχείου"
+
+#: ../lib/proj/convert.c:201
+msgid "Unable get PROJ.4-style parameter string"
+msgstr "Αδυναμία λήψης PROJ.4-στυλ παραμέτρου"
+
+#: ../lib/proj/convert.c:219
+#, c-format
+msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgstr "OGR δεν μπορεί να αναλύσει PROJ.4-το στυλ παραμέτρου string: %s (OGR κώδικας σφάλματος ήταν %d)"
+
+#: ../lib/proj/convert.c:232
+#, c-format
+msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
+msgstr "OGR δεν μπορεί να πάρεις WKT-το στυλ παραμέτρου string (OGR κωδικός σφάλματος ήταν %d)"
+
+#: ../lib/proj/convert.c:471
+#, c-format
+msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
+msgstr ""
+
+#: ../lib/proj/convert.c:478
+msgid "Updating spatial reference with embedded proj4 definition"
+msgstr ""
+
+#: ../lib/proj/convert.c:611
+msgid "No projection name! Projection parameters likely to be meaningless."
+msgstr "Δεν υπάρχει όνομα προβολής! Οι παράμετροι προβολής προφανώς είναι άνευ νοήματος."
+
+#: ../lib/proj/convert.c:678
+#, c-format
+msgid "Datum <%s> not recognised by GRASS and no parameters found"
+msgstr "Datum <%s> δεν αναγνωρίζεται από το GRASS και οι παράμετροι δεν μπορούν να βρεθούν."
+
+#: ../lib/proj/convert.c:694
+#, c-format
+msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
+msgstr "Datum <%s> προφανώς αναγνωρίζεται από το GRASS αλλά δεν μπορούν να βρεθούν οι παράμετροι. Μάλλον θα πρέπει να το ξαναδείτε."
+
+#: ../lib/proj/convert.c:698
+#, c-format
+msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
+msgstr "Μη αποδεκτός αριθμός μετασχηματισμού %d; αποδεκτό εύρος 1 με %d. Οι παράμετροι datum αφήνονται απροσδιόριστοι."
+
+#: ../lib/proj/get_proj.c:169
+#, c-format
+msgid "Invalid zone %s specified"
+msgstr "Έχει καθοριστεί λάθος ζώνη %s"
+
+#: ../lib/proj/get_proj.c:260
+msgid "Unable to initialise PROJ with the following parameter list:"
+msgstr ""
+
+#: ../lib/proj/get_proj.c:269
+#, c-format
+msgid "The PROJ error message: %s"
+msgstr ""
+
+#: ../lib/proj/get_proj.c:378
+msgid "Option input overflowed option table"
+msgstr ""
+
+#: ../lib/proj/get_proj.c:416 ../lib/proj/get_proj.c:425
+#, c-format
+msgid "Unable to initialize pj cause: %s"
+msgstr "Αδύναμία έναρξης pj εξαιτίας: %s"
+
+#: ../lib/proj/get_proj.c:539
+msgid "Input Projection Parameters"
+msgstr "Εισαγωγή παραμέτρων προβολικού συστήματος"
+
+#: ../lib/proj/get_proj.c:541
+msgid "Input Unit Factor"
+msgstr "Εισαγωγή μονάδας παράγοντα"
+
+#: ../lib/proj/get_proj.c:551
+msgid "Output Projection Parameters"
+msgstr "Εξαγωγή παραμέτρων προβολικού συστήματος"
+
+#: ../lib/proj/get_proj.c:553
+msgid "Output Unit Factor"
+msgstr "Εξαγωγή μονάδας παράγοντα"
+
+#: ../lib/proj/ellipse.c:97
+#, c-format
+msgid "Invalid ellipsoid <%s> in file"
+msgstr "Εσφαλμένο ελλειψοειδές <%s> στο αρχείο"
+
+#: ../lib/proj/ellipse.c:124
+msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
+msgstr "Δεν υπάρχει δευτερη παραμέτρος ελλειψοειδούς (rf, es ή b) στο αρχείο"
+
+#: ../lib/proj/ellipse.c:128
+msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
+msgstr "Μη επιτρεπτοι παράμετροι ελλειψοειδούς (a, rf, es ή b) στο αρχείο"
+
+#: ../lib/proj/ellipse.c:141
+msgid "No ellipsoid info given in file"
+msgstr "Δεν έχουν δωθεί στοιχεία για το ελλειψοειδές στο αρχείο"
+
+#, fuzzy
+msgid "No centroid defined for area %d. Area not exported."
+msgstr "Δεν έχει καθοριστεί η σύνδεση με τη βάση δεδομένων για το επίπεδο (layer) %d"
+
+#, fuzzy
+msgid "Out of memmory"
+msgstr "G_malloc: εκτός μνήμης"
+
+#, fuzzy
+msgid "Unable to check table. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgstr "Αδυναμία δημιουργίας κεφαλικού αρχείου για [%s in %s]"
+
+#, fuzzy
+msgid "Unable to fetch one. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgstr "Αδυναμία ανοίγματος header αρχείου διανυσματικού χάρτη <%s>"
+
+#, fuzzy
+msgid "Unable to fetch all. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgstr "Αδυναμία ανοίγματος header αρχείου διανυσματικού χάρτη <%s>"
+
+#, fuzzy
+msgid "Unable to find a temporary null file <%s>"
+msgstr "Αδυναμία εγγραφής προσωρινού κενού αρχείου %s"
+
+#, fuzzy
+msgid "Unable to open null file <%s>"
+msgstr "G_spawn: αδυναμία ανοίγματος αρχείου %s"
+
+#, fuzzy
+msgid "ERROR: <%s> is not a valid GRASS location"
+msgstr "Συγνώμη <%s> δεν είναι αποδεκτή επιλογή\n"
+
+msgid "ERROR: option <%s>: <%s> exists.\n"
+msgstr "ΣΦΑΛΜΑ: Η επιλογή <%s>: <%s> υπάρχει.\n"
+
+#, fuzzy
+msgid "Unable to open file '%s'"
+msgstr "Αδυναμία ανοίγματος αρχείου %s"
+
+#, fuzzy
+msgid "Hit RETURN to continue"
+msgstr "Πατήστε RETURN για συνέχεια -->"
+
+#, fuzzy
+msgid "Vector map <%s> is not opened on topology level"
+msgstr "Ο διανυσματικός χάρτης <%s> δεν είναι ανοικτός σε επίπεδο >= 2"
+
+msgid "Background color"
+msgstr "Χρώμα φόντου"
+
+#, fuzzy
+msgid "Removing empty 3D raster maps"
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#, fuzzy
+msgid "Mode type: {0} not supported."
+msgstr "OGR χαρακτηριστικό χωρίς ID αγνοείται"
+
+#, fuzzy
+msgid "Attributes for category %d not found"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr "Η εγγραφή της βάσης δεδομένων για cat %d δεν βρέθηκε"
 
 #: ../lib/vector/Vlib/net_build.c:467
@@ -10904,55 +12517,73 @@ msgstr "[%s]: Δεν υπάρχει τέτοιο χρώμα"
 #~ msgid "BUG in descriptions, option '%s' in <%s> does not exist"
 #~ msgstr "BUG στις περιγραφές, επιλογή '%s' στο <%s> δεν υπάρχει"
 
-#~ msgid "which is missing."
-#~ msgstr "το οποίο λείπει"
+msgid "which is missing."
+msgstr "το οποίο λείπει"
 
-#~ msgid "whose header file can't be opened."
-#~ msgstr "του οποίου το κεφαλικό (header) αρχείο δεν μπορεί να ανοίξει"
+msgid "whose header file can't be opened."
+msgstr "του οποίου το κεφαλικό (header) αρχείο δεν μπορεί να ανοίξει"
 
-#~ msgid "Illegal row value"
-#~ msgstr "Μη επιτρεπτή τιμή γραμμής"
+msgid "Illegal row value"
+msgstr "Μη επιτρεπτή τιμή γραμμής"
 
-#~ msgid "Illegal col value"
-#~ msgstr "Μη επιτρεπτή col τιμή"
+msgid "Illegal col value"
+msgstr "Μη επιτρεπτή col τιμή"
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "μη επιτρεπτή n-s3 τιμή ανάλυσης"
+msgid "Illegal n-s3 resolution value"
+msgstr "μη επιτρεπτή n-s3 τιμή ανάλυσης"
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "Μη επιτρεπτή row3 τιμή"
+msgid "Illegal row3 value"
+msgstr "Μη επιτρεπτή row3 τιμή"
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "μη επιτρεπτή e-w3 τιμή ανάλυσης"
+msgid "Illegal e-w3 resolution value"
+msgstr "μη επιτρεπτή e-w3 τιμή ανάλυσης"
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "μη επιτρεπτή col3 τιμή"
+msgid "Illegal col3 value"
+msgstr "μη επιτρεπτή col3 τιμή"
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "Μη επιτρεπτή e-w τιμή ανάλυσης"
+msgid "Illegal e-w resolution value"
+msgstr "Μη επιτρεπτή e-w τιμή ανάλυσης"
 
-#~ msgid "North must be north of South"
-#~ msgstr "Ο βοράς πρέπει να είναι βορειότερα του Νότου"
+msgid "North must be north of South"
+msgstr "Ο βοράς πρέπει να είναι βορειότερα του Νότου"
 
+<<<<<<< HEAD
 #~ msgid "East must be larger than West"
 #~ msgstr "Η Ανατολή πρέπει να είναι μεγαλύτερηαπό τη Δύση"
+=======
+msgid "North must be larger than South"
+msgstr "Ο Βοράς πρέπει να είναι μεγαλύτερος από τον Νότο"
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "Λάθος συντεταγμένες"
+msgid "East must be larger than West"
+msgstr "Η Ανατολή πρέπει να είναι μεγαλύτερηαπό τη Δύση"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "Μη επιτρεπτη n-s τιμή ανάλυσης"
+msgid "Invalid coordinates"
+msgstr "Λάθος συντεταγμένες"
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "μη επιτρεπτή t-b3 τιμή ανάλυσης"
+msgid "Illegal n-s resolution value"
+msgstr "Μη επιτρεπτη n-s τιμή ανάλυσης"
 
-#~ msgid "Illegal depths value"
-#~ msgstr "Μη επιτρεπτές τιμές βάθους"
+msgid "Illegal t-b3 resolution value"
+msgstr "μη επιτρεπτή t-b3 τιμή ανάλυσης"
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "Το πάνω πρέπει να είναι μεγαλύτερο του κάτω"
+msgid "Illegal depths value"
+msgstr "Μη επιτρεπτές τιμές βάθους"
 
+msgid "Top must be larger than Bottom"
+msgstr "Το πάνω πρέπει να είναι μεγαλύτερο του κάτω"
+
+<<<<<<< HEAD
 #~ msgid "Unable to open header file for raster map <%s@%s>"
 #~ msgstr ""
+<<<<<<< HEAD
 #~ "Αδυναμία ανοίγματος κεφαλικού (header) αρχείου για τον ράστερ χάρτη "
 #~ "<%s@%s>"
+=======
+#~ "Αδυναμία ανοίγματος κεφαλικού (header) αρχείου για τον ράστερ χάρτη <%s@"
+#~ "%s>"
+=======
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "Αδυναμία ανοίγματος κεφαλικού (header) αρχείου για τον ράστερ χάρτη <%s@%s>"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))

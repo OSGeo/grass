@@ -31,6 +31,21 @@
 #define X_OK 1
 #endif
 
+<<<<<<< HEAD
+=======
+#include <sys/types.h>
+#ifdef USE_DIRECT
+#include <sys/dir.h>
+typedef struct direct dir_entry;
+#else
+#include <dirent.h>
+typedef struct dirent dir_entry;
+#endif
+
+extern DIR *opendir();
+extern dir_entry *readdir();
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 static int cmp_dirent(const void *, const void *);
 static int get_perm(char *);
 static void sort_dirent(dbDirent *, int);
@@ -80,8 +95,13 @@ dbDirent *db_dirent(const char *dirname, int *n)
         closedir(dp);
         return (dbDirent *)NULL;
     }
+<<<<<<< HEAD
     db_dirent = db_alloc_dirent_array(count);
     if (db_dirent == NULL) {
+=======
+    dirent = db_alloc_dirent_array(count);
+    if (dirent == NULL) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         closedir(dp);
         return (dbDirent *)NULL;
     }
@@ -91,11 +111,19 @@ dbDirent *db_dirent(const char *dirname, int *n)
         if (entry == NULL) /* this shouldn't happen */
             break;
 
+<<<<<<< HEAD
         if (DB_OK != db_set_string(&db_dirent[i].name, entry->d_name))
             break;
         sprintf(path, "%s/%s", dirname, entry->d_name);
         db_dirent[i].perm = get_perm(path);
         db_dirent[i].isdir = (db_isdir(path) == DB_OK);
+=======
+        if (DB_OK != db_set_string(&dirent[i].name, entry->d_name))
+            break;
+        sprintf(path, "%s/%s", dirname, entry->d_name);
+        dirent[i].perm = get_perm(path);
+        dirent[i].isdir = (db_isdir(path) == DB_OK);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     closedir(dp);
     db_free(path);
@@ -108,6 +136,7 @@ dbDirent *db_dirent(const char *dirname, int *n)
 /*!
    \brief Free dbDirent
 
+<<<<<<< HEAD
    \param db_dirent pointer to dbDirent
    \param count number of entities in the array
  */
@@ -119,6 +148,19 @@ void db_free_dirent_array(dbDirent *db_dirent, int count)
         for (i = 0; i < count; i++)
             db_free_string(&db_dirent[i].name);
         db_free(db_dirent);
+=======
+   \param dirent pointer to dbDirent
+   \param count number of entities in the array
+ */
+void db_free_dirent_array(dbDirent *dirent, int count)
+{
+    int i;
+
+    if (dirent) {
+        for (i = 0; i < count; i++)
+            db_free_string(&dirent[i].name);
+        db_free(dirent);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 }
 
@@ -165,12 +207,21 @@ dbDirent *db_alloc_dirent_array(int count)
     int i;
     dbDirent *db_dirent;
 
+<<<<<<< HEAD
     db_dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
     if (db_dirent == NULL)
         return db_dirent;
 
     for (i = 0; i < count; i++)
         db_init_string(&db_dirent[i].name);
+=======
+    dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
+    if (dirent == NULL)
+        return dirent;
+
+    for (i = 0; i < count; i++)
+        db_init_string(&dirent[i].name);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     return db_dirent;
 }

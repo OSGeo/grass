@@ -1993,7 +1993,373 @@ msgstr ""
 msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/gis/open.c:123
+=======
+#: ../lib/gis/gisinit.c:104
+msgid "System not initialized. Programmer forgot to call G_gisinit()."
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprzlib.c:100
+#: ../lib/gis/cmprzlib.c:179 ../lib/gis/cmprzstd.c:102
+#: ../lib/gis/cmprzstd.c:176 ../lib/gis/cmprbzip.c:104
+#: ../lib/gis/cmprbzip.c:183 ../lib/gis/compress.c:335
+msgid "No source buffer"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:92 ../lib/gis/cmprlz4.c:159 ../lib/gis/cmprzlib.c:103
+#: ../lib/gis/cmprzlib.c:182 ../lib/gis/cmprzstd.c:105
+#: ../lib/gis/cmprzstd.c:179 ../lib/gis/cmprbzip.c:107
+#: ../lib/gis/cmprbzip.c:186
+msgid "No destination buffer"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:99 ../lib/gis/cmprlz4.c:166 ../lib/gis/cmprzlib.c:110
+#: ../lib/gis/cmprzlib.c:189 ../lib/gis/cmprzstd.c:112
+#: ../lib/gis/cmprzstd.c:186 ../lib/gis/cmprbzip.c:114
+#: ../lib/gis/cmprbzip.c:193 ../lib/gis/compress.c:337
+#, c-format
+msgid "Invalid source buffer size %d"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:101 ../lib/gis/cmprlz4.c:168 ../lib/gis/cmprzlib.c:112
+#: ../lib/gis/cmprzlib.c:191 ../lib/gis/cmprzstd.c:114
+#: ../lib/gis/cmprzstd.c:188 ../lib/gis/cmprbzip.c:116
+#: ../lib/gis/cmprbzip.c:195 ../lib/gis/compress.c:257
+#, c-format
+msgid "Invalid destination buffer size %d"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:121
+msgid "LZ4 compression error"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:177
+msgid "LZ4 decompression error"
+msgstr ""
+
+#: ../lib/gis/cmprlz4.c:186 ../lib/gis/cmprzlib.c:215 ../lib/gis/cmprzstd.c:206
+#: ../lib/gis/cmprbzip.c:219
+#, c-format
+msgid "Got uncompressed size %d, expected %d"
+msgstr ""
+
+#: ../lib/gis/distance.c:154
+#, c-format
+msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:84
+msgid "Description:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:103
+msgid "Keywords:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:111
+msgid "Usage:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:141
+msgid "ERROR: Option key not defined"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:198
+msgid "Flags:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:223 ../lib/gis/parser_interface.c:329
+#: ../lib/gis/parser_rest.c:164 ../lib/gis/parser_html.c:179
+msgid "Allow output files to overwrite existing files"
+msgstr "Permiteți fișierele de ieșire pentru a suprascrie fișierele existente"
+
+#: ../lib/gis/parser_help.c:225 ../lib/gis/parser_interface.c:337
+#: ../lib/gis/parser_html.c:183
+msgid "Print usage summary"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:226 ../lib/gis/parser_interface.c:344
+#: ../lib/gis/parser_rest.c:168 ../lib/gis/parser_html.c:186
+msgid "Verbose module output"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:227 ../lib/gis/parser_interface.c:351
+#: ../lib/gis/parser_rest.c:171 ../lib/gis/parser_html.c:189
+msgid "Quiet module output"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:228
+msgid "Super quiet module output"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:229 ../lib/gis/parser_html.c:192
+msgid "Force launching GUI dialog"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:238
+msgid "Parameters:"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:261
+#, c-format
+msgid "  %*s   default: %s\n"
+msgstr ""
+
+#: ../lib/gis/parser_help.c:287
+#, c-format
+msgid "  %*s   options: "
+msgstr ""
+
+#: ../lib/gis/proj3.c:124 ../lib/vector/Vlib/header.c:556
+msgid "Unknown projection"
+msgstr "Proiecţie necunoscută"
+
+#: ../lib/gis/error.c:362
+msgid "WARNING: "
+msgstr ""
+
+#: ../lib/gis/list.c:83
+#, c-format
+msgid "no %s files available in current mapset\n"
+msgstr ""
+
+#: ../lib/gis/list.c:86
+#, c-format
+msgid "no %s files available in mapset <%s>\n"
+msgstr ""
+
+#: ../lib/gis/list.c:132
+#, c-format
+msgid "%s files available in mapset <%s>:\n"
+msgstr ""
+
+#: ../lib/gis/list.c:204
+msgid "G_list: Unknown element type"
+msgstr ""
+
+#: ../lib/gis/alloc.c:44 ../lib/gis/alloc.c:86 ../lib/gis/alloc.c:132
+#, c-format
+msgid "Current region rows: %d, cols: %d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:47
+#, c-format
+msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:89
+#, c-format
+msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/alloc.c:135
+#, c-format
+msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#: ../lib/gis/parser_json.c:373
+#, c-format
+msgid "Input string not understood: <%s>. Multiple '@' chars?"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:90
+#, c-format
+msgid "Unable to make mapset element %s (%s): %s"
+msgstr ""
+
+#: ../lib/gis/mapset_msc.c:94
+#, c-format
+msgid "Unable to access mapset element %s (%s): %s"
+msgstr ""
+
+#: ../lib/gis/paths.c:201
+#, c-format
+msgid "Unable to open file <%s> for reading"
+msgstr ""
+
+#: ../lib/gis/paths.c:217
+#, c-format
+msgid "Unable to fetch security info for <%s>"
+msgstr ""
+
+#: ../lib/gis/datum.c:160
+#, c-format
+msgid "unable to open datum table file: %s"
+msgstr ""
+
+#: ../lib/gis/datum.c:182
+#, c-format
+msgid "error in datum table file, line %d"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:140
+#, c-format
+msgid "Failed to print %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:254
+#, c-format
+msgid "Failed to parse string specifier: %s"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:343
+#, c-format
+msgid "Format specifier exceeds the buffer size (%d)"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:531 ../lib/gis/make_loc.c:581
+#: ../lib/gis/key_value3.c:33
+#, c-format
+msgid "Unable to open output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/make_loc.c:545 ../lib/gis/make_loc.c:595
+#: ../lib/gis/get_projinfo.c:196 ../lib/gis/get_projinfo.c:311
+#: ../lib/gis/key_value3.c:39
+#, c-format
+msgid "Error closing output file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
+#, c-format
+msgid "Unable to open ellipsoid table file <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
+#, c-format
+msgid "Invalid a: field '%s' in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:356
+#, c-format
+msgid "Invalid ellipsoid '%s' in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:370
+#, c-format
+msgid "Invalid es: field '%s' in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/get_ellipse.c:383
+#, c-format
+msgid "No ellipsoid info given in file %s in <%s>"
+msgstr ""
+
+#: ../lib/gis/view.c:176
+#, c-format
+msgid "Unable to open %s for writing"
+msgstr "Nu s-a putut deschide %s pentru scriere"
+
+#: ../lib/gis/view.c:262 ../lib/gis/view.c:479
+#, c-format
+msgid "Unable to open %s for reading"
+msgstr "Nu s-a putut deschide %s pentru citire"
+
+#: ../lib/gis/view.c:465
+#, c-format
+msgid "GRASS window when view was saved:\n"
+msgstr ""
+
+#: ../lib/gis/view.c:545
+#, c-format
+msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgstr ""
+
+#: ../lib/gis/view.c:549
+#, c-format
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr ""
+
+#: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
+#, c-format
+msgid "Unable to seek: %s"
+msgstr ""
+
+#: ../lib/gis/seek.c:58
+msgid "Seek offset out of range"
+msgstr ""
+
+#: ../lib/gis/done_msg.c:38
+#, c-format
+msgid "%s complete. %s"
+msgstr ""
+
+#: ../lib/gis/proj2.c:63
+msgid "Latitude-Longitude"
+msgstr "Latitudine-Longitudine"
+
+#: ../lib/gis/proj2.c:65
+msgid "Other Projection"
+msgstr "Altă proiecţie"
+
+#: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
+#, c-format
+msgid "Illegal n-s resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
+#, c-format
+msgid "Illegal number of rows: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
+#, c-format
+msgid "Illegal e-w resolution value: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
+#, c-format
+msgid "Illegal number of columns: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
+#, c-format
+msgid "North must be north of South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
+#, c-format
+msgid "North must be larger than South, but %g (north) <= %g (south"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
+#, c-format
+msgid "East must be larger than West, but %g (east) <= %g (west)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
+msgid "Invalid coordinates: negative number of columns"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
+msgid "Invalid coordinates: negative number of rows"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
+msgid "NS resolution has been changed"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:129 ../lib/gis/adj_cellhd.c:295
+msgid "EW resolution has been changed"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:132 ../lib/gis/adj_cellhd.c:298
+msgid "NS and EW resolutions are different"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:175
+#, c-format
+msgid "Illegal n-s resolution value for 3D: %g"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:184
+#, c-format
+msgid "Illegal number of rows for 3D: %d (resolution is %g)"
+msgstr ""
+
+#: ../lib/gis/adj_cellhd.c:193
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "G__open(write): Unable to open '%s': %s"
 msgstr ""
@@ -4015,8 +4381,24 @@ msgstr ""
 msgid "Unable to write range file for <%s>"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/raster/range.c:465 ../lib/raster/range.c:479
 #: ../lib/raster/range.c:497 ../lib/raster/range.c:502
+=======
+#: ../lib/vector/Vlib/write.c:234
+msgid "Unable to rewrite feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:266
+msgid "Unable to delete feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:299
+msgid "Unable to restore feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:308
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Unable to write stats file for <%s>"
 msgstr ""
@@ -8055,6 +8437,7 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/read_pg.c:1739
 #, c-format
 msgid ""
@@ -9821,6 +10204,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Unable to rewrite feature/offset %<PRId64> in vector map <%s>"
 msgstr "Un s-a putut citi harta vectorială <%s>"
+=======
+#: ../lib/raster/get_cellhd.c:70
+#, c-format
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../lib/vector/Vlib/write.c:288
 #, fuzzy, c-format
@@ -10744,5 +11133,5 @@ msgstr ""
 #~ msgid "Category must be integer"
 #~ msgstr "Categoria trebuie să fie de tip integer"
 
-#~ msgid "which is missing."
-#~ msgstr "care lipseşte"
+msgid "which is missing."
+msgstr "care lipseşte"

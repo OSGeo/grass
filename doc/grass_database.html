@@ -53,6 +53,7 @@ is similar to, e.g. PostGIS, database, as it stores all information
 inside in a specific format and is accessible by specific tools.
 GRASS GIS Databases is in GRASS GIS often called GISDBASE or DATABASE.
 
+<<<<<<< HEAD
 <h3>GRASS Projects</h3>
 
 A project is further organized into mapsets which are subdirectories of
@@ -60,6 +61,14 @@ the project directory. All data in one project have the same coordinate
 reference system (projection, datum).
 Each project contains a mapset called PERMANENT.
 Typically, a project contains all data related to one real-world project
+=======
+<h3>GRASS Locations</h3>
+
+Location is a directory which contains GRASS Mapsets which are its subdirectories.
+All data in one Location have the same projection (coordinate system, datum).
+Each Location must contain Mapset called PERMANENT.
+Typically, a Location contains all data related to one project
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 or a geographic area (geographic location or region).
 Alternatively, a project can simply contain data in a given coordinate
 reference system.
@@ -185,18 +194,47 @@ as standard raster maps. Similarly for newly created maps,
 setups a format and directory where the actual data will be stored,
 however in GRASS Database the data will be created as standard maps.
 
+<<<<<<< HEAD
 <h3>Starting GRASS GIS</h3>
 
 After launching GRASS GIS for the first time,
 the GUI opens in a default project <code>world_latlong_wgs84</code>.
 From there a new project can be created.
+=======
+<h3>Starting GRASS GIS using GUI</h3>
+
+After launching GRASS GIS, the startup window will open (Fig. 2).
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 <p>
 <center>
   <img src="grass_start.png" alt="GRASS GIS GUI after first start"><br>
 </center>
 
+<<<<<<< HEAD
 GRASS GIS can be also started with a given database, project and mapset
+=======
+The startup windows provides these functions:
+
+<ol>
+    <li>Selecting the GRASS GIS Database directory.
+    <li>Selecting the Location (e.g. a project or area).
+        See the <em>Location Wizard</em> (4) for creating new Locations.
+    <li>Selecting the Mapset (a subproject or task).
+        Creating a new Mapset requires only name.
+    <li>The <em>Location Wizard</em> for creating new Locations
+        based for example, on existing georeferenced file or EPSG code.
+    <li>Download a sample Location from the Internet.
+    <li>Start GRASS GIS once you have selected an existing Location and Mapset
+        or defined a new one. The graphical user interface
+        <a href="wxGUI.html">wxGUI</a> will open and provide you with a
+        menu system, map visualization tool, digitizer, and more.
+</ol>
+
+<h3>Starting GRASS GIS using command line</h3>
+
+GRASS GIS can be started with given Database, Location and Mapset
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 from the command line. For example, the following will start
 in a given mapset with only command line interface:
 
@@ -235,11 +273,19 @@ grass -c EPSG:5514:3 D:\grassdata\mylocation
 
 See <a href="grass.html"><em>grass</em></a> command manual for more details.
 
+<<<<<<< HEAD
 <h3>Creating a New Project with the Project Wizard</h3>
 
 The <a href="wxGUI.html">GUI</a> provides a
 graphical <em>Project Wizard</em> which lets you easily create a
 new project for your own data. You will be guided through a series of
+=======
+<h3>Creating a New Location with the Location Wizard</h3>
+
+The <a href="wxGUI.html">wxGUI</a> graphical user interface provides a
+graphical <em>Location Wizard</em> which lets you easily create a
+new Location for your own data. You will be guided through a series of
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 dialogues to browse and select predefined projections or to
 define custom projections.
 
@@ -276,6 +322,7 @@ the <em>File</em> menu in <em>Layer Manager</em> or
 <em>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 <a href="index.html">GRASS GIS Reference Manual</a>
 <br>
 <a href="grass.html">GRASS GIS startup program manual page</a>
@@ -289,6 +336,11 @@ the <em>File</em> menu in <em>Layer Manager</em> or
 <br>
 <a href="grass.html">GRASS GIS 8 startup program manual page</a>
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+<a href="index.html">GRASS GIS Reference Manual</a>
+<br>
+<a href="grass.html">GRASS GIS startup program manual page</a>
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 <br>
 <a href="https://grasswiki.osgeo.org/wiki/Importing_data">Importing data on GRASS Wiki</a>
 <br>

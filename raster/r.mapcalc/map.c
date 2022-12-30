@@ -593,8 +593,13 @@ void setup_maps(void)
         setup_map(&maps[i]);
 }
 
+<<<<<<< HEAD
 void get_map_row(int idx, int mod, int depth UNUSED, int row, int col,
                  void *buf, int res_type)
+=======
+void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
+                 int res_type)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     CELL *ibuf;
     DCELL *fbuf;
@@ -725,7 +730,10 @@ void copy_history(const char *dst, int idx)
     Rast_write_history((char *)dst, &hist);
 }
 
+<<<<<<< HEAD
 #define RECORD_LEN 80
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 void create_history(const char *dst, expression *e)
 {
     int WIDTH = RECORD_LEN - 12;
@@ -736,7 +744,11 @@ void create_history(const char *dst, expression *e)
 
     Rast_short_history(dst, "raster", &hist);
 
+<<<<<<< HEAD
     for (;;) {
+=======
+    for (i = 0;; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         char buf[RECORD_LEN];
         int n;
 

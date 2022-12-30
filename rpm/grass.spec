@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 %global shortver 83
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
@@ -18,6 +19,13 @@ Name:		grass
 Name:		grass
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
 Version:	8.0.0
+=======
+%global shortver 82
+%global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
+
+Name:		grass
+Version:	8.2.0
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 Release:	1%{?dist}
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
@@ -45,7 +53,11 @@ URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
 
 # fix pkgconfig file
+<<<<<<< HEAD
 Patch 0:	grass-pkgconfig.patch
+=======
+Patch0:		grass-pkgconfig.patch
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 BuildRequires:	bison
 %if %{with flexiblas}
@@ -88,6 +100,13 @@ BuildRequires:	postgresql-devel
 BuildRequires:	libpq-devel
 %endif
 BuildRequires:	proj-devel
+<<<<<<< HEAD
+=======
+%if (0%{?rhel} <= 6 && !0%{?fedora})
+# argparse is included in python2.7+ but not python2.6
+BuildRequires:	python-argparse
+%endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 %if 0%{?rhel} == 7
 # EPEL7
 BuildRequires:	python%{python3_version_nodots}-dateutil
@@ -171,7 +190,11 @@ GRASS GIS development headers
 
 %prep
 %setup -q
+<<<<<<< HEAD
 %patch 0 -p1 -b.libdir
+=======
+%patch0 -p1 -b.libdir
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
@@ -212,7 +235,6 @@ find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 	--with-regex \
 	--with-openmp \
 	--with-gdal=%{_bindir}/gdal-config \
-	--with-wxwidgets=%{_bindir}/wx-config \
 	--with-geos=%{_bindir}/geos-config \
 	--with-netcdf=%{_bindir}/nc-config \
 	--with-mysql-includes=%{_includedir}/mysql \
@@ -356,6 +378,7 @@ fi
 %changelog
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 * Sun Aug 06 2023 Alexandre Detiste <alexandre.detiste@gmail.com> - 8.3.0-3
 - Remove support for RHEL6: Grass is now Python3 only
 
@@ -492,6 +515,71 @@ fi
 - New upstream version GRASS GIS 8.0.0
 
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+* Fri Jan 28 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
+- New upstream version GRASS GIS 8.0.0
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.6-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Thu Nov 11 2021 Sandro Mani <manisandro@gmail.com> - 7.8.6-3
+- Rebuild (gdal)
+
+* Sun Nov 07 2021 Björn Esser <besser82@fedoraproject.org> - 7.8.6-2
+- Add patch to fix installation path in pkgconfig file
+
+* Tue Nov 02 2021 Markus Neteler <neteler@mundialis.de> - 7.8.6-1
+- New upstream version GRASS GIS 7.8.6
+
+* Thu Oct 21 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-11
+- Rebuild (geos)
+
+* Tue Aug 10 2021 Orion Poplawski <orion@nwra.com> - 7.8.5-10
+- Rebuild for netcdf 4.8.0
+
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.5-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Mon Jun 21 2021 Markus Neteler <neteler@mundialis.de> - 7.8.5-8
+- fix ctypes for Python 3.10 (RHBZ #1973621)
+
+* Fri May 07 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-7
+- Rebuild (gdal)
+
+* Wed Mar 24 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-6
+- Bump
+
+* Sun Mar 07 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-5
+- Rebuild (proj)
+
+* Sat Feb 13 2021 Sandro Mani <manisandro@gmail.com> - 7.8.5-4
+- Rebuild (geos)
+
+* Mon Feb 08 2021 Pavel Raiskup <praiskup@redhat.com> - 7.8.5-3
+- rebuild for libpq ABI fix rhbz#1908268
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Tue Dec 22 2020 Markus Neteler <neteler@mundialis.de> - 7.8.5-1
+- New upstream version GRASS GIS 7.8.5
+
+* Tue Nov 24 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-6
+- Clean up proj-datumgrid requires < f34+
+
+* Fri Nov 20 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-5
+- Drop proj-datumgrid requires on f34+
+
+* Fri Nov  6 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-4
+- Rebuild (proj, gdal)
+
+* Wed Nov  4 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-3
+- Rebuild (PDAL)
+
+* Sat Oct 17 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-2
+- reinstate %%{name}-config.h (RHBZ #1889035) as being needed for QGIS
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 * Mon Oct 05 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-1
 - New upstream version GRASS GIS 7.8.4
 - disabled %%{name}-config.h

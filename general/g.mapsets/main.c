@@ -70,7 +70,11 @@ int main(int argc, char *argv[])
     char path_buf[GPATH_MAX];
     char *path, *fsep;
     int operation, nchoices;
+<<<<<<< HEAD
     enum OutputFormat format;
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     char **mapset_name;
     int nmapsets;
 
@@ -105,12 +109,31 @@ int main(int argc, char *argv[])
     opt.op->description = _("Operation to be performed");
     opt.op->answer = "add";
 
+<<<<<<< HEAD
     opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+=======
+<<<<<<< HEAD
+    opt.format = G_define_option();
+    opt.format->key = "format";
+    opt.format->type = TYPE_STRING;
+    opt.format->required = YES;
+    opt.format->label = _("Output format for printing (-l and -p flags)");
+    opt.format->options = "plain,json";
+    opt.format->descriptions = "plain;Configurable plain text output;"
+                               "json;JSON (JavaScript Object Notation);";
+    opt.format->answer = "plain";
+>>>>>>> 196338e256 (wxpyimgview: explicit conversion to int (#2704))
     opt.format->guisection = _("Print");
 
     opt.fsep = G_define_standard_option(G_OPT_F_SEP);
     opt.fsep->answer = NULL;
     opt.fsep->guisection = _("Print");
+=======
+    opt.fs = G_define_standard_option(G_OPT_F_SEP);
+    opt.fs->label = _("Field separator for printing (-l and -p flags)");
+    opt.fs->answer = "space";
+    opt.fs->guisection = _("Print");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     opt.list = G_define_flag();
     opt.list->key = 'l';
@@ -155,6 +178,7 @@ int main(int argc, char *argv[])
         }
     }
 
+<<<<<<< HEAD
     if (strcmp(opt.format->answer, "json") == 0)
         format = JSON;
     else
@@ -176,6 +200,9 @@ int main(int argc, char *argv[])
         else
             fsep = NULL; /* Something like a separator is part of the format. */
     }
+=======
+    fs = G_option_to_separator(opt.fs);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* list available mapsets */
     if (opt.list->answer) {

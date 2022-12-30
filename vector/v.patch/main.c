@@ -8,7 +8,11 @@
  *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com> (bbox)
  * PURPOSE:
+<<<<<<< HEAD
  * COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
+=======
+ * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -416,7 +420,11 @@ int main(int argc, char *argv[])
             Vect_copy_head_data(&InMap, &OutMap);
 
         if (do_table) {
+<<<<<<< HEAD
             add_cat = maxcat;
+=======
+            add_cat = maxcat + 1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         else {
             add_cat = 0;

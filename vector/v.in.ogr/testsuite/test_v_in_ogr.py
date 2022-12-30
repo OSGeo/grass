@@ -2,7 +2,10 @@
 
 @author Markus Neteler
 """
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -24,6 +27,10 @@ class TestOgrImport(TestCase):
         )
 
     def test_1(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "v.in.ogr",
             "Import GeoPackage Format",
@@ -59,6 +66,10 @@ skewness=2.82871"""
         )
 
     def test_2(self):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.assertModule(
             "v.in.ogr",
             "Import 3D SHAPE Format",

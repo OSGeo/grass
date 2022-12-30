@@ -234,7 +234,11 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
     if (nareas_all > 0)
         G_message(_("Converted areas: %d of %d"), nareas,
                   Vect_get_num_primitives(&Map, GV_CENTROID));
+<<<<<<< HEAD
     /* maximum possible number of lines: number of GV_LINE + GV_POINT
+=======
+    /* maximum possible numer of lines: number of GV_LINE + GV_POINT
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
      * actual number of lines, currently unknown:
      * number of lines are within cat constraint
      * and overlap with current region */

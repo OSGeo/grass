@@ -407,7 +407,11 @@ int gvld_isosurf(geovol *gvl)
 
    \return 0
  */
+<<<<<<< HEAD
 int gvld_wire_isosurf(geovol *gvl UNUSED)
+=======
+int gvld_wire_isosurf(geovol *gvl)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     return (0);
 }

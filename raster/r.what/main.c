@@ -50,8 +50,11 @@ static int by_point(const void *, const void *);
 
 static int tty = 0;
 
+<<<<<<< HEAD
 enum OutputFormat { PLAIN, JSON };
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 int main(int argc, char *argv[])
 {
     int i, j;
@@ -97,12 +100,15 @@ int main(int argc, char *argv[])
     int red, green, blue;
     struct GModule *module;
 
+<<<<<<< HEAD
     JSON_Value *root_value = NULL, *point_value, *layer_value;
     JSON_Array *root_array;
     JSON_Object *point_object, *layer_object;
 
     enum OutputFormat format;
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     G_gisinit(argv[0]);
 
     /* Set description */
@@ -282,7 +288,11 @@ int main(int argc, char *argv[])
     }
 
     /* print header row */
+<<<<<<< HEAD
     if (format == PLAIN && flg.header->answer) {
+=======
+    if (flg.header->answer) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (flg.cat->answer) {
             fprintf(stdout, "cat%s", fs);
         }
@@ -492,11 +502,16 @@ int main(int argc, char *argv[])
             qsort(cache, point_cnt, sizeof(struct order), by_point);
 
         /* report data from re-ordered cache */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (point = 0; point < point_cnt; point++) {
 
             G_debug(1, "%s|%s at col %d, row %d\n", cache[point].east_buf,
                     cache[point].north_buf, cache[point].col, cache[point].row);
 
+<<<<<<< HEAD
             if (format == PLAIN) {
 
                 if (flg.cat->answer) {
@@ -598,6 +613,52 @@ int main(int argc, char *argv[])
                 }
                 json_array_append_value(root_array, point_value);
             }
+=======
+            if (flg.cat->answer) {
+                fprintf(stdout, "%d%s", cache[point].cat, fs);
+            }
+            fprintf(stdout, "%s%s%s%s%s", cache[point].east_buf, fs,
+                    cache[point].north_buf, fs, cache[point].lab_buf);
+
+            for (i = 0; i < nfiles; i++) {
+                if (out_type[i] == CELL_TYPE) {
+                    if (Rast_is_c_null_value(&cache[point].value[i])) {
+                        fprintf(stdout, "%s%s", fs, null_str);
+                        if (flg.label->answer)
+                            fprintf(stdout, "%s", fs);
+                        if (flg.color->answer)
+                            fprintf(stdout, "%s", fs);
+                        continue;
+                    }
+                    fprintf(stdout, "%s%ld", fs, (long)cache[point].value[i]);
+                    cache[point].dvalue[i] = cache[point].value[i];
+                }
+                else { /* FCELL or DCELL */
+
+                    if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
+                        fprintf(stdout, "%s%s", fs, null_str);
+                        if (flg.label->answer)
+                            fprintf(stdout, "%s", fs);
+                        if (flg.color->answer)
+                            fprintf(stdout, "%s", fs);
+                        continue;
+                    }
+                    if (out_type[i] == FCELL_TYPE)
+                        sprintf(tmp_buf, "%.7g", cache[point].dvalue[i]);
+                    else /* DCELL */
+                        sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
+                    G_trim_decimal(tmp_buf); /* not needed with %g? */
+                    fprintf(stdout, "%s%s", fs, tmp_buf);
+                }
+                if (flg.label->answer)
+                    fprintf(
+                        stdout, "%s%s", fs,
+                        Rast_get_d_cat(&(cache[point].dvalue[i]), &cats[i]));
+                if (flg.color->answer)
+                    fprintf(stdout, "%s%s", fs, cache[point].clr_buf[i]);
+            }
+            fprintf(stdout, "\n");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
 
         if (cache_report & !tty)
@@ -607,6 +668,7 @@ int main(int argc, char *argv[])
         cache_hit_tot += cache_hit;
         cache_miss_tot += cache_miss;
         cache_hit = cache_miss = 0;
+<<<<<<< HEAD
     }
 
     if (format == JSON) {
@@ -618,6 +680,8 @@ int main(int argc, char *argv[])
         puts(serialized_string);
         json_free_serialized_string(serialized_string);
         json_value_free(root_value);
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     if (!opt.coords->answers && !opt.points->answers && tty)

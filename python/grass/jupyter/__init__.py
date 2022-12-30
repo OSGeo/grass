@@ -1,5 +1,8 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 # MODULE:    grass.jupyter
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
@@ -52,6 +55,7 @@ To use existing data, we start a GRASS session in an existing mapset::
 
 >>> gj.init("grassdata/nc_basic_spm_grass7/user1")
 
+<<<<<<< HEAD
 .. note::
     Contrary to typical command line / GUI module usage, grass.jupyter
     enables output overwrite by default to align with behaviour of other
@@ -60,6 +64,8 @@ To use existing data, we start a GRASS session in an existing mapset::
     restored by setting GRASS_OVERWRITE environmental variable to "0" after
     `gj.init()` call: `os.environ["GRASS_OVERWRITE"] = "0"`.
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 All classes and functions for interaction in notebooks are now available under *gj*,
 for example we can display a map with a selected raster and vector::
 
@@ -113,6 +119,7 @@ from .map import Map
 from .map3d import Map3D
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
+<<<<<<< HEAD
 from .seriesmap import SeriesMap
 =======
 from .setup import *
@@ -132,3 +139,5 @@ from .display import *
 =======
 from .utils import *
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

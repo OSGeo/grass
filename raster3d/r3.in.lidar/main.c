@@ -89,7 +89,11 @@ static void raster3d_divide_by_flat(RASTER3D_Map *a, RASTER3D_Map *b,
             for (col = 0; col < region->cols; col++) {
                 tmp = Rast3d_get_double(b, col, row, 0);
                 /* since it is count, using cast to integer to check
+<<<<<<< HEAD
                    against zero, limits the value to max of CELL */
+=======
+                   againts zero, limits the value to max of CELL */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 if (((CELL)tmp) > 0) {
                     tmp = Rast3d_get_double(a, col, row, depth) / tmp;
                     Rast3d_put_double(c, col, row, depth, tmp);
@@ -287,10 +291,16 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
+<<<<<<< HEAD
         _("Override projection check (use current projects's CRS)");
     over_flag->description =
         _("Assume that the dataset has the same coordinate "
           "reference system as the current project");
+=======
+        _("Override projection check (use current location's projection)");
+    over_flag->description = _(
+        "Assume that the dataset has same projection as the current location");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     print_flag = G_define_flag();
     print_flag->key = 'p';

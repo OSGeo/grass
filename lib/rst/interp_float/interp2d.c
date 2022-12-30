@@ -66,7 +66,11 @@ int IL_grid_calc_2d(
     double *gmin, double *gmax,     /*!< min and max interp. slope val. */
     double *c1min, double *c1max,   /*!< min and max interp. curv. val. */
     double *c2min, double *c2max,   /*!< min and max interp. curv. val. */
+<<<<<<< HEAD
     double *ertot UNUSED,           /*!< total interpolating func. error */
+=======
+    double *ertot,                  /*!< total interpolating func. error */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     double *b,                      /*!< solutions of linear equations */
     off_t offset1,                  /*!< offset for temp file writing */
     double dnorm)

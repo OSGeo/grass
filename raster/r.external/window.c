@@ -91,7 +91,11 @@ void update_default_window(struct Cell_head *cellhd)
 
     if (strcmp(G_mapset(), "PERMANENT") == 0) {
         G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
+<<<<<<< HEAD
         G_message(_("Default region for this project updated"));
+=======
+        G_message(_("Default region for this location updated"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     G_put_window(&cur_wind);
     G_message(_("Region for the current mapset updated"));

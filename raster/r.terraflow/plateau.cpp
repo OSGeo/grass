@@ -86,8 +86,13 @@ detectPlateaus::~detectPlateaus()
    structs. */
 plateauType *detectPlateaus::getPlateauForward(dimension_type i,
                                                dimension_type j,
+<<<<<<< HEAD
                                                dimension_type nr UNUSED,
                                                dimension_type nc UNUSED)
+=======
+                                               dimension_type nr,
+                                               dimension_type nc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     bool ok;
     static plateauType ptarr[3]; /* return value */
@@ -247,7 +252,11 @@ void detectPlateaus::processWindow(dimension_type row, dimension_type col,
         crtlabel = labelFactory::getNewLabel();
     }
 
+<<<<<<< HEAD
     /* check boundaries that are also part of plateau (but didn't know it) */
+=======
+    /* check boundaries that are also part of plateau (but didnt know it) */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     for (int i = 0; i < 4; i++) {
         direction_type ndir(0);
         if (win.get(i) != win.get())

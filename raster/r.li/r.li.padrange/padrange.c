@@ -70,7 +70,11 @@ int main(int argc, char *argv[])
                           raster->answer, output->answer);
 }
 
+<<<<<<< HEAD
 int patchAreaDistributionRANGE(int fd, char **par UNUSED, struct area_entry *ad,
+=======
+int patchAreaDistributionRANGE(int fd, char **par, struct area_entry *ad,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                double *result)
 {
     double indice = 0;
@@ -108,7 +112,11 @@ int calculate(int fd, struct area_entry *ad, double *result)
 {
     CELL *buf, *buf_sup, *buf_null;
     CELL corrCell, precCell, supCell;
+<<<<<<< HEAD
     long npatch;
+=======
+    long npatch, area;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -208,6 +216,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
                 continue;
             }
 
+<<<<<<< HEAD
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
                 Rast_set_c_null_value(&supCell, 1);
@@ -254,6 +263,56 @@ int calculate(int fd, struct area_entry *ad, double *result)
                         pst[new_pid].count += pst[old_pid].count;
                         pst[old_pid].count = 0;
 
+=======
+            area++;
+
+            supCell = buf_sup[j + ad->x];
+            if (masked && (mask_sup[j] == 0)) {
+                Rast_set_c_null_value(&supCell, 1);
+            }
+
+            if (!Rast_is_c_null_value(&precCell) && corrCell == precCell) {
+                pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+                connected = 1;
+                pst[pid_corr[j + ad->x]].count++;
+            }
+            else {
+                connected = 0;
+            }
+
+            if (!Rast_is_c_null_value(&supCell) && corrCell == supCell) {
+
+                if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+                    /* connect or merge */
+                    /* after r.clump */
+                    if (connected) {
+                        npatch--;
+
+                        if (npatch == 0) {
+                            G_fatal_error("npatch == 0 at row %d, col %d", i,
+                                          j);
+                        }
+                    }
+
+                    old_pid = pid_corr[j + ad->x];
+                    new_pid = pid_sup[j + ad->x];
+                    pid_corr[j + ad->x] = new_pid;
+                    if (old_pid > 0) {
+                        /* merge */
+                        /* update left side of the current row */
+                        for (k = 0; k < j; k++) {
+                            if (pid_corr[k + ad->x] == old_pid)
+                                pid_corr[k + ad->x] = new_pid;
+                        }
+                        /* update right side of the previous row */
+                        for (k = j + 1; k < ad->cl; k++) {
+                            if (pid_sup[k + ad->x] == old_pid)
+                                pid_sup[k + ad->x] = new_pid;
+                        }
+                        pst[new_pid].count += pst[old_pid].count;
+                        pst[old_pid].count = 0;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         if (old_pid == pid)
                             pid--;
                     }
@@ -309,8 +368,13 @@ int calculate(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
+<<<<<<< HEAD
         min = INFINITY;
         max = -INFINITY;
+=======
+        min = 1.0 / 0.0;  /* inf */
+        max = -1.0 / 0.0; /* -inf */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;
@@ -342,7 +406,11 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 {
     DCELL *buf, *buf_sup, *buf_null;
     DCELL corrCell, precCell, supCell;
+<<<<<<< HEAD
     long npatch;
+=======
+    long npatch, area;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -442,6 +510,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                 continue;
             }
 
+<<<<<<< HEAD
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
                 Rast_set_d_null_value(&supCell, 1);
@@ -488,6 +557,56 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                         pst[new_pid].count += pst[old_pid].count;
                         pst[old_pid].count = 0;
 
+=======
+            area++;
+
+            supCell = buf_sup[j + ad->x];
+            if (masked && (mask_sup[j] == 0)) {
+                Rast_set_d_null_value(&supCell, 1);
+            }
+
+            if (!Rast_is_d_null_value(&precCell) && corrCell == precCell) {
+                pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+                connected = 1;
+                pst[pid_corr[j + ad->x]].count++;
+            }
+            else {
+                connected = 0;
+            }
+
+            if (!Rast_is_d_null_value(&supCell) && corrCell == supCell) {
+
+                if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+                    /* connect or merge */
+                    /* after r.clump */
+                    if (connected) {
+                        npatch--;
+
+                        if (npatch == 0) {
+                            G_fatal_error("npatch == 0 at row %d, col %d", i,
+                                          j);
+                        }
+                    }
+
+                    old_pid = pid_corr[j + ad->x];
+                    new_pid = pid_sup[j + ad->x];
+                    pid_corr[j + ad->x] = new_pid;
+                    if (old_pid > 0) {
+                        /* merge */
+                        /* update left side of the current row */
+                        for (k = 0; k < j; k++) {
+                            if (pid_corr[k + ad->x] == old_pid)
+                                pid_corr[k + ad->x] = new_pid;
+                        }
+                        /* update right side of the previous row */
+                        for (k = j + 1; k < ad->cl; k++) {
+                            if (pid_sup[k + ad->x] == old_pid)
+                                pid_sup[k + ad->x] = new_pid;
+                        }
+                        pst[new_pid].count += pst[old_pid].count;
+                        pst[old_pid].count = 0;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         if (old_pid == pid)
                             pid--;
                     }
@@ -543,8 +662,13 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
+<<<<<<< HEAD
         min = INFINITY;
         max = -INFINITY;
+=======
+        min = 1.0 / 0.0;  /* inf */
+        max = -1.0 / 0.0; /* -inf */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;
@@ -576,7 +700,11 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 {
     FCELL *buf, *buf_sup, *buf_null;
     FCELL corrCell, precCell, supCell;
+<<<<<<< HEAD
     long npatch;
+=======
+    long npatch, area;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -676,6 +804,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                 continue;
             }
 
+<<<<<<< HEAD
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
                 Rast_set_f_null_value(&supCell, 1);
@@ -722,6 +851,56 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                         pst[new_pid].count += pst[old_pid].count;
                         pst[old_pid].count = 0;
 
+=======
+            area++;
+
+            supCell = buf_sup[j + ad->x];
+            if (masked && (mask_sup[j] == 0)) {
+                Rast_set_f_null_value(&supCell, 1);
+            }
+
+            if (!Rast_is_f_null_value(&precCell) && corrCell == precCell) {
+                pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+                connected = 1;
+                pst[pid_corr[j + ad->x]].count++;
+            }
+            else {
+                connected = 0;
+            }
+
+            if (!Rast_is_f_null_value(&supCell) && corrCell == supCell) {
+
+                if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+                    /* connect or merge */
+                    /* after r.clump */
+                    if (connected) {
+                        npatch--;
+
+                        if (npatch == 0) {
+                            G_fatal_error("npatch == 0 at row %d, col %d", i,
+                                          j);
+                        }
+                    }
+
+                    old_pid = pid_corr[j + ad->x];
+                    new_pid = pid_sup[j + ad->x];
+                    pid_corr[j + ad->x] = new_pid;
+                    if (old_pid > 0) {
+                        /* merge */
+                        /* update left side of the current row */
+                        for (k = 0; k < j; k++) {
+                            if (pid_corr[k + ad->x] == old_pid)
+                                pid_corr[k + ad->x] = new_pid;
+                        }
+                        /* update right side of the previous row */
+                        for (k = j + 1; k < ad->cl; k++) {
+                            if (pid_sup[k + ad->x] == old_pid)
+                                pid_sup[k + ad->x] = new_pid;
+                        }
+                        pst[new_pid].count += pst[old_pid].count;
+                        pst[old_pid].count = 0;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         if (old_pid == pid)
                             pid--;
                     }
@@ -777,8 +956,13 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
+<<<<<<< HEAD
         min = INFINITY;
         max = -INFINITY;
+=======
+        min = 1.0 / 0.0;  /* inf */
+        max = -1.0 / 0.0; /* -inf */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;

@@ -27372,10 +27372,559 @@ msgstr ""
 msgid "Removed a singular subsignature number %d (%d remain)"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../imagery/i.atcorr/atmosmodel.cpp:328
 #, fuzzy
 msgid "Unknown atmospheric model!"
 msgstr "Operação desconhecida"
+=======
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:288
+#: ../imagery/i.rectify/main.c:270
+#, c-format
+msgid "Extension <%s> is illegal"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:291
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:300
+#: ../imagery/i.rectify/main.c:273
+msgid "The following raster map already exists in"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:292
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:301
+#: ../imagery/i.rectify/main.c:274 ../vector/v.rectify/main.c:205
+#, c-format
+msgid "target LOCATION %s, MAPSET %s:"
+msgstr "LOCATION destino %s, MAPSET %s:"
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:295
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:304
+#: ../imagery/i.rectify/main.c:277
+msgid "Orthorectification cancelled."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:319
+#: ../imagery/i.rectify/main.c:292
+msgid "Target resolution must be > 0, ignored"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:326
+#: ../imagery/i.rectify/main.c:299
+#, c-format
+msgid "Using region: N=%f S=%f, E=%f W=%f"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:334
+#, c-format
+msgid "No target elevation model selected for group <%s>"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:393
+#: ../imagery/i.rectify/main.c:321
+#, c-format
+msgid "Input raster map <%s> does not exist in group <%s>."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:395
+#: ../imagery/i.rectify/main.c:323
+msgid "Try:"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:400
+#: ../imagery/i.rectify/main.c:328
+msgid "Exit!"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/rectify.c:43
+#: ../imagery/i.rectify/rectify.c:43
+#, c-format
+msgid "Rectify <%s@%s> (location <%s>)"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/rectify.c:47
+#: ../imagery/i.rectify/rectify.c:46
+#, c-format
+msgid "into  <%s@%s> (location <%s>) ..."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/rectify.c:81
+#, c-format
+msgid "No elevation available at row = %d, col = %d"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/rectify.c:127
+#: ../imagery/i.rectify/rectify.c:110
+#, c-format
+msgid "Raster map <%s@%s>: projection don't match current settings"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/rectify.c:133
+#: ../imagery/i.rectify/rectify.c:116
+#, c-format
+msgid "Raster map <%s@%s>: zone don't match current settings"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:12
+#, c-format
+msgid "Control Z Point file for group <%s@%s> - "
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:15
+#: ../imagery/i.rectify/cp.c:15
+msgid "Computing equations..."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:23
+#: ../imagery/i.rectify/cp.c:27 ../imagery/i.rectify/cp.c:51
+#: ../vector/v.rectify/cp.c:363
+msgid "Poorly placed control points."
+msgstr "Pontos de controle mal posicionados."
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:24
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:29
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:54
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:60
+#: ../imagery/i.rectify/cp.c:28 ../imagery/i.rectify/cp.c:52
+#: ../vector/v.rectify/cp.c:364
+msgid " Can not generate the transformation equation."
+msgstr "Não é possível gerar a equação de transformação."
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:25
+msgid " Run OPTION 7 of i.ortho.photo again!\n"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:28
+msgid "No active Control Points!"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:30
+msgid " Run OPTION 7 of i.ortho.photo!\n"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:47
+#, c-format
+msgid "Reference Point file for group <%s@%s> - "
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:53
+msgid "Poorly placed reference points."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:55
+msgid " Run OPTION 5 of i.ortho.photo again!"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:59
+msgid "No active reference points."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:61
+msgid " Run OPTION 5 of i.ortho.photo!"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:13
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:98
+#: ../imagery/i.rectify/target.c:13 ../vector/v.rectify/target.c:18
+#, c-format
+msgid "Target information for group <%s> missing"
+msgstr "Informações de destino para o grupo <%s> ausentes"
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:19
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:104
+#: ../imagery/i.rectify/target.c:19 ../vector/v.rectify/target.c:29
+#, c-format
+msgid "Target location <%s> not found"
+msgstr "Location destino <%s> não encontrada"
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:31
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:115
+#: ../imagery/i.rectify/target.c:31 ../vector/v.rectify/target.c:40
+#: ../raster/r.in.gdal/main.c:1130
+#, c-format
+msgid "Mapset <%s> in target location <%s> - "
+msgstr "conjunto de mapas <%s> na locação destino <%s> - "
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:32
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:116
+#: ../imagery/i.rectify/target.c:32 ../vector/v.rectify/target.c:41
+#: ../raster/r.in.gdal/main.c:1132 ../raster/r.proj/main.c:290
+msgid "permission denied"
+msgstr "permissão negada"
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:32
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:116
+#: ../imagery/i.rectify/target.c:32 ../vector/v.rectify/target.c:41
+#: ../raster/r.in.gdal/main.c:1133 ../raster/r.proj/main.c:291
+msgid "not found"
+msgstr "não encontrado"
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:35
+#: ../imagery/i.ortho.photo/i.ortho.transform/main.c:119
+#: ../imagery/i.rectify/target.c:35
+msgid "Please run i.target for group "
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/angle.c:36
+msgid "Calculating camera angle to local surface..."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/angle.c:50
+#: ../imagery/i.ortho.photo/i.ortho.rectify/exec.c:47
+msgid "Could not open elevation raster"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/angle.c:66
+#, c-format
+msgid "Converting units to meters, factor=%.6f"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:10
+#: ../imagery/i.rectify/report.c:10
+msgid "complete"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:10
+#: ../imagery/i.rectify/report.c:10 ../db/db.select/main.c:105
+msgid "failed"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:20
+#: ../imagery/i.rectify/report.c:20
+#, c-format
+msgid "%d rows, %d cols (%ld cells) completed in"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:23
+#: ../imagery/i.rectify/report.c:23
+#, c-format
+msgid "%d:%02d:%02d hours"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:25
+#: ../imagery/i.rectify/report.c:25
+#, c-format
+msgid "%d:%02d minutes"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:27
+#: ../imagery/i.rectify/report.c:27
+#, c-format
+msgid "%.1f cells per minute"
+msgstr "%.1f células por minuto"
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:52
+msgid "Select or modify the imagery group target."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:56
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:71
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:64
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:54
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:57
+msgid "Name of imagery group for ortho-rectification"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:62
+msgid "Name of target location for ortho-rectification"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:68
+msgid "Name of target mapset for ortho-rectification"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
+#, c-format
+msgid "Unable to access target location/mapset %s/%s"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
+msgid "Target locations with XY (unreferenced) are not supported"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:92
+msgid "Target locations with lon/lat are not supported"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.target/main.c:97
+#, c-format
+msgid "Group [%s] targeted for location [%s], mapset [%s]"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:67
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:76
+msgid "Name of the target location"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:81
+msgid "Name of the target mapset"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:86
+msgid "Name of elevation map to use for ortho-rectification"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:92
+msgid "Math expression to convert to real elevation"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:97
+msgid "Unit of the elevation map"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:102
+msgid "No data value"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:107
+msgid "Print currently selected elevation map and exit"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:145
+#, c-format
+msgid "Please select a target for group [%s] first"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:150
+#, c-format
+msgid "Target location [%s] not found\n"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:157
+#, c-format
+msgid "Cannot find default elevation map for target in group [%s]"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:195
+#, c-format
+msgid "Elevation map name is missing. Please set '%s' option"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:232
+#, c-format
+msgid "Group [%s] in location [%s] mapset [%s] now uses elevation map [%s]"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:236
+#, c-format
+msgid "Mapset [%s] in target location [%s] - %s "
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:238
+msgid "permission denied\n"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:238
+msgid "not found\n"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:59
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:71
+msgid "Name of camera reference file"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:77
+msgid "Camera name"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:83
+msgid "Camera id"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:89
+msgid "Calibrated focal length"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:94
+msgid "Principal point coordinates"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:100
+msgid "Fiducial coordinates"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:129
+#, c-format
+msgid "Can not read camera file '%s'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:132
+#, c-format
+msgid "Replacing camera name '%s' with '%s'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:138
+#, c-format
+msgid "Replacing camera cam_id '%s' with '%s'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:146
+#, c-format
+msgid "Replacing calibrated focal length '%g' with '%g'"
+msgstr "Substituindo o comprimento focal calibrado '%g' por '%g'"
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:153
+#, c-format
+msgid "Replacing coordinates of principal point '%.17g, %.17g' with '%.17g, %.17g'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:164
+msgid "Please provide a camera name for a new camera definition"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:168
+msgid "Please provide a camera ID for a new camera definition"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:172
+msgid "Please provide calibrated focal length for a new camera definition"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:176
+msgid "Using default coordinates 0.0, 0.0 for the principal point"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:190
+msgid "Too many fiducials!"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:212
+#, c-format
+msgid "No group '%s' in current mapset"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:217
+#, c-format
+msgid "Group [%s] in location [%s] mapset [%s] now uses camera file [%s]"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:48
+#: ../imagery/i.rectify/main.c:86
+#: ../locale/scriptstrings/r.to.vect.tiled_to_translate.c:4
+#: ../locale/scriptstrings/v.fixed.segmentpoints_to_translate.c:3
+#: ../locale/scriptstrings/v.to.lines_to_translate.c:3
+#: ../locale/scriptstrings/v.in.natura2000_to_translate.c:3
+#: ../locale/scriptstrings/v.in.pygbif_to_translate.c:3
+#: ../locale/scriptstrings/v.in.gbif_to_translate.c:3
+#: ../locale/scriptstrings/i.image.mosaic_to_translate.c:3
+#: ../locale/scriptstrings/v.report_to_translate.c:3
+#: ../locale/scriptstrings/v.concave.hull_to_translate.c:3
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:5
+#: ../locale/scriptstrings/v.clean.ogr_to_translate.c:6
+#: ../locale/scriptstrings/v.in.redlist_to_translate.c:3
+#: ../vector/v.parallel/main.c:50 ../vector/v.segment/main.c:61
+#: ../vector/v.clean/main.c:53 ../vector/v.buffer/main.c:225
+#: ../vector/v.generalize/main.c:83 ../vector/v.build/main.c:38
+#: ../vector/v.hull/main.c:53 ../vector/v.delaunay/main.c:86
+#: ../vector/v.type/main.c:39 ../vector/v.drape/main.c:57
+#: ../vector/v.perturb/main.c:63 ../vector/v.edit/main.c:56
+#: ../vector/v.mkgrid/main.c:71 ../vector/v.transform/main.c:72
+#: ../vector/v.patch/main.c:74 ../vector/v.in.ogr/main.c:223
+#: ../vector/v.to.3d/main.c:37 ../vector/v.to.points/main.c:54
+#: ../vector/v.split/main.c:55 ../vector/v.extrude/main.c:68
+#: ../vector/v.in.region/main.c:42 ../vector/v.univar/main.c:96
+#: ../vector/v.rectify/main.c:73 ../vector/v.build.polylines/main.c:112
+#: ../vector/v.to.db/main.c:48 ../vector/v.voronoi/main.c:124
+#: ../vector/v.overlay/main.c:64 ../vector/v.select/main.c:51
+#: ../raster/r.region/main.c:53 ../raster/r.thin/main.c:58
+#: ../raster/r.circle/main.c:53 ../raster/r.to.vect/main.c:78
+#: ../raster/r.patch/main.c:59
+msgid "geometry"
+msgstr "geometria"
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:49
+msgid "Menu driver for the photo imagery programs."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:60
+msgid "Name of Modules"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:71
+msgid "1 - Select/Modify imagery group"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:72
+msgid "2 - Select/Modify imagery group target"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:73
+msgid "3 - Select/Modify target elevation model"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:74
+msgid "4 - Select/Modify imagery group camera"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:75
+msgid "5 - Compute image-to-photo transformation"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:76
+msgid "6 - Initialize exposure station parameters"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:77
+msgid "7 - Compute ortho-rectification parameters"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:78
+msgid "8 - Ortho-rectify imagery files"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:50
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:62
+msgid "Initial Camera Exposure X-coordinate"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:67
+msgid "Initial Camera Exposure Y-coordinate"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:72
+msgid "Initial Camera Exposure Z-coordinate"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:77
+msgid "Apriori X-coordinate standard deviation"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:82
+msgid "Apriori Y-coordinate standard deviation"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:87
+msgid "Apriori Z-coordinate standard deviation"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:92
+msgid "Initial Camera Omega (pitch) degrees"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:97
+msgid "Initial Camera Phi (roll) degrees"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:102
+msgid "Initial Camera Kappa (yaw) degrees"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:107
+msgid "Apriori Omega (pitch) standard deviation"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
+msgid "Apriori Phi (roll) standard deviation"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../imagery/i.atcorr/geomcond.cpp:91
 #, fuzzy
@@ -39557,10 +40106,117 @@ msgstr ""
 msgid ".prj"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../locale/scriptstrings/g.proj.identify_to_translate.c:7
 #, fuzzy
 msgid "Name of input file with WKT definition"
 msgstr "Nome do arquivo de entrada; ou \"-\" para ler da stdin"
+=======
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:6
+msgid "List all modules if not given"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:7
+msgid "Display only modules where all keywords are available (AND), default: OR"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:9
+msgid "Invert selection (logical NOT)"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:11
+msgid "Search in manual pages too (can be slow)"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:13
+msgid "Search only for the exact keyword in module keyword list"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:14
+msgid "Instead of full text search, search only in actual keywords"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:16
+msgid "Use colorized (more readable) output to terminal"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:18
+msgid "Shell script format"
+msgstr ""
+
+#: ../locale/scriptstrings/g.search.modules_to_translate.c:20
+msgid "JSON format"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:1
+msgid "Manages display frames on the user's graphics monitor."
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:3
+#: ../locale/scriptstrings/v.explode_to_translate.c:3
+#: ../locale/scriptstrings/wxpyimgview_to_translate.c:3
+#: ../locale/scriptstrings/d.redraw_to_translate.c:3
+#: ../visualization/ximgview/main.c:291 ../display/d.rgb/main.c:54
+#: ../display/d.his/main.c:63 ../display/d.erase/main.c:30
+#: ../display/d.vect/main.c:74 ../display/d.info/main.c:35
+#: ../display/d.mon/main.c:51 ../display/d.rast/main.c:54
+#: ../misc/m.nviz.script/main.c:70 ../misc/m.nviz.image/main.c:51
+msgid "graphics"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:4
+#: ../locale/scriptstrings/d.redraw_to_translate.c:4
+#: ../display/d.erase/main.c:31 ../display/d.info/main.c:36
+#: ../display/d.mon/main.c:52
+msgid "monitors"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:5
+msgid "frame"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:6
+msgid "Create a new frame if doesn't exist and select"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:7
+msgid "Remove all frames, erase the screen and exit"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:8
+msgid "Print name of current frame and exit"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:9
+msgid "Print names of all frames including 'at' position and exit"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:10
+msgid "Frame to be selected or created (if -c flag is given)"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:11
+msgid "Screen coordinates in percent where to place the frame (0,0 is lower-left)"
+msgstr ""
+
+#: ../locale/scriptstrings/d.frame_to_translate.c:12
+msgid "Implies only when -c or --overwrite flag is given"
+msgstr ""
+
+#: ../locale/scriptstrings/i.band_to_translate.c:1
+msgid "Manages band reference information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+#: ../locale/scriptstrings/i.band_to_translate.c:4
+#: ../locale/scriptstrings/g.bands_to_translate.c:4
+msgid "band reference"
+msgstr ""
+
+#: ../locale/scriptstrings/i.band_to_translate.c:5
+#: ../locale/scriptstrings/g.bands_to_translate.c:5
+msgid "image collections"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../locale/scriptstrings/g.proj.identify_to_translate.c:8
 msgid "Input EPSG code"
@@ -51867,8 +52523,700 @@ msgid ""
 "space time raster datasets."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:7
 msgid "Basename for output raster maps"
+=======
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:4
+msgid "bitpattern"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:5
+#: ../locale/scriptstrings/r.mask_to_translate.c:3
+#: ../raster3d/r3.mask/main.c:134
+msgid "mask"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:7
+msgid "Output file with reclass rules"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:8
+msgid "Unacceptable conditions for Designated Fill (bit 0)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:9
+msgid "Unacceptable conditions for Dropped Frame (bit 1)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:10
+msgid "Unacceptable conditions for Terrain Occlusion (bit 2)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:11
+msgid "Unacceptable conditions for Water Confidence (bit 4-5)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:12
+msgid "Unacceptable conditions for Cloud Shaddow Confidence (bit 6-7)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:13
+msgid "Unacceptable conditions for Vegetation Confidence (bit 8-9)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:14
+msgid "Unacceptable conditions for Snow/Ice Confidence (bit 10-11)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:15
+msgid "Unacceptable conditions for Cirrus Confidence (bit 12-13)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:16
+msgid "Unacceptable conditions for Cloud Confidence (bit 14-15)"
+msgstr ""
+
+#: ../locale/scriptstrings/v.centroids_to_translate.c:1
+msgid "Adds missing centroids to closed boundaries."
+msgstr ""
+
+#: ../locale/scriptstrings/v.centroids_to_translate.c:3
+#: ../vector/v.category/main.c:691
+msgid "centroid"
+msgstr "centroide"
+
+#: ../locale/scriptstrings/v.centroids_to_translate.c:5
+msgid "Action to be taken"
+msgstr ""
+
+#: ../locale/scriptstrings/v.centroids_to_translate.c:6
+msgid "Category number starting value"
+msgstr ""
+
+#: ../locale/scriptstrings/v.centroids_to_translate.c:7
+#: ../vector/v.category/main.c:134
+msgid "Category increment"
+msgstr "Incremento de categoria"
+
+#: ../locale/scriptstrings/i.signature.list_to_translate.c:1
+msgid "Lists signature file of a group/subgroup."
+msgstr ""
+
+#: ../locale/scriptstrings/i.signature.list_to_translate.c:8
+msgid "Return in shell script style, it require group and subgroup options"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:1
+msgid "Downloads Sentinel satellite data from Copernicus Open Access Hub using sentinelsat library."
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:8
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:9
+msgid "Name for output directory where to store downloaded Sentinel data"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:10
+#, fuzzy
+msgid "Name for output vector map with footprints"
+msgstr "Nome do Raster de saída"
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:15
+msgid "Spatial reation of footprint to AOI"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:17
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:16
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:11
+msgid "Maximum cloud cover percentage for Sentinel scene"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:19
+#: ../locale/scriptstrings/i.sentinel.coverage_to_translate.c:14
+#: ../locale/scriptstrings/i.sentinel.parallel.download_to_translate.c:13
+msgid "Sentinel product type to filter"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:25
+msgid "Limit number of Sentinel products"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:27
+msgid "Extra search keywords to use in the query"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:29
+msgid "List of UUID to download"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:31
+msgid "Relative orbit number to download (Sentinel-1: from 1 to 175; Sentinel-2: from 1 to 143)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:33
+msgid "Sleep time in minutes before retrying to download data from ESA LTA"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:35
+msgid "Maximum number of retries before skipping to the next scene at ESA LTA"
+msgstr ""
+
+#: ../locale/scriptstrings/i.sentinel.download_to_translate.c:43
+msgid "Use the borders of the AOI polygon and not the region of the AOI"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:1
+msgid "Imports a space time vector dataset from a GRASS GIS specific archive file."
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:6
+#: ../vector/v.in.ogr/main.c:225 ../general/g.proj/main.c:73
+#: ../raster/r.in.gdal/main.c:128
+msgid "create location"
+msgstr "criar location"
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:9
+msgid "Path to the extraction directory"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:10
+#: ../locale/scriptstrings/t.create_to_translate.c:8
+msgid "Title of the new space time dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:11
+#: ../locale/scriptstrings/t.create_to_translate.c:9
+msgid "Description of the new space time dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:12
+msgid "Create a new location and import the data into it. Do not run this module in parallel or interrupt it when a new location should be created"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:15
+msgid "Extend location extents based on new dataset"
+msgstr "Estender locação baseado no novo conjunto de dados"
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:16
+msgid "Create the location specified by the \"location\" parameter and exit. Do not import the space time vector datasets."
+msgstr ""
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:1
+msgid "Exports raster with variable transparency into an image file"
+msgstr ""
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:3
+#: ../vector/v.kernel/main.c:110
+msgid "kernel density"
+msgstr "densidade do kernel"
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:5
+msgid "transparency"
+msgstr ""
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:6
+#: ../vector/v.kernel/main.c:112
+msgid "heatmap"
+msgstr ""
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:7
+msgid "Raster map to be rendered with semi-transparency"
+msgstr ""
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:8
+#, fuzzy
+msgid "Background raster map"
+msgstr "Cor de fundo"
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:9
+#, fuzzy
+msgid "Rendered output file"
+msgstr "Nome do arquivo de saída"
+
+#: ../locale/scriptstrings/r.out.kde_to_translate.c:10
+msgid "Method to scale transparency"
+msgstr ""
+
+#: ../locale/scriptstrings/v.mapcalc_to_translate.c:1
+#, fuzzy
+msgid "Vector map calculator."
+msgstr "Fazendo o cálculo da média..."
+
+#: ../locale/scriptstrings/v.mapcalc_to_translate.c:4
+#: ../raster/r.mapcalc/main.c:79
+msgid "Expression to evaluate"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:1
+msgid "Classification of a vector maps based on the values in attribute tables"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:6
+#, fuzzy
+msgid "Name of training vector map"
+msgstr "Nome do mapset de destino"
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:7
+#, fuzzy
+msgid "layer name or number to use for data"
+msgstr "Camada número"
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:8
+msgid "layer number/name for the training layer"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:9
+msgid "layer number/name for the ML results"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:10
+msgid "Data with statistics in npy format."
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:11
+msgid "Numpy array with vector cats."
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:12
+msgid "Numpy array with columns names."
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:13
+msgid "Boolean numpy array with training indexes."
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:14
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:16
+msgid "training npy file with training set, default: training_data.npy"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:15
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:17
+msgid "training npy file with the classes, default: training_classes.npy"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:18
+msgid "CSV file name with the feature importances rank using extra tree algorithms"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:19
+msgid "Figure file name with feature importances rank using extra tree algorithms"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:20
+msgid "scaler method, center the data before scaling, if no, not scale at all"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:21
+msgid "choose a decomposition method (PCA, KernelPCA, ProbabilisticPCA, RandomizedPCA, FastICA, TruncatedSVD) and set the parameters using the | to separate the decomposition method from the parameters like: PCA|n_components=98"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:22
+msgid "Number of random training per class to training the machine learning algorithms"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:23
+msgid "a python file with classifiers"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:24
+msgid "name of the python variable that must be a list of dictionary"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:25
+msgid "specify the index or range of index of the classifiers that you want to use"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:26
+msgid "Index of the classifiers to optimize the training set"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:27
+msgid "Column pattern:Value or Numpy funtion to use to substitute NaN values"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:28
+msgid "Key:Value or Numpy funtion to use to substitute Inf values"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:29
+msgid "Key:Value or Numpy funtion to use to substitute neginf values"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:30
+msgid "Key:Value or Numpy funtion to use to substitute posinf values"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:31
+msgid "csv file name with results of different machine learning scores"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:32
+msgid "text file name with the report of different machine learning algorithms"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:33
+msgid "C value range list to explore SVC domain"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:34
+msgid "gamma value range list to explore SVC domain"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:35
+msgid "kernel value range list to explore SVC domain"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:36
+msgid "polynomial order list to explore SVC domain"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:37
+msgid "number of jobs to use during the domain exploration"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:38
+msgid "definitive C value"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:39
+msgid "definitive gamma value"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:40
+msgid "definitive kernel value. Available kernel are: 'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:41
+msgid "filename pattern with the image of SVC parameter"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:42
+msgid "filename pattern for raster"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:43
+msgid "Extract the training set from the vtraining map"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:44
+msgid "Export to numpy files"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:45
+msgid "Feature importances using extra trees algorithm"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:46
+msgid "Balance the training using the class with the minor number of data"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:47
+msgid "Optimize the training samples"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:48
+msgid "Classify the whole dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:49
+#, fuzzy
+msgid "Export the classify results to raster maps"
+msgstr "Tipo de armazenamento para o mapa resultante"
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:50
+msgid "Test different classification methods"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:51
+msgid "add to test to compute the Bias variance"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:52
+msgid "add to test to compute extra parameters like: confusion matrix, ROC, PR"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:53
+msgid "Explore the SVC domain"
+msgstr ""
+
+#: ../locale/scriptstrings/v.class.ml_to_translate.c:54
+msgid "append the classification results"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:1
+msgid "Calculates zonal classes proportion describing raster areas's composition, e.g., in terms of land-cover classes."
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:5
+#: ../locale/scriptstrings/i.segment.stats_to_translate.c:5
+#, fuzzy
+msgid "Name for input raster map with areas"
+msgstr "Nome do mapa raster de entrada"
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:6
+msgid "Raster map with areas (all pixels of an area have same id), such as the output of r.clump"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:7
+#, fuzzy
+msgid "Name of input categorical raster maps for statistics"
+msgstr "Nome do mapa raster de entrada para cálculo da estatística"
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:8
+#: ../locale/scriptstrings/i.segment.stats_to_translate.c:9
+#, fuzzy
+msgid "Statistics to calculate for each input raster map"
+msgstr "Inicia com valores no mapa raster"
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:10
+#, fuzzy
+msgid "Prefix for statistics name"
+msgstr "Nome do mapa raster de saída"
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:12
+#, fuzzy
+msgid "Number of decimals for proportion numbers"
+msgstr "Número de casas decimais para números de ponto flutuante"
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:14
+msgid "List of classes to be considered in the calculation, e.g. '21,34,35,56'"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:16
+#: ../locale/scriptstrings/i.segment.stats_to_translate.c:13
+#, fuzzy
+msgid "Name for output CSV file containing statistics"
+msgstr "Nome do arquivo de saída"
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:19
+#: ../locale/scriptstrings/i.segment.stats_to_translate.c:16
+msgid "Name for optional vector output map with statistics as attributes"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:21
+#: ../locale/scriptstrings/i.segment.stats_to_translate.c:19
+msgid "Adjust region to input map"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:22
+msgid "Force check of input's layer type"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:23
+msgid "Consider null values in the calculations"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:25
+msgid "Proportions as percentages instead of zone's area ratio"
+msgstr ""
+
+#: ../locale/scriptstrings/r.zonal.classes_to_translate.c:27
+msgid "Compute statistics only for the classes provided in 'classes_list' parameter"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:1
+msgid "Performs inter-satellite calibration on DMSP-OLS Nighttime Lights Time Series"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:3
+#, fuzzy
+msgid "inter-satellite"
+msgstr "satélite"
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:4
+#, fuzzy
+msgid "calibration"
+msgstr "Locação: %s\n"
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:5
+msgid "nighttime lights"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:7
+msgid "DMSP-OLS"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:8
+msgid "Print out citation for selected calibration model"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:9
+#, fuzzy
+msgid "Print out calibration equations"
+msgstr "Mostra matriz de correlação"
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:10
+msgid "Evaluation based on the Normalised Difference Index"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:11
+msgid "Print in shell script style (currently only NDI via -e)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:12
+msgid "Match computational region to extent of input image"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:13
+msgid "Exclude zero values from the analysis (retain zero cells in output)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:14
+msgid "Exclude zero values from the analysis (set zero cells to NULL in output)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:15
+msgid "Do not try to transfer timestamps (for input without timestamp)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:16
+msgid "Clean average DMSP-OLS visible band digital number image(s)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:17
+msgid "output file(s) suffix"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:18
+msgid "Suffix for calibrated average digital number output image(s)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:19
+msgid "Calibration model"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:20
+msgid "Inter-satellite calibration model for average DMSP-OLS nighttime lights time series"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:21
+msgid "Elvidge (2009 or 2014), Liu 2012, Wu 2013"
+msgstr ""
+
+#: ../locale/scriptstrings/i.nightlights.intercalibration_to_translate.c:22
+msgid "Calibration Model"
+msgstr ""
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:1
+#, fuzzy
+msgid "Renames multiple maps in the current mapset."
+msgstr "mapa vetorial <%s> não encontrado no mapset atual"
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:5
+#, fuzzy
+msgid "File with rasters to be renamed"
+msgstr "Nome do mapa raster para ser reescalonado"
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:6
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:9
+msgid "Format of the file is one raster map per line. Old name first, new name second (separated by comma by default)"
+msgstr ""
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:8
+#, fuzzy
+msgid "File with 3D rasters to be renamed"
+msgstr "Nome do mapa raster para ser reescalonado"
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:11
+msgid "File with vectors to be renamed"
+msgstr ""
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:12
+msgid "Format of the file is one vector map per line. Old name first, new name second (separated by comma by default)"
+msgstr ""
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:14
+msgid "Skip file format and map existence checks"
+msgstr ""
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:15
+msgid "By default a file format check is performed and existence of map is checked before the actual renaming. This requires going through each file two times. It might be advantageous to disable the checks for renames of large number of maps. However, when this flag is used an error occurs, some maps might be renamed while some others not."
+msgstr ""
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:16
+msgid "Do the checks only (dry run)"
+msgstr ""
+
+#: ../locale/scriptstrings/g.rename.many_to_translate.c:17
+msgid "This will only perform the file format and map existence checks but it will not do the actual rename. This is useful when writing the file with renames."
+msgstr ""
+
+#: ../locale/scriptstrings/v.concave.hull_to_translate.c:1
+msgid "Creates a concave hull around points."
+msgstr ""
+
+#: ../locale/scriptstrings/v.concave.hull_to_translate.c:4
+msgid "alpha shape"
+msgstr ""
+
+#: ../locale/scriptstrings/v.concave.hull_to_translate.c:5
+#, fuzzy
+msgid "Input points"
+msgstr "Locação: %s\n"
+
+#: ../locale/scriptstrings/v.concave.hull_to_translate.c:6
+msgid "Lower values make the hull more concave"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:1
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:6
+#: ../vector/v.decimate/main.c:129 ../vector/v.outlier/main.c:72
+#: ../vector/v.extract/main.c:80
+msgid "select"
+msgstr "selecionar"
+
+#: ../locale/scriptstrings/r.agent.rand_to_translate.c:2
+#, fuzzy
+msgid "Name of step output map"
+msgstr "Nome de uma camada de saída"
+
+#: ../locale/scriptstrings/r.agent.rand_to_translate.c:3
+#, fuzzy
+msgid "Allow overwriting existing output maps"
+msgstr "Erro tentando ler o arquivo dbmscap\n"
+
+#: ../locale/scriptstrings/r.agent.rand_to_translate.c:6
+msgid "Mark each step an agent takes"
+msgstr ""
+
+#: ../locale/scriptstrings/r.agent.rand_to_translate.c:7
+msgid "Maximum amount of agents that may live concurrently (x*y)"
+msgstr ""
+
+#: ../locale/scriptstrings/r.agent.rand_to_translate.c:8
+#, fuzzy
+msgid "Time to live for an agent"
+msgstr "Texto para unidades dos dados do mapa"
+
+#: ../locale/scriptstrings/g.download.location_to_translate.c:1
+msgid "Download GRASS Location from the web"
+msgstr ""
+
+#: ../locale/scriptstrings/g.download.location_to_translate.c:2
+msgid "Get GRASS Location from an URL or file path"
+msgstr ""
+
+#: ../locale/scriptstrings/g.download.location_to_translate.c:4
+msgid "data"
+msgstr ""
+
+#: ../locale/scriptstrings/g.download.location_to_translate.c:7
+msgid "URL of the archive with a location to be downloaded"
+msgstr ""
+
+#: ../locale/scriptstrings/g.download.location_to_translate.c:8
+msgid "URL of ZIP, TAR.GZ, or other similar archive"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:1
@@ -52650,7 +53998,7 @@ msgid "Vector map with training samples"
 msgstr "Título do mapa vetorial"
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:13
-msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be choosen later."
+msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be chosen later."
 msgstr ""
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:15
@@ -54364,7 +55712,7 @@ msgid "Interpolation command string"
 msgstr "Interpolando %d pontos"
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:36
-msgid "Additional settings for choosen interpolation (see manual)"
+msgid "Additional settings for chosen interpolation (see manual)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:38
@@ -56198,9 +57546,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "imprimir informação do atributo"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -61541,9 +62888,9 @@ msgid "Reading features from vector map..."
 msgstr "Lendo feições do mapa vetorial..."
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Não consegui abrir arquivo de histórico para mapa de vetores <%s>"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -65185,8 +66532,434 @@ msgstr "Código EPSG definido para location atual (%s) é sobrescrito por %s"
 
 #: ../vector/v.out.postgis/create.c:107
 #, c-format
+<<<<<<< HEAD
 msgid "Error writing <%s> file"
 msgstr "Erro na escrita do arquivo <%s>"
+=======
+msgid ""
+"Using first from more offsets found for 2. point of:\n"
+"  %s"
+msgstr ""
+"Usando o primeiro de mais deslocamentos encontrados para 2. ponto de:\n"
+"%s"
+
+#: ../vector/v.lrs/v.lrs.segment/main.c:287
+msgid "Segment over 2 (or more) segments, not yet supported"
+msgstr "Segmento em 2 (ou mais) segmentos, ainda sem suporte"
+
+#: ../vector/v.lrs/v.lrs.segment/main.c:304
+#, c-format
+msgid "End of segment > line length (%e) -> cut"
+msgstr "Fim do segmento > comprimento da linha (%e) -> corte"
+
+#: ../vector/v.lrs/v.lrs.segment/main.c:313
+#, c-format
+msgid ""
+"Cannot make line segment: cat = %d : %f - %f (line length = %f)\n"
+"%s"
+msgstr ""
+"Não é possível fazer segmento de linha: cat = %d: %f - %f(comprimento da linha = %f)\n"
+"%s"
+
+#. GTC %s will be replaced with a message about lost points.
+#: ../vector/v.lrs/v.lrs.segment/main.c:364
+#, c-format
+msgid "[%d] point written to output map (%s)"
+msgid_plural "[%d] points written to output map (%s)"
+msgstr[0] "[%d] ponto escrito no mapa de saída (%s)"
+msgstr[1] "[%d] pontos escritos no mapa de saída (%s)"
+
+#: ../vector/v.lrs/v.lrs.segment/main.c:369
+#, c-format
+msgid "[%d] line read from input"
+msgid_plural "[%d] lines read from input"
+msgstr[0] "[%d] linha lida da entrada"
+msgstr[1] "[%d] linhas lidas da entrada"
+
+#. GTC %s will be replaced with a message about lost lines.
+#: ../vector/v.lrs/v.lrs.segment/main.c:376
+#, c-format
+msgid "[%d] line written to output map (%s)"
+msgid_plural "[%d] lines written to output map (%s)"
+msgstr[0] "[%d] linha escrita no mapa de saída (%s)"
+msgstr[1] "[%d] linhas escritas no mapa de saída (%s)"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:124
+msgid "Creates a linear reference system."
+msgstr "Cria um sistema de referência linear."
+
+#: ../vector/v.lrs/v.lrs.create/main.c:133
+msgid "Output vector map where oriented lines are written"
+msgstr "Mapa vetorial de saída onde as linhas orientadas são escritas"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:138
+msgid "Output vector map of errors"
+msgstr "Mapa vetorial de saída de erros"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:143
+msgid "Input vector map containing reference points"
+msgstr "Mapa vetorial de entrada contendo pontos de referência"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:158
+msgid "Column containing line identifiers for lines"
+msgstr "Coluna contendo identificadores de linha para linhas"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:165
+msgid "Column containing line identifiers for points"
+msgstr "Coluna contendo identificadores de linha para pontos"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:173
+msgid "Column containing milepost position for the beginning of next segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:182
+msgid "Column containing offset from milepost for the beginning of next segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:191
+msgid "Column containing milepost position for the end of previous segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:200
+msgid "Column containing offset from milepost for the end of previous segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:223
+msgid "Name of table where the reference system will be written"
+msgstr "Nome da tabela onde o sistema de referência será escrito"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:224
+msgid "New table is created by this module"
+msgstr "Nova tabela é criada por este módulo"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:231
+msgid "Maximum distance of point to line allowed"
+msgstr "Distância máxima de ponto a linha permitida"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:286
+msgid "Cannot get layer info for lines"
+msgstr "Não é possível obter informações de camada para linhas"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:289
+msgid "Cannot get layer info for points"
+msgstr "Não é possível obter informações de camada para pontos"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:327
+#, c-format
+msgid "Unable to drop table: %s"
+msgstr "Não é possível descartar a tabela: %s"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:346
+#, c-format
+msgid "Unable to select line id values from %s.%s."
+msgstr "Não foi possível selecionar valores de id de linha de %s.%s."
+
+#: ../vector/v.lrs/v.lrs.create/main.c:356
+msgid "Line id column must be integer"
+msgstr "A coluna do ID da linha deve ser um número inteiro"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:367
+#: ../vector/v.lrs/v.lrs.create/main.c:469
+msgid "Unable to fetch line id from line table"
+msgstr "Não foi possível obter o id de linha da tabela de linha"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:419
+#, c-format
+msgid "Line [%d] without category (layer [%d])"
+msgstr "Linha [%d] sem categoria (camada [%d])"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:439
+#, c-format
+msgid "No lines selected for line id [%d]"
+msgstr "Nenhuma linha selecionada para o id de linha [%d]"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:459
+#, c-format
+msgid "Unable to select point attributes from <%s>"
+msgstr "Não foi possível selecionar atributos de ponto de <%s>"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:490
+#, c-format
+msgid "Milepost (start) %f+%f used as %f+%f (change MP to integer)"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:512
+#, c-format
+msgid "Milepost (end) %f+%f used as %f+%f (change MP to integer)"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:538
+#, c-format
+msgid "Point [%d] without category (layer [%d])"
+msgstr "Ponto [%d] sem categoria (camada [%d])"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:585
+#, c-format
+msgid "Point [%d] cat [%d] is out of threshold (distance = %f)"
+msgstr "O ponto [%d] cat [%d] está fora do limiar (distância =%f)"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:717
+#, c-format
+msgid "End > start for point cat [%d]"
+msgstr "Fim > início para cat [%d] de ponto"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:734
+#, c-format
+msgid "Start of 1. MP >= end of 2. MP for points' cats [%d], [%d]"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:751
+#, c-format
+msgid "Start of 1. MP >= start of 2. MP for points' cats [%d], [%d]"
+msgstr "Início de 1. MP >= início de 2. MP para categorias de pontos [%d], [%d]"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:761
+#, c-format
+msgid "Distance along line identical for points' cats [%d], [%d]"
+msgstr "Distância ao longo da linha idêntica para categorias de pontos [%d], [%d]"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:775
+#, c-format
+msgid "Not enough points (%d) attached to the line (cat %d), line skip."
+msgstr "Pontos insuficientes (%d) anexados à linha (cat %d), ignorando de linha."
+
+#: ../vector/v.lrs/v.lrs.create/main.c:780
+#, c-format
+msgid "Unable to guess direction for the line (cat %d), line skip."
+msgstr "Não foi possível encontrar a direção da linha (cat %d), ignorando linha"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:784
+#, c-format
+msgid "Incorrect order of points along line cat [%d]"
+msgstr "Ordem incorreta de pontos ao longo da linha cat [%d]"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:834
+#, c-format
+msgid "Unable to insert reference records: %s"
+msgstr "Não foi possível inserir registros de referência: %s"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:875
+msgid "Building topology for output (out_lines) map..."
+msgstr "Construindo topologia para mapa de saída (out_lines)..."
+
+#: ../vector/v.lrs/v.lrs.create/main.c:886
+msgid "Building topology for error (err) map..."
+msgstr "Construindo topologia para mapa de erro (err)..."
+
+#: ../vector/v.net.path/main.c:45
+msgid "Finds shortest path on vector network."
+msgstr "Encontra o caminho mais curto na rede vetorial."
+
+#: ../vector/v.net.path/main.c:72
+msgid "Name of file containing start and end points. If not given, read from stdin"
+msgstr "Nome do arquivo que contém os pontos inicial e final. Se não for fornecido, leia de stdin"
+
+#: ../vector/v.net.path/main.c:101
+msgid "Maximum distance to the network"
+msgstr "Distância máxima para a rede"
+
+#: ../vector/v.net.path/main.c:102
+msgid "If start/end are given as coordinates. If start/end point is outside this threshold, the path is not found and error message is printed. To speed up the process, keep this value as low as possible."
+msgstr "Se o início/fim são fornecidos como coordenadas. Se o ponto inicial/final estiver fora desse limiar, o caminho não será encontrado e a mensagem de erro será impressa. Para acelerar o processo, mantenha esse valor o mais baixo possível."
+
+#: ../vector/v.net.path/main.c:136 ../vector/v.net.distance/main.c:165
+msgid "Write output as original input segments, not each path as one line."
+msgstr "Escreve a saída como segmentos de entrada originais, não cada caminho como uma linha."
+
+#: ../vector/v.net.path/path.c:82
+#, c-format
+msgid "[%d] points without category (nfield: [%d])"
+msgstr "[%d] pontos sem categoria (nfield: [%d])"
+
+#: ../vector/v.net.path/path.c:146 ../vector/v.net.path/path.c:211
+#, c-format
+msgid "From and to are identical (id %d)"
+msgstr "De e para são idênticos (id %d)"
+
+#: ../vector/v.net.path/path.c:153 ../vector/v.net.timetable/main.c:482
+#, c-format
+msgid "Wrong input format: %s"
+msgstr "Formato de entrada errado: %s"
+
+#: ../vector/v.net.path/path.c:164 ../vector/v.net.path/path.c:188
+#, c-format
+msgid "No point with category [%d]"
+msgstr "Nenhum ponto com a categoria [%d]"
+
+#: ../vector/v.net.path/path.c:234
+#, c-format
+msgid "Point with category [%d] is not reachable from point with category [%d]"
+msgstr "O ponto com categoria [%d] não é acessível a partir do ponto com categoria [%d]"
+
+#: ../vector/v.net.path/path.c:303
+#, c-format
+msgid "Point %f,%f is not reachable from point %f,%f"
+msgstr "Ponto %f,%f não é acessível do ponto %f,%f"
+
+#: ../vector/v.net.path/path.c:368
+#, c-format
+msgid "[%d] input format errors"
+msgstr "[%d] erros de formato de entrada"
+
+#: ../vector/v.net.path/path.c:370
+#, c-format
+msgid "[%d] points of given category missing"
+msgstr "[%d] pontos de determinada categoria ausentes"
+
+#: ../vector/v.net.path/path.c:372
+#, c-format
+msgid "%d destination(s) unreachable (including points out of threshold)"
+msgstr "%d destino(s) inacessível(is) (incluindo pontos fora do limiar)"
+
+#: ../vector/v.neighbors/main.c:82 ../raster/r.neighbors/main.c:121
+#, c-format
+msgid "Invalid out_type enumeration: %d"
+msgstr "Enumeração out_type inválida: %d"
+
+#: ../vector/v.neighbors/main.c:133
+msgid "Neighborhood analysis tool for vector point maps."
+msgstr "Ferramenta de análise de vizinhança para mapas de pontos vetoriais."
+
+#: ../vector/v.neighbors/main.c:134
+msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr ""
+
+#: ../vector/v.neighbors/main.c:160
+msgid "Method for aggregate statistics (count if non given)"
+msgstr ""
+
+#: ../vector/v.neighbors/main.c:166
+msgid "Neighborhood diameter in map units"
+msgstr "Diâmetro da vizinhança em unidades do mapa"
+
+#: ../vector/v.neighbors/main.c:170 ../vector/v.vect.stats/main.c:208
+msgid "Column name of points map to use for statistics"
+msgstr "Nome da coluna do mapa de pontos a ser usado para estatísticas"
+
+#: ../vector/v.neighbors/main.c:171 ../vector/v.vect.stats/main.c:209
+msgid "Column of points map must be numeric"
+msgstr "A coluna do mapa de pontos deve ser numérica"
+
+#: ../vector/v.neighbors/main.c:253 ../vector/v.vect.stats/main.c:451
+#, c-format
+msgid "points_column <%s> of points vector <%s> must be numeric"
+msgstr "points_column <%s> do vetor de pontos <%s> deve ser numérico"
+
+#: ../vector/v.neighbors/main.c:284
+msgid "All points fall outside of the current computational region"
+msgstr ""
+
+#: ../vector/v.neighbors/main.c:285
+msgid "Input vector and computational region do not overlap"
+msgstr "O vetor de entrada e a região computacional não se sobrepõem"
+
+#: ../vector/v.neighbors/main.c:291
+#, c-format
+msgid "The search diameter %g is smaller than cell diagonal %g: some points could not be detected"
+msgstr "O diâmetro %g da pesquisa é menor do que a diagonal %g da célula: alguns pontos não puderam ser detectados"
+
+#: ../vector/v.neighbors/main.c:361
+#, c-format
+msgid "Several cat values found for point %d. Using only first"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:98
+msgid "centrality measures"
+msgstr "medidas de centralidade"
+
+#: ../vector/v.net.centrality/main.c:100
+msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:148
+msgid "Name of degree centrality column"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:154
+msgid "Name of closeness centrality column"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:160
+msgid "Name of betweenness centrality column"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:166
+msgid "Name of eigenvector centrality column"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:175
+msgid "Maximum number of iterations to compute eigenvector centrality"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:183
+msgid "Cumulative error tolerance for eigenvector centrality"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:192 ../vector/v.net.components/main.c:131
+msgid "Add points on nodes"
+msgstr "Adicionar pontos nos nós"
+
+#: ../vector/v.net.centrality/main.c:321
+msgid "Computing degree centrality measure"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:325
+msgid "Computing betweenness and/or closeness centrality measure"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:332
+msgid "Computing eigenvector centrality measure"
+msgstr ""
+
+#: ../vector/v.net.centrality/main.c:339
+msgid "Writing data into the table..."
+msgstr "Escrevendo dados na tabela..."
+
+#: ../vector/v.outlier/main.c:75
+msgid "Removes outliers from vector point data."
+msgstr "Remove outliers de dados de pontos vetoriais."
+
+#: ../vector/v.outlier/main.c:81
+msgid "Estimate point density and distance for the input vector points within the current region extends and quit"
+msgstr "Estimar a densidade do ponto e a distância para os pontos do vetor de entrada na extensão da região atual e sair"
+
+#: ../vector/v.outlier/main.c:90
+msgid "Name for output outlier vector map"
+msgstr "Nome para o mapa vetorial de outlier de saída"
+
+#: ../vector/v.outlier/main.c:95
+msgid "Name for vector map for visualization in QGIS"
+msgstr "Nome do mapa vetorial para visualização no QGIS"
+
+#: ../vector/v.outlier/main.c:103
+msgid "Default: 10 * east-west resolution"
+msgstr "Padrão: 10 * resolução leste-oeste"
+
+#: ../vector/v.outlier/main.c:112
+msgid "Default: 10 * north-south resolution"
+msgstr "Padrão: 10 * resolução norte-sul"
+
+#: ../vector/v.outlier/main.c:119
+msgid "Tykhonov regularization weight"
+msgstr "Peso de regularização Tykhonov"
+
+#: ../vector/v.outlier/main.c:127
+msgid "Threshold for the outliers"
+msgstr "Limiar para outliers"
+
+#: ../vector/v.outlier/main.c:134
+msgid "Filtering option"
+msgstr "Opção de filtragem"
+
+#: ../vector/v.outlier/main.c:268
+#, c-format
+msgid "It was impossible to create <%s> table."
+msgstr "Foi impossível criar tabela <%s>."
+
+#: ../vector/v.outlier/main.c:430
+msgid "Outlier detection"
+msgstr "Detecção de outlier"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #: ../vector/v.distance/distance.c:48
 #, c-format
@@ -66003,8 +67776,8 @@ msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específ
 
 #: ../vector/v.out.ogr/main.c:686
 #, c-format
-msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
-msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de formato (parâmetro 'lco') para exportar <em 3D em vez de 2D (padrão)."
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:713 ../db/drivers/ogr/execute.c:56
 #, c-format
@@ -66154,9 +67927,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr "Anexar arquivos a um arquivo existente (a substituição de arquivos existentes deve ser ativada)"
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Tabela faltando"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -67369,9 +69142,9 @@ msgid "Number of columns: %d"
 msgstr "Número de colunas: %d"
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Número de linhas"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -78428,9 +80201,9 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "Tabela <%s> não existe no banco de dados <%s>"
+msgstr ""
 
 #: ../general/g.copy/main.c:74
 #, c-format
@@ -78438,14 +80211,14 @@ msgid "%s=%s,%s: files are the same, no copy required. Skipping."
 msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "Mapa raster <%s> já existe e será sobreescrito"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> é um nome de arquivo ilegal"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -88499,9 +90272,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Fator de escala para elevação"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -88588,7 +90360,15 @@ msgid ""
 "<%s> is floating-point; ignoring [cols] and drawing continuous color ramp"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../display/d.colortable/main.c:133
+=======
+#: ../raster/r.colors/rules.c:81
+msgid "Unable to open color rule"
+msgstr ""
+
+#: ../raster/r.colors/rules.c:179
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #, c-format
 msgid "Range file for <%s> not available"
 msgstr ""
@@ -90339,30 +92119,26 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Coordenadas para os nodos de linha para criação de perfil"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
-#, fuzzy
 msgid "Profile"
-msgstr "perfil"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "Nome do arquivo de saída (use output=- para saída padrão)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Formato de saída"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed parsing <%s>"
-msgstr "zrange inválido <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:302
 #, c-format
@@ -90370,14 +92146,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "ponto de origem fora da região atual"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "Não consegui abrir arquivo de saída <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -92254,6 +94029,218 @@ msgstr ""
 msgid "Converting %d place names..."
 msgstr ""
 
+<<<<<<< HEAD
+=======
+#: ../scripts/r.blend/r.blend.py:63
+#, python-format
+msgid "Raster map <%s> already exists."
+msgstr ""
+
+#: ../scripts/r.blend/r.blend.py:71
+msgid "Calculating the three component maps..."
+msgstr ""
+
+#: ../scripts/r.blend/r.blend.py:113
+msgid "Done. Use the following command to visualize the result:"
+msgstr ""
+
+#: ../scripts/r.blend/r.blend.py:115
+#, python-format
+msgid "d.rgb r=%s.r g=%s.g b=%s.b"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:64
+msgid "No band reference assigned to <{}>"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:66
+msgid "Map <{}> not found"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:81
+msgid "Band reference <{}> assigned to raster map <{}>"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:84
+msgid "Band reference dissociated from raster map <{}>"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:89
+msgid "Unable to assign/dissociate band reference. {}"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:92
+msgid "Map <{}> not found in current mapset"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:101
+msgid "Operation {}: required parameter <{}> not set"
+msgstr ""
+
+#: ../scripts/i.band/i.band.py:106
+msgid "Number of maps differs from number of bands"
+msgstr ""
+
+#: ../scripts/v.pack/v.pack.py:64
+#, python-format
+msgid "Unable to pack vector map <%s>. Only native format supported."
+msgstr ""
+
+#: ../scripts/v.pack/v.pack.py:80 ../scripts/r.pack/r.pack.py:74
+#, python-format
+msgid "Pack file <%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../scripts/v.pack/v.pack.py:83 ../scripts/v.import/v.import.py:334
+#, python-format
+msgid "option <%s>: <%s> exists."
+msgstr ""
+
+#: ../scripts/v.pack/v.pack.py:86
+#, python-format
+msgid "Packing <%s>..."
+msgstr ""
+
+#: ../scripts/v.pack/v.pack.py:98
+#, python-format
+msgid "There is not database connected with vector map <%s>"
+msgstr ""
+
+#: ../scripts/v.pack/v.pack.py:119
+#, python-format
+msgid "Pack file <%s> created"
+msgstr ""
+
+#. GTC Invalid WFS maximum features parameter
+#: ../scripts/v.in.wfs/v.in.wfs.py:124
+msgid "Invalid maximum number of features"
+msgstr ""
+
+#. GTC Invalid WFS start index parameter
+#: ../scripts/v.in.wfs/v.in.wfs.py:130
+msgid "Features begin with index \"1\""
+msgstr ""
+
+#: ../scripts/v.in.wfs/v.in.wfs.py:146
+msgid "Setting username and password..."
+msgstr ""
+
+#. GTC Downloading WFS features
+#: ../scripts/v.in.wfs/v.in.wfs.py:171
+msgid "Retrieving data..."
+msgstr ""
+
+#. GTC WFS request HTTP failure
+#: ../scripts/v.in.wfs/v.in.wfs.py:176
+#, python-format
+msgid ""
+"The server couldn't fulfill the request.\n"
+"Error code: %s"
+msgstr ""
+
+#. GTC WFS request network failure
+#: ../scripts/v.in.wfs/v.in.wfs.py:179
+#, python-format
+msgid ""
+"Failed to reach the server.\n"
+"Reason: %s"
+msgstr ""
+
+#: ../scripts/v.in.wfs/v.in.wfs.py:193
+msgid "A file called \"wms_capabilities.xml\" already exists here"
+msgstr ""
+
+#: ../scripts/v.in.wfs/v.in.wfs.py:202
+#, python-format
+msgid "Vector map <%s> imported from WFS."
+msgstr ""
+
+#: ../scripts/v.in.wfs/v.in.wfs.py:204
+msgid "WFS import failed"
+msgstr ""
+
+#: ../scripts/i.oif/i.oif.py:50
+#, python-format
+msgid "Calculating OIF for combination: %s, %s, %s"
+msgstr ""
+
+#: ../scripts/i.oif/i.oif.py:79
+msgid "At least four input maps required"
+msgstr ""
+
+#: ../scripts/i.oif/i.oif.py:83
+msgid "Calculating standard deviations for all bands..."
+msgstr ""
+
+#: ../scripts/i.oif/i.oif.py:124
+msgid "Calculating Correlation Matrix..."
+msgstr ""
+
+#: ../scripts/i.oif/i.oif.py:136
+msgid "Calculating OIF for all band combinations..."
+msgstr ""
+
+#: ../scripts/i.oif/i.oif.py:143
+msgid "The Optimum Index Factor analysis result (best combination shown first):"
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:123
+msgid "'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)"
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:140
+#, python-format
+msgid "<%s> already exists. Aborting."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:145
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:151
+#, python-format
+msgid "Please extract %s before import."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:165
+msgid "Importing SPOT VGT NDVI map..."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:169
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:241
+msgid "An error occurred. Stop."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:171
+#, python-format
+msgid "Imported SPOT VEGETATION NDVI map <%s>."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:188
+msgid "Remapping digital numbers to NDVI..."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:230
+msgid "Importing SPOT VGT NDVI quality map..."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:257
+#, python-format
+msgid "Imported SPOT VEGETATION SM quality map <%s>."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:259
+#, python-format
+msgid "Note: A snow map can be extracted by category 252 (d.rast %s cat=252)"
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:262
+msgid "Filtering NDVI map by Status Map quality layer..."
+msgstr ""
+
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:269
+#, python-format
+msgid "Filtered SPOT VEGETATION NDVI map <%s>."
+msgstr ""
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #: ../scripts/db.droptable/db.droptable.py:70
 #: ../scripts/db.dropcolumn/db.dropcolumn.py:71
 msgid "Forcing ..."
@@ -94250,6 +96237,7 @@ msgstr ""
 msgid "Generating output raster map <%s>..."
 msgstr ""
 
+<<<<<<< HEAD
 #, fuzzy
 #~ msgid "Name of training vector map"
 #~ msgstr "Nome do mapset de destino"
@@ -94393,6 +96381,1673 @@ msgstr ""
 #~ msgid ""
 #~ "Type of raster map to be created / Storage type for resultant raster map"
 #~ msgstr "Tipo de armazenamento para o mapa resultante"
+=======
+#: ../scripts/r.fillnulls/r.fillnulls.py:161
+msgid "A user raster mask (MASK) is present. Saving it..."
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:176
+msgid "Using RST interpolation..."
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:177
+msgid "Locating and isolating NULL areas..."
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:181
+msgid "Skipping masked raster parts"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:192
+#: ../scripts/r.fillnulls/r.fillnulls.py:499
+msgid "Restoring user mask (MASK)..."
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:196
+#: ../scripts/r.fillnulls/r.fillnulls.py:503
+msgid "Failed to restore user MASK!"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:200
+msgid "Growing NULL areas"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:207
+#: ../scripts/r.fillnulls/r.fillnulls.py:222
+#: ../scripts/r.fillnulls/r.fillnulls.py:316
+msgid "abandoned. Removing temporary map, restoring user mask if needed:"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:211
+msgid "Assigning IDs to NULL areas"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:236
+#: ../scripts/r.fillnulls/r.fillnulls.py:274
+#: ../scripts/r.fillnulls/r.fillnulls.py:289
+#: ../scripts/r.fillnulls/r.fillnulls.py:297
+#: ../scripts/r.fillnulls/r.fillnulls.py:331
+#: ../scripts/r.fillnulls/r.fillnulls.py:404
+#: ../scripts/r.fillnulls/r.fillnulls.py:425
+#: ../scripts/r.fillnulls/r.fillnulls.py:435
+msgid "abandoned. Removing temporary maps, restoring user mask if needed:"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:257
+msgid "Input map has no holes. Check region settings."
+msgstr ""
+
+#. GTC Hole is NULL area in a raster map
+#: ../scripts/r.fillnulls/r.fillnulls.py:260
+#, python-format
+msgid "Processing %d map holes"
+msgstr ""
+
+#. GTC Hole is a NULL area in a raster map
+#: ../scripts/r.fillnulls/r.fillnulls.py:266
+#, python-format
+msgid "Filling hole %s of %s"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:336
+#, python-format
+msgid "Interpolating %d points"
+msgstr "Interpolando %d pontos"
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:339
+msgid "No points to interpolate"
+msgstr "Sem pontos para interpolar"
+
+#. GTC Hole is NULL area in a raster map
+#: ../scripts/r.fillnulls/r.fillnulls.py:360
+#, python-format
+msgid "Failed to fill hole %s"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:374
+#, python-format
+msgid "Filling has failed silently. Leaving temporary maps with prefix <%s> for debugging."
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:439
+#, python-format
+msgid "Using %s bspline interpolation"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:472
+#: ../scripts/r.fillnulls/r.fillnulls.py:493
+#, python-format
+msgid "Input map <%s> has no holes. Copying to output without modification."
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:474
+#: ../scripts/r.fillnulls/r.fillnulls.py:495
+#, python-format
+msgid "Failure during bspline interpolation. Error message: %s"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:511
+msgid "Patching fill data into NULL areas..."
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:519
+#, python-format
+msgid "Filled raster map is: %s"
+msgstr ""
+
+#: ../scripts/r.fillnulls/r.fillnulls.py:526
+msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:185
+#, python-format
+msgid "Generating %s ..."
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:418
+msgid "Please select only one output method"
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:422
+msgid "EPS output file path <{}>, doesn't exists. Set new output file path."
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:429
+msgid "option <output>: <{}> exists. To overwrite, use the --overwrite flag."
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:435
+msgid "xgraph required, please install first (www.xgraph.org)"
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:453
+msgid "Calculating statistics for polar diagram... (be patient)"
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:483
+msgid "No data pixel found"
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:529
+msgid "Average vector:"
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:531
+#, python-format
+msgid "direction: %.1f degrees CCW from East"
+msgstr ""
+
+#: ../scripts/d.polar/d.polar.py:537
+#, python-format
+msgid "magnitude: %.1f percent of fullscale"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:49
+#: ../scripts/r.in.wms/wms_cap_parsers.py:56
+msgid "Unable to parse XML file"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:51
+#, python-format
+msgid ""
+"Unable to open XML file '%s'.\n"
+"%s\n"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:59
+msgid "Root node was not found."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:74
+#, python-format
+msgid ""
+"Unable to parse capabilities file.\n"
+"                                Tag <%s> was not found."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:105
+msgid "Missing version attribute root node in Capabilities XML file"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:117
+#, python-format
+msgid "WMS server does not support '%s' version."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:251
+#: ../scripts/r.in.wms/wms_cap_parsers.py:263
+#, python-format
+msgid ""
+"Unable to parse capabilities file. \n"
+"                                Tag <%s> was not found."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:497
+#: ../scripts/r.in.wms/wms_cap_parsers.py:512
+#, python-format
+msgid ""
+"Unable to parse capabilities file. \n"
+"                                Tag '%s' was not found."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_cap_parsers.py:568
+#, python-format
+msgid ""
+"Unable to parse tile service file. \n"
+"                                 Tag <%s> was not found."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:27 ../scripts/r.in.wms/wms_gdal_drv.py:21
+#: ../scripts/v.import/v.import.py:262 ../scripts/v.import/v.import.py:316
+msgid "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:59
+msgid "Downloading data from WMS server..."
+msgstr "Baixando dados do servidor WMS..."
+
+#: ../scripts/r.in.wms/wms_drv.py:129
+#, python-format
+msgid ""
+"Authorization failed to '%s' when fetching data.\n"
+"%s"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:133
+#, python-format
+msgid ""
+"Unable to fetch data from: '%s'\n"
+"%s"
+msgstr ""
+"Não foi possível obter dados de: '%s'\n"
+"%s"
+
+#: ../scripts/r.in.wms/wms_drv.py:156
+#, python-format
+msgid ""
+"Server refused to send data for a tile.\n"
+"Request will be repeated after %d s."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:162
+#, python-format
+msgid ""
+"Unable to write data into tempfile.\n"
+"%s"
+msgstr ""
+"Não foi possível escrever dados no arquivo temporário.\n"
+"%s"
+
+#: ../scripts/r.in.wms/wms_drv.py:175
+#, python-format
+msgid ""
+"Unable to read data from tempfile.\n"
+"%s"
+msgstr ""
+"Não foi possível ler dados do arquivo temporário.\n"
+"%s"
+
+#: ../scripts/r.in.wms/wms_drv.py:180
+#, python-format
+msgid "WMS server error: %s"
+msgstr "Erro do servidor WMS: %s"
+
+#: ../scripts/r.in.wms/wms_drv.py:182
+msgid "WMS server unknown error"
+msgstr "Erro desconhecido do servidor WMS"
+
+#: ../scripts/r.in.wms/wms_drv.py:186
+#, python-format
+msgid "WMS server error: no band(s) received. Is server URL correct? <%s>"
+msgstr "Erro do servidor WMS: nenhuma banda(s) recebida(s). O URL do servidor está correto? <%s>"
+
+#: ../scripts/r.in.wms/wms_drv.py:203
+#, python-format
+msgid "Driver %s does not supports Create() method"
+msgstr "O driver %s não suporta o método Create()"
+
+#: ../scripts/r.in.wms/wms_drv.py:258
+#, python-format
+msgid "Unable to open %s "
+msgstr "Não foi possível abrir %s"
+
+#: ../scripts/r.in.wms/wms_drv.py:324
+msgid "Region is out of server data extend."
+msgstr "A região está fora da extensão de dados do servidor."
+
+#: ../scripts/r.in.wms/wms_drv.py:352
+#, python-format
+msgid "Fetching %d tiles with %d x %d pixel size per tile..."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:560 ../scripts/r.in.wms/wms_drv.py:799
+#, python-format
+msgid ""
+"Unable to parse tile service file.\n"
+"%s\n"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:604
+#, python-format
+msgid "Layer '%s' was not found in capabilities file"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:623
+#, python-format
+msgid "Layer '%s' is not available with %s code."
+msgstr "A camada '%s' não está disponível com o código %s."
+
+#: ../scripts/r.in.wms/wms_drv.py:823
+#, python-format
+msgid ""
+"Unable to parse tile service file. \n"
+" No tag '%s' was found."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:834
+#, python-format
+msgid "Tiled group '%s' was not found in tile service file"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:928
+#, python-format
+msgid ""
+"Wrong form of parameter '%s' in '%s'. \n"
+"                                  The parameter was ignored."
+msgstr ""
+"Forma errada do parâmetro '%s' em '%s'. \n"
+"                                  O parâmetro foi ignorado."
+
+#: ../scripts/r.in.wms/wms_drv.py:951
+#, python-format
+msgid "Parameter '%s' in '%s' is not variable in tile pattern url."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_drv.py:956
+#, python-format
+msgid "%s driver supports only '%s' parameter in '%s'. Other parameters are ignored."
+msgstr "O driver %s suporta apenas '%s' parâmetro em '%s'. Outros parâmetros são ignorados."
+
+#: ../scripts/r.in.wms/r.in.wms.py:250
+msgid "The proxy will be ignored by the chosen GRASS driver. It is only used with the GDAL driver."
+msgstr ""
+
+#: ../scripts/r.in.wms/r.in.wms.py:255
+msgid "Importing raster map into GRASS..."
+msgstr ""
+
+#: ../scripts/r.in.wms/r.in.wms.py:257
+msgid ""
+"Nothing to import.\n"
+"No data has been downloaded from wms server."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:86
+#, python-format
+msgid "Please insert both %s and %s parameters or none of them."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:95
+msgid "JPEG format does not support transparency"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:104
+#, python-format
+msgid "Invalid EPSG code %d"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:110
+#, python-format
+msgid "WMS version <1.3.0> will be used, because version <1.1.1> does not support <%s>projection"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:130
+#, python-format
+msgid "SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:141
+msgid "Unable to get projection info"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:148
+msgid "Maxcols must be greater than 100"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:152
+msgid "Maxrows must be greater than 100"
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:193
+#, python-format
+msgid ""
+"These parameter are ignored: %s\n"
+"                             %s driver does not support the parameters."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:204
+#, python-format
+msgid ""
+"These flags are ignored: %s\n"
+"                             %s driver does not support the flags."
+msgstr ""
+
+#: ../scripts/r.in.wms/wms_base.py:250
+#, python-format
+msgid "Authorization failed to <%s> when fetching capabilities"
+msgstr "A autorização falhou em <%s> ao buscar recursos"
+
+#: ../scripts/r.in.wms/wms_base.py:253
+#, python-brace-format
+msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgstr "Não foi possível obter recursos de <{0}>. Razão:"
+
+#: ../scripts/r.in.wms/wms_base.py:292
+#, python-format
+msgid ""
+"Unable to open file '%s'.\n"
+"%s\n"
+msgstr ""
+"Não foi possível abrir arquivo '%s'.\n"
+"%s\n"
+
+#: ../scripts/r.in.wms/wms_base.py:327
+msgid "Unable to write data into tempfile"
+msgstr "Não é possível escrever dados no arquivo temporário"
+
+#: ../scripts/r.in.wms/wms_base.py:338
+#, python-format
+msgid "Unable to determine region, %s failed"
+msgstr "Não foi possível determinar a região, %s falhou"
+
+#: ../scripts/r.in.wms/wms_base.py:342
+msgid "Region definition: 4 points required"
+msgstr "Definição de região: 4 pontos necessários"
+
+#: ../scripts/r.in.wms/wms_base.py:348
+msgid "Reprojection of region using m.proj failed."
+msgstr "A reprojeção da região usando m.proj falhou."
+
+#: ../scripts/r.in.wms/wms_base.py:386
+msgid "Reprojecting raster..."
+msgstr "Reprojetando raster..."
+
+#: ../scripts/r.in.wms/wms_base.py:424 ../scripts/r.in.wms/wms_base.py:481
+#: ../scripts/r.in.wms/wms_base.py:491 ../scripts/r.in.wms/wms_base.py:539
+#: ../scripts/r.in.wms/wms_base.py:562 ../scripts/r.in.wms/wms_base.py:573
+#: ../scripts/r.in.wms/wms_base.py:594
+#, python-format
+msgid "%s failed"
+msgstr "%s falhou"
+
+#: ../scripts/r.in.wms/wms_base.py:441
+msgid "Unable to create temporary files"
+msgstr "Não foi possível criar arquivos temporários"
+
+#: ../scripts/r.in.wms/wms_base.py:471
+#, python-format
+msgid "Please change output name, or change names of these rasters: %s, module needs to create this temporary maps during execution."
+msgstr "Por favor, altere o nome de saída ou altere os nomes desses rasters:%s, o módulo precisa criar esses mapas temporários durante a execução."
+
+#: ../scripts/r.in.wms/wms_base.py:521
+msgid "WMS import failed, nothing imported"
+msgstr "A importação de WMS falhou, nada importado"
+
+#: ../scripts/r.in.wms/wms_base.py:526
+#, python-format
+msgid "<%s> created."
+msgstr "<%s> criado."
+
+#: ../scripts/r.in.wms/wms_gdal_drv.py:138
+msgid ""
+"If module will not be able to fetch the data in this geographic projection, \n"
+" try 'WMS_GRASS' driver or use WMS version 1.1.1."
+msgstr ""
+"Se o módulo não for capaz de buscar os dados nesta projeção geográfica,\n"
+"experimente o driver 'WMS_GRASS' ou use o WMS versão 1.1.1."
+
+#: ../scripts/r.in.wms/wms_gdal_drv.py:158
+msgid "Unable to open GDAL WMS driver"
+msgstr "Não é possível abrir o driver GDAL WMS"
+
+#: ../scripts/r.in.wms/wms_gdal_drv.py:164
+#, python-format
+msgid "Unable to find %s driver"
+msgstr "Não foi possível encontrar o driver %s"
+
+#: ../scripts/r.in.wms/wms_gdal_drv.py:169
+#, python-format
+msgid "Driver %s supports CreateCopy() method."
+msgstr "O driver %s oferece suporte ao método CreateCopy()."
+
+#: ../scripts/r.in.wms/wms_gdal_drv.py:176
+msgid "Incorrect WMS query"
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:108
+msgid "Cannot combine 'output' option and 'u' flag"
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:110
+msgid "'output' option or 'u' flag must be given"
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:112
+#, python-brace-format
+msgid "Attribute table of vector {name} will be updated..."
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:145
+#, python-format
+msgid "Space time raster dataset <%s> is empty"
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:159
+#, python-format
+msgid ""
+"Temporal type of space time raster datasets must be equal\n"
+"<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:220
+#, python-format
+msgid "Unable to add table <%s> to vector map <%s>"
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:245
+#, python-format
+msgid "Unable to add column %s to vector map <%s> "
+msgstr ""
+
+#: ../scripts/v.what.strds/v.what.strds.py:253
+#, python-format
+msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
+msgstr ""
+
+#: ../scripts/d.frame/d.frame.py:88 ../scripts/d.frame/d.frame.py:117
+#, python-format
+msgid "Unable to get monitor info. %s"
+msgstr ""
+
+#: ../scripts/d.frame/d.frame.py:104
+msgid "Unable to get monitor info"
+msgstr ""
+
+#: ../scripts/d.frame/d.frame.py:196
+#, python-format
+msgid "Invalid frame position: %s"
+msgstr ""
+
+#: ../scripts/d.frame/d.frame.py:224
+#, python-format
+msgid "Invalid monitor size: %dx%d"
+msgstr ""
+
+#: ../scripts/d.frame/d.frame.py:280
+#, python-format
+msgid "Frame <%s> doesn't exist, exiting. To create a new frame use '-c' flag."
+msgstr ""
+
+#: ../scripts/d.frame/d.frame.py:289
+#, python-format
+msgid "Frame <%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../scripts/d.frame/d.frame.py:294
+#, python-format
+msgid "Frame <%s> already found. An existing frame can be overwritten by '%s' flag."
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:121
+#, python-format
+msgid "Programmer error (%s)"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:195
+msgid "Spectral signatures"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:196
+msgid "DN Value"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:214
+msgid "Either group= or raster= is required"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:217
+msgid "group= and raster= are mutually exclusive"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:221
+msgid "Writing to text file requires output=filename"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:225
+msgid "gnuplot required, please install first"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:247
+msgid "No data returned from query"
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:164
+msgid "This module only operates in LatLong locations"
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:189
+#, python-format
+msgid "'%s' does not appear to be a valid zip file."
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:196
+#, python-format
+msgid "File '%s' or '%s' not found"
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:222
+#, python-format
+msgid "Extracting '%s'..."
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:227
+msgid "Unable to unzip file."
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:229
+msgid "Converting input file to BIL..."
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:253
+msgid "Attempting to import 1-arcsec SWBD data"
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:256
+msgid "Attempting to import 1-arcsec data"
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:274
+msgid "Unable to import data"
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:283
+msgid "Done: generated map "
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:284
+msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
+msgstr ""
+
+#: ../scripts/i.tasscap/i.tasscap.py:180
+#, python-format
+msgid "Satellite %s..."
+msgstr ""
+
+#: ../scripts/i.tasscap/i.tasscap.py:203
+#, python-format
+msgid "The number of input raster maps (bands) should be %s"
+msgstr ""
+
+#: ../scripts/i.tasscap/i.tasscap.py:221
+msgid "Tasseled Cap components calculated"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:207
+#, python-format
+msgid "Missing value for parameter <%s>"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:224 ../scripts/r.import/r.import.py:192
+#, python-format
+msgid "Input <%s> successfully imported without reprojection"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:228
+#, python-format
+msgid "Unable to import <%s>"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:236 ../scripts/r.import/r.import.py:204
+#, python-format
+msgid "Coordinate reference system not available for current location <%s>"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:256 ../scripts/r.import/r.import.py:216
+#, python-format
+msgid "Creating temporary location for <%s>..."
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:269
+#, python-format
+msgid "Unable to create location from OGR datasource <%s>"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:285 ../scripts/r.import/r.import.py:242
+#, python-format
+msgid "Coordinate reference system not available for input <%s>"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:303 ../scripts/r.import/r.import.py:337
+msgid "Unable to reproject to source location"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:310
+#, python-format
+msgid "Importing <%s> ..."
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:322
+#, python-format
+msgid "Unable to import OGR datasource <%s>"
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:341 ../scripts/r.import/r.import.py:384
+#, python-format
+msgid "Reprojecting <%s>..."
+msgstr ""
+
+#: ../scripts/v.import/v.import.py:346
+#, python-format
+msgid "Unable to to reproject vector <%s>"
+msgstr ""
+
+#: ../scripts/r.pack/r.pack.py:77
+#, python-format
+msgid "option <output>: <%s> exists."
+msgstr ""
+
+#: ../scripts/r.pack/r.pack.py:79
+#, python-format
+msgid "Packing <%s> to <%s>..."
+msgstr ""
+
+#: ../scripts/r.pack/r.pack.py:138
+msgid "No raster map components found"
+msgstr ""
+
+#: ../scripts/r.pack/r.pack.py:168
+#, python-format
+msgid "Raster map saved to '%s'"
+msgstr ""
+
+#: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:64
+msgid "There is no table connected to the input vector map. Cannot rename any column"
+msgstr ""
+
+#: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:73
+#, python-format
+msgid "Column name <%s> too long. The DBF driver supports column names not longer than 10 characters"
+msgstr ""
+
+#: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:78
+#, python-format
+msgid "Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map"
+msgstr ""
+
+#: ../scripts/v.build.all/v.build.all.py:42
+#, python-format
+msgid ""
+"%s\n"
+"Building topology for vector map <%s> (%d of %d)...\n"
+"%s"
+msgstr ""
+
+#: ../scripts/v.build.all/v.build.all.py:44
+#, python-format
+msgid "v.build map=%s"
+msgstr ""
+
+#: ../scripts/v.build.all/v.build.all.py:48
+#, python-format
+msgid "Building topology for vector map <%s> failed"
+msgstr ""
+
+#: ../scripts/r.shade/r.shade.py:123 ../scripts/d.shade/d.shade.py:58
+#, python-format
+msgid "Module %s failed. Check the above error messages."
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:56
+#, python-brace-format
+msgid "Vector map <{name}> not found in the current mapset ({mapset})"
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:67
+#, python-format
+msgid "No table assigned to layer <%s>"
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:72
+#, python-format
+msgid "User selected table <%s> but the table <%s> is linked to layer <%s>"
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:80
+#, python-format
+msgid "Removing table <%s> linked to layer <%s> of vector map <%s>"
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:84
+msgid "You must use the -f (force) flag to actually remove the table. Exiting."
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:86
+msgid "Leaving map/table unchanged."
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:89
+#, python-format
+msgid "Dropping table <%s>..."
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:95
+msgid "An error occurred while running db.execute"
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:99
+msgid "Current attribute table link(s):"
+msgstr ""
+
+#: ../scripts/v.db.droptable/v.db.droptable.py:106
+msgid "(No database links remaining)"
+msgstr ""
+
+#: ../scripts/v.db.univar/v.db.univar.py:76
+#, python-format
+msgid "No attribute table linked to layer <%s>"
+msgstr ""
+
+#: ../scripts/d.redraw/d.redraw.py:50
+#, python-format
+msgid "Unable to open file '%s' for reading. Details: %s"
+msgstr ""
+
+#: ../scripts/d.redraw/d.redraw.py:60
+#, python-format
+msgid "Unable to open file '%s' for writing. Details: %s"
+msgstr ""
+
+#: ../scripts/v.db.addcolumn/v.db.addcolumn.py:73
+msgid "There is an empty column. Did you leave a trailing comma?"
+msgstr ""
+
+#: ../scripts/v.db.addcolumn/v.db.addcolumn.py:76
+#, python-format
+msgid "Column <%s> is already in the table. Skipping."
+msgstr ""
+
+#: ../scripts/v.db.addcolumn/v.db.addcolumn.py:78
+#, python-format
+msgid "Adding column <%s> to the table"
+msgstr ""
+
+#: ../scripts/v.db.addcolumn/v.db.addcolumn.py:86
+#, python-format
+msgid "Unable to add column <%s>."
+msgstr ""
+
+#: ../scripts/db.test/db.test.py:44
+#, python-format
+msgid "Using DB driver: %s"
+msgstr ""
+
+#: ../scripts/db.test/db.test.py:71
+msgid "EXECUTE: OK"
+msgstr ""
+
+#: ../scripts/db.test/db.test.py:85
+msgid "RESULT: OK"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:108
+msgid "Required dependency NumPy not found. Exiting."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:124
+msgid "Bit depth is outside acceptable range"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:132
+msgid "Maps with selected output prefix names already exist. Delete them or use overwrite flag"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:146
+msgid "Using 8bit image channels"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:174
+msgid "Converting image chanels to 8bit for processing"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:204
+msgid "Rescaling image chanels to 8bit for processing"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:255
+#, python-format
+msgid "Performing pan sharpening with hi res pan image: %f"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:264
+msgid "Assigning grey equalized color tables to output images..."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:267
+msgid "setting pan-sharpened channels to equalized grey scale"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:275
+msgid "Adjusting blue channel color table..."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:284
+msgid "The following pan-sharpened output maps have been generated:"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:286
+#, python-format
+msgid "%s_%s"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:288
+#, python-format
+msgid "To visualize output, run: g.region -p raster=%s_red"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:289
+#, python-format
+msgid "d.rgb r=%s_red g=%s_green b=%s_blue"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:290
+msgid "If desired, combine channels into a single RGB map with 'r.composite'."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:291
+msgid "Channel colors can be rebalanced using i.colors.enhance."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:302
+msgid "cleaning up temp files"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:310
+msgid "Using Brovey algorithm"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:313
+msgid "Pan channel/intensity histogram matching using linear regression"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:328
+msgid "Calculating Brovey transformation..."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:366
+msgid "Using IHS<->RGB algorithm"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:368
+msgid "Transforming to IHS color space..."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:383
+msgid "Transforming back to RGB color space and sharpening..."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:401
+msgid "Using PCA/inverse PCA algorithm"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:402
+msgid "Creating PCA images and calculating eigenvectors..."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:409
+#: ../scripts/i.pansharpen/i.pansharpen.py:561
+msgid "Input has no data. Check region settings."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:443
+msgid "Performing inverse PCA ..."
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:538
+msgid "Histogram matching..."
+msgstr ""
+
+#: ../scripts/d.correlate/d.correlate.py:40
+msgid "At least 2 maps are required"
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:94
+#, python-format
+msgid "Target database doesn't exist, creating a new database using <%s> driver..."
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:100
+#, python-format
+msgid "Unable to create database <%s> by driver <%s>"
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:137
+#, python-format
+msgid "Unable to disconnect table <%s> from vector <%s>"
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:145
+#, python-format
+msgid "Unable to drop table <%s>"
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:154
+#, python-format
+msgid "Creating index <%s>..."
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:161
+#, python-format
+msgid "Unable to create index <%s>"
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:192
+msgid "Old and new database connection is identical. Nothing to do."
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:208
+#, python-format
+msgid ""
+"%s\n"
+"Reconnecting vector map <%s> (%d of %d)...\n"
+"%s"
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:245
+#, python-format
+msgid "Reconnecting layer %d..."
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:270
+#, python-format
+msgid "Unable to connect table <%s> to vector <%s> on layer <%s>"
+msgstr ""
+
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:276
+#, python-format
+msgid "Layer <%d> will not be reconnected because database or schema do not match."
+msgstr ""
+
+#: ../scripts/db.out.ogr/db.out.ogr.py:83
+#, python-format
+msgid "File <%s> already exists"
+msgstr ""
+
+#: ../scripts/db.out.ogr/db.out.ogr.py:91
+#: ../scripts/db.out.ogr/db.out.ogr.py:99
+#, python-format
+msgid "Module <%s> failed"
+msgstr ""
+
+#: ../scripts/db.out.ogr/db.out.ogr.py:117
+#, python-format
+msgid "Exported table <%s>"
+msgstr ""
+
+#: ../scripts/v.centroids/v.centroids.py:60
+msgid "Input vector map contains no boundaries."
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:125
+#, python-format
+msgid "This GRASS GIS pack file contains raster data. Use r.unpack to unpack <%s>"
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:138
+msgid "PROJ_INFO file is missing, unpack vector map in XY (unprojected) location."
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:156
+msgid "Projection information does not match. Proceeding..."
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:210
+#, python-format
+msgid "Coping table <%s> as table <%s>"
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:221
+#, python-format
+msgid "Unable to copy table <%s> as table <%s>"
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:223
+#, python-format
+msgid "Connect table <%s> to vector map <%s> at layer <%s>"
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:233
+#, python-format
+msgid "Unable to connect table <%s> to vector map <%s>"
+msgstr ""
+
+#: ../scripts/v.unpack/v.unpack.py:236
+#, python-format
+msgid "Vector map <%s> successfully unpacked"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:169
+msgid "To set custom resolution value, select 'value' in resolution option"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:172
+msgid "Resolution value can't be smaller than 0"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:175
+msgid "Please provide the resolution for the imported dataset or change to 'estimated' resolution"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:196 ../scripts/r.import/r.import.py:258
+#, python-format
+msgid "Unable to import GDAL dataset <%s>"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:228
+#, python-format
+msgid "Unable to read GDAL dataset <%s>"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:245
+#, python-format
+msgid "Importing <%s> to temporary location..."
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:269
+msgid "Input contains GCPs, rectification is required"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:304
+msgid "Unable to get reprojected map extent"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:335
+msgid "Please check the 'extent' parameter"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:357
+#, python-brace-format
+msgid "Estimated target resolution for input band <{out}>: {res}"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:373
+#, python-brace-format
+msgid "Using given resolution for input band <{out}>: {res}"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:379
+#, python-brace-format
+msgid "Using current region resolution for input band <{out}>: nsres={ns}, ewres={ew}"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:392
+#, python-format
+msgid "Unable to to reproject raster <%s>"
+msgstr ""
+
+#: ../scripts/r.import/r.import.py:395
+#, python-format
+msgid "The reprojected raster <%s> is empty"
+msgstr ""
+
+#: ../scripts/r.plane/r.plane.py:84
+msgid "Input coordinates seems to be invalid"
+msgstr ""
+
+#: ../scripts/r.plane/r.plane.py:91
+msgid "dip must be between -90 and 90."
+msgstr ""
+
+#: ../scripts/r.plane/r.plane.py:94
+msgid "azimuth must be between 0 and 360"
+msgstr ""
+
+#: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:106
+msgid "Extracting buffers (1/2)..."
+msgstr ""
+
+#: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:118
+msgid "Extracting buffers (2/2)..."
+msgstr ""
+
+#: ../scripts/db.dropcolumn/db.dropcolumn.py:62
+#, python-format
+msgid "Deleting <%s> column which may be needed to keep table connected to a vector map"
+msgstr ""
+
+#: ../scripts/db.dropcolumn/db.dropcolumn.py:67
+#, python-format
+msgid "Column <%s> not found in table"
+msgstr ""
+
+#: ../scripts/db.dropcolumn/db.dropcolumn.py:70
+#, python-format
+msgid "Column <%s> would be deleted."
+msgstr ""
+
+#: ../scripts/db.dropcolumn/db.dropcolumn.py:72
+msgid "You must use the force flag (-f) to actually remove it. Exiting."
+msgstr ""
+
+#: ../scripts/db.dropcolumn/db.dropcolumn.py:108
+msgid "Cannot continue (problem deleting column)"
+msgstr ""
+
+#: ../scripts/m.proj/m.proj.py:145
+msgid "cs2cs program not found, install PROJ first:             https://proj.org"
+msgstr ""
+
+#: ../scripts/m.proj/m.proj.py:165
+msgid "Unable to project to or from a XY location"
+msgstr ""
+
+#: ../scripts/m.proj/m.proj.py:181
+msgid "Invalid PROJ.4 input specification"
+msgstr ""
+
+#: ../scripts/m.proj/m.proj.py:204
+msgid "Invalid PROJ.4 output specification"
+msgstr ""
+
+#: ../scripts/m.proj/m.proj.py:207
+msgid "Missing output projection parameters "
+msgstr ""
+
+#: ../scripts/m.proj/m.proj.py:226
+msgid "Unable to read input data"
+msgstr ""
+
+#: ../scripts/m.proj/m.proj.py:288
+msgid "Projection transform probably failed, please investigate"
+msgstr ""
+
+#: ../scripts/g.search.modules/g.search.modules.py:177
+msgid "Cannot colorize, python-termcolor is not installed"
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:79
+#, python-format
+msgid "Using vector map name as table name: <%s>"
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:85
+#, python-format
+msgid "Using vector map name extended by layer number as table name: <%s>"
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:88
+#, python-format
+msgid "Using user specified table name: %s"
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:92
+msgid "Creating new DB connection based on default mapset settings..."
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:104
+#, python-format
+msgid "There is already a table linked to layer <%s>"
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:121
+#, python-format
+msgid "Duplicate column name '%s' not allowed"
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:130
+#, python-format
+msgid "Creating table with columns (%s)..."
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:142
+#, python-format
+msgid "Connecting new table to vector map <%s>..."
+msgstr ""
+
+#: ../scripts/v.db.addtable/v.db.addtable.py:159
+msgid "Current attribute table links:"
+msgstr ""
+
+#: ../scripts/r3.in.xyz/r3.in.xyz.py:243
+msgid "The 2D and 3D region settings are different. Can not continue."
+msgstr ""
+
+#: ../scripts/r3.in.xyz/r3.in.xyz.py:245
+#, python-format
+msgid "Region bottom=%.15g  top=%.15g  vertical_cell_res=%.15g  (%d depths)"
+msgstr ""
+
+#: ../scripts/r3.in.xyz/r3.in.xyz.py:248
+msgid "Creating slices ..."
+msgstr ""
+
+#: ../scripts/r3.in.xyz/r3.in.xyz.py:277
+#, python-format
+msgid "Processing horizontal slice %d of %d [%.15g,%.15g) ..."
+msgstr ""
+
+#: ../scripts/r3.in.xyz/r3.in.xyz.py:294 ../scripts/r3.in.xyz/r3.in.xyz.py:300
+msgid "Trouble importing data. Aborting."
+msgstr ""
+
+#: ../scripts/r3.in.xyz/r3.in.xyz.py:304
+msgid "Assembling 3D cube ..."
+msgstr ""
+
+#: ../scripts/r3.in.xyz/r3.in.xyz.py:314
+#, python-format
+msgid "Done. 3D raster map <%s> created."
+msgstr ""
+
+#: ../scripts/v.db.update/v.db.update.py:87
+msgid "Use of libsqlitefunctions only with SQLite backend"
+msgstr ""
+
+#: ../scripts/v.db.update/v.db.update.py:100
+msgid "<value> and <qcolumn> are mutually exclusive"
+msgstr ""
+
+#: ../scripts/v.db.update/v.db.update.py:105
+msgid "Either <value> or <qcolumn> must be given"
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:59
+msgid "'avcimport' program not found, install it first"
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:64
+msgid "'e00conv' program not found, install it first"
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:69
+msgid "Must specify one of \"point\", \"line\", or \"area\"."
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:78
+msgid "Found that E00 file is split into pieces (.e01, ...). Merging..."
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:117
+msgid "An error may appear next which will be ignored..."
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:120
+msgid "E00 ASCII found and converted to Arc Coverage in current directory"
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:124
+msgid "E00 Compressed ASCII found. Will uncompress first..."
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:127
+msgid "...converted to Arc Coverage in current directory"
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:134
+#, python-format
+msgid "Importing %ss..."
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:144
+msgid "An error occurred while running v.in.ogr"
+msgstr ""
+
+#: ../scripts/v.in.e00/v.in.e00.py:146
+#, python-format
+msgid "Imported <%s> vector map <%s>."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:228
+#, python-brace-format
+msgid "Download file from <{url}>, return status code {code}, {desc}"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:240
+#, python-brace-format
+msgid "Wrong downloaded file format. Check url <{url}>. Allowed file format is {response_format}."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:257
+msgid "The download of the json file with add-ons paths from the github server wasn't successful, {}. The previous downloaded json file  will be used if exists."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:271
+#, python-brace-format
+msgid "Download file from <{url}>, failed. Check internet connection."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:296
+#, python-format
+msgid "'%s' required. Please install '%s' first."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:360
+msgid "List of installed extensions (toolboxes):"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:362
+msgid "List of installed extensions (modules):"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:367
+msgid "No extension (toolbox) installed"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:369
+msgid "No extension (module) installed"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:441
+msgid "List of available extensions (toolboxes):"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:457
+msgid "List of available extensions (modules):"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:481
+#: ../scripts/g.extension/g.extension.py:511
+msgid "Unable to fetch addons metadata file"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:583
+#, python-format
+msgid "Unable to parse '%s'. Trying to scan SVN repository (may take some time)..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:627
+msgid "Fetching list of extensions from GRASS-Addons SVN repository (be patient)..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:633
+msgid "Flag 'c' ignored, addons metadata file not available"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:636
+msgid "Flag 'g' ignored, addons metadata file not available"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:642
+#: ../scripts/g.extension/g.extension.py:675
+#, python-format
+msgid "Checking for '%s' modules..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:650
+#: ../scripts/g.extension/g.extension.py:682
+#, python-format
+msgid "Unable to fetch '%s'"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:702
+msgid "Path to the source code:"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:842
+msgid "$GISBASE not defined"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:845
+#, python-format
+msgid "Extension <%s> already installed. Re-installing..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:855
+#, python-format
+msgid "Installing toolbox <%s>..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:865
+msgid "Nothing to install"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:892
+msgid "Installation failed, sorry. Please check above error messages."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:896
+msgid "Updating extensions metadata file..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:900
+msgid "Updating extension modules metadata file..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:906
+#, python-format
+msgid "Installation of <%s> successfully finished"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:910
+msgid "This add-on module will not function until you set the GRASS_ADDON_BASE environment variable (see \"g.manual variables\")"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:943
+msgid "Unable to read addons metadata file from the remote server"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:954
+msgid "No addons metadata available"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:957
+#, python-format
+msgid "No addons metadata available for <%s>"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1015
+#, python-brace-format
+msgid "Unable to read addons metadata file from the remote server: {0}"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1019
+#, python-format, python-brace-format
+msgid "Unable to parse '%s': {0}"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1148
+#, python-format
+msgid "No metadata available for module '%s'."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1212
+#, python-format
+msgid "Downloading precompiled GRASS Addons <%s>..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1316
+#: ../scripts/g.extension/g.extension.py:1343
+#, python-format
+msgid "GRASS Addons <%s> not found"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1427
+#, python-brace-format
+msgid "ZIP file is unreadable: {0}"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1446
+#, python-brace-format
+msgid "Archive file is unreadable: {0}"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1454
+#, python-brace-format
+msgid "Type of source identified as '{source}'."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1457
+#, python-format
+msgid "Fetching <%s> from GRASS GIS Addons repository (be patient)..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1461
+#: ../scripts/g.extension/g.extension.py:1465
+#: ../scripts/g.extension/g.extension.py:1469
+#, python-brace-format
+msgid "Fetching <{name}> from <{url}> (be patient)..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1480
+#, python-brace-format
+msgid "Expected default branch not found. Trying again from <{url}>..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1485
+#, python-brace-format
+msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1488
+#: ../scripts/g.extension/g.extension.py:1796
+#, python-format
+msgid "Extension <%s> not found"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1513
+#, python-brace-format
+msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1537
+msgid "Module name not found. Check module Makefile syntax (PGM variable)."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1609
+msgid "To compile run:"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1611
+msgid "To install run:"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1617
+msgid "Compiling..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1620
+msgid "Please install GRASS development package"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1624
+msgid "Compilation failed, sorry. Please check above error messages."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1637
+msgid "Installing..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1728
+msgid "List of removed files:"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1730
+msgid "Files to be removed:"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1736
+msgid "Updating addons metadata file..."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1740
+#, python-format
+msgid "Extension <%s> successfully uninstalled."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1744
+#, python-format
+msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1748
+#, python-format
+msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1900
+#, python-brace-format
+msgid "Unable to create '{filename}': {error}. Is the GRASS GIS documentation package installed? Installation continues, but documentation may not look right."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1918
+#, python-format
+msgid "Unable to create '%s': %s"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1943
+#, python-format
+msgid "Manual page for <%s> updated"
+msgstr ""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #, fuzzy
 #~ msgid "Footprint of the data as vector map"
@@ -95192,22 +98847,53 @@ msgstr ""
 #~ "uma linha na tabela de atributos. O número de feições para essas áreas "
 #~ "está armazenado com categoria na camada %d"
 
-#~ msgid ""
-#~ "You can switch the history by commands:\n"
-#~ "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
-#~ msgstr ""
-#~ "Você pode alternar o histórico com os comandos:\n"
-#~ "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgid ""
+"You can switch the history by commands:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgstr ""
+"Você pode alternar o histórico com os comandos:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
 
-#~ msgid "Missing table"
-#~ msgstr "Tabela faltando"
+msgid "Missing table"
+msgstr "Tabela faltando"
 
-#~ msgid "No features of type (%s) found in vector map <%s>"
-#~ msgstr "Nenhuma feição do tipo (%s) encontrada no mapa vetorial <%s>"
+msgid "No features of type (%s) found in vector map <%s>"
+msgstr "Nenhuma feição do tipo (%s) encontrada no mapa vetorial <%s>"
 
-#~ msgid "Number of rows: %d"
-#~ msgstr "Número de linhas: %d"
+msgid "Number of rows: %d"
+msgstr "Número de linhas: %d"
 
+msgid "Key columns differ"
+msgstr "As colunas chave são diferentes"
+
+msgid "Number of columns differ"
+msgstr "O número de colunas difere"
+
+msgid "Column types differ"
+msgstr "Os tipos de coluna são diferentes"
+
+msgid "Start of 1. MP >= end of 2. MP for points' cats %[d], [%d]"
+msgstr "Início de 1. MP >= fim de 2. MP para categorias de pontos % [d], [%d]"
+
+msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgstr "Faz com que cada valor de célula seja uma função dos valores de atributo designados aos pontos de vetor ou centroides ao seu redor e armazena novos valores de célula em um mapa raster de saída."
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
+msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) menor"
+
+msgid "DONE: compressed file is %lu %s (%.2f%) smaller"
+msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) menor"
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
+msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) maior"
+
+msgid "DONE: compressed file is %lu %s (%.2f%) larger"
+msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) maior"
+
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
+msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de formato (parâmetro 'lco') para exportar <em 3D em vez de 2D (padrão)."
+
+<<<<<<< HEAD
 #~ msgid "Key columns differ"
 #~ msgstr "As colunas chave são diferentes"
 
@@ -95256,3 +98942,7 @@ msgstr ""
 #, c-format
 #~ msgid "Error while retreiving database record for cat %d"
 #~ msgstr "Erro ao recuperar o registro do banco de dados para categoria %d"
+=======
+#~ msgid "Missing attribute table for vector map <%s>"
+#~ msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
