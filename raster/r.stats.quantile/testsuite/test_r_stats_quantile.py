@@ -34,6 +34,10 @@ reference_str = """\
 
 
 class TestStatsQuantile(TestCase):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     base = "zipcodes"
     cover = "elevation"
 

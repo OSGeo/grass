@@ -225,7 +225,11 @@ int Vedit_connect_lines(struct Map_info *Map, struct ilist *List, double thresh)
 }
 
 int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
+<<<<<<< HEAD
                   double thresh, struct ilist *List UNUSED)
+=======
+                  double thresh, struct ilist *List)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int line_new;
     int type_from, type_to;

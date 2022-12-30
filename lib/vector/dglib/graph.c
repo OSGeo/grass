@@ -40,7 +40,11 @@
 #endif
 #include "helpers.h"
 
+<<<<<<< HEAD
 void dglResetStats(dglGraph_s *pgraph UNUSED)
+=======
+void dglResetStats(dglGraph_s *pgraph)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 #ifdef DGL_STATS
     pgraph->clkAddEdge = 0;
@@ -1046,7 +1050,11 @@ int dglMinimumSpanning(dglGraph_s *pgraphInput, dglGraph_s *pgraphOutput,
     return nRet;
 }
 
+<<<<<<< HEAD
 void dglFreeSPReport(dglGraph_s *pgraph UNUSED, dglSPReport_s *pSPReport)
+=======
+void dglFreeSPReport(dglGraph_s *pgraph, dglSPReport_s *pSPReport)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int iArc;
 
@@ -1450,7 +1458,11 @@ int dglEdgeset_T_Initialize(dglEdgesetTraverser_s *pT, dglGraph_s *pGraph,
     return -pGraph->iErrno;
 }
 
+<<<<<<< HEAD
 void dglEdgeset_T_Release(dglEdgesetTraverser_s *pT UNUSED)
+=======
+void dglEdgeset_T_Release(dglEdgesetTraverser_s *pT)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 }
 
@@ -1507,7 +1519,11 @@ int dglIOContextInitialize(dglGraph_s *pG, dglIOContext_s *pIO)
     return 0;
 }
 
+<<<<<<< HEAD
 void dglIOContextRelease(dglIOContext_s *pIO UNUSED)
+=======
+void dglIOContextRelease(dglIOContext_s *pIO)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 }
 

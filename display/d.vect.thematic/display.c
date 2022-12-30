@@ -139,7 +139,11 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist, int chcat,
 }
 
 int draw_line(int ltype, int line, const struct line_pnts *Points,
+<<<<<<< HEAD
               const struct line_cats *Cats, int chcat, double size UNUSED,
+=======
+              const struct line_cats *Cats, int chcat, double size,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
               int default_width, const struct cat_list *Clist, SYMBOL *Symb,
               RGBA_Color *primary_color, int *n_points, int *n_lines,
               int *n_centroids, int *n_boundaries, int *n_faces,

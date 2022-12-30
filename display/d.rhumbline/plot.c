@@ -5,7 +5,11 @@
 #include "local_proto.h"
 
 void plot(double lon1, double lat1, double lon2, double lat2, int line_color,
+<<<<<<< HEAD
           int text_color UNUSED)
+=======
+          int text_color)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int nsteps = 1000;
     int i;

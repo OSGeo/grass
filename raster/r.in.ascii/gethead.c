@@ -72,7 +72,11 @@ int getgrdhead(FILE *fd, struct Cell_head *cellhd)
     cellhd->ew_res = (double)(xmax - xmin) / (nc - 1);
     cellhd->ns_res = (double)(ymax - ymin) / (nr - 1);
     /* the Surfer grid specifies x,y locations of gridded points.  The GRASS
+<<<<<<< HEAD
        raster specifies an area covered by rectangular cells centered at gridded
+=======
+       raster specifies an area covered by rectangular cells centerd at gridded
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
        points. That difference requires an adjustment */
     cellhd->north = ymax + cellhd->ns_res / 2.;
     cellhd->south = ymin - cellhd->ns_res / 2.;
@@ -235,17 +239,29 @@ static int scan_int(const char *s, double *i, int proj UNUSED)
 
     *dummy = 0;
 
+<<<<<<< HEAD
     if (sscanf(s, "%d%1s", i_loc, dummy) != 1)
         return 0;
     if (*dummy)
         return 0;
     if (*i_loc <= 0)
+=======
+    if (sscanf(s, "%d%1s", i, dummy) != 1)
+        return 0;
+    if (*dummy)
+        return 0;
+    if (*i <= 0)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return 0;
     return 1;
 }
 
 static int extract(int count, char *label, char *value, void *data, int proj,
+<<<<<<< HEAD
                    int (*scanner)(const char *, double *, int))
+=======
+                   int (*scanner)())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (count) {
         G_warning(_("Duplicate \"%s\" field in header"), label);

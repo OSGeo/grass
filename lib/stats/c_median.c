@@ -2,7 +2,11 @@
 #include <grass/raster.h>
 #include <grass/stats.h>
 
+<<<<<<< HEAD
 void c_median(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+=======
+void c_median(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     n = sort_cell(values, n);
 
@@ -12,8 +16,12 @@ void c_median(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
         *result = (values[(n - 1) / 2] + values[n / 2]) / 2;
 }
 
+<<<<<<< HEAD
 void w_median(DCELL *result, DCELL (*values)[2], int n,
               const void *closure UNUSED)
+=======
+void w_median(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DCELL total;
     int i;

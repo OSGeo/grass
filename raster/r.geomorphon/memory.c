@@ -1,6 +1,7 @@
 #include "local_proto.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct {
 =======
 typedef struct
@@ -9,6 +10,9 @@ typedef struct
 >>>>>>> 298e3c87b5 (Dockerfile_alpine: fix broken link creatio)
 =======
 >>>>>>> 5e2891edf8 (Dockerfile_alpine: fix broken link creatio)
+=======
+typedef struct {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     const char *sname;
     int r;
     int g;
@@ -39,6 +43,7 @@ static const CATCOLORS ccolors[CNT] = {
     [PT] = {"PT", 0, 0, 56, "pit"},
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     [__] = {"ERROR", 255, 0, 255, "ERROR"}};
 =======
     [__] = {"ERROR", 255, 0, 255, "ERROR"}
@@ -48,6 +53,9 @@ static const CATCOLORS ccolors[CNT] = {
     [__] = {"ERROR", 255, 0, 255, "ERROR"}
 };
 >>>>>>> 5e2891edf8 (Dockerfile_alpine: fix broken link creatio)
+=======
+    [__] = {"ERROR", 255, 0, 255, "ERROR"}};
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 static int get_cell(int, float *, void *, RASTER_MAP_TYPE);
 
@@ -71,7 +79,11 @@ int open_map(MAPS *rast)
     if (window.ew_res + 1e-10 < cellhd.ew_res ||
         window.ns_res + 1e-10 < cellhd.ns_res)
         G_warning(
+<<<<<<< HEAD
             _("Region resolution shouldn't be lesser than map %s resolution. "
+=======
+            _("Region resolution shoudn't be lesser than map %s resolution. "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
               "Run g.region raster=%s to set proper resolution"),
             rast->elevname, rast->elevname);
 
@@ -166,6 +178,7 @@ int write_form_cat_colors(char *raster)
     for (i = FL; i <= PT; ++i)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         Rast_add_color_rule(&i, ccolors[i].r, ccolors[i].g, ccolors[i].b, &i,
                             ccolors[i].r, ccolors[i].g, ccolors[i].b, &colors,
                             CELL_TYPE);
@@ -179,6 +192,11 @@ int write_form_cat_colors(char *raster)
                             &i, ccolors[i].r, ccolors[i].g, ccolors[i].b,
                             &colors, CELL_TYPE);
 >>>>>>> 5e2891edf8 (Dockerfile_alpine: fix broken link creatio)
+=======
+        Rast_add_color_rule(&i, ccolors[i].r, ccolors[i].g, ccolors[i].b, &i,
+                            ccolors[i].r, ccolors[i].g, ccolors[i].b, &colors,
+                            CELL_TYPE);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     Rast_write_colors(raster, G_mapset(), &colors);
     Rast_free_colors(&colors);
     Rast_init_cats("Forms", &cats);

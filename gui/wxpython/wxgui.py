@@ -83,13 +83,19 @@ class GMApp(wx.App):
         def show_main_gui():
             # create and show main frame
 <<<<<<< HEAD
+<<<<<<< HEAD
             single = UserSettings.Get(
                 group="appearance", key="singleWindow", subkey="enabled"
+=======
+            single = UserSettings.Get(
+                group="general", key="singleWindow", subkey="enabled"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             )
             if single:
                 from main_window.frame import GMFrame
             else:
                 from lmgr.frame import GMFrame
+<<<<<<< HEAD
             try:
                 mainframe = GMFrame(
                     parent=None, id=wx.ID_ANY, workspace=self.workspaceFile
@@ -115,6 +121,8 @@ class GMApp(wx.App):
 
 =======
             from lmgr.frame import GMFrame
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
             mainframe.Show()

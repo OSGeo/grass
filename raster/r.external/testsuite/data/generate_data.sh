@@ -17,3 +17,7 @@ g.region b=0 t=5 res3=100 tbres=1 -p3
 
 r.to.rast3 input=elevation output=elevation3d
 r3.out.netcdf input=elevation3d output=elevation3d.nc
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

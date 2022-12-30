@@ -46,11 +46,19 @@ float w[14] = {0,     0.034, 0.184, 0.138, 0.736, 0.161, 0.276,
 float hbar[] = {0,   1.0, 1.0, 2.5, 6.0, 2.0, 2.5,
                 2.5, 0.2, 0.2, 1.0, 1.0, 2.3, 3.0};
 
+<<<<<<< HEAD
 /* A Coefficients in E = IA(.474U)^B (s), where U is wind at 20 ft (mi/h) */
 double A[14] = {0,   545, 709,  429, 301, 235, 242,
                 199, 0,   1121, 224, 179, 163, 170};
 
 /* B Coefficients in E = IA(.474U)^B (s), where U is wind at 20 ft (mi/h) */
+=======
+/* A Coeficients in E = IA(.474U)^B (s), where U is wind at 20 ft (mi/h) */
+double A[14] = {0,   545, 709,  429, 301, 235, 242,
+                199, 0,   1121, 224, 179, 163, 170};
+
+/* B Coeficients in E = IA(.474U)^B (s), where U is wind at 20 ft (mi/h) */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 double B[14] = {0,    -1.21, -1.32, -1.19, -1.05, -0.92, -0.94,
                 0.83, 0,     -1.51, -0.89, -0.81, -0.78, -0.79};
 

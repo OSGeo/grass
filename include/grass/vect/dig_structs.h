@@ -399,7 +399,11 @@ struct Format_info_offset {
 
        5. ring in 3. polygon in 7. feature (multipolygon) of geometry
        collection which has FID = 123 123 (feature 123: geometry
+<<<<<<< HEAD
        collection) 6 (7. feature in geometry collection: multiPolygon) 2
+=======
+       colletion) 6 (7. feature in geometry collection: multiPolygon) 2
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
        (3. polygon) 4 (5. ring in the polygon)
 
        Example 2: geometry collection FID '1' containing one point, one
@@ -605,7 +609,11 @@ struct Format_info_pg {
      */
     char *table_name;
     /*!
+<<<<<<< HEAD
        \brief SQL where statement (of filter features)
+=======
+       \brief SQL where statement (fo filter features)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
      */
     char *where;
     /*!
@@ -795,7 +803,11 @@ struct Plus_head {
     /*!
        \brief Offset size
 
+<<<<<<< HEAD
        Because Plus_head is available to all relevant
+=======
+       Because Plus_head is available to all releveant
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
        functions
      */
     int off_t_size;

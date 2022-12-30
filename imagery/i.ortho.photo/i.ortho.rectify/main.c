@@ -125,9 +125,14 @@ int main(int argc, char *argv[])
 
     c = G_define_flag();
     c->key = 'c';
+<<<<<<< HEAD
     c->description =
         _("Use current region settings in target project (location) "
           "(def.=calculate smallest area)");
+=======
+    c->description = _("Use current region settings in target location "
+                       "(def.=calculate smallest area)");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     a = G_define_flag();
     a->key = 'a';
@@ -180,7 +185,11 @@ int main(int argc, char *argv[])
 
     /* determine the number of files in this group */
     if (!I_get_group_ref(group.name, &group.group_ref)) {
+<<<<<<< HEAD
         G_warning(_("Project (location): %s"), G_location());
+=======
+        G_warning(_("Location: %s"), G_location());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_warning(_("Mapset: %s"), G_mapset());
         G_fatal_error(_("Could not read REF file for group <%s>"), group.name);
     }
@@ -289,8 +298,13 @@ int main(int argc, char *argv[])
 
             if (G_find_raster2(result, G_mapset())) {
                 G_warning(_("The following raster map already exists in"));
+<<<<<<< HEAD
                 G_warning(_("target project (location) %s, mapset %s:"),
                           G_location(), G_mapset());
+=======
+                G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
+                          G_mapset());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_warning("<%s>", result);
                 G_fatal_error(_("Orthorectification cancelled."));
             }
@@ -298,8 +312,13 @@ int main(int argc, char *argv[])
         if (angle->answer) {
             if (G_find_raster2(angle->answer, G_mapset())) {
                 G_warning(_("The following raster map already exists in"));
+<<<<<<< HEAD
                 G_warning(_("target project (location) %s, mapset %s:"),
                           G_location(), G_mapset());
+=======
+                G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
+                          G_mapset());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_warning("<%s>", angle->answer);
                 G_fatal_error(_("Orthorectification cancelled."));
             }

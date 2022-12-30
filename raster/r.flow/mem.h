@@ -25,7 +25,11 @@ void allocate_heap(void);
 
 void deallocate_heap(void);
 
+<<<<<<< HEAD
 void put_row_seg(layer, int /* l, row */);
+=======
+void put_row_seg(/* l, row */);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 #define get_row(l, row)                                                 \
     ((parm.seg && (Segment_flush(l.seg) < 1 ||                          \

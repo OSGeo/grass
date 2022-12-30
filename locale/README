@@ -123,8 +123,8 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
  see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files
 
 [1] .pot files are auto-generated on grass.osgeo.org and
-    stored in https://grass.osgeo.org/grass80/binary/linux/snapshot/transifex/
-     --> cronjob (on grasslxd container): /home/neteler/cronjobs/cron_grass8_HEAD_build_bins.sh
+    stored in https://grass.osgeo.org/grass-devel/binary/linux/snapshot/transifex/
+     --> cronjob (on grasslxd container): /home/neteler/cronjobs/cron_grass8_main_src_snapshot.sh
 
 [2] Transifex job copies daily from [1] to here: 
 	https://www.transifex.com/grass-gis/grass7/dashboard/
@@ -133,7 +133,7 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
 
 [4] Updated po files are taken from Transifex and merged into GRASS GIS source repo 
     (MO files are generated when compiling GRASS GIS)
-    Script: https://github.com/OSGeo/grass-addons/blob/master/tools/transifex_merge.sh
+    Script: https://github.com/OSGeo/grass-addons/blob/grass8/utils/transifex_merge.sh
 
     # trim disconnected=obsolete translations
     POFILE=grassYXZ_LANG.po

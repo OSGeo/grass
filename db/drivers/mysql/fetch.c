@@ -250,7 +250,12 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
     return DB_OK;
 }
 
+<<<<<<< HEAD
 int db__driver_get_num_rows(dbCursor *cn)
+=======
+int db__driver_get_num_rows(cn)
+dbCursor *cn;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     cursor *c;
     dbToken token;

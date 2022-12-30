@@ -100,6 +100,7 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
 <<<<<<< HEAD
+<<<<<<< HEAD
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
@@ -112,6 +113,11 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbGoTo,
             sb.SbProjection,
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
@@ -162,14 +168,22 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def ActivateFirstMap(self, event=None):
         """Switch tracking direction"""
+<<<<<<< HEAD
         super().ActivateFirstMap(event)
+=======
+        super(SwipeMapPanel, self).ActivateFirstMap(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         self.firstMapWindow.ClearLines()
         self.firstMapWindow.Refresh()
 
     def ActivateSecondMap(self, event=None):
         """Switch tracking direction"""
+<<<<<<< HEAD
         super().ActivateSecondMap(event)
+=======
+        super(SwipeMapPanel, self).ActivateSecondMap(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         self.secondMapWindow.ClearLines()
         self.secondMapWindow.Refresh()
@@ -233,7 +247,11 @@ class SwipeMapPanel(DoubleMapPanel):
     def OnSize(self, event):
         Debug.msg(4, "SwipeMapPanel.OnSize()")
         self.resize = grass.clock()
+<<<<<<< HEAD
         super().OnSize(event)
+=======
+        super(SwipeMapPanel, self).OnSize(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     def OnIdle(self, event):
         if self.resize and grass.clock() - self.resize > 0.2:

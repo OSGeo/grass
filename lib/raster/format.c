@@ -107,7 +107,11 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
      */
 
     if (old) {
+<<<<<<< HEAD
         n = ((unsigned int)nrows + 1) * sizeof(off_t);
+=======
+        n = (nrows + 1) * sizeof(off_t);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (read(fd, row_ptr, n) != n)
             goto badread;
         return 1;
@@ -130,10 +134,17 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
     if (read(fd, buf, n) != n)
         goto badread;
 
+<<<<<<< HEAD
     for (row = 0, b = buf; row <= (unsigned int)nrows; row++) {
         off_t v = 0;
 
         for (n = 0; n < nbytes; n++) {
+=======
+    for (row = 0, b = buf; row <= nrows; row++) {
+        off_t v = 0;
+
+        for (n = 0; n < (int)nbytes; n++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             unsigned char c = *b++;
 
             if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) && c != 0)

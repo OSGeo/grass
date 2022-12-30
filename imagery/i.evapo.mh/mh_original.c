@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include <grass/gis.h>
 
 /*Hargreaves et al, 1985. */
 double mh_original(double ra, double tavg, double tmax, double tmin,
                    double p UNUSED)
+=======
+
+/*Hargreaves et al, 1985. */
+double mh_original(double ra, double tavg, double tmax, double tmin, double p)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     double td, result;
 

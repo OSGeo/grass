@@ -76,7 +76,11 @@ struct varray *Vect_new_varray(int size)
    \return number of items set
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_set_varray_from_cat_string(struct Map_info *Map, int field,
+=======
+int Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                     const char *cstring, int type, int value,
                                     struct varray *varray)
 {
@@ -121,7 +125,11 @@ int Vect_set_varray_from_cat_string(struct Map_info *Map, int field,
    \return number of items set
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_set_varray_from_cat_list(struct Map_info *Map, int field,
+=======
+int Vect_set_varray_from_cat_list(const struct Map_info *Map, int field,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                   struct cat_list *clist, int type, int value,
                                   struct varray *varray)
 {
@@ -239,8 +247,14 @@ static int in_array(int *cats, size_t ncats, int cat)
    \return number of items set
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_set_varray_from_db(struct Map_info *Map, int field, const char *where,
                             int type, int value, struct varray *varray)
+=======
+int Vect_set_varray_from_db(const struct Map_info *Map, int field,
+                            const char *where, int type, int value,
+                            struct varray *varray)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int i, n, c, centr, *cats;
     int ncats;

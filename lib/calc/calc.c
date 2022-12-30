@@ -12,7 +12,11 @@ int columns;
 
 /****************************************************************************/
 
+<<<<<<< HEAD
 static void handle_fpe(int n UNUSED)
+=======
+static void handle_fpe(int n)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     floating_point_exception = 1;
     floating_point_exception_occurred = 1;

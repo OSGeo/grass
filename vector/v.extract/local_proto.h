@@ -1,5 +1,9 @@
 /* copy_tab.c */
+<<<<<<< HEAD
 void copy_tabs(struct Map_info *, int, int, struct Map_info *);
+=======
+void copy_tabs(const struct Map_info *, int, int, struct Map_info *);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* extract.c */
 int cmp(const void *, const void *);

@@ -15,9 +15,13 @@
 """Basic functions for benchmarking modules"""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import random
 =======
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+import random
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import shutil
 from types import SimpleNamespace
 
@@ -79,6 +83,9 @@ def benchmark_single(module, label, repeat=5):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     """Benchmark module using values of nprocs up to *max_nprocs*.
 
@@ -95,6 +102,7 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     So, the module will run ``max_nprocs * repeat`` times.
     Runs are executed in random order, set *shuffle* to false if they
     need to be executed in order based on number of threads.
+<<<<<<< HEAD
 =======
 def benchmark_nprocs(module, label, max_nprocs, repeat):
 =======
@@ -114,11 +122,14 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
     *repeat* sets how many times the each run is repeated.
     So, the module will run ``max_nprocs * repeat`` times.
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     *label* is a text to add to the result (for user-facing display).
     Optional *nprocs* is passed to the module if present.
 
     Returns an object with attributes *times* (list of average execution times),
+<<<<<<< HEAD
 <<<<<<< HEAD
     *all_times* (list of lists of measured execution times),
     *efficiency* (parallel efficiency), *nprocs* (list of *nprocs* values used),
@@ -157,6 +168,11 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 =======
     *all_times* (list of lists of measured execution times), *nprocs*
     (list of *nprocs* values used), and *label* (the provided parameter as is).
+=======
+    *all_times* (list of lists of measured execution times),
+    *efficiency* (parallel efficiency), *nprocs* (list of *nprocs* values used),
+    and *label* (the provided parameter as is).
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     """
     term_size = shutil.get_terminal_size()
     if hasattr(module, "get_bash"):
@@ -169,29 +185,39 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
     serial_avg = None
     avg_times = []
     all_times = []
+    efficiency = []
     nprocs_list = list(range(1, max_nprocs + 1))
-    for nprocs in nprocs_list:
-        print("\u2500" * term_size.columns)
-        print(f"Benchmark with {nprocs} thread(s)...\n")
-        time_sum = 0
-        measured_times = []
-        for _ in range(repeat):
-            module.update(nprocs=nprocs)
-            module.run()
-            print(f"{module.time}s")
-            time_sum += module.time
-            measured_times.append(module.time)
-
-        avg = time_sum / repeat
+    nprocs_list_shuffled = sorted(nprocs_list * repeat)
+    if shuffle:
+        random.shuffle(nprocs_list_shuffled)
+    times = {}
+    print("\u2500" * term_size.columns)
+    for nprocs in nprocs_list_shuffled:
+        module.update(nprocs=nprocs)
+        module.run()
+        print(f"Run with {nprocs} thread(s) took {module.time}s\n")
+        if nprocs in times:
+            times[nprocs] += [module.time]
+        else:
+            times[nprocs] = [module.time]
+    for nprocs in sorted(times):
+        avg = sum(times[nprocs]) / repeat
         avg_times.append(avg)
+<<<<<<< HEAD
         all_times.append(measured_times)
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+        all_times.append(times[nprocs])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if nprocs == 1:
             serial_avg = avg
         if avg < min_avg:
             min_avg = avg
             min_time = nprocs
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         efficiency.append(serial_avg / (nprocs * avg))
 
     print("\u2500" * term_size.columns)
@@ -214,9 +240,13 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
         all_times=all_times,
         times=avg_times,
 <<<<<<< HEAD
+<<<<<<< HEAD
         efficiency=efficiency,
 =======
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+        efficiency=efficiency,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         nprocs=nprocs_list,
         label=label,
     )

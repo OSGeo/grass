@@ -215,7 +215,11 @@ AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$5 $CPPFLAGS"
 AC_RUN_IFELSE([AC_LANG_SOURCE([[
+<<<<<<< HEAD
 #include <stdio.h>
+=======
+#include <stdio.h> 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include <$1>
 int main(void) {
  FILE *fp = fopen("conftestdata","w");
@@ -410,7 +414,11 @@ AC_DEFUN([SC_ENABLE_SHARED], [
     else
 	AC_MSG_RESULT([static])
 	SHARED_BUILD=0
+<<<<<<< HEAD
 	AC_DEFINE(STATIC_BUILD, 1, [Define to 1 for Windows static build.])
+=======
+	AC_DEFINE(STATIC_BUILD, 1, [define for Windows static build])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 	GRASS_LIBRARY_TYPE='stlib'
     fi
     AC_SUBST(GRASS_LIBRARY_TYPE)
@@ -520,8 +528,13 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	*-sun-solaris*)
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
+<<<<<<< HEAD
 	    AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
 	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
+=======
+	    AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -543,8 +556,13 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    #       derives from UNIX System V Release 4
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
+<<<<<<< HEAD
 	    AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
 	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
+=======
+	    AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -571,11 +589,19 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LDFLAGS="-Wl,--export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
 	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
+<<<<<<< HEAD
 	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
 	    # AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
 	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
+=======
+	    # TODO: add optional pthread support with any combination of: 
+	    # CFLAGS="$CFLAGS -pthread"
+	    # LDFLAGS="$LDFLAGS -lpthread"
+	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 	    ;;
 	*-netbsd*)
 	    # NetBSD has ELF.
@@ -596,8 +622,13 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
+<<<<<<< HEAD
 	    # AC_DEFINE(_REENTRANT, 1, [Define to 1 for _REENTRANT flag (for SunOS).])
 	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [Define to 1 to enable threading extensions on Solaris.])
+=======
+	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 	    ;;
 	*aix*)
 		# NOTE: do we need to support aix < 6 ?

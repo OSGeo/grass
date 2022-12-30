@@ -123,7 +123,11 @@ t_ANY_GT = r">"
 t_ANY_CONDOP = r"\?"
 
 
+<<<<<<< HEAD
 # Delimiters
+=======
+# Delimeters
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 t_ANY_PERIOD = r"\."
 t_ANY_LPAREN = r"\("
 t_ANY_RPAREN = r"\)"

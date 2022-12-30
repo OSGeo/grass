@@ -222,10 +222,16 @@ int main(int argc, char *argv[])
     Flag *over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
+<<<<<<< HEAD
         _("Override projection check (use current project's CRS)");
     over_flag->description =
         _("Assume that the dataset has the same coordinate reference system as "
           "the current project");
+=======
+        _("Override projection check (use current location's projection)");
+    over_flag->description = _(
+        "Assume that the dataset has same projection as the current location");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     over_flag->guisection = _("Projection");
 
     // TODO: from the API it seems that also prj file path and proj string will

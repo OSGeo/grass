@@ -36,7 +36,11 @@ int main(int argc, char **argv)
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
+<<<<<<< HEAD
         G_fatal_error(_("Lat/Long projects are not supported by this module"));
+=======
+        G_fatal_error(_("Lat/Long locations are not supported by this module"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     open_files();
 

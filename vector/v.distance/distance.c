@@ -11,7 +11,11 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *box)
     int i;
 
     if (Points->n_points == 0) {
+<<<<<<< HEAD
         box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         return 0;
     }
 
@@ -222,11 +226,19 @@ int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
  * return 1 inside area
  * return 2 inside isle of area
  * return 3 outside area */
+<<<<<<< HEAD
 int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
               const struct bound_box *abox, double *fx, double *fy, double *fz,
               double *falong, double *fangle, double *tx, double *ty,
               double *tz, double *talong, double *tangle, double *dist,
               int with_z)
+=======
+int line2area(const struct Map_info *To, struct line_pnts *Points, int type,
+              int area, const struct bound_box *abox, double *fx, double *fy,
+              double *fz, double *falong, double *fangle, double *tx,
+              double *ty, double *tz, double *talong, double *tangle,
+              double *dist, int with_z)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int i, j;
     double tmp_dist;

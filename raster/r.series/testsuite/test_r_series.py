@@ -4,6 +4,10 @@ from grass.gunittest.gmodules import call_module
 
 
 class TestRSeries(TestCase):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     average = "average"
     count = "count"
     median = "median"

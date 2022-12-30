@@ -645,9 +645,15 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
         kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
         if wxPythonPhoenix:
+<<<<<<< HEAD
             super().DrawLine(*args, **kwargs)
         else:
             super().DrawLinePoint(*args, **kwargs)
+=======
+            super(PseudoDC, self).DrawLine(*args, **kwargs)
+        else:
+            super(PseudoDC, self).DrawLinePoint(*args, **kwargs)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     def DrawRectangleRect(self, rect):
         if wxPythonPhoenix:
@@ -677,6 +683,21 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
         kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
         super().DrawCircle(*args, **kwargs)
+
+    def DrawRectangle(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawRectangle(*args, **kwargs)
+
+    def DrawBitmap(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawBitmap(*args, **kwargs)
+
+    def DrawCircle(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawCircle(*args, **kwargs)
 
 
 class ClientDC(wx.ClientDC):

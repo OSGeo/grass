@@ -5,6 +5,7 @@
 #include "local_proto.h"
 #include <grass/parson.h>
 
+<<<<<<< HEAD
 // Function to initialize a JSON object with a mapsets array
 static JSON_Object *initialize_json_object(void)
 {
@@ -48,6 +49,28 @@ void list_available_mapsets(const char **mapset_name, int nmapsets,
         fprintf(stdout, "%s", mapset_name[n]);
         if (n < nmapsets - 1) {
             fprintf(stdout, "%s", fs);
+=======
+void list_available_mapsets(const char **mapset_name, int nmapsets,
+                            const char *fs)
+{
+    int n;
+
+    G_message(_("Available mapsets:"));
+
+    for (n = 0; n < nmapsets; n++) {
+        fprintf(stdout, "%s", mapset_name[n]);
+        if (n < nmapsets - 1) {
+            if (strcmp(fs, "newline") == 0)
+                fprintf(stdout, "\n");
+            else if (strcmp(fs, "space") == 0)
+                fprintf(stdout, " ");
+            else if (strcmp(fs, "comma") == 0)
+                fprintf(stdout, ",");
+            else if (strcmp(fs, "tab") == 0)
+                fprintf(stdout, "\t");
+            else
+                fprintf(stdout, "%s", fs);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
     fprintf(stdout, "\n");
@@ -63,7 +86,20 @@ void list_accessible_mapsets(const char *fs)
         /* match each mapset to its numeric equivalent */
         fprintf(stdout, "%s", name);
         if (G_get_mapset_name(n + 1)) {
+<<<<<<< HEAD
             fprintf(stdout, "%s", fs);
+=======
+            if (strcmp(fs, "newline") == 0)
+                fprintf(stdout, "\n");
+            else if (strcmp(fs, "space") == 0)
+                fprintf(stdout, " ");
+            else if (strcmp(fs, "comma") == 0)
+                fprintf(stdout, ",");
+            else if (strcmp(fs, "tab") == 0)
+                fprintf(stdout, "\t");
+            else
+                fprintf(stdout, "%s", fs);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
     fprintf(stdout, "\n");

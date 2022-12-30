@@ -147,6 +147,10 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
             /* test for integer overflow ? */
             value->i = OGR_F_GetFieldAsInteger64(c->hFeature, i);
             break;
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         case OFTReal:
             value->d = OGR_F_GetFieldAsDouble(c->hFeature, i);

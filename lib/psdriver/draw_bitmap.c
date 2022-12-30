@@ -13,7 +13,11 @@ void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
         for (i = 0; i < ncols; i++) {
             unsigned int k = buf[j * ncols + i];
 
+<<<<<<< HEAD
             if (k > (unsigned int)threshold)
+=======
+            if (k > threshold)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 acc |= bit;
 
             bit >>= 1;

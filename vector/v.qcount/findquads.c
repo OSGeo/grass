@@ -55,10 +55,17 @@ COOR *find_quadrats(int n, double r, struct Cell_head window)
                     j = -1;
                 }
             }
+<<<<<<< HEAD
             if (k == (unsigned int)n * n)
                 G_warning("Having difficulties fitting that many circles with "
                           "that radius");
             if (k == (unsigned int)2 * n * n)
+=======
+            if (k == n * n)
+                G_warning("Having difficulties fitting that many circles with "
+                          "that radius");
+            if (k == 2 * n * n)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 G_fatal_error("Maximum number of iterations exceeded\nTry "
                               "smaller radius or smaller number of quads");
         }

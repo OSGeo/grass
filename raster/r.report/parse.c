@@ -45,11 +45,15 @@ int parse_command_line(int argc, char *argv[])
     G_asprintf(&desc,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                "miles;%s;meters;%s;kilometers;%s;acres;%s;hectares;%s;cells;%s;"
                "percent;%s",
                _("area in square miles"), _("area in square meters"),
                _("area in square kilometers"), _("area in acres"),
                _("area in hectares"), _("number of cells"), _("percent cover"));
+<<<<<<< HEAD
     parms.units->descriptions = desc;
     parms.units->options =
         "miles,meters,kilometers,acres,hectares,cells,percent";
@@ -70,6 +74,11 @@ int parse_command_line(int argc, char *argv[])
 >>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
 =======
 >>>>>>> 1dffc5dfd4 (r.report: add default units, change to full unit names (#1666))
+=======
+    parms.units->descriptions = desc;
+    parms.units->options =
+        "miles,meters,kilometers,acres,hectares,cells,percent";
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     parms.units->answer = "cells,percent";
     parms.units->guisection = _("Statistics");
 
@@ -252,6 +261,7 @@ int parse_units(char *s)
         x = ACRES;
     else if (match(s, "hectares", 1))
 <<<<<<< HEAD
+<<<<<<< HEAD
         x = HECTARES;
     else if (match(s, "cells", 1))
         x = CELL_COUNTS;
@@ -260,6 +270,11 @@ int parse_units(char *s)
     else if (match(s, "cells", 1))
 	x = CELL_COUNTS;
 >>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
+=======
+        x = HECTARES;
+    else if (match(s, "cells", 1))
+        x = CELL_COUNTS;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     else if (match(s, "percent_cover", 1))
         x = PERCENT_COVER;
     else {

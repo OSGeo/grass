@@ -1219,8 +1219,13 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
 
    \return 1
  */
+<<<<<<< HEAD
 int gsd_scalebar_v2(float *pos, float len, GLuint fontbase UNUSED,
                     unsigned long bar_clr, unsigned long text_clr UNUSED)
+=======
+int gsd_scalebar_v2(float *pos, float len, GLuint fontbase,
+                    unsigned long bar_clr, unsigned long text_clr)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     float base[6][3];
     float Ntop[] = {0.0, 0.0, 1.0};

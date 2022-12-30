@@ -5,4 +5,8 @@
  * globals r: region, parm
  */
 
+<<<<<<< HEAD
 DCELL aspect_fly(DCELL *, DCELL *, DCELL *, double /* n, c, s, d */);
+=======
+DCELL aspect_fly(/* n, c, s, d */);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

@@ -59,11 +59,15 @@ class ModelerToolbar(BaseToolbar):
                 label=_("Export model to Python script") + " (Ctrl+Alt+P)",
             ),
             "actionAdd": MetaIcon(
+<<<<<<< HEAD
                 img="module-add",
                 label=_("Add GRASS tool (module) to model") + " (Ctrl+Alt+A)",
             ),
             "dataAdd": MetaIcon(
                 img="data-add", label=_("Add data to model") + " (Ctrl+Alt+D)"
+=======
+                img="module-add", label=_("Add GRASS tool (module) to model")
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             ),
             "relation": MetaIcon(
                 img="relation-create",
@@ -77,8 +81,13 @@ class ModelerToolbar(BaseToolbar):
             ),
             "run": MetaIcon(img="execute", label=_("Run model") + " (Ctrl+Alt+R)"),
             "validate": MetaIcon(img="check", label=_("Validate model")),
+<<<<<<< HEAD
             "settings": MetaIcon(img="modeler-settings", label=_("Modeler settings")),
             "properties": MetaIcon(img="options", label=_("Set model properties")),
+=======
+            "settings": BaseIcons["settings"],
+            "properties": MetaIcon(img="options", label=_("Show model properties")),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             "variables": MetaIcon(
                 img="modeler-variables", label=_("Manage model variables")
             ),
@@ -89,6 +98,7 @@ class ModelerToolbar(BaseToolbar):
 
         data = (
             (
+<<<<<<< HEAD
                 ("new", icons["new"].label.rsplit(" ", 1)[0]),
                 icons["new"],
                 self.parent.OnModelNew,
@@ -178,6 +188,98 @@ class ModelerToolbar(BaseToolbar):
                 self.parent.OnHelp,
             ),
             (None,),
+=======
+                (
+                    ("new", icons["new"].label.rsplit(" ", 1)[0]),
+                    icons["new"],
+                    self.parent.OnModelNew,
+                ),
+                (
+                    ("open", icons["open"].label.rsplit(" ", 1)[0]),
+                    icons["open"],
+                    self.parent.OnModelOpen,
+                ),
+                (
+                    ("save", icons["save"].label.rsplit(" ", 1)[0]),
+                    icons["save"],
+                    self.parent.OnModelSave,
+                ),
+                (
+                    ("image", icons["toImage"].label.rsplit(" ", 1)[0]),
+                    icons["toImage"],
+                    self.parent.OnExportImage,
+                ),
+                (
+                    ("python", icons["toPython"].label),
+                    icons["toPython"],
+                    self.parent.OnExportPython,
+                ),
+                (None,),
+                (
+                    ("action", icons["actionAdd"].label),
+                    icons["actionAdd"],
+                    self.parent.OnAddAction,
+                ),
+                (
+                    ("data", icons["dataAdd"].label),
+                    icons["dataAdd"],
+                    self.parent.OnAddData,
+                ),
+                (
+                    ("relation", icons["relation"].label),
+                    icons["relation"],
+                    self.parent.OnDefineRelation,
+                ),
+                (
+                    ("loop", icons["loop"].label),
+                    icons["loop"],
+                    self.parent.OnDefineLoop,
+                ),
+                (
+                    ("comment", icons["comment"].label),
+                    icons["comment"],
+                    self.parent.OnAddComment,
+                ),
+                (None,),
+                (
+                    ("redraw", icons["redraw"].label),
+                    icons["redraw"],
+                    self.parent.OnCanvasRefresh,
+                ),
+                (
+                    ("validate", icons["validate"].label),
+                    icons["validate"],
+                    self.parent.OnValidateModel,
+                ),
+                (
+                    ("run", icons["run"].label),
+                    icons["run"],
+                    self.parent.OnRunModel,
+                ),
+                (None,),
+                (
+                    ("variables", icons["variables"].label),
+                    icons["variables"],
+                    self.parent.OnVariables,
+                ),
+                (
+                    ("settings", icons["settings"].label),
+                    icons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", icons["help"].label),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
+                (None,),
+                (
+                    ("quit", icons["quit"].label),
+                    icons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
+            )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         )
         if self.parent.IsDockable():
             data += (

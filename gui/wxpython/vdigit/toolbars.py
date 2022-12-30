@@ -183,8 +183,12 @@ class VDigitToolbar(BaseToolbar):
             "deleteLine": MetaIcon(
                 img="line-delete",
                 label=_(
+<<<<<<< HEAD
                     "Delete selected point(s), line(s), boundary(ies) or "
                     "centroid(s) (Ctrl+D)"
+=======
+                    "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -213,8 +217,12 @@ class VDigitToolbar(BaseToolbar):
             "moveLine": MetaIcon(
                 img="line-move",
                 label=_(
+<<<<<<< HEAD
                     "Move selected point(s), line(s), boundary(ies) or "
                     "centroid(s) (Ctrl+M)"
+=======
+                    "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
@@ -452,15 +460,23 @@ class VDigitToolbar(BaseToolbar):
             3,
             f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
         )
+<<<<<<< HEAD
         if self.toolSwitcher and event:
             self.toolSwitcher.ToolChanged(event.GetId())
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
         self.MapWindow.mouse["use"] = "pointer"
 
         aId = self.action.get("id", -1)
+<<<<<<< HEAD
+=======
+        if event:
+            BaseToolbar.OnTool(self, event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:

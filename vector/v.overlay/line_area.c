@@ -56,7 +56,11 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
                       struct line_cats *MCats)
 {
     int i, first, last, next_line, curr_line;
+<<<<<<< HEAD
     int merged = 0;
+=======
+    int merged = 0, newl = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int next_node, direction, node_n_lines, type, ltype, lines_type;
     static struct ilist *List = NULL;
     static struct line_pnts *Points = NULL;
@@ -112,7 +116,11 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
                 if (abs(curr_line) != abs(first)) {
                     Vect_read_line(Map, NULL, Cats, abs(curr_line));
 
+<<<<<<< HEAD
                     /* categories must be identical */
+=======
+                    /* catgories must be identical */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     if (compare_cats(MCats, Cats) == 0)
                         next_line = curr_line;
                 }

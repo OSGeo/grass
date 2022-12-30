@@ -66,7 +66,11 @@ class SuccessTest(TestCase):
         )
         cls.runModule(
             "r.mapcalc",
+<<<<<<< HEAD
             expression=f"{cls.b2}=if(row() == 3 && col() == 3, null(), 5.0+rand(-1.0,1.0))",
+=======
+            expression=f"{cls.b2}=5.0+rand(-1.0,1.0)",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             flags="s",
             quiet=True,
         )

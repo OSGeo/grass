@@ -19,15 +19,23 @@
 
 import os
 <<<<<<< HEAD
+<<<<<<< HEAD
 import sys
 import unittest
 from pathlib import Path
 
 =======
 import unittest
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import sys
+import unittest
 from pathlib import Path
+<<<<<<< HEAD
 >>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -37,10 +45,14 @@ def can_import_folium():
     """Test folium import to see if test can be run."""
     try:
 <<<<<<< HEAD
+<<<<<<< HEAD
         import folium  # noqa
 =======
         import folium
 >>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
+=======
+        import folium  # noqa
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         return True
     except ImportError:

@@ -28,6 +28,10 @@ def main():
 
 
 def benchmark(memory, label, results, reference):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     slope = "benchmark_slope"
     aspect = "benchmark_aspect"
     pcurv = "benchmark_pcurv"

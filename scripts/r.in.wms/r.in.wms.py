@@ -264,8 +264,12 @@ def main():
             if "GRASS" in options["driver"]:
                 grass.warning(
                     _(
+<<<<<<< HEAD
                         "The proxy will be ignored by the chosen GRASS driver. It is "
                         "only used with the GDAL driver."
+=======
+                        "The proxy will be ignored by the chosen GRASS driver. It is only used with the GDAL driver."
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     )
                 )
 

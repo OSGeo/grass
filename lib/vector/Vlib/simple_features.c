@@ -214,7 +214,11 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
         break;
     }
     case SF_POLYGON: /* polygon */ {
+<<<<<<< HEAD
         /* write only outer/inner ring */
+=======
+        /* write only outter/inner ring */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         fprintf(file, "(");
         for (i = 0; i < Points->n_points; i++) {
             print_point(Points, i, with_z, precision, file);
@@ -245,8 +249,13 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
    \return -1 feature type not supported (GV_POINT, GV_CENTROID, ...)
    \note Implementation is pending, now always returns 0
  */
+<<<<<<< HEAD
 int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
                             int type UNUSED, int with_z UNUSED)
+=======
+int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type,
+                            int with_z)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     /* TODO:
        SF_FeatureType sftype;
@@ -297,7 +306,11 @@ int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type,
    \return number of features
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_sfa_get_num_features(struct Map_info *Map)
+=======
+int Vect_sfa_get_num_features(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int nfeat;
 

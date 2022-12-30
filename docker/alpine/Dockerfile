@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 FROM alpine:3.19@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b as common
+=======
+FROM alpine:3.15 as common
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -8,10 +12,16 @@ LABEL maintainer="neteler@osgeo.org"
 # PACKAGES VERSIONS
 ARG PYTHON_VERSION=3
 
+<<<<<<< HEAD
 # List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV GRASS_RUN_PACKAGES="\
       attr \
       build-base \
+=======
+# List of packages to be installed
+ENV PACKAGES="\
+      attr \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
       bash \
       bison \
       bzip2 \
@@ -20,6 +30,7 @@ ENV GRASS_RUN_PACKAGES="\
       fftw \
       flex \
       freetype \
+<<<<<<< HEAD
       g++ \
       gcc \
       gdal \
@@ -39,16 +50,30 @@ ENV GRASS_RUN_PACKAGES="\
       geos \
       geos-dev \
       git \
+=======
+      gdal \
+      gdal-tools \
+      gettext \
+      geos \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
       gnutls \
       jsoncpp \
       laszip \
       libbz2 \
+<<<<<<< HEAD
       libgeotiff \
       libjpeg-turbo \
       libpng \
       libpq-dev \
       libunwind \
       make \
+=======
+      libexecinfo \
+      libgeotiff \
+      libjpeg-turbo \
+      libpng \
+      libunwind \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
       musl \
       musl-utils \
       ncurses \
@@ -56,10 +81,17 @@ ENV GRASS_RUN_PACKAGES="\
       openblas \
       py3-numpy \
       py3-pillow \
+<<<<<<< HEAD
       python3 \
       pdal \
       pdal-dev \
       postgresql15-client \
+=======
+      py3-six \
+      pdal \
+      pdal-dev \
+      postgresql \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
       proj-util \
       sqlite \
       sqlite-libs \
@@ -74,10 +106,28 @@ ENV GRASS_RUN_PACKAGES="\
 
 WORKDIR /src
 
+<<<<<<< HEAD
 # Add the packages
 RUN echo "Install main packages";\
     apk update; \
     apk add --no-cache $GRASS_RUN_PACKAGES
+=======
+ENV PYTHONBIN=python$PYTHON_VERSION
+
+RUN echo "Install Python";\
+    apk add --no-cache $PYTHONBIN && \
+    $PYTHONBIN -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip$PYTHON_VERSION install --upgrade pip setuptools && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
+    rm -r /root/.cache
+
+# Add the packages
+RUN echo "Install main packages";\
+    apk update; \
+    apk add --no-cache $PACKAGES
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 FROM common as build
@@ -125,17 +175,31 @@ ENV GRASS_BUILD_PACKAGES="\
       cairo-dev \
       fftw-dev \
       freetype-dev \
+<<<<<<< HEAD
+=======
+      g++ \
+      gcc \
+      gdal-dev \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
       geos-dev \
       git \
       gnutls-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
+<<<<<<< HEAD
       libpq-dev \
+=======
+      make \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
       openjpeg-dev \
       openblas-dev \
       pdal \
       pdal-dev \
+<<<<<<< HEAD
+=======
+      postgresql-dev \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
       proj-dev \
       python3-dev \
       py3-numpy-dev \
@@ -166,6 +230,7 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
+<<<<<<< HEAD
 <<<<<<< HEAD:docker/alpine/Dockerfile
 <<<<<<< HEAD:docker/alpine/Dockerfile
 # Get rid of version number here, restore in next stage via symbolic link
@@ -203,17 +268,31 @@ RUN cp /usr/local/grass80/gui/wxpython/xml/module_items.xml module_items.xml; \
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610)):docker/alpine/Dockerfile_alpine
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610)):docker/alpine/Dockerfile_alpine
+=======
+# Reduce the image size - Remove unnecessary grass files
+RUN cp /usr/local/grass83/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass83/demolocation; \
+    rm -rf /usr/local/grass83/fonts; \
+    rm -rf /usr/local/grass83/gui; \
+    rm -rf /usr/local/grass83/share; \
+    mkdir -p /usr/local/grass83/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass83/gui/wxpython/xml/module_items.xml;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 FROM common as grass
 
+<<<<<<< HEAD
 <<<<<<< HEAD:docker/alpine/Dockerfile
 =======
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 ENV LC_ALL="en_US.UTF-8"
 
 # Copy GRASS GIS from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
+<<<<<<< HEAD
 # pip 20.0.0 fix
 RUN apk add curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py pip==20.0.2 && rm get-pip.py
 
@@ -230,6 +309,14 @@ RUN pip3 install --upgrade pip six grass-session --ignore-installed six
 
 RUN ln -sf /usr/local/grass `grass --config path`
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+=======
+
+# install external Python API
+RUN pip3 install --upgrade pip six grass-session --ignore-installed six
+
+RUN ln -sf /usr/local/grass `grass --config path`
+RUN grass --tmp-location XY --exec g.version -rge && \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     pdal --version && \
     python3 --version
 
@@ -242,6 +329,7 @@ RUN apk add make gcc
 COPY docker/testdata/simple.laz /tmp/simple.laz
 COPY docker/testdata/test_grass_session.py /scripts/test_grass_session.py
 ENV GRASSBIN=grass
+<<<<<<< HEAD
 RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
 
 # Not yet ready for GRASS GIS 8:
@@ -250,15 +338,31 @@ RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" out
 
 # Test addon installation
 RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml
+=======
+
+# Test grass-session
+# Not yet ready for GRASS GIS 8:
+RUN /usr/bin/python3 /scripts/test_grass_session.py
+# Test PDAL
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
+
+# Test addon installation
+RUN apk add py3-scikit-learn
+RUN grass --tmp-location XY --exec g.extension extension=r.learn.ml2
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 FROM grass as final
 
+<<<<<<< HEAD
 >>>>>>> e526e86235 (Dockerfile_alpine: fix broken pip six installation (#1568)):docker/alpine/Dockerfile_alpine
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
+<<<<<<< HEAD
     SHELL="/bin/bash" \
     # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
     PROJ_NETWORK=ON \
@@ -286,9 +390,23 @@ RUN ln -sf /usr/local/grass $(grass --config path); \
     grass --tmp-location XY --exec g.version -rge \
     && pdal --version \
     && python3 --version
+=======
+    SHELL="/bin/bash"
+ENV PROJ_NETWORK="ON"
+
+
+# show installed version
+RUN grass --tmp-location XY --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 # Data workdir
 WORKDIR /grassdb
 VOLUME /grassdb
 
+<<<<<<< HEAD
 CMD ["$GRASSBIN", "--version"]
+=======
+CMD $GRASSBIN --version
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

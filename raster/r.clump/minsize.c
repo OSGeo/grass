@@ -265,6 +265,10 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                 ngbr_id = cbuf[coln];
                 /* same neighbour */
                 if (ngbr_id == this_id) {
+<<<<<<< HEAD
+=======
+                    count++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     rclist_add(&rilist, rown, coln);
                     if (*rowmin > rown)
                         *rowmin = rown;

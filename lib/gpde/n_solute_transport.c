@@ -370,7 +370,11 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata, N_geom_data *geom,
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
+<<<<<<< HEAD
  * \brief Allocate memory for the solute transport data structure in three
+=======
+ * \brief Alllocate memory for the solute transport data structure in three
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * dimensions
  *
  * The solute transport data structure will be allocated including
@@ -424,7 +428,11 @@ N_solute_transport_data3d *N_alloc_solute_transport_data3d(int cols, int rows,
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
+<<<<<<< HEAD
  * \brief Allocate memory for the solute transport data structure in two
+=======
+ * \brief Alllocate memory for the solute transport data structure in two
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * dimensions
  *
  * The solute transport data structure will be allocated including
@@ -624,12 +632,20 @@ void N_calc_solute_transport_transmission_2d(N_solute_transport_data2d *data)
  * 2d
  *
  * The dispersivity tensor is stored in the data structure.
+<<<<<<< HEAD
  * To compute the dispersivity tensor, the dispersivity lengths and the gradient
+=======
+ * To compute the dispersivity tensor, the dispersivity lentghs and the gradient
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * field must be present.
  *
  * This is just a simple tensor computation which should be extended.
  *
+<<<<<<< HEAD
  * \todo Change the tensor calculation to a more realistic algorithm
+=======
+ * \todo Change the tensor calculation to a mor realistic algorithm
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * \param data N_solute_transport_data2d *
  * \return void *
@@ -685,12 +701,20 @@ void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d *data)
  * 3d
  *
  * The dispersivity tensor is stored in the data structure.
+<<<<<<< HEAD
  * To compute the dispersivity tensor, the dispersivity lengths and the gradient
+=======
+ * To compute the dispersivity tensor, the dispersivity lentghs and the gradient
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  * field must be present.
  *
  * This is just a simple tensor computation which should be extended.
  *
+<<<<<<< HEAD
  * \todo Change the tensor calculation to a more realistic algorithm
+=======
+ * \todo Change the tensor calculation to a mor realistic algorithm
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  * \param data N_solute_transport_data3d *
  * \return void *

@@ -16,6 +16,7 @@ database management (locations and mapsets) can be found in the `GRASS
 GIS 7 User's Manual: GRASS GIS Quickstart
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
 =======
 <https://grass.osgeo.org/grass80/manuals/helptext.html>`_.
@@ -23,6 +24,9 @@ GIS 7 User's Manual: GRASS GIS Quickstart
 =======
 <https://grass.osgeo.org/grass80/manuals/helptext.html>`_.
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+<https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 .. _Region-label:
 

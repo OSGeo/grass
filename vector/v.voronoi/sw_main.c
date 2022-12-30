@@ -379,6 +379,10 @@ int readbounds(void)
          * must be >= 2 */
         /* count number of valid boundaries */
         nlines = Vect_get_node_n_lines(&In, node);
+<<<<<<< HEAD
+=======
+        nconnected = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Vect_reset_list(linelist);
         Vect_reset_list(arealist);
 
@@ -393,6 +397,10 @@ int readbounds(void)
             if (n_areas(abs(line), &area_id) == 1) {
                 Vect_list_append(linelist, line);
                 Vect_list_append(arealist, area_id);
+<<<<<<< HEAD
+=======
+                nconnected++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             }
         }
 

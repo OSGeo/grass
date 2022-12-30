@@ -30,11 +30,35 @@ def GetUnicodeValue(value):
 
     :param value: value to be recoded
 
+<<<<<<< HEAD
     :return: unicode value
     """
     if isinstance(value, str):
         return value
     if isinstance(value, bytes):
+=======
+        :return: unicode value
+        """
+        if isinstance(value, unicode):
+            return value
+        if isinstance(value, bytes):
+            enc = GetDbEncoding()
+            return str(value, enc, errors="replace")
+        else:
+            return str(value)
+
+else:
+
+    def GetUnicodeValue(value):
+        """Get unicode value
+
+        :param value: value to be recoded
+
+        :return: unicode value
+        """
+        if isinstance(value, unicode):
+            return value
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         enc = GetDbEncoding()
         return str(value, enc, errors="replace")
     else:

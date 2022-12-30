@@ -15,8 +15,12 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
         Rast3d_fatal_error("Rast3d_write_doubles: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
+<<<<<<< HEAD
         if (write(fd, i, sizeof(double) * nofNum) !=
             (int)sizeof(double) * nofNum) {
+=======
+        if (write(fd, i, sizeof(double) * nofNum) != sizeof(double) * nofNum) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             Rast3d_error("Rast3d_write_doubles: writing to file failed");
             return 0;
         }
@@ -26,7 +30,11 @@ int Rast3d_write_doubles(int fd, int useXdr, const double *i, int nofNum)
     }
 
     do {
+<<<<<<< HEAD
         unsigned int j;
+=======
+        int j;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         n = nofNum % 1024;
         if (n == 0)
@@ -59,8 +67,12 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
         Rast3d_fatal_error("Rast3d_read_doubles: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
+<<<<<<< HEAD
         if (read(fd, i, sizeof(double) * nofNum) !=
             (int)sizeof(double) * nofNum) {
+=======
+        if (read(fd, i, sizeof(double) * nofNum) != sizeof(double) * nofNum) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             Rast3d_error("Rast3d_read_doubles: reading from file failed");
             return 0;
         }
@@ -70,7 +82,11 @@ int Rast3d_read_doubles(int fd, int useXdr, double *i, int nofNum)
     }
 
     do {
+<<<<<<< HEAD
         unsigned int j;
+=======
+        int j;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         n = nofNum % 1024;
         if (n == 0)

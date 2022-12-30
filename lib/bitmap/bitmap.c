@@ -152,7 +152,10 @@ int BM_set_mode(int mode, int size)
     case BM_FLAT:
     case BM_SPARSE:
         Mode = mode;
+<<<<<<< HEAD
         break;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     default:
         fprintf(stderr, "BM_set_mode:  Unknown mode: %d\n", mode);
         ret--;
@@ -315,21 +318,34 @@ struct BM *BM_file_read(FILE *fp)
     if (NULL == (map = (struct BM *)malloc(sizeof(struct BM))))
         return (NULL);
 
+<<<<<<< HEAD
     if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char)) {
-        free(map);
+=======
+    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char))
         return NULL;
-    }
-
     if (c != BM_MAGIC) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         free(map);
         return NULL;
     }
 
+<<<<<<< HEAD
+    if (c != BM_MAGIC) {
+=======
+    if (fread(buf, BM_TEXT_LEN, sizeof(char), fp) != sizeof(char)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+        free(map);
+        return NULL;
+    }
+
+<<<<<<< HEAD
     if (fread(buf, BM_TEXT_LEN, sizeof(char), fp) != sizeof(char)) {
         free(map);
         return NULL;
     }
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char)) {
         free(map);
         return NULL;

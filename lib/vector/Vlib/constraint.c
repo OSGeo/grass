@@ -76,7 +76,11 @@ int Vect_set_constraint_region(struct Map_info *Map, double n, double s,
    \return 0 on success
    \return -1 no region constraint defined
  */
+<<<<<<< HEAD
 int Vect_get_constraint_box(struct Map_info *Map, struct bound_box *Box)
+=======
+int Vect_get_constraint_box(const struct Map_info *Map, struct bound_box *Box)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (!Map->constraint.region_flag)
         return -1;

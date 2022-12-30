@@ -15,7 +15,10 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
 #include <inttypes.h>
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include <sys/types.h>
 #include <string.h>
 #include <grass/vector.h>
@@ -68,6 +71,7 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
     ptr = dig_alloc_node();
     ptr->n_lines = cnt;
 
+<<<<<<< HEAD
     if (dig_node_alloc_line(ptr, ptr->n_lines) == -1) {
         dig_free_node(ptr);
         return -1;
@@ -106,6 +110,32 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
             dig_free_node(ptr);
             return (-1);
         }
+=======
+    if (dig_node_alloc_line(ptr, ptr->n_lines) == -1)
+        return -1;
+
+    if (ptr->n_lines) {
+        if (0 >= dig__fread_port_P(ptr->lines, ptr->n_lines, fp))
+            return (-1);
+        if (0 >= dig__fread_port_F(ptr->angles, ptr->n_lines, fp))
+            return (-1);
+    }
+
+    if (Plus->with_z)
+        if (0 >= dig__fread_port_P(&n_edges, 1, fp)) /* reserved for edges */
+            return (-1);
+
+    /* here will be edges */
+
+    if (0 >= dig__fread_port_D(&(ptr->x), 1, fp))
+        return (-1);
+    if (0 >= dig__fread_port_D(&(ptr->y), 1, fp))
+        return (-1);
+
+    if (Plus->with_z) {
+        if (0 >= dig__fread_port_D(&(ptr->z), 1, fp))
+            return (-1);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     else
         ptr->z = 0;
@@ -185,7 +215,11 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 
     /* offset */
     if (0 >= dig__fread_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
+<<<<<<< HEAD
         goto free_exit_failure;
+=======
+        return (-1);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (ptr->type == GV_POINT) {
         ptr->topo = NULL;
@@ -199,22 +233,33 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
         struct P_topo_c *topo = (struct P_topo_c *)ptr->topo;
 
         if (0 >= dig__fread_port_P(&(topo->area), 1, fp))
+<<<<<<< HEAD
             goto free_exit_failure;
+=======
+            return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     /* lines */
     else if (ptr->type & GV_LINE) {
         struct P_topo_l *topo = (struct P_topo_l *)ptr->topo;
 
         if (0 >= dig__fread_port_P(&(topo->N1), 1, fp))
+<<<<<<< HEAD
             goto free_exit_failure;
         if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
             goto free_exit_failure;
+=======
+            return -1;
+        if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
+            return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     /* boundaries */
     else if (ptr->type & GV_BOUNDARY) {
         struct P_topo_b *topo = (struct P_topo_b *)ptr->topo;
 
         if (0 >= dig__fread_port_P(&(topo->N1), 1, fp))
+<<<<<<< HEAD
             goto free_exit_failure;
         if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
             goto free_exit_failure;
@@ -222,6 +267,15 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
             goto free_exit_failure;
         if (0 >= dig__fread_port_P(&(topo->right), 1, fp))
             goto free_exit_failure;
+=======
+            return -1;
+        if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
+            return -1;
+        if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
+            return -1;
+        if (0 >= dig__fread_port_P(&(topo->right), 1, fp))
+            return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     /* faces */
     else if ((ptr->type & GV_FACE) &&
@@ -229,15 +283,25 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
         struct P_topo_f *topo = (struct P_topo_f *)ptr->topo;
 
         if (0 >= dig__fread_port_I(&n_edges, 1, fp))
+<<<<<<< HEAD
             goto free_exit_failure;
+=======
+            return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         /* here will be list of edges */
 
         /* left / right volume */
         if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
+<<<<<<< HEAD
             goto free_exit_failure;
         if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
             goto free_exit_failure;
+=======
+            return -1;
+        if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
+            return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     /* kernels */
     else if ((ptr->type & GV_KERNEL) &&
@@ -245,7 +309,11 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
         struct P_topo_k *topo = (struct P_topo_k *)ptr->topo;
 
         if (0 >= dig__fread_port_P(&(topo->volume), 1, fp))
+<<<<<<< HEAD
             goto free_exit_failure;
+=======
+            return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     Plus->Line[n] = ptr;
@@ -368,6 +436,7 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile *fp)
     /* boundaries */
     ptr->n_lines = cnt;
 
+<<<<<<< HEAD
     if (dig_area_alloc_line(ptr, ptr->n_lines) == -1) {
         dig_free_area(ptr);
         return -1;
@@ -390,6 +459,25 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile *fp)
         dig_free_area(ptr);
         return -1;
     }
+=======
+    if (dig_area_alloc_line(ptr, ptr->n_lines) == -1)
+        return -1;
+
+    if (ptr->n_lines)
+        if (0 >= dig__fread_port_P(ptr->lines, ptr->n_lines, fp))
+            return -1;
+
+    /* isles */
+    if (0 >= dig__fread_port_P(&(ptr->n_isles), 1, fp))
+        return -1;
+
+    if (dig_area_alloc_isle(ptr, ptr->n_isles) == -1)
+        return -1;
+
+    if (ptr->n_isles)
+        if (0 >= dig__fread_port_P(ptr->isles, ptr->n_isles, fp))
+            return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (ptr->n_isles) {
         if (0 >= dig__fread_port_P(ptr->isles, ptr->n_isles, fp)) {
@@ -398,10 +486,15 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile *fp)
         }
     }
     /* centroid */
+<<<<<<< HEAD
     if (0 >= dig__fread_port_P(&(ptr->centroid), 1, fp)) {
         dig_free_area(ptr);
         return -1;
     }
+=======
+    if (0 >= dig__fread_port_P(&(ptr->centroid), 1, fp))
+        return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Plus->Area[n] = ptr;
 
@@ -466,6 +559,7 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile *fp)
     /* boundaries */
     ptr->n_lines = cnt;
 
+<<<<<<< HEAD
     if (dig_isle_alloc_line(ptr, ptr->n_lines) == -1) {
         dig_free_isle(ptr);
         return -1;
@@ -483,6 +577,18 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile *fp)
         dig_free_isle(ptr);
         return -1;
     }
+=======
+    if (dig_isle_alloc_line(ptr, ptr->n_lines) == -1)
+        return -1;
+
+    if (ptr->n_lines)
+        if (0 >= dig__fread_port_P(ptr->lines, ptr->n_lines, fp))
+            return -1;
+
+    /* area */
+    if (0 >= dig__fread_port_P(&(ptr->area), 1, fp))
+        return -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Plus->Isle[n] = ptr;
 
@@ -610,7 +716,11 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     else
         ptr->off_t_size = 4;
 
+<<<<<<< HEAD
     if (sizeof(off_t) < (size_t)ptr->off_t_size) {
+=======
+    if (sizeof(off_t) < ptr->off_t_size) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_warning(_("Vector exceeds supported file size limit"));
         return (-1);
     }
@@ -687,13 +797,18 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fread_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
         return (-1);
 
+<<<<<<< HEAD
     G_debug(2, "  coor size %" PRId64, ptr->coor_size);
+=======
+    G_debug(2, "  coor size %" PRI_OFF_T, ptr->coor_size);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     dig_fseek(fp, ptr->head_size, SEEK_SET);
 
     return (0);
 }
 
+<<<<<<< HEAD
 /*!
    \brief Write Plus_head to file
 
@@ -708,6 +823,8 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
    \return -1 error
    \return  0 OK
  */
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 {
     unsigned char buf[10];
@@ -729,6 +846,7 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (ptr->coor_size > (off_t)PORT_LONG_MAX) {
         /* can only happen when sizeof(off_t) == 8 */
         ptr->off_t_size = 8;
+<<<<<<< HEAD
     }
     else if (ptr->off_t_size == 0) {
         /* calculate the total size of topo file to get the correct off_t_size
@@ -793,6 +911,11 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 
         ptr->off_t_size = size > (off_t)PORT_LONG_MAX ? 8 : 4;
     }
+=======
+    }
+    else
+        ptr->off_t_size = 4;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* add a new field with off_t_size after byte_order? */
 
@@ -875,7 +998,11 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
         return (-1);
 
+<<<<<<< HEAD
     G_debug(2, "topo body offset %" PRId64, dig_ftell(fp));
+=======
+    G_debug(2, "topo body offset %" PRI_OFF_T, dig_ftell(fp));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     return (0);
 }

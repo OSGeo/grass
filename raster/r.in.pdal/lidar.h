@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /****************************************************************************
  *
  * MODULE:       r.in.pdal
@@ -17,6 +20,7 @@
  *****************************************************************************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifndef GRASS_LIDAR_H
 #define GRASS_LIDAR_H
 
@@ -26,14 +30,21 @@
 #define LAS_LAST  3
 =======
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #ifndef GRASS_LIDAR_H
 #define GRASS_LIDAR_H
 
-#define LAS_ALL 0
+#define LAS_ALL   0
 #define LAS_FIRST 1
+<<<<<<< HEAD
 #define LAS_MID 2
 #define LAS_LAST 3
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+#define LAS_MID   2
+#define LAS_LAST  3
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* Type and format specifier for count of points */
 #ifdef HAVE_LONG_LONG_INT
@@ -47,11 +58,15 @@ typedef unsigned long gpoint_count;
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct GLidarLayers {
 =======
 struct GLidarLayers
 {
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+struct GLidarLayers {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int id_layer;
     int return_layer;
     int class_layer;
@@ -97,11 +112,15 @@ void GLidarLayers_set_no_layers(struct GLidarLayers *layers);
 /* keep the comments above in sync with the .c file */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct class_table {
 =======
 struct class_table
 {
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+struct class_table {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     int code;
     char *name;
 };

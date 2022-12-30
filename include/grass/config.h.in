@@ -22,6 +22,8 @@
 
 /* Define to 1 if you have the <cblas.h> header file. */
 #undef HAVE_CBLAS_H
+<<<<<<< HEAD
+=======
 
 /* Define to 1 if you have the <clapack.h> header file. */
 #undef HAVE_CLAPACK_H
@@ -41,6 +43,73 @@
 /* Define to 1 if you have the <fftw3.h> header file. */
 #undef HAVE_FFTW3_H
 
+/* Define to 1 if you have the <fftw.h> header file. */
+#undef HAVE_FFTW_H
+
+/* Define if fseeko (and presumably ftello) exists and is declared. */
+#undef HAVE_FSEEKO
+
+/* Define to 1 if you have the <ft2build.h> header file. */
+#undef HAVE_FT2BUILD_H
+
+/* Define to 1 if you have the `ftime' function. */
+#undef HAVE_FTIME
+
+/* Define to 1 if you have the <g2c.h> header file. */
+#undef HAVE_G2C_H
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+
+/* Define to 1 if you have the <clapack.h> header file. */
+#undef HAVE_CLAPACK_H
+
+<<<<<<< HEAD
+/* Define to 1 if you have the <CL/cl.h> header file. */
+#undef HAVE_CL_CL_H
+
+/* Define to 1 if you have the <dfftw.h> header file. */
+#undef HAVE_DFFTW_H
+
+/* Define to 1 if you have the `drand48' function. */
+#undef HAVE_DRAND48
+
+/* Define to 1 if you have the <f2c.h> header file. */
+#undef HAVE_F2C_H
+=======
+/* define if GEOS is to be used */
+#undef HAVE_GEOS
+
+/* Define to 1 if you have the <geos_c.h> header file. */
+#undef HAVE_GEOS_C_H
+
+/* Define to 1 if you have the `gethostname' function. */
+#undef HAVE_GETHOSTNAME
+
+/* Define to 1 if you have the `gettimeofday' function. */
+#undef HAVE_GETTIMEOFDAY
+
+/* Define to 1 if you have the <GL/glu.h> header file. */
+#undef HAVE_GL_GLU_H
+
+/* Define to 1 if you have the <GL/gl.h> header file. */
+#undef HAVE_GL_GL_H
+
+/* Define to 1 if you have the <iconv.h> header file. */
+#undef HAVE_ICONV_H
+
+/* define if "int64_t" is available */
+#undef HAVE_INT64_T
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <langinfo.h> header file. */
+#undef HAVE_LANGINFO_H
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+
+/* Define to 1 if you have the <fftw3.h> header file. */
+#undef HAVE_FFTW3_H
+
+<<<<<<< HEAD
 /* Define to 1 if you have the <fftw.h> header file. */
 #undef HAVE_FFTW_H
 
@@ -211,8 +280,130 @@
 
 /* define if socket() exists */
 #undef HAVE_SOCKET
+=======
+/* define if BLAS exists */
+#undef HAVE_LIBBLAS
+
+/* Define to 1 if you have the <libintl.h> header file. */
+#undef HAVE_LIBINTL_H
+
+/* define if LAPACK exists */
+#undef HAVE_LIBLAPACK
+
+/* define if liblas exists */
+#undef HAVE_LIBLAS
+
+/* Define to 1 if you have the <liblas/capi/liblas.h> header file. */
+#undef HAVE_LIBLAS_CAPI_LIBLAS_H
+
+/* Define to 1 if you have the <libpq-fe.h> header file. */
+#undef HAVE_LIBPQ_FE_H
+
+/* Define to 1 if you have the <limits.h> header file. */
+#undef HAVE_LIMITS_H
+
+/* define if "long long int" is available */
+#undef HAVE_LONG_LONG_INT
+
+/* Define to 1 if you have the `lseek' function. */
+#undef HAVE_LSEEK
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <mysql.h> header file. */
+#undef HAVE_MYSQL_H
+
+/* Define to 1 if you have the `nanosleep' function. */
+#undef HAVE_NANOSLEEP
+
+/* define if NetCDF exists */
+#undef HAVE_NETCDF
+
+/* Define to 1 if you have the `nice' function. */
+#undef HAVE_NICE
+
+/* define if OGR is to be used */
+#undef HAVE_OGR
+
+/* Define to 1 if you have the <omp.h> header file. */
+#undef HAVE_OMP_H
+
+/* Define to 1 if you have the <OpenCL/opencl.h> header file. */
+#undef HAVE_OPENCL_OPENCL_H
+
+/* Define to 1 if you have the <OpenGL/glu.h> header file. */
+#undef HAVE_OPENGL_GLU_H
+
+/* Define to 1 if you have the <OpenGL/gl.h> header file. */
+#undef HAVE_OPENGL_GL_H
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* Define to 1 if SQLite is to be used. */
+#undef HAVE_SQLITE
+
+<<<<<<< HEAD
+/* Define to 1 if you have the <sqlite3.h> header file. */
+#undef HAVE_SQLITE3_H
+
+/* Define to 1 if you have the <sql.h> header file. */
+#undef HAVE_SQL_H
+=======
+/* define if PDAL exists */
+#undef HAVE_PDAL
+
+/* define if glXCreateGLXPixmap exists */
+#undef HAVE_PIXMAPS
+
+/* Define to 1 if you have the <png.h> header file. */
+#undef HAVE_PNG_H
+
+/* define if PostgreSQL is to be used */
+#undef HAVE_POSTGRES
+
+/* define if PQcmdTuples in lpq */
+#undef HAVE_PQCMDTUPLES
+
+/* Define to 1 if you have the <proj_api.h> header file. */
+#undef HAVE_PROJ_API_H
+
+/* Define to 1 if you have the <proj.h> header file. */
+#undef HAVE_PROJ_H
+
+/* Define to 1 if you have the <pthread.h> header file. */
+#undef HAVE_PTHREAD_H
+
+/* Define to 1 if you have the `putenv' function. */
+#undef HAVE_PUTENV
+
+/* Define to 1 if you have the <readline/history.h> header file. */
+#undef HAVE_READLINE_HISTORY_H
+
+/* Define to 1 if you have the <readline/readline.h> header file. */
+#undef HAVE_READLINE_READLINE_H
+
+/* Define to 1 if you have the <regex.h> header file. */
+#undef HAVE_REGEX_H
+
+/* Define to 1 if you have the `setenv' function. */
+#undef HAVE_SETENV
+
+/* Define to 1 if you have the `seteuid' function. */
+#undef HAVE_SETEUID
+
+/* Define to 1 if you have the `setpriority' function. */
+#undef HAVE_SETPRIORITY
+
+/* Define to 1 if you have the `setreuid' function. */
+#undef HAVE_SETREUID
+
+/* Define to 1 if you have the `setruid' function. */
+#undef HAVE_SETRUID
+
+/* define if socket() exists */
+#undef HAVE_SOCKET
+
+/* define if SQLite is to be used */
 #undef HAVE_SQLITE
 
 /* Define to 1 if you have the <sqlite3.h> header file. */
@@ -220,6 +411,73 @@
 
 /* Define to 1 if you have the <sql.h> header file. */
 #undef HAVE_SQL_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/mtio.h> header file. */
+#undef HAVE_SYS_MTIO_H
+
+/* Define to 1 if you have the <sys/resource.h> header file. */
+#undef HAVE_SYS_RESOURCE_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/timeb.h> header file. */
+#undef HAVE_SYS_TIMEB_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <sys/utsname.h> header file. */
+#undef HAVE_SYS_UTSNAME_H
+
+/* Define to 1 if you have the <termios.h> header file. */
+#undef HAVE_TERMIOS_H
+
+/* Define to 1 if you have the <termio.h> header file. */
+#undef HAVE_TERMIO_H
+
+/* Define to 1 if you have the <tiffio.h> header file. */
+#undef HAVE_TIFFIO_H
+
+/* Define to 1 if you have the `time' function. */
+#undef HAVE_TIME
+
+/* Define to 1 if you have the `uname' function. */
+#undef HAVE_UNAME
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <values.h> header file. */
+#undef HAVE_VALUES_H
+
+/* Define to 1 if you have the <windows.h> header file. */
+#undef HAVE_WINDOWS_H
+
+/* Define to 1 if you have the <zlib.h> header file. */
+#undef HAVE_ZLIB_H
+
+/* Define to 1 if you have the <zstd.h> header file. */
+#undef HAVE_ZSTD_H
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -299,7 +557,11 @@
 /* Define to 1 if OpenGL uses Windows. */
 #undef OPENGL_WINDOWS
 
+<<<<<<< HEAD
 /* Define to 1 if OpenGL uses X11. */
+=======
+/* define if OpenGL uses X11 */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #undef OPENGL_X11
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -320,6 +582,7 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+<<<<<<< HEAD
 /* Define to 1 if the `setpgrp' function requires zero arguments. */
 #undef SETPGRP_VOID
 
@@ -335,6 +598,24 @@
 #undef USE_NLS
 
 /* Define to 1 if using old PROJ version 4 API. */
+=======
+/* Define to 1 if the `setpgrp' function takes no argument. */
+#undef SETPGRP_VOID
+
+/* define for Windows static build */
+#undef STATIC_BUILD
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
+#undef TIME_WITH_SYS_TIME
+
+/* define if NLS requested */
+#undef USE_NLS
+
+/* define if using old PROJ version 4 API */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #undef USE_PROJ4API
 
 /* Define to 1 if the X Window System is missing or not being used. */
@@ -353,10 +634,17 @@
 /* Define for large files, on AIX-style hosts. */
 #undef _LARGE_FILES
 
+<<<<<<< HEAD
 /* Define to 1 to enable threading extensions on Solaris. */
 #undef _POSIX_PTHREAD_SEMANTICS
 
 /* Define to 1 for _REENTRANT flag (for SunOS). */
+=======
+/* enable threading extensions on Solaris */
+#undef _POSIX_PTHREAD_SEMANTICS
+
+/* define _REENTRANT flag (for SunOS) */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #undef _REENTRANT
 
 /* Define to `int' if <sys/types.h> doesn't define. */

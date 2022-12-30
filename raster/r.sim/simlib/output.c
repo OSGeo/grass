@@ -607,7 +607,11 @@ int output_data(int tt, double ft UNUSED)
     return 1;
 }
 
+<<<<<<< HEAD
 int output_et(void)
+=======
+int output_et()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 
     FCELL *tc_cell, *et_cell;

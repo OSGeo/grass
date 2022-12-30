@@ -29,12 +29,18 @@ int scan_ref(char *buf, int *xref, int *yref)
         lowercase(word2);
         if (!(xmatch(word2, xref) || ymatch(word2, yref)))
             return 0;
+<<<<<<< HEAD
         FALLTHROUGH;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     case 1:
         lowercase(word1);
         if (xmatch(word1, xref) || ymatch(word1, yref))
             return 1;
+<<<<<<< HEAD
         FALLTHROUGH;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     default:
         return 0;
     }

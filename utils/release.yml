@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 ---
 notes:
   categories:
     - title: Modules
       regexp: '((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(modules|tools): '
+=======
+notes:
+  categories:
+    - title: Modules
+      regexp: '(d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*: |(modules|tools): '
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     - title: Graphical User Interface
       regexp: '(wxGUI.*|gui|GUI): '
@@ -20,21 +27,33 @@ notes:
       regexp: '(init|startup): '
 
     - title: Translations, Internationalization, and Localization
+<<<<<<< HEAD
       regexp: '(i18n|i18N|L10n|L10N|t9n|translations?): |Translations update from '
+=======
+      regexp: '(i18n|i18N|L10n|L10N|t9n|translations?): '
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     - title: Windows
       regexp: '(winGRASS|win|[Ww]indows): '
 
     - title: Packaging, Configuration, Portability, and Compilation
+<<<<<<< HEAD
       regexp: '(packaging|pkg|rpm|deb|pkg-config|configure|config|[Mm]ake|build): '
 
     - title: Docker
       regexp: '[Dd]ocker(/[^ ]+)?: '
+=======
+      regexp: '(pkg|rpm|deb|pkg-config|configure|config|[Mm]ake): '
+
+    - title: Docker
+      regexp: '[Dd]ocker: '
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     - title: Singularity
       regexp: '[Ss]ingularity: '
 
     - title: Continuous Integration, Tests, Code Quality, and Checks
+<<<<<<< HEAD
       regexp: '(CI|ci|CI\(deps\)|ci\(deps\)|[Tt]ests|[Cc]hecks|pytest): '
 
     - title: Contributing and Management
@@ -45,3 +64,15 @@ notes:
       - '[Hh]appy [Nn]ew [Yy]ear'
       - 'version: '
       - 'RFC: '
+=======
+      regexp: '(CI|ci|[Tt]ests|[Cc]hecks|pytest): '
+
+    - title: Contributing and Management
+      regexp: '(contributing|CONTRIBUTING.md|contributors.csv): '
+
+  exclude:
+    regexp:
+      - "[Hh]appy [Nn]ew [Yy]ear"
+      - "version: "
+      - "RFC: "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

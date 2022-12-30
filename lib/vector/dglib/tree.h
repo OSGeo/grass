@@ -52,7 +52,11 @@
 #include "avl.h"
 #endif
 
+<<<<<<< HEAD
 extern void *dglTreeGetAllocator(void);
+=======
+extern void *dglTreeGetAllocator();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /*
  * Define a node as it is hosted in pNodeTree

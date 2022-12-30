@@ -50,6 +50,7 @@ char *get_datasource_name(const char *, int);
 
 void convert_osm_lines(struct Map_info *Map, double snap);
 
+<<<<<<< HEAD
 int cmp_layer_srs(GDALDatasetH, int, int *, char **, char *);
 void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                       char *geom_col, char *outloc, int create_only,
@@ -61,6 +62,19 @@ int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *, int, int *,
 
 struct OGR_iterator {
     GDALDatasetH Ogr_ds;
+=======
+int cmp_layer_srs(ds_t, int, int *, char **, char *);
+void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
+                      char *geom_col, char *outloc, int create_only,
+                      int override, int check_only);
+
+int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *, int, int *, char **,
+                          double *, double *, double *, double *, int,
+                          struct Option *);
+
+struct OGR_iterator {
+    ds_t Ogr_ds;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     char *dsn;
     int nlayers;
     int has_nonempty_layers;
@@ -72,8 +86,13 @@ struct OGR_iterator {
     int done;
 };
 
+<<<<<<< HEAD
 void OGR_iterator_init(struct OGR_iterator *OGR_iter, GDALDatasetH Ogr_ds,
                        char *dsn, int nlayers, int ogr_interleaved_reading);
+=======
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
+                       int nlayers, int ogr_interleaved_reading);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 void OGR_iterator_reset(struct OGR_iterator *OGR_iter);
 OGRFeatureH ogr_getnextfeature(struct OGR_iterator *, int, char *, OGRGeometryH,
@@ -213,7 +232,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("topology"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("snapping"));
+<<<<<<< HEAD
     G_add_keyword(_("create project"));
+=======
+    G_add_keyword(_("create location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     module->description =
         _("Imports vector data into a GRASS vector map using OGR library.");
 
@@ -377,10 +400,16 @@ int main(int argc, char *argv[])
     flag.over = G_define_flag();
     flag.over->key = 'o';
     flag.over->label =
+<<<<<<< HEAD
         _("Override projection check (use current project's CRS)");
     flag.over->description =
         _("Assume that the dataset has the same "
           "coordinate reference system (CRS) as the current project");
+=======
+        _("Override projection check (use current location's projection)");
+    flag.over->description = _("Assume that the dataset has the same "
+                               "projection as the current location");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     flag.proj = G_define_flag();
     flag.proj->key = 'j';
@@ -407,9 +436,15 @@ int main(int argc, char *argv[])
 
     flag.no_import = G_define_flag();
     flag.no_import->key = 'i';
+<<<<<<< HEAD
     flag.no_import->description =
         _("Create the project specified by the \"project\" parameter and exit."
           " Do not import the vector data.");
+=======
+    flag.no_import->description = _(
+        "Create the location specified by the \"location\" parameter and exit."
+        " Do not import the vector data.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     flag.no_import->guisection = _("Output");
 
     /* The parser checks if the map already exists in current mapset, this is
@@ -430,6 +465,10 @@ int main(int argc, char *argv[])
 
         G_message(_("Supported formats:"));
 
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 2000000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (iDriver = 0; iDriver < GDALGetDriverCount(); iDriver++) {
             GDALDriverH hDriver = GDALGetDriver(iDriver);
             const char *pszRWFlag;
@@ -447,6 +486,24 @@ int main(int argc, char *argv[])
             fprintf(stdout, " %s (%s): %s\n", GDALGetDriverShortName(hDriver),
                     pszRWFlag, GDALGetDriverLongName(hDriver));
         }
+<<<<<<< HEAD
+=======
+
+#else
+        for (iDriver = 0; iDriver < OGRGetDriverCount(); iDriver++) {
+            OGRSFDriverH poDriver = OGRGetDriver(iDriver);
+            const char *pszRWFlag;
+
+            if (OGR_Dr_TestCapability(poDriver, ODrCCreateDataSource))
+                pszRWFlag = "rw";
+            else
+                pszRWFlag = "ro";
+
+            fprintf(stdout, " %s (%s): %s\n", OGR_Dr_GetName(poDriver),
+                    pszRWFlag, OGR_Dr_GetName(poDriver));
+        }
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         exit(EXIT_SUCCESS);
     }
 
@@ -544,13 +601,27 @@ int main(int argc, char *argv[])
     /* open OGR DSN */
     Ogr_ds = NULL;
     if (strlen(dsn) > 0) {
+<<<<<<< HEAD
         Ogr_ds =
             GDALOpenEx(dsn, GDAL_OF_VECTOR, NULL, (const char **)doo, NULL);
+=======
+#if GDAL_VERSION_NUM >= 2020000
+        Ogr_ds =
+            GDALOpenEx(dsn, GDAL_OF_VECTOR, NULL, (const char **)doo, NULL);
+#else
+        Ogr_ds = OGROpen(dsn, FALSE, NULL);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     if (Ogr_ds == NULL)
         G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
+<<<<<<< HEAD
     /* driver name */
+=======
+        /* driver name */
+#if GDAL_VERSION_NUM >= 2020000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     ogr_driver_name = GDALGetDriverShortName(GDALGetDatasetDriver(Ogr_ds));
     G_verbose_message(_("Using OGR driver '%s/%s'"), ogr_driver_name,
                       GDALGetDriverLongName(GDALGetDatasetDriver(Ogr_ds)));
@@ -560,6 +631,14 @@ int main(int argc, char *argv[])
     if (strcmp(ogr_driver_name, "OSM") == 0) {
 
         /* re-open OGR DSN */
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM < 2020000
+        CPLSetConfigOption("OGR_INTERLEAVED_READING", "YES");
+        OGR_DS_Destroy(Ogr_ds);
+        Ogr_ds = OGROpen(dsn, FALSE, NULL);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         ogr_interleaved_reading = 1;
     }
     if (strcmp(ogr_driver_name, "GMLAS") == 0)
@@ -568,13 +647,36 @@ int main(int argc, char *argv[])
         G_verbose_message(_("Using interleaved reading mode"));
 
     if (param.geom->answer) {
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 1110000
+#if GDAL_VERSION_NUM >= 2020000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (!GDALDatasetTestCapability(Ogr_ds,
                                        ODsCCreateGeomFieldAfterCreateLayer)) {
             G_warning(_("Option <%s> will be ignored. OGR doesn't support it "
                         "for selected format (%s)."),
                       param.geom->key, ogr_driver_name);
+<<<<<<< HEAD
             param.geom->answer = NULL;
         }
+=======
+#else
+        if (!OGR_DS_TestCapability(Ogr_ds,
+                                   ODsCCreateGeomFieldAfterCreateLayer)) {
+            G_warning(_("Option <%s> will be ignored. OGR doesn't support it "
+                        "for selected format (%s)."),
+                      param.geom->key, ogr_driver_name);
+#endif
+            param.geom->answer = NULL;
+        }
+#else
+        G_warning(_("Option <%s> will be ignored. Multiple geometry fields are "
+                    "supported by GDAL >= 1.11"),
+                  param.geom->key);
+        param.geom->answer = NULL;
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* check encoding for given driver */
@@ -599,16 +701,28 @@ int main(int argc, char *argv[])
                   ogr_driver_name, navailable_layers);
     }
     for (i = 0; i < navailable_layers; i++) {
+<<<<<<< HEAD
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, i);
 
         available_layer_names[i] = G_store((char *)OGR_L_GetName(Ogr_layer));
+=======
+        Ogr_layer = ds_getlayerbyindex(Ogr_ds, i);
+        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+
+        available_layer_names[i] =
+            G_store((char *)OGR_FD_GetName(Ogr_featuredefn));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         if (flag.list->answer)
             fprintf(stdout, "%s\n", available_layer_names[i]);
     }
     if (flag.list->answer) {
         fflush(stdout);
+<<<<<<< HEAD
         GDALClose(Ogr_ds);
+=======
+        ds_close(Ogr_ds);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         exit(EXIT_SUCCESS);
     }
 
@@ -646,7 +760,11 @@ int main(int argc, char *argv[])
     /* compare SRS of the different layers to be imported */
     if (cmp_layer_srs(Ogr_ds, nlayers, layers, layer_names,
                       param.geom->answer)) {
+<<<<<<< HEAD
         GDALClose(Ogr_ds);
+=======
+        ds_close(Ogr_ds);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_fatal_error(_("Detected different projections of input layers. "
                         "Input layers must be imported separately."));
     }
@@ -685,13 +803,21 @@ int main(int argc, char *argv[])
 
     /* check output name */
     if (Vect_legal_filename(output) != 1) {
+<<<<<<< HEAD
         GDALClose(Ogr_ds);
+=======
+        ds_close(Ogr_ds);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_fatal_error(_("Illegal output name <%s>"), output);
     }
 
     /* Check if the output map exists */
     if (G_find_vector2(output, G_mapset()) && !overwrite) {
+<<<<<<< HEAD
         GDALClose(Ogr_ds);
+=======
+        ds_close(Ogr_ds);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_fatal_error(_("Vector map <%s> already exists"), output);
     }
 
@@ -716,7 +842,11 @@ int main(int argc, char *argv[])
 
     /* create spatial filters */
     if (param.outloc->answer && flag.region->answer) {
+<<<<<<< HEAD
         G_warning(_("When creating a new project, the current region "
+=======
+        G_warning(_("When creating a new location, the current region "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     "can not be used as spatial filter, disabling"));
         flag.region->answer = 0;
     }
@@ -731,7 +861,12 @@ int main(int argc, char *argv[])
         attr_filter) {
 
         for (layer = 0; layer < nlayers; layer++) {
+<<<<<<< HEAD
             Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
+=======
+            Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+#if GDAL_VERSION_NUM >= 1110000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (param.geom->answer) {
                 Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
                 igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn,
@@ -747,6 +882,12 @@ int main(int argc, char *argv[])
             else {
                 OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter[layer]);
             }
+<<<<<<< HEAD
+=======
+#else
+            OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter[layer]);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (OGR_L_SetAttributeFilter(Ogr_layer, attr_filter) != OGRERR_NONE)
                 G_fatal_error(_("Error setting attribute filter '%s'"),
                               attr_filter);
@@ -781,7 +922,11 @@ int main(int argc, char *argv[])
 
         n_features[layer] = 0;
         layer_id = layers[layer];
+<<<<<<< HEAD
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
+=======
+        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
         igeom = -1;
         if (param.geom->answer) {
@@ -792,6 +937,10 @@ int main(int argc, char *argv[])
                     _("Geometry column <%s> not found in OGR layer <%s>"),
                     param.geom->answer, OGR_L_GetName(Ogr_layer));
         }
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         feature_count = 0;
 
         ogr_feature_count = 0;
@@ -813,14 +962,27 @@ int main(int argc, char *argv[])
             if (ogr_feature_count <= 0)
                 n_features[layer]++;
 
+<<<<<<< HEAD
             /* Geometry */
+=======
+                /* Geometry */
+#if GDAL_VERSION_NUM >= 1110000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
                 if (igeom > -1 && i != igeom)
                     continue; /* use only geometry defined via param.geom */
 
                 Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
+<<<<<<< HEAD
                 if (Ogr_geometry != NULL) {
+=======
+#else
+            Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+#endif
+                if (Ogr_geometry != NULL) {
+#if GDAL_VERSION_NUM >= 2000000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     Ogr_geometry =
                         OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
                 }
@@ -829,8 +991,16 @@ int main(int argc, char *argv[])
                         poly_count(Ogr_geometry, (type & GV_BOUNDARY));
                     if (OGR_G_GetCoordinateDimension(Ogr_geometry) > 2)
                         input3d = 1;
+<<<<<<< HEAD
                     OGR_G_DestroyGeometry(Ogr_geometry);
                 }
+=======
+#if GDAL_VERSION_NUM >= 2000000
+                    OGR_G_DestroyGeometry(Ogr_geometry);
+#endif
+                }
+#if GDAL_VERSION_NUM >= 1110000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             }
             OGR_F_Destroy(Ogr_feature);
         }
@@ -909,7 +1079,11 @@ int main(int argc, char *argv[])
         key_column[layer] = GV_KEY_COLUMN;
         key_idx[layer] = -2; /* -1 for fid column */
         layer_id = layers[layer];
+<<<<<<< HEAD
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
+=======
+        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
         if (param.key->answer) {
@@ -935,7 +1109,15 @@ int main(int argc, char *argv[])
                 Ogr_field =
                     OGR_FD_GetFieldDefn(Ogr_featuredefn, key_idx[layer]);
                 Ogr_ftype = OGR_Fld_GetType(Ogr_field);
+<<<<<<< HEAD
                 if (!(Ogr_ftype == OFTInteger || Ogr_ftype == OFTInteger64)) {
+=======
+                if (!(Ogr_ftype == OFTInteger
+#if GDAL_VERSION_NUM >= 2000000
+                      || Ogr_ftype == OFTInteger64
+#endif
+                      )) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     G_fatal_error(
                         _("Key column '%s' in input layer <%s> is not integer"),
                         param.key->answer, layer_names[layer]);
@@ -1042,6 +1224,10 @@ int main(int argc, char *argv[])
                 if (Ogr_ftype == OFTInteger) {
                     col_info[i_out].type = "integer";
                 }
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 2000000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 else if (Ogr_ftype == OFTInteger64) {
                     if (strcmp(Fi->driver, "pg") == 0)
                         col_info[i_out].type = "bigint";
@@ -1053,8 +1239,17 @@ int main(int argc, char *argv[])
                                       Ogr_fieldname);
                     }
                 }
+<<<<<<< HEAD
                 else if (Ogr_ftype == OFTIntegerList ||
                          Ogr_ftype == OFTInteger64List) {
+=======
+#endif
+                else if (Ogr_ftype == OFTIntegerList
+#if GDAL_VERSION_NUM >= 2000000
+                         || Ogr_ftype == OFTInteger64List
+#endif
+                ) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     /* hack: treat as string */
                     sprintf(buf, "varchar ( %d )", OFTIntegerListlength);
                     col_info[i_out].type = G_store(buf);
@@ -1064,6 +1259,10 @@ int main(int argc, char *argv[])
                 }
                 else if (Ogr_ftype == OFTReal) {
                     col_info[i_out].type = "double precision";
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 1320
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 }
                 else if (Ogr_ftype == OFTDate) {
                     col_info[i_out].type = "date";
@@ -1074,6 +1273,10 @@ int main(int argc, char *argv[])
                 else if (Ogr_ftype == OFTDateTime) {
                     sprintf(buf, "%s", datetime_type);
                     col_info[i_out].type = G_store(buf);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 }
                 else if (Ogr_ftype == OFTString) {
                     int fwidth;
@@ -1145,12 +1348,21 @@ int main(int argc, char *argv[])
 
             /* Create table */
             i = 0;
+<<<<<<< HEAD
             sprintf(buf, "create table %s (\"%s\" %s", Fi->table,
                     col_info[i].name, col_info[i].type);
             db_set_string(&sql, buf);
 
             for (i = 1; i < ncols_out; i++) {
                 sprintf(buf, ", \"%s\" %s", col_info[i].name, col_info[i].type);
+=======
+            sprintf(buf, "create table %s (%s %s", Fi->table, col_info[i].name,
+                    col_info[i].type);
+            db_set_string(&sql, buf);
+
+            for (i = 1; i < ncols_out; i++) {
+                sprintf(buf, ", %s %s", col_info[i].name, col_info[i].type);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 db_append_string(&sql, buf);
             }
 
@@ -1215,13 +1427,21 @@ int main(int argc, char *argv[])
             db_begin_transaction(driver);
         }
 
+<<<<<<< HEAD
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
+=======
+        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
         igeom = -1;
         if (param.geom->answer)
             igeom =
                 OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         while ((Ogr_feature = ogr_getnextfeature(
                     &OGR_iter, layer_id, layer_names[layer],
@@ -1250,6 +1470,12 @@ int main(int argc, char *argv[])
                 /* Ogr_geometry from OGR_F_GetGeomFieldRef() should not be
                  * modified. */
                 Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
+<<<<<<< HEAD
+=======
+#else
+            Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 if (Ogr_geometry == NULL) {
                     nogeom++;
                 }
@@ -1263,7 +1489,13 @@ int main(int argc, char *argv[])
                     geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
                          flag.no_clean->answer);
                 }
+<<<<<<< HEAD
             }
+=======
+#if GDAL_VERSION_NUM >= 1110000
+            }
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             /* Attributes */
             ncols = OGR_FD_GetFieldCount(Ogr_featuredefn);
             if (!flag.notab->answer) {
@@ -1282,10 +1514,21 @@ int main(int argc, char *argv[])
                         Ogr_fstring = OGR_F_GetFieldAsString(Ogr_feature, i);
                     if (Ogr_fstring && *Ogr_fstring) {
                         if (Ogr_ftype == OFTInteger ||
+<<<<<<< HEAD
                             Ogr_ftype == OFTInteger64 || Ogr_ftype == OFTReal) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", %s",
                                         Ogr_fstring);
                         }
+=======
+#if GDAL_VERSION_NUM >= 2000000
+                            Ogr_ftype == OFTInteger64 ||
+#endif
+                            Ogr_ftype == OFTReal) {
+                            G_rasprintf(&sqlbuf, &sqlbufsize, ", %s",
+                                        Ogr_fstring);
+                        }
+#if GDAL_VERSION_NUM >= 1320
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         /* should we use OGR_F_GetFieldAsDateTime() here ? */
                         else if (Ogr_ftype == OFTDate || Ogr_ftype == OFTTime ||
                                  Ogr_ftype == OFTDateTime) {
@@ -1301,10 +1544,21 @@ int main(int argc, char *argv[])
                             G_rasprintf(&sqlbuf, &sqlbufsize, "%s", newbuf);
                             G_free(newbuf);
                         }
+<<<<<<< HEAD
                         else if (Ogr_ftype == OFTString ||
                                  Ogr_ftype == OFTStringList ||
                                  Ogr_ftype == OFTIntegerList ||
                                  Ogr_ftype == OFTInteger64List) {
+=======
+#endif
+                        else if (Ogr_ftype == OFTString ||
+                                 Ogr_ftype == OFTStringList ||
+                                 Ogr_ftype == OFTIntegerList
+#if GDAL_VERSION_NUM >= 2000000
+                                 || Ogr_ftype == OFTInteger64List
+#endif
+                        ) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                             db_set_string(&strval, (char *)Ogr_fstring);
                             db_double_quote_string(&strval);
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'",
@@ -1319,17 +1573,38 @@ int main(int argc, char *argv[])
                     else {
                         /* G_warning (_("Column value not set" )); */
                         if (Ogr_ftype == OFTInteger ||
+<<<<<<< HEAD
                             Ogr_ftype == OFTInteger64 || Ogr_ftype == OFTReal) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
                         }
+=======
+#if GDAL_VERSION_NUM >= 2000000
+                            Ogr_ftype == OFTInteger64 ||
+#endif
+                            Ogr_ftype == OFTReal) {
+                            G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
+                        }
+#if GDAL_VERSION_NUM >= 1320
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         else if (Ogr_ftype == OFTDate || Ogr_ftype == OFTTime ||
                                  Ogr_ftype == OFTDateTime) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
                         }
+<<<<<<< HEAD
                         else if (Ogr_ftype == OFTString ||
                                  Ogr_ftype == OFTStringList ||
                                  Ogr_ftype == OFTIntegerList ||
                                  Ogr_ftype == OFTInteger64List) {
+=======
+#endif
+                        else if (Ogr_ftype == OFTString ||
+                                 Ogr_ftype == OFTStringList ||
+                                 Ogr_ftype == OFTIntegerList
+#if GDAL_VERSION_NUM >= 2000000
+                                 || Ogr_ftype == OFTInteger64List
+#endif
+                        ) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
                         }
                         else {
@@ -1554,6 +1829,7 @@ int main(int argc, char *argv[])
             G_message(_("Finding centroids for OGR layer <%s>..."),
                       layer_names[layer]);
             layer_id = layers[layer];
+<<<<<<< HEAD
             Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
             Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
@@ -1561,6 +1837,17 @@ int main(int argc, char *argv[])
             if (param.geom->answer)
                 igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn,
                                                  param.geom->answer);
+=======
+            Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+            Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+
+            igeom = -1;
+#if GDAL_VERSION_NUM >= 1110000
+            if (param.geom->answer)
+                igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn,
+                                                 param.geom->answer);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             cat = 0; /* field = layer + 1 */
             feature_count = 0;
@@ -1600,11 +1887,16 @@ int main(int argc, char *argv[])
                 }
 
                 /* Geometry */
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 1110000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
                 for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn);
                      i++) {
                     if (igeom > -1 && i != igeom)
                         continue; /* use only geometry defined via param.geom */
+<<<<<<< HEAD
 
                     Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
                     if (Ogr_geometry != NULL) {
@@ -1671,6 +1963,79 @@ int main(int argc, char *argv[])
         G_message(_("%d input polygons"), n_polygons);
         Vect_hist_write(&Map, buf);
 
+=======
+
+                    Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
+#else
+                Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+#endif
+                    if (Ogr_geometry != NULL) {
+                        centroid(Ogr_geometry, Centr, &si, layer + 1, area_cat,
+                                 min_area, type);
+                    }
+#if GDAL_VERSION_NUM >= 1110000
+                }
+#endif
+                OGR_F_Destroy(Ogr_feature);
+            }
+            /* search tree is no longer needed */
+            pavl_destroy(fid_cat_tree[layer], free_fid_cat);
+            G_percent(1, 1, 1);
+        }
+
+        /* Write centroids */
+        G_message("%s", separator);
+        G_message(_("Writing centroids..."));
+
+        n_overlaps = n_nocat = 0;
+        total_area = overlap_area = nocat_area = 0.0;
+        for (centr = 1; centr <= ncentr; centr++) {
+            double area;
+
+            G_percent(centr, ncentr, 2);
+
+            area = Vect_get_area_area(&Tmp, centr);
+            total_area += area;
+
+            if (!(Centr[centr].valid)) {
+                continue;
+            }
+
+            if (Centr[centr].cats->n_cats == 0) {
+                nocat_area += area;
+                n_nocat++;
+                continue;
+            }
+
+            if (Centr[centr].cats->n_cats > 1) {
+                Vect_cat_set(Centr[centr].cats, nlayers + 1,
+                             Centr[centr].cats->n_cats);
+                overlap_area += area;
+                n_overlaps++;
+            }
+
+            Vect_reset_line(Points);
+            Vect_append_point(Points, Centr[centr].x, Centr[centr].y, 0.0);
+            if (type & GV_POINT)
+                otype = GV_POINT;
+            else
+                otype = GV_CENTROID;
+            Vect_write_line(&Tmp, otype, Points, Centr[centr].cats);
+        }
+        if (Centr)
+            G_free(Centr);
+
+        Vect_spatial_index_destroy(&si);
+
+        G_message("%s", separator);
+
+        Vect_hist_write(&Map, separator);
+        Vect_hist_write(&Map, "\n");
+        sprintf(buf, _("%d input polygons\n"), n_polygons);
+        G_message(_("%d input polygons"), n_polygons);
+        Vect_hist_write(&Map, buf);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         sprintf(buf, _("Total area: %G (%d areas)\n"), total_area, ncentr);
         G_message(_("Total area: %G (%d areas)"), total_area, ncentr);
         Vect_hist_write(&Map, buf);
@@ -1973,7 +2338,11 @@ int main(int argc, char *argv[])
 
         if (strcmp(G_mapset(), "PERMANENT") == 0) {
             G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
+<<<<<<< HEAD
             G_message(_("Default region for this project updated"));
+=======
+            G_message(_("Default region for this location updated"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         G_put_window(&cur_wind);
         G_message(_("Region for the current mapset updated"));
@@ -1987,8 +2356,13 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
+<<<<<<< HEAD
 void OGR_iterator_init(struct OGR_iterator *OGR_iter, GDALDatasetH Ogr_ds,
                        char *dsn, int nlayers, int ogr_interleaved_reading)
+=======
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
+                       int nlayers, int ogr_interleaved_reading)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     OGR_iter->Ogr_ds = Ogr_ds;
     OGR_iter->dsn = dsn;
@@ -2001,10 +2375,23 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, GDALDatasetH Ogr_ds,
     OGR_iter->done = 0;
 
     if (OGR_iter->ogr_interleaved_reading) {
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 2020000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         G_verbose_message(_("Using GDAL 2.2+ style interleaved reading for "
                             "GDAL version %d.%d.%d"),
                           GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR,
                           GDAL_VERSION_REV);
+<<<<<<< HEAD
+=======
+#else
+        G_verbose_message(_("Using GDAL 1.x style interleaved reading for GDAL "
+                            "version %d.%d.%d"),
+                          GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR,
+                          GDAL_VERSION_REV);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 }
 
@@ -2028,7 +2415,11 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
         if (!OGR_iter->ogr_interleaved_reading) {
             OGR_iter->curr_layer = layer;
             OGR_iter->Ogr_layer =
+<<<<<<< HEAD
                 GDALDatasetGetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
+=======
+                ds_getlayerbyindex(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
             OGR_L_ResetReading(OGR_iter->Ogr_layer);
         }
@@ -2037,19 +2428,48 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
 
             /* clear filters */
             for (i = 0; i < OGR_iter->nlayers; i++) {
+<<<<<<< HEAD
                 OGR_iter->Ogr_layer = GDALDatasetGetLayer(OGR_iter->Ogr_ds, i);
+=======
+                OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, i);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, NULL);
                 OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, NULL);
             }
 
+<<<<<<< HEAD
             GDALDatasetResetReading(OGR_iter->Ogr_ds);
             OGR_iter->Ogr_layer = GDALDatasetGetLayer(OGR_iter->Ogr_ds, layer);
+=======
+#if GDAL_VERSION_NUM >= 2020000
+            GDALDatasetResetReading(OGR_iter->Ogr_ds);
+#else
+            /* need to re-open OGR DSN in order to start reading from the
+             * beginning NOTE: any constraints are lost */
+            OGR_DS_Destroy(OGR_iter->Ogr_ds);
+            OGR_iter->Ogr_ds = OGROpen(OGR_iter->dsn, FALSE, NULL);
+            if (OGR_iter->Ogr_ds == NULL)
+                G_fatal_error(_("Unable to re-open data source <%s>"),
+                              OGR_iter->dsn);
+            OGR_iter->Ogr_layer = OGR_DS_GetLayer(OGR_iter->Ogr_ds, layer);
+            OGR_iter->curr_layer = 0;
+            OGR_iter->has_nonempty_layers = 0;
+#endif
+            OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, layer);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
             OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, poSpatialFilter);
             if (OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, attr_filter) !=
                 OGRERR_NONE)
                 G_fatal_error(_("Error setting attribute filter '%s'"),
                               attr_filter);
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM < 2020000
+            OGR_iter->Ogr_layer =
+                OGR_DS_GetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
         OGR_iter->requested_layer = layer;
         OGR_iter->done = 0;
@@ -2073,6 +2493,10 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
         OGRFeatureH Ogr_feature = NULL;
 
         /* fetch next feature */
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 2020000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         while (1) {
             OGR_iter->Ogr_layer = NULL;
             Ogr_feature = GDALDatasetGetNextFeature(
@@ -2088,6 +2512,7 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
                 const char *ln = OGR_L_GetName(OGR_iter->Ogr_layer);
 
                 if (ln && *ln && strcmp(ln, layer_name) == 0) {
+<<<<<<< HEAD
 
                     return Ogr_feature;
                 }
@@ -2095,6 +2520,47 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
             OGR_F_Destroy(Ogr_feature);
             OGR_iter->Ogr_layer = NULL;
         }
+=======
+
+                    return Ogr_feature;
+                }
+            }
+            OGR_F_Destroy(Ogr_feature);
+            OGR_iter->Ogr_layer = NULL;
+        }
+#else
+        while (1) {
+            Ogr_feature = OGR_L_GetNextFeature(OGR_iter->Ogr_layer);
+            if (Ogr_feature != NULL) {
+                OGR_iter->has_nonempty_layers = 1;
+                if (OGR_iter->curr_layer != layer)
+                    OGR_F_Destroy(Ogr_feature);
+                else
+                    return Ogr_feature;
+            }
+            else {
+                OGR_iter->curr_layer++;
+                if (OGR_iter->curr_layer == OGR_iter->nlayers) {
+                    if (!OGR_iter->has_nonempty_layers) {
+                        OGR_iter->Ogr_layer = NULL;
+                        OGR_iter->done = 1;
+
+                        return NULL;
+                    }
+                    else {
+                        OGR_iter->curr_layer = 0;
+                        OGR_iter->has_nonempty_layers = 0;
+                    }
+                }
+                G_debug(3, "advancing to layer %d ...", OGR_iter->curr_layer);
+                OGR_iter->Ogr_layer =
+                    OGR_DS_GetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
+                OGR_iter->Ogr_featuredefn =
+                    OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
+            }
+        }
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     return NULL;
@@ -2122,7 +2588,11 @@ int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *poSpatialFilter,
     ymaxl = (double *)G_malloc(nlayers * sizeof(double));
 
     for (layer = 0; layer < nlayers; layer++) {
+<<<<<<< HEAD
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
+=======
+        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         have_ogr_extent[layer] = 0;
         if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
             xminl[layer] = oExt.MinX;
@@ -2157,7 +2627,15 @@ int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *poSpatialFilter,
         /* OGR_L_GetExtent():
          * Note that some implementations of this method may alter
          * the read cursor of the layer. */
+<<<<<<< HEAD
         GDALDatasetResetReading(Ogr_ds);
+=======
+#if GDAL_VERSION_NUM >= 2020000
+        GDALDatasetResetReading(Ogr_ds);
+#else
+        OGR_L_ResetReading(Ogr_layer);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* set spatial filter */

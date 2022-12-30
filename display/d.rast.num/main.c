@@ -30,7 +30,11 @@
  *   them, if the cell value is other than 0 in an ascending order.
  *   d.rast.num draws a number on the graphic display
  *   of each cell, so the cell number could be identified when using hydrologic
+<<<<<<< HEAD
  *   models such AGNPS which uses the cell number for all its correspondence.
+=======
+ *   models such AGNPS which uses the cell number for all its correspondance.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  */
 
@@ -136,9 +140,12 @@ int main(int argc, char **argv)
     /* Check command line */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+<<<<<<< HEAD
 
     /* Setup driver and check important information */
     D_open_driver();
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     map_name = opt.map->answer;
 
@@ -224,6 +231,13 @@ int main(int argc, char **argv)
                         "not allowed)"));
     }
 
+<<<<<<< HEAD
+=======
+    /* Setup driver and check important information */
+
+    D_open_driver();
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (opt.font->answer)
         D_font(opt.font->answer);
     else if (opt.path->answer)

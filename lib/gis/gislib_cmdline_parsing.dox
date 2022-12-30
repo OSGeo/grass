@@ -4,7 +4,11 @@
 <!--
 extracted form gislib.dox and improved by Vaclav Petras, 2013
 
+<<<<<<< HEAD
 Copyright 2004-2024 by the GRASS Development Team
+=======
+Copyright 2004-2022 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 Published under GNU Free Documentation License
 -->

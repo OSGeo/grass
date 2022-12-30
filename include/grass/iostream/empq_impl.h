@@ -163,9 +163,14 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     assert(buff_0);
 
     char str[200];
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
+=======
+    sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
+            (long)max_nbuf);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
 
     // allocate ext memory buffers array
@@ -212,7 +217,11 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     cout << "pqsize=" << pqsize << ", bufsize=" << bufsize
          << ", maximum allowed arity=" << mm_avail / sz_stream << endl;
     if (buf_arity * sz_stream > mm_avail) {
+<<<<<<< HEAD
         cout << "sorry - empq exceeds memory limits\n";
+=======
+        cout << "sorry - empq excedes memory limits\n";
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         cout << "try again decreasing arity or pqsize/bufsize\n";
         cout.flush();
     }
@@ -318,9 +327,14 @@ em_pqueue<T, Key>::em_pqueue()
 
     // allocate ext memory buffers array
     char str[200];
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
+=======
+    sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
+            (long)max_nbuf);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
     // allocate ext memory buffers array
     buff = new em_buffer<T, Key> *[max_nbuf];
@@ -447,9 +461,14 @@ em_pqueue<T, Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis)
 
     // allocate ext memory buffer array
     char str[200];
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
+=======
+    sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
+            (long)max_nbuf);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     MEMORY_LOG(str);
     buff = new em_buffer<T, Key> *[max_nbuf];
     assert(buff);
@@ -597,9 +616,14 @@ bool em_pqueue<T, Key>::fillpq()
     AMI_err ae;
     {
         char str[200];
+<<<<<<< HEAD
         snprintf(str, sizeof(str),
                  "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
                  crt_buf);
+=======
+        sprintf(str, "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
+                crt_buf);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         MEMORY_LOG(str);
     }
     // merge pqsize smallest elements from each buffer into a new stream
@@ -1182,8 +1206,13 @@ void em_pqueue<T, Key>::empty_buff(unsigned short i)
     if (!buff[i + 1]) {
         // create buff[i+1] as a level-(i+2) buffer
         char str[200];
+<<<<<<< HEAD
         snprintf(str, sizeof(str),
                  "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
+=======
+        sprintf(str, "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n",
+                i);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         MEMORY_LOG(str);
         buff[i + 1] = new em_buffer<T, Key>(i + 2, bufsize, buf_arity);
     }
@@ -1357,7 +1386,11 @@ AMI_err em_pqueue<T, Key>::merge_buffer(em_buffer<T, Key> *buf,
     // delete [] keys;
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT)
+<<<<<<< HEAD
     // IF I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY
+=======
+    // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     // DESTRUCTOR, AND EVERYTHING SCREWS UP..
 
     buf->put_streams();
@@ -1470,7 +1503,11 @@ AMI_err em_pqueue<T, Key>::merge_streams(ExtendedMergeStream **instreams,
     // delete [] keys;
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT)
+<<<<<<< HEAD
     // IF I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY
+=======
+    // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     // DESTRUCTOR, AND EVERYTHING SCREWS UP..
 
     MY_LOG_DEBUG_ID("merge_streams: done");

@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /****************************************************************************
  *
  * MODULE:       r.in.pdal
@@ -17,9 +20,12 @@
  *****************************************************************************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #include "lidar.h"
 
 void GLidarLayers_set_no_layers(struct GLidarLayers *layers)
@@ -45,6 +51,7 @@ struct class_table class_val[] = {
     {11, "Reserved for ASPRS Definition"},
     {12, "Overlap Points"},
 <<<<<<< HEAD
+<<<<<<< HEAD
     {13 /* 13 - 31 */, "Reserved for ASPRS Definition"},
     {0, 0}};
 
@@ -62,6 +69,13 @@ struct class_table class_type[] = {
     {0, 0}
 };
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    {13 /* 13 - 31 */, "Reserved for ASPRS Definition"},
+    {0, 0}};
+
+struct class_table class_type[] = {
+    {5, "Synthetic"}, {6, "Key-point"}, {7, "Withheld"}, {0, 0}};
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 int return_to_cat(int return_n, int n_returns)
 {

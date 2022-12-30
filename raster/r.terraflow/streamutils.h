@@ -38,7 +38,11 @@ void printStream(ostream &s, AMI_STREAM<T> *str)
     str->seek(0);
 }
 
+<<<<<<< HEAD
 /* laura note: this works that class T has an empty constructor which
+=======
+/* laura note: this works that class T has an empty contructor which
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
    initializes it to the nodata value */
 template <class T, class FUN>
 void printStream2Grid(AMI_STREAM<T> *str, dimension_type nrows,
@@ -47,6 +51,7 @@ void printStream2Grid(AMI_STREAM<T> *str, dimension_type nrows,
     T *elt, nodata;
     AMI_err ae;
     ofstream fstrm(name);
+<<<<<<< HEAD
 
     if (stats)
         stats->comment("saving grid: ", name);
@@ -60,6 +65,21 @@ void printStream2Grid(AMI_STREAM<T> *str, dimension_type nrows,
     for (dimension_type i = 0; i < nrows; i++) {
         for (dimension_type j = 0; j < ncols; j++) {
 
+=======
+
+    if (stats)
+        stats->comment("saving grid: ", name);
+
+    fstrm << "rows=" << nrows << endl;
+    fstrm << "cols=" << ncols << endl;
+
+    str->seek(0);
+    ae = str->read_item(&elt);
+    assert(ae == AMI_ERROR_NO_ERROR || ae == AMI_ERROR_END_OF_STREAM);
+    for (dimension_type i = 0; i < nrows; i++) {
+        for (dimension_type j = 0; j < ncols; j++) {
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             if (ae == AMI_ERROR_NO_ERROR && elt->i == i && elt->j == j) {
                 fstrm << " " << fmt(*elt);
                 ae = str->read_item(&elt);

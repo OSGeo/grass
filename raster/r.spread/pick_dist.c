@@ -8,7 +8,11 @@
  * outward in an inverse square rate. It use three consecutive random number
  * generator:
  *     applying it once gets an UNIFORM distribution in the range of 0-max_num;
+<<<<<<< HEAD
  *     doing it twice gets a SIMPLE INVERSE distribution in that range;
+=======
+ *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *     doing three times gets a INVERSE SQUARE distribution.
  *
  * Author: Jianping Xu, Rutgers University

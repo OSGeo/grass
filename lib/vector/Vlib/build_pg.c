@@ -214,6 +214,14 @@ int build_topo(struct Map_info *Map, int build)
 
     /* update TopoGeometry based on GRASS-like topology */
     Vect_build_nat(Map, build);
+<<<<<<< HEAD
+=======
+
+    if (n_nodes != Map->plus.n_nodes)
+        G_warning(
+            _("Inconsistency in topology: number of nodes %d (should be %d)"),
+            Map->plus.n_nodes, n_nodes);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (n_nodes != Map->plus.n_nodes)
         G_warning(

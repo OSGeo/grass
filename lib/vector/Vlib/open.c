@@ -72,6 +72,7 @@ static int format_new(struct Map_info *Map UNUSED, const char *name UNUSED,
 
 static int Open_level = 0;
 
+<<<<<<< HEAD
 static int (*Open_old_array[][2])(struct Map_info *,
                                   int) = {{open_old_dummy, V1_open_old_nat}
 #ifdef HAVE_OGR
@@ -110,6 +111,43 @@ static int (*Open_new_array[][2])(struct Map_info *Map, const char *name,
 #else
     ,
     {open_new_dummy, format_new}
+=======
+static int (*Open_old_array[][2])() = {{open_old_dummy, V1_open_old_nat}
+#ifdef HAVE_OGR
+                                       ,
+                                       {open_old_dummy, V1_open_old_ogr},
+                                       {open_old_dummy, V1_open_old_ogr}
+#else
+                                       ,
+                                       {open_old_dummy, format},
+                                       {open_old_dummy, format}
+#endif
+#ifdef HAVE_POSTGRES
+                                       ,
+                                       {open_old_dummy, V1_open_old_pg}
+#else
+                                       ,
+                                       {open_old_dummy, format}
+#endif
+};
+
+static int (*Open_new_array[][2])() = {{open_new_dummy, V1_open_new_nat}
+#ifdef HAVE_OGR
+                                       ,
+                                       {open_new_dummy, V1_open_new_ogr},
+                                       {open_new_dummy, V1_open_new_ogr}
+#else
+                                       ,
+                                       {open_new_dummy, format},
+                                       {open_new_dummy, format}
+#endif
+#ifdef HAVE_POSTGRES
+                                       ,
+                                       {open_old_dummy, V1_open_new_pg}
+#else
+                                       ,
+                                       {open_old_dummy, format}
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 #endif
 };
 
@@ -1006,7 +1044,11 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
    \return 1 on success
    \return 0 on error
  */
+<<<<<<< HEAD
 int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
+=======
+int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     char file_path[GPATH_MAX];
     struct stat stat_buf;
@@ -1064,7 +1106,11 @@ int Vect_coor_info(struct Map_info *Map, struct Coor_info *Info)
    \return maptype string on success (allocated by G_store())
    \return error message on error
  */
+<<<<<<< HEAD
 const char *Vect_maptype_info(struct Map_info *Map)
+=======
+const char *Vect_maptype_info(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     char maptype[1000];
 
@@ -1094,13 +1140,21 @@ const char *Vect_maptype_info(struct Map_info *Map)
    - Native format                    (GV_FORMAT_NATIVE)
    - OGR format linked via v.external (GV_FORMAT_OGR)
    - OGR format                       (GV_FORMAT_OGR_DIRECT)
+<<<<<<< HEAD
    - PostGIS format                   (GV_FORMAT_POSTGIS)
+=======
+   - PostGIS fomat                    (GV_FORMAT_POSTGIS)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
    \param Map pointer to Map_info structure
 
    \return map format code
  */
+<<<<<<< HEAD
 int Vect_maptype(struct Map_info *Map)
+=======
+int Vect_maptype(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (Map->temporary) {
         const struct Format_info *finfo;
@@ -1489,7 +1543,11 @@ int map_format(struct Map_info *Map)
 
    \return buffer containing path
  */
+<<<<<<< HEAD
 char *Vect__get_path(char *path, struct Map_info *Map)
+=======
+char *Vect__get_path(char *path, const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (Map->temporary) {
         char path_tmp[GPATH_MAX];
@@ -1514,7 +1572,11 @@ char *Vect__get_path(char *path, struct Map_info *Map)
 
    \return allocated buffer containing path
  */
+<<<<<<< HEAD
 char *Vect__get_element_path(char *file_path, struct Map_info *Map,
+=======
+char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                              const char *element)
 {
     char path[GPATH_MAX];

@@ -33,7 +33,11 @@ static struct _state {
 } state;
 
 static struct robject *draw_line(struct Map_info *, int, int);
+<<<<<<< HEAD
 static struct robject *draw_line_vertices(void);
+=======
+static struct robject *draw_line_vertices();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 static void draw_line_nodes(struct Map_info *, int, int, struct robject_list *);
 static int draw_line_dir(struct robject_list *, int);
 static void list_append(struct robject_list *, struct robject *);

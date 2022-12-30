@@ -152,10 +152,14 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
+<<<<<<< HEAD
                 "singleWinPanesLayoutPos": {
                     "enabled": False,
                     "pos": "",
                 },
+=======
+                "singleWindow": {"enabled": False},
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             },
             #
             # datacatalog
@@ -194,7 +198,10 @@ class Settings:
                 "gSelectPopupHeight": {"value": 200},
                 "iconTheme": {"type": "grass"},
                 "commandNotebook": {"selection": 0},
+<<<<<<< HEAD
                 "singleWindow": {"enabled": True},
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             },
             #
             # language

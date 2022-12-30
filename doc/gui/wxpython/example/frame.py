@@ -356,6 +356,10 @@ class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
     """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, **kwargs):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         # init map panel
         ExampleMapPanel.__init__(
             self,

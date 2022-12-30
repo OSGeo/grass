@@ -527,12 +527,37 @@ int main(int argc, char *argv[])
             G_debug(2, " -> driver = %d", drn);
         }
     }
+<<<<<<< HEAD
     if (drn == -1)
         G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
     hDriver = GDALGetDriver(drn);
 
     if (flags.append->answer) {
         G_debug(1, "Append to OGR layer");
+=======
+#else
+    G_debug(2, "driver count = %d", OGRGetDriverCount());
+    drn = -1;
+    for (i = 0; i < OGRGetDriverCount(); i++) {
+        hDriver = OGRGetDriver(i);
+        G_debug(2, "driver %d : %s", i, OGR_Dr_GetName(hDriver));
+        /* chg white space to underscore in OGR driver names */
+        sprintf(buf, "%s", OGR_Dr_GetName(hDriver));
+        G_strchg(buf, ' ', '_');
+        if (strcmp(buf, options.format->answer) == 0) {
+            drn = i;
+            G_debug(2, " -> driver = %d", drn);
+        }
+    }
+#endif
+    if (drn == -1)
+        G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
+    hDriver = get_driver(drn);
+
+    if (flags.append->answer) {
+        G_debug(1, "Append to OGR layer");
+#if GDAL_VERSION_NUM >= 2020000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         hDS =
             GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL, NULL);
 
@@ -540,8 +565,22 @@ int main(int argc, char *argv[])
             G_debug(1, "Create OGR data source");
             hDS = GDALCreate(hDriver, dsn, 0, 0, 0, GDT_Unknown, papszDSCO);
         }
+<<<<<<< HEAD
     }
     else {
+=======
+#else
+        hDS = OGR_Dr_Open(hDriver, dsn, TRUE);
+
+        if (hDS == NULL) {
+            G_debug(1, "Create OGR data source");
+            hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
+        }
+#endif
+    }
+    else {
+#if GDAL_VERSION_NUM >= 2020000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (flags.update->answer) {
             G_debug(1, "Update OGR data source");
             hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL,
@@ -551,6 +590,19 @@ int main(int argc, char *argv[])
             G_debug(1, "Create OGR data source");
             hDS = GDALCreate(hDriver, dsn, 0, 0, 0, GDT_Unknown, papszDSCO);
         }
+<<<<<<< HEAD
+=======
+#else
+        if (flags.update->answer) {
+            G_debug(1, "Update OGR data source");
+            hDS = OGR_Dr_Open(hDriver, dsn, TRUE);
+        }
+        else {
+            G_debug(1, "Create OGR data source");
+            hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
+        }
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     CSLDestroy(papszDSCO);
@@ -563,21 +615,45 @@ int main(int argc, char *argv[])
     found = FALSE;
     for (i = 0; i < GDALDatasetGetLayerCount(hDS); i++) {
         Ogr_layer = GDALDatasetGetLayer(hDS, i);
+<<<<<<< HEAD
         Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
         if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
             continue;
 
+=======
+#else
+    for (i = 0; i < OGR_DS_GetLayerCount(hDS); i++) {
+        Ogr_layer = OGR_DS_GetLayer(hDS, i);
+
+#endif
+        Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
+        if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
+            continue;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         found = TRUE;
         if (!overwrite && !flags.append->answer) {
             G_fatal_error(
                 _("Layer <%s> already exists in OGR data source '%s'"),
                 options.layer->answer, options.dsn->answer);
         }
+<<<<<<< HEAD
         else if (overwrite && !flags.append->answer) {
             G_warning(
                 _("OGR layer <%s> already exists and will be overwritten"),
                 options.layer->answer);
             GDALDatasetDeleteLayer(hDS, i);
+=======
+        else if (overwrite) {
+            G_warning(
+                _("OGR layer <%s> already exists and will be overwritten"),
+                options.layer->answer);
+#if GDAL_VERSION_NUM >= 2020000
+            GDALDatasetDeleteLayer(hDS, i);
+#else
+            OGR_DS_DeleteLayer(hDS, i);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             break;
         }
     }
@@ -663,6 +739,16 @@ int main(int argc, char *argv[])
     else
         Ogr_layer = GDALDatasetCreateLayer(hDS, options.layer->answer,
                                            Ogr_projection, wkbtype, papszLCO);
+<<<<<<< HEAD
+=======
+#else
+    if (flags.append->answer)
+        Ogr_layer = OGR_DS_GetLayerByName(hDS, options.layer->answer);
+    else
+        Ogr_layer = OGR_DS_CreateLayer(hDS, options.layer->answer,
+                                       Ogr_projection, wkbtype, papszLCO);
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     CSLDestroy(papszLCO);
     if (Ogr_layer == NULL) {
@@ -734,6 +820,7 @@ int main(int argc, char *argv[])
                 colwidth = db_get_column_length(Column);
                 G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d", i,
                         colname[i], colsqltype, colctype[i], colwidth);
+<<<<<<< HEAD
 
                 switch (colctype[i]) {
                 case DB_C_TYPE_INT:
@@ -782,6 +869,60 @@ int main(int argc, char *argv[])
                     G_fatal_error(_("Unable to create column <%s>"),
                                   colname[i]);
 
+=======
+
+                switch (colctype[i]) {
+                case DB_C_TYPE_INT:
+                    ogr_ftype = OFTInteger;
+                    break;
+                case DB_C_TYPE_DOUBLE:
+                    ogr_ftype = OFTReal;
+                    break;
+                case DB_C_TYPE_STRING:
+                    ogr_ftype = OFTString;
+                    break;
+                case DB_C_TYPE_DATETIME:
+#if GDAL_VERSION_NUM >= 1320
+                    ogr_ftype = OFTDateTime;
+#else
+                    ogr_ftype = OFTString;
+#endif
+                    break;
+                }
+                G_debug(2, "ogr_ftype = %d", ogr_ftype);
+
+                strcpy(key1, Fi->key);
+                G_tolcase(key1);
+                strcpy(key2, colname[i]);
+                G_tolcase(key2);
+                if (strcmp(key1, key2) == 0)
+                    keycol = i;
+                G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
+                        colname[i], key1, key2, keycol);
+
+                if (flags.nocat->answer && strcmp(Fi->key, colname[i]) == 0)
+                    /* skip export of 'cat' field */
+                    continue;
+
+                if (flags.append->answer) {
+                    Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
+                    if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
+                        /* skip existing fields */
+                        continue;
+                    else
+                        G_warning(
+                            _("New attribute column <%s> added to the table"),
+                            colname[i]);
+                }
+
+                Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
+                if (ogr_ftype == OFTString && colwidth > 0)
+                    OGR_Fld_SetWidth(Ogr_field, colwidth);
+                if (OGR_L_CreateField(Ogr_layer, Ogr_field, 0) != OGRERR_NONE)
+                    G_fatal_error(_("Unable to create column <%s>"),
+                                  colname[i]);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 OGR_Fld_Destroy(Ogr_field);
             }
             if (keycol == -1)

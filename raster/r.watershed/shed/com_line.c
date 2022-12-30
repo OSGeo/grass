@@ -53,6 +53,7 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
         input->fast = 1;
         input->com_line_ram = (char *)G_calloc(400, sizeof(char));
         prog_name = G_store(RAM_NAME);
+<<<<<<< HEAD
         snprintf(input->com_line_ram, (400 * sizeof(char)),
                  "\"%s/etc/water/%s\"", G_gisbase(), RAM_NAME);
         fprintf(stderr,
@@ -65,14 +66,32 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
             input->com_line_seg = (char *)G_calloc(400, sizeof(char));
             snprintf(input->com_line_seg, (400, sizeof(char)),
                      "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+=======
+        sprintf(input->com_line_ram, "\"%s/etc/water/%s\"", G_gisbase(),
+                RAM_NAME);
+        fprintf(stderr,
+                "\nIf there is not enough ram for the fast mode (%s) to run,\n",
+                RAM_NAME);
+        sprintf(buf, "should the slow mode (%s) be run instead?", SEG_NAME);
+        if (G_yes(buf, 1)) {
+            input->slow = 1;
+            input->com_line_seg = (char *)G_calloc(400, sizeof(char));
+            sprintf(input->com_line_seg, "\"%s/etc/water/%s\"", G_gisbase(),
+                    SEG_NAME);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
     else {
         input->slow = 1;
         prog_name = G_store(SEG_NAME);
         input->com_line_seg = (char *)G_calloc(400, sizeof(char));
+<<<<<<< HEAD
         snprintf(input->com_line_seg, (400, sizeof(char)),
                  "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+=======
+        sprintf(input->com_line_seg, "\"%s/etc/water/%s\"", G_gisbase(),
+                SEG_NAME);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     G_message(_("\nIf you hit <return> by itself for the next question, this"));
@@ -271,7 +290,11 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
     /*
        COMMENT2 This section of code tells the program where to place the
        statistics about the watershed basin. GRASS users don't need this (w/
+<<<<<<< HEAD
        r.stats), but the format is supposed to be "user-friendly" to
+=======
+       r.stats), but the format is suppossed to be "user-friendly" to
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
        hydrologists. For the stats to be created, the armsed file output needs
        to exist. For the stats to be an option in this program: 1) it should be
        querried before the armsed file query, and 2) make the armsed file query
@@ -482,7 +505,11 @@ int basin_com_add(char **com_line, double d, double modifier,
     i = (int)(.5 + modifier * d / window->ns_res / window->ew_res);
     if (i < 1)
         i = 1;
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), " t=%d", i);
+=======
+    sprintf(buf, " t=%d", i);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     strcat(*com_line, buf);
 
     return 0;

@@ -27,6 +27,7 @@
 
 param_type param;
 zone_type zone_info;
+int nprocs;
 
 /* Parallelization
  * Only raster statistics reduction in process_raster() is parallelized.
@@ -121,8 +122,13 @@ void set_params(void)
 
 static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
+<<<<<<< HEAD
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs);
+=======
+static void process_raster(univar_stat *stats, int *fd, int *fdz,
+                           const struct Cell_head *region);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
@@ -135,7 +141,11 @@ int main(int argc, char *argv[])
     struct GModule *module;
     univar_stat *stats;
     char **p, *z;
+<<<<<<< HEAD
     int cell_type, min, max;
+=======
+    int *fd, *fdz, cell_type, min, max;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     struct Range zone_range;
     const char *mapset, *name;
     int t;
@@ -173,6 +183,7 @@ int main(int argc, char *argv[])
         if (NULL == freopen(name, "w", stdout)) {
             G_fatal_error(_("Unable to open file <%s> for writing"), name);
         }
+<<<<<<< HEAD
     }
 
     /* set nprocs parameter */
@@ -201,15 +212,58 @@ int main(int argc, char *argv[])
 
     /* setting up thread workspace */
     thread_workspace *tw = G_malloc(nprocs * sizeof *tw);
+=======
+    }
+
+    /* set nprocs parameter */
+    sscanf(param.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+#if defined(_OPENMP)
+    if (param.extended->answer) {
+        /* Calculation of extended statistics is not parallelized yet */
+        if (nprocs > 1)
+            G_warning(_("Computing extending statistics is not parallelized "
+                        "yet. Ignoring threads setting."));
+        nprocs = 1;
+    }
+    else {
+        omp_set_num_threads(nprocs);
+    }
+#else
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
+    nprocs = 1;
+#endif
+
+    /* table field separator */
+    zone_info.sep = G_option_to_separator(param.separator);
+
+    zone_info.min = 0.0 / 0.0; /* set to nan as default */
+    zone_info.max = 0.0 / 0.0; /* set to nan as default */
+    zone_info.n_zones = 0;
+
+    fdz = NULL;
+    fd = G_malloc(nprocs * sizeof(int));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     /* open zoning raster */
     if ((z = param.zonefile->answer)) {
         mapset = G_find_raster2(z, "");
 
+<<<<<<< HEAD
         for (t = 0; t < nprocs; ++t)
             tw[t].fdz = open_raster(z);
 
         cell_type = Rast_get_map_type(tw->fdz);
+=======
+        fdz = G_malloc(nprocs * sizeof(int));
+        for (t = 0; t < nprocs; t++)
+            fdz[t] = open_raster(z);
+
+        cell_type = Rast_get_map_type(fdz[0]);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if (cell_type != CELL_TYPE)
             G_fatal_error("Zoning raster must be of type CELL");
 
@@ -248,11 +302,19 @@ int main(int argc, char *argv[])
         }
 
         for (t = 0; t < nprocs; t++)
+<<<<<<< HEAD
             tw[t].fd = open_raster(*p);
 
         if (map_type != -1) {
             /* NB: map_type must match when doing extended stats */
             int this_type = Rast_get_map_type(tw->fd);
+=======
+            fd[t] = open_raster(*p);
+
+        if (map_type != -1) {
+            /* NB: map_type must match when doing extended stats */
+            int this_type = Rast_get_map_type(fd[0]);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
             assert(this_type > -1);
             if (map_type < -1) {
@@ -266,17 +328,29 @@ int main(int argc, char *argv[])
             }
         }
 
+<<<<<<< HEAD
         process_raster(stats, tw, &region, nprocs);
 
         /* close input raster */
         for (t = 0; t < nprocs; t++)
             Rast_close(tw[t].fd);
+=======
+        process_raster(stats, fd, fdz, &region);
+
+        /* close input raster */
+        for (t = 0; t < nprocs; t++)
+            Rast_close(fd[t]);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* close zoning raster */
     if (z) {
         for (t = 0; t < nprocs; t++)
+<<<<<<< HEAD
             Rast_close(tw[t].fdz);
+=======
+            Rast_close(fdz[t]);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
 
     /* create the output */
@@ -329,13 +403,19 @@ static univar_stat *univar_stat_with_percentiles(int map_type)
     return stats;
 }
 
+<<<<<<< HEAD
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs)
+=======
+static void process_raster(univar_stat *stats, int *fd, int *fdz,
+                           const struct Cell_head *region)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     /* use G_window_rows(), G_window_cols() here? */
     const int rows = region->rows;
     const int cols = region->cols;
 
+<<<<<<< HEAD
     const RASTER_MAP_TYPE map_type = Rast_get_map_type(tw->fd);
     const size_t value_sz = Rast_cell_size(map_type);
 
@@ -397,6 +477,77 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             }
 
             for (int col = 0; col < cols; col++) {
+=======
+    const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd[0]);
+    const size_t value_sz = Rast_cell_size(map_type);
+    int t;
+    unsigned int row;
+    void **raster_row;
+    CELL **zoneraster_row = NULL;
+    int n_zones = zone_info.n_zones;
+    int n_alloc = n_zones ? n_zones : 1;
+
+    raster_row = G_malloc(nprocs * sizeof(void *));
+    if (n_zones) {
+        zoneraster_row = G_malloc(nprocs * sizeof(CELL *));
+    }
+    for (t = 0; t < nprocs; t++) {
+        raster_row[t] = Rast_allocate_buf(map_type);
+        if (n_zones) {
+            zoneraster_row[t] = Rast_allocate_c_buf();
+        }
+    }
+
+#if defined(_OPENMP)
+    omp_lock_t *minmax = G_malloc(n_alloc * sizeof(omp_lock_t));
+
+    for (int i = 0; i < n_alloc; i++) {
+        omp_init_lock(&(minmax[i]));
+    }
+#endif
+
+    int computed = 0;
+
+#pragma omp parallel if (nprocs > 1)
+    {
+        int i;
+        int t_id = 0;
+
+#if defined(_OPENMP)
+        if (!param.extended->answer) {
+            t_id = omp_get_thread_num();
+        }
+#endif
+        size_t *n = G_calloc(n_alloc, sizeof(size_t));
+        double *sum = G_calloc(n_alloc, sizeof(double));
+        double *sumsq = G_calloc(n_alloc, sizeof(double));
+        double *sum_abs = G_calloc(n_alloc, sizeof(double));
+        size_t *size = G_calloc(n_alloc, sizeof(size_t));
+        double *min = G_malloc(n_alloc * sizeof(double));
+        double *max = G_malloc(n_alloc * sizeof(double));
+
+        for (i = 0; i < n_alloc; i++) {
+            max[i] = DBL_MIN;
+            min[i] = DBL_MAX;
+        }
+
+#pragma omp for schedule(static)
+        for (row = 0; row < rows; row++) {
+            void *ptr;
+            CELL *zptr = NULL;
+            unsigned int col;
+
+            Rast_get_row(fd[t_id], raster_row[t_id], row, map_type);
+            if (n_zones) {
+                Rast_get_c_row(fdz[t_id], zoneraster_row[t_id], row);
+                zptr = zoneraster_row[t_id];
+            }
+
+            ptr = raster_row[t_id];
+
+            for (col = 0; col < cols; col++) {
+                double val;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 int zone = 0;
 
                 if (n_zones) {
@@ -408,10 +559,16 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     }
                     zone = *zptr - zone_info.min;
                 }
+<<<<<<< HEAD
                 zone_workspace *zd = &zw[zone];
 
                 /* count all including NULL cells in input map */
                 zd->size++;
+=======
+
+                /* count all including NULL cells in input map */
+                size[zone]++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
                 /* can't do stats with NULL cells in input map */
                 if (Rast_is_null_value(ptr, map_type)) {
@@ -422,15 +579,24 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                 }
 
                 if (param.extended->answer) {
+<<<<<<< HEAD
                     zone_bucket *bucket = &zd->bucket;
 
                     /* check allocated memory */
                     if (bucket->n >= bucket->n_alloc) {
                         bucket->n_alloc += 1000;
+=======
+                    /* check allocated memory */
+                    /* parallelization is disabled, local variable reflects
+                     * global state */
+                    if (stats[zone].n + n[zone] >= stats[zone].n_alloc) {
+                        stats[zone].n_alloc += 1000;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                         size_t msize;
 
                         switch (map_type) {
                         case DCELL_TYPE:
+<<<<<<< HEAD
                             msize = bucket->n_alloc * sizeof(DCELL);
                             bucket->dcells = (DCELL *)G_realloc(
                                 (void *)bucket->dcells, msize);
@@ -449,10 +615,37 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                             bucket->cells =
                                 (CELL *)G_realloc((void *)bucket->cells, msize);
                             bucket->nextp = (void *)&(bucket->cells[bucket->n]);
+=======
+                            msize = stats[zone].n_alloc * sizeof(DCELL);
+                            stats[zone].dcell_array = (DCELL *)G_realloc(
+                                (void *)stats[zone].dcell_array, msize);
+                            stats[zone].nextp = (void *)&(
+                                stats[zone]
+                                    .dcell_array[stats[zone].n + n[zone]]);
+                            break;
+                        case FCELL_TYPE:
+                            msize = stats[zone].n_alloc * sizeof(FCELL);
+                            stats[zone].fcell_array = (FCELL *)G_realloc(
+                                (void *)stats[zone].fcell_array, msize);
+                            stats[zone].nextp = (void *)&(
+                                stats[zone]
+                                    .fcell_array[stats[zone].n + n[zone]]);
+                            break;
+                        case CELL_TYPE:
+                            msize = stats[zone].n_alloc * sizeof(CELL);
+                            stats[zone].cell_array = (CELL *)G_realloc(
+                                (void *)stats[zone].cell_array, msize);
+                            stats[zone].nextp = (void *)&(
+                                stats[zone]
+                                    .cell_array[stats[zone].n + n[zone]]);
+                            break;
+                        default:
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                             break;
                         }
                     }
                     /* put the value into stats->XXXcell_array */
+<<<<<<< HEAD
                     memcpy(bucket->nextp, ptr, value_sz);
                     bucket->nextp = G_incr_void_ptr(bucket->nextp, value_sz);
                 }
@@ -469,11 +662,35 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     zd->max = val;
                 if (val < zd->min)
                     zd->min = val;
+=======
+                    memcpy(stats[zone].nextp, ptr, value_sz);
+                    stats[zone].nextp =
+                        G_incr_void_ptr(stats[zone].nextp, value_sz);
+                }
+
+                val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
+                       : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
+                                                  : *((CELL *)ptr));
+
+                sum[zone] += val;
+                sumsq[zone] += val * val;
+                sum_abs[zone] += fabs(val);
+
+                if (val > max[zone])
+                    max[zone] = val;
+                if (val < min[zone])
+                    min[zone] = val;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
                     zptr++;
+<<<<<<< HEAD
                 zd->bucket.n++;
+=======
+                n[zone]++;
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             } /* end column loop */
             if (!(param.shell_style->answer)) {
 #pragma omp atomic update
@@ -482,6 +699,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             }
         } /* end row loop */
 
+<<<<<<< HEAD
         for (int z = 0; z < n_alloc; z++) {
             zone_workspace *zd = &zw[z];
             if (param.extended->answer) {
@@ -607,6 +825,47 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
         for (int t = 0; t < nprocs; t++) {
             G_free(tw[t].zoneraster_row);
         }
+=======
+        for (i = 0; i < n_alloc; i++) {
+#pragma omp atomic update
+            stats[i].n += n[i];
+#pragma omp atomic update
+            stats[i].size += size[i];
+#pragma omp atomic update
+            stats[i].sum += sum[i];
+#pragma omp atomic update
+            stats[i].sumsq += sumsq[i];
+#pragma omp atomic update
+            stats[i].sum_abs += sum_abs[i];
+
+#if defined(_OPENMP)
+            omp_set_lock(&(minmax[i]));
+#endif
+            if (stats[i].max < max[i] ||
+                (stats[i].max != stats[i].max && max[i] != DBL_MIN)) {
+                stats[i].max = max[i];
+            }
+            if (stats[i].min > min[i] ||
+                (stats[i].min != stats[i].min && min[i] != DBL_MAX)) {
+                stats[i].min = min[i];
+            }
+#if defined(_OPENMP)
+            omp_unset_lock(&(minmax[i]));
+#endif
+        }
+
+    } /* end parallel region */
+
+    for (t = 0; t < nprocs; t++) {
+        G_free(raster_row[t]);
+    }
+    G_free(raster_row);
+    if (n_zones) {
+        for (t = 0; t < nprocs; t++) {
+            G_free(zoneraster_row[t]);
+        }
+        G_free(zoneraster_row);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     if (!(param.shell_style->answer))
         G_percent(rows, rows, 2);

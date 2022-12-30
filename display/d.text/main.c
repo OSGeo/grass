@@ -554,9 +554,15 @@ static void set_color(char *tcolor)
 {
     unsigned int r, g, b, color;
 
+<<<<<<< HEAD
     if (sscanf(tcolor, "%u:%u:%u", &r, &g, &b) == 3 ||
         sscanf(tcolor, "0x%02x%02x%02x", &r, &g, &b) == 3) {
         if (r < 256 && g < 256 && b < 256) {
+=======
+    if (sscanf(tcolor, "%d:%d:%d", &r, &g, &b) == 3 ||
+        sscanf(tcolor, "0x%02x%02x%02x", &r, &g, &b) == 3) {
+        if (r >= 0 && r < 256 && g >= 0 && g < 256 && b >= 0 && b < 256) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             D_RGB_color(r, g, b);
         }
     }

@@ -49,7 +49,11 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
                 unsigned int k = buf[j * ncols + i];
                 unsigned int *p = &png.grid[y * png.width + x];
 
+<<<<<<< HEAD
                 if (k > (unsigned int)threshold)
+=======
+                if (k > threshold)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     *p = png.current_color;
             }
         }

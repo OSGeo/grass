@@ -177,16 +177,28 @@ int main(int argc, char *argv[])
     points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     Vect_rewind(&In);
+<<<<<<< HEAD
     while (Vect_read_next_line(&In, points, Cats) > 0)
         ;
+=======
+    while (Vect_read_next_line(&In, points, Cats) > 0) {
+        nlines++;
+    }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     Vect_rewind(&In);
 
     /* no topology, get number of lines in first pulse input vector */
     points_first = Vect_new_line_struct();
     Cats_first = Vect_new_cats_struct();
     Vect_rewind(&First);
+<<<<<<< HEAD
     while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
         ;
+=======
+    while (Vect_read_next_line(&First, points_first, Cats_first) > 0) {
+        nlines_first++;
+    }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     Vect_rewind(&First);
 
     /* Setting regions and boxes */

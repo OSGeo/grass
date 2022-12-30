@@ -169,7 +169,11 @@ int load_maps(int ele_fd, int acc_fd)
         G_free(acc_buf);
     }
 
+<<<<<<< HEAD
     G_debug(1, "%" PRId64 " non-NULL cells", n_points);
+=======
+    G_debug(1, "%" PRI_OFF_T " non-NULL cells", n_points);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     return (n_points > 0);
 }

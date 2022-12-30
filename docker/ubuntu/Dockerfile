@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # syntax=docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
@@ -8,25 +9,49 @@ ARG GUI=without
 FROM ubuntu:22.04@sha256:a6d2b38300ce017add71440577d5b0a90460d0e57fd7aec21dd0d1b0761bbfb2 as common_start
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
+=======
+FROM ubuntu:22.04
+
+LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
+<<<<<<< HEAD
+=======
+# define versions to be used
+# https://github.com/PDAL/PDAL/releases
+ARG PDAL_VERSION=2.4.3
+# https://github.com/hobuinc/laz-perf/releases
+ARG LAZ_PERF_VERSION=3.2.0
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /tmp
 
+<<<<<<< HEAD
 ARG GUI
 
 # Todo: re-consider required dev packages for addons (~400MB in dev packages)
 ARG GRASS_RUN_PACKAGES="build-essential \
     bison \
     bzip2 \
+=======
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends --no-install-suggests \
+    build-essential \
+    bison \
+    bzip2 \
+    cmake \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     curl \
     flex \
     g++ \
     gcc \
     gdal-bin \
+<<<<<<< HEAD
     geos-bin \
     proj-bin \
     netcdf-bin \
@@ -76,10 +101,61 @@ ARG GRASS_RUN_PACKAGES="build-essential \
     python3-dev \
     python3-venv \
     sqlite3 \
+=======
+    git \
+    language-pack-en-base \
+    libbz2-dev \
+    libcairo2 \
+    libcairo2-dev \
+    libcurl4-gnutls-dev \
+    libfftw3-bin \
+    libfftw3-dev \
+    libfreetype6-dev \
+    libgdal-dev \
+    libgeos-dev \
+    libgsl0-dev \
+    libjpeg-dev \
+    libjsoncpp-dev \
+    libnetcdf-dev \
+    libncurses5-dev \
+    libopenblas-base \
+    libopenblas-dev \
+    libopenjp2-7 \
+    libopenjp2-7-dev \
+    libpnglite-dev \
+    libpq-dev \
+    libproj-dev \
+    libpython3-all-dev \
+    libsqlite3-dev \
+    libtiff-dev \
+    libzstd-dev \
+    locales \
+    make \
+    mesa-common-dev \
+    moreutils \
+    ncurses-bin \
+    netcdf-bin \
+    proj-bin \
+    proj-data \
+    python3 \
+    python3-dateutil \
+    python3-dev \
+    python3-magic \
+    python3-numpy \
+    python3-pil \
+    python3-pip \
+    python3-ply \
+    python3-setuptools \
+    python3-venv \
+    software-properties-common \
+    sqlite3 \
+    subversion \
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     unzip \
     vim \
     wget \
     zip \
+<<<<<<< HEAD
     zlib1g \
     "
 
@@ -260,12 +336,91 @@ COPY . /src/grass_build/
 
 WORKDIR /src/grass_build
 
+=======
+    zlib1g-dev
+
+RUN echo LANG="en_US.UTF-8" > /etc/default/locale
+RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
+
+## install laz-perf (missing from https://packages.ubuntu.com/)
+RUN apt-get install cmake
+WORKDIR /src
+RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
+    tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
+    cd laz-perf-${LAZ_PERF_VERSION} && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install
+
+## fetch vertical datums for PDAL and store into PROJ dir
+WORKDIR /src
+RUN mkdir vdatum && \
+    cd vdatum && \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    cd .. && \
+    rm -rf vdatum
+
+## install pdal
+ENV NUMTHREADS=4
+WORKDIR /src
+RUN wget -q \
+ https://github.com/PDAL/PDAL/releases/download/${PDAL_VERSION}/PDAL-${PDAL_VERSION}-src.tar.gz && \
+    tar xfz PDAL-${PDAL_VERSION}-src.tar.gz && \
+    cd /src/PDAL-${PDAL_VERSION}-src && \
+    mkdir build && \
+    cd build && \
+    cmake .. \
+      -G "Unix Makefiles" \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_C_COMPILER=gcc \
+      -DCMAKE_CXX_COMPILER=g++ \
+      -DCMAKE_MAKE_PROGRAM=make \
+      -DBUILD_PLUGIN_PYTHON=ON \
+      -DBUILD_PLUGIN_CPD=OFF \
+      -DBUILD_PLUGIN_GREYHOUND=ON \
+      -DBUILD_PLUGIN_HEXBIN=ON \
+      -DHEXER_INCLUDE_DIR=/usr/include/ \
+      -DBUILD_PLUGIN_NITF=OFF \
+      -DBUILD_PLUGIN_ICEBRIDGE=ON \
+      -DBUILD_PLUGIN_PGPOINTCLOUD=ON \
+      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
+      -DBUILD_PLUGIN_SQLITE=ON \
+      -DWITH_LASZIP=ON \
+      -DWITH_LAZPERF=ON \
+      -DWITH_TESTS=ON && \
+    make -j $NUMTHREADS && \
+    make install
+
+# copy grass gis source
+WORKDIR /src
+COPY . /src/grass_build/
+WORKDIR /src/grass_build
+
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
 ENV MYCFLAGS "-O2 -std=gnu99 -m64"
 ENV MYLDFLAGS "-s"
 # CXX stuff:
+<<<<<<< HEAD
 #ENV LD_LIBRARY_PATH "/usr/local/lib"
+=======
+ENV LD_LIBRARY_PATH "/usr/local/lib"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 ENV LDFLAGS "$MYLDFLAGS"
 ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
@@ -274,6 +429,7 @@ ENV CXXFLAGS "$MYCXXFLAGS"
 ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
+<<<<<<< HEAD
 RUN ./configure $GRASS_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
@@ -331,3 +487,80 @@ WORKDIR /grassdb
 VOLUME /grassdb
 
 CMD ["bash", "-c", "$GRASSBIN", "--version"]
+=======
+RUN /src/grass_build/configure \
+  --with-cxx \
+  --enable-largefile \
+  --with-proj-share=/usr/share/proj \
+  --with-gdal=/usr/bin/gdal-config \
+  --with-geos \
+  --with-sqlite \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
+  --with-fftw \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-netcdf \
+  --with-zstd \
+  --with-bzlib \
+  --with-pdal \
+  --without-mysql \
+  --without-odbc \
+  --without-openmp \
+  --without-opengl \
+    && make -j $NUMTHREADS \
+    && make install && ldconfig
+
+# Unset environmental variables to avoid later compilation issues
+ENV INTEL ""
+ENV MYCFLAGS ""
+ENV MYLDFLAGS ""
+ENV MYCXXFLAGS ""
+ENV LD_LIBRARY_PATH ""
+ENV LDFLAGS ""
+ENV CFLAGS ""
+ENV CXXFLAGS ""
+
+# set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions
+ENV SHELL /bin/bash
+ENV LC_ALL "en_US.UTF-8"
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
+
+# Create generic GRASS GIS lib name regardless of version number
+RUN ln -sf /usr/local/grass83 /usr/local/grass
+
+# show GRASS GIS, PROJ, GDAL etc versions
+RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version
+
+# Reduce the image size
+RUN apt-get autoremove -y
+RUN apt-get clean -y
+RUN rm -r /src/grass_build/.git
+
+WORKDIR /scripts
+
+# install external GRASS GIS session Python API
+RUN pip3 install grass-session
+
+# install GRASS GIS extensions
+RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
+
+# add GRASS GIS envs for python usage
+ENV GISBASE "/usr/local/grass/"
+ENV GRASSBIN "/usr/local/bin/grass"
+ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
+
+WORKDIR /tmp
+COPY docker/testdata/simple.laz .
+WORKDIR /scripts
+COPY docker/testdata/test_grass_session.py .
+## just scan the LAZ file
+# Not yet ready for GRASS GIS 8:
+#RUN /usr/bin/python3 /scripts/test_grass_session.py
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
+
+WORKDIR /grassdb
+VOLUME /grassdb
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

@@ -5,7 +5,11 @@
  * PURPOSE:      Generates the font configuration file by scanning various
  *               directories for GRASS stroke and Freetype-compatible fonts.
  *
+<<<<<<< HEAD
  * COPYRIGHT:    (C) 2007-2024 by the GRASS Development Team
+=======
+ * COPYRIGHT:    (C) 2007-2015 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -64,6 +68,14 @@ int main(int argc, char *argv[])
     module->description = _(
         "Generates the font configuration file by scanning various directories "
         "for fonts.");
+<<<<<<< HEAD
+=======
+
+    overwrite = G_define_flag();
+    overwrite->key = 'o';
+    overwrite->description =
+        _("Overwrite font configuration file if already existing");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     tostdout = G_define_flag();
     tostdout->key = 's';
@@ -94,11 +106,19 @@ int main(int argc, char *argv[])
             G_asprintf(&fontcapfile, "%s/etc/fontcap", gisbase);
 
         if (!access(fontcapfile, F_OK)) { /* File exists? */
+<<<<<<< HEAD
             if (!G_get_overwrite())
                 G_fatal_error(_("Fontcap file %s already exists; use "
                                 "--overwrite flag if you "
                                 "wish to overwrite it"),
                               fontcapfile);
+=======
+            if (!overwrite->answer)
+                G_fatal_error(
+                    _("Fontcap file %s already exists; use -%c flag if you "
+                      "wish to overwrite it"),
+                    fontcapfile, overwrite->key);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         }
     }
 

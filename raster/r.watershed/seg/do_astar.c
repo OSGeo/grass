@@ -48,7 +48,12 @@ int do_astar(void)
     if (heap_size == 0)
         G_fatal_error(_("No seeds for A* Search"));
 
+<<<<<<< HEAD
     G_debug(1, "heap size %" PRId64 ", points %" PRId64, heap_size, do_points);
+=======
+    G_debug(1, "heap size %" PRI_OFF_T ", points %" PRI_OFF_T, heap_size,
+            do_points);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     count = 0;
 
@@ -62,7 +67,11 @@ int do_astar(void)
 
         r = heap_p.pnt.r;
         c = heap_p.pnt.c;
+<<<<<<< HEAD
         G_debug(3, "heap size %" PRId64 ", r %d, c %d", heap_size, r, c);
+=======
+        G_debug(3, "heap size %" PRI_OFF_T ", r %d, c %d", heap_size, r, c);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         alt_val = heap_p.ele;
 
@@ -144,8 +153,13 @@ int do_astar(void)
         seg_put(&aspflag, (char *)&af, r, c);
     }
     if (doer != -1)
+<<<<<<< HEAD
         G_fatal_error(_("bug in A* Search: doer %" PRId64 " heap size %" PRId64
                         " count %" PRId64),
+=======
+        G_fatal_error(_("bug in A* Search: doer %" PRI_OFF_T
+                        " heap size %" PRI_OFF_T " count %" PRI_OFF_T),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                       doer, heap_size, count);
 
     seg_close(&search_heap);

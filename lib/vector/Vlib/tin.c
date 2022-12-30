@@ -29,7 +29,11 @@
    \return -1 area has not 4 points or has island
  */
 int Vect_tin_get_z(struct Map_info *Map, double tx, double ty, double *tz,
+<<<<<<< HEAD
                    double *angle UNUSED, double *slope UNUSED)
+=======
+                   double *angle, double *slope)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int i, area, n_points;
     struct Plus_head *Plus;

@@ -20,10 +20,15 @@
  * best view with tabstop=4
  */
 
+<<<<<<< HEAD
 #include <grass/gis.h>
 
 int DGL_ADD_NODE_FUNC(dglGraph_s *pgraph, dglInt32_t nId,
                       void *pvNodeAttr UNUSED, dglInt32_t nFlags UNUSED)
+=======
+int DGL_ADD_NODE_FUNC(dglGraph_s *pgraph, dglInt32_t nId, void *pvNodeAttr,
+                      dglInt32_t nFlags)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DGL_T_NODEITEM_TYPE *pNodeItem;
     dglInt32_t *pnode;
@@ -191,7 +196,11 @@ int DGL_DEL_NODE_INEDGE_FUNC(dglGraph_s *pgraph, dglInt32_t nNode,
 }
 #endif
 
+<<<<<<< HEAD
 int DGL_DEL_NODE_FUNC(dglGraph_s *pgraph, dglInt32_t nNodeId UNUSED)
+=======
+int DGL_DEL_NODE_FUNC(dglGraph_s *pgraph, dglInt32_t nNodeId)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 #if defined(_DGL_V1)
     pgraph->iErrno = DGL_ERR_NotSupported;
@@ -395,8 +404,12 @@ dglInt32_t *DGL_GET_NODE_OUTEDGESET_FUNC(dglGraph_s *pgraph, dglInt32_t *pnode)
     }
 }
 
+<<<<<<< HEAD
 dglInt32_t *DGL_GET_NODE_INEDGESET_FUNC(dglGraph_s *pgraph,
                                         dglInt32_t *pnode UNUSED)
+=======
+dglInt32_t *DGL_GET_NODE_INEDGESET_FUNC(dglGraph_s *pgraph, dglInt32_t *pnode)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
 #if defined(_DGL_V1)
     pgraph->iErrno = DGL_ERR_NotSupported;

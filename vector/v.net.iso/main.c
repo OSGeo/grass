@@ -166,7 +166,11 @@ int main(int argc, char **argv)
     geo_f = G_define_flag();
     geo_f->key = 'g';
     geo_f->description =
+<<<<<<< HEAD
         _("Use geodesic calculation for longitude-latitude projects");
+=======
+        _("Use geodesic calculation for longitude-latitude locations");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     ucat_f = G_define_flag();
     ucat_f->key = 'u';

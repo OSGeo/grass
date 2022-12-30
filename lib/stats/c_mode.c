@@ -2,7 +2,11 @@
 #include <grass/raster.h>
 #include <grass/stats.h>
 
+<<<<<<< HEAD
 void c_mode(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+=======
+void c_mode(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DCELL mode;
     int max;
@@ -35,8 +39,12 @@ void c_mode(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
         *result = mode;
 }
 
+<<<<<<< HEAD
 void w_mode(DCELL *result, DCELL (*values)[2], int n,
             const void *closure UNUSED)
+=======
+void w_mode(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DCELL mode;
     DCELL max;

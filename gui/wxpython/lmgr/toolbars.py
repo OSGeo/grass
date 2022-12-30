@@ -125,6 +125,9 @@ class DisplayPanelToolbar(BaseToolbar):
         return self._getToolbarData(
             (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 (
                     ("addMulti", _("Add multiple map layers")),
                     icons["addMulti"],
@@ -160,6 +163,7 @@ class DisplayPanelToolbar(BaseToolbar):
                     icons["addWS"],
                     self.parent.OnAddWS,
                 ),
+<<<<<<< HEAD
                 (None,),
                 (
                     ("addgrp", icons["addGroup"].label),
@@ -182,6 +186,21 @@ class DisplayPanelToolbar(BaseToolbar):
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
                 (None,),
                 (
+=======
+                (None,),
+                (
+                    ("addgrp", icons["addGroup"].label),
+                    icons["addGroup"],
+                    self.parent.OnAddGroup,
+                ),
+                (
+                    ("delcmd", _("Delete map layer")),
+                    icons["delCmd"],
+                    self.parent.OnDeleteLayer,
+                ),
+                (None,),
+                (
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     ("vdigit", icons["vdigit"].label),
                     icons["vdigit"],
                     self.parent.OnVDigit,
@@ -229,11 +248,15 @@ class LMToolsToolbar(AuiToolbar):
         return self._getToolbarData(
             (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 (
                     ("newdisplay", _("New display")),
                     icons["newdisplay"],
                     self.parent.OnNewDisplay,
                 ),
+<<<<<<< HEAD
 =======
                 ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
                 (None,),
@@ -265,6 +288,31 @@ class LMToolsToolbar(AuiToolbar):
                 ),
                 (None,),
                 (
+=======
+                (None,),
+                (
+                    ("mapCalc", icons["mapcalc"].label),
+                    icons["mapcalc"],
+                    self.parent.OnMapCalculator,
+                ),
+                (
+                    ("georect", icons["georectify"].label),
+                    icons["georectify"],
+                    self.parent.OnGCPManager,
+                ),
+                (
+                    ("modeler", icons["modeler"].label),
+                    icons["modeler"],
+                    self.parent.OnGModeler,
+                ),
+                (
+                    ("mapOutput", icons["composer"].label),
+                    icons["composer"],
+                    self.parent.OnPsMap,
+                ),
+                (None,),
+                (
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     ("script-load", icons["script-load"].label),
                     icons["script-load"],
                     self.parent.OnRunScript,

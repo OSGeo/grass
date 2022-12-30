@@ -189,7 +189,11 @@ int test_solute_transport_3d(void)
     N_print_les(les);
     N_free_les(les);
 
+<<<<<<< HEAD
     /*GAUSS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
+=======
+    /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                       data->c_start, (void *)data, call);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
@@ -275,7 +279,11 @@ int test_solute_transport_2d(void)
     N_print_les(les);
     N_free_les(les);
 
+<<<<<<< HEAD
     /*GAUSS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
+=======
+    /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                                       data->c_start, (void *)data, call);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);

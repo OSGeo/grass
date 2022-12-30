@@ -124,7 +124,11 @@ int Rast__quant_organize_fp_lookup(struct Quant *q)
         qsort((char *)q->fp_lookup.vals, q->fp_lookup.nalloc, sizeof(DCELL),
               double_comp);
 
+<<<<<<< HEAD
         /* now find the rule to apply in between each 2 values in a list */
+=======
+        /* now find the rule to apply inbetween each 2 values in a list */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         for (i = 0; i < q->fp_lookup.nalloc - 1; i++) {
             /*debug
                fprintf (stderr, "%lf %lf ", q->fp_lookup.vals[i],
@@ -595,7 +599,11 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
     DCELL dtmp;
     int try, min_ind, max_ind;
     struct Quant_table *p;
+<<<<<<< HEAD
     int (*lower)(double, double);
+=======
+    int (*lower)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     dtmp = dcellVal;
     /* I know the functions which call me already check for null values,

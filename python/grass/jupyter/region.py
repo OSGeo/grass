@@ -215,6 +215,7 @@ class RegionManagerFor2D:
             return
 
 
+<<<<<<< HEAD
 class RegionManagerForSeries:
     """Region manager for SeriesMap"""
 
@@ -287,6 +288,8 @@ class RegionManagerForSeries:
             self._extent_set = True
 
 
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 class RegionManagerFor3D:
     """Region manager for 3D displays (gets region from m.nviz.image command)"""
 
