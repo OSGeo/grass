@@ -27,7 +27,7 @@ Further hints:
 ----------------------------------------------------
 
 To make gcc less tolerant in accepting errors and code flaws, compile
-with (see also ../INSTALL):
+with (see also the INSTALL.md file):
 
 export CFLAGS='-g -ansi -Wall -D_BSD_SOURCE=1 -D_SVID_SOURCE=1 -D_POSIX_SOURCE=1 -D_POSIX_C_SOURCE=199506L'
 

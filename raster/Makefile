@@ -49,6 +49,7 @@ SUBDIRS = \
 	r.mode \
 	r.neighbors \
 	r.null \
+	r.object.geometry \
 	r.out.ascii \
 	r.out.bin \
 	r.out.gdal \

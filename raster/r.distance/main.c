@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two 
+ * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
  * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
@@ -39,12 +38,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("distance"));
     module->description =
-	_("Locates the closest points between objects in two raster maps.");
+        _("Locates the closest points between objects in two raster maps.");
 
     parse(argc, argv, &parms);
     if (parms.labels) {
-	read_labels(&parms.map1);
-	read_labels(&parms.map2);
+        read_labels(&parms.map1);
+        read_labels(&parms.map2);
     }
 
     find_edge_cells(&parms.map1, parms.null);

@@ -31,13 +31,13 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct params params;
     struct flags flags;
-    
+
     int ret, field, otype, verbose;
     char *schema, *olayer, *pg_file;
     char *fid_column, *geom_column;
-    
+
     struct Map_info In, Out;
-    
+
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -48,13 +48,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("simple features"));
     G_add_keyword(_("topology"));
     G_add_keyword(_("3D"));
-    
+
     module->description =
         _("Exports a vector map layer to PostGIS feature table.");
     module->overwrite = TRUE;
-    
+
     define_options(&params, &flags);
-    
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -65,10 +65,9 @@ int main(int argc, char *argv[])
     schema = NULL;
     if (!params.olayer->answer) {
         char name[GNAME_MAX], mapset[GMAPSET_MAX];
-        
+
         /* check for fully qualified name */
-        if (G_name_is_fully_qualified(params.input->answer,
-                                      name, mapset))
+        if (G_name_is_fully_qualified(params.input->answer, name, mapset))
             olayer = G_store(name);
         else
             olayer = G_store(params.input->answer);
@@ -86,54 +85,55 @@ int main(int argc, char *argv[])
         else {
             olayer = G_store(params.olayer->answer);
         }
-        
+
         G_free_tokens(tokens);
     }
-    
+
     /* if schema not defined, use 'public' */
     if (!schema)
         schema = "public";
     G_debug(1, "Database schema: %s", schema);
-        
+
     /* open input for reading */
     ret = Vect_open_old2(&In, params.input->answer, "", params.layer->answer);
     if (ret == -1)
         G_fatal_error(_("Unable to open vector map <%s>"),
                       params.input->answer);
     if (Vect_maptype(&In) != GV_FORMAT_NATIVE)
-        G_fatal_error(_("Vector map <%s> is not in native format. Export cancelled."),
-                      Vect_get_full_name(&In));
+        G_fatal_error(
+            _("Vector map <%s> is not in native format. Export cancelled."),
+            Vect_get_full_name(&In));
     Vect_set_error_handler_io(&In, NULL);
     if (params.olink->answer)
-	G_add_error_handler(link_handler, params.olink->answer);
+        G_add_error_handler(link_handler, params.olink->answer);
 
-    if (ret < 2) 
+    if (ret < 2)
         G_warning(_("Unable to open vector map <%s> on topological level"),
                   params.input->answer);
-    
+
     /* default columns */
-    fid_column  = GV_PG_FID_COLUMN;
+    fid_column = GV_PG_FID_COLUMN;
     geom_column = GV_PG_GEOMETRY_COLUMN;
-    
+
     /* create output for writing */
-    pg_file = create_pgfile(params.dsn->answer, schema, params.olink->answer,
-                            params.opts->answers, flags.topo->answer ? TRUE : FALSE,
-			    &fid_column, &geom_column);
+    pg_file = create_pgfile(
+        params.dsn->answer, schema, params.olink->answer, params.opts->answers,
+        flags.topo->answer ? TRUE : FALSE, &fid_column, &geom_column);
     G_debug(1, "fid_column: %s", fid_column);
     G_debug(1, "geom_column: %s", geom_column);
-    
+
     if (!flags.table->answer) {
-	/* check fid column */
-	check_columns(&In, params.layer->answer, fid_column, geom_column);
+        /* check fid column */
+        check_columns(&In, params.layer->answer, fid_column, geom_column);
     }
 
     /* don't use temporary maps, writes vector features immediately to
        the output PostGIS layer */
     putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=1");
-    if (-1 == Vect_open_new(&Out, olayer,
-                            !flags.force2d->answer ? Vect_is_3d(&In) : WITHOUT_Z))
-        G_fatal_error(_("Unable to create PostGIS layer <%s>"),
-                      olayer);
+    if (-1 ==
+        Vect_open_new(&Out, olayer,
+                      !flags.force2d->answer ? Vect_is_3d(&In) : WITHOUT_Z))
+        G_fatal_error(_("Unable to create PostGIS layer <%s>"), olayer);
     G_add_error_handler(output_handler, &Out);
 
     /* copy attributes (must be done before checking output type
@@ -159,14 +159,14 @@ int main(int argc, char *argv[])
         if (otype & (GV_FACE | GV_KERNEL))
             G_fatal_error(_("Feature type '%s' not supported"),
                           params.type->answer);
-        
+
         /* set up output feature type if possible */
         if (Vect_write_line(&Out, otype, NULL, NULL) < 0)
             G_fatal_error(_("Feature type %d is not supported"), otype);
 
         Vect_set_constraint_type(&In, otype);
     }
-    
+
     /* copy vector features & create PostGIS table */
     if (Vect_copy_map_lines_field(&In, field, &Out) != 0)
         G_fatal_error(_("Copying features failed"));
@@ -178,77 +178,83 @@ int main(int argc, char *argv[])
     G_message(_("Writing output..."));
     verbose = G_verbose();
     if (!flags.topo->answer)
-        G_set_verbose(0); /* do not print build info when writing simple features */
-    
+        G_set_verbose(
+            0); /* do not print build info when writing simple features */
+
     Vect_build_partial(&Out, GV_BUILD_NONE);
     if (Vect_build(&Out) != 1)
         G_fatal_error(_("Building %s topology failed"),
                       flags.topo->answer ? "PostGIS" : "pseudo");
     G_set_verbose(verbose);
-    
-    if (Vect_get_num_lines(&Out) < 1)
-        G_fatal_error(_("No features exported. PostGIS layer <%s> not created."),
-                      Vect_get_name(&Out));
 
-    if (!flags.topo->answer) 
+    if (Vect_get_num_lines(&Out) < 1)
+        G_fatal_error(
+            _("No features exported. PostGIS layer <%s> not created."),
+            Vect_get_name(&Out));
+
+    if (!flags.topo->answer)
         G_done_msg(n_("%d feature (%s type) written to <%s>.",
                       "%d features (%s type) written to <%s>.",
                       Vect_sfa_get_num_features(&Out)),
-                   Vect_sfa_get_num_features(&Out), Vect_get_finfo_geometry_type(&Out),
-                   Vect_get_name(&Out));
+                   Vect_sfa_get_num_features(&Out),
+                   Vect_get_finfo_geometry_type(&Out), Vect_get_name(&Out));
     else
         G_done_msg(n_("%d primitive written to <%s>.",
                       "%d primitives written to <%s>.",
                       Vect_get_num_lines(&Out)),
-                   Vect_get_num_lines(&Out), 
-                   Vect_get_name(&Out));
-    
+                   Vect_get_num_lines(&Out), Vect_get_name(&Out));
+
     /* close output map */
     Vect_close(&Out);
 
     /* remove PG file */
     G_remove("", pg_file);
-    
+
     exit(EXIT_SUCCESS);
 }
 
 void link_handler(void *p)
 {
-    const char *link = (const char *) p;
-    
+    const char *link = (const char *)p;
+
     G_debug(1, "link_handler: %s", link);
     if (G_find_vector2(link, G_mapset()))
-	Vect_delete(link);
+        Vect_delete(link);
 }
 
 void output_handler(void *p)
 {
     char stmt[DB_SQL_MAX];
-       
+
     struct Map_info *Map;
     struct Format_info_pg *pg_info;
     PGresult *result;
-    
-    Map = (struct Map_info *) p;
+
+    Map = (struct Map_info *)p;
     pg_info = &Map->fInfo.pg;
-    
-    G_debug(1, "output_handler(): schema = %s; olayer = %s", pg_info->schema_name, pg_info->table_name);
-    sprintf(stmt, "SELECT DropGeometryTable('%s', '%s')", pg_info->schema_name, pg_info->table_name);
+
+    G_debug(1, "output_handler(): schema = %s; olayer = %s",
+            pg_info->schema_name, pg_info->table_name);
+    sprintf(stmt, "SELECT DropGeometryTable('%s', '%s')", pg_info->schema_name,
+            pg_info->table_name);
     result = PQexec(pg_info->conn, stmt);
     /*
-      be quiet - table may do not exists
+       be quiet - table may do not exists
 
-    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
-        G_warning(_("Unable to drop table <%s.%s>"), pg_info->schema_name, pg_info->table_name);
-    }
-    */
+       if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
+       G_warning(_("Unable to drop table <%s.%s>"), pg_info->schema_name,
+       pg_info->table_name);
+       }
+     */
     PQclear(result);
 
     if (pg_info->toposchema_name) {
-        sprintf(stmt, "SELECT topology.DropTopology('%s')", pg_info->toposchema_name);
+        sprintf(stmt, "SELECT topology.DropTopology('%s')",
+                pg_info->toposchema_name);
         result = PQexec(pg_info->conn, stmt);
         if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
-            G_warning(_("Unable to drop topology schema <%s>"), pg_info->toposchema_name);
+            G_warning(_("Unable to drop topology schema <%s>"),
+                      pg_info->toposchema_name);
         }
         PQclear(result);
     }

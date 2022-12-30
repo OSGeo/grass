@@ -64,7 +64,8 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from iclass.frame import IClassMapFrame
+    from core import globalvar
+    from iclass.frame import IClassMapDisplay
 
     group_name = subgroup_name = map_name = trainingmap_name = None
 
@@ -104,10 +105,14 @@ def main():
     app = wx.App()
 
     # show main frame
-    frame = IClassMapFrame(
+    frame = wx.Frame(
         parent=None,
-        giface=None,
+        size=globalvar.MAP_WINDOW_SIZE,
         title=_("Supervised Classification Tool - GRASS GIS"),
+    )
+    frame = IClassMapDisplay(
+        parent=frame,
+        giface=None,
     )
     if not flags["m"]:
         frame.CenterOnScreen()

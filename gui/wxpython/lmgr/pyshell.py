@@ -20,6 +20,8 @@ This program is free software under the GNU General Public License
 
 from __future__ import print_function
 
+import io
+from contextlib import redirect_stdout
 import sys
 
 import wx
@@ -49,7 +51,8 @@ class PyShellWindow(wx.Panel):
             + "\n\n"
             + _("Type %s for more GRASS scripting related information.") % '"help(gs)"'
             + "\n"
-            + _("Type %s to add raster or vector to the layer tree.") % '"AddLayer()"'
+            + _("Type %s to add raster or vector to the layer tree.")
+            % "\"AddLayer('map_name')\""
             + "\n\n"
         )
 
@@ -57,7 +60,7 @@ class PyShellWindow(wx.Panel):
             parent=self,
             id=wx.ID_ANY,
             introText=self.intro,
-            locals={"gs": grass, "AddLayer": self.AddLayer},
+            locals={"gs": grass, "AddLayer": self.AddLayer, "help": self.Help},
         )
         # useStockId (available since wxPython 4.0.2) should be False on macOS
         if sys.platform == "darwin" and CheckWxVersion([4, 0, 2]):
@@ -140,6 +143,17 @@ class PyShellWindow(wx.Panel):
             return _("Raster map <%s> added") % fname
 
         return _("Vector map <%s> added") % fname
+
+    def Help(self, obj):
+        """Override help() function
+
+        :param obj object/str: generate the help of the given object
+
+        return str: help str of the given object
+        """
+        with redirect_stdout(io.StringIO()) as f:
+            help(obj)
+        return f.getvalue()
 
     def OnClear(self, event):
         """Delete all text from the shell"""

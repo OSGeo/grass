@@ -17,6 +17,9 @@
 /*!
    \brief Create signature file
 
+   Returns a pointer to FILE for writing signature file.
+   Use fclose on the pointer to close after use.
+
    \param name signature filename
 
    \return pointer to FILE
@@ -24,14 +27,13 @@
  */
 FILE *I_fopen_signature_file_new(const char *name)
 {
-    char element[GNAME_MAX];
+    char dir[GNAME_MAX];
     FILE *fd;
 
     /* create sig directory */
-    I__make_signatures_element(I_SIGFILE_TYPE_SIG);
-
-    I__get_signatures_element(element, I_SIGFILE_TYPE_SIG);
-    fd = G_fopen_new(element, name);
+    I_make_signatures_dir(I_SIGFILE_TYPE_SIG);
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIG);
+    fd = G_fopen_new_misc(dir, "sig", name);
 
     return fd;
 }
@@ -39,7 +41,10 @@ FILE *I_fopen_signature_file_new(const char *name)
 /*!
    \brief Open existing signature file
 
-   Use fully qualified names for signatures from other mapsets
+   Use fully qualified names for signatures from other mapsets.
+
+   Returns a pointer to FILE with signature. Use fclose on the pointer
+   after use.
 
    \param name signature filename
 
@@ -49,14 +54,14 @@ FILE *I_fopen_signature_file_new(const char *name)
 FILE *I_fopen_signature_file_old(const char *name)
 {
     char sig_name[GNAME_MAX], sig_mapset[GMAPSET_MAX];
-    char element[GNAME_MAX];
+    char dir[GNAME_MAX];
     FILE *fd;
 
     if (G_unqualified_name(name, NULL, sig_name, sig_mapset) == 0)
         strcpy(sig_mapset, G_mapset());
 
-    I__get_signatures_element(element, I_SIGFILE_TYPE_SIG);
-    fd = G_fopen_old(element, sig_name, sig_mapset);
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIG);
+    fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
 
     return fd;
 }

@@ -9,7 +9,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
+           2008/2010)
  */
 
 #include <grass/glocale.h>
@@ -20,10 +21,10 @@
 
    Set position to center of view
  */
-void Nviz_init_view(nv_data * data)
+void Nviz_init_view(nv_data *data)
 {
     GS_init_view();
-    Nviz_set_focus_state(1);	/* center of view */
+    Nviz_set_focus_state(1); /* center of view */
 
     /* set default lights (1 & 2) */
     Nviz_set_light_position(data, 1, 0.68, -0.68, 0.80, 0.0);
@@ -49,12 +50,12 @@ void Nviz_init_view(nv_data * data)
 int Nviz_set_focus_state(int state_flag)
 {
     if (state_flag == 1)
-	GS_set_infocus();	/* return center of view */
+        GS_set_infocus(); /* return center of view */
     else if (state_flag == 0)
-	GS_set_nofocus();	/* no center of view -- use viewdir */
+        GS_set_nofocus(); /* no center of view -- use viewdir */
     else {
-	G_warning(_("Unable to set focus"));
-	return 0;
+        G_warning(_("Unable to set focus"));
+        return 0;
     }
 
     return 1;
@@ -75,36 +76,36 @@ int Nviz_set_focus_state(int state_flag)
 int Nviz_set_focus_map(int type, int id)
 {
     if (GS_num_surfs() < 0 && GVL_num_vols() < 0) {
-	GS_set_nofocus();
-	return 0;
+        GS_set_nofocus();
+        return 0;
     }
 
     if (type == MAP_OBJ_UNDEFINED) {
-	int *surf_list, num_surfs, *vol_list;
+        int *surf_list, num_surfs, *vol_list;
 
-	if (GS_num_surfs() > 0) {
-	    surf_list = GS_get_surf_list(&num_surfs);
-	    id = surf_list[0];
-	    G_free(surf_list);
+        if (GS_num_surfs() > 0) {
+            surf_list = GS_get_surf_list(&num_surfs);
+            id = surf_list[0];
+            G_free(surf_list);
 
-	    GS_set_focus_center_map(id);
-	}
+            GS_set_focus_center_map(id);
+        }
 
-	if (GVL_num_vols() > 0) {
-	    vol_list = GVL_get_vol_list(&num_surfs);
-	    id = vol_list[0];
-	    G_free(vol_list);
+        if (GVL_num_vols() > 0) {
+            vol_list = GVL_get_vol_list(&num_surfs);
+            id = vol_list[0];
+            G_free(vol_list);
 
-	    GVL_set_focus_center_map(id);
-	}
-	return id;
+            GVL_set_focus_center_map(id);
+        }
+        return id;
     }
 
     if (type == MAP_OBJ_SURF) {
-	GS_set_focus_center_map(id);
+        GS_set_focus_center_map(id);
     }
     else if (type == MAP_OBJ_VOL) {
-	GVL_set_focus_center_map(id);
+        GVL_set_focus_center_map(id);
     }
 
     return id;
@@ -116,7 +117,7 @@ int Nviz_set_focus_map(int type, int id)
    \param data nviz data
    \param x,y,z focus coordinates
  */
-int Nviz_get_focus(nv_data * data, float *x, float *y, float *z)
+int Nviz_get_focus(nv_data *data, float *x, float *y, float *z)
 {
     float realto[3];
 
@@ -129,7 +130,6 @@ int Nviz_get_focus(nv_data * data, float *x, float *y, float *z)
     /* no idea why */
 
     return 1;
-
 }
 
 /*!
@@ -138,7 +138,7 @@ int Nviz_get_focus(nv_data * data, float *x, float *y, float *z)
    \param data nviz data
    \param x, y, z focus coordinates
  */
-int Nviz_set_focus(nv_data * data, float x, float y, float z)
+int Nviz_set_focus(nv_data *data, float x, float y, float z)
 {
     float realto[3];
 
@@ -150,7 +150,6 @@ int Nviz_set_focus(nv_data * data, float x, float y, float z)
     /* no idea why */
 
     return 1;
-
 }
 
 /*!
@@ -158,14 +157,14 @@ int Nviz_set_focus(nv_data * data, float x, float y, float z)
 
    \param data nviz data
  */
-int Nviz_has_focus(nv_data * data)
+int Nviz_has_focus(nv_data *data)
 {
     float realto[3];
 
     if (GS_get_focus(realto))
-	return 1;
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 /*!
@@ -173,7 +172,7 @@ int Nviz_has_focus(nv_data * data)
 
    \param data nviz data
  */
-float Nviz_get_xyrange(nv_data * data)
+float Nviz_get_xyrange(nv_data *data)
 {
     return data->xyrange;
 }
@@ -184,7 +183,7 @@ float Nviz_get_xyrange(nv_data * data)
    \param data nviz data
    \param min,max z range
  */
-int Nviz_get_zrange(nv_data * data, float *min, float *max)
+int Nviz_get_zrange(nv_data *data, float *min, float *max)
 {
     GS_get_zrange_nz(min, max);
     return 1;
@@ -195,7 +194,7 @@ int Nviz_get_zrange(nv_data * data, float *min, float *max)
 
    \param data nviz data
  */
-float Nviz_get_longdim(nv_data * data)
+float Nviz_get_longdim(nv_data *data)
 {
     float dim;
 

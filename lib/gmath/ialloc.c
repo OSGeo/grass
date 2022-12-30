@@ -1,4 +1,3 @@
-
 /**
  * \file ialloc.c
  *
@@ -23,10 +22,8 @@
  * \date 2004-2006
  */
 
-
 #include <stdlib.h>
 #include <grass/gis.h>
-
 
 /**
  * \fn int *G_alloc_ivector (size_t n)
@@ -36,7 +33,7 @@
  * Allocate a vector (array) of <b>n</b> integers initialized to zero.
  *
  * \param[in] n size of vector to allocate
- * \return integer * 
+ * \return integer *
  */
 int *G_alloc_ivector(size_t n)
 {
@@ -53,7 +50,7 @@ int *G_alloc_ivector(size_t n)
  *
  * \param[in] rows number of rows in matrix
  * \param[in] cols number of columns in matrix
- * \return int ** 
+ * \return int **
  */
 int **G_alloc_imatrix(int rows, int cols)
 {
@@ -61,9 +58,9 @@ int **G_alloc_imatrix(int rows, int cols)
     int i;
 
     m = (int **)G_calloc(rows, sizeof(int *));
-    m[0] = (int *)G_calloc((size_t) rows * cols, sizeof(int));
+    m[0] = (int *)G_calloc((size_t)rows * cols, sizeof(int));
     for (i = 1; i < rows; i++)
-	m[i] = m[i - 1] + cols;
+        m[i] = m[i - 1] + cols;
 
     return m;
 }
