@@ -44,7 +44,7 @@ int get_table_color(int, int, struct Colors *, dbCatValArray *, int *, int *,
 int get_cat_color(int, const struct line_cats *, const struct cat_list *, int *,
                   int *, int *);
 double get_property(int, int, dbCatValArray *, double, double);
-int get_num_color_rules_skipped();
+int get_num_color_rules_skipped(void);
 
 /* opt.c */
 int option_to_display(const struct Option *);

@@ -39,7 +39,7 @@
  *******************************************************************
  */
 
-float rem(); /* remainder function */
+float rem(long int, long int); /* remainder function */
 
 /* normalized coordinates & dimensions of pie-chart components */
 
