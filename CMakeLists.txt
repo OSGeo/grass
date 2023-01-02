@@ -208,6 +208,8 @@ if(WITH_PYTHON)
  add_subdirectory(gui)
 endif()
 
+add_subdirectory(python)
+
 if(WITH_DOCS)
   add_subdirectory(doc)
   add_subdirectory(man)
