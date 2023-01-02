@@ -227,13 +227,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             text = text[prompt_string_size:]
         return text
 
-    def _clip(self, data):
-        if wx.TheClipboard.Open():
-            wx.TheClipboard.UsePrimarySelection(False)
-            wx.TheClipboard.SetData(data)
-            wx.TheClipboard.Flush()
-            wx.TheClipboard.Close()
-
     def CanManipulate(self):
         """Return true if text is selected and can be further manipulate (cut, edit etc.)."""
         if (
@@ -250,8 +243,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if self.CanManipulate() and self.CanCopy():
             if self.AutoCompActive():
                 self.AutoCompCancel()
-            if self.CallTipActive():
-                self.CallTipCancel()
             self.Copy()
             if self.GetSelectionStart() < self.prompt_pos_end:
                 end = self.GetSelectionEnd()
@@ -280,7 +271,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             command = command.replace(os.linesep + self.prompt_string, os.linesep)
             command = self._lstripPrompt(text=command)
             data = wx.TextDataObject(command)
-            self._clip(data)
+            if wx.TheClipboard.Open():
+                wx.TheClipboard.UsePrimarySelection(False)
+                wx.TheClipboard.SetData(data)
+                wx.TheClipboard.Flush()
+                wx.TheClipboard.Close()
 
     def OnTextSelectionChanged(self, event):
         """Copy selected text to clipboard and skip event.
@@ -521,15 +516,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 )
                 self.ClearSelections()
                 self.GotoPos(self.prompt_pos_end)
-        # Cut to the clipboard.
         elif (controlDown) and event.GetKeyCode() in (ord("X"), ord("x")):
             self.Cut()
-
-        # Copy to the clipboard.
         elif (controlDown) and event.GetKeyCode() in (ord("C"), ord("c")):
             self.Copy()
-
-        # Paste from the clipboard.
         elif (controlDown) and event.GetKeyCode() in (ord("V"), ord("v")):
             self.Paste()
         elif (
