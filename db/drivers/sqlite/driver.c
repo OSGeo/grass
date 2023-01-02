@@ -22,7 +22,7 @@ int db__driver_init(int argc, char *argv[])
     return DB_OK;
 }
 
-int db__driver_finish()
+int db__driver_finish(void)
 {
     return DB_OK;
 }

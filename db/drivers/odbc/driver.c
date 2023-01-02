@@ -5,11 +5,11 @@
 
 int db__driver_init(int argc, char **argv)
 {
-    init_error();
+    init_error(void);
     return DB_OK;
 }
 
-int db__driver_finish()
+int db__driver_finish(void)
 {
     return DB_OK;
 }
