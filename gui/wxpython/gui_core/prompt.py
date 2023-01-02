@@ -22,6 +22,7 @@ import os
 import difflib
 import codecs
 import sys
+import getpass
 
 import wx
 import wx.stc
@@ -187,7 +188,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetUseHorizontalScrollBar(True)
 
         # prompt of the interpreter
-        self.prompt_string = ">>> "
+        self.prompt_string = "{username} > ".format(username=getpass.getuser())
         self.write(self.prompt_string)
         self.DocumentEnd()
         self.prompt_pos_end = self.GetCurrentPos()
