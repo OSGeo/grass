@@ -19,7 +19,7 @@ copy_python_files_in_subdir(pygrass/modules/interface etc/python/grass)
 copy_python_files_in_subdir(pygrass/modules/grid etc/python/grass)
 
 
-configure_file(script/setup.py
+configure_file(grass/script/setup.py
   ${CMAKE_BINARY_DIR}/etc/python/grass/script/setup.py
   COPYONLY)
 
