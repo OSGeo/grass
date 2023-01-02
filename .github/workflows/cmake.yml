@@ -80,9 +80,7 @@ jobs:
       working-directory: ${{ github.workspace }}
     - name: Configure
       run: |
-        mkdir -p $GITHUB_WORKSPACE/build
-        cd $GITHUB_WORKSPACE/build
-        cmake ${CMAKE_OPTIONS} ..
+        cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build
         ls $GITHUB_WORKSPACE/build
         sudo apt-get install -y -q mlocate ; sudo updatedb
         locate include/Make/Platform.make
