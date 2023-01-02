@@ -1,5 +1,4 @@
 
-copy_python_files_in_subdir(bandref etc/python/grass)
 copy_python_files_in_subdir(exceptions etc/python/grass)
 copy_python_files_in_subdir(gunittest etc/python/grass)
 copy_python_files_in_subdir(imaging etc/python/grass)
