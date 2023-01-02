@@ -124,7 +124,8 @@ int main(int argc, char *argv[])
             for (int col = 0; col < ncols; col++) {
                 /* Predicted classes start at 1 but signature array is 0 based
                  */
-                class_cell[col] = S.sig[class_cell[col] - 1].oclass;
+                if (Rast_is_c_null_value(&class_cell[col]) == 0)
+                    class_cell[col] = S.sig[class_cell[col] - 1].oclass;
             }
         }
         Rast_put_row(class_fd, class_cell, CELL_TYPE);
