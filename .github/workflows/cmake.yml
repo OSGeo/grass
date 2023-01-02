@@ -84,7 +84,7 @@ jobs:
     - name: Build
       run: |
         cd $GITHUB_WORKSPACE/build
-        make -j$(nproc)
+        cmake --build . -j$(nproc)
     - name: ccache statistics
       run: ccache -s
 
