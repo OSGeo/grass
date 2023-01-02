@@ -12,8 +12,6 @@ foreach(gui_lib_DIR ${gui_lib_DIRS})
   list(APPEND gui_lib_targets python_${gui_lib_DIR})
 endforeach()
 add_custom_target(GUI_WXPYTHON
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gis_set.py ${WXPYTHON_DIR}/
-	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gis_set_error.py ${WXPYTHON_DIR}/
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py ${WXPYTHON_DIR}/
 	DEPENDS ${gui_lib_targets})
 
