@@ -6,7 +6,7 @@
  */
 #include <grass/datetime.h>
 
-static void make_incr();
+static void make_incr(DateTime *, int, int, DateTime *);
 
 /*!
  * \brief

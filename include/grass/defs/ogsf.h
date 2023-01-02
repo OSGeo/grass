@@ -233,7 +233,7 @@ void *GV_Get_ClientData(int);
 void GVL_libinit(void);
 void GVL_init_region(void);
 int GVL_get_region(float *, float *, float *, float *, float *, float *);
-void *GVL_get_window();
+void *GVL_get_window(void);
 int GVL_vol_exists(int);
 int GVL_new_vol(void);
 int GVL_num_vols(void);
@@ -545,7 +545,7 @@ int gsd_writeView(unsigned char **, unsigned int, unsigned int);
 int gsd_surf(geosurf *);
 int gsd_surf_map(geosurf *);
 int gsd_surf_const(geosurf *, float);
-int gsd_surf_func(geosurf *, int (*)());
+int gsd_surf_func(geosurf *, int (*)(void));
 int gsd_triangulated_wall(int, int, geosurf *, geosurf *, Point3 *, Point3 *,
                           float *);
 void gsd_setfc(int);
@@ -573,7 +573,7 @@ int gsd_wire_surf(geosurf *);
 int gsd_wire_surf_map(geosurf *);
 int gsd_coarse_surf_map(geosurf *);
 int gsd_wire_surf_const(geosurf *, float);
-int gsd_wire_surf_func(geosurf *, int (*)());
+int gsd_wire_surf_func(geosurf *, int (*)(void));
 int gsd_wire_arrows(geosurf *);
 
 /* gsdiff.c */

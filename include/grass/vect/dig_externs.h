@@ -161,7 +161,7 @@ int dig_get_poly_points(int, struct line_pnts **, int *, struct line_pnts *);
 
 /* portable.c */
 void dig_init_portable(struct Port_info *, int);
-int dig__byte_order_out();
+int dig__byte_order_out(void);
 
 /* int dig__set_cur_head (struct dig_head *); */
 int dig_set_cur_port(struct Port_info *);
@@ -239,11 +239,11 @@ int dig_alloc_nodes(struct Plus_head *, int);
 int dig_alloc_lines(struct Plus_head *, int);
 int dig_alloc_areas(struct Plus_head *, int);
 int dig_alloc_isles(struct Plus_head *, int);
-struct P_node *dig_alloc_node();
-struct P_line *dig_alloc_line();
+struct P_node *dig_alloc_node(void);
+struct P_line *dig_alloc_line(void);
 void *dig_alloc_topo(char);
-struct P_area *dig_alloc_area();
-struct P_isle *dig_alloc_isle();
+struct P_area *dig_alloc_area(void);
+struct P_isle *dig_alloc_isle(void);
 void dig_free_node(struct P_node *);
 void dig_free_line(struct P_line *);
 void dig_free_area(struct P_area *);
