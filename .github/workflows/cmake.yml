@@ -81,9 +81,6 @@ jobs:
     - name: Configure
       run: |
         cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build
-        ls $GITHUB_WORKSPACE/build
-        sudo apt-get install -y -q mlocate ; sudo updatedb
-        locate include/Make/Platform.make
     - name: Build
       run: |
         cd $GITHUB_WORKSPACE/build
