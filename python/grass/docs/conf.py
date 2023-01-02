@@ -124,7 +124,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Python library documentation"
-copyright = "2022, GRASS Development Team"
+copyright = "2023, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -359,7 +359,7 @@ texinfo_documents = [
 epub_title = "PythonLib"
 epub_author = "GRASS Development Team"
 epub_publisher = "GRASS Development Team"
-epub_copyright = "2022, GRASS Development Team"
+epub_copyright = "2023, GRASS Development Team"
 
 # The basename for the epub file. It defaults to the project name.
 # epub_basename = u'wxGUI'
