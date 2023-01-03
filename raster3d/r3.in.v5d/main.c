@@ -56,7 +56,7 @@ typedef struct {
 
 static paramType param;
 
-static void setParams()
+static void setParams(void)
 {
     param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->description = _("Name of V5D raster file to be imported");
