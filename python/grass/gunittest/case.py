@@ -1239,9 +1239,8 @@ class TestCase(unittest.TestCase):
         """
         import difflib
 
-        # 'U' taken from difflib documentation
-        fromlines = open(actual, "U").readlines()
-        tolines = open(reference, "U").readlines()
+        fromlines = open(actual).readlines()
+        tolines = open(reference).readlines()
         context_lines = 3  # number of context lines
         # TODO: filenames are set to "actual" and "reference", isn't it too general?
         # it is even more useful if map names or file names are some generated

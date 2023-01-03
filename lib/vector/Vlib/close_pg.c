@@ -102,7 +102,8 @@ int V1_close_pg(struct Map_info *Map)
 }
 
 /*!
-   \brief Close vector map (PostGIS layer) on topological level (write out fidx file)
+   \brief Close vector map (PostGIS layer) on topological level (write out fidx
+   file)
 
    \param Map pointer to Map_info structure
 
@@ -128,7 +129,7 @@ int V2_close_pg(struct Map_info *Map)
         /* delete old support files if available */
         sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
         Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
-        if (access(file_path, F_OK) == 0)       /* file exists? */
+        if (access(file_path, F_OK) == 0) /* file exists? */
             unlink(file_path);
 
         return 0;

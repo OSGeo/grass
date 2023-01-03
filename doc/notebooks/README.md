@@ -1,3 +1,5 @@
+# Notebooks
+
 ## Introduction
 
 ### Using the notebooks locally
@@ -13,14 +15,14 @@ See also the official documentation for [The Jupyter Notebook](https://jupyter-n
 
 ### Introductory notebooks to GRASS GIS and Jupyter
 
-   - GRASS GIS in Jupyter Notebook with Python and grass.jupyter: [jupyter_example.ipynb](jupyter_example.ipynb)
-   - The grass.jupyter Package: [jupyter_tutorial.ipynb](jupyter_tutorial.ipynb)
+* GRASS GIS in Jupyter Notebook with Python and grass.jupyter: [jupyter_example.ipynb](jupyter_example.ipynb)
+* The grass.jupyter Package: [jupyter_tutorial.ipynb](jupyter_tutorial.ipynb)
 
-## Thematic Jupyter notebooks:
+## Thematic Jupyter notebooks
 
-   - Viewshed Analysis: [viewshed_analysis.ipynb](viewshed_analysis.ipynb)
-   - Spatio-Temporal Analysis with grass.jupyter: [temporal.ipynb](temporal.ipynb)
-   - Solar Energy Potential Analysis: [solar_potential.ipynb](solar_potential.ipynb)
-   - GRASS GIS Scripting with Python: [scripting_example.ipynb](scripting_example.ipynb)
-   - Hydrology with GRASS GIS: [hydrology.ipynb](hydrology.ipynb)
+* Viewshed Analysis: [viewshed_analysis.ipynb](viewshed_analysis.ipynb)
+* Spatio-Temporal Analysis with grass.jupyter: [temporal.ipynb](temporal.ipynb)
+* Solar Energy Potential Analysis: [solar_potential.ipynb](solar_potential.ipynb)
+* GRASS GIS Scripting with Python: [scripting_example.ipynb](scripting_example.ipynb)
+* Hydrology with GRASS GIS: [hydrology.ipynb](hydrology.ipynb)
 

@@ -164,7 +164,13 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as etree
-from distutils.dir_util import copy_tree
+
+if sys.version_info.major == 3 and sys.version_info.minor < 8:
+    from distutils.dir_util import copy_tree
+else:
+    from functools import partial
+
+    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
 from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError
@@ -2146,9 +2152,6 @@ def check_style_file(name):
     dist_file = os.path.join(os.getenv("GISBASE"), "docs", "html", name)
     addons_file = os.path.join(options["prefix"], "docs", "html", name)
 
-    if os.path.isfile(addons_file):
-        return
-
     try:
         shutil.copyfile(dist_file, addons_file)
     except OSError as error:
@@ -2184,6 +2187,8 @@ def check_dirs():
     create_dir(os.path.join(options["prefix"], "docs", "html"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
+    check_style_file("hamburger_menu.svg")
+    check_style_file("hamburger_menu_close.svg")
     check_style_file("grassdocs.css")
     create_dir(os.path.join(options["prefix"], "etc"))
     create_dir(os.path.join(options["prefix"], "docs", "man", "man1"))

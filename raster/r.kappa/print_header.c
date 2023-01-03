@@ -4,8 +4,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
-void prn_header(void)
+void print_header(void)
 {
     int i, len;
     char buf[1024], *titles, *label;
@@ -14,10 +13,8 @@ void prn_header(void)
 
     if (output == NULL)
         fd = stdout;
-    else if ((fd = fopen(output, "w")) == NULL) {
+    else if ((fd = fopen(output, "w")) == NULL)
         G_fatal_error(_("Cannot open file <%s> to write header"), output);
-        return;
-    }
 
     /* print header */
     fprintf(fd, "\t\t\t%s\n", title);
@@ -37,8 +34,8 @@ void prn_header(void)
             G_strip(titles);
         if (titles == NULL || *titles == 0)
             titles = "(untitled)";
-        sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label,
-                i + 1, titles, layers[i].name, layers[i].mapset);
+        sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label, i + 1,
+                titles, layers[i].name, layers[i].mapset);
         fprintf(fd, "%s\n", buf);
     }
 

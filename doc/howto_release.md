@@ -204,7 +204,7 @@ Older release description may or may not be a good inspiration:
 
 If RC, mark it as a pre-release, check:
 
-```
+```text
 [x] This is a pre-release
 ```
 
@@ -291,7 +291,7 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ### Upload source code tarball to OSGeo servers
 
 Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
-      jumphost (managed by OSGeo-SAC) - see https://wiki.osgeo.org/wiki/SAC_Service_Status#grass
+      jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
@@ -336,8 +336,8 @@ vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
 Add the new version to repos which build or test addons:
 
-- https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml (currently, for new branches only)
-- https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line for new branches and final releases)
+- <https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml> (currently, for new branches only)
+- <https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh> (add new release related line for new branches and final releases)
 
 ## Close milestone
 
@@ -366,19 +366,19 @@ are any which show well specific features added or updated in the release.
 
 ### Trac Wiki release page
 
-Add entry in https://trac.osgeo.org/grass/wiki/Release
+Add entry in <https://trac.osgeo.org/grass/wiki/Release>
 
 ### Update Hugo web site to show new version
 
 For a (final) release (not release candidate), write announcement and publish it:
-- News section, https://github.com/OSGeo/grass-website/tree/master/content/news
+- News section, <https://github.com/OSGeo/grass-website/tree/master/content/news>
 
 Software pages:
-- Linux: https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md
-- Windows: https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md
-- Mac: https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md
-- Releases: https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md
-- Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
+- Linux: <https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md>
+- Windows: <https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md>
+- Mac: <https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md>
+- Releases: <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
+- Wiki: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
 
 
 ### Only in case of new major release
@@ -386,10 +386,10 @@ Software pages:
 - update cronjob '[cron_grass8_main_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)' on grass.osgeo.org to next
   but one release tag for the differences
 - wiki updates, only when new major release:
-    - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
-    - update last version on main page
+  - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
+  - update last version on main page
 - Add trac Wiki Macro definitions for manual pages G8X:modulename
-    - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
+  - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
 ## Packaging notes
 
@@ -397,7 +397,7 @@ Software pages:
 
 - Update grass_packager_release.bat, eg.
 
-```
+```bash
      set MAJOR=8
      set MINOR=2
      set PATCH=0RC1
@@ -405,13 +405,13 @@ Software pages:
 
 - Update addons (grass_addons.sh) rules, eg.
 
-```
+```bash
      compile $GIT_PATH/grass8 $GISBASE_PATH/grass820RC1  $ADDON_PATH/grass820RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
-```
+```bash
      copy_addon 820RC1 8.2.0RC1
 ```
 
@@ -423,22 +423,22 @@ Software pages:
 ### Other notes
 
 - <https://trac.osgeo.org/grass/wiki/BuildHints>
-    - <https://trac.osgeo.org/grass/wiki/DebianUbuntuPackaging>
-    - <https://trac.osgeo.org/grass/wiki/CompileOnWindows>
+  - <https://trac.osgeo.org/grass/wiki/DebianUbuntuPackaging>
+  - <https://trac.osgeo.org/grass/wiki/CompileOnWindows>
 
 ## Tell others about release
 
 - If release candidate:
-    - <grass-announce@lists.osgeo.org>
-    - <grass-dev@lists.osgeo.org>
+  - <grass-announce@lists.osgeo.org>
+  - <grass-dev@lists.osgeo.org>
 - If official release:
-    - publish related announcement press release at:
+  - publish related announcement press release at:
 - Our GRASS web site: /announces/
-    - Note: DON'T use relative links there
+  - Note: DON'T use relative links there
 - Our main mailing lists:
-    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
-    - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
-    - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
+  - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
+  - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
+  - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
 - FreeGIS: <freegis-list@intevation.de>
 - OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
 

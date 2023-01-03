@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2022 by the GRASS Development Team
+(C) 2008-2023 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -27,7 +27,7 @@ import shutil
 import codecs
 import string
 import random
-import pipes
+import shlex
 from tempfile import NamedTemporaryFile
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
@@ -863,7 +863,7 @@ def parser():
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]
-    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    cmdline += [shlex.quote(a) for a in sys.argv[1:]]
     os.environ["CMDLINE"] = " ".join(cmdline)
 
     argv = sys.argv[:]

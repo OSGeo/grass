@@ -1,4 +1,3 @@
-
 /***************************************************
  * these routines determine the printf format used
  * by floating point values
@@ -9,15 +8,15 @@
  * format_double() does the formating with the
  *     parms determined by format_parms()
  ***************************************************/
+
 #include <string.h>
 #include "global.h"
 
 int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
 {
     char buf[50];
-    int orig_length, scient_dp;
+    int scient_dp;
 
-    orig_length = *n;
     scient_dp = *dp;
     for (;;) {
         if (!*eformat)

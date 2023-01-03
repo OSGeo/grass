@@ -1,4 +1,3 @@
-
 /**
  * \file listtab.c
  *
@@ -20,7 +19,6 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
  * \fn int db__driver_list_tables (dbString **tlist, int *tcount, int system)
  *
@@ -32,7 +30,7 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
+int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 {
     int i, nrows;
     dbString *list;
@@ -41,13 +39,13 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     int ret;
 
     G_debug(3, "db__driver_list_tables(): system = %d", system);
-    ret = sqlite3_prepare(sqlite,
-                          "select name from sqlite_master where type = 'table' or type = 'view'",
-                          -1, &statement, &rest);
+    ret = sqlite3_prepare(
+        sqlite,
+        "select name from sqlite_master where type = 'table' or type = 'view'",
+        -1, &statement, &rest);
 
     if (ret != SQLITE_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to list tables:"),
+        db_d_append_error("%s\n%s", _("Unable to list tables:"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         sqlite3_finalize(statement);
@@ -62,8 +60,7 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     ret = sqlite3_reset(statement);
 
     if (ret != SQLITE_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to list tables:"),
+        db_d_append_error("%s\n%s", _("Unable to list tables:"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         sqlite3_finalize(statement);

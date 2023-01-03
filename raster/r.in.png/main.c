@@ -1,11 +1,10 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       r.in.png
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Alex Shevlakov - sixote@yahoo.com
  *               Glynn Clements
- * PURPOSE:      Import non-georeferenced Images in PNG format. 
+ * PURPOSE:      Import non-georeferenced Images in PNG format.
  * COPYRIGHT:    (C) 2000-2002, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -25,8 +24,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-typedef struct
-{
+typedef struct {
     const char suffix[4];
     int active;
     int fd;
@@ -43,14 +41,7 @@ typedef struct
 #define C_B 4
 #define C_A 5
 
-static channel channels[6] = {
-    {""},
-    {""},
-    {".r"},
-    {".g"},
-    {".b"},
-    {".a"}
-};
+static channel channels[6] = {{""}, {""}, {".r"}, {".g"}, {".b"}, {".a"}};
 
 static int Header;
 static int Float;
@@ -63,8 +54,7 @@ static png_structp png_ptr;
 static png_infop info_ptr;
 
 static png_uint_32 width, height;
-static int bit_depth, color_type, interlace_type, compression_type,
-    filter_type;
+static int bit_depth, color_type, interlace_type, compression_type, filter_type;
 
 static double gamma_correct(double k)
 {
@@ -76,19 +66,18 @@ static int intensity(double k)
     return (int)(gamma_correct(k) * 255 + 0.5);
 }
 
-static int get_byte(png_bytep * pp)
+static int get_byte(png_bytep *pp)
 {
     return *(*pp)++;
 }
 
-static int get_png_val(png_bytep * pp, int bit_depth)
+static int get_png_val(png_bytep *pp, int bit_depth)
 {
-    return (bit_depth == 16)
-        ? (get_byte(pp) << 8) | get_byte(pp)
-        : get_byte(pp);
+    return (bit_depth == 16) ? (get_byte(pp) << 8) | get_byte(pp)
+                             : get_byte(pp);
 }
 
-static void init_channel(channel * c)
+static void init_channel(channel *c)
 {
     sprintf(c->name, "%s%s", output, c->suffix);
 
@@ -113,7 +102,7 @@ static void write_row_int(png_bytep p)
         for (c = 0; c < 6; c++) {
             ch = &channels[c];
             if (ch->active)
-                ch->buf[x] = (CELL) get_png_val(&p, bit_depth);
+                ch->buf[x] = (CELL)get_png_val(&p, bit_depth);
         }
 
     if (channels[C_A].active && ialpha > 0)
@@ -141,8 +130,7 @@ static void write_row_float(png_bytep p)
         for (c = 0; c < 6; c++) {
             ch = &channels[c];
             if (ch->active)
-                ch->fbuf[x] = (FCELL) get_png_val(&p, bit_depth)
-                    / ch->maxval;
+                ch->fbuf[x] = (FCELL)get_png_val(&p, bit_depth) / ch->maxval;
         }
 
     if (t_gamma != 1.0)
@@ -188,8 +176,7 @@ static void write_colors_int(int c)
         for (i = 0; i < num_palette; i++) {
             png_colorp col = &palette[i];
 
-            Rast_set_c_color((CELL) i, col->red, col->green, col->blue,
-                             &colors);
+            Rast_set_c_color((CELL)i, col->red, col->green, col->blue, &colors);
         }
     }
     else if (c == C_A || t_gamma == 1.0)
@@ -198,7 +185,7 @@ static void write_colors_int(int c)
         for (i = 0; i <= i1; i++) {
             int v = intensity((double)i / i1);
 
-            Rast_set_c_color((CELL) i, v, v, v, &colors);
+            Rast_set_c_color((CELL)i, v, v, v, &colors);
         }
 
     Rast_write_colors(ch->name, G_mapset(), &colors);
@@ -258,10 +245,9 @@ static void print_header(void)
         sprintf(gamma_string, ", image gamma = %4.2f", f_gamma);
 
     fprintf(stderr, "%lu x %lu image, %d bit%s %s%s%s%s\n",
-            (unsigned long)width, (unsigned long)height,
-            bit_depth, bit_depth > 1 ? "s" : "",
-            type_string, alpha_string,
-            gamma_string, interlace_type ? ", Adam7 interlaced" : "");
+            (unsigned long)width, (unsigned long)height, bit_depth,
+            bit_depth > 1 ? "s" : "", type_string, alpha_string, gamma_string,
+            interlace_type ? ", Adam7 interlaced" : "");
 }
 
 static void read_png(void)
@@ -304,9 +290,8 @@ static void read_png(void)
 
     png_read_info(png_ptr, info_ptr);
 
-    png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,
-                 &color_type, &interlace_type, &compression_type,
-                 &filter_type);
+    png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type,
+                 &interlace_type, &compression_type, &filter_type);
 
     if (Header || G_verbose() == G_verbose_max())
         print_header();
@@ -340,8 +325,7 @@ static void read_png(void)
 
     ialpha = (int)(alpha * channels[C_A].maxval);
 
-    t_gamma = (f_gamma != 0.0 && d_gamma != 0.0)
-        ? f_gamma * d_gamma : 1.0;
+    t_gamma = (f_gamma != 0.0 && d_gamma != 0.0) ? f_gamma * d_gamma : 1.0;
 
     /* allocate input buffer */
 

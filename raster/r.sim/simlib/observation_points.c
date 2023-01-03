@@ -4,7 +4,6 @@
 #include <grass/vector.h>
 #include <grass/waterglobs.h>
 
-
 static void init_points(struct _points *, int);
 static void realloc_points(struct _points *, int);
 static void insert_next_point(struct _points *p, double x, double y, int cat);
@@ -61,8 +60,7 @@ void create_observation_points()
 
         if (type == -1) {
             Vect_close(&Map);
-            G_fatal_error(_("Unable to read points from map %s"),
-                          observation);
+            G_fatal_error(_("Unable to read points from map %s"), observation);
         }
 
         if (type == GV_POINT) {
@@ -97,7 +95,6 @@ void create_observation_points()
     }
     fprintf(points.output, "\n");
 
-
     return;
 }
 
@@ -118,15 +115,12 @@ void init_points(struct _points *p, int size)
 
 void realloc_points(struct _points *p, int add_size)
 {
-    p->x =
-        (double *)G_realloc(p->x,
-                            (p->npoints_alloc + add_size) * sizeof(double));
-    p->y =
-        (double *)G_realloc(p->y,
-                            (p->npoints_alloc + add_size) * sizeof(double));
+    p->x = (double *)G_realloc(p->x,
+                               (p->npoints_alloc + add_size) * sizeof(double));
+    p->y = (double *)G_realloc(p->y,
+                               (p->npoints_alloc + add_size) * sizeof(double));
     p->cats =
-        (int *)G_realloc(p->cats,
-                         (p->npoints_alloc + add_size) * sizeof(int));
+        (int *)G_realloc(p->cats, (p->npoints_alloc + add_size) * sizeof(int));
     p->npoints_alloc += add_size;
 }
 

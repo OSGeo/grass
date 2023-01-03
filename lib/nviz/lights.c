@@ -9,7 +9,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
+           2008/2010)
  */
 
 #include <grass/glocale.h>
@@ -24,8 +25,8 @@
 
    \return 1
  */
-int Nviz_set_light_position(nv_data * data, int num,
-                            double x, double y, double z, double w)
+int Nviz_set_light_position(nv_data *data, int num, double x, double y,
+                            double z, double w)
 {
     /*
        double xpos, ypos;
@@ -61,7 +62,7 @@ int Nviz_set_light_position(nv_data * data, int num,
    \param num light num (starts at 1)
    \param value brightness value
  */
-int Nviz_set_light_bright(nv_data * data, int num, double value)
+int Nviz_set_light_bright(nv_data *data, int num, double value)
 {
     double r, g, b;
 
@@ -86,8 +87,7 @@ int Nviz_set_light_bright(nv_data * data, int num, double value)
    \param num light num (starts at 1)
    \param red,green,blue RGB values (0-255)
  */
-int Nviz_set_light_color(nv_data * data, int num,
-                         int red, int green, int blue)
+int Nviz_set_light_color(nv_data *data, int num, int red, int green, int blue)
 {
     double r, g, b;
 
@@ -99,8 +99,7 @@ int Nviz_set_light_color(nv_data * data, int num,
     g = data->light[num].g * data->light[num].brt;
     b = data->light[num].b * data->light[num].brt;
 
-    G_debug(1,
-            "Nviz_set_light_color(): num = %d r = %d/%f g = %d/%f b = %d/%f",
+    G_debug(1, "Nviz_set_light_color(): num = %d r = %d/%f g = %d/%f b = %d/%f",
             num, red, r, green, g, blue, b);
     GS_setlight_color(num, r, g, b);
 
@@ -114,7 +113,7 @@ int Nviz_set_light_color(nv_data * data, int num,
    \param num light num (starts at 1)
    \param value ambient value (same for R/G/B) (0-1)
  */
-int Nviz_set_light_ambient(nv_data * data, int num, double value)
+int Nviz_set_light_ambient(nv_data *data, int num, double value)
 {
     data->light[num].ar = value;
     data->light[num].ag = value;
@@ -132,7 +131,7 @@ int Nviz_set_light_ambient(nv_data * data, int num, double value)
    \param data nviz data
    \param num light num (starts at 1)
  */
-int Nviz_init_light(nv_data * data, int num)
+int Nviz_init_light(nv_data *data, int num)
 {
     G_debug(1, "Nviz_init_light(): num = %d", num);
     if (num > MAX_LIGHTS) {
@@ -163,7 +162,7 @@ int Nviz_init_light(nv_data * data, int num)
    \return 1 on success
    \return 0 on failure
  */
-int Nviz_new_light(nv_data * data)
+int Nviz_new_light(nv_data *data)
 {
     int num;
 
@@ -184,7 +183,7 @@ int Nviz_new_light(nv_data * data)
 
    \param data nviz data
  */
-void Nviz_draw_model(nv_data * data)
+void Nviz_draw_model(nv_data *data)
 {
     GS_set_draw(GSD_FRONT);
     GS_ready_draw();

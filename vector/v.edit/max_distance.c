@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.edit
@@ -24,7 +23,7 @@
    \brief Set distance based on the current resolution
 
    This code comes from v.what/main.c
- 
+
    \param[in] maxdistance max distance
 
    \return result max distance
@@ -62,7 +61,8 @@ double max_distance(double maxdistance)
             maxd = yres;
 
         /*
-           G_important_message (_("Threshold distance set to %g map units (based on 2D resolution)"), maxd);
+           G_important_message (_("Threshold distance set to %g map units (based
+           on 2D resolution)"), maxd);
          */
     }
     else {

@@ -202,6 +202,12 @@ class SpinCtrl(wx.SpinCtrl):
         else:
             wx.SpinCtrl.SetToolTipString(self, tip)
 
+    def SetRange(self, minVal, maxVal):
+        wx.SpinCtrl.SetRange(self, int(minVal), int(maxVal))
+
+    def SetValue(self, value):
+        wx.SpinCtrl.SetValue(self, int(value))
+
 
 class FloatSpin(fs.FloatSpin):
     """Wrapper around fs.FloatSpin to have more control
@@ -912,6 +918,10 @@ class ListBox(wx.ListBox):
     def DeselectAll(self):
         for i in range(self.GetCount()):
             self.Deselect(i)
+
+    def SelectAll(self):
+        for i in range(self.GetCount()):
+            self.Select(i)
 
 
 class HyperlinkCtrl(HyperlinkCtrl_):

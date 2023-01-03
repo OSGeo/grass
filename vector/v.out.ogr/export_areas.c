@@ -2,14 +2,14 @@
 
 #include "local_proto.h"
 
-static int export_areas_single(struct Map_info *, int, int,
-                               OGRFeatureDefnH, OGRLayerH,
-                               struct field_info *, dbDriver *, int, int *,
-                               const char **, int, int, int *, int *, int);
-static int export_areas_multi(struct Map_info *, int, int,
-                              OGRFeatureDefnH, OGRLayerH,
-                              struct field_info *, dbDriver *, int, int *,
-                              const char **, int, int, int *, int *, int);
+static int export_areas_single(struct Map_info *, int, int, OGRFeatureDefnH,
+                               OGRLayerH, struct field_info *, dbDriver *, int,
+                               int *, const char **, int, int, int *, int *,
+                               int);
+static int export_areas_multi(struct Map_info *, int, int, OGRFeatureDefnH,
+                              OGRLayerH, struct field_info *, dbDriver *, int,
+                              int *, const char **, int, int, int *, int *,
+                              int);
 static OGRGeometryH create_polygon(struct Map_info *, int, struct line_pnts *,
                                    int);
 
@@ -39,29 +39,25 @@ void reverse_points(struct line_pnts *Points)
 /* export areas as single/multi-polygons */
 int export_areas(struct Map_info *In, int field, int multi, int donocat,
                  OGRFeatureDefnH Ogr_featuredefn, OGRLayerH Ogr_layer,
-                 struct field_info *Fi, dbDriver * driver, int ncol,
+                 struct field_info *Fi, dbDriver *driver, int ncol,
                  int *colctype, const char **colname, int doatt, int nocat,
                  int *noatt, int *fout, int outer_ring_ccw)
 {
     if (multi)
         /* export as multi-polygons */
-        return export_areas_multi(In, field, donocat,
-                                  Ogr_featuredefn, Ogr_layer,
-                                  Fi, driver, ncol, colctype,
-                                  colname, doatt, nocat,
-                                  noatt, fout, outer_ring_ccw);
+        return export_areas_multi(
+            In, field, donocat, Ogr_featuredefn, Ogr_layer, Fi, driver, ncol,
+            colctype, colname, doatt, nocat, noatt, fout, outer_ring_ccw);
 
     /* export as polygons */
-    return export_areas_single(In, field, donocat,
-                               Ogr_featuredefn, Ogr_layer,
-                               Fi, driver, ncol, colctype,
-                               colname, doatt, nocat,
-                               noatt, fout, outer_ring_ccw);
+    return export_areas_single(In, field, donocat, Ogr_featuredefn, Ogr_layer,
+                               Fi, driver, ncol, colctype, colname, doatt,
+                               nocat, noatt, fout, outer_ring_ccw);
 }
 
 int export_areas_single(struct Map_info *In, int field, int donocat,
                         OGRFeatureDefnH Ogr_featuredefn, OGRLayerH Ogr_layer,
-                        struct field_info *Fi, dbDriver * driver, int ncol,
+                        struct field_info *Fi, dbDriver *driver, int ncol,
                         int *colctype, const char **colname, int doatt,
                         int nocat, int *n_noatt, int *n_nocat,
                         int outer_ring_ccw)
@@ -94,19 +90,18 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         G_debug(3, "area = %d ncats = %d", area, Cats->n_cats);
         if (cat < 0 && !donocat) {
             (*n_nocat)++;
-            continue;           /* skip areas without category, do not export
-                                 * not labeled */
+            continue; /* skip areas without category, do not export
+                       * not labeled */
         }
 
         /* create polygon from area */
         Ogr_geometry = create_polygon(In, area, Points, outer_ring_ccw);
 
-
         /* output one feature for each category */
         for (i = -1; i < Cats->n_cats; i++) {
             if (i == -1) {
                 if (cat >= 0)
-                    continue;   /* cat(s) exists */
+                    continue; /* cat(s) exists */
                 (*n_nocat)++;
             }
             else {
@@ -141,7 +136,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
 
 int export_areas_multi(struct Map_info *In, int field, int donocat,
                        OGRFeatureDefnH Ogr_featuredefn, OGRLayerH Ogr_layer,
-                       struct field_info *Fi, dbDriver * driver, int ncol,
+                       struct field_info *Fi, dbDriver *driver, int ncol,
                        int *colctype, const char **colname, int doatt,
                        int nocat, int *n_noatt, int *n_nocat,
                        int outer_ring_ccw)
@@ -168,7 +163,8 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
     /* check if category index is available for given field */
     findex = Vect_cidx_get_field_index(In, field);
     if (findex == -1)
-        G_fatal_error(_("Unable to export multi-features. No category index for layer %d."),
+        G_fatal_error(_("Unable to export multi-features. No category index "
+                        "for layer %d."),
                       field);
 
     /* determine type */
@@ -253,11 +249,11 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
         Vect_get_area_cats(In, area, Cats);
         Vect_cat_get(Cats, field, &cat);
         if (cat > 0)
-            continue;           /* skip features with category */
+            continue; /* skip features with category */
         if (cat < 0 && !donocat) {
             (*n_nocat)++;
-            continue;           /* skip lines without category, do not export
-                                 * not labeled */
+            continue; /* skip lines without category, do not export
+                       * not labeled */
         }
 
         /* create polygon from area */
@@ -315,13 +311,11 @@ OGRGeometryH create_polygon(struct Map_info *In, int area,
     if (Vect_is_3d(In)) {
         if (outer_ring_ccw) {
             for (j = Points->n_points - 1; j >= 0; j--)
-                OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
-                               Points->z[j]);
+                OGR_G_AddPoint(ring, Points->x[j], Points->y[j], Points->z[j]);
         }
         else {
             for (j = 0; j < Points->n_points; j++)
-                OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
-                               Points->z[j]);
+                OGR_G_AddPoint(ring, Points->x[j], Points->y[j], Points->z[j]);
         }
     }
     else {

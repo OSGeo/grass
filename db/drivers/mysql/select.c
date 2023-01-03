@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -18,7 +17,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
+int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     cursor *c;
     dbTable *table;
@@ -32,14 +31,13 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
 
-    /* \ must be escaped, see explanation in 
+    /* \ must be escaped, see explanation in
      * db_driver_execute_immediate() */
     str = G_str_replace(db_get_string(sel), "\\", "\\\\");
     G_debug(3, "Escaped SQL: %s", str);
 
     if (mysql_query(connection, str) != 0) {
-        db_d_append_error("%s\n%s\n%s",
-                          _("Unable to select data:"),
+        db_d_append_error("%s\n%s\n%s", _("Unable to select data:"),
                           db_get_string(sel), mysql_error(connection));
         if (str)
             G_free(str);
@@ -52,8 +50,8 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     c->res = mysql_store_result(connection);
 
     if (c->res == NULL) {
-        db_d_append_error("%s\n%s",
-                          db_get_string(sel), mysql_error(connection));
+        db_d_append_error("%s\n%s", db_get_string(sel),
+                          mysql_error(connection));
         db_d_report_error();
         return DB_FAILED;
     }

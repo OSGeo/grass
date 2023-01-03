@@ -1,34 +1,33 @@
-
 /****************************************************************
- *								*
- * MODULE:	v.lidar.growing				*
- * 								*
- * AUTHOR(S):  	Roberto Antolin & Gonzalo Moreno		*
- *               						*
- * PURPOSE:	Building contour determination and Region	* 
- *		Growing algorithm for determining the building	*
- *		inside						*
- *               						*
- * COPYRIGHT:	(C) 2006 by Politecnico di Milano - 		*
- *			     Polo Regionale di Como		*
- *								*
- *               This program is free software under the 	*
- *               GNU General Public License (>=v2). 		*
- *               Read the file COPYING that comes with GRASS	*
- *               for details.					*
- *								*
+ *
+ * MODULE:       v.lidar.growing
+ *
+ * AUTHOR(S):    Roberto Antolin & Gonzalo Moreno
+ *
+ * PURPOSE:      Building contour determination and Region
+ *               Growing algorithm for determining the building
+ *               inside
+ *
+ * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
+ *                            Polo Regionale di Como
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
  ****************************************************************/
 
- /*INCLUDES*/
+/*INCLUDES*/
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "growing.h"
-    /* GLOBAL DEFINITIONS */
+/* GLOBAL DEFINITIONS */
 int nsply, nsplx, count_obj;
 double stepN, stepE;
 
-/*--------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
 
@@ -68,14 +67,13 @@ int main(int argc, char *argv[])
     dbTable *table;
     dbCursor cursor;
 
-/*------------------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------*/
     /* Options' declaration */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("LIDAR"));
-    module->description =
-        _("Building contour determination and Region Growing "
-          "algorithm for determining the building inside");
+    module->description = _("Building contour determination and Region Growing "
+                            "algorithm for determining the building inside");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->description = _("Input vector (v.lidar.edgedetection output)");
@@ -117,8 +115,7 @@ int main(int argc, char *argv[])
     Thres_j += 1;
 
     /* Open input vector */
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
         G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
@@ -131,11 +128,11 @@ int main(int argc, char *argv[])
     else
         sprintf(table_name, "%s_edge_Interpolation", in_opt->answer);
 
-    Vect_set_open_level(1);     /* WITHOUT TOPOLOGY */
+    Vect_set_open_level(1); /* WITHOUT TOPOLOGY */
     if (Vect_open_old(&In, in_opt->answer, mapset) < 1)
         G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
-    Vect_set_open_level(1);     /* WITHOUT TOPOLOGY */
+    Vect_set_open_level(1); /* WITHOUT TOPOLOGY */
     if (Vect_open_old(&First, first_opt->answer, mapset) < 1)
         G_fatal_error(_("Unable to open vector map <%s>"), first_opt->answer);
 
@@ -158,7 +155,8 @@ int main(int argc, char *argv[])
 
     driver = db_start_driver_open_database(field->driver, field->database);
     if (driver == NULL)
-        G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
+        G_fatal_error(_("No database connection for driver <%s> is defined. "
+                        "Run db.connect."),
                       field->driver);
 
     /* is this the right place to open the cursor ??? */
@@ -207,8 +205,7 @@ int main(int argc, char *argv[])
 
     /* calculate number of subregions */
     nsubregion_col =
-        ceil((original_reg.east - original_reg.west) / (LATO * ew_resol)) +
-        0.5;
+        ceil((original_reg.east - original_reg.west) / (LATO * ew_resol)) + 0.5;
     nsubregion_row =
         ceil((original_reg.north - original_reg.south) / (LATO * ns_resol)) +
         0.5;
@@ -232,7 +229,7 @@ int main(int argc, char *argv[])
             elaboration_reg.north = original_reg.north;
 
         elaboration_reg.south = elaboration_reg.north - LATO * ns_resol;
-        if (elaboration_reg.south <= original_reg.south) {      /* Last row */
+        if (elaboration_reg.south <= original_reg.south) { /* Last row */
             elaboration_reg.south = original_reg.south;
             last_row = TRUE;
         }
@@ -240,7 +237,7 @@ int main(int argc, char *argv[])
         elaboration_reg.east = original_reg.west;
         last_column = FALSE;
 
-        while (last_column == FALSE) {  /* For each strip of LATO columns */
+        while (last_column == FALSE) { /* For each strip of LATO columns */
             struct bound_box elaboration_box;
 
             subregion++;
@@ -248,12 +245,12 @@ int main(int argc, char *argv[])
                 G_message(_("Subregion %d of %d"), subregion, nsubregions);
 
             elaboration_reg.west = elaboration_reg.east;
-            if (elaboration_reg.west < original_reg.west)       /* First column */
+            if (elaboration_reg.west < original_reg.west) /* First column */
                 elaboration_reg.west = original_reg.west;
 
             elaboration_reg.east = elaboration_reg.west + LATO * ew_resol;
 
-            if (elaboration_reg.east >= original_reg.east) {    /* Last column */
+            if (elaboration_reg.east >= original_reg.east) { /* Last column */
                 elaboration_reg.east = original_reg.east;
                 last_column = TRUE;
             }
@@ -261,12 +258,10 @@ int main(int argc, char *argv[])
             /* Setting the active region */
             elaboration_reg.ns_res = ns_resol;
             elaboration_reg.ew_res = ew_resol;
-            nrows =
-                (elaboration_reg.north - elaboration_reg.south) / ns_resol +
-                0.1;
+            nrows = (elaboration_reg.north - elaboration_reg.south) / ns_resol +
+                    0.1;
             ncols =
-                (elaboration_reg.east - elaboration_reg.west) / ew_resol +
-                0.1;
+                (elaboration_reg.east - elaboration_reg.west) / ew_resol + 0.1;
             elaboration_reg.rows = nrows;
             elaboration_reg.cols = ncols;
 
@@ -298,61 +293,63 @@ int main(int argc, char *argv[])
             while (Vect_read_next_line(&In, points, Cats) > 0) {
                 line_num++;
 
-                if ((Vect_point_in_box
-                     (points->x[0], points->y[0], points->z[0],
-                      &elaboration_box)) &&
+                if ((Vect_point_in_box(points->x[0], points->y[0], points->z[0],
+                                       &elaboration_box)) &&
                     ((points->x[0] != elaboration_reg.west) ||
                      (points->x[0] == original_reg.west)) &&
                     ((points->y[0] != elaboration_reg.north) ||
                      (points->y[0] == original_reg.north))) {
 
-                    row =
-                        (int)(Rast_northing_to_row
-                              (points->y[0], &elaboration_reg));
-                    /* do not use Rast_easting_to_col() because of possible ll wrap */
+                    row = (int)(Rast_northing_to_row(points->y[0],
+                                                     &elaboration_reg));
+                    /* do not use Rast_easting_to_col() because of possible ll
+                     * wrap */
                     /*
                        col =
                        (int)(Rast_easting_to_col
                        (points->x[0], &elaboration_reg));
                      */
-                    col =
-                        (points->x[0] -
-                         elaboration_reg.west) / elaboration_reg.ew_res;
+                    col = (points->x[0] - elaboration_reg.west) /
+                          elaboration_reg.ew_res;
 
                     Z_interp = 0;
                     /* TODO: make sure the current db_fetch() usage works */
                     /* why not: */
                     /*
-                       db_init_string(&sql);
-                       sprintf(buf, "SELECT Interp,ID FROM %s WHERE ID=%d", table_name, line_num);
-                       db_append_string(&sql, buf);
+                     db_init_string(&sql);
+                     sprintf(buf, "SELECT Interp,ID FROM %s WHERE ID=%d",
+                             table_name, line_num);
+                     db_append_string(&sql, buf);
 
-                       if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
-                       G_fatal_error(_("Unable to open table <%s>"), table_name);
+                     if (db_open_select_cursor(driver, &sql, &cursor,
+                                               DB_SEQUENTIAL) != DB_OK)
+                         G_fatal_error(_("Unable to open table <%s>"),
+                                       table_name);
 
-                       while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
-                       dbColumn *Z_Interp_col;
-                       dbValue *Z_Interp_value;
-                       table = db_get_cursor_table(&cursor);
+                     while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK &&
+                            more) {
+                         dbColumn *Z_Interp_col;
+                         dbValue *Z_Interp_value;
+                         table = db_get_cursor_table(&cursor);
 
-                       Z_Interp_col = db_get_table_column(table, 1);
+                         Z_Interp_col = db_get_table_column(table, 1);
 
-                       if (db_sqltype_to_Ctype(db_get_column_sqltype(Z_Interp_col)) ==
-                       DB_C_TYPE_DOUBLE)
-                       Z_Interp_value = db_get_column_value(Z_Interp_col);
-                       else
-                       continue;
+                         if (db_sqltype_to_Ctype(db_get_column_sqltype(
+                                 Z_Interp_col)) == DB_C_TYPE_DOUBLE)
+                             Z_Interp_value =
+                                 db_get_column_value(Z_Interp_col);
+                         else
+                             continue;
 
-                       Z_interp = db_get_value_double(Z_Interp_value);
-                       break;
-                       }
-                       db_close_cursor(&cursor);
-                       db_free_string(&sql);
+                         Z_interp = db_get_value_double(Z_Interp_value);
+                         break;
+                     }
+                     db_close_cursor(&cursor);
+                     db_free_string(&sql);
                      */
                     /* instead of */
                     while (1) {
-                        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK ||
-                            !more)
+                        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK || !more)
                             break;
                         dbColumn *Z_Interp_col, *ID_col;
                         dbValue *Z_Interp_value, *ID_value;
@@ -360,17 +357,16 @@ int main(int argc, char *argv[])
                         table = db_get_cursor_table(&cursor);
 
                         ID_col = db_get_table_column(table, 1);
-                        if (db_sqltype_to_Ctype(db_get_column_sqltype(ID_col))
-                            == DB_C_TYPE_INT)
+                        if (db_sqltype_to_Ctype(
+                                db_get_column_sqltype(ID_col)) == DB_C_TYPE_INT)
                             ID_value = db_get_column_value(ID_col);
                         else
                             continue;
 
                         if (db_get_value_int(ID_value) == line_num) {
                             Z_Interp_col = db_get_table_column(table, 0);
-                            if (db_sqltype_to_Ctype
-                                (db_get_column_sqltype(Z_Interp_col)) ==
-                                DB_C_TYPE_DOUBLE)
+                            if (db_sqltype_to_Ctype(db_get_column_sqltype(
+                                    Z_Interp_col)) == DB_C_TYPE_DOUBLE)
                                 Z_Interp_value =
                                     db_get_column_value(Z_Interp_col);
                             else
@@ -383,7 +379,8 @@ int main(int argc, char *argv[])
                     raster_matrix[row][col].interp += Z_interp;
                     raster_matrix[row][col].fi++;
 
-                    /*if (( clas = Vect_get_line_cat (&In, line_num, F_EDGE_DETECTION_CLASS) ) != UNKNOWN_EDGE) { */
+                    /*if (( clas = Vect_get_line_cat (&In, line_num,
+                     * F_EDGE_DETECTION_CLASS) ) != UNKNOWN_EDGE) { */
                     if (Vect_cat_get(Cats, F_EDGE_DETECTION_CLASS, &clas)) {
                         raster_matrix[row][col].clas += clas;
                         raster_matrix[row][col].fc++;
@@ -420,31 +417,28 @@ int main(int argc, char *argv[])
             Vect_rewind(&First);
             while (Vect_read_next_line(&First, points_first, Cats_first) > 0) {
 
-                if ((Vect_point_in_box
-                     (points_first->x[0], points_first->y[0],
-                      points_first->z[0], &elaboration_box)) &&
+                if ((Vect_point_in_box(points_first->x[0], points_first->y[0],
+                                       points_first->z[0], &elaboration_box)) &&
                     ((points->x[0] != elaboration_reg.west) ||
                      (points->x[0] == original_reg.west)) &&
                     ((points->y[0] != elaboration_reg.north) ||
                      (points->y[0] == original_reg.north))) {
 
-                    row =
-                        (int)(Rast_northing_to_row
-                              (points_first->y[0], &elaboration_reg));
+                    row = (int)(Rast_northing_to_row(points_first->y[0],
+                                                     &elaboration_reg));
 
-                    /* do not use Rast_easting_to_col() because of possible ll wrap */
+                    /* do not use Rast_easting_to_col() because of possible ll
+                     * wrap */
                     /*
                        col =
                        (int)(Rast_easting_to_col
                        (points_first->x[0], &elaboration_reg));
                      */
-                    col =
-                        (points_first->x[0] -
-                         elaboration_reg.west) / elaboration_reg.ew_res;
+                    col = (points_first->x[0] - elaboration_reg.west) /
+                          elaboration_reg.ew_res;
 
-                    if (fabs
-                        (points_first->z[0] - raster_matrix[row][col].orig) >=
-                        Thres_d)
+                    if (fabs(points_first->z[0] -
+                             raster_matrix[row][col].orig) >= Thres_d)
                         raster_matrix[row][col].dueImp = DOUBLE_PULSE;
                 }
                 Vect_reset_cats(Cats_first);
@@ -466,10 +460,9 @@ int main(int argc, char *argv[])
                     for (col = 0; col <= ncols; col++) {
 
                         if ((raster_matrix[row][col].clas >= Thres_j) &&
-                            (raster_matrix[row][col].clas < colorBordo)
-                            && (raster_matrix[row][col].fi != 0) &&
-                            (raster_matrix[row][col].dueImp ==
-                             SINGLE_PULSE)) {
+                            (raster_matrix[row][col].clas < colorBordo) &&
+                            (raster_matrix[row][col].fi != 0) &&
+                            (raster_matrix[row][col].dueImp == SINGLE_PULSE)) {
 
                             /* Selecting a connected Object zone */
                             ripieno++;
@@ -481,7 +474,10 @@ int main(int argc, char *argv[])
                                 punti_bordo[conta][0] = 0;
                                 punti_bordo[conta][1] = 0;
                                 punti_bordo[conta][2] = 0;
-                                P[conta] = punti_bordo[conta];  /* It only makes indexes to be equal, not coord values!! */
+                                P[conta] =
+                                    punti_bordo[conta]; /* It only makes indexes
+                                                           to be equal, not
+                                                           coord values!! */
                             }
 
                             lungPunti = 0;
@@ -495,29 +491,29 @@ int main(int argc, char *argv[])
                             lungHull = ch2d(P, lungPunti);
                             cvxHull = G_alloc_matrix(lungHull, 3);
 
-
                             for (xi = 0; xi < lungHull; xi++) {
                                 cvxHull[xi][0] = P[xi][0];
                                 cvxHull[xi][1] = P[xi][1];
                                 cvxHull[xi][2] = P[xi][2];
                             }
 
-                            /* Computes the interpoling plane based only on Object points */
-                            altPiano =
-                                pianOriz(punti_bordo, lungPunti, &minNS,
-                                         &minEW, &maxNS, &maxEW,
-                                         raster_matrix, colorBordo);
+                            /* Computes the interpoling plane based only on
+                             * Object points */
+                            altPiano = pianOriz(punti_bordo, lungPunti, &minNS,
+                                                &minEW, &maxNS, &maxEW,
+                                                raster_matrix, colorBordo);
 
                             for (c1 = minNS; c1 <= maxNS; c1++) {
                                 for (c2 = minEW; c2 <= maxEW; c2++) {
-                                    if (checkHull(c1, c2, cvxHull, lungHull)
-                                        == 1) {
+                                    if (checkHull(c1, c2, cvxHull, lungHull) ==
+                                        1) {
                                         raster_matrix[c1][c2].obj = count_obj;
 
                                         if ((raster_matrix[c1][c2].clas ==
-                                             PRE_TERRAIN)
-                                            && (raster_matrix[c1][c2].orig >=
-                                                altPiano) && (lungHull > 3))
+                                             PRE_TERRAIN) &&
+                                            (raster_matrix[c1][c2].orig >=
+                                             altPiano) &&
+                                            (lungHull > 3))
                                             raster_matrix[c1][c2].clas =
                                                 ripieno;
                                     }
@@ -534,28 +530,27 @@ int main(int argc, char *argv[])
 
             /* WRITING THE OUTPUT VECTOR CATEGORIES */
             Vect_rewind(&In);
-            while (Vect_read_next_line(&In, points, Cats) > 0) {        /* Read every line for buffering points */
+            while (Vect_read_next_line(&In, points, Cats) >
+                   0) { /* Read every line for buffering points */
 
-                if ((Vect_point_in_box
-                     (points->x[0], points->y[0], points->z[0],
-                      &elaboration_box)) &&
+                if ((Vect_point_in_box(points->x[0], points->y[0], points->z[0],
+                                       &elaboration_box)) &&
                     ((points->x[0] != elaboration_reg.west) ||
                      (points->x[0] == original_reg.west)) &&
                     ((points->y[0] != elaboration_reg.north) ||
                      (points->y[0] == original_reg.north))) {
 
-                    row =
-                        (int)(Rast_northing_to_row
-                              (points->y[0], &elaboration_reg));
-                    /* do not use Rast_easting_to_col() because of possible ll wrap */
+                    row = (int)(Rast_northing_to_row(points->y[0],
+                                                     &elaboration_reg));
+                    /* do not use Rast_easting_to_col() because of possible ll
+                     * wrap */
                     /*
                        col =
                        (int)(Rast_easting_to_col
                        (points->x[0], &elaboration_reg));
                      */
-                    col =
-                        (points->x[0] -
-                         elaboration_reg.west) / elaboration_reg.ew_res;
+                    col = (points->x[0] - elaboration_reg.west) /
+                          elaboration_reg.ew_res;
 
                     if (raster_matrix[row][col].clas == PRE_TERRAIN) {
                         if (raster_matrix[row][col].dueImp == SINGLE_PULSE)
@@ -567,11 +562,9 @@ int main(int argc, char *argv[])
                     }
                     else {
                         if (raster_matrix[row][col].dueImp == SINGLE_PULSE)
-                            Vect_cat_set(Cats, F_CLASSIFICATION,
-                                         OBJECT_SINGLE);
+                            Vect_cat_set(Cats, F_CLASSIFICATION, OBJECT_SINGLE);
                         else
-                            Vect_cat_set(Cats, F_CLASSIFICATION,
-                                         OBJECT_DOUBLE);
+                            Vect_cat_set(Cats, F_CLASSIFICATION, OBJECT_DOUBLE);
                     }
 
                     Vect_cat_set(Cats, F_COUNTER_OBJ,
@@ -582,8 +575,8 @@ int main(int argc, char *argv[])
                 Vect_reset_line(points);
             }
             free_structmatrix(raster_matrix, 0, nrows - 1, 0, ncols - 1);
-        }                       /*! END WHILE; last_column = TRUE */
-    }                           /*! END WHILE; last_row = TRUE */
+        } /*! END WHILE; last_column = TRUE */
+    }     /*! END WHILE; last_row = TRUE */
 
     Vect_close(&In);
     Vect_close(&First);

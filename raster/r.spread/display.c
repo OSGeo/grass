@@ -11,12 +11,12 @@
 #define SIZE 80
 
 static char buf[SIZE], old_time[SIZE], cur_time[SIZE];
-static double f2s_x, f2s_y;     /*file-to-screen factors */
+static double f2s_x, f2s_y; /*file-to-screen factors */
 static int old_value = 0;
-static int xoffset, yoffset;    /*screen coors of u-l corner of file */
-static int x1, y1, x2, y2;      /*diagonal pts of a box */
-static int x1_st, y1_st, x2_st, y2_st;  /*pts of the elapsed Spread Time box */
-static int x1_ct, y1_ct, x2_ct, y2_ct;  /*pts of the Current Time box */
+static int xoffset, yoffset;           /*screen coors of u-l corner of file */
+static int x1, y1, x2, y2;             /*diagonal pts of a box */
+static int x1_st, y1_st, x2_st, y2_st; /*pts of the elapsed Spread Time box */
+static int x1_ct, y1_ct, x2_ct, y2_ct; /*pts of the Current Time box */
 static struct Colors colors;
 static struct tm *t_time;
 static time_t c_time;
@@ -24,10 +24,9 @@ static time_t c_time;
 void display_init(void)
 {
     extern struct Cell_head window;
-    extern int nrows, ncols;    /*numbers of rows and columns in file */
-    double t, b, l, r;          /*top, bottom, left and right of frame */
+    extern int nrows, ncols; /*numbers of rows and columns in file */
+    double t, b, l, r;       /*top, bottom, left and right of frame */
     int width, height;
-
 
     /*set time zone for tracing local time */
     tzset();
@@ -65,8 +64,10 @@ void display_init(void)
     y1_st = t;
     x2_st = r;
     y2_st = t + 0.05 * (b - t);
-    /*printf("\ny1-st y2-st x1st, x2st: %d, %d, %d, %d", y1_st,y2_st,x1_st,x2_st);
-     */ R_standard_color(9);
+    /*printf("\ny1-st y2-st x1st, x2st: %d, %d, %d, %d",
+     * y1_st,y2_st,x1_st,x2_st);
+     */
+    R_standard_color(9);
     R_box_abs(x1_st + 1, y1_st, x2_st, y2_st - 1);
     R_text_size((int)(0.049 * (x2_st - x1_st)), (int)(0.5 * (y2_st - y1_st)));
     R_move_abs((int)(x1_st + 0.03 * (x2_st - x1_st)),
@@ -135,18 +136,17 @@ void display_init(void)
     D_reset_screen_window(t, b, l, r);
 }
 
-
 void draw_a_cell(int row, int col, int cell_value)
 {
     x1 = xoffset + f2s_x * col;
     y1 = yoffset + f2s_y * row;
-    x2 = x1 + f2s_x + 0.999;    /*tradeoff:allowing overlaps to avoid gaps */
-    y2 = y1 + f2s_y + 0.999;    /*tradeoff:allowing overlaps to avoid gaps */
+    x2 = x1 + f2s_x + 0.999; /*tradeoff:allowing overlaps to avoid gaps */
+    y2 = y1 + f2s_y + 0.999; /*tradeoff:allowing overlaps to avoid gaps */
     D_color(cell_value % 60, &colors);
     R_box_abs(x1, y1, x2, y2);
     R_flush();
 
-    /* if cell_value changes, update it in the elasped-spread-time box, 
+    /* if cell_value changes, update it in the elasped-spread-time box,
      * also update the current watch-time if it changes*/
     if (cell_value > old_value) {
         old_value = cell_value;
@@ -186,8 +186,8 @@ void draw_a_burning_cell(int row, int col)
 {
     x1 = xoffset + f2s_x * col;
     y1 = yoffset + f2s_y * row;
-    x2 = x1 + f2s_x + 0.999;    /*tradeoff:allowing overlaps to avoid gaps */
-    y2 = y1 + f2s_y + 0.999;    /*tradeoff:allowing overlaps to avoid gaps */
+    x2 = x1 + f2s_x + 0.999; /*tradeoff:allowing overlaps to avoid gaps */
+    y2 = y1 + f2s_y + 0.999; /*tradeoff:allowing overlaps to avoid gaps */
     R_standard_color(D_translate_color("red"));
     R_box_abs(x1, y1, x2, y2);
     R_flush();

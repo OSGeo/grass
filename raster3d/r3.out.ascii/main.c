@@ -1,19 +1,18 @@
-
 /****************************************************************************
  *
- * MODULE:       r3.out.ascii 
- *   	    	
- * AUTHOR(S):    Original author 
- *		Mark Astley, Bill Brown, Soeren Gebbert
- * 		USA CERL started 4/4/96
+ * MODULE:       r3.out.ascii
  *
- * PURPOSE:      Converts a 3D raster map layer into an ASCII text file  
+ * AUTHOR(S):    Original author Mark Astley, Bill Brown
+ *                 USA CERL started 4/4/96
+ *               Soeren Gebbert
+ *
+ * PURPOSE:      Converts a 3D raster map layer into an ASCII text file
  *
  * COPYRIGHT:    (C) 2005 - 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 #include <stdio.h>
@@ -24,8 +23,7 @@
 #include <grass/glocale.h>
 
 /* structs */
-typedef struct
-{
+typedef struct {
     struct Option *input, *output, *decimals, *null_val;
     struct Flag *header;
     struct Flag *row;
@@ -38,12 +36,11 @@ typedef struct
 static void fatalError(char *errorMsg);
 static void setParams();
 static void getParams(char **input, char **output, int *decim);
-static void writeHeaderString(FILE * fp, char *valueString, double value);
-static void writeHeaderString2(FILE * fp, char *valueString, int value);
-static void writeHeaderString3(FILE * fp, char *valueString,
-                               const char *value);
+static void writeHeaderString(FILE *fp, char *valueString, double value);
+static void writeHeaderString2(FILE *fp, char *valueString, int value);
+static void writeHeaderString3(FILE *fp, char *valueString, const char *value);
 static FILE *openAscii(char *asciiFile, RASTER3D_Region region);
-static void G3dToascii(FILE * fp, RASTER3D_Region region, int decim);
+static void G3dToascii(FILE *fp, RASTER3D_Region region, int decim);
 
 /* globals */
 void *map = NULL;
@@ -60,7 +57,6 @@ void fatalError(char *errorMsg)
         /* should unopen map here! */
         if (!Rast3d_close(map))
             fatalError(_("Unable to close 3D raster map"));
-
     }
 
     Rast3d_fatal_error("%s", errorMsg);
@@ -137,7 +133,7 @@ void getParams(char **input, char **output, int *decim)
 /* This function is used to write parts of the header for the output
  * ASCII file.
  */
-void writeHeaderString(FILE * fp, char *valueString, double value)
+void writeHeaderString(FILE *fp, char *valueString, double value)
 {
     static char format[100];
 
@@ -147,7 +143,7 @@ void writeHeaderString(FILE * fp, char *valueString, double value)
 }
 
 /*---------------------------------------------------------------------------*/
-void writeHeaderString2(FILE * fp, char *valueString, int value)
+void writeHeaderString2(FILE *fp, char *valueString, int value)
 {
     static char format[100];
 
@@ -157,7 +153,7 @@ void writeHeaderString2(FILE * fp, char *valueString, int value)
 }
 
 /*---------------------------------------------------------------------------*/
-void writeHeaderString3(FILE * fp, char *valueString, const char *value)
+void writeHeaderString3(FILE *fp, char *valueString, const char *value)
 {
     static char format[100];
 
@@ -165,7 +161,6 @@ void writeHeaderString3(FILE * fp, char *valueString, const char *value)
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
-
 
 /*---------------------------------------------------------------------------*/
 
@@ -221,9 +216,9 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region region)
 /*---------------------------------------------------------------------------*/
 /* This function does all the work.  Basically, we just output the
  * source G3d file one layer at a time.
-    *//* * */
+ *//* * */
 
-void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
+void G3dToascii(FILE *fp, RASTER3D_Region region, int decim)
 {
     DCELL dvalue;
     FCELL fvalue;
@@ -239,13 +234,13 @@ void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
 
     for (z = 0; z < depths; z++) {
         G_percent(z, depths, 1);
-        for (y = 0; y < rows; y++) {    /* g3d rows count from south to north */
+        for (y = 0; y < rows; y++) { /* g3d rows count from south to north */
             for (x = 0; x < cols; x++) {
 
                 /* From west to east */
                 col = x;
                 /* The default is to write rows from north to south
-                   to be r.in.ascii compatible 
+                   to be r.in.ascii compatible
                  */
                 row = y;
                 /* From bottom to the top */
@@ -263,8 +258,7 @@ void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
 
                 if (typeIntern == FCELL_TYPE) {
 
-                    Rast3d_get_value(map, col, row, depth, &fvalue,
-                                     FCELL_TYPE);
+                    Rast3d_get_value(map, col, row, depth, &fvalue, FCELL_TYPE);
 
                     if (Rast3d_is_null_value_num(&fvalue, FCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);
@@ -273,8 +267,7 @@ void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
                 }
                 else {
 
-                    Rast3d_get_value(map, col, row, depth, &dvalue,
-                                     DCELL_TYPE);
+                    Rast3d_get_value(map, col, row, depth, &dvalue, DCELL_TYPE);
 
                     if (Rast3d_is_null_value_num(&dvalue, DCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);

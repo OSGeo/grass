@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_watson_u2(double *x, int n)
 {
     double *xcopy, mean = 0.0, sdx = 0.0, sqrt2, zbar = 0.0;

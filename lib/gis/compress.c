@@ -5,15 +5,15 @@
  * MODULE:      GRASS gis library
  * FILENAME:    compress.c
  * AUTHOR(S):   Markus Metz
- * PURPOSE:     To provide an interface for compressing and 
- *              decompressing data using various methods.  Its primary 
+ * PURPOSE:     To provide an interface for compressing and
+ *              decompressing data using various methods.  Its primary
  *              use is in the storage and reading of GRASS rasters.
  *
  * DATE CREATED: Dec 17 2015
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -91,7 +91,7 @@
 
 #include "compress.h"
 
-#define G_COMPRESSED_NO (unsigned char)'0'
+#define G_COMPRESSED_NO  (unsigned char)'0'
 #define G_COMPRESSED_YES (unsigned char)'1'
 
 /* get compressor number
@@ -152,8 +152,8 @@ int G_no_compress_bound(int src_sz)
     return src_sz;
 }
 
-int
-G_no_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_no_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                  int dst_sz)
 {
     /* Catch errors early */
     if (src == NULL || dst == NULL)
@@ -173,8 +173,7 @@ G_no_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     return src_sz;
 }
 
-int
-G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     /* Catch errors early */
     if (src == NULL || dst == NULL)
@@ -198,7 +197,7 @@ G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
  * which can be larger than the input size
  * some compressors are a bit faster if the size of the destination
  * is at least the upper bound (no need to test for buffer overlflow)
- * read comments on the specific compressor interfaces 
+ * read comments on the specific compressor interfaces
  */
 int G_compress_bound(int src_sz, int number)
 {
@@ -216,8 +215,8 @@ int G_compress_bound(int src_sz, int number)
  * -1: error
  * -2: dst too small
  */
-int G_compress(unsigned char *src, int src_sz, unsigned char *dst,
-               int dst_sz, int number)
+int G_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz,
+               int number)
 {
     if (number < 0 || number >= n_compressors) {
         G_fatal_error(_("Request for unsupported compressor"));
@@ -231,8 +230,8 @@ int G_compress(unsigned char *src, int src_sz, unsigned char *dst,
  * > 0: number of bytes in dst
  * -1: error
  */
-int G_expand(unsigned char *src, int src_sz, unsigned char *dst,
-             int dst_sz, int number)
+int G_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz,
+             int number)
 {
     if (number < 0 || number >= n_compressors) {
         G_fatal_error(_("Request for unsupported compressor"));
@@ -264,8 +263,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     bsize = rbytes;
 
     /* Our temporary input buffer for read */
-    if (NULL == (b = (unsigned char *)
-                 G_calloc(bsize, sizeof(unsigned char))))
+    if (NULL == (b = (unsigned char *)G_calloc(bsize, sizeof(unsigned char))))
         return -1;
 
     /* Read from the file until we get our bsize or an error */
@@ -320,7 +318,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     /* Return whatever G_expand() returned */
     return err;
 
-}                               /* G_read_compressed() */
+} /* G_read_compressed() */
 
 int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
 {
@@ -338,8 +336,8 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
 
     /* get upper bound of compressed size */
     dst_sz = G_compress_bound(nbytes, number);
-    if (NULL == (dst = (unsigned char *)
-                 G_calloc(dst_sz, sizeof(unsigned char))))
+    if (NULL ==
+        (dst = (unsigned char *)G_calloc(dst_sz, sizeof(unsigned char))))
         return -1;
 
     /* Now just call G_compress() */
@@ -399,7 +397,7 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
         }
         /* Account for extra byte */
         nwritten++;
-    }                           /* if (err > 0) */
+    } /* if (err > 0) */
 
     /* Done with the dst buffer */
     G_free(dst);
@@ -409,7 +407,7 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
         return -2;
 
     return nwritten;
-}                               /* G_write_compressed() */
+} /* G_write_compressed() */
 
 int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
 {
@@ -451,7 +449,6 @@ int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
     /* That's all */
     return nwritten;
 
-}                               /* G_write_uncompressed() */
-
+} /* G_write_uncompressed() */
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

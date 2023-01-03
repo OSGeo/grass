@@ -1,9 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       r.resamp.filter
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2010 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -83,14 +82,12 @@ static double f_hamming(double x)
     return 0.46 * cos(M_PI * x) + 0.54;
 }
 
-
 static double f_blackman(double x)
 {
     return cos(M_PI * x) / 2 + 0.08 * cos(2 * M_PI * x) + 0.42;
 }
 
-struct filter_type
-{
+struct filter_type {
     const char *name;
     double (*func)(double);
     int radius;
@@ -144,8 +141,7 @@ static const struct filter_type *find_method(const char *name)
     return NULL;
 }
 
-struct filter
-{
+struct filter {
     double (*func)(double);
     double x_radius;
     double y_radius;
@@ -203,7 +199,7 @@ static void make_h_weights(void)
             int k;
 
             for (k = 0; k < num_filters; k++)
-                w *= (*filters[k].func) (r / filters[k].x_radius);
+                w *= (*filters[k].func)(r / filters[k].x_radius);
 
             h_weights[col * col_scale + j] = w;
         }
@@ -240,7 +236,7 @@ static void make_v_weights(void)
             int k;
 
             for (k = 0; k < num_filters; k++)
-                w *= (*filters[k].func) (r / filters[k].y_radius);
+                w *= (*filters[k].func)(r / filters[k].y_radius);
 
             v_weights[row * row_scale + i] = w;
         }
@@ -250,7 +246,7 @@ static void make_v_weights(void)
     }
 }
 
-static void h_filter(DCELL * dst, const DCELL * src)
+static void h_filter(DCELL *dst, const DCELL *src)
 {
     int col;
 
@@ -286,7 +282,7 @@ static void h_filter(DCELL * dst, const DCELL * src)
     }
 }
 
-static void v_filter(DCELL * dst, DCELL ** src, int row, int rows)
+static void v_filter(DCELL *dst, DCELL **src, int row, int rows)
 {
     int col;
 
@@ -415,8 +411,7 @@ int main(int argc, char *argv[])
         struct Option *rastin, *rastout, *method,
             *radius, *x_radius, *y_radius, *memory, *nprocs;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *nulls;
     } flag;
     char title[64];
@@ -509,12 +504,11 @@ int main(int argc, char *argv[])
     }
     else {
         if (!parm.x_radius->answer && !parm.y_radius->answer)
-            G_fatal_error(_("Either %s= or %s=/%s= required"),
-                          parm.radius->key, parm.x_radius->key,
-                          parm.y_radius->key);
-        if (!parm.x_radius->answer || !parm.y_radius->answer)
-            G_fatal_error(_("Both %s= and %s= required"),
+            G_fatal_error(_("Either %s= or %s=/%s= required"), parm.radius->key,
                           parm.x_radius->key, parm.y_radius->key);
+        if (!parm.x_radius->answer || !parm.y_radius->answer)
+            G_fatal_error(_("Both %s= and %s= required"), parm.x_radius->key,
+                          parm.y_radius->key);
     }
 
     nulls = flag.nulls->answer;
@@ -524,11 +518,11 @@ int main(int argc, char *argv[])
     for (i = 0;; i++) {
         const char *filter_arg = parm.method->answers[i];
         const char *x_radius_arg = parm.radius->answer
-            ? parm.radius->answers[i]
-            : parm.x_radius->answers[i];
+                                       ? parm.radius->answers[i]
+                                       : parm.x_radius->answers[i];
         const char *y_radius_arg = parm.radius->answer
-            ? parm.radius->answers[i]
-            : parm.y_radius->answers[i];
+                                       ? parm.radius->answers[i]
+                                       : parm.y_radius->answers[i];
         const struct filter_type *type;
         struct filter *filter;
 
@@ -536,7 +530,8 @@ int main(int argc, char *argv[])
             break;
 
         if (!filter_arg || !x_radius_arg || !y_radius_arg)
-            G_fatal_error(_("Differing number of values for filter= and [xy_]radius="));
+            G_fatal_error(
+                _("Differing number of values for filter= and [xy_]radius="));
 
         if (num_filters >= MAX_FILTERS)
             G_fatal_error(_("Too many filters (max: %d)"), MAX_FILTERS);
@@ -585,17 +580,16 @@ int main(int argc, char *argv[])
         double x1 = Rast_col_to_easting(dst_w.cols - 0.5, &dst_w);
         int r0 =
             (int)floor(Rast_northing_to_row(y0 + f_y_radius, &src_w) - 0.1);
-        int r1 =
-            (int)ceil(Rast_northing_to_row(y1 - f_y_radius, &src_w) + 0.1);
+        int r1 = (int)ceil(Rast_northing_to_row(y1 - f_y_radius, &src_w) + 0.1);
         /* do not use Rast_easting_to_col() because it does ll wrap */
         /*
-           int c0 = (int)floor(Rast_easting_to_col(x0 - f_x_radius, &src_w) - 0.1);
-           int c1 = (int)ceil(Rast_easting_to_col(x1 + f_x_radius, &src_w) + 0.1);
+           int c0 = (int)floor(Rast_easting_to_col(x0 - f_x_radius, &src_w) -
+           0.1); int c1 = (int)ceil(Rast_easting_to_col(x1 + f_x_radius, &src_w)
+           + 0.1);
          */
         int c0 =
             (int)floor((x0 - f_x_radius - src_w.west) / src_w.ew_res - 0.1);
-        int c1 =
-            (int)ceil((x1 + f_x_radius - src_w.west) / src_w.ew_res + 0.1);
+        int c1 = (int)ceil((x1 + f_x_radius - src_w.west) / src_w.ew_res + 0.1);
 
         if (G_projection() == PROJECTION_LL) {
             while (src_w.north + src_w.ns_res * (-r0) >
@@ -666,8 +660,8 @@ int main(int argc, char *argv[])
         G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
         G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
         Rast_format_history(&history, HIST_DATSRC_2,
-                            "Source map NS res: %s   EW res: %s",
-                            buf_nsres, buf_ewres);
+                            "Source map NS res: %s   EW res: %s", buf_nsres,
+                            buf_ewres);
         Rast_command_history(&history);
         Rast_write_history(parm.rastout->answer, &history);
     }

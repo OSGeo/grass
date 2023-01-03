@@ -1,21 +1,20 @@
-
 /*****************************************************************************
-*
-* MODULE:	i.evapo.mh
-* AUTHOR:	Yann Chemin yann.chemin@gmail.com 
-*
-* PURPOSE:	To estimate the reference evapotranspiration by means
-*		of Modified Hargreaves method (2001).
-*		Also has a switch for original Hargreaves (1985),
-*		and for Hargreaves-Samani (1985).
-*
-* COPYRIGHT:	(C) 2007-2011 by the GRASS Development Team
-*
-*		This program is free software under the GNU General Public
-*		Licence (>=2). Read the file COPYING that comes with GRASS
-*		for details.
-*
-***************************************************************************/
+ *
+ * MODULE:        i.evapo.mh
+ * AUTHOR:        Yann Chemin yann.chemin@gmail.com
+ *
+ * PURPOSE:       To estimate the reference evapotranspiration by means
+ *                of Modified Hargreaves method (2001).
+ *                Also has a switch for original Hargreaves (1985),
+ *                and for Hargreaves-Samani (1985).
+ *
+ * COPYRIGHT:     (C) 2007-2011 by the GRASS Development Team
+ *
+ *                This program is free software under the GNU General Public
+ *                Licence (>=2). Read the file COPYING that comes with GRASS
+ *                for details.
+ *
+ ***************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,8 +24,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-double mh_original(double ra, double tavg, double tmax, double tmin,
-                   double p);
+double mh_original(double ra, double tavg, double tmax, double tmin, double p);
 double mh_eto(double ra, double tavg, double tmax, double tmin, double p);
 double mh_samani(double ra, double tavg, double tmax, double tmin);
 
@@ -175,12 +173,12 @@ int main(int argc, char *argv[])
         }
         for (col = 0; col < ncols; col++) {
             /* read current cell from line buffer */
-            d_rnet = ((DCELL *) inrast_RNET)[col];
-            d_tempkavg = ((DCELL *) inrast_TEMPKAVG)[col];
-            d_tempkmin = ((DCELL *) inrast_TEMPKMIN)[col];
-            d_tempkmax = ((DCELL *) inrast_TEMPKMAX)[col];
+            d_rnet = ((DCELL *)inrast_RNET)[col];
+            d_tempkavg = ((DCELL *)inrast_TEMPKAVG)[col];
+            d_tempkmin = ((DCELL *)inrast_TEMPKMIN)[col];
+            d_tempkmax = ((DCELL *)inrast_TEMPKMAX)[col];
             if (!original->answer) {
-                d_p = ((DCELL *) inrast_P)[col];
+                d_p = ((DCELL *)inrast_P)[col];
             }
             if (Rast_is_d_null_value(&d_rnet) ||
                 Rast_is_d_null_value(&d_tempkavg) ||
@@ -191,9 +189,8 @@ int main(int argc, char *argv[])
             }
             else {
                 if (original->answer) {
-                    d_daily_et =
-                        mh_original(d_rnet, d_tempkavg, d_tempkmax,
-                                    d_tempkmin, d_p);
+                    d_daily_et = mh_original(d_rnet, d_tempkavg, d_tempkmax,
+                                             d_tempkmin, d_p);
                 }
                 else if (samani->answer) {
                     d_daily_et =
@@ -201,8 +198,7 @@ int main(int argc, char *argv[])
                 }
                 else {
                     d_daily_et =
-                        mh_eto(d_rnet, d_tempkavg, d_tempkmax, d_tempkmin,
-                               d_p);
+                        mh_eto(d_rnet, d_tempkavg, d_tempkmax, d_tempkmin, d_p);
                 }
                 if (zero->answer && d_daily_et < 0)
                     d_daily_et = 0.0;

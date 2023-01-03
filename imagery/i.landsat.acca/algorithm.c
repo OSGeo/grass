@@ -19,32 +19,30 @@
 
 #include "local_proto.h"
 
-#define SCALE   200.
-#define K_BASE  230.
-
+#define SCALE    200.
+#define K_BASE   230.
 
 /* value and count */
-#define TOTAL 0
-#define WARM  1
-#define COLD  2
-#define SNOW  3
-#define SOIL  4
+#define TOTAL    0
+#define WARM     1
+#define COLD     2
+#define SNOW     3
+#define SOIL     4
 
 /* signa */
-#define COVER       1
-#define SUM_COLD    0
-#define SUM_WARM    1
-#define KMEAN       2
-#define KMAX        3
-#define KMIN        4
+#define COVER    1
+#define SUM_COLD 0
+#define SUM_WARM 1
+#define KMEAN    2
+#define KMAX     3
+#define KMIN     4
 
 /* re-use value */
-#define KLOWER      0
-#define KUPPER      1
-#define MEAN        2
-#define SKEW        3
-#define DSTD        4
-
+#define KLOWER   0
+#define KUPPER   1
+#define MEAN     2
+#define SKEW     3
+#define DSTD     4
 
 /**********************************************************
  *
@@ -58,23 +56,24 @@
   como opciones desde el programa main.
  ---------------------------------------------------------*/
 
-double th_1 = 0.08;             /* Band 3 Brightness Threshold */
+double th_1 = 0.08; /* Band 3 Brightness Threshold */
 double th_1_b = 0.07;
-double th_2[] = { -0.25, 0.70 };        /* Normalized Snow Difference Index */
+double th_2[] = {-0.25, 0.70}; /* Normalized Snow Difference Index */
 
 double th_2_b = 0.8;
-double th_3 = 300.;             /* Band 6 Temperature Threshold */
-double th_4 = 225.;             /* Band 5/6 Composite */
+double th_3 = 300.; /* Band 6 Temperature Threshold */
+double th_4 = 225.; /* Band 5/6 Composite */
 double th_4_b = 0.08;
-double th_5 = 2.35;             /* Band 4/3 Ratio */
-double th_6 = 2.16248;          /* Band 4/2 Ratio */
-double th_7 = 1.0; /* Band 4/5 Ratio */ ;
-double th_8 = 210.;             /* Band 5/6 Composite */
+double th_5 = 2.35;    /* Band 4/3 Ratio */
+double th_6 = 2.16248; /* Band 4/2 Ratio */
+double th_7 = 1.0;     /* Band 4/5 Ratio */
+;
+double th_8 = 210.; /* Band 5/6 Composite */
 
 extern int hist_n;
 
-void acca_algorithm(Gfile * out, Gfile band[],
-                    int single_pass, int with_shadow, int cloud_signature)
+void acca_algorithm(Gfile *out, Gfile band[], int single_pass, int with_shadow,
+                    int cloud_signature)
 {
     int i, count[5], hist_cold[hist_n], hist_warm[hist_n];
     double max, value[5], signa[5], idesert, review_warm, shift;
@@ -126,16 +125,17 @@ void acca_algorithm(Gfile * out, Gfile band[],
     G_message(_("* Cloud cover: %.2lf %%"), 100. * signa[COVER]);
     G_message(_("* Temperature of clouds:"));
     G_message(_("** Maximum: %.2lf K"), signa[KMAX]);
-    G_message(_("** Mean (%s cloud): %.2lf K"),
-              (review_warm ? "cold" : "all"), signa[KMEAN]);
+    G_message(_("** Mean (%s cloud): %.2lf K"), (review_warm ? "cold" : "all"),
+              signa[KMEAN]);
     G_message(_("** Minimum: %.2lf K"), signa[KMIN]);
 
     /* WARNING: re-use of the variable 'value' with new meaning */
 
     /* step 14 */
 
-    /* To correct Irish2006: idesert has to be bigger than 0.5 to start pass 2 processing (see Irish2000)
-       because then we have no desert condition (thanks to Matthias Eder, Germany) */
+    /* To correct Irish2006: idesert has to be bigger than 0.5 to start pass 2
+       processing (see Irish2000) because then we have no desert condition
+       (thanks to Matthias Eder, Germany) */
     if (cloud_signature ||
         (idesert > .5 && signa[COVER] > 0.004 && signa[KMEAN] < 295.)) {
         G_message(_("Histogram cloud signature:"));
@@ -216,10 +216,8 @@ void acca_algorithm(Gfile * out, Gfile band[],
     return;
 }
 
-
-void acca_first(Gfile * out, Gfile band[],
-                int with_shadow,
-                int count[], int cold[], int warm[], double stats[])
+void acca_first(Gfile *out, Gfile band[], int with_shadow, int count[],
+                int cold[], int warm[], double stats[])
 {
     int i, row, col, nrows, ncols;
 
@@ -251,12 +249,12 @@ void acca_first(Gfile * out, Gfile band[],
             code = NO_DEFINED;
             /* Null when null pixel in any band */
             for (i = BAND2; i <= BAND6; i++) {
-                if (Rast_is_d_null_value
-                    ((void *)((DCELL *) band[i].rast + col))) {
+                if (Rast_is_d_null_value(
+                        (void *)((DCELL *)band[i].rast + col))) {
                     code = NO_CLOUD;
                     break;
                 }
-                pixel[i] = (double)((DCELL *) band[i].rast)[col];
+                pixel[i] = (double)((DCELL *)band[i].rast)[col];
             }
             /* Determina los pixeles de sombras */
             if (code == NO_DEFINED && with_shadow) {
@@ -267,34 +265,40 @@ void acca_first(Gfile * out, Gfile band[],
                 code = NO_CLOUD;
                 count[TOTAL]++;
                 nsdi = (pixel[BAND2] - pixel[BAND5]) /
-                    (pixel[BAND2] + pixel[BAND5]);
+                       (pixel[BAND2] + pixel[BAND5]);
                 /* ----------------------------------------------------- */
                 /* step 1. Brightness Threshold: Eliminates dark images */
                 if (pixel[BAND3] > th_1) {
-                    /* step 3. Normalized Snow Difference Index: Eliminates many types of snow */
+                    /* step 3. Normalized Snow Difference Index: Eliminates many
+                     * types of snow */
                     if (nsdi > th_2[0] && nsdi < th_2[1]) {
-                        /* step 5. Temperature Threshold: Eliminates warm image features */
+                        /* step 5. Temperature Threshold: Eliminates warm image
+                         * features */
                         if (pixel[BAND6] < th_3) {
                             rat56 = (1. - pixel[BAND5]) * pixel[BAND6];
-                            /* step 6. Band 5/6 Composite: Eliminates numerous categories including ice */
+                            /* step 6. Band 5/6 Composite: Eliminates numerous
+                             * categories including ice */
                             if (rat56 < th_4) {
                                 /* step 8. Eliminates growing vegetation */
                                 if ((pixel[BAND4] / pixel[BAND3]) < th_5) {
-                                    /* step 9. Eliminates senescing vegetation */
+                                    /* step 9. Eliminates senescing vegetation
+                                     */
                                     if ((pixel[BAND4] / pixel[BAND2]) < th_6) {
-                                        /* step 10. Eliminates rocks and desert */
+                                        /* step 10. Eliminates rocks and desert
+                                         */
                                         count[SOIL]++;
                                         if ((pixel[BAND4] / pixel[BAND5]) >
                                             th_7) {
-                                            /* step 11. Distinguishes warm clouds from cold clouds */
+                                            /* step 11. Distinguishes warm
+                                             * clouds from cold clouds */
                                             if (rat56 < th_8) {
                                                 code = COLD_CLOUD;
                                                 count[COLD]++;
                                                 /* for statistic */
                                                 stats[SUM_COLD] +=
                                                     (pixel[BAND6] / SCALE);
-                                                hist_put(pixel[BAND6] -
-                                                         K_BASE, cold);
+                                                hist_put(pixel[BAND6] - K_BASE,
+                                                         cold);
                                             }
                                             else {
                                                 code = WARM_CLOUD;
@@ -302,8 +306,8 @@ void acca_first(Gfile * out, Gfile band[],
                                                 /* for statistic */
                                                 stats[SUM_WARM] +=
                                                     (pixel[BAND6] / SCALE);
-                                                hist_put(pixel[BAND6] -
-                                                         K_BASE, warm);
+                                                hist_put(pixel[BAND6] - K_BASE,
+                                                         warm);
                                             }
                                             if (pixel[BAND6] > stats[KMAX])
                                                 stats[KMAX] = pixel[BAND6];
@@ -325,9 +329,8 @@ void acca_first(Gfile * out, Gfile band[],
                             }
                             else {
                                 /* step 7 */
-                                code =
-                                    (pixel[BAND5] <
-                                     th_4_b) ? NO_CLOUD : NO_DEFINED;
+                                code = (pixel[BAND5] < th_4_b) ? NO_CLOUD
+                                                               : NO_DEFINED;
                             }
                         }
                         else {
@@ -348,10 +351,10 @@ void acca_first(Gfile * out, Gfile band[],
                 /* ----------------------------------------------------- */
             }
             if (code == NO_CLOUD) {
-                Rast_set_c_null_value((CELL *) out->rast + col, 1);
+                Rast_set_c_null_value((CELL *)out->rast + col, 1);
             }
             else {
-                ((CELL *) out->rast)[col] = code;
+                ((CELL *)out->rast)[col] = code;
             }
         }
         Rast_put_row(out->fd, out->rast, CELL_TYPE);
@@ -364,9 +367,8 @@ void acca_first(Gfile * out, Gfile band[],
     return;
 }
 
-
-void acca_second(Gfile * out, Gfile band,
-                 int review_warm, double upper, double lower)
+void acca_second(Gfile *out, Gfile band, int review_warm, double upper,
+                 double lower)
 {
     int row, col, nrows, ncols;
 
@@ -401,33 +403,33 @@ void acca_second(Gfile * out, Gfile band,
         Rast_get_c_row(out->fd, out->rast, row);
 
         for (col = 0; col < ncols; col++) {
-            if (Rast_is_c_null_value((void *)((CELL *) out->rast + col))) {
-                Rast_set_c_null_value((CELL *) tmp.rast + col, 1);
+            if (Rast_is_c_null_value((void *)((CELL *)out->rast + col))) {
+                Rast_set_c_null_value((CELL *)tmp.rast + col, 1);
             }
             else {
-                code = (int)((CELL *) out->rast)[col];
+                code = (int)((CELL *)out->rast)[col];
                 /* Resolve ambiguous pixels */
                 if (code == NO_DEFINED ||
                     (code == WARM_CLOUD && review_warm == 1)) {
-                    temp = (double)((DCELL *) band.rast)[col];
+                    temp = (double)((DCELL *)band.rast)[col];
                     if (temp > upper) {
-                        Rast_set_c_null_value((CELL *) tmp.rast + col, 1);
+                        Rast_set_c_null_value((CELL *)tmp.rast + col, 1);
                     }
                     else {
-                        ((CELL *) tmp.rast)[col] =
+                        ((CELL *)tmp.rast)[col] =
                             (temp < lower) ? IS_WARM_CLOUD : IS_COLD_CLOUD;
                     }
                 }
                 else
                     /* Join warm (not ambiguous) and cold clouds */
-                if (code == COLD_CLOUD || code == WARM_CLOUD) {
-                    ((CELL *) tmp.rast)[col] = (code == WARM_CLOUD &&
-                                                review_warm ==
-                                                0) ? IS_WARM_CLOUD :
-                        IS_COLD_CLOUD;
-                }
-                else
-                    ((CELL *) tmp.rast)[col] = IS_SHADOW;
+                    if (code == COLD_CLOUD || code == WARM_CLOUD) {
+                        ((CELL *)tmp.rast)[col] =
+                            (code == WARM_CLOUD && review_warm == 0)
+                                ? IS_WARM_CLOUD
+                                : IS_COLD_CLOUD;
+                    }
+                    else
+                        ((CELL *)tmp.rast)[col] = IS_SHADOW;
             }
         }
         Rast_put_row(tmp.fd, tmp.rast, CELL_TYPE);
@@ -467,10 +469,10 @@ int shadow_algorithm(double pixel[])
     if (pixel[BAND3] < 0.07 && (1 - pixel[BAND4]) * pixel[BAND6] > 240. &&
         pixel[BAND4] / pixel[BAND2] > 1. &&
         (pixel[BAND3] - pixel[BAND5]) / (pixel[BAND3] + pixel[BAND5]) < 0.10)
-        /*
-           if (pixel[BAND3] < 0.07 && (1 - pixel[BAND4]) * pixel[BAND6] > 240. &&
-           pixel[BAND4] / pixel[BAND2] > 1.)
-         */
+    /*
+       if (pixel[BAND3] < 0.07 && (1 - pixel[BAND4]) * pixel[BAND6] > 240. &&
+       pixel[BAND4] / pixel[BAND2] > 1.)
+     */
     {
         return IS_SHADOW;
     }

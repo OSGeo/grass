@@ -66,8 +66,7 @@ void Vect_spatial_index_add_item(struct spatial_index *si, int id,
     static int rect_init = 0;
 
     if (!rect_init) {
-        rect.boundary =
-            G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
+        rect.boundary = G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
         rect_init = si->si_tree->nsides_alloc;
     }
 
@@ -98,8 +97,7 @@ void Vect_spatial_index_del_item(struct spatial_index *si, int id,
     static int rect_init = 0;
 
     if (!rect_init) {
-        rect.boundary =
-            G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
+        rect.boundary = G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
         rect_init = si->si_tree->nsides_alloc;
     }
 
@@ -120,8 +118,7 @@ void Vect_spatial_index_del_item(struct spatial_index *si, int id,
 
 /************************* SELECT BY BOX *********************************/
 /* This function is called by  RTreeSearch() to add selected item to the list */
-static int _add_item(int id, const struct RTree_Rect *rect,
-                     struct ilist *list)
+static int _add_item(int id, const struct RTree_Rect *rect, struct ilist *list)
 {
     G_ilist_add(list, id);
     return 1;
@@ -143,8 +140,7 @@ int Vect_spatial_index_select(const struct spatial_index *si,
     static int rect_init = 0;
 
     if (!rect_init) {
-        rect.boundary =
-            G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
+        rect.boundary = G_malloc(si->si_tree->nsides_alloc * sizeof(RectReal));
         rect_init = si->si_tree->nsides_alloc;
     }
 

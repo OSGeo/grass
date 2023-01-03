@@ -7,11 +7,10 @@
 #include <grass/glocale.h>
 #include "method.h"
 
-#define MEM  1024
+#define MEM 1024
 
 /* function prototypes */
 static int m_var(double *, int, double *);
-
 
 int o_var(const char *basemap, const char *covermap, const char *outputmap,
           int usecats, struct Categories *cats)
@@ -22,7 +21,6 @@ int o_var(const char *basemap, const char *covermap, const char *outputmap,
     long basecat, covercat, catb, catc;
     double value, vari, x;
     double *tab;
-
 
     mem = MEM * sizeof(double);
     tab = (double *)G_malloc(mem);
@@ -50,7 +48,7 @@ int o_var(const char *basemap, const char *covermap, const char *outputmap,
         }
 
         if (usecats)
-            sscanf(Rast_get_c_cat((CELL *) & covercat, cats), "%lf", &x);
+            sscanf(Rast_get_c_cat((CELL *)&covercat, cats), "%lf", &x);
         else
             x = covercat;
 
@@ -62,7 +60,6 @@ int o_var(const char *basemap, const char *covermap, const char *outputmap,
             }
             tab[count++] = x;
         }
-
     }
 
     if (first) {
@@ -79,12 +76,11 @@ int o_var(const char *basemap, const char *covermap, const char *outputmap,
     return 0;
 }
 
-
 /***********************************************************************
-*
-*  Given an array of data[1...n], this routine returns its variance.
-*
-************************************************************************/
+ *
+ *  Given an array of data[1...n], this routine returns its variance.
+ *
+ ************************************************************************/
 
 static int m_var(double *data, int n, double *vari)
 {
@@ -100,14 +96,14 @@ static int m_var(double *data, int n, double *vari)
     ep = 0;
     s = 0.0;
 
-
-    for (i = 0; i < n; i++)     /* First pass to get the mean     */
+    for (i = 0; i < n; i++) /* First pass to get the mean     */
         s += data[i];
     ave = s / n;
 
     for (i = 0; i < n; i++) {
         s = data[i] - ave;
-        /*fprintf(stderr,"s: %lf  data[i]: %lf  ave: %lf  n: %d\n",s,data[i],ave,n);  */
+        /*fprintf(stderr,"s: %lf  data[i]: %lf  ave: %lf  n:
+         * %d\n",s,data[i],ave,n);  */
         *vari += s * s;
         ep += s;
     }

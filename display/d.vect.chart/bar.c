@@ -5,16 +5,15 @@
 #include <grass/symbol.h>
 #include "global.h"
 
-int
-bar(double cx, double cy, int size, double scale, double *val, int ncols,
-    COLOR * ocolor, COLOR * colors, int y_center, double *max_reference,
-    int do3d)
+int bar(double cx, double cy, int size, double scale, double *val, int ncols,
+        COLOR *ocolor, COLOR *colors, int y_center, double *max_reference,
+        int do3d)
 {
     int i;
     double max;
     double x0, y0, x1, y1, dx, dy;
-    double bw;                  /* bar width */
-    double pixel;               /* pixel size */
+    double bw;    /* bar width */
+    double pixel; /* pixel size */
     struct line_pnts *Points, *max_Points;
 
     G_debug(4, "bar(): cx = %f cy = %f", cx, cy);
@@ -22,7 +21,7 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
     Points = Vect_new_line_struct();
     max_Points = Vect_new_line_struct();
 
-    pixel = D_d_to_u_col(2) - D_d_to_u_col(1);  /* do it better */
+    pixel = D_d_to_u_col(2) - D_d_to_u_col(1); /* do it better */
 
     /* Bottom (y0) */
     max = 0;
@@ -62,8 +61,7 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 
             /* the outline color : default is black */
             D_RGB_color(ocolor->r, ocolor->g, ocolor->b);
-            D_polyline_abs(max_Points->x, max_Points->y,
-                           max_Points->n_points);
+            D_polyline_abs(max_Points->x, max_Points->y, max_Points->n_points);
         }
     }
 
@@ -74,8 +72,7 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
         Vect_append_point(Points, x0 + (i + 1) * bw, y0, 0);
         Vect_append_point(Points, x0 + (i + 1) * bw,
                           y0 + scale * val[i] * pixel, 0);
-        Vect_append_point(Points, x0 + i * bw, y0 + scale * val[i] * pixel,
-                          0);
+        Vect_append_point(Points, x0 + i * bw, y0 + scale * val[i] * pixel, 0);
         Vect_append_point(Points, x0 + i * bw, y0, 0);
 
         if (!colors[i].none) {

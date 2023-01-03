@@ -17,12 +17,12 @@
  */
 
 #include <string.h>
+#include <errno.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
 /* initialize the global struct */
-struct error_state
-{
+struct error_state {
     char *driver_name;
     dbString *errMsg;
 };
@@ -37,7 +37,6 @@ static void init()
     db_append_string(st->errMsg, "\n");
 }
 
-
 /*!
    \brief Init error message for DB driver
 
@@ -48,7 +47,7 @@ static void init()
 void db_d_init_error(const char *name)
 {
     if (!st->errMsg) {
-        st->errMsg = (dbString *) G_malloc(sizeof(dbString));
+        st->errMsg = (dbString *)G_malloc(sizeof(dbString));
         db_init_string(st->errMsg);
     }
 
@@ -76,7 +75,11 @@ void db_d_append_error(const char *fmt, ...)
         count = vfprintf(fp, fmt, ap);
         if (count >= 0 && (work = G_calloc(count + 1, 1))) {
             rewind(fp);
-            fread(work, 1, count, fp);
+            if (fread(work, 1, count, fp) != count) {
+                if (ferror(fp))
+                    G_fatal_error(_("DBMI-%s driver file reading error: %s"),
+                                  st->driver_name, strerror(errno));
+            }
             db_append_string(st->errMsg, work);
             G_free(work);
         }

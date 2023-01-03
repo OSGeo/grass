@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,7 +16,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <grass/gis.h>
 #include "distance.h"
@@ -25,23 +24,21 @@
 
 static int cur_row;
 
-
 int begin_distance(int row)
 {
     cur_row = row;
 
     if (window.proj == PROJECTION_LL)
-        G_set_geodesic_distance_lat1(window.north -
-                                     (row + .5) * window.ns_res);
+        G_set_geodesic_distance_lat1(window.north - (row + .5) * window.ns_res);
 
     return 0;
 }
 
-    /* Determine number of columns for each distance zone
-     *    (-1 means doesn't occur)
-     * Returns: first zone to occur (-1 if none)
-     * Note: modifies distances structure (global)
-     */
+/* Determine number of columns for each distance zone
+ *    (-1 means doesn't occur)
+ * Returns: first zone to occur (-1 if none)
+ * Note: modifies distances structure (global)
+ */
 
 int find_distances(int row)
 {
@@ -51,8 +48,7 @@ int find_distances(int row)
     double ns_dist;
 
     if (window.proj == PROJECTION_LL)
-        G_set_geodesic_distance_lat2(window.north -
-                                     (row + .5) * window.ns_res);
+        G_set_geodesic_distance_lat2(window.north - (row + .5) * window.ns_res);
 
     /* if at same row, distance is constant across each cell */
 
@@ -64,11 +60,11 @@ int find_distances(int row)
                 distances[i].ncols = find_ll_distance_ncols(i);
             }
         }
-        else {                  /* note - see parse_dist.c for more info  */
+        else { /* note - see parse_dist.c for more info  */
 
             for (i = 0; i < ndist; i++)
-                distances[i].ncols = distances[i].prev_ncols
-                    = (int)distances[i].dist;
+                distances[i].ncols = distances[i].prev_ncols =
+                    (int)distances[i].dist;
         }
     }
     else {
@@ -123,7 +119,7 @@ int find_ll_distance_ncols(int i)
     lon = window.ew_res * col;
 
     d = G_geodesic_distance_lon_to_lon(0.0, lon);
-    if (d > dist) {             /*backup */
+    if (d > dist) { /*backup */
         while (d > dist) {
             if (--col < 0)
                 break;

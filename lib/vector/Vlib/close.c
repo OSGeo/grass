@@ -40,26 +40,22 @@ static int format()
 }
 #endif
 
-static int (*Close_array[][2])() = {
-    {
-     clo_dummy, V1_close_nat}
+static int (*Close_array[][2])() = {{clo_dummy, V1_close_nat}
 #ifdef HAVE_OGR
-    , {
-       clo_dummy, V1_close_ogr}
-    , {
-       clo_dummy, V1_close_ogr}
+                                    ,
+                                    {clo_dummy, V1_close_ogr},
+                                    {clo_dummy, V1_close_ogr}
 #else
-    , {
-       clo_dummy, format}
-    , {
-       clo_dummy, format}
+                                    ,
+                                    {clo_dummy, format},
+                                    {clo_dummy, format}
 #endif
 #ifdef HAVE_POSTGRES
-    , {
-       clo_dummy, V1_close_pg}
+                                    ,
+                                    {clo_dummy, V1_close_pg}
 #else
-    , {
-       clo_dummy, format}
+                                    ,
+                                    {clo_dummy, format}
 #endif
 };
 
@@ -75,11 +71,12 @@ static void unlink_file(const struct Map_info *, const char *);
  */
 int Vect_close(struct Map_info *Map)
 {
-    int create_link;            /* used for external formats only */
+    int create_link; /* used for external formats only */
     struct Coor_info CInfo;
 
     G_debug(1,
-            "Vect_close(): name = %s, mapset = %s, format = %d, level = %d, is_tmp = %d",
+            "Vect_close(): name = %s, mapset = %s, format = %d, level = %d, "
+            "is_tmp = %d",
             Map->name, Map->mapset, Map->format, Map->level, Map->temporary);
 
     if (Map->temporary && (Map->fInfo.ogr.dsn || Map->fInfo.pg.conninfo)) {
@@ -102,9 +99,10 @@ int Vect_close(struct Map_info *Map)
         /* afterwords, dblinks must be removed from temporary map
            otherwise when deleting temporary map also original
            attribute tables would be deteled */
-        Vect_map_del_dblink(Map, -1);   /* delete db links for all layers */
+        Vect_map_del_dblink(Map, -1); /* delete db links for all layers */
 
-        if (0 != Vect_copy_map_lines_field(Map, 1, &Out)) {     /* always layer = 1 for OGR/PG maps */
+        if (0 != Vect_copy_map_lines_field(
+                     Map, 1, &Out)) { /* always layer = 1 for OGR/PG maps */
             G_warning(_("Copying features failed"));
             return -1;
         }
@@ -112,7 +110,7 @@ int Vect_close(struct Map_info *Map)
         Vect_build(&Out);
 
         Vect_close(&Out);
-        putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=");     /* unset variable */
+        putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE="); /* unset variable */
     }
 
     /* check for external formats whether to create a link */
@@ -162,18 +160,17 @@ int Vect_close(struct Map_info *Map)
 
     /* store support files for vector maps in the current mapset if in
        write mode on level 2 */
-    if (strcmp(Map->mapset, G_mapset()) == 0 &&
-        Map->support_updated &&
+    if (strcmp(Map->mapset, G_mapset()) == 0 && Map->support_updated &&
         Map->plus.built == GV_BUILD_ALL && create_link) {
 
-        unlink_file(Map, GV_TOPO_ELEMENT);      /* topo */
+        unlink_file(Map, GV_TOPO_ELEMENT); /* topo */
 
-        unlink_file(Map, GV_SIDX_ELEMENT);      /* sidx */
+        unlink_file(Map, GV_SIDX_ELEMENT); /* sidx */
 
-        unlink_file(Map, GV_CIDX_ELEMENT);      /* cidx */
+        unlink_file(Map, GV_CIDX_ELEMENT); /* cidx */
 
         if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_POSTGIS) {
-            unlink_file(Map, GV_FIDX_ELEMENT);  /* fidx */
+            unlink_file(Map, GV_FIDX_ELEMENT); /* fidx */
         }
 
         Vect_coor_info(Map, &CInfo);
@@ -184,7 +181,7 @@ int Vect_close(struct Map_info *Map)
         Vect_save_topo(Map);
 
         /* write out sidx file */
-        Map->plus.Spidx_new = TRUE;     /* force writing */
+        Map->plus.Spidx_new = TRUE; /* force writing */
         Vect_save_sidx(Map);
 
         /* write out cidx file */
@@ -199,8 +196,7 @@ int Vect_close(struct Map_info *Map)
 
     /* spatial index must also be closed when opened with topo but not
      * modified */
-    if (Map->plus.spidx_fp.file &&
-        Map->plus.Spidx_built == TRUE &&
+    if (Map->plus.spidx_fp.file && Map->plus.Spidx_built == TRUE &&
         !Map->support_updated && Map->plus.built == GV_BUILD_ALL) {
 
         G_debug(1, "spatial index file closed");
@@ -219,7 +215,7 @@ int Vect_close(struct Map_info *Map)
 
     /* close level 1 files / data sources if not head_only */
     if (!Map->head_only) {
-        if (create_link && ((*Close_array[Map->format][1]) (Map)) != 0) {
+        if (create_link && ((*Close_array[Map->format][1])(Map)) != 0) {
             G_warning(_("Unable to close vector <%s>"),
                       Vect_get_full_name(Map));
             return 1;
@@ -327,7 +323,7 @@ void unlink_file(const struct Map_info *Map, const char *name)
 
     /* delete old support files if available */
     Vect__get_element_path(path, Map, name);
-    if (access(path, F_OK) == 0) {      /* file exists? */
+    if (access(path, F_OK) == 0) { /* file exists? */
         G_debug(2, "\t%s: unlink", path);
         unlink(path);
     }

@@ -3,7 +3,7 @@
 #include <grass/vector.h>
 #include "walk.h"
 
-/* find next line for given line and node 
+/* find next line for given line and node
  *  return: next line (may be input line if it is loop)
  *          0 - num of lines <> 2
  */
@@ -17,7 +17,8 @@ int find_next_line(struct Map_info *map, int line, int node, int ltype)
     for (i = 0; i < Vect_get_node_n_lines(map, node); i++) {
         tmp_line = abs(Vect_get_node_line(map, node, i));
         tmp_type = Vect_read_line(map, NULL, NULL, tmp_line);
-        /* The line may be a loop so we want some other line if exists or the same line if loop */
+        /* The line may be a loop so we want some other line if exists or the
+         * same line if loop */
         if (tmp_type & ltype) {
             if (next_line == 0 || tmp_line != line)
                 next_line = tmp_line;
@@ -53,7 +54,8 @@ int walk_back(struct Map_info *map, int start_line, int type)
         next_line = find_next_line(map, line, start_node, type);
         G_debug(2, "  next = %d", next_line);
 
-        /* Keep going so long as not returned to start_line, i.e. if not a closed set of lines */
+        /* Keep going so long as not returned to start_line, i.e. if not a
+         * closed set of lines */
         if (next_line == 0 || next_line == start_line)
             break;
 
@@ -74,7 +76,7 @@ int walk_back(struct Map_info *map, int start_line, int type)
     return (line);
 }
 
-/* 
+/*
    \brief Compare two line_cats structs.
 
    \return 1 - structs have same categories in all fields
@@ -106,7 +108,6 @@ int cmp_cats(struct line_cats *Cats1, struct line_cats *Cats2)
             if (Cats1->cat[cat_idx] == cats_list->value[i]) {
                 cat_found = 1;
             }
-
         }
 
         if (cat_found == 0) {
@@ -121,11 +122,10 @@ int cmp_cats(struct line_cats *Cats1, struct line_cats *Cats2)
 
 /* Start from the first node on a polyline and walk to the other end,
    collecting the coordinates of each node en route.  */
-int walk_forward_and_pick_up_coords(struct Map_info *map,
-                                    int start_line, int ltype,
-                                    struct line_pnts *points,
-                                    int *lines_visited,
-                                    struct line_cats *Cats, int write_cats)
+int walk_forward_and_pick_up_coords(struct Map_info *map, int start_line,
+                                    int ltype, struct line_pnts *points,
+                                    int *lines_visited, struct line_cats *Cats,
+                                    int write_cats)
 {
     int cat_idx;
     int line, next_line, n1, n2;
@@ -155,18 +155,18 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
 
     Vect_get_line_nodes(map, line, &n1, &n2);
     next_line = find_next_line(map, line, n1, ltype);
-    if (next_line > 0) {        /* continue at start node */
+    if (next_line > 0) { /* continue at start node */
         Vect_append_points(points, pnts, GV_BACKWARD);
         next_node = n1;
     }
     else {
         Vect_append_points(points, pnts, GV_FORWARD);
-        next_line = find_next_line(map, line, n2, ltype);       /* check end node */
+        next_line = find_next_line(map, line, n2, ltype); /* check end node */
         if (next_line > 0) {
-            next_node = n2;     /* continue at end node */
+            next_node = n2; /* continue at end node */
         }
         else {
-            return 1;           /* no other line */
+            return 1; /* no other line */
         }
     }
 
@@ -193,7 +193,7 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
         Vect_get_line_nodes(map, line, &n1, &n2);
 
         if (node == n1) {
-            Vect_line_delete_point(pnts, 0);    /* delete duplicate nodes */
+            Vect_line_delete_point(pnts, 0); /* delete duplicate nodes */
             Vect_append_points(points, pnts, GV_FORWARD);
             next_node = n2;
         }

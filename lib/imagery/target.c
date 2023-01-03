@@ -41,7 +41,6 @@ int I_get_target(const char *group, char *location, char *mapset)
     return ok;
 }
 
-
 /*!
  * \brief write target information
  *

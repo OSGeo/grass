@@ -6,9 +6,7 @@
 #include <grass/glocale.h>
 #include "local.h"
 
-
-static struct list
-{
+static struct list {
     double size;
     int index;
     CELL cat;
@@ -19,10 +17,9 @@ static int nareas;
 /* function prototypes */
 static int compare(const void *, const void *);
 
-
 int do_areas(struct Map_info *Map, struct line_pnts *Points,
-             dbCatValArray * Cvarr, int ctype, int use,
-             double value, int value_type)
+             dbCatValArray *Cvarr, int ctype, int use, double value,
+             int value_type)
 {
     int i;
     CELL cval, cat;
@@ -33,13 +30,14 @@ int do_areas(struct Map_info *Map, struct line_pnts *Points,
 
     G_important_message(_("Reading areas..."));
     for (i = 0; i < nareas; i++) {
-        /* Note: in old version (grass5.0) there was a check here if the current area 
-         *        is identical to previous one. I don't see any reason for this in topological vectors */
+        /* Note: in old version (grass5.0) there was a check here if the current
+         * area is identical to previous one. I don't see any reason for this in
+         * topological vectors */
         G_percent(i, nareas, 2);
         cat = list[i].cat;
         G_debug(3, "Area cat = %d", cat);
 
-        if (ISNULL(&cat)) {     /* No centroid or no category */
+        if (ISNULL(&cat)) { /* No centroid or no category */
             set_cat(cat);
         }
         else {
@@ -53,8 +51,8 @@ int do_areas(struct Map_info *Map, struct line_pnts *Points,
                     set_cat(cval);
                 }
                 else if (ctype == DB_C_TYPE_DOUBLE) {
-                    if ((db_CatValArray_get_value_double(Cvarr, cat, &dval))
-                        != DB_OK) {
+                    if ((db_CatValArray_get_value_double(Cvarr, cat, &dval)) !=
+                        DB_OK) {
                         G_warning(_("No record for area (cat = %d)"), cat);
                         SETDNULL(&dval);
                     }
@@ -88,9 +86,8 @@ int do_areas(struct Map_info *Map, struct line_pnts *Points,
     return nareas;
 }
 
-
-int sort_areas(struct Map_info *Map, struct line_pnts *Points,
-               int field, struct cat_list *cat_list)
+int sort_areas(struct Map_info *Map, struct line_pnts *Points, int field,
+               struct cat_list *cat_list)
 {
     int i, centroid, nareas_selected;
     struct line_cats *Cats;
@@ -105,8 +102,7 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points,
         return 0;
 
     /* allocate list to hold valid area info */
-    list =
-        (struct list *)G_calloc(nareas * sizeof(char), sizeof(struct list));
+    list = (struct list *)G_calloc(nareas * sizeof(char), sizeof(struct list));
 
     /* store area size,cat,index in list */
     nareas_selected = 0;
@@ -162,7 +158,6 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points,
 
     return nareas_selected;
 }
-
 
 static int compare(const void *aa, const void *bb)
 {

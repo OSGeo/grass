@@ -40,7 +40,6 @@ int get_zone(void)
     return (1);
 }
 
-
 /*
  *    Get the Prime Meridian value and std parallel value
  **** */
@@ -108,7 +107,6 @@ double prompt_num_double(char *str, double deflt, int is_default)
     }
     return tmp;
 }
-
 
 int prompt_num_int(char *str, int deflt, int is_default)
 {

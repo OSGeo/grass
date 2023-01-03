@@ -24,8 +24,7 @@
 
 #define DEFAULT_WORKERS 0
 
-struct worker
-{
+struct worker {
     void (*func)(void *);
     void *closure;
     void **ref;
@@ -51,7 +50,7 @@ static void *worker(void *arg)
         while (!w->func)
             pthread_cond_wait(&w->cond, &w->mutex);
 
-        (*w->func) (w->closure);
+        (*w->func)(w->closure);
 
         w->func = NULL;
         w->closure = NULL;
@@ -78,8 +77,7 @@ static struct worker *get_worker(void)
     return NULL;
 }
 
-void G_begin_execute(void (*func)(void *), void *closure, void **ref,
-                     int force)
+void G_begin_execute(void (*func)(void *), void *closure, void **ref, int force)
 {
     struct worker *w;
 
@@ -94,7 +92,7 @@ void G_begin_execute(void (*func)(void *), void *closure, void **ref,
 
     if (!w) {
         pthread_mutex_unlock(&worker_mutex);
-        (*func) (closure);
+        (*func)(closure);
         return;
     }
 
@@ -170,8 +168,7 @@ void G_finish_workers(void)
 
 /****************************************************************************/
 
-void G_begin_execute(void (*func)(void *), void *closure, void **ref,
-                     int force)
+void G_begin_execute(void (*func)(void *), void *closure, void **ref, int force)
 {
     (*func)(closure);
 }

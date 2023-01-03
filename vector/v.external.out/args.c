@@ -5,8 +5,8 @@
 
 #include "local_proto.h"
 
-void parse_args(int argc, char **argv,
-                struct _options *options, struct _flags *flags)
+void parse_args(int argc, char **argv, struct _options *options,
+                struct _flags *flags)
 {
     options->dsn = G_define_option();
     options->dsn->key = "output";
@@ -17,7 +17,8 @@ void parse_args(int argc, char **argv,
         _("Examples:\n"
           "\t\tESRI Shapefile: directory containing a shapefile\n"
           "\t\tMapInfo File: directory containing a mapinfo file\n"
-          "\t\tPostGIS database: connection string, eg. 'PG:dbname=db user=grass'");
+          "\t\tPostGIS database: connection string, eg. 'PG:dbname=db "
+          "user=grass'");
     options->dsn->required = NO;
     options->dsn->guisection = _("Settings");
 
@@ -39,10 +40,11 @@ void parse_args(int argc, char **argv,
     options->opts = G_define_option();
     options->opts->key = "options";
     options->opts->label = _("Creation options");
-    options->opts->description = _("Examples:\n"
-                                   "\t\t'SHPT=POINTZ': create 3D point Shapefile data\n"
-                                   "\t\t'GEOM_TYPE=geography': use geography PostGIS data\n"
-                                   "\t\t'SCHEMA=grass': create new PostGIS tables in 'grass' schema");
+    options->opts->description =
+        _("Examples:\n"
+          "\t\t'SHPT=POINTZ': create 3D point Shapefile data\n"
+          "\t\t'GEOM_TYPE=geography': use geography PostGIS data\n"
+          "\t\t'SCHEMA=grass': create new PostGIS tables in 'grass' schema");
     options->opts->required = NO;
     options->opts->multiple = YES;
     options->opts->type = TYPE_STRING;
@@ -51,8 +53,7 @@ void parse_args(int argc, char **argv,
     options->input = G_define_standard_option(G_OPT_F_INPUT);
     options->input->key = "loadsettings";
     options->input->required = NO;
-    options->input->description =
-        _("Name of input file to read settings from");
+    options->input->description = _("Name of input file to read settings from");
     options->input->guisection = _("Settings");
 
     options->output = G_define_standard_option(G_OPT_F_OUTPUT);
@@ -93,15 +94,15 @@ void parse_args(int argc, char **argv,
     if (options->dsn->answer && options->format->answer &&
         options->input->answer)
         G_fatal_error(_("%s= and %s=/%s= are mutually exclusive"),
-                      options->input->key,
-                      options->dsn->key, options->format->key);
+                      options->input->key, options->dsn->key,
+                      options->format->key);
     if (flags->f->answer || flags->p->answer || flags->r->answer ||
         flags->g->answer || options->output->answer)
         return;
 
     if (!options->dsn->answer && !options->input->answer)
-        G_fatal_error(_("%s= or %s= must be specified"),
-                      options->dsn->key, options->input->key);
+        G_fatal_error(_("%s= or %s= must be specified"), options->dsn->key,
+                      options->input->key);
     if (options->dsn->answer && !options->format->answer)
         G_fatal_error(_("%s= must be specified"), options->format->key);
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int write_reclass(FILE * fd, long cat1, long cat2, char *label)
+int write_reclass(FILE *fd, long cat1, long cat2, char *label)
 {
     if (cat1 == 0) {
         cat2 = 0;

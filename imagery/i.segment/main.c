@@ -1,22 +1,22 @@
-
 /****************************************************************************
  *
  * MODULE:       i.segment
  * AUTHOR(S):    Markus Metz
- *               based on the the GSoC project by Eric Momsen <eric.momsen at gmail com>
+ *               based on the the GSoC project by
+ *               Eric Momsen <eric.momsen at gmail com>
  * PURPOSE:      Object recognition, segments an image group.
  * COPYRIGHT:    (C) 2012 by Eric Momsen, and the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the COPYING file that
  *               comes with GRASS for details.
- * 
+ *
  *
  *               NOTE: the word "segment" is already used by the
  *               Segmentation Library for the data files/tiling, so
  *               iseg (image segmentation) will be used to refer to
  *               the image segmentation.
- * 
+ *
  *****************************************************************************/
 
 #include <stdlib.h>
@@ -27,7 +27,8 @@
 
 int main(int argc, char *argv[])
 {
-    struct globals globals;     /* input and output file descriptors, data structure, buffers */
+    struct globals globals; /* input and output file descriptors, data
+                               structure, buffers */
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -37,8 +38,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("segmentation"));
     G_add_keyword(_("classification"));
     G_add_keyword(_("object recognition"));
-    module->description =
-        _("Identifies segments (objects) from imagery data.");
+    module->description = _("Identifies segments (objects) from imagery data.");
 
     parse_args(argc, argv, &globals);
 

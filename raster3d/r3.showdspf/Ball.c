@@ -1,22 +1,18 @@
-
 /***** Ball.c *****/
 /* This file contains code required to implement a trackball user
- * interface for manipulating a 3D scene.  This code was taken from 
+ * interface for manipulating a 3D scene.  This code was taken from
  * Graphics Gems 4, editted by Andrew Glassner
  */
+
 #include "Ball.h"
 #include "BallMath.h"
 #include <stdio.h>
 
-HMatrix mId = { {1, 0, 0, 0}
-, {0, 1, 0, 0}
-, {0, 0, 1, 0}
-, {0, 0, 0, 1}
-};
-float otherAxis[][4] = { {-0.48, 0.80, 0.36, 1} };
+HMatrix mId = {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+float otherAxis[][4] = {{-0.48, 0.80, 0.36, 1}};
 
 /* Establish reasonable initial values for controller. */
-void Ball_Init(BallData * ball)
+void Ball_Init(BallData *ball)
 {
     int i;
 
@@ -31,21 +27,20 @@ void Ball_Init(BallData * ball)
 }
 
 /* Set the center and size of the controller. */
-void Ball_Place(BallData * ball, HVect center, double radius)
+void Ball_Place(BallData *ball, HVect center, double radius)
 {
     ball->center = center;
     ball->radius = radius;
 }
 
 /* Incorporate new mouse position. */
-void Ball_Mouse(BallData * ball, HVect vNow)
+void Ball_Mouse(BallData *ball, HVect vNow)
 {
     ball->vNow = vNow;
 }
 
-
 /* Using vDown, vNow, dragging, and axisSet, compute rotation etc. */
-void Ball_Update(BallData * ball)
+void Ball_Update(BallData *ball)
 {
     Quat qout, qout2;
 
@@ -57,14 +52,12 @@ void Ball_Update(BallData * ball)
     }
     Qt_ToBallPoints(ball->qDown, &ball->vrFrom, &ball->vrTo);
 
-
-    Qt_ToMatrix(Qt_Conj(ball->qNow), ball->mNow);       /* Gives transpose for GL. */
+    Qt_ToMatrix(Qt_Conj(ball->qNow), ball->mNow); /* Gives transpose for GL. */
     qout2 = Matrix_to_Qt(ball->mNow);
     qout = Qt_Conj(qout2);
-
 }
 
-void Ball_SetMatrix(BallData * ball, HMatrix mat)
+void Ball_SetMatrix(BallData *ball, HMatrix mat)
 {
     int i, j;
     Quat qt;
@@ -79,7 +72,7 @@ void Ball_SetMatrix(BallData * ball, HMatrix mat)
 }
 
 /* Return rotation matrix defined by controller use. */
-void Ball_Value(BallData * ball, HMatrix mNow)
+void Ball_Value(BallData *ball, HMatrix mNow)
 {
     int i;
 
@@ -87,16 +80,15 @@ void Ball_Value(BallData * ball, HMatrix mNow)
         ((float *)mNow)[i] = ((float *)ball->mNow)[i];
 }
 
-
 /* Begin drag sequence. */
-void Ball_BeginDrag(BallData * ball)
+void Ball_BeginDrag(BallData *ball)
 {
     ball->dragging = 1;
     ball->vDown = ball->vNow;
 }
 
 /* Stop drag sequence. */
-void Ball_EndDrag(BallData * ball)
+void Ball_EndDrag(BallData *ball)
 {
     int i;
 

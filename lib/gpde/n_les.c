@@ -1,28 +1,27 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      functions to manage linear equation systems
-* 		part of the gpde library
-*               
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      functions to manage linear equation systems
+ *                 part of the gpde library
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <grass/N_pde.h>
 #include <grass/gmath.h>
 
-
 /*!
- * \brief Allocate memory for a (not) quadratic linear equation system which includes the Matrix A, vector x and vector b
+ * \brief Allocate memory for a (not) quadratic linear equation system which
+ * includes the Matrix A, vector x and vector b
  *
  * This function calls #N_alloc_les_param
  *
@@ -38,7 +37,8 @@ N_les *N_alloc_nquad_les(int cols, int rows, int type)
 }
 
 /*!
- * \brief Allocate memory for a (not) quadratic linear equation system which includes the Matrix A and vector x
+ * \brief Allocate memory for a (not) quadratic linear equation system which
+ * includes the Matrix A and vector x
  *
  * This function calls #N_alloc_les_param
  *
@@ -54,7 +54,8 @@ N_les *N_alloc_nquad_les_Ax(int cols, int rows, int type)
 }
 
 /*!
- * \brief Allocate memory for a (not) quadratic linear equation system which includes the Matrix A
+ * \brief Allocate memory for a (not) quadratic linear equation system which
+ * includes the Matrix A
  *
  * This function calls #N_alloc_les_param
  *
@@ -70,7 +71,8 @@ N_les *N_alloc_nquad_les_A(int cols, int rows, int type)
 }
 
 /*!
- * \brief Allocate memory for a (not) quadratic linear equation system which includes the Matrix A, vector x and vector b
+ * \brief Allocate memory for a (not) quadratic linear equation system which
+ * includes the Matrix A, vector x and vector b
  *
  * This function calls #N_alloc_les_param
  *
@@ -85,10 +87,9 @@ N_les *N_alloc_nquad_les_Ax_b(int cols, int rows, int type)
     return N_alloc_les_param(cols, rows, type, 2);
 }
 
-
-
 /*!
- * \brief Allocate memory for a quadratic linear equation system which includes the Matrix A, vector x and vector b
+ * \brief Allocate memory for a quadratic linear equation system which includes
+ * the Matrix A, vector x and vector b
  *
  * This function calls #N_alloc_les_param
  *
@@ -103,7 +104,8 @@ N_les *N_alloc_les(int rows, int type)
 }
 
 /*!
- * \brief Allocate memory for a quadratic linear equation system which includes the Matrix A and vector x
+ * \brief Allocate memory for a quadratic linear equation system which includes
+ * the Matrix A and vector x
  *
  * This function calls #N_alloc_les_param
  *
@@ -118,7 +120,8 @@ N_les *N_alloc_les_Ax(int rows, int type)
 }
 
 /*!
- * \brief Allocate memory for a quadratic linear equation system which includes the Matrix A
+ * \brief Allocate memory for a quadratic linear equation system which includes
+ * the Matrix A
  *
  * This function calls #N_alloc_les_param
  *
@@ -133,7 +136,8 @@ N_les *N_alloc_les_A(int rows, int type)
 }
 
 /*!
- * \brief Allocate memory for a quadratic linear equation system which includes the Matrix A, vector x and vector b
+ * \brief Allocate memory for a quadratic linear equation system which includes
+ * the Matrix A, vector x and vector b
  *
  * This function calls #N_alloc_les_param
  *
@@ -147,23 +151,23 @@ N_les *N_alloc_les_Ax_b(int rows, int type)
     return N_alloc_les_param(rows, rows, type, 2);
 }
 
-
 /*!
- * \brief Allocate memory for a quadratic or not quadratic linear equation system
+ * \brief Allocate memory for a quadratic or not quadratic linear equation
+ * system
  *
  * The type of the linear equation system must be N_NORMAL_LES for
  * a regular quadratic matrix or N_SPARSE_LES for a sparse matrix
  *
  * <p>
  * In case of N_NORMAL_LES
- * 
+ *
  * A quadratic matrix of size rows*rows*sizeof(double) will allocated
  *
  * <p>
  * In case of N_SPARSE_LES
  *
- * a vector of size row will be allocated, ready to hold additional allocated sparse vectors.
- * each sparse vector may have a different size.
+ * a vector of size row will be allocated, ready to hold additional allocated
+ * sparse vectors. each sparse vector may have a different size.
  *
  * Parameter parts defines which parts of the les should be allocated.
  * The number of columns and rows defines if the matrix is quadratic.
@@ -183,21 +187,22 @@ N_les *N_alloc_les_param(int cols, int rows, int type, int parts)
 
     if (type == N_SPARSE_LES)
         G_debug(2,
-                "Allocate memory for a sparse linear equation system with %i rows\n",
+                "Allocate memory for a sparse linear equation system with %i "
+                "rows\n",
                 rows);
     else
         G_debug(2,
-                "Allocate memory for a regular linear equation system with %i rows\n",
+                "Allocate memory for a regular linear equation system with %i "
+                "rows\n",
                 rows);
 
-    les = (N_les *) G_calloc(1, sizeof(N_les));
+    les = (N_les *)G_calloc(1, sizeof(N_les));
 
     if (parts > 0) {
         les->x = (double *)G_calloc(cols, sizeof(double));
         for (i = 0; i < cols; i++)
             les->x[i] = 0.0;
     }
-
 
     if (parts > 1) {
         les->b = (double *)G_calloc(cols, sizeof(double));
@@ -245,14 +250,13 @@ N_les *N_alloc_les_param(int cols, int rows, int type, int parts)
 
  \endverbatim
  *
- * \param les N_les * 
+ * \param les N_les *
  * \return void
- *  
+ *
  * */
-void N_print_les(N_les * les)
+void N_print_les(N_les *les)
 {
     int i, j, k, out;
-
 
     if (les->type == N_SPARSE_LES) {
         for (i = 0; i < les->rows; i++) {
@@ -288,7 +292,6 @@ void N_print_les(N_les * les)
 
             fprintf(stdout, "\n");
         }
-
     }
     return;
 }
@@ -296,12 +299,12 @@ void N_print_les(N_les * les)
 /*!
  * \brief Release the memory of the linear equation system
  *
- * \param les N_les *            
+ * \param les N_les *
  * \return void
  *
  * */
 
-void N_free_les(N_les * les)
+void N_free_les(N_les *les)
 {
     if (les->type == N_SPARSE_LES)
         G_debug(2, "Releasing memory of a sparse linear equation system\n");

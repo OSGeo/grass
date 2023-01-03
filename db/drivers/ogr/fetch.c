@@ -33,7 +33,7 @@
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db__driver_fetch(dbCursor * cn, int position, int *more)
+int db__driver_fetch(dbCursor *cn, int position, int *more)
 {
     int i, col;
     int ogrType, sqlType;
@@ -51,7 +51,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(_("Cursor not found"));
         db_d_report_error();
         return DB_FAILED;
@@ -116,7 +116,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     for (i = 0; i < c->ncols; i++) {
         if (!(c->cols[i])) {
             continue;
-        }                       /* unknown type */
+        } /* unknown type */
         col++;
 
         column = db_get_table_column(table, col);
@@ -135,9 +135,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             continue;
         }
 
-        G_debug(3, "col %d, ogrType %d, sqlType %d: val = '%s'",
-                col, ogrType, sqlType, OGR_F_GetFieldAsString(c->hFeature,
-                                                              i));
+        G_debug(3, "col %d, ogrType %d, sqlType %d: val = '%s'", col, ogrType,
+                sqlType, OGR_F_GetFieldAsString(c->hFeature, i));
 
         switch (ogrType) {
         case OFTInteger:
@@ -180,7 +179,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
    \return number of rows
    \return DB_FAILED on error
  */
-int db__driver_get_num_rows(dbCursor * cn)
+int db__driver_get_num_rows(dbCursor *cn)
 {
     cursor *c;
     dbToken token;
@@ -191,7 +190,7 @@ int db__driver_get_num_rows(dbCursor * cn)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(_("Cursor not found"));
         db_d_report_error();
         return DB_FAILED;

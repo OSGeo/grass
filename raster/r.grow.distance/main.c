@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.grow.distance
@@ -23,6 +22,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -103,8 +103,8 @@ static void check(int row, int col, int dx, int dy)
     x = xrow[col + dx] + dx;
     y = yrow[col + dx] + dy;
     v = vrow[col + dx];
-    d = distance ? (*distance) (xres * x, yres * y)
-        : geodesic_distance(col, row, col + x, row + y);
+    d = distance ? (*distance)(xres * x, yres * y)
+                 : geodesic_distance(col, row, col + x, row + y);
 
     if (!Rast_is_d_null_value(&dist_row[col]) && dist_row[col] < d)
         return;
@@ -118,12 +118,10 @@ static void check(int row, int col, int dx, int dy)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *in, *dist, *val, *met, *min, *max;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *m, *n;
     } flag;
     const char *in_name;
@@ -148,7 +146,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("distance"));
     G_add_keyword(_("proximity"));
     module->description =
-        _("Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell.");
+        _("Generates a raster map containing distances to nearest raster "
+          "features and/or the value of the nearest non-null cell.");
 
     opt.in = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -186,8 +185,7 @@ int main(int argc, char **argv)
 
     flag.m = G_define_flag();
     flag.m->key = 'm';
-    flag.m->description =
-        _("Output distances in meters instead of map units");
+    flag.m->description = _("Output distances in meters instead of map units");
 
     flag.n = G_define_flag();
     flag.n->key = 'n';
@@ -204,8 +202,8 @@ int main(int argc, char **argv)
     mindist = -1;
     if (opt.min->answer) {
         if (sscanf(opt.min->answer, "%lf", &mindist) != 1) {
-            G_warning(_("Invalid %s value '%s', ignoring."),
-                      opt.min->key, opt.min->answer);
+            G_warning(_("Invalid %s value '%s', ignoring."), opt.min->key,
+                      opt.min->answer);
 
             mindist = -1;
         }
@@ -214,8 +212,8 @@ int main(int argc, char **argv)
     maxdist = -1;
     if (opt.max->answer) {
         if (sscanf(opt.max->answer, "%lf", &maxdist) != 1) {
-            G_warning(_("Invalid %s value '%s', ignoring."),
-                      opt.max->key, opt.max->answer);
+            G_warning(_("Invalid %s value '%s', ignoring."), opt.max->key,
+                      opt.max->answer);
 
             maxdist = -1;
         }
@@ -224,8 +222,8 @@ int main(int argc, char **argv)
     if (mindist > 0 && maxdist > 0 && mindist >= maxdist) {
         /* GTC error because given minimum_distance is not smaller than
          * given maximum_distance */
-        G_fatal_error(_("'%s' must be smaller than '%s'."),
-                      opt.min->key, opt.max->key);
+        G_fatal_error(_("'%s' must be smaller than '%s'."), opt.min->key,
+                      opt.max->key);
     }
 
     if (mindist > 0 || maxdist > 0) {
@@ -238,9 +236,11 @@ int main(int argc, char **argv)
         /* value output for distance to NULL cells makes sense
          * if mindist or maxdist is given */
         if (!dist_name)
-            G_fatal_error(_("Distance output is required for distance to NULL cells"));
+            G_fatal_error(
+                _("Distance output is required for distance to NULL cells"));
         if (val_name) {
-            G_warning(_("Value output is meaningless for distance to NULL cells"));
+            G_warning(
+                _("Value output is meaningless for distance to NULL cells"));
             val_name = NULL;
         }
     }
@@ -273,7 +273,8 @@ int main(int argc, char **argv)
     if (flag.m->answer) {
         if (window.proj == PROJECTION_LL &&
             strcmp(opt.met->answer, "geodesic") != 0) {
-            G_fatal_error(_("Output distance in meters for lat/lon is only possible with '%s=%s'"),
+            G_fatal_error(_("Output distance in meters for lat/lon is only "
+                            "possible with '%s=%s'"),
                           opt.met->key, "geodesic");
         }
 
@@ -355,10 +356,18 @@ int main(int argc, char **argv)
             check(irow, col, 1, 1);
         }
 
-        write(temp_fd, new_x_row, ncols * sizeof(CELL));
-        write(temp_fd, new_y_row, ncols * sizeof(CELL));
-        write(temp_fd, dist_row, ncols * sizeof(DCELL));
-        write(temp_fd, new_val_row, ncols * sizeof(DCELL));
+        if (write(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (write(temp_fd, new_y_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (write(temp_fd, dist_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (write(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 
         swap_rows();
     }
@@ -374,16 +383,24 @@ int main(int argc, char **argv)
     for (row = 0; row < nrows; row++) {
         int irow = nrows - 1 - row;
         off_t offset =
-            (off_t) irow * ncols * (2 * sizeof(CELL) + 2 * sizeof(DCELL));
+            (off_t)irow * ncols * (2 * sizeof(CELL) + 2 * sizeof(DCELL));
 
         G_percent(row, nrows, 2);
 
         lseek(temp_fd, offset, SEEK_SET);
 
-        read(temp_fd, new_x_row, ncols * sizeof(CELL));
-        read(temp_fd, new_y_row, ncols * sizeof(CELL));
-        read(temp_fd, dist_row, ncols * sizeof(DCELL));
-        read(temp_fd, new_val_row, ncols * sizeof(DCELL));
+        if (read(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (read(temp_fd, new_y_row, ncols * sizeof(CELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (read(temp_fd, dist_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (read(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 
         for (col = 0; col < ncols; col++) {
             check(row, col, -1, -1);

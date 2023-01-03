@@ -10,7 +10,6 @@
 #include <grass/simlib.h>
 #include <grass/waterglobs.h>
 
-
 /* Local prototypes for raster map reading and array allocation */
 static float **read_float_raster_map(int rows, int cols, char *name,
                                      float unitconv);
@@ -280,8 +279,7 @@ void alloc_walkers(int max_walkers)
     w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
     vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
     if (outwalk != NULL)
-        stack =
-            (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
+        stack = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
 }
 
 /* ************************************************************** */
@@ -290,7 +288,7 @@ void alloc_walkers(int max_walkers)
 
 /*!
  * \brief allocate memory, read input rasters, assign UNDEF to NODATA
- * 
+ *
  *  \return int
  */
 
@@ -298,9 +296,9 @@ void alloc_walkers(int max_walkers)
 /* Read all input maps and input values into memory ************************ */
 int input_data(void)
 {
-    int rows = my, cols = mx;   /* my and mx are global variables */
+    int rows = my, cols = mx; /* my and mx are global variables */
     int max_walkers;
-    double unitconv = 0.000000278;      /* mm/hr to m/s */
+    double unitconv = 0.000000278; /* mm/hr to m/s */
     int if_rain = 0;
 
     G_debug(1, "Running MAR 2011 version, started modifications on 20080211");
@@ -319,12 +317,12 @@ int input_data(void)
     if (manin != NULL) {
         cchez = read_float_raster_map(rows, cols, manin, 1.0);
     }
-    else if (manin_val >= 0.0) {        /* If no value set its set to -999.99 */
+    else if (manin_val >= 0.0) { /* If no value set its set to -999.99 */
         cchez = create_float_matrix(rows, cols, manin_val);
     }
     else {
-        G_fatal_error(_("Raster map <%s> not found, and manin_val undefined, choose one to be allowed to process"),
-                      manin);
+        G_fatal_error(_("Manning's n raster map not found and manin_val "
+                        "undefined, choose one to be allowed to process"));
     }
 
     /* Rain: read rain map or use a single value for all cells */
@@ -350,7 +348,7 @@ int input_data(void)
         if (infil != NULL) {
             inf = read_double_raster_map(rows, cols, infil, unitconv);
         }
-        else if (infil_val >= 0.0) {    /* If no value set its set to -999.99 */
+        else if (infil_val >= 0.0) { /* If no value set its set to -999.99 */
             inf = create_double_matrix(rows, cols, infil_val * unitconv);
         }
         else {
@@ -433,15 +431,15 @@ int grad_check(void)
                 zx = v1[k][l];
                 zy = v2[k][l];
                 zd2 = zx * zx + zy * zy;
-                sinsl = sqrt(zd2) / sqrt(zd2 + 1);      /* sin(terrain slope) */
+                sinsl = sqrt(zd2) / sqrt(zd2 + 1); /* sin(terrain slope) */
                 /* Computing MIN */
                 zd2 = sqrt(zd2);
                 zd2min = amin1(zd2min, zd2);
                 /* Computing MAX */
                 zd2max = amax1(zd2max, zd2);
-                zd4 = sqrt(zd2);        /* ^.25 */
+                zd4 = sqrt(zd2); /* ^.25 */
                 if (cchez[k][l] != 0.) {
-                    cchez[k][l] = 1. / cchez[k][l];     /* 1/n */
+                    cchez[k][l] = 1. / cchez[k][l]; /* 1/n */
                 }
                 else {
                     G_fatal_error(_("Zero value in Mannings n"));
@@ -455,14 +453,15 @@ int grad_check(void)
                     if (wdepth)
                         hh = pow(gama[k][l], 2. / 3.);
                     /* hh = 1 if there is no water depth input */
-                    v1[k][l] = (double)hh *cchez[k][l] * zx / zd4;
-                    v2[k][l] = (double)hh *cchez[k][l] * zy / zd4;
+                    v1[k][l] = (double)hh * cchez[k][l] * zx / zd4;
+                    v2[k][l] = (double)hh * cchez[k][l] * zy / zd4;
 
                     slope[k][l] =
                         sqrt(v1[k][l] * v1[k][l] + v2[k][l] * v2[k][l]);
                 }
                 if (wdepth) {
-                    sheer = (double)(cmul2 * gama[k][l] * sinsl);       /* shear stress */
+                    sheer =
+                        (double)(cmul2 * gama[k][l] * sinsl); /* shear stress */
                     /* if critical shear stress >= shear then all zero */
                     if ((sheer <= tau[k][l]) || (ct[k][l] == 0.)) {
                         si[k][l] = 0.;
@@ -470,7 +469,11 @@ int grad_check(void)
                     }
                     else {
                         si[k][l] = (double)(dc[k][l] * (sheer - tau[k][l]));
-                        sigma[k][l] = (double)(dc[k][l] / ct[k][l]) * (sheer - tau[k][l]) / (pow(sheer, 1.5));  /* rill erosion=1.5, sheet = 1.1 */
+                        sigma[k][l] =
+                            (double)(dc[k][l] / ct[k][l]) *
+                            (sheer - tau[k][l]) /
+                            (pow(sheer,
+                                 1.5)); /* rill erosion=1.5, sheet = 1.1 */
                     }
                 }
                 sisum += si[k][l];
@@ -485,19 +488,21 @@ int grad_check(void)
                 vsum += slope[k][l];
                 chsum += cchez[k][l];
                 zmin = amin1(zmin, (double)zz[k][l]);
-                zmax = amax1(zmax, (double)zz[k][l]);   /* not clear were needed */
+                zmax =
+                    amax1(zmax, (double)zz[k][l]); /* not clear were needed */
                 if (wdepth)
                     sigmax = amax1(sigmax, sigma[k][l]);
                 cchezmax = amax1(cchezmax, cchez[k][l]);
                 /* saved sqrt(sinsl)*cchez to cchez array for output */
                 cchez[k][l] *= sqrt(sinsl);
-            }                   /* DEFined area */
+            } /* DEFined area */
         }
     }
     if (inf != NULL && smax < infmax)
-        G_warning(_("Infiltration exceeds the rainfall rate everywhere! No overland flow."));
+        G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
+                    "overland flow."));
 
-    cc = (double)mx *my;
+    cc = (double)mx * my;
 
     si0 = sisum / cc;
     vmean = vsum / cc;
@@ -507,21 +512,27 @@ int grad_check(void)
         infmean = infsum / cc;
 
     if (wdepth)
-        deltaw = 0.8 / (sigmax * vmax); /*time step for sediment */
-    deltap = 0.25 * sqrt(stepx * stepy) / vmean;        /*time step for water */
+        deltaw = 0.8 / (sigmax * vmax);          /*time step for sediment */
+    deltap = 0.25 * sqrt(stepx * stepy) / vmean; /*time step for water */
 
     if (deltaw > deltap)
         timec = 4.;
     else
         timec = 1.25;
 
-    miter = (int)(timesec / (deltap * timec));  /* number of iterations = number of cells to pass */
-    iterout = (int)(iterout / (deltap * timec));        /* number of cells to pass for time series output */
+    miter = (int)(timesec /
+                  (deltap *
+                   timec)); /* number of iterations = number of cells to pass */
+    iterout =
+        (int)(iterout /
+              (deltap *
+               timec)); /* number of cells to pass for time series output */
 
     fprintf(stderr, "\n");
     G_message(_("Min elevation \t= %.2f m\nMax elevation \t= %.2f m\n"), zmin,
               zmax);
-    G_message(_("Mean Source Rate (rainf. excess or sediment) \t= %f m/s or kg/m2s \n"),
+    G_message(_("Mean Source Rate (rainf. excess or sediment) \t= %f m/s or "
+                "kg/m2s \n"),
               si0);
     G_message(_("Mean flow velocity \t= %f m/s\n"), vmean);
     G_message(_("Mean Mannings \t= %f\n"), 1.0 / chmean);
@@ -529,29 +540,27 @@ int grad_check(void)
     deltap = amin1(deltap, deltaw);
 
     G_message(n_("Number of iterations \t= %d cell\n",
-                 "Number of iterations \t= %d cells\n", miter), miter);
+                 "Number of iterations \t= %d cells\n", miter),
+              miter);
     G_message(_("Time step \t= %.2f s\n"), deltap);
     if (wdepth) {
-        G_message(_("Sigmax \t= %f\nMax velocity \t= %f m/s\n"), sigmax,
-                  vmax);
+        G_message(_("Sigmax \t= %f\nMax velocity \t= %f m/s\n"), sigmax, vmax);
         G_message(_("Time step used \t= %.2f s\n"), deltaw);
     }
-    /*    if (wdepth) deltap = 0.1; 
+    /*    if (wdepth) deltap = 0.1;
      *    deltap for sediment is ar. average deltap and deltaw */
-    /*    if (wdepth) deltap = (deltaw+deltap)/2.; 
+    /*    if (wdepth) deltap = (deltaw+deltap)/2.;
      *    deltap for sediment is ar. average deltap and deltaw */
 
-
-    /*! For each cell (k,l) compute the length s=(v1,v2) of the path 
+    /*! For each cell (k,l) compute the length s=(v1,v2) of the path
      *  that the particle will travel per one time step
      *  \f$ s(k,l)=v(k,l)*dt \f$, [m]=[m/s]*[s]
-     *  give warning if there is a cell that will lead to path longer than 2 cells 
+     *  give warning if there is a cell that will lead to path longer than 2
+     * cells
      *
-     *  if running erosion, compute sediment transport capacity for each cell si(k,l)
-     *  \f$
-     * T({\bf r})=K_t({\bf r}) \bigl[\tau({\bf r})\bigr]^p
-     * =K_t({\bf r}) \bigl[\rho_w\, g h({\bf r}) \sin \beta ({\bf r}) \bigr]^p
-     * \f$
+     *  if running erosion, compute sediment transport capacity for each cell
+     * si(k,l) \f$ T({\bf r})=K_t({\bf r}) \bigl[\tau({\bf r})\bigr]^p =K_t({\bf
+     * r}) \bigl[\rho_w\, g h({\bf r}) \sin \beta ({\bf r}) \bigr]^p \f$
      * [kg/ms]=...
      */
     for (k = 0; k < my; k++) {
@@ -559,8 +568,8 @@ int grad_check(void)
             if (zz[k][l] != UNDEF) {
                 v1[k][l] *= deltap;
                 v2[k][l] *= deltap;
-                /*if(v1[k][l]*v1[k][l]+v2[k][l]*v2[k][l] > cellsize, warning, napocitaj
-                 *ak viac ako 10%a*/
+                /*if(v1[k][l]*v1[k][l]+v2[k][l]*v2[k][l] > cellsize, warning,
+                 *napocitaj ak viac ako 10%a*/
                 /* THIS IS CORRECT SOLUTION currently commented out */
                 if (inf)
                     inf[k][l] *= timesec;
@@ -573,25 +582,25 @@ int grad_check(void)
                         /* temp for transp. cap. erod */
                         si[k][l] = si[k][l] / (slope[k][l] * sigma[k][l]);
                 }
-            }                   /* DEFined area */
+            } /* DEFined area */
         }
     }
 
-    /*! compute transport capacity limted erosion/deposition et 
+    /*! compute transport capacity limted erosion/deposition et
      *   as a divergence of sediment transport capacity
      *   \f$
      D_T({\bf r})= \nabla\cdot {\bf T}({\bf r})
      *   \f$
      */
     if (et) {
-        erod(si);               /* compute divergence of t.capc */
+        erod(si); /* compute divergence of t.capc */
         if (output_et() != 1)
             G_fatal_error(_("Unable to write et file"));
     }
 
-    /*! compute the inversion operator and store it in sigma - note that after this
-     *   sigma does not store the first order reaction coefficient but the operator
-     *   WRITE the equation here
+    /*! compute the inversion operator and store it in sigma - note that after
+     * this sigma does not store the first order reaction coefficient but the
+     * operator WRITE the equation here
      */
     if (wdepth) {
         for (k = 0; k < my; k++) {
@@ -606,12 +615,11 @@ int grad_check(void)
 
                         /*!!!!! not clear what's here :-\ !!!!! */
 
-                        sigma[k][l] =
-                            exp(-sigma[k][l] * deltap * slope[k][l]);
-                    /* if(sigma[k][l]<0.5) warning, napocitaj, 
+                        sigma[k][l] = exp(-sigma[k][l] * deltap * slope[k][l]);
+                    /* if(sigma[k][l]<0.5) warning, napocitaj,
                      * ak vacsie ako 50% skonci, zmensi deltap)*/
                 }
-            }                   /*DEFined area */
+            } /*DEFined area */
         }
     }
     return 1;
@@ -734,8 +742,7 @@ float **read_float_raster_map(int rows, int cols, char *name, float unitconv)
 
 /* ************************************************************************* */
 
-double **read_double_raster_map(int rows, int cols, char *name,
-                                double unitconv)
+double **read_double_raster_map(int rows, int cols, char *name, double unitconv)
 {
     DCELL *row_buff = NULL;
     int fd;

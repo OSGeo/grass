@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       g.mkfontcap
  * AUTHOR(S):    Paul Kelly
  * PURPOSE:      Generates the font configuration file by scanning various
  *               directories for GRASS stroke and Freetype-compatible fonts.
- *              
+ *
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -24,12 +23,11 @@
 
 #include "local_proto.h"
 
-struct font_desc
-{
+struct font_desc {
 
-    char *filename;   /**< Filename in fonts directory */
+    char *filename; /**< Filename in fonts directory */
 
-    char *description;/**< Descriptive name of font contained in this file */
+    char *description; /**< Descriptive name of font contained in this file */
 };
 
 static struct font_desc *font_descriptions = NULL;
@@ -41,10 +39,10 @@ static const char *get_desc(const char *);
 
 /**
  * \brief Find Stroke fonts and store them in a global GFONT_CAP struct
- * 
+ *
  * The directory $GISBASE/fonts is listed to find all stroke fonts (i.e.
  * files with a .hmp extension).
- * Information on each font is stored in the global GFONT_CAP struct, 
+ * Information on each font is stored in the global GFONT_CAP struct,
  * fontcap, to be used by the main program.
  **/
 
@@ -72,8 +70,8 @@ void find_stroke_fonts(void)
         }
 
         /* Path */
-        G_asprintf(&fontcap[totalfonts].path, "%s%c%s", dirpath,
-                   HOST_DIRSEP, dirlisting[i]);
+        G_asprintf(&fontcap[totalfonts].path, "%s%c%s", dirpath, HOST_DIRSEP,
+                   dirlisting[i]);
         G_convert_dirseps_to_host(fontcap[totalfonts].path);
         /* Description & Name */
         fontcap[totalfonts].longname = G_store(get_desc(dirlisting[i]));
@@ -94,7 +92,6 @@ void find_stroke_fonts(void)
         free_font_descriptions();
 
     return;
-
 }
 
 /**
@@ -104,7 +101,7 @@ void find_stroke_fonts(void)
  * and corresponding descriptions pointed at by the static variable
  * font_descriptions. After calling, num_descriptions will contain
  * the number of font descriptions that were loaded.
- * 
+ *
  * \param descfile Filename to be loaded
  *
  * \return 1 if at least one font description was loaded; 0 otherwise
@@ -139,8 +136,7 @@ static int load_font_descriptions(const char *descfile)
         }
 
         font_descriptions[num_descriptions].filename = G_store(name);
-        font_descriptions[num_descriptions].description =
-            G_store(description);
+        font_descriptions[num_descriptions].description = G_store(description);
         num_descriptions++;
     }
 
@@ -154,11 +150,11 @@ static int load_font_descriptions(const char *descfile)
  *
  * Searches through the static font_descriptions name for a descriptive
  * name matching the filename passed to the function. If a match is found,
- * the descriptive name is returned; otherwise the filename that was 
+ * the descriptive name is returned; otherwise the filename that was
  * originally passed is returned.
- * 
+ *
  * \param filename Filename of stroke font
- * 
+ *
  * \return Const string containing descriptive name for the font
  **/
 

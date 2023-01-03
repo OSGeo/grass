@@ -1,18 +1,18 @@
 /* **************************************************************
- * 
+ *
  *  MODULE:       v.in.dwg
- *  
+ *
  *  AUTHOR(S):    Radim Blazek
- *                
+ *
  *  PURPOSE:      Import of DWG/DXF files
- *                
+ *
  *  COPYRIGHT:    (C) 2001 by the GRASS Development Team
- * 
- *                This program is free software under the 
- *                GNU General Public License (>=v2). 
+ *
+ *                This program is free software under the
+ *                GNU General Public License (>=v2).
  *                Read the file COPYING that comes with GRASS
  *                for details.
- * 
+ *
  * In addition, as a special exception, Radim Blazek gives permission
  * to link the code of this program with the OpenDWG libraries (or with
  * modified versions of the OpenDWG libraries that use the same license
@@ -22,7 +22,7 @@
  * this exception to your version of the file, but you are not obligated
  * to do so. If you do not wish to do so, delete this exception statement
  * from your version.
- * 
+ *
  * **************************************************************/
 
 /* Documentation:
@@ -52,7 +52,7 @@
 #include "global.h"
 
 #define exampleprintf printf
-#define LOCPI M_PI
+#define LOCPI         M_PI
 
 char buf[1000];
 char buf2[1000];
@@ -168,7 +168,7 @@ void getEntTypeName(PAD_ENT_HDR adenhd, char *name)
             strcpy(name, "Wipeout");
         else if (adenhd->enttype == adRtextEnttype(dwghandle))
             strcpy(name, "Rtext");
-        else {                  /* regular proxy */
+        else { /* regular proxy */
 
             G_debug(3, "adenhd->enttype: %d", adenhd->enttype);
             strcpy(name, "Proxy");
@@ -278,8 +278,7 @@ int write_line(PAD_ENT_HDR adenhd, int type, int level)
 int is_low_level(PAD_ENT_HDR adenhd)
 {
     if (adenhd->enttype == AD_ENT_BLOCK || adenhd->enttype == AD_ENT_ENDBLK ||
-        adenhd->enttype == AD_ENT_SEQEND || adenhd->enttype == AD_ENT_INSERT)
-    {
+        adenhd->enttype == AD_ENT_SEQEND || adenhd->enttype == AD_ENT_INSERT) {
         return 0;
     }
     return 1;
@@ -332,15 +331,15 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
     G_debug(1, "Entity: %s", buf);
 
     Txt = NULL;
-    adenhd2 = (PAD_ENT_HDR) G_malloc(sizeof(AD_ENT_HDR));
-    aden2 = (PAD_ENT) G_malloc(sizeof(AD_ENT));
-    adblkh = (PAD_BLKH) G_malloc(sizeof(AD_BLKH));
+    adenhd2 = (PAD_ENT_HDR)G_malloc(sizeof(AD_ENT_HDR));
+    aden2 = (PAD_ENT)G_malloc(sizeof(AD_ENT));
+    adblkh = (PAD_BLKH)G_malloc(sizeof(AD_BLKH));
     Vect_reset_line(Points);
 
     /* Check space for lower level */
     if (level + 1 == atrans) {
         atrans += 10;
-        Trans = (TRANS *) G_realloc(Trans, atrans * sizeof(TRANS));
+        Trans = (TRANS *)G_realloc(Trans, atrans * sizeof(TRANS));
     }
 
     switch (adenhd->enttype) {
@@ -383,7 +382,6 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
         write_line(adenhd, GV_POINT, level);
         break;
 
-
     case AD_ENT_POINT:
         Vect_append_point(Points, aden->point.pt0[0], aden->point.pt0[1],
                           aden->line.pt0[2]);
@@ -407,8 +405,8 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
 
     case AD_ENT_CIRCLE:
         if (circle_as_point) {
-            Vect_append_point(Points, aden->circle.pt0[0],
-                              aden->circle.pt0[1], aden->circle.pt0[3]);
+            Vect_append_point(Points, aden->circle.pt0[0], aden->circle.pt0[1],
+                              aden->circle.pt0[3]);
             write_line(adenhd, GV_POINT, level);
         }
         else {
@@ -418,29 +416,28 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
                 z = aden->circle.pt0[3];
                 Vect_append_point(Points, x, y, z);
             }
-            Vect_append_point(Points, Points->x[0], Points->y[0],
-                              Points->z[0]);
+            Vect_append_point(Points, Points->x[0], Points->y[0], Points->z[0]);
             write_line(adenhd, GV_LINE, level);
         }
         break;
 
-        /* BLOCK starts block of entities but makes no transformation - is it right ? 
+        /* BLOCK starts block of entities but makes no transformation - is it
+         * right ?
          *  -> do nothing just warn for xref */
     case AD_ENT_BLOCK:
         if (aden->block.xrefpath[0]) {
-            G_warning
-                ("External reference for block not supported.\n  xref: %s",
-                 aden->block.xrefpath);
+            G_warning("External reference for block not supported.\n  xref: %s",
+                      aden->block.xrefpath);
         }
         Block = G_store(aden->block.name2);
         break;
 
-    case AD_ENT_ENDBLK:        /* endblk - no data */
+    case AD_ENT_ENDBLK: /* endblk - no data */
         G_free(Block);
         Block = NULL;
         break;
 
-    case AD_ENT_INSERT:        /* insert */
+    case AD_ENT_INSERT: /* insert */
         /* get transformation */
         /* TODO: fix rotation for CIRCLE and ARC */
         G_debug(3, " x,y,z: %f, %f, %f", aden->insert.pt0[0],
@@ -454,8 +451,7 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
                 aden->insert.rowdist);
 
         /* write block entities */
-        adSeekBlockheader(dwghandle, aden->insert.blockheaderobjhandle,
-                          adblkh);
+        adSeekBlockheader(dwghandle, aden->insert.blockheaderobjhandle, adblkh);
         if (!adblkh->purgedflag) {
             adStartEntityGet(adblkh->entitylist);
             while (1) {
@@ -478,7 +474,7 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
         }
         break;
 
-    case AD_ENT_SEQEND:        /* seqend */
+    case AD_ENT_SEQEND: /* seqend */
         break;
 
     case AD_ENT_POLYLINE:
@@ -537,7 +533,7 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
         }
         break;
 
-    }                           /* end of switch */
+    } /* end of switch */
 
     G_free(aden2);
     G_free(adenhd2);

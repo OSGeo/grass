@@ -37,7 +37,7 @@ int read_range(void)
             old_dmax = tmp_dmax;
         if (!i || tmp_dmin < old_dmin || Rast_is_d_null_value(&old_dmin))
             old_dmin = tmp_dmin;
-    }                           /* for loop */
+    } /* for loop */
 
     return 0;
 }
@@ -58,8 +58,8 @@ int report_range(void)
     if (Rast_is_c_null_value(&old_min) || Rast_is_c_null_value(&old_max))
         G_message(_("Old integer data range is empty"));
     else
-        G_message(_("Old integer data range is %d to %d"),
-                  (int)old_min, (int)old_max);
+        G_message(_("Old integer data range is %d to %d"), (int)old_min,
+                  (int)old_max);
 
     return 0;
 }
@@ -86,8 +86,8 @@ int read_rules(const char *filename)
     read_range();
     report_range();
     if (isatty(fileno(fp)))
-        fprintf(stderr,
-                _("\nEnter the rule or 'help' for the format description or 'end' to exit:\n"));
+        fprintf(stderr, _("\nEnter the rule or 'help' for the format "
+                          "description or 'end' to exit:\n"));
     Rast_quant_init(&quant_struct);
     for (line = 1;; line++) {
         if (isatty(fileno(fp)))
@@ -105,9 +105,10 @@ int read_rules(const char *filename)
             continue;
         if (strcmp(buf, "end") == 0) {
             if (nrules == 0)
-                break;          /* if no new rules have been specified */
+                break; /* if no new rules have been specified */
 
-            /* give warning when quant rules do not cover the whole range of map */
+            /* give warning when quant rules do not cover the whole range of map
+             */
             Rast_quant_get_limits(&quant_struct, &dmin, &dmax, &cmin, &cmax);
             if ((dmin > old_dmin || dmax < old_dmax) && !first)
                 G_warning(_("quant rules do not cover the whole range map"));
@@ -115,16 +116,17 @@ int read_rules(const char *filename)
         }
 
         if (strcmp(buf, "help") == 0) {
-            fprintf(stderr,
-                    "Enter a rule in one of these formats:\n"
-                    "float_low:float_high:int_low:int_high\n"
-                    "float_low:float_high:int_val  (i.e. int_high == int_low)\n"
-                    "*:float_val:int_val           (interval [inf, float_val])\n"
-                    "float_val:*:int_val           (interval [float_val, inf])\n");
+            fprintf(
+                stderr,
+                "Enter a rule in one of these formats:\n"
+                "float_low:float_high:int_low:int_high\n"
+                "float_low:float_high:int_val  (i.e. int_high == int_low)\n"
+                "*:float_val:int_val           (interval [inf, float_val])\n"
+                "float_val:*:int_val           (interval [float_val, inf])\n");
         }
 
         /* we read and record into quant table all values, even int as doubles
-           we convert the range and domain values to the right format when we 
+           we convert the range and domain values to the right format when we
            lookup the values in the quant table */
         switch (sscanf(buf, "%lf:%lf:%d:%d", &dLow, &dHigh, &iLow, &iHigh)) {
         case 3:
@@ -158,8 +160,8 @@ int read_rules(const char *filename)
             else
                 G_warning(_("%s is not a valid rule"), buf);
             break;
-        }                       /* switch */
-    }                           /* loop */
+        } /* switch */
+    }     /* loop */
 
     if (fp != stdin)
         fclose(fp);

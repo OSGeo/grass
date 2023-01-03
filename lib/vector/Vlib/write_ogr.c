@@ -53,7 +53,7 @@ static int sqltype_to_ogrtype(int);
 
    \param Map pointer to Map_info structure
    \param type feature type
-   \param points pointer to line_pnts structure (feature geometry) 
+   \param points pointer to line_pnts structure (feature geometry)
    \param cats pointer to line_cats structure (feature categories)
 
    \return feature index in offset array (related to pseudo-topology)
@@ -85,13 +85,12 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
    \return feature offset (rewritten feature)
    \return -1 on error
  */
-off_t V1_rewrite_line_ogr(struct Map_info *Map,
-                          off_t offset, int type,
+off_t V1_rewrite_line_ogr(struct Map_info *Map, off_t offset, int type,
                           const struct line_pnts *points,
                           const struct line_cats *cats)
 {
-    G_debug(3, "V1_rewrite_line_ogr(): type=%d offset=%" PRI_OFF_T,
-            type, offset);
+    G_debug(3, "V1_rewrite_line_ogr(): type=%d offset=%" PRI_OFF_T, type,
+            offset);
 #ifdef HAVE_OGR
     if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
         G_warning(_("Unable to rewrite feature (incompatible feature types)"));
@@ -136,8 +135,8 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
         return -1;
     }
 
-    if (OGR_L_DeleteFeature(ogr_info->layer,
-                            ogr_info->offset.array[offset]) != OGRERR_NONE) {
+    if (OGR_L_DeleteFeature(ogr_info->layer, ogr_info->offset.array[offset]) !=
+        OGRERR_NONE) {
         G_warning(_("Unable to delete feature"));
         return -1;
     }
@@ -162,9 +161,8 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
    \return feature offset
    \return -1 on error
  */
-off_t V2__write_area_ogr(struct Map_info *Map,
-                         const struct line_pnts **points, int nparts,
-                         const struct line_cats *cats)
+off_t V2__write_area_ogr(struct Map_info *Map, const struct line_pnts **points,
+                         int nparts, const struct line_cats *cats)
 {
     return write_feature(Map, GV_BOUNDARY, points, nparts, cats);
 }
@@ -208,8 +206,7 @@ dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
     db_append_string(&sql, " where 0 = 1");
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
-        G_warning(_("Unable to open select cursor: '%s'"),
-                  db_get_string(&sql));
+        G_warning(_("Unable to open select cursor: '%s'"), db_get_string(&sql));
         db_close_database_shutdown_driver(driver);
         return NULL;
     }
@@ -261,7 +258,7 @@ dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
    \param type feature type (GV_POINT, GV_LINE, ...)
 
    \return 0 success
-   \return -1 error 
+   \return -1 error
  */
 int create_ogr_layer(struct Map_info *Map, int type)
 {
@@ -309,21 +306,19 @@ int create_ogr_layer(struct Map_info *Map, int type)
     Ogr_layer_options = ogr_info->layer_options;
     if (Vect_is_3d(Map)) {
         if (strcmp(ogr_info->driver_name, "PostgreSQL") == 0) {
-            Ogr_layer_options =
-                CSLSetNameValue(Ogr_layer_options, "DIM", "3");
+            Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "3");
         }
     }
     else {
         if (strcmp(ogr_info->driver_name, "PostgreSQL") == 0) {
-            Ogr_layer_options =
-                CSLSetNameValue(Ogr_layer_options, "DIM", "2");
+            Ogr_layer_options = CSLSetNameValue(Ogr_layer_options, "DIM", "2");
         }
     }
 
     /* create new OGR layer */
-    Ogr_layer = OGR_DS_CreateLayer(ogr_info->ds, ogr_info->layer_name,
-                                   Ogr_spatial_ref, Ogr_geom_type,
-                                   Ogr_layer_options);
+    Ogr_layer =
+        OGR_DS_CreateLayer(ogr_info->ds, ogr_info->layer_name, Ogr_spatial_ref,
+                           Ogr_geom_type, Ogr_layer_options);
     CSLDestroy(Ogr_layer_options);
     if (!Ogr_layer) {
         G_warning(_("Unable to create OGR layer <%s> in '%s'"),
@@ -339,7 +334,8 @@ int create_ogr_layer(struct Map_info *Map, int type)
         if (Fi) {
             if (ndblinks > 1)
                 G_warning(_("More layers defined, using driver <%s> and "
-                            "database <%s>"), Fi->driver, Fi->database);
+                            "database <%s>"),
+                          Fi->driver, Fi->database);
             ogr_info->dbdriver = create_table(ogr_info->layer, Fi);
             G_free(Fi);
         }
@@ -395,7 +391,7 @@ off_t write_feature(struct Map_info *Map, int type,
     if (nparts < 1)
         return -1;
 
-    points = p_points[0];       /* feature geometry */
+    points = p_points[0]; /* feature geometry */
 
     if (!ogr_info->layer) {
         /* create OGR layer if doesn't exist */
@@ -406,7 +402,7 @@ off_t write_feature(struct Map_info *Map, int type,
     if (!points)
         return 0;
 
-    cat = -1;                   /* no attributes to be written */
+    cat = -1; /* no attributes to be written */
     if (cats->n_cats > 0 && Vect_get_num_dblinks(Map) > 0) {
         /* check for attributes */
         Fi = Vect_get_dblink(Map, 0);
@@ -501,8 +497,8 @@ off_t write_feature(struct Map_info *Map, int type,
 
     /* write attributes */
     if (cat > -1 && ogr_info->dbdriver) {
-        if (0 > write_attributes(ogr_info->dbdriver,
-                                 cat, Fi, ogr_info->layer, Ogr_feature))
+        if (0 > write_attributes(ogr_info->dbdriver, cat, Fi, ogr_info->layer,
+                                 Ogr_feature))
             G_warning(_("Unable to writes feature attributes"));
         G_free(Fi);
     }
@@ -512,9 +508,8 @@ off_t write_feature(struct Map_info *Map, int type,
     /* update offset array */
     if (offset_info->array_num >= offset_info->array_alloc) {
         offset_info->array_alloc += 1000;
-        offset_info->array = (int *)G_realloc(offset_info->array,
-                                              offset_info->array_alloc *
-                                              sizeof(int));
+        offset_info->array = (int *)G_realloc(
+            offset_info->array, offset_info->array_alloc * sizeof(int));
     }
 
     offset = offset_info->array_num;
@@ -551,7 +546,7 @@ off_t write_feature(struct Map_info *Map, int type,
    \return 0 no attributes
    \return -1 on error
  */
-int write_attributes(dbDriver * driver, int cat, const struct field_info *Fi,
+int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
                      OGRLayerH Ogr_layer, OGRFeatureH Ogr_feature)
 {
     int j, ogrfieldnum;
@@ -594,7 +589,8 @@ int write_attributes(dbDriver * driver, int cat, const struct field_info *Fi,
 
     if (!more) {
         G_warning(_("No database record for category %d, "
-                    "no attributes will be written"), cat);
+                    "no attributes will be written"),
+                  cat);
         return -1;
     }
 

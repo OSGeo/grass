@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.describe
@@ -19,28 +18,26 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#define INCR 10
+#define INCR  10
 #define NCATS 100
 
-typedef struct
-{
+typedef struct {
     int idx;
     char cat[NCATS];
     int left;
     int right;
 } NODE;
 
-static NODE *tree = 0;          /* tree of values */
-static int tlen;                /* allocated tree size */
-static int N;                   /* number of actual nodes in tree */
-
+static NODE *tree = 0; /* tree of values */
+static int tlen;       /* allocated tree size */
+static int N;          /* number of actual nodes in tree */
 
 int plant_tree(void)
 {
     N = 0;
     if (!tree) {
         tlen = INCR;
-        tree = (NODE *) G_malloc(tlen * sizeof(NODE));
+        tree = (NODE *)G_malloc(tlen * sizeof(NODE));
     }
 
     return 0;
@@ -80,12 +77,12 @@ int add_node_to_tree(register CELL cat)
         if (tree[q].idx == idx) {
             tree[q].cat[offset] = 1;
 
-            return 0;           /* found */
+            return 0; /* found */
         }
         if (tree[q].idx > idx)
-            q = tree[q].left;   /* go left */
+            q = tree[q].left; /* go left */
         else
-            q = tree[q].right;  /* go right */
+            q = tree[q].right; /* go right */
     }
 
     /* new node */
@@ -93,7 +90,7 @@ int add_node_to_tree(register CELL cat)
 
     /* grow the tree? */
     if (N >= tlen)
-        tree = (NODE *) G_realloc(tree, sizeof(NODE) * (tlen += INCR));
+        tree = (NODE *)G_realloc(tree, sizeof(NODE) * (tlen += INCR));
 
     /* add node to tree */
     G_zero(tree[N].cat, sizeof(tree[N].cat));
@@ -102,12 +99,12 @@ int add_node_to_tree(register CELL cat)
     tree[N].left = 0;
 
     if (tree[p].idx > idx) {
-        tree[N].right = -p;     /* create thread */
-        tree[p].left = N;       /* insert left */
+        tree[N].right = -p; /* create thread */
+        tree[p].left = N;   /* insert left */
     }
     else {
-        tree[N].right = tree[p].right;  /* copy right link/thread */
-        tree[p].right = N;      /* add right */
+        tree[N].right = tree[p].right; /* copy right link/thread */
+        tree[p].right = N;             /* add right */
     }
 
     return 0;
@@ -138,22 +135,22 @@ int next_node(void)
     /* go to the right */
     curp = tree[curp].right;
 
-    if (curp == 0)              /* no more */
+    if (curp == 0) /* no more */
         return 0;
 
-    if (curp < 0) {             /* thread. stop here */
+    if (curp < 0) { /* thread. stop here */
         curp = -curp;
         return 1;
     }
 
-    while ((q = tree[curp].left))       /* now go all the way left */
+    while ((q = tree[curp].left)) /* now go all the way left */
         curp = q;
 
     return 1;
 }
 
 #ifdef COMMENT_OUT
-int first_cat(CELL * cat)
+int first_cat(CELL *cat)
 {
     first_node();
     curoffset = -1;
@@ -161,7 +158,7 @@ int first_cat(CELL * cat)
     return next_cat(cat);
 }
 
-int next_cat(CELL * cat)
+int next_cat(CELL *cat)
 {
     int idx;
 

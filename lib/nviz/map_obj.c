@@ -1,7 +1,8 @@
 /*!
    \file lib/nviz/map_obj.c
 
-   \brief Nviz library -- Define creation and interface functions for map objects.
+   \brief Nviz library -- Define creation and interface functions for map
+   objects.
 
    Map objects are considered to be surfaces, vector plots, or site
    files.
@@ -12,7 +13,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
+           2008/2010)
  */
 
 #include <stdlib.h>
@@ -41,7 +43,7 @@
    \return map object id
    \return -1 on error
  */
-int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
+int Nviz_new_map_obj(int type, const char *name, double value, nv_data *data)
 {
     int new_id, i;
     int num_surfs, *surf_list;
@@ -68,15 +70,15 @@ int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
 
         if (name) {
             /* map */
-            if (!Nviz_set_attr(new_id, MAP_OBJ_SURF, ATT_TOPO,
-                               MAP_ATT, name, -1.0, data)) {
+            if (!Nviz_set_attr(new_id, MAP_OBJ_SURF, ATT_TOPO, MAP_ATT, name,
+                               -1.0, data)) {
                 return -1;
             }
         }
         else {
             /* constant */
-            if (!Nviz_set_attr(new_id, MAP_OBJ_SURF, ATT_TOPO,
-                               CONST_ATT, NULL, value, data)) {
+            if (!Nviz_set_attr(new_id, MAP_OBJ_SURF, ATT_TOPO, CONST_ATT, NULL,
+                               value, data)) {
                 return -1;
             }
         }
@@ -170,100 +172,100 @@ int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
    \param type map object type (MAP_OBJ_SURF, MAP_OBJ_VECT, ...)
    \param desc attribute descriptor
    \param src attribute source
-   \param str_value attribute value as string (if NULL, check for <i>num_value</i>)
-   \param num_value attribute value as double 
+   \param str_value attribute value as string (if NULL, check for
+   <i>num_value</i>) \param num_value attribute value as double
 
    \return 1 on success
    \return 0 on failure
  */
-int Nviz_set_attr(int id, int type, int desc, int src,
-                  const char *str_value, double num_value, nv_data * data)
+int Nviz_set_attr(int id, int type, int desc, int src, const char *str_value,
+                  double num_value, nv_data *data)
 {
     int ret;
     double value;
 
     switch (type) {
-    case (MAP_OBJ_SURF):{
-            /* Basically two cases, either we are setting to a constant field, or
-             * we are loading an actual file. Setting a constant is the easy part
-             * so we try and do that first.
+    case (MAP_OBJ_SURF): {
+        /* Basically two cases, either we are setting to a constant field, or
+         * we are loading an actual file. Setting a constant is the easy part
+         * so we try and do that first.
+         */
+        if (src == CONST_ATT) {
+            /* Get the value for the constant
+             * Note that we require the constant to be an integer
              */
-            if (src == CONST_ATT) {
-                /* Get the value for the constant
-                 * Note that we require the constant to be an integer
-                 */
-                if (str_value)
-                    value = (double)atof(str_value);
-                else
-                    value = num_value;
-
-                /* Only special case is setting constant color.
-                 * In this case we have to decode the constant Tcl
-                 * returns so that the gsf library understands it.
-                 */
-                if (desc == ATT_COLOR) {
-                    /* TODO check this - sometimes gets reversed when save state
-                       saves a surface with constant color
-
-                       int r, g, b;
-                       r = (((int) value) & RED_MASK) >> 16;
-                       g = (((int) value) & GRN_MASK) >> 8;
-                       b = (((int) value) & BLU_MASK);
-                       value = r + (g << 8) + (b << 16);
-                     */
-                }
-
-                /* Once the value is parsed, set it */
-                ret = GS_set_att_const(id, desc, value);
-            }
-            else if (src == MAP_ATT) {
-                ret = GS_load_att_map(id, str_value, desc);
-            }
+            if (str_value)
+                value = (double)atof(str_value);
             else
-                ret = -1;
+                value = num_value;
 
-            /* After we've loaded a constant map or a file,
-             * may need to adjust resolution if we are resetting
-             * topology (for example)
+            /* Only special case is setting constant color.
+             * In this case we have to decode the constant Tcl
+             * returns so that the gsf library understands it.
              */
-            if (0 <= ret) {
-                if (desc == ATT_TOPO) {
-                    int rows, cols, max;
-                    int max2;
+            if (desc == ATT_COLOR) {
+                /* TODO check this - sometimes gets reversed when save state
+                   saves a surface with constant color
 
-                    /* If topology attribute is being set then need to set
-                     * resolution of incoming map to some sensible value so we
-                     * don't wait all day for drawing.
-                     */
-                    GS_get_dims(id, &rows, &cols);
-                    max = (rows > cols) ? rows : cols;
-                    max = max / 50;
-                    if (max < 1)
-                        max = 1;
-                    max2 = max / 5;
-                    if (max2 < 1)
-                        max2 = 1;
-                    /* reset max to finer for coarse surf drawing */
-                    max = max2 + max2 / 2;
-                    if (max < 1)
-                        max = 1;
-
-                    GS_set_drawres(id, max2, max2, max, max);
-                    GS_set_drawmode(id, DM_GOURAUD | DM_POLY | DM_GRID_SURF);
-                }
-
-                /* Not sure about this next line, should probably just
-                 * create separate routines to figure the Z range as well
-                 * as the XYrange
+                   int r, g, b;
+                   r = (((int) value) & RED_MASK) >> 16;
+                   g = (((int) value) & GRN_MASK) >> 8;
+                   b = (((int) value) & BLU_MASK);
+                   value = r + (g << 8) + (b << 16);
                  */
-                Nviz_update_ranges(data);
+            }
 
-                break;
-            }
-    default:{
-                return 0;
-            }
+            /* Once the value is parsed, set it */
+            ret = GS_set_att_const(id, desc, value);
         }
+        else if (src == MAP_ATT) {
+            ret = GS_load_att_map(id, str_value, desc);
+        }
+        else
+            ret = -1;
+
+        /* After we've loaded a constant map or a file,
+         * may need to adjust resolution if we are resetting
+         * topology (for example)
+         */
+        if (0 <= ret) {
+            if (desc == ATT_TOPO) {
+                int rows, cols, max;
+                int max2;
+
+                /* If topology attribute is being set then need to set
+                 * resolution of incoming map to some sensible value so we
+                 * don't wait all day for drawing.
+                 */
+                GS_get_dims(id, &rows, &cols);
+                max = (rows > cols) ? rows : cols;
+                max = max / 50;
+                if (max < 1)
+                    max = 1;
+                max2 = max / 5;
+                if (max2 < 1)
+                    max2 = 1;
+                /* reset max to finer for coarse surf drawing */
+                max = max2 + max2 / 2;
+                if (max < 1)
+                    max = 1;
+
+                GS_set_drawres(id, max2, max2, max, max);
+                GS_set_drawmode(id, DM_GOURAUD | DM_POLY | DM_GRID_SURF);
+            }
+
+            /* Not sure about this next line, should probably just
+             * create separate routines to figure the Z range as well
+             * as the XYrange
+             */
+            Nviz_update_ranges(data);
+
+            break;
+        }
+    default: {
+        return 0;
+    }
+    }
     }
 
     return 1;

@@ -30,8 +30,7 @@
    \return 1 not enough data points
  */
 int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
-                   double convergence,
-                   double separation, int min_class_size,
+                   double convergence, double separation, int min_class_size,
                    int (*checkpoint)(), int *interrupted)
 {
     int changes;
@@ -62,16 +61,14 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
     if (separation < 0.0)
         separation = 0.5;
 
-
     /* allocate memory */
     if (!I_cluster_exec_allocate(C))
         return -1;
 
-
     /* generate class means */
     I_cluster_means(C);
     if (checkpoint)
-        (*checkpoint) (C, 1);
+        (*checkpoint)(C, 1);
 
     /* now assign points to nearest class */
     I_cluster_assign(C, interrupted);
@@ -79,7 +76,7 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
         return -2;
     I_cluster_sum2(C);
     if (checkpoint)
-        (*checkpoint) (C, 2);
+        (*checkpoint)(C, 2);
 
     /* get rid of empty classes now */
     I_cluster_reclass(C, 1);
@@ -101,7 +98,7 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
         C->percent_stable /= (double)C->npoints;
 
         if (checkpoint)
-            (*checkpoint) (C, 3);
+            (*checkpoint)(C, 3);
 
         if (C->iteration >= iterations)
             break;
@@ -115,7 +112,7 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
             break;
 
         if (checkpoint)
-            (*checkpoint) (C, 4);
+            (*checkpoint)(C, 4);
 
         I_cluster_merge(C);
     }
@@ -126,7 +123,6 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
 
     /* compute the resulting signatures */
     I_cluster_signatures(C);
-
 
     return 0;
 }

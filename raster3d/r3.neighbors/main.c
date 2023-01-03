@@ -1,14 +1,15 @@
-
 /****************************************************************************
- * 
+ *
  * MODULE:       r3.neighbors
- *              
- * AUTHOR(S):    Original author 
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert <at> googlemail <dot> co
- *               with code from r.series and r.neighbors for parameter menu handling
- * 
- * PURPOSE:      Makes each voxel value a function of the values assigned to the voxels 
- *               around it, and stores new voxel values in an output 3D raster map
+ *               with code from r.series and r.neighbors for parameter menu
+ *               handling
+ *
+ * PURPOSE:      Makes each voxel value a function of the values assigned to the
+ *               voxels around it, and stores new voxel values in an output 3D
+ *               raster map
  *
  * COPYRIGHT:    (C) 2013 by the GRASS Development Team
  *
@@ -17,6 +18,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,55 +28,35 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-int nx, ny, nz;                 /* Number of cells in x, y and z direction */
-int x_dist, y_dist, z_dist;     /* Distance of cells from the center
-                                   to the edge of the moving window */
-int x_size, y_size, z_size;     /* The size of the moving window in x,
-                                   y and z direction */
-int size;                       /* The maximum size of the value buffer */
+int nx, ny, nz;             /* Number of cells in x, y and z direction */
+int x_dist, y_dist, z_dist; /* Distance of cells from the center
+                               to the edge of the moving window */
+int x_size, y_size, z_size; /* The size of the moving window in x,
+                               y and z direction */
+int size;                   /* The maximum size of the value buffer */
 
-struct menu
-{
-    stat_func *method;          /* routine to compute new value */
-    char *name;                 /* method name */
-    char *text;                 /* menu display - full description */
+struct menu {
+    stat_func *method; /* routine to compute new value */
+    char *name;        /* method name */
+    char *text;        /* menu display - full description */
 } menu[] = {
-    {
-     c_ave, "average", "average value"}, {
-                                          c_median, "median", "median value"}, {
-                                                                                c_mode,
-                                                                                "mode",
-                                                                                "most frequently occurring value"},
-    {
-     c_min, "minimum", "lowest value"}, {
-                                         c_max, "maximum", "highest value"}, {
-                                                                              c_range,
-                                                                              "range",
-                                                                              "range value"},
-    {
-     c_stddev, "stddev", "standard deviation"}, {
-                                                 c_sum, "sum",
-                                                 "sum of values"}, {
-                                                                    c_count,
-                                                                    "count",
-                                                                    "count of non-NULL values"},
-    {
-     c_var, "variance", "statistical variance"}, {
-                                                  c_divr, "diversity",
-                                                  "number of different values"},
-    {
-     c_intr, "interspersion", "number of values different than center value"},
-    {
-     c_quart1, "quart1", "first quartile"}, {
-                                             c_quart3, "quart3",
-                                             "third quartile"}, {
-                                                                 c_perc90,
-                                                                 "perc90",
-                                                                 "ninetieth percentile"},
-    {
-     c_quant, "quantile", "arbitrary quantile"}, {
-                                                  NULL, NULL, NULL}
-};
+    {c_ave, "average", "average value"},
+    {c_median, "median", "median value"},
+    {c_mode, "mode", "most frequently occurring value"},
+    {c_min, "minimum", "lowest value"},
+    {c_max, "maximum", "highest value"},
+    {c_range, "range", "range value"},
+    {c_stddev, "stddev", "standard deviation"},
+    {c_sum, "sum", "sum of values"},
+    {c_count, "count", "count of non-NULL values"},
+    {c_var, "variance", "statistical variance"},
+    {c_divr, "diversity", "number of different values"},
+    {c_intr, "interspersion", "number of values different than center value"},
+    {c_quart1, "quart1", "first quartile"},
+    {c_quart3, "quart3", "third quartile"},
+    {c_perc90, "perc90", "ninetieth percentile"},
+    {c_quant, "quantile", "arbitrary quantile"},
+    {NULL, NULL, NULL}};
 
 /* ************************************************************************* */
 
@@ -114,8 +96,7 @@ static int find_method(const char *method_name)
 
 /* ************************************************************************* */
 
-typedef struct
-{
+typedef struct {
     struct Option *input, *output, *window, *method, *quantile;
 } paramType;
 
@@ -156,8 +137,7 @@ static void set_params()
 
 /* ************************************************************************* */
 
-static int gather_values(RASTER3D_Map * map, DCELL * buff, int x,
-                         int y, int z)
+static int gather_values(RASTER3D_Map *map, DCELL *buff, int x, int y, int z)
 {
     int i, j, k, l;
     DCELL value;
@@ -192,7 +172,7 @@ static int gather_values(RASTER3D_Map * map, DCELL * buff, int x,
     for (i = start_z; i < end_z; i++) {
         for (j = start_y; j < end_y; j++) {
             for (k = start_x; k < end_x; k++) {
-                value = (DCELL) Rast3d_get_double(map, k, j, i);
+                value = (DCELL)Rast3d_get_double(map, k, j, i);
 
                 if (Rast_is_d_null_value(&value))
                     continue;
@@ -273,19 +253,16 @@ int main(int argc, char **argv)
     else
         quantile = 0.0;
 
-    input = Rast3d_open_cell_old(param.input->answer,
-                                 G_find_raster3d(param.input->answer, ""),
-                                 &region, RASTER3D_TILE_SAME_AS_FILE,
-                                 RASTER3D_USE_CACHE_DEFAULT);
+    input = Rast3d_open_cell_old(
+        param.input->answer, G_find_raster3d(param.input->answer, ""), &region,
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (input == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                            param.input->answer);
 
-    output =
-        Rast3d_open_new_opt_tile_size(param.output->answer,
-                                      RASTER3D_USE_CACHE_X, &region,
-                                      DCELL_TYPE, 32);
+    output = Rast3d_open_new_opt_tile_size(
+        param.output->answer, RASTER3D_USE_CACHE_X, &region, DCELL_TYPE, 32);
 
     if (output == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
@@ -297,7 +274,7 @@ int main(int argc, char **argv)
 
     DCELL *buff = NULL, value;
 
-    buff = (DCELL *) calloc(size, sizeof(DCELL));
+    buff = (DCELL *)calloc(size, sizeof(DCELL));
 
     if (buff == NULL)
         Rast3d_fatal_error(_("Unable to allocate buffer"));
@@ -311,7 +288,7 @@ int main(int argc, char **argv)
 
                 /* Compute the resulting value */
                 if (num > 0)
-                    (*method_fn) (&value, buff, num, &quantile);
+                    (*method_fn)(&value, buff, num, &quantile);
                 else
                     Rast_set_d_null_value(&value, 1);
                 /* Write the value */

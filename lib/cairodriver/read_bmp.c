@@ -9,12 +9,13 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -85,8 +86,7 @@ void cairo_read_bmp(void)
 
     input = fopen(ca.file_name, "rb");
     if (!input)
-        G_fatal_error(_("Cairo: unable to open input file <%s>"),
-                      ca.file_name);
+        G_fatal_error(_("Cairo: unable to open input file <%s>"), ca.file_name);
 
     if (fread(header, sizeof(header), 1, input) != 1)
         G_fatal_error(_("Cairo: invalid input file <%s>"), ca.file_name);
@@ -94,7 +94,15 @@ void cairo_read_bmp(void)
     if (!read_bmp_header(header))
         G_fatal_error(_("Cairo: Invalid BMP header for <%s>"), ca.file_name);
 
-    fread(ca.grid, ca.stride, ca.height, input);
+    if (fread(ca.grid, ca.stride, ca.height, input) != ca.height) {
+        if (feof(input))
+            G_fatal_error(_("Cairo: error reading BMP file <%s>: "
+                            "unexpected end of file"),
+                          ca.file_name);
+        else if (ferror(input))
+            G_fatal_error(_("Cairo: error reading BMP file <%s>: %s"),
+                          ca.file_name, strerror(errno));
+    }
 
     fclose(input);
 }

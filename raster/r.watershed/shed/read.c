@@ -4,8 +4,7 @@
 #include <grass/glocale.h>
 #include "watershed.h"
 
-
-int read_basins(char *haf_name, OUTPUT * output)
+int read_basins(char *haf_name, OUTPUT *output)
 {
     int bas_fd, fd, m, r, nrows, c, ncols, tot_basins;
     CELL v, *buf, *bas_buf, b;
@@ -38,7 +37,7 @@ int read_basins(char *haf_name, OUTPUT * output)
     for (m = 0; m < output->num_maps; m++) {
         map = &(output->maps[m]);
         Rast_read_cats(map->name, map->mapset, &(map->cats));
-        map->basins = (BASIN *) G_malloc(tot_basins * sizeof(BASIN));
+        map->basins = (BASIN *)G_malloc(tot_basins * sizeof(BASIN));
         for (r = 0; r < tot_basins; r++) {
             map->basins[r].first_cat.num_cat = -1;
             map->basins[r].first_cat.cat_val = -123456789;

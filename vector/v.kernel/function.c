@@ -12,12 +12,10 @@ double gaussian2dBySigma(double d, double sigma)
 {
     double res;
 
-    res =
-        1. / (2. * M_PI * sigma * sigma) * exp(-d * d / (2. * sigma * sigma));
+    res = 1. / (2. * M_PI * sigma * sigma) * exp(-d * d / (2. * sigma * sigma));
 
     return (res);
 }
-
 
 double gaussianFunction(double x, double sigma, double dimension)
 {
@@ -25,13 +23,11 @@ double gaussianFunction(double x, double sigma, double dimension)
             exp(-0.5 * pow(x / sigma, 2.)));
 }
 
-
 /* probability for gaussian distribution */
 double gaussianKernel(double x, double termx)
 {
     return (termx * exp(-(x * x) / 2.));
 }
-
 
 /*
    term1 = 1./(2.*M_PI*sigma*sigma)
@@ -46,7 +42,6 @@ double gaussian2dByTerms(double d, double term1, double term2)
     return (res);
 }
 
-
 double segno(double x)
 {
     double y;
@@ -55,7 +50,6 @@ double segno(double x)
 
     return y;
 }
-
 
 double kernel1(double d, double rs, double lambda)
 {
@@ -67,13 +61,12 @@ double kernel1(double d, double rs, double lambda)
     }
     else {
         res = segno(a) * (a / M_PI) * (pow(rs, 2. * a)) *
-            (1 / pow(d * d + rs * rs, lambda));
+              (1 / pow(d * d + rs * rs, lambda));
     }
 
     /*  res=1./(M_PI*(d*d+rs*rs)); */
     return (res);
 }
-
 
 double invGaussian2d(double sigma, double prob)
 {
@@ -83,7 +76,6 @@ double invGaussian2d(double sigma, double prob)
 
     return (d);
 }
-
 
 /* euclidean distance between vectors x and y of length n */
 double euclidean_distance(double *x, double *y, int n)
@@ -99,7 +91,6 @@ double euclidean_distance(double *x, double *y, int n)
 
     return sqrt(out);
 }
-
 
 /*****************kernel density functions******************************/
 
@@ -119,8 +110,8 @@ double gaussianKernel4(double term, double bandwidth, double x)
     return (term * exp((x * x) / -2.));
 }
 
-/* Note: these functions support currently only 1D and 2D, consider this for example 
- * before using them for 3d grid */
+/* Note: these functions support currently only 1D and 2D, consider this for
+ * example before using them for 3d grid */
 double uniformKernel(double term, double bandwidth, double x)
 {
     /* term is set by setKernelFunction */
@@ -295,8 +286,7 @@ void setKernelFunction(int function, int dimension, double bandwidth,
     case KERNEL_GAUSSIAN:
         kernelfn = gaussianKernel4;
         *term =
-            1. / (pow(bandwidth, dimension) *
-                  pow((2. * M_PI), dimension / 2.));
+            1. / (pow(bandwidth, dimension) * pow((2. * M_PI), dimension / 2.));
         break;
     case KERNEL_COSINE:
         kernelfn = cosineKernel;

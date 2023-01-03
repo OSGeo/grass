@@ -1,20 +1,20 @@
-
 /****************************************************************************
  *
- * MODULE:       r3.out.netCDF 
- *   	    	
+ * MODULE:       r3.out.netCDF
+ *
  * AUTHOR(S):    Soeren Gebbert
  *
- * PURPOSE:      Export a 3D raster map as netCDF file  
+ * PURPOSE:      Export a 3D raster map as netCDF file
  *
  * COPYRIGHT:    (C) 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
- * 
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
  * TODO: Add time zone support to time variable
- * TODO: Implement better support for CF coordinate reference system defined here:
+ * TODO: Implement better support for CF coordinate reference system defined
+ *       here:
  *       http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system
  *       https://cf-pcmdi.llnl.gov/trac/wiki/Cf2CrsWkt
  *       http://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
@@ -31,34 +31,36 @@
 #include <grass/glocale.h>
 #include <grass/gprojects.h>
 
-#define NDIMS 3
-#define LONG_NAME "long_name"
-#define STANDARD_NAME "standard_name"
-#define LAT_NAME "latitude"
-#define LAT_LONG_NAME "Latitude values"
-#define LON_NAME "longitude"
-#define LON_LONG_NAME "Longitude values"
-#define TIME_NAME "time"
-#define X_NAME "x"
+#define NDIMS           3
+#define LONG_NAME       "long_name"
+#define STANDARD_NAME   "standard_name"
+#define LAT_NAME        "latitude"
+#define LAT_LONG_NAME   "Latitude values"
+#define LON_NAME        "longitude"
+#define LON_LONG_NAME   "Longitude values"
+#define TIME_NAME       "time"
+#define X_NAME          "x"
 #define X_STANDARD_NAME "projection_x_coordinate"
-#define X_LONG_NAME "x coordinate of projection"
-#define Y_NAME "y"
-#define Y_LONG_NAME "y coordinate of projection"
+#define X_LONG_NAME     "x coordinate of projection"
+#define Y_NAME          "y"
+#define Y_LONG_NAME     "y coordinate of projection"
 #define Y_STANDARD_NAME "projection_y_coordinate"
-#define Z_NAME "z"
-#define Z_LONG_NAME "z coordinate of projection"
+#define Z_NAME          "z"
+#define Z_LONG_NAME     "z coordinate of projection"
 #define Z_STANDARD_NAME "projection_z_coordinate"
-#define UNITS "units"
-#define DEGREES_EAST "degrees_east"
-#define DEGREES_NORTH "degrees_north"
-#define HISTORY_TEXT "GRASS GIS 8 netCDF export of r3.out.netcdf"
-#define CF_SUPPORT "CF-1.5"
+#define UNITS           "units"
+#define DEGREES_EAST    "degrees_east"
+#define DEGREES_NORTH   "degrees_north"
+#define HISTORY_TEXT    "GRASS GIS 8 netCDF export of r3.out.netcdf"
+#define CF_SUPPORT      "CF-1.5"
 
-#define ERR(e) {fatalError(nc_strerror(e));}
+#define ERR(e)                      \
+    {                               \
+        fatalError(nc_strerror(e)); \
+    }
 
 /* structs */
-typedef struct
-{
+typedef struct {
     struct Option *input, *output, *null;
     struct Flag *mask, *proj;
 } paramType;
@@ -77,8 +79,9 @@ static void fatalError(const char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            G_fatal_error(_("Unable to close 3D raster map while catching error: %s"),
-                          errorMsg);
+            G_fatal_error(
+                _("Unable to close 3D raster map while catching error: %s"),
+                errorMsg);
     }
     G_fatal_error("%s", errorMsg);
 }
@@ -100,8 +103,8 @@ static void setParams()
     param.null->type = TYPE_DOUBLE;
     param.null->required = NO;
     param.null->multiple = NO;
-    param.null->description =
-        _("The value to be used for null values, default is the netCDF standard");
+    param.null->description = _(
+        "The value to be used for null values, default is the netCDF standard");
 
     param.proj = G_define_flag();
     param.proj->key = 'p';
@@ -114,8 +117,8 @@ static void setParams()
         _("Use 3D raster mask (if exists) with input map");
 }
 
-static void write_netcdf_header(int ncid, RASTER3D_Region * region,
-                                int *varid, char write_proj, char *null)
+static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
+                                char write_proj, char *null)
 {
     int retval, typeIntern, time;
     size_t i;
@@ -129,13 +132,11 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
     double min, max;
 
     /* global attributes */
-    if ((retval =
-         nc_put_att_text(ncid, NC_GLOBAL, "Conventions", strlen(CF_SUPPORT),
-                         CF_SUPPORT)))
+    if ((retval = nc_put_att_text(ncid, NC_GLOBAL, "Conventions",
+                                  strlen(CF_SUPPORT), CF_SUPPORT)))
         ERR(retval);
-    if ((retval =
-         nc_put_att_text(ncid, NC_GLOBAL, "history", strlen(HISTORY_TEXT),
-                         HISTORY_TEXT)))
+    if ((retval = nc_put_att_text(ncid, NC_GLOBAL, "history",
+                                  strlen(HISTORY_TEXT), HISTORY_TEXT)))
         ERR(retval);
 
     G_get_window(&window);
@@ -149,7 +150,7 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
         int crs_dimid = 0, crs_varid;
 
         if ((retval =
-             nc_def_var(ncid, "crs", NC_CHAR, 0, &crs_dimid, &crs_varid)))
+                 nc_def_var(ncid, "crs", NC_CHAR, 0, &crs_dimid, &crs_varid)))
             ERR(retval);
 
         pkv = G_get_projinfo();
@@ -163,16 +164,15 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
         pj_free(pjinfo.pj);
 #endif
 #ifdef HAVE_OGR
-        /* We support the CF suggestion crs_wkt and the gdal spatil_ref attribute */
-        if ((retval =
-             nc_put_att_text(ncid, crs_varid, "crs_wkt",
-                             strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)),
-                             GPJ_grass_to_wkt(pkv, ukv, 0, 0))))
+        /* We support the CF suggestion crs_wkt and the gdal spatil_ref
+         * attribute */
+        if ((retval = nc_put_att_text(ncid, crs_varid, "crs_wkt",
+                                      strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)),
+                                      GPJ_grass_to_wkt(pkv, ukv, 0, 0))))
             ERR(retval);
-        if ((retval =
-             nc_put_att_text(ncid, crs_varid, "spatial_ref",
-                             strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)),
-                             GPJ_grass_to_wkt(pkv, ukv, 0, 0))))
+        if ((retval = nc_put_att_text(ncid, crs_varid, "spatial_ref",
+                                      strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)),
+                                      GPJ_grass_to_wkt(pkv, ukv, 0, 0))))
             ERR(retval);
 #endif
         /* Code from g.proj:
@@ -184,9 +184,8 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
         else
             proj4mod = G_store(proj4);
 
-        if ((retval =
-             nc_put_att_text(ncid, crs_varid, "crs_proj4", strlen(proj4mod),
-                             proj4mod)))
+        if ((retval = nc_put_att_text(ncid, crs_varid, "crs_proj4",
+                                      strlen(proj4mod), proj4mod)))
             ERR(retval);
 
         if (pkv)
@@ -202,40 +201,36 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
         if ((retval = nc_def_dim(ncid, LON_NAME, region->cols, &lon_dimid)))
             ERR(retval);
 
-        if ((retval =
-             nc_def_var(ncid, LON_NAME, NC_FLOAT, 1, &lon_dimid, &lon_varid)))
+        if ((retval = nc_def_var(ncid, LON_NAME, NC_FLOAT, 1, &lon_dimid,
+                                 &lon_varid)))
             ERR(retval);
 
-        if ((retval =
-             nc_put_att_text(ncid, lon_varid, UNITS, strlen(DEGREES_EAST),
-                             DEGREES_EAST)))
+        if ((retval = nc_put_att_text(ncid, lon_varid, UNITS,
+                                      strlen(DEGREES_EAST), DEGREES_EAST)))
             ERR(retval);
         if ((retval = nc_put_att_text(ncid, lon_varid, LONG_NAME,
                                       strlen(LON_LONG_NAME), LON_LONG_NAME)))
             ERR(retval);
-        if ((retval =
-             nc_put_att_text(ncid, lon_varid, STANDARD_NAME, strlen(LON_NAME),
-                             LON_NAME)))
+        if ((retval = nc_put_att_text(ncid, lon_varid, STANDARD_NAME,
+                                      strlen(LON_NAME), LON_NAME)))
             ERR(retval);
 
         /* Y-Axis */
         if ((retval = nc_def_dim(ncid, LAT_NAME, region->rows, &lat_dimid)))
             ERR(retval);
 
-        if ((retval =
-             nc_def_var(ncid, LAT_NAME, NC_FLOAT, 1, &lat_dimid, &lat_varid)))
+        if ((retval = nc_def_var(ncid, LAT_NAME, NC_FLOAT, 1, &lat_dimid,
+                                 &lat_varid)))
             ERR(retval);
 
-        if ((retval =
-             nc_put_att_text(ncid, lat_varid, UNITS, strlen(DEGREES_NORTH),
-                             DEGREES_NORTH)))
+        if ((retval = nc_put_att_text(ncid, lat_varid, UNITS,
+                                      strlen(DEGREES_NORTH), DEGREES_NORTH)))
             ERR(retval);
         if ((retval = nc_put_att_text(ncid, lat_varid, LONG_NAME,
                                       strlen(LAT_LONG_NAME), LAT_LONG_NAME)))
             ERR(retval);
-        if ((retval =
-             nc_put_att_text(ncid, lat_varid, STANDARD_NAME, strlen(LAT_NAME),
-                             LAT_NAME)))
+        if ((retval = nc_put_att_text(ncid, lat_varid, STANDARD_NAME,
+                                      strlen(LAT_NAME), LAT_NAME)))
             ERR(retval);
     }
     else {
@@ -244,43 +239,41 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
             ERR(retval);
 
         if ((retval =
-             nc_def_var(ncid, X_NAME, NC_FLOAT, 1, &lon_dimid, &lon_varid)))
+                 nc_def_var(ncid, X_NAME, NC_FLOAT, 1, &lon_dimid, &lon_varid)))
             ERR(retval);
 
         if ((retval = nc_put_att_text(ncid, lon_varid, UNITS, strlen("meter"),
                                       "meter")))
             ERR(retval);
-        if ((retval =
-             nc_put_att_text(ncid, lon_varid, LONG_NAME, strlen(X_LONG_NAME),
-                             X_LONG_NAME)))
+        if ((retval = nc_put_att_text(ncid, lon_varid, LONG_NAME,
+                                      strlen(X_LONG_NAME), X_LONG_NAME)))
             ERR(retval);
-        if ((retval = nc_put_att_text(ncid, lon_varid, STANDARD_NAME,
-                                      strlen(X_STANDARD_NAME),
-                                      X_STANDARD_NAME)))
+        if ((retval =
+                 nc_put_att_text(ncid, lon_varid, STANDARD_NAME,
+                                 strlen(X_STANDARD_NAME), X_STANDARD_NAME)))
             ERR(retval);
         /* Y-Axis */
         if ((retval = nc_def_dim(ncid, Y_NAME, region->rows, &lat_dimid)))
             ERR(retval);
 
         if ((retval =
-             nc_def_var(ncid, Y_NAME, NC_FLOAT, 1, &lat_dimid, &lat_varid)))
+                 nc_def_var(ncid, Y_NAME, NC_FLOAT, 1, &lat_dimid, &lat_varid)))
             ERR(retval);
 
         if ((retval = nc_put_att_text(ncid, lat_varid, UNITS, strlen("meter"),
                                       "meter")))
             ERR(retval);
-        if ((retval =
-             nc_put_att_text(ncid, lat_varid, LONG_NAME, strlen(Y_LONG_NAME),
-                             Y_LONG_NAME)))
+        if ((retval = nc_put_att_text(ncid, lat_varid, LONG_NAME,
+                                      strlen(Y_LONG_NAME), Y_LONG_NAME)))
             ERR(retval);
-        if ((retval = nc_put_att_text(ncid, lat_varid, STANDARD_NAME,
-                                      strlen(Y_STANDARD_NAME),
-                                      Y_STANDARD_NAME)))
+        if ((retval =
+                 nc_put_att_text(ncid, lat_varid, STANDARD_NAME,
+                                 strlen(Y_STANDARD_NAME), Y_STANDARD_NAME)))
             ERR(retval);
     }
 
     /* We set the vertical axis and its unit. Units can be spatial
-     * or temporal. Temporal can be absolute or relative. 
+     * or temporal. Temporal can be absolute or relative.
      */
 
     is_time = 0;
@@ -298,11 +291,10 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
                        Rast3d_get_vertical_unit(map));
 
             if ((retval =
-                 nc_def_dim(ncid, TIME_NAME, region->depths, &time_dimid)))
+                     nc_def_dim(ncid, TIME_NAME, region->depths, &time_dimid)))
                 ERR(retval);
-            if ((retval =
-                 nc_def_var(ncid, TIME_NAME, NC_INT, 1, &time_dimid,
-                            &time_varid)))
+            if ((retval = nc_def_var(ncid, TIME_NAME, NC_INT, 1, &time_dimid,
+                                     &time_varid)))
                 ERR(retval);
 
             /* Temporal unit */
@@ -331,48 +323,42 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
                            "1900-01-01 00:00:00");
             }
 
-            if ((retval =
-                 nc_put_att_text(ncid, time_varid, UNITS, strlen(time_unit),
-                                 time_unit)))
+            if ((retval = nc_put_att_text(ncid, time_varid, UNITS,
+                                          strlen(time_unit), time_unit)))
                 ERR(retval);
-            if ((retval =
-                 nc_put_att_text(ncid, time_varid, LONG_NAME,
-                                 strlen(long_name), long_name)))
+            if ((retval = nc_put_att_text(ncid, time_varid, LONG_NAME,
+                                          strlen(long_name), long_name)))
                 ERR(retval)
-                    if (is_absolute_time) {
-                    if ((retval =
+            if (is_absolute_time) {
+                if ((retval =
                          nc_put_att_text(ncid, time_varid, "calendar",
                                          strlen("gregorian"), "gregorian")))
-                        ERR(retval);
-                }
-                else {
-                    if ((retval =
-                         nc_put_att_text(ncid, time_varid, "calendar",
-                                         strlen("none"), "none")))
-                        ERR(retval);
-                }
+                    ERR(retval);
+            }
+            else {
+                if ((retval = nc_put_att_text(ncid, time_varid, "calendar",
+                                              strlen("none"), "none")))
+                    ERR(retval);
+            }
         }
         else {
             if ((retval =
-                 nc_def_dim(ncid, Z_NAME, region->depths, &time_dimid)))
+                     nc_def_dim(ncid, Z_NAME, region->depths, &time_dimid)))
                 ERR(retval);
             ;
-            if ((retval =
-                 nc_def_var(ncid, Z_NAME, NC_FLOAT, 1, &time_dimid,
-                            &time_varid)))
+            if ((retval = nc_def_var(ncid, Z_NAME, NC_FLOAT, 1, &time_dimid,
+                                     &time_varid)))
+                ERR(retval);
+            if ((retval = nc_put_att_text(ncid, time_varid, UNITS,
+                                          strlen(Rast3d_get_vertical_unit(map)),
+                                          Rast3d_get_vertical_unit(map))))
+                ERR(retval);
+            if ((retval = nc_put_att_text(ncid, time_varid, LONG_NAME,
+                                          strlen(Z_LONG_NAME), Z_LONG_NAME)))
                 ERR(retval);
             if ((retval =
-                 nc_put_att_text(ncid, time_varid, UNITS,
-                                 strlen(Rast3d_get_vertical_unit(map)),
-                                 Rast3d_get_vertical_unit(map))))
-                ERR(retval);
-            if ((retval =
-                 nc_put_att_text(ncid, time_varid, LONG_NAME,
-                                 strlen(Z_LONG_NAME), Z_LONG_NAME)))
-                ERR(retval);
-            if ((retval =
-                 nc_put_att_text(ncid, time_varid, STANDARD_NAME,
-                                 strlen(Z_STANDARD_NAME), Z_STANDARD_NAME)))
+                     nc_put_att_text(ncid, time_varid, STANDARD_NAME,
+                                     strlen(Z_STANDARD_NAME), Z_STANDARD_NAME)))
                 ERR(retval);
         }
     }
@@ -380,26 +366,24 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
         /* Default is z unit meter */
         if ((retval = nc_def_dim(ncid, Z_NAME, region->depths, &time_dimid)))
             ERR(retval);
-        if ((retval =
-             nc_def_var(ncid, Z_NAME, NC_FLOAT, 1, &time_dimid, &time_varid)))
+        if ((retval = nc_def_var(ncid, Z_NAME, NC_FLOAT, 1, &time_dimid,
+                                 &time_varid)))
+            ERR(retval);
+        if ((retval = nc_put_att_text(ncid, time_varid, UNITS, strlen("meter"),
+                                      "meter")))
+            ERR(retval);
+        if ((retval = nc_put_att_text(ncid, time_varid, LONG_NAME,
+                                      strlen(Z_LONG_NAME), Z_LONG_NAME)))
             ERR(retval);
         if ((retval =
-             nc_put_att_text(ncid, time_varid, UNITS, strlen("meter"),
-                             "meter")))
-            ERR(retval);
-        if ((retval =
-             nc_put_att_text(ncid, time_varid, LONG_NAME, strlen(Z_LONG_NAME),
-                             Z_LONG_NAME)))
-            ERR(retval);
-        if ((retval =
-             nc_put_att_text(ncid, time_varid, STANDARD_NAME,
-                             strlen(Z_STANDARD_NAME), Z_STANDARD_NAME)))
+                 nc_put_att_text(ncid, time_varid, STANDARD_NAME,
+                                 strlen(Z_STANDARD_NAME), Z_STANDARD_NAME)))
             ERR(retval);
     }
 
     /* z - axis orientation */
     if ((retval =
-         nc_put_att_text(ncid, time_varid, "positive", strlen("up"), "up")))
+             nc_put_att_text(ncid, time_varid, "positive", strlen("up"), "up")))
         ERR(retval);
 
     /* Axis identifier attributes */
@@ -420,73 +404,63 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
     dimids[1] = lat_dimid;
     dimids[2] = lon_dimid;
 
-
     Rast3d_range_load(map);
     Rast3d_range_min_max(map, &min, &max);
 
     if (typeIntern == FCELL_TYPE) {
-        if ((retval =
-             nc_def_var(ncid, param.input->answer, NC_FLOAT, NDIMS, dimids,
-                        varid)))
+        if ((retval = nc_def_var(ncid, param.input->answer, NC_FLOAT, NDIMS,
+                                 dimids, varid)))
             ERR(retval);
         /* Set the range values */
         float fmin = min;
 
         float fmax = max;
 
-        if ((retval =
-             nc_put_att_float(ncid, *varid, "valid_min", NC_FLOAT, 1, &fmin)))
+        if ((retval = nc_put_att_float(ncid, *varid, "valid_min", NC_FLOAT, 1,
+                                       &fmin)))
             ERR(retval);
-        if ((retval =
-             nc_put_att_float(ncid, *varid, "valid_max", NC_FLOAT, 1, &fmax)))
+        if ((retval = nc_put_att_float(ncid, *varid, "valid_max", NC_FLOAT, 1,
+                                       &fmax)))
             ERR(retval);
 
         if (null) {
             float null_val = (float)atof(null);
 
-            if ((retval =
-                 nc_put_att_float(ncid, *varid, "missing_value", NC_FLOAT, 1,
-                                  &null_val)))
+            if ((retval = nc_put_att_float(ncid, *varid, "missing_value",
+                                           NC_FLOAT, 1, &null_val)))
                 ERR(retval);
-            if ((retval =
-                 nc_put_att_float(ncid, *varid, "_FillValue", NC_FLOAT, 1,
-                                  &null_val)))
+            if ((retval = nc_put_att_float(ncid, *varid, "_FillValue", NC_FLOAT,
+                                           1, &null_val)))
                 ERR(retval);
         }
     }
     else {
-        if ((retval =
-             nc_def_var(ncid, param.input->answer, NC_DOUBLE, NDIMS, dimids,
-                        varid)))
+        if ((retval = nc_def_var(ncid, param.input->answer, NC_DOUBLE, NDIMS,
+                                 dimids, varid)))
             ERR(retval);
         /* Set the range values */
-        if ((retval =
-             nc_put_att_double(ncid, *varid, "valid_min", NC_DOUBLE, 1,
-                               &min)))
+        if ((retval = nc_put_att_double(ncid, *varid, "valid_min", NC_DOUBLE, 1,
+                                        &min)))
             ERR(retval);
-        if ((retval =
-             nc_put_att_double(ncid, *varid, "valid_max", NC_DOUBLE, 1,
-                               &max)))
+        if ((retval = nc_put_att_double(ncid, *varid, "valid_max", NC_DOUBLE, 1,
+                                        &max)))
             ERR(retval);
 
         if (null) {
             double null_val = (double)atof(null);
 
-            if ((retval =
-                 nc_put_att_double(ncid, *varid, "missing_value", NC_DOUBLE,
-                                   1, &null_val)))
+            if ((retval = nc_put_att_double(ncid, *varid, "missing_value",
+                                            NC_DOUBLE, 1, &null_val)))
                 ERR(retval);
-            if ((retval =
-                 nc_put_att_double(ncid, *varid, "_FillValue", NC_DOUBLE, 1,
-                                   &null_val)))
+            if ((retval = nc_put_att_double(ncid, *varid, "_FillValue",
+                                            NC_DOUBLE, 1, &null_val)))
                 ERR(retval);
         }
     }
 
     if (window.proj != PROJECTION_XY && write_proj) {
-        if ((retval =
-             nc_put_att_text(ncid, *varid, "grid_mapping", strlen("crs"),
-                             "crs")))
+        if ((retval = nc_put_att_text(ncid, *varid, "grid_mapping",
+                                      strlen("crs"), "crs")))
             ERR(retval);
     }
 
@@ -494,8 +468,9 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
     if ((retval = nc_enddef(ncid)))
         ERR(retval);
 
-    /* 
-     * Build coordinates, we need to use the cell center in case of spatial dimensions 
+    /*
+     * Build coordinates, we need to use the cell center in case of spatial
+     * dimensions
      * */
 
     for (i = 0; i < region->cols; i++) {
@@ -524,7 +499,7 @@ static void write_netcdf_header(int ncid, RASTER3D_Region * region,
 
 /*---------------------------------------------------------------------------*/
 
-static void write_netcdf_data(int ncid, RASTER3D_Region * region, int varid)
+static void write_netcdf_data(int ncid, RASTER3D_Region *region, int varid)
 {
     DCELL dvalue;
     FCELL fvalue;
@@ -607,11 +582,9 @@ int main(int argc, char *argv[])
     Rast3d_get_window(&region);
 
     /* Open the map and use XY cache mode */
-    map =
-        Rast3d_open_cell_old(param.input->answer,
-                             G_find_raster3d(param.input->answer, ""),
-                             &region, RASTER3D_TILE_SAME_AS_FILE,
-                             RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(
+        param.input->answer, G_find_raster3d(param.input->answer, ""), &region,
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         G_fatal_error(_("Unable to open 3D raster map <%s>"),

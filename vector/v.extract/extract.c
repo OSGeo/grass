@@ -1,4 +1,4 @@
-/*  @(#)xtract_lines.c    1.0  9/29/89   
+/*  @(#)xtract_lines.c    1.0  9/29/89
  *  created by:         R.L.Glenn, SCS
  *
  * Program will read vector line records, outputting lines
@@ -55,10 +55,10 @@ static void extract_cats(struct line_cats *Cats, int type_only, int field,
         Vect_cat_set(TCats, Cats->field[i], Cats->cat[i]);
     }
 
-    if (type_only && field == -1) {     /* keep all */
+    if (type_only && field == -1) { /* keep all */
         return;
     }
-    else if (type_only && field > 0) {  /* keep only one field */
+    else if (type_only && field > 0) { /* keep only one field */
         Vect_reset_cats(Cats);
 
         if (new > -1) {
@@ -72,7 +72,7 @@ static void extract_cats(struct line_cats *Cats, int type_only, int field,
             }
         }
     }
-    else {                      /* keep only one field, cats in list */
+    else { /* keep only one field, cats in list */
 
         Vect_reset_cats(Cats);
 
@@ -101,15 +101,14 @@ static void extract_cats(struct line_cats *Cats, int type_only, int field,
                 }
             }
         }
-
     }
 }
 
 /* check if output cats of left and right area match */
 static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
-                                int type_only, int field, int new,
-                                int reverse, char *dissolve_key, int coltype,
-                                dbDriver * driver, struct field_info *Fi)
+                                int type_only, int field, int new, int reverse,
+                                char *dissolve_key, int coltype,
+                                dbDriver *driver, struct field_info *Fi)
 {
     int i, j, found;
     int centroid1, centroid2;
@@ -125,13 +124,13 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
         Cats2 = Vect_new_cats_struct();
 
     if (area1 < 1 || area2 < 1)
-        return 0;               /* at least one area is missing */
+        return 0; /* at least one area is missing */
 
     centroid1 = Vect_get_area_centroid(In, area1);
     centroid2 = Vect_get_area_centroid(In, area2);
 
     if (centroid1 < 1 || centroid2 < 1)
-        return 0;               /* at least one centroid is missing */
+        return 0; /* at least one centroid is missing */
 
     Vect_read_line(In, NULL, Cats1, centroid1);
     Vect_read_line(In, NULL, Cats2, centroid2);
@@ -161,25 +160,22 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
                                 dissolve_key, &val2);
                 /* compare db values */
                 switch (coltype) {
-                case DB_C_TYPE_INT:{
-                        if (db_get_value_int(&val1) ==
-                            db_get_value_int(&val2))
-                            found = 1;
-                        break;
-                    }
-                case DB_C_TYPE_DOUBLE:{
-                        if (db_get_value_int(&val1) ==
-                            db_get_value_double(&val2))
-                            found = 1;
-                        break;
-                    }
-                default:{      /* STRING and DATETIME */
-                        if (G_strcasecmp
-                            (db_get_value_string(&val1),
-                             db_get_value_string(&val2)) == 0)
-                            found = 1;
-                        break;
-                    }
+                case DB_C_TYPE_INT: {
+                    if (db_get_value_int(&val1) == db_get_value_int(&val2))
+                        found = 1;
+                    break;
+                }
+                case DB_C_TYPE_DOUBLE: {
+                    if (db_get_value_int(&val1) == db_get_value_double(&val2))
+                        found = 1;
+                    break;
+                }
+                default: { /* STRING and DATETIME */
+                    if (G_strcasecmp(db_get_value_string(&val1),
+                                     db_get_value_string(&val2)) == 0)
+                        found = 1;
+                    break;
+                }
                 }
                 if (found == 1)
                     break;
@@ -194,9 +190,9 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
 }
 
 /* extract areas, used only for OGR output */
-static int extract_area(struct Map_info *In, struct Map_info *Out,
-                        int area, struct line_pnts *Points,
-                        const struct line_cats *Cats, int field)
+static int extract_area(struct Map_info *In, struct Map_info *Out, int area,
+                        struct line_pnts *Points, const struct line_cats *Cats,
+                        int field)
 {
     int cat, ret;
     struct line_cats *cCats;
@@ -208,7 +204,8 @@ static int extract_area(struct Map_info *In, struct Map_info *Out,
     }
     if (ret > 1) {
         G_warning(_("More categories (%d) found for area %d. "
-                    "Using first found category %d"), ret, area, cat);
+                    "Using first found category %d"),
+                  ret, area, cat);
     }
 
     cCats = Vect_new_cats_struct();
@@ -217,7 +214,7 @@ static int extract_area(struct Map_info *In, struct Map_info *Out,
 
     /* get exterior ring */
     Vect_get_area_points(In, area, Points);
-    Vect_cat_set(cCats, 1, cat);        /* field for OGR always '1' */
+    Vect_cat_set(cCats, 1, cat); /* field for OGR always '1' */
     Vect_write_line(Out, GV_BOUNDARY, Points, cCats);
 
     Vect_destroy_cats_struct(cCats);
@@ -229,20 +226,23 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
                  struct Map_info *Out, int new, int select_type, int dissolve,
                  char *dissolve_key, int field, int type_only, int reverse)
 {
-    G_debug(2, "extract_line(num_index=%d, new=%d, select_type=%d,"
+    G_debug(2,
+            "extract_line(num_index=%d, new=%d, select_type=%d,"
             " dissolve=%d, field=%d, type_only=%d, reverse=%d)",
             num_index, new, select_type, dissolve, field, type_only, reverse);
     int line, nlines, native;
     struct line_pnts *Points;
     struct line_cats *Line_Cats_Old, *CCats;
 
-    int left_area, right_area;  /* left/right area */
-    int left_field_match, right_field_match;    /* left/right area field match conditions */
-    int left_cat_match, right_cat_match;        /* left/right area cat match conditions */
-    int type_match;             /* line type match */
-    int field_match;            /* category of field match */
-    int cat_match;              /* category found in list */
-    int centroid_in_area;       /* centroid is in area */
+    int left_area, right_area; /* left/right area */
+    int left_field_match,
+        right_field_match; /* left/right area field match conditions */
+    int left_cat_match,
+        right_cat_match;  /* left/right area cat match conditions */
+    int type_match;       /* line type match */
+    int field_match;      /* category of field match */
+    int cat_match;        /* category found in list */
+    int centroid_in_area; /* centroid is in area */
     int type;
     int i, tmp, write, area;
     struct field_info *Fi;
@@ -279,7 +279,6 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
         /* get column type as DB_C_TYPE_* */
         coltype = db_column_Ctype(driver, Fi->table, dissolve_key);
     }
-
 
     /* sort list */
     qsort(cats_array, ncats_array, sizeof(int), cmp);
@@ -406,13 +405,13 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
             /* areas */
             if (type == GV_BOUNDARY && (left_area || right_area)) {
                 if (!dissolve ||
-                    !areas_new_cats_match(In, left_area, right_area,
-                                          type_only, field, new, reverse,
-                                          dissolve_key, coltype, driver, Fi))
+                    !areas_new_cats_match(In, left_area, right_area, type_only,
+                                          field, new, reverse, dissolve_key,
+                                          coltype, driver, Fi))
                     write = 1;
             }
         }
-        else if (type_only && field > 0) {      /* type and field only */
+        else if (type_only && field > 0) { /* type and field only */
             /* line */
             if (type_match && field_match)
                 write = 1;
@@ -426,13 +425,13 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
             if (type == GV_BOUNDARY && (select_type & GV_AREA) &&
                 (left_field_match || right_field_match)) {
                 if (!dissolve ||
-                    !areas_new_cats_match(In, left_area, right_area,
-                                          type_only, field, new, reverse,
-                                          dissolve_key, coltype, driver, Fi))
+                    !areas_new_cats_match(In, left_area, right_area, type_only,
+                                          field, new, reverse, dissolve_key,
+                                          coltype, driver, Fi))
                     write = 1;
             }
         }
-        else {                  /* type, field and category */
+        else { /* type, field and category */
 
             /* line */
             if (type_match && cat_match)
@@ -447,9 +446,9 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
             if (type == GV_BOUNDARY && (select_type & GV_AREA) &&
                 (left_cat_match || right_cat_match)) {
                 if (!dissolve ||
-                    !areas_new_cats_match(In, left_area, right_area,
-                                          type_only, field, new, reverse,
-                                          dissolve_key, coltype, driver, Fi))
+                    !areas_new_cats_match(In, left_area, right_area, type_only,
+                                          field, new, reverse, dissolve_key,
+                                          coltype, driver, Fi))
                     write = 1;
             }
         }
@@ -465,7 +464,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
                 Vect_write_line(Out, type, Points, Line_Cats_Old);
         }
 
-    }                           /* end lines section */
+    } /* end lines section */
 
     if (driver)
         db_close_database_shutdown_driver(driver);

@@ -1,14 +1,13 @@
-
 /****************************************************************************
  r.sun: rsunlib.c. This program was written by Jaro Hofierka in Summer 1993
    and re-engineered in 1996-1999. In cooperation with Marcel Suri and
    Thomas Huld from JRC in Ispra a new version of r.sun was prepared using
    ESRA solar radiation formulas.  See the manual page for details.
 
-  (C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia, 
+  (C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia,
                and GeoModel, s.r.o., Bratislava, Slovakia
   email: hofierka at geomodel.sk, marcel.suri at jrc.it, suri at geomodel.sk
-  
+
   (C) 2011 by Hamish Bowman, and the GRASS Development Team
 ****************************************************************************/
 /*
@@ -39,7 +38,6 @@
 #include "local_proto.h"
 #include "rsunglobals.h"
 
-
 int civilTimeFlag;
 int useCivilTime()
 {
@@ -51,15 +49,12 @@ void setUseCivilTime(int val)
     civilTimeFlag = val;
 }
 
-
 double angular_loss_denom;
 
 void setAngularLossDenominator()
 {
     angular_loss_denom = 1. / (1 - exp(-1. / a_r));
-
 }
-
 
 int useShadowFlag;
 int useShadow()
@@ -71,8 +66,6 @@ void setUseShadow(int val)
 {
     useShadowFlag = val;
 }
-
-
 
 int useHorizonDataFlag;
 int useHorizonData()
@@ -107,7 +100,6 @@ void setHorizonInterval(double val)
     horizonInterval = val;
 }
 
-
 /* com_sol_const(): compute the Solar Constant corrected for the day of the
    year. The Earth is closest to the Sun (Perigee) on about January 3rd,
    it is furthest from the sun (Apogee) about July 6th. The 1367 W/m^2 solar
@@ -122,7 +114,8 @@ double com_sol_const(int no_of_day)
     /* Solar constant: 1367.0 W/m^2. Note: solar constant is parameter.
 
        Perigee offset: here we call Jan 2 at 8:18pm the Perigee, so day
-       number 2.8408. In angular units that's (2*pi * 2.8408 / 365.25) = 0.048869.
+       number 2.8408. In angular units that's (2*pi * 2.8408 / 365.25) =
+       0.048869.
 
        Orbital eccentricity: For Earth this is currently about 0.01672,
        and so the distance to the sun varies by +/- 0.01672 from the
@@ -138,9 +131,6 @@ double com_sol_const(int no_of_day)
 
     return I0;
 }
-
-
-
 
 void com_par_const(double longitTime, struct SunGeometryConstDay *sungeom,
                    struct GridGeometry *gridGeom)
@@ -169,12 +159,14 @@ void com_par_const(double longitTime, struct SunGeometryConstDay *sungeom,
         }
         else {
             if (pom < 0) {
-                /* G_debug(3,"\n Sun is ABOVE the surface during the whole day"); */
+                /* G_debug(3,"\n Sun is ABOVE the surface during the whole
+                 * day"); */
                 sungeom->sunrise_time = 0;
                 sungeom->sunset_time = 24;
             }
             else {
-                /* G_debug(3,"\n The sun is BELOW the surface during the whole day"); */
+                /* G_debug(3,"\n The sun is BELOW the surface during the whole
+                 * day"); */
                 if (fabs(pom) - 1 <= EPS) {
                     sungeom->sunrise_time = 12;
                     sungeom->sunset_time = 12;
@@ -182,12 +174,7 @@ void com_par_const(double longitTime, struct SunGeometryConstDay *sungeom,
             }
         }
     }
-
 }
-
-
-
-
 
 void com_par(struct SunGeometryConstDay *sungeom,
              struct SunGeometryVarDay *sunVarGeom,
@@ -201,9 +188,7 @@ void com_par(struct SunGeometryConstDay *sungeom,
     double delt_lat_m, delt_lon_m;
     double delt_dist;
 
-
     costimeAngle = cos(sungeom->timeAngle);
-
 
     lum_Lx = -sungeom->lum_C22 * sin(sungeom->timeAngle);
     lum_Ly = sungeom->lum_C11 * costimeAngle + sungeom->lum_C13;
@@ -230,17 +215,18 @@ void com_par(struct SunGeometryConstDay *sungeom,
         }
     }
 
-    sunVarGeom->solarAltitude = asin(sunVarGeom->sinSolarAltitude);     /* vertical angle of the sun */
+    sunVarGeom->solarAltitude =
+        asin(sunVarGeom->sinSolarAltitude); /* vertical angle of the sun */
     /* sinSolarAltitude is sin(solarAltitude) */
 
     xpom = lum_Lx * lum_Lx;
     ypom = lum_Ly * lum_Ly;
     pom = sqrt(xpom + ypom);
 
-
     if (fabs(pom) > EPS) {
         sunVarGeom->solarAzimuth = lum_Ly / pom;
-        sunVarGeom->solarAzimuth = acos(sunVarGeom->solarAzimuth);      /* horiz. angle of the Sun */
+        sunVarGeom->solarAzimuth =
+            acos(sunVarGeom->solarAzimuth); /* horiz. angle of the Sun */
         /* solarAzimuth *= RAD; */
         if (lum_Lx < 0)
             sunVarGeom->solarAzimuth = pi2 - sunVarGeom->solarAzimuth;
@@ -249,18 +235,17 @@ void com_par(struct SunGeometryConstDay *sungeom,
         sunVarGeom->solarAzimuth = UNDEF;
     }
 
-
     if (sunVarGeom->solarAzimuth < 0.5 * M_PI)
         sunVarGeom->sunAzimuthAngle = 0.5 * M_PI - sunVarGeom->solarAzimuth;
     else
         sunVarGeom->sunAzimuthAngle = 2.5 * M_PI - sunVarGeom->solarAzimuth;
 
-
     inputAngle = sunVarGeom->sunAzimuthAngle + pihalf;
     inputAngle = (inputAngle >= pi2) ? inputAngle - pi2 : inputAngle;
 
     /* 1852m * 60 * 0.0001rad * 180/pi= 636.67m */
-    delt_lat = -0.0001 * cos(inputAngle);       /* Arbitrary small distance in latitude */
+    delt_lat =
+        -0.0001 * cos(inputAngle); /* Arbitrary small distance in latitude */
     delt_lon = 0.0001 * sin(inputAngle) / cos(latitude);
 
     delt_lat_m = delt_lat * (180 / M_PI) * 1852 * 60;
@@ -268,19 +253,17 @@ void com_par(struct SunGeometryConstDay *sungeom,
     delt_dist = sqrt(delt_lat_m * delt_lat_m + delt_lon_m * delt_lon_m);
 
     /*
-       sunVarGeom->stepsinangle = gridGeom->stepxy * sin(sunVarGeom->sunAzimuthAngle);
-       sunVarGeom->stepcosangle = gridGeom->stepxy * cos(sunVarGeom->sunAzimuthAngle);
+       sunVarGeom->stepsinangle = gridGeom->stepxy *
+       sin(sunVarGeom->sunAzimuthAngle); sunVarGeom->stepcosangle =
+       gridGeom->stepxy * cos(sunVarGeom->sunAzimuthAngle);
      */
     sunVarGeom->stepsinangle = gridGeom->stepxy * delt_lat_m / delt_dist;
     sunVarGeom->stepcosangle = gridGeom->stepxy * delt_lon_m / delt_dist;
 
-
     sunVarGeom->tanSolarAltitude = tan(sunVarGeom->solarAltitude);
 
     return;
-
 }
-
 
 int searching(double *length, struct SunGeometryVarDay *sunVarGeom,
               struct GridGeometry *gridGeom)
@@ -292,17 +275,15 @@ int searching(double *length, struct SunGeometryVarDay *sunVarGeom,
     if (sunVarGeom->zp == UNDEFZ)
         return 0;
 
-
     gridGeom->yy0 += sunVarGeom->stepsinangle;
     gridGeom->xx0 += sunVarGeom->stepcosangle;
-    if (((gridGeom->xx0 + (0.5 * gridGeom->stepx)) < 0)
-        || ((gridGeom->xx0 + (0.5 * gridGeom->stepx)) > gridGeom->deltx)
-        || ((gridGeom->yy0 + (0.5 * gridGeom->stepy)) < 0)
-        || ((gridGeom->yy0 + (0.5 * gridGeom->stepy)) > gridGeom->delty))
+    if (((gridGeom->xx0 + (0.5 * gridGeom->stepx)) < 0) ||
+        ((gridGeom->xx0 + (0.5 * gridGeom->stepx)) > gridGeom->deltx) ||
+        ((gridGeom->yy0 + (0.5 * gridGeom->stepy)) < 0) ||
+        ((gridGeom->yy0 + (0.5 * gridGeom->stepy)) > gridGeom->delty))
         succes = 3;
     else
         succes = 1;
-
 
     if (succes == 1) {
         where_is_point(length, sunVarGeom, gridGeom);
@@ -314,11 +295,11 @@ int searching(double *length, struct SunGeometryVarDay *sunVarGeom,
         curvature_diff = EARTHRADIUS * (1. - cos(*length / EARTHRADIUS));
 
         z2 = sunVarGeom->z_orig + curvature_diff +
-            *length * sunVarGeom->tanSolarAltitude;
+             *length * sunVarGeom->tanSolarAltitude;
         if (z2 < sunVarGeom->zp)
-            succes = 2;         /* shadow */
+            succes = 2; /* shadow */
         if (z2 > sunVarGeom->zmax)
-            succes = 3;         /* no test needed all visible */
+            succes = 3; /* no test needed all visible */
     }
 
     if (succes != 1) {
@@ -327,9 +308,6 @@ int searching(double *length, struct SunGeometryVarDay *sunVarGeom,
     }
     return (succes);
 }
-
-
-
 
 double lumcline2(struct SunGeometryConstDay *sungeom,
                  struct SunGeometryVarDay *sunVarGeom,
@@ -365,19 +343,16 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
 
             horizPos = timeoffset / getHorizonInterval();
 
-
             lowPos = (int)horizPos;
             highPos = lowPos + 1;
             if (highPos == arrayNumInt) {
                 highPos = 0;
             }
-            horizonHeight = invScale * ((1. -
-                                         (horizPos -
-                                          lowPos)) * horizonpointer[lowPos]
-                                        + (horizPos - lowPos)
-                                        * horizonpointer[highPos]);
-            sunVarGeom->isShadow =
-                (horizonHeight > sunVarGeom->solarAltitude);
+            horizonHeight =
+                invScale *
+                ((1. - (horizPos - lowPos)) * horizonpointer[lowPos] +
+                 (horizPos - lowPos) * horizonpointer[highPos]);
+            sunVarGeom->isShadow = (horizonHeight > sunVarGeom->solarAltitude);
 
             if (!sunVarGeom->isShadow) {
                 /* if (z_orig != UNDEFZ) {
@@ -388,21 +363,20 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                    s = sunVarGeom->sinSolarAltitude;
                    }
                  */
-                s = sunSlopeGeom->lum_C31_l
-                    * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
-                    + sunSlopeGeom->lum_C33_l;  /* Jenco */
+                s = sunSlopeGeom->lum_C31_l *
+                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+                    sunSlopeGeom->lum_C33_l; /* Jenco */
             }
 
-        }                       /*  End if useHorizonData() */
+        } /*  End if useHorizonData() */
         else {
             while ((r = searching(&length, sunVarGeom, gridGeom)) == 1) {
                 if (r == 3)
-                    break;      /* no test is needed */
+                    break; /* no test is needed */
             }
 
-
             if (r == 2) {
-                sunVarGeom->isShadow = 1;       /* shadow */
+                sunVarGeom->isShadow = 1; /* shadow */
             }
             else {
 
@@ -414,9 +388,9 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                    s = sunVarGeom->sinSolarAltitude;
                    }
                  */
-                s = sunSlopeGeom->lum_C31_l
-                    * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
-                    + sunSlopeGeom->lum_C33_l;  /* Jenco */
+                s = sunSlopeGeom->lum_C31_l *
+                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+                    sunSlopeGeom->lum_C33_l; /* Jenco */
             }
         }
     }
@@ -429,9 +403,9 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
            s = sunVarGeom->sinSolarAltitude;
            }
          */
-        s = sunSlopeGeom->lum_C31_l
-            * cos(-sungeom->timeAngle - sunSlopeGeom->longit_l)
-            + sunSlopeGeom->lum_C33_l;  /* Jenco */
+        s = sunSlopeGeom->lum_C31_l *
+                cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+            sunSlopeGeom->lum_C33_l; /* Jenco */
     }
 
     /* if (s <= 0) return UNDEFZ; ?? */
@@ -440,8 +414,6 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
 
     return (s);
 }
-
-
 
 double brad(double sh, double *bh, struct SunGeometryVarDay *sunVarGeom,
             struct SunGeometryVarSlope *sunSlopeGeom,
@@ -459,28 +431,26 @@ double brad(double sh, double *bh, struct SunGeometryVarDay *sunVarGeom,
     elevationCorr = exp(-sunVarGeom->z_orig / 8434.5);
     temp1 = 0.1594 + locSolarAltitude * (1.123 + 0.065656 * locSolarAltitude);
     temp2 = 1. + locSolarAltitude * (28.9344 + 277.3971 * locSolarAltitude);
-    drefract = 0.061359 * temp1 / temp2;        /* in radians */
+    drefract = 0.061359 * temp1 / temp2; /* in radians */
     h0refract = locSolarAltitude + drefract;
-    opticalAirMass = elevationCorr / (sin(h0refract) +
-                                      0.50572 * pow(h0refract * rad2deg +
-                                                    6.07995, -1.6364));
+    opticalAirMass =
+        elevationCorr / (sin(h0refract) +
+                         0.50572 * pow(h0refract * rad2deg + 6.07995, -1.6364));
     airMass2Linke = 0.8662 * sunRadVar->linke;
     if (opticalAirMass <= 20.) {
         rayl = 1. / (6.6296 +
-                     opticalAirMass * (1.7513 +
-                                       opticalAirMass * (-0.1202 +
-                                                         opticalAirMass *
-                                                         (0.0065 -
-                                                          opticalAirMass *
-                                                          0.00013))));
+                     opticalAirMass *
+                         (1.7513 + opticalAirMass *
+                                       (-0.1202 + opticalAirMass *
+                                                      (0.0065 - opticalAirMass *
+                                                                    0.00013))));
     }
     else {
         rayl = 1. / (10.4 + 0.718 * opticalAirMass);
     }
-    *bh =
-        sunRadVar->cbh * sunRadVar->G_norm_extra *
-        sunVarGeom->sinSolarAltitude * exp(-rayl * opticalAirMass *
-                                           airMass2Linke);
+    *bh = sunRadVar->cbh * sunRadVar->G_norm_extra *
+          sunVarGeom->sinSolarAltitude *
+          exp(-rayl * opticalAirMass * airMass2Linke);
     if (sunSlopeGeom->aspect != UNDEF && sunSlopeGeom->slope != 0.)
         br = *bh * sh / sunVarGeom->sinSolarAltitude;
     else
@@ -505,25 +475,24 @@ double brad_angle_loss(double sh, double *bh,
     p = exp(-sunVarGeom->z_orig / 8434.5);
     temp1 = 0.1594 + locSolarAltitude * (1.123 + 0.065656 * locSolarAltitude);
     temp2 = 1. + locSolarAltitude * (28.9344 + 277.3971 * locSolarAltitude);
-    drefract = 0.061359 * temp1 / temp2;        /* in radians */
+    drefract = 0.061359 * temp1 / temp2; /* in radians */
     h0refract = locSolarAltitude + drefract;
-    opticalAirMass = p / (sin(h0refract) +
-                          0.50572 * pow(h0refract * rad2deg + 6.07995,
-                                        -1.6364));
+    opticalAirMass =
+        p / (sin(h0refract) +
+             0.50572 * pow(h0refract * rad2deg + 6.07995, -1.6364));
     airMass2Linke = 0.8662 * sunRadVar->linke;
     if (opticalAirMass <= 20.)
-        rayl =
-            1. / (6.6296 +
-                  opticalAirMass *
-                  (1.7513 + opticalAirMass *
-                   (-0.1202 + opticalAirMass *
-                    (0.0065 - opticalAirMass * 0.00013))));
+        rayl = 1. / (6.6296 +
+                     opticalAirMass *
+                         (1.7513 + opticalAirMass *
+                                       (-0.1202 + opticalAirMass *
+                                                      (0.0065 - opticalAirMass *
+                                                                    0.00013))));
     else
         rayl = 1. / (10.4 + 0.718 * opticalAirMass);
-    *bh =
-        sunRadVar->cbh * sunRadVar->G_norm_extra *
-        sunVarGeom->sinSolarAltitude * exp(-rayl * opticalAirMass *
-                                           airMass2Linke);
+    *bh = sunRadVar->cbh * sunRadVar->G_norm_extra *
+          sunVarGeom->sinSolarAltitude *
+          exp(-rayl * opticalAirMass * airMass2Linke);
     if (sunSlopeGeom->aspect != UNDEF && sunSlopeGeom->slope != 0.)
         br = *bh * sh / sunVarGeom->sinSolarAltitude;
     else
@@ -533,8 +502,6 @@ double brad_angle_loss(double sh, double *bh,
 
     return (br);
 }
-
-
 
 double drad(double sh, double bh, double *rr,
             struct SunGeometryVarDay *sunVarGeom,
@@ -565,7 +532,7 @@ double drad(double sh, double bh, double *rr,
     A3 = -1.3025 + locLinke * (0.039231 + 0.0085079 * locLinke);
 
     fd = A1 + A2 * locSinSolarAltitude +
-        A3 * locSinSolarAltitude * locSinSolarAltitude;
+         A3 * locSinSolarAltitude * locSinSolarAltitude;
     dh = sunRadVar->cdh * sunRadVar->G_norm_extra * fd * tn;
     gh = bh + dh;
     if (sunSlopeGeom->aspect != UNDEF && sunSlopeGeom->slope != 0.) {
@@ -579,24 +546,25 @@ double drad(double sh, double bh, double *rr,
             ln = a_ln + pi2;
         a_ln = ln;
         fg = sinslope - sunSlopeGeom->slope * cosslope -
-            M_PI * sin(0.5 * sunSlopeGeom->slope) * sin(0.5 *
-                                                        sunSlopeGeom->slope);
+             M_PI * sin(0.5 * sunSlopeGeom->slope) *
+                 sin(0.5 * sunSlopeGeom->slope);
         if ((sunVarGeom->isShadow == 1) || sh <= 0.)
             fx = r_sky + fg * 0.252271;
         else if (sunVarGeom->solarAltitude >= 0.1) {
             fx = ((0.00263 - kb * (0.712 + 0.6883 * kb)) * fg + r_sky) *
-                (1. - kb) + kb * sh / locSinSolarAltitude;
+                     (1. - kb) +
+                 kb * sh / locSinSolarAltitude;
         }
         else if (sunVarGeom->solarAltitude < 0.1)
-            fx = ((0.00263 - 0.712 * kb - 0.6883 * kb * kb) * fg +
-                  r_sky) * (1. - kb) + kb *
-                sinslope * cos(a_ln) /
-                (0.1 - 0.008 * sunVarGeom->solarAltitude);
+            fx = ((0.00263 - 0.712 * kb - 0.6883 * kb * kb) * fg + r_sky) *
+                     (1. - kb) +
+                 kb * sinslope * cos(a_ln) /
+                     (0.1 - 0.008 * sunVarGeom->solarAltitude);
         dr = dh * fx;
         /* refl. rad */
         *rr = sunRadVar->alb * gh * (1 - cosslope) / 2.;
     }
-    else {                      /* plane */
+    else { /* plane */
         dr = dh;
         *rr = 0.;
     }
@@ -639,7 +607,7 @@ double drad_angle_loss(double sh, double bh, double *rr,
     A3 = -1.3025 + locLinke * (0.039231 + 0.0085079 * locLinke);
 
     fd = A1 + A2 * locSinSolarAltitude +
-        A3 * locSinSolarAltitude * locSinSolarAltitude;
+         A3 * locSinSolarAltitude * locSinSolarAltitude;
     dh = sunRadVar->cdh * sunRadVar->G_norm_extra * fd * tn;
     gh = bh + dh;
 
@@ -656,48 +624,47 @@ double drad_angle_loss(double sh, double bh, double *rr,
             ln = a_ln + pi2;
         a_ln = ln;
         fg = sinslope - sunSlopeGeom->slope * cosslope -
-            M_PI * sin(sunSlopeGeom->slope / 2.) * sin(sunSlopeGeom->slope /
-                                                       2.);
+             M_PI * sin(sunSlopeGeom->slope / 2.) *
+                 sin(sunSlopeGeom->slope / 2.);
         if ((sunVarGeom->isShadow) || (sh <= 0.))
             fx = r_sky + fg * 0.252271;
         else if (sunVarGeom->solarAltitude >= 0.1) {
-            fx = ((0.00263 - kb * (0.712 + 0.6883 * kb)) * fg + r_sky) * (1. -
-                                                                          kb)
-                + kb * sh / locSinSolarAltitude;
+            fx = ((0.00263 - kb * (0.712 + 0.6883 * kb)) * fg + r_sky) *
+                     (1. - kb) +
+                 kb * sh / locSinSolarAltitude;
         }
         else if (sunVarGeom->solarAltitude < 0.1)
-            fx = ((0.00263 - 0.712 * kb - 0.6883 * kb * kb) * fg +
-                  r_sky) * (1. - kb) + kb * sinslope * cos(a_ln) /
-                (0.1 - 0.008 * sunVarGeom->solarAltitude);
+            fx = ((0.00263 - 0.712 * kb - 0.6883 * kb * kb) * fg + r_sky) *
+                     (1. - kb) +
+                 kb * sinslope * cos(a_ln) /
+                     (0.1 - 0.008 * sunVarGeom->solarAltitude);
 
         dr = dh * fx;
         /* refl. rad */
         *rr = sunRadVar->alb * gh * (1 - cosslope) / 2.;
     }
-    else {                      /* plane */
+    else { /* plane */
         dr = dh;
         *rr = 0.;
     }
 
     c1 = 4. / (3. * M_PI);
-    diff_coeff_angleloss = sinslope
-        + (M_PI - sunSlopeGeom->slope - sinslope) / (1 + cosslope);
-    refl_coeff_angleloss = sinslope
-        + (sunSlopeGeom->slope - sinslope) / (1 - cosslope);
+    diff_coeff_angleloss =
+        sinslope + (M_PI - sunSlopeGeom->slope - sinslope) / (1 + cosslope);
+    refl_coeff_angleloss =
+        sinslope + (sunSlopeGeom->slope - sinslope) / (1 - cosslope);
 
-    diff_loss_factor
-        = 1. - exp(-(c1 * diff_coeff_angleloss
-                     + c2 * diff_coeff_angleloss * diff_coeff_angleloss)
-                   / a_r);
-    refl_loss_factor
-        = 1. - exp(-(c1 * refl_coeff_angleloss
-                     + c2 * refl_coeff_angleloss * refl_coeff_angleloss)
-                   / a_r);
+    diff_loss_factor =
+        1. - exp(-(c1 * diff_coeff_angleloss +
+                   c2 * diff_coeff_angleloss * diff_coeff_angleloss) /
+                 a_r);
+    refl_loss_factor =
+        1. - exp(-(c1 * refl_coeff_angleloss +
+                   c2 * refl_coeff_angleloss * refl_coeff_angleloss) /
+                 a_r);
 
     dr *= diff_loss_factor;
     *rr *= refl_loss_factor;
-
-
 
     return (dr);
 }

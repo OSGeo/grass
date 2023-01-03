@@ -177,16 +177,26 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[0:2])
                 w, h = map(int, dim.split(",")[2:4])
+                client_disp = wx.ClientDisplayRect()
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
             except Exception:
                 pass
+            self.Layout()
+            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
+                self.Fit()
         else:
+            self.Layout()
+            self.Fit()
             # does center (of screen) make sense for lmgr?
             self.Centre()
 
-        self.Layout()
-        self.Fit()
         self.Show()
 
         # load workspace file if requested
@@ -1813,14 +1823,6 @@ class GMFrame(wx.Frame):
             except KeyError:
                 cmd = ["r.mapcalc"]
         win = MapCalcFrame(parent=self, giface=self._giface, cmd=cmd[0])
-        win.CentreOnScreen()
-        win.Show()
-
-    def OnVectorCleaning(self, event, cmd=""):
-        """Init interactive vector cleaning"""
-        from modules.vclean import VectorCleaningFrame
-
-        win = VectorCleaningFrame(parent=self)
         win.CentreOnScreen()
         win.Show()
 

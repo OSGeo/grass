@@ -233,6 +233,9 @@ excluded = {
 
 excluded = setify(excluded)
 
+# Don't show mobile TOC menu JS code among <script> tag on cli man page
+masked = ["script"]
+
 
 class HTMLParser(base.HTMLParser):
     def __init__(self, entities=None):
@@ -259,7 +262,8 @@ class HTMLParser(base.HTMLParser):
         data = self.data
         self.data = self.data_stack.pop()
         (tag, attrs) = self.tag_stack.pop()
-        self.append((tag, attrs, data))
+        if tag not in masked:
+            self.append((tag, attrs, data))
         return tag
 
     def push(self, tag, attrs):

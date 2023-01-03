@@ -51,7 +51,7 @@ static void compose(struct Reclass *new, const struct Reclass *mid,
         G_fatal_error(_("Too many categories"));
 
     new->num = num;
-    new->table = (CELL *) G_calloc(new->num, sizeof(CELL));
+    new->table = (CELL *)G_calloc(new->num, sizeof(CELL));
 
     for (i = new->min; i <= new->max; i++) {
         j = old->table[i - old->min];
@@ -66,7 +66,7 @@ static void compose(struct Reclass *new, const struct Reclass *mid,
     }
 }
 
-static void init_reclass(struct Reclass *rec, const RULE * rules)
+static void init_reclass(struct Reclass *rec, const RULE *rules)
 {
     int first;
     const RULE *r;
@@ -134,8 +134,7 @@ static void init_table(struct Reclass *rec, int *is_default)
     }
 }
 
-static void fill_table(struct Reclass *rec, int *is_default,
-                       const RULE * rules)
+static void fill_table(struct Reclass *rec, int *is_default, const RULE *rules)
 {
     const RULE *r;
     int i;
@@ -172,7 +171,7 @@ static void set_cats(struct Categories *cats, /* const */ int *is_default,
         Rast_set_c_cat(&DEFAULT, &DEFAULT, default_label, cats);
 }
 
-static int _reclass( /* const */ RULE * rules, struct Categories *cats,
+static int _reclass(/* const */ RULE *rules, struct Categories *cats,
                     struct Reclass *new)
 {
     int *is_default;
@@ -186,7 +185,7 @@ static int _reclass( /* const */ RULE * rules, struct Categories *cats,
     return 0;
 }
 
-static int re_reclass( /* const */ RULE * rules, struct Categories *cats,
+static int re_reclass(/* const */ RULE *rules, struct Categories *cats,
                       /* const */ struct Reclass *old, struct Reclass *new,
                       const char *input_name, const char *input_mapset)
 {
@@ -202,9 +201,8 @@ static int re_reclass( /* const */ RULE * rules, struct Categories *cats,
     return 0;
 }
 
-int reclass(const char *old_name, const char *old_mapset,
-            const char *new_name, RULE * rules, struct Categories *cats,
-            const char *title)
+int reclass(const char *old_name, const char *old_mapset, const char *new_name,
+            RULE *rules, struct Categories *cats, const char *title)
 {
     struct Reclass old, new;
     struct History hist;

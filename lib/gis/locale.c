@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/locale.c
  *
@@ -49,7 +48,6 @@ void G_init_locale(void)
 
     G_initialize_done(&initialized);
 }
-
 
 /**
  * \brief Gets localized text.

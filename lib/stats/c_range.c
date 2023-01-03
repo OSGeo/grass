@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void c_range(DCELL * result, DCELL * values, int n, const void *closure)
+void c_range(DCELL *result, DCELL *values, int n, const void *closure)
 {
     DCELL min, max;
     int i;

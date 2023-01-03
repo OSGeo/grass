@@ -2,8 +2,8 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-int cell_stats(int fd[], int with_percents, int with_counts,
-               int with_areas, int do_sort, int with_labels, char *fmt)
+int cell_stats(int fd[], int with_percents, int with_counts, int with_areas,
+               int do_sort, int with_labels, char *fmt)
 {
     CELL **cell;
     int i;
@@ -14,7 +14,7 @@ int cell_stats(int fd[], int with_percents, int with_counts,
     double G_area_of_cell_at_row();
 
     /* allocate i/o buffers for each raster map */
-    cell = (CELL **) G_calloc(nfiles, sizeof(CELL *));
+    cell = (CELL **)G_calloc(nfiles, sizeof(CELL *));
     for (i = 0; i < nfiles; i++)
         cell[i] = Rast_allocate_c_buf();
 
@@ -25,7 +25,7 @@ int cell_stats(int fd[], int with_percents, int with_counts,
     unit_area = 0.0;
     if (with_areas) {
         switch (G_begin_cell_area_calculations()) {
-        case 0:                /* areas don't make sense, but ignore this for now */
+        case 0: /* areas don't make sense, but ignore this for now */
         case 1:
             planimetric = 1;
             unit_area = G_area_of_cell_at_row(0);

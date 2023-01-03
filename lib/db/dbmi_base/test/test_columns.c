@@ -1,19 +1,18 @@
-
 /****************************************************************************
  *
  * MODULE:       test.dbmi_base.lib
  *
  * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert <at> googlemail <dot> com
- * 		 2010 Braunschweig, Germany
+ *                  2010 Braunschweig, Germany
  *
  * PURPOSE:      Unit and integration tests for the dbmi_base library
  *
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
  *
  *****************************************************************************/
 
@@ -58,7 +57,7 @@ int test_copy_column(void)
     G_message(_("\n++ Run test copy column ++"));
 
     /*Test the set and copy function */
-    column = (dbColumn *) db_calloc(sizeof(dbColumn), 2);
+    column = (dbColumn *)db_calloc(sizeof(dbColumn), 2);
     db_init_column(&column[0]);
     db_init_column(&column[1]);
 

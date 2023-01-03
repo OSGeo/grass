@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       r.composite
  * AUTHOR(S):    Glynn Clements - glynn.clements@virgin.net
@@ -23,8 +22,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-struct band
-{
+struct band {
     struct Option *opt_name;
     struct Option *opt_levels;
     char *name;
@@ -39,7 +37,7 @@ struct band
     struct Colors colors;
 };
 
-static char *const color_names[3] = { "red", "green", "blue" };
+static char *const color_names[3] = {"red", "green", "blue"};
 
 static struct band B[3];
 static int closest;
@@ -72,9 +70,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("composite"));
     G_add_keyword("RGB");
-    module->description =
-        _("Combines red, green and blue raster maps into "
-          "a single composite raster map.");
+    module->description = _("Combines red, green and blue raster maps into "
+                            "a single composite raster map.");
 
     for (i = 0; i < 3; i++) {
         struct Option *opt;
@@ -98,8 +95,7 @@ int main(int argc, char **argv)
     opt_lev->required = NO;
     opt_lev->options = "1-256";
     opt_lev->answer = "32";
-    opt_lev->description =
-        _("Number of levels to be used for each component");
+    opt_lev->description = _("Number of levels to be used for each component");
     opt_lev->guisection = _("Levels");
 
     for (i = 0; i < 3; i++) {
@@ -165,12 +161,10 @@ int main(int argc, char **argv)
                           b->name);
 
         for (j = 0; j < 3; j++)
-            b->array[j] = (i == j)
-                ? G_malloc(window.cols)
-                : dummy;
+            b->array[j] = (i == j) ? G_malloc(window.cols) : dummy;
 
-        b->levels = b->opt_levels->answer ? atoi(b->opt_levels->answer)
-            : levels;
+        b->levels =
+            b->opt_levels->answer ? atoi(b->opt_levels->answer) : levels;
         b->maxlev = b->levels - 1;
         b->offset = 128 / b->maxlev;
 
@@ -197,8 +191,8 @@ int main(int argc, char **argv)
         for (i = 0; i < 3; i++) {
             struct band *b = &B[i];
 
-            Rast_get_row_colors(b->file, atrow, &b->colors,
-                                b->array[0], b->array[1], b->array[2], nulls);
+            Rast_get_row_colors(b->file, atrow, &b->colors, b->array[0],
+                                b->array[1], b->array[2], nulls);
 
             if (dither) {
                 short *tmp = b->floyd[0];
@@ -240,8 +234,8 @@ int main(int argc, char **argv)
                     val[i] = quantize(i, v);
             }
 
-            out_array[atcol] = (CELL)
-                (val[2] * B[1].levels + val[1]) * B[0].levels + val[0];
+            out_array[atcol] =
+                (CELL)(val[2] * B[1].levels + val[1]) * B[0].levels + val[0];
         }
 
         Rast_put_row(out_file, out_array, CELL_TYPE);
@@ -266,8 +260,8 @@ int main(int argc, char **argv)
 
 static int quantize(int c, int x)
 {
-    return closest
-        ? (x + B[c].offset) * B[c].maxlev / 256 : x * B[c].levels / 256;
+    return closest ? (x + B[c].offset) * B[c].maxlev / 256
+                   : x * B[c].levels / 256;
 }
 
 static void make_color_cube(struct Colors *colors)
@@ -294,8 +288,7 @@ static void make_color_cube(struct Colors *colors)
             CELL i0 = i;
             CELL i1 = i + mr;
 
-            Rast_add_c_color_rule(&i0, 0, grn, blu,
-                                  &i1, 255, grn, blu, colors);
+            Rast_add_c_color_rule(&i0, 0, grn, blu, &i1, 255, grn, blu, colors);
 
             i += nr;
         }

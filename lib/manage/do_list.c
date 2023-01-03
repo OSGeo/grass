@@ -32,12 +32,12 @@ void M_do_list(int n, const char *mapset)
 
     if (n < 0) {
         for (i = 0; i < nlist; i++) {
-            G_list_element(list[i].element[0], list[i].desc[0],
-                           mapset, (int (*)())0);
+            G_list_element(list[i].element[0], list[i].desc[0], mapset,
+                           (int (*)())0);
         }
     }
     else {
-        G_list_element(list[n].element[0], list[n].desc[0],
-                       mapset, (int (*)())0);
+        G_list_element(list[n].element[0], list[n].desc[0], mapset,
+                       (int (*)())0);
     }
 }

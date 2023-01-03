@@ -18,7 +18,7 @@
    \brief Define range based on SQL data type
 
    \param sqltype SQL data type
-   \param[out] from 
+   \param[out] from
    \param[out] to
  */
 void db_interval_range(int sqltype, int *from, int *to)
