@@ -10,6 +10,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2007-2024 by Glynn Clements
 =======
 # COPYRIGHT:    (C) 2007-2022 by Glynn Clements
@@ -20,6 +21,9 @@
 =======
 # COPYRIGHT:    (C) 2007-2023 by Glynn Clements
 >>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+# COPYRIGHT:    (C) 2007-2023 by Glynn Clements
+>>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
