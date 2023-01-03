@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
     if (flags.format->answer) {
         /* list formats */
-        list_formats(stdout);
+        list_formats();
         exit(EXIT_SUCCESS);
     }
 
