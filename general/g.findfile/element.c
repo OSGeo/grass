@@ -2,7 +2,7 @@
 #include <grass/glocale.h>
 #include <grass/manage.h>
 
-void list_elements()
+void list_elements(void)
 {
     G_message(_("List of available elements:"));
     M_read_list(FALSE, NULL);
