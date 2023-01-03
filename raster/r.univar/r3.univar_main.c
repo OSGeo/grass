@@ -26,7 +26,7 @@ zone_type zone_info;
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.inputfile = G_define_standard_option(G_OPT_R3_MAP);
 

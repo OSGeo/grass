@@ -51,7 +51,6 @@ DCELL *DMAX, *DMIN;
 int maskfd;
 CELL *mask;
 CELL NULL_CELL;
-int (*get_row)();
 
 char fs[2];
 struct Categories *labels;

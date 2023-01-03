@@ -74,7 +74,7 @@ extern double amax1(double, double);
 extern double amin1(double, double);
 extern int min(int, int);
 extern int max(int, int);
-extern void create_observation_points();
+extern void create_observation_points(void);
 
 extern double xmin, ymin, xmax, ymax;
 extern double mayy, miyy, maxx, mixx;
