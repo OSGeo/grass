@@ -2,8 +2,9 @@
  *
  * MODULE:       r.resamp.filter
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
+ *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:
- * COPYRIGHT:    (C) 2010 by Glynn Clements and the GRASS Development Team
+ * COPYRIGHT:    (C) 2010-2023 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -160,7 +161,6 @@ static DCELL **inbuf;
 static DCELL *outbuf;
 static DCELL ***bufs;
 static int bufrows;
-static int nprocs;
 static double *h_weights;
 static double *v_weights;
 static int *mapcol0, *mapcol1;
@@ -389,7 +389,6 @@ static void filter(void)
                          rows);
 #pragma omp atomic update
                 computed_row++;
-
             }
         }
 
@@ -398,7 +397,6 @@ static void filter(void)
             G_debug(5, "write: %d", row);
         }
         written_row = end;
-
     }
     G_percent(dst_w.rows, dst_w.rows, 2);
 }
@@ -406,10 +404,9 @@ static void filter(void)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *rastin, *rastout, *method,
-            *radius, *x_radius, *y_radius, *memory, *nprocs;
+    struct {
+        struct Option *rastin, *rastout, *method, *radius, *x_radius, *y_radius,
+            *memory, *nprocs;
     } parm;
     struct {
         struct Flag *nulls;
@@ -436,6 +433,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("hermite"));
     G_add_keyword(_("lanczos"));
     G_add_keyword(_("sinc"));
+    G_add_keyword(_("parallel"));
 
     module->description =
         _("Resamples raster map layers using an analytic kernel.");
@@ -625,8 +623,7 @@ int main(int argc, char *argv[])
     Rast_set_output_window(&dst_w);
 
     bufrows =
-        atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) /
-                                     dst_w.cols);
+        atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
     if (bufrows > dst_w.rows) {
         bufrows = dst_w.rows;
     }
