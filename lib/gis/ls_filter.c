@@ -159,22 +159,22 @@ static int re_filter(const char *filename, void *closure)
 
     /* Optimize the regex */
     pcreExtra = pcre_study(pcre_regex, 0, &pcreErrorStr);
-    pcreExecRet = pcre_exec(pcre_regex, pcreExtra, filename, strlen(filename),  /* length of string */
-                            0,  /* Start looking at this point */
-                            0,  /* OPTIONS */
-                            NULL, 0);   /* Length of subStrVec */
+    pcreExecRet = pcre_exec(pcre_regex, pcreExtra, filename,
+                            strlen(filename), /* length of string */
+                            0,                /* Start looking at this point */
+                            0,                /* OPTIONS */
+                            NULL, 0);         /* Length of subStrVec */
 
     /* Optimize the regex */
     pcreExtra = pcre_study(pcre_regex, 0, &pcreErrorStr);
-    pcreExecRet = pcre_exec(pcre_regex, pcreExtra, filename, strlen(filename),  /* length of string */
-                            0,  /* Start looking at this point */
-                            0,  /* OPTIONS */
-                            NULL, 0);   /* Length of subStrVec */
+    pcreExecRet = pcre_exec(pcre_regex, pcreExtra, filename,
+                            strlen(filename), /* length of string */
+                            0,                /* Start looking at this point */
+                            0,                /* OPTIONS */
+                            NULL, 0);         /* Length of subStrVec */
 
     return filename[0] != '.' && pcreExecRet == 0;
 #endif
-
-
 }
 
 void *G_ls_regex_filter(const char *pat, int exclude, int extended,
@@ -235,7 +235,6 @@ void *G_ls_regex_filter(const char *pat, int exclude, int extended,
 
     return pcre_regex;
 #endif
-
 }
 
 void *G_ls_glob_filter(const char *pat, int exclude, int ignorecase)
@@ -270,8 +269,6 @@ void *G_ls_glob_filter(const char *pat, int exclude, int ignorecase)
 #ifdef HAVE_PCRE_H
     return pcre_regex;
 #endif
-
-
 }
 
 void G_free_ls_filter(void *regex)
@@ -286,5 +283,4 @@ void G_free_ls_filter(void *regex)
 #endif
 
     G_free(regex);
-
 }
