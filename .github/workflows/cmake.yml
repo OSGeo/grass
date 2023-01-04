@@ -25,11 +25,11 @@ permissions:
 
 jobs:
 
-  build-linux-ubuntu-focal:
+  build-linux-ubuntu-20.04:
     runs-on: ubuntu-20.04
     env:
       CMAKE_OPTIONS: -DPython_LOOKUP_VERSION=3.8 -DUSE_CCACHE=ON
-      cache-name: cmake-ubuntu-focal
+      cache-name: cmake-ubuntu-20.04
     steps:
     - name: Checkout GRASS
       uses: actions/checkout@v3
