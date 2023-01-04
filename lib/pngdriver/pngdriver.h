@@ -8,7 +8,7 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #ifndef __PNGDRIVER_H__
@@ -24,12 +24,11 @@
 #include "driver.h"
 #include "path.h"
 
-#define FILE_NAME  "map.png"
+#define FILE_NAME   "map.png"
 
 #define HEADER_SIZE 64
 
-struct png_state
-{
+struct png_state {
     char *file_name;
     int current_color;
     int true_color;
@@ -79,9 +78,8 @@ extern int PNG_Graph_set(void);
 extern const char *PNG_Graph_get_file(void);
 extern void PNG_Line_width(double);
 extern void PNG_begin_raster(int, int[2][2], double[2][2]);
-extern int PNG_raster(int, int, const unsigned char *,
-                      const unsigned char *, const unsigned char *,
-                      const unsigned char *);
+extern int PNG_raster(int, int, const unsigned char *, const unsigned char *,
+                      const unsigned char *, const unsigned char *);
 extern void PNG_Begin(void);
 extern void PNG_Move(double, double);
 extern void PNG_Cont(double, double);

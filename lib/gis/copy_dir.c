@@ -94,9 +94,8 @@ int G_recursive_copy(const char *src, const char *dst)
         if ((fd = open(src, O_RDONLY)) < 0)
             return 1;
 
-        if ((fd2 =
-             open(dst, O_CREAT | O_TRUNC | O_WRONLY,
-                  sb.st_mode & 0777)) < 0) {
+        if ((fd2 = open(dst, O_CREAT | O_TRUNC | O_WRONLY, sb.st_mode & 0777)) <
+            0) {
             close(fd);
             return 1;
         }
@@ -119,10 +118,10 @@ int G_recursive_copy(const char *src, const char *dst)
     }
     else
         /* if dst already exists and it's a file, try to remove it */
-    if (!S_ISDIR(sb.st_mode)) {
-        if (remove(dst) < 0 || G_mkdir(dst) < 0)
-            return 1;
-    }
+        if (!S_ISDIR(sb.st_mode)) {
+            if (remove(dst) < 0 || G_mkdir(dst) < 0)
+                return 1;
+        }
 
     dirp = opendir(src);
     if (!dirp)

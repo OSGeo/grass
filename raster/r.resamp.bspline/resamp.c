@@ -1,4 +1,3 @@
-
 /***********************************************************************
  *
  * MODULE:       r.resamp.bspline
@@ -22,12 +21,9 @@
 #include <math.h>
 #include "bspline.h"
 
-struct Point *P_Read_Raster_Region_masked(SEGMENT * mask_seg,
-                                          struct Cell_head *Original,
-                                          struct bound_box output_box,
-                                          struct bound_box General,
-                                          int *num_points, int dim_vect,
-                                          double mean)
+struct Point *P_Read_Raster_Region_masked(
+    SEGMENT *mask_seg, struct Cell_head *Original, struct bound_box output_box,
+    struct bound_box General, int *num_points, int dim_vect, double mean)
 {
     int col, row, startcol, endcol, startrow, endrow, nrows, ncols;
     int pippo, npoints;
@@ -55,8 +51,7 @@ struct Point *P_Read_Raster_Region_masked(SEGMENT * mask_seg,
     else
         startrow = 0;
     if (Original->south < General.S) {
-        endrow =
-            (double)((Original->north - General.S) / Original->ns_res + 1);
+        endrow = (double)((Original->north - General.S) / Original->ns_res + 1);
         if (endrow > nrows)
             endrow = nrows;
     }
@@ -71,8 +66,7 @@ struct Point *P_Read_Raster_Region_masked(SEGMENT * mask_seg,
     else
         startcol = 0;
     if (General.E < Original->east) {
-        endcol =
-            (double)((General.E - Original->west) / Original->ew_res + 1);
+        endcol = (double)((General.E - Original->west) / Original->ew_res + 1);
         if (endcol > ncols)
             endcol = ncols;
     }
@@ -90,13 +84,11 @@ struct Point *P_Read_Raster_Region_masked(SEGMENT * mask_seg,
             Y = Rast_row_to_northing((double)(row) + 0.5, Original);
 
             /* Here, mean is just for asking if obs point is in box */
-            if (Vect_point_in_box(X, Y, mean, &General)) {      /* General */
+            if (Vect_point_in_box(X, Y, mean, &General)) { /* General */
                 if (npoints >= pippo) {
                     pippo += dim_vect;
-                    obs =
-                        (struct Point *)G_realloc((void *)obs,
-                                                  (signed int)pippo *
-                                                  sizeof(struct Point));
+                    obs = (struct Point *)G_realloc(
+                        (void *)obs, (signed int)pippo * sizeof(struct Point));
                 }
 
                 /* Storing observation vector */
@@ -112,12 +104,12 @@ struct Point *P_Read_Raster_Region_masked(SEGMENT * mask_seg,
     return obs;
 }
 
-int P_Sparse_Raster_Points(SEGMENT * out_seg, struct Cell_head *Elaboration,
-                           struct Cell_head *Original,
-                           struct bound_box General, struct bound_box Overlap,
-                           struct Point *obs, double *param, double pe,
-                           double pn, double overlap, int nsplx, int nsply,
-                           int num_points, int bilin, double mean)
+int P_Sparse_Raster_Points(SEGMENT *out_seg, struct Cell_head *Elaboration,
+                           struct Cell_head *Original, struct bound_box General,
+                           struct bound_box Overlap, struct Point *obs,
+                           double *param, double pe, double pn, double overlap,
+                           int nsplx, int nsply, int num_points, int bilin,
+                           double mean)
 {
     int i, row, col;
     double X, Y, interpolation, csi, eta, weight, dval;
@@ -149,15 +141,13 @@ int P_Sparse_Raster_Points(SEGMENT * out_seg, struct Cell_head *Elaboration,
 
         G_debug(3, "P_Sparse_Raster_Points: interpolate point %d...", i);
         if (bilin)
-            interpolation =
-                dataInterpolateBilin(X, Y, pe, pn, nsplx,
-                                     nsply, Elaboration->west,
-                                     Elaboration->south, param);
+            interpolation = dataInterpolateBilin(X, Y, pe, pn, nsplx, nsply,
+                                                 Elaboration->west,
+                                                 Elaboration->south, param);
         else
-            interpolation =
-                dataInterpolateBicubic(X, Y, pe, pn, nsplx,
-                                       nsply, Elaboration->west,
-                                       Elaboration->south, param);
+            interpolation = dataInterpolateBicubic(X, Y, pe, pn, nsplx, nsply,
+                                                   Elaboration->west,
+                                                   Elaboration->south, param);
 
         interpolation += mean;
 
@@ -167,62 +157,62 @@ int P_Sparse_Raster_Points(SEGMENT * out_seg, struct Cell_head *Elaboration,
         else {
             Segment_get(out_seg, &dval, row, col);
             if ((X > Overlap.E) && (X < General.E)) {
-                if ((Y > Overlap.N) && (Y < General.N)) {       /* (3) */
+                if ((Y > Overlap.N) && (Y < General.N)) { /* (3) */
                     csi = (General.E - X) / overlap;
                     eta = (General.N - Y) / overlap;
                     weight = csi * eta;
                     interpolation *= weight;
                     dval += interpolation;
                 }
-                else if ((Y < Overlap.S) && (Y > General.S)) {  /* (1) */
+                else if ((Y < Overlap.S) && (Y > General.S)) { /* (1) */
                     csi = (General.E - X) / overlap;
                     eta = (Y - General.S) / overlap;
                     weight = csi * eta;
                     interpolation *= weight;
                     dval = interpolation;
                 }
-                else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {        /* (1) */
+                else if ((Y >= Overlap.S) && (Y <= Overlap.N)) { /* (1) */
                     weight = (General.E - X) / overlap;
                     interpolation *= weight;
                     dval = interpolation;
                 }
             }
             else if ((X < Overlap.W) && (X > General.W)) {
-                if ((Y > Overlap.N) && (Y < General.N)) {       /* (4) */
+                if ((Y > Overlap.N) && (Y < General.N)) { /* (4) */
                     csi = (X - General.W) / overlap;
                     eta = (General.N - Y) / overlap;
                     weight = eta * csi;
                     interpolation *= weight;
                     dval += interpolation;
                 }
-                else if ((Y < Overlap.S) && (Y > General.S)) {  /* (2) */
+                else if ((Y < Overlap.S) && (Y > General.S)) { /* (2) */
                     csi = (X - General.W) / overlap;
                     eta = (Y - General.S) / overlap;
                     weight = csi * eta;
                     interpolation *= weight;
                     dval += interpolation;
                 }
-                else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {        /* (2) */
+                else if ((Y >= Overlap.S) && (Y <= Overlap.N)) { /* (2) */
                     weight = (X - General.W) / overlap;
                     interpolation *= weight;
                     dval += interpolation;
                 }
             }
             else if ((X >= Overlap.W) && (X <= Overlap.E)) {
-                if ((Y > Overlap.N) && (Y < General.N)) {       /* (3) */
+                if ((Y > Overlap.N) && (Y < General.N)) { /* (3) */
                     weight = (General.N - Y) / overlap;
                     interpolation *= weight;
                     dval += interpolation;
                 }
-                else if ((Y < Overlap.S) && (Y > General.S)) {  /* (1) */
+                else if ((Y < Overlap.S) && (Y > General.S)) { /* (1) */
                     weight = (Y - General.S) / overlap;
                     interpolation *= weight;
                     dval = interpolation;
                 }
             }
-        }                       /* end not in overlap */
+        } /* end not in overlap */
         Segment_put(out_seg, &dval, row, col);
-    }                           /* for num_points */
+    } /* for num_points */
 
     return 1;
 }
@@ -235,10 +225,9 @@ int align_elaboration_box(struct Cell_head *elaboration,
     int row, col;
 
     switch (type) {
-    case GENERAL_ROW:          /* General case N-S direction */
+    case GENERAL_ROW: /* General case N-S direction */
         /* northern edge */
-        row =
-            (int)((original->north - elaboration->north) / original->ns_res);
+        row = (int)((original->north - elaboration->north) / original->ns_res);
 
         if (row < 0)
             row = 0;
@@ -246,9 +235,8 @@ int align_elaboration_box(struct Cell_head *elaboration,
         elaboration->north = original->north - original->ns_res * row;
 
         /* southern edge */
-        row =
-            (int)((original->north - elaboration->south) / original->ns_res) +
-            1;
+        row = (int)((original->north - elaboration->south) / original->ns_res) +
+              1;
 
         if (row > original->rows + 1)
             row = original->rows + 1;
@@ -257,12 +245,11 @@ int align_elaboration_box(struct Cell_head *elaboration,
 
         return 1;
 
-    case GENERAL_COLUMN:       /* General case E-W direction */
+    case GENERAL_COLUMN: /* General case E-W direction */
 
         /* eastern edge */
         col =
-            (int)((elaboration->east - original->west) / original->ew_res) +
-            1;
+            (int)((elaboration->east - original->west) / original->ew_res) + 1;
 
         if (col > original->cols + 1)
             col = original->cols + 1;
@@ -282,7 +269,6 @@ int align_elaboration_box(struct Cell_head *elaboration,
     return 0;
 }
 
-
 /* align interpolation boxes to destination region
  * return 1 on success, 0 on failure */
 
@@ -294,7 +280,7 @@ int align_interp_boxes(struct bound_box *general, struct bound_box *overlap,
     int row, col;
 
     switch (type) {
-    case GENERAL_ROW:          /* General case N-S direction */
+    case GENERAL_ROW: /* General case N-S direction */
 
         /* general box */
         /* grow north */
@@ -322,7 +308,7 @@ int align_interp_boxes(struct bound_box *general, struct bound_box *overlap,
 
         return 1;
 
-    case GENERAL_COLUMN:       /* General case E-W direction */
+    case GENERAL_COLUMN: /* General case E-W direction */
 
         /* general box */
         /* grow west */
@@ -350,7 +336,7 @@ int align_interp_boxes(struct bound_box *general, struct bound_box *overlap,
 
         return 1;
 
-    case FIRST_ROW:            /* Just started with first row */
+    case FIRST_ROW: /* Just started with first row */
         general->N = original->north;
         overlap->N = original->north;
 
@@ -371,13 +357,13 @@ int align_interp_boxes(struct bound_box *general, struct bound_box *overlap,
 
         return 1;
 
-    case LAST_ROW:             /* Reached last row */
+    case LAST_ROW: /* Reached last row */
         general->S = original->south;
         overlap->S = original->south;
 
         return 1;
 
-    case FIRST_COLUMN:         /* Just started with first column */
+    case FIRST_COLUMN: /* Just started with first column */
         general->W = original->west;
         overlap->W = original->west;
 
@@ -398,7 +384,7 @@ int align_interp_boxes(struct bound_box *general, struct bound_box *overlap,
 
         return 1;
 
-    case LAST_COLUMN:          /* Reached last column */
+    case LAST_COLUMN: /* Reached last column */
         general->E = original->east;
         overlap->E = original->east;
 

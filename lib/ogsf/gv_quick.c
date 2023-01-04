@@ -1,17 +1,17 @@
 /*!
    \file lib/ogsf/gv_quick.c
 
-   \brief OGSF library - 
+   \brief OGSF library -
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    Trying some stuff to draw a quick version of a vector map, to represent
    it when doing interactive translations.
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -35,7 +35,7 @@
 /*!
    \brief max number of lines desired
  */
-#define MFAST_LNS  400
+#define MFAST_LNS 400
 
 static geoline *copy_line(geoline *);
 static geoline *thin_line(geoline *, float);
@@ -48,12 +48,12 @@ static geoline *thin_line(geoline *, float);
    \return pointer to geoline struct
    \return on failure
  */
-static geoline *copy_line(geoline * gln)
+static geoline *copy_line(geoline *gln)
 {
     geoline *newln;
     int i, np;
 
-    newln = (geoline *) G_malloc(sizeof(geoline));      /* G_fatal_error */
+    newln = (geoline *)G_malloc(sizeof(geoline)); /* G_fatal_error */
     if (!newln) {
         return (NULL);
     }
@@ -61,7 +61,7 @@ static geoline *copy_line(geoline * gln)
     np = newln->npts = gln->npts;
 
     if (2 == (newln->dims = gln->dims)) {
-        newln->p2 = (Point2 *) G_calloc(np, sizeof(Point2));    /* G_fatal_error */
+        newln->p2 = (Point2 *)G_calloc(np, sizeof(Point2)); /* G_fatal_error */
         if (!newln->p2) {
             return (NULL);
         }
@@ -72,7 +72,7 @@ static geoline *copy_line(geoline * gln)
         }
     }
     else {
-        newln->p3 = (Point3 *) G_calloc(np, sizeof(Point3));    /* G_fatal_error */
+        newln->p3 = (Point3 *)G_calloc(np, sizeof(Point3)); /* G_fatal_error */
         if (!newln->p3) {
             return (NULL);
         }
@@ -89,7 +89,6 @@ static geoline *copy_line(geoline * gln)
     return (newln);
 }
 
-
 /*!
    \brief Thin line
 
@@ -101,12 +100,12 @@ static geoline *copy_line(geoline * gln)
    \return pointer to geoline struct
    \return NULL on failure
  */
-static geoline *thin_line(geoline * gln, float factor)
+static geoline *thin_line(geoline *gln, float factor)
 {
     geoline *newln;
     int i, nextp, targp;
 
-    newln = (geoline *) G_malloc(sizeof(geoline));      /* G_fatal_error */
+    newln = (geoline *)G_malloc(sizeof(geoline)); /* G_fatal_error */
     if (!newln) {
         return (NULL);
     }
@@ -120,14 +119,15 @@ static geoline *thin_line(geoline * gln, float factor)
     newln->npts = targp;
 
     if (2 == (newln->dims = gln->dims)) {
-        newln->p2 = (Point2 *) G_calloc(targp, sizeof(Point2)); /* G_fatal_error */
+        newln->p2 =
+            (Point2 *)G_calloc(targp, sizeof(Point2)); /* G_fatal_error */
         if (!newln->p2) {
             return (NULL);
         }
 
         for (i = 0; i < targp; i++) {
             if (i == targp - 1) {
-                nextp = gln->npts - 1;  /* avoid rounding error */
+                nextp = gln->npts - 1; /* avoid rounding error */
             }
             else {
                 nextp = (int)((i * (gln->npts - 1)) / (targp - 1));
@@ -138,14 +138,15 @@ static geoline *thin_line(geoline * gln, float factor)
         }
     }
     else {
-        newln->p3 = (Point3 *) G_calloc(targp, sizeof(Point3)); /* G_fatal_error */
+        newln->p3 =
+            (Point3 *)G_calloc(targp, sizeof(Point3)); /* G_fatal_error */
         if (!newln->p3) {
             return (NULL);
         }
 
         for (i = 0; i < targp; i++) {
             if (i == targp - 1) {
-                nextp = gln->npts - 1;  /* avoid rounding error */
+                nextp = gln->npts - 1; /* avoid rounding error */
             }
             else {
                 nextp = (int)((i * (gln->npts - 1)) / (targp - 1));
@@ -169,7 +170,7 @@ static geoline *thin_line(geoline * gln, float factor)
 
    \return line width
  */
-float gv_line_length(geoline * gln)
+float gv_line_length(geoline *gln)
 {
     int n;
     float length = 0.0;
@@ -193,7 +194,7 @@ float gv_line_length(geoline * gln)
 
    \return number of vertices
  */
-int gln_num_points(geoline * gln)
+int gln_num_points(geoline *gln)
 {
     int np = 0;
     geoline *tln;
@@ -212,12 +213,10 @@ int gln_num_points(geoline * gln)
 
    \return number of points
  */
-int gv_num_points(geovect * gv)
+int gv_num_points(geovect *gv)
 {
     return (gln_num_points(gv->lines));
 }
-
-
 
 /*!
    \brief Decimate line
@@ -229,7 +228,7 @@ int gv_num_points(geovect * gv)
 
    \return
  */
-int gv_decimate_lines(geovect * gv)
+int gv_decimate_lines(geovect *gv)
 {
     int T_pts, A_ppl, N_s;
     float decim_factor, slength[MFAST_LNS], T_slength, A_slength;
@@ -245,7 +244,7 @@ int gv_decimate_lines(geovect * gv)
     N_s = 0;
     T_slength = 0.0;
     decim_factor = T_pts / TFAST_PTS;
-    A_ppl = T_pts / gv->n_lines;        /* (int) Average points per line */
+    A_ppl = T_pts / gv->n_lines; /* (int) Average points per line */
 
     prev = NULL;
 

@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.edit
@@ -32,7 +31,7 @@ static int merge_lists2(struct ilist *, struct boxlist *);
    \param[in] action_mode tool
    \param[in] params GRASS parameters
    \param[in] List list of selected features
-   
+
    \return list of newly selected features
 */
 struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
@@ -114,8 +113,7 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
         Polygon = Vect_new_line_struct();
 
         for (i = 0; params->poly->answers[i]; i += 2) {
-            Vect_append_point(Polygon,
-                              atof(params->poly->answers[i]),
+            Vect_append_point(Polygon, atof(params->poly->answers[i]),
                               atof(params->poly->answers[i + 1]), 0.0);
         }
 
@@ -175,17 +173,15 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
 
     G_message(n_("%d of %d feature selected from vector map <%s>",
                  "%d of %d features selected from vector map <%s>",
-                 Vect_get_num_lines(Map)
-              ),
-              List->n_values,
-              Vect_get_num_lines(Map), Vect_get_full_name(Map));
+                 Vect_get_num_lines(Map)),
+              List->n_values, Vect_get_num_lines(Map), Vect_get_full_name(Map));
 
     return List;
 }
 
 /**
    \brief Print selected vector features
- 
+
    \param[in] List list of selected features
 
    \return number of selected features
@@ -197,8 +193,8 @@ int print_selected(struct ilist *List)
 
     /* print the result */
     for (i = 0; i < List->n_values; i++) {
-        fprintf(stdout, "%d%s",
-                List->value[i], i < List->n_values - 1 ? "," : "");
+        fprintf(stdout, "%d%s", List->value[i],
+                i < List->n_values - 1 ? "," : "");
     }
     if (List->n_values > 0) {
         fprintf(stdout, "\n");
@@ -210,7 +206,7 @@ int print_selected(struct ilist *List)
 
 /**
    \brief Select features by category
- 
+
    \param[in] Map vector map
    \param[in] cl_orig original list of categories (previously selected)
    \param[in] layer layer number
@@ -220,8 +216,8 @@ int print_selected(struct ilist *List)
 
    \return number of selected lines
 */
-int sel_by_cat(struct Map_info *Map, struct cat_list *cl_orig,
-               int layer, int type, char *cats, struct ilist *List)
+int sel_by_cat(struct Map_info *Map, struct cat_list *cl_orig, int layer,
+               int type, char *cats, struct ilist *List)
 {
     struct ilist *List_tmp, *List_tmp1;
     struct cat_list *cl;
@@ -269,7 +265,7 @@ int sel_by_cat(struct Map_info *Map, struct cat_list *cl_orig,
 
 /**
    \brief Select features by coordinates
- 
+
    \param[in] Map vector map
    \param[in] type feature type
    \param[in] coords coordinates GRASS parameters
@@ -278,9 +274,8 @@ int sel_by_cat(struct Map_info *Map, struct cat_list *cl_orig,
 
    \return number of selected lines
 */
-int sel_by_coordinates(struct Map_info *Map,
-                       int type, struct line_pnts *coords, double thresh,
-                       struct ilist *List)
+int sel_by_coordinates(struct Map_info *Map, int type, struct line_pnts *coords,
+                       double thresh, struct ilist *List)
 {
     int i;
     double east, north, maxdist;
@@ -332,7 +327,7 @@ int sel_by_coordinates(struct Map_info *Map,
 
 /**
    \brief Select features by bbox
-   
+
    \param[in] Map vector map
    \param[in] type feature type
    \param[in] bbox_opt bounding boxes
@@ -340,9 +335,8 @@ int sel_by_coordinates(struct Map_info *Map,
 
    \return number of selected lines
 */
-int sel_by_bbox(struct Map_info *Map,
-                int type, double x1, double y1, double x2, double y2,
-                struct ilist *List)
+int sel_by_bbox(struct Map_info *Map, int type, double x1, double y1, double x2,
+                double y2, struct ilist *List)
 {
     struct bound_box bbox;
 
@@ -376,11 +370,11 @@ int sel_by_bbox(struct Map_info *Map,
    \param[in] type feature type
    \param[in] poly polygon coordinates
    \param[in,out] List list of selected features
-   
+
    \return number of selected lines
 */
-int sel_by_polygon(struct Map_info *Map,
-                   int type, struct line_pnts *Polygon, struct ilist *List)
+int sel_by_polygon(struct Map_info *Map, int type, struct line_pnts *Polygon,
+                   struct ilist *List)
 {
     struct ilist *List_tmp;
 
@@ -413,14 +407,14 @@ int sel_by_polygon(struct Map_info *Map,
    \param[in] type feature type
    \param[in] ids ids list
    \param[in,out] List list of selected features
- 
+
    \return number of selected lines
 */
 int sel_by_id(struct Map_info *Map, int type, char *ids, struct ilist *List)
 {
     int i;
     int num, id;
-    struct cat_list *il;        /* NOTE: this is not cat list, but list of id's */
+    struct cat_list *il; /* NOTE: this is not cat list, but list of id's */
     struct ilist *List_tmp;
 
     if (first_selection) {
@@ -468,11 +462,11 @@ int sel_by_id(struct Map_info *Map, int type, char *ids, struct ilist *List)
    \param[in] type feature type
    \param[in] where 'where' statement
    \param[in,out] List list of selected features
- 
+
    \return number of selected lines
 */
-int sel_by_where(struct Map_info *Map,
-                 int layer, int type, char *where, struct ilist *List)
+int sel_by_where(struct Map_info *Map, int layer, int type, char *where,
+                 struct ilist *List)
 {
     struct cat_list *cat_list;
     struct ilist *List_tmp;
@@ -499,8 +493,7 @@ int sel_by_where(struct Map_info *Map,
     Fi = Vect_get_field(Map, layer);
 
     if (!Fi) {
-        G_fatal_error(_("Database connection not defined for layer %d"),
-                      layer);
+        G_fatal_error(_("Database connection not defined for layer %d"), layer);
     }
 
     driver = db_start_driver(Fi->driver);
@@ -599,7 +592,7 @@ static int merge_lists2(struct ilist *alist, struct boxlist *blist)
 
 /**
    \brief Reverse list selection
-   
+
    \param[in] Map vector map
    \param[in] type feature type
    \param[in,out] reversed list

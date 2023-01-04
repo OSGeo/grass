@@ -5,8 +5,10 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include "ccmath.h"
-void cmattr(Cpx * a, Cpx * b, int m, int n)
+
+void cmattr(Cpx *a, Cpx *b, int m, int n)
 {
     Cpx *p;
 

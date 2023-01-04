@@ -1,4 +1,5 @@
-/* functions to classify sorted arrays of doubles and fill a vector of classbreaks */
+/* functions to classify sorted arrays of doubles and fill a vector of
+ * classbreaks */
 
 #include <grass/glocale.h>
 #include <grass/arraystats.h>
@@ -19,8 +20,8 @@ int AS_option_to_algorithm(const struct Option *option)
     G_fatal_error(_("Unknown algorithm '%s'"), option->answer);
 }
 
-double AS_class_apply_algorithm(int algo, double *data, int nrec,
-                                int *nbreaks, double *classbreaks)
+double AS_class_apply_algorithm(int algo, double *data, int nrec, int *nbreaks,
+                                double *classbreaks)
 {
     double finfo = 0.0;
 
@@ -38,8 +39,10 @@ double AS_class_apply_algorithm(int algo, double *data, int nrec,
         finfo = AS_class_equiprob(data, nrec, nbreaks, classbreaks);
         break;
     case CLASS_DISCONT:
-        /*      finfo = class_discont(data, nrec, *nbreaks, classbreaks); disabled because of bugs */
-        G_fatal_error(_("Discont algorithm currently not available because of bugs"));
+        /*      finfo = class_discont(data, nrec, *nbreaks, classbreaks);
+         * disabled because of bugs */
+        G_fatal_error(
+            _("Discont algorithm currently not available because of bugs"));
         break;
     default:
         break;
@@ -51,8 +54,7 @@ double AS_class_apply_algorithm(int algo, double *data, int nrec,
     return finfo;
 }
 
-int AS_class_interval(double *data, int count, int nbreaks,
-                      double *classbreaks)
+int AS_class_interval(double *data, int count, int nbreaks, double *classbreaks)
 {
     double min, max;
     double step;
@@ -69,8 +71,7 @@ int AS_class_interval(double *data, int count, int nbreaks,
     return (1);
 }
 
-double AS_class_stdev(double *data, int count, int nbreaks,
-                      double *classbreaks)
+double AS_class_stdev(double *data, int count, int nbreaks, double *classbreaks)
 {
     struct GASTATS stats;
     int i;
@@ -81,15 +82,18 @@ double AS_class_stdev(double *data, int count, int nbreaks,
 
     nbclass = nbreaks + 1;
 
-    if (nbclass % 2 == 1) {     /* number of classes is uneven so we center middle class on mean */
+    if (nbclass % 2 ==
+        1) { /* number of classes is uneven so we center middle class on mean */
 
         /* find appropriate fraction of stdev for step */
         i = 1;
         while (i) {
             if (((stats.mean + stats.stdev * scale / 2) +
-                 (stats.stdev * scale * (nbclass / 2 - 1)) > stats.max) ||
+                     (stats.stdev * scale * (nbclass / 2 - 1)) >
+                 stats.max) ||
                 ((stats.mean - stats.stdev * scale / 2) -
-                 (stats.stdev * scale * (nbclass / 2 - 1)) < stats.min))
+                     (stats.stdev * scale * (nbclass / 2 - 1)) <
+                 stats.min))
                 scale = scale / 2;
             else
                 i = 0;
@@ -97,17 +101,14 @@ double AS_class_stdev(double *data, int count, int nbreaks,
 
         /* classbreaks below the mean */
         for (i = 0; i < nbreaks / 2; i++)
-            classbreaks[i] =
-                (stats.mean - stats.stdev * scale / 2) -
-                stats.stdev * scale * (nbreaks / 2 - (i + 1));
+            classbreaks[i] = (stats.mean - stats.stdev * scale / 2) -
+                             stats.stdev * scale * (nbreaks / 2 - (i + 1));
         /* classbreaks above the mean */
         for (; i < nbreaks; i++)
-            classbreaks[i] =
-                (stats.mean + stats.stdev * scale / 2) +
-                stats.stdev * scale * (i - nbreaks / 2);
-
+            classbreaks[i] = (stats.mean + stats.stdev * scale / 2) +
+                             stats.stdev * scale * (i - nbreaks / 2);
     }
-    else {                      /* number of classes is even so mean is a classbreak */
+    else { /* number of classes is even so mean is a classbreak */
 
         /* decide whether to use 1*stdev or 0.5*stdev as step */
         i = 1;
@@ -146,12 +147,12 @@ int AS_class_quant(double *data, int count, int nbreaks, double *classbreaks)
     return (1);
 }
 
-
 int AS_class_equiprob(double *data, int count, int *nbreaks,
                       double *classbreaks)
 {
     int i, j;
-    double *lequi;              /*Vector of scale factors for probabilities of the normal distribution */
+    double *lequi; /*Vector of scale factors for probabilities of the normal
+                      distribution */
     struct GASTATS stats;
     int nbclass;
 
@@ -159,8 +160,8 @@ int AS_class_equiprob(double *data, int count, int *nbreaks,
 
     lequi = G_malloc(*nbreaks * sizeof(double));
 
-    /* The following values come from the normal distribution and will be used as:
-     * classbreak[i] = (lequi[i] * stdev) + mean;
+    /* The following values come from the normal distribution and will be used
+     * as: classbreak[i] = (lequi[i] * stdev) + mean;
      */
 
     if (nbclass < 3) {
@@ -227,12 +228,14 @@ int AS_class_equiprob(double *data, int count, int *nbreaks,
         lequi[8] = 1.28155;
     }
     else {
-        G_fatal_error(_("Equiprobable classbreaks currently limited to 10 classes"));
+        G_fatal_error(
+            _("Equiprobable classbreaks currently limited to 10 classes"));
     }
 
     AS_basic_stats(data, count, &stats);
 
-    /* Check if any of the classbreaks would fall outside of the range min-max */
+    /* Check if any of the classbreaks would fall outside of the range min-max
+     */
     j = 0;
     for (i = 0; i < *nbreaks; i++) {
         if ((lequi[i] * stats.stdev + stats.mean) >= stats.min &&
@@ -242,9 +245,10 @@ int AS_class_equiprob(double *data, int count, int *nbreaks,
     }
 
     if (j < (*nbreaks)) {
-        G_warning(_("There are classbreaks outside the range min-max. Number of "
-                   "classes reduced to %i, but using probabilities for %i classes."),
-                  j + 1, *nbreaks + 1);
+        G_warning(
+            _("There are classbreaks outside the range min-max. Number of "
+              "classes reduced to %i, but using probabilities for %i classes."),
+            j + 1, *nbreaks + 1);
         G_realloc(classbreaks, j * sizeof(double));
         for (i = 0; i < j; i++)
             classbreaks[i] = 0;
@@ -272,12 +276,12 @@ double AS_class_discont(double *data, int count, int nbreaks,
 {
     int *num, nbclass;
     double *no, *zz, /* *nz, */ *xn, *co;
-    double *x;                  /* Vector standardized observations */
+    double *x; /* Vector standardized observations */
     int i, j, k;
     double min = 0, max = 0, rangemax = 0;
     int n = 0;
     double rangemin = 0, xlim = 0;
-    double dmax = 0.0 /*, d2 = 0.0, dd = 0.0, p = 0.0 */ ;
+    double dmax = 0.0 /*, d2 = 0.0, dd = 0.0, p = 0.0 */;
     int nf = 0, nmax = 0;
     double *abc;
     int nd = 0;
@@ -286,7 +290,6 @@ double AS_class_discont(double *data, int count, int nbreaks,
     int tmp = 0;
     int nff = 0, jj = 0, no1 = 0, no2 = 0;
     double f = 0, xt1 = 0, xt2 = 0, chi2 = 1000.0, xnj_1 = 0, xj_1 = 0;
-
 
     /*get the number of values */
     n = count;
@@ -300,7 +303,8 @@ double AS_class_discont(double *data, int count, int nbreaks,
     xn = G_malloc((n + 1) * sizeof(double));
     co = G_malloc((nbclass + 1) * sizeof(double));
 
-    /* We copy the array of values to x, in order to be able to standardize it */
+    /* We copy the array of values to x, in order to be able to standardize it
+     */
     x = G_malloc((n + 1) * sizeof(double));
     x[0] = n;
     xn[0] = 0;
@@ -318,7 +322,7 @@ double AS_class_discont(double *data, int count, int nbreaks,
             rangemin = x[i] - x[i - 1]; /* rangemin = minimal distance */
     }
 
-    /* STANDARDIZATION 
+    /* STANDARDIZATION
      * and creation of the number vector (xn) */
 
     for (i = 1; i <= n; i++) {
@@ -337,11 +341,11 @@ double AS_class_discont(double *data, int count, int nbreaks,
         nmax = 0;
         dmax = 0.0;
         /* d2 = 0.0; */
-        nf = 0;                 /*End number */
+        nf = 0; /*End number */
 
         /*           Loop through classes */
         for (j = 1; j <= i; j++) {
-            nd = nf;            /*Start number */
+            nd = nf; /*Start number */
             nf = num[j];
             co[j] = 10e37;
             AS_eqdrt(x, xn, nd, nf, abc);
@@ -363,7 +367,7 @@ double AS_class_discont(double *data, int count, int nbreaks,
                 dmax = d;
                 nmax = k;
             }
-            nd--;               /* A VERIFIER! */
+            nd--; /* A VERIFIER! */
             if (x[nf] != x[nd]) {
                 if (nd != 0)
                     co[j] = (xn[nf] - xn[nd]) / (x[nf] - x[nd]);
@@ -434,10 +438,11 @@ double AS_class_discont(double *data, int count, int nbreaks,
             xt2 -= xt1;
         }
 
-        /* calculate chi-square to indicate statistical significance of new class, i.e. how probable would it be that the new class could be the result of purely random choice */
+        /* calculate chi-square to indicate statistical significance of new
+         * class, i.e. how probable would it be that the new class could be the
+         * result of purely random choice */
         if (chi2 > pow((double)((no1 - no2) - (xt1 - xt2)), 2) / (xt1 + xt2))
             chi2 = pow((double)((no1 - no2) - (xt1 - xt2)), 2) / (xt1 + xt2);
-
     }
 
     /*  Fill up classbreaks of i <=nbclass classes */

@@ -3,12 +3,12 @@
 
    \brief OGSF library - loading surfaces (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -33,46 +33,41 @@
    \brief Used in the function Gs_update_attrange()
  */
 #define INIT_MINMAX(p, nm, size, min, max, found) \
-	found = 0; \
-	p+=(size-1); \
-	while (size--) \
-	{ \
-	    if (!BM_GET_BYOFFSET(nm, size)) \
-	    { \
-		min = max = *p; \
-		found = 1; \
-		break; \
-	    } \
-	    p--; \
-	}
+    found = 0;                                    \
+    p += (size - 1);                              \
+    while (size--) {                              \
+        if (!BM_GET_BYOFFSET(nm, size)) {         \
+            min = max = *p;                       \
+            found = 1;                            \
+            break;                                \
+        }                                         \
+        p--;                                      \
+    }
 
 /*!
    \brief Used in the function Gs_update_attrange()
  */
 #define SET_MINMAX(p, nm, size, min, max) \
-	p+=(size-1); \
-	while(size--) \
-	{ \
-	    if (!BM_GET_BYOFFSET(nm, size)) \
-	    { \
-		if (*p < min) \
-		{ \
-		    min = *p; \
-		} \
-		else if (*p > max) \
-		{ \
-		    max = *p; \
-		}  \
-	    } \
-	    p--; \
-	}
+    p += (size - 1);                      \
+    while (size--) {                      \
+        if (!BM_GET_BYOFFSET(nm, size)) { \
+            if (*p < min) {               \
+                min = *p;                 \
+            }                             \
+            else if (*p > max) {          \
+                max = *p;                 \
+            }                             \
+        }                                 \
+        p--;                              \
+    }
 
 typedef int FILEDESC;
 
 #define NO_DATA_COL 0xffffff
 
 /*!
-   \brief Calculates distance in METERS between two points in current projection (2D)
+   \brief Calculates distance in METERS between two points in current projection
+   (2D)
 
    Uses G_distance().
 
@@ -293,7 +288,7 @@ int Gs_numtype(const char *filename, int *negflag)
    \brief Load raster map as integer map
 
    Calling function must have already allocated space in buff for
-   wind->rows * wind->cols shorts.  
+   wind->rows * wind->cols shorts.
 
    This routine simply loads the map into a 2d array by repetitve calls
    to get_map_row.
@@ -340,7 +335,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 
     cellfile = Rast_open_old(map_name, map_set);
 
-    tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));        /* G_fatal_error */
+    tmp_buf = (int *)G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
     if (!tmp_buf) {
         return -1;
     }
@@ -392,7 +387,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
    \brief Load raster map as integer map
 
    Calling function must have already allocated space in buff for
-   wind->rows * wind->cols unsigned chars.  
+   wind->rows * wind->cols unsigned chars.
 
    This routine simply loads the map into a 2d array by repetitve calls
    to get_map_row.
@@ -446,7 +441,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 
     cellfile = Rast_open_old(map_name, map_set);
 
-    tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));        /* G_fatal_error */
+    tmp_buf = (int *)G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
     if (!tmp_buf) {
         return -1;
     }
@@ -532,7 +527,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 
     cellfile = Rast_open_old(map_name, map_set);
 
-    tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));        /* G_fatal_error */
+    tmp_buf = (int *)G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
     if (!tmp_buf) {
         return -1;
     }
@@ -593,8 +588,9 @@ int Gs_build_256lookup(const char *filename, int *buff)
     Rast_get_c_color_range(&min, &max, &colrules);
 
     if (min < 0 || max > 255) {
-        G_warning(_("Color table range doesn't match data (mincol=%d, maxcol=%d"),
-                  min, max);
+        G_warning(
+            _("Color table range doesn't match data (mincol=%d, maxcol=%d"),
+            min, max);
 
         min = min < 0 ? 0 : min;
         max = max > 255 ? 255 : max;
@@ -626,7 +622,7 @@ int Gs_build_256lookup(const char *filename, int *buff)
    \brief Pack color table
 
    Passed an array of 32 bit ints that is converted from cell values
-   to packed colors (0xbbggrr) 
+   to packed colors (0xbbggrr)
 
    \param filename raster map name
    \param buff
@@ -664,9 +660,8 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
 
         for (j = 0; j < cols; j++) {
             if (set[j]) {
-                cur[j] =
-                    (r[j] & 0xff) | ((g[j] & 0xff) << 8) | ((b[j] & 0xff) <<
-                                                            16);
+                cur[j] = (r[j] & 0xff) | ((g[j] & 0xff) << 8) |
+                         ((b[j] & 0xff) << 16);
             }
             else {
                 cur[j] = NO_DATA_COL;
@@ -692,8 +687,8 @@ void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
    \brief Pack color table (floating-point map)
 
    Passed a array of floats that will be converted from cell values
-   to packed colors (0xbbggrr) and float to int 
-   Floating point data not freed here, use: 
+   to packed colors (0xbbggrr) and float to int
+   Floating point data not freed here, use:
    gsds_free_data_buff(id, ATTY_FLOAT)
 
    \param filename raster map name
@@ -736,9 +731,8 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
 
         for (j = 0; j < cols; j++) {
             if (set[j]) {
-                icur[j] =
-                    (r[j] & 0xff) | ((g[j] & 0xff) << 8) | ((b[j] & 0xff) <<
-                                                            16);
+                icur[j] = (r[j] & 0xff) | ((g[j] & 0xff) << 8) |
+                          ((b[j] & 0xff) << 16);
             }
             else {
                 icur[j] = NO_DATA_COL;
@@ -763,7 +757,7 @@ void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf,
 /*!
    \brief Get categories/labels
 
-   Formats label as in d.what.rast -> (catval) catlabel 
+   Formats label as in d.what.rast -> (catval) catlabel
 
    \param filename raster map name
    \param drow
@@ -796,8 +790,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 
             Rast_get_c_row(fd, buf, drow);
             if (Rast_is_c_null_value(&buf[dcol])) {
-                sprintf(catstr, "(NULL) %s",
-                        Rast_get_c_cat(&buf[dcol], &cats));
+                sprintf(catstr, "(NULL) %s", Rast_get_c_cat(&buf[dcol], &cats));
             }
             else {
                 sprintf(catstr, "(%d) %s", buf[dcol],
@@ -850,8 +843,8 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
    \return -1 on error
    \return ?
  */
-int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
-                   struct Cell_head *w, geosurf * defsurf)
+int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd,
+                   struct Cell_head *w, geosurf *defsurf)
 {
     const char *mapset;
     struct G_3dview v;
@@ -875,8 +868,8 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
                 v.display_type = 2;
             }
 
-            v.mesh_freq = defsurf->x_modw;      /* mesh resolution */
-            v.poly_freq = defsurf->x_mod;       /* poly resolution */
+            v.mesh_freq = defsurf->x_modw; /* mesh resolution */
+            v.poly_freq = defsurf->x_mod;  /* poly resolution */
             v.dozero = !(defsurf->nz_topo);
             v.colorgrid = (defsurf->draw_mode & DM_COL_WIRE) ? 1 : 0;
             v.shading = (defsurf->draw_mode & DM_GOURAUD) ? 1 : 0;
@@ -900,9 +893,9 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
         v.exag = gv->vert_exag;
         v.fov = gv->fov / 10.;
         v.twist = gv->twist;
-        v.fringe = 0;           /* not implemented here */
+        v.fringe = 0; /* not implemented here */
 
-        v.lightson = 1;         /* always true, curently */
+        v.lightson = 1; /* always true, curently */
 
         if (gv->lights[0].position[W] == 1) {
             /* local */
@@ -910,13 +903,13 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
             v.lightpos[Y] = gv->lights[0].position[Y];
             v.lightpos[Z] = gv->lights[0].position[Z];
             gsd_model2real(v.lightpos);
-            v.lightpos[W] = 1.0;        /* local */
+            v.lightpos[W] = 1.0; /* local */
         }
         else {
             v.lightpos[X] = gv->lights[0].position[X];
             v.lightpos[Y] = gv->lights[0].position[Y];
             v.lightpos[Z] = gv->lights[0].position[Z];
-            v.lightpos[W] = 0.0;        /* inf */
+            v.lightpos[W] = 0.0; /* inf */
         }
 
         v.lightcol[0] = gv->lights[0].color[0];
@@ -924,10 +917,11 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
         v.lightcol[2] = gv->lights[0].color[2];
 
         v.ambient = (gv->lights[0].ambient[0] + gv->lights[0].ambient[1] +
-                     gv->lights[0].ambient[2]) / 3.;
+                     gv->lights[0].ambient[2]) /
+                    3.;
         v.shine = gv->lights[0].shine;
 
-        v.surfonly = 0;         /* N/A - now uses constant color */
+        v.surfonly = 0; /* N/A - now uses constant color */
         strcpy((v.pgm_id), "Nvision-ALPHA!");
 
         return (G_put_3dview(vname, mapset, &v, w));
@@ -948,8 +942,8 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
 
    \return 1
  */
-int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
-                   struct Cell_head *w, const geosurf * defsurf)
+int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd,
+                   struct Cell_head *w, const geosurf *defsurf)
 {
     const char *mapset;
     struct G_3dview v;
@@ -989,8 +983,8 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
         if (defsurf) {
             int dmode = 0;
 
-            GS_setall_drawres(v.poly_freq, v.poly_freq,
-                              v.mesh_freq, v.mesh_freq);
+            GS_setall_drawres(v.poly_freq, v.poly_freq, v.mesh_freq,
+                              v.mesh_freq);
 
             while (v.display_type >= 10) {
                 /* globe stuff not used */
@@ -1031,8 +1025,8 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
 
         /* Set FOV */
         if (v.fov) {
-            GS_set_fov((int)
-                       (v.fov > 0 ? v.fov * 10. + 0.5 : v.fov * 10. - 0.5));
+            GS_set_fov(
+                (int)(v.fov > 0 ? v.fov * 10. + 0.5 : v.fov * 10. - 0.5));
         }
         else {
             /* TODO: do ortho */
@@ -1041,7 +1035,6 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
         /* Set twist */
         if (v.twist)
             GS_set_twist((int)(v.twist > 0 ? v.twist + 0.5 : v.twist - 0.5));
-
 
         /* TODO:  OK to here - need to unravel/reverse lights stuff*** */
 
@@ -1065,15 +1058,12 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
             gv->lights[0].ambient[0] = gv->lights[0].ambient[1] =
                 gv->lights[0].ambient[2] = v.ambient * 3.;
 
-
-        }                       /* Done with lights */
-
+        } /* Done with lights */
 
         GS_alldraw_wire();
 
-    }                           /* Done with file */
+    } /* Done with file */
     return (1);
-
 }
 
 /*!
@@ -1085,7 +1075,7 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
    \return -1 on error
    \return 1 on success
  */
-int Gs_update_attrange(geosurf * gs, int desc)
+int Gs_update_attrange(geosurf *gs, int desc)
 {
     size_t size;
     float min = 0.0;
@@ -1094,8 +1084,7 @@ int Gs_update_attrange(geosurf * gs, int desc)
     struct BM *nm;
     int found;
 
-    gs->att[desc].max_nz = gs->att[desc].min_nz = gs->att[desc].range_nz =
-        0.0;
+    gs->att[desc].max_nz = gs->att[desc].min_nz = gs->att[desc].range_nz = 0.0;
 
     if (CONST_ATT == gs_get_att_src(gs, desc)) {
         gs->att[desc].max_nz = gs->att[desc].min_nz = gs->att[desc].constant;

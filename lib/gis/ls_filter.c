@@ -21,8 +21,7 @@
 #include <pcre.h>
 #endif
 
-struct buffer
-{
+struct buffer {
     char *buf;
     size_t len;
     size_t alloc;
@@ -184,9 +183,9 @@ void *G_ls_regex_filter(const char *pat, int exclude, int extended,
 #ifdef HAVE_REGEX_H
     regex_t *regex = G_malloc(sizeof(regex_t));
 
-    if (regcomp(regex, pat, REG_NOSUB |
-                (extended ? REG_EXTENDED : 0) |
-                (ignorecase ? REG_ICASE : 0)) != 0) {
+    if (regcomp(regex, pat,
+                REG_NOSUB | (extended ? REG_EXTENDED : 0) |
+                    (ignorecase ? REG_ICASE : 0)) != 0) {
         G_free(regex);
         return NULL;
     }

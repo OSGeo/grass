@@ -1,9 +1,9 @@
 #ifndef __WATERGLOBS_H__
 #define __WATERGLOBS_H__
 
-#define EPS     1.e-7
-#define MAXW    7000000
-#define UNDEF	-9999
+#define EPS   1.e-7
+#define MAXW  7000000
+#define UNDEF -9999
 
 #include <grass/raster.h>
 #ifdef _MSC_VER
@@ -42,31 +42,27 @@ extern char *rainval;
 extern char *maninval;
 extern char *infilval;
 
-struct seed
-{
+struct seed {
     long int is1, is2;
 };
 
 extern struct seed seed;
 
-struct _points
-{
-    double *x;                  /* x coor for each point */
-    double *y;                  /* y coor for each point */
-    int *cats;                  /* Category for each point */
-    int npoints;                /* Number of observation points */
-    int npoints_alloc;          /* Number of allocated points */
-    FILE *output;               /* Output file descriptor */
-    int is_open;                /* Set to 1 if open, 0 if closed */
+struct _points {
+    double *x;         /* x coor for each point */
+    double *y;         /* y coor for each point */
+    int *cats;         /* Category for each point */
+    int npoints;       /* Number of observation points */
+    int npoints_alloc; /* Number of allocated points */
+    FILE *output;      /* Output file descriptor */
+    int is_open;       /* Set to 1 if open, 0 if closed */
 };
 
-struct point2D
-{
+struct point2D {
     double x;
     double y;
 };
-struct point3D
-{
+struct point3D {
     double x;
     double y;
     double m;
@@ -124,6 +120,6 @@ extern double rain_val;
 extern double manin_val;
 extern double infil_val;
 
-extern struct History history;  /* holds meta-data (title, comments,..) */
+extern struct History history; /* holds meta-data (title, comments,..) */
 
 #endif /* __WATERGLOBS_H__ */

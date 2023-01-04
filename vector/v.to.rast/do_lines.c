@@ -5,18 +5,16 @@
 #include <grass/glocale.h>
 #include "local.h"
 
-
 /* function prototypes */
 static int plot_line(double *, double *, int, int, int);
 static int plot_points(double *, double *, int);
 static double v2angle(double *, double *, double, double);
 static double deg_angle(double, double, double, double);
 
-
 int do_lines(struct Map_info *Map, struct line_pnts *Points,
-             dbCatValArray * Cvarr, int ctype, int field,
-             struct cat_list *cat_list, int use, double value,
-             int value_type, int feature_type, int *count_all, int dense)
+             dbCatValArray *Cvarr, int ctype, int field,
+             struct cat_list *cat_list, int use, double value, int value_type,
+             int feature_type, int *count_all, int dense)
 {
     double min = 0, max, u;
     int nlines, type, cat, no_contour = 0;
@@ -53,7 +51,7 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
             }
         }
         else
-            cat = 0;            /* categories do not matter */
+            cat = 0; /* categories do not matter */
 
         if ((type & GV_POINT) || (type & GV_LINE))
             (*count_all)++;
@@ -118,8 +116,8 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
             max = 0.;
 
             for (j = 1; j < Points->n_points; j++) {
-                u = deg_angle(Points->x[j], Points->y[j],
-                              Points->x[j - 1], Points->y[j - 1]);
+                u = deg_angle(Points->x[j], Points->y[j], Points->x[j - 1],
+                              Points->y[j - 1]);
 
                 if (u < min)
                     min = u;
@@ -147,13 +145,12 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
     return count;
 }
 
-
 static int plot_line(double *x, double *y, int n, int use, int dense)
 {
     if (dense) {
         while (--n > 0) {
             if (use == USE_D)
-                set_dcat((DCELL) deg_angle(x[1], y[1], x[0], y[0]));
+                set_dcat((DCELL)deg_angle(x[1], y[1], x[0], y[0]));
 
             plot_line_dense(x[0], y[0], x[1], y[1]);
             x++;
@@ -163,7 +160,7 @@ static int plot_line(double *x, double *y, int n, int use, int dense)
     else {
         while (--n > 0) {
             if (use == USE_D)
-                set_dcat((DCELL) deg_angle(x[1], y[1], x[0], y[0]));
+                set_dcat((DCELL)deg_angle(x[1], y[1], x[0], y[0]));
 
             G_plot_line2(x[0], y[0], x[1], y[1]);
             x++;
@@ -174,7 +171,6 @@ static int plot_line(double *x, double *y, int n, int use, int dense)
     return 0;
 }
 
-
 /* cos of the angle between two vectors is (a . b)/|a||b| */
 static double v2angle(double v1[2], double v2[2], double mag1, double mag2)
 {
@@ -182,7 +178,6 @@ static double v2angle(double v1[2], double v2[2], double mag1, double mag2)
 
     return (acos(costheta));
 }
-
 
 static double deg_angle(double x0, double y0, double x1, double y1)
 {
@@ -203,7 +198,6 @@ static double deg_angle(double x0, double y0, double x1, double y1)
 
     return (v_ang * 360.0 / M_2PI);
 }
-
 
 static int plot_points(double *x, double *y, int n)
 {

@@ -23,7 +23,6 @@
  * Read the file COPYING that comes with GRASS for details.
  */
 
-
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
@@ -34,6 +33,7 @@
 #ifndef POINT2D_C
 #define POINT2D_C
 #endif
+
 #include <grass/interpf.h>
 
 /* needed for AIX */
@@ -74,7 +74,6 @@ int IL_check_at_points_2d(struct interp_params *params,
 
     /*  Site *site; */
     char buf[1024];
-
 
     /*  if ((site = G_site_new_struct (-1, 2, 0, 1)) == NULL)
        G_fatal_error ("Memory error for site struct"); */
@@ -137,7 +136,6 @@ int IL_check_at_points_2d(struct interp_params *params,
                                   db_get_string(&sql2));
                 }
                 count++;
-
             }
         }
         (*ertot) += err * err;
@@ -195,7 +193,6 @@ int IL_check_at_points_2d(struct interp_params *params,
             count++;
         }
     } /* cv */
-
 
     return 1;
 }

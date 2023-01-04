@@ -48,13 +48,13 @@ static const char *src_enc;
  * \param[in,out] fp file to write to
  * \param str string to write
  */
-static void print_escaped_for_xml(FILE * fp, const char *str)
+static void print_escaped_for_xml(FILE *fp, const char *str)
 {
 #ifdef HAVE_ICONV_H
     iconv_t conv = iconv_open("UTF-8", src_enc);
     char *enc = NULL;
 
-    if (conv != (iconv_t) - 1) {
+    if (conv != (iconv_t)-1) {
         char *src = (char *)str;
         size_t srclen = strlen(src);
         size_t dstlen = srclen * 4 + 1;
@@ -91,7 +91,7 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
     if (enc)
         G_freea(enc);
 
-    if (conv != (iconv_t) - 1)
+    if (conv != (iconv_t)-1)
         iconv_close(conv);
 #endif
 }
@@ -128,7 +128,7 @@ void G__usage_xml(void)
     encoding = "UTF-8";
 #endif
 
-    if (!st->pgm_name)          /* v.dave && r.michael */
+    if (!st->pgm_name) /* v.dave && r.michael */
         st->pgm_name = G_program_name();
     if (!st->pgm_name)
         st->pgm_name = "??";
@@ -156,14 +156,14 @@ void G__usage_xml(void)
         fprintf(stdout, "\n\t</keywords>\n");
     }
 
-        /***** Don't use parameter-groups for now.  We'll reimplement this later
-	 ***** when we have a concept of several mutually exclusive option
-	 ***** groups
-	if (st->n_opts || st->n_flags)
-		fprintf(stdout, "\t<parameter-group>\n");
-	 *****
-	 *****
-	 *****/
+    /***** Don't use parameter-groups for now.  We'll reimplement this later
+     ***** when we have a concept of several mutually exclusive option
+     ***** groups
+    if (st->n_opts || st->n_flags)
+            fprintf(stdout, "\t<parameter-group>\n");
+     *****
+     *****
+     *****/
 
     if (st->n_opts) {
         opt = &st->first_option;
@@ -183,14 +183,13 @@ void G__usage_xml(void)
                 type = "string";
                 break;
             }
-            fprintf(stdout, "\t<parameter "
+            fprintf(stdout,
+                    "\t<parameter "
                     "name=\"%s\" "
                     "type=\"%s\" "
                     "required=\"%s\" "
                     "multiple=\"%s\">\n",
-                    opt->key,
-                    type,
-                    opt->required == YES ? "yes" : "no",
+                    opt->key, type, opt->required == YES ? "yes" : "no",
                     opt->multiple == YES ? "yes" : "no");
 
             if (opt->label) {
@@ -221,7 +220,7 @@ void G__usage_xml(void)
             }
 
             if (opt->gisprompt) {
-                const char *atts[] = { "age", "element", "prompt", NULL };
+                const char *atts[] = {"age", "element", "prompt", NULL};
                 top = G_calloc(strlen(opt->gisprompt) + 1, 1);
                 strcpy(top, opt->gisprompt);
                 s = strtok(top, ",");
@@ -282,7 +281,6 @@ void G__usage_xml(void)
         }
     }
 
-
     if (st->n_flags) {
         flag = &st->first_flag;
         while (flag != NULL) {
@@ -312,21 +310,21 @@ void G__usage_xml(void)
         }
     }
 
-        /***** Don't use parameter-groups for now.  We'll reimplement this later
-	 ***** when we have a concept of several mutually exclusive option
-	 ***** groups
-	if (st->n_opts || st->n_flags)
-		fprintf(stdout, "\t</parameter-group>\n");
-	 *****
-	 *****
-	 *****/
+    /***** Don't use parameter-groups for now.  We'll reimplement this later
+     ***** when we have a concept of several mutually exclusive option
+     ***** groups
+    if (st->n_opts || st->n_flags)
+            fprintf(stdout, "\t</parameter-group>\n");
+     *****
+     *****
+     *****/
 
     if (new_prompt) {
         /* overwrite */
         fprintf(stdout, "\t<flag name=\"%s\">\n", "overwrite");
         fprintf(stdout, "\t\t<description>\n\t\t\t");
-        print_escaped_for_xml(stdout,
-                              _("Allow output files to overwrite existing files"));
+        print_escaped_for_xml(
+            stdout, _("Allow output files to overwrite existing files"));
         fprintf(stdout, "\n\t\t</description>\n");
         fprintf(stdout, "\t</flag>\n");
     }

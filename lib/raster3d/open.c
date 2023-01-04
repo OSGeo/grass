@@ -17,13 +17,15 @@ void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
     Rast3d_init_defaults();
 
     if (!Rast3d_mask_open_old()) {
-        Rast3d_error(_("Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"));
+        Rast3d_error(
+            _("Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"));
         return (void *)NULL;
     }
 
     map = Rast3d_malloc(sizeof(RASTER3D_Map));
     if (map == NULL) {
-        Rast3d_error(_("Rast3d_open_cell_old_no_header: error in Rast3d_malloc"));
+        Rast3d_error(
+            _("Rast3d_open_cell_old_no_header: error in Rast3d_malloc"));
         return (void *)NULL;
     }
 
@@ -32,9 +34,8 @@ void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
     map->fileName = G_store(xname);
     map->mapset = G_store(xmapset);
 
-    map->data_fd =
-        G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, xname,
-                        xmapset);
+    map->data_fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT,
+                                   xname, xmapset);
     if (map->data_fd < 0) {
         Rast3d_error(_("Rast3d_open_cell_old_no_header: error in G_open_old"));
         return (void *)NULL;
@@ -48,37 +49,36 @@ void *Rast3d_open_cell_old_no_header(const char *name, const char *mapset)
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Opens existing g3d-file <em>name</em> in <em>mapset</em>.
- * Tiles are stored in memory with <em>type</em> which must be any of FCELL_TYPE,
- * DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
- * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
- * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
- * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
- * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cache_size_encode ()</tt> (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
- * specifies the number of tiles buffered in the cache.  <em>window</em> sets the
- * window-region for the map. It is either a pointer to a window structure or
- * RASTER3D_DEFAULT_WINDOW, which uses the window stored at initialization time or
- * set via <tt>Rast3d_set_window ()</tt> (cf.{g3d:G3d.setWindow}).
- * To modify the window for the map after it has already been opened use
- * <tt>Rast3d_set_window_map ()</tt> (cf.{g3d:G3d.setWindowMap}).
- * Returns a pointer to the cell structure ... if successful, NULL ...
- * otherwise.
+ * Tiles are stored in memory with <em>type</em> which must be any of
+ * FCELL_TYPE, DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em>
+ * specifies the cache-mode used and must be either RASTER3D_NO_CACHE,
+ * RASTER3D_USE_CACHE_DEFAULT, RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
+ * RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
+ * RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of
+ * <tt>Rast3d_cache_size_encode ()</tt> (cf.{g3d:G3d.cacheSizeEncode}), or any
+ * positive integer which specifies the number of tiles buffered in the cache.
+ * <em>window</em> sets the window-region for the map. It is either a pointer to
+ * a window structure or RASTER3D_DEFAULT_WINDOW, which uses the window stored
+ * at initialization time or set via <tt>Rast3d_set_window ()</tt>
+ * (cf.{g3d:G3d.setWindow}). To modify the window for the map after it has
+ * already been opened use <tt>Rast3d_set_window_map ()</tt>
+ * (cf.{g3d:G3d.setWindowMap}). Returns a pointer to the cell structure ... if
+ * successful, NULL ... otherwise.
  *
  *  \param name
  *  \param mapset
  *  \param window
  *  \param type
  *  \param cache
- *  \return void * 
+ *  \return void *
  */
 
 void *Rast3d_open_cell_old(const char *name, const char *mapset,
-                           RASTER3D_Region * window, int typeIntern,
-                           int cache)
+                           RASTER3D_Region *window, int typeIntern, int cache)
 {
     RASTER3D_Map *map;
     int proj, zone;
@@ -94,7 +94,8 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 
     map = Rast3d_open_cell_old_no_header(name, mapset);
     if (map == NULL) {
-        Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_open_cell_old_no_header"));
+        Rast3d_error(
+            _("Rast3d_open_cell_old: error in Rast3d_open_cell_old_no_header"));
         return (void *)NULL;
     }
 
@@ -103,15 +104,11 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
         return (void *)NULL;
     }
 
-    if (!Rast3d_read_header(map,
-                            &proj, &zone,
-                            &north, &south, &east, &west, &top, &bottom,
-                            &rows, &cols, &depths,
-                            &ew_res, &ns_res, &tb_res,
-                            &tileX, &tileY, &tileZ,
-                            &type, &compression, &useRle, &useLzw,
-                            &precision, &dataOffset, &useXdr, &hasIndex,
-                            &unit, &vertical_unit, &version)) {
+    if (!Rast3d_read_header(
+            map, &proj, &zone, &north, &south, &east, &west, &top, &bottom,
+            &rows, &cols, &depths, &ew_res, &ns_res, &tb_res, &tileX, &tileY,
+            &tileZ, &type, &compression, &useRle, &useLzw, &precision,
+            &dataOffset, &useXdr, &hasIndex, &unit, &vertical_unit, &version)) {
         Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_read_header"));
         return 0;
     }
@@ -120,11 +117,13 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
         window = Rast3d_window_ptr();
 
     if (proj != window->proj) {
-        Rast3d_error(_("Rast3d_open_cell_old: projection does not match window projection"));
+        Rast3d_error(_("Rast3d_open_cell_old: projection does not match window "
+                       "projection"));
         return (void *)NULL;
     }
     if (zone != window->zone) {
-        Rast3d_error(_("Rast3d_open_cell_old: zone does not match window zone"));
+        Rast3d_error(
+            _("Rast3d_open_cell_old: zone does not match window zone"));
         return (void *)NULL;
     }
 
@@ -142,7 +141,8 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 
         /* if our long is to short to store offsets we can't read the file */
         if (map->indexNbytesUsed > sizeof(long))
-            Rast3d_fatal_error(_("Rast3d_open_cell_old: index does not fit into long"));
+            Rast3d_fatal_error(
+                _("Rast3d_open_cell_old: index does not fit into long"));
 
         ltmp = Rast3d_malloc(map->indexLongNbytes);
         if (ltmp == NULL) {
@@ -156,8 +156,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
             Rast3d_error(_("Rast3d_open_cell_old: can't read header"));
             return (void *)NULL;
         }
-        Rast3d_long_decode(ltmp, &(map->indexOffset), 1,
-                           map->indexLongNbytes);
+        Rast3d_long_decode(ltmp, &(map->indexOffset), 1, map->indexLongNbytes);
         Rast3d_free(ltmp);
     }
 
@@ -166,12 +165,12 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
     if (typeIntern == RASTER3D_TILE_SAME_AS_FILE)
         typeIntern = type;
 
-    if (!Rast3d_fill_header
-        (map, RASTER3D_READ_DATA, compression, useRle, useLzw, type,
-         precision, cache, hasIndex, map->useXdr, typeIntern, nofHeaderBytes,
-         tileX, tileY, tileZ, proj, zone, north, south, east, west, top,
-         bottom, rows, cols, depths, ew_res, ns_res, tb_res, unit,
-         vertical_unit, version)) {
+    if (!Rast3d_fill_header(map, RASTER3D_READ_DATA, compression, useRle,
+                            useLzw, type, precision, cache, hasIndex,
+                            map->useXdr, typeIntern, nofHeaderBytes, tileX,
+                            tileY, tileZ, proj, zone, north, south, east, west,
+                            top, bottom, rows, cols, depths, ew_res, ns_res,
+                            tb_res, unit, vertical_unit, version)) {
         Rast3d_error(_("Rast3d_open_cell_old: error in Rast3d_fill_header"));
         return (void *)NULL;
     }
@@ -185,32 +184,30 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Opens new g3d-file with <em>name</em> in the current mapset. Tiles
  * are stored in memory with <em>type</em> which must be one of FCELL_TYPE,
  * DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
- * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
- * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
- * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
- * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cache_size_encode ()</tt>
- * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
- * specifies the number of tiles buffered in the cache.  <em>region</em> specifies
- * the 3d region.  
- * Returns a pointer to the cell structure ... if successful,
- * NULL ... otherwise.
+ * cache-mode used and must be either RASTER3D_NO_CACHE,
+ * RASTER3D_USE_CACHE_DEFAULT, RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
+ * RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
+ * RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of
+ * <tt>Rast3d_cache_size_encode ()</tt> (cf.{g3d:G3d.cacheSizeEncode}), or any
+ * positive integer which specifies the number of tiles buffered in the cache.
+ * <em>region</em> specifies the 3d region. Returns a pointer to the cell
+ * structure ... if successful, NULL ... otherwise.
  *
  *  \param name
  *  \param type
  *  \param cache
  *  \param region
- *  \return void * 
+ *  \return void *
  */
 
 void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
-                           RASTER3D_Region * region)
+                           RASTER3D_Region *region)
 {
     RASTER3D_Map *map;
     int nofHeaderBytes, dummy = 0, compression, precision;
@@ -254,12 +251,12 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 
     if (g3d_file_type == FCELL_TYPE) {
         if (precision > 23)
-            precision = 23;     /* 32 - 8 - 1 */
+            precision = 23; /* 32 - 8 - 1 */
         else if (precision < -1)
             precision = 0;
     }
     else if (precision > 52)
-        precision = 52;         /* 64 - 11 - 1 */
+        precision = 52; /* 64 - 11 - 1 */
     else if (precision < -1)
         precision = 0;
 
@@ -281,7 +278,8 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
         /*      nof bytes of "long" */
         /*      max nof bytes used for index */
         /*      position of index in file */
-        /* the index is appended at the end of the file at closing time. since */
+        /* the index is appended at the end of the file at closing time. since
+         */
         /* we do not know this position yet we write dummy values */
 
         if ((!Rast3d_write_ints(map->data_fd, map->useXdr,
@@ -303,18 +301,15 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
     Rast3d_range_init(map);
     Rast3d_adjust_region(region);
 
-    if (!Rast3d_fill_header(map, RASTER3D_WRITE_DATA, compression, 0, 0,
-                            g3d_file_type, precision, cache,
-                            RASTER3D_HAS_INDEX, map->useXdr, typeIntern,
-                            nofHeaderBytes, g3d_tile_dimension[0],
-                            g3d_tile_dimension[1], g3d_tile_dimension[2],
-                            region->proj, region->zone, region->north,
-                            region->south, region->east, region->west,
-                            region->top, region->bottom, region->rows,
-                            region->cols, region->depths, region->ew_res,
-                            region->ns_res, region->tb_res, g3d_unit_default,
-                            g3d_vertical_unit_default,
-                            RASTER3D_MAP_VERSION)) {
+    if (!Rast3d_fill_header(
+            map, RASTER3D_WRITE_DATA, compression, 0, 0, g3d_file_type,
+            precision, cache, RASTER3D_HAS_INDEX, map->useXdr, typeIntern,
+            nofHeaderBytes, g3d_tile_dimension[0], g3d_tile_dimension[1],
+            g3d_tile_dimension[2], region->proj, region->zone, region->north,
+            region->south, region->east, region->west, region->top,
+            region->bottom, region->rows, region->cols, region->depths,
+            region->ew_res, region->ns_res, region->tb_res, g3d_unit_default,
+            g3d_vertical_unit_default, RASTER3D_MAP_VERSION)) {
         Rast3d_error(_("Rast3d_open_cell_new: error in Rast3d_fill_header"));
         return (void *)NULL;
     }

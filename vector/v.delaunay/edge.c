@@ -1,10 +1,9 @@
-
 /***************************************************************
  *
  * MODULE:       v.delaunay
  *
  * AUTHOR(S):    Martin Pavlovsky (Google SoC 2008, Paul Kelly mentor)
- *               Based on "dct" by Geoff Leach, Department of Computer 
+ *               Based on "dct" by Geoff Leach, Department of Computer
  *               Science, RMIT.
  *
  * PURPOSE:      Creates a Delaunay triangulation vector map
@@ -15,7 +14,7 @@
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
  *               comes with GRASS for details.
- * 
+ *
  * The following notices apply to portions of the code originally
  * derived from work by Geoff Leach of RMIT:
  *
@@ -25,22 +24,22 @@
  *   Date: 6/10/93
  *
  *   Version 1.0
- *   
+ *
  *   Copyright (c) RMIT 1993. All rights reserved.
  *
- *   License to copy and use this software purposes is granted provided 
+ *   License to copy and use this software purposes is granted provided
  *   that appropriate credit is given to both RMIT and the author.
  *
  *   License is also granted to make and use derivative works provided
  *   that appropriate credit is given to both RMIT and the author.
  *
- *   RMIT makes no representations concerning either the merchantability 
- *   of this software or the suitability of this software for any particular 
- *   purpose.  It is provided "as is" without express or implied warranty 
+ *   RMIT makes no representations concerning either the merchantability
+ *   of this software or the suitability of this software for any particular
+ *   purpose.  It is provided "as is" without express or implied warranty
  *   of any kind.
  *
  *   These notices must be retained in any copies of any part of this software.
- * 
+ *
  **************************************************************/
 
 #include <stdlib.h>
@@ -48,11 +47,11 @@
 #include "memory.h"
 #include "edge.h"
 
-/* 
+/*
  *  Construct an edge from vertices v1, v2 and add it to rings of edges e1, e2
  */
-struct edge *join(struct edge *e1, struct vertex *v1,
-                  struct edge *e2, struct vertex *v2, int side)
+struct edge *join(struct edge *e1, struct vertex *v1, struct edge *e2,
+                  struct vertex *v2, int side)
 {
 
     struct edge *new_edge;
@@ -79,7 +78,7 @@ struct edge *join(struct edge *e1, struct vertex *v1,
     return new_edge;
 }
 
-/* 
+/*
  *  Remove an edge.
  */
 void delete_edge(struct edge *e)
@@ -120,13 +119,12 @@ void delete_edge(struct edge *e)
     free_edge(e);
 }
 
-
- /*  Add an edge to a ring of edges. */
+/*  Add an edge to a ring of edges. */
 void splice(struct edge *a, struct edge *b, struct vertex *v)
 {
     struct edge *next;
 
-    /* b must be the unnattached edge and a must be the previous 
+    /* b must be the unnattached edge and a must be the previous
        ccw edge to b. */
 
     if (ORG(a) == v) {
@@ -153,7 +151,7 @@ void splice(struct edge *a, struct edge *b, struct vertex *v)
     }
 }
 
- /*  Create a new edge and initialize it */
+/*  Create a new edge and initialize it */
 struct edge *create_edge(struct vertex *v1, struct vertex *v2)
 {
     struct edge *new_edge;

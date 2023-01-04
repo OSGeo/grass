@@ -1,4 +1,3 @@
-
 #ifndef GRASS_CALC_H
 #define GRASS_CALC_H
 
@@ -8,8 +7,7 @@
 typedef int func_t(int argc, const int *argt, void **args);
 typedef int args_t(int argc, int *argt);
 
-enum
-{
+enum {
     E_ARG_LO = 1,
     E_ARG_HI = 2,
     E_ARG_TYPE = 3,
@@ -19,20 +17,19 @@ enum
     E_WTF = 99
 };
 
-typedef struct func_desc
-{
+typedef struct func_desc {
     const char *name;
     args_t *check_args;
     func_t *func;
 } func_desc;
 
-#define IS_NULL_C(x) (Rast_is_c_null_value((x)))
-#define IS_NULL_F(x) (Rast_is_f_null_value((x)))
-#define IS_NULL_D(x) (Rast_is_d_null_value((x)))
+#define IS_NULL_C(x)  (Rast_is_c_null_value((x)))
+#define IS_NULL_F(x)  (Rast_is_f_null_value((x)))
+#define IS_NULL_D(x)  (Rast_is_d_null_value((x)))
 
-#define SET_NULL_C(x) (Rast_set_c_null_value((x),1))
-#define SET_NULL_F(x) (Rast_set_f_null_value((x),1))
-#define SET_NULL_D(x) (Rast_set_d_null_value((x),1))
+#define SET_NULL_C(x) (Rast_set_c_null_value((x), 1))
+#define SET_NULL_F(x) (Rast_set_f_null_value((x), 1))
+#define SET_NULL_D(x) (Rast_set_d_null_value((x), 1))
 
 #ifdef GRASS_CMAKE_BUILD
 #include <export/grass_calc_export.h>

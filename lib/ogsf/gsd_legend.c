@@ -3,15 +3,15 @@
 
    \brief OGSF library - legend creation
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    Converted code from legend.c in SG3d
    routines to set viewport, close viewport, and make legend
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -140,7 +140,6 @@ int gsd_get_nice_range(float lownum, float highnum, int numvals, float *vals)
     }
 
     return (num);
-
 }
 
 /*!
@@ -254,7 +253,6 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
             cat_labs = 0;
         }
 
-
     if (flags[4] && rangef[0] != -9999. && rangef[1] != -9999.) {
         fmin = rangef[0];
         fmax = rangef[1];
@@ -309,44 +307,44 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
             fprec = 2;
         else
             fprec = 1;
-
     }
     else {
         int tmp, p1, p2;
 
         iprec = p1 = p2 = 1;
         if (max > 0)
-            for (tmp = 1; tmp < max; tmp *= 10, p1++) ;
+            for (tmp = 1; tmp < max; tmp *= 10, p1++)
+                ;
         if (min < 0)
-            for (tmp = -1; tmp > min; tmp *= 10, p2++) ;
+            for (tmp = -1; tmp > min; tmp *= 10, p2++)
+                ;
 
         iprec = (p1 > p2 ? p1 : p2);
     }
 
-/*********
- * TODO incorp lists
+    /*********
+     * TODO incorp lists
 
-     if(list && (legend_type & LT_LIST)){
-	Listcats = list;
-	Listnum = nlist;
-	qsort(Listcats, Listnum, sizeof(float), bigger);
-	discrete = 1;   
-    }
-    else
-	Listnum = 0;
+         if(list && (legend_type & LT_LIST)){
+            Listcats = list;
+            Listnum = nlist;
+            qsort(Listcats, Listnum, sizeof(float), bigger);
+            discrete = 1;
+        }
+        else
+            Listnum = 0;
 
-*********/
-
+    *********/
 
     /* how many labels? */
     /*
        numlabs can't be = max - min + 1 any more because of floating point
-       maybe shouldn't allow discrete legend for floating point maps (unless list)
-       or else check number of different values in floating point map
-       and use each if "reasonable"
-       gs_get_values_in_range(gs, att, low, high, values, &nvals)
-       the nvals sent has a max number to return, nvals returned is the actual
-       number set in values, return val is 1 on success, -1 if > max vals found
+       maybe shouldn't allow discrete legend for floating point maps (unless
+       list) or else check number of different values in floating point map and
+       use each if "reasonable" gs_get_values_in_range(gs, att, low, high,
+       values, &nvals) the nvals sent has a max number to return, nvals returned
+       is the actual number set in values, return val is 1 on success, -1 if >
+       max vals found
 
        might need to think about doing histograms first & use same routines here
        could also have a LT_MOST that would limit # to some N most frequent
@@ -361,8 +359,8 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
         CELL tcell;
         DCELL tdcell, pdcell;
         float vert1[2], vert2[2], vert3[2], vert4[2];
-        float *dv1, *dv2;       /* changing vertex coord */
-        float *sv1, *sv2;       /* stable vertex coord */
+        float *dv1, *dv2; /* changing vertex coord */
+        float *sv1, *sv2; /* stable vertex coord */
         float stab1, stab2;
         unsigned long colr;
         float *dividers;
@@ -370,9 +368,9 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
         float labpos, labpt[3];
         const char *cstr;
         char buff[80];
-        GLint wt, wb, wl, wr;   /* Whole legend area, not just box */
+        GLint wt, wb, wl, wr; /* Whole legend area, not just box */
         int xoff, yoff;
-        int incr;               /* for do_invert */
+        int incr; /* for do_invert */
 
         horiz = (sr - sl > st - sb);
         dividers = NULL;
@@ -381,7 +379,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
             numlabs = Listnum ? Listnum : max - min + 1;
             /* watch out for trying to display mega cats */
             if (is_fp && !Listnum) {
-                discrete = 0;   /* maybe later do stats & allow if few #s */
+                discrete = 0; /* maybe later do stats & allow if few #s */
                 G_warning(_("Unable to show discrete FP range (use list)"));
                 return (-1);
             }
@@ -411,8 +409,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                     else {
                         if (cat_labs && cat_vals) {
                             if (cstr)
-                                sprintf(buff, "%.*lf) %s",
-                                        fprec, tdcell, cstr);
+                                sprintf(buff, "%.*lf) %s", fprec, tdcell, cstr);
                             else
                                 sprintf(buff, "%.*lf", fprec, tdcell);
                         }
@@ -421,8 +418,8 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                     }
                 }
                 else {
-                    tcell = discrete ? Listnum ?
-                        Listcats[k] : min + k : labvals[k];
+                    tcell =
+                        discrete ? Listnum ? Listcats[k] : min + k : labvals[k];
                     if (cat_labs && !cat_vals)
                         sprintf(buff, "%s", Rast_get_c_cat(&tcell, &cats));
                     else {
@@ -470,7 +467,6 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
         /* initialize viewport */
         gsd_bgn_legend_viewport(wl, wb, wr, wt);
 
-
         vert1[X] = vert2[X] = xoff;
         vert1[Y] = vert2[Y] = yoff;
         if (horiz) {
@@ -517,7 +513,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                 if (is_fp)
                     Rast_get_d_color(&tdcell, &red, &green, &blue, &colors);
                 else
-                    Rast_get_c_color((CELL *) & tdcell, &red, &green, &blue,
+                    Rast_get_c_color((CELL *)&tdcell, &red, &green, &blue,
                                      &colors);
 
                 RGB_TO_INT(red, green, blue, colr);
@@ -645,8 +641,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                     if (cat_labs && cat_vals) {
                         if (cstr)
                             if (is_fp)
-                                sprintf(buff, "%.*lf) %s",
-                                        fprec, tdcell, cstr);
+                                sprintf(buff, "%.*lf) %s", fprec, tdcell, cstr);
                             else
                                 sprintf(buff, "%*d) %s", iprec, tcell, cstr);
                         else if (is_fp)
@@ -663,20 +658,20 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                 }
                 if (horiz) {
                     labpt[X] = labpos * (sr - sl) + xoff -
-                        gsd_get_txtwidth(buff, size) / 2 - get_txtxoffset();
-                    labpt[Y] =
-                        st - sb + yoff + 3 + gsd_get_txtheight(size) / 2;
+                               gsd_get_txtwidth(buff, size) / 2 -
+                               get_txtxoffset();
+                    labpt[Y] = st - sb + yoff + 3 + gsd_get_txtheight(size) / 2;
                 }
                 else {
                     labpt[X] = sr - sl + xoff + get_txtxoffset() + 3;
                     /*
-                       labpt[Y] = labpos * (st - sb) + yoff - 
+                       labpt[Y] = labpos * (st - sb) + yoff -
                        gsd_get_txtheight()/2 + get_txtdescender();
                      */
-                    labpt[Y] = labpos * (st - sb) + yoff -
-                        gsd_get_txtheight(size);
+                    labpt[Y] =
+                        labpos * (st - sb) + yoff - gsd_get_txtheight(size);
                 }
-                /* set color for black text -- maybe add option for color 
+                /* set color for black text -- maybe add option for color
                  * supplied with font ??
                  */
                 gsd_color_func(0x000000);

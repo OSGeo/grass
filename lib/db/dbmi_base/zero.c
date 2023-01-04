@@ -1,7 +1,7 @@
 /*!
    \file lib/db/dbmi_base/zero.c
 
-   \brief DBMI Library (base) - zero 
+   \brief DBMI Library (base) - zero
 
    (C) 1999-2009, 2011 by the GRASS Development Team
 

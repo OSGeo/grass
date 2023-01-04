@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/close.c
- * 
+ *
  * \brief Raster Library - Close raster file
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -42,27 +42,27 @@ static int close_new(int, int);
 static void sync_and_close(int fd, char *element, char *name)
 {
     /* from man 2 write:
-     * A successful return from write() does not make any guarantee 
-     * that data has been committed to disk.  On some filesystems, 
-     * including NFS, it does not even guarantee that space has 
-     * successfully been reserved for the data.  In this case, some 
-     * errors might be delayed until a future write(2), fsync(2), or 
-     * even close(2).  The only way to be sure is to call fsync(2) 
+     * A successful return from write() does not make any guarantee
+     * that data has been committed to disk.  On some filesystems,
+     * including NFS, it does not even guarantee that space has
+     * successfully been reserved for the data.  In this case, some
+     * errors might be delayed until a future write(2), fsync(2), or
+     * even close(2).  The only way to be sure is to call fsync(2)
      * after you are done writing all your data.
      */
 
 #ifndef _WIN32
     if (fsync(fd)) {
-        G_warning(_("Unable to flush file %s for raster map %s: %s"),
-                  element, name, strerror(errno));
+        G_warning(_("Unable to flush file %s for raster map %s: %s"), element,
+                  name, strerror(errno));
     }
     /* for MS Windows, try fdopen(int, char *) + fflush(FILE *) + fclose(FILE *)
-     * flcose() closes the underlying file descriptor, thus no need to 
+     * flcose() closes the underlying file descriptor, thus no need to
      * call close(fd) afterwards */
 #endif
     if (close(fd)) {
-        G_warning(_("Unable to close file %s for raster map %s: %s"),
-                  element, name, strerror(errno));
+        G_warning(_("Unable to close file %s for raster map %s: %s"), element,
+                  name, strerror(errno));
     }
 }
 
@@ -171,7 +171,7 @@ static int close_old(int fd)
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     /* if R__.auto_mask was only allocated for reading map rows to create
-       non-existant null rows, and not for actuall mask, free R__.mask_row 
+       non-existant null rows, and not for actuall mask, free R__.mask_row
        if(R__.auto_mask <=0)
        G_free (R__.mask_buf);
        This is obsolete since now the mask_bus is always allocated
@@ -230,7 +230,7 @@ static void write_support_files(int fd)
         Rast__remove_fp_range(fcb->name);
     }
     /*NOTE: int range for floating point maps is not written out */
-    else {                      /* if(fcb->map_type != CELL_TYPE) */
+    else { /* if(fcb->map_type != CELL_TYPE) */
 
         Rast_write_fp_range(fcb->name, &fcb->fp_range);
         Rast_construct_default_range(&fcb->range);
@@ -239,20 +239,22 @@ static void write_support_files(int fd)
 
     if (fcb->map_type != CELL_TYPE)
         fcb->cellhd.format = -1;
-    else                        /* CELL map */
+    else /* CELL map */
         fcb->cellhd.format = fcb->nbytes - 1;
 
     /* write header file */
     Rast_put_cellhd(fcb->name, &fcb->cellhd);
 
-    /* if map is floating point write the quant rules, otherwise remove f_quant */
+    /* if map is floating point write the quant rules, otherwise remove f_quant
+     */
     if (fcb->map_type != CELL_TYPE) {
         /* DEFAULT RANGE QUANT
            Rast_get_fp_range_min_max(&fcb->fp_range, &dcell_min, &dcell_max);
-           if(!Rast_is_d_null_value(&dcell_min) && !Rast_is_d_null_value(&dcell_max))
+           if(!Rast_is_d_null_value(&dcell_min) &&
+           !Rast_is_d_null_value(&dcell_max))
            {
            Rast_get_range_min_max(&fcb->range, &cell_min, &cell_max);
-           Rast_quant_add_rule(&fcb->quant, dcell_min, dcell_max, 
+           Rast_quant_add_rule(&fcb->quant, dcell_min, dcell_max,
            cell_min, cell_max);
            }
          */
@@ -261,8 +263,7 @@ static void write_support_files(int fd)
     }
     else {
         /* remove cell_misc/name/f_quant */
-        G_file_name_misc(path, "cell_misc", QUANT_FILE, fcb->name,
-                         fcb->mapset);
+        G_file_name_misc(path, "cell_misc", QUANT_FILE, fcb->name, fcb->mapset);
         remove(path);
     }
 
@@ -276,8 +277,7 @@ static void write_support_files(int fd)
 
     /* write the histogram */
     /* only works for integer maps */
-    if ((fcb->map_type == CELL_TYPE)
-        && (fcb->want_histogram)) {
+    if ((fcb->map_type == CELL_TYPE) && (fcb->want_histogram)) {
         Rast_write_histogram_cs(fcb->name, &fcb->statf);
         Rast_free_cell_stats(&fcb->statf);
     }
@@ -311,8 +311,7 @@ static int close_new_gdal(int fd, int ok)
         G__make_mapset_element_misc("cell_misc", fcb->name);
         G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
         remove(path);
-        G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name,
-                         G_mapset());
+        G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_mapset());
         remove(path);
 
         /* write 0-length cell file */
@@ -321,7 +320,7 @@ static int close_new_gdal(int fd, int ok)
         cell_fd = creat(path, 0666);
         close(cell_fd);
 
-        if (fcb->map_type != CELL_TYPE) {       /* floating point map */
+        if (fcb->map_type != CELL_TYPE) { /* floating point map */
             write_fp_format(fd);
 
             /* write 0-length fcell file */
@@ -394,7 +393,7 @@ static int close_new(int fd, int ok)
             fcb->data = NULL;
         }
 
-        if (fcb->null_row_ptr) {        /* compressed nulls */
+        if (fcb->null_row_ptr) { /* compressed nulls */
             fcb->null_row_ptr[fcb->cellhd.rows] =
                 lseek(fcb->null_fd, 0L, SEEK_CUR);
             Rast__write_null_row_ptrs(fd, fcb->null_fd);
@@ -411,16 +410,16 @@ static int close_new(int fd, int ok)
         G__make_mapset_element_misc("cell_misc", fcb->name);
         G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
         remove(path);
-        G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name,
-                         G_mapset());
+        G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_mapset());
         remove(path);
 
         G_file_name_misc(path, "cell_misc",
-                         fcb->null_row_ptr ? NULLC_FILE : NULL_FILE,
-                         fcb->name, G_mapset());
+                         fcb->null_row_ptr ? NULLC_FILE : NULL_FILE, fcb->name,
+                         G_mapset());
 
         if (fcb->null_cur_row > 0) {
-            /* if temporary NULL file exists, write it into cell_misc/name/null */
+            /* if temporary NULL file exists, write it into cell_misc/name/null
+             */
             if (rename(fcb->null_temp_name, path)) {
                 G_warning(_("Unable to rename null file '%s' to '%s': %s"),
                           fcb->null_temp_name, path, strerror(errno));
@@ -433,16 +432,15 @@ static int close_new(int fd, int ok)
         }
         else {
             remove(fcb->null_temp_name);
-            remove(path);       /* again ? */
-        }                       /* null_cur_row > 0 */
+            remove(path); /* again ? */
+        }                 /* null_cur_row > 0 */
 
-        if (fcb->open_mode == OPEN_NEW_COMPRESSED) {    /* auto compression */
-            fcb->row_ptr[fcb->cellhd.rows] =
-                lseek(fcb->data_fd, 0L, SEEK_CUR);
+        if (fcb->open_mode == OPEN_NEW_COMPRESSED) { /* auto compression */
+            fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
             Rast__write_row_ptrs(fd);
         }
 
-        if (fcb->map_type != CELL_TYPE) {       /* floating point map */
+        if (fcb->map_type != CELL_TYPE) { /* floating point map */
             int cell_fd;
 
             write_fp_format(fd);
@@ -450,8 +448,7 @@ static int close_new(int fd, int ok)
             /* now write 0-length cell file */
             G_make_mapset_object_group("cell");
             cell_fd =
-                creat(G_file_name(path, "cell", fcb->name, fcb->mapset),
-                      0666);
+                creat(G_file_name(path, "cell", fcb->name, fcb->mapset), 0666);
             close(cell_fd);
             CELL_DIR = "fcell";
         }
@@ -465,18 +462,16 @@ static int close_new(int fd, int ok)
             remove(path);
             CELL_DIR = "cell";
         }
-    }                           /* ok */
+    } /* ok */
     /* NOW CLOSE THE FILE DESCRIPTOR */
 
     sync_and_close(fcb->data_fd,
-                   (fcb->map_type == CELL_TYPE ? "cell" : "fcell"),
-                   fcb->name);
+                   (fcb->map_type == CELL_TYPE ? "cell" : "fcell"), fcb->name);
     fcb->open_mode = -1;
 
     if (fcb->null_fd >= 0) {
         sync_and_close(fcb->null_fd,
-                       (fcb->null_row_ptr ? NULLC_FILE : NULL_FILE),
-                       fcb->name);
+                       (fcb->null_row_ptr ? NULLC_FILE : NULL_FILE), fcb->name);
     }
     fcb->null_fd = -1;
 
@@ -534,9 +529,8 @@ void Rast__close_null(int fd)
     struct fileinfo *fcb = &R__.fileinfo[fd];
     char path[GPATH_MAX];
 
-    if (fcb->null_row_ptr) {    /* compressed nulls */
-        fcb->null_row_ptr[fcb->cellhd.rows] =
-            lseek(fcb->null_fd, 0L, SEEK_CUR);
+    if (fcb->null_row_ptr) { /* compressed nulls */
+        fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
         Rast__write_null_row_ptrs(fd, fcb->null_fd);
         G_free(fcb->null_row_ptr);
     }
@@ -553,8 +547,8 @@ void Rast__close_null(int fd)
     remove(path);
 
     G_file_name_misc(path, "cell_misc",
-                     fcb->null_row_ptr ? NULLC_FILE : NULL_FILE,
-                     fcb->name, G_mapset());
+                     fcb->null_row_ptr ? NULLC_FILE : NULL_FILE, fcb->name,
+                     G_mapset());
 
     if (rename(fcb->null_temp_name, path))
         G_warning(_("Unable to rename null file '%s' to '%s': %s"),

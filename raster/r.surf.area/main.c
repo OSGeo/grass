@@ -1,8 +1,8 @@
 /* main.c - r.surf.area */
 
 /* Copyright Notice
- * ---------------- 
- * Written by Bill Brown, USACERL December 21, 1994 
+ * ----------------
+ * Written by Bill Brown, USACERL December 21, 1994
  * Copyright 1994, Bill Brown, USACERL
  * brown@gis.uiuc.edu
  *
@@ -21,12 +21,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-
-/* Calculates area of regular 3D triangulated points 
+/* Calculates area of regular 3D triangulated points
  * (centers of cells) in current region by
- * adding areas of triangles.  Therefore, area of a flat surface 
- * will be reported as (rows + cols -1)*(area of cell) less than area of 
- * flat region due to a half row and half column missing around the 
+ * adding areas of triangles.  Therefore, area of a flat surface
+ * will be reported as (rows + cols -1)*(area of cell) less than area of
+ * flat region due to a half row and half column missing around the
  * perimeter.
  * NOTE:  This calculation is heavily dependent on data resolution
  *     (think of it as a fractal shoreline problem, the more resolution
@@ -35,11 +34,11 @@
  * This version actually calculates area twice for each triangle pair,
  * keeping a running minimum and maximum area depending on the
  * direction of the diagonal used.
- * Reported totals are: 
+ * Reported totals are:
  *      1) "plan" area within calculation region (rows-1 * cols-1 * cellarea)
  *      2) avg of min & max calculated 3d triangle area within this region
  *      3) "plan" area within current GRASS region (rows * cols * cellarea)
- *      4) scaling of calculated area to current GRASS region 
+ *      4) scaling of calculated area to current GRASS region
  */
 
 /* Modified by Eric G. Miller to work with FP rasters and to handle
@@ -61,8 +60,7 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *surf, *vscale, *units;
     } opt;
     DCELL *cell_buf[2];
@@ -114,8 +112,8 @@ int main(int argc, char *argv[])
     /* open raster map for reading */
     cellfile = Rast_open_old(opt.surf->answer, "");
 
-    cell_buf[0] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
-    cell_buf[1] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
+    cell_buf[0] = (DCELL *)G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
+    cell_buf[1] = (DCELL *)G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
 
     {
         DCELL *top, *bottom;
@@ -139,33 +137,31 @@ int main(int argc, char *argv[])
             add_null_area(top, &w, &nullarea);
     }
 
-
     G_free(cell_buf[0]);
     G_free(cell_buf[1]);
     Rast_close(cellfile);
 
-    {                           /* report */
+    { /* report */
         double reg_area, flat_area, estavg;
 
         flat_area = (w.cols - 1) * (w.rows - 1) * w.ns_res * w.ew_res;
         reg_area = w.cols * w.rows * w.ns_res * w.ew_res;
         estavg = (minarea + maxarea) / 2.0;
 
-        fprintf(stdout, "%s %f\n",
-                _("Null value area ignored in calculation:"),
+        fprintf(stdout, "%s %f\n", _("Null value area ignored in calculation:"),
                 conv_value(nullarea, units));
         fprintf(stdout, "%s %f\n", _("Plan area used in calculation:"),
                 conv_value(flat_area, units));
         fprintf(stdout, "%s\n\t%f %f %f\n",
                 _("Surface area calculation(low, high, avg):"),
-                conv_value(minarea, units),
-                conv_value(maxarea, units), conv_value(estavg, units));
+                conv_value(minarea, units), conv_value(maxarea, units),
+                conv_value(estavg, units));
 
         fprintf(stdout, "%s %f\n", _("Current region plan area:"),
                 conv_value(reg_area, units));
         fprintf(stdout, "%s %f\n", _("Estimated region Surface Area:"),
-                flat_area > 0 ?
-                conv_value(reg_area * estavg / flat_area, units) : 0);
+                flat_area > 0 ? conv_value(reg_area * estavg / flat_area, units)
+                              : 0);
     }
 
     exit(EXIT_SUCCESS);

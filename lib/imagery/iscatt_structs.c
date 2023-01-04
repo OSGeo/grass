@@ -9,8 +9,10 @@
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author Stepan Turek <stepan.turek@seznam.cz> (GSoC 2013, Mentor: Martin Landa)
+   \author Stepan Turek <stepan.turek@seznam.cz> (GSoC 2013, Mentor: Martin
+   Landa)
  */
+
 #include <math.h>
 
 #include <grass/imagery.h>
@@ -43,16 +45,15 @@ int I_id_scatt_to_bands(const int scatt_id, const int n_bands, int *b_1_id,
 
     *b_1_id =
         (int)((2 * n_b1 + 1 -
-               sqrt((double)((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id)))
-              / 2);
+               sqrt((double)((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id))) /
+              2);
 
-    *b_2_id =
-        scatt_id - ((*b_1_id) * (2 * n_b1 + 1) - (*b_1_id) * (*b_1_id)) / 2 +
-        (*b_1_id) + 1;
+    *b_2_id = scatt_id -
+              ((*b_1_id) * (2 * n_b1 + 1) - (*b_1_id) * (*b_1_id)) / 2 +
+              (*b_1_id) + 1;
 
     return 0;
 }
-
 
 /*!
    \brief Compute scatter plot id from band ids.
@@ -80,9 +81,9 @@ int I_bands_to_id_scatt(const int b_1_id, const int b_2_id, const int n_bands,
 /*!
    \brief Initialize structure for storing scatter plots data.
 
-   \param cats pointer to scCats struct 
+   \param cats pointer to scCats struct
    \param n_bands number of bands
-   \param type SC_SCATT_DATA - stores scatter plots 
+   \param type SC_SCATT_DATA - stores scatter plots
    \param type SC_SCATT_CONDITIONS - stores selected areas in scatter plots
  */
 void I_sc_init_cats(struct scCats *cats, int n_bands, int type)
@@ -98,8 +99,7 @@ void I_sc_init_cats(struct scCats *cats, int n_bands, int type)
     cats->n_scatts = (n_bands - 1) * n_bands / 2;
 
     cats->cats_arr =
-        (struct scScatts **)G_malloc(cats->n_cats *
-                                     sizeof(struct scScatts *));
+        (struct scScatts **)G_malloc(cats->n_cats * sizeof(struct scScatts *));
     G_zero(cats->cats_arr, cats->n_cats * sizeof(struct scScatts *));
 
     cats->cats_ids = (int *)G_malloc(cats->n_cats * sizeof(int));
@@ -172,9 +172,8 @@ int I_sc_add_cat(struct scCats *cats)
     cats->cats_arr[n_a_cats] =
         (struct scScatts *)G_malloc(sizeof(struct scScatts));
 
-    cats->cats_arr[n_a_cats]->scatts_arr =
-        (struct scdScattData **)G_malloc(cats->n_scatts *
-                                         sizeof(struct scdScattData *));
+    cats->cats_arr[n_a_cats]->scatts_arr = (struct scdScattData **)G_malloc(
+        cats->n_scatts * sizeof(struct scdScattData *));
     G_zero((cats->cats_arr[n_a_cats]->scatts_arr),
            cats->n_scatts * sizeof(struct scdScattData *));
 
@@ -206,9 +205,8 @@ int I_sc_add_cat(struct scCats *cats)
    \return  0 on success
    \return -1 on failure
  */
-int I_sc_insert_scatt_data(struct scCats *cats,
-                           struct scdScattData *scatt_data, int cat_id,
-                           int scatt_id)
+int I_sc_insert_scatt_data(struct scCats *cats, struct scdScattData *scatt_data,
+                           int cat_id, int scatt_id)
 {
     int band_1, band_2, cat_idx, n_a_scatts;
     struct scScatts *scatts;

@@ -76,7 +76,8 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 
     /* load to memory */
     if (!update)
-        dig_file_load(&(Map->dig_fp));  /* has currently no effect, file never loaded */
+        dig_file_load(
+            &(Map->dig_fp)); /* has currently no effect, file never loaded */
 
     return 0;
 }
@@ -89,14 +90,14 @@ int V1_open_old_nat(struct Map_info *Map, int update)
    \param with_z 2D or 3D (unused?)
 
    \return 0 success
-   \return -1 error 
+   \return -1 error
  */
 int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 {
     char path[GPATH_MAX];
 
-    G_debug(1, "V1_open_new_nat(): name = %s with_z = %d is_tmp = %d",
-            name, with_z, Map->temporary);
+    G_debug(1, "V1_open_new_nat(): name = %s with_z = %d is_tmp = %d", name,
+            with_z, Map->temporary);
 
     /* Set the 'coor' file version */
     Map->head.coor_version.major = GV_COOR_VER_MAJOR;
@@ -123,7 +124,7 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     /* check to see if dig_plus file exists and if so, remove it */
     Vect__get_element_path(path, Map, GV_TOPO_ELEMENT);
     if (access(path, F_OK) == 0)
-        unlink(path);           /* remove topo file if exists */
+        unlink(path); /* remove topo file if exists */
 
     /* set conversion matrices */
     dig_init_portable(&(Map->head.port), dig__byte_order_out());
@@ -148,14 +149,15 @@ int check_coor(struct Map_info *Map)
             (unsigned long)Map->head.size, (unsigned long)CInfo.size);
 
     if (dif > 0) {
-        G_warning(_("Coor file of vector map <%s@%s> is larger than it should be "
-                   "(%" PRI_OFF_T " bytes excess)"), Map->name, Map->mapset,
-                  dif);
+        G_warning(
+            _("Coor file of vector map <%s@%s> is larger than it should be "
+              "(%" PRI_OFF_T " bytes excess)"),
+            Map->name, Map->mapset, dif);
     }
     else if (dif < 0) {
         G_warning(_("Coor file of vector <%s@%s> is shorter than it should be "
-                   "(%" PRI_OFF_T " bytes missing)."), Map->name, Map->mapset,
-                  -dif);
+                    "(%" PRI_OFF_T " bytes missing)."),
+                  Map->name, Map->mapset, -dif);
     }
     return 1;
 }

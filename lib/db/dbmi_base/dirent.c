@@ -71,9 +71,8 @@ dbDirent *db_dirent(const char *dirname, int *n)
     dp = opendir(dirname);
     if (dp == NULL) {
         db_syserror(dirname);
-        return (dbDirent *) NULL;
+        return (dbDirent *)NULL;
     }
-
 
     /* count the number of entries and get the strlen of the longest name */
     count = 0;
@@ -86,20 +85,20 @@ dbDirent *db_dirent(const char *dirname, int *n)
     }
     rewinddir(dp);
 
-    path = db_malloc(strlen(dirname) + max + 2);        /* extra 2 for / and NULL */
+    path = db_malloc(strlen(dirname) + max + 2); /* extra 2 for / and NULL */
     if (path == NULL) {
         closedir(dp);
-        return (dbDirent *) NULL;
+        return (dbDirent *)NULL;
     }
     dirent = db_alloc_dirent_array(count);
     if (dirent == NULL) {
         closedir(dp);
-        return (dbDirent *) NULL;
+        return (dbDirent *)NULL;
     }
     *n = count;
     for (i = 0; i < count; i++) {
         entry = readdir(dp);
-        if (entry == NULL)      /* this shouldn't happen */
+        if (entry == NULL) /* this shouldn't happen */
             break;
 
         if (DB_OK != db_set_string(&dirent[i].name, entry->d_name))
@@ -122,7 +121,7 @@ dbDirent *db_dirent(const char *dirname, int *n)
    \param dirent pointer to dbDirent
    \param count number of entities in the array
  */
-void db_free_dirent_array(dbDirent * dirent, int count)
+void db_free_dirent_array(dbDirent *dirent, int count)
 {
     int i;
 
@@ -154,11 +153,11 @@ static int cmp_dirent(const void *aa, const void *bb)
     const dbDirent *a = aa;
     const dbDirent *b = bb;
 
-    return strcmp(db_get_string((dbString *) & a->name),
-                  db_get_string((dbString *) & b->name));
+    return strcmp(db_get_string((dbString *)&a->name),
+                  db_get_string((dbString *)&b->name));
 }
 
-static void sort_dirent(dbDirent * a, int n)
+static void sort_dirent(dbDirent *a, int n)
 {
     qsort(a, n, sizeof(dbDirent), cmp_dirent);
 }
@@ -176,7 +175,7 @@ dbDirent *db_alloc_dirent_array(int count)
     int i;
     dbDirent *dirent;
 
-    dirent = (dbDirent *) db_calloc(count, sizeof(dbDirent));
+    dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
     if (dirent == NULL)
         return dirent;
 

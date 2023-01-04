@@ -47,7 +47,7 @@ int I_cluster_reclass(struct Cluster *C, int minsize)
             hole++;
         }
         else
-            C->reclass[move] = -1;      /* eliminate this class */
+            C->reclass[move] = -1; /* eliminate this class */
 
     for (p = 0; p < C->npoints; p++)
         C->class[p] = C->reclass[C->class[p]];

@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D(volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               sites file named input. Output grid3 file is elev. 
+ *               sites file named input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -47,8 +46,8 @@
 #include "user.h"
 
 double /* pargr */ xmin, xmax, ymin, ymax, zmin, zmax, wmin, wmax;
-double /* norm */ xmin0, xmax0, ymin0, ymax0, zmin0, zmax0, wmin0, wmax0,
-    delt, dnorm;
+double /* norm */ xmin0, xmax0, ymin0, ymax0, zmin0, zmax0, wmin0, wmax0, delt,
+    dnorm;
 double /* MAT */ *A;
 double /* PRISP */ fi, rsm, fstar2, alphat, betat;
 
@@ -64,7 +63,7 @@ double z_orig_in, tb_res_in;
 int cursegm;
 int totsegm;
 int iw2;
-int n_rows_in;                  /* fix by JH 04/24/02 */
+int n_rows_in; /* fix by JH 04/24/02 */
 int cv;
 int sig1;
 
@@ -81,7 +80,6 @@ int count;
 FILE *dev, *cvdevf;
 FCELL *zero_array_cell;
 RASTER3D_Region current_region;
-
 
 /* pargr */
 double ns_res, ew_res, tb_res;
@@ -103,8 +101,8 @@ int NERROR, cond1, cond2;
 char fncdsm[32];
 char filnam[10];
 
-FILE *fdredinp, *fdzout, *fddxout, *fddyout, *fddzout,
-    *fdxxout, *fdyyout, *fd4, *fxyout;
+FILE *fdredinp, *fdzout, *fddxout, *fddyout, *fddzout, *fdxxout, *fdyyout, *fd4,
+    *fxyout;
 FILE *fddev = NULL;
 int fdcell, fdcout;
 
@@ -214,16 +212,14 @@ int main(int argc, char *argv[])
     struct Map_info In;
     struct History hist;
 
-    struct
-    {
+    struct {
         struct Option *input, *colnum, *scol, *wheresql, *rescalex, *fi,
             *segmax, *dmin1, *npmin, *npmax, *wmult, *outz, *rsm, *maskmap,
             *zmult, *cvdev, *gradient, *aspect1, *aspect2, *ncurv, *gcurv,
             *mcurv, *cellinp, *cellout, *devi;
     } parm;
 
-    struct
-    {
+    struct {
         struct Flag *cv;
     } flag;
 
@@ -239,14 +235,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("RST"));
     G_add_keyword(_("3D"));
     G_add_keyword(_("no-data filling"));
-    module->description =
-        _("Interpolates point data to a 3D raster map using "
-          "regularized spline with tension (RST) algorithm.");
+    module->description = _("Interpolates point data to a 3D raster map using "
+                            "regularized spline with tension (RST) algorithm.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
     parm.input->required = YES;
     parm.input->label = _("Name of input 3D vector points map");
-    parm.input->description = NULL;     /* no OGR support */
+    parm.input->description = NULL; /* no OGR support */
 
     parm.cellinp = G_define_standard_option(G_OPT_R_INPUT);
     parm.cellinp->key = "cross_input";
@@ -334,8 +329,8 @@ int main(int argc, char *argv[])
     parm.dmin1->key = "dmin";
     parm.dmin1->type = TYPE_DOUBLE;
     parm.dmin1->required = NO;
-    parm.dmin1->description =
-        _("Minimum distance between points (to remove almost identical points)");
+    parm.dmin1->description = _(
+        "Minimum distance between points (to remove almost identical points)");
     parm.dmin1->guisection = _("Settings");
 
     parm.wmult = G_define_option();
@@ -405,8 +400,7 @@ int main(int argc, char *argv[])
     parm.mcurv = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.mcurv->key = "mcurvature";
     parm.mcurv->required = NO;
-    parm.mcurv->description =
-        _("Name for output mean curvature 3D raster map");
+    parm.mcurv->description = _("Name for output mean curvature 3D raster map");
     parm.mcurv->guisection = _("Outputs");
 
     flag.cv = G_define_flag();
@@ -439,7 +433,7 @@ int main(int argc, char *argv[])
     nsizr = n_rows;
     nsizc = n_cols;
     nsizl = n_levs;
-    n_rows_in = n_rows;         /* fix by JH 04/24/02 */
+    n_rows_in = n_rows; /* fix by JH 04/24/02 */
 
     if (!parm.dmin1->answer)
         parm.dmin1->answer = dminchar;
@@ -478,23 +472,24 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Smoothing must be a positive value"));
 
     if (parm.scol->answer)
-        rsm = -1;               /* used in InterpLib to indicate variable smoothing */
+        rsm = -1; /* used in InterpLib to indicate variable smoothing */
 
     if (cv != (cvdev != NULL))
-        G_fatal_error(_("Both crossvalidation options (-%c, %s) must be specified"),
-                      flag.cv->key, parm.cvdev->key);
+        G_fatal_error(
+            _("Both crossvalidation options (-%c, %s) must be specified"),
+            flag.cv->key, parm.cvdev->key);
     if (cv && devi != NULL)
-        G_fatal_error(_("Both crossvalidation and deviations must be specified"));
-    if (cellinp == NULL && outz == NULL && cellout == NULL && gradient == NULL
-        && aspect1 == NULL && aspect2 == NULL && ncurv == NULL &&
-        gcurv == NULL && mcurv == NULL) {
+        G_fatal_error(
+            _("Both crossvalidation and deviations must be specified"));
+    if (cellinp == NULL && outz == NULL && cellout == NULL &&
+        gradient == NULL && aspect1 == NULL && aspect2 == NULL &&
+        ncurv == NULL && gcurv == NULL && mcurv == NULL) {
         sig1 = 1;
     }
 
-    if (cv &&
-        (cellinp != NULL || outz != NULL || cellout != NULL ||
-         gradient != NULL || aspect1 != NULL || aspect2 != NULL ||
-         ncurv != NULL || gcurv != NULL || mcurv != NULL || devi != NULL))
+    if (cv && (cellinp != NULL || outz != NULL || cellout != NULL ||
+               gradient != NULL || aspect1 != NULL || aspect2 != NULL ||
+               ncurv != NULL || gcurv != NULL || mcurv != NULL || devi != NULL))
         G_fatal_error(_("Crossvalidation cannot be computed simultanuously "
                         "with output grids or devi file"));
 
@@ -540,14 +535,12 @@ int main(int argc, char *argv[])
     if (!adzz)
         G_fatal_error(_("Not enough memory for %s"), "adzz");
 
-
-    if ((data =
-         data_new(x_orig, y_orig, z_orig, n_rows, n_cols, n_levs, 0)) == NULL)
+    if ((data = data_new(x_orig, y_orig, z_orig, n_rows, n_cols, n_levs, 0)) ==
+        NULL)
         G_fatal_error(_("Unable to create %s"), "octdata");
-    if ((functions =
-         OT_functions_new(oct_compare, oct_divide_data, oct_add_data,
-                          oct_intersect, oct_division_check,
-                          oct_get_points)) == NULL)
+    if ((functions = OT_functions_new(
+             oct_compare, oct_divide_data, oct_add_data, oct_intersect,
+             oct_division_check, oct_get_points)) == NULL)
         G_fatal_error(_("Unable to create %s"), "octfunc");
     if ((tree = OT_tree_new(data, NULL, NULL, functions, 0)) == NULL)
         G_fatal_error(_("Unable to create %s"), "octtree");
@@ -592,8 +585,8 @@ int main(int argc, char *argv[])
         }
         Vect_hist_command(&Map);
         f = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
-        Vect_map_add_dblink(&Map, 1, NULL, f->table, GV_KEY_COLUMN,
-                            f->database, f->driver);
+        Vect_map_add_dblink(&Map, 1, NULL, f->table, GV_KEY_COLUMN, f->database,
+                            f->driver);
         /* Create new table */
         db_zero_string(&sql);
         sprintf(buf, "create table %s ( ", f->table);
@@ -624,11 +617,10 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Raster map <%s> not found"), cellinp);
             fdcell = Rast_open_old(cellinp, mapset);
             fdcout = Rast_open_fp_new(cellout);
-            zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
+            zero_array_cell = (FCELL *)G_malloc(sizeof(FCELL) * n_cols);
             if (!zero_array_cell) {
                 clean();
-                G_fatal_error(_("Not enough memory for %s"),
-                              "zero_array_cell");
+                G_fatal_error(_("Not enough memory for %s"), "zero_array_cell");
             }
             for (i = 0; i < n_cols; i++)
                 zero_array_cell[i] = 0;
@@ -640,21 +632,22 @@ int main(int argc, char *argv[])
             }
             /* filling temp file with zeroes */
             for (i = 0; i < n_rows; i++) {
-                if (!
-                    (fwrite
-                     (zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_cell))) {
+                if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols,
+                             Tmp_fd_cell))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
         else
-            G_warning(_("Unable to create 'cross_output' raster map without 'cross_input' raster map being specified"));
+            G_warning(_("Unable to create 'cross_output' raster map without "
+                        "'cross_input' raster map being specified"));
         ertot = 0.;
 
-        out_cond1 = (outz != NULL) || (gradient != NULL) || (aspect1 != NULL)
-            || (aspect2 != NULL) || (gcurv != NULL) || (mcurv != NULL) ||
-            (ncurv != NULL);
+        out_cond1 = (outz != NULL) || (gradient != NULL) || (aspect1 != NULL) ||
+                    (aspect2 != NULL) || (gcurv != NULL) || (mcurv != NULL) ||
+                    (ncurv != NULL);
 
         if (outz != NULL) {
             /* allocating temp array for writing to corresponding temp file */
@@ -674,7 +667,8 @@ int main(int argc, char *argv[])
             for (i = 0; i < n_levs * n_rows; i++) {
                 if (!(fwrite(zero_array1, sizeof(float), n_cols, Tmp_fd_z))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
@@ -690,14 +684,14 @@ int main(int argc, char *argv[])
             Tmp_file_dx = G_tempfile();
             if (NULL == (Tmp_fd_dx = fopen(Tmp_file_dx, "w+"))) {
                 clean();
-                G_fatal_error(_("Unable to open temp file '%s'"),
-                              Tmp_file_dx);
+                G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_dx);
             }
             /* filling temp file with zeroes */
             for (i = 0; i < n_levs * n_rows; i++) {
                 if (!(fwrite(zero_array2, sizeof(float), n_cols, Tmp_fd_dx))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
@@ -713,14 +707,14 @@ int main(int argc, char *argv[])
             Tmp_file_dy = G_tempfile();
             if (NULL == (Tmp_fd_dy = fopen(Tmp_file_dy, "w+"))) {
                 clean();
-                G_fatal_error(_("Unable to open temp file '%s'"),
-                              Tmp_file_dy);
+                G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_dy);
             }
             /* filling temp file with zeroes */
             for (i = 0; i < n_levs * n_rows; i++) {
                 if (!(fwrite(zero_array3, sizeof(float), n_cols, Tmp_fd_dy))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
@@ -736,14 +730,14 @@ int main(int argc, char *argv[])
             Tmp_file_dz = G_tempfile();
             if (NULL == (Tmp_fd_dz = fopen(Tmp_file_dz, "w+"))) {
                 clean();
-                G_fatal_error(_("Unable to open temp file '%s'"),
-                              Tmp_file_dz);
+                G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_dz);
             }
             /* filling temp file with zeroes */
             for (i = 0; i < n_levs * n_rows; i++) {
                 if (!(fwrite(zero_array4, sizeof(float), n_cols, Tmp_fd_dz))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
@@ -759,14 +753,14 @@ int main(int argc, char *argv[])
             Tmp_file_xx = G_tempfile();
             if (NULL == (Tmp_fd_xx = fopen(Tmp_file_xx, "w+"))) {
                 clean();
-                G_fatal_error(_("Unable to open temp file '%s'"),
-                              Tmp_file_xx);
+                G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_xx);
             }
             /* filling temp file with zeroes */
             for (i = 0; i < n_levs * n_rows; i++) {
                 if (!(fwrite(zero_array5, sizeof(float), n_cols, Tmp_fd_xx))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
@@ -782,14 +776,14 @@ int main(int argc, char *argv[])
             Tmp_file_yy = G_tempfile();
             if (NULL == (Tmp_fd_yy = fopen(Tmp_file_yy, "w+"))) {
                 clean();
-                G_fatal_error(_("Unable to open temp file '%s'"),
-                              Tmp_file_yy);
+                G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_yy);
             }
             /* filling temp file with zeroes */
             for (i = 0; i < n_levs * n_rows; i++) {
                 if (!(fwrite(zero_array6, sizeof(float), n_cols, Tmp_fd_yy))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
@@ -805,14 +799,14 @@ int main(int argc, char *argv[])
             Tmp_file_xy = G_tempfile();
             if (NULL == (Tmp_fd_xy = fopen(Tmp_file_xy, "w+"))) {
                 clean();
-                G_fatal_error(_("Unable to open temp file '%s'"),
-                              Tmp_file_xy);
+                G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_xy);
             }
             /* filling temp file with zeroes */
             for (i = 0; i < n_levs * n_rows; i++) {
                 if (!(fwrite(zero_array7, sizeof(float), n_cols, Tmp_fd_xy))) {
                     clean();
-                    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+                    G_fatal_error(
+                        _("Not enough disk space - cannot write temp files"));
                 }
             }
         }
@@ -854,22 +848,18 @@ int main(int argc, char *argv[])
                 if ((cellout != NULL)) {
                     Rast_short_history(cellout, "raster", &hist);
                     /* TODO: next lines need to be verified! */
-                    Rast_append_format_history(&hist,
-                                               "tension=%f, smoothing=%f", fi,
-                                               rsm);
-                    Rast_append_format_history(&hist,
-                                               "dnorm=%f, dmin=%f, wmult=%f, zmult=%f",
-                                               dnorm,
-                                               atof(parm.dmin1->answer),
-                                               wmult, zmult);
-                    Rast_append_format_history(&hist,
-                                               "segmax=%d, npmin=%d, npmax=%d, rmsdevi=%f",
-                                               KMAX, npmin, KMAXPOINTS,
-                                               sqrt(ertot / KMAX2));
-                    Rast_append_format_history(&hist,
-                                               "wmin_data=%f, wmax_data=%f",
-                                               wmin, wmax);
-                    /* ? sprintf (hist.edhist[4], "wmin_int=%f, wmax_int=%f", wminac, wmaxac); */
+                    Rast_append_format_history(
+                        &hist, "tension=%f, smoothing=%f", fi, rsm);
+                    Rast_append_format_history(
+                        &hist, "dnorm=%f, dmin=%f, wmult=%f, zmult=%f", dnorm,
+                        atof(parm.dmin1->answer), wmult, zmult);
+                    Rast_append_format_history(
+                        &hist, "segmax=%d, npmin=%d, npmax=%d, rmsdevi=%f",
+                        KMAX, npmin, KMAXPOINTS, sqrt(ertot / KMAX2));
+                    Rast_append_format_history(
+                        &hist, "wmin_data=%f, wmax_data=%f", wmin, wmax);
+                    /* ? sprintf (hist.edhist[4], "wmin_int=%f, wmax_int=%f",
+                     * wminac, wmaxac); */
 
                     Rast_command_history(&hist);
                     Rast_write_history(cellout, &hist);
@@ -917,15 +907,12 @@ int main(int argc, char *argv[])
             }
 
             fprintf(stderr, "\n");
-            fprintf(stderr, "The number of points in vector map is %d\n",
-                    NPT);
-            fprintf(stderr,
-                    "The number of points outside of 2D/3D region %d\n",
+            fprintf(stderr, "The number of points in vector map is %d\n", NPT);
+            fprintf(stderr, "The number of points outside of 2D/3D region %d\n",
                     OUTRANGE);
             fprintf(stderr,
                     "The number of points used (after reduction) is %d\n",
                     NPOINT);
-
         }
         else {
             clean();

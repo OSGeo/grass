@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.carve
@@ -15,7 +14,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,10 +25,9 @@
 #include <grass/glocale.h>
 #include "enforce.h"
 
-
 /*
-   Note: Use rast input type for rast output 
-   Read vect file, 
+   Note: Use rast input type for rast output
+   Read vect file,
    for each line,
    use a shadow line struct to represent stream profile,
    where x is distance along stream and y is elevation,
@@ -39,20 +37,18 @@
    when next pnt elev increases,
    find next point <= than last confirmed pt
    just use linear interp for now
-   write line to new raster  
+   write line to new raster
    Use orig line struct for XYs, shadow struct Y for cell val
    if new raster already has value there, use lower?
-   actually probably want to use val for trunk stream 
+   actually probably want to use val for trunk stream
    and then verify branch in reverse
    - for now maybe create a conflict map
-   After that's working, add width to lines? 
+   After that's working, add width to lines?
    or use r.grow
  */
 
-
 /* function prototypes */
 static int init_projection(struct Cell_head *window, int *wrap_ncols);
-
 
 int main(int argc, char **argv)
 {
@@ -74,8 +70,9 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     module->label = _("Generates stream channels.");
-    module->description = _("Takes vector stream data, transforms it "
-                            "to raster and subtracts depth from the output DEM.");
+    module->description =
+        _("Takes vector stream data, transforms it "
+          "to raster and subtracts depth from the output DEM.");
 
     parm.inrast = G_define_standard_option(G_OPT_R_INPUT);
     parm.inrast->key = "raster";
@@ -115,28 +112,27 @@ int main(int argc, char **argv)
     G_check_input_output_name(parm.inrast->answer, parm.outrast->answer,
                               G_FATAL_EXIT);
     if (parm.outvect->answer)
-        Vect_check_input_output_name(parm.invect->answer,
-                                     parm.outvect->answer, G_FATAL_EXIT);
+        Vect_check_input_output_name(parm.invect->answer, parm.outvect->answer,
+                                     G_FATAL_EXIT);
 
     /* setup lat/lon projection and distance calculations */
     init_projection(&win, &parm.wrap);
 
     /* default width - one cell at center */
     if (width->answer == NULL) {
-        parm.swidth = G_distance((win.east + win.west) / 2,
-                                 (win.north + win.south) / 2,
-                                 ((win.east + win.west) / 2) + win.ew_res,
-                                 (win.north + win.south) / 2);
+        parm.swidth =
+            G_distance((win.east + win.west) / 2, (win.north + win.south) / 2,
+                       ((win.east + win.west) / 2) + win.ew_res,
+                       (win.north + win.south) / 2);
     }
     else {
         if (sscanf(width->answer, "%lf", &parm.swidth) != 1) {
             G_warning(_("Invalid width value '%s' - using default."),
                       width->answer);
-            parm.swidth =
-                G_distance((win.east + win.west) / 2,
-                           (win.north + win.south) / 2,
-                           ((win.east + win.west) / 2) + win.ew_res,
-                           (win.north + win.south) / 2);
+            parm.swidth = G_distance((win.east + win.west) / 2,
+                                     (win.north + win.south) / 2,
+                                     ((win.east + win.west) / 2) + win.ew_res,
+                                     (win.north + win.south) / 2);
         }
     }
 
@@ -158,8 +154,7 @@ int main(int argc, char **argv)
 
     Vect_set_open_level(2);
     if (Vect_open_old(&Map, parm.invect->answer, vmapset) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"),
-                      parm.invect->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.invect->answer);
 
     if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);
@@ -190,7 +185,6 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-
 static int init_projection(struct Cell_head *window, int *wrap_ncols)
 {
 #if 0
@@ -210,7 +204,8 @@ static int init_projection(struct Cell_head *window, int *wrap_ncols)
         *wrap_ncols =
             (360.0 - (window->east - window->west)) / window->ew_res + 1.1;
 #else
-        G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
+        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+                        "reproject map first."),
                       G_program_name());
 #endif
     }

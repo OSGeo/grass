@@ -38,10 +38,8 @@
 #include <grass/vector.h>
 #include "global.h"
 
-
 /* function prototypes */
 static int write_ln(struct COOR *, struct COOR *, int);
-
 
 /* write_line - attempt to write a line to output */
 /* just returns if line is not completed yet */
@@ -52,38 +50,39 @@ int write_line(struct COOR *seed)
     int dir, line_type, n, n1;
 
     point = seed;
-    if ((dir = at_end(point))) {        /* already have one end of line */
+    if ((dir = at_end(point))) { /* already have one end of line */
         begin = point;
         end = find_end(point, dir, &line_type, &n);
         if (line_type == OPEN) {
-            return (-1);        /* unfinished line */
+            return (-1); /* unfinished line */
         }
         direction = dir;
     }
-    else {                      /* in middle of a line */
+    else { /* in middle of a line */
         end = find_end(point, FORWARD, &line_type, &n);
-        if (line_type == OPEN) {        /* line not finished */
+        if (line_type == OPEN) { /* line not finished */
             return (-1);
         }
 
-        if (line_type == END) { /* found one end at least *//* look for other one */
+        if (line_type ==
+            END) { /* found one end at least */ /* look for other one */
             begin = find_end(point, BACKWARD, &line_type, &n1);
-            if (line_type == OPEN) {    /* line not finished */
+            if (line_type == OPEN) { /* line not finished */
                 return (-1);
             }
 
-            if (line_type == LOOP) {    /* this should NEVER be the case */
+            if (line_type == LOOP) { /* this should NEVER be the case */
                 G_warning(_("write_line:  found half a loop!"));
                 return (-1);
             }
 
-            direction = at_end(begin);  /* found both ends now; total length */
-            n += n1;            /*   is sum of distances to each end */
+            direction = at_end(begin); /* found both ends now; total length */
+            n += n1;                   /*   is sum of distances to each end */
         }
-        else {                  /* line_type = LOOP by default */
+        else { /* line_type = LOOP by default */
             /* already have correct length */
-            begin = end;        /* end and beginning are the same */
-            direction = FORWARD;        /* direction is arbitrary */
+            begin = end;         /* end and beginning are the same */
+            direction = FORWARD; /* direction is arbitrary */
         }
     }
 
@@ -97,7 +96,8 @@ int write_line(struct COOR *seed)
     point = begin;
 
     /* skip first and last point */
-    while ((point = move(point)) == begin) ;
+    while ((point = move(point)) == begin)
+        ;
 
     while (point && point != end) {
         last = point;
@@ -124,7 +124,7 @@ int write_line(struct COOR *seed)
             if (last->bptr->bptr == last)
                 last->bptr->bptr = NULL;
         free_ptr(last);
-    }                           /* end of for i */
+    } /* end of for i */
 
     if (point != end) {
         /* should not happen */
@@ -142,9 +142,10 @@ int write_line(struct COOR *seed)
 /* write_ln - actual writing part of write_line */
 /* writes binary and supplemental file */
 
-static int write_ln(struct COOR *begin, struct COOR *end,       /* start and end point of line */
+static int write_ln(struct COOR *begin,
+                    struct COOR *end, /* start and end point of line */
                     int n)
-{                               /* number of points to write */
+{ /* number of points to write */
     static struct line_pnts *points = NULL;
     double x, y;
     struct COOR *p, *last;

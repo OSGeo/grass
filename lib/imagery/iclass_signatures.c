@@ -33,8 +33,6 @@
 
 #include "iclass_local_proto.h"
 
-
-
 /*!
    \brief Initialize signatures.
 
@@ -50,9 +48,8 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
 
     I_init_signatures(sigs, refer->nfiles);
     for (unsigned int i = refer->nfiles; i--;) {
-        sigs->semantic_labels[i] =
-            Rast_get_semantic_label_or_name(refer->file[i].name,
-                                            refer->file[i].mapset);
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
+            refer->file[i].name, refer->file[i].mapset);
     }
 
     return 1;
@@ -65,7 +62,7 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
    \param statistics pointer to statistics structure
  */
 void I_iclass_add_signature(struct Signature *sigs,
-                            IClass_statistics * statistics)
+                            IClass_statistics *statistics)
 {
     int sn;
 

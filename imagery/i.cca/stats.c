@@ -3,9 +3,8 @@
 
 #include "local_proto.h"
 
-int
-within(int samptot, int nclass, double *nsamp, double ***cov,
-       double **w, int bands)
+int within(int samptot, int nclass, double *nsamp, double ***cov, double **w,
+           int bands)
 {
     int i, j, k;
 
@@ -26,10 +25,8 @@ within(int samptot, int nclass, double *nsamp, double ***cov,
     return 0;
 }
 
-
-int
-between(int samptot, int nclass, double *nsamp, double **mu,
-        double **p, int bands)
+int between(int samptot, int nclass, double *nsamp, double **mu, double **p,
+            int bands)
 {
     int i, j, k;
     double **tmp0, **tmp1, **tmp2;

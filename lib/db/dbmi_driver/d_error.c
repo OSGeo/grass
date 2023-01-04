@@ -22,8 +22,7 @@
 #include <grass/glocale.h>
 
 /* initialize the global struct */
-struct error_state
-{
+struct error_state {
     char *driver_name;
     dbString *errMsg;
 };
@@ -38,7 +37,6 @@ static void init()
     db_append_string(st->errMsg, "\n");
 }
 
-
 /*!
    \brief Init error message for DB driver
 
@@ -49,7 +47,7 @@ static void init()
 void db_d_init_error(const char *name)
 {
     if (!st->errMsg) {
-        st->errMsg = (dbString *) G_malloc(sizeof(dbString));
+        st->errMsg = (dbString *)G_malloc(sizeof(dbString));
         db_init_string(st->errMsg);
     }
 

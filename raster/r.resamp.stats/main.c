@@ -1,10 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.resamp.stats
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
+ *                 contributor)
  *               Hamish Bowman <hamish_b yahoo.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -12,6 +12,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -20,31 +21,27 @@
 #include <grass/glocale.h>
 #include <grass/stats.h>
 
-
-static const struct menu
-{
-    stat_func *method;          /* routine to compute new value */
-    stat_func_w *method_w;      /* routine to compute new value (weighted) */
-    char *name;                 /* method name */
-    char *text;                 /* menu display - full description */
-} menu[] = {
-    {c_ave, w_ave, "average", "average (mean) value"},
-    {c_median, w_median, "median", "median value"},
-    {c_mode, w_mode, "mode", "most frequently occurring value"},
-    {c_min, w_min, "minimum", "lowest value"},
-    {c_max, w_max, "maximum", "highest value"},
-    {c_range, NULL, "range", "range value"},
-    {c_quart1, w_quart1, "quart1", "first quartile"},
-    {c_quart3, w_quart3, "quart3", "third quartile"},
-    {c_perc90, w_perc90, "perc90", "ninetieth percentile"},
-    {c_sum, w_sum, "sum", "sum of values"},
-    {c_var, w_var, "variance", "variance value"},
-    {c_stddev, w_stddev, "stddev", "standard deviation"},
-    {c_quant, w_quant, "quantile", "arbitrary quantile"},
-    {c_count, w_count, "count", "count of non-NULL values"},
-    {c_divr, NULL, "diversity", "number of different values"},
-    {NULL, NULL, NULL, NULL}
-};
+static const struct menu {
+    stat_func *method;     /* routine to compute new value */
+    stat_func_w *method_w; /* routine to compute new value (weighted) */
+    char *name;            /* method name */
+    char *text;            /* menu display - full description */
+} menu[] = {{c_ave, w_ave, "average", "average (mean) value"},
+            {c_median, w_median, "median", "median value"},
+            {c_mode, w_mode, "mode", "most frequently occurring value"},
+            {c_min, w_min, "minimum", "lowest value"},
+            {c_max, w_max, "maximum", "highest value"},
+            {c_range, NULL, "range", "range value"},
+            {c_quart1, w_quart1, "quart1", "first quartile"},
+            {c_quart3, w_quart3, "quart3", "third quartile"},
+            {c_perc90, w_perc90, "perc90", "ninetieth percentile"},
+            {c_sum, w_sum, "sum", "sum of values"},
+            {c_var, w_var, "variance", "variance value"},
+            {c_stddev, w_stddev, "stddev", "standard deviation"},
+            {c_quant, w_quant, "quantile", "arbitrary quantile"},
+            {c_count, w_count, "count", "count of non-NULL values"},
+            {c_divr, NULL, "diversity", "number of different values"},
+            {NULL, NULL, NULL, NULL}};
 
 static char *build_method_list(void)
 {
@@ -147,7 +144,7 @@ static void resamp_unweighted(void)
             if (null && nulls)
                 Rast_set_d_null_value(&outbuf[col], 1);
             else
-                (*method_fn) (&outbuf[col], values, n, closure);
+                (*method_fn)(&outbuf[col], values, n, closure);
         }
 
         Rast_put_d_row(outfile, outbuf);
@@ -205,14 +202,14 @@ static void resamp_weighted(void)
             int i, j;
 
             for (i = maprow0; i < maprow1; i++) {
-                double ky = (i == maprow0) ? 1 - (y0 - maprow0)
-                    : (i == maprow1 - 1) ? 1 - (maprow1 - y1)
-                    : 1;
+                double ky = (i == maprow0)       ? 1 - (y0 - maprow0)
+                            : (i == maprow1 - 1) ? 1 - (maprow1 - y1)
+                                                 : 1;
 
                 for (j = mapcol0; j < mapcol1; j++) {
-                    double kx = (j == mapcol0) ? 1 - (x0 - mapcol0)
-                        : (j == mapcol1 - 1) ? 1 - (mapcol1 - x1)
-                        : 1;
+                    double kx = (j == mapcol0)       ? 1 - (x0 - mapcol0)
+                                : (j == mapcol1 - 1) ? 1 - (mapcol1 - x1)
+                                                     : 1;
 
                     DCELL *src = &bufs[i - maprow0][j];
                     DCELL *dst = &values[n++][0];
@@ -231,7 +228,7 @@ static void resamp_weighted(void)
             if (null && nulls)
                 Rast_set_d_null_value(&outbuf[col], 1);
             else
-                (*method_fn) (&outbuf[col], values, n, closure);
+                (*method_fn)(&outbuf[col], values, n, closure);
         }
 
         Rast_put_d_row(outfile, outbuf);
@@ -241,12 +238,10 @@ static void resamp_weighted(void)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *rastin, *rastout, *method, *quantile;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *nulls, *weight;
     } flag;
     struct History history;
@@ -281,8 +276,7 @@ int main(int argc, char *argv[])
     parm.quantile->key = "quantile";
     parm.quantile->type = TYPE_DOUBLE;
     parm.quantile->required = NO;
-    parm.quantile->description =
-        _("Quantile to calculate for method=quantile");
+    parm.quantile->description = _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
     parm.quantile->answer = "0.5";
 
@@ -386,8 +380,8 @@ int main(int argc, char *argv[])
     G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
     G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
     Rast_format_history(&history, HIST_DATSRC_2,
-                        "Source map NS res: %s   EW res: %s",
-                        buf_nsres, buf_ewres);
+                        "Source map NS res: %s   EW res: %s", buf_nsres,
+                        buf_ewres);
     Rast_command_history(&history);
     Rast_write_history(parm.rastout->answer, &history);
 

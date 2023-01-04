@@ -1,4 +1,3 @@
-
 #define USE_PPM
 
 #ifndef USE_PPM

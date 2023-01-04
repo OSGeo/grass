@@ -12,8 +12,7 @@ int parse_command_line(int argc, char *argv[])
 {
     int ncols;
 
-    struct
-    {
+    struct {
         struct Option *vect;
         struct Option *option;
         struct Option *type;
@@ -24,8 +23,7 @@ int parse_command_line(int argc, char *argv[])
         struct Option *qcol;
         struct Option *fs;
     } parms;
-    struct
-    {
+    struct {
         struct Flag *p, *s, *t;
     } flags;
     char *desc;
@@ -39,8 +37,8 @@ int parse_command_line(int argc, char *argv[])
     parms.type->options = "point,line,boundary,centroid";
     parms.type->answer = "point,line,boundary,centroid";
     parms.type->label = _("Feature type");
-    parms.type->description =
-        _("For coor valid point/centroid, " "for length valid line/boundary");
+    parms.type->description = _("For coor valid point/centroid, "
+                                "for length valid line/boundary");
     parms.type->guisection = _("Selection");
 
     parms.option = G_define_option();
@@ -48,46 +46,49 @@ int parse_command_line(int argc, char *argv[])
     parms.option->type = TYPE_STRING;
     parms.option->required = YES;
     parms.option->multiple = NO;
-    parms.option->options =
-        "cat,area,compact,fd,perimeter,length,count,coor,start,end,sides,query,slope,sinuous,azimuth,bbox";
+    parms.option->options = "cat,area,compact,fd,perimeter,length,count,coor,"
+                            "start,end,sides,query,slope,sinuous,azimuth,bbox";
     parms.option->description = _("Value to upload");
     desc = NULL;
-    G_asprintf(&desc,
-               "cat;%s;"
-               "area;%s;"
-               "compact;%s;"
-               "fd;%s;"
-               "perimeter;%s;"
-               "length;%s;"
-               "count;%s;"
-               "coor;%s;"
-               "start;%s;"
-               "end;%s;"
-               "sides;%s;"
-               "query;%s;"
-               "slope;%s;"
-               "sinuous;%s;"
-               "azimuth;%s;"
-               "bbox;%s;",
-               _("insert new row for each category if doesn't exist yet"),
-               _("area size"),
-               _("compactness of an area, calculated as \n"
-                 "              compactness = perimeter / (2 * sqrt(PI * area))"),
-               _("fractal dimension of boundary defining a polygon, calculated as \n"
-                "              fd = 2 * (log(perimeter) / log(area))"),
-               _("perimeter length of an area"), _("line length"),
-               _("number of features for each category"),
-               _("point coordinates, X,Y or X,Y,Z"),
-               _("line/boundary starting point coordinates, X,Y or X,Y,Z"),
-               _("line/boundary end point coordinates, X,Y or X,Y,Z"),
-               _("categories of areas on the left and right side of the boundary, "
-                "'query_layer' is used for area category"),
-               _("result of a database query for all records of the geometry"
-                 "(or geometries) from table specified by 'query_layer' option"),
-               _("slope steepness of vector line or boundary"),
-               _("line sinuousity, calculated as line length / distance between end points"),
-               _("line azimuth, calculated as angle between North direction and endnode direction at startnode"),
-               _("bounding box of area, N,S,E,W"));
+    G_asprintf(
+        &desc,
+        "cat;%s;"
+        "area;%s;"
+        "compact;%s;"
+        "fd;%s;"
+        "perimeter;%s;"
+        "length;%s;"
+        "count;%s;"
+        "coor;%s;"
+        "start;%s;"
+        "end;%s;"
+        "sides;%s;"
+        "query;%s;"
+        "slope;%s;"
+        "sinuous;%s;"
+        "azimuth;%s;"
+        "bbox;%s;",
+        _("insert new row for each category if doesn't exist yet"),
+        _("area size"),
+        _("compactness of an area, calculated as \n"
+          "              compactness = perimeter / (2 * sqrt(PI * area))"),
+        _("fractal dimension of boundary defining a polygon, calculated as \n"
+          "              fd = 2 * (log(perimeter) / log(area))"),
+        _("perimeter length of an area"), _("line length"),
+        _("number of features for each category"),
+        _("point coordinates, X,Y or X,Y,Z"),
+        _("line/boundary starting point coordinates, X,Y or X,Y,Z"),
+        _("line/boundary end point coordinates, X,Y or X,Y,Z"),
+        _("categories of areas on the left and right side of the boundary, "
+          "'query_layer' is used for area category"),
+        _("result of a database query for all records of the geometry"
+          "(or geometries) from table specified by 'query_layer' option"),
+        _("slope steepness of vector line or boundary"),
+        _("line sinuousity, calculated as line length / distance between end "
+          "points"),
+        _("line azimuth, calculated as angle between North direction and "
+          "endnode direction at startnode"),
+        _("bounding box of area, N,S,E,W"));
     parms.option->descriptions = desc;
 
     parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
@@ -171,7 +172,12 @@ int parse_command_line(int argc, char *argv[])
     }
 
     if (!options.print && !options.total) {
-        if (options.option == O_AREA || options.option == O_LENGTH || options.option == O_COUNT || options.option == O_QUERY || options.option == O_COMPACT || options.option == O_FD || options.option == O_PERIMETER || options.option == O_SLOPE || options.option == O_SINUOUS || options.option == O_AZIMUTH) {    /* one column required */
+        if (options.option == O_AREA || options.option == O_LENGTH ||
+            options.option == O_COUNT || options.option == O_QUERY ||
+            options.option == O_COMPACT || options.option == O_FD ||
+            options.option == O_PERIMETER || options.option == O_SLOPE ||
+            options.option == O_SINUOUS ||
+            options.option == O_AZIMUTH) { /* one column required */
             if (ncols != 1) {
                 G_fatal_error(_("This option requires one column"));
             }
@@ -192,11 +198,11 @@ int parse_command_line(int argc, char *argv[])
                 G_fatal_error(_("This option requires four columns"));
             }
         }
-
     }
 
     if (options.option == O_QUERY && !parms.qcol->answers)
-        G_fatal_error(_("Parameter 'qcolumn' must be specified for 'option=query'"));
+        G_fatal_error(
+            _("Parameter 'qcolumn' must be specified for 'option=query'"));
 
     options.qcol = parms.qcol->answer;
 
@@ -208,7 +214,6 @@ int parse_command_line(int argc, char *argv[])
 
     if (options.option == O_AZIMUTH && !(options.type | GV_LINES))
         G_fatal_error(_("The 'azimuth' option makes sense only for lines"));
-
 
     return 0;
 }

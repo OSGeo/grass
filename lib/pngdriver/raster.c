@@ -9,7 +9,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Per Henrik Johansen (original contributor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include <string.h>
@@ -19,10 +19,10 @@
 #include "pngdriver.h"
 
 #ifndef min
-#define min(a,b) ((a)<(b)?(a):(b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
+#define max(a, b) ((a) > (b) ? (a) : (b))
 #endif
 
 static int *trans;
@@ -34,8 +34,8 @@ static int dst[2][2];
 
 static double scale(double k, const int src[2], const int dst[2])
 {
-    return dst[0] + (double)(k - src[0]) * (dst[1] - dst[0]) / (src[1] -
-                                                                src[0]);
+    return dst[0] +
+           (double)(k - src[0]) * (dst[1] - dst[0]) / (src[1] - src[0]);
 }
 
 static int scale_fwd_y(int sy)
@@ -108,9 +108,9 @@ void PNG_begin_raster(int mask, int s[2][2], double fd[2][2])
 
    \return next row
  */
-int PNG_raster(int n, int row,
-               const unsigned char *red, const unsigned char *grn,
-               const unsigned char *blu, const unsigned char *nul)
+int PNG_raster(int n, int row, const unsigned char *red,
+               const unsigned char *grn, const unsigned char *blu,
+               const unsigned char *nul)
 {
     int d_y0 = scale_fwd_y(row + 0);
     int d_y1 = scale_fwd_y(row + 1);

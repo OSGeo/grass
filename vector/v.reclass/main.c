@@ -1,13 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       v.reclass
  * AUTHOR(S):    R.L. Glenn, USDA, SCS, NHQ-CGIS (original contributor)
  *               GRASS 6 update: Radim Blazek <radim.blazek gmail.com>
  *               Glynn Clements <glynn gclements.plus.com>,
- *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Markus Neteler <neteler itc.it>
  *               OGR support by Martin Landa <landa.martin gmail.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -25,17 +25,17 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-#define KEY(x) (G_strcasecmp(key,x)==0)
+#define KEY(x) (G_strcasecmp(key, x) == 0)
 
-int inpt(FILE * rulefd, char *buf);
+int inpt(FILE *rulefd, char *buf);
 int key_data(char *buf, char **k, char **d);
-int reclass(struct Map_info *In, struct Map_info *Out, int type,
-            int field, dbCatValArray * cvarr, int optiond);
+int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
+            dbCatValArray *cvarr, int optiond);
 
 static int cmpcat(const void *pa, const void *pb)
 {
-    dbCatVal *p1 = (dbCatVal *) pa;
-    dbCatVal *p2 = (dbCatVal *) pb;
+    dbCatVal *p1 = (dbCatVal *)pa;
+    dbCatVal *p2 = (dbCatVal *)pb;
 
     if (p1->cat < p2->cat)
         return -1;
@@ -69,7 +69,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("attributes"));
     module->description =
         _("Changes vector category values for an existing vector map "
-          "according to results of SQL queries or a value in attribute table column.");
+          "according to results of SQL queries or a value in attribute table "
+          "column.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -84,8 +85,8 @@ int main(int argc, char *argv[])
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    col_opt->label =
-        _("The name of the column whose values are to be used as new categories");
+    col_opt->label = _(
+        "The name of the column whose values are to be used as new categories");
     col_opt->description =
         _("The source for the new key column must be type integer or string");
 
@@ -97,7 +98,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     type = Vect_option_to_types(type_opt);
 
     if ((!(rules_opt->answer) && !(col_opt->answer)) ||
@@ -106,8 +106,7 @@ int main(int argc, char *argv[])
                       rules_opt->key, col_opt->key);
     }
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
     if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
@@ -147,9 +146,8 @@ int main(int argc, char *argv[])
                           col_opt->answer, Fi->table);
         }
         else if (ctype == DB_C_TYPE_INT) {
-            nrec =
-                db_select_CatValArray(Driver, Fi->table, Fi->key,
-                                      col_opt->answer, NULL, &cvarr);
+            nrec = db_select_CatValArray(Driver, Fi->table, Fi->key,
+                                         col_opt->answer, NULL, &cvarr);
             G_debug(3, "nrec = %d", nrec);
         }
         else if (ctype == DB_C_TYPE_STRING) {
@@ -169,23 +167,19 @@ int main(int argc, char *argv[])
             db_init_string(&lastval);
 
             NewFi = Vect_default_field_info(&Out, field, NULL, GV_1TABLE);
-            Vect_map_add_dblink(&Out, field, NULL, NewFi->table,
-                                GV_KEY_COLUMN, NewFi->database,
-                                NewFi->driver);
-
+            Vect_map_add_dblink(&Out, field, NULL, NewFi->table, GV_KEY_COLUMN,
+                                NewFi->database, NewFi->driver);
 
             /* Open output driver and database */
-            if (strcmp(Fi->driver, NewFi->driver) == 0
-                && strcmp(Fi->database,
-                          Vect_subst_var(NewFi->database, &Out)) == 0) {
+            if (strcmp(Fi->driver, NewFi->driver) == 0 &&
+                strcmp(Fi->database, Vect_subst_var(NewFi->database, &Out)) ==
+                    0) {
                 G_debug(3, "Use the same driver");
                 Driver2 = Driver;
             }
             else {
-                Driver2 = db_start_driver_open_database(NewFi->driver,
-                                                        Vect_subst_var
-                                                        (NewFi->database,
-                                                         &Out));
+                Driver2 = db_start_driver_open_database(
+                    NewFi->driver, Vect_subst_var(NewFi->database, &Out));
                 db_set_error_handler_driver(Driver2);
             }
 
@@ -203,8 +197,8 @@ int main(int argc, char *argv[])
             len = 0;
             for (i = 0; i < ncols; i++) {
                 column = db_get_table_column(table, i);
-                if (G_strcasecmp(db_get_column_name(column), col_opt->answer)
-                    == 0) {
+                if (G_strcasecmp(db_get_column_name(column), col_opt->answer) ==
+                    0) {
                     /* String column length */
                     len = db_get_column_length(column);
                     break;
@@ -232,8 +226,8 @@ int main(int argc, char *argv[])
 
             G_debug(3, "  SQL: %s", db_get_string(&stmt));
 
-            if (db_open_select_cursor(Driver, &stmt, &cursor, DB_SEQUENTIAL)
-                != DB_OK)
+            if (db_open_select_cursor(Driver, &stmt, &cursor, DB_SEQUENTIAL) !=
+                DB_OK)
                 G_fatal_error("Unable to open select cursor: '%s'",
                               db_get_string(&stmt));
 
@@ -254,7 +248,8 @@ int main(int argc, char *argv[])
             G_debug(3, "  key type = %d", type);
 
             if (ctype != DB_C_TYPE_INT) {
-                G_fatal_error(_("Key column type is not integer"));     /* shouldnot happen */
+                G_fatal_error(
+                    _("Key column type is not integer")); /* shouldnot happen */
             }
 
             cvarr.ctype = DB_C_TYPE_INT;
@@ -338,7 +333,6 @@ int main(int argc, char *argv[])
         else {
             G_fatal_error(_("Column type must be integer or string"));
         }
-
     }
     else {
         int cat;
@@ -394,15 +388,13 @@ int main(int argc, char *argv[])
                 if (!label)
                     label = where;
 
-                ncats =
-                    db_select_int(Driver, Fi->table, Fi->key, where, &cats);
+                ncats = db_select_int(Driver, Fi->table, Fi->key, where, &cats);
                 if (ncats == -1)
                     G_fatal_error(_("Cannot select values from database"));
                 G_debug(3, "  ncats = %d", ncats);
 
-
-                /* If the category already exists, overwrite it cvarr, set to 0 in cats
-                 * and don't add second time */
+                /* If the category already exists, overwrite it cvarr, set to 0
+                 * in cats and don't add second time */
                 over = 0;
                 for (i = 0; i < ncats; i++) {
                     if (db_CatValArray_get_value(&cvarr, cats[i], &catval) ==
@@ -413,7 +405,8 @@ int main(int argc, char *argv[])
                     }
                 }
                 if (over > 0)
-                    G_warning(_("%d previously set categories overwritten by new category %d"),
+                    G_warning(_("%d previously set categories overwritten by "
+                                "new category %d"),
                               over, cat);
 
                 for (i = 0; i < ncats; i++) {

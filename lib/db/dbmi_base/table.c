@@ -30,13 +30,13 @@ dbTable *db_alloc_table(int ncols)
     dbTable *table;
     int i;
 
-    table = (dbTable *) db_malloc(sizeof(dbTable));
+    table = (dbTable *)db_malloc(sizeof(dbTable));
     if (table == NULL)
         return (table = NULL);
 
     db_init_table(table);
 
-    table->columns = (dbColumn *) db_calloc(sizeof(dbColumn), ncols);
+    table->columns = (dbColumn *)db_calloc(sizeof(dbColumn), ncols);
     if (table->columns == NULL) {
         db_free(table);
         return (table = NULL);
@@ -53,7 +53,7 @@ dbTable *db_alloc_table(int ncols)
 
    \param table pointer to dbTable
  */
-void db_init_table(dbTable * table)
+void db_init_table(dbTable *table)
 {
     db_zero((void *)table, sizeof(dbTable));
     db_init_string(&table->tableName);
@@ -65,7 +65,7 @@ void db_init_table(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_free_table(dbTable * table)
+void db_free_table(dbTable *table)
 {
     int i;
 
@@ -86,7 +86,7 @@ void db_free_table(dbTable * table)
 
    \return DB_OK on success
  */
-int db_set_table_name(dbTable * table, const char *name)
+int db_set_table_name(dbTable *table, const char *name)
 {
     return db_set_string(&table->tableName, name);
 }
@@ -98,7 +98,7 @@ int db_set_table_name(dbTable * table, const char *name)
 
    \return name of the table
  */
-const char *db_get_table_name(dbTable * table)
+const char *db_get_table_name(dbTable *table)
 {
     return db_get_string(&table->tableName);
 }
@@ -111,7 +111,7 @@ const char *db_get_table_name(dbTable * table)
 
    \return DB_OK
  */
-int db_set_table_description(dbTable * table, const char *description)
+int db_set_table_description(dbTable *table, const char *description)
 {
     return db_set_string(&table->description, description);
 }
@@ -123,7 +123,7 @@ int db_set_table_description(dbTable * table, const char *description)
 
    \return description of the table
  */
-const char *db_get_table_description(dbTable * table)
+const char *db_get_table_description(dbTable *table)
 {
     return db_get_string(&table->description);
 }
@@ -135,12 +135,12 @@ const char *db_get_table_description(dbTable * table)
 
    \return number of columns
  */
-int db_get_table_number_of_columns(dbTable * table)
+int db_get_table_number_of_columns(dbTable *table)
 {
     return table->numColumns;
 }
 
-static void set_all_column_privs(dbTable * table, void (*set_column_priv)())
+static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
 {
     int col, ncols;
     dbColumn *column;
@@ -152,7 +152,7 @@ static void set_all_column_privs(dbTable * table, void (*set_column_priv)())
     }
 }
 
-static int get_all_column_privs(dbTable * table, int (*get_column_priv)())
+static int get_all_column_privs(dbTable *table, int (*get_column_priv)())
 {
     int priv, col, ncols;
     dbColumn *column;
@@ -172,7 +172,7 @@ static int get_all_column_privs(dbTable * table, int (*get_column_priv)())
 
    \param table pointer to dbTable
  */
-void db_set_table_select_priv_granted(dbTable * table)
+void db_set_table_select_priv_granted(dbTable *table)
 {
     set_all_column_privs(table, db_set_column_select_priv_granted);
 }
@@ -182,7 +182,7 @@ void db_set_table_select_priv_granted(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_set_table_select_priv_not_granted(dbTable * table)
+void db_set_table_select_priv_not_granted(dbTable *table)
 {
     set_all_column_privs(table, db_set_column_select_priv_not_granted);
 }
@@ -194,7 +194,7 @@ void db_set_table_select_priv_not_granted(dbTable * table)
 
    \return privileges
  */
-int db_get_table_select_priv(dbTable * table)
+int db_get_table_select_priv(dbTable *table)
 {
     return get_all_column_privs(table, db_get_column_select_priv);
 }
@@ -204,7 +204,7 @@ int db_get_table_select_priv(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_set_table_update_priv_granted(dbTable * table)
+void db_set_table_update_priv_granted(dbTable *table)
 {
     set_all_column_privs(table, db_set_column_update_priv_granted);
 }
@@ -214,7 +214,7 @@ void db_set_table_update_priv_granted(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_set_table_update_priv_not_granted(dbTable * table)
+void db_set_table_update_priv_not_granted(dbTable *table)
 {
     set_all_column_privs(table, db_set_column_update_priv_not_granted);
 }
@@ -226,7 +226,7 @@ void db_set_table_update_priv_not_granted(dbTable * table)
 
    \return privileges
  */
-int db_get_table_update_priv(dbTable * table)
+int db_get_table_update_priv(dbTable *table)
 {
     return get_all_column_privs(table, db_get_column_update_priv);
 }
@@ -236,7 +236,7 @@ int db_get_table_update_priv(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_set_table_insert_priv_granted(dbTable * table)
+void db_set_table_insert_priv_granted(dbTable *table)
 {
     table->priv_insert = DB_GRANTED;
 }
@@ -246,7 +246,7 @@ void db_set_table_insert_priv_granted(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_set_table_insert_priv_not_granted(dbTable * table)
+void db_set_table_insert_priv_not_granted(dbTable *table)
 {
     table->priv_insert = DB_NOT_GRANTED;
 }
@@ -258,7 +258,7 @@ void db_set_table_insert_priv_not_granted(dbTable * table)
 
    \return prilileges
  */
-int db_get_table_insert_priv(dbTable * table)
+int db_get_table_insert_priv(dbTable *table)
 {
     return table->priv_insert;
 }
@@ -268,7 +268,7 @@ int db_get_table_insert_priv(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_set_table_delete_priv_granted(dbTable * table)
+void db_set_table_delete_priv_granted(dbTable *table)
 {
     table->priv_delete = DB_GRANTED;
 }
@@ -278,7 +278,7 @@ void db_set_table_delete_priv_granted(dbTable * table)
 
    \param table pointer to dbTable
  */
-void db_set_table_delete_priv_not_granted(dbTable * table)
+void db_set_table_delete_priv_not_granted(dbTable *table)
 {
     table->priv_delete = DB_NOT_GRANTED;
 }
@@ -290,7 +290,7 @@ void db_set_table_delete_priv_not_granted(dbTable * table)
 
    \return privileges
  */
-int db_get_table_delete_priv(dbTable * table)
+int db_get_table_delete_priv(dbTable *table)
 {
     return table->priv_delete;
 }
@@ -304,10 +304,10 @@ int db_get_table_delete_priv(dbTable * table)
    \return pointer to dbColumn
    \return NULL if not found
  */
-dbColumn *db_get_table_column(dbTable * table, int idx)
+dbColumn *db_get_table_column(dbTable *table, int idx)
 {
     if (idx < 0 || idx >= table->numColumns)
-        return ((dbColumn *) NULL);
+        return ((dbColumn *)NULL);
     return &table->columns[idx];
 }
 
@@ -320,7 +320,7 @@ dbColumn *db_get_table_column(dbTable * table, int idx)
    \return pointer to dbColumn
    \return NULL if not found
  */
-dbColumn *db_get_table_column_by_name(dbTable * table, const char *name)
+dbColumn *db_get_table_column_by_name(dbTable *table, const char *name)
 {
     dbColumn *c = NULL;
     int i, columns = table->numColumns;
@@ -351,7 +351,7 @@ dbColumn *db_get_table_column_by_name(dbTable * table, const char *name)
    \return DB_OK on success
    \return DB_FAILURE on error
  */
-int db_set_table_column(dbTable * table, int idx, dbColumn * column)
+int db_set_table_column(dbTable *table, int idx, dbColumn *column)
 {
     if (idx < 0 || idx >= table->numColumns)
         return DB_FAILED;
@@ -369,11 +369,10 @@ int db_set_table_column(dbTable * table, int idx, dbColumn * column)
    \return DB_OK on success
    \return DB_FAILURE on error
  */
-int db_append_table_column(dbTable * table, dbColumn * column)
+int db_append_table_column(dbTable *table, dbColumn *column)
 {
-    table->columns =
-        (dbColumn *) db_realloc((void *)table->columns,
-                                sizeof(dbColumn) * (table->numColumns + 1));
+    table->columns = (dbColumn *)db_realloc(
+        (void *)table->columns, sizeof(dbColumn) * (table->numColumns + 1));
     if (table->columns == NULL)
         return DB_FAILED;
     db_copy_column(&table->columns[table->numColumns], column);
@@ -384,14 +383,15 @@ int db_append_table_column(dbTable * table, dbColumn * column)
 /*!
    \brief Make a new exact copy of an existing table
 
-   New memory is allocated for the clone, the columns-content will be copied too.
+   New memory is allocated for the clone, the columns-content will be copied
+   too.
 
    \param src Pointer to dbTable
 
-   \return A new alloacted clone of the given table on success 
+   \return A new alloacted clone of the given table on success
    \return NULL on error
  */
-dbTable *db_clone_table(dbTable * src)
+dbTable *db_clone_table(dbTable *src)
 {
     int i, n = db_get_table_number_of_columns(src);
     dbTable *new = db_alloc_table(n);
@@ -423,7 +423,7 @@ dbTable *db_clone_table(dbTable * src)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_table_to_sql(dbTable * table, dbString * sql)
+int db_table_to_sql(dbTable *table, dbString *sql)
 {
     int col, ncols;
     dbColumn *column;
@@ -449,12 +449,13 @@ int db_table_to_sql(dbTable * table, dbString * sql)
         db_append_string(sql, colname);
         db_append_string(sql, " ");
         /* Note: I found on Web:
-         *  These are the ANSI data types: BIT, CHARACTER, DATE, DECIMAL, DOUBLE PRECISION, FLOAT, 
-         *  INTEGER, INTERVAL, NUMERIC, REAL, SMALLINT, TIMESTAMP, TIME, VARBIT, VARCHAR, CHAR
+         *  These are the ANSI data types: BIT, CHARACTER, DATE, DECIMAL, DOUBLE
+         * PRECISION, FLOAT, INTEGER, INTERVAL, NUMERIC, REAL, SMALLINT,
+         * TIMESTAMP, TIME, VARBIT, VARCHAR, CHAR
          *  ...
-         *  Thus, the only data types you can use with the assurance that they will 
-         *  work everywhere are as follows:
-         *  DOUBLE PRECISION, FLOAT, INTEGER, NUMERIC, REAL, SMALLINT, VARCHAR, CHAR */
+         *  Thus, the only data types you can use with the assurance that they
+         * will work everywhere are as follows: DOUBLE PRECISION, FLOAT,
+         * INTEGER, NUMERIC, REAL, SMALLINT, VARCHAR, CHAR */
         switch (sqltype) {
         case DB_SQL_TYPE_CHARACTER:
             sprintf(buf, "varchar(%d)", db_get_column_length(column));

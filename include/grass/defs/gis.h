@@ -6,9 +6,9 @@
  *              Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
  * PURPOSE:     This file contains the prototypes for all the functions in the
  *              gis library (src/libes/gis).
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
+ *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
  *              for details.
  *
@@ -41,11 +41,11 @@
 #include <sys/param.h>
 #endif
 #if (defined(BSD))
-    /* no malloc.h, no alloca.h ?
-     * TODO: better
-     * check if alloca.h exists,
-     * if not, check if malloc.h exists,
-     * if not use stdlib.h */
+/* no malloc.h, no alloca.h ?
+ * TODO: better
+ * check if alloca.h exists,
+ * if not, check if malloc.h exists,
+ * if not use stdlib.h */
 #include <stdlib.h>
 #else
 #include <alloca.h>
@@ -55,7 +55,7 @@
 #define G_freea(p)
 #else
 #define G_alloca(n) G_malloc(n)
-#define G_freea(p) G_free(p)
+#define G_freea(p)  G_free(p)
 #endif
 
 #include <stdarg.h>
@@ -84,8 +84,8 @@
 #include <gdal_version.h>
 #if GDAL_VERSION_NUM < 2030000
 #include <cpl_config.h>
-   /* HAVE_LONG_LONG_INT comes from GRASS
-    * HAVE_LONG_LONG comes from GDAL */
+/* HAVE_LONG_LONG_INT comes from GRASS
+ * HAVE_LONG_LONG comes from GDAL */
 #if HAVE_LONG_LONG_INT && !defined(HAVE_LONG_LONG)
 #define HAVE_LONG_LONG 1
 #endif
@@ -146,7 +146,6 @@ double G_area_for_zone_on_sphere(double, double);
 
 /* ascii_chk.c */
 void G_ascii_check(char *);
-
 
 /* asprintf.c */
 /* Do it better if you know how */
@@ -216,45 +215,40 @@ int G_compress(unsigned char *, int, unsigned char *, int, int);
 int G_expand(unsigned char *, int, unsigned char *, int, int);
 
 /* compress.c : no compression */
-int
-G_no_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
-int
-G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
+int G_no_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                  int dst_sz);
+int G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
 
 /* cmprrle.c : Run Length Encoding (RLE) */
-int
-G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
-               int dst_sz);
-int
-G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
+int G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                   int dst_sz);
+int G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst,
+                 int dst_sz);
 
 /* cmprzlib.c : ZLIB's DEFLATE */
-int
-G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
-                int dst_sz);
-int
-G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
+int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                    int dst_sz);
+int G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
+                  int dst_sz);
 
 /* cmprlz4.c : LZ4, extremely fast */
-int
-G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst,
-               int dst_sz);
-int
-G_lz4_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
+int G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                   int dst_sz);
+int G_lz4_expand(unsigned char *src, int src_sz, unsigned char *dst,
+                 int dst_sz);
 
-/* cmprbzip.c : BZIP2, high compression, faster than ZLIB's DEFLATE with level 9 */
-int
-G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
-               int dst_sz);
-int
-G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
+/* cmprbzip.c : BZIP2, high compression, faster than ZLIB's DEFLATE with level 9
+ */
+int G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                   int dst_sz);
+int G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
+                 int dst_sz);
 
 /* cmprzstd.c : ZSTD, compression similar to ZLIB's DEFLATE but faster */
-int
-G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
-                int dst_sz);
-int
-G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz);
+int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                    int dst_sz);
+int G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
+                  int dst_sz);
 
 /* add more compression methods here */
 
@@ -281,7 +275,6 @@ const char *G_datum_ellipsoid(int);
 int G_get_datumparams_from_projinfo(const struct Key_Value *, char *, char *);
 void G_read_datum_table(void);
 
-
 /* debug.c */
 void G_init_debug(void);
 int G_debug(int, const char *, ...) __attribute__((format(printf, 2, 3)));
@@ -289,10 +282,10 @@ int G_debug(int, const char *, ...) __attribute__((format(printf, 2, 3)));
 /* distance.c */
 int G_begin_distance_calculations(void);
 double G_distance(double, double, double, double);
-double G_distance_between_line_segments(double, double, double, double,
-                                        double, double, double, double);
-double G_distance_point_to_line_segment(double, double, double, double,
-                                        double, double);
+double G_distance_between_line_segments(double, double, double, double, double,
+                                        double, double, double);
+double G_distance_point_to_line_segment(double, double, double, double, double,
+                                        double);
 
 /* done_msg.c */
 void G_done_msg(const char *, ...) __attribute__((format(printf, 1, 2)));
@@ -328,12 +321,11 @@ jmp_buf *G_fatal_longjmp(int);
 
 int G_info_format(void);
 void G_message(const char *, ...) __attribute__((format(printf, 1, 2)));
-void G_verbose_message(const char *, ...)
-    __attribute__((format(printf, 1, 2)));
+void G_verbose_message(const char *, ...) __attribute__((format(printf, 1, 2)));
 void G_important_message(const char *, ...)
     __attribute__((format(printf, 1, 2)));
 void G_fatal_error(const char *, ...) __attribute__((format(printf, 1, 2)))
-    __attribute__((noreturn));
+__attribute__((noreturn));
 void G_warning(const char *, ...) __attribute__((format(printf, 1, 2)));
 int G_suppress_warnings(int);
 int G_sleep_on_error(int);
@@ -352,8 +344,7 @@ char *G_file_name_basedir(char *, const char *, const char *, const char *,
 /* find_file.c */
 const char *G_find_file(const char *, char *, const char *);
 const char *G_find_file2(const char *, const char *, const char *);
-const char *G_find_file_misc(const char *, const char *, char *,
-                             const char *);
+const char *G_find_file_misc(const char *, const char *, char *, const char *);
 const char *G_find_file2_misc(const char *, const char *, const char *,
                               const char *);
 
@@ -516,8 +507,8 @@ void G_free_ls_filter(void *);
 #endif
 
 /* make_loc.c */
-int G_make_location(const char *, struct Cell_head *,
-                    const struct Key_Value *, const struct Key_Value *);
+int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
+                    const struct Key_Value *);
 int G_make_location_epsg(const char *, struct Cell_head *,
                          const struct Key_Value *, const struct Key_Value *,
                          const struct Key_Value *);
@@ -589,8 +580,7 @@ int G_open_new_misc(const char *, const char *, const char *);
 int G_open_old_misc(const char *, const char *, const char *, const char *);
 int G_open_update_misc(const char *, const char *, const char *);
 FILE *G_fopen_new_misc(const char *, const char *, const char *);
-FILE *G_fopen_old_misc(const char *, const char *, const char *,
-                       const char *);
+FILE *G_fopen_old_misc(const char *, const char *, const char *, const char *);
 FILE *G_fopen_append_misc(const char *, const char *, const char *);
 FILE *G_fopen_modify_misc(const char *, const char *, const char *);
 
@@ -654,7 +644,7 @@ void G_popen_close(struct Popen *);
 
 /* plot.c */
 void G_setup_plot(double, double, double, double, int (*)(int, int),
-                  int(*)(int, int));
+                  int (*)(int, int));
 void G_setup_fill(int);
 void G_plot_where_xy(double, double, int *, int *);
 void G_plot_where_en(int, int, double *, double *);
@@ -691,8 +681,7 @@ const char *G_database_epsg_code(void);
 
 /* put_window.c */
 int G_put_window(const struct Cell_head *);
-int G_put_element_window(const struct Cell_head *, const char *,
-                         const char *);
+int G_put_element_window(const struct Cell_head *, const char *, const char *);
 
 /* putenv.c */
 void G_putenv(const char *, const char *);
@@ -858,8 +847,7 @@ int G_limit_north(double *, int);
 int G_limit_south(double *, int);
 
 /* wind_overlap.c */
-int G_window_overlap(const struct Cell_head *, double, double, double,
-                     double);
+int G_window_overlap(const struct Cell_head *, double, double, double, double);
 double G_window_percentage_overlap(const struct Cell_head *, double, double,
                                    double, double);
 

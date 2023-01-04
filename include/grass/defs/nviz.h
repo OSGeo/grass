@@ -32,7 +32,6 @@ int Nviz_get_cplane_translation(nv_data *, int, float *, float *, float *);
 int Nviz_set_fence_color(nv_data *, int);
 int Nviz_set_cplane_here(nv_data *, int, float, float);
 
-
 /* draw.c */
 int Nviz_draw_all_surf(nv_data *);
 int Nviz_draw_all_vect(void);
@@ -73,11 +72,11 @@ void Nviz_destroy_data(nv_data *);
 void Nviz_set_bgcolor(nv_data *, int);
 int Nviz_get_bgcolor(nv_data *);
 int Nviz_color_from_str(const char *);
-struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
-                                    double, int, int, int, int);
-struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
-                                    double, int, int, int, int);
-void Nviz_draw_fringe(nv_data * data);
+struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long, double, int,
+                                    int, int, int);
+struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long, double, int,
+                                    int, int, int);
+void Nviz_draw_fringe(nv_data *data);
 int Nviz_draw_arrow(nv_data *);
 int Nviz_set_arrow(nv_data *, int, int, float, unsigned int);
 void Nviz_delete_arrow(nv_data *);

@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       m.nviz.image
- *               
+ *
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
  *               Anna Kratochvilova (Google SoC 2011)
- *               
+ *
  * PURPOSE:      Renders GIS data in 3D space from the command line.
- *               
+ *
  * COPYRIGHT:    (C) 2008-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -35,8 +34,8 @@ int main(int argc, char *argv[])
     int i, ret;
     int red, grn, blu;
     float size;
-    double vp_height, z_exag;   /* calculated viewpoint height, z-exag */
-    int width, height;          /* output image size */
+    double vp_height, z_exag; /* calculated viewpoint height, z-exag */
+    int width, height;        /* output image size */
     char *output_name;
 
     nv_data data;
@@ -75,7 +74,8 @@ int main(int argc, char *argv[])
             G_warning(_("File <%s> already exists and will be overwritten"),
                       output_name);
         else
-            G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+            G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the "
+                            "--overwrite flag"),
                           params->output->key, output_name);
     }
 
@@ -146,7 +146,8 @@ int main(int argc, char *argv[])
     else {
         z_exag = Nviz_get_exag();
         G_verbose_message(_("Vertical exaggeration not given, using calculated "
-                           "value %.0f"), z_exag);
+                            "value %.0f"),
+                          z_exag);
     }
     Nviz_change_exag(&data, z_exag);
 
@@ -158,7 +159,8 @@ int main(int argc, char *argv[])
 
         Nviz_get_exag_height(&vp_height, &min, &max);
         G_verbose_message(_("Viewpoint height not given, using calculated "
-                            "value %.0f"), vp_height);
+                            "value %.0f"),
+                          vp_height);
     }
     Nviz_set_viewpoint_height(vp_height);
 
@@ -174,12 +176,10 @@ int main(int argc, char *argv[])
     }
 
     /* set lights */
-    Nviz_set_light_position(&data, 1,
-                            atof(params->light_pos->answers[0]),
+    Nviz_set_light_position(&data, 1, atof(params->light_pos->answers[0]),
                             atof(params->light_pos->answers[1]),
                             atof(params->light_pos->answers[2]), 0.0);
-    Nviz_set_light_bright(&data, 1,
-                          atoi(params->light_bright->answer) / 100.0);
+    Nviz_set_light_bright(&data, 1, atoi(params->light_bright->answer) / 100.0);
     if (G_str_to_color(params->light_color->answer, &red, &grn, &blu) != 1) {
         red = grn = blu = 255;
     }
@@ -219,10 +219,8 @@ int main(int argc, char *argv[])
             size = atof(params->north_arrow_size->answer);
 
         Nviz_set_arrow(&data, atoi(params->north_arrow->answers[0]),
-                       atoi(params->north_arrow->answers[1]),
-                       size,
-                       Nviz_color_from_str(params->
-                                           north_arrow_color->answer));
+                       atoi(params->north_arrow->answers[1]), size,
+                       Nviz_color_from_str(params->north_arrow_color->answer));
         Nviz_draw_arrow(&data);
     }
 

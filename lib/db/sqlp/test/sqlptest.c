@@ -11,7 +11,6 @@ int main(int argc, char **argv)
     dbString stmt;
     int len;
 
-
     st = sqpInitStmt();
 
     db_init_string(&stmt);
@@ -22,8 +21,8 @@ int main(int argc, char **argv)
         G_chop(buf2);
         len = strlen(buf2);
 
-        if (buf2[len - 1] == ';') {     /* end of statement */
-            buf2[len - 1] = 0;  /* truncate ';' */
+        if (buf2[len - 1] == ';') { /* end of statement */
+            buf2[len - 1] = 0;      /* truncate ';' */
             db_append_string(&stmt, buf2);
 
             st->stmt = db_get_string(&stmt);
@@ -41,13 +40,11 @@ int main(int argc, char **argv)
             sqpPrintStmt(st);
 
             db_zero_string(&stmt);
-
         }
         else {
             db_append_string(&stmt, buf);
         }
     }
-
 
     sqpFreeStmt(st);
 

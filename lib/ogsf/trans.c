@@ -3,7 +3,7 @@
 
    \brief OGSF library - matrix transformation (higher level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    NOTE: This file should be REMOVED and any calls to the functions in this
    file should be replaced with appropriate OpenGL calls.
@@ -18,14 +18,14 @@
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
-   \author Dave Gerdes Jan 1990 All rights reserved, US Army Construction Engineering Research Lab
-   \author Bill Brown USACERL (November 1993)
-   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+   \author Dave Gerdes Jan 1990 All rights reserved, US Army Construction
+   Engineering Research Lab \author Bill Brown USACERL (November 1993) \author
+   Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
  */
 
 #include <math.h>
@@ -36,17 +36,15 @@
 
 #define MAX_STACK 20
 
-
 /* function prototypes */
-static void P__transform(int num_vert, float (*in)[4],
-                         float(*out)[4], float(*c)[4]);
-static void P_matrix_copy(float (*from)[4], float(*to)[4], int size);
-
+static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
+                         float (*c)[4]);
+static void P_matrix_copy(float (*from)[4], float (*to)[4], int size);
 
 /* global variables */
-static float c_stack[MAX_STACK][4][4];  /* matrix stack */
-static int stack_ptr = -1;      /* index of curr matrix depth */
-static float d[4][4];           /* tmp matrix */
+static float c_stack[MAX_STACK][4][4]; /* matrix stack */
+static int stack_ptr = -1;             /* index of curr matrix depth */
+static float d[4][4];                  /* tmp matrix */
 
 #define NPI M_PI
 
@@ -54,18 +52,10 @@ static float d[4][4];           /* tmp matrix */
  **  Current transformation matrix
  */
 static float trans_mat[4][4] = {
-    {1., 0., 0., 0.},
-    {0., 1., 0., 0.},
-    {0., 0., 1., 0.},
-    {0., 0., 0., 1.}
-};
+    {1., 0., 0., 0.}, {0., 1., 0., 0.}, {0., 0., 1., 0.}, {0., 0., 0., 1.}};
 
 static float ident[4][4] = {
-    {1., 0., 0., 0.},
-    {0., 1., 0., 0.},
-    {0., 0., 1., 0.},
-    {0., 0., 0., 1.}
-};
+    {1., 0., 0., 0.}, {0., 1., 0., 0.}, {0., 0., 1., 0.}, {0., 0., 0., 1.}};
 
 /*!
    \brief ADD
@@ -114,7 +104,7 @@ void P_scale(float x, float y, float z)
    \param in
    \param out
  */
-void P_transform(int num_vert, float (*in)[4], float(*out)[4])
+void P_transform(int num_vert, float (*in)[4], float (*out)[4])
 {
     P__transform(num_vert, in, out, trans_mat);
 
@@ -133,8 +123,8 @@ void P_transform(int num_vert, float (*in)[4], float(*out)[4])
    \param in
    \param out
  */
-static void P__transform(int num_vert, float (*in)[4], float(*out)[4],
-                         float(*c)[4])
+static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
+                         float (*c)[4])
 {
     register int k, j, i;
 
@@ -152,13 +142,13 @@ static void P__transform(int num_vert, float (*in)[4], float(*out)[4],
 }
 
 /*!
-   \brief Copy matrix 
+   \brief Copy matrix
 
    \param from 'from' matrix
    \param to 'to' matrix
    \param size number of rows (ncols=4)
  */
-static void P_matrix_copy(float (*from)[4], float(*to)[4], int size)
+static void P_matrix_copy(float (*from)[4], float (*to)[4], int size)
 {
     register int i, j;
 
@@ -189,7 +179,8 @@ int P_pushmatrix(void)
 }
 
 /*!
-   \brief Pop top of matrix stack, placing it into the current transformation matrix
+   \brief Pop top of matrix stack, placing it into the current transformation
+   matrix
 
    \return -1 on failure
    \return 0 on success
@@ -220,7 +211,7 @@ void P_rot(float angle, char axis)
 
     P_matrix_copy(ident, d, 4);
 
-    theta = (NPI / 180.) * angle;       /* convert to radians */
+    theta = (NPI / 180.) * angle; /* convert to radians */
 
     /* optimize to handle rotations of mutliples of 90 deg */
     switch (axis) {

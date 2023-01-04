@@ -1,25 +1,24 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-* DBF API:      http://shapelib.maptools.org/dbf_api.html
-*
-* DBFFieldType: FTString, FTInteger, FTDouble, FTLogical, FTInvalid
-*                  0          1          2         4         5
-*                DBF_CHAR   DBF_INT   DBF_DOUBLE  
-*                  1          2          3
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ * DBF API:      http://shapelib.maptools.org/dbf_api.html
+ *
+ * DBFFieldType: FTString, FTInteger, FTDouble, FTLogical, FTInvalid
+ *                  0          1          2         4         5
+ *                DBF_CHAR   DBF_INT   DBF_DOUBLE
+ *                  1          2          3
+ *****************************************************************************/
 #ifdef __MINGW32__
 #include <windows.h>
 #endif
@@ -41,21 +40,30 @@
 /* add table to database */
 int add_table(char *table, char *name)
 {
+    int res;
+    size_t buf_s;
+
     G_debug(2, "add_table(): table = %s name = %s", table, name);
 
     if (db.atables == db.ntables) {
         db.atables += 15;
-        db.tables =
-            (TABLE *) G_realloc(db.tables, db.atables * sizeof(TABLE));
+        db.tables = (TABLE *)G_realloc(db.tables, db.atables * sizeof(TABLE));
     }
 
     strcpy(db.tables[db.ntables].name, table);
 
+    buf_s = sizeof(db.tables[db.ntables].file);
 #ifdef __MINGW32__
-    sprintf(db.tables[db.ntables].file, "%s\\%s", db.name, name);
+    res = snprintf(db.tables[db.ntables].file, buf_s, "%s\\%s", db.name, name);
 #else
-    sprintf(db.tables[db.ntables].file, "%s/%s", db.name, name);
+    res = snprintf(db.tables[db.ntables].file, buf_s, "%s/%s", db.name, name);
 #endif
+    if (res >= buf_s) {
+        db_d_append_error(_("Unable to add table %s to %s. "
+                            "The file path is too long."),
+                          name, db.name);
+        return DB_FAILED;
+    }
 
     db.tables[db.ntables].alive = TRUE;
     db.tables[db.ntables].described = FALSE;
@@ -72,7 +80,6 @@ int add_table(char *table, char *name)
 
     return DB_OK;
 }
-
 
 /* returns table index or -1 */
 int find_table(char *table)
@@ -162,7 +169,7 @@ int load_table(int t)
 
     G_debug(2, "load_table(): tab = %d", t);
 
-    if (db.tables[t].loaded == TRUE)    /*already loaded */
+    if (db.tables[t].loaded == TRUE) /*already loaded */
         return DB_OK;
 
     dbf = DBFOpen(db.tables[t].file, "r");
@@ -174,14 +181,14 @@ int load_table(int t)
     ncols = db.tables[t].ncols;
     nrows = DBFGetRecordCount(dbf);
     rows = db.tables[t].rows;
-    rows = (ROW *) G_malloc(nrows * sizeof(ROW));
+    rows = (ROW *)G_malloc(nrows * sizeof(ROW));
     db.tables[t].arows = nrows;
 
     G_debug(2, "  ncols = %d nrows = %d", ncols, nrows);
 
     for (i = 0; i < nrows; i++) {
         rows[i].alive = TRUE;
-        rows[i].values = (VALUE *) G_calloc(ncols, sizeof(VALUE));
+        rows[i].values = (VALUE *)G_calloc(ncols, sizeof(VALUE));
 
         for (j = 0; j < ncols; j++) {
             val = &(rows[i].values[j]);
@@ -226,10 +233,11 @@ int save_table(int t)
 
     G_debug(2, "save_table %d", t);
 
-    /* Note: because if driver is killed during the time the table is written, the process
-     *        is not completed and DATA ARE LOST. To minimize this, data are first written
-     *        to temporary file and then this file is renamed to 'database/table.dbf'.
-     *        Hopefully both file are on the same disk/partition */
+    /* Note: because if driver is killed during the time the table is written,
+     * the process is not completed and DATA ARE LOST. To minimize this, data
+     * are first written to temporary file and then this file is renamed to
+     * 'database/table.dbf'. Hopefully both file are on the same disk/partition
+     */
 
     if (!(db.tables[t].alive) || !(db.tables[t].updated))
         return DB_OK;
@@ -267,7 +275,6 @@ int save_table(int t)
         width = db.tables[t].cols[i].width;
         decimals = db.tables[t].cols[i].decimals;
         DBFAddField(dbf, db.tables[t].cols[i].name, dbftype, width, decimals);
-
     }
 
     G_debug(2, "Write %d rows", nrows);
@@ -308,8 +315,8 @@ int save_table(int t)
 
     /* Copy */
     if (G_rename_file(name, db.tables[t].file)) {
-        db_d_append_error(_("Unable to move '%s' to '%s'."),
-                          name, db.tables[t].file);
+        db_d_append_error(_("Unable to move '%s' to '%s'."), name,
+                          db.tables[t].file);
         return DB_FAILED;
     };
 

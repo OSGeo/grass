@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       i.rgb.his
  *
  * AUTHOR(S):    David Satnik, GIS Laboratory, Central Washington University
  *               with acknowledgements to Ali Vali,
- *               Univ. of Texas Space Research Center, for the core routine. 
- *               
- * PURPOSE:      Red-green-blue (rgb) to hue-intensity-saturation (his) 
+ *               Univ. of Texas Space Research Center, for the core routine.
+ *
+ * PURPOSE:      Red-green-blue (rgb) to hue-intensity-saturation (his)
  *               raster map color transformation function
  *
  * COPYRIGHT:    (C) 2007-2008 by the GRASS Development Team
@@ -80,14 +79,13 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /* get dimension of the image */
     rows = Rast_window_rows();
     cols = Rast_window_cols();
 
     openfiles(opt_red->answer, opt_green->answer, opt_blue->answer,
-              opt_hue->answer, opt_inten->answer, opt_sat->answer,
-              fd_input, fd_output, rowbuffer);
+              opt_hue->answer, opt_inten->answer, opt_sat->answer, fd_input,
+              fd_output, rowbuffer);
 
     for (i = 0; i < rows; i++) {
         /* read in a row from each cell map */
@@ -105,9 +103,8 @@ int main(int argc, char **argv)
     }
     G_percent(i, rows, 2);
 
-    closefiles(opt_hue->answer, opt_inten->answer, opt_sat->answer,
-               fd_output, rowbuffer);
-
+    closefiles(opt_hue->answer, opt_inten->answer, opt_sat->answer, fd_output,
+               rowbuffer);
 
     exit(EXIT_SUCCESS);
 }

@@ -61,7 +61,7 @@ static void swap_8(void *p)
     q[4] = t;
 }
 
-static void write_int(FILE * fp, int swap_flag, int x)
+static void write_int(FILE *fp, int swap_flag, int x)
 {
     if (swap_flag)
         swap_4(&x);
@@ -70,7 +70,7 @@ static void write_int(FILE * fp, int swap_flag, int x)
         G_fatal_error(_("Error writing data"));
 }
 
-static void write_double(FILE * fp, int swap_flag, double x)
+static void write_double(FILE *fp, int swap_flag, double x)
 {
     if (swap_flag)
         swap_8(&x);
@@ -79,9 +79,9 @@ static void write_double(FILE * fp, int swap_flag, double x)
         G_fatal_error(_("Error writing data"));
 }
 
-static void make_gmt_header(struct GRD_HEADER *header,
-                            const char *name, const char *outfile,
-                            const struct Cell_head *region, double null_val)
+static void make_gmt_header(struct GRD_HEADER *header, const char *name,
+                            const char *outfile, const struct Cell_head *region,
+                            double null_val)
 {
     struct FPRange range;
     DCELL z_min, z_max;
@@ -91,7 +91,7 @@ static void make_gmt_header(struct GRD_HEADER *header,
 
     header->nx = region->cols;
     header->ny = region->rows;
-    header->node_offset = 1;    /* 1 is pixel registration */
+    header->node_offset = 1; /* 1 is pixel registration */
     header->x_min = region->west;
     header->x_max = region->east;
     header->y_min = region->south;
@@ -114,13 +114,12 @@ static void make_gmt_header(struct GRD_HEADER *header,
 
     strcpy(header->z_units, "elevation");
     strcpy(header->title, name);
-    sprintf(header->command, "r.out.bin -h input=%s output=%s", name,
-            outfile);
+    sprintf(header->command, "r.out.bin -h input=%s output=%s", name, outfile);
     sprintf(header->remark, "%g used for NULL", null_val);
 }
 
 static void write_gmt_header(const struct GRD_HEADER *header, int swap_flag,
-                             FILE * fp)
+                             FILE *fp)
 {
     /* Write Values 1 at a time if byteswapping */
     write_int(fp, swap_flag, header->nx);
@@ -221,16 +220,14 @@ static void convert_cell(unsigned char *out_cell, const DCELL in_cell,
     }
 }
 
-static void convert_row(unsigned char *out_buf, const DCELL * raster,
-                        int ncols, int is_fp, int bytes, int swap_flag,
-                        double null_val)
+static void convert_row(unsigned char *out_buf, const DCELL *raster, int ncols,
+                        int is_fp, int bytes, int swap_flag, double null_val)
 {
     unsigned char *ptr = out_buf;
     int i;
 
     for (i = 0; i < ncols; i++) {
-        DCELL x = Rast_is_d_null_value(&raster[i])
-            ? null_val : raster[i];
+        DCELL x = Rast_is_d_null_value(&raster[i]) ? null_val : raster[i];
 
         convert_cell(ptr, x, is_fp, bytes, swap_flag);
         ptr += bytes;
@@ -263,16 +260,14 @@ static void write_bil_wld(const char *outfile, const struct Cell_head *region)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input;
         struct Option *output;
         struct Option *null;
         struct Option *bytes;
         struct Option *order;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *int_out;
         struct Flag *float_out;
         struct Flag *gmt_hd;
@@ -384,18 +379,18 @@ int main(int argc, char *argv[])
     else if (G_strcasecmp(parm.order->answer, "little") == 0)
         order = 1;
     else if (G_strcasecmp(parm.order->answer, "native") == 0)
-        order = G_is_little_endian()? 1 : 0;
+        order = G_is_little_endian() ? 1 : 0;
     else if (G_strcasecmp(parm.order->answer, "swap") == 0)
-        order = G_is_little_endian()? 0 : 1;
+        order = G_is_little_endian() ? 0 : 1;
 
     if (flag.swap->answer) {
         if (strcmp(parm.order->answer, "native") != 0)
             G_fatal_error(_("-%c and %s= are mutually exclusive"),
                           flag.swap->key, parm.order->key);
-        order = G_is_little_endian()? 0 : 1;
+        order = G_is_little_endian() ? 0 : 1;
     }
 
-    swap_flag = order == (G_is_little_endian()? 0 : 1);
+    swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
     do_stdout = strcmp("-", outfile) == 0;
 
@@ -447,8 +442,8 @@ int main(int argc, char *argv[])
     /* Write out BIL support files compatible with Arc-View */
     if (flag.bil_hd->answer) {
         G_message(_("Creating BIL support files..."));
-        write_bil_hdr(outfile, &region,
-                      bytes, order, flag.gmt_hd->answer, null_val);
+        write_bil_hdr(outfile, &region, bytes, order, flag.gmt_hd->answer,
+                      null_val);
         write_bil_wld(outfile, &region);
     }
 
@@ -488,14 +483,13 @@ int main(int argc, char *argv[])
 
         Rast_get_d_row(fd, in_buf, row);
 
-        convert_row(out_buf, in_buf, ncols, is_fp, bytes, swap_flag,
-                    null_val);
+        convert_row(out_buf, in_buf, ncols, is_fp, bytes, swap_flag, null_val);
 
         if (fwrite(out_buf, bytes, ncols, fp) != ncols)
             G_fatal_error(_("Error writing data"));
     }
 
-    G_percent(row, nrows, 2);   /* finish it off */
+    G_percent(row, nrows, 2); /* finish it off */
 
     Rast_close(fd);
     fclose(fp);

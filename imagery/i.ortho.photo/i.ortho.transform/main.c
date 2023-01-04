@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.ortho.transform   (cloned from m.transform nee g.transform)
@@ -6,7 +5,7 @@
  *               Glynn Clements
  *               Hamish Bowman
  *               Markus Metz
- * PURPOSE:      Utility to compute transformation based upon GCPs and 
+ * PURPOSE:      Utility to compute transformation based upon GCPs and
  *               output error measurements
  * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
  *
@@ -28,14 +27,12 @@
 #include <grass/glocale.h>
 #include "orthophoto.h"
 
-struct Max
-{
+struct Max {
     int idx;
     double val;
 };
 
-struct Stats
-{
+struct Stats {
     struct Max x, y, g;
     double sum2, rms;
 };
@@ -57,7 +54,7 @@ static int count;
 static struct Stats fwd, rev;
 
 /* target fns taken from i.ortho.rectify */
-static int which_env = -1;      /* 0 = cur, 1 = target */
+static int which_env = -1; /* 0 = cur, 1 = target */
 
 int select_current_env(void)
 {
@@ -113,15 +110,14 @@ static int get_target(void)
         select_current_env();
         return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset,
-            location);
+    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
-  error:
+error:
     strcat(buf, "\n");
     strcat(buf, _("Please run i.target for group "));
     strcat(buf, group.name);
     G_fatal_error("%s", buf);
-    return 1;                   /* never reached */
+    return 1; /* never reached */
 }
 
 static void update_max(struct Max *m, int n, double k)
@@ -154,9 +150,8 @@ static void compute_transformation(void)
     struct Ortho_Control_Points temp_points;
 
     /* compute photo <-> image equations */
-    group.ref_equation_stat = I_compute_ref_equations(&group.photo_points,
-                                                      group.E12, group.N12,
-                                                      group.E21, group.N21);
+    group.ref_equation_stat = I_compute_ref_equations(
+        &group.photo_points, group.E12, group.N12, group.E21, group.N21);
 
     if (group.ref_equation_stat <= 0)
         G_fatal_error(_("Error conducting transform (%d)"),
@@ -189,16 +184,10 @@ static void compute_transformation(void)
         I_new_con_point(&temp_points, e0, n0, z1, e2, n2, z2, status);
     }
 
-
-    group.con_equation_stat = I_compute_ortho_equations(&temp_points,
-                                                        &group.camera_ref,
-                                                        &group.camera_exp,
-                                                        &group.XC, &group.YC,
-                                                        &group.ZC,
-                                                        &group.omega,
-                                                        &group.phi,
-                                                        &group.kappa,
-                                                        &group.M, &group.MI);
+    group.con_equation_stat = I_compute_ortho_equations(
+        &temp_points, &group.camera_ref, &group.camera_exp, &group.XC,
+        &group.YC, &group.ZC, &group.omega, &group.phi, &group.kappa, &group.M,
+        &group.MI);
 
     if (group.con_equation_stat <= 0)
         G_fatal_error(_("Error conducting transform (%d)"),
@@ -227,8 +216,8 @@ static void compute_transformation(void)
 
             /* photo coordinates ex1, nx1 to target coordinates e1, n1 */
             I_inverse_ortho_ref(etmp, ntmp, points->z1[n], &e2, &n2, &z2,
-                                &group.camera_ref,
-                                group.XC, group.YC, group.ZC, group.MI);
+                                &group.camera_ref, group.XC, group.YC, group.ZC,
+                                group.MI);
 
             fx = fabs(e2 - points->e2[n]);
             fy = fabs(n2 - points->n2[n]);
@@ -244,9 +233,9 @@ static void compute_transformation(void)
             /* target -> photo -> image */
 
             /* target coordinates e1, n1 to photo coordinates ex1, nx1 */
-            I_ortho_ref(points->e2[n], points->n2[n], points->z2[n],
-                        &etmp, &ntmp, &z2, &group.camera_ref,
-                        group.XC, group.YC, group.ZC, group.M);
+            I_ortho_ref(points->e2[n], points->n2[n], points->z2[n], &etmp,
+                        &ntmp, &z2, &group.camera_ref, group.XC, group.YC,
+                        group.ZC, group.M);
 
             /* photo coordinates ex1, nx1 to image coordinates ex, nx */
             I_georef(etmp, ntmp, &e1, &n1, group.E21, group.N21, 1);
@@ -474,16 +463,14 @@ int main(int argc, char **argv)
     fmt->multiple = YES;
     fmt->options = "idx,src,dst,fwd,rev,fxy,rxy,fd,rd";
     desc = NULL;
-    G_asprintf(&desc,
-               "idx;%s;src;%s;dst;%s;fwd;%s;rev;%s;fxy;%s;rxy;%s;fd;%s;rd;%s",
-               _("point index"),
-               _("source coordinates"),
-               _("destination coordinates"),
-               _("forward coordinates (destination)"),
-               _("reverse coordinates (source)"),
-               _("forward coordinates difference (destination)"),
-               _("reverse coordinates difference (source)"),
-               _("forward error (destination)"), _("reverse error (source)"));
+    G_asprintf(
+        &desc, "idx;%s;src;%s;dst;%s;fwd;%s;rev;%s;fxy;%s;rxy;%s;fd;%s;rd;%s",
+        _("point index"), _("source coordinates"), _("destination coordinates"),
+        _("forward coordinates (destination)"),
+        _("reverse coordinates (source)"),
+        _("forward coordinates difference (destination)"),
+        _("reverse coordinates difference (source)"),
+        _("forward error (destination)"), _("reverse error (source)"));
     fmt->descriptions = desc;
     fmt->answer = "fd,rd";
     fmt->description = _("Output format");
@@ -495,8 +482,8 @@ int main(int argc, char **argv)
     xfm_pts = G_define_standard_option(G_OPT_F_INPUT);
     xfm_pts->key = "coords";
     xfm_pts->required = NO;
-    xfm_pts->label =
-        _("File containing coordinates to transform (\"-\" to read from stdin)");
+    xfm_pts->label = _(
+        "File containing coordinates to transform (\"-\" to read from stdin)");
     xfm_pts->description =
         _("Local x,y,z coordinates to target east,north,height");
 
@@ -516,7 +503,6 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     G_strip(grp->answer);
     strcpy(group.name, grp->answer);
@@ -549,8 +535,9 @@ int main(int argc, char **argv)
     /* get initial camera exposure station, if any */
     if (I_find_initial(group.name)) {
         if (!I_get_init_info(group.name, &group.camera_exp))
-            G_warning(_("Bad format in initial exposure station file for group <%s>"),
-                      group.name);
+            G_warning(
+                _("Bad format in initial exposure station file for group <%s>"),
+                group.name);
     }
 
     /* get the target */

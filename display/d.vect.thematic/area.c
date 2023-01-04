@@ -1,6 +1,7 @@
 /* Author: Moritz Lennert, based on d.vect from Radim Blazek
  *
  */
+
 #include <string.h>
 #include <stdlib.h>
 #include <grass/gis.h>
@@ -13,7 +14,7 @@
 #include "local_proto.h"
 
 int dareatheme(struct Map_info *Map, struct cat_list *Clist,
-               dbCatValArray * cvarr, double *breaks, int nbreaks,
+               dbCatValArray *cvarr, double *breaks, int nbreaks,
                const struct color_rgb *colors, const struct color_rgb *bcolor,
                int chcat, struct Cell_head *window, int default_width)
 {
@@ -34,7 +35,6 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 
     num = Vect_get_num_areas(Map);
     G_debug(2, "n_areas = %d", num);
-
 
     for (area = 1; area <= num; area++) {
         int i;
@@ -58,7 +58,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
             }
         }
 
-        if (chcat) {            /* check category: where_opt used */
+        if (chcat) { /* check category: where_opt used */
             int found = 0;
 
             centroid = Vect_get_area_centroid(Map, area);
@@ -79,7 +79,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
             }
             if (!found)
                 continue;
-        }                       /* end if chcat */
+        } /* end if chcat */
         else if (Clist->field > 0) {
             int found = 0;
 
@@ -116,12 +116,13 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
             isle = Vect_get_area_isle(Map, area, i);
             Vect_get_isle_points(Map, isle, IPoints);
             Vect_append_points(Points, IPoints, GV_FORWARD);
-            Vect_append_point(Points, xl, yl, 0.0);     /* ??? */
+            Vect_append_point(Points, xl, yl, 0.0); /* ??? */
         }
 
-        cat = Vect_get_area_cat(Map, area,
-                                (Clist->field > 0 ? Clist->field :
-                                 (Cats->n_cats > 0 ? Cats->field[0] : 1)));
+        cat = Vect_get_area_cat(
+            Map, area,
+            (Clist->field > 0 ? Clist->field
+                              : (Cats->n_cats > 0 ? Cats->field[0] : 1)));
 
         if (!Vect_get_area_centroid(Map, area) && cat == -1) {
             continue;
@@ -135,7 +136,6 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
             /* Get value of data for this area */
             if (db_CatValArray_get_value(cvarr, cat, &cv) != DB_OK) {
                 G_debug(3, "No value found for cat %i", cat);
-
             }
             else {
                 breakval =
@@ -147,8 +147,6 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
         i = 0;
         while (breakval > breaks[i] && i < nbreaks)
             i++;
-
-
 
         /* plot polygon in class color */
         D_RGB_color(colors[i].r, colors[i].g, colors[i].b);
@@ -169,7 +167,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
                 D_polyline_abs(Points->x, Points->y, Points->n_points);
             }
         }
-    }                           /* end for loop over areas */
+    } /* end for loop over areas */
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(IPoints);

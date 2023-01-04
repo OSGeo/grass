@@ -164,7 +164,7 @@ int dig__fread_port_F(float *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fread_port_O(off_t * buf, size_t cnt, struct gvfile *fp,
+int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
                       size_t port_off_t_size)
 {
     unsigned int i, j;
@@ -534,7 +534,7 @@ int dig__fread_port_C(char *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fread_port_P(plus_t * buf, size_t cnt, struct gvfile *fp)
+int dig__fread_port_P(plus_t *buf, size_t cnt, struct gvfile *fp)
 {
     int *ibuf;
 
@@ -633,8 +633,8 @@ int dig__fwrite_port_F(const float *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fwrite_port_O(const off_t * buf,
-                       size_t cnt, struct gvfile *fp, size_t port_off_t_size)
+int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
+                       size_t port_off_t_size)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
@@ -852,7 +852,6 @@ int dig__fwrite_port_S(const short *buf, size_t cnt, struct gvfile *fp)
     return 0;
 }
 
-
 /*!
    \brief Write plus_t to the Portable Vector Format
 
@@ -866,7 +865,7 @@ int dig__fwrite_port_S(const short *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fwrite_port_P(const plus_t * buf, size_t cnt, struct gvfile *fp)
+int dig__fwrite_port_P(const plus_t *buf, size_t cnt, struct gvfile *fp)
 {
     return (dig__fwrite_port_I((int *)buf, cnt, fp));
 }

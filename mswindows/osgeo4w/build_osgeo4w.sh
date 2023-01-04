@@ -1,8 +1,6 @@
 #!/bin/sh
 
 #
-# Usage: build_osgeo4w.sh
-#
 # The following environment variables are supposed to be passed to the build script
 # - SRC: the directory where the grass source code lives
 # - OSGEO4W_ROOT_MSYS: the root directory of OSGeo4W
@@ -11,12 +9,6 @@
 # By default, the script will look for the source code in the current directory
 # and create bin.x86_64-w64-mingw32\grass$ver.bat (run this batch file to start
 # GRASS GIS) and dist.x86_64-w64-mingw32\etc\env.bat.
-#
-# -p	optionally install GRASS GIS to C:\OSGeo4W\opt\grass (run
-#	C:\OSGeo4W64\opt\grass\grass$ver.bat) and create an unzippable package
-#	grass$ver-x86_64-w64-mingw32-osgeo4w64-$date.zip
-#
-# path	specify a path to the source code
 #
 
 # stop on errors
@@ -111,12 +103,12 @@ dist_esc="$src_esc\\\\$dist"
 
 set PATH=%PATH%;C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin
 
-if not exist %GISBASE%\etc\fontcap (
+if not exist %GISBASE%\\etc\\fontcap (
 	pushd .
 	%~d0
-	cd %GISBASE%\lib
+	cd %GISBASE%\\lib
 	set GISRC=dummy
-	%GISBASE%\bin\g.mkfontcap.exe
+	%GISBASE%\\bin\\g.mkfontcap.exe
 	popd
 )
 EOT
@@ -154,12 +146,12 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
 
 set PATH=%OSGEO4W_ROOT%\\bin${msys_path};%PATH%;$bash_exe_path
 
-if not exist %GISBASE%\etc\fontcap (
+if not exist %GISBASE%\\etc\\fontcap (
 	pushd .
 	%~d0
-	cd %GISBASE%\lib
+	cd %GISBASE%\\lib
 	set GISRC=dummy
-	%GISBASE%\bin\g.mkfontcap.exe
+	%GISBASE%\\bin\\g.mkfontcap.exe
 	popd
 )
 EOT

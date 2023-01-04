@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.resample
  * AUTHOR(S):    Michael Shapiro (original CERL contributor),
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      resamples the data values in a user-specified raster
  *               input map layer
@@ -19,6 +18,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -43,8 +43,7 @@ int main(int argc, char *argv[])
     int infd, outfd;
     RASTER_MAP_TYPE data_type, out_type;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output;
     } option;
 
@@ -137,10 +136,8 @@ int main(int argc, char *argv[])
         rast2 = G_incr_void_ptr(rast, Rast_cell_size(data_type));
 
         G_message(_("Creating new cats file..."));
-        while (Rast_get_next_marked_cat(&cats,
-                                        rast1, rast2, &count, data_type))
-            Rast_set_cat(rast1, rast2,
-                         Rast_get_cat(rast1, &cats, data_type),
+        while (Rast_get_next_marked_cat(&cats, rast1, rast2, &count, data_type))
+            Rast_set_cat(rast1, rast2, Rast_get_cat(rast1, &cats, data_type),
                          &newcats, data_type);
 
         Rast_write_cats(result, &newcats);

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       g.rename
@@ -73,8 +72,7 @@ int main(int argc, char *argv[])
             old = parm[n]->answers[i++];
             new = parm[n]->answers[i++];
             if (!M_find(n, old, mapset)) {
-                G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc,
-                          old);
+                G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc, old);
                 continue;
             }
             if (M_find(n, new, mapset) && !(module->overwrite)) {
@@ -87,9 +85,11 @@ int main(int argc, char *argv[])
                 continue;
             }
             if (G_strcasecmp(old, new) == 0) {
-                /* avoid problems on case-insensitive file systems (FAT, NTFS, ...) */
-                G_warning(_("%s=%s,%s: files could be the same, no rename possible"),
-                          parm[n]->key, old, new);
+                /* avoid problems on case-insensitive file systems (FAT, NTFS,
+                 * ...) */
+                G_warning(
+                    _("%s=%s,%s: files could be the same, no rename possible"),
+                    parm[n]->key, old, new);
                 continue;
             }
 
@@ -190,7 +190,8 @@ void update_base_map(const char *old, const char *new, const char *mapset)
 
     if (!found) {
         G_fatal_error(_("Unable to find reclass information for <%s> in "
-                        "base map <%s@%s>"), xold, bname, bmapset);
+                        "base map <%s@%s>"),
+                      xold, bname, bmapset);
     }
 
     G_message(_("Updating base map <%s@%s>"), bname, bmapset);
@@ -199,8 +200,8 @@ void update_base_map(const char *old, const char *new, const char *mapset)
 
     fp = fopen(rpath, "w");
     if (fp == NULL) {
-        G_fatal_error(_("Unable to update dependency file in <%s@%s>"),
-                      bname, bmapset);
+        G_fatal_error(_("Unable to update dependency file in <%s@%s>"), bname,
+                      bmapset);
     }
 
     xnew = G_fully_qualified_name(new, mapset);

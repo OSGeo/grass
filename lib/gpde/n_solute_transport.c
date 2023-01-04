@@ -1,20 +1,19 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      solute transport in porous media
-* 		part of the gpde library
-*
-* COPYRIGHT:    (C) 2007 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      solute transport in porous media
+ *                 part of the gpde library
+ *
+ * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <math.h>
 #include <grass/N_solute_transport.h>
@@ -25,9 +24,8 @@
 /*! \brief This is just a placeholder
  *
  * */
-N_data_star *N_callback_solute_transport_3d(void *solutedata,
-                                            N_geom_data * geom, int col,
-                                            int row, int depth)
+N_data_star *N_callback_solute_transport_3d(void *solutedata, N_geom_data *geom,
+                                            int col, int row, int depth)
 {
     double Df_e = 0, Df_w = 0, Df_n = 0, Df_s = 0, Df_t = 0, Df_b = 0;
     double dx, dy, dz, Az;
@@ -48,7 +46,7 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
     N_gradient_3d grad;
 
     /*cast the void pointer to the right data structure */
-    data = (N_solute_transport_data3d *) solutedata;
+    data = (N_solute_transport_data3d *)solutedata;
 
     N_get_gradient_3d(data->grad, &grad, col, row, depth);
 
@@ -107,17 +105,17 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
     rt = N_exp_upwinding(vt, dz, Dn);
 
     /*mass balance center cell to western cell */
-    W = -1 * (Dw) * dy * dz - vw * (1 - rw) * dy * dz;
+    W = -1 * (Dw)*dy * dz - vw * (1 - rw) * dy * dz;
     /*mass balance center cell to eastern cell */
-    E = -1 * (De) * dy * dz + ve * (1 - re) * dy * dz;
+    E = -1 * (De)*dy * dz + ve * (1 - re) * dy * dz;
     /*mass balance center cell to southern cell */
-    S = -1 * (Ds) * dx * dz - vs * (1 - rs) * dx * dz;
+    S = -1 * (Ds)*dx * dz - vs * (1 - rs) * dx * dz;
     /*mass balance center cell to northern cell */
-    N = -1 * (Dn) * dx * dz + vn * (1 - rn) * dx * dz;
+    N = -1 * (Dn)*dx * dz + vn * (1 - rn) * dx * dz;
     /*mass balance center cell to bottom cell */
-    B = -1 * (Db) * Az - vb * (1 - rb) * Az;
+    B = -1 * (Db)*Az - vb * (1 - rb) * Az;
     /*mass balance center cell to top cell */
-    T = -1 * (Dt) * Az + vt * (1 - rt) * Az;
+    T = -1 * (Dt)*Az + vt * (1 - rt) * Az;
 
     /* Retardation */
     R = N_get_array_3d_d_value(data->R, col, row, depth);
@@ -131,11 +129,9 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
     cin = N_get_array_3d_d_value(data->cin, col, row, depth);
 
     /*the diagonal entry of the matrix */
-    C = ((Dw - vw) * dy * dz +
-         (De + ve) * dy * dz +
-         (Ds - vs) * dx * dz +
-         (Dn + vn) * dx * dz +
-         (Db - vb) * Az + (Dt + vt) * Az + Az * dz * R / data->dt - q / nf);
+    C = ((Dw - vw) * dy * dz + (De + ve) * dy * dz + (Ds - vs) * dx * dz +
+         (Dn + vn) * dx * dz + (Db - vb) * Az + (Dt + vt) * Az +
+         Az * dz * R / data->dt - q / nf);
 
     /*the entry in the right side b of Ax = b */
     V = (cs + cg_start * Az * dz * R / data->dt - q / nf * cin);
@@ -152,8 +148,8 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
      * printf("R %g\n", R);
      * printf("dt %g\n", data->dt);
      */
-    G_debug(6, "N_callback_solute_transport_3d: called [%i][%i][%i]", row,
-            col, depth);
+    G_debug(6, "N_callback_solute_transport_3d: called [%i][%i][%i]", row, col,
+            depth);
 
     /*create the 7 point star entries */
     mat_pos = N_create_7star(C, W, E, N, S, T, B, V);
@@ -169,21 +165,20 @@ N_data_star *N_callback_solute_transport_3d(void *solutedata,
  *
  * The mass balance is based on the common solute transport equation:
  *
- * \f[\frac{\partial c_g}{\partial t} R = \nabla \cdot ({\bf D} \nabla c_g - {\bf u} c_g) + \sigma + \frac{q}{n_f}(c_g - c_in) \f]
+ * \f[\frac{\partial c_g}{\partial t} R = \nabla \cdot ({\bf D} \nabla c_g -
+ * {\bf u} c_g) + \sigma + \frac{q}{n_f}(c_g - c_in) \f]
  *
- * This equation is discretizised with the finite volume method in two dimensions.
+ * This equation is discretizised with the finite volume method in two
+ * dimensions.
  *
  *
- * \param solutedata  * N_solute_transport_data2d - a void pointer to the data structure
- * \param geom N_geom_data *
- * \param col   int
- * \param row   int
- * \return N_data_star * - a five point data star
+ * \param solutedata  * N_solute_transport_data2d - a void pointer to the data
+ * structure \param geom N_geom_data * \param col   int \param row   int \return
+ * N_data_star * - a five point data star
  *
  * */
-N_data_star *N_callback_solute_transport_2d(void *solutedata,
-                                            N_geom_data * geom, int col,
-                                            int row)
+N_data_star *N_callback_solute_transport_2d(void *solutedata, N_geom_data *geom,
+                                            int col, int row)
 {
     double Df_e = 0, Df_w = 0, Df_n = 0, Df_s = 0;
     double z_e = 0, z_w = 0, z_n = 0, z_s = 0;
@@ -210,7 +205,7 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
     N_gradient_2d grad;
 
     /*cast the void pointer to the right data structure */
-    data = (N_solute_transport_data2d *) solutedata;
+    data = (N_solute_transport_data2d *)solutedata;
 
     N_get_gradient_2d(data->grad, &grad, col, row);
 
@@ -223,25 +218,16 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
     /* cg = N_get_array_2d_d_value(data->c, col, row); */
 
     /* calculate the cell height */
-    z = N_get_array_2d_d_value(data->top, col,
-                               row) -
+    z = N_get_array_2d_d_value(data->top, col, row) -
         N_get_array_2d_d_value(data->bottom, col, row);
-    z_xw =
-        N_get_array_2d_d_value(data->top, col - 1,
-                               row) -
-        N_get_array_2d_d_value(data->bottom, col - 1, row);
-    z_xe =
-        N_get_array_2d_d_value(data->top, col + 1,
-                               row) -
-        N_get_array_2d_d_value(data->bottom, col + 1, row);
-    z_yn =
-        N_get_array_2d_d_value(data->top, col,
-                               row - 1) -
-        N_get_array_2d_d_value(data->bottom, col, row - 1);
-    z_ys =
-        N_get_array_2d_d_value(data->top, col,
-                               row + 1) -
-        N_get_array_2d_d_value(data->bottom, col, row + 1);
+    z_xw = N_get_array_2d_d_value(data->top, col - 1, row) -
+           N_get_array_2d_d_value(data->bottom, col - 1, row);
+    z_xe = N_get_array_2d_d_value(data->top, col + 1, row) -
+           N_get_array_2d_d_value(data->bottom, col + 1, row);
+    z_yn = N_get_array_2d_d_value(data->top, col, row - 1) -
+           N_get_array_2d_d_value(data->bottom, col, row - 1);
+    z_ys = N_get_array_2d_d_value(data->top, col, row + 1) -
+           N_get_array_2d_d_value(data->bottom, col, row + 1);
 
     /*geometrical mean of cell height */
     z_w = N_calc_geom_mean(z_xw, z);
@@ -327,13 +313,13 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
     }
 
     /*mass balance center cell to western cell */
-    W = -1 * (Dw) * dy * z_w + vw * (1 - rw) * dy * z_w;
+    W = -1 * (Dw)*dy * z_w + vw * (1 - rw) * dy * z_w;
     /*mass balance center cell to eastern cell */
-    E = -1 * (De) * dy * z_e + ve * (1 - re) * dy * z_e;
+    E = -1 * (De)*dy * z_e + ve * (1 - re) * dy * z_e;
     /*mass balance center cell to southern cell */
-    S = -1 * (Ds) * dx * z_s + vs * (1 - rs) * dx * z_s;
+    S = -1 * (Ds)*dx * z_s + vs * (1 - rs) * dx * z_s;
     /*mass balance center cell to northern cell */
-    N = -1 * (Dn) * dx * z_n + vn * (1 - rn) * dx * z_n;
+    N = -1 * (Dn)*dx * z_n + vn * (1 - rn) * dx * z_n;
 
     NW = 0.0;
     SW = 0.0;
@@ -352,10 +338,9 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
     cin = N_get_array_2d_d_value(data->cin, col, row);
 
     /*the diagonal entry of the matrix */
-    C = (Dw + vw * rw) * dy * z_w +
-        (De + ve * re) * dy * z_e +
-        (Ds + vs * rs) * dx * z_s +
-        (Dn + vn * rn) * dx * z_n + Az * z * R / data->dt - q / nf;
+    C = (Dw + vw * rw) * dy * z_w + (De + ve * re) * dy * z_e +
+        (Ds + vs * rs) * dx * z_s + (Dn + vn * rn) * dx * z_n +
+        Az * z * R / data->dt - q / nf;
 
     /*the entry in the right side b of Ax = b */
     V = (cs + cg_start * Az * z * R / data->dt + q / nf * cin);
@@ -385,13 +370,15 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata,
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
- * \brief Alllocate memory for the solute transport data structure in three dimensions
+ * \brief Alllocate memory for the solute transport data structure in three
+ * dimensions
  *
  * The solute transport data structure will be allocated including
  * all appendant 3d arrays. The offset for the 3d arrays is one
- * to establish homogeneous Neumann boundary conditions at the calculation area border.
- * This data structure is used to create a linear equation system based on the computation of
- * solute transport in porous media with the finite volume method.
+ * to establish homogeneous Neumann boundary conditions at the calculation area
+ * border. This data structure is used to create a linear equation system based
+ * on the computation of solute transport in porous media with the finite volume
+ * method.
  *
  * \param cols   int
  * \param rows   int
@@ -404,10 +391,8 @@ N_solute_transport_data3d *N_alloc_solute_transport_data3d(int cols, int rows,
 {
     N_solute_transport_data3d *data = NULL;
 
-    data =
-        (N_solute_transport_data3d *) G_calloc(1,
-                                               sizeof
-                                               (N_solute_transport_data3d));
+    data = (N_solute_transport_data3d *)G_calloc(
+        1, sizeof(N_solute_transport_data3d));
 
     data->c = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     data->c_start = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
@@ -429,7 +414,6 @@ N_solute_transport_data3d *N_alloc_solute_transport_data3d(int cols, int rows,
     data->disp_xz = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     data->disp_yz = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
 
-
     data->grad = N_alloc_gradient_field_3d(cols, rows, depths);
     data->stab = N_UPWIND_EXP;
 
@@ -440,28 +424,27 @@ N_solute_transport_data3d *N_alloc_solute_transport_data3d(int cols, int rows,
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
- * \brief Alllocate memory for the solute transport data structure in two dimensions
+ * \brief Alllocate memory for the solute transport data structure in two
+ * dimensions
  *
  * The solute transport data structure will be allocated including
  * all appendant 2d arrays. The offset for the 2d arrays is one
- * to establish homogeneous Neumann boundary conditions at the calculation area border.
- * This data structure is used to create a linear equation system based on the computation of
- * solute transport in porous media with the finite volume method.
+ * to establish homogeneous Neumann boundary conditions at the calculation area
+ * border. This data structure is used to create a linear equation system based
+ * on the computation of solute transport in porous media with the finite volume
+ * method.
  *
  * \param cols   int
  * \param rows   int
  * \return N_solute_transport_data2d *
  * */
 
-
 N_solute_transport_data2d *N_alloc_solute_transport_data2d(int cols, int rows)
 {
     N_solute_transport_data2d *data = NULL;
 
-    data =
-        (N_solute_transport_data2d *) G_calloc(1,
-                                               sizeof
-                                               (N_solute_transport_data2d));
+    data = (N_solute_transport_data2d *)G_calloc(
+        1, sizeof(N_solute_transport_data2d));
 
     data->c = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
     data->c_start = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
@@ -491,12 +474,13 @@ N_solute_transport_data2d *N_alloc_solute_transport_data2d(int cols, int rows)
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
- * \brief Release the memory of the solute transport data structure in three dimensions
+ * \brief Release the memory of the solute transport data structure in three
+ * dimensions
  *
  * \param data N_solute_transport_data2d *
  * \return void *
  * */
-void N_free_solute_transport_data3d(N_solute_transport_data3d * data)
+void N_free_solute_transport_data3d(N_solute_transport_data3d *data)
 {
     N_free_array_3d(data->c);
     N_free_array_3d(data->c_start);
@@ -528,12 +512,13 @@ void N_free_solute_transport_data3d(N_solute_transport_data3d * data)
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
- * \brief Release the memory of the solute transport data structure in two dimensions
+ * \brief Release the memory of the solute transport data structure in two
+ * dimensions
  *
  * \param data N_solute_transport_data2d *
  * \return void *
  * */
-void N_free_solute_transport_data2d(N_solute_transport_data2d * data)
+void N_free_solute_transport_data2d(N_solute_transport_data2d *data)
 {
     N_free_array_2d(data->c);
     N_free_array_2d(data->c_start);
@@ -566,16 +551,16 @@ void N_free_solute_transport_data2d(N_solute_transport_data2d * data)
  * for each cell with status N_CELL_TRANSMISSION. The surrounding
  * gradient field is used to verfiy the flow direction. If a flow
  * goes into a cell, the concentration (data->c) from the neighbour cell is
- * added to the transmission cell. If the flow from several neighbour 
+ * added to the transmission cell. If the flow from several neighbour
  * cells goes into the cell, the concentration mean is calculated.
- * 
+ *
  * The new concentrations are written into the data->c_start array,
  * so they can be handled by the matrix assembling function.
  *
  * \param data N_solute_transport_data2d *
  * \return void *
  * */
-void N_calc_solute_transport_transmission_2d(N_solute_transport_data2d * data)
+void N_calc_solute_transport_transmission_2d(N_solute_transport_data2d *data)
 {
     int i, j, count = 1;
     int cols, rows;
@@ -585,8 +570,8 @@ void N_calc_solute_transport_transmission_2d(N_solute_transport_data2d * data)
     cols = data->grad->cols;
     rows = data->grad->rows;
 
-    G_debug(2,
-            "N_calc_solute_transport_transmission_2d: calculating transmission boundary");
+    G_debug(2, "N_calc_solute_transport_transmission_2d: calculating "
+               "transmission boundary");
 
     for (j = 0; j < rows; j++) {
         for (i = 0; i < cols; i++) {
@@ -635,20 +620,21 @@ void N_calc_solute_transport_transmission_2d(N_solute_transport_data2d * data)
 }
 
 /*!
- * \brief Compute the dispersivity tensor based on the solute transport data in 2d
+ * \brief Compute the dispersivity tensor based on the solute transport data in
+ * 2d
  *
  * The dispersivity tensor is stored in the data structure.
- * To compute the dispersivity tensor, the dispersivity lentghs and the gradient field
- * must be present.
+ * To compute the dispersivity tensor, the dispersivity lentghs and the gradient
+ * field must be present.
  *
  * This is just a simple tensor computation which should be extended.
  *
- * \todo Change the tensor calculation to a mor realistic algorithm 
+ * \todo Change the tensor calculation to a mor realistic algorithm
  *
  * \param data N_solute_transport_data2d *
  * \return void *
  * */
-void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d * data)
+void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d *data)
 {
     int i, j;
     int cols, rows;
@@ -659,8 +645,8 @@ void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d * data)
     cols = data->grad->cols;
     rows = data->grad->rows;
 
-    G_debug(2,
-            "N_calc_solute_transport_disptensor_2d: calculating the dispersivity tensor");
+    G_debug(2, "N_calc_solute_transport_disptensor_2d: calculating the "
+               "dispersivity tensor");
 
     for (j = 0; j < rows; j++) {
         for (i = 0; i < cols; i++) {
@@ -682,7 +668,8 @@ void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d * data)
             }
 
             G_debug(5,
-                    "N_calc_solute_transport_disptensor_2d: [%i][%i] disp_xx %g disp_yy %g disp_xy %g",
+                    "N_calc_solute_transport_disptensor_2d: [%i][%i] disp_xx "
+                    "%g disp_yy %g disp_xy %g",
                     i, j, disp_xx, disp_yy, disp_xy);
             N_put_array_2d_d_value(data->disp_xx, i, j, disp_xx);
             N_put_array_2d_d_value(data->disp_yy, i, j, disp_yy);
@@ -694,20 +681,21 @@ void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d * data)
 }
 
 /*!
- * \brief Compute the dispersivity tensor based on the solute transport data in 3d
+ * \brief Compute the dispersivity tensor based on the solute transport data in
+ * 3d
  *
  * The dispersivity tensor is stored in the data structure.
- * To compute the dispersivity tensor, the dispersivity lentghs and the gradient field
- * must be present.
- * 
+ * To compute the dispersivity tensor, the dispersivity lentghs and the gradient
+ * field must be present.
+ *
  * This is just a simple tensor computation which should be extended.
  *
- * \todo Change the tensor calculation to a mor realistic algorithm 
+ * \todo Change the tensor calculation to a mor realistic algorithm
  *
  * \param data N_solute_transport_data3d *
  * \return void *
  * */
-void N_calc_solute_transport_disptensor_3d(N_solute_transport_data3d * data)
+void N_calc_solute_transport_disptensor_3d(N_solute_transport_data3d *data)
 {
     int i, j, k;
     int cols, rows, depths;
@@ -719,8 +707,8 @@ void N_calc_solute_transport_disptensor_3d(N_solute_transport_data3d * data)
     rows = data->grad->rows;
     depths = data->grad->depths;
 
-    G_debug(2,
-            "N_calc_solute_transport_disptensor_3d: calculating the dispersivity tensor");
+    G_debug(2, "N_calc_solute_transport_disptensor_3d: calculating the "
+               "dispersivity tensor");
 
     for (k = 0; k < depths; k++) {
         for (j = 0; j < rows; j++) {
@@ -740,22 +728,21 @@ void N_calc_solute_transport_disptensor_3d(N_solute_transport_data3d * data)
                 vv = sqrt(vx * vx + vy * vy + vz * vz);
 
                 if (vv != 0) {
-                    disp_xx =
-                        data->al * vx * vx / vv + data->at * vy * vy / vv +
-                        data->at * vz * vz / vv;
-                    disp_yy =
-                        data->at * vx * vx / vv + data->al * vy * vy / vv +
-                        data->at * vz * vz / vv;
-                    disp_zz =
-                        data->at * vx * vx / vv + data->at * vy * vy / vv +
-                        data->al * vz * vz / vv;
+                    disp_xx = data->al * vx * vx / vv +
+                              data->at * vy * vy / vv + data->at * vz * vz / vv;
+                    disp_yy = data->at * vx * vx / vv +
+                              data->al * vy * vy / vv + data->at * vz * vz / vv;
+                    disp_zz = data->at * vx * vx / vv +
+                              data->at * vy * vy / vv + data->al * vz * vz / vv;
                     disp_xy = (data->al - data->at) * vx * vy / vv;
                     disp_xz = (data->al - data->at) * vx * vz / vv;
                     disp_yz = (data->al - data->at) * vy * vz / vv;
                 }
 
                 G_debug(5,
-                        "N_calc_solute_transport_disptensor_3d: [%i][%i][%i] disp_xx %g disp_yy %g disp_zz %g  disp_xy %g disp_xz %g disp_yz %g ",
+                        "N_calc_solute_transport_disptensor_3d: [%i][%i][%i] "
+                        "disp_xx %g disp_yy %g disp_zz %g  disp_xy %g disp_xz "
+                        "%g disp_yz %g ",
                         i, j, k, disp_xx, disp_yy, disp_zz, disp_xy, disp_xz,
                         disp_yz);
                 N_put_array_3d_d_value(data->disp_xx, i, j, k, disp_xx);

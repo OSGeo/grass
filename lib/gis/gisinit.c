@@ -69,7 +69,8 @@ void G__gisinit(const char *version, const char *pgm)
     if (strcmp(version, GIS_H_VERSION) != 0)
         G_fatal_error(_("Module built against version %s but "
                         "trying to use version %s. "
-                        "You need to rebuild GRASS GIS or untangle multiple installations."),
+                        "You need to rebuild GRASS GIS or untangle multiple "
+                        "installations."),
                       version, GIS_H_VERSION);
 
     /* Make sure location and mapset are set */
@@ -90,7 +91,6 @@ void G__gisinit(const char *version, const char *pgm)
     gisinit();
 }
 
-
 /*!
    \brief Initialize GIS Library
 
@@ -105,11 +105,11 @@ void G__no_gisinit(const char *version)
     if (strcmp(version, GIS_H_VERSION) != 0)
         G_fatal_error(_("Module built against version %s but "
                         "trying to use version %s. "
-                        "You need to rebuild GRASS GIS or untangle multiple installations."),
+                        "You need to rebuild GRASS GIS or untangle multiple "
+                        "installations."),
                       version, GIS_H_VERSION);
     gisinit();
 }
-
 
 /*!
    \brief Checks to see if GIS engine is initialized.
@@ -118,11 +118,11 @@ void G__check_gisinit(void)
 {
     if (initialized)
         return;
-    G_warning(_("System not initialized. Programmer forgot to call G_gisinit()."));
+    G_warning(
+        _("System not initialized. Programmer forgot to call G_gisinit()."));
     G_sleep(3);
     exit(EXIT_FAILURE);
 }
-
 
 static int gisinit(void)
 {
@@ -139,11 +139,11 @@ static int gisinit(void)
 
     zlib = getenv("GRASS_ZLIB_LEVEL");
     /* Valid zlib compression levels -1 - 9 */
-    /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6 
+    /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6
      * level 0 means no compression
-     * as used here, 1 gives the best compromise between speed and compression */
-    G__.compression_level = (zlib && *zlib &&
-                             isdigit(*zlib)) ? atoi(zlib) : 1;
+     * as used here, 1 gives the best compromise between speed and compression
+     */
+    G__.compression_level = (zlib && *zlib && isdigit(*zlib)) ? atoi(zlib) : 1;
     if (G__.compression_level < -1 || G__.compression_level > 9)
         G__.compression_level = 1;
 

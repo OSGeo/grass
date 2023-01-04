@@ -1,21 +1,21 @@
-
 /****************************************************************************
  *
  * MODULE:       test.gpde.lib
- *   	    	
- * AUTHOR(S):    Original author 
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert <at> gmx <dot> de
- * 		05 Sep 2007 Berlin
+ *                 05 Sep 2007 Berlin
  *
  * PURPOSE:      Unit and integration tests for the gmath library
  *
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -25,17 +25,15 @@
 #include "grass/gmath.h"
 
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct
-{
-    struct Option *unit, *integration, *solverbenchmark, *blasbenchmark,
-        *rows;
+typedef struct {
+    struct Option *unit, *integration, *solverbenchmark, *blasbenchmark, *rows;
     struct Flag *full, *testunit, *testint;
 } paramType;
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void);   /*Fill the paramType structure */
+static void set_params(void); /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -90,7 +88,6 @@ void set_params(void)
     param.full = G_define_flag();
     param.full->key = 'a';
     param.full->description = _("Run all unit and integration tests");
-
 }
 
 /* ************************************************************************* */
@@ -103,21 +100,18 @@ int main(int argc, char *argv[])
     int returnstat = 0, i;
     int rows = 3000;
 
-
     /* Initialize GRASS */
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description
-        =
-        _("Performs benchmarks, unit and integration tests for the gmath library");
+    module->description = _("Performs benchmarks, unit and integration tests "
+                            "for the gmath library");
 
     /* Get parameters from user */
     set_params();
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     if (param.rows->answer)
         sscanf(param.rows->answer, "%i", &rows);
@@ -130,7 +124,6 @@ int main(int argc, char *argv[])
         returnstat += unit_test_solvers();
         returnstat += unit_test_matrix_conversion();
         returnstat += unit_test_ccmath_wrapper();
-
     }
 
     /*Run the integration tests */
@@ -173,7 +166,6 @@ int main(int argc, char *argv[])
                 while (param.integration->answers[i]) {
                     ;
                 }
-
         }
     }
 

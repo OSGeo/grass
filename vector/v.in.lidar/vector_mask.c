@@ -58,9 +58,8 @@ int VectorMask_point_in(struct VectorMask *vector_mask, double x, double y)
     int i;
 
     for (i = 1; i <= vector_mask->nareas; i++) {
-        if (Vect_point_in_area
-            (x, y, vector_mask->map_info, i,
-             &vector_mask->area_bboxes[i - 1])) {
+        if (Vect_point_in_area(x, y, vector_mask->map_info, i,
+                               &vector_mask->area_bboxes[i - 1])) {
             is_out = FALSE;
             break;
         }

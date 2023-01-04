@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.viewshed
@@ -35,11 +34,11 @@
  *
  *****************************************************************************/
 
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+
 extern "C" {
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -48,9 +47,7 @@ extern "C" {
 
 #include "statusstructure.h"
 
-
 /*SMALLEST_GRADIENT is defined in rbbst.h */
-
 
 /* ------------------------------------------------------------ */
 /*find the vertical angle in degrees between the viewpoint and the
@@ -84,8 +81,6 @@ float get_vertical_angle(Viewpoint vp, StatusNode sn, surface_type elev,
         return (atan(sqrt(sn.dist2vp) / fabs(diffElev)) * (180 / M_PI));
 }
 
-
-
 /* ------------------------------------------------------------ */
 /*return an estimate of the size of active structure */
 long long get_active_str_size_bytes(GridHeader *hd)
@@ -102,7 +97,6 @@ long long get_active_str_size_bytes(GridHeader *hd)
     return sizeBytes;
 }
 
-
 /* ------------------------------------------------------------ */
 /*given a StatusNode, fill in its dist2vp and gradient */
 void calculate_dist_n_gradient(StatusNode *sn, double elev, Viewpoint *vp,
@@ -113,7 +107,9 @@ void calculate_dist_n_gradient(StatusNode *sn, double elev, Viewpoint *vp,
        //sn->dist2vp = sqrt((float) ( pow(sn->row - vp->row,2.0) +
        //               pow(sn->col - vp->col,2.0)));
        //sn->gradient = (sn->elev  - vp->elev)/(sn->dist2vp); */
+
     double diffElev = elev - vp->elev;
+
     if (G_projection() == PROJECTION_LL) {
         double dist =
             G_distance(Rast_col_to_easting(sn->col + 0.5, &(hd.window)),
@@ -153,9 +149,9 @@ void calculate_dist_n_gradient(StatusNode *sn, double elev, Viewpoint *vp,
     /*maintain sign */
     if (elev < vp->elev)
         sn->gradient[1] = -sn->gradient[1];
+
     return;
 }
-
 
 /* ------------------------------------------------------------ */
 /* calculate gradient for ENTERING or EXITING event */
@@ -167,6 +163,7 @@ void calculate_event_gradient(StatusNode *sn, int e_idx, double row, double col,
        //sn->dist2vp = sqrt((float) ( pow(sn->row - vp->row,2.0) +
        //               pow(sn->col - vp->col,2.0)));
        //sn->gradient = (sn->elev  - vp->elev)/(sn->dist2vp); */
+
     double diffElev = elev - vp->elev;
     double dist2vp;
 
@@ -208,7 +205,6 @@ void calculate_event_gradient(StatusNode *sn, int e_idx, double row, double col,
     return;
 }
 
-
 /* ------------------------------------------------------------ */
 /*create an empty  status list */
 StatusList *create_status_struct()
@@ -229,11 +225,9 @@ StatusList *create_status_struct()
     tv.key = 0;
     tv.maxGradient = SMALLEST_GRADIENT;
 
-
     sl->rbt = create_tree(tv);
     return sl;
 }
-
 
 /* ------------------------------------------------------------ */
 /*delete a status structure */
@@ -246,7 +240,6 @@ void delete_status_structure(StatusList *sl)
     return;
 }
 
-
 /* ------------------------------------------------------------ */
 /*delete the statusNode with the given key */
 void delete_from_status_struct(StatusList *sl, double dist2vp)
@@ -255,9 +248,6 @@ void delete_from_status_struct(StatusList *sl, double dist2vp)
     delete_from(sl->rbt, dist2vp);
     return;
 }
-
-
-
 
 /* ------------------------------------------------------------ */
 /*insert the element into the status structure */
@@ -278,7 +268,6 @@ void insert_into_status_struct(StatusNode sn, StatusList *sl)
 
     return;
 }
-
 
 /* ------------------------------------------------------------ */
 /*find the node with max Gradient within the distance (from viewpoint)

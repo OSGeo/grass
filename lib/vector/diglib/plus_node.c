@@ -1,4 +1,3 @@
-
 /**
  * \file plus_node.c
  *
@@ -26,24 +25,24 @@ static double dist_squared(double, double, double, double);
  *
  * Line will be negative if END node
  *
- * 'node' must of course already exist space will be alloced to add 'line' to array
+ * 'node' must of course already exist space will be alloced to add 'line' to
+ * array
  *
  * Lines are sorted in increasing angle order and
  * degenerated lines are set to -9 (ignored).
- * 
+ *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] nodeid node id
  * \param[in] lineid line id
  * \param[in] points line geometry
- * \param[in] type line type 
+ * \param[in] type line type
  *
- * \return -1 on error      
+ * \return -1 on error
  * \return 0 line not added (degenerate)
- * \return new number of lines in node 
+ * \return new number of lines in node
  */
-int
-dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
-                  const struct line_pnts *points, int type)
+int dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
+                      const struct line_pnts *points, int type)
 {
     register int i;
     float angle;
@@ -82,21 +81,21 @@ dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
 
     node->n_lines++;
 
-    G_debug(3,
-            "dig_node_add_line(): line %d added position %d n_lines: %d angle %f",
-            lineid, i, node->n_lines, angle);
+    G_debug(
+        3,
+        "dig_node_add_line(): line %d added position %d n_lines: %d angle %f",
+        lineid, i, node->n_lines, angle);
 
     return ((int)node->n_lines);
 }
 
-
 /*!
- * \brief Add new node to plus structure 
+ * \brief Add new node to plus structure
  *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] x,y,z coordinates
  *
- * \return -1 on error      
+ * \return -1 on error
  * \return number of node
  */
 int dig_add_node(struct Plus_head *plus, double x, double y, double z)
@@ -106,9 +105,9 @@ int dig_add_node(struct Plus_head *plus, double x, double y, double z)
 
     /* First look if we have space in array of pointers to nodes
      *  and reallocate if necessary */
-    G_debug(3, "dig_add_node(): n_nodes = %d, alloc_nodes = %d",
-            plus->n_nodes, plus->alloc_nodes);
-    if (plus->n_nodes >= plus->alloc_nodes) {   /* array is full */
+    G_debug(3, "dig_add_node(): n_nodes = %d, alloc_nodes = %d", plus->n_nodes,
+            plus->alloc_nodes);
+    if (plus->n_nodes >= plus->alloc_nodes) { /* array is full */
         if (dig_alloc_nodes(plus, 1000) == -1)
             return -1;
     }
@@ -134,7 +133,8 @@ int dig_add_node(struct Plus_head *plus, double x, double y, double z)
 }
 
 /*!
- * \brief Return actual index into node arrays of the first set of matching coordinates
+ * \brief Return actual index into node arrays of the first set of matching
+ * coordinates
  *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] x,y coordinates
@@ -180,7 +180,7 @@ int dig_which_node(struct Plus_head *plus, double x, double y, double thresh)
         return (-1);
 
     return (winner);
-}                               /*  which_node ()  */
+} /*  which_node ()  */
 
 /*!
  * \brief Return line angle
@@ -210,10 +210,12 @@ float dig_node_line_angle(struct Plus_head *plus, int nodeid, int lineid)
             return (node->angles[i]);
     }
 
-    G_fatal_error(_("Attempt to read line angle for the line which is not connected to the node: "
-                   "node %d, line %d"), nodeid, lineid);
+    G_fatal_error(_("Attempt to read line angle for the line which is not "
+                    "connected to the node: "
+                    "node %d, line %d"),
+                  nodeid, lineid);
 
-    return 0.0;                 /* not reached */
+    return 0.0; /* not reached */
 }
 
 static double dist_squared(double x1, double y1, double x2, double y2)

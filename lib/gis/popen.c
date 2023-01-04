@@ -9,11 +9,11 @@
 #ifdef _WIN32
 #include <io.h>
 #include <fcntl.h>
-#define pipe(fds) _pipe(fds, 4096, O_BINARY|O_NOINHERIT)
+#define pipe(fds) _pipe(fds, 4096, O_BINARY | O_NOINHERIT)
 #endif
 
-static FILE *do_popen(struct Popen *state, int wr,
-                      const char *program, const char **args)
+static FILE *do_popen(struct Popen *state, int wr, const char *program,
+                      const char **args)
 {
     int which = wr ? 0 : 1;
     const char *dir = wr ? "w" : "r";
@@ -36,10 +36,9 @@ static FILE *do_popen(struct Popen *state, int wr,
         args = argv;
     }
 
-    state->pid = G_spawn_ex(program,
-                            SF_ARGVEC, args,
-                            SF_REDIRECT_DESCRIPTOR, which, cfd,
-                            SF_CLOSE_DESCRIPTOR, pfd, SF_BACKGROUND, NULL);
+    state->pid =
+        G_spawn_ex(program, SF_ARGVEC, args, SF_REDIRECT_DESCRIPTOR, which, cfd,
+                   SF_CLOSE_DESCRIPTOR, pfd, SF_BACKGROUND, NULL);
 
     if (state->pid == -1) {
         close(pipe_fds[0]);
@@ -60,14 +59,12 @@ void G_popen_clear(struct Popen *state)
     state->pid = -1;
 }
 
-FILE *G_popen_write(struct Popen *state, const char *program,
-                    const char **args)
+FILE *G_popen_write(struct Popen *state, const char *program, const char **args)
 {
     return do_popen(state, 1, program, args);
 }
 
-FILE *G_popen_read(struct Popen *state, const char *program,
-                   const char **args)
+FILE *G_popen_read(struct Popen *state, const char *program, const char **args)
 {
     return do_popen(state, 0, program, args);
 }

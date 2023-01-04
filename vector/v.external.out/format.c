@@ -23,7 +23,7 @@ int is_ogr(const char *format)
                         "but GRASS is compiled with OGR support. "
                         "Using GRASS-PostGIS data driver instead."));
         use_ogr = FALSE;
-#else /* -> force using OGR */
+#else  /* -> force using OGR */
         G_warning(_("GRASS is not compiled with PostgreSQL support. "
                     "Using OGR-PostgreSQL driver instead of native "
                     "GRASS-PostGIS data driver."));

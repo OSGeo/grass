@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.circle
@@ -7,7 +6,7 @@
  *               Markus Neteler
  *
  * PURPOSE:      Creates a raster map containing concentric rings
- *	         around a given point.
+ *                 around a given point.
  *
  * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
  *
@@ -27,9 +26,8 @@
 static double distance(double *, double *, double, double, int);
 
 #ifndef HUGE_VAL
-#define HUGE_VAL        1.7976931348623157e+308
+#define HUGE_VAL 1.7976931348623157e+308
 #endif
-
 
 int main(int argc, char *argv[])
 {
@@ -52,9 +50,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("buffer"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("circle"));
-    module->description =
-        _("Creates a raster map containing concentric "
-          "rings around a given point.");
+    module->description = _("Creates a raster map containing concentric "
+                            "rings around a given point.");
 
     out_file = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -117,7 +114,7 @@ int main(int argc, char *argv[])
                         "using the binary flag"));
 
     if (flag->answer)
-        binary = 1;             /* generate binary pattern only, useful for MASK */
+        binary = 1; /* generate binary pattern only, useful for MASK */
     else
         binary = 0;
 
@@ -141,7 +138,6 @@ int main(int argc, char *argv[])
                     Rast_set_null_value(&int_buf[c], 1, CELL_TYPE);
             }
             Rast_put_row(cellfile, int_buf, CELL_TYPE);
-
         }
     }
     G_free(int_buf);
@@ -154,8 +150,6 @@ int main(int argc, char *argv[])
 
     return (EXIT_SUCCESS);
 }
-
-
 
 /*******************************************************************/
 
@@ -178,7 +172,7 @@ static double distance(double from[2], double to[2], double min, double max,
         else
             return 1;
     else
-        return 0;               /* should be NULL ? */
+        return 0; /* should be NULL ? */
 }
 
 /**********************************************************************/

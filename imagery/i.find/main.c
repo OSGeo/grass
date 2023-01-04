@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       i.find
- * AUTHOR(S):    Markus Neteler <neteler itc.it> 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ * AUTHOR(S):    Markus Neteler <neteler itc.it>
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      produces a file containing the names of files of type
- *               element (cell, dig, etc) in the search path for the mapset 
+ *               element (cell, dig, etc) in the search path for the mapset
  *               in location
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
@@ -49,10 +48,8 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
 /* function prototypes */
-static int find(FILE * fd, char *element);
-
+static int find(FILE *fd, char *element);
 
 int main(int argc, char *argv[])
 {
@@ -100,8 +97,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-
-static int find(FILE * fd, char *element)
+static int find(FILE *fd, char *element)
 {
     int len1 = 0, len2 = 0;
     const char *mapset;

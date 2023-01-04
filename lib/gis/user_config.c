@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/user_config.c
  *
@@ -38,7 +37,6 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <grass/gis.h>
-
 
 /**************************************************************************
  * _make_toplevel(): make user's toplevel config directory if it doesn't
@@ -137,7 +135,6 @@ static char *_make_toplevel(void)
     return path;
 }
 
-
 /**************************************************************************
  * _elem_count_split: Does a couple things:
  * 1) Counts the number of elements in "elems"
@@ -180,7 +177,6 @@ static int _elem_count_split(char *elems)
     /* That's it */
     return i;
 }
-
 
 /**************************************************************************
  * _make_sublevels(): creates subelements as necessary from the passed
@@ -270,7 +266,6 @@ static char *_make_sublevels(const char *elems)
     return path;
 }
 
-
 /**
  * \brief Returns path to <b>element</b> and <b>item</b>.
  *
@@ -303,7 +298,6 @@ char *G_rc_path(const char *element, const char *item)
         path = _make_sublevels(element);
     }
 
-
     assert(*item != '.');
     assert(path != NULL);
     ptr = strchr(item, '/'); /* should not have slashes */
@@ -319,7 +313,6 @@ char *G_rc_path(const char *element, const char *item)
 
     return path;
 } /* G_rc_path */
-
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */
 #endif

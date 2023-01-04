@@ -16,11 +16,11 @@
 #include "plot.h"
 #include "local_proto.h"
 
-int display_lines(struct Map_info *Map, struct cat_list *Clist,
-                  int chcat, const char *symbol_name, double size,
-                  int default_width, dbCatValArray * cvarr, double *breaks,
-                  int nbreaks, const struct color_rgb *colors, const struct
-                  color_rgb *bcolor)
+int display_lines(struct Map_info *Map, struct cat_list *Clist, int chcat,
+                  const char *symbol_name, double size, int default_width,
+                  dbCatValArray *cvarr, double *breaks, int nbreaks,
+                  const struct color_rgb *colors,
+                  const struct color_rgb *bcolor)
 {
     int ltype, line, nlines;
     struct line_pnts *Points;
@@ -74,7 +74,7 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
             if (ltype == -1) {
                 G_fatal_error(_("Unable to read vector map"));
             }
-            else if (ltype == -2) {     /* EOF */
+            else if (ltype == -2) { /* EOF */
                 break;
             }
         }
@@ -108,26 +108,25 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
         else
             secondary_color->a = 0;
 
-        draw_line(ltype, line, Points, Cats, chcat, size, default_width,
-                  Clist, Symb, primary_color, &n_points, &n_lines,
-                  &n_centroids, &n_boundaries, &n_faces, secondary_color);
+        draw_line(ltype, line, Points, Cats, chcat, size, default_width, Clist,
+                  Symb, primary_color, &n_points, &n_lines, &n_centroids,
+                  &n_boundaries, &n_faces, secondary_color);
     }
 
     if (n_points > 0)
-        G_verbose_message(n_
-                          ("%d point plotted", "%d points plotted", n_points),
+        G_verbose_message(n_("%d point plotted", "%d points plotted", n_points),
                           n_points);
     if (n_lines > 0)
         G_verbose_message(n_("%d line plotted", "%d lines plotted", n_lines),
                           n_lines);
     if (n_centroids > 0)
-        G_verbose_message(n_
-                          ("%d centroid plotted", "%d centroids plotted",
-                           n_centroids), n_centroids);
+        G_verbose_message(
+            n_("%d centroid plotted", "%d centroids plotted", n_centroids),
+            n_centroids);
     if (n_boundaries > 0)
-        G_verbose_message(n_
-                          ("%d boundary plotted", "%d boundaries plotted",
-                           n_boundaries), n_boundaries);
+        G_verbose_message(
+            n_("%d boundary plotted", "%d boundaries plotted", n_boundaries),
+            n_boundaries);
     if (n_faces > 0)
         G_verbose_message(n_("%d face plotted", "%d faces plotted", n_faces),
                           n_faces);
@@ -139,13 +138,12 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
     return 0;
 }
 
-int draw_line(int ltype, int line,
-              const struct line_pnts *Points, const struct line_cats *Cats,
-              int chcat, double size, int default_width,
-              const struct cat_list *Clist, SYMBOL * Symb,
-              RGBA_Color * primary_color,
-              int *n_points, int *n_lines, int *n_centroids,
-              int *n_boundaries, int *n_faces, RGBA_Color * secondary_color)
+int draw_line(int ltype, int line, const struct line_pnts *Points,
+              const struct line_cats *Cats, int chcat, double size,
+              int default_width, const struct cat_list *Clist, SYMBOL *Symb,
+              RGBA_Color *primary_color, int *n_points, int *n_lines,
+              int *n_centroids, int *n_boundaries, int *n_faces,
+              RGBA_Color *secondary_color)
 {
     /* double var_size, rotation; */
     int i;
@@ -189,7 +187,6 @@ int draw_line(int ltype, int line,
 
     G_debug(3, "\tdisplay feature %d, cat %d", line, cat);
 
-
     /* enough of the prep work, lets start plotting stuff */
     x = Points->x;
     y = Points->y;
@@ -211,9 +208,9 @@ int draw_line(int ltype, int line,
         /* Plot the lines */
         D_line_width(default_width);
         D_RGB_color(primary_color->r, primary_color->g, primary_color->b);
-        if (Points->n_points == 1)      /* line with one coor */
+        if (Points->n_points == 1) /* line with one coor */
             D_polydots_abs(x, y, Points->n_points);
-        else                    /* use different user defined render methods */
+        else /* use different user defined render methods */
             D_polyline_abs(x, y, Points->n_points);
     }
 

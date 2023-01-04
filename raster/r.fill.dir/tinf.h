@@ -61,7 +61,6 @@ void prod_c(void *, void *);
 void prod_f(void *, void *);
 void prod_d(void *, void *);
 
-
 /* to add a new multitype function, add a pointer for the function and
  * its argument list to the list below */
 
@@ -86,11 +85,10 @@ double slope_c(void *, void *, double);
 double slope_f(void *, void *, double);
 double slope_d(void *, void *, double);
 
-struct band3
-{
-    int ns;                     /* samples per line */
-    size_t sz;                  /* bytes per line */
-    char *b[3];                 /* pointers to start of each line */
+struct band3 {
+    int ns;     /* samples per line */
+    size_t sz;  /* bytes per line */
+    char *b[3]; /* pointers to start of each line */
 };
 
 int advance_band3(int, struct band3 *);

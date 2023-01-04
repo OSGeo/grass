@@ -1,14 +1,16 @@
 /*!
    \file lib/imagery/iscatt_core.c
 
-   \brief Imagery library - wx.iscatt (wx Interactive Scatter Plot Tool) backend.
+   \brief Imagery library - wx.iscatt (wx Interactive Scatter Plot Tool)
+   backend.
 
    Copyright (C) 2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author Stepan Turek <stepan.turek@seznam.cz> (GSoC 2013, Mentor: Martin Landa)
+   \author Stepan Turek <stepan.turek@seznam.cz> (GSoC 2013, Mentor: Martin
+   Landa)
  */
 
 #include <stdio.h>
@@ -23,11 +25,10 @@
 
 #include "iclass_local_proto.h"
 
-struct rast_row
-{
+struct rast_row {
     CELL *row;
     char *null_row;
-    struct Range rast_range;    /*Range of whole raster. */
+    struct Range rast_range; /*Range of whole raster. */
 };
 
 /*!
@@ -36,7 +37,7 @@ struct rast_row
    Scatter plot internally generates pgm files.
    These pgms have header in format created by this function.
 
-   \param region region to be pgm header generated for 
+   \param region region to be pgm header generated for
    \param [out] header header of pgm file
  */
 static int get_cat_rast_header(struct Cell_head *region, char *header)
@@ -47,10 +48,10 @@ static int get_cat_rast_header(struct Cell_head *region, char *header)
 /*!
    \brief Create category raster conditions file.
    The file is used for holding selected areas from mapwindow.
-   The reason why the standard GRASS raster is not used is that for every 
+   The reason why the standard GRASS raster is not used is that for every
    modification (new area is selected) we would need to create whole new raster.
-   Instead of this scatter plot only modifies affected region in 
-   the internal pgm file. 
+   Instead of this scatter plot only modifies affected region in
+   the internal pgm file.
 
    \param cat_rast_region region to be file generated for
    \param[out] cat_rast path where the pgm raster file will be generated
@@ -77,14 +78,14 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
            f_cat_rast);
     if (ferror(f_cat_rast)) {
         fclose(f_cat_rast);
-        G_warning(_("Unable to write header into category raster condition file <%s>."),
+        G_warning(_("Unable to write header into category raster condition "
+                    "file <%s>."),
                   cat_rast);
         return -1;
     }
 
-    row_data =
-        (unsigned char *)G_malloc(cat_rast_region->cols *
-                                  sizeof(unsigned char));
+    row_data = (unsigned char *)G_malloc(cat_rast_region->cols *
+                                         sizeof(unsigned char));
     for (i_col = 0; i_col < cat_rast_region->cols; i_col++)
         row_data[i_col] = 0 & 255;
 
@@ -93,8 +94,9 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
                (cat_rast_region->cols) / sizeof(unsigned char), f_cat_rast);
         if (ferror(f_cat_rast)) {
             fclose(f_cat_rast);
-            G_warning(_("Unable to write into category raster condition file <%s>."),
-                      cat_rast);
+            G_warning(
+                _("Unable to write into category raster condition file <%s>."),
+                cat_rast);
             return -1;
         }
     }
@@ -108,7 +110,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
 
    \param A pointer to intersected region
    \param B pointer to intersected region
-   \param [out] intersec pointer to intersection region of regions A B 
+   \param [out] intersec pointer to intersection region of regions A B
    (relevant params of the region are: south, north, east, west)
 
    \return  0 if interaction exists
@@ -153,7 +155,6 @@ static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
         return -1;
 
     return 0;
-
 }
 
 /*!
@@ -161,14 +162,14 @@ static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
 
    \param A pointer to intersected region
    \param B pointer to intersected region (A and B must have same resolution)
-   \param [out] A_bounds rows and cols numbers of A stored in 
+   \param [out] A_bounds rows and cols numbers of A stored in
    south, north, east, west, which defines intersection of A and B
-   \param [out] B_bounds rows and cols numbers of B stored in 
+   \param [out] B_bounds rows and cols numbers of B stored in
    south, north, east, west, which defines intersection of A and B
 
    \return  0 if interaction exists
    \return -1 if regions do not intersect
-   \return -2 resolution of regions is not same 
+   \return -2 resolution of regions is not same
  */
 static int get_rows_and_cols_bounds(struct Cell_head *A, struct Cell_head *B,
                                     struct Cell_head *A_bounds,
@@ -180,16 +181,16 @@ static int get_rows_and_cols_bounds(struct Cell_head *A, struct Cell_head *B,
 
     /* TODO is it right check? */
     if (fabs(A->ns_res - B->ns_res) > GRASS_EPSILON) {
-        G_warning
-            ("'get_rows_and_cols_bounds' ns_res does not fit, A->ns_res: %f B->ns_res: %f",
-             A->ns_res, B->ns_res);
+        G_warning("'get_rows_and_cols_bounds' ns_res does not fit, A->ns_res: "
+                  "%f B->ns_res: %f",
+                  A->ns_res, B->ns_res);
         return -2;
     }
 
     if (fabs(A->ew_res - B->ew_res) > GRASS_EPSILON) {
-        G_warning
-            ("'get_rows_and_cols_bounds' ew_res does not fit, A->ew_res: %f B->ew_res: %f",
-             A->ew_res, B->ew_res);
+        G_warning("'get_rows_and_cols_bounds' ew_res does not fit, A->ew_res: "
+                  "%f B->ew_res: %f",
+                  A->ew_res, B->ew_res);
         return -2;
     }
 
@@ -199,18 +200,14 @@ static int get_rows_and_cols_bounds(struct Cell_head *A, struct Cell_head *B,
     if (regions_intersecion(A, B, &intersec) == -1)
         return -1;
 
-    A_bounds->north =
-        ceil((A->north - intersec.north - ns_res * 0.5) / ns_res);
-    A_bounds->south =
-        ceil((A->north - intersec.south - ns_res * 0.5) / ns_res);
+    A_bounds->north = ceil((A->north - intersec.north - ns_res * 0.5) / ns_res);
+    A_bounds->south = ceil((A->north - intersec.south - ns_res * 0.5) / ns_res);
 
     A_bounds->east = ceil((intersec.east - A->west - ew_res * 0.5) / ew_res);
     A_bounds->west = ceil((intersec.west - A->west - ew_res * 0.5) / ew_res);
 
-    B_bounds->north =
-        ceil((B->north - intersec.north - ns_res * 0.5) / ns_res);
-    B_bounds->south =
-        ceil((B->north - intersec.south - ns_res * 0.5) / ns_res);
+    B_bounds->north = ceil((B->north - intersec.north - ns_res * 0.5) / ns_res);
+    B_bounds->south = ceil((B->north - intersec.south - ns_res * 0.5) / ns_res);
 
     B_bounds->east = ceil((intersec.east - B->west - ew_res * 0.5) / ew_res);
     B_bounds->west = ceil((intersec.west - B->west - ew_res * 0.5) / ew_res);
@@ -270,12 +267,12 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
         return -1;
     }
 
-    ret =
-        get_rows_and_cols_bounds(cat_rast_region, &patch_region,
-                                 &cat_rast_bounds, &patch_bounds);
+    ret = get_rows_and_cols_bounds(cat_rast_region, &patch_region,
+                                   &cat_rast_bounds, &patch_bounds);
     if (ret == -2) {
-        G_warning(_("Resolutions of patch <%s> and patched file <%s> are not same."),
-                  patch_rast, cat_rast);
+        G_warning(
+            _("Resolutions of patch <%s> and patched file <%s> are not same."),
+            patch_rast, cat_rast);
 
         Rast_close(fd_patch_rast);
         fclose(f_cat_rast);
@@ -295,13 +292,13 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
 
     patch_data = (unsigned char *)G_malloc(ncols * sizeof(unsigned char));
 
-    init_shift =
-        head_nchars + cat_rast_region->cols * cat_rast_bounds.north +
-        cat_rast_bounds.west;
+    init_shift = head_nchars + cat_rast_region->cols * cat_rast_bounds.north +
+                 cat_rast_bounds.west;
 
     if (fseek(f_cat_rast, init_shift, SEEK_SET) != 0) {
-        G_warning(_("Corrupted  category raster conditions file <%s> (fseek failed)"),
-                  cat_rast);
+        G_warning(
+            _("Corrupted  category raster conditions file <%s> (fseek failed)"),
+            cat_rast);
 
         Rast_close(fd_patch_rast);
         fclose(f_cat_rast);
@@ -330,8 +327,9 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
         fwrite(patch_data, sizeof(unsigned char),
                (ncols) / sizeof(unsigned char), f_cat_rast);
         if (ferror(f_cat_rast)) {
-            G_warning(_("Unable to write into category raster conditions file <%s>"),
-                      cat_rast);
+            G_warning(
+                _("Unable to write into category raster conditions file <%s>"),
+                cat_rast);
 
             Rast_close(fd_patch_rast);
             G_free(null_chunk_row);
@@ -340,7 +338,8 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
             return -1;
         }
         if (fseek(f_cat_rast, step_shift, SEEK_CUR) != 0) {
-            G_warning(_("Corrupted  category raster conditions file <%s> (fseek failed)"),
+            G_warning(_("Corrupted  category raster conditions file <%s> "
+                        "(fseek failed)"),
                       cat_rast);
 
             Rast_close(fd_patch_rast);
@@ -358,13 +357,14 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
 }
 
 /*!
-   \brief Updates scatter plots data in category by pixels which meets category conditions.
+   \brief Updates scatter plots data in category by pixels which meets category
+   conditions.
 
    \param bands_rows data represents data describig one row from raster band
-   \param belongs_pix array which defines which pixels belongs to category 
+   \param belongs_pix array which defines which pixels belongs to category
    (1 value) and which not (0 value)
-   \param [out] scatts pointer to scScatts struct of type SC_SCATT_DATA, 
-   which are modified according to values in belongs_pix 
+   \param [out] scatts pointer to scScatts struct of type SC_SCATT_DATA,
+   which are modified according to values in belongs_pix
    (represents scatter plot category)
  */
 static void update_cat_scatt_plts(struct rast_row *bands_rows,
@@ -399,13 +399,13 @@ static void update_cat_scatt_plts(struct rast_row *bands_rows,
         b_2_range = b_2_rast_row.rast_range;
 
         b_1_range_size = b_1_range.max - b_1_range.min + 1;
-        max_arr_idx =
-            (b_1_range.max - b_1_range.min + 1) * (b_2_range.max -
-                                                   b_2_range.min + 1);
+        max_arr_idx = (b_1_range.max - b_1_range.min + 1) *
+                      (b_2_range.max - b_2_range.min + 1);
 
         for (i_chunk_rows_pix = 0; i_chunk_rows_pix < row_size;
              i_chunk_rows_pix++) {
-            /* pixel does not belongs to scatter plot or has null value in one of the bands */
+            /* pixel does not belongs to scatter plot or has null value in one
+             * of the bands */
             if (!belongs_pix[i_chunk_rows_pix] ||
                 b_1_null_row[i_chunk_rows_pix] == 1 ||
                 b_2_null_row[i_chunk_rows_pix] == 1)
@@ -417,8 +417,8 @@ static void update_cat_scatt_plts(struct rast_row *bands_rows,
                 (b_2_row[i_chunk_rows_pix] - b_2_range.min) * b_1_range_size;
 
             if (array_idx < 0 || array_idx >= max_arr_idx) {
-                G_warning
-                    ("Inconsistent data. Value computed for scatter plot is out of initialized range.");
+                G_warning("Inconsistent data. Value computed for scatter plot "
+                          "is out of initialized range.");
                 continue;
             }
 
@@ -431,11 +431,11 @@ static void update_cat_scatt_plts(struct rast_row *bands_rows,
 /*!
    \brief Computes scatter plots data from bands_rows.
 
-   \param scatt_conds pointer to scScatts struct of type SC_SCATT_CONDITIONS, 
+   \param scatt_conds pointer to scScatts struct of type SC_SCATT_CONDITIONS,
    where are selected areas (conditions) stored
    \param f_cats_rasts_conds file which stores selected areas (conditions) from
    mapwindow see I_create_cat_rast and I_insert_patch_to_cat_rast
-   \param bands_rows data arrays of raster rows from analyzed raster bands 
+   \param bands_rows data arrays of raster rows from analyzed raster bands
    (all data in bands_rows and belongs_pix arrays represents same region (row))
    \param[out] scatts pointer to scScatts struct of type SC_SCATT_DATA,
    where are computed scatter plots stored
@@ -446,7 +446,7 @@ static void update_cat_scatt_plts(struct rast_row *bands_rows,
    \return -1 on failure
  */
 static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
-                                         FILE ** f_cats_rasts_conds,
+                                         FILE **f_cats_rasts_conds,
                                          struct rast_row *bands_rows,
                                          struct scCats *scatts,
                                          int *fd_cats_rasts)
@@ -478,7 +478,6 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
         (unsigned char *)G_malloc(row_size * sizeof(unsigned char));
     cat_rast_row = Rast_allocate_c_buf();
 
-
     for (i_cat = 0; i_cat < scatt_conds->n_a_cats; i_cat++) {
         scatts_conds = scatt_conds->cats_arr[i_cat];
 
@@ -491,7 +490,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 
         G_zero(belongs_pix, row_size * sizeof(unsigned short));
 
-        /* if category has no conditions defined, scatter plots without 
+        /* if category has no conditions defined, scatter plots without
            any constraint are computed (default scatter plots) */
         if (!scatts_conds->n_a_scatts && !f_cats_rasts_conds[i_cat]) {
             for (i_scatt = 0; i_scatt < scatts_scatt_plts->n_a_scatts;
@@ -508,23 +507,23 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
             /* check conditions from category raster conditions file
                (see I_create_cat_rast) */
             if (f_cats_rasts_conds[i_cat]) {
-                n_pixs =
-                    fread(rast_pixs, sizeof(unsigned char),
-                          (row_size) / sizeof(unsigned char),
-                          f_cats_rasts_conds[i_cat]);
+                n_pixs = fread(rast_pixs, sizeof(unsigned char),
+                               (row_size) / sizeof(unsigned char),
+                               f_cats_rasts_conds[i_cat]);
 
                 if (ferror(f_cats_rasts_conds[i_cat])) {
                     G_free(rast_pixs);
                     G_free(belongs_pix);
-                    G_warning(_("Unable to read from category raster condition file."));
+                    G_warning(_(
+                        "Unable to read from category raster condition file."));
                     return -1;
                 }
                 if (n_pixs != (row_size) / sizeof(unsigned char)) {
                     G_free(rast_pixs);
                     G_free(belongs_pix);
-                    G_warning(_("Invalid size of category raster conditions file."));
+                    G_warning(
+                        _("Invalid size of category raster conditions file."));
                     return -1;
-
                 }
 
                 for (i_rows_pix = 0; i_rows_pix < row_size; i_rows_pix++) {
@@ -548,16 +547,15 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                 b_2_range = b_2_rast_row.rast_range;
 
                 b_1_range_size = b_1_range.max - b_1_range.min + 1;
-                max_arr_idx =
-                    (b_1_range.max - b_1_range.min + 1) * (b_2_range.max -
-                                                           b_2_range.min + 1);
+                max_arr_idx = (b_1_range.max - b_1_range.min + 1) *
+                              (b_2_range.max - b_2_range.min + 1);
 
-                i_scatt_conds =
-                    scatts_conds->scatts_arr[i_scatt]->b_conds_arr;
+                i_scatt_conds = scatts_conds->scatts_arr[i_scatt]->b_conds_arr;
 
                 for (i_rows_pix = 0; i_rows_pix < row_size; i_rows_pix++) {
-                    /* pixels already belongs to category from category raster conditions 
-                       file or contains null value in one of the bands */
+                    /* pixels already belongs to category from category raster
+                       conditions file or contains null value in one of the
+                       bands */
                     if (belongs_pix[i_rows_pix] ||
                         b_1_null_row[i_rows_pix] == 1 ||
                         b_2_null_row[i_rows_pix] == 1)
@@ -565,11 +563,11 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 
                     array_idx =
                         b_1_row[i_rows_pix] - b_1_range.min +
-                        (b_2_row[i_rows_pix] -
-                         b_2_range.min) * b_1_range_size;
+                        (b_2_row[i_rows_pix] - b_2_range.min) * b_1_range_size;
                     if (array_idx < 0 || array_idx >= max_arr_idx) {
                         G_warning(_("Data inconsistent. "
-                                    "Value computed for scatter plot is out of initialized range."));
+                                    "Value computed for scatter plot is out of "
+                                    "initialized range."));
                         continue;
                     }
                     /* pixels meets condtion defined in scatter plot ->
@@ -618,9 +616,8 @@ static void get_needed_bands(struct scCats *cats, int *b_needed_bands)
 
             b_needed_bands[cats->cats_arr[i_cat]->scatts_bands[i_scatt * 2]] =
                 1;
-            b_needed_bands[cats->
-                           cats_arr[i_cat]->scatts_bands[i_scatt * 2 + 1]] =
-                1;
+            b_needed_bands[cats->cats_arr[i_cat]
+                               ->scatts_bands[i_scatt * 2 + 1]] = 1;
         }
     }
     return;
@@ -629,11 +626,10 @@ static void get_needed_bands(struct scCats *cats, int *b_needed_bands)
 /*!
    \brief Helper function for clean up.
  */
-static void free_compute_scatts_data(int *fd_bands,
-                                     struct rast_row *bands_rows,
+static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
                                      int n_a_bands, int *bands_ids,
                                      int *fd_cats_rasts,
-                                     FILE ** f_cats_rasts_conds, int n_a_cats)
+                                     FILE **f_cats_rasts_conds, int n_a_cats)
 {
     int i, band_id;
 
@@ -655,31 +651,29 @@ static void free_compute_scatts_data(int *fd_bands,
         for (i = 0; i < n_a_cats; i++)
             if (fd_cats_rasts[i] >= 0)
                 Rast_close(fd_cats_rasts[i]);
-
 }
 
 /*!
    \brief Compute scatter plots data.
 
-   If category has not defined category raster condition file and no scatter plot 
-   exists with condition, default/full scatter plot is computed.
-   Warning: calls Rast_set_window
+   If category has not defined category raster condition file and no scatter
+   plot exists with condition, default/full scatter plot is computed. Warning:
+   calls Rast_set_window
 
-   \param region analysis region, beaware that all input data must be prepared for this region 
-   (bands (their ranges), cats_rasts_conds rasters...)
-   \param region function calls Rast_set_window for this region
-   \param scatt_conds pointer to scScatts struct of type SC_SCATT_CONDITIONS, 
-   where are stored selected areas (conditions) in scatter plots
-   \param cats_rasts_conds paths to category raster conditions files representing 
-   selected areas from mapwindow (conditions) in rasters for every category 
-   \param cats_rasts_conds index in array represents corresponding category id
-   \param cats_rasts_conds for manipulation with category raster conditions file 
-   see also I_id_scatt_to_bands and I_insert_patch_to_cat_rast
-   \param bands names of analyzed bands, order of bands is defined by their id
-   \param n_bands number of bands
-   \param[out] scatts pointer to scScatts struct of type SC_SCATT_DATA, 
+   \param region analysis region, beaware that all input data must be prepared
+   for this region (bands (their ranges), cats_rasts_conds rasters...) \param
+   region function calls Rast_set_window for this region \param scatt_conds
+   pointer to scScatts struct of type SC_SCATT_CONDITIONS, where are stored
+   selected areas (conditions) in scatter plots \param cats_rasts_conds paths to
+   category raster conditions files representing selected areas from mapwindow
+   (conditions) in rasters for every category \param cats_rasts_conds index in
+   array represents corresponding category id \param cats_rasts_conds for
+   manipulation with category raster conditions file see also
+   I_id_scatt_to_bands and I_insert_patch_to_cat_rast \param bands names of
+   analyzed bands, order of bands is defined by their id \param n_bands number
+   of bands \param[out] scatts pointer to scScatts struct of type SC_SCATT_DATA,
    where are computed scatter plots stored
-   \param[out] cats_rasts array of raster maps names for every category 
+   \param[out] cats_rasts array of raster maps names for every category
    where will be stored all selected pixels
 
    \return  0 on success
@@ -738,8 +732,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                 return -1;
             }
 
-            if ((fd_bands[n_a_bands] =
-                 Rast_open_old(bands[band_id], mapset)) < 0) {
+            if ((fd_bands[n_a_bands] = Rast_open_old(bands[band_id], mapset)) <
+                0) {
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
@@ -757,9 +751,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
             bands_rows[band_id].row = Rast_allocate_c_buf();
             bands_rows[band_id].null_row = Rast_allocate_null_buf();
 
-            if (Rast_read_range
-                (bands[band_id], mapset,
-                 &bands_rows[band_id].rast_range) != 1) {
+            if (Rast_read_range(bands[band_id], mapset,
+                                &bands_rows[band_id].rast_range) != 1) {
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
@@ -777,8 +770,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++) {
         id_cat = scatts->cats_ids[i_cat];
         if (cats_rasts[id_cat]) {
-            fd_cats_rasts[i_cat] =
-                Rast_open_new(cats_rasts[id_cat], CELL_TYPE);
+            fd_cats_rasts[i_cat] = Rast_open_new(cats_rasts[id_cat], CELL_TYPE);
         }
         else
             fd_cats_rasts[i_cat] = -1;
@@ -786,12 +778,12 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
         if (cats_rasts_conds[id_cat]) {
             f_cats_rasts_conds[i_cat] = fopen(cats_rasts_conds[id_cat], "r");
             if (!f_cats_rasts_conds[i_cat]) {
-                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
-                                         bands_ids, fd_cats_rasts,
-                                         f_cats_rasts_conds,
-                                         scatt_conds->n_a_cats);
-                G_warning(_("Unable to open category raster condition file <%s>"),
-                          bands[band_id]);
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, fd_cats_rasts,
+                    f_cats_rasts_conds, scatt_conds->n_a_cats);
+                G_warning(
+                    _("Unable to open category raster condition file <%s>"),
+                    bands[band_id]);
                 return -1;
             }
         }
@@ -803,7 +795,8 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     for (i_cat = 0; i_cat < scatt_conds->n_a_cats; i_cat++)
         if (f_cats_rasts_conds[i_cat])
             if (fseek(f_cats_rasts_conds[i_cat], head_nchars, SEEK_SET) != 0) {
-                G_warning(_("Corrupted category raster conditions file (fseek failed)"));
+                G_warning(_("Corrupted category raster conditions file (fseek "
+                            "failed)"));
                 return -1;
             }
 
@@ -817,16 +810,14 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
             Rast_get_null_value_row(fd_bands[i_band],
                                     bands_rows[band_id].null_row, i_row);
         }
-        if (compute_scatts_from_chunk_row
-            (scatt_conds, f_cats_rasts_conds, bands_rows, scatts,
-             fd_cats_rasts) == -1) {
-            free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
-                                     bands_ids, fd_cats_rasts,
-                                     f_cats_rasts_conds,
+        if (compute_scatts_from_chunk_row(scatt_conds, f_cats_rasts_conds,
+                                          bands_rows, scatts,
+                                          fd_cats_rasts) == -1) {
+            free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
+                                     fd_cats_rasts, f_cats_rasts_conds,
                                      scatt_conds->n_a_cats);
             return -1;
         }
-
     }
     free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
                              fd_cats_rasts, f_cats_rasts_conds,
@@ -836,7 +827,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
 /*!
    \brief Merge arrays according to opacity.
-   Every pixel in array must be represented by 4 values (RGBA). 
+   Every pixel in array must be represented by 4 values (RGBA).
 
    Implementd for speeding up of scatter plots rendering.
 
@@ -864,14 +855,13 @@ int I_merge_arrays(unsigned char *merged_arr, unsigned char *overlay_arr,
             c_a = overlay_arr[idx] * alpha;
             c_a_i = 255 - c_a;
 
-            merged_arr[idx] =
-                (c_a_i * (int)merged_arr[idx] + c_a * 255) / 255;
+            merged_arr[idx] = (c_a_i * (int)merged_arr[idx] + c_a * 255) / 255;
 
             for (i_b = 0; i_b < 3; i_b++) {
                 idx = col_idx + i_b;
-                merged_arr[idx] =
-                    (c_a_i * (int)merged_arr[idx] +
-                     c_a * (int)overlay_arr[idx]) / 255;
+                merged_arr[idx] = (c_a_i * (int)merged_arr[idx] +
+                                   c_a * (int)overlay_arr[idx]) /
+                                  255;
             }
         }
     }
@@ -879,7 +869,7 @@ int I_merge_arrays(unsigned char *merged_arr, unsigned char *overlay_arr,
 }
 
 /*!
-   \brief Apply colromap to the raster. 
+   \brief Apply colromap to the raster.
 
    Implementd for speeding up of scatter plots rendering.
 
@@ -887,7 +877,8 @@ int I_merge_arrays(unsigned char *merged_arr, unsigned char *overlay_arr,
    \param vals_mask maks of vals array
    \param nvals number of items of vals_mask and vals array
    \param colmap colour map to be applied
-   \param[out] col_vals output raster with applied color map (length is 4 * nvals (RGBA)) 
+   \param[out] col_vals output raster with applied color map (length is 4 *
+   nvals (RGBA))
 
    \return 0
  */
@@ -921,7 +912,7 @@ int I_apply_colormap(unsigned char *vals, unsigned char *vals_mask,
 }
 
 /*!
-   \brief Wrapper for using of iclass perimeter rasterization by scatter plot. 
+   \brief Wrapper for using of iclass perimeter rasterization by scatter plot.
    Warning: calls Rast_set_window
 
    \param polygon array of polygon coordinates [x, y, x, y...]
@@ -957,8 +948,9 @@ int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
     for (i = 1; i < perimeter.npoints; i += 2) {
         y = perimeter.points[i].y;
         if (y != perimeter.points[i - 1].y) {
-            G_warning(_("prepare_signature: scan line %d has odd number of points."),
-                      (i + 1) / 2);
+            G_warning(
+                _("prepare_signature: scan line %d has odd number of points."),
+                (i + 1) / 2);
             return 1;
         }
 

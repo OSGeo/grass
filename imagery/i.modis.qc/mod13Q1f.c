@@ -9,7 +9,7 @@ CELL mod13Q1f(CELL pixel)
 {
     CELL qctemp;
 
-    pixel >>= 10;               /*bit [10] becomes [0] */
+    pixel >>= 10; /*bit [10] becomes [0] */
     qctemp = pixel & 0x01;
 
     return qctemp;

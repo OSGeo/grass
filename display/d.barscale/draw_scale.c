@@ -13,83 +13,49 @@
 #include <grass/glocale.h>
 #include "options.h"
 
-#define NUMSCALES	16
+#define NUMSCALES 16
 
 /* declare variables */
-static const struct scale
-{
+static const struct scale {
     char *symbol;
     double size;
     double limit;
-} all_scales[2][NUMSCALES] = {
-    {
-     /* meters */
-     {
-      "", 0., 2.}, {
-                    "1 m", 1., 7.}, {
-                                     "5 m", 5., 20.}, {
-                                                       "10 m", 10., 70.}, {
-                                                                           "50 m",
-                                                                           50.,
-                                                                           200.},
-     {
-      "100 m", 100., 700.}, {
-                             "500 m", 500., 2000.}, {
-                                                     "1 km", 1000., 7000.}, {
-                                                                             "5 km",
-                                                                             5000.,
-                                                                             20000.},
-     {
-      "10 km", 10000., 70000.}, {
-                                 "50 km", 50000., 200000.}, {
-                                                             "100 km",
-                                                             100000.,
-                                                             700000.}, {
-                                                                        "500 km",
-                                                                        500000.,
-                                                                        2000000.},
-     {
-      "1000 km", 1000000., 7000000.}, {
-                                       "5000 km", 5000000., 20000000.}, {
-                                                                         "10000 km",
-                                                                         10000000.,
-                                                                         70000000.}
-     }, {
-         /* feet/miles */
-         {
-          "", 0.000, 1.}, {
-                           "1 ft", 0.305, 2.}, {
-                                                "5 ft", 1.524, 10.}, {
-                                                                      "10 ft",
-                                                                      3.048,
-                                                                      20.}, {
-                                                                             "50 ft",
-                                                                             15.240,
-                                                                             100.},
-         {
-          "100 ft", 30.480, 200.}, {
-                                    "500 ft", 152.400, 1000.}, {
-                                                                "1000 ft",
-                                                                304.800,
-                                                                2000.}, {
-                                                                         "1 mi",
-                                                                         1609.344,
-                                                                         10000.},
-         {
-          "5 mi", 8046.720, 20000.}, {
-                                      "10 mi", 16093.440, 100000.}, {
-                                                                     "50 mi",
-                                                                     80467.200,
-                                                                     200000.},
-         {
-          "100 mi", 160934.400, 1000000.}, {
-                                            "500 mi", 804672.000, 2000000.}, {
-                                                                              "1000 mi",
-                                                                              1609344.000,
-                                                                              10000000.},
-         {
-          "5000 mi", 8046720.000, 20000000.},}
-};
+} all_scales[2][NUMSCALES] = {{/* meters */
+                               {"", 0., 2.},
+                               {"1 m", 1., 7.},
+                               {"5 m", 5., 20.},
+                               {"10 m", 10., 70.},
+                               {"50 m", 50., 200.},
+                               {"100 m", 100., 700.},
+                               {"500 m", 500., 2000.},
+                               {"1 km", 1000., 7000.},
+                               {"5 km", 5000., 20000.},
+                               {"10 km", 10000., 70000.},
+                               {"50 km", 50000., 200000.},
+                               {"100 km", 100000., 700000.},
+                               {"500 km", 500000., 2000000.},
+                               {"1000 km", 1000000., 7000000.},
+                               {"5000 km", 5000000., 20000000.},
+                               {"10000 km", 10000000., 70000000.}},
+                              {
+                                  /* feet/miles */
+                                  {"", 0.000, 1.},
+                                  {"1 ft", 0.305, 2.},
+                                  {"5 ft", 1.524, 10.},
+                                  {"10 ft", 3.048, 20.},
+                                  {"50 ft", 15.240, 100.},
+                                  {"100 ft", 30.480, 200.},
+                                  {"500 ft", 152.400, 1000.},
+                                  {"1000 ft", 304.800, 2000.},
+                                  {"1 mi", 1609.344, 10000.},
+                                  {"5 mi", 8046.720, 20000.},
+                                  {"10 mi", 16093.440, 100000.},
+                                  {"50 mi", 80467.200, 200000.},
+                                  {"100 mi", 160934.400, 1000000.},
+                                  {"500 mi", 804672.000, 2000000.},
+                                  {"1000 mi", 1609344.000, 10000000.},
+                                  {"5000 mi", 8046720.000, 20000000.},
+                              }};
 
 int draw_scale(double east, double north, int length, int seg, int units,
                char *label_cstm, int style, int text_posn, double width_scale,
@@ -100,8 +66,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
     int i, incr;
     double x_pos, y_pos;
     double t, b, l, r;
-    double pt, pb, pl, pr;      /* background box */
-    double tt, tb, tl, tr;      /* text box */
+    double pt, pb, pl, pr; /* background box */
+    double tt, tb, tl, tr; /* text box */
     double xarr[5], yarr[5];
     double seg_len;
     const struct scale *scales = all_scales[use_feet];
@@ -115,7 +81,6 @@ int draw_scale(double east, double north, int length, int seg, int units,
     double xspace_bf_N, x_pos_start, xspace_around_line, xsize_N;
     double ysize, ysize_solid, ysize_checker, ysize_ticks;
 
-
     /* Establish text size */
     if (fontsize > 0)
         D_text_size(fontsize, fontsize);
@@ -126,8 +91,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
     x_pos = l + (int)(east * (r - l) / 100.);
     y_pos = t + (int)((100. - north) * (b - t) / 100.);
 
-
-    D_setup(0);                 /* back to regular coordinate settings */
+    D_setup(0); /* back to regular coordinate settings */
     meters = D_get_u_east() - D_get_u_west();
     meters *= G_database_units_to_meters_factor();
 
@@ -156,8 +120,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
         sprintf(label, "%d %s", length, label_cstm);
     }
 
-    line_len = D_get_u_to_d_xconv() * size
-        / G_database_units_to_meters_factor();
+    line_len =
+        D_get_u_to_d_xconv() * size / G_database_units_to_meters_factor();
 
     seg_len = line_len / seg;
     /* work around round off */
@@ -170,20 +134,19 @@ int draw_scale(double east, double north, int length, int seg, int units,
     xspace_around_line = 10 * width_scale;
     xsize_N = 10 * width_scale;
     x_pos_start =
-        x_pos +
-        (north_arrow ? (xspace_bf_N + xsize_N + xspace_around_line) :
-         xspace_around_line);
+        x_pos + (north_arrow ? (xspace_bf_N + xsize_N + xspace_around_line)
+                             : xspace_around_line);
     ysize = 30 * width_scale;
     ysize_solid = 8 * width_scale;
     ysize_checker = 6 * width_scale;
-    ysize_ticks = 20 * width_scale;     /* the length of the edge tick */
+    ysize_ticks = 20 * width_scale; /* the length of the edge tick */
 
     if (do_background) {
         /* Blank out area with background color */
         D_get_text_box(label, &tt, &tb, &tl, &tr);
         pl = x_pos + 0;
         pr = x_pos + line_len + 2 * xspace_around_line +
-            (north_arrow ? xspace_bf_N + xsize_N : 0);
+             (north_arrow ? xspace_bf_N + xsize_N : 0);
         if (text_posn == TEXT_OVER) {
             pt = y_pos + tb - 5 * width_scale;
             pb = y_pos + ysize;
@@ -223,10 +186,10 @@ int draw_scale(double east, double north, int length, int seg, int units,
             }
         }
 
-        if (fontsize < 0) {     /* no text */
+        if (fontsize < 0) { /* no text */
             pl = x_pos + 0;
             pr = x_pos + line_len + 2 * xspace_around_line +
-                (north_arrow ? xspace_bf_N + xsize_N : 0);
+                 (north_arrow ? xspace_bf_N + xsize_N : 0);
             switch (style) {
             case STYLE_CLASSIC_BAR:
             case STYLE_THIN_WITH_ENDS:
@@ -267,7 +230,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_box_abs(pl, pt, pr, pb);
     }
 
-    /* Draw the small N with an arrow through it on the left side for the classic barscale styles */
+    /* Draw the small N with an arrow through it on the left side for the
+     * classic barscale styles */
     D_use_color(fg_color);
     if (north_arrow) {
         D_begin();
@@ -317,7 +281,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_cont_abs(x_pos_start + line_len,
                    y_pos + ysize - (ysize - ysize_ticks) / 2);
         D_close();
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
     }
     else if (style == STYLE_SOLID_BAR) {
         /* draw simple solid-bar scale */
@@ -346,7 +310,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_cont_rel(-line_len, 0);
         D_cont_rel(0, ysize_solid);
         D_close();
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
     }
     else if (style == STYLE_FULL_CHECKER) {
         D_begin();
@@ -357,7 +321,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_cont_rel(-line_len, 0);
         D_cont_rel(0, +2 * ysize_checker);
         D_close();
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
         D_stroke();
 
         D_pos_rel(0, -ysize_checker);
@@ -386,7 +350,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_cont_rel(-line_len, 0);
         D_cont_rel(0, +2 * ysize_checker);
         D_close();
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
         D_stroke();
 
         D_pos_rel(0, -ysize_checker);
@@ -447,7 +411,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         /* horizontal line across the middle to separate white from white */
         D_move_abs(x_pos_start, y_pos + ysize / 2);
         D_cont_rel(line_len, 0);
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
         D_close();
         D_stroke();
 
@@ -509,7 +473,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_cont_rel(-line_len, 0);
         D_cont_rel(0, +2 * ysize_checker);
         D_close();
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
         D_stroke();
 
         D_pos_rel(0, -ysize_checker);
@@ -533,7 +497,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_move_rel(0, ysize_checker);
         D_cont_rel(0, -2 * ysize_checker);
         D_close();
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
         D_stroke();
 
         D_pos_rel(0, ysize_checker);
@@ -569,10 +533,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_move_rel(0, ysize_ticks / 4);
         for (i = 0; i <= seg - 2; i++) {
             D_move_rel(seg_len, 0);
-            D_cont_rel(0, -ysize_ticks / 2);    /* 5 above, on px on line, and 5 below */
+            D_cont_rel(0, -ysize_ticks /
+                              2); /* 5 above, on px on line, and 5 below */
             D_move_rel(0, +ysize_ticks / 2);
         }
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
     }
     else if (style == STYLE_TICKS_UP) {
         /* draw simple line scale with up facing ticks */
@@ -586,10 +551,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_move_abs(x_pos_start, y_pos + ysize / 2);
         for (i = 0; i <= seg - 2; i++) {
             D_move_rel(seg_len, 0);
-            D_cont_rel(0, -ysize_ticks / 2);    /* 5 above, on px on line, and 5 below */
+            D_cont_rel(0, -ysize_ticks /
+                              2); /* 5 above, on px on line, and 5 below */
             D_move_rel(0, +ysize_ticks / 2);
         }
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
         D_close();
     }
     else if (style == STYLE_TICKS_DOWN) {
@@ -605,10 +571,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_move_abs(x_pos_start, y_pos + ysize / 2);
         for (i = 0; i <= seg - 2; i++) {
             D_move_rel(seg_len, 0);
-            D_cont_rel(0, +ysize_ticks / 2);    /* 5 above, on px on line, and 5 below */
+            D_cont_rel(0, +ysize_ticks /
+                              2); /* 5 above, on px on line, and 5 below */
             D_move_rel(0, -ysize_ticks / 2);
         }
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
         D_close();
     }
     else if (style == STYLE_ARROW_ENDS) {
@@ -644,8 +611,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
         y0 = D_d_to_u_row(y_pos + ysize / 2);
         Symb = S_read("extra/dim_arrow");
         if (!Symb)
-            G_fatal_error(_("Could not read symbol \"%s\""),
-                          "extra/dim_arrow");
+            G_fatal_error(_("Could not read symbol \"%s\""), "extra/dim_arrow");
         S_stroke(Symb, symbol_size, 0.0, 0);
         D_symbol(Symb, x0, y0, line_color, fill_color);
         G_free(Symb);
@@ -664,10 +630,9 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_begin();
         D_move_abs(x_pos_start, y_pos + ysize / 2);
         D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
-        D_end();                /* no-op? */
+        D_end(); /* no-op? */
     }
     D_stroke();
-
 
     if (fontsize < 0)
         return 0;
@@ -678,13 +643,13 @@ int draw_scale(double east, double north, int length, int seg, int units,
 
     if (text_posn == TEXT_OVER) {
         D_pos_abs(x_pos + line_len / 2 + xspace_around_line +
-                  (north_arrow ? xspace_bf_N + xsize_N : 0) - (tr - tl) / 2,
+                      (north_arrow ? xspace_bf_N + xsize_N : 0) - (tr - tl) / 2,
                   y_pos);
         D_text(label);
     }
     else if (text_posn == TEXT_UNDER) {
         D_pos_abs(x_pos + line_len / 2 + xspace_around_line +
-                  (north_arrow ? xspace_bf_N + xsize_N : 0) - (tr - tl) / 2,
+                      (north_arrow ? xspace_bf_N + xsize_N : 0) - (tr - tl) / 2,
                   y_pos + 40 * width_scale);
         D_text(label);
     }
@@ -695,7 +660,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
             y_pos += 9 * width_scale;
 
         D_pos_abs(x_pos + line_len + 2 * xspace_around_line +
-                  (north_arrow ? xspace_bf_N + xsize_N : 0),
+                      (north_arrow ? xspace_bf_N + xsize_N : 0),
                   y_pos + ysize / 2 + (tt - tb) / 2);
         D_text(label);
     }

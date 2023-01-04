@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/spawn.c
  *
@@ -45,7 +44,6 @@
 #define MAX_BINDINGS  256
 #define MAX_SIGNALS   32
 #define MAX_REDIRECTS 32
-
 
 /**
  * \brief Spawns a new process.
@@ -431,7 +429,6 @@ static void do_redirects(struct redirect *redirects, int num_redirects,
             handles[r->dst_fd] = get_handle(r->src_fd);
 
             close(r->src_fd);
-
         }
         else if (r->src_fd >= 0) {
             handles[r->dst_fd] = get_handle(r->src_fd);
@@ -790,7 +787,6 @@ static void parse_argvec(struct spawn *sp, const char **va)
         }
         else if (arg == SF_DIRECTORY) {
             sp->directory = NEXT_ARG(va, const char *);
-
         }
         else if (arg == SF_ARGVEC) {
             parse_argvec(sp, NEXT_ARG(va, const char **));

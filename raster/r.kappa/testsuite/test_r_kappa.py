@@ -11,11 +11,16 @@ Licence:   This program is free software under the GNU General Public
 
 import os
 import pathlib
+import json
+
+from tempfile import NamedTemporaryFile
 
 from grass.script import read_command
+from grass.script import decode
 from grass.script.core import tempname
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.checkers import keyvalue_equals
 
 
 class MatrixCorrectnessTest(TestCase):
@@ -33,14 +38,12 @@ class MatrixCorrectnessTest(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_1.ascii"),
             output=cls.ref_1,
-            quiet=True,
         )
         cls.class_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_1.ascii"),
             output=cls.class_1,
-            quiet=True,
         )
 
     @classmethod
@@ -91,14 +94,12 @@ class CalculationCorrectness1Test(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_1.ascii"),
             output=cls.ref_1,
-            quiet=True,
         )
         cls.class_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_1.ascii"),
             output=cls.class_1,
-            quiet=True,
         )
         cls.per_class = {
             "producer": [
@@ -204,14 +205,12 @@ class CalculationCorrectness2Test(TestCase):
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "ref_2.ascii"),
             output=cls.ref_1,
-            quiet=True,
         )
         cls.class_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
             input=os.path.join(cls.data_dir, "class_2.ascii"),
             output=cls.class_1,
-            quiet=True,
         )
         cls.per_class = {
             "producer": [
@@ -230,8 +229,8 @@ class CalculationCorrectness2Test(TestCase):
     def tearDownClass(cls):
         """Remove temporary data"""
         cls.del_temp_region()
-        # cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
-        # cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
 
     def match(self, pat, ref):
         if pat == "NA" or ref == "NA":
@@ -290,6 +289,198 @@ class CalculationCorrectness2Test(TestCase):
         self.assertEqual(vals[0], "0")
         self.assertEqual(vals[1], "25")
         self.assertTrue(self.match(vals[2], 0.0))
+
+
+class JSONOutputTest(TestCase):
+    """Test printing of parameters in JSON format"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Import sample maps with known properties"""
+        cls.use_temp_region()
+        cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
+
+        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.references = []
+        cls.classifications = []
+        cls.expected_outputs = []
+        # Normal case
+        cls.references.append(tempname(10))
+        cls.runModule(
+            "r.in.ascii",
+            input=os.path.join(cls.data_dir, "ref_1.ascii"),
+            output=cls.references[0],
+        )
+        cls.classifications.append(tempname(10))
+        cls.runModule(
+            "r.in.ascii",
+            input=os.path.join(cls.data_dir, "class_1.ascii"),
+            output=cls.classifications[0],
+        )
+
+        cls.expected_outputs.append(
+            {
+                "reference": cls.references[0],
+                "classification": cls.classifications[0],
+                "observations": 18,
+                "correct": 11,
+                "overall_accuracy": 61.111111,
+                "kappa": 0.52091,
+                "kappa_variance": 0.016871,
+                "cats": [1, 2, 3, 4, 5, 6],
+                "matrix": [
+                    [4, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 1, 4, 0, 0, 0],
+                    [3, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 1, 0],
+                    [0, 2, 0, 0, 0, 2],
+                ],
+                "row_sum": [4, 0, 5, 4, 1, 4],
+                "col_sum": [7, 3, 4, 0, 1, 3],
+                "producers_accuracy": [57.1429, 0.0, 100.0, None, 100.0, 66.66666],
+                "users_accuracy": [100.0, None, 80.0, 0.0, 100.0, 50.0],
+                "conditional_kappa": [1.0, None, 0.742857, 0.0, 1.0, 0.400],
+            }
+        )
+
+        # Bad case with no correct matches
+        cls.references.append(tempname(10))
+        cls.runModule(
+            "r.in.ascii",
+            input=os.path.join(cls.data_dir, "ref_2.ascii"),
+            output=cls.references[1],
+        )
+        cls.classifications.append(tempname(10))
+        cls.runModule(
+            "r.in.ascii",
+            input=os.path.join(cls.data_dir, "class_2.ascii"),
+            output=cls.classifications[1],
+        )
+        cls.expected_outputs.append(
+            {
+                "reference": cls.references[1],
+                "classification": cls.classifications[1],
+                "observations": 25,
+                "correct": 0,
+                "overall_accuracy": 0.0,
+                "kappa": 0.0,
+                "kappa_variance": 0.0,
+                "cats": [0, 1, 2, 3, 4, 9],
+                "matrix": [
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0],
+                    [8, 8, 4, 1, 4, 0],
+                ],
+                "row_sum": [0, 0, 0, 0, 0, 25],
+                "col_sum": [8, 8, 4, 1, 4, 0],
+                "producers_accuracy": [0.0, 0.0, 0.0, 0.0, 0.0, None],
+                "users_accuracy": [None, None, None, None, None, 0.0],
+                "conditional_kappa": [None, None, None, None, None, 0.0],
+            }
+        )
+
+        # Degenerate case #1
+        cls.references.append(tempname(10))
+        cls.classifications.append(tempname(10))
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.references[2]}=null()",
+        )
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.classifications[2]}=null()",
+        )
+        cls.expected_outputs.append(
+            {
+                "reference": cls.references[2],
+                "classification": cls.classifications[2],
+                "observations": 0,
+                "correct": 0,
+                "overall_accuracy": 0.0,
+                "kappa": None,
+                "kappa_variance": None,
+                "cats": [],
+                "matrix": [[]],
+                "row_sum": [],
+                "col_sum": [],
+                "producers_accuracy": [],
+                "users_accuracy": [],
+                "conditional_kappa": [],
+            }
+        )
+
+        # Degenerate case #2
+        cls.references.append(tempname(10))
+        cls.classifications.append(tempname(10))
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.references[3]}=1",
+        )
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.classifications[3]}=null()",
+        )
+        cls.expected_outputs.append(
+            {
+                "reference": cls.references[3],
+                "classification": cls.classifications[3],
+                "observations": 0,
+                "correct": 0,
+                "overall_accuracy": 0.0,
+                "kappa": None,
+                "kappa_variance": None,
+                "cats": [],
+                "matrix": [[]],
+                "row_sum": [],
+                "col_sum": [],
+                "producers_accuracy": [],
+                "users_accuracy": [],
+                "conditional_kappa": [],
+            }
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove temporary data"""
+        cls.del_temp_region()
+        for reference in cls.references:
+            cls.runModule("g.remove", flags="f", type="raster", name=reference)
+        for classification in cls.classifications:
+            cls.runModule("g.remove", flags="f", type="raster", name=classification)
+
+    def test_stdout(self):
+        for i in range(len(self.references)):
+            out = read_command(
+                "r.kappa",
+                reference=self.references[i],
+                classification=self.classifications[i],
+                format="json",
+                quiet=True,
+            )
+            json_out = json.loads(decode(out))
+            self.assertTrue(
+                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+            )
+
+    def test_file(self):
+        for i in range(len(self.references)):
+            f = NamedTemporaryFile()
+            self.runModule(
+                "r.kappa",
+                reference=self.references[i],
+                classification=self.classifications[i],
+                output=f.name,
+                format="json",
+                overwrite=True,
+            )
+            json_out = json.loads(f.read())
+            self.assertTrue(
+                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+            )
 
 
 if __name__ == "__main__":

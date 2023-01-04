@@ -4,7 +4,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/imagery.h>
-#include <grass/segment.h>      /* segmentation library */
+#include <grass/segment.h> /* segmentation library */
 #include "iseg.h"
 
 static int load_seeds(struct globals *, int, int, int);
@@ -15,12 +15,13 @@ int open_files(struct globals *globals)
 {
     int *in_fd, bounds_fd, is_null;
     int n, row, col, srows, scols, inlen, outlen, nseg;
-    DCELL **inbuf;              /* buffers to store lines from each of the imagery group rasters */
+    DCELL **inbuf; /* buffers to store lines from each of the imagery group
+                      rasters */
     CELL *boundsbuf, bounds_val;
     int have_bounds = 0;
     CELL id;
-    struct Range range;         /* min/max values of bounds map */
-    struct FPRange *fp_range;   /* min/max values of each input raster */
+    struct Range range;       /* min/max values of bounds map */
+    struct FPRange *fp_range; /* min/max values of each input raster */
     DCELL *min, *max;
     struct ngbr_stats Ri, Rk;
 
@@ -32,7 +33,7 @@ int open_files(struct globals *globals)
     flag_clear_all(globals->candidate_flag);
 
     in_fd = G_malloc(globals->Ref.nfiles * sizeof(int));
-    inbuf = (DCELL **) G_malloc(globals->Ref.nfiles * sizeof(DCELL *));
+    inbuf = (DCELL **)G_malloc(globals->Ref.nfiles * sizeof(DCELL *));
     fp_range = G_malloc(globals->Ref.nfiles * sizeof(struct FPRange));
     min = G_malloc(globals->Ref.nfiles * sizeof(DCELL));
     max = G_malloc(globals->Ref.nfiles * sizeof(DCELL));
@@ -43,9 +44,8 @@ int open_files(struct globals *globals)
     G_debug(1, "Opening input rasters...");
     for (n = 0; n < globals->Ref.nfiles; n++) {
         inbuf[n] = Rast_allocate_d_buf();
-        in_fd[n] =
-            Rast_open_old(globals->Ref.file[n].name,
-                          globals->Ref.file[n].mapset);
+        in_fd[n] = Rast_open_old(globals->Ref.file[n].name,
+                                 globals->Ref.file[n].mapset);
     }
 
     /* Get min/max values of each input raster for scaling */
@@ -55,9 +55,8 @@ int open_files(struct globals *globals)
 
     for (n = 0; n < globals->Ref.nfiles; n++) {
         /* returns -1 on error, 2 on empty range, quitting either way. */
-        if (Rast_read_fp_range
-            (globals->Ref.file[n].name, globals->Ref.file[n].mapset,
-             &fp_range[n]) != 1)
+        if (Rast_read_fp_range(globals->Ref.file[n].name,
+                               globals->Ref.file[n].mapset, &fp_range[n]) != 1)
             G_fatal_error(_("No min/max found in raster map <%s>"),
                           globals->Ref.file[n].name);
         Rast_get_fp_range_min_max(&(fp_range[n]), &min[n], &max[n]);
@@ -70,9 +69,7 @@ int open_files(struct globals *globals)
                           globals->Ref.file[n].name, min[n]);
         }
 
-        G_debug(1, "Range for layer %d: min = %f, max = %f",
-                n, min[n], max[n]);
-
+        G_debug(1, "Range for layer %d: min = %f, max = %f", n, min[n], max[n]);
     }
     if (globals->weighted == FALSE)
         globals->max_diff = globals->Ref.nfiles;
@@ -81,8 +78,7 @@ int open_files(struct globals *globals)
         Ri.mean = max;
         Rk.mean = min;
         globals->max_diff = 1;
-        globals->max_diff =
-            (*globals->calculate_similarity) (&Ri, &Rk, globals);
+        globals->max_diff = (*globals->calculate_similarity)(&Ri, &Rk, globals);
     }
 
     /* ********** find out file segmentation size ************ */
@@ -96,14 +92,14 @@ int open_files(struct globals *globals)
     globals->datasize = sizeof(double) * globals->nbands;
 
     /* count non-null cells */
-    globals->notnullcells = (LARGEINT) globals->nrows * globals->ncols;
+    globals->notnullcells = (LARGEINT)globals->nrows * globals->ncols;
     for (row = 0; row < globals->nrows; row++) {
         for (n = 0; n < globals->Ref.nfiles; n++) {
             Rast_get_d_row(in_fd[n], inbuf[n], row);
         }
         for (col = 0; col < globals->ncols; col++) {
 
-            is_null = 0;        /*Assume there is data */
+            is_null = 0; /*Assume there is data */
             for (n = 0; n < globals->Ref.nfiles; n++) {
                 if (Rast_is_d_null_value(&inbuf[n][col])) {
                     is_null = 1;
@@ -116,7 +112,8 @@ int open_files(struct globals *globals)
         }
     }
     if (globals->notnullcells < 2)
-        G_fatal_error(_("Insufficient number of non-NULL cells in current region"));
+        G_fatal_error(
+            _("Insufficient number of non-NULL cells in current region"));
 
     /* segment lib segment size */
     srows = 64;
@@ -125,24 +122,21 @@ int open_files(struct globals *globals)
     nseg = manage_memory(srows, scols, globals);
 
     /* create segment structures */
-    if (Segment_open
-        (&globals->bands_seg, G_tempfile(), globals->nrows, globals->ncols,
-         srows, scols, inlen, nseg) != 1)
+    if (Segment_open(&globals->bands_seg, G_tempfile(), globals->nrows,
+                     globals->ncols, srows, scols, inlen, nseg) != 1)
         G_fatal_error("Unable to create input temporary files");
 
     if (globals->method == ORM_MS) {
-        if (Segment_open
-            (&globals->bands_seg2, G_tempfile(), globals->nrows,
-             globals->ncols, srows, scols, inlen, nseg) != 1)
+        if (Segment_open(&globals->bands_seg2, G_tempfile(), globals->nrows,
+                         globals->ncols, srows, scols, inlen, nseg) != 1)
             G_fatal_error("Unable to create input temporary files");
 
         globals->bands_in = &globals->bands_seg;
         globals->bands_out = &globals->bands_seg2;
     }
 
-    if (Segment_open
-        (&globals->rid_seg, G_tempfile(), globals->nrows, globals->ncols,
-         srows, scols, outlen, nseg * 2) != 1)
+    if (Segment_open(&globals->rid_seg, G_tempfile(), globals->nrows,
+                     globals->ncols, srows, scols, outlen, nseg * 2) != 1)
         G_fatal_error("Unable to create input temporary files");
 
     /* load input bands to segment structure */
@@ -167,7 +161,7 @@ int open_files(struct globals *globals)
         }
         for (col = 0; col < globals->ncols; col++) {
 
-            is_null = 0;        /*Assume there is data */
+            is_null = 0; /*Assume there is data */
             for (n = 0; n < globals->Ref.nfiles; n++) {
                 globals->bands_val[n] = inbuf[n][col];
                 if (Rast_is_d_null_value(&inbuf[n][col])) {
@@ -180,8 +174,8 @@ int open_files(struct globals *globals)
                             (inbuf[n][col] - min[n]) / (max[n] - min[n]);
                 }
             }
-            if (Segment_put(&globals->bands_seg,
-                            (void *)globals->bands_val, row, col) != 1)
+            if (Segment_put(&globals->bands_seg, (void *)globals->bands_val,
+                            row, col) != 1)
                 G_fatal_error(_("Unable to write to temporary file"));
 
             if (globals->method == ORM_MS) {
@@ -212,15 +206,15 @@ int open_files(struct globals *globals)
         }
     }
     G_percent(1, 1, 1);
-    G_debug(1, "nrows: %d, min row: %d, max row %d",
-            globals->nrows, globals->row_min, globals->row_max);
-    G_debug(1, "ncols: %d, min col: %d, max col %d",
-            globals->ncols, globals->col_min, globals->col_max);
+    G_debug(1, "nrows: %d, min row: %d, max row %d", globals->nrows,
+            globals->row_min, globals->row_max);
+    G_debug(1, "ncols: %d, min col: %d, max col %d", globals->ncols,
+            globals->col_min, globals->col_max);
 
     globals->row_max++;
     globals->col_max++;
-    globals->ncells = (LARGEINT) (globals->row_max - globals->row_min) *
-        (globals->col_max - globals->col_min);
+    globals->ncells = (LARGEINT)(globals->row_max - globals->row_min) *
+                      (globals->col_max - globals->col_min);
 
     /* bounds/constraints */
 
@@ -228,13 +222,13 @@ int open_files(struct globals *globals)
     Rast_set_c_null_value(&globals->lower_bound, 1);
 
     if (globals->bounds_map != NULL) {
-        if (Segment_open
-            (&globals->bounds_seg, G_tempfile(), globals->nrows,
-             globals->ncols, srows, scols, sizeof(CELL), nseg) != TRUE)
+        if (Segment_open(&globals->bounds_seg, G_tempfile(), globals->nrows,
+                         globals->ncols, srows, scols, sizeof(CELL),
+                         nseg) != TRUE)
             G_fatal_error("Unable to create bounds temporary files");
 
-        if (Rast_read_range
-            (globals->bounds_map, globals->bounds_mapset, &range) != 1)
+        if (Rast_read_range(globals->bounds_map, globals->bounds_mapset,
+                            &range) != 1)
             G_fatal_error(_("No min/max found in raster map <%s>"),
                           globals->bounds_map);
         Rast_get_range_min_max(&range, &globals->upper_bound,
@@ -247,8 +241,7 @@ int open_files(struct globals *globals)
                           globals->bounds_map);
         }
 
-        bounds_fd =
-            Rast_open_old(globals->bounds_map, globals->bounds_mapset);
+        bounds_fd = Rast_open_old(globals->bounds_map, globals->bounds_mapset);
         boundsbuf = Rast_allocate_c_buf();
 
         for (row = 0; row < globals->nrows; row++) {
@@ -267,8 +260,8 @@ int open_files(struct globals *globals)
                             globals->upper_bound = bounds_val;
                     }
                 }
-                if (Segment_put(&globals->bounds_seg, &bounds_val, row, col)
-                    != 1)
+                if (Segment_put(&globals->bounds_seg, &bounds_val, row, col) !=
+                    1)
                     G_fatal_error(_("Unable to write to temporary file"));
             }
         }
@@ -290,7 +283,7 @@ int open_files(struct globals *globals)
     }
 
     /* other info */
-    globals->candidate_count = 0;       /* counter for remaining candidate pixels */
+    globals->candidate_count = 0; /* counter for remaining candidate pixels */
 
     /* Free memory */
 
@@ -316,7 +309,6 @@ int open_files(struct globals *globals)
     return TRUE;
 }
 
-
 static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 {
     int row, col;
@@ -335,9 +327,8 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 
     G_message(_("Loading seeds from raster map <%s>..."), globals->seeds);
 
-    if (Segment_open
-        (&seeds_seg, G_tempfile(), globals->nrows, globals->ncols,
-         srows, scols, sizeof(CELL), nseg) != TRUE)
+    if (Segment_open(&seeds_seg, G_tempfile(), globals->nrows, globals->ncols,
+                     srows, scols, sizeof(CELL), nseg) != TRUE)
         G_fatal_error("Unable to create bounds temporary files");
 
     seeds_fd = Rast_open_old(globals->seeds, "");
@@ -410,9 +401,8 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
     return 1;
 }
 
-
-static int read_seed(struct globals *globals, SEGMENT * seeds_seg,
-                     struct rc *Ri, int new_id)
+static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
+                     int new_id)
 {
     int n, i, Ri_id, Rk_id;
     struct rc ngbr_rc, next;
@@ -434,8 +424,8 @@ static int read_seed(struct globals *globals, SEGMENT * seeds_seg,
     globals->rs.count = 1;
 
     globals->rs.id = new_id;
-    Segment_get(&globals->bands_seg, (void *)globals->bands_val,
-                Ri->row, Ri->col);
+    Segment_get(&globals->bands_seg, (void *)globals->bands_val, Ri->row,
+                Ri->col);
 
     for (i = 0; i < globals->nbands; i++) {
         globals->rs.sum[i] = globals->bands_val[i];
@@ -448,8 +438,8 @@ static int read_seed(struct globals *globals, SEGMENT * seeds_seg,
 
     while (rclist_drop(&rilist, &next)) {
 
-        G_debug(5, "find_pixel_neighbors for row: %d , col %d",
-                next.row, next.col);
+        G_debug(5, "find_pixel_neighbors for row: %d , col %d", next.row,
+                next.col);
 
         globals->find_neighbors(next.row, next.col, neighbors);
 
@@ -480,8 +470,8 @@ static int read_seed(struct globals *globals, SEGMENT * seeds_seg,
             }
 
             /* set segment id */
-            if (Segment_put(&globals->rid_seg,
-                            &new_id, ngbr_rc.row, ngbr_rc.col) != 1)
+            if (Segment_put(&globals->rid_seg, &new_id, ngbr_rc.row,
+                            ngbr_rc.col) != 1)
                 G_fatal_error(_("Unable to write to temporary file"));
 
             /* set candidate flag */
@@ -523,7 +513,6 @@ static int read_seed(struct globals *globals, SEGMENT * seeds_seg,
     return 1;
 }
 
-
 static int manage_memory(int srows, int scols, struct globals *globals)
 {
     double reg_size_mb, segs_mb;
@@ -534,9 +523,9 @@ static int manage_memory(int srows, int scols, struct globals *globals)
     if (globals->method == ORM_RG) {
 
         /* minimum region size to store in search tree */
-        reg_size_mb = 2 * globals->datasize +   /* mean, sum */
-            2 * sizeof(int) +   /* id, count */
-            sizeof(unsigned char) + 2 * sizeof(struct REG_NODE *);
+        reg_size_mb = 2 * globals->datasize + /* mean, sum */
+                      2 * sizeof(int) +       /* id, count */
+                      sizeof(unsigned char) + 2 * sizeof(struct REG_NODE *);
         reg_size_mb /= (1024. * 1024.);
 
         /* put aside some memory for segment structures */
@@ -563,9 +552,9 @@ static int manage_memory(int srows, int scols, struct globals *globals)
                 segs_mb = 10;
         }
 
-        G_verbose_message(_("Regions with at least %" PRI_LONG
-                           " cells are stored in memory"),
-                          globals->min_reg_size);
+        G_verbose_message(
+            _("Regions with at least %" PRI_LONG " cells are stored in memory"),
+            globals->min_reg_size);
     }
 
     /* calculate number of segments in memory */
@@ -574,38 +563,37 @@ static int manage_memory(int srows, int scols, struct globals *globals)
         /* input bands, segment ids, bounds map */
         if (globals->method == ORM_MS) {
             nseg = (1024. * 1024. * segs_mb) /
-                (sizeof(DCELL) * 2 * globals->nbands * srows * scols +
-                 sizeof(CELL) * 4 * srows * scols);
+                   (sizeof(DCELL) * 2 * globals->nbands * srows * scols +
+                    sizeof(CELL) * 4 * srows * scols);
         }
         else {
             nseg = (1024. * 1024. * segs_mb) /
-                (sizeof(DCELL) * globals->nbands * srows * scols +
-                 sizeof(CELL) * 4 * srows * scols);
+                   (sizeof(DCELL) * globals->nbands * srows * scols +
+                    sizeof(CELL) * 4 * srows * scols);
         }
     }
     else {
         /* input bands, segment ids */
         if (globals->method == ORM_MS) {
             nseg = (1024. * 1024. * segs_mb) /
-                (sizeof(DCELL) * 2 * globals->nbands * srows * scols +
-                 sizeof(CELL) * 2 * srows * scols);
+                   (sizeof(DCELL) * 2 * globals->nbands * srows * scols +
+                    sizeof(CELL) * 2 * srows * scols);
         }
         else {
             nseg = (1024. * 1024. * segs_mb) /
-                (sizeof(DCELL) * globals->nbands * srows * scols +
-                 sizeof(CELL) * 2 * srows * scols);
+                   (sizeof(DCELL) * globals->nbands * srows * scols +
+                    sizeof(CELL) * 2 * srows * scols);
         }
     }
     nseg_total = (globals->nrows / srows + (globals->nrows % srows > 0)) *
-        (globals->ncols / scols + (globals->ncols % scols > 0));
+                 (globals->ncols / scols + (globals->ncols % scols > 0));
 
     if (nseg > nseg_total)
         nseg = nseg_total;
 
     G_debug(1, "current region:  %d rows, %d cols", globals->nrows,
             globals->ncols);
-    G_debug(1, "segmented to tiles with size:  %d rows, %d cols", srows,
-            scols);
+    G_debug(1, "segmented to tiles with size:  %d rows, %d cols", srows, scols);
     G_verbose_message(_("Number of segments in memory: %d of %d total"), nseg,
                       nseg_total);
 

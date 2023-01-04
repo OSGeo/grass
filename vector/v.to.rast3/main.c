@@ -1,8 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       v.to.rast3
- * AUTHOR(S):    Original s.to.rast3: Jaro Hofierka, Geomodel s.r.o. (original contributor)
+ * AUTHOR(S):    Original s.to.rast3: Jaro Hofierka, Geomodel s.r.o. (original
+ *                 contributor)
  *               9/2005 Upgrade to GRASS 6 by Radim Blazek
  *               Soeren Gebbert <soeren.gebbert gmx.de>
  *               OGR support by Martin Landa <landa.martin gmail.com>
@@ -87,10 +87,11 @@ int main(int argc, char *argv[])
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(Driver);
 
-    /* Note: do not check if the column exists in the table because it may be expression */
+    /* Note: do not check if the column exists in the table because it may be
+     * expression */
 
-    nrec = db_select_CatValArray(Driver, Fi->table, Fi->key,
-                                 col_opt->answer, NULL, &cvarr);
+    nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, col_opt->answer,
+                                 NULL, &cvarr);
 
     G_debug(2, "nrec = %d", nrec);
     if (nrec < 0)
@@ -102,9 +103,8 @@ int main(int argc, char *argv[])
 
     db_close_database_shutdown_driver(Driver);
 
-    map = Rast3d_open_new_opt_tile_size(out_opt->answer,
-                                        RASTER3D_USE_CACHE_DEFAULT, &region,
-                                        FCELL_TYPE, 32);
+    map = Rast3d_open_new_opt_tile_size(
+        out_opt->answer, RASTER3D_USE_CACHE_DEFAULT, &region, FCELL_TYPE, 32);
 
     if (map == NULL)
         G_fatal_error(_("Unable to create output map"));
@@ -128,8 +128,8 @@ int main(int argc, char *argv[])
             continue;
         }
         /* Check if the coordinates are located in the cube */
-        if (!Rast3d_is_valid_location
-            (&(map->region), Points->y[0], Points->x[0], Points->z[0])) {
+        if (!Rast3d_is_valid_location(&(map->region), Points->y[0],
+                                      Points->x[0], Points->z[0])) {
             continue;
         }
         /* Convert the north, east and top coorindate into row, col and depth */

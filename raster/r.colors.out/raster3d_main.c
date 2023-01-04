@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.colors.out
@@ -7,7 +6,8 @@
  *
  * PURPOSE:      Allows export of the color table for a 3D raster map.
  *
- * COPYRIGHT:    (C) 2008, 2010-2011 Glynn Clements and the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010-2011 Glynn Clements and the GRASS Development
+ *               Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -26,12 +26,10 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map, *file;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *p;
     } flag;
 

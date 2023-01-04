@@ -1,7 +1,8 @@
 /*!
    \file lib/vector/Vlib/copy.c
 
-   \brief Vector library - Copy vector features and attribute tables linked to the map
+   \brief Vector library - Copy vector features and attribute tables linked to
+   the map
 
    Higher level functions for reading/writing/manipulating vectors.
 
@@ -12,7 +13,8 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
-   \author Update to GRASS 7 by Martin Landa <landa.martin gmail.com> (OGR/PostGIS topology support)
+   \author Update to GRASS 7 by Martin Landa <landa.martin gmail.com>
+   (OGR/PostGIS topology support)
  */
 
 #include <grass/vector.h>
@@ -27,7 +29,7 @@
    - native topo (GRASS)
    - PostGIS Topo
  */
-#define TOPO_NONE   -1
+#define TOPO_NONE    -1
 #define TOPO_NATIVE  1
 #define TOPO_POSTGIS 2
 
@@ -79,11 +81,12 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
     int ret, format, topo;
 
     if (Vect_level(In) < 1)
-        G_fatal_error(_("Unable to copy features. Input vector map <%s> is not open"),
-                      Vect_get_full_name(In));
+        G_fatal_error(
+            _("Unable to copy features. Input vector map <%s> is not open"),
+            Vect_get_full_name(In));
 
-    format = Out->format;       /* do not use Vect_maptype(), we need native
-                                   format for temporary maps here */
+    format = Out->format; /* do not use Vect_maptype(), we need native
+                             format for temporary maps here */
     topo = TOPO_NONE;
     if (format == GV_FORMAT_NATIVE) {
         topo = TOPO_NATIVE;
@@ -133,7 +136,8 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
         /* -> copy features on level 1 */
         if (topo == TOPO_NONE)
             G_warning(_("Vector map <%s> not open on topological level. "
-                        "Areas will be skipped!"), Vect_get_full_name(In));
+                        "Areas will be skipped!"),
+                      Vect_get_full_name(In));
 
         ret += copy_lines_1(In, field, Out);
     }
@@ -172,17 +176,17 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
             ret = 1;
             break;
         }
-        else if (type == -2) {  /* EOF */
-            break;              /* free allocated space and return */
+        else if (type == -2) { /* EOF */
+            break;             /* free allocated space and return */
         }
-        else if (type == 0) {   /* dead line */
+        else if (type == 0) { /* dead line */
             continue;
         }
 
         /* don't skip boundaries if field != -1 */
         if (field != -1 && !(type & GV_BOUNDARY) &&
             Vect_cat_get(Cats, field, NULL) == 0)
-            continue;           /* different layer */
+            continue; /* different layer */
 
         Vect_write_line(Out, type, Points, Cats);
     }
@@ -204,8 +208,7 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
    \return 0 on success
    \return 1 on error
  */
-int copy_lines_2(struct Map_info *In, int field, int topo,
-                 struct Map_info *Out)
+int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
 {
     int i, type, nlines, nskipped;
     int ret, left, rite, centroid, with_z;
@@ -248,10 +251,10 @@ int copy_lines_2(struct Map_info *In, int field, int topo,
             G_warning(_("Unable to read vector map <%s>"),
                       Vect_get_full_name(In));
             ret = 1;
-            break;              /* free allocated space and return */
+            break; /* free allocated space and return */
         }
         if (type == 0)
-            continue;           /* dead line */
+            continue; /* dead line */
         if (In->constraint.type_flag) {
             /* skip feature by type */
             if (!(type & In->constraint.type))
@@ -303,8 +306,8 @@ int copy_lines_2(struct Map_info *In, int field, int topo,
                         if (rite < 0)
                             rite = Vect_get_isle_area(In, abs(rite));
                         if (rite > 0) {
-                            if ((centroid =
-                                 Vect_get_area_centroid(In, rite)) > 0) {
+                            if ((centroid = Vect_get_area_centroid(In, rite)) >
+                                0) {
                                 Vect_read_line(In, CPoints, CCats, centroid);
                                 if (Vect_cat_get(CCats, field, NULL) != 0)
                                     skip_bndry = FALSE;
@@ -317,7 +320,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo,
             }
             else if (Vect_cat_get(Cats, field, NULL) == 0) {
                 nskipped++;
-                continue;       /* different layer */
+                continue; /* different layer */
             }
         }
 
@@ -363,8 +366,9 @@ int copy_lines_2(struct Map_info *In, int field, int topo,
     }
 
     if (nskipped > 0)
-        G_important_message(_("%d features without category or from different layer skipped"),
-                            nskipped);
+        G_important_message(
+            _("%d features without category or from different layer skipped"),
+            nskipped);
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(CPoints);
@@ -470,8 +474,7 @@ int is_isle(const struct Map_info *Map, int area)
         }
     }
 
-    G_debug(3, "is_isle(): area %d skip? -> %s", area,
-            is_isle ? "yes" : "no");
+    G_debug(3, "is_isle(): area %d skip? -> %s", area, is_isle ? "yes" : "no");
     Vect_destroy_list(List);
 
     return is_isle;
@@ -487,8 +490,7 @@ int is_isle(const struct Map_info *Map, int area)
    \return 0 on success
    \return 1 on error
  */
-int Vect__copy_areas(const struct Map_info *In, int field,
-                     struct Map_info *Out)
+int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
 {
     int i, area, nareas, cat, isle, nisles, nparts_alloc, nskipped;
     struct line_pnts **Points;
@@ -516,7 +518,7 @@ int Vect__copy_areas(const struct Map_info *In, int field,
             /* skip area without category in given layer
                if (cat == -1) {
                nskipped++;
-               continue; 
+               continue;
                }
              */
 
@@ -546,10 +548,8 @@ int Vect__copy_areas(const struct Map_info *In, int field,
         nisles = Vect_get_area_num_isles(In, area);
         if (nisles + 1 > nparts_alloc) {
             /* reallocate space for isles */
-            Points = (struct line_pnts **)G_realloc(Points,
-                                                    (nisles + 1) *
-                                                    sizeof(struct line_pnts
-                                                           *));
+            Points = (struct line_pnts **)G_realloc(
+                Points, (nisles + 1) * sizeof(struct line_pnts *));
             for (i = nparts_alloc; i < nisles + 1; i++)
                 Points[i] = Vect_new_line_struct();
             nparts_alloc = nisles + 1;
@@ -568,7 +568,7 @@ int Vect__copy_areas(const struct Map_info *In, int field,
             }
         }
 #ifdef HAVE_POSTGRES
-        else {                  /* building simple features geometry from topogeometry data */
+        else { /* building simple features geometry from topogeometry data */
             if (0 > V2__update_area_pg(Out, (const struct line_pnts **)Points,
                                        nisles + 1, cat)) {
                 G_warning(_("Writing area %d failed"), area);
@@ -579,8 +579,9 @@ int Vect__copy_areas(const struct Map_info *In, int field,
     }
 
     if (nskipped > 0)
-        G_important_message(_("%d areas without category or from different layer skipped"),
-                            nskipped);
+        G_important_message(
+            _("%d areas without category or from different layer skipped"),
+            nskipped);
 
     /* free allocated space for isles */
     for (i = 0; i < nparts_alloc; i++)
@@ -607,8 +608,7 @@ int Vect__copy_areas(const struct Map_info *In, int field,
    \return 0 on success
    \return -1 on error
  */
-int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out,
-                     int field)
+int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
 {
     int i, n, type;
     struct field_info *Fi;
@@ -631,12 +631,13 @@ int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out,
         if (field > 0 && Fi->number != field)
             continue;
 
-        if (Vect_copy_table(In, Out, Fi->number, Fi->number, Fi->name,
-                            type) != 0) {
+        if (Vect_copy_table(In, Out, Fi->number, Fi->number, Fi->name, type) !=
+            0) {
 
-            G_warning(_("Unable to copy table <%s> for layer %d from <%s> to <%s>"),
-                      Fi->table, Fi->number, Vect_get_full_name(In),
-                      Vect_get_name(Out));
+            G_warning(
+                _("Unable to copy table <%s> for layer %d from <%s> to <%s>"),
+                Fi->table, Fi->number, Vect_get_full_name(In),
+                Vect_get_name(Out));
             return -1;
         }
     }
@@ -682,10 +683,10 @@ int Vect_copy_table(const struct Map_info *In, struct Map_info *Out,
    \return 0 on success
    \return -1 on error
  */
-int Vect_copy_table_by_cat_list(const struct Map_info *In,
-                                struct Map_info *Out, int field_in,
-                                int field_out, const char *field_name,
-                                int type, const struct cat_list *cat_list)
+int Vect_copy_table_by_cat_list(const struct Map_info *In, struct Map_info *Out,
+                                int field_in, int field_out,
+                                const char *field_name, int type,
+                                const struct cat_list *cat_list)
 {
     int *cats;
     int ncats, ret;
@@ -694,9 +695,8 @@ int Vect_copy_table_by_cat_list(const struct Map_info *In,
         if (Vect_cat_list_to_array(cat_list, &cats, &ncats) != 0)
             return -1;
 
-        ret =
-            Vect_copy_table_by_cats(In, Out, field_in, field_out, field_name,
-                                    type, cats, ncats);
+        ret = Vect_copy_table_by_cats(In, Out, field_in, field_out, field_name,
+                                      type, cats, ncats);
 
         G_free(cats);
     }
@@ -724,9 +724,8 @@ int Vect_copy_table_by_cat_list(const struct Map_info *In,
    \return -1 on error
  */
 int Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
-                            int field_in, int field_out,
-                            const char *field_name, int type, int *cats,
-                            int ncats)
+                            int field_in, int field_out, const char *field_name,
+                            int type, int *cats, int ncats)
 {
     int ret;
     struct field_info *Fi, *Fin;
@@ -738,8 +737,7 @@ int Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
 
     Fi = Vect_get_field(In, field_in);
     if (Fi == NULL) {
-        G_warning(_("Database connection not defined for layer %d"),
-                  field_in);
+        G_warning(_("Database connection not defined for layer %d"), field_in);
         return -1;
     }
 
@@ -749,13 +747,11 @@ int Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
         name = Fi->name;
 
     Fin = Vect_default_field_info(Out, field_out, name, type);
-    G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'",
-            Fi->driver, Fi->database, Fi->table, Fin->driver, Fin->database,
-            Fin->table);
+    G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'", Fi->driver,
+            Fi->database, Fi->table, Fin->driver, Fin->database, Fin->table);
 
-    ret =
-        Vect_map_add_dblink(Out, Fin->number, Fin->name, Fin->table, Fi->key,
-                            Fin->database, Fin->driver);
+    ret = Vect_map_add_dblink(Out, Fin->number, Fin->name, Fin->table, Fi->key,
+                              Fin->database, Fin->driver);
     if (ret == -1) {
         G_warning(_("Unable to add database link for vector map <%s>"),
                   Out->name);
@@ -768,17 +764,15 @@ int Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
         key = NULL;
 
     ret = db_copy_table_by_ints(Fi->driver, Fi->database, Fi->table,
-                                Fin->driver, Vect_subst_var(Fin->database,
-                                                            Out), Fin->table,
-                                key, cats, ncats);
+                                Fin->driver, Vect_subst_var(Fin->database, Out),
+                                Fin->table, key, cats, ncats);
     if (ret == DB_FAILED) {
         G_warning(_("Unable to copy table <%s>"), Fin->table);
         return -1;
     }
 
     driver = db_start_driver_open_database(Fin->driver,
-                                           Vect_subst_var(Fin->database,
-                                                          Out));
+                                           Vect_subst_var(Fin->database, Out));
 
     if (!driver) {
         G_warning(_("Unable to open database <%s> with driver <%s>"),

@@ -21,8 +21,8 @@ int do_astar(void)
      * |2| |3|
      * |5|0|6|
      */
-    int nbr_ew[8] = { 0, 1, 2, 3, 1, 0, 0, 1 };
-    int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2 };
+    int nbr_ew[8] = {0, 1, 2, 3, 1, 0, 0, 1};
+    int nbr_ns[8] = {0, 1, 2, 3, 3, 2, 3, 2};
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
     int skip_diag;
@@ -83,9 +83,8 @@ int do_astar(void)
                 if (!is_worked) {
                     seg_get(&watalt, (char *)&wa, upr, upc);
                     alt_nbr[ct_dir] = wa.ele;
-                    slope[ct_dir] =
-                        get_slope2(alt_val, alt_nbr[ct_dir],
-                                   dist_to_nbr[ct_dir]);
+                    slope[ct_dir] = get_slope2(alt_val, alt_nbr[ct_dir],
+                                               dist_to_nbr[ct_dir]);
                 }
                 if (!is_in_list || (!is_worked && af.asp < 0)) {
                     if (ct_dir > 3 && slope[ct_dir] > 0) {
@@ -127,7 +126,8 @@ int do_astar(void)
                                 seg_put(&watalt, (char *)&wa, r, c);
                             }
                         }
-                        /* neighbour is inside real depression, not yet worked */
+                        /* neighbour is inside real depression, not yet worked
+                         */
                         else if (af.asp == 0) {
                             af.asp = drain[upr - r + 1][upc - c + 1];
                             seg_put(&aspflag, (char *)&af, upr, upc);
@@ -144,20 +144,20 @@ int do_astar(void)
         seg_put(&aspflag, (char *)&af, r, c);
     }
     if (doer != -1)
-        G_fatal_error(_("bug in A* Search: doer %" PRI_OFF_T " heap size %"
-                        PRI_OFF_T " count %" PRI_OFF_T), doer, heap_size,
-                      count);
+        G_fatal_error(_("bug in A* Search: doer %" PRI_OFF_T
+                        " heap size %" PRI_OFF_T " count %" PRI_OFF_T),
+                      doer, heap_size, count);
 
     seg_close(&search_heap);
 
-    G_percent(count, do_points, 1);     /* finish it */
+    G_percent(count, do_points, 1); /* finish it */
 
     return 0;
 }
 
 /* compare two heap points */
 /* return 1 if a < b else 0 */
-static int cmp_pnt(HEAP_PNT * a, HEAP_PNT * b)
+static int cmp_pnt(HEAP_PNT *a, HEAP_PNT *b)
 {
     if (a->ele < b->ele)
         return 1;

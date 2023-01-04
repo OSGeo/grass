@@ -6,18 +6,18 @@
  * US Army Construction Engineering Research Lab
  * Copyright 1993, H. Mitasova (University of Illinois),
  * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
- * 
+ *
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
  *  as published by the Free Software Foundation; either version 2
  *  of the License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
@@ -28,7 +28,6 @@
  * modified by Mitasova in November 1999
  *
  */
-
 
 #include <stdio.h>
 #include <math.h>
@@ -69,7 +68,7 @@ static double theta, scalex;
 static FCELL *zero_array_cell;
 static struct interp_params params;
 
-static FILE *fd4;               /* unused? */
+static FILE *fd4; /* unused? */
 static int fdinp, fdsmooth = -1;
 
 /*
@@ -78,7 +77,7 @@ static int fdinp, fdsmooth = -1;
  * interpolated values z for output grid adx,ady, ... - estimation of
  * derivatives for output grid nsizr,nsizc - number of rows and columns
  * for output grid xmin ... - coordinates of corners of output grid
- * 
+ *
  * subroutines input_data - input of data x,y,z (test function or measured
  * data) iterpolate - interpolation of z-values and derivatives to grid
  * secpar_loop- computation of secondary(morphometric) parameters output -
@@ -130,17 +129,14 @@ int main(int argc, char *argv[])
     FCELL *cellrow, fcellmin;
 
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *elev, *slope, *aspect, *pcurv, *tcurv, *mcurv,
             *smooth, *maskmap, *zmult, *fi, *segmax, *npmin, *res_ew, *res_ns,
             *overlap, *theta, *scalex;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *deriv, *cprght;
     } flag;
-
 
     G_gisinit(argv[0]);
 
@@ -204,8 +200,7 @@ int main(int argc, char *argv[])
     parm.mcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.mcurv->key = "mcurvature";
     parm.mcurv->required = NO;
-    parm.mcurv->description =
-        _("Name for output mean curvature map (or fxy)");
+    parm.mcurv->description = _("Name for output mean curvature map (or fxy)");
     parm.mcurv->guisection = _("Output");
 
     parm.smooth = G_define_standard_option(G_OPT_R_INPUT);
@@ -324,7 +319,8 @@ int main(int argc, char *argv[])
         if (sscanf(parm.scalex->answer, "%lf", &scalex) != 1)
             G_fatal_error(_("Invalid value for scalex"));
         if (!parm.theta->answer)
-            G_fatal_error(_("When using anisotropy both theta and scalex must be specified"));
+            G_fatal_error(_("When using anisotropy both theta and scalex must "
+                            "be specified"));
     }
 
     /*
@@ -343,7 +339,7 @@ int main(int argc, char *argv[])
     ns_res = outhd.ns_res;
     nsizc = outhd.cols;
     nsizr = outhd.rows;
-    disk = (off_t) nsizc *nsizr * sizeof(int);
+    disk = (off_t)nsizc * nsizr * sizeof(int);
 
     az = G_alloc_vector(nsizc + 1);
 
@@ -376,7 +372,8 @@ int main(int argc, char *argv[])
     Rast_get_cellhd(input, "", &inphd);
 
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
-        G_fatal_error(_("Input map resolution differs from current region resolution!"));
+        G_fatal_error(
+            _("Input map resolution differs from current region resolution!"));
 
     sdisk = 0;
     if (elev != NULL)
@@ -412,7 +409,6 @@ int main(int argc, char *argv[])
                      "%d bytes of disk space for temp files.", (int)sdisk),
                   (int)sdisk);
 
-
     fstar2 = fi * fi / 4.;
     tfsta2 = fstar2 + fstar2;
     deltx = winhd.east - winhd.west;
@@ -425,7 +421,6 @@ int main(int argc, char *argv[])
         smc = -9999;
     else
         smc = 0.01;
-
 
     if (Rast_read_fp_range(input, "", &range) >= 0) {
         Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
@@ -447,8 +442,8 @@ int main(int argc, char *argv[])
     if (Rast_is_f_null_value(&fcellmin))
         G_fatal_error(_("Maximum value of a raster map is NULL."));
 
-    zmin = (double)cellmin *zmult;
-    zmax = (double)cellmax *zmult;
+    zmin = (double)cellmin * zmult;
+    zmax = (double)cellmax * zmult;
 
     G_debug(1, "zmin=%f, zmax=%f", zmin, zmax);
 
@@ -459,19 +454,18 @@ int main(int argc, char *argv[])
     IL_init_params_2d(&params, NULL, 1, 1, zmult, KMIN, KMAX, maskmap,
                       outhd.rows, outhd.cols, az, adx, ady, adxx, adyy, adxy,
                       fi, MAXPOINTS, SCIK1, SCIK2, SCIK3, smc, elev, slope,
-                      aspect, pcurv, tcurv, mcurv, dmin, inp_x_orig,
-                      inp_y_orig, deriv, theta, scalex, Tmp_fd_z, Tmp_fd_dx,
-                      Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, false, NULL,
-                      0, NULL);
+                      aspect, pcurv, tcurv, mcurv, dmin, inp_x_orig, inp_y_orig,
+                      deriv, theta, scalex, Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy,
+                      Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, false, NULL, 0, NULL);
 
-    /*  In the above line, the penultimate argument is supposed to be a 
+    /*  In the above line, the penultimate argument is supposed to be a
      * deviations file pointer.  None is obvious, so I used NULL. */
     /*  The 3rd and 4th argument are int-s, elatt and smatt (from the function
      * definition.  The value 1 seemed like a good placeholder...  or not. */
 
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
-                    IL_check_at_points_2d,
-                    IL_secpar_loop_2d, IL_crst, IL_crstg, IL_write_temp_2d);
+                    IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
+                    IL_write_temp_2d);
 
     G_message(_("Temporarily changing the region to desired resolution ..."));
     Rast_set_window(&outhd);
@@ -489,15 +483,11 @@ int main(int argc, char *argv[])
     cursegm = 0;
     G_message(_("Percent complete: "));
 
-
-    NPOINT =
-        IL_resample_interp_segments_2d(&params, bitmask, zmin, zmax, &zminac,
-                                       &zmaxac, &gmin, &gmax, &c1min, &c1max,
-                                       &c2min, &c2max, &ertot, nsizc, &dnorm,
-                                       overlap, inp_rows, inp_cols, fdsmooth,
-                                       fdinp, ns_res, ew_res, inp_ns_res,
-                                       inp_ew_res, dtens);
-
+    NPOINT = IL_resample_interp_segments_2d(
+        &params, bitmask, zmin, zmax, &zminac, &zmaxac, &gmin, &gmax, &c1min,
+        &c1max, &c2min, &c2max, &ertot, nsizc, &dnorm, overlap, inp_rows,
+        inp_cols, fdsmooth, fdinp, ns_res, ew_res, inp_ns_res, inp_ew_res,
+        dtens);
 
     G_message(_("dnorm in mainc after grid before out1= %f"), dnorm);
 
@@ -520,11 +510,12 @@ int main(int argc, char *argv[])
     }
     G_message(_("dnorm in mainc after grid before out2= %f"), dnorm);
 
-    if (IL_resample_output_2d(&params, zmin, zmax, zminac, zmaxac, c1min,
-                              c1max, c2min, c2max, gmin, gmax, ertot, input,
-                              &dnorm, &outhd, &winhd, smooth, NPOINT) < 0) {
+    if (IL_resample_output_2d(&params, zmin, zmax, zminac, zmaxac, c1min, c1max,
+                              c2min, c2max, gmin, gmax, ertot, input, &dnorm,
+                              &outhd, &winhd, smooth, NPOINT) < 0) {
         clean();
-        G_fatal_error(_("Unable to write raster maps -- try increasing cell size"));
+        G_fatal_error(
+            _("Unable to write raster maps -- try increasing cell size"));
     }
 
     G_free(zero_array_cell);
@@ -565,7 +556,7 @@ static FILE *create_temp_file(const char *name, char **tmpname)
 
 static void create_temp_files(void)
 {
-    zero_array_cell = (FCELL *) G_calloc(nsizc, sizeof(FCELL));
+    zero_array_cell = (FCELL *)G_calloc(nsizc, sizeof(FCELL));
 
     Tmp_fd_z = create_temp_file(elev, &Tmp_file_z);
     Tmp_fd_dx = create_temp_file(slope, &Tmp_file_dx);

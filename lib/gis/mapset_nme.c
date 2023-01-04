@@ -19,10 +19,8 @@
 
 #include "gis_local_proto.h"
 
-static struct state
-{
-    struct list
-    {
+static struct state {
+    struct list {
         char **names;
         int count;
         int size;

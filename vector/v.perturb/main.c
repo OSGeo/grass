@@ -1,12 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       v.perturb
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
- * 	         http://mccauley-usa.com/
+ *                  http://mccauley-usa.com/
  * PURPOSE:      Random location perturbations of vector points
  *
- * COPYRIGHT:    (C) 1994-2009 by James Darrell McCauley and the GRASS Development Team
+ * COPYRIGHT:    (C) 1994-2009 by James Darrell McCauley and the GRASS
+ *               Development Team
  *
  * Modification History:
  * 3/2006              added min and seed MN/SM ITC-irst
@@ -51,8 +51,7 @@ int main(int argc, char **argv)
 
     struct Cell_head window;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *in, *out, *dist, *pars, *min, *seed, *field;
         struct Flag *gen_seed, *no_topo;
     } parm;
@@ -67,8 +66,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("point pattern"));
     G_add_keyword(_("level1"));
 
-    module->description =
-        _("Random location perturbations of vector points.");
+    module->description = _("Random location perturbations of vector points.");
 
     parm.in = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -90,10 +88,11 @@ int main(int argc, char **argv)
     parm.pars->required = YES;
     parm.pars->multiple = YES;
     parm.pars->label = _("Parameter(s) of distribution");
-    parm.pars->description = _("If the distribution "
-                               "is uniform, only one parameter, the maximum, is needed. "
-                               "For a normal distribution, two parameters, the mean and "
-                               "standard deviation, are required.");
+    parm.pars->description =
+        _("If the distribution "
+          "is uniform, only one parameter, the maximum, is needed. "
+          "For a normal distribution, two parameters, the mean and "
+          "standard deviation, are required.");
 
     parm.min = G_define_option();
     parm.min->key = "minimum";
@@ -153,7 +152,8 @@ int main(int argc, char **argv)
             G_fatal_error(_("Error scanning arguments"));
         }
         if (p2 <= 0)
-            G_fatal_error(_("Standard deviation of normal distribution must be >= zero"));
+            G_fatal_error(
+                _("Standard deviation of normal distribution must be >= zero"));
     }
 
     G_get_window(&window);
@@ -171,8 +171,7 @@ int main(int argc, char **argv)
 
     /* Open output */
     if (Vect_open_new(&Out, parm.out->answer, out_is_3d) < 0)
-        G_fatal_error(_("Unable to create vector map <%s>"),
-                      parm.out->answer);
+        G_fatal_error(_("Unable to create vector map <%s>"), parm.out->answer);
     /* TODO: Add also optional z perturb support */
 
     Vect_hist_copy(&In, &Out);
@@ -199,7 +198,8 @@ int main(int argc, char **argv)
     while (1) {
         int type = Vect_read_next_line(&In, Points, Cats);
 
-        /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+        /* Note: check for dead lines is not needed, because they are skipped by
+         * V1_read_next_line_nat() */
         if (type == -1) {
             G_fatal_error(_("Unable to read vector map"));
         }
@@ -270,9 +270,8 @@ int main(int argc, char **argv)
         Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fin->table, Fi->key,
                             Fin->database, Fin->driver);
 
-        ret = db_copy_table(Fi->driver, Fi->database, Fi->table,
-                            Fin->driver, Vect_subst_var(Fin->database, &Out),
-                            Fin->table);
+        ret = db_copy_table(Fi->driver, Fi->database, Fi->table, Fin->driver,
+                            Vect_subst_var(Fin->database, &Out), Fin->table);
         if (ret == DB_FAILED) {
             G_warning("Cannot copy table");
         }

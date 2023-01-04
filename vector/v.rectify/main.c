@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       v.rectify
  * AUTHOR(S):    Markus Metz
  *               based on i.rectify
- * PURPOSE:      calculate a transformation matrix and then convert x,y(,z) 
- *               coordinates to standard map coordinates for all objects in 
+ * PURPOSE:      calculate a transformation matrix and then convert x,y(,z)
+ *               coordinates to standard map coordinates for all objects in
  *               the vector
- *               control points can come from g.gui.gcp or 
- *               a user-given text file
+ *               control points can come from g.gui.gcp or a user-given
+ *               text file
  * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -29,14 +28,12 @@
 #include "global.h"
 #include "crs.h"
 
-
 /* georef coefficients */
 
 double E12[20], N12[20], Z12[20];
 double E21[20], N21[20], Z21[20];
 double HG12[20], HG21[20], HQ12[20], HQ21[20];
 double OR12[20], OR21[20];
-
 
 int main(int argc, char *argv[])
 {
@@ -52,13 +49,13 @@ int main(int argc, char *argv[])
     int use3d;
     FILE *fp;
 
-    struct Option *grp,         /* imagery group */
-     *val,                      /* transformation order */
-     *in_opt,                   /* input vector name */
-     *out_opt,                  /* output vector name */
-     *pfile,                    /* text file with GCPs */
-     *rfile,                    /* text file to hold RMS errors */
-     *sep;                      /* field separator for RMS report */
+    struct Option *grp, /* imagery group */
+        *val,           /* transformation order */
+        *in_opt,        /* input vector name */
+        *out_opt,       /* output vector name */
+        *pfile,         /* text file with GCPs */
+        *rfile,         /* text file to hold RMS errors */
+        *sep;           /* field separator for RMS report */
 
     struct Flag *flag_use3d, *no_topo, *print_rms, *ortho;
 
@@ -93,8 +90,8 @@ int main(int argc, char *argv[])
 
     rfile = G_define_standard_option(G_OPT_F_INPUT);
     rfile->key = "rmsfile";
-    rfile->description =
-        _("Name of output file with RMS errors (if omitted or '-' output to stdout");
+    rfile->description = _("Name of output file with RMS errors (if omitted or "
+                           "'-' output to stdout");
     rfile->required = NO;
 
     val = G_define_option();
@@ -127,7 +124,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     if (grp->answer) {
         G_strip(grp->answer);
         strcpy(group, grp->answer);
@@ -140,7 +136,8 @@ int main(int argc, char *argv[])
     if (grp->answer == NULL && points_file == NULL)
         G_fatal_error(_("Please select a group or give an input file."));
     else if (grp->answer != NULL && points_file != NULL)
-        G_warning(_("Points in group will be ignored, GCPs in input file are used."));
+        G_warning(
+            _("Points in group will be ignored, GCPs in input file are used."));
 
     order = atoi(val->answer);
 
@@ -158,7 +155,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("3D transformation requires a 3D vector"));
 
     if (use3d && !points_file)
-        G_fatal_error(_("A file with 3D control points is needed for 3D transformation"));
+        G_fatal_error(
+            _("A file with 3D control points is needed for 3D transformation"));
 
     orthorot = ortho->answer;
 
@@ -193,7 +191,7 @@ int main(int argc, char *argv[])
     get_target(group);
 
     /* Check the GRASS_OVERWRITE environment variable */
-    if ((overstr = getenv("GRASS_OVERWRITE")))  /* OK ? */
+    if ((overstr = getenv("GRASS_OVERWRITE"))) /* OK ? */
         target_overwrite = atoi(overstr);
 
     if (!target_overwrite) {
@@ -232,7 +230,7 @@ int main(int argc, char *argv[])
     while (1) {
         type = Vect_read_next_line(&In, Points, Cats);
         if (type == 0)
-            continue;           /* Dead */
+            continue; /* Dead */
 
         if (type == -1)
             G_fatal_error(_("Reading input vector map"));
@@ -253,11 +251,11 @@ int main(int argc, char *argv[])
         for (n = 0; n < Vect_get_num_line_points(Points); n++) {
             if (use3d) {
                 if (orthorot)
-                    CRS_georef_or(Points->x[n], Points->y[n], Points->z[n],
-                                  &x, &y, &z, OR12);
+                    CRS_georef_or(Points->x[n], Points->y[n], Points->z[n], &x,
+                                  &y, &z, OR12);
                 else
-                    CRS_georef_3d(Points->x[n], Points->y[n], Points->z[n],
-                                  &x, &y, &z, E12, N12, Z12, order);
+                    CRS_georef_3d(Points->x[n], Points->y[n], Points->z[n], &x,
+                                  &y, &z, E12, N12, Z12, order);
             }
             else {
                 I_georef(Points->x[n], Points->y[n], &x, &y, E12, N12, order);

@@ -9,7 +9,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 #if defined(_MSC_VER)
 #include <math.h>
@@ -20,7 +20,7 @@
 
 #if CAIRO_HAS_FT_FONT
 #include <cairo-ft.h>
-#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1,10,0) || defined(CAIRO_HAS_FC_FONT)
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0) || defined(CAIRO_HAS_FC_FONT)
 #define USE_FONTCONFIG 1
 #include <fontconfig/fontconfig.h>
 #else
@@ -50,9 +50,8 @@ static char *convert(const char *in)
         size_t ret;
         iconv_t cd;
 
-        if ((cd = iconv_open("UTF-8", encoding)) == (iconv_t) - 1)
-            G_fatal_error(_("Unable to convert from <%s> to UTF-8"),
-                          encoding);
+        if ((cd = iconv_open("UTF-8", encoding)) == (iconv_t)-1)
+            G_fatal_error(_("Unable to convert from <%s> to UTF-8"), encoding);
 
         ret = iconv(cd, &p1, &ilen, &p2, &olen);
 
@@ -131,8 +130,7 @@ void Cairo_Text(const char *str)
    \param str string
    \param[out] t,b,l,r top, bottom, left, right corner
  */
-void Cairo_text_box(const char *str, double *t, double *b, double *l,
-                    double *r)
+void Cairo_text_box(const char *str, double *t, double *b, double *l, double *r)
 {
     char *utf8 = convert(str);
     cairo_text_extents_t ext;
@@ -206,7 +204,7 @@ static void set_font_fc(const char *name)
         face = NULL;
     }
 
-    pattern = FcNameParse((FcChar8 *) name);
+    pattern = FcNameParse((FcChar8 *)name);
     FcDefaultSubstitute(pattern);
     FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
     pattern = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
@@ -234,15 +232,14 @@ static void font_list_fc(char ***list, int *count, int verbose)
     for (i = 0; i < fontset->nfont; i++) {
         char buf[1024];
         FcPattern *pat = fontset->fonts[i];
-        FcChar8 *family = (FcChar8 *) "", *style = (FcChar8 *) "";
+        FcChar8 *family = (FcChar8 *)"", *style = (FcChar8 *)"";
 
         FcPatternGetString(pat, FC_FAMILY, 0, &family);
         FcPatternGetString(pat, FC_STYLE, 0, &style);
 
         if (verbose)
-            sprintf(buf, "%s:%s|%s:%s|%d|%s|%d|%s|",
-                    family, style, family, style, GFONT_DRIVER, "", 0,
-                    "utf-8");
+            sprintf(buf, "%s:%s|%s:%s|%d|%s|%d|%s|", family, style, family,
+                    style, GFONT_DRIVER, "", 0, "utf-8");
         else
             sprintf(buf, "%s:%s", family, style);
 
@@ -260,18 +257,9 @@ static void font_list_fc(char ***list, int *count, int verbose)
 #endif
 
 static const char *toy_fonts[12] = {
-    "sans",
-    "sans-italic",
-    "sans-bold",
-    "sans-bold-italic",
-    "serif",
-    "serif-italic",
-    "serif-bold",
-    "serif-bold-italic",
-    "mono",
-    "mono-italic",
-    "mono-bold",
-    "mono-bold-italic",
+    "sans",  "sans-italic",  "sans-bold",  "sans-bold-italic",
+    "serif", "serif-italic", "serif-bold", "serif-bold-italic",
+    "mono",  "mono-italic",  "mono-bold",  "mono-bold-italic",
 };
 
 static const int num_toy_fonts = 12;
@@ -316,8 +304,8 @@ static void font_list_toy(char ***list, int *count, int verbose)
         char buf[256];
 
         if (verbose)
-            sprintf(buf, "%s|%s|%d|%s|%d|%s|",
-                    toy_fonts[i], toy_fonts[i], GFONT_DRIVER, "", 0, "utf-8");
+            sprintf(buf, "%s|%s|%d|%s|%d|%s|", toy_fonts[i], toy_fonts[i],
+                    GFONT_DRIVER, "", 0, "utf-8");
         else
             strcpy(buf, toy_fonts[i]);
         fonts[num_fonts++] = G_store(buf);

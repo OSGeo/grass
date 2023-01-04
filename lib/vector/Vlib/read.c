@@ -21,8 +21,7 @@
 
 static int read_dummy()
 {
-    G_warning("Vect_read_line() %s",
-              _("for this format/level not supported"));
+    G_warning("Vect_read_line() %s", _("for this format/level not supported"));
     return -1;
 }
 
@@ -35,42 +34,41 @@ static int format()
 #endif
 
 static int (*Read_next_line_array[][3])() = {
-    {
-     read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
+    {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
 #ifdef HAVE_OGR
-    , {
-       read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
-    , {
-       read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
+    ,
+    {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr},
+    {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
 #else
-    , {
-       read_dummy, format, format}
-    , {
-       read_dummy, format, format}
+    ,
+    {read_dummy, format, format},
+    {read_dummy, format, format}
 #endif
 #ifdef HAVE_POSTGRES
-    , {
-       read_dummy, V1_read_next_line_pg, V2_read_next_line_pg}
+    ,
+    {read_dummy, V1_read_next_line_pg, V2_read_next_line_pg}
 #else
-    , {
-       read_dummy, format, format}
+    ,
+    {read_dummy, format, format}
 #endif
 };
 
-static int (*Read_line_array[])() = {
-    V2_read_line_nat
+static int (*Read_line_array[])() = {V2_read_line_nat
 #ifdef HAVE_OGR
-        , V2_read_line_sfa, V2_read_line_sfa
+                                     ,
+                                     V2_read_line_sfa, V2_read_line_sfa
 #else
-        , format, format
+                                     ,
+                                     format, format
 #endif
 #ifdef HAVE_POSTGRES
-        , V2_read_line_pg
+                                     ,
+                                     V2_read_line_pg
 #else
-        , format
+                                     ,
+                                     format
 #endif
 };
-
 
 /*!
    \brief Get line id for sequential reading.
@@ -116,8 +114,8 @@ int Vect_get_next_line_id(const struct Map_info *Map)
    \return -1 on error
    \return -2 nothing to read
  */
-int Vect_read_next_line(const struct Map_info *Map,
-                        struct line_pnts *line_p, struct line_cats *line_c)
+int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
+                        struct line_cats *line_c)
 {
     int ret;
 
@@ -128,8 +126,7 @@ int Vect_read_next_line(const struct Map_info *Map,
         return -1;
     }
 
-    ret = (*Read_next_line_array[Map->format][Map->level]) (Map, line_p,
-                                                            line_c);
+    ret = (*Read_next_line_array[Map->format][Map->level])(Map, line_p, line_c);
     if (ret == -1)
         G_warning(_("Unable to read feature %d from vector map <%s>"),
                   Map->next_line, Vect_get_full_name(Map));
@@ -153,11 +150,10 @@ int Vect_read_next_line(const struct Map_info *Map,
 
    \return feature type
    \return -1 on failure
-   \return -2 nothing to read   
+   \return -2 nothing to read
  */
-int Vect_read_line(const struct Map_info *Map,
-                   struct line_pnts *line_p, struct line_cats *line_c,
-                   int line)
+int Vect_read_line(const struct Map_info *Map, struct line_pnts *line_p,
+                   struct line_cats *line_c, int line)
 {
     int ret;
 
@@ -173,11 +169,11 @@ int Vect_read_line(const struct Map_info *Map,
         return -1;
     }
 
-    ret = (*Read_line_array[Map->format]) (Map, line_p, line_c, line);
+    ret = (*Read_line_array[Map->format])(Map, line_p, line_c, line);
 
     if (ret == -1)
-        G_warning(_("Unable to read feature %d from vector map <%s>"),
-                  line, Vect_get_full_name(Map));
+        G_warning(_("Unable to read feature %d from vector map <%s>"), line,
+                  Vect_get_full_name(Map));
 
     return ret;
 }

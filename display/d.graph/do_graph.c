@@ -10,7 +10,7 @@
 #include "options.h"
 #include "local_proto.h"
 
-#define CHUNK	128
+#define CHUNK 128
 
 static int coors_allocated = 0;
 static double *xarray;
@@ -19,7 +19,7 @@ static double *yarray;
 static float xincr;
 static float yincr;
 
-static double rotation;         /* degrees counter-clockwise from east */
+static double rotation; /* degrees counter-clockwise from east */
 
 static RGBA_Color last_color;
 
@@ -34,15 +34,15 @@ int set_graph_stuff(void)
     if (mapunits) {
         xincr = (r - l) / 100.;
         if (xincr < 0.0)
-            xincr = -xincr;     /* mod: shapiro 13 jun 1991 */
+            xincr = -xincr; /* mod: shapiro 13 jun 1991 */
         yincr = (b - t) / 100.;
         if (yincr < 0.0)
-            yincr = -yincr;     /* mod: shapiro 13 jun 1991 */
+            yincr = -yincr; /* mod: shapiro 13 jun 1991 */
     }
     else
         xincr = yincr = 1;
 
-    rotation = 0.0;             /* init */
+    rotation = 0.0; /* init */
 
     return 0;
 }
@@ -51,8 +51,8 @@ int set_text_size(void)
 {
     if (hsize >= 0. && vsize >= 0. && hsize <= 100. && vsize <= 100.) {
         D_text_size(hsize * xincr, vsize * yincr);
-        G_debug(3, "text size initialized to [%.1f,%.1f]",
-                hsize * xincr, vsize * yincr);
+        G_debug(3, "text size initialized to [%.1f,%.1f]", hsize * xincr,
+                vsize * yincr);
     }
     return (0);
 }
@@ -112,7 +112,7 @@ int do_color(const char *str)
         /* store for backup */
         set_last_color(R, G, B, RGBA_COLOR_OPAQUE);
     }
-    if (color == 2) {           /* color == 'none' */
+    if (color == 2) { /* color == 'none' */
         R = D_translate_color(DEFAULT_BG_COLOR);
         D_use_color(R);
         /* store for backup */
@@ -136,8 +136,7 @@ int do_linewidth(const char *str)
     return (0);
 }
 
-
-int do_poly(char *buff, FILE * infile)
+int do_poly(char *buff, FILE *infile)
 {
     int num;
     char origcmd[64];
@@ -159,8 +158,7 @@ int do_poly(char *buff, FILE * infile)
                 continue;
             }
 
-            G_debug(3, "coordinate pair not found. ending polygon. [%s]",
-                    buff);
+            G_debug(3, "coordinate pair not found. ending polygon. [%s]", buff);
             break;
         }
 
@@ -173,7 +171,7 @@ int do_poly(char *buff, FILE * infile)
     }
 
     if (num) {
-        /* this check is here so you can use the "polyline" command 
+        /* this check is here so you can use the "polyline" command
            to make an unfilled polygon */
         if (!strcmp(origcmd, "polygon"))
             D_polygon_abs(xarray, yarray, num);
@@ -227,8 +225,10 @@ int do_text(const char *str)
     const char *ptr = str;
 
     /* skip to beginning of actual text */
-    for (; *ptr != ' '; ptr++) ;
-    for (; *ptr == ' '; ptr++) ;
+    for (; *ptr != ' '; ptr++)
+        ;
+    for (; *ptr == ' '; ptr++)
+        ;
     D_text(ptr);
 
     return 0;
@@ -309,11 +309,11 @@ int do_symbol(const char *str)
     RGBA_Color *line_color, *fill_color;
     int R, G, B, ret;
 
-
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
 
-    symb_name = G_malloc(strlen(str) + 1);      /* well, it won't be any bigger than this */
+    symb_name =
+        G_malloc(strlen(str) + 1); /* well, it won't be any bigger than this */
     line_color_str = G_malloc(strlen(str) + 1);
     fill_color_str = G_malloc(strlen(str) + 1);
 
@@ -323,9 +323,8 @@ int do_symbol(const char *str)
     strcpy(line_color_str, DEFAULT_FG_COLOR);
     strcpy(fill_color_str, "grey");
 
-    if (sscanf
-        (str, "%*s %s %lf %lf %lf %s %s", symb_name, &size, &xper, &yper,
-         line_color_str, fill_color_str) < 4) {
+    if (sscanf(str, "%*s %s %lf %lf %lf %s %s", symb_name, &size, &xper, &yper,
+               line_color_str, fill_color_str) < 4) {
         G_warning(_("Problem parsing command [%s]"), str);
         return (-1);
     }
@@ -341,7 +340,8 @@ int do_symbol(const char *str)
     line_color->b = (unsigned char)B;
 
     if (ret == 1) {
-        /* here alpha is only used as an on/off switch, otherwise unused by the display drivers */
+        /* here alpha is only used as an on/off switch, otherwise unused by the
+         * display drivers */
         line_color->a = RGBA_COLOR_OPAQUE;
     }
     else if (ret == 2)
@@ -382,7 +382,7 @@ int do_symbol(const char *str)
         D_RGB_color(last_color.r, last_color.g, last_color.b);
     else if (last_color.a == RGBA_COLOR_NONE)
         D_use_color(D_parse_color(DEFAULT_BG_COLOR, 0));
-    else                        /* unset or bad */
+    else /* unset or bad */
         D_RGB_color(line_color->r, line_color->g, line_color->b);
 
     G_free(symb_name);
@@ -394,7 +394,8 @@ int do_symbol(const char *str)
     return (0);
 }
 
-/* RGBA are 0-255; alpha is only used as an on/off switch. maybe test a<127<a ? */
+/* RGBA are 0-255; alpha is only used as an on/off switch. maybe test a<127<a ?
+ */
 void set_last_color(int R, int G, int B, int alpha)
 {
     if (alpha == RGBA_COLOR_OPAQUE) {

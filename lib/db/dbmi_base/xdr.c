@@ -72,7 +72,7 @@ static ssize_t writen(int fd, const void *buf, size_t count)
    \param send
    \param recv
  */
-void db__set_protocol_fds(FILE * send, FILE * recv)
+void db__set_protocol_fds(FILE *send, FILE *recv)
 {
     _send = send;
     _recv = recv;

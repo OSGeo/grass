@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two 
+ * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
  * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
@@ -49,9 +48,9 @@ void find_edge_cells(struct Map *map, int null)
     ncols = Rast_window_cols();
     nrows = Rast_window_rows();
 
-    buf0 = (CELL *) G_calloc(ncols + 2, sizeof(CELL));
-    buf1 = (CELL *) G_calloc(ncols + 2, sizeof(CELL));
-    buf2 = (CELL *) G_calloc(ncols + 2, sizeof(CELL));
+    buf0 = (CELL *)G_calloc(ncols + 2, sizeof(CELL));
+    buf1 = (CELL *)G_calloc(ncols + 2, sizeof(CELL));
+    buf2 = (CELL *)G_calloc(ncols + 2, sizeof(CELL));
 
     for (col = 0; col < (ncols + 2); col++) {
         buf0[col] = 0;
@@ -75,11 +74,10 @@ void find_edge_cells(struct Map *map, int null)
         Rast_get_c_row(fd, &buf1[1], row);
 
         for (col = 1; col <= ncols; col++) {
-            if ((buf1[col]      /* is a valid category */
-                 &&(buf1[col - 1] != buf1[col]  /* 4 neighbors not the same? */
-                    ||buf1[col + 1] != buf1[col]
-                    || buf0[col] != buf1[col]
-                    || buf2[col] != buf1[col])) &&
+            if ((buf1[col]                      /* is a valid category */
+                 && (buf1[col - 1] != buf1[col] /* 4 neighbors not the same? */
+                     || buf1[col + 1] != buf1[col] || buf0[col] != buf1[col] ||
+                     buf2[col] != buf1[col])) &&
                 (null || !Rast_is_c_null_value(&buf1[col])))
                 add_edge_cell(map, buf1[col], row, col - 1);
         }
@@ -103,14 +101,13 @@ void add_edge_cell(struct Map *map, CELL cat, int row, int col)
     for (i = 0; i < map->edges.ncats; i++)
         if (cat == map->edges.catlist[i].cat)
             break;
-    if (i == map->edges.ncats) {        /* new category */
+    if (i == map->edges.ncats) { /* new category */
         map->edges.ncats += 1;
         if (map->edges.nalloc < map->edges.ncats) {
             map->edges.nalloc += 32;
-            map->edges.catlist =
-                (struct CatEdgeList *)G_realloc(map->edges.catlist,
-                                                map->edges.nalloc *
-                                                sizeof(struct CatEdgeList));
+            map->edges.catlist = (struct CatEdgeList *)G_realloc(
+                map->edges.catlist,
+                map->edges.nalloc * sizeof(struct CatEdgeList));
         }
         map->edges.catlist[i].ncells = 0;
         map->edges.catlist[i].nalloc = 0;
@@ -159,6 +156,6 @@ static int cmp(const void *aa, const void *bb)
 void sort_edge_list(struct Map *map)
 {
     if (map->edges.ncats > 0)
-        qsort(map->edges.catlist, map->edges.ncats,
-              sizeof(struct CatEdgeList), cmp);
+        qsort(map->edges.catlist, map->edges.ncats, sizeof(struct CatEdgeList),
+              cmp);
 }

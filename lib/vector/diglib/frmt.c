@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Radim Blazek
  *
  * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
@@ -14,6 +13,7 @@
  *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 #include <string.h>
 #include <stdio.h>
 
@@ -29,7 +29,7 @@
    \return format code
    \return -1 on error
  */
-int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
+int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
 {
     char buff[2001], buf1[2001];
     char *ptr;
@@ -49,7 +49,7 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
         strcpy(buf1, buff);
         buf1[ptr - buff] = '\0';
 
-        ptr++;                  /* Search for the start of text */
+        ptr++; /* Search for the start of text */
         while (*ptr == ' ')
             ptr++;
 
@@ -101,7 +101,7 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
         strcpy(buf1, buff);
         buf1[ptr - buff] = '\0';
 
-        ptr++;                  /* Search for the start of text */
+        ptr++; /* Search for the start of text */
         while (*ptr == ' ')
             ptr++;
 
@@ -152,7 +152,7 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
  *  Returns: 0 OK
  *           -1 on error
  */
-int dig_write_frmt_ascii(FILE * dascii, struct Format_info *finfo, int format)
+int dig_write_frmt_ascii(FILE *dascii, struct Format_info *finfo, int format)
 {
     G_debug(3, "dig_write_frmt_ascii()");
 

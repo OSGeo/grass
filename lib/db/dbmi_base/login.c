@@ -23,8 +23,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-typedef struct
-{
+typedef struct {
     char *driver;
     char *database;
     char *user;
@@ -33,8 +32,7 @@ typedef struct
     char *port;
 } DATA;
 
-typedef struct
-{
+typedef struct {
     int n, a;
     DATA *data;
 } LOGIN;
@@ -50,29 +48,30 @@ static const char *login_filename(void)
     return file;
 }
 
-static void init_login(LOGIN * login)
+static void init_login(LOGIN *login)
 {
     login->n = 0;
     login->a = 10;
 
-    login->data = (DATA *) malloc(login->a * sizeof(DATA));
+    login->data = (DATA *)malloc(login->a * sizeof(DATA));
 }
 
-static void add_login(LOGIN * login, const char *dr, const char *db,
+static void add_login(LOGIN *login, const char *dr, const char *db,
                       const char *usr, const char *pwd, const char *host,
                       const char *port, int idx)
 {
     int login_idx;
 
-    G_debug(3,
-            "add_login(): drv='%s' db='%s' usr='%s' pwd='%s' host='%s', port='%s'",
-            dr, db, usr ? usr : "null", pwd ? pwd : "null",
-            host ? host : "null", port ? port : "null");
+    G_debug(
+        3,
+        "add_login(): drv='%s' db='%s' usr='%s' pwd='%s' host='%s', port='%s'",
+        dr, db, usr ? usr : "null", pwd ? pwd : "null", host ? host : "null",
+        port ? port : "null");
 
     if (login->n == login->a) {
         login->a += 10;
         login->data =
-            (DATA *) realloc((void *)login->data, login->a * sizeof(DATA));
+            (DATA *)realloc((void *)login->data, login->a * sizeof(DATA));
     }
     if (idx > -1 && idx < login->n) {
         login_idx = idx;
@@ -94,7 +93,7 @@ static void add_login(LOGIN * login, const char *dr, const char *db,
    return: -1 error (cannot read file)
    number of items (0 also if file does not exist)
  */
-static int read_file(LOGIN * login)
+static int read_file(LOGIN *login)
 {
     int ret;
     const char *file;
@@ -130,12 +129,12 @@ static int read_file(LOGIN * login)
             continue;
         }
 
-        add_login(login, tokens[0],     /* driver */
-                  tokens[1],    /* database */
-                  ret > 2 ? tokens[2] : NULL,   /* user */
-                  ret > 3 ? tokens[3] : NULL,   /* password */
-                  ret > 4 ? tokens[4] : NULL,   /* host */
-                  ret > 5 ? tokens[5] : NULL,   /* port */
+        add_login(login, tokens[0],           /* driver */
+                  tokens[1],                  /* database */
+                  ret > 2 ? tokens[2] : NULL, /* user */
+                  ret > 3 ? tokens[3] : NULL, /* password */
+                  ret > 4 ? tokens[4] : NULL, /* host */
+                  ret > 5 ? tokens[5] : NULL, /* port */
                   -1);
         G_free_tokens(tokens);
     }
@@ -150,7 +149,7 @@ static int read_file(LOGIN * login)
    return: -1 error (cannot read file)
    0 OK
  */
-static int write_file(LOGIN * login)
+static int write_file(LOGIN *login)
 {
     int i;
     const char *file;
@@ -192,15 +191,16 @@ static int write_file(LOGIN * login)
     return 0;
 }
 
-static int set_login(const char *driver, const char *database,
-                     const char *user, const char *password, const char *host,
-                     const char *port, int overwrite)
+static int set_login(const char *driver, const char *database, const char *user,
+                     const char *password, const char *host, const char *port,
+                     int overwrite)
 {
     int i, found;
     LOGIN login;
 
     G_debug(3,
-            "db_set_login(): drv=[%s] db=[%s] usr=[%s] pwd=[%s] host=[%s] port=[%s]",
+            "db_set_login(): drv=[%s] db=[%s] usr=[%s] pwd=[%s] host=[%s] "
+            "port=[%s]",
             driver, database, user, password, host, port);
 
     init_login(&login);
@@ -229,11 +229,13 @@ static int set_login(const char *driver, const char *database,
 
     if (found) {
         if (overwrite)
-            G_warning(_("DB connection <%s/%s> already exists and will be overwritten"),
+            G_warning(_("DB connection <%s/%s> already exists and will be "
+                        "overwritten"),
                       driver, database ? database : "");
         else
             G_fatal_error(_("DB connection <%s/%s> already exists. "
-                            "Re-run '%s' with '--%s' flag to overwrite existing settings."),
+                            "Re-run '%s' with '--%s' flag to overwrite "
+                            "existing settings."),
                           driver, database ? database : "", G_program_name(),
                           "overwrite");
     }
@@ -340,7 +342,7 @@ static int get_login(const char *driver, const char *database,
     return DB_OK;
 }
 
-/*!  
+/*!
    \brief Get login parameters for driver/database
 
    If driver/database is not found, output arguments are set to NULL.
@@ -363,7 +365,7 @@ int db_get_login(const char *driver, const char *database, const char **user,
     return get_login(driver, database, user, password, NULL, NULL);
 }
 
-/*!  
+/*!
    \brief Get login parameters for driver/database
 
    If driver/database is not found, output arguments are set to NULL.
@@ -384,7 +386,7 @@ int db_get_login2(const char *driver, const char *database, const char **user,
     return get_login(driver, database, user, password, host, port);
 }
 
-/*!  
+/*!
    \brief Print all connection settings to file
 
    \param fd file where to print settings
@@ -392,7 +394,7 @@ int db_get_login2(const char *driver, const char *database, const char **user,
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_get_login_dump(FILE * fd)
+int db_get_login_dump(FILE *fd)
 {
     int i;
     LOGIN login;
@@ -404,12 +406,9 @@ int db_get_login_dump(FILE * fd)
         return DB_FAILED;
 
     for (i = 0; i < login.n; i++) {
-        fprintf(fd, "%s|%s|%s|%s|%s|%s\n",
-                login.data[i].driver,
-                login.data[i].database,
-                login.data[i].user,
-                login.data[i].password,
-                login.data[i].host, login.data[i].port);
+        fprintf(fd, "%s|%s|%s|%s|%s|%s\n", login.data[i].driver,
+                login.data[i].database, login.data[i].user,
+                login.data[i].password, login.data[i].host, login.data[i].port);
     }
 
     return DB_OK;

@@ -1,20 +1,21 @@
-
 /****************************************************************************
-*
-* MODULE:       r3.gwflow 
-*   	    	
-* AUTHOR(S):    Original author 
-*               Soeren Gebbert soerengebbert <at> gmx <dot> de
-* 		27 11 2006 Berlin
-* PURPOSE:      Calculates confined transient three dimensional groundwater flow
-*
-* COPYRIGHT:    (C) 2006 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r3.gwflow
+ *
+ * AUTHOR(S):    Original author
+ *               Soeren Gebbert soerengebbert <at> gmx <dot> de
+ *                 27 11 2006 Berlin
+ * PURPOSE:      Calculates confined transient three dimensional groundwater
+ *               flow
+ *
+ * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,25 +26,22 @@
 #include <grass/N_pde.h>
 #include <grass/N_gwflow.h>
 
-
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct
-{
+typedef struct {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *hc_z, *q, *s, *r,
-        *vector_x, *vector_y, *vector_z, *budget, *dt, *maxit, *error,
-        *solver;
+        *vector_x, *vector_y, *vector_z, *budget, *dt, *maxit, *error, *solver;
     struct Flag *mask;
     struct Flag *full_les;
 } paramType;
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void);   /*Fill the paramType structure */
+static void set_params(void); /*Fill the paramType structure */
 
-static void write_result(N_array_3d * status, N_array_3d * phead_start,
-                         N_array_3d * phead, double *result,
-                         RASTER3D_Region * region, char *name);
+static void write_result(N_array_3d *status, N_array_3d *phead_start,
+                         N_array_3d *phead, double *result,
+                         RASTER3D_Region *region, char *name);
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -58,22 +56,23 @@ void set_params(void)
     param.status = G_define_standard_option(G_OPT_R3_INPUT);
     param.status->key = "status";
     param.status->description =
-        _("Input 3D raster map providing the status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
+        _("Input 3D raster map providing the status for each cell, = 0 - "
+          "inactive, 1 - active, 2 - dirichlet");
 
     param.hc_x = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_x->key = "hc_x";
-    param.hc_x->description =
-        _("Input 3D raster map with the x-part of the hydraulic conductivity tensor in [m/s]");
+    param.hc_x->description = _("Input 3D raster map with the x-part of the "
+                                "hydraulic conductivity tensor in [m/s]");
 
     param.hc_y = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_y->key = "hc_y";
-    param.hc_y->description =
-        _("Input 3D raster map with the y-part of the hydraulic conductivity tensor in [m/s]");
+    param.hc_y->description = _("Input 3D raster map with the y-part of the "
+                                "hydraulic conductivity tensor in [m/s]");
 
     param.hc_z = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_z->key = "hc_z";
-    param.hc_z->description =
-        _("Input 3D raster map with the z-part of the hydraulic conductivity tensor in [m/s]");
+    param.hc_z->description = _("Input 3D raster map with the z-part of the "
+                                "hydraulic conductivity tensor in [m/s]");
 
     param.q = G_define_standard_option(G_OPT_R3_INPUT);
     param.q->key = "sink";
@@ -93,31 +92,35 @@ void set_params(void)
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.output->key = "output";
     param.output->description =
-        _("Output 3D raster map storing the piezometric head result of the numerical calculation");
+        _("Output 3D raster map storing the piezometric head result of the "
+          "numerical calculation");
 
     param.vector_x = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_x->key = "velocity_x";
     param.vector_x->required = NO;
     param.vector_x->description =
-        _("Output 3D raster map storing the groundwater filter velocity vector part in x direction [m/s]");
+        _("Output 3D raster map storing the groundwater filter velocity vector "
+          "part in x direction [m/s]");
 
     param.vector_y = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_y->key = "velocity_y";
     param.vector_y->required = NO;
     param.vector_y->description =
-        _("Output 3D raster map storing the groundwater filter velocity vector part in y direction [m/s]");
+        _("Output 3D raster map storing the groundwater filter velocity vector "
+          "part in y direction [m/s]");
 
     param.vector_z = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_z->key = "velocity_z";
     param.vector_z->required = NO;
     param.vector_z->description =
-        _("Output 3D raster map storing the groundwater filter velocity vector part in z direction [m/s]");
+        _("Output 3D raster map storing the groundwater filter velocity vector "
+          "part in z direction [m/s]");
 
     param.budget = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.budget->key = "budget";
     param.budget->required = NO;
-    param.budget->description =
-        _("Output 3D raster map storing the groundwater budget for each cell [m^3/s]");
+    param.budget->description = _("Output 3D raster map storing the "
+                                  "groundwater budget for each cell [m^3/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -164,8 +167,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("groundwater flow"));
     G_add_keyword(_("voxel"));
     G_add_keyword(_("hydrology"));
-    module->description =
-        _("Numerical calculation program for transient, confined groundwater flow in three dimensions.");
+    module->description = _("Numerical calculation program for transient, "
+                            "confined groundwater flow in three dimensions.");
 
     /* Get parameters from user */
     set_params();
@@ -183,10 +186,9 @@ int main(int argc, char *argv[])
 
     if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 &&
         !param.full_les->answer)
-        G_fatal_error(_("The cholesky solver does not work with sparse matrices.\n"
-                       "Consider to choose a full filled quadratic matrix with flag -f "));
-
-
+        G_fatal_error(_(
+            "The cholesky solver does not work with sparse matrices.\n"
+            "Consider to choose a full filled quadratic matrix with flag -f "));
 
     /*Set the defaults */
     Rast3d_init_defaults();
@@ -199,7 +201,7 @@ int main(int argc, char *argv[])
 
     /*Set the function callback to the groundwater flow function */
     call = N_alloc_les_callback_3d();
-    N_set_les_callback_3d_func(call, (*N_callback_gwflow_3d));  /*gwflow 3d */
+    N_set_les_callback_3d_func(call, (*N_callback_gwflow_3d)); /*gwflow 3d */
 
     /*Allocate the groundwater flow data structure */
     data = N_alloc_gwflow_data3d(geom->cols, geom->rows, geom->depths, 0, 0);
@@ -236,7 +238,7 @@ int main(int argc, char *argv[])
         for (y = 0; y < geom->rows; y++) {
             for (x = 0; x < geom->cols; x++) {
                 stat = (int)N_get_array_3d_d_value(data->status, x, y, z);
-                if (stat == N_CELL_INACTIVE) {  /*only inactive cells */
+                if (stat == N_CELL_INACTIVE) { /*only inactive cells */
                     N_put_array_3d_d_value(data->hc_x, x, y, z, 0);
                     N_put_array_3d_d_value(data->hc_y, x, y, z, 0);
                     N_put_array_3d_d_value(data->hc_z, x, y, z, 0);
@@ -249,14 +251,12 @@ int main(int argc, char *argv[])
 
     /*assemble the linear equation system */
     if (!param.full_les->answer) {
-        les =
-            N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead,
-                              (void *)data, call);
+        les = N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->phead,
+                                (void *)data, call);
     }
     else {
-        les =
-            N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead,
-                              (void *)data, call);
+        les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->phead,
+                                (void *)data, call);
     }
 
     if (les && les->type == N_NORMAL_LES) {
@@ -273,22 +273,22 @@ int main(int argc, char *argv[])
     }
     else if (les && les->type == N_SPARSE_LES) {
         if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
-            G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows,
-                                    maxit, error);
+            G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, maxit,
+                                    error);
 
         if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
-            G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows,
-                                     maxit, error,
-                                     G_MATH_DIAGONAL_PRECONDITION);
+            G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, maxit,
+                                     error, G_MATH_DIAGONAL_PRECONDITION);
     }
 
     if (les == NULL)
-        G_fatal_error(_("Unable to create and solve the linear equation system"));
+        G_fatal_error(
+            _("Unable to create and solve the linear equation system"));
 
-
-    /*write the result to the output file and copy the values to the data->phead array */
-    write_result(data->status, data->phead_start, data->phead, les->x,
-                 &region, param.output->answer);
+    /*write the result to the output file and copy the values to the data->phead
+     * array */
+    write_result(data->status, data->phead_start, data->phead, les->x, &region,
+                 param.output->answer);
     N_free_les(les);
 
     /* Compute the water budget for each cell */
@@ -301,25 +301,21 @@ int main(int argc, char *argv[])
         N_write_array_3d_to_rast3d(budget, param.budget->answer, 1);
     }
 
-    /*Compute the the velocity field if required and write the result into three rast3d maps */
+    /*Compute the the velocity field if required and write the result into three
+     * rast3d maps */
     if (param.vector_x->answer || param.vector_y->answer ||
         param.vector_z->answer) {
-        field =
-            N_compute_gradient_field_3d(data->phead, data->hc_x, data->hc_y,
-                                        data->hc_z, geom, NULL);
+        field = N_compute_gradient_field_3d(data->phead, data->hc_x, data->hc_y,
+                                            data->hc_z, geom, NULL);
 
-        xcomp =
-            N_alloc_array_3d(geom->cols, geom->rows, geom->depths, 1,
-                             DCELL_TYPE);
-        ycomp =
-            N_alloc_array_3d(geom->cols, geom->rows, geom->depths, 1,
-                             DCELL_TYPE);
-        zcomp =
-            N_alloc_array_3d(geom->cols, geom->rows, geom->depths, 1,
-                             DCELL_TYPE);
+        xcomp = N_alloc_array_3d(geom->cols, geom->rows, geom->depths, 1,
+                                 DCELL_TYPE);
+        ycomp = N_alloc_array_3d(geom->cols, geom->rows, geom->depths, 1,
+                                 DCELL_TYPE);
+        zcomp = N_alloc_array_3d(geom->cols, geom->rows, geom->depths, 1,
+                                 DCELL_TYPE);
 
         N_compute_gradient_field_components_3d(field, xcomp, ycomp, zcomp);
-
 
         if (param.vector_x->answer)
             N_write_array_3d_to_rast3d(xcomp, param.vector_x->answer, 1);
@@ -348,14 +344,12 @@ int main(int argc, char *argv[])
     return (EXIT_SUCCESS);
 }
 
-
 /* ************************************************************************* */
 /* this function writes the result from the x vector to a g3d map ********** */
 /* ************************************************************************* */
-void
-write_result(N_array_3d * status, N_array_3d * phead_start,
-             N_array_3d * phead, double *result, RASTER3D_Region * region,
-             char *name)
+void write_result(N_array_3d *status, N_array_3d *phead_start,
+                  N_array_3d *phead, double *result, RASTER3D_Region *region,
+                  char *name)
 {
     void *map = NULL;
     int changemask = 0;
@@ -367,9 +361,8 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
     depths = region->depths;
 
     /*Open the new map */
-    map =
-        Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY, region,
-                                      DCELL_TYPE, 32);
+    map = Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY, region,
+                                        DCELL_TYPE, 32);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"), name);
@@ -391,13 +384,13 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
         for (y = 0; y < rows; y++) {
             for (x = 0; x < cols; x++) {
                 stat = (int)N_get_array_3d_d_value(status, x, y, z);
-                if (stat == N_CELL_ACTIVE) {    /*only active cells */
+                if (stat == N_CELL_ACTIVE) { /*only active cells */
                     d1 = result[count];
                     /*copy the values */
                     N_put_array_3d_d_value(phead, x, y, z, d1);
                     count++;
                 }
-                else if (stat == N_CELL_DIRICHLET) {    /*dirichlet cells */
+                else if (stat == N_CELL_DIRICHLET) { /*dirichlet cells */
                     d1 = N_get_array_3d_d_value(phead_start, x, y, z);
                 }
                 else {
@@ -417,8 +410,7 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
 
     /* Flush all tile */
     if (!Rast3d_flush_all_tiles(map))
-        Rast3d_fatal_error
-            ("Error flushing tiles with Rast3d_flush_all_tiles");
+        Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
     if (!Rast3d_close(map))
         Rast3d_fatal_error(_("Unable to close 3D raster map <%s>"), name);
 

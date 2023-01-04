@@ -1,4 +1,3 @@
-
 /**
    \file get_proj.c
 
@@ -25,8 +24,8 @@
 
 /* Finder function for datum transformation grids */
 #define FINDERFUNC set_proj_share
-#define PERMANENT "PERMANENT"
-#define MAX_PARGS 100
+#define PERMANENT  "PERMANENT"
+#define MAX_PARGS  100
 
 static void alloc_options(char *);
 
@@ -124,25 +123,23 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
             /* Datum and ellipsoid-related parameters will be handled
              * separately after end of this loop PK */
-
         }
-        else if (strcmp(in_proj_keys->key[i], "datum") == 0
-                 || strcmp(in_proj_keys->key[i], "dx") == 0
-                 || strcmp(in_proj_keys->key[i], "dy") == 0
-                 || strcmp(in_proj_keys->key[i], "dz") == 0
-                 || strcmp(in_proj_keys->key[i], "datumparams") == 0
-                 || strcmp(in_proj_keys->key[i], "nadgrids") == 0
-                 || strcmp(in_proj_keys->key[i], "towgs84") == 0
-                 || strcmp(in_proj_keys->key[i], "ellps") == 0
-                 || strcmp(in_proj_keys->key[i], "a") == 0
-                 || strcmp(in_proj_keys->key[i], "b") == 0
-                 || strcmp(in_proj_keys->key[i], "es") == 0
-                 || strcmp(in_proj_keys->key[i], "f") == 0
-                 || strcmp(in_proj_keys->key[i], "rf") == 0) {
+        else if (strcmp(in_proj_keys->key[i], "datum") == 0 ||
+                 strcmp(in_proj_keys->key[i], "dx") == 0 ||
+                 strcmp(in_proj_keys->key[i], "dy") == 0 ||
+                 strcmp(in_proj_keys->key[i], "dz") == 0 ||
+                 strcmp(in_proj_keys->key[i], "datumparams") == 0 ||
+                 strcmp(in_proj_keys->key[i], "nadgrids") == 0 ||
+                 strcmp(in_proj_keys->key[i], "towgs84") == 0 ||
+                 strcmp(in_proj_keys->key[i], "ellps") == 0 ||
+                 strcmp(in_proj_keys->key[i], "a") == 0 ||
+                 strcmp(in_proj_keys->key[i], "b") == 0 ||
+                 strcmp(in_proj_keys->key[i], "es") == 0 ||
+                 strcmp(in_proj_keys->key[i], "f") == 0 ||
+                 strcmp(in_proj_keys->key[i], "rf") == 0) {
             continue;
 
             /* PROJ.4 uses longlat instead of ll as 'projection name' */
-
         }
         else if (strcmp(in_proj_keys->key[i], "proj") == 0) {
             if (strcmp(in_proj_keys->value[i], "ll") == 0)
@@ -158,8 +155,8 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
             sprintf(buffa, "%s", in_proj_keys->key[i]);
 
         else
-            sprintf(buffa, "%s=%s",
-                    in_proj_keys->key[i], in_proj_keys->value[i]);
+            sprintf(buffa, "%s=%s", in_proj_keys->key[i],
+                    in_proj_keys->value[i]);
 
         alloc_options(buffa);
     }
@@ -183,8 +180,8 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
         alloc_options(buffa);
     }
 
-    if ((GPJ__get_ellipsoid_params(in_proj_keys, &a, &es, &rf) == 0)
-        && (str = G_find_key_value("ellps", in_proj_keys)) != NULL) {
+    if ((GPJ__get_ellipsoid_params(in_proj_keys, &a, &es, &rf) == 0) &&
+        (str = G_find_key_value("ellps", in_proj_keys)) != NULL) {
         /* Default values were returned but an ellipsoid name not recognised
          * by GRASS is present---perhaps it will be recognised by
          * PROJ.4 even though it wasn't by GRASS */
@@ -201,7 +198,6 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
         else
             sprintf(buffa, "rf=%.16g", rf);
         alloc_options(buffa);
-
     }
     /* Workaround to stop PROJ reading values from defaults file when
      * rf (and sometimes ellps) is not specified */
@@ -257,8 +253,9 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     if (!(pj = pj_init(nopt, opt_in))) {
 #endif
-        strcpy(buffa,
-               _("Unable to initialise PROJ with the following parameter list:"));
+        strcpy(
+            buffa,
+            _("Unable to initialise PROJ with the following parameter list:"));
         for (i = 0; i < nopt; i++) {
             char err[50];
 
@@ -377,7 +374,8 @@ int pj_get_string(struct pj_info *info, char *str)
                 if (nsize = strlen(s), nsize) {
                     if (nopt >= MAX_PARGS) {
                         fprintf(stderr, "nopt = %d, s=%s\n", nopt, str);
-                        G_fatal_error(_("Option input overflowed option table"));
+                        G_fatal_error(
+                            _("Option input overflowed option table"));
                     }
 
                     if (strncmp("zone=", s, 5) == 0) {
@@ -452,7 +450,8 @@ int pj_get_string(struct pj_info *info, char *str)
 
 #ifndef HAVE_PROJ_H
 /* GPJ_get_equivalent_latlong(): only available with PROJ 4 API
- * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV transformation
+ * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV
+ * transformation
  */
 
 /**
@@ -540,8 +539,7 @@ int pj_print_proj_params(const struct pj_info *iproj,
     if (iproj) {
         str = iproj->def;
         if (str != NULL) {
-            fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
-                    str);
+            fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"), str);
             fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
                     iproj->meters);
         }
@@ -552,8 +550,7 @@ int pj_print_proj_params(const struct pj_info *iproj,
     if (oproj) {
         str = oproj->def;
         if (str != NULL) {
-            fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
-                    str);
+            fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"), str);
             fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
                     oproj->meters);
         }
