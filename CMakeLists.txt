@@ -4,7 +4,7 @@
 #   	    	 This program is free software under the GPL (>=v2)
 #   	    	 Read the file COPYING that comes with GRASS for details.
 
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.11)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 #if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
