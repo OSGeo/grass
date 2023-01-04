@@ -20,7 +20,7 @@
 #include <math.h>
 #include "test_raster3d_lib.h"
 #ifdef _MSC_VER
- #include <winsock.h>
+#include <winsock.h>
 #endif
 
 /* *************************************************************** */
