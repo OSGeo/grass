@@ -185,7 +185,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetUseTabs(False)
         self.UsePopUp(True)
         self.SetUseHorizontalScrollBar(True)
-        self.SetHint(_("Type command here and press Enter"))
+        self.hint = _("Type command here and press Enter")
 
         # support light and dark mode
         bg_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
@@ -207,6 +207,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
         if sys.platform != "darwin":  # unstable on Mac with wxPython 3
             self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+            self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
 
         # signal which requests showing of a notification
         self.showNotification = Signal("GPromptSTC.showNotification")
@@ -306,6 +307,14 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # hide autocomplete
         if self.AutoCompActive():
             self.AutoCompCancel()
+        if self.IsEmpty():
+            self.WriteText(self.hint)
+        event.Skip()
+
+    def OnSetFocus(self, event):
+        if not self.IsEmpty() and self.GetText() == self.hint:
+            self.ClearAll()
+            self.SetFocus()
         event.Skip()
 
     def SetTextAndFocus(self, text):
