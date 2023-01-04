@@ -34,7 +34,9 @@ script:
   - ./.travis/$TRAVIS_OS_NAME.script.sh
 
 after_success:
-  - bash < (curl -s https://codecov.io/bash)
+  - curl -Os https://uploader.codecov.io/latest/linux/codecov
+  - chmod +x codecov
+  - ./codecov
 
 notifications:
         irc: "chat.freenode.net#grass"
