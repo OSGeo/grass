@@ -189,8 +189,8 @@ dbDbmscap *db_read_dbmscap(void)
         name = G_str_replace(ent->d_name, ".exe", "");
 
 #ifdef _WIN32
-        dirpath = G_malloc(strlen("\\driver\\db\\")
-                           + strlen(G_gisbase()) + strlen(ent->d_name) + 1);
+        dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) +
+                           strlen(ent->d_name) + 1);
         sprintf(dirpath, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
         G_convert_dirseps_to_host(dirpath);
 #else

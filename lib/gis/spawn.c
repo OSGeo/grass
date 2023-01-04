@@ -935,11 +935,11 @@ int G_spawn(const char *command, ...)
 
     va_end(va);
 
-    status = G_spawn_ex(command,
+    status =
+        G_spawn_ex(command,
 #ifndef _WIN32
-                        SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT,
-                        SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGQUIT,
-                        SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
+                   SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT, SF_SIGNAL, SST_PRE,
+                   SSA_IGNORE, SIGQUIT, SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
 #endif
                    SF_ARGVEC, args, NULL);
 

@@ -44,7 +44,7 @@
  * path [caller must G_free ()] on success, or NULL on failure
  *************************************************************************/
 
-#ifndef _WIN32             /* TODO */
+#ifndef _WIN32 /* TODO */
 static char *_make_toplevel(void)
 {
     size_t len;
@@ -314,6 +314,7 @@ char *G_rc_path(const char *element, const char *item)
 
     return path;
 } /* G_rc_path */
+
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */
 #endif

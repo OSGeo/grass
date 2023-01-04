@@ -31,7 +31,7 @@
 #include <grass/dbmi.h>
 
 #ifndef POINT2D_C
-#define	POINT2D_C 1
+#define POINT2D_C
 #endif
 #include <grass/interpf.h>
 
@@ -192,6 +192,7 @@ int IL_check_at_points_2d(struct interp_params *params,
             count++;
         }
     } /* cv */
+
 
     return 1;
 }

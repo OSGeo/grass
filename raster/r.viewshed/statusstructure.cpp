@@ -17,7 +17,7 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tessellation of flat cells,
+ * terrain. The terrain is NOT viewed as a tesselation of flat cells,
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -38,8 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-extern "C"
-{
+extern "C" {
 #include <grass/gis.h>
 #include <grass/glocale.h>
 }
@@ -58,7 +57,7 @@ extern "C"
    If doCurv is set we need to consider the curvature of the
    earth */
 float get_vertical_angle(Viewpoint vp, StatusNode sn, surface_type elev,
-                         int doCurv UNUSED)
+                         int doCurv)
 {
 
     /*determine the difference in elevation, based on the curvature */
@@ -107,9 +106,7 @@ void calculate_dist_n_gradient(StatusNode *sn, double elev, Viewpoint *vp,
        //sn->dist2vp = sqrt((float) ( pow(sn->row - vp->row,2.0) +
        //               pow(sn->col - vp->col,2.0)));
        //sn->gradient = (sn->elev  - vp->elev)/(sn->dist2vp); */
-
     double diffElev = elev - vp->elev;
-
     if (G_projection() == PROJECTION_LL) {
         double dist =
             G_distance(Rast_col_to_easting(sn->col + 0.5, &(hd.window)),
@@ -149,7 +146,6 @@ void calculate_dist_n_gradient(StatusNode *sn, double elev, Viewpoint *vp,
     /*maintain sign */
     if (elev < vp->elev)
         sn->gradient[1] = -sn->gradient[1];
-
     return;
 }
 
@@ -163,7 +159,6 @@ void calculate_event_gradient(StatusNode *sn, int e_idx, double row, double col,
        //sn->dist2vp = sqrt((float) ( pow(sn->row - vp->row,2.0) +
        //               pow(sn->col - vp->col,2.0)));
        //sn->gradient = (sn->elev  - vp->elev)/(sn->dist2vp); */
-
     double diffElev = elev - vp->elev;
     double dist2vp;
 
