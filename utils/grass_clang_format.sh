@@ -42,19 +42,20 @@ fi
 
 # If set, use env variable GRASS_CLANG_FORMAT for clang-format
 if [ -z ${GRASS_CLANG_FORMAT+x} ]; then
-	fmt="clang-format"
+    fmt="clang-format"
 else
-	fmt="$GRASS_CLANG_FORMAT"
+    fmt="${GRASS_CLANG_FORMAT}"
 fi
 
-if ! ($fmt --version >/dev/null); then
-  echo "clang-format not available."
-  exit 1
+if ! (${fmt} --version >/dev/null); then
+    echo "clang-format not available."
+    exit 1
 fi
 
-clang_version=$($fmt --version | cut -f3 -d" " | cut -f1 -d".")
-if [ "$clang_version" -lt "$req_cf_v" ]; then
-    echo "Error: $($fmt --version)"
+clang_version_full=$(${fmt} --version)
+clang_version=$(echo "${clang_version_full}" | cut -f3 -d" " | cut -f1 -d".")
+if [ "${clang_version}" -lt "${req_cf_v}" ]; then
+    echo "Error: ${clang_version_full}"
     echo "  is used, but version ${req_cf_v} or newer is required."
     echo "  Consider setting the global variable GRASS_CLANG_FORMAT to"
     echo "  the clang-format version needed."
@@ -63,12 +64,12 @@ fi
 
 # Enable extended regex in BSD-like system's find command
 case "$(uname)" in
- Darwin | *BSD*)
-  find="find -E"
-  ;;
- *)
-  find="find"
-  ;;
+    Darwin | *BSD*)
+        find="find -E"
+        ;;
+    *)
+        find="find"
+        ;;
 esac
 
 # One argument, a directory path is allowed
@@ -78,5 +79,5 @@ else
     dir="."
 fi
 
-$find "$dir" -type f -iregex '.*\.(cpp|hpp|c|h)' -exec \
-    "$fmt" -i '{}' +
+${find} "${dir}" -type f -iregex '.*\.(cpp|hpp|c|h)' -exec \
+    "${fmt}" -i '{}' +
