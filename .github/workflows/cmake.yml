@@ -42,13 +42,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-${{ github.base_ref }}
             ${{ runner.os }}-${{ env.cache-name }}
-    - name: Install CMake 3.9.1
+    - name: Install CMake 3.11.4
       run: |
         cd ${GITHUB_WORKSPACE}
-        wget https://github.com/Kitware/CMake/releases/download/v3.9.1/cmake-3.9.1-Linux-x86_64.tar.gz
-        tar xzf cmake-3.9.1-Linux-x86_64.tar.gz
-        echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-3.9.1-Linux-x86_64/bin" >> $GITHUB_ENV
-        echo "$GITHUB_WORKSPACE/cmake-3.9.1-Linux-x86_64/bin" >> $GITHUB_PATH
+        wget https://github.com/Kitware/CMake/releases/download/v3.11.4/cmake-3.11.4-Linux-x86_64.tar.gz
+        tar xzf cmake-3.11.4-Linux-x86_64.tar.gz
+        echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-3.11.4-Linux-x86_64/bin" >> $GITHUB_ENV
+        echo "$GITHUB_WORKSPACE/cmake-3.11.4-Linux-x86_64/bin" >> $GITHUB_PATH
     - run: |
         cmake --version
     - name: Install dependencies
@@ -80,6 +80,7 @@ jobs:
       working-directory: ${{ github.workspace }}
     - name: Configure
       run: |
+        mkdir build
         cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build
     - name: Build
       run: |
