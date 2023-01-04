@@ -42,8 +42,8 @@ static void map_file(void)
         return;
 
 #ifdef _WIN32
-    png.handle = CreateFileMapping((HANDLE) _get_osfhandle(fd),
-                                   NULL, PAGE_READWRITE, 0, size, NULL);
+    png.handle = CreateFileMapping((HANDLE)_get_osfhandle(fd), NULL,
+                                   PAGE_READWRITE, 0, size, NULL);
     if (!png.handle)
         return;
     ptr = MapViewOfFile(png.handle, FILE_MAP_WRITE, 0, 0, size);

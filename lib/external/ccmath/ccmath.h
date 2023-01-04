@@ -32,18 +32,16 @@
 #define NULL ((void *)0
 #endif
 
-               /* Complex Types */
+/* Complex Types */
 #ifndef CPX
 #ifndef _MSC_VER
-struct complex
-{
+struct complex {
     double re, im;
 };
 typedef struct complex Cpx;
 #else
 /* _MSVC has complex struct and cannot be used */
-struct gcomplex
-{
+struct gcomplex {
     double re, im;
 };
 typedef struct gcomplex Cpx;
@@ -54,7 +52,9 @@ typedef struct gcomplex Cpx;
 
 /*   Linear Algebra     */
 
+
 /* Real Linear Systems */
+
 
 int minv(double *a, int n);
 
@@ -177,6 +177,8 @@ void cmcpy(Cpx *a, Cpx *b, int n);
 void unitary(Cpx *u, int n);
 
 void hmgen(Cpx *h, double *eval, Cpx *u, int n);
+
+int csolv(Cpx *a, Cpx *b, int n);
 
 /* utility routines for hermitian eigen problems */
 

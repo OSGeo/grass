@@ -79,7 +79,6 @@ enum MM_stream_usage {
     MM_STREAM_USAGE_MAXIMUM
 };
 
-
 #ifdef GRASS_CMAKE_BUILD
 #include <export/grass_iostream_export.h>
 #else
