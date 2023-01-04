@@ -23,7 +23,7 @@
 #include "common.h"
 
 #ifdef _MSC_VER
-#pragma warning(default:4716)
+#pragma warning(default : 4716)
 #endif
 #define FLOOD_DEBUG if(0)
 

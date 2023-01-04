@@ -6,15 +6,18 @@
     builtin and then its argument prototype would still apply.  */
 char glXCreateGLXPixmap();
 
-int main() {
+int main()
+{
 
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
-#if defined (__stub_glXCreateGLXPixmap) || defined (__stub___glXCreateGLXPixmap)
-choke me
+#if defined(__stub_glXCreateGLXPixmap) || defined(__stub___glXCreateGLXPixmap)
+    choke me
 #else
-glXCreateGLXPixmap();
+    glXCreateGLXPixmap();
 #endif
 
-; return 0; }
+        ;
+    return 0;
+}

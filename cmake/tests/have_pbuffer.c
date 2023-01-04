@@ -4,15 +4,17 @@
     builtin and then its argument prototype would still apply.  */
 char glXCreatePbuffer();
 
-int main() {
+int main()
+{
 
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
-#if defined (__stub_glXCreatePbuffer) || defined (__stub___glXCreatePbuffer)
-choke me
+#if defined(__stub_glXCreatePbuffer) || defined(__stub___glXCreatePbuffer)
+    choke me
 #else
-glXCreatePbuffer();
+    glXCreatePbuffer();
 #endif
-; return 0; }
-
+        ;
+    return 0;
+}
