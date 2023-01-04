@@ -312,9 +312,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         event.Skip()
 
     def OnSetFocus(self, event):
-        if not self.IsEmpty() and self.GetText() == self.hint:
+        if self.GetText() == self.hint:
             self.ClearAll()
-            self.SetFocus()
         event.Skip()
 
     def SetTextAndFocus(self, text):
