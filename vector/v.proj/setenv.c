@@ -1,5 +1,5 @@
 #include <grass/gis.h>
-static int which_env = -1;      /* 0 = cur, 1 = target */
+static int which_env = -1; /* 0 = cur, 1 = target */
 
 int select_current_env(void)
 {

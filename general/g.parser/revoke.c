@@ -48,11 +48,12 @@ int reinvoke_script(const struct context *ctx, const char *filename)
 
 #ifdef __MINGW32__
     {
-        /* execlp() and _spawnlp ( _P_OVERLAY,..) do not work, they return 
+        /* execlp() and _spawnlp ( _P_OVERLAY,..) do not work, they return
          * immediately and that breaks scripts running GRASS scripts
          * because they dont wait until GRASS script finished */
         /* execlp( "sh", "sh", filename, "@ARGS_PARSED@", NULL); */
-        /* _spawnlp ( _P_OVERLAY, filename, filename, "@ARGS_PARSED@", NULL ); */
+        /* _spawnlp ( _P_OVERLAY, filename, filename, "@ARGS_PARSED@", NULL );
+         */
         int ret;
         char *shell = getenv("GRASS_SH");
 

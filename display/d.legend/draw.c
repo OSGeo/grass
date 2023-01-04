@@ -19,18 +19,17 @@
 #include "local_proto.h"
 
 void draw(const char *map_name, int maptype, int color, int thin, int lines,
-          int steps, int fp, int label_indent, int hide_catnum,
-          int hide_catstr, int show_ticks, int hide_nodata, int do_smooth,
+          int steps, int fp, int label_indent, int hide_catnum, int hide_catstr,
+          int show_ticks, int hide_nodata, int do_smooth,
           struct Categories cats, struct Colors colors, double X0, double X1,
           double Y0, double Y1, int flip, int UserRange, double UserRangeMin,
           double UserRangeMax, double *catlist, int catlistCount,
-          int use_catlist, int ticksCount, double fontsize,
-          double tit_fontsize, const char *title, double *tick_values,
-          double t_step, int colorb, int colorbg, struct Option *opt_use,
-          struct Option *opt_at, struct Option *opt_fontsize,
-          struct Option *opt_tstep, struct Option *opt_range,
-          struct Flag *histo, struct Flag *hidestr, int log_sc, int draw,
-          int digits, char *units)
+          int use_catlist, int ticksCount, double fontsize, double tit_fontsize,
+          const char *title, double *tick_values, double t_step, int colorb,
+          int colorbg, struct Option *opt_use, struct Option *opt_at,
+          struct Option *opt_fontsize, struct Option *opt_tstep,
+          struct Option *opt_range, struct Flag *histo, struct Flag *hidestr,
+          int log_sc, int draw, int digits, char *units)
 {
     char buff[512];
     int black, white;
@@ -51,7 +50,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     int x0, x1, y0, y1, xyTemp;
     int SigDigits;
     unsigned int MaxLabelLen;
-    char DispFormat[5];         /*  %.Xf\0  */
+    char DispFormat[6]; /*  %.Xf\0  */
     double maxCat;
     int horiz;
     char *units_bottom;
@@ -72,7 +71,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     double num;
     int MaxLabelW, LabelW;
 
-
     if (draw) {
         /* init colors */
         black = D_translate_color(DEFAULT_FG_COLOR);
@@ -85,11 +83,12 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 
     x0 = l + (int)((r - l) * X0 / 100.);
     x1 = l + (int)((r - l) * X1 / 100.);
-    y0 = t + (int)((b - t) * (100. - Y0) / 100.);       /* make lower left the origin */
+    y0 = t +
+         (int)((b - t) * (100. - Y0) / 100.); /* make lower left the origin */
     y1 = t + (int)((b - t) * (100. - Y1) / 100.);
 
-    if (y0 > y1) {              /* allow for variety in order of corner */
-        flip = !flip;           /*   selection without broken output    */
+    if (y0 > y1) {    /* allow for variety in order of corner */
+        flip = !flip; /*   selection without broken output    */
         xyTemp = y0;
         y0 = y1;
         y1 = xyTemp;
@@ -101,31 +100,35 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     }
 
     if (x0 == x1)
-        x1++;                   /* avoid 0 width boxes */
+        x1++; /* avoid 0 width boxes */
     if (y0 == y1)
         y1++;
 
     if (draw) {
-        if ((x0 < l) || (x1 > r) || (y0 < t) || (y1 > b))       /* for mouse or at= 0- or 100+; needs to be after order check */
-            G_warning(_("Legend box lies outside of frame. Text may not display properly."));
+        if ((x0 < l) || (x1 > r) || (y0 < t) ||
+            (y1 > b)) /* for mouse or at= 0- or 100+; needs to be after order
+                         check */
+            G_warning(_("Legend box lies outside of frame. Text may not "
+                        "display properly."));
     }
 
     horiz = (x1 - x0 > y1 - y0);
     if (horiz && draw)
         G_message(_("Drawing horizontal legend as box width exceeds height"));
 
-    if (!fp && horiz)           /* better than nothing */
+    if (!fp && horiz) /* better than nothing */
         do_smooth = TRUE;
 
-    MaxLabelLen = 0;            /* init variable */
+    MaxLabelLen = 0; /* init variable */
     MaxLabelW = 0;
 
     /* How many categories to show */
     /* not fp */
     if (!fp) {
         if (Rast_read_range(map_name, "", &range) == -1)
-            G_fatal_error(_("Range information for <%s> not available (run r.support)"),
-                          map_name);
+            G_fatal_error(
+                _("Range information for <%s> not available (run r.support)"),
+                map_name);
 
         Rast_get_range_min_max(&range, &min_ind, &max_ind);
         if (Rast_is_c_null_value(&min_ind))
@@ -139,18 +142,18 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             if (max_ind > UserRangeMax)
                 max_ind = (int)floor(UserRangeMax);
             if (min_ind > UserRangeMin) {
-                min_ind =
-                    UserRangeMin <
-                    min_colr ? min_colr : (int)ceil(UserRangeMin);
+                min_ind = UserRangeMin < min_colr ? min_colr
+                                                  : (int)ceil(UserRangeMin);
                 if (draw)
-                    G_warning(_("Requested range exceeds lower limit of actual data"));
+                    G_warning(_(
+                        "Requested range exceeds lower limit of actual data"));
             }
             if (max_ind < UserRangeMax) {
-                max_ind =
-                    UserRangeMax >
-                    max_colr ? max_colr : (int)floor(UserRangeMax);
+                max_ind = UserRangeMax > max_colr ? max_colr
+                                                  : (int)floor(UserRangeMax);
                 if (draw)
-                    G_warning(_("Requested range exceeds upper limit of actual data"));
+                    G_warning(_(
+                        "Requested range exceeds upper limit of actual data"));
             }
         }
 
@@ -188,11 +191,11 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             if (!use_catlist)
                 catlist[j - 1] = (double)i;
 
-            if (!cstr[0]) {     /* no cat label found, skip str output */
+            if (!cstr[0]) { /* no cat label found, skip str output */
                 if (hide_nodata)
                     continue;
             }
-            else {              /* ie has a label */
+            else { /* ie has a label */
                 if (!hide_catstr && (MaxLabelLen < strlen(cstr))) {
                     MaxLabelLen = strlen(cstr);
                     sprintf(MaxLabel, "%s", cstr);
@@ -202,18 +205,20 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             if (!hide_catnum)
                 if (i > maxCat)
                     maxCat = (double)i;
-            k++;                /* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
+            k++; /* count of actual boxes drawn (hide_nodata option invaidates
+                    using j-1) */
         }
         lines = k;
 
         /* figure out how long the category + label will be */
         if (use_catlist) {
             MaxLabelLen = 0;
-            maxCat = 0;         /* reset */
+            maxCat = 0; /* reset */
             for (i = 0, k = 0; i < catlistCount; i++) {
                 if ((catlist[i] < min_ind) || (catlist[i] > max_ind)) {
-                    G_fatal_error(_("use=%s out of range [%d,%d] (extend with range= ?)"),
-                                  opt_use->answers[i], min_ind, max_ind);
+                    G_fatal_error(
+                        _("use=%s out of range [%d,%d] (extend with range= ?)"),
+                        opt_use->answers[i], min_ind, max_ind);
                 }
 
                 cstr = Rast_get_d_cat(&catlist[i], &cats);
@@ -221,7 +226,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     if (hide_nodata)
                         continue;
                 }
-                else {          /* ie has a label */
+                else { /* ie has a label */
                     if (!hide_catstr && (MaxLabelLen < strlen(cstr)))
                         MaxLabelLen = strlen(cstr);
                 }
@@ -230,14 +235,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         maxCat = catlist[i];
                 k++;
             }
-            if (0 == k)         /* nothing to draw */
+            if (0 == k) /* nothing to draw */
                 lines = 0;
         }
 
-        /* following covers both the above if(do_cats == cats_num) and k++ loop */
+        /* following covers both the above if(do_cats == cats_num) and k++ loop
+         */
         if (lines < 1) {
-            lines = 1;          /* ward off the dpl floating point exception */
-            G_fatal_error(_("Nothing to draw! (no categories with labels? out of range?)"));
+            lines = 1; /* ward off the dpl floating point exception */
+            G_fatal_error(_(
+                "Nothing to draw! (no categories with labels? out of range?)"));
         }
 
         /* Figure number of lines, number of pixles per line and text size */
@@ -248,15 +255,18 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if ((dots_per_line == 0) && (do_smooth == FALSE)) {
             if (!use_catlist) {
                 if (draw)
-                    G_message(_("Forcing a smooth legend: too many categories for current window height"));
+                    G_message(_("Forcing a smooth legend: too many categories "
+                                "for current window height"));
                 do_smooth = TRUE;
             }
         }
 
         /* center really tiny legends */
-        if (opt_at->answer == NULL) {   /* if defualt scaling */
-            if (!do_smooth && (dots_per_line < 4))      /* if so small that there's no box */
-                if ((b - (dots_per_line * lines)) / (b * 1.0) > 0.15)   /* if there's more than a 15% blank at the bottom */
+        if (opt_at->answer == NULL) { /* if defualt scaling */
+            if (!do_smooth &&
+                (dots_per_line < 4)) /* if so small that there's no box */
+                if ((b - (dots_per_line * lines)) / (b * 1.0) >
+                    0.15) /* if there's more than a 15% blank at the bottom */
                     y0 = ((b - t) - (dots_per_line * lines)) / 2;
         }
 
@@ -270,14 +280,20 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (horiz)
             sprintf(DispFormat, "%%d");
         else {
-            if (maxCat > 0.0)
-                sprintf(DispFormat, "%%%dd", (int)(log10(fabs(maxCat))) + 1);
+            if (maxCat > 0.0) {
+                size_t b_s = sizeof(DispFormat);
+                int log_maxCat = (int)(log10(fabs(maxCat))) + 1;
+                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= b_s)
+                    G_fatal_error(
+                        _("Failed to create format string with maxCat=%f."),
+                        maxCat);
+            }
             else
                 sprintf(DispFormat, "%%2d");
         }
-    }                           /* end of if(!fp) */
+    } /* end of if(!fp) */
 
-    else {                      /* is fp */
+    else { /* is fp */
         if (maptype == MAP_TYPE_RASTER2D) {
             if (Rast_read_fp_range(map_name, "", &fprange) == -1)
                 G_fatal_error(_("Range information for <%s> not available"),
@@ -307,30 +323,33 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }
         }
 
-        /* In case of log. scale raster doesn't contain negative or zero values */
+        /* In case of log. scale raster doesn't contain negative or zero values
+         */
         if (log_sc)
             if ((dmin <= 0) || (dmax <= 0))
-                G_fatal_error(_("Range [%.3f, %.3f] out of the logarithm domain."),
-                              dmin, dmax);
-
+                G_fatal_error(
+                    _("Range [%.3f, %.3f] out of the logarithm domain."), dmin,
+                    dmax);
 
         if (use_catlist) {
             for (i = 0; i < catlistCount; i++) {
                 if ((catlist[i] < dmin) || (catlist[i] > dmax)) {
-                    G_fatal_error(_("use=%s out of range [%.3f, %.3f] (extend with range= ?)"),
+                    G_fatal_error(_("use=%s out of range [%.3f, %.3f] (extend "
+                                    "with range= ?)"),
                                   opt_use->answers[i], dmin, dmax);
                 }
                 if (strlen(opt_use->answers[i]) > MaxLabelLen)
                     MaxLabelLen = strlen(opt_use->answers[i]);
             }
         }
-        do_cats = 0;            /* if only to get rid of the compiler warning  */
-        cats_num = 0;           /* if only to get rid of the compiler warning  */
+        do_cats = 0;  /* if only to get rid of the compiler warning  */
+        cats_num = 0; /* if only to get rid of the compiler warning  */
         /* determine how many significant digits to display based on range */
-        if (digits != -1)       /* number of digits given by user */
+        if (digits != -1) /* number of digits given by user */
             sprintf(DispFormat, "%%.%df", digits);
-        else {                  /* automatic calculation */
-            if (0 == (dmax - dmin))     /* trap divide by 0 for single value rasters */
+        else { /* automatic calculation */
+            if (0 ==
+                (dmax - dmin)) /* trap divide by 0 for single value rasters */
                 sprintf(DispFormat, "%%f");
             else {
                 SigDigits = (int)ceil(log10(fabs(25 / (dmax - dmin))));
@@ -339,10 +358,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 if (SigDigits < 7)
                     sprintf(DispFormat, "%%.%df", SigDigits);
                 else
-                    sprintf(DispFormat, "%%.2g");       /* eg 4.2e-9  */
+                    sprintf(DispFormat, "%%.2g"); /* eg 4.2e-9  */
             }
         }
-    }                           /* end of is fp */
+    } /* end of is fp */
 
     if (use_catlist) {
         cats_num = catlistCount;
@@ -350,7 +369,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         lines = catlistCount;
         do_smooth = FALSE;
     }
-
 
     if (do_smooth) {
         if (horiz) {
@@ -360,7 +378,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 dy = y1 - y0;
             }
             if (fp)
-                flip = !flip;   /* horiz floats look better not flipped by default */
+                flip =
+                    !flip; /* horiz floats look better not flipped by default */
         }
         else {
             if (draw) {
@@ -374,7 +393,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         /* Draw the legend bar */
         if (draw) {
             for (k = 0; k < lleg; k++) {
-                if (log_sc) {   /* logarithmic scale */
+                if (log_sc) { /* logarithmic scale */
                     num = k / lleg;
                     val = dmin * pow(dmax / dmin, num);
                     D_d_color(val, &colors);
@@ -391,18 +410,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             D_box_abs(x0, y1 - k, x0 + dx, y1 - k - 1);
                     }
 
-                }               /* linear scale */
+                } /* linear scale */
                 else {
                     if (!fp) {
                         if (!flip)
-                            tcell =
-                                min_ind + k * (double)(1 + max_ind -
-                                                       min_ind) / lleg;
+                            tcell = min_ind +
+                                    k * (double)(1 + max_ind - min_ind) / lleg;
                         else
-                            tcell =
-                                (max_ind + 1) - k * (double)(1 + max_ind -
-                                                             min_ind) / lleg;
-                        D_color((CELL) tcell, &colors);
+                            tcell = (max_ind + 1) -
+                                    k * (double)(1 + max_ind - min_ind) / lleg;
+                        D_color((CELL)tcell, &colors);
                     }
                     else {
                         if (!flip)
@@ -423,7 +440,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         }
 
         /* Format text */
-        if (!fp) {              /* cut down labelnum so they don't repeat */
+        if (!fp) { /* cut down labelnum so they don't repeat */
             if (do_cats < steps)
                 steps = do_cats;
         }
@@ -439,8 +456,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 
         /* scale text to fit in window if position not manually set */
         /* usually not needed, except when frame is really narrow   */
-        if (opt_at->answer == NULL) {   /* ie default scaling */
-            ScaleFactor = ((r - x1) / ((MaxLabelLen + 1) * txsiz * 0.81));      /* ?? txsiz*.81=actual text width. */
+        if (opt_at->answer == NULL) { /* ie default scaling */
+            ScaleFactor =
+                ((r - x1) / ((MaxLabelLen + 1) * txsiz *
+                             0.81)); /* ?? txsiz*.81=actual text width. */
             if (ScaleFactor < 1.0) {
                 txsiz = txsiz * ScaleFactor;
             }
@@ -450,7 +469,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             txsiz = fontsize;
 
         if (txsiz < 0)
-            txsiz = 0;          /* keep it sane */
+            txsiz = 0; /* keep it sane */
 
         if (tit_fontsize == 0)
             titsiz = txsiz;
@@ -468,24 +487,22 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             for (k = 0; k < steps; k++) {
                 if (!fp) {
                     if (!flip)
-                        tcell =
-                            min_ind + k * (double)(max_ind -
-                                                   min_ind) / (steps - 1);
+                        tcell = min_ind +
+                                k * (double)(max_ind - min_ind) / (steps - 1);
                     else
-                        tcell =
-                            max_ind - k * (double)(max_ind -
-                                                   min_ind) / (steps - 1);
+                        tcell = max_ind -
+                                k * (double)(max_ind - min_ind) / (steps - 1);
 
-                    if (!cstr[0])       /* no cats found, disable str output */
+                    if (!cstr[0]) /* no cats found, disable str output */
                         hide_catstr = 1;
                     else
                         hide_catstr = hidestr->answer;
 
-                    buff[0] = 0;        /* blank string */
+                    buff[0] = 0; /* blank string */
 
                     if (!hide_catnum) { /* num */
                         sprintf(buff, DispFormat, tcell);
-                        if (!hide_catstr)       /* both */
+                        if (!hide_catstr) /* both */
                             strcat(buff, ")");
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff, &bb, &bt, &bl, &br);
@@ -508,15 +525,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         }
                     }
                 }
-                else {          /* ie FP map */
+                else { /* ie FP map */
                     if (hide_catnum)
-                        buff[0] = 0;    /* no text */
+                        buff[0] = 0; /* no text */
                     else {
                         if (log_sc) {
                             num =
                                 log10(dmax) -
-                                k * ((log10(dmax) - log10(dmin)) /
-                                     (steps - 1));
+                                k * ((log10(dmax) - log10(dmin)) / (steps - 1));
                             val = pow(10, num);
                         }
                         else {
@@ -544,18 +560,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         D_get_text_box(buff, &bb, &bt, &bl, &br);
                         if (!horiz) {
                             if (log_sc) {
-                                coef =
-                                    (log10(val) -
-                                     log10(dmin)) / (log10(dmax) -
-                                                     log10(dmin));
+                                coef = (log10(val) - log10(dmin)) /
+                                       (log10(dmax) - log10(dmin));
                                 if (flip)
                                     D_pos_abs(x1 + label_indent,
-                                              y1 - coef * lleg + (bb -
-                                                                  bt) / 2);
+                                              y1 - coef * lleg + (bb - bt) / 2);
                                 else
                                     D_pos_abs(x1 + label_indent,
-                                              y0 + coef * lleg + (bb -
-                                                                  bt) / 2);
+                                              y0 + coef * lleg + (bb - bt) / 2);
                             }
                             else {
                                 ppl = (lleg) / (steps * 1.0 - 1);
@@ -566,29 +578,27 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                 D_use_color(black);
                                 if (log_sc)
                                     if (flip)
-                                        D_line_abs(x1, y1 - coef * lleg,
-                                                   x1 + 6, y1 - coef * lleg);
+                                        D_line_abs(x1, y1 - coef * lleg, x1 + 6,
+                                                   y1 - coef * lleg);
                                     else
-                                        D_line_abs(x1, y0 + coef * lleg,
-                                                   x1 + 6, y0 + coef * lleg);
+                                        D_line_abs(x1, y0 + coef * lleg, x1 + 6,
+                                                   y0 + coef * lleg);
                                 else
-                                    D_line_abs(x1, y0 + ppl * k,
-                                               x1 + 6, y0 + ppl * k);
+                                    D_line_abs(x1, y0 + ppl * k, x1 + 6,
+                                               y0 + ppl * k);
                             }
                         }
                         else {
                             if (log_sc) {
-                                coef =
-                                    (log10(val) -
-                                     log10(dmin)) / (log10(dmax) -
-                                                     log10(dmin));
+                                coef = (log10(val) - log10(dmin)) /
+                                       (log10(dmax) - log10(dmin));
                                 if (flip)
                                     D_pos_abs(x1 - coef * wleg -
-                                              ((br - bl) / 2),
+                                                  ((br - bl) / 2),
                                               y1 + label_indent + txsiz);
                                 else
                                     D_pos_abs(x0 + coef * wleg -
-                                              ((br - bl) / 2),
+                                                  ((br - bl) / 2),
                                               y1 + label_indent + txsiz);
                             }
                             else {
@@ -606,8 +616,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                         D_line_abs(x0 + coef * wleg, y1,
                                                    x0 + coef * wleg, y1 + 6);
                                 else
-                                    D_line_abs(x0 + ppl * k, y1,
-                                               x0 + ppl * k, y1 + 6);
+                                    D_line_abs(x0 + ppl * k, y1, x0 + ppl * k,
+                                               y1 + 6);
                             }
                         }
                         if (color)
@@ -615,7 +625,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         D_text(buff);
                     }
                 }
-            }                   /* for */
+            } /* for */
         }
 
         if (!fp) {
@@ -628,8 +638,9 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (ticksCount > 0) {
             for (i = 0; i < ticksCount; i++) {
                 if ((tick_values[i] < dmin) || (tick_values[i] > dmax)) {
-                    G_fatal_error(_("tick_value=%.3f out of range [%.3f, %.3f]"),
-                                  tick_values[i], dmin, dmax);
+                    G_fatal_error(
+                        _("tick_value=%.3f out of range [%.3f, %.3f]"),
+                        tick_values[i], dmin, dmax);
                 }
                 sprintf(buff, DispFormat, tick_values[i]);
                 if (strlen(units) > 0)
@@ -643,9 +654,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 }
 
                 if (log_sc) {
-                    coef =
-                        (log10(tick_values[i]) - log10(dmin)) / (log10(dmax) -
-                                                                 log10(dmin));
+                    coef = (log10(tick_values[i]) - log10(dmin)) /
+                           (log10(dmax) - log10(dmin));
                 }
                 else
                     coef = (tick_values[i] - dmin) / ((dmax - dmin) * 1.0);
@@ -655,8 +665,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         if (!horiz) {
                             if (show_ticks) {
                                 D_use_color(black);
-                                D_line_abs(x1, y0 + coef * lleg,
-                                           x1 + 6, y0 + coef * lleg);
+                                D_line_abs(x1, y0 + coef * lleg, x1 + 6,
+                                           y0 + coef * lleg);
                             }
                             D_pos_abs(x1 + label_indent,
                                       y0 + coef * lleg + txsiz / 2);
@@ -668,7 +678,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                            x0 + coef * wleg, y1 + 6);
                             }
                             D_pos_abs(x0 + coef * wleg -
-                                      (strlen(buff) * txsiz * .81 / 2),
+                                          (strlen(buff) * txsiz * .81 / 2),
                                       y1 + label_indent + txsiz);
                         }
                     }
@@ -676,8 +686,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         if (!horiz) {
                             if (show_ticks) {
                                 D_use_color(black);
-                                D_line_abs(x1, y1 - coef * lleg,
-                                           x1 + 6, y1 - coef * lleg);
+                                D_line_abs(x1, y1 - coef * lleg, x1 + 6,
+                                           y1 - coef * lleg);
                             }
                             D_pos_abs(x1 + label_indent,
                                       y1 - coef * lleg + txsiz / 2);
@@ -689,7 +699,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                            x1 - coef * wleg, y1 + 6);
                             }
                             D_pos_abs(x1 - coef * wleg -
-                                      (strlen(buff) * txsiz * .81 / 2),
+                                          (strlen(buff) * txsiz * .81 / 2),
                                       y1 + label_indent + txsiz);
                         }
                     }
@@ -701,7 +711,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 
         /* LABEL_STEP OPTION */
         if (opt_tstep->answer) {
-            if (log_sc) {       /* logarithmic */
+            if (log_sc) { /* logarithmic */
                 t_start = 0;
                 while (log10(dmin) + t_start < log10(dmax)) {
                     num = ceil(log10(dmin)) + t_start;
@@ -716,16 +726,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         MaxLabelW = LabelW;
                         sprintf(MaxLabel, "%s", buff);
                     }
-                    coef =
-                        (log10(val) - log10(dmin)) / (log10(dmax) -
-                                                      log10(dmin));
+                    coef = (log10(val) - log10(dmin)) /
+                           (log10(dmax) - log10(dmin));
                     if (draw) {
                         if (!flip) {
                             if (!horiz) {
                                 if (show_ticks) {
                                     D_use_color(black);
-                                    D_line_abs(x1, y0 + coef * lleg,
-                                               x1 + 6, y0 + coef * lleg);
+                                    D_line_abs(x1, y0 + coef * lleg, x1 + 6,
+                                               y0 + coef * lleg);
                                 }
                                 D_pos_abs(x1 + label_indent,
                                           y0 + coef * lleg + txsiz / 2);
@@ -737,7 +746,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                                x0 + coef * wleg, y1 + 6);
                                 }
                                 D_pos_abs(x0 + coef * wleg -
-                                          (strlen(buff) * txsiz * .81 / 2),
+                                              (strlen(buff) * txsiz * .81 / 2),
                                           y1 + label_indent + txsiz);
                             }
                         }
@@ -745,8 +754,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             if (!horiz) {
                                 if (show_ticks) {
                                     D_use_color(black);
-                                    D_line_abs(x1, y1 - coef * lleg,
-                                               x1 + 6, y1 - coef * lleg);
+                                    D_line_abs(x1, y1 - coef * lleg, x1 + 6,
+                                               y1 - coef * lleg);
                                 }
                                 D_pos_abs(x1 + label_indent,
                                           y1 - coef * lleg + txsiz / 2);
@@ -758,18 +767,17 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                                x1 - coef * wleg, y1 + 6);
                                 }
                                 D_pos_abs(x1 - coef * wleg -
-                                          (strlen(buff) * txsiz * .81 / 2),
+                                              (strlen(buff) * txsiz * .81 / 2),
                                           y1 + label_indent + txsiz);
                             }
                         }
                         D_use_color(color);
                         D_text(buff);
-
                     }
                     t_start += t_step;
                 }
             }
-            else {              /* linear */
+            else { /* linear */
                 t_start = ceil(dmin / t_step) * t_step;
                 if (t_start == -0)
                     t_start = 0;
@@ -788,12 +796,11 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                 sprintf(MaxLabel, "%s", buff);
                             }
                             if (draw) {
-                                coef =
-                                    (t_start - dmin) / ((dmax - dmin) * 1.0);
+                                coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
                                 if (show_ticks) {
                                     D_use_color(black);
-                                    D_line_abs(x1, y0 + coef * lleg,
-                                               x1 + 6, y0 + coef * lleg);
+                                    D_line_abs(x1, y0 + coef * lleg, x1 + 6,
+                                               y0 + coef * lleg);
                                 }
                                 D_pos_abs(x1 + label_indent,
                                           y0 + coef * lleg + txsiz / 2);
@@ -816,15 +823,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             }
 
                             if (draw) {
-                                coef =
-                                    (t_start - dmin) / ((dmax - dmin) * 1.0);
+                                coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
                                 if (show_ticks) {
                                     D_use_color(black);
                                     D_line_abs(x0 + coef * wleg, y1,
                                                x0 + coef * wleg, y1 + 6);
                                 }
                                 D_pos_abs(x0 + coef * wleg -
-                                          (strlen(buff) * txsiz * .81 / 2),
+                                              (strlen(buff) * txsiz * .81 / 2),
                                           y1 + label_indent + txsiz);
                                 D_use_color(color);
                                 D_text(buff);
@@ -847,12 +853,11 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             }
 
                             if (draw) {
-                                coef =
-                                    (t_start - dmin) / ((dmax - dmin) * 1.0);
+                                coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
                                 if (show_ticks) {
                                     D_use_color(black);
-                                    D_line_abs(x1, y1 - coef * lleg,
-                                               x1 + 6, y1 - coef * lleg);
+                                    D_line_abs(x1, y1 - coef * lleg, x1 + 6,
+                                               y1 - coef * lleg);
                                 }
                                 D_pos_abs(x1 + label_indent,
                                           y1 - coef * lleg + txsiz / 2);
@@ -875,15 +880,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             }
 
                             if (draw) {
-                                coef =
-                                    (t_start - dmin) / ((dmax - dmin) * 1.0);
+                                coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
                                 if (show_ticks) {
                                     D_use_color(black);
                                     D_line_abs(x1 - coef * wleg, y1,
                                                x1 - coef * wleg, y1 + 6);
                                 }
                                 D_pos_abs(x1 - coef * wleg -
-                                          (strlen(buff) * txsiz * .81 / 2),
+                                              (strlen(buff) * txsiz * .81 / 2),
                                           y1 + label_indent + txsiz);
                                 D_use_color(color);
                                 D_text(buff);
@@ -924,21 +928,18 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
            will affect the title position */
         max_hist = 0;
         if (histo->answer) {
-            render_range.min = (DCELL) (fp ? dmin : min_ind);
-            render_range.max = (DCELL) (fp ? dmax : max_ind);
+            render_range.min = (DCELL)(fp ? dmin : min_ind);
+            render_range.max = (DCELL)(fp ? dmax : max_ind);
             /* reuse flag to indicate if user-specified or default ranging */
             render_range.first_time = opt_range->answer ? TRUE : FALSE;
 
             if (draw)
-                max_hist =
-                    histogram(map_name, x0, y0, wleg, lleg, color, flip,
-                              horiz, maptype, fp, render_range, 1);
+                max_hist = histogram(map_name, x0, y0, wleg, lleg, color, flip,
+                                     horiz, maptype, fp, render_range, 1);
             else
-                max_hist =
-                    histogram(map_name, x0, y0, wleg, lleg, color, flip,
-                              horiz, maptype, fp, render_range, 0);
+                max_hist = histogram(map_name, x0, y0, wleg, lleg, color, flip,
+                                     horiz, maptype, fp, render_range, 0);
         }
-
 
         /* display title or units */
         if (strlen(title) > 0) {
@@ -947,7 +948,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             /* title */
             if (horiz) {
                 x_tit = (x0 + x1) / 2. - (br - bl) / 2;
-                y_tit = y0 - (titsiz) - max_hist;
+                y_tit = y0 - (titsiz)-max_hist;
             }
             else {
                 x_tit = x0;
@@ -974,8 +975,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 units_bottom = Rast_read_units(map_name, "");
             else
                 units_bottom = "";
-            /* FIXME: does the raster3d really need to be opened to read the units?
-               units_bottom = Rast3d_get_unit(map_fid); */
+            /* FIXME: does the raster3d really need to be opened to read the
+               units? units_bottom = Rast3d_get_unit(map_fid); */
 
             if (!units_bottom)
                 units_bottom = "";
@@ -985,7 +986,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 D_get_text_box(units_bottom, &bb, &bt, &bl, &br);
                 if (horiz) {
                     x_tit = (x0 + x1) / 2. - (br - bl) / 2;
-                    y_tit = y0 - (titsiz) - max_hist;
+                    y_tit = y0 - (titsiz)-max_hist;
                 }
                 else {
                     x_tit = x0;
@@ -1000,7 +1001,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     D_text(units_bottom);
                 }
             }
-        }                       /* end of display units) */
+        } /* end of display units) */
 
         if (!draw) {
             /* Draw background */
@@ -1047,18 +1048,19 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             D_stroke();
         }
 
-    }                           /* end of if(do_smooth) */
+    } /* end of if(do_smooth) */
 
-    else {                      /* non FP, no smoothing */
+    else { /* non FP, no smoothing */
         ScaleFactor = 1.0;
 
         if (histo->answer)
-            G_warning(_("Histogram plotting not implemented for categorical legends. "
-                       "Use the '-s' flag"));
+            G_warning(
+                _("Histogram plotting not implemented for categorical legends. "
+                  "Use the '-s' flag"));
 
         /* set legend box bounds */
         true_l = l;
-        true_r = r;             /* preserve window width */
+        true_r = r; /* preserve window width */
         l = x0;
         t = y0;
         r = x1;
@@ -1066,9 +1068,13 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 
         /* figure out box height  */
         if (do_cats == cats_num)
-            dots_per_line = (b - t) / (lines + 1);      /* +1 line for the two 1/2s at top and bottom */
+            dots_per_line =
+                (b - t) /
+                (lines + 1); /* +1 line for the two 1/2s at top and bottom */
         else
-            dots_per_line = (b - t) / (lines + 2);      /* + another line for 'x of y categories' text */
+            dots_per_line =
+                (b - t) /
+                (lines + 2); /* + another line for 'x of y categories' text */
 
         /* adjust text size */
         /*  txsiz = (int)((y1-y0)/(1.5*(lines+5))); */
@@ -1080,8 +1086,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             titsiz = tit_fontsize;
 
         /* scale text to fit in window if position not manually set */
-        if (opt_at->answer == NULL) {   /* ie defualt scaling */
-            ScaleFactor = ((true_r - true_l) / ((MaxLabelLen + 3) * txsiz * 0.81));     /* ?? txsiz*.81=actual text width. */
+        if (opt_at->answer == NULL) { /* ie defualt scaling */
+            ScaleFactor = ((true_r - true_l) /
+                           ((MaxLabelLen + 3) * txsiz *
+                            0.81)); /* ?? txsiz*.81=actual text width. */
             if (ScaleFactor < 1.0) {
                 txsiz = txsiz * ScaleFactor;
                 dots_per_line = (int)floor(dots_per_line * ScaleFactor);
@@ -1106,11 +1114,12 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         x_box[4] = (5 - dots_per_line);
         y_box[4] = 0;
 
-
         /* Draw away */
 
         /* if(ScaleFactor < 1.0)   */
-        /*    cur_dot_row = ((b-t) - (dots_per_line*lines))/2; *//* this will center the legend */
+        /*    cur_dot_row = ((b-t) - (dots_per_line*lines))/2; */ /* this will
+                                                                     center the
+                                                                     legend */
         /* else    */
         cur_dot_row = t + dots_per_line / 2;
 
@@ -1122,15 +1131,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         }
 
         for (i = 0, k = 0; i < catlistCount; i++)
-            /* for(i=min_ind, j=1, k=0; j<=do_cats && i<=max_ind; j++, i+=thin) */
+        /* for(i=min_ind, j=1, k=0; j<=do_cats && i<=max_ind; j++, i+=thin) */
         {
             if (!flip)
                 cstr = Rast_get_d_cat(&catlist[i], &cats);
             else
                 cstr = Rast_get_d_cat(&catlist[catlistCount - i - 1], &cats);
 
-
-            if (!cstr[0]) {     /* no cat label found, skip str output */
+            if (!cstr[0]) { /* no cat label found, skip str output */
                 hide_catstr = 1;
                 if (hide_nodata)
                     continue;
@@ -1138,7 +1146,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             else
                 hide_catstr = hidestr->answer;
 
-            k++;                /* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
+            k++; /* count of actual boxes drawn (hide_nodata option invaidates
+                    using j-1) */
 
             cur_dot_row += dots_per_line;
 
@@ -1165,13 +1174,12 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 D_end();
                 D_stroke();
 
-
                 /* Color solid box */
                 if (!fp) {
                     if (!flip)
-                        D_color((CELL) (int)catlist[i], &colors);
+                        D_color((CELL)(int)catlist[i], &colors);
                     else
-                        D_color((CELL) (int)catlist[catlistCount - i - 1],
+                        D_color((CELL)(int)catlist[catlistCount - i - 1],
                                 &colors);
                 }
                 else {
@@ -1188,11 +1196,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 D_use_color(color);
             }
 
-
             if (!fp) {
                 /* nothing, box only */
                 buff[0] = 0;
-                if (!hide_catnum) {     /* num */
+                if (!hide_catnum) { /* num */
                     sprintf(buff, DispFormat, (int)catlist[i]);
                     if (strlen(units) > 0)
                         strcat(buff, units);
@@ -1228,10 +1235,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             sprintf(MaxLabel, "%s", buff);
                         }
                     }
-                    if (!hide_catstr)   /* both */
+                    if (!hide_catstr) /* both */
                         strcat(buff, ")");
                 }
-                if (!hide_catstr) {     /* str */
+                if (!hide_catstr) { /* str */
                     sprintf(buff + strlen(buff), " %s", cstr);
                     if (strlen(units) > 0)
                         strcat(buff, units);
@@ -1244,11 +1251,12 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     }
                 }
             }
-            else {              /* is fp */
+            else { /* is fp */
                 if (!flip) {
                     if (use_catlist) {
                         /* pass through format exactly as given by the user in
-                           the use= command line parameter (helps with log scale) */
+                           the use= command line parameter (helps with log
+                           scale) */
                         sprintf(buff, "%s", opt_use->answers[i]);
                         if (strlen(units) > 0)
                             strcat(buff, units);
@@ -1261,7 +1269,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         }
                     }
                     else {
-                        /* automatically generated/tuned decimal precision format */
+                        /* automatically generated/tuned decimal precision
+                         * format */
                         sprintf(buff, DispFormat, catlist[i]);
                         if (strlen(units) > 0)
                             strcat(buff, units);
@@ -1305,14 +1314,18 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }
 
             if (draw) {
-                D_pos_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
+                D_pos_abs((l + 3 + dots_per_line), (cur_dot_row)-3);
                 if (color)
                     D_text(buff);
             }
         }
 
         if (0 == k)
-            G_fatal_error(_("Nothing to draw! (no categories with labels?)"));  /* "(..., out of range?)" */
+            G_fatal_error(
+                _("Nothing to draw! (no categories with labels?)")); /* "(...,
+                                                                        out of
+                                                                        range?)"
+                                                                      */
 
         /* display title */
         if (strlen(title) > 0) {
@@ -1370,7 +1383,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             else
                 y0bg = y0 - txsiz;
 
-
             if (colorbg != 0) {
                 D_use_color(colorbg);
                 D_box_abs(x0bg, y0bg, x1bg, y1bg);
@@ -1386,6 +1398,5 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             D_end();
             D_stroke();
         }
-
     }
 }

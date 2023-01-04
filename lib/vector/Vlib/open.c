@@ -13,7 +13,8 @@
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
-   \author Update to GRASS 7 Martin Landa <landa.martin gmail.com> (better OGR support and native PostGIS access)
+   \author Update to GRASS 7 Martin Landa <landa.martin gmail.com> (better OGR
+   support and native PostGIS access)
  */
 
 #include <stdlib.h>
@@ -63,49 +64,41 @@ static int format()
 
 static int Open_level = 0;
 
-static int (*Open_old_array[][2])() = {
-    {
-     open_old_dummy, V1_open_old_nat}
+static int (*Open_old_array[][2])() = {{open_old_dummy, V1_open_old_nat}
 #ifdef HAVE_OGR
-    , {
-       open_old_dummy, V1_open_old_ogr}
-    , {
-       open_old_dummy, V1_open_old_ogr}
+                                       ,
+                                       {open_old_dummy, V1_open_old_ogr},
+                                       {open_old_dummy, V1_open_old_ogr}
 #else
-    , {
-       open_old_dummy, format}
-    , {
-       open_old_dummy, format}
+                                       ,
+                                       {open_old_dummy, format},
+                                       {open_old_dummy, format}
 #endif
 #ifdef HAVE_POSTGRES
-    , {
-       open_old_dummy, V1_open_old_pg}
+                                       ,
+                                       {open_old_dummy, V1_open_old_pg}
 #else
-    , {
-       open_old_dummy, format}
+                                       ,
+                                       {open_old_dummy, format}
 #endif
 };
 
-static int (*Open_new_array[][2])() = {
-    {
-     open_new_dummy, V1_open_new_nat}
+static int (*Open_new_array[][2])() = {{open_new_dummy, V1_open_new_nat}
 #ifdef HAVE_OGR
-    , {
-       open_new_dummy, V1_open_new_ogr}
-    , {
-       open_new_dummy, V1_open_new_ogr}
+                                       ,
+                                       {open_new_dummy, V1_open_new_ogr},
+                                       {open_new_dummy, V1_open_new_ogr}
 #else
-    , {
-       open_new_dummy, format}
-    , {
-       open_new_dummy, format}
+                                       ,
+                                       {open_new_dummy, format},
+                                       {open_new_dummy, format}
 #endif
 #ifdef HAVE_POSTGRES
-    , {
-       open_old_dummy, V1_open_new_pg}
+                                       ,
+                                       {open_old_dummy, V1_open_new_pg}
 #else
-    , {
-       open_old_dummy, format}
+                                       ,
+                                       {open_old_dummy, format}
 #endif
 };
 
@@ -144,7 +137,7 @@ int Vect_set_open_level(int level)
     return 0;
 }
 
-/*! 
+/*!
    \brief Open existing vector map for reading (internal use only)
 
    \param[out] Map pointer to Map_info structure
@@ -170,15 +163,15 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     int ogr_mapset;
     const char *fmapset;
 
-    G_debug(1,
-            "Vect__open_old(): name = %s, mapset = %s, layer = %s, update = %d, "
-            "head_only = %d, is_tmp = %d", name, mapset,
-            layer ? layer : "NULL", update, head_only, is_tmp);
+    G_debug(
+        1,
+        "Vect__open_old(): name = %s, mapset = %s, layer = %s, update = %d, "
+        "head_only = %d, is_tmp = %d",
+        name, mapset, layer ? layer : "NULL", update, head_only, is_tmp);
 
     if (update && !is_tmp) {
-        is_tmp =
-            getenv("GRASS_VECTOR_TEMPORARY") ? TEMPORARY_MAP_ENV :
-            TEMPORARY_MAP_DISABLED;
+        is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TEMPORARY_MAP_ENV
+                                                  : TEMPORARY_MAP_DISABLED;
         G_debug(1,
                 "Vect__open_old(): is_tmp = %d (check GRASS_VECTOR_TEMPORARY)",
                 is_tmp);
@@ -209,7 +202,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             ogr_mapset = TRUE;
             Map->fInfo.ogr.dsn = G_store(xname);
             if (layer) {
-                Map->fInfo.ogr.layer_name = G_store(layer);     /* no layer to be open */
+                Map->fInfo.ogr.layer_name =
+                    G_store(layer); /* no layer to be open */
             }
         }
         Map->name = G_store(xname);
@@ -234,8 +228,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             fmapset = G_find_vector2(Map->name, Map->mapset);
             if (fmapset == NULL) {
                 if (mapset && strcmp(mapset, G_mapset()) == 0)
-                    G_fatal_error(_("Vector map <%s> not found in current mapset"),
-                                  Vect_get_name(Map));
+                    G_fatal_error(
+                        _("Vector map <%s> not found in current mapset"),
+                        Vect_get_name(Map));
                 else
                     G_fatal_error(_("Vector map <%s> not found"),
                                   Vect_get_full_name(Map));
@@ -255,7 +250,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                 Map->mapset = G_store(G_mapset());
             else {
                 if (strcmp(Map->mapset, G_mapset()) != 0) {
-                    G_warning(_("Temporary vector maps can be accessed only in the current mapset"));
+                    G_warning(_("Temporary vector maps can be accessed only in "
+                                "the current mapset"));
                     return -1;
                 }
             }
@@ -266,12 +262,11 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                  * to switch to normal mode, useful when updating
                  * existing map */
                 Map->temporary = FALSE;
-                Vect__get_path(path, Map);      /* path must be updated for
-                                                 * subsequent operations */
+                Vect__get_path(path, Map); /* path must be updated for
+                                            * subsequent operations */
                 Vect__get_element_path(file_path, Map, GV_HEAD_ELEMENT);
                 if (access(file_path, F_OK) != 0)
                     return -1;
-
             }
         }
     }
@@ -280,7 +275,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     Map->gisdbase = G_store(G_gisdbase());
 
     if (update && !ogr_mapset && (0 != strcmp(Map->mapset, G_mapset()))) {
-        G_warning(_("Vector map which is not in the current mapset cannot be opened for update"));
+        G_warning(_("Vector map which is not in the current mapset cannot be "
+                    "opened for update"));
         return -1;
     }
 
@@ -335,7 +331,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     /* try to open support files if level was not requested or
      * requested level is 2 (format independent) */
     if (level_request == 0 || level_request > 1) {
-        level = 2;              /* we expect success */
+        level = 2; /* we expect success */
 
         /* open topo */
         ret = -1;
@@ -349,38 +345,41 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                read pseudo-topology for OGR/PostGIS links */
             ret = Vect_open_topo(Map, head_only);
 
-            if (ret == 1) {     /* topo file is not available */
+            if (ret == 1) { /* topo file is not available */
                 G_debug(1, "topo file for vector '%s' not available.",
                         Vect_get_full_name(Map));
                 level = 1;
             }
             else if (ret == -1) {
-                G_fatal_error(_("Unable to open topology file for vector map <%s>"),
-                              Vect_get_full_name(Map));
+                G_fatal_error(
+                    _("Unable to open topology file for vector map <%s>"),
+                    Vect_get_full_name(Map));
             }
         }
 
         /* open spatial index */
         if (level >= 2) {
             ret = Vect_open_sidx(Map, (update != 0));
-            if (ret == 1) {     /* sidx file is not available */
+            if (ret == 1) { /* sidx file is not available */
                 G_debug(1, "sidx file for vector '%s' not available.",
                         Vect_get_full_name(Map));
-                if (!Map->fInfo.pg.toposchema_name)     /* optional for PostGIS Topology */
+                if (!Map->fInfo.pg
+                         .toposchema_name) /* optional for PostGIS Topology */
                     level = 1;
             }
             else if (ret == -1) {
-                G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
-                              Vect_get_full_name(Map));
+                G_fatal_error(
+                    _("Unable to open spatial index file for vector map <%s>"),
+                    Vect_get_full_name(Map));
             }
             /* check with_z consistency */
             if ((Map->plus.with_z != 0 && Map->plus.spidx_with_z == 0) ||
                 (Map->plus.with_z == 0 && Map->plus.spidx_with_z != 0)) {
-                G_warning
-                    ("Vector map <%s>: topology is %s, but spatial index is %s",
-                     Vect_get_full_name(Map),
-                     (Map->plus.with_z != 0 ? "3D" : "2D"),
-                     (Map->plus.spidx_with_z != 0 ? "3D" : "2D"));
+                G_warning(
+                    "Vector map <%s>: topology is %s, but spatial index is %s",
+                    Vect_get_full_name(Map),
+                    (Map->plus.with_z != 0 ? "3D" : "2D"),
+                    (Map->plus.spidx_with_z != 0 ? "3D" : "2D"));
                 level = 1;
             }
         }
@@ -388,18 +387,19 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         /* open category index */
         if (level >= 2) {
             ret = Vect_cidx_open(Map, head_only);
-            if (ret == 1) {     /* category index is not available */
-                G_debug(1,
-                        "cidx file for vector '%s' not available.",
+            if (ret == 1) { /* category index is not available */
+                G_debug(1, "cidx file for vector '%s' not available.",
                         Vect_get_full_name(Map));
-                if (!Map->fInfo.pg.toposchema_name) {   /* optional for PostGIS Topology */
-                    dig_free_plus(&(Map->plus));        /* free topology */
+                if (!Map->fInfo.pg
+                         .toposchema_name) { /* optional for PostGIS Topology */
+                    dig_free_plus(&(Map->plus)); /* free topology */
                     level = 1;
                 }
             }
-            else if (ret == -1) {       /* file exists, but cannot be opened */
-                G_fatal_error(_("Unable to open category index file for vector map <%s>"),
-                              Vect_get_full_name(Map));
+            else if (ret == -1) { /* file exists, but cannot be opened */
+                G_fatal_error(
+                    _("Unable to open category index file for vector map <%s>"),
+                    Vect_get_full_name(Map));
             }
         }
 #ifdef HAVE_OGR
@@ -423,7 +423,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 #endif
         if (level_request == 2 && level < 2) {
             if (!ogr_mapset) {
-                /* for direct OGR read access is built pseudo-topology on the fly */
+                /* for direct OGR read access is built pseudo-topology on the
+                 * fly */
                 G_warning(_("Unable to open vector map <%s> on level %d. "
                             "Try to rebuild vector topology with v.build."),
                           Vect_get_full_name(Map), level_request);
@@ -432,14 +433,14 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         }
     }
     else {
-        level = 1;              /* i.e. requested level is 1 */
+        level = 1; /* i.e. requested level is 1 */
     }
 
     /* open level 1 files / sources (format specific) */
     if (!head_only || ogr_mapset || format == GV_FORMAT_POSTGIS) {
         /* no need to open coordinates */
-        if (0 != (*Open_old_array[format][1]) (Map, update)) {  /* cannot open */
-            if (level >= 2) {   /* support files opened */
+        if (0 != (*Open_old_array[format][1])(Map, update)) { /* cannot open */
+            if (level >= 2) { /* support files opened */
                 dig_free_plus(&(Map->plus));
             }
             G_fatal_error(_("Unable to open vector map <%s>"),
@@ -451,7 +452,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             int verbose;
 
             verbose = G_verbose();
-            G_message(_("Building topology for OGR layer <%s> from datasource '%s'..."),
+            G_message(_("Building topology for OGR layer <%s> from datasource "
+                        "'%s'..."),
                       Map->fInfo.ogr.layer_name, Map->fInfo.ogr.dsn);
             G_set_verbose(0);
             if (Vect_build(Map)) {
@@ -496,11 +498,12 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 
     G_debug(1, "Vect__open_old(): vector opened on level %d", level);
 
-    if (level == 1) {           /* without topology */
+    if (level == 1) { /* without topology */
         Map->plus.built = GV_BUILD_NONE;
     }
-    else {                      /* level 2, with topology */
-        Map->plus.built = GV_BUILD_ALL; /* highest level of topology for level 2 */
+    else { /* level 2, with topology */
+        Map->plus.built =
+            GV_BUILD_ALL; /* highest level of topology for level 2 */
     }
 
     Map->plus.uplist.do_uplist = FALSE;
@@ -510,17 +513,16 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     Vect_read_dblinks(Map);
 
     /* open history file */
-    if (update && !ogr_mapset) {        /* native only */
+    if (update && !ogr_mapset) { /* native only */
         Map->hist_fp = G_fopen_modify(path, GV_HIST_ELEMENT);
         if (Map->hist_fp == NULL) {
             G_warning(_("Unable to open history file for vector map <%s>"),
                       Vect_get_full_name(Map));
             return -1;
         }
-        G_fseek(Map->hist_fp, (off_t) 0, SEEK_END);
-        Vect_hist_write(Map,
-                        "---------------------------------------------------------------------------------\n");
-
+        G_fseek(Map->hist_fp, (off_t)0, SEEK_END);
+        Vect_hist_write(Map, "-------------------------------------------------"
+                             "--------------------------------\n");
     }
     else {
         if (Map->format == GV_FORMAT_NATIVE || Map->format == GV_FORMAT_OGR ||
@@ -533,29 +535,30 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         }
     }
 
-    if (!head_only) {           /* cannot rewind if not fully opened */
+    if (!head_only) { /* cannot rewind if not fully opened */
         Vect_rewind(Map);
     }
 
-    /* delete support files if native format was opened for update (not head_only) */
+    /* delete support files if native format was opened for update (not
+     * head_only) */
     if (update && !head_only) {
         char file_path[GPATH_MAX];
 
         Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
-        if (access(file_path, F_OK) == 0)       /* topo file exists? */
+        if (access(file_path, F_OK) == 0) /* topo file exists? */
             unlink(file_path);
 
         Vect__get_element_path(file_path, Map, GV_SIDX_ELEMENT);
-        if (access(file_path, F_OK) == 0)       /* sidx file exists? */
+        if (access(file_path, F_OK) == 0) /* sidx file exists? */
             unlink(file_path);
 
         Vect__get_element_path(file_path, Map, GV_CIDX_ELEMENT);
-        if (access(file_path, F_OK) == 0)       /* cidx file exists? */
+        if (access(file_path, F_OK) == 0) /* cidx file exists? */
             unlink(file_path);
 
         if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
             Vect__get_element_path(file_path, Map, GV_FIDX_ELEMENT);
-            if (access(file_path, F_OK) == 0)   /* fidx file exists? */
+            if (access(file_path, F_OK) == 0) /* fidx file exists? */
                 unlink(file_path);
         }
     }
@@ -647,8 +650,7 @@ int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset,
    \return 2 open on level 2 (with topology)
    \return -1 on error
  */
-int Vect_open_update(struct Map_info *Map, const char *name,
-                     const char *mapset)
+int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 {
     return Vect__open_old(Map, name, mapset, NULL, TRUE, FALSE, FALSE);
 }
@@ -695,7 +697,7 @@ int Vect_open_tmp_update(struct Map_info *Map, const char *name,
 
    \return 1 open on level 1 (without topology)
    \return 2 open on level 2 (with topology)
-   \return -1 on error 
+   \return -1 on error
  */
 int Vect_open_update2(struct Map_info *Map, const char *name,
                       const char *mapset, const char *layer)
@@ -703,7 +705,7 @@ int Vect_open_update2(struct Map_info *Map, const char *name,
     return Vect__open_old(Map, name, mapset, layer, TRUE, FALSE, FALSE);
 }
 
-/*! 
+/*!
    \brief Reads only info about vector map (headers)
 
    Reads from headers of 'head', 'dbln', 'topo' and 'cidx' file.
@@ -719,7 +721,7 @@ int Vect_open_update2(struct Map_info *Map, const char *name,
 
    \return 1 open on level 1 (without topology)
    \return 2 open on level 2 (with topology)
-   \return -1 on error 
+   \return -1 on error
  */
 int Vect_open_old_head(struct Map_info *Map, const char *name,
                        const char *mapset)
@@ -727,7 +729,7 @@ int Vect_open_old_head(struct Map_info *Map, const char *name,
     return Vect__open_old(Map, name, mapset, NULL, FALSE, TRUE, FALSE);
 }
 
-/*! 
+/*!
    \brief Reads only info about vector map (headers)
 
    Reads from headers of 'head', 'dbln', 'topo' and 'cidx' file.
@@ -746,7 +748,7 @@ int Vect_open_old_head(struct Map_info *Map, const char *name,
 
    \return 1 open on level 1 (without topology)
    \return 2 open on level 2 (with topology)
-   \return -1 on error 
+   \return -1 on error
  */
 int Vect_open_old_head2(struct Map_info *Map, const char *name,
                         const char *mapset, const char *layer)
@@ -763,7 +765,7 @@ int Vect_open_old_head2(struct Map_info *Map, const char *name,
 
    \return 1 open on level 1 (without topology)
    \return 2 open on level 2 (with topology)
-   \return -1 on error 
+   \return -1 on error
  */
 int Vect_open_update_head(struct Map_info *Map, const char *name,
                           const char *mapset)
@@ -776,8 +778,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     int ret;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-    G_debug(1, "Vect_open_new(): name = %s with_z = %d is_tmp = %d",
-            name, with_z, is_tmp);
+    G_debug(1, "Vect_open_new(): name = %s with_z = %d is_tmp = %d", name,
+            with_z, is_tmp);
 
     /* zero Map_info structure */
     G_zero(Map, sizeof(struct Map_info));
@@ -788,7 +790,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     /* check for fully-qualified map name */
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
         if (strcmp(xmapset, G_mapset()) != 0) {
-            G_warning(_("Unable to create vector map: <%s> is not in the current mapset (%s)"),
+            G_warning(_("Unable to create vector map: <%s> is not in the "
+                        "current mapset (%s)"),
                       name, G_mapset());
             return -1;
         }
@@ -797,8 +800,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
     if (Vect_legal_filename(name) < 0) {
-        G_fatal_error(_("Unable to create vector map: <%s> is not SQL compliant"),
-                      name);
+        G_fatal_error(
+            _("Unable to create vector map: <%s> is not SQL compliant"), name);
         return -1;
     }
 
@@ -812,7 +815,9 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     /* determine output format */
     Map->format = map_format(Map);
 
-    if (Map->format != GV_FORMAT_OGR_DIRECT && getenv("GRASS_VECTOR_PGFILE") == NULL) { /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
+    if (Map->format != GV_FORMAT_OGR_DIRECT &&
+        getenv("GRASS_VECTOR_PGFILE") ==
+            NULL) { /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
         char *env;
         char path[GPATH_MAX];
 
@@ -831,8 +836,9 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
         env = getenv("GRASS_VECTOR_TEMPORARY");
         if (!Map->temporary || (env && strcmp(env, "move") == 0)) {
             if (G_find_vector2(name, G_mapset()) != NULL) {
-                G_warning(_("Vector map <%s> already exists and will be overwritten"),
-                          name);
+                G_warning(
+                    _("Vector map <%s> already exists and will be overwritten"),
+                    name);
 
                 ret = Vect_delete(name);
                 if (ret == -1) {
@@ -868,9 +874,10 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 
     Map->level = LEVEL_1;
 
-    if ((*Open_new_array[Map->format][1]) (Map, name, with_z) < 0) {
-        if (getenv("GRASS_VECTOR_PGFILE") == NULL)      /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
-            Vect_delete(name);  /* clean up */
+    if ((*Open_new_array[Map->format][1])(Map, name, with_z) < 0) {
+        if (getenv("GRASS_VECTOR_PGFILE") ==
+            NULL) /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
+            Vect_delete(name); /* clean up */
         return -1;
     }
 
@@ -882,8 +889,9 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 
     /* open new spatial index */
     if (Vect_open_sidx(Map, 2) < 0)
-        G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
-                      Vect_get_full_name(Map));
+        G_fatal_error(
+            _("Unable to open spatial index file for vector map <%s>"),
+            Vect_get_full_name(Map));
 
     Map->open = VECT_OPEN_CODE;
     Map->head_only = FALSE;
@@ -898,8 +906,7 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     Map->dblnk = Vect_new_dblinks_struct();
 
     if (Map->fInfo.ogr.driver_name) {
-        G_verbose_message(_("Using OGR/%s format"),
-                          Map->fInfo.ogr.driver_name);
+        G_verbose_message(_("Using OGR/%s format"), Map->fInfo.ogr.driver_name);
     }
     else if (Map->fInfo.pg.conninfo) {
         if (Map->fInfo.pg.toposchema_name)
@@ -937,9 +944,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 {
     int is_tmp;
 
-    is_tmp =
-        getenv("GRASS_VECTOR_TEMPORARY") ? TEMPORARY_MAP_ENV :
-        TEMPORARY_MAP_DISABLED;
+    is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TEMPORARY_MAP_ENV
+                                              : TEMPORARY_MAP_DISABLED;
     G_debug(1, "Vect_open_new(): is_tmp = %d", is_tmp);
 
     return open_new(Map, name, with_z, is_tmp);
@@ -977,7 +983,7 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
     }
     G_debug(1, "Vect_open_tmp_new(): name = '%s' with_z = %d", name, with_z);
 
-    return open_new(Map, tmp_name, with_z, TEMPORARY_MAP);      /* temporary map */
+    return open_new(Map, tmp_name, with_z, TEMPORARY_MAP); /* temporary map */
 }
 
 /*!
@@ -1004,8 +1010,8 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
             Info->mtime = -1L;
         }
         else {
-            Info->size = (off_t) stat_buf.st_size;      /* file size */
-            Info->mtime = (long)stat_buf.st_mtime;      /* last modified time */
+            Info->size = (off_t)stat_buf.st_size;  /* file size */
+            Info->mtime = (long)stat_buf.st_mtime; /* last modified time */
         }
 
         /* stat does not give correct size on MINGW
@@ -1132,9 +1138,9 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     dig_file_init(&fp);
     fp.file = G_fopen_old(path, GV_TOPO_ELEMENT, Map->mapset);
 
-    if (fp.file == NULL) {      /* topo file is not available */
-        G_debug(1, "Cannot open topo file for vector '%s@%s'.",
-                Map->name, Map->mapset);
+    if (fp.file == NULL) { /* topo file is not available */
+        G_debug(1, "Cannot open topo file for vector '%s@%s'.", Map->name,
+                Map->mapset);
         return -1;
     }
 
@@ -1152,14 +1158,15 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     /* do checks */
     err = 0;
     if (CInfo.size != Plus->coor_size) {
-        G_warning(_("Size of 'coor' file differs from value saved in topology file"));
+        G_warning(
+            _("Size of 'coor' file differs from value saved in topology file"));
         err = 1;
     }
     /* Do not check mtime because mtime is changed by copy */
     /*
        if ( CInfo.mtime != Plus->coor_mtime ) {
-       G_warning ( "Time of last modification for 'coor' file differs from value saved in topo file.\n");
-       err = 1;
+       G_warning ( "Time of last modification for 'coor' file differs from value
+       saved in topo file.\n"); err = 1;
        }
      */
     if (err) {
@@ -1213,12 +1220,12 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 
         Vect__get_path(path, Map);
         Vect__get_element_path(file_path, Map, GV_SIDX_ELEMENT);
-        if (access(file_path, F_OK) != 0)       /* does not exist */
+        if (access(file_path, F_OK) != 0) /* does not exist */
             return 1;
 
         Plus->spidx_fp.file = G_fopen_old(path, GV_SIDX_ELEMENT, Map->mapset);
 
-        if (Plus->spidx_fp.file == NULL) {      /* sidx file is not available */
+        if (Plus->spidx_fp.file == NULL) { /* sidx file is not available */
             G_debug(1, "Cannot open spatial index file for vector '%s@%s'.",
                     Map->name, Map->mapset);
             return -1;
@@ -1251,14 +1258,15 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
         /* do checks */
         err = 0;
         if (CInfo.size != Plus->coor_size) {
-            G_warning(_("Size of 'coor' file differs from value saved in sidx file"));
+            G_warning(
+                _("Size of 'coor' file differs from value saved in sidx file"));
             err = 1;
         }
         /* Do not check mtime because mtime is changed by copy */
         /*
            if ( CInfo.mtime != Plus->coor_mtime ) {
-           G_warning ( "Time of last modification for 'coor' file differs from value saved in topo file.\n");
-           err = 1;
+           G_warning ( "Time of last modification for 'coor' file differs from
+           value saved in topo file.\n"); err = 1;
            }
          */
         if (err) {
@@ -1353,7 +1361,8 @@ int map_format(struct Map_info *Map)
         ogr_info->layer_name = G_store(Map->name);
     }
 
-    def_file = getenv("GRASS_VECTOR_PGFILE");   /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
+    def_file = getenv("GRASS_VECTOR_PGFILE"); /* GRASS_VECTOR_PGFILE defined by
+                                                 v.out.postgis */
     if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
         /* PostGIS */
         if (Map->fInfo.ogr.driver_name) {
@@ -1494,8 +1503,8 @@ char *Vect__get_path(char *path, const struct Map_info *Map)
 
    \return allocated buffer containing path
  */
-char *Vect__get_element_path(char *file_path,
-                             const struct Map_info *Map, const char *element)
+char *Vect__get_element_path(char *file_path, const struct Map_info *Map,
+                             const char *element)
 {
     char path[GPATH_MAX];
 

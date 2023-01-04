@@ -20,17 +20,15 @@
 #include <grass/dbmi.h>
 #include <grass/gis.h>
 
-static char *dbmscap_files[] = {
-    "/etc/dbmscap",
-    "/lib/dbmscap",
-    "/usr/lib/dbmscap",
-    "/usr/local/lib/dbmscap",
-    "/usr/local/dbmi/lib/dbmscap",
-    NULL
-};
+static char *dbmscap_files[] = {"/etc/dbmscap",
+                                "/lib/dbmscap",
+                                "/usr/lib/dbmscap",
+                                "/usr/local/lib/dbmscap",
+                                "/usr/local/dbmi/lib/dbmscap",
+                                NULL};
 
-static void
-add_entry(dbDbmscap ** list, char *name, char *startup, char *comment);
+static void add_entry(dbDbmscap **list, char *name, char *startup,
+                      char *comment);
 
 static char *dbmscap_filename(int err_flag)
 {
@@ -78,7 +76,7 @@ int db_has_dbms(void)
    \param dst destination
    \param src source
  */
-void db_copy_dbmscap_entry(dbDbmscap * dst, dbDbmscap * src)
+void db_copy_dbmscap_entry(dbDbmscap *dst, dbDbmscap *src)
 {
     strcpy(dst->driverName, src->driverName);
     strcpy(dst->comment, src->comment);
@@ -90,16 +88,16 @@ void db_copy_dbmscap_entry(dbDbmscap * dst, dbDbmscap * src)
 
    dbmscap file was used in grass5.0 but it is not used in
    grass5.7 until we find it necessary. All code for dbmscap
-   file is commented here. 
+   file is commented here.
 
-   Instead of in dbmscap file db_read_dbmscap() searches 
+   Instead of in dbmscap file db_read_dbmscap() searches
    for available dbmi drivers in $(GISBASE)/driver/db/
 
    \return pointer to dbDbmscap
  */
 dbDbmscap *db_read_dbmscap(void)
 {
-    /*  
+    /*
        FILE *fd;
        char *file;
        char name[1024];
@@ -170,7 +168,7 @@ dbDbmscap *db_read_dbmscap(void)
     dir = opendir(dirpath);
     if (dir == NULL) {
         db_syserror("Cannot open drivers directory");
-        return (dbDbmscap *) NULL;
+        return (dbDbmscap *)NULL;
     }
     G_free(dirpath);
 
@@ -178,8 +176,7 @@ dbDbmscap *db_read_dbmscap(void)
     while ((ent = readdir(dir))) {
         char *name;
 
-        if ((strcmp(ent->d_name, ".") == 0)
-            || (strcmp(ent->d_name, "..") == 0))
+        if ((strcmp(ent->d_name, ".") == 0) || (strcmp(ent->d_name, "..") == 0))
             continue;
 
 #ifdef __MINGW32__
@@ -192,8 +189,8 @@ dbDbmscap *db_read_dbmscap(void)
         name = G_str_replace(ent->d_name, ".exe", "");
 
 #ifdef __MINGW32__
-        dirpath = G_malloc(strlen("\\driver\\db\\")
-                           + strlen(G_gisbase()) + strlen(ent->d_name) + 1);
+        dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) +
+                           strlen(ent->d_name) + 1);
         sprintf(dirpath, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
         G_convert_dirseps_to_host(dirpath);
 #else
@@ -209,20 +206,22 @@ dbDbmscap *db_read_dbmscap(void)
     return list;
 }
 
-static int cmp_entry(dbDbmscap * a, dbDbmscap * b)
+static int cmp_entry(dbDbmscap *a, dbDbmscap *b)
 {
-    return (*a->driverName &&
-            *b->driverName ? strcmp(a->driverName, b->driverName) : 0);
+    return (*a->driverName && *b->driverName
+                ? strcmp(a->driverName, b->driverName)
+                : 0);
 }
 
-static void add_entry(dbDbmscap ** list, char *name, char *startup,
+static void add_entry(dbDbmscap **list, char *name, char *startup,
                       char *comment)
 {
-    /* add an entry to the list, so that the list remains ordered (by driverName) */
+    /* add an entry to the list, so that the list remains ordered (by
+     * driverName) */
 
     dbDbmscap *head, *cur, *tail;
 
-    cur = (dbDbmscap *) db_malloc(sizeof(dbDbmscap));
+    cur = (dbDbmscap *)db_malloc(sizeof(dbDbmscap));
     if (cur == NULL) {
         *list = NULL;
         return;
@@ -256,11 +255,11 @@ static void add_entry(dbDbmscap ** list, char *name, char *startup,
 }
 
 /*!
-   \brief Free dbmscap 
+   \brief Free dbmscap
 
    \param list pointer to dbDbmscap
  */
-void db_free_dbmscap(dbDbmscap * list)
+void db_free_dbmscap(dbDbmscap *list)
 {
     dbDbmscap *next, *cur;
 

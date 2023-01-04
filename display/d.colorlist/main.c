@@ -1,10 +1,9 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.colorlist
  * AUTHOR(S):    Andreas Lange - andreas.lange@rhein-main.de
  * PURPOSE:      Output a list of all available colors with a configurable
- *               separator (default is comma). 
+ *               separator (default is comma).
  *               Used for scripting and tcl/tk-scripts to
  *               build a list of available options.
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -35,8 +34,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("settings"));
     G_add_keyword(_("colors"));
-    module->description =
-        _("Outputs a list of all available display colors.");
+    module->description = _("Outputs a list of all available display colors.");
 
     /* set up option */
     sep = G_define_standard_option(G_OPT_F_SEP);

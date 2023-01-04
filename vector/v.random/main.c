@@ -1,10 +1,9 @@
-
 /****************************************************************
  *
  * MODULE:       v.random (based on s.rand)
  *
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
- * 	         http://mccauley-usa.com/
+ *                  http://mccauley-usa.com/
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Area support by Markus Metz
  *
@@ -28,7 +27,7 @@
  *               Public License (>=v2).  Read the file COPYING that
  *               comes with GRASS for details.
  *
-**************************************************************/
+ **************************************************************/
 
 #include <stdlib.h>
 #include <math.h>
@@ -41,8 +40,7 @@
 
 /* for qsort */
 
-typedef struct
-{
+typedef struct {
     int i;
     double size;
     struct bound_box box;
@@ -50,8 +48,8 @@ typedef struct
 
 static int sort_by_size(const void *a, const void *b)
 {
-    BOX_SIZE *as = (BOX_SIZE *) a;
-    BOX_SIZE *bs = (BOX_SIZE *) b;
+    BOX_SIZE *as = (BOX_SIZE *)a;
+    BOX_SIZE *bs = (BOX_SIZE *)b;
 
     if (as->size < bs->size)
         return -1;
@@ -79,13 +77,11 @@ int main(int argc, char *argv[])
     struct bound_box box;
     struct Cell_head window;
     struct GModule *module;
-    struct
-    {
-        struct Option *input, *field, *cats, *where, *output, *nsites,
-            *zmin, *zmax, *zcol, *ztype, *seed;
+    struct {
+        struct Option *input, *field, *cats, *where, *output, *nsites, *zmin,
+            *zmax, *zcol, *ztype, *seed;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *z, *notopo, *a;
     } flag;
     int notable;
@@ -154,8 +150,8 @@ int main(int argc, char *argv[])
     parm.seed->key = "seed";
     parm.seed->type = TYPE_INTEGER;
     parm.seed->required = NO;
-    parm.seed->description =
-        _("The seed to initialize the random generator. If not set the process ID is used");
+    parm.seed->description = _("The seed to initialize the random generator. "
+                               "If not set the process ID is used");
 
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->label = _("Name of column for z values");
@@ -179,8 +175,8 @@ int main(int argc, char *argv[])
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
-    flag.a->description =
-        _("Generate n points for each individual area (requires restrict parameter)");
+    flag.a->description = _("Generate n points for each individual area "
+                            "(requires restrict parameter)");
     flag.a->guisection = _("Restrict");
 
     flag.notopo = G_define_standard_flag(G_FLG_V_TOPO);
@@ -206,8 +202,7 @@ int main(int argc, char *argv[])
     field = -1;
     if (parm.input->answer) {
         Vect_set_open_level(2); /* topology required */
-        if (2 >
-            Vect_open_old2(&In, parm.input->answer, "", parm.field->answer))
+        if (2 > Vect_open_old2(&In, parm.input->answer, "", parm.field->answer))
             G_fatal_error(_("Unable to open vector map <%s>"),
                           parm.input->answer);
 
@@ -215,25 +210,23 @@ int main(int argc, char *argv[])
             field = Vect_get_field_number(&In, parm.field->answer);
 
         if ((parm.cats->answer || parm.where->answer) && field == -1) {
-            G_warning(_("Invalid layer number (%d). Parameter '%s' or '%s' specified, assuming layer '1'."),
+            G_warning(_("Invalid layer number (%d). Parameter '%s' or '%s' "
+                        "specified, assuming layer '1'."),
                       field, parm.cats->key, parm.where->key);
             field = 1;
         }
         if (field > 0)
-            cat_list =
-                Vect_cats_set_constraint(&In, field, parm.where->answer,
-                                         parm.cats->answer);
+            cat_list = Vect_cats_set_constraint(&In, field, parm.where->answer,
+                                                parm.cats->answer);
         nareas = Vect_get_num_areas(&In);
         if (nareas == 0) {
             Vect_close(&In);
-            G_fatal_error(_("No areas in vector map <%s>"),
-                          parm.input->answer);
+            G_fatal_error(_("No areas in vector map <%s>"), parm.input->answer);
         }
     }
 
     /* create new vector map */
-    if (-1 ==
-        Vect_open_new(&Out, output, flag.z->answer ? WITH_Z : WITHOUT_Z))
+    if (-1 == Vect_open_new(&Out, output, flag.z->answer ? WITH_Z : WITHOUT_Z))
         G_fatal_error(_("Unable to create vector map <%s>"), output);
     Vect_set_error_handler_io(NULL, &Out);
 
@@ -247,9 +240,8 @@ int main(int argc, char *argv[])
     ncols = 0;
     if (!notable) {
         Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
-        driver =
-            db_start_driver_open_database(Fi->driver,
-                                          Vect_subst_var(Fi->database, &Out));
+        driver = db_start_driver_open_database(
+            Fi->driver, Vect_subst_var(Fi->database, &Out));
         if (driver == NULL) {
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Vect_subst_var(Fi->database, &Out), Fi->driver);
@@ -273,12 +265,11 @@ int main(int argc, char *argv[])
 
             Fi_input = Vect_get_field2(&In, parm.field->answer);
             if (Fi_input == NULL)
-                G_fatal_error(_("Database connection not defined for layer <%s>"),
-                              parm.field->answer);
-            driver_input =
-                db_start_driver_open_database(Fi_input->driver,
-                                              Vect_subst_var(Fi_input->
-                                                             database, &In));
+                G_fatal_error(
+                    _("Database connection not defined for layer <%s>"),
+                    parm.field->answer);
+            driver_input = db_start_driver_open_database(
+                Fi_input->driver, Vect_subst_var(Fi_input->database, &In));
             if (driver_input == NULL) {
                 G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                               Vect_subst_var(Fi_input->database, &In),
@@ -304,8 +295,7 @@ int main(int argc, char *argv[])
         db_append_string(&sql, ")");
 
         if (db_execute_immediate(driver, &sql) != DB_OK) {
-            G_fatal_error(_("Unable to create table: %s"),
-                          db_get_string(&sql));
+            G_fatal_error(_("Unable to create table: %s"), db_get_string(&sql));
         }
 
         /* Create index */
@@ -313,9 +303,8 @@ int main(int argc, char *argv[])
             G_warning(_("Unable to create index"));
 
         /* Grant */
-        if (db_grant_on_table
-            (driver, Fi->table, DB_PRIV_SELECT,
-             DB_GROUP | DB_PUBLIC) != DB_OK) {
+        if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                              DB_GROUP | DB_PUBLIC) != DB_OK) {
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           Fi->table);
         }
@@ -334,8 +323,9 @@ int main(int argc, char *argv[])
                 type == DB_SQL_TYPE_DOUBLE_PRECISION)
                 usefloat = 1;
             if (usefloat < 0) {
-                G_fatal_error(_("You have created unsupported column type. This module supports only INTEGER"
-                               " and DOUBLE PRECISION column types."));
+                G_fatal_error(_("You have created unsupported column type. "
+                                "This module supports only INTEGER"
+                                " and DOUBLE PRECISION column types."));
             }
         }
 
@@ -398,7 +388,8 @@ int main(int argc, char *argv[])
             Vect_close(&In);
             Vect_close(&Out);
             Vect_delete(output);
-            G_fatal_error(_("Selected areas in input vector <%s> do not overlap with the current region"),
+            G_fatal_error(_("Selected areas in input vector <%s> do not "
+                            "overlap with the current region"),
                           parm.input->answer);
         }
         Vect_box_copy(&box, &bbox);
@@ -410,8 +401,9 @@ int main(int argc, char *argv[])
             Vect_close(&In);
             Vect_close(&Out);
             Vect_delete(output);
-            G_fatal_error(_("Input vector <%s> does not overlap with the current region"),
-                          parm.input->answer);
+            G_fatal_error(
+                _("Input vector <%s> does not overlap with the current region"),
+                parm.input->answer);
         }
 
         /* try to reduce the current region */
@@ -524,8 +516,8 @@ int main(int argc, char *argv[])
 
                     ret = Vect_point_in_area(x, y, &In, area, &abox);
 
-                    G_debug(3, "    area = %d Vect_point_in_area() = %d",
-                            area, ret);
+                    G_debug(3, "    area = %d Vect_point_in_area() = %d", area,
+                            ret);
 
                     if (ret >= 1) {
                         outside = 0;
@@ -600,12 +592,12 @@ int main(int argc, char *argv[])
                     Vect_select_areas_by_box(&In, &box, List);
                     G_debug(3, "  %d areas selected by box", List->n_values);
 
-                    /* sort areas by size, the smallest is likely to be the nearest */
+                    /* sort areas by size, the smallest is likely to be the
+                     * nearest */
                     if (alloc_size_list < List->n_values) {
                         alloc_size_list = List->n_values;
-                        size_list =
-                            G_realloc(size_list,
-                                      alloc_size_list * sizeof(BOX_SIZE));
+                        size_list = G_realloc(size_list, alloc_size_list *
+                                                             sizeof(BOX_SIZE));
                     }
 
                     k = 0;
@@ -619,8 +611,8 @@ int main(int argc, char *argv[])
                             if (Vect_get_area_cats(&In, area, Cats))
                                 continue;
 
-                            if (!Vect_cats_in_constraint
-                                (Cats, field, cat_list)) {
+                            if (!Vect_cats_in_constraint(Cats, field,
+                                                         cat_list)) {
                                 continue;
                             }
                         }
@@ -652,9 +644,8 @@ int main(int argc, char *argv[])
                         int ret;
 
                         area = size_list[j].i;
-                        ret =
-                            Vect_point_in_area(x, y, &In, area,
-                                               &size_list[j].box);
+                        ret = Vect_point_in_area(x, y, &In, area,
+                                                 &size_list[j].box);
 
                         G_debug(3, "    area = %d Vect_point_in_area() = %d",
                                 area, ret);
@@ -737,8 +728,8 @@ int main(int argc, char *argv[])
         db_init_string(&update_str);
         sprintf(buf, "select * from %s", Fi_input->table);
         db_set_string(&sql, buf);
-        if (db_open_select_cursor(driver_input, &sql,
-                                  &cursor, DB_SEQUENTIAL) != DB_OK)
+        if (db_open_select_cursor(driver_input, &sql, &cursor, DB_SEQUENTIAL) !=
+            DB_OK)
             G_fatal_error(_("Unable to open select cursor"));
         table = db_get_cursor_table(&cursor);
 
@@ -775,8 +766,7 @@ int main(int argc, char *argv[])
             for (i = 0; i < total_n; i++) {
                 if (cat_area == cats_array[i].val) {
                     db_copy_string(&sql, &update_str);
-                    sprintf(buf, " where %s = %d", Fi->key,
-                            cats_array[i].cat);
+                    sprintf(buf, " where %s = %d", Fi->key, cats_array[i].cat);
                     db_append_string(&sql, buf);
                     G_debug(3, "%s", db_get_string(&sql));
                     if (db_execute_immediate(driver, &sql) != DB_OK) {

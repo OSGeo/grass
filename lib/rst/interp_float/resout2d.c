@@ -1,13 +1,12 @@
-
 /*-
  * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Summer 1993
  * University of Illinois
- * US Army Construction Engineering Research Lab  
+ * US Army Construction Engineering Research Lab
  * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+ * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
  *
  * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
+ * modified by Mitasova in August 1995
  *
  */
 
@@ -43,22 +42,26 @@ static void do_history(const char *name, const char *input,
     Rast_free_history(&hist);
 }
 
-int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax,       /* min,max input z-values */
-                          double zminac, double zmaxac, /* min,max interpolated values */
-                          double c1min, double c1max, double c2min, double c2max, double gmin, double gmax, double ertot,       /* total interplating func. error */
-                          char *input,  /* input file name */
-                          double *dnorm, struct Cell_head *outhd,       /* Region with desired resolution */
-                          struct Cell_head *winhd,      /* Current region */
-                          char *smooth, int n_points)
+int IL_resample_output_2d(
+    struct interp_params *params, double zmin,
+    double zmax,                  /* min,max input z-values */
+    double zminac, double zmaxac, /* min,max interpolated values */
+    double c1min, double c1max, double c2min, double c2max, double gmin,
+    double gmax, double ertot,              /* total interplating func. error */
+    char *input,                            /* input file name */
+    double *dnorm, struct Cell_head *outhd, /* Region with desired resolution */
+    struct Cell_head *winhd,                /* Current region */
+    char *smooth, int n_points)
 /*
  * Creates output files as well as history files  and color tables for
  * them.
  */
 {
-    FCELL *cell1;               /* cell buffer */
-    int cf1 = 0, cf2 = 0, cf3 = 0, cf4 = 0, cf5 = 0, cf6 = 0;   /* cell file descriptors */
-    int nrows, ncols;           /* current region rows and columns */
-    int i;                      /* loop counter */
+    FCELL *cell1; /* cell buffer */
+    int cf1 = 0, cf2 = 0, cf3 = 0, cf4 = 0, cf5 = 0,
+        cf6 = 0;      /* cell file descriptors */
+    int nrows, ncols; /* current region rows and columns */
+    int i;            /* loop counter */
     const char *mapset;
     float dat1, dat2;
     struct Colors colors, colors2;
@@ -69,12 +72,13 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     int cond1, cond2;
     CELL val1, val2;
 
-    cond2 = ((params->pcurv != NULL) ||
-             (params->tcurv != NULL) || (params->mcurv != NULL));
+    cond2 = ((params->pcurv != NULL) || (params->tcurv != NULL) ||
+             (params->mcurv != NULL));
     cond1 = ((params->slope != NULL) || (params->aspect != NULL) || cond2);
 
     /* change region to output cell file region */
-    G_verbose_message(_("Temporarily changing the region to desired resolution..."));
+    G_verbose_message(
+        _("Temporarily changing the region to desired resolution..."));
     Rast_set_output_window(outhd);
     mapset = G_mapset();
 
@@ -100,26 +104,28 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
     nrows = outhd->rows;
     if (nrows != params->nsizr) {
-        G_warning(_("First change your rows number(%d) to %d"),
-                  nrows, params->nsizr);
+        G_warning(_("First change your rows number(%d) to %d"), nrows,
+                  params->nsizr);
         return -1;
     }
 
     ncols = outhd->cols;
     if (ncols != params->nsizc) {
-        G_warning(_("First change your columns number(%d) to %d"),
-                  ncols, params->nsizr);
+        G_warning(_("First change your columns number(%d) to %d"), ncols,
+                  params->nsizr);
         return -1;
     }
 
     if (params->elev != NULL) {
-        G_fseek(params->Tmp_fd_z, 0L, 0);       /* seek to the beginning */
+        G_fseek(params->Tmp_fd_z, 0L, 0); /* seek to the beginning */
         for (i = 0; i < params->nsizr; i++) {
             /* seek to the right row */
-            G_fseek(params->Tmp_fd_z, (off_t) (params->nsizr - 1 - i) *
-                    params->nsizc * sizeof(FCELL), 0);
-            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z)
-                != params->nsizc)
+            G_fseek(params->Tmp_fd_z,
+                    (off_t)(params->nsizr - 1 - i) * params->nsizc *
+                        sizeof(FCELL),
+                    0);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z) !=
+                params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf1, cell1);
@@ -127,13 +133,15 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->slope != NULL) {
-        G_fseek(params->Tmp_fd_dx, 0L, 0);      /* seek to the beginning */
+        G_fseek(params->Tmp_fd_dx, 0L, 0); /* seek to the beginning */
         for (i = 0; i < params->nsizr; i++) {
             /* seek to the right row */
-            G_fseek(params->Tmp_fd_dx, (off_t) (params->nsizr - 1 - i) *
-                    params->nsizc * sizeof(FCELL), 0);
-            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx)
-                != params->nsizc)
+            G_fseek(params->Tmp_fd_dx,
+                    (off_t)(params->nsizr - 1 - i) * params->nsizc *
+                        sizeof(FCELL),
+                    0);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx) !=
+                params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf2, cell1);
@@ -141,13 +149,15 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->aspect != NULL) {
-        G_fseek(params->Tmp_fd_dy, 0L, 0);      /* seek to the beginning */
+        G_fseek(params->Tmp_fd_dy, 0L, 0); /* seek to the beginning */
         for (i = 0; i < params->nsizr; i++) {
             /* seek to the right row */
-            G_fseek(params->Tmp_fd_dy, (off_t) (params->nsizr - 1 - i) *
-                    params->nsizc * sizeof(FCELL), 0);
-            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy)
-                != params->nsizc)
+            G_fseek(params->Tmp_fd_dy,
+                    (off_t)(params->nsizr - 1 - i) * params->nsizc *
+                        sizeof(FCELL),
+                    0);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy) !=
+                params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf3, cell1);
@@ -155,13 +165,15 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->pcurv != NULL) {
-        G_fseek(params->Tmp_fd_xx, 0L, 0);      /* seek to the beginning */
+        G_fseek(params->Tmp_fd_xx, 0L, 0); /* seek to the beginning */
         for (i = 0; i < params->nsizr; i++) {
             /* seek to the right row */
-            G_fseek(params->Tmp_fd_xx, (off_t) (params->nsizr - 1 - i) *
-                    params->nsizc * sizeof(FCELL), 0);
-            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx)
-                != params->nsizc)
+            G_fseek(params->Tmp_fd_xx,
+                    (off_t)(params->nsizr - 1 - i) * params->nsizc *
+                        sizeof(FCELL),
+                    0);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx) !=
+                params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf4, cell1);
@@ -169,13 +181,15 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->tcurv != NULL) {
-        G_fseek(params->Tmp_fd_yy, 0L, 0);      /* seek to the beginning */
+        G_fseek(params->Tmp_fd_yy, 0L, 0); /* seek to the beginning */
         for (i = 0; i < params->nsizr; i++) {
             /* seek to the right row */
-            G_fseek(params->Tmp_fd_yy, (off_t) (params->nsizr - 1 - i) *
-                    params->nsizc * sizeof(FCELL), 0);
-            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy)
-                != params->nsizc)
+            G_fseek(params->Tmp_fd_yy,
+                    (off_t)(params->nsizr - 1 - i) * params->nsizc *
+                        sizeof(FCELL),
+                    0);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy) !=
+                params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf5, cell1);
@@ -183,13 +197,15 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     }
 
     if (params->mcurv != NULL) {
-        G_fseek(params->Tmp_fd_xy, 0L, 0);      /* seek to the beginning */
+        G_fseek(params->Tmp_fd_xy, 0L, 0); /* seek to the beginning */
         for (i = 0; i < params->nsizr; i++) {
             /* seek to the right row */
-            G_fseek(params->Tmp_fd_xy, (off_t) (params->nsizr - 1 - i) *
-                    params->nsizc * sizeof(FCELL), 0);
-            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy)
-                != params->nsizc)
+            G_fseek(params->Tmp_fd_xy,
+                    (off_t)(params->nsizr - 1 - i) * params->nsizc *
+                        sizeof(FCELL),
+                    0);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy) !=
+                params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf6, cell1);
@@ -233,12 +249,10 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
                 for (; rule; rule = rule->prev) {
                     value1 = rule->low.value * params->zmult;
                     value2 = rule->high.value * params->zmult;
-                    Rast_add_modular_d_color_rule(&value1, rule->low.red,
-                                                  rule->low.grn,
-                                                  rule->low.blu, &value2,
-                                                  rule->high.red,
-                                                  rule->high.grn,
-                                                  rule->high.blu, &colors2);
+                    Rast_add_modular_d_color_rule(
+                        &value1, rule->low.red, rule->low.grn, rule->low.blu,
+                        &value2, rule->high.red, rule->high.grn, rule->high.blu,
+                        &colors2);
                 }
             }
 
@@ -251,11 +265,10 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
                 for (; rule; rule = rule->prev) {
                     value1 = rule->low.value * params->zmult;
                     value2 = rule->high.value * params->zmult;
-                    Rast_add_d_color_rule(&value1, rule->low.red,
-                                          rule->low.grn, rule->low.blu,
-                                          &value2, rule->high.red,
-                                          rule->high.grn, rule->high.blu,
-                                          &colors2);
+                    Rast_add_d_color_rule(&value1, rule->low.red, rule->low.grn,
+                                          rule->low.blu, &value2,
+                                          rule->high.red, rule->high.grn,
+                                          rule->high.blu, &colors2);
                 }
             }
 
@@ -267,13 +280,13 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
             }
 
             Rast_write_colors(params->elev, maps, &colors2);
-            Rast_quantize_fp_map_range(params->elev, mapset,
-                                       zminac - 0.5, zmaxac + 0.5,
-                                       (CELL) (zminac - 0.5),
-                                       (CELL) (zmaxac + 0.5));
+            Rast_quantize_fp_map_range(params->elev, mapset, zminac - 0.5,
+                                       zmaxac + 0.5, (CELL)(zminac - 0.5),
+                                       (CELL)(zmaxac + 0.5));
         }
         else
-            G_warning(_("No color table for input raster map -- will not create color table"));
+            G_warning(_("No color table for input raster map -- will not "
+                        "create color table"));
     }
 
     /* colortable for slopes */
@@ -352,39 +365,37 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
         if (cond2) {
             Rast_init_colors(&colors);
 
-            dat1 = (FCELL) amin1(c1min, c2min);
-            dat2 = (FCELL) - 0.01;
+            dat1 = (FCELL)amin1(c1min, c2min);
+            dat2 = (FCELL)-0.01;
 
-            Rast_add_f_color_rule(&dat1, 50, 0, 155,
-                                  &dat2, 0, 0, 255, &colors);
+            Rast_add_f_color_rule(&dat1, 50, 0, 155, &dat2, 0, 0, 255, &colors);
             dat1 = dat2;
-            dat2 = (FCELL) - 0.001;
-            Rast_add_f_color_rule(&dat1, 0, 0, 255,
-                                  &dat2, 0, 127, 255, &colors);
+            dat2 = (FCELL)-0.001;
+            Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 127, 255,
+                                  &colors);
             dat1 = dat2;
-            dat2 = (FCELL) - 0.00001;
-            Rast_add_f_color_rule(&dat1, 0, 127, 255,
-                                  &dat2, 0, 255, 255, &colors);
+            dat2 = (FCELL)-0.00001;
+            Rast_add_f_color_rule(&dat1, 0, 127, 255, &dat2, 0, 255, 255,
+                                  &colors);
             dat1 = dat2;
-            dat2 = (FCELL) 0.00;
-            Rast_add_f_color_rule(&dat1, 0, 255, 255,
-                                  &dat2, 200, 255, 200, &colors);
+            dat2 = (FCELL)0.00;
+            Rast_add_f_color_rule(&dat1, 0, 255, 255, &dat2, 200, 255, 200,
+                                  &colors);
             dat1 = dat2;
-            dat2 = (FCELL) 0.00001;
-            Rast_add_f_color_rule(&dat1, 200, 255, 200,
-                                  &dat2, 255, 255, 0, &colors);
+            dat2 = (FCELL)0.00001;
+            Rast_add_f_color_rule(&dat1, 200, 255, 200, &dat2, 255, 255, 0,
+                                  &colors);
             dat1 = dat2;
-            dat2 = (FCELL) 0.001;
-            Rast_add_f_color_rule(&dat1, 255, 255, 0,
-                                  &dat2, 255, 127, 0, &colors);
+            dat2 = (FCELL)0.001;
+            Rast_add_f_color_rule(&dat1, 255, 255, 0, &dat2, 255, 127, 0,
+                                  &colors);
             dat1 = dat2;
-            dat2 = (FCELL) 0.01;
-            Rast_add_f_color_rule(&dat1, 255, 127, 0,
-                                  &dat2, 255, 0, 0, &colors);
+            dat2 = (FCELL)0.01;
+            Rast_add_f_color_rule(&dat1, 255, 127, 0, &dat2, 255, 0, 0,
+                                  &colors);
             dat1 = dat2;
-            dat2 = (FCELL) amax1(c1max, c2max);
-            Rast_add_f_color_rule(&dat1, 255, 0, 0,
-                                  &dat2, 155, 0, 20, &colors);
+            dat2 = (FCELL)amax1(c1max, c2max);
+            Rast_add_f_color_rule(&dat1, 255, 0, 0, &dat2, 155, 0, 20, &colors);
             maps = NULL;
             if (params->pcurv != NULL) {
                 maps = G_find_file("cell", params->pcurv, "");
@@ -396,10 +407,9 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
 
                 fprintf(stderr, "color map written\n");
 
-                Rast_quantize_fp_map_range(params->pcurv, mapset,
-                                           dat1, dat2,
-                                           (CELL) (dat1 * MULT),
-                                           (CELL) (dat2 * MULT));
+                Rast_quantize_fp_map_range(params->pcurv, mapset, dat1, dat2,
+                                           (CELL)(dat1 * MULT),
+                                           (CELL)(dat2 * MULT));
                 do_history(params->pcurv, input, params);
             }
 
@@ -411,9 +421,9 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
                     return -1;
                 }
                 Rast_write_colors(params->tcurv, maps, &colors);
-                Rast_quantize_fp_map_range(params->tcurv, mapset,
-                                           dat1, dat2, (CELL) (dat1 * MULT),
-                                           (CELL) (dat2 * MULT));
+                Rast_quantize_fp_map_range(params->tcurv, mapset, dat1, dat2,
+                                           (CELL)(dat1 * MULT),
+                                           (CELL)(dat2 * MULT));
 
                 do_history(params->tcurv, input, params);
             }
@@ -426,10 +436,9 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
                     return -1;
                 }
                 Rast_write_colors(params->mcurv, maps, &colors);
-                Rast_quantize_fp_map_range(params->mcurv, mapset,
-                                           dat1, dat2,
-                                           (CELL) (dat1 * MULT),
-                                           (CELL) (dat2 * MULT));
+                Rast_quantize_fp_map_range(params->mcurv, mapset, dat1, dat2,
+                                           (CELL)(dat1 * MULT),
+                                           (CELL)(dat2 * MULT));
 
                 do_history(params->mcurv, input, params);
             }

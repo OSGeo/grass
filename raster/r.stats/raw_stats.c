@@ -20,7 +20,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
     rast = (void **)G_calloc(nfiles, sizeof(void *));
     rastp = (void **)G_calloc(nfiles, sizeof(void *));
 
-    map_type = (RASTER_MAP_TYPE *) G_calloc(nfiles, sizeof(RASTER_MAP_TYPE));
+    map_type = (RASTER_MAP_TYPE *)G_calloc(nfiles, sizeof(RASTER_MAP_TYPE));
 
     for (i = 0; i < nfiles; i++) {
         /* if fp map and report real data, not cat indexes, set type to DCELL */
@@ -57,8 +57,8 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
                 for (i = 0; i < nfiles; i++) {
                     /*
                        Rast_set_d_value(zero_val, 0.0, map_type[i]);
-                       if (Rast_raster_cmp(rastp[i], zero_val, map_type[i]) != 0)
-                       break;
+                       if (Rast_raster_cmp(rastp[i], zero_val, map_type[i]) !=
+                       0) break;
                      */
                     if (Rast_is_null_value(rastp[i], map_type[i]))
                         nulls_found++;
@@ -67,8 +67,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
                 if ((nulls_found == nfiles) || (nulls_found && no_nulls)) {
                     for (i = 0; i < nfiles; i++)
                         rastp[i] = G_incr_void_ptr(rastp[i],
-                                                   Rast_cell_size(map_type
-                                                                  [i]));
+                                                   Rast_cell_size(map_type[i]));
                     continue;
                 }
             }
@@ -89,31 +88,28 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
                 }
                 else if (map_type[i] == CELL_TYPE) {
                     fprintf(stdout, "%s%ld", i ? fs : "",
-                            (long)*((CELL *) rastp[i]));
+                            (long)*((CELL *)rastp[i]));
                     if (with_labels && !is_fp[i])
                         fprintf(stdout, "%s%s", fs,
-                                Rast_get_c_cat((CELL *) rastp[i],
-                                               &labels[i]));
+                                Rast_get_c_cat((CELL *)rastp[i], &labels[i]));
                 }
                 else if (map_type[i] == FCELL_TYPE) {
-                    sprintf(str1, "%.8g", *((FCELL *) rastp[i]));
+                    sprintf(str1, "%.8g", *((FCELL *)rastp[i]));
                     G_trim_decimal(str1);
                     G_strip(str1);
                     fprintf(stdout, "%s%s", i ? fs : "", str1);
                     if (with_labels)
                         fprintf(stdout, "%s%s", fs,
-                                Rast_get_f_cat((FCELL *) rastp[i],
-                                               &labels[i]));
+                                Rast_get_f_cat((FCELL *)rastp[i], &labels[i]));
                 }
                 else if (map_type[i] == DCELL_TYPE) {
-                    sprintf(str1, "%.16g", *((DCELL *) rastp[i]));
+                    sprintf(str1, "%.16g", *((DCELL *)rastp[i]));
                     G_trim_decimal(str1);
                     G_strip(str1);
                     fprintf(stdout, "%s%s", i ? fs : "", str1);
                     if (with_labels)
                         fprintf(stdout, "%s%s", fs,
-                                Rast_get_d_cat((DCELL *) rastp[i],
-                                               &labels[i]));
+                                Rast_get_d_cat((DCELL *)rastp[i], &labels[i]));
                 }
                 else
                     G_fatal_error(_("Invalid map type"));

@@ -50,8 +50,9 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
     fp = NULL;
     if ((capfile = getenv("GRASS_FONT_CAP"))) {
         if ((fp = fopen(capfile, "r")) == NULL)
-            G_warning(_("%s: Unable to read font definition file; use the default"),
-                      capfile);
+            G_warning(
+                _("%s: Unable to read font definition file; use the default"),
+                capfile);
     }
     if (fp == NULL) {
         sprintf(file, "%s/etc/fontcap", G_gisbase());
@@ -61,8 +62,8 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
 
     if (fp != NULL) {
         while (fgets(buf, sizeof(buf), fp) && !feof(fp)) {
-            char name[GNAME_MAX], longname[GNAME_MAX],
-                path[GPATH_MAX], encoding[128];
+            char name[GNAME_MAX], longname[GNAME_MAX], path[GPATH_MAX],
+                encoding[128];
             int type, index;
             char *p;
 
@@ -70,9 +71,8 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
             if (p)
                 *p = 0;
 
-            if (sscanf(buf, "%[^|]|%[^|]|%d|%[^|]|%d|%[^|]|",
-                       name, longname, &type, path, &index, encoding)
-                != 6)
+            if (sscanf(buf, "%[^|]|%[^|]|%d|%[^|]|%d|%[^|]|", name, longname,
+                       &type, path, &index, encoding) != 6)
                 continue;
             if (strcmp(name, font) != 0 && strcmp(longname, font) != 0)
                 continue;
@@ -87,7 +87,6 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
             font_cap[fonts_count].path = G_store(path);
             font_cap[fonts_count].index = index;
             font_cap[fonts_count].encoding = G_store(encoding);
-
         }
         fclose(fp);
     }

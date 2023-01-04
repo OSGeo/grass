@@ -1,9 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       db.drivers
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>, Stephan Holl
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Stephan Holl
  * PURPOSE:      lists all database drivers
  * COPYRIGHT:    (C) 2002-2006, 2012 by the GRASS Development Team
  *
@@ -18,15 +19,12 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-struct
-{
+struct {
     int f;
 } parms;
 
 /* function prototypes */
 static void parse_command_line(int, char **);
-
 
 int main(int argc, char **argv)
 {
@@ -48,7 +46,6 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {

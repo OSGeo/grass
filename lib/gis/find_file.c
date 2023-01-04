@@ -5,8 +5,8 @@
 
    (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -18,29 +18,13 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static const char *find_element(int misc, const char *dir,
-                                const char *element)
+static const char *find_element(int misc, const char *dir, const char *element)
 {
-    static const char *cell_elements[] = {
-        "cellhd",
-        "cell",
-        "cats",
-        "colr",
-        "hist",
-        "cell_misc",
-        "fcell",
-        "g3dcell",
-        NULL
-    };
+    static const char *cell_elements[] = {"cellhd", "cell",    "cats",
+                                          "colr",   "hist",    "cell_misc",
+                                          "fcell",  "g3dcell", NULL};
     static const char *dig_elements[] = {
-        "dig",
-        "dig_att",
-        "dig_plus",
-        "dig_cats",
-        "dig_misc",
-        "reg",
-        NULL
-    };
+        "dig", "dig_att", "dig_plus", "dig_cats", "dig_misc", "reg", NULL};
     const char *search = misc ? dir : element;
     int i;
 
@@ -53,9 +37,8 @@ static const char *find_element(int misc, const char *dir,
     return element;
 }
 
-static const char *find_file(int misc, const char *dir,
-                             const char *element, const char *name,
-                             const char *mapset)
+static const char *find_file(int misc, const char *dir, const char *element,
+                             const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -79,8 +62,8 @@ static const char *find_file(int misc, const char *dir,
         pmapset = mapset;
     }
 
-    if (strcmp(element, "vector") == 0 &&
-        pmapset && strcasecmp(pmapset, "ogr") == 0) {
+    if (strcmp(element, "vector") == 0 && pmapset &&
+        strcasecmp(pmapset, "ogr") == 0) {
         /* don't check for virtual OGR mapset */
         return G_store(pmapset);
     }
@@ -112,7 +95,8 @@ static const char *find_file(int misc, const char *dir,
                 if (!pselmapset)
                     pselmapset = pmapset;
                 else if (element == pelement)
-                    G_important_message(_("Data element '%s/%s' was found in more mapsets (also found in <%s>)"),
+                    G_important_message(_("Data element '%s/%s' was found in "
+                                          "more mapsets (also found in <%s>)"),
                                         element, pname, pmapset);
                 cnt++;
             }
@@ -123,10 +107,11 @@ static const char *find_file(int misc, const char *dir,
             else
                 G_file_name(path, element, name, pselmapset);
             if (access(path, 0) == 0) {
-                /* If the same name exists in more mapsets and print a warning */
+                /* If the same name exists in more mapsets and print a warning
+                 */
                 if (cnt > 1 && element == pelement)
-                    G_important_message(_("Using <%s@%s>..."),
-                                        pname, pselmapset);
+                    G_important_message(_("Using <%s@%s>..."), pname,
+                                        pselmapset);
 
                 return G_store(pselmapset);
             }
@@ -151,12 +136,8 @@ static const char *find_file(int misc, const char *dir,
     return NULL;
 }
 
-
-
-static const char *find_file1(int misc,
-                              const char *dir,
-                              const char *element, char *name,
-                              const char *mapset)
+static const char *find_file1(int misc, const char *dir, const char *element,
+                              char *name, const char *mapset)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     const char *pname, *pmapset;
@@ -196,7 +177,8 @@ static const char *find_file1(int misc,
  *
  * \param element database element (eg, "cell", "cellhd", "colr", etc)
  * \param name    file name to look for
- * \param mapset  mapset to search. if mapset is "" will search in mapset search list
+ * \param mapset  mapset to search. if mapset is "" will search in mapset search
+ * list
  *
  * \return pointer to a string with name of mapset where file was
  * found, or NULL if not found
@@ -217,13 +199,13 @@ const char *G_find_file(const char *element, char *name, const char *mapset)
  * \param dir     file directory
  * \param element database element (eg, "cell", "cellhd", "colr", etc)
  * \param name    file name to look for
- * \param mapset  mapset to search. if mapset is "" will search in mapset search list
+ * \param mapset  mapset to search. if mapset is "" will search in mapset search
+ * list
  *
  * \return pointer to a string with name of mapset where file was
  * found, or NULL if not found
  */
-const char *G_find_file_misc(const char *dir,
-                             const char *element, char *name,
+const char *G_find_file_misc(const char *dir, const char *element, char *name,
                              const char *mapset)
 {
     return find_file1(1, dir, element, name, mapset);
@@ -243,7 +225,8 @@ const char *G_find_file_misc(const char *dir,
  *
  * \param element    database element (eg, "cell", "cellhd", "colr", etc)
  * \param name       file name to look for
- * \param mapset     mapset to search. if mapset is "" will search in mapset search list
+ * \param mapset     mapset to search. if mapset is "" will search in mapset
+ * search list
  *
  * \return pointer to a string with name of mapset where file was
  * found, or NULL if not found
@@ -265,13 +248,13 @@ const char *G_find_file2(const char *element, const char *name,
  * \param dir        file directory
  * \param element    database element (eg, "cell", "cellhd", "colr", etc)
  * \param name       file name to look for
- * \param mapset     mapset to search. if mapset is "" will search in mapset search list
+ * \param mapset     mapset to search. if mapset is "" will search in mapset
+ * search list
  *
  * \return pointer to a string with name of mapset where file was
  * found, or NULL if not found
  */
-const char *G_find_file2_misc(const char *dir,
-                              const char *element,
+const char *G_find_file2_misc(const char *dir, const char *element,
                               const char *name, const char *mapset)
 {
     return find_file(1, dir, element, name, mapset);

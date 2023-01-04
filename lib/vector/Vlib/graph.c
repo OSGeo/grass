@@ -21,12 +21,12 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int From_node;           /* from node set in SP and used by clipper for first arc */
+static int
+    From_node; /* from node set in SP and used by clipper for first arc */
 
-static int clipper(dglGraph_s * pgraph,
-                   dglSPClipInput_s * pargIn,
-                   dglSPClipOutput_s * pargOut, void *pvarg)
-{                               /* caller's pointer */
+static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
+                   dglSPClipOutput_s *pargOut, void *pvarg)
+{ /* caller's pointer */
     dglInt32_t cost;
     dglInt32_t from;
 
@@ -35,15 +35,16 @@ static int clipper(dglGraph_s * pgraph,
     from = dglNodeGet_Id(pgraph, pargIn->pnNodeFrom);
 
     G_debug(3, "  Edge = %d NodeFrom = %d NodeTo = %d edge cost = %d",
-            (int)dglEdgeGet_Id(pgraph, pargIn->pnEdge),
-            (int)from, (int)dglNodeGet_Id(pgraph, pargIn->pnNodeTo),
+            (int)dglEdgeGet_Id(pgraph, pargIn->pnEdge), (int)from,
+            (int)dglNodeGet_Id(pgraph, pargIn->pnNodeTo),
             (int)pargOut->nEdgeCost);
 
-    if (from != From_node) {    /* do not clip first */
+    if (from != From_node) { /* do not clip first */
         if (dglGet_NodeAttrSize(pgraph) > 0) {
             memcpy(&cost, dglNodeGet_Attr(pgraph, pargIn->pnNodeFrom),
                    sizeof(cost));
-            if (cost == -1) {   /* closed, cannot go from this node except it is 'from' node */
+            if (cost == -1) { /* closed, cannot go from this node except it is
+                                 'from' node */
                 G_debug(3, "  closed node");
                 return 1;
             }
@@ -68,18 +69,18 @@ static int clipper(dglGraph_s * pgraph,
 
    \return void
  */
-void Vect_graph_init(dglGraph_s * graph, int nodes_costs)
+void Vect_graph_init(dglGraph_s *graph, int nodes_costs)
 {
-    dglInt32_t opaqueset[16] =
-        { 360000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    dglInt32_t opaqueset[16] = {360000, 0, 0, 0, 0, 0, 0, 0,
+                                0,      0, 0, 0, 0, 0, 0, 0};
 
     G_debug(3, "Vect_graph_init()");
 
     if (nodes_costs)
-        dglInitialize(graph, (dglByte_t) 1, sizeof(dglInt32_t),
-                      (dglInt32_t) 0, opaqueset);
+        dglInitialize(graph, (dglByte_t)1, sizeof(dglInt32_t), (dglInt32_t)0,
+                      opaqueset);
     else
-        dglInitialize(graph, (dglByte_t) 1, (dglInt32_t) 0, (dglInt32_t) 0,
+        dglInitialize(graph, (dglByte_t)1, (dglInt32_t)0, (dglInt32_t)0,
                       opaqueset);
 }
 
@@ -94,7 +95,7 @@ void Vect_graph_init(dglGraph_s * graph, int nodes_costs)
 
    \return void
  */
-void Vect_graph_build(dglGraph_s * graph)
+void Vect_graph_build(dglGraph_s *graph)
 {
     int ret;
 
@@ -106,7 +107,7 @@ void Vect_graph_build(dglGraph_s * graph)
 }
 
 /*!
-   \brief Add edge to graph. 
+   \brief Add edge to graph.
 
    Internal format for edge costs is integer, costs are multiplied
    before conversion to int by 1000.  Costs -1 for infinity i.e. arc
@@ -120,9 +121,8 @@ void Vect_graph_build(dglGraph_s * graph)
 
    \return void
  */
-void
-Vect_graph_add_edge(dglGraph_s * graph, int from, int to, double costs,
-                    int id)
+void Vect_graph_add_edge(dglGraph_s *graph, int from, int to, double costs,
+                         int id)
 {
     int ret;
     dglInt32_t dglcosts;
@@ -130,11 +130,10 @@ Vect_graph_add_edge(dglGraph_s * graph, int from, int to, double costs,
     G_debug(3, "Vect_add_edge() from = %d to = %d, costs = %f, id = %d", from,
             to, costs, id);
 
-    dglcosts = (dglInt32_t) costs *1000;
+    dglcosts = (dglInt32_t)costs * 1000;
 
-    ret =
-        dglAddEdge(graph, (dglInt32_t) from, (dglInt32_t) to, dglcosts,
-                   (dglInt32_t) id);
+    ret = dglAddEdge(graph, (dglInt32_t)from, (dglInt32_t)to, dglcosts,
+                     (dglInt32_t)id);
     if (ret < 0)
         G_fatal_error(_("Unable to add network arc"));
 }
@@ -152,16 +151,16 @@ Vect_graph_add_edge(dglGraph_s * graph, int from, int to, double costs,
 
    \return void
  */
-void Vect_graph_set_node_costs(dglGraph_s * graph, int node, double costs)
+void Vect_graph_set_node_costs(dglGraph_s *graph, int node, double costs)
 {
     dglInt32_t dglcosts;
 
     /* TODO: Not tested! */
     G_debug(3, "Vect_graph_set_node_costs()");
 
-    dglcosts = (dglInt32_t) costs *1000;
+    dglcosts = (dglInt32_t)costs * 1000;
 
-    dglNodeSet_Attr(graph, dglGetNode(graph, (dglInt32_t) node), &dglcosts);
+    dglNodeSet_Attr(graph, dglGetNode(graph, (dglInt32_t)node), &dglcosts);
 }
 
 /*!
@@ -178,12 +177,11 @@ void Vect_graph_set_node_costs(dglGraph_s * graph, int node, double costs)
    \param cost costs value
 
    \return number of segments
-   \return 0 is correct for from = to, or List == NULL ), ? sum of costs is better return value,
-   \return -1 destination unreachable
+   \return 0 is correct for from = to, or List == NULL ), ? sum of costs is
+   better return value, \return -1 destination unreachable
  */
-int
-Vect_graph_shortest_path(dglGraph_s * graph, int from, int to,
-                         struct ilist *List, double *cost)
+int Vect_graph_shortest_path(dglGraph_s *graph, int from, int to,
+                             struct ilist *List, double *cost)
 {
     int i, line, *pclip, cArc, nRet;
     dglSPReport_s *pSPReport;
@@ -191,13 +189,14 @@ Vect_graph_shortest_path(dglGraph_s * graph, int from, int to,
 
     G_debug(3, "Vect_graph_shortest_path(): from = %d, to = %d", from, to);
 
-    /* Note : if from == to dgl goes to nearest node and returns back (dgl feature) => 
-     *         check here for from == to */
+    /* Note : if from == to dgl goes to nearest node and returns back (dgl
+     * feature) => check here for from == to */
 
     if (List != NULL)
         Vect_reset_list(List);
 
-    /* Check if from and to are identical, otherwise dglib returns path to neares node and back! */
+    /* Check if from and to are identical, otherwise dglib returns path to
+     * neares node and back! */
     if (from == to) {
         if (cost != NULL)
             *cost = 0;
@@ -208,14 +207,12 @@ Vect_graph_shortest_path(dglGraph_s * graph, int from, int to,
 
     pclip = NULL;
     if (List != NULL) {
-        nRet =
-            dglShortestPath(graph, &pSPReport, (dglInt32_t) from,
-                            (dglInt32_t) to, clipper, pclip, NULL);
+        nRet = dglShortestPath(graph, &pSPReport, (dglInt32_t)from,
+                               (dglInt32_t)to, clipper, pclip, NULL);
     }
     else {
-        nRet =
-            dglShortestDistance(graph, &nDistance, (dglInt32_t) from,
-                                (dglInt32_t) to, clipper, pclip, NULL);
+        nRet = dglShortestDistance(graph, &nDistance, (dglInt32_t)from,
+                                   (dglInt32_t)to, clipper, pclip, NULL);
     }
 
     if (nRet == 0) {

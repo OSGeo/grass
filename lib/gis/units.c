@@ -10,7 +10,8 @@
 
    \author Original author CERL
    \author Adopted for libgis by Martin Landa <landa.martin gmail.com> (2010)
-   \author Temporal units and unit type check from Soeren gebbert <soerengebbert googlemail.com> (2012)
+   \author Temporal units and unit type check from Soeren gebbert <soerengebbert
+   googlemail.com> (2012)
  */
 
 #include <string.h>
@@ -46,15 +47,15 @@ double G_meters_to_units_factor(int units)
         break;
 
     case U_MILES:
-        return 6.21371192237334e-4;     /*  1 / (0.0254 * 12 * 5280)    */
+        return 6.21371192237334e-4; /*  1 / (0.0254 * 12 * 5280)    */
         break;
 
     case U_FEET:
-        return 3.28083989501312;        /*  1 / (0.0254 * 12)    */
+        return 3.28083989501312; /*  1 / (0.0254 * 12)    */
         break;
 
     case U_USFEET:
-        return 3.28083333333333;        /*  1 / (1200/3937)    */
+        return 3.28083333333333; /*  1 / (1200/3937)    */
         break;
 
     default:
@@ -96,7 +97,7 @@ double G_meters_to_units_factor_sq(int units)
         break;
 
     case U_ACRES:
-        return 2.47105381467165e-4;     /* 640 acres in a sq mile */
+        return 2.47105381467165e-4; /* 640 acres in a sq mile */
         break;
 
     case U_HECTARES:
@@ -104,15 +105,15 @@ double G_meters_to_units_factor_sq(int units)
         break;
 
     case U_MILES:
-        return 3.86102158542446e-7;     /*  1 / (0.0254 * 12 * 5280)^2  */
+        return 3.86102158542446e-7; /*  1 / (0.0254 * 12 * 5280)^2  */
         break;
 
     case U_FEET:
-        return 10.7639104167097;        /*  1 / (0.0254 * 12)^2  */
+        return 10.7639104167097; /*  1 / (0.0254 * 12)^2  */
         break;
 
     case U_USFEET:
-        return 10.7638673611111;        /*  1 / (1200/3937)^2    */
+        return 10.7638673611111; /*  1 / (1200/3937)^2    */
         break;
 
     default:
@@ -124,10 +125,10 @@ double G_meters_to_units_factor_sq(int units)
 }
 
 /** \brief Check if the unit is of spatial type
-  
+
   \param units units code from gis.h
- 
-  \return 1 if True, 0 otherwise 
+
+  \return 1 if True, 0 otherwise
  */
 
 int G_is_units_type_spatial(int units)
@@ -156,10 +157,10 @@ int G_is_units_type_spatial(int units)
 }
 
 /** \brief Check if the unit is of temporal type
-  
+
   \param units units code from gis.h
- 
-  \return 1 if True, 0 otherwise 
+
+  \return 1 if True, 0 otherwise
  */
 
 int G_is_units_type_temporal(int units)
@@ -228,16 +229,16 @@ const char *G_get_units_name(int units, int plural, int square)
         if (square)
             return plural ? _("acres") : _("acre");
         else
-            return G_get_units_name(G_units(G_database_unit_name(1)),
-                                    plural, square);
+            return G_get_units_name(G_units(G_database_unit_name(1)), plural,
+                                    square);
         break;
 
     case U_HECTARES:
         if (square)
             return plural ? _("hectares") : _("hectare");
         else
-            return G_get_units_name(G_units(G_database_unit_name(1)),
-                                    plural, square);
+            return G_get_units_name(G_units(G_database_unit_name(1)), plural,
+                                    square);
         break;
 
     case U_MILES:

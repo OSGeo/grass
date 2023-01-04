@@ -8,7 +8,7 @@
 #include "glob.h"
 #include "filter.h"
 
-int execute_filter(ROWIO * r, int *out, FILTER * filter, DCELL ** cell)
+int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 {
     int i;
     int t;
@@ -28,15 +28,14 @@ int execute_filter(ROWIO * r, int *out, FILTER * filter, DCELL ** cell)
         nprocs = 1;
     }
 
-
     size = filter->size;
     mid = size / 2;
-    bufs = (DCELL ***) G_malloc(nprocs * sizeof(DCELL **));
-    box = (DCELL ***) G_malloc(nprocs * sizeof(DCELL **));
+    bufs = (DCELL ***)G_malloc(nprocs * sizeof(DCELL **));
+    box = (DCELL ***)G_malloc(nprocs * sizeof(DCELL **));
 
     for (t = 0; t < nprocs; t++) {
-        bufs[t] = (DCELL **) G_malloc(size * sizeof(DCELL *));
-        box[t] = (DCELL **) G_malloc(size * sizeof(DCELL *));
+        bufs[t] = (DCELL **)G_malloc(size * sizeof(DCELL *));
+        box[t] = (DCELL **)G_malloc(size * sizeof(DCELL *));
     }
 
     switch (filter->start) {
@@ -79,7 +78,7 @@ int execute_filter(ROWIO * r, int *out, FILTER * filter, DCELL ** cell)
     /* copy border rows to output */
     row = starty;
     for (i = 0; i < mid; i++) {
-        cp = (DCELL *) Rowio_get(&r[MASTER], row);
+        cp = (DCELL *)Rowio_get(&r[MASTER], row);
         if (write(out[MASTER], cp, buflen) < 0)
             G_fatal_error("Error writing temporary file");
         row += dy;
@@ -92,7 +91,8 @@ int execute_filter(ROWIO * r, int *out, FILTER * filter, DCELL ** cell)
     int work = 0;
     DCELL *cellp = cell[MASTER];
 
-#pragma omp parallel firstprivate(starty, id, start, end, cellp) private(i, count, row, col, cp) if(nprocs > 1)
+#pragma omp parallel firstprivate(starty, id, start, end, cellp) private( \
+    i, count, row, col, cp) if (nprocs > 1)
     {
 #if defined(_OPENMP)
         if (nprocs > 1) {
@@ -101,7 +101,7 @@ int execute_filter(ROWIO * r, int *out, FILTER * filter, DCELL ** cell)
             end = rcount * (id + 1) / nprocs;
             cellp = cell[id];
             starty += start * dy;
-            lseek(out[id], (off_t) buflen * (mid + start), SEEK_SET);
+            lseek(out[id], (off_t)buflen * (mid + start), SEEK_SET);
         }
 #endif
 
@@ -111,7 +111,7 @@ int execute_filter(ROWIO * r, int *out, FILTER * filter, DCELL ** cell)
             starty += dy;
             /* get "size" rows */
             for (i = 0; i < size; i++) {
-                bufs[id][i] = (DCELL *) Rowio_get(&r[id], row);
+                bufs[id][i] = (DCELL *)Rowio_get(&r[id], row);
                 box[id][i] = bufs[id][i] + startx;
                 row += dy;
             }
@@ -147,12 +147,12 @@ int execute_filter(ROWIO * r, int *out, FILTER * filter, DCELL ** cell)
     }
     G_percent(work, rcount, 2);
     starty = rcount * dy;
-    lseek(out[MASTER], (off_t) buflen * (mid + rcount), SEEK_SET);
+    lseek(out[MASTER], (off_t)buflen * (mid + rcount), SEEK_SET);
 
     /* copy border rows to output */
     row = starty + mid * dy;
     for (i = 0; i < mid; i++) {
-        cp = (DCELL *) Rowio_get(&r[MASTER], row);
+        cp = (DCELL *)Rowio_get(&r[MASTER], row);
         if (write(out[MASTER], cp, buflen) < 0)
             G_fatal_error("Error writing temporary file");
         row += dy;

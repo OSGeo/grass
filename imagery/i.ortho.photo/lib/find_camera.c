@@ -1,9 +1,8 @@
-
 /**************************************************************
-* I_find_camera (camera)
-*
-* Look for the named camera reference file in the current mapset
-**************************************************************/
+ * I_find_camera (camera)
+ *
+ * Look for the named camera reference file in the current mapset
+ **************************************************************/
 #include <grass/gis.h>
 
 int I_find_camera(char *camera)

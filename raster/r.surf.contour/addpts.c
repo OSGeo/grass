@@ -1,6 +1,6 @@
 #include "contour.h"
 
-NODE *addpts(NODE * zero, int r, int c, int rr, int cc, int *node_ct)
+NODE *addpts(NODE *zero, int r, int c, int rr, int cc, int *node_ct)
 {
     NODE *add_in();
 

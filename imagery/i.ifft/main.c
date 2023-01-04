@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.ifft
  * AUTHOR(S):    David B. Satnik and Ali R. Vali (original contributors),
  *               Markus Neteler <neteler itc.it>
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      processes the real and imaginary Fourier
  *               components in frequency space and constract raster map
@@ -55,21 +54,22 @@ int main(int argc, char *argv[])
 {
     /* Global variable & function declarations */
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *orig, *real, *imag;
     } opt;
     const char *Cellmap_real, *Cellmap_imag;
     const char *Cellmap_orig;
-    int realfd, imagfd, outputfd, maskfd;       /* the input and output file descriptors */
+    int realfd, imagfd, outputfd,
+        maskfd; /* the input and output file descriptors */
     struct Cell_head realhead, imaghead;
     DCELL *cell_real, *cell_imag;
     CELL *maskbuf;
 
-    int i, j;                   /* Loop control variables */
-    int rows, cols;             /* number of rows & columns */
-    long totsize;               /* Total number of data points */
-    double (*data)[2];          /* Data structure containing real & complex values of FFT */
+    int i, j;       /* Loop control variables */
+    int rows, cols; /* number of rows & columns */
+    long totsize;   /* Total number of data points */
+    double(
+        *data)[2]; /* Data structure containing real & complex values of FFT */
 
     G_gisinit(argv[0]);
 
@@ -107,15 +107,13 @@ int main(int argc, char *argv[])
     Rast_get_cellhd(Cellmap_real, "", &realhead);
     Rast_get_cellhd(Cellmap_imag, "", &imaghead);
 
-    if (realhead.proj != imaghead.proj ||
-        realhead.zone != imaghead.zone ||
-        realhead.north != imaghead.north ||
-        realhead.south != imaghead.south ||
-        realhead.east != imaghead.east ||
-        realhead.west != imaghead.west ||
+    if (realhead.proj != imaghead.proj || realhead.zone != imaghead.zone ||
+        realhead.north != imaghead.north || realhead.south != imaghead.south ||
+        realhead.east != imaghead.east || realhead.west != imaghead.west ||
         realhead.ew_res != imaghead.ew_res ||
         realhead.ns_res != imaghead.ns_res)
-        G_fatal_error(_("The real and imaginary original windows did not match"));
+        G_fatal_error(
+            _("The real and imaginary original windows did not match"));
 
     Rast_set_window(&realhead); /* set the window to the whole cell map */
 
@@ -138,7 +136,7 @@ int main(int argc, char *argv[])
     cell_real = Rast_allocate_d_buf();
     cell_imag = Rast_allocate_d_buf();
 
-#define C(i, j) ((i) * cols + (j))
+#define C(i, j) ((i)*cols + (j))
 
     /* Read in cell map values */
     G_message(_("Reading raster maps..."));
@@ -177,17 +175,17 @@ int main(int argc, char *argv[])
         G_free(maskbuf);
     }
 
-#define SWAP1(a, b)				\
-    do {					\
-	double temp = (a);			\
-	(a) = (b);				\
-	(b) = temp;				\
+#define SWAP1(a, b)        \
+    do {                   \
+        double temp = (a); \
+        (a) = (b);         \
+        (b) = temp;        \
     } while (0)
 
-#define SWAP2(a, b)				\
-    do {					\
-	SWAP1(data[(a)][0], data[(b)][0]);	\
-	SWAP1(data[(a)][1], data[(b)][1]);	\
+#define SWAP2(a, b)                        \
+    do {                                   \
+        SWAP1(data[(a)][0], data[(b)][0]); \
+        SWAP1(data[(a)][1], data[(b)][1]); \
     } while (0)
 
     /* rotate the data array for standard display */

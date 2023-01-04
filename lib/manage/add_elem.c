@@ -34,7 +34,6 @@ void M__add_element(const char *elem, const char *desc)
     list[n].element =
         G_realloc(list[n].element, (nelem + 1) * sizeof(const char *));
     list[n].element[nelem] = G_store(elem);
-    list[n].desc =
-        G_realloc(list[n].desc, (nelem + 1) * sizeof(const char *));
+    list[n].desc = G_realloc(list[n].desc, (nelem + 1) * sizeof(const char *));
     list[n].desc[nelem] = G_store(desc);
 }

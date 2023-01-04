@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -22,7 +21,6 @@
 #include "distance.h"
 #include "local_proto.h"
 #include <grass/glocale.h>
-
 
 int execute_distance(void)
 {

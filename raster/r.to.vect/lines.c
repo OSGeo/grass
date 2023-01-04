@@ -2,10 +2,10 @@
  * Cell-file line extraction
  *   Line-tracing algorithm
  *
- * Mike Baba 
+ * Mike Baba
  * DBA Systems
- * Farfax, VA 
- * Jan 1990 
+ * Farfax, VA
+ * Jan 1990
  *
  * Jean Ezell
  * US Army Corps of Engineers
@@ -28,6 +28,7 @@
  * null values raster map format.
  * Pierre de Mouveaux - 20 april 2000.
  */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <grass/gis.h>
@@ -35,7 +36,6 @@
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 #include "global.h"
-
 
 static struct line_hdr *v_list;
 static struct COOR *h_ptr;
@@ -60,7 +60,6 @@ static struct COOR *end_line(struct COOR *, int);
 static struct COOR *start_line(int);
 static struct COOR *get_ptr(void);
 
-
 int extract_lines(void)
 {
     n_alloced_ptrs = 0;
@@ -71,110 +70,107 @@ int extract_lines(void)
     G_message(_("Extracting lines..."));
 
     switch (data_type) {
-    case CELL_TYPE:
-        {
-            int rows = 1;
+    case CELL_TYPE: {
+        int rows = 1;
 
-            while (read_next()) {
-                CELL *m = &((CELL *) middle)[1];
-                CELL *t = &((CELL *) top)[1];
-                CELL *b = &((CELL *) bottom)[1];
-
-                G_percent(rows, n_rows, 2);
-
-                for (col = 1; col < n_cols - 1; col++, t++, m++, b++) {
-                    m = &((CELL *) middle)[col];
-                    t = &((CELL *) top)[col];
-                    b = &((CELL *) bottom)[col];
-
-                    if ((mc = !Rast_is_c_null_value(m))) {
-                        tl = !Rast_is_c_null_value(t - 1);
-                        tc = !Rast_is_c_null_value(t);
-                        tr = !Rast_is_c_null_value(t + 1);
-                        ml = !Rast_is_c_null_value(m - 1);
-                        mr = !Rast_is_c_null_value(m + 1);
-                        bl = !Rast_is_c_null_value(b - 1);
-                        bc = !Rast_is_c_null_value(b);
-                        br = !Rast_is_c_null_value(b + 1);
-                        update_list(nabors());
-                    }
-                }
-
-                rows++;
-            }
+        while (read_next()) {
+            CELL *m = &((CELL *)middle)[1];
+            CELL *t = &((CELL *)top)[1];
+            CELL *b = &((CELL *)bottom)[1];
 
             G_percent(rows, n_rows, 2);
-            break;
-        }
-    case FCELL_TYPE:
-        {
-            int rows = 1;
 
-            while (read_next()) {
-                FCELL *m = &((FCELL *) middle)[1];
-                FCELL *t = &((FCELL *) top)[1];
-                FCELL *b = &((FCELL *) bottom)[1];
+            for (col = 1; col < n_cols - 1; col++, t++, m++, b++) {
+                m = &((CELL *)middle)[col];
+                t = &((CELL *)top)[col];
+                b = &((CELL *)bottom)[col];
 
-                G_percent(rows, n_rows, 2);
-
-                for (col = 1; col < n_cols - 1; col++, t++, m++, b++) {
-                    m = &((FCELL *) middle)[col];
-                    t = &((FCELL *) top)[col];
-                    b = &((FCELL *) bottom)[col];
-
-                    if ((mc = !Rast_is_f_null_value(m))) {
-                        tl = !Rast_is_f_null_value(t - 1);
-                        tc = !Rast_is_f_null_value(t);
-                        tr = !Rast_is_f_null_value(t + 1);
-                        ml = !Rast_is_f_null_value(m - 1);
-                        mr = !Rast_is_f_null_value(m + 1);
-                        bl = !Rast_is_f_null_value(b - 1);
-                        bc = !Rast_is_f_null_value(b);
-                        br = !Rast_is_f_null_value(b + 1);
-                        update_list(nabors());
-                    }
+                if ((mc = !Rast_is_c_null_value(m))) {
+                    tl = !Rast_is_c_null_value(t - 1);
+                    tc = !Rast_is_c_null_value(t);
+                    tr = !Rast_is_c_null_value(t + 1);
+                    ml = !Rast_is_c_null_value(m - 1);
+                    mr = !Rast_is_c_null_value(m + 1);
+                    bl = !Rast_is_c_null_value(b - 1);
+                    bc = !Rast_is_c_null_value(b);
+                    br = !Rast_is_c_null_value(b + 1);
+                    update_list(nabors());
                 }
-
-                rows++;
             }
 
-            G_percent(rows, n_rows, 2);
-            break;
+            rows++;
         }
-    case DCELL_TYPE:
-        {
-            int rows = 1;
 
-            while (read_next()) {
-                DCELL *m = &((DCELL *) middle)[1];
-                DCELL *t = &((DCELL *) top)[1];
-                DCELL *b = &((DCELL *) bottom)[1];
+        G_percent(rows, n_rows, 2);
+        break;
+    }
+    case FCELL_TYPE: {
+        int rows = 1;
 
-                G_percent(rows, n_rows, 2);
+        while (read_next()) {
+            FCELL *m = &((FCELL *)middle)[1];
+            FCELL *t = &((FCELL *)top)[1];
+            FCELL *b = &((FCELL *)bottom)[1];
 
-                for (col = 1; col < n_cols - 1; col++, t++, m++, b++) {
-                    m = &((DCELL *) middle)[col];
-                    t = &((DCELL *) top)[col];
-                    b = &((DCELL *) bottom)[col];
-                    if ((mc = !Rast_is_d_null_value(m))) {
-                        tl = !Rast_is_d_null_value(t - 1);
-                        tc = !Rast_is_d_null_value(t);
-                        tr = !Rast_is_d_null_value(t + 1);
-                        ml = !Rast_is_d_null_value(m - 1);
-                        mr = !Rast_is_d_null_value(m + 1);
-                        bl = !Rast_is_d_null_value(b - 1);
-                        bc = !Rast_is_d_null_value(b);
-                        br = !Rast_is_d_null_value(b + 1);
-                        update_list(nabors());
-                    }
+            G_percent(rows, n_rows, 2);
+
+            for (col = 1; col < n_cols - 1; col++, t++, m++, b++) {
+                m = &((FCELL *)middle)[col];
+                t = &((FCELL *)top)[col];
+                b = &((FCELL *)bottom)[col];
+
+                if ((mc = !Rast_is_f_null_value(m))) {
+                    tl = !Rast_is_f_null_value(t - 1);
+                    tc = !Rast_is_f_null_value(t);
+                    tr = !Rast_is_f_null_value(t + 1);
+                    ml = !Rast_is_f_null_value(m - 1);
+                    mr = !Rast_is_f_null_value(m + 1);
+                    bl = !Rast_is_f_null_value(b - 1);
+                    bc = !Rast_is_f_null_value(b);
+                    br = !Rast_is_f_null_value(b + 1);
+                    update_list(nabors());
                 }
-
-                rows++;
             }
 
-            G_percent(rows, n_rows, 2);
-            break;
+            rows++;
         }
+
+        G_percent(rows, n_rows, 2);
+        break;
+    }
+    case DCELL_TYPE: {
+        int rows = 1;
+
+        while (read_next()) {
+            DCELL *m = &((DCELL *)middle)[1];
+            DCELL *t = &((DCELL *)top)[1];
+            DCELL *b = &((DCELL *)bottom)[1];
+
+            G_percent(rows, n_rows, 2);
+
+            for (col = 1; col < n_cols - 1; col++, t++, m++, b++) {
+                m = &((DCELL *)middle)[col];
+                t = &((DCELL *)top)[col];
+                b = &((DCELL *)bottom)[col];
+                if ((mc = !Rast_is_d_null_value(m))) {
+                    tl = !Rast_is_d_null_value(t - 1);
+                    tc = !Rast_is_d_null_value(t);
+                    tr = !Rast_is_d_null_value(t + 1);
+                    ml = !Rast_is_d_null_value(m - 1);
+                    mr = !Rast_is_d_null_value(m + 1);
+                    bl = !Rast_is_d_null_value(b - 1);
+                    bc = !Rast_is_d_null_value(b);
+                    br = !Rast_is_d_null_value(b + 1);
+                    update_list(nabors());
+                }
+            }
+
+            rows++;
+        }
+
+        G_percent(rows, n_rows, 2);
+        break;
+    }
     }
 
     G_free(top);
@@ -224,7 +220,7 @@ static int update_list(int count)
     case 0:
         G_debug(1, "Isolated cell (%d,%d)", row, col);
         break;
-    case 1:                    /* begin or end line */
+    case 1: /* begin or end line */
         if (ml)
             h_ptr = end_line(h_ptr, 0);
         if (tl)
@@ -242,14 +238,14 @@ static int update_list(int count)
         if (bl)
             v_list[col - 1].right = start_line(0);
         break;
-    case 2:                    /* straight or bent line */
-        if (tl != 0 && br != 0) {       /* slanted line (\) */
+    case 2:                       /* straight or bent line */
+        if (tl != 0 && br != 0) { /* slanted line (\) */
             if (value_flag) {
                 /* only CELL supported */
                 if (data_type == CELL_TYPE) {
-                    int mc_val = ((CELL *) middle)[col];
-                    int br_val = ((CELL *) bottom)[col + 1];
-                    int tl_val = ((CELL *) top)[col - 1];
+                    int mc_val = ((CELL *)middle)[col];
+                    int br_val = ((CELL *)bottom)[col + 1];
+                    int tl_val = ((CELL *)top)[col - 1];
 
                     if (tl_val != mc_val) {
                         v_list[col].left = end_line(v_list[col].left, 1);
@@ -264,13 +260,13 @@ static int update_list(int count)
             v_list[col + 1].left = v_list[col].left;
             v_list[col].left = NULL;
         }
-        else if (tr != 0 && bl != 0) {  /* slanted line (/) */
+        else if (tr != 0 && bl != 0) { /* slanted line (/) */
             if (value_flag) {
                 /* only CELL supported */
                 if (data_type == CELL_TYPE) {
-                    int mc_val = ((CELL *) middle)[col];
-                    int bl_val = ((CELL *) bottom)[col - 1];
-                    int tr_val = ((CELL *) top)[col + 1];
+                    int mc_val = ((CELL *)middle)[col];
+                    int bl_val = ((CELL *)bottom)[col - 1];
+                    int tr_val = ((CELL *)top)[col + 1];
 
                     if (tr_val != mc_val) {
                         v_list[col].right = end_line(v_list[col].right, 1);
@@ -288,21 +284,21 @@ static int update_list(int count)
 
         /* first take care of the cases where both non-zero
            neighbours are in a upper-left corner (cw from ml to tr) */
-        else if (ml != 0 && tc != 0) {  /* bend (_|) */
+        else if (ml != 0 && tc != 0) { /* bend (_|) */
             join_lines(h_ptr, v_list[col].center);
             h_ptr = v_list[col].center = NULL;
         }
-        else if (ml != 0 && tr != 0) {  /* bend (_/) */
+        else if (ml != 0 && tr != 0) { /* bend (_/) */
             join_lines(h_ptr, v_list[col].right);
             h_ptr = v_list[col].left = NULL;
         }
-        else if (tl != 0 && tr != 0) {  /* bend (\/) */
+        else if (tl != 0 && tr != 0) { /* bend (\/) */
             join_lines(v_list[col].left, v_list[col].right);
             v_list[col].left = v_list[col].right = NULL;
         }
-        else if (tl != 0 && tc != 0)    /* bend (\|) */
+        else if (tl != 0 && tc != 0) /* bend (\|) */
             v_list[col].center = end_line(v_list[col].center, 1);
-        else if (tr != 0 && tc != 0)    /* bend |/ */
+        else if (tr != 0 && tc != 0) /* bend |/ */
             v_list[col].center = end_line(v_list[col].center, 1);
         else if (tl != 0 && ml != 0)
             h_ptr = end_line(h_ptr, 1);
@@ -314,14 +310,15 @@ static int update_list(int count)
         else if (tr != 0 && mr != 0)
             h_ptr = start_line(1);
         else if (!((tc != 0 && bc != 0) || (ml != 0 && mr != 0)))
-            /* if not horiz or vertical line */
+        /* if not horiz or vertical line */
         {
             /* one of the non zero neighbours is in the top left corner,
                and the other one is one of bl - mr, not next to the first one */
-            if (ml || tl || tc || tr) { /* old line bends toward *//*   new area */
+            if (ml || tl || tc ||
+                tr) { /* old line bends toward */ /*   new area */
                 new_ptr1 = get_ptr();
 
-                if (ml) {       /* join new to where came from */
+                if (ml) { /* join new to where came from */
                     if (h_ptr == NULL)
                         G_debug(1, "h_ptr is NULL!");
 
@@ -345,7 +342,7 @@ static int update_list(int count)
                     extend_line(v_list[col].center, new_ptr1);
                     v_list[col].center = NULL;
                 }
-                else {          /* tr */
+                else { /* tr */
 
                     if (v_list[col].right == NULL)
                         G_debug(1, "v_list[col].right is NULL!");
@@ -363,18 +360,18 @@ static int update_list(int count)
                     v_list[col + 1].left = new_ptr1;
                 else if (bc)
                     v_list[col].center = new_ptr1;
-                else            /* bl, ml is 0 here */
+                else /* bl, ml is 0 here */
                     v_list[col - 1].right = new_ptr1;
             }
-            else {              /* lower-left */
+            else { /* lower-left */
                 /* if the non-zero neighbors are adjacent */
                 if (mr && br)
                     h_ptr = start_line(1);
                 else if ((br && bc) || (bl && bc))
                     v_list[col].center = start_line(1);
                 else
-                    /* the non-zero neighbors are not adjacent */
-                {               /* starting in middle of line */
+                /* the non-zero neighbors are not adjacent */
+                { /* starting in middle of line */
                     new_ptr1 = get_ptr();
                     new_ptr2 = get_ptr();
                     new_ptr3 = get_ptr();
@@ -394,29 +391,31 @@ static int update_list(int count)
                         v_list[col - 1].right = new_ptr3;
                         v_list[col + 1].left = new_ptr2;
                     }
-                }               /* starting in the middle of the line */
+                } /* starting in the middle of the line */
             }
         }
-        else if (value_flag) {  /* horizontal or vertical line */
+        else if (value_flag) {          /* horizontal or vertical line */
             int ml_val, mc_val, mr_val; /* horiz */
-            int tc_val, bc_val; /* vert */
+            int tc_val, bc_val;         /* vert */
 
             ml_val = mc_val = mr_val = tc_val = bc_val = 0;
             /* only CELL supported */
             if (data_type == CELL_TYPE) {
-                ml_val = ((CELL *) middle)[col - 1];
-                mc_val = ((CELL *) middle)[col];
-                mr_val = ((CELL *) middle)[col + 1];
+                ml_val = ((CELL *)middle)[col - 1];
+                mc_val = ((CELL *)middle)[col];
+                mr_val = ((CELL *)middle)[col + 1];
 
-                tc_val = ((CELL *) top)[col];
-                bc_val = ((CELL *) bottom)[col];
+                tc_val = ((CELL *)top)[col];
+                bc_val = ((CELL *)bottom)[col];
             }
 
-            if ((mc && mr) && mc_val != mr_val) {       /* break the horizontal line */
+            if ((mc && mr) &&
+                mc_val != mr_val) { /* break the horizontal line */
                 h_ptr = end_line(h_ptr, 1);
                 h_ptr = start_line(1);
             }
-            else if ((mc && bc) && mc_val != bc_val) {  /* break the vertical line */
+            else if ((mc && bc) &&
+                     mc_val != bc_val) { /* break the vertical line */
                 v_list[col].center = end_line(v_list[col].center, 1);
                 v_list[col].center = start_line(1);
             }
@@ -431,7 +430,7 @@ static int update_list(int count)
         break;
     case 3:
         if (ml || tl || tc || (tr && !mr)) {
-            if (ml)             /* stop horz. and vert. lines */
+            if (ml) /* stop horz. and vert. lines */
                 h_ptr = end_line(h_ptr, 1);
 
             if (tc)
@@ -444,7 +443,7 @@ static int update_list(int count)
                 v_list[col].right = end_line(v_list[col].right, 1);
         }
 
-        if (mr)                 /* start horz. and vert */
+        if (mr) /* start horz. and vert */
             h_ptr = start_line(1);
         if (bc)
             v_list[col].center = start_line(1);
@@ -456,7 +455,7 @@ static int update_list(int count)
             v_list[col - 1].right = start_line(1);
         break;
     case 4:
-        if (ml)                 /* end horz. and vert lines */
+        if (ml) /* end horz. and vert lines */
             h_ptr = end_line(h_ptr, 1);
 
         if (tc)
@@ -468,7 +467,7 @@ static int update_list(int count)
         if ((tr) && (!mr) && (!tc))
             v_list[col].right = end_line(v_list[col].right, 1);
 
-        if (mr)                 /* start horz. and vert */
+        if (mr) /* start horz. and vert */
             h_ptr = start_line(1);
         if (bc)
             v_list[col].center = start_line(1);
@@ -481,10 +480,11 @@ static int update_list(int count)
                 v_list[col - 1].right = start_line(1);
         break;
     case 5:
-        /* G_message(_("crowded cell %xH (%d,%d) -continuing"),count,row,col); */
+        /* G_message(_("crowded cell %xH (%d,%d) -continuing"),count,row,col);
+         */
         /* I think 5 neighbours is nor crowded, so we shouldn't worry the user
            Olga */
-        if (ml)                 /* end horz. and vert lines */
+        if (ml) /* end horz. and vert lines */
             h_ptr = end_line(h_ptr, 1);
 
         if (tc)
@@ -496,7 +496,7 @@ static int update_list(int count)
         if ((tr) && (!mr) && (!tc))
             v_list[col].right = end_line(v_list[col].right, 1);
 
-        if (mr)                 /* start horz. and vert */
+        if (mr) /* start horz. and vert */
             h_ptr = start_line(1);
         if (bc)
             v_list[col].center = start_line(1);
@@ -511,7 +511,7 @@ static int update_list(int count)
         /* the same as case 5 */
         G_debug(1, "Crowded cell %xH (%d,%d), continuing", count, row, col);
 
-        if (ml)                 /* end horz. and vert lines */
+        if (ml) /* end horz. and vert lines */
             h_ptr = end_line(h_ptr, 1);
 
         if (tc)
@@ -523,7 +523,7 @@ static int update_list(int count)
         if ((tr) && (!mr) && (!tc))
             v_list[col].right = end_line(v_list[col].right, 1);
 
-        if (mr)                 /* start horz. and vert */
+        if (mr) /* start horz. and vert */
             h_ptr = start_line(1);
         if (bc)
             v_list[col].center = start_line(1);
@@ -537,10 +537,11 @@ static int update_list(int count)
     default:
         G_message(_("Crowded cell at (%f, %f): row %d, col %d, count %d"),
                   Rast_col_to_easting((double)col - .5, &cell_head),
-                  Rast_row_to_northing((double)row + .5, &cell_head),
-                  row, col - 1, count);
-        G_fatal_error(_("Raster map is not thinned properly.\nPlease run r.thin."));
-    }                           /* switch count */
+                  Rast_row_to_northing((double)row + .5, &cell_head), row,
+                  col - 1, count);
+        G_fatal_error(
+            _("Raster map is not thinned properly.\nPlease run r.thin."));
+    } /* switch count */
 
     return 0;
 }
@@ -553,20 +554,20 @@ static struct COOR *end_line(struct COOR *ptr, int node)
 
     switch (data_type) {
     case CELL_TYPE:
-        ptr->val = ((CELL *) middle)[col];
+        ptr->val = ((CELL *)middle)[col];
         break;
     case FCELL_TYPE:
-        ptr->dval = ((FCELL *) middle)[col];
+        ptr->dval = ((FCELL *)middle)[col];
         break;
     case DCELL_TYPE:
-        ptr->dval = ((DCELL *) middle)[col];
+        ptr->dval = ((DCELL *)middle)[col];
         break;
     default:
         break;
     }
 
-    G_debug(3, "end_line: node: %d; p: row:%d, col:%d",
-            node, ptr->row, ptr->col);
+    G_debug(3, "end_line: node: %d; p: row:%d, col:%d", node, ptr->row,
+            ptr->col);
 
     ptr->fptr = ptr;
     write_line(ptr);
@@ -597,20 +598,20 @@ static int join_lines(struct COOR *p, struct COOR *q)
 
     switch (data_type) {
     case CELL_TYPE:
-        p->val = ((CELL *) middle)[col];
+        p->val = ((CELL *)middle)[col];
         break;
     case FCELL_TYPE:
-        p->dval = ((FCELL *) middle)[col];
+        p->dval = ((FCELL *)middle)[col];
         break;
     case DCELL_TYPE:
-        p->dval = ((DCELL *) middle)[col];
+        p->dval = ((DCELL *)middle)[col];
         break;
     default:
         break;
     }
 
-    G_debug(3, "join_lines: p: row:%d, col:%d; q: row:%d, col:%d",
-            p->row, p->col, q->row, q->col);
+    G_debug(3, "join_lines: p: row:%d, col:%d; q: row:%d, col:%d", p->row,
+            p->col, q->row, q->col);
 
     if (p->fptr != NULL) {
         G_warning(_("join_lines: p front pointer not NULL!"));
@@ -642,21 +643,21 @@ static int extend_line(struct COOR *p, struct COOR *q)
         p = start_line(1);
     }
 
-    G_debug(3, "extend_line: p: row:%d, col:%d; q: row:%d, col:%d",
-            p->row, p->col, q->row, q->col);
+    G_debug(3, "extend_line: p: row:%d, col:%d; q: row:%d, col:%d", p->row,
+            p->col, q->row, q->col);
 
     p->row = row;
     p->col = col - 1;
 
     switch (data_type) {
     case CELL_TYPE:
-        p->val = ((CELL *) middle)[col];
+        p->val = ((CELL *)middle)[col];
         break;
     case FCELL_TYPE:
-        p->dval = ((FCELL *) middle)[col];
+        p->dval = ((FCELL *)middle)[col];
         break;
     case DCELL_TYPE:
-        p->dval = ((DCELL *) middle)[col];
+        p->dval = ((DCELL *)middle)[col];
         break;
     default:
         break;
@@ -729,13 +730,13 @@ static struct COOR *get_ptr(void)
 
     switch (data_type) {
     case CELL_TYPE:
-        p->val = ((CELL *) middle)[col];
+        p->val = ((CELL *)middle)[col];
         break;
     case FCELL_TYPE:
-        p->dval = ((FCELL *) middle)[col];
+        p->dval = ((FCELL *)middle)[col];
         break;
     case DCELL_TYPE:
-        p->dval = ((DCELL *) middle)[col];
+        p->dval = ((DCELL *)middle)[col];
         break;
     default:
         break;

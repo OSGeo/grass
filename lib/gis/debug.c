@@ -45,13 +45,14 @@ void G_init_debug(void)
  * \brief Print debugging message.
  *
  * Print debugging message if environment variable GRASS_DEBUG_LEVEL
- * is set to level equal or greater  
+ * is set to level equal or greater
  *
  * Levels: (recommended levels)<br>
  *  - 1 - message is printed once or twice per module<br>
  *  - 2 - less interesting once-per-module messages,<br>
  *  - 2 - library functions likely to be used once in a module<br>
- *  - 3 - library functions likely to be called a few times in a module (<=10),<br>
+ *  - 3 - library functions likely to be called a few times in a module
+ * (<=10),<br>
  *  - 3 - database opening and closing logistics<br>
  *  - 4 - each row (raster) or line (vector) or database/column (DB),<br>
  *  - 4 - each column/cat (DB)<br>

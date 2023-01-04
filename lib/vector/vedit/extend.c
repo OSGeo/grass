@@ -120,16 +120,16 @@ int Vedit_extend_lines(struct Map_info *Map, struct ilist *List, int nodes,
                 int found;
 
                 /* find first nearest line */
-                found = Vect_find_line_list(Map, x, y, z,
-                                            GV_LINES, thresh, WITHOUT_Z,
-                                            List_exclude, List_found);
+                found =
+                    Vect_find_line_list(Map, x, y, z, GV_LINES, thresh,
+                                        WITHOUT_Z, List_exclude, List_found);
 
                 if (found > 0 && Vect_line_alive(Map, found)) {
                     /* try to extend lines (given node) */
                     G_debug(3, "Vedit_extend_lines(): lines=%d,%d", line,
                             found);
-                    if (extend_lines
-                        (Map, !j, line, found, parallel, thresh, List)) {
+                    if (extend_lines(Map, !j, line, found, parallel, thresh,
+                                     List)) {
                         G_debug(3,
                                 "Vedit_extend_lines(): lines=%d,%d -> extended",
                                 line, found);
@@ -196,8 +196,8 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
             x = Points_from->x[n_points];
             y = Points_from->y[n_points];
         }
-        seg = Vect_line_distance(Points_to, x, y, 0.0, WITHOUT_Z,
-                                 &px, &py, NULL, &dist, &spdist, &lpdist);
+        seg = Vect_line_distance(Points_to, x, y, 0.0, WITHOUT_Z, &px, &py,
+                                 NULL, &dist, &spdist, &lpdist);
 
         if (!(seg > 0 && dist > 0.0 && (thresh < 0. || dist <= thresh)))
             break;
@@ -206,8 +206,8 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
         length = first ? 0 : Vect_line_length(Points_from);
 
         /* find angles */
-        if (!Vect_point_on_line
-            (Points_from, length, NULL, NULL, NULL, &angle_f, NULL) ||
+        if (!Vect_point_on_line(Points_from, length, NULL, NULL, NULL, &angle_f,
+                                NULL) ||
             !Vect_point_on_line(Points_to, lpdist, NULL, NULL, NULL, &angle_t,
                                 NULL))
             break;
@@ -215,8 +215,8 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
         line_to_extended = 0;
 
         /* extend both lines and find intersection */
-        if (!find_extended_intersection(x, y, angle_f, px, py, angle_t,
-                                        &x1, &y1)) {
+        if (!find_extended_intersection(x, y, angle_f, px, py, angle_t, &x1,
+                                        &y1)) {
             /* parallel lines */
             if (!parallel)
                 break;
@@ -292,8 +292,8 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
             for (is = 0; is < Points_to->n_points; is++)
                 Vect_append_point(Points_final, Points_to->x[is],
                                   Points_to->y[is], Points_to->z[is]);
-            line_new = Vect_rewrite_line(Map, line_to, type_to, Points_final,
-                                         Cats_to);
+            line_new =
+                Vect_rewrite_line(Map, line_to, type_to, Points_final, Cats_to);
         }
         else if (line_to_extended == 2) {
             /* extend line_to end node */
@@ -301,8 +301,8 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
                 Vect_append_point(Points_final, Points_to->x[is],
                                   Points_to->y[is], Points_to->z[is]);
             Vect_append_point(Points_final, x1, y1, 0.0);
-            line_new = Vect_rewrite_line(Map, line_to, type_to, Points_final,
-                                         Cats_to);
+            line_new =
+                Vect_rewrite_line(Map, line_to, type_to, Points_final, Cats_to);
         }
         else {
             int n_parts = 0;
@@ -330,8 +330,8 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 
             if (Vect_line_length(Points_final) > 0) {
                 if (n_parts > 0)
-                    line_new = Vect_write_line(Map, type_to, Points_final,
-                                               Cats_to);
+                    line_new =
+                        Vect_write_line(Map, type_to, Points_final, Cats_to);
                 else
                     line_new = Vect_rewrite_line(Map, line_to, type_to,
                                                  Points_final, Cats_to);

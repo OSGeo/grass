@@ -25,12 +25,11 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-/*!  
+/*!
    \brief This structure keeps info about geometry parts above current
    geometry, path to curent geometry in the feature. First 'part' number
    however is feature id */
-struct geom_parts
-{
+struct geom_parts {
     int *part;
     int a_parts;
     int n_parts;
@@ -43,24 +42,22 @@ static void add_part(struct geom_parts *, int);
 static void del_part(struct geom_parts *);
 static void add_parts_to_offset(struct Format_info_offset *,
                                 struct geom_parts *);
-static int add_line(struct Plus_head *, struct Format_info_offset *,
-                    int, struct line_pnts *, int, struct geom_parts *);
+static int add_line(struct Plus_head *, struct Format_info_offset *, int,
+                    struct line_pnts *, int, struct geom_parts *);
 
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
-static int add_geometry_pg(struct Plus_head *,
-                           struct Format_info_pg *,
-                           struct feat_parts *, int,
-                           int, int, struct geom_parts *);
+static int add_geometry_pg(struct Plus_head *, struct Format_info_pg *,
+                           struct feat_parts *, int, int, int,
+                           struct geom_parts *);
 static void build_pg(struct Map_info *, int);
 #endif
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
-static int add_geometry_ogr(struct Plus_head *,
-                            struct Format_info_ogr *,
+static int add_geometry_ogr(struct Plus_head *, struct Format_info_ogr *,
                             OGRGeometryH, int, int, struct geom_parts *);
 
 static void build_ogr(struct Map_info *, int);
@@ -98,8 +95,8 @@ void add_part(struct geom_parts *parts, int part)
 {
     if (parts->a_parts == parts->n_parts) {
         parts->a_parts += 10;
-        parts->part = (int *)G_realloc((void *)parts->part,
-                                       parts->a_parts * sizeof(int));
+        parts->part =
+            (int *)G_realloc((void *)parts->part, parts->a_parts * sizeof(int));
     }
     parts->part[parts->n_parts] = part;
     parts->n_parts++;
@@ -123,8 +120,8 @@ void add_parts_to_offset(struct Format_info_offset *offset,
 
     if (offset->array_num + parts->n_parts >= offset->array_alloc) {
         offset->array_alloc += parts->n_parts + 1000;
-        offset->array = (int *)G_realloc(offset->array,
-                                         offset->array_alloc * sizeof(int));
+        offset->array =
+            (int *)G_realloc(offset->array, offset->array_alloc * sizeof(int));
     }
     j = offset->array_num;
     for (i = 0; i < parts->n_parts; i++) {
@@ -139,8 +136,8 @@ void add_parts_to_offset(struct Format_info_offset *offset,
    \brief Add line to support structures
  */
 int add_line(struct Plus_head *plus, struct Format_info_offset *offset,
-             int type, struct line_pnts *Points,
-             int FID, struct geom_parts *parts)
+             int type, struct line_pnts *Points, int FID,
+             struct geom_parts *parts)
 {
     int line;
     long offset_value;
@@ -185,10 +182,9 @@ int add_line(struct Plus_head *plus, struct Format_info_offset *offset,
 /*!
    \brief Recursively add geometry (PostGIS) to topology
  */
-int add_geometry_pg(struct Plus_head *plus,
-                    struct Format_info_pg *pg_info,
-                    struct feat_parts *fparts, int ipart,
-                    int FID, int build, struct geom_parts *parts)
+int add_geometry_pg(struct Plus_head *plus, struct Format_info_pg *pg_info,
+                    struct feat_parts *fparts, int ipart, int FID, int build,
+                    struct geom_parts *parts)
 {
     int line, i, idx, area, isle, outer_area, ret;
     int lines[1];
@@ -236,7 +232,7 @@ int add_geometry_pg(struct Plus_head *plus,
             dig_line_box(line_i, &box);
             dig_find_area_poly(line_i, &area_size);
 
-            if (area_size > 0)  /* area clockwise */
+            if (area_size > 0) /* area clockwise */
                 lines[0] = line;
             else
                 lines[0] = -line;
@@ -244,17 +240,17 @@ int add_geometry_pg(struct Plus_head *plus,
             area = dig_add_area(plus, 1, lines, &box);
 
             /* each area is also isle */
-            lines[0] = -lines[0];       /* island is counter clockwise */
+            lines[0] = -lines[0]; /* island is counter clockwise */
 
             isle = dig_add_isle(plus, 1, lines, &box);
 
             if (build < GV_BUILD_ATTACH_ISLES)
                 continue;
 
-            if (i == 0) {       /* outer ring */
+            if (i == 0) { /* outer ring */
                 outer_area = area;
             }
-            else {              /* inner ring */
+            else { /* inner ring */
                 struct P_isle *Isle;
 
                 Isle = plus->Isle[isle];
@@ -266,14 +262,13 @@ int add_geometry_pg(struct Plus_head *plus,
 
         if (build >= GV_BUILD_CENTROIDS) {
             /* create virtual centroid */
-            ret =
-                Vect_get_point_in_poly_isl((const struct line_pnts *)pg_info->
-                                           cache.lines[fparts->idx[ipart]],
-                                           (const struct line_pnts **)
-                                           &pg_info->cache.lines[fparts->
-                                                                 idx[ipart]] +
-                                           1, fparts->nlines[ipart] - 1, &x,
-                                           &y);
+            ret = Vect_get_point_in_poly_isl(
+                (const struct line_pnts *)
+                    pg_info->cache.lines[fparts->idx[ipart]],
+                (const struct line_pnts **)&pg_info->cache
+                        .lines[fparts->idx[ipart]] +
+                    1,
+                fparts->nlines[ipart] - 1, &x, &y);
             if (ret < -1) {
                 G_warning(_("Unable to calculate centroid for area %d"),
                           outer_area);
@@ -287,8 +282,7 @@ int add_geometry_pg(struct Plus_head *plus,
                 G_debug(4, "  Centroid: %f, %f", x, y);
                 line_c = Vect_new_line_struct();
                 Vect_append_point(line_c, x, y, 0.0);
-                line =
-                    add_line(plus, offset, GV_CENTROID, line_c, FID, parts);
+                line = add_line(plus, offset, GV_CENTROID, line_c, FID, parts);
 
                 Line = plus->Line[line];
                 topo = (struct P_topo_c *)Line->topo;
@@ -341,8 +335,8 @@ void build_pg(struct Map_info *Map, int build)
         /* get feature id */
         fid = atoi(PQgetvalue(pg_info->res, iFeature, 1));
         if (fid < 1)
-            continue;           /* PostGIS Topology: skip features with negative
-                                 * fid (isles, universal face, ...) */
+            continue; /* PostGIS Topology: skip features with negative
+                       * fid (isles, universal face, ...) */
 
         wkb_data = PQgetvalue(pg_info->res, iFeature, 0);
 
@@ -370,8 +364,8 @@ void build_pg(struct Map_info *Map, int build)
 
             if (fparts.n_parts > 1)
                 add_part(&parts, ipart);
-            add_geometry_pg(&(Map->plus), pg_info, &fparts, ipart,
-                            fid, build, &parts);
+            add_geometry_pg(&(Map->plus), pg_info, &fparts, ipart, fid, build,
+                            &parts);
             if (fparts.n_parts > 1)
                 del_part(&parts);
         }
@@ -381,9 +375,9 @@ void build_pg(struct Map_info *Map, int build)
     }
     G_progress(1, 1);
 
-    G_message(n_
-              ("One primitive registered", "%d primitives registered",
-               Map->plus.n_lines), Map->plus.n_lines);
+    G_message(n_("One primitive registered", "%d primitives registered",
+                 Map->plus.n_lines),
+              Map->plus.n_lines);
     G_message(n_("One vertex registered", "%d vertices registered", npoints),
               npoints);
 
@@ -401,8 +395,7 @@ void build_pg(struct Map_info *Map, int build)
 /*!
    \brief Recursively add geometry (OGR) to topology
  */
-int add_geometry_ogr(struct Plus_head *plus,
-                     struct Format_info_ogr *ogr_info,
+int add_geometry_ogr(struct Plus_head *plus, struct Format_info_ogr *ogr_info,
                      OGRGeometryH hGeom, int FID, int build,
                      struct geom_parts *parts)
 {
@@ -445,8 +438,7 @@ int add_geometry_ogr(struct Plus_head *plus,
         Vect_reset_line(ogr_info->cache.lines[0]);
         Vect_append_point(ogr_info->cache.lines[0], OGR_G_GetX(hGeom, 0),
                           OGR_G_GetY(hGeom, 0), OGR_G_GetZ(hGeom, 0));
-        add_line(plus, offset, GV_POINT, ogr_info->cache.lines[0], FID,
-                 parts);
+        add_line(plus, offset, GV_POINT, ogr_info->cache.lines[0], FID, parts);
         npoints += ogr_info->cache.lines[0]->n_points;
         break;
 
@@ -457,9 +449,8 @@ int add_geometry_ogr(struct Plus_head *plus,
         nPoints = OGR_G_GetPointCount(hGeom);
         Vect_reset_line(ogr_info->cache.lines[0]);
         for (i = 0; i < nPoints; i++) {
-            Vect_append_point(ogr_info->cache.lines[0],
-                              OGR_G_GetX(hGeom, i), OGR_G_GetY(hGeom, i),
-                              OGR_G_GetZ(hGeom, i));
+            Vect_append_point(ogr_info->cache.lines[0], OGR_G_GetX(hGeom, i),
+                              OGR_G_GetY(hGeom, i), OGR_G_GetZ(hGeom, i));
         }
         add_line(plus, offset, GV_LINE, ogr_info->cache.lines[0], FID, parts);
         npoints += ogr_info->cache.lines[0]->n_points;
@@ -474,10 +465,9 @@ int add_geometry_ogr(struct Plus_head *plus,
         /* alloc space for islands if needed */
         if (nRings > ogr_info->cache.lines_alloc) {
             ogr_info->cache.lines_alloc += nRings;
-            ogr_info->cache.lines =
-                (struct line_pnts **)G_realloc(ogr_info->cache.lines,
-                                               ogr_info->cache.lines_alloc *
-                                               sizeof(struct line_pnts *));
+            ogr_info->cache.lines = (struct line_pnts **)G_realloc(
+                ogr_info->cache.lines,
+                ogr_info->cache.lines_alloc * sizeof(struct line_pnts *));
             ogr_info->cache.lines_types =
                 (int *)G_realloc(ogr_info->cache.lines_types,
                                  ogr_info->cache.lines_alloc * sizeof(int));
@@ -506,9 +496,8 @@ int add_geometry_ogr(struct Plus_head *plus,
 
             /* register boundary */
             add_part(parts, iPart);
-            line =
-                add_line(plus, offset, GV_BOUNDARY,
-                         ogr_info->cache.lines[iPart], FID, parts);
+            line = add_line(plus, offset, GV_BOUNDARY,
+                            ogr_info->cache.lines[iPart], FID, parts);
             del_part(parts);
 
             if (build < GV_BUILD_AREAS)
@@ -518,7 +507,7 @@ int add_geometry_ogr(struct Plus_head *plus,
             dig_line_box(ogr_info->cache.lines[iPart], &box);
             dig_find_area_poly(ogr_info->cache.lines[iPart], &area_size);
 
-            if (area_size > 0)  /* area clockwise */
+            if (area_size > 0) /* area clockwise */
                 lines[0] = line;
             else
                 lines[0] = -line;
@@ -526,17 +515,17 @@ int add_geometry_ogr(struct Plus_head *plus,
             area = dig_add_area(plus, 1, lines, &box);
 
             /* each area is also isle */
-            lines[0] = -lines[0];       /* island is counter clockwise */
+            lines[0] = -lines[0]; /* island is counter clockwise */
 
             isle = dig_add_isle(plus, 1, lines, &box);
 
             if (build < GV_BUILD_ATTACH_ISLES)
                 continue;
 
-            if (iPart == 0) {   /* outer ring */
+            if (iPart == 0) { /* outer ring */
                 outer_area = area;
             }
-            else {              /* inner ring */
+            else { /* inner ring */
                 struct P_isle *Isle;
 
                 Isle = plus->Isle[isle];
@@ -548,12 +537,10 @@ int add_geometry_ogr(struct Plus_head *plus,
 
         if (build >= GV_BUILD_CENTROIDS) {
             /* create virtual centroid */
-            ret =
-                Vect_get_point_in_poly_isl((const struct line_pnts *)
-                                           ogr_info->cache.lines[0],
-                                           (const struct line_pnts **)
-                                           ogr_info->cache.lines + 1,
-                                           nRings - 1, &x, &y);
+            ret = Vect_get_point_in_poly_isl(
+                (const struct line_pnts *)ogr_info->cache.lines[0],
+                (const struct line_pnts **)ogr_info->cache.lines + 1,
+                nRings - 1, &x, &y);
             if (ret < -1) {
                 G_warning(_("Unable to calculate centroid for area %d"),
                           outer_area);
@@ -565,9 +552,8 @@ int add_geometry_ogr(struct Plus_head *plus,
                 G_debug(4, "  Centroid: %f, %f", x, y);
                 Vect_reset_line(ogr_info->cache.lines[0]);
                 Vect_append_point(ogr_info->cache.lines[0], x, y, 0.0);
-                line =
-                    add_line(plus, offset, GV_CENTROID,
-                             ogr_info->cache.lines[0], FID, parts);
+                line = add_line(plus, offset, GV_CENTROID,
+                                ogr_info->cache.lines[0], FID, parts);
 
                 Line = plus->Line[line];
                 topo = (struct P_topo_c *)Line->topo;
@@ -590,10 +576,9 @@ int add_geometry_ogr(struct Plus_head *plus,
         /* alloc space for parts if needed */
         if (nParts > ogr_info->cache.lines_alloc) {
             ogr_info->cache.lines_alloc += nParts;
-            ogr_info->cache.lines =
-                (struct line_pnts **)G_realloc(ogr_info->cache.lines,
-                                               ogr_info->cache.lines_alloc *
-                                               sizeof(struct line_pnts *));
+            ogr_info->cache.lines = (struct line_pnts **)G_realloc(
+                ogr_info->cache.lines,
+                ogr_info->cache.lines_alloc * sizeof(struct line_pnts *));
             ogr_info->cache.lines_types =
                 (int *)G_realloc(ogr_info->cache.lines_types,
                                  ogr_info->cache.lines_alloc * sizeof(int));
@@ -609,8 +594,8 @@ int add_geometry_ogr(struct Plus_head *plus,
         for (i = 0; i < nParts; i++) {
             add_part(parts, i);
             hGeom2 = OGR_G_GetGeometryRef(hGeom, i);
-            npoints += add_geometry_ogr(plus, ogr_info, hGeom2,
-                                        FID, build, parts);
+            npoints +=
+                add_geometry_ogr(plus, ogr_info, hGeom2, FID, build, parts);
             del_part(parts);
         }
         break;
@@ -670,23 +655,22 @@ void build_ogr(struct Map_info *Map, int build)
 
         reset_parts(&parts);
         add_part(&parts, FID);
-        npoints += add_geometry_ogr(&(Map->plus), ogr_info, hGeom,
-                                    FID, build, &parts);
+        npoints +=
+            add_geometry_ogr(&(Map->plus), ogr_info, hGeom, FID, build, &parts);
 
         OGR_F_Destroy(hFeature);
-    }                           /* while */
+    } /* while */
     G_progress(1, 1);
 
-    G_message(n_
-              ("One primitive registered", "%d primitives registered",
-               Map->plus.n_lines), Map->plus.n_lines);
+    G_message(n_("One primitive registered", "%d primitives registered",
+                 Map->plus.n_lines),
+              Map->plus.n_lines);
     G_message(n_("One vertex registered", "%d vertices registered", npoints),
               npoints);
 
     if (nskipped > 0)
-        G_warning(n_
-                  ("One feature without geometry skipped",
-                   "%d features without geometry skipped", nskipped),
+        G_warning(n_("One feature without geometry skipped",
+                     "%d features without geometry skipped", nskipped),
                   nskipped);
 
     Map->plus.built = GV_BUILD_BASE;
@@ -763,7 +747,7 @@ int Vect__build_sfa(struct Map_info *Map, int build)
    \return 1 on success
    \return 0 on error
  */
-int Vect_fidx_dump(const struct Map_info *Map, FILE * out)
+int Vect_fidx_dump(const struct Map_info *Map, FILE *out)
 {
     int i;
     const struct Format_info_offset *offset;
@@ -782,8 +766,7 @@ int Vect_fidx_dump(const struct Map_info *Map, FILE * out)
     fprintf(out, "---------- FEATURE INDEX DUMP ----------\n");
 
     fprintf(out, "format: %s\n", Vect_maptype_info(Map));
-    if (Vect_maptype(Map) == GV_FORMAT_POSTGIS &&
-        Map->fInfo.pg.toposchema_name)
+    if (Vect_maptype(Map) == GV_FORMAT_POSTGIS && Map->fInfo.pg.toposchema_name)
         fprintf(out, "topology: PostGIS\n");
     else
         fprintf(out, "topology: pseudo\n");

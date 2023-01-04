@@ -3,7 +3,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-
 void *read_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
 {
     void *tmpbuf = buf;
@@ -17,13 +16,11 @@ void *read_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
 
         Rast_get_row(fd, tmpbuf, i, rtype);
         tmpbuf =
-            G_incr_void_ptr(tmpbuf,
-                            Rast_cell_size(rtype) * Rast_window_cols());
+            G_incr_void_ptr(tmpbuf, Rast_cell_size(rtype) * Rast_window_cols());
     }
 
     return tmpbuf;
 }
-
 
 void *write_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
 {
@@ -38,8 +35,7 @@ void *write_raster(void *buf, const int fd, const RASTER_MAP_TYPE rtype)
 
         Rast_put_row(fd, tmpbuf, rtype);
         tmpbuf =
-            G_incr_void_ptr(tmpbuf,
-                            Rast_cell_size(rtype) * Rast_window_cols());
+            G_incr_void_ptr(tmpbuf, Rast_cell_size(rtype) * Rast_window_cols());
     }
 
     return tmpbuf;

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.in.bin
@@ -25,8 +24,7 @@
 
 #include "gmt_grd.h"
 
-enum fliphv
-{
+enum fliphv {
     FLIP_H = 1,
     FLIP_V = 2,
 };
@@ -73,7 +71,7 @@ static void swap_8(void *p)
     q[4] = t;
 }
 
-static void read_int(FILE * fp, int swap_flag, int *x)
+static void read_int(FILE *fp, int swap_flag, int *x)
 {
     if (fread(x, 4, 1, fp) != 1)
         G_fatal_error(_("Error reading data"));
@@ -82,7 +80,7 @@ static void read_int(FILE * fp, int swap_flag, int *x)
         swap_4(x);
 }
 
-static void read_double(FILE * fp, int swap_flag, double *x)
+static void read_double(FILE *fp, int swap_flag, double *x)
 {
     if (fread(x, 8, 1, fp) != 1)
         G_fatal_error(_("Error reading data"));
@@ -91,8 +89,7 @@ static void read_double(FILE * fp, int swap_flag, double *x)
         swap_8(x);
 }
 
-static void read_gmt_header(struct GRD_HEADER *header, int swap_flag,
-                            FILE * fp)
+static void read_gmt_header(struct GRD_HEADER *header, int swap_flag, FILE *fp)
 {
     read_int(fp, swap_flag, &header->nx);
     read_int(fp, swap_flag, &header->ny);
@@ -136,8 +133,8 @@ static void get_gmt_header(const struct GRD_HEADER *header,
     region->ns_res = header->y_inc;
 }
 
-static void convert_cell(DCELL * out_cell, unsigned char *in_cell,
-                         int is_fp, int is_signed, int bytes, int swap_flag)
+static void convert_cell(DCELL *out_cell, unsigned char *in_cell, int is_fp,
+                         int is_signed, int bytes, int swap_flag)
 {
     if (swap_flag) {
         switch (bytes) {
@@ -203,7 +200,7 @@ static void convert_cell(DCELL * out_cell, unsigned char *in_cell,
     }
 }
 
-static void convert_row(DCELL * raster, unsigned char *in_buf, int ncols,
+static void convert_row(DCELL *raster, unsigned char *in_buf, int ncols,
                         int is_fp, int is_signed, int bytes, int swap_flag,
                         double null_val, int flip)
 {
@@ -228,8 +225,7 @@ static void convert_row(DCELL * raster, unsigned char *in_buf, int ncols,
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input;
         struct Option *output;
         struct Option *null;
@@ -246,8 +242,7 @@ int main(int argc, char *argv[])
         struct Option *cols;
         struct Option *flip;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *float_in;
         struct Flag *double_in;
         struct Flag *gmt_hd;
@@ -422,13 +417,10 @@ int main(int argc, char *argv[])
     parm.flip->options = "h,v";
     parm.flip->multiple = YES;
     parm.flip->label = _("Flip input horizontal and/or vertical");
-    G_asprintf(&desc,
-               "h;%s;v;%s",
-               _("Flip input horizontal (East - West)"),
+    G_asprintf(&desc, "h;%s;v;%s", _("Flip input horizontal (East - West)"),
                _("Flip input vertical (North - South)"));
     parm.flip->descriptions = desc;
     parm.flip->guisection = _("Settings");
-
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -449,28 +441,28 @@ int main(int argc, char *argv[])
     else if (G_strcasecmp(parm.order->answer, "little") == 0)
         order = 1;
     else if (G_strcasecmp(parm.order->answer, "native") == 0)
-        order = G_is_little_endian()? 1 : 0;
+        order = G_is_little_endian() ? 1 : 0;
     else if (G_strcasecmp(parm.order->answer, "swap") == 0)
-        order = G_is_little_endian()? 0 : 1;
+        order = G_is_little_endian() ? 0 : 1;
 
     if (flag.swap->answer) {
         if (strcmp(parm.order->answer, "native") != 0)
             G_fatal_error(_("-%c and %s= are mutually exclusive"),
                           flag.swap->key, parm.order->key);
-        order = G_is_little_endian()? 0 : 1;
+        order = G_is_little_endian() ? 0 : 1;
     }
 
     if (flag.gmt_hd->answer && parm.flip->answer)
-        G_fatal_error(_("-%c and %s= are mutually exclusive"),
-                      flag.gmt_hd->key, parm.flip->key);
+        G_fatal_error(_("-%c and %s= are mutually exclusive"), flag.gmt_hd->key,
+                      parm.flip->key);
     if (flag.gmt_hd->answer && hbytes > 0)
-        G_warning(_("Option %s= is ignored if -%c is set"),
-                  parm.hbytes->key, flag.gmt_hd->key);
+        G_warning(_("Option %s= is ignored if -%c is set"), parm.hbytes->key,
+                  flag.gmt_hd->key);
     if (flag.gmt_hd->answer && nbands > 1)
-        G_warning(_("Option %s= is ignored if -%c is set"),
-                  parm.bands->key, flag.gmt_hd->key);
+        G_warning(_("Option %s= is ignored if -%c is set"), parm.bands->key,
+                  flag.gmt_hd->key);
 
-    swap_flag = order == (G_is_little_endian()? 0 : 1);
+    swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
     is_signed = !!flag.sign->answer;
 
@@ -539,22 +531,23 @@ int main(int argc, char *argv[])
                           flag.gmt_hd->key, parm.rows->key, parm.cols->key);
 
         num_bounds = !!parm.north->answer + !!parm.south->answer +
-            !!parm.east->answer + !!parm.west->answer;
+                     !!parm.east->answer + !!parm.west->answer;
         if (num_bounds != 0 && num_bounds != 4)
-            G_fatal_error(_("Either all or none of %s=, %s=, %s= and %s= must be given"),
-                          parm.north->key, parm.south->key, parm.east->key,
-                          parm.west->key);
+            G_fatal_error(
+                _("Either all or none of %s=, %s=, %s= and %s= must be given"),
+                parm.north->key, parm.south->key, parm.east->key,
+                parm.west->key);
 
         cellhd.rows = atoi(parm.rows->answer);
         cellhd.cols = atoi(parm.cols->answer);
 
         if (num_bounds > 0) {
-            if (!G_scan_northing
-                (parm.north->answer, &cellhd.north, cellhd.proj))
+            if (!G_scan_northing(parm.north->answer, &cellhd.north,
+                                 cellhd.proj))
                 G_fatal_error(_("Illegal north coordinate <%s>"),
                               parm.north->answer);
-            if (!G_scan_northing
-                (parm.south->answer, &cellhd.south, cellhd.proj))
+            if (!G_scan_northing(parm.south->answer, &cellhd.south,
+                                 cellhd.proj))
                 G_fatal_error(_("Illegal south coordinate <%s>"),
                               parm.south->answer);
             if (!G_scan_easting(parm.east->answer, &cellhd.east, cellhd.proj))
@@ -591,8 +584,7 @@ int main(int argc, char *argv[])
         G_warning(_("East-West (ewres: %f) and North-South (nsres: %f) "
                     "resolution differ significantly. "
                     "Did you assign %s= and %s= correctly?"),
-                  cellhd.ew_res, cellhd.ns_res, parm.east->key,
-                  parm.west->key);
+                  cellhd.ew_res, cellhd.ns_res, parm.east->key, parm.west->key);
 
     grass_nrows = nrows = cellhd.rows;
     grass_ncols = ncols = cellhd.cols;
@@ -600,14 +592,14 @@ int main(int argc, char *argv[])
     Rast_set_window(&cellhd);
 
     if (grass_nrows != Rast_window_rows())
-        G_fatal_error("rows changed from %d to %d",
-                      grass_nrows, Rast_window_rows());
+        G_fatal_error("rows changed from %d to %d", grass_nrows,
+                      Rast_window_rows());
 
     if (grass_ncols != Rast_window_cols())
-        G_fatal_error("cols changed from %d to %d",
-                      grass_ncols, Rast_window_cols());
+        G_fatal_error("cols changed from %d to %d", grass_ncols,
+                      Rast_window_cols());
 
-    expected = (off_t) ncols *nrows * bytes * nbands + hbytes;
+    expected = (off_t)ncols * nrows * bytes * nbands + hbytes;
 
     if (file_size != expected) {
         G_warning(_("File Size %" PRI_OFF_T " ... Total Bytes %" PRI_OFF_T),
@@ -638,27 +630,28 @@ int main(int argc, char *argv[])
 
         fd = Rast_open_new(output, map_type);
 
-        band_off = (off_t) nrows *ncols * bytes * (band - 1) + hbytes;
+        band_off = (off_t)nrows * ncols * bytes * (band - 1) + hbytes;
 
         for (row = 0; row < grass_nrows; row++) {
             G_percent(row, nrows, 2);
 
             if (flip & FLIP_V) {
                 G_fseek(fp,
-                        (off_t) (grass_nrows - row - 1) * ncols * bytes +
-                        band_off, SEEK_SET);
+                        (off_t)(grass_nrows - row - 1) * ncols * bytes +
+                            band_off,
+                        SEEK_SET);
             }
 
             if (fread(in_buf, bytes, ncols, fp) != ncols)
                 G_fatal_error(_("Error reading data"));
 
-            convert_row(out_buf, in_buf, ncols, is_fp, is_signed,
-                        bytes, swap_flag, null_val, flip);
+            convert_row(out_buf, in_buf, ncols, is_fp, is_signed, bytes,
+                        swap_flag, null_val, flip);
 
             Rast_put_d_row(fd, out_buf);
         }
 
-        G_percent(row, nrows, 2);       /* finish it off */
+        G_percent(row, nrows, 2); /* finish it off */
 
         Rast_close(fd);
 

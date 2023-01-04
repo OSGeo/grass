@@ -38,13 +38,10 @@ int display(struct Map_info *Map, struct line_pnts *Points,
     return 0;
 }
 
-
-
-/* Same as path() but get start/stop from the command line (for non-interactive use)
-   Hamish Bowman March 2007 */
-int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
-              int be_bold, double start_x, double start_y,
-              double end_x, double end_y)
+/* Same as path() but get start/stop from the command line (for non-interactive
+   use) Hamish Bowman March 2007 */
+int coor_path(struct Map_info *Map, const struct color_rgb *hcolor, int be_bold,
+              double start_x, double start_y, double end_x, double end_y)
 {
     int ret;
     double nx, ny, fx, fy, tx, ty, msize, maxdist;
@@ -54,7 +51,7 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
 
     Points = Vect_new_line_struct();
 
-    msize = 10 * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0));       /* do it better */
+    msize = 10 * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0)); /* do it better */
     G_debug(1, "msize = %f\n", msize);
 
     /*
@@ -70,12 +67,11 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
        else maxdist = y1;
      */
 
-/**  maxdist = 10 pixels on the display (WDTH*2); ?
- **   ie related to zoom level ??  just use msize ?? **/
+    /**  maxdist = 10 pixels on the display (WDTH*2); ?
+     **   ie related to zoom level ??  just use msize ?? **/
     maxdist = msize;
 
     G_debug(1, "Maximum distance in map units = %f\n", maxdist);
-
 
     /* Vect_find_node(): find number of nearest node, 0 if not found */
     start_node = Vect_find_node(Map, start_x, start_y, 0.0, maxdist, 0);
@@ -94,7 +90,6 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
     D_RGB_color(hcolor->r, hcolor->g, hcolor->b);
     D_plot_icon(fx, fy, G_ICON_BOX, 0.0, msize);
 
-
     end_node = Vect_find_node(Map, end_x, end_y, 0.0, maxdist, 0);
     if (end_node > 0) {
         Vect_get_node_coor(Map, end_node, &nx, &ny, NULL);
@@ -111,20 +106,19 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
     D_RGB_color(hcolor->r, hcolor->g, hcolor->b);
     D_plot_icon(tx, ty, G_ICON_CROSS, 0.0, msize);
 
-
     G_debug(2, "find path %f %f -> %f %f", fx, fy, tx, ty);
 
-    ret =
-        Vect_net_shortest_path_coor(Map, fx, fy, 0.0, tx, ty, 0.0,
-                                    5 * maxdist, 5 * maxdist, &cost, Points,
-                                    NULL, NULL, NULL, NULL, &fdist, &tdist);
+    ret = Vect_net_shortest_path_coor(Map, fx, fy, 0.0, tx, ty, 0.0,
+                                      5 * maxdist, 5 * maxdist, &cost, Points,
+                                      NULL, NULL, NULL, NULL, &fdist, &tdist);
     if (ret == 0) {
         fprintf(stdout, _("Destination unreachable\n"));
     }
     else {
         fprintf(stdout, _("Costs on the network = %f\n"), cost);
-        fprintf(stdout, _("  Distance to the network = %f, "
-                          "distance from the network = %f\n\n"),
+        fprintf(stdout,
+                _("  Distance to the network = %f, "
+                  "distance from the network = %f\n\n"),
                 fdist, tdist);
 
         display(Map, Points, hcolor, 1, 1, be_bold);

@@ -21,8 +21,8 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out);
 
 /* check topology corruption by boundary modification
  * return 0 on corruption, 1 if modification is ok */
-int check_topo(struct Map_info *, int, struct line_pnts *,
-               struct line_pnts *, struct line_cats *);
+int check_topo(struct Map_info *, int, struct line_pnts *, struct line_pnts *,
+               struct line_cats *);
 
 int set_topo_debug(void);
 #endif

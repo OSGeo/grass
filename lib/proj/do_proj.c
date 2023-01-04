@@ -1,4 +1,3 @@
-
 /**
    \file do_proj.c
 
@@ -24,21 +23,21 @@
 #include <grass/glocale.h>
 
 /* a couple defines to simplify reading the function */
-#define MULTIPLY_LOOP(x,y,c,m) \
-do {\
-   for (i = 0; i < c; ++i) {\
-       x[i] *= m; \
-       y[i] *= m; \
-   }\
-} while (0)
+#define MULTIPLY_LOOP(x, y, c, m) \
+    do {                          \
+        for (i = 0; i < c; ++i) { \
+            x[i] *= m;            \
+            y[i] *= m;            \
+        }                         \
+    } while (0)
 
-#define DIVIDE_LOOP(x,y,c,m) \
-do {\
-   for (i = 0; i < c; ++i) {\
-       x[i] /= m; \
-       y[i] /= m; \
-   }\
-} while (0)
+#define DIVIDE_LOOP(x, y, c, m)   \
+    do {                          \
+        for (i = 0; i < c; ++i) { \
+            x[i] /= m;            \
+            y[i] /= m;            \
+        }                         \
+    } while (0)
 
 static double METERS_in = 1.0, METERS_out = 1.0;
 
@@ -64,7 +63,7 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
         int i;
         const char *projstr = NULL;
         char *indef = NULL;
-        struct pj_info oproj, tproj;    /* proj parameters  */
+        struct pj_info oproj, tproj; /* proj parameters  */
 
         oproj.pj = NULL;
         oproj.proj[0] = '\0';
@@ -122,7 +121,8 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
         }
         G_free(indef);
 
-        /* inpired by gdal/ogr/ogrct.cpp OGRProjCT::ListCoordinateOperations() */
+        /* inpired by gdal/ogr/ogrct.cpp OGRProjCT::ListCoordinateOperations()
+         */
         estep = (window.east - window.west) / 21.;
         nstep = (window.north - window.south) / 21.;
         for (i = 0; i < 20; i++) {
@@ -191,7 +191,8 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
         G_debug(1, "transformed ymax: %.8f", *ymax);
 
         /* test valid values, as in
-         * gdal/ogr/ogrct.cpp OGRCoordinateTransformationOptions::SetAreaOfInterest()
+         * gdal/ogr/ogrct.cpp
+         * OGRCoordinateTransformationOptions::SetAreaOfInterest()
          */
         if (fabs(*xmin) > 180) {
             G_warning(_("Invalid west longitude %g"), *xmin);
@@ -214,13 +215,13 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
             return 0;
         }
     }
-    G_debug(1, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
-            *xmin, *xmax, *ymin, *ymax);
+    G_debug(1, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g", *xmin,
+            *xmax, *ymin, *ymax);
 
     return 1;
 }
 
-char *get_pj_type_string(PJ * pj)
+char *get_pj_type_string(PJ *pj)
 {
     char *pj_type = NULL;
 
@@ -312,7 +313,6 @@ char *get_pj_type_string(PJ * pj)
 
     return pj_type;
 }
-
 
 PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
 {
@@ -408,7 +408,7 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
  * created accordingly, while for PROJ 4, the output SRS is created as
  * latlong equivalent of the input SRS
  *
-* PROJ 5+:
+ * PROJ 5+:
  *   info_in->pj must not be null
  *   if info_out->pj is null, assume info_out to be the ll equivalent
  *   of info_in
@@ -426,7 +426,8 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
  *
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
- * \param info_trans pointer to pj_info struct for a transformation object (PROJ 5+)
+ * \param info_trans pointer to pj_info struct for a transformation object (PROJ
+ *5+)
  *
  * \return 1 on success, -1 on failure
  **/
@@ -457,13 +458,13 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
         /* info_in->pj, info_in->proj, info_out->pj, info_out->proj
          * must be set */
-        if (!info_in->pj || !info_in->proj[0] ||
-            !info_out->pj || !info_out->proj[0]) {
-            G_warning(_("A custom pipeline requires input and output projection info"));
+        if (!info_in->pj || !info_in->proj[0] || !info_out->pj ||
+            !info_out->proj[0]) {
+            G_warning(_(
+                "A custom pipeline requires input and output projection info"));
 
             return -1;
         }
-
 
         /* create a pj from user-defined transformation pipeline */
         info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
@@ -487,9 +488,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
             info_trans->def = G_store(projstr);
 
             if (strstr(info_trans->def, "axisswap")) {
-                G_warning(_("The transformation pipeline contains an '%s' step. "
-                           "Remove this step if easting and northing are swapped in the output."),
-                          "axisswap");
+                G_warning(
+                    _("The transformation pipeline contains an '%s' step. "
+                      "Remove this step if easting and northing are swapped in "
+                      "the output."),
+                    "axisswap");
             }
 
             G_debug(1, "proj_create() pipeline: %s", info_trans->def);
@@ -543,8 +546,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
         int op_count = 0, op_count_area = 0;
 
         /* get pj_area */
-        /* do it here because get_pj_area() will use 
-         * the PROJ definition for simple transformation to the 
+        /* do it here because get_pj_area() will use
+         * the PROJ definition for simple transformation to the
          * ll equivalent and we need to do unit conversion */
         if (get_pj_area(info_in, &xmin, &xmax, &ymin, &ymax)) {
             pj_area = proj_area_create();
@@ -609,8 +612,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
          * and we have to take care of datumshift manually */
         /* list all operations irrespecitve of area and
          * grid availability */
-        op_list = proj_create_operations(PJ_DEFAULT_CTX,
-                                         in_pj, out_pj, operation_ctx);
+        op_list = proj_create_operations(PJ_DEFAULT_CTX, in_pj, out_pj,
+                                         operation_ctx);
         proj_operation_factory_context_destroy(operation_ctx);
 
         op_count = 0;
@@ -628,11 +631,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
                 PJ *op, *op_norm;
 
                 op = proj_list_get(PJ_DEFAULT_CTX, op_list, i);
-                op_norm =
-                    proj_normalize_for_visualization(PJ_DEFAULT_CTX, op);
+                op_norm = proj_normalize_for_visualization(PJ_DEFAULT_CTX, op);
 
                 if (!op_norm) {
-                    G_warning(_("proj_normalize_for_visualization() failed for operation %d"),
+                    G_warning(_("proj_normalize_for_visualization() failed for "
+                                "operation %d"),
                               i + 1);
                 }
                 else {
@@ -682,9 +685,10 @@ int GPJ_init_transform(const struct pj_info *info_in,
             G_important_message("************************");
 
             G_important_message(_("See also output of:"));
-            G_important_message("projinfo -o PROJ -s \"%s\" -t \"%s\"",
-                                indef, outdef);
-            G_important_message(_("Please provide the appropriate PROJ string with the %s option"),
+            G_important_message("projinfo -o PROJ -s \"%s\" -t \"%s\"", indef,
+                                outdef);
+            G_important_message(_("Please provide the appropriate PROJ string "
+                                  "with the %s option"),
                                 "pipeline");
             G_important_message("************************");
         }
@@ -696,30 +700,27 @@ int GPJ_init_transform(const struct pj_info *info_in,
          * in proj src/4D_api.cpp
          * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
 
-
         /* now use the current region as area of interest */
         operation_ctx =
             proj_create_operation_factory_context(PJ_DEFAULT_CTX, NULL);
-        proj_operation_factory_context_set_area_of_interest(PJ_DEFAULT_CTX,
-                                                            operation_ctx,
-                                                            xmin, ymin, xmax,
-                                                            ymax);
-        proj_operation_factory_context_set_spatial_criterion(PJ_DEFAULT_CTX,
-                                                             operation_ctx,
-                                                             PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
-        proj_operation_factory_context_set_grid_availability_use
-            (PJ_DEFAULT_CTX, operation_ctx,
-             PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+        proj_operation_factory_context_set_area_of_interest(
+            PJ_DEFAULT_CTX, operation_ctx, xmin, ymin, xmax, ymax);
+        proj_operation_factory_context_set_spatial_criterion(
+            PJ_DEFAULT_CTX, operation_ctx,
+            PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+        proj_operation_factory_context_set_grid_availability_use(
+            PJ_DEFAULT_CTX, operation_ctx,
+            PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
         /* The operations are sorted with the most relevant ones first:
-         * by descending area (intersection of the transformation area 
-         * with the area of interest, or intersection of the 
+         * by descending area (intersection of the transformation area
+         * with the area of interest, or intersection of the
          * transformation with the area of use of the CRS),
          * and by increasing accuracy.
          * Operations with unknown accuracy are sorted last,
          * whatever their area.
          */
-        op_list = proj_create_operations(PJ_DEFAULT_CTX,
-                                         in_pj, out_pj, operation_ctx);
+        op_list = proj_create_operations(PJ_DEFAULT_CTX, in_pj, out_pj,
+                                         operation_ctx);
         proj_operation_factory_context_destroy(operation_ctx);
         op_count_area = 0;
         if (op_list)
@@ -731,7 +732,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
         else if (op_count_area == 1) {
             info_trans->pj = proj_list_get(PJ_DEFAULT_CTX, op_list, 0);
         }
-        else {                  /* op_count_area > 1 */
+        else { /* op_count_area > 1 */
             /* can't use pj_create_prepared_operations()
              * this is a PROJ-internal function
              * trust the sorting of PROJ and use the first one */
@@ -750,8 +751,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
          * proj_operation_factory_context_set_spatial_criterion()
          * with PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
          * instead of
-         * PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT 
-         * 
+         * PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT
+         *
          * fixed in PROJ master, probably available with PROJ 7.3.x */
 
         /*
@@ -773,8 +774,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
             G_debug(1, "proj_create_crs_to_crs() succeeded with PROJ%d",
                     PROJ_VERSION_MAJOR);
 
-            projstr = proj_as_proj_string(NULL, info_trans->pj,
-                                          PJ_PROJ_5, NULL);
+            projstr =
+                proj_as_proj_string(NULL, info_trans->pj, PJ_PROJ_5, NULL);
 
             info_trans->def = G_store(projstr);
 
@@ -784,17 +785,17 @@ int GPJ_init_transform(const struct pj_info *info_in,
                  * source and target CRS
                  * -> does not work with ll equivalent of input:
                  * no target CRS in +proj=pipeline +step +inv %s */
-                pj_norm =
-                    proj_normalize_for_visualization(PJ_DEFAULT_CTX,
-                                                     info_trans->pj);
+                pj_norm = proj_normalize_for_visualization(PJ_DEFAULT_CTX,
+                                                           info_trans->pj);
 
                 if (!pj_norm) {
-                    G_warning(_("proj_normalize_for_visualization() failed for '%s'"),
-                              info_trans->def);
+                    G_warning(
+                        _("proj_normalize_for_visualization() failed for '%s'"),
+                        info_trans->def);
                 }
                 else {
-                    projstr = proj_as_proj_string(NULL, pj_norm,
-                                                  PJ_PROJ_5, NULL);
+                    projstr =
+                        proj_as_proj_string(NULL, pj_norm, PJ_PROJ_5, NULL);
                     if (projstr && *projstr) {
                         proj_destroy(info_trans->pj);
                         info_trans->pj = pj_norm;
@@ -802,7 +803,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
                     }
                     else {
                         proj_destroy(pj_norm);
-                        G_warning(_("No PROJ definition for normalized version of '%s'"),
+                        G_warning(_("No PROJ definition for normalized version "
+                                    "of '%s'"),
                                   info_trans->def);
                     }
                 }
@@ -889,8 +891,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
                        indef, outdef);
 
             /* try proj_create_crs_to_crs() */
-            info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
-                                                    indef, outdef, NULL);
+            info_trans->pj =
+                proj_create_crs_to_crs(PJ_DEFAULT_CTX, indef, outdef, NULL);
         }
 
         if (info_trans->pj) {
@@ -921,8 +923,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
             /* try proj_create() with +proj=pipeline +step +inv %s +step %s" */
             G_asprintf(&(info_trans->def),
-                       "+proj=pipeline +step +inv %s +step %s", indef,
-                       outdef);
+                       "+proj=pipeline +step +inv %s +step %s", indef, outdef);
 
             info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
         }
@@ -972,19 +973,18 @@ int GPJ_init_transform(const struct pj_info *info_in,
  *
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
- * \param info_trans pointer to pj_info struct for a transformation object (PROJ 5+)
- * \param dir direction of the transformation (PJ_FWD or PJ_INV)
- * \param x Pointer to a double containing easting or longitude
- * \param y Pointer to a double containing northing or latitude
- * \param z Pointer to a double containing height, or NULL
+ * \param info_trans pointer to pj_info struct for a transformation object (PROJ
+ *5+) \param dir direction of the transformation (PJ_FWD or PJ_INV) \param x
+ *Pointer to a double containing easting or longitude \param y Pointer to a
+ *double containing northing or latitude \param z Pointer to a double containing
+ *height, or NULL
  *
  * \return Return value from PROJ proj_trans() function
  **/
 
-int GPJ_transform(const struct pj_info *info_in,
-                  const struct pj_info *info_out,
-                  const struct pj_info *info_trans, int dir,
-                  double *x, double *y, double *z)
+int GPJ_transform(const struct pj_info *info_in, const struct pj_info *info_out,
+                  const struct pj_info *info_trans, int dir, double *x,
+                  double *y, double *z)
 {
     int ok = 0;
 
@@ -1191,20 +1191,20 @@ int GPJ_transform(const struct pj_info *info_in,
  *
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
- * \param info_trans pointer to pj_info struct for a transformation object (PROJ 5+)
- * \param dir direction of the transformation (PJ_FWD or PJ_INV)
- * \param x pointer to an array of type double containing easting or longitude
- * \param y pointer to an array of type double containing northing or latitude
- * \param z pointer to an array of type double containing height, or NULL
- * \param n number of points in the arrays to be transformed
+ * \param info_trans pointer to pj_info struct for a transformation object (PROJ
+ *5+) \param dir direction of the transformation (PJ_FWD or PJ_INV) \param x
+ *pointer to an array of type double containing easting or longitude \param y
+ *pointer to an array of type double containing northing or latitude \param z
+ *pointer to an array of type double containing height, or NULL \param n number
+ *of points in the arrays to be transformed
  *
  * \return Return value from PROJ proj_trans() function
  **/
 
 int GPJ_transform_array(const struct pj_info *info_in,
                         const struct pj_info *info_out,
-                        const struct pj_info *info_trans, int dir,
-                        double *x, double *y, double *z, int n)
+                        const struct pj_info *info_trans, int dir, double *x,
+                        double *y, double *z, int n)
 {
     int ok;
     int i;
@@ -1464,8 +1464,8 @@ int GPJ_transform_array(const struct pj_info *info_in,
  * \return Return value from PROJ proj_trans() function
  **/
 
-int pj_do_proj(double *x, double *y,
-               const struct pj_info *info_in, const struct pj_info *info_out)
+int pj_do_proj(double *x, double *y, const struct pj_info *info_in,
+               const struct pj_info *info_out)
 {
     int ok;
 

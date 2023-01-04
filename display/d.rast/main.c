@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       d.rast
  * AUTHOR(S):    Jim Westervelt (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jan-Oliver Wagner <jan intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
  *               Radim Blazek <radim.blazek gmail.com>,
  *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      display raster maps in active graphics display
@@ -19,6 +18,7 @@
  *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -53,9 +53,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("raster"));
-    module->description =
-        _("Displays user-specified raster map in the active "
-          "graphics frame.");
+    module->description = _("Displays user-specified raster map in the active "
+                            "graphics frame.");
 
     /* set up command line */
     map = G_define_standard_option(G_OPT_R_MAP);
@@ -113,7 +112,7 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
-static int parse_catlist(char **catlist, Mask * mask)
+static int parse_catlist(char **catlist, Mask *mask)
 {
     char buf[1024];
     char x[2];
@@ -145,7 +144,7 @@ static int parse_catlist(char **catlist, Mask * mask)
     return 0;
 }
 
-static int parse_vallist(char **vallist, d_Mask * d_mask)
+static int parse_vallist(char **vallist, d_Mask *d_mask)
 {
     char buf[1024];
     char x[2];
@@ -177,7 +176,7 @@ static int parse_vallist(char **vallist, d_Mask * d_mask)
     return 0;
 }
 
-int parse_mask_rule(char *catlist, Mask * mask, char *where)
+int parse_mask_rule(char *catlist, Mask *mask, char *where)
 {
     long a, b;
     char junk[128];
@@ -208,7 +207,7 @@ int parse_mask_rule(char *catlist, Mask * mask, char *where)
     return 0;
 }
 
-int parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
+int parse_d_mask_rule(char *vallist, d_Mask *d_mask, char *where)
 {
     double a, b;
     char junk[128];

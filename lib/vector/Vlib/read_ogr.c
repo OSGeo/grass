@@ -90,11 +90,11 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
         line = Map->next_line;
 
         if (Map->next_line > Map->plus.n_lines)
-            return -2;          /* nothing to read */
+            return -2; /* nothing to read */
 
         Map->next_line++;
         Line = Map->plus.Line[line];
-        if (Line == NULL) {     /* skip dead features */
+        if (Line == NULL) { /* skip dead features */
             continue;
         }
 
@@ -128,8 +128,8 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
                 }
 
                 Vect_reset_line(line_p);
-                Vect_append_point(line_p, list.box[found].E,
-                                  list.box[found].N, 0.0);
+                Vect_append_point(line_p, list.box[found].E, list.box[found].N,
+                                  0.0);
             }
             if (line_c != NULL) {
                 /* cat = FID and offset = FID for centroid */
@@ -165,21 +165,20 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 
    This function implements random access on level 1.
 
-   \param Map pointer to Map_info structure 
+   \param Map pointer to Map_info structure
    \param[out] line_p container used to store line points within
    (pointer line_pnts struct)
    \param[out] line_c container used to store line categories within
    (pointer line_cats struct)
-   \param offset given offset 
+   \param offset given offset
 
    \return line type
    \return 0 dead line
    \return -2 no more features
    \return -1 on failure
  */
-int V1_read_line_ogr(struct Map_info *Map,
-                     struct line_pnts *line_p, struct line_cats *line_c,
-                     off_t offset)
+int V1_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
+                     struct line_cats *line_c, off_t offset)
 {
 #ifdef HAVE_OGR
     long fid;
@@ -193,7 +192,7 @@ int V1_read_line_ogr(struct Map_info *Map,
             (long)offset, (long)ogr_info->offset.array_num);
 
     if (offset >= ogr_info->offset.array_num)
-        return -2;              /* nothing to read */
+        return -2; /* nothing to read */
 
     if (line_p != NULL)
         Vect_reset_line(line_p);
@@ -245,9 +244,11 @@ int V1_read_line_ogr(struct Map_info *Map,
 
 #ifdef HAVE_OGR
 /*!
-   \brief Recursively read feature and add all elements to points_cache and types_cache.
+   \brief Recursively read feature and add all elements to points_cache and
+   types_cache.
 
-   ftype: if > 0 use this type (because parts of Polygon are read as wkbLineString)
+   ftype: if > 0 use this type (because parts of Polygon are read as
+   wkbLineString)
 
    \param Map pointer to Map_info structure
    \param[out] hGeom OGR geometry
@@ -273,10 +274,9 @@ int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
     line = ogr_info->cache.lines_num;
     if (line == ogr_info->cache.lines_alloc) {
         ogr_info->cache.lines_alloc += 1;
-        ogr_info->cache.lines =
-            (struct line_pnts **)G_realloc((void *)ogr_info->cache.lines,
-                                           ogr_info->cache.lines_alloc *
-                                           sizeof(struct line_pnts *));
+        ogr_info->cache.lines = (struct line_pnts **)G_realloc(
+            (void *)ogr_info->cache.lines,
+            ogr_info->cache.lines_alloc * sizeof(struct line_pnts *));
 
         ogr_info->cache.lines_types =
             (int *)G_realloc(ogr_info->cache.lines_types,
@@ -293,9 +293,8 @@ int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
     switch (type) {
     case wkbPoint:
         G_debug(4, "Point");
-        Vect_append_point(ogr_info->cache.lines[line],
-                          OGR_G_GetX(hGeom, 0), OGR_G_GetY(hGeom, 0),
-                          OGR_G_GetZ(hGeom, 0));
+        Vect_append_point(ogr_info->cache.lines[line], OGR_G_GetX(hGeom, 0),
+                          OGR_G_GetY(hGeom, 0), OGR_G_GetZ(hGeom, 0));
         ogr_info->cache.lines_types[line] = GV_POINT;
         ogr_info->cache.lines_num++;
         return 0;
@@ -305,12 +304,11 @@ int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
         G_debug(4, "LineString");
         np = OGR_G_GetPointCount(hGeom);
         for (i = 0; i < np; i++) {
-            Vect_append_point(ogr_info->cache.lines[line],
-                              OGR_G_GetX(hGeom, i), OGR_G_GetY(hGeom, i),
-                              OGR_G_GetZ(hGeom, i));
+            Vect_append_point(ogr_info->cache.lines[line], OGR_G_GetX(hGeom, i),
+                              OGR_G_GetY(hGeom, i), OGR_G_GetZ(hGeom, i));
         }
 
-        if (ftype > 0) {        /* Polygon rings */
+        if (ftype > 0) { /* Polygon rings */
             ogr_info->cache.lines_types[line] = ftype;
         }
         else {
@@ -374,11 +372,11 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
         while (ogr_info->cache.lines_next == ogr_info->cache.lines_num) {
             hFeature = OGR_L_GetNextFeature(ogr_info->layer);
             if (hFeature == NULL) {
-                return -2;      /* nothing to read */
+                return -2; /* nothing to read */
             }
 
             hGeom = OGR_F_GetGeometryRef(hFeature);
-            if (hGeom == NULL) {        /* skip feature without geometry */
+            if (hGeom == NULL) { /* skip feature without geometry */
                 G_warning(_("Feature without geometry. Skipped."));
                 OGR_F_Destroy(hFeature);
                 continue;
@@ -426,9 +424,9 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
         /* skip feature by field - ignored */
 
         if (line_p != NULL)
-            Vect_append_points(line_p,
-                               ogr_info->cache.lines[ogr_info->cache.
-                                                     lines_next], GV_FORWARD);
+            Vect_append_points(
+                line_p, ogr_info->cache.lines[ogr_info->cache.lines_next],
+                GV_FORWARD);
 
         if (line_c != NULL && ogr_info->cache.fid != OGRNullFID)
             Vect_cat_set(line_c, 1, ogr_info->cache.fid);
@@ -439,7 +437,7 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
         return itype;
     }
 
-    return -1;                  /* not reached */
+    return -1; /* not reached */
 }
 
 /*!
@@ -499,8 +497,7 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
     case wkbMultiLineString:
     case wkbMultiPolygon:
     case wkbGeometryCollection:
-        G_debug(4, "\t->more geoms -> part %d",
-                ogr_info->offset.array[offset]);
+        G_debug(4, "\t->more geoms -> part %d", ogr_info->offset.array[offset]);
         hGeom2 = OGR_G_GetGeometryRef(hGeom, ogr_info->offset.array[offset]);
         line = read_line(Map, hGeom2, offset + 1, Points);
         if (eType == wkbPolygon || eType == wkbMultiPolygon)

@@ -7,8 +7,8 @@
 
    (C) 2010-2012 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -19,18 +19,18 @@
  */
 
 /* Read these articles first before attempting to modify the code
- * 
+ *
  * R-Tree reference:
  * Guttman, A. (1984). "R-Trees: A Dynamic Index Structure for Spatial
- * Searching". Proceedings of the 1984 ACM SIGMOD international 
+ * Searching". Proceedings of the 1984 ACM SIGMOD international
  * conference on Management of data - SIGMOD '84. pp. 47.
  * DOI:10.1145/602259.602266
  * ISBN 0897911288
- *  
+ *
  * R*-Tree reference:
  * Beckmann, N.; Kriegel, H. P.; Schneider, R.; Seeger, B. (1990).
- * "The R*-tree: an efficient and robust access method for points and 
- * rectangles". Proceedings of the 1990 ACM SIGMOD international 
+ * "The R*-tree: an efficient and robust access method for points and
+ * rectangles". Proceedings of the 1990 ACM SIGMOD international
  * conference on Management of data - SIGMOD '90. pp. 322.
  * DOI:10.1145/93597.98741
  * ISBN 0897913655
@@ -47,7 +47,7 @@
    \brief Create new empty R*-Tree
 
    This method creates a new RTree, either in memory (fd < 0) or in file.
-   If the file descriptor is positive, the corresponding file must have 
+   If the file descriptor is positive, the corresponding file must have
    been opened for reading and writing.
    This method must also be called if an existing tree previously saved
    to file is going to be accessed.
@@ -85,19 +85,21 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 
     new_rtree->rectsize = new_rtree->nsides_alloc * sizeof(RectReal);
     new_rtree->branchsize = sizeof(struct RTree_Branch) -
-        sizeof(struct RTree_Rect) + new_rtree->rectsize;
+                            sizeof(struct RTree_Rect) + new_rtree->rectsize;
     new_rtree->nodesize = sizeof(struct RTree_Node) -
-        sizeof(struct RTree_Branch *) + MAXCARD * new_rtree->branchsize;
+                          sizeof(struct RTree_Branch *) +
+                          MAXCARD * new_rtree->branchsize;
 
     /* create empty root node */
     n = RTreeAllocNode(new_rtree, 0);
-    new_rtree->rootlevel = n->level = 0;        /* leaf */
+    new_rtree->rootlevel = n->level = 0; /* leaf */
 
     /* use overflow by default */
     new_rtree->overflow = 1;
 
-    if (fd > -1) {              /* file based */
-        /* nodecard and leafcard can be adjusted, must NOT be larger than MAXCARD */
+    if (fd > -1) { /* file based */
+        /* nodecard and leafcard can be adjusted, must NOT be larger than
+         * MAXCARD */
         new_rtree->nodecard = MAXCARD;
         new_rtree->leafcard = MAXCARD;
 
@@ -110,12 +112,10 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
         }
 
         new_rtree->used = malloc(MAXLEVEL * sizeof(int *));
-        new_rtree->used[0] =
-            malloc(MAXLEVEL * NODE_BUFFER_SIZE * sizeof(int));
+        new_rtree->used[0] = malloc(MAXLEVEL * NODE_BUFFER_SIZE * sizeof(int));
         for (i = 0; i < MAXLEVEL; i++) {
             if (i)
-                new_rtree->used[i] =
-                    new_rtree->used[i - 1] + NODE_BUFFER_SIZE;
+                new_rtree->used[i] = new_rtree->used[i - 1] + NODE_BUFFER_SIZE;
             for (j = 0; j < NODE_BUFFER_SIZE; j++) {
                 new_rtree->nb[i][j].dirty = 0;
                 new_rtree->nb[i][j].pos = -1;
@@ -144,7 +144,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
         new_rtree->search_rect = RTreeSearchF;
         new_rtree->valid_child = RTreeValidChildF;
     }
-    else {                      /* memory based */
+    else { /* memory based */
         new_rtree->nodecard = MAXCARD;
         new_rtree->leafcard = MAXCARD;
 
@@ -157,7 +157,8 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     }
 
     /* minimum number of remaining children for RTreeDeleteRect */
-    /* NOTE: min fill can be changed if needed, must be < nodecard and leafcard. */
+    /* NOTE: min fill can be changed if needed, must be < nodecard and leafcard.
+     */
     new_rtree->min_node_fill = (new_rtree->nodecard - 2) / 2;
     new_rtree->min_leaf_fill = (new_rtree->leafcard - 2) / 2;
 
@@ -178,8 +179,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     new_rtree->tmpb2.rect.boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->c.rect.boundary = RTreeAllocBoundary(new_rtree);
 
-    new_rtree->BranchBuf =
-        malloc((MAXCARD + 1) * sizeof(struct RTree_Branch));
+    new_rtree->BranchBuf = malloc((MAXCARD + 1) * sizeof(struct RTree_Branch));
     for (i = 0; i <= MAXCARD; i++) {
         new_rtree->BranchBuf[i].rect.boundary = RTreeAllocBoundary(new_rtree);
     }
@@ -188,7 +188,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     new_rtree->upperrect.boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->orect.boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->center_n =
-        (RectReal *) malloc(new_rtree->ndims_alloc * sizeof(RectReal));
+        (RectReal *)malloc(new_rtree->ndims_alloc * sizeof(RectReal));
 
     return new_rtree;
 }
@@ -196,7 +196,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 /*!
    \brief Enable/disable R*-tree forced reinsertion (overflow)
 
-   For dynamic R*-trees with runtime insertion and deletion, 
+   For dynamic R*-trees with runtime insertion and deletion,
    forced reinsertion results in a more compact tree, searches are a bit
    faster. For static R*-trees (no insertion/deletion after creation)
    forced reinsertion can be disabled at the cost of slower searches.
@@ -214,9 +214,9 @@ void RTreeSetOverflow(struct RTree *t, char overflow)
 /*!
    \brief Destroy an R*-Tree
 
-   This method releases all memory allocated to a RTree. It deletes all 
+   This method releases all memory allocated to a RTree. It deletes all
    rectangles and all memory allocated for internal support data.
-   Note that for a file-based RTree, the file is not deleted and not 
+   Note that for a file-based RTree, the file is not deleted and not
    closed. The file can thus be used to permanently store an RTree.
 
    \param t pointer to RTree structure
@@ -279,7 +279,7 @@ void RTreeDestroyTree(struct RTree *t)
 /*!
    \brief Search an R*-Tree
 
-   Search in an RTree for all data retangles that overlap or touch the 
+   Search in an RTree for all data retangles that overlap or touch the
    argument rectangle.
    Return the number of qualifying data rectangles.
    The search stops if the SearchHitCallBack function returns 0 (zero)
@@ -293,15 +293,15 @@ void RTreeDestroyTree(struct RTree *t)
    \return number of qualifying data rectangles
  */
 /*
- * 
+ *
  * add option to select operator to select rectangles ?
  * current: overlap
- * possible alternatives: 
+ * possible alternatives:
  *  - select all rectangles that are fully contained in r
  *  - select all rectangles that fully contain r
  */
-int RTreeSearch(struct RTree *t, struct RTree_Rect *r,
-                SearchHitCallback * shcb, void *cbarg)
+int RTreeSearch(struct RTree *t, struct RTree_Rect *r, SearchHitCallback *shcb,
+                void *cbarg)
 {
     assert(r && t);
 
@@ -332,9 +332,9 @@ int RTreeInsertRect(struct RTree_Rect *r, int tid, struct RTree *t)
 /*!
    \brief Delete an item from a R*-Tree
 
-   This method deletes an item from the RTree. The rectangle passed to 
+   This method deletes an item from the RTree. The rectangle passed to
    this method does not need to be the exact rectangle, the only
-   requirement is that this rectangle overlaps with the rectangle to 
+   requirement is that this rectangle overlaps with the rectangle to
    be deleted. The rectangle to be deleted is identified by its id.
 
    \param r pointer to rectangle to use for searching
@@ -355,11 +355,9 @@ int RTreeDeleteRect(struct RTree_Rect *r, int tid, struct RTree *t)
     return t->delete_rect(r, child, t);
 }
 
-
 /***********************************
  *    internally used functions    *
  ***********************************/
-
 
 /*
  * Allocate space for a node in the list used in DeleteRect to
@@ -375,7 +373,7 @@ void RTreeFreeListNode(struct RTree_ListNode *p)
     free(p);
 }
 
-/* 
+/*
  * Add a node to the reinsertion list.  All its branches will later
  * be reinserted into the index structure.
  */
@@ -388,7 +386,7 @@ void RTreeReInsertNode(struct RTree_Node *n, struct RTree_ListNode **ee)
     *ee = l;
 }
 
-/* 
+/*
  * Free ListBranch, used by R*-type forced reinsertion
  */
 void RTreeFreeListBranch(struct RTree_ListBranch *p)

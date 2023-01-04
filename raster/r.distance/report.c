@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -6,7 +5,7 @@
  * AUTHOR(S):    Michael Shapiro - CERL
  *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two 
+ * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
  * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
@@ -22,8 +21,7 @@
 
 #include "defs.h"
 
-struct ReportLine
-{
+struct ReportLine {
     CELL cat1;
     CELL cat2;
     int isnull1;
@@ -61,10 +59,8 @@ void report(struct Parms *parms)
     G_message(_("Processing..."));
 
     if (parms->sort > 0)
-        lines =
-            (struct ReportLine *)G_malloc(map1->edges.ncats *
-                                          map2->edges.ncats *
-                                          sizeof(struct ReportLine));
+        lines = (struct ReportLine *)G_malloc(
+            map1->edges.ncats * map2->edges.ncats * sizeof(struct ReportLine));
     else
         lines = NULL;
     nlines = 0;
@@ -82,10 +78,9 @@ void report(struct Parms *parms)
             list2 = &map2->edges.catlist[i2];
             isnull2 = parms->null ? Rast_is_c_null_value(&(list2->cat)) : 0;
 
-            find_minimum_distance(list1, list2,
-                                  &east1, &north1, &east2, &north2, &distance,
-                                  &region, parms->overlap, map1->name,
-                                  map2->name);
+            find_minimum_distance(list1, list2, &east1, &north1, &east2,
+                                  &north2, &distance, &region, parms->overlap,
+                                  map1->name, map2->name);
 
             line.cat1 = list1->cat;
             line.cat2 = list2->cat;
@@ -174,17 +169,17 @@ static int compare(const void *p1, const void *p2)
     line2 = (const struct ReportLine *)p2;
 
     if (line1->distance < line2->distance)
-        return -1;              /* short distance first */
+        return -1; /* short distance first */
     if (line1->distance > line2->distance)
         return 1;
 
     if (!line1->isnull1 && line2->isnull1)
-        return -1;              /* non-null first */
+        return -1; /* non-null first */
     if (line1->isnull1 && !line2->isnull1)
         return 1;
     if (!line1->isnull1 && !line2->isnull1) {
         if (line1->cat1 < line2->cat1)
-            return -1;          /* small cat first */
+            return -1; /* small cat first */
         if (line1->cat1 > line2->cat1)
             return 1;
     }
@@ -200,7 +195,7 @@ static int compare(const void *p1, const void *p2)
             return 1;
     }
 
-    return 0;                   /* same cat1, same cat2 */
+    return 0; /* same cat1, same cat2 */
 }
 
 static int revcompare(const void *p1, const void *p2)

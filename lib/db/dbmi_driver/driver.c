@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/driver.c
- * 
+ *
  * \brief DBMI Library (driver) - drivers
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -23,7 +23,7 @@
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include "procs.h"
-#define	DB_DRIVER_C
+#define DB_DRIVER_C
 #include "dbstubs.h"
 
 extern char *getenv();
@@ -65,12 +65,12 @@ int db_driver(int argc, char *argv[])
     /* TODO: */
     /* We should close everything except stdin, stdout but _fcloseall()
      * closes open streams not file descriptors. _getmaxstdio too big number.
-     * 
-     * Because the pipes were created just before this driver was started 
+     *
+     * Because the pipes were created just before this driver was started
      * the file descriptors should not be above a closed descriptor
-     * until it was run from a multithread application and some descriptors 
-     * were closed in the mean time. 
-     * Also Windows documentation does not say that new file descriptor is 
+     * until it was run from a multithread application and some descriptors
+     * were closed in the mean time.
+     * Also Windows documentation does not say that new file descriptor is
      * the lowest available.
      */
 
@@ -99,7 +99,7 @@ int db_driver(int argc, char *argv[])
 
     /* THIS CODE IS FOR DEBUGGING WITH CODECENTER */
 
-/**********************************************/
+    /**********************************************/
     if (argc == 3) {
         rfd = wfd = -1;
         sscanf(argv[1], "%d", &rfd);
@@ -116,7 +116,7 @@ int db_driver(int argc, char *argv[])
         }
     }
 
-/**********************************************/
+    /**********************************************/
 
     db_clear_error();
     db_auto_print_errors(1);
@@ -153,12 +153,11 @@ int db_driver(int argc, char *argv[])
         /* if found, call it */
         if (procedure[i].routine) {
             if ((stat = db__send_procedure_ok(procnum)) != DB_OK)
-                break;          /* while loop */
-            if ((stat = (*procedure[i].routine) ()) != DB_OK)
+                break; /* while loop */
+            if ((stat = (*procedure[i].routine)()) != DB_OK)
                 break;
         }
-        else if ((stat =
-                  db__send_procedure_not_implemented(procnum)) != DB_OK)
+        else if ((stat = db__send_procedure_not_implemented(procnum)) != DB_OK)
             break;
     }
 

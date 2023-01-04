@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/color_write.c
- * 
+ *
  * \brief Raster Library - Write color table of raster map
  *
  * (C) 1999-2009 by the GRASS Development Team
@@ -89,12 +89,12 @@ void Rast_write_colors(const char *name, const char *mapset,
      */
     sprintf(element, "colr2/%s", mapset);
     if (strcmp(mapset, G_mapset()) == 0) {
-        G_remove(element, name);        /* get rid of existing colr2, if any */
+        G_remove(element, name); /* get rid of existing colr2, if any */
         strcpy(element, "colr");
     }
     if (!(fd = G_fopen_new(element, name)))
-        G_fatal_error(_("Unable to create <%s> file for map <%s>"),
-                      element, name);
+        G_fatal_error(_("Unable to create <%s> file for map <%s>"), element,
+                      name);
 
     Rast__write_colors(fd, colors);
     fclose(fd);
@@ -106,7 +106,7 @@ void Rast_write_colors(const char *name, const char *mapset,
  * \param fd file descriptor
  * \param colors pointer to Colors structure which holds color info
  */
-void Rast__write_colors(FILE * fd, struct Colors *colors)
+void Rast__write_colors(FILE *fd, struct Colors *colors)
 {
     if (getenv("FORCE_GRASS3_COLORS"))
         forced_write_old_colors(fd, colors);
@@ -116,7 +116,7 @@ void Rast__write_colors(FILE * fd, struct Colors *colors)
         write_new_colors(fd, colors);
 }
 
-static void write_new_colors(FILE * fd, struct Colors *colors)
+static void write_new_colors(FILE *fd, struct Colors *colors)
 {
     char str1[100], str2[100];
 
@@ -134,15 +134,15 @@ static void write_new_colors(FILE * fd, struct Colors *colors)
 
     if (colors->null_set) {
         fprintf(fd, "nv:%d", colors->null_red);
-        if (colors->null_red != colors->null_grn || colors->null_red
-            != colors->null_blu)
+        if (colors->null_red != colors->null_grn ||
+            colors->null_red != colors->null_blu)
             fprintf(fd, ":%d:%d", colors->null_grn, colors->null_blu);
         fprintf(fd, "\n");
     }
     if (colors->undef_set) {
         fprintf(fd, "*:%d", colors->undef_red);
-        if (colors->undef_red != colors->undef_grn || colors->undef_red
-            != colors->undef_blu)
+        if (colors->undef_red != colors->undef_grn ||
+            colors->undef_red != colors->undef_blu)
             fprintf(fd, ":%d:%d", colors->undef_grn, colors->undef_blu);
         fprintf(fd, "\n");
     }
@@ -156,7 +156,7 @@ static void write_new_colors(FILE * fd, struct Colors *colors)
 }
 
 /* overall min and max data values in color table */
-static void write_rules(FILE * fd, struct _Color_Rule_ *crules, DCELL dmin,
+static void write_rules(FILE *fd, struct _Color_Rule_ *crules, DCELL dmin,
                         DCELL dmax)
 {
     struct _Color_Rule_ *rule;
@@ -195,33 +195,31 @@ static void write_rules(FILE * fd, struct _Color_Rule_ *crules, DCELL dmin,
     }
 }
 
-static void write_old_colors(FILE * fd, struct Colors *colors)
+static void write_old_colors(FILE *fd, struct Colors *colors)
 {
     int i, n;
 
     fprintf(fd, "#%ld first color\n", (long)colors->fixed.min);
     if (colors->null_set) {
-        fprintf(fd, "%d %d %d\n",
-                (int)colors->null_red,
-                (int)colors->null_grn, (int)colors->null_blu);
+        fprintf(fd, "%d %d %d\n", (int)colors->null_red, (int)colors->null_grn,
+                (int)colors->null_blu);
     }
     else
-        fprintf(fd, "255 255 255\n");   /* white */
+        fprintf(fd, "255 255 255\n"); /* white */
 
     n = colors->fixed.max - colors->fixed.min + 1;
 
     for (i = 0; i < n; i++) {
         fprintf(fd, "%d", (int)colors->fixed.lookup.red[i]);
-        if (colors->fixed.lookup.red[i] != colors->fixed.lookup.grn[i]
-            || colors->fixed.lookup.red[i] != colors->fixed.lookup.blu[i])
-            fprintf(fd, " %d %d",
-                    (int)colors->fixed.lookup.grn[i],
+        if (colors->fixed.lookup.red[i] != colors->fixed.lookup.grn[i] ||
+            colors->fixed.lookup.red[i] != colors->fixed.lookup.blu[i])
+            fprintf(fd, " %d %d", (int)colors->fixed.lookup.grn[i],
                     (int)colors->fixed.lookup.blu[i]);
         fprintf(fd, "\n");
     }
 }
 
-static void forced_write_old_colors(FILE * fd, struct Colors *colors)
+static void forced_write_old_colors(FILE *fd, struct Colors *colors)
 {
     int red, grn, blu;
     CELL cat;
@@ -240,7 +238,6 @@ static void forced_write_old_colors(FILE * fd, struct Colors *colors)
     }
 }
 
-
 static void format_min(char *str, double dval)
 {
     double dtmp;
@@ -249,7 +246,7 @@ static void format_min(char *str, double dval)
     /* Note that G_trim_decimal() does not trim e.g. 1.0000000e-20 */
     G_trim_decimal(str);
     sscanf(str, "%lf", &dtmp);
-    if (dtmp != dval) {         /* if no zeros after decimal point were trimmed */
+    if (dtmp != dval) { /* if no zeros after decimal point were trimmed */
         /* lower dval by GRASS_EPSILON fraction */
         if (dval > 0)
             sprintf(str, "%.17g", dval * (1 - GRASS_EPSILON));
@@ -257,7 +254,6 @@ static void format_min(char *str, double dval)
             sprintf(str, "%.17g", dval * (1 + GRASS_EPSILON));
     }
 }
-
 
 static void format_max(char *str, double dval)
 {
@@ -267,7 +263,7 @@ static void format_max(char *str, double dval)
     /* Note that G_trim_decimal() does not trim e.g. 1.0000000e-20 */
     G_trim_decimal(str);
     sscanf(str, "%lf", &dtmp);
-    if (dtmp != dval) {         /* if  no zeros after decimal point were trimmed */
+    if (dtmp != dval) { /* if  no zeros after decimal point were trimmed */
         /* increase dval by by GRASS_EPSILON fraction */
         if (dval > 0)
             sprintf(str, "%.17g", dval * (1 + GRASS_EPSILON));

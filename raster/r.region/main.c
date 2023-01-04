@@ -1,15 +1,14 @@
-
 /***************************************************************************
  *
- * MODULE:	r.region (commandline)
- * AUTHOR(S):	Glynn Clements
- *		based upon g.region
- * PURPOSE:	Set the boundary definitions for a raster map.
- * 
- * COPYRIGHT:	(C) 2002-2020 by the GRASS Development Team
+ * MODULE:        r.region (commandline)
+ * AUTHOR(S):     Glynn Clements
+ *                based upon g.region
+ * PURPOSE:       Set the boundary definitions for a raster map.
  *
- *		This program is free software under the GPL (>=v2)
- *		Read the file COPYING that comes with GRASS for details.
+ * COPYRIGHT:     (C) 2002-2020 by the GRASS Development Team
+ *
+ *                This program is free software under the GPL (>=v2)
+ *                Read the file COPYING that comes with GRASS for details.
  ****************************************************************************
  */
 
@@ -23,7 +22,6 @@
 static int nsew(const char *, const char *, const char *, const char *);
 static void die(struct Option *);
 
-
 int main(int argc, char *argv[])
 {
     int i;
@@ -33,15 +31,12 @@ int main(int argc, char *argv[])
     const char *name;
 
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Flag *dflt, *cur, *llauto;
     } flag;
-    struct
-    {
-        struct Option
-            *map,
-            *north, *south, *east, *west, *raster, *vect, *region, *align;
+    struct {
+        struct Option *map, *north, *south, *east, *west, *raster, *vect,
+            *region, *align;
     } parm;
 
     G_gisinit(argv[0]);
@@ -51,8 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("metadata"));
     G_add_keyword(_("geometry"));
 
-    module->description =
-        _("Sets the boundary definitions for a raster map.");
+    module->description = _("Sets the boundary definitions for a raster map.");
 
     /* flags */
 
@@ -162,14 +156,14 @@ int main(int argc, char *argv[])
     if (flag.cur->answer)
         G_get_window(&window);
 
-    if ((name = parm.region->answer))   /* region= */
+    if ((name = parm.region->answer)) /* region= */
         G_get_element_window(&window, "windows", name, "");
 
     if ((name = parm.raster->answer)) { /* raster= */
         Rast_get_cellhd(name, "", &window);
     }
 
-    if ((name = parm.vect->answer)) {   /* vect= */
+    if ((name = parm.vect->answer)) { /* vect= */
         struct Map_info Map;
         struct bound_box box;
 
@@ -232,7 +226,7 @@ int main(int argc, char *argv[])
             die(parm.south);
     }
 
-    if ((value = parm.east->answer)) {  /* e= */
+    if ((value = parm.east->answer)) { /* e= */
         if ((i = nsew(value, "e+", "e-", "w+"))) {
             if (!G_scan_resolution(value + 2, &x, window.proj))
                 die(parm.east);
@@ -254,7 +248,7 @@ int main(int argc, char *argv[])
             die(parm.east);
     }
 
-    if ((value = parm.west->answer)) {  /* w= */
+    if ((value = parm.west->answer)) { /* w= */
         if ((i = nsew(value, "w+", "w-", "e-"))) {
             if (!G_scan_resolution(value + 2, &x, window.proj))
                 die(parm.west);
@@ -276,7 +270,7 @@ int main(int argc, char *argv[])
             die(parm.west);
     }
 
-    if ((name = parm.align->answer)) {  /* align= */
+    if ((name = parm.align->answer)) { /* align= */
         struct Cell_head temp_window;
 
         Rast_get_cellhd(name, "", &temp_window);
@@ -312,8 +306,7 @@ static void die(struct Option *parm)
     G_fatal_error("<%s=%s> ** illegal value **", parm->key, parm->answer);
 }
 
-static int nsew(const char *value, const char *a, const char *b,
-                const char *c)
+static int nsew(const char *value, const char *a, const char *b, const char *c)
 {
     if (strncmp(value, a, strlen(a)) == 0)
         return 1;

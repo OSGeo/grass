@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
@@ -37,8 +36,9 @@ void print_projinfo(int shell)
         return;
 
     if (!shell)
-        fprintf(stdout,
-                "-PROJ_INFO-------------------------------------------------\n");
+        fprintf(
+            stdout,
+            "-PROJ_INFO-------------------------------------------------\n");
     for (i = 0; i < projinfo->nitems; i++) {
         if (strcmp(projinfo->key[i], "init") == 0)
             continue;
@@ -53,8 +53,8 @@ void print_projinfo(int shell)
     if (projsrid) {
 
         if (!shell) {
-            fprintf(stdout,
-                    "-PROJ_SRID-------------------------------------------------\n");
+            fprintf(stdout, "-PROJ_SRID----------------------------------------"
+                            "---------\n");
             fprintf(stdout, "%-11s: %s\n", "SRID", projsrid);
         }
         else
@@ -63,15 +63,15 @@ void print_projinfo(int shell)
 
     if (projunits) {
         if (!shell)
-            fprintf(stdout,
-                    "-PROJ_UNITS------------------------------------------------\n");
+            fprintf(stdout, "-PROJ_UNITS---------------------------------------"
+                            "---------\n");
         for (i = 0; i < projunits->nitems; i++) {
             if (shell)
-                fprintf(stdout, "%s=%s\n",
-                        projunits->key[i], projunits->value[i]);
+                fprintf(stdout, "%s=%s\n", projunits->key[i],
+                        projunits->value[i]);
             else
-                fprintf(stdout, "%-11s: %s\n",
-                        projunits->key[i], projunits->value[i]);
+                fprintf(stdout, "%-11s: %s\n", projunits->key[i],
+                        projunits->value[i]);
         }
     }
 
@@ -94,8 +94,8 @@ void print_datuminfo(void)
         validdatum = GPJ_get_datum_by_name(datum, &dstruct);
 
     if (validdatum > 0)
-        fprintf(stdout, "GRASS datum code: %s\nWKT Name: %s\n",
-                dstruct.name, dstruct.longname);
+        fprintf(stdout, "GRASS datum code: %s\nWKT Name: %s\n", dstruct.name,
+                dstruct.longname);
     else if (datum)
         fprintf(stdout, "Invalid datum code: %s\n", datum);
     else
@@ -104,14 +104,16 @@ void print_datuminfo(void)
     if (params)
         fprintf(stdout,
                 "Datum transformation parameters (PROJ.4 format):\n"
-                "\t%s\n", params);
+                "\t%s\n",
+                params);
     else if (validdatum > 0) {
         char *defparams;
 
         GPJ_get_default_datum_params_by_name(dstruct.name, &defparams);
         fprintf(stdout,
                 "Datum parameters not present; default for %s is:\n"
-                "\t%s\n", dstruct.name, defparams);
+                "\t%s\n",
+                dstruct.name, defparams);
         G_free(defparams);
     }
     else
@@ -161,7 +163,8 @@ void print_proj4(int dontprettify)
 
     if (!projstr) {
         if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
-            G_fatal_error(_("Unable to convert projection information to PROJ format"));
+            G_fatal_error(
+                _("Unable to convert projection information to PROJ format"));
         projstr = pjinfo.def;
 #if PROJ_VERSION_MAJOR >= 5
         proj_destroy(pjinfo.pj);
@@ -231,8 +234,9 @@ void print_wkt(int esristyle, int dontprettify)
 
             obj = proj_create(NULL, projsrid);
             if (!obj)
-                G_fatal_error(_("Unable to create PROJ definition from srid <%s>"),
-                              projsrid);
+                G_fatal_error(
+                    _("Unable to create PROJ definition from srid <%s>"),
+                    projsrid);
             tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
             hSRS = OSRNewSpatialReference(tmpwkt);
             OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
@@ -252,9 +256,8 @@ void print_wkt(int esristyle, int dontprettify)
         }
         if (!outwkt) {
             /* use GRASS proj info + units */
-            projwkt =
-                GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
-                                  !(dontprettify));
+            projwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg,
+                                        esristyle, !(dontprettify));
             hSRS = OSRNewSpatialReference(projwkt);
             OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
         }

@@ -19,7 +19,7 @@
    \brief Remove color table of raster map
 
    \param name name of raster map
-   \param mapset name of mapset 
+   \param mapset name of mapset
 
    \return -1 on error
    \return 0 color table not found

@@ -35,7 +35,7 @@ struct cache *readcell(int fdi, int size)
     if (size > 0)
         nblocks = size * ((1 << 20) / sizeof(block));
     else
-        nblocks = (nx + ny) * 2;        /* guess */
+        nblocks = (nx + ny) * 2; /* guess */
 
     if (nblocks > nx * ny)
         nblocks = nx * ny;
@@ -43,8 +43,8 @@ struct cache *readcell(int fdi, int size)
     c = G_malloc(sizeof(struct cache));
     c->stride = nx;
     c->nblocks = nblocks;
-    c->grid = (block **) G_calloc(nx * ny, sizeof(block *));
-    c->blocks = (block *) G_malloc(nblocks * sizeof(block));
+    c->grid = (block **)G_calloc(nx * ny, sizeof(block *));
+    c->blocks = (block *)G_malloc(nblocks * sizeof(block));
     c->refs = (int *)G_malloc(nblocks * sizeof(int));
 
     if (nblocks < nx * ny) {
@@ -66,7 +66,7 @@ struct cache *readcell(int fdi, int size)
     for (i = 0; i < c->nblocks; i++)
         c->refs[i] = -1;
 
-    tmpbuf = (DCELL *) G_malloc(nx * sizeof(block));
+    tmpbuf = (DCELL *)G_malloc(nx * sizeof(block));
 
     for (row = 0; row < nrows; row += BDIM) {
         int x, y;
@@ -83,15 +83,13 @@ struct cache *readcell(int fdi, int size)
         for (x = 0; x < nx; x++)
             for (y = 0; y < BDIM; y++)
                 if (c->fd >= 0) {
-                    if (write
-                        (c->fd, &tmpbuf[(y * nx + x) * BDIM],
-                         BDIM * sizeof(DCELL)) < 0)
+                    if (write(c->fd, &tmpbuf[(y * nx + x) * BDIM],
+                              BDIM * sizeof(DCELL)) < 0)
                         G_fatal_error(_("Error writing segment file"));
                 }
                 else
                     memcpy(&c->blocks[BKIDX(c, HI(row), x)][LO(y)][0],
-                           &tmpbuf[(y * nx + x) * BDIM],
-                           BDIM * sizeof(DCELL));
+                           &tmpbuf[(y * nx + x) * BDIM], BDIM * sizeof(DCELL));
     }
 
     G_free(tmpbuf);
@@ -110,7 +108,7 @@ block *get_block(struct cache *c, int idx)
     int replace = G_lrand48() % c->nblocks;
     block *p = &c->blocks[replace];
     int cref = c->refs[replace];
-    off_t offset = (off_t) idx * sizeof(DCELL) << L2BSIZE;
+    off_t offset = (off_t)idx * sizeof(DCELL) << L2BSIZE;
 
     if (c->fd < 0)
         G_fatal_error(_("Internal error: cache miss on fully-cached map"));

@@ -5,7 +5,7 @@
 #include "costHa.h"
 #include "local_proto.h"
 
-#define DATA(map, r, c)		(map)[(r) * ncols + (c)]
+#define DATA(map, r, c) (map)[(r)*ncols + (c)]
 
 void ram2out(void)
 {
@@ -22,8 +22,8 @@ void ram2out(void)
     north = Rast_row_to_northing(0.5, &window);
     west = Rast_col_to_easting(0.5, &window);
     /*  Copy maps in ram to output maps, casting into integers */
-    G_message("Writing output: %s, x_output: %s, y_output: %s ... ",
-              out_layer, x_out_layer, y_out_layer);
+    G_message("Writing output: %s, x_output: %s, y_output: %s ... ", out_layer,
+              x_out_layer, y_out_layer);
     for (row = 0; row < nrows; row++) {
         for (col = 0; col < ncols; col++) {
             G_percent(row, nrows, 2);
@@ -33,8 +33,7 @@ void ram2out(void)
                     *(x_cell + col) = 0;
                 else
                     *(x_cell + col) =
-                        (int)(west +
-                              window.ew_res * DATA(map_x_out, row, col));
+                        (int)(west + window.ew_res * DATA(map_x_out, row, col));
             }
             if (y_out) {
                 if (DATA(map_y_out, row, col) == 0)

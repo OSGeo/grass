@@ -1,5 +1,5 @@
 /* min/brent.c
- * 
+ *
  * Copyright (C) 1996, 1997, 1998, 1999, 2000 Brian Gough
  *
  * Taken from 'GSL - The GNU Scientific Library':
@@ -11,12 +11,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
  * your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
@@ -27,8 +27,8 @@
 #include <math.h>
 #include <float.h>
 
-#define GSL_SQRT_DBL_EPSILON   1.e-4
-#define GSL_DBL_EPSILON  1.e-8
+#define GSL_SQRT_DBL_EPSILON 1.e-4
+#define GSL_DBL_EPSILON      1.e-8
 
 /*
    #define SAFE_FUNC_CALL(f, x, yp) \
@@ -39,21 +39,16 @@
    } while (0)
  */
 
-
-typedef struct
-{
+typedef struct {
     double d, e, v, w;
     double f_v, f_w;
-}
-brent_state_t;
+} brent_state_t;
 
-
-
-static int
-brent(void *vstate, double (*f)(), double *x_minimum, double *f_minimum,
-      double *x_lower, double *f_lower, double *x_upper, double *f_upper)
+static int brent(void *vstate, double (*f)(), double *x_minimum,
+                 double *f_minimum, double *x_lower, double *f_lower,
+                 double *x_upper, double *f_upper)
 {
-    brent_state_t *state =(brent_state_t *) vstate;
+    brent_state_t *state = (brent_state_t *)vstate;
 
     const double x_left = *x_lower;
     const double x_right = *x_upper;
@@ -68,7 +63,7 @@ brent(void *vstate, double (*f)(), double *x_minimum, double *f_minimum,
     const double f_w = state->f_w;
     const double f_z = *f_minimum;
 
-    const double golden = 0.3819660;    /* golden = (3 - sqrt(5))/2 */
+    const double golden = 0.3819660; /* golden = (3 - sqrt(5))/2 */
 
     const double w_lower = (z - x_left);
     const double w_upper = (x_right - z);
@@ -113,7 +108,6 @@ brent(void *vstate, double (*f)(), double *x_minimum, double *f_minimum,
         d = golden * e;
     }
 
-
     if (fabs(d) >= tolerance) {
         u = z + d;
     }
@@ -125,7 +119,7 @@ brent(void *vstate, double (*f)(), double *x_minimum, double *f_minimum,
     state->d = d;
 
     /*  SAFE_FUNC_CALL(f, u, &f_u); */
-    f_u = (*f) (u);
+    f_u = (*f)(u);
 
     if (f_u > f_z) {
         if (u < z) {
@@ -174,11 +168,9 @@ brent(void *vstate, double (*f)(), double *x_minimum, double *f_minimum,
     }
 }
 
-
 /* Code modified by Stefano Menegon 1st of February 2004 */
 
-double brent_iterate(double (*f)(), double x_lower, double x_upper,
-                     int maxiter)
+double brent_iterate(double (*f)(), double x_lower, double x_upper, int maxiter)
 {
     int i;
     double x_minimum = (x_upper + x_lower) / 2.;
@@ -188,14 +180,14 @@ double brent_iterate(double (*f)(), double x_lower, double x_upper,
 
     /* stato iterazione */
     brent_state_t itstate;
-    const double golden = 0.3819660;    /* golden = (3 - sqrt(5))/2 */
+    const double golden = 0.3819660; /* golden = (3 - sqrt(5))/2 */
     double v = x_lower + golden * (x_upper - x_lower);
     double w = v;
     double f_vw;
 
-    f_lower = (*f) (x_lower);
-    f_upper = (*f) (x_upper);
-    f_minimum = (*f) (x_minimum);
+    f_lower = (*f)(x_lower);
+    f_upper = (*f)(x_upper);
+    f_minimum = (*f)(x_minimum);
 
     itstate.v = v;
     itstate.w = w;
@@ -205,14 +197,14 @@ double brent_iterate(double (*f)(), double x_lower, double x_upper,
 
     /*  SAFE_FUNC_CALL (f, v, &f_vw); */
 
-    f_vw = (*f) (v);
+    f_vw = (*f)(v);
 
     itstate.f_v = f_vw;
     itstate.f_w = f_vw;
 
     for (i = 0; i < maxiter; i++) {
-        brent(&itstate, f, &x_minimum, &f_minimum, &x_lower, &f_lower,
-              &x_upper, &f_upper);
+        brent(&itstate, f, &x_minimum, &f_minimum, &x_lower, &f_lower, &x_upper,
+              &f_upper);
         if (fabs(f_upper - f_lower) < GSL_DBL_EPSILON * fabs(f_minimum)) {
             return x_minimum;
         }

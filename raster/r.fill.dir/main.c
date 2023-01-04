@@ -1,10 +1,8 @@
-/*
- *
- *****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       r.fill.dir
  * AUTHOR(S):    Original author unknown - Raghavan Srinivasan Nov, 1991
- *               (srin@ecn.purdue.edu) Agricultural Engineering, 
+ *               (srin@ecn.purdue.edu) Agricultural Engineering,
  *               Purdue University
  *               Markus Neteler: update to FP (C-code)
  *                             : update to FP (Fortran)
@@ -23,8 +21,8 @@
  *               Options have been added to produce a map of undrained areas
  *               and to run without filling undrained areas except single-cell
  *               pits.  Not all problems can be solved in a single pass.  The
- *               program can be run repeatedly, using the output elevations from
- *               one run as input to the next run until all problems are 
+ *               program can be run repeatedly, using the output elevations
+ *               from one run as input to the next run until all problems are
  *               resolved.
  * COPYRIGHT:    (C) 2001, 2010 by the GRASS Development Team
  *
@@ -32,7 +30,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
- *****************************************************************************/
+ ****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -104,8 +102,8 @@ int main(int argc, char **argv)
 
     opt4 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt4->key = "direction";
-    opt4->description =
-        _("Name for output flow direction map for depressionless elevation raster map");
+    opt4->description = _("Name for output flow direction map for "
+                          "depressionless elevation raster map");
 
     opt5 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt5->key = "areas";
@@ -188,9 +186,9 @@ int main(int argc, char **argv)
     tempfile2 = G_tempfile();
     tempfile3 = G_tempfile();
 
-    fe = open(tempfile1, O_RDWR | O_CREAT, 0666);       /* elev */
-    fd = open(tempfile2, O_RDWR | O_CREAT, 0666);       /* dirn */
-    fm = open(tempfile3, O_RDWR | O_CREAT, 0666);       /* problems */
+    fe = open(tempfile1, O_RDWR | O_CREAT, 0666); /* elev */
+    fd = open(tempfile2, O_RDWR | O_CREAT, 0666); /* dirn */
+    fm = open(tempfile3, O_RDWR | O_CREAT, 0666); /* problems */
 
     G_message(_("Reading input elevation raster map..."));
     for (i = 0; i < nrows; i++) {
@@ -217,7 +215,8 @@ int main(int argc, char **argv)
         /* determine the watershed for each sink */
         wtrshed(fm, fd, nrows, ncols, 4);
 
-        /* fill all of the watersheds up to the elevation necessary for drainage */
+        /* fill all of the watersheds up to the elevation necessary for drainage
+         */
         ppupdate(fe, fm, nrows, nbasins, &bnd, &bndC);
 
         /* repeat the first three steps to get the final directions */
@@ -309,7 +308,7 @@ int main(int argc, char **argv)
 
 static int dir_type(int type, int dir)
 {
-    if (type == 1) {            /* AGNPS aspect format */
+    if (type == 1) { /* AGNPS aspect format */
         if (dir == 128)
             return (1);
         else if (dir == 1)
@@ -332,7 +331,7 @@ static int dir_type(int type, int dir)
         }
     }
 
-    else if (type == 2) {       /* ANSWERS aspect format */
+    else if (type == 2) { /* ANSWERS aspect format */
         if (dir == 128)
             return (90);
         else if (dir == 1)
@@ -355,7 +354,7 @@ static int dir_type(int type, int dir)
         }
     }
 
-    else {                      /* [new] GRASS aspect format */
+    else { /* [new] GRASS aspect format */
         if (dir == 128)
             return (90);
         else if (dir == 1)
@@ -377,5 +376,4 @@ static int dir_type(int type, int dir)
             return (dir);
         }
     }
-
 }

@@ -1,20 +1,20 @@
-/* ***************************************************************
- * *
- * * MODULE:       v.clean
- * * 
- * * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- * *               
- * * PURPOSE:      Clean lines -- remove all lines or boundaries
- * *               of zero length
- * *               
- * * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
- * *               Read the file COPYING that comes with GRASS
- * *               for details.
- * *
- * **************************************************************/
+/***************************************************************
+ *
+ * MODULE:       v.clean
+ *
+ * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
+ *
+ * PURPOSE:      Clean lines -- remove all lines or boundaries
+ *               of zero length
+ *
+ * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
@@ -64,5 +64,4 @@ int remove_zero_line(struct Map_info *Map, int otype, struct Map_info *Err)
     G_verbose_message(_("Lines / boundaries removed: %d"), count);
 
     return count;
-
 }

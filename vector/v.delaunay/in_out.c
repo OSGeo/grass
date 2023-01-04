@@ -1,10 +1,9 @@
-
 /***************************************************************
  *
  * MODULE:       v.delaunay
  *
  * AUTHOR(S):    Martin Pavlovsky (Google SoC 2008, Paul Kelly mentor)
- *               Based on "dct" by Geoff Leach, Department of Computer 
+ *               Based on "dct" by Geoff Leach, Department of Computer
  *               Science, RMIT.
  *
  * PURPOSE:      Creates a Delaunay triangulation vector map
@@ -15,7 +14,7 @@
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
  *               comes with GRASS for details.
- * 
+ *
  * The following notices apply to portions of the code originally
  * derived from work by Geoff Leach of RMIT:
  *
@@ -25,22 +24,22 @@
  *   Date: 6/10/93
  *
  *   Version 1.0
- *   
+ *
  *   Copyright (c) RMIT 1993. All rights reserved.
  *
- *   License to copy and use this software purposes is granted provided 
+ *   License to copy and use this software purposes is granted provided
  *   that appropriate credit is given to both RMIT and the author.
  *
  *   License is also granted to make and use derivative works provided
  *   that appropriate credit is given to both RMIT and the author.
  *
- *   RMIT makes no representations concerning either the merchantability 
- *   of this software or the suitability of this software for any particular 
- *   purpose.  It is provided "as is" without express or implied warranty 
+ *   RMIT makes no representations concerning either the merchantability
+ *   of this software or the suitability of this software for any particular
+ *   purpose.  It is provided "as is" without express or implied warranty
  *   of any kind.
  *
  *   These notices must be retained in any copies of any part of this software.
- * 
+ *
  **************************************************************/
 
 #include <stdio.h>
@@ -119,8 +118,8 @@ void output_edges(unsigned int n, int mode3d, int type, struct Map_info *Out)
 
 /* Print the ring of triangles about each vertex. */
 
-void output_triangles(unsigned int n,
-                      int mode3d, int type, struct Map_info *Out)
+void output_triangles(unsigned int n, int mode3d, int type,
+                      struct Map_info *Out)
 {
     struct edge *e_start, *e, *next;
     struct vertex *u, *v, *w;

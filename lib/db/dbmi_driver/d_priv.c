@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_priv.c
- * 
+ *
  * \brief DBMI Library (driver) - privileges management
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,7 +18,7 @@
 #include "dbstubs.h"
 
 /*!
-   \brief Grant privileges on table 
+   \brief Grant privileges on table
 
    \return DB_OK on success
    \return DB_FAILED on failure

@@ -6,10 +6,10 @@
 
 /*--------------------------------------------------------------------------*/
 
-#define XDR_DOUBLE_LENGTH 8
+#define XDR_DOUBLE_LENGTH        8
 #define XDR_DOUBLE_NOF_EXP_BYTES 2
-#define XDR_FLOAT_LENGTH 4
-#define XDR_FLOAT_NOF_EXP_BYTES 1
+#define XDR_FLOAT_LENGTH         4
+#define XDR_FLOAT_NOF_EXP_BYTES  1
 
 /*--------------------------------------------------------------------------*/
 
@@ -48,21 +48,21 @@ void Rast3d_fpcompress_dissect_xdr_double(unsigned char *numPointer)
 
 /*--------------------------------------------------------------------------*/
 
-static unsigned char clearMask[9] =
-    { 255, 128, 192, 224, 240, 248, 252, 254, 255 };
+static unsigned char clearMask[9] = {255, 128, 192, 224, 240,
+                                     248, 252, 254, 255};
 
 /*--------------------------------------------------------------------------*/
 
-#define ALL_NULL_CODE 2
+#define ALL_NULL_CODE  2
 #define ZERO_NULL_CODE 1
 #define SOME_NULL_CODE 0
 
 /*--------------------------------------------------------------------------*/
 
-static void
-G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
-                                   int precision, unsigned char *dst,
-                                   int *length, int *offsetMantissa)
+static void G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
+                                               int precision,
+                                               unsigned char *dst, int *length,
+                                               int *offsetMantissa)
 {
     unsigned int nNullBits, nBits;
     register unsigned char *srcStop;
@@ -79,10 +79,10 @@ G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
         cp1 = cp2 + size;
         cp0 = cp1 + size;
         while (srcStop != src) {
-            *cp3++ = *src++;    /* sign + 7 exponent bits */
-            *cp2++ = *src++;    /* 1 exponent bit + 7 ms mantissa bits */
-            *cp1++ = *src++;    /* 8 mantissa bits */
-            *cp0++ = *src++;    /* 8 ls mantissa bits */
+            *cp3++ = *src++; /* sign + 7 exponent bits */
+            *cp2++ = *src++; /* 1 exponent bit + 7 ms mantissa bits */
+            *cp1++ = *src++; /* 8 mantissa bits */
+            *cp0++ = *src++; /* 8 ls mantissa bits */
         }
 
         *length = size * XDR_FLOAT_LENGTH;
@@ -105,7 +105,7 @@ G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
         return;
     }
 
-    precision += 1;             /* treat the ls exponent bit like an addl mantissa bit */
+    precision += 1; /* treat the ls exponent bit like an addl mantissa bit */
 
     *dst = (unsigned char)(nofNull == 0 ? ZERO_NULL_CODE : SOME_NULL_CODE);
 
@@ -149,7 +149,8 @@ G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
             }
         }
 
-        /* printf ("write src cp0 %d %d (%d %d) %d\n", *src, *cp0, src, cp0, nullBits); */
+        /* printf ("write src cp0 %d %d (%d %d) %d\n", *src, *cp0, src, cp0,
+         * nullBits); */
 
         *cp0++ = *src++;
         if (gt8)
@@ -167,9 +168,8 @@ G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
 
                 /*printf ("%d %d\n", *cp1, (*src & mask) << (8 - nBits)); */
 
-                *cp1 =
-                    (unsigned char)((unsigned char)((*src & mask)) <<
-                                    (8 - nBits));
+                *cp1 = (unsigned char)((unsigned char)((*src & mask))
+                                       << (8 - nBits));
                 nBits += precision - 8;
             }
             else {
@@ -189,25 +189,25 @@ G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
         src += srcIncrement;
     }
 
-    *length = 1;                /* null-bit-vector indicator-byte */
+    *length = 1; /* null-bit-vector indicator-byte */
 
-    if (nofNull)                /* length of null-bit-vector */
+    if (nofNull) /* length of null-bit-vector */
         *length += size / 8 + ((size % 8) != 0);
 
     /* length of data */
     *length += (gt8 + gt16 + (precision == 0) + 1) * (size - nofNull) +
-        ((precision * (size - nofNull)) / 8) +
-        (((precision * (size - nofNull)) % 8) != 0);
+               ((precision * (size - nofNull)) / 8) +
+               (((precision * (size - nofNull)) % 8) != 0);
 
     *offsetMantissa = size - nofNull;
 }
 
 /*--------------------------------------------------------------------------*/
 
-static void
-G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
-                                    int precision, unsigned char *dst,
-                                    int *length, int *offsetMantissa)
+static void G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
+                                                int precision,
+                                                unsigned char *dst, int *length,
+                                                int *offsetMantissa)
 {
     unsigned int nNullBits, nBits;
     unsigned char isNull;
@@ -231,14 +231,14 @@ G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
         cp0 = cp1 + size;
 
         while (srcStop != src) {
-            *cp7++ = *src++;    /* sign + 7 ms exponent bits */
-            *cp6++ = *src++;    /* 4 exponent bits + 4 ms mantissa bits */
-            *cp5++ = *src++;    /* 8 mantissa bits */
+            *cp7++ = *src++; /* sign + 7 ms exponent bits */
+            *cp6++ = *src++; /* 4 exponent bits + 4 ms mantissa bits */
+            *cp5++ = *src++; /* 8 mantissa bits */
             *cp4++ = *src++;
             *cp3++ = *src++;
             *cp2++ = *src++;
             *cp1++ = *src++;
-            *cp0++ = *src++;    /* 8 ls mantissa bits */
+            *cp0++ = *src++; /* 8 ls mantissa bits */
         }
 
         *length = size * XDR_DOUBLE_LENGTH;
@@ -247,7 +247,7 @@ G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
         return;
     }
 
-    precision += 4;             /* treat the 4 ls exponent bits like addl mantissa bits */
+    precision += 4; /* treat the 4 ls exponent bits like addl mantissa bits */
 
     d = (double *)src;
     nofNull = 0;
@@ -271,8 +271,7 @@ G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
     gt24 = precision > 24;
     gt16 = precision > 16;
     gt8 = precision > 8;
-    srcIncrement =
-        1 + (!gt8) + (!gt16) + (!gt24) + (!gt32) + (!gt40) + (!gt48);
+    srcIncrement = 1 + (!gt8) + (!gt16) + (!gt24) + (!gt32) + (!gt40) + (!gt48);
 
     precision %= 8;
 
@@ -340,9 +339,8 @@ G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
             *cp1 |= (unsigned char)((unsigned char)(*src & mask) >> nBits);
             if (8 - nBits < precision) {
                 cp1++;
-                *cp1 =
-                    (unsigned char)(((unsigned char)(*src & mask)) <<
-                                    (8 - nBits));
+                *cp1 = (unsigned char)(((unsigned char)(*src & mask))
+                                       << (8 - nBits));
                 nBits += precision - 8;
             }
             else {
@@ -366,11 +364,10 @@ G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
     if (nofNull)
         *length += size / 8 + ((size % 8) != 0);
 
-    *length +=
-        (1 + gt8 + gt16 + gt24 + gt32 + gt40 + gt48 +
-         (precision ==
-          0)) * (size - nofNull) + ((precision * (size - nofNull)) / 8) +
-        (((precision * (size - nofNull)) % 8) != 0);
+    *length += (1 + gt8 + gt16 + gt24 + gt32 + gt40 + gt48 + (precision == 0)) *
+                   (size - nofNull) +
+               ((precision * (size - nofNull)) / 8) +
+               (((precision * (size - nofNull)) % 8) != 0);
 
     if (gt8)
         *offsetMantissa = 2 * (size - nofNull);
@@ -380,9 +377,9 @@ G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
 
 /*--------------------------------------------------------------------------*/
 
-static void
-G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
-                                   int precision, unsigned char *dst)
+static void G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
+                                               int precision,
+                                               unsigned char *dst)
 {
     unsigned int nNullBits, nBits;
     register unsigned char *dstStop;
@@ -391,7 +388,7 @@ G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
     int gt8, gt16, dstIncrement, nofNull;
     float *f, *fStop;
 
-    if ((precision != -1) && (precision <= 15)) {       /* 23 - 8 */
+    if ((precision != -1) && (precision <= 15)) { /* 23 - 8 */
         cp3 = dst + 3;
         dstStop = dst + XDR_FLOAT_LENGTH * size + 3;
         while (dstStop != cp3) {
@@ -434,7 +431,7 @@ G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
         return;
     }
 
-    precision += 1;             /* treat the ls exponent bit like an addl mantissa bit */
+    precision += 1; /* treat the ls exponent bit like an addl mantissa bit */
 
     gt16 = precision > 16;
     gt8 = precision > 8;
@@ -518,9 +515,9 @@ G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
 
 /*--------------------------------------------------------------------------*/
 
-static void
-G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
-                                    int precision, unsigned char *dst)
+static void G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
+                                                int precision,
+                                                unsigned char *dst)
 {
     unsigned int nNullBits, nBits;
     register unsigned char *dstStop;
@@ -576,7 +573,7 @@ G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
         return;
     }
 
-    precision += 4;             /* treat the 4 ls exponent bits like addl mantissa bits */
+    precision += 4; /* treat the 4 ls exponent bits like addl mantissa bits */
 
     gt48 = precision > 48;
     gt40 = precision > 40;
@@ -585,8 +582,7 @@ G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
     gt16 = precision > 16;
     gt8 = precision > 8;
 
-    dstIncrement =
-        1 + (!gt8) + (!gt16) + (!gt24) + (!gt32) + (!gt40) + (!gt48);
+    dstIncrement = 1 + (!gt8) + (!gt16) + (!gt24) + (!gt32) + (!gt40) + (!gt48);
 
     precision %= 8;
 
@@ -686,25 +682,22 @@ G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
 
 /*--------------------------------------------------------------------------*/
 
-int
-Rast3d_fpcompress_write_xdr_nums(int fd, char *src, int nofNum, int precision,
-                                 char *compressBuf, int isFloat)
+int Rast3d_fpcompress_write_xdr_nums(int fd, char *src, int nofNum,
+                                     int precision, char *compressBuf,
+                                     int isFloat)
 {
     int status;
     int nBytes;
     int offsetMantissa;
 
     if (isFloat)
-        G_fpcompress_rearrangeEncodeFloats((unsigned char *)src, nofNum,
-                                           precision,
-                                           (unsigned char *)(compressBuf + 1),
-                                           &nBytes, &offsetMantissa);
+        G_fpcompress_rearrangeEncodeFloats(
+            (unsigned char *)src, nofNum, precision,
+            (unsigned char *)(compressBuf + 1), &nBytes, &offsetMantissa);
     else
-        G_fpcompress_rearrangeEncodeDoubles((unsigned char *)src, nofNum,
-                                            precision,
-                                            (unsigned char *)(compressBuf +
-                                                              1), &nBytes,
-                                            &offsetMantissa);
+        G_fpcompress_rearrangeEncodeDoubles(
+            (unsigned char *)src, nofNum, precision,
+            (unsigned char *)(compressBuf + 1), &nBytes, &offsetMantissa);
 
     *compressBuf = 0;
     status =
@@ -720,9 +713,9 @@ Rast3d_fpcompress_write_xdr_nums(int fd, char *src, int nofNum, int precision,
 
 /*--------------------------------------------------------------------------*/
 
-int
-Rast3d_fpcompress_read_xdr_nums(int fd, char *dst, int nofNum, int fileBytes,
-                                int precision, char *compressBuf, int isFloat)
+int Rast3d_fpcompress_read_xdr_nums(int fd, char *dst, int nofNum,
+                                    int fileBytes, int precision,
+                                    char *compressBuf, int isFloat)
 {
     int status;
     int lengthEncode, lengthDecode;
@@ -742,8 +735,8 @@ Rast3d_fpcompress_read_xdr_nums(int fd, char *dst, int nofNum, int fileBytes,
     /* This code is kept for backward compatibility */
     if (*compressBuf++ == 1) {
         status--;
-        Rast3d_rle_decode(compressBuf, dst, nofNum * nBytes, 1,
-                          &lengthEncode, &lengthDecode);
+        Rast3d_rle_decode(compressBuf, dst, nofNum * nBytes, 1, &lengthEncode,
+                          &lengthDecode);
         if (*dst == ALL_NULL_CODE)
             Rast3d_fatal_error("Rast3d_fpcompress_read_xdr_nums: wrong code");
 
@@ -764,9 +757,8 @@ Rast3d_fpcompress_read_xdr_nums(int fd, char *dst, int nofNum, int fileBytes,
     }
 
     if (isFloat)
-        G_fpcompress_rearrangeDecodeFloats((unsigned char *)compressBuf,
-                                           nofNum, precision,
-                                           (unsigned char *)dst);
+        G_fpcompress_rearrangeDecodeFloats((unsigned char *)compressBuf, nofNum,
+                                           precision, (unsigned char *)dst);
     else
         G_fpcompress_rearrangeDecodeDoubles((unsigned char *)compressBuf,
                                             nofNum, precision,

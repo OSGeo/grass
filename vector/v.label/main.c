@@ -1,8 +1,8 @@
-/* ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       v.label 
- * AUTHOR(S):    Philip Verhagen (original s.label), Radim Blazek, Hamish Bowman 
- * PURPOSE:      Create paint labels    
+ * MODULE:       v.label
+ * AUTHOR(S):    Philip Verhagen (original s.label), Radim Blazek, Hamish Bowman
+ * PURPOSE:      Create paint labels
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -60,7 +60,6 @@ int main(int argc, char **argv)
     G_add_keyword(_("paint labels"));
     module->description =
         _("Creates paint labels for a vector map from attached attributes.");
-
 
     Labelfile = G_define_option();
     Labelfile->key = "labels";
@@ -153,8 +152,7 @@ int main(int argc, char **argv)
 
     Rotation = G_define_option();
     Rotation->key = "rotation";
-    Rotation->description =
-        _("Rotation angle in degrees (counter-clockwise)");
+    Rotation->description = _("Rotation angle in degrees (counter-clockwise)");
     Rotation->type = TYPE_DOUBLE;
     Rotation->required = NO;
     Rotation->options = "0-360";
@@ -208,7 +206,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     if (Curl_flag->answer)
         Along_flag->answer = 1;
 
@@ -221,7 +218,8 @@ int main(int argc, char **argv)
     type = Vect_option_to_types(Typopt);
 
     size = atof(Size->answer);
-    space = size;               /* default: set spacing according to letter size (map units) */
+    space =
+        size; /* default: set spacing according to letter size (map units) */
     rotate = atof(Rotation->answer);
 
     if (FontSize->answer) {
@@ -230,12 +228,12 @@ int main(int argc, char **argv)
         /* figure out space param dynamically from current dispay */
         /* don't bother if Space was explicitly given (bypasses xmon req) */
         if (Along_flag->answer && !Space->answer) {
-            if (D_open_driver() != 0)   /* connect to the driver */
+            if (D_open_driver() != 0) /* connect to the driver */
                 G_fatal_error(_("No graphics device selected"));
 
             /* Read in the map region associated with graphics window */
             D_setup(0);
-            space = fontsize / D_get_u_to_d_xconv();    /* in earth units */
+            space = fontsize / D_get_u_to_d_xconv(); /* in earth units */
 
             D_close_driver();
         }
@@ -249,8 +247,8 @@ int main(int argc, char **argv)
 
     if (Along_flag->answer && !fontsize &&
         (size / space >= 2 || size / space <= 0.5))
-        G_warning(_("size and space options vary significantly which may lead to crummy output"));
-
+        G_warning(_("size and space options vary significantly which may lead "
+                    "to crummy output"));
 
     /* parse reference answers */
     i = 0;
@@ -293,24 +291,23 @@ int main(int argc, char **argv)
         if (ltype == -1)
             G_fatal_error(_("Unable to read vector map"));
         if (ltype == -2)
-            break;              /* EOF */
+            break; /* EOF */
         if (!(type & ltype))
             continue;
 
         Vect_cat_get(Cats, field, &cat);
         if (cat < 0)
-            continue;           /* no cat for this field */
+            continue; /* no cat for this field */
 
         /* Read label from database */
 
         if (whereopt->answer) {
             sprintf(buf, "select %s from %s where %s = %d and %s",
-                    Colopt->answer, fi->table, fi->key, cat,
-                    whereopt->answer);
+                    Colopt->answer, fi->table, fi->key, cat, whereopt->answer);
         }
         else {
-            sprintf(buf, "select %s from %s where %s = %d",
-                    Colopt->answer, fi->table, fi->key, cat);
+            sprintf(buf, "select %s from %s where %s = %d", Colopt->answer,
+                    fi->table, fi->key, cat);
         }
         G_debug(3, "SQL: %s", buf);
         db_set_string(&stmt, buf);
@@ -323,8 +320,8 @@ int main(int argc, char **argv)
         if (nrows < 1) {
             /* not optimal, but the warning isn't /that/ critical. */
             if (!whereopt->answer) {
-                G_warning(_("No record for category %d in table <%s>"),
-                          cat, fi->table);
+                G_warning(_("No record for category %d in table <%s>"), cat,
+                          fi->table);
             }
             continue;
         }
@@ -353,11 +350,10 @@ int main(int argc, char **argv)
         }
         else if (!Along_flag->answer) { /* Line, but not along */
             /* get centre */
-            Vect_point_on_line(Points, linlength / 2, &x, &y, NULL, NULL,
-                               NULL);
+            Vect_point_on_line(Points, linlength / 2, &x, &y, NULL, NULL, NULL);
             print_label(labels, x, y, rotate, txt);
         }
-        else {                  /* Along line */
+        else { /* Along line */
 
             /* find best orientation (most letters by bottom to down side */
             rotate = 0;
@@ -411,7 +407,8 @@ int main(int argc, char **argv)
                     print_label(labels, x, y, rotate, buf);
                 }
             }
-            else {              /* same as above but take center value for placement & rotation */
+            else { /* same as above but take center value for placement &
+                      rotation */
                 i = (int)(txtlength / 2.0 + 0.5);
                 lablength = txtlength * space;
                 ldist = i * space + (linlength - lablength) / 2;
@@ -419,8 +416,7 @@ int main(int argc, char **argv)
                     ldist = 0;
                 if (ldist > linlength)
                     ldist = linlength;
-                Vect_point_on_line(Points, ldist, &x, &y, NULL, &rotate,
-                                   NULL);
+                Vect_point_on_line(Points, ldist, &x, &y, NULL, &rotate, NULL);
                 rotate = rotate * 180 / PI;
                 if (direction != 0)
                     rotate += 180;
@@ -441,8 +437,7 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
-void print_label(FILE * labels, double x, double y, double rotate,
-                 char *label)
+void print_label(FILE *labels, double x, double y, double rotate, char *label)
 {
     fprintf(labels, "east: %f\n", x);
     fprintf(labels, "north: %f\n", y);

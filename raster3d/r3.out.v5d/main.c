@@ -5,7 +5,7 @@
  * GeoModel,s.r.o., Bratislava, 1999
  * hofierka@geomodel.sk
  *
- * Improvements: 
+ * Improvements:
  * - added true coordinates support Markus Neteler 1/2001
  * - Region sensivity by MN 1/2001
  * - Fixed coordinate being reversed MN 1/2001
@@ -24,8 +24,7 @@
 #include <grass/glocale.h>
 
 /* structs */
-typedef struct
-{
+typedef struct {
     struct Option *input, *output;
 } paramType;
 
@@ -99,14 +98,14 @@ void getParams(char **input, char **output, int *decim)
 void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 {
 
-    int NumTimes = 1;           /* number of time steps */
-    int NumVars = 1;            /* number of variables */
-    int Nl[MAXVARS];            /* size of 3-D grids */
-    char VarName[MAXVARS][10];  /* names of variables */
-    int TimeStamp[MAXTIMES];    /* real times for each time step */
-    int DateStamp[MAXTIMES];    /* real dates for each time step */
+    int NumTimes = 1;          /* number of time steps */
+    int NumVars = 1;           /* number of variables */
+    int Nl[MAXVARS];           /* size of 3-D grids */
+    char VarName[MAXVARS][10]; /* names of variables */
+    int TimeStamp[MAXTIMES];   /* real times for each time step */
+    int DateStamp[MAXTIMES];   /* real dates for each time step */
 
-#if 0                           /* unused */
+#if 0 /* unused */
     float NorthLat;             /* latitude of north bound of box */
     float LatInc;               /* spacing between rows in degrees */
     float WestLon;              /* longitude of west bound of box */
@@ -127,18 +126,18 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     int x, y, z;
     int typeIntern;
 
-
-     /*AV*/
-        /* BEGIN OF ORIGINAL CODE WHICH IS NOT NECESSARY FOR ME, COMMENTED IT */
-        /* values of global variables are passed as function's arguments at line 345 */
-        /*
-           / * copy setting from global variables MN 1/2001 * /
-           rows = region.rows;
-           cols=region.cols;
-           depths=region.depths;
-         */
-        /* END OF ORIGINAL CODE WHICH IS NOT NECESSARY FOR ME, COMMENTED IT */
-        typeIntern = Rast3d_tile_type_map(map);
+    /*AV*/
+    /* BEGIN OF ORIGINAL CODE WHICH IS NOT NECESSARY FOR ME, COMMENTED IT */
+    /* values of global variables are passed as function's arguments at line 345
+     */
+    /*
+       / * copy setting from global variables MN 1/2001 * /
+       rows = region.rows;
+       cols=region.cols;
+       depths=region.depths;
+     */
+    /* END OF ORIGINAL CODE WHICH IS NOT NECESSARY FOR ME, COMMENTED IT */
+    typeIntern = Rast3d_tile_type_map(map);
 
     G_debug(3, "cols: %i rows: %i depths: %i\n", cols, rows, depths);
 
@@ -147,8 +146,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
         G_fatal_error(_("Vis5D allows %d columns, %d columns found"),
                       MAXCOLUMNS, cols);
     if (rows > MAXROWS)
-        G_fatal_error(_("Vis5D allows %d rows, %d rows found"), MAXROWS,
-                      rows);
+        G_fatal_error(_("Vis5D allows %d rows, %d rows found"), MAXROWS, rows);
 
     Nl[0] = depths;
 
@@ -162,29 +160,29 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     TimeStamp[0] = DateStamp[0] = 0;
     CompressMode = 4;
 
-    if (trueCoords) {           /* use map coordinates */
-        Projection = 0;         /*linear, rectangular, generic units */
-        ProjArgs[0] = region.north;     /*North boundary of 3-D box */
-        ProjArgs[1] = region.west;      /*West boundary of 3-D box */
-        ProjArgs[2] = region.ns_res;    /*Increment between rows */
-        ProjArgs[3] = region.ew_res * (-1);     /*Increment between columns, reverse direction */
-        Vertical = 0;           /*equally spaced levels in generic units */
-        VertArgs[0] = region.bottom;    /*height of bottom level */
-        VertArgs[1] = region.tb_res;    /*spacing between levels */
+    if (trueCoords) {                /* use map coordinates */
+        Projection = 0;              /*linear, rectangular, generic units */
+        ProjArgs[0] = region.north;  /*North boundary of 3-D box */
+        ProjArgs[1] = region.west;   /*West boundary of 3-D box */
+        ProjArgs[2] = region.ns_res; /*Increment between rows */
+        ProjArgs[3] = region.ew_res *
+                      (-1); /*Increment between columns, reverse direction */
+        Vertical = 0;       /*equally spaced levels in generic units */
+        VertArgs[0] = region.bottom; /*height of bottom level */
+        VertArgs[1] = region.tb_res; /*spacing between levels */
     }
-    else {                      /* xyz coordinates */
-        Projection = 0;         /*linear, rectangular, generic units */
-        ProjArgs[0] = 0.0;      /*North boundary of 3-D box */
-        ProjArgs[1] = 0.0;      /*West boundary of 3-D box */
-        ProjArgs[2] = 1.0;      /*Increment between rows */
-        ProjArgs[3] = 1.0;      /*Increment between columns */
-        Vertical = 0;           /*equally spaced levels in generic units */
-        VertArgs[0] = 0.0;      /*height of bottom level */
-        VertArgs[1] = 1.0;      /*spacing between levels */
+    else {                 /* xyz coordinates */
+        Projection = 0;    /*linear, rectangular, generic units */
+        ProjArgs[0] = 0.0; /*North boundary of 3-D box */
+        ProjArgs[1] = 0.0; /*West boundary of 3-D box */
+        ProjArgs[2] = 1.0; /*Increment between rows */
+        ProjArgs[3] = 1.0; /*Increment between columns */
+        Vertical = 0;      /*equally spaced levels in generic units */
+        VertArgs[0] = 0.0; /*height of bottom level */
+        VertArgs[1] = 1.0; /*spacing between levels */
     }
 
-
-#if 0                           /* unused */
+#if 0 /* unused */
     /* put here some g3d functions */
     /* required ? */
     LatInc = 1.0;
@@ -195,7 +193,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     BottomHgt = 0.0;
 #endif
 
-/****************/
+    /****************/
 
     g = (float *)G_malloc(rows * cols * Nl[0] * sizeof(float));
     d1p = &d1;
@@ -213,14 +211,14 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
        MN 1/2001. Now results comparable to r3.showdspf but
        for loops are different to r3.out.ascii and r3.to.sites - hmpf */
 
-     /*AV*/
-        /* IT WORKS WHIT A PARTICULAR FOR LOOP PROBABLY BECAUSE THE DATA
-           ARE NOT STORED IN A 3D MATRIX [z,y,x] BUT IN A POINTER
-           MANAGED AS (z,x,y) */
-        for (z = 0; z < depths; z++) {
+    /*AV*/
+    /* IT WORKS WHIT A PARTICULAR FOR LOOP PROBABLY BECAUSE THE DATA
+       ARE NOT STORED IN A 3D MATRIX [z,y,x] BUT IN A POINTER
+       MANAGED AS (z,x,y) */
+    for (z = 0; z < depths; z++) {
         G_percent(z, depths, 1);
         for (x = 0; x < cols; x++) {
-            for (y = 0; y < rows; y++) {        /* north to south */
+            for (y = 0; y < rows; y++) { /* north to south */
 
                 Rast3d_get_value_region(map, x, y, z, d1p, typeIntern);
 
@@ -234,7 +232,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
                         cnt++;
                     }
                 }
-                else {          /*double */
+                else { /*double */
                     if (Rast3d_is_null_value_num(d1p, DCELL_TYPE)) {
                         g[cnt] = MISSING;
                         cnt++;
@@ -248,17 +246,15 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
         }
     }
 
-   /************/
+    /************/
 
     /* Create the output v5d file */
 
-     /*AV*/
-        if (!v5dCreate
-            (fileout, NumTimes, NumVars, rows, cols, Nl,
-             (const char (*)[10])VarName, TimeStamp, DateStamp, CompressMode,
-             Projection, ProjArgs, Vertical, VertArgs))
+    /*AV*/
+    if (!v5dCreate(fileout, NumTimes, NumVars, rows, cols, Nl,
+                   (const char(*)[10])VarName, TimeStamp, DateStamp,
+                   CompressMode, Projection, ProjArgs, Vertical, VertArgs))
         G_fatal_error(_("Unable to create V5D file <%s>"), fileout);
-
 
     /* Write the v5d file */
     if (!v5dWrite(1, 1, g))
@@ -266,7 +262,6 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 
     /* Close the v5d file */
     v5dClose();
-
 }
 
 /*---------------------------------------------------------------------------*/
@@ -310,10 +305,9 @@ int main(int argc, char *argv[])
     if (NULL == G_find_raster3d(input, ""))
         Rast3d_fatal_error(_("3D raster map <%s> not found"), input);
 
-    map =
-        Rast3d_open_cell_old(input, G_find_raster3d(input, ""),
-                             RASTER3D_DEFAULT_WINDOW,
-                             RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
+    map = Rast3d_open_cell_old(input, G_find_raster3d(input, ""),
+                               RASTER3D_DEFAULT_WINDOW,
+                               RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), input);
 

@@ -73,8 +73,7 @@ int Vedit_delete_area_centroid(struct Map_info *Map, int centroid)
         return 0;
     }
     if (area < 0) {
-        G_warning(_("Duplicate centroid %d, unable to delete area"),
-                  centroid);
+        G_warning(_("Duplicate centroid %d, unable to delete area"), centroid);
         return 0;
     }
 

@@ -24,7 +24,9 @@
 
 #include "local_proto.h"
 
-#define SEP "------------------------------------------------------------------------------------------\n"
+#define SEP                                                                    \
+    "------------------------------------------------------------------------" \
+    "------------------\n"
 
 static void check_status(const struct Map_info *Map)
 {
@@ -84,14 +86,14 @@ int Vect_cidx_get_num_fields(const struct Map_info *Map)
 }
 
 /*!
-   \brief Get layer number for given index 
+   \brief Get layer number for given index
 
    G_fatal_error() is called when index not found.
 
    \param Map pointer to Map_info structure
    \param index layer index: from 0 to Vect_cidx_get_num_fields() - 1
 
-   \return layer number 
+   \return layer number
  */
 int Vect_cidx_get_field_number(const struct Map_info *Map, int index)
 {
@@ -105,10 +107,10 @@ int Vect_cidx_get_field_number(const struct Map_info *Map, int index)
    \brief Get layer index for given layer number
 
    \param Map pointer to Map_info structure
-   \param field layer number 
+   \param field layer number
 
    \return layer index
-   \return -1 if not found 
+   \return -1 if not found
  */
 int Vect_cidx_get_field_index(const struct Map_info *Map, int field)
 {
@@ -129,7 +131,7 @@ int Vect_cidx_get_field_index(const struct Map_info *Map, int field)
 }
 
 /*!
-   \brief Get number of unique categories for given layer index 
+   \brief Get number of unique categories for given layer index
 
    G_fatal_error() is called when index not found.
 
@@ -149,7 +151,7 @@ int Vect_cidx_get_num_unique_cats_by_index(const struct Map_info *Map,
 }
 
 /*!
-   \brief Get number of categories for given layer index 
+   \brief Get number of categories for given layer index
 
    \param Map pointer to Map_info structure
    \param index layer index
@@ -166,7 +168,7 @@ int Vect_cidx_get_num_cats_by_index(const struct Map_info *Map, int index)
 }
 
 /*!
-   \brief Get number of feature types for given layer index 
+   \brief Get number of feature types for given layer index
 
    G_fatal_error() is called when index not found.
 
@@ -225,13 +227,12 @@ int Vect_cidx_get_type_count(const struct Map_info *Map, int field, int type)
 {
     int i, fi, count = 0;
 
-    G_debug(3, "Vect_cidx_get_type_count() field = %d, type = %d", field,
-            type);
+    G_debug(3, "Vect_cidx_get_type_count() field = %d, type = %d", field, type);
 
     check_status(Map);
 
     if ((fi = Vect_cidx_get_field_index(Map, field)) < 0)
-        return 0;               /* field not found */
+        return 0; /* field not found */
     G_debug(3, "field_index = %d", fi);
 
     G_debug(3, "ntypes = %d", Map->plus.cidx[fi].n_types);
@@ -249,7 +250,7 @@ int Vect_cidx_get_type_count(const struct Map_info *Map, int field, int type)
 }
 
 /*!
-   \brief Get category, feature type and id for given layer and category index 
+   \brief Get category, feature type and id for given layer and category index
 
    \param Map pointer to Map_info structure
    \param field_index layer index
@@ -264,7 +265,7 @@ int Vect_cidx_get_type_count(const struct Map_info *Map, int field, int type)
 int Vect_cidx_get_cat_by_index(const struct Map_info *Map, int field_index,
                                int cat_index, int *cat, int *type, int *id)
 {
-    check_status(Map);          /* This check is slow ? */
+    check_status(Map); /* This check is slow ? */
     check_index(Map, field_index);
 
     if (cat_index < 0 || cat_index >= Map->plus.cidx[field_index].n_cats)
@@ -313,7 +314,7 @@ int Vect_cidx_get_unique_cats_by_index(struct Map_info *Map, int field_index,
 }
 
 /*!
-   \brief Find next line/area id for given category, start_index and type_mask 
+   \brief Find next line/area id for given category, start_index and type_mask
 
    \param Map pointer to Map_info structure
    \param field_index layer index
@@ -336,7 +337,7 @@ int Vect_cidx_find_next(const struct Map_info *Map, int field_index, int cat,
             "Vect_cidx_find_next() cat = %d, type_mask = %d, start_index = %d",
             cat, type_mask, start_index);
 
-    check_status(Map);          /* This check is slow ? */
+    check_status(Map); /* This check is slow ? */
     check_index(Map, field_index);
     *type = *id = 0;
 
@@ -362,7 +363,6 @@ int Vect_cidx_find_next(const struct Map_info *Map, int field_index, int cat,
 
     return -1;
 }
-
 
 /*!
    \brief Find all line/area id's for given category
@@ -392,8 +392,8 @@ void Vect_cidx_find_all(const struct Map_info *Map, int layer, int type_mask,
     if ((type_mask & GV_AREA) && type_mask != GV_AREA)
         G_fatal_error(_("Mixing IDs of areas and primitives"));
 
-    idx = Vect_cidx_find_next(Map, field_index, cat,
-                              type_mask, 0, &type, &line);
+    idx =
+        Vect_cidx_find_next(Map, field_index, cat, type_mask, 0, &type, &line);
 
     if (idx == -1) {
         return;
@@ -420,7 +420,7 @@ void Vect_cidx_find_all(const struct Map_info *Map, int layer, int type_mask,
    \return 1 on success
    \return 0 on error
  */
-int Vect_cidx_dump(const struct Map_info *Map, FILE * out)
+int Vect_cidx_dump(const struct Map_info *Map, FILE *out)
 {
     int i, field, nfields, ntypes;
 
@@ -429,8 +429,10 @@ int Vect_cidx_dump(const struct Map_info *Map, FILE * out)
     check_status(Map);
 
     nfields = Vect_cidx_get_num_fields(Map);
-    fprintf(out, "---------- CATEGORY INDEX DUMP: Number of layers: %d "
-            "--------------------------------------\n", nfields);
+    fprintf(out,
+            "---------- CATEGORY INDEX DUMP: Number of layers: %d "
+            "--------------------------------------\n",
+            nfields);
 
     for (i = 0; i < nfields; i++) {
         int j, nucats, ncats;
@@ -516,7 +518,7 @@ int Vect_cidx_save(struct Map_info *Map)
    \param Map pointer to Map_info structure
    \param head_only read only header of the file
 
-   \return 0 on success 
+   \return 0 on success
    \return 1 if file does not exist
    \return -1 error, file exists but cannot be read
  */
@@ -542,7 +544,7 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     dig_file_init(&fp);
     fp.file = G_fopen_old(path, GV_CIDX_ELEMENT, Map->mapset);
 
-    if (fp.file == NULL) {      /* category index file is not available */
+    if (fp.file == NULL) { /* category index file is not available */
         G_warning(_("Unable to open category index file for vector map <%s>"),
                   Vect_get_full_name(Map));
         return -1;

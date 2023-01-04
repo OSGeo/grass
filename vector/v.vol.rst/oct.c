@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               3D vector point input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -35,13 +34,9 @@
 #include "externs.h"
 #include "dataoct.h"
 
-
-
-
-struct octfunc *OT_functions_new(int (*compare)(),
-                                 VOID_T **(*divide_data)(),
-                                 int(*add_data)(), int(*intersect)(),
-                                 int(*division_check)(), int(*get_points)())
+struct octfunc *OT_functions_new(int (*compare)(), VOID_T **(*divide_data)(),
+                                 int (*add_data)(), int (*intersect)(),
+                                 int (*division_check)(), int (*get_points)())
 /* Initializes FUNCTIONS structure with given arguments */
 {
     struct octfunc *functions;
@@ -58,10 +53,7 @@ struct octfunc *OT_functions_new(int (*compare)(),
     return functions;
 }
 
-
-
-
-struct octtree *OT_tree_new(VOID_T * data, struct octtree **leafs,
+struct octtree *OT_tree_new(VOID_T *data, struct octtree **leafs,
                             struct octtree *parent, struct octfunc *functions,
                             int octant)
 /*Initializes TREE using given arguments */
@@ -78,11 +70,6 @@ struct octtree *OT_tree_new(VOID_T * data, struct octtree **leafs,
     tree->octant = octant;
     return tree;
 }
-
-
-
-
-
 
 int OT_insert_oct(struct quadruple *point, struct octtree *tree)
 {
@@ -125,16 +112,9 @@ int OT_insert_oct(struct quadruple *point, struct octtree *tree)
         }
         if (k < 0)
             return k;
-
     }
     return j;
 }
-
-
-
-
-
-
 
 int OT_divide_oct(struct octtree *tree)
 {
@@ -157,17 +137,11 @@ int OT_divide_oct(struct octtree *tree)
     return 1;
 }
 
-
-
-
-
-
-int
-OT_region_data(struct octtree *tree, double xmin, double xmax, double ymin,
-               double ymax, double zmin, double zmax,
-               struct quadruple *points, int MAX)
-        /* max number of points we can add (KMAX2) */
- /* note: this KMAX2 can be larger then KMAX */
+int OT_region_data(struct octtree *tree, double xmin, double xmax, double ymin,
+                   double ymax, double zmin, double zmax,
+                   struct quadruple *points, int MAX)
+/* max number of points we can add (KMAX2) */
+/* note: this KMAX2 can be larger then KMAX */
 {
     int n = 0, j;
 
@@ -179,21 +153,19 @@ OT_region_data(struct octtree *tree, double xmin, double xmax, double ymin,
         fprintf(stderr, "OT_region_data: tree is NULL\n");
         return n;
     }
-    if (tree->
-        functions->intersect(xmin, xmax, ymin, ymax, zmin, zmax,
-                             tree->data)) {
+    if (tree->functions->intersect(xmin, xmax, ymin, ymax, zmin, zmax,
+                                   tree->data)) {
         if (tree->leafs != NULL) {
             for (j = 0; j < NUMLEAFS; j++) {
-                if ((n = n + OT_region_data(tree->leafs[j], xmin, xmax,
-                                            ymin, ymax, zmin, zmax,
-                                            points + n, MAX - n)) > MAX)
+                if ((n = n + OT_region_data(tree->leafs[j], xmin, xmax, ymin,
+                                            ymax, zmin, zmax, points + n,
+                                            MAX - n)) > MAX)
                     return n;
             }
         }
         else {
-            n = tree->functions->get_points(points, tree->data,
-                                            xmin, xmax, ymin, ymax, zmin,
-                                            zmax, MAX);
+            n = tree->functions->get_points(points, tree->data, xmin, xmax,
+                                            ymin, ymax, zmin, zmax, MAX);
         }
         return n;
     }

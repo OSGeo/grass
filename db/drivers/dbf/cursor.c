@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>
@@ -21,12 +20,12 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_close_cursor(dbCursor * dbc)
+int db__driver_close_cursor(dbCursor *dbc)
 {
     cursor *c;
 
     /* get my cursor via the dbc token */
-    c = (cursor *) db_find_token(db_get_cursor_token(dbc));
+    c = (cursor *)db_find_token(db_get_cursor_token(dbc));
     if (c == NULL)
         return DB_FAILED;
 
@@ -36,13 +35,12 @@ int db__driver_close_cursor(dbCursor * dbc)
     return DB_OK;
 }
 
-
 cursor *alloc_cursor()
 {
     cursor *c;
 
     /* allocate the cursor */
-    c = (cursor *) db_malloc(sizeof(cursor));
+    c = (cursor *)db_malloc(sizeof(cursor));
     if (c == NULL) {
         db_d_append_error(_("Unable to allocate new cursor"));
         db_d_report_error();
@@ -63,7 +61,7 @@ cursor *alloc_cursor()
     return c;
 }
 
-void free_cursor(cursor * c)
+void free_cursor(cursor *c)
 {
     db_drop_token(c->token);
     sqpFreeStmt(c->st);

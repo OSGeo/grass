@@ -96,7 +96,7 @@ double G_meridional_radius_of_curvature(double lon, double a, double e2)
  \f$
  \nu = \frac{a}{(1-e^2\sin^2 lon)^{1/2}}
  \f$
- * 
+ *
  *  \param lon longitude
  *  \param a ellipsoid semi-major axis
  *  \param e2 ellipsoid eccentricity squared
@@ -123,7 +123,7 @@ double G_transverse_radius_of_curvature(double lon, double a, double e2)
  \f$
  r = \frac{a (1-e^2)^{1/2}}{(1-e^2\sin^2 lon)}
  \f$
- * 
+ *
  *  \param lon longitude
  *  \param a ellipsoid semi-major axis
  *  \param e2 ellipsoid eccentricity squared

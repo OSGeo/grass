@@ -5,7 +5,7 @@
  * MODULE:      GRASS gis library
  * FILENAME:    cmprbzip.c
  * AUTHOR(S):   Markus Metz
- * PURPOSE:     To provide an interface to libbzip2 for compressing and 
+ * PURPOSE:     To provide an interface to libbzip2 for compressing and
  *              decompressing data.  Its primary use is in
  *              the storage and reading of GRASS rasters.
  *
@@ -14,7 +14,7 @@
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -69,12 +69,11 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
 int G_bz2_compress_bound(int src_sz)
 {
     /* from the documentation:
-     * To guarantee that the compressed data will fit in its buffer, 
-     * allocate an output buffer of size 1% larger than the uncompressed data, 
+     * To guarantee that the compressed data will fit in its buffer,
+     * allocate an output buffer of size 1% larger than the uncompressed data,
      * plus six hundred extra bytes.
      * bzip2 does not provide a compressbound fn
      * and apparently does not have a fast version if destLen is
@@ -83,8 +82,8 @@ int G_bz2_compress_bound(int src_sz)
     return src_sz;
 }
 
-int
-G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                   int dst_sz)
 {
     int err;
     int i, buf_sz;
@@ -92,7 +91,8 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     unsigned char *buf;
 
 #ifndef HAVE_BZLIB_H
-    G_fatal_error(_("GRASS needs to be compiled with BZIP2 for BZIP2 compression"));
+    G_fatal_error(
+        _("GRASS needs to be compiled with BZIP2 for BZIP2 compression"));
     return -1;
 #else
 
@@ -115,14 +115,15 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
         return 0;
     }
 
-    /* Output buffer has to be 1% + 600 bytes bigger for single pass compression */
+    /* Output buffer has to be 1% + 600 bytes bigger for single pass compression
+     */
     buf = dst;
     buf_sz = G_bz2_compress_bound(src_sz);
     if (buf_sz > dst_sz) {
-        G_warning
-            ("G_bz2_compress(): programmer error, destination is too small");
-        if (NULL == (buf = (unsigned char *)
-                     G_calloc(buf_sz, sizeof(unsigned char))))
+        G_warning(
+            "G_bz2_compress(): programmer error, destination is too small");
+        if (NULL ==
+            (buf = (unsigned char *)G_calloc(buf_sz, sizeof(unsigned char))))
             return -1;
     }
     else
@@ -130,11 +131,11 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 
     /* Do single pass compression */
     nbytes = buf_sz;
-    err = BZ2_bzBuffToBuffCompress((char *)buf, &nbytes,        /* destination */
-                                   (char *)src, src_sz, /* source */
-                                   9,   /* blockSize100k */
-                                   0,   /* verbosity */
-                                   100);        /* workFactor */
+    err = BZ2_bzBuffToBuffCompress((char *)buf, &nbytes, /* destination */
+                                   (char *)src, src_sz,  /* source */
+                                   9,                    /* blockSize100k */
+                                   0,                    /* verbosity */
+                                   100);                 /* workFactor */
 
     if (err != BZ_OK) {
         G_warning(_("BZIP2 version %s compression error %d"),
@@ -162,16 +163,16 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 
     return nbytes;
 #endif
-}                               /* G_bz2_compress() */
+} /* G_bz2_compress() */
 
-int
-G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int err;
     unsigned int nbytes;
 
 #ifndef HAVE_BZLIB_H
-    G_fatal_error(_("GRASS needs to be compiled with BZIP2 for BZIP2 compression"));
+    G_fatal_error(
+        _("GRASS needs to be compiled with BZIP2 for BZIP2 compression"));
     return -2;
 #else
 
@@ -194,13 +195,12 @@ G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
         return 0;
     }
 
-
     /* Do single pass decompression */
     nbytes = dst_sz;
-    err = BZ2_bzBuffToBuffDecompress((char *)dst, &nbytes,      /* destination */
-                                     (char *)src, src_sz,       /* source */
-                                     0, /* small */
-                                     0);        /* verbosity */
+    err = BZ2_bzBuffToBuffDecompress((char *)dst, &nbytes, /* destination */
+                                     (char *)src, src_sz,  /* source */
+                                     0,                    /* small */
+                                     0);                   /* verbosity */
 
     if (err != BZ_OK) {
         G_warning(_("BZIP2 version %s decompression error %d"),
@@ -222,6 +222,5 @@ G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     return nbytes;
 #endif
 }
-
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

@@ -5,15 +5,17 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
+
 static double tpi = 6.283185307179586;
 
 static void uortho(double *g, int n);
 
 double unfl();
 
-void unitary(Cpx * u, int n)
+void unitary(Cpx *u, int n)
 {
     int i, j, k, m;
 
@@ -23,7 +25,7 @@ void unitary(Cpx * u, int n)
 
     m = n * n;
     g = (double *)calloc(n * n, sizeof(double));
-    v = (Cpx *) calloc(m + n, sizeof(Cpx));
+    v = (Cpx *)calloc(m + n, sizeof(Cpx));
     e = v + m;
     h.re = 1.;
     h.im = 0.;
