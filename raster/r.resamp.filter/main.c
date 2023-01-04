@@ -107,7 +107,7 @@ static const struct filter_type menu[] = {
     {"hann", f_hann, 0},
     {"hamming", f_hamming, 0},
     {"blackman", f_blackman, 0},
-    {NULL},
+    {NULL, NULL, 0},
 };
 
 static char *build_filter_list(void)
