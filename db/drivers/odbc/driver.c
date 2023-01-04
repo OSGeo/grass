@@ -5,7 +5,7 @@
 
 int db__driver_init(int argc, char **argv)
 {
-    init_error(void);
+    init_error();
     return DB_OK;
 }
 
