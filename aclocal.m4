@@ -712,7 +712,7 @@ AC_DEFUN([LOC_OPENMP],
           dnl   Cray CCE             -homp
           dnl   NEC SX               -Popenmp
           dnl   Lahey Fortran (Linux)  --openmp
-          dnl.  Clang (Apple)        -Xclang -fopenmp
+          dnl   Clang (Apple)        -Xclang -fopenmp
 	  dnl If in this loop a compiler is passed an option that it doesn't
 	  dnl understand or that it misinterprets, the AC_LINK_IFELSE test
 	  dnl will fail (since we know that it failed without the option),
