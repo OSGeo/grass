@@ -186,8 +186,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.UsePopUp(True)
         self.SetUseHorizontalScrollBar(True)
         self.hint = _("Type command here and press Enter")
-        self.text_color = {"hint": wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT),
-                           "command": wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT)}
+        self.text_color = {
+            "hint": wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT),
+            "command": wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT),
+        }
 
         # support light and dark mode
         bg_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
