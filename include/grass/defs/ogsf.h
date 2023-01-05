@@ -517,7 +517,7 @@ void gsd_scale(float, float, float);
 void gsd_translate(float, float, float);
 void gsd_rot(float, char);
 void gsd_checkwindow(int *, int *, double *, double *);
-int gsd_checkpoint(float *, int *, int *, double *, double *);
+int gsd_checkpoint(float[4], int[4], int[4], double[16], double[16]);
 void gsd_litvert_func(float *, unsigned long, float *);
 void gsd_litvert_func2(float *, unsigned long, float *);
 void gsd_vert_func(float *);
