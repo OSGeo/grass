@@ -186,6 +186,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.UsePopUp(True)
         self.SetUseHorizontalScrollBar(True)
         self.hint = _("Type command here and press Enter")
+        self.text_color = {"hint": wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT),
+                           "command": wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT)}
 
         # support light and dark mode
         bg_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
@@ -303,17 +305,20 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.cmdDesc = None
 
     def OnKillFocus(self, event):
-        """Hides autocomplete"""
+        """Hides autocomplete and writes a hint if a control is currently empty."""
         # hide autocomplete
         if self.AutoCompActive():
             self.AutoCompCancel()
         if self.IsEmpty():
+            self.StyleSetForeground(0, self.text_color["hint"])
             self.WriteText(self.hint)
         event.Skip()
 
     def OnSetFocus(self, event):
+        """Prepares prompt for entering commands."""
         if self.GetText() == self.hint:
             self.ClearAll()
+            self.StyleSetForeground(0, self.text_color["command"])
         event.Skip()
 
     def SetTextAndFocus(self, text):
