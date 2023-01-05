@@ -64,10 +64,10 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     /* use ptr->off_t_size = 4 if possible */
     if (sizeof(off_t) > 4) {
         size = 145; /* max header size, see below */
-        size += ptr->Node_spidx->n_nodes * ptr->Node_spidx->nodesize;
-        size += ptr->Line_spidx->n_nodes * ptr->Line_spidx->nodesize;
-        size += ptr->Area_spidx->n_nodes * ptr->Area_spidx->nodesize;
-        size += ptr->Isle_spidx->n_nodes * ptr->Isle_spidx->nodesize;
+        size += (size_t)ptr->Node_spidx->n_nodes * ptr->Node_spidx->nodesize;
+        size += (size_t)ptr->Line_spidx->n_nodes * ptr->Line_spidx->nodesize;
+        size += (size_t)ptr->Area_spidx->n_nodes * ptr->Area_spidx->nodesize;
+        size += (size_t)ptr->Isle_spidx->n_nodes * ptr->Isle_spidx->nodesize;
 
         if (size < PORT_INT_MAX)
             ptr->spidx_port.off_t_size = 4;
@@ -282,6 +282,7 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
         ptr->version.spidx.back_major, ptr->version.spidx.back_minor);
 
     G_debug(2, "  byte order %d", byte_order);
+    G_debug(2, "  off_t size %d", ptr->spidx_port.off_t_size);
 
     /* check version numbers */
     if (ptr->version.spidx.major > GV_SIDX_VER_MAJOR ||
