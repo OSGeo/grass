@@ -2257,10 +2257,6 @@ class GMFrame(wx.Frame):
 
     def _closeWindow(self, event):
         """Close wxGUI"""
-        # save command protocol if actived
-        if self.goutput.btnCmdProtocol.GetValue():
-            self.goutput.CmdProtocolSave()
-
         if not self.currentPage:
             self._auimgr.UnInit()
             self.Destroy()
