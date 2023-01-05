@@ -185,11 +185,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetUseTabs(False)
         self.UsePopUp(True)
         self.SetUseHorizontalScrollBar(True)
-        self.hint = _("Type command here and press Enter")
-        self.text_color = {
-            "hint": wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT),
-            "command": wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT),
-        }
 
         # support light and dark mode
         bg_color = wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
@@ -200,6 +195,17 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCaretForeground(fg_color)
         self.SetSelBackground(True, selection_color)
         self.StyleClearAll()
+
+        # two colors distiguishing a usability hint from a command
+        self.text_color = {
+            "hint": wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT),
+            "command": wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT),
+        }
+
+        # show hint
+        self.hint = _("Type command here and press Enter")
+        self.StyleSetForeground(0, self.text_color["hint"])
+        self.WriteText(self.hint)
 
         #
         # bindings
