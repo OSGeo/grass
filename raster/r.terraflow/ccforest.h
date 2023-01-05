@@ -40,12 +40,6 @@ public:
     T src() const { return key; };
     T dst() const { return value; };
 
-    keyvalue operator=(const keyvalue &that)
-    {
-        key = that.key;
-        value = that.value;
-        return *this;
-    };
     int operator!=(const keyvalue &e2) const
     {
         return (key != e2.key) || (value != e2.value);
@@ -147,7 +141,12 @@ private:
 
 public:
     ccforest();
+    ccforest(const ccforest &) = delete;
+    ccforest &operator=(const ccforest &) = delete;
+    ccforest(ccforest &&) = delete;
+    ccforest &operator=(ccforest &&) = delete;
     ~ccforest();
+
     void insert(const T &i, const T &j); /* insert edge (i,j) */
     T findNextRoot(const T &i);          /* find root where i >= prev i */
     void printRootStream();
