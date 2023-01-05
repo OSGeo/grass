@@ -21,41 +21,38 @@
 * safileio.c
    SHP_CVSID: ISO C does not allow extra ‘;’ outside of a function
 
-* Use `<grass/shapefil.h>` etc rather than `"shapefil.h"`
-   in shpopen.c, dbfopen.c and safileio.c
-
 
 ## Full fix
 
 ```diff
 diff --git a/lib/external/shapelib/dbfopen.c b/lib/external/shapelib/dbfopen.c
-index 5151148d33..5380e3e20b 100644
+index 5380e3e20b..5151148d33 100644
 --- a/lib/external/shapelib/dbfopen.c
 +++ b/lib/external/shapelib/dbfopen.c
-@@ -1226,10 +1226,9 @@ DBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName,
+@@ -1226,9 +1226,10 @@ DBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName,
      else if( psDBF->pachFieldType[iField] == 'N'
               || psDBF->pachFieldType[iField] == 'F' )
      {
--    if( psDBF->panFieldDecimals[iField] > 0 ) {
--        /* || psDBF->panFieldSize[iField] >= 10 ) */ /* GDAL bug #809 */
-+    if( psDBF->panFieldDecimals[iField] > 0
-+            || psDBF->panFieldSize[iField] >= 10 )
+-    if( psDBF->panFieldDecimals[iField] > 0
+-            || psDBF->panFieldSize[iField] >= 10 )
++    if( psDBF->panFieldDecimals[iField] > 0 ) {
++        /* || psDBF->panFieldSize[iField] >= 10 ) */ /* GDAL bug #809 */
          return( FTDouble );
--    }
++    }
      else
          return( FTInteger );
      }
 diff --git a/lib/external/shapelib/safileio.c b/lib/external/shapelib/safileio.c
-index 7a614a5806..289d347eaf 100644
+index 289d347eaf..7a614a5806 100644
 --- a/lib/external/shapelib/safileio.c
 +++ b/lib/external/shapelib/safileio.c
 @@ -74,7 +74,7 @@
  #include <string.h>
  #include <stdio.h>
- 
--SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $")
-+SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $");
- 
+
+-SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $");
++SHP_CVSID("$Id: safileio.c,v 1.6 2018-06-15 19:56:32 erouault Exp $")
+
  #ifdef SHPAPI_UTF8_HOOKS
  #   ifdef SHPAPI_WINDOWS
 
