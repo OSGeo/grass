@@ -196,16 +196,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetSelBackground(True, selection_color)
         self.StyleClearAll()
 
-        # two colors distiguishing a usability hint from a command
-        self.text_color = {
-            "hint": wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT),
-            "command": wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT),
-        }
-
         # show hint
-        self.hint = _("Type command here and press Enter")
-        self.StyleSetForeground(0, self.text_color["hint"])
-        self.WriteText(self.hint)
+        self.ShowHint()
 
         #
         # bindings
@@ -312,22 +304,40 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             except IOError:
                 self.cmdDesc = None
 
+    def IsHintShown(self):
+        return self._hint_shown
+
+    def SetHintShown(self, shown):
+        self._hint_shown = shown
+
+    def ShowHint(self):
+        """Shows usability hint"""
+        self.StyleSetForeground(0, wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        self.WriteText(_("Type command here and press Enter"))
+        self.SetHintShown(True)
+
+    def HideHint(self):
+        """Hides usability hint"""
+        if self.IsHintShown():
+            self.ClearAll()
+            self.StyleSetForeground(
+                0, wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+            )
+            self.SetHintShown(False)
+
     def OnKillFocus(self, event):
-        """Hides autocomplete and writes a hint if a control is currently empty."""
+        """Hides autocomplete and show hint"""
         # hide autocomplete
         if self.AutoCompActive():
             self.AutoCompCancel()
-        # write a hint
+        # show hint
         if self.IsEmpty():
-            self.StyleSetForeground(0, self.text_color["hint"])
-            self.WriteText(self.hint)
+            self.ShowHint()
         event.Skip()
 
     def OnSetFocus(self, event):
         """Prepares prompt for entering commands."""
-        if self.GetText() == self.hint:
-            self.ClearAll()
-            self.StyleSetForeground(0, self.text_color["command"])
+        self.HideHint()
         event.Skip()
 
     def SetTextAndFocus(self, text):
