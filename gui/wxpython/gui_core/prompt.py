@@ -317,6 +317,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # hide autocomplete
         if self.AutoCompActive():
             self.AutoCompCancel()
+        # write a hint
         if self.IsEmpty():
             self.StyleSetForeground(0, self.text_color["hint"])
             self.WriteText(self.hint)
