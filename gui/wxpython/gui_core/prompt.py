@@ -22,6 +22,7 @@ import os
 import difflib
 import codecs
 import sys
+import shutil
 
 import wx
 import wx.stc
@@ -33,7 +34,7 @@ from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core import utils
-from core.gcmd import EncodeString, DecodeString
+from core.gcmd import EncodeString, DecodeString, GError
 
 
 class GPrompt(object):
@@ -138,6 +139,27 @@ class GPrompt(object):
 
         self.OnCmdErase(None)
         self.ShowStatusText("")
+
+    def CopyHistory(self, targetFile):
+        """Copy history file to the target location.
+        Returns True if file is successfully copied."""
+        env = grass.gisenv()
+        historyFile = os.path.join(
+            env["GISDBASE"],
+            env["LOCATION_NAME"],
+            env["MAPSET"],
+            ".wxgui_history",
+        )
+        try:
+            shutil.copyfile(historyFile, targetFile)
+        except (IOError, OSError) as e:
+            GError(
+                _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
+                    historyFile, targetFile, e
+                )
+            )
+            return False
+        return True
 
     def GetCommands(self):
         """Get list of launched commands"""
