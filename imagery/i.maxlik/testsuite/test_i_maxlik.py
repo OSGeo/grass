@@ -68,6 +68,7 @@ class SuccessTest(TestCase):
             "r.mapcalc",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             expression=f"{cls.b2}=if(row() == 3 && col() == 3, null(), 5.0+rand(-1.0,1.0))",
 =======
             expression=f"{cls.b2}=5.0+rand(-1.0,1.0)",
@@ -75,6 +76,9 @@ class SuccessTest(TestCase):
 =======
             expression=f"{cls.b2}=5.0+rand(-1.0,1.0)",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            expression=f"{cls.b2}=if(row() == 3 && col() == 3, null(), 5.0+rand(-1.0,1.0))",
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
             flags="s",
             quiet=True,
         )

@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 
 import difflib
 import sys
+import shutil
 
 import wx
 import wx.stc
@@ -140,6 +141,27 @@ class GPrompt:
 
         self.CmdErase()
         self.ShowStatusText("")
+
+    def CopyHistory(self, targetFile):
+        """Copy history file to the target location.
+        Returns True if file is successfully copied."""
+        env = grass.gisenv()
+        historyFile = os.path.join(
+            env["GISDBASE"],
+            env["LOCATION_NAME"],
+            env["MAPSET"],
+            ".wxgui_history",
+        )
+        try:
+            shutil.copyfile(historyFile, targetFile)
+        except (IOError, OSError) as e:
+            GError(
+                _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
+                    historyFile, targetFile, e
+                )
+            )
+            return False
+        return True
 
     def GetCommands(self):
         """Get list of launched commands"""

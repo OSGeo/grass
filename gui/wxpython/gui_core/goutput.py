@@ -43,7 +43,11 @@ from core.gconsole import (
 )
 from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
+<<<<<<< HEAD
 from gui_core.wrap import Button, ClearButton, StaticText
+=======
+from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
 from core.settings import UserSettings
 
 
@@ -143,10 +147,28 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
+<<<<<<< HEAD
 
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
+=======
+        self.btnCmdExportHistory = Button(parent=self.panelOutput, id=wx.ID_ANY)
+        self.btnCmdExportHistory.SetLabel(_("&Export history"))
+        self.btnCmdExportHistory.SetToolTip(
+            _("Export history of executed commands to a file")
+        )
+
+        if not self._gcstyle & GC_PROMPT:
+            self.btnCmdClear.Hide()
+            self.btnCmdExportHistory.Hide()
+
+        self.btnCmdClear.Bind(wx.EVT_BUTTON, self.cmdPrompt.OnCmdErase)
+        self.btnOutputClear.Bind(wx.EVT_BUTTON, self.OnOutputClear)
+        self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
+        self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
+        self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
 
         self._layout()
 
@@ -188,6 +210,39 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdOutput, proportion=1, flag=wx.EXPAND | wx.ALL, border=3
         )
 
+<<<<<<< HEAD
+=======
+        outBtnSizer.Add(
+            self.btnOutputClear,
+            proportion=proportion,
+            flag=wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+            border=5,
+        )
+
+        outBtnSizer.Add(
+            self.btnOutputSave,
+            proportion=proportion,
+            flag=wx.RIGHT | wx.BOTTOM,
+            border=5,
+        )
+
+        cmdBtnSizer.Add(
+            self.btnCmdExportHistory,
+            proportion=1,
+            flag=wx.ALIGN_CENTER
+            | wx.ALIGN_CENTER_VERTICAL
+            | wx.LEFT
+            | wx.RIGHT
+            | wx.BOTTOM,
+            border=5,
+        )
+        cmdBtnSizer.Add(
+            self.btnCmdClear,
+            proportion=1,
+            flag=wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM,
+            border=5,
+        )
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
         progressSizer.Add(
             self.btnCmdAbort, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=5
         )
@@ -402,6 +457,32 @@ class GConsoleWindow(wx.SplitterWindow):
         self.progressbar.SetValue(event.value)
         event.Skip()
 
+<<<<<<< HEAD
+=======
+    def OnCmdExportHistory(self, event):
+        """Export the history of executed commands stored
+        in a .wxgui_history file to a selected file."""
+        dlg = wx.FileDialog(
+            self,
+            message=_("Save file as..."),
+            defaultFile="grass_cmd_log.txt",
+            wildcard=_("{txt} (*.txt)|*.txt|{files} (*)|*").format(
+                txt=_("Text files"), files=_("Files")
+            ),
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
+
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if self.cmdPrompt.CopyHistory(path):
+                self.showNotification.emit(
+                    message=_("Command history saved to '{}'".format(path))
+                )
+
+        dlg.Destroy()
+        event.Skip()
+
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
     def OnCmdRun(self, event):
         """Run command"""
         self.outputSizer.Show(self.panelProgress)
