@@ -178,6 +178,7 @@ class flowPriority {
 public:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     elevation_type h{0.0};
     toporank_type toporank{0};
 =======
@@ -188,10 +189,15 @@ public:
     elevation_type h;
     toporank_type toporank;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    elevation_type h{0.0};
+    toporank_type toporank{0};
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
     /* points at same heights are processed in increasing order of their
        topological rank; overall, this gives topological order and
        guarantees that flow is never puhsed backwards. Note: of course,
        this is a way of waving hands on topological sorting.  */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     dimension_type i{0}, j{0};
@@ -238,20 +244,24 @@ public:
 
 =======
     dimension_type i, j;
+=======
+    dimension_type i{0}, j{0};
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
 
 public:
-    flowPriority(elevation_type a = 0, toporank_type b = 0,
-                 dimension_type c = 0, dimension_type d = 0)
-        : h(a), toporank(b), i(c), j(d)
+    flowPriority() {}
+    flowPriority(elevation_type a) : h{a} {}
+    flowPriority(elevation_type a, toporank_type b, dimension_type c,
+                 dimension_type d)
+        : h{a}, toporank{b}, i{c}, j{d}
     {
     }
 
-    flowPriority(const flowPriority &p)
-        : h(p.h), toporank(p.toporank), i(p.i), j(p.j)
-    {
-    }
-
-    ~flowPriority() {}
+    flowPriority(const flowPriority &) = default;
+    flowPriority &operator=(const flowPriority &) = default;
+    flowPriority(flowPriority &&) = default;
+    flowPriority &operator=(flowPriority &&) = default;
+    ~flowPriority() = default;
 
     elevation_type field1() const { return h; }
 
@@ -428,6 +438,7 @@ public:
     /***************************************************************/
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* return the elevation window */
     genericWindow<elevation_type> getElevWindow() const { return elevwin; }
 
@@ -447,6 +458,8 @@ public:
     ~sweepItemBaseType() {}
 
     /***************************************************************/
+=======
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
     /* return the elevation window */
     genericWindow<elevation_type> getElevWindow() const { return elevwin; }
 
@@ -567,6 +580,7 @@ class flowValue {
 public:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flowaccumulation_type value{0};
 
 public:
@@ -575,11 +589,13 @@ public:
 
 =======
     flowaccumulation_type value;
+=======
+    flowaccumulation_type value{0};
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
 
 public:
-    flowValue(flowaccumulation_type x = 0) : value(x) {}
-
-    ~flowValue() {}
+    flowValue() {}
+    flowValue(flowaccumulation_type x) : value{x} {}
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -607,6 +623,7 @@ public:
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -619,6 +636,8 @@ public:
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
     flowValue operator!=(const flowValue &elt) { return value != elt.value; }
     flowValue operator==(const flowValue &elt) { return value == elt.value; }
 
@@ -645,6 +664,7 @@ class flowStructure {
 private:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     flowPriority prio{};
     flowValue val{};
 
@@ -659,13 +679,18 @@ public:
 =======
     flowPriority prio;
     flowValue val;
+=======
+    flowPriority prio{};
+    flowValue val{};
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
 
 public:
-    flowStructure(const flowPriority &p = 0, const flowValue &e = 0)
-        : prio(p), val(e)
+    flowStructure() {}
+    flowStructure(const flowPriority &p, const flowValue &e) : prio{p}, val{e}
     {
     }
 
+<<<<<<< HEAD
     /* flowStructure(const flowValue &e, const flowPriority &p):
            prio(p), val(e) {}
     */
@@ -689,6 +714,8 @@ public:
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     ~flowStructure() {}
 
+=======
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
     flowPriority getPriority() const { return prio; }
 
 <<<<<<< HEAD
