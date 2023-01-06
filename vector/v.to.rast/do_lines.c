@@ -8,7 +8,7 @@
 /* function prototypes */
 static int plot_line(double *, double *, int, int, int);
 static int plot_points(double *, double *, int);
-static double v2angle(double *, double *, double, double);
+static double v2angle(double[2], double[2], double, double);
 static double deg_angle(double, double, double, double);
 
 int do_lines(struct Map_info *Map, struct line_pnts *Points,

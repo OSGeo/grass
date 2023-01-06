@@ -23,7 +23,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static double distance(double *, double *, double, double, int);
+static double distance(double[2], double[2], double, double, int);
 
 #ifndef HUGE_VAL
 #define HUGE_VAL 1.7976931348623157e+308

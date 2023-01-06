@@ -214,7 +214,7 @@ void gpd_obj(geosurf *gs, gvstyle *style, Point3 pt)
  */
 int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast)
 {
-    float site[3], konst;
+    float site[4], konst;
     int src, check;
     geopoint *gpt;
     typbuff *buf;
@@ -311,7 +311,7 @@ int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast)
  */
 int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast)
 {
-    float site[3], tz;
+    float site[4], tz;
     int check;
     geopoint *gpt;
     GLdouble modelMatrix[16], projMatrix[16];

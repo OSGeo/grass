@@ -3282,7 +3282,7 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
                               float *dist, int use_exag)
 {
     geosurf *gs;
-    float p1[2], p2[2];
+    Point3 p1, p2;
 
     gs = gs_get_surf(hs);
     if (gs == NULL) {

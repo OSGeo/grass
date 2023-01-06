@@ -141,7 +141,7 @@ int open_files(struct globals *);
 
 /* create_isegs.c */
 int create_isegs(struct globals *);
-void find_four_neighbors(int, int, int[][2]);
+void find_four_neighbors(int, int, int[8][2]);
 void find_eight_neighbors(int, int, int[8][2]);
 double calculate_euclidean_similarity(struct ngbr_stats *, struct ngbr_stats *,
                                       struct globals *);
