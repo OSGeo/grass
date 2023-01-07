@@ -320,7 +320,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self._hint_shown = False
 
     def OnKillFocus(self, event):
-        """Hides autocomplete and show hint"""
+        """Hides autocomplete and shows hint"""
         # hide autocomplete
         if self.AutoCompActive():
             self.AutoCompCancel()
