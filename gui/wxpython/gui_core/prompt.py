@@ -197,7 +197,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.StyleClearAll()
 
         # show hint
-        self.ShowHint()
+        self._showHint()
 
         #
         # bindings
@@ -304,26 +304,20 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             except IOError:
                 self.cmdDesc = None
 
-    def IsHintShown(self):
-        return self._hint_shown
-
-    def SetHintShown(self, shown):
-        self._hint_shown = shown
-
-    def ShowHint(self):
+    def _showHint(self):
         """Shows usability hint"""
         self.StyleSetForeground(0, wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         self.WriteText(_("Type command here and press Enter"))
-        self.SetHintShown(True)
+        self._hint_shown = True
 
-    def HideHint(self):
+    def _hideHint(self):
         """Hides usability hint"""
-        if self.IsHintShown():
+        if self._hint_shown:
             self.ClearAll()
             self.StyleSetForeground(
                 0, wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT)
             )
-            self.SetHintShown(False)
+            self._hint_shown = False
 
     def OnKillFocus(self, event):
         """Hides autocomplete and show hint"""
@@ -332,12 +326,12 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.AutoCompCancel()
         # show hint
         if self.IsEmpty():
-            self.ShowHint()
+            self._showHint()
         event.Skip()
 
     def OnSetFocus(self, event):
         """Prepares prompt for entering commands."""
-        self.HideHint()
+        self._hideHint()
         event.Skip()
 
     def SetTextAndFocus(self, text):
