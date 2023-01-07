@@ -85,14 +85,6 @@ public:
     }
 
     /***************************************************************/
-    genericWindow(const genericWindow<T> &win)
-    {
-        for (int i = 0; i < 9; i++) {
-            data[i] = win.data[i];
-        }
-    }
-
-    /***************************************************************/
     /* get specified neighbour di,dj in {-1,0,1} */
     T get(short di, short dj) const
     {
