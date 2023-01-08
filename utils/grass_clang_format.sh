@@ -34,7 +34,7 @@ set -eu
 req_cf_v="15"
 
 # No need to continue if the .clang-format file isn't found
-if [ ! -f .clang-format ] && [ ! -f ../.clang-format ]; then
+if [ ! -f .clang-format ]; then
     echo "Error: could not find the .clang-format file. Is the GRASS source"
     echo  "  top directory your working directory?"
     exit 1
@@ -62,13 +62,16 @@ if [ "${clang_version}" -lt "${req_cf_v}" ]; then
     exit 1
 fi
 
-# Enable extended regex in BSD-like system's find command
+# Enable 'posix extended' regular expression style
 case "$(uname)" in
     Darwin | *BSD*)
         find="find -E"
+        regex="-iregex"
         ;;
     *)
+        # GNU find
         find="find"
+        regex="-regextype posix-extended -iregex"
         ;;
 esac
 
@@ -79,5 +82,5 @@ else
     dir="."
 fi
 
-${find} "${dir}" -type f -iregex '.*\.(cpp|hpp|c|h)' -exec \
+${find} "${dir}" -type f "${regex}" '.*\.(cpp|hpp|c|h)' -exec \
     "${fmt}" -i '{}' +
