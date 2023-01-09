@@ -62,19 +62,6 @@ if [ "${clang_version}" -lt "${req_cf_v}" ]; then
     exit 1
 fi
 
-# Enable 'posix extended' regular expression style
-case "$(uname)" in
-    Darwin | *BSD*)
-        find="find -E"
-        regex="-iregex"
-        ;;
-    *)
-        # GNU find
-        find="find"
-        regex="-regextype posix-extended -iregex"
-        ;;
-esac
-
 # One argument, a directory path is allowed
 if [ "$#" -eq 1 ] && [ -d "$1" ]; then
     dir="$1"
@@ -82,5 +69,6 @@ else
     dir="."
 fi
 
-${find} "${dir}" -type f "${regex}" '.*\.(cpp|hpp|c|h)' -exec \
-    "${fmt}" -i '{}' +
+find "${dir}" -type f \
+    '(' -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' ')' \
+        -exec "${fmt}" -i '{}' +
