@@ -268,6 +268,8 @@ class WorkspaceManager:
             if "showToolbars" in display and not display["showToolbars"]:
                 for toolbar in mapdisp.GetToolbarNames():
                     mapdisp.RemoveToolbar(toolbar)
+            if "isDocked" in display and not display["isDocked"]:
+                mapdisp.OnDockUndock()
 
             displayId += 1
             mapdisp.Show()  # show mapdisplay

@@ -180,6 +180,7 @@ class ProcessWorkspaceFile:
                     "showCompExtent": bool(int(display.get("showCompExtent", "0"))),
                     "showStatusbar": bool(int(display.get("showStatusbar", "0"))),
                     "showToolbars": bool(int(display.get("showToolbars", "0"))),
+                    "isDocked": bool(int(display.get("isDocked", "0"))),
                     "pos": pos,
                     "size": size,
                     "extent": extent,
@@ -921,6 +922,7 @@ class WriteWorkspaceFile(object):
                 'constrainRes="%d" '
                 'showStatusbar="%d" '
                 'showToolbars="%d" '
+                'isDocked="%d" '
                 'dim="%d,%d,%d,%d" '
                 'extent="%f,%f,%f,%f,%f,%f" '
                 'tbres="%f" '  # needed only for animation tool
@@ -935,6 +937,7 @@ class WriteWorkspaceFile(object):
                     int(mapdisp.mapWindowProperties.resolution),
                     int(mapdisp.IsStatusbarShown()),
                     int(mapdisp.GetMapToolbar().IsShown()),
+                    int(mapdisp.IsDocked()),
                     displayPos[0],
                     displayPos[1],
                     displaySize[0],

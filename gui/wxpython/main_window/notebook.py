@@ -25,12 +25,13 @@ from gui_core.wrap import SimpleTabArt
 class MapPageFrame(wx.Frame):
     """Frame for independent map display window."""
 
-    def __init__(self, parent, mapdisplay, title):
+    def __init__(self, parent, mapdisplay, size, title):
         wx.Frame.__init__(self, parent=parent, title=title)
         self.mapdisplay = mapdisplay
-        self.SetSize(mapdisplay.GetSize())
+        self.SetSize(size)
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizerAndFit(self.sizer)
+
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def closeFrameNoEvent(self):
@@ -70,8 +71,9 @@ class MapNotebook(aui.AuiNotebook):
         """Undock active map display to independent MapFrame object"""
         index = self.GetPageIndex(page)
         text = self.GetPageText(index)
+        original_size = page.GetSize()
         self.RemovePage(index)
-        frame = MapPageFrame(parent=self.parent, mapdisplay=page, title=text)
+        frame = MapPageFrame(parent=self.parent, mapdisplay=page, size=original_size, title=text)
         page.Reparent(frame)
         page.SetDockingCallback(self.DockMapDisplay)
         frame.sizer.Add(page, proportion=1, flag=wx.EXPAND)

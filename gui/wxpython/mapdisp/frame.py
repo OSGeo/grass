@@ -673,7 +673,7 @@ class MapPanel(SingleMapPanel):
         """Sets docking bound method to dock or undock"""
         self._docking_callback = function
 
-    def OnDockUndock(self, event):
+    def OnDockUndock(self, event=None):
         """Dock or undock map display panel to independent MapFrame"""
         if self._docking_callback:
             self._docking_callback(self)

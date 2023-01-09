@@ -970,8 +970,7 @@ class GMFrame(wx.Frame):
             self.OnCBPageClosing,
         )
         if is_docked:
-            map_page = self.mapnotebook.GetPage(pgnum_dict["mapnotebook"])
-            self.mapnotebook.DeleteMapPage(map_page)
+            self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
