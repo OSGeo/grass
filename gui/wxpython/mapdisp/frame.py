@@ -137,6 +137,9 @@ class MapPanel(SingleMapPanel):
         self.closingDisplay = Signal("MapPanel.closingDisplay")
 
         # Emitted when closing display by closing its window.
+        self.closingFrame = Signal("MapPanel.closingFrame")
+
+        # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
 
         #
@@ -1005,7 +1008,8 @@ class MapPanel(SingleMapPanel):
                             pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
                         )
                         if not self.IsDocked():
-                            self.GetParent().Destroy()
+                            self.closingFrame.emit()
+                            self.GetParent().closeFrameNoEvent()
                     else:
                         self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
