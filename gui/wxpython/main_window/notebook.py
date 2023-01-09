@@ -73,7 +73,9 @@ class MapNotebook(aui.AuiNotebook):
         text = self.GetPageText(index)
         original_size = page.GetSize()
         self.RemovePage(index)
-        frame = MapPageFrame(parent=self.parent, mapdisplay=page, size=original_size, title=text)
+        frame = MapPageFrame(
+            parent=self.parent, mapdisplay=page, size=original_size, title=text
+        )
         page.Reparent(frame)
         page.SetDockingCallback(self.DockMapDisplay)
         frame.sizer.Add(page, proportion=1, flag=wx.EXPAND)
