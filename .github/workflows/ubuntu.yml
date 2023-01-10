@@ -60,6 +60,11 @@ jobs:
           ldd --version
 
       - name: Build
+        env:
+          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+          CFLAGS: "-std=${{ matrix.c }} -fPIC"
+          # TODO: -pedantic-errors here won't compile
+          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC"
         run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
 
       - name: Add the bin directory to PATH
