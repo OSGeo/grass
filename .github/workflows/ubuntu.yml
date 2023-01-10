@@ -57,7 +57,7 @@ jobs:
         run: |
           printenv | sort
           gcc --version
-          lld --version
+          ldd --version
 
       - name: Build
         run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
