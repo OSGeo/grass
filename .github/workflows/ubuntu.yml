@@ -56,7 +56,7 @@ jobs:
         shell: bash -el {0}
         run: |
           printenv | sort
-          $CC --version
+          gcc --version
           lld --version
 
       - name: Build
