@@ -52,8 +52,15 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          $CC --version
+          lld --version
+
       - name: Build
-        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install
+        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
 
       - name: Add the bin directory to PATH
         run: |
