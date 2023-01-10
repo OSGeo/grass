@@ -274,6 +274,14 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     if (perr)
         G_fatal_error("PROJ 5 error %d", perr);
+
+    if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
+    }
 #endif
 
     info->pj = pj;
@@ -416,6 +424,14 @@ int pj_get_string(struct pj_info *info, char *str)
         G_warning(_("Unable to initialize pj cause: %s"),
                   proj_errno_string(proj_context_errno(pjc)));
         return -1;
+    }
+
+    if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
     }
 #else
     /* Set finder function for locating datum conversion tables PK */
