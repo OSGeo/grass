@@ -144,63 +144,63 @@ class VDigitToolbar(BaseToolbar):
         self.icons = {
             "addPoint": MetaIcon(
                 img="point-create",
-                label=_("Digitize new point"),
+                label=_("Digitize new point (Ctrl+P)"),
                 desc=_("Left: new point"),
             ),
             "addLine": MetaIcon(
                 img="line-create",
-                label=_("Digitize new line"),
+                label=_("Digitize new line (Ctrl+L)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
             ),
             "addBoundary": MetaIcon(
                 img="boundary-create",
-                label=_("Digitize new boundary"),
+                label=_("Digitize new boundary (Ctrl+B)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
             ),
             "addCentroid": MetaIcon(
                 img="centroid-create",
-                label=_("Digitize new centroid"),
+                label=_("Digitize new centroid (Ctrl+C)"),
                 desc=_("Left: new point"),
             ),
             "addArea": MetaIcon(
                 img="polygon-create",
-                label=_("Digitize new area (boundary without category)"),
+                label=_("Digitize new area (boundary without category) (Ctrl+A)"),
                 desc=_("Left: new point"),
             ),
             "addVertex": MetaIcon(
                 img="vertex-create",
-                label=_("Add new vertex to line or boundary"),
+                label=_("Add new vertex to line or boundary (Ctrl+V)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "deleteLine": MetaIcon(
                 img="line-delete",
                 label=_(
-                    "Delete selected point(s), line(s), boundary(ies) or centroid(s)"
+                    "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "deleteArea": MetaIcon(
                 img="polygon-delete",
-                label=_("Delete selected area(s)"),
+                label=_("Delete selected area(s) (Ctrl+F)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "displayAttr": MetaIcon(
                 img="attributes-display",
-                label=_("Display/update attributes"),
+                label=_("Display/update attributes (Ctrl+K)"),
                 desc=_("Left: Select"),
             ),
             "displayCats": MetaIcon(
                 img="cats-display",
-                label=_("Display/update categories"),
+                label=_("Display/update categories (Ctrl+J)"),
                 desc=_("Left: Select"),
             ),
             "editLine": MetaIcon(
                 img="line-edit",
-                label=_("Edit selected line/boundary"),
+                label=_("Edit selected line/boundary (Ctrl+E)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
@@ -208,25 +208,29 @@ class VDigitToolbar(BaseToolbar):
             "moveLine": MetaIcon(
                 img="line-move",
                 label=_(
-                    "Move selected point(s), line(s), boundary(ies) or centroid(s)"
+                    "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "moveVertex": MetaIcon(
                 img="vertex-move",
-                label=_("Move selected vertex"),
+                label=_("Move selected vertex (Ctrl+G)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "removeVertex": MetaIcon(
                 img="vertex-delete",
-                label=_("Remove selected vertex"),
+                label=_("Remove selected vertex (Ctrl+X)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
-            "settings": BaseIcons["settings"],
+            "settings": BaseIcons["settings"].SetLabel(
+                label=_("Settings (Ctrl+T)"),
+            ),
             "quit": BaseIcons["quit"].SetLabel(
-                label=_("Quit"), desc=_("Quit digitizer and save changes")
+                label=_("Quit (Ctrl+Q)"),
+                desc=_("Quit digitizer and save changes"),
             ),
             "help": BaseIcons["help"].SetLabel(
+                label=_("Show manual (Ctrl+H)"),
                 desc=_("Show Vector Digitizer manual"),
             ),
             "additionalTools": MetaIcon(
@@ -235,10 +239,14 @@ class VDigitToolbar(BaseToolbar):
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "undo": MetaIcon(
-                img="undo", label=_("Undo"), desc=_("Undo previous change")
+                img="undo",
+                label=_("Undo (Ctrl+Z)"),
+                desc=_("Undo previous change"),
             ),
             "redo": MetaIcon(
-                img="redo", label=_("Redo"), desc=_("Redo previous change")
+                img="redo",
+                label=_("Redo (Ctrl+Y)"),
+                desc=_("Redo previous change"),
             ),
         }
 
@@ -434,14 +442,18 @@ class VDigitToolbar(BaseToolbar):
     def OnTool(self, event):
         """Tool selected -> untoggles previusly selected tool in
         toolbar"""
-        Debug.msg(3, "VDigitToolbar.OnTool(): id = %s" % event.GetId())
+        Debug.msg(
+            3,
+            f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
+        )
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
         self.MapWindow.mouse["use"] = "pointer"
 
         aId = self.action.get("id", -1)
-        BaseToolbar.OnTool(self, event)
+        if event:
+            BaseToolbar.OnTool(self, event)
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:
@@ -628,14 +640,16 @@ class VDigitToolbar(BaseToolbar):
         if self.digit:
             self.digit.Undo()
 
-        event.Skip()
+        if event:
+            event.Skip()
 
     def OnRedo(self, event):
         """Undo previous changes"""
         if self.digit:
             self.digit.Undo(level=1)
 
-        event.Skip()
+        if event:
+            event.Skip()
 
     def EnableUndo(self, enable=True):
         """Enable 'Undo' in toolbar

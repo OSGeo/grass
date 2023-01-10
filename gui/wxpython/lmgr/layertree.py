@@ -491,7 +491,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
-                if ltype != "raster_3d":
+                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
                     item = wx.MenuItem(
                         self.popupMenu,
                         id=self.popupID["opacity"],
@@ -1248,7 +1248,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         .. todo::
             vector/volume
         """
-        self.lmgr.notebook.SetSelectionByName("nviz")
+        if not UserSettings.Get(
+            group="general",
+            key="singleWindow",
+            subkey="enabled",
+        ):
+            self.lmgr.notebook.SetSelectionByName("nviz")
         ltype = self.GetLayerInfo(self.layer_selected, key="type")
         if ltype == "raster":
             self.lmgr.nviz.SetPage("surface")

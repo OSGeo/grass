@@ -1,19 +1,18 @@
 #ifndef __DATAOCT_H__
 #define __DATAOCT_H__
 
-#define NWT  1
-#define NET  2
-#define SWT  3
-#define SET  4
-#define NWB  5
-#define NEB  6
-#define SWB  7
-#define SEB  8
+#define NWT      1
+#define NET      2
+#define SWT      3
+#define SET      4
+#define NWB      5
+#define NEB      6
+#define SWB      7
+#define SEB      8
 
 #define NUMLEAFS 8
 
-struct quadruple
-{
+struct quadruple {
     double x;
     double y;
     double z;
@@ -21,8 +20,7 @@ struct quadruple
     double sm;
 };
 
-struct octdata
-{
+struct octdata {
     double x_orig;
     double y_orig;
     double z_orig;

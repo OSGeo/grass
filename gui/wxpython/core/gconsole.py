@@ -408,7 +408,11 @@ class GConsole(wx.EvtHandler):
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             if enc:
                 if sys.version_info.major == 2:
                     sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
@@ -715,6 +719,10 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
+        elif event.returncode != 0:
+            msg = _("Command ended with non-zero return code {returncode}").format(
+                returncode=event.returncode
+            )
         else:
             msg = _("Command finished")
 

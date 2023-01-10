@@ -161,6 +161,9 @@ class GMFrame(wx.Frame):
 
         # create widgets and build panes
         self.CreateMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.BuildPanes()
         self.BindEvents()
 
@@ -174,16 +177,26 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[0:2])
                 w, h = map(int, dim.split(",")[2:4])
+                client_disp = wx.ClientDisplayRect()
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
             except Exception:
                 pass
+            self.Layout()
+            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
+                self.Fit()
         else:
+            self.Layout()
+            self.Fit()
             # does center (of screen) make sense for lmgr?
             self.Centre()
 
-        self.Layout()
-        self.Fit()
         self.Show()
 
         # load workspace file if requested
@@ -673,14 +686,16 @@ class GMFrame(wx.Frame):
         self._auimgr.GetPane("toolbarNviz").Hide()
 
         # Set Tools as active tab
-        tools = self._auimgr.GetPane("tools")
-        notebook = self._auimgr.GetNotebooks()[0]
-        notebook.SetSelectionToPage(tools)
+        notebooks = self._auimgr.GetNotebooks()
+        if notebooks:
+            notebook = notebooks[0]
+            tools = self._auimgr.GetPane("tools")
+            notebook.SetSelectionToPage(tools)
 
-        # Set the size for automatic notebook
-        pane = self._auimgr.GetPane(notebook)
-        pane.BestSize(self.PANE_BEST_SIZE)
-        pane.MinSize(self.PANE_MIN_SIZE)
+            # Set the size for automatic notebook
+            pane = self._auimgr.GetPane(notebook)
+            pane.BestSize(self.PANE_BEST_SIZE)
+            pane.MinSize(self.PANE_MIN_SIZE)
 
         wx.CallAfter(self.datacatalog.LoadItems)
 
@@ -689,7 +704,6 @@ class GMFrame(wx.Frame):
     def BindEvents(self):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
-        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
@@ -1812,14 +1826,6 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
-    def OnVectorCleaning(self, event, cmd=""):
-        """Init interactive vector cleaning"""
-        from modules.vclean import VectorCleaningFrame
-
-        win = VectorCleaningFrame(parent=self)
-        win.CentreOnScreen()
-        win.Show()
-
     def OnRasterOutputFormat(self, event):
         """Set raster output format handler"""
         self.OnMenuCmd(cmd=["r.external.out"])
@@ -2271,24 +2277,6 @@ class GMFrame(wx.Frame):
             except ValueError:
                 pass
 
-    def OnKeyDown(self, event):
-        """Key pressed"""
-        kc = event.GetKeyCode()
-
-        try:
-            kc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
-
-        event.Skip()
-
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
         self._closeWindow(event)
@@ -2308,10 +2296,6 @@ class GMFrame(wx.Frame):
 
     def _closeWindow(self, event):
         """Close wxGUI"""
-        # save command protocol if actived
-        if self.goutput.btnCmdProtocol.GetValue():
-            self.goutput.CmdProtocolSave()
-
         if not self.currentPage:
             self._auimgr.UnInit()
             self.Destroy()

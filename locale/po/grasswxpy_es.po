@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2022-03-22 12:12+0000\n"
+"PO-Revision-Date: 2022-05-22 05:04+0000\n"
 "Last-Translator: Veronica <veroandreo@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/es/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12.2\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 
@@ -540,7 +540,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:37
 msgid "Add existing or create new database"
-msgstr ""
+msgstr "Añadir base de datos existente o crear una nueva"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
 msgid "Create new mapset in current location"

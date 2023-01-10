@@ -1,0 +1,80 @@
+---
+name: macOS
+# Build and run tests on macOS
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
+env:
+  CACHE_NUMBER: 0
+jobs:
+  macos_build:
+    name: macOS build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Mambaforge
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          channels: conda-forge
+          miniforge-variant: Mambaforge
+          miniforge-version: latest
+          activate-environment: grass-env
+          use-mamba: true
+      - name: Get cache date
+        id: get-date
+        run: echo "today=$(/bin/date -u '+%Y%m%d')" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: Cache conda environment
+        uses: actions/cache@v3
+        with:
+          path: ~/miniconda3/envs/grass-env
+          key: conda-macos-x86_64-${{steps.get-date.outputs.today
+            }}-${{hashFiles('.github/workflows/macos_dependencies.txt') }}-${{
+            env.CACHE_NUMBER}}
+        id: cache
+      - name: Update environment
+        run: mamba env update -n grass-env -f .github/workflows/macos_dependencies.txt
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Conda info
+        shell: bash -el {0}
+        run: |
+          conda info
+          conda list
+          conda config --show-sources
+          conda config --show
+          printenv | sort
+          $CC --version
+      - name: Create installation directory
+        run: mkdir $HOME/install
+      - name: Build and install
+        shell: bash -l {0}
+        run: source ./.github/workflows/macos_install.sh $HOME/install
+      - name: Add the bin directory to PATH
+        run: echo "$HOME/install/bin" >> $GITHUB_PATH
+      - name: Check installed version
+        shell: bash -l {0}
+        run: source ./.github/workflows/print_versions.sh
+      - name: Run tests
+        shell: bash -el {0}
+        run: >
+          grass --tmp-location XY --exec \
+              g.download.location url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+          grass --tmp-location XY --exec \
+              python3 -m grass.gunittest.main \
+              --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
+              --min-success 100 --config .github/workflows/macos_gunittest.cfg
+      - name: Make HTML test report available
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: testreport-macOS
+          path: testreport
+          retention-days: 3
+...

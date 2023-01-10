@@ -17,7 +17,7 @@ int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
     db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
@@ -26,15 +26,14 @@ int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 
     ret = SQLExecDirect(c->stmt, (SQLCHAR *)sql, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
-		      sizeof(msg), NULL);
-	db_d_append_error("SQLExecDirect():\n%s\n%s (%d)", sql, msg, (int)err);
-	db_d_report_error();
-	return DB_FAILED;
+        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg, sizeof(msg),
+                      NULL);
+        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)", sql, msg, (int)err);
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     describe_table(c->stmt, &table);
-
 
     db_set_cursor_table(dbc, table);
 
@@ -44,18 +43,18 @@ int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
     /* set dbCursor's token for my cursor */
     db_set_cursor_token(dbc, c->token);
 
-    /* It seems that there is no function in ODBC to get number of selected rows.
-     *  SQLRowCount() works for insert, update, delete. */
+    /* It seems that there is no function in ODBC to get number of selected
+     * rows. SQLRowCount() works for insert, update, delete. */
     nrows = 0;
     while (1) {
-	ret = SQLFetchScroll(c->stmt, SQL_FETCH_NEXT, 0);
-	if (ret == SQL_NO_DATA) {
-	    break;
-	}
-	if (!SQL_SUCCEEDED(ret)) {
-	    return DB_FAILED;
-	}
-	nrows++;
+        ret = SQLFetchScroll(c->stmt, SQL_FETCH_NEXT, 0);
+        if (ret == SQL_NO_DATA) {
+            break;
+        }
+        if (!SQL_SUCCEEDED(ret)) {
+            return DB_FAILED;
+        }
+        nrows++;
     }
     c->nrows = nrows;
     SQLFetchScroll(c->stmt, SQL_FETCH_FIRST, 0);

@@ -153,6 +153,9 @@ class GMFrame(wx.Frame):
 
         # create widgets
         self._createMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.statusbar = SbMain(parent=self, giface=self._giface)
         self.notebook = self._createNotebook()
         self._createDataCatalog(self.notebook)
@@ -252,6 +255,13 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[0:2])
                 w, h = map(int, dim.split(",")[2:4])
+                client_disp = wx.ClientDisplayRect()
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
             except:
@@ -1728,14 +1738,6 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
-    def OnVectorCleaning(self, event, cmd=""):
-        """Init interactive vector cleaning"""
-        from modules.vclean import VectorCleaningFrame
-
-        win = VectorCleaningFrame(parent=self)
-        win.CentreOnScreen()
-        win.Show()
-
     def OnRasterOutputFormat(self, event):
         """Set raster output format handler"""
         self.OnMenuCmd(cmd=["r.external.out"])
@@ -2234,18 +2236,6 @@ class GMFrame(wx.Frame):
                 else:
                     self.notebook.SetSelectionByName("layers")
 
-        try:
-            ckc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
-
         event.Skip()
 
     def OnCloseWindow(self, event):
@@ -2267,10 +2257,6 @@ class GMFrame(wx.Frame):
 
     def _closeWindow(self, event):
         """Close wxGUI"""
-        # save command protocol if actived
-        if self.goutput.btnCmdProtocol.GetValue():
-            self.goutput.CmdProtocolSave()
-
         if not self.currentPage:
             self._auimgr.UnInit()
             self.Destroy()

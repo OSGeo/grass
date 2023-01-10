@@ -8,8 +8,8 @@
 #   	    	Radim Blazek - Italy - blazek AT itc.it
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #   	    	clean, and uninstall GRASS
-#   	    	See INSTALL file for explanations.
-# COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
+#   	    	See INSTALL.md file for usage.
+# COPYRIGHT:    (C) 2002-2023 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,7 +51,7 @@ DIRS = \
 
 SUBDIRS = $(DIRS)
 
-FILES = AUTHORS CHANGES CITING COPYING GPL.TXT INSTALL REQUIREMENTS.html contributors.csv contributors_extra.csv translators.csv
+FILES = AUTHORS CHANGES CITING COPYING GPL.TXT INSTALL.md REQUIREMENTS.html contributors.csv contributors_extra.csv translators.csv
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:

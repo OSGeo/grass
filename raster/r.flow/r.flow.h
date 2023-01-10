@@ -1,4 +1,3 @@
-
 /****************************************************************************
 **  Written by Maros Zlocha, Jaroslav Hofierka, Helena Mitasova, Winter 1992
 **  Comenius University, Bratislava, Slovakia and
@@ -11,7 +10,7 @@
 /*
  * changes from version 6: lg matrix changed to single cell row buffer
  *      x, y components of point structure are now exact coordinates
- *      r, c reflect file structure (i.e. r = distance in ns-res units from N) 
+ *      r, c reflect file structure (i.e. r = distance in ns-res units from N)
  * changes from version 7: next_point changed to eliminate arctangent
  *      theta and other angles kept in degrees instead of radians
  * changes from version 8: tangents replaced by lookup table
@@ -38,47 +37,42 @@
 #include <grass/bitmap.h>
 
 #ifndef hypot
-#define hypot(x,y)	(sqrt((x)*(x)+(y)*(y)))
+#define hypot(x, y) (sqrt((x) * (x) + (y) * (y)))
 #endif
-#define ROUND(x)	(int) ((x) + 0.5)
+#define ROUND(x) (int)((x) + 0.5)
 
-#define D_PI	180.
-#define D2_PI	360.
-#define DEG2RAD	M_D2R
-#define UNDEF	365.		/* change to undefined when available */
-#define UNDEFZ	0.		/* change to undefined when available */
-#define HORIZ	1		/* magic        */
-#define VERT	0		/*      numbers */
+#define D_PI     180.
+#define D2_PI    360.
+#define DEG2RAD  M_D2R
+#define UNDEF    365. /* change to undefined when available */
+#define UNDEFZ   0.   /* change to undefined when available */
+#define HORIZ    1    /* magic        */
+#define VERT     0    /*      numbers */
 
-
-typedef struct
-{
-    char *elevin;		/* name of input elevation file         */
-    char *aspin;		/* name of input aspect file            */
-    char *barin;		/* name of barrier input file           */
-    char *flout;		/* name of output flowline file         */
-    char *lgout;		/* name of output length file           */
-    char *dsout;		/* name of output density file          */
-    int skip;			/* cells between flowlines output       */
-    int bound;			/* constant bound on path length        */
+typedef struct {
+    char *elevin; /* name of input elevation file         */
+    char *aspin;  /* name of input aspect file            */
+    char *barin;  /* name of barrier input file           */
+    char *flout;  /* name of output flowline file         */
+    char *lgout;  /* name of output length file           */
+    char *dsout;  /* name of output density file          */
+    int skip;     /* cells between flowlines output       */
+    int bound;    /* constant bound on path length        */
     /*    double  offset;              magnitude of random grid offset      */
-    char up;			/* direction to compute lines           */
-    char l3d;			/* three-dimensional length             */
-    char mem;			/* always recompute aspect              */
-    char seg;			/* use segmented arrays                 */
-}
-params;
+    char up;  /* direction to compute lines           */
+    char l3d; /* three-dimensional length             */
+    char mem; /* always recompute aspect              */
+    char seg; /* use segmented arrays                 */
+} params;
 
-typedef struct
-{
-    DCELL **buf;		/* internal row storage                 */
-    SEGMENT *seg;		/* state for segment library            */
-    int sfd;			/* file descriptor for segment file     */
-    int row_offset,		/* border widths of buf (for            */
-      col_offset;		/*      extrapolating border data)      */
-    char *name;			/* for error messages                   */
-}
-layer;
+typedef struct {
+    DCELL **buf;    /* internal row storage                 */
+    SEGMENT *seg;   /* state for segment library            */
+    int sfd;        /* file descriptor for segment file     */
+    int row_offset, /* border widths of buf (for            */
+        col_offset; /*      extrapolating border data)      */
+    char *name;     /* for error messages                   */
+} layer;
 
 /******************************* GLOBALS ********************************/
 
@@ -92,4 +86,3 @@ extern double *ew_dist;
 extern double *epsilon[2];
 
 extern params parm;
-
