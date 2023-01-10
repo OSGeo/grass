@@ -273,14 +273,14 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     int perr = proj_errno(pj);
 
     if (perr)
-	G_fatal_error("PROJ 5 error %d", perr);
+        G_fatal_error("PROJ 5 error %d", perr);
 
     if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
-	PJ *source_crs = proj_get_source_crs(pjc, pj);
-	if (source_crs) {
-	    proj_destroy(pj);
-	    pj = source_crs;
-	}
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
     }
 #endif
 
@@ -427,11 +427,11 @@ int pj_get_string(struct pj_info *info, char *str)
     }
 
     if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
-	PJ *source_crs = proj_get_source_crs(pjc, pj);
-	if (source_crs) {
-	    proj_destroy(pj);
-	    pj = source_crs;
-	}
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
     }
 #else
     /* Set finder function for locating datum conversion tables PK */
