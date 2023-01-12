@@ -52,8 +52,20 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
+
       - name: Build
-        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install
+        env:
+          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+          CFLAGS: "-fPIC"
+          # TODO: -pedantic-errors here won't compile
+          CXXFLAGS: "-fPIC"
+        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
 
       - name: Add the bin directory to PATH
         run: |
