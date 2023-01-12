@@ -841,12 +841,12 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
             if (stat > N_CELL_ACTIVE && stat < N_MAX_CELL_STATE) {
                 if (les->type == N_SPARSE_LES) {
                     /*set the rows to zero */
-                    for (i = 0; i < les->Asp[count]->cols; i++)
+                    for (i = 0; (unsigned int)i < les->Asp[count]->cols; i++)
                         les->Asp[count]->values[i] = 0.0;
                     /*set the cols to zero */
                     for (i = 0; i < les->rows; i++) {
-                        for (j = 0; j < les->Asp[i]->cols; j++) {
-                            if (les->Asp[i]->index[j] == count)
+                        for (j = 0; (unsigned int)j < les->Asp[i]->cols; j++) {
+                            if (les->Asp[i]->index[j] == (unsigned int)count)
                                 les->Asp[i]->values[j] = 0.0;
                         }
                     }
@@ -1302,12 +1302,15 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
                 if (stat > N_CELL_ACTIVE && stat < N_MAX_CELL_STATE) {
                     if (les->type == N_SPARSE_LES) {
                         /*set the rows to zero */
-                        for (i = 0; i < les->Asp[count]->cols; i++)
+                        for (i = 0; (unsigned int)i < les->Asp[count]->cols;
+                             i++)
                             les->Asp[count]->values[i] = 0.0;
                         /*set the cols to zero */
                         for (i = 0; i < les->rows; i++) {
-                            for (j = 0; j < les->Asp[i]->cols; j++) {
-                                if (les->Asp[i]->index[j] == count)
+                            for (j = 0; (unsigned int)j < les->Asp[i]->cols;
+                                 j++) {
+                                if (les->Asp[i]->index[j] ==
+                                    (unsigned int)count)
                                     les->Asp[i]->values[j] = 0.0;
                             }
                         }

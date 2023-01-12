@@ -30,6 +30,8 @@
 #include <assert.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdint.h>
+#include <stddef.h>
 #ifndef __MINGW32__
 #include <pwd.h>
 #endif
@@ -155,10 +157,11 @@ static int _elem_count_split(char *elems)
     /* Some basic assertions */
     assert(elems != NULL);
     assert((len = strlen(elems)) > 0);
+    assert(len < PTRDIFF_MAX);
     assert(*elems != '/');
 
     begin = elems;
-    for (i = 0; begin != NULL && len > begin - elems; i++) {
+    for (i = 0; begin != NULL && (ptrdiff_t)len > begin - elems; i++) {
         /* check '.' condition */
         if (*begin == '.')
             return 0;
