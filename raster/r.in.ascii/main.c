@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row += 1) {
-        if (fread(rast, Rast_cell_size(data_type), ncols, ft) != ncols)
+        if (fread(rast, Rast_cell_size(data_type), ncols, ft) != (size_t)ncols)
             G_fatal_error(_("Read from file error: %s"), strerror(errno));
         Rast_put_row(cf, rast, data_type);
         G_fseek(ft, sz, SEEK_CUR);

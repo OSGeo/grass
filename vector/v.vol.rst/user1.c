@@ -409,7 +409,7 @@ int OUTGR()
             G_fseek(Tmp_fd_cell,
                     ((off_t)(nsizr - 1 - i) * nsizc * sizeof(FCELL)), 0);
             read_val = fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
-            if (read_val != nsizc) {
+            if (read_val != (size_t)nsizc) {
                 clean();
                 G_fatal_error(_("Unable to read data from temp file"));
             }

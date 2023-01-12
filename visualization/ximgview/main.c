@@ -226,7 +226,7 @@ static int read_bmp_header(const unsigned char *p)
 
     if (get_4(&p) != 0)
         return 0;
-    if (get_4(&p) != i_width * i_height * 4)
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
         return 0;
 
     if (size != HEADER_SIZE + i_width * i_height * 4)
