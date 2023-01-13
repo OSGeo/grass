@@ -171,7 +171,6 @@ class GConsoleWindow(wx.SplitterWindow):
                 flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
                 border=3,
             )
-
             helpText = StaticText(
                 self.panelPrompt,
                 id=wx.ID_ANY,
