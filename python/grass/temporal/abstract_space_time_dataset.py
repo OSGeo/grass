@@ -1353,7 +1353,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return None
 
-    def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
+    def get_registered_maps_as_objects_with_gaps(
+        self, where=None, dbif=None, spatial_extent=None, spatial_relation=None
+    ):
         """Return all or a subset of the registered maps as
         ordered (by start_time) object list with
         "gap" map objects (id==None) for spatio-temporal topological
@@ -1370,6 +1372,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param where: The SQL where statement to select a
                      subset of the registered maps without "WHERE"
         :param dbif: The database interface to be used
+        :param spatial_extent: Return only maps with the provided spatial
+                     relation to the given spatial extent (requires
+                     spatial_relation parameter)
+        :param spatial_relation: Return only maps with the given spatial
+                     relation to the provided spatial extent (requires
+                     spatial_extent parameter)
 
         :return: ordered object list, in case nothing found None is returned
         """
@@ -1378,7 +1386,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         obj_list = []
 
-        maps = self.get_registered_maps_as_objects(where, "start_time", dbif)
+        maps = self.get_registered_maps_as_objects(
+            where, "start_time", dbif, spatial_extent, spatial_relation
+        )
 
         if maps is not None and len(maps) > 0:
             for i in range(len(maps)):
@@ -1412,7 +1422,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         return obj_list
 
     def get_registered_maps_as_objects_with_temporal_topology(
-        self, where=None, order="start_time", dbif=None
+        self,
+        where=None,
+        order="start_time",
+        dbif=None,
+        spatial_extent=None,
+        spatial_relation=None,
     ):
         """Return all or a subset of the registered maps as ordered object
         list with spatio-temporal topological relationship information.
@@ -1428,12 +1443,21 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param order: The SQL order statement to be used to order the
                      objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
+        :param spatial_extent: Return only maps with the provided spatial
+                     relation to the given spatial extent (requires
+                     spatial_relation parameter)
+        :param spatial_relation: Return only maps with the given spatial
+                     relation to the provided spatial extent (requires
+                     spatial_extent parameter)
+
         :return: The ordered map object list,
                 In case nothing found None is returned
         """
 
         dbif, connection_state_changed = init_dbif(dbif)
-        obj_list = self.get_registered_maps_as_objects(where, order, dbif)
+        obj_list = self.get_registered_maps_as_objects(
+            where, order, dbif, spatial_extent, spatial_relation
+        )
 
         tb = SpatioTemporalTopologyBuilder()
         tb.build(obj_list)
@@ -1444,7 +1468,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         return obj_list
 
     def get_registered_maps_as_objects(
-        self, where=None, order="start_time", dbif=None, spatial_extent=None
+        self,
+        where=None,
+        order="start_time",
+        dbif=None,
+        spatial_extent=None,
+        spatial_relation=None,
     ):
         """Return all or a subset of the registered maps as ordered object
         list for spatio-temporal topological operations that require the
@@ -1461,8 +1490,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param order: The SQL order statement to be used to order the
                       objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
-        :param spatial_extent: Return only maps that overlap with the
-                     given spatial extent
+        :param spatial_extent: Return only maps with the provided spatial
+                     relation to the given spatial extent (requires
+                     spatial_relation parameter)
+        :param spatial_relation: Return only maps with the given spatial
+                     relation to the provided spatial extent (requires
+                     spatial_extent parameter)
+
         :return: The ordered map object list,
                 In case nothing found None is returned
         """
@@ -1484,7 +1518,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     db_version = int(float(row["value"]))
 
         # use all columns
-        rows = self.get_registered_maps(None, where, order, dbif, spatial_extent)
+        rows = self.get_registered_maps(
+            None, where, order, dbif, spatial_extent, spatial_relation
+        )
 
         if rows is not None:
             has_bt_columns = False
@@ -1605,7 +1641,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return where
 
-    def _update_where_statement_by_spatial_extent(self, where, spatial_extent):
+    def _update_where_statement_by_spatial_extent(
+        self, where, spatial_extent, spatial_relation
+    ):
         """Update given SQL WHERE statement by spatial extent where clause
 
         Code is lend from wind_overlap.c in lib/gis and
@@ -1621,6 +1659,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param str where: SQL WHERE statement to be updated
         :param dict spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3
+        :param dict spatial_relation: Spatial relation to the provided
+            spatial extent as a string with one of the following values:
+            "overlaps": maps that spatially overlap ("intersect")
+                        within the provided spatial extent
+            "is_contained": maps that are fully within the provided spatial extent
+            "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: updated SQL WHERE statement
 
@@ -1628,7 +1672,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
              >>> import grass.script as gs
              >>> where = None
              >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
-             >>> _update_where_statement_by_spatial_extent(where, spatial_extent)
+             >>> _update_where_statement_by_spatial_extent(where, spatial_extent, "overlaps")
              ((north > 0 AND south < 1 AND east > 0 AND west < 1))
         """
 
@@ -1638,15 +1682,45 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         else:
             where = "("
 
-        # SQL implementation of overlapping function from SpatialExtent
+        if not spatial_relation:
+            spatial_relation = "overlaps"
+        elif spatial_relation not in ["overlaps", "is_contained", "contains"]:
+            self.msgr.error(
+                _(
+                    "Invalid spatial relation <{}> requested."
+                    "Only values 'overlaps', 'is_contained', and 'contains' are allowed."
+                ).format(spatial_relation)
+            )
+            raise
+        # SQL implementation of overlap, is_contained, and contains
         where += ""
 
-        spatial_where_template = (
-            "(north > {s}" " AND south < {n}" " AND east > {w}" " AND west < {e}"
-        )
+        if spatial_relation == "overlaps":
+            spatial_where_template = (
+                "(north > {s}" " AND south < {n}" " AND east > {w}" " AND west < {e}"
+            )
+        elif spatial_relation == "is_contained":
+            spatial_where_template = (
+                "(north <= {n}"
+                " AND south >= {s}"
+                " AND east <= {e}"
+                " AND west >= {w}"
+            )
+        elif spatial_relation == "contains":
+            spatial_where_template = (
+                "(north >= {n}"
+                " AND south <= {s}"
+                " AND east >= {e}"
+                " AND west <= {w}"
+            )
 
         if self.get_type() == "str3ds":
-            spatial_where_template += " AND top > {b}" " AND bottom < {t}"
+            if spatial_relation == "overlaps":
+                spatial_where_template += " AND top > {b}" " AND bottom < {t}"
+        elif spatial_relation == "is_contained":
+            spatial_where_template += " AND top <= {t}" " AND bottom >= {b}"
+        elif spatial_relation == "contains":
+            spatial_where_template += " AND top >= {t}" " AND bottom <= {b}"
         spatial_where_template += ")"
 
         spatial_where_list = [spatial_where_template.format(**spatial_extent)]
@@ -1672,7 +1746,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         return where
 
     def get_registered_maps(
-        self, columns=None, where=None, order=None, dbif=None, spatial_extent=None
+        self,
+        columns=None,
+        where=None,
+        order=None,
+        dbif=None,
+        spatial_extent=None,
+        spatial_relation=None,
     ):
         """Return SQL rows of all registered maps.
 
@@ -1685,8 +1765,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param order: The SQL order statement to be used to order the
                      objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
-        :param spatial_extent: Return only maps that overlap with the
-                     given spatial extent
+        :param spatial_extent: Return only maps with the provided spatial
+                     relation to the given spatial extent (requires
+                     spatial_relation parameter)
+        :param spatial_relation: Return only maps with the given spatial
+                     relation to the provided spatial extent (requires
+                     spatial_extent parameter)
 
         :return: SQL rows of all registered maps,
                 In case nothing found None is returned
@@ -1724,7 +1808,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # filter by semantic label identifier
             if spatial_extent:
                 where = self._update_where_statement_by_spatial_extent(
-                    where, spatial_extent
+                    where, spatial_extent, spatial_relation
                 )
 
             if where is not None and where != "":
