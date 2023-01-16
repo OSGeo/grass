@@ -43,6 +43,8 @@ Yes, you should really read [INSTALL.md](INSTALL.md). In addition, there are det
 Build a docker image using the downloaded source code (run this in the directory
 containing the source code):
 
+A. Docker image **without graphical user interface - wxGUI**.
+
 ```bash
 docker build -t grassgis .
 ```
@@ -74,6 +76,23 @@ docker run -it --rm --user=$(id -u):$(id -g) \
         grassgis grass /data/nc_basic_spm_grass7/PERMANENT --exec \
             python -m grass.gunittest.main \
                 --location nc_basic_spm_grass7 --location-type nc
+```
+
+B. Docker image **with graphical user interface - wxGUI**.
+
+```bash
+docker build -t grassgis -f docker/ubuntu/wxgui/Dockerfile .
+```
+
+Note that the first `grassgis` is the name of the image while the second
+`grass` is the name of the executable.
+
+```bash
+xhost local:$(id -u)
+docker run -it --privileged --user=$(id -u):$(id -g) --rm \
+    --volume="$(pwd)/:/data" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    --env HOME=/data/ --env DISPLAY=$DISPLAY --device="/dev/dri/card0:/dev/dri/card0" \
+        grassgis grass --gui
 ```
 
 Note: If you compiled locally before building the Docker image, you may
