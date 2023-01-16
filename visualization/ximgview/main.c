@@ -145,7 +145,7 @@ static void main_loop(void)
     for (;;) {
         fd_set waitset;
         struct timeval tv;
-        unsigned long delay;
+        unsigned long delay = 0;
 
         while (XPending(dpy) > 0) {
             XEvent event;
