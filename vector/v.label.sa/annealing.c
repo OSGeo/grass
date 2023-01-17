@@ -57,7 +57,7 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
     double dE;
 
     T = -1.0 / log(1.0 / 3.0);
-    unsigned int t, tot_better = 0, tot_worse = 0, tot_ign = 0;
+    unsigned int t;
 
     fprintf(stderr, "Optimizing label positions: ...");
     for (t = 0; t < TEMP_DECS; t++) {
@@ -96,7 +96,6 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                 lp->current_candidate = c;
                 successes++;
                 consec_successes++;
-                tot_better++;
             }
             /* else apply with probability p=e^(-dE/T) */
             else {
@@ -110,10 +109,8 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                     lp->current_candidate = c;
                     successes++;
                     consec_successes++;
-                    tot_worse++;
                 }
                 else {
-                    tot_ign++;
                     consec_successes = 0;
                 }
             }
