@@ -88,8 +88,9 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
     }
 
 #ifdef HAVE_ICONV_H
-    if (enc)
+    if (enc) {
         G_freea(enc);
+    }
 
     if (conv != (iconv_t)-1)
         iconv_close(conv);
