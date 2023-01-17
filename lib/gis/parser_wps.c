@@ -172,9 +172,7 @@ void G__wps_print_process_description(void)
     const char **keywords = NULL;
     int data_type, is_input, is_output;
     int num_raster_inputs = 0, num_raster_outputs = 0;
-    int num_vector_inputs = 0, num_vector_outputs = 0;
     int num_strds_inputs = 0, num_strds_outputs = 0;
-    int num_stvds_inputs = 0, num_stvds_outputs = 0;
     int min = 0, max = 0;
     int num_keywords = 0;
     int found_output = 0;
@@ -275,10 +273,6 @@ void G__wps_print_process_description(void)
                     }
                     if (strcmp(token, "vector") == 0) {
                         data_type = TYPE_VECTOR;
-                        if (is_input == 1)
-                            num_vector_inputs++;
-                        if (is_output == 1)
-                            num_vector_outputs++;
                     }
                     /* Modules may have different types of space time datasets
                      * as inputs */
@@ -294,10 +288,6 @@ void G__wps_print_process_description(void)
                     }
                     if (strcmp(token, "stvds") == 0) {
                         data_type = TYPE_STVDS;
-                        if (is_input == 1)
-                            num_stvds_inputs++;
-                        if (is_output == 1)
-                            num_stvds_outputs++;
                     }
                     if (strcmp(token, "file") == 0) {
                         data_type = TYPE_PLAIN_TEXT;

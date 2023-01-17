@@ -346,7 +346,6 @@ struct datum_list *read_datum_table(void)
     char buf[4096];
     int line;
     struct datum_list *current = NULL, *outputlist = NULL;
-    int count = 0;
 
     sprintf(file, "%s%s", G_gisbase(), DATUMTABLE);
 
@@ -381,8 +380,6 @@ struct datum_list *read_datum_table(void)
         current->dy = dy;
         current->dz = dz;
         current->next = NULL;
-
-        count++;
     }
 
     fclose(fd);

@@ -329,14 +329,11 @@ void G_math_f_asum_norm(float *x, float *value, int rows)
 {
     int i;
 
-    int count = 0;
-
     float s = 0.0;
 
-#pragma omp parallel for schedule(static) private(i) reduction(+ : s, count)
+#pragma omp parallel for schedule(static) private(i) reduction(+ : s)
     for (i = 0; i < rows; i++) {
         s += fabs(x[i]);
-        count++;
     }
 #pragma omp single
     {

@@ -79,7 +79,6 @@ int do_grid(void)
 int do_grid_cross(void)
 {
     double g_north, g_east;
-    int j, k;
 
     if (PS.grid <= 0)
         return 1;
@@ -90,8 +89,8 @@ int do_grid_cross(void)
 
     g_north = floor(PS.w.north / PS.grid) * PS.grid;
     g_east = floor(PS.w.east / PS.grid) * PS.grid;
-    for (j = 0; g_north >= PS.w.south; j++, g_north -= PS.grid) {
-        for (k = 0; g_east > PS.w.west; k++, g_east -= PS.grid) {
+    for (; g_north >= PS.w.south; g_north -= PS.grid) {
+        for (; g_east > PS.w.west; g_east -= PS.grid) {
 
             if (g_north == PS.w.north || g_north == PS.w.south)
                 continue;

@@ -919,13 +919,13 @@ int G_spawn_ex(const char *command, ...)
 int G_spawn(const char *command, ...)
 {
     const char *args[MAX_ARGS];
-    int num_args = 0, i;
+    int num_args = 0;
     va_list va;
     int status = -1;
 
     va_start(va, command);
 
-    for (i = 0;; i++) {
+    for (;;) {
         const char *arg = va_arg(va, const char *);
 
         args[num_args++] = arg;

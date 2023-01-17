@@ -244,7 +244,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
     double east, west, north, south;
     double start_coord;
     double lat, lon;
-    int j, ll;
+    int ll;
     int SEGS = 100;
     char text[128];
     float border_off = 4.5;
@@ -274,7 +274,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
     /* Lines of Latitude */
     g = floor(north / size) * size;
     e1 = east;
-    for (j = 0; g >= south; j++, g -= size) {
+    for (; g >= south; g -= size) {
         start_coord = -9999.;
         if (g == north || g == south || direction == DIRN_LON)
             continue;
@@ -320,7 +320,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
     /* Lines of Longitude */
     g = floor(east / size) * size;
     n1 = north;
-    for (j = 0; g > west; j++, g -= size) {
+    for (; g > west; g -= size) {
         start_coord = -9999.;
         extra_y_off = 0.0;
         if (g == east || g == west || direction == DIRN_LAT)
@@ -428,7 +428,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
     if (do_text) {
         g = floor(north / size) * size;
         e1 = east;
-        for (j = 0; g >= south; j++, g -= size) {
+        for (; g >= south; g -= size) {
             start_coord = -9999.;
             if (g == north || g == south || direction == DIRN_LON)
                 continue;
@@ -488,7 +488,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
     if (do_text) {
         g = floor(east / size) * size;
         n1 = north;
-        for (j = 0; g > west; j++, g -= size) {
+        for (; g > west; g -= size) {
             start_coord = -9999.;
             extra_y_off = 0.0;
             if (g == east || g == west || direction == DIRN_LAT)

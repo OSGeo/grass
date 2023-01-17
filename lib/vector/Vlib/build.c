@@ -929,7 +929,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     if (plus->built >= GV_BUILD_AREAS) {
         int line, nlines, area, nareas, err_boundaries, err_centr_out,
-            err_centr_dupl, err_nocentr;
+            err_centr_dupl /*, err_nocentr */;
         struct P_line *Line;
         struct Plus_head *Plus;
 
@@ -961,14 +961,14 @@ int Vect_build_partial(struct Map_info *Map, int build)
             }
         }
 
-        err_nocentr = 0;
+        /* err_nocentr = 0; */
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
             if (!Vect_area_alive(Map, area))
                 continue;
             line = Vect_get_area_centroid(Map, area);
-            if (line == 0)
-                err_nocentr++;
+            /* if (line == 0)
+                err_nocentr++; */
         }
 
         G_verbose_message(_("Number of areas: %d"), plus->n_areas);

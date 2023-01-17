@@ -501,7 +501,6 @@ void gsd_fringe_vert_line(float bot, geosurf *surf, int col, int side)
 void gsd_fringe_horiz_line2(float bot, geosurf *surf, int row, int side)
 {
     int col;
-    int cnt;
     float pt[4];
     typbuff *buff;
     long offset;
@@ -528,7 +527,6 @@ void gsd_fringe_horiz_line2(float bot, geosurf *surf, int row, int side)
     pt[Z] = pt[Z] * surf->z_exag;
     gsd_vert_func(pt);
 
-    cnt = 1;
     for (col = 0; col < xcnt - 1; col++) {
         /* bottom right */
         pt[X] = surf->xmin + (col * (surf->x_mod * surf->xres));
@@ -537,7 +535,6 @@ void gsd_fringe_horiz_line2(float bot, geosurf *surf, int row, int side)
         GET_MAPATT(buff, offset, pt[Z]);
         pt[Z] = pt[Z] * surf->z_exag;
         gsd_vert_func(pt);
-        cnt++;
     }
 
     col--;
