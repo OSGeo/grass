@@ -58,7 +58,7 @@ struct rule {
     void **opts;
 };
 
-static struct vector rules = {sizeof(struct rule), 50};
+static struct vector rules = {.elsize = sizeof(struct rule), .increment = 50};
 
 /*! \brief Set generic option rule
 
