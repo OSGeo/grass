@@ -79,7 +79,7 @@ int G_recursive_copy(const char *src, const char *dst)
     if (!S_ISDIR(sb.st_mode)) {
         char buf[4096];
         int fd, fd2;
-        size_t len, len2;
+        ssize_t len, len2;
 
         if (G_lstat(dst, &sb) == 0 && S_ISDIR(sb.st_mode)) {
             char path[GPATH_MAX];

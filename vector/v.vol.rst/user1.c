@@ -440,8 +440,9 @@ int OUTGR()
         G_fseek(Tmp_fd_z, 0L, 0);
 
         /* Read data in from temp file */
-        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_z);
-        if (read_val < 0) {
+        read_val =
+            fread(data, sizeof(float), (size_t)nsizr * nsizc * nsizl, Tmp_fd_z);
+        if (read_val != (size_t)nsizr * nsizc * nsizl) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
         }
@@ -494,8 +495,9 @@ int OUTGR()
         G_fseek(Tmp_fd_dx, 0L, 0);
 
         /* Read data in from temp file */
-        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dx);
-        if (read_val < 0) {
+        read_val = fread(data, sizeof(float), (size_t)nsizr * nsizc * nsizl,
+                         Tmp_fd_dx);
+        if (read_val != (size_t)nsizr * nsizc * nsizl) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
         }
@@ -547,8 +549,9 @@ int OUTGR()
         G_fseek(Tmp_fd_dy, 0L, 0);
 
         /* Read data in from temp file */
-        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dy);
-        if (read_val < 0) {
+        read_val = fread(data, sizeof(float), (size_t)nsizr * nsizc * nsizl,
+                         Tmp_fd_dy);
+        if (read_val != (size_t)nsizr * nsizc * nsizl) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
         }
@@ -600,8 +603,9 @@ int OUTGR()
         G_fseek(Tmp_fd_dz, 0L, 0);
 
         /* Read data in from temp file */
-        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dz);
-        if (read_val < 0) {
+        read_val = fread(data, sizeof(float), (size_t)nsizr * nsizc * nsizl,
+                         Tmp_fd_dz);
+        if (read_val != (size_t)nsizr * nsizc * nsizl) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
         }
@@ -653,8 +657,9 @@ int OUTGR()
         G_fseek(Tmp_fd_xx, 0L, 0);
 
         /* Read data in from temp file */
-        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xx);
-        if (read_val < 0) {
+        read_val = fread(data, sizeof(float), (size_t)nsizr * nsizc * nsizl,
+                         Tmp_fd_xx);
+        if (read_val != (size_t)nsizr * nsizc * nsizl) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
         }
@@ -706,8 +711,9 @@ int OUTGR()
         G_fseek(Tmp_fd_yy, 0L, 0);
 
         /* Read data in from temp file */
-        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_yy);
-        if (read_val < 0) {
+        read_val = fread(data, sizeof(float), (size_t)nsizr * nsizc * nsizl,
+                         Tmp_fd_yy);
+        if (read_val != (size_t)nsizr * nsizc * nsizl) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
         }
@@ -759,8 +765,9 @@ int OUTGR()
         G_fseek(Tmp_fd_xy, 0L, 0);
 
         /* Read data in from temp file */
-        read_val = fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xy);
-        if (read_val < 0) {
+        read_val = fread(data, sizeof(float), (size_t)nsizr * nsizc * nsizl,
+                         Tmp_fd_xy);
+        if (read_val != (size_t)nsizr * nsizc * nsizl) {
             clean();
             G_fatal_error(_("Unable to read data from temp file"));
         }
