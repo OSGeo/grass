@@ -992,7 +992,6 @@ else
 
   if test "$PDAL_CONFIG" != "" ; then
     PDAL_LIBS=`"$PDAL_CONFIG" --libs`
-    PDAL_CPPFLAGS=`"$PDAL_CONFIG" --cxxflags`
     PDAL_INC=`"$PDAL_CONFIG" --includes`
     USE_PDAL=1
   fi
@@ -1000,10 +999,8 @@ else
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
-  ac_save_cppflags="$CPPFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
-  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
@@ -1015,7 +1012,6 @@ else
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
-  CPPFLAGS=${ac_save_cppflags}
 
   AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
 fi
