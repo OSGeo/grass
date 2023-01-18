@@ -108,7 +108,7 @@ double octa_perimeter(const PATTERN *);
 double octa_area(const PATTERN *);
 double mesh_perimeter(const PATTERN *);
 double mesh_area(const PATTERN *);
-int radial2cartesian(PATTERN *);
+void radial2cartesian(PATTERN *);
 
 /* profile */
 void prof_int(const char *, const int);
