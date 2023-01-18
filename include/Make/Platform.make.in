@@ -181,7 +181,6 @@ USE_LIBLAS          = @USE_LIBLAS@
 
 #LAS LiDAR through PDAL
 PDALLIBS             = @PDAL_LIBS@
-PDALCPPFLAGS         = @PDAL_CPPFLAGS@
 PDALINC              = @PDAL_INC@
 USE_PDAL             = @USE_PDAL@
 
