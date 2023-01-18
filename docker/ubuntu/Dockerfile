@@ -220,9 +220,6 @@ WORKDIR /scripts
 # install external GRASS GIS session Python API
 RUN pip3 install grass-session
 
-# install GRASS GIS extensions
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
-
 # add GRASS GIS envs for python usage
 ENV GISBASE "/usr/local/grass/"
 ENV GRASSBIN "/usr/local/bin/grass"
