@@ -523,6 +523,11 @@ class MapFrame(SingleMapFrame):
                               CloseButton(False).Layer(2).
                               BestSize((self.toolbars['map'].GetBestSize())))
 
+        # nviz
+        elif name == "nviz":
+            self.toolbars["map"].combo.SetValue(_("3D view"))
+            self.AddNviz()
+
         # vector digitizer
         elif name == "vdigit":
             self.toolbars['map'].combo.SetValue(_("Vector digitizer"))

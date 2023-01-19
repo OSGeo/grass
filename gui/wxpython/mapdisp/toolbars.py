@@ -237,11 +237,13 @@ class MapToolbar(BaseToolbar):
         if tool == self.toolId['2d']:
             self.ExitToolbars()
             self.Enable2D(True)
+            self.parent.MapWindow.SetFocus()
 
         elif tool == self.toolId['3d'] and \
                 not (self.parent.MapWindow3D and self.parent.IsPaneShown('3d')):
             self.ExitToolbars()
-            self.parent.AddNviz()
+            self.parent.AddToolbar("nviz")
+            self.parent.MapWindow.SetFocus()
 
         elif tool == self.toolId['vdigit'] and \
                 not self.parent.GetToolbar('vdigit'):
@@ -251,7 +253,8 @@ class MapToolbar(BaseToolbar):
 
         elif tool == self.toolId['rdigit']:
             self.ExitToolbars()
-            self.parent.AddRDigit()
+            self.parent.AddToolbar("rdigit")
+            self.parent.MapWindow.SetFocus()
 
     def OnAnalyze(self, event):
         """Analysis tools menu
