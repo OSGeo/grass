@@ -163,7 +163,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
         /* pre 3.0 compression */
         n = *nbytes = fcb->nbytes;
 
-    bufsize = n * fcb->cellhd.cols;
+    bufsize = (size_t)n * fcb->cellhd.cols;
     if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
         if (fcb->cellhd.compressed == 1)
             rle_decompress(data_buf, cmp, n, readamount);

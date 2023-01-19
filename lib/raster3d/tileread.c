@@ -94,7 +94,7 @@ static int Rast3d_readTileUncompressed(RASTER3D_Map *map, int tileIndex,
     size_t nofBytes;
     ssize_t res;
 
-    nofBytes = nofNum * map->numLengthExtern;
+    nofBytes = (size_t)nofNum * map->numLengthExtern;
     nofBytes =
         RASTER3D_MIN(nofBytes, (size_t)map->fileEndPtr - map->index[tileIndex]);
 
