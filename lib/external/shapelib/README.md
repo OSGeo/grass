@@ -21,7 +21,6 @@
 * safileio.c
    SHP_CVSID: ISO C does not allow extra ‘;’ outside of a function
 
-
 ## Full fix
 
 ```diff
