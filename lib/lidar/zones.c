@@ -566,7 +566,7 @@ void P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out,
                      dbDriver *driver, char *tab_name)
 {
 
-    int more, type, count = 0;
+    int more, type;
     double coordX, coordY, coordZ;
 
     struct line_pnts *point;
@@ -592,7 +592,6 @@ void P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out,
     db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL);
 
     while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
-        count++;
         table = db_get_cursor_table(&cursor);
 
         column = db_get_table_column(table, 0);

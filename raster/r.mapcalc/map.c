@@ -733,11 +733,10 @@ void create_history(const char *dst, expression *e)
     char *expr = format_expression(e);
     char *p = expr;
     int len = strlen(expr);
-    int i;
 
     Rast_short_history(dst, "raster", &hist);
 
-    for (i = 0;; i++) {
+    for (;;) {
         char buf[RECORD_LEN];
         int n;
 

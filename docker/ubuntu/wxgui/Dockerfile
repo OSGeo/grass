@@ -1,22 +1,35 @@
-FROM debian:10.1
+FROM ubuntu:22.04
 
-LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
+LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used
-ARG PDAL_VERSION=1.8.0
-ARG PROJ_VERSION=5.2.0
-ARG PROJ_DATUMGRID_VERSION=1.8
-ARG LAZ_PERF_VERSION=1.3.0
+# https://github.com/PDAL/PDAL/releases
+ARG PDAL_VERSION=2.4.3
+# https://github.com/hobuinc/laz-perf/releases
+ARG LAZ_PERF_VERSION=3.2.0
 
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /tmp
 
+# wxGUI require packages:
+# adwaita-icon-theme-full
+# libgl1-mesa-dev
+# libglu1-mesa-dev
+# libgtk-3-0
+# libnotify4
+# libsdl2-2.0-0
+# libxtst6
+# librsvg2-common (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
+# Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
+# This may indicate that pixbuf loaders or the mime database could not be found.)
+# gettext (require for configure option --with-nls) enable wxGUI localization
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends --no-install-suggests \
+    adwaita-icon-theme-full \
     build-essential \
     bison \
     bzip2 \
@@ -26,7 +39,9 @@ RUN apt-get update && apt-get upgrade -y && \
     g++ \
     gcc \
     gdal-bin \
+    gettext \
     git \
+    language-pack-en-base \
     libbz2-dev \
     libcairo2 \
     libcairo2-dev \
@@ -34,22 +49,31 @@ RUN apt-get update && apt-get upgrade -y && \
     libfftw3-bin \
     libfftw3-dev \
     libfreetype6-dev \
+    libgl1-mesa-dev \
     libgdal-dev \
     libgeos-dev \
+    libglu1-mesa-dev \
     libgsl0-dev \
+    libgtk-3-0 \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
     libncurses5-dev \
+    libnotify4 \
     libopenblas-base \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
     libpq-dev \
+    libproj-dev \
     libpython3-all-dev \
+    librsvg2-common \
+    libreadline-dev \
+    libsdl2-2.0-0 \
     libsqlite3-dev \
     libtiff-dev \
+    libxtst6 \
     libzstd-dev \
     locales \
     make \
@@ -57,6 +81,8 @@ RUN apt-get update && apt-get upgrade -y && \
     moreutils \
     ncurses-bin \
     netcdf-bin \
+    proj-bin \
+    proj-data \
     python3 \
     python3-dateutil \
     python3-dev \
@@ -76,23 +102,20 @@ RUN apt-get update && apt-get upgrade -y && \
     zip \
     zlib1g-dev
 
+# wxGUI
+RUN pip install -U \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04 \
+    wxPython \
+    && pip cache purge
+# If you do not use any Gnome Accessibility features, to suppress warning
+# WARNING **: Couldn't connect to accessibility bus:
+# execute programs with
+ENV NO_AT_BRIDGE=1
+
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
-## install a more recent projection library for GRASS GIS
-WORKDIR /src
-RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-    tar xzf proj-${PROJ_VERSION}.tar.gz && \
-    cd /src/proj-${PROJ_VERSION}/ && \
-    wget -q http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd nad && \
-    unzip ../proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-    cd .. && \
-    ./configure --prefix=/usr/ && \
-    make && \
-    make install
-
-## install laz-perf
+## install laz-perf (missing from https://packages.ubuntu.com/)
 RUN apt-get install cmake
 WORKDIR /src
 RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
@@ -157,6 +180,9 @@ WORKDIR /src
 COPY . /src/grass_build/
 WORKDIR /src/grass_build
 
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
+
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
 ENV MYCFLAGS "-O2 -std=gnu99 -m64"
@@ -168,6 +194,9 @@ ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
+# wxGUI require
+# --with-x
+# --with-nls
 ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
@@ -189,7 +218,9 @@ RUN /src/grass_build/configure \
   --without-mysql \
   --without-odbc \
   --without-openmp \
-  --without-opengl \
+  --with-x \
+  --with-nls \
+  --with-readline \
     && make -j $NUMTHREADS \
     && make install && ldconfig
 

@@ -41,7 +41,9 @@ typedef struct {
 #define C_B 4
 #define C_A 5
 
-static channel channels[6] = {{""}, {""}, {".r"}, {".g"}, {".b"}, {".a"}};
+static channel channels[6] = {{.suffix = ""},   {.suffix = ""},
+                              {.suffix = ".r"}, {.suffix = ".g"},
+                              {.suffix = ".b"}, {.suffix = ".a"}};
 
 static int Header;
 static int Float;
