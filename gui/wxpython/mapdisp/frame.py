@@ -623,7 +623,7 @@ class MapPanel(SingleMapPanel):
 
         # nviz
         elif name == "nviz":
-            self.toolbars["map"].combo.SetValue(_("3D View"))
+            self.toolbars["map"].combo.SetValue(_("3D view"))
             self.AddNviz()
 
         # vector digitizer
