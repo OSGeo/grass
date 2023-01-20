@@ -58,6 +58,11 @@ class ProcessWorkspaceFile:
         }  # current working directory
 
         #
+        # perspective
+        #
+        self.perspective = None
+        #
+        #
         # list of mapdisplays
         #
         self.displays = []
@@ -127,6 +132,13 @@ class ProcessWorkspaceFile:
             cwdPath = self.__getNodeText(node_lm, "cwd")
             if cwdPath:
                 self.layerManager["cwd"] = cwdPath
+
+        #
+        # perspective
+        #
+        node_pr= self.root.find("perspective")
+        if node_pr is not None:
+            self.perspective = node_pr.get("value", "")
 
         #
         # displays
@@ -897,6 +909,19 @@ class WriteWorkspaceFile(object):
             file.write("%s<cwd>%s</cwd>\n" % (" " * self.indent, cwdPath))
         self.indent -= 4
         file.write("%s</layer_manager>\n" % (" " * self.indent))
+
+        # perspectives
+        if hasattr(self.lmgr.GetAuiNotebook(), "SavePerspective"):
+            perspective = self.lmgr.GetAuiNotebook().SavePerspective()
+            file.write(
+                '%s<perspective value="%s">\n'
+                % (
+                    " " * self.indent,
+                    perspective
+                )
+            )
+            self.indent += 4
+            file.write("%s</perspective>\n" % (" " * self.indent))
 
         # list of displays
         for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):

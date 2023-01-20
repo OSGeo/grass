@@ -211,6 +211,12 @@ class WorkspaceManager:
                     os.chdir(self.lmgr.cwdPath)
 
         #
+        # load user-defined layout
+        #
+        if gxwXml.perspective and hasattr(self.lmgr.GetAuiNotebook(), "LoadPerspective"):
+            self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.perspective)
+
+        #
         # start map displays first (list of layers can be empty)
         #
         displayId = 0
