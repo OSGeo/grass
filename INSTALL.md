@@ -282,7 +282,8 @@ better settings to us):
 CFLAGS="-mcpu=athlon -O2" # AMD Athlon processor with code optimisations
 CFLAGS="-mcpu=pentium" # Intel Pentium processor
 CFLAGS="-mcpu=pentium4" # Intel Pentium4 processor
-CFLAGS="-O2 -msse -msse2 -mfpmath=sse -minline-all-stringops" # Intel XEON 64bit processor
+CFLAGS="-O2 -msse -msse2 -mfpmath=sse \
+        -minline-all-stringops" # Intel XEON 64bit processor
 CFLAGS="-mtune=nocona -m64 -minline-all-stringops" # Intel Pentium 64bit processor
 ```
 
