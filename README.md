@@ -81,7 +81,7 @@ docker run -it --rm --user=$(id -u):$(id -g) \
 B. Docker image **with graphical user interface - wxGUI**.
 
 ```bash
-docker build -t grassgis -f docker/ubuntu/wxgui/Dockerfile .
+docker build -t grassgis -f docker/ubuntu_wxgui/Dockerfile .
 ```
 
 Note that the first `grassgis` is the name of the image while the second
