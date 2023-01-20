@@ -73,7 +73,7 @@ public:
     char *operator()(const elevation_type &p)
     {
         static char buf[20];
-        sprintf(buf, "%.1f", (float)p);
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
         return buf;
     }
 };
@@ -83,13 +83,13 @@ public:
     char *operator()(const direction_type &p)
     {
         static char buf[20];
-        sprintf(buf, "%3d", p);
+        snprintf(buf, sizeof(buf), "%3d", p);
         return buf;
     }
     char *operator()(const waterWindowBaseType &p)
     {
         static char buf[20];
-        sprintf(buf, "%3d", p.dir);
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
         return buf;
     }
 #if (0)
@@ -108,19 +108,19 @@ public:
     char *operator()(const labelElevType &p)
     {
         static char buf[8];
-        sprintf(buf, CCLABEL_FMT, p.getLabel());
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
         return buf;
     }
     char *operator()(const waterGridType &p)
     {
         static char buf[8];
-        sprintf(buf, CCLABEL_FMT, p.getLabel());
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
         return buf;
     }
     char *operator()(const waterType &p)
     {
         static char buf[8];
-        sprintf(buf, CCLABEL_FMT, p.getLabel());
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
         return buf;
     }
 };
@@ -130,7 +130,7 @@ public:
     char *operator()(const waterGridType &p)
     {
         static char buf[3];
-        sprintf(buf, "%1u", p.depth);
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
         return buf;
     }
 };
@@ -138,7 +138,7 @@ public:
 char *verbosedir(const std::string &s)
 {
     static char buf[BUFSIZ];
-    sprintf(buf, "dump/%s", s.c_str());
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
     return buf;
 }
 
@@ -365,7 +365,7 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
     char path[BUFSIZ];
     char *base_dir = getenv(STREAM_TMPDIR);
     assert(base_dir);
-    sprintf(path, "%s/flowStream", base_dir);
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
     flowStream = new AMI_STREAM<waterWindowBaseType>(path);
     /*flowStream->persist(PERSIST_PERSISTENT); */
     if (stats)
