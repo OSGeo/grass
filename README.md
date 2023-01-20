@@ -17,7 +17,8 @@ a Geographic Information System used for geospatial data management and
 analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
 
-Launch this repository in Binder and experiment with GRASS's Python API in Jupyter Notebooks by clicking the button below:
+Launch this repository in Binder and experiment with GRASS's Python API in
+Jupyter Notebooks by clicking the button below:
 
 [![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb)
 
@@ -36,7 +37,9 @@ Want to become a core developer? See
 
 > See the INSTALL.md file.
 
-Yes, you should really read [INSTALL.md](INSTALL.md). In addition, there are detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
+Yes, you should really read [INSTALL.md](INSTALL.md). In addition, there are
+detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
+in the Wiki.
 
 ## Docker
 
@@ -91,8 +94,9 @@ Note that the first `grassgis` is the name of the image while the second
 xhost local:$(id -u)
 docker run -it --privileged --user=$(id -u):$(id -g) --rm \
     --volume="$(pwd)/:/data" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    --env HOME=/data/ --env DISPLAY=$DISPLAY --device="/dev/dri/card0:/dev/dri/card0" \
-        grassgis grass --gui
+    --env HOME=/data/ --env DISPLAY=$DISPLAY \
+    --device="/dev/dri/card0:/dev/dri/card0" \
+    grassgis grass --gui
 ```
 
 Note: If you compiled locally before building the Docker image, you may
