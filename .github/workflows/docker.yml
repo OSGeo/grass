@@ -51,6 +51,7 @@ jobs:
           - alpine
           - debian
           - ubuntu
+          - ubuntu_wxgui
       fail-fast: false
 
     steps:
