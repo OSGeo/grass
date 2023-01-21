@@ -94,7 +94,7 @@ public:
     char *operator()(const sweepOutput &p)
     {
         static char buf[20];
-        sprintf(buf, "%7.3f", p.accu);
+        snprintf(buf, sizeof(buf), "%7.3f", p.accu);
         return buf;
     }
 };
@@ -111,7 +111,7 @@ public:
     char *operator()(const sweepOutput &p)
     {
         static char buf[20];
-        sprintf(buf, "%7.3f", p.tci);
+        snprintf(buf, sizeof(buf), "%7.3f", p.tci);
         return buf;
     }
 };

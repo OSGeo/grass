@@ -91,7 +91,8 @@ public:
         assert(n >= 0);
 
         char str[100];
-        sprintf(str, "im_buffer: allocate %ld\n", (long)(maxsize * sizeof(T)));
+        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
+                 (long)(maxsize * sizeof(T)));
         MEMORY_LOG(str);
 
         data = new T[maxsize];

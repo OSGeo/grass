@@ -652,7 +652,8 @@ template <class T>
 char *AMI_STREAM<T>::sprint()
 {
     static char desc[BUFSIZ + 256];
-    sprintf(desc, "[AMI_STREAM %s %ld]", path, (long)stream_len());
+    snprintf(desc, sizeof(desc), "[AMI_STREAM %s %ld]", path,
+             (long)stream_len());
     return desc;
 }
 

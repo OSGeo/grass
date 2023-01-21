@@ -414,28 +414,29 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
     assert((level >= 1) && (basesize >= 0));
 
     char str[100];
-    sprintf(str, "em_buffer: allocate %d AMI_STREAM*, total %ld\n", arity,
-            (long)(arity * sizeof(AMI_STREAM<T> *)));
+    snprintf(str, sizeof(str),
+             "em_buffer: allocate %d AMI_STREAM*, total %ld\n", arity,
+             (long)(arity * sizeof(AMI_STREAM<T> *)));
     MEMORY_LOG(str);
     // allocate STREAM* array
     data = new AMI_STREAM<T> *[arity];
 
     // allocate deleted array
-    sprintf(str, "em_buffer: allocate deleted array: %ld\n",
-            (long)(arity * sizeof(long)));
+    snprintf(str, sizeof(str), "em_buffer: allocate deleted array: %ld\n",
+             (long)(arity * sizeof(long)));
     MEMORY_LOG(str);
     deleted = new long[arity];
 
     // allocate streamsize array
-    sprintf(str, "em_buffer: allocate streamsize array: %ld\n",
-            (long)(arity * sizeof(long)));
+    snprintf(str, sizeof(str), "em_buffer: allocate streamsize array: %ld\n",
+             (long)(arity * sizeof(long)));
     MEMORY_LOG(str);
     streamsize = new unsigned long[arity];
 
 #ifdef SAVE_MEMORY
     // allocate name array
-    sprintf(str, "em_buffer: allocate name array: %ld\n",
-            (long)(arity * sizeof(char *)));
+    snprintf(str, sizeof(str), "em_buffer: allocate name array: %ld\n",
+             (long)(arity * sizeof(char *)));
     MEMORY_LOG(str);
     name = new char *[arity];
     assert(name);
@@ -937,9 +938,9 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
     AMI_err ami_err;
 
     char str[200];
-    sprintf(str,
-            "em_buffer::substream_merge: allocate keys array, total %ldB\n",
-            (long)((long)arity * sizeof(merge_key<Key>)));
+    snprintf(str, sizeof(str),
+             "em_buffer::substream_merge: allocate keys array, total %ldB\n",
+             (long)((long)arity * sizeof(merge_key<Key>)));
     MEMORY_LOG(str);
 
     // keys array is initialized with smallest key from each stream (only

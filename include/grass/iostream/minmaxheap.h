@@ -93,8 +93,8 @@ public:
     BasicMinMaxHeap(HeapIndex size) : maxsize(size)
     {
         char str[100];
-        sprintf(str, "BasicMinMaxHeap: allocate %ld\n",
-                (long)((size + 1) * sizeof(T)));
+        snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
+                 (long)((size + 1) * sizeof(T)));
         // MEMORY_LOG(str);
 
         lastindex = 0;

@@ -167,7 +167,7 @@ template <class T>
 char *MEM_STREAM<T>::sprint()
 {
     static char buf[BUFSIZ];
-    sprintf(buf, "[MEM_STREAM %d]", stream_len());
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
     return buf;
 }
 

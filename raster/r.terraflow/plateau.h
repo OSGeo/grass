@@ -48,7 +48,7 @@ public:
     static char *printLabel(const plateauType &p)
     {
         static char buf[8];
-        sprintf(buf, CCLABEL_FMT, p.cclabel);
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
         return buf;
     }
 
