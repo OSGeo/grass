@@ -113,20 +113,13 @@ The `<h2>SEE ALSO</h2>` section of each page should also be alphabetized.
 
 ### Footer
 
-Change in 2019: no longer useful after migration to git:
 
-~~The last line of the page should be the date of the last modification of the
-page which is updated automatically by Subversion (during `svn commit`). In
-other words, include the following example line as is. It will be updated to
-the correct date automatically.~~
-
-```html
-<p><i>Last changed: $Date: 2014-08-14 11:34:43 -0400 (Thu, 14 Aug 2014) $</i>
-```
+No footer to be added, since it will be added automatically during compilation.
 
 ### Break long lines
 
-To avoid git merge conflicts, please break a line at approximately 70-80 chars.
+In order to minimize potential git merge conflicts, please break a line
+at approximately 70-80 chars.
 
 Hints:
 

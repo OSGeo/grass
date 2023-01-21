@@ -67,7 +67,7 @@ tickets or other commits too in the same way as in commit messages, although the
 will not be automatically linked).
 
 Write the commit messages in the way that they can be used to create/update
-change logs, [wiki:Release](https://trac.osgeo.org/grass/wiki/Release) pages and
+change logs, [release](https://github.com/OSGeo/grass/releases) pages and
 news in general.
 
 Don't include your name (or id) to commit message, this is stored separately and
@@ -121,86 +121,6 @@ Such diffs should be made from the top-level directory, e.g.
 `git diff display/d.vect/main.c`; that way, the diff will include the pathname
 rather than just an ambiguous `main.c`.
 
-### SVN Properties
-
-When submitting new files to the repository set SVN properties,
-
-usually for directory
-
-```text
-svn:ignore : *.tmp.html
-             *OBJ*
-```
-
-or e.g. for C-file
-
-```text
-svn:mime-type : text/x-csrc
-```
-
-```text
-svn:keywords : Author Date Id
-svn:eol-style : native
-```
-
-See [​http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html](http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html)
-
-To set a property:
-
-```bash
-svn propset svn:keywords 'Author Date Id' <file>
-svn propset svn:mime-type text/x-sh grass\_shellscript.sh
-```
-
-To edit the `svn:ignore` property using your default text editor:
-
-```bash
-svn propedit svn:ignore <directory>
-```
-
-To set the `svn:ignore` property non-interactively, first create a file
-containing the value:
-
-```bash
-echo "\*.tmp.html" > ignore.txt
-echo "\*OBJ\*" >> ignore.txt
-```
-
-then use:
-
-```bash
-svn propset -F ignore.txt svn:ignore <directory>
-```
-
-List of mime-type:
-
-```text
-C++ files (.cpp): text/x-c++src
-C files (.c): text/x-csrc
-DTD files (.dtd): text/xml-dtd
-GIF files (.gif): image/gif
-Header files (.h): text/x-chdr
-HTML files (.html): text/html
-JPEG files (.jpg): image/jpeg
-Makefiles: text/x-makefile
-PNG files (.png): image/png
-Python files (.py): text/x-python
-Shell scripts (.sh): text/x-sh
-Text files (.txt): text/plain
-XML files (.xml): text/xml
-```
-
-(please update the list...)
-
-For your convenience use the
-[source:grass-addons/tools/module\_svn\_propset.sh](https://trac.osgeo.org/grass/browser/grass-addons/tools/module_svn_propset.sh)
-script.
-
-### SVN Property Id
-
-We don't want the `$ID$` in source code any more as it causes problems for the
-SVN branches.
-
 ### Comments
 
 PLEASE take the time to add comments throughout your code explaining what the
@@ -214,49 +134,37 @@ used (`\n`).
 
 ### Branches and backports
 
-_This section applies to the core developers with access to the main repository
-(other contributors can safely ignore it)._
+The GRASS GIS repository on GitHub has the "main" and several release branches. 
+All the development should happen in "main" (the development branch). All the other
+branches are usually associated with releases and should contain stable code
+which is being prepared towards the given release.
 
-GRASS GIS Subversion repository has trunk and several branches. All the development
-should happen in trunk (trunk is a "development branch"). All the other branches
-are usually associated with releases and should contain stable code which is being
-prepared towards the given release.
-
-When a bug is fixed the fix should be committed to trunk, tested there, and than
-backported to the release branch or branches. The testing before backport should
-include user testing, running automated test (if available), and compilation of
-the whole source tree (ideally after `make distclean`). Note that thinks like
-testing should be done also before the original commit to trunk. Also note that
-not all these steps has to be done manually, you can take an advantage of
-[​Travis CI](https://travis-ci.org/GRASS-GIS/) or
+When a bug is fixed the fix should be committed to "main", tested there, and then
+backported to the release branch or branches, if appropriate. The testing before
+doing a backport should include user testing, running of automated test (if
+available), and compilation of the whole source tree (ideally after the
+`make distclean` step). Note that testing should already be done also prior to
+the original commit to "main". Also note that not all these steps have to be
+done manually, you can take an advantage of our [​CI](https://github.com/OSGeo/grass/actions) or
 [​automated runs of the GRASS GIS testing suite](http://fatra.cnr.ncsu.edu/grassgistests/).
 
-Often there is more than one active stable branch, if you are backporting, make
-sure you always backport to all the branches between trunk and the furthest
-branch you are backporting to. For example, let's say we have trunk and branches
-7.2 and 7.0, if you backport to 7.0, you have to also backport to 7.2. You can
-also choose to backport only to the closest branch, in our example 7.2.
+Often there is more than one active release branch, if you are backporting, make
+sure you always backport to all the branches between "main" and the furthest
+branch you are backporting to. For example, let's say we have "main" and branches
+8.2 and 7.8, if you backport to 8.2, you should also consider to backport to 7.8.
+You can also choose to backport only to the closest branch, in our example 8.2.
 
 Backport only complete fixes. When you are not sure if the fix is complete or if
 there is an possibility that some details such as wording will change, wait with
 the backport for a little while and backport all the changes together to reduce
 number of commits which needs to be reviewed (right now or in the future). You
-can also backport multiple commits from trunk as one commit if you think it is
+can also backport multiple commits from "main" as one commit if you think it is
 appropriate.
 
-Include the number of the commit (or commits) you are backporting, into the commit
-message, for example: `less verbose messages (backport r89436)`. This will help
+Include the number of the pull request when you are backporting, into the commit
+message, for example: `less verbose messages (backport of PR #1234)`. This will help
 matching the file content in between branches and tracking if the commits were
 backported.
-
-As a developer you should maintain a list of commits which you plan to backport.
-One way how to do it is to subscribe to the
-[​grass-commit mailing list](https://lists.osgeo.org/listinfo/grass-commit) and
-filter your commits in your email.
-
-Do not add svn merge property to the commit. Review
-[tools directory in Addons repository](/grass/browser/grass-addons/tools) for
-scripts which will help you with backporting.
 
 ## Makefiles
 
@@ -277,8 +185,8 @@ If you have to use commands, please check for:
 
 Examples: see below examples or others
 
-[source:grass/trunk/raster/r.info/Makefile](https://trac.osgeo.org/grass/browser/grass/trunk/raster/r.info/Makefile)
-[source:grass/trunk/vector/v.edit/Makefile](https://trac.osgeo.org/grass/browser/grass/trunk/vector/v.edit/Makefile)
+[raster/r.info/Makefile](https://github.com/OSGeo/grass/blob/main/raster/r.info/Makefile)
+[vector/v.edit/Makefile](https://github.com/OSGeo/grass/blob/main/vector/v.info/Makefile)
 
 If you are unsure, please ask on the GRASS Developers list.
 
@@ -291,9 +199,9 @@ will not work) to re-generate 'configure'.
 
 ## Naming Conventions
 
-Have a look at [source:grass/trunk/INSTALL](https://trac.osgeo.org/grass/browser/grass/trunk/INSTALL)
+Have a look at the [INSTALL](https://github.com/OSGeo/grass/blob/main/INSTALL.md) file.
 
-For consistency, use `README` rather than `README.txt` for any `README` files.
+For consistency, use `README.md` rather than `README.txt` for any `README` files.
 
 ### Variables
 
@@ -301,7 +209,7 @@ GRASS/Environment variables:
 
 If you add a new variable, please follow the naming convention. All variables
 are described in
-[source:grass/trunk/lib/init/variables.html](https://trac.osgeo.org/grass/browser/grass/trunk/lib/init/variables.html)
+the [variables](https://grass.osgeo.org/grass-stable/manuals/variables.html) file.
 
 ### Modules
 
@@ -333,11 +241,11 @@ Avoid module names with more than two dots in the name. Example: instead of
 ## Code Quality
 
 Follow the best writing practices specified by GRASS
-[submitting rules](https://trac.osgeo.org/grass/wiki/Submitting) for a given
+[contributing rules](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md) for a given
 language.
 
-Write tests for your code. See the [testing guide](https://grass.osgeo.org/grass73/manuals/libpython/gunittest_testing.html)
-or existing examples ([g.list](https://trac.osgeo.org/grass/browser/grass/trunk/general/g.list/testsuite?rev=65204).
+Write tests for your code. See the [testing guide](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
+or existing examples ([g.list](https://github.com/OSGeo/grass/tree/main/general/g.list/testsuite)).
 
 ## Contact us
 
@@ -350,4 +258,4 @@ To subscribe to this mailing list, see
 
 In case of questions feel free to contact the developers at the above mailing list.
 
-[​http://grass.osgeo.org/development/](http://grass.osgeo.org/development/)
+[​https://grass.osgeo.org/contribute/development/](https://grass.osgeo.org/contribute/development/)
