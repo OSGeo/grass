@@ -12,12 +12,6 @@ ENV DEBIAN_FRONTEND noninteractive
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
 ARG PDAL_VERSION=2.4.3
-## http://download.osgeo.org/proj/
-#ARG PROJ_VERSION=8.2.1
-#ARG PROJ_DATUMGRID_VERSION=1.8
-# laz-perf is included in PDAL >= 2.4.x
-## https://github.com/hobuinc/laz-perf/releases
-#ARG LAZ_PERF_VERSION=3.3.0
 
 SHELL ["/bin/bash", "-c"]
 
@@ -89,32 +83,6 @@ RUN apt-get update && apt-get upgrade -y && \
 
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
-
-### install a more recent projection library for GRASS GIS
-#WORKDIR /src
-#RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-#    tar xzf proj-${PROJ_VERSION}.tar.gz && \
-#    cd /src/proj-${PROJ_VERSION}/ && \
-#    wget -q http://download.osgeo.org/proj/proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-#    cd nad && \
-#    unzip ../proj-datumgrid-${PROJ_DATUMGRID_VERSION}.zip && \
-#    cd .. && \
-#    ./configure --prefix=/usr/ && \
-#    make && \
-#    make install
-
-# laz-perf is included in PDAL >= 2.4.x
-#### compile and install laz-perf (not available on Debian)
-#RUN apt-get install cmake
-#WORKDIR /src
-#RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-#    tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-#    cd laz-perf-${LAZ_PERF_VERSION} && \
-#    mkdir build && \
-#    cd build && \
-#    cmake .. && \
-#    make && \
-#    make install
 
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
