@@ -134,8 +134,9 @@ git status
 git log --max-count=5
 ```
 
-Create an annotated tag (a lightweight tag is okay too, but there is more metadata
-stored for annotated tags including a date; message is suggested by the version script):
+Create an annotated tag (a lightweight tag is okay too, but there is more
+metadata stored for annotated tags including a date; message is suggested
+by the `update_version.py` script, see above):
 
 ```bash
 echo $VERSION
@@ -240,7 +241,7 @@ Commit with the suggested commit message and push, e.g.:
 
 ```bash
 git diff
-git commit include/VERSION -m "version: Back to 8.2.0dev"
+git commit include/VERSION -m "version: Start 8.2.1dev"
 git push upstream releasebranch_8_2
 ```
 
