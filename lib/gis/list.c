@@ -24,6 +24,7 @@
 static int list_element(FILE *, const char *, const char *, const char *,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         int (*)(const char *, const char *, char *));
 =======
                         int (*)(const char *, const char *, const char *));
@@ -31,6 +32,9 @@ static int list_element(FILE *, const char *, const char *, const char *,
 =======
                         int (*)(const char *, const char *, const char *));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        int (*)(const char *, const char *, char *));
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 /*!
    \brief General purpose list function
@@ -59,6 +63,7 @@ static int list_element(FILE *, const char *, const char *, const char *,
 void G_list_element(const char *element, const char *desc, const char *mapset,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     int (*lister)(const char *, const char *, char *))
 =======
                     int (*lister)(const char *, const char *, const char *))
@@ -66,6 +71,9 @@ void G_list_element(const char *element, const char *desc, const char *mapset,
 =======
                     int (*lister)(const char *, const char *, const char *))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    int (*lister)(const char *, const char *, char *))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     struct Popen pager;
     int n;
@@ -112,6 +120,7 @@ static int list_element(FILE *out, const char *element, const char *desc,
                         const char *mapset,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         int (*lister)(const char *, const char *, char *))
 =======
                         int (*lister)(const char *, const char *, const char *))
@@ -119,6 +128,9 @@ static int list_element(FILE *out, const char *element, const char *desc,
 =======
                         int (*lister)(const char *, const char *, const char *))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        int (*lister)(const char *, const char *, char *))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     char path[GPATH_MAX];
     int count = 0;

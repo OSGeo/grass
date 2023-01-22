@@ -27,19 +27,28 @@
 
 #include "local_proto.h"
 
+<<<<<<< HEAD
 static int clo_dummy(struct Map_info *map UNUSED)
+=======
+static int clo_dummy(struct Map_info *map)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
+<<<<<<< HEAD
 static int format(struct Map_info *map UNUSED)
+=======
+static int format(struct Map_info *map)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
@@ -60,19 +69,23 @@ static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
                                                      {clo_dummy, format}
 =======
 static int (*Close_array[][2])() = {{clo_dummy, V1_close_nat}
+=======
+static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #ifdef HAVE_OGR
-                                    ,
-                                    {clo_dummy, V1_close_ogr},
-                                    {clo_dummy, V1_close_ogr}
+                                                     ,
+                                                     {clo_dummy, V1_close_ogr},
+                                                     {clo_dummy, V1_close_ogr}
 #else
-                                    ,
-                                    {clo_dummy, format},
-                                    {clo_dummy, format}
+                                                     ,
+                                                     {clo_dummy, format},
+                                                     {clo_dummy, format}
 #endif
 #ifdef HAVE_POSTGRES
-                                    ,
-                                    {clo_dummy, V1_close_pg}
+                                                     ,
+                                                     {clo_dummy, V1_close_pg}
 #else
+<<<<<<< HEAD
                                     ,
                                     {clo_dummy, format}
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -94,6 +107,10 @@ static int (*Close_array[][2])() = {{clo_dummy, V1_close_nat}
                                     ,
                                     {clo_dummy, format}
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                                     ,
+                                                     {clo_dummy, format}
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #endif
 };
 

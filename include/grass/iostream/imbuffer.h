@@ -93,6 +93,7 @@ public:
         char str[100];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
                  (long)(maxsize * sizeof(T)));
 =======
@@ -101,6 +102,10 @@ public:
 =======
         sprintf(str, "im_buffer: allocate %ld\n", (long)(maxsize * sizeof(T)));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
+                 (long)(maxsize * sizeof(T)));
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         MEMORY_LOG(str);
 
         data = new T[maxsize];

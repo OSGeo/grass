@@ -382,6 +382,7 @@ struct datum_list *read_datum_table(void)
         current->next = NULL;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
         count++;
@@ -390,6 +391,8 @@ struct datum_list *read_datum_table(void)
 
         count++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     }
 
     fclose(fd);

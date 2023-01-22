@@ -86,10 +86,14 @@ void Rast3d_cache_dispose(RASTER3D_cache *c)
 void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
                        int (*eltRemoveFun)(int, const void *, void *),
                        void *eltRemoveFunData,
                        int (*eltLoadFun)(int, void *, void *),
                        void *eltLoadFunData)
+<<<<<<< HEAD
 =======
                        int (*eltRemoveFun)(), void *eltRemoveFunData,
                        int (*eltLoadFun)(), void *eltLoadFunData)
@@ -98,6 +102,8 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
                        int (*eltRemoveFun)(), void *eltRemoveFunData,
                        int (*eltLoadFun)(), void *eltLoadFunData)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     RASTER3D_cache *tmp;
     int i;
@@ -150,6 +156,7 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
                                  int (*eltRemoveFun)(int, const void *, void *),
 =======
@@ -158,6 +165,10 @@ void Rast3d_cache_set_remove_fun(RASTER3D_cache *c, int (*eltRemoveFun)(),
 =======
 void Rast3d_cache_set_remove_fun(RASTER3D_cache *c, int (*eltRemoveFun)(),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
+                                 int (*eltRemoveFun)(int, const void *, void *),
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
                                  void *eltRemoveFunData)
 {
     c->eltRemoveFun = eltRemoveFun;
@@ -168,6 +179,7 @@ void Rast3d_cache_set_remove_fun(RASTER3D_cache *c, int (*eltRemoveFun)(),
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
                                int (*eltLoadFun)(int, void *, void *),
 =======
@@ -176,6 +188,10 @@ void Rast3d_cache_set_load_fun(RASTER3D_cache *c, int (*eltLoadFun)(),
 =======
 void Rast3d_cache_set_load_fun(RASTER3D_cache *c, int (*eltLoadFun)(),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
+                               int (*eltLoadFun)(int, void *, void *),
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
                                void *eltLoadFunData)
 {
     c->eltLoadFun = eltLoadFun;

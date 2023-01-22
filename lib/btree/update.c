@@ -13,6 +13,7 @@ int btree_update(BTREE *B, const void *key, int keylen, const void *data,
     int N;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*cmp)(const void *, const void *);
 =======
     int (*cmp)();
@@ -20,6 +21,9 @@ int btree_update(BTREE *B, const void *key, int keylen, const void *data,
 =======
     int (*cmp)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*cmp)(const void *, const void *);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     int dir;
 
     /* first node is special case */

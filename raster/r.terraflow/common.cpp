@@ -95,6 +95,7 @@ void *LargeMemory::alloc(size_t leng)
         char buf[BUFSIZ], buf2[32];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
                  formatNumber(buf2, leng), (unsigned long)p);
 =======
@@ -105,6 +106,10 @@ void *LargeMemory::alloc(size_t leng)
         sprintf(buf, "allocated large memory: %s 0x%lX",
                 formatNumber(buf2, leng), (unsigned long)p);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
+                 formatNumber(buf2, leng), (unsigned long)p);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         stats->comment(buf);
     }
     return p;
@@ -133,6 +138,7 @@ void LargeMemory::free(void *p)
         char buf[BUFSIZ], buf2[32];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
                  formatNumber(buf2, len[i]), (unsigned long)p);
 =======
@@ -143,6 +149,10 @@ void LargeMemory::free(void *p)
         sprintf(buf, "freed large memory: %s 0x%lX", formatNumber(buf2, len[i]),
                 (unsigned long)p);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
+                 formatNumber(buf2, len[i]), (unsigned long)p);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         stats->comment(buf);
     }
 

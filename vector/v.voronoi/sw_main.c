@@ -71,7 +71,11 @@ struct Site *nextone(void)
         return ((struct Site *)NULL);
 }
 
+<<<<<<< HEAD
 /* removes duplicate sites that would break the voronoi algorithm */
+=======
+/* removes duplicate sites that would break the voronoi alghoritm */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 void removeDuplicates(void)
 {
     int i, j;
@@ -381,12 +385,15 @@ int readbounds(void)
         nlines = Vect_get_node_n_lines(&In, node);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         nconnected = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
         nconnected = 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         Vect_reset_list(linelist);
         Vect_reset_list(arealist);
 
@@ -403,12 +410,15 @@ int readbounds(void)
                 Vect_list_append(arealist, area_id);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 nconnected++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
                 nconnected++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             }
         }
 

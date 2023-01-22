@@ -277,6 +277,7 @@ int main(int argc, char *argv[])
             /*set it */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             snprintf(buf, sizeof(buf), "%s=%s", STREAM_TMPDIR,
                      viewOptions.streamdir);
 =======
@@ -285,6 +286,10 @@ int main(int argc, char *argv[])
 =======
             sprintf(buf, "%s=%s", STREAM_TMPDIR, viewOptions.streamdir);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            snprintf(buf, sizeof(buf), "%s=%s", STREAM_TMPDIR,
+                     viewOptions.streamdir);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             G_debug(1, "setting %s ", buf);
             putenv(buf);
             if (getenv(STREAM_TMPDIR) == NULL) {

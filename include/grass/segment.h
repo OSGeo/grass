@@ -18,6 +18,7 @@ struct aq {                     /* age queue */
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct SEGMENT {
 =======
 typedef struct {
@@ -25,6 +26,9 @@ typedef struct {
 =======
 typedef struct {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+typedef struct SEGMENT {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     int open;      /* open flag */
     off_t nrows;   /* rows in original data */
     off_t ncols;   /* cols in original data */
@@ -46,6 +50,7 @@ typedef struct {
     int sizebits;   /* segment size bitshift */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
     int (*seek)(const struct SEGMENT *S, int, int);
 =======
@@ -56,6 +61,10 @@ typedef struct {
     int (*address)();
     int (*seek)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
+    int (*seek)(const struct SEGMENT *S, int, int);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
     char *fname; /* segment file name */
     int fd;      /* file descriptor to read/write segment */

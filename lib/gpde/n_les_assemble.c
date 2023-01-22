@@ -341,6 +341,7 @@ N_data_star *N_create_27star(double C, double W, double E, double N, double S,
 void N_set_les_callback_3d_func(N_les_callback_3d *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 N_data_star *(*callback_func_3d)(void *,
                                                                  N_geom_data *,
                                                                  int, int, int))
@@ -350,6 +351,11 @@ void N_set_les_callback_3d_func(N_les_callback_3d *data,
 =======
                                 N_data_star *(*callback_func_3d)())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                N_data_star *(*callback_func_3d)(void *,
+                                                                 N_geom_data *,
+                                                                 int, int, int))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     data->callback = callback_func_3d;
 }
@@ -368,6 +374,7 @@ void N_set_les_callback_3d_func(N_les_callback_3d *data,
 void N_set_les_callback_2d_func(N_les_callback_2d *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 N_data_star *(*callback_func_2d)(void *,
                                                                  N_geom_data *,
                                                                  int, int))
@@ -377,6 +384,11 @@ void N_set_les_callback_2d_func(N_les_callback_2d *data,
 =======
                                 N_data_star *(*callback_func_2d)())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                N_data_star *(*callback_func_2d)(void *,
+                                                                 N_geom_data *,
+                                                                 int, int))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     data->callback = callback_func_2d;
 }

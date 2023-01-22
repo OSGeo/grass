@@ -113,12 +113,12 @@ int max(int, int);
 void com_par(double angle);
 int is_shadow(void);
 double horizon_height(void);
-void calculate_shadow();
+void calculate_shadow(void);
 double calculate_shadow_onedirection(double shadow_angle);
 
-int new_point();
-double searching();
-int test_low_res();
+int new_point(void);
+double searching(void);
+int test_low_res(void);
 
 /*void where_is_point();
    void cube(int, int);
@@ -1385,6 +1385,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     origin_point.z_orig = z[yindex][xindex];
     G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex,
             origin_point.z_orig);
@@ -1401,6 +1402,9 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     tanh0 = -1.0 / 0.0; /* -inf */
+=======
+    tanh0 = -INFINITY;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     length = 0;
 
     height = searching();
@@ -1418,7 +1422,7 @@ double calculate_shadow_onedirection(double shadow_angle)
     return shadow_angle;
 }
 
-void calculate_shadow()
+void calculate_shadow(void)
 {
     double dfr_rad;
 
@@ -1694,6 +1698,7 @@ void calculate_shadow()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int new_point(const Geometry *geometry, const OriginPoint *origin_point,
               const OriginAngle *origin_angle, SearchPoint *search_point,
               HorizonProperties *horizon)
@@ -1702,6 +1707,9 @@ int new_point(const Geometry *geometry, const OriginPoint *origin_point,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int new_point()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int new_point(void)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     int iold = search_point->ip;
     int jold = search_point->jp;
@@ -1772,6 +1780,7 @@ int new_point()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
                  const OriginAngle *origin_angle, SearchPoint *search_point,
                  const HorizonProperties *horizon)
@@ -1780,6 +1789,9 @@ int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int test_low_res()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int test_low_res(void)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     int iold100 = search_point->ip100;
     int jold100 = search_point->jp100;
@@ -1935,6 +1947,7 @@ int test_low_res()
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 HorizonProperties horizon_height(const Geometry *geometry,
                                  const OriginPoint *origin_point,
                                  const OriginAngle *origin_angle)
@@ -1943,6 +1956,9 @@ HorizonProperties horizon_height(const Geometry *geometry,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 double searching()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+double searching(void)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     SearchPoint search_point;
     HorizonProperties horizon;

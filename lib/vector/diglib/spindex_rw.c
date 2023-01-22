@@ -65,6 +65,7 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     if (sizeof(off_t) > 4) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         off_t size;
 
         size = 145; /* max header size, see below */
@@ -74,11 +75,15 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
         size += (off_t)ptr->Isle_spidx->n_nodes * ptr->Isle_spidx->nodesize;
 
 =======
+=======
+        off_t size;
+
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         size = 145; /* max header size, see below */
-        size += ptr->Node_spidx->n_nodes * ptr->Node_spidx->nodesize;
-        size += ptr->Line_spidx->n_nodes * ptr->Line_spidx->nodesize;
-        size += ptr->Area_spidx->n_nodes * ptr->Area_spidx->nodesize;
-        size += ptr->Isle_spidx->n_nodes * ptr->Isle_spidx->nodesize;
+        size += (off_t)ptr->Node_spidx->n_nodes * ptr->Node_spidx->nodesize;
+        size += (off_t)ptr->Line_spidx->n_nodes * ptr->Line_spidx->nodesize;
+        size += (off_t)ptr->Area_spidx->n_nodes * ptr->Area_spidx->nodesize;
+        size += (off_t)ptr->Isle_spidx->n_nodes * ptr->Isle_spidx->nodesize;
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -1201,6 +1206,7 @@ static void rtree_load_from_sidx(struct gvfile *fp, off_t rootpos,
     if (t->fd > -1)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         rtree_load_to_file(fp, rootpos, t, off_t_size);
     else
         rtree_load_to_memory(fp, rootpos, t, off_t_size);
@@ -1214,6 +1220,11 @@ static void rtree_load_from_sidx(struct gvfile *fp, off_t rootpos,
     else
         return rtree_load_to_memory(fp, rootpos, t, off_t_size);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        rtree_load_to_file(fp, rootpos, t, off_t_size);
+    else
+        rtree_load_to_memory(fp, rootpos, t, off_t_size);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 }
 
 /*!

@@ -169,6 +169,7 @@ char *MEM_STREAM<T>::sprint()
     static char buf[BUFSIZ];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
 =======
     sprintf(buf, "[MEM_STREAM %d]", stream_len());
@@ -176,6 +177,9 @@ char *MEM_STREAM<T>::sprint()
 =======
     sprintf(buf, "[MEM_STREAM %d]", stream_len());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     return buf;
 }
 

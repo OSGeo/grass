@@ -258,6 +258,7 @@ int main(int argc, char *argv[])
             sum = sumsq = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             min = INFINITY;
 =======
             min = 1.0 / 0.0;
@@ -265,6 +266,9 @@ int main(int argc, char *argv[])
 =======
             min = 1.0 / 0.0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            min = INFINITY;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             max = 0;
             kd = G_malloc(minpnts * sizeof(double));
             ki = G_malloc(minpnts * sizeof(int));
@@ -473,6 +477,7 @@ int main(int argc, char *argv[])
             sum = sumsq = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             min = INFINITY;
 =======
             min = 1.0 / 0.0;
@@ -480,6 +485,9 @@ int main(int argc, char *argv[])
 =======
             min = 1.0 / 0.0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            min = INFINITY;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             max = 0;
             kd = G_malloc(minpnts * sizeof(double));
             ki = G_malloc(minpnts * sizeof(int));

@@ -90,6 +90,7 @@ int do_grid_cross(void)
     g_north = floor(PS.w.north / PS.grid) * PS.grid;
     g_east = floor(PS.w.east / PS.grid) * PS.grid;
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (; g_north >= PS.w.south; g_north -= PS.grid) {
         for (; g_east > PS.w.west; g_east -= PS.grid) {
 =======
@@ -99,6 +100,10 @@ int do_grid_cross(void)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (; g_north >= PS.w.south; g_north -= PS.grid) {
+        for (; g_east > PS.w.west; g_east -= PS.grid) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
             if (g_north == PS.w.north || g_north == PS.w.south)
                 continue;

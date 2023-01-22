@@ -106,12 +106,15 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                 consec_successes++;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 tot_better++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
                 tot_better++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             }
             /* else apply with probability p=e^(-dE/T) */
             else {
@@ -127,6 +130,7 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                     consec_successes++;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 }
                 else {
 =======
@@ -140,6 +144,10 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                }
+                else {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
                     consec_successes = 0;
                 }
             }

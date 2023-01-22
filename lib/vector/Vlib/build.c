@@ -32,13 +32,18 @@
 #define SEP "-----------------------------------\n"
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
+<<<<<<< HEAD
 static int format(struct Map_info *Map UNUSED, int build UNUSED)
+=======
+static int format(struct Map_info *Map, int build)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
@@ -58,17 +63,22 @@ static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
                                                        format
 =======
 static int (*Build_array[])() = {Vect_build_nat
+=======
+static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #ifdef HAVE_OGR
-                                 ,
-                                 Vect_build_ogr, Vect_build_ogr
+                                                       ,
+                                                       Vect_build_ogr,
+                                                       Vect_build_ogr
 #else
-                                 ,
-                                 format, format
+                                                       ,
+                                                       format, format
 #endif
 #ifdef HAVE_POSTGRES
-                                 ,
-                                 Vect_build_pg
+                                                       ,
+                                                       Vect_build_pg
 #else
+<<<<<<< HEAD
                                  ,
                                  format
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -88,6 +98,10 @@ static int (*Build_array[])() = {Vect_build_nat
                                  ,
                                  format
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                                       ,
+                                                       format
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #endif
 };
 
@@ -966,6 +980,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
         int line, nlines, area, nareas, err_boundaries, err_centr_out,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             err_centr_dupl /*, err_nocentr */;
 =======
             err_centr_dupl, err_nocentr;
@@ -973,6 +988,9 @@ int Vect_build_partial(struct Map_info *Map, int build)
 =======
             err_centr_dupl, err_nocentr;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            err_centr_dupl /*, err_nocentr */;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         struct P_line *Line;
         struct Plus_head *Plus;
 
@@ -1006,6 +1024,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* err_nocentr = 0; */
 =======
         err_nocentr = 0;
@@ -1013,11 +1032,15 @@ int Vect_build_partial(struct Map_info *Map, int build)
 =======
         err_nocentr = 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* err_nocentr = 0; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
             if (!Vect_area_alive(Map, area))
                 continue;
             line = Vect_get_area_centroid(Map, area);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             /* if (line == 0)
@@ -1030,6 +1053,10 @@ int Vect_build_partial(struct Map_info *Map, int build)
             if (line == 0)
                 err_nocentr++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            /* if (line == 0)
+                err_nocentr++; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         }
 
         G_verbose_message(_("Number of areas: %d"), plus->n_areas);
@@ -1304,12 +1331,15 @@ int Vect_build_sidx(struct Map_info *Map)
 int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
 
     G_warning(_("%s is no longer supported"), "Vect_build_sidx_from_topo()");

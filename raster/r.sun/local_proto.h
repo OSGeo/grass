@@ -20,12 +20,16 @@ int searching_parallel(double *length, double *sunVarGeom_z_orig,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int useCivilTime(void);
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int useCivilTime();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int useCivilTime(void);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 void setUseCivilTime(int val);
 int useShadow(void);
 void setUseShadow(int val);
@@ -38,6 +42,7 @@ void setTimeOffset(double val);
 double getHorizonInterval(void);
 void setHorizonInterval(double val);
 <<<<<<< HEAD
+<<<<<<< HEAD
 void setAngularLossDenominator(void);
 =======
 void setAngularLossDenominator();
@@ -45,6 +50,9 @@ void setAngularLossDenominator();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+void setAngularLossDenominator(void);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 /* void cube(int, int); */
 

@@ -12,6 +12,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 float rem(long int, long int); /* remainder function */
 =======
 float rem(); /* remainder function */
@@ -19,6 +20,9 @@ float rem(); /* remainder function */
 =======
 float rem(); /* remainder function */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+float rem(long int, long int); /* remainder function */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 /* normalized coordinates of bar-chart components */
 

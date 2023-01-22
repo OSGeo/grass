@@ -13,6 +13,7 @@
 int (*is_null)(void *);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 size_t (*bpe)(void);
 void *(*get_max)(void *, void *);
 void *(*get_min)(void *, void *);
@@ -30,6 +31,13 @@ void *(*get_buf)();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+size_t (*bpe)(void);
+void *(*get_max)(void *, void *);
+void *(*get_min)(void *, void *);
+void (*get_row)(int, void *, int);
+void *(*get_buf)(void);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 void (*put_row)(int, void *);
 double (*slope)(void *, void *, double);
 void (*set_min)(void *);
