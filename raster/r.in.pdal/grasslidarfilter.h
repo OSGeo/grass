@@ -24,9 +24,16 @@ extern "C" {
 #include "rast_segment.h"
 }
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
 #include <pdal/Filter.hpp>
 #include <pdal/Streamable.hpp>
 #include <pdal/Dimension.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 /* All GRASS GIS filters which are similar across multiple modules
  * put together as one PDAL Stage class.

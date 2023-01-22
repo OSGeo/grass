@@ -17,6 +17,10 @@
  *
  *****************************************************************************/
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
 #include <pdal/PointTable.hpp>
 #include <pdal/PointLayout.hpp>
 #include <pdal/StageFactory.hpp>
@@ -26,6 +30,9 @@
 #include <pdal/filters/MergeFilter.hpp>
 #include <pdal/filters/ReprojectionFilter.hpp>
 #include <pdal/filters/StreamCallbackFilter.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 extern "C" {
 #include <grass/gis.h>
