@@ -6,8 +6,6 @@
 void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out, dbDriver *driver,
                    FILE *fsite)
 {
-
-    int cont = 0;
     int more, ltype, line_num, ID_type, Interp_type;
     double quotaZ;
 
@@ -29,8 +27,6 @@ void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out, dbDriver *driver,
     db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL);
 
     while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
-        cont++;
-
         table = db_get_cursor_table(&cursor);
 
         ID_column = db_get_table_column(table, 0);

@@ -10,6 +10,7 @@
  */
 
 #include "info.h"
+#include <cmath>
 
 void get_extent(struct StringList *infiles, double *min_x, double *max_x,
                 double *min_y, double *max_y, double *min_z, double *max_z)
@@ -17,7 +18,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
     pdal::StageFactory factory;
     bool first = 1;
 
-    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = 0.0 / 0.0;
+    *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
 
     for (int i = 0; i < infiles->num_items; i++) {
         const char *infile = infiles->items[i];

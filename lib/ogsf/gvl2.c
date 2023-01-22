@@ -95,7 +95,7 @@ int GVL_get_region(float *n, float *s, float *w, float *e, float *t, float *b)
 
    \return pointer to RASTER3D_Region struct (static)
  */
-void *GVL_get_window()
+void *GVL_get_window(void)
 {
     return &wind3;
 }

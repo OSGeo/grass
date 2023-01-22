@@ -123,7 +123,8 @@ FLOW_DATASTR *initializePQ()
         stats->comment("FLOW_DATASTRUCTURE: in-memory pqueue");
     flowpq = new FLOW_DATASTR(PQ_SIZE);
     char buf[1024];
-    sprintf(buf, "initialized to %.2fMB\n", (float)PQ_SIZE / (1 << 20));
+    snprintf(buf, sizeof(buf), "initialized to %.2fMB\n",
+             (float)PQ_SIZE / (1 << 20));
     if (stats)
         *stats << buf;
 
@@ -271,7 +272,7 @@ AMI_STREAM<sweepOutput> *sweep(AMI_STREAM<sweepItem> *sweepstr,
     if (stats)
         *stats << "sweeping done\n";
     char buf[1024];
-    sprintf(buf, "pqsize = %ld \n", (long)flowpq->size());
+    snprintf(buf, sizeof(buf), "pqsize = %ld \n", (long)flowpq->size());
     if (stats)
         *stats << buf;
 

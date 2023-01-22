@@ -32,27 +32,28 @@
 #define SEP "-----------------------------------\n"
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format(struct Map_info *Map, int build)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Build_array[])() = {Vect_build_nat
+static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
 #ifdef HAVE_OGR
-                                 ,
-                                 Vect_build_ogr, Vect_build_ogr
+                                                       ,
+                                                       Vect_build_ogr,
+                                                       Vect_build_ogr
 #else
-                                 ,
-                                 format, format
+                                                       ,
+                                                       format, format
 #endif
 #ifdef HAVE_POSTGRES
-                                 ,
-                                 Vect_build_pg
+                                                       ,
+                                                       Vect_build_pg
 #else
-                                 ,
-                                 format
+                                                       ,
+                                                       format
 #endif
 };
 
@@ -929,7 +930,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     if (plus->built >= GV_BUILD_AREAS) {
         int line, nlines, area, nareas, err_boundaries, err_centr_out,
-            err_centr_dupl, err_nocentr;
+            err_centr_dupl /*, err_nocentr */;
         struct P_line *Line;
         struct Plus_head *Plus;
 
@@ -961,14 +962,14 @@ int Vect_build_partial(struct Map_info *Map, int build)
             }
         }
 
-        err_nocentr = 0;
+        /* err_nocentr = 0; */
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
             if (!Vect_area_alive(Map, area))
                 continue;
             line = Vect_get_area_centroid(Map, area);
-            if (line == 0)
-                err_nocentr++;
+            /* if (line == 0)
+                err_nocentr++; */
         }
 
         G_verbose_message(_("Number of areas: %d"), plus->n_areas);
@@ -1242,7 +1243,6 @@ int Vect_build_sidx(struct Map_info *Map)
  */
 int Vect_build_sidx_from_topo(const struct Map_info *Map)
 {
-
     G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
 
     G_warning(_("%s is no longer supported"), "Vect_build_sidx_from_topo()");

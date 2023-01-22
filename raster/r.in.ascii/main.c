@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     char *null_val_str;
     DCELL mult;
     RASTER_MAP_TYPE data_type;
-    double atof();
 
     G_gisinit(argv[0]);
 

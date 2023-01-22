@@ -1087,7 +1087,7 @@ int gsd_surf_const(geosurf *surf, float k)
 
    \return 1
  */
-int gsd_surf_func(geosurf *gs, int (*user_func)())
+int gsd_surf_func(geosurf *gs, int (*user_func)(void))
 {
 
     return (1);
@@ -2078,7 +2078,6 @@ int gsd_surf_map(geosurf *surf)
     GLdouble modelMatrix[16], projMatrix[16];
     GLint viewport[4];
     GLint window[4];
-    int cnt1 = 0, cnt2 = 0;
 
     int datacol1, datacol2, datacol3;
 
@@ -2263,8 +2262,6 @@ int gsd_surf_map(geosurf *surf)
                }
              */
 
-            cnt1++;
-
             /* Do not need BM_get because GET_MAPATT calls
              * same and returns zero if masked
              */
@@ -2357,7 +2354,6 @@ int gsd_surf_map(geosurf *surf)
 
             } /* close ii loop */
             gsd_endtfan();
-            cnt2++;
         } /* end col */
     }     /* end row */
 
