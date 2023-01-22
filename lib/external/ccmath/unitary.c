@@ -13,7 +13,7 @@ static double tpi = 6.283185307179586;
 
 static void uortho(double *g, int n);
 
-double unfl();
+double unfl(void);
 
 void unitary(Cpx *u, int n)
 {

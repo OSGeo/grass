@@ -110,14 +110,14 @@ void alloc_edges(unsigned int n)
         free_list_e[i] = e;
 }
 
-void free_memory()
+void free_memory(void)
 {
     G_free(sites);
     G_free(edges);
     G_free(free_list_e);
 }
 
-struct edge *get_edge()
+struct edge *get_edge(void)
 {
     if (n_free_e < 1)
         G_fatal_error(_("All allocated edges have been used."));

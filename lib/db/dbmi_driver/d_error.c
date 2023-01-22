@@ -30,7 +30,7 @@ struct error_state {
 static struct error_state state;
 static struct error_state *st = &state;
 
-static void init()
+static void init(void)
 {
     db_set_string(st->errMsg, "");
     db_d_append_error(_("DBMI-%s driver error:"), st->driver_name);

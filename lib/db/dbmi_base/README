@@ -27,11 +27,6 @@ XDRLIB:
 	mips:       XDRLIB = -lrpcsvc
 	sgi:        XDRLIB = -lsun
 
-USE_DIRECT:
-    #define that says to use #include <sys/dir.h> and struct direct
-    instead of #include <dirent.h> and struct dirent
-
-	mips: USE_DIRECT = -DUSE_DIRECT
 
 USE_BUFFERED_IO:
     #define that says to not to call setbuf(fd, NULL) to force unbuffered io

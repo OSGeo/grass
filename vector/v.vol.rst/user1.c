@@ -390,7 +390,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
  * OUTGR now writes 3d raster maps (mca 2/15/96)
  */
 
-int OUTGR()
+int OUTGR(void)
 {
     void *cf1, *cf2, *cf3, *cf4, *cf5, *cf6, *cf7;
     size_t read_val;

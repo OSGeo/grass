@@ -28,7 +28,7 @@ void create_location(const char *location)
               "g.mapset mapset=PERMANENT location", location);
 }
 
-void modify_projinfo()
+void modify_projinfo(void)
 {
     const char *mapset = G_mapset();
     struct Cell_head old_cellhd;

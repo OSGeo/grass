@@ -26,8 +26,6 @@
 #define DB_DRIVER_C
 #include "dbstubs.h"
 
-extern char *getenv();
-
 /*!
    \brief Get driver (?)
 

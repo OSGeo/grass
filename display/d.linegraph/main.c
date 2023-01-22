@@ -196,8 +196,6 @@ int main(int argc, char **argv)
     char *name, *xlabel;
     char color_name[20];
 
-    FILE *fopen();
-
     struct Option *dir_opt, *x_opt, *y_opt;
     struct Option *y_color_opt;
     struct Option *color_table_opt;

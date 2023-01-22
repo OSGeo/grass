@@ -31,7 +31,7 @@
  */
 int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
                    double convergence, double separation, int min_class_size,
-                   int (*checkpoint)(), int *interrupted)
+                   int (*checkpoint)(struct Cluster *, int), int *interrupted)
 {
     int changes;
 

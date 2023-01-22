@@ -74,15 +74,15 @@ struct WaterParams {
 
 void WaterParams_init(struct WaterParams *wp);
 void init_library_globals(struct WaterParams *wp);
-void alloc_grids_water();
-void alloc_grids_sediment();
-void init_grids_sediment();
+void alloc_grids_water(void);
+void alloc_grids_sediment(void);
+void init_grids_sediment(void);
 
 int input_data(void);
 int grad_check(void);
 void main_loop(void);
 int output_data(int, double);
-void free_walkers();
+void free_walkers(void);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
