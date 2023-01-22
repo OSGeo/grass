@@ -90,6 +90,7 @@ int read_rules(const char *filename)
                           "description or 'end' to exit:\n"));
     Rast_quant_init(&quant_struct);
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (;;) {
 =======
     for (line = 1;; line++) {
@@ -97,6 +98,9 @@ int read_rules(const char *filename)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (;;) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         if (isatty(fileno(fp)))
             fprintf(stderr, "> ");
         if (!G_getl2(buf, sizeof(buf), fp))

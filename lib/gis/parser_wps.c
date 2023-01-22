@@ -275,6 +275,7 @@ void G__wps_print_process_description(void)
                         data_type = TYPE_VECTOR;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -283,6 +284,8 @@ void G__wps_print_process_description(void)
                         if (is_output == 1)
                             num_vector_outputs++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
                     }
                     /* Modules may have different types of space time datasets
                      * as inputs */
@@ -300,6 +303,7 @@ void G__wps_print_process_description(void)
                         data_type = TYPE_STVDS;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -308,6 +312,8 @@ void G__wps_print_process_description(void)
                         if (is_output == 1)
                             num_stvds_outputs++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
                     }
                     if (strcmp(token, "file") == 0) {
                         data_type = TYPE_PLAIN_TEXT;

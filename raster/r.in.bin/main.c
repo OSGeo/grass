@@ -257,6 +257,7 @@ int main(int argc, char *argv[])
     const char *title;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     double null_val = NAN;
 =======
     double null_val = 0.0 / 0.0;
@@ -264,6 +265,9 @@ int main(int argc, char *argv[])
 =======
     double null_val = 0.0 / 0.0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double null_val = NAN;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     int is_fp;
     int is_signed;
     int bytes, hbytes;

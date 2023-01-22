@@ -54,6 +54,7 @@ source repository:
  from a file. If a copyright holder wishes to give up copyright they
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  must do so in writing to the GRASS [PSC](https://trac.osgeo.org/grass/wiki/PSC)
  before copyright messages are removed. If license terms are changed, it has to
  be by agreement (written in email is ok) of the copyright holders.
@@ -67,6 +68,11 @@ source repository:
  are removed. If license terms are changed, it has to be by agreement
  (written in email is ok) of the copyright holders.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+ must do so in writing to the GRASS [PSC](https://trac.osgeo.org/grass/wiki/PSC)
+ before copyright messages are removed. If license terms are changed, it has to
+ be by agreement (written in email is ok) of the copyright holders.
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 * When substantial contributions are added to a file (such as
  substantial patches) the author/contributor should be added to the
  list of copyright holders for the file in the file header.
@@ -81,9 +87,12 @@ GRASS Development Team at the following address:
 Internet: <http://grass.osgeo.org/home/contact-us/>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))

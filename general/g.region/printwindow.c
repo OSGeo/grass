@@ -720,6 +720,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         if (G_projection() == PROJECTION_XY)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             convergence = NAN;
 =======
             convergence = 0. / 0.;
@@ -727,6 +728,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
             convergence = 0. / 0.;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            convergence = NAN;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         else if (G_projection() == PROJECTION_LL)
             convergence = 0.0;
         else {

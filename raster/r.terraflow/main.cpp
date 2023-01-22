@@ -340,6 +340,7 @@ void record_args(int argc, char **argv)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "D8CUT=%f", opt->d8cut);
 =======
     sprintf(buf, "D8CUT=%f", opt->d8cut);
@@ -347,11 +348,15 @@ void record_args(int argc, char **argv)
 =======
     sprintf(buf, "D8CUT=%f", opt->d8cut);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, BUFSIZ, "D8CUT=%f", opt->d8cut);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     stats->comment(buf);
 
     size_t mm_size = (size_t)opt->mem << 20; /* (in bytes) */
     char tmp[100];
     formatNumber(tmp, mm_size);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(buf, BUFSIZ, "Memory size: %s bytes", tmp);
@@ -361,6 +366,9 @@ void record_args(int argc, char **argv)
 =======
     sprintf(buf, "Memory size: %s bytes", tmp);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, BUFSIZ, "Memory size: %s bytes", tmp);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     stats->comment(buf);
 }
 
@@ -529,6 +537,7 @@ int main(int argc, char *argv[])
     /* check STREAM path (the place where intermediate STREAMs are placed) */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "%s=%s", STREAM_TMPDIR, opt->streamdir);
 =======
     sprintf(buf, "%s=%s", STREAM_TMPDIR, opt->streamdir);
@@ -536,6 +545,9 @@ int main(int argc, char *argv[])
 =======
     sprintf(buf, "%s=%s", STREAM_TMPDIR, opt->streamdir);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, BUFSIZ, "%s=%s", STREAM_TMPDIR, opt->streamdir);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     /* don't pass an automatic variable; putenv() isn't guaranteed to make a
      * copy */
     putenv(G_store(buf));
@@ -633,6 +645,7 @@ int main(int argc, char *argv[])
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(path, GPATH_MAX, "%s/flowStream", streamdir->answer);
 =======
     sprintf(path, "%s/flowStream", streamdir->answer);
@@ -640,6 +653,9 @@ int main(int argc, char *argv[])
 =======
     sprintf(path, "%s/flowStream", streamdir->answer);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(path, GPATH_MAX, "%s/flowStream", streamdir->answer);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     flowStream = new AMI_STREAM<waterWindowBaseType>(path);
   G_verbose_message(_("flowStream opened: len=%lld\n", flowStream->stream_len());
   G_verbose_message(_("jumping to flow accumulation computation\n");

@@ -1081,10 +1081,14 @@ OCLINCPATH
 USE_OPENMP
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 OPENMP_LIB
 OPENMP_LIBPATH
 OPENMP_INCPATH
 OPENMP_CFLAGS
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1096,6 +1100,8 @@ OMPINCPATH
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 USE_PTHREAD
 PTHREADLIB
 PTHREADLIBPATH
@@ -1454,11 +1460,15 @@ with_opencl_libs
 with_x
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 enable_openmp
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+enable_openmp
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 enable_largefile
 '
       ac_precious_vars='build_alias
@@ -2209,11 +2219,15 @@ Optional Features:
   --enable-w11            use W11 library for Windows X11 emulation
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   --disable-openmp        do not use OpenMP
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+  --disable-openmp        do not use OpenMP
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
   --disable-largefile     omit support for large files (LFS)
 
 Optional Packages:
@@ -18756,9 +18770,17 @@ fi
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
   fi
 
+<<<<<<< HEAD
   PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
   PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
   USE_PDAL=1
+=======
+  if test "$PDAL_CONFIG" != "" ; then
+    PDAL_LIBS=`"$PDAL_CONFIG" --libs`
+    PDAL_INC=`"$PDAL_CONFIG" --includes`
+    USE_PDAL=1
+  fi
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
   PDAL=
   ac_save_libs="$LIBS"
@@ -18766,12 +18788,15 @@ fi
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -18909,7 +18934,6 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
-  CPPFLAGS=${ac_save_cppflags}
 
 <<<<<<< HEAD
 =======
@@ -31706,12 +31730,35 @@ fi
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of OpenMP library" >&5
 printf %s "checking for location of OpenMP library... " >&6; }
 =======
+=======
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of OpenMP library" >&5
+$as_echo_n "checking for location of OpenMP library... " >&6; }
+case "$with_openmp_libs" in
+y | ye | yes | n | no)
+	as_fn_error $? "*** You must supply a directory to --with-openmp-libs." "$LINENO" 5
+	;;
+esac
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_openmp_libs" >&5
+$as_echo "$with_openmp_libs" >&6; }
+
+if test -n "$with_openmp_libs"; then
+    for dir in $with_openmp_libs; do
+        if test -d "$dir"; then
+            OPENMP_LIBPATH="$OPENMP_LIBPATH -L$dir"
+        else
+            as_fn_error $? "*** OpenMP library directory $dir does not exist." "$LINENO" 5
+        fi
+    done
+fi
+
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 ac_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$OMPINCPATH $CPPFLAGS"
+CPPFLAGS="$OPENMP_INCPATH $CPPFLAGS"
 for ac_header in omp.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "omp.h" "ac_cv_header_omp_h" "$ac_includes_default"
@@ -31731,12 +31778,8 @@ done
 CPPFLAGS=$ac_save_cppflags
 
 
-# With OpenMP library directory
-# GCC et al.: -lgomp
-# Solaris cc: -lmtsk
-# AIX xlc: -lxlsmp
-# SGI IRIX 6.5 MIPSpro C/C++: -lmp
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -31796,11 +31839,10 @@ else $as_nop
 
 =======
 ac_save_libs="$LIBS"
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 ac_save_ldflags="$LDFLAGS"
-LIBS="  $LIBS"
-LDFLAGS=" $LDFLAGS"
-ac_fn_c_check_func "$LINENO" "GOMP_parallel_start" "ac_cv_func_GOMP_parallel_start"
-if test "x$ac_cv_func_GOMP_parallel_start" = xyes; then :
+LDFLAGS="$OPENMP_LIBPATH $LDFLAGS"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -31846,15 +31888,48 @@ CPPFLAGS=$ac_save_cppflags
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
-    OMPLIB="$OMPLIB "
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for omp_get_num_threads in -lomp" >&5
+$as_echo_n "checking for omp_get_num_threads in -lomp... " >&6; }
 
+ac_check_lib_save_LIBS=$LIBS
+LIBS="-lomp  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char omp_get_num_threads ();
+int
+main ()
+{
+return omp_get_num_threads ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_omp_omp_get_num_threads=yes
+else
+  ac_cv_lib_omp_omp_get_num_threads=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_omp_omp_get_num_threads" >&5
+$as_echo "$ac_cv_lib_omp_omp_get_num_threads" >&6; }
+if test "x$ac_cv_lib_omp_omp_get_num_threads" = xyes; then :
+  OPENMP_LIB="$OPENMP_LIB -lomp "
 else
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
+LDFLAGS=${ac_save_ldflags}
 
 ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$OPENMP_LIBPATH $LDFLAGS"
@@ -32012,7 +32087,7 @@ LIBS=$ac_check_lib_save_LIBS
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gomp_GOMP_parallel_start" >&5
 $as_echo "$ac_cv_lib_gomp_GOMP_parallel_start" >&6; }
 if test "x$ac_cv_lib_gomp_GOMP_parallel_start" = xyes; then :
-  OMPLIB="$OMPLIB -lgomp "
+  OPENMP_LIB="$OPENMP_LIB -lgomp "
 else
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -32040,6 +32115,7 @@ LDFLAGS=${ac_save_ldflags}
 
 loc_save_cflags="$CFLAGS"
 CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
+<<<<<<< HEAD
 if test -e penmp || test -e mp; then
   as_fn_error $? "AC_OPENMP clobbers files named 'mp' and 'penmp'. Aborting configure because one of these files already exists." "$LINENO" 5
 fi
@@ -32117,6 +32193,68 @@ printf "%s\n" "$ac_cv_prog_c_openmp" >&6; }
        test "$ac_cv_prog_c_openmp" != 'none needed'; then
       OPENMP_CFLAGS="$ac_cv_prog_c_openmp"
     fi
+=======
+
+  OPENMP_CFLAGS=
+  # Check whether --enable-openmp was given.
+if test "${enable_openmp+set}" = set; then :
+  enableval=$enable_openmp;
+fi
+
+  if test "$enable_openmp" != no; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to support OpenMP" >&5
+$as_echo_n "checking for $CC option to support OpenMP... " >&6; }
+
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_prog_c_openmp='none needed'
+else
+  ac_cv_prog_c_openmp='unsupported'
+	  	  	  	  	  	  	                                          	  	  	  	  	  	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
+                           -Popenmp --openmp '-Xclang -fopenmp'; do
+	    ac_save_CFLAGS=$CFLAGS
+	    CFLAGS="$CFLAGS $ac_option"
+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_prog_c_openmp=$ac_option
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	    CFLAGS=$ac_save_CFLAGS
+	    if test "$ac_cv_prog_c_openmp" != unsupported; then
+	      break
+	    fi
+	  done
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_c_openmp" >&5
+$as_echo "$ac_cv_prog_c_openmp" >&6; }
+    case $ac_cv_prog_c_openmp in #(
+      "none needed" | unsupported)
+	;; #(
+      *)
+	OPENMP_CFLAGS=$ac_cv_prog_c_openmp ;;
+    esac
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
   fi
 
 

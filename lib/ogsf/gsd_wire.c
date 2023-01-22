@@ -441,6 +441,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
 =======
 int gsd_wire_surf_func(geosurf *gs, int (*user_func)())
@@ -448,6 +449,9 @@ int gsd_wire_surf_func(geosurf *gs, int (*user_func)())
 =======
 int gsd_wire_surf_func(geosurf *gs, int (*user_func)())
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     return (1);
 }

@@ -95,6 +95,7 @@ public:
         char str[100];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
                  (long)((size + 1) * sizeof(T)));
 =======
@@ -105,6 +106,10 @@ public:
         sprintf(str, "BasicMinMaxHeap: allocate %ld\n",
                 (long)((size + 1) * sizeof(T)));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
+                 (long)((size + 1) * sizeof(T)));
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         // MEMORY_LOG(str);
 
         lastindex = 0;

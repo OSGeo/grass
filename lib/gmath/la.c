@@ -1307,6 +1307,7 @@ double G_vector_norm1(vec_struct *vc)
         G_warning(_("Matrix is not initialised"));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return NAN;
 =======
         return 0.0 / 0.0; /* NaN */
@@ -1314,6 +1315,9 @@ double G_vector_norm1(vec_struct *vc)
 =======
         return 0.0 / 0.0; /* NaN */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        return NAN;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     }
 
     idx = (vc->v_indx > 0) ? vc->v_indx : 0;

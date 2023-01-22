@@ -108,6 +108,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     CELL corrCell, precCell, supCell;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     long npatch;
 =======
     long npatch, area;
@@ -115,6 +116,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
 =======
     long npatch, area;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    long npatch;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -216,6 +220,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
                 Rast_set_c_null_value(&supCell, 1);
@@ -430,6 +437,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     DCELL corrCell, precCell, supCell;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     long npatch;
 =======
     long npatch, area;
@@ -437,6 +445,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 =======
     long npatch, area;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    long npatch;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -538,6 +549,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
                 Rast_set_d_null_value(&supCell, 1);
@@ -724,6 +738,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     FCELL corrCell, precCell, supCell;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     long npatch;
 =======
     long npatch, area;
@@ -731,6 +746,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 =======
     long npatch, area;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    long npatch;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -832,6 +850,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
                 Rast_set_f_null_value(&supCell, 1);

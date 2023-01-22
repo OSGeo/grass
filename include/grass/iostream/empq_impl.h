@@ -165,6 +165,7 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
@@ -176,6 +177,11 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
             (long)max_nbuf);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(str, sizeof(str),
+             "em_pqueue: allocating array of %ld buff pointers\n",
+             (long)max_nbuf);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     MEMORY_LOG(str);
 
     // allocate ext memory buffers array
@@ -338,6 +344,7 @@ em_pqueue<T, Key>::em_pqueue()
     char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
@@ -349,6 +356,11 @@ em_pqueue<T, Key>::em_pqueue()
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
             (long)max_nbuf);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(str, sizeof(str),
+             "em_pqueue: allocating array of %ld buff pointers\n",
+             (long)max_nbuf);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     MEMORY_LOG(str);
     // allocate ext memory buffers array
     buff = new em_buffer<T, Key> *[max_nbuf];
@@ -477,6 +489,7 @@ em_pqueue<T, Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis)
     char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_pqueue: allocating array of %ld buff pointers\n",
              (long)max_nbuf);
@@ -488,6 +501,11 @@ em_pqueue<T, Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis)
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
             (long)max_nbuf);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(str, sizeof(str),
+             "em_pqueue: allocating array of %ld buff pointers\n",
+             (long)max_nbuf);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     MEMORY_LOG(str);
     buff = new em_buffer<T, Key> *[max_nbuf];
     assert(buff);
@@ -637,6 +655,7 @@ bool em_pqueue<T, Key>::fillpq()
         char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(str, sizeof(str),
                  "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
                  crt_buf);
@@ -648,6 +667,11 @@ bool em_pqueue<T, Key>::fillpq()
         sprintf(str, "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
                 crt_buf);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(str, sizeof(str),
+                 "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
+                 crt_buf);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         MEMORY_LOG(str);
     }
     // merge pqsize smallest elements from each buffer into a new stream
@@ -1232,6 +1256,7 @@ void em_pqueue<T, Key>::empty_buff(unsigned short i)
         char str[200];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(str, sizeof(str),
                  "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
 =======
@@ -1242,6 +1267,10 @@ void em_pqueue<T, Key>::empty_buff(unsigned short i)
         sprintf(str, "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n",
                 i);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(str, sizeof(str),
+                 "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         MEMORY_LOG(str);
         buff[i + 1] = new em_buffer<T, Key>(i + 2, bufsize, buf_arity);
     }

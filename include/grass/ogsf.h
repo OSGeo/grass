@@ -245,10 +245,14 @@ typedef struct {
 typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     IFLAG att_src;          /* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
     IFLAG att_type;         /* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
     int hdata;              /* handle to dataset */
     int (*user_func)(void); /* Not yet supported */
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -260,6 +264,8 @@ typedef struct {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     float constant;
     int *lookup; /* TODO: use transform instead */
     float min_nz, max_nz, range_nz;
@@ -351,6 +357,7 @@ typedef struct g_vect {
     geoline *fastlines;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
 =======
     int (*bgn_read)(), (*end_read)(), (*nxt_line)();
@@ -358,6 +365,9 @@ typedef struct g_vect {
 =======
     int (*bgn_read)(), (*end_read)(), (*nxt_line)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     struct g_vect *next;
     void *clientdata;
 
@@ -393,6 +403,7 @@ typedef struct g_site {
     geopoint *points;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
 =======
     int (*bgn_read)(), (*end_read)(), (*nxt_site)();
@@ -400,6 +411,9 @@ typedef struct g_site {
 =======
     int (*bgn_read)(), (*end_read)(), (*nxt_site)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     struct g_site *next;
     void *clientdata;
 
@@ -430,6 +444,7 @@ typedef struct {
     int hfile;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*user_func)(void); /* unused */
 =======
     int (*user_func)();
@@ -437,6 +452,9 @@ typedef struct {
 =======
     int (*user_func)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*user_func)(void); /* unused */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     float constant;
 
     void *att_data;
@@ -521,6 +539,7 @@ typedef struct { /* need to add elements here for off_screen drawing */
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 extern void (*Cxl_func)(void);
 extern void (*Swap_func)(void); /* unused */
 =======
@@ -531,6 +550,10 @@ extern void (*Swap_func)();
 extern void (*Cxl_func)();
 extern void (*Swap_func)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+extern void (*Cxl_func)(void);
+extern void (*Swap_func)(void); /* unused */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 /* Key frames */
 /* these have to be 1 << KF_id_index */

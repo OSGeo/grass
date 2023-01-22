@@ -396,8 +396,8 @@ int main(int argc, char *argv[])
     nprocs = 1;
 #endif
 
-    lo = -1.0 / 0.0; /* -inf */
-    hi = 1.0 / 0.0;  /* inf */
+    lo = -INFINITY;
+    hi = INFINITY;
     if (parm.range->answer) {
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);
