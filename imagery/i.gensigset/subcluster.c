@@ -10,17 +10,17 @@
 #define ZERO              1e-10
 #define SMALLEST_SUBCLUST 1
 
-static void seed();
-static double refine_clusters();
-static int reestimate();
-static double regroup();
-static void reduce_order();
-static double loglike();
-static double distance();
-static int compute_constants();
-static void add_SubSigs();
-static void copy_ClassSig();
-static void copy_SubSig();
+static void seed(struct ClassSig *, int);
+static double refine_clusters(struct ClassSig *, int);
+static int reestimate(struct ClassSig *, int);
+static double regroup(struct ClassSig *, int);
+static void reduce_order(struct ClassSig *, int, int *, int *);
+static double loglike(DCELL *, struct SubSig *, int);
+static double distance(struct SubSig *, struct SubSig *, int);
+static int compute_constants(struct ClassSig *, int);
+static void add_SubSigs(struct SubSig *, struct SubSig *, struct SubSig *, int);
+static void copy_ClassSig(struct ClassSig *, struct ClassSig *, int);
+static void copy_SubSig(struct SubSig *, struct SubSig *, int);
 
 static int total_nulls, *n_nulls;
 

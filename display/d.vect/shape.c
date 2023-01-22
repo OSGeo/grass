@@ -7,7 +7,7 @@
 
 static int ncolor_rules_skipped = 0;
 
-int get_num_color_rules_skipped()
+int get_num_color_rules_skipped(void)
 {
     return ncolor_rules_skipped;
 }

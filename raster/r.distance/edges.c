@@ -35,10 +35,6 @@ void print_edge_info(struct Map *map)
 
 void find_edge_cells(struct Map *map, int null)
 {
-    void init_edge_list();
-    void add_edge_cell();
-    void sort_edge_list();
-
     int nrows, ncols, row, col;
     int fd;
     CELL *buf0, *buf1, *buf2, *tmp;

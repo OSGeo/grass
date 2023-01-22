@@ -125,7 +125,7 @@ int db__driver_open_database(dbHandle *handle)
     return DB_OK;
 }
 
-int db__driver_close_database()
+int db__driver_close_database(void)
 {
     int i;
 

@@ -7,7 +7,6 @@ int print_separability(FILE *fd, struct Cluster *C)
 {
     int c1, c2;
     int first, last;
-    double I_cluster_separation();
     double q;
 
     I_cluster_sum2(C);

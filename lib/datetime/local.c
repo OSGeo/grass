@@ -7,9 +7,6 @@
 #include <time.h>
 #include <grass/datetime.h>
 
-extern struct tm *localtime();
-extern struct tm *gmtime();
-
 /*
  ** NOTE:  the extern variable "timezone" seems to be treated
  ** differently by different OS, and the tm_zone element of struct tm

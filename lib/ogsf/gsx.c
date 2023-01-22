@@ -18,7 +18,7 @@
 
 #include <grass/ogsf.h>
 
-void (*Cxl_func)();
+void (*Cxl_func)(void);
 
 static int Cxl = 0;
 

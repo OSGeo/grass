@@ -88,7 +88,6 @@ int do_label(FILE *fd, int font_override)
     char field[1024];
     char value[1024];
     char ch, buf[1024];
-    double atof();
     int X_just_offset, Y_just_offset;
 
     /* initialize */

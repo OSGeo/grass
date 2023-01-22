@@ -102,7 +102,7 @@ typedef struct {
 
 paramType param;
 
-static void set_params()
+static void set_params(void)
 {
     param.input = G_define_standard_option(G_OPT_R3_INPUT);
 

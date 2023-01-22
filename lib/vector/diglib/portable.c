@@ -1005,7 +1005,7 @@ int dig_set_cur_port(struct Port_info *port)
    \return ENDIAN_LITTLE
    \return ENDIAN_BIG
  */
-int dig__byte_order_out()
+int dig__byte_order_out(void)
 {
     if (dbl_order == ENDIAN_LITTLE)
         return (ENDIAN_LITTLE);

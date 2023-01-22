@@ -10,7 +10,7 @@ static void insert_next_point(struct _points *p, double x, double y, int cat);
 
 /* ************************************************************************* */
 
-void create_observation_points()
+void create_observation_points(void)
 {
     int if_log = 0;
     struct Map_info Map;

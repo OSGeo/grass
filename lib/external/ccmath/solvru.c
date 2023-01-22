@@ -9,7 +9,7 @@ int solvru(double *a, double *b, int n)
 {
     int j, k;
 
-    double fabs();
+    double fabs(double);
 
     double s, t, *p, *q;
 

@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 
 static int list_element(FILE *, const char *, const char *, const char *,
-                        int (*)(const char *, const char *, const char *));
+                        int (*)(const char *, const char *, char *));
 
 /*!
    \brief General purpose list function
@@ -49,7 +49,7 @@ static int list_element(FILE *, const char *, const char *, const char *,
    NULL if no titles desired.
  */
 void G_list_element(const char *element, const char *desc, const char *mapset,
-                    int (*lister)(const char *, const char *, const char *))
+                    int (*lister)(const char *, const char *, char *))
 {
     struct Popen pager;
     int n;
@@ -94,7 +94,7 @@ void G_list_element(const char *element, const char *desc, const char *mapset,
 
 static int list_element(FILE *out, const char *element, const char *desc,
                         const char *mapset,
-                        int (*lister)(const char *, const char *, const char *))
+                        int (*lister)(const char *, const char *, char *))
 {
     char path[GPATH_MAX];
     int count = 0;

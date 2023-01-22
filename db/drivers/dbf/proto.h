@@ -3,7 +3,7 @@ void init_error(void);
 
 int save_string(VALUE *, char *);
 
-cursor *alloc_cursor();
+cursor *alloc_cursor(void);
 void free_cursor(cursor *);
 
 /* column.c */

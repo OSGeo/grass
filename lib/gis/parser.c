@@ -940,7 +940,7 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
    \return 1 overwrite enabled
    \return 0 overwrite disabled
  */
-int G_get_overwrite()
+int G_get_overwrite(void)
 {
     return st->module_info.overwrite;
 }

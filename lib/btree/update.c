@@ -11,7 +11,7 @@ int btree_update(BTREE *B, const void *key, int keylen, const void *data,
     int p = 0;
     int q;
     int N;
-    int (*cmp)();
+    int (*cmp)(const void *, const void *);
     int dir;
 
     /* first node is special case */

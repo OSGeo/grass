@@ -595,7 +595,7 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
     DCELL dtmp;
     int try, min_ind, max_ind;
     struct Quant_table *p;
-    int (*lower)();
+    int (*lower)(double, double);
 
     dtmp = dcellVal;
     /* I know the functions which call me already check for null values,

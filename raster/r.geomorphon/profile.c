@@ -125,7 +125,7 @@ void prof_sso(const char *key)
     size++;
 }
 
-void prof_eso()
+void prof_eso(void)
 {
     if (size == MAX_TOKENS) {
         overflow = 1;
@@ -184,7 +184,7 @@ void prof_pattern(const double o_elevation, const PATTERN *p)
     prof_eso();
 }
 
-void prof_map_info()
+void prof_map_info(void)
 {
     prof_sso("map_info");
     prof_str("elevation_name", elevation.elevname);
@@ -335,7 +335,7 @@ static unsigned stack_push(const char *s)
     return 1;
 }
 
-static const char *stack_pop()
+static const char *stack_pop(void)
 {
     if (!stack_size)
         return NULL;

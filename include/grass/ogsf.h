@@ -243,10 +243,10 @@ typedef struct {
 
 /* maybe add transformation matrix? */
 typedef struct {
-    IFLAG att_src;  /* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
-    IFLAG att_type; /* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
-    int hdata;      /* handle to dataset */
-    int (*user_func)();
+    IFLAG att_src;          /* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
+    IFLAG att_type;         /* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
+    int hdata;              /* handle to dataset */
+    int (*user_func)(void); /* Not yet supported */
     float constant;
     int *lookup; /* TODO: use transform instead */
     float min_nz, max_nz, range_nz;
@@ -336,7 +336,7 @@ typedef struct g_vect {
     /* also maybe center & rotate? */
     geoline *lines;
     geoline *fastlines;
-    int (*bgn_read)(), (*end_read)(), (*nxt_line)();
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_line)(void);
     struct g_vect *next;
     void *clientdata;
 
@@ -370,7 +370,7 @@ typedef struct g_site {
     transform attr_trans;
     float x_trans, y_trans, z_trans;
     geopoint *points;
-    int (*bgn_read)(), (*end_read)(), (*nxt_site)();
+    int (*bgn_read)(void), (*end_read)(void), (*nxt_site)(void);
     struct g_site *next;
     void *clientdata;
 
@@ -399,7 +399,7 @@ typedef struct {
     IFLAG att_src;
 
     int hfile;
-    int (*user_func)();
+    int (*user_func)(void); /* unused */
     float constant;
 
     void *att_data;
@@ -482,8 +482,8 @@ typedef struct { /* need to add elements here for off_screen drawing */
     int bgcol;
 } geodisplay;
 
-extern void (*Cxl_func)();
-extern void (*Swap_func)();
+extern void (*Cxl_func)(void);
+extern void (*Swap_func)(void); /* unused */
 
 /* Key frames */
 /* these have to be 1 << KF_id_index */

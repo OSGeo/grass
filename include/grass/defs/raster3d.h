@@ -227,9 +227,13 @@ void Rast3d_coord2location(RASTER3D_Region *, double, double, double, double *,
                            double *, double *);
 /* resample.c */
 void Rast3d_nearest_neighbor(RASTER3D_Map *, int, int, int, void *, int);
-void Rast3d_set_resampling_fun(RASTER3D_Map *, void (*)());
-void Rast3d_get_resampling_fun(RASTER3D_Map *, void (**)());
-void Rast3d_get_nearest_neighbor_fun_ptr(void (**)());
+void Rast3d_set_resampling_fun(RASTER3D_Map *, void (*)(RASTER3D_Map *, int,
+                                                        int, int, void *, int));
+void Rast3d_get_resampling_fun(RASTER3D_Map *,
+                               void (**)(RASTER3D_Map *, int, int, int, void *,
+                                         int));
+void Rast3d_get_nearest_neighbor_fun_ptr(void (**)(RASTER3D_Map *, int, int,
+                                                   int, void *, int));
 
 /* volume.c */
 void Rast3d_get_volume_a(void *, double[2][2][2][3], int, int, int, void *,

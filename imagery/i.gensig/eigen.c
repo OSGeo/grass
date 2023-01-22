@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 #include <math.h>
-double **matrix(), *vector();
+double **matrix(int, int, int, int), *vector(int, int);
 
 /* Computes eigenvalues (and eigen vectors if desired) for      *
  *  symmetric matices.                                          */

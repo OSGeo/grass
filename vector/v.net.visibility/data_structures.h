@@ -19,11 +19,11 @@
 #include <grass/glocale.h>
 #include "rotation_tree.h"
 
-struct Point *pop();
-struct Point *top();
+struct Point *pop(void);
+struct Point *top(void);
 void push(struct Point *p);
-int empty_stack();
-void init_stack();
+int empty_stack(void);
+void init_stack(int);
 
 int cmp_points(const void *v1, const void *v2, void *param);
 

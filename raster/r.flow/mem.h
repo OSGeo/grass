@@ -16,16 +16,16 @@ extern CELL v;
  * globals w: fl, density, ew_dist, el, as, ds
  */
 
-void allocate_heap();
+void allocate_heap(void);
 
 /*
  * deallocate_heap: frees space for other processes, closes cts output files
  * globals r: parm, bitbar, lgfd, el, as, ew_dist
  */
 
-void deallocate_heap();
+void deallocate_heap(void);
 
-void put_row_seg(/* l, row */);
+void put_row_seg(layer, int /* l, row */);
 
 #define get_row(l, row)                                                 \
     ((parm.seg && (Segment_flush(l.seg) < 1 ||                          \

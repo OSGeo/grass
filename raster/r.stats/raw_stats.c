@@ -11,7 +11,6 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
     char str1[50];
     register int i;
     int row, col, nulls_found;
-    double Rast_row_to_northing(), G_col_to_easting();
     struct Cell_head window;
     char nbuf[100], ebuf[100];
     RASTER_MAP_TYPE *map_type;

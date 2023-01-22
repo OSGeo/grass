@@ -28,8 +28,10 @@ struct Slink {
 /* function prototypes */
 static int comp_double(double *, double *);
 static int V__within(double, double, double);
-int Vect__intersect_y_line_with_poly();
-int Vect__intersect_x_line_with_poly();
+int Vect__intersect_y_line_with_poly(const struct line_pnts *, double,
+                                     struct line_pnts *);
+int Vect__intersect_x_line_with_poly(const struct line_pnts *, double,
+                                     struct line_pnts *);
 static void destroy_links(struct link_head *, struct Slink *);
 static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
                                     struct link_head *, double *, double *,

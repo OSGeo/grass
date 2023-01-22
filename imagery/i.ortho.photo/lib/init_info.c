@@ -2,8 +2,8 @@
 
 #include "orthophoto.h"
 
-FILE *I_fopen_group_init_old();
-FILE *I_fopen_group_init_new();
+FILE *I_fopen_group_init_old(char *);
+FILE *I_fopen_group_init_new(char *);
 
 #define INITIAL_FILE "INIT_EXP"
 

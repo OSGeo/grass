@@ -51,7 +51,7 @@ void tgis_free_map_list(tgisMapList *list)
  * \return list The pointer to a new allocated integer list
  *
  * */
-tgisMapList *tgis_new_map_list()
+tgisMapList *tgis_new_map_list(void)
 {
     tgisMapList *list = G_malloc(sizeof(tgisMapList));
 

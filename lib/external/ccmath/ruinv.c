@@ -9,7 +9,7 @@ int ruinv(double *a, int n)
 {
     int j;
 
-    double fabs();
+    double fabs(double);
 
     double tt, z, *p, *q, *r, *s, *t;
 

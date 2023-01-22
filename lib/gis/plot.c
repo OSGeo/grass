@@ -30,7 +30,8 @@
 
 static void fastline(double, double, double, double);
 static void slowline(double, double, double, double);
-static void plot_line(double, double, double, double, void (*)());
+static void plot_line(double, double, double, double,
+                      void (*)(double, double, double, double));
 static double wrap_east(double, double);
 static int edge(double, double, double, double);
 static int edge_point(double, int);

@@ -23,7 +23,7 @@
  */
 int M__hold_signals(int hold)
 {
-    void (*sig)() = hold ? SIG_IGN : SIG_DFL;
+    void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
 
     signal(SIGINT, sig);
 

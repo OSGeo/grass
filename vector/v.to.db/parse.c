@@ -4,9 +4,9 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-int parse_units();
-int parse_option();
-int match();
+int parse_units(char *);
+int parse_option(char *);
+int match(char *, char *, int);
 
 int parse_command_line(int argc, char *argv[])
 {

@@ -487,7 +487,7 @@ void get_statistics_mode(unsigned long row_index, unsigned long col, double min,
 /*
  * Initializes handlers to point to corresponding data rows.
  */
-void init_handles()
+void init_handles(void)
 {
     unsigned long i;
 

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     int line, nlines, layer, nosplit, fixedlength;
     double length = -1;
     int vertices = 0;
-    double (*line_length)();
+    double (*line_length)(const struct line_pnts *);
     int geodesic = 0;
 
     G_gisinit(argv[0]);

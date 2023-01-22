@@ -1087,7 +1087,7 @@ int gsd_surf_const(geosurf *surf, float k)
 
    \return 1
  */
-int gsd_surf_func(geosurf *gs, int (*user_func)())
+int gsd_surf_func(geosurf *gs, int (*user_func)(void))
 {
 
     return (1);

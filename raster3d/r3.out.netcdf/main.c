@@ -90,7 +90,7 @@ static void fatalError(const char *errorMsg)
 
 /* Convenient way to set up the arguments we are expecting
  */
-static void setParams()
+static void setParams(void)
 {
     param.input = G_define_standard_option(G_OPT_R3_INPUT);
 

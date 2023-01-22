@@ -340,22 +340,23 @@ static void cell_values_double(int fd, const unsigned char *data,
 
 #ifdef HAVE_GDAL
 static void gdal_values_int(int fd, const unsigned char *data,
-                            const COLUMN_MAPPING *cmap, int nbytes, CELL *cell,
+                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
                             int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
+    CELL *c = cell;
     const unsigned char *d;
     COLUMN_MAPPING cmapold = 0;
     int i;
 
     for (i = 0; i < n; i++) {
         if (!cmap[i]) {
-            cell[i] = 0;
+            c[i] = 0;
             continue;
         }
 
         if (cmap[i] == cmapold) {
-            cell[i] = cell[i - 1];
+            c[i] = c[i - 1];
             continue;
         }
 
@@ -363,23 +364,23 @@ static void gdal_values_int(int fd, const unsigned char *data,
 
         switch (fcb->gdal->type) {
         case GDT_Byte:
-            cell[i] = *(GByte *)d;
+            c[i] = *(GByte *)d;
             break;
         case GDT_Int16:
-            cell[i] = *(GInt16 *)d;
+            c[i] = *(GInt16 *)d;
             break;
         case GDT_UInt16:
-            cell[i] = *(GUInt16 *)d;
+            c[i] = *(GUInt16 *)d;
             break;
         case GDT_Int32:
-            cell[i] = *(GInt32 *)d;
+            c[i] = *(GInt32 *)d;
             break;
         case GDT_UInt32:
-            cell[i] = *(GUInt32 *)d;
+            c[i] = *(GUInt32 *)d;
             break;
         default:
             /* shouldn't happen */
-            Rast_set_c_null_value(&cell[i], 1);
+            Rast_set_c_null_value(&c[i], 1);
             break;
         }
 
@@ -387,49 +388,53 @@ static void gdal_values_int(int fd, const unsigned char *data,
     }
 }
 
-static void gdal_values_float(int fd, const float *data,
+static void gdal_values_float(int fd, const unsigned char *data,
                               const COLUMN_MAPPING *cmap, int nbytes,
-                              FCELL *cell, int n)
+                              void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
+    const float *d = (const float *)data;
+    FCELL *c = cell;
     int i;
 
     for (i = 0; i < n; i++) {
         if (!cmap[i]) {
-            cell[i] = 0;
+            c[i] = 0;
             continue;
         }
 
         if (cmap[i] == cmapold) {
-            cell[i] = cell[i - 1];
+            c[i] = c[i - 1];
             continue;
         }
 
-        cell[i] = data[cmap[i] - 1];
+        c[i] = d[cmap[i] - 1];
 
         cmapold = cmap[i];
     }
 }
 
-static void gdal_values_double(int fd, const double *data,
+static void gdal_values_double(int fd, const unsigned char *data,
                                const COLUMN_MAPPING *cmap, int nbytes,
-                               DCELL *cell, int n)
+                               void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
+    const double *d = (const double *)data;
+    DCELL *c = cell;
     int i;
 
     for (i = 0; i < n; i++) {
         if (!cmap[i]) {
-            cell[i] = 0;
+            c[i] = 0;
             continue;
         }
 
         if (cmap[i] == cmapold) {
-            cell[i] = cell[i - 1];
+            c[i] = c[i - 1];
             continue;
         }
 
-        cell[i] = data[cmap[i] - 1];
+        c[i] = d[cmap[i] - 1];
 
         cmapold = cmap[i];
     }
@@ -447,11 +452,13 @@ static void gdal_values_double(int fd, const double *data,
  */
 static void transfer_to_cell_XX(int fd, void *cell)
 {
-    static void (*cell_values_type[3])() = {cell_values_int, cell_values_float,
-                                            cell_values_double};
+    static void (*cell_values_type[3])(
+        int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
+        int) = {cell_values_int, cell_values_float, cell_values_double};
 #ifdef HAVE_GDAL
-    static void (*gdal_values_type[3])() = {gdal_values_int, gdal_values_float,
-                                            gdal_values_double};
+    static void (*gdal_values_type[3])(
+        int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
+        int) = {gdal_values_int, gdal_values_float, gdal_values_double};
 #endif
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
@@ -560,7 +567,7 @@ static void transfer_to_cell_fd(int fd, void *cell)
 static int get_map_row_nomask(int fd, void *rast, int row,
                               RASTER_MAP_TYPE data_type)
 {
-    static void (*transfer_to_cell_FtypeOtype[3][3])() = {
+    static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
         {transfer_to_cell_XX, transfer_to_cell_if, transfer_to_cell_id},
         {transfer_to_cell_fi, transfer_to_cell_XX, transfer_to_cell_fd},
         {transfer_to_cell_di, transfer_to_cell_df, transfer_to_cell_XX}};

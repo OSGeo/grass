@@ -9,7 +9,7 @@
  * globals w:  density, string
  */
 
-void read_input_files();
+void read_input_files(void);
 
 /*
  * open_output_files: opens continuously written files (length/vector)
@@ -17,18 +17,18 @@ void read_input_files();
  * globals w: string, el, as, ds, lgfd
  */
 
-void open_output_files();
+void open_output_files(void);
 
 /*
  * close_files: closes continuously written/read files, outputs header info
  * globals r: parm, el, as, ds, lgfd, fl
  */
 
-void close_files();
+void close_files(void);
 
 /*
  * write_density_file: dumps density matrix and colormap
  * globals r: density, parm, region, string
  */
 
-void write_density_file();
+void write_density_file(void);

@@ -32,7 +32,7 @@
  * compare
  * add
  */
-dglTreeNode_s *dglTreeNodeAlloc()
+dglTreeNode_s *dglTreeNodeAlloc(void)
 {
     dglTreeNode_s *pNode = (dglTreeNode_s *)malloc(sizeof(dglTreeNode_s));
 
@@ -84,7 +84,7 @@ dglTreeNode_s *dglTreeNodeAdd(void *pavl, dglInt32_t nKey)
  * compare
  * add
  */
-dglTreeNode2_s *dglTreeNode2Alloc()
+dglTreeNode2_s *dglTreeNode2Alloc(void)
 {
     dglTreeNode2_s *pNode2 = (dglTreeNode2_s *)malloc(sizeof(dglTreeNode2_s));
     if (pNode2)
@@ -138,7 +138,7 @@ dglTreeNode2_s *dglTreeNode2Add(void *pavl, dglInt32_t nKey)
  * compare
  * add
  */
-dglTreeEdge_s *dglTreeEdgeAlloc()
+dglTreeEdge_s *dglTreeEdgeAlloc(void)
 {
     dglTreeEdge_s *pEdge = (dglTreeEdge_s *)malloc(sizeof(dglTreeEdge_s));
 
@@ -188,7 +188,7 @@ dglTreeEdge_s *dglTreeEdgeAdd(void *pavl, dglInt32_t nKey)
  * compare
  * add
  */
-dglTreeTouchI32_s *dglTreeTouchI32Alloc()
+dglTreeTouchI32_s *dglTreeTouchI32Alloc(void)
 {
     dglTreeTouchI32_s *pTouchI32 =
         (dglTreeTouchI32_s *)malloc(sizeof(dglTreeTouchI32_s));
@@ -237,7 +237,7 @@ dglTreeTouchI32_s *dglTreeTouchI32Add(void *pavl, dglInt32_t nKey)
  * compare
  * add
  */
-dglTreePredist_s *dglTreePredistAlloc()
+dglTreePredist_s *dglTreePredistAlloc(void)
 {
     dglTreePredist_s *pPredist =
         (dglTreePredist_s *)malloc(sizeof(dglTreePredist_s));
@@ -287,7 +287,7 @@ dglTreePredist_s *dglTreePredistAdd(void *pavl, dglInt32_t nKey)
  * compare
  * add
  */
-dglTreeNodePri32_s *dglTreeNodePri32Alloc()
+dglTreeNodePri32_s *dglTreeNodePri32Alloc(void)
 {
     dglTreeNodePri32_s *pNodePri32 =
         (dglTreeNodePri32_s *)malloc(sizeof(dglTreeNodePri32_s));
@@ -337,7 +337,7 @@ dglTreeNodePri32_s *dglTreeNodePri32Add(void *pavl, dglInt32_t nKey)
  * compare
  * add
  */
-dglTreeEdgePri32_s *dglTreeEdgePri32Alloc()
+dglTreeEdgePri32_s *dglTreeEdgePri32Alloc(void)
 {
     dglTreeEdgePri32_s *pEdgePri32 =
         (dglTreeEdgePri32_s *)malloc(sizeof(dglTreeEdgePri32_s));
@@ -399,7 +399,7 @@ static void _tree_free(struct libavl_allocator *allocator, void *libavl_block)
 
 static struct libavl_allocator _tree_allocator = {_tree_malloc, _tree_free};
 
-void *dglTreeGetAllocator()
+void *dglTreeGetAllocator(void)
 {
     return &_tree_allocator;
 }

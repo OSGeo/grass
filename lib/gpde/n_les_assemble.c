@@ -339,7 +339,9 @@ N_data_star *N_create_27star(double C, double W, double E, double N, double S,
  * \return void
  * */
 void N_set_les_callback_3d_func(N_les_callback_3d *data,
-                                N_data_star *(*callback_func_3d)())
+                                N_data_star *(*callback_func_3d)(void *,
+                                                                 N_geom_data *,
+                                                                 int, int, int))
 {
     data->callback = callback_func_3d;
 }
@@ -356,7 +358,9 @@ void N_set_les_callback_3d_func(N_les_callback_3d *data,
  * \return void
  * */
 void N_set_les_callback_2d_func(N_les_callback_2d *data,
-                                N_data_star *(*callback_func_2d)())
+                                N_data_star *(*callback_func_2d)(void *,
+                                                                 N_geom_data *,
+                                                                 int, int))
 {
     data->callback = callback_func_2d;
 }

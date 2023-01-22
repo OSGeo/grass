@@ -33,7 +33,7 @@ double sphere_volume(double dimension)
     return exp(log_volume);
 }
 
-int main()
+int main(void)
 {
     double dim = 0, delta = 1;
 

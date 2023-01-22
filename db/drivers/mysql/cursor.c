@@ -32,7 +32,7 @@ int db__driver_close_cursor(dbCursor *dbc)
     return DB_OK;
 }
 
-cursor *alloc_cursor()
+cursor *alloc_cursor(void)
 {
     cursor *c;
 

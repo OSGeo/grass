@@ -38,7 +38,7 @@ paramType param; /*Parameters */
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int *fd, int depths,
                  char *errorMsg); /*Simple Error message */
-void set_params();                /*Fill the paramType structure */
+void set_params(void);            /*Fill the paramType structure */
 void g3d_to_raster(void *map, RASTER3D_Region region, int *fd, int output_type,
                    int use_coeffs, double coeff_a,
                    double coeff_b);                  /*Write the raster */
@@ -88,7 +88,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 /* Set up the arguments we are expecting ********************************** */
 
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.input = G_define_option();
     param.input->key = "input";

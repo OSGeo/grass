@@ -16,7 +16,6 @@ void ram2out(void)
     extern int nrows, ncols;
     extern struct Cell_head window;
     double north, west;
-    double Rast_row_to_northing(), G_col_to_easting();
     int row, col;
 
     north = Rast_row_to_northing(0.5, &window);

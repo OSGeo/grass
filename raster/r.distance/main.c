@@ -24,10 +24,6 @@
 
 int main(int argc, char *argv[])
 {
-    extern void parse();
-    extern void find_edge_cells();
-    extern void report();
-    extern void read_labels();
     struct Parms parms;
     struct GModule *module;
 

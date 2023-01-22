@@ -12,7 +12,7 @@
 /* function prototypes */
 static int comp_array(const void *p1, const void *p2);
 
-void Init()
+void Init(void)
 {
     struct Cell_head Region;
     int Count;

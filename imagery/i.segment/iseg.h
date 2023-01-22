@@ -70,12 +70,12 @@ struct globals {
     char *bsuf;     /* suffix to be appended to input bands */
 
     /* general segmentation */
-    int method;         /* Segmentation method code */
-    int (*method_fn)(); /* Segmentation method function */
-    int nn;             /* number of neighbors, 4 or 8 */
-    double max_diff;    /* max possible difference */
-    double alpha;       /* similarity threshold */
-    int end_t;          /* maximum number of iterations */
+    int method;                         /* Segmentation method code */
+    int (*method_fn)(struct globals *); /* Segmentation method function */
+    int nn;                             /* number of neighbors, 4 or 8 */
+    double max_diff;                    /* max possible difference */
+    double alpha;                       /* similarity threshold */
+    int end_t;                          /* maximum number of iterations */
 
     /* region growing */
     int min_segment_size; /* smallest number of pixels/cells allowed in a final

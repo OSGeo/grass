@@ -27,35 +27,35 @@
 
 #include "local_proto.h"
 
-static int clo_dummy()
+static int clo_dummy(struct Map_info *map)
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format(struct Map_info *map)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Close_array[][2])() = {{clo_dummy, V1_close_nat}
+static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
 #ifdef HAVE_OGR
-                                    ,
-                                    {clo_dummy, V1_close_ogr},
-                                    {clo_dummy, V1_close_ogr}
+                                                     ,
+                                                     {clo_dummy, V1_close_ogr},
+                                                     {clo_dummy, V1_close_ogr}
 #else
-                                    ,
-                                    {clo_dummy, format},
-                                    {clo_dummy, format}
+                                                     ,
+                                                     {clo_dummy, format},
+                                                     {clo_dummy, format}
 #endif
 #ifdef HAVE_POSTGRES
-                                    ,
-                                    {clo_dummy, V1_close_pg}
+                                                     ,
+                                                     {clo_dummy, V1_close_pg}
 #else
-                                    ,
-                                    {clo_dummy, format}
+                                                     ,
+                                                     {clo_dummy, format}
 #endif
 };
 

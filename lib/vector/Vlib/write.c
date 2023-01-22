@@ -25,27 +25,31 @@
 #include <grass/glocale.h>
 #include <grass/vector.h>
 
-static off_t write_dummy()
+static off_t write_dummy(struct Map_info *Map, int type,
+                         const struct line_pnts *points,
+                         const struct line_cats *cats)
 {
     G_warning("Vect_write_line() %s", _("for this format/level not supported"));
     return -1;
 }
 
-static off_t rewrite_dummy()
+static off_t rewrite_dummy(struct Map_info *Map, off_t line, int type,
+                           const struct line_pnts *points,
+                           const struct line_cats *cats)
 {
     G_warning("Vect_rewrite_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-static int delete_dummy()
+static int delete_dummy(struct Map_info *Map, off_t line)
 {
     G_warning("Vect_delete_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-static int restore_dummy()
+static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
 {
     G_warning("Vect_restore_line() %s",
               _("for this format/level not supported"));
@@ -53,20 +57,38 @@ static int restore_dummy()
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format(struct Map_info *Map, off_t line)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static off_t format_l()
+static int format2(struct Map_info *Map, off_t offset, off_t line)
+{
+    G_fatal_error(_("Requested format is not compiled in this version"));
+    return 0;
+}
+
+static off_t format_l(struct Map_info *Map, int type,
+                      const struct line_pnts *points,
+                      const struct line_cats *cats)
+{
+    G_fatal_error(_("Requested format is not compiled in this version"));
+    return 0;
+}
+
+static off_t format_l2(struct Map_info *Map, off_t line, int type,
+                       const struct line_pnts *points,
+                       const struct line_cats *cats)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static off_t (*Vect_write_line_array[][3])() = {
+static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
+                                           const struct line_pnts *,
+                                           const struct line_cats *) = {
     {write_dummy, V1_write_line_nat, V2_write_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -86,7 +108,9 @@ static off_t (*Vect_write_line_array[][3])() = {
 #endif
 };
 
-static off_t (*Vect_rewrite_line_array[][3])() = {
+static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
+                                             const struct line_pnts *,
+                                             const struct line_cats *) = {
     {rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -94,19 +118,19 @@ static off_t (*Vect_rewrite_line_array[][3])() = {
     {rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa}
 #else
     ,
-    {rewrite_dummy, format_l, format_l},
-    {rewrite_dummy, format_l, format_l}
+    {rewrite_dummy, format_l2, format_l2},
+    {rewrite_dummy, format_l2, format_l2}
 #endif
 #ifdef HAVE_POSTGRES
     ,
     {rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_pg}
 #else
     ,
-    {rewrite_dummy, format_l, format_l}
+    {rewrite_dummy, format_l2, format_l2}
 #endif
 };
 
-static int (*Vect_delete_line_array[][3])() = {
+static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
     {delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -126,7 +150,7 @@ static int (*Vect_delete_line_array[][3])() = {
 #endif
 };
 
-static int (*Vect_restore_line_array[][3])() = {
+static int (*Vect_restore_line_array[][3])(struct Map_info *, off_t, off_t) = {
     {restore_dummy, V1_restore_line_nat, V2_restore_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -134,15 +158,15 @@ static int (*Vect_restore_line_array[][3])() = {
     {restore_dummy, restore_dummy, restore_dummy}
 #else
     ,
-    {restore_dummy, format, format},
-    {restore_dummy, format, format}
+    {restore_dummy, format2, format2},
+    {restore_dummy, format2, format2}
 #endif
 #ifdef HAVE_POSTGRES
     ,
     {restore_dummy, restore_dummy, restore_dummy}
 #else
     ,
-    {restore_dummy, format, format}
+    {restore_dummy, format2, format2}
 #endif
 };
 

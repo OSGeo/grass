@@ -50,7 +50,7 @@ int mk_att(int, struct field_info *, dbDriver *, int, int *, const char **, int,
 char *get_datasource_name(const char *, int);
 
 /* list.c */
-char *OGR_list_write_drivers();
+char *OGR_list_write_drivers(void);
 void list_formats(void);
 char *default_driver(void);
 

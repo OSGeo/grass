@@ -28,7 +28,7 @@
 #define S_TEST 12345
 #define C_TEST 123
 
-int main()
+int main(void)
 {
     int i, j;
     int err;

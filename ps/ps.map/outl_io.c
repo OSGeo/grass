@@ -4,7 +4,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-static int blank_line();
+static int blank_line(void *);
 
 static char *error_prefix;
 static int first_read, last_read;

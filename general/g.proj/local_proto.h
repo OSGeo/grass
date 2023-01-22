@@ -30,7 +30,7 @@ int set_datumtrans(int, int);
 
 /* create.c */
 void create_location(const char *);
-void modify_projinfo();
+void modify_projinfo(void);
 
 /* list_codes.c */
 char *get_authority_names(void);

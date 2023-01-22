@@ -18,7 +18,7 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
 
     if (strcmp(name, "list") == 0) {
         if (isatty(0))
-            G_list_element(element, desc, mapset, (int (*)())NULL);
+            G_list_element(element, desc, mapset, NULL);
         reject();
         return 0;
     }

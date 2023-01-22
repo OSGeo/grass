@@ -12,7 +12,7 @@ void ortho(double *e, int n)
 {
     int i, j, k, m;
 
-    double *p, *q, c, s, a, unfl();
+    double *p, *q, c, s, a, unfl(void);
 
     for (i = 0, p = e; i < n; ++i) {
         for (j = 0; j < n; ++j) {

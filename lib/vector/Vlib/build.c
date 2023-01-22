@@ -32,27 +32,28 @@
 #define SEP "-----------------------------------\n"
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format(struct Map_info *Map, int build)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Build_array[])() = {Vect_build_nat
+static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
 #ifdef HAVE_OGR
-                                 ,
-                                 Vect_build_ogr, Vect_build_ogr
+                                                       ,
+                                                       Vect_build_ogr,
+                                                       Vect_build_ogr
 #else
-                                 ,
-                                 format, format
+                                                       ,
+                                                       format, format
 #endif
 #ifdef HAVE_POSTGRES
-                                 ,
-                                 Vect_build_pg
+                                                       ,
+                                                       Vect_build_pg
 #else
-                                 ,
-                                 format
+                                                       ,
+                                                       format
 #endif
 };
 
@@ -1242,7 +1243,6 @@ int Vect_build_sidx(struct Map_info *Map)
  */
 int Vect_build_sidx_from_topo(const struct Map_info *Map)
 {
-
     G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
 
     G_warning(_("%s is no longer supported"), "Vect_build_sidx_from_topo()");

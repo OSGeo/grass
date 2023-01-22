@@ -23,7 +23,7 @@
 
    \return string buffer with logname
  */
-const char *db_whoami()
+const char *db_whoami(void)
 {
     return G_store(getenv("LOGNAME"));
 }

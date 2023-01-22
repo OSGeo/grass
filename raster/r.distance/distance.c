@@ -36,9 +36,6 @@ void find_minimum_distance(const struct CatEdgeList *list1,
     int i1, i2;
     double dist;
     double e1, n1, e2, n2;
-    extern double G_distance();
-    extern double Rast_row_to_northing();
-    extern double Rast_col_to_easting();
     int zerro_row, zerro_col;
 
     int nulldistance = 0;

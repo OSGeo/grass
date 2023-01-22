@@ -74,7 +74,7 @@ int Nviz_get_exag_height(double *val, double *min, double *max)
 
    \return value
  */
-double Nviz_get_exag()
+double Nviz_get_exag(void)
 {
     float exag, texag;
     int nsurfs, i, *surf_list;

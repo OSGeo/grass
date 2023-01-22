@@ -13,7 +13,7 @@ static double coss[NUM_DIRS] = {
 #define TERNARY_MAX 6561 /* 3**8 */
 static unsigned int global_ternary_codes[TERNARY_MAX];
 
-void generate_ternary_codes()
+void generate_ternary_codes(void)
 {
     unsigned i;
 
