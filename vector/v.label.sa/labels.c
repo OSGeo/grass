@@ -222,10 +222,11 @@ label_t *labels_init(struct params *p, int *n_labels)
  * This function calculates the skyline of a label and stores it in the label
  * structure.
  * @param face The openned FT library face to use.
- * @param The charset to use
+ * @param The charset to use [unused]
  * @param The label to which we want to create a skyline
  */
-static int label_skyline(FT_Face face, const char *charset, label_t *label)
+static int label_skyline(FT_Face face, const char *charset UNUSED,
+                         label_t *label)
 {
     int i, len;
     double advance = 0.0;

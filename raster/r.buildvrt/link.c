@@ -82,7 +82,8 @@ void write_fp_quant(const char *output)
 
 void create_map(const struct input *inputs, int num_inputs, const char *output,
                 struct Cell_head *cellhd, int maptype, DCELL dmin, DCELL dmax,
-                int have_stats, struct R_stats *ostats, const char *title)
+                int have_stats UNUSED, struct R_stats *ostats UNUSED,
+                const char *title)
 {
     struct History history;
     struct Categories cats;
