@@ -352,7 +352,8 @@ Add the new version to repos which build or test addons:
 For a final release (not release candidate), close the related milestone at
 <https://github.com/OSGeo/grass/milestones>.
 If there are any open issues or PRs, move them to another milestone
-in the milestone view (all can be moved at once).
+in the milestone view (all can be moved at once by selecting the open
+issues and PRs and reassigning the next milestone).
 
 ## Publish the release
 
