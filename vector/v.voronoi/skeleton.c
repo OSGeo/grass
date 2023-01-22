@@ -530,6 +530,7 @@ int tie_up(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         distmin = INFINITY;
 =======
         distmin = 1. / 0.; /* +inf */
@@ -537,6 +538,9 @@ int tie_up(void)
 =======
         distmin = 1. / 0.; /* +inf */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        distmin = INFINITY;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         xmin = x;
         ymin = y;
 

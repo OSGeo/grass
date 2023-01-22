@@ -24,6 +24,7 @@ static CELL *cell;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int (*dot)(int, int);
 =======
 static int (*dot)();
@@ -31,6 +32,9 @@ static int (*dot)();
 =======
 static int (*dot)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int (*dot)(int, int);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 static int cell_dot(int, int);
 static int fcell_dot(int, int);
 static int dcell_dot(int, int);

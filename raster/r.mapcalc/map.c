@@ -752,6 +752,7 @@ void create_history(const char *dst, expression *e)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (;;) {
 =======
     for (i = 0;; i++) {
@@ -759,6 +760,9 @@ void create_history(const char *dst, expression *e)
 =======
     for (i = 0;; i++) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (;;) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         char buf[RECORD_LEN];
         int n;
 

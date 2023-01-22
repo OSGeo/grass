@@ -2,6 +2,7 @@
 #include "local_proto.h"
 #include <math.h>
 <<<<<<< HEAD
+<<<<<<< HEAD
 double **matrix(int, int, int, int), *vector(int, int);
 =======
 double **matrix(), *vector();
@@ -9,6 +10,9 @@ double **matrix(), *vector();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+double **matrix(int, int, int, int), *vector(int, int);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 /* Computes eigenvalues (and eigen vectors if desired) for      *
  *  symmetric matices.                                          */

@@ -654,6 +654,7 @@ char *AMI_STREAM<T>::sprint()
     static char desc[BUFSIZ + 256];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(desc, sizeof(desc), "[AMI_STREAM %s %ld]", path,
              (long)stream_len());
 =======
@@ -662,6 +663,10 @@ char *AMI_STREAM<T>::sprint()
 =======
     sprintf(desc, "[AMI_STREAM %s %ld]", path, (long)stream_len());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(desc, sizeof(desc), "[AMI_STREAM %s %ld]", path,
+             (long)stream_len());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     return desc;
 }
 

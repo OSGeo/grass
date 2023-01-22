@@ -44,6 +44,7 @@ int I_compute_ref_equations(struct Ortho_Photo_Points *cp, double E12[3],
     double det;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void (*sigfpe)(int);
 =======
     void (*sigfpe)();
@@ -51,6 +52,9 @@ int I_compute_ref_equations(struct Ortho_Photo_Points *cp, double E12[3],
 =======
     void (*sigfpe)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    void (*sigfpe)(int);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     int i;
 
     s0 = s1 = s2 = s3 = s4 = s5 = 0.0;

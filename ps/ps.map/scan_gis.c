@@ -20,6 +20,7 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
         if (isatty(0))
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_list_element(element, desc, mapset, NULL);
 =======
             G_list_element(element, desc, mapset, (int (*)())NULL);
@@ -27,6 +28,9 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
 =======
             G_list_element(element, desc, mapset, (int (*)())NULL);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            G_list_element(element, desc, mapset, NULL);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         reject();
         return 0;
     }

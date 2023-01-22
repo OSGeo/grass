@@ -4,6 +4,7 @@ PGM = r.slope.aspect
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 EXTRA_LIBS = $(OPENMP_LIBPATH) $(OPENMP_LIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)
@@ -19,6 +20,13 @@ LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB) $(OMPLIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)
 EXTRA_CFLAGS = $(OMPCFLAGS)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
+EXTRA_LIBS = $(OPENMP_LIBPATH) $(OPENMP_LIB)
+DEPENDENCIES = $(RASTERDEP) $(GISDEP)
+EXTRA_CFLAGS = $(OPENMP_CFLAGS)
+EXTRA_INC = $(OPENMP_INCPATH)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

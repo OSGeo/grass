@@ -333,6 +333,7 @@ void G_math_f_asum_norm(float *x, float *value, int rows)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #pragma omp parallel for schedule(static) private(i) reduction(+ : s)
     for (i = 0; i < rows; i++) {
         s += fabs(x[i]);
@@ -348,6 +349,11 @@ void G_math_f_asum_norm(float *x, float *value, int rows)
         s += fabs(x[i]);
         count++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+#pragma omp parallel for schedule(static) private(i) reduction(+ : s)
+    for (i = 0; i < rows; i++) {
+        s += fabs(x[i]);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     }
 #pragma omp single
     {

@@ -26,9 +26,15 @@
 #include <grass/glocale.h>
 #include <grass/vector.h>
 
+<<<<<<< HEAD
 static off_t write_dummy(struct Map_info *Map UNUSED, int type UNUSED,
                          const struct line_pnts *points UNUSED,
                          const struct line_cats *cats UNUSED)
+=======
+static off_t write_dummy(struct Map_info *Map, int type,
+                         const struct line_pnts *points,
+                         const struct line_cats *cats)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_warning("Vect_write_line() %s", _("for this format/level not supported"));
 <<<<<<< HEAD
@@ -38,14 +44,16 @@ static off_t write_dummy(struct Map_info *Map UNUSED, int type UNUSED,
     return -1;
 }
 
-static off_t rewrite_dummy()
+static off_t rewrite_dummy(struct Map_info *Map, off_t line, int type,
+                           const struct line_pnts *points,
+                           const struct line_cats *cats)
 {
     G_warning("Vect_rewrite_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-static int delete_dummy()
+static int delete_dummy(struct Map_info *Map, off_t line)
 {
     G_warning("Vect_delete_line() %s",
               _("for this format/level not supported"));
@@ -53,6 +61,7 @@ static int delete_dummy()
     return -1;
 }
 
+<<<<<<< HEAD
 static off_t rewrite_dummy()
 {
     G_warning("Vect_rewrite_line() %s",
@@ -87,6 +96,9 @@ static int delete_dummy(struct Map_info *Map UNUSED, off_t line UNUSED)
 
 static int restore_dummy(struct Map_info *Map UNUSED, off_t offset UNUSED,
                          off_t line UNUSED)
+=======
+static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_warning("Vect_restore_line() %s",
               _("for this format/level not supported"));
@@ -94,36 +106,57 @@ static int restore_dummy(struct Map_info *Map UNUSED, off_t offset UNUSED,
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
+<<<<<<< HEAD
 static int format(struct Map_info *Map UNUSED, off_t line UNUSED)
+=======
+static int format(struct Map_info *Map, off_t line)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
+<<<<<<< HEAD
 static int format2(struct Map_info *Map UNUSED, off_t offset UNUSED,
                    off_t line UNUSED)
+=======
+static int format2(struct Map_info *Map, off_t offset, off_t line)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
+<<<<<<< HEAD
 static off_t format_l(struct Map_info *Map UNUSED, int type UNUSED,
                       const struct line_pnts *points UNUSED,
                       const struct line_cats *cats UNUSED)
+=======
+static off_t format_l(struct Map_info *Map, int type,
+                      const struct line_pnts *points,
+                      const struct line_cats *cats)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
+<<<<<<< HEAD
 static off_t format_l2(struct Map_info *Map UNUSED, off_t line UNUSED,
                        int type UNUSED, const struct line_pnts *points UNUSED,
                        const struct line_cats *cats UNUSED)
+=======
+static off_t format_l2(struct Map_info *Map, off_t line, int type,
+                       const struct line_pnts *points,
+                       const struct line_cats *cats)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
@@ -135,6 +168,11 @@ static off_t (*Vect_write_line_array[][3])() = {
 =======
 static off_t (*Vect_write_line_array[][3])() = {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
+                                           const struct line_pnts *,
+                                           const struct line_cats *) = {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     {write_dummy, V1_write_line_nat, V2_write_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -156,6 +194,7 @@ static off_t (*Vect_write_line_array[][3])() = {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
                                              const struct line_pnts *,
                                              const struct line_cats *) = {
@@ -165,6 +204,11 @@ static off_t (*Vect_rewrite_line_array[][3])() = {
 =======
 static off_t (*Vect_rewrite_line_array[][3])() = {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
+                                             const struct line_pnts *,
+                                             const struct line_cats *) = {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     {rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -172,6 +216,7 @@ static off_t (*Vect_rewrite_line_array[][3])() = {
     {rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa}
 #else
     ,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     {rewrite_dummy, format_l2, format_l2},
@@ -184,12 +229,17 @@ static off_t (*Vect_rewrite_line_array[][3])() = {
     {rewrite_dummy, format_l, format_l},
     {rewrite_dummy, format_l, format_l}
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    {rewrite_dummy, format_l2, format_l2},
+    {rewrite_dummy, format_l2, format_l2}
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #endif
 #ifdef HAVE_POSTGRES
     ,
     {rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_pg}
 #else
     ,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     {rewrite_dummy, format_l2, format_l2}
@@ -222,10 +272,13 @@ static int (*Vect_delete_line_array[][3])() = {
     {delete_dummy, format, format}
 =======
     {rewrite_dummy, format_l, format_l}
+=======
+    {rewrite_dummy, format_l2, format_l2}
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #endif
 };
 
-static int (*Vect_delete_line_array[][3])() = {
+static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
     {delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -245,7 +298,7 @@ static int (*Vect_delete_line_array[][3])() = {
 #endif
 };
 
-static int (*Vect_restore_line_array[][3])() = {
+static int (*Vect_restore_line_array[][3])(struct Map_info *, off_t, off_t) = {
     {restore_dummy, V1_restore_line_nat, V2_restore_line_nat}
 #ifdef HAVE_OGR
     ,
@@ -253,16 +306,20 @@ static int (*Vect_restore_line_array[][3])() = {
     {restore_dummy, restore_dummy, restore_dummy}
 #else
     ,
-    {restore_dummy, format, format},
-    {restore_dummy, format, format}
+    {restore_dummy, format2, format2},
+    {restore_dummy, format2, format2}
 #endif
 #ifdef HAVE_POSTGRES
     ,
     {restore_dummy, restore_dummy, restore_dummy}
 #else
     ,
+<<<<<<< HEAD
     {restore_dummy, format, format}
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    {restore_dummy, format2, format2}
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #endif
 };
 

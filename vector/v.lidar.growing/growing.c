@@ -37,6 +37,7 @@ void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out, dbDriver *driver,
     while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         table = db_get_cursor_table(&cursor);
 
         ID_column = db_get_table_column(table, 0);
@@ -66,6 +67,8 @@ void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out, dbDriver *driver,
 =======
         cont++;
 
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         table = db_get_cursor_table(&cursor);
 
         ID_column = db_get_table_column(table, 0);

@@ -122,6 +122,7 @@ void main_loop(void)
     int i, ii, l, k;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* int icoub, nmult */;
 =======
     int icoub /*, nmult */;
@@ -129,6 +130,9 @@ void main_loop(void)
 =======
     int icoub /*, nmult */;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /* int icoub, nmult */;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     int iw, iblock, lw;
     int itime, iter1;
 
@@ -150,6 +154,7 @@ void main_loop(void)
 
     nblock = 1;
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* icoub = 0; */
 =======
     icoub = 0;
@@ -157,6 +162,9 @@ void main_loop(void)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /* icoub = 0; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     /* icfl = 0; */
     nstack = 0;
 
@@ -174,6 +182,7 @@ void main_loop(void)
     for (iblock = 1; iblock <= nblock; iblock++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* ++icoub; */
 =======
         ++icoub;
@@ -181,6 +190,9 @@ void main_loop(void)
 =======
         ++icoub;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* ++icoub; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
         lw = 0;
         walkwe = 0.;

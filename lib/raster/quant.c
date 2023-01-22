@@ -605,6 +605,7 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
     struct Quant_table *p;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*lower)(double, double);
 =======
     int (*lower)();
@@ -612,6 +613,9 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
 =======
     int (*lower)();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*lower)(double, double);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
     dtmp = dcellVal;
     /* I know the functions which call me already check for null values,

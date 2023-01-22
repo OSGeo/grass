@@ -385,6 +385,7 @@ static void cell_values_double(int fd, const unsigned char *data,
 static void gdal_values_int(int fd, const unsigned char *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             const COLUMN_MAPPING *cmap, int nbytes, void *cell,
 =======
                             const COLUMN_MAPPING *cmap, int nbytes, CELL *cell,
@@ -392,6 +393,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
                             const COLUMN_MAPPING *cmap, int nbytes, CELL *cell,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
                             int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -404,6 +408,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
         if (!cmap[i]) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             c[i] = 0;
 =======
             cell[i] = 0;
@@ -411,10 +416,14 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
             cell[i] = 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            c[i] = 0;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             continue;
         }
 
         if (cmap[i] == cmapold) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = c[i - 1];
@@ -424,6 +433,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
             cell[i] = cell[i - 1];
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            c[i] = c[i - 1];
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             continue;
         }
 
@@ -431,6 +443,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
 
         switch (fcb->gdal->type) {
         case GDT_Byte:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = *(GByte *)d;
@@ -454,26 +467,33 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             cell[i] = *(GByte *)d;
+=======
+            c[i] = *(GByte *)d;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             break;
         case GDT_Int16:
-            cell[i] = *(GInt16 *)d;
+            c[i] = *(GInt16 *)d;
             break;
         case GDT_UInt16:
-            cell[i] = *(GUInt16 *)d;
+            c[i] = *(GUInt16 *)d;
             break;
         case GDT_Int32:
-            cell[i] = *(GInt32 *)d;
+            c[i] = *(GInt32 *)d;
             break;
         case GDT_UInt32:
-            cell[i] = *(GUInt32 *)d;
+            c[i] = *(GUInt32 *)d;
             break;
         default:
             /* shouldn't happen */
+<<<<<<< HEAD
             Rast_set_c_null_value(&cell[i], 1);
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            Rast_set_c_null_value(&c[i], 1);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             break;
         }
 
@@ -481,6 +501,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 static void gdal_values_float(int fd UNUSED, const unsigned char *data,
                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
@@ -493,6 +514,11 @@ static void gdal_values_float(int fd, const float *data,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static void gdal_values_float(int fd, const unsigned char *data,
+                              const COLUMN_MAPPING *cmap, int nbytes,
+                              void *cell, int n)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     COLUMN_MAPPING cmapold = 0;
     const float *d = (const float *)data;
@@ -503,6 +529,7 @@ static void gdal_values_float(int fd, const float *data,
         if (!cmap[i]) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             c[i] = 0;
 =======
             cell[i] = 0;
@@ -510,10 +537,14 @@ static void gdal_values_float(int fd, const float *data,
 =======
             cell[i] = 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            c[i] = 0;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             continue;
         }
 
         if (cmap[i] == cmapold) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = c[i - 1];
@@ -531,16 +562,20 @@ static void gdal_values_float(int fd, const float *data,
 
 =======
             cell[i] = cell[i - 1];
+=======
+            c[i] = c[i - 1];
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             continue;
         }
 
-        cell[i] = data[cmap[i] - 1];
+        c[i] = d[cmap[i] - 1];
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         cmapold = cmap[i];
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 static void gdal_values_double(int fd UNUSED, const unsigned char *data,
                                const COLUMN_MAPPING *cmap, int nbytes UNUSED,
@@ -553,6 +588,11 @@ static void gdal_values_double(int fd, const double *data,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static void gdal_values_double(int fd, const unsigned char *data,
+                               const COLUMN_MAPPING *cmap, int nbytes,
+                               void *cell, int n)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 {
     COLUMN_MAPPING cmapold = 0;
     const double *d = (const double *)data;
@@ -563,6 +603,7 @@ static void gdal_values_double(int fd, const double *data,
         if (!cmap[i]) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             c[i] = 0;
 =======
             cell[i] = 0;
@@ -570,10 +611,14 @@ static void gdal_values_double(int fd, const double *data,
 =======
             cell[i] = 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            c[i] = 0;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             continue;
         }
 
         if (cmap[i] == cmapold) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             c[i] = c[i - 1];
@@ -591,10 +636,13 @@ static void gdal_values_double(int fd, const double *data,
 
 =======
             cell[i] = cell[i - 1];
+=======
+            c[i] = c[i - 1];
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             continue;
         }
 
-        cell[i] = data[cmap[i] - 1];
+        c[i] = d[cmap[i] - 1];
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         cmapold = cmap[i];
@@ -613,6 +661,7 @@ static void gdal_values_double(int fd, const double *data,
  */
 static void transfer_to_cell_XX(int fd, void *cell)
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     static void (*cell_values_type[3])(
@@ -636,6 +685,15 @@ static void transfer_to_cell_XX(int fd, void *cell)
     static void (*gdal_values_type[3])() = {gdal_values_int, gdal_values_float,
                                             gdal_values_double};
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    static void (*cell_values_type[3])(
+        int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
+        int) = {cell_values_int, cell_values_float, cell_values_double};
+#ifdef HAVE_GDAL
+    static void (*gdal_values_type[3])(
+        int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
+        int) = {gdal_values_int, gdal_values_float, gdal_values_double};
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 #endif
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
@@ -746,6 +804,7 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
 =======
     static void (*transfer_to_cell_FtypeOtype[3][3])() = {
@@ -753,6 +812,9 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 =======
     static void (*transfer_to_cell_FtypeOtype[3][3])() = {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         {transfer_to_cell_XX, transfer_to_cell_if, transfer_to_cell_id},
         {transfer_to_cell_fi, transfer_to_cell_XX, transfer_to_cell_fd},
         {transfer_to_cell_di, transfer_to_cell_df, transfer_to_cell_XX}};

@@ -75,6 +75,7 @@ public:
         static char buf[20];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%.1f", (float)p);
 =======
         sprintf(buf, "%.1f", (float)p);
@@ -82,6 +83,9 @@ public:
 =======
         sprintf(buf, "%.1f", (float)p);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         return buf;
     }
 };
@@ -93,6 +97,7 @@ public:
         static char buf[20];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p);
 =======
         sprintf(buf, "%3d", p);
@@ -100,11 +105,15 @@ public:
 =======
         sprintf(buf, "%3d", p);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%3d", p);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         return buf;
     }
     char *operator()(const waterWindowBaseType &p)
     {
         static char buf[20];
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p.dir);
@@ -114,6 +123,9 @@ public:
 =======
         sprintf(buf, "%3d", p.dir);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         return buf;
     }
 #if (0)
@@ -134,6 +146,7 @@ public:
         static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
 =======
         sprintf(buf, CCLABEL_FMT, p.getLabel());
@@ -141,6 +154,9 @@ public:
 =======
         sprintf(buf, CCLABEL_FMT, p.getLabel());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         return buf;
     }
     char *operator()(const waterGridType &p)
@@ -148,6 +164,7 @@ public:
         static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
 =======
         sprintf(buf, CCLABEL_FMT, p.getLabel());
@@ -155,6 +172,9 @@ public:
 =======
         sprintf(buf, CCLABEL_FMT, p.getLabel());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         return buf;
     }
     char *operator()(const waterType &p)
@@ -162,6 +182,7 @@ public:
         static char buf[8];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
 =======
         sprintf(buf, CCLABEL_FMT, p.getLabel());
@@ -169,6 +190,9 @@ public:
 =======
         sprintf(buf, CCLABEL_FMT, p.getLabel());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         return buf;
     }
 };
@@ -180,6 +204,7 @@ public:
         static char buf[3];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%1u", p.depth);
 =======
         sprintf(buf, "%1u", p.depth);
@@ -187,6 +212,9 @@ public:
 =======
         sprintf(buf, "%1u", p.depth);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         return buf;
     }
 };
@@ -196,6 +224,7 @@ char *verbosedir(const std::string &s)
     static char buf[BUFSIZ];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
 =======
     sprintf(buf, "dump/%s", s.c_str());
@@ -203,6 +232,9 @@ char *verbosedir(const std::string &s)
 =======
     sprintf(buf, "dump/%s", s.c_str());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     return buf;
 }
 
@@ -431,6 +463,7 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
     assert(base_dir);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
 =======
     sprintf(path, "%s/flowStream", base_dir);
@@ -438,6 +471,9 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
 =======
     sprintf(path, "%s/flowStream", base_dir);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     flowStream = new AMI_STREAM<waterWindowBaseType>(path);
     /*flowStream->persist(PERSIST_PERSISTENT); */
     if (stats)

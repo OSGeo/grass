@@ -55,6 +55,7 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
         prog_name = G_store(RAM_NAME);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(input->com_line_ram, (400 * sizeof(char)),
                  "\"%s/etc/water/%s\"", G_gisbase(), RAM_NAME);
         fprintf(stderr,
@@ -72,25 +73,36 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         sprintf(input->com_line_ram, "\"%s/etc/water/%s\"", G_gisbase(),
                 RAM_NAME);
+=======
+        snprintf(input->com_line_ram, (400 * sizeof(char)),
+                 "\"%s/etc/water/%s\"", G_gisbase(), RAM_NAME);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         fprintf(stderr,
                 "\nIf there is not enough ram for the fast mode (%s) to run,\n",
                 RAM_NAME);
-        sprintf(buf, "should the slow mode (%s) be run instead?", SEG_NAME);
+        snprintf(buf, sizeof(buf), "should the slow mode (%s) be run instead?",
+                 SEG_NAME);
         if (G_yes(buf, 1)) {
             input->slow = 1;
             input->com_line_seg = (char *)G_calloc(400, sizeof(char));
+<<<<<<< HEAD
             sprintf(input->com_line_seg, "\"%s/etc/water/%s\"", G_gisbase(),
                     SEG_NAME);
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            snprintf(input->com_line_seg, (400, sizeof(char)),
+                     "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
         }
     }
     else {
         input->slow = 1;
         prog_name = G_store(SEG_NAME);
         input->com_line_seg = (char *)G_calloc(400, sizeof(char));
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         snprintf(input->com_line_seg, (400, sizeof(char)),
@@ -103,6 +115,10 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
         sprintf(input->com_line_seg, "\"%s/etc/water/%s\"", G_gisbase(),
                 SEG_NAME);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(input->com_line_seg, (400, sizeof(char)),
+                 "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     }
 
     G_message(_("\nIf you hit <return> by itself for the next question, this"));
@@ -522,12 +538,16 @@ int basin_com_add(char **com_line, double d, double modifier,
         i = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), " t=%d", i);
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     sprintf(buf, " t=%d", i);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, sizeof(buf), " t=%d", i);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     strcat(*com_line, buf);
 
     return 0;

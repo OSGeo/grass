@@ -193,6 +193,7 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int point;              /* index in points array */
     int nsnapped, ncreated; /* number of snapped verices, number of new vertices
                                (on segments) */
@@ -217,6 +218,15 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int point;              /* index in points array */
+    int nsnapped, ncreated; /* number of snapped verices, number of new vertices
+                               (on segments) */
+    int apoints, npoints;   /* number of allocated points, registered points */
+    XPNT *XPnts;            /* Array of points */
+    NEW *New = NULL;        /* Array of new points */
+    int anew = 0, nnew;     /* allocated new points, number of new points */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     struct ilist *List;
     int *Index = NULL; /* indexes of anchors for vertices */
     int aindex = 0;    /* allocated Index */
@@ -244,11 +254,14 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
     point = 1; /* index starts from 1 ! */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     nvertices = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     XPnts = NULL;
 
     G_important_message(_("Snap vertices Pass 1: select points"));
@@ -270,12 +283,15 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
             G_debug(3, "  vertex v = %d", v);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             nvertices++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
             nvertices++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
             /* coords */
             c[0] = Points->x[v];
@@ -317,12 +333,15 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
         XPnts[point].anchor = 0; /* make it anchor */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         nanchors++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
         nanchors++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
         /* Find points in threshold */
         c[0] = XPnts[point].x;
@@ -352,12 +371,15 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
                 XPnts[pointb].anchor = point;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 ntosnap++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
                 ntosnap++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             }
             else if (XPnts[pointb].anchor >
                      0) { /* check distance to previously assigned anchor */
@@ -590,6 +612,7 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int point;              /* index in points array */
     int nsnapped, ncreated; /* number of snapped verices, number of new vertices
                                (on segments) */
@@ -614,6 +637,15 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int point;              /* index in points array */
+    int nsnapped, ncreated; /* number of snapped verices, number of new vertices
+                               (on segments) */
+    int apoints, npoints;   /* number of allocated points, registered points */
+    XPNT *XPnts;            /* Array of points */
+    NEW *New = NULL;        /* Array of new points */
+    int anew = 0, nnew;     /* allocated new points , number of new points */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     struct ilist *List;
     int *Index = NULL; /* indexes of anchors for vertices */
     int aindex = 0;    /* allocated Index */
@@ -651,11 +683,14 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
     point = 1; /* index starts from 1 ! */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     nvertices = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     XPnts = NULL;
 
     G_important_message(_("Snap vertices Pass 1: select points"));
@@ -676,12 +711,15 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
             G_debug(3, "  vertex v = %d", v);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             nvertices++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
             nvertices++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
             /* Box */
             rect.boundary[0] = Points->x[v];
@@ -733,12 +771,15 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
         XPnts[point].anchor = 0; /* make it anchor */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         nanchors++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
         nanchors++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
         /* Find points in threshold */
         rect.boundary[0] = XPnts[point].x - thresh;
@@ -772,12 +813,15 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
                 XPnts[pointb].anchor = point;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 ntosnap++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
                 ntosnap++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
             }
             else if (XPnts[pointb].anchor >
                      0) { /* check distance to previously assigned anchor */
@@ -1068,12 +1112,15 @@ int Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
     int asegments;      /* number of allocated segments */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     int nvertices;      /* number of vertices */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
     int nvertices;      /* number of vertices */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     char *XSegs = NULL; /* Array of segments */
     NEW2 *New = NULL;   /* Array of new points */
     int anew = 0, nnew; /* allocated new points , number of new points */
@@ -1121,11 +1168,14 @@ int Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
     point = segment = 1; /* index starts from 1 ! */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     nvertices = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
     asegments = 0;
 
     /* Add all vertices and all segments of all reference lines
@@ -1146,12 +1196,15 @@ int Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
             G_debug(3, "  vertex v = %d", v);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             nvertices++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
             nvertices++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 
             /* Box */
             rect.boundary[0] = LPoints->x[v];
