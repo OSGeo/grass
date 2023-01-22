@@ -562,7 +562,7 @@ void P_Aux_to_Raster(double **matrix, int fd)
 }
 
 /*------------------------------------------------------------------------------------------------*/
-void P_Aux_to_Vector(struct Map_info *Map, struct Map_info *Out,
+void P_Aux_to_Vector(struct Map_info *Map UNUSED, struct Map_info *Out,
                      dbDriver *driver, char *tab_name)
 {
 

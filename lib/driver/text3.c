@@ -36,7 +36,7 @@ static int convert_str(const char *, const char *, unsigned char **);
 static void release_convert_str(unsigned char *);
 static void set_matrix(FT_Matrix *);
 static void draw_text(FT_Face, FT_Vector *, FT_Matrix *, const unsigned char *,
-                      int, int, struct rectangle *);
+                      int, struct rectangle *);
 static void draw_bitmap(FT_Bitmap *, FT_Int, FT_Int);
 static void set_text_box(FT_Bitmap *, FT_Int, FT_Int, struct rectangle *);
 #endif
@@ -106,7 +106,7 @@ static void draw_main(double x, double y, const char *string,
     /* set matrix */
     set_matrix(&matrix);
     /* draw */
-    draw_text(face, &pen, &matrix, out, outlen, 0, box);
+    draw_text(face, &pen, &matrix, out, outlen, box);
 
     /* release */
     release_convert_str(out);
@@ -172,8 +172,7 @@ static void release_convert_str(unsigned char *out)
 }
 
 static void draw_text(FT_Face face, FT_Vector *pen, FT_Matrix *matrix,
-                      const unsigned char *out, int len, int color,
-                      struct rectangle *box)
+                      const unsigned char *out, int len, struct rectangle *box)
 {
     FT_ULong ch;
     FT_Error ans;

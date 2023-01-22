@@ -46,8 +46,8 @@ int IL_resample_output_2d(
     struct interp_params *params, double zmin,
     double zmax,                  /* min,max input z-values */
     double zminac, double zmaxac, /* min,max interpolated values */
-    double c1min, double c1max, double c2min, double c2max, double gmin,
-    double gmax, double ertot,              /* total interplating func. error */
+    double c1min, double c1max, double c2min, double c2max, double gmin UNUSED,
+    double gmax UNUSED, double ertot,       /* total interplating func. error */
     char *input,                            /* input file name */
     double *dnorm, struct Cell_head *outhd, /* Region with desired resolution */
     struct Cell_head *winhd,                /* Current region */

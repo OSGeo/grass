@@ -183,7 +183,7 @@ void G_math_gauss_elimination(double **A, double *b, int rows)
  * system, otherwise set it to NULL \param rows int \return void
  *
  * */
-void G_math_lu_decomposition(double **A, double *b, int rows)
+void G_math_lu_decomposition(double **A, double *b UNUSED, int rows)
 {
 
     int i, j, k;

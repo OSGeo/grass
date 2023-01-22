@@ -36,8 +36,14 @@
 #define __attribute__(x)
 #endif
 
-static const char *GRASS_copyright __attribute__((unused)) =
-    "GRASS GNU GPL licensed Software";
+#undef UNUSED
+#if (defined(__GNUC__) || defined(__APPLE__)) && !defined(_MSC_VER)
+#define UNUSED __attribute__((unused))
+#else
+#define UNUSED
+#endif
+
+static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 
 /* GRASS version, GRASS date, git short hash of last change in GRASS headers
  * (and anything else in include)

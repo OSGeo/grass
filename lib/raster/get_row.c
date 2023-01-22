@@ -255,9 +255,9 @@ static void read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 }
 
 /* copy cell file data to user buffer translated by window column mapping */
-static void cell_values_int(int fd, const unsigned char *data,
-                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
-                            int n)
+static void cell_values_int(int fd UNUSED, const unsigned char *data UNUSED,
+                            const COLUMN_MAPPING *cmap, int nbytes UNUSED,
+                            void *cell, int n)
 {
     CELL *c = cell;
     COLUMN_MAPPING cmapold = 0;
@@ -300,8 +300,8 @@ static void cell_values_int(int fd, const unsigned char *data,
     }
 }
 
-static void cell_values_float(int fd, const unsigned char *data,
-                              const COLUMN_MAPPING *cmap, int nbytes,
+static void cell_values_float(int fd, const unsigned char *data UNUSED,
+                              const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                               void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -319,8 +319,8 @@ static void cell_values_float(int fd, const unsigned char *data,
     }
 }
 
-static void cell_values_double(int fd, const unsigned char *data,
-                               const COLUMN_MAPPING *cmap, int nbytes,
+static void cell_values_double(int fd, const unsigned char *data UNUSED,
+                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                                void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -388,8 +388,8 @@ static void gdal_values_int(int fd, const unsigned char *data,
     }
 }
 
-static void gdal_values_float(int fd, const unsigned char *data,
-                              const COLUMN_MAPPING *cmap, int nbytes,
+static void gdal_values_float(int fd UNUSED, const unsigned char *data,
+                              const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                               void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
@@ -414,8 +414,8 @@ static void gdal_values_float(int fd, const unsigned char *data,
     }
 }
 
-static void gdal_values_double(int fd, const unsigned char *data,
-                               const COLUMN_MAPPING *cmap, int nbytes,
+static void gdal_values_double(int fd UNUSED, const unsigned char *data,
+                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                                void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;

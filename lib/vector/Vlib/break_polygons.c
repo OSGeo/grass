@@ -70,7 +70,7 @@ typedef struct {
 static int fpoint;
 
 /* Function called from RTreeSearch for point found */
-static int srch(int id, const struct RTree_Rect *rect, void *arg)
+static int srch(int id, const struct RTree_Rect *rect UNUSED, void *arg UNUSED)
 {
     fpoint = id;
 
