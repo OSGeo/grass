@@ -162,7 +162,7 @@ jobs:
           fetch-depth: 0
       - name: Create image and tag name
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           # images: ${DOCKERHUB_REPOSITORY}
           images: mundialis/grass-py3-pdal
