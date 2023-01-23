@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Lint code base
-        uses: docker://github/super-linter:v2.2.2
+        uses: docker://github/super-linter:v4.10.1
         env:
           # Listed but disabled linters would be nice to have.
           # Python (supported using Pylint) and C/C++ (not supported) are
