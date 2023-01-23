@@ -14,7 +14,7 @@ jobs:
   build:
     name: ${{ matrix.c }} & ${{ matrix.cpp }}
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         include:
@@ -57,4 +57,4 @@ jobs:
           CFLAGS: "-std=${{ matrix.c }} -fPIC -Wall"
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC -Wall"
-        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install -Werror
+        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror

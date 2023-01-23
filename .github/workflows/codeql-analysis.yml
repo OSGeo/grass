@@ -18,7 +18,7 @@ on:
 jobs:
   analyze:
     name: ${{ matrix.language }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
@@ -57,7 +57,7 @@ jobs:
         env:
           CFLAGS: "-std=gnu11"
           CXXFLAGS: "-std=c++11"
-        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install
+        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
