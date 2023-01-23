@@ -31,6 +31,7 @@ CREATE INDEX raster_base_index ON raster_base (id);
 CREATE INDEX raster_relative_time_index ON raster_relative_time (id, start_time, end_time);
 CREATE INDEX raster_absolute_time_index ON raster_absolute_time (id, start_time, end_time);
 CREATE INDEX raster_spatial_extent_index ON raster_spatial_extent (id);
+CREATE INDEX raster_spatial_extent_index_bbox ON raster_spatial_extent (id, north, south, east, west);
 CREATE INDEX raster_stds_register_index ON raster_stds_register (id);
 
 
@@ -38,14 +39,17 @@ CREATE INDEX raster3d_base_index ON raster3d_base (id);
 CREATE INDEX raster3d_relative_time_index ON raster3d_relative_time (id, start_time, end_time);
 CREATE INDEX raster3d_absolute_time_index ON raster3d_absolute_time (id, start_time, end_time);
 CREATE INDEX raster3d_spatial_extent_index ON raster3d_spatial_extent (id);
+CREATE INDEX raster3d_spatial_extent_index_bbox ON raster3d_spatial_extent (id, north, south, east, west, top, bottom);
 CREATE INDEX raster3d_stds_register_index ON raster3d_stds_register (id);
 
 CREATE INDEX vector_base_index ON vector_base (id);
 CREATE INDEX vector_relative_time_index ON vector_relative_time (id, start_time, end_time);
 CREATE INDEX vector_absolute_time_index ON vector_absolute_time (id, start_time, end_time);
 CREATE INDEX vector_spatial_extent_index ON vector_spatial_extent (id);
+CREATE INDEX vector_spatial_extent_index_bbox ON vector_spatial_extent (id, north, south, east, west, top, bottom);
 CREATE INDEX vector_stds_register_index ON vector_stds_register (id);
 
 CREATE INDEX raster3d_metadata_index ON raster3d_metadata (id);
 CREATE INDEX raster_metadata_index ON raster_metadata (id);
+CREATE INDEX raster_metadata_index_semantic_label ON raster_metadata (id, semantic_label);
 CREATE INDEX vector_metadata_index ON vector_metadata (id);
