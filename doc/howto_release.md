@@ -395,10 +395,10 @@ Verify software pages:
 - update cronjob '[cron_grass8_main_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)' on grass.osgeo.org to next
   but one release tag for the differences
 - wiki updates, only when new major release:
-  - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
-  - update last version on main page
+    - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
+    - update last version on main page
 - Add trac Wiki Macro definitions for manual pages G8X:modulename
-  - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
+    - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
 ## Packaging notes
 
@@ -432,22 +432,22 @@ Verify software pages:
 ### Other notes
 
 - <https://trac.osgeo.org/grass/wiki/BuildHints>
-  - <https://trac.osgeo.org/grass/wiki/DebianUbuntuPackaging>
-  - <https://trac.osgeo.org/grass/wiki/CompileOnWindows>
+    - <https://trac.osgeo.org/grass/wiki/DebianUbuntuPackaging>
+    - <https://trac.osgeo.org/grass/wiki/CompileOnWindows>
 
 ## Tell others about release
 
 - If release candidate:
-  - <grass-announce@lists.osgeo.org>
-  - <grass-dev@lists.osgeo.org>
+    - <grass-announce@lists.osgeo.org>
+    - <grass-dev@lists.osgeo.org>
 - If official release:
-  - publish related announcement press release at:
+    - publish related announcement press release at:
 - Our GRASS web site: /announces/
-  - Note: DON'T use relative links there
+    - Note: DON'T use relative links there
 - Our main mailing lists:
-  - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
-  - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
-  - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
 - FreeGIS: <freegis-list@intevation.de>
 - OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
 
