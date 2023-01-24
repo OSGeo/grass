@@ -1,242 +1,135 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- <title>REQUIREMENTS to compile GRASS GIS 8</title>
- <link rel="stylesheet" href="grassdocs.css" type="text/css">
- <meta http-equiv="content-language" content="en-us">
- <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body bgcolor="#FFFFFF">
+# Requirements to compile GRASS GIS 8
 
-<h2>REQUIREMENTS to compile GRASS GIS 8</h2>
+A workstation running some flavor of UNIX including
+GNU/Linux, Solaris, IRIX, BSD, Mac OSX, Cygwin or MinGW (on Win32/Win64).
+Ideally, you should have at least 800 MB of free disk space.
+The source code package needs disk space of around
+26 MB compressed and 440MB uncompressed.
+The resulting binaries may need between 20 MB and 180 MB
+depending on your platform and compiler flags.
+During a full compilation you may need temporarily up to
+550MB including the source code.
 
-A workstation running some flavor of UNIX including GNU/Linux, Solaris, IRIX, BSD,
-Mac OSX, Cygwin or MinGW (on Win32/Win64). Ideally, you should have at least 800 MB of
-free disk space. The source code package needs disk space of around 26 MB compressed
-and 440MB uncompressed. The resulting binaries may need between 20 MB and 180 MB
-depending on your platform and compiler flags. During a full compilation you may need
-temporarily up to 550MB including the source code.
-<p>
-To enable and disable features please read the <a href="INSTALL.md">INSTALL.md</a> file.
+To enable and disable features please read the [INSTALL.md](INSTALL.md) file.
 
-<h3>General requirements:</h3>
+## General requirements
 
-(most tools are standard tools on GNU/Linux, for other platforms you may have
-to install some of them.)
+Most tools are standard tools on GNU/Linux,
+for other platforms you may have to install some of them.
 
-<ul>
-<li><b>C-compiler</b> (cc, gcc, egcs, ...)
-<br>gcc: <a href="https://www.gnu.org/software/gcc/gcc.html">https://www.gnu.org/software/gcc/gcc.html</a>
-</li>
+- **C-compiler** (cc, gcc, egcs, ...)  
+  gcc: [https://www.gnu.org/software/gcc/gcc.html](https://www.gnu.org/software/gcc/gcc.html)
+- **GNU make** is recommended (at least version 3.81)  
+  [https://www.gnu.org/software/make/make.html](https://www.gnu.org/software/make/make.html)
+- **zlib** compression library (already installed on most modern systems)  
+  It is used to internally compress GRASS raster maps.  
+  libz: [https://www.zlib.net](https://www.zlib.net)
+- **flex** lexical analyzer generator (flex)  
+  _Note: lex is no longer supported, please use flex instead._\
+  flex: [https://github.com/westes/flex](https://github.com/westes/flex)
+- **parser generator** (yacc, bison)  
+  bison: [https://www.gnu.org/software/bison/bison.html](https://www.gnu.org/software/bison/bison.html)
+- **PROJ** - Cartographic Projection Library  
+  PROJ: [https://proj.org/](https://proj.org/)
+- **GDAL/OGR** for import and export of most external raster and vector map formats  
+  GDAL: [https://gdal.org](https://gdal.org)
+- **Python >= 3.7** (for temporal framework, scripts, wxGUI, and ctypes interface)  
+  [https://www.python.org](https://www.python.org)
 
-<li><b>GNU make</b> is recommended (at least version 3.81)
-<br><a href="https://www.gnu.org/software/make/make.html">https://www.gnu.org/software/make/make.html</a>
-</li>
+## Optional packages
 
-<li><b>zlib</b> compression library (already installed on most modern systems)
-<br>It is used to internally compress GRASS raster maps.
-<br>libz: <a href="https://www.zlib.net">https://www.zlib.net</a>
-</li>
+Note: also the respective development packages (commonly named `xxx-dev` or `xxx-devel`) need to be installed.
 
-<li><b>flex</b> lexical analyzer generator (flex)
-<br>Note: lex is no longer supported, please use flex instead.
-<br>flex: <a href="https://github.com/westes/flex">https://github.com/westes/flex</a>
-</li>
+- **C++ Compiler** (required for various C++ GRASS modules)  
+  gcc: [https://www.gnu.org/software/gcc/gcc.html](https://www.gnu.org/software/gcc/gcc.html)
+- **bzip2**, needed for raster compression with bzip2  
+  [https://www.bzip.org](https://www.bzip.org)
+- **zstd** (Zstandard), needed for raster compression with zstd  
+  [https://facebook.github.io/zstd](https://facebook.github.io/zstd)
+- **FFTW 2.x or 3.x** (library for computing the Discrete Fourier Transform),
+  required for `i.fft` and `i.ifft` and other modules  
+  [http://www.fftw.org](http://www.fftw.org)
+- **GEOS** (Geometry Engine library),
+  needed for `v.buffer` and adds extended options to the `v.select` module  
+  [https://libgeos.org/](https://libgeos.org/)
+- **LAPACK / BLAS** (libraries for numerical computing) for GMATH library (GRASS Numerical Library)  
+  [https://www.netlib.org/lapack](https://www.netlib.org/lapack) (usually available on Linux distros)  
+  _Note: LAPACK/BLAS support is at time only needed for selected Addons._
+- **NetCDF** (for 3D raster netcdf export)  
+  [https://www.unidata.ucar.edu/software/netcdf/](https://www.unidata.ucar.edu/software/netcdf/)
+- **Mesa-3.x**, if hardware OpenGL support is missing in the X Server (OpenGL clone) may be required for wxNVIZ  
+  [https://mesa3d.org/](https://mesa3d.org/)
+- **libpng** (for `r.out.png` and the PNG driver), usually already installed.  
+  [http://www.libpng.org/pub/png/libpng.html](http://www.libpng.org/pub/png/libpng.html)
+- **libtiff** (for `r.out.tiff`), usually already installed.  
+  [https://gitlab.com/libtiff/libtiff](https://gitlab.com/libtiff/libtiff)
+- **readline** for extra command prompt functionality  
+  [https://tiswww.case.edu/~chet/readline/rltop.html](https://tiswww.case.edu/~chet/readline/rltop.html)  
+  [ftp://ftp.gnu.org/gnu/readline](ftp://ftp.gnu.org/gnu/readline)
+- **PostgreSQL libraries** (for the PostgreSQL database interface and PostGIS support)  
+  [https://www.postgresql.org](https://www.postgresql.org)
+- **MariaDB/MySQL libraries** (for the MySQL database interface)  
+  [https://mariadb.org/](https://mariadb.org/)
+- **SQLite libraries** (for the SQLite database interface)  
+  [https://www.sqlite.org](https://www.sqlite.org)
+- **unixODBC** (for the ODBC database interface)  
+  [http://www.unixodbc.org](http://www.unixodbc.org)
+- **R Statistics** (for the R statistical language interface)  
+  [https://cran.r-project.org](https://cran.r-project.org)
+- **FreeType2** (for TrueType font support and `d.text.freetype`)  
+  [https://freetype.org/](https://freetype.org/)
+- **Ctypes** (for ctypes interface)  
+  Ctypes can be added as a third-party module in Python 2.3 and
+  2.4 - [https://pypi.org/project/ctypes/1.0.2/](https://pypi.org/project/ctypes/1.0.2/)  
+  [https://docs.python.org/library/ctypes.html](https://docs.python.org/library/ctypes.html)
+- **wxPython >= 2.8.10.1** (for wxGUI)  
+  [https://www.wxpython.org](https://www.wxpython.org)
+- **NumPy >= 1.0.4** (for various wxGUI components and pyGRASS)  
+  [https://numpy.org](https://numpy.org)
+- **Python dateutil Library** (`python-dateutil`, needed for the tgrass modules `t.*`)  
+  [https://pypi.org/project/python-dateutil/](https://pypi.org/project/python-dateutil/)  
+  [https://github.com/dateutil/dateutil](https://github.com/dateutil/dateutil)
+- **Python PLY Library (Python Lex-Yacc)** (`python-ply`, needed for the temporal algebra in tgis)  
+  [https://www.dabeaz.com/ply](https://www.dabeaz.com/ply/)
+- **Pillow (Python Imaging Library)** (highly recommended for wxGUI and necessary for wxGUI Cartographic Composer)  
+  [https://python-pillow.org/](https://python-pillow.org/)
+- **Python matplotlib > 1.2** (`python-matplotlib`, needed for the several wxGUI tools)  
+  [https://matplotlib.org/](https://matplotlib.org/)
+- **Python wxPython backend for python-matplotlib**
+  ("python-matplotlib-wx", needed for e.g. `g.gui.timeline`)  
+  [https://matplotlib.org/](https://matplotlib.org/)
+- **python-termcolor** (recommended for `g.search.modules`)  
+  [https://pypi.org/project/termcolor/](https://pypi.org/project/termcolor/)
+- **six** (`python-six`, needed for Python API and for cross-version Python compatibility)  
+  [https://pypi.python.org/pypi/six](https://pypi.python.org/pypi/six)  
+  [https://github.com/benjaminp/six](https://github.com/benjaminp/six)
+- **FFMPEG or alternative** (for wxGUI Animation tool - `g.gui.module`), specifically ffmpeg tool  
+  [https://ffmpeg.org](https://ffmpeg.org)
+- **mpeg_encode or ppmtompeg tool** (for `r.out.mpeg` module)  
+  [https://ffmpeg.org](https://ffmpeg.org)
+- **Cairo >= 1.5.8** (for Cairo driver)  
+  [https://cairographics.org](https://cairographics.org)
+- **AVCE00 and E00Compr Libraries** (avcimport)  
+  [http://avce00.maptools.org](http://avce00.maptools.org)
+- **git** (git for `g.extension`)  
+  [https://git-scm.com](https://git-scm.com)
+- **Subversion** (svn in `g.extension` to fetch code selectively from grass-addons on GitHub)  
+  [https://subversion.apache.org/](https://subversion.apache.org/)
 
-<li><b>parser generator</b> (yacc, bison)
-<br>bison: <a href="https://www.gnu.org/software/bison/bison.html">https://www.gnu.org/software/bison/bison.html</a>
-</li>
+## Note
 
-<li><b>PROJ</b> - Cartographic Projection Library<br>
-<a href="https://proj.org/">https://proj.org/</a>
-</li>
+SUN Solaris users may go here to download precompiled libraries etc.:  
+[https://www.sunfreeware.com](https://www.sunfreeware.com)
 
-<li><b>GDAL/OGR</b> for import and export of most external raster and vector
-map formats<br>
-<a href="https://gdal.org">https://gdal.org</a>
-</li>
+SGI IRIX users may go here to download precompiled libraries etc.:  
+[https://freeware.sgi.com](https://freeware.sgi.com)
 
-<li><b>Python &gt;= 3.7</b> (for temporal framework, scripts, wxGUI, and ctypes interface)<br>
-<a href="https://www.python.org">https://www.python.org</a>
-</li>
+MacOSX users may go here to download precompiled libraries etc.:  
+[https://fink.sourceforge.net](https://fink.sourceforge.net)
 
-</ul>
+---
 
-<h3>Optional packages:</h3>
+_© GRASS Development Team 1997-2023_
 
-Note: also the respective development packages (commonly named xxx-dev or xxx-devel) need
-to be installed.
-
-<ul>
-
-<li><b>C++ Compiler</b> (required for the various C++ GRASS module)<br>
-gcc: <a href="https://www.gnu.org/software/gcc/gcc.html">https://www.gnu.org/software/gcc/gcc.html</a>
-</li>
-
-<li><b>bzip2</b>, needed for raster compression with bzip2<br>
-<a href="https://www.bzip.org">https://www.bzip.org</a>
-</li>
-
-<li><b>zstd</b> (Zstandard), needed for raster compression with zstd<br>
-<a href="https://facebook.github.io/zstd">https://facebook.github.io/zstd</a>
-</li>
-
-<li><b>FFTW 2.x or 3.x</b> (library for computing the Discrete Fourier Transform), required
-for i.fft and i.ifft and other modules<br>
-<a href="http://www.fftw.org">http://www.fftw.org</a>
-</li>
-
-<li><b>GEOS</b> (Geometry Engine library), needed for v.buffer and adds extended options
-to the v.select module<br>
-<a href="https://trac.osgeo.org/geos">https://trac.osgeo.org/geos</a>
-</li>
-
-<li><b>LAPACK / BLAS</b> (libraries for numerical computing) for GMATH library (GRASS Numerical Library)<br>
-<a href="https://www.netlib.org/lapack">https://www.netlib.org/lapack</a> (usually available on Linux distros)
-<br>
-<i>Note:</i> LAPACK/BLAS support is at time only needed for selected Addons
-
-<li><b>NetCDF</b> (for 3D raster netcdf export)<br>
-<a href="https://www.unidata.ucar.edu/software/netcdf/">https://www.unidata.ucar.edu/software/netcdf/</a>
-</li>
-
-<li>If hardware openGL support is missing in the X Server, <b>Mesa-3.x</b> (openGL clone)
-may be required for wxNVIZ<br>
-<a href="https://mesa3d.org/">https://mesa3d.org/</a>
-</li>
-
-<li><b>libpng</b> (for r.out.png and the PNG driver), usually already installed.<br>
-<a href="http://www.libpng.org/pub/png/libpng.html">http://www.libpng.org/pub/png/libpng.html</a>
-</li>
-
-<li><b>libtiff</b> (for r.out.tiff), usually already installed.<br>
-<a href="https://gitlab.com/libtiff/libtiff">https://gitlab.com/libtiff/libtiff</a>
-</li>
-
-<li><b>readline</b> for extra command prompt functionality
-<br><a href="https://tiswww.case.edu/~chet/readline/rltop.html">https://tiswww.case.edu/~chet/readline/rltop.html</a>
-<br><a href="ftp://ftp.gnu.org/gnu/readline">ftp://ftp.gnu.org/gnu/readline</a>
-</li>
-
-<li><b>PostgreSQL libraries</b> (for the PostgreSQL database interface and PostGIS support)<br>
-<a href="https://www.postgresql.org">https://www.postgresql.org</a>
-</li>
-
-<li><b>MariaDB/MySQL libraries</b> (for the MySQL database interface)<br>
-<a href="https://mariadb.org/">https://mariadb.org/</a>
-</li>
-
-<li><b>SQLite libraries</b> (for the SQLite database interface)<br>
-<a href="https://www.sqlite.org">https://www.sqlite.org</a>
-</li>
-
-<li><b>unixODBC</b> (for the ODBC database interface)<br>
-<a href="http://www.unixodbc.org">http://www.unixodbc.org</a>
-</li>
-
-<li><b>R Statistics</b> (for the R statistical language interface)<br>
-<a href="https://cran.r-project.org">https://cran.r-project.org</a>
-</li>
-
-<li><b>FreeType2</b> (for TrueType font support and d.text.freetype)<br>
-  <a href="https://www.freetype.org/">https://www.freetype.org/</a>
-</li>
-
-<li><b>Ctypes</b> (for ctypes interface)<br>
-Ctypes can be added as a third-party module in Python 2.3 and 2.4
-- <a href="https://pypi.python.org/pypi/ctypes/1.0.2">https://pypi.python.org/pypi/ctypes/1.0.2</a><br>
-<a href="https://docs.python.org/library/ctypes.html">https://docs.python.org/library/ctypes.html</a>
-</li>
-
-<li><b>wxPython &gt;= 2.8.10.1</b> (for wxGUI)<br>
-<a href="https://www.wxpython.org">https://www.wxpython.org</a>
-</li>
-
-<li><b>NumPy &gt;= 1.0.4</b> (for various wxGUI components and pyGRASS)<br>
-<a href="https://numpy.org">https://numpy.org</a>
-</li>
-
-<li><b>Python dateutil Library</b> ("python-dateutil", needed for the tgrass modules t.*)<br>
-<a href="https://labix.org/python-dateutil">https://labix.org/python-dateutil</a>
-</li>
-
-<li><b>Python PLY Library (Python Lex-Yacc)</b> ("python-ply", needed for the temporal algebra in tgis)<br>
-<a href="https://www.dabeaz.com/ply">https://www.dabeaz.com/ply</a>
-</li>
-
-<li><b>Python Imaging Library or PILLOW</b> (highly recommended for wxGUI and necessary for wxGUI Cartographic Composer)<br>
-<a href="https://www.pythonware.com/products/pil">https://www.pythonware.com/products/pil</a>,
-newer versions are named "python-pillow"
-</li>
-
-<li><b>Python matplotlib &gt; 1.2</b> ("python-matplotlib", needed for the several wxGUI tools)<br>
-<a href="https://matplotlib.org/">https://matplotlib.org/</a>
-</li>
-
-<li><b>Python six Library</b> ("python-six", needed for Python API)<br>
-<a href="https://github.com/benjaminp/six">https://github.com/benjaminp/six</a>
-</li>
-
-<li><b>Python wxPython backend for python-matplotlib</b> ("python-matplotlib-wx", needed for e.g. g.gui.timeline)<br>
-<a href="https://matplotlib.org/">https://matplotlib.org/</a>
-</li>
-
-<li><b>python-termcolor</b> (recommended for g.search.modules)<br>
-<a href="https://pypi.python.org/pypi/termcolor">https://pypi.python.org/pypi/termcolor</a>
-</li>
-
-<li><b>six</b> (needed for cross-version Python compatibility)<br>
-<a href="https://pypi.python.org/pypi/six">https://pypi.python.org/pypi/six</a>
-</li>
-
-<li><b>FFMPEG or alternative</b> (for wxGUI Animation tool - g.gui.module),
-    specifically ffmpeg tool<br>
-<a href="https://ffmpeg.org">https://ffmpeg.org</a>
-</li>
-
-<li><b>mpeg_encode or ppmtompeg tool</b> (for r.out.mpeg module)<br>
-<a href="https://ffmpeg.org">https://ffmpeg.org</a>
-</li>
-
-<li><b>Cairo &gt;= 1.5.8</b> (for Cairo driver)<br>
-<a href="https://cairographics.org">https://cairographics.org</a>
-</li>
-
-<!-- really needed? -->
-<li><b>AVCE00 and E00Compr Libraries</b> (avcimport)<br>
-<a href="https://avce00.maptools.org">https://avce00.maptools.org</a>
-</li>
-
-<li><b>git</b> (git for g.extension)<br>
-<a href="https://git-scm.com/">https://git-scm.com/</a><br>
-</li>
- 
-<li><b>Subversion</b> (svn in g.extension to fetch code selectively from grass-addons on GitHub)<br>
-<a href="https://subversion.apache.org/">https://subversion.apache.org/</a><br>
-</ul>
-
-<h3>Note:</h3>
-
-<!-- since 2014 no longer supported: -->
-SUN Solaris users may go here to download precompiled libraries etc.:
-<br><a href="https://www.sunfreeware.com">https://www.sunfreeware.com</a>
-
-<p>
-<!-- no longer supported: -->
-SGI IRIX users may go here to download precompiled libraries etc.:
-<br><a href="https://freeware.sgi.com">https://freeware.sgi.com</a>
-
-<p>
-MacOSX users may go here to download precompiled libraries etc.:
-<br><a href="https://fink.sourceforge.net">https://fink.sourceforge.net</a>
-
-<p>
-
-<hr width="100%">
-<i>&copy; GRASS Development Team 1997-2023</i>
-
-<p>Please report bugs here:
-<br><a href="https://grass.osgeo.org/contribute/">https://grass.osgeo.org/contribute/</a>
-</body>
-</html>
+Please report bugs here:  
+[https://grass.osgeo.org/contribute/](https://grass.osgeo.org/contribute/)
