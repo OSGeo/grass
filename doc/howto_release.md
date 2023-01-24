@@ -377,18 +377,18 @@ are any which show well specific features added or updated in the release.
 
 Add entry in <https://trac.osgeo.org/grass/wiki/Release>
 
-### Update Hugo web site to show new version
+### Update Hugo web site and other pages to show new version
 
 For a (final) release (not release candidate), write announcement and publish it:
 - News section, <https://github.com/OSGeo/grass-website/tree/master/content/news>
+- increment GRASS GIS version in <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
+- increment GRASS GIS version in <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
+- update Wiki page: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
 
-Software pages:
+Verify software pages:
 - Linux: <https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md>
 - Windows: <https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md>
 - Mac: <https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md>
-- Releases: <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
-- Wiki: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
-
 
 ### Only in case of new major release
 
