@@ -29,3 +29,8 @@ repos:
     rev: v15.0.6
     hooks:
       - id: clang-format
+        types_or: [c, c++, javascript, json, objective-c]
+        exclude: |
+          (?x)^(
+                man/jquery.fixedheadertable.min.js
+          )
