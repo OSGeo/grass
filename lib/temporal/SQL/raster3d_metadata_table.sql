@@ -1,5 +1,5 @@
 --#############################################################################
--- This SQL script generates the raster3d metadata table to store 
+-- This SQL script generates the raster3d metadata table to store
 -- and metadata for SQL queries and temporal GIS support.
 --
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com

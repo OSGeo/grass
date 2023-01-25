@@ -2,7 +2,7 @@ TODO
 
 -------
 Probably the sun position calculation shouldbe replaced
-with 
+with
 
  G_calc_solar_position()
 
@@ -11,7 +11,7 @@ solpos.c from NREL and very precise.
 
 MN 4/2001
 
-#### 
+####
 Update
   https://grasswiki.osgeo.org/wiki/R.sun
 

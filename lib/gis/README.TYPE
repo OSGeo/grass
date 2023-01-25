@@ -23,7 +23,7 @@ The argument type for some parameters for the following routines was changed:
 
 .DS
 G_init_cats            [cats.c]
-G_get_cats 
+G_get_cats
 G_set_cats
 G_get_color            [color.c]
 G_set_color
