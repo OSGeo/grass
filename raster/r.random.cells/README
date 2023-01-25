@@ -48,6 +48,3 @@ NOTES
 The original purpose for this program was to generate independent random
 samples of cells in a study area.  The distancevalue is the amount
 of spatial autocorrelation for the map being studied.
-
-
-

@@ -49,6 +49,3 @@ CREATE TABLE  STDS_spatial_extent (
   proj VARCHAR,      -- The projection of the space time dataset (XY of LL)
   PRIMARY KEY (id)
 );
-
-
-

@@ -40,5 +40,3 @@ CREATE VIEW raster3d_view_rel_time AS SELECT
             raster3d_stds_register A5
             WHERE A1.id = A2.id AND A1.id = A3.id AND
             A1.id = A4.id AND A1.id = A5.id;
-
-

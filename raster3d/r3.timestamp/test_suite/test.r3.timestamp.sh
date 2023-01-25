@@ -54,4 +54,3 @@ r3.timestamp map=map3d date="2 years 3 months 8 days"
 r3.timestamp map=map3d date="1 month 5 days"
 r3.timestamp map=map3d date="July 2003"
 r3.timestamp map=map3d date="14 Jul 2003 +0700"
-

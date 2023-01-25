@@ -15,4 +15,3 @@ default: cmd
 
 ctest:
 	$(MAKE) -C test
-

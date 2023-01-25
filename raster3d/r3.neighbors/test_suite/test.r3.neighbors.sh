@@ -31,5 +31,3 @@ r3.out.ascii precision=2 input=test_neighbor_double_sum output=test_neighbor_dou
 r3.neighbors input=test_neighbor_null output=test_neighbor_null_sum \
     method=sum window=3,3,3
 r3.out.ascii precision=2 input=test_neighbor_null_sum output=test_neighbor_null_sum.txt
-
-

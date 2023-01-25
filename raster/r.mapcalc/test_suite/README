@@ -42,5 +42,3 @@ time (
  r.mapcalc "$OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND" &
  wait
 )
-
-

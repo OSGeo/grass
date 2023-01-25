@@ -65,4 +65,3 @@ hacks. Some of those are useful-but-not-essential (e.g. automatically
 selecting the correct ellipsoid for certain projections), while others
 are necessary (e.g. the zone= and south parameters for UTM need to go
 into the WIND/DEFAULT_WIND files as well as the PROJ_INFO file).
-

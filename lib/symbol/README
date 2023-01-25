@@ -106,4 +106,3 @@ A symbol read into memory is stored in structure SYMBOL containing an array
 of parts (SYMBPART). Each part may be of type S_STRING or S_POLYGON, and
 contain an array of chains (SYMBCHAIN) where both STRING or POLYGONS are
 stored. One chain contains an array of elements (SYMBEL).
-

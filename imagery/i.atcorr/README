@@ -50,4 +50,3 @@ in csv file. Ex.:
 
 Program will interpolate filter function to 2.5 nm steps
 and output a CPP template file in the IWave format.
-

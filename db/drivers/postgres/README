@@ -32,4 +32,3 @@ character, char, character varying, varchar,  text, bool, boolean
 
 DB_C_TYPE_DATETIME:
 date, time, timestamp
-

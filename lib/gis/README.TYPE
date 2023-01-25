@@ -141,4 +141,3 @@ G_get_histogram_count    [histogram.c]
 
 These changes required immediate upgrade.
 I think this update is done, but I want to review it again.
-

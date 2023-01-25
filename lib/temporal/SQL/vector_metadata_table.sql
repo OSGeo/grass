@@ -26,6 +26,3 @@ CREATE TABLE  vector_metadata (
   volumes INTEGER,        -- The number of volumes (topological information)
   PRIMARY KEY (id)
 );
-
-
-

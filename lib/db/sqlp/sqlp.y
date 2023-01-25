@@ -297,5 +297,3 @@ y_order_desc:
 		NAME DESC			{ sqpOrderColumn( $1, SORT_DESC ); }
 	;
 %%
-
-

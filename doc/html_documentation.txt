@@ -20,4 +20,3 @@ HOWTO document in this GRASS version?
 - The Programmers' manual can by created from the inline Doxygen comments with:
      make htmldocs (or)
      make pdfdocs
-

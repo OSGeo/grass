@@ -18,4 +18,3 @@ Parameters:
           default: 0.0
   sigma   Standard deviation
           default: 1.0
-

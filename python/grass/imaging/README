@@ -38,6 +38,3 @@ Questions
 =========
 Should we make the visvis files PEP8 compliant? This would make
 merging of possible changes from visvis more difficult.
-
-
-

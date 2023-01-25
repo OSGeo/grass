@@ -22,7 +22,3 @@ CREATE TABLE  raster3d_metadata (
   max DOUBLE PRECISION,
   PRIMARY KEY (id)
 );
-
-
-
-

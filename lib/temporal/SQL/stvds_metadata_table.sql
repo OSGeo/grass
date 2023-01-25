@@ -25,4 +25,3 @@ CREATE TABLE  stvds_metadata (
   volumes INTEGER,        -- The number of volumes accumulated from all registered maps (topological information)           -- The command that was used to create the space time raster dataset
   PRIMARY KEY (id)
 );
-

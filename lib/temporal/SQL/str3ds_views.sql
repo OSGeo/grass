@@ -43,4 +43,3 @@ CREATE VIEW str3ds_view_rel_time AS SELECT
             FROM str3ds_base A1, str3ds_relative_time A2,
             str3ds_spatial_extent A3, str3ds_metadata A4 WHERE A1.id = A2.id AND
             A1.id = A3.id AND A1.id = A4.id;
-

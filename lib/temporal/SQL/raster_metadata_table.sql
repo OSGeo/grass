@@ -22,5 +22,3 @@ CREATE TABLE  raster_metadata (
   semantic_label VARCHAR,
   PRIMARY KEY (id)
 );
-
-

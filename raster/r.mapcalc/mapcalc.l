@@ -240,4 +240,3 @@ void initialize_scanner_stream(FILE *fp)
 	input_stream = fp;
 	setbuf(fp, NULL);
 }
-

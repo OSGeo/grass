@@ -12,4 +12,3 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 ifneq ($(USE_PNG),)
 default: cmd
 endif
-

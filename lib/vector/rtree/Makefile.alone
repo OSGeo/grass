@@ -24,4 +24,3 @@ test: test.c librtree.a
 
 clean:
 	rm -rf ./*.o ./*.a ./test
-

@@ -25,4 +25,3 @@ Parameters:
         default: 2.05
     n   Number of intermediate images to produce
         default: 0
-

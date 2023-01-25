@@ -31,4 +31,3 @@ time r.sun elevin=undulates day=$DAY step=0.05 \
   beam_rad=rad_test.und.355.beam \
   diff_rad=rad_test.und.355.diff \
   refl_rad=rad_test.und.355.refl
-

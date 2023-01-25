@@ -39,5 +39,3 @@ CREATE VIEW vector_view_rel_time AS SELECT
             vector_stds_register A5
             WHERE A1.id = A2.id AND A1.id = A3.id AND
             A1.id = A4.id AND A1.id = A5.id;
-
-

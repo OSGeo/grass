@@ -75,4 +75,3 @@ sky_sphere{
     pigment {planar colour_map{[0,rgb <0.9,0.9,1>][1, rgb <0.1,0.2,1>]}}
     pigment{P_Cloud4}
 }
-

@@ -58,4 +58,3 @@ time t.remove type=strds input=bench1
 time t.remove type=strds input=bench2
 time t.remove type=strds input=bench3
 time t.remove -rf type=strds input=bench4
-

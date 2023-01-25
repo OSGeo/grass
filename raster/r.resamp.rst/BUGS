@@ -20,4 +20,3 @@ rows:       2122
 cols:       2173
 
 -> should use the functionality of 'g.region -a'
-

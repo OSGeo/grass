@@ -232,6 +232,3 @@ IL_output_2d (cellhd,nsizr,nsizc,elev,slope,aspect,pcurv,tcurv,mcurv,
     char   *input;                           /* input file name */
 
 Creates output files as well as history files  and color tables for them.
-
-
-
