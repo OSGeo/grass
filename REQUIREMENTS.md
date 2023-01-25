@@ -38,7 +38,8 @@ for other platforms you may have to install some of them.
 
 ## Optional packages
 
-Note: also the respective development packages (commonly named `xxx-dev` or `xxx-devel`) need to be installed.
+Note: also the respective development packages (commonly named `xxx-dev` or
+`xxx-devel`) need to be installed.
 
 - **C++ Compiler** (required for various C++ GRASS modules)
   gcc: [https://www.gnu.org/software/gcc/gcc.html](https://www.gnu.org/software/gcc/gcc.html)
@@ -52,12 +53,15 @@ Note: also the respective development packages (commonly named `xxx-dev` or `xxx
 - **GEOS** (Geometry Engine library),
   needed for `v.buffer` and adds extended options to the `v.select` module
   [https://libgeos.org/](https://libgeos.org/)
-- **LAPACK / BLAS** (libraries for numerical computing) for GMATH library (GRASS Numerical Library)
-  [https://www.netlib.org/lapack](https://www.netlib.org/lapack) (usually available on Linux distros)
+- **LAPACK / BLAS** (libraries for numerical computing) for GMATH library
+  (GRASS Numerical Library)
+  [https://www.netlib.org/lapack](https://www.netlib.org/lapack) (usually
+  available on Linux distros)
   _Note: LAPACK/BLAS support is at time only needed for selected Addons._
 - **NetCDF** (for 3D raster netcdf export)
   [https://www.unidata.ucar.edu/software/netcdf/](https://www.unidata.ucar.edu/software/netcdf/)
-- **Mesa-3.x**, if hardware OpenGL support is missing in the X Server (OpenGL clone) may be required for wxNVIZ
+- **Mesa-3.x**, if hardware OpenGL support is missing in the X Server (OpenGL
+  clone) may be required for wxNVIZ
   [https://mesa3d.org/](https://mesa3d.org/)
 - **libpng** (for `r.out.png` and the PNG driver), usually already installed.
   [http://www.libpng.org/pub/png/libpng.html](http://www.libpng.org/pub/png/libpng.html)
@@ -89,21 +93,26 @@ Note: also the respective development packages (commonly named `xxx-dev` or `xxx
 - **Python dateutil Library** (`python-dateutil`, needed for the tgrass modules `t.*`)
   [https://pypi.org/project/python-dateutil/](https://pypi.org/project/python-dateutil/)
   [https://github.com/dateutil/dateutil](https://github.com/dateutil/dateutil)
-- **Python PLY Library (Python Lex-Yacc)** (`python-ply`, needed for the temporal algebra in tgis)
+- **Python PLY Library (Python Lex-Yacc)** (`python-ply`, needed for the
+  temporal algebra in tgis)
   [https://www.dabeaz.com/ply](https://www.dabeaz.com/ply/)
-- **Pillow (Python Imaging Library)** (highly recommended for wxGUI and necessary for wxGUI Cartographic Composer)
+- **Pillow (Python Imaging Library)** (highly recommended for wxGUI and
+  necessary for wxGUI Cartographic Composer)
   [https://python-pillow.org/](https://python-pillow.org/)
-- **Python matplotlib > 1.2** (`python-matplotlib`, needed for the several wxGUI tools)
+- **Python matplotlib > 1.2** (`python-matplotlib`, needed for the several wxGUI
+  tools)
   [https://matplotlib.org/](https://matplotlib.org/)
 - **Python wxPython backend for python-matplotlib**
   ("python-matplotlib-wx", needed for e.g. `g.gui.timeline`)
   [https://matplotlib.org/](https://matplotlib.org/)
 - **python-termcolor** (recommended for `g.search.modules`)
   [https://pypi.org/project/termcolor/](https://pypi.org/project/termcolor/)
-- **six** (`python-six`, needed for Python API and for cross-version Python compatibility)
+- **six** (`python-six`, needed for Python API and for cross-version Python
+  compatibility)
   [https://pypi.python.org/pypi/six](https://pypi.python.org/pypi/six)
   [https://github.com/benjaminp/six](https://github.com/benjaminp/six)
-- **FFMPEG or alternative** (for wxGUI Animation tool - `g.gui.module`), specifically ffmpeg tool
+- **FFMPEG or alternative** (for wxGUI Animation tool - `g.gui.module`),
+  specifically ffmpeg tool
   [https://ffmpeg.org](https://ffmpeg.org)
 - **mpeg_encode or ppmtompeg tool** (for `r.out.mpeg` module)
   [https://ffmpeg.org](https://ffmpeg.org)
@@ -113,7 +122,8 @@ Note: also the respective development packages (commonly named `xxx-dev` or `xxx
   [http://avce00.maptools.org](http://avce00.maptools.org)
 - **git** (git for `g.extension`)
   [https://git-scm.com](https://git-scm.com)
-- **Subversion** (svn in `g.extension` to fetch code selectively from grass-addons on GitHub)
+- **Subversion** (svn in `g.extension` to fetch code selectively from grass-addons
+  on GitHub)
   [https://subversion.apache.org/](https://subversion.apache.org/)
 
 ## Note
@@ -129,7 +139,7 @@ MacOSX users may go here to download precompiled libraries etc.:
 
 ---
 
-_© GRASS Development Team 1997-2023_
+© _GRASS Development Team 1997-2023_
 
 Please report bugs here:
 [https://grass.osgeo.org/contribute/](https://grass.osgeo.org/contribute/)
