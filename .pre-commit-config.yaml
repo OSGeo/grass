@@ -4,7 +4,35 @@ repos:
     rev: v4.4.0
     hooks:
       - id: trailing-whitespace
+        exclude: |
+          (?x)^(
+                configure$|
+                .*\.ascii$|
+                .*\.asc$|
+                .*\.ref$|
+                raster3d/r3.null/testsuite/data/test_volume_.*|
+                mswindows/.*|
+                .*\.po$|
+                .*\.ps$|
+                .*\.svg$|
+                python/libgrass_interface_generator/ctypesgen/|
+                lib/fonts/fonts/.*
+          )
       - id: end-of-file-fixer
+        exclude: |
+          (?x)^(
+                configure$|
+                .*\.ascii$|
+                .*\.asc$|
+                .*\.ref$|
+                python/grass/pygrass/raster/testsuite/data/geology_cats|
+                mswindows/.*|
+                .*\.po$|
+                .*\.ps$|
+                .*\.svg$|
+                python/libgrass_interface_generator/ctypesgen/|
+                lib/fonts/fonts/.*
+          )
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.33.0
     hooks:

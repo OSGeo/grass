@@ -9,5 +9,4 @@ DEPENDENCIES = $(VECTORDEP) $(DBMIDEP) $(RASTERDEP) $(GISDEP)
 EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS = $(VECT_CFLAGS)
 
-default: cmd	
-
+default: cmd

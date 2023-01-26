@@ -9,7 +9,7 @@ This file contains following sections:
 
 [ Web page: https://grass.osgeo.org/devel/i18n.php ]
 
-Updating the message catalogs currently only works on 
+Updating the message catalogs currently only works on
 unix-like systems and requires xgettext.
 
 ------------------------------------------------------
@@ -55,7 +55,7 @@ NOTE2: Also the parameters/flags of each module needs the
 NOTE3: Notices to translators can be added by placing
        a comment line starting with GTC tag just above
        message to be translated:
-        /* GTC A comma separated keyword list. 
+        /* GTC A comma separated keyword list.
            Should not contain spaces! */
         keywords = _("first,second,third");
 
@@ -63,26 +63,26 @@ NOTE4:  Any string containing a number that requires a correct plural form of
         a noun, has to pass trough ngettext function implemented in GRASS
         as a n_() macro.
         n_("Message in English for singular case", "Message in English for
-        plural case", number) 
+        plural case", number)
 
 Examples of messages with plural forms.
 Wrong:
     G_message( _("%d map(s) from mapset <%s> removed"), n, ms);
     G_message( n == 1 ? _("One file removed") : _("%d files removed"), n);
-    G_warning( _("%d %s without geometry skipped"), n, 
-        n == 1 ? "feature" : "features"); 
+    G_warning( _("%d %s without geometry skipped"), n,
+        n == 1 ? "feature" : "features");
     G_message( _("%d maps selected"), n);
     G_message( n == 1 ? _("Remove map") : _("Remove maps"));
 
 Correct:
-    G_message( n_("%d map from mapset <%s> removed", 
+    G_message( n_("%d map from mapset <%s> removed",
         "%d maps from mapset <%s> removed", n), n, ms);
-    /* Notice double use of number "n" - as an argument for 
+    /* Notice double use of number "n" - as an argument for
     both functions - n_() and G_message() */
     G_message( n_("One file removed", "%d files removed", n) n);
-    /* Both of forms of singular case "%d file" or "One file" are correct. 
+    /* Both of forms of singular case "%d file" or "One file" are correct.
     The choice between them is purely stylistic one. */
-    G_warning( n_("One feature without geometry skipped", 
+    G_warning( n_("One feature without geometry skipped",
         "%d features without geometry skipped", n), n);
     G_message( n_("%d map selected", "%d maps selected", n), n);
     /* Although in English it is not necessary to provide a separate
@@ -90,9 +90,9 @@ Correct:
     is i.e. 2-4, or n==10 etc. */
     G_message( n_("Remove map", "Remove maps", n));
     /* Number it self doesn't have to be used in the output text */
-        
-        
-All these messages strings will be then automatically 
+
+
+All these messages strings will be then automatically
 extracted into the message files.
 
 See for example ./vector/v.what.rast/main.c
@@ -103,7 +103,7 @@ NOTE4: Such lines
 
 A detailed example of adapting code for use in multiple languages
 can be found in gettext manual.
-How to prepare program source: 
+How to prepare program source:
 https://www.gnu.org/software/gettext/manual/gettext.html#Sources
 
 More advanced tricks like resolving ambiguties and handling of plural forms:
@@ -126,12 +126,12 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
     stored in https://grass.osgeo.org/grass-devel/binary/linux/snapshot/transifex/
      --> cronjob (on grasslxd container): /home/neteler/cronjobs/cron_grass8_main_src_snapshot.sh
 
-[2] Transifex job copies daily from [1] to here: 
+[2] Transifex job copies daily from [1] to here:
 	https://www.transifex.com/grass-gis/grass7/dashboard/
 
 [3] Translators work in Transifex,
 
-[4] Updated po files are taken from Transifex and merged into GRASS GIS source repo 
+[4] Updated po files are taken from Transifex and merged into GRASS GIS source repo
     (MO files are generated when compiling GRASS GIS)
     Script: https://github.com/OSGeo/grass-addons/blob/grass8/utils/transifex_merge.sh
 
@@ -143,7 +143,7 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
 Semi-automated procedure:
 
   1. In the main GRASS source code directory, run:
-     
+
         ./configured --with-nls [...further options...]
         make
 
@@ -153,12 +153,12 @@ TODO OLD    make pot        creates grass.pot (containing original messages)
 
 TODO OLD    make update-po  merges new messages into existing *.po files
 
-  3. Now translate the messages in the po/*.po files (using kbabel or 
+  3. Now translate the messages in the po/*.po files (using kbabel or
      other editor). Just open the .po file(s) in your preferred translation
      software.
 
   4. In the locale/ directory, run:
-      
+
         make mo         creates the mo files (containing translated messages as
                         binary file)
 
@@ -203,7 +203,7 @@ DETAILED PROCEDURE :
 2. CREATE POT FILES
    run
     make pot
-    
+
    This will create
     ./templates/grasslibs.pot
     ./templates/grassmods.pot
@@ -216,14 +216,14 @@ DETAILED PROCEDURE :
     a) Messages have not yet been translated to your language.
     b) Some messages have already been translated to your language,
        so you want to merge your efforts into the existing translation.
-       
+
   3.a) First CASE: Messages have not yet been translated to your language.
        No .po file is present for your language in the ./po/ directory.
-      
+
        Run:
         make pot
         make update-po
- 
+
        Move the generated file from the ./template/ directory
        to the ./po/ directory (for example German language):
         mv ./template/grasslibs.pot ./po/grasslibs_de.po
@@ -236,28 +236,28 @@ DETAILED PROCEDURE :
 
        Then continue with 4. below.
 
-  3.b) Second CASE: Some messages have already been translated to 
+  3.b) Second CASE: Some messages have already been translated to
        your language (files present in ./po/ directory), and
        you want to continue with translating new and still
        untranslated messages.
 
-       First we have to merge new messages into existing .po files 
+       First we have to merge new messages into existing .po files
        (which contain already translated messages) as new messages
-       might have been added into the GRASS system. 
+       might have been added into the GRASS system.
        To do so, run:
-    
+
        make pot
        make update-po
-    
-       This will update the messages in all existing files in 
+
+       This will update the messages in all existing files in
        the .po/ directory.
-    
+
 
 4. TRANSLATE MESSAGES
 
    In the links section at bottom of this page you find references to the
    'kbabel' and 'poEdit' software to easily translate the message files.
-   
+
    Run 'kbabel' or equivalent program
     kbabel ./po/grasslibs_<LANGUAGE>.po
     kbabel ./po/grassmods_<LANGUAGE>.po
@@ -273,15 +273,15 @@ DETAILED PROCEDURE :
            For Asian, Indian and other keymaps, see [footnote 3].
 
    NOTES:
-   * Pay attention to keep '%s', '\n' and other stuff also 
+   * Pay attention to keep '%s', '\n' and other stuff also
      in the translated messages!
-   
+
    * Please use 'ISO-8859-1' or 'ISO-8859-15' for western languages.
      See https://en.wikipedia.org/wiki/ISO_8859 for details.
-   
+
    After finishing the translation, save the files.
 
-     
+
 5. CREATE MO FILES
 
    run
@@ -304,12 +304,12 @@ DETAILED PROCEDURE :
 
    If you updated .c files with _() macros as explained
    above, please send C file diffs against git:
-   
+
    git diff file.c > file.diff
-   
+
    Thanks for submitting.
 
-   
+
 PLEASE HELP TO TRANSLATE GRASS MESSAGES!
 
 ----------------------------------------------

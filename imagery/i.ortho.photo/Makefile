@@ -17,5 +17,3 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 $(SUBDIRS1): lib
 
 default: parsubdirs
-
-

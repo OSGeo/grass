@@ -7,9 +7,9 @@ results are not consistent
 
   the code base is large, making it difficult to debug
 
-  for debugging, two different systems are needed that create different 
+  for debugging, two different systems are needed that create different
   results with identical input
-  
+
   functions causing problems are
   compute() in 6s.cpp
     particularly the loop over response values per wavelength
@@ -18,6 +18,6 @@ results are not consistent
     in the last loop, sbp must be > 0
     the second last loop after "if(k != ip)" needs a closer look
   [add more functions here]
-  
+
   the code base needs to be compared against the latest 6S code
     requires comparing fortran with cpp

@@ -54,7 +54,7 @@ r.relief input=myplane_pyr output=myplane_pyr_shaded altitude=$sunangleabovehori
 
 # pre-run: illumination map
 i.topo.corr -i output=myplane_pyr_illumination \
-	    basemap=myplane_pyr zenith=$solarzenith azimuth=$sunazimuth 
+	    basemap=myplane_pyr zenith=$solarzenith azimuth=$sunazimuth
 r.colors myplane_pyr_illumination color=gyr
 
 # show original

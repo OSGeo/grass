@@ -12,10 +12,10 @@
 #include "param.h"
 
 void disp_matrix(double **a, double *x, double *z, int n)
-                        /* Displays matrices used to solve a 
-                           set of linear equations in the form 
+                        /* Displays matrices used to solve a
+                           set of linear equations in the form
 
-                           _                        _      _  _      _  _ 
+                           _                        _      _  _      _  _
                            | a(0,0) a(0,1) ... a(0,n) |    | x0 |    | z0 |
                            | a(1,0) a(1,1) ... a(1,n) |    | x1 |    | z1 |
                            |    :           :   ...   :    | .  | :  | =  | :  |

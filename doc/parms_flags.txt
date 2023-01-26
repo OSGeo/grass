@@ -1,9 +1,9 @@
 GRASS: Module parameters concept
 
-All GRASS modules should use a standardized scheme.                               
+All GRASS modules should use a standardized scheme.
 Collected idead below.
 
-1) 
+1)
 Date: Sun, 26 Nov 2000 20:34:55 -0800
 From: "Eric G . Miller" <egm2 jps.net>
 Subject: [GRASSLIST:1195] Re: [GRASS5] Re: notation standardisation
@@ -17,14 +17,14 @@ and "3dview" to use (and maybe "dspf" ?).
 
 Rule of thumb [proposed]:
 
-1. If the module takes a single input and produces a single output, then 
+1. If the module takes a single input and produces a single output, then
    use input=[name] and output=[name].
 
 2. If the module just performs some action, but doesn't produce an
    output different from the input, then use the input "types" parameter
    "name" (i.e. "rast", "vect", etc...).
 
-3. If the module has multiple inputs or outputs, then attempt to use the 
+3. If the module has multiple inputs or outputs, then attempt to use the
    parameter names above if possible, else parameter names are left up
    to the author.  So, If I had a module that took a raster and a vector
    and produced a raster, it's parameters could be:
@@ -37,7 +37,7 @@ I don't know that we ever resolved the issue of addressing sites
 attributes.  Basically we have something like:
 
    "east", "north", "dim", "cat", "decimal", and "string";
-   
+
 for attribute names. For the "index", I don't know; maybe just "index"
 when there's only one to be specified, otherwise "zindex" for "dim",
 "dindex" for decimal and "sindex" for string???  I know I'm guilty of
@@ -50,7 +50,7 @@ and I don't know how well Xbase files might support efforts at
 localization in the future.  Anyway, I bring this up, because
 identifying attributes by "type" and "index" is really cumbersome.
 
--- 
+--
 Eric G. Miller <egm2@jps.net>
 
 
@@ -69,9 +69,9 @@ Export:
 -> file is external file. Should be read from current directory, not
    within mapset!
 
-Display modules: 
-  map= for all raster and vector modules, 
-  file=name for modules that can read from stdin in the 
+Display modules:
+  map= for all raster and vector modules,
+  file=name for modules that can read from stdin in the
        "easting northing label" format.
 
 
@@ -81,17 +81,17 @@ Vector modules:
 
 
 Raster modules:
-  input= output= for maps (analysis modules) 
+  input= output= for maps (analysis modules)
   sometimes: elev=
 
 
 Imagery modules:
   input= output= for maps (analysis modules)
 
-  
+
 Sites modules:
   map= for map (no analysis modules)
-  input= output= for maps (analysis modules) 
+  input= output= for maps (analysis modules)
   sometimes: elev=
   field   Attribute field type to use for operation
            options: dim,decimal,cat
@@ -128,4 +128,4 @@ General proposal for import modules:
   present in r.in.gdal -e, this should be moved to libgis and added to
   all import modules)
 - read from stdin with 'in=-' (for all import modules)
-- add 'timestamp' parameter to import modules 
+- add 'timestamp' parameter to import modules

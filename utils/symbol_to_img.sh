@@ -39,7 +39,7 @@ do
         echo -e "border none\npoint 50% 50%\n  symbol $DIR/$SYMBOL\n  end\nend" > "$PSMAP_FILE"
         ps.map input="$PSMAP_FILE" output="$PS_FILE"
         inkscape -f "$PS_FILE" --export-png="$PNG_OUT/$SYMBOL.png" -D -h=30
-        
+
         rm "$PSMAP_FILE" "$PS_FILE"
 
         # ImageMagic optimizes PNGs, no optipng needed

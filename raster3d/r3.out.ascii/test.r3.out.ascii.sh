@@ -1,15 +1,15 @@
 # Tests for r3.out.ascii and r3.in.ascii
 # This script tests the export of voxel data using r3.out.ascii
-# as well as the import of the generated data with r3.in.ascii 
+# as well as the import of the generated data with r3.in.ascii
 # using different row and depth ordering options.
 
 # We set up a specific region in the
 # @preprocess step of this test. We generate
-# voxel data with r3.mapcalc. The region setting 
+# voxel data with r3.mapcalc. The region setting
 # should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 # We create several (float, double, null value) voxel map
-# with value = col + row + depth. 
+# with value = col + row + depth.
 r3.mapcalc --o expr="volume_float = float(col() + row() + depth())"
 r3.mapcalc --o expr="volume_double = double(col() + row() + depth())"
 # Add null value information to test correct null value handling
@@ -66,7 +66,7 @@ r3.in.ascii --o output=test_double_nsbt_null input=test_double_sntb_null_prec8.t
 # Import grass6 legacy data
 r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null_grass6_comp_1.txt
 
-# In this @preprocess step for the last test we create a large region and 
+# In this @preprocess step for the last test we create a large region and
 # generate large input data to test the handling of large files.
 g.region s=0 n=800 w=0 e=1200 b=0 t=50 res=10 res3=1.5 -p3
 r3.mapcalc --o expr="volume_double_large = double(col() + row() + depth())"
@@ -80,7 +80,7 @@ r3.in.ascii --o output=test_double_nsbt_null_large input=test_double_nsbt_null_l
 r3.info test_double_nsbt_null_large
 
 # Show differences between references and created text files
-for i in `ls *.ref` ; do 
-    diff $i "`basename $i .ref`.txt" ; 
+for i in `ls *.ref` ; do
+    diff $i "`basename $i .ref`.txt" ;
 done
 rm *.txt

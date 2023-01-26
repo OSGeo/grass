@@ -15,15 +15,15 @@ sw_defs.h sw_edgelist.c sw_geometry.c sw_heap.c sw_main.c sw_memory.c
 sw_output.c sw_voronoi.c
 vo_cats_att.c vo_extend.c vo_inregion.c vo_main.c vo_polygons.c
 -------------------------
-This was developed from something called sweep2, 
+This was developed from something called sweep2,
 which can be found on netlib sites (e.g., research.att.com). I
 do not claim in any way to be an expert in computational geometry.
 The only real additions that I made was the GRASS wrapper and making
 a few cosmetic changes to Fortune's output routines.
 
-There's a few places where the code needs cleaning up (i.e., there's a 
-few areas where I need to do some re-allocation of memory, but I didn't get 
-around to doing this). 
+There's a few places where the code needs cleaning up (i.e., there's a
+few areas where I need to do some re-allocation of memory, but I didn't get
+around to doing this).
 
 This is a complete re-write of the old s.voronoi. If you find any bugs,
 let me know.
@@ -33,7 +33,7 @@ mccauley@ecn.purdue.edu
 
 -----------------------------------------
 UPDATE 1/5/2001
-I updtated McCauley file to address slowness, some numerical 
+I updtated McCauley file to address slowness, some numerical
 problem related to line segment parameters in s.sweep output
 and to improve speed. I also updated both commands to use
 GRASS 5 site API. A speed improvement is still possible

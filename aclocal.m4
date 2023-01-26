@@ -215,7 +215,7 @@ AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$5 $CPPFLAGS"
 AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <stdio.h> 
+#include <stdio.h>
 #include <$1>
 int main(void) {
  FILE *fp = fopen("conftestdata","w");
@@ -376,7 +376,7 @@ AC_SUBST(EXEEXT)])
 #
 # Arguments:
 #	none
-#	
+#
 # Results:
 #
 #	Adds the following arguments to configure:
@@ -538,8 +538,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    ;;
 	*-solaris2*)
 	    # Note: Solaris is as of 2010 Oracle Solaris, not Sun Solaris
-	    #       Oracle Solaris derives from Solaris 2 
-	    #       derives from SunOS 5 
+	    #       Oracle Solaris derives from Solaris 2
+	    #       derives from SunOS 5
 	    #       derives from UNIX System V Release 4
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
@@ -571,7 +571,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LDFLAGS="-Wl,--export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
 	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
-	    # TODO: add optional pthread support with any combination of: 
+	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
 	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
@@ -593,7 +593,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # NetBSD 6 does handle version numbers with dots.
 	    STLIB_SUFFIX=".a"
 	    SHLIB_SUFFIX=".so"
-	    # TODO: add optional pthread support with any combination of: 
+	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
 	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
@@ -742,7 +742,7 @@ AC_DEFUN([LOC_OPENMP],
 dnl -------------------- / OpenMP ---------------------------------------------
 
 
-dnl XXXX Begin Stolen from cdrtools-2.01 
+dnl XXXX Begin Stolen from cdrtools-2.01
 dnl XXXX by Joerg Schilling <schilling fokus fraunhofer de> et al. XXXXXXXXX
 
 dnl XXXXXXXXX Begin Stolen (but modified) from GNU tar XXXXXXXXXXXXXXXXXXXXX
@@ -932,4 +932,3 @@ if test $ac_cv_func_ftello = yes; then
 fi])
 
 dnl XXXXXXXXXXX End Stolen from cdrtools-2.01 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-

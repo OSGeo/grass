@@ -23,13 +23,13 @@ is the default DBMI backend.
 The current database management settings are shown or modified with
 <a href="db.connect.html">db.connect</a> for current mapset. Available DBMI drivers
 are listed with <a href="db.drivers.html">db.drivers</a>. Some DBMI backends
-require a user/password for driver/database to be set with <a href="db.login.html">db.login</a>. 
-In order to test a driver, run <a href="db.test.html">db.test</a>. 
+require a user/password for driver/database to be set with <a href="db.login.html">db.login</a>.
+In order to test a driver, run <a href="db.test.html">db.test</a>.
 
 <h3>Attribute data import and export</h3>
 
 Attribute data can be imported with <a href="db.in.ogr.html">db.in.ogr</a> from
-various formats and exported with <a href="db.out.ogr.html">db.out.ogr</a>. To internally 
+various formats and exported with <a href="db.out.ogr.html">db.out.ogr</a>. To internally
 copy a a full table or selectively parts of it, use <a href="db.copy.html">db.copy</a>.
 <p>
 
@@ -42,13 +42,13 @@ Further conversion tools:
 
 <h3>SQL commands</h3>
 
-GRASS supports two main SQL operations, execution of an SQL statement 
+GRASS supports two main SQL operations, execution of an SQL statement
 (<a href="db.execute.html">db.execute</a>) and selection
 of data from a table (<a href="db.select.html">db.select</a>).
 See the <a href="sql.html">SQL help page</a> for examples.
 
 <h3>Managing the default DBMI settings</h3>
- 
+
 Per default vector map attributes are stored in SQLite tables. This default
 definition can be modified with <a href="db.connect.html">db.connect</a>. If an
 external DBMS is used, <a href="db.login.html">db.login</a> may be required.
@@ -77,7 +77,7 @@ With <a href="db.droptable.html">db.droptable</a> an attribute table can be dele
 
 <h3>Database Schema</h3>
 Currently schema support only works for PostgreSQL connections. Default schema
-can be set with <a href="db.connect.html">db.connect</a>. Note that the default 
+can be set with <a href="db.connect.html">db.connect</a>. Note that the default
 schema will be used by all db.* modules.
 <p>
 <a href="db.tables.html">db.tables</a> returns 'schema.table' if schemas are

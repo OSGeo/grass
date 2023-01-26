@@ -6,7 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 MOD_OBJS := $(filter-out ftol.o,$(AUTO_OBJS))
 
-include $(MODULE_TOPDIR)/include/Make/Lib.make 
+include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 EXTRA_CFLAGS = $(ZLIBINCPATH) $(GDALCFLAGS)

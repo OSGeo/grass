@@ -74,4 +74,3 @@ CREATE TRIGGER delete_str3ds_base AFTER DELETE ON str3ds_base FOR EACH ROW EXECU
 CREATE TRIGGER delete_raster3d_base AFTER DELETE ON raster3d_base FOR EACH ROW EXECUTE PROCEDURE delete_raster3d_base();
 CREATE TRIGGER delete_stvds_base AFTER DELETE ON stvds_base FOR EACH ROW EXECUTE PROCEDURE delete_stvds_base();
 CREATE TRIGGER delete_vector_base AFTER DELETE ON vector_base FOR EACH ROW EXECUTE PROCEDURE delete_vector_base();
-

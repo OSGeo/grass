@@ -140,7 +140,7 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default:
 	$(MAKE) -C r.mapcalc
-	$(MAKE) htmldir 
+	$(MAKE) htmldir
 
 htmldir: parsubdirs
 

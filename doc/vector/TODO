@@ -138,7 +138,7 @@ the fly. OGR vectors would be specified by virtual mapset name
 OGR layer will be equivalent to GRASS layer (it is necessary to
 implement layer names, see above). It would be for example possible to
 display a shapefile or PostGIS layers directly:
-  
+
   d.vect map=./shapefiles/@OGR layer=roads    # display shapefile ./shapefiles/roads.shp
   d.vect map=PG:dbname=test@OGR layer=roads   # display table roads from database test
 

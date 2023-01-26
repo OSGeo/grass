@@ -1,16 +1,16 @@
 Symbol drawing commands are stored in a text file (one file for each symbol)
 which are located in $GISBASE/etc/symbol/group/name or mapset/symbol/group/name
 
-S_read() searches first in mapsets and then in $GISBASE (symbol names in 
+S_read() searches first in mapsets and then in $GISBASE (symbol names in
 $GISBASE may be overridden by symbols of the same group/name in mapset).
 
 
-File format example: 
+File format example:
 VERSION 1.0
 BOX -10 -10 10 10
 STRING
   LINE
-    0 -10 
+    0 -10
     0  10
   END
 END
@@ -24,7 +24,7 @@ ends with a new line or 'END'. Some objects may contain other objects.
 - STRINGS and RINGS are composed of LINES and ARCS.
 
 POLYGONS and STRINGS are drawn using the default color and fill color
-(specified in module options such as 'd.vect color='). This color may be 
+(specified in module options such as 'd.vect color='). This color may be
 overwritten by using the COLOR and FCOLOR keywords.
 
 Blank lines and lines starting with a #hash will be ignored.
@@ -55,7 +55,7 @@ COLOR NONE | R G B
 FCOLOR NONE | R G B
  Fill color used for polygon. If NONE is used, then the polygon is not filled.
 
-LINE 
+LINE
   X Y
   X Y
  [X Y]
@@ -65,7 +65,7 @@ END
 ARC X Y R A1 A2 [C]
  Arc specified by center (X Y), radius (R), start/end angle in degrees (A1/A2)
  and optionally direction (C for clockwise, default counter clockwise)
- Note degrees are polar theta not navigational, i.e. 0 is east and 
+ Note degrees are polar theta not navigational, i.e. 0 is east and
  values increase counter-clockwise from there. Reducing the angle
  from a full circle does not make it draw like a pacman but rather
  with a straight chord-line from the start/end points on the circle
@@ -97,13 +97,12 @@ END
 
 ------------------------------------
 
-Note: restriction for clockwise/counter clockwise rings should be removed 
-later and replaced by reordering in symbol library. Order is required by 
+Note: restriction for clockwise/counter clockwise rings should be removed
+later and replaced by reordering in symbol library. Order is required by
 ps.map because PS uses even-odd rule for polygon filling.
 
 Internal structure:
-A symbol read into memory is stored in structure SYMBOL containing an array 
-of parts (SYMBPART). Each part may be of type S_STRING or S_POLYGON, and 
-contain an array of chains (SYMBCHAIN) where both STRING or POLYGONS are 
+A symbol read into memory is stored in structure SYMBOL containing an array
+of parts (SYMBPART). Each part may be of type S_STRING or S_POLYGON, and
+contain an array of chains (SYMBCHAIN) where both STRING or POLYGONS are
 stored. One chain contains an array of elements (SYMBEL).
-

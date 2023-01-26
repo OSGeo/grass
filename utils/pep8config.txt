@@ -25,4 +25,3 @@ ignore=E121,E122,E123,E124,E125,E126,E127,E128,E201,E202,E203,E211,E221,E222,E22
 
 # set maximum allowed line length (default: 79)
 max-line-length=150
-

@@ -9,7 +9,7 @@
 --   2-launched (good place to show initial windows or dialogs)
 --   2.5-open?
 --   3-idle (waits for user action)
--- 
+--
 -- idle is supposed to be last, but open seems to cause it to think
 -- it's not idle, so we can process drag-n-drop before idling.  No docs
 -- say explicitly that this is the case, so speed of Mac and process load
@@ -48,7 +48,7 @@ on launchgrass()
 	set grass_path to (posix path of (path to me as string)) & "Contents/MacOS/"
 	set grass_startup to (quoted form of (grass_path & "grass.sh"))
 	set grassRun to grass_startup & grassGui & grassMap & "; exit"
-	
+
 	set TerminalRunning to false
 	try
 		if ((do shell script "ps -axc | grep '\\bTerminal\\b'") is not null) then
@@ -64,6 +64,6 @@ on launchgrass()
 			do script (grassRun) in window 1
 		end if
 	end tell
-	
+
 	tell me to quit
 end launchgrass

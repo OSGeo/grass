@@ -1,6 +1,6 @@
 
 CC = gcc
-CFLAGS = 
+CFLAGS =
 
 OBJECTS = card.o \
 	gammavol.o \
@@ -8,7 +8,7 @@ OBJECTS = card.o \
 	node.o \
 	rect.o \
 	sphvol.o \
-	split.o 
+	split.o
 
 all: librtree.a test
 
@@ -24,4 +24,3 @@ test: test.c librtree.a
 
 clean:
 	rm -rf ./*.o ./*.a ./test
-

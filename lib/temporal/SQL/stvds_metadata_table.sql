@@ -18,11 +18,10 @@ CREATE TABLE  stvds_metadata (
   faces INTEGER,          -- The number of faces accumulated from all registered maps
   kernels INTEGER,        -- The number of kernels accumulated from all registered maps
   primitives INTEGER,     -- All primitives accumulated (points, lines,boundaries,centroids,faces,kernels)
-  nodes INTEGER,          -- Number of nodes accumulated from all registered maps (topological information) 
+  nodes INTEGER,          -- Number of nodes accumulated from all registered maps (topological information)
   areas INTEGER,          -- The number of areas accumulated from all registered maps (topological information)
   islands INTEGER,        -- The number of islands accumulated from all registered maps (topological information)
   holes INTEGER,          -- The number of holes accumulated from all registered maps (topological information)
   volumes INTEGER,        -- The number of volumes accumulated from all registered maps (topological information)           -- The command that was used to create the space time raster dataset
   PRIMARY KEY (id)
 );
-

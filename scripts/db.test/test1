@@ -13,7 +13,7 @@ SELECT * FROM grass_test1
 2||xxx
 
 S
-SELECT c1 FROM grass_test1 WHERE d1 < 500 / 2 AND i1 <> 2  AND c1 LIKE '%bc%' 
+SELECT c1 FROM grass_test1 WHERE d1 < 500 / 2 AND i1 <> 2  AND c1 LIKE '%bc%'
 abcd
 
 X

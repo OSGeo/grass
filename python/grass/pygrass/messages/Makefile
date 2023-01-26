@@ -9,7 +9,7 @@ GDIR = $(PYDIR)/grass
 PGDIR = $(GDIR)/pygrass
 DSTDIR= $(PGDIR)/messages
 
-MODULES = 
+MODULES =
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

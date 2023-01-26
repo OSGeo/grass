@@ -1,11 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.execute</em> allows the user to execute SQL statements.  
+<em>db.execute</em> allows the user to execute SQL statements.
 
 <h2>NOTES</h2>
 
-<em>db.execute</em> only executes SQL statements and does not return 
-any data. If you need data returned from the database, use 
+<em>db.execute</em> only executes SQL statements and does not return
+any data. If you need data returned from the database, use
 <em><a href="db.select.html">db.select</a></em>.
 <p>
 If parameters for database connection are already set with
@@ -80,7 +80,7 @@ Update attribute with multiple SQL instructions in file
 <div class="code"><pre>
 UPDATE roads SET travelcost=5 WHERE cat=1;
 UPDATE roads SET travelcost=2 WHERE cat=2;
- 
+
 db.execute input=file.sql
 </pre></div>
 

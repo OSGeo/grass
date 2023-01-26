@@ -10,9 +10,9 @@ if (WScript.Arguments.Length >= 1) {
         }
         Arguments += WScript.Arguments(Index);
     }
-    new ActiveXObject("Shell.Application").ShellExecute(Application, Arguments, "", "runas");
+    new ActiveXObject("Shell.Application")
+        .ShellExecute(Application, Arguments, "", "runas");
 } else {
     WScript.Echo("Usage:");
     WScript.Echo("elevate Application Arguments");
 }
-

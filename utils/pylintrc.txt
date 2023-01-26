@@ -285,4 +285,3 @@ valid-classmethod-first-arg=cls
 # Exceptions that will emit a warning when being caught. Defaults to
 # "Exception"
 overgeneral-exceptions=Exception
-

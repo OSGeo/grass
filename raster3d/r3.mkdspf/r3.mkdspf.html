@@ -3,7 +3,7 @@
 Creates a display file from an existing grid3 file according to
 specified threshold levels.  The display file is a display list
 of polygons that represent isosurfaces of the data volume.  If
-specific <I>levels</I> are given, additional optional parameters 
+specific <I>levels</I> are given, additional optional parameters
 are ignored.  <I>Min</I> or <I>max</I> may be used alone or together
 to specify a sub-range of the data.  The <I>step</I>
 parameter is given precedence over <I>tnum</I>.
@@ -53,8 +53,8 @@ copy them to their mapset.
 
 <h2>EXAMPLES</h2>
 
-With grid3 data (<I>phdata</I>) in the range 3-7, 
-we only want to see isosurface values for the range 4-6.  
+With grid3 data (<I>phdata</I>) in the range 3-7,
+we only want to see isosurface values for the range 4-6.
 Any of these commands will produce the same results:<br>
 <div class="code"><pre>
 r3.mkdspf phdata dspf=iso min=4.0 max=6.0 tnum=5

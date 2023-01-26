@@ -3,10 +3,10 @@
 MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
-MOD_OBJS = 
+MOD_OBJS =
 
-EXTRA_INC = 
-EXTRA_CFLAGS = 
+EXTRA_INC =
+EXTRA_CFLAGS =
 EXTRA_LDFLAGS = -framework Cocoa -framework AppleScriptKit
 ifndef MACOSX_APP_NAME
 MACOSX_APP_NAME = GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.app

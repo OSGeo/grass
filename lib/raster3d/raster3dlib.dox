@@ -1,5 +1,5 @@
 /*! \page raster3dlib GRASS 3D Raster Volume Library
-<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+<!-- doxygenized from "GRASS 5 Programmer's Manual"
      by M. Neteler 5/2004, 8/2005
   -->
 
@@ -31,7 +31,7 @@ The file format consists of a mapset element <EM>grid3</EM> which contains a
 directory for every map. The elements for each map are
 
 <P>
-\verbatim 
+\verbatim
         3d region file
         color file (color)
         categories file (cats)
@@ -40,14 +40,14 @@ directory for every map. The elements for each map are
         cell file (cell)
         header file (cellhd)
         a directory containing display files (dsp)
-\endverbatim 
+\endverbatim
 
 <P>
 There is also a <EM>colr2</EM> mechanism provided. <EM>colr2</EM> color tables
 are stored in <EM>grid3/colr2/MAPSET/MAP</EM>.
 
 <P>
-Note: color, categories, and the range can be used in the same way as in <EM>2d</EM> 
+Note: color, categories, and the range can be used in the same way as in <EM>2d</EM>
 GRASS with the exception of reading and writing. <EM>3d</EM> read and write
 functions have to be used for this purpose.
 
@@ -77,13 +77,13 @@ functions have to be used for this purpose.
 The data file has the following format:
 
 <P>
-\verbatim 
+\verbatim
         xdr_int nofBytesLong;
         xdr_int nofBytesUsed;
         encoded_long indexOffset;
         compressed_tile[] tiles;
         compressed_encoded_long[] index;
-\endverbatim 
+\endverbatim
 
 <P>
 
@@ -117,7 +117,7 @@ There are three methods of compression provided. The compression
 methods can either be those defined by default, set by environment
 variables or explicitly set at run-time.
 
-\verbatim 
+\verbatim
         Precision
         zlib
 \endverbatim
@@ -138,7 +138,7 @@ represented in the array of cell values. This array is stored together
 with the cell-values of the tile.
 
 
-\section Tile_Cache Tile Cache 
+\section Tile_Cache Tile Cache
 
 <P>
 Tiles can either be read and written directly or use an intermediate
@@ -148,13 +148,13 @@ cache instead.
 In non-cache mode the application should only use the functions
 
 <P>
-int Rast3d_readTile() 
+int Rast3d_readTile()
 
 <P>
-and 
+and
 
 <P>
-int Rast3d_writeTile() 
+int Rast3d_writeTile()
 
 <P>
 to read and write tiles.  The application can use one tile provided by the map
@@ -214,7 +214,7 @@ consistently.
 The header file has the following format:
 
 <P>
-\verbatim 
+\verbatim
 Proj: 1
 Zone: 1
 North: 2.0000000000000
@@ -250,7 +250,7 @@ precision is used.
 <BR>
 <P>
 Binary files not in RASTER3D format can be read by the library. The
-following actions have to be taken: 
+following actions have to be taken:
 
 <P>
 Make a new map directory in the <EM>grid3</EM> element of the mapset (say <EM>mymap</EM>).
@@ -260,7 +260,7 @@ Make a new map directory in the <EM>grid3</EM> element of the mapset (say <EM>my
 In the following example the relevant values of <EM>mymap/cellhd</EM> are shown:
 
 <P>
-\verbatim 
+\verbatim
 TileDimensionX: A
 TileDimensionY: B
 TileDimensionZ: C
@@ -277,7 +277,7 @@ The values of <EM>A</EM>, <EM>B</EM>, and <EM>C</EM> have to be chosen
 according to one of the following patterns:
 
 <P>
-\verbatim 
+\verbatim
 A &gt;= 1, B == 1, C == 1, or
 A &gt;= nofRows, B &gt;= 1, C == 1, or
 A &gt;= nofRows, B &gt;= nofCols, C &gt;= 1.
@@ -301,13 +301,13 @@ For performance reasons it is a good idea to use function
 \section Region_Structure Region Structure
 
 <P>
-\verbatim 
+\verbatim
 typedef struct{
 
     double north, south;
     double east, west;
     double top, bottom;
-  
+
     int rows, cols, depths; // data dimensions in cells
 
     double ns_res, ew_res, tb_res;
@@ -339,7 +339,7 @@ user to overwrite this default.
 The window file has the following format:
 
 <P>
-\verbatim 
+\verbatim
 Proj: 1
 Zone: 1
 North: 2.0
@@ -478,7 +478,7 @@ default should not be changed.
 Environment variables RASTER3D_USE_COMPRESSION and RASTER3D_NO_COMPRESSION.
 
 <P>
-See functions Rast3d_setCompressionMode() (cf. 
+See functions Rast3d_setCompressionMode() (cf.
 Section 22.3.2.3 ) and Rast3d_getCompressionMode() (cf. Section 22.3.2.3 ).
 
 <P>
@@ -500,7 +500,7 @@ be changed at compilation time of the library.
 Environment variables RASTER3D_USE_RLE and RASTER3D_NO_RLE.
 
 <P>
-See functions Rast3d_setCompressionMode() (cf. 
+See functions Rast3d_setCompressionMode() (cf.
 Section 22.3.2.3) and Rast3d_getCompressionMode() (cf. Section 22.3.2.3).
 
 \section Setting_the_precision Setting the precision
@@ -586,10 +586,10 @@ The default <EM>3d</EM> window file is <EM>WIND3</EM> located in the current map
 <P>
 Possible choices for <EM>3d</EM> window files are <EM>name</EM> which refers to a
 window file in the <EM>3d</EM> window database located at <EM>windows3d</EM> of the
-current mapset; or file names which are identified by a leading <EM><TT>"/"</TT></EM> 
+current mapset; or file names which are identified by a leading <EM><TT>"/"</TT></EM>
 or <EM><TT>"."</TT></EM>; or fully qualified
-names, i.e. <EM>file@mapset</EM> which refer to window files in the <EM>3d</EM> window 
-database of mapset.  Note, that names <EM>WIND3</EM> and <EM>WIND3@mapset</EM> do not 
+names, i.e. <EM>file@mapset</EM> which refer to window files in the <EM>3d</EM> window
+database of mapset.  Note, that names <EM>WIND3</EM> and <EM>WIND3@mapset</EM> do not
 specify the default window name in the (current)
 mapset but rather a window file in the window database of the (current) mapset.
 
@@ -597,7 +597,7 @@ mapset but rather a window file in the window database of the (current) mapset.
 Environment variable RASTER3D_DEFAULT_WINDOW3D.
 
 <P>
-See functions 
+See functions
 
 <P>
 <TT>Rast3d_useWindowParams()</TT>,
@@ -663,7 +663,7 @@ void Rast3d_printError(char (*msg)(char *)) This function prints the
 
 <P>
 void Rast3d_fatalError(char (*msg)(char *)) This function prints the
-  error message <EM>msg</EM> to <EM>stderr</EM>, flushes <EM>stdout</EM> 
+  error message <EM>msg</EM> to <EM>stderr</EM>, flushes <EM>stdout</EM>
   and <EM>stderr</EM>, and terminates the program with a segmentation fault.
 
 <P>
@@ -682,7 +682,7 @@ Tiles are stored in memory with <EM>type</EM> which must be any of FCELL_TYPE,
   cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
   RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
   RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
-  RASTER3D_USE_CACHE_XYZ, the result of <TT>Rast3d_cacheSizeEncode()</TT> (cf. 
+  RASTER3D_USE_CACHE_XYZ, the result of <TT>Rast3d_cacheSizeEncode()</TT> (cf.
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>window</EM> sets the
   window-region for the map. It is either a pointer to a window structure or
@@ -703,10 +703,10 @@ void  *Rast3d_openCellNew(char *name, int type, int cache, RASTER3D_Region
   cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
   RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
   RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
-  RASTER3D_USE_CACHE_XYZ, the result of <TT>Rast3d_cacheSizeEncode()</TT> (cf. 
+  RASTER3D_USE_CACHE_XYZ, the result of <TT>Rast3d_cacheSizeEncode()</TT> (cf.
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>region</EM> specifies
-  the 3d region.  
+  the 3d region.
 
 <P>
 Returns a pointer to the cell structure ... if successful,
@@ -722,7 +722,7 @@ void  *Rast3d_openCellNewParam(char *name, int typeIntern, int cache,
   RASTER3D_USE_CACHE_DEFAULT, RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
   RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
   RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of
-  <TT>Rast3d_cacheSizeEncode()</TT> (cf. 
+  <TT>Rast3d_cacheSizeEncode()</TT> (cf.
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>region</EM> specifies
   the 3d region.
@@ -732,7 +732,7 @@ In addition the properties of the new file have to be specified. It is
   assumed by default that compression is used. This function first sets the
   global default values to the specified values, and then restores the original
   global defaults. This function can be used in conjunction with
-  <TT>Rast3d_setStandard3dInputParams()</TT> (cf. 
+  <TT>Rast3d_setStandard3dInputParams()</TT> (cf.
   Section 22.4.18) and
   <TT>Rast3d_getStandard3dParams()</TT>.
 
@@ -743,7 +743,7 @@ Returns a pointer to the cell structure ... if successful, NULL ...
 <P>
 int Rast3d_closeCell(void *map)Closes g3d-file. If <EM>map</EM> is new
   and cache-mode is used for <EM>map</EM> then every tile which is not flushed
-  before closing is flushed.  
+  before closing is flushed.
 
 <P>
 Returns 1 ... if successful, 0 ...  otherwise.
@@ -772,7 +772,7 @@ NULL ... otherwise.
 
 <P>
 These functions read or write data directly to the file (after performing the
-appropriate compression) without going through the cache. In order to avoid 
+appropriate compression) without going through the cache. In order to avoid
 unexpected side-effects the use of these functions in cache mode is
 discouraged.
 
@@ -785,7 +785,7 @@ int Rast3d_readTile(void *map, char *tileIndex, int tile, int type)
   is filled with NULL-values.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -808,7 +808,7 @@ A tile can only be written once. Subsequent attempts to write the same tile
   are ignored.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         2 ... if write request was ignored,
         0 ... otherwise.
@@ -876,7 +876,7 @@ int Rast3d_putValue(void *map, int x, int y, int z, char *value, int
 Returns
 
 <P>
-  1 ... if successful,  
+  1 ... if successful,
   0 ... otherwise.
 
 <P>
@@ -904,23 +904,23 @@ If <EM>map</EM> is old and the cache is not used the tile with <EM>tileIndex</EM
   is read from file and stored in the buffer provided by the map structure.
   The pointer to this buffer is returned. If the buffer already contains the
   tile with <EM>tileIndex</EM> reading is skipped. Data which was stored in
-  earlier calls to <TT>Rast3d_getTilePtr</TT> is destroyed.  If the tile with 
-  <EM>tileIndex</EM> is not stored on the file corresponding to <EM>map</EM>, and 
+  earlier calls to <TT>Rast3d_getTilePtr</TT> is destroyed.  If the tile with
+  <EM>tileIndex</EM> is not stored on the file corresponding to <EM>map</EM>, and
   <EM>tileIndex</EM> is a valid index the buffer is filled with NULL-values.
 <BR>
 <P>
 If <EM>map</EM> is old and the cache is used the tile with <EM>tileIndex</EM> is
   read from file and stored in one of the cache buffers.  The pointer to buffer
   is returned.  If no free cache buffer is available an unlocked cache-buffer
-  is freed up and the new tile is stored in its place.  If the tile with 
-  <EM>tileIndex</EM> is not stored on the file corresponding to <EM>map</EM>, and 
+  is freed up and the new tile is stored in its place.  If the tile with
+  <EM>tileIndex</EM> is not stored on the file corresponding to <EM>map</EM>, and
   <EM>tileIndex</EM> is a valid index the buffer is filled with NULL-values.  If one
   of the cache buffers already contains the tile with <EM>tileIndex</EM> reading
   is skipped and the pointer to this buffer is returned.
 <BR>
 <P>
 If <EM>map</EM> is new and the cache is not used the functionality is the same
-  as if <EM>map</EM> is old and the cache is not used.  If the tile with 
+  as if <EM>map</EM> is old and the cache is not used.  If the tile with
   <EM>tileIndex</EM> is already stored on file, it is read into the buffer, if not,
   the cells are set to null-values.  If the buffer corresponding to the pointer
   is used for writing, subsequent calls to <TT>Rast3d_getTilePtr</TT> may destroy the
@@ -930,7 +930,7 @@ If <EM>map</EM> is new and the cache is not used the functionality is the same
 <BR>
 <P>
 If <EM>map</EM> is new and the cache is used the functionality is the same as if
-  <EM>map</EM> is old and the cache is used with the following exception.  If 
+  <EM>map</EM> is old and the cache is used with the following exception.  If
   <EM>tileIndex</EM> is a valid index and the tile with this index is not found in
   the cache and is not stored on the file corresponding to <EM>map</EM>, then the
   file cache is queried next. If the file-cache contains the tile it is loaded
@@ -948,7 +948,7 @@ Care has to be taken if this function is used in non-cache mode since it is
   <TT>Rast3d_writeTile()</TT> and their corresponding type-specific versions.
 
 <P>
-Returns 
+Returns
         a pointer to a buffer ... if successful,
         NULL ... otherwise.
 
@@ -958,7 +958,7 @@ Same functionality as <TT>Rast3d_getTilePtr()</TT> but does not return the
 pointer.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -991,7 +991,7 @@ If this tile has already been written before the write request is ignored.
   tile filled with NULL-values is written.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1004,7 +1004,7 @@ int Rast3d_flushTileCube(void *map, int xMin, int yMin, int zMin, int
   written earlier are ignored.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1021,7 +1021,7 @@ Tiles which are not stored in the cache are written as NULL-tiles.
         ignored.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1030,12 +1030,12 @@ Returns
 \subsection Locking_and_Unlocking_Tiles_and_CyclesLocking and Unlocking Tiles, and Cycles
 
 <P>
-int Rast3d_lockTile(void *map, int tileIndex) Locks tile with <EM>tileIndex</EM> in cache. 
+int Rast3d_lockTile(void *map, int tileIndex) Locks tile with <EM>tileIndex</EM> in cache.
 If after locking fewer than the minimum number of
   unlocked tiles are unlocked, the lock request is ignored.
 
 <P>
-Returns 
+Returns
          1 ... if successful,
         -1 ... if request is ignored,
          0 ... otherwise.
@@ -1045,7 +1045,7 @@ int Rast3d_unlockTile(void *map, int tileIndex)
 Unlocks tile with <EM>tileIndex</EM>.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1054,7 +1054,7 @@ int Rast3d_unlockAll(void *map)
 Unlocks every tile in cache of <EM>map</EM>.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1084,7 +1084,7 @@ int Rast3d_beginCycle(void *map)
 Starts a new cycle.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1093,7 +1093,7 @@ int Rast3d_endCycle(void *map)
 Ends a cycle.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1130,7 +1130,7 @@ int Rast3d_getVolume(void *map, double originNorth, double originWest,
   double originBottom, double vxNorth, double vxWest, double vxBottom, double
   vyNorth, double vyWest, double vyBottom, double vzNorth, double vzWest,
   double vzBottom, int nx, int ny, int nz, char *volumeBuf, int type)
-  Resamples the cube defined by <EM>origin</EM> and the 3 vertices <EM>vx</EM>, 
+  Resamples the cube defined by <EM>origin</EM> and the 3 vertices <EM>vx</EM>,
   <EM>vy</EM>, and <EM>vz</EM> which are incident to the 3 edges adjacent to
    <EM>origin</EM>.  The resampled cube is stored in <EM>volumeBuf</EM> which is a cube
   with dimensions <EM>(nx, ny, nz)</EM>.
@@ -1139,7 +1139,7 @@ int Rast3d_getVolume(void *map, double originNorth, double originWest,
 The method of sampling is nearest neighbor sampling.
 
 <P>
-The values stored are of <EM>type</EM>. 
+The values stored are of <EM>type</EM>.
 
 <P>
 Returns 1 ... if successful, 0 ... otherwise.
@@ -1151,7 +1151,7 @@ int Rast3d_getAlignedVolume(void *map, double originNorth, double
   Resamples the axis-parallel cube defined by <EM>origin</EM> and the lengths of
   the 3 edges adjacent to <EM>origin</EM>.  The resampled cube is stored in
    <EM>volumeBuf</EM> which is a cube with dimensions <EM>(nx, ny, nz)</EM>.  The method
-  of sampling is nearest neighbor sampling.  The values stored are of <EM>type</EM>.  
+  of sampling is nearest neighbor sampling.  The values stored are of <EM>type</EM>.
 
 <P>
 Returns 1 ... if successful, 0 ... otherwise.
@@ -1166,17 +1166,17 @@ Same as <EM>malloc (nBytes)</EM>, except that in case of error
 <TT>Rast3d_error()</TT> is invoked.
 
 <P>
-Returns 
+Returns
         a pointer ... if successful,
         NULL ... otherwise.
 
 <P>
 void  *Rast3d_realloc(void *ptr, int nBytes)
 Same as <EM>realloc (ptr, nBytes)</EM>, except that in case of error
-<TT>Rast3d_error()</TT> is invoked. 
+<TT>Rast3d_error()</TT> is invoked.
 
 <P>
-Returns 
+Returns
         a pointer ... if successful,
         NULL ... otherwise.
 
@@ -1190,7 +1190,7 @@ as the tiles of <EM>map</EM> and large enough to store cell-values of
 <EM>type</EM>.
 
 <P>
-Returns 
+Returns
         a pointer to the vector ... if successful,
         NULL ... otherwise.
 
@@ -1342,7 +1342,7 @@ void Rast3d_location2coord(void *map, double north, double west, double
 int Rast3d_computeClippedTileDimensions(void *map, int tileIndex, int
   *rows, int *cols, int *depths, int *xRedundant, int *yRedundant, int
   *zRedundant) Computes the dimensions of the tile when clipped to fit the
-  region of <EM>map</EM>. The clipped dimensions are returned in <EM>rows</EM>, 
+  region of <EM>map</EM>. The clipped dimensions are returned in <EM>rows</EM>,
   <EM>cols</EM>, <EM>depths</EM>.  The complement is returned in <EM>xRedundant</EM>,
    <EM>yRedundant</EM>, and <EM>zRedundant</EM>. This function returns the number of
   cells in the clipped tile.
@@ -1381,7 +1381,7 @@ Rast3d_remove_color() function removes the color file.
 \subsection RASTER3D_Categories_Support RASTER3D Categories Support
 
 <P>
-Applications can use the standard GRASS functions to work with categories, 
+Applications can use the standard GRASS functions to work with categories,
 except for the file manipulations.
 
 <P>
@@ -1394,7 +1394,7 @@ categories the Categories structure into the categories file for a map.
 \subsection RASTER3D_History_Support RASTER3D History Support
 
 <P>
-Applications can use the standard GRASS functions to work with histories, 
+Applications can use the standard GRASS functions to work with histories,
 except for the file manipulations.
 
 <P>
@@ -1404,7 +1404,7 @@ int Rast3d_readHistory(char *name, char *mapset, struct History *hist)
   (Raster_History_File) for details and return values.
 
 <P>
-int Rast3d_writeHistory(char *name, struct History *hist) 
+int Rast3d_writeHistory(char *name, struct History *hist)
   Writes the
   history stored in the <EM>hist</EM> structure into the categories file for
   map <EM>name</EM> in the current mapset.  See <EM>G_write_history</EM>
@@ -1436,12 +1436,12 @@ Returns 1 if the mask for <EM>map</EM> is turned off. Returns 0 otherwise.
 The remaining functions in this section are for the explicit query of the mask
 and the masking of individual cells or tiles. These functions are used in the
 library and might have applications in situations where both the masked and
-non-masked value of a cell has to be known.  
+non-masked value of a cell has to be known.
 
 <P>
 int Rast3d_maskReopen(int cache)
 This function should be used to adjust the cache size used for the
-3d-mask. First the open 3d-mask is closed and then opened again with 
+3d-mask. First the open 3d-mask is closed and then opened again with
 a cache size as specified with <EM>cache</EM>.
 
 <P>
@@ -1468,7 +1468,7 @@ out. Returns 0 otherwise.
 
 <P>
 void Rast3d_maskNum(int x, int y, int z, void  *value, int type)
-Replaces the value stored in <EM>value</EM> with the NULL-value if 
+Replaces the value stored in <EM>value</EM> with the NULL-value if
 <EM>Rast3d_isMasked (x, y, z)</EM> returns 1. Does nothing otherwise.
 <EM>value</EM> is assumed to be of<EM>type</EM>.
 
@@ -1482,9 +1482,9 @@ Same as <EM>Rast3d_maskNum (x, y, z, value, DCELL_TYPE)</EM>.
 
 <P>
 void Rast3d_maskTile(void *map, int tileIndex, char *tile, int type)
-Replaces the values stored in <EM>tile</EM> (with <EM>tileIndex</EM>) for 
+Replaces the values stored in <EM>tile</EM> (with <EM>tileIndex</EM>) for
 which <EM>Rast3d_isMasked</EM> returns 1 with NULL-values. Does not change
-the remaining values. The values are assumed to be of <EM>type</EM>. 
+the remaining values. The values are assumed to be of <EM>type</EM>.
 Whether replacement is performed or not only depends on location of the
 cells of the tile and not on the status of the mask for <EM>map</EM>
 (i.e. turned on or off).
@@ -1570,7 +1570,7 @@ void Rast3d_getResamplingFun(void *map, void  (**resampleFun)())
 
 <P>
 void Rast3d_getNearestNeighborFunPtr(void (**nnFunPtr)()) Returns
-  in <EM>nnFunPtr</EM> a pointer to Rast3d_nearestNeighbor() (cf. 
+  in <EM>nnFunPtr</EM> a pointer to Rast3d_nearestNeighbor() (cf.
   Section&nbsp;<A HREF="#g3d:G3d.nearestNeighbor">22.4.16</A>).
 
 <P>
@@ -1628,7 +1628,7 @@ void Rast3d_initDefaults() Initializes the default values described
   opened.
 
 <P>
-void Rast3d_setStandard3dInputParams() 
+void Rast3d_setStandard3dInputParams()
  Initializes a parameter
   structure for the subset of command line arguments which lets the user
   overwrite the default properties of the new file.  Applications are
@@ -1640,7 +1640,7 @@ void Rast3d_setStandard3dInputParams()
 
 <P>
 This function has to be used in conjunction with
-  Rast3d_getStandard3dInputParams() (cf. 
+  Rast3d_getStandard3dInputParams() (cf.
   Section 22.4.18).
 
 <P>
@@ -1650,17 +1650,17 @@ int Rast3d_getStandard3dInputParams(int *useTypeDefault, *type, *useLzwDefault, 
 Returns the properties of the new file as chosen by the user via command
 line arguments. If the default is chosen the values of
 <EM>useXxxxDefault</EM> is 1, it is 0 otherwise. In addition, the
-corresponding parameters contain the default value if 
-<EM>useXxxxDefault</EM> is 1, or the value specified by the user if 
+corresponding parameters contain the default value if
+<EM>useXxxxDefault</EM> is 1, or the value specified by the user if
 <EM>useXxxxDefault</EM> is 0.
 
 <P>
-Function 
+Function
 Rast3d_setStandard3dInputParams() (cf. Section 22.4.18)
 has to be used to initialize the internal parameter structure.
 
 <P>
-Returns 
+Returns
         1 ... if successful,
         0 ... otherwise.
 
@@ -1727,7 +1727,7 @@ The source code can be found in <EM>filecompare.c</EM>.
 <P>
 void Rast3d_getBlock(void *map, int x0, int y0, int z0, int nx, int ny,
 int nz, char *block,  int type)
-Copies the cells contained in the block (cube) with vertices 
+Copies the cells contained in the block (cube) with vertices
 <EM>(x0, y0, z0)</EM> and <EM>(x0 + nx - 1, y0 + ny - 1, z0 + nz - 1)</EM>
 into <EM>block</EM>. The cell-values in <EM>block</EM> are of <EM>type</EM>.
 
@@ -1736,16 +1736,16 @@ The source code can be found in <EM>getblock.c</EM>.
 
 <P>
 void Rast3d_writeAscii(void *map, char *fname)
-Writes the cell-values of <EM>map</EM> in ascii format to file 
+Writes the cell-values of <EM>map</EM> in ascii format to file
 <EM>fname</EM>. The values are organized by horizontal slices.
 
 
 <P>
-See \ref Compiling_and_Installing_GRASS_Modules for a complete 
+See \ref Compiling_and_Installing_GRASS_Modules for a complete
 discussion of Makefiles.
 
-Authors: Roman Waupotitsch and Michael Shapiro, Helena Mitasova, 
-         Bill Brown, Lubos Mitas, Jaro Hofierka, 
+Authors: Roman Waupotitsch and Michael Shapiro, Helena Mitasova,
+         Bill Brown, Lubos Mitas, Jaro Hofierka,
          Minor modification, code cleanup and test suite by Soeren Gebbert
-         
+
 */

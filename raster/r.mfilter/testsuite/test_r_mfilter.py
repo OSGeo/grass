@@ -172,9 +172,9 @@ class TestNeighbors(TestCase):
                    TYPE    S
 
                    MATRIX 3
-                   1 1 1 
-                   1 1 1 
-                   1 1 1 
+                   1 1 1
+                   1 1 1
+                   1 1 1
                    DIVISOR 9
                    TYPE    P""",
     }
