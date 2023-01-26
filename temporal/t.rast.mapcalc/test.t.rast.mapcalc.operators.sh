@@ -1,5 +1,5 @@
 #!/bin/sh
-# Test for t.rast.mapcalc 
+# Test for t.rast.mapcalc
 export GRASS_OVERWRITE=1
 # We need to set a specific region in the
 # @preprocess step of this test. We generate

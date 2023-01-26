@@ -24,5 +24,3 @@ CREATE TABLE  str3ds_metadata (
   command VARCHAR,              -- The command that was used to create the space time 3D raster dataset
   PRIMARY KEY (id)
 );
-
-

@@ -106,7 +106,7 @@ libs:
 	$(MAKE) subdirs SUBDIRS=$(LIBDIRS)
 	$(MAKE) $(FILES_DST)
 
-cleandistdirs: 
+cleandistdirs:
 	-rm -rf $(ARCH_DISTDIR)
 	-rm -rf $(ARCH_BINDIR)
 

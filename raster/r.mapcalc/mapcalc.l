@@ -141,14 +141,14 @@ F		[fF]
 
 {N}		{
 			yylval.sval = strdup(yytext);
-			return is_var(yytext) ? VARNAME : NAME; 
+			return is_var(yytext) ? VARNAME : NAME;
 		}
 
 \"[^"]+\"	|
 \'[^']+\'	{
 			yylval.sval = strdup(yytext + 1);
 			yylval.sval[yyleng - 2] = '\0';
-			return is_var(yytext) ? VARSTRING : STRING; 
+			return is_var(yytext) ? VARSTRING : STRING;
 		}
 
 \"[^"]+		|
@@ -240,4 +240,3 @@ void initialize_scanner_stream(FILE *fp)
 	input_stream = fp;
 	setbuf(fp, NULL);
 }
-
