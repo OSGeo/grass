@@ -134,7 +134,7 @@ used (`\n`).
 
 ### Branches and backports
 
-The GRASS GIS repository on GitHub has the "main" and several release branches. 
+The GRASS GIS repository on GitHub has the "main" and several release branches.
 All the development should happen in "main" (the development branch). All the other
 branches are usually associated with releases and should contain stable code
 which is being prepared towards the given release.
@@ -145,8 +145,8 @@ doing a backport should include user testing, running of automated test (if
 available), and compilation of the whole source tree (ideally after the
 `make distclean` step). Note that testing should already be done also prior to
 the original commit to "main". Also note that not all these steps have to be
-done manually, you can take an advantage of our [​CI](https://github.com/OSGeo/grass/actions) or
-[​automated runs of the GRASS GIS testing suite](http://fatra.cnr.ncsu.edu/grassgistests/).
+done manually, you can take an advantage of our [​CI](https://github.com/OSGeo/grass/actions)
+or [​automated runs of the GRASS GIS testing suite](http://fatra.cnr.ncsu.edu/grassgistests/).
 
 Often there is more than one active release branch, if you are backporting, make
 sure you always backport to all the branches between "main" and the furthest
@@ -199,7 +199,8 @@ will not work) to re-generate 'configure'.
 
 ## Naming Conventions
 
-Have a look at the [INSTALL](https://github.com/OSGeo/grass/blob/main/INSTALL.md) file.
+Have a look at the [INSTALL](https://github.com/OSGeo/grass/blob/main/INSTALL.md)
+file.
 
 For consistency, use `README.md` rather than `README.txt` for any `README` files.
 
@@ -241,8 +242,8 @@ Avoid module names with more than two dots in the name. Example: instead of
 ## Code Quality
 
 Follow the best writing practices specified by GRASS
-[contributing rules](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md) for a given
-language.
+[contributing rules](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md)
+for a given language.
 
 Write tests for your code. See the [testing guide](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
 or existing examples ([g.list](https://github.com/OSGeo/grass/tree/main/general/g.list/testsuite)).
