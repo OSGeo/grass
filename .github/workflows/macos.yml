@@ -1,5 +1,6 @@
 ---
 name: macOS
+
 # Build and run tests on macOS
 
 on:
@@ -35,9 +36,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/miniconda3/envs/grass-env
-          key: conda-macos-x86_64-${{steps.get-date.outputs.today
-            }}-${{hashFiles('.github/workflows/macos_dependencies.txt') }}-${{
-            env.CACHE_NUMBER}}
+          key: conda-macos-x86_64-${{steps.get-date.outputs.today }}-${{hashFiles('.github/workflows/macos_dependencies.txt') }}-${{ env.CACHE_NUMBER}}
         id: cache
       - name: Update environment
         run: mamba env update -n grass-env -f .github/workflows/macos_dependencies.txt
@@ -77,4 +76,3 @@ jobs:
           name: testreport-macOS
           path: testreport
           retention-days: 3
-...
