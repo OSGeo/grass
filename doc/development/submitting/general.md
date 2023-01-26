@@ -145,8 +145,7 @@ doing a backport should include user testing, running of automated test (if
 available), and compilation of the whole source tree (ideally after the
 `make distclean` step). Note that testing should already be done also prior to
 the original commit to "main". Also note that not all these steps have to be
-done manually, you can take an advantage of our [​CI](https://github.com/OSGeo/grass/actions)
-or [​automated runs of the GRASS GIS testing suite](http://fatra.cnr.ncsu.edu/grassgistests/).
+done manually, you can take an advantage of our [​CI](https://github.com/OSGeo/grass/actions).
 
 Often there is more than one active release branch, if you are backporting, make
 sure you always backport to all the branches between "main" and the furthest
