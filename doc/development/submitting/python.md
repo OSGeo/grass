@@ -9,7 +9,7 @@ please take care of following rules:
 ### GRASS module
 
 Instructions for the GRASS script parser can be found in the
-[​g.parser](http://grass.osgeo.org/grass70/manuals/g.parser.html) module's help
+[​g.parser](https://grass.osgeo.org/grass-stable/manuals/g.parser.html) module's help
 page.
 
 Use the directory structure to place your script appropriately into the source
@@ -46,7 +46,7 @@ Example (fictitious header for a script called _g.myscript_):
 ```
 
 The copyright protects your rights according to GNU General Public License
-([​http://www.gnu.org/licenses/](http://www.gnu.org/licenses/)).
+([​https://www.gnu.org/licenses/](https://www.gnu.org/licenses/)).
 
 You can easily autogenerate the header and parameters from an existing module
 using the `--script` flag. Example:
@@ -391,7 +391,7 @@ errors may not apply to your code.
 
 ## Testing
 
-[​http://grass.osgeo.org/grass79/manuals/libpython/](http://grass.osgeo.org/grass79/manuals/libpython/)
+[​https://grass.osgeo.org/grass-stable/manuals/libpython/](https://grass.osgeo.org/grass-stable/manuals/libpython/)
 
 ## See also
 
@@ -407,16 +407,16 @@ errors may not apply to your code.
 ### GRASS GIS documentation
 
 - GRASS Programming manual for C API and existing classes:
-  [​http://grass.osgeo.org/programming7/](http://grass.osgeo.org/programming7/)
+  [​https://grass.osgeo.org/programming8/](https://grass.osgeo.org/programming8/)
   (add more specific link)
-- GRASS scripts in Python: [​http://grasswiki.osgeo.org/wiki/GRASS\_and\_Python](http://grasswiki.osgeo.org/wiki/GRASS_and_Python)
-- GRASS scripts in PyGRASS: [​http://grass.osgeo.org/grass79/manuals/libpython/](http://grass.osgeo.org/grass79/manuals/libpython/)
-- Python based wxGUI: [​http://grass.osgeo.org/grass79/manuals/wxgui/](http://grass.osgeo.org/grass79/manuals/wxgui/)
+- GRASS scripts in Python: [​https://grasswiki.osgeo.org/wiki/GRASS\_and\_Python](https://grasswiki.osgeo.org/wiki/GRASS_and_Python)
+- GRASS scripts in PyGRASS: [​https://grass.osgeo.org/grass-stable/manuals/libpython/](https://grass.osgeo.org/grass-stable/manuals/libpython/)
+- Python based wxGUI: [​https://grass.osgeo.org/grass-stable/manuals/wxgui/](https://grass.osgeo.org/grass-stable/manuals/wxgui/)
 
 ### External documentation
 
-- Style Guide for Python Code: [​http://www.python.org/dev/peps/pep-0008/](http://www.python.org/dev/peps/pep-0008/)
+- Style Guide for Python Code: [​https://peps.python.org/pep-0008/](https://peps.python.org/pep-0008/)
 - Python Style Guide by Guido van Rossum:
-  [​http://www.python.org/doc/essays/styleguide.html](http://www.python.org/doc/essays/styleguide.html)
+  [​https://www.python.org/doc/essays/styleguide/](https://www.python.org/doc/essays/styleguide/)
 - Additional info on Python docstrings:
-  [​http://epydoc.sourceforge.net/docstrings.html](http://epydoc.sourceforge.net/docstrings.html)
+  [​https://epydoc.sourceforge.net/docstrings.html](https://epydoc.sourceforge.net/docstrings.html)

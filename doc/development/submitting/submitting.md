@@ -26,7 +26,7 @@ do and what they shouldn't do. There is always some reason why some things are
 considered as "good" or "bad", still they are just noted in some long GRASS
 developer mailing list conversations. These pages here aim at collecting such
 ideas which are floating around in the
-[​GRASS-dev](http://lists.osgeo.org/mailman/listinfo/grass-dev) mailing list (and
+[​GRASS-dev](https://lists.osgeo.org/mailman/listinfo/grass-dev) mailing list (and
 other places) to help new module developers/bugfixers to understand many little
 tricks how GRASS modules should work.
 
@@ -41,15 +41,15 @@ to add code/pseudocode samples, if they apply.
 ## GRASS best practice list (unsorted)
 
 - Read the rules above
-- All GRASS modules should accept map names in format "map@mapset". [​http://lists.osgeo.org/pipermail/grass-dev/2008-February/035629.html](http://lists.osgeo.org/pipermail/grass-dev/2008-February/035629.html)
-- Module should **not** write/change maps in other mapsets than current mapset. [​http://lists.osgeo.org/pipermail/grass-dev/2008-February/035637.html](http://lists.osgeo.org/pipermail/grass-dev/2008-February/035637.html)
+- All GRASS modules should accept map names in format "map@mapset". [​https://lists.osgeo.org/pipermail/grass-dev/2008-February/035629.html](https://lists.osgeo.org/pipermail/grass-dev/2008-February/035629.html)
+- Module should **not** write/change maps in other mapsets than current mapset. [​https://lists.osgeo.org/pipermail/grass-dev/2008-February/035637.html](https://lists.osgeo.org/pipermail/grass-dev/2008-February/035637.html)
 
 ## GRASS GIS Addons
 
 - Check your code against the **Submitting rules** (see above)
 - Upload your code with the git client ([git usage](/grass/wiki/HowToGit))
 - Once uploaded to the GRASS GIS Addons GitHub repository:
-  - Addons appear in the [​Addons manual pages](http://grass.osgeo.org/grass7/manuals/addons/)
+  - Addons appear in the [​Addons manual pages](https://grass.osgeo.org/grass-stable/manuals/addons/)
     when being registered in the parent Makefile
   - note to devs only: the addons are created via cronjobs on the server (user
     can install them via g.extension)
@@ -69,4 +69,4 @@ See [HowToGit](/grass/wiki/HowToGit)
 
 ## See also
 
-- [​http://grass.osgeo.org/development/](http://grass.osgeo.org/development/)
+- [​https://grass.osgeo.org/contribute/development/](https://grass.osgeo.org/contribute/development/)

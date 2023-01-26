@@ -2,7 +2,7 @@
 
 There are three types of documentation
 
-- **Library programmer's manual**: we [​use doxygen and document the functions](http://grass.osgeo.org/programming8/)
+- **Library programmer's manual**: we [​use doxygen and document the functions](https://grass.osgeo.org/programming8/)
   directly in the source code. See lib/gis/\*.c and lib/gis/gislib.dox for examples
 
 - **User manual**: each command ("module") comes with its own page. We write it
@@ -10,7 +10,7 @@ There are three types of documentation
   subdirectory of the module. See below for details on the structure.
 
 - **Python documentation**: written in Markdown which is compiled with Sphinx
-  (see [​PyGRASS documentation](http://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html))
+  (see [​PyGRASS documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html))
 
 ## HTML Pages
 
@@ -82,8 +82,8 @@ v.to.db map=soils type=area option=area column=area_size unit=h
 </pre></div>
 ```
 
-The [​online WWW manual pages](http://grass.osgeo.org/grass-stable/manuals/) are
-updated every Saturday (from GitHub repository).
+The [​online WWW manual pages](https://grass.osgeo.org/grass-stable/manuals/) are
+updated daily (from GitHub repository).
 
 ### Supported HTML Tags
 

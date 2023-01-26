@@ -127,13 +127,13 @@ from core.utils import _
 ### GRASS GIS documentation
 
 - Sphinx Pages about how to develop wxGUI:
-  [​http://grass.osgeo.org/grass71/manuals/wxgui/](http://grass.osgeo.org/grass71/manuals/wxgui/)
-- Wiki Pages about how to develop wxGUI: [​http://grasswiki.osgeo.org/wiki/WxGUI](http://grasswiki.osgeo.org/wiki/WxGUI)
+  [​https://grass.osgeo.org/grass-stable/manuals/wxgui/](https://grass.osgeo.org/grass-stable/manuals/wxgui/)
+- Wiki Pages about how to develop wxGUI: [​https://grasswiki.osgeo.org/wiki/WxGUI](https://grasswiki.osgeo.org/wiki/WxGUI)
 - GRASS Trac wiki has pages about the state of wxGUI development:
-  [​http://trac.osgeo.org/grass/wiki/wxGUIDevelopment](http://trac.osgeo.org/grass/wiki/wxGUIDevelopment)
+  [​https://trac.osgeo.org/grass/wiki/wxGUIDevelopment](https://trac.osgeo.org/grass/wiki/wxGUIDevelopment)
 - GRASS Programming manual for C API and existing classes:
-  [​http://grass.osgeo.org/programming7/wxpythonlib.html](http://grass.osgeo.org/programming7/wxpythonlib.html)
+  [​https://grass.osgeo.org/programming8/](https://grass.osgeo.org/programming8/)
 
 ### External documentation
 
-- wxPython Style Guide: [​http://wiki.wxpython.org/wxPython\_Style\_Guide](http://wiki.wxpython.org/wxPython_Style_Guide)
+- wxPython Style Guide: [​https://wiki.wxpython.org/wxPython\_Style\_Guide](https://wiki.wxpython.org/wxPython%20Style%20Guide)

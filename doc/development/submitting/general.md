@@ -255,7 +255,7 @@ Tell the other developers about the new code using the following e-mail:
 grass-dev@…
 
 To subscribe to this mailing list, see
-[​http://lists.osgeo.org/mailman/listinfo/grass-dev](http://lists.osgeo.org/mailman/listinfo/grass-dev)
+[​https://lists.osgeo.org/mailman/listinfo/grass-dev](https://lists.osgeo.org/mailman/listinfo/grass-dev)
 
 In case of questions feel free to contact the developers at the above mailing list.
 

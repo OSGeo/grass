@@ -8,7 +8,7 @@ following rules (see also
 
 Get and read the GRASS Programmer's Manual here:
 
-<http://grass.osgeo.org/programming8/>
+<https://grass.osgeo.org/programming8/>
 
 Or generate it from this source code (the programmer's manual is integrated in
 the source code in doxygen style):
@@ -28,7 +28,7 @@ Use the directory structure to place your module appropriately into the source t
 - ...
 
 Consider to take a look at "GNU Coding Standards":
-<http://www.gnu.org/prep/standards.html>
+<https://www.gnu.org/prep/standards/>
 
 ## Headers
 
@@ -58,7 +58,7 @@ Example:
 ```
 
 The copyright protects your rights according to GNU General Public License
-<http://www.gnu.org>.
+<https://www.gnu.org>.
 
 ### GRASS Config Header
 
@@ -160,7 +160,7 @@ first)
 ### Naming Conventions
 
 Use function names which fulfill the official GNU naming convention:
-<http://www.gnu.org/prep/standards/html_node/Names.html#Names>
+<https://www.gnu.org/prep/standards/html_node/Names.html#Names>
 
 Instead of naming a function like: MyNewFunction() use underscores for seperation
 and lower case letters: my_new_function()`.
@@ -368,7 +368,7 @@ For your convenience use the
 [grass_indent.sh](https://github.com/OSGeo/grass/blob/main/utils/grass_indent.sh)
 script available in GRASS source code.
 
-See ​[GRASS Wiki](http://grasswiki.osgeo.org/wiki/Development#Explanation_of_C_indentation_rules)
+See ​[GRASS Wiki](https://grasswiki.osgeo.org/wiki/Development#Explanation_of_C_indentation_rules)
 or `man indent` for explanation of individual switches.
 
 ## Compilation
@@ -385,7 +385,7 @@ Suggested compiler flags: We suggest to use very strict compiler flags to captur
 errors at the very beginning. Here our list of flags, please use them to configure
 you development version of GRASS GIS.
 
-See also <http://grasswiki.osgeo.org/wiki/Compile_and_Install>
+See also <https://grasswiki.osgeo.org/wiki/Compile_and_Install>
 
 #### GNU/Linux
 
@@ -410,18 +410,18 @@ CFLAGS="$MYCFLAGS" CXXFLAGS="$MYCXXFLAGS" LDFLAGS="$MYLDFLAGS" ./configure ...
 
 (to be suggested)
 
-See also <http://grasswiki.osgeo.org/wiki/Compile_and_Install#FreeBSD_.2F_NetBSD>
+See also <https://grasswiki.osgeo.org/wiki/Compile_and_Install#FreeBSD_.2F_NetBSD>
 
 #### IBM/AIX
 
 (to be suggested)
 
-See also <http://grasswiki.osgeo.org/wiki/Compile_and_Install#AIX>
+See also <https://grasswiki.osgeo.org/wiki/Compile_and_Install#AIX>
 
 #### Solaris
 
 (to be suggested)
 
-See also <http://grasswiki.osgeo.org/wiki/Compile_and_Install#AIX>
+See also <https://grasswiki.osgeo.org/wiki/Compile_and_Install#AIX>
 
 ...
