@@ -211,12 +211,6 @@ class WorkspaceManager:
                     os.chdir(self.lmgr.cwdPath)
 
         #
-        # load user-defined layout
-        #
-        if gxwXml.perspective and hasattr(self.lmgr.GetAuiNotebook(), "LoadPerspective"):
-            self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.perspective)
-
-        #
         # start map displays first (list of layers can be empty)
         #
         displayId = 0
@@ -348,6 +342,14 @@ class WorkspaceManager:
                     self.lmgr.nvizUpdatePage(page)
                 self.lmgr.nvizUpdateSettings()
                 mapdisplay[i].toolbars["map"].combo.SetSelection(1)
+
+        #
+        # load layout
+        #
+        if UserSettings.Get(group="general", key="singleWindow", subkey="enabled"):
+            if gxwXml.layout:
+                self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
+                self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.layout["notebook"])
 
         self.workspaceFile = filename
         self.AddFileToHistory()

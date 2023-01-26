@@ -1029,13 +1029,6 @@ class GMFrame(wx.Frame):
         """Get Layers Notebook"""
         return self.notebookLayers
 
-    def GetAuiNotebook(self):
-        """Get aui notebook
-
-        :return: aui notebook instance
-        """
-        return self._auimgr
-
     def GetLayerTree(self):
         """Get current layer tree
 

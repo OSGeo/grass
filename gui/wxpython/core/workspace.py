@@ -58,9 +58,13 @@ class ProcessWorkspaceFile:
         }  # current working directory
 
         #
-        # perspective
+        # layout
         #
-        self.perspective = None
+        self.layout = {
+            "panes": None,
+            "notebook": None,
+        }
+
         #
         #
         # list of mapdisplays
@@ -134,11 +138,16 @@ class ProcessWorkspaceFile:
                 self.layerManager["cwd"] = cwdPath
 
         #
-        # perspective
+        # layout
         #
-        node_pr= self.root.find("perspective")
-        if node_pr is not None:
-            self.perspective = node_pr.get("value", "")
+        layout = self.root.find("layout")
+        if layout is not None:
+            self.layout["panes"] = self.__filterValue(
+                self.__getNodeText(layout, "panes")
+            )
+            self.layout["notebook"] = self.__filterValue(
+                self.__getNodeText(layout, "notebook")
+            )
 
         #
         # displays
@@ -910,18 +919,24 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
         file.write("%s</layer_manager>\n" % (" " * self.indent))
 
-        # perspectives
-        if hasattr(self.lmgr.GetAuiNotebook(), "SavePerspective"):
-            perspective = self.lmgr.GetAuiNotebook().SavePerspective()
+        # layout
+        if UserSettings.Get(group="general", key="singleWindow", subkey="enabled"):
+            layout_panes = self.lmgr.GetAuiManager().SavePerspective()
+            layout_notebook = self.lmgr.GetAuiNotebook().SavePerspective()
+            file.write("{indent}<layout>\n".format(indent=" " * self.indent))
+            self.indent += 4
             file.write(
-                '%s<perspective value="%s">\n'
-                % (
-                    " " * self.indent,
-                    perspective
+                "{indent}<panes>{layout}</panes>\n".format(
+                    indent=" " * self.indent, layout=layout_panes
                 )
             )
-            self.indent += 4
-            file.write("%s</perspective>\n" % (" " * self.indent))
+            file.write(
+                "{indent}<notebook>{layout}</notebook>\n".format(
+                    indent=" " * self.indent, layout=layout_notebook
+                )
+            )
+            self.indent -= 4
+            file.write("{indent}</layout>\n".format(indent=" " * self.indent))
 
         # list of displays
         for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):
