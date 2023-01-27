@@ -67,9 +67,9 @@ To ensure that the software system continues to work, please include
 `#include <grass/config.h>`
 
 in your files and make use of the various system dependencies contained therein.
-As one example of this, see source:grass/trunk/lib/gmath/fft.c​. Please refrain
-from declaring system functions within the software; include the proper header
-files (conditionally dependent on config.h macros if necessary) instead.
+As one example of this, see [lib/gmath/fft.c​](../../../lib/gmath/fft.c). Please
+refrain from declaring system functions within the software; include the proper
+header files (conditionally dependent on config.h macros if necessary) instead.
 
 ### Other Headers
 
@@ -179,7 +179,7 @@ This is safe comparing to nested `/* comments */`
 
 Functions in the library must be documented in doxygen style to get them into the
 programmer's manual (generate with make pdfdocs or make htmldocs). See
-source:grass/trunk/lib/gis/ for examples.
+[lib/gis/](../../../lib/gis/) for examples.
 
 ### Documentation in Doxygen
 
@@ -285,7 +285,7 @@ English language it is not required!
 G_message(n_("One map", "%d maps", number), number);
 ```
 
-See source:grass/trunk/locale/README​ for details.
+See [locale/README](../../../locale/README) for details.
 
 Pipe/file data output: For data output redirected to pipe or file, please use
 fprintf() and specify the stdout stream as follows:
@@ -301,16 +301,16 @@ fflush(stdout); /* always required when using fprintf(stdout, ...). */
 
 Have a function included in your module which writes to the history file of the
 map (e.g. command line, parameters etc.). See e.g.
-source:grass/trunk/raster/r.patch/main.c​ (the same applies to vector and raster3d
-modules!)
+[raster/r.patch/main.c​](../../../raster/r.patch/main.c) (the same applies to
+vector and raster3d modules!)
 
 ### Standardized Options and Flags
 
 Standard parser options: use G_define_standard_option() whenever possible to
 define standard module command line options. This will save you time, create fewer
 bugs, and make things easier on the translators. See
-source:grass/trunk/lib/gis/parser_standard_options.c​ for details of the
-function definition.
+[lib/gis/parser_standard_options.c]​(../../../lib/gis/parser_standard_options.c)
+for details of the function definition.
 
 ### Adding description and keywords
 

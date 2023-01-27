@@ -113,7 +113,6 @@ The `<h2>SEE ALSO</h2>` section of each page should also be alphabetized.
 
 ### Footer
 
-
 No footer to be added, since it will be added automatically during compilation.
 
 ### Break long lines

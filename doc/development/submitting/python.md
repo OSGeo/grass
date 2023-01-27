@@ -9,8 +9,8 @@ please take care of following rules:
 ### GRASS module
 
 Instructions for the GRASS script parser can be found in the
-[​g.parser](https://grass.osgeo.org/grass-stable/manuals/g.parser.html) module's help
-page.
+[​g.parser](https://grass.osgeo.org/grass-stable/manuals/g.parser.html) module's
+help page.
 
 Use the directory structure to place your script appropriately into the source
 tree: scripts go into `scripts` directory.
