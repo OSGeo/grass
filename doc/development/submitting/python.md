@@ -397,12 +397,9 @@ errors may not apply to your code.
 
 ### Related submitting rules
 
-- [wiki:Submitting/General](/grass/wiki/Submitting/General) general GRASS and
-  git instructions
-- [wiki:Submitting/Docs](/grass/wiki/Submitting/Docs) user documentation of
-  modules and GUI
-- [wiki:Submitting/wxGUI](/grass/wiki/Submitting/wxGUI) wxPython-based GUI has
-  its own rules
+- [General](./general.md) general GRASS and git instructions
+- [Docs](./docs.md) user documentation of modules and GUI
+- [wxGUI](./wxGUI.md) wxPython-based GUI has its own rules
 
 ### GRASS GIS documentation
 

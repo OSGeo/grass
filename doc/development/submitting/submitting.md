@@ -47,7 +47,7 @@ to add code/pseudocode samples, if they apply.
 ## GRASS GIS Addons
 
 - Check your code against the **Submitting rules** (see above)
-- Upload your code with the git client ([git usage](/grass/wiki/HowToGit))
+- Upload your code with the git client ([git usage](https://trac.osgeo.org/grass/wiki/HowToGit))
 - Once uploaded to the GRASS GIS Addons GitHub repository:
   - Addons appear in the [​Addons manual pages](https://grass.osgeo.org/grass-stable/manuals/addons/)
     when being registered in the parent Makefile
@@ -65,7 +65,7 @@ to add code/pseudocode samples, if they apply.
 
 ## Submitting code to GitHub
 
-See [HowToGit](/grass/wiki/HowToGit)
+See [HowToGit](https://trac.osgeo.org/grass/wiki/HowToGit)
 
 ## See also
 

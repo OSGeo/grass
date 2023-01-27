@@ -117,12 +117,10 @@ from core.utils import _
 
 ### Related submitting rules
 
-- [wiki:Submitting/General](/grass/wiki/Submitting/General) general GRASS and
-  svn instructions
-- [wiki:Submitting/Python](/grass/wiki/Submitting/Python) Python library and
-  scripts related instructions which applies to wxGUI too if not stated otherwise
-- [wiki:Submitting/Docs](/grass/wiki/Submitting/Docs) user documentation of
-  modules and GUI
+- [General notes](./general.md) general GRASS and git instructions
+- [Python code](./python.md) Python library and scripts related instructions
+  which applies to wxGUI too if not stated otherwise
+- [Documentation-related notes](./docs.md) user documentation of modules and GUI
 
 ### GRASS GIS documentation
 
