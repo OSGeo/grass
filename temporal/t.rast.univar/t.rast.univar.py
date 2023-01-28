@@ -50,6 +50,15 @@
 # % guisection: Selection
 # %end
 
+# %option
+# % key: spatial_relation
+# % description: Process only maps with this spatial relation to the current computational region
+# % guisection: Selection
+# % options: overlaps,contains,is_contained
+# % required: no
+# % multiple: no
+# %end
+
 # %option G_OPT_F_SEP
 # % label: Field separator character between the output columns
 # % guisection: Formatting
@@ -71,6 +80,10 @@
 # % guisection: Formatting
 # %end
 
+# %rules
+# % exclusive: -r,spatial_relation
+# %end
+
 import grass.script as gs
 
 ############################################################################
@@ -89,6 +102,7 @@ def main():
     output = options["output"]
     nprocs = int(options["nprocs"])
     where = options["where"]
+    spatial_relation = options["spatial_relation"]
     extended = flags["e"]
     no_header = flags["u"]
     rast_region = bool(flags["r"])
@@ -117,6 +131,8 @@ def main():
         fs=separator,
         rast_region=rast_region,
         zones=zones,
+        spatial_relation=spatial_relation,
+        spatial_extent=gs.parse_command("g.region", flags="3gu"),
         nprocs=nprocs,
     )
 
