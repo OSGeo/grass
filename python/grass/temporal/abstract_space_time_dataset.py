@@ -1717,10 +1717,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if self.get_type() == "str3ds":
             if spatial_relation == "overlaps":
                 spatial_where_template += " AND top > {b}" " AND bottom < {t}"
-        elif spatial_relation == "is_contained":
-            spatial_where_template += " AND top <= {t}" " AND bottom >= {b}"
-        elif spatial_relation == "contains":
-            spatial_where_template += " AND top >= {t}" " AND bottom <= {b}"
+            elif spatial_relation == "is_contained":
+                spatial_where_template += " AND top <= {t}" " AND bottom >= {b}"
+            elif spatial_relation == "contains":
+                spatial_where_template += " AND top >= {t}" " AND bottom <= {b}"
         spatial_where_template += ")"
 
         spatial_where_list = [spatial_where_template.format(**spatial_extent)]
