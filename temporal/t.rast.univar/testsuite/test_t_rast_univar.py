@@ -17,6 +17,26 @@ class TestRasterUnivar(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region"""
         cls.use_temp_region()
+        for idx, region_extent in enumerate(
+            [[0, 80, 0, 120],
+            [-80, 0, 0, 120],
+            [0, 80, -120, 0],
+            [-80, 0, -120, 0],
+        ]):
+            cls.runModule(
+                "g.region",
+                s=region_extent[0],
+                n=region_extent[1],
+                w=region_extent[2],
+                e=region_extent[3],
+                b=0,
+                t=50,
+                res=1,
+            )
+            cls.runModule(
+                "r.mapcalc", expression=f"d_{idx + 1} = {idx + 1}00", overwrite=True
+            )
+
         cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=1, res3=1)
 
         cls.runModule(
@@ -69,6 +89,15 @@ class TestRasterUnivar(TestCase):
             overwrite=True,
         )
         cls.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="absolute",
+            output="C",
+            title="C test",
+            description="C test",
+            overwrite=True,
+        )
+        cls.runModule(
             "t.register",
             flags="i",
             type="raster",
@@ -94,6 +123,16 @@ class TestRasterUnivar(TestCase):
             type="raster",
             input="B",
             maps="c_1,c_2,c_3,c_4",
+            start="2001-01-01",
+            increment="3 months",
+            overwrite=True,
+        )
+        cls.runModule(
+            "t.register",
+            flags="i",
+            type="raster",
+            input="C",
+            maps="d_1,d_2,d_3,d_4",
             start="2001-01-01",
             increment="3 months",
             overwrite=True,
@@ -335,6 +374,85 @@ b_1@PERMANENT|S2_B1|2001-01-01 00:00:00|2001-04-01 00:00:00|110|110|110|110|0|0|
 b_2@PERMANENT|S2_B1|2001-04-01 00:00:00|2001-07-01 00:00:00|220|220|220|220|0|0|0|2112000|0|9600|9600
 b_3@PERMANENT|S2_B1|2001-07-01 00:00:00|2001-10-01 00:00:00|330|330|330|330|0|0|0|3168000|0|9600|9600
 b_4@PERMANENT|S2_B1|2001-10-01 00:00:00|2002-01-01 00:00:00|440|440|440|440|0|0|0|4224000|0|9600|9600
+"""
+        for ref, res in zip(
+            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+        ):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
+
+    def test_with_spatial_filter_intersects(self):
+        """Test spatial filter overlaps"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="C",
+            where="start_time >= '2001-01-01'",
+            nprocs=2,
+            spatial_relation="overlaps",
+            overwrite=True,
+            verbose=True,
+        )
+        self.runModule("g.region", res=1, s=-5, n=85, w=-5, e=125)
+        self.assertModule(t_rast_univar)
+
+        univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
+d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2100|9600|9600
+d_2@stbl||2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|120000|11100|600|600
+d_3@stbl||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|120000|11300|400|400
+d_4@stbl||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|10000|11675|25|25
+"""
+        for ref, res in zip(
+            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+        ):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
+
+    def test_with_spatial_filter_contains(self):
+        """Test spatial filter contains"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="C",
+            where="start_time >= '2001-01-01'",
+            nprocs=2,
+            spatial_relation="contains",
+            overwrite=True,
+            verbose=True,
+        )
+        self.runModule("g.region", res=1, s=5, n=75, w=5, e=115)
+        self.assertModule(t_rast_univar)
+
+        print(t_rast_univar.outputs.stdout)
+        univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
+d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|770000|0|7700|7700
+"""
+        for ref, res in zip(
+            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+        ):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
+
+    def test_with_spatial_filter_is_contained(self):
+        """Test spatial filter is_contained"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="C",
+            where="start_time >= '2001-01-01'",
+            nprocs=2,
+            spatial_relation="is_contained",
+            overwrite=True,
+            verbose=True,
+        )
+        self.runModule("g.region", res=1, s=-5, n=85, w=-5, e=125)
+        self.assertModule(t_rast_univar)
+
+        univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
+d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2100|9600|9600
 """
         for ref, res in zip(
             univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
