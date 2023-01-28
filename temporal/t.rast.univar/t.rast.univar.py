@@ -132,7 +132,6 @@ def main():
         rast_region=rast_region,
         zones=zones,
         spatial_relation=spatial_relation,
-        spatial_extent=gs.parse_command("g.region", flags="3gu"),
         nprocs=nprocs,
     )
 
