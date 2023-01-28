@@ -18,11 +18,13 @@ class TestRasterUnivar(TestCase):
         """Initiate the temporal GIS and set the region"""
         cls.use_temp_region()
         for idx, region_extent in enumerate(
-            [[0, 80, 0, 120],
-            [-80, 0, 0, 120],
-            [0, 80, -120, 0],
-            [-80, 0, -120, 0],
-        ]):
+            [
+                [0, 80, 0, 120],
+                [-80, 0, 0, 120],
+                [0, 80, -120, 0],
+                [-80, 0, -120, 0],
+            ]
+        ):
             cls.runModule(
                 "g.region",
                 s=region_extent[0],
@@ -461,6 +463,19 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
+
+    def test_with_with_spatial_filter_fails(self):
+        """Test semantic labels"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            flags="r",
+            input="C",
+            where="start_time >= '2001-01-01'",
+            spatial_relation="overlaps",
+            overwrite=True,
+            verbose=True,
+        )
+        self.assertModuleFails(t_rast_univar)
 
 
 if __name__ == "__main__":
