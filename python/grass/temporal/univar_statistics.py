@@ -110,6 +110,7 @@ def print_gridded_dataset_univar_statistics(
     no_header=False,
     fs="|",
     rast_region=False,
+    spatial_relation=None,
     zones=None,
     nprocs=1,
 ):
@@ -126,6 +127,12 @@ def print_gridded_dataset_univar_statistics(
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
            Only available for strds.
+    :param dict spatial_relation: Spatial relation to the provided
+        spatial extent as a string with one of the following values:
+        "overlaps": maps that spatially overlap ("intersect")
+                    within the provided spatial extent
+        "is_contained": maps that are fully within the provided spatial extent
+        "contains": maps that contain (fully cover) the provided spatial extent
     :param zones: raster map with zones to calculate statistics for
     """
     # We need a database interface
@@ -137,18 +144,29 @@ def print_gridded_dataset_univar_statistics(
     if output is not None:
         out_file = open(output, "w")
 
+    spatial_extent = None
+    if spatial_relation:
+        spatial_extent = gs.parse_command("g.region", flags="3gu")
+
     strds_cols = (
         "id,start_time,end_time,semantic_label"
         if type == "strds"
         else "id,start_time,end_time"
     )
-    rows = sp.get_registered_maps(strds_cols, where, "start_time", dbif)
+    rows = sp.get_registered_maps(
+        strds_cols,
+        where,
+        "start_time",
+        dbif,
+        spatial_extent=spatial_extent,
+        spatial_relation=spatial_relation,
+    )
 
     if not rows and rows != [""]:
         dbif.close()
         err = "Space time %(sp)s dataset <%(i)s> is empty"
         if where:
-            err += " or where condition is wrong"
+            err += " or where condition does not return any maps"
         gs.fatal(
             _(err) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
         )
