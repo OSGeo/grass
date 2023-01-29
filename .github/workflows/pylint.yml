@@ -86,7 +86,13 @@ jobs:
           pip install pytest pytest-pylint
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
-          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) --pylint-ignore-patterns="python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,scripts/d.rast.edit/d.rast.edit.py"
+          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
+            --pylint-ignore-patterns="${{ env.PylintIgnore }}"
+        env:
+          PylintIgnore: "python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,\
+            imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,\
+            temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,\
+            scripts/d.rast.edit/d.rast.edit.py"
 
       - name: Test compiling example modules
         run: |

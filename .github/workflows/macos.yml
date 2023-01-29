@@ -36,7 +36,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/miniconda3/envs/grass-env
-          key: conda-macos-x86_64-${{steps.get-date.outputs.today }}-${{hashFiles('.github/workflows/macos_dependencies.txt') }}-${{ env.CACHE_NUMBER}}
+          key: conda-macos-x86_64-${{
+            steps.get-date.outputs.today }}-${{
+            hashFiles('.github/workflows/macos_dependencies.txt') }}-${{
+            env.CACHE_NUMBER }}
         id: cache
       - name: Update environment
         run: mamba env update -n grass-env -f .github/workflows/macos_dependencies.txt
@@ -64,11 +67,14 @@ jobs:
         shell: bash -el {0}
         run: >
           grass --tmp-location XY --exec \
-              g.download.location url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+              g.download.location url=${{ env.SampleData }} path=$HOME
           grass --tmp-location XY --exec \
               python3 -m grass.gunittest.main \
               --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
               --min-success 100 --config .github/workflows/macos_gunittest.cfg
+        env:
+          SampleData: "https://grass.osgeo.org/sampledata/north_carolina/\
+                       nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ always() }}
         uses: actions/upload-artifact@v3

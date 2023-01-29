@@ -66,9 +66,5 @@ repos:
     rev: v1.21.0
     hooks:
       - id: yamllint
-        args: [--format, parsable, --strict, -d, '{extends: default, rules: {truthy: disable, line-length: disable } }']
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.2.1
-    hooks:
-      - id: yamlfmt
-        args: [--mapping, '2', --sequence, '4', --offset, '2']
+        args: [--format, parsable, --strict, -d,
+               '{extends: default, rules: {truthy: disable, line-length: {max: 120, allow-non-breakable-words: true}}}']
