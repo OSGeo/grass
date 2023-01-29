@@ -13,6 +13,9 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestRasterUnivar(TestCase):
+
+    default_region = {"s": 0, "n": 80, "w": 0, "e": 120, "b": 0, "t": 50}
+
     @classmethod
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region"""
@@ -39,7 +42,7 @@ class TestRasterUnivar(TestCase):
                 "r.mapcalc", expression=f"d_{idx + 1} = {idx + 1}00", overwrite=True
             )
 
-        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=1, res3=1)
+        cls.runModule("g.region", **cls.default_region, res=1, res3=1)
 
         cls.runModule(
             "r.mapcalc",
@@ -158,7 +161,7 @@ class TestRasterUnivar(TestCase):
             overwrite=True,
             verbose=True,
         )
-        self.runModule("g.region", res=1)
+        self.runModule("g.region", **self.default_region, res=1)
         self.assertModule(t_rast_univar)
 
         univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
@@ -184,7 +187,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
             overwrite=True,
             verbose=True,
         )
-        self.runModule("g.region", res=1)
+        self.runModule("g.region", **self.default_region, res=1)
         self.assertModule(t_rast_univar)
 
         univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
@@ -209,7 +212,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
             overwrite=True,
             verbose=True,
         )
-        self.runModule("g.region", res=10)
+        self.runModule("g.region", **self.default_region, res=10)
         self.assertModule(t_rast_univar)
 
         univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
@@ -227,7 +230,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 
     def test_subset_with_output(self):
 
-        self.runModule("g.region", res=10)
+        self.runModule("g.region", **self.default_region, res=10)
         self.assertModule(
             "t.rast.univar",
             input="A",
@@ -255,7 +258,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 
     def test_subset_with_output_coarse_resolution(self):
 
-        self.runModule("g.region", res=10)
+        self.runModule("g.region", **self.default_region, res=10)
         self.assertModule(
             "t.rast.univar",
             input="A",
@@ -304,7 +307,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
             overwrite=True,
             verbose=True,
         )
-        self.runModule("g.region", res=1)
+        self.runModule("g.region", **self.default_region, res=1)
         self.assertModule(t_rast_univar)
 
         print(t_rast_univar.outputs.stdout.split("\n"))
@@ -341,7 +344,7 @@ a_4@PERMANENT||2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|2
             overwrite=True,
             verbose=True,
         )
-        self.runModule("g.region", res=1)
+        self.runModule("g.region", **self.default_region, res=1)
         self.assertModule(t_rast_univar)
 
         univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
@@ -368,7 +371,7 @@ b_4@PERMANENT|S2_B1|2001-10-01 00:00:00|2002-01-01 00:00:00|440|440|440|440|0|0|
             overwrite=True,
             verbose=True,
         )
-        self.runModule("g.region", res=1)
+        self.runModule("g.region", **self.default_region, res=1)
         self.assertModule(t_rast_univar)
 
         univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
@@ -475,7 +478,7 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2
             overwrite=True,
             verbose=True,
         )
-        self.assertModuleFails(t_rast_univar)
+        self.assertModuleFail(t_rast_univar)
 
 
 if __name__ == "__main__":
