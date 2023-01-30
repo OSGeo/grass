@@ -349,7 +349,7 @@ int main(int argc, char *argv[])
                                             cats_opt->answer);
 	
     if (bufcol_opt->answer && field == -1)
-	G_fatal_error(_("The bufcol option requires a valid layer."));
+	G_fatal_error(_("The column option requires a valid layer."));
 
     tolerance = 0.01;
     if (tol_opt->answer) {
