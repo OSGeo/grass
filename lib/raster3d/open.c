@@ -140,7 +140,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
         }
 
         /* if our long is to short to store offsets we can't read the file */
-        if (map->indexNbytesUsed > sizeof(long))
+        if (map->indexNbytesUsed > (int)sizeof(long))
             Rast3d_fatal_error(
                 _("Rast3d_open_cell_old: index does not fit into long"));
 

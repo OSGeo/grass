@@ -37,7 +37,7 @@ static int if_add_point(struct DecimationPoint *point, void *point_data,
     /* according to cat (which could be cluster, return or class) */
     struct DecimationContext *dc = context;
     double zdiff = dc->zdiff;
-    int j;
+    unsigned int j;
 
     /* TODO: use something like Vect_cat_in_cat_list? */
     for (j = 0; j < npoints; j++) {

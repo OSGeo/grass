@@ -56,7 +56,8 @@ struct link_head *link_init(int size)
     Head->max_ptr = 0;
     Head->Unused = NULL;
     Head->alloced = PTR_CNT;
-    Head->unit_size = size < sizeof(VOID_T *) ? sizeof(VOID_T *) : size;
+    Head->unit_size =
+        size < (int)sizeof(VOID_T *) ? (int)sizeof(VOID_T *) : size;
     Head->chunk_size = link_chunk_size;
     Head->exit_flag = link_exit_flag;
 

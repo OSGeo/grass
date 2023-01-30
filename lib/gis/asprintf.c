@@ -113,7 +113,7 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
         va_start(ap, fmt);
         count = vsnprintf(buf, osize, fmt, ap);
         va_end(ap);
-        if (count >= 0 && count < osize)
+        if (count >= 0 && (size_t)count < osize)
             break;
         if (count > -1)
             osize = count + 1;

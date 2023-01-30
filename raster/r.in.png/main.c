@@ -333,7 +333,8 @@ static void read_png(void)
 
     linesize = png_get_rowbytes(png_ptr, info_ptr);
 
-    png_buffer = G_malloc(interlace ? height * linesize : linesize);
+    png_buffer = G_malloc((size_t)interlace ? (size_t)height * linesize
+                                            : (size_t)linesize);
 
     if (interlace) {
         png_rows = G_malloc(height * sizeof(png_bytep));

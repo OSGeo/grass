@@ -49,7 +49,7 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     va_end(ap);
 
     /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
-    if (count == size)
+    if (count >= 0 && (unsigned int)count == size)
         str[--count] = '\0';
 
     return count;

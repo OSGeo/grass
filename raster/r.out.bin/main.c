@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
 
         convert_row(out_buf, in_buf, ncols, is_fp, bytes, swap_flag, null_val);
 
-        if (fwrite(out_buf, bytes, ncols, fp) != ncols)
+        if (fwrite(out_buf, bytes, ncols, fp) != (size_t)ncols)
             G_fatal_error(_("Error writing data"));
     }
 

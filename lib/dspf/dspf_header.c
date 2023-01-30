@@ -41,7 +41,8 @@ int dfwrite_header(file_info *headp)
     if (1 != fwrite(&linep->nthres, isize, 1, fp))
         return (-1);
     /* write the array of thresholds out */
-    if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) != linep->nthres) {
+    if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) !=
+        (size_t)linep->nthres) {
         fprintf(stderr, "ERROR: fwrite in dspf_header.c\n");
         return (-1);
     }

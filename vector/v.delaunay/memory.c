@@ -56,7 +56,7 @@ static unsigned int n_free_e;
 void alloc_memory(unsigned int n)
 {
     struct edge *e;
-    int i;
+    unsigned int i;
 
     /* Sites storage. */
     sites = (struct vertex *)G_calloc(n, sizeof(struct vertex));
@@ -95,7 +95,7 @@ void realloc_sites(unsigned int n)
 void alloc_edges(unsigned int n)
 {
     struct edge *e;
-    int i;
+    unsigned int i;
 
     /* Edges. Euler's formula - at most 3n edges on a set of n sites */
     n_free_e = 3 * n;

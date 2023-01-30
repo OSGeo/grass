@@ -333,7 +333,7 @@ static void put_data(int fd, char *null_buf, const CELL *cell, int row, int n,
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int compressed = (fcb->open_mode == OPEN_NEW_COMPRESSED);
-    int len = compressed ? sizeof(CELL) : fcb->nbytes;
+    int len = compressed ? (int)sizeof(CELL) : fcb->nbytes;
     unsigned char *work_buf, *wk;
     ssize_t nwrite;
 
@@ -511,6 +511,7 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     unsigned char *compressed_buf;
     ssize_t nwrite;
     size_t cmax;
+    int res;
 
     fcb->null_row_ptr[row] = lseek(fcb->null_fd, 0L, SEEK_CUR);
 
@@ -521,14 +522,16 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     /* compress null bits file with LZ4, see lib/gis/compress.h */
     nwrite = G_compress((unsigned char *)flags, size, compressed_buf, cmax, 3);
 
-    if (nwrite > 0 && nwrite < size) {
-        if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
+    if (nwrite > 0 && (size_t)nwrite < size) {
+        if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
+            (unsigned int)res != nwrite)
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
     }
     else {
-        if (write(fcb->null_fd, flags, size) != size)
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
@@ -553,6 +556,7 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
     int row = fcb->null_cur_row++;
     off_t offset;
     size_t size;
+    int res;
 
     size = Rast__null_bitstream_size(fcb->cellhd.cols);
 
@@ -566,7 +570,8 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
     if (lseek(fcb->null_fd, offset, SEEK_SET) < 0)
         G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
-    if (write(fcb->null_fd, flags, size) != size)
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
         G_fatal_error(_("Error writing null row %d of <%s>: %s"), row,
                       fcb->name, strerror(errno));
 }

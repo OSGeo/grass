@@ -283,7 +283,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             if (maxCat > 0.0) {
                 size_t b_s = sizeof(DispFormat);
                 int log_maxCat = (int)(log10(fabs(maxCat))) + 1;
-                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= b_s)
+                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
                     G_fatal_error(
                         _("Failed to create format string with maxCat=%f."),
                         maxCat);

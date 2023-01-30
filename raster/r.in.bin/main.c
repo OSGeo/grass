@@ -642,7 +642,7 @@ int main(int argc, char *argv[])
                         SEEK_SET);
             }
 
-            if (fread(in_buf, bytes, ncols, fp) != ncols)
+            if (fread(in_buf, bytes, ncols, fp) != (size_t)ncols)
                 G_fatal_error(_("Error reading data"));
 
             convert_row(out_buf, in_buf, ncols, is_fp, is_signed, bytes,

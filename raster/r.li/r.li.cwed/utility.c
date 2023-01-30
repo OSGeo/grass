@@ -35,8 +35,8 @@ char **split_arg(char *linea, char separatore, long *numerotoken)
     char **argv;      /* token array */
     char *copialinea; /* line copy */
 
-    long i;  /* find token number */
-    long it; /* iterator */
+    long i;    /* find token number */
+    size_t it; /* iterator */
     long num;
 
     int term; /* =0 if last token has not /0 */

@@ -68,8 +68,8 @@ static void read_hersh(const char *filename)
         char buf[8];
         struct glyph *glyph;
         int coords;
-        unsigned int idx, count;
-        int c, i;
+        unsigned int i, idx, count;
+        int c;
 
         switch (c = fgetc(fp)) {
         case '\r':

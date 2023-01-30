@@ -58,7 +58,7 @@ static int get_input_stream(char *buf, int max_size)
 		line_read = readline("mapcalc> ");
 		if (!line_read)
 			return YY_NULL;
-		if (strlen(line_read) > max_size - 2)
+		if ((ssize_t)strlen(line_read) > max_size - 2)
 			G_fatal_error("input line too long");
 		strcpy(buf, line_read);
 		strcat(buf, "\n");

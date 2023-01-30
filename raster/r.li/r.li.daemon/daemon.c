@@ -682,7 +682,7 @@ int error_Output(int out, msg m)
 
         sprintf(s, "ERROR %i", m.f.f_d.aid);
 
-        if (write(out, s, strlen(s)) == strlen(s))
+        if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
             return 1;
         else
             return 0;

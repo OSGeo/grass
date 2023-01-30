@@ -92,11 +92,14 @@ static int Rast3d_readTileUncompressed(RASTER3D_Map *map, int tileIndex,
                                        int nofNum)
 {
     size_t nofBytes;
+    ssize_t res;
 
-    nofBytes = nofNum * map->numLengthExtern;
-    nofBytes = RASTER3D_MIN(nofBytes, map->fileEndPtr - map->index[tileIndex]);
+    nofBytes = (size_t)nofNum * map->numLengthExtern;
+    nofBytes =
+        RASTER3D_MIN(nofBytes, (size_t)map->fileEndPtr - map->index[tileIndex]);
 
-    if (read(map->data_fd, xdr, nofBytes) != nofBytes) {
+    if ((res = read(map->data_fd, xdr, nofBytes)) < 0 ||
+        (size_t)res != nofBytes) {
         Rast3d_error("Rast3d_readTileUncompressed: can't read file");
         return 0;
     }
