@@ -206,7 +206,7 @@ void Rast__lookup_colors(const void *raster, unsigned char *red,
     int found, r, g, b;
     int cell_type;
     int lookup, max_ind, min_ind, try;
-    int (*lower)();
+    int (*lower)(double, double);
     size_t size = Rast_cell_size(data_type);
 
     if (mod)

@@ -32,7 +32,7 @@
 char *labelElevType::printLabel(const labelElevType &p)
 {
     static char buf[8];
-    sprintf(buf, CCLABEL_FMT, p.label);
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
     return buf;
 }
 
@@ -175,7 +175,7 @@ ostream &operator<<(ostream &s, const labelElevType &p)
 char *waterType::printLabel(const waterType &p)
 {
     static char buf[8];
-    sprintf(buf, CCLABEL_FMT, p.label);
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
     return buf;
 }
 

@@ -269,7 +269,7 @@ void Rast3d_rle_decode(char *src, char *dst, int nofElts, int eltLength,
  * Seems to be some leftover from the early pre-SVN days of GRASS GIS.
  * Maris, 2018.
  */
-void test_rle()
+void test_rle(void)
 {
     char c[100];
     int length;

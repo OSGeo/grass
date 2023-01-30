@@ -12,7 +12,7 @@
 
 #include <grass/waterglobs.h>
 
-void free_walkers()
+void free_walkers(void)
 {
     G_free(w);
     G_free(vavg);

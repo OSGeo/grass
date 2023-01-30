@@ -498,8 +498,11 @@ void G__describe_option_rules_xml(FILE *fp)
     for (i = 0; i < rules.count; i++) {
         const struct rule *rule = &((const struct rule *)rules.data)[i];
 
+        if (rule->count < 0)
+            G_fatal_error(_("Internal error: the number of options is < 0"));
+
         fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
-        for (j = 0; j < rule->count; j++) {
+        for (j = 0; j < (unsigned int)rule->count; j++) {
             void *p = rule->opts[j];
 
             if (is_flag(p)) {

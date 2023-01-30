@@ -36,7 +36,7 @@
 int main(int argc, char **argv)
 {
     double p1, p2, numbers[1000], numbers2[1000];
-    int (*rng)();
+    int (*rng)(int, double *);
     int i;
     int line, nlines, ttype, n, ret, seed, field;
     struct field_info *Fi, *Fin;

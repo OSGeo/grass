@@ -50,7 +50,9 @@ void Rast3d_nearest_neighbor(RASTER3D_Map *map, int x, int y, int z,
  *  \return void
  */
 
-void Rast3d_set_resampling_fun(RASTER3D_Map *map, void (*resampleFun)())
+void Rast3d_set_resampling_fun(RASTER3D_Map *map,
+                               void (*resampleFun)(RASTER3D_Map *, int, int,
+                                                   int, void *, int))
 {
     map->resampleFun = resampleFun;
 }
@@ -67,7 +69,9 @@ void Rast3d_set_resampling_fun(RASTER3D_Map *map, void (*resampleFun)())
  *  \return void
  */
 
-void Rast3d_get_resampling_fun(RASTER3D_Map *map, void (**resampleFun)())
+void Rast3d_get_resampling_fun(RASTER3D_Map *map,
+                               void (**resampleFun)(RASTER3D_Map *, int, int,
+                                                    int, void *, int))
 {
     *resampleFun = map->resampleFun;
 }
@@ -84,7 +88,9 @@ void Rast3d_get_resampling_fun(RASTER3D_Map *map, void (**resampleFun)())
  *  \return void
  */
 
-void Rast3d_get_nearest_neighbor_fun_ptr(void (**nnFunPtr)())
+void Rast3d_get_nearest_neighbor_fun_ptr(void (**nnFunPtr)(RASTER3D_Map *, int,
+                                                           int, int, void *,
+                                                           int))
 {
     *nnFunPtr = Rast3d_nearest_neighbor;
 }

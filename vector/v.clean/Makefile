@@ -11,8 +11,7 @@ CLEAN_SUBDIRS = test
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-default: cmd 
+default: cmd
 
 ctest:
 	$(MAKE) -C test
-

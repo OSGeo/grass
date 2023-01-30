@@ -466,7 +466,7 @@ void Rast_set_cell_format(int n)
     R__.nbytes = n + 1;
     if (R__.nbytes <= 0)
         R__.nbytes = 1;
-    if (R__.nbytes > sizeof(CELL))
+    if (R__.nbytes > (int)sizeof(CELL))
         R__.nbytes = sizeof(CELL);
 }
 

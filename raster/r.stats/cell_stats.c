@@ -11,7 +11,6 @@ int cell_stats(int fd[], int with_percents, int with_counts, int with_areas,
     double unit_area;
     int planimetric = 0;
     int compute_areas;
-    double G_area_of_cell_at_row();
 
     /* allocate i/o buffers for each raster map */
     cell = (CELL **)G_calloc(nfiles, sizeof(CELL *));

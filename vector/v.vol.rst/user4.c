@@ -43,7 +43,7 @@
 
  */
 
-void clean()
+void clean(void)
 {
     if (Tmp_fd_z) {
         fclose(Tmp_fd_z);

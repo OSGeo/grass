@@ -571,7 +571,7 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     else
         ptr->off_t_size = 4;
 
-    if (sizeof(off_t) < ptr->off_t_size) {
+    if (sizeof(off_t) < (size_t)ptr->off_t_size) {
         G_warning(_("Vector exceeds supported file size limit"));
         return (-1);
     }
