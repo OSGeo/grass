@@ -63,7 +63,7 @@ repos:
                 man/jquery.fixedheadertable.min.js
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.21.0
+    rev: v1.29.0
     hooks:
       - id: yamllint
         args: [--format, parsable, --strict, -d,
