@@ -899,7 +899,8 @@ static FILE *create_temp_file(const char *name, char **tmpname)
         G_fatal_error(_("Unable to open temporary file <%s>"), *tmpname);
 
     for (i = 0; i < n_rows; i++) {
-        if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) != n_cols) {
+        if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) !=
+            (size_t)n_cols) {
             clean();
             G_fatal_error(_("Error writing temporary file <%s>"), *tmpname);
         }
