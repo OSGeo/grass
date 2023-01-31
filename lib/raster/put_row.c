@@ -551,6 +551,7 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     nwrite = G_compress((unsigned char *)flags, size, compressed_buf, cmax, 3);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (nwrite > 0 && (size_t)nwrite < size) {
         if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
             (unsigned int)res != nwrite)
@@ -561,11 +562,17 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (nwrite > 0 && (size_t)nwrite < size) {
+        if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
+            (unsigned int)res != nwrite)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
     }
     else {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         if ((res = write(fcb->null_fd, flags, size)) < 0 ||
@@ -576,6 +583,10 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 =======
         if (write(fcb->null_fd, flags, size) != size)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
@@ -615,6 +626,7 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
         G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||
         (unsigned int)res != size)
 =======
@@ -623,6 +635,10 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
         G_fatal_error(_("Error writing null row %d of <%s>: %s"), row,
                       fcb->name, strerror(errno));
 }

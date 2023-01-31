@@ -39,6 +39,7 @@ The install order matters. GRASS needs at least two libraries
 which have to be installed before installing/compiling GRASS:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 For links to the software, see [REQUIREMENTS.md](REQUIREMENTS.md) in this
 directory.
 =======
@@ -49,6 +50,10 @@ directory:
 For links to the software, see ./REQUIREMENTS.html in this
 directory:
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+For links to the software, see [REQUIREMENTS.md](REQUIREMENTS.md) in this
+directory.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 Installation order:
 
@@ -101,6 +106,7 @@ The command,
 explains the options used to disable the compilation of non-mandatory
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 GRASS modules. See [REQUIREMENTS.md](REQUIREMENTS.md) for details on dependencies.
 =======
 GRASS modules. See REQUIREMENTS.html for details on dependencies.
@@ -108,6 +114,9 @@ GRASS modules. See REQUIREMENTS.html for details on dependencies.
 =======
 GRASS modules. See REQUIREMENTS.html for details on dependencies.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+GRASS modules. See [REQUIREMENTS.md](REQUIREMENTS.md) for details on dependencies.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux
 distributions, FreeBSD, AIX, etc) are available at:
 <https://grasswiki.osgeo.org/wiki/Compile_and_Install>

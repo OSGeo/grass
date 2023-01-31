@@ -51,6 +51,7 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
         *dest = *source--;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
 =======
         if ((eltLength >= RASTER3D_LONG_LENGTH) && (*dest != 0))
@@ -58,6 +59,9 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
 =======
         if ((eltLength >= RASTER3D_LONG_LENGTH) && (*dest != 0))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
             Rast3d_fatal_error("Rast3d_long_decode: decoded long too long");
         dest--;
     }
@@ -71,6 +75,7 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
             *dest += *source--;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
 =======
             if ((eltLength >= RASTER3D_LONG_LENGTH) && (*dest != 0))
@@ -78,6 +83,9 @@ void Rast3d_long_decode(unsigned char *source, long *dst, int nofNums,
 =======
             if ((eltLength >= RASTER3D_LONG_LENGTH) && (*dest != 0))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if ((eltLength >= (int)RASTER3D_LONG_LENGTH) && (*dest != 0))
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 Rast3d_fatal_error("Rast3d_long_decode: decoded long too long");
             dest--;
         }

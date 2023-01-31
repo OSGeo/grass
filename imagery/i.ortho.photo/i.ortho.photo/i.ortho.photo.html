@@ -77,10 +77,17 @@ To ortho-rectify aerial images the user has to follow the menu options
 step by step. Alternatively, all the steps can be performed separately
 by running the corresponding modules.
 <p>
+<<<<<<< HEAD
 The aerial photos shall be stored in a <b>source project</b> - a general
 Cartesian coordinate system (XY). Digital elevation model and a map reference
 (topo sheet or other map used for ground control point matching) shall
 be stored in a <b>target project</b> in a real-world coordinate system
+=======
+The aerial photos shall be stored in a <b>source location</b> - a general
+Cartesian coordinate system (XY). Digital elevation model and a map reference
+(topo sheet or other map used for ground control point matching) shall
+be stored in a <b>target location</b> in a real-world coordinate system
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 (e.g. ETRS33).
 <p>
 The steps to follow are described below:
@@ -88,7 +95,11 @@ The steps to follow are described below:
 <li><em>Create/Modify imagery group to be orthorectified:
 <a href="i.group.html">i.group</a></em>
 <p>
+<<<<<<< HEAD
 This step is to be run in the <b>source project</b>.
+=======
+This step is to be run in the <b>source location</b>.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 <p>
 In this first step an imagery group of aerial images for ortho-rectification
 is created or modified. The current imagery group is displayed at the top
@@ -129,7 +140,11 @@ target_mapset
 <p>
 This step is to be run in the <b>source project</b>.
 <p>
+<<<<<<< HEAD
 Step 3 allows you to select the raster map from the target project to be
+=======
+Step 3 allows you to select the raster map from the target location to be
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 used as the elevation model. The elevation model is required for both the
 computation of photo-to-target parameters (Step 6) and for the
 ortho-rectification of the imagery group files (Step 8).
@@ -220,14 +235,22 @@ coordinate systems.
 <li><em> Initialize parameters of camera:
 <a href="i.ortho.init.html">i.ortho.init</a></em>
 <p>
+<<<<<<< HEAD
 This step is to be run in the <b>source project</b>.
+=======
+This step is to be run in the <b>source location</b>.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 <p>
 In Step 6, initial camera exposure station parameters and initial variances
 may be selected or modified.
 <ul>
     <li><b>X</b>: East aircraft position;</li>
     <li><b>Y</b>: North aircraft position;</li>
+<<<<<<< HEAD
     <li><b>Z</b>: Flight height above surface;</li>
+=======
+    <li><b>Z</b>: Flight heigh above surface;</li>
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
     <li><b>Omega (pitch)</b>: Raising or lowering of the aircraft's front
 	(turning around the wings' axis);</li>
     <li><b>Phi (roll)</b>: Raising or lowering of the wings (turning
@@ -330,12 +353,16 @@ and further image analysis.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Wolf P.R. (1983). <i>Elements of Photogrammetry: With Air Photo
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 Wolf P.R. (1983). <i>Elements of Photogrammetry: With Air Photo 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+Wolf P.R. (1983). <i>Elements of Photogrammetry: With Air Photo
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 Interpretation and Remote Sensing</i>
 <b>McGraw Hill Higher Education</b>
 ISBN-10: 0070713456, ISBN-13: 978-0070713451 <br>

@@ -378,6 +378,7 @@ int main(int argc, char **argv)
             if (write(val_fd, map_buf, ncols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
 =======
                 ncols * sizeof(DCELL)) {
@@ -385,6 +386,9 @@ int main(int argc, char **argv)
 =======
                 ncols * sizeof(DCELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                ncols * (int)sizeof(DCELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("Unable to write to tempfile"));
             }
         }
@@ -457,6 +461,7 @@ int main(int argc, char **argv)
             if (write(dir_fd, dir_buf, ncols * sizeof(CELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ncols * (int)sizeof(CELL)) {
 =======
                 ncols * sizeof(CELL)) {
@@ -464,6 +469,9 @@ int main(int argc, char **argv)
 =======
                 ncols * sizeof(CELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                ncols * (int)sizeof(CELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("Unable to write to tempfile"));
             }
         }
@@ -482,6 +490,7 @@ int main(int argc, char **argv)
             if (write(dir_fd, dir_buf, ncols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
 =======
                 ncols * sizeof(DCELL)) {
@@ -489,6 +498,9 @@ int main(int argc, char **argv)
 =======
                 ncols * sizeof(DCELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                ncols * (int)sizeof(DCELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("Unable to write to tempfile"));
             }
         }
@@ -769,6 +781,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
 =======
                     window->cols * sizeof(DCELL)) {
@@ -776,6 +789,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 =======
                     window->cols * sizeof(DCELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    window->cols * (int)sizeof(DCELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                     G_fatal_error(_("Unable to read from temp file"));
                 }
                 val_row = stackp->row;
@@ -808,6 +824,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                 if (read(dir_fd, dir_buf, window->cols * sizeof(CELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     window->cols * (int)sizeof(CELL)) {
 =======
                     window->cols * sizeof(CELL)) {
@@ -815,6 +832,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 =======
                     window->cols * sizeof(CELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    window->cols * (int)sizeof(CELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                     G_fatal_error(_("Unable to read from temp file"));
                 }
                 dir_row = next_row;
@@ -945,6 +965,7 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                                      window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 window->cols * (int)sizeof(DCELL)) {
 =======
                                 window->cols * sizeof(DCELL)) {
@@ -952,6 +973,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 =======
                                 window->cols * sizeof(DCELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                window->cols * (int)sizeof(DCELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                                 G_fatal_error(
                                     _("Unable to read from temp file"));
                             }
@@ -1064,6 +1088,7 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
 =======
                     window->cols * sizeof(DCELL)) {
@@ -1071,6 +1096,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
 =======
                     window->cols * sizeof(DCELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    window->cols * (int)sizeof(DCELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                     G_fatal_error(_("Unable to read from temp file"));
                 }
                 val_row = next_row;
@@ -1098,6 +1126,7 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             if (read(dir_fd, dir_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 window->cols * (int)sizeof(DCELL)) {
 =======
                 window->cols * sizeof(DCELL)) {
@@ -1105,6 +1134,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
 =======
                 window->cols * sizeof(DCELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                window->cols * (int)sizeof(DCELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("Unable to read from temp file"));
             }
             dir_row = next_row;
@@ -1205,6 +1237,7 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                                  window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             window->cols * (int)sizeof(DCELL)) {
 =======
                             window->cols * sizeof(DCELL)) {
@@ -1212,6 +1245,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
 =======
                             window->cols * sizeof(DCELL)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                            window->cols * (int)sizeof(DCELL)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                             G_fatal_error(_("Unable to read from temp file"));
                         }
                         val_row = next_row;

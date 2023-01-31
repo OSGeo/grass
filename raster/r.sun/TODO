@@ -1,7 +1,11 @@
 TODO
 
 -------
+<<<<<<< HEAD
 Probably the sun position calculation should be replaced
+=======
+Probably the sun position calculation shouldbe replaced
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 with
 
  G_calc_solar_position()

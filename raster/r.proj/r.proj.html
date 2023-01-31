@@ -263,12 +263,21 @@ r.proj input=elevation project=ll_wgs84 mapset=user1 memory=800
 
 v.in.region -d output=bounds type=area
 
+<<<<<<< HEAD
 # Now switch to the target project and import the vector bounding box
 # (you can run v.proj -l to get a list of vector maps in the source project):
+=======
+# Now switch to the target location and import the vector bounding box
+# (you can run v.proj -l to get a list of vector maps in the source location):
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 v.proj input=bounds project=source_project_name output=bounds_reprojected
 
+<<<<<<< HEAD
 # Set the region in the target project with that of the newly-imported vector
+=======
+# Set the region in the target location with that of the newly-imported vector
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 # bounds map, and align the resolution to the desired cell resolution of the
 # final, reprojected raster map:
 
@@ -325,12 +334,16 @@ The 'gdalwarp' and 'gdal_translate' utilities are available from the
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
   
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 Martin Schroeder, University of Heidelberg, Germany<br>
 Man page text from S.J.D. Cox, AGCRC, CSIRO Exploration &amp; Mining, Nedlands, WA<br>
 Updated by <a href="mailto:morten@untamo.net">Morten Hulden</a><br>

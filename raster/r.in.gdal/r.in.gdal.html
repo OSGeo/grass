@@ -2,8 +2,12 @@
 
 <em>r.in.gdal</em> allows a user to create a GRASS GIS raster map layer,
 or imagery group, from any GDAL supported raster map format, with an optional
+<<<<<<< HEAD
 title. The imported file may also be used to create a new project
 (previously called location).
+=======
+title. The imported file may also be optionally used to create a new location.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 <!--
 Extended explanations:
@@ -128,18 +132,32 @@ WMO GRIB1/GRIB2 (.grb)                        GRIB              No       Yes    
 
 <h3>Project Creation</h3>
 
+<<<<<<< HEAD
 <em>r.in.gdal</em> attempts to preserve coordinate reference system (CRS)
 information when importing datasets if the source format includes CRS information,
 and if the GDAL driver supports it. If the CRS of the source dataset does
 not match the CRS of the current project <em>r.in.gdal</em> will
 report an error message (<tt>Coordinate reference system of dataset does not appear to
 match current project</tt>) and then report the PROJ_INFO parameters of
+=======
+<em>r.in.gdal</em> attempts to preserve projection information when importing
+datasets if the source format includes projection information, and if
+the GDAL driver supports it.  If the projection of the source dataset does
+not match the projection of the current location <em>r.in.gdal</em> will
+report an error message (<tt>Projection of dataset does not appear to
+match current location</tt>) and then report the PROJ_INFO parameters of
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 the source dataset.
 
 <p>
 If the user wishes to ignore the difference between the apparent coordinate
+<<<<<<< HEAD
 system of the source data and the current project, they may pass the
 <b>-o</b> flag to override the CRS check.
+=======
+system of the source data and the current location, they may pass the
+<b>-o</b> flag to override the projection check.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 <p>
 If the user wishes to import the data with the full CRS definition,
@@ -159,9 +177,15 @@ The <b>target</b> option allows you to automatically re-project the GCPs
 from their own CRS into another CRS read from the
 PROJ_INFO file of the project name <b>target</b>.
 <p>
+<<<<<<< HEAD
 If the <b>target</b> project does not exist, a new project will be
 created matching the CRS definition of the GCPs. The target of
 the output group will be set to the new project, and
+=======
+If the <b>target</b> location does not exist, a new location will be
+created matching the projection definition of the GCPs. The target of
+the output group will be set to the new location, and
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 <a href=i.rectify.html>i.rectify</a> can now be used without any further
 preparation.
 <p>
@@ -212,9 +236,15 @@ point cell layers (*.real and *.imaginary).<br>
 to set the north, south, east and west edges.  Rotational coefficients will
 be ignored, resulting in incorrect positioning for rotated datasets.<br>
 
+<<<<<<< HEAD
 <dt> Coordinate reference system
 <dd> The dataset's CRS will be used to compare to the current project
 or to define a new project.  Internally GDAL represents CRS in
+=======
+<dt> Projection
+<dd> The dataset's projection will be used to compare to the current location
+or to define a new location.  Internally GDAL represents projections in
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 OpenGIS Well Known Text format.  A large subset of the total set of GRASS
 CRSs are supported.<br>
 
@@ -231,7 +261,11 @@ a POINTS file associated with the imagery group.  Datasets with only one
 band that would otherwise have been translated as a simple raster map
 will also have an associated imagery group if there are ground control points.
 The coordinate system of the ground control points is reported by r.in.gdal
+<<<<<<< HEAD
 but not preserved.  It is up to the user to ensure that the project
+=======
+but not preserved.  It is up to the user to ensure that the location
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 established with i.target has a compatible coordinate system before using
 the points with i.rectify.<br>
 
@@ -375,6 +409,27 @@ g.region raster=srtmgl1_v003_30m -p
 r.colors srtmgl1_v003_30m color=srtm_plus
 </pre></div>
 
+<<<<<<< HEAD
+=======
+<h3>Worldclim.org data</h3>
+
+To import the BIL data from <a href="http://www.worldclim.org">Worldclim</a>, the following
+line has to be added to each .hdr file:
+<div class="code"><pre>
+PIXELTYPE SIGNEDINT
+</pre></div>
+<p>
+
+To import the ESRI Grd data from <a href="http://www.worldclim.org">Worldclim</a>, the
+broken spatial extent (exceeding the boundaries) needs to be fixed prior to import:
+
+<div class="code"><pre>
+# example: tmean dataset
+gdal_translate -a_ullr -180 90 180 -60 tmean_1 tmean_1_fixed.tif
+r.in.gdal input=tmean_1_fixed.tif output=tmean_1
+</pre></div>
+
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 <h3>HDF</h3>
 
 The import of HDF bands requires the specification of the individual bands

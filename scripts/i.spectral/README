@@ -1,4 +1,8 @@
+<<<<<<< HEAD
  This GRASS module calculates the  spectral response
+=======
+ This GRASS module calculates the  spectral resonse
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
  for raster images at a user specified point (by mouse).
 
  Requirement:

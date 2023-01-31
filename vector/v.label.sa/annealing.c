@@ -154,6 +154,7 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
             /* decrease immediately */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (consec_successes > (unsigned int)(5 * n_labels)) {
 =======
             if (consec_successes > (5 * n_labels)) {
@@ -161,6 +162,9 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
 =======
             if (consec_successes > (5 * n_labels)) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (consec_successes > (unsigned int)(5 * n_labels)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 consec_successes = 0;
                 break;
             }

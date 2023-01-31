@@ -33,7 +33,11 @@ disabled (not recommended).
 <em>v.proj</em> supports general datum transformations, making use of the
 <em>PROJ</em> co-ordinate system translation library.
 
+<<<<<<< HEAD
 <p>When projecting into a latlon project, east coordinates are wrapped
+=======
+<p>When projecting into a latlon location, east coordinates are wrapped
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 by the proj4 library to fit into the range -180,180. This is in most cases
 appropriate, but can cause errors the input vector crosses the datum line
 at 180E/W. In this case wrapping of east coordinates to -180,180 needs

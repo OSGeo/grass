@@ -19,6 +19,7 @@ Be sure to check your code against these rules:
 - [User message standardization](./message_standardization.md): formatting,
   standard phrases, i18N etc.
 
+<<<<<<< HEAD
 ### Use pre-commit
 
 It is highly recommended to install and use [pre-commit](https://pre-commit.com)
@@ -80,6 +81,8 @@ git switch main
 pre-commit install
 ```
 
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 ## GRASS GIS programming best practice
 
 There are many unwritten rules how GRASS modules should work, what they should

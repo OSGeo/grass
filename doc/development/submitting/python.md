@@ -99,16 +99,23 @@ For example like this:
 flake8 --config lib/python/.flake8 lib/python/temporal/register.py
 ```
 
+<<<<<<< HEAD
 :exclamation:
 It is very convenient and recommended to [use pre-commit](./submitting.md#use-pre-commit)
 to do both Black formatting and Flake8 file validation.
 
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 ### Editor settings for 4-space indentation
 
 The correct editor settings for Python indentation
 
 - [​Geany](https://www.geany.org/) editor:
+<<<<<<< HEAD
   - Edit > Preferences > Editor > Indentation tab > Type: Spaces
+=======
+  - Edit > Preferences > Editor > Intentation tab > Type: Spaces
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 - [​PyCharm](https://www.jetbrains.com/pycharm/) IDE:
   - already fine and includes code-linting
 - [​atom](https://atom.io/) IDE:
@@ -301,7 +308,11 @@ output. This is reserved for standard module output if it has one.
 ### Translations
 
 To enable translating of messages to other languages (than English), use full
+<<<<<<< HEAD
 strings, e.g. (good example):
+=======
+strings, e.g.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 ```py
 if ...:
@@ -310,7 +321,11 @@ else:
     win.SetLabel(_("Name for new raster map to create"))
 ```
 
+<<<<<<< HEAD
 instead of constructing string from several parts (bad example):
+=======
+instead of constructing string from several parts:
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 ```py
 if ...:

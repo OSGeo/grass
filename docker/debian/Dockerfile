@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM debian:stable@sha256:84725fb1debbf461f54a23030be0bcde8449f2fa4eba8adf857b1a4c707fec8d
 # currently Debian 12
 
@@ -11,12 +12,20 @@ FROM debian:10.1
 =======
 FROM debian:10.1
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+FROM debian:stable
+# currently Debian 11
+
+# docker run -it --rm debian:stable bash
+# apt-get update && apt-get install lsb-release -y && lsb_release -a
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
@@ -34,6 +43,11 @@ ARG LAZ_PERF_VERSION=1.3.0
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+# define versions to be used (PDAL is not available on Debian, so we compile it here)
+# https://github.com/PDAL/PDAL/releases
+ARG PDAL_VERSION=2.4.3
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 SHELL ["/bin/bash", "-c"]
 
@@ -90,11 +104,15 @@ RUN apt-get update && apt-get upgrade -y && \
     libpq-dev \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     libproj-dev \
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    libproj-dev \
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
     libpython3-all-dev \
     libsqlite3-dev \
     libtiff-dev \
@@ -107,12 +125,17 @@ RUN apt-get update && apt-get upgrade -y && \
     netcdf-bin \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proj-bin \
     proj-data \
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    proj-bin \
+    proj-data \
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
     python3 \
     python3-dateutil \
     python3-dev \
@@ -144,6 +167,7 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -178,6 +202,8 @@ RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
 RUN mkdir vdatum && \
@@ -196,6 +222,7 @@ RUN mkdir vdatum && \
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
 =======
 ## install pdal
@@ -203,6 +230,9 @@ RUN mkdir vdatum && \
 =======
 ## install pdal
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 ENV NUMTHREADS=4
 WORKDIR /src
 RUN wget -q \
@@ -227,6 +257,7 @@ RUN wget -q \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
       -DBUILD_PGPOINTCLOUD_TESTS=OFF \
       -DBUILD_PLUGIN_SQLITE=ON \
@@ -242,6 +273,12 @@ RUN wget -q \
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+      -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
+      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
+      -DBUILD_PLUGIN_SQLITE=ON \
+      -DWITH_LASZIP=OFF \
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
       -DWITH_LAZPERF=ON \
       -DWITH_TESTS=ON && \
     make -j $NUMTHREADS && \
@@ -253,12 +290,17 @@ COPY . /src/grass_build/
 WORKDIR /src/grass_build
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Cleanup potentially leftover GISRC file with wrong path to "demolocation"
 RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
@@ -396,8 +438,11 @@ COPY docker/testdata/test_grass_session.py .
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< HEAD:docker/debian/Dockerfile
 <<<<<<< HEAD:docker/debian/Dockerfile
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 # test LAZ file
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 =======

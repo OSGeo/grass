@@ -411,6 +411,7 @@ int OUTGR(void)
             read_val = fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (read_val != (size_t)nsizc) {
 =======
             if (read_val != nsizc) {
@@ -418,6 +419,9 @@ int OUTGR(void)
 =======
             if (read_val != nsizc) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (read_val != (size_t)nsizc) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 clean();
                 G_fatal_error(_("Unable to read data from temp file"));
             }
