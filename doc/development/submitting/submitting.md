@@ -45,6 +45,17 @@ pre-commit run black --all-files
 The pre-commmit hooks are defined in
 [.pre-commit-config.yaml](../../../.pre-commit-config.yaml).
 
+It is possible to temporary disable the Pre-commit hooks in the repo, eg. while
+working on older branches:
+
+```bash
+# backporting...
+pre-commit uninstall
+
+git switch main
+pre-commit install
+```
+
 ## GRASS GIS programming best practice
 
 There are many unwritten rules how GRASS modules should work, what they should
