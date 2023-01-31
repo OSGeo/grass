@@ -469,6 +469,7 @@ void Rast_set_cell_format(int n)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (R__.nbytes > (int)sizeof(CELL))
 =======
     if (R__.nbytes > sizeof(CELL))
@@ -479,6 +480,12 @@ void Rast_set_cell_format(int n)
 =======
     if (R__.nbytes > (int)sizeof(CELL))
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (R__.nbytes > sizeof(CELL))
+=======
+    if (R__.nbytes > (int)sizeof(CELL))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         R__.nbytes = sizeof(CELL);
 }
 

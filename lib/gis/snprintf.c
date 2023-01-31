@@ -51,6 +51,7 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (count >= 0 && (unsigned int)count == size)
 =======
     if (count == size)
@@ -61,6 +62,12 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
 =======
     if (count >= 0 && (unsigned int)count == size)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (count == size)
+=======
+    if (count >= 0 && (unsigned int)count == size)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         str[--count] = '\0';
 
     return count;

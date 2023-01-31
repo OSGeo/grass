@@ -28,7 +28,10 @@ Bug fix (9/12/2010) by Daniel:
 =======
    1) function interpolate_band was not generating the spectral response for the last value in the filter function. Fixed
    2) function pretty_print was not printing the 8th value of every line, cutting the filter function short.
+<<<<<<< HEAD
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 """
 import os

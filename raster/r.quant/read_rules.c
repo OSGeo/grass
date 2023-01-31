@@ -91,6 +91,7 @@ int read_rules(const char *filename)
     Rast_quant_init(&quant_struct);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (;;) {
 =======
     for (line = 1;; line++) {
@@ -101,6 +102,12 @@ int read_rules(const char *filename)
 =======
     for (;;) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (line = 1;; line++) {
+=======
+    for (;;) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         if (isatty(fileno(fp)))
             fprintf(stderr, "> ");
         if (!G_getl2(buf, sizeof(buf), fp))

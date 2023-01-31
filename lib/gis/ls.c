@@ -186,6 +186,7 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         unsigned int max_len = 0;
 =======
         int max_len = 0;
@@ -196,6 +197,12 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 =======
         unsigned int max_len = 0;
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        int max_len = 0;
+=======
+        unsigned int max_len = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
         for (i = 0; i < num_items; i++) {
             /* Find maximum filename length */

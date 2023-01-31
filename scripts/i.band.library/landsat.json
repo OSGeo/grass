@@ -146,6 +146,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             },
 =======
              },
@@ -156,6 +157,12 @@
 =======
             },
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+             },
+=======
+            },
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             "10": {
                 "wavelength (µm)": "10.6-11.19",
                 "spatial resolution (meters)": 100,

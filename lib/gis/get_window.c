@@ -143,6 +143,7 @@ void G_get_element_window(struct Cell_head *window, const char *element,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void G_unset_window(void)
 =======
 =======
@@ -152,6 +153,12 @@ void G_unset_window()
 =======
 void G_unset_window(void)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+void G_unset_window()
+=======
+void G_unset_window(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     st->initialized = 0;
     G__.window_set = 0;

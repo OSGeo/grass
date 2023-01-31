@@ -63,6 +63,7 @@ int read_rules(FILE *fp)
     Rast_fpreclass_init(&rcl_struct);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (;;) {
 =======
     for (line = 1;; line++) {
@@ -73,6 +74,12 @@ int read_rules(FILE *fp)
 =======
     for (;;) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (line = 1;; line++) {
+=======
+    for (;;) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         if (isatty(fileno(fp)))
             fprintf(stderr, "> ");
 

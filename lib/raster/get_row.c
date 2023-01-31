@@ -165,8 +165,13 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bufsize = (size_t)n * fcb->cellhd.cols;
     if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
+=======
+    bufsize = n * fcb->cellhd.cols;
+    if (fcb->cellhd.compressed < 0 || readamount < bufsize) {
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         if (fcb->cellhd.compressed == 1)
             rle_decompress(data_buf, cmp, n, readamount);
         else {
@@ -176,6 +181,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
                 G_fatal_error(
                     _("Error uncompressing raster data for row %d of <%s>"),
                     row, fcb->name);
+<<<<<<< HEAD
             }
 =======
     bufsize = n * fcb->cellhd.cols;
@@ -184,6 +190,11 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     bufsize = (size_t)n * fcb->cellhd.cols;
     if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+=======
+    bufsize = (size_t)n * fcb->cellhd.cols;
+    if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         if (fcb->cellhd.compressed == 1)
             rle_decompress(data_buf, cmp, n, readamount);
         else {
@@ -195,12 +206,17 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
                     row, fcb->name);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
             }
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+            }
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         }
     }
     else
@@ -396,6 +412,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             const COLUMN_MAPPING *cmap, int nbytes, void *cell,
 =======
                             const COLUMN_MAPPING *cmap, int nbytes, CELL *cell,
@@ -406,6 +423,12 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
                             const COLUMN_MAPPING *cmap, int nbytes, void *cell,
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                            const COLUMN_MAPPING *cmap, int nbytes, CELL *cell,
+=======
+                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
                             int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -419,6 +442,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             c[i] = 0;
 =======
             cell[i] = 0;
@@ -429,6 +453,12 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
             c[i] = 0;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            cell[i] = 0;
+=======
+            c[i] = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             continue;
         }
 
@@ -436,6 +466,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             c[i] = c[i - 1];
 =======
             cell[i] = cell[i - 1];
@@ -446,6 +477,12 @@ static void gdal_values_int(int fd, const unsigned char *data,
 =======
             c[i] = c[i - 1];
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            cell[i] = cell[i - 1];
+=======
+            c[i] = c[i - 1];
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             continue;
         }
 
@@ -456,7 +493,11 @@ static void gdal_values_int(int fd, const unsigned char *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             c[i] = *(GByte *)d;
+=======
+            cell[i] = *(GByte *)d;
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             break;
         case GDT_Int16:
             c[i] = *(GInt16 *)d;
@@ -498,12 +539,34 @@ static void gdal_values_int(int fd, const unsigned char *data,
 <<<<<<< HEAD
             Rast_set_c_null_value(&cell[i], 1);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
             Rast_set_c_null_value(&c[i], 1);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+            c[i] = *(GByte *)d;
+            break;
+        case GDT_Int16:
+            c[i] = *(GInt16 *)d;
+            break;
+        case GDT_UInt16:
+            c[i] = *(GUInt16 *)d;
+            break;
+        case GDT_Int32:
+            c[i] = *(GInt32 *)d;
+            break;
+        case GDT_UInt32:
+            c[i] = *(GUInt32 *)d;
+            break;
+        default:
+            /* shouldn't happen */
+            Rast_set_c_null_value(&c[i], 1);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             break;
         }
 
@@ -511,6 +574,7 @@ static void gdal_values_int(int fd, const unsigned char *data,
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static void gdal_values_float(int fd UNUSED, const unsigned char *data,
@@ -525,10 +589,19 @@ static void gdal_values_float(int fd, const float *data,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+static void gdal_values_float(int fd, const float *data,
+                              const COLUMN_MAPPING *cmap, int nbytes,
+                              FCELL *cell, int n)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
 static void gdal_values_float(int fd, const unsigned char *data,
                               const COLUMN_MAPPING *cmap, int nbytes,
                               void *cell, int n)
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     COLUMN_MAPPING cmapold = 0;
     const float *d = (const float *)data;
@@ -537,6 +610,7 @@ static void gdal_values_float(int fd, const unsigned char *data,
 
     for (i = 0; i < n; i++) {
         if (!cmap[i]) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -550,10 +624,17 @@ static void gdal_values_float(int fd, const unsigned char *data,
 =======
             c[i] = 0;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            cell[i] = 0;
+=======
+            c[i] = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             continue;
         }
 
         if (cmap[i] == cmapold) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -563,12 +644,24 @@ static void gdal_values_float(int fd, const unsigned char *data,
 
         c[i] = d[cmap[i] - 1];
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             cell[i] = cell[i - 1];
             continue;
         }
 
         cell[i] = data[cmap[i] - 1];
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+            c[i] = c[i - 1];
+            continue;
+        }
+
+        c[i] = d[cmap[i] - 1];
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 =======
             cell[i] = cell[i - 1];
@@ -587,6 +680,7 @@ static void gdal_values_float(int fd, const unsigned char *data,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void gdal_values_double(int fd UNUSED, const unsigned char *data,
                                const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                                void *cell, int n)
@@ -599,10 +693,19 @@ static void gdal_values_double(int fd, const double *data,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+static void gdal_values_double(int fd, const double *data,
+                               const COLUMN_MAPPING *cmap, int nbytes,
+                               DCELL *cell, int n)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
 static void gdal_values_double(int fd, const unsigned char *data,
                                const COLUMN_MAPPING *cmap, int nbytes,
                                void *cell, int n)
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     COLUMN_MAPPING cmapold = 0;
     const double *d = (const double *)data;
@@ -611,6 +714,7 @@ static void gdal_values_double(int fd, const unsigned char *data,
 
     for (i = 0; i < n; i++) {
         if (!cmap[i]) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -624,10 +728,17 @@ static void gdal_values_double(int fd, const unsigned char *data,
 =======
             c[i] = 0;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            cell[i] = 0;
+=======
+            c[i] = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             continue;
         }
 
         if (cmap[i] == cmapold) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -637,12 +748,24 @@ static void gdal_values_double(int fd, const unsigned char *data,
 
         c[i] = d[cmap[i] - 1];
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             cell[i] = cell[i - 1];
             continue;
         }
 
         cell[i] = data[cmap[i] - 1];
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+            c[i] = c[i - 1];
+            continue;
+        }
+
+        c[i] = d[cmap[i] - 1];
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 =======
             cell[i] = cell[i - 1];
@@ -674,6 +797,7 @@ static void transfer_to_cell_XX(int fd, void *cell)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static void (*cell_values_type[3])(
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {cell_values_int, cell_values_float, cell_values_double};
@@ -682,11 +806,14 @@ static void transfer_to_cell_XX(int fd, void *cell)
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {gdal_values_int, gdal_values_float, gdal_values_double};
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     static void (*cell_values_type[3])() = {cell_values_int, cell_values_float,
                                             cell_values_double};
 #ifdef HAVE_GDAL
     static void (*gdal_values_type[3])() = {gdal_values_int, gdal_values_float,
                                             gdal_values_double};
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
     static void (*cell_values_type[3])() = {cell_values_int, cell_values_float,
@@ -696,6 +823,8 @@ static void transfer_to_cell_XX(int fd, void *cell)
                                             gdal_values_double};
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
     static void (*cell_values_type[3])(
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {cell_values_int, cell_values_float, cell_values_double};
@@ -703,7 +832,11 @@ static void transfer_to_cell_XX(int fd, void *cell)
     static void (*gdal_values_type[3])(
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {gdal_values_int, gdal_values_float, gdal_values_double};
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 #endif
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
@@ -815,6 +948,7 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
 =======
     static void (*transfer_to_cell_FtypeOtype[3][3])() = {
@@ -825,6 +959,12 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 =======
     static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    static void (*transfer_to_cell_FtypeOtype[3][3])() = {
+=======
+    static void (*transfer_to_cell_FtypeOtype[3][3])(int, void *) = {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         {transfer_to_cell_XX, transfer_to_cell_if, transfer_to_cell_id},
         {transfer_to_cell_fi, transfer_to_cell_XX, transfer_to_cell_fd},
         {transfer_to_cell_di, transfer_to_cell_df, transfer_to_cell_XX}};
@@ -1111,6 +1251,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((res = read(null_fd, flags, size)) < 0 ||
             (unsigned int)res != size) {
 =======
@@ -1123,6 +1264,13 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
         if ((res = read(null_fd, flags, size)) < 0 ||
             (unsigned int)res != size) {
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (read(null_fd, flags, size) != size) {
+=======
+        if ((res = read(null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             G_fatal_error(
                 _("Error reading compressed null data for row %d of <%s>"), row,
                 fcb->name);
@@ -1132,6 +1280,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
 
     compressed_buf = G_malloc(readamount);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
@@ -1146,6 +1295,13 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
         (unsigned int)res != readamount) {
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (read(null_fd, compressed_buf, readamount) != readamount) {
+=======
+    if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
+        (unsigned int)res != readamount) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         G_free(compressed_buf);
         G_fatal_error(
             _("Error reading compressed null data for row %d of <%s>"), row,

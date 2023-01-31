@@ -90,6 +90,7 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
 #ifdef HAVE_ICONV_H
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (enc) {
         G_freea(enc);
     }
@@ -101,10 +102,18 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+    if (enc)
+        G_freea(enc);
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
     if (enc) {
         G_freea(enc);
     }
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
     if (conv != (iconv_t)-1)
         iconv_close(conv);

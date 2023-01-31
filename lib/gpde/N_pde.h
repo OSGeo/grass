@@ -310,6 +310,7 @@ typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
 =======
     N_data_star *(*callback)();
@@ -320,12 +321,19 @@ typedef struct {
 =======
     N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    N_data_star *(*callback)();
+=======
+    N_data_star *(*callback)(void *, N_geom_data *, int, int, int);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 } N_les_callback_3d;
 
 /*!
  * \brief callback structure for 2d matrix assembling
  * */
 typedef struct {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -339,6 +347,8 @@ extern void N_set_les_callback_2d_func(
     N_les_callback_2d *data,
     N_data_star *(*callback_func_2d)(void *, N_geom_data *, int, int));
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     N_data_star *(*callback)();
 } N_les_callback_2d;
 
@@ -352,9 +362,12 @@ extern void N_set_les_callback_3d_func(N_les_callback_3d *data,
 extern void N_set_les_callback_2d_func(N_les_callback_2d *data,
                                        N_data_star *(*callback_func_2d)());
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 =======
     N_data_star *(*callback)(void *, N_geom_data *, int, int);
 } N_les_callback_2d;
@@ -365,7 +378,11 @@ extern void N_set_les_callback_3d_func(
 extern void N_set_les_callback_2d_func(
     N_les_callback_2d *data,
     N_data_star *(*callback_func_2d)(void *, N_geom_data *, int, int));
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 extern N_les_callback_3d *N_alloc_les_callback_3d(void);
 extern N_les_callback_2d *N_alloc_les_callback_2d(void);
 extern N_data_star *N_alloc_5star(void);

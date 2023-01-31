@@ -10,6 +10,7 @@ static unsigned int s, h, sbuf[256];
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 double unfl(void)
 =======
 double unfl()
@@ -20,6 +21,12 @@ double unfl()
 =======
 double unfl(void)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+double unfl()
+=======
+double unfl(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     int i;
 

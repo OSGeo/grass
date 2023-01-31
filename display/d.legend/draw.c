@@ -294,6 +294,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
 =======
                 if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= b_s)
@@ -304,6 +305,12 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 =======
                 if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= b_s)
+=======
+                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
                     G_fatal_error(
                         _("Failed to create format string with maxCat=%f."),
                         maxCat);

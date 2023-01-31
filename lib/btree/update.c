@@ -14,6 +14,7 @@ int btree_update(BTREE *B, const void *key, int keylen, const void *data,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*cmp)(const void *, const void *);
 =======
     int (*cmp)();
@@ -24,6 +25,12 @@ int btree_update(BTREE *B, const void *key, int keylen, const void *data,
 =======
     int (*cmp)(const void *, const void *);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    int (*cmp)();
+=======
+    int (*cmp)(const void *, const void *);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     int dir;
 
     /* first node is special case */

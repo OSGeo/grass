@@ -26,6 +26,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 const char *db_whoami(void)
 =======
 =======
@@ -35,6 +36,12 @@ const char *db_whoami()
 =======
 const char *db_whoami(void)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+const char *db_whoami()
+=======
+const char *db_whoami(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     return G_store(getenv("LOGNAME"));
 }

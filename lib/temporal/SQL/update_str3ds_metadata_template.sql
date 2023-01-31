@@ -84,4 +84,7 @@ UPDATE str3ds_metadata SET tbres_max =
        (SELECT max(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN
     		(SELECT id FROM SPACETIME_REGISTER_TABLE)
        ) WHERE id = 'SPACETIME_ID';
+<<<<<<< HEAD
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
