@@ -118,7 +118,7 @@ git checkout -b new-feature
 ### Making changes
 
 You can use your favorite tools to change source code or other files
-in the local copy of the code. When making changes, please follow
+in the local copy of the code. When making changes, please follow the
 [Submitting Guidelines](./doc/development/submitting/submitting.md).
 
 ### Testing changes

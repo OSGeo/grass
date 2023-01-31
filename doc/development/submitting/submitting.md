@@ -42,7 +42,7 @@ pre-commit run clang-format --all-files
 pre-commit run black --all-files
 ```
 
-The pre-commmit hooks are defined in
+The Pre-commit hooks are defined in
 [.pre-commit-config.yaml](../../../.pre-commit-config.yaml).
 
 It is possible to temporary disable the Pre-commit hooks in the repo, eg. while
