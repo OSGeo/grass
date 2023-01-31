@@ -116,6 +116,7 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (count >= 0 && (size_t)count < osize)
 =======
         if (count >= 0 && count < osize)
@@ -126,6 +127,12 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 =======
         if (count >= 0 && (size_t)count < osize)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (count >= 0 && count < osize)
+=======
+        if (count >= 0 && (size_t)count < osize)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             break;
         if (count > -1)
             osize = count + 1;

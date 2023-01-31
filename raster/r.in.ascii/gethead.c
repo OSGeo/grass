@@ -237,10 +237,14 @@ int gethead(FILE *fd, struct Cell_head *cellhd, RASTER_MAP_TYPE *d_type,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int scan_int(const char *s, double *i, int proj UNUSED)
 =======
 static int scan_int(const char *s, double *i, int proj)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static int scan_int(const char *s, double *i, int proj)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     char dummy[3];
     int *i_loc = (int *)i;
@@ -250,17 +254,21 @@ static int scan_int(const char *s, double *i, int proj)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (sscanf(s, "%d%1s", i_loc, dummy) != 1)
         return 0;
     if (*dummy)
         return 0;
     if (*i_loc <= 0)
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     if (sscanf(s, "%d%1s", i, dummy) != 1)
         return 0;
     if (*dummy)
         return 0;
     if (*i <= 0)
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
     if (sscanf(s, "%d%1s", i, dummy) != 1)
@@ -270,12 +278,18 @@ static int scan_int(const char *s, double *i, int proj)
     if (*i <= 0)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
     if (sscanf(s, "%d%1s", i_loc, dummy) != 1)
         return 0;
     if (*dummy)
         return 0;
     if (*i_loc <= 0)
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         return 0;
     return 1;
 }
@@ -284,6 +298,7 @@ static int extract(int count, char *label, char *value, void *data, int proj,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                    int (*scanner)(const char *, double *, int))
 =======
                    int (*scanner)())
@@ -294,6 +309,12 @@ static int extract(int count, char *label, char *value, void *data, int proj,
 =======
                    int (*scanner)(const char *, double *, int))
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                   int (*scanner)())
+=======
+                   int (*scanner)(const char *, double *, int))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     if (count) {
         G_warning(_("Duplicate \"%s\" field in header"), label);

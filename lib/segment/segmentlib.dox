@@ -246,8 +246,11 @@ memory:
 <P>
   Deletes the segment file and uses Segment_release() to release the
 <<<<<<< HEAD
+<<<<<<< HEAD
   allocated memory. No further cleaning up is required.
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
   allocated memory. No further cleaing up is required.
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 

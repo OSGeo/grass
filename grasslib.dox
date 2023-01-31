@@ -225,8 +225,11 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
  - datetime:	\ref datetime (DateTime library)
 <<<<<<< HEAD
+<<<<<<< HEAD
  - external:	\ref external (External libraries from other projects such as shapelib, parson and \ref ccmathlib)
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
  - external:	\ref external (External libraries from other projects such as shapelib and \ref ccmathlib)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
  - fonts:	\ref fonts (GRASS fonts library)

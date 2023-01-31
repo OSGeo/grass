@@ -26,6 +26,7 @@ int M__hold_signals(int hold)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
 =======
     void (*sig)() = hold ? SIG_IGN : SIG_DFL;
@@ -36,6 +37,12 @@ int M__hold_signals(int hold)
 =======
     void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    void (*sig)() = hold ? SIG_IGN : SIG_DFL;
+=======
+    void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
     signal(SIGINT, sig);
 

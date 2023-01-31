@@ -21,6 +21,7 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_list_element(element, desc, mapset, NULL);
 =======
             G_list_element(element, desc, mapset, (int (*)())NULL);
@@ -31,6 +32,12 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
 =======
             G_list_element(element, desc, mapset, NULL);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            G_list_element(element, desc, mapset, (int (*)())NULL);
+=======
+            G_list_element(element, desc, mapset, NULL);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         reject();
         return 0;
     }

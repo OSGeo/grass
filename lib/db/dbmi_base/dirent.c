@@ -33,7 +33,10 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 #include <sys/types.h>
 #ifdef USE_DIRECT
 #include <sys/dir.h>
@@ -46,9 +49,14 @@ typedef struct dirent dir_entry;
 extern DIR *opendir();
 extern dir_entry *readdir();
 
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 static int cmp_dirent(const void *, const void *);
 static int get_perm(char *);
 static void sort_dirent(dbDirent *, int);
@@ -100,6 +108,7 @@ dbDirent *db_dirent(const char *dirname, int *n)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     db_dirent = db_alloc_dirent_array(count);
     if (db_dirent == NULL) {
 =======
@@ -113,6 +122,14 @@ dbDirent *db_dirent(const char *dirname, int *n)
     db_dirent = db_alloc_dirent_array(count);
     if (db_dirent == NULL) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    dirent = db_alloc_dirent_array(count);
+    if (dirent == NULL) {
+=======
+    db_dirent = db_alloc_dirent_array(count);
+    if (db_dirent == NULL) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         closedir(dp);
         return (dbDirent *)NULL;
     }
@@ -125,6 +142,7 @@ dbDirent *db_dirent(const char *dirname, int *n)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (DB_OK != db_set_string(&db_dirent[i].name, entry->d_name))
             break;
         sprintf(path, "%s/%s", dirname, entry->d_name);
@@ -133,22 +151,31 @@ dbDirent *db_dirent(const char *dirname, int *n)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         if (DB_OK != db_set_string(&dirent[i].name, entry->d_name))
             break;
         sprintf(path, "%s/%s", dirname, entry->d_name);
         dirent[i].perm = get_perm(path);
         dirent[i].isdir = (db_isdir(path) == DB_OK);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 =======
         if (DB_OK != db_set_string(&db_dirent[i].name, entry->d_name))
             break;
         sprintf(path, "%s/%s", dirname, entry->d_name);
         db_dirent[i].perm = get_perm(path);
         db_dirent[i].isdir = (db_isdir(path) == DB_OK);
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     }
     closedir(dp);
     db_free(path);
@@ -164,7 +191,11 @@ dbDirent *db_dirent(const char *dirname, int *n)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param db_dirent pointer to dbDirent
+=======
+   \param dirent pointer to dbDirent
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
    \param count number of entities in the array
  */
 void db_free_dirent_array(dbDirent *db_dirent, int count)
@@ -194,6 +225,7 @@ void db_free_dirent_array(dbDirent *db_dirent, int count)
             db_free_string(&dirent[i].name);
         db_free(dirent);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -201,6 +233,21 @@ void db_free_dirent_array(dbDirent *db_dirent, int count)
             db_free_string(&db_dirent[i].name);
         db_free(db_dirent);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+   \param db_dirent pointer to dbDirent
+   \param count number of entities in the array
+ */
+void db_free_dirent_array(dbDirent *db_dirent, int count)
+{
+    int i;
+
+    if (db_dirent) {
+        for (i = 0; i < count; i++)
+            db_free_string(&db_dirent[i].name);
+        db_free(db_dirent);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     }
 }
 
@@ -250,6 +297,7 @@ dbDirent *db_alloc_dirent_array(int count)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     db_dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
     if (db_dirent == NULL)
         return db_dirent;
@@ -261,12 +309,15 @@ dbDirent *db_alloc_dirent_array(int count)
     if (dirent == NULL)
         return dirent;
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
     if (dirent == NULL)
         return dirent;
 
     for (i = 0; i < count; i++)
         db_init_string(&dirent[i].name);
+<<<<<<< HEAD
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     for (i = 0; i < count; i++)
@@ -282,5 +333,16 @@ dbDirent *db_alloc_dirent_array(int count)
         db_init_string(&db_dirent[i].name);
 
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+    db_dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
+    if (db_dirent == NULL)
+        return db_dirent;
+
+    for (i = 0; i < count; i++)
+        db_init_string(&db_dirent[i].name);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     return db_dirent;
 }

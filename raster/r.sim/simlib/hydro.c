@@ -123,6 +123,7 @@ void main_loop(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* int icoub, nmult */;
 =======
     int icoub /*, nmult */;
@@ -133,6 +134,12 @@ void main_loop(void)
 =======
     /* int icoub, nmult */;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    int icoub /*, nmult */;
+=======
+    /* int icoub, nmult */;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     int iw, iblock, lw;
     int itime, iter1;
 
@@ -155,6 +162,7 @@ void main_loop(void)
     nblock = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* icoub = 0; */
 =======
     icoub = 0;
@@ -165,6 +173,12 @@ void main_loop(void)
 =======
     /* icoub = 0; */
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    icoub = 0;
+=======
+    /* icoub = 0; */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     /* icfl = 0; */
     nstack = 0;
 
@@ -183,6 +197,7 @@ void main_loop(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* ++icoub; */
 =======
         ++icoub;
@@ -193,6 +208,12 @@ void main_loop(void)
 =======
         /* ++icoub; */
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        ++icoub;
+=======
+        /* ++icoub; */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
         lw = 0;
         walkwe = 0.;

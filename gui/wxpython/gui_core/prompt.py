@@ -224,6 +224,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self._showHint()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         # read history file
         self._loadHistory()
         if giface:
@@ -236,6 +237,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             )
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         #
         # bindings
         #
@@ -364,10 +367,14 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # show hint
         if self.IsEmpty():
 <<<<<<< HEAD
+<<<<<<< HEAD
             wx.CallAfter(self._showHint)
 =======
             self._showHint()
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            self._showHint()
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         event.Skip()
 
     def OnSetFocus(self, event):

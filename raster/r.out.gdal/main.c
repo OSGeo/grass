@@ -1058,17 +1058,21 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         return NAN;
 
     case GDT_Float64:
     case GDT_CFloat64:
         return NAN;
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         return 0.0 / 0.0;
 
     case GDT_Float64:
     case GDT_CFloat64:
         return 0.0 / 0.0;
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
         return 0.0 / 0.0;
@@ -1078,12 +1082,18 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
         return 0.0 / 0.0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
         return NAN;
 
     case GDT_Float64:
     case GDT_CFloat64:
         return NAN;
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
     default:
         return 0;

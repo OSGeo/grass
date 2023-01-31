@@ -91,6 +91,7 @@ int do_grid_cross(void)
     g_east = floor(PS.w.east / PS.grid) * PS.grid;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (; g_north >= PS.w.south; g_north -= PS.grid) {
         for (; g_east > PS.w.west; g_east -= PS.grid) {
 =======
@@ -104,6 +105,14 @@ int do_grid_cross(void)
     for (; g_north >= PS.w.south; g_north -= PS.grid) {
         for (; g_east > PS.w.west; g_east -= PS.grid) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (j = 0; g_north >= PS.w.south; j++, g_north -= PS.grid) {
+        for (k = 0; g_east > PS.w.west; k++, g_east -= PS.grid) {
+=======
+    for (; g_north >= PS.w.south; g_north -= PS.grid) {
+        for (; g_east > PS.w.west; g_east -= PS.grid) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
             if (g_north == PS.w.north || g_north == PS.w.south)
                 continue;

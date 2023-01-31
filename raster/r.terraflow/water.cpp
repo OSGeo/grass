@@ -35,6 +35,7 @@ char *labelElevType::printLabel(const labelElevType &p)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
 =======
     sprintf(buf, CCLABEL_FMT, p.label);
@@ -45,6 +46,12 @@ char *labelElevType::printLabel(const labelElevType &p)
 =======
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     return buf;
 }
 
@@ -190,6 +197,7 @@ char *waterType::printLabel(const waterType &p)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
 =======
     sprintf(buf, CCLABEL_FMT, p.label);
@@ -200,6 +208,12 @@ char *waterType::printLabel(const waterType &p)
 =======
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     return buf;
 }
 

@@ -179,6 +179,7 @@ int main(int argc, char *argv[])
     Vect_rewind(&In);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     while (Vect_read_next_line(&In, points, Cats) > 0)
         ;
 =======
@@ -190,12 +191,22 @@ int main(int argc, char *argv[])
     while (Vect_read_next_line(&In, points, Cats) > 0)
         ;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    while (Vect_read_next_line(&In, points, Cats) > 0) {
+        nlines++;
+    }
+=======
+    while (Vect_read_next_line(&In, points, Cats) > 0)
+        ;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     Vect_rewind(&In);
 
     /* no topology, get number of lines in first pulse input vector */
     points_first = Vect_new_line_struct();
     Cats_first = Vect_new_cats_struct();
     Vect_rewind(&First);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
@@ -209,6 +220,15 @@ int main(int argc, char *argv[])
     while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
         ;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    while (Vect_read_next_line(&First, points_first, Cats_first) > 0) {
+        nlines_first++;
+    }
+=======
+    while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
+        ;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     Vect_rewind(&First);
 
     /* Setting regions and boxes */

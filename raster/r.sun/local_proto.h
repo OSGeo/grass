@@ -21,6 +21,7 @@ int searching_parallel(double *length, double *sunVarGeom_z_orig,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int useCivilTime(void);
 =======
 =======
@@ -30,6 +31,12 @@ int useCivilTime();
 =======
 int useCivilTime(void);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+int useCivilTime();
+=======
+int useCivilTime(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 void setUseCivilTime(int val);
 int useShadow(void);
 void setUseShadow(int val);
@@ -43,6 +50,7 @@ double getHorizonInterval(void);
 void setHorizonInterval(double val);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void setAngularLossDenominator(void);
 =======
 void setAngularLossDenominator();
@@ -53,6 +61,12 @@ void setAngularLossDenominator();
 =======
 void setAngularLossDenominator(void);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+void setAngularLossDenominator();
+=======
+void setAngularLossDenominator(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 /* void cube(int, int); */
 

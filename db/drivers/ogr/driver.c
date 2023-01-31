@@ -46,6 +46,7 @@ int db__driver_init(int argc, char *argv[])
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_finish(void)
 =======
 =======
@@ -55,6 +56,12 @@ int db__driver_finish()
 =======
 int db__driver_finish(void)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+int db__driver_finish()
+=======
+int db__driver_finish(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     return DB_OK;
 }

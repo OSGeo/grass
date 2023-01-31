@@ -55,6 +55,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 extern void *dglTreeGetAllocator(void);
 =======
 =======
@@ -64,6 +65,12 @@ extern void *dglTreeGetAllocator();
 =======
 extern void *dglTreeGetAllocator(void);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+extern void *dglTreeGetAllocator();
+=======
+extern void *dglTreeGetAllocator(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 /*
  * Define a node as it is hosted in pNodeTree

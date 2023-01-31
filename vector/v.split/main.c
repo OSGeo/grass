@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     double (*line_length)(const struct line_pnts *);
 =======
     double (*line_length)();
@@ -57,6 +58,12 @@ int main(int argc, char *argv[])
 =======
     double (*line_length)(const struct line_pnts *);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    double (*line_length)();
+=======
+    double (*line_length)(const struct line_pnts *);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     int geodesic = 0;
 
     G_gisinit(argv[0]);

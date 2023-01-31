@@ -552,6 +552,7 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (nwrite > 0 && (size_t)nwrite < size) {
         if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
             (unsigned int)res != nwrite)
@@ -563,15 +564,24 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+    if (nwrite > 0 && nwrite < size) {
+        if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
     if (nwrite > 0 && (size_t)nwrite < size) {
         if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
             (unsigned int)res != nwrite)
+<<<<<<< HEAD
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
     }
     else {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -587,6 +597,13 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
         if ((res = write(fcb->null_fd, flags, size)) < 0 ||
             (unsigned int)res != size)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (write(fcb->null_fd, flags, size) != size)
+=======
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
@@ -627,6 +644,7 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||
         (unsigned int)res != size)
 =======
@@ -639,6 +657,13 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||
         (unsigned int)res != size)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (write(fcb->null_fd, flags, size) != size)
+=======
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         G_fatal_error(_("Error writing null row %d of <%s>: %s"), row,
                       fcb->name, strerror(errno));
 }

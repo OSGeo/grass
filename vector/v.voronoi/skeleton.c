@@ -531,6 +531,7 @@ int tie_up(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         distmin = INFINITY;
 =======
         distmin = 1. / 0.; /* +inf */
@@ -541,6 +542,12 @@ int tie_up(void)
 =======
         distmin = INFINITY;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        distmin = 1. / 0.; /* +inf */
+=======
+        distmin = INFINITY;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         xmin = x;
         ymin = y;
 

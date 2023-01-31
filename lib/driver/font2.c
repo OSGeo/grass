@@ -71,6 +71,7 @@ static void read_hersh(const char *filename)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         unsigned int i, idx, count;
         int c;
 =======
@@ -85,6 +86,14 @@ static void read_hersh(const char *filename)
         unsigned int i, idx, count;
         int c;
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        unsigned int idx, count;
+        int c, i;
+=======
+        unsigned int i, idx, count;
+        int c;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
         switch (c = fgetc(fp)) {
         case '\r':
