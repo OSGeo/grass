@@ -575,6 +575,29 @@ def replace_shebang_win(python_file):
     os.rename(tmp_name, python_file)  # rename temp to original name
 
 
+def replace_shebang_win(python_file):
+    """
+    Replaces "python" with "python3" in python files
+    using UTF8 encoding on MS Windows
+    """
+
+    cur_dir = os.path.dirname(python_file)
+    tmp_name = os.path.join(cur_dir, gscript.tempname(12))
+
+    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
+        tmp_name, "w", encoding="utf8"
+    ) as out_file:
+
+        for line in in_file:
+            new_line = line.replace(
+                "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"
+            )
+            out_file.write(new_line)
+
+    os.remove(python_file)  # remove original
+    os.rename(tmp_name, python_file)  # rename temp to original name
+
+
 def urlretrieve(url, filename, *args, **kwargs):
     """Same function as 'urlretrieve', but with the ability to
     define headers.
