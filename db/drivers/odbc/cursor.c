@@ -21,7 +21,11 @@ int db__driver_close_cursor(dbCursor *dbc)
     return DB_OK;
 }
 
+<<<<<<< HEAD
 cursor *alloc_cursor()
+=======
+cursor *alloc_cursor(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     cursor *c;
     SQLRETURN ret;

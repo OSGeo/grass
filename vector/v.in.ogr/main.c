@@ -652,10 +652,15 @@ int main(int argc, char *argv[])
     }
     for (i = 0; i < navailable_layers; i++) {
         Ogr_layer = ds_getlayerbyindex(Ogr_ds, i);
+<<<<<<< HEAD
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
         available_layer_names[i] =
             G_store((char *)OGR_FD_GetName(Ogr_featuredefn));
+=======
+
+        available_layer_names[i] = G_store((char *)OGR_L_GetName(Ogr_layer));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
         if (flag.list->answer)
             fprintf(stdout, "%s\n", available_layer_names[i]);

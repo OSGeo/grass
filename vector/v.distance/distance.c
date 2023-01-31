@@ -11,7 +11,11 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *box)
     int i;
 
     if (Points->n_points == 0) {
+<<<<<<< HEAD
         box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return 0;
     }
 

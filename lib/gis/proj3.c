@@ -20,7 +20,7 @@
 
 static const char *lookup_proj(const char *);
 static const char *lookup_units(const char *);
-static const char *lookup_epsg();
+static const char *lookup_epsg(void);
 static int equal(const char *, const char *);
 static int lower(char);
 
@@ -63,7 +63,11 @@ const char *G_database_unit_name(int plural)
 
    \return units id
  */
+<<<<<<< HEAD
 int G_database_unit()
+=======
+int G_database_unit(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int units;
     const char *name;
@@ -250,7 +254,7 @@ const char *lookup_units(const char *key)
     return G_find_key_value(key, proj_units);
 }
 
-const char *lookup_epsg()
+const char *lookup_epsg(void)
 {
     init();
     return G_find_key_value("epsg", proj_epsg);

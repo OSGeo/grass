@@ -58,7 +58,11 @@ int add_table(char *table, char *name)
 #else
     res = snprintf(db.tables[db.ntables].file, buf_s, "%s/%s", db.name, name);
 #endif
+<<<<<<< HEAD
     if (res >= buf_s) {
+=======
+    if (res < 0 || (size_t)res >= buf_s) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         db_d_append_error(_("Unable to add table %s to %s. "
                             "The file path is too long."),
                           name, db.name);

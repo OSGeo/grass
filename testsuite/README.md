@@ -27,4 +27,7 @@ Since 2020: For a more advanced test suite, see
 
 Until 2019: For a more advanced test suite, see
 <http://fatra.cnr.ncsu.edu/grassgistests/summary_report/>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))

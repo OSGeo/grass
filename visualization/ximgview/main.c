@@ -145,7 +145,11 @@ static void main_loop(void)
     for (;;) {
         fd_set waitset;
         struct timeval tv;
+<<<<<<< HEAD
         unsigned long delay;
+=======
+        unsigned long delay = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
         while (XPending(dpy) > 0) {
             XEvent event;
@@ -226,7 +230,11 @@ static int read_bmp_header(const unsigned char *p)
 
     if (get_4(&p) != 0)
         return 0;
+<<<<<<< HEAD
     if (get_4(&p) != i_width * i_height * 4)
+=======
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return 0;
 
     if (size != HEADER_SIZE + i_width * i_height * 4)

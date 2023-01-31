@@ -124,8 +124,13 @@ int main(int argc, char *argv[])
     int arr_row, arr_col;
     unsigned long count, count_total;
 
+<<<<<<< HEAD
     double min = 0.0 / 0.0; /* init as nan */
     double max = 0.0 / 0.0; /* init as nan */
+=======
+    double min = NAN;
+    double max = NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     double zscale = 1.0;
     double vscale = 1.0;
     size_t offset, n_offset;

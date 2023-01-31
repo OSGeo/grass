@@ -15,6 +15,7 @@
  *
  *****************************************************************************/
 
+#include <assert.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gmath.h>
@@ -145,13 +146,18 @@ void G_math_free_spmatrix(G_math_spvector **Asp, int rows)
  * */
 void G_math_print_spmatrix(G_math_spvector **Asp, int rows)
 {
-    int i, j, k, out;
+    int i, j, out;
+    unsigned int k;
 
     for (i = 0; i < rows; i++) {
         for (j = 0; j < rows; j++) {
             out = 0;
             for (k = 0; k < Asp[i]->cols; k++) {
+<<<<<<< HEAD
                 if (Asp[i]->index[k] == j) {
+=======
+                if (Asp[i]->index[k] == (unsigned int)j) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                     fprintf(stdout, "%4.5f ", Asp[i]->values[k]);
                     out = 1;
                 }
@@ -178,7 +184,8 @@ void G_math_print_spmatrix(G_math_spvector **Asp, int rows)
  * */
 double **G_math_Asp_to_A(G_math_spvector **Asp, int rows)
 {
-    int i, j;
+    int i;
+    unsigned int j;
 
     double **A = NULL;
 
@@ -221,13 +228,19 @@ double **G_math_Asp_to_A(G_math_spvector **Asp, int rows)
 double **G_math_Asp_to_sband_matrix(G_math_spvector **Asp, int rows,
                                     int bandwidth)
 {
-    int i, j;
+    unsigned int i, j;
 
     double **A = NULL;
 
+    assert(rows >= 0 && bandwidth >= 0);
+
     A = G_alloc_matrix(rows, bandwidth);
 
+<<<<<<< HEAD
     for (i = 0; i < rows; i++) {
+=======
+    for (i = 0; i < (unsigned int)rows; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         for (j = 0; j < Asp[i]->cols; j++) {
             if (Asp[i]->index[j] == i) {
                 A[i][0] = Asp[i]->values[j];
@@ -363,7 +376,8 @@ G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows,
  * */
 void G_math_Ax_sparse(G_math_spvector **Asp, double *x, double *y, int rows)
 {
-    int i, j;
+    int i;
+    unsigned int j;
 
     double tmp;
 

@@ -68,8 +68,13 @@ static void read_hersh(const char *filename)
         char buf[8];
         struct glyph *glyph;
         int coords;
+<<<<<<< HEAD
         unsigned int idx, count;
         int c, i;
+=======
+        unsigned int i, idx, count;
+        int c;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
         switch (c = fgetc(fp)) {
         case '\r':

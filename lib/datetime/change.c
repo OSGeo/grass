@@ -6,7 +6,11 @@
  */
 #include <grass/datetime.h>
 
+<<<<<<< HEAD
 static void make_incr();
+=======
+static void make_incr(DateTime *, int, int, DateTime *);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 /*!
  * \brief

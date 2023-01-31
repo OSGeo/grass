@@ -93,8 +93,13 @@ public:
     BasicMinMaxHeap(HeapIndex size) : maxsize(size)
     {
         char str[100];
+<<<<<<< HEAD
         sprintf(str, "BasicMinMaxHeap: allocate %ld\n",
                 (long)((size + 1) * sizeof(T)));
+=======
+        snprintf(str, sizeof(str), "BasicMinMaxHeap: allocate %ld\n",
+                 (long)((size + 1) * sizeof(T)));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         // MEMORY_LOG(str);
 
         lastindex = 0;

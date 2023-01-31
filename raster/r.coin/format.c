@@ -27,7 +27,11 @@ int format_double(double v, char *buf, int n)
     sprintf(fmt, "%%%d.2lf", n);
     sprintf(buf, fmt, v);
 
+<<<<<<< HEAD
     for (k = n; strlen(buf) > n; k--) {
+=======
+    for (k = n; (ssize_t)strlen(buf) > n; k--) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         sprintf(fmt, "%%%d.%dg", n, k);
         sprintf(buf, fmt, v);
     }

@@ -3282,7 +3282,11 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
                               float *dist, int use_exag)
 {
     geosurf *gs;
+<<<<<<< HEAD
     float p1[2], p2[2];
+=======
+    Point3 p1, p2;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     gs = gs_get_surf(hs);
     if (gs == NULL) {

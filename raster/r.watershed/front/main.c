@@ -34,7 +34,7 @@ static void do_opt(const struct Option *opt)
     if (!opt->answer)
         return;
     buf = G_malloc(strlen(opt->key) + 1 + strlen(opt->answer) + 1);
-    sprintf(buf, "%s=%s", opt->key, opt->answer);
+    snprintf(buf, GPATH_MAX, "%s=%s", opt->key, opt->answer);
     new_argv[new_argc++] = buf;
 }
 
@@ -261,8 +261,13 @@ int main(int argc, char *argv[])
     }
 
     /* Build command line */
+<<<<<<< HEAD
     sprintf(command, "%s/etc/r.watershed/%s", G_gisbase(),
             flag_seg->answer ? "seg" : "ram");
+=======
+    snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
+             flag_seg->answer ? "seg" : "ram");
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     new_argv[new_argc++] = command;
 
     if (flag_sfd->answer)

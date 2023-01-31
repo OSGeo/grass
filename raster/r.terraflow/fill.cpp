@@ -73,7 +73,11 @@ public:
     char *operator()(const elevation_type &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         sprintf(buf, "%.1f", (float)p);
+=======
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
 };
@@ -83,13 +87,21 @@ public:
     char *operator()(const direction_type &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         sprintf(buf, "%3d", p);
+=======
+        snprintf(buf, sizeof(buf), "%3d", p);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
     char *operator()(const waterWindowBaseType &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         sprintf(buf, "%3d", p.dir);
+=======
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
 #if (0)
@@ -108,19 +120,31 @@ public:
     char *operator()(const labelElevType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         sprintf(buf, CCLABEL_FMT, p.getLabel());
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
     char *operator()(const waterGridType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         sprintf(buf, CCLABEL_FMT, p.getLabel());
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
     char *operator()(const waterType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         sprintf(buf, CCLABEL_FMT, p.getLabel());
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
 };
@@ -130,7 +154,11 @@ public:
     char *operator()(const waterGridType &p)
     {
         static char buf[3];
+<<<<<<< HEAD
         sprintf(buf, "%1u", p.depth);
+=======
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
 };
@@ -138,7 +166,11 @@ public:
 char *verbosedir(const std::string &s)
 {
     static char buf[BUFSIZ];
+<<<<<<< HEAD
     sprintf(buf, "dump/%s", s.c_str());
+=======
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     return buf;
 }
 
@@ -365,7 +397,11 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
     char path[BUFSIZ];
     char *base_dir = getenv(STREAM_TMPDIR);
     assert(base_dir);
+<<<<<<< HEAD
     sprintf(path, "%s/flowStream", base_dir);
+=======
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     flowStream = new AMI_STREAM<waterWindowBaseType>(path);
     /*flowStream->persist(PERSIST_PERSISTENT); */
     if (stats)

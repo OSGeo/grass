@@ -90,12 +90,12 @@ int max(int, int);
 void com_par(double angle);
 int is_shadow(void);
 double horizon_height(void);
-void calculate_shadow();
+void calculate_shadow(void);
 double calculate_shadow_onedirection(double shadow_angle);
 
-int new_point();
-double searching();
-int test_low_res();
+int new_point(void);
+double searching(void);
+int test_low_res(void);
 
 /*void where_is_point();
    void cube(int, int);
@@ -754,7 +754,11 @@ double horizon_height(void)
 {
     double height;
 
+<<<<<<< HEAD
     tanh0 = -1.0 / 0.0; /* -inf */
+=======
+    tanh0 = -INFINITY;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     length = 0;
 
     height = searching();
@@ -772,7 +776,11 @@ double calculate_shadow_onedirection(double shadow_angle)
     return shadow_angle;
 }
 
+<<<<<<< HEAD
 void calculate_shadow()
+=======
+void calculate_shadow(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     double dfr_rad;
 
@@ -881,7 +889,11 @@ void calculate_shadow()
 
 /*////////////////////////////////////////////////////////////////////// */
 
+<<<<<<< HEAD
 int new_point()
+=======
+int new_point(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int iold, jold;
     int succes = 1, succes2 = 1;
@@ -922,7 +934,11 @@ int new_point()
     return -1;
 }
 
+<<<<<<< HEAD
 int test_low_res()
+=======
+int test_low_res(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int iold100, jold100;
     double sx, sy;
@@ -990,7 +1006,11 @@ int test_low_res()
     }
 }
 
+<<<<<<< HEAD
 double searching()
+=======
+double searching(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     double z2;
     double curvature_diff;

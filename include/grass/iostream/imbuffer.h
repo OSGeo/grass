@@ -91,7 +91,12 @@ public:
         assert(n >= 0);
 
         char str[100];
+<<<<<<< HEAD
         sprintf(str, "im_buffer: allocate %ld\n", (long)(maxsize * sizeof(T)));
+=======
+        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
+                 (long)(maxsize * sizeof(T)));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         MEMORY_LOG(str);
 
         data = new T[maxsize];

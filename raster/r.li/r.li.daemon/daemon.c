@@ -682,7 +682,11 @@ int error_Output(int out, msg m)
 
         sprintf(s, "ERROR %i", m.f.f_d.aid);
 
+<<<<<<< HEAD
         if (write(out, s, strlen(s)) == strlen(s))
+=======
+        if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             return 1;
         else
             return 0;

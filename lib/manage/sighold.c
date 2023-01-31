@@ -23,7 +23,11 @@
  */
 int M__hold_signals(int hold)
 {
+<<<<<<< HEAD
     void (*sig)() = hold ? SIG_IGN : SIG_DFL;
+=======
+    void (*sig)(int) = hold ? SIG_IGN : SIG_DFL;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     signal(SIGINT, sig);
 

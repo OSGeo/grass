@@ -35,8 +35,13 @@ char **split_arg(char *linea, char separatore, long *numerotoken)
     char **argv;      /* token array */
     char *copialinea; /* line copy */
 
+<<<<<<< HEAD
     long i;  /* find token number */
     long it; /* iterator */
+=======
+    long i;    /* find token number */
+    size_t it; /* iterator */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     long num;
 
     int term; /* =0 if last token has not /0 */

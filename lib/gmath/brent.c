@@ -44,7 +44,11 @@ typedef struct {
     double f_v, f_w;
 } brent_state_t;
 
+<<<<<<< HEAD
 static int brent(void *vstate, double (*f)(), double *x_minimum,
+=======
+static int brent(void *vstate, double (*f)(double), double *x_minimum,
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                  double *f_minimum, double *x_lower, double *f_lower,
                  double *x_upper, double *f_upper)
 {
@@ -170,7 +174,12 @@ static int brent(void *vstate, double (*f)(), double *x_minimum,
 
 /* Code modified by Stefano Menegon 1st of February 2004 */
 
+<<<<<<< HEAD
 double brent_iterate(double (*f)(), double x_lower, double x_upper, int maxiter)
+=======
+double brent_iterate(double (*f)(double), double x_lower, double x_upper,
+                     int maxiter)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int i;
     double x_minimum = (x_upper + x_lower) / 2.;

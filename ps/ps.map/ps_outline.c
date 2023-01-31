@@ -34,7 +34,6 @@ double e1, e2, e3, n1, n2, n3;
  ** plotted.
  */
 
-extern RASTER_MAP_TYPE o_open_file();
 static RASTER_MAP_TYPE map_type;
 
 int ps_outline(void)

@@ -328,7 +328,7 @@ int mst(
 
 int main(int argc, char **argv)
 {
-    int i, j, k, ret;
+    int i, j, ret;
     int nlines, type, ltype, afield, tfield, geo, cat;
     int sp, nsp, nspused, node, line;
     struct Option *map, *output, *afield_opt, *tfield_opt, *afcol, *type_opt,
@@ -634,11 +634,16 @@ int main(int argc, char **argv)
         Vect_cat_get(Cats, afield, &cat);
         G_debug(1, "arc cat = %d", cat);
     }
+<<<<<<< HEAD
+
+    G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
+            StNodes->n_values);
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
             StNodes->n_values);
 
-    k = 0;
     pointlist = Vect_new_boxlist(0);
     for (i = 0; i < StNodes->n_values; i++) {
         double x, y, z;
@@ -662,7 +667,10 @@ int main(int argc, char **argv)
                 continue;
             Vect_write_line(&Out, ltype, Points, Cats);
             G_debug(1, "node cat = %d", cat);
+<<<<<<< HEAD
             k++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         }
     }
 

@@ -39,7 +39,11 @@ typedef struct {
 paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
+<<<<<<< HEAD
 void set_params(); /*Fill the paramType structure */
+=======
+void set_params(void); /*Fill the paramType structure */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 void copy_result(N_array_2d *status, N_array_2d *c_start, double *result,
                  struct Cell_head *region, N_array_2d *target, int tflag);
 N_les *create_solve_les(N_geom_data *geom, N_solute_transport_data2d *data,
@@ -49,7 +53,7 @@ N_les *create_solve_les(N_geom_data *geom, N_solute_transport_data2d *data,
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.c = G_define_standard_option(G_OPT_R_INPUT);
     param.c->key = "c";

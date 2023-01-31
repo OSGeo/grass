@@ -15,7 +15,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
+
 #include <grass/dbmi.h>
+
 /* NOTE: these should come from <unistd.h> or from <sys/file.h> */
 #ifndef R_OK
 #define R_OK 4
@@ -27,6 +31,7 @@
 #define X_OK 1
 #endif
 
+<<<<<<< HEAD
 #include <sys/types.h>
 #ifdef USE_DIRECT
 #include <sys/dir.h>
@@ -39,6 +44,8 @@ typedef struct dirent dir_entry;
 extern DIR *opendir();
 extern dir_entry *readdir();
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 static int cmp_dirent(const void *, const void *);
 static int get_perm(char *);
 static void sort_dirent(dbDirent *, int);
@@ -57,8 +64,8 @@ static void sort_dirent(dbDirent *, int);
 dbDirent *db_dirent(const char *dirname, int *n)
 {
     DIR *dp;
-    dir_entry *entry;
-    dbDirent *dirent;
+    struct dirent *entry;
+    dbDirent *db_dirent;
     int i, count;
     char *path;
     int len, max;
@@ -88,8 +95,13 @@ dbDirent *db_dirent(const char *dirname, int *n)
         closedir(dp);
         return (dbDirent *)NULL;
     }
+<<<<<<< HEAD
     dirent = db_alloc_dirent_array(count);
     if (dirent == NULL) {
+=======
+    db_dirent = db_alloc_dirent_array(count);
+    if (db_dirent == NULL) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         closedir(dp);
         return (dbDirent *)NULL;
     }
@@ -99,23 +111,32 @@ dbDirent *db_dirent(const char *dirname, int *n)
         if (entry == NULL) /* this shouldn't happen */
             break;
 
+<<<<<<< HEAD
         if (DB_OK != db_set_string(&dirent[i].name, entry->d_name))
             break;
         sprintf(path, "%s/%s", dirname, entry->d_name);
         dirent[i].perm = get_perm(path);
         dirent[i].isdir = (db_isdir(path) == DB_OK);
+=======
+        if (DB_OK != db_set_string(&db_dirent[i].name, entry->d_name))
+            break;
+        sprintf(path, "%s/%s", dirname, entry->d_name);
+        db_dirent[i].perm = get_perm(path);
+        db_dirent[i].isdir = (db_isdir(path) == DB_OK);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     }
     closedir(dp);
     db_free(path);
 
-    sort_dirent(dirent, *n);
+    sort_dirent(db_dirent, *n);
 
-    return dirent;
+    return db_dirent;
 }
 
 /*!
    \brief Free dbDirent
 
+<<<<<<< HEAD
    \param dirent pointer to dbDirent
    \param count number of entities in the array
  */
@@ -127,6 +148,19 @@ void db_free_dirent_array(dbDirent *dirent, int count)
         for (i = 0; i < count; i++)
             db_free_string(&dirent[i].name);
         db_free(dirent);
+=======
+   \param db_dirent pointer to dbDirent
+   \param count number of entities in the array
+ */
+void db_free_dirent_array(dbDirent *db_dirent, int count)
+{
+    int i;
+
+    if (db_dirent) {
+        for (i = 0; i < count; i++)
+            db_free_string(&db_dirent[i].name);
+        db_free(db_dirent);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     }
 }
 
@@ -171,14 +205,23 @@ static void sort_dirent(dbDirent *a, int n)
 dbDirent *db_alloc_dirent_array(int count)
 {
     int i;
-    dbDirent *dirent;
+    dbDirent *db_dirent;
 
+<<<<<<< HEAD
     dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
     if (dirent == NULL)
         return dirent;
 
     for (i = 0; i < count; i++)
         db_init_string(&dirent[i].name);
+=======
+    db_dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
+    if (db_dirent == NULL)
+        return db_dirent;
 
-    return dirent;
+    for (i = 0; i < count; i++)
+        db_init_string(&db_dirent[i].name);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+
+    return db_dirent;
 }

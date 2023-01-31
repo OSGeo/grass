@@ -15,7 +15,11 @@ int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
         Rast3d_fatal_error("Rast3d_write_ints: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
+<<<<<<< HEAD
         if (write(fd, i, sizeof(int) * nofNum) != sizeof(int) * nofNum) {
+=======
+        if (write(fd, i, sizeof(int) * nofNum) != (int)sizeof(int) * nofNum) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             Rast3d_error("Rast3d_write_ints: writing to file failed");
             return 0;
         }
@@ -25,7 +29,11 @@ int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
     }
 
     do {
+<<<<<<< HEAD
         int j;
+=======
+        unsigned int j;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
         n = nofNum % 1024;
         if (n == 0)
@@ -58,7 +66,11 @@ int Rast3d_read_ints(int fd, int useXdr, int *i, int nofNum)
         Rast3d_fatal_error("Rast3d_read_ints: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
+<<<<<<< HEAD
         if (read(fd, i, sizeof(int) * nofNum) != sizeof(int) * nofNum) {
+=======
+        if (read(fd, i, sizeof(int) * nofNum) != (int)sizeof(int) * nofNum) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             Rast3d_error("Rast3d_read_ints: reading from file failed");
             return 0;
         }
@@ -68,7 +80,11 @@ int Rast3d_read_ints(int fd, int useXdr, int *i, int nofNum)
     }
 
     do {
+<<<<<<< HEAD
         int j;
+=======
+        unsigned int j;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
         n = nofNum % 1024;
         if (n == 0)

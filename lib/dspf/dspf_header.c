@@ -41,7 +41,12 @@ int dfwrite_header(file_info *headp)
     if (1 != fwrite(&linep->nthres, isize, 1, fp))
         return (-1);
     /* write the array of thresholds out */
+<<<<<<< HEAD
     if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) != linep->nthres) {
+=======
+    if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) !=
+        (size_t)linep->nthres) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         fprintf(stderr, "ERROR: fwrite in dspf_header.c\n");
         return (-1);
     }

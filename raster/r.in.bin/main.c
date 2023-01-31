@@ -254,7 +254,11 @@ int main(int argc, char *argv[])
     const char *outpre;
     char output[GNAME_MAX];
     const char *title;
+<<<<<<< HEAD
     double null_val = 0.0 / 0.0;
+=======
+    double null_val = NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     int is_fp;
     int is_signed;
     int bytes, hbytes;
@@ -642,7 +646,11 @@ int main(int argc, char *argv[])
                         SEEK_SET);
             }
 
+<<<<<<< HEAD
             if (fread(in_buf, bytes, ncols, fp) != ncols)
+=======
+            if (fread(in_buf, bytes, ncols, fp) != (size_t)ncols)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("Error reading data"));
 
             convert_row(out_buf, in_buf, ncols, is_fp, is_signed, bytes,

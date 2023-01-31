@@ -18,7 +18,7 @@
 
 #include <grass/raster.h>
 
-void init_cell_funcs();
+void init_cell_funcs(void);
 
 extern RASTER_MAP_TYPE IN_TYPE; /* stuff for cell input and output data */
 extern RASTER_MAP_TYPE OUT_TYPE;

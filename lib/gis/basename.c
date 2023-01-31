@@ -106,7 +106,7 @@ char *G_double_to_basename_format(double number, size_t ndigits,
  *
  * return pointer to basename separator
  */
-char *G_get_basename_separator()
+char *G_get_basename_separator(void)
 {
     char *envvar = "GRASS_BASENAME_SEPARATOR";
     char *envsep;

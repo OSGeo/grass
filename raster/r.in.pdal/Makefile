@@ -10,12 +10,15 @@ EXTRA_CFLAGS = $(VECT_CFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+<<<<<<< HEAD
 $(OBJDIR)/main.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
 
 $(OBJDIR)/info.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
 
 $(OBJDIR)/grasslidarfilter.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 LINK = $(CXX)
 
 ifneq ($(strip $(CXX)),)

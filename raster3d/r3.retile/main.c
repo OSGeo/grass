@@ -35,7 +35,11 @@ paramType param; /*Parameters */
 /*- prototypes --------------------------------------------------------------*/
 static void fatal_error(void *map, int *fd, int depths,
                         char *errorMsg); /*Simple Error message */
+<<<<<<< HEAD
 static void set_params();                /*Fill the paramType structure */
+=======
+static void set_params(void);            /*Fill the paramType structure */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 /* ************************************************************************* */
 /* Error handling ********************************************************** */
@@ -64,7 +68,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 /* Set up the arguments we are expecting *********************************** */
 
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.input = G_define_standard_option(G_OPT_R3_INPUT);
 

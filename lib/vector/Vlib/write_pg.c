@@ -2659,7 +2659,11 @@ int delete_face(const struct Map_info *Map, int area)
    \brief Update lines (next left and right edges)
 
    - isolated edges
+<<<<<<< HEAD
    next left  edge: -edge 
+=======
+   next left  edge: -edge
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
    next right edge:  edge
 
    - connected edges
@@ -2667,7 +2671,11 @@ int delete_face(const struct Map_info *Map, int area)
    next right edge: next edge or  edge
 
    \param Map pointer to Map_info struct
+<<<<<<< HEAD
    \param line feature id 
+=======
+   \param line feature id
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
    \return 0  on success
    \return -1 on error

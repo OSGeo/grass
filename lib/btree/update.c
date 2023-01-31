@@ -11,7 +11,11 @@ int btree_update(BTREE *B, const void *key, int keylen, const void *data,
     int p = 0;
     int q;
     int N;
+<<<<<<< HEAD
     int (*cmp)();
+=======
+    int (*cmp)(const void *, const void *);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     int dir;
 
     /* first node is special case */

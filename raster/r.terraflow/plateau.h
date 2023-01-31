@@ -48,7 +48,11 @@ public:
     static char *printLabel(const plateauType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         sprintf(buf, CCLABEL_FMT, p.cclabel);
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.cclabel);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         return buf;
     }
 

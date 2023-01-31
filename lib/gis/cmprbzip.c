@@ -86,8 +86,8 @@ int G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
                    int dst_sz)
 {
     int err;
-    int i, buf_sz;
-    unsigned int nbytes;
+    int buf_sz;
+    unsigned int i, nbytes;
     unsigned char *buf;
 
 #ifndef HAVE_BZLIB_H
@@ -212,7 +212,11 @@ int G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
      * updated buffer size
      */
 
+<<<<<<< HEAD
     if (nbytes != dst_sz) {
+=======
+    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         /* TODO: it is not an error if destination is larger than needed */
         G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes,
                   dst_sz);

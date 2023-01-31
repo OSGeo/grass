@@ -125,7 +125,11 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z) !=
+<<<<<<< HEAD
                 params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf1, cell1);
@@ -141,7 +145,11 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx) !=
+<<<<<<< HEAD
                 params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf2, cell1);
@@ -157,7 +165,11 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy) !=
+<<<<<<< HEAD
                 params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf3, cell1);
@@ -173,7 +185,11 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx) !=
+<<<<<<< HEAD
                 params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf4, cell1);
@@ -189,7 +205,11 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy) !=
+<<<<<<< HEAD
                 params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf5, cell1);
@@ -205,7 +225,11 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy) !=
+<<<<<<< HEAD
                 params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf6, cell1);

@@ -595,7 +595,11 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
     DCELL dtmp;
     int try, min_ind, max_ind;
     struct Quant_table *p;
+<<<<<<< HEAD
     int (*lower)();
+=======
+    int (*lower)(double, double);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     dtmp = dcellVal;
     /* I know the functions which call me already check for null values,

@@ -58,7 +58,7 @@ struct rule {
     void **opts;
 };
 
-static struct vector rules = {sizeof(struct rule), 50};
+static struct vector rules = {.elsize = sizeof(struct rule), .increment = 50};
 
 /*! \brief Set generic option rule
 
@@ -498,8 +498,16 @@ void G__describe_option_rules_xml(FILE *fp)
     for (i = 0; i < rules.count; i++) {
         const struct rule *rule = &((const struct rule *)rules.data)[i];
 
+<<<<<<< HEAD
         fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
         for (j = 0; j < rule->count; j++) {
+=======
+        if (rule->count < 0)
+            G_fatal_error(_("Internal error: the number of options is < 0"));
+
+        fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
+        for (j = 0; j < (unsigned int)rule->count; j++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             void *p = rule->opts[j];
 
             if (is_flag(p)) {

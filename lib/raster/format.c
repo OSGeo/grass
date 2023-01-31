@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include <grass/config.h>
 #include <grass/gis.h>
@@ -95,8 +96,10 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
 {
     unsigned char nbytes;
     unsigned char *buf, *b;
-    int n;
-    int row;
+    unsigned int n;
+    unsigned int row;
+
+    assert(nrows >= 0);
 
     /*
      * pre3.0 row addresses were written directly from the array of off_t's
@@ -104,7 +107,11 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
      */
 
     if (old) {
+<<<<<<< HEAD
         n = (nrows + 1) * sizeof(off_t);
+=======
+        n = ((unsigned int)nrows + 1) * sizeof(off_t);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         if (read(fd, row_ptr, n) != n)
             goto badread;
         return 1;
@@ -122,15 +129,22 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
     if (nbytes == 0)
         goto badread;
 
-    n = (nrows + 1) * nbytes;
+    n = ((unsigned int)nrows + 1) * nbytes;
     buf = G_malloc(n);
     if (read(fd, buf, n) != n)
         goto badread;
 
+<<<<<<< HEAD
     for (row = 0, b = buf; row <= nrows; row++) {
         off_t v = 0;
 
         for (n = 0; n < (int)nbytes; n++) {
+=======
+    for (row = 0, b = buf; row <= (unsigned int)nrows; row++) {
+        off_t v = 0;
+
+        for (n = 0; n < nbytes; n++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             unsigned char c = *b++;
 
             if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) && c != 0)

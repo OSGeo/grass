@@ -22,7 +22,11 @@
 #include <grass/glocale.h>
 
 static int list_element(FILE *, const char *, const char *, const char *,
+<<<<<<< HEAD
                         int (*)(const char *, const char *, const char *));
+=======
+                        int (*)(const char *, const char *, char *));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 /*!
    \brief General purpose list function
@@ -49,7 +53,11 @@ static int list_element(FILE *, const char *, const char *, const char *,
    NULL if no titles desired.
  */
 void G_list_element(const char *element, const char *desc, const char *mapset,
+<<<<<<< HEAD
                     int (*lister)(const char *, const char *, const char *))
+=======
+                    int (*lister)(const char *, const char *, char *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     struct Popen pager;
     int n;
@@ -94,7 +102,11 @@ void G_list_element(const char *element, const char *desc, const char *mapset,
 
 static int list_element(FILE *out, const char *element, const char *desc,
                         const char *mapset,
+<<<<<<< HEAD
                         int (*lister)(const char *, const char *, const char *))
+=======
+                        int (*lister)(const char *, const char *, char *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     char path[GPATH_MAX];
     int count = 0;

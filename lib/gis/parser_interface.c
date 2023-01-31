@@ -88,8 +88,14 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
     }
 
 #ifdef HAVE_ICONV_H
+<<<<<<< HEAD
     if (enc)
         G_freea(enc);
+=======
+    if (enc) {
+        G_freea(enc);
+    }
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     if (conv != (iconv_t)-1)
         iconv_close(conv);

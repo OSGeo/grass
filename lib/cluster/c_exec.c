@@ -31,7 +31,11 @@
  */
 int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
                    double convergence, double separation, int min_class_size,
+<<<<<<< HEAD
                    int (*checkpoint)(), int *interrupted)
+=======
+                   int (*checkpoint)(struct Cluster *, int), int *interrupted)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int changes;
 

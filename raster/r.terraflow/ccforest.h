@@ -40,12 +40,15 @@ public:
     T src() const { return key; };
     T dst() const { return value; };
 
+<<<<<<< HEAD
     keyvalue operator=(const keyvalue &that)
     {
         key = that.key;
         value = that.value;
         return *this;
     };
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     int operator!=(const keyvalue &e2) const
     {
         return (key != e2.key) || (value != e2.value);
@@ -147,7 +150,16 @@ private:
 
 public:
     ccforest();
+<<<<<<< HEAD
     ~ccforest();
+=======
+    ccforest(const ccforest &) = delete;
+    ccforest &operator=(const ccforest &) = delete;
+    ccforest(ccforest &&) = delete;
+    ccforest &operator=(ccforest &&) = delete;
+    ~ccforest();
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     void insert(const T &i, const T &j); /* insert edge (i,j) */
     T findNextRoot(const T &i);          /* find root where i >= prev i */
     void printRootStream();

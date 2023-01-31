@@ -49,7 +49,11 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
                 unsigned int k = buf[j * ncols + i];
                 unsigned int *p = &png.grid[y * png.width + x];
 
+<<<<<<< HEAD
                 if (k > threshold)
+=======
+                if (k > (unsigned int)threshold)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                     *p = png.current_color;
             }
         }

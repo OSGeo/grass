@@ -329,7 +329,11 @@ int Rast_read_rstats(const char *name, const char *mapset,
     if (nbytes == 0)
         return 1;
 
+<<<<<<< HEAD
     if (nbytes < 1 || nbytes > sizeof(grass_int64)) {
+=======
+    if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         close(fd);
         G_debug(1, "Invalid byte count in stats file for <%s>",
                 G_fully_qualified_name(name, mapset));
@@ -454,7 +458,7 @@ void Rast_write_rstats(const char *name, const struct R_stats *rstats)
     char xdr_buf[2][XDR_DOUBLE_NBYTES];
     unsigned char cc[8];
     char nbytes;
-    int i;
+    unsigned int i;
     grass_int64 count;
 
     Rast_init();

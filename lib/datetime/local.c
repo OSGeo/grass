@@ -7,9 +7,12 @@
 #include <time.h>
 #include <grass/datetime.h>
 
+<<<<<<< HEAD
 extern struct tm *localtime();
 extern struct tm *gmtime();
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 /*
  ** NOTE:  the extern variable "timezone" seems to be treated
  ** differently by different OS, and the tm_zone element of struct tm

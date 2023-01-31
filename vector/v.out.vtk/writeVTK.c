@@ -614,7 +614,7 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
     int numcelldata =
         info->maxnumvertices + info->maxnumlines + info->maxnumpolygons;
     /* attribute table info */
-    int ncol = 0, colsqltype, colctype, num_atts, cur_att, progress;
+    int ncol = 0, colsqltype, colctype, num_atts, cur_att;
     struct field_info *Fi = NULL;
     dbDriver *Driver = NULL;
     dbHandle handle;
@@ -677,7 +677,6 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
 
     G_message("Writing %i scalar variables as cell data ...", num_atts);
 
-    progress = 0;
     for (cur_att = 0; cur_att < ncol; cur_att++) {
 
         if (numcelldata > 0) {
@@ -704,7 +703,10 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
                 }
 
                 fprintf(ascii, "LOOKUP_TABLE default\n");
+<<<<<<< HEAD
                 progress++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
                 /*For every available vector type */
                 for (k = 0; k < typenum; k++) {

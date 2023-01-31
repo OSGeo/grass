@@ -733,11 +733,14 @@ void create_history(const char *dst, expression *e)
     char *expr = format_expression(e);
     char *p = expr;
     int len = strlen(expr);
-    int i;
 
     Rast_short_history(dst, "raster", &hist);
 
+<<<<<<< HEAD
     for (i = 0;; i++) {
+=======
+    for (;;) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         char buf[RECORD_LEN];
         int n;
 

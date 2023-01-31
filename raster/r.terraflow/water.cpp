@@ -32,7 +32,11 @@
 char *labelElevType::printLabel(const labelElevType &p)
 {
     static char buf[8];
+<<<<<<< HEAD
     sprintf(buf, CCLABEL_FMT, p.label);
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     return buf;
 }
 
@@ -175,7 +179,11 @@ ostream &operator<<(ostream &s, const labelElevType &p)
 char *waterType::printLabel(const waterType &p)
 {
     static char buf[8];
+<<<<<<< HEAD
     sprintf(buf, CCLABEL_FMT, p.label);
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     return buf;
 }
 

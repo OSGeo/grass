@@ -16,7 +16,11 @@ struct aq {                     /* age queue */
     struct aq *younger, *older; /* pointer to next younger and next older */
 };
 
+<<<<<<< HEAD
 typedef struct {
+=======
+typedef struct SEGMENT {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     int open;      /* open flag */
     off_t nrows;   /* rows in original data */
     off_t ncols;   /* cols in original data */
@@ -36,8 +40,13 @@ typedef struct {
     int fast_seek;  /* toggles fast seek mode */
     int lenbits;    /* data size bitshift */
     int sizebits;   /* segment size bitshift */
+<<<<<<< HEAD
     int (*address)();
     int (*seek)();
+=======
+    int (*address)(const struct SEGMENT *, off_t, off_t, int *, int *);
+    int (*seek)(const struct SEGMENT *S, int, int);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     char *fname; /* segment file name */
     int fd;      /* file descriptor to read/write segment */

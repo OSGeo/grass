@@ -44,7 +44,8 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
     G_message(_("will allow other processes to run concurrently with %s.\n"),
               NON_NAME);
 
-    sprintf(buf, "Do you want to use the fast mode of %s?", NON_NAME);
+    snprintf(buf, sizeof(buf), "Do you want to use the fast mode of %s?",
+             NON_NAME);
     input->com_line_ram = input->com_line_seg = NULL;
     input->fast = 0;
     input->slow = 0;
@@ -52,6 +53,7 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
         input->fast = 1;
         input->com_line_ram = (char *)G_calloc(400, sizeof(char));
         prog_name = G_store(RAM_NAME);
+<<<<<<< HEAD
         sprintf(input->com_line_ram, "\"%s/etc/water/%s\"", G_gisbase(),
                 RAM_NAME);
         fprintf(stderr,
@@ -63,14 +65,33 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
             input->com_line_seg = (char *)G_calloc(400, sizeof(char));
             sprintf(input->com_line_seg, "\"%s/etc/water/%s\"", G_gisbase(),
                     SEG_NAME);
+=======
+        snprintf(input->com_line_ram, (400 * sizeof(char)),
+                 "\"%s/etc/water/%s\"", G_gisbase(), RAM_NAME);
+        fprintf(stderr,
+                "\nIf there is not enough ram for the fast mode (%s) to run,\n",
+                RAM_NAME);
+        snprintf(buf, sizeof(buf), "should the slow mode (%s) be run instead?",
+                 SEG_NAME);
+        if (G_yes(buf, 1)) {
+            input->slow = 1;
+            input->com_line_seg = (char *)G_calloc(400, sizeof(char));
+            snprintf(input->com_line_seg, (400, sizeof(char)),
+                     "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         }
     }
     else {
         input->slow = 1;
         prog_name = G_store(SEG_NAME);
         input->com_line_seg = (char *)G_calloc(400, sizeof(char));
+<<<<<<< HEAD
         sprintf(input->com_line_seg, "\"%s/etc/water/%s\"", G_gisbase(),
                 SEG_NAME);
+=======
+        snprintf(input->com_line_seg, (400, sizeof(char)),
+                 "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     }
 
     G_message(_("\nIf you hit <return> by itself for the next question, this"));
@@ -319,7 +340,8 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
     G_message(
         _("Equation (Rusle): Slope Length (LS), and Slope Steepness (S).\n"));
 
-    sprintf(buf, "Would you like any of these maps to be created?");
+    snprintf(buf, sizeof(buf),
+             "Would you like any of these maps to be created?");
     if (G_yes(buf, 1)) {
         mapset = G_ask_new("", map_layer, "cell", "stream channel");
         if (mapset != NULL) {
@@ -479,7 +501,11 @@ int basin_com_add(char **com_line, double d, double modifier,
     i = (int)(.5 + modifier * d / window->ns_res / window->ew_res);
     if (i < 1)
         i = 1;
+<<<<<<< HEAD
     sprintf(buf, " t=%d", i);
+=======
+    snprintf(buf, sizeof(buf), " t=%d", i);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     strcat(*com_line, buf);
 
     return 0;
@@ -490,7 +516,7 @@ int com_add(char **com_line, char *prompt, int ril_value)
     char buf[20];
 
     strcat(*com_line, prompt);
-    sprintf(buf, "%d", ril_value);
+    snprintf(buf, sizeof(buf), "%d", ril_value);
     strcat(*com_line, buf);
 
     return 0;

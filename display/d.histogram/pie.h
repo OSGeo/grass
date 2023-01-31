@@ -39,7 +39,11 @@
  *******************************************************************
  */
 
+<<<<<<< HEAD
 float rem(); /* remainder function */
+=======
+float rem(long int, long int); /* remainder function */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 /* normalized coordinates & dimensions of pie-chart components */
 

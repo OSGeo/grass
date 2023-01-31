@@ -42,7 +42,11 @@ int I_compute_ref_equations(struct Ortho_Photo_Points *cp, double E12[3],
     double s0, s1, s2, s3, s4, s5;
     double x0, x1, x2;
     double det;
+<<<<<<< HEAD
     void (*sigfpe)();
+=======
+    void (*sigfpe)(int);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     int i;
 
     s0 = s1 = s2 = s3 = s4 = s5 = 0.0;

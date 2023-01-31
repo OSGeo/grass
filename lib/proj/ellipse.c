@@ -233,8 +233,6 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     struct ellps_list *current = NULL, *outputlist = NULL;
     double a, e2, rf;
 
-    int count = 0;
-
     sprintf(file, "%s%s", G_gisbase(), ELLIPSOIDTABLE);
     fd = fopen(file, "r");
 
@@ -273,7 +271,10 @@ struct ellps_list *read_ellipsoid_table(int fatal)
             current->es = e2;
             current->rf = rf;
             current->next = NULL;
+<<<<<<< HEAD
             count++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         }
         else {
             err++;

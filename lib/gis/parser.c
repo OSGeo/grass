@@ -940,7 +940,11 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
    \return 1 overwrite enabled
    \return 0 overwrite disabled
  */
+<<<<<<< HEAD
 int G_get_overwrite()
+=======
+int G_get_overwrite(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     return st->module_info.overwrite;
 }

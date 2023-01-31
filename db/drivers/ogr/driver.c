@@ -36,7 +36,11 @@ int db__driver_init(int argc, char *argv[])
 
    \return DB_OK
  */
+<<<<<<< HEAD
 int db__driver_finish()
+=======
+int db__driver_finish(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     return DB_OK;
 }

@@ -59,6 +59,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
     int index;
     size_t nBytes;
     size_t offs, offsLast;
+    ssize_t res;
     long int pos;
 
     pos = map->index[tileIndex];
@@ -83,7 +84,12 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if (read(map->cacheFD, tileBuf, nBytes) != nBytes) {
+=======
+    if ((res = read(map->cacheFD, tileBuf, nBytes)) < 0 ||
+        (size_t)res != nBytes) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         Rast3d_error("cacheWrite_readFun: can't read file");
         return 0;
     }
@@ -109,7 +115,12 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if (read(map->cacheFD, xdr, nBytes + sizeof(int)) != nBytes + sizeof(int)) {
+=======
+    if ((res = read(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
+        (size_t)res != nBytes + sizeof(int)) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         Rast3d_error("cacheWrite_readFun: can't read file");
         return 0;
     }
@@ -118,8 +129,13 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
         Rast3d_error("cacheWrite_readFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if (write(map->cacheFD, xdr, nBytes + sizeof(int)) !=
         nBytes + sizeof(int)) {
+=======
+    if ((res = write(map->cacheFD, xdr, nBytes + sizeof(int))) < 0 ||
+        (size_t)res != nBytes + sizeof(int)) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         Rast3d_error("cacheWrite_readFun: can't write file");
         return 0;
     }
@@ -140,6 +156,7 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
     RASTER3D_Map *map = closure;
     size_t nBytes;
     size_t offs;
+    ssize_t res;
 
     if (map->index[tileIndex] != -1)
         return 1;
@@ -152,7 +169,12 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
         Rast3d_error("cacheWrite_writeFun: can't position file");
         return 0;
     }
+<<<<<<< HEAD
     if (write(map->cacheFD, tileBuf, nBytes) != nBytes) {
+=======
+    if ((res = write(map->cacheFD, tileBuf, nBytes)) < 0 ||
+        (size_t)res != nBytes) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         Rast3d_error("cacheWrite_writeFun: can't write file");
         return 0;
     }

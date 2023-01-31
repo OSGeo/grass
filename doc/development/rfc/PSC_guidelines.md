@@ -8,9 +8,16 @@ Status: Adopted (6 April 2007)
 
 ## Summary
 
+<<<<<<< HEAD
 A GRASS Project Steering Committee ([PSC](https://trac.osgeo.org/grass/wiki/PSC)) is proposed to formalize control
 over the GRASS codebase and to facilitate GRASS project management issues.
 It is desired to keep the administrational overhead as low as possible.
+=======
+A GRASS Project Steering Committee ([PSC](https://trac.osgeo.org/grass/wiki/PSC))
+is proposed to formalize control over the GRASS codebase and to facilitate GRASS
+project management issues. It is desired to keep the administrational overhead
+as low as possible.
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 This document describes how the GRASS Project Steering Committee
 determines membership, and makes decisions on GRASS project issues.
@@ -41,7 +48,12 @@ currently include:
 
 * Maintaining submitter guidelines and making all developers aware of them.
 * Granting write access to the source code repository for new developers.
+<<<<<<< HEAD
 * Enforcing the submitter guidelines, with the ultimate sanction against non-compliance being removal of write access to the source code repository.
+=======
+* Enforcing the submitter guidelines, with the ultimate sanction against
+  non-compliance being removal of write access to the source code repository.
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 In general, once write access has been granted, developers are allowed to
 make changes to the codebase as they see fit. For controversial or
@@ -59,7 +71,12 @@ community can request the PSC to choose options best preserving the
 quality of the GRASS project.
 
 Removal of write access to the source code repository is handled as a
+<<<<<<< HEAD
 proposal to the committee as described below in the [Operation of the PSC](#operation-of-the-psc) section.
+=======
+proposal to the committee as described below in the
+[Operation of the PSC](#operation-of-the-psc) section.
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 ### Legal aspects
 

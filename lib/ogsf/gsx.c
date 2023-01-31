@@ -18,7 +18,11 @@
 
 #include <grass/ogsf.h>
 
+<<<<<<< HEAD
 void (*Cxl_func)();
+=======
+void (*Cxl_func)(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 static int Cxl = 0;
 

@@ -27,7 +27,11 @@
    \return pointer to allocated P_node struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_node *dig_alloc_node()
+=======
+struct P_node *dig_alloc_node(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     struct P_node *Node;
 
@@ -124,7 +128,11 @@ int dig_alloc_nodes(struct Plus_head *Plus, int add)
    \return pointer to allocated P_node struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_line *dig_alloc_line()
+=======
+struct P_line *dig_alloc_line(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     struct P_line *Line;
 
@@ -263,7 +271,11 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
    \return pointer to allocated P_area struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_area *dig_alloc_area()
+=======
+struct P_area *dig_alloc_area(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     struct P_area *Area;
 
@@ -298,7 +310,11 @@ void dig_free_area(struct P_area *Area)
    \return pointer to allocated P_isle struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_isle *dig_alloc_isle()
+=======
+struct P_isle *dig_alloc_isle(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     struct P_isle *Isle;
 

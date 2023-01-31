@@ -528,7 +528,11 @@ int tie_up(void)
                                  IPoints[i]);
         }
 
+<<<<<<< HEAD
         distmin = 1. / 0.; /* +inf */
+=======
+        distmin = INFINITY;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         xmin = x;
         ymin = y;
 

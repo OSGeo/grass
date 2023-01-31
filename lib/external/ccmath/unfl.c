@@ -7,7 +7,11 @@
  */
 static unsigned int a = 69069U, c = 244045795U;
 static unsigned int s, h, sbuf[256];
+<<<<<<< HEAD
 double unfl()
+=======
+double unfl(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int i;
 

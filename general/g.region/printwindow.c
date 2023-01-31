@@ -469,7 +469,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         double convergence;
 
         if (G_projection() == PROJECTION_XY)
+<<<<<<< HEAD
             convergence = 0. / 0.;
+=======
+            convergence = NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         else if (G_projection() == PROJECTION_LL)
             convergence = 0.0;
         else {

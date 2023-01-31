@@ -73,7 +73,11 @@ int db__driver_open_database(dbHandle *handle)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
+<<<<<<< HEAD
 int db__driver_close_database()
+=======
+int db__driver_close_database(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     G_debug(3, "db_driver_close_database()");
 

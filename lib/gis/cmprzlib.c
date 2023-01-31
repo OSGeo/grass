@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *                     -- GRASS Development Team --
  *
  * MODULE:      GRASS gis library
@@ -116,7 +115,11 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     /* Output buffer should be large enough for single pass compression */
     buf = dst;
     buf_sz = G_zlib_compress_bound(src_sz);
+<<<<<<< HEAD
     if (buf_sz > dst_sz) {
+=======
+    if (dst_sz < 0 || buf_sz > (unsigned int)dst_sz) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         G_warning(
             "G_zlib_compress(): programmer error, destination is too small");
         if (NULL ==
@@ -145,7 +148,11 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     }
 
     /* updated buf_sz is bytes of compressed data */
+<<<<<<< HEAD
     if (nbytes >= src_sz) {
+=======
+    if (src_sz < 0 || nbytes >= (unsigned int)src_sz) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         /* compression not possible */
         if (buf != dst)
             G_free(buf);
@@ -205,7 +212,11 @@ int G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
      * updated buffer size
      */
 
+<<<<<<< HEAD
     if (nbytes != dst_sz) {
+=======
+    if (dst_sz < 0 || nbytes != (unsigned int)dst_sz) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         /* TODO: it is not an error if destination is larger than needed */
         G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes,
                   dst_sz);

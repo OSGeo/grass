@@ -262,8 +262,13 @@ void N_print_les(N_les *les)
         for (i = 0; i < les->rows; i++) {
             for (j = 0; j < les->cols; j++) {
                 out = 0;
+<<<<<<< HEAD
                 for (k = 0; k < les->Asp[i]->cols; k++) {
                     if (les->Asp[i]->index[k] == j) {
+=======
+                for (k = 0; (unsigned int)k < les->Asp[i]->cols; k++) {
+                    if (les->Asp[i]->index[k] == (unsigned int)j) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                         fprintf(stdout, "%4.5f ", les->Asp[i]->values[k]);
                         out = 1;
                     }

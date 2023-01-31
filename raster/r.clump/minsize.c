@@ -195,7 +195,7 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                                int *best_cnt_id, int *rowmin, int *rowmax,
                                int *colmin, int *colmax)
 {
-    int rown, coln, n, count;
+    int rown, coln, n;
     int nrows, ncols;
     int neighbors[8][2];
     struct rc next;
@@ -231,7 +231,6 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
     next.row = row;
     next.col = col;
     rclist_init(&rilist);
-    count = 1;
     *best_sim_id = 0;
     *best_cnt_id = 0;
     best_sim = 2;
@@ -266,7 +265,10 @@ static int find_best_neighbour(int bfd, int nin, DCELL *rng, int cfd, int csize,
                 ngbr_id = cbuf[coln];
                 /* same neighbour */
                 if (ngbr_id == this_id) {
+<<<<<<< HEAD
                     count++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                     rclist_add(&rilist, rown, coln);
                     if (*rowmin > rown)
                         *rowmin = rown;

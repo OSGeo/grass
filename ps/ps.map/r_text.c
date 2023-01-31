@@ -20,9 +20,12 @@
 #define UPPER    1
 #define CENTER   2
 
+<<<<<<< HEAD
 extern char *get_color_name();
 extern int get_color_number();
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 static char *help[] = {"font        fontname",
                        "color       color",
                        "width       #",

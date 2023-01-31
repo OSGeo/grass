@@ -35,7 +35,11 @@ int f_rand(int argc, const int *argt, void **args)
                 lo = hi;
                 hi = tmp;
             }
+<<<<<<< HEAD
             res[i] = (lo == hi) ? lo : lo + x % (unsigned int)(hi - lo);
+=======
+            res[i] = (lo == hi) ? lo : (int)(lo + x % (unsigned int)(hi - lo));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         }
         return 0;
     }

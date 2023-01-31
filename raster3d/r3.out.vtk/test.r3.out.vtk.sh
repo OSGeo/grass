@@ -13,7 +13,7 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 # to south. So in the south the elevation must have a maximum.
 r.mapcalc --o expr="elev_bottom = row()"
 r.mapcalc --o expr="elev_top = row() + 50"
-# Now create a voxel map with value = col + row + depth. 
+# Now create a voxel map with value = col + row + depth.
 r3.mapcalc --o expr="volume = col() + row() + depth()"
 # Add null value information
 r3.mapcalc --o expr="volume_null = if(row() == 2 || row() == 7, null(), volume)"
@@ -38,7 +38,7 @@ r3.out.vtk -s --o top=elev_top bottom=elev_bottom input=volume_null output=test_
 r3.out.vtk -sp --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_points_elevation.vtk dp=3 null=0
 
 # Comparison of references and vtk files
-for i in `ls *.ref` ; do 
-    diff $i "`basename $i .ref`.vtk" ; 
+for i in `ls *.ref` ; do
+    diff $i "`basename $i .ref`.vtk" ;
 done
 rm *.vtk

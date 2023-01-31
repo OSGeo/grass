@@ -631,10 +631,17 @@ OCLLIB
 OCLLIBPATH
 OCLINCPATH
 USE_OPENMP
+<<<<<<< HEAD
 OMPCFLAGS
 OMPLIB
 OMPLIBPATH
 OMPINCPATH
+=======
+OPENMP_LIB
+OPENMP_LIBPATH
+OPENMP_INCPATH
+OPENMP_CFLAGS
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 USE_PTHREAD
 PTHREADLIB
 PTHREADLIBPATH
@@ -940,6 +947,10 @@ with_openmp_libs
 with_opencl_includes
 with_opencl_libs
 with_x
+<<<<<<< HEAD
+=======
+enable_openmp
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 enable_largefile
 '
       ac_precious_vars='build_alias
@@ -1575,6 +1586,10 @@ Optional Features:
   --enable-macosx-app     create a MacOSX application
   --enable-shared         build and link with shared libraries --enable-shared
   --enable-w11            use W11 library for Windows X11 emulation
+<<<<<<< HEAD
+=======
+  --disable-openmp        do not use OpenMP
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
   --disable-largefile     omit support for large files (LFS)
 
 Optional Packages:
@@ -9398,7 +9413,6 @@ fi
 
   if test "$PDAL_CONFIG" != "" ; then
     PDAL_LIBS=`"$PDAL_CONFIG" --libs`
-    PDAL_CPPFLAGS=`"$PDAL_CONFIG" --cxxflags`
     PDAL_INC=`"$PDAL_CONFIG" --includes`
     USE_PDAL=1
   fi
@@ -9406,10 +9420,12 @@ fi
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
-  ac_save_cppflags="$CPPFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
+<<<<<<< HEAD
   CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -9456,7 +9472,6 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
-  CPPFLAGS=${ac_save_cppflags}
 
 
 $as_echo "#define HAVE_PDAL 1" >>confdefs.h
@@ -14319,14 +14334,14 @@ esac
 
 
 
-OMPINCPATH=
-OMPLIBPATH=
-OMPLIB=
-OMPCFLAGS=
+if test "$enable_openmp" != no; then
 
-if test -n "$USE_OPENMP"; then
+if test -n "${USE_OPENMP}"; then
 
-# With OpenMP includes directory
+OPENMP_INCPATH=
+OPENMP_LIBPATH=
+OPENMP_LIB=
+OPENMP_CFLAGS=
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of OpenMP includes" >&5
@@ -14342,7 +14357,7 @@ $as_echo "$with_openmp_includes" >&6; }
 if test -n "$with_openmp_includes" ; then
     for dir in $with_openmp_includes; do
         if test -d "$dir"; then
-            OMPINCPATH="$OMPINCPATH -I$dir"
+            OPENMP_INCPATH="$OPENMP_INCPATH -I$dir"
         else
             as_fn_error $? "*** OpenMP includes directory $dir does not exist." "$LINENO" 5
         fi
@@ -14350,9 +14365,33 @@ if test -n "$with_openmp_includes" ; then
 fi
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of OpenMP library" >&5
+$as_echo_n "checking for location of OpenMP library... " >&6; }
+case "$with_openmp_libs" in
+y | ye | yes | n | no)
+	as_fn_error $? "*** You must supply a directory to --with-openmp-libs." "$LINENO" 5
+	;;
+esac
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_openmp_libs" >&5
+$as_echo "$with_openmp_libs" >&6; }
+
+if test -n "$with_openmp_libs"; then
+    for dir in $with_openmp_libs; do
+        if test -d "$dir"; then
+            OPENMP_LIBPATH="$OPENMP_LIBPATH -L$dir"
+        else
+            as_fn_error $? "*** OpenMP library directory $dir does not exist." "$LINENO" 5
+        fi
+    done
+fi
+
 
 ac_save_cppflags="$CPPFLAGS"
+<<<<<<< HEAD
 CPPFLAGS="$OMPINCPATH $CPPFLAGS"
+=======
+CPPFLAGS="$OPENMP_INCPATH $CPPFLAGS"
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 for ac_header in omp.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "omp.h" "ac_cv_header_omp_h" "$ac_includes_default"
@@ -14372,12 +14411,8 @@ done
 CPPFLAGS=$ac_save_cppflags
 
 
-# With OpenMP library directory
-# GCC et al.: -lgomp
-# Solaris cc: -lmtsk
-# AIX xlc: -lxlsmp
-# SGI IRIX 6.5 MIPSpro C/C++: -lmp
 
+<<<<<<< HEAD
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of OpenMP library" >&5
 $as_echo_n "checking for location of OpenMP library... " >&6; }
@@ -14412,11 +14447,53 @@ if test "x$ac_cv_func_GOMP_parallel_start" = xyes; then :
     OMPLIB="$OMPLIB "
 
 
+=======
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$OPENMP_LIBPATH $LDFLAGS"
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for omp_get_num_threads in -lomp" >&5
+$as_echo_n "checking for omp_get_num_threads in -lomp... " >&6; }
+
+ac_check_lib_save_LIBS=$LIBS
+LIBS="-lomp  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char omp_get_num_threads ();
+int
+main ()
+{
+return omp_get_num_threads ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_omp_omp_get_num_threads=yes
+else
+  ac_cv_lib_omp_omp_get_num_threads=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_omp_omp_get_num_threads" >&5
+$as_echo "$ac_cv_lib_omp_omp_get_num_threads" >&6; }
+if test "x$ac_cv_lib_omp_omp_get_num_threads" = xyes; then :
+  OPENMP_LIB="$OPENMP_LIB -lomp "
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 else
 
+LDFLAGS=${ac_save_ldflags}
 
 ac_save_ldflags="$LDFLAGS"
-LDFLAGS="$OMPLIBPATH $LDFLAGS"
+LDFLAGS="$OPENMP_LIBPATH $LDFLAGS"
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GOMP_parallel_start in -lgomp" >&5
@@ -14453,7 +14530,11 @@ LIBS=$ac_check_lib_save_LIBS
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gomp_GOMP_parallel_start" >&5
 $as_echo "$ac_cv_lib_gomp_GOMP_parallel_start" >&6; }
 if test "x$ac_cv_lib_gomp_GOMP_parallel_start" = xyes; then :
+<<<<<<< HEAD
   OMPLIB="$OMPLIB -lgomp "
+=======
+  OPENMP_LIB="$OPENMP_LIB -lgomp "
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 else
 
 LDFLAGS=${ac_save_ldflags}
@@ -14468,40 +14549,104 @@ fi
 LDFLAGS=${ac_save_ldflags}
 
 
-
 fi
 
-LIBS=${ac_save_libs}
+
+
 LDFLAGS=${ac_save_ldflags}
 
 
-# compiler dependent
-#if test ${CC} = "gcc" ; then
-if test x$GCC = xyes ; then
-	# GNU C compiler (>= 4.2.1)
-	OMPCFLAGS=-fopenmp
-elif test ${CC} = "icc" ; then
-	# Intel compiler
-	OMPCFLAGS=-openmp
-elif test ${CC} = "opencc" ; then
-	# AMD's x86 Open64 compiler
-	OMPCFLAGS=-mp
-elif test ${CC} = "pgcc" ; then
-	# Portland Group's compiler
-	OMPCFLAGS=-mp
-# ... anybody else?
+loc_save_cflags="$CFLAGS"
+CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
+
+  OPENMP_CFLAGS=
+  # Check whether --enable-openmp was given.
+if test "${enable_openmp+set}" = set; then :
+  enableval=$enable_openmp;
 fi
 
+<<<<<<< HEAD
 # try to build a test program with "$CC $OMPCLFAGS" to confirm it works
 #...how?
 #echo "int main() {return 0;}" > test.c
 #$CC $OMPCLFAGS test.c -o test
+=======
+  if test "$enable_openmp" != no; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to support OpenMP" >&5
+$as_echo_n "checking for $CC option to support OpenMP... " >&6; }
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
-fi # $USE_OPENMP
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_prog_c_openmp='none needed'
+else
+  ac_cv_prog_c_openmp='unsupported'
+	  	  	  	  	  	  	                                          	  	  	  	  	  	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
+                           -Popenmp --openmp '-Xclang -fopenmp'; do
+	    ac_save_CFLAGS=$CFLAGS
+	    CFLAGS="$CFLAGS $ac_option"
+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_prog_c_openmp=$ac_option
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	    CFLAGS=$ac_save_CFLAGS
+	    if test "$ac_cv_prog_c_openmp" != unsupported; then
+	      break
+	    fi
+	  done
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_c_openmp" >&5
+$as_echo "$ac_cv_prog_c_openmp" >&6; }
+    case $ac_cv_prog_c_openmp in #(
+      "none needed" | unsupported)
+	;; #(
+      *)
+	OPENMP_CFLAGS=$ac_cv_prog_c_openmp ;;
+    esac
+  fi
+
+
+CFLAGS="${loc_save_cflags}"
 
 
 
 
+
+
+fi # USE_OPENMP
+
+else # enable_openmp
+
+if test -n "${USE_OPENMP}"; then
+
+echo "OpenMP explicitly disabled with --disable-openmp."
+
+fi
+USE_OPENMP=
+
+fi  # enable_openmp
 
 
 

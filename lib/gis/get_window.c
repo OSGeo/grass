@@ -132,7 +132,11 @@ void G_get_element_window(struct Cell_head *window, const char *element,
 /*!
    \brief Unset current region
  */
+<<<<<<< HEAD
 void G_unset_window()
+=======
+void G_unset_window(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     st->initialized = 0;
     G__.window_set = 0;

@@ -22,7 +22,11 @@ static int cur_x, cur_y;
 static int format;
 static CELL *cell;
 
+<<<<<<< HEAD
 static int (*dot)();
+=======
+static int (*dot)(int, int);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 static int cell_dot(int, int);
 static int fcell_dot(int, int);
 static int dcell_dot(int, int);

@@ -24,7 +24,11 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
         else
             scient_format(v, buf, *n, *dp);
 
+<<<<<<< HEAD
         if (strlen(buf) <= *n)
+=======
+        if ((int)strlen(buf) <= *n)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             break;
 
         if (*dp) {

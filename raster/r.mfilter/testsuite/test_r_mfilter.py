@@ -172,9 +172,15 @@ class TestNeighbors(TestCase):
                    TYPE    S
 
                    MATRIX 3
+<<<<<<< HEAD
                    1 1 1 
                    1 1 1 
                    1 1 1 
+=======
+                   1 1 1
+                   1 1 1
+                   1 1 1
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                    DIVISOR 9
                    TYPE    P""",
     }

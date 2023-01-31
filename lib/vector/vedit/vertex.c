@@ -35,7 +35,7 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
                       double thresh_coords, double thresh_snap, double move_x,
                       double move_y, double move_z, int move_first, int snap)
 {
-    int nvertices_moved, nlines_modified, nvertices_snapped;
+    int nvertices_moved, nvertices_snapped;
 
     int i, j, k;
     int line, type, rewrite;
@@ -47,7 +47,6 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
     struct line_pnts *Points, *Points_snap;
     struct line_cats *Cats;
 
-    nlines_modified = 0;
     nvertices_moved = nvertices_snapped = 0;
     moved = NULL;
 
@@ -160,8 +159,11 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
             if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
                 return -1;
             }
+<<<<<<< HEAD
 
             nlines_modified++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         }
     } /* for each selected line */
 
@@ -194,7 +196,7 @@ int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,
 {
     int i, j;
     int type, line, seg;
-    int nlines_modified, nvertices_added, rewrite;
+    int nvertices_added, rewrite;
     double east, north, dist;
     double *x, *y, *z;
     double px, py;
@@ -202,7 +204,6 @@ int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    nlines_modified = 0;
     nvertices_added = 0;
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -254,8 +255,11 @@ int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,
             if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
                 return -1;
             }
+<<<<<<< HEAD
 
             nlines_modified++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         }
     } /* for each line */
 

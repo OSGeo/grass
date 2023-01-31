@@ -34,7 +34,11 @@ notes:
       regexp: '[Ss]ingularity: '
 
     - title: Continuous Integration, Tests, Code Quality, and Checks
+<<<<<<< HEAD
       regexp: '(CI|ci|[Tt]ests|[Cc]hecks|pytest): '
+=======
+      regexp: '(CI|ci|CI\(deps\)|ci\(deps\)|[Tt]ests|[Cc]hecks|pytest): '
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     - title: Contributing and Management
       regexp: '(contributing|CONTRIBUTING.md|contributors.csv): '

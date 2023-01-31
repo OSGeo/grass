@@ -6,13 +6,17 @@ Last changed: July 2020
 Related Wiki documents:
 
 * <https://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo> (historical document)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 ## GRASS GIS Source code repository
 
 Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, <http://wiki.osgeo.org/wiki/SAC>
 
-Important update April 2019: The source code is now managed on GitHub (rather than in SVN).
+Important update April 2019: The source code is now managed on GitHub (rather
+than in SVN).
 
 The GitHub repositories are:
 
@@ -35,7 +39,12 @@ Issues:
 
 Trac related notes:
 
+<<<<<<< HEAD
 * For easier linking in the Trac Wiki, some macro definitions are used for manual page refs (G7:modulename)
+=======
+* For easier linking in the Trac Wiki, some macro definitions are used for manual
+  page refs (G7:modulename)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
   * <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 * ZIP file download support in trac (was needed for g.extension) * on trac.osgeo.org:
 
@@ -49,7 +58,10 @@ Statistics:
 
 * <https://github.com/OSGeo/grass/pulse>
 * <https://trac.osgeo.org/grass/stats/code>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 ## GRASS Web server
 
@@ -63,8 +75,13 @@ Maintainer: M. Neteler
   * ssh login: via jumphost hop.osgeo8.osgeo.org
   * deployment via cronjob: <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/>
 * <https://old.grass.osgeo.org> (CMSMS, replaced in 2020 by above hugo based solution)
+<<<<<<< HEAD
   * Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
   server: osgeo6.osgeo.osuosl.org)
+=======
+  * Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University
+    Open Source Lab server: osgeo6.osgeo.osuosl.org)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
   * Login: via OSGeo LDAP, there is a "grass" LDAP group
   * Software:
     * OS: Debian Wheezy
@@ -95,7 +112,12 @@ Maintainer: M. Neteler
   * disabled: PDF: cronjob run Saturday morning Portland (OR), US time
 
 * i18N translation statistics (<https://grass.osgeo.org/development/translations/#statistics>)
+<<<<<<< HEAD
   * generated during compilation of Linux binary snapshot, stats of `(cd locale; make)` are extracted into text file
+=======
+  * generated during compilation of Linux binary snapshot, stats of
+    `(cd locale; make)` are extracted into text file
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
   * text file parsed by PHP page and shown as table
   * GRASS GIS version is coded in devel/i18n_stats.inc
   * for Transifex integration, see below
@@ -115,11 +137,13 @@ Maintainer: M. Neteler
 
 Summary: The system should run almost autonomously.
 
-
 ## WinGRASS maintenance scripts
 
 * <https://github.com/landam/wingrass-maintenance-scripts>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 ## GRASS Mailing lists
 
@@ -128,6 +152,7 @@ Maintainer: Markus Neteler
 Available lists:
 
 * at OSGeo.org (<https://lists.osgeo.org/mailman/listinfo>):
+<<<<<<< HEAD
    grass-abm            Integration of GRASS with JAVA based agent based modeling (ABM)
    grass-announce GRASS announcements
    grass-commit         Mailing list to distribute GRASS-CVS commits
@@ -153,7 +178,39 @@ Notes:
 * grass-web is an open list (posting without subscription possible) with (Google) spam filter
   * moderated by M. Neteler to avoid spam
 * OLD, UNUSED: grass-qa is receiving posts from the GRASS Quality Control System at Ecole Polytechnique de Montreal, Canada. Not open for other postings.
+=======
+  * grass-abm           Integration of GRASS with JAVA based agent based modeling
+                        (ABM)
+  * grass-announce      GRASS announcements
+  * grass-commit        Mailing list to distribute GRASS-CVS commits
+  * grass-dev           GRASS GIS Development mailing list
+  * grass-es            La lista de correo de GRASS GIS en español
+  * grass-psc           GRASS-PSC: GRASS Project Steering Committee
+  * grass-stats         GRASS and statistical software
+  * grass-translations  Translation of GRASS (i18N)
+  * grass-user          GRASS user list
+  * grass-web           GRASS website mailing list
 
+* OLD, UNUSED: at FBK-irst (<http://grass.fbk.eu/mailman/admin/>):
+  * grass-commit-addons  Mailing list to distribute GRASS Addons-SVN commits
+  * grass-gui            GRASSGUI mailing list
+  * grass-qa             GRASS Quality Assessment and monitoring list
+  * grass-windows        winGRASS * Using GRASS on MS-Windows systems mailing list
+
+Notes:
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+
+* grass-announce:
+  * moderated by M. Neteler
+  * has monthly password reminder disabled to avoid leakage into publicly
+    archived lists
+* grass-commit is receiving posts from the GRASS SVN at osgeo.org. Not open for
+  other postings, they will be trashed automatically
+* grass-web is an open list (posting without subscription possible) with (Google)
+  spam filter
+  * moderated by M. Neteler to avoid spam
+* OLD, UNUSED: grass-qa is receiving posts from the GRASS Quality Control System
+  at Ecole Polytechnique de Montreal, Canada. Not open for other postings.
 
 ## GRASS Wiki
 
@@ -164,9 +221,14 @@ Maintainer: Martin Landa, Markus Neteler
 * mirrored at CZ Tech University
 * requires registration to keep spammers out
 
-Summary: The system should run almost autonomous. An eye must be be kept on people trying to spam the site
+Summary: The system should run almost autonomous. An eye must be be kept on people
+trying to spam the site
 
 Macros for manual pages (src, cmd, API, ...):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 * <https://grasswiki.osgeo.org/wiki/Category:Templates>
 
 ## GRASS IRC
@@ -174,7 +236,7 @@ Macros for manual pages (src, cmd, API, ...):
 Channel: irc://irc.freenode.net/grass
 Web based client: See <https://grasswiki.osgeo.org/wiki/IRC>
 
-* channel owner: Alessandro Frigeri <afrigeri unipg.it> ("geoalf")
+* channel owner: Alessandro Frigeri < afrigeri unipg.it > ("geoalf")
 * quasi guru level: Markus Neteler ("markusN")
 * further operators:
   * Jachym ("jachym")
@@ -195,6 +257,10 @@ Old bugtracker (Jan 2008 - Jan 2020):
 * Settings:
 
 Old tracsvn (OSGeo server) (Dec 2007 * Mai 2019)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 ```text
 /var/www/trac/env/grass/conf/trac.ini
   downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
@@ -217,13 +283,21 @@ Very old bugtracker (Jan 2007 * Dec 2008):
 * needs `noreply*wald.intevation.org` to be enabled as alias in Mailman
 
 Very very old bugtracker (Dec 2000 * Dec 2006):
+<<<<<<< HEAD
 
 * <https://intevation.de/rt/webrt?q_queue=grass>
 * webRT, sponsored by Intevation GmbH, Germany
 * spamassasin spamfilter locally, bogofilter at grass-dev list
 * reports are directly sent to GRASS Developers mailing list for notification
 * TODO: migrate to trac
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
+* <https://intevation.de/rt/webrt?q_queue=grass>
+* webRT, sponsored by Intevation GmbH, Germany
+* spamassasin spamfilter locally, bogofilter at grass-dev list
+* reports are directly sent to GRASS Developers mailing list for notification
+* TODO: migrate to trac
 
 ## GRASS Addons
 
@@ -239,9 +313,12 @@ The redirect to the latest grass7x directory is defined on grass.osgeo.org:
   /etc/apache2/includes/grass.osgeo.org.inc
 
 Procedure building of binaries (Windows):
-* Addons module are compiled on build server, currently at the CTU in Prague) and publishing their manual pages on publishing server, i.e. grass.osgeo.org.
+
+* Addons module are compiled on build server, currently at the CTU in Prague) and
+  publishing their manual pages on publishing server, i.e. grass.osgeo.org.
 * A new compilation is triggered everytime when a commit is done in the Addons-SVN.
 * Logs:
+<<<<<<< HEAD
   * Linux log files:   <https://grass.osgeo.org/addons/grass7/logs> (compiled on `grasslxd` on `osgeo7`)
   * Windows log files: <http://wingrass.fsv.cvut.cz/grass78/x86_64/addons/latest/logs/>
 
@@ -252,6 +329,23 @@ Procedure of granting write access to Addons repo:
 * Confirm request in grass-psc and give instructions concerning code style etc (see archive for examples)
 
 XML file for g.extension: <https://grass.osgeo.org/addons/grass7/modules.xml>
+=======
+  * Linux log files:   <https://grass.osgeo.org/addons/grass7/logs> (compiled on
+    `grasslxd` on `osgeo7`)
+  * Windows log files: <http://wingrass.fsv.cvut.cz/grass78/x86_64/addons/latest/logs/>
+
+Procedure of granting write access to Addons repo:
+
+* Request procedure: <https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASS-Addons-SVNrepository>
+* Adding OSGeo-ID:   <https://www.osgeo.org/cgi-bin/auth/ldap_group.py?group=grass_addons>
+* Adding contributor: <https://trac.osgeo.org/grass/browser/grass-addons/contributors.csv>
+  (via SVN commit)
+* Confirm request in grass-psc and give instructions concerning code style etc
+  (see archive for examples)
+
+XML file for g.extension: <https://grass.osgeo.org/addons/grass7/modules.xml>
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 * generated in grass-addons/utils/addons/grass-addons-publish.sh
 
 ## GRASS Travis CI
@@ -270,10 +364,13 @@ Travis CI control files:
    linux.script.sh
 
 Maintenance script:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 * <https://github.com/OSGeo/grass-addons/tree/master/utils/grass-ci/grass-ci.sh>
 
 The github update is run as a cronjob on server "geo102" (CTU, CZ).
-
 
 ## GRASS CI: GitHub Actions
 
@@ -285,21 +382,39 @@ Maintainer: Vaclav Petras
 * Details: <https://github.com/OSGeo/grass/pull/525>
 
 * CI workflow with:
+<<<<<<< HEAD
   * A build job which is not parallelized and is meant for clear & relatively fast check of compilation and building in general. (Duplicating what is running on Travis)
   * A test job which of course needs to build, but the main focus is to run tests, so the compilation is parallelized (depending on nproc) and thus potentially less readable. This runs the whole test suite. (You need to run it locally to see the actual error, but you can see which tests are failing.)
 * Static code analysis/Code quality check using Flake8 with separate checks for python/grass, gui/wxpython, scripts and temporal directories.
   * Configurations ignore different lists of Flake8 errors. The idea is to reduce that to minimum.
   * Code in testsuite directories is also ignored for now, but should not be in the future.
+=======
+  * A build job which is not parallelized and is meant for clear & relatively fast
+    check of compilation and building in general. (Duplicating what is running
+    on Travis)
+  * A test job which of course needs to build, but the main focus is to run tests,
+    so the compilation is parallelized (depending on nproc) and thus potentially
+    less readable. This runs the whole test suite. (You need to run it locally to
+    see the actual error, but you can see which tests are failing.)
+* Static code analysis/Code quality check using Flake8 with separate checks for
+  python/grass, gui/wxpython, scripts and temporal directories.
+  * Configurations ignore different lists of Flake8 errors. The idea is to reduce
+    that to minimum.
+  * Code in testsuite directories is also ignored for now, but should not be in
+    the future.
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 Helper files placed to .github/workflows
-
 
 ## GRASS Coverity Scan
 
 Maintainer: Markus Neteler
 
 * <https://scan.coverity.com/projects/grass?tab=overview>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 ## Transifex translation management
 
@@ -311,7 +426,10 @@ i18N gettext messages:
     * Menu: Resources
       * Use: "Auto update resources" button
 * Weblate: <https://weblate.osgeo.org/>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
 ## OLD: GRASS Quality Control
 
@@ -329,11 +447,16 @@ Further notification/functionality test systems:
 
 ## Previous hosting sponsors
 
-Since 2010 the GRASS GIS project is hosted at the Oregon State University Open Source Lab (OSUOSL), Oregon, USA
+Since 2010 the GRASS GIS project is hosted at the Oregon State University Open
+Source Lab (OSUOSL), Oregon, USA
 
-Numerous institutions have sponsored the GRASS Project with Hardware/Bandwidth (list of master site hosting):
-* 1997-1999: Institut fuer Landschaftspflege und Naturschutz (ILN), Universitaet Hannover, Germany
-* 1999-2001: Institut fuer Physische Geographie und Landschaftsoekologie, Universitaet Hannover, Germany
+Numerous institutions have sponsored the GRASS Project with Hardware/Bandwidth
+(list of master site hosting):
+
+* 1997-1999: Institut fuer Landschaftspflege und Naturschutz (ILN), Universitaet
+  Hannover, Germany
+* 1999-2001: Institut fuer Physische Geographie und Landschaftsoekologie,
+  Universitaet Hannover, Germany
 * 2001-2008: ITC-irst, Trento, Italy
 * 2009-2010: Telascience.org at San Diego Supercomputer Center, California, USA
 * 2010-today: Oregon State University | Open Source Lab, USA

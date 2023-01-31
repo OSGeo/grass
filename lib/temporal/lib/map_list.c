@@ -51,7 +51,11 @@ void tgis_free_map_list(tgisMapList *list)
  * \return list The pointer to a new allocated integer list
  *
  * */
+<<<<<<< HEAD
 tgisMapList *tgis_new_map_list()
+=======
+tgisMapList *tgis_new_map_list(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     tgisMapList *list = G_malloc(sizeof(tgisMapList));
 

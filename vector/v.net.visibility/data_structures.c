@@ -18,14 +18,14 @@
 static int stack_index = 0;
 static struct Point **stack = NULL;
 
-struct Point *pop()
+struct Point *pop(void)
 {
     stack_index--;
 
     return stack[stack_index + 1];
 }
 
-struct Point *top()
+struct Point *top(void)
 {
     if (stack_index > -1)
         return stack[stack_index];
@@ -39,7 +39,7 @@ void push(struct Point *p)
     stack[stack_index] = p;
 }
 
-int empty_stack()
+int empty_stack(void)
 {
     return stack_index == -1;
 }

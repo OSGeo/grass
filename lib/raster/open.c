@@ -466,7 +466,11 @@ void Rast_set_cell_format(int n)
     R__.nbytes = n + 1;
     if (R__.nbytes <= 0)
         R__.nbytes = 1;
+<<<<<<< HEAD
     if (R__.nbytes > sizeof(CELL))
+=======
+    if (R__.nbytes > (int)sizeof(CELL))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         R__.nbytes = sizeof(CELL);
 }
 

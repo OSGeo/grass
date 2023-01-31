@@ -267,7 +267,12 @@ int main(int argc, char *argv[])
         }
         else {
             /*set it */
+<<<<<<< HEAD
             sprintf(buf, "%s=%s", STREAM_TMPDIR, viewOptions.streamdir);
+=======
+            snprintf(buf, sizeof(buf), "%s=%s", STREAM_TMPDIR,
+                     viewOptions.streamdir);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             G_debug(1, "setting %s ", buf);
             putenv(buf);
             if (getenv(STREAM_TMPDIR) == NULL) {
@@ -493,7 +498,7 @@ void parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
         _("Maximum visibility radius. By default infinity (-1)");
     char infdist[10];
 
-    sprintf(infdist, "%d", INFINITY_DISTANCE);
+    snprintf(infdist, sizeof(infdist), "%d", INFINITY_DISTANCE);
     maxDistOpt->answer = infdist;
     maxDistOpt->guisection = _("Settings");
 

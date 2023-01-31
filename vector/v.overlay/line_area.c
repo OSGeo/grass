@@ -56,7 +56,11 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
                       struct line_cats *MCats)
 {
     int i, first, last, next_line, curr_line;
+<<<<<<< HEAD
     int merged = 0, newl = 0;
+=======
+    int merged = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     int next_node, direction, node_n_lines, type, ltype, lines_type;
     static struct ilist *List = NULL;
     static struct line_pnts *Points = NULL;
@@ -196,7 +200,6 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
     }
     MPoints->n_points++;
     merged += List->n_values;
-    newl++;
 
     return merged;
 }

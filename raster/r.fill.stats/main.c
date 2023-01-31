@@ -155,7 +155,11 @@ long int estimate_mem_needed(long int cols, char *mode)
 void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
+<<<<<<< HEAD
     int weight_matrix_line_length = 80;
+=======
+    size_t weight_matrix_line_length = 80;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     char weight_matrix_line_buf[weight_matrix_line_length + 1];
     char weight_matrix_weight_buf[weight_matrix_line_length + 1];
 
@@ -487,7 +491,7 @@ void get_statistics_mode(unsigned long row_index, unsigned long col, double min,
 /*
  * Initializes handlers to point to corresponding data rows.
  */
-void init_handles()
+void init_handles(void)
 {
     unsigned long i;
 

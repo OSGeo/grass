@@ -1047,11 +1047,19 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
 
     case GDT_Float32:
     case GDT_CFloat32:
+<<<<<<< HEAD
         return 0.0 / 0.0;
 
     case GDT_Float64:
     case GDT_CFloat64:
         return 0.0 / 0.0;
+=======
+        return NAN;
+
+    case GDT_Float64:
+    case GDT_CFloat64:
+        return NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 
     default:
         return 0;

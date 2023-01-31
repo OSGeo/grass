@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     int nsubregion_col, nsubregion_row;
     int subregion = 0, nsubregions = 0;
     int last_row, last_column;
-    int nlines, nlines_first, line_num;
+    int line_num;
     int more;
     int clas, region = TRUE;
     double Z_interp;
@@ -174,23 +174,31 @@ int main(int argc, char *argv[])
     count_obj = 1;
 
     /* no topology, get number of lines in input vector */
-    nlines = 0;
     points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     Vect_rewind(&In);
+<<<<<<< HEAD
     while (Vect_read_next_line(&In, points, Cats) > 0) {
         nlines++;
     }
+=======
+    while (Vect_read_next_line(&In, points, Cats) > 0)
+        ;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     Vect_rewind(&In);
 
     /* no topology, get number of lines in first pulse input vector */
-    nlines_first = 0;
     points_first = Vect_new_line_struct();
     Cats_first = Vect_new_cats_struct();
     Vect_rewind(&First);
+<<<<<<< HEAD
     while (Vect_read_next_line(&First, points_first, Cats_first) > 0) {
         nlines_first++;
     }
+=======
+    while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
+        ;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     Vect_rewind(&First);
 
     /* Setting regions and boxes */

@@ -11,11 +11,19 @@
  * The actual functions follow. */
 
 int (*is_null)(void *);
+<<<<<<< HEAD
 size_t (*bpe)();
 void *(*get_max)(void *, void *);
 void *(*get_min)(void *, void *);
 void (*get_row)(int, void *, int);
 void *(*get_buf)();
+=======
+size_t (*bpe)(void);
+void *(*get_max)(void *, void *);
+void *(*get_min)(void *, void *);
+void (*get_row)(int, void *, int);
+void *(*get_buf)(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 void (*put_row)(int, void *);
 double (*slope)(void *, void *, double);
 void (*set_min)(void *);
@@ -101,17 +109,17 @@ int is_null_d(void *value)
 }
 
 /* return the size of the current type */
-size_t bpe_c()
+size_t bpe_c(void)
 {
     return sizeof(CELL);
 }
 
-size_t bpe_f()
+size_t bpe_f(void)
 {
     return sizeof(FCELL);
 }
 
-size_t bpe_d()
+size_t bpe_d(void)
 {
     return sizeof(DCELL);
 }

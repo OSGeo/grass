@@ -571,7 +571,11 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     else
         ptr->off_t_size = 4;
 
+<<<<<<< HEAD
     if (sizeof(off_t) < ptr->off_t_size) {
+=======
+    if (sizeof(off_t) < (size_t)ptr->off_t_size) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         G_warning(_("Vector exceeds supported file size limit"));
         return (-1);
     }

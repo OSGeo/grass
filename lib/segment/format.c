@@ -219,13 +219,17 @@ static int zero_fill(int fd, off_t nbytes)
     register int n;
 
     /* zero buf */
-    n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+    n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
     b = buf;
     while (n-- > 0)
         *b++ = 0;
 
     while (nbytes > 0) {
+<<<<<<< HEAD
         n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+=======
+        n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         errno = 0;
         if (write(fd, buf, n) != n) {
             int err = errno;

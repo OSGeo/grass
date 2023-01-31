@@ -870,8 +870,15 @@ int main(int argc, char *argv[])
     /* close raster file & write history */
     Rast_close(out_fd);
 
+<<<<<<< HEAD
     sprintf(title, "Raw X,Y,Z data binned into a raster grid by cell %s",
             method_opt->answer);
+=======
+    snprintf(title, sizeof(title),
+             "Raw X,Y,Z data binned into a raster grid by cell %s",
+             method_opt->answer);
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     Rast_put_cell_title(outmap, title);
 
     Rast_short_history(outmap, "raster", &history);
@@ -894,6 +901,7 @@ int main(int argc, char *argv[])
         G_put_window(&region);
 
     if (infiles.num_items > 1) {
+<<<<<<< HEAD
         sprintf(buff,
                 _("Raster map <%s> created."
                   " " GPOINT_COUNT_FORMAT
@@ -905,6 +913,19 @@ int main(int argc, char *argv[])
                 _("Raster map <%s> created."
                   " " GPOINT_COUNT_FORMAT " points found in region."),
                 outmap, grass_filter.num_passed());
+=======
+        snprintf(buff, BUFFSIZE,
+                 _("Raster map <%s> created."
+                   " " GPOINT_COUNT_FORMAT
+                   " points from %d files found in region."),
+                 outmap, grass_filter.num_passed(), infiles.num_items);
+    }
+    else {
+        snprintf(buff, BUFFSIZE,
+                 _("Raster map <%s> created."
+                   " " GPOINT_COUNT_FORMAT " points found in region."),
+                 outmap, grass_filter.num_passed());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     }
 
     G_done_msg("%s", buff);

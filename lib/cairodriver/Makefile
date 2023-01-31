@@ -15,4 +15,3 @@ endif
 ifneq ($(USE_CAIRO),)
 default: lib
 endif
-

@@ -34,9 +34,21 @@
 #include "externs.h"
 #include "dataoct.h"
 
+<<<<<<< HEAD
 struct octfunc *OT_functions_new(int (*compare)(), VOID_T **(*divide_data)(),
                                  int (*add_data)(), int (*intersect)(),
                                  int (*division_check)(), int (*get_points)())
+=======
+struct octfunc *
+OT_functions_new(int (*compare)(struct quadruple *, struct octdata *),
+                 struct octdata **(*divide_data)(struct octdata *),
+                 int (*add_data)(struct quadruple *, struct octdata *),
+                 int (*intersect)(double, double, double, double, double,
+                                  double, struct octdata *),
+                 int (*division_check)(struct octdata *),
+                 int (*get_points)(struct quadruple *, struct octdata *, double,
+                                   double, double, double, double, double, int))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 /* Initializes FUNCTIONS structure with given arguments */
 {
     struct octfunc *functions;
@@ -53,7 +65,11 @@ struct octfunc *OT_functions_new(int (*compare)(), VOID_T **(*divide_data)(),
     return functions;
 }
 
+<<<<<<< HEAD
 struct octtree *OT_tree_new(VOID_T *data, struct octtree **leafs,
+=======
+struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                             struct octtree *parent, struct octfunc *functions,
                             int octant)
 /*Initializes TREE using given arguments */
@@ -119,7 +135,7 @@ int OT_insert_oct(struct quadruple *point, struct octtree *tree)
 int OT_divide_oct(struct octtree *tree)
 {
     int i;
-    VOID_T **datas;
+    struct octdata **datas;
     struct octtree *par;
     struct octtree **leafs;
 

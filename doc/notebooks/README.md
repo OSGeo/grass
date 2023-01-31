@@ -4,8 +4,14 @@
 
 ### Using the notebooks locally
 
+<<<<<<< HEAD
 Clone this repository with `git clone` first. Then, locally start the Jupyter notebook
 server from the command line in the `doc/notebooks/` directory containing the `*.ipynb` files with:
+=======
+Clone this repository with `git clone` first. Then, locally start the Jupyter
+notebook server from the command line in the `doc/notebooks/` directory containing
+the `*.ipynb` files with:
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 `jupyter notebook`
 
 This will open a new browser tab or window with a list of the contents of the current
@@ -25,4 +31,7 @@ See also the official documentation for [The Jupyter Notebook](https://jupyter-n
 * Solar Energy Potential Analysis: [solar_potential.ipynb](solar_potential.ipynb)
 * GRASS GIS Scripting with Python: [scripting_example.ipynb](scripting_example.ipynb)
 * Hydrology with GRASS GIS: [hydrology.ipynb](hydrology.ipynb)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))

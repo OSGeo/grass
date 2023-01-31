@@ -233,6 +233,7 @@ int main(int argc, char *argv[])
          * the hist file. bug? */
         /* Should be RECORD_LEN, but r.info truncates at > 71 chars */
         if (strlen(history_opt->answer) > 71) {
+<<<<<<< HEAD
             int i;
 
             for (i = 0; i < strlen(history_opt->answer); i += 71) {
@@ -247,6 +248,20 @@ int main(int argc, char *argv[])
         else
             Rast_append_history(&hist, history_opt->answer);
 
+=======
+            for (unsigned int i = 0; i < strlen(history_opt->answer); i += 71) {
+                char buf[72];
+
+                strncpy(buf, &history_opt->answer[i], sizeof(buf) - 1);
+                buf[sizeof(buf) - 1] = '\0';
+
+                Rast_append_history(&hist, buf);
+            }
+        }
+        else
+            Rast_append_history(&hist, history_opt->answer);
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         Rast_write_history(raster->answer, &hist);
     }
 

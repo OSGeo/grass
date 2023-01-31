@@ -72,7 +72,7 @@ struct Site *nextone(void)
 }
 
 /* removes duplicate sites that would break the voronoi alghoritm */
-void removeDuplicates()
+void removeDuplicates(void)
 {
     int i, j;
 
@@ -251,7 +251,6 @@ int readbounds(void)
     int area_id;
     double x, y, z, x1, y1, z1;
     double maxdist, sdist, l, dx, dy, dz;
-    int nconnected;
     struct ilist *linelist, *arealist;
 
     Points = Vect_new_line_struct();
@@ -380,7 +379,10 @@ int readbounds(void)
          * must be >= 2 */
         /* count number of valid boundaries */
         nlines = Vect_get_node_n_lines(&In, node);
+<<<<<<< HEAD
         nconnected = 0;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         Vect_reset_list(linelist);
         Vect_reset_list(arealist);
 
@@ -395,7 +397,10 @@ int readbounds(void)
             if (n_areas(abs(line), &area_id) == 1) {
                 Vect_list_append(linelist, line);
                 Vect_list_append(arealist, area_id);
+<<<<<<< HEAD
                 nconnected++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             }
         }
 

@@ -15,7 +15,11 @@
 
 # TODO: replace short flags by long ones to improve readability
 
+<<<<<<< HEAD
 case "$(uname)" in 
+=======
+case "$(uname)" in
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
  Darwin | *BSD*)
   INDENT=$(which gindent)
   ;;

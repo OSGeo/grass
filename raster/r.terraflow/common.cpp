@@ -93,8 +93,13 @@ void *LargeMemory::alloc(size_t leng)
     next++;
     if (stats) {
         char buf[BUFSIZ], buf2[32];
+<<<<<<< HEAD
         sprintf(buf, "allocated large memory: %s 0x%lX",
                 formatNumber(buf2, leng), (unsigned long)p);
+=======
+        snprintf(buf, BUFSIZ, "allocated large memory: %s 0x%lX",
+                 formatNumber(buf2, leng), (unsigned long)p);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         stats->comment(buf);
     }
     return p;
@@ -121,8 +126,13 @@ void LargeMemory::free(void *p)
 
     if (stats) {
         char buf[BUFSIZ], buf2[32];
+<<<<<<< HEAD
         sprintf(buf, "freed large memory: %s 0x%lX", formatNumber(buf2, len[i]),
                 (unsigned long)p);
+=======
+        snprintf(buf, BUFSIZ, "freed large memory: %s 0x%lX",
+                 formatNumber(buf2, len[i]), (unsigned long)p);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         stats->comment(buf);
     }
 

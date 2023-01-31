@@ -69,7 +69,7 @@ int read_rules(const char *filename)
     char buf[1024];
     DCELL dLow, dHigh;
     CELL iLow, iHigh;
-    int line, n, nrules = 0;
+    int n, nrules = 0;
     int first = 1;
     DCELL dmin, dmax;
     CELL cmin, cmax;
@@ -89,7 +89,11 @@ int read_rules(const char *filename)
         fprintf(stderr, _("\nEnter the rule or 'help' for the format "
                           "description or 'end' to exit:\n"));
     Rast_quant_init(&quant_struct);
+<<<<<<< HEAD
     for (line = 1;; line++) {
+=======
+    for (;;) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         if (isatty(fileno(fp)))
             fprintf(stderr, "> ");
         if (!G_getl2(buf, sizeof(buf), fp))

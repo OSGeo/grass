@@ -13,7 +13,11 @@ void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
         for (i = 0; i < ncols; i++) {
             unsigned int k = buf[j * ncols + i];
 
+<<<<<<< HEAD
             if (k > threshold)
+=======
+            if (k > (unsigned int)threshold)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 acc |= bit;
 
             bit >>= 1;

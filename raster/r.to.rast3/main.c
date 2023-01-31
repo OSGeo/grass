@@ -37,7 +37,11 @@ int globalG3dMapType;
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int *fd, int depths,
                  char *errorMsg); /*Simple Error message */
+<<<<<<< HEAD
 void set_params();                /*Fill the paramType structure */
+=======
+void set_params(void);            /*Fill the paramType structure */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 void raster_to_g3d(void *map, RASTER3D_Region region,
                    int *fd);                 /*Write the raster */
 int open_input_raster_map(const char *name); /*opens the outputmap */
@@ -72,7 +76,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 /* Setg up the arguments we are expecting ********************************** */
 
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.input = G_define_standard_option(G_OPT_R_INPUTS);
     param.input->description = _("2D raster maps which represent the slices");

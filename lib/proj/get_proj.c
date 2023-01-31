@@ -274,6 +274,19 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     if (perr)
         G_fatal_error("PROJ 5 error %d", perr);
+<<<<<<< HEAD
+=======
+
+#if PROJ_VERSION_MAJOR >= 6
+    if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
+    }
+#endif
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 #endif
 
     info->pj = pj;
@@ -417,6 +430,16 @@ int pj_get_string(struct pj_info *info, char *str)
                   proj_errno_string(proj_context_errno(pjc)));
         return -1;
     }
+
+#if PROJ_VERSION_MAJOR >= 6
+    if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
+        PJ *source_crs = proj_get_source_crs(pjc, pj);
+        if (source_crs) {
+            proj_destroy(pj);
+            pj = source_crs;
+        }
+    }
+#endif
 #else
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);

@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     char *null_val_str;
     DCELL mult;
     RASTER_MAP_TYPE data_type;
-    double atof();
 
     G_gisinit(argv[0]);
 
@@ -233,7 +232,11 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row += 1) {
+<<<<<<< HEAD
         if (fread(rast, Rast_cell_size(data_type), ncols, ft) != ncols)
+=======
+        if (fread(rast, Rast_cell_size(data_type), ncols, ft) != (size_t)ncols)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             G_fatal_error(_("Read from file error: %s"), strerror(errno));
         Rast_put_row(cf, rast, data_type);
         G_fseek(ft, sz, SEEK_CUR);

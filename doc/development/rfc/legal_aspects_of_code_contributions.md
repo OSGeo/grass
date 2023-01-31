@@ -52,9 +52,15 @@ source repository:
  licensing (grass/COPYRIGHT.txt).
 * Existing copyright headers and license text should never be stripped
  from a file. If a copyright holder wishes to give up copyright they
+<<<<<<< HEAD
  must do so in writing to the GRASS [PSC](https://trac.osgeo.org/grass/wiki/PSC) before copyright messages
  are removed. If license terms are changed, it has to be by agreement
  (written in email is ok) of the copyright holders.
+=======
+ must do so in writing to the GRASS [PSC](https://trac.osgeo.org/grass/wiki/PSC)
+ before copyright messages are removed. If license terms are changed, it has to
+ be by agreement (written in email is ok) of the copyright holders.
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 * When substantial contributions are added to a file (such as
  substantial patches) the author/contributor should be added to the
  list of copyright holders for the file in the file header.
@@ -67,4 +73,7 @@ Questions regarding GRASS GIS should be directed to the
 GRASS Development Team at the following address:
 
 Internet: <http://grass.osgeo.org/home/contact-us/>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))

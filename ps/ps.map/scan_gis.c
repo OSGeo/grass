@@ -18,7 +18,11 @@ int scan_gis(char *element, char *desc, char *key, char *data, char *name,
 
     if (strcmp(name, "list") == 0) {
         if (isatty(0))
+<<<<<<< HEAD
             G_list_element(element, desc, mapset, (int (*)())NULL);
+=======
+            G_list_element(element, desc, mapset, NULL);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         reject();
         return 0;
     }

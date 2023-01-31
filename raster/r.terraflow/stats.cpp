@@ -89,7 +89,11 @@ int noclobberFile(char *fname)
             else { /* file exists */
                 char buf[BUFSIZ];
                 G_debug(1, "file %s exists - renaming.\n", fname);
+<<<<<<< HEAD
                 sprintf(buf, "%s.old", fname);
+=======
+                snprintf(buf, BUFSIZ, "%s.old", fname);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
                 if (rename(fname, buf) != 0) {
                     G_fatal_error("%s", fname);
                 }
@@ -111,7 +115,11 @@ char *noclobberFileName(char *fname)
         else { /* file exists */
             char buf[BUFSIZ];
             G_debug(1, "file %s exists - renaming.\n", fname);
+<<<<<<< HEAD
             sprintf(buf, "%s.old", fname);
+=======
+            snprintf(buf, BUFSIZ, "%s.old", fname);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
             if (rename(fname, buf) != 0) {
                 G_fatal_error("%s", fname);
             }
@@ -137,7 +145,11 @@ char *statsRecorder::timestamp()
 {
     static char buf[BUFSIZ];
     rt_stop(tm);
+<<<<<<< HEAD
     sprintf(buf, "[%.1f] ", rt_seconds(tm));
+=======
+    snprintf(buf, BUFSIZ, "[%.1f] ", rt_seconds(tm));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     return buf;
 }
 
@@ -159,20 +171,29 @@ void statsRecorder::comment(const char *s, const int verbose)
 void statsRecorder::comment(const char *s1, const char *s2)
 {
     char buf[BUFSIZ];
+<<<<<<< HEAD
     sprintf(buf, "%s%s", s1, s2);
+=======
+    snprintf(buf, BUFSIZ, "%s%s", s1, s2);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     comment(buf);
 }
 
 void statsRecorder::comment(const int n)
 {
     char buf[BUFSIZ];
+<<<<<<< HEAD
     sprintf(buf, "%d", n);
+=======
+    snprintf(buf, BUFSIZ, "%d", n);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     comment(buf);
 }
 
 char *formatNumber(char *buf, off_t val)
 {
     if (val > (1 << 30)) {
+<<<<<<< HEAD
         sprintf(buf, "%.2fG (%" PRI_OFF_T ")", (double)val / (1 << 30), val);
     }
     else if (val > (1 << 20)) {
@@ -183,6 +204,21 @@ char *formatNumber(char *buf, off_t val)
     }
     else {
         sprintf(buf, "%" PRI_OFF_T, val);
+=======
+        snprintf(buf, BUFSIZ, "%.2fG (%" PRI_OFF_T ")", (double)val / (1 << 30),
+                 val);
+    }
+    else if (val > (1 << 20)) {
+        snprintf(buf, BUFSIZ, "%.2fM (%" PRI_OFF_T ")", (double)val / (1 << 20),
+                 val);
+    }
+    else if (val > (1 << 10)) {
+        snprintf(buf, BUFSIZ, "%.2fK (%" PRI_OFF_T ")", (double)val / (1 << 10),
+                 val);
+    }
+    else {
+        snprintf(buf, BUFSIZ, "%" PRI_OFF_T, val);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     }
     return buf;
 }

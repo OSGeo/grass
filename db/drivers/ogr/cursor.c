@@ -55,7 +55,11 @@ int db__driver_close_cursor(dbCursor *dbc)
    \return pointer to cursor structure
    \return NULL on error
  */
+<<<<<<< HEAD
 cursor *alloc_cursor()
+=======
+cursor *alloc_cursor(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     cursor *c;
 

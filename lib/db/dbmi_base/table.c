@@ -140,7 +140,12 @@ int db_get_table_number_of_columns(dbTable *table)
     return table->numColumns;
 }
 
+<<<<<<< HEAD
 static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
+=======
+static void set_all_column_privs(dbTable *table,
+                                 void (*set_column_priv)(dbColumn *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int col, ncols;
     dbColumn *column;
@@ -152,7 +157,12 @@ static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
     }
 }
 
+<<<<<<< HEAD
 static int get_all_column_privs(dbTable *table, int (*get_column_priv)())
+=======
+static int get_all_column_privs(dbTable *table,
+                                int (*get_column_priv)(dbColumn *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 {
     int priv, col, ncols;
     dbColumn *column;

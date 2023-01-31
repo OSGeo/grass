@@ -163,8 +163,14 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     assert(buff_0);
 
     char str[200];
+<<<<<<< HEAD
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
             (long)max_nbuf);
+=======
+    snprintf(str, sizeof(str),
+             "em_pqueue: allocating array of %ld buff pointers\n",
+             (long)max_nbuf);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     MEMORY_LOG(str);
 
     // allocate ext memory buffers array
@@ -317,8 +323,14 @@ em_pqueue<T, Key>::em_pqueue()
 
     // allocate ext memory buffers array
     char str[200];
+<<<<<<< HEAD
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
             (long)max_nbuf);
+=======
+    snprintf(str, sizeof(str),
+             "em_pqueue: allocating array of %ld buff pointers\n",
+             (long)max_nbuf);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     MEMORY_LOG(str);
     // allocate ext memory buffers array
     buff = new em_buffer<T, Key> *[max_nbuf];
@@ -445,8 +457,14 @@ em_pqueue<T, Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis)
 
     // allocate ext memory buffer array
     char str[200];
+<<<<<<< HEAD
     sprintf(str, "em_pqueue: allocating array of %ld buff pointers\n",
             (long)max_nbuf);
+=======
+    snprintf(str, sizeof(str),
+             "em_pqueue: allocating array of %ld buff pointers\n",
+             (long)max_nbuf);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
     MEMORY_LOG(str);
     buff = new em_buffer<T, Key> *[max_nbuf];
     assert(buff);
@@ -594,8 +612,14 @@ bool em_pqueue<T, Key>::fillpq()
     AMI_err ae;
     {
         char str[200];
+<<<<<<< HEAD
         sprintf(str, "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
                 crt_buf);
+=======
+        snprintf(str, sizeof(str),
+                 "em_pqueue::fillpq: allocate array of %hd AMI_STREAMs\n",
+                 crt_buf);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         MEMORY_LOG(str);
     }
     // merge pqsize smallest elements from each buffer into a new stream
@@ -1178,8 +1202,13 @@ void em_pqueue<T, Key>::empty_buff(unsigned short i)
     if (!buff[i + 1]) {
         // create buff[i+1] as a level-(i+2) buffer
         char str[200];
+<<<<<<< HEAD
         sprintf(str, "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n",
                 i);
+=======
+        snprintf(str, sizeof(str),
+                 "em_pqueue::empty_buff( %hd ) allocate new em_buffer\n", i);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
         MEMORY_LOG(str);
         buff[i + 1] = new em_buffer<T, Key>(i + 2, bufsize, buf_arity);
     }

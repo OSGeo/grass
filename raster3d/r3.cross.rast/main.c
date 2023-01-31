@@ -37,7 +37,11 @@ int globalElevMapType;
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int elevfd, int outfd,
                  char *errorMsg); /*Simple Error message */
+<<<<<<< HEAD
 void set_params();                /*Fill the paramType structure */
+=======
+void set_params(void);            /*Fill the paramType structure */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd,
                           int outfd); /*Write the raster */
 void close_output_map(int fd);        /*close the map */
@@ -77,7 +81,7 @@ void close_output_map(int fd)
 /* ************************************************************************* */
 /* Set up the arguments we are expecting *********************************** */
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.input = G_define_option();
     param.input->key = "input";

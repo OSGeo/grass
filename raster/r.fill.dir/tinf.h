@@ -13,9 +13,9 @@ int is_null_c(void *);
 int is_null_f(void *);
 int is_null_d(void *);
 
-size_t bpe_c();
-size_t bpe_f();
-size_t bpe_d();
+size_t bpe_c(void);
+size_t bpe_f(void);
+size_t bpe_d(void);
 
 void *get_min_c(void *, void *);
 void *get_min_f(void *, void *);
@@ -65,11 +65,19 @@ void prod_d(void *, void *);
  * its argument list to the list below */
 
 extern int (*is_null)(void *);
+<<<<<<< HEAD
 extern size_t (*bpe)();
 extern void *(*get_max)(void *, void *);
 extern void *(*get_min)(void *, void *);
 extern void (*get_row)(int, void *, int);
 extern void *(*get_buf)();
+=======
+extern size_t (*bpe)(void);
+extern void *(*get_max)(void *, void *);
+extern void *(*get_min)(void *, void *);
+extern void (*get_row)(int, void *, int);
+extern void *(*get_buf)(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 extern void (*put_row)(int, void *);
 extern double (*slope)(void *, void *, double);
 extern void (*set_min)(void *);
