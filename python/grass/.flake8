@@ -2,6 +2,10 @@
 ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
+<<<<<<< HEAD
+=======
+    E722, # do not use bare 'except'
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
 
 per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
