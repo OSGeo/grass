@@ -219,13 +219,13 @@ static int zero_fill(int fd, off_t nbytes)
     register int n;
 
     /* zero buf */
-    n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+    n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
     b = buf;
     while (n-- > 0)
         *b++ = 0;
 
     while (nbytes > 0) {
-        n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+        n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
         errno = 0;
         if (write(fd, buf, n) != n) {
             int err = errno;

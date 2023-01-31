@@ -24,7 +24,7 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
         else
             scient_format(v, buf, *n, *dp);
 
-        if (strlen(buf) <= *n)
+        if ((int)strlen(buf) <= *n)
             break;
 
         if (*dp) {

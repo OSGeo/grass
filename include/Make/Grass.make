@@ -5,10 +5,10 @@
 # xxxLIBDIR  directory(ies) containing library (example: /usr/lib)
 # xxxLIBPATH cc option for library directory (example: -L/usr/lib)
 # xxx_LIBNAME library name (example: gis)
-# xxxLIB full static library path 
+# xxxLIB full static library path
 #        (example: /home/abc/grass63/dist.i686-pc-linux-gnu/lib/libgis.a)
 # xxxDEP dependency
-# 
+#
 # GRASS_xxx GRASS specific (without ARCH_xxx)
 #
 # ARCH_xxx platform specific dirs (without GRASS_xxx)
@@ -89,7 +89,7 @@ MANIFEST = internal
 endif
 
 # lexical analyzer and default options
-LFLAGS      = 
+LFLAGS      =
 
 # parser generator and default options
 YFLAGS      = -d -v
@@ -230,7 +230,7 @@ CAIRODRIVERDEPS += $(XLIBPATH) $(XLIB) $(XEXTRALIBS)
 endif
 
 ifneq ($(USE_CAIRO),)
-DISPLAYDEPS += $(CAIRODRIVERLIB) 
+DISPLAYDEPS += $(CAIRODRIVERLIB)
 endif
 
 ifneq ($(GDAL_LINK),)

@@ -542,7 +542,7 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
     mismatches[0] = NULL;
     mismatches[1] = NULL;
     total = 1;
-    for (unsigned int i = 0; i < S->nbands; i++) {
+    for (unsigned int i = 0; i < (unsigned int)S->nbands; i++) {
         if (!match1[i]) {
             if (S->semantic_labels[i])
                 total = total + strlen(S->semantic_labels[i]);
@@ -563,7 +563,7 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
         }
     }
     total = 1;
-    for (unsigned int j = 0; j < R->nfiles; j++) {
+    for (unsigned int j = 0; j < (unsigned int)R->nfiles; j++) {
         if (!match2[j]) {
             if (group_semantic_labels[j])
                 total = total + strlen(group_semantic_labels[j]);
@@ -588,10 +588,11 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
     if (!mc1 && !mc2) {
         for (unsigned int c = S->nclasses; c--;) {
             for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
-                for (unsigned int b1 = 0; b1 < S->nbands; b1++) {
+                for (unsigned int b1 = 0; b1 < (unsigned int)S->nbands; b1++) {
                     new_means[c][s][new_order[b1]] =
                         S->ClassSig[c].SubSig[s].means[b1];
-                    for (unsigned int b2 = 0; b2 < S->nbands; b2++) {
+                    for (unsigned int b2 = 0; b2 < (unsigned int)S->nbands;
+                         b2++) {
                         new_vars[c][s][new_order[b1]][new_order[b2]] =
                             S->ClassSig[c].SubSig[s].R[b1][b2];
                     }

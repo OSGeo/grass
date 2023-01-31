@@ -17,7 +17,8 @@ int o_adev(const char *basemap, const char *covermap, const char *outputmap,
 {
     struct Popen stats_child, reclass_child;
     FILE *stats, *reclass;
-    int first, mem, i, count;
+    int first, i, count;
+    size_t mem;
     long basecat, covercat, catb, catc;
     double value, adev, x;
     double *tab;
