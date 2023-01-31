@@ -19,6 +19,32 @@ Be sure to check your code against these rules:
 - [User message standardization](./message_standardization.md): formatting,
   standard phrases, i18N etc.
 
+### Use pre-commit
+
+It is highly recommended to install and use [Pre-commit](https://pre-commit.com)
+before submitting any new or modification of code or other content. The Pre-commit
+git hooks set are checking validity and executes formatting of file formats for
+a range of files types, including C/C++ and Python files. Pre-commit installs
+all necessary tools in a virtual environment upon first use.
+
+```bash
+cd <grass_source_dir>
+
+# once per repo
+python -m pip install pre-commit
+```
+
+Pre-commit will then be automatically triggered by git commit command. It is
+also possible to run manually, e.g:
+
+```bash
+pre-commit run clang-format --all-files
+pre-commit run black --all-files
+```
+
+The pre-commmit hooks are defined in
+[.pre-commit-config.yaml](../../../.pre-commit-config.yaml).
+
 ## GRASS GIS programming best practice
 
 There are many unwritten rules how GRASS modules should work, what they should

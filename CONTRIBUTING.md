@@ -119,8 +119,7 @@ git checkout -b new-feature
 
 You can use your favorite tools to change source code or other files
 in the local copy of the code. When making changes, please follow
-Submitting Guidelines at
-<http://trac.osgeo.org/grass/wiki/Submitting>.
+[Submitting Guidelines](./doc/development/submitting/submitting.md).
 
 ### Testing changes
 
