@@ -632,7 +632,11 @@ The gradient of one cell to there neighbours in each direction has the following
 
 \verbatim
 
+<<<<<<< HEAD
 The two dimensional gradient consists of 4 values between the neighbour cells
+=======
+The two dimensional gradient consits of 4 values between the neighbour cells
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
  ______________
 |    |    |    |
 |    |    |    |

@@ -75,7 +75,11 @@ that exists in a vector file will have the same HREF tag.
 
 	export GRASS_RENDER_HTMLMAXPOINTS
 	GRASS_RENDER_HTMLMAXPOINTS=xx
+<<<<<<< HEAD
 	    specifies the maximum number of vertices that a polygon can
+=======
+	    specifies the maxiumum number of vertices that a polygon can
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 	    have.  The default is 99.  Some browser can only handle
 	    image map polygons of less that 100 vertices.
 

@@ -164,10 +164,14 @@ void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
 <<<<<<< HEAD
+<<<<<<< HEAD
     char weight_matrix_line_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
     char weight_matrix_weight_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
 =======
     int weight_matrix_line_length = 80;
+=======
+    size_t weight_matrix_line_length = 80;
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
     char weight_matrix_line_buf[weight_matrix_line_length + 1];
     char weight_matrix_weight_buf[weight_matrix_line_length + 1];
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

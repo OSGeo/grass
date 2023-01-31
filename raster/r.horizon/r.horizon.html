@@ -5,8 +5,13 @@ radians. It reads a raster of elevation data and outputs the horizon
 outline in one of two modes:
 
 <ul>
+<<<<<<< HEAD
 <li> point: as a series of horizon
 heights in the specified directions from the given point(s). The results are
+=======
+<li> single point: as a series of horizon
+heights in the specified directions from the given point. The results are
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 written to the stdout.
 <li> raster: in this case the output is
 one or more raster maps, with each point in a raster giving the horizon
@@ -107,7 +112,11 @@ area specified by the current region definition.
 horizon raster maps. The raster name of each horizon direction
 raster will be constructed as <i>basename_</i>ANGLE, where ANGLE
 is the angle in degrees with the direction. If you use <b>r.horizon</b>
+<<<<<<< HEAD
 in the point mode this option will be ignored.
+=======
+in the single point mode this option will be ignored.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 <p>The <i>file</i> parameter allows saving the resulting horizon
 angles in a comma separated ASCII file with option <b>format=plain</b>
@@ -115,10 +124,14 @@ or in a JSON file with option <b>format=json</b> (point mode only). If
 you use <b>r.horizon</b> in the raster map mode this option will be ignored.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 <p>At the moment the elevation and maximum distance must be measured in meters,
 even if you use geographical coordinates (longitude/latitude). If your
 projection is based on distance (easting and northing), these too must
 be in meters. The buffer parameters must be in the same units as the
+<<<<<<< HEAD
 raster coordinates (e.g., for latitude-longitude buffers are
 measured in degrees).
 =======
@@ -126,6 +139,8 @@ measured in degrees).
 even if you use geographical coordinates (longitude/latitude). If your 
 projection is based on distance (easting and northing), these too must 
 be in meters. The buffer parameters must be in the same units as the 
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 raster coordinates (e.g., for latitude-longitude locations buffers are
 measured in degree unit).
 <<<<<<< HEAD
@@ -266,12 +281,16 @@ in GIS</a>, 8(2), 175-190
 Thomas Huld, Joint Research Centre of
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the European Commission, Ispra, Italy
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 the European Commission, Ispra, Italy 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+the European Commission, Ispra, Italy
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 <br>
 <p>Tomas Cebecauer, Joint Research Centre
 of the European Commission, Ispra, Italy
@@ -285,6 +304,7 @@ European Commission, Ispra, Italy
 <a href="mailto:Tomas.Cebecauer@jrc.it">Tomas.Cebecauer@jrc.it</a>
 <a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a>
 =======
 <a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a> 
@@ -292,3 +312,6 @@ European Commission, Ispra, Italy
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a>
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))

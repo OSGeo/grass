@@ -137,6 +137,7 @@ int IL_resample_output_2d(
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
                 params->nsizc)
@@ -144,6 +145,9 @@ int IL_resample_output_2d(
 =======
                 params->nsizc)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf1, cell1);
@@ -161,6 +165,7 @@ int IL_resample_output_2d(
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
                 params->nsizc)
@@ -168,6 +173,9 @@ int IL_resample_output_2d(
 =======
                 params->nsizc)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf2, cell1);
@@ -185,6 +193,7 @@ int IL_resample_output_2d(
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
                 params->nsizc)
@@ -192,6 +201,9 @@ int IL_resample_output_2d(
 =======
                 params->nsizc)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf3, cell1);
@@ -209,6 +221,7 @@ int IL_resample_output_2d(
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
                 params->nsizc)
@@ -216,6 +229,9 @@ int IL_resample_output_2d(
 =======
                 params->nsizc)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf4, cell1);
@@ -233,6 +249,7 @@ int IL_resample_output_2d(
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
                 params->nsizc)
@@ -240,6 +257,9 @@ int IL_resample_output_2d(
 =======
                 params->nsizc)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf5, cell1);
@@ -257,6 +277,7 @@ int IL_resample_output_2d(
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy) !=
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
                 params->nsizc)
@@ -264,6 +285,9 @@ int IL_resample_output_2d(
 =======
                 params->nsizc)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf6, cell1);

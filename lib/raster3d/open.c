@@ -142,6 +142,7 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
         /* if our long is to short to store offsets we can't read the file */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (map->indexNbytesUsed > (int)sizeof(long))
 =======
         if (map->indexNbytesUsed > sizeof(long))
@@ -149,6 +150,9 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
 =======
         if (map->indexNbytesUsed > sizeof(long))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (map->indexNbytesUsed > (int)sizeof(long))
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
             Rast3d_fatal_error(
                 _("Rast3d_open_cell_old: index does not fit into long"));
 

@@ -1,6 +1,10 @@
 --#############################################################################
 -- This SQL script is to update the spatial and temporal extent as well as
+<<<<<<< HEAD
 -- the modification time and revision of a space time dataset. This script
+=======
+-- the modifcation time and revision of a space time dataset. This script
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 -- should be called when maps inserted or deleted in a space time dataset.
 --
 --
@@ -20,6 +24,7 @@
 UPDATE STDS_metadata SET number_of_maps =
        (SELECT count(id) FROM SPACETIME_REGISTER_TABLE)
        WHERE id = 'SPACETIME_ID';
+<<<<<<< HEAD
 
 -- Update the temporal extent
 UPDATE STDS_absolute_time
@@ -77,3 +82,51 @@ UPDATE STDS_spatial_extent
            SPACETIME_REGISTER_TABLE.id = GRASS_MAP_spatial_extent.id
        ) AS new_stats
  WHERE STDS_spatial_extent.id = 'SPACETIME_ID';
+=======
+-- Update the temporal extent
+UPDATE STDS_absolute_time SET start_time =
+       (SELECT min(start_time) FROM GRASS_MAP_absolute_time WHERE GRASS_MAP_absolute_time.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_absolute_time SET end_time =
+       (SELECT max(end_time) FROM GRASS_MAP_absolute_time WHERE GRASS_MAP_absolute_time.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_relative_time SET start_time =
+       (SELECT min(start_time) FROM GRASS_MAP_relative_time WHERE GRASS_MAP_relative_time.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_relative_time SET end_time =
+       (SELECT max(end_time) FROM GRASS_MAP_relative_time WHERE GRASS_MAP_relative_time.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+-- Update the spatial extent
+UPDATE STDS_spatial_extent SET north =
+       (SELECT max(north) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_spatial_extent SET south =
+       (SELECT min(south) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_spatial_extent SET east =
+       (SELECT max(east) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_spatial_extent SET west =
+       (SELECT min(west) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_spatial_extent SET top =
+       (SELECT max(top) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_spatial_extent SET bottom =
+       (SELECT min(bottom) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+UPDATE STDS_spatial_extent SET proj =
+       (SELECT min(proj) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN
+    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       ) WHERE id = 'SPACETIME_ID';
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))

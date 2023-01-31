@@ -19,7 +19,11 @@ r.mapcalc --o expr="elev_5 = 45"
 # We @test several methods to generate @raster3d maps from raster maps
 # For validation a @precision=0 should be used. We start with 5 raster maps,
 # then 3 raster maps then using single float and double raster maps
+<<<<<<< HEAD
 # with different tile sizes and null data
+=======
+# with differen tile sizes and null data
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 r.to.rast3 --o input=elev_1,elev_2,elev_3,elev_4,elev_5 output=test_volume_6_raster tilesize=1
 r.to.rast3 --o input=elev_1,elev_2,elev_3               output=test_volume_3_raster tilesize=1
 r.to.rast3 --o input=elev_float                         output=test_volume_float_raster tilesize=2

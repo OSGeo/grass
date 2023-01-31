@@ -236,6 +236,7 @@ static int zero_fill(int fd, off_t nbytes)
     while (nbytes > 0) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
 =======
         n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
@@ -243,6 +244,9 @@ static int zero_fill(int fd, off_t nbytes)
 =======
         n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
         errno = 0;
         if (write(fd, buf, n) != n) {
             int err = errno;

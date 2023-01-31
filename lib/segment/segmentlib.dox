@@ -245,7 +245,11 @@ memory:
 <I>int Segment_close (SEGMENT *seg)</I>, close segment structure
 <P>
   Deletes the segment file and uses Segment_release() to release the
+<<<<<<< HEAD
   allocated memory. No further cleaning up is required.
+=======
+  allocated memory. No further cleaing up is required.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 <P>
 

@@ -70,6 +70,7 @@ static void read_hersh(const char *filename)
         int coords;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         unsigned int i, idx, count;
         int c;
 =======
@@ -80,6 +81,10 @@ static void read_hersh(const char *filename)
         unsigned int idx, count;
         int c, i;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        unsigned int i, idx, count;
+        int c;
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
         switch (c = fgetc(fp)) {
         case '\r':

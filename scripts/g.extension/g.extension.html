@@ -36,6 +36,7 @@ GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
 <<<<<<< HEAD
+<<<<<<< HEAD
 the user's home directory.
 =======
 the user's home directory. 
@@ -43,6 +44,9 @@ the user's home directory.
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+the user's home directory.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 On GNU/Linux it is <tt>$HOME/.grass8/addons</tt>,
 on MS-Windows it is <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.
 The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
@@ -93,12 +97,19 @@ For well known general hosting services, namely GitHub, GitLab and Bitbucket,
 <em>g.extension</em> supports the download of a repository.
 Here the user only needs to provide a base URL to the repository web page
 (with or without the <tt>https://</tt> part).
+<<<<<<< HEAD
 For GitHub, GitLab and Bitbucket, the latest source code in the default
 branch is downloaded, unless a specific branch is requested in the
 <em>branch</em> option.
 
 Of course, a user can still specify the full URL of a ZIP file e.g. for a
 specific release and install the archived code in this way (ZIP file mechanism
+=======
+For GitLab and Bitbucket, the latest source code in the default branch is
+downloaded, for GitHub, the latest source code in the master branch is downloaded.
+Of course, a user can still specify the full URL of a ZIP file
+and install a specific branch or release in this way (ZIP file mechanism
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 will be applied).
 
 <p>
