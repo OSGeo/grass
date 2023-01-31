@@ -14,6 +14,7 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *box)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         box->E = box->W = box->N = box->S = box->T = box->B = NAN;
 =======
         box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
@@ -24,6 +25,12 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *box)
 =======
         box->E = box->W = box->N = box->S = box->T = box->B = NAN;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         return 0;
     }
 

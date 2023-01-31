@@ -25,6 +25,7 @@ static int list_element(FILE *, const char *, const char *, const char *,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         int (*)(const char *, const char *, char *));
 =======
                         int (*)(const char *, const char *, const char *));
@@ -35,6 +36,12 @@ static int list_element(FILE *, const char *, const char *, const char *,
 =======
                         int (*)(const char *, const char *, char *));
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                        int (*)(const char *, const char *, const char *));
+=======
+                        int (*)(const char *, const char *, char *));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 /*!
    \brief General purpose list function
@@ -64,6 +71,7 @@ void G_list_element(const char *element, const char *desc, const char *mapset,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     int (*lister)(const char *, const char *, char *))
 =======
                     int (*lister)(const char *, const char *, const char *))
@@ -74,6 +82,12 @@ void G_list_element(const char *element, const char *desc, const char *mapset,
 =======
                     int (*lister)(const char *, const char *, char *))
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                    int (*lister)(const char *, const char *, const char *))
+=======
+                    int (*lister)(const char *, const char *, char *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     struct Popen pager;
     int n;
@@ -121,6 +135,7 @@ static int list_element(FILE *out, const char *element, const char *desc,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         int (*lister)(const char *, const char *, char *))
 =======
                         int (*lister)(const char *, const char *, const char *))
@@ -131,6 +146,12 @@ static int list_element(FILE *out, const char *element, const char *desc,
 =======
                         int (*lister)(const char *, const char *, char *))
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                        int (*lister)(const char *, const char *, const char *))
+=======
+                        int (*lister)(const char *, const char *, char *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     char path[GPATH_MAX];
     int count = 0;

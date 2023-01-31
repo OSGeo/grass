@@ -606,6 +606,7 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*lower)(double, double);
 =======
     int (*lower)();
@@ -616,6 +617,12 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
 =======
     int (*lower)(double, double);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    int (*lower)();
+=======
+    int (*lower)(double, double);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
     dtmp = dcellVal;
     /* I know the functions which call me already check for null values,

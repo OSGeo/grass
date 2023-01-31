@@ -29,6 +29,7 @@ int format_double(double v, char *buf, int n)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (k = n; (ssize_t)strlen(buf) > n; k--) {
 =======
     for (k = n; strlen(buf) > n; k--) {
@@ -39,6 +40,12 @@ int format_double(double v, char *buf, int n)
 =======
     for (k = n; (ssize_t)strlen(buf) > n; k--) {
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    for (k = n; strlen(buf) > n; k--) {
+=======
+    for (k = n; (ssize_t)strlen(buf) > n; k--) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         sprintf(fmt, "%%%d.%dg", n, k);
         sprintf(buf, fmt, v);
     }

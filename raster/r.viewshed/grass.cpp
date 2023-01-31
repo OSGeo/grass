@@ -250,6 +250,7 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
     e.angle = -1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
 =======
     for (i = 0; i < nrows; i++) {
@@ -260,6 +261,12 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
 =======
     for (i = 0; i < (dimensionType)nrows; i++) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (i = 0; i < nrows; i++) {
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         /*read in the raster row */
 
         G_SURFACE_T *tmprast = inrast[0];
@@ -278,6 +285,7 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         for (j = 0; j < (dimensionType)ncols; j++) {
 =======
         for (j = 0; j < Rast_window_cols(); j++) {
@@ -288,6 +296,12 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
 =======
         for (j = 0; j < (dimensionType)ncols; j++) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        for (j = 0; j < Rast_window_cols(); j++) {
+=======
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             e.row = i;
             e.col = j;
 
@@ -501,6 +515,7 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
     /*start scanning through the grid */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
 =======
     for (i = 0; i < nrows; i++) {
@@ -511,6 +526,12 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
 =======
     for (i = 0; i < (dimensionType)nrows; i++) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (i = 0; i < nrows; i++) {
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
         G_percent(i, nrows, 2);
 
@@ -530,6 +551,7 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         for (j = 0; j < (dimensionType)ncols; j++) {
 =======
         for (j = 0; j < ncols; j++) {
@@ -540,6 +562,12 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
 =======
         for (j = 0; j < (dimensionType)ncols; j++) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        for (j = 0; j < ncols; j++) {
+=======
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
             e.row = i;
             e.col = j;
@@ -710,6 +738,7 @@ void save_grid_to_GRASS(Grid *grid, char *filename, RASTER_MAP_TYPE type,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
         G_percent(i, nrows, 5);
         for (j = 0; j < (dimensionType)ncols; j++) {
@@ -722,10 +751,19 @@ void save_grid_to_GRASS(Grid *grid, char *filename, RASTER_MAP_TYPE type,
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
+    for (i = 0; i < Rast_window_rows(); i++) {
+        G_percent(i, Rast_window_rows(), 5);
+        for (j = 0; j < Rast_window_cols(); j++) {
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
     for (i = 0; i < (dimensionType)nrows; i++) {
         G_percent(i, nrows, 5);
         for (j = 0; j < (dimensionType)ncols; j++) {
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             if (is_invisible_nodata(grid->grid_data[i][j])) {
                 writeNodataValue(outrast, j, type);
             }
@@ -809,28 +847,38 @@ void save_vis_elev_to_GRASS(Grid *visgrid, char *elevfname, char *visfname,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
         /* get the row from elevation */
         Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
         for (j = 0; j < (dimensionType)ncols; j++) {
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     for (i = 0; i < Rast_window_rows(); i++) {
         /* get the row from elevation */
         Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
         for (j = 0; j < Rast_window_cols(); j++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 =======
     for (i = 0; i < (dimensionType)nrows; i++) {
         /* get the row from elevation */
         Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
         for (j = 0; j < (dimensionType)ncols; j++) {
+<<<<<<< HEAD
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
             /* read the current elevation value */
             int isNull = 0;
@@ -967,6 +1015,7 @@ void save_io_visibilitygrid_to_GRASS(IOVisibilityGrid *visgrid, char *fname,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
         for (j = 0; j < (dimensionType)ncols; j++) {
 =======
@@ -980,6 +1029,14 @@ void save_io_visibilitygrid_to_GRASS(IOVisibilityGrid *visgrid, char *fname,
     for (i = 0; i < (dimensionType)nrows; i++) {
         for (j = 0; j < (dimensionType)ncols; j++) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (i = 0; i < Rast_window_rows(); i++) {
+        for (j = 0; j < Rast_window_cols(); j++) {
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
             if (curResult->row == i && curResult->col == j) {
                 /*cell is recodred in the visibility stream: it must be
@@ -1079,12 +1136,17 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     int nrows = Rast_window_rows();
     int ncols = Rast_window_cols();
     if (nrows > maxDimension || ncols > maxDimension)
         G_fatal_error(_("Grid size exceeds max dimension: %d"), maxDimension);
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1092,6 +1154,9 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
     for (i = 0; i < (dimensionType)nrows; i++) {
 

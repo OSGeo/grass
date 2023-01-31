@@ -27,6 +27,7 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((int)strlen(buf) <= *n)
 =======
         if (strlen(buf) <= *n)
@@ -37,6 +38,12 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
 =======
         if ((int)strlen(buf) <= *n)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (strlen(buf) <= *n)
+=======
+        if ((int)strlen(buf) <= *n)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
             break;
 
         if (*dp) {

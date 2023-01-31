@@ -113,6 +113,7 @@ void alloc_edges(unsigned int n)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void free_memory(void)
 =======
 =======
@@ -122,6 +123,12 @@ void free_memory()
 =======
 void free_memory(void)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+void free_memory()
+=======
+void free_memory(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     G_free(sites);
     G_free(edges);

@@ -14,8 +14,11 @@ Changes done in GRASS:
 - few modifications to get rid of compiler warnings, but warnings like:
     index.c:277: warning: `tmp_nptr' might be used uninitialized in this function
 <<<<<<< HEAD
+<<<<<<< HEAD
     were left because need deeper revision if may cause problems, instead of blindly init to 0/NULL
 =======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     were left because need deeper revision if may cause problems, insetad of blindly init to 0/NULL
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 - '//' comments -> '/* */'

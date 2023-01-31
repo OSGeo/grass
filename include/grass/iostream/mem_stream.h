@@ -170,6 +170,7 @@ char *MEM_STREAM<T>::sprint()
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
 =======
     sprintf(buf, "[MEM_STREAM %d]", stream_len());
@@ -180,6 +181,12 @@ char *MEM_STREAM<T>::sprint()
 =======
     snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, "[MEM_STREAM %d]", stream_len());
+=======
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
     return buf;
 }
 

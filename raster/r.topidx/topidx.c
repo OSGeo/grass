@@ -43,6 +43,7 @@ void calculate_atanb(void)
     nsink = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (; natb < ncells;) {
 =======
     for (iter = 1; natb < ncells; iter++) {
@@ -53,6 +54,12 @@ void calculate_atanb(void)
 =======
     for (; natb < ncells;) {
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (iter = 1; natb < ncells; iter++) {
+=======
+    for (; natb < ncells;) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         /*
            for(i=0;i<80;i++)
            fprintf(stderr,"\b");

@@ -8,6 +8,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void make_incr(DateTime *, int, int, DateTime *);
 =======
 static void make_incr();
@@ -18,6 +19,12 @@ static void make_incr();
 =======
 static void make_incr(DateTime *, int, int, DateTime *);
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static void make_incr();
+=======
+static void make_incr(DateTime *, int, int, DateTime *);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
 /*!
  * \brief

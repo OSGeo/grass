@@ -34,6 +34,7 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                    int (*checkpoint)(struct Cluster *, int), int *interrupted)
 =======
                    int (*checkpoint)(), int *interrupted)
@@ -44,6 +45,12 @@ int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
 =======
                    int (*checkpoint)(struct Cluster *, int), int *interrupted)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                   int (*checkpoint)(), int *interrupted)
+=======
+                   int (*checkpoint)(struct Cluster *, int), int *interrupted)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 {
     int changes;
 

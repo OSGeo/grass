@@ -82,6 +82,7 @@ int G_recursive_copy(const char *src, const char *dst)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         ssize_t len, len2;
 =======
         size_t len, len2;
@@ -92,6 +93,12 @@ int G_recursive_copy(const char *src, const char *dst)
 =======
         ssize_t len, len2;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        size_t len, len2;
+=======
+        ssize_t len, len2;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
         if (G_lstat(dst, &sb) == 0 && S_ISDIR(sb.st_mode)) {
             char path[GPATH_MAX];

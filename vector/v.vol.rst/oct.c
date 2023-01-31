@@ -37,6 +37,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 struct octfunc *
@@ -61,6 +62,22 @@ struct octfunc *OT_functions_new(int (*compare)(), VOID_T **(*divide_data)(),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+struct octfunc *OT_functions_new(int (*compare)(), VOID_T **(*divide_data)(),
+                                 int (*add_data)(), int (*intersect)(),
+                                 int (*division_check)(), int (*get_points)())
+=======
+struct octfunc *
+OT_functions_new(int (*compare)(struct quadruple *, struct octdata *),
+                 struct octdata **(*divide_data)(struct octdata *),
+                 int (*add_data)(struct quadruple *, struct octdata *),
+                 int (*intersect)(double, double, double, double, double,
+                                  double, struct octdata *),
+                 int (*division_check)(struct octdata *),
+                 int (*get_points)(struct quadruple *, struct octdata *, double,
+                                   double, double, double, double, double, int))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 /* Initializes FUNCTIONS structure with given arguments */
 {
     struct octfunc *functions;
@@ -80,6 +97,7 @@ struct octfunc *OT_functions_new(int (*compare)(), VOID_T **(*divide_data)(),
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
 =======
 struct octtree *OT_tree_new(VOID_T *data, struct octtree **leafs,
@@ -90,6 +108,12 @@ struct octtree *OT_tree_new(VOID_T *data, struct octtree **leafs,
 =======
 struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+struct octtree *OT_tree_new(VOID_T *data, struct octtree **leafs,
+=======
+struct octtree *OT_tree_new(struct octdata *data, struct octtree **leafs,
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
                             struct octtree *parent, struct octfunc *functions,
                             int octant)
 /*Initializes TREE using given arguments */

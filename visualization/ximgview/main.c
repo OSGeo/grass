@@ -148,6 +148,7 @@ static void main_loop(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         unsigned long delay = 0;
 =======
         unsigned long delay;
@@ -158,6 +159,12 @@ static void main_loop(void)
 =======
         unsigned long delay = 0;
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        unsigned long delay;
+=======
+        unsigned long delay = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 
         while (XPending(dpy) > 0) {
             XEvent event;
@@ -241,6 +248,7 @@ static int read_bmp_header(const unsigned char *p)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (get_4(&p) != (unsigned int)i_width * i_height * 4)
 =======
     if (get_4(&p) != i_width * i_height * 4)
@@ -251,6 +259,12 @@ static int read_bmp_header(const unsigned char *p)
 =======
     if (get_4(&p) != (unsigned int)i_width * i_height * 4)
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (get_4(&p) != i_width * i_height * 4)
+=======
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
         return 0;
 
     if (size != HEADER_SIZE + i_width * i_height * 4)
