@@ -26,14 +26,16 @@ ENV DEBIAN_FRONTEND noninteractive
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 # define versions to be used
+=======
+# define versions to be used (PDAL is not available on Ubuntu/Debian, so we compile it here)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 # https://github.com/PDAL/PDAL/releases
 ARG PDAL_VERSION=2.4.3
-# https://github.com/hobuinc/laz-perf/releases
-ARG LAZ_PERF_VERSION=3.2.0
 
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -369,18 +371,6 @@ WORKDIR /src/grass_build
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
-## install laz-perf (missing from https://packages.ubuntu.com/)
-RUN apt-get install cmake
-WORKDIR /src
-RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz -O laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-    tar -zxf laz-perf-${LAZ_PERF_VERSION}.tar.gz && \
-    cd laz-perf-${LAZ_PERF_VERSION} && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    make install
-
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
 RUN mkdir vdatum && \
@@ -397,7 +387,7 @@ RUN mkdir vdatum && \
     cd .. && \
     rm -rf vdatum
 
-## install pdal
+## compile and install PDAL (not available on Debian/Ubuntu) with laz-perf enabled
 ENV NUMTHREADS=4
 WORKDIR /src
 RUN wget -q \
@@ -420,10 +410,10 @@ RUN wget -q \
       -DHEXER_INCLUDE_DIR=/usr/include/ \
       -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
-      -DBUILD_PLUGIN_PGPOINTCLOUD=ON \
+      -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
       -DBUILD_PGPOINTCLOUD_TESTS=OFF \
       -DBUILD_PLUGIN_SQLITE=ON \
-      -DWITH_LASZIP=ON \
+      -DWITH_LASZIP=OFF \
       -DWITH_LAZPERF=ON \
       -DWITH_TESTS=ON && \
     make -j $NUMTHREADS && \
@@ -593,6 +583,7 @@ COPY docker/testdata/test_grass_session.py .
 ## just scan the LAZ file
 # Not yet ready for GRASS GIS 8:
 #RUN /usr/bin/python3 /scripts/test_grass_session.py
+# test LAZ file
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 WORKDIR /grassdb

@@ -195,6 +195,7 @@ int main(int argc, char *argv[])
         if (strlen(history_opt->answer) > 71) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             for (unsigned int i = 0; i < strlen(history_opt->answer); i += 71) {
                 char buf[72];
 
@@ -211,6 +212,9 @@ int main(int argc, char *argv[])
             int i;
 
             for (i = 0; i < strlen(history_opt->answer); i += 71) {
+=======
+            for (unsigned int i = 0; i < strlen(history_opt->answer); i += 71) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
                 char buf[72];
 
                 strncpy(buf, &history_opt->answer[i], sizeof(buf) - 1);

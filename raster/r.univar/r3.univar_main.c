@@ -220,6 +220,7 @@ int main(int argc, char *argv[])
 
     stats = create_univar_stat_struct(map_type, i);
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (i = 0; i < (unsigned int)n_zones; i++) {
 =======
     for (i = 0; i < n_zones; i++) {
@@ -227,6 +228,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0; i < (unsigned int)n_zones; i++) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
         unsigned int j;
 
         for (j = 0; j < stats[i].n_perc; j++) {

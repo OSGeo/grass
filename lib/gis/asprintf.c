@@ -115,6 +115,7 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
         va_end(ap);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (count >= 0 && (size_t)count < osize)
 =======
         if (count >= 0 && count < osize)
@@ -122,6 +123,9 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 =======
         if (count >= 0 && count < osize)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (count >= 0 && (size_t)count < osize)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
             break;
         if (count > -1)
             osize = count + 1;

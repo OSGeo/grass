@@ -217,12 +217,16 @@ CPPFLAGS="$5 $CPPFLAGS"
 AC_RUN_IFELSE([AC_LANG_SOURCE([[
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <stdio.h>
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 #include <stdio.h> 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#include <stdio.h>
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 #include <$1>
 int main(void) {
  FILE *fp = fopen("conftestdata","w");
@@ -608,6 +612,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
@@ -617,6 +622,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 	    # TODO: add optional pthread support with any combination of: 
+=======
+	    # TODO: add optional pthread support with any combination of:
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
 	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
@@ -801,6 +809,7 @@ AC_DEFUN([LOC_OPENMP],
 dnl -------------------- / OpenMP ---------------------------------------------
 
 
+<<<<<<< HEAD
 dnl -------------------- OpenMP -----------------------------------------------
 dnl OpenMP code borrowed and modified from Autoconf 2.71 (AC_OPENMP)
 dnl to enable Clang detection
@@ -939,6 +948,8 @@ fi])
 dnl -------------------- / OpenMP ---------------------------------------------
 
 
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 dnl XXXX Begin Stolen from cdrtools-2.01
 dnl XXXX by Joerg Schilling <schilling fokus fraunhofer de> et al. XXXXXXXXX
 

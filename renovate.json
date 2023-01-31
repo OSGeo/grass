@@ -1,7 +1,11 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
+<<<<<<< HEAD
         "config:best-practices",
+=======
+        "config:base",
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
         ":semanticCommitTypeAll(CI)"
     ]
 }

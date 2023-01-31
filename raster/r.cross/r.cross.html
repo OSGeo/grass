@@ -9,6 +9,7 @@ created by <em>r.cross</em>.
 
 <h2>OPTIONS</h2>
 
+<<<<<<< HEAD
 <p>
 With the <b>-z</b> flag NULL values are not crossed.
 This means that if a NULL value occurs in any input data layer,
@@ -18,6 +19,21 @@ In the example given below, use of the <b>-z</b> option
 would cause 3 categories to be generated instead of 5.
 
 <p>
+=======
+The program will be run non-interactively if the user specifies
+the names of between 2-10 raster map layers be used as <em>input</em>,
+and the name of a raster map layer to hold program <em>output</em>.
+
+<p>
+With the <b>-z</b> flag NULL values are not crossed.
+This means that if a NULL value occurs in any input data layer,
+this combination is ignored,
+even if other data layers contain non-NULL data.
+In the example given below, use of the <b>-z</b> option
+would cause 3 categories to be generated instead of 5.
+
+<p>
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 If the <b>-z</b> flag is not specified, then map layer combinations
 in which some values are NULL will be assigned
 a unique category value in the resulting output map.

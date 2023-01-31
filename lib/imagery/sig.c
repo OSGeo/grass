@@ -774,6 +774,9 @@ char **I_sort_signatures_by_semantic_label(struct Signature *S,
     total = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
     for (unsigned int i = 0; i < (unsigned int)S->nbands; i++) {
         if (!match1[i]) {
             if (S->semantic_labels[i])
@@ -838,6 +841,9 @@ char **I_sort_signatures_by_semantic_label(struct Signature *S,
     total = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
     for (unsigned int j = 0; j < (unsigned int)R->nfiles; j++) {
         if (!match2[j]) {
             if (group_semantic_labels[j])
@@ -905,6 +911,9 @@ char **I_sort_signatures_by_semantic_label(struct Signature *S,
         for (unsigned int c = S->nsigs; c--;) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
             for (unsigned int b1 = 0; b1 < (unsigned int)S->nbands; b1++) {
                 new_means[c][new_order[b1]] = S->sig[c].mean[b1];
                 for (unsigned int b2 = 0; b2 <= b1; b2++) {

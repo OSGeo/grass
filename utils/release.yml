@@ -71,6 +71,7 @@ notes:
     - title: Continuous Integration, Tests, Code Quality, and Checks
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       regexp: '(CI|ci|CI\(deps\)|ci\(deps\)|[Tt]ests|[Cc]hecks|pytest): '
 
     - title: Contributing and Management
@@ -85,6 +86,9 @@ notes:
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
       regexp: '(CI|ci|[Tt]ests|[Cc]hecks|pytest): '
+=======
+      regexp: '(CI|ci|CI\(deps\)|ci\(deps\)|[Tt]ests|[Cc]hecks|pytest): '
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
     - title: Contributing and Management
       regexp: '(contributing|CONTRIBUTING.md|contributors.csv): '
