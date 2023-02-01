@@ -36,6 +36,11 @@
 #define __attribute__(x)
 #endif
 
+/*!
+    \def UNUSED
+    \brief A macro for an attribut, if attached to a variable, indicates
+           that the variable is not used
+*/
 #undef UNUSED
 #if (defined(__GNUC__) || defined(__APPLE__)) && !defined(_MSC_VER)
 #define UNUSED __attribute__((unused))
