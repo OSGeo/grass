@@ -38,10 +38,9 @@
 
 /*!
     \def UNUSED
-    \brief A macro for an attribut, if attached to a variable, indicates
-           that the variable is not used
+    \brief A macro for an attribute, if attached to a variable,
+           indicating that the variable is not used
 */
-#undef UNUSED
 #if (defined(__GNUC__) || defined(__APPLE__)) && !defined(_MSC_VER)
 #define UNUSED __attribute__((unused))
 #else
