@@ -41,7 +41,8 @@ static double buffer = 0.0;
 label_t *labels_init(struct params *p, int *n_labels)
 {
     label_t *labels;
-    int legal_types, layer, i = 0, error, sql_len;
+    int legal_types, layer, error, sql_len;
+    unsigned int i = 0;
     size_t label_sz;
     struct field_info *fi;
     dbDriver *driver;

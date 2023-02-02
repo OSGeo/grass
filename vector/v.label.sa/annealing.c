@@ -115,7 +115,7 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
                 }
             }
             /* decrease immediately */
-            if (consec_successes > (5 * n_labels)) {
+            if (consec_successes > (unsigned int)(5 * n_labels)) {
                 consec_successes = 0;
                 break;
             }

@@ -13,7 +13,7 @@ void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
         for (i = 0; i < ncols; i++) {
             unsigned int k = buf[j * ncols + i];
 
-            if (k > threshold)
+            if (k > (unsigned int)threshold)
                 acc |= bit;
 
             bit >>= 1;

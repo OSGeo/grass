@@ -1,7 +1,7 @@
 """
 Name:       v.vect.stats test
 Purpose:    Tests v.vect.stats and its flags/options.
-	
+
 Author:     Sunveer Singh, Google Code-in 2017
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
