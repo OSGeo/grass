@@ -411,7 +411,7 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
     : arity(ar), level(i), basesize(bs)
 {
 
-    assert((level >= 1) && (basesize >= 0));
+    assert(level >= 1);
 
     char str[100];
     snprintf(str, sizeof(str),
@@ -564,7 +564,7 @@ template <class T, class Key>
 AMI_STREAM<T> *em_buffer<T, Key>::get_stream(unsigned int i)
 {
 
-    assert(i >= 0 && i < index);
+    assert(i < index);
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::get_stream");
@@ -623,7 +623,7 @@ template <class T, class Key>
 void em_buffer<T, Key>::put_stream(unsigned int i)
 {
 
-    assert(i >= 0 && i < index);
+    assert(i < index);
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::put_stream");

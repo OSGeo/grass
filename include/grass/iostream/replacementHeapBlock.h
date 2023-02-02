@@ -216,7 +216,7 @@ template <class T, class Compare>
 void ReplacementHeapBlock<T, Compare>::deleteRun(size_t i)
 {
 
-    assert(i >= 0 && i < size && mergeHeap[i].run);
+    assert(i < size && mergeHeap[i].run);
 
     RBHEAP_DEBUG
     {
@@ -294,7 +294,7 @@ void ReplacementHeapBlock<T, Compare>::heapify(size_t i)
     size_t rc = rheap_rchild(i);
 
     Compare cmpobj;
-    assert(i >= 0 && i < size);
+    assert(i < size);
     if ((lc < size) && (cmpobj.compare(mergeHeap[lc].value,
                                        mergeHeap[min_index].value) == -1)) {
         min_index = lc;
