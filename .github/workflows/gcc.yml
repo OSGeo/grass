@@ -1,3 +1,4 @@
+---
 name: GCC C/C++ standards check
 
 on:
@@ -54,7 +55,9 @@ jobs:
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: "-std=${{ matrix.c }} -fPIC -Wall"
+          CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
+            -Wno-error=implicit-fallthrough -Wno-error=unused-parameter
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC -Wall"
+          CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
+            -Wno-error=implicit-fallthrough -Wno-error=unused-parameter
         run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror
