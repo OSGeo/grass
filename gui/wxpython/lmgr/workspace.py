@@ -347,8 +347,9 @@ class WorkspaceManager:
         # load layout
         #
         if UserSettings.Get(group="general", key="singleWindow", subkey="enabled"):
-            if gxwXml.layout:
+            if gxwXml.layout["panes"]:
                 self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
+            if gxwXml.layout["notebook"]:
                 self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.layout["notebook"])
 
         self.workspaceFile = filename
