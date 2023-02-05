@@ -226,10 +226,8 @@ class GConsoleWindow(wx.SplitterWindow):
             self.panelPrompt.SetSizer(promptSizer)
 
         # split window
-        if self._gcstyle & GC_PROMPT:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, 0)
-        else:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, 0)
+        self.SplitHorizontally(self.panelOutput, self.panelPrompt, 0)
+        if not (self._gcstyle & GC_PROMPT):
             self.Unsplit()
         self.SetMinimumPaneSize(self.btnClear.GetSize()[1] + 100)
 
