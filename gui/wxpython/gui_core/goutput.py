@@ -136,8 +136,8 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdPrompt.Hide()
 
         # buttons
-        self.btnOutputClear = ClearButton(parent=self.panelPrompt)
-        self.btnOutputClear.SetToolTip(_("Clear output window content"))
+        self.btnClear = ClearButton(parent=self.panelPrompt)
+        self.btnClear.SetToolTip(_("Clear content of output and command windows"))
         self.btnOutputSave = Button(parent=self.panelPrompt, id=wx.ID_SAVE)
         self.btnOutputSave.SetToolTip(_("Save output window content to the file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
@@ -151,7 +151,7 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.btnCmdExportHistory.Hide()
 
-        self.btnOutputClear.Bind(wx.EVT_BUTTON, self.OnOutputClear)
+        self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
         self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
@@ -195,7 +195,7 @@ class GConsoleWindow(wx.SplitterWindow):
                 border=5,
             )
             btnSizer.AddStretchSpacer()
-            btnSizer.Add(self.btnOutputClear, proportion=0, flag=wx.EXPAND, border=5)
+            btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
             promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.outputSizer.Add(
@@ -231,7 +231,7 @@ class GConsoleWindow(wx.SplitterWindow):
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
             self.Unsplit()
-        self.SetMinimumPaneSize(self.btnOutputClear.GetSize()[1] + 100)
+        self.SetMinimumPaneSize(self.btnClear.GetSize()[1] + 100)
 
         self.SetSashGravity(1.0)
 
@@ -330,12 +330,13 @@ class GConsoleWindow(wx.SplitterWindow):
             notification=Notification.MAKE_VISIBLE,
         )
 
-    def OnOutputClear(self, event):
-        """Clear content of output window"""
+    def OnClear(self, event):
+        """Clear content of output window and command window"""
         self.cmdOutput.SetReadOnly(False)
         self.cmdOutput.ClearAll()
         self.cmdOutput.SetReadOnly(True)
         self.progressbar.SetValue(0)
+        self.cmdPrompt.CmdErase()
 
     def GetProgressBar(self):
         """Return progress bar widget"""
