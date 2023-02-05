@@ -141,7 +141,7 @@ class ProcessWorkspaceFile:
         # layout
         #
         layout = self.root.find("layout")
-        if layout is not None:
+        if layout:
             self.layout["panes"] = self.__filterValue(
                 self.__getNodeText(layout, "panes")
             )
