@@ -105,7 +105,8 @@ class MapNotebook(aui.AuiNotebook):
         self.SetSelection(self.GetPageIndex(page))
 
         if not page.IsDocked():
-            wx.CallLater(500, page.GetParent().Raise)
+            frame = page.GetParent()
+            wx.CallLater(500, lambda: frame.Raise if frame else None)
 
     def DeleteMapPage(self, page):
         """Decides whether to delete a MapNotebook page
