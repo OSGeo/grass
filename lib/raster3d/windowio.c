@@ -17,7 +17,8 @@ static int Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead,
                                   double *ns_res, double *tb_res)
 {
     int returnVal;
-    int (*windowInt)(), (*windowDouble)();
+    int (*windowInt)(struct Key_Value *, const char *, int *),
+        (*windowDouble)(struct Key_Value *, const char *, double *);
 
     if (doRead) {
         windowDouble = Rast3d_key_get_double;

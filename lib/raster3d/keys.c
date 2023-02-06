@@ -90,7 +90,7 @@ int Rast3d_key_get_value(struct Key_Value *keys, const char *key, char *val1,
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_key_set_int(struct Key_Value *keys, const char *key, const int *i)
+int Rast3d_key_set_int(struct Key_Value *keys, const char *key, int *i)
 {
     char keyValStr[200];
 
@@ -101,8 +101,7 @@ int Rast3d_key_set_int(struct Key_Value *keys, const char *key, const int *i)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_key_set_double(struct Key_Value *keys, const char *key,
-                          const double *d)
+int Rast3d_key_set_double(struct Key_Value *keys, const char *key, double *d)
 {
     char keyValStr[200];
 
@@ -114,7 +113,7 @@ int Rast3d_key_set_double(struct Key_Value *keys, const char *key,
 /*---------------------------------------------------------------------------*/
 
 int Rast3d_key_set_string(struct Key_Value *keys, const char *key,
-                          char *const *keyValStr)
+                          char **keyValStr)
 {
     G_set_key_value(key, *keyValStr, keys);
     return 1;
@@ -122,9 +121,8 @@ int Rast3d_key_set_string(struct Key_Value *keys, const char *key,
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_key_set_value(struct Key_Value *keys, const char *key,
-                         const char *val1, const char *val2, int keyval1,
-                         int keyval2, const int *keyvalVar)
+int Rast3d_key_set_value(struct Key_Value *keys, const char *key, char *val1,
+                         char *val2, int keyval1, int keyval2, int *keyvalVar)
 {
     if (*keyvalVar == keyval1) {
         G_set_key_value(key, val1, keys);

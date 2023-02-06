@@ -132,11 +132,11 @@ int Rast3d_key_get_double(struct Key_Value *, const char *, double *);
 int Rast3d_key_get_string(struct Key_Value *, const char *, char **);
 int Rast3d_key_get_value(struct Key_Value *, const char *, char *, char *, int,
                          int, int *);
-int Rast3d_key_set_int(struct Key_Value *, const char *, const int *);
-int Rast3d_key_set_double(struct Key_Value *, const char *, const double *);
-int Rast3d_key_set_string(struct Key_Value *, const char *, char *const *);
-int Rast3d_key_set_value(struct Key_Value *, const char *, const char *,
-                         const char *, int, int, const int *);
+int Rast3d_key_set_int(struct Key_Value *, const char *, int *);
+int Rast3d_key_set_double(struct Key_Value *, const char *, double *);
+int Rast3d_key_set_string(struct Key_Value *, const char *, char **);
+int Rast3d_key_set_value(struct Key_Value *, const char *, char *, char *, int,
+                         int, int *);
 /* long.c */
 int Rast3d_long_encode(long *, unsigned char *, int);
 void Rast3d_long_decode(unsigned char *, long *, int, int);

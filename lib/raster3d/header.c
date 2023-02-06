@@ -42,8 +42,11 @@ static int Rast3d_readWriteHeader(
     int *vertical_unit, int *version)
 {
     int returnVal;
-    int (*headerInt)(), (*headerDouble)(), (*headerValue)();
-    int (*headerString)();
+    int (*headerInt)(struct Key_Value *, const char *, int *),
+        (*headerDouble)(struct Key_Value *, const char *, double *),
+        (*headerValue)(struct Key_Value *, const char *, char *, char *, int,
+                       int, int *);
+    int (*headerString)(struct Key_Value *, const char *, char **);
 
     if (doRead) {
         headerDouble = Rast3d_key_get_double;
