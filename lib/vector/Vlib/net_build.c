@@ -429,7 +429,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
 
             if (ret != DB_OK) {
                 G_warning(
-                    _("Database record for turn with cat = %d in not found. "
+                    _("Database record for turn with cat = %d is not found. "
                       "(The turn was skipped."),
                     i);
                 continue;
