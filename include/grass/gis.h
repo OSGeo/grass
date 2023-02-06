@@ -62,13 +62,6 @@ static const char *GRASS_copyright __attribute__((unused)) =
 #define FALSE false
 #endif
 
-#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || \
-    (__APPLE__ && __LP64__)
-#define PRI_OFF_T "lld"
-#else
-#define PRI_OFF_T "ld"
-#endif
-
 /*! \brief Cross-platform Newline Character */
 #define NEWLINE '\n'
 #ifdef __MINGW32__

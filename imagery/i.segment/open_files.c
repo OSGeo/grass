@@ -1,5 +1,6 @@
 /* PURPOSE:      opening input rasters and creating segmentation files */
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -553,7 +554,7 @@ static int manage_memory(int srows, int scols, struct globals *globals)
         }
 
         G_verbose_message(
-            _("Regions with at least %" PRI_LONG " cells are stored in memory"),
+            _("Regions with at least %" PRId64 " cells are stored in memory"),
             globals->min_reg_size);
     }
 
