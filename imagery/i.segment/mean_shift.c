@@ -1,6 +1,5 @@
 /* PURPOSE:      Develop the image segments */
 
-#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
@@ -210,7 +209,7 @@ int mean_shift(struct globals *globals)
         G_message(_("Range bandwidth: %g"), hspec);
     }
 
-    G_debug(4, "Starting to process %" PRId64 " candidate cells",
+    G_debug(4, "Starting to process %" PRI_LONG " candidate cells",
             globals->candidate_count);
 
     t = 0;
@@ -395,7 +394,7 @@ int mean_shift(struct globals *globals)
             }
         }
         G_percent(1, 1, 1);
-        G_message(_("Changes > threshold: %" PRId64 ", largest change: %g"),
+        G_message(_("Changes > threshold: %" PRI_LONG ", largest change: %g"),
                   n_changes, sqrt(maxdiff2));
     }
     if (n_changes > 1)
