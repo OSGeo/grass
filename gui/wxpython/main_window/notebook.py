@@ -16,21 +16,30 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+import os
+
 import wx
 import wx.lib.agw.aui as aui
 
+from core import globalvar
 from gui_core.wrap import SimpleTabArt
 
 
 class MapPageFrame(wx.Frame):
     """Frame for independent map display window."""
 
-    def __init__(self, parent, mapdisplay, size, title):
-        wx.Frame.__init__(self, parent=parent, title=title)
+    def __init__(self, parent, mapdisplay, size, pos, title):
+        wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
         self.mapdisplay = mapdisplay
-        self.SetSize(size)
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.SetSizerAndFit(self.sizer)
+
+        # set system icon
+        self.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
@@ -72,12 +81,12 @@ class MapNotebook(aui.AuiNotebook):
         index = self.GetPageIndex(page)
         text = self.GetPageText(index)
         original_size = page.GetSize()
+        original_pos = page.GetPosition()
         self.RemovePage(index)
         frame = MapPageFrame(
-            parent=self.parent, mapdisplay=page, size=original_size, title=text
+            parent=self.parent, mapdisplay=page, size=original_size, pos=original_pos, title=text
         )
         page.Reparent(frame)
-        page.closingFrame.connect(lambda index = index: self.DeletePage(index))
         page.SetDockingCallback(self.DockMapDisplay)
         frame.sizer.Add(page, proportion=1, flag=wx.EXPAND)
         frame.Show()

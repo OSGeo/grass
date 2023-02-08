@@ -907,8 +907,14 @@ class WriteWorkspaceFile(object):
             compRegion = gcore.region(region3d=True)
             mapdisp = mapTree.GetMapDisplay()
 
-            displayPos = mapdisp.GetPosition()
-            displaySize = mapdisp.GetSize()
+            if mapdisp.IsDocked():
+                displayPos = mapdisp.GetPosition()
+                displaySize = mapdisp.GetSize()
+            else:
+                frame = mapdisp.GetParent()
+                displayPos = frame.GetPosition()
+                displaySize = frame.GetSize()
+
             if mapdisp.toolbars["map"].combo.GetSelection() == 1:
                 viewmode = "3d"
             else:
