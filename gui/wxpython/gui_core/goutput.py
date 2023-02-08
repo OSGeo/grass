@@ -137,9 +137,9 @@ class GConsoleWindow(wx.SplitterWindow):
 
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
-        self.btnClear.SetToolTip(_("Clear content of output and command windows"))
+        self.btnClear.SetToolTip(_("Clear prompt and output window"))
         self.btnOutputSave = Button(parent=self.panelPrompt, id=wx.ID_SAVE)
-        self.btnOutputSave.SetToolTip(_("Save output window content to the file"))
+        self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
         self.btnCmdExportHistory = Button(parent=self.panelPrompt, id=wx.ID_ANY)
@@ -231,7 +231,7 @@ class GConsoleWindow(wx.SplitterWindow):
             self.Unsplit()
         self.SetMinimumPaneSize(self.btnClear.GetSize()[1] + 100)
 
-        self.SetSashGravity(0.5)
+        self.SetSashGravity(1.0)
 
         self.outputSizer.Hide(self.panelProgress)
         # layout
