@@ -506,7 +506,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
             SHLIB_SUFFIX=".dll"
             SHLIB_LD="${CC} -shared"
             SHLIB_LDX="${CXX} -shared"
-            LDFLAGS="-Wl,--export-dynamic,--enable-runtime-pseudo-reloc"
+            LDFLAGS="-Wl,--enable-runtime-pseudo-reloc"
             LD_LIBRARY_PATH_VAR="PATH"
             ;;
         *-apple-darwin*)
