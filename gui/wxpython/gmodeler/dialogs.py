@@ -345,7 +345,7 @@ class ModelSearchDialog(wx.Dialog):
         self.search.Reset()
         self.label.SetValue("")
         self.comment.SetValue("")
-        self.cmd_prompt.OnCmdErase(None)
+        self.cmd_prompt.CmdErase()
         self.cmd_prompt.SetFocus()
 
 

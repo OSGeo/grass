@@ -137,7 +137,7 @@ class GPrompt(object):
 
         self.promptRunCmd.emit(cmd=cmd)
 
-        self.OnCmdErase(None)
+        self.CmdErase()
         self.ShowStatusText("")
 
     def CopyHistory(self, targetFile):
@@ -703,7 +703,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             wx.TheClipboard.Flush()
         event.Skip()
 
-    def OnCmdErase(self, event):
+    def CmdErase(self):
         """Erase command prompt"""
         self.Home()
         self.DelLineRight()
