@@ -6,7 +6,8 @@ Status: Early draft (19 Mar 2016)
 
 ## Introduction
 
-GRASS GIS is widely used in scientific, private and government sector. Scientific theories, environmental decisions and actions depend on the outcome of spatial analysis performed with GRASS GIS. Any errors in analytical modules might lead to erroneous conclusions and actions based on them. This RFC provides a framework of documenting and spreading information on analysis inaccuracies caused by errors in GRASS GIS code.
+GRASS GIS is widely used in scientific, private and government sector. Scientific theories, environmental decisions and actions depend on the outcome of spatial analysis performed with GRASS GIS. Any errors in analytical modules might lead to erroneous conclusions and actions based on them. 
+This RFC provides a framework of documenting and spreading information on analysis inaccuracies caused by errors in GRASS GIS code.
 
 ## Overall process
 
@@ -20,22 +21,23 @@ GRASS GIS is widely used in scientific, private and government sector. Scientifi
 
 ### Evaluation criteria
 
- * Bug must be present in an official GRASS GIS release.
- * Bug must cause generation of incorrect analysis results that are not so easy to notice.
+* Bug must be present in an official GRASS GIS release.
+* Bug must cause generation of incorrect analysis results that are not so easy to notice.
 Module crashes or bugs causing easy to identify incorrect results should not be given an erratum. Examples of possible erratum worth bugs are single cell shift of raster result, not enough randomness of expected random module output, loss of output precision due to incorrect floating point handling etc.
 
 ### Content and life cycle of an Erratum
 
 GRASS GIS Erratum message should contain following elements:
- * it's number;
- * date of issue;
- * name(s) of affected module(s);
- * information about affected release(s);
- * a short description of problem;
- * steps resulting in incorrect output (i.e. specific input parameter combination);
- * current state of problem (in progress, fixed for release x.y.z);
- * references to bug report (Trac bug number), developer mailing list thread;
- * any other information relevant to erratum.
+
+* it's number;
+* date of issue;
+* name(s) of affected module(s);
+* information about affected release(s);
+* a short description of problem;
+* steps resulting in incorrect output (i.e. specific input parameter combination);
+* current state of problem (in progress, fixed for release x.y.z);
+* references to bug report (Trac bug number), developer mailing list thread;
+* any other information relevant to erratum.
 
 GRASS GIS errata might receive updates, if it's found to be necessary
 (i.e. notice of fixing issue, issue scope update etc.).
