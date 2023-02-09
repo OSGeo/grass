@@ -6,7 +6,8 @@ Status: draft
 
 ## Introduction
 
-The code base of GRASS GIS consists today (Feb. 2021) of predominantly C code (ca 50 %), Python (ca 30 %) and a smaller amount of C++ (ca 5 %). Each of these languages have evolved significantly in the last 10–20 years. There is, however, no clearly stated policy of supported language standard(s), nor mechanism to update this policy when needed or wanted. This result in uncertainty for contributors for what may be allowed and solutions that may not be optimal.
+The code base of GRASS GIS consists today (Feb. 2021) of predominantly C code (ca 50 %), Python (ca 30 %) and a smaller amount of C++ (ca 5 %). Each of these languages have evolved significantly in the last 10–20 years.
+There is, however, no clearly stated policy of supported language standard(s), nor mechanism to update this policy when needed or wanted. This result in uncertainty for contributors for what may be allowed and solutions that may not be optimal.
 
 This RFC aims at setting a policy for GRASS GIS project regarding the minimum version support for Python.
 
@@ -20,14 +21,12 @@ The minimum support for Python will, in contrast, likely change more often, due 
 
 For a new release of a minor GRASS version, the Python minimum version should be raised if the current minimum Python version reaches end of life or there are any important technical reasons.
 
-
 At the same time, as for the minor GRASS version, we raise the minimal Python version for a matching branch in grass-addons.
 
 For example, when Python 3.7 goes end-of-life before the release of 8.0.4, we raise the minimal Python version for 8.0.4 to 3.8. We also raise the minimal Python version for grass8 branch in grass-addons repo to Python 3.8.
 
 ### References
 
- * Sunsetting Python 2: https://www.python.org/doc/sunset-python-2/
- * Active Python Releases: https://www.python.org/downloads/
- * Version list: https://endoflife.date/python
-
+* Sunsetting Python 2: https://www.python.org/doc/sunset-python-2/
+* Active Python Releases: https://www.python.org/downloads/
+* Version list: https://endoflife.date/python
