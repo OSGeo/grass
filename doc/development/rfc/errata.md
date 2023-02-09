@@ -6,7 +6,7 @@ Status: Early draft (19 Mar 2016)
 
 ## Introduction
 
-GRASS GIS is widely used in scientific, private and government sector. Scientific theories, environmental decisions and actions depend on the outcome of spatial analysis performed with GRASS GIS. Any errors in analytical modules might lead to erroneous conclusions and actions based on them. 
+GRASS GIS is widely used in scientific, private and government sector. Scientific theories, environmental decisions and actions depend on the outcome of spatial analysis performed with GRASS GIS. Any errors in analytical modules might lead to erroneous conclusions and actions based on them.
 This RFC provides a framework of documenting and spreading information on analysis inaccuracies caused by errors in GRASS GIS code.
 
 ## Overall process
