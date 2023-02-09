@@ -84,7 +84,11 @@ class MapNotebook(aui.AuiNotebook):
         original_pos = page.GetPosition()
         self.RemovePage(index)
         frame = MapPageFrame(
-            parent=self.parent, mapdisplay=page, size=original_size, pos=original_pos, title=text
+            parent=self.parent,
+            mapdisplay=page,
+            size=original_size,
+            pos=original_pos,
+            title=text,
         )
         page.Reparent(frame)
         page.SetDockingCallback(self.DockMapDisplay)
