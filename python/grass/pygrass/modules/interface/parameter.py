@@ -98,11 +98,22 @@ def _check_value(param, value):
             if (param.min is not None and newvalue < param.min) or (
                 param.max is not None and newvalue > param.max
             ):
-                err_str = (
-                    "The Parameter <%s>, must be between: "
-                    "%g<=value<=%g, %r is outside."
-                )
-                raise ValueError(err_str % (param.name, param.min, param.max, newvalue))
+                if param.min is None:
+                    err_str = (
+                        "The Parameter <%s>, must be lower than "
+                        "%g, %r is outside." % (param.name, param.max, newvalue)
+                    )
+                elif param.max is None:
+                    err_str = (
+                        "The Parameter <%s>, must be higher than "
+                        "%g, %r is out of range." % (param.name, param.min, newvalue)
+                    )
+                else:
+                    err_str = (
+                        "The Parameter <%s>, must be between: "
+                        "%g<=value<=%g, %r is outside." % (param.name, param.min, param.max, newvalue)
+                    )
+                raise ValueError(err_str)
         # check if value is in the list of valid values
         if param.values is not None and newvalue not in param.values:
             raise ValueError(must_val % (param.name, param.values))
