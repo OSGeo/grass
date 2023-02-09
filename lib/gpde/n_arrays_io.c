@@ -363,7 +363,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 
     /* Close files and exit */
     if (!Rast3d_close(map))
-        Rast3d_fatal_error(_("Error closing g3d file"));
+        Rast3d_fatal_error(_("Error closing g3d file <%s>"), name);
 
     return data;
 }
@@ -468,7 +468,7 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
             ("Error flushing tiles with Rast3d_flush_all_tiles");
     /* Close files and exit */
     if (!Rast3d_close(map))
-        Rast3d_fatal_error(_("Error closing g3d file"));
+        Rast3d_fatal_error(_("Error closing g3d file <%s>"), name);
 
     return;
 }
