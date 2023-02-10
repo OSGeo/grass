@@ -153,7 +153,6 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
-                "singleWindow": {"enabled": False},
             },
             #
             # datacatalog
@@ -191,6 +190,7 @@ class Settings:
                 "gSelectPopupHeight": {"value": 200},
                 "iconTheme": {"type": "grass"},
                 "commandNotebook": {"selection": 0},
+                "singleWindow": {"enabled": True},
             },
             #
             # language

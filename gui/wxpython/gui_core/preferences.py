@@ -405,19 +405,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        singleWindow = wx.CheckBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Use single-window mode (experimental, requires GUI restart)"),
-            name="IsChecked",
-        )
-        singleWindow.SetValue(
-            self.settings.Get(group="general", key="singleWindow", subkey="enabled")
-        )
-        self.winId["general:singleWindow:enabled"] = singleWindow.GetId()
-        gridSizer.Add(singleWindow, pos=(row, 0), span=(1, 2))
-
-        row += 1
         posDisplay = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
@@ -515,6 +502,29 @@ class PreferencesDialog(PreferencesBaseDialog):
         notebook.AddPage(page=panel, text=_("Appearance"))
 
         border = wx.BoxSizer(wx.VERTICAL)
+
+        #
+        # single window settings
+        #
+        box = StaticBox(
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Window layout settings")
+        )
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        singleWindow = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Use single-window mode (requires GUI restart)"),
+            name="IsChecked",
+        )
+        singleWindow.SetToolTip(
+            _("Use single-window mode instead of multi-window mode")
+        )
+        singleWindow.SetValue(
+            self.settings.Get(group="appearance", key="singleWindow", subkey="enabled")
+        )
+        self.winId["appearance:singleWindow:enabled"] = singleWindow.GetId()
+        sizer.Add(singleWindow, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
         box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
