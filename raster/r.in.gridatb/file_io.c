@@ -4,7 +4,6 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 void rdwr_gridatb(void)
 {
     char buf[1024];
@@ -20,8 +19,8 @@ void rdwr_gridatb(void)
     if (!buf[0])
         getc(fp);
 
-    if (fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res)
-        != 3)
+    if (fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res) !=
+        3)
         G_fatal_error(_("Error reading data"));
     cellhd.ew_res = cellhd.ns_res;
     cellhd.south = 0;
@@ -48,7 +47,7 @@ void rdwr_gridatb(void)
 
     fd = Rast_open_new(oname, FCELL_TYPE);
 
-    cell = (FCELL *) G_malloc(sizeof(FCELL) * cellhd.cols);
+    cell = (FCELL *)G_malloc(sizeof(FCELL) * cellhd.cols);
 
     for (i = 0; i < cellhd.rows; i++) {
         G_percent(i, cellhd.rows, 2);

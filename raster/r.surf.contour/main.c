@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       r.surf.contour
  * AUTHOR(S):    Chuck Ehlschlaeger (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Markus Metz
  * PURPOSE:      Interpolates a raster elevation map from a rasterized
@@ -78,7 +77,7 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
     i_val_l_f = nrows + ncols;
     con = read_cell(con_name);
-    alt_row = (DCELL *) G_malloc(ncols * sizeof(DCELL));
+    alt_row = (DCELL *)G_malloc(ncols * sizeof(DCELL));
     seen = flag_create(nrows, ncols);
     mask = flag_create(nrows, ncols);
     if (NULL != G_find_file("cell", "MASK", G_mapset())) {
@@ -91,7 +90,7 @@ int main(int argc, char *argv[])
         }
         Rast_close(file_fd);
     }
-    zero = (NODE *) G_malloc(INIT_AR * sizeof(NODE));
+    zero = (NODE *)G_malloc(INIT_AR * sizeof(NODE));
     minc = minr = 0;
     maxc = ncols - 1;
     maxr = nrows - 1;

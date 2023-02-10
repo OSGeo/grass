@@ -1,20 +1,19 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      groundwater flow in porous media 
-* 		part of the gpde library
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      groundwater flow in porous media
+ *                 part of the gpde library
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/N_gwflow.h>
 
@@ -22,13 +21,15 @@
 /* ***************** N_gwflow_data3d ***************************** */
 /* *************************************************************** */
 /*!
- * \brief Alllocate memory for the groundwater calculation data structure in 3 dimensions
+ * \brief Alllocate memory for the groundwater calculation data structure in 3
+ * dimensions
  *
  * The groundwater calculation data structure will be allocated including
  * all appendant 3d and 2d arrays. The offset for the 3d arrays is one
- * to establish homogeneous Neumann boundary conditions at the calculation area border.
- * This data structure is used to create a linear equation system based on the computation of
- * groundwater flow in porous media with the finite volume method.
+ * to establish homogeneous Neumann boundary conditions at the calculation area
+ * border. This data structure is used to create a linear equation system based
+ * on the computation of groundwater flow in porous media with the finite volume
+ * method.
  *
  * \param cols   int
  * \param rows   int
@@ -40,7 +41,7 @@ N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
 {
     N_gwflow_data3d *data;
 
-    data = (N_gwflow_data3d *) G_calloc(1, sizeof(N_gwflow_data3d));
+    data = (N_gwflow_data3d *)G_calloc(1, sizeof(N_gwflow_data3d));
 
     data->phead = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     data->phead_start = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
@@ -54,10 +55,8 @@ N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
     data->r = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
 
     if (river) {
-        data->river_head =
-            N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
-        data->river_leak =
-            N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
+        data->river_head = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
+        data->river_leak = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
         data->river_bed = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     }
     else {
@@ -67,8 +66,7 @@ N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
     }
 
     if (drain) {
-        data->drain_leak =
-            N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
+        data->drain_leak = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
         data->drain_bed = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     }
     else {
@@ -83,13 +81,14 @@ N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
 /* ********************* N_free_gwflow_data3d ******************** */
 /* *************************************************************** */
 /*!
- * \brief Release the memory of the groundwater flow data structure in three dimensions
+ * \brief Release the memory of the groundwater flow data structure in three
+ * dimensions
  *
  * \param data N_gwflow_data3d *
  * \return void *
  * */
 
-void N_free_gwflow_data3d(N_gwflow_data3d * data)
+void N_free_gwflow_data3d(N_gwflow_data3d *data)
 {
     if (data->phead)
         N_free_array_3d(data->phead);
@@ -133,24 +132,25 @@ void N_free_gwflow_data3d(N_gwflow_data3d * data)
 /* ******************** N_alloc_gwflow_data2d ******************** */
 /* *************************************************************** */
 /*!
- * \brief Alllocate memory for the groundwater calculation data structure in 2 dimensions
- * 
+ * \brief Alllocate memory for the groundwater calculation data structure in 2
+ * dimensions
+ *
  * The groundwater calculation data structure will be allocated including
  * all appendant 2d arrays. The offset for the 3d arrays is one
- * to establish homogeneous Neumann boundary conditions at the calculation area border.
- * This data structure is used to create a linear equation system based on the computation of
- * groundwater flow in porous media with the finite volume method.
+ * to establish homogeneous Neumann boundary conditions at the calculation area
+ * border. This data structure is used to create a linear equation system based
+ * on the computation of groundwater flow in porous media with the finite volume
+ * method.
  *
  * \param cols int
  * \param rows int
  * \return N_gwflow_data2d *
  * */
-N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river,
-                                       int drain)
+N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river, int drain)
 {
     N_gwflow_data2d *data;
 
-    data = (N_gwflow_data2d *) G_calloc(1, sizeof(N_gwflow_data2d));
+    data = (N_gwflow_data2d *)G_calloc(1, sizeof(N_gwflow_data2d));
 
     data->phead = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
     data->phead_start = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
@@ -184,7 +184,6 @@ N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river,
         data->drain_bed = NULL;
     }
 
-
     return data;
 }
 
@@ -192,12 +191,13 @@ N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river,
 /* ****************** N_free_gwflow_data2d *********************** */
 /* *************************************************************** */
 /*!
- * \brief Release the memory of the groundwater flow data structure in two dimensions
+ * \brief Release the memory of the groundwater flow data structure in two
+ * dimensions
  *
  * \param data N_gwflow_data2d *
  * \return void
  * */
-void N_free_gwflow_data2d(N_gwflow_data2d * data)
+void N_free_gwflow_data2d(N_gwflow_data2d *data)
 {
     if (data->phead)
         N_free_array_2d(data->phead);
@@ -234,7 +234,8 @@ void N_free_gwflow_data2d(N_gwflow_data2d * data)
 
     G_free(data);
 
-    data = NULL;;
+    data = NULL;
+    ;
 
     return;
 }
@@ -249,7 +250,8 @@ void N_free_gwflow_data2d(N_gwflow_data2d * data)
  *
  * \f[Ss \frac{\partial h}{\partial t} = \nabla {\bf K} \nabla h + q \f]
  *
- * This equation is discretizised with the finite volume method in three dimensions.
+ * This equation is discretizised with the finite volume method in three
+ * dimensions.
  *
  *
  * \param gwdata N_gwflow_data3d *
@@ -260,7 +262,7 @@ void N_free_gwflow_data2d(N_gwflow_data2d * data)
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
+N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data *geom, int col,
                                   int row, int depth)
 {
     double hc_e = 0, hc_w = 0, hc_n = 0, hc_s = 0, hc_t = 0, hc_b = 0;
@@ -275,7 +277,7 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
     N_gwflow_data3d *data;
 
     /*cast the void pointer to the right data structure */
-    data = (N_gwflow_data3d *) gwdata;
+    data = (N_gwflow_data3d *)gwdata;
 
     dx = geom->dx;
     dy = geom->dy;
@@ -348,7 +350,6 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
     return mat_pos;
 }
 
-
 /* *************************************************************** */
 /* ****************** N_gwflow_3d_calc_water_budget ************** */
 /* *************************************************************** */
@@ -356,10 +357,10 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
  * \brief This function computes the water budget of the entire groundwater
  *
  * The water budget is calculated for each active and dirichlet cell from
- * its surrounding neighbours. This is based on the 7 star mass balance computation
- * of N_callback_gwflow_3d and the gradient of the water heights in the cells.
- * The sum of the water budget of each active/dirichlet cell must be near zero
- * due the effect of numerical inaccuracy of cpu's.
+ * its surrounding neighbours. This is based on the 7 star mass balance
+ * computation of N_callback_gwflow_3d and the gradient of the water heights in
+ * the cells. The sum of the water budget of each active/dirichlet cell must be
+ * near zero due the effect of numerical inaccuracy of cpu's.
  *
  * \param gwdata N_gwflow_data3d *
  * \param geom N_geom_data *
@@ -367,9 +368,8 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
  * \return void
  *
  * */
-void
-N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom,
-                              N_array_3d * budget)
+void N_gwflow_3d_calc_water_budget(N_gwflow_data3d *data, N_geom_data *geom,
+                                   N_array_3d *budget)
 {
     int z, y, x, stat;
     double h, hc;
@@ -391,40 +391,41 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom,
 
                 val = 0.0;
 
-                if (stat != N_CELL_INACTIVE) {  /*all active/dirichlet cells */
+                if (stat != N_CELL_INACTIVE) { /*all active/dirichlet cells */
 
                     /* Compute the flow parameter */
                     dstar = N_callback_gwflow_3d(data, geom, x, y, z);
-                    /* Compute the gradient in each direction pointing from the center */
+                    /* Compute the gradient in each direction pointing from the
+                     * center */
                     hc = N_get_array_3d_d_value(data->phead, x, y, z);
 
-                    if ((int)N_get_array_3d_d_value(data->status, x + 1, y, z)
-                        != N_CELL_INACTIVE) {
+                    if ((int)N_get_array_3d_d_value(data->status, x + 1, y,
+                                                    z) != N_CELL_INACTIVE) {
                         h = N_get_array_3d_d_value(data->phead, x + 1, y, z);
                         val += dstar->E * (hc - h);
                     }
-                    if ((int)N_get_array_3d_d_value(data->status, x - 1, y, z)
-                        != N_CELL_INACTIVE) {
+                    if ((int)N_get_array_3d_d_value(data->status, x - 1, y,
+                                                    z) != N_CELL_INACTIVE) {
                         h = N_get_array_3d_d_value(data->phead, x - 1, y, z);
                         val += dstar->W * (hc - h);
                     }
-                    if ((int)N_get_array_3d_d_value(data->status, x, y + 1, z)
-                        != N_CELL_INACTIVE) {
+                    if ((int)N_get_array_3d_d_value(data->status, x, y + 1,
+                                                    z) != N_CELL_INACTIVE) {
                         h = N_get_array_3d_d_value(data->phead, x, y + 1, z);
                         val += dstar->S * (hc - h);
                     }
-                    if ((int)N_get_array_3d_d_value(data->status, x, y - 1, z)
-                        != N_CELL_INACTIVE) {
+                    if ((int)N_get_array_3d_d_value(data->status, x, y - 1,
+                                                    z) != N_CELL_INACTIVE) {
                         h = N_get_array_3d_d_value(data->phead, x, y - 1, z);
                         val += dstar->N * (hc - h);
                     }
-                    if ((int)N_get_array_3d_d_value(data->status, x, y, z + 1)
-                        != N_CELL_INACTIVE) {
+                    if ((int)N_get_array_3d_d_value(data->status, x, y,
+                                                    z + 1) != N_CELL_INACTIVE) {
                         h = N_get_array_3d_d_value(data->phead, x, y, z + 1);
                         val += dstar->T * (hc - h);
                     }
-                    if ((int)N_get_array_3d_d_value(data->status, x, y, z - 1)
-                        != N_CELL_INACTIVE) {
+                    if ((int)N_get_array_3d_d_value(data->status, x, y,
+                                                    z - 1) != N_CELL_INACTIVE) {
                         h = N_get_array_3d_d_value(data->phead, x, y, z - 1);
                         val += dstar->B * (hc - h);
                     }
@@ -443,13 +444,12 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom,
     if (fabs(sum) < 0.0000000001)
         G_message(_("The total sum of the water budget: %g\n"), sum);
     else
-        G_warning(_("The total sum of the water budget is significantly larger then 0: %g\n"),
+        G_warning(_("The total sum of the water budget is significantly larger "
+                    "then 0: %g\n"),
                   sum);
 
     return;
 }
-
-
 
 /* *************************************************************** */
 /* ****************** N_callback_gwflow_2d *********************** */
@@ -461,7 +461,8 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom,
  *
  * \f[Ss \frac{\partial h}{\partial t} = \nabla {\bf K} \nabla h + q \f]
  *
- * This equation is discretizised with the finite volume method in two dimensions.
+ * This equation is discretizised with the finite volume method in two
+ * dimensions.
  *
  * \param gwdata N_gwflow_data2d *
  * \param geom N_geom_data *
@@ -470,7 +471,7 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom,
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
+N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data *geom, int col,
                                   int row)
 {
     double T_e = 0, T_w = 0, T_n = 0, T_s = 0;
@@ -487,13 +488,13 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     double C, W, E, N, S, V;
     N_gwflow_data2d *data;
     N_data_star *mat_pos;
-    double river_vect = 0;      /*entry in vector */
-    double river_mat = 0;       /*entry in matrix */
-    double drain_vect = 0;      /*entry in vector */
-    double drain_mat = 0;       /*entry in matrix */
+    double river_vect = 0; /*entry in vector */
+    double river_mat = 0;  /*entry in matrix */
+    double drain_vect = 0; /*entry in vector */
+    double drain_mat = 0;  /*entry in matrix */
 
     /*cast the void pointer to the right data structure */
-    data = (N_gwflow_data2d *) gwdata;
+    data = (N_gwflow_data2d *)gwdata;
 
     dx = geom->dx;
     dy = geom->dy;
@@ -512,42 +513,32 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     /* recharge */
     r = N_get_array_2d_d_value(data->r, col, row) * Az;
 
-
-    if (hc > top) {             /*If the aquifer is confined */
-        z = N_get_array_2d_d_value(data->top, col,
-                                   row) -
+    if (hc > top) { /*If the aquifer is confined */
+        z = N_get_array_2d_d_value(data->top, col, row) -
             N_get_array_2d_d_value(data->bottom, col, row);
-        z_xw =
-            N_get_array_2d_d_value(data->top, col - 1,
-                                   row) -
-            N_get_array_2d_d_value(data->bottom, col - 1, row);
-        z_xe =
-            N_get_array_2d_d_value(data->top, col + 1,
-                                   row) -
-            N_get_array_2d_d_value(data->bottom, col + 1, row);
-        z_yn =
-            N_get_array_2d_d_value(data->top, col,
-                                   row - 1) -
-            N_get_array_2d_d_value(data->bottom, col, row - 1);
-        z_ys =
-            N_get_array_2d_d_value(data->top, col,
-                                   row + 1) -
-            N_get_array_2d_d_value(data->bottom, col, row + 1);
+        z_xw = N_get_array_2d_d_value(data->top, col - 1, row) -
+               N_get_array_2d_d_value(data->bottom, col - 1, row);
+        z_xe = N_get_array_2d_d_value(data->top, col + 1, row) -
+               N_get_array_2d_d_value(data->bottom, col + 1, row);
+        z_yn = N_get_array_2d_d_value(data->top, col, row - 1) -
+               N_get_array_2d_d_value(data->bottom, col, row - 1);
+        z_ys = N_get_array_2d_d_value(data->top, col, row + 1) -
+               N_get_array_2d_d_value(data->bottom, col, row + 1);
     }
-    else {                      /* the aquifer is unconfined */
+    else { /* the aquifer is unconfined */
 
         /* If the aquifer is unconfied use an explicite scheme to solve
          * the nonlinear equation. We use the phead from the first iteration */
         z = N_get_array_2d_d_value(data->phead, col, row) -
             N_get_array_2d_d_value(data->bottom, col, row);
         z_xw = N_get_array_2d_d_value(data->phead, col - 1, row) -
-            N_get_array_2d_d_value(data->bottom, col - 1, row);
+               N_get_array_2d_d_value(data->bottom, col - 1, row);
         z_xe = N_get_array_2d_d_value(data->phead, col + 1, row) -
-            N_get_array_2d_d_value(data->bottom, col + 1, row);
+               N_get_array_2d_d_value(data->bottom, col + 1, row);
         z_yn = N_get_array_2d_d_value(data->phead, col, row - 1) -
-            N_get_array_2d_d_value(data->bottom, col, row - 1);
+               N_get_array_2d_d_value(data->bottom, col, row - 1);
         z_ys = N_get_array_2d_d_value(data->phead, col, row + 1) -
-            N_get_array_2d_d_value(data->bottom, col, row + 1);
+               N_get_array_2d_d_value(data->bottom, col, row + 1);
     }
 
     /*geometrical mean of cell height */
@@ -591,26 +582,27 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
         /* Groundwater surface is above the river bed */
         if (hc > N_get_array_2d_d_value(data->river_bed, col, row)) {
             river_vect = N_get_array_2d_d_value(data->river_head, col, row) *
-                N_get_array_2d_d_value(data->river_leak, col, row);
+                         N_get_array_2d_d_value(data->river_leak, col, row);
             river_mat = N_get_array_2d_d_value(data->river_leak, col, row);
-        }                       /* Groundwater surface is below the river bed */
+        } /* Groundwater surface is below the river bed */
         else if (hc < N_get_array_2d_d_value(data->river_bed, col, row)) {
             river_vect = (N_get_array_2d_d_value(data->river_head, col, row) -
-                          N_get_array_2d_d_value(data->river_bed, col, row))
-                * N_get_array_2d_d_value(data->river_leak, col, row);
+                          N_get_array_2d_d_value(data->river_bed, col, row)) *
+                         N_get_array_2d_d_value(data->river_leak, col, row);
             river_mat = 0;
         }
     }
 
     /* compute the drainage, this is an explicit method
-     * Drainage is only enabled, if the drain bed is lower the groundwater surface
+     * Drainage is only enabled, if the drain bed is lower the groundwater
+     * surface
      */
     if (data->drain_leak &&
         (N_get_array_2d_d_value(data->drain_leak, col, row) != 0) &&
         N_get_array_2d_d_value(data->drain_bed, col, row) <= top) {
         if (hc > N_get_array_2d_d_value(data->drain_bed, col, row)) {
             drain_vect = N_get_array_2d_d_value(data->drain_bed, col, row) *
-                N_get_array_2d_d_value(data->drain_leak, col, row);
+                         N_get_array_2d_d_value(data->drain_leak, col, row);
             drain_mat = N_get_array_2d_d_value(data->drain_leak, col, row);
         }
         else if (hc <= N_get_array_2d_d_value(data->drain_bed, col, row)) {
@@ -629,8 +621,8 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     S = -1 * T_s * dx / dy;
 
     /*the diagonal entry of the matrix */
-    C = -1 * (W + E + N + S - Az * Ss / data->dt - river_mat * Az -
-              drain_mat * Az);
+    C = -1 *
+        (W + E + N + S - Az * Ss / data->dt - river_mat * Az - drain_mat * Az);
 
     /*the entry in the right side b of Ax = b */
     V = (q + hc_start * Az * Ss / data->dt) + r + river_vect * Az +
@@ -644,8 +636,6 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     return mat_pos;
 }
 
-
-
 /* *************************************************************** */
 /* ****************** N_gwflow_2d_calc_water_budget ************** */
 /* *************************************************************** */
@@ -653,10 +643,10 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
  * \brief This function computes the water budget of the entire groundwater
  *
  * The water budget is calculated for each active and dirichlet cell from
- * its surrounding neighbours. This is based on the 5 star mass balance computation
- * of N_callback_gwflow_2d and the gradient of the water heights in the cells.
- * The sum of the water budget of each active/dirichlet cell must be near zero
- * due the effect of numerical inaccuracy of cpu's.
+ * its surrounding neighbours. This is based on the 5 star mass balance
+ * computation of N_callback_gwflow_2d and the gradient of the water heights in
+ * the cells. The sum of the water budget of each active/dirichlet cell must be
+ * near zero due the effect of numerical inaccuracy of cpu's.
  *
  * \param gwdata N_gwflow_data2d *
  * \param geom N_geom_data *
@@ -664,9 +654,8 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
  * \return void
  *
  * */
-void
-N_gwflow_2d_calc_water_budget(N_gwflow_data2d * data, N_geom_data * geom,
-                              N_array_2d * budget)
+void N_gwflow_2d_calc_water_budget(N_gwflow_data2d *data, N_geom_data *geom,
+                                   N_array_2d *budget)
 {
     int y, x, stat;
     double h, hc;
@@ -686,11 +675,12 @@ N_gwflow_2d_calc_water_budget(N_gwflow_data2d * data, N_geom_data * geom,
 
             val = 0.0;
 
-            if (stat != N_CELL_INACTIVE) {      /*all active/dirichlet cells */
+            if (stat != N_CELL_INACTIVE) { /*all active/dirichlet cells */
 
                 /* Compute the flow parameter */
                 dstar = N_callback_gwflow_2d(data, geom, x, y);
-                /* Compute the gradient in each direction pointing from the center */
+                /* Compute the gradient in each direction pointing from the
+                 * center */
                 hc = N_get_array_2d_d_value(data->phead, x, y);
 
                 if ((int)N_get_array_2d_d_value(data->status, x + 1, y) !=
@@ -728,7 +718,8 @@ N_gwflow_2d_calc_water_budget(N_gwflow_data2d * data, N_geom_data * geom,
     if (fabs(sum) < 0.0000000001)
         G_message(_("The total sum of the water budget: %g\n"), sum);
     else
-        G_warning(_("The total sum of the water budget is significantly larger then 0: %g\n"),
+        G_warning(_("The total sum of the water budget is significantly larger "
+                    "then 0: %g\n"),
                   sum);
 
     return;

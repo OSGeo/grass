@@ -65,7 +65,8 @@ plus_t Vect_get_num_primitives(const struct Map_info *Map, int type)
 }
 
 /*!
-   \brief Fetch number of features (points, lines, boundaries, centroids) in vector map
+   \brief Fetch number of features (points, lines, boundaries, centroids) in
+   vector map
 
    \param Map pointer to Map_info struct
 
@@ -100,7 +101,6 @@ plus_t Vect_get_num_kernels(const struct Map_info *Map)
     return (Map->plus.n_klines);
 }
 
-
 /*!
    \brief Get number of faces in vector map
 
@@ -112,7 +112,6 @@ plus_t Vect_get_num_faces(const struct Map_info *Map)
 {
     return (Map->plus.n_flines);
 }
-
 
 /*!
    \brief Fetch number of volumes in vector map
@@ -126,7 +125,6 @@ plus_t Vect_get_num_volumes(const struct Map_info *Map)
     return (Map->plus.n_volumes);
 }
 
-
 /*!
    \brief Get number of islands in vector map
 
@@ -139,7 +137,6 @@ plus_t Vect_get_num_islands(const struct Map_info *Map)
     return (Map->plus.n_isles);
 }
 
-
 /*!
    \brief Fetch number of holes in vector map
 
@@ -151,7 +148,6 @@ plus_t Vect_get_num_holes(const struct Map_info *Map)
 {
     return (Map->plus.n_holes);
 }
-
 
 /*!
    \brief Get number of defined dblinks
@@ -304,8 +300,7 @@ int Vect_get_node_coor(const struct Map_info *Map, int num, double *x,
 
    \return 1
  */
-int Vect_get_line_nodes(const struct Map_info *Map, int line, int *n1,
-                        int *n2)
+int Vect_get_line_nodes(const struct Map_info *Map, int line, int *n1, int *n2)
 {
     char type;
 
@@ -388,7 +383,6 @@ int Vect_get_node_n_lines(const struct Map_info *Map, int node)
     check_level(Map);
 
     return (Map->plus.Node[node]->n_lines);
-
 }
 
 /*!

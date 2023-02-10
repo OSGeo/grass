@@ -1,19 +1,21 @@
-
 /****************************************************************************
  *
  * MODULE:       r.volume
- * AUTHOR(S):    Dr. James Hinthorne, Central Washington University GIS Laboratory
- *               December 1988, (revised April 1989) (original contributor)
+ * AUTHOR(S):    Dr. James Hinthorne, Central Washington University GIS
+ *                 Laboratory December 1988, (revised April 1989)
+ *                 (original contributor)
  *               Revised Jul 1995 to use new sites API (McCauley)
  *               GRASS 6 update: Hamish Bowman <hamish_b yahoo.com>
- *               Glynn Clements <glynn gclements.plus.com>, Soeren Gebbert <soeren.gebbert gmx.de>
- *               GRASS 7 update (to use Vlib): Martin Landa <landa.martin gmail.com>
- * PURPOSE:      
- *               r.volume is a program to compute the total, and average of cell values
- *               within regions of a map defined by clumps or patches on a second map
- *               (or MASK).  It also computes the "volume" by multiplying the total
- *               within a clump by the area of each cell. It also outputs the
- *               "centroid" location of each clump. Output is to standard out.
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Soeren Gebbert <soeren.gebbert gmx.de>
+ *               GRASS 7 update (to use Vlib): Martin Landa
+ *                 <landa.martin gmail.com>
+ * PURPOSE:      r.volume is a program to compute the total, and average of
+ *               cell values within regions of a map defined by clumps or
+ *               patches on a second map (or MASK). It also computes the
+ *               "volume" by multiplying the total within a clump by the area
+ *               of each cell. It also outputs the "centroid" location of each
+ *               clump. Output is to standard out.
  *
  * COPYRIGHT:    (C) 1999-2006, 2013 by the GRASS Development Team
  *
@@ -62,12 +64,10 @@ int main(int argc, char *argv[])
     dbDriver *driver;
 
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *clump, *centroids, *output;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *report;
     } flag;
 
@@ -79,12 +79,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("volume"));
     G_add_keyword(_("clumps"));
     module->label = _("Calculates the volume of data \"clumps\".");
-    module->description = _("Optionally produces a GRASS vector points map "
-                            "containing the calculated centroids of these clumps.");
+    module->description =
+        _("Optionally produces a GRASS vector points map "
+          "containing the calculated centroids of these clumps.");
 
     opt.input = G_define_standard_option(G_OPT_R_INPUT);
-    opt.input->description =
-        _("Name of input raster map representing data that will be summed within clumps");
+    opt.input->description = _("Name of input raster map representing data "
+                               "that will be summed within clumps");
 
     opt.clump = G_define_standard_option(G_OPT_R_INPUT);
     opt.clump->key = "clump";
@@ -141,8 +142,10 @@ int main(int argc, char *argv[])
         clumpmap = "MASK";
         use_MASK = 1;
         if (!G_find_raster2(clumpmap, G_mapset()))
-            G_fatal_error(_("No MASK found. If no clump map is given than the MASK is required. "
-                           "You need to define a clump raster map or create a MASK by r.mask command."));
+            G_fatal_error(_("No MASK found. If no clump map is given than the "
+                            "MASK is required. "
+                            "You need to define a clump raster map or create a "
+                            "MASK by r.mask command."));
         G_important_message(_("No clump map given, using MASK"));
     }
 
@@ -153,8 +156,7 @@ int main(int argc, char *argv[])
     /* initialize vector map (for centroids) if needed */
     if (centroidsmap) {
         if (Vect_open_new(fd_centroids, centroidsmap, WITHOUT_Z) < 0)
-            G_fatal_error(_("Unable to create vector map <%s>"),
-                          centroidsmap);
+            G_fatal_error(_("Unable to create vector map <%s>"), centroidsmap);
 
         Points = Vect_new_line_struct();
         Cats = Vect_new_cats_struct();
@@ -197,11 +199,12 @@ int main(int argc, char *argv[])
         for (col = 0; col < cols; col++) {
             i = clump_buf[col];
             if (i > max)
-                G_fatal_error(_("Invalid category value %d (max=%d): row=%d col=%d"),
-                              i, max, row, col);
+                G_fatal_error(
+                    _("Invalid category value %d (max=%d): row=%d col=%d"), i,
+                    max, row, col);
             if (i < 1) {
                 G_debug(3, "row=%d col=%d: zero or negs ignored", row, col);
-                continue;       /* ignore zeros and negs */
+                continue; /* ignore zeros and negs */
             }
             if (Rast_is_d_null_value(&data_buf[col])) {
                 G_debug(3, "row=%d col=%d: NULL ignored", row, col);
@@ -239,9 +242,8 @@ int main(int argc, char *argv[])
         /* create attribute table */
         Fi = Vect_default_field_info(fd_centroids, 1, NULL, GV_1TABLE);
 
-        driver = db_start_driver_open_database(Fi->driver,
-                                               Vect_subst_var(Fi->database,
-                                                              fd_centroids));
+        driver = db_start_driver_open_database(
+            Fi->driver, Vect_subst_var(Fi->database, fd_centroids));
         if (driver == NULL) {
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Vect_subst_var(Fi->database, fd_centroids),
@@ -252,30 +254,32 @@ int main(int argc, char *argv[])
         db_begin_transaction(driver);
 
         db_init_string(&sql);
-        sprintf(buf, "create table %s (cat integer, volume double precision, "
-                "average double precision, sum double precision, count integer)",
-                Fi->table);
+        sprintf(
+            buf,
+            "create table %s (cat integer, volume double precision, "
+            "average double precision, sum double precision, count integer)",
+            Fi->table);
         db_set_string(&sql, buf);
         Vect_map_add_dblink(fd_centroids, 1, NULL, Fi->table, GV_KEY_COLUMN,
                             Fi->database, Fi->driver);
 
         G_debug(3, "%s", db_get_string(&sql));
         if (db_execute_immediate(driver, &sql) != DB_OK) {
-            G_fatal_error(_("Unable to create table: %s"),
-                          db_get_string(&sql));
+            G_fatal_error(_("Unable to create table: %s"), db_get_string(&sql));
         }
     }
 
     /* print header */
     if (out_mode) {
         fprintf(stdout,
-                _("\nVolume report on data from <%s> using clumps on <%s> raster map"),
+                _("\nVolume report on data from <%s> using clumps on <%s> "
+                  "raster map"),
                 datamap, clumpmap);
         fprintf(stdout, "\n\n");
-        fprintf(stdout,
-                _("Category   Average   Data   # Cells        Centroid             Total\n"));
-        fprintf(stdout,
-                _("Number     in clump  Total  in clump   Easting     Northing     Volume"));
+        fprintf(stdout, _("Category   Average   Data   # Cells        Centroid "
+                          "            Total\n"));
+        fprintf(stdout, _("Number     in clump  Total  in clump   Easting     "
+                          "Northing     Volume"));
         fprintf(stdout, "\n%s\n", SEP);
     }
     total_vol = 0.0;
@@ -303,12 +307,11 @@ int main(int argc, char *argv[])
                                   db_get_string(&sql));
             }
             if (out_mode)
-                fprintf(stdout,
-                        "%8d%10.2f%10.0f %7ld  %10.2f  %10.2f %16.2f\n", i,
-                        avg, sum[i], count[i], east, north, vol);
-            else
-                fprintf(stdout, "%d:%.2f:%.0f:%ld:%.2f:%.2f:%.2f\n",
+                fprintf(stdout, "%8d%10.2f%10.0f %7ld  %10.2f  %10.2f %16.2f\n",
                         i, avg, sum[i], count[i], east, north, vol);
+            else
+                fprintf(stdout, "%d:%.2f:%.0f:%ld:%.2f:%.2f:%.2f\n", i, avg,
+                        sum[i], count[i], east, north, vol);
         }
     }
 

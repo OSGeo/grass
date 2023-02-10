@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.components
@@ -25,8 +24,8 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-int insert_new_record(dbDriver * driver, struct field_info *Fi,
-                      dbString * sql, int cat, int comp)
+int insert_new_record(dbDriver *driver, struct field_info *Fi, dbString *sql,
+                      int cat, int comp)
 {
     char buf[2000];
 
@@ -47,10 +46,9 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     static struct line_pnts *Points;
     struct line_cats *Cats;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *method_opt, *afield_opt, *nfield_opt, *abcol,
-        *afcol, *ncol;
+    struct Option *method_opt, *afield_opt, *nfield_opt, *abcol, *afcol, *ncol;
     struct Flag *add_f;
     int with_z;
     int afield, nfield, mask_type;
@@ -65,7 +63,8 @@ int main(int argc, char *argv[])
     struct field_info *Fi;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -119,9 +118,7 @@ int main(int argc, char *argv[])
     method_opt->multiple = NO;
     method_opt->options = "weak,strong";
     desc = NULL;
-    G_asprintf(&desc,
-               "weak;%s;strong;%s",
-               _("Weakly connected components"),
+    G_asprintf(&desc, "weak;%s;strong;%s", _("Weakly connected components"),
                _("Strongly connected components"));
     method_opt->descriptions = desc;
     method_opt->description = _("Type of components");
@@ -139,8 +136,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -158,9 +154,8 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    if (0 !=
-        Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                             abcol->answer, ncol->answer, 0, 2))
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, 0, 2))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(&In));
 
@@ -195,8 +190,8 @@ int main(int argc, char *argv[])
     if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
         G_warning(_("Cannot create index"));
 
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
@@ -243,9 +238,8 @@ int main(int argc, char *argv[])
             int node;
 
             /* Vect_get_line_nodes(&In, i, &node, NULL); */
-            node =
-                Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0],
-                               0, 0);
+            node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0],
+                                  0, 0);
             if (!node)
                 continue;
             comp = component[node];

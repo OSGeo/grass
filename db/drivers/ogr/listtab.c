@@ -30,7 +30,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
+int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 {
     int i, nlayers;
     dbString *list;

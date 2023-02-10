@@ -29,15 +29,15 @@
    \param graph input graph
    \param[out] degree array of degrees
  */
-void NetA_degree_centrality(dglGraph_s * graph, double *degree)
+void NetA_degree_centrality(dglGraph_s *graph, double *degree)
 {
     int i;
     double nnodes = dglGet_NodeCount(graph);
 
     for (i = 1; i <= nnodes; i++)
         degree[i] =
-            dglNodeGet_OutDegree(graph,
-                                 dglGetNode(graph, (dglInt32_t) i)) / nnodes;
+            dglNodeGet_OutDegree(graph, dglGetNode(graph, (dglInt32_t)i)) /
+            nnodes;
 }
 
 /*!
@@ -51,8 +51,8 @@ void NetA_degree_centrality(dglGraph_s * graph, double *degree)
    \return 0 on success
    \return -1 on failure
  */
-int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
-                                double error, double *eigenvector)
+int NetA_eigenvector_centrality(dglGraph_s *graph, int iterations, double error,
+                                double *eigenvector)
 {
     int i, iter, nnodes;
     double *tmp;
@@ -97,13 +97,11 @@ int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
                 max_value = tmp[i];
         for (i = 1; i <= nnodes; i++) {
             tmp[i] /= max_value;
-            cum_error +=
-                (tmp[i] - eigenvector[i]) * (tmp[i] - eigenvector[i]);
+            cum_error += (tmp[i] - eigenvector[i]) * (tmp[i] - eigenvector[i]);
             eigenvector[i] = tmp[i];
         }
         if (cum_error < error)
             break;
-
     }
 
     G_free(tmp);
@@ -111,7 +109,8 @@ int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
 }
 
 /*!
-   \brief Computes betweenness and closeness centrality measure using Brandes algorithm. 
+   \brief Computes betweenness and closeness centrality measure using Brandes
+   algorithm.
 
    Edge costs must be nonnegative. If some edge costs are negative then
    the behaviour of this method is undefined.
@@ -123,7 +122,7 @@ int NetA_eigenvector_centrality(dglGraph_s * graph, int iterations,
    \return 0 on success
    \return -1 on failure
  */
-int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
+int NetA_betweenness_closeness(dglGraph_s *graph, double *betweenness,
                                double *closeness)
 {
     int i, j, nnodes, stack_size, count;
@@ -135,17 +134,16 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 
     nnodes = dglGet_NodeCount(graph);
 
-    dst = (dglInt32_t *) G_calloc(nnodes + 1, sizeof(dglInt32_t));
+    dst = (dglInt32_t *)G_calloc(nnodes + 1, sizeof(dglInt32_t));
     prev = (struct ilist **)G_calloc(nnodes + 1, sizeof(struct ilist *));
-    stack = (dglInt32_t *) G_calloc(nnodes, sizeof(dglInt32_t));
-    cnt = (dglInt32_t *) G_calloc(nnodes + 1, sizeof(dglInt32_t));
-    delta = (dglInt32_t *) G_calloc(nnodes + 1, sizeof(dglInt32_t));
+    stack = (dglInt32_t *)G_calloc(nnodes, sizeof(dglInt32_t));
+    cnt = (dglInt32_t *)G_calloc(nnodes + 1, sizeof(dglInt32_t));
+    delta = (dglInt32_t *)G_calloc(nnodes + 1, sizeof(dglInt32_t));
 
     if (!dst || !prev || !stack || !cnt || !delta) {
         G_fatal_error(_("Out of memory"));
         return -1;
     }
-
 
     for (i = 1; i <= nnodes; i++) {
         prev[i] = Vect_new_list();
@@ -189,10 +187,8 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 
             dglInt32_t *edge;
 
-            dglEdgeset_T_Initialize(&et, graph,
-                                    dglNodeGet_OutEdgeset(graph,
-                                                          dglGetNode(graph,
-                                                                     v)));
+            dglEdgeset_T_Initialize(
+                &et, graph, dglNodeGet_OutEdgeset(graph, dglGetNode(graph, v)));
             for (edge = dglEdgeset_T_First(&et); edge;
                  edge = dglEdgeset_T_Next(&et)) {
                 dglInt32_t *to = dglEdgeGet_Tail(graph, edge);
@@ -229,7 +225,6 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
             }
             if (w != s && betweenness)
                 betweenness[w] += delta[w];
-
         }
         if (closeness)
             closeness[s] /= (double)stack_size;

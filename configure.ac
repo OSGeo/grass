@@ -1,19 +1,19 @@
 #############################################################################
 #
-# MODULE:   	Grass Compilation
+# MODULE:	Grass Compilation
 # AUTHOR(S):	Original author unknown - probably CERL
-#   	    	Eric G. Miller - egm2 jps.net
-#   	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
-#   	    	Markus Neteler - Germany/Italy - neteler itc.it
-#   	    	Nicklas Larsson (update to autoconfig 2.69)
-# PURPOSE:  	This configure runs all the tests to determine what components
-#   	    	are installed on the current system. It also defines certain
-#   	    	configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
+#		Eric G. Miller - egm2 jps.net
+#		Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
+#		Markus Neteler - Germany/Italy - neteler itc.it
+#		Nicklas Larsson (update to autoconfig 2.69)
+# PURPOSE:	This configure runs all the tests to determine what components
+#		are installed on the current system. It also defines certain
+#		configuration variables for compilation and installation.
+# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
 #
-#               This program is free software under the GNU General
-#   	    	Public License (>=v2). Read the file COPYING that
-#   	    	comes with GRASS for details.
+#		This program is free software under the GNU General
+#		Public License (>=v2). Read the file COPYING that
+#		comes with GRASS for details.
 #
 # MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
@@ -288,7 +288,6 @@ AC_ARG_WITH(macosx-sdk,
 [  --with-macosx-sdk[=path/sdk]
                           compile with a system SDK on MacOSX. (default: no)],, with_macosx_sdk="no")
 LOC_ARG_WITH(tiff, TIFF)
-LOC_ARG_WITH(png, PNG)
 LOC_ARG_WITH(postgres, PostgreSQL, no)
 LOC_ARG_WITH(mysql, MySQL, no)
 LOC_ARG_WITH(sqlite, SQLite)
@@ -308,6 +307,11 @@ LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
+
+AC_ARG_WITH(libpng,
+[  --with-libpng[=path/libpng-config]
+                          enable PNG support (libpng-config with path,
+                          e.g. '--with-libpng=/usr/local/bin/libpng-config')])
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -360,9 +364,6 @@ LOC_ARG_WITH_LIB(readline, Readline)
 
 LOC_ARG_WITH_INC(tiff, TIFF)
 LOC_ARG_WITH_LIB(tiff, TIFF)
-
-LOC_ARG_WITH_INC(png, PNG)
-LOC_ARG_WITH_LIB(png, PNG)
 
 LOC_ARG_WITH_INC(postgres, PostgreSQL)
 LOC_ARG_WITH_LIB(postgres, PostgreSQL)
@@ -489,7 +490,7 @@ fi
 AC_PROG_RANLIB
 AC_CHECK_PROGS(AR, ar)
 AC_CHECK_PROGS(ENV, env)
-AC_PATH_PROG(PERL, perl, no)  
+AC_PATH_PROG(PERL, perl, no)
 AC_HEADER_STDC
 #AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
 AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h f2c.h g2c.h)
@@ -873,6 +874,55 @@ AC_SUBST(HISTORYLIB)
 
 # Done checking Readline
 
+# PNG option
+
+AC_MSG_CHECKING(whether to use PNG)
+
+PNGLIB=
+PNGINC=
+USE_PNG=
+
+if test "`basename xx/$with_libpng`" = "libpng-config" ; then
+  LIBPNG_CONFIG="$with_libpng"
+fi
+
+if test "$with_libpng" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_PATH_PROG(LIBPNG_CONFIG, libpng-config, no)
+
+  if test "$LIBPNG_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find libpng-config])
+  fi
+
+  if test "$LIBPNG_CONFIG" != "" ; then
+    PNGLIB=`"$LIBPNG_CONFIG" --static --ldflags`
+    PNGINC=`"$LIBPNG_CONFIG" --cflags`
+    USE_PNG=1
+  fi
+
+  PNG=
+  ac_save_libs="$LIBS"
+  ac_save_cflags="$CFLAGS"
+  LIBS="$LIBS $PNGLIB"
+  CFLAGS="$CFLAGS $PNGINC"
+
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[],[
+  AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
+  AC_MSG_ERROR([*** Unable to locate libpng library.])
+  ])
+  ])
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+
+  AC_DEFINE(HAVE_PNG_H, 1, [Define to 1 if you have the <png.h> header file.])
+fi
+
+AC_SUBST(PNGLIB)
+AC_SUBST(PNGINC)
+AC_SUBST(USE_PNG)
+
 # GDAL option
 
 AC_MSG_CHECKING(whether to use GDAL)
@@ -1009,7 +1059,6 @@ else
 
   if test "$PDAL_CONFIG" != "" ; then
     PDAL_LIBS=`"$PDAL_CONFIG" --libs`
-    PDAL_CPPFLAGS=`"$PDAL_CONFIG" --cxxflags`
     PDAL_INC=`"$PDAL_CONFIG" --includes`
     USE_PDAL=1
   fi
@@ -1017,10 +1066,8 @@ else
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
-  ac_save_cppflags="$CPPFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
-  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
@@ -1032,7 +1079,6 @@ else
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
-  CPPFLAGS=${ac_save_cppflags}
 
   AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
 fi
@@ -1114,13 +1160,13 @@ else
   if test "$GEOS_CONFIG" = "no" ; then
     AC_MSG_ERROR([*** couldn't find geos-config])
   fi
-  
+
   if test "$GEOS_CONFIG" != "" ; then
     GEOS_LIBS=`"$GEOS_CONFIG" --clibs`
     GEOS_CFLAGS=`"$GEOS_CONFIG" --cflags`
     USE_GEOS=1
   fi
-  
+
   LOC_CHECK_INCLUDES(geos_c.h,GEOS,$GEOS_CFLAGS)
 ### geos 3.3.6 installs geos_c.lib, see http://osgeo-org.1560.n6.nabble.com/osgeo4w-329-update-geos-to-3-3-6-td5024605.html
 #  if test "$MINGW32" = yes ; then
@@ -1164,35 +1210,6 @@ AC_SUBST(TIFF_LIBRARY_DIRS)
 AC_SUBST(TIFFLIB)
 
 # Done checking TIFF
-
-# Enable PNG option
-
-LOC_CHECK_USE(png,PNG,USE_PNG)
-
-PNGINC=
-PNGLIB=
-
-if test -n "$USE_PNG"; then
-
-# With PNG includes directory
-
-LOC_CHECK_INC_PATH(png,PNG,PNGINC)
-
-LOC_CHECK_INCLUDES(png.h,PNG,$PNGINC)
-
-# With PNG library directory
-
-LOC_CHECK_LIB_PATH(png,PNG,PNGLIB)
-
-LOC_CHECK_LIBS(png,png_read_image,PNG,$PNGLIB,PNGLIB,,$ZLIB $MATHLIB,)
-
-fi # $USE_PNG
-
-AC_SUBST(PNGINC)
-AC_SUBST(PNGLIB)
-AC_SUBST(USE_PNG)
-
-# Done checking PNG
 
 # Enable PostgreSQL option
 
@@ -1468,7 +1485,7 @@ LOC_CHECK_INC_PATH(odbc,ODBC,ODBCINC)
 
 AC_CHECK_HEADER([windows.h],
     AC_DEFINE(HAVE_WINDOWS_H, 1, [Define to 1 if you have the <windows.h> header file.]))
- 
+
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$ODBCINC $CPPFLAGS"
 AC_CHECK_HEADER([sql.h],
@@ -1567,7 +1584,7 @@ save_LDFLAGS="$LDFLAGS"
 LDFLAGS="$BLASLIB $LDFLAGS"
 AC_CHECK_LIB(atlas, ATL_xerbla,
 		[AC_CHECK_LIB(f77blas, sgemm_,
-		[AC_CHECK_LIB(cblas, cblas_dgemm, 
+		[AC_CHECK_LIB(cblas, cblas_dgemm,
 			[blas_ok=yes; BLASLIB="-lcblas -lf77blas -latlas"],
 			[],[-lf77blas -latlas])],
 		[],[-latlas])]
@@ -1871,59 +1888,43 @@ AC_SUBST(USE_PTHREAD)
 
 LOC_CHECK_USE(openmp,OpenMP,USE_OPENMP)
 
-OMPINCPATH=
-OMPLIBPATH=
-OMPLIB=
-OMPCFLAGS=
+if test "$enable_openmp" != no; then
 
-if test -n "$USE_OPENMP"; then
+if test -n "${USE_OPENMP}"; then
 
-# With OpenMP includes directory
+OPENMP_INCPATH=
+OPENMP_LIBPATH=
+OPENMP_LIB=
+OPENMP_CFLAGS=
 
-LOC_CHECK_INC_PATH(openmp,OpenMP,OMPINCPATH)
+LOC_CHECK_INC_PATH(openmp,OpenMP,OPENMP_INCPATH)
+LOC_CHECK_LIB_PATH(openmp,OpenMP,OPENMP_LIBPATH)
+LOC_CHECK_INCLUDES(omp.h,OpenMP,$OPENMP_INCPATH)
 
-LOC_CHECK_INCLUDES(omp.h,OpenMP,$OMPINCPATH)
+LOC_CHECK_LIBS(omp,omp_get_num_threads,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,[
+LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,)])
 
-# With OpenMP library directory
-# GCC et al.: -lgomp
-# Solaris cc: -lmtsk
-# AIX xlc: -lxlsmp
-# SGI IRIX 6.5 MIPSpro C/C++: -lmp
+loc_save_cflags="$CFLAGS"
+CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
+LOC_OPENMP
+CFLAGS="${loc_save_cflags}"
 
-LOC_CHECK_LIB_PATH(openmp,OpenMP,OMPLIBPATH)
+AC_SUBST(OPENMP_INCPATH)
+AC_SUBST(OPENMP_LIBPATH)
+AC_SUBST(OPENMP_LIB)
+AC_SUBST(OPENMP_CFLAGS)
 
-LOC_CHECK_FUNC(GOMP_parallel_start,OpenMP functions,OMPLIB,,,,,[
-LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OMPLIBPATH,OMPLIB,,,)
-])
+fi # USE_OPENMP
 
-# compiler dependent
-#if test ${CC} = "gcc" ; then
-if test x$GCC = xyes ; then
-	# GNU C compiler (>= 4.2.1)
-	OMPCFLAGS=-fopenmp
-elif test ${CC} = "icc" ; then
-	# Intel compiler
-	OMPCFLAGS=-openmp
-elif test ${CC} = "opencc" ; then
-	# AMD's x86 Open64 compiler
-	OMPCFLAGS=-mp
-elif test ${CC} = "pgcc" ; then
-	# Portland Group's compiler
-	OMPCFLAGS=-mp
-# ... anybody else?
+else # enable_openmp
+
+if test -n "${USE_OPENMP}"; then
+LOC_MSG(OpenMP explicitly disabled with --disable-openmp.)
 fi
+USE_OPENMP=
 
-# try to build a test program with "$CC $OMPCLFAGS" to confirm it works
-#...how?
-#echo "int main() {return 0;}" > test.c 
-#$CC $OMPCLFAGS test.c -o test
+fi  # enable_openmp
 
-fi # $USE_OPENMP
-
-AC_SUBST(OMPINCPATH)
-AC_SUBST(OMPLIBPATH)
-AC_SUBST(OMPLIB)
-AC_SUBST(OMPCFLAGS)
 AC_SUBST(USE_OPENMP)
 
 # Done checking OpenMP

@@ -5,7 +5,7 @@
  * MODULE:      GRASS gis library
  * FILENAME:    cmprrle.c
  * AUTHOR(S):   Markus Metz
- * PURPOSE:     To provide generic RLE for compressing and 
+ * PURPOSE:     To provide generic RLE for compressing and
  *              decompressing data.  Its primary use is in
  *              the storage and reading of GRASS rasters.
  *
@@ -14,7 +14,7 @@
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -44,7 +44,7 @@
  *     unsigned char *src, *dst;                                    *
  * ---------------------------------------------------------------- *
  * This function decompresses data compressed with RLE.              *
- * It is equivalent to a single pass call to an external expansion  * 
+ * It is equivalent to a single pass call to an external expansion  *
  * function.                                                        *
  * If you need a continuous expansion scheme, you'll have to code   *
  * your own.                                                        *
@@ -63,15 +63,15 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-/* no fast mode if destination is large enough to hold 
+/* no fast mode if destination is large enough to hold
  * worst case compression */
 int G_rle_compress_bound(int src_sz)
 {
     return ((src_sz >> 1) * 3 + (src_sz & 1));
 }
 
-int
-G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                   int dst_sz)
 {
     int i, nbytes;
     unsigned char prev_b;
@@ -92,7 +92,7 @@ G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
      * example:
      * ABBCCC
      * is encoded as
-     * ABB2CC3 
+     * ABB2CC3
      */
 
     prev_b = src[0];
@@ -136,8 +136,7 @@ G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     return nbytes;
 }
 
-int
-G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int i, j, nbytes, cnt;
     unsigned char prev_b;

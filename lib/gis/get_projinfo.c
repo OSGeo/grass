@@ -37,8 +37,8 @@ struct Key_Value *G_get_projunits(void)
     G_file_name(path, "", UNIT_FILE, PERMANENT);
     if (access(path, 0) != 0) {
         if (G_projection() != PROJECTION_XY) {
-            G_warning(_("<%s> file not found for location <%s>"),
-                      UNIT_FILE, G_location());
+            G_warning(_("<%s> file not found for location <%s>"), UNIT_FILE,
+                      G_location());
         }
         return NULL;
     }
@@ -107,8 +107,8 @@ struct Key_Value *G_get_projepsg(void)
     G_file_name(path, "", EPSG_FILE, PERMANENT);
     if (access(path, 0) != 0) {
         if (G_projection() != PROJECTION_XY) {
-            G_debug(1, "<%s> file not found for location <%s>",
-                    EPSG_FILE, G_location());
+            G_debug(1, "<%s> file not found for location <%s>", EPSG_FILE,
+                    G_location());
         }
         return NULL;
     }
@@ -135,8 +135,8 @@ char *G_get_projwkt(void)
     G_file_name(path, "", WKT_FILE, "PERMANENT");
     if (access(path, 0) != 0) {
         if (G_projection() != PROJECTION_XY) {
-            G_debug(1, "<%s> file not found for location <%s>",
-                    WKT_FILE, G_location());
+            G_debug(1, "<%s> file not found for location <%s>", WKT_FILE,
+                    G_location());
         }
         return NULL;
     }
@@ -157,15 +157,16 @@ char *G_get_projwkt(void)
             break;
         }
 
-        if (c == '\r') {        /* DOS or MacOS9 */
+        if (c == '\r') { /* DOS or MacOS9 */
             c = fgetc(fp);
             if (c != EOF) {
-                if (c != '\n') {        /* MacOS9 - we have to return the char to stream */
+                if (c !=
+                    '\n') { /* MacOS9 - we have to return the char to stream */
                     ungetc(c, fp);
                     c = '\n';
                 }
             }
-            else {              /* MacOS9 - we have to return the char to stream */
+            else { /* MacOS9 - we have to return the char to stream */
                 ungetc(c, fp);
                 c = '\n';
             }
@@ -224,7 +225,8 @@ char *G_get_projwkt(void)
    5. "urn:ogc:def:crs:EPSG::n" - ogc urns
    6. PROJ.4 definitions - passed on to importFromProj4().
    7. filename - file read for WKT, XML or PROJ.4 definition.
-   8. well known name accepted by SetWellKnownGeogCS(), such as NAD27, NAD83, WGS84 or WGS72.
+   8. well known name accepted by SetWellKnownGeogCS(), such as NAD27, NAD83,
+   WGS84 or WGS72.
    9. "IGNF:xxxx", "ESRI:xxxx", etc. from definitions from the PROJ database;
    10. PROJJSON (PROJ >= 6.2)
 
@@ -246,8 +248,8 @@ char *G_get_projsrid(void)
             struct Key_Value *projepsg;
             const char *epsg_num;
 
-            G_debug(1, "<%s> file not found for location <%s>",
-                    SRID_FILE, G_location());
+            G_debug(1, "<%s> file not found for location <%s>", SRID_FILE,
+                    G_location());
 
             /* for backwards compatibility, check if PROJ_EPSG exists */
             if ((projepsg = G_get_projepsg()) != NULL) {
@@ -281,15 +283,16 @@ char *G_get_projsrid(void)
             break;
         }
 
-        if (c == '\r') {        /* DOS or MacOS9 */
+        if (c == '\r') { /* DOS or MacOS9 */
             c = fgetc(fp);
             if (c != EOF) {
-                if (c != '\n') {        /* MacOS9 - we have to return the char to stream */
+                if (c !=
+                    '\n') { /* MacOS9 - we have to return the char to stream */
                     ungetc(c, fp);
                     c = '\n';
                 }
             }
-            else {              /* MacOS9 - we have to return the char to stream */
+            else { /* MacOS9 - we have to return the char to stream */
                 ungetc(c, fp);
                 c = '\n';
             }

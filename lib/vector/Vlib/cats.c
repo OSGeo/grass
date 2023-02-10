@@ -25,7 +25,6 @@
 static int cmp(const void *pa, const void *pb);
 static struct line_cats *Vect__new_cats_struct(void);
 
-
 /*!
    \brief Creates and initializes line_cats structure.
 
@@ -79,7 +78,7 @@ static struct line_cats *Vect__new_cats_struct()
  */
 void Vect_destroy_cats_struct(struct line_cats *p)
 {
-    if (p) {                    /* probably a moot test */
+    if (p) { /* probably a moot test */
         if (p->n_cats) {
             G_free((void *)p->field);
             G_free((void *)p->cat);
@@ -97,16 +96,16 @@ void Vect_destroy_cats_struct(struct line_cats *p)
    \param[in] cat category number
 
    \return number of categories
-   \return 0 if no space for new category in structure, n_cats would be > GV_NCATS_MAX
-   \return -1 on out of memory
-   \return -2 if field out of range: 1 - GV_FIELD_MAX or cat out of range:  1 - GV_CAT_MAX
+   \return 0 if no space for new category in structure, n_cats would be >
+   GV_NCATS_MAX \return -1 on out of memory \return -2 if field out of range: 1
+   - GV_FIELD_MAX or cat out of range:  1 - GV_CAT_MAX
  */
 int Vect_cat_set(struct line_cats *Cats, int field, int cat)
 {
     register int n;
 
     /* check input values */
-    /* compiler may warn: 
+    /* compiler may warn:
      * comparison is always 0 due to limited range of data type
      * but remember that limit is set to portable data type length
      * and machine native size may be longer */
@@ -124,8 +123,9 @@ int Vect_cat_set(struct line_cats *Cats, int field, int cat)
     /* field was not found so we shall append new cat */
     /* test if space exist */
     if (n >= GV_NCATS_MAX) {
-        G_fatal_error(_("Too many categories (%d), unable to set cat %d (layer %d)"),
-                      Cats->n_cats, cat, field);
+        G_fatal_error(
+            _("Too many categories (%d), unable to set cat %d (layer %d)"),
+            Cats->n_cats, cat, field);
     }
 
     if (Cats->n_cats == Cats->alloc_cats) {
@@ -283,7 +283,8 @@ int Vect_field_cat_del(struct line_cats *Cats, int field, int cat)
 }
 
 /*!
-   \brief Reset category structure to make sure cats structure is clean to be re-used.
+   \brief Reset category structure to make sure cats structure is clean to be
+   re-used.
 
    I.e. it has no cats associated with it. Cats must have
    previously been created with Vect_new_cats_struct()
@@ -318,7 +319,6 @@ struct cat_list *Vect_new_cat_list()
     return p;
 }
 
-
 /*!
    \brief Frees allocated cat_list memory.
 
@@ -326,7 +326,7 @@ struct cat_list *Vect_new_cat_list()
  */
 void Vect_destroy_cat_list(struct cat_list *p)
 {
-    if (p) {                    /* probably a moot test */
+    if (p) { /* probably a moot test */
         if (p->n_ranges) {
             G_free((void *)p->min);
             G_free((void *)p->max);
@@ -335,9 +335,9 @@ void Vect_destroy_cat_list(struct cat_list *p)
     }
 }
 
-
 /*!
-   \brief Converts string of categories and cat ranges separated by commas to cat_list.
+   \brief Converts string of categories and cat ranges separated by commas to
+   cat_list.
 
    \par Examples of string:
    \verbatim
@@ -378,7 +378,7 @@ int Vect_str_to_cat_list(const char *str, struct cat_list *list)
     l = strlen(str);
 
     /* find number of ranges */
-    nr = 1;                     /* one range */
+    nr = 1; /* one range */
     for (i = 0; i < l; i++)
         if (str[i] == ',')
             nr++;
@@ -398,7 +398,7 @@ int Vect_str_to_cat_list(const char *str, struct cat_list *list)
     s = str;
 
     while (s) {
-        e = (char *)strchr(s, ',');     /* first comma */
+        e = (char *)strchr(s, ','); /* first comma */
         if (e) {
             l = e - s;
             strncpy(buf, s, l);
@@ -415,9 +415,10 @@ int Vect_str_to_cat_list(const char *str, struct cat_list *list)
         }
         else if (sscanf(buf, "%d", &min) == 1)
             max = min;
-        else {                  /* error */
+        else { /* error */
 
-            G_warning(_("Unable to convert category string '%s' (from '%s') to category range"),
+            G_warning(_("Unable to convert category string '%s' (from '%s') to "
+                        "category range"),
                       buf, str);
             err++;
             continue;
@@ -454,11 +455,9 @@ int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
             if (range == list->alloc_ranges) {
                 list->alloc_ranges += 1000;
                 list->min = (int *)G_realloc((void *)list->min,
-                                             list->alloc_ranges *
-                                             sizeof(int));
-                list->max =
-                    (int *)G_realloc((void *)list->max,
-                                     list->alloc_ranges * sizeof(int));
+                                             list->alloc_ranges * sizeof(int));
+                list->max = (int *)G_realloc((void *)list->max,
+                                             list->alloc_ranges * sizeof(int));
             }
             list->min[range] = vals[i];
             list->max[range] = vals[i];
@@ -487,8 +486,7 @@ int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
    \return 0 on success
    \return -1 on failure
  */
-int Vect_cat_list_to_array(const struct cat_list *list, int **vals,
-                           int *nvals)
+int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
 {
     int i, j, k, n, n_cats, n_ucats, last_cat;
     int *cats, *ucats;
@@ -555,7 +553,8 @@ int Vect_cat_in_cat_list(int cat, const struct cat_list *list)
 }
 
 /*!
-   \brief Set category constraints using 'where' or 'cats' option and layer number.
+   \brief Set category constraints using 'where' or 'cats' option and layer
+   number.
 
    \param Map pointer to Map_info structure
    \param layer layer number
@@ -584,7 +583,8 @@ struct cat_list *Vect_cats_set_constraint(struct Map_info *Map, int layer,
         int i, j;
 
         if (catstr)
-            G_warning(_("'%s' and '%s' parameters were supplied, cats will be ignored"),
+            G_warning(_("'%s' and '%s' parameters were supplied, cats will be "
+                        "ignored"),
                       "where", "cats");
 
         Fi = Vect_get_field(Map, layer);
@@ -605,9 +605,8 @@ struct cat_list *Vect_cats_set_constraint(struct Map_info *Map, int layer,
         if (ncats == -1)
             G_fatal_error(_("Unable select records from table <%s>"),
                           Fi->table);
-        G_verbose_message(n_
-                          ("One category loaded", "%d categories loaded",
-                           ncats), ncats);
+        G_verbose_message(
+            n_("One category loaded", "%d categories loaded", ncats), ncats);
 
         db_close_database_shutdown_driver(driver);
 
@@ -697,7 +696,6 @@ int Vect_cats_in_constraint(struct line_cats *Cats, int layer,
 
     return 0;
 }
-
 
 /*!
    \brief Check if category is in ordered array of integers.

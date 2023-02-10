@@ -9,7 +9,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
+           2008/2010)
  */
 
 #include <math.h>
@@ -57,7 +58,7 @@ int Nviz_resize_window(int width, int height)
 
    \return 1
  */
-int Nviz_update_ranges(nv_data * dc)
+int Nviz_update_ranges(nv_data *dc)
 {
     float zmin, zmax, exag;
 
@@ -74,7 +75,7 @@ int Nviz_update_ranges(nv_data * dc)
         exag = 1.0;
     }
 
-    GS_get_zrange_nz(&zmin, &zmax);     /* actual */
+    GS_get_zrange_nz(&zmin, &zmax); /* actual */
 
     zmax = zmin + (3. * dc->xyrange / exag);
     zmin = zmin - (2. * dc->xyrange / exag);
@@ -104,8 +105,8 @@ int Nviz_set_viewpoint_position(double x_pos, double y_pos)
     ypos = (ypos < 0) ? 0 : (ypos > 1.0) ? 1.0 : ypos;
 
     if (x_pos < 0.0 || x_pos > 1.0 || y_pos < 0.0 || y_pos > 1.0) {
-        G_debug(3, "Invalid view position coordinates, using %f,%f",
-                xpos, 1.0 - ypos);
+        G_debug(3, "Invalid view position coordinates, using %f,%f", xpos,
+                1.0 - ypos);
     }
 
     G_debug(1, "Nviz_set_viewpoint_position(): x = %f y = %f", x_pos, y_pos);
@@ -141,8 +142,8 @@ void Nviz_get_viewpoint_position(double *x_pos, double *y_pos)
     *y_pos = (*y_pos < 0) ? 0 : (*y_pos > 1.0) ? 1.0 : *y_pos;
 
     if (xpos < 0.0 || xpos > 1.0 || ypos < 0.0 || ypos > 1.0) {
-        G_debug(3, "Invalid view position coordinates, using %f,%f",
-                *x_pos, 1.0 - *y_pos);
+        G_debug(3, "Invalid view position coordinates, using %f,%f", *x_pos,
+                1.0 - *y_pos);
     }
 }
 
@@ -234,7 +235,7 @@ int Nviz_set_viewpoint_twist(int twist)
 
    \return 1
  */
-int Nviz_change_exag(nv_data * data, double exag)
+int Nviz_change_exag(nv_data *data, double exag)
 {
     double temp;
 
@@ -286,8 +287,8 @@ void Nviz_get_modelview(double *modelMatrix)
  */
 void Nviz_set_rotation(double angle, double x, double y, double z)
 {
-    G_debug(3, "Nviz_set_rotation(): angle = %f, x = %f, y = %f, z = %f",
-            angle, x, y, z);
+    G_debug(3, "Nviz_set_rotation(): angle = %f, x = %f, y = %f, z = %f", angle,
+            x, y, z);
     GS_set_rotation(angle, x, y, z);
 }
 
@@ -320,7 +321,7 @@ void Nviz_init_rotation(void)
    \param lateral type of movement
 
  */
-void Nviz_flythrough(nv_data * data, float *fly_info, int *scale, int lateral)
+void Nviz_flythrough(nv_data *data, float *fly_info, int *scale, int lateral)
 {
     float dir[3], from[4], cur_from[4], cur_dir[4];
     float speed, h, p, sh, ch, sp, cp;
@@ -337,8 +338,8 @@ void Nviz_flythrough(nv_data * data, float *fly_info, int *scale, int lateral)
 
     speed = scale[0] * fly_info[0];
 
-    h += scale[1] * fly_info[1];        /* change heading */
-    if (!lateral)               /* in case of "lateral" doesn't change pitch */
+    h += scale[1] * fly_info[1]; /* change heading */
+    if (!lateral)                /* in case of "lateral" doesn't change pitch */
         p -= scale[1] * fly_info[2];
 
     h = fmod(h + M_PI, 2 * M_PI) - M_PI;
@@ -361,19 +362,18 @@ void Nviz_flythrough(nv_data * data, float *fly_info, int *scale, int lateral)
         from[X] = cur_from[X] + speed * dir[X];
         from[Y] = cur_from[Y] + speed * dir[Y];
         /* not sure how this should behave (change Z coord or not ?) */
-        from[Z] = cur_from[Z];  /* + speed * dir[Z] */
+        from[Z] = cur_from[Z]; /* + speed * dir[Z] */
     }
 
     diff_x = fabs(cur_dir[X] - dir[X]);
     diff_y = fabs(cur_dir[Y] - dir[Y]);
     diff_z = fabs(cur_dir[Z] - dir[Z]);
 
-    if (                        /* something has changed */
-           (diff_x > quasi_zero) || (diff_y > quasi_zero) ||
-           (diff_z > quasi_zero) || (cur_from[X] != from[X]) ||
-           (cur_from[Y] != from[Y]) || (cur_from[Z] != from[Z])
-        ) {
+    if (/* something has changed */
+        (diff_x > quasi_zero) || (diff_y > quasi_zero) ||
+        (diff_z > quasi_zero) || (cur_from[X] != from[X]) ||
+        (cur_from[Y] != from[Y]) || (cur_from[Z] != from[Z])) {
         GS_moveto(from);
-        GS_set_viewdir(dir);    /* calls gsd_set_view */
+        GS_set_viewdir(dir); /* calls gsd_set_view */
     }
 }

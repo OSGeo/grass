@@ -215,7 +215,7 @@ AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$5 $CPPFLAGS"
 AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <stdio.h> 
+#include <stdio.h>
 #include <$1>
 int main(void) {
  FILE *fp = fopen("conftestdata","w");
@@ -376,7 +376,7 @@ AC_SUBST(EXEEXT)])
 #
 # Arguments:
 #	none
-#	
+#
 # Results:
 #
 #	Adds the following arguments to configure:
@@ -538,8 +538,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    ;;
 	*-solaris2*)
 	    # Note: Solaris is as of 2010 Oracle Solaris, not Sun Solaris
-	    #       Oracle Solaris derives from Solaris 2 
-	    #       derives from SunOS 5 
+	    #       Oracle Solaris derives from Solaris 2
+	    #       derives from SunOS 5
 	    #       derives from UNIX System V Release 4
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
@@ -571,7 +571,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LDFLAGS="-Wl,--export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
 	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR} -Wl,-rpath,${INST_DIR}/lib'
-	    # TODO: add optional pthread support with any combination of: 
+	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
 	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
@@ -593,7 +593,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # NetBSD 6 does handle version numbers with dots.
 	    STLIB_SUFFIX=".a"
 	    SHLIB_SUFFIX=".so"
-	    # TODO: add optional pthread support with any combination of: 
+	    # TODO: add optional pthread support with any combination of:
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
 	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
@@ -638,8 +638,111 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     AC_SUBST(STLIB_SUFFIX)
 ])
 
+dnl -------------------- OpenMP -----------------------------------------------
+dnl OpenMP code borrowed and modified from Autoconf 2.69 (AC_OPENMP)
+dnl to enable Clang detection
 
-dnl XXXX Begin Stolen from cdrtools-2.01 
+# _LOC_LANG_OPENMP
+# ---------------
+# Expands to some language dependent source code for testing the presence of
+# OpenMP.
+AC_DEFUN([_LOC_LANG_OPENMP],
+[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
+
+# _LOC_LANG_OPENMP(C)
+# ------------------
+m4_define([_LOC_LANG_OPENMP(C)],
+[
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+])
+
+# _LOC_LANG_OPENMP(C++)
+# --------------------
+m4_copy([_LOC_LANG_OPENMP(C)], [_LOC_LANG_OPENMP(C++)])
+
+# _LOC_LANG_OPENMP(Fortran 77)
+# ---------------------------
+m4_define([_LOC_LANG_OPENMP(Fortran 77)],
+[
+      program main
+      implicit none
+!$    integer tid
+      tid = 42
+      call omp_set_num_threads(2)
+      end
+])
+
+# _LOC_LANG_OPENMP(Fortran)
+# ------------------------
+m4_copy([_LOC_LANG_OPENMP(Fortran 77)], [_LOC_LANG_OPENMP(Fortran)])
+
+# LOC_OPENMP
+# ---------
+# Check which options need to be passed to the C compiler to support OpenMP.
+# Set the OPENMP_CFLAGS / OPENMP_CXXFLAGS / OPENMP_FFLAGS variable to these
+# options.
+# The options are necessary at compile time (so the #pragmas are understood)
+# and at link time (so the appropriate library is linked with).
+# This macro takes care to not produce redundant options if $CC $CFLAGS already
+# supports OpenMP. It also is careful to not pass options to compilers that
+# misinterpret them; for example, most compilers accept "-openmp" and create
+# an output file called 'penmp' rather than activating OpenMP support.
+AC_DEFUN([LOC_OPENMP],
+[
+  OPENMP_[]_AC_LANG_PREFIX[]FLAGS=
+  AC_ARG_ENABLE([openmp],
+    [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])
+  if test "$enable_openmp" != no; then
+    AC_CACHE_CHECK([for $[]_AC_CC[] option to support OpenMP],
+      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp],
+      [AC_LINK_IFELSE([_LOC_LANG_OPENMP],
+	 [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='none needed'],
+	 [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'
+	  dnl Try these flags:
+	  dnl   GCC >= 4.2           -fopenmp
+	  dnl   SunPRO C             -xopenmp
+	  dnl   Intel C              -openmp
+	  dnl   SGI C, PGI C         -mp
+	  dnl   Tru64 Compaq C       -omp
+	  dnl   IBM C (AIX, Linux)   -qsmp=omp
+          dnl   Cray CCE             -homp
+          dnl   NEC SX               -Popenmp
+          dnl   Lahey Fortran (Linux)  --openmp
+          dnl   Clang (Apple)        -Xclang -fopenmp
+	  dnl If in this loop a compiler is passed an option that it doesn't
+	  dnl understand or that it misinterprets, the AC_LINK_IFELSE test
+	  dnl will fail (since we know that it failed without the option),
+	  dnl therefore the loop will continue searching for an option, and
+	  dnl no output file called 'penmp' or 'mp' is created.
+	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
+                           -Popenmp --openmp '-Xclang -fopenmp'; do
+	    ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+	    _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+	    AC_LINK_IFELSE([_LOC_LANG_OPENMP],
+	      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
+	    _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+	    if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != unsupported; then
+	      break
+	    fi
+	  done])])
+    case $ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp in #(
+      "none needed" | unsupported)
+	;; #(
+      *)
+	OPENMP_[]_AC_LANG_PREFIX[]FLAGS=$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp ;;
+    esac
+  fi
+  AC_SUBST([OPENMP_]_AC_LANG_PREFIX[FLAGS])
+])
+
+dnl -------------------- / OpenMP ---------------------------------------------
+
+
+dnl XXXX Begin Stolen from cdrtools-2.01
 dnl XXXX by Joerg Schilling <schilling fokus fraunhofer de> et al. XXXXXXXXX
 
 dnl XXXXXXXXX Begin Stolen (but modified) from GNU tar XXXXXXXXXXXXXXXXXXXXX
@@ -829,4 +932,3 @@ if test $ac_cv_func_ftello = yes; then
 fi])
 
 dnl XXXXXXXXXXX End Stolen from cdrtools-2.01 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-

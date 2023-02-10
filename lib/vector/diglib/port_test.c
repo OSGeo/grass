@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,10 +10,11 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/vector.h>
@@ -24,9 +24,8 @@
  **  US Army Construction Engineering Research Lab
  */
 
-
-/* 
- ** 
+/*
+ **
  **  This code is a quick hack to allow the writing of portable
  **  binary data files.
  **  The approach is to take known values and compare them against
@@ -45,14 +44,14 @@
  **
  **  First, true IEEE numbers had to be chosen to avoid getting an FPE.
  **  Second, every byte in the test pattern had to be unique.   And
- **  finally, the number had to not be sensitive to rounding by the 
+ **  finally, the number had to not be sensitive to rounding by the
  **  specific hardware implementation.
  **
  **  By experimentation it was found that the number  1.3333  met
  **  all these criteria for both floats and doubles
 
  **  See the discourse at the end of this file for more information
- **  
+ **
  **
  */
 
@@ -62,12 +61,11 @@
 #else
 #define OFF_T_TEST 0x01020304
 #endif
-#define LONG_TEST 0x01020304
-#define INT_TEST 0x01020304
+#define LONG_TEST  0x01020304
+#define INT_TEST   0x01020304
 #define SHORT_TEST 0x0102
 
-union type_conv
-{
+union type_conv {
     double d;
     float f;
     off_t o;
@@ -79,15 +77,15 @@ union type_conv
 static union type_conv u;
 
 /* dbl_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
-static unsigned char dbl_cmpr[] =
-    { 0x3f, 0xf5, 0x55, 0x32, 0x61, 0x7c, 0x1b, 0xda };
+static unsigned char dbl_cmpr[] = {0x3f, 0xf5, 0x55, 0x32,
+                                   0x61, 0x7c, 0x1b, 0xda};
 /* flt_cmpr holds the bytes of an IEEE representation of  TEST_PATTERN */
-static unsigned char flt_cmpr[] = { 0x3f, 0xaa, 0xa9, 0x93 };
-static unsigned char off_t_cmpr[] =
-    { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
-static unsigned char lng_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
-static unsigned char int_cmpr[] = { 0x01, 0x02, 0x03, 0x04 };
-static unsigned char shrt_cmpr[] = { 0x01, 0x02 };
+static unsigned char flt_cmpr[] = {0x3f, 0xaa, 0xa9, 0x93};
+static unsigned char off_t_cmpr[] = {0x01, 0x02, 0x03, 0x04,
+                                     0x05, 0x06, 0x07, 0x08};
+static unsigned char lng_cmpr[] = {0x01, 0x02, 0x03, 0x04};
+static unsigned char int_cmpr[] = {0x01, 0x02, 0x03, 0x04};
+static unsigned char shrt_cmpr[] = {0x01, 0x02};
 
 static char dbl_cnvrt[sizeof(double)];
 static char flt_cnvrt[sizeof(float)];
@@ -98,11 +96,9 @@ static char shrt_cnvrt[sizeof(short)];
 
 static int nat_dbl, nat_flt, nat_lng, nat_off_t, nat_int, nat_shrt, nat_char;
 
-
 /* function prototypes */
 static int find_offset(unsigned char *, unsigned char, int);
 static int dumpflags(void);
-
 
 int main(int argc, char **argv)
 {
@@ -149,7 +145,7 @@ int main(int argc, char **argv)
         err = 1;
     }
 
-    /* Find for each byte in big endian test pattern (*_cmpr) 
+    /* Find for each byte in big endian test pattern (*_cmpr)
      * offset of corresponding byte in machine native order.
      * Look if native byte order is little or big or some other (pdp)
      * endian.
@@ -168,9 +164,9 @@ int main(int argc, char **argv)
     tmp = tmp2 = 1;
     for (i = 0; i < PORT_DOUBLE; i++) {
         if (dbl_cnvrt[i] != i)
-            tmp = 0;            /* isn't big endian */
+            tmp = 0; /* isn't big endian */
         if (dbl_cnvrt[i] != (PORT_DOUBLE - i - 1))
-            tmp2 = 0;           /* isn't little endian */
+            tmp2 = 0; /* isn't little endian */
     }
     if (tmp)
         dbl_order = ENDIAN_BIG;
@@ -262,8 +258,7 @@ int main(int argc, char **argv)
     for (i = 0; i < PORT_INT; i++) {
         tmp = find_offset(u.c, int_cmpr[i], nat_int);
         if (-1 == tmp) {
-            fprintf(stderr, "ERROR, could not find '%x' in int\n",
-                    int_cmpr[i]);
+            fprintf(stderr, "ERROR, could not find '%x' in int\n", int_cmpr[i]);
             err = 1;
         }
         int_cnvrt[i] = tmp;
@@ -321,13 +316,12 @@ int main(int argc, char **argv)
     return (err);
 }
 
-
 /*
- ** match search_value against each char in basis. 
+ ** match search_value against each char in basis.
  ** return offset or -1 if not found
  */
-static int
-find_offset(unsigned char *basis, unsigned char search_value, int size)
+static int find_offset(unsigned char *basis, unsigned char search_value,
+                       int size)
 {
     register int i;
 
@@ -337,7 +331,6 @@ find_offset(unsigned char *basis, unsigned char search_value, int size)
 
     return (-1);
 }
-
 
 static int dumpflags(void)
 {
@@ -402,10 +395,10 @@ static int dumpflags(void)
 
 /*
 
-   The 3.0 dig, and dig_plus files are inherently non-portable.  This 
+   The 3.0 dig, and dig_plus files are inherently non-portable.  This
    can be seen in moving files between a SUN 386i and other SUN machines.
    The recommended way to transport files was always to convert to ASCII
-   (b.a.vect) and copy the ASCII files:  dig_ascii and dig_att to the 
+   (b.a.vect) and copy the ASCII files:  dig_ascii and dig_att to the
    destination machine.
 
    The problem lies in the way that different architectures internally
@@ -415,7 +408,7 @@ static int dumpflags(void)
 
    The CERL port of GRASS to the Compaq 386 already has code to deal
    with this incompatibility.  This code converts all files that are written
-   out to conform to the 680x0 standard.  These binary files can then be 
+   out to conform to the 680x0 standard.  These binary files can then be
    shared between machines without conversion.
    This code is designed to work with the majority of computers in use
    today that fit the following requirements:

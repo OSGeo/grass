@@ -18,10 +18,8 @@
 
 #include "parser_local_proto.h"
 
-
-static void print_escaped_for_rest(FILE * f, const char *str);
-static void print_escaped_for_rest_options(FILE * f, const char *str);
-
+static void print_escaped_for_rest(FILE *f, const char *str);
+static void print_escaped_for_rest_options(FILE *f, const char *str);
 
 /*!
    \brief Print module usage description in reStructuredText format.
@@ -69,7 +67,6 @@ void G__usage_rest(void)
     if (st->module_info.description)
         fprintf(stdout, "%s\n", st->module_info.description);
 
-
     fprintf(stdout, "\n%s\n----------------------\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
         G__print_keywords(stdout, NULL);
@@ -80,8 +77,6 @@ void G__usage_rest(void)
     fprintf(stdout, "**%s** --help\n\n", st->pgm_name);
 
     fprintf(stdout, "**%s**", st->pgm_name);
-
-
 
     /* print short version first */
     if (st->n_flags) {
@@ -137,7 +132,6 @@ void G__usage_rest(void)
     fprintf(stdout, " [-- **quiet**] ");
 
     fprintf(stdout, "\n");
-
 
     /* now long version */
     fprintf(stdout, "\n");
@@ -260,15 +254,16 @@ void G__usage_rest(void)
         }
         fprintf(stdout, "\n");
     }
-
 }
-
 
 /*!
  * \brief Format text for reStructuredText output
  */
-#define do_escape(c,escaped) case c: fputs(escaped,f);break
-void print_escaped_for_rest(FILE * f, const char *str)
+#define do_escape(c, escaped) \
+    case c:                   \
+        fputs(escaped, f);    \
+        break
+void print_escaped_for_rest(FILE *f, const char *str)
 {
     const char *s;
 
@@ -281,7 +276,7 @@ void print_escaped_for_rest(FILE * f, const char *str)
     }
 }
 
-void print_escaped_for_rest_options(FILE * f, const char *str)
+void print_escaped_for_rest_options(FILE *f, const char *str)
 {
     const char *s;
 

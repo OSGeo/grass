@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.null
@@ -35,19 +34,16 @@ int main(int argc, char *argv[])
     int row, col, fd;
     unsigned char *null_bits;
     RASTER_MAP_TYPE map_type;
-    int change_null =
-        0, create, remove, only_int, only_fp, only_null, recreate;
+    int change_null = 0, create, remove, only_int, only_fp, only_null, recreate;
     int is_reclass;
 
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map;
         struct Option *setnull;
         struct Option *null;
     } parms;
-    struct
-    {
+    struct {
         struct Flag *f;
         struct Flag *n;
         struct Flag *i;
@@ -144,8 +140,8 @@ int main(int argc, char *argv[])
     }
 
     if (strcmp(mapset, G_mapset()) != 0)
-        G_fatal_error(_("Raster map <%s> is not in your mapset <%s>"),
-                      name, G_mapset());
+        G_fatal_error(_("Raster map <%s> is not in your mapset <%s>"), name,
+                      G_mapset());
 
     if (parms.null->answer) {
         if (sscanf(parms.null->answer, "%lf", &new_null) == 1)
@@ -214,13 +210,15 @@ int main(int argc, char *argv[])
 
         if (donullcompr) {
             if (G_find_file2_misc("cell_misc", "nullcmpr", name, mapset)) {
-                G_message(_("The NULL file is already compressed, nothing to do."));
+                G_message(
+                    _("The NULL file is already compressed, nothing to do."));
                 exit(EXIT_SUCCESS);
             }
         }
         else {
             if (G_find_file2_misc("cell_misc", "null", name, mapset)) {
-                G_message(_("The NULL file is already uncompressed, nothing to do."));
+                G_message(
+                    _("The NULL file is already uncompressed, nothing to do."));
                 exit(EXIT_SUCCESS);
             }
         }
@@ -251,8 +249,7 @@ int main(int argc, char *argv[])
 
     if (remove) {
         /* remove NULL file */
-        G_verbose_message(_("Removing null file for raster map <%s>..."),
-                          name);
+        G_verbose_message(_("Removing null file for raster map <%s>..."), name);
         G_file_name_misc(path, "cell_misc", "null", name, mapset);
         unlink(path);
         G_file_name_misc(path, "cell_misc", "nullcmpr", name, mapset);
@@ -268,7 +265,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-static int parse_vallist(char **vallist, d_Mask * d_mask)
+static int parse_vallist(char **vallist, d_Mask *d_mask)
 {
     char buf[1024];
     char x[2];
@@ -300,7 +297,7 @@ static int parse_vallist(char **vallist, d_Mask * d_mask)
     return 0;
 }
 
-int parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
+int parse_d_mask_rule(char *vallist, d_Mask *d_mask, char *where)
 {
     double a, b;
     char junk[128];

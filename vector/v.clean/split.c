@@ -1,16 +1,15 @@
-
 /****************************************************************
  *
  * MODULE:       v.clean
- * 
+ *
  * AUTHOR(S):    Markus Metz
- *               
+ *
  * PURPOSE:      Split lines - helper tool for breaking lines
- *               
+ *
  * COPYRIGHT:    (C) 2012 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -118,7 +117,8 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
     dist = sqrt(dx * dx + dy * dy);
 
     /* trying to keep line length smaller than split_distance
-     * alternative, less code: write line as soon as split_distance is exceeded */
+     * alternative, less code: write line as soon as split_distance is exceeded
+     */
     for (i = 2; i < Points->n_points; i++) {
         dx = Points->x[i] - Points->x[i - 1];
         dy = Points->y[i] - Points->y[i - 1];
@@ -132,8 +132,7 @@ int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
                               Points->z[i - 1]);
             n_segs++;
         }
-        Vect_append_point(OutPoints, Points->x[i], Points->y[i],
-                          Points->z[i]);
+        Vect_append_point(OutPoints, Points->x[i], Points->y[i], Points->z[i]);
     }
     /* write out remaining line points only when original line was split */
     if (n_segs)

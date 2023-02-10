@@ -1,11 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r.out.ppm3
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>
- * PURPOSE:      Use to convert 3 grass raster layers (R,G,B) to PPM
- *               uses currently selected region
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
+ *                  contributor)
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Markus Neteler <neteler itc.it>
+ * PURPOSE:      Use to convert 3 grass raster layers (R,G,B) to PPM uses
+ *               currently selected region
  * COPYRIGHT:    (C) 2001-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -25,8 +26,7 @@
 #define DEF_GRN 255
 #define DEF_BLU 255
 
-struct band
-{
+struct band {
     struct Option *opt;
     int file;
     int type;
@@ -36,7 +36,7 @@ struct band
     unsigned char *mask;
 };
 
-static char *const color_names[3] = { "red", "green", "blue" };
+static char *const color_names[3] = {"red", "green", "blue"};
 
 int main(int argc, char **argv)
 {
@@ -147,8 +147,8 @@ int main(int argc, char **argv)
         fprintf(fp, "# Blue:  %s\n", B[2].opt->answer);
         fprintf(fp, "# Projection: %s (Zone: %d)\n",
                 G_database_projection_name(), G_zone());
-        fprintf(fp, "# N=%f, S=%f, E=%f, W=%f\n",
-                w.north, w.south, w.east, w.west);
+        fprintf(fp, "# N=%f, S=%f, E=%f, W=%f\n", w.north, w.south, w.east,
+                w.west);
         fprintf(fp, "# N/S Res: %f, E/W Res: %f\n", w.ns_res, w.ew_res);
     }
 
@@ -166,11 +166,10 @@ int main(int argc, char **argv)
         for (i = 0; i < 3; i++) {
             Rast_get_row(B[i].file, B[i].array, row, B[i].type);
 
-            Rast_lookup_colors(B[i].array,
-                               (i == 0) ? B[i].buf : dummy,
+            Rast_lookup_colors(B[i].array, (i == 0) ? B[i].buf : dummy,
                                (i == 1) ? B[i].buf : dummy,
-                               (i == 2) ? B[i].buf : dummy,
-                               B[i].mask, w.cols, &B[i].colors, B[i].type);
+                               (i == 2) ? B[i].buf : dummy, B[i].mask, w.cols,
+                               &B[i].colors, B[i].type);
         }
 
         for (col = 0; col < w.cols; col++) {

@@ -252,8 +252,10 @@ If you want ffmpeg support (see build instructions below), add this:
 --with-ffmpeg-libs=/usr/local/lib
 ```
 
-For cairo support (see build instructions at
-[kyngchaos.com](https://web.archive.org/web/20161112052733/http://www.kyngchaos.com/macosx/build/cairo/)), add this:
+For cairo support (see build
+instructions at
+[kyngchaos.com](https://web.archive.org/web/20161112052733/http://www.kyngchaos.com/macosx/build/cairo/)),
+add this:
 
 ```bash
 --with-cairo \
@@ -434,7 +436,8 @@ could use static, since GRASS only needs a few of the progs
 ignore warning about libz
 
 ```sh
-echo "JASPERLIB = /Library/Frameworks/UnixImageIO.framework/unix/lib/libjasper.dylib"  \
+echo "JASPERLIB = \
+    /Library/Frameworks/UnixImageIO.framework/unix/lib/libjasper.dylib"  \
     >> Makefile.config
 echo "JASPERHDR_DIR = /Library/Frameworks/UnixImageIO.framework/Headers" \
     >> Makefile.config
@@ -443,7 +446,8 @@ echo "JASPERHDR_DIR = /Library/Frameworks/UnixImageIO.framework/Headers" \
 For Tiger:
 
 ```sh
-echo "CC = /usr/bin/gcc -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk" \
+echo "CC = /usr/bin/gcc -arch ppc -arch i386 \
+    -isysroot /Developer/SDKs/MacOSX10.4u.sdk" \
     >> Makefile.config
 ```
 
@@ -558,13 +562,13 @@ cd ../build-ppc
     --extra-ldflags="-arch ppc"
 make
 ```
+
 Don't install this one, there is no need.
 
 If you are building for Leopard, also do the 64bit varieties, otherwise
 skip to the lipo step below.
 
 For x86_64:
-
 
 ```sh
 cd build-x86_64

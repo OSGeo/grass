@@ -15,17 +15,17 @@
  */
 
 /* example:
- * 
+ *
  * X -->-- X ---- X --<-- X ---- X
  * N1      N2     N3      N4     N5
- * 
+ *
  * -->--, --<-- one-way
  * ---- both ways
- * 
+ *
  * weakly connected:
  * all 5 nodes, even though there is no direct path from N1 to N4, 5
  * but N1 connects to N2, 3, and N4, 5 also connect to N2, 3
- * 
+ *
  * strongly connected:
  * no path from N2 to N1, no path from N3 to N4
  * component 1: N1
@@ -49,7 +49,7 @@
    \return number of components
    \return -1 on failure
  */
-int NetA_weakly_connected_components(dglGraph_s * graph, int *component)
+int NetA_weakly_connected_components(dglGraph_s *graph, int *component)
 {
     int nnodes, i;
     dglInt32_t *stack;
@@ -60,14 +60,14 @@ int NetA_weakly_connected_components(dglGraph_s * graph, int *component)
     dglInt32_t ncost;
 
     if (graph->Version < 2) {
-        G_warning
-            ("Directed graph must be version 2 or 3 for NetA_weakly_connected_components()");
+        G_warning("Directed graph must be version 2 or 3 for "
+                  "NetA_weakly_connected_components()");
         return -1;
     }
 
     components = 0;
     nnodes = dglGet_NodeCount(graph);
-    stack = (dglInt32_t *) G_calloc(nnodes + 1, sizeof(dglInt32_t));
+    stack = (dglInt32_t *)G_calloc(nnodes + 1, sizeof(dglInt32_t));
     if (!stack) {
         G_fatal_error(_("Out of memory"));
         return -1;
@@ -106,9 +106,8 @@ int NetA_weakly_connected_components(dglGraph_s * graph, int *component)
                         /* do not go through closed nodes */
                         if (have_node_costs) {
                             memcpy(&ncost,
-                                   dglNodeGet_Attr(graph,
-                                                   dglEdgeGet_Tail(graph,
-                                                                   edge)),
+                                   dglNodeGet_Attr(
+                                       graph, dglEdgeGet_Tail(graph, edge)),
                                    sizeof(ncost));
                         }
                         if (ncost >= 0)
@@ -129,9 +128,8 @@ int NetA_weakly_connected_components(dglGraph_s * graph, int *component)
                         /* do not go through closed nodes */
                         if (have_node_costs) {
                             memcpy(&ncost,
-                                   dglNodeGet_Attr(graph,
-                                                   dglEdgeGet_Tail(graph,
-                                                                   edge)),
+                                   dglNodeGet_Attr(
+                                       graph, dglEdgeGet_Tail(graph, edge)),
                                    sizeof(ncost));
                         }
                         if (ncost >= 0)
@@ -149,7 +147,7 @@ int NetA_weakly_connected_components(dglGraph_s * graph, int *component)
 }
 
 /*!
-   \brief Computes strongly connected components with Kosaraju's 
+   \brief Computes strongly connected components with Kosaraju's
    two-pass algorithm
 
    \param graph input graph
@@ -158,7 +156,7 @@ int NetA_weakly_connected_components(dglGraph_s * graph, int *component)
    \return number of components
    \return -1 on failure
  */
-int NetA_strongly_connected_components(dglGraph_s * graph, int *component)
+int NetA_strongly_connected_components(dglGraph_s *graph, int *component)
 {
     int nnodes, i;
     dglInt32_t *stack, *order;
@@ -170,15 +168,15 @@ int NetA_strongly_connected_components(dglGraph_s * graph, int *component)
     dglInt32_t ncost;
 
     if (graph->Version < 2) {
-        G_warning
-            ("Directed graph must be version 2 or 3 for NetA_strongly_connected_components()");
+        G_warning("Directed graph must be version 2 or 3 for "
+                  "NetA_strongly_connected_components()");
         return -1;
     }
 
     components = 0;
     nnodes = dglGet_NodeCount(graph);
-    stack = (dglInt32_t *) G_calloc(nnodes + 1, sizeof(dglInt32_t));
-    order = (dglInt32_t *) G_calloc(nnodes + 1, sizeof(dglInt32_t));
+    stack = (dglInt32_t *)G_calloc(nnodes + 1, sizeof(dglInt32_t));
+    order = (dglInt32_t *)G_calloc(nnodes + 1, sizeof(dglInt32_t));
     processed = (int *)G_calloc(nnodes + 1, sizeof(int));
     if (!stack || !order || !processed) {
         G_fatal_error(_("Out of memory"));
@@ -228,9 +226,8 @@ int NetA_strongly_connected_components(dglGraph_s * graph, int *component)
                         /* do not go through closed nodes */
                         if (have_node_costs) {
                             memcpy(&ncost,
-                                   dglNodeGet_Attr(graph,
-                                                   dglEdgeGet_Tail(graph,
-                                                                   edge)),
+                                   dglNodeGet_Attr(
+                                       graph, dglEdgeGet_Tail(graph, edge)),
                                    sizeof(ncost));
                         }
                         if (ncost < 0)
@@ -275,9 +272,8 @@ int NetA_strongly_connected_components(dglGraph_s * graph, int *component)
                         /* do not go through closed nodes */
                         if (have_node_costs) {
                             memcpy(&ncost,
-                                   dglNodeGet_Attr(graph,
-                                                   dglEdgeGet_Head(graph,
-                                                                   edge)),
+                                   dglNodeGet_Attr(
+                                       graph, dglEdgeGet_Head(graph, edge)),
                                    sizeof(ncost));
                         }
                         if (ncost >= 0)

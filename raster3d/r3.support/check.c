@@ -5,9 +5,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 /*
- * check_stats() - Check and update statistics 
+ * check_stats() - Check and update statistics
  *
  * RETURN: EXIT_SUCCESS / EXIT_FAILURE
  */

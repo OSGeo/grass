@@ -9,7 +9,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
+           2008/2010)
  */
 
 #include <grass/nviz.h>
@@ -27,13 +28,12 @@ static geoview Gv;
    \param data nviz data
    \param id
  */
-int Nviz_new_cplane(nv_data * data, int id)
+int Nviz_new_cplane(nv_data *data, int id)
 {
     data->num_cplanes++;
     /* Initialize internal attributes for this cutplane */
     data->cp_rot[id][X] = data->cp_rot[id][Y] = data->cp_rot[id][Z] = 0.0;
-    data->cp_trans[id][X] = data->cp_trans[id][Y] = data->cp_trans[id][Z] =
-        0.0;
+    data->cp_trans[id][X] = data->cp_trans[id][Y] = data->cp_trans[id][Z] = 0.0;
     data->cp_on[id] = 0;
 
     return 1;
@@ -45,7 +45,7 @@ int Nviz_new_cplane(nv_data * data, int id)
    \param data nviz data
    \param cplane id
  */
-int Nviz_on_cplane(nv_data * data, int id)
+int Nviz_on_cplane(nv_data *data, int id)
 {
     data->cur_cplane = id;
     data->cp_on[id] = 1;
@@ -60,7 +60,7 @@ int Nviz_on_cplane(nv_data * data, int id)
    \param data nviz data
    \param cplane id
  */
-int Nviz_off_cplane(nv_data * data, int id)
+int Nviz_off_cplane(nv_data *data, int id)
 {
     data->cp_on[id] = 0;
     GS_unset_cplane(id);
@@ -75,7 +75,7 @@ int Nviz_off_cplane(nv_data * data, int id)
    \param bound1
    \param bound2
  */
-int Nviz_draw_cplane(nv_data * data, int bound1, int bound2)
+int Nviz_draw_cplane(nv_data *data, int bound1, int bound2)
 {
     cp_draw(data, data->cur_cplane, bound1, bound2);
 
@@ -90,7 +90,7 @@ int Nviz_draw_cplane(nv_data * data, int bound1, int bound2)
    \param surf1 first surface id
    \param surf2 second surface id
  */
-void cp_draw(nv_data * data, int current, int surf1, int surf2)
+void cp_draw(nv_data *data, int current, int surf1, int surf2)
 {
     int i, nsurfs;
     int surf_min = 0, surf_max = 0, temp;
@@ -144,7 +144,7 @@ void cp_draw(nv_data * data, int current, int surf1, int surf2)
 
    \param data nviz data
  */
-int Nviz_num_cplanes(nv_data * data)
+int Nviz_num_cplanes(nv_data *data)
 {
     return data->num_cplanes;
 }
@@ -154,7 +154,7 @@ int Nviz_num_cplanes(nv_data * data)
 
    \param data nviz data
  */
-int Nviz_get_current_cplane(nv_data * data)
+int Nviz_get_current_cplane(nv_data *data)
 {
     return data->cur_cplane;
 }
@@ -166,10 +166,10 @@ int Nviz_get_current_cplane(nv_data * data)
    \param id id of current clip plane
    \param dx,dy,dz rotation parameters
 
-   \return 1 
+   \return 1
 
  */
-int Nviz_set_cplane_rotation(nv_data * data, int id, float dx, float dy,
+int Nviz_set_cplane_rotation(nv_data *data, int id, float dx, float dy,
                              float dz)
 {
     data->cp_rot[id][X] = dx;
@@ -193,7 +193,7 @@ int Nviz_set_cplane_rotation(nv_data * data, int id, float dx, float dy,
    \return 1
 
  */
-int Nviz_get_cplane_rotation(nv_data * data, int id, float *dx, float *dy,
+int Nviz_get_cplane_rotation(nv_data *data, int id, float *dx, float *dy,
                              float *dz)
 {
     *dx = data->cp_rot[id][X];
@@ -212,7 +212,7 @@ int Nviz_get_cplane_rotation(nv_data * data, int id, float *dx, float *dy,
 
    \return 1
  */
-int Nviz_set_cplane_translation(nv_data * data, int id, float dx, float dy,
+int Nviz_set_cplane_translation(nv_data *data, int id, float dx, float dy,
                                 float dz)
 {
     data->cp_trans[id][X] = dx;
@@ -233,7 +233,7 @@ int Nviz_set_cplane_translation(nv_data * data, int id, float dx, float dy,
    \param id id of current clip plane
    \param dx,dy,dz translation parameters
  */
-int Nviz_get_cplane_translation(nv_data * data, int id, float *dx, float *dy,
+int Nviz_get_cplane_translation(nv_data *data, int id, float *dx, float *dy,
                                 float *dz)
 {
     *dx = data->cp_trans[id][X];
@@ -248,15 +248,14 @@ int Nviz_get_cplane_translation(nv_data * data, int id, float *dx, float *dy,
 
    \param type type of fence (FC_ABOVE, FC_BELOW, FC_BLEND, FC_GREY, FC_OFF)
  */
-int Nviz_set_fence_color(nv_data * data, int type)
+int Nviz_set_fence_color(nv_data *data, int type)
 {
     GS_set_fencecolor(type);
 
     return 1;
-
 }
 
-int Nviz_set_cplane_here(nv_data * data, int cplane, float sx, float sy)
+int Nviz_set_cplane_here(nv_data *data, int cplane, float sx, float sy)
 {
     float x, y, z, len, los[2][3];
     float dx, dy, dz;

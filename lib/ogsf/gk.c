@@ -1,14 +1,15 @@
 /*!
    \file lib/ogsf/gk.c
 
-   \brief OGSF library - setting and manipulating keyframes animation (lower level functions)
+   \brief OGSF library - setting and manipulating keyframes animation (lower
+   level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -29,10 +30,9 @@ static float spl3(float, double, double, double, double, double, double,
 static float spl3(float tension, double data0, double data1, double x,
                   double x2, double x3, double lderiv, double rderiv)
 {
-    return ((float)
-            (data0 * (2 * x3 - 3 * x2 + 1) + data1 * (-2 * x3 + 3 * x2) +
-             (double)tension * lderiv * (x3 - 2 * x2 + x) +
-             (double)tension * rderiv * (x3 - x2)));
+    return ((float)(data0 * (2 * x3 - 3 * x2 + 1) + data1 * (-2 * x3 + 3 * x2) +
+                    (double)tension * lderiv * (x3 - 2 * x2 + x) +
+                    (double)tension * rderiv * (x3 - x2)));
 }
 
 /*!
@@ -42,12 +42,12 @@ static float spl3(float tension, double data0, double data1, double x,
 
    \return pointer to Keylist struct (target)
  */
-Keylist *gk_copy_key(Keylist * k)
+Keylist *gk_copy_key(Keylist *k)
 {
     Keylist *newk;
     int i;
 
-    newk = (Keylist *) G_malloc(sizeof(Keylist));       /* G_fatal_error */
+    newk = (Keylist *)G_malloc(sizeof(Keylist)); /* G_fatal_error */
     if (!newk) {
         return (NULL);
     }
@@ -76,7 +76,7 @@ Keylist *gk_copy_key(Keylist * k)
 
    \return mask value
  */
-unsigned long gk_get_mask_sofar(float time, Keylist * keys)
+unsigned long gk_get_mask_sofar(float time, Keylist *keys)
 {
     Keylist *k;
     float startpos, endpos, curpos;
@@ -84,7 +84,8 @@ unsigned long gk_get_mask_sofar(float time, Keylist * keys)
 
     if (keys) {
         /* find end key */
-        for (k = keys; k->next; k = k->next) ;
+        for (k = keys; k->next; k = k->next)
+            ;
 
         startpos = keys->pos;
         endpos = k->pos;
@@ -92,7 +93,7 @@ unsigned long gk_get_mask_sofar(float time, Keylist * keys)
 
         for (k = keys; k->next; k = k->next) {
             if (k->pos <= curpos) {
-                mask &= k->fieldmask;   /* (else break) */
+                mask &= k->fieldmask; /* (else break) */
             }
         }
     }
@@ -109,8 +110,7 @@ unsigned long gk_get_mask_sofar(float time, Keylist * keys)
 
    \return number of output keyframes
  */
-int gk_viable_keys_for_mask(unsigned long mask, Keylist * keys,
-                            Keylist ** keyret)
+int gk_viable_keys_for_mask(unsigned long mask, Keylist *keys, Keylist **keyret)
 {
     Keylist *k;
     int cnt = 0;
@@ -138,11 +138,11 @@ int gk_viable_keys_for_mask(unsigned long mask, Keylist * keys,
    \param render
    \param mode
  */
-void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
+void gk_follow_frames(Viewnode *view, int numsteps, Keylist *keys, int step,
                       int onestep, int render, unsigned long mode)
 {
     Viewnode *v;
-    int frame;                  /* frame is index into viewnode array */
+    int frame; /* frame is index into viewnode array */
     float tmp[3];
     float x, y, z;
     int num, w;
@@ -211,7 +211,7 @@ void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
         num = 1;
         GS_getlight_position(num, &x, &y, &z, &w);
         GS_setlight_position(num, x, y, z, w);
-        num = 2;                /* Top light */
+        num = 2; /* Top light */
         GS_setlight_position(num, 0., 0., 1., 0);
 
         if (render) {
@@ -268,7 +268,7 @@ void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
 
    \param ok pointer to Keylist struct
  */
-void gk_free_key(Keylist * ok)
+void gk_free_key(Keylist *ok)
 {
     Keylist *k, *prev;
 
@@ -298,7 +298,7 @@ void gk_free_key(Keylist * ok)
    \return pointer to Viewnode
    \return NULL on failure
  */
-Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
+Viewnode *gk_make_framesfromkeys(Keylist *keys, int keysteps, int newsteps,
                                  int loop, float t)
 {
     int i;
@@ -308,7 +308,8 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
     double dt1, dt2, x, x2, x3, range, time, time_step, len, rderiv, lderiv;
 
     /* allocate tmp keys to hold valid keys for fields */
-    tkeys = (Keylist **) G_malloc(keysteps * sizeof(Keylist *));        /* G_fatal_error */
+    tkeys =
+        (Keylist **)G_malloc(keysteps * sizeof(Keylist *)); /* G_fatal_error */
     if (!tkeys) {
         return (NULL);
     }
@@ -323,15 +324,17 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
         }
 
         /* find end key */
-        for (k = keys; k->next; k = k->next) ;
+        for (k = keys; k->next; k = k->next)
+            ;
 
         startpos = keys->pos;
         endpos = k->pos;
         range = endpos - startpos;
         time_step = range / (newsteps - 1);
 
-        newview = (Viewnode *) G_malloc(newsteps * sizeof(Viewnode));   /* G_fatal_error */
-        if (!newview) {         /* not used */
+        newview = (Viewnode *)G_malloc(newsteps *
+                                       sizeof(Viewnode)); /* G_fatal_error */
+        if (!newview) {                                   /* not used */
             G_free(tkeys);
             return (NULL);
         }
@@ -344,24 +347,24 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
             time = startpos + i * time_step;
 
             if (i == newsteps - 1) {
-                time = endpos;  /*to ensure no roundoff errors */
+                time = endpos; /*to ensure no roundoff errors */
             }
 
             for (field = 0; field < KF_NUMFIELDS; field++) {
-                int nvk = 0;    /* number of viable keyframes for this field */
+                int nvk = 0; /* number of viable keyframes for this field */
 
                 /* now need to do for each field to look at mask */
                 k = kp1 = kp2 = km1 = NULL;
-                nvk = gk_viable_keys_for_mask((unsigned long)(1 << field),
-                                              keys, tkeys);
+                nvk = gk_viable_keys_for_mask((unsigned long)(1 << field), keys,
+                                              tkeys);
                 if (nvk) {
-                    len = get_key_neighbors(nvk, time, range,
-                                            loop, tkeys, &k, &kp1, &kp2, &km1,
-                                            &dt1, &dt2);
+                    len = get_key_neighbors(nvk, time, range, loop, tkeys, &k,
+                                            &kp1, &kp2, &km1, &dt1, &dt2);
                 }
 
                 /* ACS 1 line: was      if (len == 0.0) {
-                   when disabling a channel no calculation must be made at all (otherwise core dump)
+                   when disabling a channel no calculation must be made at all
+                   (otherwise core dump)
                  */
                 if (len == 0.0 || nvk == 0) {
                     if (!k) {
@@ -378,9 +381,9 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
                 }
                 else if (!km1 && !kp2) {
                     /* only two valid - use linear */
-                    v->fields[field] = lin_interp((time - k->pos) / len,
-                                                  k->fields[field],
-                                                  kp1->fields[field]);
+                    v->fields[field] =
+                        lin_interp((time - k->pos) / len, k->fields[field],
+                                   kp1->fields[field]);
                     continue;
                 }
 
@@ -391,28 +394,32 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
                 if (!km1) {
                     /* leftmost interval */
                     rderiv = (kp2->fields[field] - k->fields[field]) / dt2;
-                    lderiv = (3 * (kp1->fields[field] -
-                                   k->fields[field]) / dt1 - rderiv) / 2.0;
-                    v->fields[field] = spl3(t, k->fields[field],
-                                            kp1->fields[field], x, x2, x3,
-                                            lderiv, rderiv);
+                    lderiv =
+                        (3 * (kp1->fields[field] - k->fields[field]) / dt1 -
+                         rderiv) /
+                        2.0;
+                    v->fields[field] =
+                        spl3(t, k->fields[field], kp1->fields[field], x, x2, x3,
+                             lderiv, rderiv);
                 }
                 else if (!kp2) {
                     /* rightmost interval */
                     lderiv = (kp1->fields[field] - km1->fields[field]) / dt1;
-                    rderiv = (3 * (kp1->fields[field] -
-                                   k->fields[field]) / dt2 - lderiv) / 2.0;
-                    v->fields[field] = spl3(t, k->fields[field],
-                                            kp1->fields[field], x, x2, x3,
-                                            lderiv, rderiv);
+                    rderiv =
+                        (3 * (kp1->fields[field] - k->fields[field]) / dt2 -
+                         lderiv) /
+                        2.0;
+                    v->fields[field] =
+                        spl3(t, k->fields[field], kp1->fields[field], x, x2, x3,
+                             lderiv, rderiv);
                 }
                 else {
                     /* not on ends */
                     lderiv = (kp1->fields[field] - km1->fields[field]) / dt1;
                     rderiv = (kp2->fields[field] - k->fields[field]) / dt2;
-                    v->fields[field] = spl3(t, k->fields[field],
-                                            kp1->fields[field], x, x2, x3,
-                                            lderiv, rderiv);
+                    v->fields[field] =
+                        spl3(t, k->fields[field], kp1->fields[field], x, x2, x3,
+                             lderiv, rderiv);
                 }
             }
         }
@@ -453,9 +460,8 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
    \return 0 on error
  */
 double get_key_neighbors(int nvk, double time, double range, int loop,
-                         Keylist * karray[], Keylist ** km1, Keylist ** kp1,
-                         Keylist ** kp2, Keylist ** km2, double *dt1,
-                         double *dt2)
+                         Keylist *karray[], Keylist **km1, Keylist **kp1,
+                         Keylist **kp2, Keylist **km2, double *dt1, double *dt2)
 {
     int i;
     double len;
@@ -470,7 +476,7 @@ double get_key_neighbors(int nvk, double time, double range, int loop,
     }
 
     if (!i) {
-        return (0.0);           /* before first keyframe or nvk == 0 */
+        return (0.0); /* before first keyframe or nvk == 0 */
     }
 
     if (i == nvk) {
@@ -556,7 +562,7 @@ double lin_interp(float dt, float val1, float val2)
    \return interval value
  */
 double get_2key_neighbors(int nvk, float time, float range, int loop,
-                          Keylist * karray[], Keylist ** km1, Keylist ** kp1)
+                          Keylist *karray[], Keylist **km1, Keylist **kp1)
 {
     int i;
     double len;
@@ -570,7 +576,7 @@ double get_2key_neighbors(int nvk, float time, float range, int loop,
     }
 
     if (!i) {
-        return (0.0);           /* before first keyframe or nvk == 0 */
+        return (0.0); /* before first keyframe or nvk == 0 */
     }
 
     if (i == nvk) {
@@ -601,7 +607,7 @@ double get_2key_neighbors(int nvk, float time, float range, int loop,
    \param pointer to viewnode struct
    \param NULL on failure
  */
-Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
+Viewnode *gk_make_linear_framesfromkeys(Keylist *keys, int keysteps,
                                         int newsteps, int loop)
 {
     int i, nvk;
@@ -610,7 +616,8 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
     float startpos, endpos, dt, range, time, time_step, len;
 
     /* allocate tmp keys to hold valid keys for fields */
-    tkeys = (Keylist **) G_malloc(keysteps * sizeof(Keylist *));        /* G_fatal_error */
+    tkeys =
+        (Keylist **)G_malloc(keysteps * sizeof(Keylist *)); /* G_fatal_error */
     if (!tkeys) {
         return (NULL);
     }
@@ -625,15 +632,17 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
         }
 
         /* find end key */
-        for (k = keys; k->next; k = k->next) ;
+        for (k = keys; k->next; k = k->next)
+            ;
 
         startpos = keys->pos;
         endpos = k->pos;
         range = endpos - startpos;
         time_step = range / (newsteps - 1);
 
-        newview = (Viewnode *) G_malloc(newsteps * sizeof(Viewnode));   /* G_fatal_error */
-        if (!newview) {         /* not used */
+        newview = (Viewnode *)G_malloc(newsteps *
+                                       sizeof(Viewnode)); /* G_fatal_error */
+        if (!newview) {                                   /* not used */
             G_free(tkeys);
             return (NULL);
         }
@@ -645,23 +654,25 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
 
             time = startpos + i * time_step;
             if (i == newsteps - 1) {
-                time = endpos;  /*to ensure no roundoff errors */
+                time = endpos; /*to ensure no roundoff errors */
             }
 
             for (field = 0; field < KF_NUMFIELDS; field++) {
 
-                nvk = gk_viable_keys_for_mask((unsigned long)(1 << field),
-                                              keys, tkeys);
+                nvk = gk_viable_keys_for_mask((unsigned long)(1 << field), keys,
+                                              tkeys);
                 if (!nvk) {
-                    v->fields[field] = keys->fields[field];     /*default-not used */
+                    v->fields[field] =
+                        keys->fields[field]; /*default-not used */
                 }
                 else {
-                    len = get_2key_neighbors(nvk, time, range, loop,
-                                             tkeys, &k1, &k2);
+                    len = get_2key_neighbors(nvk, time, range, loop, tkeys, &k1,
+                                             &k2);
                 }
 
                 /* ACS 1 line: was      if (len == 0.0) {
-                   when disabling a channel no calculation must be made at all (otherwise core dump)
+                   when disabling a channel no calculation must be made at all
+                   (otherwise core dump)
                  */
                 if (len == 0.0 || nvk == 0) {
                     if (!k1) {
@@ -676,9 +687,8 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
                 }
                 else {
                     dt = (time - k1->pos) / len;
-                    v->fields[field] = lin_interp(dt,
-                                                  k1->fields[field],
-                                                  k2->fields[field]);
+                    v->fields[field] =
+                        lin_interp(dt, k1->fields[field], k2->fields[field]);
                 }
             }
         }
@@ -697,7 +707,7 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
 
    \param k keyframe list
  */
-void correct_twist(Keylist * k)
+void correct_twist(Keylist *k)
 {
     Keylist *c, *p, *t;
     int cnt, j;
@@ -735,7 +745,7 @@ void correct_twist(Keylist * k)
    \return 0 on failure
    \return 1 on success
  */
-int gk_draw_path(Viewnode * views, int steps, Keylist * keys)
+int gk_draw_path(Viewnode *views, int steps, Keylist *keys)
 {
     Viewnode *v;
     Keylist *k;
@@ -765,10 +775,9 @@ int gk_draw_path(Viewnode * views, int steps, Keylist * keys)
 
     gsd_linewidth(1);
 
-
     for (k = keys; k; k = k->next) {
-        gsd_x(NULL, &(k->fields[KF_FROMX]),
-              ~(GS_background_color() | 0xFF0000), siz);
+        gsd_x(NULL, &(k->fields[KF_FROMX]), ~(GS_background_color() | 0xFF0000),
+              siz);
     }
 
     /* draw viewer position for inset images */

@@ -22,7 +22,6 @@ void G_matrix_print(mat_struct *);
 int G_matrix_set_element(mat_struct *, int, int, double);
 double G_matrix_get_element(mat_struct *, int, int);
 
-
 /* Matrix-vector routines corresponding to BLAS Level II */
 
 vec_struct *G_matvect_get_column(mat_struct *, int);
@@ -30,7 +29,6 @@ vec_struct *G_matvect_get_row(mat_struct *, int);
 vec_struct *G_matvect_product(mat_struct *, vec_struct *, vec_struct *);
 int G_matvect_extract_vector(mat_struct *, vtype, int);
 int G_matvect_retrieve_matrix(vec_struct *);
-
 
 /* Vector routines corresponding to BLAS Level I */
 

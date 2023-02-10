@@ -1,8 +1,9 @@
 /*
  * MODULE:       g.ppmtopng
  * AUTHOR(S):    Glynn Clements
- * PURPOSE:      g.ppmtopng isn't meant for end users. It's an internal tool for use by
- *               the script to generate thumbnails for the r.colors manual page.
+ * PURPOSE:      g.ppmtopng isn't meant for end users. It's an internal tool
+ *               for use by the script to generate thumbnails for the r.colors
+ *               manual page.
  * COPYRIGHT:    (C) 2009 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -65,8 +66,7 @@ static void write_png(const char *filename)
     int y;
     unsigned char *p;
 
-    png_ptr =
-        png_create_write_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
     if (!png_ptr)
         G_fatal_error(_("Unable to allocate PNG structure"));
 
@@ -83,11 +83,9 @@ static void write_png(const char *filename)
 
     png_init_io(png_ptr, output);
 
-    png_set_IHDR(png_ptr, info_ptr,
-                 width, height,
-                 8, PNG_COLOR_TYPE_RGB,
-                 PNG_INTERLACE_NONE,
-                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_set_IHDR(png_ptr, info_ptr, width, height, 8, PNG_COLOR_TYPE_RGB,
+                 PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
+                 PNG_FILTER_TYPE_DEFAULT);
 
     png_set_invert_alpha(png_ptr);
 
@@ -106,8 +104,7 @@ static void write_png(const char *filename)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *in, *out;
     } opt;
 
@@ -116,8 +113,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("display"));
-    module->description =
-        _("Converts between PPM/PGM and PNG image formats.");
+    module->description = _("Converts between PPM/PGM and PNG image formats.");
 
     opt.in = G_define_standard_option(G_OPT_F_INPUT);
 

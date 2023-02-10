@@ -30,7 +30,7 @@
    \param Plus pointer to Plus_head structure
 
    \return 1 OK
-   \return 0 on error      
+   \return 0 on error
  */
 int dig_spidx_init(struct Plus_head *Plus)
 {
@@ -99,7 +99,7 @@ int dig_spidx_init(struct Plus_head *Plus)
     return 1;
 }
 
-/*! 
+/*!
    \brief Free spatial index for nodes
 
    \param Plus pointer to Plus_head structure
@@ -131,7 +131,7 @@ void dig_spidx_free_nodes(struct Plus_head *Plus)
     }
 }
 
-/*! 
+/*!
    \brief Free spatial index for lines
 
    \param Plus pointer to Plus_head structure
@@ -163,7 +163,7 @@ void dig_spidx_free_lines(struct Plus_head *Plus)
     }
 }
 
-/*! 
+/*!
    \brief Reset spatial index for areas
 
    \param Plus pointer to Plus_head structure
@@ -195,7 +195,7 @@ void dig_spidx_free_areas(struct Plus_head *Plus)
     }
 }
 
-/*! 
+/*!
    \brief Reset spatial index for isles
 
    \param Plus pointer to Plus_head structure
@@ -227,7 +227,7 @@ void dig_spidx_free_isles(struct Plus_head *Plus)
     }
 }
 
-/*! 
+/*!
    \brief Free spatial index (nodes, lines, areas, isles)
 
    \param Plus pointer to Plus_head structure
@@ -271,18 +271,17 @@ void dig_spidx_free(struct Plus_head *Plus)
 }
 
 /*!
-   \brief Add new node to spatial index 
+   \brief Add new node to spatial index
 
    \param Plus pointer to Plus_head structure
    \param node node id
    \param x,y,z node coordinates
 
    \return 1 OK
-   \return 0 on error      
+   \return 0 on error
  */
-int
-dig_spidx_add_node(struct Plus_head *Plus, int node,
-                   double x, double y, double z)
+int dig_spidx_add_node(struct Plus_head *Plus, int node, double x, double y,
+                       double z)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -308,7 +307,7 @@ dig_spidx_add_node(struct Plus_head *Plus, int node,
 }
 
 /*!
-   \brief Add new line to spatial index 
+   \brief Add new line to spatial index
 
    \param Plus pointer to Plus_head structure
    \param line line id
@@ -342,7 +341,7 @@ int dig_spidx_add_line(struct Plus_head *Plus, int line,
 }
 
 /*!
-   \brief Add new area to spatial index 
+   \brief Add new area to spatial index
 
    \param Plus pointer to Plus_head structure
    \param area area id
@@ -376,7 +375,7 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area,
 }
 
 /*!
-   \brief Add new island to spatial index 
+   \brief Add new island to spatial index
 
    \param Plus pointer to Plus_head structure
    \param isle isle id
@@ -411,7 +410,7 @@ int dig_spidx_add_isle(struct Plus_head *Plus, int isle,
 }
 
 /*!
-   \brief Delete node from spatial index 
+   \brief Delete node from spatial index
 
    G_fatal_error() called on error.
 
@@ -453,7 +452,7 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
 }
 
 /*!
-   \brief Delete line from spatial index 
+   \brief Delete line from spatial index
 
    G_fatal_error() called on error.
 
@@ -463,8 +462,8 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
 
    \return 0
  */
-int dig_spidx_del_line(struct Plus_head *Plus, int line,
-                       double x, double y, double z)
+int dig_spidx_del_line(struct Plus_head *Plus, int line, double x, double y,
+                       double z)
 {
     int ret;
     static struct RTree_Rect rect;
@@ -496,7 +495,7 @@ int dig_spidx_del_line(struct Plus_head *Plus, int line,
 }
 
 /*!
-   \brief Delete area from spatial index 
+   \brief Delete area from spatial index
 
    G_fatal_error() called on error.
 
@@ -548,8 +547,8 @@ int dig_spidx_del_area(struct Plus_head *Plus, int area)
     return 0;
 }
 
-/*! 
-   \brief Delete isle from spatial index 
+/*!
+   \brief Delete isle from spatial index
 
    G_fatal_error() called on error.
 
@@ -597,15 +596,15 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
     return 0;
 }
 
-/* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
-static int _add_item(int id, const struct RTree_Rect *rect,
-                     struct ilist *list)
+/* This function is called by RTreeSearch() to add selected node/line/area/isle
+ * to the list */
+static int _add_item(int id, const struct RTree_Rect *rect, struct ilist *list)
 {
     G_ilist_add(list, id);
     return 1;
 }
 
-/* This function is called by RTreeSearch() to add 
+/* This function is called by RTreeSearch() to add
  * selected node/line/area/isle to the box list */
 static int _add_item_with_box(int id, const struct RTree_Rect *rect,
                               struct boxlist *list)
@@ -623,13 +622,12 @@ static int _add_item_with_box(int id, const struct RTree_Rect *rect,
     return 1;
 }
 
-struct boxid
-{
+struct boxid {
     int id;
     struct bound_box *box;
 };
 
-/* This function is called by RTreeSearch() to add 
+/* This function is called by RTreeSearch() to add
  * selected node/line/area/isle to the box list */
 static int _set_item_box(int id, const struct RTree_Rect *rect,
                          struct boxid *box_id)
@@ -650,7 +648,7 @@ static int _set_item_box(int id, const struct RTree_Rect *rect,
 }
 
 /*!
-   \brief Select nodes by bbox 
+   \brief Select nodes by bbox
 
    \param Plus pointer to Plus_head structure
    \param box bounding box
@@ -659,9 +657,8 @@ static int _set_item_box(int id, const struct RTree_Rect *rect,
    \return number of selected nodes
    \return -1 on error
  */
-int
-dig_select_nodes(struct Plus_head *Plus, const struct bound_box *box,
-                 struct ilist *list)
+int dig_select_nodes(struct Plus_head *Plus, const struct bound_box *box,
+                     struct ilist *list)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -699,7 +696,7 @@ static int _add_node(int id, const struct RTree_Rect *rect, int *node)
 }
 
 /*!
-   \brief Find one node by coordinates 
+   \brief Find one node by coordinates
 
    \param Plus pointer to Plus_head structure
    \param x,y,z coordinates
@@ -771,11 +768,10 @@ int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box,
     rect.boundary[5] = box->T;
 
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Line_spidx, &rect, (void *)_add_item_with_box,
-                    list);
+        RTreeSearch(Plus->Line_spidx, &rect, (void *)_add_item_with_box, list);
     else
-        rtree_search(Plus->Line_spidx, &rect, (void *)_add_item_with_box,
-                     list, Plus);
+        rtree_search(Plus->Line_spidx, &rect, (void *)_add_item_with_box, list,
+                     Plus);
 
     return (list->n_values);
 }
@@ -835,28 +831,26 @@ int dig_find_line_box(struct Plus_head *Plus, int line, struct bound_box *box)
         box_id.box = box;
 
         if (Plus->Spidx_new)
-            ret =
-                RTreeSearch(Plus->Line_spidx, &rect, (void *)_set_item_box,
-                            &box_id);
+            ret = RTreeSearch(Plus->Line_spidx, &rect, (void *)_set_item_box,
+                              &box_id);
         else
-            ret =
-                rtree_search(Plus->Line_spidx, &rect, (void *)_set_item_box,
-                             &box_id, Plus);
+            ret = rtree_search(Plus->Line_spidx, &rect, (void *)_set_item_box,
+                               &box_id, Plus);
 
         return ret;
     }
 
-    /* do not translate this error because 
+    /* do not translate this error because
      * 1. this error is not supposed to happen
      * 2. the maintainer at which this message is directed prefers english */
-    G_fatal_error
-        ("Bug in vector lib: dig_find_line_box() may only be used for lines and boundaries.");
+    G_fatal_error("Bug in vector lib: dig_find_line_box() may only be used for "
+                  "lines and boundaries.");
 
     return 0;
 }
 
-/*! 
-   \brief Select areas with boxes by box 
+/*!
+   \brief Select areas with boxes by box
 
    \param Plus pointer to Plus_head structure
    \param box bounding box
@@ -864,9 +858,8 @@ int dig_find_line_box(struct Plus_head *Plus, int line, struct bound_box *box)
 
    \return number of selected areas
  */
-int
-dig_select_areas(struct Plus_head *Plus, const struct bound_box *box,
-                 struct boxlist *list)
+int dig_select_areas(struct Plus_head *Plus, const struct bound_box *box,
+                     struct boxlist *list)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -889,11 +882,10 @@ dig_select_areas(struct Plus_head *Plus, const struct bound_box *box,
     rect.boundary[5] = box->T;
 
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Area_spidx, &rect, (void *)_add_item_with_box,
-                    list);
+        RTreeSearch(Plus->Area_spidx, &rect, (void *)_add_item_with_box, list);
     else
-        rtree_search(Plus->Area_spidx, &rect, (void *)_add_item_with_box,
-                     list, Plus);
+        rtree_search(Plus->Area_spidx, &rect, (void *)_add_item_with_box, list,
+                     Plus);
 
     return (list->n_values);
 }
@@ -943,19 +935,17 @@ int dig_find_area_box(struct Plus_head *Plus, int area, struct bound_box *box)
     box_id.box = box;
 
     if (Plus->Spidx_new)
-        ret =
-            RTreeSearch(Plus->Area_spidx, &rect, (void *)_set_item_box,
-                        &box_id);
+        ret = RTreeSearch(Plus->Area_spidx, &rect, (void *)_set_item_box,
+                          &box_id);
     else
-        ret =
-            rtree_search(Plus->Area_spidx, &rect, (void *)_set_item_box,
-                         &box_id, Plus);
+        ret = rtree_search(Plus->Area_spidx, &rect, (void *)_set_item_box,
+                           &box_id, Plus);
 
     return ret;
 }
 
-/*! 
-   \brief Select isles with boxes by box 
+/*!
+   \brief Select isles with boxes by box
 
    \param Plus pointer to Plus_head structure
    \param box bounding box
@@ -963,9 +953,8 @@ int dig_find_area_box(struct Plus_head *Plus, int area, struct bound_box *box)
 
    \return number of selected isles
  */
-int
-dig_select_isles(struct Plus_head *Plus, const struct bound_box *box,
-                 struct boxlist *list)
+int dig_select_isles(struct Plus_head *Plus, const struct bound_box *box,
+                     struct boxlist *list)
 {
     static struct RTree_Rect rect;
     static int rect_init = 0;
@@ -988,11 +977,10 @@ dig_select_isles(struct Plus_head *Plus, const struct bound_box *box,
     rect.boundary[5] = box->T;
 
     if (Plus->Spidx_new)
-        RTreeSearch(Plus->Isle_spidx, &rect, (void *)_add_item_with_box,
-                    list);
+        RTreeSearch(Plus->Isle_spidx, &rect, (void *)_add_item_with_box, list);
     else
-        rtree_search(Plus->Isle_spidx, &rect, (void *)_add_item_with_box,
-                     list, Plus);
+        rtree_search(Plus->Isle_spidx, &rect, (void *)_add_item_with_box, list,
+                     Plus);
 
     return (list->n_values);
 }
@@ -1042,13 +1030,11 @@ int dig_find_isle_box(struct Plus_head *Plus, int isle, struct bound_box *box)
     box_id.box = box;
 
     if (Plus->Spidx_new)
-        ret =
-            RTreeSearch(Plus->Isle_spidx, &rect, (void *)_set_item_box,
-                        &box_id);
+        ret = RTreeSearch(Plus->Isle_spidx, &rect, (void *)_set_item_box,
+                          &box_id);
     else
-        ret =
-            rtree_search(Plus->Isle_spidx, &rect, (void *)_set_item_box,
-                         &box_id, Plus);
+        ret = rtree_search(Plus->Isle_spidx, &rect, (void *)_set_item_box,
+                           &box_id, Plus);
 
     return ret;
 }

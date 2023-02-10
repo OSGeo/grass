@@ -3,17 +3,17 @@
 
    \brief OGSF library - TIFF stuff
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
    - added little/big endian test Markus Neteler
    - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
    - changed 10/99 Jaro
-   - Created new function GS_write_tif based on RGB dump 
+   - Created new function GS_write_tif based on RGB dump
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -79,8 +79,8 @@ int GS_write_tif(const char *name)
     TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, 24 > 1 ? 8 : 1);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
 
-    TIFFSetField(out, TIFFTAG_PHOTOMETRIC, 24 > 8 ?
-                 PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK);
+    TIFFSetField(out, TIFFTAG_PHOTOMETRIC,
+                 24 > 8 ? PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK);
 
     linebytes = ((xsize * ysize + 15) >> 3) & ~1;
 

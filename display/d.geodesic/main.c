@@ -1,15 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       d.geodesic
  * AUTHOR(S):    Michael Shapiro (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      displays a geodesic line in the active frame on the user's 
+ * PURPOSE:      displays a geodesic line in the active frame on the user's
  *               graphics monitor
  * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
@@ -18,6 +17,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -35,8 +35,7 @@ int main(int argc, char *argv[])
     int unit_id;
     double factor;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *lcolor, *tcolor, *coor, *units;
     } parm;
 
@@ -98,13 +97,11 @@ int main(int argc, char *argv[])
     if (!G_scan_northing(parm.coor->answers[3], &lat2, G_projection()))
         G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
 
-
     D_open_driver();
 
     line_color = D_translate_color(parm.lcolor->answer);
     if (!line_color)
-        line_color = D_translate_color(parm.lcolor->answer =
-                                       DEFAULT_FG_COLOR);
+        line_color = D_translate_color(parm.lcolor->answer = DEFAULT_FG_COLOR);
 
     if (strcmp(parm.lcolor->answer, DEFAULT_FG_COLOR) == 0)
         deftcolor = "red";

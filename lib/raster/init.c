@@ -1,7 +1,6 @@
-
 /**
  * \file lib/raster/init.c
- * 
+ *
  * \brief Raster Library - Handles program initialization.
  *
  * (C) 2001-2008 by the GRASS Development Team
@@ -46,7 +45,6 @@ void Rast_init(void)
     Rast__init();
 }
 
-
 /**
  * \brief Checks to see if GIS engine is initialized.
  *
@@ -58,9 +56,9 @@ void Rast__check_init(void)
     if (initialized)
         return;
 
-    G_fatal_error(_("Raster library not initialized. Programmer forgot to call Rast_init()."));
+    G_fatal_error(_("Raster library not initialized. Programmer forgot to call "
+                    "Rast_init()."));
 }
-
 
 void Rast__init(void)
 {
@@ -109,18 +107,21 @@ static int init(void)
         R__.compression_type = G_compressor_number(cname);
         if (R__.compression_type < 1) {
             if (R__.compression_type < 0) {
-                G_warning(_("Unknown compression method <%s>, using default %s"),
-                          cname, G_compressor_name(G_default_compressor()));
+                G_warning(
+                    _("Unknown compression method <%s>, using default %s"),
+                    cname, G_compressor_name(G_default_compressor()));
             }
             if (R__.compression_type == 0) {
-                G_warning(_("No compression is not supported for GRASS raster maps, using default %s"),
+                G_warning(_("No compression is not supported for GRASS raster "
+                            "maps, using default %s"),
                           G_compressor_name(G_default_compressor()));
             }
             /* use default */
             R__.compression_type = G_default_compressor();
         }
         if (G_check_compressor(R__.compression_type) != 1) {
-            G_warning(_("This GRASS version does not support %s compression, using default %s"),
+            G_warning(_("This GRASS version does not support %s compression, "
+                        "using default %s"),
                       cname, G_compressor_name(G_default_compressor()));
             /* use default */
             R__.compression_type = G_default_compressor();

@@ -1,16 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       i.emissivity
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates the emissivity from NDVI (empirical)
- *                as seen in Caselles and Colles (1997). 
+ *               as seen in Caselles and Colles (1997).
  *
  * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -29,11 +28,11 @@ int main(int argc, char *argv[])
     int row, col;
     struct GModule *module;
     struct Option *input, *output;
-    struct History history;     /*metadata */
+    struct History history; /*metadata */
 
     /************************************/
-    char *result1;              /*output raster name */
-    int infd, outfd;            /*File Descriptors */
+    char *result1;   /*output raster name */
+    int infd, outfd; /*File Descriptors */
     char *ndvi;
     void *inr;
     DCELL *outr;
@@ -86,7 +85,7 @@ int main(int argc, char *argv[])
 
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_ndvi = ((DCELL *) inr)[col];
+            d_ndvi = ((DCELL *)inr)[col];
             if (Rast_is_d_null_value(&d_ndvi))
                 Rast_set_d_null_value(&outr[col], 1);
             else {

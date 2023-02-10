@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.uslek
@@ -10,11 +9,10 @@
  * COPYRIGHT:    (C) 2002-2008, 2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,9 +37,9 @@ int main(int argc, char *argv[])
     int row, col;
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *output1;
-    struct History history;     /*metadata */
+    struct History history; /*metadata */
 
-    char *result;               /*output raster name */
+    char *result; /*output raster name */
     int infd_psand, infd_psilt, infd_pclay, infd_pomat;
     int outfd;
     char *psand, *psilt, *pclay, *pomat;
@@ -60,23 +58,19 @@ int main(int argc, char *argv[])
     /* Define the different options */
     input1 = G_define_standard_option(G_OPT_R_INPUT);
     input1->key = "psand";
-    input1->description =
-        _("Name of soil sand fraction raster map [0.0-1.0]");
+    input1->description = _("Name of soil sand fraction raster map [0.0-1.0]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = "pclay";
-    input2->description =
-        _("Name of soil clay fraction raster map [0.0-1.0]");
+    input2->description = _("Name of soil clay fraction raster map [0.0-1.0]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
     input3->key = "psilt";
-    input3->description =
-        _("Name of soil silt fraction raster map [0.0-1.0]");
+    input3->description = _("Name of soil silt fraction raster map [0.0-1.0]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
     input4->key = "pomat";
-    input4->description =
-        _("Name of soil organic matter raster map [0.0-1.0]");
+    input4->description = _("Name of soil organic matter raster map [0.0-1.0]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
     output1->description =
@@ -131,13 +125,12 @@ int main(int argc, char *argv[])
 
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_sand = ((DCELL *) inrast_psand)[col];
-            d_silt = ((DCELL *) inrast_psilt)[col];
-            d_clay = ((DCELL *) inrast_pclay)[col];
-            d_om = ((DCELL *) inrast_pomat)[col];
+            d_sand = ((DCELL *)inrast_psand)[col];
+            d_silt = ((DCELL *)inrast_psilt)[col];
+            d_clay = ((DCELL *)inrast_pclay)[col];
+            d_om = ((DCELL *)inrast_pomat)[col];
             if (Rast_is_d_null_value(&d_sand) ||
-                Rast_is_d_null_value(&d_clay) ||
-                Rast_is_d_null_value(&d_silt))
+                Rast_is_d_null_value(&d_clay) || Rast_is_d_null_value(&d_silt))
                 Rast_set_d_null_value(&outrast[col], 1);
             else {
 
@@ -153,7 +146,7 @@ int main(int argc, char *argv[])
                     /************************************/
                     /* convert to usle_k                */
                     d = (double)prct2tex(d_sand, d_clay, d_silt);
-                    if (d > 11.0)       /* 11 is highest class */
+                    if (d > 11.0) /* 11 is highest class */
                         Rast_set_d_null_value(&outrast[col], 1);
                     else
                         outrast[col] = tex2usle_k((int)d, d_om);

@@ -1,14 +1,15 @@
 /*!
    \file lib/ogsf/gvld.c
 
-   \brief OGSF library - loading and manipulating volumes (lower level functions)
+   \brief OGSF library - loading and manipulating volumes (lower level
+   functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -34,7 +35,7 @@
    \return -1 on failure
    \return 1 on success
  */
-int gvld_vol(geovol * gvl)
+int gvld_vol(geovol *gvl)
 {
     G_debug(5, "gvld_vol(): id=%d", gvl->gvol_id);
 
@@ -65,7 +66,7 @@ int gvld_vol(geovol * gvl)
    \return -1 on failure
    \return 1 on success
  */
-int gvld_wire_vol(geovol * gvl)
+int gvld_wire_vol(geovol *gvl)
 {
     G_debug(5, "gvld_wire_vol(): id=%d", gvl->gvol_id);
 
@@ -88,7 +89,7 @@ int gvld_wire_vol(geovol * gvl)
    \return -1 on failure
    \return 1 on success
  */
-int gvld_isosurf(geovol * gvl)
+int gvld_isosurf(geovol *gvl)
 {
     float tx, ty, tz;
     int cols, rows, depths;
@@ -102,8 +103,7 @@ int gvld_isosurf(geovol * gvl)
 
     int n_i = gvl->n_isosurfs;
 
-    int *check_color, *check_transp, *check_material, *check_emis,
-        *check_shin;
+    int *check_color, *check_transp, *check_material, *check_emis, *check_shin;
     float *kem, *ksh, pkem, pksh;
     unsigned int *ktrans, *curcolor;
     int pktransp = 0;
@@ -232,8 +232,8 @@ int gvld_isosurf(geovol * gvl)
         }
 
         /* check material */
-        check_material[i] = (check_shin[i] || check_emis[i] ||
-                             (kem[i] && check_color[i]));
+        check_material[i] =
+            (check_shin[i] || check_emis[i] || (kem[i] && check_color[i]));
 
         /* set position in data */
         pos[i] = 0;
@@ -247,8 +247,8 @@ int gvld_isosurf(geovol * gvl)
 
         if (GS_check_cancel()) {
             for (i = 0; i < gvl->n_isosurfs; i++) {
-                G_debug(5, "  break : isosurf : %d datalength : %d B\n",
-                        i, pos[i]);
+                G_debug(5, "  break : isosurf : %d datalength : %d B\n", i,
+                        pos[i]);
             }
 
             gsd_set_material(1, 1, 0., 0., 0x0);
@@ -351,13 +351,13 @@ int gvld_isosurf(geovol * gvl)
                                 r = READ();
                                 g = READ();
                                 b = READ();
-                                curcolor[i] =
-                                    (r & 0xff) | ((g & 0xff) << 8) |
-                                    ((b & 0xff) << 16);
+                                curcolor[i] = (r & 0xff) | ((g & 0xff) << 8) |
+                                              ((b & 0xff) << 16);
                             }
 
                             if (check_transp[i])
-                                ktrans[i] = READ() << 24;;
+                                ktrans[i] = READ() << 24;
+                            ;
 
                             if (check_shin[i])
                                 ksh[i] = ((float)READ()) / 255.;
@@ -381,15 +381,11 @@ int gvld_isosurf(geovol * gvl)
                     }
 
                     /* set position to next cube */
-                    pos[i] =
-                        tmp_pos + cell_table[c_ndx].nedges * e_dl[i] +
-                        (iv ? 2 : 0);
+                    pos[i] = tmp_pos + cell_table[c_ndx].nedges * e_dl[i] +
+                             (iv ? 2 : 0);
                 }
-
             }
-
         }
-
     }
 
     for (i = 0; i < gvl->n_isosurfs; i++) {
@@ -411,7 +407,7 @@ int gvld_isosurf(geovol * gvl)
 
    \return 0
  */
-int gvld_wire_isosurf(geovol * gvl)
+int gvld_wire_isosurf(geovol *gvl)
 {
     return (0);
 }
@@ -421,7 +417,8 @@ int gvld_wire_isosurf(geovol * gvl)
 
 /************************************************************************/
 
-#define DISTANCE_2(x1, y1, x2, y2)	sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
+#define DISTANCE_2(x1, y1, x2, y2) \
+    sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 
 /*!
    \brief Draw slices
@@ -430,7 +427,7 @@ int gvld_wire_isosurf(geovol * gvl)
 
    \return 0
  */
-int gvld_slices(geovol * gvl)
+int gvld_slices(geovol *gvl)
 {
     float tx, ty, tz;
     int i;
@@ -487,7 +484,7 @@ int gvld_slices(geovol * gvl)
 
    \return 1
  */
-int gvld_slice(geovol * gvl, int ndx)
+int gvld_slice(geovol *gvl, int ndx)
 {
     geovol_slice *slice;
 
@@ -547,9 +544,8 @@ int gvld_slice(geovol * gvl, int ndx)
     }
 
     /* x,y mod */
-    modxy =
-        DISTANCE_2((slice->x2 - slice->x1) / distxy * modx,
-                   (slice->y2 - slice->y1) / distxy * mody, 0., 0.);
+    modxy = DISTANCE_2((slice->x2 - slice->x1) / distxy * modx,
+                       (slice->y2 - slice->y1) / distxy * mody, 0., 0.);
 
     /* cols/rows of slice */
     f_cols = distxy / modxy;
@@ -601,8 +597,8 @@ int gvld_slice(geovol * gvl, int ndx)
 
             /* get color from slice data */
             color = (slice->data[offset] & 0xff) |
-                ((slice->data[offset + 1] & 0xff) << 8) |
-                ((slice->data[offset + 2] & 0xff) << 16);
+                    ((slice->data[offset + 1] & 0xff) << 8) |
+                    ((slice->data[offset + 2] & 0xff) << 16);
 
             /* triagle vertices */
             pt[ptX] = nextx * resx;
@@ -617,8 +613,8 @@ int gvld_slice(geovol * gvl, int ndx)
 
             /* get color from slice data */
             color = (slice->data[offset] & 0xff) |
-                ((slice->data[offset + 1] & 0xff) << 8) |
-                ((slice->data[offset + 2] & 0xff) << 16);
+                    ((slice->data[offset + 1] & 0xff) << 8) |
+                    ((slice->data[offset + 2] & 0xff) << 16);
 
             /* set triangle vertices */
             pt[ptX] = x * resx;
@@ -660,13 +656,13 @@ int gvld_slice(geovol * gvl, int ndx)
 }
 
 /*!
-   \brief Draw wire slices 
+   \brief Draw wire slices
 
    \param gvl pointer to geovol struct
 
    \return 0
  */
-int gvld_wire_slices(geovol * gvl)
+int gvld_wire_slices(geovol *gvl)
 {
     float pt[3];
     int i;
@@ -726,31 +722,36 @@ int gvld_wire_slices(geovol * gvl)
         /* first slice edge */
         pt[ptX] = slice->x1 * resx;
         pt[ptY] = slice->y1 * resy;
-        pt[ptZ] = slice->z1 * resz;;
+        pt[ptZ] = slice->z1 * resz;
+        ;
         pt[Y] = (gvl->rows - 1) * gvl->yres - pt[Y];
         gsd_vert_func(pt);
 
         pt[ptX] = slice->x1 * resx;
         pt[ptY] = slice->y1 * resy;
-        pt[ptZ] = slice->z2 * resz;;
+        pt[ptZ] = slice->z2 * resz;
+        ;
         pt[Y] = (gvl->rows - 1) * gvl->yres - pt[Y];
         gsd_vert_func(pt);
 
         pt[ptX] = slice->x2 * resx;
         pt[ptY] = slice->y2 * resy;
-        pt[ptZ] = slice->z2 * resz;;
+        pt[ptZ] = slice->z2 * resz;
+        ;
         pt[Y] = (gvl->rows - 1) * gvl->yres - pt[Y];
         gsd_vert_func(pt);
 
         pt[ptX] = slice->x2 * resx;
         pt[ptY] = slice->y2 * resy;
-        pt[ptZ] = slice->z1 * resz;;
+        pt[ptZ] = slice->z1 * resz;
+        ;
         pt[Y] = (gvl->rows - 1) * gvl->yres - pt[Y];
         gsd_vert_func(pt);
 
         pt[ptX] = slice->x1 * resx;
         pt[ptY] = slice->y1 * resy;
-        pt[ptZ] = slice->z1 * resz;;
+        pt[ptZ] = slice->z1 * resz;
+        ;
         pt[Y] = (gvl->rows - 1) * gvl->yres - pt[Y];
         gsd_vert_func(pt);
 
@@ -770,7 +771,7 @@ int gvld_wire_slices(geovol * gvl)
 
    \return 0
  */
-int gvld_wind3_box(geovol * gvl)
+int gvld_wind3_box(geovol *gvl)
 {
     float pt[3];
 

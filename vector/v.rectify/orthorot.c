@@ -1,4 +1,3 @@
-
 /***********************************************************************
 
    orthorot.c
@@ -24,12 +23,12 @@
 
 #include "crs.h"
 
-#define MSUCCESS     1          /* SUCCESS */
-#define MNPTERR      0          /* NOT ENOUGH POINTS */
-#define MUNSOLVABLE -1          /* NOT SOLVABLE */
-#define MMEMERR     -2          /* NOT ENOUGH MEMORY */
-#define MPARMERR    -3          /* PARAMETER ERROR */
-#define MINTERR     -4          /* INTERNAL ERROR */
+#define MSUCCESS    1  /* SUCCESS */
+#define MNPTERR     0  /* NOT ENOUGH POINTS */
+#define MUNSOLVABLE -1 /* NOT SOLVABLE */
+#define MMEMERR     -2 /* NOT ENOUGH MEMORY */
+#define MPARMERR    -3 /* PARAMETER ERROR */
+#define MINTERR     -4 /* INTERNAL ERROR */
 
 /***********************************************************************
 
@@ -55,14 +54,14 @@ double trace(int, int, double **);
 
 ************************************************************************/
 
-int CRS_georef_or(double e1,    /* EASTING TO BE TRANSFORMED */
-                  double n1,    /* NORTHING TO BE TRANSFORMED */
-                  double z1,    /* HEIGHT TO BE TRANSFORMED */
-                  double *e,    /* EASTING, TRANSFORMED */
-                  double *n,    /* NORTHING, TRANSFORMED */
-                  double *z,    /* HEIGHT, TRANSFORMED */
-                  double OR[]   /* TRANSFORMATION COEFFICIENTS */
-    )
+int CRS_georef_or(double e1,  /* EASTING TO BE TRANSFORMED */
+                  double n1,  /* NORTHING TO BE TRANSFORMED */
+                  double z1,  /* HEIGHT TO BE TRANSFORMED */
+                  double *e,  /* EASTING, TRANSFORMED */
+                  double *n,  /* NORTHING, TRANSFORMED */
+                  double *z,  /* HEIGHT, TRANSFORMED */
+                  double OR[] /* TRANSFORMATION COEFFICIENTS */
+)
 {
     *e = OR[9] + OR[12] * (OR[0] * e1 + OR[1] * n1 + OR[2] * z1);
     *n = OR[10] + OR[13] * (OR[3] * e1 + OR[4] * n1 + OR[5] * z1);
@@ -75,9 +74,9 @@ int CRS_georef_or(double e1,    /* EASTING TO BE TRANSFORMED */
 
   COMPUTE THE FORWARD AND BACKWARD GEOREFFERENCING COEFFICIENTS
   BASED ON A SET OF CONTROL POINTS
-   
+
   ORTHOGONAL TRANSFORMATION (ORTHOGONAL ROTATION MATRIX)
-   
+
   Rotation matrix
   OR[0] OR[1] OR[2]
   OR[3] OR[4] OR[5]
@@ -93,13 +92,13 @@ int CRS_georef_or(double e1,    /* EASTING TO BE TRANSFORMED */
 
 ************************************************************************/
 
-int CRS_compute_georef_equations_or(struct Control_Points_3D *cp,
-                                    double OR12[], double OR21[])
+int CRS_compute_georef_equations_or(struct Control_Points_3D *cp, double OR12[],
+                                    double OR21[])
 {
     double *tempptr, *OR;
     int status, i, numactive;
-    struct Control_Points_3D cpc,       /* center points */
-      cpr;                      /* reduced to center */
+    struct Control_Points_3D cpc, /* center points */
+        cpr;                      /* reduced to center */
 
     cpc.count = 1;
     cpc.e1 = (double *)G_calloc(cpc.count, sizeof(double));
@@ -178,12 +177,15 @@ int CRS_compute_georef_equations_or(struct Control_Points_3D *cp,
 
     for (i = numactive = 0; i < cp->count; i++) {
         if (cp->status[i] > 0) {
-            OR[9] += cp->e2[i] - OR[12] *
-                (OR[0] * cp->e1[i] + OR[1] * cp->n1[i] + OR[2] * cp->z1[i]);
-            OR[10] += cp->n2[i] - OR[13] *
-                (OR[3] * cp->e1[i] + OR[4] * cp->n1[i] + OR[5] * cp->z1[i]);
-            OR[11] += cp->z2[i] - OR[14] *
-                (OR[6] * cp->e1[i] + OR[7] * cp->n1[i] + OR[8] * cp->z1[i]);
+            OR[9] +=
+                cp->e2[i] - OR[12] * (OR[0] * cp->e1[i] + OR[1] * cp->n1[i] +
+                                      OR[2] * cp->z1[i]);
+            OR[10] +=
+                cp->n2[i] - OR[13] * (OR[3] * cp->e1[i] + OR[4] * cp->n1[i] +
+                                      OR[5] * cp->z1[i]);
+            OR[11] +=
+                cp->z2[i] - OR[14] * (OR[6] * cp->e1[i] + OR[7] * cp->n1[i] +
+                                      OR[8] * cp->z1[i]);
 
             numactive++;
         }
@@ -232,12 +234,15 @@ int CRS_compute_georef_equations_or(struct Control_Points_3D *cp,
 
     for (i = numactive = 0; i < cp->count; i++) {
         if (cp->status[i] > 0) {
-            OR[9] += cp->e1[i] - OR[12] *
-                (OR[0] * cp->e2[i] + OR[1] * cp->n2[i] + OR[2] * cp->z2[i]);
-            OR[10] += cp->n1[i] - OR[13] *
-                (OR[3] * cp->e2[i] + OR[4] * cp->n2[i] + OR[5] * cp->z2[i]);
-            OR[11] += cp->z1[i] - OR[14] *
-                (OR[6] * cp->e2[i] + OR[7] * cp->n2[i] + OR[8] * cp->z2[i]);
+            OR[9] +=
+                cp->e1[i] - OR[12] * (OR[0] * cp->e2[i] + OR[1] * cp->n2[i] +
+                                      OR[2] * cp->z2[i]);
+            OR[10] +=
+                cp->n1[i] - OR[13] * (OR[3] * cp->e2[i] + OR[4] * cp->n2[i] +
+                                      OR[5] * cp->z2[i]);
+            OR[11] +=
+                cp->z1[i] - OR[14] * (OR[6] * cp->e2[i] + OR[7] * cp->n2[i] +
+                                      OR[8] * cp->z2[i]);
             numactive++;
         }
     }
@@ -297,7 +302,7 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
     double *one_vec = NULL;
     double trace1 = 0.0;
     double trace2 = 0.0;
-    int numactive;              /* NUMBER OF ACTIVE CONTROL POINTS */
+    int numactive; /* NUMBER OF ACTIVE CONTROL POINTS */
     int m, n, i, j;
     int status;
 
@@ -438,7 +443,7 @@ static int calccoef(struct Control_Points_3D *cp, double OR[], int ndims)
 static int calcscale(struct Control_Points_3D *cp, double OR[])
 {
     double sumX, sumY, sumsqX, sumsqY, sumXY;
-    int numactive;              /* NUMBER OF ACTIVE CONTROL POINTS */
+    int numactive; /* NUMBER OF ACTIVE CONTROL POINTS */
     int i;
 
     /* CALCULATE SCALE */
@@ -479,8 +484,8 @@ static int calcscale(struct Control_Points_3D *cp, double OR[])
         }
     }
 
-    OR[12] = (sumXY - sumX * sumY / numactive) /
-        (sumsqX - sumX * sumX / numactive);
+    OR[12] =
+        (sumXY - sumX * sumY / numactive) / (sumsqX - sumX * sumX / numactive);
 
     if (fabs(OR[12] - OR[14]) > 10 * GRASS_EPSILON) {
         G_debug(1, "Scale mismatch: %.4f %.4f", OR[12], OR[14]);
@@ -568,8 +573,7 @@ void scale_matrix(int n, int m, double scal, double **src_matrix,
     }
 }
 
-void subtract_matrix(int n, int m, double **mat1, double **mat2,
-                     double **mat3)
+void subtract_matrix(int n, int m, double **mat1, double **mat2, double **mat3)
 {
     int i, j;
 

@@ -1,3 +1,4 @@
+---
 name: General linting
 
 on:
@@ -19,20 +20,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Lint code base
-        uses: docker://github/super-linter:v2.2.2
+        uses: github/super-linter@v4
         env:
-          # Listed but disabled linters would be nice to have.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Listed but commented out linters would be nice to have.
+          # (see https://github.com/github/super-linter#environment-variables)
+          #
           # Python (supported using Pylint) and C/C++ (not supported) are
           # handled separately due to the complexity of the settings.
-          # (The rest is simply disabled automatically as of v2.)
-          VALIDATE_BASH: false
-          VALIDATE_CSS: false
-          VALIDATE_DOCKER: false
+          # VALIDATE_BASH: true
+          # VALIDATE_CSS: true
+          # VALIDATE_DOCKER: true
           VALIDATE_JAVASCRIPT_ES: true
-          VALIDATE_JAVASCRIPT_STANDARD: false
+          # VALIDATE_JAVASCRIPT_STANDARD: true
           VALIDATE_JSON: true
-          VALIDATE_MD: true
-          VALIDATE_PERL: true
+          VALIDATE_MARKDOWN: true
           VALIDATE_POWERSHELL: true
-          VALIDATE_XML: true
+          # VALIDATE_XML: true
           VALIDATE_YAML: true

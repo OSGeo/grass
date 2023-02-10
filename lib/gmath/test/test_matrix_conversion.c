@@ -1,10 +1,9 @@
-
 /*****************************************************************************
  *
  * MODULE:       Grass PDE Numerical Library
  * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
+ *                 soerengebbert <at> gmx <dot> de
+ *
  * PURPOSE:      Unit tests for les solving
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -23,7 +22,7 @@
 #include "test_gmath_lib.h"
 
 #define EPSILON_DIRECT 1.0E-10
-#define EPSILON_ITER 1.0E-4
+#define EPSILON_ITER   1.0E-4
 
 /* prototypes */
 static int test_matrix_conversion(void);
@@ -42,7 +41,8 @@ int unit_test_matrix_conversion(void)
     if (sum > 0)
         G_warning(_("\n-- Matrix conversion unit tests failure --"));
     else
-        G_message(_("\n-- Matrix conversion unit tests finished successfully --"));
+        G_message(
+            _("\n-- Matrix conversion unit tests finished successfully --"));
 
     return sum;
 }

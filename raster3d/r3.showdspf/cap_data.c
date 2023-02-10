@@ -2,12 +2,11 @@
 
 /********************************  cap_data  **********************************/
 
-void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
-     struct dspec *D_spec;
-     file_info *Headp;
-     file_info *G3header;
-     struct Cap *D_Cap;
-     int type;
+void draw_cap_side(D_spec, Headp, G3header, D_Cap, type) struct dspec *D_spec;
+file_info *Headp;
+file_info *G3header;
+struct Cap *D_Cap;
+int type;
 {
     int t, y, z;
     int xdim, ydim, zdim;
@@ -33,16 +32,14 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
     /*
      **      Old DSPF Cubes are 3 less than the number of data points across
      **      in each dimension.  Thus to make Grid3 match up with
-     **      Cubes, we have to throw away the outer points of each side 
-     **      Check difference in dimensions to see if we have an old 
+     **      Cubes, we have to throw away the outer points of each side
+     **      Check difference in dimensions to see if we have an old
      **      or new file.
      */
 
-
-    if ((xdim - Headp->xdim > 1) ||
-        (ydim - Headp->ydim > 1) || (zdim - Headp->zdim > 1))
+    if ((xdim - Headp->xdim > 1) || (ydim - Headp->ydim > 1) ||
+        (zdim - Headp->zdim > 1))
         old = 1;
-
 
     if (old) {
         yloop = ydim - 1;
@@ -74,7 +71,7 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
         D_Cap->side = t;
 
         switch (t) {
-        case 0:                /*xyplane  z = zdim */
+        case 0: /*xyplane  z = zdim */
             D_Cap->reverse = 1;
             D_Cap->minx = D_spec->B[X];
             D_Cap->miny = D_spec->B[Y];
@@ -86,14 +83,16 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
             D_Cap->Rows = yrc;
             D_Cap->Cols = xrc;
             for (y = ystart; y < yloop; y++) {
-                G_fseek(fp, D_offset +
-                        (xysize * (D_spec->E[Z]) + y * xdim + offset) *
-                        sizeof(float), 0);
+                G_fseek(fp,
+                        D_offset +
+                            (xysize * (D_spec->E[Z]) + y * xdim + offset) *
+                                sizeof(float),
+                        0);
                 fread(DB, xrc, sizeof(float), fp);
                 DB += xrc;
             }
             break;
-        case 1:                /*xyplane z = 0 */
+        case 1: /*xyplane z = 0 */
             D_Cap->reverse = 0;
             D_Cap->minx = D_spec->B[X];
             D_Cap->miny = D_spec->B[Y];
@@ -105,14 +104,16 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
             D_Cap->Rows = yrc;
             D_Cap->Cols = xrc;
             for (y = ystart; y < yloop; y++) {
-                G_fseek(fp, D_offset +
-                        (xysize * (D_spec->B[Z] + offset) + y * xdim +
-                         offset) * sizeof(float), 0);
+                G_fseek(fp,
+                        D_offset + (xysize * (D_spec->B[Z] + offset) +
+                                    y * xdim + offset) *
+                                       sizeof(float),
+                        0);
                 fread(DB, xrc, sizeof(float), fp);
                 DB += xrc;
             }
             break;
-        case 2:                /*yzplane x=xdim */
+        case 2: /*yzplane x=xdim */
             D_Cap->reverse = 0;
             D_Cap->minx = D_spec->B[Y];
             D_Cap->miny = D_spec->B[Z];
@@ -125,14 +126,16 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 
             for (z = zstart; z < zloop; z++) {
                 for (y = ystart; y < yloop; y++) {
-                    G_fseek(fp, D_offset +
-                            (xysize * z + xdim * y +
-                             (D_spec->E[X] + offset)) * sizeof(float), 0);
+                    G_fseek(fp,
+                            D_offset + (xysize * z + xdim * y +
+                                        (D_spec->E[X] + offset)) *
+                                           sizeof(float),
+                            0);
                     fread(DB++, sizeof(float), 1, fp);
                 }
             }
             break;
-        case 3:                /*yzplane  x = 0 */
+        case 3: /*yzplane  x = 0 */
             D_Cap->reverse = 1;
             D_Cap->minx = D_spec->B[Y];
             D_Cap->miny = D_spec->B[Z];
@@ -146,14 +149,16 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
 
             for (z = zstart; z < zloop; z++) {
                 for (y = ystart; y < yloop; y++) {
-                    G_fseek(fp, D_offset +
-                            (xysize * z + xdim * y +
-                             (D_spec->B[X] + offset)) * sizeof(float), 0);
+                    G_fseek(fp,
+                            D_offset + (xysize * z + xdim * y +
+                                        (D_spec->B[X] + offset)) *
+                                           sizeof(float),
+                            0);
                     fread(DB++, sizeof(float), 1, fp);
                 }
             }
             break;
-        case 4:                /*xzplane y = ydim */
+        case 4: /*xzplane y = ydim */
             D_Cap->reverse = 0;
             D_Cap->minx = D_spec->B[X];
             D_Cap->miny = D_spec->B[Z];
@@ -164,14 +169,16 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
             D_Cap->Cols = xrc;
             for (z = zstart; z < zloop; z++) {
                 /* fill in the buff one line at a time */
-                G_fseek(fp, D_offset +
-                        (xysize * z + xdim * (D_spec->E[Y] + offset) +
-                         offset) * sizeof(float), 0);
+                G_fseek(fp,
+                        D_offset + (xysize * z +
+                                    xdim * (D_spec->E[Y] + offset) + offset) *
+                                       sizeof(float),
+                        0);
                 fread(DB, sizeof(float), xrc, fp);
                 DB += xrc;
             }
             break;
-        case 5:                /*xzplane y = 0 */
+        case 5: /*xzplane y = 0 */
             D_Cap->reverse = 1;
             D_Cap->minx = D_spec->B[X];
             D_Cap->miny = D_spec->B[Z];
@@ -182,15 +189,16 @@ void draw_cap_side(D_spec, Headp, G3header, D_Cap, type)
             D_Cap->Cols = xrc;
             for (z = zstart; z < zloop; z++) {
                 /* fill in the buff one line at a time */
-                G_fseek(fp, D_offset +
-                        (xysize * z + xdim * (D_spec->B[Y] + offset) +
-                         offset) * sizeof(float), 0);
+                G_fseek(fp,
+                        D_offset + (xysize * z +
+                                    xdim * (D_spec->B[Y] + offset) + offset) *
+                                       sizeof(float),
+                        0);
                 fread(DB, sizeof(float), xrc, fp);
 
                 DB += xrc;
             }
             break;
-
         }
         draw_cap(Headp, D_spec, D_Cap);
     }

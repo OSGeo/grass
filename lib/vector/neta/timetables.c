@@ -30,10 +30,10 @@
    \param[out] list of lengths
    \param[out] list of ids
 
-   \return number of distinct elements 
+   \return number of distinct elements
    \return -1 on failure
  */
-int NetA_init_distinct(dbDriver * driver, dbString * sql, int **lengths,
+int NetA_init_distinct(dbDriver *driver, dbString *sql, int **lengths,
                        int **ids)
 {
     int count, last, cur, result, index, more;
@@ -113,7 +113,7 @@ static int cmp_int(const void *a, const void *b)
 int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
                                 int walk_layer, char *route_id, char *times,
                                 char *to_stop, char *walk_length,
-                                neta_timetable * timetable, int **route_ids,
+                                neta_timetable *timetable, int **route_ids,
                                 int **stop_ids)
 {
     int more, i, stop, route, time, *stop_pnt, stop1, stop2;
@@ -133,31 +133,25 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Fi->database, Fi->driver);
 
-
     db_init_string(&sql);
     sprintf(buf, "select %s from %s order by %s", route_id, Fi->table,
             route_id);
     db_set_string(&sql, buf);
     timetable->routes =
-        NetA_init_distinct(driver, &sql, &(timetable->route_length),
-                           route_ids);
+        NetA_init_distinct(driver, &sql, &(timetable->route_length), route_ids);
     if (timetable->routes < 0)
         return 1;
 
-    sprintf(buf, "select %s from %s order by %s", Fi->key, Fi->table,
-            Fi->key);
+    sprintf(buf, "select %s from %s order by %s", Fi->key, Fi->table, Fi->key);
     db_set_string(&sql, buf);
     timetable->stops =
         NetA_init_distinct(driver, &sql, &(timetable->stop_length), stop_ids);
     if (timetable->stops < 0)
         return 1;
 
-    timetable->route_stops =
-        (int **)G_calloc(timetable->routes, sizeof(int *));
-    timetable->route_times =
-        (int **)G_calloc(timetable->routes, sizeof(int *));
-    timetable->stop_routes =
-        (int **)G_calloc(timetable->stops, sizeof(int *));
+    timetable->route_stops = (int **)G_calloc(timetable->routes, sizeof(int *));
+    timetable->route_times = (int **)G_calloc(timetable->routes, sizeof(int *));
+    timetable->stop_routes = (int **)G_calloc(timetable->stops, sizeof(int *));
     timetable->stop_times = (int **)G_calloc(timetable->stops, sizeof(int *));
     timetable->walk_length = (int *)G_calloc(timetable->stops, sizeof(int));
     timetable->walk_stops = (int **)G_calloc(timetable->stops, sizeof(int *));
@@ -204,7 +198,6 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
         return 1;
     }
 
-
     table = db_get_cursor_table(&cursor);
     column1 = db_get_table_column(table, 0);
     column2 = db_get_table_column(table, 1);
@@ -216,27 +209,26 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
         route = db_get_value_int(value);
         value = db_get_column_value(column3);
         time = db_get_value_int(value);
-        stop =
-            (int *)bsearch(&stop, *stop_ids, timetable->stops, sizeof(int),
-                           cmp_int) - (*stop_ids);
-        route =
-            (int *)bsearch(&route, *route_ids, timetable->routes, sizeof(int),
-                           cmp_int) - (*route_ids);
+        stop = (int *)bsearch(&stop, *stop_ids, timetable->stops, sizeof(int),
+                              cmp_int) -
+               (*stop_ids);
+        route = (int *)bsearch(&route, *route_ids, timetable->routes,
+                               sizeof(int), cmp_int) -
+                (*route_ids);
 
         timetable->stop_routes[stop][timetable->stop_length[stop]] = route;
         timetable->stop_times[stop][timetable->stop_length[stop]++] = time;
 
         timetable->route_stops[route][timetable->route_length[route]] = stop;
-        timetable->route_times[route][timetable->route_length[route]++] =
-            time;
+        timetable->route_times[route][timetable->route_length[route]++] = time;
     }
     db_close_cursor(&cursor);
 
     if (walk_layer != -1) {
 
         Fi = Vect_get_field(In, walk_layer);
-        sprintf(buf, "select %s, %s, %s from %s", Fi->key, to_stop,
-                walk_length, Fi->table);
+        sprintf(buf, "select %s, %s, %s from %s", Fi->key, to_stop, walk_length,
+                Fi->table);
         db_set_string(&sql, buf);
 
         if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
@@ -252,15 +244,13 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
         while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
             value = db_get_column_value(column2);
             stop = db_get_value_int(value);
-            stop_pnt =
-                (int *)bsearch(&stop, *stop_ids, timetable->stops,
-                               sizeof(int), cmp_int);
+            stop_pnt = (int *)bsearch(&stop, *stop_ids, timetable->stops,
+                                      sizeof(int), cmp_int);
             if (stop_pnt) {
                 value = db_get_column_value(column1);
                 stop = db_get_value_int(value);
-                stop_pnt =
-                    (int *)bsearch(&stop, *stop_ids, timetable->stops,
-                                   sizeof(int), cmp_int);
+                stop_pnt = (int *)bsearch(&stop, *stop_ids, timetable->stops,
+                                          sizeof(int), cmp_int);
                 if (stop_pnt) {
                     stop = stop_pnt - (*stop_ids);
                     timetable->walk_length[stop]++;
@@ -295,25 +285,23 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
         while (db_fetch(&cursor, DB_NEXT, &more) == DB_OK && more) {
             value = db_get_column_value(column2);
             stop = db_get_value_int(value);
-            stop_pnt =
-                (int *)bsearch(&stop, *stop_ids, timetable->stops,
-                               sizeof(int), cmp_int);
+            stop_pnt = (int *)bsearch(&stop, *stop_ids, timetable->stops,
+                                      sizeof(int), cmp_int);
             if (stop_pnt) {
                 stop2 = stop_pnt - (*stop_ids);
                 value = db_get_column_value(column1);
                 stop = db_get_value_int(value);
-                stop_pnt =
-                    (int *)bsearch(&stop, *stop_ids, timetable->stops,
-                                   sizeof(int), cmp_int);
+                stop_pnt = (int *)bsearch(&stop, *stop_ids, timetable->stops,
+                                          sizeof(int), cmp_int);
                 if (stop_pnt) {
                     stop1 = stop_pnt - (*stop_ids);
                     value = db_get_column_value(column3);
                     time = db_get_value_int(value);
-                    timetable->
-                        walk_stops[stop1][timetable->walk_length[stop1]] =
+                    timetable
+                        ->walk_stops[stop1][timetable->walk_length[stop1]] =
                         stop2;
-                    timetable->
-                        walk_times[stop1][timetable->walk_length[stop1]++] =
+                    timetable
+                        ->walk_times[stop1][timetable->walk_length[stop1]++] =
                         time;
                 }
             }
@@ -325,16 +313,14 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
     return 0;
 }
 
-typedef struct
-{
+typedef struct {
     int v;
     int conns;
 } neta_heap_data;
 
 static neta_heap_data *new_heap_data(int conns, int v)
 {
-    neta_heap_data *d =
-        (neta_heap_data *) G_calloc(1, sizeof(neta_heap_data));
+    neta_heap_data *d = (neta_heap_data *)G_calloc(1, sizeof(neta_heap_data));
     d->v = v;
     d->conns = conns;
     return d;
@@ -356,7 +342,7 @@ static neta_heap_data *new_heap_data(int conns, int v)
  */
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
                           int v, int route, int rows, int update,
-                          neta_timetable_result * result, dglHeap_s * heap)
+                          neta_timetable_result *result, dglHeap_s *heap)
 {
     if (result->dst[new_conns][to] == -1 ||
         result->dst[new_conns][to] > new_dst) {
@@ -391,10 +377,10 @@ void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
    \return ?
    \return -1 on error
  */
-int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
+int NetA_timetable_shortest_path(neta_timetable *timetable, int from_stop,
                                  int to_stop, int start_time, int min_change,
                                  int max_changes, int walking_change,
-                                 neta_timetable_result * result)
+                                 neta_timetable_result *result)
 {
     int i, j;
     dglHeap_s heap;
@@ -419,11 +405,10 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
     for (i = 0; i < rows; i++) {
         result->dst[i] = (int *)G_calloc(timetable->stops, sizeof(int));
         result->prev_stop[i] = (int *)G_calloc(timetable->stops, sizeof(int));
-        result->prev_route[i] =
-            (int *)G_calloc(timetable->stops, sizeof(int));
+        result->prev_route[i] = (int *)G_calloc(timetable->stops, sizeof(int));
         result->prev_conn[i] = (int *)G_calloc(timetable->stops, sizeof(int));
-        if (!result->dst[i] || !result->prev_stop[i] || !result->prev_route[i]
-            || !result->prev_conn[i]) {
+        if (!result->dst[i] || !result->prev_stop[i] ||
+            !result->prev_route[i] || !result->prev_conn[i]) {
             G_warning(_("Out of memory"));
             return -1;
         }
@@ -462,8 +447,8 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 
         if (!dglHeapExtractMin(&heap, &heap_node))
             break;
-        v = ((neta_heap_data *) (heap_node.value.pv))->v;
-        conns = ((neta_heap_data *) (heap_node.value.pv))->conns;
+        v = ((neta_heap_data *)(heap_node.value.pv))->v;
+        conns = ((neta_heap_data *)(heap_node.value.pv))->conns;
         dist = heap_node.key;
 
         if (dist > result->dst[conns][v])
@@ -475,7 +460,8 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
 
         /*walking */
         if (walk_conns < rows) {
-            /*            update = (max_changes == -1 || walk_conns <= max_changes); */
+            /*            update = (max_changes == -1 || walk_conns <=
+             * max_changes); */
             update = 1;
             for (i = 0; i < timetable->walk_length[v]; i++) {
                 int to = timetable->walk_stops[v][i];
@@ -533,7 +519,7 @@ int NetA_timetable_shortest_path(neta_timetable * timetable, int from_stop,
    \return time
    \return -1 if not found
  */
-int NetA_timetable_get_route_time(neta_timetable * timetable, int stop,
+int NetA_timetable_get_route_time(neta_timetable *timetable, int stop,
                                   int route)
 {
     int i;
@@ -549,7 +535,7 @@ int NetA_timetable_get_route_time(neta_timetable * timetable, int stop,
 
    \param result pointer to neta_timetable_result structure
  */
-void NetA_timetable_result_release(neta_timetable_result * result)
+void NetA_timetable_result_release(neta_timetable_result *result)
 {
     int i;
 

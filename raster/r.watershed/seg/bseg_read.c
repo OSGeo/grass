@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include "Gwater.h"
 
-int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
+int bseg_read_cell(BSEG *bseg, char *map_name, char *mapset)
 {
     int row, rows;
     int col, cols;

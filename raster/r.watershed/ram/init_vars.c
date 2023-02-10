@@ -57,8 +57,10 @@ int init_vars(int argc, char *argv[])
             asp_flag++;
         else if (sscanf(argv[r], "depression=%s", pit_name) == 1)
             pit_flag++;
-        else if (sscanf(argv[r], "threshold=%d", &bas_thres) == 1) ;
-        else if (sscanf(argv[r], "max_slope_length=%lf", &max_length) == 1) ;
+        else if (sscanf(argv[r], "threshold=%d", &bas_thres) == 1)
+            ;
+        else if (sscanf(argv[r], "max_slope_length=%lf", &max_length) == 1)
+            ;
         else if (sscanf(argv[r], "basin=%s", bas_name) == 1)
             bas_flag++;
         else if (sscanf(argv[r], "stream=%s", seg_name) == 1)
@@ -92,7 +94,8 @@ int init_vars(int argc, char *argv[])
             if (sides != 4)
                 usage(argv[0]);
         }
-        else if (sscanf(argv[r], "convergence=%d", &c_fac) == 1) ;
+        else if (sscanf(argv[r], "convergence=%d", &c_fac) == 1)
+            ;
         else if (strcmp(argv[r], "-s") == 0)
             mfd = 0;
         else if (strcmp(argv[r], "-a") == 0)
@@ -105,15 +108,12 @@ int init_vars(int argc, char *argv[])
     if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
         G_fatal_error("Convergence factor must be between 1 and 10.");
     }
-    if ((ele_flag != 1)
-        ||
+    if ((ele_flag != 1) ||
         ((arm_flag == 1) &&
-         ((bas_thres <= 0) || ((haf_flag != 1) && (bas_flag != 1))))
-        ||
+         ((bas_thres <= 0) || ((haf_flag != 1) && (bas_flag != 1)))) ||
         ((bas_thres <= 0) &&
          ((bas_flag == 1) || (seg_flag == 1) || (haf_flag == 1) ||
-          (sl_flag == 1) || (sg_flag == 1) || (ls_flag == 1)))
-        )
+          (sl_flag == 1) || (sg_flag == 1) || (ls_flag == 1))))
         usage(argv[0]);
     tot_parts = 4;
     if (ls_flag || sg_flag)
@@ -142,34 +142,28 @@ int init_vars(int argc, char *argv[])
         half_res = .5 * window.ew_res;
     else
         half_res = .5 * window.ns_res;
-    diag = sqrt(window.ew_res * window.ew_res +
-                window.ns_res * window.ns_res);
+    diag = sqrt(window.ew_res * window.ew_res + window.ns_res * window.ns_res);
     if (sides == 4)
         diag *= 0.5;
 
-    alt =
-        (CELL *) G_malloc(sizeof(CELL) * size_array(&alt_seg, nrows, ncols));
-    wat =
-        (DCELL *) G_malloc(sizeof(DCELL) *
-                           size_array(&wat_seg, nrows, ncols));
+    alt = (CELL *)G_malloc(sizeof(CELL) * size_array(&alt_seg, nrows, ncols));
+    wat = (DCELL *)G_malloc(sizeof(DCELL) * size_array(&wat_seg, nrows, ncols));
 
     sca = tanb = NULL;
     atanb_flag = 0;
     if (tci_flag || spi_flag) {
-        sca = (DCELL *) G_malloc(sizeof(DCELL) *
+        sca = (DCELL *)G_malloc(sizeof(DCELL) *
+                                size_array(&wat_seg, nrows, ncols));
+        tanb = (DCELL *)G_malloc(sizeof(DCELL) *
                                  size_array(&wat_seg, nrows, ncols));
-        tanb = (DCELL *) G_malloc(sizeof(DCELL) *
-                                  size_array(&wat_seg, nrows, ncols));
         atanb_flag = 1;
     }
 
-    asp =
-        (CELL *) G_malloc(size_array(&asp_seg, nrows, ncols) * sizeof(CELL));
+    asp = (CELL *)G_malloc(size_array(&asp_seg, nrows, ncols) * sizeof(CELL));
 
     if (er_flag) {
         r_h =
-            (CELL *) G_malloc(sizeof(CELL) *
-                              size_array(&r_h_seg, nrows, ncols));
+            (CELL *)G_malloc(sizeof(CELL) * size_array(&r_h_seg, nrows, ncols));
     }
 
     swale = flag_create(nrows, ncols);
@@ -184,7 +178,7 @@ int init_vars(int argc, char *argv[])
     elebuf = Rast_allocate_buf(ele_map_type);
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
-        ele_scale = 1000;       /* should be enough to do the trick */
+        ele_scale = 1000; /* should be enough to do the trick */
     if (flat_flag)
         ele_scale = 10000;
 
@@ -212,16 +206,16 @@ int init_vars(int argc, char *argv[])
             }
             else {
                 if (ele_map_type == CELL_TYPE) {
-                    alt_value = *((CELL *) ptr);
+                    alt_value = *((CELL *)ptr);
                     alt_value *= ele_scale;
                 }
                 else if (ele_map_type == FCELL_TYPE) {
-                    dvalue = *((FCELL *) ptr);
+                    dvalue = *((FCELL *)ptr);
                     dvalue *= ele_scale;
                     alt_value = ele_round(dvalue);
                 }
                 else if (ele_map_type == DCELL_TYPE) {
-                    dvalue = *((DCELL *) ptr);
+                    dvalue = *((DCELL *)ptr);
                     dvalue *= ele_scale;
                     alt_value = ele_round(dvalue);
                 }
@@ -244,7 +238,8 @@ int init_vars(int argc, char *argv[])
     G_free(elebuf);
     MASK_flag = (do_points < nrows * ncols);
 
-    /* read flow accumulation from input map flow: amount of overland flow per cell */
+    /* read flow accumulation from input map flow: amount of overland flow per
+     * cell */
     if (run_flag) {
         dbuf = Rast_allocate_d_buf();
         fd = Rast_open_old(run_name, "");
@@ -269,8 +264,8 @@ int init_vars(int argc, char *argv[])
     /* read retention map to adjust flow distribution (AG) */
     rtn = NULL;
     if (rtn_flag) {
-        rtn = (char *)G_malloc(sizeof(char) *
-                               size_array(&rtn_seg, nrows, ncols));
+        rtn =
+            (char *)G_malloc(sizeof(char) * size_array(&rtn_seg, nrows, ncols));
         buf = Rast_allocate_c_buf();
         fd = Rast_open_old(rtn_name, "");
         for (r = 0; r < nrows; r++) {
@@ -323,20 +318,17 @@ int init_vars(int argc, char *argv[])
 
     /* RUSLE: LS and/or S factor */
     if (er_flag) {
-        s_l =
-            (double *)G_malloc(size_array(&s_l_seg, nrows, ncols) *
-                               sizeof(double));
+        s_l = (double *)G_malloc(size_array(&s_l_seg, nrows, ncols) *
+                                 sizeof(double));
     }
 
     if (sg_flag) {
-        s_g =
-            (double *)G_malloc(size_array(&s_g_seg, nrows, ncols) *
-                               sizeof(double));
+        s_g = (double *)G_malloc(size_array(&s_g_seg, nrows, ncols) *
+                                 sizeof(double));
     }
     if (ls_flag) {
-        l_s =
-            (double *)G_malloc(size_array(&l_s_seg, nrows, ncols) *
-                               sizeof(double));
+        l_s = (double *)G_malloc(size_array(&l_s_seg, nrows, ncols) *
+                                 sizeof(double));
     }
 
     astar_pts = (int *)G_malloc((do_points + 1) * sizeof(int));
@@ -459,7 +451,7 @@ int init_vars(int argc, char *argv[])
         }
     }
 
-    G_percent(r, nrows, 1);     /* finish it */
+    G_percent(r, nrows, 1); /* finish it */
 
     if (pit_flag) {
         Rast_close(fd);

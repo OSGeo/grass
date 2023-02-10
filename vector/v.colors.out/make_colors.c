@@ -18,7 +18,7 @@ struct Colors *make_colors(const char *name, const char *layer,
     dbCatValArray cvarr;
     dbCatVal *cv;
 
-    Vect_set_open_level(1);     /* no topology required */
+    Vect_set_open_level(1); /* no topology required */
     if (Vect_open_old2(&Map, name, "", layer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), name);
 
@@ -39,15 +39,15 @@ struct Colors *make_colors(const char *name, const char *layer,
 
     ctype = db_column_Ctype(driver, fi->table, column);
     if (ctype == -1)
-        G_fatal_error(_("Column <%s> not found in table <%s>"),
-                      column, fi->table);
+        G_fatal_error(_("Column <%s> not found in table <%s>"), column,
+                      fi->table);
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
         G_fatal_error(_("Column <%s> is not numeric"), column);
 
     is_fp = ctype == DB_C_TYPE_DOUBLE;
 
-    nrec = db_select_CatValArray(driver, fi->table, fi->key, column,
-                                 NULL, &cvarr);
+    nrec =
+        db_select_CatValArray(driver, fi->table, fi->key, column, NULL, &cvarr);
     if (nrec < 1) {
         G_important_message(_("No data selected"));
         return 0;
@@ -71,7 +71,6 @@ struct Colors *make_colors(const char *name, const char *layer,
             Rast_add_c_color_rule((const CELL *)&(cv->val.i), red, grn, blu,
                                   (const CELL *)&(cv->val.i), red, grn, blu,
                                   colors);
-
     }
 
     Vect_close(&Map);

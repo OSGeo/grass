@@ -96,16 +96,14 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
     /* compute rows and columns, if not set */
     if (!row_flag) {
-        cellhd->rows =
-            (cellhd->north - cellhd->south +
-             cellhd->ns_res / 2.0) / cellhd->ns_res;
+        cellhd->rows = (cellhd->north - cellhd->south + cellhd->ns_res / 2.0) /
+                       cellhd->ns_res;
         if (cellhd->rows == 0)
             cellhd->rows = 1;
     }
     if (!col_flag) {
-        cellhd->cols =
-            (cellhd->east - cellhd->west +
-             cellhd->ew_res / 2.0) / cellhd->ew_res;
+        cellhd->cols = (cellhd->east - cellhd->west + cellhd->ew_res / 2.0) /
+                       cellhd->ew_res;
         if (cellhd->cols == 0)
             cellhd->cols = 1;
     }
@@ -162,8 +160,8 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
  * \param col_flag compute e-w resolution
  * \param depth_flag compute t-b resolution
  */
-void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
-                         int col_flag, int depth_flag)
+void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag, int col_flag,
+                         int depth_flag)
 {
     double old_res;
 
@@ -239,36 +237,32 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 
     /* compute rows and columns, if not set */
     if (!row_flag) {
-        cellhd->rows =
-            (cellhd->north - cellhd->south +
-             cellhd->ns_res / 2.0) / cellhd->ns_res;
+        cellhd->rows = (cellhd->north - cellhd->south + cellhd->ns_res / 2.0) /
+                       cellhd->ns_res;
         if (cellhd->rows == 0)
             cellhd->rows = 1;
 
         cellhd->rows3 =
-            (cellhd->north - cellhd->south +
-             cellhd->ns_res3 / 2.0) / cellhd->ns_res3;
+            (cellhd->north - cellhd->south + cellhd->ns_res3 / 2.0) /
+            cellhd->ns_res3;
         if (cellhd->rows3 == 0)
             cellhd->rows3 = 1;
     }
     if (!col_flag) {
-        cellhd->cols =
-            (cellhd->east - cellhd->west +
-             cellhd->ew_res / 2.0) / cellhd->ew_res;
+        cellhd->cols = (cellhd->east - cellhd->west + cellhd->ew_res / 2.0) /
+                       cellhd->ew_res;
         if (cellhd->cols == 0)
             cellhd->cols = 1;
 
-        cellhd->cols3 =
-            (cellhd->east - cellhd->west +
-             cellhd->ew_res3 / 2.0) / cellhd->ew_res3;
+        cellhd->cols3 = (cellhd->east - cellhd->west + cellhd->ew_res3 / 2.0) /
+                        cellhd->ew_res3;
         if (cellhd->cols3 == 0)
             cellhd->cols3 = 1;
     }
 
     if (!depth_flag) {
-        cellhd->depths =
-            (cellhd->top - cellhd->bottom +
-             cellhd->tb_res / 2.0) / cellhd->tb_res;
+        cellhd->depths = (cellhd->top - cellhd->bottom + cellhd->tb_res / 2.0) /
+                         cellhd->tb_res;
         if (cellhd->depths == 0)
             cellhd->depths = 1;
     }
@@ -388,8 +382,9 @@ static int ll_check_ns(struct Cell_head *cellhd)
     ncells = (int)(diff + 0.5);
     diff -= ncells;
     if ((diff < 0 && diff < -fpepsilon) || (diff > 0 && diff > fpepsilon)) {
-        G_verbose_message(_("NS extent does not match NS resolution: %g cells difference"),
-                          diff);
+        G_verbose_message(
+            _("NS extent does not match NS resolution: %g cells difference"),
+            diff);
     }
 
     /* north */
@@ -397,11 +392,11 @@ static int ll_check_ns(struct Cell_head *cellhd)
     if (diff < 0)
         diff = -diff;
     if (cellhd->north < 90.0 && diff < 1.0) {
-        G_verbose_message(_("%g cells missing to reach 90 degree north"),
-                          diff);
+        G_verbose_message(_("%g cells missing to reach 90 degree north"), diff);
         if (diff < llepsilon && diff > fpepsilon) {
-            G_verbose_message(_("Subtle input data rounding error of north boundary (%g)"),
-                              cellhd->north - 90.0);
+            G_verbose_message(
+                _("Subtle input data rounding error of north boundary (%g)"),
+                cellhd->north - 90.0);
             /* check only, do not modify
                cellhd->north = 90.0;
                lladjust = 1;
@@ -414,7 +409,8 @@ static int ll_check_ns(struct Cell_head *cellhd)
                                 diff);
 
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of north boundary (%g)"),
+                G_verbose_message(_("Subtle input data rounding error of north "
+                                    "boundary (%g)"),
                                   cellhd->north - 90.0);
                 G_debug(1, "North of north in seconds: %g",
                         (cellhd->north - 90.0) * 3600);
@@ -428,9 +424,9 @@ static int ll_check_ns(struct Cell_head *cellhd)
             if (diff < 0)
                 diff = -diff;
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of north boundary (%g)"),
-                                  cellhd->north - 90.0 -
-                                  cellhd->ns_res / 2.0);
+                G_verbose_message(_("Subtle input data rounding error of north "
+                                    "boundary (%g)"),
+                                  cellhd->north - 90.0 - cellhd->ns_res / 2.0);
                 G_debug(1, "North of north + 0.5 cells in seconds: %g",
                         (cellhd->north - 90.0 - cellhd->ns_res / 2.0) * 3600);
                 /* check only, do not modify
@@ -448,11 +444,11 @@ static int ll_check_ns(struct Cell_head *cellhd)
     if (diff < 0)
         diff = -diff;
     if (cellhd->south > -90.0 && diff < 1.0) {
-        G_verbose_message(_("%g cells missing to reach 90 degree south"),
-                          diff);
+        G_verbose_message(_("%g cells missing to reach 90 degree south"), diff);
         if (diff < llepsilon && diff > fpepsilon) {
-            G_verbose_message(_("Subtle input data rounding error of south boundary (%g)"),
-                              cellhd->south + 90.0);
+            G_verbose_message(
+                _("Subtle input data rounding error of south boundary (%g)"),
+                cellhd->south + 90.0);
             /* check only, do not modify
                cellhd->south = -90.0;
                lladjust = 1;
@@ -465,7 +461,8 @@ static int ll_check_ns(struct Cell_head *cellhd)
                                 diff);
 
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of south boundary (%g)"),
+                G_verbose_message(_("Subtle input data rounding error of south "
+                                    "boundary (%g)"),
                                   cellhd->south + 90);
                 G_debug(1, "South of south in seconds: %g",
                         (-cellhd->south - 90) * 3600);
@@ -479,7 +476,8 @@ static int ll_check_ns(struct Cell_head *cellhd)
             if (diff < 0)
                 diff = -diff;
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of south boundary (%g)"),
+                G_verbose_message(_("Subtle input data rounding error of south "
+                                    "boundary (%g)"),
                                   cellhd->south + 90 + cellhd->ns_res / 2.0);
                 G_debug(1, "South of south + 0.5 cells in seconds: %g",
                         (-cellhd->south - 90 - cellhd->ns_res / 2.0) * 3600);
@@ -518,21 +516,22 @@ static int ll_check_ew(struct Cell_head *cellhd)
     ncells = (int)(diff + 0.5);
     diff -= ncells;
     if ((diff < 0 && diff < -fpepsilon) || (diff > 0 && diff > fpepsilon)) {
-        G_verbose_message(_("EW extent does not match EW resolution: %g cells difference"),
-                          diff);
+        G_verbose_message(
+            _("EW extent does not match EW resolution: %g cells difference"),
+            diff);
     }
     if (cellhd->east - cellhd->west > 360.0) {
         diff = (cellhd->east - cellhd->west - 360.0) / cellhd->ew_res;
         if (diff > fpepsilon)
             G_important_message(_("360 degree EW extent is exceeded by %g cells"
-                                 " (East: %g, West: %g)"), diff, cellhd->east,
-                                cellhd->west);
+                                  " (East: %g, West: %g)"),
+                                diff, cellhd->east, cellhd->west);
     }
     else if (cellhd->east - cellhd->west < 360.0) {
         diff = (360.0 - (cellhd->east - cellhd->west)) / cellhd->ew_res;
         if (diff < 1.0 && diff > fpepsilon)
-            G_verbose_message(_("%g cells missing to cover 360 degree EW extent"),
-                              diff);
+            G_verbose_message(
+                _("%g cells missing to cover 360 degree EW extent"), diff);
     }
 
     return lladjust;
@@ -557,7 +556,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
     char buf[100], buf2[100];
     double diff;
     double old, new;
-    struct Cell_head cellhds;   /* everything in seconds, not degrees */
+    struct Cell_head cellhds; /* everything in seconds, not degrees */
 
     /* lat/lon checks */
     if (cellhd->proj != PROJECTION_LL)
@@ -644,8 +643,8 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             G_llres_format(old / 3600, buf);
             G_llres_format(new / 3600, buf2);
             if (strcmp(buf, buf2))
-                G_verbose_message(_("NS resolution rounded from %s to %s"),
-                                  buf, buf2);
+                G_verbose_message(_("NS resolution rounded from %s to %s"), buf,
+                                  buf2);
             ll_adjust = 1;
             res_adj = 1;
             cellhds.ns_res = new;
@@ -677,20 +676,20 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
                 G_lat_format(old / 3600, buf);
                 G_lat_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("North rounded from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("North rounded from %s to %s"), buf,
+                                      buf2);
                 cellhds.north = new;
             }
 
             old = cellhds.south;
-            new = cellhds.north - cellhds.ns_res * cellhds.rows;
+            new = cellhds.north - cellhds.ns_res *cellhds.rows;
             diff = fabs(new - old) / cellhds.ns_res;
             if (diff > 0) {
                 G_lat_format(old / 3600, buf);
                 G_lat_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("South adjusted from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("South adjusted from %s to %s"), buf,
+                                      buf2);
             }
             cellhds.south = new;
         }
@@ -704,20 +703,20 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
                 G_lat_format(old / 3600, buf);
                 G_lat_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("South rounded from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("South rounded from %s to %s"), buf,
+                                      buf2);
                 cellhds.south = new;
             }
 
             old = cellhds.north;
-            new = cellhds.south + cellhds.ns_res * cellhds.rows;
+            new = cellhds.south + cellhds.ns_res *cellhds.rows;
             diff = fabs(new - old) / cellhds.ns_res;
             if (diff > 0) {
                 G_lat_format(old / 3600, buf);
                 G_lat_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("North adjusted from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("North adjusted from %s to %s"), buf,
+                                      buf2);
             }
             cellhds.north = new;
         }
@@ -732,8 +731,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             G_lat_format(old / 3600, buf);
             G_lat_format(new / 3600, buf2);
             if (strcmp(buf, buf2))
-                G_verbose_message(_("North rounded from %s to %s"),
-                                  buf, buf2);
+                G_verbose_message(_("North rounded from %s to %s"), buf, buf2);
             ll_adjust = 1;
             cellhds.north = new;
         }
@@ -747,8 +745,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             G_lat_format(old / 3600, buf);
             G_lat_format(new / 3600, buf2);
             if (strcmp(buf, buf2))
-                G_verbose_message(_("South rounded from %s to %s"),
-                                  buf, buf2);
+                G_verbose_message(_("South rounded from %s to %s"), buf, buf2);
             ll_adjust = 1;
             cellhds.south = new;
         }
@@ -770,8 +767,8 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             G_llres_format(old / 3600, buf);
             G_llres_format(new / 3600, buf2);
             if (strcmp(buf, buf2))
-                G_verbose_message(_("EW resolution rounded from %s to %s"),
-                                  buf, buf2);
+                G_verbose_message(_("EW resolution rounded from %s to %s"), buf,
+                                  buf2);
             ll_adjust = 1;
             res_adj = 1;
             cellhds.ew_res = new;
@@ -803,20 +800,20 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
                 G_lon_format(old / 3600, buf);
                 G_lon_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("West rounded from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("West rounded from %s to %s"), buf,
+                                      buf2);
                 cellhds.west = new;
             }
 
             old = cellhds.east;
-            new = cellhds.west + cellhds.ew_res * cellhds.cols;
+            new = cellhds.west + cellhds.ew_res *cellhds.cols;
             diff = fabs(new - old) / cellhds.ew_res;
             if (diff > 0) {
                 G_lon_format(old / 3600, buf);
                 G_lon_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("East adjusted from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("East adjusted from %s to %s"), buf,
+                                      buf2);
             }
             cellhds.east = new;
         }
@@ -830,20 +827,20 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
                 G_lon_format(old / 3600, buf);
                 G_lon_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("East rounded from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("East rounded from %s to %s"), buf,
+                                      buf2);
                 cellhds.east = new;
             }
 
             old = cellhds.west;
-            new = cellhds.east - cellhds.ew_res * cellhds.cols;
+            new = cellhds.east - cellhds.ew_res *cellhds.cols;
             diff = fabs(new - cellhds.west) / cellhds.ew_res;
             if (diff > 0) {
                 G_lon_format(old / 3600, buf);
                 G_lon_format(new / 3600, buf2);
                 if (strcmp(buf, buf2))
-                    G_verbose_message(_("West adjusted from %s to %s"),
-                                      buf, buf2);
+                    G_verbose_message(_("West adjusted from %s to %s"), buf,
+                                      buf2);
             }
             cellhds.west = new;
         }

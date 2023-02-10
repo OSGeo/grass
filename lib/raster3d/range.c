@@ -11,11 +11,10 @@
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_range_update_from_tile(RASTER3D_Map * map, const void *tile, int rows,
-                              int cols, int depths, int xRedundant,
-                              int yRedundant, int zRedundant, int nofNum,
-                              int type)
+void Rast3d_range_update_from_tile(RASTER3D_Map *map, const void *tile,
+                                   int rows, int cols, int depths,
+                                   int xRedundant, int yRedundant,
+                                   int zRedundant, int nofNum, int type)
 {
     int y, z, cellType;
     struct FPRange *range;
@@ -32,22 +31,18 @@ Rast3d_range_update_from_tile(RASTER3D_Map * map, const void *tile, int rows,
         for (z = 0; z < depths; z++) {
             for (y = 0; y < rows; y++) {
                 Rast_row_update_fp_range(tile, cols, range, cellType);
-                tile =
-                    G_incr_void_ptr(tile, map->tileX * Rast3d_length(type));
+                tile = G_incr_void_ptr(tile, map->tileX * Rast3d_length(type));
             }
             if (yRedundant)
-                tile =
-                    G_incr_void_ptr(tile,
-                                    map->tileX * yRedundant *
-                                    Rast3d_length(type));
+                tile = G_incr_void_ptr(tile, map->tileX * yRedundant *
+                                                 Rast3d_length(type));
         }
         return;
     }
 
     if (yRedundant) {
         for (z = 0; z < depths; z++) {
-            Rast_row_update_fp_range(tile, map->tileX * rows, range,
-                                     cellType);
+            Rast_row_update_fp_range(tile, map->tileX * rows, range, cellType);
             tile = G_incr_void_ptr(tile, map->tileXY * Rast3d_length(type));
         }
         return;
@@ -58,10 +53,9 @@ Rast3d_range_update_from_tile(RASTER3D_Map * map, const void *tile, int rows,
 
 /*---------------------------------------------------------------------------*/
 
-int
-Rast3d_read_range(const char *name, const char *mapset,
-                  struct FPRange *drange)
- /* adapted from Rast_read_fp_range */
+int Rast3d_read_range(const char *name, const char *mapset,
+                      struct FPRange *drange)
+/* adapted from Rast_read_fp_range */
 {
     int fd;
     int bytes_read;
@@ -75,8 +69,7 @@ Rast3d_read_range(const char *name, const char *mapset,
     fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name,
                          mapset);
     if (fd < 0) {
-        G_warning(_("Unable to open range file for [%s in %s]"), name,
-                  mapset);
+        G_warning(_("Unable to open range file for [%s in %s]"), name, mapset);
         return -1;
     }
 
@@ -87,7 +80,6 @@ Rast3d_read_range(const char *name, const char *mapset,
         close(fd);
         return 1;
     }
-
 
     if (bytes_read != 2 * RASTER3D_XDR_DOUBLE_LENGTH) {
         close(fd);
@@ -106,7 +98,6 @@ Rast3d_read_range(const char *name, const char *mapset,
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
  * \brief Loads the range into the range structure of <em>map</em>.
  *
@@ -115,7 +106,7 @@ Rast3d_read_range(const char *name, const char *mapset,
  *          0 ... otherwise.
  */
 
-int Rast3d_range_load(RASTER3D_Map * map)
+int Rast3d_range_load(RASTER3D_Map *map)
 {
     if (map->operation == RASTER3D_WRITE_DATA)
         return 1;
@@ -128,17 +119,16 @@ int Rast3d_range_load(RASTER3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief Returns in <em>min</em> and <em>max</em> the minimum and maximum values of
- *        the range.
+ * \brief Returns in <em>min</em> and <em>max</em> the minimum and maximum
+ * values of the range.
  *
  *  \param map a pointer to a raster 3D map object
  *  \param min a pointer to a double to store minumim
  *  \param max a pointer to a double to store maximum
  */
 
-void Rast3d_range_min_max(RASTER3D_Map * map, double *min, double *max)
+void Rast3d_range_min_max(RASTER3D_Map *map, double *min, double *max)
 {
     Rast_get_fp_range_min_max(&(map->range), min, max);
 }
@@ -146,7 +136,7 @@ void Rast3d_range_min_max(RASTER3D_Map * map, double *min, double *max)
 /*-------------------------------------------------------------------------*/
 
 static int writeRange(const char *name, struct FPRange *range)
- /* adapted from Rast_write_fp_range */
+/* adapted from Rast_write_fp_range */
 {
     char xdr_buf[2 * RASTER3D_XDR_DOUBLE_LENGTH];
     int fd;
@@ -173,27 +163,27 @@ static int writeRange(const char *name, struct FPRange *range)
     close(fd);
     return 0;
 
-  error:
+error:
     close(fd);
-    G_remove_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name);    /* remove the old file with this name */
+    G_remove_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT,
+                  name); /* remove the old file with this name */
     G_warning("can't write range file for [%s in %s]", name, G_mapset());
     return -1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Writes the range which is stored in the range structure of <em>map</em>. 
+ * Writes the range which is stored in the range structure of <em>map</em>.
  * (This function is invoked automatically when a new file is closed).
  *
  *  \param map
  *  \return 1 ... if successful
  *          0 ... otherwise.
  */
-int Rast3d_range_write(RASTER3D_Map * map)
+int Rast3d_range_write(RASTER3D_Map *map)
 {
     char path[GPATH_MAX];
 
@@ -210,7 +200,7 @@ int Rast3d_range_write(RASTER3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_range_init(RASTER3D_Map * map)
+int Rast3d_range_init(RASTER3D_Map *map)
 {
     Rast_init_fp_range(&(map->range));
     return 0;

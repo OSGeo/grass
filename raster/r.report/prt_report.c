@@ -62,7 +62,7 @@ int print_report(int unit1, int unit2)
         case ACRES:
             unit[i].label[0] = "";
             unit[i].label[1] = "acres";
-            unit[i].factor = 2.47105381467165e-4;       /* 640 acres in a sq mile */
+            unit[i].factor = 2.47105381467165e-4; /* 640 acres in a sq mile */
             break;
 
         case HECTARES:
@@ -74,7 +74,8 @@ int print_report(int unit1, int unit2)
         case SQ_MILES:
             unit[i].label[0] = "square";
             unit[i].label[1] = " miles";
-            unit[i].factor = 3.86102158542446e-7;       /* 1 / ( (0.0254m/in * 12in/ft * 5280ft/mi)^2 ) */
+            unit[i].factor = 3.86102158542446e-7; /* 1 / ( (0.0254m/in * 12in/ft
+                                                   * 5280ft/mi)^2 ) */
             break;
 
         default:
@@ -85,9 +86,8 @@ int print_report(int unit1, int unit2)
             unit[i].len = 10;
             unit[i].eformat = 0;
             ns = 0;
-            format_parms(area_sum(&ns, -1) * unit[i].factor,
-                         &unit[i].len, &unit[i].dp, &(unit[i].eformat),
-                         e_format);
+            format_parms(area_sum(&ns, -1) * unit[i].factor, &unit[i].len,
+                         &unit[i].dp, &(unit[i].eformat), e_format);
         }
     }
 
@@ -126,7 +126,7 @@ int print_report(int unit1, int unit2)
 
         cats = Gstats[ns].cats;
 
-        /* determine the number of lines needed to print the cat labels 
+        /* determine the number of lines needed to print the cat labels
          * by pretending to print the labels and counting the number of
          * print calls needed
          */
@@ -142,7 +142,7 @@ int print_report(int unit1, int unit2)
                 }
             }
             if (nunits)
-                i += nlayers;   /* divider lines */
+                i += nlayers; /* divider lines */
 
             /* if we don't have enough lines, go to a new page */
             if (nlines <= i + 2) {
@@ -198,15 +198,16 @@ int print_report(int unit1, int unit2)
                        with_stats = 0;
                      */
                     if (with_stats)
-                        /* if it's not the lowest level of the table */
+                    /* if it's not the lowest level of the table */
                     {
                         if (nl != nlayers - 1) {
                             if (new != 2)
-                                NS = ns;        /* to memorise total */
+                                NS = ns; /* to memorise total */
 
-                            /* if new is 2 then the total for this class should be reprinted on the
-                               top of the page. So we need to remember ns of total in case we need to
-                               print it again later */
+                            /* if new is 2 then the total for this class should
+                               be reprinted on the top of the page. So we need
+                               to remember ns of total in case we need to print
+                               it again later */
                             spacing = 0;
                             dot = '_';
                         }
@@ -257,7 +258,7 @@ int print_report(int unit1, int unit2)
     return 0;
 }
 
-int construct_val_str(int nl, CELL * pval, char *str)
+int construct_val_str(int nl, CELL *pval, char *str)
 {
     char str1[50], str2[50];
     DCELL dLow, dHigh;
@@ -266,13 +267,13 @@ int construct_val_str(int nl, CELL * pval, char *str)
         sprintf(str, "%s", no_data_str);
     else if (!is_fp[nl] || as_int)
         sprintf(str, "%d", *pval);
-    else {                      /* find out which floating point range to print */
+    else { /* find out which floating point range to print */
 
         if (cat_ranges)
             Rast_get_ith_d_cat(&layers[nl].labels, *pval, &dLow, &dHigh);
         else {
-            dLow = (DMAX[nl] - DMIN[nl]) / nsteps *
-                (double)(*pval - 1) + DMIN[nl];
+            dLow =
+                (DMAX[nl] - DMIN[nl]) / nsteps * (double)(*pval - 1) + DMIN[nl];
             dHigh = (DMAX[nl] - DMIN[nl]) / nsteps * (double)*pval + DMIN[nl];
         }
         sprintf(str1, "%10f", dLow);
@@ -295,23 +296,23 @@ char *construct_cat_label(int nl, CELL cat)
 
     if (!is_fp[nl] || as_int)
         return Rast_get_c_cat(&cat, &layers[nl].labels);
-    else {                      /* find or construct the label for
-                                   floating point range to print */
+    else { /* find or construct the label for
+              floating point range to print */
         if (Rast_is_c_null_value(&tmp))
             return G_store("no data");
         if (cat_ranges)
             return Rast_get_ith_d_cat(&layers[nl].labels, cat, &dLow, &dHigh);
         else {
-            dLow = (DMAX[nl] - DMIN[nl]) / (double)nsteps *
-                (double)(cat - 1) + DMIN[nl];
-            dHigh = (DMAX[nl] - DMIN[nl]) / (double)nsteps *
-                (double)cat + DMIN[nl];
+            dLow = (DMAX[nl] - DMIN[nl]) / (double)nsteps * (double)(cat - 1) +
+                   DMIN[nl];
+            dHigh =
+                (DMAX[nl] - DMIN[nl]) / (double)nsteps * (double)cat + DMIN[nl];
             sprintf(str, "from %s to %s",
                     Rast_get_d_cat(&dLow, &layers[nl].labels),
                     Rast_get_d_cat(&dHigh, &layers[nl].labels));
             return str;
         }
-    }                           /* fp label */
+    } /* fp label */
 
     return 0;
 }

@@ -3,7 +3,7 @@
 
 #include "voxel_traversal.h"
 
-void traverse(RASTER3D_Region * region, double *start, double *end,
+void traverse(RASTER3D_Region *region, double *start, double *end,
               int **coordinates, int *size, int *coor_count)
 {
     double dx, dy, dz;

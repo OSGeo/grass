@@ -1,18 +1,17 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.in.bin
  *
  * AUTHOR(S):   Soeren Gebbert
- *   			Based on r.in.bin from: Bob Covill
+ *                           Based on r.in.bin from: Bob Covill
  *
  * PURPOSE:     Imports a binary raster file into a GRASS 3D raster map.
  *
  * COPYRIGHT:   (C) 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -73,8 +72,8 @@ static void swap_8(void *p)
     q[4] = t;
 }
 
-static void read_cell(DCELL * out_cell, int is_integer, int is_signed,
-                      int bytes, int byte_swap)
+static void read_cell(DCELL *out_cell, int is_integer, int is_signed, int bytes,
+                      int byte_swap)
 {
 
     if (fread(in_cell, bytes, 1, fp) != 1)
@@ -164,8 +163,8 @@ static void bin_to_raster3d(char *null, int map_type, int is_integer,
     Rast3d_autolock_on(map);
     Rast3d_unlock_all(map);
     G_message(_("Loading %s data with %i  bytes ...  (%dx%dx%d)"),
-              (is_integer ? "integer" : "floating point "), bytes,
-              region.cols, region.rows, region.depths);
+              (is_integer ? "integer" : "floating point "), bytes, region.cols,
+              region.rows, region.depths);
 
     for (z = 0; z < region.depths; z++) {
         G_percent(z, region.depths, 1);
@@ -173,7 +172,7 @@ static void bin_to_raster3d(char *null, int map_type, int is_integer,
         if ((z % tileZ) == 0)
             Rast3d_unlock_all(map);
 
-        for (y = 0; y < region.rows; y++) {     /* go south to north */
+        for (y = 0; y < region.rows; y++) { /* go south to north */
             for (x = 0; x < region.cols; x++) {
 
                 /* From west to east */
@@ -201,11 +200,10 @@ static void bin_to_raster3d(char *null, int map_type, int is_integer,
                     Rast3d_put_double(map, col, row, depth, value);
                 }
                 else {
-                    fvalue = (FCELL) value;
+                    fvalue = (FCELL)value;
                     if (null && value == null_value)
                         Rast3d_set_null_value(&fvalue, 1, FCELL_TYPE);
                     Rast3d_put_double(map, col, row, depth, fvalue);
-
                 }
             }
         }
@@ -223,8 +221,7 @@ static void bin_to_raster3d(char *null, int map_type, int is_integer,
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input;
         struct Option *output;
         struct Option *null;
@@ -240,8 +237,7 @@ int main(int argc, char *argv[])
         struct Option *cols;
         struct Option *depths;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *integer_in;
         struct Flag *sign;
         struct Flag *depth;
@@ -273,8 +269,7 @@ int main(int argc, char *argv[])
         _("Imports a binary raster file into a GRASS 3D raster map.");
 
     parm.input = G_define_standard_option(G_OPT_F_BIN_INPUT);
-    parm.input->description =
-        _("Name of binary 3D raster file to be imported");
+    parm.input->description = _("Name of binary 3D raster file to be imported");
 
     parm.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
@@ -396,11 +391,11 @@ int main(int argc, char *argv[])
     else if (G_strcasecmp(parm.order->answer, "little") == 0)
         order = 1;
     else if (G_strcasecmp(parm.order->answer, "native") == 0)
-        order = G_is_little_endian()? 1 : 0;
+        order = G_is_little_endian() ? 1 : 0;
     else if (G_strcasecmp(parm.order->answer, "swap") == 0)
-        order = G_is_little_endian()? 0 : 1;
+        order = G_is_little_endian() ? 0 : 1;
 
-    byte_swap = order == (G_is_little_endian()? 0 : 1);
+    byte_swap = order == (G_is_little_endian() ? 0 : 1);
 
     is_signed = !!flag.sign->answer;
 
@@ -412,8 +407,9 @@ int main(int argc, char *argv[])
 
     if (!flag.integer_in->answer) {
         if (bytes && bytes < 4)
-            G_fatal_error(_("bytes=%d; must be 4 or 8 in case of floating point input"),
-                          bytes);
+            G_fatal_error(
+                _("bytes=%d; must be 4 or 8 in case of floating point input"),
+                bytes);
         if (!bytes)
             bytes = 4;
     }
@@ -448,7 +444,7 @@ int main(int argc, char *argv[])
 
     Rast3d_adjust_region(&region);
 
-    expected = (off_t) region.rows * region.cols * region.depths * bytes;
+    expected = (off_t)region.rows * region.cols * region.depths * bytes;
 
     fp = fopen(input, "rb");
     if (!fp)

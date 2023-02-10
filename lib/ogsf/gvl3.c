@@ -3,12 +3,12 @@
 
    \brief OGSF library - loading volumes (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -83,6 +83,6 @@ int Gvl_get_color_for_value(void *color_data, float *value)
 {
     int r, g, b;
 
-    Rast_get_f_color((FCELL *) value, &r, &g, &b, color_data);
+    Rast_get_f_color((FCELL *)value, &r, &g, &b, color_data);
     return ((r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16));
 }

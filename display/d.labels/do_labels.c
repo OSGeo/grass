@@ -7,18 +7,18 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define NL	012
-#define TAB	011
-#define BACK	0134
-#define MTEXT	1024
+#define NL    012
+#define TAB   011
+#define BACK  0134
+#define MTEXT 1024
 
-#define TOP	0
-#define CENT	1
-#define BOT	2
-#define LEFT	0
-#define RITE	2
-#define YES	1
-#define NO	0
+#define TOP   0
+#define CENT  1
+#define BOT   2
+#define LEFT  0
+#define RITE  2
+#define YES   1
+#define NO    0
 
 static double east;
 static double north;
@@ -38,7 +38,6 @@ static const char *std_font;
 
 static int ymatch(char *);
 static int xmatch(char *);
-
 
 int initialize_options(void)
 {
@@ -66,8 +65,7 @@ int initialize_options(void)
     return 0;
 }
 
-
-int do_labels(FILE * infile, int do_rotation)
+int do_labels(FILE *infile, int do_rotation)
 {
     char buff[128];
 
@@ -117,8 +115,7 @@ int do_labels(FILE * infile, int do_rotation)
             }
         }
         else if (!strncmp(text, "fon", 3)) {
-            if (sscanf(text, "%*s %s", font) != 1
-                || !strcmp(font, "standard"))
+            if (sscanf(text, "%*s %s", font) != 1 || !strcmp(font, "standard"))
                 strcpy(font, std_font);
         }
         else if (!strncmp(text, "rot", 3)) {
@@ -134,7 +131,7 @@ int do_labels(FILE * infile, int do_rotation)
 
         else if (!strncmp(text, "tex", 3)) {
             show_it();
-            rotation = 0.0;     /* reset */
+            rotation = 0.0; /* reset */
         }
 
         else {
@@ -152,9 +149,9 @@ int show_it(void)
      * The border+background box coords given by R_get_text_box() expand to
      * cover the area of the rotated text, but the bottom left corner of that
      * box is not always the ref=lower,left spot (rot>90), and middle|upper
-     * left of the text do not match the middle|upper left of the expanded 
+     * left of the text do not match the middle|upper left of the expanded
      * text box when rotated.
-     * 
+     *
      * The solution is to calculate the position and dimensions of the text
      * without rotation, then rotate those points about the point's coord,
      * and replot. For text we must calculate the starting coord of the text
@@ -174,8 +171,8 @@ int show_it(void)
     double t, b, l, r;
     double xarr[5];
     double yarr[5];
-    double Xoffset, Yoffset;    /* in XY plane */
-    double X_just_offset, Y_just_offset;        /* in rotated label plane */
+    double Xoffset, Yoffset;             /* in XY plane */
+    double X_just_offset, Y_just_offset; /* in rotated label plane */
     double ll_x, ll_y, ul_x, ul_y, lr_x, lr_y, ur_x, ur_y, text_x, text_y;
 
     G_debug(3, "Doing '%s'", text);
@@ -206,10 +203,12 @@ int show_it(void)
     R = -1e300;
 
     /* Scan to beginning of text string */
-    for (tptr = text; *tptr != ':'; tptr++) ;
+    for (tptr = text; *tptr != ':'; tptr++)
+        ;
     tptr++;
 
-    /* get the box size for each line of text and expand the bounding box as needed */
+    /* get the box size for each line of text and expand the bounding box as
+     * needed */
     n_lines = 0;
     for (;;) {
         n_chars = 0;
@@ -236,7 +235,7 @@ int show_it(void)
 
         Y = north - (line_size * 1.2) - ((n_lines - 1) * line_size);
         D_pos_abs(X, Y);
-        D_text_rotation(0.0);   /* reset */
+        D_text_rotation(0.0); /* reset */
         D_get_text_box(line, &t, &b, &l, &r);
 
         if (T < t)
@@ -321,7 +320,7 @@ int show_it(void)
     fprintf(stdout, "L 5\n");
     for (i = 0; i < 5; i++)
         fprintf(stdout, " %f %f\n", xarr[i], yarr[i]);
-    /* d.labels labfile | v.in.ascii -n out=labbox format=standard */
+        /* d.labels labfile | v.in.ascii -n out=labbox format=standard */
 #endif
 
     /* draw boxes */
@@ -345,14 +344,15 @@ int show_it(void)
         set_color_from_RGBA(&highlight_color);
 
         /* Scan to beginning of text string */
-        for (tptr = text; *tptr != ':'; tptr++) ;
+        for (tptr = text; *tptr != ':'; tptr++)
+            ;
         tptr++;
 
         for (i = 1; i <= n_lines; i++) {
             /* get line of text from full label text string */
             n_chars = 0;
             for (lptr = line; *tptr && *tptr != NL; *lptr++ = *tptr++) {
-                if ((lptr == line) && (i > 1))  /* see comment above */
+                if ((lptr == line) && (i > 1)) /* see comment above */
                     *lptr++ = ' ';
                 if ((*tptr == BACK) && (*(tptr + 1) == 'n'))
                     break;
@@ -364,12 +364,14 @@ int show_it(void)
 
             /* figure out text placement */
             Y = north - (line_size * 1.2) - ((i - 1) * line_size);
-            text_x = X + X_just_offset; /* reset after G_rotate_around_point_int() */
+            text_x =
+                X + X_just_offset; /* reset after G_rotate_around_point_int() */
             text_y = Y + Y_just_offset;
             G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
             for (j = 1; j <= highlight_width; j++) {
-                /* smear it around. probably a better way (knight's move? rand?) */
+                /* smear it around. probably a better way (knight's move? rand?)
+                 */
                 D_pos_abs(text_x + Xoffset, text_y + Yoffset + j);
                 D_text(line);
                 D_pos_abs(text_x + Xoffset, text_y + Yoffset - j);
@@ -396,19 +398,19 @@ int show_it(void)
         }
     }
 
-
     /**** place the text ****/
     set_color_from_RGBA(&color);
 
     /* Scan to beginning of text string */
-    for (tptr = text; *tptr != ':'; tptr++) ;
+    for (tptr = text; *tptr != ':'; tptr++)
+        ;
     tptr++;
 
     for (i = 1; i <= n_lines; i++) {
         /* get line of text from full label text string */
         n_chars = 0;
         for (lptr = line; *tptr && *tptr != NL; *lptr++ = *tptr++) {
-            if ((lptr == line) && (i > 1))      /* see comment above */
+            if ((lptr == line) && (i > 1)) /* see comment above */
                 *lptr++ = ' ';
             if ((*tptr == BACK) && (*(tptr + 1) == 'n'))
                 break;
@@ -420,7 +422,8 @@ int show_it(void)
 
         /* figure out text placement */
         Y = north - (line_size * 1.2) - ((i - 1) * line_size);
-        text_x = X + X_just_offset;     /* reset after G_rotate_around_point_int() */
+        text_x =
+            X + X_just_offset; /* reset after G_rotate_around_point_int() */
         text_y = Y + Y_just_offset;
         G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
@@ -432,7 +435,6 @@ int show_it(void)
         tptr++;
         tptr++;
     }
-
 
     return 0;
 }

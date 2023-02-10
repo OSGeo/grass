@@ -25,8 +25,7 @@
    \return 1 if regions overlap
    \return 0 if not
  */
-int
-V__map_overlap(struct Map_info *Map, double n, double s, double e, double w)
+int V__map_overlap(struct Map_info *Map, double n, double s, double e, double w)
 {
     struct Cell_head W;
 

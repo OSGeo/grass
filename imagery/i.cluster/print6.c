@@ -3,8 +3,7 @@
 #include <grass/imagery.h>
 #include <grass/cluster.h>
 
-
-int print_distribution(FILE * fd, struct Cluster *C)
+int print_distribution(FILE *fd, struct Cluster *C)
 {
     int cat;
 

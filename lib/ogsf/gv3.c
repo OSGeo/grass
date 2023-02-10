@@ -3,7 +3,7 @@
 
    \brief OGSF library - loading vector sets (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -68,7 +68,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
         return NULL;
     }
 
-    top = gln = (geoline *) G_malloc(sizeof(geoline));  /* G_fatal_error */
+    top = gln = (geoline *)G_malloc(sizeof(geoline)); /* G_fatal_error */
     if (!top) {
         return NULL;
     }
@@ -107,7 +107,8 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 
         if (is3d) {
             gln->dims = 3;
-            gln->p3 = (Point3 *) G_calloc(np, sizeof(Point3));  /* G_fatal_error */
+            gln->p3 =
+                (Point3 *)G_calloc(np, sizeof(Point3)); /* G_fatal_error */
             if (!gln->p3) {
                 return (NULL);
             }
@@ -117,7 +118,8 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
         }
         else {
             gln->dims = 2;
-            gln->p2 = (Point2 *) G_calloc(np, sizeof(Point2));  /* G_fatal_error */
+            gln->p2 =
+                (Point2 *)G_calloc(np, sizeof(Point2)); /* G_fatal_error */
             if (!gln->p2) {
                 return (NULL);
             }
@@ -146,11 +148,10 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
             vect[1][Y] = (float)(gln->p3[2][Y] - gln->p3[1][Y]);
             vect[1][Z] = (float)(gln->p3[2][Z] - gln->p3[1][Z]);
             GS_v3cross(vect[1], vect[0], gln->norm);
-
         }
 
         gln->cats = NULL;
-        gln->next = (geoline *) G_malloc(sizeof(geoline));      /* G_fatal_error */
+        gln->next = (geoline *)G_malloc(sizeof(geoline)); /* G_fatal_error */
         if (!gln->next) {
             return (NULL);
         }
@@ -175,7 +176,8 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
             }
             else {
                 gln->type = OGSF_POLYGON;
-                /* Vect_append_point ( points, points->x[0], points->y[0], points->z[0] ); */
+                /* Vect_append_point ( points, points->x[0], points->y[0],
+                 * points->z[0] ); */
             }
 
             /* initialize style */
@@ -186,7 +188,8 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 
             if (is3d) {
                 gln->dims = 3;
-                gln->p3 = (Point3 *) G_calloc(np, sizeof(Point3));      /* G_fatal_error */
+                gln->p3 =
+                    (Point3 *)G_calloc(np, sizeof(Point3)); /* G_fatal_error */
                 if (!gln->p3) {
                     return (NULL);
                 }
@@ -196,7 +199,8 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
             }
             else {
                 gln->dims = 2;
-                gln->p2 = (Point2 *) G_calloc(np, sizeof(Point2));      /* G_fatal_error */
+                gln->p2 =
+                    (Point2 *)G_calloc(np, sizeof(Point2)); /* G_fatal_error */
                 if (!gln->p2) {
                     return (NULL);
                 }
@@ -239,7 +243,8 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
                 Vect_reset_cats(Cats);
             }
 
-            gln->next = (geoline *) G_malloc(sizeof(geoline));  /* G_fatal_error */
+            gln->next =
+                (geoline *)G_malloc(sizeof(geoline)); /* G_fatal_error */
             if (!gln->next) {
                 return (NULL);
             }
@@ -266,8 +271,9 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     Vect_close(&map);
 
     if (!nl) {
-        G_warning(_("No features from vector map <%s> fall within current region"),
-                  G_fully_qualified_name(grassname, mapset));
+        G_warning(
+            _("No features from vector map <%s> fall within current region"),
+            G_fully_qualified_name(grassname, mapset));
         return (NULL);
     }
     else {
@@ -284,10 +290,10 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     return (top);
 }
 
-/*! 
-   \brief Tracking memory 
+/*!
+   \brief Tracking memory
 
-   \param minus mimus number 
+   \param minus mimus number
  */
 void sub_Vectmem(int minus)
 {
@@ -310,7 +316,7 @@ void sub_Vectmem(int minus)
    \return number of features defined by thematic mapping
    \return -1 on error
  */
-int Gv_load_vect_thematic(geovect * gv, struct Colors *colors)
+int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
 {
     geoline *gvt;
 
@@ -354,7 +360,7 @@ int Gv_load_vect_thematic(geovect * gv, struct Colors *colors)
               G_fully_qualified_name(gv->filename, mapset));
     nlines = nskipped = 0;
     for (gvt = gv->lines; gvt; gvt = gvt->next) {
-        gvt->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+        gvt->style = (gvstyle *)G_malloc(sizeof(gvstyle));
         G_zero(gvt->style, sizeof(gvstyle));
 
         /* use default style */
@@ -373,20 +379,19 @@ int Gv_load_vect_thematic(geovect * gv, struct Colors *colors)
 
         /* color */
         if (colors) {
-            if (!Rast_get_c_color
-                ((const CELL *)&cat, &red, &grn, &blu, colors)) {
+            if (!Rast_get_c_color((const CELL *)&cat, &red, &grn, &blu,
+                                  colors)) {
                 G_warning(_("No color rule defined for category %d"), cat);
                 gvt->style->color = gv->style->color;
             }
-            gvt->style->color =
-                (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
-                ((int)((blu) << 16) & BLU_MASK);
+            gvt->style->color = (red & RED_MASK) +
+                                ((int)((grn) << 8) & GRN_MASK) +
+                                ((int)((blu) << 16) & BLU_MASK);
         }
 
         if (gv->tstyle->color_column) {
-            nvals =
-                db_select_value(driver, Fi->table, Fi->key, cat,
-                                gv->tstyle->color_column, &value);
+            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+                                    gv->tstyle->color_column, &value);
             if (nvals < 1)
                 continue;
             str = db_get_value_string(&value);
@@ -397,17 +402,16 @@ int Gv_load_vect_thematic(geovect * gv, struct Colors *colors)
                 gvt->style->color = gv->style->color;
             }
             else {
-                gvt->style->color =
-                    (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
-                    ((int)((blu) << 16) & BLU_MASK);
+                gvt->style->color = (red & RED_MASK) +
+                                    ((int)((grn) << 8) & GRN_MASK) +
+                                    ((int)((blu) << 16) & BLU_MASK);
             }
         }
 
         /* width */
         if (gv->tstyle->width_column) {
-            nvals =
-                db_select_value(driver, Fi->table, Fi->key, cat,
-                                gv->tstyle->width_column, &value);
+            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+                                    gv->tstyle->width_column, &value);
             if (nvals < 1)
                 continue;
             gvt->style->width = db_get_value_int(&value);
@@ -417,9 +421,10 @@ int Gv_load_vect_thematic(geovect * gv, struct Colors *colors)
     }
 
     if (nskipped > 0)
-        G_warning(_("%d features without category. "
-                    "Unable to determine color rules for features without category."),
-                  nskipped);
+        G_warning(
+            _("%d features without category. "
+              "Unable to determine color rules for features without category."),
+            nskipped);
 
     return nlines;
 }

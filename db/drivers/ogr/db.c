@@ -31,7 +31,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_open_database(dbHandle * handle)
+int db__driver_open_database(dbHandle *handle)
 {
     const char *name;
     dbConnection connection;
@@ -73,7 +73,7 @@ int db__driver_open_database(dbHandle * handle)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_close_database()
+int db__driver_close_database(void)
 {
     G_debug(3, "db_driver_close_database()");
 
