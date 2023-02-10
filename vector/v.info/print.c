@@ -148,7 +148,7 @@ void print_columns(const struct Map_info *Map, const char *input_opt,
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL)
         G_fatal_error(_("Database connection not defined for layer <%s> of <%s>"),
-                      field_opt, Vect_get_full_name(&In));
+                      field_opt, input_opt);
     driver = db_start_driver(fi->driver);
     if (driver == NULL)
         G_fatal_error(_("Unable to open driver <%s>"), fi->driver);
