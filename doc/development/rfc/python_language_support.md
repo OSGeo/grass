@@ -6,7 +6,7 @@ Status: draft
 
 ## Introduction
 
-The code base of GRASS GIS consists today (Feb. 2021) of predominantly C code (ca 50 %), Python (ca 30 %) and a smaller amount of C++ (ca 5 %). Each of these languages have evolved significantly in the last 10–20 years.
+The code base of GRASS GIS consists as of Feb. 2021 of predominantly C code (ca 50 %), Python (ca 30 %) and a smaller amount of C++ (ca 5 %). Each of these languages have evolved significantly in the last 10–20 years.
 There is, however, no clearly stated policy of supported language standard(s), nor mechanism to update this policy when needed or wanted. This result in uncertainty for contributors for what may be allowed and solutions that may not be optimal.
 
 This RFC aims at setting a policy for GRASS GIS project regarding the minimum version support for Python.
