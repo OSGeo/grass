@@ -8,7 +8,7 @@ LABEL maintainer="neteler@osgeo.org"
 # PACKAGES VERSIONS
 ARG PYTHON_VERSION=3
 
-# List of packages to be installed
+# List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV PACKAGES="\
       attr \
       bash \
@@ -127,12 +127,12 @@ ENV GRASS_BUILD_PACKAGES="\
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
+      libpq-dev \
       make \
       openjpeg-dev \
       openblas-dev \
       pdal \
       pdal-dev \
-      postgresql-dev \
       proj-dev \
       python3-dev \
       py3-numpy-dev \
@@ -217,6 +217,7 @@ FROM grass as final
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash"
+
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
 
