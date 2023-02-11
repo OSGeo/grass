@@ -64,7 +64,7 @@ RUN echo "Install Python";\
     rm -r /usr/lib/python*/ensurepip && \
     pip$PYTHON_VERSION install --upgrade pip setuptools && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
-    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
+    if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
     rm -r /root/.cache
 
 # Add the packages
@@ -184,7 +184,7 @@ COPY --from=build /usr/local/grass* /usr/local/grass/
 # install external Python API
 RUN pip3 install --upgrade pip six grass-session --ignore-installed six
 
-RUN ln -sf /usr/local/grass `grass --config path`
+RUN ln -sf /usr/local/grass $(grass --config path)
 RUN grass --tmp-location XY --exec g.version -rge && \
     pdal --version && \
     python3 --version
@@ -192,7 +192,7 @@ RUN grass --tmp-location XY --exec g.version -rge && \
 
 FROM grass as test
 
-RUN apk add make gcc
+RUN apk add --no-cache make gcc
 
 ## run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/simple.laz
@@ -206,7 +206,7 @@ RUN /usr/bin/python3 /scripts/test_grass_session.py
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 # Test addon installation
-RUN apk add py3-scikit-learn
+RUN apk add --no-cache py3-scikit-learn
 RUN grass --tmp-location XY --exec g.extension extension=r.learn.ml2
 
 
