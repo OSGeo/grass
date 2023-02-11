@@ -920,7 +920,7 @@ class WriteWorkspaceFile(object):
         file.write("%s</layer_manager>\n" % (" " * self.indent))
 
         # layout
-        if UserSettings.Get(group="general", key="singleWindow", subkey="enabled"):
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
             layout_panes = self.lmgr.GetAuiManager().SavePerspective()
             layout_notebook = self.lmgr.GetAuiNotebook().SavePerspective()
             file.write("{indent}<layout>\n".format(indent=" " * self.indent))

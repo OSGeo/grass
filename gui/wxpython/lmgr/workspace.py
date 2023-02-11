@@ -346,7 +346,7 @@ class WorkspaceManager:
         #
         # load layout
         #
-        if UserSettings.Get(group="general", key="singleWindow", subkey="enabled"):
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
             if gxwXml.layout["panes"]:
                 self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
             if gxwXml.layout["notebook"]:
