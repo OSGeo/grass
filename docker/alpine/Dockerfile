@@ -217,7 +217,8 @@ FROM grass as final
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash"
-ENV PROJ_NETWORK="ON"
+# https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+ENV PROJ_NETWORK=ON
 
 # show installed version
 RUN grass --tmp-location XY --exec g.version -rge && \
@@ -233,4 +234,4 @@ RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" out
 WORKDIR /grassdb
 VOLUME /grassdb
 
-CMD $GRASSBIN --version
+CMD ["$GRASSBIN", "--version"]
