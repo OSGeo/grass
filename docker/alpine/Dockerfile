@@ -1,4 +1,4 @@
-FROM alpine:3.15 as common
+FROM alpine:3.17 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -27,7 +27,6 @@ ENV PACKAGES="\
       jsoncpp \
       laszip \
       libbz2 \
-      libexecinfo \
       libgeotiff \
       libjpeg-turbo \
       libpng \
