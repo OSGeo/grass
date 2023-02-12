@@ -164,12 +164,15 @@ def print_gridded_dataset_univar_statistics(
 
     if not rows and rows != [""]:
         dbif.close()
-        err = "Space time %(sp)s dataset <%(i)s> is empty"
+        warn = "Space time %(sp)s dataset <%(i)s> is empty"
+        if spatial_relation:
+            warn += " or no maps with the requested spatial_relation to the computational region exist"
         if where:
-            err += " or where condition does not return any maps"
-        gs.fatal(
-            _(err) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
+            warn += " or where condition does not return any maps"
+        gs.warning(
+            _(warn) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
         )
+        return
 
     if no_header is False:
         cols = (
