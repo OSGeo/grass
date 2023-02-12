@@ -30,7 +30,7 @@
  * \return 0 changed
  */
 
-int G_limit_east(double *east, int proj)
+int G_limit_east(double *east UNUSED, int proj UNUSED)
 {
     return 1;
 }
@@ -50,7 +50,7 @@ int G_limit_east(double *east, int proj)
  * \return 0 changed
  */
 
-int G_limit_west(double *west, int proj)
+int G_limit_west(double *west UNUSED, int proj UNUSED)
 {
     return 1;
 }

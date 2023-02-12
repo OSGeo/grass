@@ -14,7 +14,7 @@
 void Rast3d_range_update_from_tile(RASTER3D_Map *map, const void *tile,
                                    int rows, int cols, int depths,
                                    int xRedundant, int yRedundant,
-                                   int zRedundant, int nofNum, int type)
+                                   int zRedundant UNUSED, int nofNum, int type)
 {
     int y, z, cellType;
     struct FPRange *range;

@@ -689,7 +689,7 @@ int error_Output(int out, msg m)
     }
 }
 
-int raster_Output(int fd, int aid, struct g_area *g, double res)
+int raster_Output(int fd, int aid, struct g_area *g UNUSED, double res)
 {
     double toPut = res;
     off_t offset = (off_t)aid * sizeof(double);

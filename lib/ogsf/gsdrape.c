@@ -1063,7 +1063,7 @@ int get_horz_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 
    \return number of intersects
  */
-int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
+int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir UNUSED)
 {
     int fdig, ldig, incr, hits, num, offset;
     int vrow, vcol, drow1, drow2, dcol1, dcol2;

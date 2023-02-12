@@ -21,9 +21,12 @@
 #include <math.h>
 #include "bspline.h"
 
-struct Point *P_Read_Raster_Region_masked(
-    SEGMENT *mask_seg, struct Cell_head *Original, struct bound_box output_box,
-    struct bound_box General, int *num_points, int dim_vect, double mean)
+struct Point *P_Read_Raster_Region_masked(SEGMENT *mask_seg,
+                                          struct Cell_head *Original,
+                                          struct bound_box output_box UNUSED,
+                                          struct bound_box General,
+                                          int *num_points, int dim_vect,
+                                          double mean)
 {
     int col, row, startcol, endcol, startrow, endrow, nrows, ncols;
     int pippo, npoints;
