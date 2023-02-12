@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include "Gwater.h"
 #include <unistd.h>
 #include <grass/gis.h>
@@ -554,7 +555,7 @@ int do_cum_mfd(void)
 
     if (workedon)
         G_warning(_("MFD: A * path already processed when distributing flow: "
-                    "%d of %" PRI_OFF_T " cells"),
+                    "%d of %" PRId64 " cells"),
                   workedon, do_points);
 
     G_message(_("SECTION 3b: Adjusting drainage directions."));

@@ -11,6 +11,7 @@
  *
  *****************************************************************************/
 
+#include <inttypes.h>
 #include <grass/segment.h>
 #include <grass/imagery.h>
 #include "flag.h"
@@ -24,7 +25,7 @@
 #define PRI_LONG "lld"
 #elif defined HAVE_LARGEFILES
 #define LARGEINT off_t
-#define PRI_LONG PRI_OFF_T
+#define PRI_LONG PRId64
 #else
 #define LARGEINT long
 #define PRI_LONG "ld"

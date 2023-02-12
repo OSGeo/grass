@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -602,7 +603,7 @@ int main(int argc, char *argv[])
     expected = (off_t)ncols * nrows * bytes * nbands + hbytes;
 
     if (file_size != expected) {
-        G_warning(_("File Size %" PRI_OFF_T " ... Total Bytes %" PRI_OFF_T),
+        G_warning(_("File Size %" PRId64 " ... Total Bytes %" PRId64),
                   file_size, expected);
         G_fatal_error(_("Bytes do not match file size"));
     }

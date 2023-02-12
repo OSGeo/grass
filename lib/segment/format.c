@@ -11,6 +11,7 @@
  * \date 2005-2018
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -108,7 +109,7 @@ static int seg_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
     int spr, size;
 
     if (nrows <= 0 || ncols <= 0 || len <= 0 || srows <= 0 || scols <= 0) {
-        G_warning("Segment_format(fd,%" PRI_OFF_T ",%" PRI_OFF_T
+        G_warning("Segment_format(fd,%" PRId64 ",%" PRId64
                   ",%d,%d,%d): illegal value(s)",
                   nrows, ncols, srows, scols, len);
         return -3;

@@ -21,6 +21,7 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -347,8 +348,8 @@ int V2_read_line_pg(struct Map_info *Map NOPG_UNUSED,
         return 0;
     }
 
-    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %" PRI_OFF_T,
-            line, Line->type, Line->offset);
+    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %" PRId64, line,
+            Line->type, Line->offset);
 
     if (!line_p && !line_c)
         return Line->type;
