@@ -232,8 +232,8 @@ void *get_input_row(unsigned long row_idx)
  * types of information to be collected.
  */
 
-void collect_values_unfiltered(double val1, double val2, double min, double max,
-                               stats_struct *stats)
+void collect_values_unfiltered(double val1, double val2, double min UNUSED,
+                               double max UNUSED, stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
     stats->certainty += val2;
@@ -248,8 +248,9 @@ void collect_values_filtered(double val1, double val2, double min, double max,
     }
 }
 
-void collect_values_and_weights_unfiltered(double val1, double val2, double min,
-                                           double max, stats_struct *stats)
+void collect_values_and_weights_unfiltered(double val1, double val2,
+                                           double min UNUSED, double max UNUSED,
+                                           stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
     stats->weights[stats->num_values] = val2;
@@ -266,7 +267,8 @@ void collect_values_and_weights_filtered(double val1, double val2, double min,
 }
 
 void collect_values_and_frequencies_unfiltered(double val1, double val2,
-                                               double min, double max,
+                                               double min UNUSED,
+                                               double max UNUSED,
                                                stats_struct *stats)
 {
     unsigned long i;

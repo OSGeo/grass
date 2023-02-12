@@ -2,7 +2,7 @@
 
 /* Not yet implemented - just defaults */
 
-void vrml_put_view(FILE *vout, struct G_3dview *v3d)
+void vrml_put_view(FILE *vout, struct G_3dview *v3d UNUSED)
 {
     char tbuf[512];
 

@@ -188,7 +188,7 @@ static void evaluate_constant(expression *e)
     }
 }
 
-static void evaluate_variable(expression *e)
+static void evaluate_variable(expression *e UNUSED)
 {
     /* this is a no-op */
 }
@@ -285,7 +285,7 @@ static expr_list *exprs;
 
 /****************************************************************************/
 
-static void error_handler(void *p)
+static void error_handler(void *p UNUSED)
 {
     expr_list *l;
 

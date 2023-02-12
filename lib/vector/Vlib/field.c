@@ -37,6 +37,12 @@
 #include <ogr_api.h>
 #endif
 
+#ifdef HAVE_POSTGRES
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
+#endif
+
 /*!
    \brief Create and init new dblinks structure
 
@@ -883,7 +889,7 @@ static int read_dblinks_ogr(struct Map_info *Map)
 #endif /* HAVE_GDAL */
 }
 
-static int read_dblinks_pg(struct Map_info *Map)
+static int read_dblinks_pg(struct Map_info *Map NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     char *name;

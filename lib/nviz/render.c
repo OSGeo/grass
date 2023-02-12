@@ -147,14 +147,14 @@ void Nviz_destroy_render_window(struct render_window *rwin)
    \brief Create render window
 
    \param rwin pointer to render_window struct
-   \param display display instance (NULL for offscreen)
+   \param display display instance (NULL for offscreen) [unused]
    \param width window width
    \param height window height
 
    \return 0 on success
    \return -1 on error
  */
-int Nviz_create_render_window(struct render_window *rwin, void *display,
+int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
                               int width, int height)
 {
 #if defined(OPENGL_X11)

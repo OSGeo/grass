@@ -48,7 +48,7 @@ static unsigned int overlaps_removed = 0;
  @param n_labels The size of the labels array.
  @params The commandline parameters.
  */
-void simulate_annealing(label_t *labels, int n_labels, struct params *p)
+void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
 {
     /* The temperature of the system */
     double T;

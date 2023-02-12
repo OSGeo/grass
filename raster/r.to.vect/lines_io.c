@@ -143,7 +143,7 @@ int write_line(struct COOR *seed)
 /* writes binary and supplemental file */
 
 static int write_ln(struct COOR *begin,
-                    struct COOR *end, /* start and end point of line */
+                    struct COOR *end UNUSED, /* start and end point of line */
                     int n)
 { /* number of points to write */
     static struct line_pnts *points = NULL;

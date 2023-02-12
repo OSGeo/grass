@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
                           raster->answer, output->answer);
 }
 
-int patchAreaDistributionSD(int fd, char **par, struct area_entry *ad,
+int patchAreaDistributionSD(int fd, char **par UNUSED, struct area_entry *ad,
                             double *result)
 {
     double indice = 0;

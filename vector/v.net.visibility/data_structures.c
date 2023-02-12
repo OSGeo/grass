@@ -52,7 +52,7 @@ void init_stack(int size)
 
 /** compare the points along the x axis
  */
-int cmp_points(const void *v1, const void *v2, void *param)
+int cmp_points(const void *v1, const void *v2, void *param UNUSED)
 {
     struct Point *p1 = (struct Point *)v1;
     struct Point *p2 = (struct Point *)v2;

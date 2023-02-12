@@ -73,7 +73,7 @@ static int sort_new2(const void *pa, const void *pb)
 }
 
 /* This function is called by RTreeSearch() to find a vertex */
-static int find_item(int id, const struct RTree_Rect *rect, void *list)
+static int find_item(int id, const struct RTree_Rect *rect UNUSED, void *list)
 {
     G_ilist_add((struct ilist *)list, id);
     return 0;
@@ -81,7 +81,7 @@ static int find_item(int id, const struct RTree_Rect *rect, void *list)
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle
  * to the list */
-static int add_item(int id, const struct RTree_Rect *rect, void *list)
+static int add_item(int id, const struct RTree_Rect *rect UNUSED, void *list)
 {
     G_ilist_add((struct ilist *)list, id);
     return 1;

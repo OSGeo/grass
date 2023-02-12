@@ -59,7 +59,8 @@ int IL_output_2d(struct interp_params *params,
                  double zmin, double zmax, /*!< min,max input z-values */
                  double zminac, double zmaxac, double c1min,
                  double c1max, /*!< min,max interpolated values */
-                 double c2min, double c2max, double gmin, double gmax,
+                 double c2min, double c2max, double gmin UNUSED,
+                 double gmax UNUSED,
                  double ertot, /*!< total interpolating func. error */
                  char *input,  /*!< input file name */
                  double dnorm, /*!< normalization factor */

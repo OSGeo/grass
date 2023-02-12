@@ -416,16 +416,17 @@ N_les_callback_2d *N_alloc_les_callback_2d(void)
  * This is a template callback for mass balance calculation with 7 point stars
  * based on 3d data (g3d).
  *
- * \param data void *
+ * \param data void * (unused)
  * \param geom N_geom_data *
- * \param depth int
- * \param row   int
- * \param col   int
+ * \param depth int (unused)
+ * \param row   int (unused)
+ * \param col   int (unused)
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
-                                    int row, int depth)
+N_data_star *N_callback_template_3d(void *data UNUSED, N_geom_data *geom,
+                                    int col UNUSED, int row UNUSED,
+                                    int depth UNUSED)
 {
     N_data_star *star = N_alloc_7star();
 
@@ -454,15 +455,15 @@ N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
  * This is a template callback for mass balance calculation with 9 point stars
  * based on 2d data (raster).
  *
- * \param data void *
+ * \param data void * (unused)
  * \param geom N_geom_data *
- * \param row int
- * \param col int
+ * \param row int (unused)
+ * \param col int (unused)
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_template_2d(void *data, N_geom_data *geom, int col,
-                                    int row)
+N_data_star *N_callback_template_2d(void *data UNUSED, N_geom_data *geom,
+                                    int col UNUSED, int row UNUSED)
 {
     N_data_star *star = N_alloc_9star();
 

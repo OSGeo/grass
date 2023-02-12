@@ -36,7 +36,7 @@ void check(CELL newdir, CELL *dir, void *center, void *edge, double cnst,
 }
 
 /* process one row, filling single-cell pits */
-int fill_row(int nl, int ns, struct band3 *bnd)
+int fill_row(int nl UNUSED, int ns, struct band3 *bnd)
 {
     int j, offset, inc, rc;
     void *min;

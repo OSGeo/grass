@@ -4,7 +4,7 @@
 #include <grass/cdhc.h>
 #include "local_proto.h"
 
-int main(int argc, char **argv)
+int main(void)
 {
     double z[1000];
     double *w;

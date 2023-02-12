@@ -98,9 +98,10 @@ int Vect_overlay(struct Map_info *AMap, int atype, struct ilist *AList,
    \return 1 on success
    \return 0 on error
  */
-int Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
-                     struct ilist *AAList, struct Map_info *BMap, int btype,
-                     struct ilist *BList, struct ilist *BAList,
+int Vect_overlay_and(struct Map_info *AMap, int atype,
+                     struct ilist *AList UNUSED, struct ilist *AAList UNUSED,
+                     struct Map_info *BMap, int btype,
+                     struct ilist *BList UNUSED, struct ilist *BAList UNUSED,
                      struct Map_info *OMap)
 {
     int i, j, k, line, altype, bltype, oltype, area, centr;

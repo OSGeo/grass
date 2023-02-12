@@ -7,7 +7,7 @@
    \return
    \param
  */
-int db__driver_bind_update(dbCursor *cursor)
+int db__driver_bind_update(dbCursor *cursor UNUSED)
 {
     db_procedure_not_implemented("db_bind_update");
     return DB_FAILED;

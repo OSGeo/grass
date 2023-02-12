@@ -233,9 +233,10 @@ void weightWindow::compute(const dimension_type i, const dimension_type j,
 
 /* Find the dominant direction. Set corresponding weight to 1, and
    sets all other weights to 0. Set sumweight and sumcontour.*/
-void weightWindow::makeD8(const dimension_type i, const dimension_type j,
+void weightWindow::makeD8(const dimension_type i UNUSED,
+                          const dimension_type j UNUSED,
                           const genericWindow<elevation_type> &elevwin,
-                          const direction_type dir, const bool trustdir)
+                          const direction_type dir, const bool trustdir UNUSED)
 {
 
     elevation_type elev_crt;

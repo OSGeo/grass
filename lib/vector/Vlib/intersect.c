@@ -601,7 +601,7 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
 static struct line_pnts *APnts, *BPnts;
 
 /* break segments (called by rtree search) */
-static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
+static int cross_seg(int id, const struct RTree_Rect *rect UNUSED, void *arg)
 {
     double x1, y1, z1, x2, y2, z2;
     int i, j, ret;
@@ -661,7 +661,7 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
                            struct bound_box *ABox, struct bound_box *BBox,
                            struct line_pnts ***ALines,
                            struct line_pnts ***BLines, int *nalines,
-                           int *nblines, int with_z)
+                           int *nblines, int with_z UNUSED)
 {
     int i, j, k, l, last_seg, seg, last;
     int n_alive_cross;
@@ -1232,7 +1232,7 @@ static int cross_found; /* set by find_cross() */
 static int report_all;  /* should all crossings be reported or just first one */
 
 /* break segments (called by rtree search) */
-static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
+static int find_cross(int id, const struct RTree_Rect *rect UNUSED, void *arg)
 {
     double x1, y1, z1, x2, y2, z2;
     int i, j, ret;

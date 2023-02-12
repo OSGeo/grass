@@ -83,7 +83,7 @@ static void getParams(char **input, char **output, int *convertNull,
 /*---------------------------------------------------------------------------*/
 
 void convert(char *openFile, RASTER3D_Region *region, int convertNull,
-             double nullValue)
+             double nullValue UNUSED)
 {
     v5dstruct v5d;
     int time, var;

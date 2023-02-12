@@ -9,7 +9,7 @@
  if(a,b,c,d)  d,c,b  b if a is positive, c if a is zero, d if a is negative
 ********************************************************************/
 
-static int f_if_i(int argc, const int *argt, void **args)
+static int f_if_i(int argc, const int *argt UNUSED, void **args)
 {
     CELL *res = args[0];
     DCELL *arg1 = args[1];
@@ -89,7 +89,7 @@ static int f_if_i(int argc, const int *argt, void **args)
     return 0;
 }
 
-static int f_if_f(int argc, const int *argt, void **args)
+static int f_if_f(int argc, const int *argt UNUSED, void **args)
 {
     FCELL *res = args[0];
     DCELL *arg1 = args[1];
@@ -164,7 +164,7 @@ static int f_if_f(int argc, const int *argt, void **args)
     return 0;
 }
 
-static int f_if_d(int argc, const int *argt, void **args)
+static int f_if_d(int argc, const int *argt UNUSED, void **args)
 {
     DCELL *res = args[0];
     DCELL *arg1 = args[1];

@@ -25,31 +25,33 @@
 #include <grass/glocale.h>
 #include <grass/vector.h>
 
-static off_t write_dummy(struct Map_info *Map, int type,
-                         const struct line_pnts *points,
-                         const struct line_cats *cats)
+static off_t write_dummy(struct Map_info *Map UNUSED, int type UNUSED,
+                         const struct line_pnts *points UNUSED,
+                         const struct line_cats *cats UNUSED)
 {
     G_warning("Vect_write_line() %s", _("for this format/level not supported"));
     return -1;
 }
 
-static off_t rewrite_dummy(struct Map_info *Map, off_t line, int type,
-                           const struct line_pnts *points,
-                           const struct line_cats *cats)
+static off_t rewrite_dummy(struct Map_info *Map UNUSED, off_t line UNUSED,
+                           int type UNUSED,
+                           const struct line_pnts *points UNUSED,
+                           const struct line_cats *cats UNUSED)
 {
     G_warning("Vect_rewrite_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-static int delete_dummy(struct Map_info *Map, off_t line)
+static int delete_dummy(struct Map_info *Map UNUSED, off_t line UNUSED)
 {
     G_warning("Vect_delete_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
+static int restore_dummy(struct Map_info *Map UNUSED, off_t offset UNUSED,
+                         off_t line UNUSED)
 {
     G_warning("Vect_restore_line() %s",
               _("for this format/level not supported"));
@@ -57,29 +59,30 @@ static int restore_dummy(struct Map_info *Map, off_t offset, off_t line)
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *Map, off_t line)
+static int format(struct Map_info *Map UNUSED, off_t line UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static int format2(struct Map_info *Map, off_t offset, off_t line)
+static int format2(struct Map_info *Map UNUSED, off_t offset UNUSED,
+                   off_t line UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static off_t format_l(struct Map_info *Map, int type,
-                      const struct line_pnts *points,
-                      const struct line_cats *cats)
+static off_t format_l(struct Map_info *Map UNUSED, int type UNUSED,
+                      const struct line_pnts *points UNUSED,
+                      const struct line_cats *cats UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static off_t format_l2(struct Map_info *Map, off_t line, int type,
-                       const struct line_pnts *points,
-                       const struct line_cats *cats)
+static off_t format_l2(struct Map_info *Map UNUSED, off_t line UNUSED,
+                       int type UNUSED, const struct line_pnts *points UNUSED,
+                       const struct line_cats *cats UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;

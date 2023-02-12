@@ -13,11 +13,18 @@
 #define INFO_H
 
 #include <pdal/pdal_config.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
 #include <pdal/PointTable.hpp>
 #include <pdal/StageFactory.hpp>
 #include <pdal/Options.hpp>
 #include <pdal/io/LasReader.hpp>
 #include <pdal/io/LasHeader.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 extern "C" {
 #include <grass/gis.h>

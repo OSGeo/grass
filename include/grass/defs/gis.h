@@ -690,8 +690,8 @@ double G_transverse_radius_of_curvature(double, double, double);
 double G_radius_of_conformal_tangent_sphere(double, double, double);
 
 /* rd_cellhd.c */
-void G__read_Cell_head(FILE *, struct Cell_head *, int);
-void G__read_Cell_head_array(char **, struct Cell_head *, int);
+void G__read_Cell_head(FILE *, struct Cell_head *);
+void G__read_Cell_head_array(char **, struct Cell_head *);
 
 /* remove.c */
 int G_remove(const char *, const char *);
@@ -818,7 +818,7 @@ int G_set_verbose(int);
 /* view.c */
 void G_3dview_warning(int);
 int G_get_3dview_defaults(struct G_3dview *, struct Cell_head *);
-int G_put_3dview(const char *, const char *, const struct G_3dview *,
+int G_put_3dview(const char *, const struct G_3dview *,
                  const struct Cell_head *);
 int G_get_3dview(const char *, const char *, struct G_3dview *);
 

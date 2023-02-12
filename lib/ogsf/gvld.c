@@ -403,11 +403,11 @@ int gvld_isosurf(geovol *gvl)
 /*!
    \brief Draw volume isosurface in draw mode
 
-   \param gvl pointer to geovol struct
+   \param gvl pointer to geovol struct [unused]
 
    \return 0
  */
-int gvld_wire_isosurf(geovol *gvl)
+int gvld_wire_isosurf(geovol *gvl UNUSED)
 {
     return (0);
 }

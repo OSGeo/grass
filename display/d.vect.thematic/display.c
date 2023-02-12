@@ -139,7 +139,7 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist, int chcat,
 }
 
 int draw_line(int ltype, int line, const struct line_pnts *Points,
-              const struct line_cats *Cats, int chcat, double size,
+              const struct line_cats *Cats, int chcat, double size UNUSED,
               int default_width, const struct cat_list *Clist, SYMBOL *Symb,
               RGBA_Color *primary_color, int *n_points, int *n_lines,
               int *n_centroids, int *n_boundaries, int *n_faces,

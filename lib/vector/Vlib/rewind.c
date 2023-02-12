@@ -18,13 +18,13 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int rew_dummy(struct Map_info *Map)
+static int rew_dummy(struct Map_info *Map UNUSED)
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *Map)
+static int format(struct Map_info *Map UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;

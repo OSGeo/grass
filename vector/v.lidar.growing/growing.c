@@ -4,7 +4,7 @@
 #include "growing.h"
 
 void P_Aux_to_Coor(struct Map_info *In, struct Map_info *Out, dbDriver *driver,
-                   FILE *fsite)
+                   FILE *fsite UNUSED)
 {
     int more, ltype, line_num, ID_type, Interp_type;
     double quotaZ;

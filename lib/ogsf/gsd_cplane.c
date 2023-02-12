@@ -244,7 +244,7 @@ void gsd_cplane_settrans(int num, float tx, float ty, float tz)
    \param surf2 second surface (geosurf) [unused]
    \param cpnum
  */
-void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2, int cpnum)
+void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2 UNUSED, int cpnum)
 {
     int was_on;
     float len, dir[3], bgn[2], end[2], px, py, fencenorm[3];

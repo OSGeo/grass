@@ -20,11 +20,14 @@
  * best view with tabstop=4
  */
 
+#include <grass/gis.h>
+
 /*
  * Edge Traversing
  */
-int DGL_EDGE_T_INITIALIZE_FUNC(dglGraph_s *pGraph, dglEdgeTraverser_s *pT,
-                               dglEdgePrioritizer_s *pEP)
+int DGL_EDGE_T_INITIALIZE_FUNC(dglGraph_s *pGraph,
+                               dglEdgeTraverser_s *pT UNUSED,
+                               dglEdgePrioritizer_s *pEP UNUSED)
 {
 #if defined(_DGL_V1)
     pGraph->iErrno = DGL_ERR_NotSupported;
@@ -274,7 +277,7 @@ int DGL_EDGESET_T_INITIALIZE_FUNC(dglGraph_s *pGraph, dglEdgesetTraverser_s *pT,
     return 0;
 }
 
-void DGL_EDGESET_T_RELEASE_FUNC(dglEdgesetTraverser_s *pT)
+void DGL_EDGESET_T_RELEASE_FUNC(dglEdgesetTraverser_s *pT UNUSED)
 {
 }
 

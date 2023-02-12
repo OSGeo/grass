@@ -23,6 +23,9 @@
 
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -33,7 +36,7 @@
    \return 0 on success
    \return non-zero on error
  */
-int V1_close_pg(struct Map_info *Map)
+int V1_close_pg(struct Map_info *Map NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
@@ -110,7 +113,7 @@ int V1_close_pg(struct Map_info *Map)
    \return 0 on success
    \return non-zero on error
  */
-int V2_close_pg(struct Map_info *Map)
+int V2_close_pg(struct Map_info *Map NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     G_debug(3, "V2_close_pg() name = %s mapset = %s", Map->name, Map->mapset);

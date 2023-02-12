@@ -877,7 +877,7 @@ void v5dDecompressGrid(int nr, int nc, int nl, int compressmode, void *compdata,
  *         time, var - which timestep and variable
  * Return:  number of data points.
  */
-int v5dSizeofGrid(const v5dstruct *v, int time, int var)
+int v5dSizeofGrid(const v5dstruct *v, int time UNUSED, int var)
 {
     return v->Nr * v->Nc * v->Nl[var] * v->CompressMode;
 }

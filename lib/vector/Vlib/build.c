@@ -32,7 +32,7 @@
 #define SEP "-----------------------------------\n"
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *Map, int build)
+static int format(struct Map_info *Map UNUSED, int build UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;

@@ -34,14 +34,14 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
 
    \param Map pointer to Map_info
    \param type feature type
-   \param layer layer number
+   \param layer layer number (unused)
    \param thresh threshold value (< 0 for 'shorter', > 0 for 'longer')
    \param query query (length, dangle, ...)
    \param[in,out] List list of selected features
 
    \return number of selected primitives
  */
-int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
+int Vedit_select_by_query(struct Map_info *Map, int type, int layer UNUSED,
                           double thresh, int query, struct ilist *List)
 {
     int num, line, i;

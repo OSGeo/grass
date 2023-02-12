@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <grass/gis.h>
 
 /*Hargreaves et al, 1985. */
-double mh_original(double ra, double tavg, double tmax, double tmin, double p)
+double mh_original(double ra, double tavg, double tmax, double tmin,
+                   double p UNUSED)
 {
     double td, result;
 
