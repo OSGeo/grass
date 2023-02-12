@@ -161,7 +161,7 @@ public:
 
     // create an em_pqueue capable to store <= N elements
     em_pqueue();
-    em_pqueue(long N) { em_pqueue(); }; // N not used
+    em_pqueue(long N UNUSED) { em_pqueue(); }; // N not used
 
 #ifdef SAVE_MEMORY
     // create an empq, initialize its pq with im and insert amis in

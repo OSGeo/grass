@@ -72,4 +72,3 @@ touch $MYPATH/fix_typos/typos_whitelist.txt
 python3 $MYPATH/fix_typos/codespell/codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
        -x $MYPATH/fix_typos/typos_whitelist.txt --words-white-list=$WORDS_WHITE_LIST \
        -D $MYPATH/fix_typos/grassgis_dict.txt  .
-

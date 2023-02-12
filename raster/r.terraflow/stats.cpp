@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <cinttypes>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -89,7 +90,7 @@ int noclobberFile(char *fname)
             else { /* file exists */
                 char buf[BUFSIZ];
                 G_debug(1, "file %s exists - renaming.\n", fname);
-                sprintf(buf, "%s.old", fname);
+                snprintf(buf, BUFSIZ, "%s.old", fname);
                 if (rename(fname, buf) != 0) {
                     G_fatal_error("%s", fname);
                 }
@@ -111,7 +112,7 @@ char *noclobberFileName(char *fname)
         else { /* file exists */
             char buf[BUFSIZ];
             G_debug(1, "file %s exists - renaming.\n", fname);
-            sprintf(buf, "%s.old", fname);
+            snprintf(buf, BUFSIZ, "%s.old", fname);
             if (rename(fname, buf) != 0) {
                 G_fatal_error("%s", fname);
             }
@@ -137,7 +138,7 @@ char *statsRecorder::timestamp()
 {
     static char buf[BUFSIZ];
     rt_stop(tm);
-    sprintf(buf, "[%.1f] ", rt_seconds(tm));
+    snprintf(buf, BUFSIZ, "[%.1f] ", rt_seconds(tm));
     return buf;
 }
 
@@ -159,30 +160,33 @@ void statsRecorder::comment(const char *s, const int verbose)
 void statsRecorder::comment(const char *s1, const char *s2)
 {
     char buf[BUFSIZ];
-    sprintf(buf, "%s%s", s1, s2);
+    snprintf(buf, BUFSIZ, "%s%s", s1, s2);
     comment(buf);
 }
 
 void statsRecorder::comment(const int n)
 {
     char buf[BUFSIZ];
-    sprintf(buf, "%d", n);
+    snprintf(buf, BUFSIZ, "%d", n);
     comment(buf);
 }
 
 char *formatNumber(char *buf, off_t val)
 {
     if (val > (1 << 30)) {
-        sprintf(buf, "%.2fG (%" PRI_OFF_T ")", (double)val / (1 << 30), val);
+        snprintf(buf, BUFSIZ, "%.2fG (%" PRId64 ")", (double)val / (1 << 30),
+                 val);
     }
     else if (val > (1 << 20)) {
-        sprintf(buf, "%.2fM (%" PRI_OFF_T ")", (double)val / (1 << 20), val);
+        snprintf(buf, BUFSIZ, "%.2fM (%" PRId64 ")", (double)val / (1 << 20),
+                 val);
     }
     else if (val > (1 << 10)) {
-        sprintf(buf, "%.2fK (%" PRI_OFF_T ")", (double)val / (1 << 10), val);
+        snprintf(buf, BUFSIZ, "%.2fK (%" PRId64 ")", (double)val / (1 << 10),
+                 val);
     }
     else {
-        sprintf(buf, "%" PRI_OFF_T, val);
+        snprintf(buf, BUFSIZ, "%" PRId64, val);
     }
     return buf;
 }

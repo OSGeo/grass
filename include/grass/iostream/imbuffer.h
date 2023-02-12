@@ -91,7 +91,8 @@ public:
         assert(n >= 0);
 
         char str[100];
-        sprintf(str, "im_buffer: allocate %ld\n", (long)(maxsize * sizeof(T)));
+        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
+                 (long)(maxsize * sizeof(T)));
         MEMORY_LOG(str);
 
         data = new T[maxsize];
@@ -133,7 +134,7 @@ public:
     // return i'th item in buffer
     T get_item(unsigned long i) const
     {
-        assert((i >= 0) && (i < size));
+        assert(i < size);
         return data[i];
     }
 
@@ -333,7 +334,7 @@ void im_buffer<T>::reset(unsigned long start, unsigned long n)
         sorted = false;
         return;
     }
-    assert((start >= 0) && (start + n <= size));
+    assert(start + n <= size);
     size = n;
     if (n) {
         memmove(data, data + start, n * sizeof(T));

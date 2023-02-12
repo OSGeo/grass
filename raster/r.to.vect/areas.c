@@ -85,17 +85,17 @@ static struct equiv_table *e_list;
 
 /* function prototypes */
 static int update_list(int);
-static int end_vline();
-static int end_hline();
-static int start_vline();
-static int start_hline();
-static struct COOR *get_ptr();
-static int read_next();
+static int end_vline(void);
+static int end_hline(void);
+static int start_vline(void);
+static int start_hline(void);
+static struct COOR *get_ptr(void);
+static int read_next(void);
 static int equiv_areas(int, int);
 static int map_area(int, int);
 static int add_to_list(int, int);
 static int assign_area(double, int);
-static int more_areas();
+static int more_areas(void);
 static int update_width(struct area_table *, int);
 static int nabors(void);
 
@@ -668,7 +668,7 @@ static int add_to_list(int x, int y)
 /* assign_area - make current area number correspond to the passed */
 /* category number and allocate more space to store areas if necessary */
 
-static int assign_area(double cat, int kase)
+static int assign_area(double cat, int kase UNUSED)
 {
     a_list_new->free = 0;
     a_list_new->cat = cat;

@@ -161,7 +161,7 @@ install-strip:
 	$(MAKE) strip
 	$(MAKE) install
 
-bindist:  
+bindist:
 ifeq ($(strip $(MACOSX_APP)),1)
 	$(MAKE) bindist-macosx
 else

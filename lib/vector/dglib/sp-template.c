@@ -40,8 +40,10 @@
 
 #if !defined(DGL_DEFINE_TREE_PROCS) && !defined(DGL_DEFINE_FLAT_PROCS)
 
-int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph, dglSPCache_s *pCache,
-                                 dglInt32_t nStart)
+#include <grass/gis.h>
+
+int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph UNUSED,
+                                 dglSPCache_s *pCache, dglInt32_t nStart)
 {
     pCache->nStartNode = nStart;
     pCache->pvVisited = NULL;
@@ -56,7 +58,7 @@ int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph, dglSPCache_s *pCache,
     return 0;
 }
 
-void DGL_SP_CACHE_RELEASE_FUNC(dglGraph_s *pgraph, dglSPCache_s *pCache)
+void DGL_SP_CACHE_RELEASE_FUNC(dglGraph_s *pgraph UNUSED, dglSPCache_s *pCache)
 {
     if (pCache->pvVisited)
         avl_destroy(pCache->pvVisited, dglTreeTouchI32Cancel);

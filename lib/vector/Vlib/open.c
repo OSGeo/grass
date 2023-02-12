@@ -44,18 +44,26 @@
  */
 #define MAX_OPEN_LEVEL 2
 
-static int open_old_dummy()
+static int open_old_dummy(struct Map_info *Map UNUSED, int update UNUSED)
 {
     return 0;
 }
 
-static int open_new_dummy()
+static int open_new_dummy(struct Map_info *Map UNUSED, const char *name UNUSED,
+                          int with_z UNUSED)
 {
     return 0;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format_old(struct Map_info *Map UNUSED, int update UNUSED)
+{
+    G_fatal_error(_("Requested format is not compiled in this version"));
+    return 0;
+}
+
+static int format_new(struct Map_info *Map UNUSED, const char *name UNUSED,
+                      int with_z UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
@@ -64,41 +72,44 @@ static int format()
 
 static int Open_level = 0;
 
-static int (*Open_old_array[][2])() = {{open_old_dummy, V1_open_old_nat}
+static int (*Open_old_array[][2])(struct Map_info *,
+                                  int) = {{open_old_dummy, V1_open_old_nat}
 #ifdef HAVE_OGR
-                                       ,
-                                       {open_old_dummy, V1_open_old_ogr},
-                                       {open_old_dummy, V1_open_old_ogr}
+                                          ,
+                                          {open_old_dummy, V1_open_old_ogr},
+                                          {open_old_dummy, V1_open_old_ogr}
 #else
-                                       ,
-                                       {open_old_dummy, format},
-                                       {open_old_dummy, format}
+                                          ,
+                                          {open_old_dummy, format_old},
+                                          {open_old_dummy, format_old}
 #endif
 #ifdef HAVE_POSTGRES
-                                       ,
-                                       {open_old_dummy, V1_open_old_pg}
+                                          ,
+                                          {open_old_dummy, V1_open_old_pg}
 #else
-                                       ,
-                                       {open_old_dummy, format}
+                                          ,
+                                          {open_old_dummy, format_old}
 #endif
 };
 
-static int (*Open_new_array[][2])() = {{open_new_dummy, V1_open_new_nat}
+static int (*Open_new_array[][2])(struct Map_info *Map, const char *name,
+                                  int with_z) = {
+    {open_new_dummy, V1_open_new_nat}
 #ifdef HAVE_OGR
-                                       ,
-                                       {open_new_dummy, V1_open_new_ogr},
-                                       {open_new_dummy, V1_open_new_ogr}
+    ,
+    {open_new_dummy, V1_open_new_ogr},
+    {open_new_dummy, V1_open_new_ogr}
 #else
-                                       ,
-                                       {open_new_dummy, format},
-                                       {open_new_dummy, format}
+    ,
+    {open_new_dummy, format_new},
+    {open_new_dummy, format_new}
 #endif
 #ifdef HAVE_POSTGRES
-                                       ,
-                                       {open_old_dummy, V1_open_new_pg}
+    ,
+    {open_new_dummy, V1_open_new_pg}
 #else
-                                       ,
-                                       {open_old_dummy, format}
+    ,
+    {open_new_dummy, format_new}
 #endif
 };
 

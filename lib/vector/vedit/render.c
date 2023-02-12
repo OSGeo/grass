@@ -33,7 +33,7 @@ static struct _state {
 } state;
 
 static struct robject *draw_line(struct Map_info *, int, int);
-static struct robject *draw_line_vertices();
+static struct robject *draw_line_vertices(void);
 static void draw_line_nodes(struct Map_info *, int, int, struct robject_list *);
 static int draw_line_dir(struct robject_list *, int);
 static void list_append(struct robject_list *, struct robject *);
@@ -309,7 +309,7 @@ struct robject *robj_alloc(int type, int npoints)
 /*!
    \brief Draw line vertices
  */
-struct robject *draw_line_vertices()
+struct robject *draw_line_vertices(void)
 {
     int i;
     int x, y;

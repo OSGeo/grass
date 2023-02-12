@@ -52,7 +52,8 @@ void Rast3d_cache_reset(RASTER3D_cache *c)
 
 /*---------------------------------------------------------------------------*/
 
-static int cache_dummy_fun(int tileIndex, const void *tileBuf, void *map)
+static int cache_dummy_fun(int tileIndex UNUSED, const void *tileBuf UNUSED,
+                           void *map UNUSED)
 {
     return 1;
 }
@@ -83,8 +84,10 @@ void Rast3d_cache_dispose(RASTER3D_cache *c)
 /*---------------------------------------------------------------------------*/
 
 void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
-                       int (*eltRemoveFun)(), void *eltRemoveFunData,
-                       int (*eltLoadFun)(), void *eltLoadFunData)
+                       int (*eltRemoveFun)(int, const void *, void *),
+                       void *eltRemoveFunData,
+                       int (*eltLoadFun)(int, void *, void *),
+                       void *eltLoadFunData)
 {
     RASTER3D_cache *tmp;
     int i;
@@ -135,7 +138,8 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_set_remove_fun(RASTER3D_cache *c, int (*eltRemoveFun)(),
+void Rast3d_cache_set_remove_fun(RASTER3D_cache *c,
+                                 int (*eltRemoveFun)(int, const void *, void *),
                                  void *eltRemoveFunData)
 {
     c->eltRemoveFun = eltRemoveFun;
@@ -144,7 +148,8 @@ void Rast3d_cache_set_remove_fun(RASTER3D_cache *c, int (*eltRemoveFun)(),
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_set_load_fun(RASTER3D_cache *c, int (*eltLoadFun)(),
+void Rast3d_cache_set_load_fun(RASTER3D_cache *c,
+                               int (*eltLoadFun)(int, void *, void *),
                                void *eltLoadFunData)
 {
     c->eltLoadFun = eltLoadFun;
@@ -595,7 +600,7 @@ static void cache_test_print(RASTER3D_cache *c)
 
 /*---------------------------------------------------------------------------*/
 
-static int cache_test_flush_fun(int name, const void *eltPtr, void *data)
+static int cache_test_flush_fun(int name, const void *eltPtr, void *data UNUSED)
 {
     printf("flushing name %d value %d\n", name, ((const int *)eltPtr)[17]);
     return 0;
@@ -644,7 +649,7 @@ static void cache_test_add(void *c, int name, int val)
 
 /*---------------------------------------------------------------------------*/
 
-int MAIN()
+int MAIN(void)
 {
     void *c;
 

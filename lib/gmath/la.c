@@ -1291,7 +1291,7 @@ double G_vector_norm1(vec_struct *vc)
 
     if (!vc->is_init) {
         G_warning(_("Matrix is not initialised"));
-        return 0.0 / 0.0; /* NaN */
+        return NAN;
     }
 
     idx = (vc->v_indx > 0) ? vc->v_indx : 0;

@@ -117,8 +117,8 @@ int I_put_con_points(char *, struct Ortho_Control_Points *);
 int I_convert_con_points(char *, struct Ortho_Control_Points *,
                          struct Ortho_Control_Points *, double[3], double[3]);
 /* georef.c */
-int I_compute_ref_equations(struct Ortho_Photo_Points *, double *, double *,
-                            double *, double *);
+int I_compute_ref_equations(struct Ortho_Photo_Points *, double[3], double[3],
+                            double[3], double[3]);
 /* orthoref.c */
 int I_compute_ortho_equations(struct Ortho_Control_Points *,
                               struct Ortho_Camera_File_Ref *,
@@ -140,7 +140,7 @@ int I_put_ref_points(char *, struct Ortho_Photo_Points *);
 
 /* cam_info.h */
 int I_read_cam_info(FILE *, struct Ortho_Camera_File_Ref *);
-int I_new_fid_point(struct Ortho_Camera_File_Ref *, char *, double, double);
+int I_new_fid_point(struct Ortho_Camera_File_Ref *, char[30], double, double);
 int I_write_cam_info(FILE *, struct Ortho_Camera_File_Ref *);
 int I_get_cam_info(char *, struct Ortho_Camera_File_Ref *);
 int I_put_cam_info(char *, struct Ortho_Camera_File_Ref *);

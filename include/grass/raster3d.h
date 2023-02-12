@@ -207,13 +207,16 @@ typedef struct {
     int first, last;  /* index (into next) of first and last elt in fifo */
     /* first == -1 iff fifo is empty */
 
-    int (*eltRemoveFun)();  /* callback activated if the contents of an
-                               elt needs to be removed */
-    void *eltRemoveFunData; /* pointer to user data passed along with
-                               eltRemoveFun */
-    int (*eltLoadFun)();    /* callback activated to load contents of an elt */
-    void *eltLoadFunData;   /* pointer to user data passed along with
-                               eltLoadFun */
+    int (*eltRemoveFun)(int, const void *,
+                        void *); /* callback activated if the contents of an elt
+                                    needs to be removed */
+    void *eltRemoveFunData;      /* pointer to user data passed along with
+                                    eltRemoveFun */
+    int (*eltLoadFun)(
+        int, void *,
+        void *);          /* callback activated to load contents of an elt */
+    void *eltLoadFunData; /* pointer to user data passed along with
+                             eltLoadFun */
 
     void *hash; /* ptr to hashTable used to relate external names to
                    internal indices (elts) */

@@ -163,7 +163,7 @@ static void G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
 
             /*printf ("%d\n", ((*src & mask) >> nBits) << nBits); */
 
-            if (8 - nBits < precision) {
+            if (8 - nBits < (unsigned int)precision) {
                 cp1++;
 
                 /*printf ("%d %d\n", *cp1, (*src & mask) << (8 - nBits)); */
@@ -337,7 +337,7 @@ static void G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
 
         if (nBits && precision) {
             *cp1 |= (unsigned char)((unsigned char)(*src & mask) >> nBits);
-            if (8 - nBits < precision) {
+            if (8 - nBits < (unsigned int)precision) {
                 cp1++;
                 *cp1 = (unsigned char)(((unsigned char)(*src & mask))
                                        << (8 - nBits));
@@ -491,7 +491,7 @@ static void G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
         if (nBits && precision) {
             *dst = (unsigned char)((*cp1 << nBits) & mask);
 
-            if (8 - nBits < precision) {
+            if (8 - nBits < (unsigned int)precision) {
                 cp1++;
                 *dst |= (unsigned char)((*cp1 >> (8 - nBits)) & mask);
                 nBits += precision - 8;
@@ -658,7 +658,7 @@ static void G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
         if (nBits && precision) {
             *dst = (unsigned char)((*cp1 << nBits) & mask);
 
-            if (8 - nBits < precision) {
+            if (8 - nBits < (unsigned int)precision) {
                 cp1++;
                 *dst |= (unsigned char)((*cp1 >> (8 - nBits)) & mask);
                 nBits += precision - 8;

@@ -23,7 +23,7 @@
 #include <math.h>
 #include "correction.h"
 
-void P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
+void P_Sparse_Correction(struct Map_info *In UNUSED, struct Map_info *Out,
                          struct Map_info *Terrain,
                          struct Cell_head *Elaboration,
                          struct bound_box General, struct bound_box Overlap,

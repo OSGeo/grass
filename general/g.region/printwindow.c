@@ -469,7 +469,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         double convergence;
 
         if (G_projection() == PROJECTION_XY)
-            convergence = 0. / 0.;
+            convergence = NAN;
         else if (G_projection() == PROJECTION_LL)
             convergence = 0.0;
         else {

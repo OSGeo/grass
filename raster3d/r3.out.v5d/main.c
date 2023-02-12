@@ -30,7 +30,7 @@ typedef struct {
 
 /* protos */
 void fatalError(char *errorMsg);
-void setParams();
+void setParams(void);
 void getParams(char **input, char **output, int *decim);
 void convert(char *fileout, int, int, int, int);
 
@@ -57,7 +57,7 @@ void fatalError(char *errorMsg)
 /*---------------------------------------------------------------------------*/
 /* Convenient way to set up the arguments we are expecting
  */
-void setParams()
+void setParams(void)
 {
     param.input = G_define_option();
     param.input->key = "input";
@@ -84,7 +84,7 @@ void setParams()
 /*---------------------------------------------------------------------------*/
 /* Set up the input and output file names from the user's responses
  */
-void getParams(char **input, char **output, int *decim)
+void getParams(char **input, char **output, int *decim UNUSED)
 {
     *input = param.input->answer;
     *output = param.output->answer;

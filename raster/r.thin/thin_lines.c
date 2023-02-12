@@ -35,7 +35,7 @@ extern int put_a_row(int row, CELL *buf);
 int thin_lines(int iterations)
 {
     int j, i, col, deleted, row;
-    CELL *row_buf, *new_med, *med, *bottom, *top, *get_a_row();
+    CELL *row_buf, *new_med, *med, *bottom, *top;
     unsigned char W, N_W, Templ[8], N_Templ[8];
 
     map_size(&n_rows, &n_cols, &pad_size);

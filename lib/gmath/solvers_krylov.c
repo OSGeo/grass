@@ -15,6 +15,7 @@
  *
  *****************************************************************************/
 
+#include <assert.h>
 #include <math.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -747,16 +748,18 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
 {
     G_math_spvector **Msp;
 
-    int i, j, cols = rows;
+    unsigned int i, j, cols = (unsigned int)rows;
 
     double sum;
+
+    assert(rows >= 0);
 
     Msp = G_math_alloc_spmatrix(rows);
 
     if (A != NULL) {
 #pragma omp parallel for schedule(static) private(i, j, sum) \
     shared(A, Msp, rows, cols, prec)
-        for (i = 0; i < rows; i++) {
+        for (i = 0; i < (unsigned int)rows; i++) {
             G_math_spvector *spvect = G_math_alloc_spvector(1);
 
             switch (prec) {
@@ -787,7 +790,7 @@ G_math_spvector **create_diag_precond_matrix(double **A, G_math_spvector **Asp,
     else {
 #pragma omp parallel for schedule(static) private(i, j, sum) \
     shared(Asp, Msp, rows, cols, prec)
-        for (i = 0; i < rows; i++) {
+        for (i = 0; i < (unsigned int)rows; i++) {
             G_math_spvector *spvect = G_math_alloc_spvector(1);
 
             switch (prec) {

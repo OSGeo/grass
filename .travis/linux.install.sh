@@ -52,4 +52,3 @@ sudo apt-get install --no-install-recommends \
         pdal \
         proj-bin \
         proj-data
-

@@ -6,11 +6,10 @@ Currently installed version:
 [**v1.1.1**](https://github.com/ctypesgen/ctypesgen/releases/tag/1.1.1)
 (19 October 2022)
 
-
 ### How to update ctypesgen version
 
-1. Replace the GRASS directory `python/libgrass_interface_generator/ctypesgen` with the `ctypesgen`
-   directory from ctypesgen source directory.
+1. Replace the GRASS directory `python/libgrass_interface_generator/ctypesgen`
+   with the `ctypesgen` directory from ctypesgen source directory.
 2. Replace `python/grass/ctypes/run.py` with `run.py` from ctypesgen source directory.
 3. Apply the patches below.
 4. Update this document with info on installed ctypesgen version.
@@ -18,7 +17,8 @@ Currently installed version:
 
 ### Patches
 
-It is highly encouraged to report [upstreams](https://github.com/ctypesgen/ctypesgen) necessary patches for GRASS.
+It is highly encouraged to report [upstreams](https://github.com/ctypesgen/ctypesgen)
+necessary patches for GRASS.
 
 #### Ctypes "unnamed structure member with 0 bit size"-patch
 
@@ -52,6 +52,7 @@ Reported with: <https://github.com/OSGeo/grass/pull/2073>
 This patch removes the zero bit sized unnamed structure members from the
 generated files.
 
+<!-- markdownlint-disable line-length -->
 ```diff
 --- ctypesgen/printer_python/printer.py.orig
 +++ ctypesgen/printer_python/printer.py
@@ -177,6 +178,7 @@ generated files.
 +        )
 
 ```
+<!-- markdownlint-enable line-length -->
 
 #### Windows specific patches
 

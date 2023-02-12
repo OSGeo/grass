@@ -335,13 +335,13 @@ static neta_heap_data *new_heap_data(int conns, int v)
    \param new_dst new 'to' node
    \param v ?
    \param route id of route
-   \param rows ?
+   \param rows ? (unused)
    \param update ?
    \param[out] result pointer to neta_timetable_result structure
    \param heap ?
  */
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
-                          int v, int route, int rows, int update,
+                          int v, int route, int rows UNUSED, int update,
                           neta_timetable_result *result, dglHeap_s *heap)
 {
     if (result->dst[new_conns][to] == -1 ||

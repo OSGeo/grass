@@ -1,3 +1,4 @@
+---
 # Author: Ivan Mincik, ivan.mincik@gmail.com (linux)
 #         Rainer M. Krug, Rainer@krugs.de (osx)
 
@@ -5,20 +6,18 @@ language: c
 cache: ccache
 
 matrix:
-   include:
-      - os: linux
-        dist: focal
-        compiler: gcc
-        sudo: required
-        env:
-            CC=gcc
+  include:
+    - os: linux
+      dist: focal
+      compiler: gcc
+      sudo: required
+      env: CC=gcc
 
-      - os: linux
-        dist: focal
-        compiler: clang
-        sudo: required
-        env:
-            CC=clang
+    - os: linux
+      dist: focal
+      compiler: clang
+      sudo: required
+      env: CC=clang
 
 env:
   global:
@@ -37,4 +36,4 @@ after_success:
   - bash < (curl -s https://codecov.io/bash)
 
 notifications:
-        irc: "chat.freenode.net#grass"
+  irc: chat.freenode.net#grass

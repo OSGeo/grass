@@ -33,7 +33,7 @@
 
 static void fatalError(char *errorMsg); /*Simple Error message */
 
-static void setParams(); /*Fill the paramType structure */
+static void setParams(void); /*Fill the paramType structure */
 
 /*Puts the userdefined parameters into easier handable variables */
 static void getParams(char **input, char **output, int *convertNull,
@@ -60,8 +60,6 @@ void *map = NULL;
 int rowOrder;
 int depthOrder;
 
-extern void *Rast3d_open_new_param();
-
 /*---------------------------------------------------------------------------*/
 void fatalError(char *errorMsg)
 {
@@ -81,7 +79,7 @@ typedef struct {
 
 static paramType param;
 
-static void setParams()
+static void setParams(void)
 {
     param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->required = YES;

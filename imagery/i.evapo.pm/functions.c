@@ -97,8 +97,8 @@ DCELL calc_ETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int night, DCELL Rh,
     return ETp;
 }
 
-DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day, DCELL Rh,
-                        DCELL hc)
+DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day UNUSED,
+                        DCELL Rh, DCELL hc UNUSED)
 {
     DCELL ea, delta, gamma, lambda;
     DCELL P, ed, ETaero, ETp;

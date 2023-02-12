@@ -4,10 +4,10 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+static int lister(const char *, const char *, char *);
+
 int main(int argc, char *argv[])
 {
-    int lister();
-
     G_gisinit(argv[0]);
 
     if (argc == 1)
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     exit(0);
 }
 
-int lister(char *name, char *mapset, char *title)
+static int lister(const char *name, const char *mapset, char *title)
 {
     struct Map_info Map;
 

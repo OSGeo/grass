@@ -89,7 +89,7 @@ int calc_pattern(PATTERN *pattern, int row, int cur_row, int col, const int);
 extern const char *dirname[];
 
 /* geom */
-void generate_ternary_codes();
+void generate_ternary_codes(void);
 unsigned int ternary_rotate(unsigned int value);
 FORMS determine_form(int num_plus, int num_minus);
 int form_deviation(const unsigned, const unsigned);
@@ -108,7 +108,7 @@ double octa_perimeter(const PATTERN *);
 double octa_area(const PATTERN *);
 double mesh_perimeter(const PATTERN *);
 double mesh_area(const PATTERN *);
-int radial2cartesian(PATTERN *);
+void radial2cartesian(PATTERN *);
 
 /* profile */
 void prof_int(const char *, const int);
@@ -118,8 +118,8 @@ void prof_mtr(const char *, const double);
 void prof_str(const char *, const char *);
 void prof_utc(const char *, const time_t);
 void prof_sso(const char *);
-void prof_eso();
+void prof_eso(void);
 void prof_pattern(const double, const PATTERN *);
-void prof_map_info();
+void prof_map_info(void);
 unsigned prof_write(FILE *, const char *);
 #endif

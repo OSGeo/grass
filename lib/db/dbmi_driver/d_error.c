@@ -30,7 +30,7 @@ struct error_state {
 static struct error_state state;
 static struct error_state *st = &state;
 
-static void init()
+static void init(void)
 {
     db_set_string(st->errMsg, "");
     db_d_append_error(_("DBMI-%s driver error:"), st->driver_name);
@@ -75,7 +75,7 @@ void db_d_append_error(const char *fmt, ...)
         count = vfprintf(fp, fmt, ap);
         if (count >= 0 && (work = G_calloc(count + 1, 1))) {
             rewind(fp);
-            if (fread(work, 1, count, fp) != count) {
+            if (fread(work, 1, count, fp) != (size_t)count) {
                 if (ferror(fp))
                     G_fatal_error(_("DBMI-%s driver file reading error: %s"),
                                   st->driver_name, strerror(errno));
