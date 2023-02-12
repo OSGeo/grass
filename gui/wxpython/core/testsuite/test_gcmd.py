@@ -28,10 +28,14 @@ class Recv_SomeTest(TestCase):
 
 
 if __name__ == "__main__":
-    from grass.script.setup import set_gui_path
+    try:
+        from grass.script.setup import set_gui_path
 
-    set_gui_path()
+        set_gui_path()
 
-    from core.gcmd import recv_some
+        from core.gcmd import recv_some
 
-    test()
+        test()
+    except ModuleNotFoundError:
+        # Tests can not run if wx is absent
+        pass
