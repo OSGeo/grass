@@ -14,6 +14,7 @@
   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
+#include <inttypes.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -150,11 +151,11 @@ int check_coor(struct Map_info *Map)
 
     if (dif > 0) {
 	G_warning(_("Coor file of vector map <%s@%s> is larger than it should be "
-		   "(%" PRI_OFF_T " bytes excess)"), Map->name, Map->mapset, dif);
+		   "(%" PRId64 " bytes excess)"), Map->name, Map->mapset, dif);
     }
     else if (dif < 0) {
 	G_warning(_("Coor file of vector <%s@%s> is shorter than it should be "
-		   "(%" PRI_OFF_T " bytes missing)."), Map->name, Map->mapset, -dif);
+		   "(%" PRId64 " bytes missing)."), Map->name, Map->mapset, -dif);
     }
     return 1;
 }

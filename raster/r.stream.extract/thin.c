@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -166,7 +167,8 @@ int thin_streams(void)
 
     G_free(nodestack);
     
-    G_verbose_message(_("%d of %"PRI_OFF_T" stream segments were thinned"), n_thinned, n_stream_nodes);
+    G_verbose_message(_("%d of %" PRId64 " stream segments were thinned"),
+                      n_thinned, n_stream_nodes);
 
     return 1;
 }

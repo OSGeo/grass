@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/raster.h>
@@ -59,12 +60,12 @@ int do_astar(void)
     while (heap_size > 0) {
 	G_percent(count++, n_points, 1);
 	if (count > n_points)
-	    G_fatal_error(_("%"PRI_OFF_T" surplus points"),
+	    G_fatal_error(_("%" PRId64 " surplus points"),
 	                  heap_size);
 
 	if (heap_size > n_points)
 	    G_fatal_error
-		(_("Too many points in heap %"PRI_OFF_T", should be %"PRI_OFF_T""),
+		(_("Too many points in heap %" PRId64 ", should be %" PRId64 ""),
 		 heap_size, n_points);
 
 	heap_p = heap_drop();

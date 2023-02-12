@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 
+#include <cinttypes>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -174,13 +175,13 @@ statsRecorder::comment(const int n) {
 char *
 formatNumber(char *buf, off_t val) {
   if(val > (1<<30)) {
-	sprintf(buf, "%.2fG (%" PRI_OFF_T ")", (double)val/(1<<30), val);
+	sprintf(buf, "%.2fG (%" PRId64 ")", (double)val/(1<<30), val);
   } else if(val > (1<<20)) {
-	sprintf(buf, "%.2fM (%" PRI_OFF_T ")", (double)val/(1<<20), val);
+	sprintf(buf, "%.2fM (%" PRId64 ")", (double)val/(1<<20), val);
   } else if(val > (1<<10)) {
-	sprintf(buf, "%.2fK (%" PRI_OFF_T ")", (double)val/(1<<10), val);
+	sprintf(buf, "%.2fK (%" PRId64 ")", (double)val/(1<<10), val);
   } else {
-	sprintf(buf, "%" PRI_OFF_T, val);
+	sprintf(buf, "%" PRId64, val);
   }
   return buf;
 }

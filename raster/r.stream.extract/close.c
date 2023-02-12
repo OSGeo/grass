@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
@@ -206,7 +207,7 @@ int close_streamvect(char *stream_vect)
     /* stream nodes */
     for (i = 1; i <= n_stream_nodes; i++) {
 
-	sprintf(buf, "insert into %s values ( %"PRI_OFF_T", \'%s\', %d, %d )",
+	sprintf(buf, "insert into %s values ( %" PRId64 ", \'%s\', %d, %d )",
 		Fi->table, i,
 		(stream_node[i].n_trib > 0 ? "intermediate" : "start"),
 		(stream_node[i].n_trib > 0), network_id[i]);

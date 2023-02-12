@@ -1,5 +1,6 @@
 /* PURPOSE:      opening input rasters and creating segmentation files */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -550,8 +551,11 @@ static int manage_memory(int srows, int scols, struct globals *globals)
 		segs_mb = 10;
 	}
 
-	G_verbose_message(_("Regions with at least %"PRI_LONG" cells are stored in memory"),
-			  globals->min_reg_size);
+        char buf[100];
+        snprintf(buf, sizeof(buf), "%" PRI_LONG, globals->min_reg_size);
+        G_verbose_message(
+            _("Regions with at least %s cells are stored in memory"), buf);
+
     }
 
     /* calculate number of segments in memory */

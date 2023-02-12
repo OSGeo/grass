@@ -19,6 +19,7 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <inttypes.h>
 #include <string.h>
 
 #include <grass/vector.h>
@@ -181,7 +182,7 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
                          const struct line_pnts * points,
                          const struct line_cats * cats)
 {
-    G_debug(3, "V1_rewrite_line_pg(): type=%d offset=%" PRI_OFF_T,
+    G_debug(3, "V1_rewrite_line_pg(): type=%d offset=%" PRId64,
             type, offset);
 #ifdef HAVE_POSTGRES
     if (type != V1_read_line_pg(Map, NULL, NULL, offset)) {
@@ -278,7 +279,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
     }
     
     geom_data = line_to_wkb(pg_info, &points, 1, type, Map->head.with_z);
-    G_asprintf(&stmt, "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = %" PRI_OFF_T,
+    G_asprintf(&stmt, "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = %" PRId64,
                schema_name, table_name, geom_data, keycolumn, line);
     G_free(geom_data);
 
@@ -324,7 +325,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
     }
 
     if (offset >= pg_info->offset.array_num) {
-        G_warning(_("Invalid offset (%" PRI_OFF_T ")"), offset);
+        G_warning(_("Invalid offset (%" PRId64 ")"), offset);
         return -1;
     }
 

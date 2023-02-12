@@ -20,6 +20,7 @@
    \author Updated by Martin Landa <landa.martin gmail.com> (restore lines, OGR & PostGIS support)
  */
 
+#include <inttypes.h>
 #include <sys/types.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
@@ -222,7 +223,7 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
 {
     off_t ret;
 
-    G_debug(3, "Vect_rewrite_line(): name = %s, format = %d, level = %d, line/offset = %" PRI_OFF_T,
+    G_debug(3, "Vect_rewrite_line(): name = %s, format = %d, level = %d, line/offset = %" PRId64,
 	    Map->name, Map->format, Map->level, line);
 
     if (!check_map(Map))
@@ -231,7 +232,7 @@ off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
     ret = (*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type,
 							       points, cats);
     if (ret == -1)
-        G_warning(_("Unable to rewrite feature/offset %" PRI_OFF_T " in vector map <%s>"),
+        G_warning(_("Unable to rewrite feature/offset %" PRId64 " in vector map <%s>"),
 	          line, Vect_get_name(Map));
 
     return ret;
@@ -254,7 +255,7 @@ int Vect_delete_line(struct Map_info *Map, off_t line)
 {
     int ret;
 
-    G_debug(3, "Vect_delete_line(): name = %s, line/offset = %" PRI_OFF_T,
+    G_debug(3, "Vect_delete_line(): name = %s, line/offset = %" PRId64,
             Map->name, line);
 
     if (!check_map(Map))
@@ -263,7 +264,7 @@ int Vect_delete_line(struct Map_info *Map, off_t line)
     ret = (*Vect_delete_line_array[Map->format][Map->level]) (Map, line);
 
     if (ret == -1)
-	G_warning(_("Unable to delete feature/offset %" PRI_OFF_T " from vector map <%s>"),
+	G_warning(_("Unable to delete feature/offset %" PRId64 " from vector map <%s>"),
                   line, Vect_get_name(Map));
 
     return ret;
@@ -287,7 +288,8 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
 {
     int ret;
 
-    G_debug(3, "Vect_restore_line(): name = %s, level = %d, offset = %" PRI_OFF_T ", line = %" PRI_OFF_T,
+    G_debug(3, "Vect_restore_line(): name = %s, level = %d, offset = %" PRId64
+            ", line = %" PRId64,
             Map->name, Map->level, offset, line);
 
     if (!check_map(Map))
@@ -296,7 +298,7 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
     ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, offset, line);
 
     if (ret == -1)
-	G_warning(_("Unable to restore feature/offset %" PRI_OFF_T " in vector map <%s>"),
+	G_warning(_("Unable to restore feature/offset %" PRId64 " in vector map <%s>"),
                   offset, Vect_get_name(Map));
 
     return ret;
