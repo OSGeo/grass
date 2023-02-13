@@ -283,7 +283,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 
     def test_error_handling_empty_strds(self):
         # Empty strds
-        self.assertModuleFail(
+        self.assertModule(
             "t.rast.univar",
             input="A",
             output="univar_output.txt",
