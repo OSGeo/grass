@@ -110,13 +110,13 @@ def print_gridded_dataset_univar_statistics(
     no_header=False,
     fs="|",
     rast_region=False,
-    spatial_relation=None,
+    region_relation=None,
     zones=None,
     nprocs=1,
 ):
     """Print univariate statistics for a space time raster or raster3d dataset
     Returns None if the space time raster dataset is empty or if applied
-    filters (where, spatial_relation) do not return and maps to process
+    filters (where, region_relation) do not return and maps to process
 
     :param type: Type of Space-Time-Dataset, must be either strds or str3ds
     :param input: The name of the space time dataset
@@ -129,7 +129,7 @@ def print_gridded_dataset_univar_statistics(
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
            Only available for strds.
-    :param spatial_relation: Process only maps with the given spatial relation
+    :param region_relation: Process only maps with the given spatial relation
            to the computational region. A string with one of the following values:
            "overlaps": maps that spatially overlap ("intersect")
                        within the provided spatial extent
@@ -147,7 +147,7 @@ def print_gridded_dataset_univar_statistics(
         out_file = open(output, "w")
 
     spatial_extent = None
-    if spatial_relation:
+    if region_relation:
         spatial_extent = gs.parse_command("g.region", flags="3gu")
 
     strds_cols = (
@@ -161,7 +161,7 @@ def print_gridded_dataset_univar_statistics(
         "start_time",
         dbif,
         spatial_extent=spatial_extent,
-        spatial_relation=spatial_relation,
+        spatial_relation=region_relation,
     )
 
     if not rows and rows != [""]:
@@ -173,10 +173,10 @@ def print_gridded_dataset_univar_statistics(
                 )
             )
         )
-        if spatial_relation:
+        if region_relation:
             gs.verbose(
                 _(
-                    "or no maps with the requested spatial_relation"
+                    "or no maps with the requested spatial relation"
                     "to the computational region exist"
                 )
             )
