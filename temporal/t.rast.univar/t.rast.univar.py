@@ -71,7 +71,7 @@
 
 # %flag
 # % key: r
-# % description: Ignore the current region settings and use the raster map regions for univar statistical calculation
+# % description: Use the raster map regions for univar statistical calculation instead of the current region
 # %end
 
 # %flag
