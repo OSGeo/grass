@@ -127,7 +127,7 @@ def main():
         fs=separator,
         rast_region=rast_region,
         zones=zones,
-        spatial_relation=region_relation,
+        region_relation=region_relation,
         nprocs=nprocs,
     )
 
