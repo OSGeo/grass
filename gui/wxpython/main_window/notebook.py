@@ -127,7 +127,8 @@ class MapNotebook(aui.AuiNotebook):
         if page.IsDocked():
             self.DeletePage(self.GetPageIndex(page))
         else:
-            page.Close()
+            frame = page.GetParent()
+            frame.closeFrameNoEvent()
 
     def SetMapPageText(self, page, text):
         """Decides whether sets title to MapNotebook page
