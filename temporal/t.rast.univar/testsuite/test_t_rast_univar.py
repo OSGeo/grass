@@ -395,7 +395,7 @@ b_4@PERMANENT|S2_B1|2001-10-01 00:00:00|2002-01-01 00:00:00|440|440|440|440|0|0|
             input="C",
             where="start_time >= '2001-01-01'",
             nprocs=2,
-            spatial_relation="overlaps",
+            region_relation="overlaps",
             overwrite=True,
             verbose=True,
         )
@@ -423,7 +423,7 @@ d_4@stbl||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|10000|11
             input="C",
             where="start_time >= '2001-01-01'",
             nprocs=2,
-            spatial_relation="contains",
+            region_relation="contains",
             overwrite=True,
             verbose=True,
         )
@@ -449,7 +449,7 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|770000|0
             input="C",
             where="start_time >= '2001-01-01'",
             nprocs=2,
-            spatial_relation="is_contained",
+            region_relation="is_contained",
             overwrite=True,
             verbose=True,
         )
@@ -466,19 +466,6 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
-
-    def test_with_with_spatial_filter_fails(self):
-        """Test semantic labels"""
-        t_rast_univar = SimpleModule(
-            "t.rast.univar",
-            flags="r",
-            input="C",
-            where="start_time >= '2001-01-01'",
-            spatial_relation="overlaps",
-            overwrite=True,
-            verbose=True,
-        )
-        self.assertModuleFail(t_rast_univar)
 
 
 if __name__ == "__main__":
