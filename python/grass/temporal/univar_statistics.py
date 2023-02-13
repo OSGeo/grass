@@ -115,6 +115,8 @@ def print_gridded_dataset_univar_statistics(
     nprocs=1,
 ):
     """Print univariate statistics for a space time raster or raster3d dataset
+    Returns None if the space time raster dataset is empty or if applied
+    filters (where, spatial_relation) do not return and maps to process
 
     :param type: Type of Space-Time-Dataset, must be either strds or str3ds
     :param input: The name of the space time dataset
@@ -127,12 +129,12 @@ def print_gridded_dataset_univar_statistics(
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
            Only available for strds.
-    :param dict spatial_relation: Spatial relation to the provided
-        spatial extent as a string with one of the following values:
-        "overlaps": maps that spatially overlap ("intersect")
-                    within the provided spatial extent
-        "is_contained": maps that are fully within the provided spatial extent
-        "contains": maps that contain (fully cover) the provided spatial extent
+    :param spatial_relation: Process only maps with the given spatial relation
+           to the computational region. A string with one of the following values:
+           "overlaps": maps that spatially overlap ("intersect")
+                       within the provided spatial extent
+           "is_contained": maps that are fully within the provided spatial extent
+           "contains": maps that contain (fully cover) the provided spatial extent
     :param zones: raster map with zones to calculate statistics for
     """
     # We need a database interface
@@ -164,14 +166,25 @@ def print_gridded_dataset_univar_statistics(
 
     if not rows and rows != [""]:
         dbif.close()
-        warn = "Space time %(sp)s dataset <%(i)s> is empty"
-        if spatial_relation:
-            warn += " or no maps with the requested spatial_relation to the computational region exist"
-        if where:
-            warn += " or where condition does not return any maps"
-        gs.warning(
-            _(warn) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
+        gs.verbose(
+            _(
+                "Space time {type} dataset <{id}> is empty".format(
+                    type=sp.get_new_map_instance(None).get_type(), id=sp.get_id()
+                )
+            )
         )
+        if spatial_relation:
+            gs.verbose(
+                _(
+                    "or no maps with the requested spatial_relation"
+                    "to the computational region exist"
+                )
+            )
+        if where:
+            gs.verbose(_("or where condition does not return any maps"))
+
+        if output is not None:
+            out_file.close()
         return
 
     if no_header is False:
