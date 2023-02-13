@@ -1005,7 +1005,8 @@ class MapPanel(SingleMapPanel):
                             pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
                         )
                         if not self.IsDocked():
-                            self.GetParent().Destroy()
+                            frame = self.GetParent()
+                            frame.closeFrameNoEvent()
                     else:
                         self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
