@@ -16,6 +16,8 @@ import tempfile
 import os
 import weakref
 import shutil
+from pathlib import Path
+
 import grass.script as gs
 
 from .map import Map
@@ -483,7 +485,8 @@ class TimeSeriesMap:
             self.render()
 
         # filepath to output GIF
-        if not filename.endswith(".gif"):
+        filename = Path(filename)
+        if not filename.suffix.lower() == ".gif":
             raise ValueError(_("filename must end in '.gif'"))
 
         images = []
