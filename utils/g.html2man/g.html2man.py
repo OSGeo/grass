@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import re
-from ghtml import HTMLParser, HTMLParseError
+from ghtml import HTMLParser
 from ggroff import Formatter
 
 try:
