@@ -74,7 +74,6 @@ def main():
     tar = tarfile.TarFile.open(name=input_base, mode="r")
     try:
         data_names = [tarinfo.name for tarinfo in tar.getmembers() if "/" not in tarinfo.name]
-        # code changed here, Exception included instead of bare except
     except Exception:
         grass.fatal(_("Pack file unreadable"))
 

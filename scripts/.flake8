@@ -19,7 +19,6 @@ per-file-ignores =
     v.report/v.report.py: F841
     db.out.ogr/db.out.ogr.py: F841
     g.extension/g.extension.py: F841, E722
-    
     v.unpack/v.unpack.py: F841, E722
     v.import/v.import.py: F841, E722
     db.univar/db.univar.py: E741
@@ -34,7 +33,6 @@ per-file-ignores =
     v.in.wfs/v.in.wfs.py: E722
     r.plane/r.plane.py: E722
     v.what.strds/v.what.strds.py: E722
-    
 
 max-line-length = 88
 exclude =
