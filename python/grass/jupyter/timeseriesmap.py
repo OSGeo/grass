@@ -486,7 +486,7 @@ class TimeSeriesMap:
 
         # filepath to output GIF
         filename = Path(filename)
-        if not filename.suffix.lower() == ".gif":
+        if filename.suffix.lower() != ".gif":
             raise ValueError(_("filename must end in '.gif'"))
 
         images = []
