@@ -925,7 +925,7 @@ class GMFrame(wx.Frame):
         self.currentPageNum = self.notebookLayers.GetSelection()
 
         if hasattr(self.currentPage, "maptree") and self.mapnotebook.GetCurrentPage():
-            self.mapnotebook.SetSelectionToPage(self.GetMapDisplay())
+            self.mapnotebook.SetSelectionToMapPage(self.GetMapDisplay())
 
         event.Skip()
 

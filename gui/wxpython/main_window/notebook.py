@@ -105,9 +105,8 @@ class MapNotebook(aui.AuiNotebook):
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
 
-    def SetSelectionToPage(self, page):
-        """Overrides Aui.Notebook SetSelectionToPage method.
-        Decides whether to set selection to a MapNotebook page
+    def SetSelectionToMapPage(self, page):
+        """Decides whether to set selection to a MapNotebook page
         or an undocked independent frame"""
         self.SetSelection(self.GetPageIndex(page))
 
