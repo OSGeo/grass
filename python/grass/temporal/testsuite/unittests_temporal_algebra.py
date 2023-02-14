@@ -124,7 +124,7 @@ class TestTemporalAlgebra(TestCase):
         cls.del_temp_region()
 
     def test_temporal_select1(self):
-        """Testing the temporal select operator with equal relations. """
+        """Testing the temporal select operator with equal relations."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression="R = A : A", stdstype="strds", basename="r", overwrite=True)
 
@@ -141,7 +141,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select2(self):
-        """Testing the temporal select operator with equal relations. """
+        """Testing the temporal select operator with equal relations."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression="R = A : D", stdstype="strds", basename="r", overwrite=True)
 
@@ -158,7 +158,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select3(self):
-        """Testing the temporal select operator with equal relations. """
+        """Testing the temporal select operator with equal relations."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = A !: D", stdstype="strds", basename="r", overwrite=True
@@ -177,7 +177,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select_operators1(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = A {:,during} C",
@@ -199,7 +199,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select_operators2(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = A {:,equal|during} C",
@@ -300,7 +300,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_extent1(self):
-        """Testing the temporal extent operators. """
+        """Testing the temporal extent operators."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = A {:,during,r} C",
@@ -323,7 +323,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_extent2(self):
-        """Testing the temporal extent operators. """
+        """Testing the temporal extent operators."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = A {:,during,d} C",
@@ -346,7 +346,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_extent3(self):
-        """Testing the temporal extent operators. """
+        """Testing the temporal extent operators."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = A {:,during,u} C",
@@ -373,7 +373,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_hash1(self):
-        """Testing the hash function in conditional statement. """
+        """Testing the hash function in conditional statement."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = if(A # D == 1, A)",
@@ -396,7 +396,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_hash_operator1(self):
-        """Testing the hash operator function in conditional statement. """
+        """Testing the hash operator function in conditional statement."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = if(A {#,during} C == 1, A)",
@@ -419,7 +419,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_hash_operator2(self):
-        """Testing the hash operator function in conditional statement. """
+        """Testing the hash operator function in conditional statement."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = if({during}, C {#,contains} A == 2, A)",
@@ -442,7 +442,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_tmap_function1(self):
-        """Testing the tmap function. """
+        """Testing the tmap function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = tmap(singletmap)",
@@ -465,7 +465,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_tmap_function2(self):
-        """Testing the tmap function. """
+        """Testing the tmap function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = A : tmap(singletmap)",
@@ -488,7 +488,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_merge_function1(self):
-        """Testing the merge function. """
+        """Testing the merge function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = merge(A,D)", stdstype="strds", basename="r", overwrite=True
@@ -508,7 +508,7 @@ class TestTemporalAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_merge_function2(self):
-        """Testing the merge function. """
+        """Testing the merge function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
             expression="R = merge(A, B {!:,contains} A)",
@@ -637,7 +637,7 @@ class TestTemporalAlgebraDryRun(TestCase):
         cls.del_temp_region()
 
     def test_merge_function1(self):
-        """Testing the merge function. """
+        """Testing the merge function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
         pc = ta.parse(
             expression="R = merge(A, B {:,contains} A)",
@@ -651,7 +651,7 @@ class TestTemporalAlgebraDryRun(TestCase):
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
     def test_merge_function2(self):
-        """Testing the merge function. """
+        """Testing the merge function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
         pc = ta.parse(
             expression="R = merge(A, B {!:,contains} A)",
@@ -665,7 +665,7 @@ class TestTemporalAlgebraDryRun(TestCase):
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
     def test_merge_function3(self):
-        """Testing the merge function. """
+        """Testing the merge function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
         pc = ta.parse(
             expression="R = merge(A, D {!:,equal} A)",
@@ -679,7 +679,7 @@ class TestTemporalAlgebraDryRun(TestCase):
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
     def test_shift1(self):
-        """Testing the shift function. """
+        """Testing the shift function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
         pc = ta.parse(
             expression='R = tshift(A, "3 days")',
@@ -693,7 +693,7 @@ class TestTemporalAlgebraDryRun(TestCase):
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
     def test_shift2(self):
-        """Testing the shift function. """
+        """Testing the shift function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
         pc = ta.parse(
             expression='R = tshift(A, "2 days") {:,during,l} C',
@@ -707,7 +707,7 @@ class TestTemporalAlgebraDryRun(TestCase):
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
     def test_buffer1(self):
-        """Testing the shift function. """
+        """Testing the shift function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
         pc = ta.parse(
             expression='R = buff_t(A, "1 day") ',
@@ -721,7 +721,7 @@ class TestTemporalAlgebraDryRun(TestCase):
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
     def test_buff2(self):
-        """Testing the shift function. """
+        """Testing the shift function."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
         pc = ta.parse(
             expression='R = buff_t(A, "1 day") {:,contains,l} C',

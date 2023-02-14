@@ -1,6 +1,7 @@
 MODULE_TOPDIR = ..
 
 SUBDIRS = \
+	d.background \
 	d.correlate \
 	d.frame \
 	d.out.file \
@@ -18,13 +19,13 @@ SUBDIRS = \
 	db.out.ogr \
 	db.test \
 	db.univar \
-	g.bands \
+	g.download.location \
 	g.extension \
 	g.extension.all \
 	g.manual \
 	g.search.modules \
+	i.band.library \
 	i.colors.enhance \
-	i.band \
 	i.image.mosaic \
 	i.in.spotvgt \
 	i.oif \
@@ -49,6 +50,7 @@ SUBDIRS = \
 	r.plane \
 	r.reclass.area \
 	r.rgb \
+	r.semantic.label \
 	r.shade \
 	r.tileset \
 	r.unpack \
@@ -85,4 +87,3 @@ SUBDIRS = \
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
-

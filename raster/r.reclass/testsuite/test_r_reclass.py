@@ -1,7 +1,7 @@
 """
 Name:       r.reclass test
 Purpose:    Tests r.reclass and its flags/options.
-	
+
 Author:     Sunveer Singh, Google Code-in 2017
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
@@ -48,7 +48,7 @@ class Testrr(TestCase):
         self.runModule("g.remove", type="raster", flags="f", name=self.output)
 
     def test_rules1(self):
-        """Testing rules 1 """
+        """Testing rules 1"""
         reclass = SimpleModule(
             "r.reclass", input=self.input, output=self.output, rules="-"
         )

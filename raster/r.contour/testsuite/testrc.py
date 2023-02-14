@@ -1,7 +1,7 @@
 """
 Name:       r.contour test
 Purpose:    Tests r.contour and its flags/options.
-    
+
 Author:     Sunveer Singh, Google Code-in 2018
 Copyright:  (C) 2018 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
@@ -107,7 +107,7 @@ class Testrr(TestCase):
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_v_db_select(self):
-        """Testing attribute values of contours with v.db.select """
+        """Testing attribute values of contours with v.db.select"""
         self.assertModule("r.contour", input=self.input, output=self.output, step=2)
         v_db_select = SimpleModule("v.db.select", map=self.output)
         v_db_select.run()

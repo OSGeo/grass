@@ -1,0 +1,92 @@
+---
+name: Ubuntu
+
+# Build and run tests on Ubuntu
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.name }} tests
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - name: '22.04'
+            os: ubuntu-22.04
+            config: ubuntu-22.04
+          # This is without optional things but it still keeps things useful,
+          # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
+          # so that test pass even when these optional things are not present.
+          - name: minimum config
+            os: ubuntu-22.04
+            config: ubuntu-22.04_without_x
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Create installation directory
+        run: |
+          mkdir $HOME/install
+
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
+
+      - name: Build
+        env:
+          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+          CFLAGS: -fPIC
+          # TODO: -pedantic-errors here won't compile
+          CXXFLAGS: -fPIC
+        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
+
+      - name: Add the bin directory to PATH
+        run: |
+          echo "$HOME/install/bin" >> $GITHUB_PATH
+
+      - name: Test executing of the grass command
+        run: .github/workflows/test_simple.sh
+
+      - name: Run tests
+        run: .github/workflows/test_thorough.sh
+
+      - name: Make HTML test report available
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: testreport-${{ matrix.config }}
+          path: testreport
+          retention-days: 3
+
+      - name: Print installed versions
+        if: always()
+        run: .github/workflows/print_versions.sh

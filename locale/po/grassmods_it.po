@@ -4412,9 +4412,9 @@ msgid "Name of target mapset for ortho-rectification"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access target location/mapset %s/%s"
-msgstr "Non è possibile creare la location <%s>: %s"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
 msgid "Target locations with XY (unreferenced) are not supported"
@@ -4697,14 +4697,12 @@ msgid "Initial Camera Kappa (yaw) degrees"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:107
-#, fuzzy
 msgid "Apriori Omega (pitch) standard deviation"
-msgstr "Colora usando le bande di deviazione standard"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
-#, fuzzy
 msgid "Apriori Phi (roll) standard deviation"
-msgstr "Colora usando le bande di deviazione standard"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
 msgid "Apriori Kappa (yaw) standard deviation"
@@ -11488,9 +11486,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Selezione "
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 msgid "Name of band reference identifier (example: S2_1)"
@@ -14353,9 +14350,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "distanza"
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -16852,9 +16848,8 @@ msgstr "dati nulli"
 #: ../locale/scriptstrings/r.mask_to_translate.c:5
 #: ../raster3d/r3.mask/main.c:136 ../raster3d/r3.null/main.c:183
 #: ../raster/r.null/main.c:63
-#, fuzzy
 msgid "no-data"
-msgstr "Nessun dato"
+msgstr ""
 
 #: ../locale/scriptstrings/r.null.all_to_translate.c:6
 #: ../raster/r.null/main.c:88
@@ -20071,9 +20066,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "Nessun dato"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -20877,7 +20871,7 @@ msgid "Vector map with training samples"
 msgstr "Mappa vettoriale di input contenente le linee"
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:13
-msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be choosen later."
+msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be chosen later."
 msgstr ""
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:15
@@ -22597,7 +22591,7 @@ msgid "Interpolation command string"
 msgstr "Metodo di interpolazione da usare"
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:36
-msgid "Additional settings for choosen interpolation (see manual)"
+msgid "Additional settings for chosen interpolation (see manual)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:38
@@ -30197,9 +30191,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Non è possibile aprire il file della cronologia per la mappa vettoriale <%s>"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35535,9 +35529,8 @@ msgid "Neighborhood analysis tool for vector point maps."
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:134
-#, fuzzy
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Rende ogni valore di categoria della cella una funzione dei valori di categoria delle celle attorno ad essa, e raccoglie i nuovi valori di cella in un layer raster di output."
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:160
 msgid "Method for aggregate statistics (count if non given)"
@@ -35561,9 +35554,8 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:284
-#, fuzzy
 msgid "All points fall outside of the current computational region"
-msgstr "Il punto seed è fuori dalla regione corrente"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:285
 msgid "Input vector and computational region do not overlap"
@@ -36474,7 +36466,7 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:686
 #, c-format
-msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:713 ../db/drivers/ogr/execute.c:56
@@ -36625,9 +36617,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr ""
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Tabella mancante"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -36635,9 +36627,9 @@ msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
 #: ../vector/v.patch/main.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
-msgstr "Il numero di colonne è differente"
+msgstr ""
 
 #: ../vector/v.patch/main.c:289
 #, c-format
@@ -37840,9 +37832,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Numero di righe"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42642,24 +42634,24 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "Gruppo <%s> non esiste ancora. Sto creandolo..."
+msgstr ""
 
 #: ../general/g.copy/main.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s=%s,%s: files are the same, no copy required. Skipping."
-msgstr "%s=%s,%s: sono gli stessi file, non è richiesto copiarli"
+msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "Il tematismo OGR <%s> è già esistente e verrà sovrascritto"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> è un nome di file non valido"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -54267,9 +54259,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Fattore di scala per l'elevazione"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54359,9 +54350,8 @@ msgstr ""
 " (le regole indicano da %f a %f ma i dati da %f da %f)"
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Non è possibile leggere il colore"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -56067,23 +56057,6 @@ msgstr ""
 msgid "Comparison mode for zenith/nadir line-of-sight search"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:221
-msgid "Prefix for maps resulting from multiresolution approach"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:222 ../raster/r.geomorphon/main.c:230
-#: ../raster/r.geomorphon/main.c:238
-msgid "Multires"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:229
-msgid "Distance step for every iteration (zero to omit)"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:237
-msgid "Distance where search will start in multiple mode (zero to omit)"
-msgstr ""
-
 #: ../raster/r.geomorphon/main.c:243
 msgid "Use meters to define search units (default is cells)"
 msgstr ""
@@ -56093,30 +56066,26 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Coordinate da interrogare"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
-#, fuzzy
 msgid "Profile"
-msgstr "profilo"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "Nome del file di output (utilizzare output=- per stampare a monitor)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Formato di output"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed parsing <%s>"
-msgstr "Esportazione di <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:302
 #, c-format
@@ -56124,14 +56093,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "Le coordinate del punto finale sono al di fuori della regione corrente"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "impossibile aprire il file di output <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -56149,15 +56117,6 @@ msgstr ""
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:399
-msgid "For multiresolution mode step must be greater than or equal to resolution of one cell"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:403
-#, c-format
-msgid "<%s> is an incorrect prefix"
-msgstr ""
-
 #: ../raster/r.geomorphon/main.c:431
 #, c-format
 msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
@@ -56172,9 +56131,8 @@ msgid "Profile data has been written"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:655
-#, fuzzy
 msgid "Failed writing profile data"
-msgstr "Scrittura del file V5D non riuscita"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:751
 msgid "Failed to profile the computation, please check the parameters"
@@ -57628,9 +57586,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "Mapset <%s> non trovato"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57645,14 +57602,12 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "Mappa raster <%s> non trovata nel mapset corrente"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "Parametro richiesto <%s> non impostato"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
@@ -58294,7 +58249,7 @@ msgid "%s driver supports only '%s' parameter in '%s'. Other parameters are igno
 msgstr ""
 
 #: ../scripts/r.in.wms/r.in.wms.py:250
-msgid "The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."
+msgid "The proxy will be ignored by the chosen GRASS driver. It is only used with the GDAL driver."
 msgstr ""
 
 #: ../scripts/r.in.wms/r.in.wms.py:255
@@ -58491,9 +58446,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Non è possibile ottenere la banda raster"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -60229,20 +60183,20 @@ msgstr "Impossibile leggere il file georeferenziato %s né con GDAL né con OGR"
 msgid "GDAL datatype: %s, range: %g - %g"
 msgstr "Tipo di dati GDAL: %s, campo di variazione: %g - %g"
 
-#~ msgid "<%s> not found"
-#~ msgstr "<%s> non trovato"
+msgid "<%s> not found"
+msgstr "<%s> non trovato"
 
-#~ msgid "Key columns differ"
-#~ msgstr "Le colonne chiave sono differenti"
+msgid "Key columns differ"
+msgstr "Le colonne chiave sono differenti"
 
-#~ msgid "Column types differ"
-#~ msgstr "I tipi di colonna sono differenti"
+msgid "Column types differ"
+msgstr "I tipi di colonna sono differenti"
 
-#~ msgid "Missing table"
-#~ msgstr "Tabella mancante"
+msgid "Missing table"
+msgstr "Tabella mancante"
 
-#~ msgid "Number of columns differ"
-#~ msgstr "Il numero di colonne è differente"
+msgid "Number of columns differ"
+msgstr "Il numero di colonne è differente"
 
-#~ msgid "%s=%s,%s: files are the same, no copy required"
-#~ msgstr "%s=%s,%s: sono gli stessi file, non è richiesto copiarli"
+msgid "%s=%s,%s: files are the same, no copy required"
+msgstr "%s=%s,%s: sono gli stessi file, non è richiesto copiarli"

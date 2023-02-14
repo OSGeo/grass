@@ -626,17 +626,13 @@ class VDigitZBulkDialog(wx.Dialog):
 
         # starting value
         txt = StaticText(parent=self, label=_("Starting value"))
-        self.value = SpinCtrl(
-            parent=self, id=wx.ID_ANY, size=(150, -1), initial=0, min=-1e6, max=1e6
-        )
+        self.value = SpinCtrl(parent=self, id=wx.ID_ANY, initial=0, min=-1e6, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.value, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
 
         # step
         txt = StaticText(parent=self, label=_("Step"))
-        self.step = SpinCtrl(
-            parent=self, id=wx.ID_ANY, size=(150, -1), initial=0, min=0, max=1e6
-        )
+        self.step = SpinCtrl(parent=self, id=wx.ID_ANY, initial=0, min=0, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.step, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
 

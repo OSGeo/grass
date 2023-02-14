@@ -722,7 +722,7 @@ class VNETAnalysisParameters:
 
 class VNETAnalysesProperties:
     def __init__(self):
-        """Initializes parameters for different v.net.* modules """
+        """Initializes parameters for different v.net.* modules"""
         # initialization of v.net.* analysis parameters (data which
         # characterizes particular analysis)
 
@@ -994,7 +994,7 @@ class VectMap:
         self.DeleteRenderLayer()
 
     def AddRenderLayer(self, cmd=None, colorsCmd=None):
-        """Add map from map window layers to render """
+        """Add map from map window layers to render"""
 
         if not self.mapWin:
             return False

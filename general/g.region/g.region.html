@@ -13,7 +13,6 @@ specified mapset;  i.e., GRASS programs that respect the
 geographic region settings will use the current geographic
 region settings.
 
-
 <h2>DEFINITIONS</h2>
 
 <dl>
@@ -84,7 +83,6 @@ these mapsets are included in the user's mapset search
 path or the '@' operator is used (<tt>region_name@mapset</tt>).
 </dl>
 
-
 <h2>NOTES</h2>
 
 After all updates have been applied, the current region's
@@ -93,17 +91,17 @@ that the north/south distance is a multiple of the
 north/south resolution and that the east/west distance is a
 multiple of the east/west resolution.
 
-<p>With the <b>-a</b> flag all four boundaries are adjusted 
+<p>With the <b>-a</b> flag all four boundaries are adjusted
 to be even multiples of the resolution, aligning the region to the
 resolution supplied by the user. The default is to
 align the region resolution to match the region boundaries.
 
 <p>The <b>-m</b> flag will report the region resolution in meters. The
 resolution is calculated by averaging the resolution at the region
-boundaries. This resolution is calculated by dividing the geodesic 
+boundaries. This resolution is calculated by dividing the geodesic
 distance in meters at the boundary by the number of rows or columns.
-For example the east / west resolution (ewres) is determined from an 
-average of the geodesic distances at the North and South boundaries 
+For example the east / west resolution (ewres) is determined from an
+average of the geodesic distances at the North and South boundaries
 divided by the number of columns.
 <!-- add'l info. include?
 Print the region resolution in meters (from geodesic). With no other
@@ -122,6 +120,14 @@ This format can be given back to <em>g.region</em> on its command line.
 This may also be used to save region settings as shell environment variables
 with the UNIX eval command, "<tt>eval `g.region -g`</tt>".
 
+<p>With <b>-u</b> flag current region is not updated even if one or more
+options for changing region is used (<b>res=</b>, <b>raster=</b>, etc).
+This can be used for example to print modified region values for further use
+without actually modifying the current region.
+Similarly, <b>-o</b> flag forces to update current region file even when e.g., only
+printing was specified. Flag <b>-o</b> was added in GRASS GIS version 8 to simulate
+<em>g.region</em> behavior in prior versions when current region file was
+always updated unless <b>-u</b> was specified.
 
 <h3>Additional parameter information:</h3>
 
@@ -141,7 +147,7 @@ that fall inside the region stated in the cell header for
 the named <b>raster</b> map.
 
 
-<dt><b>align=</b><em>name</em> 
+<dt><b>align=</b><em>name</em>
 
 <dd>Set the current resolution equal to that of the named
 raster map, and align the current region to a row and
@@ -151,7 +157,6 @@ nearest cell in the named raster map - not to the named
 map's edges.  To perform the latter function, use the
 <b>raster=</b><em>name</em> option.
 </dl>
-
 
 <h2>EXAMPLES</h2>
 
@@ -452,8 +457,6 @@ gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
 Here the input raster map does not have to match the location
 projection since it is reprojected on the fly.
 
-
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -464,14 +467,8 @@ projection since it is reprojected on the fly.
 Environment variables: <a href="variables.html#internal">GRASS_REGION and WIND_OVERRIDE</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 Michael Shapiro,
-U.S.Army Construction Engineering 
+U.S.Army Construction Engineering
 Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

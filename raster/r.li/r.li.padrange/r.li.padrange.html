@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.padrange</em> calculates the range of patch area sizes in 
+<em>r.li.padrange</em> calculates the range of patch area sizes in
 hectares as:<br>
 <img src="rlipadrange_formula.png" alt="r.li.padrange formula"> <br>
 with:<br>
@@ -10,7 +10,7 @@ with:<br>
 </ul>
 
 <p>
-This index is calculated using a 4 neighbour algorithm, diagonal cells 
+This index is calculated using a 4 neighbour algorithm, diagonal cells
 are ignored when tracing a patch.
 
 <h2>NOTES</h2>
@@ -27,6 +27,7 @@ If the sample area contains only NULL values then <em>r.li.padrange</em>
 returns NULL.<br>
 
 <h2>EXAMPLES</h2>
+
 To calculate range of patch area size index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
 <em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
@@ -59,21 +60,19 @@ d.vect forests type=boundary
 </pre></div>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
 <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
 <h2>REFERENCES</h2>
+
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
+
 Michael Shapiro - CERL (patch identification)<br>
 Markus Metz (statistics)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

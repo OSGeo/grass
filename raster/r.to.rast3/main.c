@@ -1,20 +1,20 @@
-
 /****************************************************************************
  *
- * MODULE:       r.to.rast3 
- *   	    	
- * AUTHOR(S):    Original author 
+ * MODULE:       r.to.rast3
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert@gmx.de
- * 		08 01 2005 Berlin
- * PURPOSE:      Converts 2D raster map slices to one 3D volume map  
+ *                 08 01 2005 Berlin
+ * PURPOSE:      Converts 2D raster map slices to one 3D volume map
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,15 +34,14 @@ paramType param; /*params */
 int globalRastMapType;
 int globalG3dMapType;
 
-
 /*- prototypes --------------------------------------------------------------*/
-void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
-void set_params(); /*Fill the paramType structure */
-void raster_to_g3d(void *map, RASTER3D_Region region, int *fd); /*Write the raster */
+void fatal_error(void *map, int *fd, int depths,
+                 char *errorMsg); /*Simple Error message */
+void set_params(void);            /*Fill the paramType structure */
+void raster_to_g3d(void *map, RASTER3D_Region region,
+                   int *fd);                 /*Write the raster */
 int open_input_raster_map(const char *name); /*opens the outputmap */
-void close_input_raster_map(int fd); /*close the map */
-
-
+void close_input_raster_map(int fd);         /*close the map */
 
 /* ************************************************************************* */
 /* Error handling ********************************************************** */
@@ -54,7 +53,8 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     /* Close files and exit */
     if (map != NULL) {
-        /* should unopen map here! but this functionality is not jet implemented */
+        /* should unopen map here! but this functionality is not jet implemented
+         */
         if (!Rast3d_close(map))
             Rast3d_fatal_error(_("Could not close the map"));
     }
@@ -66,14 +66,13 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     Rast3d_fatal_error("%s", errorMsg);
     exit(EXIT_FAILURE);
-
 }
 
 /* ************************************************************************* */
 /* Setg up the arguments we are expecting ********************************** */
 
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.input = G_define_standard_option(G_OPT_R_INPUTS);
     param.input->description = _("2D raster maps which represent the slices");
@@ -81,7 +80,8 @@ void set_params()
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
     param.tilesize = G_define_option();
-    param.tilesize->description = _("The maximum tile size in kilo bytes. Default is 32KB.");
+    param.tilesize->description =
+        _("The maximum tile size in kilo bytes. Default is 32KB.");
     param.tilesize->key = "tilesize";
     param.tilesize->answer = "32";
     param.tilesize->type = TYPE_INTEGER;
@@ -90,14 +90,12 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use 3D raster mask (if exists) with output map");
-
+    param.mask->description =
+        _("Use 3D raster mask (if exists) with output map");
 }
 
-
-
 /* ************************************************************************* */
-/* Write the raster maps into one RASTER3D map ********************************** */
+/* Write the raster maps into one RASTER3D map               *************** */
 
 /* ************************************************************************* */
 void raster_to_g3d(void *map, RASTER3D_Region region, int *fd)
@@ -127,36 +125,40 @@ void raster_to_g3d(void *map, RASTER3D_Region region, int *fd)
             Rast_get_row(fd[z], rast, y, globalRastMapType);
 
             for (x = 0, ptr = rast; x < cols; x++,
-                ptr =
-                G_incr_void_ptr(ptr, Rast_cell_size(globalRastMapType))) {
+                ptr = G_incr_void_ptr(ptr, Rast_cell_size(globalRastMapType))) {
                 if (globalRastMapType == CELL_TYPE) {
                     if (Rast_is_null_value(ptr, globalRastMapType)) {
                         Rast3d_set_null_value(&dvalue, 1, DCELL_TYPE);
-                    } else {
-                        dvalue = *(CELL *) ptr;
                     }
-                    if (Rast3d_put_value
-                        (map, x, y, z, (char *) &dvalue, DCELL_TYPE) < 0)
+                    else {
+                        dvalue = *(CELL *)ptr;
+                    }
+                    if (Rast3d_put_value(map, x, y, z, (char *)&dvalue,
+                                         DCELL_TYPE) < 0)
                         fatal_error(map, fd, depths,
                                     "Error writing double data");
-                } else if (globalRastMapType == FCELL_TYPE) {
+                }
+                else if (globalRastMapType == FCELL_TYPE) {
                     if (Rast_is_null_value(ptr, globalRastMapType)) {
                         Rast3d_set_null_value(&fvalue, 1, FCELL_TYPE);
-                    } else {
-                        fvalue = *(FCELL *) ptr;
                     }
-                    if (Rast3d_put_value
-                        (map, x, y, z, (char *) &fvalue, FCELL_TYPE) < 0)
+                    else {
+                        fvalue = *(FCELL *)ptr;
+                    }
+                    if (Rast3d_put_value(map, x, y, z, (char *)&fvalue,
+                                         FCELL_TYPE) < 0)
                         fatal_error(map, fd, depths,
                                     "Error writing float data");
-                } else if (globalRastMapType == DCELL_TYPE) {
+                }
+                else if (globalRastMapType == DCELL_TYPE) {
                     if (Rast_is_null_value(ptr, globalRastMapType)) {
                         Rast3d_set_null_value(&dvalue, 1, DCELL_TYPE);
-                    } else {
-                        dvalue = *(DCELL *) ptr;
                     }
-                    if (Rast3d_put_value
-                        (map, x, y, z, (char *) &dvalue, DCELL_TYPE) < 0)
+                    else {
+                        dvalue = *(DCELL *)ptr;
+                    }
+                    if (Rast3d_put_value(map, x, y, z, (char *)&dvalue,
+                                         DCELL_TYPE) < 0)
                         fatal_error(map, fd, depths,
                                     "Error writing double data");
                 }
@@ -164,16 +166,14 @@ void raster_to_g3d(void *map, RASTER3D_Region region, int *fd)
         }
     }
 
-	G_percent(1, 1, 1);
+    G_percent(1, 1, 1);
 
     if (rast)
         G_free(rast);
-
 }
 
-
 /* ************************************************************************* */
-/* Main function, open the raster maps and create the RASTER3D raster map ******* */
+/* Main function, open the raster maps and create the RASTER3D raster map ** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
@@ -207,7 +207,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /*Check for output */
     if (param.output->answer == NULL)
         Rast3d_fatal_error(_("No output map"));
@@ -227,7 +226,8 @@ int main(int argc, char *argv[])
 
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
-        G_message(_("The 2D and 3D region settings are different. Using the 3D region settings to adjust the 2D region."));
+        G_message(_("The 2D and 3D region settings are different. Using the 3D "
+                    "region settings to adjust the 2D region."));
         G_get_set_window(&window2d);
         window2d.ns_res = region.ns_res;
         window2d.ew_res = region.ew_res;
@@ -236,9 +236,8 @@ int main(int argc, char *argv[])
         Rast_set_window(&window2d);
     }
 
-
     /*prepare the filehandler */
-    fd = (int *) G_malloc(region.depths * sizeof (int));
+    fd = (int *)G_malloc(region.depths * sizeof(int));
 
     if (fd == NULL)
         fatal_error(map, NULL, 0, _("Out of memory"));
@@ -259,8 +258,9 @@ int main(int argc, char *argv[])
             nofile = 1;
 
         /*if only one map is given, open it depths - times */
-        G_verbose_message(_("Open raster map %s - one time for each depth (%d/%d)"),
-                          name, i + 1, region.depths);
+        G_verbose_message(
+            _("Open raster map %s - one time for each depth (%d/%d)"), name,
+            i + 1, region.depths);
         fd[i] = open_input_raster_map(name);
         opencells++;
 
@@ -272,7 +272,8 @@ int main(int argc, char *argv[])
 
         if (maptype_tmp != globalRastMapType) {
             fatal_error(map, fd, opencells,
-                        _("Input maps have to be from the same type. CELL, FCELL or DCELL!"));
+                        _("Input maps have to be from the same type. CELL, "
+                          "FCELL or DCELL!"));
         }
     }
 
@@ -285,7 +286,9 @@ int main(int argc, char *argv[])
     else
         globalG3dMapType = FCELL_TYPE;
 
-    map = Rast3d_open_new_opt_tile_size(param.output->answer, RASTER3D_USE_CACHE_XY, &region, globalG3dMapType, maxSize);
+    map = Rast3d_open_new_opt_tile_size(param.output->answer,
+                                        RASTER3D_USE_CACHE_XY, &region,
+                                        globalG3dMapType, maxSize);
 
     if (map == NULL)
         fatal_error(map, fd, opencells, _("Error opening 3D raster map"));
@@ -331,8 +334,6 @@ int main(int argc, char *argv[])
 
     return (EXIT_SUCCESS);
 }
-
-
 
 /* ************************************************************************* */
 /* Open the raster input map *********************************************** */

@@ -21,6 +21,11 @@ set -u
 
 export INSTALL_PREFIX=$1
 
+# Old versions of GCC on CentOS default to C89 although are C11 capable
+# This causes compilation to fail on >C89 code
+export CFLAGS="-O2 -std=gnu11"
+export CXXFLAGS="-std=gnu++11"
+
 ./configure \
     --prefix="$INSTALL_PREFIX/" \
     --without-freetype \
@@ -28,6 +33,7 @@ export INSTALL_PREFIX=$1
     --with-cairo --with-cairo-ldflags=-lfontconfig \
     --with-freetype --with-freetype-includes=/usr/include/freetype2 \
     --with-proj --with-proj-share=/usr/share/proj \
+    --with-libpng=/usr/bin/libpng-config \
     --with-gdal=/usr/bin/gdal-config \
     --without-zstd \
     --without-tiff \

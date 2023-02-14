@@ -55,11 +55,11 @@ class TestAggregationAbsolute(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds", inputs="B")
+        self.runModule("t.remove", flags="df", type="strds", inputs="B")
 
     def test_disaggregation(self):
         """Disaggregation with empty maps"""

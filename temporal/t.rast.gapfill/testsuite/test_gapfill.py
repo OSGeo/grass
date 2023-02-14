@@ -72,7 +72,7 @@ class TestRasterToVector(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        self.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_simple_2procs(self):
         self.assertModule(

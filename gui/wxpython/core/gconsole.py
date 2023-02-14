@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 @author Anna Kratochvilova <kratochanna gmail.com> (refactoring)
+@author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
 from __future__ import print_function
@@ -86,7 +87,7 @@ class CmdThread(threading.Thread):
         else:
             self.resultQ = resultQ
 
-        self.setDaemon(True)
+        self.daemon = True
 
         self.requestCmd = None
 
@@ -355,7 +356,7 @@ gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
 
 
 class GConsole(wx.EvtHandler):
-    """"""
+    """Backend for command execution, esp. interactive command execution"""
 
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         """
@@ -370,8 +371,6 @@ class GConsole(wx.EvtHandler):
         # Signal when some map is created or updated by a module.
         # attributes: name: map name, ltype: map type,
         self.mapCreated = Signal("GConsole.mapCreated")
-        # emitted when map display should be re-render
-        self.updateMap = Signal("GConsole.updateMap")
         # emitted when log message should be written
         self.writeLog = Signal("GConsole.writeLog")
         # emitted when command log message should be written
@@ -409,7 +408,11 @@ class GConsole(wx.EvtHandler):
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             if enc:
                 if sys.version_info.major == 2:
                     sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
@@ -716,6 +719,10 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
+        elif event.returncode != 0:
+            msg = _("Command ended with non-zero return code {returncode}").format(
+                returncode=event.returncode
+            )
         else:
             msg = _("Command finished")
 
@@ -787,7 +794,19 @@ class GConsole(wx.EvtHandler):
                                 element=prompt,
                             )
         if name == "r.mask":
-            self.updateMap.emit()
+            action = "new"
+            for p in task.get_options()["flags"]:
+                if p.get("name") == "r" and p.get("value"):
+                    action = "delete"
+            gisenv = grass.gisenv()
+            self._giface.grassdbChanged.emit(
+                grassdb=gisenv["GISDBASE"],
+                location=gisenv["LOCATION_NAME"],
+                mapset=gisenv["MAPSET"],
+                action=action,
+                map="MASK",
+                element="raster",
+            )
 
         event.Skip()
 
@@ -802,7 +821,7 @@ class GConsole(wx.EvtHandler):
         env = grass.gisenv()
         try:
             filePath = os.path.join(
-                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".bash_history"
+                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".wxgui_history"
             )
             fileHistory = codecs.open(filePath, encoding="utf-8", mode="a")
         except IOError as e:

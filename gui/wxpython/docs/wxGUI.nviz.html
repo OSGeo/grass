@@ -20,7 +20,7 @@ of <em>3D rasters</em>.
 
 <p>
 To start the wxGUI 3D view mode, choose '3D view' from the map
-toolbar. You can switch between 2D and 3D view. The region in 
+toolbar. You can switch between 2D and 3D view. The region in
 3D view is updated according to displayed region in 2D view.
 <p>
 wxNviz is emphasized on the ease and speed of viewer positioning and
@@ -79,8 +79,8 @@ direction line pointing to the center. The direction line indicates
 the look direction (azimuth). You click and drag the puck to change
 the current eye position. Another way to change eye position is
 to press the buttons around the position box representing cardinal
-and ordinal directions. 
-  
+and ordinal directions.
+
 <p>
 There are four other buttons for view control in the bottom of this panel
 (following label <em>Look:</em>):
@@ -122,9 +122,9 @@ arrows. Speed is increased multiple times while Shift key is held down.
 Holding down Ctrl key switches flight mode in the way that position of
 viewpoint is changed (not the direction).
 
-<h3>Data properties</h3> 
+<h3>Data properties</h3>
 This tab controls the parameters related to map layers. It consists
-of four collapsible panels - <em>Surface</em>, <em>Constant surface</em>, 
+of four collapsible panels - <em>Surface</em>, <em>Constant surface</em>,
 <em>Vector</em> and <em>3D raster</em>.
 
 <h4>Surface</h4>
@@ -191,8 +191,8 @@ and set some positive value. To reset the surface position press
 </center>
 
 <h4>Constant surface</h4>
-It is possible to add constant surface and set its properties like 
-fine resolution, value (height), color and transparency. It behaves 
+It is possible to add constant surface and set its properties like
+fine resolution, value (height), color and transparency. It behaves
 similarly to surface but it has less options.
 
 <h4>Vector</h4>
@@ -236,7 +236,7 @@ applies to wire-frame markers). -->
   <li><b>gyroscope</b> - hollow 3D sphere,</li>
   <li><b>asterisk</b> - 3D line-star.</li>
 </ul>
- 
+
 <p>
 Thematic mapping can be used to determine marker color and size
 (and line color and width).
@@ -285,7 +285,7 @@ attributes:
     100.</li>
 </ul>
 
-In case of 3D raster slice the bottom part of the panel controls the slice 
+In case of 3D raster slice the bottom part of the panel controls the slice
 attributes (which axis is slice parallel to, position of slice edges,
 transparency). Press button <em>Reset</em> to reset slice position
 attributes.
@@ -301,19 +301,18 @@ attributes.
 
 <h4>Cutting planes</h4>
 
-Cutting planes allow cutting surfaces along a plane. You can switch 
+Cutting planes allow cutting surfaces along a plane. You can switch
 between six planes; to disable cutting planes switch to <em>None</em>.
 Initially the plane is vertical, you can change it to horizontal by
 setting <em>tilt</em> 90 degrees. The <em>X</em> and <em>Y</em> values
 specify the rotation center of plane. You can see better what <em>X</em>
 and <em>Y</em> do when changing <em>rotation</em>.  The <em>Height</em>
-parameter applies only when changing <em>tilt</em> concurrently. 
+parameter applies only when changing <em>tilt</em> concurrently.
 Press the <em>Reset</em> button to reset the current cutting plane.
 <p>
 In case of multiple surfaces you can visualize the cutting plane by
 <em>Shading</em>. Shading is visible only when more than one surface
 is loaded and these surfaces must have the same fine resolution set.
-
 
 <h3>Appearance</h3>
 Appearance tab consists of three collapsible panels:
@@ -325,7 +324,7 @@ Appearance tab consists of three collapsible panels:
 </ul>
 <p>
 The <em>lighting</em> panel enables to change the position of light
-source, light color, brightness and ambient. Light position is controlled 
+source, light color, brightness and ambient. Light position is controlled
 similarly to eye position. If option <em>Show light model</em> is enabled
 light model is displayed to visualize the light settings.
 
@@ -339,7 +338,7 @@ directions (North &amp; East, South &amp; East, South &amp; West, North
 bottom edge.
 <p>
 The <em>Decorations</em> panel enables to display north arrow and simple
-scale bar. North arrow and scale bar length is determined in map units. 
+scale bar. North arrow and scale bar length is determined in map units.
 You can display more than one scale bar.
 
 <h3>Animation</h3>
@@ -360,7 +359,6 @@ vector and 3D raster data attributes. You can also modify default view
 parameters, or to set the background color of the Map Display Window
 (the default color is white).
 
-
 <h2>To be implemented</h2>
 
 <ul>
@@ -370,8 +368,8 @@ parameters, or to set the background color of the Map Display Window
   <li>...</li>
 </ul>
 
-
 <h2>NOTE</h2>
+
 wxNviz is under active development and
 distributed as &quot;Experimental Prototype&quot;.
 
@@ -384,7 +382,6 @@ you encounter such problems, try to change a depth buffer number in
 (possible numbers are 0, 16, 24, 32). It is currently not possible to
 automatically determine the right number which is working for your
 computer.
-
 
 <h2>SEE ALSO</h2>
 
@@ -402,7 +399,6 @@ tutorials</a>).
 
 Command-line module <em><a href="m.nviz.image.html">m.nviz.image</a></em>.
 <br><br>
-
 
 <h2>AUTHORS</h2>
 
@@ -425,7 +421,7 @@ U.S. Army Corps of Engineers Research Laboratories, Champaign,
 Illinois and UI GMS Laboratory, Urbana, IL in the early 1990s.
 <p>
 Original documentation was written by Terry Baker (spring 1995), and
-updated by Mark Astley, based on a document written by Bill Brown. 
+updated by Mark Astley, based on a document written by Bill Brown.
 Additional design help and funding in the early 1990s by Helena
 Mitasova (CERL). Tcl/Tk support added by Terry Baker. Ported to Linux
 by Jaro Hofierka and others. Conversion from SGI IRIS GL code to
@@ -434,7 +430,7 @@ updates by Bob Covill, Tekmap Consulting. 3D volume support by Tomas
 Paudits with supervision from Jaro Hofierka and Helena Mitasova.
 Fly-through mode, thematic site attributes, and picking by Massimo
 Cuomo (ACS) with updates by Michael Barton. GRASS 6 vector support by
-Radim Blazek. Additional updates by Markus Neteler, Martin Landa, 
+Radim Blazek. Additional updates by Markus Neteler, Martin Landa,
 Glynn Clements, and Hamish Bowman.
 
 <p>
@@ -442,9 +438,3 @@ NVIZ evolved from the earlier GRASS program <em>SG3d</em> written
 for Silicon Graphics IRIS GL by Bill Brown and Dave Gerdes at USA
 CERL, 1990-1995 and from the NVIZ Motif version written by Bill Brown
 with contributions by Terrance McGhee.
-
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

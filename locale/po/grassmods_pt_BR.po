@@ -4396,9 +4396,9 @@ msgid "Name of target mapset for ortho-rectification"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access target location/mapset %s/%s"
-msgstr "Não foi possível criar mapa vetorial <%s>"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
 msgid "Target locations with XY (unreferenced) are not supported"
@@ -4685,9 +4685,8 @@ msgid "Apriori Omega (pitch) standard deviation"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
-#, fuzzy
 msgid "Apriori Phi (roll) standard deviation"
-msgstr "Desvio padrão"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
 msgid "Apriori Kappa (yaw) standard deviation"
@@ -11427,9 +11426,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Seleção"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 msgid "Name of band reference identifier (example: S2_1)"
@@ -17613,7 +17611,7 @@ msgstr "Usar um subconjunto do intervalo do mapa para a legenda (min,máx)"
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:19
 #: ../display/d.legend/main.c:151
 msgid "Specific values to draw ticks"
-msgstr ""
+msgstr "Valores específicos para desenhar marcas de intervalo"
 
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:21
 #: ../display/d.legend/main.c:160
@@ -17632,7 +17630,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:28
 #: ../display/d.legend/main.c:262
 msgid "Draw legend ticks for labels"
-msgstr ""
+msgstr "Desenhar marcas de legenda para rótulos"
 
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:30
 #: ../display/d.text/main.c:223 ../display/d.rast.num/main.c:119
@@ -19883,9 +19881,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "metadados"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -20676,7 +20673,7 @@ msgid "Vector map with training samples"
 msgstr "Título do mapa vetorial"
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:13
-msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be choosen later."
+msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be chosen later."
 msgstr ""
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:15
@@ -22390,7 +22387,7 @@ msgid "Interpolation command string"
 msgstr "Interpolando %d pontos"
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:36
-msgid "Additional settings for choosen interpolation (see manual)"
+msgid "Additional settings for chosen interpolation (see manual)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:38
@@ -23630,17 +23627,17 @@ msgstr "Mapa de saída no qual os erros serão gravados"
 #: ../locale/scriptstrings/r.mapcalc.tiled_to_translate.c:7
 #: ../raster/r.tile/main.c:62
 msgid "Width of tiles (columns)"
-msgstr "Largura dos tiles (colunas)"
+msgstr "Largura dos mosaicos (colunas)"
 
 #: ../locale/scriptstrings/r.mapcalc.tiled_to_translate.c:8
 #: ../raster/r.tile/main.c:69
 msgid "Height of tiles (rows)"
-msgstr "Altura dos tiles (linhas)"
+msgstr "Altura dos mosaicos (linhas)"
 
 #: ../locale/scriptstrings/r.mapcalc.tiled_to_translate.c:9
 #: ../raster/r.tile/main.c:76
 msgid "Overlap of tiles"
-msgstr "Sobreposição de tiles"
+msgstr "Sobreposição de mosaicos"
 
 #: ../locale/scriptstrings/v.habitat.dem_to_translate.c:1
 msgid "Calculates DEM derived characteristics of habitats."
@@ -24224,9 +24221,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "imprimir informação do atributo"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -26871,7 +26867,7 @@ msgstr ""
 #: ../display/d.legend/draw.c:613
 #, c-format
 msgid "tick_value=%.3f out of range [%.3f, %.3f]"
-msgstr ""
+msgstr "tick_value=%.3f fora do intervalo [%.3f, %.3f]"
 
 #: ../display/d.legend/draw.c:1030
 msgid "Histogram plotting not implemented for categorical legends. Use the '-s' flag"
@@ -28385,15 +28381,15 @@ msgstr ""
 
 #: ../display/d.barscale/main.c:110
 msgid "Up ticks style"
-msgstr ""
+msgstr "Estilo de marcas de intervalo para cima"
 
 #: ../display/d.barscale/main.c:111
 msgid "Down ticks style"
-msgstr ""
+msgstr "Estilo de marcas de intervalo para baixo"
 
 #: ../display/d.barscale/main.c:112
 msgid "Both ticks style"
-msgstr ""
+msgstr "Ambos estilos de marcas de intervalo"
 
 #: ../display/d.barscale/main.c:112
 msgid "Arrow ends style"
@@ -29508,58 +29504,58 @@ msgstr ""
 
 #: ../vector/v.net.iso/main.c:177 ../vector/v.net.alloc/main.c:156
 msgid "Create unique categories and attribute table"
-msgstr ""
+msgstr "Crie categorias e tabela de atributos exclusivas"
 
 #: ../vector/v.net.iso/main.c:179
 msgid "Default: one category for each iso-band"
-msgstr ""
+msgstr "Padrão: uma categoria para cada banda iso"
 
 #: ../vector/v.net.iso/main.c:215
 #, c-format
 msgid "Wrong iso cost: %f"
-msgstr ""
+msgstr "Custo da iso errado: %f"
 
 #: ../vector/v.net.iso/main.c:218
 #, c-format
 msgid "Iso cost: %f less than previous"
-msgstr ""
+msgstr "Custo da iso: %f menor que o anterior"
 
 #: ../vector/v.net.iso/main.c:223
 #, c-format
 msgid "Iso cost %d: %f"
-msgstr ""
+msgstr "Custo da iso %d: %f"
 
 #: ../vector/v.net.iso/main.c:231
 msgid "Not enough costs, everything reachable falls to first band"
-msgstr ""
+msgstr "Custos insuficientes, tudo o que é alcançável cai para a primeira faixa"
 
 #: ../vector/v.net.iso/main.c:282 ../vector/v.net.alloc/main.c:224
 #: ../vector/v.net.salesman/main.c:277
 msgid "Point is not connected to the network"
-msgstr ""
+msgstr "O ponto não está conectado à rede"
 
 #: ../vector/v.net.iso/main.c:290 ../vector/v.net.alloc/main.c:232
 msgid "Center at closed node (costs = -1) ignored"
-msgstr ""
+msgstr "Centro no nó fechado (custos = -1) ignorado"
 
 #: ../vector/v.net.iso/main.c:308 ../vector/v.net.alloc/main.c:250
 #, c-format
 msgid "Number of centers: %d (nlayer %d)"
-msgstr ""
+msgstr "Número de centros: %d (nlayer %d)"
 
 #: ../vector/v.net.iso/main.c:311 ../vector/v.net.alloc/main.c:253
 msgid "Not enough centers for selected nlayer. Nothing will be allocated."
-msgstr ""
+msgstr "Centros insuficientes para a camada selecionada. Nada será alocado."
 
 #: ../vector/v.net.iso/main.c:333 ../vector/v.net.iso/main.c:345
 #: ../vector/v.net.alloc/main.c:275 ../vector/v.net.alloc/main.c:287
 msgid "Calculating costs from centers ..."
-msgstr ""
+msgstr "Calculando custos dos centros..."
 
 #: ../vector/v.net.iso/main.c:338 ../vector/v.net.iso/main.c:349
 #: ../vector/v.net.alloc/main.c:280 ../vector/v.net.alloc/main.c:291
 msgid "Calculating costs to centers ..."
-msgstr ""
+msgstr "Calculando custos para centros..."
 
 #: ../vector/v.net.iso/main.c:394 ../vector/v.sample/main.c:193
 #: ../vector/v.net.flow/main.c:185 ../vector/v.net.alloc/main.c:333
@@ -29952,9 +29948,9 @@ msgid "Reading features from vector map..."
 msgstr "Lendo feições do mapa vetorial..."
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Não consegui abrir arquivo de histórico para mapa de vetores <%s>"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -32692,7 +32688,7 @@ msgstr "Linha de perfilagem"
 
 #: ../vector/v.profile/main.c:247
 msgid "Profiling line map"
-msgstr ""
+msgstr "Mapa de linhas de perfil"
 
 #: ../vector/v.profile/main.c:248
 msgid "Vector map containing profiling line"
@@ -35325,9 +35321,8 @@ msgid "Neighborhood analysis tool for vector point maps."
 msgstr "Ferramenta de análise de vizinhança para mapas de pontos vetoriais."
 
 #: ../vector/v.neighbors/main.c:134
-#, fuzzy
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Define a categoria de cada célula como função das categorias das células vizinhas, e grava os novos valores numa camada raster de saída."
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:160
 msgid "Method for aggregate statistics (count if non given)"
@@ -35351,9 +35346,8 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr "points_column <%s> do vetor de pontos <%s> deve ser numérico"
 
 #: ../vector/v.neighbors/main.c:284
-#, fuzzy
 msgid "All points fall outside of the current computational region"
-msgstr "ponto de origem fora da região atual"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:285
 msgid "Input vector and computational region do not overlap"
@@ -36268,8 +36262,8 @@ msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específ
 
 #: ../vector/v.out.ogr/main.c:686
 #, c-format
-msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
-msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de formato (parâmetro 'lco') para exportar <em 3D em vez de 2D (padrão)."
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:713 ../db/drivers/ogr/execute.c:56
 #, c-format
@@ -36419,9 +36413,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr "Anexar arquivos a um arquivo existente (a substituição de arquivos existentes deve ser ativada)"
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Tabela faltando"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -37453,7 +37447,7 @@ msgstr "Aumenta a precisão das formas reprojetadas, desativa com smax=0"
 #: ../raster/r.proj/main.c:175 ../raster/r.proj/main.c:186
 #: ../raster/r.proj/main.c:196
 msgid "Target"
-msgstr ""
+msgstr "Destino"
 
 #: ../vector/v.proj/main.c:118 ../raster/r.proj/main.c:203
 msgid "PROJ pipeline for coordinate transformation"
@@ -37634,9 +37628,9 @@ msgid "Number of columns: %d"
 msgstr "Número de colunas: %d"
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Número de linhas"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -39131,7 +39125,7 @@ msgstr "Tanto a validação cruzada quanto os desvios devem ser especificados"
 
 #: ../vector/v.vol.rst/main.c:493
 msgid "Crossvalidation cannot be computed simultanuously with output grids or devi file"
-msgstr ""
+msgstr "A validação cruzada não pode ser calculada simultaneamente com grades de saída ou arquivo devi"
 
 #: ../vector/v.vol.rst/main.c:557
 #, c-format
@@ -42446,9 +42440,9 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "Tabela <%s> não existe no banco de dados <%s>"
+msgstr ""
 
 #: ../general/g.copy/main.c:74
 #, c-format
@@ -42456,14 +42450,14 @@ msgid "%s=%s,%s: files are the same, no copy required. Skipping."
 msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "Mapa raster <%s> já existe e será sobreescrito"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> é um nome de arquivo ilegal"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -44922,7 +44916,7 @@ msgstr ""
 
 #: ../raster3d/r3.mask/main.c:104
 msgid "makeMask: error flushing tiles in cube"
-msgstr "makeMask: erro limpando ladrilhos em cubo"
+msgstr "makeMask: erro limpando mosaicos em cubo"
 
 #: ../raster3d/r3.mask/main.c:109
 msgid "makeMask: error flushing all tiles"
@@ -46850,7 +46844,7 @@ msgstr ""
 
 #: ../raster/r.stats.quantile/main.c:315
 msgid "Printing quantiles"
-msgstr ""
+msgstr "Impressão de quantis"
 
 #: ../raster/r.stats.quantile/main.c:360 ../raster/r.quantile/main.c:204
 msgid "Computing quantiles"
@@ -46878,7 +46872,7 @@ msgstr ""
 
 #: ../raster/r.stats.quantile/main.c:531 ../raster/r.quantile/main.c:278
 msgid "Number of quantiles"
-msgstr ""
+msgstr "Número de quantis"
 
 #: ../raster/r.stats.quantile/main.c:537 ../raster/r.quantile/main.c:286
 msgid "List of percentiles"
@@ -47129,12 +47123,12 @@ msgstr ""
 #: ../raster/r.sun/main.c:704
 #, c-format
 msgid "Using slope constant: %lf"
-msgstr ""
+msgstr "Usando a constante de declividade:%lf"
 
 #: ../raster/r.sun/main.c:707
 #, c-format
 msgid "Using slope map <%s>"
-msgstr ""
+msgstr "Usando mapa de declive <%s>"
 
 #: ../raster/r.sun/main.c:712
 #, c-format
@@ -49947,11 +49941,11 @@ msgstr ""
 
 #: ../raster/r.stream.extract/main.c:121
 msgid "Montgomery exponent for slope, disabled with 0"
-msgstr ""
+msgstr "Expoente de Montgomery para declividade, desativado com 0"
 
 #: ../raster/r.stream.extract/main.c:123
 msgid "Montgomery: accumulation is multiplied with pow(slope,mexp) and then compared with threshold"
-msgstr ""
+msgstr "Montgomery: o acúmulo é multiplicado com o pow(slope, mexp) e depois comparado com o limiar"
 
 #: ../raster/r.stream.extract/main.c:131
 msgid "Delete stream segments shorter than stream_length cells"
@@ -50306,7 +50300,7 @@ msgstr "Nome para o mapa raster de elevação de saída"
 
 #: ../raster/r.resamp.rst/main.c:181
 msgid "Name for output slope map (or fx)"
-msgstr ""
+msgstr "Nome para o mapa de declividade de saída (ou fx)"
 
 #: ../raster/r.resamp.rst/main.c:187
 msgid "Name for output aspect map (or fy)"
@@ -52124,12 +52118,12 @@ msgstr ""
 
 #: ../raster/r.tile/main.c:46
 msgid "Splits a raster map into tiles."
-msgstr "Divide um mapa raster em tiles."
+msgstr "Divide um mapa raster em mosaicos."
 
 #: ../raster/r.tile/main.c:129
 #, c-format
 msgid "Generating %d x %d = %d tiles..."
-msgstr "Gerando %d x %d = %d tiles..."
+msgstr "Gerando %d x %d = %d mosaicos..."
 
 #: ../raster/r.tile/main.c:187
 #, c-format
@@ -54043,9 +54037,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Fator de escala para elevação"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54135,9 +54128,8 @@ msgstr ""
 "(regras %f para %f, mas dados %f para %f)"
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Não consegui abrir o arquivo <%s>"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -54486,7 +54478,7 @@ msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:174
 msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map."
-msgstr ""
+msgstr "Gera mapas raster de declividade, aspecto, curvaturas e derivadas parciais de um mapa raster de elevação."
 
 #: ../raster/r.slope.aspect/main.c:176
 msgid "Aspect is calculated counterclockwise from east."
@@ -55845,23 +55837,6 @@ msgstr ""
 msgid "Comparison mode for zenith/nadir line-of-sight search"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:221
-msgid "Prefix for maps resulting from multiresolution approach"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:222 ../raster/r.geomorphon/main.c:230
-#: ../raster/r.geomorphon/main.c:238
-msgid "Multires"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:229
-msgid "Distance step for every iteration (zero to omit)"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:237
-msgid "Distance where search will start in multiple mode (zero to omit)"
-msgstr ""
-
 #: ../raster/r.geomorphon/main.c:243
 msgid "Use meters to define search units (default is cells)"
 msgstr ""
@@ -55871,30 +55846,26 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Coordenadas para os nodos de linha para criação de perfil"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
-#, fuzzy
 msgid "Profile"
-msgstr "perfil"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "Nome do arquivo de saída (use output=- para saída padrão)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Formato de saída"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed parsing <%s>"
-msgstr "zrange inválido <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:302
 #, c-format
@@ -55902,14 +55873,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "ponto de origem fora da região atual"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "Não consegui abrir arquivo de saída <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -55925,15 +55895,6 @@ msgstr ""
 
 #: ../raster/r.geomorphon/main.c:381
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:399
-msgid "For multiresolution mode step must be greater than or equal to resolution of one cell"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:403
-#, c-format
-msgid "<%s> is an incorrect prefix"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:431
@@ -57405,9 +57366,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "%s mapa <%s> não encontrado"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57422,14 +57382,12 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "mapa vetorial <%s> não encontrado no mapset atual"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "parâmetro <%s> necessário não configurado"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
@@ -58079,7 +58037,7 @@ msgid "%s driver supports only '%s' parameter in '%s'. Other parameters are igno
 msgstr "O driver %s suporta apenas '%s' parâmetro em '%s'. Outros parâmetros são ignorados."
 
 #: ../scripts/r.in.wms/r.in.wms.py:250
-msgid "The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."
+msgid "The proxy will be ignored by the chosen GRASS driver. It is only used with the GDAL driver."
 msgstr ""
 
 #: ../scripts/r.in.wms/r.in.wms.py:255
@@ -58280,9 +58238,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Não foi possível definir o tamanho da fonte"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -60111,48 +60068,51 @@ msgstr "Erro em pj_do_proj (projeção das coordenadas de entrada)"
 msgid "%d areas represent more (overlapping) features, because polygons overlap in input layer(s). Such areas are linked to more than 1 row in attribute table. The number of features for those areas is stored as category in layer %d"
 msgstr "%d áreas representam mais feições (sobreposição) , pois os polígonos se sobrepõe na(s) camada(s) de entrada. Estas áreas estão ligadas a mais de uma linha na tabela de atributos. O número de feições para essas áreas está armazenado com categoria na camada %d"
 
-#~ msgid ""
-#~ "You can switch the history by commands:\n"
-#~ "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
-#~ msgstr ""
-#~ "Você pode alternar o histórico com os comandos:\n"
-#~ "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgid ""
+"You can switch the history by commands:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgstr ""
+"Você pode alternar o histórico com os comandos:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
 
-#~ msgid "Missing table"
-#~ msgstr "Tabela faltando"
+msgid "Missing table"
+msgstr "Tabela faltando"
 
-#~ msgid "No features of type (%s) found in vector map <%s>"
-#~ msgstr "Nenhuma feição do tipo (%s) encontrada no mapa vetorial <%s>"
+msgid "No features of type (%s) found in vector map <%s>"
+msgstr "Nenhuma feição do tipo (%s) encontrada no mapa vetorial <%s>"
 
-#~ msgid "Number of rows: %d"
-#~ msgstr "Número de linhas: %d"
+msgid "Number of rows: %d"
+msgstr "Número de linhas: %d"
+
+msgid "Key columns differ"
+msgstr "As colunas chave são diferentes"
+
+msgid "Number of columns differ"
+msgstr "O número de colunas difere"
+
+msgid "Column types differ"
+msgstr "Os tipos de coluna são diferentes"
+
+msgid "Start of 1. MP >= end of 2. MP for points' cats %[d], [%d]"
+msgstr "Início de 1. MP >= fim de 2. MP para categorias de pontos % [d], [%d]"
+
+msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgstr "Faz com que cada valor de célula seja uma função dos valores de atributo designados aos pontos de vetor ou centroides ao seu redor e armazena novos valores de célula em um mapa raster de saída."
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
+msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) menor"
+
+msgid "DONE: compressed file is %lu %s (%.2f%) smaller"
+msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) menor"
+
+msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
+msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) maior"
+
+msgid "DONE: compressed file is %lu %s (%.2f%) larger"
+msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) maior"
+
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
+msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de formato (parâmetro 'lco') para exportar <em 3D em vez de 2D (padrão)."
 
 #~ msgid "Missing attribute table for vector map <%s>"
 #~ msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
-
-#~ msgid "Key columns differ"
-#~ msgstr "As colunas chave são diferentes"
-
-#~ msgid "Number of columns differ"
-#~ msgstr "O número de colunas difere"
-
-#~ msgid "Column types differ"
-#~ msgstr "Os tipos de coluna são diferentes"
-
-#~ msgid "Start of 1. MP >= end of 2. MP for points' cats %[d], [%d]"
-#~ msgstr "Início de 1. MP >= fim de 2. MP para categorias de pontos % [d], [%d]"
-
-#~ msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
-#~ msgstr "Faz com que cada valor de célula seja uma função dos valores de atributo designados aos pontos de vetor ou centroides ao seu redor e armazena novos valores de célula em um mapa raster de saída."
-
-#~ msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
-#~ msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) menor"
-
-#~ msgid "DONE: compressed file is %lu %s (%.2f%) smaller"
-#~ msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) menor"
-
-#~ msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
-#~ msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) maior"
-
-#~ msgid "DONE: compressed file is %lu %s (%.2f%) larger"
-#~ msgstr "CONCLUÍDO: o arquivo compactado é%lu  %s (%.2f%) maior"

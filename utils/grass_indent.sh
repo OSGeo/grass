@@ -15,12 +15,25 @@
 
 # TODO: replace short flags by long ones to improve readability
 
+case "$(uname)" in
+ Darwin | *BSD*)
+  INDENT=$(which gindent)
+  ;;
+ *)
+  INDENT=$(which indent)
+  ;;
+esac
+
+if [ -z "$INDENT" ]; then
+ echo "Failed to find the 'indent' (or 'gindent' on BSD platforms) command."
+ exit 1
+fi
 
 if [ $# -lt 1 ] ; then
  echo "No files specified (give file name(s) as parameter)"
  exit 1
 else
- indent -npro -bad -bap -bbb -br -bli0 -bls -cli0 -ncs -fc1 -hnl -i4 \
+ ${INDENT} -npro -bad -bap -bbb -br -bli0 -bls -cli0 -ncs -fc1 -hnl -i4 \
       -nbbo -nbc -nbfda -nbfde -ncdb -ncdw -nce -nfca -npcs -nprs \
       -npsl -nsc -nsob -saf -sai -saw -sbi0 -ss --no-tabs "$@"
 

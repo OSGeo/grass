@@ -1,14 +1,21 @@
+---
 name: CentOS
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   build:
     name: ${{ matrix.os }} build
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     container: ${{ matrix.os }}
     strategy:
       matrix:
@@ -17,7 +24,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get dependencies
         run: |
           yum install -y epel-release
@@ -56,3 +63,8 @@ jobs:
         run: |
           source $CONDA_ACTIVATE
           .github/workflows/test_simple.sh
+      - name: Print installed versions
+        if: always()
+        run: |
+          source $CONDA_ACTIVATE
+          .github/workflows/print_versions.sh

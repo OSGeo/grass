@@ -122,10 +122,12 @@ r.mapcalc expression="c_5 = if(7 == 5 || 7 == 6, (a7 + b7), (a7 * b7))"
 r.mapcalc expression="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
 </pre></div>
 <p>
+Semantic labels present in the sample dataset A will be transferred to
+the output dataset.
 
 <h2>EXAMPLES</h2>
 
-The following command creates a new space time raster dataset 
+The following command creates a new space time raster dataset
 <tt>january_under_0</tt> that will set to null all cells with
 temperature above zero in the January maps while keeping all the rest
 as in the original time series. This will change the maximum values
@@ -153,10 +155,10 @@ t.rast.list tempmean_monthly columns=name,start_time,min,max | grep 01-01
 2012_01_tempmean|2012-01-01 00:00:00|-0.534994|9.69511
 </pre></div>
 
-<h3>Band reference filtering</h3>
+<h3>Semantic label filtering</h3>
 
-<em>t.rast.mapcalc</em> supports band reference filtering similarly
-to <em><a href="t.rast.list.html#filtering-the-result-by-band-references">t.rast.list</a></em>. In
+<em>t.rast.mapcalc</em> supports semantic label filtering similarly
+to <em><a href="t.rast.list.html#filtering-the-result-by-semantic-label">t.rast.list</a></em>. In
 example below a new STRDS will be created and filled by NDVI products.
 
 <div class="code"><pre>
@@ -164,8 +166,8 @@ t.rast.mapcalc inputs=test.S2_8,test.S2_4 output=ndvi basename=ndvi \
      expression="float(test.S2_8 - test.S2_4) / (test.S2_8 + test.S2_4)"
 </pre></div>
 
-For more information about band reference concept
-see <em><a href="g.bands.html">g.bands</a></em> module.
+For more information about semantic label concept
+see <em><a href="i.band.library.html">i.band.library</a></em> module.
 
 <h2>SEE ALSO</h2>
 
@@ -181,9 +183,3 @@ see <em><a href="g.bands.html">g.bands</a></em> module.
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

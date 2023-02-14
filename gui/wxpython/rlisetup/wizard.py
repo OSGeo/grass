@@ -649,6 +649,7 @@ class FirstPage(TitledPage):
             )
             self.newconftxt.SetValue("")
             self.conf_name = ""
+        event.Skip()
 
     def OnNameChanged(self, event):
         """Name of configuration file has changed"""
@@ -917,7 +918,7 @@ class DrawSampleFramePage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
     def SampleFrameChanged(self, region):
-        """"Enables the next dialog when region is set"""
+        """Enables the next dialog when region is set"""
         if region:
             self.tregion = region
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)

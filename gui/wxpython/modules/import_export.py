@@ -466,6 +466,8 @@ class GdalImportDialog(ImportDialog):
             return
 
         dsn = self.dsnInput.GetDsn()
+        if not dsn:
+            return
         ext = self.dsnInput.GetFormatExt()
 
         for layer, output, listId in data:
@@ -473,6 +475,9 @@ class GdalImportDialog(ImportDialog):
 
             if self.dsnInput.GetType() == "dir":
                 idsn = os.path.join(dsn, layer)
+            elif self.dsnInput.GetType() == "db":
+                if "PG:" in dsn:
+                    idsn = f"{dsn} table={layer}"
             else:
                 idsn = dsn
 
@@ -608,13 +613,19 @@ class OgrImportDialog(ImportDialog):
             return
 
         dsn = self.dsnInput.GetDsn()
+        if not dsn:
+            return
         ext = self.dsnInput.GetFormatExt()
 
         # determine data driver for PostGIS links
         self.popOGR = False
         if (
             self.dsnInput.GetType() == "db"
-            and self.dsnInput.GetFormat() == "PostgreSQL"
+            and self.dsnInput.GetFormat()
+            in (
+                "PostgreSQL",
+                "PostgreSQL/PostGIS",
+            )
             and "GRASS_VECTOR_OGR" not in os.environ
         ):
             self.popOGR = True
@@ -776,14 +787,25 @@ class GdalOutputDialog(wx.Dialog):
             RunCommand("v.external.out", parent=self, flags="r")
         else:
             dsn = self.dsnInput.GetDsn()
-            frmt = self.dsnInput.GetFormat()
+            frmt = self.dsnInput.GetFormat(getFormatAbbreviation=True)
+            extension = self.dsnInput.GetFormatExt()
             options = self.dsnInput.GetOptions()
             if not dsn:
                 GMessage(_("No data source selected."), parent=self)
                 return
-
+            if self.ogr:
+                cmd, params = "v.external.out", {"output": dsn}
+            else:
+                cmd, params = (
+                    "r.external.out",
+                    {"directory": dsn, "extension": extension},
+                )
             RunCommand(
-                "v.external.out", parent=self, output=dsn, format=frmt, options=options
+                cmd,
+                parent=self,
+                format=frmt,
+                options=options,
+                **params,
             )
         self.Close()
 

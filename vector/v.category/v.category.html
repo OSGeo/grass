@@ -1,13 +1,12 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.category</em> attaches, copies, deletes or reports categories to/from/of 
-vector geometry objects. Further on, <em>v.category</em> adds a number 
-given by the <em>cat</em> option to categories of the selected layer. 
+<em>v.category</em> attaches, copies, deletes or reports categories to/from/of
+vector geometry objects. Further on, <em>v.category</em> adds a number
+given by the <em>cat</em> option to categories of the selected layer.
 These categories (IDs) are used to assign IDs or to group geometry objects
-into categories (several different geometry objects share the same 
+into categories (several different geometry objects share the same
 category). These categories are also used to link geometry
 object(s) to attribute records (from an attribute table linked to vector map).
-
 
 <h2>NOTES</h2>
 
@@ -26,44 +25,43 @@ using <em><a href="wxGUI.vdigit.html">wxGUI vector
 digitizer</a></em> or by running <em>v.category</em> with the type
 parameter set to area.
 
-<p>If categories are copied with <em>option=transfer</em>, a warning is 
-issued if categories already exit in the layer they are copied to. In 
-this case the user must make sure beforehand that copying categories 
-from one layer to another layer does not cause undesired grouping of 
-different geometry objects into the same categories. This can be avoided 
-by specifying only one <em>layer</em>. The module will then find the 
-next free layer number and copy categories to there. The new layer number 
+<p>If categories are copied with <em>option=transfer</em>, a warning is
+issued if categories already exit in the layer they are copied to. In
+this case the user must make sure beforehand that copying categories
+from one layer to another layer does not cause undesired grouping of
+different geometry objects into the same categories. This can be avoided
+by specifying only one <em>layer</em>. The module will then find the
+next free layer number and copy categories to there. The new layer number
 is reported at the end.
-    
+
 <p>Areas are a special case because it is impossible to attach a cat to
 an area without a centroid; in this case, the module places new
 centroids in areas automatically for <b>type=area</b>.
 
-<p>The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i>, 
+<p>The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i>,
 <b>option</b>=<i>sum</i> and <b>option</b>=<i>del</i>.
 
-<p>Categories can be deleted for the given layer with <em>option=del</em>. 
-If <b>cat</b> is set to <i>-1</i>, all categories for the given layer 
-are deleted. If <b>cat</b> is zero or positive, only this category value 
-will be deleted. By default, <b>cat</b> is set to <i>1</i> which means 
-that only categories of value <i>1</i> will be deleted. 
+<p>Categories can be deleted for the given layer with <em>option=del</em>.
+If <b>cat</b> is set to <i>-1</i>, all categories for the given layer
+are deleted. If <b>cat</b> is zero or positive, only this category value
+will be deleted. By default, <b>cat</b> is set to <i>1</i> which means
+that only categories of value <i>1</i> will be deleted.
 
-<p>With <b>option=report</b>, the module reports for each layer and 
-type the total number of categories, the minimum and the maximum 
-category number. If there are e.g. two lines with line 1 having 
-category 1 and line 1 having categories 1 and 2, then there are a total 
-of three category values with minimum 1 and maximum 2.  
+<p>With <b>option=report</b>, the module reports for each layer and
+type the total number of categories, the minimum and the maximum
+category number. If there are e.g. two lines with line 1 having
+category 1 and line 1 having categories 1 and 2, then there are a total
+of three category values with minimum 1 and maximum 2.
 
 <p>The <b>ids</b> parameter specifies the list of feature IDs to which the
-operation is performed; by default, all vector feature ids are processed. 
+operation is performed; by default, all vector feature ids are processed.
 The <i>feature ID</i> is an internal (unique) geometry ID that all vector
 primitives possess, and is separate from any category the feature may
-also possess. 
+also possess.
 Use <div class="code"><pre>
   <em><a href="v.edit.html">v.edit</a></em> map=inputname tool=select
 </pre></div>
 to find out the geometry ids of certain features.
-
 
 <h2>EXAMPLES</h2>
 
@@ -128,7 +126,6 @@ Print vector categories from the first layer, only for feature ids 1-50.
 v.category input=roads option=print layer=1 id=1-50
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -138,14 +135,8 @@ v.category input=roads option=print layer=1 id=1-50
 <a href="v.to.db.html">v.to.db</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-irst, Trento, Italy<br>
 Modified (the id parameter) by Martin Landa,
   FBK-irst (formerly ITC-irst), Trento, Italy, 2008/02
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
