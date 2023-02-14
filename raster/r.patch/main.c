@@ -113,10 +113,10 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-     if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-         G_warning(_("Parallel processing disabled due to active MASK."));
-         nprocs = 1;
-     }
+    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
+        G_warning(_("Parallel processing disabled due to active MASK."));
+        nprocs = 1;
+    }
 
     use_zero = (zeroflag->answer);
     no_support = (nosupportflag->answer);
