@@ -6,7 +6,7 @@ int open_connection();
 int close_connection();
 
 /* cursor.c */
-cursor *alloc_cursor();
+cursor *alloc_cursor(void);
 void free_cursor(cursor *c);
 
 /* describe.c */

@@ -8,7 +8,7 @@
 #    /Library/GRASS/$GRASS_MMVER/Modules and the user's
 #    $HOME/Library/$GRASS_MMVER/GRASS/Modules
 #    Each is in their own section, in the same index file.
-# 
+#
 #    global help pages are symlinked to the user dir, so user doesn't need perms
 #    to write there for redirects.
 #    main and section indexes from GRASS.app are redirected from user dir, not
@@ -55,7 +55,7 @@ echo " <link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">
 <h2>GRASS GIS $GRASSVERSION Reference Manual</h2>
 
 <p>Geographic Resources Analysis Support System, commonly referred to as
-<a href=\"https://grass.osgeo.org\">GRASS</a>, 
+<a href=\"https://grass.osgeo.org\">GRASS</a>,
 is a Geographic Information System (GIS) used for geospatial data management
 and analysis, image processing, graphics/maps production, spatial modeling,
 and visualization. GRASS is currently used in academic and commercial settings
@@ -75,7 +75,7 @@ write_html_footer()
 echo "<hr class=\"header\">" >> $1
 echo "<p><a href=\"$GISBASE/docs/html/index.html\">Help Index</a> | <a href=\"$GISBASE/docs/html/full_index.html\">Full Index</a> | <a href=\"$HTMLDIR/addon_index.html\">Addon Index</a><br>" >> $1
 echo "&copy; 2003-2008 <a href=\"https://grass.osgeo.org\">GRASS Development Team</a></p>" >> $1
-echo "</body>" >> $1   
+echo "</body>" >> $1
 echo "</html>" >> $1
 }
 
@@ -153,7 +153,7 @@ if [ "$CMDLIST" = "" ] ; then
   echo "<tr><td valign=\"top\"><td>[There are no user addon help pages.]</td></tr>" >> $FULLINDEX
 else
   for i in $CMDLIST
-  do 
+  do
     for i in `ls -1 $i.*.html`
     do
       BASENAME=`basename $i .html`

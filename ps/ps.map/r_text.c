@@ -20,9 +20,6 @@
 #define UPPER    1
 #define CENTER   2
 
-extern char *get_color_name();
-extern int get_color_number();
-
 static char *help[] = {"font        fontname",
                        "color       color",
                        "width       #",

@@ -41,7 +41,8 @@ static double buffer = 0.0;
 label_t *labels_init(struct params *p, int *n_labels)
 {
     label_t *labels;
-    int legal_types, layer, i = 0, error, sql_len;
+    int legal_types, layer, error, sql_len;
+    unsigned int i = 0;
     size_t label_sz;
     struct field_info *fi;
     dbDriver *driver;
@@ -222,10 +223,11 @@ label_t *labels_init(struct params *p, int *n_labels)
  * This function calculates the skyline of a label and stores it in the label
  * structure.
  * @param face The openned FT library face to use.
- * @param The charset to use
+ * @param The charset to use [unused]
  * @param The label to which we want to create a skyline
  */
-static int label_skyline(FT_Face face, const char *charset, label_t *label)
+static int label_skyline(FT_Face face, const char *charset UNUSED,
+                         label_t *label)
 {
     int i, len;
     double advance = 0.0;

@@ -11,7 +11,7 @@
 
 #define WDTH 5
 
-int display(struct Map_info *Map, struct line_pnts *Points,
+int display(struct Map_info *Map UNUSED, struct line_pnts *Points,
             const struct color_rgb *color, int first, int last, int be_bold)
 {
     int from, to;

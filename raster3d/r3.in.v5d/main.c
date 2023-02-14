@@ -56,7 +56,7 @@ typedef struct {
 
 static paramType param;
 
-static void setParams()
+static void setParams(void)
 {
     param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->description = _("Name of V5D raster file to be imported");
@@ -83,7 +83,7 @@ static void getParams(char **input, char **output, int *convertNull,
 /*---------------------------------------------------------------------------*/
 
 void convert(char *openFile, RASTER3D_Region *region, int convertNull,
-             double nullValue)
+             double nullValue UNUSED)
 {
     v5dstruct v5d;
     int time, var;
@@ -138,7 +138,7 @@ void convert(char *openFile, RASTER3D_Region *region, int convertNull,
                 for (y = 0; y < region->rows; y++) {
                     for (x = 0; x < region->cols; x++) {
                         value = data1[cnt++];
-                        if (convertNull && (value == MISSING))
+                        if (convertNull && IS_MISSING(value))
                             Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                         Rast3d_put_float(map, x, y, z, value);
                     }

@@ -122,7 +122,7 @@ void set_null_d(void *cells, unsigned long count)
  * I.e. right after IN_TYPE and OUT_TYPE have been set
  * to valid values;
  */
-void init_cell_funcs()
+void init_cell_funcs(void)
 {
 
     CELL_ERR_SIZE = sizeof(FCELL);

@@ -18,14 +18,14 @@
 static int stack_index = 0;
 static struct Point **stack = NULL;
 
-struct Point *pop()
+struct Point *pop(void)
 {
     stack_index--;
 
     return stack[stack_index + 1];
 }
 
-struct Point *top()
+struct Point *top(void)
 {
     if (stack_index > -1)
         return stack[stack_index];
@@ -39,7 +39,7 @@ void push(struct Point *p)
     stack[stack_index] = p;
 }
 
-int empty_stack()
+int empty_stack(void)
 {
     return stack_index == -1;
 }
@@ -52,7 +52,7 @@ void init_stack(int size)
 
 /** compare the points along the x axis
  */
-int cmp_points(const void *v1, const void *v2, void *param)
+int cmp_points(const void *v1, const void *v2, void *param UNUSED)
 {
     struct Point *p1 = (struct Point *)v1;
     struct Point *p2 = (struct Point *)v2;

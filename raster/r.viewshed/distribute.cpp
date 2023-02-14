@@ -502,7 +502,8 @@ void distribute_bnd_events(AMI_STREAM<AEvent> *bndEvents,
    solved by switching to radial sweep.  */
 unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
                               AMI_STREAM<AEvent> *enterBndEvents,
-                              double start_angle, double end_angle,
+                              double start_angle UNUSED,
+                              double end_angle UNUSED,
                               IOVisibilityGrid *visgrid, GridHeader *hd,
                               Viewpoint *vp, const ViewOptions &viewOptions)
 {

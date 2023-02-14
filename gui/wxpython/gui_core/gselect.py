@@ -3109,6 +3109,14 @@ class SignatureSelect(wx.ComboBox):
         self.SetValue("")
 
     def _append_mapset_signatures(self, mapset, element, items):
+        # A workaround to list signature files before a separate
+        # signature management module is developed
+        try:
+            from grass.lib.gis import G_gisinit
+
+            G_gisinit("")
+        except Exception:
+            return
         try:
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,

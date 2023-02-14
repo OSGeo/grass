@@ -13,8 +13,9 @@
 #define TMPBUFSIZE 8192
 
 static int missing(int, char *);
-static int extract(int, char *, char *, void *, int, int (*)());
-static int scan_int(char *, int *, int);
+static int extract(int, char *, char *, void *, int,
+                   int (*)(const char *, double *, int));
+static int scan_int(const char *, double *, int);
 
 const char gs_ascii_flag[5] = {"DSAA"};
 
@@ -227,23 +228,24 @@ int gethead(FILE *fd, struct Cell_head *cellhd, RASTER_MAP_TYPE *d_type,
     return 1;
 }
 
-static int scan_int(char *s, int *i, int proj)
+static int scan_int(const char *s, double *i, int proj UNUSED)
 {
     char dummy[3];
+    int *i_loc = (int *)i;
 
     *dummy = 0;
 
-    if (sscanf(s, "%d%1s", i, dummy) != 1)
+    if (sscanf(s, "%d%1s", i_loc, dummy) != 1)
         return 0;
     if (*dummy)
         return 0;
-    if (*i <= 0)
+    if (*i_loc <= 0)
         return 0;
     return 1;
 }
 
 static int extract(int count, char *label, char *value, void *data, int proj,
-                   int (*scanner)())
+                   int (*scanner)(const char *, double *, int))
 {
     if (count) {
         G_warning(_("Duplicate \"%s\" field in header"), label);

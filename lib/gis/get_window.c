@@ -59,7 +59,7 @@ void G_get_window(struct Cell_head *window)
     if (regvar) {
         char **tokens = G_tokenize(regvar, ";");
 
-        G__read_Cell_head_array(tokens, &st->dbwindow, 0);
+        G__read_Cell_head_array(tokens, &st->dbwindow);
         G_free_tokens(tokens);
     }
     else {
@@ -125,14 +125,14 @@ void G_get_element_window(struct Cell_head *window, const char *element,
         G_fatal_error(_("Region file %s/%s/%s is empty"), mapset, element,
                       name);
     G_fseek(fp, 0, SEEK_SET);
-    G__read_Cell_head(fp, window, 0);
+    G__read_Cell_head(fp, window);
     fclose(fp);
 }
 
 /*!
    \brief Unset current region
  */
-void G_unset_window()
+void G_unset_window(void)
 {
     st->initialized = 0;
     G__.window_set = 0;

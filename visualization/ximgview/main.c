@@ -128,7 +128,7 @@ static void redraw(void)
     last = (tv1.tv_sec - tv0.tv_sec) * 1000000L + (tv1.tv_usec - tv0.tv_usec);
 }
 
-static void dummy_handler(int sig)
+static void dummy_handler(int sig UNUSED)
 {
 }
 
@@ -145,7 +145,7 @@ static void main_loop(void)
     for (;;) {
         fd_set waitset;
         struct timeval tv;
-        unsigned long delay;
+        unsigned long delay = 0;
 
         while (XPending(dpy) > 0) {
             XEvent event;
@@ -226,7 +226,7 @@ static int read_bmp_header(const unsigned char *p)
 
     if (get_4(&p) != 0)
         return 0;
-    if (get_4(&p) != i_width * i_height * 4)
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
         return 0;
 
     if (size != HEADER_SIZE + i_width * i_height * 4)

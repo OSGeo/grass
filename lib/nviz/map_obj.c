@@ -262,6 +262,7 @@ int Nviz_set_attr(int id, int type, int desc, int src, const char *str_value,
 
             break;
         }
+        FALLTHROUGH;
     default: {
         return 0;
     }
@@ -274,7 +275,7 @@ int Nviz_set_attr(int id, int type, int desc, int src, const char *str_value,
 /*!
    \brief Set default surface attributes
  */
-void Nviz_set_surface_attr_default()
+void Nviz_set_surface_attr_default(void)
 {
     float defs[MAX_ATTS];
 

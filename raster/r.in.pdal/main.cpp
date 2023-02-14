@@ -17,6 +17,10 @@
  *
  *****************************************************************************/
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
 #include <pdal/PointTable.hpp>
 #include <pdal/PointLayout.hpp>
 #include <pdal/StageFactory.hpp>
@@ -26,6 +30,9 @@
 #include <pdal/filters/MergeFilter.hpp>
 #include <pdal/filters/ReprojectionFilter.hpp>
 #include <pdal/filters/StreamCallbackFilter.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 extern "C" {
 #include <grass/gis.h>
@@ -870,8 +877,10 @@ int main(int argc, char *argv[])
     /* close raster file & write history */
     Rast_close(out_fd);
 
-    sprintf(title, "Raw X,Y,Z data binned into a raster grid by cell %s",
-            method_opt->answer);
+    snprintf(title, sizeof(title),
+             "Raw X,Y,Z data binned into a raster grid by cell %s",
+             method_opt->answer);
+
     Rast_put_cell_title(outmap, title);
 
     Rast_short_history(outmap, "raster", &history);
@@ -894,17 +903,17 @@ int main(int argc, char *argv[])
         G_put_window(&region);
 
     if (infiles.num_items > 1) {
-        sprintf(buff,
-                _("Raster map <%s> created."
-                  " " GPOINT_COUNT_FORMAT
-                  " points from %d files found in region."),
-                outmap, grass_filter.num_passed(), infiles.num_items);
+        snprintf(buff, BUFFSIZE,
+                 _("Raster map <%s> created."
+                   " " GPOINT_COUNT_FORMAT
+                   " points from %d files found in region."),
+                 outmap, grass_filter.num_passed(), infiles.num_items);
     }
     else {
-        sprintf(buff,
-                _("Raster map <%s> created."
-                  " " GPOINT_COUNT_FORMAT " points found in region."),
-                outmap, grass_filter.num_passed());
+        snprintf(buff, BUFFSIZE,
+                 _("Raster map <%s> created."
+                   " " GPOINT_COUNT_FORMAT " points found in region."),
+                 outmap, grass_filter.num_passed());
     }
 
     G_done_msg("%s", buff);

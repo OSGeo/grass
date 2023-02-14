@@ -73,7 +73,6 @@ extern DCELL *DMAX, *DMIN;
 extern int maskfd;
 extern CELL *mask;
 extern CELL NULL_CELL;
-extern int (*get_row)();
 
 extern char fs[2];
 extern struct Categories *labels;

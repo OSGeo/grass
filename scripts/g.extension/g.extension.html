@@ -26,7 +26,7 @@ Two types of extensions are supported:
 extension re-installs the requested extension which may include
 updates.
 <p>
-To bulk-update all locally installed GRASS GIS extensions, 
+To bulk-update all locally installed GRASS GIS extensions,
 <em><a href="g.extension.all.html">g.extension.all</a></em> module
 is available.
 
@@ -35,7 +35,7 @@ is available.
 GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
-the user's home directory. 
+the user's home directory.
 On GNU/Linux it is <tt>$HOME/.grass8/addons</tt>,
 on MS-Windows it is <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.
 The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
@@ -45,7 +45,7 @@ environmental variable.
 The flag <b>-s</b> changes this install target directory to the GRASS GIS
 installation directory
 (determined by <tt>GISBASE</tt> environmental variable, e.g. <tt>/usr/</tt>)
-rather than the default directory defined as per  <tt>GRASS_ADDON_BASE</tt> 
+rather than the default directory defined as per  <tt>GRASS_ADDON_BASE</tt>
 (see also documentation for <a href="variables.html">variables</a>).
 <em>g.extension</em> checks if the user has permission to write to
 <tt>GISBASE</tt> or <tt>GRASS_ADDON_BASE</tt>.
@@ -86,7 +86,7 @@ For well known general hosting services, namely GitHub, GitLab and Bitbucket,
 <em>g.extension</em> supports the download of a repository as a ZIP file.
 Here the user only needs to provide a base URL to the repository web page
 (with or without the <tt>https://</tt> part).
-For GitLab and Bitbucket, the latest source code in the default branch is 
+For GitLab and Bitbucket, the latest source code in the default branch is
 downloaded, for GitHub, the latest source code in the master branch is downloaded.
 Of course, a user can still specify the full URL of a ZIP file
 and install a specific branch or release in this way (ZIP file mechanism

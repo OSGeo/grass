@@ -1249,7 +1249,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             vector/volume
         """
         if not UserSettings.Get(
-            group="general",
+            group="appearance",
             key="singleWindow",
             subkey="enabled",
         ):

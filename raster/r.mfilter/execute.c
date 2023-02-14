@@ -140,7 +140,8 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
                 *cp++ = bufs[id][mid][i];
 
             /* write row */
-            write(out[id], cellp, buflen);
+            if (write(out[id], cellp, buflen) < 0)
+                G_fatal_error("Error writing temporary file");
 #pragma omp atomic update
             work++;
         }

@@ -86,8 +86,8 @@ detectPlateaus::~detectPlateaus()
    structs. */
 plateauType *detectPlateaus::getPlateauForward(dimension_type i,
                                                dimension_type j,
-                                               dimension_type nr,
-                                               dimension_type nc)
+                                               dimension_type nr UNUSED,
+                                               dimension_type nc UNUSED)
 {
     bool ok;
     static plateauType ptarr[3]; /* return value */

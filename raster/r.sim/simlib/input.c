@@ -240,7 +240,7 @@ void init_library_globals(struct WaterParams *wp)
 
 /* we do the allocation inside because we anyway need to set the variables */
 
-void alloc_grids_water()
+void alloc_grids_water(void)
 {
     /* memory allocation for output grids */
     G_debug(1, "beginning memory allocation for output grids");
@@ -251,7 +251,7 @@ void alloc_grids_water()
     dif = G_alloc_fmatrix(my, mx);
 }
 
-void alloc_grids_sediment()
+void alloc_grids_sediment(void)
 {
     /* mandatory for si,sigma */
 
@@ -265,7 +265,7 @@ void alloc_grids_sediment()
         er = G_alloc_fmatrix(my, mx);
 }
 
-void init_grids_sediment()
+void init_grids_sediment(void)
 {
     /* this should be fulfilled for sediment but not water */
     if (et != NULL)
