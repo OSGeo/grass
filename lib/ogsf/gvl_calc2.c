@@ -374,6 +374,7 @@ int mc33_process_cube(int c_ndx, float *v)
         case 7:
             return OFFSET_T7_1 + m_config; /* 7.1 */
         };
+        break; /* will not reach this as previous switch is exhaustive */
 
     case 8:
         return OFFSET_T8 + m_config;
@@ -558,6 +559,7 @@ int mc33_process_cube(int c_ndx, float *v)
         default:
             fprintf(stderr, "Marching Cubes: Impossible case 13?\n");
         }
+        break; /* will not reach this as previous switch is exhaustive */
 
     case 14:
         return OFFSET_T14 + m_config;

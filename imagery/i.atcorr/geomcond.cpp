@@ -360,7 +360,8 @@ void GeomCond::parse()
     }
     case 4:
         campm = 1.0f; /* avhrr PM, case 4 must fall through to case 5 */
-    case 5:           /* avhrr PM and avhrr AM */
+        FALLTHROUGH;
+    case 5: /* avhrr PM and avhrr AM */
     {
         cin >> month;
         cin >> jday;
