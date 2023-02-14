@@ -31,6 +31,10 @@
 #include <grass/glocale.h>
 #include <grass/gprojects.h>
 
+// Constant to string conversion
+#define STR_HELPER(x)   #x
+#define STR(x)          STR_HELPER(x)
+
 #define NDIMS           3
 #define LONG_NAME       "long_name"
 #define STANDARD_NAME   "standard_name"
@@ -51,7 +55,7 @@
 #define UNITS           "units"
 #define DEGREES_EAST    "degrees_east"
 #define DEGREES_NORTH   "degrees_north"
-#define HISTORY_TEXT    "GRASS GIS %d netCDF export of r3.out.netcdf"
+#define HISTORY_TEXT    "GRASS GIS " STR(GRASS_VERSION_MAJOR) " netCDF export of r3.out.netcdf"
 #define CF_SUPPORT      "CF-1.5"
 
 #define ERR(e)                      \
@@ -136,13 +140,8 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
                                   strlen(CF_SUPPORT), CF_SUPPORT)))
         ERR(retval);
 
-    // Works up to version 9999.
-    // 2 in original, 2 more, \0 is in the original string which sizeof counts.
-    size_t history_size = sizeof(HISTORY_TEXT) / sizeof(char) + 2;
-    char history_string[history_size];
-    snprintf(history_string, history_size, HISTORY_TEXT, GRASS_VERSION_MAJOR);
     if ((retval = nc_put_att_text(ncid, NC_GLOBAL, "history",
-                                  strlen(history_string), history_string)))
+                                  strlen(HISTORY_TEXT), HISTORY_TEXT)))
         ERR(retval);
 
     G_get_window(&window);
