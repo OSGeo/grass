@@ -43,12 +43,6 @@ class MapPageFrame(wx.Frame):
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-    def closeFrameNoEvent(self):
-        """Close frame without generating OnClose event."""
-        self.Unbind(wx.EVT_CLOSE)
-        self.Close()
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-
     def OnClose(self, event):
         """Close frame and associated layer notebook page."""
         self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
@@ -103,7 +97,7 @@ class MapNotebook(aui.AuiNotebook):
         page.Reparent(self)
         page.SetDockingCallback(self.UndockMapDisplay)
         self.AddPage(page, frame.GetTitle())
-        frame.closeFrameNoEvent()
+        frame.Destroy()
 
     def AddPage(self, *args, **kwargs):
         """Overrides Aui.Notebook AddPage method.
@@ -128,7 +122,7 @@ class MapNotebook(aui.AuiNotebook):
             self.DeletePage(self.GetPageIndex(page))
         else:
             frame = page.GetParent()
-            frame.closeFrameNoEvent()
+            frame.Destroy()
 
     def SetMapPageText(self, page, text):
         """Decides whether sets title to MapNotebook page
