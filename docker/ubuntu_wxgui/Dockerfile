@@ -98,7 +98,8 @@ RUN apt-get update && apt-get upgrade -y && \
     vim \
     wget \
     zip \
-    zlib1g-dev
+    zlib1g-dev \
+    && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 # wxGUI
 RUN pip install -U \
@@ -224,6 +225,9 @@ ENV CXXFLAGS ""
 ENV SHELL /bin/bash
 ENV LC_ALL "en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
+
+# https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+ENV PROJ_NETWORK=ON
 
 # Create generic GRASS GIS lib name regardless of version number
 RUN ln -sf /usr/local/grass83 /usr/local/grass
