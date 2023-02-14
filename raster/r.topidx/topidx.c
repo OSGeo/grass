@@ -28,7 +28,7 @@ void initialize(void)
 void calculate_atanb(void)
 {
     int i, j, k, snatb;
-    int iter, ncells, nroute, nslp;
+    int ncells, nroute, nslp;
     double sum, route[9], tanB[9], dx, dx1, dx2, sumtb, C;
     int nsink;
 
@@ -41,7 +41,7 @@ void calculate_atanb(void)
     G_important_message(_("Calculating..."));
 
     nsink = 0;
-    for (iter = 1; natb < ncells; iter++) {
+    for (; natb < ncells;) {
         /*
            for(i=0;i<80;i++)
            fprintf(stderr,"\b");

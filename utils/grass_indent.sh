@@ -15,7 +15,7 @@
 
 # TODO: replace short flags by long ones to improve readability
 
-case "$(uname)" in 
+case "$(uname)" in
  Darwin | *BSD*)
   INDENT=$(which gindent)
   ;;

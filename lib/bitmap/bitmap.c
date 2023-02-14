@@ -152,6 +152,7 @@ int BM_set_mode(int mode, int size)
     case BM_FLAT:
     case BM_SPARSE:
         Mode = mode;
+        break;
     default:
         fprintf(stderr, "BM_set_mode:  Unknown mode: %d\n", mode);
         ret--;

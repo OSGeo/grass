@@ -682,14 +682,14 @@ int error_Output(int out, msg m)
 
         sprintf(s, "ERROR %i", m.f.f_d.aid);
 
-        if (write(out, s, strlen(s)) == strlen(s))
+        if (write(out, s, strlen(s)) == (ssize_t)strlen(s))
             return 1;
         else
             return 0;
     }
 }
 
-int raster_Output(int fd, int aid, struct g_area *g, double res)
+int raster_Output(int fd, int aid, struct g_area *g UNUSED, double res)
 {
     double toPut = res;
     off_t offset = (off_t)aid * sizeof(double);

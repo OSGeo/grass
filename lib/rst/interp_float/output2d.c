@@ -59,7 +59,8 @@ int IL_output_2d(struct interp_params *params,
                  double zmin, double zmax, /*!< min,max input z-values */
                  double zminac, double zmaxac, double c1min,
                  double c1max, /*!< min,max interpolated values */
-                 double c2min, double c2max, double gmin, double gmax,
+                 double c2min, double c2max, double gmin UNUSED,
+                 double gmax UNUSED,
                  double ertot, /*!< total interpolating func. error */
                  char *input,  /*!< input file name */
                  double dnorm, /*!< normalization factor */
@@ -131,7 +132,7 @@ int IL_output_2d(struct interp_params *params,
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z) !=
-                params->nsizc)
+                (size_t)params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf1, cell1);
@@ -147,7 +148,7 @@ int IL_output_2d(struct interp_params *params,
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx) !=
-                params->nsizc)
+                (size_t)params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf2, cell1);
@@ -163,7 +164,7 @@ int IL_output_2d(struct interp_params *params,
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy) !=
-                params->nsizc)
+                (size_t)params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf3, cell1);
@@ -179,7 +180,7 @@ int IL_output_2d(struct interp_params *params,
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx) !=
-                params->nsizc)
+                (size_t)params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf4, cell1);
@@ -195,7 +196,7 @@ int IL_output_2d(struct interp_params *params,
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy) !=
-                params->nsizc)
+                (size_t)params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf5, cell1);
@@ -211,7 +212,7 @@ int IL_output_2d(struct interp_params *params,
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy) !=
-                params->nsizc)
+                (size_t)params->nsizc)
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf6, cell1);

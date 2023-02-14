@@ -187,19 +187,6 @@ RASTER3D_Region out_region;
 
 int main(int argc, char *argv[])
 {
-    int INPUT();
-    int SEGMEN();
-    int interp_call();
-    int COGRR1();
-    int SECPAR();
-    int OUTGR();
-    int LINEQS();
-    int CRSTG();
-    double CRST();
-    double amax1(double, double);
-    double amin1(double, double);
-    int max1();
-    int min1();
     int npmin;
     int ii, i, n_rows, n_cols, n_levs;
     double x_orig, y_orig, z_orig;

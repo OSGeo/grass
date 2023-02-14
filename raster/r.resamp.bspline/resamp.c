@@ -21,9 +21,12 @@
 #include <math.h>
 #include "bspline.h"
 
-struct Point *P_Read_Raster_Region_masked(
-    SEGMENT *mask_seg, struct Cell_head *Original, struct bound_box output_box,
-    struct bound_box General, int *num_points, int dim_vect, double mean)
+struct Point *P_Read_Raster_Region_masked(SEGMENT *mask_seg,
+                                          struct Cell_head *Original,
+                                          struct bound_box output_box UNUSED,
+                                          struct bound_box General,
+                                          int *num_points, int dim_vect,
+                                          double mean)
 {
     int col, row, startcol, endcol, startrow, endrow, nrows, ncols;
     int pippo, npoints;
@@ -113,7 +116,6 @@ int P_Sparse_Raster_Points(SEGMENT *out_seg, struct Cell_head *Elaboration,
 {
     int i, row, col;
     double X, Y, interpolation, csi, eta, weight, dval;
-    int points_in_box = 0;
 
     /* Reading points inside output region and inside general box */
     /* all points available here are inside the output box,
@@ -137,7 +139,6 @@ int P_Sparse_Raster_Points(SEGMENT *out_seg, struct Cell_head *Elaboration,
             G_fatal_error("col index out of range");
             continue;
         }
-        points_in_box++;
 
         G_debug(3, "P_Sparse_Raster_Points: interpolate point %d...", i);
         if (bilin)

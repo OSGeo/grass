@@ -177,7 +177,7 @@ int G_vsnaprintf(char *, size_t, const char *, va_list);
 char *G_basename(char *, const char *);
 size_t G_get_num_decimals(const char *);
 char *G_double_to_basename_format(double, size_t, size_t);
-char *G_get_basename_separator();
+char *G_get_basename_separator(void);
 char *G_join_basename_strings(const char **, size_t);
 char *G_generate_basename(const char *, double, size_t, size_t);
 
@@ -420,7 +420,7 @@ const char *G_config_path(void);
 /* ilist.c */
 void G_init_ilist(struct ilist *);
 void G_free_ilist(struct ilist *);
-struct ilist *G_new_ilist();
+struct ilist *G_new_ilist(void);
 void G_ilist_add(struct ilist *, int);
 
 /* intersect.c */
@@ -462,7 +462,7 @@ double G_distance2_point_to_line(double, double, double, double, double,
 
 /* list.c */
 void G_list_element(const char *, const char *, const char *,
-                    int (*)(const char *, const char *, const char *));
+                    int (*)(const char *, const char *, char *));
 char **G_list(int, const char *, const char *, const char *);
 void G_free_list(char **);
 
@@ -605,7 +605,7 @@ void G_usage(void);
 char *G_recreate_command(void);
 void G_add_keyword(const char *);
 void G_set_keywords(const char *);
-int G_get_overwrite();
+int G_get_overwrite(void);
 char *G_option_to_separator(const struct Option *);
 FILE *G_open_option_file(const struct Option *);
 void G_close_option_file(FILE *);
@@ -672,7 +672,7 @@ const char *G_projection_name(int);
 
 /* proj3.c */
 const char *G_database_unit_name(int);
-int G_database_unit();
+int G_database_unit(void);
 const char *G_database_projection_name(void);
 const char *G_database_datum_name(void);
 const char *G_database_ellipse_name(void);
@@ -692,8 +692,8 @@ double G_transverse_radius_of_curvature(double, double, double);
 double G_radius_of_conformal_tangent_sphere(double, double, double);
 
 /* rd_cellhd.c */
-void G__read_Cell_head(FILE *, struct Cell_head *, int);
-void G__read_Cell_head_array(char **, struct Cell_head *, int);
+void G__read_Cell_head(FILE *, struct Cell_head *);
+void G__read_Cell_head_array(char **, struct Cell_head *);
 
 /* remove.c */
 int G_remove(const char *, const char *);
@@ -719,7 +719,7 @@ void G_fseek(FILE *, off_t, int);
 /* set_window.c */
 void G_get_set_window(struct Cell_head *);
 void G_set_window(struct Cell_head *);
-void G_unset_window();
+void G_unset_window(void);
 
 /* short_way.c */
 void G_shortest_way(double *, double *);
@@ -820,7 +820,7 @@ int G_set_verbose(int);
 /* view.c */
 void G_3dview_warning(int);
 int G_get_3dview_defaults(struct G_3dview *, struct Cell_head *);
-int G_put_3dview(const char *, const char *, const struct G_3dview *,
+int G_put_3dview(const char *, const struct G_3dview *,
                  const struct Cell_head *);
 int G_get_3dview(const char *, const char *, struct G_3dview *);
 

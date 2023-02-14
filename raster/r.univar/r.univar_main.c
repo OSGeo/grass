@@ -32,7 +32,7 @@ int nprocs;
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.inputfile = G_define_standard_option(G_OPT_R_MAPS);
 
@@ -170,8 +170,8 @@ int main(int argc, char *argv[])
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
-    zone_info.min = 0.0 / 0.0; /* set to nan as default */
-    zone_info.max = 0.0 / 0.0; /* set to nan as default */
+    zone_info.min = 0;
+    zone_info.max = 0;
     zone_info.n_zones = 0;
 
     fdz = NULL;

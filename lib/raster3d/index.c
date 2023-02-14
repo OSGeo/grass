@@ -46,7 +46,7 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
         if (indexLength <
             map->indexLongNbytes * map->nTiles) { /* RLE encoded? */
 
-            if (indexLength > sizeof(long) * map->nTiles) {
+            if (indexLength > (int)sizeof(long) * map->nTiles) {
 
                 /*->index large enough? */
                 tmp2 = Rast3d_malloc(indexLength);
@@ -67,7 +67,7 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
                               map->indexLongNbytes * map->nTiles, 1, &dummy1,
                               &dummy2);
 
-            if (indexLength > sizeof(long) * map->nTiles)
+            if (indexLength > (int)sizeof(long) * map->nTiles)
                 Rast3d_free(tmp2);
         } /* END RLE */
 

@@ -45,28 +45,28 @@ It has the following format:
 </pre></div>
 
 <dl>
-<dt>TITLE 
+<dt>TITLE
 
 <dd>A one-line TITLE for the filter.
 If a TITLE was not specified on the command line, it can be specified here.
 This TITLE would be used to construct a TITLE for the resulting raster map
 layer.  It should be a one-line description of the filter.
 
-<dt>MATRIX 
+<dt>MATRIX
 
 <dd>The matrix (n x n) follows on the next n lines.  <em>n</em> must be
 an odd integer greater than or equal to 3.
 The matrix itself consists of n rows of n values.
 The values must be separated from each other by at least 1 blank.
 
-<dt>DIVISOR 
+<dt>DIVISOR
 
 <dd>The filter divisor is <em>d</em>.  If not specified, the default is 1.
 If the divisor is zero (0), then the divisor is dependent on the
 category values in the neighborhood
 (see HOW THE FILTER WORKS below).
 
-<dt>TYPE 
+<dt>TYPE
 
 <dd>The filter type.  <em>S</em> means sequential, while <em>P</em> mean parallel.
 If not specified, the default is S.

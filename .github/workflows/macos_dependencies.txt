@@ -35,3 +35,4 @@ postgresql
 postgis
 cmake
 llvm-openmp
+flex

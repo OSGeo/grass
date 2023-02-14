@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
                           raster->answer, output->answer);
 }
 
-int patchAreaDistributionRANGE(int fd, char **par, struct area_entry *ad,
+int patchAreaDistributionRANGE(int fd, char **par UNUSED, struct area_entry *ad,
                                double *result)
 {
     double indice = 0;
@@ -108,7 +108,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 {
     CELL *buf, *buf_sup, *buf_null;
     CELL corrCell, precCell, supCell;
-    long npatch, area;
+    long npatch;
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -157,7 +157,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
     /* calculate number of patches */
     npatch = 0;
-    area = 0;
     pid = 0;
 
     /* patch size and type */
@@ -208,8 +207,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
                 precCell = corrCell;
                 continue;
             }
-
-            area++;
 
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
@@ -312,8 +309,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
-        min = 1.0 / 0.0;  /* inf */
-        max = -1.0 / 0.0; /* -inf */
+        min = INFINITY;
+        max = -INFINITY;
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;
@@ -345,7 +342,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 {
     DCELL *buf, *buf_sup, *buf_null;
     DCELL corrCell, precCell, supCell;
-    long npatch, area;
+    long npatch;
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -394,7 +391,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
     /* calculate number of patches */
     npatch = 0;
-    area = 0;
     pid = 0;
 
     /* patch size and type */
@@ -445,8 +441,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                 precCell = corrCell;
                 continue;
             }
-
-            area++;
 
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
@@ -549,8 +543,8 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
-        min = 1.0 / 0.0;  /* inf */
-        max = -1.0 / 0.0; /* -inf */
+        min = INFINITY;
+        max = -INFINITY;
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;
@@ -582,7 +576,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 {
     FCELL *buf, *buf_sup, *buf_null;
     FCELL corrCell, precCell, supCell;
-    long npatch, area;
+    long npatch;
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -631,7 +625,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
     /* calculate number of patches */
     npatch = 0;
-    area = 0;
     pid = 0;
 
     /* patch size and type */
@@ -682,8 +675,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                 precCell = corrCell;
                 continue;
             }
-
-            area++;
 
             supCell = buf_sup[j + ad->x];
             if (masked && (mask_sup[j] == 0)) {
@@ -786,8 +777,8 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
-        min = 1.0 / 0.0;  /* inf */
-        max = -1.0 / 0.0; /* -inf */
+        min = INFINITY;
+        max = -INFINITY;
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;

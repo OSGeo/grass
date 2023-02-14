@@ -456,9 +456,11 @@ int scan_ref(char *buf)
     case 2:
         if (!(xmatch(word2) || ymatch(word2)))
             return 0;
+        FALLTHROUGH;
     case 1:
         if (xmatch(word1) || ymatch(word1))
             return 1;
+        FALLTHROUGH;
     default:
         return 0;
     }

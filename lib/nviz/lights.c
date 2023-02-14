@@ -181,9 +181,9 @@ int Nviz_new_light(nv_data *data)
 /*!
    \brief Draw lighting model
 
-   \param data nviz data
+   \param data nviz data [unused]
  */
-void Nviz_draw_model(nv_data *data)
+void Nviz_draw_model(nv_data *data UNUSED)
 {
     GS_set_draw(GSD_FRONT);
     GS_ready_draw();

@@ -41,7 +41,9 @@ typedef struct {
 #define C_B 4
 #define C_A 5
 
-static channel channels[6] = {{""}, {""}, {".r"}, {".g"}, {".b"}, {".a"}};
+static channel channels[6] = {{.suffix = ""},   {.suffix = ""},
+                              {.suffix = ".r"}, {.suffix = ".g"},
+                              {.suffix = ".b"}, {.suffix = ".a"}};
 
 static int Header;
 static int Float;
@@ -331,7 +333,8 @@ static void read_png(void)
 
     linesize = png_get_rowbytes(png_ptr, info_ptr);
 
-    png_buffer = G_malloc(interlace ? height * linesize : linesize);
+    png_buffer = G_malloc((size_t)interlace ? (size_t)height * linesize
+                                            : (size_t)linesize);
 
     if (interlace) {
         png_rows = G_malloc(height * sizeof(png_bytep));

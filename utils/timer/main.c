@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdio.h>
 
-int main()
+int main(void)
 {
     struct timeval t;
 

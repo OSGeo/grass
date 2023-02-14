@@ -593,8 +593,8 @@ void setup_maps(void)
         setup_map(&maps[i]);
 }
 
-void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
-                 int res_type)
+void get_map_row(int idx, int mod, int depth UNUSED, int row, int col,
+                 void *buf, int res_type)
 {
     CELL *ibuf;
     DCELL *fbuf;
@@ -733,11 +733,10 @@ void create_history(const char *dst, expression *e)
     char *expr = format_expression(e);
     char *p = expr;
     int len = strlen(expr);
-    int i;
 
     Rast_short_history(dst, "raster", &hist);
 
-    for (i = 0;; i++) {
+    for (;;) {
         char buf[RECORD_LEN];
         int n;
 
