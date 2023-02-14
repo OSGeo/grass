@@ -107,8 +107,8 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     if (!p)
         return NULL;
     /* atof on windows can not read "nan" and returns 0 instead */
-    if (strcmp(p, "none") == 0 ||
-        G_strcasecmp(p, "nan") == 0 || G_strcasecmp(p, "-nan") == 0) {
+    if (strcmp(p, "none") == 0 || G_strcasecmp(p, "nan") == 0 ||
+        G_strcasecmp(p, "-nan") == 0) {
         Rast_set_d_null_value(&null_val, 1);
     }
     else
@@ -173,16 +173,14 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     return gdal;
 }
 
-struct GDAL_Options
-{
+struct GDAL_Options {
     const char *dir;
     const char *ext;
     const char *format;
     char **options;
 };
 
-static struct state
-{
+static struct state {
     int initialized;
     struct GDAL_Options opts;
     struct Key_Value *projinfo, *projunits, *projepsg;
@@ -279,16 +277,16 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
         switch (R__.nbytes) {
         case 1:
             gdal->type = GDT_Byte;
-            gdal->null_val = (DCELL) 0xFF;
+            gdal->null_val = (DCELL)0xFF;
             break;
         case 2:
             gdal->type = GDT_UInt16;
-            gdal->null_val = (DCELL) 0xFFFF;
+            gdal->null_val = (DCELL)0xFFFF;
             break;
         case 3:
         case 4:
             gdal->type = GDT_Int32;
-            gdal->null_val = (DCELL) 0x80000000U;
+            gdal->null_val = (DCELL)0x80000000U;
             break;
         }
         break;
@@ -312,14 +310,13 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
     /* Does driver support GDALCreate ? */
     if (GDALGetMetadataItem(driver, GDAL_DCAP_CREATE, NULL)) {
         gdal->data =
-            GDALCreate(driver, gdal->filename,
-                       R__.wr_window.cols, R__.wr_window.rows,
-                       1, gdal->type, st->opts.options);
+            GDALCreate(driver, gdal->filename, R__.wr_window.cols,
+                       R__.wr_window.rows, 1, gdal->type, st->opts.options);
         if (!gdal->data)
             G_fatal_error(_("Unable to create <%s> dataset using <%s> driver"),
                           name, st->opts.format);
     }
-    /* If not - create MEM driver for intermediate dataset. 
+    /* If not - create MEM driver for intermediate dataset.
      * Check if raster can be created at all (with GDALCreateCopy) */
     else if (GDALGetMetadataItem(driver, GDAL_DCAP_CREATECOPY, NULL)) {
         GDALDriverH mem_driver;
@@ -333,12 +330,11 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
             G_fatal_error(_("Unable to get in-memory raster driver"));
 
         gdal->data =
-            GDALCreate(mem_driver, "",
-                       R__.wr_window.cols, R__.wr_window.rows,
+            GDALCreate(mem_driver, "", R__.wr_window.cols, R__.wr_window.rows,
                        1, gdal->type, st->opts.options);
         if (!gdal->data)
-            G_fatal_error(_("Unable to create <%s> dataset using memory driver"),
-                          name);
+            G_fatal_error(
+                _("Unable to create <%s> dataset using memory driver"), name);
     }
     else
         G_fatal_error(_("Driver <%s> does not support creating rasters"),
@@ -424,9 +420,8 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 
     if (G_strcasecmp(GDALGetDriverShortName(src_drv), "MEM") == 0) {
         GDALDriverH dst_drv = GDALGetDriverByName(st->opts.format);
-        GDALDatasetH dst =
-            GDALCreateCopy(dst_drv, gdal->filename, gdal->data, FALSE,
-                           st->opts.options, NULL, NULL);
+        GDALDatasetH dst = GDALCreateCopy(dst_drv, gdal->filename, gdal->data,
+                                          FALSE, st->opts.options, NULL, NULL);
 
         if (!dst) {
             G_warning(_("Unable to create output file <%s> using driver <%s>"),
@@ -451,14 +446,13 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 
    See GDAL's RasterIO for details.
  */
-CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag,
-                           int x_off, int y_off, int x_size, int y_size,
-                           void *buffer, int buf_x_size, int buf_y_size,
-                           GDALDataType buf_type, int pixel_size,
-                           int line_size)
+CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag, int x_off,
+                           int y_off, int x_size, int y_size, void *buffer,
+                           int buf_x_size, int buf_y_size,
+                           GDALDataType buf_type, int pixel_size, int line_size)
 {
-    return GDALRasterIO(band, rw_flag, x_off, y_off, x_size, y_size,
-                        buffer, buf_x_size, buf_y_size, buf_type,
-                        pixel_size, line_size);
+    return GDALRasterIO(band, rw_flag, x_off, y_off, x_size, y_size, buffer,
+                        buf_x_size, buf_y_size, buf_type, pixel_size,
+                        line_size);
 }
 #endif

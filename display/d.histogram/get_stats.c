@@ -41,14 +41,14 @@ static void run_stats(const char *mapname, const char *tempfile)
 }
 
 int get_stats(const char *mapname, struct stat_list *dist_stats)
-{                               /* linked list of stats */
-    char buf[1024];             /* input buffer for reading stats */
+{                   /* linked list of stats */
+    char buf[1024]; /* input buffer for reading stats */
     int done = 0;
-    char *tempfile;             /* temp file name */
-    FILE *fd;                   /* temp file pointer */
+    char *tempfile; /* temp file name */
+    FILE *fd;       /* temp file pointer */
 
-    long int cat;               /* a category value */
-    long int stat;              /* a category stat value */
+    long int cat;  /* a category value */
+    long int stat; /* a category stat value */
     struct stat_node *ptr = NULL;
     int first;
 
@@ -126,19 +126,19 @@ int get_stats(const char *mapname, struct stat_list *dist_stats)
                 /* put it in the list */
                 if (dist_stats->ptr == NULL) {
                     /* first in list */
-                    dist_stats->ptr = (struct stat_node *)
-                        G_malloc(sizeof(struct stat_node));
+                    dist_stats->ptr =
+                        (struct stat_node *)G_malloc(sizeof(struct stat_node));
                     dist_stats->ptr->cat = cat;
                     dist_stats->ptr->stat = stat;
                     dist_stats->ptr->next = NULL;
                     ptr = dist_stats->ptr;
                 }
                 else {
-                    ptr->next = (struct stat_node *)
-                        G_malloc(sizeof(struct stat_node));
+                    ptr->next =
+                        (struct stat_node *)G_malloc(sizeof(struct stat_node));
                     ptr->next->cat = cat;
                     ptr->next->stat = stat;
-                    ptr->next->next = NULL;     /* mod: shapiro */
+                    ptr->next->next = NULL; /* mod: shapiro */
                     ptr = ptr->next;
                 }
             }

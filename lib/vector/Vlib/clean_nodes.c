@@ -30,9 +30,8 @@
 
    \return number of line modifications
  */
-int
-Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
-                                 struct Map_info *Err)
+int Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
+                                     struct Map_info *Err)
 {
     int node, nnodes;
     int nmodif = 0;
@@ -56,7 +55,7 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 
         while (1) {
             float angle1 = -100;
-            int line1 = -999;   /* value not important, just for debug */
+            int line1 = -999; /* value not important, just for debug */
             int clean = 1;
 
             nlines = Vect_get_node_n_lines(Map, node);
@@ -77,7 +76,7 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 
                 angle2 = Vect_get_node_line_angle(Map, node, i);
                 if (angle2 == -9.0)
-                    continue;   /* Degenerated line */
+                    continue; /* Degenerated line */
 
                 G_debug(4, "  line1 = %d angle1 = %e line2 = %d angle2 = %e",
                         line1, angle1, line2, angle2);
@@ -85,9 +84,10 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
                 if (angle2 == angle1) {
                     int j;
                     double length1, length2;
-                    int short_line;     /* line with shorter end segment */
-                    int long_line;      /* line with longer end segment */
-                    int new_short_line = 0;     /* line number of short line after rewrite */
+                    int short_line; /* line with shorter end segment */
+                    int long_line;  /* line with longer end segment */
+                    int new_short_line =
+                        0; /* line number of short line after rewrite */
                     int short_type, long_type, type;
                     double x, y, z, nx, ny, nz;
 
@@ -96,42 +96,35 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
                     /* Length of end segments for both lines */
                     Vect_read_line(Map, Points, NULL, abs(line1));
                     if (line1 > 0) {
-                        length1 =
-                            Vect_points_distance(Points->x[0], Points->y[0],
-                                                 0.0, Points->x[1],
-                                                 Points->y[1], 0.0, 0);
+                        length1 = Vect_points_distance(
+                            Points->x[0], Points->y[0], 0.0, Points->x[1],
+                            Points->y[1], 0.0, 0);
                     }
                     else {
                         int np;
 
                         np = Points->n_points;
-                        length1 =
-                            Vect_points_distance(Points->x[np - 1],
-                                                 Points->y[np - 1], 0.0,
-                                                 Points->x[np - 2],
-                                                 Points->y[np - 2], 0.0, 0);
+                        length1 = Vect_points_distance(
+                            Points->x[np - 1], Points->y[np - 1], 0.0,
+                            Points->x[np - 2], Points->y[np - 2], 0.0, 0);
                     }
 
                     Vect_read_line(Map, Points, NULL, abs(line2));
                     if (line2 > 0) {
-                        length2 =
-                            Vect_points_distance(Points->x[0], Points->y[0],
-                                                 0.0, Points->x[1],
-                                                 Points->y[1], 0.0, 0);
+                        length2 = Vect_points_distance(
+                            Points->x[0], Points->y[0], 0.0, Points->x[1],
+                            Points->y[1], 0.0, 0);
                     }
                     else {
                         int np;
 
                         np = Points->n_points;
-                        length2 =
-                            Vect_points_distance(Points->x[np - 1],
-                                                 Points->y[np - 1], 0.0,
-                                                 Points->x[np - 2],
-                                                 Points->y[np - 2], 0.0, 0);
+                        length2 = Vect_points_distance(
+                            Points->x[np - 1], Points->y[np - 1], 0.0,
+                            Points->x[np - 2], Points->y[np - 2], 0.0, 0);
                     }
 
-                    G_debug(4, "  length1 = %f length2 = %f", length1,
-                            length2);
+                    G_debug(4, "  length1 = %f length2 = %f", length1, length2);
 
                     if (length1 < length2) {
                         short_line = line1;
@@ -150,13 +143,14 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
                         x = Points->x[1];
                         y = Points->y[1];
                         z = Points->z[1];
-                        Vect_line_delete_point(Points, 0);      /* first */
+                        Vect_line_delete_point(Points, 0); /* first */
                     }
                     else {
                         x = Points->x[Points->n_points - 2];
                         y = Points->y[Points->n_points - 2];
                         z = Points->z[Points->n_points - 2];
-                        Vect_line_delete_point(Points, Points->n_points - 1);   /* last */
+                        Vect_line_delete_point(Points,
+                                               Points->n_points - 1); /* last */
                     }
 
                     /* It may happen that it is one line: node could be deleted,
@@ -164,16 +158,16 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
                     Vect_get_node_coor(Map, node, &nx, &ny, &nz);
 
                     if (Points->n_points > 1) {
-                        new_short_line =
-                            Vect_rewrite_line(Map, abs(short_line),
-                                              short_type, Points, SCats);
+                        new_short_line = Vect_rewrite_line(
+                            Map, abs(short_line), short_type, Points, SCats);
                     }
                     else {
                         Vect_delete_line(Map, abs(short_line));
                     }
 
-                    /* It may happen that it is one line, in that case we have to take the new
-                     * short line as long line, orientation is not changed */
+                    /* It may happen that it is one line, in that case we have
+                     * to take the new short line as long line, orientation is
+                     * not changed */
                     if (abs(line1) == abs(line2)) {
                         if (long_line > 0)
                             long_line = new_short_line;
@@ -181,7 +175,8 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
                             long_line = -new_short_line;
                     }
 
-                    /* Add new line (must be before rewrite of long_line otherwise node could be deleted) */
+                    /* Add new line (must be before rewrite of long_line
+                     * otherwise node could be deleted) */
                     long_type =
                         Vect_read_line(Map, NULL, LCats, abs(long_line));
 

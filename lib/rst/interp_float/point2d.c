@@ -23,7 +23,6 @@
  * Read the file COPYING that comes with GRASS for details.
  */
 
-
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
@@ -31,7 +30,7 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-#define	POINT2D_C
+#define POINT2D_C
 #include <grass/interpf.h>
 
 /* needed for AIX */
@@ -43,21 +42,22 @@
  * Checks if interpolating function interp() evaluates correct z-values at
  * given points. If smoothing is used calculate the maximum error caused
  * by smoothing.
- * 
+ *
  * *ertot* is a RMS deviation of the interpolated surface.
- * 
+ *
  * \todo
  * Alternative description:
  * ...calculate the maximum and RMS deviation caused by smoothing.
  */
-int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  /*!< current region */
-                          double *b,    /*!< solution of linear equations */
-                          double *ertot,        /*!< total error */
-                          double zmin,  /*!< min z-value */
+int IL_check_at_points_2d(struct interp_params *params,
+                          struct quaddata *data, /*!< current region */
+                          double *b,     /*!< solution of linear equations */
+                          double *ertot, /*!< total error */
+                          double zmin,   /*!< min z-value */
                           double dnorm, struct triple skip_point)
 {
-    int n_points = data->n_points;      /* number of points */
-    struct triple *points = data->points;       /* points for interpolation */
+    int n_points = data->n_points;        /* number of points */
+    struct triple *points = data->points; /* points for interpolation */
     double east = data->xmax;
     double west = data->x_orig;
     double north = data->ymax;
@@ -71,7 +71,6 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
 
     /*  Site *site; */
     char buf[1024];
-
 
     /*  if ((site = G_site_new_struct (-1, 2, 0, 1)) == NULL)
        G_fatal_error ("Memory error for site struct"); */
@@ -101,16 +100,15 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
         err = hz - zz;
         xmm = points[mm - 1].x * dnorm + params->x_orig + west;
         ymm = points[mm - 1].y * dnorm + params->y_orig + south;
-        if ((xmm >= west + params->x_orig) && (xmm <= east + params->x_orig)
-            && (ymm >= south + params->y_orig) &&
-            (ymm <= north + params->y_orig))
+        if ((xmm >= west + params->x_orig) && (xmm <= east + params->x_orig) &&
+            (ymm >= south + params->y_orig) && (ymm <= north + params->y_orig))
             inside = 1;
         else
             inside = 0;
 
         if (params->create_devi) {
 
-            if (inside) {       /* if the point is inside the region */
+            if (inside) { /* if the point is inside the region */
                 Vect_reset_line(Pnts);
                 Vect_reset_cats(Cats2);
 
@@ -135,7 +133,6 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
                                   db_get_string(&sql2));
                 }
                 count++;
-
             }
         }
         (*ertot) += err * err;
@@ -160,14 +157,13 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
         xmm = skip_point.x * dnorm + params->x_orig + west;
         ymm = skip_point.y * dnorm + params->y_orig + south;
 
-        if ((xmm >= west + params->x_orig) && (xmm <= east + params->x_orig)
-            && (ymm >= south + params->y_orig) &&
-            (ymm <= north + params->y_orig))
+        if ((xmm >= west + params->x_orig) && (xmm <= east + params->x_orig) &&
+            (ymm >= south + params->y_orig) && (ymm <= north + params->y_orig))
             inside = 1;
         else
             inside = 0;
 
-        if (inside) {           /* if the point is inside the region */
+        if (inside) { /* if the point is inside the region */
             Vect_reset_line(Pnts);
             Vect_reset_cats(Cats2);
 
@@ -193,8 +189,7 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,  
             }
             count++;
         }
-    }                           /* cv */
-
+    } /* cv */
 
     return 1;
 }

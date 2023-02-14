@@ -28,4 +28,3 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 default: parsubdirs htmldir
 
 $(SUBDIRS1): r.li.daemon
-

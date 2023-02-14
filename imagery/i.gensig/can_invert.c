@@ -54,7 +54,7 @@ int can_invert(double **a, int n)
     }
     G_free(vv);
     return 1;
-  singular:
+singular:
     G_free(vv);
     return 0;
 }

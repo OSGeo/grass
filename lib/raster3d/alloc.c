@@ -6,9 +6,8 @@
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Same as <em>malloc (nBytes)</em>, except that in case of error
  * <tt>Rast3d_error()</tt> is invoked.
@@ -32,12 +31,11 @@ void *Rast3d_malloc(int nBytes)
     return (void *)NULL;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Same as <em>realloc (ptr, nBytes)</em>, except that in case of error
- *  <tt>Rast3d_error()</tt> is invoked. 
+ *  <tt>Rast3d_error()</tt> is invoked.
  *
  *  \param ptr
  *  \param nBytes
@@ -56,9 +54,8 @@ void *Rast3d_realloc(void *ptr, int nBytes)
     return (void *)NULL;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Same as <em>free (ptr)</em>.
  *

@@ -14,16 +14,14 @@
 
 #include <math.h>
 
-#define RpD ((2 * M_PI) / 360.) /* radians/degree */
-#define D2R(d) (double)(d * RpD)        /* degrees->radians */
-#define R2D(d) (double)(d / RpD)        /* radians->degrees */
-
-
+#define RpD    ((2 * M_PI) / 360.) /* radians/degree */
+#define D2R(d) (double)(d * RpD)   /* degrees->radians */
+#define R2D(d) (double)(d / RpD)   /* radians->degrees */
 
 /*!
  * \brief Rotate point (double version)
  *
- * Given a point, angle, and origin, rotate the point around the origin 
+ * Given a point, angle, and origin, rotate the point around the origin
  * by the given angle. Coordinates and results are double prec floating point.
  *
  * \param X0  X component of origin (center of circle)
@@ -49,7 +47,7 @@ void G_rotate_around_point(double X0, double Y0, double *X1, double *Y1,
 /*!
  * \brief Rotate point (int version)
  *
- * Given a point, angle, and origin, rotate the point around the origin 
+ * Given a point, angle, and origin, rotate the point around the origin
  * by the given angle. Coordinates are given in integer and results are rounded
  * back to integer.
  *

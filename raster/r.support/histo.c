@@ -4,7 +4,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-/* 
+/*
  * do_histogram() - Creates histogram for CELL
  *
  * RETURN: EXIT_SUCCESS / EXIT_FAILURE
@@ -57,7 +57,7 @@ int do_histogram(const char *name)
                 if (Rast_is_d_null_value(&dcell[col]))
                     Rast_set_c_null_value(&cell[col], 1);
                 else
-                    cell[col] = (CELL) dcell[col];
+                    cell[col] = (CELL)dcell[col];
             }
             Rast_update_cell_stats(cell, ncols, &statf);
             Rast_row_update_fp_range(dcell, ncols, &fprange, data_type);

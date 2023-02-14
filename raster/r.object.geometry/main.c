@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.object.geometry
@@ -50,8 +49,7 @@ int main(int argc, char *argv[])
     CELL cur, top, left;
     int cur_null, top_null, left_null;
     int len;
-    struct obj_geo
-    {
+    struct obj_geo {
         double area, perimeter, x, y;
         int min_row, max_row, min_col, max_col; /* bounding box */
         int num;
@@ -109,8 +107,8 @@ int main(int argc, char *argv[])
 
     /* allocate CELL buffers two columns larger than current window */
     len = (ncols + 2) * sizeof(CELL);
-    prev_in = (CELL *) G_malloc(len);
-    cur_in = (CELL *) G_malloc(len);
+    prev_in = (CELL *)G_malloc(len);
+    cur_in = (CELL *)G_malloc(len);
 
     /* fake a previous row which is all NULL */
     Rast_set_c_null_value(prev_in, ncols + 2);
@@ -124,7 +122,8 @@ int main(int argc, char *argv[])
     if (Rast_is_c_null_value(&min) || Rast_is_c_null_value(&max))
         G_fatal_error(_("Empty input map <%s>"), opt_in->answer);
 
-    /* REMARK: The following is only true if object ids are continuously numbered */
+    /* REMARK: The following is only true if object ids are continuously
+     * numbered */
     n_objects = max - min + 1;
     obj_geos = G_malloc(n_objects * sizeof(struct obj_geo));
 
@@ -143,7 +142,7 @@ int main(int argc, char *argv[])
     unit_area = 0.0;
     if (flag_m->answer) {
         switch (G_begin_cell_area_calculations()) {
-        case 0:                /* areas don't make sense, but ignore this for now */
+        case 0: /* areas don't make sense, but ignore this for now */
         case 1:
             planimetric = 1;
             unit_area = G_area_of_cell_at_row(0);
@@ -201,12 +200,11 @@ int main(int argc, char *argv[])
                     double perimeter;
 
                     /* could be optimized */
-                    perimeter = G_distance(cellhd.west + col * cellhd.ew_res,
-                                           Rast_row_to_northing(row, &cellhd),
-                                           cellhd.west + (col +
-                                                          1) * cellhd.ew_res,
-                                           Rast_row_to_northing(row,
-                                                                &cellhd));
+                    perimeter =
+                        G_distance(cellhd.west + col * cellhd.ew_res,
+                                   Rast_row_to_northing(row, &cellhd),
+                                   cellhd.west + (col + 1) * cellhd.ew_res,
+                                   Rast_row_to_northing(row, &cellhd));
 
                     if (!cur_null)
                         obj_geos[cur - min].perimeter += perimeter;
@@ -225,12 +223,11 @@ int main(int argc, char *argv[])
                     double perimeter;
 
                     /* could be optimized */
-                    perimeter = G_distance(cellhd.west + col * cellhd.ew_res,
-                                           Rast_row_to_northing(row, &cellhd),
-                                           cellhd.west +
-                                           (col) * cellhd.ew_res,
-                                           Rast_row_to_northing(row + 1,
-                                                                &cellhd));
+                    perimeter =
+                        G_distance(cellhd.west + col * cellhd.ew_res,
+                                   Rast_row_to_northing(row, &cellhd),
+                                   cellhd.west + (col)*cellhd.ew_res,
+                                   Rast_row_to_northing(row + 1, &cellhd));
 
                     if (!cur_null)
                         obj_geos[cur - min].perimeter += perimeter;
@@ -250,10 +247,9 @@ int main(int argc, char *argv[])
         if (flag_m->answer) {
             double perimeter;
 
-            perimeter = G_distance(cellhd.east,
-                                   Rast_row_to_northing(row, &cellhd),
-                                   cellhd.east,
-                                   Rast_row_to_northing(row + 1, &cellhd));
+            perimeter =
+                G_distance(cellhd.east, Rast_row_to_northing(row, &cellhd),
+                           cellhd.east, Rast_row_to_northing(row + 1, &cellhd));
             if (!cur_null)
                 obj_geos[cur - min].perimeter += perimeter;
         }
@@ -326,8 +322,8 @@ int main(int argc, char *argv[])
                 sep);
         /* log 1 = 0, so avoid that by always adding 0.001 to the area: */
         fprintf(out_fp, "%f%s",
-                2 * log(obj_geos[i].perimeter) / log(obj_geos[i].area +
-                                                     0.001), sep);
+                2 * log(obj_geos[i].perimeter) / log(obj_geos[i].area + 0.001),
+                sep);
         if (!flag_m->answer)
             obj_geos[i].num = obj_geos[i].area;
         fprintf(out_fp, "%f%s", obj_geos[i].x / obj_geos[i].num, sep);
@@ -336,8 +332,9 @@ int main(int argc, char *argv[])
 
         /* TODO */
         /* smoothness */
-        /* perimeter of bounding box / perimeter -> smoother objects have a higher smoothness value
-         * smoothness is in the range 0 < smoothness <= 1 */
+        /* perimeter of bounding box / perimeter -> smoother objects have a
+         * higher smoothness value smoothness is in the range 0 < smoothness <=
+         * 1 */
 
         /* bounding box perimeter */
 

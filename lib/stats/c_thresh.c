@@ -3,7 +3,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void c_thresh(DCELL * result, DCELL * values, int n, const void *closure)
+void c_thresh(DCELL *result, DCELL *values, int n, const void *closure)
 {
     DCELL thresh, threshx;
     double tval = *(const double *)closure;

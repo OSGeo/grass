@@ -9,7 +9,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-   \author Glynn Clements  
+   \author Glynn Clements
  */
 
 #include "cairodriver.h"
@@ -81,15 +81,13 @@ static void init_xlib(void)
     templ.screen = scrn;
 
     vinfo =
-        XGetVisualInfo(ca.dpy, VisualIDMask | VisualScreenMask, &templ,
-                       &count);
+        XGetVisualInfo(ca.dpy, VisualIDMask | VisualScreenMask, &templ, &count);
     if (!vinfo || !count)
         G_fatal_error(_("Unable to obtain visual"));
     visual = vinfo[0].visual;
 
     ca.screen = ScreenOfDisplay(ca.dpy, scrn);
-    pix =
-        XCreatePixmap(ca.dpy, RootWindow(ca.dpy, scrn), 1, 1, vinfo[0].depth);
+    pix = XCreatePixmap(ca.dpy, RootWindow(ca.dpy, scrn), 1, 1, vinfo[0].depth);
     s1 = cairo_xlib_surface_create(ca.dpy, pix, visual, 1, 1);
     s2 = cairo_surface_create_similar(s1, CAIRO_CONTENT_COLOR_ALPHA, 1, 1);
     ca.format = cairo_xlib_surface_get_xrender_format(s2);
@@ -99,8 +97,8 @@ static void init_xlib(void)
     XFreePixmap(ca.dpy, pix);
 
     if (!ca.win)
-        ca.win = XCreatePixmap(ca.dpy, RootWindow(ca.dpy, scrn),
-                               ca.width, ca.height, ca.depth);
+        ca.win = XCreatePixmap(ca.dpy, RootWindow(ca.dpy, scrn), ca.width,
+                               ca.height, ca.depth);
 }
 
 static void fini_xlib(void)
@@ -249,8 +247,7 @@ int Cairo_Graph_set(void)
         unsigned int red, green, blue;
 
         if (sscanf(p, "%02x%02x%02x", &red, &green, &blue) == 3 ||
-            G_str_to_color(p, (int *)&red, (int *)&green,
-                           (int *)&blue) == 1) {
+            G_str_to_color(p, (int *)&red, (int *)&green, (int *)&blue) == 1) {
             ca.bgcolor_r = CAIROCOLOR(red);
             ca.bgcolor_g = CAIROCOLOR(green);
             ca.bgcolor_b = CAIROCOLOR(blue);
@@ -339,44 +336,32 @@ static void init_cairo(void)
     case FTYPE_PPM:
     case FTYPE_BMP:
     case FTYPE_PNG:
-        surface =
-            (cairo_surface_t *) cairo_image_surface_create_for_data(ca.grid,
-                                                                    CAIRO_FORMAT_ARGB32,
-                                                                    ca.width,
-                                                                    ca.height,
-                                                                    ca.stride);
+        surface = (cairo_surface_t *)cairo_image_surface_create_for_data(
+            ca.grid, CAIRO_FORMAT_ARGB32, ca.width, ca.height, ca.stride);
         break;
 #if CAIRO_HAS_PDF_SURFACE
     case FTYPE_PDF:
-        surface =
-            (cairo_surface_t *) cairo_pdf_surface_create(ca.file_name,
-                                                         (double)ca.width,
-                                                         (double)ca.height);
+        surface = (cairo_surface_t *)cairo_pdf_surface_create(
+            ca.file_name, (double)ca.width, (double)ca.height);
         break;
 #endif
 #if CAIRO_HAS_PS_SURFACE
     case FTYPE_PS:
-        surface =
-            (cairo_surface_t *) cairo_ps_surface_create(ca.file_name,
-                                                        (double)ca.width,
-                                                        (double)ca.height);
+        surface = (cairo_surface_t *)cairo_ps_surface_create(
+            ca.file_name, (double)ca.width, (double)ca.height);
         break;
 #endif
 #if CAIRO_HAS_SVG_SURFACE
     case FTYPE_SVG:
-        surface =
-            (cairo_surface_t *) cairo_svg_surface_create(ca.file_name,
-                                                         (double)ca.width,
-                                                         (double)ca.height);
+        surface = (cairo_surface_t *)cairo_svg_surface_create(
+            ca.file_name, (double)ca.width, (double)ca.height);
         break;
 #endif
 #if CAIRO_HAS_XLIB_XRENDER_SURFACE
     case FTYPE_X11:
-        surface = (cairo_surface_t *)
-            cairo_xlib_surface_create_with_xrender_format(ca.dpy, ca.win,
-                                                          ca.screen,
-                                                          ca.format, ca.width,
-                                                          ca.height);
+        surface =
+            (cairo_surface_t *)cairo_xlib_surface_create_with_xrender_format(
+                ca.dpy, ca.win, ca.screen, ca.format, ca.width, ca.height);
         break;
 #endif
     default:
@@ -399,8 +384,7 @@ static int ends_with(const char *string, const char *suffix)
     if (strlen(string) < strlen(suffix))
         return FALSE;
 
-    return G_strcasecmp(suffix,
-                        string + strlen(string) - strlen(suffix)) == 0;
+    return G_strcasecmp(suffix, string + strlen(string) - strlen(suffix)) == 0;
 }
 
 static void map_file(void)
@@ -414,7 +398,7 @@ static void map_file(void)
     if (fd < 0)
         return;
 
-    ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t) 0);
+    ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t)0);
     if (ptr == MAP_FAILED)
         return;
 

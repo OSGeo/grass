@@ -1,17 +1,16 @@
-
 /****************************************************************************
  *
  * MODULE:       m.measure
  * AUTHOR(S):    Created from d.measure by Glynn Clements, 2010
- *               James Westervelt and Michael Shapiro 
+ *               James Westervelt and Michael Shapiro
  *                (CERL - original contributors)
- *               Markus Neteler <neteler itc.it>, 
- *               Reinhard Brunzema <r.brunzema@web.de>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Reinhard Brunzema <r.brunzema@web.de>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Distance and area measurement
@@ -100,7 +99,6 @@ int main(int argc, char **argv)
     }
     else {
         printf("%-8s %10.6f %s\n", _("Length:"), f * length, units_name);
-
     }
 
     if (npoints > 3) {
@@ -110,8 +108,7 @@ int main(int argc, char **argv)
             printf("area=%.6f\n", sq_f * area);
         }
         else {
-            printf("%-8s %10.6f %s\n", _("Area:"), sq_f * area,
-                   sq_units_name);
+            printf("%-8s %10.6f %s\n", _("Area:"), sq_f * area, sq_units_name);
         }
     }
 

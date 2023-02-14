@@ -1,3 +1,4 @@
+---
 name: CentOS
 
 on:
@@ -14,7 +15,7 @@ jobs:
   build:
     name: ${{ matrix.os }} build
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container: ${{ matrix.os }}
     strategy:
       matrix:

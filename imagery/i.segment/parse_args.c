@@ -9,16 +9,15 @@
 
 int parse_args(int argc, char *argv[], struct globals *globals)
 {
-    struct Option *group, *seeds, *bounds, *output,
-        *method, *similarity, *threshold, *min_segment_size, *hs, *hr, *bsuf,
+    struct Option *group, *seeds, *bounds, *output, *method, *similarity,
+        *threshold, *min_segment_size, *hs, *hr, *bsuf,
 #ifdef _OR_SHAPE_
-     *shape_weight, *smooth_weight,
+        *shape_weight, *smooth_weight,
 #endif
-     *mem;
+        *mem;
     struct Flag *diagonal, *weighted, *ms_a, *ms_p;
     struct Option *gof, *endt;
     int bands;
-
 
     /* required parameters */
     group = G_define_standard_option(G_OPT_R_INPUTS);
@@ -37,8 +36,8 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     threshold->type = TYPE_DOUBLE;
     threshold->required = YES;
     threshold->label = _("Difference threshold between 0 and 1");
-    threshold->description =
-        _("Threshold = 0 merges only identical segments; threshold = 1 merges all");
+    threshold->description = _("Threshold = 0 merges only identical segments; "
+                               "threshold = 1 merges all");
 
     /* optional parameters */
 
@@ -48,16 +47,17 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     hs->required = NO;
     hs->answer = "1.5";
     hs->label = _("Spatial radius in number of cells");
-    hs->description =
-        _("Must be >= 1, only cells within spatial bandwidth are considered for mean shift");
+    hs->description = _("Must be >= 1, only cells within spatial bandwidth are "
+                        "considered for mean shift");
 
     hr = G_define_option();
     hr->key = "hr";
     hr->type = TYPE_DOUBLE;
     hr->required = NO;
     hr->label = _("Range (spectral) bandwidth [0, 1]");
-    hr->description =
-        _("Only cells within range (spectral) bandwidth are considered for mean shift. Range bandwidth is used as conductance parameter for adaptive bandwidth");
+    hr->description = _("Only cells within range (spectral) bandwidth are "
+                        "considered for mean shift. Range bandwidth is used as "
+                        "conductance parameter for adaptive bandwidth");
 
     method = G_define_option();
     method->key = "method";
@@ -66,7 +66,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     method->answer = "region_growing";
     method->options = "region_growing,mean_shift";
     /*
-       Watershed method disabled, it's not implemented yet, see 
+       Watershed method disabled, it's not implemented yet, see
        https://trac.osgeo.org/grass/ticket/3181
        method->options = "region_growing,mean_shift,watershed";
      */
@@ -140,8 +140,8 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     bounds->key = "bounds";
     bounds->required = NO;
     bounds->label = _("Name of input bounding/constraining raster map");
-    bounds->description =
-        _("Must be integer values, each area will be segmented independent of the others");
+    bounds->description = _("Must be integer values, each area will be "
+                            "segmented independent of the others");
     bounds->guisection = _("Settings");
 
     gof = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -152,14 +152,14 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 
     diagonal = G_define_flag();
     diagonal->key = 'd';
-    diagonal->description =
-        _("Use 8 neighbors (3x3 neighborhood) instead of the default 4 neighbors for each pixel");
+    diagonal->description = _("Use 8 neighbors (3x3 neighborhood) instead of "
+                              "the default 4 neighbors for each pixel");
     diagonal->guisection = _("Settings");
 
     weighted = G_define_flag();
     weighted->key = 'w';
-    weighted->description =
-        _("Weighted input, do not perform the default scaling of input raster maps");
+    weighted->description = _("Weighted input, do not perform the default "
+                              "scaling of input raster maps");
     weighted->guisection = _("Settings");
 
     ms_a = G_define_flag();
@@ -172,8 +172,8 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     ms_p = G_define_flag();
     ms_p->key = 'p';
     ms_p->label = _("Use progressive bandwidth for mean shift");
-    ms_p->description =
-        _("Spatial bandwidth is increased, range (spectral) bandwidth is decreased in each iteration");
+    ms_p->description = _("Spatial bandwidth is increased, range (spectral) "
+                          "bandwidth is decreased in each iteration");
     ms_p->guisection = _("Settings");
 
     if (G_parser(argc, argv))
@@ -181,7 +181,8 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 
     /* Check and save parameters */
 
-    for (bands = 0; group->answers[bands] != NULL; bands++) ;
+    for (bands = 0; group->answers[bands] != NULL; bands++)
+        ;
 
     I_init_group_ref(&globals->Ref);
     if (bands > 1 || !I_find_group(group->answers[0])) {
@@ -267,8 +268,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     else
         G_fatal_error(_("Unable to assign segmentation method"));
 
-    G_debug(1, "segmentation method: %s (%d)", method->answer,
-            globals->method);
+    G_debug(1, "segmentation method: %s (%d)", method->answer, globals->method);
 
     /* distance methods for similarity measurement */
     if (strcmp(similarity->answer, "euclidean") == 0)
@@ -327,13 +327,15 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     }
     else {
         globals->bounds_map = bounds->answer;
-        if ((globals->bounds_mapset =
-             G_find_raster(globals->bounds_map, "")) == NULL) {
-            G_fatal_error(_("Segmentation constraint/boundary raster map not found"));
+        if ((globals->bounds_mapset = G_find_raster(globals->bounds_map, "")) ==
+            NULL) {
+            G_fatal_error(
+                _("Segmentation constraint/boundary raster map not found"));
         }
         if (Rast_map_type(globals->bounds_map, globals->bounds_mapset) !=
             CELL_TYPE) {
-            G_fatal_error(_("Segmentation constraint raster map must be CELL type (integers)"));
+            G_fatal_error(_("Segmentation constraint raster map must be CELL "
+                            "type (integers)"));
         }
     }
 
@@ -346,13 +348,14 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 
         LARGEINT intmax;
 
-        intmax = ((LARGEINT) 1 << (sizeof(LARGEINT) * 8 - 2)) - 1;
-        intmax += ((LARGEINT) 1 << (sizeof(LARGEINT) * 8 - 2));
+        intmax = ((LARGEINT)1 << (sizeof(LARGEINT) * 8 - 2)) - 1;
+        intmax += ((LARGEINT)1 << (sizeof(LARGEINT) * 8 - 2));
 
         globals->ncells = globals->ncols;
         for (i = 1; i < globals->nrows; i++) {
             if (globals->ncols > intmax - globals->ncells)
-                G_fatal_error(_("Integer overflow: too many cells in current region"));
+                G_fatal_error(
+                    _("Integer overflow: too many cells in current region"));
 
             globals->ncells += globals->ncols;
         }
@@ -372,8 +375,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
         globals->end_t = 50;
         if (globals->method == ORM_MS)
             globals->end_t = 10;
-        G_message(_("Maximum number of iterations set to %d"),
-                  globals->end_t);
+        G_message(_("Maximum number of iterations set to %d"), globals->end_t);
     }
     else {
         if (atoi(endt->answer) > 0)

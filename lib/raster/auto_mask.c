@@ -1,4 +1,3 @@
-
 /**
  * \file auto_mask.c
  *
@@ -22,11 +21,10 @@
 
 #include "R.h"
 
-
 /**
  * \brief Checks for auto masking.
  *
- * On first call, opens the mask file if declared and available and 
+ * On first call, opens the mask file if declared and available and
  * allocates buffer for reading mask rows.
  * On second call, returns 0 or 1.
  *
@@ -77,7 +75,6 @@ int Rast__check_for_auto_masking(void)
     return 1;
 }
 
-
 /**
  * \brief Suppresses masking.
  *
@@ -95,7 +92,6 @@ void Rast_suppress_masking(void)
     }
     R__.auto_mask = -2;
 }
-
 
 /**
  * \brief Unsuppresses masking.

@@ -17,8 +17,7 @@ void write_rgb_values(const struct Map_info *Map, int layer,
 
     fi = Vect_get_field(Map, layer);
     if (!fi)
-        G_fatal_error(_("Database connection not defined for layer %d"),
-                      layer);
+        G_fatal_error(_("Database connection not defined for layer %d"), layer);
 
     driver = db_start_driver_open_database(fi->driver, fi->database);
     if (!driver)
@@ -57,12 +56,11 @@ void write_rgb_values(const struct Map_info *Map, int layer,
            db_free_column(&column);
          */
 
-        G_important_message(_("Column <%s> added to table <%s>"),
-                            column_name, fi->table);
+        G_important_message(_("Column <%s> added to table <%s>"), column_name,
+                            fi->table);
     }
     else if (ctype != DB_C_TYPE_STRING)
-        G_fatal_error(_("Data type of column <%s> must be char"),
-                      column_name);
+        G_fatal_error(_("Data type of column <%s> must be char"), column_name);
 
     nrec = db_select_int(driver, fi->table, fi->key, NULL, &pval);
     if (nrec < 1) {

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       imagery library
@@ -23,24 +22,23 @@
 /* STRUCTURE FOR USE INTERNALLY WITH THESE FUNCTIONS.  THESE FUNCTIONS EXPECT
    SQUARE MATRICES SO ONLY ONE VARIABLE IS GIVEN (N) FOR THE MATRIX SIZE */
 
-struct MATRIX
-{
-    int n;                      /* SIZE OF THIS MATRIX (N x N) */
+struct MATRIX {
+    int n; /* SIZE OF THIS MATRIX (N x N) */
     double *v;
 };
 
 /* CALCULATE OFFSET INTO ARRAY BASED ON R/C */
 
-#define M(row,col) m->v[(((row)-1)*(m->n))+(col)-1]
+#define M(row, col) m->v[(((row)-1) * (m->n)) + (col)-1]
 
-#define MSUCCESS     1          /* SUCCESS */
-#define MNPTERR      0          /* NOT ENOUGH POINTS */
-#define MUNSOLVABLE -1          /* NOT SOLVABLE */
-#define MMEMERR     -2          /* NOT ENOUGH MEMORY */
-#define MPARMERR    -3          /* PARAMETER ERROR */
-#define MINTERR     -4          /* INTERNAL ERROR */
+#define MSUCCESS    1  /* SUCCESS */
+#define MNPTERR     0  /* NOT ENOUGH POINTS */
+#define MUNSOLVABLE -1 /* NOT SOLVABLE */
+#define MMEMERR     -2 /* NOT ENOUGH MEMORY */
+#define MPARMERR    -3 /* PARAMETER ERROR */
+#define MINTERR     -4 /* INTERNAL ERROR */
 
-#define MAXORDER 3              /* HIGHEST SUPPORTED ORDER OF TRANSFORMATION */
+#define MAXORDER    3 /* HIGHEST SUPPORTED ORDER OF TRANSFORMATION */
 
 /***********************************************************************
 
@@ -49,11 +47,11 @@ struct MATRIX
 ************************************************************************/
 
 static int calccoef(struct Control_Points *, double **, double **);
-static int calcls(struct Control_Points *, struct MATRIX *, double *,
-                  double *, double *, double *);
+static int calcls(struct Control_Points *, struct MATRIX *, double *, double *,
+                  double *, double *);
 
-static double tps_base_func(const double x1, const double y1,
-                            const double x2, const double y2);
+static double tps_base_func(const double x1, const double y1, const double x2,
+                            const double y2);
 static int solvemat(struct MATRIX *, double *, double *, double *, double *);
 
 /***********************************************************************
@@ -62,12 +60,12 @@ static int solvemat(struct MATRIX *, double *, double *, double *, double *);
 
 ************************************************************************/
 
-int I_georef_tps(double e1,     /* EASTING TO BE TRANSFORMED */
-                 double n1,     /* NORTHING TO BE TRANSFORMED */
-                 double *e,     /* EASTING, TRANSFORMED */
-                 double *n,     /* NORTHING, TRANSFORMED */
-                 double *E,     /* EASTING COEFFICIENTS */
-                 double *N,     /* NORTHING COEFFICIENTS */
+int I_georef_tps(double e1, /* EASTING TO BE TRANSFORMED */
+                 double n1, /* NORTHING TO BE TRANSFORMED */
+                 double *e, /* EASTING, TRANSFORMED */
+                 double *n, /* NORTHING, TRANSFORMED */
+                 double *E, /* EASTING COEFFICIENTS */
+                 double *N, /* NORTHING COEFFICIENTS */
                  struct Control_Points *cp, int fwd)
 {
     int i, j;
@@ -85,7 +83,6 @@ int I_georef_tps(double e1,     /* EASTING TO BE TRANSFORMED */
     /* global affine (1st order poly) */
     *e = E[0] + e1 * E[1] + n1 * E[2];
     *n = N[0] + e1 * N[1] + n1 * N[2];
-
 
     for (i = 0, j = 0; i < cp->count; i++) {
         if (cp->status[i] > 0) {
@@ -108,12 +105,12 @@ int I_georef_tps(double e1,     /* EASTING TO BE TRANSFORMED */
 
 ************************************************************************/
 
-int I_compute_georef_equations_tps(struct Control_Points *cp,
-                                   double **E12tps, double **N12tps,
-                                   double **E21tps, double **N21tps)
+int I_compute_georef_equations_tps(struct Control_Points *cp, double **E12tps,
+                                   double **N12tps, double **E21tps,
+                                   double **N21tps)
 {
     double *tempptr;
-    int numactive;              /* NUMBER OF ACTIVE CONTROL POINTS */
+    int numactive; /* NUMBER OF ACTIVE CONTROL POINTS */
     int status, i;
     double xmax, xmin, ymax, ymin;
     double delx, dely;
@@ -131,7 +128,7 @@ int I_compute_georef_equations_tps(struct Control_Points *cp,
     if (numactive < 3)
         return MNPTERR;
 
-    if (numactive > 100000)     /* arbitrary, admittedly */
+    if (numactive > 100000) /* arbitrary, admittedly */
         return MNPTERR;
 
     xmin = xmax = cp->e1[0];
@@ -251,7 +248,7 @@ static int calccoef(struct Control_Points *cp, double **E, double **N)
     struct MATRIX m;
     double *a;
     double *b;
-    int numactive;              /* NUMBER OF ACTIVE CONTROL POINTS */
+    int numactive; /* NUMBER OF ACTIVE CONTROL POINTS */
     int status, i;
 
     /* CALCULATE THE NUMBER OF VALID CONTROL POINTS */
@@ -297,18 +294,18 @@ static int calccoef(struct Control_Points *cp, double **E, double **N)
     return status;
 }
 
-
 /***********************************************************************
 
-  CALCULATE THE TRANSFORMATION COEFFICIENTS FOR THIN PLATE SPLINE 
+  CALCULATE THE TRANSFORMATION COEFFICIENTS FOR THIN PLATE SPLINE
   INTERPOLATION.
   THIS ROUTINE USES THE LEAST SQUARES METHOD TO COMPUTE THE COEFFICIENTS.
 
 ************************************************************************/
 
-static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[], double b[], double E[],      /* EASTING COEFFICIENTS */
-                  double N[]    /* NORTHING COEFFICIENTS */
-    )
+static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[],
+                  double b[], double E[], /* EASTING COEFFICIENTS */
+                  double N[]              /* NORTHING COEFFICIENTS */
+)
 {
     int i, j, n, o, numactive = 0;
 
@@ -380,7 +377,6 @@ static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[], doubl
     return solvemat(m, a, b, E, N);
 }
 
-
 /***********************************************************************
 
   SOLVE FOR THE 'E' AND 'N' COEFFICIENTS BY USING A SOMEWHAT MODIFIED
@@ -405,7 +401,7 @@ static int solvemat(struct MATRIX *m, double a[], double b[], double E[],
 {
     int i, j, i2, j2, imark;
     double factor, temp;
-    double pivot;               /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
+    double pivot; /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
 
     for (i = 1; i <= m->n; i++) {
         G_percent(i - 1, m->n, 4);
@@ -474,8 +470,8 @@ static int solvemat(struct MATRIX *m, double a[], double b[], double E[],
     return MSUCCESS;
 }
 
-static double tps_base_func(const double x1, const double y1,
-                            const double x2, const double y2)
+static double tps_base_func(const double x1, const double y1, const double x2,
+                            const double y2)
 {
     /* official: r * r * log(r) */
     double dist;

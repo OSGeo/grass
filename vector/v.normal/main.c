@@ -1,18 +1,17 @@
-
 /***************************************************************
  *
  * MODULE:       v.normal
- * 
+ *
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
  *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
- *               
+ *
  * PURPOSE:      GRASS program for distributional testing (based on s.normal)
- *               
+ *
  * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details. 
+ *               comes with GRASS for details.
  * Modification History:
  * <23 Jan 2001> - added field parameter, fixed reading of sites (MN)
  * <27 Aug 1994> - began coding. Adapted cdh.f from statlib (jdm)
@@ -43,12 +42,10 @@ int main(int argc, char **argv)
     long x, y;
     struct Cell_head window;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *tests, *dfield, *layer;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *q, *l, *region;
     } flag;
     double *w, *z;
@@ -108,8 +105,7 @@ int main(int argc, char **argv)
     /* Open input */
     Vect_set_open_level(2);
     if (Vect_open_old2(&Map, parm.input->answer, "", parm.layer->answer) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"),
-                      parm.input->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
 
     field = Vect_get_field_number(&Map, parm.layer->answer);
 
@@ -124,9 +120,8 @@ int main(int argc, char **argv)
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Fi->database, Fi->driver);
 
-    nrecords =
-        db_select_CatValArray(Driver, Fi->table, Fi->key, parm.dfield->answer,
-                              NULL, &cvarr);
+    nrecords = db_select_CatValArray(Driver, Fi->table, Fi->key,
+                                     parm.dfield->answer, NULL, &cvarr);
     G_debug(1, "nrecords = %d", nrecords);
 
     ctype = cvarr.ctype;
@@ -206,7 +201,8 @@ int main(int argc, char **argv)
             if (z[i] > 1.0e-10)
                 z[i] = log10(z[i]);
             else if (!warn_once) {
-                G_warning(_("Negative or very small point values set to -10.0"));
+                G_warning(
+                    _("Negative or very small point values set to -10.0"));
                 z[i] = -10.0;
                 warn_once = 1;
             }
@@ -222,70 +218,69 @@ int main(int argc, char **argv)
         scan_cats(parm.tests->answers[i], &x, &y);
         while (x <= y)
             switch (x++) {
-            case 1:            /* moments */
+            case 1: /* moments */
                 fprintf(stdout, _("Moments \\sqrt{b_1} and b_2: "));
                 w = Cdhc_omnibus_moments(z, nsites);
                 fprintf(stdout, "%g %g\n", w[0], w[1]);
                 break;
-            case 2:            /* geary */
-                fprintf(stdout,
-                        _("Geary's a-statistic & an approx. normal: "));
+            case 2: /* geary */
+                fprintf(stdout, _("Geary's a-statistic & an approx. normal: "));
                 w = Cdhc_geary_test(z, nsites);
                 fprintf(stdout, "%g %g\n", w[0], w[1]);
                 break;
-            case 3:            /* extreme deviates */
+            case 3: /* extreme deviates */
                 fprintf(stdout, _("Extreme normal deviates: "));
                 w = Cdhc_extreme(z, nsites);
                 fprintf(stdout, "%g %g\n", w[0], w[1]);
                 break;
-            case 4:            /* D'Agostino */
+            case 4: /* D'Agostino */
                 fprintf(stdout, _("D'Agostino's D & an approx. normal: "));
                 w = Cdhc_dagostino_d(z, nsites);
                 fprintf(stdout, "%g %g\n", w[0], w[1]);
                 break;
-            case 5:            /* Kuiper */
+            case 5: /* Kuiper */
                 fprintf(stdout,
                         _("Kuiper's V (regular & modified for normality): "));
                 w = Cdhc_kuipers_v(z, nsites);
                 fprintf(stdout, "%g %g\n", w[1], w[0]);
                 break;
-            case 6:            /* Watson */
+            case 6: /* Watson */
                 fprintf(stdout,
                         _("Watson's U^2 (regular & modified for normality): "));
                 w = Cdhc_watson_u2(z, nsites);
                 fprintf(stdout, "%g %g\n", w[1], w[0]);
                 break;
-            case 7:            /* Durbin */
+            case 7: /* Durbin */
                 fprintf(stdout,
                         _("Durbin's Exact Test (modified Kolmogorov): "));
                 w = Cdhc_durbins_exact(z, nsites);
                 fprintf(stdout, "%g\n", w[0]);
                 break;
-            case 8:            /* Anderson-Darling */
-                fprintf(stdout,
-                        _("Anderson-Darling's A^2 (regular & modified for normality): "));
+            case 8: /* Anderson-Darling */
+                fprintf(stdout, _("Anderson-Darling's A^2 (regular & modified "
+                                  "for normality): "));
                 w = Cdhc_anderson_darling(z, nsites);
                 fprintf(stdout, "%g %g\n", w[1], w[0]);
                 break;
-            case 9:            /* Cramer-Von Mises */
-                fprintf(stdout,
-                        _("Cramer-Von Mises W^2(regular & modified for normality): "));
+            case 9: /* Cramer-Von Mises */
+                fprintf(stdout, _("Cramer-Von Mises W^2(regular & modified for "
+                                  "normality): "));
                 w = Cdhc_cramer_von_mises(z, nsites);
                 fprintf(stdout, "%g %g\n", w[1], w[0]);
                 break;
-            case 10:           /* Kolmogorov-Smirnov */
-                fprintf(stdout,
-                        _("Kolmogorov-Smirnov's D (regular & modified for normality): "));
+            case 10: /* Kolmogorov-Smirnov */
+                fprintf(stdout, _("Kolmogorov-Smirnov's D (regular & modified "
+                                  "for normality): "));
                 w = Cdhc_kolmogorov_smirnov(z, nsites);
                 fprintf(stdout, "%g %g\n", w[1], w[0]);
                 break;
-            case 11:           /* chi-square */
-                fprintf(stdout,
-                        _("Chi-Square stat (equal probability classes) and d.f.: "));
+            case 11: /* chi-square */
+                fprintf(stdout, _("Chi-Square stat (equal probability classes) "
+                                  "and d.f.: "));
                 w = Cdhc_chi_square(z, nsites);
                 fprintf(stdout, "%g %d\n", w[0], (int)w[1]);
                 break;
-            case 12:           /* Shapiro-Wilk */
+            case 12: /* Shapiro-Wilk */
                 if (nsites > 50) {
                     G_warning(_("Shapiro-Wilk's W cannot be used for n > 50"));
                     if (nsites < 99)
@@ -297,27 +292,28 @@ int main(int argc, char **argv)
                     fprintf(stdout, "%g\n", w[0]);
                 }
                 break;
-            case 13:           /* Weisberg-Bingham */
+            case 13: /* Weisberg-Bingham */
                 if (nsites > 99 || nsites < 50)
-                    G_warning(_("Weisberg-Bingham's W'' cannot be used for n < 50 or n > 99"));
+                    G_warning(_("Weisberg-Bingham's W'' cannot be used for n < "
+                                "50 or n > 99"));
                 else {
                     fprintf(stdout, _("Weisberg-Bingham's W'': "));
                     w = Cdhc_weisberg_bingham(z, nsites);
                     fprintf(stdout, "%g\n", w[0]);
                 }
                 break;
-            case 14:           /* Royston */
+            case 14: /* Royston */
                 if (nsites > 2000)
-                    G_warning(_("Royston only extended Shapiro-Wilk's W up to n = 2000"));
+                    G_warning(_("Royston only extended Shapiro-Wilk's W up to "
+                                "n = 2000"));
                 else {
                     fprintf(stdout, _("Shapiro-Wilk W'': "));
                     w = Cdhc_royston(z, nsites);
                     fprintf(stdout, "%g\n", w[0]);
                 }
                 break;
-            case 15:           /* Kotz */
-                fprintf(stdout,
-                        _("Kotz' T'_f (Lognormality vs. Normality): "));
+            case 15: /* Kotz */
+                fprintf(stdout, _("Kotz' T'_f (Lognormality vs. Normality): "));
                 w = Cdhc_kotz_families(z, nsites);
                 fprintf(stdout, "%g\n", w[0]);
                 break;

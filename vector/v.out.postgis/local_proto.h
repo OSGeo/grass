@@ -3,13 +3,11 @@
 
 #include <grass/vector.h>
 
-struct params
-{
+struct params {
     struct Option *input, *layer, *dsn, *olayer, *opts, *olink, *type;
 };
 
-struct flags
-{
+struct flags {
     struct Flag *table, *topo, *force2d;
 };
 

@@ -98,9 +98,8 @@
 /*                                                                        */
 /* *********************************************************************** */
 
-struct GeomCond
-{
-    long int igeom;             /* geometrical conditions */
+struct GeomCond {
+    long int igeom; /* geometrical conditions */
 
     /* primary */
     double asol;
@@ -125,7 +124,7 @@ struct GeomCond
 
     void print();
 
-  private:
+private:
     /* conversion routines */
     void possol(double tu);
     void landsat(double tu);
@@ -135,9 +134,10 @@ struct GeomCond
     void day_number(long int ia, long int &j);
     void pos_fft(long int j, double tu);
 
-    double varsol();            /* returns dsol as in fortran proggie */
+    double varsol(); /* returns dsol as in fortran proggie */
     void parse();
-  public:
+
+public:
     static GeomCond Parse();
 };
 

@@ -1,4 +1,3 @@
-
 /***************************************************************
 G_lat_format (lat, buf)
     double lat;
@@ -21,9 +20,9 @@ G_llres_format (res, buf)
   (lon > 0 is eastern,  lon < 0 is western)
 
 Note: lat should be in the range -90 to 90s, but
-	  the range is NOT checked by G_lat_format().
+          the range is NOT checked by G_lat_format().
       lon can be anything, but
-	  values outside [-180,180] are moved into this range 
+          values outside [-180,180] are moved into this range
           by adding (or subtracting) 360.
 
 NOTE: These routines are used by G_format_northing(), G_format_easting(), and
@@ -92,7 +91,7 @@ static void format(char *buf, int d, int m, double s, char h)
     sprintf(temp, "%f", s);
     sscanf(temp, "%lf", &ss);
     if (ss >= 60) {
-        ss = 0;                 /* force it to zero */
+        ss = 0; /* force it to zero */
         if (++m >= 60) {
             m = 0;
             d++;
@@ -114,11 +113,11 @@ static void format(char *buf, int d, int m, double s, char h)
         sprintf(buf, "0");
 }
 
-void G_lat_parts(double lat,    /* lat in degrees to be split into parts */
-                 int *d, int *m,        /* degrees, minutes */
-                 double *s,     /* seconds */
-                 char *h        /* hemisphere */
-    )
+void G_lat_parts(double lat,     /* lat in degrees to be split into parts */
+                 int *d, int *m, /* degrees, minutes */
+                 double *s,      /* seconds */
+                 char *h         /* hemisphere */
+)
 {
     if (lat < 0) {
         *h = 'S';
@@ -130,11 +129,11 @@ void G_lat_parts(double lat,    /* lat in degrees to be split into parts */
     ll_parts(lat, d, m, s);
 }
 
-void G_lon_parts(double lon,    /* lon in degrees to be split into parts */
-                 int *d, int *m,        /* degrees, minutes */
-                 double *s,     /* seconds */
-                 char *h        /* hemisphere */
-    )
+void G_lon_parts(double lon,     /* lon in degrees to be split into parts */
+                 int *d, int *m, /* degrees, minutes */
+                 double *s,      /* seconds */
+                 char *h         /* hemisphere */
+)
 {
 #if 0
     while (lon > 180.0)
@@ -153,10 +152,10 @@ void G_lon_parts(double lon,    /* lon in degrees to be split into parts */
     ll_parts(lon, d, m, s);
 }
 
-static void ll_parts(double ll, /* ll in degrees to be split into parts */
-                     int *d, int *m,    /* degrees, minutes */
-                     double *s  /* seconds */
-    )
+static void ll_parts(double ll,      /* ll in degrees to be split into parts */
+                     int *d, int *m, /* degrees, minutes */
+                     double *s       /* seconds */
+)
 {
     if (ll == 0.0) {
         *d = 0;

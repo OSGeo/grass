@@ -15,13 +15,11 @@
 #ifndef __FILTERS_H__
 #define __FILTERS_H__
 
-struct ReturnFilter
-{
+struct ReturnFilter {
     int filter;
 };
 
-struct ClassFilter
-{
+struct ClassFilter {
 
     /** NULL terminated list of class numbers represented as string */
     char **str_classes;
@@ -31,8 +29,8 @@ struct Option;
 
 int spatial_filter_from_option(struct Option *option, double *xmin,
                                double *ymin, double *xmax, double *ymax);
-int spatial_filter_from_current_region(double *xmin, double *ymin,
-                                       double *xmax, double *ymax);
+int spatial_filter_from_current_region(double *xmin, double *ymin, double *xmax,
+                                       double *ymax);
 
 int range_filter_from_option(struct Option *option, double *min, double *max);
 

@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               3D vector point input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -49,11 +48,8 @@
    interp_call() - divides region on segments
  */
 
-
-
-int
-translate_oct(struct octtree *tree, double numberx, double numbery,
-              double numberz, double numberw)
+int translate_oct(struct octtree *tree, double numberx, double numbery,
+                  double numberz, double numberw)
 {
     int total = 0, i;
 
@@ -66,9 +62,8 @@ translate_oct(struct octtree *tree, double numberx, double numbery,
         ((struct octdata *)(tree->data))->y_orig -= numbery;
         ((struct octdata *)(tree->data))->z_orig -= numberz;
         for (i = 0; i < NUMLEAFS; i++) {
-            total +=
-                translate_oct(tree->leafs[i], numberx, numbery, numberz,
-                              numberw);
+            total += translate_oct(tree->leafs[i], numberx, numbery, numberz,
+                                   numberw);
         }
     }
     else {
@@ -86,10 +81,6 @@ translate_oct(struct octtree *tree, double numberx, double numbery,
     return total;
 }
 
-
-
-
-
 int interp_call(struct octtree *root, struct octtree *tree)
 {
     /*    double          xmn,xmx,ymn,ymx,zmn,zmx; */
@@ -99,7 +90,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
     struct point_3d skip_point;
     struct point_3d *point = NULL;
     int skip_index, segtest;
-    double xx, yy, zz /*, ww */ ;
+    double xx, yy, zz /*, ww */;
 
     if (tree == NULL)
         return -1;
@@ -114,18 +105,16 @@ int interp_call(struct octtree *root, struct octtree *tree)
     else {
 
         if (!points) {
-            if (!
-                (points =
-                 (struct quadruple *)G_malloc(sizeof(struct quadruple) *
-                                              (KMAX2 + 1)))) {
+            if (!(points = (struct quadruple *)G_malloc(
+                      sizeof(struct quadruple) * (KMAX2 + 1)))) {
                 clean();
                 G_fatal_error(_("Not enough memory for %s"), "points");
             }
         }
 
-        /*           if(!(point=(struct point_3d*)G_malloc(sizeof(struct point_3d)*(KMAX2+1))))
-           {clean(); G_fatal_error("Not enough memory for points");} */
-
+        /*           if(!(point=(struct point_3d*)G_malloc(sizeof(struct
+           point_3d)*(KMAX2+1)))) {clean(); G_fatal_error("Not enough memory for
+           points");} */
 
         distx = (((struct octdata *)(tree->data))->n_cols * ew_res) * 0.1;
         disty = (((struct octdata *)(tree->data))->n_rows * ns_res) * 0.1;
@@ -135,13 +124,13 @@ int interp_call(struct octtree *root, struct octtree *tree)
         distzp = 0;
         xmn = ((struct octdata *)(tree->data))->x_orig;
         xmx = ((struct octdata *)(tree->data))->x_orig +
-            ((struct octdata *)(tree->data))->n_cols * ew_res;
+              ((struct octdata *)(tree->data))->n_cols * ew_res;
         ymn = ((struct octdata *)(tree->data))->y_orig;
         ymx = ((struct octdata *)(tree->data))->y_orig +
-            ((struct octdata *)(tree->data))->n_rows * ns_res;
+              ((struct octdata *)(tree->data))->n_rows * ns_res;
         zmn = ((struct octdata *)(tree->data))->z_orig;
         zmx = ((struct octdata *)(tree->data))->z_orig +
-            ((struct octdata *)(tree->data))->n_levs * tb_res;
+              ((struct octdata *)(tree->data))->n_levs * tb_res;
         i = 0;
         MAXENC = 0;
         npt = OT_region_data(root, xmn - distx, xmx + distx, ymn - disty,
@@ -149,8 +138,9 @@ int interp_call(struct octtree *root, struct octtree *tree)
                              KMAX2);
         while ((npt < KMIN) || (npt > KMAX2)) {
             if (i >= 70) {
-                fprintf(stderr,
-                        "Warning: taking too long to find points for interpolation--please change the region to area where your points are\n");
+                fprintf(stderr, "Warning: taking too long to find points for "
+                                "interpolation--please change the region to "
+                                "area where your points are\n");
                 break;
             }
             i++;
@@ -166,7 +156,8 @@ int interp_call(struct octtree *root, struct octtree *tree)
                 temp3 = distzp;
                 distzp = distz;
                 distz = distzp - fabs(distz - temp3) * 0.5;
-                /*              npt = OT_region_data (root,xmn-distx,xmx+distx,ymn-disty,
+                /*              npt = OT_region_data
+                   (root,xmn-distx,xmx+distx,ymn-disty,
                    ymx+disty,zmn-distz,zmx+distz,points, KMAX2); */
             }
             else {
@@ -188,15 +179,15 @@ int interp_call(struct octtree *root, struct octtree *tree)
                     distz += distz;
                 }
 
-                /*`             npt = OT_region_data (root,xmn-distx,xmx+distx,ymn-disty,
+                /*`             npt = OT_region_data
+                   (root,xmn-distx,xmx+distx,ymn-disty,
                    ymx+disty,zmn-distz,zmx+distz,points, KMAX2);
                  */
-            }                   /* end of npt > KMAX2 else */
+            } /* end of npt > KMAX2 else */
 
             npt = OT_region_data(root, xmn - distx, xmx + distx, ymn - disty,
-                                 ymx + disty, zmn - distz, zmx + distz,
-                                 points, KMAX2);
-
+                                 ymx + disty, zmn - distz, zmx + distz, points,
+                                 KMAX2);
         }
         /*fprintf(stderr,"got %d points for interpolation\n",npt); */
         {
@@ -205,10 +196,8 @@ int interp_call(struct octtree *root, struct octtree *tree)
             if (first) {
                 first = 0;
 
-                if (!
-                    (A =
-                     (double *)G_malloc(sizeof(double) *
-                                        ((KMAX2 + 1) * (KMAX2 + 2) + 1)))) {
+                if (!(A = (double *)G_malloc(
+                          sizeof(double) * ((KMAX2 + 1) * (KMAX2 + 2) + 1)))) {
                     clean();
                     G_fatal_error(_("Cannot allocate A"));
                 }
@@ -223,11 +212,11 @@ int interp_call(struct octtree *root, struct octtree *tree)
             }
         }
 
-        /*      if(!(points=(struct quadruple*)G_malloc(sizeof(struct quadruple)*(npt))))
-           {clean(); G_fatal_error("Not enough memory for points");} */
-        if (!
-            (point =
-             (struct point_3d *)G_malloc(sizeof(struct point_3d) * (npt)))) {
+        /*      if(!(points=(struct quadruple*)G_malloc(sizeof(struct
+           quadruple)*(npt)))) {clean(); G_fatal_error("Not enough memory for
+           points");} */
+        if (!(point = (struct point_3d *)G_malloc(sizeof(struct point_3d) *
+                                                  (npt)))) {
             clean();
             G_fatal_error(_("Not enough memory for %s"), "point");
         }
@@ -265,37 +254,34 @@ int interp_call(struct octtree *root, struct octtree *tree)
                             j++;
                         }
                     }
-                }               /* segment area test */
+                } /* segment area test */
 
                 if (segtest == 1)
-                    if (!COGRR1
-                        (xmn, ymn, zmn,
-                         ((struct octdata *)(tree->data))->n_rows,
-                         ((struct octdata *)(tree->data))->n_cols,
-                         ((struct octdata *)(tree->data))->n_levs, npt - 1,
-                         points, skip_point)) {
+                    if (!COGRR1(xmn, ymn, zmn,
+                                ((struct octdata *)(tree->data))->n_rows,
+                                ((struct octdata *)(tree->data))->n_cols,
+                                ((struct octdata *)(tree->data))->n_levs,
+                                npt - 1, points, skip_point)) {
                         fprintf(stderr, "Error in COGRR!\n");
                         return 0;
                     }
             }
         }
 
-
-
         /* show before to catch 0% */
 
-        /*fprintf(stderr,"total segments = %d, Current = %d, npoints = %d\n",totsegm,cursegm+1,npt); */
+        /*fprintf(stderr,"total segments = %d, Current = %d, npoints =
+         * %d\n",totsegm,cursegm+1,npt); */
 
         {
             G_percent(cursegm, totsegm, 1);
         }
 
         if (!cv)
-            if (!COGRR1
-                (xmn, ymn, zmn, ((struct octdata *)(tree->data))->n_rows,
-                 ((struct octdata *)(tree->data))->n_cols,
-                 ((struct octdata *)(tree->data))->n_levs, npt, points,
-                 skip_point)) {
+            if (!COGRR1(xmn, ymn, zmn, ((struct octdata *)(tree->data))->n_rows,
+                        ((struct octdata *)(tree->data))->n_cols,
+                        ((struct octdata *)(tree->data))->n_levs, npt, points,
+                        skip_point)) {
                 fprintf(stderr, "Error in COGRR!\n");
                 return 0;
             }

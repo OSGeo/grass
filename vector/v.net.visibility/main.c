@@ -1,9 +1,8 @@
-
 /****************************************************************
  * MODULE:     v.net.visibility
  *
  * AUTHOR(S):  Maximilian Maldacker
- *  
+ *
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -26,8 +25,8 @@
 int main(int argc, char *argv[])
 {
     struct Map_info in, out, vis;
-    struct GModule *module;     /* GRASS module for parsing arguments */
-    struct Option *input, *output;      /* The input map */
+    struct GModule *module;        /* GRASS module for parsing arguments */
+    struct Option *input, *output; /* The input map */
     struct Option *coor, *ovis;
 
     struct Point *points;
@@ -35,10 +34,9 @@ int main(int argc, char *argv[])
     int num_points, num_lines;
     int n = 0;
 
-
-
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -68,7 +66,7 @@ int main(int argc, char *argv[])
 
     Vect_set_open_level(2);
 
-    if (Vect_open_old(&in, input->answer, "") < 1)      /* opens the map */
+    if (Vect_open_old(&in, input->answer, "") < 1) /* opens the map */
         G_fatal_error(_("Unable to open vector map <%s>"), input->answer);
 
     if (Vect_open_new(&out, output->answer, WITHOUT_Z) < 0) {
@@ -87,7 +85,6 @@ int main(int argc, char *argv[])
 
     if (G_projection() == PROJECTION_LL)
         G_warning(_("Lat-long projection"));
-
 
     /* counting how many points and lines we have to allocate */
     count(&in, &num_points, &num_lines);
@@ -127,7 +124,6 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
 /* count how many new points we have to add */
 int count_new(char **coor)
 {
@@ -145,12 +141,11 @@ int count_new(char **coor)
 }
 
 /** add points to the visibility graph
-*/
+ */
 void add_points(char **coor, struct Point **points, int *index_point)
 {
     int i;
     double x, y;
-
 
     /* and defining the points */
     for (i = 0; coor[i] != NULL; i += 2) {
@@ -170,12 +165,12 @@ void add_points(char **coor, struct Point **points, int *index_point)
         (*points)[*index_point].rightmost_son = NULL;
 
         (*index_point)++;
-
     }
 }
 
-/** counts the number of individual segments ( boundaries and lines ) and vertices
-*/
+/** counts the number of individual segments ( boundaries and lines ) and
+ * vertices
+ */
 void count(struct Map_info *map, int *num_points, int *num_lines)
 {
     int index_line = 0;
@@ -205,8 +200,6 @@ void count(struct Map_info *map, int *num_points, int *num_lines)
         else if (type == GV_POINT) {
             index_point++;
         }
-
-
     }
 
     *num_points = index_point;
@@ -216,9 +209,8 @@ void count(struct Map_info *map, int *num_points, int *num_lines)
     Vect_destroy_cats_struct(cats);
 }
 
-
 /** Get the lines and boundaries from the map and load them in an array
-*/
+ */
 void load_lines(struct Map_info *map, struct Point **points, int *num_points,
                 struct Line **lines, int *num_lines)
 {
@@ -244,7 +236,6 @@ void load_lines(struct Map_info *map, struct Point **points, int *num_points,
                              cat++);
         else if (type == GV_POINT)
             process_point(sites, points, &index_point, -1);
-
     }
 
     *num_points = index_point;
@@ -272,8 +263,8 @@ void process_point(struct line_pnts *sites, struct Point **points,
     (*index_point)++;
 }
 
-/** extract all segments from the line 
-*/
+/** extract all segments from the line
+ */
 void process_line(struct line_pnts *sites, struct Point **points,
                   int *index_point, struct Line **lines, int *index_line,
                   int cat)
@@ -305,7 +296,6 @@ void process_line(struct line_pnts *sites, struct Point **points,
         (*points)[*index_point].father = NULL;
         (*points)[*index_point].rightmost_son = NULL;
 
-
         (*index_point)++;
 
         if (i < n - 1) {
@@ -316,8 +306,8 @@ void process_line(struct line_pnts *sites, struct Point **points,
     }
 }
 
-/** extract all segments from the boundary 
-*/
+/** extract all segments from the boundary
+ */
 void process_boundary(struct line_pnts *sites, struct Point **points,
                       int *index_point, struct Line **lines, int *index_line,
                       int cat)
@@ -331,8 +321,7 @@ void process_boundary(struct line_pnts *sites, struct Point **points,
         (*points)[*index_point].y = sites->y[i];
 
         if (i == 0) {
-            (*points)[*index_point].line1 =
-                &((*lines)[(*index_line) + n - 2]);
+            (*points)[*index_point].line1 = &((*lines)[(*index_line) + n - 2]);
             (*points)[*index_point].line2 = &((*lines)[*index_line]);
         }
         else {
@@ -344,7 +333,6 @@ void process_boundary(struct line_pnts *sites, struct Point **points,
         (*points)[*index_point].right_brother = NULL;
         (*points)[*index_point].father = NULL;
         (*points)[*index_point].rightmost_son = NULL;
-
 
         (*index_point)++;
 
@@ -359,5 +347,4 @@ void process_boundary(struct line_pnts *sites, struct Point **points,
 
         (*index_line)++;
     }
-
 }

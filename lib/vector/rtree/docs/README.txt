@@ -1,8 +1,8 @@
 
 This directory contains a C implementation of the R*-tree data structure.
-The implementation is originally from the RTree test code of Toni 
-Guttmann, and later ported to ANSI C on a variety of platforms by 
-Daniel Green (dgreen@superliminal.com). 
+The implementation is originally from the RTree test code of Toni
+Guttmann, and later ported to ANSI C on a variety of platforms by
+Daniel Green (dgreen@superliminal.com).
 Later on it was converted to an R*-tree by Markus Metz based on the article
 http://dbs.mathematik.uni-marburg.de/publications/myPapers/1990/BKSS90.pdf.
 

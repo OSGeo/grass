@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2022 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -769,7 +769,8 @@ def set_paths(grass_config_dir):
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
     # this works for subprocesses but won't affect the current process
-    path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
+    if LD_LIBRARY_PATH_VAR:
+        path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
 
 
 def find_exe(pgm):

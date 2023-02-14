@@ -1,4 +1,3 @@
-
 /*!
    \file lib/gis/percent.c
 
@@ -15,11 +14,10 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
-static struct state
-{
+static struct state {
     int prev;
     int first;
-} state = { -1, 1 };
+} state = {-1, 1};
 
 static struct state *st = &state;
 static int (*ext_percent)(int);
@@ -28,8 +26,8 @@ static int (*ext_percent)(int);
    \brief Print percent complete messages.
 
    This routine prints a percentage complete message to stderr. The
-   percentage complete is <i>(<b>n</b>/<b>d</b>)*100</i>, and these are 
-   printed only for each <b>s</b> percentage. This is perhaps best 
+   percentage complete is <i>(<b>n</b>/<b>d</b>)*100</i>, and these are
+   printed only for each <b>s</b> percentage. This is perhaps best
    explained by example:
    \code
    #include <stdio.h>
@@ -66,8 +64,7 @@ void G_percent(long n, long d, int s)
 
     format = G_info_format();
 
-    x = (d <= 0 || s <= 0)
-        ? 100 : (int)(100 * n / d);
+    x = (d <= 0 || s <= 0) ? 100 : (int)(100 * n / d);
 
     /* be verbose only 1> */
     if (format == G_INFO_FORMAT_SILENT || G_verbose() < 1)
@@ -90,7 +87,7 @@ void G_percent(long n, long d, int s)
                     else
                         fprintf(stderr, "%d..", x);
                 }
-                else {          /* GUI */
+                else { /* GUI */
                     if (st->first) {
                         fprintf(stderr, "\n");
                     }

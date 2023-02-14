@@ -3,14 +3,12 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
-#define PI M_PI
-#define Radians(x) ((x) * PI/180.0)
-#define Degrees(x) ((x) * 180.0/PI)
+#define PI         M_PI
+#define Radians(x) ((x)*PI / 180.0)
+#define Degrees(x) ((x)*180.0 / PI)
 
-
-int
-parse_line(const char *key, char **s, double *e1, double *n1, double *e2,
-           double *n2, int projection)
+int parse_line(const char *key, char **s, double *e1, double *n1, double *e2,
+               double *n2, int projection)
 {
     int err;
     double distance, azimuth;
@@ -30,20 +28,20 @@ parse_line(const char *key, char **s, double *e1, double *n1, double *e2,
         char partbuf[64];
 
         sprintf(warningbuff, "%s=", key);
-        sprintf(partbuf, "%s%s%s,",
-                err & 1 ? "<" : "", s[0], err & 1 ? ">" : "");
+        sprintf(partbuf, "%s%s%s,", err & 1 ? "<" : "", s[0],
+                err & 1 ? ">" : "");
         strcat(warningbuff, partbuf);
 
-        sprintf(partbuf, "%s%s%s,",
-                err & 2 ? "<" : "", s[1], err & 2 ? ">" : "");
+        sprintf(partbuf, "%s%s%s,", err & 2 ? "<" : "", s[1],
+                err & 2 ? ">" : "");
         strcat(warningbuff, partbuf);
 
-        sprintf(partbuf, "%s%s%s,",
-                err & 4 ? "<" : "", s[2], err & 4 ? ">" : "");
+        sprintf(partbuf, "%s%s%s,", err & 4 ? "<" : "", s[2],
+                err & 4 ? ">" : "");
         strcat(warningbuff, partbuf);
 
-        sprintf(partbuf, "%s%s%s",
-                err & 8 ? "<" : "", s[3], err & 8 ? ">" : "");
+        sprintf(partbuf, "%s%s%s", err & 8 ? "<" : "", s[3],
+                err & 8 ? ">" : "");
         strcat(warningbuff, partbuf);
 
         G_warning("%s %s", warningbuff, " invalid values(s)");
