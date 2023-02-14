@@ -28,10 +28,12 @@ a range of files types, including C/C++ and Python files. Pre-commit installs
 all necessary tools in a virtual environment upon first use.
 
 ```bash
+python -m pip install pre-commit
+
 cd <grass_source_dir>
 
 # once per repo
-python -m pip install pre-commit
+pre-commit install
 ```
 
 Pre-commit will then be automatically triggered by git commit command. It is
