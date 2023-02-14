@@ -150,8 +150,6 @@
 
 # TODO: solve addon-extension(-module) confusion
 
-
-from __future__ import print_function
 import fileinput
 import http
 import os
@@ -172,9 +170,9 @@ else:
 
     copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
-from six.moves.urllib import request as urlrequest
-from six.moves.urllib.error import HTTPError, URLError
-from six.moves.urllib.parse import urlparse
+from urllib import request as urlrequest
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlparse
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
