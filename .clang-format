@@ -1,7 +1,6 @@
 ---
 BasedOnStyle: LLVM
 IndentWidth: 4
-
 ---
 Language: Cpp
 AccessModifierOffset: -4
@@ -23,13 +22,9 @@ IfMacros:
 MacroBlockBegin: GNO_BEGIN
 MacroBlockEnd: GNO_END
 SortIncludes: Never
-
 ---
 Language: ObjC
-
 ---
 Language: JavaScript
-
 ---
 Language: Json
-...

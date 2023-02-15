@@ -5,8 +5,9 @@
 
 #define PI M_PI
 
-double r_net(double bbalb, double ndvi, double tempk, double dtair, double e0,
-             double tsw, double doy, double utc, double sunzangle)
+double r_net(double bbalb, double ndvi UNUSED, double tempk, double dtair,
+             double e0, double tsw, double doy, double utc UNUSED,
+             double sunzangle)
 {
 
     /* Tsw =  atmospheric transmissivity single-way (~0.7 -) */

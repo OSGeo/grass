@@ -76,6 +76,7 @@ int dxf_to_vect(struct dxf_file *dxf, struct Map_info *Map)
                     case 30:
                         dxf_ext.B = atof(dxf_buf);
                         bounds++;
+                        FALLTHROUGH;
                     default:
                         break;
                     }

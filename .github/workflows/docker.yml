@@ -1,3 +1,6 @@
+---
+name: Docker
+
 # This workflow builds and pushes docker images to dockerhub
 #
 # Summary
@@ -14,24 +17,22 @@
 # job docker-release-os-matrix:
 # * creates tags <version>-alpine, <version>-debian and <version>-ubuntu for each release
 
-name: Docker
-
 on:
   push:
     branches:
-      - 'main'
-      - 'releasebranch_*'
+      - main
+      - releasebranch_*
       - '!releasebranch_7_*'
-      - 'releasebranch_7_8'
+      - releasebranch_7_8
     tags: ['*.*.*']
-    paths-ignore: ['doc/**']
+    paths-ignore: [doc/**]
   release:
     types: [published]
 
 env:
-    # Additionally mentioned in docker-sha-release-latest
-    # as use of variable fails there
-    DOCKERHUB_REPOSITORY: mundialis/grass-py3-pdal
+  # Additionally mentioned in docker-sha-release-latest
+  # as use of variable fails there
+  DOCKERHUB_REPOSITORY: mundialis/grass-py3-pdal
 
 jobs:
 
@@ -88,7 +89,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           pull: true
@@ -131,7 +132,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           pull: true
@@ -189,7 +190,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           pull: true

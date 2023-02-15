@@ -137,7 +137,7 @@ public:
     {
         return (x.k == y.k);
     }
-    friend merge_key operator+(const merge_key &x, const merge_key &y)
+    friend merge_key operator+(const merge_key &x, const merge_key &y UNUSED)
     {
         assert(0);
         return x;
@@ -411,7 +411,7 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
     : arity(ar), level(i), basesize(bs)
 {
 
-    assert((level >= 1) && (basesize >= 0));
+    assert(level >= 1);
 
     char str[100];
     snprintf(str, sizeof(str),
@@ -533,7 +533,7 @@ em_buffer<T, Key>::~em_buffer()
 // memory (by a previous get_stream call, for instance) in order to
 // find its length
 template <class T, class Key>
-void em_buffer<T, Key>::check_name(unsigned int i)
+void em_buffer<T, Key>::check_name(unsigned int i UNUSED)
 {
 
 #ifdef EMBUF_CHECK_NAME
@@ -564,7 +564,7 @@ template <class T, class Key>
 AMI_STREAM<T> *em_buffer<T, Key>::get_stream(unsigned int i)
 {
 
-    assert(i >= 0 && i < index);
+    assert(i < index);
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::get_stream");
@@ -623,7 +623,7 @@ template <class T, class Key>
 void em_buffer<T, Key>::put_stream(unsigned int i)
 {
 
-    assert(i >= 0 && i < index);
+    assert(i < index);
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::put_stream");

@@ -19,6 +19,7 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <inttypes.h>
 #include <string.h>
 
 #include <grass/vector.h>
@@ -79,6 +80,9 @@ static dbDriver *open_db(struct Format_info_pg *);
 
 static struct line_pnts *Points;
 
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -102,9 +106,9 @@ static struct line_pnts *Points;
    \return feature offset into file
    \return -1 on error
  */
-off_t V1_write_line_pg(struct Map_info *Map, int type,
-                       const struct line_pnts *points,
-                       const struct line_cats *cats)
+off_t V1_write_line_pg(struct Map_info *Map NOPG_UNUSED, int type NOPG_UNUSED,
+                       const struct line_pnts *points NOPG_UNUSED,
+                       const struct line_cats *cats NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
@@ -145,9 +149,9 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
    \return feature offset into file
    \return -1 on error
  */
-off_t V2_write_line_pg(struct Map_info *Map, int type,
-                       const struct line_pnts *points,
-                       const struct line_cats *cats)
+off_t V2_write_line_pg(struct Map_info *Map NOPG_UNUSED, int type NOPG_UNUSED,
+                       const struct line_pnts *points NOPG_UNUSED,
+                       const struct line_cats *cats NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
@@ -183,12 +187,11 @@ off_t V2_write_line_pg(struct Map_info *Map, int type,
    \return feature offset (rewritten feature)
    \return -1 on error
  */
-off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
-                         const struct line_pnts *points,
-                         const struct line_cats *cats)
+off_t V1_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t offset,
+                         int type, const struct line_pnts *points NOPG_UNUSED,
+                         const struct line_cats *cats NOPG_UNUSED)
 {
-    G_debug(3, "V1_rewrite_line_pg(): type=%d offset=%" PRI_OFF_T, type,
-            offset);
+    G_debug(3, "V1_rewrite_line_pg(): type=%d offset=%" PRId64, type, offset);
 #ifdef HAVE_POSTGRES
     if (type != V1_read_line_pg(Map, NULL, NULL, offset)) {
         G_warning(_("Unable to rewrite feature (incompatible feature types)"));
@@ -218,14 +221,14 @@ off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
    \param line feature id
    \param type feature type  (GV_POINT, GV_LINE, ...)
    \param points feature geometry
-   \param cats feature categories
+   \param cats feature categories (unused)
 
    \return offset where feature was rewritten
    \return -1 on error
  */
-off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
-                         const struct line_pnts *points,
-                         const struct line_cats *cats)
+off_t V2_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line, int type,
+                         const struct line_pnts *points NOPG_UNUSED,
+                         const struct line_cats *cats UNUSED)
 {
     G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d", (int)line, type);
 #ifdef HAVE_POSTGRES
@@ -288,7 +291,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
     geom_data = line_to_wkb(pg_info, &points, 1, type, Map->head.with_z);
     G_asprintf(&stmt,
                "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = "
-               "%" PRI_OFF_T,
+               "%" PRId64,
                schema_name, table_name, geom_data, keycolumn, line);
     G_free(geom_data);
 
@@ -318,7 +321,8 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
    \return  0 on success
    \return -1 on error
  */
-int V1_delete_line_pg(struct Map_info *Map, off_t offset)
+int V1_delete_line_pg(struct Map_info *Map NOPG_UNUSED,
+                      off_t offset NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     long fid;
@@ -334,7 +338,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
     }
 
     if (offset >= pg_info->offset.array_num) {
-        G_warning(_("Invalid offset (%" PRI_OFF_T ")"), offset);
+        G_warning(_("Invalid offset (%" PRId64 ")"), offset);
         return -1;
     }
 
@@ -380,7 +384,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
    \return 0 on success
    \return -1 on error
  */
-int V2_delete_line_pg(struct Map_info *Map, off_t line)
+int V2_delete_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int ret;

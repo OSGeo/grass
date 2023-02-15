@@ -73,7 +73,8 @@ void write_vtk_normal_header(FILE *fp, struct Cell_head region,
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    /* The header line describes the data. */
+    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_POINTS\n"); /*We are using the structured
                                                    point dataset. */
@@ -104,7 +105,7 @@ void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_GRID\n"); /*We are using the structured grid
                                                  dataset. */
@@ -122,7 +123,7 @@ void write_vtk_polygonal_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET POLYDATA\n"); /*We are using polydataset. */
     fprintf(fp, "POINTS %i float\n", region.cols * region.rows);
@@ -149,7 +150,7 @@ void write_vtk_pointdata_header(FILE *fp, struct Cell_head region)
 /* ************************************************************************* */
 /* Write the VTK Structured Coordinates ************************************ */
 /* ************************************************************************* */
-void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname,
+void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
                                       struct Cell_head region, int out_type,
                                       char *null_value, double scale, int dp)
 {
@@ -200,7 +201,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname,
 /* ************************************************************************* */
 /* Write Polygonal Coordinates ********************************************* */
 /* ************************************************************************* */
-void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname,
+void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
                                      struct Cell_head region, int out_type,
                                      char *null_value, double scale,
                                      int polytype, int dp)

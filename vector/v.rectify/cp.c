@@ -14,7 +14,7 @@ struct Stats {
     double sum2, rms;
 };
 
-static void update_stats(struct Stats *st, int n, double dx, double dy,
+static void update_stats(struct Stats *st, int n UNUSED, double dx, double dy,
                          double *dz, double dg, double d2)
 {
     st->x += dx;

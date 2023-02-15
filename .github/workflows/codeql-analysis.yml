@@ -1,4 +1,5 @@
-name: "CodeQL"
+---
+name: CodeQL
 
 on:
   push:
@@ -8,12 +9,12 @@ on:
     branches:
       - main
     paths-ignore:
-      - "**/*.html"
-      - "**/*.md"
-      - "**/*.txt"
+      - '**/*.html'
+      - '**/*.md'
+      - '**/*.txt'
   schedule:
     # Check every Saturday at 18:36
-    - cron: "36 18 * * 6"
+    - cron: 36 18 * * 6
 
 jobs:
   analyze:
@@ -55,8 +56,8 @@ jobs:
 
       - name: Build
         env:
-          CFLAGS: "-std=gnu11"
-          CXXFLAGS: "-std=c++11"
+          CFLAGS: -std=gnu11
+          CXXFLAGS: -std=c++11
         run: .github/workflows/build_ubuntu-22.04.sh $HOME/install
 
       - name: Perform CodeQL Analysis

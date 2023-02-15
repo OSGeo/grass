@@ -225,7 +225,7 @@ int Vedit_connect_lines(struct Map_info *Map, struct ilist *List, double thresh)
 }
 
 int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
-                  double thresh, struct ilist *List)
+                  double thresh, struct ilist *List UNUSED)
 {
     int line_new;
     int type_from, type_to;

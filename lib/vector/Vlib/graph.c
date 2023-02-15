@@ -25,7 +25,7 @@ static int
     From_node; /* from node set in SP and used by clipper for first arc */
 
 static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
-                   dglSPClipOutput_s *pargOut, void *pvarg)
+                   dglSPClipOutput_s *pargOut, void *pvarg UNUSED)
 { /* caller's pointer */
     dglInt32_t cost;
     dglInt32_t from;

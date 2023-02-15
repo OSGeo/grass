@@ -21,6 +21,7 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -57,6 +58,10 @@ static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
 static int get_centroid(struct Map_info *, int, struct line_pnts *,
                         struct line_cats *);
 static void error_tuples(struct Format_info_pg *);
+
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -80,8 +85,9 @@ static void error_tuples(struct Format_info_pg *);
    \return -2 no more features (EOF)
    \return -1 out of memory
  */
-int V1_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-                         struct line_cats *line_c)
+int V1_read_next_line_pg(struct Map_info *Map NOPG_UNUSED,
+                         struct line_pnts *line_p NOPG_UNUSED,
+                         struct line_cats *line_c NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     G_debug(3, "V1_read_next_line_pg()");
@@ -110,8 +116,9 @@ int V1_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
    \return -2 no more features (EOF)
    \return -1 on failure
  */
-int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-                         struct line_cats *line_c)
+int V2_read_next_line_pg(struct Map_info *Map NOPG_UNUSED,
+                         struct line_pnts *line_p NOPG_UNUSED,
+                         struct line_cats *line_c NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int line, ret;
@@ -235,8 +242,10 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
    \return -2 no more features
    \return -1 out of memory
  */
-int V1_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-                    struct line_cats *line_c, off_t offset)
+int V1_read_line_pg(struct Map_info *Map NOPG_UNUSED,
+                    struct line_pnts *line_p NOPG_UNUSED,
+                    struct line_cats *line_c NOPG_UNUSED,
+                    off_t offset NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     long fid;
@@ -316,8 +325,9 @@ int V1_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
    \return 0 dead feature
    \return -1 on error
  */
-int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-                    struct line_cats *line_c, int line)
+int V2_read_line_pg(struct Map_info *Map NOPG_UNUSED,
+                    struct line_pnts *line_p NOPG_UNUSED,
+                    struct line_cats *line_c NOPG_UNUSED, int line NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int fid, cache_idx;
@@ -338,8 +348,8 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         return 0;
     }
 
-    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %" PRI_OFF_T,
-            line, Line->type, Line->offset);
+    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %" PRId64, line,
+            Line->type, Line->offset);
 
     if (!line_p && !line_c)
         return Line->type;

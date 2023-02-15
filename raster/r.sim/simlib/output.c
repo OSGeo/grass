@@ -88,7 +88,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
 /* Soeren 8. Mar 2011 TODO:
  * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft)
+int output_data(int tt, double ft UNUSED)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
