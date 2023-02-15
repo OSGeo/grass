@@ -361,6 +361,25 @@ clang-format -i <new_or_modified_file.c>
 The ClangFormat settings for the repo are defined in
 [.clang-format](../../../.clang-format).
 
+If using pre-commit is not an option, for whatever reason, there is a helper
+script [grass_clang_format.sh](./utils/grass_clang_format.sh), which simplifies
+bulk reformatting. Before using this script you need to install `clang-format`
+and make sure it is available on PATH.
+
+```bash
+# Simple way to install clang-format (optional)
+python -m pip install 'clang-format==15.0.6’
+
+# Run script to format all files in source repo
+./utils/grass_clang_format.sh
+
+# It is also possible to format the content in a (one) given directory (faster)
+./utils/grass_clang_format.sh ./lib/raster
+
+# Setting GRASS_CLANG_FORMAT enables use of clang-format by other name/path
+GRASS_CLANG_FORMAT="clang-format-15" ./utils/grass_clang_format.sh
+```
+
 ## Compilation
 
 Platform dependent code:
