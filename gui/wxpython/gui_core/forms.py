@@ -2035,7 +2035,11 @@ class CmdPanel(wx.Panel):
                         )
                         if p.get("value", "") and os.path.isfile(p["value"]):
                             ifbb.Clear()
-                            enc = locale.getdefaultlocale()[1]
+                            try:
+                                # Python >= 3.11
+                                enc = locale.getencoding()
+                            except AttributeError:
+                                enc = locale.getdefaultlocale()[1]
                             with codecs.open(
                                 p["value"], encoding=enc, errors="ignore"
                             ) as f:
@@ -2262,7 +2266,7 @@ class CmdPanel(wx.Panel):
                         )
                         p["wxId"] = [self.win1.GetId()]
 
-                        def OnCheckItem(index, flag):
+                        def OnCheckItem(index=None, flag=None, event=None):
                             layers = list()
                             geometry = None
                             for layer, match, listId in self.win1.GetLayers():
@@ -2277,7 +2281,13 @@ class CmdPanel(wx.Panel):
                             # TODO: v.import has no geometry option
                             self.OnUpdateValues()  # TODO: replace by signal
 
-                        self.win1.OnCheckItem = OnCheckItem
+                        from core.globalvar import CheckWxVersion
+
+                        if CheckWxVersion([4, 1, 0]):
+                            self.win1.Bind(wx.EVT_LIST_ITEM_CHECKED, OnCheckItem)
+                            self.win1.Bind(wx.EVT_LIST_ITEM_UNCHECKED, OnCheckItem)
+                        else:
+                            self.win1.OnCheckItem = OnCheckItem
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
@@ -2588,7 +2598,11 @@ class CmdPanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             f = codecs.open(path, encoding=enc, mode="w", errors="replace")
             try:
                 f.write(text + os.linesep)
@@ -2612,7 +2626,11 @@ class CmdPanel(wx.Panel):
                 filename = grass.tempfile()
                 win.SetValue(filename)
 
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             f = codecs.open(filename, encoding=enc, mode="w", errors="replace")
             try:
                 f.write(text)

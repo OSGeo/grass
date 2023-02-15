@@ -1,22 +1,22 @@
-
 /****************************************************************
  *
  * MODULE:       g.mapset
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Joel Pitt, joel.pitt@gmail.com
- *               
+ *
  * PURPOSE:      Change current mapset, optionally adding it
  *               if the mapset does not exist.
- *               
+ *
  * COPYRIGHT:    (C) 2004, 2010-2011 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
  **************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -29,12 +29,10 @@ int main(int argc, char *argv[])
 {
     int ret;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *gisdbase, *location, *mapset;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *add, *list, *curr;
     } flag;
     const char *gisdbase_old, *location_old, *mapset_old;
@@ -51,8 +49,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
     module->label = _("Changes/reports current mapset.");
-    module->description =
-        _("Optionally create new mapset or list available mapsets in given location.");
+    module->description = _("Optionally create new mapset or list available "
+                            "mapsets in given location.");
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
     opt.mapset->required = YES;
@@ -157,8 +155,9 @@ int main(int argc, char *argv[])
                               mapset_new);
         }
         else
-            G_fatal_error(_("Mapset <%s> does not exist. Use -c flag to create it."),
-                          mapset_new);
+            G_fatal_error(
+                _("Mapset <%s> does not exist. Use -c flag to create it."),
+                mapset_new);
         break;
     default:
         break;
@@ -178,15 +177,16 @@ int main(int argc, char *argv[])
     G_debug(2, "lock result = %d", ret);
     G_free(lock_prog);
 
-    /* Warning: the value returned by system() is not that returned by exit() in executed program
-     *          e.g. exit(1) -> 256 (multiplied by 256) */
+    /* Warning: the value returned by system() is not that returned by exit() in
+     * executed program e.g. exit(1) -> 256 (multiplied by 256) */
     if (ret != 0) {
         /* .gislock does not exist */
         if (access(path, F_OK) != 0)
             G_fatal_error(_("Lock file of mapset <%s> cannot be checked"),
                           mapset_new);
         else
-            G_fatal_error(_("There appears to be an active GRASS session in selected mapset <%s>"),
+            G_fatal_error(_("There appears to be an active GRASS session in "
+                            "selected mapset <%s>"),
                           mapset_new);
     }
 
@@ -217,7 +217,8 @@ int main(int argc, char *argv[])
     }
     if (shell && strstr(shell, "tcsh")) {
         G_important_message(_("You can switch the history by commands:\n"
-                              "history -S; history -L %s/.history; setenv histfile=%s/.history"),
+                              "history -S; history -L %s/.history; setenv "
+                              "histfile=%s/.history"),
                             mapset_new_path, mapset_new_path);
     }
 

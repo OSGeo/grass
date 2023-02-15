@@ -1,4 +1,3 @@
-
 /***********************************************************************
 
    crs3d.c
@@ -23,22 +22,21 @@
 /* STRUCTURE FOR USE INTERNALLY WITH THESE FUNCTIONS.  THESE FUNCTIONS EXPECT
    SQUARE MATRICES SO ONLY ONE VARIABLE IS GIVEN (N) FOR THE MATRIX SIZE */
 
-struct MATRIX
-{
-    int n;                      /* SIZE OF THIS MATRIX (N x N) */
+struct MATRIX {
+    int n; /* SIZE OF THIS MATRIX (N x N) */
     double *v;
 };
 
 /* CALCULATE OFFSET INTO ARRAY BASED ON R/C */
 
-#define M(row,col) m->v[(((row)-1)*(m->n))+(col)-1]
+#define M(row, col) m->v[(((row)-1) * (m->n)) + (col)-1]
 
-#define MSUCCESS     1          /* SUCCESS */
-#define MNPTERR      0          /* NOT ENOUGH POINTS */
-#define MUNSOLVABLE -1          /* NOT SOLVABLE */
-#define MMEMERR     -2          /* NOT ENOUGH MEMORY */
-#define MPARMERR    -3          /* PARAMETER ERROR */
-#define MINTERR     -4          /* INTERNAL ERROR */
+#define MSUCCESS    1  /* SUCCESS */
+#define MNPTERR     0  /* NOT ENOUGH POINTS */
+#define MUNSOLVABLE -1 /* NOT SOLVABLE */
+#define MMEMERR     -2 /* NOT ENOUGH MEMORY */
+#define MPARMERR    -3 /* PARAMETER ERROR */
+#define MINTERR     -4 /* INTERNAL ERROR */
 
 /***********************************************************************
 
@@ -62,21 +60,22 @@ static double term(int, double, double, double);
 
 ************************************************************************/
 
-int CRS_georef_3d(double e1,    /* EASTING TO BE TRANSFORMED */
-                  double n1,    /* NORTHING TO BE TRANSFORMED */
-                  double z1,    /* HEIGHT TO BE TRANSFORMED */
-                  double *e,    /* EASTING, TRANSFORMED */
-                  double *n,    /* NORTHING, TRANSFORMED */
-                  double *z,    /* HEIGHT, TRANSFORMED */
-                  double E[],   /* EASTING COEFFICIENTS */
-                  double N[],   /* NORTHING COEFFICIENTS */
-                  double Z[],   /* HEIGHT COEFFICIENTS */
-                  int order     /* ORDER OF TRANSFORMATION TO BE PERFORMED, MUST MATCH THE
-                                   ORDER USED TO CALCULATE THE COEFFICIENTS */
-    )
+int CRS_georef_3d(
+    double e1,  /* EASTING TO BE TRANSFORMED */
+    double n1,  /* NORTHING TO BE TRANSFORMED */
+    double z1,  /* HEIGHT TO BE TRANSFORMED */
+    double *e,  /* EASTING, TRANSFORMED */
+    double *n,  /* NORTHING, TRANSFORMED */
+    double *z,  /* HEIGHT, TRANSFORMED */
+    double E[], /* EASTING COEFFICIENTS */
+    double N[], /* NORTHING COEFFICIENTS */
+    double Z[], /* HEIGHT COEFFICIENTS */
+    int order   /* ORDER OF TRANSFORMATION TO BE PERFORMED, MUST MATCH THE
+                   ORDER USED TO CALCULATE THE COEFFICIENTS */
+)
 {
-    double e2, n2, z2, en, ez, nz,
-        e3, n3, z3, e2n, e2z, en2, ez2, n2z, nz2, enz;
+    double e2, n2, z2, en, ez, nz, e3, n3, z3, e2n, e2z, en2, ez2, n2z, nz2,
+        enz;
 
     switch (order) {
     case 1:
@@ -93,13 +92,12 @@ int CRS_georef_3d(double e1,    /* EASTING TO BE TRANSFORMED */
         nz = n1 * z1;
         z2 = z1 * z1;
 
-        *e = E[0] + E[1] * e1 + E[2] * n1 + E[3] * z1 +
-            E[4] * e2 + E[5] * en + E[6] * ez + E[7] * n2 + E[8] * nz +
-            E[9] * z2;
-        *n = N[0] + N[1] * e1 + N[2] * n1 + N[3] * z1 + N[4] * e2 +
-            N[5] * en + N[6] * ez + N[7] * n2 + N[8] * nz + N[9] * z2;
-        *z = Z[0] + Z[1] * e1 + Z[2] * n1 + Z[3] * z1 + Z[4] * e2 +
-            Z[5] * en + Z[6] * ez + Z[7] * n2 + Z[8] * nz + Z[9] * z2;
+        *e = E[0] + E[1] * e1 + E[2] * n1 + E[3] * z1 + E[4] * e2 + E[5] * en +
+             E[6] * ez + E[7] * n2 + E[8] * nz + E[9] * z2;
+        *n = N[0] + N[1] * e1 + N[2] * n1 + N[3] * z1 + N[4] * e2 + N[5] * en +
+             N[6] * ez + N[7] * n2 + N[8] * nz + N[9] * z2;
+        *z = Z[0] + Z[1] * e1 + Z[2] * n1 + Z[3] * z1 + Z[4] * e2 + Z[5] * en +
+             Z[6] * ez + Z[7] * n2 + Z[8] * nz + Z[9] * z2;
         break;
 
     case 3:
@@ -121,21 +119,18 @@ int CRS_georef_3d(double e1,    /* EASTING TO BE TRANSFORMED */
         nz2 = n1 * z2;
         z3 = z1 * z2;
 
-        *e = E[0] + E[1] * e1 + E[2] * n1 + E[3] * z1 +
-            E[4] * e2 + E[5] * en + E[6] * ez + E[7] * n2 + E[8] * nz +
-            E[9] * z2 + E[10] * e3 + E[11] * e2n + E[12] * e2z + E[13] * en2 +
-            E[14] * enz + E[15] * ez2 + E[16] * n3 + E[17] * n2z +
-            E[18] * nz2 + E[19] * z3;
-        *n = N[0] + N[1] * e1 + N[2] * n1 + N[3] * z1 + N[4] * e2 +
-            N[5] * en + N[6] * ez + N[7] * n2 + N[8] * nz + N[9] * z2 +
-            N[10] * e3 + N[11] * e2n + N[12] * e2z + N[13] * en2 +
-            N[14] * enz + N[15] * ez2 + N[16] * n3 + N[17] * n2z +
-            N[18] * nz2 + N[19] * z3;
-        *z = Z[0] + Z[1] * e1 + Z[2] * n1 + Z[3] * z1 + Z[4] * e2 +
-            Z[5] * en + Z[6] * ez + Z[7] * n2 + Z[8] * nz + Z[9] * z2 +
-            Z[10] * e3 + Z[11] * e2n + Z[12] * e2z + Z[13] * en2 +
-            Z[14] * enz + Z[15] * ez2 + Z[16] * n3 + Z[17] * n2z +
-            Z[18] * nz2 + Z[19] * z3;
+        *e = E[0] + E[1] * e1 + E[2] * n1 + E[3] * z1 + E[4] * e2 + E[5] * en +
+             E[6] * ez + E[7] * n2 + E[8] * nz + E[9] * z2 + E[10] * e3 +
+             E[11] * e2n + E[12] * e2z + E[13] * en2 + E[14] * enz +
+             E[15] * ez2 + E[16] * n3 + E[17] * n2z + E[18] * nz2 + E[19] * z3;
+        *n = N[0] + N[1] * e1 + N[2] * n1 + N[3] * z1 + N[4] * e2 + N[5] * en +
+             N[6] * ez + N[7] * n2 + N[8] * nz + N[9] * z2 + N[10] * e3 +
+             N[11] * e2n + N[12] * e2z + N[13] * en2 + N[14] * enz +
+             N[15] * ez2 + N[16] * n3 + N[17] * n2z + N[18] * nz2 + N[19] * z3;
+        *z = Z[0] + Z[1] * e1 + Z[2] * n1 + Z[3] * z1 + Z[4] * e2 + Z[5] * en +
+             Z[6] * ez + Z[7] * n2 + Z[8] * nz + Z[9] * z2 + Z[10] * e3 +
+             Z[11] * e2n + Z[12] * e2z + Z[13] * en2 + Z[14] * enz +
+             Z[15] * ez2 + Z[16] * n3 + Z[17] * n2z + Z[18] * nz2 + Z[19] * z3;
         break;
 
     default:
@@ -152,10 +147,9 @@ int CRS_georef_3d(double e1,    /* EASTING TO BE TRANSFORMED */
 
 ************************************************************************/
 
-int CRS_compute_georef_equations_3d(struct Control_Points_3D *cp,
-                                    double E12[], double N12[], double Z12[],
-                                    double E21[], double N21[], double Z21[],
-                                    int order)
+int CRS_compute_georef_equations_3d(struct Control_Points_3D *cp, double E12[],
+                                    double N12[], double Z12[], double E21[],
+                                    double N21[], double Z21[], int order)
 {
     double *tempptr;
     int status;
@@ -208,14 +202,14 @@ int CRS_compute_georef_equations_3d(struct Control_Points_3D *cp,
 
 ************************************************************************/
 
-static int calccoef(struct Control_Points_3D *cp,
-                    double E[], double N[], double Z[], int order)
+static int calccoef(struct Control_Points_3D *cp, double E[], double N[],
+                    double Z[], int order)
 {
     struct MATRIX m;
     double *a;
     double *b;
     double *c;
-    int numactive;              /* NUMBER OF ACTIVE CONTROL POINTS */
+    int numactive; /* NUMBER OF ACTIVE CONTROL POINTS */
     int status, i;
 
     /* CALCULATE THE NUMBER OF VALID CONTROL POINTS */
@@ -274,10 +268,12 @@ static int calccoef(struct Control_Points_3D *cp,
 
 ************************************************************************/
 
-static int exactdet(struct Control_Points_3D *cp, struct MATRIX *m, double a[], double b[], double c[], double E[],     /* EASTING COEFFICIENTS */
+static int exactdet(struct Control_Points_3D *cp, struct MATRIX *m, double a[],
+                    double b[], double c[],
+                    double E[], /* EASTING COEFFICIENTS */
                     double N[], /* NORTHING COEFFICIENTS */
                     double Z[]  /* HEIGHT COEFFICIENTS */
-    )
+)
 {
     int pntnow, currow, j;
 
@@ -314,10 +310,11 @@ static int exactdet(struct Control_Points_3D *cp, struct MATRIX *m, double a[], 
 
 ************************************************************************/
 
-static int calcls(struct Control_Points_3D *cp, struct MATRIX *m, double a[], double b[], double c[], double E[],       /* EASTING COEFFICIENTS */
-                  double N[],   /* NORTHING COEFFICIENTS */
-                  double Z[]    /* HEIGHT COEFFICIENTS */
-    )
+static int calcls(struct Control_Points_3D *cp, struct MATRIX *m, double a[],
+                  double b[], double c[], double E[], /* EASTING COEFFICIENTS */
+                  double N[], /* NORTHING COEFFICIENTS */
+                  double Z[]  /* HEIGHT COEFFICIENTS */
+)
 {
     int i, j, n, numactive = 0;
 
@@ -338,7 +335,7 @@ static int calcls(struct Control_Points_3D *cp, struct MATRIX *m, double a[], do
             for (i = 1; i <= m->n; i++) {
                 for (j = i; j <= m->n; j++)
                     M(i, j) += term(i, cp->e1[n], cp->n1[n], cp->z1[n]) *
-                        term(j, cp->e1[n], cp->n1[n], cp->z1[n]);
+                               term(j, cp->e1[n], cp->n1[n], cp->z1[n]);
 
                 a[i - 1] +=
                     cp->e2[n] * term(i, cp->e1[n], cp->n1[n], cp->z1[n]);
@@ -366,13 +363,15 @@ static int calcls(struct Control_Points_3D *cp, struct MATRIX *m, double a[], do
 
   CALCULATE THE X/Y TERM BASED ON THE TERM NUMBER
 
-  ORDER\TERM   1      2      3      4      5      6      7      8      9      10
-  1            e0n0z0 e1n0z0 e0n1z0 e0n0z1
-  2            e0n0z0 e1n0z0 e0n1z0 e0n0z1 e2n0z0 e1n1z0 e1n0z1 e0n2z0 e0n1z1 e0n0z2
-  3            e0n0z0 e1n0z0 e0n1z0 e0n0z1 e2n0z0 e1n1z0 e1n0z1 e0n2z0 e0n1z1 e0n0z2
+  ORDER\
+  TERM   1      2      3      4      5      6      7      8      9      10
+  1      e0n0z0 e1n0z0 e0n1z0 e0n0z1
+  2      e0n0z0 e1n0z0 e0n1z0 e0n0z1 e2n0z0 e1n1z0 e1n0z1 e0n2z0 e0n1z1 e0n0z2
+  3      e0n0z0 e1n0z0 e0n1z0 e0n0z1 e2n0z0 e1n1z0 e1n0z1 e0n2z0 e0n1z1 e0n0z2
 
-  ORDER\TERM   11      12     13     14     15     16     17     18     19     20
-  3            e3n0z0  e2n1z0 e2n0z1 e1n2z0 e1n1z1 e1n0z2 e0n3z0 e0n2z1 e0n1z2 e0n0z3
+  ORDER\
+  TERM   11      12     13     14     15     16     17     18     19     20
+  3      e3n0z0  e2n1z0 e2n0z1 e1n2z0 e1n1z1 e1n0z2 e0n3z0 e0n2z1 e0n1z2 e0n0z3
 
 ************************************************************************/
 
@@ -458,7 +457,7 @@ static int solvemat(struct MATRIX *m, double a[], double b[], double c[],
 {
     int i, j, i2, j2, imark;
     double factor, temp;
-    double pivot;               /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
+    double pivot; /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
 
     for (i = 1; i <= m->n; i++) {
         j = i;

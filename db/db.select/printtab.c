@@ -3,7 +3,7 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-int print_table_definition(dbDriver * driver, dbTable * table)
+int print_table_definition(dbDriver *driver, dbTable *table)
 {
     int ncols, col, nrows;
     dbColumn *column;
@@ -32,7 +32,7 @@ int print_table_definition(dbDriver * driver, dbTable * table)
     return 0;
 }
 
-int print_column_definition(dbColumn * column)
+int print_column_definition(dbColumn *column)
 {
     dbString value_string;
 

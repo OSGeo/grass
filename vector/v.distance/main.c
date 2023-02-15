@@ -1,4 +1,3 @@
-
 /***************************************************************
  *
  * MODULE:       v.distance
@@ -65,25 +64,22 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *from, *to, *from_type, *to_type,
-            *from_field, *to_field;
+    struct {
+        struct Option *from, *to, *from_type, *to_type, *from_field, *to_field;
         struct Option *out, *max, *min, *table;
         struct Option *upload, *column, *to_column;
         struct Option *sep;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *print, *all, *square;
     } flag;
 
-    int print;                  /* -p: print to stdout */
-    int create_map;             /* output=: create a new map */
-    int create_table;           /* table=: create a new table */
-    int update_table;           /* column= !table=: update the "from" table */
-    int do_all;                 /* -a: calculate from each to each within the threshold */
-    int print_as_matrix;        /* only for do_all=TRUE */
+    int print;        /* -p: print to stdout */
+    int create_map;   /* output=: create a new map */
+    int create_table; /* table=: create a new table */
+    int update_table; /* column= !table=: update the "from" table */
+    int do_all;       /* -a: calculate from each to each within the threshold */
+    int print_as_matrix; /* only for do_all=TRUE */
 
     int i, j;
     char *desc;
@@ -95,8 +91,8 @@ int main(int argc, char *argv[])
     struct line_pnts *FPoints, *TPoints;
     struct line_cats *FCats, *TCats;
     NEAR *Near, *near;
-    int anear;                  /* allocated space, used only for do_all */
-    UPLOAD *Upload;             /* zero terminated */
+    int anear;      /* allocated space, used only for do_all */
+    UPLOAD *Upload; /* zero terminated */
     int ftype, ttype, fcat, nfcats, tcat, count, fline, tfeature;
     int nfrom, nfromlines, nfromareas, nto, ntolines, ntoareas;
     int tarea, area, isle, nisles, nlines;
@@ -124,8 +120,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("distance"));
     G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
-    module->description =
-        _("Finds the nearest element in vector map 'to' for elements in vector map 'from'.");
+    module->description = _("Finds the nearest element in vector map 'to' for "
+                            "elements in vector map 'from'.");
 
     opt.from = G_define_standard_option(G_OPT_V_INPUT);
     opt.from->key = "from";
@@ -193,38 +189,39 @@ int main(int argc, char *argv[])
     opt.upload->description =
         _("Values describing the relation between two nearest features");
     desc = NULL;
-    G_asprintf(&desc,
-               "cat;%s;"
-               "dist;%s;"
-               "to_x;%s;"
-               "to_y;%s;"
-               "to_along;%s;"
-               "to_angle;%s;"
-               "to_attr;%s",
-               _("category of the nearest feature"),
-               _("minimum distance to nearest feature"),
-               _("x coordinate of the nearest point on the 'to' feature"),
-               _("y coordinate of the nearest point on the 'to' feature"),
-               _("distance to the nearest point on the 'to' feature along "
-                 "that linear feature"),
-               _("angle along the nearest linear feature in the 'to' map, "
-                 "measured CCW from the +x axis, in radians, between -Pi and Pi "
-                 "inclusive"),
-               _("attribute of nearest feature given by to_column option"));
+    G_asprintf(
+        &desc,
+        "cat;%s;"
+        "dist;%s;"
+        "to_x;%s;"
+        "to_y;%s;"
+        "to_along;%s;"
+        "to_angle;%s;"
+        "to_attr;%s",
+        _("category of the nearest feature"),
+        _("minimum distance to nearest feature"),
+        _("x coordinate of the nearest point on the 'to' feature"),
+        _("y coordinate of the nearest point on the 'to' feature"),
+        _("distance to the nearest point on the 'to' feature along "
+          "that linear feature"),
+        _("angle along the nearest linear feature in the 'to' map, "
+          "measured CCW from the +x axis, in radians, between -Pi and Pi "
+          "inclusive"),
+        _("attribute of nearest feature given by to_column option"));
     /* "from_x - x coordinate of the nearest point on 'from' feature;"
      * "from_y - y coordinate of the nearest point on 'from' feature;"
-     * "from_along - distance to the nearest point on 'from' feature along linear feature;"
-     * "from_angle - angle between the linear feature in 'to' map and the +x "
-     * "axis, at the location of point/centroid in 'from' map, CCW, in "
-     * "radians, between -Pi and Pi inclusive;"
+     * "from_along - distance to the nearest point on 'from' feature along
+     * linear feature;" "from_angle - angle between the linear feature in 'to'
+     * map and the +x " "axis, at the location of point/centroid in 'from' map,
+     * CCW, in " "radians, between -Pi and Pi inclusive;"
      */
     opt.upload->descriptions = desc;
 
     opt.column = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.column->required = NO;
     opt.column->multiple = YES;
-    opt.column->description =
-        _("Column name(s) where values specified by 'upload' option will be uploaded");
+    opt.column->description = _("Column name(s) where values specified by "
+                                "'upload' option will be uploaded");
     opt.column->guisection = _("From");
 
     opt.to_column = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -258,8 +255,8 @@ int main(int argc, char *argv[])
 
     flag.square = G_define_flag();
     flag.square->key = 's';
-    flag.square->label =
-        _("Print output as square matrix (only possible for one single upload variable)");
+    flag.square->label = _("Print output as square matrix (only possible for "
+                           "one single upload variable)");
 
     /* GUI dependency */
     opt.from->guidependency = G_store(opt.from_field->key);
@@ -306,16 +303,18 @@ int main(int argc, char *argv[])
         i++;
 
     if (i > 1 && print_as_matrix)
-        G_fatal_error(_("Square matrix output only possible with one single upload variable"));
+        G_fatal_error(_("Square matrix output only possible with one single "
+                        "upload variable"));
 
     /* TODO: Known issue. Segmentation fault on print_as_matrix with dmin= or
      * dmax= because count may not be nfrom^2. Needs to populate Near[] fully
      * even if some near features are not found */
     if (print_as_matrix && (min >= 0 || max >= 0))
-        G_fatal_error(_("Printing distance matrix is not supported with dmin= or dmax="));
+        G_fatal_error(
+            _("Printing distance matrix is not supported with dmin= or dmax="));
 
     /* alloc */
-    Upload = (UPLOAD *) G_calloc(i + 1, sizeof(UPLOAD));
+    Upload = (UPLOAD *)G_calloc(i + 1, sizeof(UPLOAD));
     /* read upload */
     i = 0;
     while (opt.upload->answer && opt.upload->answers[i]) {
@@ -368,8 +367,7 @@ int main(int argc, char *argv[])
 
     /* Open 'from' vector */
     Vect_set_open_level(2);
-    if (Vect_open_old2(&From, opt.from->answer, "", opt.from_field->answer) <
-        0)
+    if (Vect_open_old2(&From, opt.from->answer, "", opt.from_field->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), opt.from->answer);
 
     from_field = Vect_get_field_number(&From, opt.from_field->answer);
@@ -565,8 +563,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Database connection not defined for layer %d"),
                           to_field);
 
-        to_driver =
-            db_start_driver_open_database(toFi->driver, toFi->database);
+        to_driver = db_start_driver_open_database(toFi->driver, toFi->database);
         if (to_driver == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           toFi->database, toFi->driver);
@@ -610,28 +607,27 @@ int main(int argc, char *argv[])
 
                 Fi = Vect_get_field(&From, from_field);
                 if (Fi == NULL)
-                    G_fatal_error(_("Database connection not defined for layer <%s>"),
-                                  opt.from_field->answer);
+                    G_fatal_error(
+                        _("Database connection not defined for layer <%s>"),
+                        opt.from_field->answer);
 
                 driver =
                     db_start_driver_open_database(Fi->driver, Fi->database);
                 if (driver == NULL)
-                    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                                  Fi->database, Fi->driver);
+                    G_fatal_error(
+                        _("Unable to open database <%s> by driver <%s>"),
+                        Fi->database, Fi->driver);
 
                 fctype = db_column_Ctype(driver, Fi->table, fcname);
-                tctype =
-                    db_column_Ctype(to_driver, toFi->table,
-                                    opt.to_column->answer);
+                tctype = db_column_Ctype(to_driver, toFi->table,
+                                         opt.to_column->answer);
 
                 if (((tctype == DB_C_TYPE_STRING ||
-                      tctype == DB_C_TYPE_DATETIME)
-                     && (fctype == DB_C_TYPE_INT ||
-                         fctype == DB_C_TYPE_DOUBLE)) ||
-                    ((tctype == DB_C_TYPE_INT || tctype == DB_C_TYPE_DOUBLE)
-                     && (fctype == DB_C_TYPE_STRING ||
-                         fctype == DB_C_TYPE_DATETIME))
-                    ) {
+                      tctype == DB_C_TYPE_DATETIME) &&
+                     (fctype == DB_C_TYPE_INT || fctype == DB_C_TYPE_DOUBLE)) ||
+                    ((tctype == DB_C_TYPE_INT || tctype == DB_C_TYPE_DOUBLE) &&
+                     (fctype == DB_C_TYPE_STRING ||
+                      fctype == DB_C_TYPE_DATETIME))) {
                     G_fatal_error(_("Incompatible column types"));
                 }
                 /* close db connection */
@@ -648,14 +644,14 @@ int main(int argc, char *argv[])
     TPoints = Vect_new_line_struct();
     FCats = Vect_new_cats_struct();
     TCats = Vect_new_cats_struct();
-    lList = Vect_new_boxlist(1);        /* line list */
-    aList = Vect_new_boxlist(1);        /* area list */
+    lList = Vect_new_boxlist(1); /* line list */
+    aList = Vect_new_boxlist(1); /* area list */
 
     /* Allocate space ( may be more than needed (duplicate cats and elements
      * without cats) ) */
     /* Be careful with do_all, it can easily run out of memory */
     anear = nfrom;
-    Near = (NEAR *) G_calloc(nfrom, sizeof(NEAR));
+    Near = (NEAR *)G_calloc(nfrom, sizeof(NEAR));
 
     /* Read all cats from 'from' */
     nfcats = 0;
@@ -678,11 +674,11 @@ int main(int argc, char *argv[])
             Near[nfcats].count = 0;
             nfcats++;
         }
-        G_debug(1, "%d cats loaded from vector (including duplicates)",
-                nfcats);
+        G_debug(1, "%d cats loaded from vector (including duplicates)", nfcats);
 
         if (nfcats == 0)
-            G_fatal_error(_("No categories for 'from' for selected type and layer"));
+            G_fatal_error(
+                _("No categories for 'from' for selected type and layer"));
 
         /* Sort by cats and remove duplicates */
         qsort((void *)Near, nfcats, sizeof(NEAR), cmp_near);
@@ -707,7 +703,7 @@ int main(int argc, char *argv[])
     /* suppress compiler warnings */
     tx = ty = tz = fx = fy = fz = 0;
 
-    count = 0;                  /* count of distances in 'do_all' mode */
+    count = 0; /* count of distances in 'do_all' mode */
     /* Find nearest features for 'from' lines */
     if (nfromlines) {
         G_message(_("Finding nearest features..."));
@@ -742,16 +738,16 @@ int main(int argc, char *argv[])
 
             if (!do_all) {
                 /* find near by 'from' cat */
-                near = (NEAR *) bsearch((void *)&fcat, Near, nfcats,
-                                        sizeof(NEAR), cmp_near);
+                near = (NEAR *)bsearch((void *)&fcat, Near, nfcats,
+                                       sizeof(NEAR), cmp_near);
             }
 
-            dist = PORT_DOUBLE_MAX;     /* distance to nearest 'to' feature */
+            dist = PORT_DOUBLE_MAX; /* distance to nearest 'to' feature */
 
             while (!done) {
                 done = TRUE;
 
-                tfeature = 0;   /* id of nearest 'to' feature */
+                tfeature = 0; /* id of nearest 'to' feature */
 
                 if (!do_all) {
                     /* enlarge search box until we get a hit */
@@ -773,8 +769,7 @@ int main(int argc, char *argv[])
                         box.B = -PORT_DOUBLE_MAX;
 
                         if (ntolines)
-                            Vect_select_lines_by_box(&To, &box, to_type,
-                                                     lList);
+                            Vect_select_lines_by_box(&To, &box, to_type, lList);
                         if (ntoareas)
                             Vect_select_areas_by_box(&To, &box, aList);
 
@@ -799,21 +794,22 @@ int main(int argc, char *argv[])
                 for (i = 0; i < lList->n_values; i++) {
                     ttype = Vect_read_line(&To, TPoints, TCats, lList->id[i]);
 
-                    line2line(FPoints, ftype, TPoints, ttype,
-                              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong,
-                              &tmp_fangle, &tmp_tx, &tmp_ty, &tmp_tz,
-                              &tmp_talong, &tmp_tangle, &tmp_dist, with_z);
+                    line2line(FPoints, ftype, TPoints, ttype, &tmp_fx, &tmp_fy,
+                              &tmp_fz, &tmp_falong, &tmp_fangle, &tmp_tx,
+                              &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
+                              &tmp_dist, with_z);
 
                     if (tmp_dist > max || tmp_dist < min)
-                        continue;       /* not in threshold */
+                        continue; /* not in threshold */
 
                     tmp_tcat = -1;
                     /* TODO: all cats of given field ? */
                     for (j = 0; j < TCats->n_cats; j++) {
                         if (TCats->field[j] == to_field) {
                             if (tmp_tcat >= 0)
-                                G_warning(_("More cats found in to_layer (line=%d)"),
-                                          lList->id[i]);
+                                G_warning(
+                                    _("More cats found in to_layer (line=%d)"),
+                                    lList->id[i]);
                             tmp_tcat = TCats->cat[j];
                         }
                     }
@@ -825,8 +821,7 @@ int main(int argc, char *argv[])
                         if (anear <= count) {
                             anear += 10 + nto / 10;
                             Near =
-                                (NEAR *) G_realloc(Near,
-                                                   anear * sizeof(NEAR));
+                                (NEAR *)G_realloc(Near, anear * sizeof(NEAR));
                             if (!Near)
                                 G_fatal_error(_("Out of memory!"));
                         }
@@ -834,17 +829,17 @@ int main(int argc, char *argv[])
 
                         /* store info about relation */
                         near->from_cat = fcat;
-                        near->to_cat = tmp_tcat;        /* -1 is OK */
+                        near->to_cat = tmp_tcat; /* -1 is OK */
                         near->dist = tmp_dist;
                         near->from_x = tmp_fx;
                         near->from_y = tmp_fy;
                         near->from_z = tmp_fz;
-                        near->from_along = tmp_falong;  /* 0 for points */
+                        near->from_along = tmp_falong; /* 0 for points */
                         near->from_angle = tmp_fangle;
                         near->to_x = tmp_tx;
                         near->to_y = tmp_ty;
                         near->to_z = tmp_tz;
-                        near->to_along = tmp_talong;    /* 0 for points */
+                        near->to_along = tmp_talong; /* 0 for points */
                         near->to_angle = tmp_tangle;
                         near->count++;
                         count++;
@@ -875,14 +870,13 @@ int main(int argc, char *argv[])
                     if (Vect_get_area_centroid(&To, aList->id[i]) == 0)
                         continue;
 
-                    line2area(&To, FPoints, ftype, aList->id[i],
-                              &aList->box[i], &tmp_fx, &tmp_fy, &tmp_fz,
-                              &tmp_falong, &tmp_fangle, &tmp_tx, &tmp_ty,
-                              &tmp_tz, &tmp_talong, &tmp_tangle, &tmp_dist,
-                              with_z);
+                    line2area(&To, FPoints, ftype, aList->id[i], &aList->box[i],
+                              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong,
+                              &tmp_fangle, &tmp_tx, &tmp_ty, &tmp_tz,
+                              &tmp_talong, &tmp_tangle, &tmp_dist, with_z);
 
                     if (tmp_dist > max || tmp_dist < min)
-                        continue;       /* not in threshold */
+                        continue; /* not in threshold */
 
                     /* TODO: more cats of the same field */
                     Vect_get_area_cats(&To, aList->id[i], TCats);
@@ -892,8 +886,9 @@ int main(int argc, char *argv[])
                     for (j = 0; j < TCats->n_cats; j++) {
                         if (TCats->field[j] == to_field) {
                             if (tmp_tcat >= 0)
-                                G_warning(_("More cats found in to_layer (area=%d)"),
-                                          aList->id[i]);
+                                G_warning(
+                                    _("More cats found in to_layer (area=%d)"),
+                                    aList->id[i]);
                             tmp_tcat = TCats->cat[j];
                         }
                     }
@@ -905,8 +900,7 @@ int main(int argc, char *argv[])
                         if (anear <= count) {
                             anear += 10 + nto / 10;
                             Near =
-                                (NEAR *) G_realloc(Near,
-                                                   anear * sizeof(NEAR));
+                                (NEAR *)G_realloc(Near, anear * sizeof(NEAR));
                             if (!Near)
                                 G_fatal_error(_("Out of memory!"));
                         }
@@ -914,17 +908,17 @@ int main(int argc, char *argv[])
 
                         /* store info about relation */
                         near->from_cat = fcat;
-                        near->to_cat = tmp_tcat;        /* -1 is OK */
+                        near->to_cat = tmp_tcat; /* -1 is OK */
                         near->dist = tmp_dist;
                         near->from_x = tmp_fx;
                         near->from_y = tmp_fy;
                         near->from_z = tmp_fz;
-                        near->from_along = tmp_falong;  /* 0 for points */
+                        near->from_along = tmp_falong; /* 0 for points */
                         near->from_angle = tmp_fangle;
                         near->to_x = tmp_tx;
                         near->to_y = tmp_ty;
                         near->to_z = tmp_tz;
-                        near->to_along = tmp_talong;    /* 0 for points */
+                        near->to_along = tmp_talong; /* 0 for points */
                         near->to_angle = tmp_tangle;
                         near->count++;
                         count++;
@@ -979,23 +973,23 @@ int main(int argc, char *argv[])
                             near->from_cat, near->count);
                     /* store info about relation */
                     if (near->count == 0 || near->dist > dist) {
-                        near->to_cat = tcat;    /* -1 is OK */
+                        near->to_cat = tcat; /* -1 is OK */
                         near->dist = dist;
                         near->from_x = fx;
                         near->from_y = fy;
                         near->from_z = fz;
-                        near->from_along = falong;      /* 0 for points */
+                        near->from_along = falong; /* 0 for points */
                         near->from_angle = fangle;
                         near->to_x = tx;
                         near->to_y = ty;
                         near->to_z = tz;
-                        near->to_along = talong;        /* 0 for points */
+                        near->to_along = talong; /* 0 for points */
                         near->to_angle = tangle;
                     }
                     near->count++;
                 }
-            }                   /* done searching 'to' */
-        }                       /* next from feature */
+            } /* done searching 'to' */
+        }     /* next from feature */
     }
 
     /* Find nearest features for 'from' areas */
@@ -1033,16 +1027,16 @@ int main(int argc, char *argv[])
 
             if (!do_all) {
                 /* find near by 'from' cat */
-                near = (NEAR *) bsearch((void *)&fcat, Near, nfcats,
-                                        sizeof(NEAR), cmp_near);
+                near = (NEAR *)bsearch((void *)&fcat, Near, nfcats,
+                                       sizeof(NEAR), cmp_near);
             }
 
-            dist = PORT_DOUBLE_MAX;     /* distance to nearest 'to' feature */
+            dist = PORT_DOUBLE_MAX; /* distance to nearest 'to' feature */
 
             while (!done) {
                 done = TRUE;
 
-                tfeature = 0;   /* id of nearest 'to' feature */
+                tfeature = 0; /* id of nearest 'to' feature */
 
                 if (!do_all) {
                     /* enlarge search box until we get a hit */
@@ -1064,8 +1058,7 @@ int main(int argc, char *argv[])
                         box.B = -PORT_DOUBLE_MAX;
 
                         if (ntolines)
-                            Vect_select_lines_by_box(&To, &box, to_type,
-                                                     lList);
+                            Vect_select_lines_by_box(&To, &box, to_type, lList);
                         if (ntoareas)
                             Vect_select_areas_by_box(&To, &box, aList);
 
@@ -1093,21 +1086,22 @@ int main(int argc, char *argv[])
                     ttype = Vect_read_line(&To, TPoints, TCats, lList->id[i]);
 
                     /* area to line */
-                    line2area(&From, TPoints, ttype, area, &fbox,
-                              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong,
-                              &tmp_tangle, &tmp_fx, &tmp_fy, &tmp_fz,
-                              &tmp_falong, &tmp_fangle, &tmp_dist, with_z);
+                    line2area(&From, TPoints, ttype, area, &fbox, &tmp_tx,
+                              &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
+                              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong,
+                              &tmp_fangle, &tmp_dist, with_z);
 
                     if (tmp_dist > max || tmp_dist < min)
-                        continue;       /* not in threshold */
+                        continue; /* not in threshold */
 
                     tmp_tcat = -1;
                     /* TODO: all cats of given field ? */
                     for (j = 0; j < TCats->n_cats; j++) {
                         if (TCats->field[j] == to_field) {
                             if (tmp_tcat >= 0)
-                                G_warning(_("More cats found in to_layer (line=%d)"),
-                                          lList->id[i]);
+                                G_warning(
+                                    _("More cats found in to_layer (line=%d)"),
+                                    lList->id[i]);
                             tmp_tcat = TCats->cat[j];
                         }
                     }
@@ -1119,8 +1113,7 @@ int main(int argc, char *argv[])
                         if (anear <= count) {
                             anear += 10 + nto / 10;
                             Near =
-                                (NEAR *) G_realloc(Near,
-                                                   anear * sizeof(NEAR));
+                                (NEAR *)G_realloc(Near, anear * sizeof(NEAR));
                             if (!Near)
                                 G_fatal_error(_("Out of memory!"));
                         }
@@ -1128,17 +1121,17 @@ int main(int argc, char *argv[])
 
                         /* store info about relation */
                         near->from_cat = fcat;
-                        near->to_cat = tmp_tcat;        /* -1 is OK */
+                        near->to_cat = tmp_tcat; /* -1 is OK */
                         near->dist = tmp_dist;
                         near->from_x = tmp_fx;
                         near->from_y = tmp_fy;
                         near->from_z = tmp_fz;
-                        near->from_along = tmp_falong;  /* 0 for points */
+                        near->from_along = tmp_falong; /* 0 for points */
                         near->from_angle = tmp_fangle;
                         near->to_x = tmp_tx;
                         near->to_y = tmp_ty;
                         near->to_z = tmp_tz;
-                        near->to_along = tmp_talong;    /* 0 for points */
+                        near->to_along = tmp_talong; /* 0 for points */
                         near->to_angle = tmp_tangle;
                         near->count++;
                         count++;
@@ -1181,11 +1174,10 @@ int main(int argc, char *argv[])
 
                     /* Find the distance of the outer ring of 'to' area
                      * to 'from' area */
-                    poly = line2area(&From, TPoints, ttype, area, &fbox,
-                                     &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong,
-                                     &tmp_tangle, &tmp_fx, &tmp_fy, &tmp_fz,
-                                     &tmp_falong, &tmp_fangle, &tmp_dist,
-                                     with_z);
+                    poly = line2area(
+                        &From, TPoints, ttype, area, &fbox, &tmp_tx, &tmp_ty,
+                        &tmp_tz, &tmp_talong, &tmp_tangle, &tmp_fx, &tmp_fy,
+                        &tmp_fz, &tmp_falong, &tmp_fangle, &tmp_dist, with_z);
 
                     if (poly == 3) {
                         /* 'to' outer ring is outside 'from' area,
@@ -1196,10 +1188,8 @@ int main(int argc, char *argv[])
                             if (FPoints->n_points == 0)
                                 Vect_get_area_points(&From, area, FPoints);
                             for (j = 0; j < FPoints->n_points; j++) {
-                                poly =
-                                    Vect_point_in_poly(FPoints->x[j],
-                                                       FPoints->y[j],
-                                                       TPoints);
+                                poly = Vect_point_in_poly(
+                                    FPoints->x[j], FPoints->y[j], TPoints);
                                 if (poly)
                                     break;
                             }
@@ -1209,13 +1199,11 @@ int main(int argc, char *argv[])
                              * get distance to 'to' area */
                             if (FPoints->n_points == 0)
                                 Vect_get_area_points(&From, area, FPoints);
-                            poly =
-                                line2area(&To, FPoints, ttype, tarea,
-                                          &aList->box[i], &tmp_fx, &tmp_fy,
-                                          &tmp_fz, &tmp_falong, &tmp_fangle,
-                                          &tmp_tx, &tmp_ty, &tmp_tz,
-                                          &tmp_talong, &tmp_tangle, &tmp_dist,
-                                          with_z);
+                            poly = line2area(
+                                &To, FPoints, ttype, tarea, &aList->box[i],
+                                &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong,
+                                &tmp_fangle, &tmp_tx, &tmp_ty, &tmp_tz,
+                                &tmp_talong, &tmp_tangle, &tmp_dist, with_z);
 
                             /* inside isle ? */
                             poly = poly == 2;
@@ -1236,10 +1224,9 @@ int main(int argc, char *argv[])
 
                                 line2area(&From, TPoints, ttype, area, &fbox,
                                           &tmp2_tx, &tmp2_ty, &tmp2_tz,
-                                          &tmp2_talong, &tmp2_tangle,
-                                          &tmp2_fx, &tmp2_fy, &tmp2_fz,
-                                          &tmp2_falong, &tmp2_fangle,
-                                          &tmp2_dist, with_z);
+                                          &tmp2_talong, &tmp2_tangle, &tmp2_fx,
+                                          &tmp2_fy, &tmp2_fz, &tmp2_falong,
+                                          &tmp2_fangle, &tmp2_dist, with_z);
 
                                 if (tmp2_dist < tmp_dist) {
                                     tmp_dist = tmp2_dist;
@@ -1259,15 +1246,16 @@ int main(int argc, char *argv[])
                     }
 
                     if (tmp_dist > max || tmp_dist < min)
-                        continue;       /* not in threshold */
+                        continue; /* not in threshold */
                     Vect_get_area_cats(&To, tarea, TCats);
                     tmp_tcat = -1;
                     /* TODO: all cats of given field ? */
                     for (j = 0; j < TCats->n_cats; j++) {
                         if (TCats->field[j] == to_field) {
                             if (tmp_tcat >= 0)
-                                G_warning(_("More cats found in to_layer (area=%d)"),
-                                          tarea);
+                                G_warning(
+                                    _("More cats found in to_layer (area=%d)"),
+                                    tarea);
                             tmp_tcat = TCats->cat[j];
                         }
                     }
@@ -1279,24 +1267,23 @@ int main(int argc, char *argv[])
                         if (anear <= count) {
                             anear += 10 + nfrom / 10;
                             Near =
-                                (NEAR *) G_realloc(Near,
-                                                   anear * sizeof(NEAR));
+                                (NEAR *)G_realloc(Near, anear * sizeof(NEAR));
                         }
                         near = &(Near[count]);
 
                         /* store info about relation */
                         near->from_cat = fcat;
-                        near->to_cat = tmp_tcat;        /* -1 is OK */
+                        near->to_cat = tmp_tcat; /* -1 is OK */
                         near->dist = tmp_dist;
                         near->from_x = tmp_fx;
                         near->from_y = tmp_fy;
                         near->from_z = tmp_fz;
-                        near->from_along = tmp_falong;  /* 0 for points */
+                        near->from_along = tmp_falong; /* 0 for points */
                         near->from_angle = tmp_fangle;
                         near->to_x = tmp_tx;
                         near->to_y = tmp_ty;
                         near->to_z = tmp_tz;
-                        near->to_along = tmp_talong;    /* 0 for points */
+                        near->to_along = tmp_talong; /* 0 for points */
                         near->to_angle = tmp_tangle;
                         near->count++;
                         count++;
@@ -1350,7 +1337,7 @@ int main(int argc, char *argv[])
 
                     /* store info about relation */
                     if (near->count == 0 || near->dist > dist) {
-                        near->to_cat = tcat;    /* -1 is OK */
+                        near->to_cat = tcat; /* -1 is OK */
                         near->dist = dist;
                         near->from_x = fx;
                         near->from_y = fy;
@@ -1365,8 +1352,8 @@ int main(int argc, char *argv[])
                     }
                     near->count++;
                 }
-            }                   /* done */
-        }                       /* next feature */
+            } /* done */
+        }     /* next feature */
     }
 
     G_debug(3, "count = %d", count);
@@ -1375,8 +1362,7 @@ int main(int argc, char *argv[])
     if (opt.to_column->answer) {
         int nrec;
 
-        to_driver =
-            db_start_driver_open_database(toFi->driver, toFi->database);
+        to_driver = db_start_driver_open_database(toFi->driver, toFi->database);
         if (to_driver == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           toFi->database, toFi->driver);
@@ -1387,7 +1373,8 @@ int main(int argc, char *argv[])
         G_debug(3, "selected values = %d", nrec);
 
         if (cvarr.ctype == DB_C_TYPE_DATETIME) {
-            G_warning(_("DATETIME type not yet supported, no attributes will be uploaded"));
+            G_warning(_("DATETIME type not yet supported, no attributes will "
+                        "be uploaded"));
         }
         db_close_database_shutdown_driver(to_driver);
         to_driver = NULL;
@@ -1410,7 +1397,7 @@ int main(int argc, char *argv[])
         update_notfound = ncatexist = 0;
 
     /* Update database / print to stdout / create output map */
-    if (print) {                /* print header */
+    if (print) { /* print header */
         fprintf(stdout, "from_cat");
         if (do_all)
             fprintf(stdout, "%sto_cat", sep);
@@ -1421,7 +1408,7 @@ int main(int argc, char *argv[])
         }
         fprintf(stdout, "\n");
     }
-    else if (create_table) {    /* create new table */
+    else if (create_table) { /* create new table */
         db_set_string(&stmt, "create table ");
         db_append_string(&stmt, opt.table->answer);
         if (Outp)
@@ -1464,11 +1451,9 @@ int main(int argc, char *argv[])
                               DB_GROUP | DB_PUBLIC) != DB_OK)
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           opt.table->answer);
-
     }
-    else if (update_table) {    /* read existing cats from table */
-        ncatexist =
-            db_select_int(driver, Fi->table, Fi->key, NULL, &catexist);
+    else if (update_table) { /* read existing cats from table */
+        ncatexist = db_select_int(driver, Fi->table, Fi->key, NULL, &catexist);
         G_debug(1, "%d cats selected from the table", ncatexist);
     }
 
@@ -1482,13 +1467,13 @@ int main(int argc, char *argv[])
     if (driver)
         db_begin_transaction(driver);
 
-    if (!print)                 /* no printing */
+    if (!print) /* no printing */
         G_message("Update vector attributes...");
 
     for (i = 0; i < count; i++) {
         dbCatVal *catval = 0;
 
-        if (!print)             /* no printing */
+        if (!print) /* no printing */
             G_percent(i, count, 1);
 
         /* Write line connecting nearest points */
@@ -1507,7 +1492,6 @@ int main(int argc, char *argv[])
                 Vect_append_point(FPoints, Near[i].to_x, Near[i].to_y, 0);
                 Vect_write_line(Outp, GV_LINE, FPoints, FCats);
             }
-
         }
 
         if (Near[i].count > 1)
@@ -1519,7 +1503,7 @@ int main(int argc, char *argv[])
             db_CatValArray_get_value(&cvarr, Near[i].to_cat, &catval);
         }
 
-        if (print) {            /* print only */
+        if (print) { /* print only */
             /*
                input and output is the same &&
                calculate distances &&
@@ -1538,8 +1522,7 @@ int main(int argc, char *argv[])
                 if (i % nfrom == 0) {
                     fprintf(stdout, "%d", Near[i].from_cat);
                     for (j = 0; j < nfrom; j++) {
-                        print_upload(Near, Upload, i + j, &cvarr, catval,
-                                     sep);
+                        print_upload(Near, Upload, i + j, &cvarr, catval, sep);
                     }
                     fprintf(stdout, "\n");
                 }
@@ -1552,13 +1535,13 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "\n");
             }
         }
-        else if (create_table) {        /* insert new record */
-            if (Near[i].count == 0)     /* no nearest found */
+        else if (create_table) {    /* insert new record */
+            if (Near[i].count == 0) /* no nearest found */
                 continue;
 
             if (!Outp)
-                sprintf(buf1, "insert into %s values ( %d ",
-                        opt.table->answer, Near[i].from_cat);
+                sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
+                        Near[i].from_cat);
             else
                 sprintf(buf1, "insert into %s values ( %d, %d ",
                         opt.table->answer, i, Near[i].from_cat);
@@ -1609,8 +1592,7 @@ int main(int argc, char *argv[])
                             break;
 
                         case DB_C_TYPE_STRING:
-                            db_set_string(&dbstr,
-                                          db_get_string(catval->val.s));
+                            db_set_string(&dbstr, db_get_string(catval->val.s));
                             db_double_quote_string(&dbstr);
                             sprintf(buf2, " '%s'", db_get_string(&dbstr));
                             break;
@@ -1638,14 +1620,13 @@ int main(int argc, char *argv[])
                 update_err++;
             }
         }
-        else if (update_table) {        /* update table */
+        else if (update_table) { /* update table */
             int do_update = 0;
 
             /* check if exists in table */
-            cex =
-                (int *)bsearch((void *)&(Near[i].from_cat), catexist,
-                               ncatexist, sizeof(int), cmp_exist);
-            if (cex == NULL) {  /* cat does not exist in DB */
+            cex = (int *)bsearch((void *)&(Near[i].from_cat), catexist,
+                                 ncatexist, sizeof(int), cmp_exist);
+            if (cex == NULL) { /* cat does not exist in DB */
                 update_notexist++;
                 continue;
             }
@@ -1662,7 +1643,7 @@ int main(int argc, char *argv[])
                 sprintf(buf2, " %s =", Upload[j].column);
                 db_append_string(&stmt, buf2);
 
-                if (Near[i].count == 0) {       /* no nearest found */
+                if (Near[i].count == 0) { /* no nearest found */
                     /* really clear existing records if no nearest found ? */
                     db_append_string(&stmt, " null");
                 }
@@ -1752,8 +1733,9 @@ int main(int argc, char *argv[])
 
     /* print stats */
     if (update_dupl > 0)
-        G_message(_("%d categories with more than 1 feature in vector map <%s>"),
-                  update_dupl, opt.from->answer);
+        G_message(
+            _("%d categories with more than 1 feature in vector map <%s>"),
+            update_dupl, opt.from->answer);
     if (update_notfound > 0)
         G_message(_("%d categories - no nearest feature found"),
                   update_notfound);
@@ -1771,16 +1753,17 @@ int main(int argc, char *argv[])
         }
         else {
             if (nfcats > 0)
-                G_verbose_message(_("%d categories read from the map"),
-                                  nfcats);
+                G_verbose_message(_("%d categories read from the map"), nfcats);
             if (ncatexist > 0)
                 G_verbose_message(_("%d categories exist in the table"),
                                   ncatexist);
             if (update_exist > 0)
-                G_verbose_message(_("%d categories read from the map exist in the table"),
-                                  update_exist);
+                G_verbose_message(
+                    _("%d categories read from the map exist in the table"),
+                    update_exist);
             if (update_notexist > 0)
-                G_verbose_message(_("%d categories read from the map don't exist in the table"),
+                G_verbose_message(_("%d categories read from the map don't "
+                                    "exist in the table"),
                                   update_notexist);
             if (update_err > 0)
                 G_warning(_("%d update errors"), update_err);
@@ -1790,7 +1773,6 @@ int main(int argc, char *argv[])
             G_free(catexist);
             Vect_set_db_updated(&From);
         }
-
     }
 
     Vect_close(&From);
@@ -1800,8 +1782,7 @@ int main(int argc, char *argv[])
 
             db_get_connection(&connection);
             Vect_map_add_dblink(Outp, 1, NULL, opt.table->answer, "cat",
-                                connection.databaseName,
-                                connection.driverName);
+                                connection.databaseName, connection.driverName);
         }
         Vect_build(Outp);
         Vect_close(Outp);

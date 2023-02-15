@@ -26,7 +26,7 @@ DCELL **read_cell(const char *name)
     return idx;
 }
 
-void free_cell(DCELL ** idx)
+void free_cell(DCELL **idx)
 {
     G_free(idx[0]);
     G_free(idx);

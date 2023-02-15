@@ -1,10 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       t.connect
  * AUTHOR(S):    Soeren Gebbert, based on db.connect
  *
- * PURPOSE:      Prints/sets general temporal GIS database connection for current mapset.
+ * PURPOSE:      Prints/sets general temporal GIS database connection for
+ *               current mapset.
  * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("temporal"));
     G_add_keyword(_("settings"));
     G_add_keyword(_("metadata"));
-    module->description =
-        _("Prints/sets general temporal GIS database connection for current mapset.");
+    module->description = _("Prints/sets general temporal GIS database "
+                            "connection for current mapset.");
 
     print = G_define_flag();
     print->key = 'p';
@@ -82,8 +82,7 @@ int main(int argc, char *argv[])
             }
             else
                 G_fatal_error(_("Temporal GIS database connection not defined. "
-                               "Run t.connect."));
-
+                                "Run t.connect."));
         }
         else {
             /* get and print connection */
@@ -95,7 +94,7 @@ int main(int argc, char *argv[])
             }
             else
                 G_fatal_error(_("Temporal GIS database connection not defined. "
-                               "Run t.connect."));
+                                "Run t.connect."));
         }
 
         exit(EXIT_SUCCESS);
@@ -127,14 +126,13 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-
     if (def->answer) {
         tgis_set_default_connection();
         tgis_get_connection(&conn);
 
         G_important_message(_("Default driver / database set to:\n"
-                              "driver: %s\ndatabase: %s"), conn.driverName,
-                            conn.databaseName);
+                              "driver: %s\ndatabase: %s"),
+                            conn.driverName, conn.databaseName);
         exit(EXIT_SUCCESS);
     }
 

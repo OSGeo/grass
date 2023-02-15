@@ -4,7 +4,6 @@
 #include "signature.h"
 #include "parms.h"
 
-
 int write_sigfile(struct parms *parms, struct Signature *S)
 {
     FILE *fd;

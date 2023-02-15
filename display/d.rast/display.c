@@ -9,12 +9,10 @@
 #include "mask.h"
 #include "local_proto.h"
 
+static int cell_draw(const char *, struct Colors *, int, int, RASTER_MAP_TYPE);
 
-static int cell_draw(const char *, struct Colors *, int, int,
-                     RASTER_MAP_TYPE);
-
-int display(const char *name,
-            int overlay, char *bg, RASTER_MAP_TYPE data_type, int invert)
+int display(const char *name, int overlay, char *bg, RASTER_MAP_TYPE data_type,
+            int invert)
 {
     struct Colors colors;
     int r, g, b;
@@ -39,9 +37,8 @@ int display(const char *name,
     return 0;
 }
 
-static int cell_draw(const char *name,
-                     struct Colors *colors,
-                     int overlay, int invert, RASTER_MAP_TYPE data_type)
+static int cell_draw(const char *name, struct Colors *colors, int overlay,
+                     int invert, RASTER_MAP_TYPE data_type)
 {
     int cellfile;
     void *xarray;
@@ -72,7 +69,6 @@ static int cell_draw(const char *name,
 
         /* Draw the cell row, and get the next row number */
         cur_A_row = D_draw_raster(cur_A_row, xarray, colors, data_type);
-
     }
     D_raster_draw_end();
 
@@ -84,13 +80,13 @@ static int cell_draw(const char *name,
     return (0);
 }
 
-int mask_raster_array(void *xarray,
-                      int ncols, int invert, RASTER_MAP_TYPE data_type)
+int mask_raster_array(void *xarray, int ncols, int invert,
+                      RASTER_MAP_TYPE data_type)
 {
     if (data_type == CELL_TYPE)
-        mask_cell_array((CELL *) xarray, ncols, &mask, invert);
+        mask_cell_array((CELL *)xarray, ncols, &mask, invert);
     else if (data_type == DCELL_TYPE)
-        mask_d_cell_array((DCELL *) xarray, ncols, &d_mask, invert);
+        mask_d_cell_array((DCELL *)xarray, ncols, &d_mask, invert);
 
     return 0;
 }

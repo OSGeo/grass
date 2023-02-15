@@ -114,7 +114,7 @@ void G_free_key_value(struct Key_Value *kv)
     }
     G_free(kv->key);
     G_free(kv->value);
-    kv->nitems = 0;             /* just for safe measure */
+    kv->nitems = 0; /* just for safe measure */
     kv->nalloc = 0;
     G_free(kv);
 }

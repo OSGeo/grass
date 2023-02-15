@@ -1,7 +1,7 @@
 /* Broadband albedo Aster
- * Salleh and Chan, 2014. 
- * Land Surface Albedo Determination: 
- * Remote Sensing and Statistical Validation. 
+ * Salleh and Chan, 2014.
+ * Land Surface Albedo Determination:
+ * Remote Sensing and Statistical Validation.
  * in proceedings of FIG 2014.
  * https://www.fig.net/resources/proceedings/fig_proceedings/fig2014/papers/ts05g/TS05G_salleh_chan_6910.pdf
  * Input: Ref1, Ref3

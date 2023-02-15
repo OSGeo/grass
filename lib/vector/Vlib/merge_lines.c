@@ -7,8 +7,8 @@
 
    (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -62,15 +62,16 @@ static int compare_cats(struct line_cats *ACats, struct line_cats *BCats)
    Merges lines specified by type in vector map.
    Useful for generalization and smoothing.
    Adjacent boundaries are merged as long as topology is maintained.
-   Adjacent lines are merged as long as there are exactly two different 
+   Adjacent lines are merged as long as there are exactly two different
    lines with identical categories connected at a given node.
    Zero-length lines need to be removed first.
    GV_BUILD_BASE as topo build level is sufficient, areas need not be built.
 
-   \param Map input vector map 
+   \param Map input vector map
    \param type feature type
-   \param[out] Err vector map where merged lines/boundaries will be written or NULL
-   \param new_lines  pointer to where number of new lines/boundaries is stored or NULL
+   \param[out] Err vector map where merged lines/boundaries will be written or
+   NULL \param new_lines  pointer to where number of new lines/boundaries is
+   stored or NULL
 
    \return number of merged lines/boundaries
  */
@@ -90,8 +91,8 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
     type &= GV_LINES;
 
     if (!(type & GV_LINES)) {
-        G_warning
-            ("Merging is done with lines or boundaries only, not with other types");
+        G_warning("Merging is done with lines or boundaries only, not with "
+                  "other types");
         return 0;
     }
 
@@ -121,10 +122,12 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
         /* special cases:
          *  - loop back to start boundary via several other boundaries
          *  - one boundary forming closed loop
-         *  - node with 3 entries but only 2 boundaries, one of them connecting twice,
-         *    the other one must then be topologically incorrect (a bridge) in case of boundary */
+         *  - node with 3 entries but only 2 boundaries, one of them connecting
+         * twice, the other one must then be topologically incorrect (a bridge)
+         * in case of boundary */
 
-        /* go backward as long as there is only one other line/boundary at the current node */
+        /* go backward as long as there is only one other line/boundary at the
+         * current node */
         G_debug(3, "go backward");
         Vect_get_line_nodes(Map, line, &next_node, NULL);
 
@@ -163,7 +166,8 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
                 break;
         }
 
-        /* go forward as long as there is only one other line/boundary at the current node */
+        /* go forward as long as there is only one other line/boundary at the
+         * current node */
         G_debug(3, "go forward");
 
         /* reverse direction */

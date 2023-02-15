@@ -33,9 +33,8 @@
 
 #include "iclass_local_proto.h"
 
-
-#define extrema(x,y,z) (((x<y)&&(z<y))||((x>y)&&(z>y)))
-#define non_extrema(x,y,z) (((x<y)&&(y<z))||((x>y)&&(y>z)))
+#define extrema(x, y, z)     (((x < y) && (z < y)) || ((x > y) && (z > y)))
+#define non_extrema(x, y, z) (((x < y) && (y < z)) || ((x > y) && (y > z)))
 
 /*!
    \brief Creates perimeters from vector areas of given category.
@@ -50,7 +49,7 @@
    \return -1 on error
  */
 int vector2perimeters(struct Map_info *Map, const char *layer_name,
-                      int category, IClass_perimeter_list * perimeters,
+                      int category, IClass_perimeter_list *perimeters,
                       struct Cell_head *band_region)
 {
     struct line_pnts *points;
@@ -87,9 +86,9 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 
     perimeters->nperimeters = nareas_cat;
     perimeters->perimeters =
-        (IClass_perimeter *) G_calloc(nareas_cat, sizeof(IClass_perimeter));
+        (IClass_perimeter *)G_calloc(nareas_cat, sizeof(IClass_perimeter));
 
-    j = 0;                      /* area with cat */
+    j = 0; /* area with cat */
     for (i = 1; i <= nareas; i++) {
         if (!Vect_area_alive(Map, i))
             continue;
@@ -100,7 +99,7 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
         else if (cat == category) {
             j++;
 
-            points = Vect_new_line_struct();    /* Vect_destroy_line_struct */
+            points = Vect_new_line_struct(); /* Vect_destroy_line_struct */
             ret = Vect_get_area_points(Map, i, points);
 
             if (ret <= 0) {
@@ -109,8 +108,8 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
                 G_warning(_("Get area %d failed"), i);
                 return -1;
             }
-            if (make_perimeter
-                (points, &perimeters->perimeters[j - 1], band_region) <= 0) {
+            if (make_perimeter(points, &perimeters->perimeters[j - 1],
+                               band_region) <= 0) {
                 Vect_destroy_line_struct(points);
                 free_perimeters(perimeters);
                 G_warning(_("Perimeter computation failed"));
@@ -118,7 +117,6 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
             }
             Vect_destroy_line_struct(points);
         }
-
     }
 
     /* Vect_close(&Map); */
@@ -133,7 +131,7 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 
    \param perimeters list of perimeters
  */
-void free_perimeters(IClass_perimeter_list * perimeters)
+void free_perimeters(IClass_perimeter_list *perimeters)
 {
     int i;
 
@@ -155,7 +153,7 @@ void free_perimeters(IClass_perimeter_list * perimeters)
    \return 1 on success
    \return 0 on error
  */
-int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
+int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
                    struct Cell_head *band_region)
 {
     IClass_point *tmp_points;
@@ -166,22 +164,23 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
 
     int count, vertex_count;
 
-    int np;                     /* perimeter estimate */
+    int np; /* perimeter estimate */
 
     G_debug(5, "iclass_make_perimeter()");
     count = points->n_points;
 
-    tmp_points = (IClass_point *) G_calloc(count, sizeof(IClass_point));        /* TODO test */
+    tmp_points =
+        (IClass_point *)G_calloc(count, sizeof(IClass_point)); /* TODO test */
 
     for (i = 0; i < count; i++) {
-        G_debug(5, "iclass_make_perimeter(): points: x: %f y: %f",
-                points->x[i], points->y[i]);
+        G_debug(5, "iclass_make_perimeter(): points: x: %f y: %f", points->x[i],
+                points->y[i]);
 
-        /* This functions are no longer used because of the different behavior 
-           of Rast_easting_to_col depending whether location is LL or not. 
-           It makes problem  in  interactive scatter plot tool, 
-           which defines its own coordinates systems for the plots and 
-           therefore it requires the function to work always in same way 
+        /* This functions are no longer used because of the different behavior
+           of Rast_easting_to_col depending whether location is LL or not.
+           It makes problem  in  interactive scatter plot tool,
+           which defines its own coordinates systems for the plots and
+           therefore it requires the function to work always in same way
            without hidden dependency on location type.
 
            tmp_points[i].y = Rast_northing_to_row(points->y[i], band_region);
@@ -214,10 +213,11 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
     /* copy tmp to vertex list collapsing adjacent horizontal edges */
 
     /* vertex_count <= count, size of vertex_points is count */
-    vertex_points = (IClass_point *) G_calloc(count, sizeof(IClass_point));     /* TODO test */
+    vertex_points =
+        (IClass_point *)G_calloc(count, sizeof(IClass_point)); /* TODO test */
     skip = 0;
     vertex_count = 0;
-    i = first;                  /* stmt not necssary */
+    i = first; /* stmt not necssary */
 
     do {
         if (!skip) {
@@ -234,8 +234,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
 
         skip = ((tmp_points[prev].y == tmp_points[i].y) &&
                 (tmp_points[next].y == tmp_points[i].y));
-    }
-    while (i != first);
+    } while (i != first);
 
     G_free(tmp_points);
 
@@ -249,7 +248,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
 
     /* allocate perimeter list */
 
-    perimeter->points = (IClass_point *) G_calloc(np, sizeof(IClass_point));
+    perimeter->points = (IClass_point *)G_calloc(np, sizeof(IClass_point));
     if (!perimeter->points) {
         G_free(vertex_points);
         G_warning(_("Outlined area is too large."));
@@ -261,9 +260,8 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
     perimeter->npoints = 0;
     prev = vertex_count - 1;
     for (i = 0; i < vertex_count; prev = i++) {
-        edge2perimeter(perimeter, vertex_points[prev].x,
-                       vertex_points[prev].y, vertex_points[i].x,
-                       vertex_points[i].y);
+        edge2perimeter(perimeter, vertex_points[prev].x, vertex_points[prev].y,
+                       vertex_points[i].x, vertex_points[i].y);
     }
 
     /*
@@ -283,21 +281,18 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
         if (next >= vertex_count)
             next = 0;
 
-        if (extrema
-            (vertex_points[prev].y, vertex_points[i].y,
-             vertex_points[next].y))
+        if (extrema(vertex_points[prev].y, vertex_points[i].y,
+                    vertex_points[next].y))
             skip = 1;
-        else if (non_extrema
-                 (vertex_points[prev].y, vertex_points[i].y,
-                  vertex_points[next].y))
+        else if (non_extrema(vertex_points[prev].y, vertex_points[i].y,
+                             vertex_points[next].y))
             skip = 0;
         else {
             skip = 0;
             if (++next >= vertex_count)
                 next = 0;
-            if (extrema
-                (vertex_points[prev].y, vertex_points[i].y,
-                 vertex_points[next].y))
+            if (extrema(vertex_points[prev].y, vertex_points[i].y,
+                        vertex_points[next].y))
                 skip = 1;
         }
 
@@ -307,17 +302,15 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
 
         i = next;
         prev = i - 1;
-    }
-    while (i != 0);
+    } while (i != 0);
 
     G_free(vertex_points);
 
     /* sort the edge points by row and then by col */
-    qsort(perimeter->points, (size_t)perimeter->npoints,
-          sizeof(IClass_point), edge_order);
+    qsort(perimeter->points, (size_t)perimeter->npoints, sizeof(IClass_point),
+          edge_order);
 
     return 1;
-
 }
 
 /*!
@@ -333,8 +326,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
    \return 1 on success
    \return 0 on error
  */
-int edge2perimeter(IClass_perimeter * perimeter, int x0, int y0, int x1,
-                   int y1)
+int edge2perimeter(IClass_perimeter *perimeter, int x0, int y0, int x1, int y1)
 {
     float m;
 
@@ -370,7 +362,7 @@ int edge2perimeter(IClass_perimeter * perimeter, int x0, int y0, int x1,
    \param perimeter perimeter
    \param x,y point row and cell
  */
-void perimeter_add_point(IClass_perimeter * perimeter, int x, int y)
+void perimeter_add_point(IClass_perimeter *perimeter, int x, int y)
 {
     int n;
 

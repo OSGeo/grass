@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cost
@@ -8,16 +7,15 @@
  *               Pierre de Mouveaux <pmx audiovu com>
  *               Eric G. Miller <egm2 jps net>
  *
- *               Updated for calculation errors and directional surface generation
- *                 Colin Nielsen <colin.nielsen gmail com>
+ *               Updated for calculation errors and directional surface
+ *               generation Colin Nielsen <colin.nielsen gmail com>
  *               Use min heap instead of btree (faster, less memory)
- *               multiple directions with bitmask encoding
- *               avoid circular paths
- *                 Markus Metz
+ *               multiple directions with bitmask encoding avoid circular
+ *               paths Markus Metz
  *
- * PURPOSE:      Outputs a raster map layer showing the cumulative cost 
- *               of moving between different geographic locations on an 
- *               input raster map layer whose cell category values 
+ * PURPOSE:      Outputs a raster map layer showing the cumulative cost
+ *               of moving between different geographic locations on an
+ *               input raster map layer whose cell category values
  *               represent cost.
  *
  * COPYRIGHT:    (C) 2006-2015 by the GRASS Development Team
@@ -48,10 +46,10 @@
 /* BUG 2005 - Markus Metz
  * r.cost hangs with negative costs.
  * Non-negative costs are a requirement for Dijkstra search
- * 
+ *
  * 08 april 2000 - Pierre de Mouveaux. pmx@audiovu.com
  * Updated to use the Grass 5.0 floating point raster cell format.
- * 
+ *
  * 12 dec 2001 - Eric G. Miller <egm2@jps.net>
  * Try to fix some file searching bugs, and give better error
  * if "output" doesn't exist, but is expected (this is bad design).
@@ -59,7 +57,8 @@
 
 /* TODO
  * re-organize and clean up code for better readability
- * compartmentalize code, start with putting Dijkstra search into a separate function
+ * compartmentalize code, start with putting Dijkstra search into a separate
+ * function
  */
 
 #include <stdlib.h>
@@ -78,12 +77,11 @@
 #include "stash.h"
 #include "flag.h"
 
-#define SEGCOLSIZE 	64
+#define SEGCOLSIZE 64
 
 struct Cell_head window;
 
-struct rc
-{
+struct rc {
     int r;
     int c;
 };
@@ -140,17 +138,16 @@ int main(int argc, char *argv[])
     struct cost *pres_cell;
     struct start_pt *head_start_pt = NULL;
     struct start_pt *next_start_pt;
-    struct cc
-    {
+    struct cc {
         double cost_in, cost_out, nearest;
     } costs;
     FLAG *visited;
 
     void *ptr2;
-    RASTER_MAP_TYPE data_type,  /* input cost type */
-      cum_data_type = DCELL_TYPE,       /* output cumulative cost type */
-        dir_data_type = FCELL_TYPE,     /* output direction type */
-        nearest_data_type = CELL_TYPE;  /* output nearest type */
+    RASTER_MAP_TYPE data_type,         /* input cost type */
+        cum_data_type = DCELL_TYPE,    /* output cumulative cost type */
+        dir_data_type = FCELL_TYPE,    /* output direction type */
+        nearest_data_type = CELL_TYPE; /* output nearest type */
     struct History history;
     double peak = 0.0;
     int dsize, nearest_size;
@@ -166,11 +163,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("cost surface"));
     G_add_keyword(_("cumulative costs"));
     G_add_keyword(_("cost allocation"));
-    module->description =
-        _("Creates a raster map showing the "
-          "cumulative cost of moving between different "
-          "geographic locations on an input raster map "
-          "whose cell category values represent cost.");
+    module->description = _("Creates a raster map showing the "
+                            "cumulative cost of moving between different "
+                            "geographic locations on an input raster map "
+                            "whose cell category values represent cost.");
 
     opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->description =
@@ -183,7 +179,8 @@ int main(int argc, char *argv[])
     opt_solve->required = NO;
     opt_solve->label = _("Name of input raster map solving equal costs");
     opt_solve->description =
-        _("Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)");
+        _("Helper variable to pick a direction if two directions have equal "
+          "cumulative costs (smaller is better)");
 
     opt12 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt12->key = "nearest";
@@ -290,10 +287,8 @@ int main(int argc, char *argv[])
     EW_fac = 1.0;
     NS_fac = window.ns_res / window.ew_res;
     DIAG_fac = (double)sqrt((double)(NS_fac * NS_fac + EW_fac * EW_fac));
-    V_DIAG_fac =
-        (double)sqrt((double)(4 * NS_fac * NS_fac + EW_fac * EW_fac));
-    H_DIAG_fac =
-        (double)sqrt((double)(NS_fac * NS_fac + 4 * EW_fac * EW_fac));
+    V_DIAG_fac = (double)sqrt((double)(4 * NS_fac * NS_fac + EW_fac * EW_fac));
+    H_DIAG_fac = (double)sqrt((double)(NS_fac * NS_fac + 4 * EW_fac * EW_fac));
 
     EW_fac /= 2.0;
     NS_fac /= 2.0;
@@ -327,7 +322,8 @@ int main(int argc, char *argv[])
             count++;
 
         if (count != 1)
-            G_fatal_error(_("Must specify exactly one of start_points, start_rast or coordinate"));
+            G_fatal_error(_("Must specify exactly one of start_points, "
+                            "start_rast or coordinate"));
     }
 
     if (opt3->answers) {
@@ -371,12 +367,13 @@ int main(int argc, char *argv[])
 
     if (!Rast_is_d_null_value(&null_cost)) {
         if (null_cost < 0.0) {
-            G_warning(_("Assigning negative cost to null cell. Null cells excluded."));
+            G_warning(_(
+                "Assigning negative cost to null cell. Null cells excluded."));
             Rast_set_d_null_value(&null_cost, 1);
         }
     }
     else {
-        keep_nulls = 0;         /* handled automagically... */
+        keep_nulls = 0; /* handled automagically... */
     }
 
     cum_cost_layer = opt1->answer;
@@ -438,19 +435,17 @@ int main(int argc, char *argv[])
     if (have_solver)
         nbytes += 16;
 
-    disk_mb = (double)nrows *ncols * nbytes / 1048576.;
+    disk_mb = (double)nrows * ncols * nbytes / 1048576.;
 
-    segments_in_memory = maxmem /
-        ((double)srows * scols * (nbytes / 1048576.));
+    segments_in_memory = maxmem / ((double)srows * scols * (nbytes / 1048576.));
     if (segments_in_memory < 4)
         segments_in_memory = 4;
     if (segments_in_memory > nseg)
         segments_in_memory = nseg;
-    mem_mb = (double)srows *scols * (nbytes / 1048576.) * segments_in_memory;
+    mem_mb = (double)srows * scols * (nbytes / 1048576.) * segments_in_memory;
 
     if (flag5->answer) {
-        fprintf(stdout, _("Will need at least %.2f MB of disk space"),
-                disk_mb);
+        fprintf(stdout, _("Will need at least %.2f MB of disk space"), disk_mb);
         fprintf(stdout, "\n");
         fprintf(stdout, _("Will need at least %.2f MB of memory"), mem_mb);
         fprintf(stdout, "\n");
@@ -497,7 +492,7 @@ int main(int argc, char *argv[])
             Rast_get_d_row(sfd, cell, row);
             ptr2 = cell;
             for (col = 0; col < ncols; col++) {
-                solvedir[0] = *(DCELL *) ptr2;
+                solvedir[0] = *(DCELL *)ptr2;
                 if (Segment_put(&solve_seg, solvedir, row, col) < 0)
                     G_fatal_error(_("Can not write to temporary file"));
                 ptr2 = G_incr_void_ptr(ptr2, dsize);
@@ -542,19 +537,19 @@ int main(int argc, char *argv[])
                 else {
                     switch (data_type) {
                     case CELL_TYPE:
-                        p = *(CELL *) ptr2;
+                        p = *(CELL *)ptr2;
                         break;
                     case FCELL_TYPE:
-                        p = *(FCELL *) ptr2;
+                        p = *(FCELL *)ptr2;
                         break;
                     case DCELL_TYPE:
-                        p = *(DCELL *) ptr2;
+                        p = *(DCELL *)ptr2;
                         break;
                     }
                 }
                 if (p < 0) {
                     G_warning(_("Negative cell value found at row %d, col %d. "
-                               "Setting negative value to null_cost value"),
+                                "Setting negative value to null_cost value"),
                               row, col);
                     p = null_cost;
                 }
@@ -614,7 +609,8 @@ int main(int argc, char *argv[])
             /* register line */
             type = Vect_read_next_line(&In, Points, Cats);
 
-            /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+            /* Note: check for dead lines is not needed, because they are
+             * skipped by V1_read_next_line_nat() */
             if (type == -1) {
                 G_warning(_("Unable to read vector map"));
                 continue;
@@ -644,8 +640,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("No start points found in vector map <%s>"),
                           Vect_get_full_name(&In));
         else
-            G_verbose_message(n_
-                              ("%d point found", "%d points found", npoints),
+            G_verbose_message(n_("%d point found", "%d points found", npoints),
                               npoints);
 
         Vect_close(&In);
@@ -678,7 +673,8 @@ int main(int argc, char *argv[])
             /* register line */
             type = Vect_read_next_line(&In, Points, Cats);
 
-            /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+            /* Note: check for dead lines is not needed, because they are
+             * skipped by V1_read_next_line_nat() */
             if (type == -1) {
                 G_warning(_("Unable to read vector map"));
                 continue;
@@ -729,7 +725,8 @@ int main(int argc, char *argv[])
             Rast_get_row(fd, cell2, row, data_type2);
             ptr2 = cell2;
             for (col = 0; col < ncols; col++) {
-                /* Did I understand that concept of cumulative cost map? - (pmx) 12 april 2000 */
+                /* Did I understand that concept of cumulative cost map? - (pmx)
+                 * 12 april 2000 */
                 if (!Rast_is_null_value(ptr2, data_type2)) {
                     double cellval;
 
@@ -772,9 +769,10 @@ int main(int argc, char *argv[])
         next_start_pt = head_start_pt;
         while (next_start_pt != NULL) {
             value = &zero;
-            if (next_start_pt->row < 0 || next_start_pt->row >= nrows
-                || next_start_pt->col < 0 || next_start_pt->col >= ncols)
-                G_fatal_error(_("Specified starting location outside database window"));
+            if (next_start_pt->row < 0 || next_start_pt->row >= nrows ||
+                next_start_pt->col < 0 || next_start_pt->col >= ncols)
+                G_fatal_error(
+                    _("Specified starting location outside database window"));
             insert(zero, next_start_pt->row, next_start_pt->col);
             if (Segment_get(&cost_seg, &costs, next_start_pt->row,
                             next_start_pt->col) < 0)
@@ -836,27 +834,26 @@ int main(int argc, char *argv[])
             break;
 
         /* If I've already been updated, delete me */
-        if (Segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col) <
-            0)
+        if (Segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col) < 0)
             G_fatal_error(_("Can not read from temporary file"));
         old_min_cost = costs.cost_out;
         if (!Rast_is_d_null_value(&old_min_cost)) {
             if (pres_cell->min_cost > old_min_cost) {
-                delete(pres_cell);
+                delete (pres_cell);
                 pres_cell = get_lowest();
                 continue;
             }
         }
         if (FLAG_GET(visited, pres_cell->row, pres_cell->col)) {
-            delete(pres_cell);
+            delete (pres_cell);
             pres_cell = get_lowest();
             continue;
         }
         FLAG_SET(visited, pres_cell->row, pres_cell->col);
 
         if (have_solver) {
-            if (Segment_get
-                (&solve_seg, mysolvedir, pres_cell->row, pres_cell->col) < 0)
+            if (Segment_get(&solve_seg, mysolvedir, pres_cell->row,
+                            pres_cell->col) < 0)
                 G_fatal_error(_("Can not read from temporary file"));
         }
 
@@ -868,7 +865,7 @@ int main(int argc, char *argv[])
 
         G_percent(n_processed++, total_cells, 1);
 
-        /*          9    10       Order in which neighbors 
+        /*          9    10       Order in which neighbors
          *       13 5  3  6 14    are visited (Knight move).
          *          1     2
          *       16 8  4  7 15
@@ -876,20 +873,20 @@ int main(int argc, char *argv[])
          */
 
         /* drainage directions in degrees CCW from East
-         * drainage directions are set for each neighbor and must be 
+         * drainage directions are set for each neighbor and must be
          * read as from neighbor to current cell
-         * 
+         *
          * X = neighbor:
-         * 
-         *       112.5       67.5 
+         *
+         *       112.5       67.5
          * 157.5 135    90   45   22.5
          *       180     X  360
          * 202.5 225   270  315   337.5
          *       247.5      292.5
-         * 
+         *
          * X = current cell:
-         * 
-         *       292.5      247.5 
+         *
+         *       292.5      247.5
          * 337.5 315   270  225    202.5
          *       360     X  180
          *  22.5  45    90  135    157.5
@@ -897,14 +894,14 @@ int main(int argc, char *argv[])
          */
 
         /* drainage directions bitmask encoded CW from North
-         * drainage directions are set for each neighbor and must be 
+         * drainage directions are set for each neighbor and must be
          * read as from neighbor to current cell
-         * 
+         *
          * bit positions, zero-based, from neighbor to current cell
-         * 
+         *
          *     X = neighbor                X = current cell
-         * 
-         *      15       8                   11      12 
+         *
+         *      15       8                   11      12
          *    14 6   7   0  9              10 2   3   4 13
          *       5   X   1                    1   X   5
          *    13 4   3   2 10               9 0   7   6 14
@@ -1171,14 +1168,12 @@ int main(int argc, char *argv[])
                         G_fatal_error(_("Can not write to temporary file"));
                 }
             }
-            else if (old_min_cost == min_cost &&
-                     (dir_bin || have_solver) &&
+            else if (old_min_cost == min_cost && (dir_bin || have_solver) &&
                      !(FLAG_GET(visited, row, col))) {
                 FCELL old_dir;
 
-                int dir_inv[16] = { 4, 5, 6, 7, 0, 1, 2, 3,
-                    12, 13, 14, 15, 8, 9, 10, 11
-                };
+                int dir_inv[16] = {4,  5,  6,  7,  0, 1, 2,  3,
+                                   12, 13, 14, 15, 8, 9, 10, 11};
                 int dir_fwd;
                 int equal = 1;
 
@@ -1202,7 +1197,8 @@ int main(int argc, char *argv[])
                             if (dir_bin)
                                 cur_dir = (1 << (int)cur_dir);
                             if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
-                                G_fatal_error(_("Can not write to temporary file"));
+                                G_fatal_error(
+                                    _("Can not write to temporary file"));
                         }
                     }
                 }
@@ -1211,14 +1207,14 @@ int main(int argc, char *argv[])
                     /* this can create circular paths:
                      * set only if current cell does not point to neighbor
                      * does not avoid longer circular paths */
-                    if (Segment_get
-                        (&dir_seg, &old_dir, pres_cell->row,
-                         pres_cell->col) < 0)
+                    if (Segment_get(&dir_seg, &old_dir, pres_cell->row,
+                                    pres_cell->col) < 0)
                         G_fatal_error(_("Can not read from temporary file"));
                     dir_fwd = (1 << dir_inv[(int)cur_dir]);
                     if (!((int)old_dir & dir_fwd)) {
                         if (Segment_get(&dir_seg, &old_dir, row, col) < 0)
-                            G_fatal_error(_("Can not read from temporary file"));
+                            G_fatal_error(
+                                _("Can not read from temporary file"));
                         cur_dir = ((1 << (int)cur_dir) | (int)old_dir);
                         if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
                             G_fatal_error(_("Can not write to temporary file"));
@@ -1231,7 +1227,7 @@ int main(int argc, char *argv[])
             break;
 
         ct = pres_cell;
-        delete(pres_cell);
+        delete (pres_cell);
         pres_cell = get_lowest();
 
         if (ct == pres_cell)
@@ -1315,26 +1311,26 @@ int main(int argc, char *argv[])
 
                     switch (cum_data_type) {
                     case CELL_TYPE:
-                        *(CELL *) p = (CELL) (min_cost + .5);
+                        *(CELL *)p = (CELL)(min_cost + .5);
                         break;
                     case FCELL_TYPE:
-                        *(FCELL *) p = (FCELL) (min_cost);
+                        *(FCELL *)p = (FCELL)(min_cost);
                         break;
                     case DCELL_TYPE:
-                        *(DCELL *) p = (DCELL) (min_cost);
+                        *(DCELL *)p = (DCELL)(min_cost);
                         break;
                     }
 
                     if (nearest_layer) {
                         switch (nearest_data_type) {
                         case CELL_TYPE:
-                            *(CELL *) p3 = (CELL) (nearest);
+                            *(CELL *)p3 = (CELL)(nearest);
                             break;
                         case FCELL_TYPE:
-                            *(FCELL *) p3 = (FCELL) (nearest);
+                            *(FCELL *)p3 = (FCELL)(nearest);
                             break;
                         case DCELL_TYPE:
-                            *(DCELL *) p3 = (DCELL) (nearest);
+                            *(DCELL *)p3 = (DCELL)(nearest);
                             break;
                         }
                     }
@@ -1369,7 +1365,7 @@ int main(int argc, char *argv[])
             for (col = 0; col < ncols; col++) {
                 if (Segment_get(&dir_seg, &cur_dir, row, col) < 0)
                     G_fatal_error(_("Can not read from temporary file"));
-                *((FCELL *) p) = cur_dir;
+                *((FCELL *)p) = cur_dir;
                 p = G_incr_void_ptr(p, dir_size);
             }
             Rast_put_row(dir_fd, dir_cell, dir_data_type);
@@ -1379,7 +1375,7 @@ int main(int argc, char *argv[])
         G_free(dir_cell);
     }
 
-    Segment_close(&cost_seg);   /* release memory  */
+    Segment_close(&cost_seg); /* release memory  */
     if (dir == 1)
         Segment_close(&dir_seg);
 
@@ -1454,10 +1450,10 @@ struct start_pt *process_start_coords(char **answers,
         if (!G_scan_northing(*(answers + 1), &north, G_projection()))
             G_fatal_error(_("Illegal y coordinate <%s>"), *(answers + 1));
 
-        if (east < window.west || east > window.east ||
-            north < window.south || north > window.north) {
-            G_warning(_("Warning, ignoring point outside window: %g, %g"),
-                      east, north);
+        if (east < window.west || east > window.east || north < window.south ||
+            north > window.north) {
+            G_warning(_("Warning, ignoring point outside window: %g, %g"), east,
+                      north);
             continue;
         }
 
@@ -1490,10 +1486,10 @@ int process_stop_coords(char **answers)
         if (!G_scan_northing(*(answers + 1), &north, G_projection()))
             G_fatal_error(_("Illegal y coordinate <%s>"), *(answers + 1));
 
-        if (east < window.west || east > window.east ||
-            north < window.south || north > window.north) {
-            G_warning(_("Warning, ignoring point outside window: %g, %g"),
-                      east, north);
+        if (east < window.west || east > window.east || north < window.south ||
+            north > window.north) {
+            G_warning(_("Warning, ignoring point outside window: %g, %g"), east,
+                      north);
             continue;
         }
 
@@ -1513,9 +1509,8 @@ void add_stop_pnt(int r, int c)
 
     if (n_stop_pnts == stop_pnts_alloc) {
         stop_pnts_alloc += 100;
-        stop_pnts =
-            (struct rc *)G_realloc(stop_pnts,
-                                   stop_pnts_alloc * sizeof(struct rc));
+        stop_pnts = (struct rc *)G_realloc(stop_pnts,
+                                           stop_pnts_alloc * sizeof(struct rc));
     }
 
     sp.r = r;

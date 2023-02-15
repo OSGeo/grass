@@ -1,14 +1,14 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 
-    /*
-       IPVI: Infrared Percentage Vegetation Index
+/*
+   IPVI: Infrared Percentage Vegetation Index
 
-       NIR
-       IPVI = --------
-       NIR+red
-     */
+   NIR
+   IPVI = --------
+   NIR+red
+ */
 double ip_vi(double redchan, double nirchan)
 {
     double result;

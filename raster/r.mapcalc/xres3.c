@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include <grass/raster3d.h>
 #include "globals.h"

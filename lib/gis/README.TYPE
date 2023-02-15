@@ -23,7 +23,7 @@ The argument type for some parameters for the following routines was changed:
 
 .DS
 G_init_cats            [cats.c]
-G_get_cats 
+G_get_cats
 G_set_cats
 G_get_color            [color.c]
 G_set_color
@@ -141,4 +141,3 @@ G_get_histogram_count    [histogram.c]
 
 These changes required immediate upgrade.
 I think this update is done, but I want to review it again.
-

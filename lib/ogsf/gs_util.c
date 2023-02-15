@@ -3,12 +3,12 @@
 
    \brief OGSF library - loading and manipulating surfaces
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -309,7 +309,6 @@ int GS_dv3norm(double *dv1)
     return (1);
 }
 
-
 /*!
    \brief Change v2 so that v1v2 is a unit vector
 
@@ -338,7 +337,6 @@ int GS_v3normalize(float *v1, float *v2)
 
     return (1);
 }
-
 
 /*!
    \brief Get a normalized direction from v1 to v2, store in v3
@@ -370,7 +368,6 @@ int GS_v3dir(float *v1, float *v2, float *v3)
 
     return (1);
 }
-
 
 /*!
    \brief Get a normalized direction from v1 to v2, store in v3 (2D)
@@ -466,8 +463,8 @@ int GS_coordpair_repeats(float *p1, float *p2, int nhist)
     }
 
     for (i = 0; i < next; i += 4) {
-        if (entrys[i] == p1[0] && entrys[i + 1] == p1[1]
-            && entrys[i + 2] == p2[0] && entrys[i + 3] == p2[1]) {
+        if (entrys[i] == p1[0] && entrys[i + 1] == p1[1] &&
+            entrys[i + 2] == p2[0] && entrys[i + 3] == p2[1]) {
             return (1);
         }
     }

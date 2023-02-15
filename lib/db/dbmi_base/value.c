@@ -23,7 +23,7 @@
    \return non-zero is null
    \return zero is not null
  */
-int db_test_value_isnull(dbValue * value)
+int db_test_value_isnull(dbValue *value)
 {
     return (value->isNull != 0);
 }
@@ -35,7 +35,7 @@ int db_test_value_isnull(dbValue * value)
 
    \return value
  */
-int db_get_value_int(dbValue * value)
+int db_get_value_int(dbValue *value)
 {
     return (value->i);
 }
@@ -47,7 +47,7 @@ int db_get_value_int(dbValue * value)
 
    \return value
  */
-double db_get_value_double(dbValue * value)
+double db_get_value_double(dbValue *value)
 {
     return (value->d);
 }
@@ -62,7 +62,7 @@ double db_get_value_double(dbValue * value)
 
    \return value
  */
-double db_get_value_as_double(dbValue * value, int ctype)
+double db_get_value_as_double(dbValue *value, int ctype)
 {
     double val;
 
@@ -89,7 +89,7 @@ double db_get_value_as_double(dbValue * value, int ctype)
 
    \return value
  */
-const char *db_get_value_string(dbValue * value)
+const char *db_get_value_string(dbValue *value)
 {
     return (db_get_string(&value->s));
 }
@@ -101,7 +101,7 @@ const char *db_get_value_string(dbValue * value)
 
    \return value
  */
-int db_get_value_year(dbValue * value)
+int db_get_value_year(dbValue *value)
 {
     return (value->t.year);
 }
@@ -113,7 +113,7 @@ int db_get_value_year(dbValue * value)
 
    \return value
  */
-int db_get_value_month(dbValue * value)
+int db_get_value_month(dbValue *value)
 {
     return (value->t.month);
 }
@@ -125,7 +125,7 @@ int db_get_value_month(dbValue * value)
 
    \return value
  */
-int db_get_value_day(dbValue * value)
+int db_get_value_day(dbValue *value)
 {
     return (value->t.day);
 }
@@ -137,7 +137,7 @@ int db_get_value_day(dbValue * value)
 
    \return value
  */
-int db_get_value_hour(dbValue * value)
+int db_get_value_hour(dbValue *value)
 {
     return (value->t.hour);
 }
@@ -149,7 +149,7 @@ int db_get_value_hour(dbValue * value)
 
    \return value
  */
-int db_get_value_minute(dbValue * value)
+int db_get_value_minute(dbValue *value)
 {
     return (value->t.minute);
 }
@@ -161,7 +161,7 @@ int db_get_value_minute(dbValue * value)
 
    \return value
  */
-double db_get_value_seconds(dbValue * value)
+double db_get_value_seconds(dbValue *value)
 {
     return (value->t.seconds);
 }
@@ -171,7 +171,7 @@ double db_get_value_seconds(dbValue * value)
 
    \param value pointer to dbValue
  */
-void db_set_value_null(dbValue * value)
+void db_set_value_null(dbValue *value)
 {
     value->isNull = 1;
 }
@@ -181,7 +181,7 @@ void db_set_value_null(dbValue * value)
 
    \param value pointer to dbValue
  */
-void db_set_value_not_null(dbValue * value)
+void db_set_value_not_null(dbValue *value)
 {
     value->isNull = 0;
 }
@@ -192,7 +192,7 @@ void db_set_value_not_null(dbValue * value)
    \param value pointer to dbValue
    \param i integer value
  */
-void db_set_value_int(dbValue * value, int i)
+void db_set_value_int(dbValue *value, int i)
 {
     value->i = i;
     db_set_value_not_null(value);
@@ -204,7 +204,7 @@ void db_set_value_int(dbValue * value, int i)
    \param value pointer to dbValue
    \param d double value
  */
-void db_set_value_double(dbValue * value, double d)
+void db_set_value_double(dbValue *value, double d)
 {
     value->d = d;
     db_set_value_not_null(value);
@@ -216,7 +216,7 @@ void db_set_value_double(dbValue * value, double d)
    \param value pointer to dbValue
    \param s string value
  */
-int db_set_value_string(dbValue * value, const char *s)
+int db_set_value_string(dbValue *value, const char *s)
 {
     db_set_value_not_null(value);
     return db_set_string(&value->s, s);
@@ -228,7 +228,7 @@ int db_set_value_string(dbValue * value, const char *s)
    \param value pointer to dbValue
    \param year year value
  */
-void db_set_value_year(dbValue * value, int year)
+void db_set_value_year(dbValue *value, int year)
 {
     value->t.year = year;
     db_set_value_datetime_not_current(value);
@@ -240,7 +240,7 @@ void db_set_value_year(dbValue * value, int year)
    \param value pointer to dbValue
    \param month month value
  */
-void db_set_value_month(dbValue * value, int month)
+void db_set_value_month(dbValue *value, int month)
 {
     value->t.month = month;
     db_set_value_datetime_not_current(value);
@@ -252,7 +252,7 @@ void db_set_value_month(dbValue * value, int month)
    \param value pointer to dbValue
    \param day day value
  */
-void db_set_value_day(dbValue * value, int day)
+void db_set_value_day(dbValue *value, int day)
 {
     value->t.day = day;
     db_set_value_datetime_not_current(value);
@@ -264,7 +264,7 @@ void db_set_value_day(dbValue * value, int day)
    \param value pointer to dbValue
    \param hour hour value
  */
-void db_set_value_hour(dbValue * value, int hour)
+void db_set_value_hour(dbValue *value, int hour)
 {
     value->t.hour = hour;
     db_set_value_datetime_not_current(value);
@@ -276,7 +276,7 @@ void db_set_value_hour(dbValue * value, int hour)
    \param value pointer to dbValue
    \param minute minute value
  */
-void db_set_value_minute(dbValue * value, int minute)
+void db_set_value_minute(dbValue *value, int minute)
 {
     value->t.minute = minute;
     db_set_value_datetime_not_current(value);
@@ -288,7 +288,7 @@ void db_set_value_minute(dbValue * value, int minute)
    \param value pointer to dbValue
    \param seconds seconds value
  */
-void db_set_value_seconds(dbValue * value, double seconds)
+void db_set_value_seconds(dbValue *value, double seconds)
 {
     value->t.seconds = seconds;
     db_set_value_datetime_not_current(value);
@@ -302,7 +302,7 @@ void db_set_value_seconds(dbValue * value, double seconds)
    \return non-zero for true
    \return zero for false
  */
-int db_test_value_datetime_current(dbValue * value)
+int db_test_value_datetime_current(dbValue *value)
 {
     return (value->t.current != 0);
 }
@@ -312,7 +312,7 @@ int db_test_value_datetime_current(dbValue * value)
 
    \param value pointer to dbValue
  */
-void db_set_value_datetime_current(dbValue * value)
+void db_set_value_datetime_current(dbValue *value)
 {
     value->t.current = 1;
     db_set_value_not_null(value);
@@ -323,7 +323,7 @@ void db_set_value_datetime_current(dbValue * value)
 
    \param value pointer to dbValue
  */
-void db_set_value_datetime_not_current(dbValue * value)
+void db_set_value_datetime_not_current(dbValue *value)
 {
     value->t.current = 0;
     db_set_value_not_null(value);
@@ -337,7 +337,7 @@ void db_set_value_datetime_not_current(dbValue * value)
    \param dst destination dbValue
    \param src source dbValue
  */
-void db_copy_value(dbValue * dst, dbValue * src)
+void db_copy_value(dbValue *dst, dbValue *src)
 {
     dst->isNull = src->isNull;
     dst->i = src->i;
@@ -358,7 +358,7 @@ void db_copy_value(dbValue * dst, dbValue * src)
 
    \param arr pointer to dbCatValArray to be initialized
  */
-void db_CatValArray_init(dbCatValArray * arr)
+void db_CatValArray_init(dbCatValArray *arr)
 {
     arr->n_values = 0;
     arr->alloc = 0;
@@ -370,7 +370,7 @@ void db_CatValArray_init(dbCatValArray * arr)
 
    \param arr pointer to dbCatValArray
  */
-void db_CatValArray_free(dbCatValArray * arr)
+void db_CatValArray_free(dbCatValArray *arr)
 {
     if (arr->ctype == DB_C_TYPE_STRING || arr->ctype == DB_C_TYPE_DATETIME) {
         int i;
@@ -398,9 +398,9 @@ void db_CatValArray_free(dbCatValArray * arr)
 
    \return DB_OK
  */
-int db_CatValArray_alloc(dbCatValArray * arr, int n)
+int db_CatValArray_alloc(dbCatValArray *arr, int n)
 {
-    arr->value = (dbCatVal *) G_calloc(n, sizeof(dbCatVal));
+    arr->value = (dbCatVal *)G_calloc(n, sizeof(dbCatVal));
 
     arr->alloc = n;
 
@@ -417,9 +417,9 @@ int db_CatValArray_alloc(dbCatValArray * arr, int n)
 
    \return DB_OK
  */
-int db_CatValArray_realloc(dbCatValArray * arr, int n)
+int db_CatValArray_realloc(dbCatValArray *arr, int n)
 {
-    arr->value = (dbCatVal *) G_realloc(arr->value, n * sizeof(dbCatVal));
+    arr->value = (dbCatVal *)G_realloc(arr->value, n * sizeof(dbCatVal));
 
     arr->alloc = n;
 

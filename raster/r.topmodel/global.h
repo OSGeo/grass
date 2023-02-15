@@ -1,15 +1,14 @@
 #include <stdio.h>
 
-#define	BUF_SIZE	1024
+#define BUF_SIZE 1024
 
 /* file_io.c */
-void get_line(FILE * fp, char *buffer);
+void get_line(FILE *fp, char *buffer);
 void read_input(void);
 void write_output(void);
 
 /* topmodel.c */
-void create_topidxstats(char *topidx, int ntopidxclasses,
-                        char *outtopidxstats);
+void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats);
 double calculate_lambda(void);
 void initialize(void);
 void calculate_flows(void);
@@ -20,10 +19,8 @@ void run_topmodel(void);
 /* infiltration.c */
 double calculate_infiltration(int timestep, double R);
 
-
 /* Parameters file */
-struct params
-{
+struct params {
     char *name;
     double A;
     double qs0;
@@ -45,16 +42,14 @@ struct params
 };
 
 /* Topographic index statistics file */
-struct topidxstats
-{
+struct topidxstats {
     /* misc.ntopidxclasses */
     double *atb;
     double *Aatb_r;
 };
 
 /* Input file */
-struct input
-{
+struct input {
     int ntimesteps;
     double dt;
     /* input.ntimestep's */
@@ -63,8 +58,7 @@ struct input
 };
 
 /* File names */
-struct file
-{
+struct file {
     char *params;
     char *topidxstats;
     char *input;
@@ -72,8 +66,7 @@ struct file
 };
 
 /* Miscellaneous TOPMODEL variables */
-struct misc
-{
+struct misc {
     /* Number of non-null cells */
     int ncells;
     /* Number of topographic index classes */
@@ -97,7 +90,7 @@ struct misc
     double *Ad;
     /* input.ntimestep's */
     double *Qt;
-    double *qs;                 /* spatially constant? */
+    double *qs; /* spatially constant? */
     double *S_mean;
     double *f;
     double *fex;

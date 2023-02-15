@@ -37,6 +37,6 @@ void qindices(int *cnt, int n, double *fisher, double *david, double *douglas,
     *lloyd = m + s / m - 1;
     *lloydip = *lloyd / m;
     *morisita *= n;
-    *morisita /= (n * m * (n * m - 1.0));       /* cressie */
+    *morisita /= (n * m * (n * m - 1.0)); /* cressie */
     /* *morisita = *lloydip * n * m / (n * m - 1.0);  ripley 1 */
 }

@@ -1,6 +1,6 @@
 #include "contour.h"
 
-NODE *add_in(int r, int c, int rr, int cc, NODE * zero, int *node_ct)
+NODE *add_in(int r, int c, int rr, int cc, NODE *zero, int *node_ct)
 {
     int dor, doc;
 
@@ -14,8 +14,7 @@ NODE *add_in(int r, int c, int rr, int cc, NODE * zero, int *node_ct)
     if (cc > maxc)
         maxc = cc;
     if (*node_ct == array_size) {
-        zero = (NODE *) G_realloc(zero, (array_size + AR_INCR) *
-                                  sizeof(NODE));
+        zero = (NODE *)G_realloc(zero, (array_size + AR_INCR) * sizeof(NODE));
         array_size += AR_INCR;
     }
     dor = ABS(rr - r);

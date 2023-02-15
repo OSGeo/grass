@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -21,8 +20,7 @@
 
 #include <grass/gis.h>
 
-struct stats_table
-{
+struct stats_table {
     long count;
     double area;
 };

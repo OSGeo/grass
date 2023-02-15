@@ -5,8 +5,10 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include "ccmath.h"
-void cmmul(Cpx * c, Cpx * a, Cpx * b, int n)
+
+void cmmul(Cpx *c, Cpx *a, Cpx *b, int n)
 {
     Cpx s, *p, *q;
 

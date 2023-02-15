@@ -1,18 +1,17 @@
-
 /****************************************************************************
  *
- * MODULE:      i.vi
- * AUTHOR(S):   Baburao Kamble baburaokamble@gmail.com
- *              Yann Chemin - yann.chemin@gmail.com
- *              Nikos Alexandris - nik@nikosalexandris.net
- * PURPOSE:     Calculates 16 vegetation and related indices
- *              based on biophysical parameters.
+ * MODULE:       i.vi
+ * AUTHOR(S):    Baburao Kamble baburaokamble@gmail.com
+ *               Yann Chemin - yann.chemin@gmail.com
+ *               Nikos Alexandris - nik@nikosalexandris.net
+ * PURPOSE:      Calculates 16 vegetation and related indices
+ *               based on biophysical parameters.
  *
  * COPYRIGHT:    (C) 2002-2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  * Remarks:
  *           These are generic indices that use red and nir for most of them.

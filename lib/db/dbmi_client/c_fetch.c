@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_fetch.c
- * 
+ *
  * \brief DBMI Library (client) - fetch data
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -25,7 +25,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_fetch(dbCursor * cursor, int position, int *more)
+int db_fetch(dbCursor *cursor, int position, int *more)
 {
     int ret_code;
 
@@ -41,7 +41,7 @@ int db_fetch(dbCursor * cursor, int position, int *more)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-        return ret_code;        /* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get the results */
     DB_RECV_INT(more);

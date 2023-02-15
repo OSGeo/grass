@@ -44,9 +44,8 @@ static void add_rule(struct context *ctx, int type, const char *data)
 
         strcpy(buf, tokens[i]);
         name = G_chop(buf);
-        opts[i] = (name[0] == '-')
-            ? find_flag(ctx, name[1])
-            : find_option(ctx, name);
+        opts[i] =
+            (name[0] == '-') ? find_flag(ctx, name[1]) : find_option(ctx, name);
     }
 
     G_free_tokens(tokens);
@@ -91,6 +90,5 @@ void parse_rule(struct context *ctx, const char *cmd, const char *arg)
         return;
     }
 
-    fprintf(stderr, _("Unknown rule type \"%s\" at line %d\n"),
-            cmd, ctx->line);
+    fprintf(stderr, _("Unknown rule type \"%s\" at line %d\n"), cmd, ctx->line);
 }

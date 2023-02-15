@@ -3,8 +3,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-int read_stats(FILE * fd, long *cat1, long *cat2, double *value)
+int read_stats(FILE *fd, long *cat1, long *cat2, double *value)
 {
     char buf[1024];
 

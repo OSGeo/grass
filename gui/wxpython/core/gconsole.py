@@ -359,7 +359,7 @@ class GConsole(wx.EvtHandler):
     """Backend for command execution, esp. interactive command execution"""
 
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
-        """
+        r"""
         :param guiparent: parent window for created GUI objects
         :param lmgr: layer manager window (TODO: replace by giface)
         :param ignoredCmdPattern: regular expression specifying commads
@@ -408,7 +408,11 @@ class GConsole(wx.EvtHandler):
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             if enc:
                 if sys.version_info.major == 2:
                     sys.stdout = codecs.getwriter(enc)(sys.__stdout__)

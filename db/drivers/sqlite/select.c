@@ -1,4 +1,3 @@
-
 /**
  * \file select.c
  *
@@ -20,9 +19,9 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
- * \fn int db__driver_open_select_cursor (dbString *sel, dbCursor *dbc, int mode)
+ * \fn int db__driver_open_select_cursor (dbString *sel, dbCursor *dbc, int
+ * mode)
  *
  * \brief Open SQLite cursor for select.
  *
@@ -32,7 +31,7 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
+int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     cursor *c;
     dbTable *table;
@@ -59,8 +58,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
         ret = sqlite3_prepare(sqlite, str, -1, &(c->statement), &rest);
 
         if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s\n%s",
-                              _("Error in sqlite3_prepare():"),
+            db_d_append_error("%s\n%s\n%s", _("Error in sqlite3_prepare():"),
                               db_get_string(sel),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
@@ -76,8 +74,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
             /* try again */
         }
         else if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s",
-                              _("Error in sqlite3_step():"),
+            db_d_append_error("%s\n%s", _("Error in sqlite3_step():"),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
             sqlite3_finalize(c->statement);
@@ -91,8 +88,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
         G_free(str);
 
     if (describe_table(c->statement, &table, c) == DB_FAILED) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to describe table:"),
+        db_d_append_error("%s\n%s", _("Unable to describe table:"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;

@@ -56,14 +56,13 @@ int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
     double n, e, z1, ad;
     double n0, e0;
     double aver_z;
-    struct _corner
-    {
+    struct _corner {
         double n, e;
     } nw, ne, se, sw;
 
     /* get an average elevation from the active control points */
     /* for mountainous areas this is a very rough approximation
-     * which would become more accurate only if actual elevation 
+     * which would become more accurate only if actual elevation
      * values are used */
     get_aver_elev(&group->control_points, &aver_z);
     G_debug(1, "Aver elev = %f", aver_z);
@@ -79,8 +78,8 @@ int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
             group->E12[2]);
     G_debug(1, "group->N12 = %f %f %f,", group->N12[0], group->N12[1],
             group->N12[2]);
-    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->west,
-            w1->north, e0, n0);
+    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->west, w1->north,
+            e0, n0);
     G_debug(1, "target x = %f y = %f", e, n);
 
     w2->north = w2->south = n;
@@ -93,8 +92,8 @@ int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
                         group->XC, group->YC, group->ZC, group->MI);
 
     G_debug(1, "NORTH EAST CORNER");
-    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->east,
-            w1->north, e0, n0);
+    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->east, w1->north,
+            e0, n0);
     G_debug(1, "target x = %f y = %f", e, n);
 
     ne.n = n;
@@ -113,8 +112,8 @@ int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
                         group->XC, group->YC, group->ZC, group->MI);
 
     G_debug(1, "SOUTH WEST CORNER");
-    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->west,
-            w1->south, e0, n0);
+    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->west, w1->south,
+            e0, n0);
     G_debug(1, "target x = %f y = %f", e, n);
 
     sw.n = n;
@@ -133,8 +132,8 @@ int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
                         group->XC, group->YC, group->ZC, group->MI);
 
     G_debug(1, "SOUTH EAST CORNER");
-    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->east,
-            w1->south, e0, n0);
+    G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->east, w1->south,
+            e0, n0);
     G_debug(1, "target x = %f y = %f", e, n);
 
     se.n = n;
@@ -165,13 +164,15 @@ int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
         w2->ns_res = (sqrt((nw.n - sw.n) * (nw.n - sw.n) +
                            (nw.e - sw.e) * (nw.e - sw.e)) +
                       sqrt((ne.n - se.n) * (ne.n - se.n) +
-                           (ne.e - se.e) * (ne.e - se.e))) / (2.0 * w1->rows);
+                           (ne.e - se.e) * (ne.e - se.e))) /
+                     (2.0 * w1->rows);
 
         /* E-W extends along northern and southern edge */
         w2->ew_res = (sqrt((nw.n - ne.n) * (nw.n - ne.n) +
                            (nw.e - ne.e) * (nw.e - ne.e)) +
                       sqrt((sw.n - se.n) * (sw.n - se.n) +
-                           (sw.e - se.e) * (sw.e - se.e))) / (2.0 * w1->cols);
+                           (sw.e - se.e) * (sw.e - se.e))) /
+                     (2.0 * w1->cols);
 
         /* make ew_res = ns_res */
         w2->ns_res = (w2->ns_res + w2->ew_res) / 2.0;
@@ -206,8 +207,8 @@ int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
     w2->cols = (w2->east - w2->west + w2->ew_res / 2.0) / w2->ew_res;
 
     G_debug(1, "FINAL");
-    G_debug(1, "east = %f \n west = %f \n north = %f \n south = %f",
-            w2->east, w2->west, w2->north, w2->south);
+    G_debug(1, "east = %f \n west = %f \n north = %f \n south = %f", w2->east,
+            w2->west, w2->north, w2->south);
     G_debug(1, "RESOLUTION");
     G_debug(1, "EW = %f", w2->ew_res);
     G_debug(1, "NS = %f", w2->ns_res);

@@ -1,10 +1,10 @@
 /*
- **  Original Algorithm:    H. Mitasova, L. Mitas, J. Hofierka, M. Zlocha 
+ **  Original Algorithm:    H. Mitasova, L. Mitas, J. Hofierka, M. Zlocha
  **  GRASS Implementation:  J. Caplan, M. Ruesink  1995
  **
- **  US Army Construction Engineering Research Lab, University of Illinois 
+ **  US Army Construction Engineering Research Lab, University of Illinois
  **
- **  Copyright  M. Ruesink, J. Caplan, H. Mitasova, L. Mitas, J. Hofierka, 
+ **  Copyright  M. Ruesink, J. Caplan, H. Mitasova, L. Mitas, J. Hofierka,
  **     M. Zlocha  1995
  **
  **This program is free software; you can redistribute it and/or
@@ -23,18 +23,18 @@
  **
  */
 
-
 #include <math.h>
 #include <grass/gis.h>
 #include "r.flow.h"
 
-
-DCELL aspect_fly(DCELL * n, DCELL * c, DCELL * s, double d)
+DCELL aspect_fly(DCELL *n, DCELL *c, DCELL *s, double d)
 {
-    double xslope = ((n[-1] + c[-1] + c[-1] + s[-1]) -
-                     (n[1] + c[1] + c[1] + s[1])) / (8 * d);
-    double yslope = ((s[-1] + s[0] + s[0] + s[1]) -
-                     (n[-1] + n[0] + n[0] + n[1])) / (8 * region.ns_res);
+    double xslope =
+        ((n[-1] + c[-1] + c[-1] + s[-1]) - (n[1] + c[1] + c[1] + s[1])) /
+        (8 * d);
+    double yslope =
+        ((s[-1] + s[0] + s[0] + s[1]) - (n[-1] + n[0] + n[0] + n[1])) /
+        (8 * region.ns_res);
     double asp;
 
     if (!yslope)

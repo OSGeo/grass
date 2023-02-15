@@ -3,10 +3,10 @@
 #include <grass/gmath.h>
 
 int invert(
-              /* inverts a matrix of arbitrary size input as a 2D array. */
-              double **a,       /* input/output matrix */
-              int n             /* dimension */
-    )
+    /* inverts a matrix of arbitrary size input as a 2D array. */
+    double **a, /* input/output matrix */
+    int n       /* dimension */
+)
 {
     int status;
     int i, j, *indx;

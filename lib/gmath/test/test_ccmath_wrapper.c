@@ -1,10 +1,9 @@
-
 /*****************************************************************************
  *
  * MODULE:       Grass PDE Numerical Library
  * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
- * 		soerengebbert <at> gmx <dot> de
- *               
+ *                 soerengebbert <at> gmx <dot> de
+ *
  * PURPOSE:      Unit tests for les solving
  *
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -23,7 +22,7 @@
 #include "test_gmath_lib.h"
 
 #define EPSILON_DIRECT 1.0E-10
-#define EPSILON_ITER 1.0E-4
+#define EPSILON_ITER   1.0E-4
 
 /* prototypes */
 static int test_ccmath_wrapper(void);
@@ -86,8 +85,8 @@ int test_ccmath_wrapper(void)
 
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing ccmath positive definite solver with symmetric matrix\n");
+    G_message(
+        "\t * testing ccmath positive definite solver with symmetric matrix\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
 
@@ -117,8 +116,7 @@ int test_ccmath_wrapper(void)
 
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing ccmath matrix inversion with unsymmetric matrix\n");
+    G_message("\t * testing ccmath matrix inversion with unsymmetric matrix\n");
 
     les = create_normal_unsymmetric_les(TEST_NUM_ROWS);
 
@@ -133,9 +131,8 @@ int test_ccmath_wrapper(void)
 
     G_math_free_les(les);
 
-
-    G_message
-        ("\t * testing ccmath positive definite matrix inversion with symmetric matrix\n");
+    G_message("\t * testing ccmath positive definite matrix inversion with "
+              "symmetric matrix\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
 
@@ -150,9 +147,7 @@ int test_ccmath_wrapper(void)
 
     G_math_free_les(les);
 
-
-    G_message
-        ("\t * testing ccmath eigenvalue solver with symmetric matrix\n");
+    G_message("\t * testing ccmath eigenvalue solver with symmetric matrix\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     // Results of the eigenvalue computation with ocatve
@@ -178,9 +173,8 @@ int test_ccmath_wrapper(void)
 
     G_math_free_les(les);
 
-
-    G_message
-        ("\t * testing ccmath eigenvector computation with symmetric matrix\n");
+    G_message(
+        "\t * testing ccmath eigenvector computation with symmetric matrix\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
     // Results of the eigenvalue computation with ocatve
@@ -205,14 +199,13 @@ int test_ccmath_wrapper(void)
     }
     G_math_free_les(les);
 
-    G_message
-        ("\t * testing ccmath singulare value decomposition with symmetric matrix\n");
+    G_message("\t * testing ccmath singulare value decomposition with "
+              "symmetric matrix\n");
 
     les = create_normal_symmetric_les(TEST_NUM_ROWS);
 
     G_math_svdval(les->x, les->A, les->rows, les->rows);
     G_math_print_les(les);
-
 
     G_math_free_les(les);
 

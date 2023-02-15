@@ -15,7 +15,6 @@
 
 #include "globals.h"
 
-
 /* init error message */
 void init_error(void)
 {

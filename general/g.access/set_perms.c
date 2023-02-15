@@ -8,8 +8,6 @@
 
 int set_perms(char *path, int perms, int group, int other)
 {
-    char *explain_perms();
-
     perms |= OWNER_PERMS;
 
     perms &= ~GROUP_BITS;

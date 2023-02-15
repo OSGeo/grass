@@ -1,17 +1,16 @@
-
 /****************************************************************
  *
  * MODULE:       d.path
- * 
+ *
  * AUTHOR(S):    Radim Blazek
- *               
+ *
  * PURPOSE:      shortest path networking on vector map
  *               Uses the DGLib from Roberto Micarelli
- *               
+ *
  * COPYRIGHT:    (C) 2002 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -32,12 +31,12 @@ int main(int argc, char **argv)
 {
     struct Option *map, *afield_opt, *nfield_opt, *afcol, *abcol, *ncol,
         *type_opt;
-    struct Option *color_opt, *hcolor_opt, *bgcolor_opt, *coor_opt;
+    struct Option /* *color_opt, */ *hcolor_opt, /* *bgcolor_opt, */ *coor_opt;
     struct Flag *geo_f, *bold_f;
     struct GModule *module;
     struct Map_info Map;
     int type, afield, nfield, geo;
-    struct color_rgb color, hcolor, bgcolor;
+    struct color_rgb /* color, */ hcolor /*, bgcolor */;
     int r, g, b;
     double x1, y1, x2, y2;
 
@@ -93,6 +92,7 @@ int main(int argc, char **argv)
     ncol->required = NO;
     ncol->description = _("Node cost column");
 
+#if 0 /* unused */
     color_opt = G_define_option();
     color_opt->key = "color";
     color_opt->type = TYPE_STRING;
@@ -100,6 +100,7 @@ int main(int argc, char **argv)
     color_opt->description = _("Original line color");
     color_opt->gisprompt = "old_color,color,color";
     color_opt->guisection = _("Rendering");
+#endif
 
     hcolor_opt = G_define_option();
     hcolor_opt->key = "highlight_color";
@@ -109,6 +110,7 @@ int main(int argc, char **argv)
     hcolor_opt->gisprompt = "old_color,color,color";
     hcolor_opt->guisection = _("Rendering");
 
+#if 0 /* unused */
     bgcolor_opt = G_define_option();
     bgcolor_opt->key = "bgcolor";
     bgcolor_opt->type = TYPE_STRING;
@@ -116,6 +118,7 @@ int main(int argc, char **argv)
     bgcolor_opt->description = _("Background color");
     bgcolor_opt->gisprompt = "old_color,color,color";
     bgcolor_opt->guisection = _("Rendering");
+#endif
 
     geo_f = G_define_flag();
     geo_f->key = 'g';
@@ -127,15 +130,12 @@ int main(int argc, char **argv)
     bold_f->description = _("Render bold lines");
     bold_f->guisection = _("Rendering");
 
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     type = Vect_option_to_types(type_opt);
     afield = atoi(afield_opt->answer);
     nfield = atoi(nfield_opt->answer);
-
 
     if (coor_opt->answers[0] == NULL)
         G_fatal_error(_("No coordinates given"));
@@ -149,15 +149,16 @@ int main(int argc, char **argv)
     if (!G_scan_northing(coor_opt->answers[3], &y2, G_projection()))
         G_fatal_error(_("%s - illegal y value"), coor_opt->answers[3]);
 
-
     D_open_driver();
 
+#if 0 /* unused */
     color = G_standard_color_rgb(BLACK);
     if (G_str_to_color(color_opt->answer, &r, &g, &b)) {
         color.r = r;
         color.g = g;
         color.b = b;
     }
+#endif
 
     hcolor = G_standard_color_rgb(RED);
     if (G_str_to_color(hcolor_opt->answer, &r, &g, &b)) {
@@ -166,17 +167,20 @@ int main(int argc, char **argv)
         hcolor.b = b;
     }
 
+#if 0 /* unused */
     bgcolor = G_standard_color_rgb(WHITE);
     if (G_str_to_color(bgcolor_opt->answer, &r, &g, &b)) {
         bgcolor.r = r;
         bgcolor.g = g;
         bgcolor.b = b;
     }
+#endif
 
     if (geo_f->answer) {
         geo = 1;
         if (G_projection() != PROJECTION_LL)
-            G_fatal_error(_("The current projection is not longitude-latitude"));
+            G_fatal_error(
+                _("The current projection is not longitude-latitude"));
     }
     else
         geo = 0;

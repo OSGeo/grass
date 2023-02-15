@@ -1,8 +1,7 @@
-
 /**********************************************************
-* I_get_group_camera (group, &Cam_Ref);
-* I_put_group_camera (group, &Cam_Ref);
-**********************************************************/
+ * I_get_group_camera (group, &Cam_Ref);
+ * I_put_group_camera (group, &Cam_Ref);
+ **********************************************************/
 #include "orthophoto.h"
 #include <grass/ortholib.h>
 #include <grass/glocale.h>

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
 double *Cdhc_shapiro_wilk_exp(double *x, int n)
 {
     static double y[2];

@@ -1,25 +1,24 @@
 #ifndef IWAVE_H
 #define IWAVE_H
 
-
 /***********************************************************************
  *       iwave input of the spectral conditions
- *          --------------------------------                         
+ *          --------------------------------
  *
- *  you choose to define your own spectral conditions: iwave=-1,0 or 1 
+ *  you choose to define your own spectral conditions: iwave=-1,0 or 1
  *                    (three user s conditions )
  *       -2  enter wlinf, wlsup, the filter function will be equal to 1
  *           over the whole band (as iwave=0) but step by step output
  *           will be printed
  *       -1  enter wl (monochr. cond,  gaseous absorption is included)
- * 
+ *
  *        0  enter wlinf, wlsup. the filter function will be equal to 1
  *           over the whole band.
- * 
+ *
  *        1  enter wlinf, wlsup and user's filter function s(lambda)
  *                         ( by step of 0.0025 micrometer).
- * 
- * 
+ *
+ *
  *  or you select one of the following satellite spectral band
  *  with indication in brackets of the band limits used in the code :
  *                                               iwave=2 to 60
@@ -32,12 +31,11 @@
  *        8  2nd      "               ( 0.640-1.170 )
  *        9  1st band of avhrr(noaa8) ( 0.540-1.010 )
  *        [...] - see iwave.cpp
- * 
+ *
  *  note: wl has to be in micrometer
-***********************************************************************/
+ ***********************************************************************/
 
-struct IWave
-{
+struct IWave {
     int iwave;
     int iinf;
     int isup;
@@ -45,15 +43,13 @@ struct IWave
     double wl;
     double wlmoy;
 
-
-    struct FFu
-    {
+    struct FFu {
         double s[1501];
         double wlinf;
         double wlsup;
     } ffu;
 
-  private:
+private:
     void parse();
 
     void meteo();
@@ -90,14 +86,14 @@ struct IWave
     void planetscope0f10(int iwa);
     void worldview4(int iwa);
 
-  public:
+public:
     /* To compute the equivalent wavelength needed for the calculation of the
-       downward radiation field used in the computation of the non lambertian 
+       downward radiation field used in the computation of the non lambertian
        target contribution (main.f). */
     double equivwl() const;
 
-    /* To read the solar irradiance (in Wm-2mm-1) from 250 nm to 4000 nm by 
-       steps of 2.5 nm, The total solar irradiance is put equal to 1372 Wm-2. 
+    /* To read the solar irradiance (in Wm-2mm-1) from 250 nm to 4000 nm by
+       steps of 2.5 nm, The total solar irradiance is put equal to 1372 Wm-2.
        Between 250 and 4000 nm we have 1358 Wm-2. */
     double solirr(double wl) const;
 

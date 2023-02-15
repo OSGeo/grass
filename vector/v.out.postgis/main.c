@@ -1,4 +1,3 @@
-
 /***************************************************************
  *
  * MODULE:       v.out.postgis
@@ -101,8 +100,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to open vector map <%s>"),
                       params.input->answer);
     if (Vect_maptype(&In) != GV_FORMAT_NATIVE)
-        G_fatal_error(_("Vector map <%s> is not in native format. Export cancelled."),
-                      Vect_get_full_name(&In));
+        G_fatal_error(
+            _("Vector map <%s> is not in native format. Export cancelled."),
+            Vect_get_full_name(&In));
     Vect_set_error_handler_io(&In, NULL);
     if (params.olink->answer)
         G_add_error_handler(link_handler, params.olink->answer);
@@ -116,10 +116,9 @@ int main(int argc, char *argv[])
     geom_column = GV_PG_GEOMETRY_COLUMN;
 
     /* create output for writing */
-    pg_file = create_pgfile(params.dsn->answer, schema, params.olink->answer,
-                            params.opts->answers,
-                            flags.topo->answer ? TRUE : FALSE, &fid_column,
-                            &geom_column);
+    pg_file = create_pgfile(
+        params.dsn->answer, schema, params.olink->answer, params.opts->answers,
+        flags.topo->answer ? TRUE : FALSE, &fid_column, &geom_column);
     G_debug(1, "fid_column: %s", fid_column);
     G_debug(1, "geom_column: %s", geom_column);
 
@@ -131,9 +130,9 @@ int main(int argc, char *argv[])
     /* don't use temporary maps, writes vector features immediately to
        the output PostGIS layer */
     putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=1");
-    if (-1 == Vect_open_new(&Out, olayer,
-                            !flags.force2d->
-                            answer ? Vect_is_3d(&In) : WITHOUT_Z))
+    if (-1 ==
+        Vect_open_new(&Out, olayer,
+                      !flags.force2d->answer ? Vect_is_3d(&In) : WITHOUT_Z))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"), olayer);
     G_add_error_handler(output_handler, &Out);
 
@@ -179,7 +178,8 @@ int main(int argc, char *argv[])
     G_message(_("Writing output..."));
     verbose = G_verbose();
     if (!flags.topo->answer)
-        G_set_verbose(0);       /* do not print build info when writing simple features */
+        G_set_verbose(
+            0); /* do not print build info when writing simple features */
 
     Vect_build_partial(&Out, GV_BUILD_NONE);
     if (Vect_build(&Out) != 1)
@@ -188,8 +188,9 @@ int main(int argc, char *argv[])
     G_set_verbose(verbose);
 
     if (Vect_get_num_lines(&Out) < 1)
-        G_fatal_error(_("No features exported. PostGIS layer <%s> not created."),
-                      Vect_get_name(&Out));
+        G_fatal_error(
+            _("No features exported. PostGIS layer <%s> not created."),
+            Vect_get_name(&Out));
 
     if (!flags.topo->answer)
         G_done_msg(n_("%d feature (%s type) written to <%s>.",
@@ -234,14 +235,15 @@ void output_handler(void *p)
 
     G_debug(1, "output_handler(): schema = %s; olayer = %s",
             pg_info->schema_name, pg_info->table_name);
-    sprintf(stmt, "SELECT DropGeometryTable('%s', '%s')",
-            pg_info->schema_name, pg_info->table_name);
+    sprintf(stmt, "SELECT DropGeometryTable('%s', '%s')", pg_info->schema_name,
+            pg_info->table_name);
     result = PQexec(pg_info->conn, stmt);
     /*
        be quiet - table may do not exists
 
        if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
-       G_warning(_("Unable to drop table <%s.%s>"), pg_info->schema_name, pg_info->table_name);
+       G_warning(_("Unable to drop table <%s.%s>"), pg_info->schema_name,
+       pg_info->table_name);
        }
      */
     PQclear(result);

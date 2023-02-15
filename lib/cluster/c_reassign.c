@@ -44,7 +44,7 @@ int I_cluster_reassign(struct Cluster *C, int *interrupted)
     for (p = 0; p < C->npoints; p++) {
         if (*interrupted)
             return 0;
-        if (C->class[p] < 0)    /* point to be ignored */
+        if (C->class[p] < 0) /* point to be ignored */
             continue;
 
         /* find minimum distance to center of all classes */

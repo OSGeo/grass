@@ -24,6 +24,4 @@ int ask_datum(char *datum, char *ellps, char *params)
     }
     else
         return -1;
-
-
 }

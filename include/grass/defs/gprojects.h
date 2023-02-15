@@ -7,8 +7,8 @@ int GPJ_init_transform(const struct pj_info *, const struct pj_info *,
 int GPJ_transform(const struct pj_info *, const struct pj_info *,
                   const struct pj_info *, int, double *, double *, double *);
 int GPJ_transform_array(const struct pj_info *, const struct pj_info *,
-                        const struct pj_info *, int,
-                        double *, double *, double *, int);
+                        const struct pj_info *, int, double *, double *,
+                        double *, int);
 
 /* old API, to be removed */
 int pj_do_proj(double *, double *, const struct pj_info *,
@@ -29,8 +29,8 @@ const char *set_proj_share(const char *);
 int pj_print_proj_params(const struct pj_info *, const struct pj_info *);
 
 /* convert.c */
-char *GPJ_grass_to_wkt(const struct Key_Value *, const struct Key_Value *,
-                       int, int);
+char *GPJ_grass_to_wkt(const struct Key_Value *, const struct Key_Value *, int,
+                       int);
 char *GPJ_grass_to_wkt2(const struct Key_Value *, const struct Key_Value *,
                         const struct Key_Value *, int, int);
 #ifdef HAVE_OGR
@@ -52,15 +52,14 @@ int GPJ_get_default_datum_params_by_name(const char *, char **);
 int GPJ_get_datum_params(char **, char **);
 int GPJ__get_datum_params(const struct Key_Value *, char **, char **);
 void GPJ_free_datum(struct gpj_datum *);
-struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
-                                                                 *);
+struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char *);
 void GPJ_free_datum_transform(struct gpj_datum_transform_list *);
 
 /* ellipse.c */
 int GPJ_get_ellipsoid_by_name(const char *, struct gpj_ellps *);
 int GPJ_get_ellipsoid_params(double *, double *, double *);
-int GPJ__get_ellipsoid_params(const struct Key_Value *,
-                              double *, double *, double *);
+int GPJ__get_ellipsoid_params(const struct Key_Value *, double *, double *,
+                              double *);
 void GPJ_free_ellps(struct gpj_ellps *);
 
 #ifndef HAVE_PROJ_H

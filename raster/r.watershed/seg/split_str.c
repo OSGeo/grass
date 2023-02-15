@@ -1,8 +1,7 @@
 #include "Gwater.h"
 
-CELL
-split_stream(int row, int col, int new_r[], int new_c[], int ct,
-             CELL basin_num, double stream_length, CELL old_elev)
+CELL split_stream(int row, int col, int new_r[], int new_c[], int ct,
+                  CELL basin_num, double stream_length, CELL old_elev)
 {
     CELL old_basin, new_elev;
     char downdir, aspect;
@@ -86,13 +85,11 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
             basin_num =
                 def_basin(new_r[r], new_c[r], basin_num, diag, new_elev);
         else if (new_r[r] != row)
-            basin_num =
-                def_basin(new_r[r], new_c[r], basin_num, window.ns_res,
-                          new_elev);
+            basin_num = def_basin(new_r[r], new_c[r], basin_num, window.ns_res,
+                                  new_elev);
         else
-            basin_num =
-                def_basin(new_r[r], new_c[r], basin_num, window.ew_res,
-                          new_elev);
+            basin_num = def_basin(new_r[r], new_c[r], basin_num, window.ew_res,
+                                  new_elev);
     }
     return (basin_num);
 }
