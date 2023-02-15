@@ -8,8 +8,8 @@
 /* function prototypes */
 static int out(FILE *, long, double, double);
 
-int o_average(const char *basemap, const char *covermap,
-              const char *outputmap, int usecats, struct Categories *cats)
+int o_average(const char *basemap, const char *covermap, const char *outputmap,
+              int usecats, struct Categories *cats)
 {
     struct Popen stats_child, reclass_child;
     FILE *stats, *reclass;
@@ -32,7 +32,7 @@ int o_average(const char *basemap, const char *covermap,
             catb = basecat;
         }
         if (usecats)
-            sscanf(Rast_get_c_cat((CELL *) & covercat, cats), "%lf", &x);
+            sscanf(Rast_get_c_cat((CELL *)&covercat, cats), "%lf", &x);
         else
             x = covercat;
         sum1 += x * area;
@@ -47,8 +47,7 @@ int o_average(const char *basemap, const char *covermap,
     return 0;
 }
 
-
-static int out(FILE * fp, long cat, double sum1, double sum2)
+static int out(FILE *fp, long cat, double sum1, double sum2)
 {
     char buf[80];
 

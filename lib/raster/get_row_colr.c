@@ -1,6 +1,6 @@
 /*!
  * \file lib/raster/get_row_colr.c
- * 
+ *
  * \brief Raster Library - Get raster row (colors)
  *
  * (C) 1999-2009 by the GRASS Development Team

@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <grass/raster3d.h>
 
-#define G_254_SQUARE 64516
-#define G_254_TIMES_2 508
+#define G_254_SQUARE            64516
+#define G_254_TIMES_2           508
 
-#define G_RLE_OUTPUT_CODE(code) (*((unsigned char *) dst++) = (code))
-#define G_RLE_INPUT_CODE(codeP) (*(codeP) = *((unsigned char *) src++))
+#define G_RLE_OUTPUT_CODE(code) (*((unsigned char *)dst++) = (code))
+#define G_RLE_INPUT_CODE(codeP) (*(codeP) = *((unsigned char *)src++))
 
 /*---------------------------------------------------------------------------*/
 
@@ -36,7 +36,7 @@ static char *rle_length2code(int length, char *dst)
 {
     register int lPrime;
 
-    if (length == -1) {         /* stop code */
+    if (length == -1) { /* stop code */
         G_RLE_OUTPUT_CODE(255);
         G_RLE_OUTPUT_CODE(255);
 
@@ -49,15 +49,16 @@ static char *rle_length2code(int length, char *dst)
         return dst;
     }
 
-    if (length < G_254_TIMES_2) {       /* length == 254 + a; a < 254 */
+    if (length < G_254_TIMES_2) { /* length == 254 + a; a < 254 */
         G_RLE_OUTPUT_CODE(255);
         G_RLE_OUTPUT_CODE(length % 254);
 
         return dst;
     }
 
-    if (length < G_254_SQUARE) {        /* length = 254 * b + a; b, a < 254 */
-        G_RLE_OUTPUT_CODE(254); /* this if-clause included for efficiency only */
+    if (length < G_254_SQUARE) { /* length = 254 * b + a; b, a < 254 */
+        G_RLE_OUTPUT_CODE(
+            254); /* this if-clause included for efficiency only */
         G_RLE_OUTPUT_CODE(length / 254);
         G_RLE_OUTPUT_CODE(length % 254);
 
@@ -65,7 +66,8 @@ static char *rle_length2code(int length, char *dst)
     }
 
     /* TODO implement a corrected version for larger strings */
-    /* This code is simply wrong, it works only for c == 2, critical number for wrong computation is 254*254*2 = 129032 */
+    /* This code is simply wrong, it works only for c == 2, critical number for
+     * wrong computation is 254*254*2 = 129032 */
     /* CORRECT: length = 254 ^ 2 + 254 * b + a; b, a < 254 */
 
     /* WRONG: length = 254 ^ c + 254 * b + a; b, a < 254 */
@@ -79,7 +81,8 @@ static char *rle_length2code(int length, char *dst)
     G_RLE_OUTPUT_CODE(length / 254);
     G_RLE_OUTPUT_CODE(length % 254);
 
-    /* Next should be: length = 254 ^ 3 + 254 ^ 2 * c + 254 * b + a; c, b, a < 254 */
+    /* Next should be: length = 254 ^ 3 + 254 ^ 2 * c + 254 * b + a; c, b, a <
+     * 254 */
 
     return dst;
 }
@@ -91,9 +94,9 @@ static char *rle_code2length(char *src, int *length)
     int code;
 
     if (G_RLE_INPUT_CODE(length) < 254)
-        return src;             /* length < 254 */
+        return src; /* length < 254 */
 
-    if (*length == 255) {       /* length == 254 + a; a < 254 */
+    if (*length == 255) { /* length == 254 + a; a < 254 */
         if (G_RLE_INPUT_CODE(length) == 255) {
             *length = -1;
             return src;
@@ -104,15 +107,17 @@ static char *rle_code2length(char *src, int *length)
     }
 
     G_RLE_INPUT_CODE(&code);
-    if (code < 254) {           /* length = 254 * b + a; b, a < 254 */
-        G_RLE_INPUT_CODE(length);       /* this if-clause included for efficiency only */
+    if (code < 254) { /* length = 254 * b + a; b, a < 254 */
+        G_RLE_INPUT_CODE(
+            length); /* this if-clause included for efficiency only */
         *length += 254 * code;
 
         return src;
     }
 
     /* TODO implement a corrected version for larger strings */
-    /* This code is simply wrong, it works only for c == 2, critical number for wrong computation is 254*254*2 = 129032 */
+    /* This code is simply wrong, it works only for c == 2, critical number for
+     * wrong computation is 254*254*2 = 129032 */
     /* CORRECT: length = 254 ^ 2 + 254 * b + a; b, a < 254 */
 
     /* WRONG: length = 254 ^ c + 254 * b + a; b, a < 254 */
@@ -125,7 +130,8 @@ static char *rle_code2length(char *src, int *length)
     G_RLE_INPUT_CODE(&code);
     *length += code;
 
-    /* Next should be: length = 254 ^ 3 + 254 ^ 2 * c + 254 * b + a; c, b, a < 254 */
+    /* Next should be: length = 254 ^ 3 + 254 ^ 2 * c + 254 * b + a; c, b, a <
+     * 254 */
 
     return src;
 }
@@ -177,13 +183,12 @@ int Rast3d_rle_count_only(char *src, int nofElts, int eltLength)
 
 void Rast3d_rle_encode(char *src, char *dst, int nofElts, int eltLength)
 {
-    int length, nofEqual;
+    int nofEqual;
     char *head, *tail, *headStop, *headStop2;
 
     if (nofElts <= 0)
         Rast3d_fatal_error("trying to encode 0-length list");
 
-    length = 0;
     nofEqual = 1;
     head = src + eltLength;
     tail = src;
@@ -201,7 +206,6 @@ void Rast3d_rle_encode(char *src, char *dst, int nofElts, int eltLength)
                 /*      printf ("equal %d char %d\n", nofEqual, *tail); */
                 while (tail != head)
                     *dst++ = *tail++;
-                length += G_rle_codeLength(nofEqual) + eltLength;
                 nofEqual = 1;
                 tail = headStop2 - eltLength;
                 break;
@@ -223,17 +227,14 @@ void Rast3d_rle_encode(char *src, char *dst, int nofElts, int eltLength)
     head = tail + eltLength;
     while (tail != head)
         *dst++ = *tail++;
-    length += G_rle_codeLength(nofEqual) + eltLength;
     dst = rle_length2code(-1, dst);
-    length += G_rle_codeLength(-1);
     rle_code2length(dst - 2, &nofEqual);
 }
 
 /*---------------------------------------------------------------------------*/
 
-void
-Rast3d_rle_decode(char *src, char *dst, int nofElts, int eltLength,
-                  int *lengthEncode, int *lengthDecode)
+void Rast3d_rle_decode(char *src, char *dst, int nofElts, int eltLength,
+                       int *lengthEncode, int *lengthDecode)
 {
     int nofEqual;
     char *src2, *srcStop, *src2Stop, *dstFirst;
@@ -268,7 +269,7 @@ Rast3d_rle_decode(char *src, char *dst, int nofElts, int eltLength,
  * Seems to be some leftover from the early pre-SVN days of GRASS GIS.
  * Maris, 2018.
  */
-void test_rle()
+void test_rle(void)
 {
     char c[100];
     int length;

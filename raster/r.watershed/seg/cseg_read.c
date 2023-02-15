@@ -5,7 +5,7 @@
 
 static char *me = "cseg_read_cell";
 
-int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
+int cseg_read_cell(CSEG *cseg, char *map_name, char *mapset)
 {
     GW_LARGE_INT row, rows;
     int map_fd;
@@ -22,8 +22,8 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
         if (Segment_put_row(&(cseg->seg), buffer, row) < 0) {
             G_free(buffer);
             Rast_close(map_fd);
-            G_warning("%s(): unable to segment put row for [%s] in [%s]",
-                      me, map_name, mapset);
+            G_warning("%s(): unable to segment put row for [%s] in [%s]", me,
+                      map_name, mapset);
             return (-1);
         }
     }

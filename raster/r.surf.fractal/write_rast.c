@@ -8,7 +8,7 @@
 
 /***  Extracts real component from complex array and writes as raster.   ***/
 
-/***                  Jo Wood, V1.0, 20th October, 1994  		 ***/
+/***                  Jo Wood, V1.0, 20th October, 1994                  ***/
 
 /***                                                                     ***/
 
@@ -21,7 +21,7 @@
 int write_rast(double *data[2], /* Array holding complex data.          */
                int nn,          /* Size of side of array.               */
                int step         /* Version of file to send.             */
-    )
+)
 {
 
     /*------------------------------------------------------------------*/
@@ -29,14 +29,14 @@ int write_rast(double *data[2], /* Array holding complex data.          */
 
     /*------------------------------------------------------------------*/
 
-    DCELL *row_out;             /* Buffers to hold raster rows.         */
+    DCELL *row_out; /* Buffers to hold raster rows.         */
 
-    char file_name[GNAME_MAX];  /* Name of each file to be written      */
-    struct History history;     /* cmd line history metadata */
+    char file_name[GNAME_MAX]; /* Name of each file to be written      */
+    struct History history;    /* cmd line history metadata */
 
-    int nrows,                  /* Will store the current number of     */
-      ncols,                    /* rows and columns in the raster.      */
-      row, col;                 /* Counts through each row and column   */
+    int nrows,    /* Will store the current number of     */
+        ncols,    /* rows and columns in the raster.      */
+        row, col; /* Counts through each row and column   */
 
     /* of the input raster.                 */
 
@@ -64,9 +64,9 @@ int write_rast(double *data[2], /* Array holding complex data.          */
 
     for (row = 0; row < nrows; row++) {
         for (col = 0; col < ncols; col++)
-            *(row_out + col) = (DCELL) (*(data[0] + row * nn + col) * 100000);
+            *(row_out + col) = (DCELL)(*(data[0] + row * nn + col) * 100000);
 
-        Rast_put_row(fd_out, (DCELL *) row_out, DCELL_TYPE);
+        Rast_put_row(fd_out, (DCELL *)row_out, DCELL_TYPE);
     }
 
     Rast_close(fd_out);

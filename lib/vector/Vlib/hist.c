@@ -41,11 +41,12 @@ int Vect_hist_command(struct Map_info *Map)
     if (0 > Vect_hist_write(Map, "\n"))
         return -1;
 
-    sprintf(buf, "GISDBASE: %s\n", G_gisdbase());       /* Needed ? */
+    sprintf(buf, "GISDBASE: %s\n", G_gisdbase()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 
-    sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n", G_location(), G_mapset(), G_whoami(), G_date());        /* Needed ? */
+    sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n", G_location(),
+            G_mapset(), G_whoami(), G_date()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 
@@ -93,7 +94,7 @@ char *Vect_hist_read(char *s, int size, const struct Map_info *Map)
     G_debug(5, "Vect_hist_read()");
 
     if (Map->hist_fp == NULL)
-        return NULL;            /* OK for shapefile etc. */
+        return NULL; /* OK for shapefile etc. */
 
     ret = G_getl2(s, size, Map->hist_fp);
 
@@ -135,7 +136,7 @@ int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
     G_debug(3, "Vect_hist_copy()");
 
     if (In->hist_fp == NULL)
-        return 0;               /* This is correct (old hist doesn't exist) */
+        return 0; /* This is correct (old hist doesn't exist) */
     if (Out->hist_fp == NULL)
         return -1;
 
@@ -165,7 +166,7 @@ int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
     }
 
     /* Separator */
-    Vect_hist_write(Out,
-                    "---------------------------------------------------------------------------------\n");
+    Vect_hist_write(Out, "-----------------------------------------------------"
+                         "----------------------------\n");
     return (0);
 }

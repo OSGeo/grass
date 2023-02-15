@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -62,8 +61,8 @@ int print_coin_hdr(int Conformat)
 
     fprintf(dumpfile, "\n");
     fprintf(dumpfile, "+%78.78s+\n", midline);
-    fprintf(dumpfile, "|%24.24sCOINCIDENCE TABULATION REPORT%25.25s|\n",
-            fill, fill);
+    fprintf(dumpfile, "|%24.24sCOINCIDENCE TABULATION REPORT%25.25s|\n", fill,
+            fill);
     fprintf(dumpfile, "|%78.78s|\n", midline);
     fprintf(dumpfile, "| Location: %-16.14sMapset: %-17.15sDate: %-20.20s|\n",
             location, mapset, G_date());
@@ -74,10 +73,10 @@ int print_coin_hdr(int Conformat)
     fprintf(dumpfile, "|%78.78s|\n", fill);
     fprintf(dumpfile, "| Units:   %-68.68s|\n", unit_type);
     fprintf(dumpfile, "|%78.78s|\n", midline);
-    fprintf(dumpfile, "| Window:%22.22sNorth: %-10s%31.31s|\n",
-            fill, north, fill);
-    fprintf(dumpfile, "|%14.14sWest: %-9s%19.19sEast: %-9s%15.15s|\n",
-            fill, west, fill, east, fill);
+    fprintf(dumpfile, "| Window:%22.22sNorth: %-10s%31.31s|\n", fill, north,
+            fill);
+    fprintf(dumpfile, "|%14.14sWest: %-9s%19.19sEast: %-9s%15.15s|\n", fill,
+            west, fill, east, fill);
     fprintf(dumpfile, "|%30.30sSouth: %-10s%31.31s|\n", fill, south, fill);
     fprintf(dumpfile, "+%78.78s+\n\n", midline);
 

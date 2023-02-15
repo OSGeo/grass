@@ -3,7 +3,7 @@
 #include <grass/glocale.h>
 #include "seg.h"
 
-int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
+int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
 {
     char *filename;
     int errflag;
@@ -14,11 +14,9 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     cseg->mapset = NULL;
 
     filename = G_tempfile();
-    if (0 >
-        (errflag =
-         Segment_open(&(cseg->seg), filename, Rast_window_rows(),
-                      Rast_window_cols(), srows, scols, sizeof(CELL),
-                      nsegs_in_memory))) {
+    if (0 > (errflag = Segment_open(&(cseg->seg), filename, Rast_window_rows(),
+                                    Rast_window_cols(), srows, scols,
+                                    sizeof(CELL), nsegs_in_memory))) {
         if (errflag == -1) {
             G_warning(_("File name is invalid"));
             return -1;
@@ -50,7 +48,7 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     return 0;
 }
 
-int cseg_close(CSEG * cseg)
+int cseg_close(CSEG *cseg)
 {
     Segment_close(&(cseg->seg));
     if (cseg->name) {
@@ -64,7 +62,7 @@ int cseg_close(CSEG * cseg)
     return 0;
 }
 
-int cseg_put(CSEG * cseg, CELL * value, GW_LARGE_INT row, GW_LARGE_INT col)
+int cseg_put(CSEG *cseg, CELL *value, GW_LARGE_INT row, GW_LARGE_INT col)
 {
     if (Segment_put(&(cseg->seg), value, row, col) < 0) {
         G_warning(_("Unable to write segment file"));
@@ -73,7 +71,7 @@ int cseg_put(CSEG * cseg, CELL * value, GW_LARGE_INT row, GW_LARGE_INT col)
     return 0;
 }
 
-int cseg_put_row(CSEG * cseg, CELL * value, GW_LARGE_INT row)
+int cseg_put_row(CSEG *cseg, CELL *value, GW_LARGE_INT row)
 {
     if (Segment_put_row(&(cseg->seg), value, row) < 0) {
         G_warning(_("Unable to write segment file"));
@@ -82,7 +80,7 @@ int cseg_put_row(CSEG * cseg, CELL * value, GW_LARGE_INT row)
     return 0;
 }
 
-int cseg_get(CSEG * cseg, CELL * value, GW_LARGE_INT row, GW_LARGE_INT col)
+int cseg_get(CSEG *cseg, CELL *value, GW_LARGE_INT row, GW_LARGE_INT col)
 {
     if (Segment_get(&(cseg->seg), value, row, col) < 0) {
         G_warning(_("Unable to read segment file"));
@@ -91,7 +89,7 @@ int cseg_get(CSEG * cseg, CELL * value, GW_LARGE_INT row, GW_LARGE_INT col)
     return 0;
 }
 
-int cseg_read_raster(CSEG * cseg, char *map_name, char *mapset)
+int cseg_read_raster(CSEG *cseg, char *map_name, char *mapset)
 {
     int row, rows;
     int map_fd;
@@ -123,7 +121,7 @@ int cseg_read_raster(CSEG * cseg, char *map_name, char *mapset)
     return 0;
 }
 
-int cseg_write_raster(CSEG * cseg, char *map_name)
+int cseg_write_raster(CSEG *cseg, char *map_name)
 {
     int map_fd;
     int row, rows;
@@ -138,7 +136,7 @@ int cseg_write_raster(CSEG * cseg, char *map_name)
         Segment_get_row(&(cseg->seg), buffer, row);
         Rast_put_row(map_fd, buffer, CELL_TYPE);
     }
-    G_percent(row, rows, 1);    /* finish it */
+    G_percent(row, rows, 1); /* finish it */
     G_free(buffer);
     Rast_close(map_fd);
     return 0;

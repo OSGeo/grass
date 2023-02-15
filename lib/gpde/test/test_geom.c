@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit tests for geometry calculations
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit tests for geometry calculations
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +42,6 @@ int unit_test_geom_data(void)
 
     return sum;
 }
-
 
 /* ************************************************************************* */
 /* ************************************************************************* */
@@ -110,12 +108,10 @@ int test_geom_data(void)
             area += N_get_geom_data_area_of_cell(geom, i);
 
         if (area == 0) {
-            G_warning
-                ("Wrong area calculation in N_get_geom_data_area_of_cell");
+            G_warning("Wrong area calculation in N_get_geom_data_area_of_cell");
             sum++;
         }
     }
-
 
     N_free_geom_data(geom);
     geom = NULL;
@@ -148,8 +144,7 @@ int test_geom_data(void)
             area += N_get_geom_data_area_of_cell(geom, i);
 
         if (area == 0) {
-            G_warning
-                ("Wrong area calculation in N_get_geom_data_area_of_cell");
+            G_warning("Wrong area calculation in N_get_geom_data_area_of_cell");
             sum++;
         }
     }
@@ -160,12 +155,10 @@ int test_geom_data(void)
             area += N_get_geom_data_area_of_cell(geom, i);
 
         if (area == 0) {
-            G_warning
-                ("Wrong area calculation in N_get_geom_data_area_of_cell");
+            G_warning("Wrong area calculation in N_get_geom_data_area_of_cell");
             sum++;
         }
     }
 
     return sum;
-
 }

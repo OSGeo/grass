@@ -17,7 +17,7 @@ r.mapcalc expr="prec_4 = rand(0, 510)" -s
 r.mapcalc expr="prec_5 = rand(0, 300)" -s
 r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`

@@ -1,10 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       r.mfilter
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Roberto Flor <flor itc.it>, Markus Neteler <neteler itc.it>
- *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
+ *               Roberto Flor <flor itc.it>,
+ *               Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Aaron Saw Min Sern
  * PURPOSE:      Performs raster map matrix filter
@@ -15,6 +16,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
@@ -98,7 +100,7 @@ int main(int argc, char **argv)
 
     /* Define the different flags */
 
-    /* this isn't implemented at all 
+    /* this isn't implemented at all
        flag3 = G_define_flag() ;
        flag3->key         = 'p' ;
        flag3->description = _("Preserved edge") ;
@@ -148,7 +150,6 @@ int main(int argc, char **argv)
         if (filter[i].size > ncols || filter[i].size > nrows)
             G_fatal_error(_("Raster map too small for the size of the filter"));
     }
-
 
     /* make a title for result */
     if (opt5->answer)

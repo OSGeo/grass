@@ -5,8 +5,8 @@
 
    Lower level functions for reading/writing/manipulating vectors.
 
-   Note: seems that the time is almost the same for both cases: 
-   - reading from file 
+   Note: seems that the time is almost the same for both cases:
+   - reading from file
    - load whole file to memory and read from memory
 
    (C) 2001-2009 by the GRASS Development Team
@@ -35,7 +35,7 @@
  */
 off_t dig_ftell(struct gvfile *file)
 {
-    if (file->loaded)           /* using memory */
+    if (file->loaded) /* using memory */
         return (file->current - file->start);
 
     return (G_ftell(file->file));
@@ -59,7 +59,7 @@ off_t dig_ftell(struct gvfile *file)
  */
 int dig_fseek(struct gvfile *file, off_t offset, int whence)
 {
-    if (file->loaded) {         /* using memory */
+    if (file->loaded) { /* using memory */
         switch (whence) {
         case SEEK_SET:
             file->current = file->start + offset;
@@ -86,7 +86,7 @@ int dig_fseek(struct gvfile *file, off_t offset, int whence)
  */
 void dig_rewind(struct gvfile *file)
 {
-    if (file->loaded) {         /* using memory */
+    if (file->loaded) { /* using memory */
         file->current = file->start;
     }
     else {
@@ -103,7 +103,7 @@ void dig_rewind(struct gvfile *file)
  */
 int dig_fflush(struct gvfile *file)
 {
-    if (file->loaded) {         /* using memory */
+    if (file->loaded) { /* using memory */
         return 0;
     }
     else {
@@ -126,8 +126,8 @@ size_t dig_fread(void *ptr, size_t size, size_t nmemb, struct gvfile *file)
     long tot;
     size_t cnt;
 
-    if (file->loaded) {         /* using memory */
-        if (file->current >= file->end) {       /* EOF */
+    if (file->loaded) {                   /* using memory */
+        if (file->current >= file->end) { /* EOF */
             return 0;
         }
         tot = size * nmemb;
@@ -156,7 +156,7 @@ size_t dig_fread(void *ptr, size_t size, size_t nmemb, struct gvfile *file)
 size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb,
                   struct gvfile *file)
 {
-    if (file->loaded) {         /* using memory */
+    if (file->loaded) { /* using memory */
         G_fatal_error(_("Writing to file loaded to memory not supported"));
     }
 
@@ -214,14 +214,14 @@ int dig_file_load(struct gvfile *file)
     }
     G_debug(2, "  requested mode = %d", mode);
 
-
     fstat(fileno(file->file), &sbuf);
     size = sbuf.st_size;
 
     G_debug(2, "  size = %lu", (long unsigned int)size);
 
     /* Decide if the file should be loaded */
-    /* TODO: I don't know how to get size of free memory (portability) to decide if load or not for auto */
+    /* TODO: I don't know how to get size of free memory (portability) to decide
+     * if load or not for auto */
     if (mode == GV_MEMORY_AUTO)
         mode = GV_MEMORY_NEVER;
     if (mode == GV_MEMORY_ALWAYS)
@@ -235,8 +235,9 @@ int dig_file_load(struct gvfile *file)
             return -1;
 
         G_fseek(file->file, 0L, 0);
-        ret = fread(file->start, size, 1, file->file);  /* Better to read in smaller portions? */
-        G_fseek(file->file, 0L, 0);     /* reset to the beginning */
+        ret = fread(file->start, size, 1,
+                    file->file);    /* Better to read in smaller portions? */
+        G_fseek(file->file, 0L, 0); /* reset to the beginning */
 
         if (ret <= 0) {
             G_free(file->start);

@@ -10,8 +10,7 @@
 #include <grass/vector.h>
 #include "global.h"
 
-
-int extract_points(int z_flag)
+int extract_points(int z_flag UNUSED)
 {
     struct line_pnts *points = Vect_new_line_struct();
     CELL *cellbuf;

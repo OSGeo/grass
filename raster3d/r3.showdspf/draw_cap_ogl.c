@@ -1,6 +1,5 @@
 #include "vizual.h"
 
-
 /* LOCALLY Global structures */
 static file_info *Headp;
 static struct dspec *B_spec;
@@ -15,10 +14,9 @@ static double Xlinterp();
 
 /**************************************  get_min_max  *************************/
 /* get min and max values from the original data */
-static get_min_max(minmax, size, array)
-     double *minmax;
-     int size;
-     double array[4];
+static get_min_max(minmax, size, array) double *minmax;
+int size;
+double array[4];
 {
     register int i;
     double min, max;
@@ -37,11 +35,10 @@ static get_min_max(minmax, size, array)
 }
 
 /*************************************** side_to_xy  **************************/
-static side_to_xy(xyray, pre, zz, side)
-     double *xyray;
-     struct poly_info *pre;
-     double zz;
-     int side;
+static side_to_xy(xyray, pre, zz, side) double *xyray;
+struct poly_info *pre;
+double zz;
+int side;
 {
     double x1, x2;
     double y1, y2;
@@ -69,7 +66,6 @@ static side_to_xy(xyray, pre, zz, side)
         xyray[1] = y1 + (interp * (y2 - y1));
     else
         xyray[1] = y2;
-
 }
 
 /**********************************  split_poly   *****************************/
@@ -77,16 +73,15 @@ static side_to_xy(xyray, pre, zz, side)
  ** them then draws the polygon and falls thru to left over polygon
  ** code */
 
-void split_poly(ta, pnum, t)
-     int pnum;                  /* index to current polygon */
-     int ta;                    /* current threshold array */
-     int t;                     /* current threshold index */
+void split_poly(ta, pnum, t) int pnum; /* index to current polygon */
+int ta;                                /* current threshold array */
+int t;                                 /* current threshold index */
 {
     double minmax[2];
-    double zz;                  /* current threshold */
+    double zz; /* current threshold */
     int num;
     int hits;
-    int xing[4];                /* a list of the sides with hits */
+    int xing[4]; /* a list of the sides with hits */
     int tnum;
     int i;
     int new_pnum;
@@ -107,11 +102,11 @@ void split_poly(ta, pnum, t)
 
     zz = (double)tp->tvalue[t];
 
-    if (t) {                    /* don't draw below 1st threshold */
+    if (t) { /* don't draw below 1st threshold */
         if (B_spec->in_out == INSIDE)
             tnum = t + B_spec->low;
         else if (ta == 0)
-            /* tnum == t; *//* fix ? MN 2001 */
+            /* tnum == t; */ /* fix ? MN 2001 */
             tnum = t;
         else
             tnum = t + B_spec->hi;
@@ -120,7 +115,7 @@ void split_poly(ta, pnum, t)
     /* calc min/max for each new poly */
     get_min_max(minmax, Polys[pnum].vnum, Polys[pnum].data);
 
-    if (zz > (double)minmax[1]) {       /* if entirely contained */
+    if (zz > (double)minmax[1]) { /* if entirely contained */
         if (t) {
             draw_cappolys(Headp, B_spec, Cap, &Polys[pnum], x, y, 1, tnum);
         }
@@ -139,18 +134,16 @@ void split_poly(ta, pnum, t)
                  zz < Polys[pnum].data[(i + 1) % Polys[pnum].vnum]) ||
                 (Polys[pnum].data[i] > zz &&
                  zz >= Polys[pnum].data[(i + 1) % Polys[pnum].vnum])) {
-                hits |= (1 << i);       /* record which lines were crossed */
+                hits |= (1 << i); /* record which lines were crossed */
                 xing[num] = i;
                 num++;
             }
         }
 
-
-        if (!num || num & 0x01) {       /* zero or odd  no contour in cell */
+        if (!num || num & 0x01) { /* zero or odd  no contour in cell */
             /* just go on to next thresh */
             split_poly(ta, pnum, t + 1);
         }
-
 
         /* else split into two polygons */
         else {
@@ -183,8 +176,7 @@ void split_poly(ta, pnum, t)
                 side = next_higher(side, Polys[pnum].vnum);
             }
             Polys[new_pnum].data[n_verts] = Polys[pnum].data[side];
-            Polys[new_pnum].verts[n_verts << 1] =
-                Polys[pnum].verts[side << 1];
+            Polys[new_pnum].verts[n_verts << 1] = Polys[pnum].verts[side << 1];
             Polys[new_pnum].verts[(n_verts << 1) + 1] =
                 Polys[pnum].verts[(side << 1) + 1];
             n_verts++;
@@ -199,23 +191,23 @@ void split_poly(ta, pnum, t)
 
             if (first) {
                 if (t)
-                    draw_cappolys(Headp, B_spec, Cap, &Polys[new_pnum], x, y,
-                                  1, tnum);
+                    draw_cappolys(Headp, B_spec, Cap, &Polys[new_pnum], x, y, 1,
+                                  tnum);
                 drawn = 1;
             }
             else {
                 split_poly(ta, new_pnum, t + 1);
             }
 
-/*============================================================================*/
+            /*============================================================================*/
             /* NOW DO THE SECOND HALF OF THE SPLIT */
             side = xing[1];
             n_verts = 0;
 
             /* 1st vert will be the location that xing occurs */
             Polys[new_pnum].data[n_verts] = zz;
-            side_to_xy(&Polys[new_pnum].verts[n_verts << 1], &(Polys[pnum]),
-                       zz, side);
+            side_to_xy(&Polys[new_pnum].verts[n_verts << 1], &(Polys[pnum]), zz,
+                       side);
             n_verts++;
 
             side = next_higher(side, Polys[pnum].vnum);
@@ -230,15 +222,14 @@ void split_poly(ta, pnum, t)
                 side = next_higher(side, Polys[pnum].vnum);
             }
             Polys[new_pnum].data[n_verts] = Polys[pnum].data[side];
-            Polys[new_pnum].verts[n_verts << 1] =
-                Polys[pnum].verts[side << 1];
+            Polys[new_pnum].verts[n_verts << 1] = Polys[pnum].verts[side << 1];
             Polys[new_pnum].verts[(n_verts << 1) + 1] =
                 Polys[pnum].verts[(side << 1) + 1];
             n_verts++;
 
             Polys[new_pnum].data[n_verts] = zz;
-            side_to_xy(&Polys[new_pnum].verts[n_verts << 1], &(Polys[pnum]),
-                       zz, side);
+            side_to_xy(&Polys[new_pnum].verts[n_verts << 1], &(Polys[pnum]), zz,
+                       side);
             n_verts++;
 
             Polys[new_pnum].vnum = n_verts;
@@ -246,8 +237,8 @@ void split_poly(ta, pnum, t)
 
             if (!first) {
                 if (t) {
-                    draw_cappolys(Headp, B_spec, Cap, &Polys[new_pnum], x, y,
-                                  1, tnum);
+                    draw_cappolys(Headp, B_spec, Cap, &Polys[new_pnum], x, y, 1,
+                                  tnum);
                 }
                 /* mark a flag */
                 drawn = 1;
@@ -256,8 +247,7 @@ void split_poly(ta, pnum, t)
                 split_poly(ta, new_pnum, t + 1);
             }
         }
-    }                           /*end WITHIN code */
-
+    } /*end WITHIN code */
 
     /* if no hits then ready to fall thru to left over node
        code which will be the tail end of the split_poly routine */
@@ -268,13 +258,12 @@ void split_poly(ta, pnum, t)
     return;
 }
 
-
 /**************************************  Xlinterp  ****************************/
 /* rescale zz to a number between 0. and 1. */
 static double Xlinterp(zmin, zz, zmax)
-     double zmin, zz, zmax;
+double zmin, zz, zmax;
 {
-    if (zmin == zmax)           /* div by zero.  should never get here */
+    if (zmin == zmax) /* div by zero.  should never get here */
         return zmin;
     return (zz - zmin) / (zmax - zmin);
 }
@@ -282,15 +271,15 @@ static double Xlinterp(zmin, zz, zmax)
 /*******************************   next_higher  *******************************/
 /* given sides 0,1,2,3, return number of next side in clockwise order */
 int next_higher(side, verts)
-     int side, verts;
+int side, verts;
 {
     return ((side + 1) % verts);
 }
 
 int draw_cap(XHeadp, XB_spec, XCap)
-     file_info *XHeadp;
-     struct dspec *XB_spec;
-     struct Cap *XCap;
+file_info *XHeadp;
+struct dspec *XB_spec;
+struct Cap *XCap;
 {
     int row, xdim;
     int ta;
@@ -309,20 +298,21 @@ int draw_cap(XHeadp, XB_spec, XCap)
     Cap = XCap;
 
     xdim = Cap->Cols;
-    for (y = Cap->miny; y < Cap->maxy; y++) {   /* for each cell */
-        row = y * Cap->Cols;    /*shouldn't this be Rows? JCM   NO. DPG */
+    for (y = Cap->miny; y < Cap->maxy; y++) { /* for each cell */
+        row = y * Cap->Cols; /*shouldn't this be Rows? JCM   NO. DPG */
         for (x = Cap->minx; x < Cap->maxx; x++) {
             Polys[0].data[0] = Polys[0].data[4] =
                 (double)Cap->D_buff[row + xdim + x];
-             /*BL*/ Polys[0].data[1] = (double)Cap->D_buff[row + xdim + x + 1]; /* BR */
-            Polys[0].data[2] = (double)Cap->D_buff[row + x + 1];        /* TR */
-            Polys[0].data[3] = (double)Cap->D_buff[row + x];    /* TL */
+            /*BL*/ Polys[0].data[1] =
+                (double)Cap->D_buff[row + xdim + x + 1];         /* BR */
+            Polys[0].data[2] = (double)Cap->D_buff[row + x + 1]; /* TR */
+            Polys[0].data[3] = (double)Cap->D_buff[row + x];     /* TL */
 
             /* for each threshold array */
             for (ta = 0; ta < 2 && (tp = &(B_spec->threshes[ta]))->nthres;
                  ta++) {
 
-                {               /* build initial poly */
+                { /* build initial poly */
                     Polys[0].verts[0] = 0.0;
                     Polys[0].verts[1] = 1.0;
                     Polys[0].verts[2] = 1.0;
@@ -334,7 +324,6 @@ int draw_cap(XHeadp, XB_spec, XCap)
                     Polys[0].verts[8] = 0.0;
                     Polys[0].verts[9] = 1.0;
                     Polys[0].vnum = 4;
-
                 }
                 /* First time */
                 if (B_spec->in_out == INSIDE)

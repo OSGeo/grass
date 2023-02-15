@@ -1,12 +1,12 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 
-double g_0(double bbalb, double ndvi, double tempk, double rnet,
-           double time, int roerink)
+double g_0(double bbalb, double ndvi, double tempk, double rnet, double time,
+           int roerink)
 {
     double a, b, result;
-    double r0_coef;
+    double r0_coef = 1.1;
 
     if (time <= 9.0 || time > 15.0)
         r0_coef = 1.1;

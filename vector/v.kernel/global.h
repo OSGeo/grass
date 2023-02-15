@@ -6,14 +6,13 @@
 #define NODE_EQUAL_SPLIT            2
 #define NODE_CONTINUOUS_EQUAL_SPLIT 3
 
-#define KERNEL_UNIFORM      0
-#define KERNEL_TRIANGULAR   1
-#define KERNEL_EPANECHNIKOV 2
-#define KERNEL_QUARTIC      3
-#define KERNEL_TRIWEIGHT    4
-#define KERNEL_GAUSSIAN     5
-#define KERNEL_COSINE       6
-
+#define KERNEL_UNIFORM              0
+#define KERNEL_TRIANGULAR           1
+#define KERNEL_EPANECHNIKOV         2
+#define KERNEL_QUARTIC              3
+#define KERNEL_TRIWEIGHT            4
+#define KERNEL_GAUSSIAN             5
+#define KERNEL_COSINE               6
 
 void setKernelFunction(int function, int dimension, double bandwidth,
                        double *term);
@@ -26,7 +25,7 @@ double gaussianKernel(double x, double term);
 
 double invGaussian2d(double sigma, double prob);
 double gaussian2dByTerms(double d, double term1, double term2);
-double brent_iterate(double (*f)(), double x_lower, double x_upper,
+double brent_iterate(double (*f)(double), double x_lower, double x_upper,
                      int maxiter);
 double kernel1(double d, double rs, double lambda);
 double segno(double x);

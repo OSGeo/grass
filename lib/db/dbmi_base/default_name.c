@@ -85,12 +85,12 @@ const char *db_get_default_group_name(void)
 /*!
    \brief Sets up database connection settings using GRASS default from dbmi.h
 
-   This function ignores current DB connection settings and uses GRASS 
+   This function ignores current DB connection settings and uses GRASS
    default settings instead.
 
    \todo DB_OK on success, DB_* error code on fail
 
-   \return returns DB_OK 
+   \return returns DB_OK
  */
 int db_set_default_connection(void)
 {
@@ -119,15 +119,15 @@ int db_set_default_connection(void)
         connection.driverName = "sqlite";
         /*
          * TODO: Use one DB for entire mapset (LFS problems?)
-         *      or per-map DBs in $MASPET/vector/mapname/sqlite.db (how to set that here?)
-         *      or $MAPSET/sqlite/mapname.sql as with dbf?
+         *      or per-map DBs in $MASPET/vector/mapname/sqlite.db (how to set
+         * that here?) or $MAPSET/sqlite/mapname.sql as with dbf?
          */
 
         /* http://www.sqlite.org/lockingv3.html
-         * When SQLite creates a journal file on Unix, it opens the 
-         * directory that contains that file and calls fsync() on the 
+         * When SQLite creates a journal file on Unix, it opens the
+         * directory that contains that file and calls fsync() on the
          * directory, in an effort to push the directory information to disk.
-         * 
+         *
          * -> have sqlite.db in a separate directory
          */
         connection.databaseName =

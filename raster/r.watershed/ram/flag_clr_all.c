@@ -1,6 +1,6 @@
 #include "flag.h"
 
-int flag_clear_all(FLAG * flags)
+int flag_clear_all(FLAG *flags)
 {
     register int r, c;
 

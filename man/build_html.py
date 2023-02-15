@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
-# (C) 2003-2022 Markus Neteler and the GRASS Development Team
+# (C) 2003-2023 Markus Neteler and the GRASS Development Team
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
@@ -39,6 +39,8 @@ header1_tmpl = string.Template(
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title>${title} - GRASS GIS Manual</title>
  <meta name="Author" content="GRASS Development Team">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 """
 )
 

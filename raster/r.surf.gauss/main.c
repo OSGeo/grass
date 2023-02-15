@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.surf.gauss
  * AUTHOR(S):    Jo Wood, 19th October, 24th October 1991 (original contributor)
  *               Midlands Regional Research Laboratory (ASSIST)
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -19,7 +18,6 @@
 #include <grass/gmath.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -38,12 +36,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("random"));
-    module->label =
-        _("Generates a raster map using gaussian "
-          "random number generator.");
-    module->description =
-        _("Mean and standard deviation of gaussian deviates "
-          "can be expressed by the user.");
+    module->label = _("Generates a raster map using gaussian "
+                      "random number generator.");
+    module->description = _("Mean and standard deviation of gaussian deviates "
+                            "can be expressed by the user.");
 
     out = G_define_standard_option(G_OPT_R_OUTPUT);
 

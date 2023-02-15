@@ -82,12 +82,11 @@
 /*                                                                      c */
 /* **********************************************************************c */
 
-struct AerosolModel
-{
-    long int iaer;              /* aerosol model */
+struct AerosolModel {
+    long int iaer; /* aerosol model */
     double c[4];
 
-  private:
+private:
     double nis;
     double sca[10];
     long int iaerp;
@@ -97,7 +96,7 @@ struct AerosolModel
 
     string filename;
     void load();
-    void save();                /* .mie file */
+    void save(); /* .mie file */
 
     /* defined models' initilizations */
     void bdm();
@@ -108,8 +107,7 @@ struct AerosolModel
     void ocea();
     void soot();
 
-    struct Mie_in
-    {
+    struct Mie_in {
         double rmax;
         double rmin;
         double rn[10][4];
@@ -127,19 +125,17 @@ struct AerosolModel
 
     Mie_in mie_in;
     void mie(double (&ex)[4][10], double (&sc)[4][10], double (&asy)[4][10]);
-    void exscphase(const double alpha, const double nr,
-                   const double ni, double &Qext,
-                   double &Qsca, double (&p11)[83]);
+    void exscphase(const double alpha, const double nr, const double ni,
+                   double &Qext, double &Qsca, double (&p11)[83]);
 
     void parse(const double xmud);
 
     /* format 132 */
     void print132(string s);
-  public:
+
+public:
     void print();
     static AerosolModel Parse(const double xmud);
 };
-
-
 
 #endif /* AEROSOL_MODEL_H */

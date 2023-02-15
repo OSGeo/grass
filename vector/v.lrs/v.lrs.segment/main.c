@@ -1,11 +1,11 @@
 /*
- *  v.lrs.segment - Generate segments or points from input map for existing 
+ *  v.lrs.segment - Generate segments or points from input map for existing
  *                 linear reference system
  */
 
- /******************************************************************************
+/******************************************************************************
  * Copyright (c) 2004-2007, Radim Blazek (blazek@itc.it),
- *			    Hamish Bowman (side_offset bits)
+ *                          Hamish Bowman (side_offset bits)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -38,7 +38,6 @@
 
 int find_line(struct Map_info *Map, int lfield, int cat);
 void offset_pt_90(double *, double *, double, double);
-
 
 int main(int argc, char **argv)
 {
@@ -117,7 +116,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     LCats = Vect_new_cats_struct();
     SCats = Vect_new_cats_struct();
     LPoints = Vect_new_line_struct();
@@ -125,7 +123,7 @@ int main(int argc, char **argv)
     PlPoints = Vect_new_line_struct();
 
     lfield = atoi(lfield_opt->answer);
-    multip = 1000;              /* Number of map units per MP unit */
+    multip = 1000; /* Number of map units per MP unit */
 
     if (file_opt->answer) {
         /* open input file */
@@ -178,8 +176,8 @@ int main(int argc, char **argv)
         switch (buf[0]) {
         case 'P':
             side_offset = 0;
-            ret = sscanf(buf, "%c %d %d %lf+%lf %lf", &stype, &id,
-                         &lid, &mpost, &offset, &side_offset);
+            ret = sscanf(buf, "%c %d %d %lf+%lf %lf", &stype, &id, &lid, &mpost,
+                         &offset, &side_offset);
             if (ret < 5) {
                 G_warning(_("Cannot read input: %s"), buf);
                 break;
@@ -189,9 +187,9 @@ int main(int argc, char **argv)
                     side_offset);
 
             ret = LR_get_offset(rsdriver, table_opt->answer, "lcat", "lid",
-                                "start_map", "end_map", "start_mp",
-                                "start_off", "end_mp", "end_off", lid, mpost,
-                                offset, multip, &lcat1, &map_offset1);
+                                "start_map", "end_map", "start_mp", "start_off",
+                                "end_mp", "end_off", lid, mpost, offset, multip,
+                                &lcat1, &map_offset1);
             if (ret == 0) {
                 G_warning(_("No record in LR table for: %s"), buf);
                 break;
@@ -209,9 +207,8 @@ int main(int argc, char **argv)
             }
 
             Vect_read_line(&In, LPoints, LCats, line);
-            ret =
-                Vect_point_on_line(LPoints, map_offset1, &x, &y, &z, &angle,
-                                   NULL);
+            ret = Vect_point_on_line(LPoints, map_offset1, &x, &y, &z, &angle,
+                                     NULL);
             if (ret == 0) {
                 len = Vect_line_length(LPoints);
                 G_warning(_("Cannot get point on line: cat = [%d] "
@@ -231,9 +228,8 @@ int main(int argc, char **argv)
             break;
         case 'L':
             side_offset = 0;
-            ret = sscanf(buf, "%c %d %d %lf+%lf %lf+%lf %lf", &stype, &id,
-                         &lid, &mpost, &offset, &mpost2, &offset2,
-                         &side_offset);
+            ret = sscanf(buf, "%c %d %d %lf+%lf %lf+%lf %lf", &stype, &id, &lid,
+                         &mpost, &offset, &mpost2, &offset2, &side_offset);
             if (ret < 7) {
                 G_warning(_("Cannot read input: %s"), buf);
                 break;
@@ -243,12 +239,10 @@ int main(int argc, char **argv)
                     mpost2, offset2, side_offset);
             /* Find both points */
             /* Nearest up */
-            ret =
-                LR_get_nearest_offset(rsdriver, table_opt->answer, "lcat",
-                                      "lid", "start_map", "end_map",
-                                      "start_mp", "start_off", "end_mp",
-                                      "end_off", lid, mpost, offset, multip,
-                                      0, &lcat1, &map_offset1);
+            ret = LR_get_nearest_offset(
+                rsdriver, table_opt->answer, "lcat", "lid", "start_map",
+                "end_map", "start_mp", "start_off", "end_mp", "end_off", lid,
+                mpost, offset, multip, 0, &lcat1, &map_offset1);
             if (ret == 0) {
                 G_warning(_("No record in LRS table for 1. point of:\n  %s"),
                           buf);
@@ -256,19 +250,19 @@ int main(int argc, char **argv)
             }
             if (ret == 3) {
                 G_warning(_("Using last from more offsets found for 1. "
-                            "point of:\n  %s"), buf);
+                            "point of:\n  %s"),
+                          buf);
             }
             if (ret == 2) {
                 G_warning(_("Requested offset for the 1. point not found, "
-                            "using nearest found:\n  %s"), buf);
+                            "using nearest found:\n  %s"),
+                          buf);
             }
             /* Nearest down */
-            ret =
-                LR_get_nearest_offset(rsdriver, table_opt->answer, "lcat",
-                                      "lid", "start_map", "end_map",
-                                      "start_mp", "start_off", "end_mp",
-                                      "end_off", lid, mpost2, offset2, multip,
-                                      1, &lcat2, &map_offset2);
+            ret = LR_get_nearest_offset(
+                rsdriver, table_opt->answer, "lcat", "lid", "start_map",
+                "end_map", "start_mp", "start_off", "end_mp", "end_off", lid,
+                mpost2, offset2, multip, 1, &lcat2, &map_offset2);
             if (ret == 0) {
                 G_warning(_("No record in LRS table for 2. point of:\n  %s"),
                           buf);
@@ -276,15 +270,18 @@ int main(int argc, char **argv)
             }
             if (ret == 2) {
                 G_warning(_("Requested offset for the 2. point not found, "
-                            "using nearest found:\n  %s"), buf);
+                            "using nearest found:\n  %s"),
+                          buf);
             }
             if (ret == 3) {
                 G_warning(_("Using first from more offsets found for 2. "
-                            "point of:\n  %s"), buf);
+                            "point of:\n  %s"),
+                          buf);
             }
             /* Check if both points are at the same line */
             if (lcat1 != lcat2) {
-                G_warning(_("Segment over 2 (or more) segments, not yet supported"));
+                G_warning(
+                    _("Segment over 2 (or more) segments, not yet supported"));
                 break;
             }
             G_debug(2, "segment: lcat = %d : %f -  %f", lcat1, map_offset1,
@@ -299,16 +296,16 @@ int main(int argc, char **argv)
 
             len = Vect_line_length(LPoints);
             if (map_offset2 > len) {
-                /* This is mostly caused by calculation only -> use a threshold for warning */
-                if (fabs(map_offset2 - len) > 1e-6) {   /* usually around 1e-7 */
+                /* This is mostly caused by calculation only -> use a threshold
+                 * for warning */
+                if (fabs(map_offset2 - len) > 1e-6) { /* usually around 1e-7 */
                     G_warning(_("End of segment > line length (%e) -> cut"),
                               fabs(map_offset2 - len));
                 }
                 map_offset2 = len;
             }
 
-            ret =
-                Vect_line_segment(LPoints, map_offset1, map_offset2, SPoints);
+            ret = Vect_line_segment(LPoints, map_offset1, map_offset2, SPoints);
             if (ret == 0) {
                 G_warning(_("Cannot make line segment: cat = %d : "
                             "%f - %f (line length = %f)\n%s"),
@@ -319,9 +316,8 @@ int main(int argc, char **argv)
             Vect_cat_set(SCats, 1, id);
 
             if (fabs(side_offset) > 0.0) {
-                Vect_line_parallel2(SPoints, side_offset, side_offset,
-                                    0.0, 1, FALSE, side_offset / 10.,
-                                    PlPoints);
+                Vect_line_parallel2(SPoints, side_offset, side_offset, 0.0, 1,
+                                    FALSE, side_offset / 10., PlPoints);
                 Vect_write_line(&Out, GV_LINE, PlPoints, SCats);
                 G_debug(3, "  segment n_points = %d", PlPoints->n_points);
             }
@@ -336,7 +332,6 @@ int main(int argc, char **argv)
         default:
             G_warning(_("Incorrect segment type: %s"), buf);
         }
-
     }
 
     db_close_database(rsdriver);
@@ -354,30 +349,29 @@ int main(int argc, char **argv)
     if (file_opt->answer)
         fclose(in_file);
 
-    G_message(n_("[%d] point read from input",
-                 "[%d] points read from input", points_read), points_read);
-    G_asprintf(&tmpstr1, n_("%d lost", "%d lost",
-                            points_read - points_written),
+    G_message(n_("[%d] point read from input", "[%d] points read from input",
+                 points_read),
+              points_read);
+    G_asprintf(&tmpstr1, n_("%d lost", "%d lost", points_read - points_written),
                points_read - points_written);
     /* GTC %s will be replaced with a message about lost points. */
     G_message(n_("[%d] point written to output map (%s)",
-                 "[%d] points written to output map (%s)",
-                 points_written), points_written, tmpstr1);
+                 "[%d] points written to output map (%s)", points_written),
+              points_written, tmpstr1);
     G_free(tmpstr1);
-    G_message(n_("[%d] line read from input",
-                 "[%d] lines read from input", lines_read), lines_read);
-    G_asprintf(&tmpstr1, n_("%d lost", "%d lost",
-                            lines_read - lines_written),
+    G_message(n_("[%d] line read from input", "[%d] lines read from input",
+                 lines_read),
+              lines_read);
+    G_asprintf(&tmpstr1, n_("%d lost", "%d lost", lines_read - lines_written),
                lines_read - lines_written);
     /* GTC %s will be replaced with a message about lost lines. */
     G_message(n_("[%d] line written to output map (%s)",
-                 "[%d] lines written to output map (%s)",
-                 lines_written), lines_written, tmpstr1);
+                 "[%d] lines written to output map (%s)", lines_written),
+              lines_written, tmpstr1);
     G_free(tmpstr1);
 
     exit(EXIT_SUCCESS);
 }
-
 
 /* Find line by cat, returns 0 if not found */
 /* TODO: use category index */
@@ -402,9 +396,8 @@ int find_line(struct Map_info *Map, int lfield, int lcat)
     return 0;
 }
 
-
-/* calculate a point perpendicular to the current line angle, offset by a distance
- * works in the x,y plane.
+/* calculate a point perpendicular to the current line angle, offset by a
+ * distance works in the x,y plane.
  */
 void offset_pt_90(double *x, double *y, double angle, double distance)
 {

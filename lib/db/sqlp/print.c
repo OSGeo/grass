@@ -1,28 +1,27 @@
-
 /*****************************************************************************
-*
-* MODULE:       SQL statement parser library 
-*   	    	
-* AUTHOR(S):    lex.l and yac.y were originally taken from unixODBC and
-*               probably written by Peter Harvey <pharvey@codebydesigns.com>,
-*               modifications and other code by Radim Blazek
-*
-* PURPOSE:      Parse input string containing SQL statement to 
-*               SQLPSTMT structure.
-*               SQL parser may be used by simple database drivers. 
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       SQL statement parser library
+ *
+ * AUTHOR(S):    lex.l and yac.y were originally taken from unixODBC and
+ *               probably written by Peter Harvey <pharvey@codebydesigns.com>,
+ *               modifications and other code by Radim Blazek
+ *
+ * PURPOSE:      Parse input string containing SQL statement to
+ *               SQLPSTMT structure.
+ *               SQL parser may be used by simple database drivers.
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 
 #include <grass/sqlp.h>
 #include <stdio.h>
 
-static void print_node(SQLPNODE * nptr, int level)
+static void print_node(SQLPNODE *nptr, int level)
 {
     int i;
 
@@ -55,12 +54,12 @@ static void print_node(SQLPNODE * nptr, int level)
             break;
         }
     }
-    else {                      /* SQLP_NODE_COLUMN */
+    else { /* SQLP_NODE_COLUMN */
         fprintf(stderr, "col: %s\n", nptr->column_name);
     }
 }
 
-int sqpPrintStmt(SQLPSTMT * st)
+int sqpPrintStmt(SQLPSTMT *st)
 {
     int i;
 
@@ -104,8 +103,7 @@ int sqpPrintStmt(SQLPSTMT * st)
             fprintf(stderr, "COLUMN %2d: ", i + 1);
             switch (sqlpStmt->ColType[i]) {
             case (SQLP_VARCHAR):
-                fprintf(stderr, "type:varchar width:%d",
-                        sqlpStmt->ColWidth[i]);
+                fprintf(stderr, "type:varchar width:%d", sqlpStmt->ColWidth[i]);
                 break;
             case (SQLP_INTEGER):
                 fprintf(stderr, "type:integer");
@@ -161,7 +159,6 @@ int sqpPrintStmt(SQLPSTMT * st)
         print_node(sqlpStmt->upperNodeptr, 0);
     }
 
-
     if (sqlpStmt->command == SQLP_SELECT) {
         if (sqlpStmt->orderDir) {
             fprintf(stderr, "ORDER BY: %s %s\n", sqlpStmt->orderCol,
@@ -171,7 +168,6 @@ int sqpPrintStmt(SQLPSTMT * st)
             fprintf(stderr, "ORDER BY: %s\n", sqlpStmt->orderCol);
         }
     }
-
 
     fprintf(stderr, "***************************************\n");
 

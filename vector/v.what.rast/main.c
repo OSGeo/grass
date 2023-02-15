@@ -1,22 +1,22 @@
-/* ***************************************************************
+/****************************************************************
  *
  * MODULE:       v.what.rast
- *  
+ *
  * AUTHOR(S):    Radim Blazek (adapted from r.what)
  *               Michael Shapiro, U.S. Army Construction Engineering
  *                 Research Laboratory (r.what)
  *               Hamish Bowman, University of Otago, NZ (interpolation)
  *
- *  PURPOSE:      Query raster map
- *                
- *  COPYRIGHT:    (C) 2001-2015 by the GRASS Development Team
- * 
- *                This program is free software under the GNU General
- *                Public License (>=v2).  Read the file COPYING that
- *                comes with GRASS for details.
- * 
+ *  PURPOSE:     Query raster map
+ *
+ *  COPYRIGHT:   (C) 2001-2015 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
+ *
  * * TODO: fix user notification if where= is used
- * **************************************************************/
+ ***************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     int i, j, type, field, cat, vtype, open_level;
     int fd;
 
-    /* struct Categories RCats; *//* TODO */
+    /* struct Categories RCats; */ /* TODO */
     struct Cell_head window;
     RASTER_MAP_TYPE out_type;
     CELL *cell_row, *prev_c_row, *next_c_row;
@@ -39,8 +39,7 @@ int main(int argc, char *argv[])
     int width;
     int row, col;
     char buf[DB_SQL_MAX];
-    struct
-    {
+    struct {
         struct Option *vect, *rast, *field, *type, *col, *where;
     } opt;
     struct Flag *interp_flag, *print_flag;
@@ -53,10 +52,10 @@ int main(int argc, char *argv[])
     struct line_pnts *Points;
     struct line_cats *Cats;
     int point;
-    int point_cnt;              /* number of points in cache */
-    int outside_cnt;            /* points outside region */
-    int nocat_cnt;              /* points inside region but without category */
-    int dupl_cnt;               /* duplicate categories */
+    int point_cnt;   /* number of points in cache */
+    int outside_cnt; /* points outside region */
+    int nocat_cnt;   /* points inside region but without category */
+    int dupl_cnt;    /* duplicate categories */
     struct bound_box box;
 
     int *catexst, *cex;
@@ -93,7 +92,8 @@ int main(int argc, char *argv[])
     opt.rast->description = _("Name of existing raster map to be queried");
 
     opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
-    opt.col->required = NO;     /* YES, but suppress_required only for this option */
+    opt.col->required =
+        NO; /* YES, but suppress_required only for this option */
     opt.col->description =
         _("Name of attribute column to be updated with the query result");
 
@@ -112,7 +112,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     db_init_string(&stmt);
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -121,12 +120,12 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Required parameter <%s> not set"), opt.col->key);
 
     G_get_window(&window);
-    Vect_region_box(&window, &box);     /* T and B set to +/- PORT_DOUBLE_MAX */
+    Vect_region_box(&window, &box); /* T and B set to +/- PORT_DOUBLE_MAX */
 
     /* Open vector */
-    open_level = Vect_open_old2(&Map, opt.vect->answer,
-                                print_flag->answer ? "" : G_mapset(),
-                                opt.field->answer);
+    open_level =
+        Vect_open_old2(&Map, opt.vect->answer,
+                       print_flag->answer ? "" : G_mapset(), opt.field->answer);
     if (open_level < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), opt.vect->answer);
 
@@ -157,7 +156,7 @@ int main(int argc, char *argv[])
         width = 7;
 
     /* TODO: Later possibly category labels */
-    /* 
+    /*
        if ( Rast_read_cats (name, "", &RCats) < 0 )
        G_fatal_error ( "Cannot read category file");
      */
@@ -167,8 +166,9 @@ int main(int argc, char *argv[])
 
         if (col_type == -1) {
             /* column doesn't exist, create it */
-            G_important_message(_("Column <%s> not found in the table <%s>. Creating..."),
-                                opt.col->answer, Fi->table);
+            G_important_message(
+                _("Column <%s> not found in the table <%s>. Creating..."),
+                opt.col->answer, Fi->table);
             sprintf(buf, "ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s", Fi->table,
                     opt.col->answer,
                     out_type == CELL_TYPE ? "INTEGER" : "DOUBLE PRECISION");
@@ -186,7 +186,8 @@ int main(int argc, char *argv[])
                 G_warning(_("Raster type is integer and column type is float"));
 
             if (out_type != CELL_TYPE && col_type == DB_C_TYPE_INT)
-                G_warning(_("Raster type is float and column type is integer, some data lost!!"));
+                G_warning(_("Raster type is float and column type is integer, "
+                            "some data lost!!"));
         }
     }
 
@@ -227,7 +228,7 @@ int main(int argc, char *argv[])
         }
 
         Vect_cat_get(Cats, field, &cat);
-        if (cat < 0) {          /* no category of given field */
+        if (cat < 0) { /* no category of given field */
             nocat_cnt++;
             continue;
         }
@@ -238,10 +239,8 @@ int main(int argc, char *argv[])
         if (open_level < 2) {
             if (point_cnt >= Cache_size) {
                 Cache_size += 1000;
-                cache =
-                    (struct order *)G_realloc(cache,
-                                              Cache_size *
-                                              sizeof(struct order));
+                cache = (struct order *)G_realloc(
+                    cache, Cache_size * sizeof(struct order));
             }
         }
 
@@ -274,13 +273,14 @@ int main(int argc, char *argv[])
     }
 
     if (point_cnt < 1) {
-        G_warning(_("No features of type (%s) found in the current computational region"),
+        G_warning(_("No features of type (%s) found in the current "
+                    "computational region"),
                   opt.type->answer);
         exit(EXIT_SUCCESS);
     }
     G_debug(1, "Read %d vector points", point_cnt);
-    /* Cache may contain duplicate categories, sort by cat, find and remove duplicates 
-     * and recalc count and decrease point_cnt  */
+    /* Cache may contain duplicate categories, sort by cat, find and remove
+     * duplicates and recalc count and decrease point_cnt  */
     qsort(cache, point_cnt, sizeof(struct order), by_cat);
 
     G_debug(1, "Points are sorted, starting duplicate removal loop");
@@ -293,8 +293,7 @@ int main(int argc, char *argv[])
 
     point_cnt = i + 1;
 
-    G_debug(1, "%d vector points left after removal of duplicates",
-            point_cnt);
+    G_debug(1, "%d vector points left after removal of duplicates", point_cnt);
 
     /* Report number of points not used */
     if (outside_cnt)
@@ -333,7 +332,7 @@ int main(int argc, char *argv[])
 
     for (point = 0; point < point_cnt; point++) {
         if (cache[point].count > 1)
-            continue;           /* duplicate cats */
+            continue; /* duplicate cats */
 
         if (cur_row != cache[point].row) {
             if (out_type == CELL_TYPE) {
@@ -341,14 +340,12 @@ int main(int argc, char *argv[])
 
                 if (interp_flag->answer) {
                     if (cache[point].row <= 0)
-                        Rast_set_null_value(prev_c_row, window.cols,
-                                            out_type);
+                        Rast_set_null_value(prev_c_row, window.cols, out_type);
                     else
                         Rast_get_c_row(fd, prev_c_row, cache[point].row - 1);
 
                     if (cache[point].row + 1 > window.rows - 1)
-                        Rast_set_null_value(next_c_row, window.cols,
-                                            out_type);
+                        Rast_set_null_value(next_c_row, window.cols, out_type);
                     else
                         Rast_get_c_row(fd, next_c_row, cache[point].row + 1);
                 }
@@ -388,77 +385,64 @@ int main(int argc, char *argv[])
 
             weightsum = valweight = 0;
 
-
             if (cache[point].x <
-                Rast_col_to_easting(cache[point].col,
-                                    &window) + window.ew_res / 2)
+                Rast_col_to_easting(cache[point].col, &window) +
+                    window.ew_res / 2)
                 col_offset = -1;
             else
                 col_offset = +1;
 
             if (cache[point].y >
-                Rast_row_to_northing(cache[point].row,
-                                     &window) - window.ns_res / 2)
+                Rast_row_to_northing(cache[point].row, &window) -
+                    window.ns_res / 2)
                 row_offset = -1;
             else
                 row_offset = +1;
 
-            distance[0] = G_distance(cache[point].x, cache[point].y,
-                                     Rast_col_to_easting(cache[point].col,
-                                                         &window) +
-                                     window.ew_res / 2,
-                                     Rast_row_to_northing(cache[point].row,
-                                                          &window) -
-                                     window.ns_res / 2);
+            distance[0] =
+                G_distance(cache[point].x, cache[point].y,
+                           Rast_col_to_easting(cache[point].col, &window) +
+                               window.ew_res / 2,
+                           Rast_row_to_northing(cache[point].row, &window) -
+                               window.ns_res / 2);
 
-            distance[1] = G_distance(cache[point].x, cache[point].y,
-                                     Rast_col_to_easting(cache[point].col +
-                                                         col_offset,
-                                                         &window) +
-                                     window.ew_res / 2,
-                                     Rast_row_to_northing(cache[point].row,
-                                                          &window) -
-                                     window.ns_res / 2);
+            distance[1] = G_distance(
+                cache[point].x, cache[point].y,
+                Rast_col_to_easting(cache[point].col + col_offset, &window) +
+                    window.ew_res / 2,
+                Rast_row_to_northing(cache[point].row, &window) -
+                    window.ns_res / 2);
 
             if (row_offset == -1) {
-                distance[2] = G_distance(cache[point].x, cache[point].y,
-                                         Rast_col_to_easting(cache[point].col
-                                                             + col_offset,
-                                                             &window) +
-                                         window.ew_res / 2,
-                                         Rast_row_to_northing(cache[point].row
-                                                              - 1,
-                                                              &window) -
-                                         window.ns_res / 2);
-                distance[3] =
-                    G_distance(cache[point].x, cache[point].y,
-                               Rast_col_to_easting(cache[point].col,
-                                                   &window) +
-                               window.ew_res / 2,
-                               Rast_row_to_northing(cache[point].row - 1,
-                                                    &window) -
-                               window.ns_res / 2);
+                distance[2] = G_distance(
+                    cache[point].x, cache[point].y,
+                    Rast_col_to_easting(cache[point].col + col_offset,
+                                        &window) +
+                        window.ew_res / 2,
+                    Rast_row_to_northing(cache[point].row - 1, &window) -
+                        window.ns_res / 2);
+                distance[3] = G_distance(
+                    cache[point].x, cache[point].y,
+                    Rast_col_to_easting(cache[point].col, &window) +
+                        window.ew_res / 2,
+                    Rast_row_to_northing(cache[point].row - 1, &window) -
+                        window.ns_res / 2);
             }
             else {
-                distance[2] = G_distance(cache[point].x, cache[point].y,
-                                         Rast_col_to_easting(cache[point].col
-                                                             + col_offset,
-                                                             &window) +
-                                         window.ew_res / 2,
-                                         Rast_row_to_northing(cache[point].row
-                                                              + 1,
-                                                              &window) -
-                                         window.ns_res / 2);
-                distance[3] =
-                    G_distance(cache[point].x, cache[point].y,
-                               Rast_col_to_easting(cache[point].col,
-                                                   &window) +
-                               window.ew_res / 2,
-                               Rast_row_to_northing(cache[point].row + 1,
-                                                    &window) -
-                               window.ns_res / 2);
+                distance[2] = G_distance(
+                    cache[point].x, cache[point].y,
+                    Rast_col_to_easting(cache[point].col + col_offset,
+                                        &window) +
+                        window.ew_res / 2,
+                    Rast_row_to_northing(cache[point].row + 1, &window) -
+                        window.ns_res / 2);
+                distance[3] = G_distance(
+                    cache[point].x, cache[point].y,
+                    Rast_col_to_easting(cache[point].col, &window) +
+                        window.ew_res / 2,
+                    Rast_row_to_northing(cache[point].row + 1, &window) -
+                        window.ns_res / 2);
             }
-
 
             if (out_type == CELL_TYPE) {
 
@@ -472,8 +456,10 @@ int main(int argc, char *argv[])
 
                 nearby_c_val[0] = cell_row[cache[point].col];
 
-                if (cache[point].col + col_offset < 0 || cache[point].col + col_offset >= window.cols)  /* UNTESTED */
-                    Rast_set_null_value(&nearby_c_val[1], 1, out_type); /* UNTESTED */
+                if (cache[point].col + col_offset < 0 ||
+                    cache[point].col + col_offset >= window.cols) /* UNTESTED */
+                    Rast_set_null_value(&nearby_c_val[1], 1,
+                                        out_type); /* UNTESTED */
                 else
                     nearby_c_val[1] = cell_row[cache[point].col + col_offset];
 
@@ -523,8 +509,7 @@ int main(int argc, char *argv[])
                     cache[point].col + col_offset >= window.cols)
                     Rast_set_null_value(&nearby_d_val[1], 1, out_type);
                 else
-                    nearby_d_val[1] =
-                        dcell_row[cache[point].col + col_offset];
+                    nearby_d_val[1] = dcell_row[cache[point].col + col_offset];
 
                 if (row_offset == -1) {
                     if (cache[point].col + col_offset < 0 ||
@@ -558,9 +543,8 @@ int main(int argc, char *argv[])
                 cache[point].dvalue = valweight / weightsum;
             }
         }
-    }                           /* point loop */
+    } /* point loop */
     Rast_close(fd);
-
 
     if (print_flag->answer) {
         dupl_cnt = 0;
@@ -572,7 +556,10 @@ int main(int argc, char *argv[])
 
         for (point = 0; point < point_cnt; point++) {
             if (cache[point].count > 1) {
-                G_warning(_("Multiple points (%d) of category %d, value set to 'NULL'"), cache[point].count, cache[point].cat); /* TODO: improve message */
+                G_warning(_("Multiple points (%d) of category %d, value set to "
+                            "'NULL'"),
+                          cache[point].count,
+                          cache[point].cat); /* TODO: improve message */
                 dupl_cnt++;
             }
 
@@ -586,7 +573,7 @@ int main(int argc, char *argv[])
                 else
                     fprintf(stdout, "%d", cache[point].value);
             }
-            else {              /* FCELL or DCELL */
+            else { /* FCELL or DCELL */
                 if (cache[point].count > 1 ||
                     Rast_is_d_null_value(&cache[point].dvalue)) {
                     fprintf(stdout, "*");
@@ -611,7 +598,8 @@ int main(int argc, char *argv[])
         G_message("Update vector attributes...");
         for (point = 0; point < point_cnt; point++) {
             if (cache[point].count > 1) {
-                G_warning(_("Multiple points (%d) of category %d, value set to 'NULL'"),
+                G_warning(_("Multiple points (%d) of category %d, value set to "
+                            "'NULL'"),
                           cache[point].count, cache[point].cat);
                 dupl_cnt++;
             }
@@ -619,10 +607,9 @@ int main(int argc, char *argv[])
             G_percent(point, point_cnt, 2);
 
             /* category exist in DB ? */
-            cex =
-                (int *)bsearch((void *)&(cache[point].cat), catexst, select,
-                               sizeof(int), srch_cat);
-            if (cex == NULL) {  /* cat does not exist in DB */
+            cex = (int *)bsearch((void *)&(cache[point].cat), catexst, select,
+                                 sizeof(int), srch_cat);
+            if (cex == NULL) { /* cat does not exist in DB */
                 norec_cnt++;
                 G_warning(_("No record for category %d in table <%s>"),
                           cache[point].cat, Fi->table);
@@ -641,7 +628,7 @@ int main(int argc, char *argv[])
                 else
                     sprintf(buf, "%d ", cache[point].value);
             }
-            else {              /* FCELL or DCELL */
+            else { /* FCELL or DCELL */
                 if (cache[point].count > 1 ||
                     Rast_is_d_null_value(&cache[point].dvalue)) {
                     sprintf(buf, "NULL");
@@ -681,8 +668,8 @@ int main(int argc, char *argv[])
     /* Report */
     G_verbose_message(_("%d categories loaded from vector"), point_cnt);
     if (dupl_cnt > 0)
-        G_message(_("%d duplicate categories in vector map <%s>"),
-                  dupl_cnt, opt.vect->answer);
+        G_message(_("%d duplicate categories in vector map <%s>"), dupl_cnt,
+                  opt.vect->answer);
 
     if (!print_flag->answer) {
         G_verbose_message(_("%d categories loaded from table"), select);

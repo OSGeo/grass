@@ -26,4 +26,3 @@ default: htmldir
 htmldir:
 	$(MAKE) -C drivers
 	$(MAKE) parsubdirs
-

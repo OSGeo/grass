@@ -1,4 +1,3 @@
-
 #ifndef __GLOBALS_H_
 #define __GLOBALS_H_
 

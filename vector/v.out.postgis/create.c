@@ -8,8 +8,8 @@
 static void file_handler(void *);
 
 char *create_pgfile(const char *dsn, const char *schema, const char *olink,
-                    char **options, int topo,
-                    char **fid_column, char **geom_column)
+                    char **options, int topo, char **fid_column,
+                    char **geom_column)
 {
     int i;
     const char *epsg;
@@ -75,7 +75,8 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
 
             if (strcmp(tokens[0], "srid") == 0 &&
                 (epsg && strcmp(tokens[1], epsg) != 0))
-                G_warning(_("EPSG code defined for current location (%s) is overridden by %s"),
+                G_warning(_("EPSG code defined for current location (%s) is "
+                            "overridden by %s"),
                           epsg, tokens[1]);
 
             G_set_key_value(tokens[0], tokens[1], key_val);

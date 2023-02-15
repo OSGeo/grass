@@ -26,7 +26,6 @@ int ELinitialize(void)
     return 0;
 }
 
-
 struct Halfedge *HEcreate(struct Edge *e, int pm)
 {
     struct Halfedge *answer;
@@ -39,7 +38,6 @@ struct Halfedge *HEcreate(struct Edge *e, int pm)
     answer->ELrefcnt = 0;
     return (answer);
 }
-
 
 int ELinsert(struct Halfedge *lb, struct Halfedge *new)
 {
@@ -113,7 +111,6 @@ struct Halfedge *ELleftbnd(struct Point *p)
     return (he);
 }
 
-
 /* This delete routine can't reclaim node, since pointers from hash
    table may be present.   */
 int ELdelete(struct Halfedge *he)
@@ -125,7 +122,6 @@ int ELdelete(struct Halfedge *he)
     return 0;
 }
 
-
 struct Halfedge *ELright(struct Halfedge *he)
 {
     return (he->ELright);
@@ -135,7 +131,6 @@ struct Halfedge *ELleft(struct Halfedge *he)
 {
     return (he->ELleft);
 }
-
 
 struct Site *leftreg(struct Halfedge *he)
 {

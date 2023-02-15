@@ -19,15 +19,13 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-struct rule
-{
+struct rule {
     int set;
     int r, g, b;
     DCELL val;
 };
 
-enum rule_error
-{
+enum rule_error {
     CR_OK = 0,
     CR_ERROR_RULE_SYNTAX,
     CR_ERROR_COLOR_SYNTAX,
@@ -47,19 +45,18 @@ enum rule_error
    The return code can be translated to an error message using
    the Rast_parse_color_rule_error() function.
 
-   \param min, max min & max values (used only when color rules are in percentage)
-   \param buf string with the color rule
-   \param[out] val value which the color is assigned to
-   \param[out] r,g,b color values
-   \param[out] norm set to non-zero value if the value and color are set
-   \param[out] nval set to non-zero value if rule is for null value
-   \param[out] dflt set to non-zero value if rule specifies the default color
+   \param min, max min & max values (used only when color rules are in
+   percentage) \param buf string with the color rule \param[out] val value which
+   the color is assigned to \param[out] r,g,b color values \param[out] norm set
+   to non-zero value if the value and color are set \param[out] nval set to
+   non-zero value if rule is for null value \param[out] dflt set to non-zero
+   value if rule specifies the default color
 
    \returns enum rule_error values (non-zero on failure)
  */
-int Rast_parse_color_rule(DCELL min, DCELL max, const char *buf,
-                          DCELL * val, int *r, int *g, int *b,
-                          int *norm, int *nval, int *dflt)
+int Rast_parse_color_rule(DCELL min, DCELL max, const char *buf, DCELL *val,
+                          int *r, int *g, int *b, int *norm, int *nval,
+                          int *dflt)
 {
     char value[80], color[80];
     double x;
@@ -139,19 +136,17 @@ const char *Rast_parse_color_rule_error(int code)
    \brief Read color rule
 
    \param closure
-   \param min, max min & max values (used only when color rules are in percentage)
-   \param val value
-   \param[out] r,g,b color values
-   \param norm
+   \param min, max min & max values (used only when color rules are in
+   percentage) \param val value \param[out] r,g,b color values \param norm
    \param nval
    \param dflt
 
    \return 0 on failure
    \return 1 on success
  */
-int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
-                         DCELL * val, int *r, int *g, int *b,
-                         int *norm, int *nval, int *dflt)
+int Rast_read_color_rule(void *closure, DCELL min, DCELL max, DCELL *val,
+                         int *r, int *g, int *b, int *norm, int *nval,
+                         int *dflt)
 {
     char buf[1024];
     FILE *fp = closure;
@@ -171,9 +166,8 @@ int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
         if (*buf == '#')
             continue;
 
-        ret =
-            Rast_parse_color_rule(min, max, buf, val, r, g, b, norm, nval,
-                                  dflt);
+        ret = Rast_parse_color_rule(min, max, buf, val, r, g, b, norm, nval,
+                                    dflt);
         if (ret == 0)
             return 1;
 
@@ -188,15 +182,14 @@ int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
    \brief Read color rules from file
 
    \param[out] colors pointer to Colors structure
-   \param min, max min & max values (used only when color rules are in percentage)
-   \param read_rule pointer to read_rule_fn structure
-   \param closure 
+   \param min, max min & max values (used only when color rules are in
+   percentage) \param read_rule pointer to read_rule_fn structure \param closure
 
    \return 0 on failure
    \return 1 on success
  */
 int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
-                          read_rule_fn * read_rule, void *closure)
+                          read_rule_fn *read_rule, void *closure)
 {
     struct rule *rule = NULL;
     int nrules = 0;
@@ -214,8 +207,8 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
     dflt.r = dflt.g = dflt.b = dflt.set = 0;
     null.r = null.g = null.b = null.set = 0;
 
-    while ((*read_rule)
-           (closure, min, max, &val, &r, &g, &b, &set, &is_null, &is_dflt)) {
+    while ((*read_rule)(closure, min, max, &val, &r, &g, &b, &set, &is_null,
+                        &is_dflt)) {
         struct rule *p = NULL;
 
         if (set) {
@@ -251,8 +244,8 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
         struct rule *lo = &rule[n - 1];
         struct rule *hi = &rule[n];
 
-        Rast_add_d_color_rule(&lo->val, lo->r, lo->g, lo->b,
-                              &hi->val, hi->r, hi->g, hi->b, colors);
+        Rast_add_d_color_rule(&lo->val, lo->r, lo->g, lo->b, &hi->val, hi->r,
+                              hi->g, hi->b, colors);
     }
 
     G_free(rule);
@@ -278,9 +271,8 @@ static int load_rules_file(struct Colors *colors, const char *path, DCELL min,
     if (!fp)
         return 0;
 
-    ret =
-        Rast_read_color_rules(colors, min, max, Rast_read_color_rule,
-                              (void *)fp);
+    ret = Rast_read_color_rules(colors, min, max, Rast_read_color_rule,
+                                (void *)fp);
 
     fclose(fp);
 
@@ -292,7 +284,8 @@ static int load_rules_file(struct Colors *colors, const char *path, DCELL min,
 
    \param[out] colors pointer to Colors structure
    \param path path to the color rules file
-   \param min, max min & max values (used only when color rules are in percentage)
+   \param min, max min & max values (used only when color rules are in
+   percentage)
 
    \return 0 on failure
    \return 1 on success
@@ -300,7 +293,7 @@ static int load_rules_file(struct Colors *colors, const char *path, DCELL min,
 int Rast_load_colors(struct Colors *colors, const char *path, CELL min,
                      CELL max)
 {
-    return load_rules_file(colors, path, (DCELL) min, (DCELL) max);
+    return load_rules_file(colors, path, (DCELL)min, (DCELL)max);
 }
 
 /*!
@@ -308,7 +301,8 @@ int Rast_load_colors(struct Colors *colors, const char *path, CELL min,
 
    \param[out] colors pointer to Colors structure
    \param path path to the color rules file
-   \param min, max min & max values (used only when color rules are in percentage)
+   \param min, max min & max values (used only when color rules are in
+   percentage)
 
    \return 0 on failure
    \return 1 on success
@@ -319,8 +313,8 @@ int Rast_load_fp_colors(struct Colors *colors, const char *path, DCELL min,
     return load_rules_file(colors, path, min, max);
 }
 
-static void load_rules_name(struct Colors *colors, const char *name,
-                            DCELL min, DCELL max)
+static void load_rules_name(struct Colors *colors, const char *name, DCELL min,
+                            DCELL max)
 {
     char path[GPATH_MAX];
 
@@ -335,12 +329,13 @@ static void load_rules_name(struct Colors *colors, const char *name,
 
    \param[out] colors pointer to Colors structure
    \param name name of color table to load
-   \param min, max min & max values (used only when color rules are in percentage)
+   \param min, max min & max values (used only when color rules are in
+   percentage)
  */
 void Rast_make_colors(struct Colors *colors, const char *name, CELL min,
                       CELL max)
 {
-    load_rules_name(colors, name, (DCELL) min, (DCELL) max);
+    load_rules_name(colors, name, (DCELL)min, (DCELL)max);
 }
 
 /*!
@@ -348,7 +343,8 @@ void Rast_make_colors(struct Colors *colors, const char *name, CELL min,
 
    \param[out] colors pointer to Colors structure
    \param name name of color table to load
-   \param min, max min & max values (used only when color rules are in percentage)
+   \param min, max min & max values (used only when color rules are in
+   percentage)
  */
 void Rast_make_fp_colors(struct Colors *colors, const char *name, DCELL min,
                          DCELL max)

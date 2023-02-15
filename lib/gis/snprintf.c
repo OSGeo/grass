@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/snprintf.c
  *
@@ -30,8 +29,8 @@
 /**
  * \brief snprintf() clone.
  *
- * <b>Note:</b> The use of <i>snprintf()</i>/<i>G_snprintf()</i> is 
- * discouraged in favour of calculating how long the string will be and 
+ * <b>Note:</b> The use of <i>snprintf()</i>/<i>G_snprintf()</i> is
+ * discouraged in favour of calculating how long the string will be and
  * allocating enough memory!
  *
  * \param[in] str input string
@@ -50,7 +49,7 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     va_end(ap);
 
     /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
-    if (count == size)
+    if (count >= 0 && (unsigned int)count == size)
         str[--count] = '\0';
 
     return count;

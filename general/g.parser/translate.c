@@ -6,14 +6,15 @@
 #include <grass/glocale.h>
 
 /* Returns translated version of a string.
-   If global variable to output strings for translation is set it spits them out */
+   If global variable to output strings for translation is set it spits them out
+ */
 char *translate(const char *arg)
 {
     if (arg == NULL)
         return (char *)arg;
 
     if (strlen(arg) == 0)
-        return NULL;            /* unset */
+        return NULL; /* unset */
 
     if (*arg && translate_output) {
         fputs(arg, stdout);

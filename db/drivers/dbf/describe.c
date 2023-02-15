@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/dbmi.h>
 #include <grass/datetime.h>
@@ -22,7 +21,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_describe_table(dbString * table_name, dbTable ** table)
+int db__driver_describe_table(dbString *table_name, dbTable **table)
 {
     int tab;
     char *name;
@@ -43,7 +42,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 
 /* scols is array of indexes selected columns or null,
  * if nscols == 0 => describe all columns */
-int describe_table(int tab, int *scols, int nscols, dbTable ** table)
+int describe_table(int tab, int *scols, int nscols, dbTable **table)
 {
     int i, col, ncols, dbtype, precision, scale;
     dbColumn *column;
@@ -78,12 +77,13 @@ int describe_table(int tab, int *scols, int nscols, dbTable ** table)
         switch (dcol->type) {
         case DBF_INT:
             dbtype = DB_SQL_TYPE_INTEGER;
-            precision = dcol->width - 1;        /* one char for sign */
+            precision = dcol->width - 1; /* one char for sign */
             scale = 0;
             break;
         case DBF_DOUBLE:
             dbtype = DB_SQL_TYPE_DOUBLE_PRECISION;
-            precision = dcol->width - 2;        /* one char for sign second for decimal point */
+            precision = dcol->width -
+                        2; /* one char for sign second for decimal point */
             scale = dcol->decimals;
             break;
         case DBF_CHAR:
@@ -114,8 +114,6 @@ int describe_table(int tab, int *scols, int nscols, dbTable ** table)
             db_set_column_update_priv_granted(column);
         else
             db_set_column_update_priv_not_granted(column);
-
-
     }
 
     /* set the table name */

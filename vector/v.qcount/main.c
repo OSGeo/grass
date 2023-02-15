@@ -1,11 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       v.qcount
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
- * 	                          http://mccauley-usa.com/
+ *                                   http://mccauley-usa.com/
  *               OGR support by Martin Landa <landa.martin gmail.com>
- * PURPOSE:      GRASS program to sample a raster map at site locations (based on s.qcount)
+ * PURPOSE:      GRASS program to sample a raster map at site locations (based
+ *               on s.qcount)
  *
  * Modification History:
  * <03 Mar 1993> - began coding (jdm)
@@ -43,12 +43,10 @@ int main(int argc, char **argv)
 
     struct Cell_head window;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *field, *output, *n, *r;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *g;
     } flag;
     COOR *quads;
@@ -70,8 +68,8 @@ int main(int argc, char **argv)
 
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.output->required = NO;
-    parm.output->description =
-        _("Name for output quadrat centers map (number of points is written as category)");
+    parm.output->description = _("Name for output quadrat centers map (number "
+                                 "of points is written as category)");
 
     parm.n = G_define_option();
     parm.n->key = "nquadrats";
@@ -100,8 +98,7 @@ int main(int argc, char **argv)
     /* Open input */
     Vect_set_open_level(2);
     if (Vect_open_old2(&Map, parm.input->answer, "", parm.field->answer) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"),
-                      parm.input->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
 
     /* Get the quadrats */
     G_message(_("Finding quadrats..."));
@@ -144,7 +141,6 @@ int main(int argc, char **argv)
 
         Vect_build(&Out);
         Vect_close(&Out);
-
     }
 
     /* Indices if requested */
@@ -152,32 +148,31 @@ int main(int argc, char **argv)
              &morisita);
 
     if (!flag.g->answer) {
-        fprintf(stdout,
-                "-----------------------------------------------------------\n");
-        fprintf(stdout,
-                "Index                                           Realization\n");
-        fprintf(stdout,
-                "-----------------------------------------------------------\n");
-        fprintf(stdout,
-                "Fisher el al (1922) Relative Variance            %g\n",
+        fprintf(
+            stdout,
+            "-----------------------------------------------------------\n");
+        fprintf(
+            stdout,
+            "Index                                           Realization\n");
+        fprintf(
+            stdout,
+            "-----------------------------------------------------------\n");
+        fprintf(stdout, "Fisher el al (1922) Relative Variance            %g\n",
                 fisher);
-        fprintf(stdout,
-                "David & Moore (1954) Index of Cluster Size       %g\n",
+        fprintf(stdout, "David & Moore (1954) Index of Cluster Size       %g\n",
                 david);
-        fprintf(stdout,
-                "Douglas (1975) Index of Cluster Frequency        %g\n",
+        fprintf(stdout, "Douglas (1975) Index of Cluster Frequency        %g\n",
                 douglas);
         fprintf(stdout,
                 "Lloyd (1967) \"mean crowding\"                     %g\n",
                 lloyd);
-        fprintf(stdout,
-                "Lloyd (1967) Index of patchiness                 %g\n",
+        fprintf(stdout, "Lloyd (1967) Index of patchiness                 %g\n",
                 lloydip);
-        fprintf(stdout,
-                "Morisita's (1959) I (variability b/n patches)    %g\n",
+        fprintf(stdout, "Morisita's (1959) I (variability b/n patches)    %g\n",
                 morisita);
-        fprintf(stdout,
-                "-----------------------------------------------------------\n");
+        fprintf(
+            stdout,
+            "-----------------------------------------------------------\n");
     }
     else {
         fprintf(stdout, "fisher=%g\n", fisher);
@@ -187,8 +182,6 @@ int main(int argc, char **argv)
         fprintf(stdout, "lloydip=%g\n", lloydip);
         fprintf(stdout, "morisita=%g\n", morisita);
     }
-
-
 
     exit(EXIT_SUCCESS);
 }

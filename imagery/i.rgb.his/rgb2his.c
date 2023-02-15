@@ -1,17 +1,16 @@
-
 /******************************************************************************
-NAME:                         RGB2HIS
- 
+NAME:      RGB2HIS
+
 PURPOSE    To process red,green,blue bands to hue,intensity,saturation.
- 
+
 ALGORITHM:
    Get red, green, blue from input buffer
    Create the HIS bands
    Write to output buffer
- 
+
 ASSUMPTION:
    The input images are read to the input buffer.
- 
+
 ******************************************************************************/
 /* For GRASS one row from each cell map is passed in and each cell in
    each band is processed and written out.   CWU GIS Lab: DBS 8/90 */
@@ -19,20 +18,20 @@ ASSUMPTION:
 #include <grass/gis.h>
 #include "globals.h"
 
-void rgb2his(CELL * rowbuffer[3], int columns)
+void rgb2his(CELL *rowbuffer[3], int columns)
 {
-    int sample;                 /* sample indicator                      */
-    double red;                 /* the red band output                   */
-    double green;               /* the green band output                 */
-    double blue;                /* the blue band output                  */
-    double scaler;              /* red value                             */
-    double scaleg;              /* green value                           */
-    double scaleb;              /* blue value                            */
-    double high;                /* maximum red, green, blue              */
-    double low;                 /* minimum red, green, blue              */
-    double intens;              /* intensity                             */
-    double sat;                 /* saturation                            */
-    double hue = 0.0L;          /* hue                                   */
+    int sample;        /* sample indicator                      */
+    double red;        /* the red band output                   */
+    double green;      /* the green band output                 */
+    double blue;       /* the blue band output                  */
+    double scaler;     /* red value                             */
+    double scaleg;     /* green value                           */
+    double scaleb;     /* blue value                            */
+    double high;       /* maximum red, green, blue              */
+    double low;        /* minimum red, green, blue              */
+    double intens;     /* intensity                             */
+    double sat;        /* saturation                            */
+    double hue = 0.0L; /* hue                                   */
 
     for (sample = 0; sample < columns; sample++) {
         if (Rast_is_c_null_value(&rowbuffer[0][sample]) ||

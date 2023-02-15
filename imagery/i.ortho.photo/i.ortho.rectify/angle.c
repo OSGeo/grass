@@ -2,8 +2,8 @@
  * 90 degrees: orthogonal to local surface
  * 0 degress: parallel to local surface
  * < 0 degrees: not visible by camera
- * 
- * Earth curvature is not considered, assuming that the extends of the 
+ *
+ * Earth curvature is not considered, assuming that the extends of the
  * imagery to be orthorectified are rather small
  * Shadowing effects by ridges and peaks are not considered */
 
@@ -169,9 +169,8 @@ int camera_angle(struct Ortho_Image_Group *group, char *name)
             /* camera angle to real ground */
             /* orthogonal to ground: 90 degrees */
             /* parallel to ground: 0 degrees */
-            c_angle =
-                asin(cos(c_alt) * cos(slope) -
-                     sin(c_alt) * sin(slope) * cos(c_az - aspect));
+            c_angle = asin(cos(c_alt) * cos(slope) -
+                           sin(c_alt) * sin(slope) * cos(c_az - aspect));
 
             outbuf[col] = c_angle * radians_to_degrees;
             if (c_angle_min > outbuf[col])
@@ -195,7 +194,7 @@ int camera_angle(struct Ortho_Image_Group *group, char *name)
 
     Rast_init_colors(&colr);
     if (c_angle_min < 0) {
-        clr_min = (FCELL) ((int)(c_angle_min / 10 - 1)) * 10;
+        clr_min = (FCELL)((int)(c_angle_min / 10 - 1)) * 10;
         clr_max = 0;
         Rast_add_f_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0, 0, &colr);
     }

@@ -1,7 +1,8 @@
 /*!
    \file lib/ogsf/gv2.c
 
-   \brief OGSF library - loading and manipulating vector sets (higher level functions)
+   \brief OGSF library - loading and manipulating vector sets (higher level
+   functions)
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -241,7 +242,6 @@ int GV_set_style(int id, int mem, int color, int width, int use_z)
     return 1;
 }
 
-
 /*!
    \brief Get vector style
 
@@ -294,7 +294,7 @@ int GV_set_style_thematic(int id, int layer, const char *color,
     }
 
     if (!gv->tstyle)
-        gv->tstyle = (gvstyle_thematic *) G_malloc(sizeof(gvstyle_thematic));
+        gv->tstyle = (gvstyle_thematic *)G_malloc(sizeof(gvstyle_thematic));
     G_zero(gv->tstyle, sizeof(gvstyle_thematic));
 
     gv->tstyle->active = 1;

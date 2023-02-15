@@ -82,7 +82,6 @@ static int G__mkstemp(char *template, int flags, int mode)
     return -1;
 }
 
-
 /*!
  * \brief Opens a temporary file.
  *
@@ -164,8 +163,8 @@ int G_mkstemp(char *template, int flags, int mode)
 FILE *G_mkstemp_fp(char *template, int flags, int mode)
 {
     const char *fmode = ((flags & O_ACCMODE) == O_RDWR)
-        ? ((flags & O_APPEND) ? "a+" : "w+")
-        : ((flags & O_APPEND) ? "a" : "w");
+                            ? ((flags & O_APPEND) ? "a+" : "w+")
+                            : ((flags & O_APPEND) ? "a" : "w");
     int fd = G_mkstemp(template, flags, mode);
 
     if (fd < 0)
