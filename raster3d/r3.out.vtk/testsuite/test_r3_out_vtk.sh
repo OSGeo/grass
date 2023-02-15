@@ -23,19 +23,19 @@ r3.mapcalc --o expr="volume_rgb = volume_null * 5"
 # The first @test just exports the volume map as cell and point data
 # using alow precision and replaces the default null value with 0
 # the created @files should be compared with the reference data.
-r3.out.vtk --o input=volume_null output=test_volume_null_1_cells.vtk dp=3 null=0
-r3.out.vtk -p --o input=volume_null output=test_volume_null_1_points.vtk dp=3 null=0
+r3.out.vtk --o input=volume_null output=test_volume_null_1_cells.vtk precision=3 null=0
+r3.out.vtk -p --o input=volume_null output=test_volume_null_1_points.vtk precision=3 null=0
 
 # The second @test adds rgb and vector maps. We re-use the created volume map
 # for vector creation. The rgb value must range fom 0 - 255. The generated @files
 # should be compared with the reference data.
-r3.out.vtk --o rgbmaps=volume_rgb,volume_rgb,volume_rgb vectormaps=volume_null,volume_null,volume_null input=volume_null output=test_volume_null_1_cells_rgb_vect.vtk dp=3 null=-1.0
-r3.out.vtk -p --o rgbmaps=volume_rgb,volume_rgb,volume_rgb vectormaps=volume_null,volume_null,volume_null input=volume_null output=test_volume_null_1_points_rgb_vect.vtk dp=3 null=-1.0
+r3.out.vtk --o rgbmaps=volume_rgb,volume_rgb,volume_rgb vectormaps=volume_null,volume_null,volume_null input=volume_null output=test_volume_null_1_cells_rgb_vect.vtk precision=3 null=-1.0
+r3.out.vtk -p --o rgbmaps=volume_rgb,volume_rgb,volume_rgb vectormaps=volume_null,volume_null,volume_null input=volume_null output=test_volume_null_1_points_rgb_vect.vtk precision=3 null=-1.0
 
 # The third @test uses raster maps to create volume data with an elevation surface
 # The maximum elevation should be in the south. Reference @files are present for validation.
-r3.out.vtk -s --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_cells_elevation.vtk dp=3 null=0
-r3.out.vtk -sp --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_points_elevation.vtk dp=3 null=0
+r3.out.vtk -s --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_cells_elevation.vtk precision=3 null=0
+r3.out.vtk -sp --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_points_elevation.vtk precision=3 null=0
 
 # Comparison of references and vtk files
 for i in `ls *.ref` ; do
