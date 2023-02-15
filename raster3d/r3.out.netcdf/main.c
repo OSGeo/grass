@@ -140,7 +140,6 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
     if ((retval = nc_put_att_text(ncid, NC_GLOBAL, "Conventions",
                                   strlen(CF_SUPPORT), CF_SUPPORT)))
         ERR(retval);
-
     if ((retval = nc_put_att_text(ncid, NC_GLOBAL, "history",
                                   strlen(HISTORY_TEXT), HISTORY_TEXT)))
         ERR(retval);
