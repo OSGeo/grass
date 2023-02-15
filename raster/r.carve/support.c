@@ -16,7 +16,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <string.h>
 #include <stdio.h>
@@ -24,7 +24,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "enforce.h"
-
 
 /*
  * update_rast_history - Update a history file.  Some of the digit file
@@ -47,7 +46,6 @@ void update_rast_history(struct parms *parm)
     Rast_write_history(parm->outrast->answer, &hist);
 }
 
-
 void check_mem_alloc(struct ptr *pointer)
 /*
  * Function: check_mem_alloc
@@ -62,47 +60,41 @@ void check_mem_alloc(struct ptr *pointer)
  *
  */
 {
-    switch (pointer->type)
-    {
-       case P_INT:
-           if (!pointer->p_int)
-           {
-               G_free(pointer->p_int);
-               pointer->p_int = NULL;
-               G_fatal_error(_("Fail to allocate memory"));
-           }
-           break;
-       case P_DOUBLE:
-           if (!pointer->p_double)
-           {
-               G_free(pointer->p_double);
-               pointer->p_double = NULL;
-               G_fatal_error(_("Fail to allocate memory"));
-           }
-           break;
-       case P_CHAR:
-           if (!pointer->p_char)
-           {
-               G_free(pointer->p_char);
-               pointer->p_char = NULL;
-               G_fatal_error(_("Fail to allocate memory"));
-           }
-           break;
-       case P_DBSTRING:
-           if (!pointer->p_dbString)
-           {
-               db_free_string(pointer->p_dbString);
-               pointer->p_dbString = NULL;
-               G_fatal_error(_("Fail to allocate memory"));
-           }
-           break;
-       case P_VECT_ID_CAT_MAP:
-           if (!pointer->p_vect_id_cat_map)
-           {
-               G_free(pointer->p_vect_id_cat_map);
-               pointer->p_vect_id_cat_map = NULL;
-               G_fatal_error(_("Fail to allocate memory"));
-           }
-           break;
-     }
+    switch (pointer->type) {
+    case P_INT:
+        if (!pointer->p_int) {
+            G_free(pointer->p_int);
+            pointer->p_int = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_DOUBLE:
+        if (!pointer->p_double) {
+            G_free(pointer->p_double);
+            pointer->p_double = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_CHAR:
+        if (!pointer->p_char) {
+            G_free(pointer->p_char);
+            pointer->p_char = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_DBSTRING:
+        if (!pointer->p_dbString) {
+            db_free_string(pointer->p_dbString);
+            pointer->p_dbString = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_VECT_ID_CAT_MAP:
+        if (!pointer->p_vect_id_cat_map) {
+            G_free(pointer->p_vect_id_cat_map);
+            pointer->p_vect_id_cat_map = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    }
 }

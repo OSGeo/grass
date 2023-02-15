@@ -17,7 +17,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -28,18 +28,17 @@
 #include <grass/glocale.h>
 #include "enforce.h"
 
-
 #ifndef MAX
-#define MIN(a,b)      ((a<b) ? a : b)
-#define MAX(a,b)      ((a>b) ? a : b)
+#define MIN(a, b) ((a < b) ? a : b)
+#define MAX(a, b) ((a > b) ? a : b)
 #endif
 
 /* function prototypes */
 static void clear_bitmap(struct BM *bm);
 void process_line(struct Map_info *Map, struct Map_info *outMap,
                   const struct parms *parm, void *rbuf, const int *line);
-static void traverse_line_flat(Point2 * pgpts, const int pt, const int npts);
-static void traverse_line_noflat(Point2 * pgpts, const double depth,
+static void traverse_line_flat(Point2 *pgpts, const int pt, const int npts);
+static void traverse_line_noflat(Point2 *pgpts, const double depth,
                                  const int pt, const int npts);
 static void set_min_point(void *buf, const int col, const int row,
                           const double elev, const double depth,
@@ -47,27 +46,23 @@ static void set_min_point(void *buf, const int col, const int row,
 static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
                                      const double px, const double py,
                                      const double rad);
-static void process_line_segment(const int npts, void *rbuf, Point2 * pgxypts,
-                                 Point2 * pgpts, struct BM *bm,
+static void process_line_segment(const int npts, void *rbuf, Point2 *pgxypts,
+                                 Point2 *pgpts, struct BM *bm,
                                  struct Map_info *outMap,
                                  const struct parms *parm);
-double get_value(unsigned short int *ctype, dbColumn * col);
-void set_value(dbColumn * col, unsigned short int *ctype, char *answer,
-               double *parm, double *def_value, dbTable * table,
+double get_value(unsigned short int *ctype, dbColumn *col);
+void set_value(dbColumn *col, unsigned short int *ctype, char *answer,
+               double *parm, double *def_value, dbTable *table,
                struct Cell_head *wind, value_type type);
-struct sql_statement create_select_sql_statement(struct Map_info *Map,
-                                                 struct field_info *Fi,
-                                                 struct boxlist *box_list,
-                                                 char *columns[2],
-                                                 unsigned short int *field,
-                                                 char *keycol);
+struct sql_statement
+create_select_sql_statement(struct Map_info *Map, struct field_info *Fi,
+                            struct boxlist *box_list, char *columns[2],
+                            unsigned short int *field, char *keycol);
 
-
-void enforce_downstream(int infd, int outfd,
-                        struct Map_info *Map, struct Map_info *outMap,
-                        struct parms *parm, struct field_info *Fi,
-                        int *width_col_pos, int *depth_col_pos,
-                        char *columns[2], dbDriver * driver)
+void enforce_downstream(int infd, int outfd, struct Map_info *Map,
+                        struct Map_info *outMap, struct parms *parm,
+                        struct field_info *Fi, int *width_col_pos,
+                        int *depth_col_pos, char *columns[2], dbDriver *driver)
 /*
  * Function: enforce_downstream
  * -------------------------
@@ -133,11 +128,11 @@ void enforce_downstream(int infd, int outfd,
     finfo = Vect_get_field(Map, field);
 
     if (parm->width_col->answer || parm->depth_col->answer) {
-        sql = create_select_sql_statement(Map, Fi, box_list, columns,
-                                          &field, finfo->key);
+        sql = create_select_sql_statement(Map, Fi, box_list, columns, &field,
+                                          finfo->key);
 
-        if (db_open_select_cursor(driver, sql.sql,
-                                  &cursor, DB_SEQUENTIAL) != DB_OK)
+        if (db_open_select_cursor(driver, sql.sql, &cursor, DB_SEQUENTIAL) !=
+            DB_OK)
             G_fatal_error(_("Unable to open select cursor"));
 
         def_width = G_malloc(sizeof(double));
@@ -146,18 +141,18 @@ void enforce_downstream(int infd, int outfd,
         memcpy(def_depth, &parm->sdepth, sizeof(double));
 
         table = db_get_cursor_table(&cursor);
-        G_debug(1, "Default width: %.2f, depth: %.2f",
-                *def_width / distance, *def_depth);
+        G_debug(1, "Default width: %.2f, depth: %.2f", *def_width / distance,
+                *def_depth);
 
         cat_col = db_get_table_column_by_name(table, finfo->key);
         if (parm->width_col->answer) {
-            width_col = db_get_table_column_by_name(table,
-                                                    columns[*width_col_pos]);
+            width_col =
+                db_get_table_column_by_name(table, columns[*width_col_pos]);
             width_col_type = db_get_column_sqltype(width_col);
         }
         if (parm->depth_col->answer) {
-            depth_col = db_get_table_column_by_name(table,
-                                                    columns[*depth_col_pos]);
+            depth_col =
+                db_get_table_column_by_name(table, columns[*depth_col_pos]);
             depth_col_type = db_get_column_sqltype(depth_col);
         }
 
@@ -182,7 +177,8 @@ void enforce_downstream(int infd, int outfd,
             for (c = 0; c < sql.ncats; c++) {
                 /* Line cat has an entry in the db table */
                 if (cat == sql.id_cat_map[c].cat) {
-                    G_debug(3, "Process line with id: %d, cat: %d, "
+                    G_debug(3,
+                            "Process line with id: %d, cat: %d, "
                             "width: %.2f, depth: %.2f",
                             sql.id_cat_map[c].id, cat, parm->swidth,
                             parm->sdepth);
@@ -238,7 +234,7 @@ void process_line(struct Map_info *Map, struct Map_info *outMap,
     static struct BM *bm = NULL;
     Point2 *pgpts = NULL, *pgxypts = NULL;
     PointGrp pg;
-    PointGrp pgxy;              /* copy any points in region to this one */
+    PointGrp pgxy; /* copy any points in region to this one */
 
     G_get_window(&wind);
 
@@ -266,8 +262,8 @@ void process_line(struct Map_info *Map, struct Map_info *outMap,
         int col = Rast_easting_to_col(points->x[i], &wind);
 
         /* rough clipping */
-        if (row < 0 || row > Rast_window_rows() - 1 ||
-            col < 0 || col > Rast_window_cols() - 1) {
+        if (row < 0 || row > Rast_window_rows() - 1 || col < 0 ||
+            col > Rast_window_cols() - 1) {
             if (first_in != -1)
                 in_out = 1;
 
@@ -330,7 +326,6 @@ void process_line(struct Map_info *Map, struct Map_info *outMap,
     process_line_segment(npts, rbuf, pgxypts, pgpts, bm, outMap, parm);
 }
 
-
 static void clear_bitmap(struct BM *bm)
 {
     int i, j;
@@ -340,8 +335,7 @@ static void clear_bitmap(struct BM *bm)
             BM_set(bm, i, j, 0);
 }
 
-
-static void traverse_line_flat(Point2 * pgpts, const int pt, const int npts)
+static void traverse_line_flat(Point2 *pgpts, const int pt, const int npts)
 {
     int j, k;
 
@@ -362,12 +356,11 @@ static void traverse_line_flat(Point2 * pgpts, const int pt, const int npts)
         for (k = (pt + 1); k < j; k++)
             pgpts[k][1] = LINTERP(pgpts[j][1], pgpts[pt][1],
                                   (pgpts[j][0] - pgpts[k][0]) /
-                                  (pgpts[j][0] - pgpts[pt][0]));
+                                      (pgpts[j][0] - pgpts[pt][0]));
     }
 }
 
-
-static void traverse_line_noflat(Point2 * pgpts, const double depth,
+static void traverse_line_noflat(Point2 *pgpts, const double depth,
                                  const int pt, const int npts)
 {
     int j, k;
@@ -387,11 +380,10 @@ static void traverse_line_noflat(Point2 * pgpts, const double depth,
 
     /* linear interp between point pt and the next < */
     for (k = (pt + 1); k < j; k++)
-        pgpts[k][1] = LINTERP(pgpts[j][1], pgpts[pt][1],
-                              (pgpts[j][0] - pgpts[k][0]) /
-                              (pgpts[j][0] - pgpts[pt][0]));
+        pgpts[k][1] =
+            LINTERP(pgpts[j][1], pgpts[pt][1],
+                    (pgpts[j][0] - pgpts[k][0]) / (pgpts[j][0] - pgpts[pt][0]));
 }
-
 
 /* sets value for a cell */
 static void set_min_point(void *data, const int col, const int row,
@@ -399,33 +391,26 @@ static void set_min_point(void *data, const int col, const int row,
                           const RASTER_MAP_TYPE rtype)
 {
     switch (rtype) {
-    case CELL_TYPE:
-        {
-            CELL *cbuf = data;
+    case CELL_TYPE: {
+        CELL *cbuf = data;
 
-            cbuf[row * Rast_window_cols() + col] =
-                MIN(cbuf[row * Rast_window_cols() + col], elev) - (int)depth;
-        }
-        break;
-    case FCELL_TYPE:
-        {
-            FCELL *fbuf = data;
+        cbuf[row * Rast_window_cols() + col] =
+            MIN(cbuf[row * Rast_window_cols() + col], elev) - (int)depth;
+    } break;
+    case FCELL_TYPE: {
+        FCELL *fbuf = data;
 
-            fbuf[row * Rast_window_cols() + col] =
-                MIN(fbuf[row * Rast_window_cols() + col], elev) - depth;
-        }
-        break;
-    case DCELL_TYPE:
-        {
-            DCELL *dbuf = data;
+        fbuf[row * Rast_window_cols() + col] =
+            MIN(fbuf[row * Rast_window_cols() + col], elev) - depth;
+    } break;
+    case DCELL_TYPE: {
+        DCELL *dbuf = data;
 
-            dbuf[row * Rast_window_cols() + col] =
-                MIN(dbuf[row * Rast_window_cols() + col], elev) - depth;
-        }
-        break;
+        dbuf[row * Rast_window_cols() + col] =
+            MIN(dbuf[row * Rast_window_cols() + col], elev) - depth;
+    } break;
     }
 }
-
 
 /* returns the lowest value cell within radius rad of px, py */
 static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
@@ -457,30 +442,24 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     col2 = MIN(rastcols - 1, col + coloff);
 
     switch (rtype) {
-    case CELL_TYPE:
-        {
-            CELL *cbuf = data;
+    case CELL_TYPE: {
+        CELL *cbuf = data;
 
-            if (!(Rast_is_c_null_value(&cbuf[row1 * rastcols + col1])))
-                min = cbuf[row1 * rastcols + col1];
-        }
-        break;
-    case FCELL_TYPE:
-        {
-            FCELL *fbuf = data;
+        if (!(Rast_is_c_null_value(&cbuf[row1 * rastcols + col1])))
+            min = cbuf[row1 * rastcols + col1];
+    } break;
+    case FCELL_TYPE: {
+        FCELL *fbuf = data;
 
-            if (!(Rast_is_f_null_value(&fbuf[row1 * rastcols + col1])))
-                min = fbuf[row1 * rastcols + col1];
-        }
-        break;
-    case DCELL_TYPE:
-        {
-            DCELL *dbuf = data;
+        if (!(Rast_is_f_null_value(&fbuf[row1 * rastcols + col1])))
+            min = fbuf[row1 * rastcols + col1];
+    } break;
+    case DCELL_TYPE: {
+        DCELL *dbuf = data;
 
-            if (!(Rast_is_d_null_value(&dbuf[row1 * rastcols + col1])))
-                min = dbuf[row1 * rastcols + col1];
-        }
-        break;
+        if (!(Rast_is_d_null_value(&dbuf[row1 * rastcols + col1])))
+            min = dbuf[row1 * rastcols + col1];
+    } break;
     }
 
     for (r = row1; r < row2; r++) {
@@ -492,63 +471,45 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 
             if (G_distance(px, py, cx, cy) <= SQR(rad)) {
                 switch (rtype) {
-                case CELL_TYPE:
-                    {
-                        CELL *cbuf = data;
+                case CELL_TYPE: {
+                    CELL *cbuf = data;
 
-                        if (Rast_is_d_null_value(&min)) {
-                            if (!
-                                (Rast_is_c_null_value
-                                 (&cbuf[r * rastcols + c])))
+                    if (Rast_is_d_null_value(&min)) {
+                        if (!(Rast_is_c_null_value(&cbuf[r * rastcols + c])))
+                            min = cbuf[r * rastcols + c];
+                    }
+                    else {
+                        if (!(Rast_is_c_null_value(&cbuf[r * rastcols + c])))
+                            if (cbuf[r * rastcols + c] < min)
                                 min = cbuf[r * rastcols + c];
-                        }
-                        else {
-                            if (!
-                                (Rast_is_c_null_value
-                                 (&cbuf[r * rastcols + c])))
-                                if (cbuf[r * rastcols + c] < min)
-                                    min = cbuf[r * rastcols + c];
-                        }
                     }
-                    break;
-                case FCELL_TYPE:
-                    {
-                        FCELL *fbuf = data;
+                } break;
+                case FCELL_TYPE: {
+                    FCELL *fbuf = data;
 
-                        if (Rast_is_d_null_value(&min)) {
-                            if (!
-                                (Rast_is_f_null_value
-                                 (&fbuf[r * rastcols + c])))
+                    if (Rast_is_d_null_value(&min)) {
+                        if (!(Rast_is_f_null_value(&fbuf[r * rastcols + c])))
+                            min = fbuf[r * rastcols + c];
+                    }
+                    else {
+                        if (!(Rast_is_f_null_value(&fbuf[r * rastcols + c])))
+                            if (fbuf[r * rastcols + c] < min)
                                 min = fbuf[r * rastcols + c];
-                        }
-                        else {
-                            if (!
-                                (Rast_is_f_null_value
-                                 (&fbuf[r * rastcols + c])))
-                                if (fbuf[r * rastcols + c] < min)
-                                    min = fbuf[r * rastcols + c];
-                        }
                     }
-                    break;
-                case DCELL_TYPE:
-                    {
-                        DCELL *dbuf = data;
+                } break;
+                case DCELL_TYPE: {
+                    DCELL *dbuf = data;
 
-                        if (Rast_is_d_null_value(&min)) {
-                            if (!
-                                (Rast_is_d_null_value
-                                 (&dbuf[r * rastcols + c])))
-                                min = dbuf[r * rastcols + c];
-                        }
-                        else {
-                            if (!
-                                (Rast_is_d_null_value
-                                 (&dbuf[r * rastcols + c])))
-                                if (dbuf[r * rastcols + c] < min)
-                                    min = dbuf[r * rastcols + c];
-                        }
+                    if (Rast_is_d_null_value(&min)) {
+                        if (!(Rast_is_d_null_value(&dbuf[r * rastcols + c])))
+                            min = dbuf[r * rastcols + c];
                     }
-                    break;
+                    else {
+                        if (!(Rast_is_d_null_value(&dbuf[r * rastcols + c])))
+                            if (dbuf[r * rastcols + c] < min)
+                                min = dbuf[r * rastcols + c];
+                    }
+                } break;
                 }
             }
         }
@@ -559,15 +520,14 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     return min;
 }
 
-
 /* Now for each segment in the line, use distance from segment
  * to find beginning row from northernmost point, beginning
  * col from easternmost, ending row & col, then loop through
  * bounding box and use distance from segment to emboss
  * new elevations */
-static void process_line_segment(const int npts, void *rbuf,
-                                 Point2 * pgxypts, Point2 * pgpts,
-                                 struct BM *bm, struct Map_info *outMap,
+static void process_line_segment(const int npts, void *rbuf, Point2 *pgxypts,
+                                 Point2 *pgpts, struct BM *bm,
+                                 struct Map_info *outMap,
                                  const struct parms *parm)
 {
     int i, row1, row2, col1, col2;
@@ -609,7 +569,7 @@ static void process_line_segment(const int npts, void *rbuf,
                 double distance;
 
                 cellx = Rast_col_to_easting(c + 0.5, &wind);
-                celly = cy;     /* gets written over in distance2... */
+                celly = cy; /* gets written over in distance2... */
 
                 /* Thought about not going past endpoints (use
                  * status to check) but then pieces end up missing
@@ -618,22 +578,18 @@ static void process_line_segment(const int npts, void *rbuf,
                  * Here we use a bitmap and only change cells once
                  * on the way down */
 
-                distance = sqrt(dig_distance2_point_to_line(cellx, celly, 0,
-                                                            pgxypts[i - 1][0],
-                                                            pgxypts[i - 1][1],
-                                                            0, pgxypts[i][0],
-                                                            pgxypts[i][1], 0,
-                                                            0, &cellx, &celly,
-                                                            NULL, NULL,
-                                                            NULL));
+                distance = sqrt(dig_distance2_point_to_line(
+                    cellx, celly, 0, pgxypts[i - 1][0], pgxypts[i - 1][1], 0,
+                    pgxypts[i][0], pgxypts[i][1], 0, 0, &cellx, &celly, NULL,
+                    NULL, NULL));
 
                 if (distance <= parm->swidth && !BM_get(bm, c, r)) {
                     double dist, elev;
 
                     Vect_reset_line(points);
 
-                    dist = G_distance(pgxypts[i][0], pgxypts[i][1],
-                                      cellx, celly);
+                    dist =
+                        G_distance(pgxypts[i][0], pgxypts[i][1], cellx, celly);
 
                     elev = LINTERP(pgpts[i][1], pgpts[i - 1][1],
                                    (dist / (pgpts[i][0] - pgpts[i - 1][0])));
@@ -660,7 +616,7 @@ static void process_line_segment(const int npts, void *rbuf,
     }
 }
 
-double get_value(unsigned short int *ctype, dbColumn * col)
+double get_value(unsigned short int *ctype, dbColumn *col)
 /*
  * Function:  get_value
  * --------------------
@@ -678,8 +634,8 @@ double get_value(unsigned short int *ctype, dbColumn * col)
         return db_get_value_double(db_get_column_value(col));
 }
 
-void set_value(dbColumn * col, unsigned short int *ctype, char *answer,
-               double *parm, double *def_value, dbTable * table,
+void set_value(dbColumn *col, unsigned short int *ctype, char *answer,
+               double *parm, double *def_value, dbTable *table,
                struct Cell_head *wind, value_type type)
 /*
  * Function:  set_value
@@ -718,7 +674,6 @@ void set_value(dbColumn * col, unsigned short int *ctype, char *answer,
         *parm = *def_value;
 }
 
-
 void adjust_swidth(struct Cell_head *win, double *value)
 /*
  * Function:  adjust_swidth
@@ -732,16 +687,14 @@ void adjust_swidth(struct Cell_head *win, double *value)
     double width = 0.0;
 
     if (*value <= width) {
-        double def_width = G_distance((win->east + win->west) / 2,
-                                      (win->north + win->south) / 2,
-                                      ((win->east + win->west) / 2) +
-                                      win->ew_res,
-                                      (win->north + win->south) / 2);
+        double def_width = G_distance(
+            (win->east + win->west) / 2, (win->north + win->south) / 2,
+            ((win->east + win->west) / 2) + win->ew_res,
+            (win->north + win->south) / 2);
 
         *value = def_width;
     }
 }
-
 
 void adjust_sdepth(double *value)
 /*
@@ -758,13 +711,10 @@ void adjust_sdepth(double *value)
         *value = def_depth;
 }
 
-
-struct sql_statement create_select_sql_statement(struct Map_info *Map,
-                                                 struct field_info *Fi,
-                                                 struct boxlist *box_list,
-                                                 char *columns[2],
-                                                 unsigned short int *field,
-                                                 char *keycol)
+struct sql_statement
+create_select_sql_statement(struct Map_info *Map, struct field_info *Fi,
+                            struct boxlist *box_list, char *columns[2],
+                            unsigned short int *field, char *keycol)
 /*
  * Function: create_select_sql_statement
  * -------------------------------------
@@ -789,7 +739,7 @@ struct sql_statement create_select_sql_statement(struct Map_info *Map,
     bool no_cat = false;
     char query[DB_SQL_MAX];
     char *cat_buf = NULL, *where_buf = NULL;
-    dbString sql;               /* value_string; */
+    dbString sql; /* value_string; */
     struct sql_statement ret;
     struct ptr *p = G_malloc(sizeof(struct ptr));
 
@@ -827,9 +777,8 @@ struct sql_statement create_select_sql_statement(struct Map_info *Map,
             if (ncats == 1)
                 ret.id_cat_map = G_malloc(sizeof(struct vect_id_cat_map));
             else
-                ret.id_cat_map = G_realloc(ret.id_cat_map,
-                                           sizeof(struct vect_id_cat_map) *
-                                           ncats);
+                ret.id_cat_map = G_realloc(
+                    ret.id_cat_map, sizeof(struct vect_id_cat_map) * ncats);
 
             p->type = P_VECT_ID_CAT_MAP;
             p->p_vect_id_cat_map = ret.id_cat_map;

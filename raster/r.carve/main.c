@@ -17,7 +17,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +27,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "enforce.h"
-
 
 /*
    Note: Use rast input type for rast output
@@ -51,10 +50,8 @@
    or use r.grow
  */
 
-
 /* function prototypes */
 static int init_projection(struct Cell_head *window, int *wrap_ncols);
-
 
 int main(int argc, char **argv)
 {
@@ -74,7 +71,7 @@ int main(int argc, char **argv)
     dbDriver *driver = NULL;
     dbString dbstr;
     dbColumn *column = NULL;
-    char *columns[2] = { 0 };
+    char *columns[2] = {0};
 
     /* start GIS engine */
     G_gisinit(argv[0]);
@@ -83,8 +80,9 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     module->label = _("Generates stream channels.");
-    module->description = _("Takes vector stream data, transforms it "
-                            "to raster and subtracts depth from the output DEM.");
+    module->description =
+        _("Takes vector stream data, transforms it "
+          "to raster and subtracts depth from the output DEM.");
 
     parm.inrast = G_define_standard_option(G_OPT_R_INPUT);
     parm.inrast->key = "raster";
@@ -144,8 +142,8 @@ int main(int argc, char **argv)
     G_check_input_output_name(parm.inrast->answer, parm.outrast->answer,
                               G_FATAL_EXIT);
     if (parm.outvect->answer)
-        Vect_check_input_output_name(parm.invect->answer,
-                                     parm.outvect->answer, G_FATAL_EXIT);
+        Vect_check_input_output_name(parm.invect->answer, parm.outvect->answer,
+                                     G_FATAL_EXIT);
 
     /* setup lat/lon projection and distance calculations */
     init_projection(&win, &parm.wrap);
@@ -184,8 +182,7 @@ int main(int argc, char **argv)
 
     Vect_set_open_level(2);
     if (Vect_open_old(&Map, parm.invect->answer, vmapset) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"),
-                      parm.invect->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.invect->answer);
 
     if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);
@@ -216,14 +213,14 @@ int main(int argc, char **argv)
                 if (column) {
                     db_free_column(column);
                     column = NULL;
-                    int ctype =
-                        db_column_Ctype(driver, Fi->table, columns[i]);
+                    int ctype = db_column_Ctype(driver, Fi->table, columns[i]);
                     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
                         /* Close db connection */
                         db_close_database_shutdown_driver(driver);
                         driver = NULL;
-                        G_fatal_error(_("Incompatible column type for <%s> column"),
-                                      columns[i]);
+                        G_fatal_error(
+                            _("Incompatible column type for <%s> column"),
+                            columns[i]);
                     }
                 }
                 else {
@@ -248,8 +245,8 @@ int main(int argc, char **argv)
     if (parm.outvect->answer)
         open_new_vect(&outMap, parm.outvect->answer);
 
-    enforce_downstream(infd, outfd, &Map, &outMap, &parm, Fi,
-                       &width_col_pos, &depth_col_pos, columns, driver);
+    enforce_downstream(infd, outfd, &Map, &outMap, &parm, Fi, &width_col_pos,
+                       &depth_col_pos, columns, driver);
 
     Rast_close(infd);
     Rast_close(outfd);
@@ -263,7 +260,6 @@ int main(int argc, char **argv)
 
     return EXIT_SUCCESS;
 }
-
 
 static int init_projection(struct Cell_head *window, int *wrap_ncols)
 {
@@ -284,7 +280,8 @@ static int init_projection(struct Cell_head *window, int *wrap_ncols)
         *wrap_ncols =
             (360.0 - (window->east - window->west)) / window->ew_res + 1.1;
 #else
-        G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
+        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+                        "reproject map first."),
                       G_program_name());
 #endif
     }
