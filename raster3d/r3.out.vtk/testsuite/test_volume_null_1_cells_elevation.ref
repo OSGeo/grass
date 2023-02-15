@@ -1,5 +1,5 @@
 # vtk DataFile Version 3.0
-GRASS GIS 7 Export
+GRASS GIS 8 Export
 ASCII
 DATASET UNSTRUCTURED_GRID
 POINTS 3840 float
