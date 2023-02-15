@@ -368,7 +368,7 @@ and make sure it is available on PATH.
 
 ```bash
 # Simple way to install clang-format (optional)
-python -m pip install 'clang-format==15.0.6’
+python -m pip install 'clang-format==15.0.6'
 
 # Run script to format all files in source repo
 ./utils/grass_clang_format.sh
