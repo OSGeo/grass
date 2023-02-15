@@ -111,7 +111,7 @@ class Menu(wx.MenuBar):
             if (
                 cmd
                 and cmd[0] not in globalvar.grassCmd
-                and re.match("[rvdipmgt][3bs]?\.([a-z0-9\.])+", cmd[0])
+                and re.match(r"[rvdipmgt][3bs]?\.([a-z0-9\.])+", cmd[0])
             ):
                 menuItem.Enable(False)
 

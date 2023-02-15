@@ -1107,7 +1107,7 @@ class Nviz(object):
         return 1
 
     def ReadVectorColors(self, name, mapset):
-        """Read vector colors
+        r"""Read vector colors
 
         :param name: vector map name
         :param mapset: mapset name (empty string (\c "") for search path)

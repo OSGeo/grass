@@ -453,7 +453,7 @@ def CreateNewVector(
     disableAdd=False,
     disableTable=False,
 ):
-    """Create new vector map layer
+    r"""Create new vector map layer
 
     :param cmd: (prog, \*\*kwargs)
     :param title: window title
