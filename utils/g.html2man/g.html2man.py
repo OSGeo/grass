@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import re
-from ghtml import HTMLParser, HTMLParseError
+from ghtml import HTMLParser
 from ggroff import Formatter
 
 try:
@@ -37,12 +37,6 @@ def main():
     for n, line in enumerate(inf):
         try:
             p.feed(line)
-        except HTMLParseError as err:
-            sys.stderr.write(
-                "%s:%d:%d: Parse error: %s\n"
-                % (infile, err.lineno, err.offset, err.msg)
-            )
-            sys.exit(1)
         except Exception as err:
             sys.stderr.write(
                 "%s:%d:0: Error (%s): %s\n" % (infile, n + 1, repr(err), line)
