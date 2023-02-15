@@ -1,3 +1,4 @@
+---
 name: Python Black Formatting
 
 on:
@@ -19,17 +20,17 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-20.04
-            python-version: "3.10"
-            black-version: "22.3.0"
+          - os: ubuntu-22.04
+            python-version: '3.10'
+            black-version: 22.3.0
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 

@@ -9,15 +9,13 @@ static struct line_cats *PCats;
 static struct line_pnts *PPoints;
 static int point_cat = 1;
 
-static void write_line_forward(struct Map_info *, struct line_pnts *, int,
-                               int, int, double, dbDriver *,
-                               struct field_info *);
-static void write_line_backward(struct Map_info *, struct line_pnts *, int,
-                                int, int, double, dbDriver *,
-                                struct field_info *);
+static void write_line_forward(struct Map_info *, struct line_pnts *, int, int,
+                               int, double, dbDriver *, struct field_info *);
+static void write_line_backward(struct Map_info *, struct line_pnts *, int, int,
+                                int, double, dbDriver *, struct field_info *);
 
 void write_point(struct Map_info *Out, double x, double y, double z,
-                 int line_cat, double along, dbDriver * driver,
+                 int line_cat, double along, dbDriver *driver,
                  struct field_info *Fi)
 {
     G_debug(3, "write_point()");
@@ -66,22 +64,22 @@ void write_point(struct Map_info *Out, double x, double y, double z,
 
 void write_line(struct Map_info *Out, struct line_pnts *LPoints, int cat,
                 int vertex, int interpolate, int reverse, double dmax,
-                dbDriver * driver, struct field_info *Fi)
+                dbDriver *driver, struct field_info *Fi)
 {
     if (reverse == 0)
-        write_line_forward(Out, LPoints, cat, vertex, interpolate, dmax,
-                           driver, Fi);
+        write_line_forward(Out, LPoints, cat, vertex, interpolate, dmax, driver,
+                           Fi);
     else
         write_line_backward(Out, LPoints, cat, vertex, interpolate, dmax,
                             driver, Fi);
 }
 
-static void write_line_forward(struct Map_info *Out,
-                               struct line_pnts *LPoints, int cat, int vertex,
-                               int interpolate, double dmax,
-                               dbDriver * driver, struct field_info *Fi)
+static void write_line_forward(struct Map_info *Out, struct line_pnts *LPoints,
+                               int cat, int vertex, int interpolate,
+                               double dmax, dbDriver *driver,
+                               struct field_info *Fi)
 {
-    if (vertex != 0) {          /* use line vertices */
+    if (vertex != 0) { /* use line vertices */
         double along;
         int vert;
 
@@ -89,8 +87,7 @@ static void write_line_forward(struct Map_info *Out,
         for (vert = 0; vert < LPoints->n_points; vert++) {
             G_debug(3, "vert = %d", vert);
 
-            if (vertex == GV_NODE &&
-                (vert > 0 && vert < LPoints->n_points - 1))
+            if (vertex == GV_NODE && (vert > 0 && vert < LPoints->n_points - 1))
                 continue;
             if (vertex == GV_START && vert > 0)
                 return;
@@ -116,7 +113,7 @@ static void write_line_forward(struct Map_info *Out,
                     double x, y, z, dlen;
 
                     if (len > dmax) {
-                        n = len / dmax + 1;     /* number of segments */
+                        n = len / dmax + 1; /* number of segments */
                         dx /= n;
                         dy /= n;
                         dz /= n;
@@ -136,13 +133,13 @@ static void write_line_forward(struct Map_info *Out,
             }
         }
     }
-    else {                      /* do not use vertices */
+    else { /* do not use vertices */
         int i, n;
         double len, dlen, along, x, y, z;
 
         len = Vect_line_length(LPoints);
-        n = len / dmax + 1;     /* number of segments */
-        dlen = len / n;         /* length of segment */
+        n = len / dmax + 1; /* number of segments */
+        dlen = len / n;     /* length of segment */
 
         G_debug(3, "n = %d len = %f dlen = %f", n, len, dlen);
 
@@ -151,14 +148,14 @@ static void write_line_forward(struct Map_info *Out,
                 along = i * dlen;
                 Vect_point_on_line(LPoints, along, &x, &y, &z, NULL, NULL);
             }
-            else {              /* first and last vertex */
+            else { /* first and last vertex */
                 if (i == 0) {
                     along = 0;
                     x = LPoints->x[0];
                     y = LPoints->y[0];
                     z = LPoints->z[0];
                 }
-                else {          /* last */
+                else { /* last */
                     along = len;
                     x = LPoints->x[LPoints->n_points - 1];
                     y = LPoints->y[LPoints->n_points - 1];
@@ -171,12 +168,12 @@ static void write_line_forward(struct Map_info *Out,
     }
 }
 
-static void write_line_backward(struct Map_info *Out,
-                                struct line_pnts *LPoints, int cat,
-                                int vertex, int interpolate, double dmax,
-                                dbDriver * driver, struct field_info *Fi)
+static void write_line_backward(struct Map_info *Out, struct line_pnts *LPoints,
+                                int cat, int vertex, int interpolate,
+                                double dmax, dbDriver *driver,
+                                struct field_info *Fi)
 {
-    if (vertex == GV_VERTEX || vertex == GV_NODE) {     /* use line vertices */
+    if (vertex == GV_VERTEX || vertex == GV_NODE) { /* use line vertices */
         double along;
         int vert;
 
@@ -207,7 +204,7 @@ static void write_line_backward(struct Map_info *Out,
                     double x, y, z, dlen;
 
                     if (len > dmax) {
-                        n = len / dmax + 1;     /* number of segments */
+                        n = len / dmax + 1; /* number of segments */
                         dx /= n;
                         dy /= n;
                         dz /= n;
@@ -227,13 +224,13 @@ static void write_line_backward(struct Map_info *Out,
             }
         }
     }
-    else {                      /* do not use vertices */
+    else { /* do not use vertices */
         int i, n;
         double len, dlen, along, x, y, z;
 
         len = Vect_line_length(LPoints);
-        n = len / dmax + 1;     /* number of segments */
-        dlen = len / n;         /* length of segment */
+        n = len / dmax + 1; /* number of segments */
+        dlen = len / n;     /* length of segment */
 
         G_debug(3, "n = %d len = %f dlen = %f", n, len, dlen);
 
@@ -242,14 +239,14 @@ static void write_line_backward(struct Map_info *Out,
                 along = len - i * dlen;
                 Vect_point_on_line(LPoints, along, &x, &y, &z, NULL, NULL);
             }
-            else {              /* first and last vertex */
+            else { /* first and last vertex */
                 if (i == 0) {
                     along = len;
                     x = LPoints->x[LPoints->n_points - 1];
                     y = LPoints->y[LPoints->n_points - 1];
                     z = LPoints->z[LPoints->n_points - 1];
                 }
-                else {          /* last */
+                else { /* last */
                     along = 0;
                     x = LPoints->x[0];
                     y = LPoints->y[0];

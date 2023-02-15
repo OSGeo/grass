@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_desc_table.c
- * 
+ *
  * \brief DBMI Library (driver) - describe table
  *
  * (C) 1999-2008 by the GRASS Development Team

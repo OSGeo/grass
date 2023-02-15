@@ -4,7 +4,7 @@
 #include <grass/raster.h>
 #include <grass/stats.h>
 
-void c_stddev(DCELL * result, DCELL * values, int n, const void *closure)
+void c_stddev(DCELL *result, DCELL *values, int n, const void *closure)
 {
     DCELL var;
 
@@ -16,7 +16,7 @@ void c_stddev(DCELL * result, DCELL * values, int n, const void *closure)
         *result = sqrt(var);
 }
 
-void w_stddev(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_stddev(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 {
     DCELL var;
 

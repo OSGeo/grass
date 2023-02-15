@@ -1,4 +1,3 @@
-
 /***************************************************************/
 /*                                                             */
 /*        cost.h    in   ~/src/Gcost                           */
@@ -13,8 +12,7 @@
 #ifndef __COST_H__
 #define __COST_H__
 
-struct cost
-{
+struct cost {
     double min_cost;
     long age;
     int row;

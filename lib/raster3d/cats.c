@@ -10,9 +10,8 @@
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Writes the
  * categories stored in the <em>cats</em> structure into the categories file for
@@ -25,7 +24,7 @@
  */
 
 int Rast3d_write_cats(const char *name, struct Categories *cats)
- /* adapted from Rast_write_cats */
+/* adapted from Rast_write_cats */
 {
     FILE *fd;
     int i;
@@ -45,8 +44,8 @@ int Rast3d_write_cats(const char *name, struct Categories *cats)
 
     /* write format and coefficients */
     fprintf(fd, "%s\n", cats->fmt != NULL ? cats->fmt : "");
-    fprintf(fd, "%.2f %.2f %.2f %.2f\n",
-            cats->m1, cats->a1, cats->m2, cats->a2);
+    fprintf(fd, "%.2f %.2f %.2f %.2f\n", cats->m1, cats->a1, cats->m2,
+            cats->a2);
 
     /* write the cat numbers:label */
     for (i = 0; i < Rast_quant_nof_rules(&cats->q); i++) {
@@ -73,9 +72,9 @@ int Rast3d_write_cats(const char *name, struct Categories *cats)
 
 /*---------------------------------------------------------------------------*/
 
-static int
-read_cats(const char *name, const char *mapset, struct Categories *pcats)
- /* adapted from G__read_cats */
+static int read_cats(const char *name, const char *mapset,
+                     struct Categories *pcats)
+/* adapted from G__read_cats */
 {
     FILE *fd;
     char buff[1024];
@@ -153,20 +152,19 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
     fclose(fd);
     return 0;
 
-  error:
+error:
     fclose(fd);
     return -1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Reads the categories file for map <em>name</em> in <em>mapset</em> and
- * stores the categories in the <em>pcats</em> structure.  See <em>Rast_read_cats</em>
- * (Raster_Category_File) for details and return values.
+ * stores the categories in the <em>pcats</em> structure.  See
+ * <em>Rast_read_cats</em> (Raster_Category_File) for details and return values.
  *
  *  \param name
  *  \param mapset
@@ -174,10 +172,9 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
  *  \return int
  */
 
-int
-Rast3d_read_cats(const char *name, const char *mapset,
-                 struct Categories *pcats)
- /* adapted from Rast_read_cats */
+int Rast3d_read_cats(const char *name, const char *mapset,
+                     struct Categories *pcats)
+/* adapted from Rast_read_cats */
 {
     const char *type;
 
@@ -192,7 +189,7 @@ Rast3d_read_cats(const char *name, const char *mapset,
         return 0;
     }
 
-    G_warning("category support for [%s] in mapset [%s] %s",
-              name, mapset, type);
+    G_warning("category support for [%s] in mapset [%s] %s", name, mapset,
+              type);
     return -1;
 }

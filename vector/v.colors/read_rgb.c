@@ -20,8 +20,7 @@ void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
 
     fi = Vect_get_field(Map, layer);
     if (!fi)
-        G_fatal_error(_("Database connection not defined for layer %d"),
-                      layer);
+        G_fatal_error(_("Database connection not defined for layer %d"), layer);
 
     driver = db_start_driver_open_database(fi->driver, fi->database);
     if (!driver)
@@ -32,8 +31,8 @@ void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
         G_fatal_error(_("Data type of RGB column <%s> must be char"),
                       rgb_column);
 
-    if (0 > db_select_CatValArray(driver, fi->table, fi->key,
-                                  rgb_column, NULL, &cvarr))
+    if (0 > db_select_CatValArray(driver, fi->table, fi->key, rgb_column, NULL,
+                                  &cvarr))
         G_warning(_("No RGB values found"));
 
     Rast_init_colors(colors);
@@ -58,8 +57,7 @@ void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
         }
 
         Rast_add_c_color_rule((const CELL *)&(cv->cat), red, grn, blu,
-                              (const CELL *)&(cv->cat), red, grn, blu,
-                              colors);
+                              (const CELL *)&(cv->cat), red, grn, blu, colors);
     }
 
     if (nskipped > 0)

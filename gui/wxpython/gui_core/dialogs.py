@@ -453,7 +453,7 @@ def CreateNewVector(
     disableAdd=False,
     disableTable=False,
 ):
-    """Create new vector map layer
+    r"""Create new vector map layer
 
     :param cmd: (prog, \*\*kwargs)
     :param title: window title
@@ -986,8 +986,7 @@ class GroupDialog(wx.Dialog):
         if not check:
             self.gLayerBox.DeselectAll()
         else:
-            for item in range(self.subgListBox.GetCount()):
-                self.gLayerBox.Select(item)
+            self.gLayerBox.SelectAll()
 
         event.Skip()
 

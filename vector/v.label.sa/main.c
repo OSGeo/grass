@@ -1,4 +1,4 @@
-/* ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.label.sa
  * AUTHOR(S):    Wolf Bergenheim
@@ -37,8 +37,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("paint labels"));
-    module->description =
-        _("Create optimally placed labels for vector map(s)");
+    module->description = _("Create optimally placed labels for vector map(s)");
 
     /* parse options and flags */
     p.map = G_define_standard_option(G_OPT_V_MAP);
@@ -53,8 +52,7 @@ int main(int argc, char *argv[])
     p.column->key = "column";
     p.column->type = TYPE_STRING;
     p.column->required = YES;
-    p.column->description =
-        _("Name of attribute column to be used for labels");
+    p.column->description = _("Name of attribute column to be used for labels");
 
     p.labels = G_define_option();
     p.labels->key = "labels";
@@ -67,8 +65,7 @@ int main(int argc, char *argv[])
     p.font->key = "font";
     p.font->type = TYPE_STRING;
     p.font->required = YES;
-    p.font->description =
-        _("Name of TrueType font (as listed in the fontcap)");
+    p.font->description = _("Name of TrueType font (as listed in the fontcap)");
     p.font->guisection = _("Font");
     p.font->gisprompt = "font";
 
@@ -99,7 +96,7 @@ int main(int argc, char *argv[])
     p.color->type = TYPE_STRING;
     p.color->answer = "black";
     p.color->options = "aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-        "magenta,orange,purple,red,violet,white,yellow";
+                       "magenta,orange,purple,red,violet,white,yellow";
     p.color->guisection = _("Colors");
 
     p.hlcolor = G_define_option();
@@ -182,7 +179,7 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
-void print_label(FILE * labelf, label_t * label, struct params *p)
+void print_label(FILE *labelf, label_t *label, struct params *p)
 {
     int cc, hlwidth;
     double size;
@@ -193,8 +190,8 @@ void print_label(FILE * labelf, label_t * label, struct params *p)
 
     fprintf(labelf, "east: %lf\n", label->candidates[cc].point.x);
     fprintf(labelf, "north: %lf\n", label->candidates[cc].point.y);
-    fprintf(labelf, "xoffset: %lf\n", 0.0);     /*  * (size)); */
-    fprintf(labelf, "yoffset: %lf\n", 0.0);     /*  * (size)); */
+    fprintf(labelf, "xoffset: %lf\n", 0.0); /*  * (size)); */
+    fprintf(labelf, "yoffset: %lf\n", 0.0); /*  * (size)); */
     fprintf(labelf, "ref: %s\n", "bottom left");
 
     fprintf(labelf, "font: %s\n", p->font->answer);

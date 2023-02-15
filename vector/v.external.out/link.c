@@ -8,8 +8,8 @@
 
 static int parse_option_pg(const char *, char **, char **);
 
-void make_link(const char *dsn_opt,
-               const char *format, char *option_str, char **options)
+void make_link(const char *dsn_opt, const char *format, char *option_str,
+               char **options)
 {
     int use_ogr;
     char *filename, *dsn;
@@ -22,8 +22,10 @@ void make_link(const char *dsn_opt,
     /* check for weird options */
     if (G_strncasecmp(dsn_opt, "PG:", 3) == 0 &&
         strcmp(format, "PostgreSQL") != 0)
-        G_warning(_("Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" "
-                   "format (\"%s\" given)"), format);
+        G_warning(_("Data source starts with \"PG:\" prefix, expecting "
+                    "\"PostgreSQL\" "
+                    "format (\"%s\" given)"),
+                  format);
 
     /* use OGR ? */
     use_ogr = is_ogr(format);
@@ -72,13 +74,13 @@ void make_link(const char *dsn_opt,
             G_set_key_value("conninfo", dsn, key_val);
     }
 
-    if (use_ogr) {              /* OGR */
+    if (use_ogr) { /* OGR */
         if (format)
             G_set_key_value("format", format, key_val);
         if (option_str)
             G_set_key_value("options", option_str, key_val);
     }
-    else {                      /* PG */
+    else { /* PG */
         G_set_key_value("format", "PostgreSQL", key_val);
     }
     /* save file - OGR or PG */

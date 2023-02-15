@@ -1,9 +1,8 @@
-
 /************************************************************
  *
  *                 get_minHa.c (for spread)
  *  This routine is to get the cell with the SMALLEST min_
- *  cost. This cell is the root of the (min) heap. After 
+ *  cost. This cell is the root of the (min) heap. After
  *  removing the root, it calls fixHa routine to restore a
  *  heap order.
  *

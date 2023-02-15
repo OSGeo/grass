@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2022 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -66,7 +66,11 @@ _DEBUG = None
 # for wxpath
 _WXPYTHON_BASE = None
 
-ENCODING = locale.getdefaultlocale()[1]
+try:
+    # Python >= 3.11
+    ENCODING = locale.getencoding()
+except AttributeError:
+    ENCODING = locale.getdefaultlocale()[1]
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -645,11 +649,7 @@ def create_fallback_session(gisrc, tmpdir):
     """Creates fallback temporary session"""
     # Create temporary location
     set_mapset(
-        gisrc=gisrc,
-        geofile="XY",
-        create_new=True,
-        tmp_location=True,
-        tmpdir=tmpdir,
+        gisrc=gisrc, geofile="XY", create_new=True, tmp_location=True, tmpdir=tmpdir
     )
 
 
@@ -769,7 +769,8 @@ def set_paths(grass_config_dir):
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
     # this works for subprocesses but won't affect the current process
-    path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
+    if LD_LIBRARY_PATH_VAR:
+        path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
 
 
 def find_exe(pgm):
@@ -1418,7 +1419,11 @@ def set_language(grass_config_dir):
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        language, encoding = locale.getdefaultlocale()
+        try:
+            # Python >= 3.11
+            language, encoding = locale.getlocale()
+        except AttributeError:
+            language, encoding = locale.getdefaultlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"
@@ -1560,10 +1565,7 @@ def set_language(grass_config_dir):
         del os.environ["LC_ALL"]  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    if encoding:
-        gettext.install("grasslibs", gpath("locale"), codeset=encoding)
-    else:
-        gettext.install("grasslibs", gpath("locale"))
+    gettext.install("grasslibs", gpath("locale"))
 
 
 def lock_mapset(mapset_path, force_gislock_removal, user):
@@ -1757,9 +1759,7 @@ def run_batch_job(batch_job: list):
         script_in_addon_path = None
         if "GRASS_ADDON_BASE" in os.environ:
             script_in_addon_path = os.path.join(
-                os.environ["GRASS_ADDON_BASE"],
-                "scripts",
-                batch_job[0],
+                os.environ["GRASS_ADDON_BASE"], "scripts", batch_job[0]
             )
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
@@ -1772,8 +1772,7 @@ def run_batch_job(batch_job: list):
         proc = Popen(batch_job, shell=False, env=os.environ)
     except OSError as error:
         error_message = _("Execution of <{cmd}> failed:\n" "{error}").format(
-            cmd=batch_job_string,
-            error=error,
+            cmd=batch_job_string, error=error
         )
         # No such file or directory
         if error.errno == errno.ENOENT:
@@ -2039,6 +2038,21 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """.format(
             sh_history=sh_history
         )
+        # Ubuntu sudo creates a file .sudo_as_admin_successful and bash checks
+        # for this file in the home directory from /etc/bash.bashrc and prints a
+        # message if it's not detected. This can be suppressed with either
+        # creating the file ~/.sudo_as_admin_successful (it's always empty) or
+        # by creating a file ~/.hushlogin (also an empty file)
+        # Here we create the file in the Mapset directory if it exists in the
+        # user's home directory.
+        sudo_success_file = ".sudo_as_admin_successful"
+        if os.path.exists(os.path.join(userhome, sudo_success_file)):
+            try:
+                # Open with append so that if the file already exists there
+                # isn't any error.
+                fh = open(os.path.join(home, sudo_success_file), "a")
+            finally:
+                fh.close()
 
     # double curly brackets means single one for format function
     # setting LOCATION for backwards compatibility
@@ -2559,8 +2573,7 @@ def main():
         from grass.grassdb.checks import can_start_in_mapset
 
         last_mapset_usable = can_start_in_mapset(
-            mapset_path=last_mapset_path,
-            ignore_lock=params.force_gislock_removal,
+            mapset_path=last_mapset_path, ignore_lock=params.force_gislock_removal
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:

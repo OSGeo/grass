@@ -31,4 +31,3 @@ mkdir -p data/grassdata \
   && unzip -qq nc_basic_spm_grass7.zip \
   && mv nc_basic_spm_grass7 data/grassdata \
   && rm nc_basic_spm_grass7.zip
-  

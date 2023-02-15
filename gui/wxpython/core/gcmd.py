@@ -783,7 +783,11 @@ def GetDefaultEncoding(forceUTF8=False):
 
     :return: system encoding (can be None)
     """
-    enc = locale.getdefaultlocale()[1]
+    try:
+        # Python >= 3.11
+        enc = locale.getencoding()
+    except AttributeError:
+        enc = locale.getdefaultlocale()[1]
     if forceUTF8 and (enc is None or enc == "UTF8"):
         return "UTF-8"
 

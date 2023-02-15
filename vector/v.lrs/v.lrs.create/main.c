@@ -22,7 +22,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
-*****************************************************************************/
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -36,46 +36,49 @@
 
 /* MP is milepost */
 
-#define TO_TYPE_FROM 1          /* the same as specified fo from_ */
-#define TO_TYPE_MAP  2          /* calculated from map along the line from previous MP */
-#define TO_TYPE_USER 3          /* defined by user */
+/* the same as specified fo from_ */
+#define TO_TYPE_FROM     1
+/* calculated from map along the line from previous MP */
+#define TO_TYPE_MAP      2
+/* defined by user */
+#define TO_TYPE_USER     3
 
-#define DIR_FORWARD   1
-#define DIR_BACKWARD  2
-#define DIR_UNKNOWN   3
+#define DIR_FORWARD      1
+#define DIR_BACKWARD     2
+#define DIR_UNKNOWN      3
 
-#define ERR_OK           0      /* No error */
-#define ERR_END_GT_START 1      /* MP: end > start */
-#define ERR_THRESHOLD    2      /* MP is outside threshold */
-#define ERR_IDENT        3      /* more MPs with identical distance along the line */
-#define ERR_ORDER        4      /* MP in wrong order (used for points) */
-#define ERR_NO_POINT     5      /* No MP point found for MP DB record */
-#define ERR_NO_MP        6      /* Line without MP */
-#define ERR_ONE_MP       7      /* Line with 1 MP only */
-#define ERR_NO_DIR       8      /* Unknown direction of line */
-#define ERR_LINE_ORDER   9      /* Wrong order of MP along line (used for lines) */
+#define ERR_OK           0 /* No error */
+#define ERR_END_GT_START 1 /* MP: end > start */
+#define ERR_THRESHOLD    2 /* MP is outside threshold */
+#define ERR_IDENT        3 /* more MPs with identical distance along the line */
+#define ERR_ORDER        4 /* MP in wrong order (used for points) */
+#define ERR_NO_POINT     5 /* No MP point found for MP DB record */
+#define ERR_NO_MP        6 /* Line without MP */
+#define ERR_ONE_MP       7 /* Line with 1 MP only */
+#define ERR_NO_DIR       8 /* Unknown direction of line */
+#define ERR_LINE_ORDER   9 /* Wrong order of MP along line (used for lines) */
 
-typedef struct
-{
+typedef struct {
     double x, y;
     int cat;
-    int line_idx;               /* index to line in 'lines' array */
-    double dist_along;          /* distance from the beginning of the line */
-    double start_mp, start_off; /* milepost, offset for the beginning of ref. segment */
-    double end_mp, end_off;     /* milepost, offset for the end of ref. segment */
-    int to_type;                /* type of the end_mp, end_off */
-    int err;                    /* error number */
+    int line_idx;      /* index to line in 'lines' array */
+    double dist_along; /* distance from the beginning of the line */
+    double start_mp,
+        start_off; /* milepost, offset for the beginning of ref. segment */
+    double end_mp, end_off; /* milepost, offset for the end of ref. segment */
+    int to_type;            /* type of the end_mp, end_off */
+    int err;                /* error number */
 } MILEPOST;
 
-typedef struct
-{
-    int line, cat;              /* line number in 'In' vector and category of nearest line */
-    int nmposts;                /* number of attached MPs */
-    int first_mpost_idx;        /* index of first/last MP in 'mposts' */
-    int direction;              /* direction DIR_FORWARD/DIR_BACKWARD if MPs have increasing/decreasing */
+typedef struct {
+    int line, cat; /* line number in 'In' vector and category of nearest line */
+    int nmposts;   /* number of attached MPs */
+    int first_mpost_idx; /* index of first/last MP in 'mposts' */
+    int direction;       /* direction DIR_FORWARD/DIR_BACKWARD if MPs have
+                            increasing/decreasing */
     /* values along the line */
-    double length;              /* line length */
-    int err;                    /* error number */
+    double length; /* line length */
+    int err;       /* error number */
 } RLINE;
 
 int cmp_along(const void *pa, const void *pb);
@@ -88,11 +91,11 @@ int main(int argc, char **argv)
     int cat, *cats, ncat, lfield, pfield;
     int line, first, last, point, type;
     int nrlines, nmposts, nallmposts, mpost;
-    MILEPOST *mposts /* table of currently referenced MPs */ ;
-    RLINE *rlines;              /* table of currently referenced lines */
+    MILEPOST *mposts /* table of currently referenced MPs */;
+    RLINE *rlines; /* table of currently referenced lines */
     double thresh, dist_to, dist_along, distance_to;
     double end_mp, end_off;
-    double multip = 1000;       /* Number of map units per MP unit */
+    double multip = 1000; /* Number of map units per MP unit */
     struct Option *in_lines_opt, *out_lines_opt, *points_opt, *err_opt;
     struct Option *lfield_opt, *pfield_opt;
     struct Option *lidcol_opt, *pidcol_opt;
@@ -139,8 +142,7 @@ int main(int argc, char **argv)
 
     points_opt = G_define_standard_option(G_OPT_V_INPUT);
     points_opt->key = "points";
-    points_opt->description =
-        _("Input vector map containing reference points");
+    points_opt->description = _("Input vector map containing reference points");
 
     lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     lfield_opt->key = "llayer";
@@ -154,8 +156,7 @@ int main(int argc, char **argv)
     lidcol_opt->key = "lidcol";
     lidcol_opt->type = TYPE_STRING;
     lidcol_opt->required = YES;
-    lidcol_opt->description =
-        _("Column containing line identifiers for lines");
+    lidcol_opt->description = _("Column containing line identifiers for lines");
 
     pidcol_opt = G_define_option();
     pidcol_opt->key = "pidcol";
@@ -260,8 +261,7 @@ int main(int argc, char **argv)
         G_fatal_error(_("Vector map <%s> not found"), points_opt->answer);
 
     if (Vect_open_old(&PMap, points_opt->answer, mapset) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"),
-                      points_opt->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), points_opt->answer);
 
     /* Open output lines */
     if (Vect_open_new(&Out, out_lines_opt->answer, Vect_is_3d(&In)) < 0)
@@ -276,10 +276,11 @@ int main(int argc, char **argv)
     }
 
     /* Because the line feature identified by one id (lidcol) may be split
-     *  to more line parts, and milepost may be in threshold for more such parts,
-     *  so that if each line part would be processed separetely, it could be attached
-     *  to more parts, it is better to process always whole line feature (all parts)
-     *  of one id at the same time, and attache mileposts always to nearest one */
+     *  to more line parts, and milepost may be in threshold for more such
+     * parts, so that if each line part would be processed separetely, it could
+     * be attached to more parts, it is better to process always whole line
+     * feature (all parts) of one id at the same time, and attache mileposts
+     * always to nearest one */
 
     /* Open the database for lines and points */
     Lfi = Vect_get_field(&In, lfield);
@@ -329,8 +330,10 @@ int main(int argc, char **argv)
     }
     db_init_string(&rsstmt);
     sprintf(buf,
-            "create table %s (rsid int, lcat int, lid int, start_map double precision, "
-            "end_map double precision, start_mp double precision, start_off double precision, "
+            "create table %s (rsid int, lcat int, lid int, start_map double "
+            "precision, "
+            "end_map double precision, start_mp double precision, start_off "
+            "double precision, "
             "end_mp double precision, end_off double precision, end_type int)",
             table_opt->answer);
     G_debug(debug, "ref tab SQL: %s", buf);
@@ -349,7 +352,7 @@ int main(int argc, char **argv)
 
     /* TODO: we expect line id to be integer, extend to string later */
     ltable = db_get_cursor_table(&lcursor);
-    lcolumn = db_get_table_column(ltable, 0);   /* first column */
+    lcolumn = db_get_table_column(ltable, 0); /* first column */
     lcoltype = db_get_column_sqltype(lcolumn);
     lccoltype = db_sqltype_to_Ctype(lcoltype);
 
@@ -379,7 +382,7 @@ int main(int argc, char **argv)
                 break;
             }
         }
-        if (!found) {           /* add new lid */
+        if (!found) { /* add new lid */
             G_debug(debug, "lid = %d (new)", lid);
             if (nLid == aLid) {
                 aLid += 1;
@@ -391,11 +394,10 @@ int main(int argc, char **argv)
     }
     db_close_cursor(&lcursor);
 
-
-    /* Allocate space for lines and points (maybe more than used, but not less ) */
-    rlines = (RLINE *) G_malloc(Vect_get_num_lines(&In) * sizeof(RLINE));
-    mposts =
-        (MILEPOST *) G_malloc(Vect_get_num_lines(&PMap) * sizeof(MILEPOST));
+    /* Allocate space for lines and points (maybe more than used, but not less)
+     */
+    rlines = (RLINE *)G_malloc(Vect_get_num_lines(&In) * sizeof(RLINE));
+    mposts = (MILEPOST *)G_malloc(Vect_get_num_lines(&PMap) * sizeof(MILEPOST));
 
     /* Go throuhg each line id */
     G_debug(debug, "Process each line id");
@@ -417,8 +419,8 @@ int main(int argc, char **argv)
             if (!(type & GV_LINES))
                 continue;
             if (!(Vect_cat_get(LCats, lfield, &cat))) {
-                G_warning(_("Line [%d] without category (layer [%d])"),
-                          line, lfield);
+                G_warning(_("Line [%d] without category (layer [%d])"), line,
+                          lfield);
                 continue;
             }
             for (j = 0; j < ncat; j++) {
@@ -472,7 +474,7 @@ int main(int argc, char **argv)
             if (!more)
                 break;
 
-            pcolumn = db_get_table_column(ptable, 0);   /* first column */
+            pcolumn = db_get_table_column(ptable, 0); /* first column */
             pvalue = db_get_column_value(pcolumn);
             mposts[nmposts].cat = db_get_value_int(pvalue);
 
@@ -488,7 +490,8 @@ int main(int argc, char **argv)
             if (floor(mp_tmp) != mp_tmp) {
                 mp_tmp2 = floor(mp_tmp);
                 off_tmp2 = off_tmp + multip * (mp_tmp - mp_tmp2);
-                G_warning(_("Milepost (start) %f+%f used as %f+%f (change MP to integer)"),
+                G_warning(_("Milepost (start) %f+%f used as %f+%f (change MP "
+                            "to integer)"),
                           mp_tmp, off_tmp, mp_tmp2, off_tmp2);
             }
             else {
@@ -510,7 +513,8 @@ int main(int argc, char **argv)
             if (floor(mp_tmp) != mp_tmp) {
                 mp_tmp2 = floor(mp_tmp);
                 off_tmp2 = off_tmp + multip * (mp_tmp - mp_tmp2);
-                G_warning(_("Milepost (end) %f+%f used as %f+%f (change MP to integer)"),
+                G_warning(_("Milepost (end) %f+%f used as %f+%f (change MP to "
+                            "integer)"),
                           mp_tmp, off_tmp, mp_tmp2, off_tmp2);
             }
             else {
@@ -529,15 +533,15 @@ int main(int argc, char **argv)
 
         G_debug(debug, "  %d mileposts selected from db", nmposts);
 
-        /* Go through all points and store numbers of those matching category and within
-         *  threshold of any line*/
+        /* Go through all points and store numbers of those matching category
+         * and within threshold of any line */
         for (point = 1; point <= Vect_get_num_lines(&PMap); point++) {
             type = Vect_read_line(&PMap, PPoints, PCats, point);
             if (!(type & GV_POINT))
                 continue;
             if (!(Vect_cat_get(PCats, pfield, &cat))) {
-                G_warning(_("Point [%d] without category (layer [%d])"),
-                          point, pfield);
+                G_warning(_("Point [%d] without category (layer [%d])"), point,
+                          pfield);
                 continue;
             }
             mpost = -1;
@@ -558,8 +562,8 @@ int main(int argc, char **argv)
                 for (j = 0; j < nrlines; j++) {
                     line = rlines[j].line;
                     Vect_read_line(&In, LPoints, NULL, line);
-                    Vect_line_distance(LPoints, PPoints->x[0], PPoints->y[0],
-                                       0, 0, NULL, NULL, NULL, &dist_to, NULL,
+                    Vect_line_distance(LPoints, PPoints->x[0], PPoints->y[0], 0,
+                                       0, NULL, NULL, NULL, &dist_to, NULL,
                                        &dist_along);
                     G_debug(debug,
                             " line %d dist to line = %f, dist along line = %f",
@@ -576,25 +580,28 @@ int main(int argc, char **argv)
                             "Point = %d cat = %d line = %d, distance = %f",
                             point, cat, mposts[mpost].line_idx, distance_to);
                     G_debug(debug,
-                            "  start_mp = %f start_off = %f end_mp = %f end_off = %f",
+                            "  start_mp = %f start_off = %f end_mp = %f "
+                            "end_off = %f",
                             mposts[mpost].start_mp, mposts[mpost].start_off,
                             mposts[mpost].end_mp, mposts[mpost].end_off);
                 }
                 else {
                     mposts[mpost].line_idx = PORT_INT_MAX;
                     mposts[mpost].err = ERR_THRESHOLD;
-                    G_warning(_("Point [%d] cat [%d] is out of threshold (distance = %f)"),
+                    G_warning(_("Point [%d] cat [%d] is out of threshold "
+                                "(distance = %f)"),
                               point, cat, distance_to);
                 }
             }
         }
-        G_debug(debug, "  %d points attached to line(s) of line id %d",
-                nmposts, lid);
+        G_debug(debug, "  %d points attached to line(s) of line id %d", nmposts,
+                lid);
 
         /* Sort MPs according to line_idx, and dist_along */
         qsort((void *)mposts, nmposts, sizeof(MILEPOST), cmp_along);
 
-        /* Reduce nmposts to exclude not attached db records of MPs from processing */
+        /* Reduce nmposts to exclude not attached db records of MPs from
+         * processing */
         nallmposts = nmposts;
         for (j = 0; j < nmposts; j++) {
             if (mposts[j].line_idx == PORT_INT_MAX) {
@@ -604,13 +611,14 @@ int main(int argc, char **argv)
         }
         G_debug(debug, "  %d mileposts attached to line(s)", nmposts);
 
-        /* Go thourough all attached MPs and fill in info about MPs to 'lines' table */
+        /* Go thourough all attached MPs and fill in info about MPs to 'lines'
+         * table */
         last = -1;
         for (j = 0; j < nmposts; j++) {
             G_debug(debug, " line_idx = %d, point cat = %d dist_along = %f",
                     mposts[j].line_idx, mposts[j].cat, mposts[j].dist_along);
 
-            if (mposts[j].line_idx != last) {   /* line_index changed */
+            if (mposts[j].line_idx != last) { /* line_index changed */
                 rlines[mposts[j].line_idx].first_mpost_idx = j;
                 rlines[mposts[j].line_idx].nmposts = 1;
             }
@@ -620,12 +628,14 @@ int main(int argc, char **argv)
             last = mposts[j].line_idx;
         }
 
-        /* 1) Check number of MP 
-         * 2) Guess direction: find direction for each segment between 2 MPs and at the end
-         *  compare number of segmnets in both directions, if equal assign DIR_UNKNOWN. */
+        /* 1) Check number of MP
+         * 2) Guess direction: find direction for each segment between 2 MPs and
+         * at the end compare number of segmnets in both directions, if equal
+         * assign DIR_UNKNOWN. */
         for (j = 0; j < nrlines; j++) {
             G_debug(debug,
-                    " Guess direction line_idx = %d, cat = %d, nmposts = %d first_mpost_idx = %d",
+                    " Guess direction line_idx = %d, cat = %d, nmposts = %d "
+                    "first_mpost_idx = %d",
                     j, rlines[j].cat, rlines[j].nmposts,
                     rlines[j].first_mpost_idx);
 
@@ -639,8 +649,8 @@ int main(int argc, char **argv)
                 rlines[j].err = ERR_ONE_MP;
 
             if (rlines[j].nmposts < 2) {
-                /* TODO?: in some cases could be possible to guess from one point?
-                 *        E.g. start_mp = 0 for  -+-------------  */
+                /* TODO?: in some cases could be possible to guess from one
+                 * point? E.g. start_mp = 0 for  -+-------------  */
 
                 continue;
             }
@@ -681,7 +691,8 @@ int main(int argc, char **argv)
             }
         }
 
-        /* Sort MPs again according to line_idx, and dist_along but with correct direction */
+        /* Sort MPs again according to line_idx, and dist_along but with correct
+         * direction */
         qsort((void *)mposts, nmposts, sizeof(MILEPOST), cmp_along);
 
         /* Check order of MPs along the line and write LRS for line */
@@ -690,78 +701,81 @@ int main(int argc, char **argv)
                     "MAKE LR: line_idx = %d, nmposts = %d first_mpost_idx = %d",
                     j, rlines[j].nmposts, rlines[j].first_mpost_idx);
 
-
             first = rlines[j].first_mpost_idx;
             last = first + rlines[j].nmposts - 1;
 
             /* Check order of MPs along the line if possible */
-            order = 0;          /* wrong order in case nmposts < 2 or DIR_UNKNOWN */
+            order = 0; /* wrong order in case nmposts < 2 or DIR_UNKNOWN */
             if (rlines[j].nmposts >= 2 && rlines[j].direction != DIR_UNKNOWN) {
-                /* Note: some MP could have more errors at the time, only first is recorded */
+                /* Note: some MP could have more errors at the time, only first
+                 * is recorded */
                 G_debug(debug, "Check order of MPs along the line");
-                order = 1;      /* first we expect that MP order is OK */
+                order = 1; /* first we expect that MP order is OK */
                 for (k = first; k <= last; k++) {
                     G_debug(debug, "  point cat = %d dist_along = %f",
                             mposts[k].cat, mposts[k].dist_along);
                     G_debug(debug,
-                            "    start_mp = %f start_off = %f end_mp = %f end_off = %f",
+                            "    start_mp = %f start_off = %f end_mp = %f "
+                            "end_off = %f",
                             mposts[k].start_mp, mposts[k].start_off,
                             mposts[k].end_mp, mposts[k].end_off);
 
-                    /* Do not break after first error, to get printed all errors */
+                    /* Do not break after first error, to get printed all errors
+                     */
                     /* 1) For each MP must be end <= start */
-                    ret =
-                        LR_cmp_mileposts(mposts[k].end_mp, mposts[k].end_off,
-                                         mposts[k].start_mp,
-                                         mposts[k].start_off);
-                    if (ret == 1) {     /* end > start */
+                    ret = LR_cmp_mileposts(mposts[k].end_mp, mposts[k].end_off,
+                                           mposts[k].start_mp,
+                                           mposts[k].start_off);
+                    if (ret == 1) { /* end > start */
                         G_warning(_("End > start for point cat [%d]"),
                                   mposts[k].cat);
                         mposts[k].err = ERR_END_GT_START;
                         order = 0;
                         continue;
                     }
-                    if (k < last) {     /* each segment ( MP <-> nextMP ) */
+                    if (k < last) { /* each segment ( MP <-> nextMP ) */
                         if (mposts[k + 1].end_mp > 0 ||
                             mposts[k + 1].end_off > 0) {
-                            /* 2) For 2 MPs must be first.start < second.end 
-                             *     if end > 0 ( otherwise it is considered to be NULL ) */
-                            ret =
-                                LR_cmp_mileposts(mposts[k].start_mp,
-                                                 mposts[k].start_off,
-                                                 mposts[k + 1].end_mp,
-                                                 mposts[k + 1].end_off);
-                            if (ret > -1) {     /* start >= end */
-                                G_warning(_("Start of 1. MP >= end of 2. MP for points' "
-                                           "cats [%d], [%d]"), mposts[k].cat,
-                                          mposts[k + 1].cat);
+                            /* 2) For 2 MPs must be first.start < second.end
+                             *     if end > 0 ( otherwise it is considered to be
+                             * NULL ) */
+                            ret = LR_cmp_mileposts(
+                                mposts[k].start_mp, mposts[k].start_off,
+                                mposts[k + 1].end_mp, mposts[k + 1].end_off);
+                            if (ret > -1) { /* start >= end */
+                                G_warning(_("Start of 1. MP >= end of 2. MP "
+                                            "for points' "
+                                            "cats [%d], [%d]"),
+                                          mposts[k].cat, mposts[k + 1].cat);
                                 mposts[k].err = ERR_END_GT_START;
                                 order = 0;
                                 continue;
                             }
                         }
                         else {
-                            /* 3) For 2 MPs must be first.start < second.start 
+                            /* 3) For 2 MPs must be first.start < second.start
                              *     if end = 0 ( NULL, not used ) */
-                            ret =
-                                LR_cmp_mileposts(mposts[k].start_mp,
-                                                 mposts[k].start_off,
-                                                 mposts[k + 1].start_mp,
-                                                 mposts[k + 1].start_off);
-                            if (ret > -1) {     /* start > end */
-                                G_warning(_("Start of 1. MP >= start of 2. MP for points' "
-                                           "cats [%d], [%d]"), mposts[k].cat,
-                                          mposts[k + 1].cat);
+                            ret = LR_cmp_mileposts(mposts[k].start_mp,
+                                                   mposts[k].start_off,
+                                                   mposts[k + 1].start_mp,
+                                                   mposts[k + 1].start_off);
+                            if (ret > -1) { /* start > end */
+                                G_warning(_("Start of 1. MP >= start of 2. MP "
+                                            "for points' "
+                                            "cats [%d], [%d]"),
+                                          mposts[k].cat, mposts[k + 1].cat);
                                 mposts[k].err = ERR_END_GT_START;
                                 order = 0;
                                 continue;
                             }
                         }
-                        /* 4) For 2 MPs must be distance along line different (duplicate points) */
+                        /* 4) For 2 MPs must be distance along line different
+                         * (duplicate points) */
                         if (mposts[k].dist_along == mposts[k + 1].dist_along) {
-                            G_warning(_("Distance along line identical for points' "
-                                       "cats [%d], [%d]"), mposts[k].cat,
-                                      mposts[k + 1].cat);
+                            G_warning(
+                                _("Distance along line identical for points' "
+                                  "cats [%d], [%d]"),
+                                mposts[k].cat, mposts[k + 1].cat);
                             mposts[k].err = ERR_IDENT;
                             mposts[k + 1].err = ERR_IDENT;
                             order = 0;
@@ -771,19 +785,25 @@ int main(int argc, char **argv)
             }
 
             /* Write errors if any ( and continue ) */
-            if (!order) {       /* something is wrong */
-                if (rlines[j].nmposts < 2) {    /* Impossible to get reference/direction */
-                    G_warning(_("Not enough points (%d) attached to the line (cat %d), "
-                               "line skip."), rlines[j].nmposts,
-                              rlines[j].cat);
+            if (!order) { /* something is wrong */
+                if (rlines[j].nmposts <
+                    2) { /* Impossible to get reference/direction */
+                    G_warning(_("Not enough points (%d) attached to the line "
+                                "(cat %d), "
+                                "line skip."),
+                              rlines[j].nmposts, rlines[j].cat);
                 }
-                else if (rlines[j].direction == DIR_UNKNOWN) {  /* Unknown direction */
-                    G_warning(_("Unable to guess direction for the line (cat %d), "
-                               "line skip."), rlines[j].cat);
+                else if (rlines[j].direction ==
+                         DIR_UNKNOWN) { /* Unknown direction */
+                    G_warning(
+                        _("Unable to guess direction for the line (cat %d), "
+                          "line skip."),
+                        rlines[j].cat);
                 }
                 else {
-                    G_warning(_("Incorrect order of points along line cat [%d]"),
-                              rlines[j].cat);
+                    G_warning(
+                        _("Incorrect order of points along line cat [%d]"),
+                        rlines[j].cat);
                     rlines[j].err = ERR_LINE_ORDER;
                 }
 
@@ -799,23 +819,27 @@ int main(int argc, char **argv)
                 continue;
             }
 
-            /* Order is correct and we can store reference records for this line */
-            G_debug(debug,
-                    "  lcat |   lid | start_map |   end_map |  start_mp | start_off |    end_mp |   end_off | end type");
+            /* Order is correct and we can store reference records for this line
+             */
+            G_debug(debug, "  lcat |   lid | start_map |   end_map |  start_mp "
+                           "| start_off |    end_mp |   end_off | end type");
             for (k = first; k < last; k++) {
                 /* Decide which value to use for end */
-                if (mposts[k + 1].end_mp > 0 || mposts[k + 1].end_off > 0) {    /* TODO: use NULL ? */
+                if (mposts[k + 1].end_mp > 0 ||
+                    mposts[k + 1].end_off > 0) { /* TODO: use NULL ? */
                     totype = TO_TYPE_USER;
                     end_mp = mposts[k + 1].end_mp;
                     end_off = mposts[k + 1].end_off;
                 }
-                else {          /* values not specified -> use start values from next MP */
+                else { /* values not specified -> use start values from next MP
+                        */
                     totype = TO_TYPE_MAP;
                     end_mp = mposts[k + 1].start_mp;
                     end_off = mposts[k + 1].start_off;
                 }
                 G_debug(debug,
-                        " %5d | %5d | %9.3f | %9.3f | %9.3f | %9.3f | %9.3f | %9.3f | %1d",
+                        " %5d | %5d | %9.3f | %9.3f | %9.3f | %9.3f | %9.3f | "
+                        "%9.3f | %1d",
                         rlines[j].cat, lid, mposts[k].dist_along,
                         mposts[k + 1].dist_along, mposts[k].start_mp,
                         mposts[k].start_off, end_mp, end_off, totype);
@@ -835,7 +859,6 @@ int main(int argc, char **argv)
                     G_fatal_error(_("Unable to insert reference records: %s"),
                                   buf);
                 rsid++;
-
             }
             /* Write the line to output */
             type = Vect_read_line(&In, LPoints, LCats, rlines[j].line);
@@ -894,8 +917,8 @@ int main(int argc, char **argv)
 
 int cmp_along(const void *pa, const void *pb)
 {
-    MILEPOST *p1 = (MILEPOST *) pa;
-    MILEPOST *p2 = (MILEPOST *) pb;
+    MILEPOST *p1 = (MILEPOST *)pa;
+    MILEPOST *p2 = (MILEPOST *)pb;
 
     /* compare line_idx */
     if (p1->line_idx < p2->line_idx)

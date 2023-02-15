@@ -3,26 +3,26 @@
  * GNU GPL by Morten Hulden <morten@untamo.net>, August 2000
  *
  * bordwalk.c - projects the border cell centers of a map or region
- * to check whether they are inside the borders of another map/region 
+ * to check whether they are inside the borders of another map/region
  * in a different location, and adjusts the cell header so
  * only overlapping areas are included. The function is called by main,
  * first to project the output region into the input map and trim the
- * borders of this in order to get a smaller map, and faster and less hungry 
+ * borders of this in order to get a smaller map, and faster and less hungry
  * memory allocation. Then main calls the function again, but reversed,
- * to project the input map on the output region, trimming this down to 
+ * to project the input map on the output region, trimming this down to
  * the smallest possible rectangular region.
- * 
- * Simply using corner and midpoints (original r.proj) will only work 
- * between cylindrical projections. In other projections, though he input 
- * map is always a rectangular area, the projected output can be of almost 
- * any shape and its position can be rotated any way. It can even be a 
+ *
+ * Simply using corner and midpoints (original r.proj) will only work
+ * between cylindrical projections. In other projections, though he input
+ * map is always a rectangular area, the projected output can be of almost
+ * any shape and its position can be rotated any way. It can even be a
  * discontinous area.
  *
- * In many projections, especially when large areas are displayed, the edges 
- * of rectangular GRASS regions do not necessarily represent east, west, north 
- * and south. Naming the region edges accordingly (as is regions and cellhd) can be 
- * misleading. (Well, invite code readers/writers to make assumptions anyway. Don't 
- * assume north is really direction north in this code ;)
+ * In many projections, especially when large areas are displayed, the edges
+ * of rectangular GRASS regions do not necessarily represent east, west, north
+ * and south. Naming the region edges accordingly (as is regions and cellhd) can
+ * be misleading. (Well, invite code readers/writers to make assumptions anyway.
+ * Don't assume north is really direction north in this code ;)
  */
 
 #include <math.h>
@@ -35,8 +35,8 @@
 
 static void debug(const char *name, const struct Cell_head *hd)
 {
-    G_debug(3, "%s: xmin: %f; xmax: %f; ymin: %f; ymax: %f",
-            name, hd->west, hd->east, hd->south, hd->north);
+    G_debug(3, "%s: xmin: %f; xmax: %f; ymin: %f; ymax: %f", name, hd->west,
+            hd->east, hd->south, hd->north);
 }
 
 static void update(struct Cell_head *to_hd, double hx, double hy)
@@ -47,8 +47,7 @@ static void update(struct Cell_head *to_hd, double hx, double hy)
     to_hd->south = MIN(to_hd->south, hy);
 }
 
-static void intersect(struct Cell_head *to_hd,
-                      const struct Cell_head *from_hd)
+static void intersect(struct Cell_head *to_hd, const struct Cell_head *from_hd)
 {
     to_hd->east = MIN(to_hd->east, from_hd->east);
     to_hd->west = MAX(to_hd->west, from_hd->west);
@@ -58,10 +57,8 @@ static void intersect(struct Cell_head *to_hd,
 
 static int inside(const struct Cell_head *ref_hd, double hx, double hy)
 {
-    return
-        (hx <= ref_hd->east) &&
-        (hx >= ref_hd->west) &&
-        (hy <= ref_hd->north) && (hy >= ref_hd->south);
+    return (hx <= ref_hd->east) && (hx >= ref_hd->west) &&
+           (hy <= ref_hd->north) && (hy >= ref_hd->south);
 }
 
 static void invert(struct Cell_head *cur_hd, const struct Cell_head *ref_hd,
@@ -180,10 +177,8 @@ static void reverse_check(const struct pj_info *from_pj,
 static int outside(const struct Cell_head *cur_hd,
                    const struct Cell_head *ref_hd)
 {
-    return
-        (cur_hd->west > ref_hd->east) ||
-        (cur_hd->east < ref_hd->west) ||
-        (cur_hd->south > ref_hd->north) || (cur_hd->north < ref_hd->south);
+    return (cur_hd->west > ref_hd->east) || (cur_hd->east < ref_hd->west) ||
+           (cur_hd->south > ref_hd->north) || (cur_hd->north < ref_hd->south);
 }
 
 static void snap_to_grid(struct Cell_head *cur_hd,
@@ -262,8 +257,7 @@ void bordwalk_edge(const struct Cell_head *from_hd, struct Cell_head *to_hd,
 
     /* Top */
     for (idx = from_hd->west; idx < from_hd->east; idx += from_hd->ew_res)
-        proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx,
-                    from_hd->north);
+        proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->north);
     idx = from_hd->east;
     proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->north);
 
@@ -279,8 +273,7 @@ void bordwalk_edge(const struct Cell_head *from_hd, struct Cell_head *to_hd,
 
     /* Bottom */
     for (idx = from_hd->east; idx > from_hd->west; idx -= from_hd->ew_res)
-        proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx,
-                    from_hd->south);
+        proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->south);
     idx = from_hd->west;
     proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->south);
 

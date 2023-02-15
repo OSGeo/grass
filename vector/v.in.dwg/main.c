@@ -1,18 +1,18 @@
 /* **************************************************************
- * 
+ *
  *  MODULE:       v.in.dwg
- *  
+ *
  *  AUTHOR(S):    Radim Blazek
- *                
+ *
  *  PURPOSE:      Import of DWG/DXF files
- *                
+ *
  *  COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
- * 
- *                This program is free software under the 
- *                GNU General Public License (>=v2). 
+ *
+ *                This program is free software under the
+ *                GNU General Public License (>=v2).
  *                Read the file COPYING that comes with GRASS
  *                for details.
- * 
+ *
  * In addition, as a special exception, Radim Blazek gives permission
  * to link the code of this program with the OpenDWG libraries (or with
  * modified versions of the OpenDWG libraries that use the same license
@@ -22,7 +22,7 @@
  * this exception to your version of the file, but you are not obligated
  * to do so. If you do not wish to do so, delete this exception statement
  * from your version.
- * 
+ *
  * **************************************************************/
 #define AD_PROTOTYPES
 #define AD_VM_PC
@@ -43,8 +43,8 @@
 #include "global.h"
 
 int cat;
-int n_elements;                 /* number of processed elements (only low level elements) */
-int n_skipped;                  /* number of skipped low level elements (different layer name) */
+int n_elements; /* number of processed elements (only low level elements) */
+int n_skipped; /* number of skipped low level elements (different layer name) */
 struct Map_info Map;
 dbDriver *driver;
 dbString sql;
@@ -56,8 +56,8 @@ char *Txt;
 char *Block;
 struct field_info *Fi;
 AD_DB_HANDLE dwghandle;
-TRANS *Trans;                   /* transformation */
-int atrans;                     /* number of allocated levels */
+TRANS *Trans; /* transformation */
+int atrans;   /* number of allocated levels */
 struct Option *layers_opt;
 struct Flag *invert_flag;
 
@@ -122,21 +122,20 @@ int main(int argc, char *argv[])
 
     db_init_string(&sql);
     db_init_string(&str);
-    adenhd = (PAD_ENT_HDR) G_malloc(sizeof(AD_ENT_HDR));
-    aden = (PAD_ENT) G_malloc(sizeof(AD_ENT));
-    Layer = (PAD_LAY) G_malloc(sizeof(AD_LAY));
+    adenhd = (PAD_ENT_HDR)G_malloc(sizeof(AD_ENT_HDR));
+    aden = (PAD_ENT)G_malloc(sizeof(AD_ENT));
+    Layer = (PAD_LAY)G_malloc(sizeof(AD_LAY));
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     Block = NULL;
 
-    atrans = 20;                /* nested, recursive levels */
-    Trans = (TRANS *) G_malloc(atrans * sizeof(TRANS));
+    atrans = 20; /* nested, recursive levels */
+    Trans = (TRANS *)G_malloc(atrans * sizeof(TRANS));
 
     /* Init OpenDWG */
     sprintf(path, "%s/etc/adinit.dat", G_gisbase());
     if (!adInitAd2(path, &initerror)) {
-        sprintf(buf,
-                _("Unable to initialize OpenDWG Toolkit, error: %d: %s."),
+        sprintf(buf, _("Unable to initialize OpenDWG Toolkit, error: %d: %s."),
                 initerror, adErrorStr(initerror));
         if (initerror == AD_UNABLE_TO_OPEN_INIT_FILE)
             sprintf(buf, _("%s Cannot open %s"), buf, path);
@@ -151,13 +150,13 @@ int main(int argc, char *argv[])
                       in_opt->answer, adError(), adErrorStr(adError()));
     }
 
-    if (l_flag->answer) {       /* List layers */
+    if (l_flag->answer) { /* List layers */
         PAD_TB adtb;
         AD_DWGHDR adhd;
         int i;
         char on, frozen, vpfrozen, locked;
 
-        adtb = (PAD_TB) G_malloc(sizeof(AD_TB));
+        adtb = (PAD_TB)G_malloc(sizeof(AD_TB));
 
         G_debug(2, "%d layers", (int)adNumLayers(dwghandle));
         adReadHeaderBlock(dwghandle, &adhd);
@@ -194,7 +193,6 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-
     /* open output vector */
     if (Vect_open_new(&Map, out_opt->answer, z_flag->answer) < 0)
         G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
@@ -206,9 +204,8 @@ int main(int argc, char *argv[])
     Vect_map_add_dblink(&Map, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
                         Fi->driver);
 
-    driver =
-        db_start_driver_open_database(Fi->driver,
-                                      Vect_subst_var(Fi->database, &Map));
+    driver = db_start_driver_open_database(Fi->driver,
+                                           Vect_subst_var(Fi->database, &Map));
     if (driver == NULL) {
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Vect_subst_var(Fi->database, &Map), Fi->driver);
@@ -218,16 +215,17 @@ int main(int argc, char *argv[])
     db_begin_transaction(driver);
 
     /* Create table */
-    if (int_flag->answer) {     /* List layers */
+    if (int_flag->answer) { /* List layers */
         sprintf(buf,
-                "create table %s ( cat integer, entity_name varchar(20), color int, weight int, "
+                "create table %s ( cat integer, entity_name varchar(20), color "
+                "int, weight int, "
                 "layer real, block varchar(100), txt varchar(100) )",
                 Fi->table);
-
     }
     else {
         sprintf(buf,
-                "create table %s ( cat integer, entity_name varchar(20), color int, weight int, "
+                "create table %s ( cat integer, entity_name varchar(20), color "
+                "int, weight int, "
                 "layer varchar(100), block varchar(100), txt varchar(100) )",
                 Fi->table);
     }
@@ -244,14 +242,14 @@ int main(int argc, char *argv[])
         G_warning(_("Unable to create index for table <%s>, key <%s>"),
                   Fi->table, GV_KEY_COLUMN);
 
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-        G_fatal_error(_("Unable to grant privileges on table <%s>"),
-                      Fi->table);
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
+        G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi->table);
 
     cat = 1;
     n_elements = n_skipped = 0;
-    /* Write each entity. Some entities may be composed by other entities (like INSERT or BLOCK) */
+    /* Write each entity. Some entities may be composed by other entities (like
+     * INSERT or BLOCK) */
     /* Set transformation for first (index 0) level */
     Trans[0].dx = Trans[0].dy = Trans[0].dz = 0;
     Trans[0].xscale = Trans[0].yscale = Trans[0].zscale = 1;

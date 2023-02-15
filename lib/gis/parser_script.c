@@ -27,8 +27,8 @@ void G__script(void)
     char *type;
 
     fprintf(fp, "#!/usr/bin/env python3\n");
-    fprintf(fp,
-            "############################################################################\n");
+    fprintf(fp, "##############################################################"
+                "##############\n");
     fprintf(fp, "#\n");
     fprintf(fp, "# MODULE:       %s_wrapper\n", G_program_name());
     fprintf(fp, "# AUTHOR(S):    %s\n", G_whoami());
@@ -37,24 +37,27 @@ void G__script(void)
             "# COPYRIGHT:    (C) %s by %s, and the GRASS Development Team\n",
             GRASS_VERSION_DATE, G_whoami());
     fprintf(fp, "#\n");
-    fprintf(fp,
-            "#  This program is free software; you can redistribute it and/or modify\n");
-    fprintf(fp,
-            "#  it under the terms of the GNU General Public License as published by\n");
-    fprintf(fp,
-            "#  the Free Software Foundation; either version 2 of the License, or\n");
+    fprintf(fp, "#  This program is free software; you can redistribute it "
+                "and/or modify\n");
+    fprintf(fp, "#  it under the terms of the GNU General Public License as "
+                "published by\n");
+    fprintf(fp, "#  the Free Software Foundation; either version 2 of the "
+                "License, or\n");
     fprintf(fp, "#  (at your option) any later version.\n");
     fprintf(fp, "#\n");
-    fprintf(fp,
-            "#  This program is distributed in the hope that it will be useful,\n");
-    fprintf(fp,
-            "#  but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-    fprintf(fp,
-            "#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
+    fprintf(
+        fp,
+        "#  This program is distributed in the hope that it will be useful,\n");
+    fprintf(
+        fp,
+        "#  but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
+    fprintf(
+        fp,
+        "#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
     fprintf(fp, "#  GNU General Public License for more details.\n");
     fprintf(fp, "#\n");
-    fprintf(fp,
-            "############################################################################\n\n");
+    fprintf(fp, "##############################################################"
+                "##############\n\n");
 
     fprintf(fp, "\"\"\"Wraps %s to make it even better\"\"\"\n\n",
             G_program_name());
@@ -139,8 +142,9 @@ void G__script(void)
 
     fprintf(fp, "\nimport grass.script as gs\n\n");
     fprintf(fp, "\ndef main():");
-    fprintf(fp,
-            "\n    \"\"\"Process command line parameters and run analysis\"\"\"");
+    fprintf(
+        fp,
+        "\n    \"\"\"Process command line parameters and run analysis\"\"\"");
     fprintf(fp, "\n    options, flags = gs.parser()");
     fprintf(fp, "\n    # Put your code here.");
     fprintf(fp, "\n\n");

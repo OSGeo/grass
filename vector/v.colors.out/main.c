@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.colors.out
@@ -28,12 +27,10 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *map, *field, *file, *col;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *p;
     } flag;
     struct Colors cat_colors, *colors;
@@ -109,7 +106,7 @@ int main(int argc, char **argv)
     else
         colors = &cat_colors;
 
-    Rast_print_colors(colors, (DCELL) min, (DCELL) max, fp,
+    Rast_print_colors(colors, (DCELL)min, (DCELL)max, fp,
                       flag.p->answer ? 1 : 0);
 
     exit(EXIT_SUCCESS);

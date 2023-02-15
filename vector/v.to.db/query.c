@@ -22,7 +22,8 @@ int query(struct Map_info *Map)
 
     G_message(_("Reading features..."));
 
-    /* Cycle through all lines and make a list of categories of 'qfield' for each category given by 'field' */
+    /* Cycle through all lines and make a list of categories of 'qfield' for
+     * each category given by 'field' */
     nlines = Vect_get_num_lines(Map);
     for (line_num = 1; line_num <= nlines; line_num++) {
         type = Vect_read_line(Map, Points, Cats, line_num);
@@ -37,13 +38,13 @@ int query(struct Map_info *Map)
                 idx = find_cat(cat_no, 1);
 
                 for (j = 0; j < Cats->n_cats; j++) {
-                    if (Cats->field[j] == options.qfield) {     /* Add to list */
-                        if (Values[idx].nqcats == Values[idx].aqcats) { /* Alloc space */
+                    if (Cats->field[j] == options.qfield) { /* Add to list */
+                        if (Values[idx].nqcats ==
+                            Values[idx].aqcats) { /* Alloc space */
                             Values[idx].aqcats += 2;
-                            Values[idx].qcat =
-                                (int *)G_realloc(Values[idx].qcat,
-                                                 Values[idx].aqcats *
-                                                 sizeof(int));
+                            Values[idx].qcat = (int *)G_realloc(
+                                Values[idx].qcat,
+                                Values[idx].aqcats * sizeof(int));
                         }
                         Values[idx].qcat[Values[idx].nqcats] = Cats->cat[j];
                         Values[idx].nqcats++;
@@ -52,7 +53,8 @@ int query(struct Map_info *Map)
             }
         }
 
-        /* If there is no field cat add cat -1, values for cat -1 are reported at the end  */
+        /* If there is no field cat add cat -1, values for cat -1 are reported
+         * at the end  */
         Vect_cat_get(Cats, options.field, &cat_no);
 
         if (cat_no == -1) {
@@ -60,12 +62,11 @@ int query(struct Map_info *Map)
 
             for (j = 0; j < Cats->n_cats; j++) {
                 if (Cats->field[j] == options.qfield) { /* Add to list */
-                    if (Values[idx].nqcats == Values[idx].aqcats) {     /* Alloc space */
+                    if (Values[idx].nqcats ==
+                        Values[idx].aqcats) { /* Alloc space */
                         Values[idx].aqcats += 2;
-                        Values[idx].qcat =
-                            (int *)G_realloc(Values[idx].qcat,
-                                             Values[idx].aqcats *
-                                             sizeof(int));
+                        Values[idx].qcat = (int *)G_realloc(
+                            Values[idx].qcat, Values[idx].aqcats * sizeof(int));
                     }
                     Values[idx].qcat[Values[idx].nqcats] = Cats->cat[j];
                     Values[idx].nqcats++;
@@ -80,7 +81,8 @@ int query(struct Map_info *Map)
     db_init_string(&value_string);
 
     if ((Fi = Vect_get_field(Map, options.qfield)) == NULL)
-        G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
+        G_fatal_error(_("Database connection not defined for layer %d. Use "
+                        "v.db.connect first."),
                       options.qfield);
 
     /* Open driver */
@@ -102,12 +104,16 @@ int query(struct Map_info *Map)
         G_debug(3, "cat %d", Values[i].cat);
         G_percent(i + 1, vstat.rcat, 1);
 
-        /* Skip if cat is zero and large number of query categories (many features without category).
-         * It would cause problems on server side and take long time. Postgres limit is 10000 */
-        /* TODO: verify because no category is encoded as cat = -1, not cat = zero */
+        /* Skip if cat is zero and large number of query categories (many
+         * features without category). It would cause problems on server side
+         * and take long time. Postgres limit is 10000 */
+        /* TODO: verify because no category is encoded as cat = -1, not cat =
+         * zero */
         if (Values[i].cat == 0 && Values[i].nqcats > 1000) {
-            G_warning(_("Query for category '0' (no category) was not executed because of too many "
-                       "(%d) query categories. All later reported values for cat 0 are not valid."),
+            G_warning(_("Query for category '0' (no category) was not executed "
+                        "because of too many "
+                        "(%d) query categories. All later reported values for "
+                        "cat 0 are not valid."),
                       Values[i].nqcats);
             continue;
         }
@@ -127,13 +133,12 @@ int query(struct Map_info *Map)
             }
             G_debug(4, "  SQL: '%s'", db_get_string(&stmt));
 
-            if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL)
-                != DB_OK)
-                G_fatal_error("Cannot open cursor: '%s'",
-                              db_get_string(&stmt));
+            if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) !=
+                DB_OK)
+                G_fatal_error("Cannot open cursor: '%s'", db_get_string(&stmt));
 
             table = db_get_cursor_table(&cursor);
-            column = db_get_table_column(table, 0);     /* first column */
+            column = db_get_table_column(table, 0); /* first column */
             value = db_get_column_value(column);
             ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
             vstat.qtype = ctype;
@@ -143,7 +148,8 @@ int query(struct Map_info *Map)
 
             if (nrows != 1) {
                 if (nrows > 1) {
-                    G_warning(_("Multiple query results, output value set to NULL (category [%d])"),
+                    G_warning(_("Multiple query results, output value set to "
+                                "NULL (category [%d])"),
                               Values[i].cat);
                 }
                 Values[i].null = 1;
@@ -172,15 +178,14 @@ int query(struct Map_info *Map)
                     case (DB_C_TYPE_DATETIME):
                         db_convert_column_value_to_string(column,
                                                           &value_string);
-                        Values[i].str1 =
-                            G_store(db_get_string(&value_string));
+                        Values[i].str1 = G_store(db_get_string(&value_string));
                     }
                     Values[i].null = 0;
                 }
             }
             db_close_cursor(&cursor);
         }
-        else {                  /* no qcats -> upload NULL */
+        else { /* no qcats -> upload NULL */
             Values[i].null = 1;
         }
     }

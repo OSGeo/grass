@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.surf.random
@@ -22,7 +21,6 @@
 #include <grass/glocale.h>
 #include <grass/raster.h>
 #include "local_proto.h"
-
 
 /** Return TRUE if text contains only an integer number
  *
@@ -82,8 +80,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("random"));
-    module->description =
-        _("Produces a raster surface map of uniform random deviates with defined range.");
+    module->description = _("Produces a raster surface map of uniform random "
+                            "deviates with defined range.");
 
     out = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -131,13 +129,11 @@ int main(int argc, char *argv[])
     /* Using user-provided strings instead of attempting to guess the
      * right formatting. */
     if (i_flag->answer) {
-        sprintf(title,
-                _("Uniform random integer values in range [%s, %s]"),
+        sprintf(title, _("Uniform random integer values in range [%s, %s]"),
                 min->answer, max->answer);
     }
     else {
-        sprintf(title,
-                _("Uniform random float values in range [%s, %s)"),
+        sprintf(title, _("Uniform random float values in range [%s, %s)"),
                 min->answer, max->answer);
     }
     Rast_put_cell_title(out->answer, title);

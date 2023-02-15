@@ -1,11 +1,10 @@
-
 /*****************************************************************************/
 
 /***                                                                       ***/
 
 /***                             open_files()                              ***/
 
-/***   	              Opens input and output raster maps.  		   ***/
+/***                         Opens input and output raster maps.           ***/
 
 /***               Jo Wood, Project ASSIST, 24th January 1993              ***/
 
@@ -17,7 +16,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "param.h"
-
 
 void open_files(void)
 {

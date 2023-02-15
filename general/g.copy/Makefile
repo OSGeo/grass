@@ -9,4 +9,3 @@ LIBES = $(MANAGELIB) $(GISLIB)
 DEPENDENCIES = $(MANAGEDEP) $(GISDEP)
 
 default: cmd
-

@@ -6,9 +6,8 @@
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Allocates a vector of <em>nofTiles</em> tiles with the same dimensions
  * as the tiles of <em>map</em> and large enough to store cell-values of
@@ -21,7 +20,7 @@
  *                   NULL ... otherwise.
  */
 
-void *Rast3d_alloc_tiles_type(RASTER3D_Map * map, int nofTiles, int type)
+void *Rast3d_alloc_tiles_type(RASTER3D_Map *map, int nofTiles, int type)
 {
     void *tiles;
 
@@ -36,18 +35,18 @@ void *Rast3d_alloc_tiles_type(RASTER3D_Map * map, int nofTiles, int type)
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
- *  Is equivalent to Rast3d_alloc_tiles_type (map, nofTiles, Rast3d_file_type_map (map)).
+ *  Is equivalent to Rast3d_alloc_tiles_type (map, nofTiles,
+ * Rast3d_file_type_map (map)).
  *
  *  \param map
  *  \param nofTiles
- *  \return void * 
+ *  \return void *
  */
 
-void *Rast3d_alloc_tiles(RASTER3D_Map * map, int nofTiles)
+void *Rast3d_alloc_tiles(RASTER3D_Map *map, int nofTiles)
 {
     void *tiles;
 
@@ -62,9 +61,8 @@ void *Rast3d_alloc_tiles(RASTER3D_Map * map, int nofTiles)
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Is equivalent to <tt>Rast3d_free (tiles);</tt>
  *

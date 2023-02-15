@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include <grass/gmath.h>
 
-
 #define TINY 1.0e-20;
 
 /*!
@@ -25,7 +24,8 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
     vv = G_alloc_vector(n);
     *d = 1.0;
     /* this pragma works, but doesn't really help speed things up */
-    /* #pragma omp parallel for private(i, j, big, temp) shared(n, a, vv, is_singular) */
+    /* #pragma omp parallel for private(i, j, big, temp) shared(n, a, vv,
+     * is_singular) */
     for (i = 0; i < n; i++) {
         big = 0.0;
         for (j = 0; j < n; j++)
@@ -41,7 +41,7 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
     }
     if (is_singular) {
         *d = 0.0;
-        return 0;               /* Singular matrix  */
+        return 0; /* Singular matrix  */
     }
 
     for (j = 0; j < n; j++) {
@@ -89,7 +89,6 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
 }
 
 #undef TINY
-
 
 /*!
  * \brief LU backward substitution

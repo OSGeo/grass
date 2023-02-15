@@ -280,12 +280,12 @@ class MapToolbar(BaseToolbar):
             icons = BaseIcons
         else:
             icons = NvizIcons
-        for i, data in enumerate(self._data):
+        for i, data in enumerate(self.controller.data):
             for tool in ("zoomIn", "zoomOut"):
                 if data[0] == tool:
                     tmp = list(data)
                     tmp[4] = icons[tool].GetDesc()
-                    self._data[i] = tuple(tmp)
+                    self.controller.data[i] = tuple(tmp)
 
     def OnSelectTool(self, event):
         """Select / enable tool available in tools list"""
@@ -294,12 +294,14 @@ class MapToolbar(BaseToolbar):
         if tool == self.toolId["2d"]:
             self.ExitToolbars()
             self.Enable2D(True)
+            self.parent.MapWindow.SetFocus()
 
         elif tool == self.toolId["3d"] and not (
             self.parent.MapWindow3D and self.parent.IsPaneShown("3d")
         ):
             self.ExitToolbars()
-            self.parent.AddNviz()
+            self.parent.AddToolbar("nviz")
+            self.parent.MapWindow.SetFocus()
 
         elif tool == self.toolId["vdigit"] and not self.parent.GetToolbar("vdigit"):
             self.ExitToolbars()
@@ -308,7 +310,8 @@ class MapToolbar(BaseToolbar):
 
         elif tool == self.toolId["rdigit"]:
             self.ExitToolbars()
-            self.parent.AddRDigit()
+            self.parent.AddToolbar("rdigit")
+            self.parent.MapWindow.SetFocus()
 
     def OnAnalyze(self, event):
         """Analysis tools menu"""

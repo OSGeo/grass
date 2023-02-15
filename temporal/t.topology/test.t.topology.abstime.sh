@@ -1,8 +1,8 @@
 #!/bin/sh
-# Tests the temporal topology module of space time datasets 
+# Tests the temporal topology module of space time datasets
 
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -23,7 +23,7 @@ r.mapcalc --o expr="C = 3"
 g.region s=70 n=90 w=10 e=130 b=10 t=50 res=10 res3=10 -p3 # overlap B
 r.mapcalc --o expr="D = 3"
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`

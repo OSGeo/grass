@@ -10,7 +10,7 @@ FLAG *flag_create(int nrows, int ncols)
 
     register int i;
 
-    new_flag = (FLAG *) G_malloc(sizeof(FLAG));
+    new_flag = (FLAG *)G_malloc(sizeof(FLAG));
     new_flag->nrows = nrows;
     new_flag->ncols = ncols;
     new_flag->leng = (ncols + 7) / 8;
@@ -20,9 +20,8 @@ FLAG *flag_create(int nrows, int ncols)
     if (!new_flag->array)
         G_fatal_error(_("Out of memory!"));
 
-    temp =
-        (unsigned char *)G_malloc(nrows * new_flag->leng *
-                                  sizeof(unsigned char));
+    temp = (unsigned char *)G_malloc(nrows * new_flag->leng *
+                                     sizeof(unsigned char));
 
     if (!temp)
         G_fatal_error(_("Out of memory!"));
@@ -37,7 +36,7 @@ FLAG *flag_create(int nrows, int ncols)
     return (new_flag);
 }
 
-int flag_destroy(FLAG * flags)
+int flag_destroy(FLAG *flags)
 {
     G_free(flags->array[0]);
     G_free(flags->array);
@@ -46,7 +45,7 @@ int flag_destroy(FLAG * flags)
     return 0;
 }
 
-int flag_clear_all(FLAG * flags)
+int flag_clear_all(FLAG *flags)
 {
     register int r, c;
 

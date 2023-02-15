@@ -2,7 +2,6 @@
 #include "ransurf.h"
 #include "local_proto.h"
 
-
 void MakeBigF(void)
 {
     int R, C;

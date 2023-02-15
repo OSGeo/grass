@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.lake
@@ -39,26 +38,28 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-/* Saves map file from 2d array. NULL must be 0. Also meanwhile calculates area and volume. */
-void save_map(FCELL ** out, int out_fd, int rows, int cols, int flag,
-              FCELL * min_depth, FCELL * max_depth, double *area,
-              double *volume)
+/* Saves map file from 2d array. NULL must be 0. Also meanwhile calculates area
+ * and volume. */
+void save_map(FCELL **out, int out_fd, int rows, int cols, int flag,
+              FCELL *min_depth, FCELL *max_depth, double *area, double *volume)
 {
     int row, col;
     double cellsize = -1;
 
     G_debug(1, "Saving new map");
 
-    if (G_begin_cell_area_calculations() == 0 || G_begin_cell_area_calculations() == 1) {       /* All cells have constant size... */
+    if (G_begin_cell_area_calculations() == 0 ||
+        G_begin_cell_area_calculations() ==
+            1) { /* All cells have constant size... */
         cellsize = G_area_of_cell_at_row(0);
     }
     G_debug(1, "Cell area: %f", cellsize);
 
     for (row = 0; row < rows; row++) {
-        if (cellsize == -1)     /* Get LatLon current rows cell size */
+        if (cellsize == -1) /* Get LatLon current rows cell size */
             cellsize = G_area_of_cell_at_row(row);
         for (col = 0; col < cols; col++) {
-            if (flag == 1)      /* Create negative map */
+            if (flag == 1) /* Create negative map */
                 out[row][col] = 0 - out[row][col];
             if (out[row][col] == 0) {
                 Rast_set_f_null_value(&out[row][col], 1);
@@ -100,16 +101,16 @@ short is_near_water(FCELL window[][3])
 }
 
 /* Loads values into window around central cell */
-void load_window_values(FCELL ** in_rows, FCELL window[][3],
-                        int rows, int cols, int row, int col)
+void load_window_values(FCELL **in_rows, FCELL window[][3], int rows, int cols,
+                        int row, int col)
 {
     int i, j;
 
-    rows -= 1;                  /* Row'n'Col count starts from 0! */
+    rows -= 1; /* Row'n'Col count starts from 0! */
     cols -= 1;
 
     for (i = -1; i < 2; i++) {
-        if (row + i < 0 || row + i > rows) {    /* First or last line... */
+        if (row + i < 0 || row + i > rows) { /* First or last line... */
             window[i + 1][0] = 0;
             window[i + 1][1] = 0;
             window[i + 1][2] = 0;
@@ -117,11 +118,12 @@ void load_window_values(FCELL ** in_rows, FCELL window[][3],
         }
         else {
             for (j = -1; j < 2; j++) {
-                if (col + j < 0 || col + j > cols - 1) {        /* First or last column... */
+                if (col + j < 0 ||
+                    col + j > cols - 1) { /* First or last column... */
                     window[i + 1][j + 1] = 0;
                     continue;
                 }
-                else {          /* All normal cases... */
+                else { /* All normal cases... */
                     window[i + 1][j + 1] = in_rows[row + i][col + j];
                 }
             }
@@ -176,8 +178,8 @@ int main(int argc, char *argv[])
 
     smap_opt = G_define_standard_option(G_OPT_R_MAP);
     smap_opt->key = "seed";
-    smap_opt->label =
-        _("Input raster map with given starting point(s) (at least 1 cell > 0)");
+    smap_opt->label = _(
+        "Input raster map with given starting point(s) (at least 1 cell > 0)");
     smap_opt->description =
         _("Either this parameter or a coordinates pair have to be specified");
     smap_opt->required = NO;
@@ -194,7 +196,7 @@ int main(int argc, char *argv[])
         _("Overwrite seed map with result (lake) map");
     overwrite_flag->guisection = _("Output");
 
-    if (G_parser(argc, argv))   /* Returns 0 if successful, non-zero otherwise */
+    if (G_parser(argc, argv)) /* Returns 0 if successful, non-zero otherwise */
         exit(EXIT_FAILURE);
 
     if (smap_opt->answer && sdxy_opt->answer)
@@ -217,7 +219,8 @@ int main(int argc, char *argv[])
     sscanf(wlvl_opt->answer, "%f", &water_level);
     lakemap = lake_opt->answer;
 
-    /* If lakemap is set, write to it, else is set overwrite flag and we should write to seedmap. */
+    /* If lakemap is set, write to it, else is set overwrite flag and we should
+     * write to seedmap. */
     if (lakemap)
         lake_fd = Rast_open_new(lakemap, 1);
 
@@ -235,8 +238,8 @@ int main(int argc, char *argv[])
         start_col = (int)Rast_easting_to_col(east, &window);
         start_row = (int)Rast_northing_to_row(north, &window);
 
-        if (start_row < 0 || start_row > rows ||
-            start_col < 0 || start_col > cols)
+        if (start_row < 0 || start_row > rows || start_col < 0 ||
+            start_col > cols)
             G_fatal_error(_("Seed point outside the current region"));
     }
 
@@ -248,17 +251,16 @@ int main(int argc, char *argv[])
         out_fd = Rast_open_old(seedmap, "");
 
     /* Pointers to rows. Row = ptr to 'col' size array. */
-    in_terran = (FCELL **) G_malloc(rows * sizeof(FCELL *));
-    out_water = (FCELL **) G_malloc(rows * sizeof(FCELL *));
+    in_terran = (FCELL **)G_malloc(rows * sizeof(FCELL *));
+    out_water = (FCELL **)G_malloc(rows * sizeof(FCELL *));
     if (in_terran == NULL || out_water == NULL)
         G_fatal_error(_("G_malloc: out of memory"));
-
 
     G_debug(1, "Loading maps...");
     /* foo_rows[row] == array with data (2d array). */
     for (row = 0; row < rows; row++) {
-        in_terran[row] = (FCELL *) G_malloc(cols * sizeof(FCELL));
-        out_water[row] = (FCELL *) G_calloc(cols, sizeof(FCELL));
+        in_terran[row] = (FCELL *)G_malloc(cols * sizeof(FCELL));
+        out_water[row] = (FCELL *)G_calloc(cols, sizeof(FCELL));
 
         /* In newly created space load data from file. */
         Rast_get_f_row(in_terran_fd, in_terran[row], row);
@@ -273,8 +275,9 @@ int main(int argc, char *argv[])
     if (sdxy_opt->answer)
         /* Check is water level higher than seed point */
         if (in_terran[start_row][start_col] >= water_level)
-            G_fatal_error(_("Given water level at seed point is below earth surface. "
-                           "Increase water level or move seed point."));
+            G_fatal_error(
+                _("Given water level at seed point is below earth surface. "
+                  "Increase water level or move seed point."));
     out_water[start_row][start_col] = 1;
 
     /* Close seed map for reading. */
@@ -287,12 +290,14 @@ int main(int argc, char *argv[])
     else
         out_fd = Rast_open_new(seedmap, 1);
 
-    /* More pases are renudant. Real pases count is controlled by altered cell count. */
+    /* More pases are renudant. Real pases count is controlled by altered cell
+     * count. */
     pases = (int)(rows * cols) / 2;
 
-    G_debug(1,
-            "Starting lake filling at level of %8.4f in %d passes. Percent done:",
-            water_level, pases);
+    G_debug(
+        1,
+        "Starting lake filling at level of %8.4f in %d passes. Percent done:",
+        water_level, pases);
 
     lastcount = 0;
 
@@ -309,18 +314,18 @@ int main(int argc, char *argv[])
                 /* Cheking presence of water. */
                 if (is_near_water(water_window) == 1) {
                     if (in_terran[row][col] < water_level) {
-                        out_water[row][col] =
-                            water_level - in_terran[row][col];
+                        out_water[row][col] = water_level - in_terran[row][col];
                         curcount++;
                     }
                     else {
-                        out_water[row][col] = 0;        /* Cell is higher than water level -> NULL. */
+                        out_water[row][col] =
+                            0; /* Cell is higher than water level -> NULL. */
                     }
                 }
             }
         }
         if (curcount == lastcount)
-            break;              /* We done. */
+            break; /* We done. */
         lastcount = curcount;
         curcount = 0;
         /* Move backwards - from lower right corner to upper left corner. */
@@ -331,8 +336,7 @@ int main(int argc, char *argv[])
 
                 if (is_near_water(water_window) == 1) {
                     if (in_terran[row][col] < water_level) {
-                        out_water[row][col] =
-                            water_level - in_terran[row][col];
+                        out_water[row][col] = water_level - in_terran[row][col];
                         curcount++;
                     }
                     else {
@@ -343,20 +347,22 @@ int main(int argc, char *argv[])
         }
         G_percent(pass + 1, pases, 10);
         if (curcount == lastcount)
-            break;              /* We done. */
+            break; /* We done. */
         lastcount = curcount;
-    }                           /*pases */
+    } /*pases */
 
-    G_percent(pases, pases, 10);        /* Show 100%. */
+    G_percent(pases, pases, 10); /* Show 100%. */
 
     save_map(out_water, out_fd, rows, cols, negative_flag->answer, &min_depth,
              &max_depth, &area, &volume);
 
-    G_message(_("Lake depth from %f to %f (specified water level is taken as zero)"),
-              min_depth, max_depth);
+    G_message(
+        _("Lake depth from %f to %f (specified water level is taken as zero)"),
+        min_depth, max_depth);
     G_message(_("Lake area %f square meters"), area);
     G_message(_("Lake volume %f cubic meters"), volume);
-    G_important_message(_("Volume is correct only if lake depth (terrain raster map) is in meters"));
+    G_important_message(_("Volume is correct only if lake depth (terrain "
+                          "raster map) is in meters"));
 
     /* Close all files. Lake map gets written only now. */
     Rast_close(in_terran_fd);
@@ -365,12 +371,12 @@ int main(int argc, char *argv[])
     /* Add blue color gradient from light bank to dark depth */
     Rast_init_colors(&colr);
     if (negative_flag->answer == 1) {
-        Rast_add_f_color_rule(&max_depth, 0, 240, 255,
-                              &min_depth, 0, 50, 170, &colr);
+        Rast_add_f_color_rule(&max_depth, 0, 240, 255, &min_depth, 0, 50, 170,
+                              &colr);
     }
     else {
-        Rast_add_f_color_rule(&min_depth, 0, 240, 255,
-                              &max_depth, 0, 50, 170, &colr);
+        Rast_add_f_color_rule(&min_depth, 0, 240, 255, &max_depth, 0, 50, 170,
+                              &colr);
     }
 
     Rast_write_colors(lakemap, G_mapset(), &colr);

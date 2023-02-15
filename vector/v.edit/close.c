@@ -1,6 +1,5 @@
 #include <string.h>
 #include "global.h"
-
 /*!
    \brief Close lines (boundaries)
 
@@ -44,8 +43,8 @@ int close_lines(struct Map_info *Map, int ltype, double thresh)
         y = Points->y;
         z = Points->z;
 
-        dist = Vect_points_distance(x[npoints], y[npoints], z[npoints],
-                                    x[0], y[0], z[0], WITHOUT_Z);
+        dist = Vect_points_distance(x[npoints], y[npoints], z[npoints], x[0],
+                                    y[0], z[0], WITHOUT_Z);
 
         if (dist > 0 && (thresh < 0.0 || dist <= thresh)) {
             Vect_line_delete_point(Points, npoints);

@@ -4,7 +4,6 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 void rdwr_gridatb(void)
 {
     char buf[1024];
@@ -15,11 +14,14 @@ void rdwr_gridatb(void)
     fp = fopen(file, "r");
 
     buf[0] = 0;
-    fscanf(fp, "%[^\n]", buf);
+    if (fscanf(fp, "%[^\n]", buf) != 1)
+        G_fatal_error(_("Error reading data"));
     if (!buf[0])
         getc(fp);
 
-    fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res);
+    if (fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res) !=
+        3)
+        G_fatal_error(_("Error reading data"));
     cellhd.ew_res = cellhd.ns_res;
     cellhd.south = 0;
     cellhd.north = cellhd.south + cellhd.ns_res * cellhd.rows;
@@ -45,14 +47,15 @@ void rdwr_gridatb(void)
 
     fd = Rast_open_new(oname, FCELL_TYPE);
 
-    cell = (FCELL *) G_malloc(sizeof(FCELL) * cellhd.cols);
+    cell = (FCELL *)G_malloc(sizeof(FCELL) * cellhd.cols);
 
     for (i = 0; i < cellhd.rows; i++) {
         G_percent(i, cellhd.rows, 2);
 
         for (j = 0; j < cellhd.cols; j++) {
             idx = 9999.0;
-            fscanf(fp, "%f", &idx);
+            if (fscanf(fp, "%f", &idx) != 1)
+                G_fatal_error(_("Error reading data"));
             if (idx >= 9999.0) {
                 Rast_set_f_null_value(&(cell[j]), 1);
             }

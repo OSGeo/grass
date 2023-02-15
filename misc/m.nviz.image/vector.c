@@ -33,11 +33,10 @@ static int load_vectors(const struct Option *, const struct Option *,
 
    \return number of loaded vectors
  */
-int load_vlines(const struct GParams *params, nv_data * data)
+int load_vlines(const struct GParams *params, nv_data *data)
 {
-    return load_vectors(params->elev_map, params->elev_const,
-                        params->vlines, params->vline_pos,
-                        MAP_OBJ_VECT, data);
+    return load_vectors(params->elev_map, params->elev_const, params->vlines,
+                        params->vline_pos, MAP_OBJ_VECT, data);
 }
 
 /*!
@@ -48,17 +47,15 @@ int load_vlines(const struct GParams *params, nv_data * data)
 
    \return number of loaded vectors
  */
-int load_vpoints(const struct GParams *params, nv_data * data)
+int load_vpoints(const struct GParams *params, nv_data *data)
 {
-    return load_vectors(params->elev_map, params->elev_const,
-                        params->vpoints, params->vpoint_pos,
-                        MAP_OBJ_SITE, data);
+    return load_vectors(params->elev_map, params->elev_const, params->vpoints,
+                        params->vpoint_pos, MAP_OBJ_SITE, data);
 }
 
-int load_vectors(const struct Option *elev_map,
-                 const struct Option *elev_const, const struct Option *vect,
-                 const struct Option *position,
-                 int map_obj_type, nv_data * data)
+int load_vectors(const struct Option *elev_map, const struct Option *elev_const,
+                 const struct Option *vect, const struct Option *position,
+                 int map_obj_type, nv_data *data)
 {
     int i, id;
     int nvects;
@@ -67,7 +64,8 @@ int load_vectors(const struct Option *elev_map,
 
     double x, y, z;
 
-    if ((!elev_map->answer || elev_const->answer) && GS_num_surfs() == 0) {     /* load base surface if no loaded */
+    if ((!elev_map->answer || elev_const->answer) &&
+        GS_num_surfs() == 0) { /* load base surface if no loaded */
         int *surf_list, nsurf;
 
         Nviz_new_map_obj(MAP_OBJ_SURF, NULL, 0.0, data);
@@ -84,8 +82,8 @@ int load_vectors(const struct Option *elev_map,
             G_fatal_error(_("Vector map <%s> not found"), vect->answers[i]);
         }
         id = Nviz_new_map_obj(map_obj_type,
-                              G_fully_qualified_name(vect->answers[i],
-                                                     mapset), 0.0, data);
+                              G_fully_qualified_name(vect->answers[i], mapset),
+                              0.0, data);
 
         /* set position */
         x = atof(position->answers[i * 3 + 0]);
@@ -126,11 +124,13 @@ int vlines_set_attrb(const struct GParams *params)
         check_map(params, i, TRUE, &layer, NULL);
 
         color = Nviz_color_from_str(params->vline_color->answers[i]);
-        color_column = params->vline_color_column->answers ?
-            params->vline_color_column->answers[i] : NULL;
+        color_column = params->vline_color_column->answers
+                           ? params->vline_color_column->answers[i]
+                           : NULL;
         width = atoi(params->vline_width->answers[i]);
-        width_column = params->vline_width_column->answers ?
-            params->vline_width_column->answers[i] : NULL;
+        width_column = params->vline_width_column->answers
+                           ? params->vline_width_column->answers[i]
+                           : NULL;
 
         if (strcmp(params->vline_mode->answers[i], "flat") == 0)
             flat = 1;
@@ -142,8 +142,7 @@ int vlines_set_attrb(const struct GParams *params)
             return 0;
 
         /* check for vector color table */
-        have_colors = Vect_read_colors(params->vlines->answers[i], "",
-                                       &colors);
+        have_colors = Vect_read_colors(params->vlines->answers[i], "", &colors);
 
         if (have_colors || color_column || width_column)
             if (GV_set_style_thematic(vect_list[i], layer, color_column,
@@ -185,17 +184,21 @@ int vpoints_set_attrb(const struct GParams *params)
         check_map(params, i, FALSE, &layer, &with_z);
 
         color = Nviz_color_from_str(params->vpoint_color->answers[i]);
-        color_column = params->vpoint_color_column->answers ?
-            params->vpoint_color_column->answers[i] : NULL;
+        color_column = params->vpoint_color_column->answers
+                           ? params->vpoint_color_column->answers[i]
+                           : NULL;
         size = atof(params->vpoint_size->answers[i]);
-        size_column = params->vpoint_size_column->answers ?
-            params->vpoint_size_column->answers[i] : NULL;
+        size_column = params->vpoint_size_column->answers
+                          ? params->vpoint_size_column->answers[i]
+                          : NULL;
         width = atoi(params->vpoint_width->answers[i]);
-        width_column = params->vpoint_width_column->answers ?
-            params->vpoint_width_column->answers[i] : NULL;
+        width_column = params->vpoint_width_column->answers
+                           ? params->vpoint_width_column->answers[i]
+                           : NULL;
         marker_str = params->vpoint_marker->answers[i];
-        marker_column = params->vpoint_marker_column->answers ?
-            params->vpoint_marker_column->answers[i] : NULL;
+        marker_column = params->vpoint_marker_column->answers
+                            ? params->vpoint_marker_column->answers[i]
+                            : NULL;
         marker = GP_str_to_marker(marker_str);
 
         if (with_z) {
@@ -209,14 +212,13 @@ int vpoints_set_attrb(const struct GParams *params)
             return 0;
 
         /* check for vector color table */
-        have_colors = Vect_read_colors(params->vpoints->answers[i], "",
-                                       &colors);
+        have_colors =
+            Vect_read_colors(params->vpoints->answers[i], "", &colors);
 
-        if (have_colors || color_column || width_column ||
-            size_column || marker_column) {
+        if (have_colors || color_column || width_column || size_column ||
+            marker_column) {
             if (GP_set_style_thematic(site_list[i], layer, color_column,
-                                      width_column, size_column,
-                                      marker_column,
+                                      width_column, size_column, marker_column,
                                       have_colors ? &colors : NULL) < 0)
                 return 0;
         }
@@ -236,8 +238,8 @@ int vpoints_set_attrb(const struct GParams *params)
 
    \return 0 on success otherwise 1
  */
-int check_map(const struct GParams *params, int index, int vlines,
-              int *field, int *with_z)
+int check_map(const struct GParams *params, int index, int vlines, int *field,
+              int *with_z)
 {
     int type;
     struct Map_info Map;
@@ -253,24 +255,30 @@ int check_map(const struct GParams *params, int index, int vlines,
     if (vlines) {
         map = params->vlines->answers[index];
         layer = params->vline_layer->answers[index];
-        color = params->vline_color_column->answers ?
-            params->vline_color_column->answers[index] : NULL;
+        color = params->vline_color_column->answers
+                    ? params->vline_color_column->answers[index]
+                    : NULL;
         size = NULL;
-        width = params->vline_width_column->answers ?
-            params->vline_width_column->answers[index] : NULL;
+        width = params->vline_width_column->answers
+                    ? params->vline_width_column->answers[index]
+                    : NULL;
         marker = NULL;
     }
     else {
         map = params->vpoints->answers[index];
         layer = params->vpoint_layer->answers[index];
-        color = params->vpoint_color_column->answers ?
-            params->vpoint_color_column->answers[index] : NULL;
-        size = params->vpoint_size_column->answers ?
-            params->vpoint_size_column->answers[index] : NULL;
-        width = params->vpoint_width_column->answers ?
-            params->vpoint_width_column->answers[index] : NULL;
-        marker = params->vpoint_marker_column->answers ?
-            params->vpoint_marker_column->answers[index] : NULL;
+        color = params->vpoint_color_column->answers
+                    ? params->vpoint_color_column->answers[index]
+                    : NULL;
+        size = params->vpoint_size_column->answers
+                   ? params->vpoint_size_column->answers[index]
+                   : NULL;
+        width = params->vpoint_width_column->answers
+                    ? params->vpoint_width_column->answers[index]
+                    : NULL;
+        marker = params->vpoint_marker_column->answers
+                     ? params->vpoint_marker_column->answers[index]
+                     : NULL;
     }
 
     if (!map)
@@ -297,8 +305,8 @@ int check_map(const struct GParams *params, int index, int vlines,
         if (color) {
             db_get_column(driver, Fi->table, color, &column);
             if (!column)
-                G_fatal_error(_("Column <%s> in table <%s> not found"),
-                              color, Fi->table);
+                G_fatal_error(_("Column <%s> in table <%s> not found"), color,
+                              Fi->table);
 
             if (db_column_Ctype(driver, Fi->table, color) != DB_C_TYPE_STRING)
                 G_fatal_error(_("Data type of color column must be character"));
@@ -306,8 +314,8 @@ int check_map(const struct GParams *params, int index, int vlines,
         if (size) {
             db_get_column(driver, Fi->table, size, &column);
             if (!column)
-                G_fatal_error(_("Column <%s> in table <%s> not found"),
-                              size, Fi->table);
+                G_fatal_error(_("Column <%s> in table <%s> not found"), size,
+                              Fi->table);
 
             type = db_column_Ctype(driver, Fi->table, size);
             if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
@@ -316,8 +324,8 @@ int check_map(const struct GParams *params, int index, int vlines,
         if (width) {
             db_get_column(driver, Fi->table, width, &column);
             if (!column)
-                G_fatal_error(_("Column <%s> in table <%s> not found"),
-                              width, Fi->table);
+                G_fatal_error(_("Column <%s> in table <%s> not found"), width,
+                              Fi->table);
 
             type = db_column_Ctype(driver, Fi->table, width);
             if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
@@ -326,13 +334,13 @@ int check_map(const struct GParams *params, int index, int vlines,
         if (marker) {
             db_get_column(driver, Fi->table, marker, &column);
             if (!column)
-                G_fatal_error(_("Column <%s> in table <%s> not found"),
-                              marker, Fi->table);
+                G_fatal_error(_("Column <%s> in table <%s> not found"), marker,
+                              Fi->table);
 
             type = db_column_Ctype(driver, Fi->table, marker);
-            if (db_column_Ctype(driver, Fi->table, marker) !=
-                DB_C_TYPE_STRING)
-                G_fatal_error(_("Data type of marker column must be character"));
+            if (db_column_Ctype(driver, Fi->table, marker) != DB_C_TYPE_STRING)
+                G_fatal_error(
+                    _("Data type of marker column must be character"));
         }
 
         db_close_database_shutdown_driver(driver);

@@ -6,10 +6,9 @@
 #include "files.h"
 #include "local_proto.h"
 
-
 int compute_means(struct files *files, struct Signature *S)
 {
-    int n, n_nulls;
+    int n;
     int b;
     int nrows, ncols, row, col;
     CELL *class;
@@ -21,21 +20,19 @@ int compute_means(struct files *files, struct Signature *S)
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    class = (CELL *) G_calloc(ncols, sizeof(CELL));
+    class = (CELL *)G_calloc(ncols, sizeof(CELL));
 
     G_message(_("Calculating class means..."));
 
     for (row = 0; row < nrows; row++) {
         G_percent(row, nrows, 2);
         read_training_map(class, row, ncols, files);
-        for (b = 0; b < files->nbands; b++) {   /* NOTE: files->nbands == S->nbands */
-            Rast_get_d_row(files->band_fd[b], cell =
-                           files->band_cell[b], row);
+        for (b = 0; b < files->nbands;
+             b++) { /* NOTE: files->nbands == S->nbands */
+            Rast_get_d_row(files->band_fd[b], cell = files->band_cell[b], row);
             for (col = 0; col < ncols; col++) {
-                if (Rast_is_d_null_value(&cell[col])) {
-                    n_nulls++;
+                if (Rast_is_d_null_value(&cell[col]))
                     continue;
-                }
                 n = class[col];
                 if (n < 0)
                     continue;

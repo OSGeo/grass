@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 /* this is actually the Weisberg-Bingham stat. I need to
    OCR the constants and implement this Cdhc_correctly */
 
@@ -40,4 +39,4 @@ double *Cdhc_shapiro_francia(double *x, int n)
     free(xcopy);
 
     return y;
-}                               /* test14_ */
+} /* test14_ */

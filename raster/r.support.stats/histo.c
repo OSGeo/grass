@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:        r.support.stats
  *
@@ -19,8 +18,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-
-/* 
+/*
  * do_histogram() - Creates histogram for CELL
  *
  * RETURN: 0 on success / 1 on failure

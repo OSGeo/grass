@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include "vizual.h"
+
 /*
  **  return an array of struct cmndln_info of resulting
  **   thresholds based on  in_out flag
  */
 
-
 int build_thresh_arrays(D_spec, headp)
-     struct dspec *D_spec;
-     file_info *headp;
+struct dspec *D_spec;
+file_info *headp;
 {
     double min_thresh, max_thresh;
     int a, b, i;
@@ -18,7 +18,7 @@ int build_thresh_arrays(D_spec, headp)
 
     /* initializations */
     D_spec->threshes[0].nthres = 0;
-    D_spec->threshes[1].nthres = 0;     /* for INSIDE CASE */
+    D_spec->threshes[1].nthres = 0; /* for INSIDE CASE */
 
     if (D_spec->in_out == INSIDE) {
         b = 0;
@@ -29,9 +29,8 @@ int build_thresh_arrays(D_spec, headp)
                 D_spec->threshes[0].nthres++;
             }
         }
-
     }
-    else {                      /* OUTSIDE */
+    else { /* OUTSIDE */
 
         for (i = 0; i < 2; i++) {
             b = 0;
@@ -47,7 +46,7 @@ int build_thresh_arrays(D_spec, headp)
                             headp->linefax.tvalue[a];
                         D_spec->threshes[i].nthres++;
                     }
-                }               /* is this brace correct? MN 2001 */
+                } /* is this brace correct? MN 2001 */
             }
         }
     }

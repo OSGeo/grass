@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_fetch.c
- * 
+ *
  * \brief DBMI Library (driver) - fetch data
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,8 +16,7 @@
 #include "macros.h"
 #include "dbstubs.h"
 
-
-static int valid_cursor(dbCursor * cursor, int position);
+static int valid_cursor(dbCursor *cursor, int position);
 
 /*!
    \brief Fetch data
@@ -36,7 +35,7 @@ int db_d_fetch(void)
     /* get the arg(s) */
     DB_RECV_TOKEN(&token);
     DB_RECV_INT(&position);
-    cursor = (dbCursor *) db_find_token(token);
+    cursor = (dbCursor *)db_find_token(token);
     if (!valid_cursor(cursor, position)) {
         DB_SEND_FAILURE();
         return DB_FAILED;
@@ -61,8 +60,7 @@ int db_d_fetch(void)
     return DB_OK;
 }
 
-
-static int valid_cursor(dbCursor * cursor, int position)
+static int valid_cursor(dbCursor *cursor, int position)
 {
     if (cursor == NULL)
         return 0;

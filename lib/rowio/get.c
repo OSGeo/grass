@@ -17,7 +17,6 @@
 static void *my_select(ROWIO *, int);
 static void pageout(ROWIO *, int);
 
-
 /*!
  * \brief Read a row
  *
@@ -30,7 +29,7 @@ static void pageout(ROWIO *, int);
  * the putrow() routine specified in Rowio_setup() is
  * called first to write the changed row to disk. If row is
  * already in memory, no disk read is done. The pointer to the data is
- * simply returned.  
+ * simply returned.
  *
  * \param R pointer to ROWIO structure
  * \param row row number
@@ -38,7 +37,7 @@ static void pageout(ROWIO *, int);
  * \return NULL on error
  * \return pointer to the buffer containing row
  */
-void *Rowio_get(ROWIO * R, int row)
+void *Rowio_get(ROWIO *R, int row)
 {
     int i;
     int age;
@@ -58,7 +57,7 @@ void *Rowio_get(ROWIO * R, int row)
     cur = 0;
 
     for (i = 0; i < R->nrows; i++)
-        if (R->rcb[i].row < 0) {        /* free slot ! */
+        if (R->rcb[i].row < 0) { /* free slot ! */
             cur = i;
             break;
         }
@@ -69,7 +68,7 @@ void *Rowio_get(ROWIO * R, int row)
 
     pageout(R, cur);
 
-    i = (*R->getrow) (R->fd, R->rcb[cur].buf, R->rcb[cur].row = row, R->len);
+    i = (*R->getrow)(R->fd, R->rcb[cur].buf, R->rcb[cur].row = row, R->len);
     R->rcb[cur].dirty = 0;
     if (!i) {
         R->rcb[cur].row = -1;
@@ -86,7 +85,7 @@ void *Rowio_get(ROWIO * R, int row)
 
    \param R pointer to ROWIO strcuture
  */
-void Rowio_flush(ROWIO * R)
+void Rowio_flush(ROWIO *R)
 {
     int i;
 
@@ -94,17 +93,17 @@ void Rowio_flush(ROWIO * R)
         pageout(R, i);
 }
 
-static void pageout(ROWIO * R, int cur)
+static void pageout(ROWIO *R, int cur)
 {
     if (R->rcb[cur].row < 0)
         return;
     if (!R->rcb[cur].dirty)
         return;
-    (*R->putrow) (R->fd, R->rcb[cur].buf, R->rcb[cur].row, R->len);
+    (*R->putrow)(R->fd, R->rcb[cur].buf, R->rcb[cur].row, R->len);
     R->rcb[cur].dirty = 0;
 }
 
-static void *my_select(ROWIO * R, int n)
+static void *my_select(ROWIO *R, int n)
 {
     int i;
 

@@ -50,7 +50,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     int x0, x1, y0, y1, xyTemp;
     int SigDigits;
     unsigned int MaxLabelLen;
-    char DispFormat[5]; /*  %.Xf\0  */
+    char DispFormat[6]; /*  %.Xf\0  */
     double maxCat;
     int horiz;
     char *units_bottom;
@@ -280,8 +280,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (horiz)
             sprintf(DispFormat, "%%d");
         else {
-            if (maxCat > 0.0)
-                sprintf(DispFormat, "%%%dd", (int)(log10(fabs(maxCat))) + 1);
+            if (maxCat > 0.0) {
+                size_t b_s = sizeof(DispFormat);
+                int log_maxCat = (int)(log10(fabs(maxCat))) + 1;
+                if (snprintf(DispFormat, b_s, "%%%dd", log_maxCat) >= (int)b_s)
+                    G_fatal_error(
+                        _("Failed to create format string with maxCat=%f."),
+                        maxCat);
+            }
             else
                 sprintf(DispFormat, "%%2d");
         }
@@ -749,11 +755,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (opt_tstep->answer) {
             if (log_sc) { /* logarithmic */
                 t_start = 0;
-                while (log10(eps_min) + t_start <
-                       (dmax > 0
-                            ? log10(dmax)
-                            : log10(eps_min) +
-                                  1.5 * t_step)) { /* only twice if dmax <= 0 */
+                while (
+                    log10(eps_min) + t_start <
+                    (dmax > 0 ? log10(dmax) : log10(eps_min) + 1.5 * t_step)) {
+                    /* only twice if dmax <= 0 */
                     if (dmax <= 0) {
                         /* XXX: again, if the entire raster is not positive,
                          * maybe, we should quit */

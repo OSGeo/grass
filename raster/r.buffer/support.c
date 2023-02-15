@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,11 +16,10 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <grass/raster.h>
 #include "distance.h"
-
 
 int make_support_files(char *output, char *units)
 {

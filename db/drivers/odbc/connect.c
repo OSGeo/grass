@@ -15,8 +15,7 @@ int open_connection()
         return DB_FAILED;
     }
 
-    ret =
-        SQLSetEnvAttr(ODenvi, SQL_ATTR_ODBC_VERSION, (void *)SQL_OV_ODBC3, 0);
+    ret = SQLSetEnvAttr(ODenvi, SQL_ATTR_ODBC_VERSION, (void *)SQL_OV_ODBC3, 0);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
         db_d_append_error("SQLSetEnvAttr()");
         db_d_report_error();
@@ -34,7 +33,7 @@ int open_connection()
     }
 
     /* Set timeout */
-    SQLSetConnectAttr(ODconn, SQL_LOGIN_TIMEOUT, (SQLPOINTER *) 5, 0);
+    SQLSetConnectAttr(ODconn, SQL_LOGIN_TIMEOUT, (SQLPOINTER *)5, 0);
 
     return DB_OK;
 }

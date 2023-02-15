@@ -1,16 +1,14 @@
-
 /*-
  * G_clicker()
- * 
+ *
  * Print a clock hand (one of '|', '/', '-', '\') to stderr.
  * Used in place of G_percent for unknown number of iterations
- * 
+ *
  */
 #include <stdio.h>
 #include <grass/gis.h>
 
-static struct state
-{
+static struct state {
     int prev;
 } state;
 

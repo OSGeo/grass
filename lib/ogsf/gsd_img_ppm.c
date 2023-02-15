@@ -3,17 +3,17 @@
 
    \brief OGSF library - PPM stuff
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
    - added little/big endian test Markus Neteler
    - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
    - changed 10/99 Jaro
-   - Created new function GS_write_ppm based on RGB dump 
+   - Created new function GS_write_ppm based on RGB dump
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -68,7 +68,6 @@ int GS_write_ppm(const char *name)
             fputc((int)g, fp);
             fputc((int)b, fp);
         }
-
     }
     G_free(pixbuf);
     fclose(fp);
@@ -114,7 +113,6 @@ int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
             fputc((int)g, fp);
             fputc((int)b, fp);
         }
-
     }
     free(pixbuf);
     fclose(fp);

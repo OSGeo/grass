@@ -38,8 +38,8 @@ static void freedb(char **, int);
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_list_databases(dbString * path, int npaths,
-                              dbHandle ** handles, int *count)
+int db__driver_list_databases(dbString *path, int npaths, dbHandle **handles,
+                              int *count)
 {
     if (npaths < 1) {
         db_d_append_error(_("No path given"));
@@ -77,7 +77,7 @@ int db__driver_list_databases(dbString * path, int npaths,
 /* list .db file in the given path
    TODO: do it better?
  */
-int listdb(dbString * path, int npaths, dbHandle ** handles, int *count)
+int listdb(dbString *path, int npaths, dbHandle **handles, int *count)
 {
     int i, hcount, len;
     dbHandle *hlist;
@@ -113,8 +113,9 @@ int listdb(dbString * path, int npaths, dbHandle ** handles, int *count)
             sprintf(fpath, "%s/%s", db_get_string(path), dp->d_name);
             if (sqlite3_open(fpath, &sqlite) == SQLITE_OK) {
                 if (sqlite3_close(sqlite) == SQLITE_BUSY) {
-                    db_d_append_error(_("SQLite database connection '%s' is still busy"),
-                                      dp->d_name);
+                    db_d_append_error(
+                        _("SQLite database connection '%s' is still busy"),
+                        dp->d_name);
                     continue;
                 }
 
