@@ -614,7 +614,7 @@ class GMFrame(wx.Frame):
             self.datacatalog,
             aui.AuiPaneInfo()
             .Name("datacatalog")
-            .Caption("Data Catalog")
+            .Caption("Data")
             .Left()
             .Layer(1)
             .Position(1)
