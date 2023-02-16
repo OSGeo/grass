@@ -135,7 +135,7 @@ class GPrompt(object):
             cmd = utils.split(EncodeString((cmdString)))
         cmd = list(map(DecodeString, cmd))
 
-        self.promptRunCmd.emit(cmd=cmd)
+        self.promptRunCmd.emit(cmd={"cmd": cmd, "cmdString": str(cmdString)})
 
         self.CmdErase()
         self.ShowStatusText("")
