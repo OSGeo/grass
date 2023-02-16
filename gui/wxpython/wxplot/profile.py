@@ -271,7 +271,9 @@ class ProfileFrame(BasePlotFrame):
             "r.profile",
             parent=self,
             input=raster,
-            coordinates=coords,
+            # since a transect "line" starts with two identical start points,
+            # don't repeat the first pair of coordinates in output
+            coordinates=",".join(coords.split(",")[2:]),
             resolution=transect_res,
             null="nan",
             quiet=True,
