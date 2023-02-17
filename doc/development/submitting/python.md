@@ -99,6 +99,10 @@ For example like this:
 flake8 --config lib/python/.flake8 lib/python/temporal/register.py
 ```
 
+:exclamation:
+It is very convenient and recommended to [use pre-commit](./submitting.md#use-pre-commit)
+to do both Black formatting and Flake8 file validation.
+
 ### Editor settings for 4-space indentation
 
 The correct editor settings for Python indentation
