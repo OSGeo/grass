@@ -21,7 +21,7 @@
  * <25 Jun 1995> - new site API (jdm)
  * <13 Sep 2000> - released under GPL
  *
- * COPYRIGHT:    (C) 2003-2018 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2023 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
     struct bound_box box;
     struct Cell_head window;
     struct GModule *module;
+    char xname[GNAME_MAX], xmapset[GNAME_MAX];
     struct {
         struct Option *input, *field, *cats, *where, *output, *nsites, *zmin,
             *zmax, *zcol, *ztype, *seed;
@@ -223,6 +224,7 @@ int main(int argc, char *argv[])
             Vect_close(&In);
             G_fatal_error(_("No areas in vector map <%s>"), parm.input->answer);
         }
+        G_unqualified_name(parm.input->answer, G_mapset(), xname, xmapset);
     }
 
     /* create new vector map */
@@ -286,7 +288,7 @@ int main(int argc, char *argv[])
             ncols = db_get_table_number_of_columns(table);
             for (icol = 0; icol < ncols; icol++) {
                 col = db_get_table_column(table, icol);
-                sprintf(buf, ",%s_%s %s", parm.input->answer,
+                sprintf(buf, ",%s_%s %s", xname,
                         db_get_column_name(col),
                         db_sqltype_name(db_get_column_sqltype(col)));
                 db_append_string(&sql, buf);
@@ -753,7 +755,7 @@ int main(int argc, char *argv[])
 
                 if (icol > 0)
                     db_append_string(&update_str, ", ");
-                sprintf(buf, "%s_%s = ", parm.input->answer, column_name);
+                sprintf(buf, "%s_%s = ", xname, column_name);
                 db_append_string(&update_str, buf);
                 ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
                 db_convert_value_to_string(value, ctype, &value_str);
