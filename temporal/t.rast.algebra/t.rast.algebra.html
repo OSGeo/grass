@@ -571,7 +571,7 @@ C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/
 Compute the DOY for all maps from STRDS A where conditions are met at three 
 consecutive time intervals (e.g. temperature > 0):
 <div class="code"><pre>
-B = if(A>0.0&&A[-1]>0.0&&A[-2]>0.0, start_doy(A, -1), 0)"
+B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
 </pre></div>
 
 
