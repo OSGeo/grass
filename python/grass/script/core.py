@@ -390,7 +390,15 @@ def start_command(
         else:
             options[opt] = val
 
-    args = make_command(prog, flags=flags, overwrite=overwrite, quiet=quiet, superquiet=superquiet, verbose=verbose, **options)
+    args = make_command(
+        prog,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=quiet,
+        superquiet=superquiet,
+        verbose=verbose,
+        **options,
+    )
 
     if debug_level() > 0:
         sys.stderr.write(

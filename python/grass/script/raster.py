@@ -109,7 +109,14 @@ def raster_info(map, env=None):
 
 
 def mapcalc(
-    exp, quiet=False, superquiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r.mapcalc.
 
@@ -147,7 +154,14 @@ def mapcalc(
 
 
 def mapcalc_start(
-    exp, quiet=False, superquiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 

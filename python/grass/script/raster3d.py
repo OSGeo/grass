@@ -69,7 +69,14 @@ def raster3d_info(map, env=None):
 
 
 def mapcalc3d(
-    exp, quiet=False, superquiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r3.mapcalc.
 
