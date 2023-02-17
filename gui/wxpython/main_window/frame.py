@@ -614,7 +614,7 @@ class GMFrame(wx.Frame):
             self.datacatalog,
             aui.AuiPaneInfo()
             .Name("datacatalog")
-            .Caption("Data Catalog")
+            .Caption(_("Data"))
             .Left()
             .Layer(1)
             .Position(1)
@@ -629,7 +629,7 @@ class GMFrame(wx.Frame):
             self.notebookLayers,
             aui.AuiPaneInfo()
             .Name("layers")
-            .Caption("Layers")
+            .Caption(_("Layers"))
             .Left()
             .Layer(1)
             .Position(2)
@@ -644,7 +644,7 @@ class GMFrame(wx.Frame):
             self.search,
             aui.AuiPaneInfo()
             .Name("tools")
-            .Caption("Tools")
+            .Caption(_("Tools"))
             .Right()
             .Layer(1)
             .Position(1)
@@ -659,7 +659,7 @@ class GMFrame(wx.Frame):
             self.goutput,
             aui.AuiPaneInfo()
             .Name("console")
-            .Caption("Console")
+            .Caption(_("Console"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
@@ -673,7 +673,7 @@ class GMFrame(wx.Frame):
             self.pyshell,
             aui.AuiPaneInfo()
             .Name("python")
-            .Caption("Python")
+            .Caption(_("Python"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
