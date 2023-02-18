@@ -273,9 +273,9 @@ end_minute(A)            The minute of the end time [0 - 59]
 end_second(A)            The second of the end time [0 - 59]
 </pre></div>
 
-In order to use the numbers returned by the functions in the last block above, an 
-offset value needs to be added. For example, start_doy(A, 0) would return the 
-DOY of the current map in STDS A. end_hour(A, -1) would return the end hour of 
+In order to use the numbers returned by the functions in the last block above, an
+offset value needs to be added. For example, start_doy(A, 0) would return the
+DOY of the current map in STDS A. end_hour(A, -1) would return the end hour of
 the previous map in STDS A.
 
 <h4>Comparison operator</h4>
@@ -567,7 +567,7 @@ C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/
 </pre></div>
 
 <h3>Compute DOY for spatio-temporal conditions</h3>
-Compute the DOY for all maps from STRDS A where conditions are met at three 
+Compute the DOY for all maps from STRDS A where conditions are met at three
 consecutive time intervals (e.g. temperature > 0):
 <div class="code"><pre>
 B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
