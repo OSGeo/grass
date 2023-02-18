@@ -3325,7 +3325,6 @@ class TemporalAlgebraParser(object):
             elif len(t) == 7:
                 print(str(t[3]) + "* = tshift(", str(t[3]), ",", str(t[5]), ")")
 
-
     def p_expr_time_const(self, t):
         # Examples
         # start_doy(A, -1)  # Get the start DOY from the preceding map
@@ -3355,7 +3354,7 @@ class TemporalAlgebraParser(object):
                     # Create r.mapcalc expression string for the operation.
                     tfuncdict = self.get_temporal_func_dict(map_n)
                     # Generate an intermediate map for the result map list.
-                    map_new = self.generate_new_map(map_n, bool_op = 'and', copy = True)
+                    map_new = self.generate_new_map(map_n, bool_op="and", copy=True)
                     map_new.set_temporal_extent(map_i_t_extent)
                     # Set new command list for map.
                     map_new.cmd_list = str(tfuncdict[t[1].upper()])
@@ -3367,7 +3366,6 @@ class TemporalAlgebraParser(object):
 
         if self.debug:
             print(t[0], t[1], t[2], t[3])
-
 
     def p_error(self, t):
         # Handle errors.
