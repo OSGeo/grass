@@ -7,12 +7,10 @@ for details.
 :authors: Soeren Gebbert and Thomas Leppelt
 """
 
-import grass.script
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 import datetime
-import os
 
 
 class TestTemporalAlgebra(TestCase):
@@ -312,7 +310,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 2)
         self.assertEqual(D.metadata.get_max_max(), 3)
@@ -335,7 +332,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 2)
         self.assertEqual(D.metadata.get_max_max(), 3)
@@ -385,7 +381,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 3)
         self.assertEqual(D.metadata.get_max_max(), 4)
@@ -408,7 +403,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 2)
         self.assertEqual(D.metadata.get_max_max(), 3)
@@ -431,7 +425,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 2)
         self.assertEqual(D.metadata.get_max_max(), 3)
@@ -454,7 +447,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 99)
         self.assertEqual(D.metadata.get_max_max(), 99)
@@ -477,7 +469,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 3)
         self.assertEqual(D.metadata.get_max_max(), 3)
@@ -497,7 +488,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 7)
         self.assertEqual(D.metadata.get_min_min(), 1)
         self.assertEqual(D.metadata.get_max_max(), 10)
@@ -520,7 +510,6 @@ class TestTemporalAlgebra(TestCase):
         D = tgis.open_old_stds("R", type="strds")
         self.assertTrue(D.is_in_db())
         D.select()
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 1)
         self.assertEqual(D.metadata.get_max_max(), 4)
@@ -731,6 +720,20 @@ class TestTemporalAlgebraDryRun(TestCase):
         )
         print(pc["register"])
         self.assertEqual(len(pc["register"]), 2)
+        self.assertEqual(pc["STDS"]["name"], "R")
+        self.assertEqual(pc["STDS"]["stdstype"], "strds")
+
+    def test_time_constant(self):
+        """Testing the time constant functions."""
+        ta = tgis.TemporalAlgebraParser(run=True, debug=False, dry_run=True)
+        pc = ta.parse(
+            expression="R = if(start_doy(A)<3,start_doy(A, 1), A)",
+            stdstype="strds",
+            basename="r",
+            overwrite=True,
+        )
+        print(pc["register"])
+        self.assertEqual(len(pc["register"]), 4)
         self.assertEqual(pc["STDS"]["name"], "R")
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
