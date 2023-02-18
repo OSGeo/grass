@@ -45,17 +45,17 @@ class MapPageFrame(wx.Frame):
         self.mapdisplay.onFocus.emit()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        self.Show()
+        self._show()
 
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.mapdisplay, proportion=1, flag=wx.EXPAND)
         self.SetSizer(sizer)
 
-    def Show(self):
+    def _show(self):
         """Show frame and contained mapdisplay panel"""
         self.mapdisplay.Show()
-        super().Show()
+        self.Show()
 
     def SetDockingCallback(self, function):
         """Set docking callback on reparented mapdisplay panel"""
