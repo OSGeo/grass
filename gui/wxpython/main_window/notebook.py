@@ -31,8 +31,9 @@ class MapPageFrame(wx.Frame):
     def __init__(self, parent, mapdisplay, size, pos, title):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
         self.mapdisplay = mapdisplay
-        self.sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.SetSizerAndFit(self.sizer)
+        self.mapdisplay.Reparent(self)
+
+        self._layout()
 
         # set system icon
         self.SetIcon(
@@ -41,7 +42,24 @@ class MapPageFrame(wx.Frame):
             )
         )
 
+        self.mapdisplay.onFocus.emit()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+        self.Show()
+
+    def _layout(self):
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.mapdisplay, proportion=1, flag=wx.EXPAND)
+        self.SetSizer(sizer)
+
+    def Show(self):
+        """Show frame and contained mapdisplay panel"""
+        self.mapdisplay.Show()
+        super().Show()
+
+    def SetDockingCallback(self, function):
+        """Set docking callback on reparented mapdisplay panel"""
+        self.mapdisplay.SetDockingCallback(function)
 
     def OnClose(self, event):
         """Close frame and associated layer notebook page."""
@@ -84,12 +102,7 @@ class MapNotebook(aui.AuiNotebook):
             pos=original_pos,
             title=text,
         )
-        page.Reparent(frame)
-        page.SetDockingCallback(self.DockMapDisplay)
-        frame.sizer.Add(page, proportion=1, flag=wx.EXPAND)
-        frame.Show()
-        page.Show()
-        page.onFocus.emit()
+        frame.SetDockingCallback(self.DockMapDisplay)
 
     def DockMapDisplay(self, page):
         """Dock independent MapFrame object back to Aui.Notebook"""
