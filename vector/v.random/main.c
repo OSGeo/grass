@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
             ncols = db_get_table_number_of_columns(table);
             for (icol = 0; icol < ncols; icol++) {
                 col = db_get_table_column(table, icol);
-                sprintf(buf, ",%s_%s %s", xname,
+                snprintf(buf, DB_SQL_MAX, ",%s_%s %s", xname,
                         db_get_column_name(col),
                         db_sqltype_name(db_get_column_sqltype(col)));
                 db_append_string(&sql, buf);
