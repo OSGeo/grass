@@ -51,7 +51,7 @@ class MapPageFrame(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.mapdisplay, proportion=1, flag=wx.EXPAND)
         self.SetSizer(sizer)
-        self.Centre(wx.BOTH)
+        self.CentreOnParent()
 
     def _show(self):
         """Show frame and contained mapdisplay panel"""
