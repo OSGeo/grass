@@ -255,10 +255,12 @@ int main(int argc, char *argv[])
         db_init_string(&sql);
 
         /* Create table */
-        snprintf(buf, DB_SQL_MAX, "create table %s (%s integer", Fi->table, GV_KEY_COLUMN);
+        snprintf(buf, DB_SQL_MAX, "create table %s (%s integer", Fi->table,
+                 GV_KEY_COLUMN);
         db_set_string(&sql, buf);
         if (parm.zcol->answer) {
-            snprintf(buf, DB_SQL_MAX, ", %s %s", parm.zcol->answer, parm.ztype->answer);
+            snprintf(buf, DB_SQL_MAX, ", %s %s", parm.zcol->answer,
+                     parm.ztype->answer);
             db_append_string(&sql, buf);
         }
         if (parm.input->answer && field > 0) {
@@ -289,8 +291,8 @@ int main(int argc, char *argv[])
             for (icol = 0; icol < ncols; icol++) {
                 col = db_get_table_column(table, icol);
                 snprintf(buf, DB_SQL_MAX, ",%s_%s %s", xname,
-                        db_get_column_name(col),
-                        db_sqltype_name(db_get_column_sqltype(col)));
+                         db_get_column_name(col),
+                         db_sqltype_name(db_get_column_sqltype(col)));
                 db_append_string(&sql, buf);
             }
         }
@@ -532,7 +534,8 @@ int main(int argc, char *argv[])
                     Vect_append_point(Points, x, y, 0.0);
 
                 if (!notable) {
-                    snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table, Fi->key);
+                    snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table,
+                             Fi->key);
                     db_set_string(&sql, buf);
                     if (parm.zcol->answer) {
                         snprintf(buf, DB_SQL_MAX, ", %s", parm.zcol->answer);
@@ -687,7 +690,8 @@ int main(int argc, char *argv[])
                     Vect_reset_cats(Cats);
                 }
 
-                snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table, Fi->key);
+                snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table,
+                         Fi->key);
                 db_set_string(&sql, buf);
                 if (parm.zcol->answer) {
                     snprintf(buf, DB_SQL_MAX, ", %s", parm.zcol->answer);
@@ -762,13 +766,15 @@ int main(int argc, char *argv[])
                 if (ctype == DB_C_TYPE_INT || ctype == DB_C_TYPE_DOUBLE)
                     snprintf(buf, DB_SQL_MAX, "%s", db_get_string(&value_str));
                 else
-                    snprintf(buf, DB_SQL_MAX, "'%s'", db_get_string(&value_str));
+                    snprintf(buf, DB_SQL_MAX, "'%s'",
+                             db_get_string(&value_str));
                 db_append_string(&update_str, buf);
             }
             for (i = 0; i < total_n; i++) {
                 if (cat_area == cats_array[i].val) {
                     db_copy_string(&sql, &update_str);
-                    snprintf(buf, DB_SQL_MAX, " where %s = %d", Fi->key, cats_array[i].cat);
+                    snprintf(buf, DB_SQL_MAX, " where %s = %d", Fi->key,
+                             cats_array[i].cat);
                     db_append_string(&sql, buf);
                     G_debug(3, "%s", db_get_string(&sql));
                     if (db_execute_immediate(driver, &sql) != DB_OK) {
