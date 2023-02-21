@@ -1371,7 +1371,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         The combination of the spatial_extent and spatial_relation parameters
         can be used to return only map objects with the given spatial relation
-        to the provided spatial extent
+        to the provided spatial extent.
 
         :param where: The SQL where statement to select a
                      subset of the registered maps without "WHERE"
