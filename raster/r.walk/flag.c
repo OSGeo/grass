@@ -21,7 +21,7 @@ FLAG *flag_create(int nrows, int ncols)
 	G_fatal_error(_("Out of memory!"));
 
     temp =
-	(unsigned char *)G_malloc(nrows * new_flag->leng *
+	(unsigned char *)G_malloc((size_t)nrows * new_flag->leng *
 				  sizeof(unsigned char));
 
     if (!temp)
