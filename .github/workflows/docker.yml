@@ -1,5 +1,3 @@
----
-name: Docker
 # This workflow builds and pushes docker images to dockerhub
 #
 # Summary
