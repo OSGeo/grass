@@ -12,6 +12,7 @@ import os
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.gmodules import SimpleModule
 
 
 class TestTRastAlgebra(TestCase):
@@ -257,6 +258,51 @@ class TestTRastAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+    def test_simple_arith_time_function(self):
+        """Simple arithmetic test of time functions"""
+
+        E = SimpleModule(
+            "t.rast.algebra",
+            expression="R = if(A >= 3, start_doy(A, 0), 0)",
+            basename="r",
+            flags="d",
+            suffix="gran",
+        )
+        E.run()
+        self.assertModule(
+            "t.rast.algebra",
+            expression="R = if(A >= 3, start_doy(A, 0), 0)",
+            basename="r",
+            suffix="gran",
+        )
+
+        D = tgis.open_old_stds("R", type="strds")
+
+        # Check expressions
+        ref_str = "...".join(
+            [
+                "r_2001_01_01=if(a1@... >= 3, 1, 0)",
+                "r_2001_01_02=if(a2@... >= 3, 2, 0)",
+                "r_2001_01_03=if(a3@... >= 3, 3, 0)",
+                "r_2001_01_04=if(a4@... >= 3, 4, 0)",
+            ]
+        )
+        ref_str = f"...{ref_str}..."
+        self.assertLooksLike(str(E.outputs.stdout), ref_str)
+
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), 0)
+        self.assertEqual(D.metadata.get_min_max(), 4)
+        self.assertEqual(D.metadata.get_max_min(), 0)
+        self.assertEqual(D.metadata.get_max_max(), 4)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+        # Check results around if-threshold
+        self.assertRasterMinMax("r_2001_01_02", 0, 0)
+        self.assertRasterMinMax("r_2001_01_03", 3, 3)
 
     def test_simple_arith_if_1(self):
         """Simple arithmetic test with if condition"""
@@ -520,7 +566,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 99)
         self.assertEqual(D.metadata.get_max_max(), 99)
@@ -539,7 +584,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 100)
         self.assertEqual(D.metadata.get_max_max(), 100)
@@ -558,7 +602,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 101)
         self.assertEqual(D.metadata.get_max_max(), 104)
@@ -577,7 +620,6 @@ class TestTRastAlgebra(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 100)
         self.assertEqual(D.metadata.get_max_max(), 400)
@@ -587,8 +629,8 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_select(self):
-        """Testing the temporal select operator."""
+    def test_temporal_select_one_strds(self):
+        """Testing the temporal select operator with one STRDS."""
 
         self.assertModule("t.rast.algebra", expression="R = A : A", basename="r")
 
@@ -603,8 +645,8 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_select(self):
-        """Testing the temporal select operator."""
+    def test_temporal_select_two_strds(self):
+        """Testing the temporal select operator with two STRDS."""
 
         self.assertModule("t.rast.algebra", expression="R = A : D", basename="r")
 
