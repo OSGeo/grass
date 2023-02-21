@@ -22,11 +22,12 @@ from __future__ import print_function
 from multiprocessing import Pool
 from subprocess import PIPE
 
+import grass.script as gs
+from grass.pygrass.modules import Module
+
 from .core import SQLDatabaseInterfaceConnection, get_current_mapset
 from .factory import dataset_factory
 from .open_stds import open_old_stds
-import grass.script as gs
-from grass.pygrass.modules import Module
 
 ###############################################################################
 
@@ -168,20 +169,13 @@ def print_gridded_dataset_univar_statistics(
         dbif.close()
         gs.verbose(
             _(
-                "Space time {type} dataset <{id}> is empty".format(
-                    type=sp.get_new_map_instance(None).get_type(), id=sp.get_id()
-                )
-            )
+                "No maps found to process. "
+                "Space time {type} dataset <{id}> is either empty "
+                "or the where condition (if used) does not return any maps "
+                "or no maps with the requested spatial relation to the "
+                "computational region exist in the dataset."
+            ).format(type=sp.get_new_map_instance(None).get_type(), id=sp.get_id())
         )
-        if region_relation:
-            gs.verbose(
-                _(
-                    "or no maps with the requested spatial relation"
-                    "to the computational region exist"
-                )
-            )
-        if where:
-            gs.verbose(_("or where condition does not return any maps"))
 
         if output is not None:
             out_file.close()
@@ -335,7 +329,7 @@ def print_vector_dataset_univar_statistics(
             + fs
         )
         string += "min" + fs + "max" + fs + "range"
-        if type == "point" or type == "centroid":
+        if type in ("point", "centroid"):
             string += (
                 fs
                 + "mean"
