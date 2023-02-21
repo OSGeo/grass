@@ -406,8 +406,8 @@ int Rast_maskfd(void);
     (*(const DCELL *)(dcellVal) != *(const DCELL *)(dcellVal))
 
 void Rast__set_null_value(void *, int, int, RASTER_MAP_TYPE);
-void Rast_set_null_value(void *, int, RASTER_MAP_TYPE);
-void Rast_set_c_null_value(CELL *, int);
+void Rast_set_null_value(void *, unsigned int, RASTER_MAP_TYPE);
+void Rast_set_c_null_value(CELL *, unsigned int);
 void Rast_set_f_null_value(FCELL *, int);
 void Rast_set_d_null_value(DCELL *, int);
 int Rast_is_null_value(const void *, RASTER_MAP_TYPE);

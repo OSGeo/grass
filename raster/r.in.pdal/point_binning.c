@@ -57,7 +57,7 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
     case -1:
         /* fill with NULL */
         /* alloc for col+1, do we come up (nrows) short? no. */
-        Rast_set_null_value(array, nrows * ncols, map_type);
+        Rast_set_null_value(array, (size_t)nrows * ncols, map_type);
         break;
 
     default:

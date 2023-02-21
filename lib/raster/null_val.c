@@ -95,7 +95,8 @@ void Rast__set_null_value(void *rast, int numVals, int null_is_zero,
    \param numVals number of values to set to null
    \param data_type type of raster - CELL, FCELL, DCELL
  */
-void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
+void Rast_set_null_value(void *buf, unsigned int numVals,
+                         RASTER_MAP_TYPE data_type)
 {
     switch (data_type) {
     case CELL_TYPE:
@@ -121,9 +122,9 @@ void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
    \param cellVals pointer to CELL values to set to null
    \param numVals  number of values to set to null
  */
-void Rast_set_c_null_value(CELL *cellVals, int numVals)
+void Rast_set_c_null_value(CELL *cellVals, unsigned int numVals)
 {
-    int i; /* counter */
+    unsigned int i; /* counter */
 
     for (i = 0; i < numVals; i++)
         cellVals[i] = (int)0x80000000;
