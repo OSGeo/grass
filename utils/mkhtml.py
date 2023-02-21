@@ -34,8 +34,12 @@ except ImportError:
     # Python 3 import
     from html.parser import HTMLParser
 
-from six.moves.urllib import request as urlrequest
-from six.moves.urllib.error import HTTPError, URLError
+try:
+    from six.moves.urllib import request as urlrequest
+    from six.moves.urllib.error import HTTPError, URLError
+except ImportError:
+    from urllib import request as urlrequest
+    from urllib.error import HTTPError, URLError
 
 try:
     import urlparse
