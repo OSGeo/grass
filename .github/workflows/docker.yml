@@ -1,3 +1,5 @@
+---
+name: Docker
 # This workflow builds and pushes docker images to dockerhub
 #
 # Summary
@@ -14,7 +16,6 @@
 # job docker-release-os-matrix:
 # * creates tags <version>-alpine, <version>-debian and <version>-ubuntu for each release
 
-name: Docker
 
 on:
   push:
