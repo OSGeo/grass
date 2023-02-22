@@ -11,7 +11,7 @@ matrix:
       dist: focal
       compiler: gcc
       sudo: required
-      env: CC=gcc CXX=gcc++
+      env: CC=gcc CXX=g++
 
     - os: linux
       dist: focal
