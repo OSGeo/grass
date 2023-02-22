@@ -11,13 +11,13 @@ matrix:
       dist: focal
       compiler: gcc
       sudo: required
-      env: CC=gcc
+      env: CC=gcc CXX=gcc++
 
     - os: linux
       dist: focal
       compiler: clang
       sudo: required
-      env: CC=clang
+      env: CC=clang CXX=clang++
 
 env:
   global:
