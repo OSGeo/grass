@@ -22,6 +22,7 @@ matrix:
 env:
   global:
     - CFLAGS="-Werror=implicit-function-declaration"
+    - CXXFLAGS="-std=c++11"
 
 before_install:
   - ./.travis/$TRAVIS_OS_NAME.before_install.sh
