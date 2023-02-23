@@ -527,7 +527,7 @@ int main(int argc, char *argv[])
                 /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
                  * Thus original data start is shifted by ncb.dist! */
                 for (i = 0; i < num_outputs; i++)
-                    outputs[i].buf[brow_idx * ncols + col] = ncb.buf[t][ncb.dist][col + ncb.dist];
+                    outputs[i].buf[(size_t)brow_idx * ncols + col] = ncb.buf[t][ncb.dist][col + ncb.dist];
                 continue;
             }
 
@@ -538,7 +538,7 @@ int main(int argc, char *argv[])
 
             for (i = 0; i < num_outputs; i++) {
                 struct output *out = &outputs[i];
-                DCELL *rp = &out->buf[brow_idx * ncols + col];
+                DCELL *rp = &out->buf[(size_t)brow_idx * ncols + col];
 
                 if (n == 0) {
                     Rast_set_d_null_value(rp, 1);
