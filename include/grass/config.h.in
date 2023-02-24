@@ -152,7 +152,7 @@
 /* define if glXCreatePbuffer exists */
 #undef HAVE_PBUFFERS
 
-/* define if PDAL exists */
+/* Define to 1 if PDAL is to be used. */
 #undef HAVE_PDAL
 
 /* define if glXCreateGLXPixmap exists */

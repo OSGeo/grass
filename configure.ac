@@ -307,6 +307,7 @@ LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
+LOC_ARG_WITH(pdal, PDAL)
 
 AC_ARG_WITH(libpng,
 [  --with-libpng[=path/libpng-config]
@@ -323,12 +324,6 @@ AC_ARG_WITH(liblas,
                           enable libLAS support (liblas-config with path,
                           e.g. '--with-liblas=/usr/local/bin/liblas-config',
                           default: no)],, with_liblas="no")
-
-AC_ARG_WITH(pdal,
-[  --with-pdal[=path/pdal-config]
-                          enable PDAL support (pdal-config with path,
-                          e.g. '--with-pdal=/usr/local/bin/pdal-config',
-                          default: no)],, with_pdal="no")
 
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
@@ -1042,26 +1037,20 @@ AC_LANG_PUSH(C++)
 PDAL_LIBS=
 PDAL_CPPFLAGS=
 USE_PDAL=
-
-if test "`basename xx/$with_pdal`" = "pdal-config" ; then
-  PDAL_CONFIG="$with_pdal"
-fi
+pdal="pdal"
 
 if test "$with_pdal" = "no" ; then
   AC_MSG_RESULT(no)
 else
   AC_MSG_RESULT(yes)
-  AC_PATH_PROG(PDAL_CONFIG, pdal-config, no)
 
-  if test "$PDAL_CONFIG" = "no" ; then
-    AC_MSG_ERROR([*** could not find pdal-config])
+  if test -s "${PKG_CONFIG} --exists ${pdal}" ; then
+    AC_MSG_ERROR([*** Unable to locate PDAL package.])
   fi
 
-  if test "$PDAL_CONFIG" != "" ; then
-    PDAL_LIBS=`"$PDAL_CONFIG" --libs`
-    PDAL_INC=`"$PDAL_CONFIG" --includes`
-    USE_PDAL=1
-  fi
+  PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
+  PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
+  USE_PDAL=1
 
   PDAL=
   ac_save_libs="$LIBS"
@@ -1080,7 +1069,7 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
+  AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL is to be used.])
 fi
 
 AC_SUBST(PDAL_LIBS)

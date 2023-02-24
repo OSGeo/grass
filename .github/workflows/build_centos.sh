@@ -41,7 +41,8 @@ export CXXFLAGS="-std=gnu++11"
     --without-mysql \
     --without-postgres \
     --without-odbc \
-    --without-fftw
+    --without-fftw \
+    --without-pdal
 
 make
 make install

@@ -11,17 +11,18 @@ matrix:
       dist: focal
       compiler: gcc
       sudo: required
-      env: CC=gcc
+      env: CC=gcc CXX=g++
 
     - os: linux
       dist: focal
       compiler: clang
       sudo: required
-      env: CC=clang
+      env: CC=clang CXX=clang++
 
 env:
   global:
     - CFLAGS="-Werror=implicit-function-declaration"
+    - CXXFLAGS="-std=c++11"
 
 before_install:
   - ./.travis/$TRAVIS_OS_NAME.before_install.sh
