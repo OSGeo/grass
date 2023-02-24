@@ -1,3 +1,4 @@
+---
 name: Ubuntu
 # Build and run tests on Ubuntu
 
@@ -13,19 +14,19 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "20.04"
+          - name: '20.04'
             os: ubuntu-20.04
             config: ubuntu-20.04
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
-          - name: "minimum config"
+          - name: minimum config
             os: ubuntu-20.04
             config: ubuntu-20.04_without_x
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Get dependencies
         run: |
@@ -61,7 +62,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

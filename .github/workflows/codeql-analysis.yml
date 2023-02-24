@@ -1,4 +1,5 @@
-name: "CodeQL"
+---
+name: CodeQL
 
 on:
   push:
@@ -11,7 +12,7 @@ on:
       - "**/*.txt"
   schedule:
     # Check every Saturday at 18:36
-    - cron: "36 18 * * 6"
+    - cron: 36 18 * * 6
 
 jobs:
   analyze:
@@ -28,10 +29,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
@@ -53,9 +54,9 @@ jobs:
 
       - name: Build
         env:
-          CFLAGS: "-std=gnu11"
-          CXXFLAGS: "-std=c++11"
+          CFLAGS: -std=gnu11
+          CXXFLAGS: -std=c++11
         run: .github/workflows/build_ubuntu-20.04.sh $HOME/install
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v2
