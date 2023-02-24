@@ -246,10 +246,13 @@ int main(int argc, char *argv[])
 
                         if (Rast_is_d_null_value(&c)) {
                             Rast_set_d_null_value(
-                                &outbuf[(size_t)(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
-                            outbuf[(size_t)(row - start) * dst_w.cols + col] = c;
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
+                                c;
                         }
                     }
 
@@ -288,7 +291,9 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c10) ||
                             Rast_is_d_null_value(&c11)) {
                             Rast_set_d_null_value(
-                                &outbuf[(size_t)(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
                             outbuf[(size_t)(row - start) * dst_w.cols + col] =
@@ -361,7 +366,9 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c32) ||
                             Rast_is_d_null_value(&c33)) {
                             Rast_set_d_null_value(
-                                &outbuf[(size_t)(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
                             outbuf[(size_t)(row - start) * dst_w.cols + col] =
@@ -433,7 +440,8 @@ int main(int argc, char *argv[])
 
         /* write to output map */
         for (row = start; row < end; row++) {
-            Rast_put_d_row(outfile, &outbuf[(size_t)(row - start) * dst_w.cols]);
+            Rast_put_d_row(outfile,
+                           &outbuf[(size_t)(row - start) * dst_w.cols]);
         }
         written = end;
     }
