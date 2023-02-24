@@ -60,7 +60,7 @@ CONFIGURE_FLAGS="\
   --with-nls \
   --with-libs=${CONDA_PREFIX}/lib \
   --with-includes=${CONDA_PREFIX}/include \
-  --with-pdal=${CONDA_PREFIX}/bin/pdal-config \
+  --with-pdal \
   --with-readline \
   --with-readline-includes=${CONDA_PREFIX}/include/readline \
   --with-readline-libs=${CONDA_PREFIX}/lib
