@@ -542,7 +542,7 @@ class RenderMapMgr(wx.EvtHandler):
     def _init(self):
         """Init render manager"""
         self._startTime = time.time()
-        self.progresInfo = None
+        self.progressInfo = None
         self.layers = []
 
         # re-render from scratch
@@ -763,7 +763,7 @@ class RenderMapMgr(wx.EvtHandler):
         """Calculates progress in rendering/downloading
         and emits signal to inform progress bar about progress.
 
-        Emits renderDone event when progresVal is equal to range.
+        Emits renderDone event when progressVal is equal to range.
 
         :param layer: Layer to be processed or None to reset
         """
