@@ -1090,8 +1090,8 @@ static double label_lineover(label_t *label, label_candidate_t *candidate,
  * line.
  * @param skyline The skyline to investigate.
  * @param swathline The swath line to investigate.
- * @param p The point on the skyline which is nearest to the swath line is stored
- * in this structure.
+ * @param p The point on the skyline which is nearest to the swath line is
+ * stored in this structure.
  * @return The distance in map units.
  */
 static double min_dist_2_lines(struct line_pnts *skyline,

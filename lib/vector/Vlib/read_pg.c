@@ -697,7 +697,8 @@ SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
     if (pg_info->toposchema_name) {
         int cat, col_idx;
 
-        col_idx = fid < 0 ? 3 : 2; /* TODO: determine col_idx for random access */
+        col_idx =
+            fid < 0 ? 3 : 2; /* TODO: determine col_idx for random access */
 
         if (!PQgetisnull(pg_info->res, pg_info->next_line, col_idx))
             cat = atoi(PQgetvalue(pg_info->res, pg_info->next_line, col_idx));

@@ -954,8 +954,8 @@ find_shortest_path_coor(struct Map_info *Map, double fx, double fy, double fz,
                     int node, node1, node2;
 
                     Vect_get_line_nodes(Map, abs(line), &node1, &node2);
-                    /* add the second node, the first of first segmet was already
-                     * added */
+                    /* add the second node, the first of first segmet was
+                     * already added */
                     if (line > 0)
                         node = node2;
                     else
