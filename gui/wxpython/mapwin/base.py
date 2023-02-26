@@ -215,7 +215,7 @@ class MapWindowBase(object):
         return lambda event: self.HandlersCaller(event, evHandlers)
 
     def HandlersCaller(self, event, handlers):
-        """Hepler function which calls all handlers registered for
+        """Helper function which calls all handlers registered for
         event
         """
         for handler in handlers:

@@ -133,7 +133,7 @@ static void line_coefficients(double x1, double y1, double x2, double y2,
 /*
  * Finds intersection of two straight lines. Returns 0 if the lines are
  * parallel, 1 if they cross, 2 if they are the same line.
- * !!!!!!!!!!!!!!!! FIX THIS TOLLERANCE CONSTANTS BAD (and UGLY) CODE !!!!!!!!!
+ * !!!!!!!!!!!!!!!! FIX THIS TOLERANCE CONSTANTS BAD (and UGLY) CODE !!!!!!!!!
  */
 static int line_intersection(double a1, double b1, double c1, double a2,
                              double b2, double c2, double *x, double *y)

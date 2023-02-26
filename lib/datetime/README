@@ -450,7 +450,7 @@ These functions perform addition/subtraction on datetimes.
 		 and 'src' is a date for which this function
 		 has not been implemented. NOTE: this should only happen
 		 if the total number of days in the 'src' would exceed 28
-		 since this would then cause date arithemtic to kick in
+		 since this would then cause date arithmetic to kick in
 		 to figure out if these are too many days for the month.
 ## BROWN - identify which dates you know how to handle, and which you do not.
 
@@ -609,7 +609,7 @@ To aid in setting the 'incr' type, the following routine can be used
 :+  datetime_set_increment_type (DateTime *src, *incr)
 
 	src must be legal
-	This is a convience routine which is implemented as follows:
+	This is a convenience routine which is implemented as follows:
 
 	    int mode, from ,to;
 	    int fracsec;

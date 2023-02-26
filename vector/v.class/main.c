@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
     nbclass = atoi(nbclass_opt->answer);
     nbreaks =
         nbclass -
-        1; /* we need one less classbreaks (min and max exluded) than classes */
+        1; /* we need one less classbreaks (min and max excluded) than classes */
 
     classbreaks = (double *)G_malloc((nbreaks) * sizeof(double));
     for (i = 0; i < nbreaks; i++)

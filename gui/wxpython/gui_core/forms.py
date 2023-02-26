@@ -3087,7 +3087,7 @@ class GUI:
             if completed[2]:
                 dcmd_params.update(completed[2])
 
-        # parse the interface decription
+        # parse the interface description
         try:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
@@ -3189,7 +3189,7 @@ class GUI:
         :return: parameter key
         :return: None on failure
         """
-        # parse the interface decription
+        # parse the interface description
         if not self.grass_task:
             tree = etree.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()

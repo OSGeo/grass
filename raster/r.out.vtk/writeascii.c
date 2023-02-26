@@ -64,7 +64,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 }
 
 /* ************************************************************************* */
-/* Write the default VTK Header, Elevation  is not supportet *************** */
+/* Write the default VTK Header, Elevation  is not supported *************** */
 /* ************************************************************************* */
 void write_vtk_normal_header(FILE *fp, struct Cell_head region,
                              double elevation, int type)
@@ -97,7 +97,7 @@ void write_vtk_normal_header(FILE *fp, struct Cell_head region,
 }
 
 /* ************************************************************************* */
-/* Write the Elevation VTK Header, Elevation is supportet ****************** */
+/* Write the Elevation VTK Header, Elevation is supported ****************** */
 /* ************************************************************************* */
 void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 {
@@ -115,7 +115,7 @@ void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 }
 
 /* ************************************************************************* */
-/* Write the Rectilinear Elevtaion VTK Header, Elevation is supportet ****** */
+/* Write the Rectilinear Elevtaion VTK Header, Elevation is supported ****** */
 /* ************************************************************************* */
 void write_vtk_polygonal_elevation_header(FILE *fp, struct Cell_head region)
 {
@@ -255,12 +255,12 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
     /*Now we need to write the Connectivity between the points */
 
     if (polytype == QUADS) { /*The default */
-        /*If Datafiltering should be supportet, we use Polygons to represent the
+        /*If Datafiltering should be supported, we use Polygons to represent the
          * grid */
         fprintf(fp, "POLYGONS %i %i\n", (region.rows - 1) * (region.cols - 1),
                 5 * (region.rows - 1) * (region.cols - 1));
 
-        /*We creat a grid of quads, the corners of the quads are the datapoints
+        /*We create a grid of quads, the corners of the quads are the datapoints
          */
         for (i = 0; i < region.rows - 1; i++) {
             for (j = 0; j < region.cols - 1; j++) {

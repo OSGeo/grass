@@ -1004,7 +1004,7 @@ double N_get_array_3d_d_value(N_array_3d *data, int col, int row, int depth)
  * \param col int
  * \param row int
  * \param depth int
- * \param value cahr *
+ * \param value char *
  * \return void
  * */
 void N_put_array_3d_value(N_array_3d *data, int col, int row, int depth,

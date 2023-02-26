@@ -634,7 +634,7 @@ def raster2numpy(rastname, mapset=""):
     """Return a numpy array from a raster map
 
     :param str rastname: the name of raster map
-    :parar str mapset: the name of mapset containig raster map
+    :parar str mapset: the name of mapset containing raster map
     """
     with RasterRow(rastname, mapset=mapset, mode="r") as rast:
         return np.array(rast)

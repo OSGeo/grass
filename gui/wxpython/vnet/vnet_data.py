@@ -886,7 +886,7 @@ class VNETTmpVectMaps:
         # map already exists
         if fullName:
             # TODO move dialog out of class, AddTmpVectMap(self, mapName,
-            # overvrite = False)
+            # overwrite = False)
             dlg = wx.MessageDialog(
                 parent=self.parent,
                 message=msg,

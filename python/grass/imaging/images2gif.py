@@ -48,7 +48,7 @@ algorithm of Anthony Dekker to Python (See the NeuQuant class for its
 license).
 
 Many thanks to Alex Robinson for implementing the concept of subrectangles,
-which (depening on image content) can give a very significant reduction in
+which (depending on image content) can give a very significant reduction in
 file size.
 
 This code is based on gifmaker (in the scripts folder of the source
@@ -95,7 +95,7 @@ def get_cKDTree():
 
 # getheader gives a 87a header and a color palette (two elements in a list)
 # getdata()[0] gives the Image Descriptor up to (including) "LZW min code size"
-# getdatas()[1:] is the image data itself in chuncks of 256 bytes (well
+# getdatas()[1:] is the image data itself in chunks of 256 bytes (well
 # technically the first byte says how many bytes follow, after which that
 # amount (max 255) follows)
 
@@ -112,7 +112,7 @@ def checkImages(images):
 
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
-            # We assume PIL images are allright
+            # We assume PIL images are alright
             images2.append(im)
 
         elif np and isinstance(im, np.ndarray):
@@ -179,7 +179,7 @@ class GifWriter:
         :param xy:
         """
 
-        # Defaule use full image and place at upper left
+        # Default use full image and place at upper left
         if xy is None:
             xy = (0, 0)
 

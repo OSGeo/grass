@@ -31,7 +31,7 @@
 *                - avoids passing location edge coordinates to PROJ
 *                (they may be invalid in some projections).
 *                - output map will be clipped to borders of the current region.
-*                - output map cell edges and centers will coinside with those
+*                - output map cell edges and centers will coincide with those
 *                of the current region.
 *                - output map resolution (unless changed explicitly) will
 *                match (exactly) the resolution of the current region.

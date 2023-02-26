@@ -1094,7 +1094,7 @@ const char *Vect_maptype_info(const struct Map_info *Map)
    - Native format                    (GV_FORMAT_NATIVE)
    - OGR format linked via v.external (GV_FORMAT_OGR)
    - OGR format                       (GV_FORMAT_OGR_DIRECT)
-   - PostGIS fomat                    (GV_FORMAT_POSTGIS)
+   - PostGIS format                   (GV_FORMAT_POSTGIS)
 
    \param Map pointer to Map_info structure
 

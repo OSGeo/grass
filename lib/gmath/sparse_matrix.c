@@ -297,7 +297,7 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
  *
  * WARNING:
  * This function is experimental, do not use.
- * Only the upper triangle matrix of the band strcuture is copied.
+ * Only the upper triangle matrix of the band structure is copied.
  *
  * \param A (double **) the symmetric band matrix
  * \param rows (int)

@@ -112,7 +112,7 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
 
     G_debug(3, "V1_rewrite_line_nat(): offset = %" PRId64, offset);
 
-    /* First compare numbers of points and cats with tha old one */
+    /* First compare numbers of points and cats with the old one */
     if (!old_points) {
         old_points = Vect_new_line_struct();
         old_cats = Vect_new_cats_struct();

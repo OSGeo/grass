@@ -21,7 +21,7 @@
 /* ***************** N_gwflow_data3d ***************************** */
 /* *************************************************************** */
 /*!
- * \brief Alllocate memory for the groundwater calculation data structure in 3
+ * \brief Allocate memory for the groundwater calculation data structure in 3
  * dimensions
  *
  * The groundwater calculation data structure will be allocated including
@@ -132,7 +132,7 @@ void N_free_gwflow_data3d(N_gwflow_data3d *data)
 /* ******************** N_alloc_gwflow_data2d ******************** */
 /* *************************************************************** */
 /*!
- * \brief Alllocate memory for the groundwater calculation data structure in 2
+ * \brief Allocate memory for the groundwater calculation data structure in 2
  * dimensions
  *
  * The groundwater calculation data structure will be allocated including
@@ -527,7 +527,7 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data *geom, int col,
     }
     else { /* the aquifer is unconfined */
 
-        /* If the aquifer is unconfied use an explicite scheme to solve
+        /* If the aquifer is unconfied use an explicit scheme to solve
          * the nonlinear equation. We use the phead from the first iteration */
         z = N_get_array_2d_d_value(data->phead, col, row) -
             N_get_array_2d_d_value(data->bottom, col, row);
