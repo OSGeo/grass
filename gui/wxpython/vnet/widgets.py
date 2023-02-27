@@ -185,7 +185,7 @@ class PointsList(
                 itemIndexes.append(col[iDefVal])
             else:
                 itemData.append(col[iDefVal])
-                itemIndexes.append(-1)  # not a choise column
+                itemIndexes.append(-1)  # not a choice column
 
         self.selIdxs.append(itemIndexes)
 
@@ -691,7 +691,7 @@ class EditItem(wx.Dialog):
             if type(cell[2]).__name__ == "list":
                 itemIndexes.append(self.fields[iField].GetSelection())
             else:
-                itemIndexes.append(-1)  # not a choise column
+                itemIndexes.append(-1)  # not a choice column
             if cell[2]:
                 iField += 1
 

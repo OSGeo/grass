@@ -520,7 +520,7 @@ class Model(object):
         return errList
 
     def _substituteFile(self, item, params=None, checkOnly=False):
-        """Subsitute variables in command file inputs
+        """Substitute variables in command file inputs
 
         :param bool checkOnly: tuble - True to check variable, don't touch files
 
@@ -2553,7 +2553,7 @@ class WriteScriptFile(ABC):
 
     @abstractmethod
     def __init__(self, fd, model):
-        """Constructor to be overriden."""
+        """Constructor to be overridden."""
         self.fd = None
         self.model = None
         self.indent = None
@@ -2820,7 +2820,7 @@ if __name__ == "__main__":
             value = param["value"]
             age = param["age"]
 
-            # ComplexOutput if: outputing a new non-intermediate layer and
+            # ComplexOutput if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
                 age == "new"
@@ -2881,7 +2881,7 @@ if __name__ == "__main__":
             value = param["value"]
             age = param["age"]
 
-            # output if: outputing a new non-intermediate layer and
+            # output if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
                 age == "new"

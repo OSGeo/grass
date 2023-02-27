@@ -264,7 +264,7 @@ class ExportCategoryRaster(wx.Dialog):
     def OnTextChanged(self, event):
         """Name of new vector map given.
 
-        Enable/diable OK button.
+        Enable/disable OK button.
         """
         file = self.vectorNameCtrl.GetValue()
         if len(file) > 0:

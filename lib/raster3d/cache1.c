@@ -52,7 +52,8 @@ void Rast3d_cache_reset(RASTER3D_cache *c)
 
 /*---------------------------------------------------------------------------*/
 
-static int cache_dummy_fun(int tileIndex, const void *tileBuf, void *map)
+static int cache_dummy_fun(int tileIndex UNUSED, const void *tileBuf UNUSED,
+                           void *map UNUSED)
 {
     return 1;
 }
@@ -599,7 +600,7 @@ static void cache_test_print(RASTER3D_cache *c)
 
 /*---------------------------------------------------------------------------*/
 
-static int cache_test_flush_fun(int name, const void *eltPtr, void *data)
+static int cache_test_flush_fun(int name, const void *eltPtr, void *data UNUSED)
 {
     printf("flushing name %d value %d\n", name, ((const int *)eltPtr)[17]);
     return 0;

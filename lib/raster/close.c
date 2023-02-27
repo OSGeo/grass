@@ -171,7 +171,7 @@ static int close_old(int fd)
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     /* if R__.auto_mask was only allocated for reading map rows to create
-       non-existant null rows, and not for actuall mask, free R__.mask_row
+       non-existent null rows, and not for actual mask, free R__.mask_row
        if(R__.auto_mask <=0)
        G_free (R__.mask_buf);
        This is obsolete since now the mask_bus is always allocated

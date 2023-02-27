@@ -107,7 +107,7 @@ class Select(ComboCtrl):
         validator=wx.DefaultValidator,
     ):
         """Custom control to create a ComboBox with a tree control to
-        display and select GIS elements within acessible mapsets.
+        display and select GIS elements within accessible mapsets.
         Elements can be selected with mouse. Can allow multiple
         selections, when argument <em>multiple</em> is True. Multiple
         selections are separated by commas.
@@ -3109,6 +3109,14 @@ class SignatureSelect(wx.ComboBox):
         self.SetValue("")
 
     def _append_mapset_signatures(self, mapset, element, items):
+        # A workaround to list signature files before a separate
+        # signature management module is developed
+        try:
+            from grass.lib.gis import G_gisinit
+
+            G_gisinit("")
+        except Exception:
+            return
         try:
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,
@@ -3137,7 +3145,7 @@ class SignatureSelect(wx.ComboBox):
 
 
 class SeparatorSelect(wx.ComboBox):
-    """Widget for selecting seperator"""
+    """Widget for selecting separator"""
 
     def __init__(
         self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs

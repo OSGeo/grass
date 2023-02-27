@@ -490,7 +490,7 @@ class PsMapFrame(wx.Frame):
                     ),
                     hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                     hyperlinkLabel=_(
-                        "You can donwload {program} {arch} version here."
+                        "You can download {program} {arch} version here."
                     ).format(
                         program=program,
                         arch="64bit" if "64" in program else "32bit",

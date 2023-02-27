@@ -1,4 +1,4 @@
-FROM alpine:3.15 as common
+FROM alpine:3.17 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -8,7 +8,7 @@ LABEL maintainer="neteler@osgeo.org"
 # PACKAGES VERSIONS
 ARG PYTHON_VERSION=3
 
-# List of packages to be installed
+# List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV PACKAGES="\
       attr \
       bash \
@@ -27,7 +27,6 @@ ENV PACKAGES="\
       jsoncpp \
       laszip \
       libbz2 \
-      libexecinfo \
       libgeotiff \
       libjpeg-turbo \
       libpng \
@@ -65,7 +64,7 @@ RUN echo "Install Python";\
     rm -r /usr/lib/python*/ensurepip && \
     pip$PYTHON_VERSION install --upgrade pip setuptools && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
-    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
+    if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
     rm -r /root/.cache
 
 # Add the packages
@@ -128,12 +127,12 @@ ENV GRASS_BUILD_PACKAGES="\
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
+      libpq-dev \
       make \
       openjpeg-dev \
       openblas-dev \
       pdal \
       pdal-dev \
-      postgresql-dev \
       proj-dev \
       python3-dev \
       py3-numpy-dev \
@@ -185,7 +184,7 @@ COPY --from=build /usr/local/grass* /usr/local/grass/
 # install external Python API
 RUN pip3 install --upgrade pip six grass-session --ignore-installed six
 
-RUN ln -sf /usr/local/grass `grass --config path`
+RUN ln -sf /usr/local/grass $(grass --config path)
 RUN grass --tmp-location XY --exec g.version -rge && \
     pdal --version && \
     python3 --version
@@ -193,7 +192,7 @@ RUN grass --tmp-location XY --exec g.version -rge && \
 
 FROM grass as test
 
-RUN apk add make gcc
+RUN apk add --no-cache make gcc
 
 ## run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/simple.laz
@@ -207,7 +206,7 @@ RUN /usr/bin/python3 /scripts/test_grass_session.py
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 # Test addon installation
-RUN apk add py3-scikit-learn
+RUN apk add --no-cache py3-scikit-learn
 RUN grass --tmp-location XY --exec g.extension extension=r.learn.ml2
 
 
@@ -218,7 +217,9 @@ FROM grass as final
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash"
-ENV PROJ_NETWORK="ON"
+
+# https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+ENV PROJ_NETWORK=ON
 
 # show installed version
 RUN grass --tmp-location XY --exec g.version -rge && \
@@ -234,4 +235,4 @@ RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" out
 WORKDIR /grassdb
 VOLUME /grassdb
 
-CMD $GRASSBIN --version
+CMD ["$GRASSBIN", "--version"]

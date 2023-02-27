@@ -49,7 +49,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist,
         db_set_error_handler_driver(driver);
     }
 
-    /* fisrt search for color table */
+    /* first search for color table */
     have_colors =
         Vect_read_colors(Vect_get_name(Map), Vect_get_mapset(Map), &colors);
     if (have_colors && rgb_column) {

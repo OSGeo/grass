@@ -38,7 +38,7 @@ void printStream(ostream &s, AMI_STREAM<T> *str)
     str->seek(0);
 }
 
-/* laura note: this works that class T has an empty contructor which
+/* laura note: this works that class T has an empty constructor which
    initializes it to the nodata value */
 template <class T, class FUN>
 void printStream2Grid(AMI_STREAM<T> *str, dimension_type nrows,

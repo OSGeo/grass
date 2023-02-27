@@ -404,7 +404,7 @@ def delete_mapsets_interactively(guiparent, mapsets):
                 parent=guiparent,
                 caption=_("Error when deleting mapsets"),
                 message=_(
-                    "The following error occured when deleting mapset <{path}>:"
+                    "The following error occurred when deleting mapset <{path}>:"
                     "\n\n{error}\n\n"
                     "Deleting of mapsets was interrupted."
                 ).format(
@@ -489,7 +489,7 @@ def delete_locations_interactively(guiparent, locations):
                 parent=guiparent,
                 caption=_("Error when deleting locations"),
                 message=_(
-                    "The following error occured when deleting location <{path}>:"
+                    "The following error occurred when deleting location <{path}>:"
                     "\n\n{error}\n\n"
                     "Deleting of locations was interrupted."
                 ).format(
@@ -553,7 +553,7 @@ def delete_grassdb_interactively(guiparent, grassdb):
                     parent=guiparent,
                     caption=_("Error when deleting GRASS database"),
                     message=_(
-                        "The following error occured when deleting database <{path}>:"
+                        "The following error occurred when deleting database <{path}>:"
                         "\n\n{error}\n\n"
                         "Deleting of GRASS database was interrupted."
                     ).format(

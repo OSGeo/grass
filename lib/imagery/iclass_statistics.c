@@ -136,7 +136,7 @@ void I_iclass_free_statistics(IClass_statistics *statistics)
    \param band_buffer buffer to read band rows into
    \param band_fd band files descriptors
 
-   \return 1 on succes
+   \return 1 on success
    \return 0 on failure
  */
 int make_all_statistics(IClass_statistics *statistics,
@@ -187,7 +187,7 @@ int make_all_statistics(IClass_statistics *statistics,
    \param band_buffer buffer to read band rows into
    \param band_fd band files descriptors
 
-   \return 1 on succes
+   \return 1 on success
    \return 0 on failure
  */
 int make_statistics(IClass_statistics *statistics, IClass_perimeter *perimeter,

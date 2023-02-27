@@ -538,7 +538,7 @@ class HistRasterDialog(wx.Dialog):
         sizer.Fit(self)
 
     def OnHistMap(self, event):
-        """Hander for radio buttons to choose between histogramming a
+        """Handler for radio buttons to choose between histogramming a
         single raster and an imagery group
         """
         if self.rasterRadio.GetValue() is True:

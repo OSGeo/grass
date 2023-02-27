@@ -886,7 +886,7 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                 continue;
             }
             fprintf(ascii, "POLYGON(");
-            /* write outter ring */
+            /* write outer ring */
             Vect_sfa_line_astext(Points, GV_BOUNDARY, 0, dp,
                                  ascii); /* boundary is always 2D */
             /* get isles (holes) -> inner rings */

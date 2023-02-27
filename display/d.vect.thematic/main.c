@@ -404,7 +404,7 @@ int main(int argc, char **argv)
 
             nclass = atoi(nbclass_opt->answer);
             nbreaks = nclass - 1; /* we need one less classbreaks (min and
-                                   * max exluded) than classes */
+                                   * max excluded) than classes */
 
             breakpoints = (double *)G_malloc((nbreaks) * sizeof(double));
             for (i = 0; i < nbreaks; i++)

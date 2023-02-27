@@ -453,7 +453,7 @@ def CreateNewVector(
     disableAdd=False,
     disableTable=False,
 ):
-    """Create new vector map layer
+    r"""Create new vector map layer
 
     :param cmd: (prog, \*\*kwargs)
     :param title: window title
@@ -1136,7 +1136,7 @@ class GroupDialog(wx.Dialog):
         wx.CallAfter(self.GroupSelected)
 
     def GroupSelected(self):
-        """Group was selected, check if changes were apllied"""
+        """Group was selected, check if changes were applied"""
         self._checkChange()
         group, s = self.GetSelectedGroup()
         maps = list()
@@ -1173,7 +1173,7 @@ class GroupDialog(wx.Dialog):
         self._checkSubGSellAll()
 
     def SubGroupSelected(self):
-        """Subgroup was selected, check if changes were apllied"""
+        """Subgroup was selected, check if changes were applied"""
         self._checkChange()
 
         subgroup = self.subGroupSelect.GetValue().strip()

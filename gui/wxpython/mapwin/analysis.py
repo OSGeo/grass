@@ -84,7 +84,7 @@ class AnalysisControllerBase:
 
     def _doAnalysis(self, coords):
         """Perform the required analysis
-        (compute distnace, update profile)
+        (compute distance, update profile)
 
         :param coords: EN coordinates
         """

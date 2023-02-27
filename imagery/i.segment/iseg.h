@@ -11,6 +11,7 @@
  *
  *****************************************************************************/
 
+#include <inttypes.h>
 #include <grass/segment.h>
 #include <grass/imagery.h>
 #include "flag.h"
@@ -24,7 +25,7 @@
 #define PRI_LONG "lld"
 #elif defined HAVE_LARGEFILES
 #define LARGEINT off_t
-#define PRI_LONG PRI_OFF_T
+#define PRI_LONG PRId64
 #else
 #define LARGEINT long
 #define PRI_LONG "ld"
@@ -119,7 +120,7 @@ struct globals {
     FLAG *candidate_flag,
         *null_flag; /*TODO, need some way to remember MASK/NULL values.  Was
                        using -1, 0, 1 in int array.  Better to use 2 FLAG
-                       structures, better readibility? */
+                       structures, better readability? */
 
     /* number of remaining cells to check */
     LARGEINT candidate_count;

@@ -5,7 +5,7 @@
  * format_parms() is called for each value.
  *     before first call set eformat=0,dp=6
  *
- * format_double() does the formating with the
+ * format_double() does the formatting with the
  *     parms determined by format_parms()
  ***************************************************/
 

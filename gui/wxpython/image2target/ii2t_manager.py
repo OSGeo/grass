@@ -1412,7 +1412,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def SetGCPSatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
-        will be drawed.
+        will be drawn.
         """
         key = self.list.GetItemData(itemIndex)
         # incremented because of itemDataMap (has one more item) - will be
@@ -1710,7 +1710,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
+        # TODO: it is here just to remove old or obsolete beavior of base class gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
 

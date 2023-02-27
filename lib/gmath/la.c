@@ -861,11 +861,13 @@ int G_matvect_extract_vector(mat_struct *mt, vtype vt, int indx)
     case RVEC: {
         mt->type = ROWVEC_;
         mt->v_indx = indx;
+        break;
     }
 
     case CVEC: {
         mt->type = COLVEC_;
         mt->v_indx = indx;
+        break;
     }
 
     default: {

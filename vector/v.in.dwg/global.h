@@ -27,7 +27,7 @@
 
 /* transformation, first level is 0 ( called from main ) and transformation
  *  for this level is 0,0,0, 1,1,1, 0 so that no transformation is done on first
- * level (not efective but better readable?) */
+ * level (not effective but better readable?) */
 typedef struct {
     double dx, dy, dz;
     double xscale, yscale, zscale;

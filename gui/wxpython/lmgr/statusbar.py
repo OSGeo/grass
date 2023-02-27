@@ -62,7 +62,7 @@ class SbMain:
         self._repositionStatusbar()
 
     def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
+        """Override wx.StatusBar method"""
         self.GetWidget().SetStatusText(*args)
 
 

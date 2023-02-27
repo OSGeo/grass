@@ -385,8 +385,8 @@ static void filter(void)
 
                 num_rows = rows;
 
-                v_filter(&outbuf[(row - start) * dst_w.cols], bufs[t_id], row,
-                         rows);
+                v_filter(&outbuf[(size_t)(row - start) * dst_w.cols],
+                         bufs[t_id], row, rows);
 #pragma omp atomic update
                 computed_row++;
             }

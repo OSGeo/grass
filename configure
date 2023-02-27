@@ -696,7 +696,6 @@ USE_PDAL
 PDAL_INC
 PDAL_CPPFLAGS
 PDAL_LIBS
-PDAL_CONFIG
 USE_LIBLAS
 LIBLAS_INC
 LIBLAS_CFLAGS
@@ -886,10 +885,10 @@ with_openmp
 with_opencl
 with_bzlib
 with_zstd
+with_pdal
 with_libpng
 with_gdal
 with_liblas
-with_pdal
 with_netcdf
 with_geos
 with_includes
@@ -1609,6 +1608,7 @@ Optional Packages:
   --with-opencl           support OpenCL functionality (default: no)
   --with-bzlib            support BZIP2 functionality (default: no)
   --with-zstd             support Zstandard functionality (default: yes)
+  --with-pdal             support PDAL functionality (default: yes)
   --with-libpng=path/libpng-config
                           enable PNG support (libpng-config with path,
                           e.g. '--with-libpng=/usr/local/bin/libpng-config')
@@ -1618,10 +1618,6 @@ Optional Packages:
   --with-liblas=path/liblas-config
                           enable libLAS support (liblas-config with path,
                           e.g. '--with-liblas=/usr/local/bin/liblas-config',
-                          default: no)
-  --with-pdal=path/pdal-config
-                          enable PDAL support (pdal-config with path,
-                          e.g. '--with-pdal=/usr/local/bin/pdal-config',
                           default: no)
   --with-netcdf=path/nc-config
                           enable NetCDF support (nc-config with path,
@@ -4698,6 +4694,16 @@ fi
 
 
 
+# Check whether --with-pdal was given.
+if test "${with_pdal+set}" = set; then :
+  withval=$with_pdal;
+else
+  with_pdal=yes
+fi
+
+
+
+
 # Check whether --with-libpng was given.
 if test "${with_libpng+set}" = set; then :
   withval=$with_libpng;
@@ -4717,15 +4723,6 @@ if test "${with_liblas+set}" = set; then :
   withval=$with_liblas;
 else
   with_liblas="no"
-fi
-
-
-
-# Check whether --with-pdal was given.
-if test "${with_pdal+set}" = set; then :
-  withval=$with_pdal;
-else
-  with_pdal="no"
 fi
 
 
@@ -9344,10 +9341,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 PDAL_LIBS=
 PDAL_CPPFLAGS=
 USE_PDAL=
-
-if test "`basename xx/$with_pdal`" = "pdal-config" ; then
-  PDAL_CONFIG="$with_pdal"
-fi
+pdal="pdal"
 
 if test "$with_pdal" = "no" ; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -9355,54 +9349,14 @@ $as_echo "no" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-  # Extract the first word of "pdal-config", so it can be a program name with args.
-set dummy pdal-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
 
-case $PDAL_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PDAL_CONFIG="$PDAL_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PDAL_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_PDAL_CONFIG" && ac_cv_path_PDAL_CONFIG="no"
-  ;;
-esac
-PDAL_CONFIG=$ac_cv_path_PDAL_CONFIG
-if test -n "$PDAL_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PDAL_CONFIG" >&5
-$as_echo "$PDAL_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-
-  if test "$PDAL_CONFIG" = "no" ; then
-    as_fn_error $? "*** could not find pdal-config" "$LINENO" 5
+  if test -s "${PKG_CONFIG} --exists ${pdal}" ; then
+    as_fn_error $? "*** Unable to locate PDAL package." "$LINENO" 5
   fi
 
-  if test "$PDAL_CONFIG" != "" ; then
-    PDAL_LIBS=`"$PDAL_CONFIG" --libs`
-    PDAL_INC=`"$PDAL_CONFIG" --includes`
-    USE_PDAL=1
-  fi
+  PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
+  PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
+  USE_PDAL=1
 
   PDAL=
   ac_save_libs="$LIBS"

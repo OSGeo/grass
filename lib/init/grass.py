@@ -252,7 +252,7 @@ def Popen(cmd, **kwargs):  # pylint: disable=C0103
 
 
 def gpath(*args):
-    """Costruct path to file or directory in GRASS GIS installation
+    """Construct path to file or directory in GRASS GIS installation
 
     Can be called only after GISBASE was set.
     """
@@ -260,7 +260,7 @@ def gpath(*args):
 
 
 def wxpath(*args):
-    """Costruct path to file or directory in GRASS wxGUI
+    """Construct path to file or directory in GRASS wxGUI
 
     Can be called only after GISBASE was set.
 
@@ -769,7 +769,8 @@ def set_paths(grass_config_dir):
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
     # this works for subprocesses but won't affect the current process
-    path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
+    if LD_LIBRARY_PATH_VAR:
+        path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
 
 
 def find_exe(pgm):
@@ -1533,7 +1534,7 @@ def set_language(grass_config_dir):
         encoding = None
 
         # XXX: In UN*X, LC_CTYPE needs to be set to *any* value before GRASS
-        # starts when the language setting is overriden by the user. For
+        # starts when the language setting is overridden by the user. For
         # example, 'LC_CTYPE= grass' will break the welcome message.
         # Interestingly, modules' help messages look fine.
     elif encoding:
@@ -1964,7 +1965,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         )
 
     # save command history in mapset dir and remember more
-    # bash histroy file handled in specific_addition
+    # bash history file handled in specific_addition
     if not sh == "bash":
         os.environ["HISTFILE"] = os.path.join(location, sh_history)
 
@@ -2387,7 +2388,7 @@ def classic_parser(argv, default_gui):
         params.exit_grass = True
     if parsed_args.exec:
         params.batch_job = parsed_args.exec
-    # Cases to execute immediatelly
+    # Cases to execute immediately
     if parsed_args.version:
         sys.stdout.write("GRASS GIS %s" % GRASS_VERSION)
         sys.stdout.write("\n" + readfile(gpath("etc", "license")))
@@ -2481,7 +2482,7 @@ def main():
     use_shell = io_is_interactive() or force_shell
     if not use_shell:
         # If no shell is used, always use actual GUI as GUI, even when "text" is set as
-        # a GUI in the gisrcrc becasue otherwise there would be nothing for the user
+        # a GUI in the gisrcrc because otherwise there would be nothing for the user
         # unless running in the batch mode. (The gisrcrc file is loaded later on in case
         # nothing was provided in the command line).
         grass_gui = default_gui

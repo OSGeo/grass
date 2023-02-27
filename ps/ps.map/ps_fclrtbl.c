@@ -42,7 +42,7 @@ int PS_fcolortable(void)
     unsigned int max_label_length = 0;
     int label_posn, label_xref, label_yref;
 
-    /* let user know what's happenning */
+    /* let user know what's happening */
     G_message(_("Creating color table for <%s in %s>..."), ct.name, ct.mapset);
 
     /* Get color range */

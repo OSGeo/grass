@@ -113,7 +113,7 @@ class IClassMapPanel(DoubleMapPanel):
             self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
 
-        # show computation region by defaut
+        # show computation region by default
         self.mapWindowProperties.showRegion = True
 
         self.firstMapWindow = IClassVDigitWindow(
@@ -1535,7 +1535,7 @@ class MapManager:
     def Render(self):
         """
         .. todo::
-            giface shoud be used instead of this method"""
+            giface should be used instead of this method"""
         self.frame.Render(self.mapWindow)
 
     def RemoveLayer(self, name, idx):

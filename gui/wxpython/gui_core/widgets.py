@@ -1471,7 +1471,7 @@ class ManageSettingsWidget(wx.Panel):
     def SetSettings(self, settings):
         """Set settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings = settings
         self._saveSettings()
@@ -1479,7 +1479,7 @@ class ManageSettingsWidget(wx.Panel):
     def AddSettings(self, settings):
         """Add settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings.update(settings)
         self._saveSettings()

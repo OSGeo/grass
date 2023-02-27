@@ -171,7 +171,7 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
    \param x,y,z point coordinates
 
    \return number of points
-   \return -1 on error (alocation)
+   \return -1 on error (allocation)
  */
 int Vect_line_insert_point(struct line_pnts *Points, int index, double x,
                            double y, double z)

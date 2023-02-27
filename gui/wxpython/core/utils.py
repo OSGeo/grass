@@ -41,7 +41,7 @@ def normalize_whitespace(text):
 
 
 def split(s):
-    """Platform spefic shlex.split"""
+    """Platform specific shlex.split"""
     try:
         if sys.platform == "win32":
             return shlex.split(s.replace("\\", r"\\"))
@@ -659,7 +659,7 @@ def _parseFormats(output, writableOnly=False):
 
     patt = None
     if writableOnly:
-        patt = re.compile("\(rw\+?\)$", re.IGNORECASE)
+        patt = re.compile(r"\(rw\+?\)$", re.IGNORECASE)
 
     for line in output.splitlines():
         key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
@@ -1098,7 +1098,7 @@ def isInRegion(regionA, regionB):
     :param regionB: input region B as dictionary
 
     :return: True if region A is inside of region B
-    :return: False othewise
+    :return: False otherwise
     """
     if (
         regionA["s"] >= regionB["s"]

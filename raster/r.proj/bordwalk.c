@@ -16,7 +16,7 @@
  * between cylindrical projections. In other projections, though he input
  * map is always a rectangular area, the projected output can be of almost
  * any shape and its position can be rotated any way. It can even be a
- * discontinous area.
+ * discontinuous area.
  *
  * In many projections, especially when large areas are displayed, the edges
  * of rectangular GRASS regions do not necessarily represent east, west, north
@@ -217,7 +217,7 @@ void bordwalk(const struct Cell_head *from_hd, struct Cell_head *to_hd,
 
     debug("Extra check", &cur_hd);
 
-    /* if we still have some unresonable default minmax left, then abort */
+    /* if we still have some unreasonable default minmax left, then abort */
 
     if (outside(&cur_hd, to_hd))
         G_fatal_error(_("Input raster map is outside current region"));

@@ -956,7 +956,7 @@ class IClassDigitConnection:
 
 
 class IMapDispConnection:
-    """Manage comunication of the scatter plot with mapdisplay in mapwindow."""
+    """Manage communication of the scatter plot with mapdisplay in mapwindow."""
 
     def __init__(self, scatt_mgr, cats_mgr, giface):
         self.scatt_mgr = scatt_mgr
@@ -1044,7 +1044,7 @@ class IMapDispConnection:
 
 
 class IClassConnection:
-    """Manage comunication of the scatter plot with mapdisplay in wx.iclass."""
+    """Manage communication of the scatter plot with mapdisplay in wx.iclass."""
 
     def __init__(self, scatt_mgr, iclass_frame, cats_mgr):
         self.iclass_frame = iclass_frame

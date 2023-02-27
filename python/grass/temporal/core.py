@@ -435,7 +435,7 @@ def get_tgis_database_string():
     """Return the preprocessed temporal database string
 
     This string is the temporal database string set with t.connect
-    that was processed to substitue location, gisdbase and mapset
+    that was processed to substitute location, gisdbase and mapset
     variables.
     """
     global tgis_database_string

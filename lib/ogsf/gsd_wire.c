@@ -434,12 +434,12 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
    Not yet implemented.
 
-   \param gs surface (geosurf)
-   \param user_func user defined function
+   \param gs surface (geosurf) [unused]
+   \param user_func user defined function [unused]
 
    \return 1
  */
-int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
+int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
 {
     return (1);
 }
