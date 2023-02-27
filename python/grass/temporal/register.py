@@ -226,7 +226,9 @@ def register_maps_in_space_time_dataset(
                 found = gscript.find_file(element=type, name=mapname)
                 if found["mapset"] is not None and len(found["mapset"]) > 0:
                     map_mapset = found["mapset"]
-            row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
+                row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
+            else:
+                row["id"] = AbstractMapDataset.build_id(*mapname.split("@")[0:2])
 
             maplist.append(row)
 
