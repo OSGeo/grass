@@ -19,7 +19,7 @@ The minimum support for Python will, in contrast, likely change more often, due 
 
 ## Version Updates
 
-For a new release of a minor GRASS version, the Python minimum version should be raised if the current minimum Python version reaches end of life or there are any important technical reasons.
+For a new release of a minor GRASS version, the Python minimum version should be raised in the [requirements](https://github.com/OSGeo/grass/blob/main/REQUIREMENTS.md#general-requirements) file if the current minimum Python version reaches end of life or there are any important technical reasons.
 
 At the same time, as for the minor GRASS version, we raise the minimal Python version for a matching branch in grass-addons.
 
