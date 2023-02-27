@@ -27,7 +27,7 @@
 
 /*!
    \brief This structure keeps info about geometry parts above current
-   geometry, path to curent geometry in the feature. First 'part' number
+   geometry, path to current geometry in the feature. First 'part' number
    however is feature id */
 struct geom_parts {
     int *part;

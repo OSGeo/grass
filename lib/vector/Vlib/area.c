@@ -167,7 +167,7 @@ int Vect_get_area_boundaries(const struct Map_info *Map, int area,
    Note that ids in <b>List</b> can be negative. The sign indicates in
    which direction the boundary should be read (negative for forward).
 
-   \param Map pointer to Map_info structur
+   \param Map pointer to Map_info structure
    \param isle island number
    \param[out] List pointer to list where boundaries are stored
 

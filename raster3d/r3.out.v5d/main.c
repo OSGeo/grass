@@ -7,7 +7,7 @@
  *
  * Improvements:
  * - added true coordinates support Markus Neteler 1/2001
- * - Region sensivity by MN 1/2001
+ * - Region sensitivity by MN 1/2001
  * - Fixed coordinate being reversed MN 1/2001
  *
  * BUGS: see BUG file

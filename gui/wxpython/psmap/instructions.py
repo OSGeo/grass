@@ -543,7 +543,7 @@ class Instruction:
 
 
 class InstructionObject:
-    """Abtract class representing single instruction"""
+    """Abstract class representing single instruction"""
 
     def __init__(self, id, env):
         self.id = id

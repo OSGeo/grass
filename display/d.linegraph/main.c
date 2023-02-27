@@ -297,7 +297,7 @@ int main(int argc, char **argv)
     y_range_opt = G_define_option();
     y_range_opt->key = "y_range";
     y_range_opt->description =
-        _("Minimum and maximun value for Y axis (min,max)");
+        _("Minimum and maximum value for Y axis (min,max)");
     y_range_opt->type = TYPE_DOUBLE;
     y_range_opt->key_desc = "min,max";
     y_range_opt->required = NO;

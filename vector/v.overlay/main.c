@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
     }
 
     /* OP_OR, OP_XOR is not supported for lines,
-       mostly because I'am not sure if they make enouhg sense */
+       mostly because I'am not sure if they make enough sense */
     if (type[0] == GV_LINE && (operator== OP_OR || operator== OP_XOR))
         G_fatal_error(_("Operator '%s' is not supported for type line"),
                       operator_opt->answer);

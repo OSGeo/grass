@@ -178,7 +178,7 @@ class LayerManagerGrassInterface(object):
     """@implements core::giface::GrassInterface"""
 
     def __init__(self, lmgr):
-        """Costructor is specific to the current implementation.
+        """Constructor is specific to the current implementation.
 
         Uses Layer Manager object including its private attributes.
         (It encapsulates existing Layer Manager so access to private members

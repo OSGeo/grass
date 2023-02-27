@@ -55,7 +55,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
     def __init__(self, parent, scatt_id, scatt_mgr, transpose, id=wx.ID_ANY):
         # TODO should not be transpose and scatt_id but x, y
         wx.Panel.__init__(self, parent, id)
-        # bacause of aui (if floatable it can not take cursor from parent)
+        # because of aui (if floatable it can not take cursor from parent)
         ManageBusyCursorMixin.__init__(self, window=self)
 
         self.parent = parent

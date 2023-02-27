@@ -1401,7 +1401,7 @@ msgstr "Impossibile fare zoom al raster 3d <%s>."
 
 #: ../gui/wxpython/core/render.py:1072
 msgid ""
-"Unable to get current geographic extent. Force quiting wxGUI. Please "
+"Unable to get current geographic extent. Force quitting wxGUI. Please "
 "manually run g.region to fix the problem."
 msgstr ""
 "Impossibile ottenere l'estensione geografica attuale. Uscita forzata da "
@@ -1802,8 +1802,8 @@ msgstr ""
 #, python-format
 msgid "No 3d view information in workspace file <%s>."
 msgstr ""
-"Informazioni sulla vista 3d non disponibili  nel file di ambiente di lavoro <"
-"%s>."
+"Informazioni sulla vista 3d non disponibili  nel file di ambiente di lavoro "
+"<%s>."
 
 #: ../gui/wxpython/animation/nviztask.py:286
 msgid "Please add only one layer in the list."
@@ -2806,8 +2806,8 @@ msgstr "Scatter plot non può essere aggiunto.\n"
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <"
-"%d>.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit "
+"<%d>.\n"
 msgstr ""
 "Lo scatter plot non può essere aggiunto.\n"
 "Diversi intervalli delle bande <%s:%d * %s:%d = %d> è più alto che il limite "
@@ -5000,8 +5000,8 @@ msgid ""
 "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package "
 "to be installed. {0}"
 msgstr ""
-"Lo Strumento Grafici Temporali ha bisogno che il pacchetto \"matplotlib"
-"\" (python-matplotlib) sia installato. {0}"
+"Lo Strumento Grafici Temporali ha bisogno che il pacchetto "
+"\"matplotlib\" (python-matplotlib) sia installato. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:98
 msgid "Temporal Plot Tool"
@@ -8256,8 +8256,8 @@ msgid ""
 "Database connection for vector map <%s> is not defined in DB file.  Do you "
 "want to create and connect new attribute table?"
 msgstr ""
-"La connessione al databse per il vettoriale <%s> non è definito nel DB file. "
-"Vuoi creare e connettere una nuova tabella degli attributi?"
+"La connessione al database per il vettoriale <%s> non è definito nel DB "
+"file. Vuoi creare e connettere una nuova tabella degli attributi?"
 
 #: ../gui/wxpython/modules/colorrules.py:1276
 msgid "No database connection defined"
@@ -8861,7 +8861,7 @@ msgid "Random non overlapping"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1235
-msgid "Systematic contiguos"
+msgid "Systematic contiguous"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1236
@@ -8869,7 +8869,7 @@ msgid "Stratified random"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1237
-msgid "Systematic non contiguos"
+msgid "Systematic non contiguous"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1238
@@ -15102,7 +15102,7 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:450
 #, python-brace-format
 msgid ""
-"The following error occured when deleting mapset <{path}>:\n"
+"The following error occurred when deleting mapset <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -15145,7 +15145,7 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:535
 #, python-brace-format
 msgid ""
-"The following error occured when deleting location <{path}>:\n"
+"The following error occurred when deleting location <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -15187,7 +15187,7 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:599
 #, python-brace-format
 msgid ""
-"The following error occured when deleting database <{path}>:\n"
+"The following error occurred when deleting database <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -15596,8 +15596,8 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:2558
 #, python-format
 msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
-"%(table)s>."
+"Unable to rename column. Column <%(column)s> doesn't exist in the table "
+"<%(table)s>."
 msgstr ""
 "Impossibile rinominare la colonna. La colonna <%(column)s> non esiste nella "
 "tabelle <%(table)s>."
@@ -15928,8 +15928,8 @@ msgid ""
 "Database connection for vector map <%s> is not defined in DB file. You can "
 "define new connection in 'Manage layers' tab."
 msgstr ""
-"La connessione al databse per la mappa vettoriale <%s> non è definito nel DB "
-"file. Puoi definire una nuova connessione nel tab 'Gestisci layers'"
+"La connessione al database per la mappa vettoriale <%s> non è definito nel "
+"DB file. Puoi definire una nuova connessione nel tab 'Gestisci layers'"
 
 #: ../gui/wxpython/dbmgr/manager.py:106
 msgid "Please wait, loading attribute data..."
@@ -16144,8 +16144,8 @@ msgid ""
 "User defined server with same name as default server <%s> already exists.\n"
 "Keeping user defined server"
 msgstr ""
-"Il server definito dall'utente ha lo stesso nome del server di default <"
-"%s> .\n"
+"Il server definito dall'utente ha lo stesso nome del server di default "
+"<%s> .\n"
 "Viene mantenuto il server definito dall'utente."
 
 #: ../gui/wxpython/web_services/dialogs.py:96
@@ -16497,7 +16497,7 @@ msgid "Couldn't read file <{}>."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:323
-msgid "Permission denied <{}>. Please change file permission for writting.{}"
+msgid "Permission denied <{}>. Please change file permission for writing.{}"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:334
@@ -16553,7 +16553,7 @@ msgid "Activate overwrite"
 msgstr "Attiva la sovrascrittura"
 
 #: ../gui/wxpython/gui_core/pyedit.py:636
-msgid "Deactive overwrite"
+msgid "Deactivate overwrite"
 msgstr "Disattiva la sovrascrittura "
 
 #: ../gui/wxpython/gui_core/pyedit.py:638
@@ -17136,7 +17136,7 @@ msgid "Ask when removing map layer from layer tree"
 msgstr "Chiedi quando si sta rimuovendo un layer dal layer tree"
 
 #: ../gui/wxpython/gui_core/preferences.py:306
-msgid "Ask when quiting wxGUI or closing display"
+msgid "Ask when quitting wxGUI or closing display"
 msgstr "Chiedi quando si sta chiudendo wxGUI o un display"
 
 #: ../gui/wxpython/gui_core/preferences.py:321
@@ -17339,7 +17339,7 @@ msgid "Line width (in pixels):"
 msgstr "Larghezza linea (in pixel):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1551
-msgid "Automatically hightlight selected features in map display"
+msgid "Automatically highlight selected features in map display"
 msgstr ""
 "Evidenzia automaticamente gli elementi selezionati nel visualizzatore di "
 "mappe"
@@ -17974,7 +17974,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:57
 #, python-format
-msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
 msgstr ""
 "Impossibile caricare il tema delle icone. Motivazione: %s. Esce da wxGUI..."
 
@@ -18959,13 +18959,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:715
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location <"
-"%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location "
+"<%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
-"Vuoi continuare eliminando il mapset <%(mapset)s> dalla location <"
-"%(location)s>?\n"
+"Vuoi continuare eliminando il mapset <%(mapset)s> dalla location "
+"<%(location)s>?\n"
 "\n"
 "TUTTE LE MAPPE incluse in questo mapset saranno ELIMINATE DEFINITIVAMENTE!"
 

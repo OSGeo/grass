@@ -7234,7 +7234,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:5
 #, fuzzy
-msgid "vector map(s) of species occurence"
+msgid "vector map(s) of species occurrence"
 msgstr "Projektionzone der Vektorkarte"
 
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:6
@@ -9210,7 +9210,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.what.spoly_to_translate.c:1
 msgid ""
-"Queries vector map with overlaping \"spaghetti\" polygons (e.g. Landsat "
+"Queries vector map with overlapping \"spaghetti\" polygons (e.g. Landsat "
 "footprints) at given location. Polygons must have not intersected boundaries."
 msgstr ""
 
@@ -10004,11 +10004,11 @@ msgid "Spectral bandwidths to test"
 msgstr ""
 
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:39
-msgid "Lowest spectral bandwith to test"
+msgid "Lowest spectral bandwidth to test"
 msgstr ""
 
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:41
-msgid "Spectral bandwith at which to stop (not included)"
+msgid "Spectral bandwidth at which to stop (not included)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:43
@@ -14531,7 +14531,7 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.pyupdate_to_translate.c:18
-msgid "Import all functions from specificed packages"
+msgid "Import all functions from specified packages"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.pyupdate_to_translate.c:19
@@ -15011,7 +15011,7 @@ msgid "Factor for hindrances expenses"
 msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:95
-msgid "Maintenace costs per kW"
+msgid "Maintenance costs per kW"
 msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:96
@@ -15783,7 +15783,7 @@ msgid "Print list of protected area site types"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mcda.topsis_to_translate.c:1
-msgid "Generates a MCDA map based on TOPSIS algorthm."
+msgid "Generates a MCDA map based on TOPSIS algorithm."
 msgstr ""
 
 #: ../locale/scriptstrings/r.mcda.topsis_to_translate.c:5
@@ -16950,7 +16950,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.landscape.evol.old_to_translate.c:51
 #: ../locale/scriptstrings/r.landscape.evol_to_translate.c:47
 msgid ""
-"-k Keep ALL temporary maps (overides flags -drst). This will make A LOT of "
+"-k Keep ALL temporary maps (overrides flags -drst). This will make A LOT of "
 "maps!"
 msgstr ""
 
@@ -17208,7 +17208,7 @@ msgstr "Lösche existierende Farbtabelle."
 
 #: ../locale/scriptstrings/v.link.precip_to_translate.c:11
 #, fuzzy
-msgid "Print attribut table"
+msgid "Print attribute table"
 msgstr "Löscht eine Attributtabelle."
 
 #: ../locale/scriptstrings/v.link.precip_to_translate.c:12
@@ -17655,12 +17655,12 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:6
 #, fuzzy
-msgid "Input vector map (attribut table required)"
+msgid "Input vector map (attribute table required)"
 msgstr "Attributtabelle erforderlich "
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:7
 #, fuzzy
-msgid "Training vector map (attribut table required)"
+msgid "Training vector map (attribute table required)"
 msgstr "Gebe Vektorattribute aus."
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:8
@@ -18123,7 +18123,8 @@ msgstr "Name der Ausgabe Höhenkarte (Z-Werte)."
 #: ../locale/scriptstrings/r.viewshed.cva_to_translate.c:7
 #, fuzzy
 msgid ""
-"Name of input vector points map containg the set of points for this analysis."
+"Name of input vector points map containing the set of points for this "
+"analysis."
 msgstr "Name der Eingabe-Vektorkarte mit Flüssen"
 
 #: ../locale/scriptstrings/r.viewshed.cva_to_translate.c:8
@@ -19957,7 +19958,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.out.ntv2_to_translate.c:2
 #, fuzzy
-msgid "Input raster map of lattitude datum shift values"
+msgid "Input raster map of latitude datum shift values"
 msgstr "Exportiere Rasterkarte als Fließkommazahlen."
 
 #: ../locale/scriptstrings/r.out.ntv2_to_translate.c:3
@@ -20062,7 +20063,7 @@ msgid "Source populations"
 msgstr "Quell-Projektion"
 
 #: ../locale/scriptstrings/r.fidimo_to_translate.c:13
-msgid "Or: Source population raster (relative or absolute occurence)"
+msgid "Or: Source population raster (relative or absolute occurrence)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.fidimo_to_translate.c:15
@@ -20491,7 +20492,7 @@ msgid "Unacceptable conditions for Water Confidence (bit 4-5)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:12
-msgid "Unacceptable conditions for Cloud Shaddow Confidence (bit 6-7)"
+msgid "Unacceptable conditions for Cloud Shadow Confidence (bit 6-7)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:13
@@ -20800,19 +20801,19 @@ msgid "Index of the classifiers to optimize the training set"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:27
-msgid "Column pattern:Value or Numpy funtion to use to substitute NaN values"
+msgid "Column pattern:Value or Numpy function to use to substitute NaN values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:28
-msgid "Key:Value or Numpy funtion to use to substitute Inf values"
+msgid "Key:Value or Numpy function to use to substitute Inf values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:29
-msgid "Key:Value or Numpy funtion to use to substitute neginf values"
+msgid "Key:Value or Numpy function to use to substitute neginf values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:30
-msgid "Key:Value or Numpy funtion to use to substitute posinf values"
+msgid "Key:Value or Numpy function to use to substitute posinf values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:31
@@ -21547,7 +21548,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.green.gshp.technical_to_translate.c:36
 #: ../locale/scriptstrings/r.green.gshp.theoretical_to_translate.c:22
-msgid "Borehole thermal resistence [m K W-1]"
+msgid "Borehole thermal resistance [m K W-1]"
 msgstr ""
 
 #: ../locale/scriptstrings/r.green.gshp.technical_to_translate.c:38
@@ -22076,7 +22077,7 @@ msgstr "Ausgabekarte"
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:19
 msgid ""
 "Raster layer name to store result from classification or regression model. "
-"The name will also used as a perfix if class probabilities or intermediate "
+"The name will also used as a prefix if class probabilities or intermediate "
 "of cross-validation results are ordered as maps."
 msgstr ""
 
@@ -22644,7 +22645,7 @@ msgid "x-y extent of the Gaussian filter (i.zc)"
 msgstr "X/Y-Ausdehnung des Gauss'schen Filters."
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:16
-msgid "Low treshold for edges (i.edge)"
+msgid "Low threshold for edges (i.edge)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:17
@@ -22655,7 +22656,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:18
 #, fuzzy
-msgid "High treshold for edges (i.edge)"
+msgid "High threshold for edges (i.edge)"
 msgstr "Schwellwert hoher Gradienten für die Kantenerkennung "
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:20
@@ -23905,7 +23906,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:38
 #, fuzzy
-msgid "Do not set region from modul settings"
+msgid "Do not set region from module settings"
 msgstr "Setze Region von benannter Region."
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:42
@@ -25445,7 +25446,7 @@ msgstr "Methode für aggregierende Statistik"
 
 #: ../locale/scriptstrings/t.rast.what.aggr_to_translate.c:12
 #, fuzzy
-msgid "Tha date format"
+msgid "The date format"
 msgstr "Tabellenformat"
 
 #: ../locale/scriptstrings/t.rast.what.aggr_to_translate.c:15
@@ -25877,7 +25878,8 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/v.gsflow.export_to_translate.c:1
-msgid "Export databse tables and pour point for GSFLOW input and control files"
+msgid ""
+"Export database tables and pour point for GSFLOW input and control files"
 msgstr ""
 
 #: ../locale/scriptstrings/v.gsflow.export_to_translate.c:6
@@ -26816,7 +26818,7 @@ msgstr "Schwellwert"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:6
 #, fuzzy
-msgid "Name of output sement raster map"
+msgid "Name of output segment raster map"
 msgstr "Name der Ausgabe-Rasterkarte(n)."
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:7
@@ -30028,7 +30030,7 @@ msgid "Title for Graph"
 msgstr "Titel der Grafik"
 
 #: ../display/d.linegraph/main.c:311
-msgid "Minimum and maximun value for Y axis (min,max)"
+msgid "Minimum and maximum value for Y axis (min,max)"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:318
@@ -33937,8 +33939,8 @@ msgstr ""
 "Geschlossenheits(closeness)-Schwellenwert für die Netzwerk Generalisierung."
 
 #: ../vector/v.generalize/main.c:209
-msgid "Betweeness threshold in network generalization"
-msgstr "Betweeness-Schwellwert für die Netzwerk Generalisierung."
+msgid "Betweenness threshold in network generalization"
+msgstr "Betweenness-Schwellwert für die Netzwerk Generalisierung."
 
 #: ../vector/v.generalize/main.c:216
 msgid "Snakes alpha parameter"
@@ -34965,15 +34967,15 @@ msgstr ""
 msgid "Vector map <%s> does not have cat's defined on layer %d"
 msgstr ""
 
-#: ../vector/v.profile/main.c:683
+#: ../doc/vector/v.example/main.c:175
 #, c-format
-msgid "Unabale to get attribute data for cat %d"
-msgstr ""
+msgid "Unable to get attribute data for cat %d"
+msgstr "Kann die Attribute für cat %d nicht bekommen."
 
-#: ../vector/v.profile/main.c:692
+#: ../doc/vector/v.example/main.c:184
 #, c-format
-msgid "Error while retreiving database record for cat %d"
-msgstr ""
+msgid "Error while retrieving database record for cat %d"
+msgstr "Fehler beim Abfragen des Datenbankeintrags für cat %d"
 
 #: ../vector/v.profile/main.c:730
 msgid "Can not write data portion to provided output"
@@ -35485,8 +35487,8 @@ msgstr ""
 #: ../vector/v.external.out/link.c:26 ../vector/v.out.ogr/main.c:104
 #, c-format
 msgid ""
-"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format (\"%s"
-"\" given)"
+"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format "
+"(\"%s\" given)"
 msgstr ""
 
 #: ../vector/v.external.out/link.c:88 ../vector/v.external.out/status.c:158
@@ -37710,7 +37712,7 @@ msgid ""
 "Computes degree, centrality, betweeness, closeness and eigenvector "
 "centrality measures in the network."
 msgstr ""
-"Berechnet Degree, Centrality, Betweeness, Closeness and Eigenvektor "
+"Berechnet Degree, Centrality, Betweenness, Closeness and Eigenvektor "
 "centrality Werte im Netzwerk."
 
 #: ../vector/v.net.centrality/main.c:148
@@ -41822,8 +41824,8 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:321
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN="
-"%d"
+"%d points given for interpolation (after thinning) is less than given "
+"NPMIN=%d"
 msgstr ""
 "%d Punkte, die (nach Ausdünnung) zur Verfügung stehen, sind weniger als die "
 "angegebenen NPMIN=%d."
@@ -45098,8 +45100,8 @@ msgstr ""
 #: ../general/g.findfile/main.c:97
 #, c-format
 msgid ""
-"Parameter 'file' contains reference to <%s> mapset, but mapset parameter <"
-"%s> does not correspond"
+"Parameter 'file' contains reference to <%s> mapset, but mapset parameter "
+"<%s> does not correspond"
 msgstr ""
 "Der Parameter 'file' enthält einen Verweis auf das Mapset <%s>, aber der "
 "Parameter Mapset <%s> stimmt damit nicht überein."
@@ -45737,16 +45739,6 @@ msgstr "Schlagwort3"
 #: ../doc/vector/v.example/main.c:53
 msgid "My first vector module"
 msgstr "Mein erstes Vektormodul."
-
-#: ../doc/vector/v.example/main.c:175
-#, c-format
-msgid "Unable to get attribute data for cat %d"
-msgstr "Kann die Attribute für cat %d nicht bekommen."
-
-#: ../doc/vector/v.example/main.c:184
-#, c-format
-msgid "Error while retrieving database record for cat %d"
-msgstr "Fehler beim Abfragen des Datenbankeintrags für cat %d"
 
 #: ../doc/vector/v.example/main.c:217
 #, c-format
@@ -58267,11 +58259,11 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:369
 #, c-format
 msgid ""
-"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, <"
-"%s>, <%s>, <%s>, <%s> or <%s>"
+"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, "
+"<%s>, <%s>, <%s>, <%s> or <%s>"
 msgstr ""
-"Sie müssen mindestens einen der Parameter wählen: <%s>, <%s>, <%s>, <%s>, <"
-"%s>, <%s>, <%s>, <%s> oder <%s>"
+"Sie müssen mindestens einen der Parameter wählen: <%s>, <%s>, <%s>, <%s>, "
+"<%s>, <%s>, <%s>, <%s> oder <%s>"
 
 #: ../raster/r.slope.aspect/main.c:396
 #, c-format
@@ -59632,7 +59624,7 @@ msgstr ""
 #: ../raster/r.geomorphon/memory.c:42
 #, c-format
 msgid ""
-"Region resolution shoudn't be lesser than map %s resolution. Run g.region "
+"Region resolution shouldn't be lesser than map %s resolution. Run g.region "
 "raster=%s to set proper resolution"
 msgstr ""
 
@@ -61027,8 +61019,8 @@ msgstr ""
 #: ../scripts/v.dissolve/v.dissolve.py:68
 #, python-format
 msgid ""
-"No '%s' option specified. Dissolving based on category values from layer <"
-"%s>."
+"No '%s' option specified. Dissolving based on category values from layer "
+"<%s>."
 msgstr ""
 
 #: ../scripts/v.dissolve/v.dissolve.py:74
@@ -61988,8 +61980,8 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_base.py:110
 #, python-format
 msgid ""
-"WMS version <1.3.0> will be used, because version <1.1.1> does not support <"
-"%s>projection"
+"WMS version <1.3.0> will be used, because version <1.1.1> does not support "
+"<%s>projection"
 msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:130
@@ -62517,11 +62509,11 @@ msgid "Using 8bit image channels"
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:174
-msgid "Converting image chanels to 8bit for processing"
+msgid "Converting image channels to 8bit for processing"
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:204
-msgid "Rescaling image chanels to 8bit for processing"
+msgid "Rescaling image channels to 8bit for processing"
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:255

@@ -214,7 +214,7 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
         break;
     }
     case SF_POLYGON: /* polygon */ {
-        /* write only outter/inner ring */
+        /* write only outer/inner ring */
         fprintf(file, "(");
         for (i = 0; i < Points->n_points; i++) {
             print_point(Points, i, with_z, precision, file);

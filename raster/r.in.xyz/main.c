@@ -726,7 +726,7 @@ int main(int argc, char *argv[])
             }
 
             G_chop(buff); /* remove leading and trailing whitespace from the
-                             string.  unneded?? */
+                             string.  unneeded?? */
             tokens = G_tokenize(buff, fs);
             ntokens = G_number_of_tokens(tokens);
 
@@ -1235,7 +1235,7 @@ int scan_bounds(FILE *fp, int xcol, int ycol, int zcol, int vcol, char *fs,
             continue; /* line is a comment or blank */
         }
 
-        G_chop(buff); /* remove leading and trailing whitespace. unneded?? */
+        G_chop(buff); /* remove leading and trailing whitespace. unneeded?? */
         tokens = G_tokenize(buff, fs);
         ntokens = G_number_of_tokens(tokens);
 

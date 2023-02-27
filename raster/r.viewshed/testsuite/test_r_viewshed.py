@@ -18,7 +18,7 @@ class TestViewshed(TestCase):
 
     def tearDown(cls):
         """Remove viewshed map after each test method"""
-        # TODO: eventually, removing maps should be handled through testing framework fucntions
+        # TODO: eventually, removing maps should be handled through testing framework functions
         cls.runModule("g.remove", flags="f", type="raster", name=cls.viewshed)
 
     def test_limits(self):
@@ -73,7 +73,7 @@ class TestViewshed(TestCase):
     def test_limits_extreme_value(self):
         """Test extremely high observer elevation
 
-        Unfortunatelly, this takes very long time to compute
+        Unfortunately, this takes very long time to compute
         (something like ten times more).
         """
         obs_elev = "500000"

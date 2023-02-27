@@ -180,7 +180,7 @@ class WMSBase(object):
     def _modifyProj(self, proj):
         """!Modify proj.4 string for usage in this module"""
 
-        # add +wktext parameter to avoid droping of +nadgrids parameter (if presented) in gdalwarp
+        # add +wktext parameter to avoid dropping of +nadgrids parameter (if presented) in gdalwarp
         if "+nadgrids=" in proj and " +wktext" not in proj:
             proj += " +wktext"
 
@@ -648,7 +648,7 @@ class GRASSImporter:
                 grass.fatal(_("%s failed") % "r.mask")
 
             if not self.cleanup_bands:
-                # use the MASK to set NULL vlues
+                # use the MASK to set NULL values
                 for suffix in (".red", ".green", ".blue"):
                     rast = self.opt_output + suffix
                     if grass.find_file(rast, element="cell", mapset=".")["file"]:

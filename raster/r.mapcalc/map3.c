@@ -243,7 +243,7 @@ static void translate_from_colors(map *m, DCELL *rast, CELL *cell, int ncols,
  *
  * This requires performing sscanf() of the category label
  * and only do it it for new categories. Must maintain
- * some kind of maps of already scaned values.
+ * some kind of maps of already scanned values.
  *
  * This maps is a hybrid tree, where the data in each node
  * of the tree is an array of, for example, 64 values, and

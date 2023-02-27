@@ -234,7 +234,7 @@ def get_svn_info():
 
 
 def years_ago(date, years):
-    # dateutil relative delte would be better but this is more portable
+    # dateutil relative date would be better but this is more portable
     return date - datetime.timedelta(weeks=years * 52)
 
 
@@ -335,7 +335,7 @@ class GrassTestFilesMultiReporter(object):
     def start(self, results_dir):
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
         # TODO: perhaps only those whoe need it should do it (even multiple times)
-        # and there is also the delet problem
+        # and there is also the delete problem
         ensure_dir(os.path.abspath(results_dir))
         for reporter in self.reporters:
             try:
@@ -751,7 +751,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         # TODO: include optionally hyper link to test suite
-        # TODO: file_path is reconstucted in a naive way
+        # TODO: file_path is reconstructed in a naive way
         # file_path should be stored in the module/test file object and just used here
         summary_section = (
             "<table><tbody>"

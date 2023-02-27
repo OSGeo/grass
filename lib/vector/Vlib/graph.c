@@ -196,7 +196,7 @@ int Vect_graph_shortest_path(dglGraph_s *graph, int from, int to,
         Vect_reset_list(List);
 
     /* Check if from and to are identical, otherwise dglib returns path to
-     * neares node and back! */
+     * nearest node and back! */
     if (from == to) {
         if (cost != NULL)
             *cost = 0;

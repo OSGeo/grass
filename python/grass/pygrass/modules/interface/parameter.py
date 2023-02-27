@@ -53,7 +53,7 @@ def _check_value(param, value):
     if value is None:
         return param.default, param.default
 
-    # find errors with multiple parmeters
+    # find errors with multiple parameters
     if isinstance(value, (list, tuple)):
         if param.keydescvalues:
             return (
