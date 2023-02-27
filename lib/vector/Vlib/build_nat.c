@@ -233,7 +233,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
     /* Add areas to category index */
     /* add message and G_percent() ?
-     * it seems fast enough, no message / precent needed */
+     * it seems fast enough, no message / percent needed */
     for (i = 1; i <= plus->n_areas; i++) {
         int c;
 

@@ -227,14 +227,14 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
                   column);
 
 #if 0
-    /* maximum possible numer of areas: number of centroids
+    /* maximum possible number of areas: number of centroids
      * actual number of areas, currently unknown:
      * number of areas with centroid that are within cat constraint
      * and overlap with current region */
     if (nareas_all > 0)
         G_message(_("Converted areas: %d of %d"), nareas,
                   Vect_get_num_primitives(&Map, GV_CENTROID));
-    /* maximum possible numer of lines: number of GV_LINE + GV_POINT
+    /* maximum possible number of lines: number of GV_LINE + GV_POINT
      * actual number of lines, currently unknown:
      * number of lines are within cat constraint
      * and overlap with current region */

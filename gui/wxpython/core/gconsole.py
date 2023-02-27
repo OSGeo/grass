@@ -362,7 +362,7 @@ class GConsole(wx.EvtHandler):
         r"""
         :param guiparent: parent window for created GUI objects
         :param lmgr: layer manager window (TODO: replace by giface)
-        :param ignoredCmdPattern: regular expression specifying commads
+        :param ignoredCmdPattern: regular expression specifying commands
                                   to be ignored (e.g. @c '^d\..*' for
                                   display commands)
         """
@@ -717,7 +717,7 @@ class GConsole(wx.EvtHandler):
                     "sec": int(ctime - (mtime * 60)),
                 }
         except KeyError:
-            # stopped deamon
+            # stopped daemon
             stime = _("unknown")
 
         if event.aborted:

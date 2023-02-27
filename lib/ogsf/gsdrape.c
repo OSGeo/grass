@@ -860,7 +860,7 @@ int order_intersects(geosurf *gs, Point3 first, Point3 last, int vi, int hi,
 /*!
    \brief ADD
 
-   \todo For consistancy, need to decide how last row & last column are
+   \todo For consistency, need to decide how last row & last column are
    displayed - would it look funny to always draw last row/col with
    finer resolution if necessary, or would it be better to only show
    full rows/cols?

@@ -586,7 +586,7 @@ int grad_check(void)
         }
     }
 
-    /*! compute transport capacity limted erosion/deposition et
+    /*! compute transport capacity limited erosion/deposition et
      *   as a divergence of sediment transport capacity
      *   \f$
      D_T({\bf r})= \nabla\cdot {\bf T}({\bf r})

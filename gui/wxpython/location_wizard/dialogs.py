@@ -166,7 +166,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.cells3 = int(region["cells3"])
 
         #
-        # 3D box collapsable
+        # 3D box collapsible
         #
         self.infoCollapseLabelExp = _("Click here to show 3D settings")
         self.infoCollapseLabelCol = _("Click here to hide 3D settings")

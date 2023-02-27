@@ -426,7 +426,7 @@ void GS_v3mag(float *v1, float *mag)
    \brief ADD
 
    Initialize by calling with a number nhist to represent number of
-   previous entrys to check, then call with zero as nhist
+   previous entries to check, then call with zero as nhist
 
    \param p1 first point
    \param p2 second point

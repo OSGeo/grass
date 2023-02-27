@@ -411,8 +411,8 @@ class SwipeMapPanel(DoubleMapPanel):
                 secondLayerList=None,
             )
             dlg.applyChanges.connect(self.OnApplyInputChanges)
-            # connect to convertor object to convert to Map
-            # store reference to convertor is needed otherwise it would be
+            # connect to converter object to convert to Map
+            # store reference to converter is needed otherwise it would be
             # discarded
             self._firstConverter = self._connectSimpleLmgr(
                 dlg.GetFirstSimpleLmgr(), self.GetFirstMap()

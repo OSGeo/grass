@@ -217,7 +217,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
         (IClass_point *)G_calloc(count, sizeof(IClass_point)); /* TODO test */
     skip = 0;
     vertex_count = 0;
-    i = first; /* stmt not necssary */
+    i = first; /* stmt not necessary */
 
     do {
         if (!skip) {

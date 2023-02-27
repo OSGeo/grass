@@ -2,7 +2,7 @@
 
 struct order {
     int cat;   /* point category */
-    int count; /* nuber of points with category 'cat' */
+    int count; /* number of points with category 'cat' */
     int row;
     int col;
     double x, y; /* used with interp flag */

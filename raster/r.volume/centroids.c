@@ -57,7 +57,7 @@ int centroids(int fd, /* File descriptor of map layer to process */
             if (v < 1)
                 continue; /* can't handle 0 or - values */
             count[v]++;
-            if (method > 0) { /* acccumulate row, col weights */
+            if (method > 0) { /* accumulate row, col weights */
                 e[v] += col;
                 n[v] += row;
             }

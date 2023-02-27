@@ -96,7 +96,7 @@ int PS_raster_plot(void)
     else
         fprintf(PS.fp, "image\n");
 
-    /* let user know what's happenning */
+    /* let user know what's happening */
     if (PS.do_raster)
         G_message(_("Reading raster map <%s>..."),
                   G_fully_qualified_name(PS.cell_name, PS.cell_mapset));

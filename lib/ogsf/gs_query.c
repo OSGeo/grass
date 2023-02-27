@@ -370,7 +370,7 @@ int gs_los_intersect(int surfid, float **los, float *point)
    no line segment along the ray that is inside the polyhedron), then the
    ray misses and returns 0; else 1 is returned if the ray is entering the
    polyhedron, -1 if the ray originates inside the polyhedron.  If there is
-   an intersection, the distance and the nunber of the face hit is returned.
+   an intersection, the distance and the number of the face hit is returned.
 
    \param org,dir origin and direction of ray
    \param tmax maximum useful distance along ray

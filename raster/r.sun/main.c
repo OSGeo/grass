@@ -2114,7 +2114,7 @@ double com_declin(int no_of_day)
 
 int test(void)
 {
-    /* not finshed yet */
+    /* not finished yet */
     int dej;
 
     G_message("\n ddd: %f", declin);

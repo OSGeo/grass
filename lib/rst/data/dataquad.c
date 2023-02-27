@@ -219,9 +219,9 @@ int quad_division_check(struct quaddata *data, int kmax)
 /*!
  * Divide *data* into four new ones
  *
- * Divides *data* into 4 new datas reinserting `data->points` in
+ * Divides *data* into 4 new data reinserting `data->points` in
  * them by calling data function `quad_compare()` to determine
- * were to insert. Returns array of 4 new datas (allocates memory).
+ * were to insert. Returns array of 4 new data (allocates memory).
  */
 struct quaddata **quad_divide_data(struct quaddata *data, int kmax, double dmin)
 {

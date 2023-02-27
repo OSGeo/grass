@@ -162,7 +162,7 @@ first)
 Use function names which fulfill the official GNU naming convention:
 <https://www.gnu.org/prep/standards/html_node/Names.html#Names>
 
-Instead of naming a function like: MyNewFunction() use underscores for seperation
+Instead of naming a function like: MyNewFunction() use underscores for separation
 and lower case letters: my_new_function()`.
 
 ### Comments

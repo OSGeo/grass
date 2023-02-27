@@ -164,7 +164,7 @@ GM_WINDOW_MIN_SIZE = (525, 400)
 # not defined UBUNTU_MENUPROXY on linux means standard menu,
 # so the probably problem
 # UBUNTU_MENUPROXY= means ubuntu with disabled global menu [1]
-# use UBUNTU_MENUPROXY=0 to disbale global menu on ubuntu but in the same time
+# use UBUNTU_MENUPROXY=0 to disable global menu on ubuntu but in the same time
 # to get smaller lmgr
 # [1] https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationMenu#Troubleshooting
 if sys.platform in ("win32", "darwin") or os.environ.get("UBUNTU_MENUPROXY"):

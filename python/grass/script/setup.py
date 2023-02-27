@@ -143,12 +143,12 @@ def get_install_path(path=None):
     """
 
     def ask_executable(arg):
-        """Query the GRASS exectable for the path"""
+        """Query the GRASS executable for the path"""
         return subprocess.run(
             [arg, "--config", "path"], text=True, check=True, capture_output=True
         ).stdout.strip()
 
-    # Exectable was provided as parameter.
+    # Executable was provided as parameter.
     if path and shutil.which(path):
         # The path was provided by the user and it is an executable
         # (on path or provided with full path), so raise exception on failure.

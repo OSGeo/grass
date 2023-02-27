@@ -541,7 +541,7 @@ N_les *N_assemble_les_2d_dirichlet(int les_type, N_geom_data *geom,
  * equation solvers. An 2d array with start values and an 2d status array must
  * be provided as well as the location geometry and a void pointer to data
  * passed to the callback which creates the les row entries. This callback
- * must be defined in the N_les_callback_2d strcuture.
+ * must be defined in the N_les_callback_2d structure.
  *
  * The creation of the les is parallelized with OpenMP.
  * If you implement new callbacks, please make sure that the
@@ -805,7 +805,7 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
     rows = geom->rows;
     cols = geom->cols;
 
-    /*we nned to additional vectors */
+    /*we need to additional vectors */
     dvect1 = (double *)G_calloc(les->cols, sizeof(double));
     dvect2 = (double *)G_calloc(les->cols, sizeof(double));
 
@@ -1263,7 +1263,7 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
     cols = geom->cols;
     depths = geom->depths;
 
-    /*we nned to additional vectors */
+    /*we need to additional vectors */
     dvect1 = (double *)G_calloc(les->cols, sizeof(double));
     dvect2 = (double *)G_calloc(les->cols, sizeof(double));
 

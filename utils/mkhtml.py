@@ -154,7 +154,7 @@ def download_git_commit(url, response_format, *args, **kwargs):
 def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """Get default Git commit and commit date, when getting commit from
     local Git, local JSON file and remote GitHub REST API server wasn't
-    successfull.
+    successful.
 
     :param str src_dir: addon source dir
     :param str datetime_format: output commit datetime format
@@ -205,7 +205,7 @@ def get_git_commit_from_file(
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    # Accessed date time if getting commit from JSON file wasn't successfull
+    # Accessed date time if getting commit from JSON file wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     json_file_path = os.path.join(
@@ -237,7 +237,7 @@ def get_git_commit_from_rest_api_for_addon_repo(
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    # Accessed date time if getting commit from GitHub REST API wasn't successfull
+    # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     grass_addons_url = (

@@ -71,7 +71,7 @@ dbTable **table;
     SQLRETURN ret;
     SQLCHAR charval[100];
 
-    /* get the number of colummns */
+    /* get the number of columns */
     ret = SQLNumResultCols(stmt, &ncols);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
         db_d_append_error("SQLNumResultCols()");

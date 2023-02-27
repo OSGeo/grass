@@ -4,7 +4,7 @@
  * AUTHOR(S):    Bob Covill <bcovill@tekmap.ns.ca>
  * PURPOSE:      interactively create fly-through script for NVIZ
  * Functions:
- *   main --      parse parameters and get key frame coorinates
+ *   main --      parse parameters and get key frame coordinates
  *   do_profile-- calculate camera and eye coordinates from
  *                raster map
  *   move --      part of screen coords
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
-    /* eanble vector and sites drawing */
+    /* enable vector and sites drawing */
     if (parm.e->answer) {
         sprintf(buf1, "\nSendScriptLine \"Nshow_vect on\"");
         sprintf(buf2, "\nSendScriptLine \"Nshow_sites on\"\n\n");

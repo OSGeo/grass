@@ -182,7 +182,7 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
             G_math_d_Ax(A, x, v, rows, rows);
 
         G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
-        /*performe the preconditioning */
+        /*perform the preconditioning */
         G_math_Ax_sparse(M, r, p, rows);
 
         /* scalar product */
@@ -238,7 +238,7 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
                 G_math_d_ax_by(r, v, r, 1.0, -1.0 * mygamma, rows);
             }
 
-            /*performe the preconditioning */
+            /*perform the preconditioning */
             G_math_Ax_sparse(M, r, z, rows);
 
             /* scalar product */

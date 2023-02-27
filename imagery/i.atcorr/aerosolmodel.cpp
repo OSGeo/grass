@@ -483,7 +483,7 @@ void AerosolModel::save()
 
 /*
   To compute the optical scattering parameters (extinction and scattering
-  coefficients, single scattering albedo, phase function, assymetry factor)
+  coefficients, single scattering albedo, phase function, asymmetry factor)
   at the ten discrete wavelengths for the selected model (or created model)
   from:
   (1) the characteristics of the basic components of the International

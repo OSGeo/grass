@@ -231,7 +231,7 @@ class TestBasicOperations(TestCase):
 
     def test_nrows_ncols_sum(self):
         """Test if sum of nrows and ncols matches one
-        expected from current region settigs"""
+        expected from current region settings"""
         self.assertModule("r.mapcalc", expression="nrows_ncols_sum = nrows() + ncols()")
         self.to_remove.append("nrows_ncols_sum")
         self.assertRasterMinMax("nrows_ncols_sum", refmin=20, refmax=20)

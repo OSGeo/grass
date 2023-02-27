@@ -1,6 +1,6 @@
 """
 Name:       v.profile test
-Purpose:    Tests v.profile input parsing and simle output generation.
+Purpose:    Tests v.profile input parsing and simple output generation.
             Uses NC Basic data set.
 
 Author:     Maris Nartiss

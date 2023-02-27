@@ -5,7 +5,7 @@ setlocal
 if not "%2"=="" goto:run
 echo Usage: copydir fromdir todir
 echo All files/directories in fromdir that do not also exist in todir are 
-echo recurisvely copied.
+echo recursively copied.
 echo e.g. 
 echo      cd "%userprofile%\Documents\R\win-library"
 echo      copydir 2.14 2.15

@@ -64,7 +64,7 @@ void *db_malloc(int n)
    \param n number of entities
    \param m entity size
 
-   \return pointer to allocated memmory
+   \return pointer to allocated memory
  */
 void *db_calloc(int n, int m)
 {
@@ -88,7 +88,7 @@ void *db_calloc(int n, int m)
    \param s pointer to memory
    \param n number of newly allocated bytes
 
-   \return pointer to allocated memmory
+   \return pointer to allocated memory
  */
 void *db_realloc(void *s, int n)
 {

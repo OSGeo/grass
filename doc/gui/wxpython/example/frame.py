@@ -345,7 +345,7 @@ class ExampleMapPanel(SingleMapPanel):
         return gcore.parse_key_val(res, val_type=float)
 
     def UpdateStatistics(self):
-        """!Upadate statistic information.
+        """!Update statistic information.
 
         Called after changing raster map.
         """

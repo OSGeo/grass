@@ -452,7 +452,7 @@ AC_DEFUN([SC_ENABLE_SHARED], [
 #                       into a shared C++ library.  Make sure "IS_CXX = yes"
 #                       is set in the library's Makefile.
 #       SHLIB_LD_FLAGS -Flags to pass when building a shared library. This
-#                       differes from the SHLIB_CFLAGS as it is not used
+#                       differs from the SHLIB_CFLAGS as it is not used
 #                       when building object files or executables.
 #       SHLIB_LD_LIBS - Dependent libraries for the linker to scan when
 #                       creating shared libraries.  This symbol typically

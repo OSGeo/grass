@@ -54,7 +54,7 @@ def update_keyval_file(filename, module, returncode):
     if test_file_authors is None:
         test_file_authors = ""
 
-    # always owerwrite name and status
+    # always overwrite name and status
     keyval["name"] = module.name
     keyval["tested_dir"] = module.tested_dir
     if "status" not in keyval.keys():

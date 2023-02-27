@@ -821,7 +821,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         return imgs
 
     def GetImage(self):
-        """Converts redered map files to wx.Image
+        """Converts rendered map files to wx.Image
 
         Updates self.imagedict (id=99)
 
@@ -853,7 +853,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def UpdateMap(self, render=True, renderVector=True, delay=0.0):
         """Updates the canvas anytime there is a change to the
-        underlaying images or to the geometry of the canvas.
+        underlying images or to the geometry of the canvas.
 
         This method should not be called directly.
 
@@ -1408,7 +1408,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         elif event.MiddleDown():
             self.OnMiddleDown(event)
 
-        # middle mouse button relesed
+        # middle mouse button released
         elif event.MiddleUp():
             self.OnMiddleUp(event)
 
@@ -2273,7 +2273,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         return item
 
     def UnregisterGraphicsToDraw(self, item):
-        """Unregisteres GraphicsSet instance
+        """Unregisters GraphicsSet instance
 
         :param item: (GraphicsSetItem) - item to unregister
 

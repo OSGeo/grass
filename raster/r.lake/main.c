@@ -16,7 +16,7 @@
  *               for details.
  *
  *  TODO:        - Option to create 3D output;
- *               - Test with lat/lon location, feets and other crap;
+ *               - Test with lat/lon location, feet and other crap;
  *               - In progress: Add different debug level messages;
  *               - In progress: Option to output resulting lake area and volume.
  *
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
                 load_window_values(out_water, water_window, rows, cols, row,
                                    col);
 
-                /* Cheking presence of water. */
+                /* Checking presence of water. */
                 if (is_near_water(water_window) == 1) {
                     if (in_terran[row][col] < water_level) {
                         out_water[row][col] = water_level - in_terran[row][col];

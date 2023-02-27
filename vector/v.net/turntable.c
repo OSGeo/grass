@@ -564,7 +564,7 @@ void populate_turntable(dbDriver *driver, struct Map_info *InMap,
 
     box_List = Vect_new_boxlist(0);
 
-    /* Update point on every node (assing tuclayer cat) */
+    /* Update point on every node (assign tuclayer cat) */
     for (pivot_node = 1; pivot_node <= n_nodes; pivot_node++) {
         Vect_reset_line(line_pnts_i);
         Vect_reset_cats(cats_i);

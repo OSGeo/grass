@@ -1180,7 +1180,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def UpdateMap(self, render=True):
         """Updates the canvas anytime there is a change to the
-        underlaying images or to the geometry of the canvas.
+        underlying images or to the geometry of the canvas.
 
         :param render: re-render map composition
         :type render: bool

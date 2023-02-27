@@ -22,7 +22,7 @@
  **
  **
  **  no checking is done for overlapping lines.
- **  header information will have to be editted afterwards.
+ **  header information will have to be edited afterwards.
  */
 
 /*

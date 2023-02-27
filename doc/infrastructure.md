@@ -248,7 +248,7 @@ Procedure building of binaries (Windows):
 
 * Addons module are compiled on build server, currently at the CTU in Prague) and
   publishing their manual pages on publishing server, i.e. grass.osgeo.org.
-* A new compilation is triggered everytime when a commit is done in the Addons-SVN.
+* A new compilation is triggered every time when a commit is done in the Addons-SVN.
 * Logs:
   * Linux log files:   <https://grass.osgeo.org/addons/grass7/logs> (compiled on
     `grasslxd` on `osgeo7`)

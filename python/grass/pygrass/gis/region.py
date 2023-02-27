@@ -347,7 +347,7 @@ class Region(object):
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def keys(self):

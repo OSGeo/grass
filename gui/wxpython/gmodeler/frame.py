@@ -313,7 +313,7 @@ class ModelFrame(wx.Frame):
                         "sec": int(ctime - (mtime * 60)),
                     }
             except KeyError:
-                # stopped deamon
+                # stopped daemon
                 stime = _("unknown")
 
             return stime

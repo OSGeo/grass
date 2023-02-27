@@ -68,7 +68,7 @@ because I can't modify the row buffer. So I have 2 options:
 1. make a new update_range() low level function which takes
 ignore_zeros flag as argument.
 
-2. to call update with each cell idividually and check for 0's
+2. to call update with each cell individually and check for 0's
 what should I do?
 
 

@@ -850,7 +850,7 @@ class DbMgrBase:
         # delete page
         if layer in self.dbMgrData["mapDBInfo"].layers.keys():
             # delete page
-            # draging pages disallowed
+            # dragging pages disallowed
             # if self.browsePage.GetPageText(page).replace('Layer ', '').strip() == str(layer):
             # self.browsePage.DeletePage(page)
             # break
@@ -1832,7 +1832,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 n, s, w, e = display.GetRegionSelected()
                 self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e, update=True)
         else:
-            # add map layer with higlighted vector features
+            # add map layer with highlighted vector features
             self.AddQueryMapLayer(selectedOnly)  # -> self.qlayer
 
             # set opacity based on queried layer
@@ -2020,7 +2020,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnDeleteSelected(self, event):
         """Delete vector objects selected in attribute browse window
-        (attribures and geometry)
+        (attributes and geometry)
         """
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["data"])
         cats = tlist.GetSelectedItems()

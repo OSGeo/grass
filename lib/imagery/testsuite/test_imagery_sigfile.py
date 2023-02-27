@@ -58,7 +58,7 @@ class SignatureFileTestCase(TestCase):
 
     def test_roundtrip_signature_v1_norgb_one_label(self):
         """Test writing and reading back signature file (v1)
-        wiht a single label"""
+        with a single label"""
 
         # Create signature struct
         So = Signature()

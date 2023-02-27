@@ -835,7 +835,7 @@ def cleanup():
 
 
 def write_xml_modules(name, tree=None):
-    """Write element tree as a modules matadata file
+    """Write element tree as a modules metadata file
 
     If the *tree* is not given, an empty file is created.
 
@@ -881,7 +881,7 @@ def write_xml_modules(name, tree=None):
 
 
 def write_xml_extensions(name, tree=None):
-    """Write element tree as a modules matadata file
+    """Write element tree as a modules metadata file
 
     If the *tree* is not given, an empty file is created.
 
@@ -937,7 +937,7 @@ def write_xml_extensions(name, tree=None):
 
 
 def write_xml_toolboxes(name, tree=None):
-    """Write element tree as a toolboxes matadata file
+    """Write element tree as a toolboxes metadata file
 
     If the *tree* is not given, an empty file is created.
 
@@ -1065,7 +1065,7 @@ def install_extension(source, url, xmlurl, branch):
 def get_toolboxes_metadata(url):
     """Return metadata for all toolboxes from given URL
 
-    :param url: URL of a modules matadata file
+    :param url: URL of a modules metadata file
     :param mlist: list of modules to get metadata for
     :returns: tuple where first item is dictionary with module names as keys
         and dictionary with dest, keyw, files keys as value, the second item
@@ -1147,7 +1147,7 @@ def install_toolbox_xml(url, name):
 def get_addons_metadata(url, mlist):
     """Return metadata for list of modules from given URL
 
-    :param url: URL of a modules matadata file
+    :param url: URL of a modules metadata file
     :param mlist: list of modules to get metadata for
     :returns: tuple where first item is dictionary with module names as keys
         and dictionary with dest, keyw, files keys as value, the second item
@@ -1316,7 +1316,7 @@ def get_multi_addon_addons_which_install_only_html_man_page():
 def filter_multi_addon_addons(mlist):
     """Filter out list of multi-addon addons which contains
     and installs only *.html manual page, without source/binary
-    excutable module and doesn't need to check metadata.
+    executable module and doesn't need to check metadata.
 
     e.g. the i.sentinel multi-addon consists of several full i.sentinel.*
     addons along with a i.sentinel.html overview file.
@@ -2465,7 +2465,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module') # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
-    # Handle URL for the offical repo
+    # Handle URL for the official repo
     if name and (not url or fork):
         module_class = get_module_class_name(name)
         # note: 'trunk' is required to make URL usable for 'svn export' call

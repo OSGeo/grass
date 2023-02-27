@@ -367,7 +367,7 @@ def vector_what(
     :param ttype: list of topology types (default of v.what are point, line,
                   area, face)
     :param encoding: attributes encoding
-    :param skip_attributes: True to skip quering attributes
+    :param skip_attributes: True to skip querying attributes
     :param layer: layer number or list of layers (one for each vector),
                   if None, all layers (-1) are used
     :param multiple: find multiple features within threshold distance

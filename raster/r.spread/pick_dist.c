@@ -8,7 +8,7 @@
  * outward in an inverse square rate. It use three consecutive random number
  * generator:
  *     applying it once gets an UNIFORM distribution in the range of 0-max_num;
- *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
+ *     doing it twice gets a SIMPLE INVERSE distribution in that range;
  *     doing three times gets a INVERSE SQUARE distribution.
  *
  * Author: Jianping Xu, Rutgers University
@@ -23,7 +23,7 @@
 
 /**
  * @brief Picks one possible distance value from range 0, u
- * @param u maximum pontential distance
+ * @param u maximum potential distance
  * @return value in range 0, u
  */
 int pick_dist(int u)

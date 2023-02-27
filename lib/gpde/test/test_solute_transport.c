@@ -31,7 +31,7 @@ static int test_solute_transport_2d(void);
 static int test_solute_transport_3d(void);
 
 /* *************************************************************** */
-/* Performe the solute_transport integration tests ************************* */
+/* Perform the solute_transport integration tests ************************* */
 /* *************************************************************** */
 int integration_test_solute_transport(void)
 {
@@ -189,7 +189,7 @@ int test_solute_transport_3d(void)
     N_print_les(les);
     N_free_les(les);
 
-    /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
+    /*GAUSS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
                                       data->c_start, (void *)data, call);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
@@ -275,7 +275,7 @@ int test_solute_transport_2d(void)
     N_print_les(les);
     N_free_les(les);
 
-    /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
+    /*GAUSS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
                                       data->c_start, (void *)data, call);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);

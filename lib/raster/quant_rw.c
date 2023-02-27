@@ -69,7 +69,7 @@ void Rast_round_fp_map(const char *name, const char *mapset)
  * Make a rule for map \<name\> that maps floating range (d_min, d_max)
  * into integer range (min, max)
  * This function is useful when the quant rule doesn't depend of the
- * range of produced float data, for example the slope map whould
+ * range of produced float data, for example the slope map would
  * want to have a quant rule: 0.0, 90.0 -> 0 , 90
  * no matter what the min and max slope of this map is.
 
@@ -110,7 +110,7 @@ void Rast_quantize_fp_map(const char *name, const char *mapset, CELL min,
  * Make a rule for map \<name\> that maps floating range (d_min, d_max)
  * into integer range (min, max)
  * This function is useful when the quant rule doesn't depend of the
- * range of produced float data, for example the slope map whould
+ * range of produced float data, for example the slope map would
  * want to have a quant rule: 0.0, 90.0 -> 0 , 90
  * no matter what the min and max slope of this map is.
  *

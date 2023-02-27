@@ -142,7 +142,7 @@ unsigned char *Rast__allocate_null_bits(int cols)
  *
  * \param cols number of columns
  *
- * \return size of null bistream
+ * \return size of null bitstream
  */
 int Rast__null_bitstream_size(int cols)
 {

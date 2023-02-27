@@ -1,7 +1,7 @@
 /* draw.c:
  *
  * With do_bg=1 compute position of all legend graphic item and draw only
- * background. Eith do_bg=0 compute position of all legend graphic item and draw
+ * background. With do_bg=0 compute position of all legend graphic item and draw
  * all.
  *
  * Copyright (C) 2016 by Adam Laza, GSoC 2016, and the GRASS Development Team

@@ -254,7 +254,7 @@ void G3dToascii(FILE *fp, RASTER3D_Region region, int decim)
                 if (param.depth->answer)
                     depth = depths - z - 1;
 
-                /* Get the data and resample if nessessary */
+                /* Get the data and resample if necessary */
 
                 if (typeIntern == FCELL_TYPE) {
 

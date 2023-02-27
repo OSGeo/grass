@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Database connection not defined for layer %d"), 1);
     }
 
-    /* Output information useful for debuging
+    /* Output information useful for debugging
        include/vect/dig_structs.h
      */
     G_debug(1,

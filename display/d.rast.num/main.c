@@ -27,10 +27,10 @@
  *
  *   This program used Dgrid's sources as a beginning. Purpose of Dnumber
  *   is to read the cell layer displayed on the graphics monitor and number
- *   them, if the cell value is other than 0 in an acending order.
+ *   them, if the cell value is other than 0 in an ascending order.
  *   d.rast.num draws a number on the graphic display
  *   of each cell, so the cell number could be identified when using hydrologic
- *   models such AGNPS which uses the cell number for all its correspondance.
+ *   models such AGNPS which uses the cell number for all its correspondence.
  *
  */
 

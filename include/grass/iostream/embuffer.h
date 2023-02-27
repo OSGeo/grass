@@ -154,7 +154,7 @@ public:
  external_memory buffer
 
  Each level-i buffer can store up to <arity>^i * <basesize> items,
- where tipically <arity> is \theta(m) and <basesize> is \theta(M);
+ where typically <arity> is \theta(m) and <basesize> is \theta(M);
  therefore log_m{n/m} buffers are needed to store N items, one
  buffer for each level 1..log_m{n/m}. All buffers must have same
  values or <arity> and <basesize>.
@@ -202,7 +202,7 @@ private:
 
     // the buffers can be depleted to fill the internal pq;
     // keep an array which counts, for each stream, how many elements
-    // have been deleted (implicitely from the beginning of stream)
+    // have been deleted (implicitly from the beginning of stream)
     long *deleted;
 
     // nb of items in each substream; this can be found out by calling
@@ -886,7 +886,7 @@ AMI_STREAM<T> *em_buffer<T, Key>::sort()
     MEMORY_LOG("em_buffer::sort: allocate new AMI_STREAM\n");
 
     AMI_STREAM<T> *sorted_stream =
-        new AMI_STREAM<T>(); /* will be deleteed in insert() */
+        new AMI_STREAM<T>(); /* will be deleted in insert() */
     assert(sorted_stream);
 
     // merge the streams into sorted stream
@@ -1019,7 +1019,7 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
     // delete [] keys;
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT) IF
-    // I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
+    // I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
     // AND EVERYTHING SCREWS UP..
 
     return AMI_ERROR_NO_ERROR;
@@ -1074,7 +1074,7 @@ long em_buffer<T, Key>::insert(T *a, long n)
    stream.
 
    stream is assume stream is sorted; bos = how many elements must be
-   skipped (were deleted) from the beginning fo stream;
+   skipped (were deleted) from the beginning of stream;
 
    return the number of items actually inserted */
 template <class T, class Key>

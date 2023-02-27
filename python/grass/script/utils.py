@@ -462,7 +462,7 @@ def set_path(modulename, dirname=None, path="."):
     In this way we are executing the local code even if the module was already
     installed as grass-addons and it is available in GRASS standards path.
 
-    The function is cheching if the dirname is provided and if the
+    The function is checking if the dirname is provided and if the
     directory exists and it is available using the path
     provided as third parameter, if yes add the path to sys.path to be
     importable, otherwise it will check on GRASS GIS standard paths.
@@ -600,7 +600,7 @@ def append_random(name, suffix_length=None, total_length=None):
 
     ..note::
 
-        Note that this will be influeced by the random seed set for the Python
+        Note that this will be influenced by the random seed set for the Python
         random package.
 
     ..note::

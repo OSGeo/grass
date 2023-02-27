@@ -44,7 +44,7 @@ int is_int_only(const char *buffer)
 
 /** Issue a fatal error if the option value is not integer
  *
- * This catches the cases when option is readble as integer,
+ * This catches the cases when option is readable as integer,
  * but there would be additional characters left.
  * For example, when a number with a decimal point is read by C
  * functions, the decimal part is simply truncated and an integer is
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
      * min == max as a possible extreme case. */
     if (min_value > max_value) {
         /* showing the not parsed numbers to show exactly what user
-         * provided and to avoid any issues with formating %f vs %d */
+         * provided and to avoid any issues with formatting %f vs %d */
         G_fatal_error(_("Minimum %s should be higher than maximum %s,"
                         " but %s > %s"),
                       min->key, max->key, min->answer, max->answer);

@@ -100,7 +100,7 @@ int N_copy_gradient_2d(N_gradient_2d *source, N_gradient_2d *target)
  * field at position [row][col]
  *
  *  This function returns the gradient of a cell at position [row][col] from the
- * input gradient field. Returend is a new structure of type N_gradient_2d.
+ * input gradient field. Returned is a new structure of type N_gradient_2d.
  *
  *  \param field N_gradient_field_2d * - A two dimensional gradient field
  *  \param gradient N_gradient_2d * - the gradient structure which should be
@@ -675,7 +675,7 @@ int N_copy_gradient_neighbours_2d(N_gradient_neighbours_2d *source,
  *
  *  This function returns the gradient neighbours in x and y dierection
  *  of a cell at position [row][col] from the input gradient field.
- *  Returend is a pointer to a structure of type N_gradient_neighbours_2d.
+ *  Returned is a pointer to a structure of type N_gradient_neighbours_2d.
  *
  *  \param field N_gradient_field_2d * - A two dimensional gradient field
  *  \param gradient N_gradient_neighbours_2d * - the gradient structure which

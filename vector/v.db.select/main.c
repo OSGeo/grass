@@ -400,7 +400,7 @@ int main(int argc, char **argv)
             else {
                 char *str = db_get_string(&value_string);
 
-                /* Escaped charcters in different formats
+                /* Escaped characters in different formats
                  * JSON (mandatory): \" \\ \r \n \t \f \b
                  * CSV (usually none, here optional): \\ \r \n \t \f \b
                  * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b

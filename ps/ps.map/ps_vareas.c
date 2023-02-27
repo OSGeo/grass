@@ -15,7 +15,7 @@
 #include "clr.h"
 #include "local_proto.h"
 
-/* constuct subpath with moveto and repeated lineto from Points */
+/* construct subpath with moveto and repeated lineto from Points */
 int construct_path(struct line_pnts *Points, double shift, int t)
 {
     int i, np, k = 1;

@@ -85,7 +85,7 @@ class TestRasterreport(TestCase):
         )
 
     def test_flagt(self):
-        """Testing Falg T"""
+        """Testing Flag T"""
         self.assertModule(
             "v.extract", input=self.input, output=self.output, flags="t", cats=1
         )

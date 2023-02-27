@@ -367,7 +367,7 @@ class MapPanelBase(wx.Panel):
         )
 
     def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
+        """Override wx.StatusBar method"""
         self.statusbar.SetStatusText(*args)
 
     def ShowStatusbar(self, show):
@@ -613,7 +613,7 @@ class DoubleMapPanel(MapPanelBase):
 
         \a firstMap is set as active (by assign it to \c self.Map).
         Derived class should assging to \c self.MapWindow to make one
-        map window current by dafault.
+        map window current by default.
 
         :param parent: gui parent
         :param id: wx id
@@ -672,7 +672,7 @@ class DoubleMapPanel(MapPanelBase):
         r"""Returns current map (renderer) instance
 
         @note Use this method to access current map renderer.
-        (It is not guarented that current map will be stored in
+        (It is not guaranteed that current map will be stored in
         \c self.Map in future versions.)
         """
         return self.Map

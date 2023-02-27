@@ -338,7 +338,7 @@ class PyEditController(object):
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for writting.{}".format(
+                    "permission for writing.{}".format(
                         file_path,
                         additional_err_message,
                     ),
@@ -662,7 +662,7 @@ class PyEditToolbar(BaseToolbar):
             "run": MetaIcon(img="execute", label=_("Run (Ctrl+R)")),
             # TODO: better icons for overwrite modes
             "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
-            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
+            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactivate overwrite")),
             "help": BaseIcons["help"],
             "quit": BaseIcons["quit"],
         }

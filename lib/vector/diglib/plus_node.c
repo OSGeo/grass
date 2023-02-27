@@ -25,7 +25,7 @@ static double dist_squared(double, double, double, double);
  *
  * Line will be negative if END node
  *
- * 'node' must of course already exist space will be alloced to add 'line' to
+ * 'node' must of course already exist space will be allocated to add 'line' to
  * array
  *
  * Lines are sorted in increasing angle order and

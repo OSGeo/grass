@@ -73,9 +73,9 @@ class VDigitWindow(BufferedMapWindow):
         # currently used only for coordinates of mouse cursor + segmnt and
         # total feature length
         self.digitizingInfo = Signal("VDigitWindow.digitizingInfo")
-        # Emitted when some info about digitizing is or will be availbale
+        # Emitted when some info about digitizing is or will be available
         self.digitizingInfoAvailable = Signal("VDigitWindow.digitizingInfo")
-        # Emitted when some info about digitizing is or will be availbale
+        # Emitted when some info about digitizing is or will be available
         # digitizingInfo signal is emitted only between digitizingInfoAvailable
         # and digitizingInfoUnavailable signals
         self.digitizingInfoUnavailable = Signal("VDigitWindow.digitizingInfo")
@@ -345,7 +345,7 @@ class VDigitWindow(BufferedMapWindow):
             dialog.OnReset()
 
     def _geomAttrbUpdate(self, fids):
-        """Update geometry atrributes of currently selected features
+        """Update geometry attributes of currently selected features
 
         :param fid: list feature id
         """
@@ -994,7 +994,7 @@ class VDigitWindow(BufferedMapWindow):
                     self.mouse["begin"]
                 )  # left down
 
-            # eliminate initial mouse moving efect
+            # eliminate initial mouse moving effect
             self.mouse["begin"] = self.mouse["end"]
 
         action = self.toolbar.GetAction()

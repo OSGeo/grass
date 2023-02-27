@@ -137,7 +137,7 @@ int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
 /*!
    \brief Read vector feature (topological level required)
 
-   This function implements random access. Constraits are ignored.
+   This function implements random access. Constraints are ignored.
 
    Note: Topology must be built at level >= GV_BUILD_BASE
 

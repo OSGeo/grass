@@ -198,7 +198,7 @@ class VectorSelectBase:
         self.RegisterMapEvtHandler()
 
     def _onMapClickHandler(self, event):
-        """Registred handler for clicking on grass disp"""
+        """Registered handler for clicking on grass disp"""
         if event == "unregistered":
             return
         vWhatDic = self.QuerySelectedMap()
@@ -328,7 +328,7 @@ class VectorSelectBase:
 
         Add new map layer to layer tree and checked it
 
-        @todo: set color of map to higlight color
+        @todo: set color of map to highlight color
         """
 
         if len(self.selectedFeatures) == 0:
@@ -429,7 +429,7 @@ class VectorSelectHighlighter:
         """Highlight selected features"""
         self.layerCat[int(self.data["Layer"])] = self.data["Category"]
 
-        # add map layer with higlighted vector features
+        # add map layer with highlighted vector features
         self.AddQueryMapLayer()  # -> self.qlayer
         self.qlayer.SetOpacity(0.7)
         self.giface.updateMap.emit(render=True, renderVector=True)

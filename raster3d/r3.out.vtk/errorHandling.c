@@ -69,7 +69,7 @@ int close_input_raster3d_map(RASTER3D_Map *map)
 }
 
 /* ************************************************************************* */
-/* Close alls open raster and 3d raster maps and free memory
+/* Close all open raster and 3d raster maps and free memory
  * ********************* */
 /* ************************************************************************* */
 void release_input_maps_struct(input_maps *in)

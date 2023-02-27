@@ -45,7 +45,7 @@ avl_tree avl_make(const generic_cell k, const long n)
         return NULL;
     }
 
-    /* inizialize root */
+    /* initialize root */
     root->right_child = NULL;
     root->left_child = NULL;
     root->father = NULL;

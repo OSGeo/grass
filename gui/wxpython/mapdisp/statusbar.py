@@ -982,7 +982,7 @@ class SbCompRegionExtent(SbRegionExtent):
 class SbProgress(SbItem):
     """General progress bar to show progress.
 
-    Underlaying widget is wx.Gauge.
+    Underlying widget is wx.Gauge.
     """
 
     def __init__(self, mapframe, statusbar, sbManager, position=0):
@@ -1035,7 +1035,7 @@ class SbProgress(SbItem):
             self.Hide()
 
     def GetWidget(self):
-        """Returns underlaying winget.
+        """Returns underlying winget.
 
         :return: widget or None if doesn't exist
         """

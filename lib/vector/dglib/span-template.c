@@ -222,7 +222,7 @@ dfs_error:
 
 /*
  * Use a edge prioritized, tree growing scheme (aka Prim algorithm) in order to
- * be appliable to both undirected graphs (minimum spanning tree - MST) and
+ * be applicable to both undirected graphs (minimum spanning tree - MST) and
  * digraphs (minimum arborescense tree - MAT)
  * The vertex argument is ignored in MST (when algorithm is applied to a
  * version 3 undirected graph).

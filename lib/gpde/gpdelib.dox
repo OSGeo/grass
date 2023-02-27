@@ -600,7 +600,7 @@ The gradient of one cell to there neighbours in each direction has the following
 
 \verbatim
 
-The two dimensional gradient consits of 4 values between the neighbour cells
+The two dimensional gradient consists of 4 values between the neighbour cells
  ______________
 |    |    |    |
 |    |    |    |
@@ -612,7 +612,7 @@ The two dimensional gradient consits of 4 values between the neighbour cells
 |    |    |    |
 |____|____|____|
 
-The three dimensional gradient consits of 6 values between the neighbour cells
+The three dimensional gradient consists of 6 values between the neighbour cells
 
       |  /
      TC NC

@@ -159,7 +159,7 @@ typedef struct {
        IF Projection==0 THEN
        -- Rectilinear grid, generic units
        ProjArgs[0] = North bound, Y coordinate of grid row 0
-       ProjArgs[1] = West bound, X coordiante of grid column 0
+       ProjArgs[1] = West bound, X coordinate of grid column 0
        ProjArgs[2] = Increment between rows
        ProjArgs[3] = Increment between columns
        NOTES: X coordinates increase to the right, Y increase upward.

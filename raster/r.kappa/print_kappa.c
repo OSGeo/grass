@@ -16,8 +16,8 @@ void print_kappa(void)
             _("Cannot open file <%s> to write kappa and relevant parameters"),
             output);
 
-    /* print out the comission and omission accuracy, and conditional kappa */
-    fprintf(fd, "\nCats\t%% Comission\t%% Omission\tEstimated Kappa\n");
+    /* print out the commission and omission accuracy, and conditional kappa */
+    fprintf(fd, "\nCats\t%% Commission\t%% Omission\tEstimated Kappa\n");
     for (i = 0; i < ncat; i++) {
         fprintf(fd, "%ld\t", rlst[i]);
         if (metrics->users_accuracy[i] == na_value)

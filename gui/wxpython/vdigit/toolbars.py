@@ -1026,7 +1026,7 @@ class VDigitToolbar(BaseToolbar):
             return
 
         if self.mapLayer:
-            # deactive map layer for editing
+            # deactivate map layer for editing
             self.StopEditing()
 
         # select the given map layer for editing
@@ -1062,7 +1062,7 @@ class VDigitToolbar(BaseToolbar):
             else:
                 return
 
-        # deactive layer
+        # deactivate layer
         self.Map.ChangeLayerActive(mapLayer, False)
 
         # clean map canvas

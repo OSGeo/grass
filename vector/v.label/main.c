@@ -225,7 +225,7 @@ int main(int argc, char **argv)
     if (FontSize->answer) {
         fontsize = atoi(FontSize->answer);
 
-        /* figure out space param dynamically from current dispay */
+        /* figure out space param dynamically from current display */
         /* don't bother if Space was explicitly given (bypasses xmon req) */
         if (Along_flag->answer && !Space->answer) {
             if (D_open_driver() != 0) /* connect to the driver */

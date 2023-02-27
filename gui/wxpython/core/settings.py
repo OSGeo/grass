@@ -167,7 +167,7 @@ class Settings:
                 "changeOpacityLevel": {"enabled": False},
                 # ask when removing layer from layer tree
                 "askOnRemoveLayer": {"enabled": True},
-                # ask when quiting wxGUI or closing display
+                # ask when quitting wxGUI or closing display
                 "askOnQuit": {"enabled": True},
                 # hide tabs
                 "hideTabs": {

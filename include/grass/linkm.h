@@ -11,7 +11,7 @@
 
 struct link_head {
     VOID_T **ptr_array; /* array of pointers to chunks */
-    int max_ptr;        /* num of chunks alloced */
+    int max_ptr;        /* num of chunks allocated */
     int alloced;        /* size of ptr_array */
     int chunk_size;     /* size of alloc chucks in units */
     int unit_size;      /* size of each user defined unit */

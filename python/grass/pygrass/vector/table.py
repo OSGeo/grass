@@ -249,7 +249,7 @@ class Columns(object):
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def is_pg(self):
@@ -782,7 +782,7 @@ class Link(object):
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def connection(self):

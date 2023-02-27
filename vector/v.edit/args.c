@@ -5,7 +5,7 @@
 
    \param[in] argc number of arguments
    \param[in] argv arguments array
-   \param[in] params GRASS paramenters
+   \param[in] params GRASS parameters
    \param[out] action mode selected tool
 
    \return 1

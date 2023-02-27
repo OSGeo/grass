@@ -668,7 +668,7 @@ class WSPropertiesDialog(WSDialogBase):
 
         ws_cap = self._getWSfromCmd(cmd)
         for ws in six.iterkeys(self.ws_panels):
-            # cap file used in cmd will be deleted, thnaks to the dialogs
+            # cap file used in cmd will be deleted, thanks to the dialogs
             # destructor
             if ws == ws_cap and "capfile" in cmd[1]:
                 self.revert_ws_cap_files[ws] = cmd[1]["capfile"]

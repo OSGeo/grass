@@ -244,7 +244,7 @@ class InteractiveMap:
 
     def show(self):
         """This function returns a folium figure object with a GRASS raster
-        overlayed on a basemap.
+        overlaid on a basemap.
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""

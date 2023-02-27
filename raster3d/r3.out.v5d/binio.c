@@ -142,7 +142,7 @@ static void c_to_if(long *t, const long *f)
         T = F;                                                             \
     }
 
-/* IEEE single precison to Cray */
+/* IEEE single precision to Cray */
 static void if_to_c(long *t, const long *f)
 {
     if (*f != 0) {

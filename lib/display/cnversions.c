@@ -21,7 +21,7 @@
  *
  *  Calls to convert row and column (x and y) values in one system to
  *  another system are available.  In addition calls which return the
- *  conversion coefficients are alos provided.
+ *  conversion coefficients are also provided.
  */
 
 struct vector {

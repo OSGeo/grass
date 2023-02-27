@@ -98,7 +98,7 @@ float SIGMA[4][14] = {
     {0, 0, 30, 0, 30, 0, 30, 30, 30, 30, 30, 30, 30, 30},
     {0, 0, 1500, 0, 1500, 1500, 0, 1500, 0, 0, 1500, 0, 0, 0}};
 
-/*fuel particale surface-area-to-volume ratio, 1/ft. */
+/*fuel particle surface-area-to-volume ratio, 1/ft. */
 float MX[] = {
     0,    0.12, 0.15, 0.25, 0.20, 0.20, 0.25, 0.40,
     0.30, 0.25, 0.25, 0.15, 0.20, 0.25}; /*moisture content of extinction */

@@ -83,7 +83,7 @@ void *Rowio_get(ROWIO *R, int row)
 /*!
    \brief Flush data
 
-   \param R pointer to ROWIO strcuture
+   \param R pointer to ROWIO structure
  */
 void Rowio_flush(ROWIO *R)
 {

@@ -181,7 +181,7 @@ class BasePlotFrame(wx.Frame):
         self.properties["legend"] = UserSettings.Get(group=self.plottype, key="legend")
 
         self.zoom = False  # zooming disabled
-        self.drag = False  # draging disabled
+        self.drag = False  # dragging disabled
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)
@@ -431,7 +431,7 @@ class BasePlotFrame(wx.Frame):
         )
 
     def DrawPointLabel(self, dc, mDataDict):
-        """This is the fuction that defines how the pointLabels are
+        """This is the function that defines how the pointLabels are
         plotted dc - DC that will be passed mDataDict - Dictionary
         of data that you want to use for the pointLabel
 

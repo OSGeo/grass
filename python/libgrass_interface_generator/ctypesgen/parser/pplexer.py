@@ -123,7 +123,7 @@ t_ANY_GT = r">"
 t_ANY_CONDOP = r"\?"
 
 
-# Delimeters
+# Delimiters
 t_ANY_PERIOD = r"\."
 t_ANY_LPAREN = r"\("
 t_ANY_RPAREN = r"\)"

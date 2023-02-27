@@ -89,7 +89,7 @@ struct Halfedge *ELleftbnd(struct Point *p)
         totalsearch += i;
     }
     ntry++;
-    /* Now search linear list of halfedges for the corect one */
+    /* Now search linear list of halfedges for the correct one */
     if (he == ELleftend || (he != ELrightend && right_of(he, p))) {
         do {
             he = he->ELright;

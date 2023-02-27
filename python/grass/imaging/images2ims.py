@@ -54,7 +54,7 @@ def checkImages(images):
 
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
-            # We assume PIL images are allright
+            # We assume PIL images are alright
             images2.append(im)
 
         elif np and isinstance(im, np.ndarray):

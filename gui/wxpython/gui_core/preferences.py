@@ -310,7 +310,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         askOnQuit = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Ask when quiting wxGUI or closing display"),
+            label=_("Ask when quitting wxGUI or closing display"),
             name="IsChecked",
         )
         askOnQuit.SetValue(
@@ -1121,7 +1121,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createCmdPage(self, notebook):
-        """Create notebook page for commad dialog settings"""
+        """Create notebook page for command dialog settings"""
         panel = SP.ScrolledPanel(parent=notebook, id=wx.ID_ANY)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         notebook.AddPage(page=panel, text=_("Tools"))
@@ -1535,7 +1535,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         autoHighlight = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Automatically hightlight selected features in map display"),
+            label=_("Automatically highlight selected features in map display"),
         )
         autoHighlight.SetValue(
             self.settings.Get(group="atm", key="highlight", subkey="auto")

@@ -116,7 +116,7 @@ static const char cases[256][2] = {
 #define OFFSET_T14        716
 
 /************************************************************************/
-/* lookup table for mc 33 - all posible cube tilings */
+/* lookup table for mc 33 - all possible cube tilings */
 static const CELL_ENTRY cell_table[] = {
     {
         3,

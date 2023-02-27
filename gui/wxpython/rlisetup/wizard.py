@@ -329,7 +329,7 @@ class RLIWizard(object):
         if samtype == SamplingType.WHOLE:
             cl = float(self.SF_CL) / float(self.rasterinfo["cols"])
             rl = float(self.SF_RL) / float(self.rasterinfo["rows"])
-            # this two variable are unused, problably to remove
+            # this two variable are unused, probably to remove
             x = float(self.SF_X) / float(self.rasterinfo["cols"])
             y = float(self.SF_Y) / float(self.rasterinfo["rows"])
             fil.write("SAMPLEAREA %r|%r|%r|%r\n" % (self.per_x, self.per_y, rl, cl))
@@ -1352,9 +1352,9 @@ class SampleUnitsKeyPage(TitledPage):
             label=" %s " % _("Select method of sampling unit distribution"),
             choices=[
                 _("Random non overlapping"),
-                _("Systematic contiguos"),
+                _("Systematic contiguous"),
                 _("Stratified random"),
-                _("Systematic non contiguos"),
+                _("Systematic non contiguous"),
                 _("Centered over sites"),
             ],
         )

@@ -108,7 +108,7 @@ to do both Black formatting and Flake8 file validation.
 The correct editor settings for Python indentation
 
 - [​Geany](https://www.geany.org/) editor:
-  - Edit > Preferences > Editor > Intentation tab > Type: Spaces
+  - Edit > Preferences > Editor > Indentation tab > Type: Spaces
 - [​PyCharm](https://www.jetbrains.com/pycharm/) IDE:
   - already fine and includes code-linting
 - [​atom](https://atom.io/) IDE:

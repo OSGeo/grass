@@ -95,7 +95,7 @@ void P_scale(float x, float y, float z)
 /*!
    \brief Transform array of vectors using current T matrix
 
-   Multiply 'in' matrix (homogenous coordinate generally) by
+   Multiply 'in' matrix (homogeneous coordinate generally) by
    the current transformation matrix, placing the result in 'out'
 
    [in][trans_mat] => [out]
@@ -114,7 +114,7 @@ void P_transform(int num_vert, float (*in)[4], float (*out)[4])
 /*!
    \brief Transform array of vectors using current T matrix
 
-   Multiply 'in' matrix (homogenous coordinate generally) by
+   Multiply 'in' matrix (homogeneous coordinate generally) by
    the current transformation matrix, placing the result in 'out'
 
    [in][trans_mat] => [out]
@@ -213,7 +213,7 @@ void P_rot(float angle, char axis)
 
     theta = (NPI / 180.) * angle; /* convert to radians */
 
-    /* optimize to handle rotations of mutliples of 90 deg */
+    /* optimize to handle rotations of multiples of 90 deg */
     switch (axis) {
     case 'X':
     case 'x':

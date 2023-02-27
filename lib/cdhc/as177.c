@@ -155,7 +155,7 @@ void Cdhc_nscor2(double s[], int n, int n2, int *ifault)
 }
 
 /*-Algorithm AS 177.4 Appl. Statist. (1982) Vol.31, No.2
- * Calculates Cdhc_correction for tail area of noraml distribution
+ * Calculates Cdhc_correction for tail area of normal distribution
  * corresponding to ith largest rankit in sample size n.
  */
 static double Cdhc_correc(int i, int n)

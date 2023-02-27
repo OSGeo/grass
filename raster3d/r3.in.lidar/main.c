@@ -89,7 +89,7 @@ static void raster3d_divide_by_flat(RASTER3D_Map *a, RASTER3D_Map *b,
             for (col = 0; col < region->cols; col++) {
                 tmp = Rast3d_get_double(b, col, row, 0);
                 /* since it is count, using cast to integer to check
-                   againts zero, limits the value to max of CELL */
+                   against zero, limits the value to max of CELL */
                 if (((CELL)tmp) > 0) {
                     tmp = Rast3d_get_double(a, col, row, depth) / tmp;
                     Rast3d_put_double(c, col, row, depth, tmp);
