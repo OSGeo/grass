@@ -29,4 +29,4 @@ For example, when Python 3.7 goes end-of-life before the release of 8.0.4, we ra
 
 * Sunsetting Python 2: <https://www.python.org/doc/sunset-python-2/>
 * Active Python Releases: <https://www.python.org/downloads/>
-* Version list: <https://endoflife.date/python>
+* Version list: <https://devguide.python.org/versions/>
