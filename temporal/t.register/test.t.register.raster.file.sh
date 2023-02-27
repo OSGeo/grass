@@ -19,9 +19,11 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
 r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
+eval `g.gisenv`
 n1=`g.tempfile pid=1 -d` # Only map names
 n2=`g.tempfile pid=2 -d` # Map names and start time
 n3=`g.tempfile pid=3 -d` # Map names start time and increment
+n4=`g.tempfile pid=4 -d` # Full map names, start time, end time and semantic label
 
 cat > "${n1}" << EOF
 prec_1
@@ -53,6 +55,16 @@ prec_6|2002-04-01|2002-07-01
 EOF
 cat "${n3}"
 
+cat > "${n4}" << EOF
+prec_1@${MAPSET}|2001-01-01|2001-04-01|semantic_label
+prec_2@${MAPSET}|2001-04-01|2001-07-01|semantic_label
+prec_3@${MAPSET}|2001-07-01|2001-10-01|semantic_label
+prec_4@${MAPSET}|2001-10-01|2002-01-01|semantic_label
+prec_5@${MAPSET}|2002-01-01|2002-04-01|semantic_label
+prec_6@${MAPSET}|2002-04-01|2002-07-01|semantic_label
+EOF
+cat "${n4}"
+
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
 t.create --o type=strds temporaltype=absolute output=precip_abs8 title="A test with input files" descr="A test with input files"
@@ -76,6 +88,10 @@ t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 # File 3
 t.register --o -i input=precip_abs8 file="${n3}"
+t.info type=strds input=precip_abs8
+t.rast.list input=precip_abs8
+# File 4
+t.register --o input=precip_abs8 file="${n4}"
 t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 
