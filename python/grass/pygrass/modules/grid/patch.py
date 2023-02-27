@@ -18,6 +18,23 @@ from grass.pygrass.utils import coor2pixel
 from grass.pygrass.modules import Module
 
 
+def get_start_end_index(bbox_list):
+    """Convert a Bounding Box to a list of the index of
+    column start, end, row start and end
+    :param bbox_list: a list of BBox object to convert
+    :type bbox_list: list of BBox object
+
+    .. deprecated:: 8.3
+    """
+    ss_list = []
+    reg = Region()
+    for bbox in bbox_list:
+        r_start, c_start = coor2pixel((bbox.west, bbox.north), reg)
+        r_end, c_end = coor2pixel((bbox.east, bbox.south), reg)
+        ss_list.append((int(r_start), int(r_end), int(c_start), int(c_end)))
+    return ss_list
+
+
 def rpatch_row(rast, rasts, bboxes):
     """Patch a row of bound boxes.
 
