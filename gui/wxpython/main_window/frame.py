@@ -1109,6 +1109,20 @@ class GMFrame(wx.Frame):
                 lcmd=command,
             )
 
+    def GetAuiManager(self):
+        """Get aui manager
+
+        :return: aui manager instance
+        """
+        return self._auimgr
+
+    def GetAuiNotebook(self):
+        """Get aui notebook
+
+        :return: aui notebook instance
+        """
+        return self.mapnotebook
+
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
         return self.notebookLayers
@@ -1948,8 +1962,6 @@ class GMFrame(wx.Frame):
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
         # and one times when loosing focus?
-        if self.workspace_manager.loadingWorkspace:
-            return
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)
