@@ -26,48 +26,6 @@ import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
-"""
-eval `g.gisenv`
-n1=`g.tempfile pid=1 -d` # Only map names
-n2=`g.tempfile pid=2 -d` # Map names and start time
-n3=`g.tempfile pid=3 -d` # Map names start time and increment
-n4=`g.tempfile pid=4 -d` # Full map names, start time, end time and semantic label
-
-cat > "${n1}" << EOF
-EOF
-cat "${n1}"
-
-cat > "${n2}" << EOF
-EOF
-cat "${n2}"
-
-cat > "${n3}" << EOF
-EOF
-cat "${n3}"
-
-cat > "${n4}" << EOF
-EOF
-cat "${n4}"
-
-# The first @test
-# We create the space time raster inputs and register the raster maps with absolute time interval
-
-
-# Test with input files
-# File 1
-# File 1
-# File 2
-# File 2
-# File 3
-# File 4
-t.register --o input=precip_abs8 file="${n4}"
-t.info type=strds input=precip_abs8
-t.rast.list input=precip_abs8
-
-t.remove --v type=strds input=precip_abs8
-t.unregister --v type=raster file="${n1}"
-"""
-
 
 class TestRasterUnivar(TestCase):
     @classmethod
