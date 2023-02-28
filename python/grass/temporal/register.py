@@ -81,6 +81,14 @@ def register_maps_in_space_time_dataset(
     start_time_in_file = False
     end_time_in_file = False
     semantic_label_in_file = False
+    element = {
+        "rast": "cell",
+        "raster": "cell",
+        "rast3d": "grid3",
+        "raster3d": "grid3",
+        "raster_3d": "grid3",
+        "vector": "vector",
+    }[type]
 
     msgr = get_tgis_message_interface()
 
@@ -159,12 +167,12 @@ def register_maps_in_space_time_dataset(
             mapname = maplist[count]
             map_mapset = mapset
             if "@" not in mapname:
-                found = gscript.find_file(element=type, name=mapname)
-                if found["mapset"] is not None and len(found["mapset"]) > 0:
+                found = gscript.find_file(element=element, name=mapname)
+                if found["mapset"]:
                     map_mapset = found["mapset"]
-            mapid = AbstractMapDataset.build_id(mapname, map_mapset, None)
-
-            row["id"] = mapid
+                row["id"] = AbstractMapDataset.build_id(mapname, map_mapset, None)
+            else:
+                row["id"] = AbstractMapDataset.build_id(*mapname.split("@")[0:2], None)
             maplist[count] = row
 
     # Read the map list from file
@@ -223,13 +231,12 @@ def register_maps_in_space_time_dataset(
 
             map_mapset = mapset
             if "@" not in mapname:
-                found = gscript.find_file(element=type, name=mapname)
-                if found["mapset"] is not None and len(found["mapset"]) > 0:
+                found = gscript.find_file(element=element, name=mapname)
+                if found["mapset"]:
                     map_mapset = found["mapset"]
                 row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
             else:
                 row["id"] = AbstractMapDataset.build_id(*mapname.split("@")[0:2])
-
             maplist.append(row)
 
         if start_time_in_file is True and increment:
