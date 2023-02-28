@@ -343,6 +343,15 @@ class WorkspaceManager:
                 self.lmgr.nvizUpdateSettings()
                 mapdisplay[i].toolbars["map"].combo.SetSelection(1)
 
+        #
+        # load layout
+        #
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
+            if gxwXml.layout["panes"]:
+                self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
+            if gxwXml.layout["notebook"]:
+                self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.layout["notebook"])
+
         self.workspaceFile = filename
         self.AddFileToHistory()
         return True
