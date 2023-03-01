@@ -165,12 +165,18 @@ def register_maps_in_space_time_dataset(
         for count in range(len(maplist)):
             row = {}
             mapname = maplist[count]
-            map_mapset = mapset
             if "@" not in mapname:
-                found = gscript.find_file(element=element, name=mapname)
-                if found["mapset"]:
-                    map_mapset = found["mapset"]
-                row["id"] = AbstractMapDataset.build_id(mapname, map_mapset, None)
+                result = gscript.find_file(element=element, name=mapname)
+                if result["mapset"]:
+                    row["id"] = AbstractMapDataset.build_id(
+                        mapname, result["mapset"], None
+                    )
+                else:
+                    gscript.fatal(
+                        _("{type} map <{mapname}> not found on search path").format(
+                            type=type, mapname=mapname
+                        )
+                    )
             else:
                 row["id"] = AbstractMapDataset.build_id(*mapname.split("@")[0:2], None)
             maplist[count] = row
@@ -229,12 +235,16 @@ def register_maps_in_space_time_dataset(
                 # case-sensitive, the user decides on the band name
                 row["semantic_label"] = line_list[idx].strip()
 
-            map_mapset = mapset
             if "@" not in mapname:
-                found = gscript.find_file(element=element, name=mapname)
-                if found["mapset"]:
-                    map_mapset = found["mapset"]
-                row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
+                result = gscript.find_file(element=element, name=mapname)
+                if result["mapset"]:
+                    row["id"] = AbstractMapDataset.build_id(mapname, result["mapset"])
+                else:
+                    gscript.fatal(
+                        _("{type} map <{mapname}> not found on search path").format(
+                            type=type, mapname=mapname
+                        )
+                    )
             else:
                 row["id"] = AbstractMapDataset.build_id(*mapname.split("@")[0:2])
             maplist.append(row)
