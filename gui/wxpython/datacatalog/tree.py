@@ -2128,6 +2128,16 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
 
+    def OnCopyMapsetPath(mapset,item):
+        """Copies path from datacatalog panel to mapset"""
+        item_copy = item.copy()
+
+        if item_copy["path"] in mapset:
+            mapset[item_copy["path"]].append(item_copy)
+        else:
+            mapset[item_copy["path"]] = [item_copy]
+        return mapset
+
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
         node = self.selected_location[0]
@@ -2299,6 +2309,10 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path to mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
