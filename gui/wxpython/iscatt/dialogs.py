@@ -49,7 +49,6 @@ class AddScattPlotDialog(wx.Dialog):
         self._createWidgets()
 
     def _createWidgets(self):
-
         self.labels = {}
         self.params = {}
 
@@ -90,7 +89,6 @@ class AddScattPlotDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         border = wx.BoxSizer(wx.VERTICAL)
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -156,7 +154,6 @@ class AddScattPlotDialog(wx.Dialog):
         self.btn_remove.Bind(wx.EVT_BUTTON, self.OnRemoveLayer)
 
     def OnOk(self, event):
-
         if not self.GetBands():
             GMessage(parent=self, message=_("No scatter plots selected."))
             return
@@ -499,7 +496,6 @@ class SettingsDialog(wx.Dialog):
         self.Close()
 
     def UpdateSettings(self):
-
         chanaged_setts = []
         for settKey, sett in six.iteritems(self.colorsSetts):
             col = tuple(self.settings[settKey].GetColour())

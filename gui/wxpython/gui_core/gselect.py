@@ -436,7 +436,6 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
     # overridden ComboPopup methods
 
     def Init(self):
-
         ListCtrlComboPopup.Init(self)
         self.nmaps = 1
         self.type = None
@@ -1021,7 +1020,6 @@ class DriverSelect(wx.ComboBox):
         size=globalvar.DIALOG_LAYER_SIZE,
         **kargs,
     ):
-
         super(DriverSelect, self).__init__(
             parent, id, value, pos, size, choices, style=wx.CB_READONLY
         )
@@ -1956,7 +1954,6 @@ class GdalSelect(wx.Panel):
             self.dbPanel,
             self.protocolPanel,
         ):
-
             self.changingSizer.Add(panel, proportion=1, flag=wx.EXPAND)
 
         self.mainSizer.Add(
@@ -2304,7 +2301,6 @@ class GdalSelect(wx.Panel):
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
-
             if projectionMatch == "0":
                 projectionMatchCaption = _("No")
             else:
@@ -3024,7 +3020,6 @@ class VectorCategorySelect(wx.Panel):
                 self.buttonVecSelect.SetValue(False)
                 return
         if self._vectorSelect is None:
-
             if self.mapdisp:
                 if self.buttonVecSelect.IsEnabled():
                     switcher = self.mapdisp.GetToolSwitcher()

@@ -598,7 +598,6 @@ class IClassMapPanel(DoubleMapPanel):
 
         while True:
             if dlg.ShowModal() == wx.ID_OK:
-
                 if dlg.GetGroupBandsErr(parent=self):
                     g, s = dlg.GetData()
                     group = grass.find_file(name=g, element="group")

@@ -22,7 +22,7 @@ jobs:
         include:
           - os: ubuntu-22.04
             python-version: '3.10'
-            black-version: 22.3.0
+            black-version: '23.1.0'
 
     runs-on: ${{ matrix.os }}
 

@@ -44,7 +44,6 @@ class WMSBase(object):
         self.temp_warpmap = None
 
     def __del__(self):
-
         # tries to remove temporary files, all files should be
         # removed before, implemented just in case of unexpected
         # stop of module
@@ -191,7 +190,6 @@ class WMSBase(object):
 
         not_relevant_params = []
         for i_param in driver_props["ignored_params"]:
-
             if (
                 i_param in options
                 and options[i_param]
@@ -210,7 +208,6 @@ class WMSBase(object):
 
         not_relevant_flags = []
         for i_flag in driver_props["ignored_flags"]:
-
             if flags[i_flag]:
                 not_relevant_flags.append("<" + i_flag + ">")
 
@@ -506,7 +503,6 @@ class WMSBase(object):
 
 class GRASSImporter:
     def __init__(self, opt_output, cleanup_bands):
-
         self.cleanup_mask = False
         self.cleanup_bands = cleanup_bands
 
@@ -722,7 +718,6 @@ class WMSDriversInfo:
             return self._OnEarthProperties()
 
     def _OnEarthProperties(self):
-
         props = {}
         props["ignored_flags"] = ["o"]
         props["ignored_params"] = [
@@ -738,7 +733,6 @@ class WMSDriversInfo:
         return props
 
     def _WMSProperties(self):
-
         props = {}
         props["ignored_params"] = ["capfile"]
         props["ignored_flags"] = []
@@ -747,7 +741,6 @@ class WMSDriversInfo:
         return props
 
     def _WMTSProperties(self):
-
         props = {}
         props["ignored_flags"] = ["o"]
         props["ignored_params"] = ["urlparams", "bgcolor", "wms_version"]
@@ -756,7 +749,6 @@ class WMSDriversInfo:
         return props
 
     def _GDALDrvProperties(self):
-
         props = {}
         props["ignored_flags"] = []
         props["ignored_params"] = [
