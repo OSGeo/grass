@@ -13,7 +13,7 @@ on:
 
 jobs:
   run-black:
-    name: Black ${{ matrix.black-version }}
+    name: Black
 
     # Using matrix just to get variables which are not environmental variables
     # and also to sync with other workflows which use matrix.
