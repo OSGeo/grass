@@ -1,6 +1,6 @@
 ---
 name: GCC C/C++ standards check
-# bogus comment
+
 on:
   push:
     branches:
